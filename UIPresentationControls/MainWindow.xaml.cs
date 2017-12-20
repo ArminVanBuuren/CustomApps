@@ -23,6 +23,8 @@ namespace UIPresentationControls
         public MainWindow ()
         {
             InitializeComponent();
+
+            string myFirstChange = "1";
         }
     }
 }
