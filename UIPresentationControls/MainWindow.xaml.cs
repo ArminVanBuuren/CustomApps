@@ -25,6 +25,7 @@ namespace UIPresentationControls
             InitializeComponent();
 
             string myFirstChange = "1";
+            string myFirstChange2 = "1";
         }
     }
 }
