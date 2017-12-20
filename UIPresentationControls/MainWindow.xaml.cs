@@ -29,6 +29,7 @@ namespace UIPresentationControls
             string myFirstChange3 = "1";
             string myFirstChange4 = "1";
             string myFirstChange5 = "1";
+            string myFirstChange6 = "1";
         }
     }
 }
