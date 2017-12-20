@@ -23,17 +23,6 @@ namespace UIPresentationControls
         public MainWindow ()
         {
             InitializeComponent();
-
-            string myFirstChange = "1";
-            string myFirstChange2 = "1";
-            string myFirstChange3 = "1";
-            string myFirstChange4 = "1";
-            string myFirstChange5 = "1";
-            string myFirstChange6 = "1";
-            string myFirstChange7 = "1";
-            string myFirstChange8 = "1";
-            string myFirstChange9 = "1";
-            string myFirstChange10 = "1";
         }
     }
 }
