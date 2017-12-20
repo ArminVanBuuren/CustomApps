@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace UIPresentationControls.Properties
+namespace UIPresentationControls.Test.Properties
 {
 
 
