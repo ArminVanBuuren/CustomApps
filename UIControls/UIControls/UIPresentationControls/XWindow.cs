@@ -30,7 +30,6 @@ namespace UIPresentationControls
     public class XWindow : Window, IXWindow
     {
         private bool _isBlured, _isBlured2;
-
         private bool _canDragMove = true;
         private bool _canFullWindowDragMove = false;
         private bool _showInfoButton = false;
@@ -54,7 +53,7 @@ namespace UIPresentationControls
 
         public new Style Style
         {
-            get; private set;
+            get; internal set;
         }
 
         void WindowLoaded(object sender, RoutedEventArgs e)
