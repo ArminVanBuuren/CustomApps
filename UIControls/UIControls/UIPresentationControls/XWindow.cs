@@ -19,65 +19,56 @@ using UIPresentationControls.Utils;
 
 namespace UIPresentationControls
 {
-    public class XWindow : Window
+    public interface IXWindow
+    {
+        bool CanFullWindowDragMove { get; set; }
+        bool ShowInfoButton { get; set; }
+        bool ShowMinButton { get; set; }
+        bool ShowMaxButton { get; set; }
+    }
+
+    public class XWindow : Window, IXWindow
     {
         private bool _isBlured, _isBlured2;
 
-        private bool _canDragMove = false;
+        private bool _canDragMove = true;
+        private bool _canFullWindowDragMove = false;
+        private bool _showInfoButton = false;
+        private bool _showMinButton = false;
+        private bool _showMaxButton = false;
 
-        public bool PanelItemsIsVisible { get; } = true;
 
-        public XWindow ()
+        public XWindow(Style style)
         {
-            Style = FindResource("XWindowStyle") as Style;
+            //base.Style = FindResource("XWindowStyle") as Style;
 
-            CanDragMove = true;
-
-            PanelItemsIsVisible = panelItemIsVisible;
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-
-            Loaded += WindowLoaded;
-            Activated += WindowNew_Activated;
-            Closing += Window_Closing;
-            StateChanged += WindowStateChanged;
-
+            
+            
+            //Loaded += WindowLoaded;
+            //Activated += WindowNew_Activated;
+            //Closing += Window_Closing;
+            //StateChanged += WindowStateChanged;
         }
 
-        void WindowLoaded (object sender, RoutedEventArgs e)
+        public new Style Style
         {
-            OpacityActivate(this);
+            get; private set;
+        }
 
+        void WindowLoaded(object sender, RoutedEventArgs e)
+        {
             if (Style == null)
                 return;
 
-            if (!PanelItemsIsVisible)
-            {
-                var infButtom = (Button)Template.FindName("Information", this);
-                var minButtom = (Button)Template.FindName("MinButton", this);
-                var maxButtom = (Button)Template.FindName("MaxButton", this);
-                infButtom.Visibility = Visibility.Collapsed;
-                minButtom.Visibility = Visibility.Collapsed;
-                maxButtom.Visibility = Visibility.Collapsed;
-            }
-
+            ShowInfoButton = true;
+            ShowMinButton = true;
+            ShowMaxButton = true;
+            CanFullWindowDragMove = true;
         }
 
-        static void OpacityActivate (XWindow mainWindow)
-        {
-            if (mainWindow.Style == null)
-                return;
 
-            //эффект перехода из прозрачного в нормальный режим и из размытого в четкий
-            Storyboard sb = mainWindow.FindResource("HoverOn") as Storyboard;
-            if (sb == null)
-                return;
-            Border containerBorder = (Border)mainWindow.Template.FindName("PART_Container", mainWindow);
-            BlurEffect containerBorder2 = (BlurEffect)mainWindow.Template.FindName("MyBlurEffect", mainWindow);
-            containerBorder.Opacity = 0;
-            containerBorder2.Radius = 15;
-            sb.Begin(containerBorder);
-        }
 
         /// <summary>
         /// Активировать или отключить перемещение окна (по умолчание перемещение можно делать)
@@ -99,11 +90,96 @@ namespace UIPresentationControls
             }
         }
 
-        private void DisableWindowMoving (object sender, EventArgs e)
+        private void DisableWindowMoving(object sender, EventArgs e)
         {
             WindowInteropHelper helper = new WindowInteropHelper(this);
             HwndSource source = HwndSource.FromHwnd(helper.Handle);
             source?.AddHook(Win32Controls.WndProc);
+        }
+
+        /// <summary>
+        /// чтобы можно было перемещать окно по нажатию клавиши в любой точки окна, а не только через верхнюю панель
+        /// </summary>
+        public bool CanFullWindowDragMove
+        {
+            get { return _canFullWindowDragMove; }
+            set
+            {
+                if (_canFullWindowDragMove == value)
+                    return;
+
+                Grid LayoutRoot = (Grid)Template.FindName("LayoutRoot", this);
+
+                if (LayoutRoot == null)
+                    return;
+
+                if (_canFullWindowDragMove)
+                    LayoutRoot.MouseLeftButtonDown += ParentGrid_MouseLeftButtonDown;
+                else
+                    LayoutRoot.MouseLeftButtonDown -= ParentGrid_MouseLeftButtonDown;
+
+                _canFullWindowDragMove = value;
+            }
+        }
+
+        private void ParentGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs args)
+        {
+            //если менялся размер окна то не перемещаем окно
+            DragMove();
+            args.Handled = true;
+        }
+
+        public bool ShowInfoButton
+        {
+            get { return _showInfoButton; }
+            set
+            {
+                if (_showInfoButton == value)
+                    return;
+
+                if (ChangePanelButtons("Information", value, this))
+                    _showInfoButton = value;
+            }
+        }
+
+        public bool ShowMinButton
+        {
+            get { return _showMinButton; }
+            set
+            {
+                if (_showMinButton == value)
+                    return;
+
+                if (ChangePanelButtons("MinButton", value, this))
+                    _showMinButton = value;
+            }
+        }
+
+        public bool ShowMaxButton
+        {
+            get { return _showMaxButton; }
+            set
+            {
+                if (_showMaxButton == value)
+                    return;
+
+                if (ChangePanelButtons("MaxButton", value, this))
+                    _showMaxButton = value;
+            }
+        }
+
+        static bool ChangePanelButtons(string name, bool value, XWindow window)
+        {
+            Button panelButton = (Button)window.Template.FindName(name, window);
+            if (panelButton == null)
+                return false;
+
+            if (value)
+                panelButton.Visibility = Visibility.Visible;
+            else
+                panelButton.Visibility = Visibility.Collapsed;
+
+            return true;
         }
     }
 }

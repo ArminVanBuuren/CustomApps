@@ -4,19 +4,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:UIPresentationControls">
 
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="../Brushes.xaml" />
-        <ResourceDictionary Source="../Core.xaml" />
-    </ResourceDictionary.MergedDictionaries>
-
     <SolidColorBrush x:Key="TitleBarBackgroundBrush" Color="#FF424242" />
     <SolidColorBrush x:Key="AuthorWindowTopBorderBrush" Color="#FF00A0B9" />
     <SolidColorBrush x:Key="AuthorWindowTopBorderTextBrush" Color="#FFA5FFFF" />
-    <SolidColorBrush x:Key="VS2012WindowBorderBrush" Color="#007ACC" />
-    <SolidColorBrush x:Key="VS2012WindowBorderBrushInactive" Color="#999999" />
-    <SolidColorBrush x:Key="VS2012WindowBorderBrushMouseOver" Color="White" />
-    <SolidColorBrush x:Key="VS2012WindowStatusForeground" Color="#FFFFFF" />
-    <SolidColorBrush x:Key="VS2012WindowStatusForegroundInactive" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="XWindowBorderBrush" Color="#007ACC" />
+    <SolidColorBrush x:Key="XWindowBorderBrushInactive" Color="#999999" />
+    <SolidColorBrush x:Key="XWindowBorderBrushMouseOver" Color="White" />
+    <SolidColorBrush x:Key="XWindowStatusForeground" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="XWindowStatusForegroundInactive" Color="#FFFFFF" />
 
     <!--<Style x:Key="RectBorderStyle" TargetType="Border">
         <Setter Property="Focusable" Value="False" />
@@ -29,7 +24,7 @@
     </Style>-->
 
 
-    <Style x:Key="VS2012WindowStyleTitleBarButton" TargetType="{x:Type Button}">
+    <Style x:Key="XWindowStyleTitleBarButton" TargetType="{x:Type Button}">
         <Setter Property="Focusable" Value="false" />
         <Setter Property="Template">
             <Setter.Value>
@@ -43,11 +38,11 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="PART_border" Property="Background" Value="{StaticResource VS2012WindowBorderBrushMouseOver}" />
+                            <Setter TargetName="PART_border" Property="Background" Value="{StaticResource XWindowBorderBrushMouseOver}" />
                             <Setter TargetName="PART_border" Property="Opacity" Value="0.15" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="PART_border" Property="Background" Value="{StaticResource VS2012WindowBorderBrush}"/>
+                            <Setter TargetName="PART_border" Property="Background" Value="{StaticResource XWindowBorderBrush}"/>
                             <Setter TargetName="PART_border" Property="Opacity" Value="1" />
                             <Setter Property="Foreground" Value="#FFF"/>
                         </Trigger>
@@ -58,13 +53,11 @@
     </Style>
 
 
-    <Style x:Key="VS2012WindowStyle" TargetType="{x:Type local:XWindow}">
+    <Style x:Key="XWindowStyle" TargetType="{x:Type local:XWindow}">
         <Setter Property="WindowStyle" Value="None" />
-
         <Setter Property="AllowsTransparency" Value="true" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="ResizeMode" Value="CanResizeWithGrip" />
-
         <Setter Property="WindowChrome.WindowChrome">
             <Setter.Value>
                 <WindowChrome
@@ -75,7 +68,6 @@
                 />
             </Setter.Value>
         </Setter>
-        <EventSetter Event="Loaded" Handler="WindowLoaded" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Window}">
@@ -90,13 +82,13 @@
                                 <LinearDoubleKeyFrame Value="0" KeyTime="0:0:0.5"></LinearDoubleKeyFrame>
                             </DoubleAnimationUsingKeyFrames>
                         </Storyboard>
-                        <Storyboard x:Key="HoverOn">
+                        <Storyboard x:Key="BegginingActivate">
                             <DoubleAnimation Duration="0:0:0.2" Storyboard.TargetName="PART_Container" Storyboard.TargetProperty="(FrameworkElement.Opacity)" To="1" />
                             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Radius" Storyboard.TargetName="MyBlurEffect" >
                                 <LinearDoubleKeyFrame Value="0" KeyTime="0:0:0.7"></LinearDoubleKeyFrame>
                             </DoubleAnimationUsingKeyFrames>
                         </Storyboard>
-                        <Storyboard x:Key="HoverOff" >
+                        <Storyboard x:Key="BegginingDeactivate" >
                             <DoubleAnimation Duration="0:0:0.3" Storyboard.TargetName="PART_Container" Storyboard.TargetProperty="(FrameworkElement.Opacity)" To="0" />
                             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Radius" Storyboard.TargetName="MyBlurEffect" >
                                 <LinearDoubleKeyFrame Value="20" KeyTime="0:0:0.3"></LinearDoubleKeyFrame>
@@ -124,13 +116,11 @@
 								Height="Auto"
 								
 								Background="{StaticResource MainFormBackground}"
-								BorderBrush="{StaticResource VS2012WindowBorderBrush}"
+								BorderBrush="{StaticResource XWindowBorderBrush}"
 								BorderThickness="1"
 								Padding="0"
 								CornerRadius="{StaticResource WindowCornerRadius}"
-								
 								>
-
                                 <Grid
 									HorizontalAlignment="Stretch"
 									Background="Transparent"
@@ -190,7 +180,7 @@
 											Height="20"
 											Margin="0 0 0 0"
 											Foreground="{StaticResource ControlForeground}"
-											Style="{StaticResource VS2012WindowStyleTitleBarButton}"
+											Style="{StaticResource XWindowStyleTitleBarButton}"
 											Click="Information_OnClick"
 											WindowChrome.IsHitTestVisibleInChrome="True">
                                             <Grid MaxHeight="11" MaxWidth="11" >
@@ -214,7 +204,7 @@
 												Height="20"
 												Margin="0 0 0 0"
 												Foreground="{StaticResource ControlForeground}"
-												Style="{StaticResource VS2012WindowStyleTitleBarButton}"
+												Style="{StaticResource XWindowStyleTitleBarButton}"
 												Click="MinButtonClick"
 											    WindowChrome.IsHitTestVisibleInChrome="True">
                                             <Grid MaxHeight="9" MaxWidth="9">
@@ -238,7 +228,7 @@
 												Height="20"
 												Margin="0 0 0 0"
 												Foreground="{StaticResource ControlForeground}"
-												Style="{StaticResource VS2012WindowStyleTitleBarButton}"
+												Style="{StaticResource XWindowStyleTitleBarButton}"
 												Click="MaxButtonClick"
 											    WindowChrome.IsHitTestVisibleInChrome="True">
                                             <Grid MaxHeight="9" MaxWidth="9">
@@ -263,7 +253,7 @@
 												Height="20"
 												Margin="0 0 0 0"
 												Foreground="{StaticResource ControlForeground}"
-												Style="{StaticResource VS2012WindowStyleTitleBarButton}"
+												Style="{StaticResource XWindowStyleTitleBarButton}"
 												Click="CloseButtonClick"
 											    WindowChrome.IsHitTestVisibleInChrome="True">
                                             <Grid MaxHeight="9" MaxWidth="9">
@@ -279,10 +269,11 @@
                                             </Button.Resources>
                                         </Button>
                                     </Grid>
-
+                                    
                                     <Border Grid.Row="1" Grid.Column="0" >
                                         <ContentPresenter />
                                     </Border>
+                                    
                                     <Border Grid.Row="0" Grid.RowSpan="2"  Name="Left"
 									        MouseDown="OnSizeWest" 
 									        BorderBrush="Transparent" 
@@ -290,8 +281,6 @@
 									        BorderThickness="5,0,0,0"
 											HorizontalAlignment="Left"
 											VerticalAlignment="Stretch"
-                                            
-                                            
 											/>
                                     <!-- 
 									<Border Grid.Row="0" Grid.RowSpan="2"  Name="Top"
@@ -302,7 +291,6 @@
 											HorizontalAlignment="Stretch"
 											VerticalAlignment="Top"
 											/>-->
-
                                     <Border Grid.Row="0" Grid.RowSpan="2" Name="Right"
                                             MouseDown="OnSizeEast" 
                                             BorderBrush="Transparent" 
@@ -310,10 +298,7 @@
 									        BorderThickness="0,0,5,0"
 											HorizontalAlignment="Right"
 											VerticalAlignment="Stretch"
-                                            
-									        
 											/>
-
                                     <Border Grid.Row="0" Grid.RowSpan="2"  Name="Bottom"
                                             MouseDown="OnSizeSouth" 
                                             BorderBrush="Transparent" 
@@ -321,26 +306,15 @@
 									        BorderThickness="0,0,0,5"
 											HorizontalAlignment="Stretch"
 											VerticalAlignment="Bottom"
-                                            
-									        
                                             />
-
                                     <Rectangle Grid.Row="0" Grid.RowSpan="2" MouseDown="OnSizeNorthWest" x:Name="rectSizeNorthWest" Cursor="SizeNWSE" Fill="Transparent" Width="5" Height="5" VerticalAlignment="Top" HorizontalAlignment="Left" />
                                     <Rectangle Grid.Row="0" Grid.RowSpan="2" MouseDown="OnSizeNorthEast" x:Name="rectSizeNorthEast" Cursor="SizeNESW" Fill="Transparent" Width="5" Height="5" VerticalAlignment="Top" HorizontalAlignment="Right" />
                                     <Rectangle Grid.Row="0" Grid.RowSpan="2" MouseDown="OnSizeSouthWest" x:Name="rectSizeSouthWest" Cursor="SizeNESW" Fill="Transparent" Width="5" Height="5" VerticalAlignment="Bottom" HorizontalAlignment="Left" />
                                     <Rectangle Grid.Row="0" Grid.RowSpan="2" MouseDown="OnSizeSouthEast" x:Name="rectSizeSouthEast" Cursor="SizeNWSE" Fill="Transparent" Width="5" Height="5" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
-
-
-
                                 </Grid>
                             </Border>
-
-
-
                         </Grid>
                     </Border>
-
-
                     <ControlTemplate.Triggers>
                         <Trigger Property="WindowState" Value="Maximized">
                             <Setter TargetName="PART_MaxButton_Path" Property="Data" Value="M0,3 H5 V8 H0 V3 M0,4 H5 M3,0 H8 V5 H7 M3,1 H8"/>
@@ -358,50 +332,24 @@
                             </Setter>
                         </Trigger>
                         <Trigger Property="IsActive" Value="False">
-                            <Setter TargetName="PART_Border" Property="BorderBrush" Value="{StaticResource VS2012WindowBorderBrushInactive}"/>
+                            <Setter TargetName="PART_Border" Property="BorderBrush" Value="{StaticResource XWindowBorderBrushInactive}"/>
                         </Trigger>
-
-
-
-                        <!--
-						<Trigger Property="IsEnabled" Value="False">
-							<Trigger.EnterActions>
-								<BeginStoryboard Storyboard="{StaticResource IsDisabled}"/>
-							</Trigger.EnterActions>
-							<Trigger.ExitActions>
-								<BeginStoryboard Storyboard="{StaticResource IsEnabled}"/>
-							</Trigger.ExitActions>
-						</Trigger>
-                        -->
                         <Trigger Property="IsEnabled" Value="False">
                             <Trigger.EnterActions>
-                                <BeginStoryboard Storyboard="{StaticResource HoverOff}"/>
+                                <BeginStoryboard Storyboard="{StaticResource BegginingDeactivate}"/>
                             </Trigger.EnterActions>
                             <Trigger.ExitActions>
-                                <BeginStoryboard Storyboard="{StaticResource HoverOn}"/>
+                                <BeginStoryboard Storyboard="{StaticResource BegginingActivate}"/>
                             </Trigger.ExitActions>
                         </Trigger>
-
-                        <!--EventTrigger SourceName="CloseButton" RoutedEvent="Button.Click"-->
-                        <!--<EventTrigger RoutedEvent="Window.Unloaded" >
-							<BeginStoryboard>
-								<Storyboard>
-									<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Radius" Storyboard.TargetName="MyBlurEffect" >
-										<LinearDoubleKeyFrame Value="20" KeyTime="0:0:0.5"></LinearDoubleKeyFrame>
-									</DoubleAnimationUsingKeyFrames>
-								</Storyboard>
-							</BeginStoryboard>
-						</EventTrigger>-->
-
-
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
         <Style.Resources>
             <Style TargetType="{x:Type StatusBar}">
-                <Setter Property="Foreground" Value="{StaticResource VS2012WindowStatusForeground}" />
-                <Setter Property="Background" Value="{StaticResource VS2012WindowBorderBrush}" />
+                <Setter Property="Foreground" Value="{StaticResource XWindowStatusForeground}" />
+                <Setter Property="Background" Value="{StaticResource XWindowBorderBrush}" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type StatusBar}">
@@ -421,8 +369,8 @@
 
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding IsActive, RelativeSource={RelativeSource AncestorType=Window}}" Value="False">
-                        <Setter Property="Foreground" Value="{StaticResource VS2012WindowStatusForegroundInactive}" />
-                        <Setter Property="Background" Value="{StaticResource VS2012WindowBorderBrushInactive}" />
+                        <Setter Property="Foreground" Value="{StaticResource XWindowStatusForegroundInactive}" />
+                        <Setter Property="Background" Value="{StaticResource XWindowBorderBrushInactive}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
