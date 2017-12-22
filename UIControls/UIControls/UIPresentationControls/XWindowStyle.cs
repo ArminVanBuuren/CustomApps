@@ -21,6 +21,7 @@ namespace UIPresentationControls
 
         public XWindowStyle(XWindow baseXWindow, ResourceDictionary controlDictionary, ResourceDictionary brushDictionary)
         {
+
             //ResourceDictionary myControlDictionary = new ResourceDictionary();
             //myControlDictionary.Source = new Uri(controlsUri, UriKind.RelativeOrAbsolute);
 

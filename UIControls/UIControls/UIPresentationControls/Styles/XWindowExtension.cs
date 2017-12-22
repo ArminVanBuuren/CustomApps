@@ -13,6 +13,7 @@ namespace UIPresentationControls.Styles
                 action(window);
         }
 
+
         public static IntPtr GetWindowHandle(this Window window)
         {
             WindowInteropHelper helper = new WindowInteropHelper(window);

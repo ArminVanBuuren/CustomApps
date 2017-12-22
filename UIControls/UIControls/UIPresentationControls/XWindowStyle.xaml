@@ -13,6 +13,7 @@
     <SolidColorBrush x:Key="XWindowStatusForeground" Color="#FFFFFF" />
     <SolidColorBrush x:Key="XWindowStatusForegroundInactive" Color="#FFFFFF" />
 
+    
     <!--<Style x:Key="RectBorderStyle" TargetType="Border">
         <Setter Property="Focusable" Value="False" />
         <Setter Property="Background" Value="Transparent" />

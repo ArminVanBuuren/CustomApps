@@ -53,7 +53,7 @@ namespace UIPresentationControls
 
         public new Style Style
         {
-            get; internal set;
+            get; private set;
         }
 
         void WindowLoaded(object sender, RoutedEventArgs e)
