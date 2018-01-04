@@ -301,8 +301,8 @@ namespace TFSGeneration
                 if (_openedWarningWindowCount >= 1 || !this.IsLoaded)
                     return;
 
-                if (error == WarnSeverity.Error)
-                    ShowMyForm(this, EventArgs.Empty);
+                // if (error == WarnSeverity.Error)
+                ShowMyForm(this, EventArgs.Empty);
 
                 AddLog(stackTrace);
 
