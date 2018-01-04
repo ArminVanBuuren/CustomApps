@@ -112,44 +112,52 @@ namespace TFSGeneration.Control
             _exchangeService.TraceEnabled = Settings.MailOption.DebugLogging.Value;
             _exchangeService.KeepAlive = true;
 
-
-            string[] domain_username = Settings.MailOption.UserName.Value.Split('\\');
-
             SecureString _mailPassword = new SecureString();
-            foreach (char ch in Settings.MailOption.Password.Value)
-                _mailPassword.AppendChar(ch);
+            if (Settings.MailOption.Password.Value != null)
+                foreach (char ch in Settings.MailOption.Password.Value)
+                    _mailPassword.AppendChar(ch);
 
-            if (!Settings.MailOption.ExchangeUri.Value.Trim().IsNullOrEmpty() && domain_username.Length >= 2)
+
+            if (!Settings.MailOption.ExchangeUri.Value.IsNullOrEmptyTrim() && !Settings.MailOption.UserName.Value.IsNullOrEmptyTrim())
             {
-                if (domain_username[0].IsNullOrEmpty() || domain_username[1].IsNullOrEmpty() || domain_username.Length > 2)
+                string[] domain_username = Settings.MailOption.UserName.Value.Split('\\');
+                if (domain_username.Length != 2 || domain_username[0].IsNullOrEmpty() || domain_username[1].IsNullOrEmpty())
                     throw new ArgumentException("You must add UserName and Domain like: \"Domain\\Username\"");
 
                 _exchangeService.Credentials = new NetworkCredential(domain_username[1].Trim(), _mailPassword, domain_username[0].Trim());
                 _exchangeService.Url = new Uri(Settings.MailOption.ExchangeUri.Value);
                 //AlternateIdBase response = _exchangeService.ConvertId(new AlternateId(IdFormat.EwsId, "Placeholder", domain_username[1].Trim()), IdFormat.EwsId);
             }
-            else if (_checkEmailAddress.IsMatch(Settings.MailOption.Address.Value)) // Необходим только Email Address и пароль, т.к. вызывается другой способ подключения
+            else if (!Settings.MailOption.Address.Value.IsNullOrEmptyTrim() && _checkEmailAddress.IsMatch(Settings.MailOption.Address.Value)
+            ) // Необходим только Email Address и пароль, т.к. вызывается другой способ подключения
             {
                 _exchangeService.Credentials = new NetworkCredential(Settings.MailOption.Address.Value, _mailPassword);
                 _exchangeService.AutodiscoverUrl(Settings.MailOption.Address.Value, RedirectionUrlValidationCallback);
                 OnWriteLog(string.Format("Absolute Uri to Exchange Server - \"{0}\"", _exchangeService.Url.AbsoluteUri));
-                Settings.MailOption.ExchangeUri.Value = _exchangeService.Url.AbsoluteUri; // обновляем ссылку на путь до Exchange сервера почты
+                Settings.MailOption.ExchangeUri.Value =
+                    _exchangeService.Url.AbsoluteUri; // обновляем ссылку на путь до Exchange сервера почты
             }
             else
             {
-                throw new ArgumentException("Mail Address or User Name with Exchange Uri is Incorrect! Please check fields.");
+                throw new ArgumentException(string.Format(
+                    "Mail Address=[{0}] Or Domain\\Username=[{1}] With ExchangeUri=[{2}] is Incorrect! Please check fields.",
+                    Settings.MailOption.Address.Value.ToStringIsNullOrEmptyTrim(),
+                    Settings.MailOption.UserName.Value.ToStringIsNullOrEmptyTrim(),
+                    Settings.MailOption.ExchangeUri.Value.ToStringIsNullOrEmptyTrim()));
             }
 
             _exchangeFolder = new FolderId(WellKnownFolderName.Inbox);
             Folder checkConnect = Folder.Bind(_exchangeService, _exchangeFolder);
-            _exchangeService.TraceEnabled = false; // во время дальнейшей обработки данная опция уже бсполезна, т.к. после получения ошибок при подключении к серверу в дебагe уже ничего не пишется об этом, он просто будет спамить что получил от сервера и передал
+            _exchangeService.TraceEnabled =
+                false; // во время дальнейшей обработки данная опция уже бсполезна, т.к. после получения ошибок при подключении к серверу в дебагe уже ничего не пишется об этом, он просто будет спамить что получил от сервера и передал
 
             // если указан фильтр по папке, то найти папку на почте и обрабатывать письмо только из этой папки
             string findFolder = Settings.MailOption.SourceFolder.Value.Trim();
             if (!findFolder.IsNullOrEmpty())
             {
                 //находим все дочение папки из папки Входящие (Inbox)
-                FindFoldersResults inboxFolders = _exchangeService.FindFolders(WellKnownFolderName.Inbox, new FolderView(int.MaxValue) {Traversal = FolderTraversal.Deep});
+                FindFoldersResults inboxFolders = _exchangeService.FindFolders(WellKnownFolderName.Inbox,
+                    new FolderView(int.MaxValue) {Traversal = FolderTraversal.Deep});
                 if (inboxFolders != null)
                 {
                     foreach (Folder folder in inboxFolders)
@@ -169,6 +177,11 @@ namespace TFSGeneration.Control
             //   collection.Authenticate();
             //   collection.EnsureAuthenticated();
             //   _workItemStore = collection.GetService<WorkItemStore>();
+
+
+            //если в настройках нет данных о создании TFS
+            if (Settings.TFSOption.TFSCreate.TeamProjects == null || Settings.TFSOption.TFSCreate.TeamProjects.Length == 0)
+                throw new TFSFieldsException("TeamProjects Not Found!");
 
             Uri collectionUri = new Uri(Settings.TFSOption.TFSUri.Value);
             _tfsService = TfsTeamProjectCollectionFactory.GetTeamProjectCollection(collectionUri);
@@ -347,7 +360,7 @@ namespace TFSGeneration.Control
                         };
                         string tfsId;
                         //создаем ТФС
-                        bool resultCreateTFS = CreateTFS(_task.Executed.ReplaceParcedValues, out tfsId);
+                        bool resultCreateTFS = CheckAndCreateTFSItem(_task.Executed.ReplaceParcedValues, out tfsId);
                         _task.Executed.TFSID = tfsId;
                         //Если уже TFS создавался то пропускаем обработку, и записываем ранее созданный TFSID
                         _task.Status = resultCreateTFS ? ProcessingStatus.Created : ProcessingStatus.Skipped;
@@ -421,7 +434,7 @@ namespace TFSGeneration.Control
 
 
 
-        bool CreateTFS(GetParcedValue getParcedValue, out string createdTfsId)
+        bool CheckAndCreateTFSItem(GetParcedValue getParcedValue, out string createdTfsId)
         {
             createdTfsId = string.Empty;
             //запускаем скрипт по поиску дублей
@@ -437,10 +450,11 @@ namespace TFSGeneration.Control
                 return false;
             }
 
-            //если в настройках нет данных о создании TFS
-            if (Settings.TFSOption.TFSCreate.TeamProjects == null || Settings.TFSOption.TFSCreate.TeamProjects.Length == 0)
-                throw new TFSFieldsException("TeamProjects Not Found!");
+            return CreateTFSItem(getParcedValue, ref createdTfsId);
+        }
 
+        bool CreateTFSItem(GetParcedValue getParcedValue, ref string createdTfsId)
+        {
             foreach (TeamProjectCondition teamProj in Settings.TFSOption.TFSCreate.TeamProjects)
             {
                 //проверяем условие в аттрибуте Condition, но сначала выполняется функция getParcedValue для замены необходимых спарсенных данных
@@ -505,7 +519,58 @@ namespace TFSGeneration.Control
 
 
 
-        void Test()
+        void Test1()
+        {
+            string query = @"SELECT [System.Id]
+            FROM WorkItems
+            WHERE [System.ID] = '1373710'";
+            WorkItemCollection workQuery = _workItemStore.Query(query);
+            foreach (WorkItem item in workQuery)
+            {
+                foreach (Field field in item.Fields)
+                {
+                    string fefe = field.Name;
+                    object fefe123 = field.Value;
+                }
+            }
+
+
+            TMData _task = new TMData
+            {
+                ID = "1221",
+                From = "JIRA",
+                ReceivedDate = DateTime.Now.ToString("G")
+            };
+
+            List<DataMail> parced = ParceBodyAndSubject(@"[JIRA]  (ITHD-268244) Приоритет: [Высокий] Отв. группа: [МедиаТел(HD)]", @"
+     [ http://jira:8090/browse/ITHD-268244?page=com.atlassian.jira.plugin.system.issuetabpanels:all-tabpanel ]
+
+	Здравствуйте!
+	На вашу группу [ МедиаТел(HD) ] назначена новая заявка.
+
+	Сообщения в счета
+
+	Код: ITHD-268244
+	URL: http://jira:8090/browse/ITHD-268244?page=com.atlassian.jira.plugin.system.issuetabpanels:all-tabpanel
+	Проект: ХелпДеск
+	Тип запроса: Ошибка
+
+-- 
+This message is automatically generated by JIRA.
+");
+
+            _task.Executed = new ItemExecuted
+            {
+                MailParcedItems = parced
+            };
+
+            //string temp = _task.Executed.ReplaceParcedValues(Settings.TFSOption.GetDublicateTFS[0].Value);
+
+            string idResult = string.Empty;
+            CreateTFSItem(_task.Executed.ReplaceParcedValues, ref idResult);
+        }
+
+        void Test2()
         {
             //WorkItemStore workItemStore = _tfsService.GetService<WorkItemStore>();
             Project teamProject = _workItemStore.Projects["Support"];

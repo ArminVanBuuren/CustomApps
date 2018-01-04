@@ -33,7 +33,12 @@ namespace TFSGeneration.Control.DataBase.Datas
             }
 
             _result = Utils.GetCustomFuncResult(_result);
-            _result = _result.Replace(@"\r\n", Environment.NewLine).Replace(@"\r", "\r").Replace(@"\n", "\n");
+
+            while (_result.IndexOf("&amp;", StringComparison.Ordinal) != -1)
+            {
+                _result = _result.Replace(@"&amp;", @"&");
+            }
+            _result = _result.Replace(@"\r", "\r").Replace(@"\n", "\n").Replace(@"&lt;", @"<").Replace(@"&gt;", @">").Replace(@"&quot;","\"").Replace(@"&apos;", @"'");
 
 
             return _result;
