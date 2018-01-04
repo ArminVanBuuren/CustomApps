@@ -302,7 +302,7 @@ namespace TFSGeneration
                     return;
 
                 // if (error == WarnSeverity.Error)
-                ShowMyForm(this, EventArgs.Empty);
+                ShowMyForm(this, EventArgs.Empty); // всегда активировать окно при любых ошибках
 
                 AddLog(stackTrace);
 
