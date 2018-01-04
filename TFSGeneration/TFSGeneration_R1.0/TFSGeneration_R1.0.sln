@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFSGeneration", "TFSGenerat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFSGeneration.Control", "TFSGeneration.Control\TFSGeneration.Control.csproj", "{E53CB879-B60B-4679-82D8-EFCCA6F0520A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ForeignAssembly", "ForeignAssembly", "{E049ED61-ED09-46A1-8D02-2B503D2CB20F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Any CPU|Any CPU = Any CPU|Any CPU
