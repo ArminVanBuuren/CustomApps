@@ -194,13 +194,17 @@ namespace TFSGeneration.Control
 
             //если в настройках нет данных о создании TFS
             if (Settings.TFSOption.TFSCreate.TeamProjects == null || Settings.TFSOption.TFSCreate.TeamProjects.Length == 0)
-                throw new TFSFieldsException("TeamProjects Not Found!");
+                throw new TFSFieldsException("TeamProjects Not Found! Please check config file.");
 
             Uri collectionUri = new Uri(Settings.TFSOption.TFSUri.Value);
             _tfsService = TfsTeamProjectCollectionFactory.GetTeamProjectCollection(collectionUri);
             _tfsService.Authenticate();
             _tfsService.EnsureAuthenticated();
             _workItemStore = _tfsService.GetService<WorkItemStore>();
+
+
+            //NotifyUserIfHasError(WarnSeverity.Warning, string.Format("Please see log tab. Catched: {0} processing errors!", 10), "1111");
+            //Test1();
         }
 
 
@@ -293,7 +297,7 @@ namespace TFSGeneration.Control
         MailItem[] ExchangeExceptionHandle(ExchangeService service, FolderId folderId, int numberOfMessages, ref int numberOfAttempts, Exception ex)
         {
             if (numberOfAttempts >= 5)
-                throw new Exception(string.Format("{0} connection attempts were made to the Exchange-Server.", numberOfAttempts), ex);
+                throw new Exception(string.Format("Error when connecting to Exchange Server! {0} connection attempts were made to the server.", numberOfAttempts), ex);
 
             Thread.Sleep(30 * 1000);
             return GetUnreadMailFromInbox(service, folderId, numberOfMessages, ref numberOfAttempts);
@@ -505,10 +509,6 @@ namespace TFSGeneration.Control
                     WorkItemType workItemType = teamProject.WorkItemTypes[workItem.Value];
                     WorkItem tfsWorkItem = new WorkItem(workItemType);
 
-                    //получаем все обязательные поля для заполнения, чтобы в случае эксепшена знать какие поля необходимо заполнить
-                    string reqFields = tfsWorkItem.Fields.Cast<Field>().Where(field => field.IsRequired)
-                        .Aggregate(string.Empty, (current, field) => current + (field.ReferenceName + "\r\n")).Trim();
-
                     try
                     {
                         //заполняем все поля которые были указаны в конфиге для обпределенного типа заявки TFS
@@ -529,11 +529,13 @@ namespace TFSGeneration.Control
                         tfsWorkItem.Save();
                         createdTfsId += tfsWorkItem.Id + ";";
                     }
-                    catch (Exception ex)
+                    catch (ValidationException ex)
                     {
-                        throw new Exception(
-                            string.Format("Please Check Fields In [{0}/{1}].\r\nRequired fields:\r\n{2}", teamProj.Value, workItem.Value,
-                                reqFields), ex);
+                        //получаем все обязательные поля для заполнения, чтобы в случае эксепшена знать какие поля необходимо заполнить
+                        string reqFields = tfsWorkItem.Fields.Cast<Field>().Where(field => field.IsRequired)
+                            .Aggregate(string.Empty, (current, field) => current + (field.ReferenceName + "\r\n")).Trim();
+
+                        throw new TFSFieldsException(string.Format("Failure in creating TFS item! Please check fields in [{0}/{1}]", teamProj.Value, workItem.Value), new TFSFieldsException(string.Format("Required fields:\r\n{0}", reqFields), ex));
                     }
                 }
             }

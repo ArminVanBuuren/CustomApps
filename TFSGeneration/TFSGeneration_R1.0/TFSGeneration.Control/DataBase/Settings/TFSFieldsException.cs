@@ -13,7 +13,11 @@ namespace TFSGeneration.Control.DataBase.Settings
 		{
 
 		}
-		public TFSFieldsException(string fromat, params object[] obj_params) : base(string.Format(fromat, obj_params))
+	    public TFSFieldsException(string message, Exception innerException) : base(message, innerException)
+	    {
+
+	    }
+        public TFSFieldsException(string fromat, params string[] obj_params) : base(string.Format(fromat, obj_params))
 		{
 
 		}
