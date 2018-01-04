@@ -27,19 +27,18 @@ namespace TFSGeneration.Control.DataBase.Datas
         {
             string _result = source;
 
+            while (_result.IndexOf("&amp;", StringComparison.Ordinal) != -1)
+            {
+                _result = _result.Replace(@"&amp;", @"&");
+            }
+            _result = _result.Replace(@"\r", "\r").Replace(@"\n", "\n").Replace(@"&lt;", @"<").Replace(@"&gt;", @">").Replace(@"&quot;", "\"").Replace(@"&apos;", @"'");
+
             foreach (DataMail mailParceItem in MailParcedItems)
             {
                 _result = new Regex(string.Format(@"%\s*{0}\s*%", mailParceItem.Name), RegexOptions.IgnoreCase).Replace(_result, mailParceItem.Value);
             }
 
             _result = Utils.GetCustomFuncResult(_result);
-
-            while (_result.IndexOf("&amp;", StringComparison.Ordinal) != -1)
-            {
-                _result = _result.Replace(@"&amp;", @"&");
-            }
-            _result = _result.Replace(@"\r", "\r").Replace(@"\n", "\n").Replace(@"&lt;", @"<").Replace(@"&gt;", @">").Replace(@"&quot;","\"").Replace(@"&apos;", @"'");
-
 
             return _result;
         }
