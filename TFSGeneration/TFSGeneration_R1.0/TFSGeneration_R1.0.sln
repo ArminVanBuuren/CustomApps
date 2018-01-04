@@ -7,60 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFSGeneration", "TFSGenerat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFSGeneration.Control", "TFSGeneration.Control\TFSGeneration.Control.csproj", "{E53CB879-B60B-4679-82D8-EFCCA6F0520A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ForeignAssembly", "ForeignAssembly", "{E049ED61-ED09-46A1-8D02-2B503D2CB20F}"
-	ProjectSection(SolutionItems) = preProject
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.mshtml.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.mshtml.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.ServiceBus.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.ServiceBus.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.Build.Client.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.Build.Client.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.Build.Common.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.Build.Common.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.Build2.WebApi.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.Build2.WebApi.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.Client.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.Client.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.Common.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.Common.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.Core.WebApi.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.Core.WebApi.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.Diff.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.Diff.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.Lab.Client.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.Lab.Client.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.Lab.Common.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.Lab.Common.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.ProjectManagement.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.ProjectManagement.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.Test.WebApi.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.Test.WebApi.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.TestManagement.Client.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.TestManagement.Client.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.TestManagement.Common.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.TestManagement.Common.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.TestManagement.Controller.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.TestManagement.Controller.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.VersionControl.Client.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.VersionControl.Client.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.Work.WebApi.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.Work.WebApi.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.WorkItemTracking.Client.DataStoreLoader.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.WorkItemTracking.Client.DataStoreLoader.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.WorkItemTracking.Client.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.WorkItemTracking.Client.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.WorkItemTracking.Client.QueryLanguage.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.WorkItemTracking.Client.QueryLanguage.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.WorkItemTracking.Common.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.WorkItemTracking.Common.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.WorkItemTracking.ControlsCore.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.WorkItemTracking.ControlsCore.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.WorkItemTracking.Proxy.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.WorkItemTracking.Proxy.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.WorkItemTracking.WebApi.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.TeamFoundation.WorkItemTracking.WebApi.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.VisualStudio.Services.Client.Interactive.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.VisualStudio.Services.Client.Interactive.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.VisualStudio.Services.Common.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.VisualStudio.Services.Common.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.VisualStudio.Services.WebApi.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.VisualStudio.Services.WebApi.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.WITDataStore32.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.WITDataStore32.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.WITDataStore64.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Microsoft.WITDataStore64.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Newtonsoft.Json.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\Newtonsoft.Json.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\System.Net.Http.Formatting.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\System.Net.Http.Formatting.dll
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ru", "ru", "{0D161099-C1DC-44FB-87CC-21A772F47C01}"
-	ProjectSection(SolutionItems) = preProject
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\ru\Microsoft.TeamFoundation.Build.Client.Resources.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\ru\Microsoft.TeamFoundation.Build.Client.Resources.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\ru\Microsoft.TeamFoundation.Client.Resources.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\ru\Microsoft.TeamFoundation.Client.Resources.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\ru\Microsoft.TeamFoundation.Common.Resources.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\ru\Microsoft.TeamFoundation.Common.Resources.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\ru\Microsoft.TeamFoundation.Lab.Client.Resources.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\ru\Microsoft.TeamFoundation.Lab.Client.Resources.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\ru\Microsoft.TeamFoundation.TestManagement.Client.Resources.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\ru\Microsoft.TeamFoundation.TestManagement.Client.Resources.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\ru\Microsoft.TeamFoundation.WorkItemTracking.Client.QueryLanguage.Resources.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\ru\Microsoft.TeamFoundation.WorkItemTracking.Client.QueryLanguage.Resources.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\ru\Microsoft.TeamFoundation.WorkItemTracking.Client.Resources.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\ru\Microsoft.TeamFoundation.WorkItemTracking.Client.Resources.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\ru\Microsoft.TeamFoundation.WorkItemTracking.Common.Resources.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\ru\Microsoft.TeamFoundation.WorkItemTracking.Common.Resources.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\ru\Microsoft.TeamFoundation.WorkItemTracking.ControlsCore.Resources.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\ru\Microsoft.TeamFoundation.WorkItemTracking.ControlsCore.Resources.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\ru\Microsoft.TeamFoundation.WorkItemTracking.Proxy.Resources.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\ru\Microsoft.TeamFoundation.WorkItemTracking.Proxy.Resources.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\ru\Microsoft.VisualStudio.Services.Client.Interactive.Resources.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\ru\Microsoft.VisualStudio.Services.Client.Interactive.Resources.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\ru\Microsoft.VisualStudio.Services.Common.Resources.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\ru\Microsoft.VisualStudio.Services.Common.Resources.dll
-		..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\ru\Microsoft.VisualStudio.Services.WebApi.Resources.dll = ..\..\..\..\Google Drive\PROJECTS\C# Application\Part 1\TFSFromMail\!!!\ForeignAssembly\ru\Microsoft.VisualStudio.Services.WebApi.Resources.dll
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Any CPU|Any CPU = Any CPU|Any CPU
@@ -113,9 +59,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{0D161099-C1DC-44FB-87CC-21A772F47C01} = {E049ED61-ED09-46A1-8D02-2B503D2CB20F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C93E86C3-1F2A-45F0-B6A7-20856B1C70AE}
