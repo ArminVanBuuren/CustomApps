@@ -88,7 +88,8 @@ namespace TFSGeneration.Control
                 {
                     NotifyUserCurrentStatus(fatal.Message);
                     NotifyUserIfHasError(WarnSeverity.Error,
-                        string.Format("Processing was stopped. Catched fatal exception:{0}{1}", Environment.NewLine, fatal.Message), fatal, true);
+                        string.Format("Processing was stopped. Catched fatal exception:{0}{1}", Environment.NewLine, fatal.Message), fatal,
+                        true);
                 }
                 finally
                 {
@@ -128,8 +129,7 @@ namespace TFSGeneration.Control
                 _exchangeService.Url = new Uri(Settings.MailOption.ExchangeUri.Value);
                 //AlternateIdBase response = _exchangeService.ConvertId(new AlternateId(IdFormat.EwsId, "Placeholder", domain_username[1].Trim()), IdFormat.EwsId);
             }
-            else if (!Settings.MailOption.Address.Value.IsNullOrEmptyTrim() && _checkEmailAddress.IsMatch(Settings.MailOption.Address.Value)
-            ) // Необходим только Email Address и пароль, т.к. вызывается другой способ подключения
+            else if (!Settings.MailOption.Address.Value.IsNullOrEmptyTrim() && _checkEmailAddress.IsMatch(Settings.MailOption.Address.Value)) // Необходим только Email Address и пароль, т.к. вызывается другой способ подключения
             {
                 _exchangeService.Credentials = new NetworkCredential(Settings.MailOption.Address.Value, _mailPassword);
                 _exchangeService.AutodiscoverUrl(Settings.MailOption.Address.Value, RedirectionUrlValidationCallback);
@@ -242,13 +242,15 @@ namespace TFSGeneration.Control
             {
                 numberOfAttempts++;
                 //https://stackoverflow.com/questions/36069801/ews-read-mail-plain-text-body-getting-serviceobjectpropertyexception
-                PropertySet GetItemsPropertySet = new PropertySet(BasePropertySet.FirstClassProperties, EmailMessageSchema.From, EmailMessageSchema.ToRecipients);
+                PropertySet GetItemsPropertySet = new PropertySet(BasePropertySet.FirstClassProperties, EmailMessageSchema.From,
+                    EmailMessageSchema.ToRecipients);
                 GetItemsPropertySet.RequestedBodyType = BodyType.Text;
 
                 Folder inbox = Folder.Bind(service, folderId);
                 FindItemsResults<Item> findResults = inbox.FindItems(new ItemView(numberOfMessages));
 
-                ServiceResponseCollection<GetItemResponse> items = service.BindToItems(findResults.Select(item => item.Id), GetItemsPropertySet);
+                ServiceResponseCollection<GetItemResponse> items = service.BindToItems(findResults.Select(item => item.Id),
+                    GetItemsPropertySet);
 
                 return items.Select(item =>
                 {
@@ -258,7 +260,8 @@ namespace TFSGeneration.Control
                         //ID = item.Item.Id.ChangeKey + item.Item.Id.UniqueId,
                         ID = uniqueId[uniqueId.Length - 1],
                         From = ((EmailAddress) item.Item[EmailMessageSchema.From]).Address,
-                        Recipients = ((EmailAddressCollection) item.Item[EmailMessageSchema.ToRecipients]).Select(recipient => recipient.Address)
+                        Recipients = ((EmailAddressCollection) item.Item[EmailMessageSchema.ToRecipients])
+                            .Select(recipient => recipient.Address)
                             .ToArray(),
                         Subject = item.Item.Subject,
                         ReceivedDate = item.Item.DateTimeReceived,
@@ -276,7 +279,8 @@ namespace TFSGeneration.Control
             }
         }
 
-        MailItem[] ExchangeExceptionHandle(ExchangeService service, FolderId folderId, int numberOfMessages, ref int numberOfAttempts, Exception ex)
+        MailItem[] ExchangeExceptionHandle(ExchangeService service, FolderId folderId, int numberOfMessages, ref int numberOfAttempts,
+            Exception ex)
         {
             if (numberOfAttempts >= 5)
                 throw new Exception(string.Format("{0} connection attempts were made to the Exchange-Server.", numberOfAttempts), ex);
@@ -419,13 +423,21 @@ namespace TFSGeneration.Control
 
             foreach (string match in ParceSubject.GetGroupNames())
             {
-                parced.Add(new DataMail {Name = string.Format("{0}_{1}", nameof(Settings.MailOption.ParceSubject), match), Value = fromSubject[match].Value});
+                parced.Add(new DataMail
+                {
+                    Name = string.Format("{0}_{1}", nameof(Settings.MailOption.ParceSubject), match),
+                    Value = fromSubject[match].Value
+                });
             }
 
 
             foreach (string match in ParceBody.GetGroupNames())
             {
-                parced.Add(new DataMail {Name = string.Format("{0}_{1}", nameof(Settings.MailOption.ParceBody), match), Value = fromBody[match].Value});
+                parced.Add(new DataMail
+                {
+                    Name = string.Format("{0}_{1}", nameof(Settings.MailOption.ParceBody), match),
+                    Value = fromBody[match].Value
+                });
 
             }
 
@@ -498,7 +510,9 @@ namespace TFSGeneration.Control
                             if (field.Name.Equals("Control.AssignedTo", StringComparison.CurrentCultureIgnoreCase))
                             {
                                 string getAssignTo = field.GetSwitchValue(getParcedValue).Trim();
-                                tfsWorkItem.Fields["Assigned To"].Value = getAssignTo.IsNullOrEmpty() ? _tfsService.AuthorizedIdentity.DisplayName : getAssignTo;
+                                tfsWorkItem.Fields["Assigned To"].Value = getAssignTo.IsNullOrEmpty()
+                                    ? _tfsService.AuthorizedIdentity.DisplayName
+                                    : getAssignTo;
                                 continue;
                             }
                             tfsWorkItem.Fields[field.Name].Value = field.GetSwitchValue(getParcedValue);
@@ -509,7 +523,9 @@ namespace TFSGeneration.Control
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception(string.Format("Please Check Fields In [{0}/{1}].\r\nRequired fields:\r\n{2}", teamProj.Value, workItem.Value, reqFields), ex);
+                        throw new Exception(
+                            string.Format("Please Check Fields In [{0}/{1}].\r\nRequired fields:\r\n{2}", teamProj.Value, workItem.Value,
+                                reqFields), ex);
                     }
                 }
             }
