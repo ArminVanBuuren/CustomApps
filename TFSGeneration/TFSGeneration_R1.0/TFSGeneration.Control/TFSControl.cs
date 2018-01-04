@@ -148,8 +148,7 @@ namespace TFSGeneration.Control
 
             _exchangeFolder = new FolderId(WellKnownFolderName.Inbox);
             Folder checkConnect = Folder.Bind(_exchangeService, _exchangeFolder);
-            _exchangeService.TraceEnabled =
-                false; // во время дальнейшей обработки данная опция уже бсполезна, т.к. после получения ошибок при подключении к серверу в дебагe уже ничего не пишется об этом, он просто будет спамить что получил от сервера и передал
+            _exchangeService.TraceEnabled = false; // во время дальнейшей обработки данная опция уже бсполезна, т.к. после получения ошибок при подключении к серверу в дебагe уже ничего не пишется об этом, он просто будет спамить что получил от сервера и передал
 
             // если указан фильтр по папке, то найти папку на почте и обрабатывать письмо только из этой папки
             string findFolder = Settings.MailOption.SourceFolder.Value.Trim();
@@ -242,15 +241,13 @@ namespace TFSGeneration.Control
             {
                 numberOfAttempts++;
                 //https://stackoverflow.com/questions/36069801/ews-read-mail-plain-text-body-getting-serviceobjectpropertyexception
-                PropertySet GetItemsPropertySet = new PropertySet(BasePropertySet.FirstClassProperties, EmailMessageSchema.From,
-                    EmailMessageSchema.ToRecipients);
+                PropertySet GetItemsPropertySet = new PropertySet(BasePropertySet.FirstClassProperties, EmailMessageSchema.From, EmailMessageSchema.ToRecipients);
                 GetItemsPropertySet.RequestedBodyType = BodyType.Text;
 
                 Folder inbox = Folder.Bind(service, folderId);
                 FindItemsResults<Item> findResults = inbox.FindItems(new ItemView(numberOfMessages));
 
-                ServiceResponseCollection<GetItemResponse> items = service.BindToItems(findResults.Select(item => item.Id),
-                    GetItemsPropertySet);
+                ServiceResponseCollection<GetItemResponse> items = service.BindToItems(findResults.Select(item => item.Id), GetItemsPropertySet);
 
                 return items.Select(item =>
                 {
@@ -279,8 +276,7 @@ namespace TFSGeneration.Control
             }
         }
 
-        MailItem[] ExchangeExceptionHandle(ExchangeService service, FolderId folderId, int numberOfMessages, ref int numberOfAttempts,
-            Exception ex)
+        MailItem[] ExchangeExceptionHandle(ExchangeService service, FolderId folderId, int numberOfMessages, ref int numberOfAttempts, Exception ex)
         {
             if (numberOfAttempts >= 5)
                 throw new Exception(string.Format("{0} connection attempts were made to the Exchange-Server.", numberOfAttempts), ex);
@@ -383,8 +379,7 @@ namespace TFSGeneration.Control
                     Datas.Add(_task);
 
                     countErrors++;
-                    logProcessing += string.Format("Processing Error!{0}ReceivedDate=[{1}] Subject=[{2}]{0}{3}{0}{4}{0}{5}{0}",
-                        Environment.NewLine, item.ReceivedDate, item.Subject, ex.Message, ex.StackTrace, new string('=', 47));
+                    logProcessing += string.Format("Processing Error!{0}ReceivedDate=[{1}] Subject=[{2}]{0}{3}{0}{4}{0}{5}{0}", Environment.NewLine, item.ReceivedDate, item.Subject, ex.Message, ex.StackTrace, new string('=', 47));
                 }
                 catch (Exception)
                 {
@@ -404,8 +399,7 @@ namespace TFSGeneration.Control
             {
                 //отправляем список ошибок которые возможно связанны с настроками конфига
                 NotifyUserCurrentStatus(STR_PROC_ERROR);
-                NotifyUserIfHasError(WarnSeverity.Warning,
-                    string.Format("Please see log tab. Catched: {0} processing errors!", countErrors),
+                NotifyUserIfHasError(WarnSeverity.Warning, string.Format("Please see log tab. Catched: {0} processing errors!", countErrors),
                     logProcessing.Trim());
                 Thread.Sleep(10 * 1000);
             }
