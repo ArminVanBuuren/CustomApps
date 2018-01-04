@@ -19,7 +19,7 @@ namespace TFSGeneration.Control.DataBase.Datas
         public string TFSID { get; set; }
 
         /// <summary>
-        /// Основной метод для замены спец функций из текста значения
+        /// Основной метод для замены динамические параметров из шаблона на спец функций или спарсенные параметры из запросы
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
@@ -27,17 +27,20 @@ namespace TFSGeneration.Control.DataBase.Datas
         {
             string _result = source;
 
+            // реплейсим спец символы xml в обычный текст
             while (_result.IndexOf("&amp;", StringComparison.Ordinal) != -1)
             {
                 _result = _result.Replace(@"&amp;", @"&");
             }
             _result = _result.Replace(@"\r", "\r").Replace(@"\n", "\n").Replace(@"&lt;", @"<").Replace(@"&gt;", @">").Replace(@"&quot;", "\"").Replace(@"&apos;", @"'");
 
+            // реплейсим динамические параметры на спарсенные параметры из запроса, по ситаксису %ParceBody_TITLE%
             foreach (DataMail mailParceItem in MailParcedItems)
             {
                 _result = new Regex(string.Format(@"%\s*{0}\s*%", mailParceItem.Name), RegexOptions.IgnoreCase).Replace(_result, mailParceItem.Value);
             }
 
+            // реплейсим динамические параметры на результат функций, по ситаксису %now%
             _result = Utils.GetCustomFuncResult(_result);
 
             return _result;
