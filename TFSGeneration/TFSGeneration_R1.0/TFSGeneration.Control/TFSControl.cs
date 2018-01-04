@@ -88,7 +88,7 @@ namespace TFSGeneration.Control
                 {
                     NotifyUserCurrentStatus(fatal.Message);
                     NotifyUserIfHasError(WarnSeverity.Error,
-                        string.Format("Processing was stopped. Catched fatal exception:{0}{1}", Environment.NewLine, fatal.Message), fatal,
+                        string.Format("Processing was stopped. {0}{1}", Environment.NewLine, fatal.Message), fatal,
                         true);
                 }
                 finally
@@ -146,9 +146,21 @@ namespace TFSGeneration.Control
                     Settings.MailOption.ExchangeUri.Value.ToStringIsNullOrEmptyTrim()));
             }
 
-            _exchangeFolder = new FolderId(WellKnownFolderName.Inbox);
-            Folder checkConnect = Folder.Bind(_exchangeService, _exchangeFolder);
-            _exchangeService.TraceEnabled = false; // во время дальнейшей обработки данная опция уже бсполезна, т.к. после получения ошибок при подключении к серверу в дебагe уже ничего не пишется об этом, он просто будет спамить что получил от сервера и передал
+            // проверяем коннект к почтовому серверу
+            try
+            {
+                _exchangeFolder = new FolderId(WellKnownFolderName.Inbox);
+                Folder checkConnect = Folder.Bind(_exchangeService, _exchangeFolder);
+            }
+            catch (ServiceRequestException ex)
+            {
+                throw new Exception("Error when connecting to Exchange Server! Please check your authorization data.", ex);
+            }
+            finally
+            {
+                _exchangeService.TraceEnabled = false; // во время дальнейшей обработки данная опция уже бсполезна, т.к. после получения ошибок при подключении к серверу в дебагe уже ничего не пишется об этом, он просто будет спамить что получил от сервера и передал
+            }
+
 
             // если указан фильтр по папке, то найти папку на почте и обрабатывать письмо только из этой папки
             string findFolder = Settings.MailOption.SourceFolder.Value.Trim();
@@ -168,6 +180,8 @@ namespace TFSGeneration.Control
                     }
                 }
             }
+
+
 
 
             //   Uri TfsURL = new Uri(Settings.TFSOption.TFSUri.Value);
