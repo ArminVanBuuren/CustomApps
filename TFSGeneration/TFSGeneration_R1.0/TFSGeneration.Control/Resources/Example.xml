@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<Settings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Interval Value="20" />
+	<StartDate Value="10.12.2017 11:08:06" />
+	<SourceFolder Value="jira" />
+	<FilterMailFrom Value="jira@mts.by" />
+	<FilterSubject Value=".+Приоритет:\s*\[(.+?)\].+" />
+	<BootRun Value="false" />
+	<MailOption>
+		<ExchangeUri Value="https://e-mail.mts.ru/ews/exchange.asmx" />
+		<ParceBody><![CDATA[.+На\s*вашу\s*группу\s*\[.+?\]\s*назначена\s*новая\s*заявка\.\s*(?<TITLE>.+?)\s*Код:\s*(?<ITHD>.+?)\s*URL:\s*(?<URL>.+?)\s*Проект:\s*(?<PROJECT>.+?)\s*Тип\s*запроса:\s*(?<REQTYPE>.+?)\s*$.+]]></ParceBody>
+		<ParceSubject><![CDATA[.+Приоритет:\s*\[(?<SEVERITY>.+?)\].+]]></ParceSubject>
+	</MailOption>
+	<TFSOption>
+		<TFSUri Value="https://tfs.bss.nvision-group.com" />
+		<GetDublicateTFS><![CDATA[SELECT [System.Id] 
+FROM WorkItems 
+WHERE [System.TeamProject] = 'Support' 
+AND [System.Title] Contains '%ParceBody_ITHD%']]></GetDublicateTFS>
+		<CreateTFS>
+			<TeamProject Condition="#{if('true'='true')}" Value="Support" >
+				<WorkItem Condition="#{if('%ParceBody_REQTYPE%'!='ошибка')}" Value="Task">
+					<Field Name="AssignedTo" Value="" />
+					<Field Name="System.CreatedBy" Value="Костюченко Ольга Вячеславовна" />
+					<Field Name="System.Title" Value="[%ParceBody_ITHD%] %ParceBody_TITLE%" />
+					<Field Name="Sitronics.RND.StsProject" Value="B13002_MTSMinsk_TS_ALL_in_2017" />
+					<Field Name="Sitronics.RND.Support.ServiceDeskCode" Value="%ParceBody_ITHD%" />
+					<Field Name="Sitronics.RND.Region" Value="MTS.Bel" />
+					<Field Name="Description" Value="TFS Assist" />
+					<Field Name="Microsoft.VSTS.Common.Activity" Value="Consultation" />
+					<Field Name="System.AreaPath" Value="Support\All" />
+					<Field Name="System.IterationPath" Value="Support\Release 4.7.1" />
+					<Field Name="Microsoft.VSTS.Scheduling.StartDate" Value="%now%" />
+					<Field Name="Severity" Value="Medium" Switch="%ParceSubject_SEVERITY%">
+						<Map Case="авария" Value="Critical" />
+						<Map Case="критический" Value="Critical" />
+						<Map Case="высокий" Value="High" />
+						<Map Case="стандартный" Value="Medium" />
+						<Map Case="низкий" Value="Low" />
+					</Field>
+					<Field Name="Sitronics.RND.SuggestDeployDate" Value="%now(+1:month)%" />
+					<Field Name="Microsoft.VSTS.Scheduling.FinishDate" Value="%now(+1:week)%" />
+				</WorkItem>
+				<WorkItem Condition="#{if('%ParceBody_REQTYPE%'='ошибка')}" Value="Issue">
+					<Field Name="AssignedTo" Value="" />
+					<Field Name="System.CreatedBy" Value="Костюченко Ольга Вячеславовна" />
+					<Field Name="System.Title" Value="[%ParceBody_ITHD%] %ParceBody_TITLE%" />
+					<Field Name="Sitronics.RND.StsProject" Value="B13002_MTSMinsk_TS_ALL_in_2017" />
+					<Field Name="Sitronics.RND.Support.ServiceDeskCode" Value="%ParceBody_ITHD%" />
+					<Field Name="Sitronics.RND.Region" Value="MTS.Bel" />
+					<Field Name="Description" Value="TFS Assist" />
+					<Field Name="Microsoft.VSTS.Common.Activity" Value="Consultation" />
+					<Field Name="System.AreaPath" Value="Support\All" />
+					<Field Name="System.IterationPath" Value="Support\Release 4.7.1" />
+					<Field Name="Microsoft.VSTS.Scheduling.StartDate" Value="%now%" />
+					<Field Name="Severity" Value="Medium" Switch="%ParceSubject_SEVERITY%">
+						<Map Case="авария" Value="Critical" />
+						<Map Case="критический" Value="Critical" />
+						<Map Case="высокий" Value="High" />
+						<Map Case="стандартный" Value="Medium" />
+						<Map Case="низкий" Value="Low" />
+					</Field>
+					<Field Name="Sitronics.RND.Support.SLA.WorkaroundDate" Value="" Switch="%ParceSubject_SEVERITY%">
+						<Map Case="авария"         Value="%now(+8:hour)%" />
+						<Map Case="критический"    Value="%now(+8:hour)%" />
+						<Map Case="высокий"        Value="%now(+24:hour)%" />
+						<Map Case="стандартный"    Value="%now(+5:workday)%" />
+						<Map Case="низкий"         Value="%now(+10:workday)%" />
+					</Field>
+					<Field Name="Sitronics.RND.SuggestDeployDate" Value="" Switch="%ParceSubject_SEVERITY%">
+						<Map Case="авария"         Value="%now(+25:workday)%" />
+						<Map Case="критический"    Value="%now(+25:workday)%" />
+						<Map Case="высокий"        Value="%now(+35:workday)%" />
+						<Map Case="стандартный"    Value="%now(+50:workday)%" />
+						<Map Case="низкий"         Value="%now(+65:workday)%" />
+					</Field>
+					<Field Name="Microsoft.VSTS.Scheduling.FinishDate" Value="" Switch="%ParceSubject_SEVERITY%">
+						<Map Case="авария"         Value="%now(+8:hour)%" />
+						<Map Case="критический"    Value="%now(+8:hour)%" />
+						<Map Case="высокий"        Value="%now(+24:hour)%" />
+						<Map Case="стандартный"    Value="%now(+3:workday)%" />
+						<Map Case="низкий"         Value="%now(+1:week)%" />
+					</Field>
+				</WorkItem>
+			</TeamProject>
+		</CreateTFS>
+	</TFSOption>
+</Settings>
