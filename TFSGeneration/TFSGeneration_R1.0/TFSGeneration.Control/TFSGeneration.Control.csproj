@@ -239,7 +239,7 @@
     <None Include="Resources\Rick.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Example.xml" />
+    <None Include="Resources\Example_Config.xml" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

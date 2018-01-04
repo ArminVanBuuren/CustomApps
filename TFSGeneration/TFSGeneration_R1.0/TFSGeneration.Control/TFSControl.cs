@@ -16,7 +16,7 @@ using TFSGeneration.Control.Utils;
 
 namespace TFSGeneration.Control
 {
-    public partial class TFSControl
+    public sealed partial class TFSControl
     {
         private const string STR_INITIALIZATION = "Initialization...";
         private const string STR_CONNECTING = "Connecting...";

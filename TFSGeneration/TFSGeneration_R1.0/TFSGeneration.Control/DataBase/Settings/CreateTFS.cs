@@ -71,7 +71,7 @@ namespace TFSGeneration.Control.DataBase.Settings
 
         public override string ToString()
         {
-            return string.Format("WorkItems:[{0}]", WorkItems?.Length ?? 0);
+            return string.Format("{1} WorkItems:[{0}]", WorkItems?.Length ?? 0, Value);
         }
     }
 
@@ -86,7 +86,7 @@ namespace TFSGeneration.Control.DataBase.Settings
 
         public override string ToString()
         {
-            return string.Format("TFSFields:[{0}]", Fields?.Length ?? 0);
+            return string.Format("{1} TFSFields:[{0}]", Fields?.Length ?? 0, Value);
         }
     }
 

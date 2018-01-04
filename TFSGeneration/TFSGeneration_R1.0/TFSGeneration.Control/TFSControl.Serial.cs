@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net.Mime;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -25,7 +26,7 @@ namespace TFSGeneration.Control
     }
 
     [Serializable]
-    partial class TFSControl : ISerializable, IDisposable
+    sealed partial class TFSControl : ISerializable, IDisposable
     {
         public static event NotifyOfAnErrorHandler NotifyUserAnError;
         public static string ApplicationName { get; }
@@ -93,6 +94,7 @@ namespace TFSGeneration.Control
             return tfsControl;
         }
 
+        //-------------------------------------- Reference Instance Controls (Non-Static) -----------------------------------
 
         public event NotifyStatusHandler NotifyUserAnStatus;
         public event WriteLogHandler WriteLog;
@@ -129,6 +131,9 @@ namespace TFSGeneration.Control
         TFSControl (SerializationInfo propertyBag, StreamingContext context)
         {
             Initialize();
+
+            if (Settings == null)
+                throw new ArgumentException(string.Format("'{0}' Is Not Initialized!", SettingsPath));
 
             try
             {
@@ -215,52 +220,86 @@ namespace TFSGeneration.Control
         /// </summary>
         void Initialize()
         {
-            Settings = DeserializeSettings();
-            Datas = DeserializeDatas();
+            uint tryLoad = 0;
+            Settings = LoadSettings(SettingsPath, ref tryLoad);
+            Datas = DeserializeDatas(DataBasePath) ?? new DataCollection();
+        }
 
-            if (Settings == null)
-                Settings = new SettingsCollection();
+        static SettingsCollection LoadSettings(string settPath, ref uint tryLoad)
+        {
+            SettingsCollection sett = DeserializeSettings(settPath);
 
-            if (Datas == null)
-                Datas = new DataCollection();
+            if (sett != null)
+                return sett;
+
+            if (tryLoad == 0)
+            {
+                // создаем настройки из файла примера в ресурсах Example_Config и бэкапим неудавшуюся настройку
+                FileInfo fileInfo = new FileInfo(settPath);
+                if (fileInfo.Exists)
+                {
+                    int index = 0;
+                    string bakFileName = string.Format("{0}_Incorrect.bak", settPath);
+                    while (File.Exists(bakFileName))
+                    {
+                        bakFileName = string.Format("{0}_Incorrect_{1}.bak", settPath, ++index);
+                    }
+                    File.Copy(settPath, bakFileName);
+                }
+                
+                using (StreamWriter tw = new StreamWriter(settPath, false))
+                {
+                    // var thisExe = System.Reflection.Assembly.GetExecutingAssembly();
+                    tw.Write(Properties.Resources.Example_Config);
+                    tw.Close();
+                }
+
+                tryLoad++;
+                return LoadSettings(settPath, ref tryLoad);
+            }
+            else
+            {
+                // если даже из ресурсов пример не подходит, то просто создаем новый настройки
+                return new SettingsCollection();
+            }
         }
 
         #region Deserialize - Serialize Settings And Datas
 
-        static SettingsCollection DeserializeSettings()
+        static SettingsCollection DeserializeSettings(string settPath)
         {
-            if (!File.Exists(SettingsPath))
+            if (!File.Exists(settPath))
                 return null;
 
             try
             {
-                using (FileStream stream = new FileStream(SettingsPath, FileMode.Open, FileAccess.Read))
+                using (FileStream stream = new FileStream(settPath, FileMode.Open, FileAccess.Read))
                 {
                     return new XmlSerializer(typeof(SettingsCollection)).Deserialize(stream) as SettingsCollection;
                 }
             }
             catch (Exception ex)
             {
-                NotifyUserIfHasError(WarnSeverity.Attention, string.Format(NotifyDeSerializetionFailor, SettingsPath), ex, true);
+                NotifyUserIfHasError(WarnSeverity.Attention, string.Format(NotifyDeSerializetionFailor, settPath), ex, true);
             }
             return null;
         }
 
-        static DataCollection DeserializeDatas()
+        static DataCollection DeserializeDatas(string datasPath)
         {
-            if (!File.Exists(DataBasePath))
+            if (!File.Exists(datasPath))
                 return null;
 
             try
             {
-                using (FileStream stream = new FileStream(DataBasePath, FileMode.Open, FileAccess.Read))
+                using (FileStream stream = new FileStream(datasPath, FileMode.Open, FileAccess.Read))
                 {
                     return new XmlSerializer(typeof(DataCollection)).Deserialize(stream) as DataCollection;
                 }
             }
             catch (Exception ex)
             {
-                NotifyUserIfHasError(WarnSeverity.Attention, string.Format(NotifyDeSerializetionFailor, DataBasePath), ex, true);
+                NotifyUserIfHasError(WarnSeverity.Attention, string.Format(NotifyDeSerializetionFailor, datasPath), ex, true);
             }
             return null;
         }

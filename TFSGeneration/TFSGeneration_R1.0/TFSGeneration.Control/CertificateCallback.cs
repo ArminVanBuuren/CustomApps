@@ -4,20 +4,20 @@ namespace TFSGeneration.Control
 {
     public static class CertificateCallback
     {
-        static CertificateCallback ()
+        static CertificateCallback()
         {
             ServicePointManager.ServerCertificateValidationCallback = CertificateValidationCallBack;
         }
 
-        public static void Initialize ()
+        public static void Initialize()
         {
         }
 
-        private static bool CertificateValidationCallBack (
-             object sender,
-             System.Security.Cryptography.X509Certificates.X509Certificate certificate,
-             System.Security.Cryptography.X509Certificates.X509Chain chain,
-             System.Net.Security.SslPolicyErrors sslPolicyErrors)
+        private static bool CertificateValidationCallBack(
+            object sender,
+            System.Security.Cryptography.X509Certificates.X509Certificate certificate,
+            System.Security.Cryptography.X509Certificates.X509Chain chain,
+            System.Net.Security.SslPolicyErrors sslPolicyErrors)
         {
             // If the certificate is a valid, signed certificate, return true.
             if (sslPolicyErrors == System.Net.Security.SslPolicyErrors.None)
@@ -33,7 +33,7 @@ namespace TFSGeneration.Control
                     foreach (System.Security.Cryptography.X509Certificates.X509ChainStatus status in chain.ChainStatus)
                     {
                         if ((certificate.Subject == certificate.Issuer) &&
-                           (status.Status == System.Security.Cryptography.X509Certificates.X509ChainStatusFlags.UntrustedRoot))
+                            (status.Status == System.Security.Cryptography.X509Certificates.X509ChainStatusFlags.UntrustedRoot))
                         {
                             // Self-signed certificates with an untrusted root are valid. 
                             continue;
