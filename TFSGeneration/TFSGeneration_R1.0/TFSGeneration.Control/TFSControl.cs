@@ -154,7 +154,7 @@ namespace TFSGeneration.Control
             }
             catch (ServiceRequestException ex)
             {
-                throw new Exception("Error when connecting to Exchange Server! Please check your authorization data.", ex);
+                throw new Exception("Error connecting to Exchange Server! Please check your authorization data.", ex);
             }
             finally
             {
@@ -297,7 +297,7 @@ namespace TFSGeneration.Control
         MailItem[] ExchangeExceptionHandle(ExchangeService service, FolderId folderId, int numberOfMessages, ref int numberOfAttempts, Exception ex)
         {
             if (numberOfAttempts >= 5)
-                throw new Exception(string.Format("Error when connecting to Exchange Server! {0} connection attempts were made to the server.", numberOfAttempts), ex);
+                throw new Exception(string.Format("Error connecting to Exchange Server! {0} connection attempts were made to the server.", numberOfAttempts), ex);
 
             Thread.Sleep(30 * 1000);
             return GetUnreadMailFromInbox(service, folderId, numberOfMessages, ref numberOfAttempts);
@@ -529,13 +529,14 @@ namespace TFSGeneration.Control
                         tfsWorkItem.Save();
                         createdTfsId += tfsWorkItem.Id + ";";
                     }
-                    catch (ValidationException ex)
+                    catch (ValidationException ex) // ошибка если не все обязательные поля были заполнены
                     {
                         //получаем все обязательные поля для заполнения, чтобы в случае эксепшена знать какие поля необходимо заполнить
                         string reqFields = tfsWorkItem.Fields.Cast<Field>().Where(field => field.IsRequired)
-                            .Aggregate(string.Empty, (current, field) => current + (field.ReferenceName + "\r\n")).Trim();
+                                                      .Aggregate(string.Empty, (current, field) => current + (field.ReferenceName + Environment.NewLine)).Trim();
 
-                        throw new TFSFieldsException(string.Format("Failure in creating TFS item! Please check fields in [{0}/{1}]", teamProj.Value, workItem.Value), new TFSFieldsException(string.Format("Required fields:\r\n{0}", reqFields), ex));
+                        throw new TFSFieldsException("Error in creating TFS item! Please check workitem's fields in config.",
+                                                     new TFSFieldsException(string.Format("Error in {0}=[{1}] / {2}=[{3}]{4}Required fields:{4}{5}", teamProj.Value, teamProj.Condition, workItem.Value, workItem.Condition, Environment.NewLine, reqFields), ex));
                     }
                 }
             }

@@ -76,7 +76,6 @@ namespace TFSGeneration
                 tfsControl.IsCompleted += TfsControl_IsCompleted;
                 tfsControl.WriteLog += AddLog;
 
-
                 //================Main Tab Default Bindings=======================
                 DefaultBinding(MailAddress, TextBox.TextProperty, tfsControl.Settings.MailOption.Address);
                 DefaultBinding(MailUserName, TextBox.TextProperty, tfsControl.Settings.MailOption.UserName);
@@ -100,7 +99,6 @@ namespace TFSGeneration
                 tfsControl.Settings.MailOption.StartDate.PropertyChanged += StartDate_PropertyChanged;
                 ToolTipService.SetInitialShowDelay(FilterStartDate, timeoutToShowToolTip);
 
-
                 //================Option Mail====================================
                 DefaultBinding(MailExchangeUri, TextBox.TextProperty, tfsControl.Settings.MailOption.ExchangeUri);
                 DefaultBinding(SetDebugLogging, ToggleButton.IsCheckedProperty, tfsControl.Settings.MailOption.DebugLogging);
@@ -115,14 +113,12 @@ namespace TFSGeneration
                 RegexBodyParce.TextChanged += RegexBodyParce_OnTextChanged;
                 ToolTipService.SetInitialShowDelay(RegexBodyParce, timeoutToShowToolTip);
 
-
                 //================Options TFS===================================
                 DefaultBinding(TFSUri, TextBox.TextProperty, tfsControl.Settings.TFSOption.TFSUri);
                 Paragraph par = new Paragraph(new Run(tfsControl.Settings.TFSOption.GetDublicateTFS[0].Value)) {LineHeight = 1};
                 GetDublicateTFS.Document.Blocks.Add(par);
                 GetDublicateTFS.TextChanged += GetDublicateTFS_OnTextChanged;
                 ToolTipService.SetInitialShowDelay(GetDublicateTFS, timeoutToShowToolTip);
-
 
                 //================Notification Bar==============================
                 notification = new System.Windows.Forms.NotifyIcon
@@ -133,7 +129,6 @@ namespace TFSGeneration
                 };
                 notification.BalloonTipClicked += ShowMyForm;
                 notification.DoubleClick += ShowMyForm;
-
 
                 //================Activate Button Start And Start Timer==============================
                 ButtonStart.IsEnabled = true;
@@ -165,7 +160,6 @@ namespace TFSGeneration
                 ShowMyForm(this, EventArgs.Empty);
             }
         }
-
 
 
         /// <summary>
@@ -296,15 +290,17 @@ namespace TFSGeneration
 
             Dispatcher?.Invoke(() =>
             {
+                AddLog(stackTrace);
+
+                // показывает уведомление при любых уведомлениях, если окно не активно или уже было одно уведомление
                 DisplayNotify(error.ToString("G"), message);
 
                 if (_openedWarningWindowCount >= 1 || !this.IsLoaded)
                     return;
 
-                // if (error == WarnSeverity.Error)
-                ShowMyForm(this, EventArgs.Empty); // всегда активировать окно при любых ошибках
-
-                AddLog(stackTrace);
+                // Cразу активировать окно только при критических ошибках. При остальных уведомлениях появляется статус бар или по таймеру активируется окно если _openedWarningWindowCount > 0
+                if (error == WarnSeverity.Error)
+                    ShowMyForm(this, EventArgs.Empty);
 
                 warnWindow = new WindowWarning(Width, error.ToString("G"), message);
                 warnWindow.Loaded += Warn_Loaded;
@@ -334,6 +330,7 @@ namespace TFSGeneration
             Dispatcher?.Invoke(() =>
             {
                 _openedWarningWindowCount--;
+                ShowMyForm(this, EventArgs.Empty);
                 IsBlured = false;
             });
         }
@@ -376,7 +373,7 @@ namespace TFSGeneration
 
 
 
-        int countNotWatchedNotifications;
+        uint countNotWatchedNotifications = 0;
 
         /// <summary>
         /// Показать сообщение в уведомлениях Windows
@@ -385,8 +382,7 @@ namespace TFSGeneration
         /// <param name="messageDetails"></param>
         void DisplayNotify(string messageHeader, string messageDetails)
         {
-            if (WindowState != WindowState.Minimized || messageHeader.IsNullOrEmpty() || messageDetails.IsNullOrEmpty() ||
-                countNotWatchedNotifications > 1)
+            if (IsActive || messageHeader.IsNullOrEmpty() || messageDetails.IsNullOrEmpty() || countNotWatchedNotifications != 0)
                 return;
 
             notification.Text = TFSControl.ApplicationName;
@@ -396,6 +392,8 @@ namespace TFSGeneration
             notification.ShowBalloonTip(100);
             countNotWatchedNotifications++;
         }
+
+
 
         void MainWindow_Activated(object sender, EventArgs e)
         {
