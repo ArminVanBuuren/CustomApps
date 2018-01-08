@@ -11,14 +11,30 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using FastColoredTextBoxNS;
+using Script.ColoredStyle;
 using Script.Control;
 using XPackage;
 
 namespace Script
 {
+    enum ProcessStatus
+    {
+        None = 0,
+        Processing = 1,
+        Completed = 2,
+        Aborted = 3,
+        Exception = 4
+    }
+
     public partial class MainWindow : Form
     {
         private string _configPath = string.Empty;
+        ScriptTemplate st = null;
+        AbortableBackgroundWorker asyncPerforming = new AbortableBackgroundWorker();
+
+        public bool InProgress { get; private set; }
+        public static string LocalPath => Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
         private string ConfigPath
         {
             get => _configPath;
@@ -28,25 +44,17 @@ namespace Script
                 this.Text = string.Format("Script {0}", value);
             }
         }
-        public static string LocalPath => Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-        ScriptTemplate st = null;
-        public bool InProgress { get; private set; }
-        AbortableBackgroundWorker asyncPerforming = new AbortableBackgroundWorker();
 
-        enum ProcessStatus
-        {
-            None = 0,
-            Processing = 1,
-            Completed = 2,
-            Aborted = 3,
-            Exception = 4
-        }
 
+        
         public MainWindow()
         {
             InitializeComponent();
+            ConfigStyle colored = new ConfigStyle(SXML_Config);
+
             asyncPerforming.DoWork += AsyncPerforming_DoWork;
             asyncPerforming.RunWorkerCompleted += AsyncPerforming_RunWorkerCompleted;
+
 
             try
             {

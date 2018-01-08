@@ -50,6 +50,9 @@
     <Compile Include="AbortableBackgroundWorker.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ColoredStyle\ConfigStyle.cs" />
+    <Compile Include="ColoredStyle\InsertEnterSnippet.cs" />
+    <Compile Include="ColoredStyle\InsertSpaceSnippet.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
