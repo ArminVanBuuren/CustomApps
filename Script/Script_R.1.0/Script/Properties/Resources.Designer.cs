@@ -59,24 +59,5 @@ namespace Script.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;Config&gt;
-        ///	&lt;!--
-        ///!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        ///#1 - exception=&quot;rollback, skip, stop&quot; настроить roolback, при копировании файлов создавать темповые файлы, как завершится полностью процесс удалять темпоые или роллбэк для восстановления
-        ///#2 - настроить считывание и поиск больших файлов для RegexContent и FileRead
-        ///#3 - настроить запись в файл - FileWrite и простой поиск FileRead
-        ///!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        ///--&gt;
-        ///
-        ///	&lt;!-- TestCase 1 --&gt;
-        ///	&lt;!--ScriptTemplate Name=&quot;Script2&quot; Severity=&quot;Failure&quot; log_Dir [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string Script_Config {
-            get {
-                return ResourceManager.GetString("Script_Config", resourceCulture);
-            }
-        }
     }
 }

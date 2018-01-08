@@ -20,9 +20,9 @@ namespace Script
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.CreateServ = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.StatusBarLable = new System.Windows.Forms.ToolStripStatusLabel();
@@ -31,16 +31,15 @@ namespace Script
             this.TabProcess = new System.Windows.Forms.TabPage();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.grid = new System.Windows.Forms.DataGridView();
+            this.TabConfig = new System.Windows.Forms.TabPage();
+            this.SXML_Config = new FastColoredTextBoxNS.FastColoredTextBox();
+            this.TabLog = new System.Windows.Forms.TabPage();
+            this.LogTextBox = new FastColoredTextBoxNS.FastColoredTextBox();
             this.GridViewID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.GridViewName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.GridViewDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.GridViewStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.GridViewSetMode = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.TabConfig = new System.Windows.Forms.TabPage();
-            this.SXML_Config = new FastColoredTextBoxNS.FastColoredTextBox();
-            this.TabLog = new System.Windows.Forms.TabPage();
-            this.LogTextBox = new FastColoredTextBoxNS.FastColoredTextBox();
-            this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.TabProcess.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
@@ -62,9 +61,6 @@ namespace Script
             // 
             // statusStrip1
             // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.StatusBarLable,
-            this.StatusBarDesc});
             this.statusStrip1.Location = new System.Drawing.Point(0, 592);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(780, 22);
@@ -135,48 +131,17 @@ namespace Script
             this.grid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.grid.Location = new System.Drawing.Point(0, 0);
             this.grid.Name = "grid";
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopRight;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.grid.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopRight;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.grid.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.grid.Size = new System.Drawing.Size(748, 519);
             this.grid.TabIndex = 0;
             this.grid.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.grid_DataError);
-            // 
-            // GridViewID
-            // 
-            dataGridViewCellStyle1.Format = "N0";
-            dataGridViewCellStyle1.NullValue = null;
-            this.GridViewID.DefaultCellStyle = dataGridViewCellStyle1;
-            this.GridViewID.HeaderText = "ID";
-            this.GridViewID.Name = "GridViewID";
-            this.GridViewID.Width = 50;
-            // 
-            // GridViewName
-            // 
-            this.GridViewName.HeaderText = "Configuration";
-            this.GridViewName.Name = "GridViewName";
-            this.GridViewName.Width = 120;
-            // 
-            // GridViewDescription
-            // 
-            this.GridViewDescription.HeaderText = "Description";
-            this.GridViewDescription.Name = "GridViewDescription";
-            // 
-            // GridViewStatus
-            // 
-            this.GridViewStatus.HeaderText = "Status";
-            this.GridViewStatus.Name = "GridViewStatus";
-            // 
-            // GridViewSetMode
-            // 
-            this.GridViewSetMode.HeaderText = "Set";
-            this.GridViewSetMode.Name = "GridViewSetMode";
-            this.GridViewSetMode.Width = 50;
             // 
             // TabConfig
             // 
@@ -254,7 +219,7 @@ namespace Script
         '\"',
         '\'',
         '\''};
-            this.LogTextBox.AutoScrollMinSize = new System.Drawing.Size(25, 14);
+            this.LogTextBox.AutoScrollMinSize = new System.Drawing.Size(2, 14);
             this.LogTextBox.BackBrush = null;
             this.LogTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.LogTextBox.CharHeight = 14;
@@ -274,6 +239,38 @@ namespace Script
             this.LogTextBox.TabIndex = 5;
             this.LogTextBox.Zoom = 100;
             // 
+            // GridViewID
+            // 
+            dataGridViewCellStyle3.Format = "N0";
+            dataGridViewCellStyle3.NullValue = null;
+            this.GridViewID.DefaultCellStyle = dataGridViewCellStyle3;
+            this.GridViewID.HeaderText = "ID";
+            this.GridViewID.Name = "GridViewID";
+            this.GridViewID.ReadOnly = true;
+            this.GridViewID.Width = 50;
+            // 
+            // GridViewName
+            // 
+            this.GridViewName.HeaderText = "Configuration";
+            this.GridViewName.Name = "GridViewName";
+            this.GridViewName.Width = 120;
+            // 
+            // GridViewDescription
+            // 
+            this.GridViewDescription.HeaderText = "Description";
+            this.GridViewDescription.Name = "GridViewDescription";
+            // 
+            // GridViewStatus
+            // 
+            this.GridViewStatus.HeaderText = "Status";
+            this.GridViewStatus.Name = "GridViewStatus";
+            // 
+            // GridViewSetMode
+            // 
+            this.GridViewSetMode.HeaderText = "Set";
+            this.GridViewSetMode.Name = "GridViewSetMode";
+            this.GridViewSetMode.Width = 50;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -283,8 +280,6 @@ namespace Script
             this.Controls.Add(this.statusStrip1);
             this.Name = "MainWindow";
             this.Text = "Script";
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.TabProcess.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();

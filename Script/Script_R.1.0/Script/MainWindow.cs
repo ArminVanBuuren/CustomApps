@@ -11,10 +11,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Serialization;
 using FastColoredTextBoxNS;
 using Script.ColoredStyle;
 using Script.Control;
 using Script.DataGridViewCustom;
+using Script.Properties;
 using XPackage;
 
 namespace Script
@@ -30,36 +32,50 @@ namespace Script
 
     public partial class MainWindow : Form
     {
-        private string _configPath = string.Empty;
-        ScriptTemplate st = null;
-        AbortableBackgroundWorker asyncPerforming = new AbortableBackgroundWorker();
-
-        public bool InProgress { get; private set; }
+        public static string ApplicationName { get; }
+        public static string AppConfigPath { get; }
         public static string LocalPath => Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
+        static MainWindow()
+        {
+            ApplicationName = Assembly.GetEntryAssembly().GetName().Name;
+            AppConfigPath = Path.Combine(LocalPath, ApplicationName + ".xml");
+        }
 
-
+        string _configPath = string.Empty;
+        ScriptTemplate st = null;
+        AbortableBackgroundWorker asyncPerforming = new AbortableBackgroundWorker();
+        ScriptSettings AppSettings;
+        public bool InProgress { get; private set; }
 
         public MainWindow()
         {
             InitializeComponent();
             grid.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(grid, true, null);
-            DataGridViewTextButtonColumn GridColumnPath = new DataGridViewCustom.DataGridViewTextButtonColumn
-                                  {
-                                      AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill,
-                                      ValueType = typeof(string),
-                                      HeaderText = @"Path",
-                                      ButtonClickHandler = GridColumnPath_ButtonClick
-                                  };
+            DataGridViewTextButtonColumn GridColumnPath = new DataGridViewCustom.DataGridViewTextButtonColumn {
+                                                                                                                  AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill,
+                                                                                                                  ValueType = typeof(string),
+                                                                                                                  HeaderText = @"Path",
+                                                                                                                  ButtonClickHandler = GridColumnPath_ButtonClick
+                                                                                                              };
             grid.Columns.Add(GridColumnPath);
 
+            if (File.Exists(AppConfigPath))
+                AppSettings = DeserializeSettings(AppConfigPath);
+            if (AppSettings == null)
+                AppSettings = new ScriptSettings();
+
+            uint i = 0;
+            foreach (ConfigurationProcess proc in AppSettings.ProcessList)
+            {
+                grid.Rows.Add(new object[] {
+                                               i, proc.ConfiguraionName, proc.Description, "None", "Start", proc.Path
+                                           });
+                i++;
+            }
 
             //grid.Rows[rowIndex].Cells[columnIndex].Value = value;
 
-            grid.Rows.Add(new object[]{ 0, "Timesheet", "Get Stats", "None", "Start", @"C:\1\1.sxml" });
-            grid.Rows.Add(new object[]{ 1, "SPA.Configuration", "BPM Process", "None", "Start", @"C:\1\1.sxml" });
-            grid.Rows.Add(new object[]{ 2, "SPA.Configuration", "SA Process", "None", "Start", @"C:\1\1.sxml" });
-            grid.Rows.Add(new object[]{ 3, "CRM.Configuration", "Create Requests", "None", "Start", @"C:\1\2.sxml" });
 
 
             ConfigStyle colored = new ConfigStyle(SXML_Config);
@@ -108,6 +124,7 @@ namespace Script
             }
             grid.BeginEdit(false);
         }
+
 
         private void grid_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
@@ -204,6 +221,45 @@ namespace Script
             StatusBarDesc.Text = message ?? string.Empty;
         }
 
+        #region Serialize And Deserialize Settings
+
+        static ScriptSettings DeserializeSettings(string settPath)
+        {
+            if (!File.Exists(settPath))
+                return null;
+
+            try
+            {
+                using (FileStream stream = new FileStream(settPath, FileMode.Open, FileAccess.Read))
+                {
+                    return new XmlSerializer(typeof(ScriptSettings)).Deserialize(stream) as ScriptSettings;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            return null;
+        }
+
+        void SerializeSettings()
+        {
+            try
+            {
+                using (FileStream stream = new FileStream(Path.Combine(LocalPath, ApplicationName + ".xml"), FileMode.Create, FileAccess.ReadWrite))
+                {
+                    new XmlSerializer(typeof(ScriptSettings)).Serialize(stream, AppSettings);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        #endregion
+
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
@@ -211,7 +267,12 @@ namespace Script
         protected override void Dispose(bool disposing)
         {
             asyncPerforming.Abort();
-            SXML_Config.Text.SaveStreamToFile(_configPath);
+            //SXML_Config.Text.SaveStreamToFile(_configPath);
+            SerializeSettings();
+
+
+
+
             if (disposing && (components != null))
             {
                 components.Dispose();
