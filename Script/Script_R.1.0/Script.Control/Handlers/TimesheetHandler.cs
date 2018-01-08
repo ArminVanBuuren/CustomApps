@@ -103,13 +103,16 @@ namespace Script.Control.Handlers
         /// </summary>
         void GetHTMLBodySource()
         {
-            for (int i = FidStart; i < FidEnd; i++)
+            for (int i = FidStart; i <= FidEnd; i++)
             {
                 string htmlBody = GetSiteData(string.Format("{0}{1}{2}", Src.AbsoluteUri, DEFAULT_FID, i), TFSProjects.Autorization.GetNetworkCredential());
                 if (string.IsNullOrEmpty(htmlBody))
                     continue;
                 TFSProjects.Load(htmlBody, i);
             }
+
+            if(TFSProjects.Items.Count == 0)
+                return;
 
             if (SerializationResult)
                 Serialize(TFSProjects);

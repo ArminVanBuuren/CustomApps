@@ -22,7 +22,6 @@ namespace Script
         public static string LocalPath => Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
         ScriptTemplate st = null;
         public bool InProgress { get; private set; }
-        private string sourceConfigSXML = string.Empty;
         AbortableBackgroundWorker asyncPerforming = new AbortableBackgroundWorker();
 
         enum ProcessStatus
@@ -90,14 +89,12 @@ namespace Script
                 if (!InProgress)
                 {
                     ChangeStatusBar(ProcessStatus.Processing);
-                    sourceConfigSXML = SXML_Config.Text.SaveStreamToFile(configPath);
                     asyncPerforming.RunWorkerAsync();
                 }
                 else
                 {
                     ChangeStatusBar(ProcessStatus.Aborted);
                     asyncPerforming.Abort();
-                    InProgress = false;
                 }
             }
             catch (Exception ex)
@@ -112,8 +109,12 @@ namespace Script
             try
             {
                 InProgress = true;
+                Invoke(new Action(() => button1.Text = @"Stop"));
+                string sourceControl = string.Empty;
+                Invoke(new Action(() => sourceControl = SXML_Config.Text.SaveStreamToFile(configPath)));
+
                 XmlDocument xdoc = new XmlDocument();
-                xdoc.LoadXml(sourceConfigSXML);
+                xdoc.LoadXml(sourceControl);
                 st = new ScriptTemplate(xdoc);
                 InProgress = false;
             }
@@ -129,6 +130,8 @@ namespace Script
             if (asyncExceptions == 0)
                 ChangeStatusBar(ProcessStatus.Completed);
             asyncExceptions = 0;
+            InProgress = false;
+            Invoke(new Action(() => button1.Text = @"Start"));
         }
 
 
