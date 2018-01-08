@@ -76,7 +76,7 @@ namespace Script.Control.Handlers
             bool temp_serialization = false;
             if (bool.TryParse(Attributes[GetXMLAttributeName(nameof(SerializationResult))], out temp_serialization) && temp_serialization)
                 SerializationResult = true;
-            TFSProjects = new TFSProjectCollection(Attributes[GetXMLAttributeName(nameof(UserAutorization.UserName))], Attributes[GetXMLAttributeName(nameof(UserAutorization.Password))], GroupBy);
+            TFSProjects = new TFSProjectCollection(Attributes[nameof(UserAutorization.UserName)], Attributes[nameof(UserAutorization.Password)], GroupBy);
 
             _execute = GetHTMLBodySource;
 

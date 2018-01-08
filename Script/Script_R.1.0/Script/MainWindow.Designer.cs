@@ -7,18 +7,7 @@
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+
 
         #region Windows Form Designer generated code
 
@@ -46,7 +35,7 @@
             this.button1.TabIndex = 0;
             this.button1.Text = "Start";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.buttonStart_Click);
+            this.button1.Click += new System.EventHandler(this.Start_Click);
             // 
             // SXML_Config
             // 
@@ -68,7 +57,7 @@
             this.button2.TabIndex = 2;
             this.button2.Text = "Open";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.buttonOpen_Click);
+            this.button2.Click += new System.EventHandler(this.Open_Click);
             // 
             // statusStrip1
             // 

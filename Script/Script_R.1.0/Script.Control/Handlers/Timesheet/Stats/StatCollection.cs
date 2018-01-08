@@ -124,7 +124,7 @@ namespace Script.Control.Handlers.Timesheet.Stats
 
         public virtual string GetStat()
         {
-            return string.Format("Период: {0:dd.MM.yyyy} - {1:dd.MM.yyyy}{3}Затрачено часов: {2}", PeriodStart, PeriodEnd, TotalTimeByAnyDay, Environment.NewLine);
+            return string.Format("Период: {0:dd.MM.yyyy} - {1:dd.MM.yyyy}{3}Отработано часов: {2}", PeriodStart, PeriodEnd, Math.Round(TotalTimeByAnyDay, 1), Environment.NewLine);
         }
 
         public int Count => ChildItems?.Count ?? -1;

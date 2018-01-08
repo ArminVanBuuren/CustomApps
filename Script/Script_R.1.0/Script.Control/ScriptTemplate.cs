@@ -429,6 +429,8 @@ namespace Script.Control
         {
             Type inheritType = GetType().UnderlyingSystemType;
             PropertyInfo prop = inheritType.GetProperty(propName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
+            if (prop == null)
+                throw new HandlerInitializationException("Not Found Mandatory Propery [{0}]", propName);
             foreach (object obj in prop.GetCustomAttributes(false))
             {
                 IdentifierAttribute attrVoid = obj as IdentifierAttribute;

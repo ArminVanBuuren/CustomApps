@@ -36,13 +36,13 @@ namespace Script.Control.Handlers.Timesheet.Project
                 foreach (Match mch in r.Matches(temp_tfsData))
                 {
                     if (mch.Groups[1].Value.Equals("Requirement", StringComparison.CurrentCultureIgnoreCase))
-                        Requirement = mch.Groups[2].Value.Trim();
+                        Requirement = mch.Groups[2].Value.Trim().ReplaceXmlSpecSymbols();
                     else if (mch.Groups[1].Value.Equals("LeadTask", StringComparison.CurrentCultureIgnoreCase))
-                        LeadTask = mch.Groups[2].Value.Trim();
+                        LeadTask = mch.Groups[2].Value.Trim().ReplaceXmlSpecSymbols();
                     else if (mch.Groups[1].Value.Equals("Type", StringComparison.CurrentCultureIgnoreCase))
-                        Type = mch.Groups[2].Value.Trim();
+                        Type = mch.Groups[2].Value.Trim().ReplaceXmlSpecSymbols();
                     else if (mch.Groups[1].Value.Equals("Title", StringComparison.CurrentCultureIgnoreCase))
-                        Title = mch.Groups[2].Value.Trim();
+                        Title = mch.Groups[2].Value.Trim().ReplaceXmlSpecSymbols();
                 }
                 
             }
