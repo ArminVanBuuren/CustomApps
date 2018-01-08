@@ -31,6 +31,12 @@ namespace Script.Control.Handlers
         public TFSProjectCollection TFSProjects { get; }
         public Statistic Matches { get; private set; }
 
+        [Identifier("UserName", "Домен с логином", "Обязательный парамтер")]
+        public string UserName { get; } = string.Empty;
+
+        [Identifier("Password", "Пароль к учетке", "Обязательный парамтер")]
+        public string Password { get; } = string.Empty;
+
         [Identifier("Src", "Адрес Timesheet страцины до параметра fid=. Например: https://......./v2.0.0.0/Tabel.aspx?", "Условно Обязательный. Если аттрибута не будет, то должны быть созданы сериализуемые файлы")]
         public Uri Src { get; }
 
@@ -76,7 +82,7 @@ namespace Script.Control.Handlers
             bool temp_serialization = false;
             if (bool.TryParse(Attributes[GetXMLAttributeName(nameof(SerializationResult))], out temp_serialization) && temp_serialization)
                 SerializationResult = true;
-            TFSProjects = new TFSProjectCollection(Attributes[nameof(UserAutorization.UserName)], Attributes[nameof(UserAutorization.Password)], GroupBy);
+            TFSProjects = new TFSProjectCollection(Attributes[GetXMLAttributeName(nameof(UserAutorization.UserName))], Attributes[GetXMLAttributeName(nameof(UserAutorization.Password))], GroupBy);
 
             _execute = GetHTMLBodySource;
 

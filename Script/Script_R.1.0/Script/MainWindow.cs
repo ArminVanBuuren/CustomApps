@@ -109,7 +109,7 @@ namespace Script
             try
             {
                 InProgress = true;
-                Invoke(new Action(() => button1.Text = @"Stop"));
+                Invoke(new Action(() => buttonStartStop.Text = @"Stop"));
                 string sourceControl = string.Empty;
                 Invoke(new Action(() => sourceControl = SXML_Config.Text.SaveStreamToFile(configPath)));
 
@@ -131,7 +131,7 @@ namespace Script
                 ChangeStatusBar(ProcessStatus.Completed);
             asyncExceptions = 0;
             InProgress = false;
-            Invoke(new Action(() => button1.Text = @"Start"));
+            Invoke(new Action(() => buttonStartStop.Text = @"Start"));
         }
 
 
