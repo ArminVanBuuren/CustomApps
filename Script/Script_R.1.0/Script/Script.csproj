@@ -51,8 +51,21 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ColoredStyle\ConfigStyle.cs" />
+    <Compile Include="ColoredStyle\DeclarationSnippet.cs" />
     <Compile Include="ColoredStyle\InsertEnterSnippet.cs" />
     <Compile Include="ColoredStyle\InsertSpaceSnippet.cs" />
+    <Compile Include="ColoredStyle\LogStyle.cs" />
+    <Compile Include="DataGridViewCustom\DataGridViewTextButtonCell.cs" />
+    <Compile Include="DataGridViewCustom\DataGridViewTextButtonColumn.cs" />
+    <Compile Include="DataGridViewCustom\DataGridViewTextButtonEditingControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataGridViewCustom\TextButton.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataGridViewCustom\TextButton.designer.cs">
+      <DependentUpon>TextButton.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -62,6 +75,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatUtil.cs" />
+    <EmbeddedResource Include="DataGridViewCustom\TextButton.resx">
+      <DependentUpon>TextButton.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>

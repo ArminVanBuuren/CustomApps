@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text.RegularExpressions;
 using FastColoredTextBoxNS;
 
@@ -8,6 +9,7 @@ namespace Script.ColoredStyle
     public class ConfigStyle
     {
         AutocompleteMenu popupMenu;
+        private FastColoredTextBox fctb;
         string[] keywords = { "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked", "class", "const", "continue", "decimal", "default", "delegate", "do", "double", "else", "enum", "event", "explicit", "extern", "false", "finally", "fixed", "float", "for", "foreach", "goto", "if", "implicit", "in", "int", "interface", "internal", "is", "lock", "long", "namespace", "new", "null", "object", "operator", "out", "override", "params", "private", "protected", "public", "readonly", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string", "struct", "switch", "this", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort", "using", "virtual", "void", "volatile", "while", "add", "alias", "ascending", "descending", "dynamic", "from", "get", "global", "group", "into", "join", "let", "orderby", "partial", "remove", "select", "set", "value", "var", "where", "yield" };
         string[] methods = { "Equals()", "GetHashCode()", "GetType()", "ToString()" };
         string[] snippets = { "if(^)\n{\n;\n}", "if(^)\n{\n;\n}\nelse\n{\n;\n}", "for(^;;)\n{\n;\n}", "while(^)\n{\n;\n}", "do${\n^;\n}while();", "switch(^)\n{\ncase : break;\n}" };
@@ -17,56 +19,24 @@ namespace Script.ColoredStyle
                                            "public void ^()\n{\n;\n}", "private void ^()\n{\n;\n}", "internal void ^()\n{\n;\n}", "protected void ^()\n{\n;\n}",
                                            "public ^{ get; set; }", "private ^{ get; set; }", "internal ^{ get; set; }", "protected ^{ get; set; }"
                                        };
+        Style KeywordsStyle = new TextStyle(Brushes.Green, null, FontStyle.Regular);
+        Style FunctionNameStyle = new TextStyle(Brushes.Blue, null, FontStyle.Regular);
 
         public ConfigStyle(FastColoredTextBox fctb)
         {
-            ((System.ComponentModel.ISupportInitialize) (fctb)).BeginInit();
-            fctb.AutoCompleteBracketsList = new char[] {
-                                                           '(',
-                                                           ')',
-                                                           '{',
-                                                           '}',
-                                                           '[',
-                                                           ']',
-                                                           '\"',
-                                                           '\"',
-                                                           '\'',
-                                                           '\''
-                                                       };
-            fctb.AutoIndentCharsPatterns = "\r\n^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);\r\n^\\s*(case|default)\\s*[^:]" +
-                                           "*(?<range>:)\\s*(?<range>[^;]+);\r\n";
+            this.fctb = fctb;
 
-            fctb.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            fctb.BracketsHighlightStrategy = FastColoredTextBoxNS.BracketsHighlightStrategy.Strategy2;
-            fctb.CharHeight = 15;
-            fctb.CharWidth = 7;
-            fctb.DelayedEventsInterval = 500;
-            fctb.DelayedTextChangedInterval = 500;
-            fctb.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            fctb.Dock = System.Windows.Forms.DockStyle.Fill;
-            fctb.Font = new System.Drawing.Font("Consolas", 9.75F);
-            fctb.IsReplaceMode = false;
-            fctb.Language = FastColoredTextBoxNS.Language.XML;
-            fctb.LeftBracket = '(';
-            fctb.LeftBracket2 = '{';
-            fctb.Location = new System.Drawing.Point(0, 85);
-            fctb.Name = "fctb";
-            fctb.Paddings = new System.Windows.Forms.Padding(0);
-            fctb.RightBracket = ')';
-            fctb.RightBracket2 = '}';
-            fctb.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-            fctb.Size = new System.Drawing.Size(490, 268);
-            fctb.TabIndex = 3;
-            fctb.Zoom = 100;
-
-
+            // Динамичное изменение стиля
+            //fctb.TextChangedDelayed += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.fctb_TextChangedDelayed);
+            //fctb.DelayedTextChangedInterval = 100;
 
             //create autocomplete popup menu
-            popupMenu = new AutocompleteMenu(fctb);
+            popupMenu = new AutocompleteMenu(this.fctb);
             popupMenu.AllowTabKey = true;
             //popupMenu.Items.ImageList = imageList1;
             popupMenu.SearchPattern = @"[\w\.:=!<>]";
             popupMenu.AllowTabKey = true;
+            BuildAutocompleteMenu();
         }
 
         private void BuildAutocompleteMenu()
@@ -91,22 +61,19 @@ namespace Script.ColoredStyle
         }
 
         /// <summary>
-        /// This item appears when any part of snippet text is typed
+        /// Динамичное изменение стиля текста
         /// </summary>
-        class DeclarationSnippet : SnippetAutocompleteItem
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void fctb_TextChangedDelayed(object sender, TextChangedEventArgs e)
         {
-            public DeclarationSnippet(string snippet)
-                : base(snippet)
-            {
-            }
-
-            public override CompareResult Compare(string fragmentText)
-            {
-                var pattern = Regex.Escape(fragmentText);
-                if (Regex.IsMatch(Text, "\\b" + pattern, RegexOptions.IgnoreCase))
-                    return CompareResult.Visible;
-                return CompareResult.Hidden;
-            }
+            //clear styles
+            fctb.Range.ClearStyle(KeywordsStyle, FunctionNameStyle);
+            //highlight keywords of LISP
+            fctb.Range.SetStyle(KeywordsStyle, @"\b(and|eval|else|if|lambda|or|set|defun)\b", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            //find function declarations, highlight all of their entry into the code
+            foreach (Range found in fctb.GetRanges(@"\b(defun|DEFUN)\s+(?<range>\w+)\b"))
+                fctb.Range.SetStyle(FunctionNameStyle, @"\b" + found.Text + @"\b");
         }
     }
 }

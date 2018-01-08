@@ -46,12 +46,14 @@ namespace Script
         }
 
 
-        
+
         public MainWindow()
         {
             InitializeComponent();
-            ConfigStyle colored = new ConfigStyle(SXML_Config);
+            grid.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(grid, true, null);
 
+
+            ConfigStyle colored = new ConfigStyle(SXML_Config);
             asyncPerforming.DoWork += AsyncPerforming_DoWork;
             asyncPerforming.RunWorkerCompleted += AsyncPerforming_RunWorkerCompleted;
 
@@ -74,6 +76,29 @@ namespace Script
             {
                 ChangeStatusBar(ProcessStatus.Exception, ex.Message);
             }
+        }
+
+        void GridColumnPath_ButtonClick(object sender, EventArgs arg)
+        {
+            grid.EndEdit();
+            using (var openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.InitialDirectory = Directory.GetCurrentDirectory();
+                openFileDialog.Filter = @"Value(*.sxml) | *.sxml";
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    ConfigPath = openFileDialog.FileName;
+                    SXML_Config.Text = ConfigPath.LoadFileByPath();
+                }
+            }
+            grid.BeginEdit(false);
+        }
+
+        private void grid_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            e.Cancel = true;
+            MessageBox.Show(this, @"Invalid value: " + grid[e.ColumnIndex, e.RowIndex].EditedFormattedValue, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
         private void Open_Click(object sender, EventArgs e)
