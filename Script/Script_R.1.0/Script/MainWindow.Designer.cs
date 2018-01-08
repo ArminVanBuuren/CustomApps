@@ -20,22 +20,23 @@ namespace Script
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
-            this.buttonStartStop = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.CreateServ = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.StatusBarLable = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatusBarDesc = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.TabProcess = new System.Windows.Forms.TabPage();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.grid = new System.Windows.Forms.DataGridView();
             this.GridViewID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.GridViewName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.GridViewDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.GridViewStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.GridViewSetMode = new System.Windows.Forms.DataGridViewButtonColumn();
             this.TabConfig = new System.Windows.Forms.TabPage();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.SXML_Config = new FastColoredTextBoxNS.FastColoredTextBox();
             this.TabLog = new System.Windows.Forms.TabPage();
             this.LogTextBox = new FastColoredTextBoxNS.FastColoredTextBox();
@@ -49,27 +50,15 @@ namespace Script
             ((System.ComponentModel.ISupportInitialize)(this.LogTextBox)).BeginInit();
             this.SuspendLayout();
             // 
-            // buttonStartStop
+            // CreateServ
             // 
-            this.buttonStartStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonStartStop.Location = new System.Drawing.Point(667, 522);
-            this.buttonStartStop.Name = "buttonStartStop";
-            this.buttonStartStop.Size = new System.Drawing.Size(75, 23);
-            this.buttonStartStop.TabIndex = 0;
-            this.buttonStartStop.Text = "Start";
-            this.buttonStartStop.UseVisualStyleBackColor = true;
-            this.buttonStartStop.Click += new System.EventHandler(this.Start_Click);
-            // 
-            // button2
-            // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(586, 522);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "Open";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.Open_Click);
+            this.CreateServ.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.CreateServ.Location = new System.Drawing.Point(652, 525);
+            this.CreateServ.Name = "CreateServ";
+            this.CreateServ.Size = new System.Drawing.Size(93, 23);
+            this.CreateServ.TabIndex = 2;
+            this.CreateServ.Text = "Create Service";
+            this.CreateServ.UseVisualStyleBackColor = true;
             // 
             // statusStrip1
             // 
@@ -108,7 +97,9 @@ namespace Script
             // 
             // TabProcess
             // 
+            this.TabProcess.Controls.Add(this.progressBar1);
             this.TabProcess.Controls.Add(this.grid);
+            this.TabProcess.Controls.Add(this.CreateServ);
             this.TabProcess.Location = new System.Drawing.Point(4, 22);
             this.TabProcess.Name = "TabProcess";
             this.TabProcess.Size = new System.Drawing.Size(748, 551);
@@ -116,36 +107,51 @@ namespace Script
             this.TabProcess.Text = "Process";
             this.TabProcess.UseVisualStyleBackColor = true;
             // 
+            // progressBar1
+            // 
+            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBar1.Location = new System.Drawing.Point(3, 525);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(643, 23);
+            this.progressBar1.TabIndex = 4;
+            // 
             // grid
             // 
             this.grid.AllowUserToAddRows = false;
             this.grid.AllowUserToDeleteRows = false;
             this.grid.AllowUserToResizeRows = false;
+            this.grid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.grid.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
             this.grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.grid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.GridViewID,
             this.GridViewName,
+            this.GridViewDescription,
             this.GridViewStatus,
             this.GridViewSetMode});
-            this.grid.Dock = System.Windows.Forms.DockStyle.Top;
             this.grid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.grid.Location = new System.Drawing.Point(0, 0);
             this.grid.Name = "grid";
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopRight;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.grid.RowHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.grid.Size = new System.Drawing.Size(748, 545);
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopRight;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.grid.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            this.grid.Size = new System.Drawing.Size(748, 519);
             this.grid.TabIndex = 0;
             this.grid.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.grid_DataError);
             // 
             // GridViewID
             // 
+            dataGridViewCellStyle1.Format = "N0";
+            dataGridViewCellStyle1.NullValue = null;
+            this.GridViewID.DefaultCellStyle = dataGridViewCellStyle1;
             this.GridViewID.HeaderText = "ID";
             this.GridViewID.Name = "GridViewID";
             this.GridViewID.Width = 50;
@@ -156,6 +162,11 @@ namespace Script
             this.GridViewName.Name = "GridViewName";
             this.GridViewName.Width = 120;
             // 
+            // GridViewDescription
+            // 
+            this.GridViewDescription.HeaderText = "Description";
+            this.GridViewDescription.Name = "GridViewDescription";
+            // 
             // GridViewStatus
             // 
             this.GridViewStatus.HeaderText = "Status";
@@ -163,15 +174,13 @@ namespace Script
             // 
             // GridViewSetMode
             // 
-            this.GridViewSetMode.HeaderText = "Set Mode";
+            this.GridViewSetMode.HeaderText = "Set";
             this.GridViewSetMode.Name = "GridViewSetMode";
+            this.GridViewSetMode.Width = 50;
             // 
             // TabConfig
             // 
-            this.TabConfig.Controls.Add(this.progressBar1);
             this.TabConfig.Controls.Add(this.SXML_Config);
-            this.TabConfig.Controls.Add(this.button2);
-            this.TabConfig.Controls.Add(this.buttonStartStop);
             this.TabConfig.Location = new System.Drawing.Point(4, 22);
             this.TabConfig.Name = "TabConfig";
             this.TabConfig.Padding = new System.Windows.Forms.Padding(3);
@@ -179,13 +188,6 @@ namespace Script
             this.TabConfig.TabIndex = 0;
             this.TabConfig.Text = "Config";
             this.TabConfig.UseVisualStyleBackColor = true;
-            // 
-            // progressBar1
-            // 
-            this.progressBar1.Location = new System.Drawing.Point(7, 522);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(573, 23);
-            this.progressBar1.TabIndex = 4;
             // 
             // SXML_Config
             // 
@@ -201,31 +203,32 @@ namespace Script
         '\'',
         '\''};
             this.SXML_Config.AutoIndentCharsPatterns = "";
-            this.SXML_Config.AutoScrollMinSize = new System.Drawing.Size(0, 16);
+            this.SXML_Config.AutoScrollMinSize = new System.Drawing.Size(0, 14);
             this.SXML_Config.BackBrush = null;
             this.SXML_Config.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.SXML_Config.BracketsHighlightStrategy = FastColoredTextBoxNS.BracketsHighlightStrategy.Strategy2;
-            this.SXML_Config.CharHeight = 16;
-            this.SXML_Config.CharWidth = 8;
+            this.SXML_Config.CharHeight = 14;
+            this.SXML_Config.CharWidth = 7;
             this.SXML_Config.CommentPrefix = null;
             this.SXML_Config.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.SXML_Config.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.SXML_Config.Font = new System.Drawing.Font("Consolas", 10.725F);
+            this.SXML_Config.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SXML_Config.Font = new System.Drawing.Font("Consolas", 9F);
             this.SXML_Config.IsReplaceMode = false;
             this.SXML_Config.Language = FastColoredTextBoxNS.Language.XML;
             this.SXML_Config.LeftBracket = '<';
             this.SXML_Config.LeftBracket2 = '(';
-            this.SXML_Config.Location = new System.Drawing.Point(0, 0);
+            this.SXML_Config.Location = new System.Drawing.Point(3, 3);
             this.SXML_Config.Name = "SXML_Config";
             this.SXML_Config.Paddings = new System.Windows.Forms.Padding(0);
             this.SXML_Config.RightBracket = '>';
             this.SXML_Config.RightBracket2 = ')';
             this.SXML_Config.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.SXML_Config.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("SXML_Config.ServiceColors")));
-            this.SXML_Config.Size = new System.Drawing.Size(748, 516);
+            this.SXML_Config.Size = new System.Drawing.Size(742, 545);
             this.SXML_Config.TabIndex = 3;
             this.SXML_Config.WordWrap = true;
-            this.SXML_Config.Zoom = 110;
+            this.SXML_Config.Zoom = 100;
             // 
             // TabLog
             // 
@@ -251,15 +254,15 @@ namespace Script
         '\"',
         '\'',
         '\''};
-            this.LogTextBox.AutoScrollMinSize = new System.Drawing.Size(2, 15);
+            this.LogTextBox.AutoScrollMinSize = new System.Drawing.Size(25, 14);
             this.LogTextBox.BackBrush = null;
             this.LogTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.LogTextBox.CharHeight = 15;
+            this.LogTextBox.CharHeight = 14;
             this.LogTextBox.CharWidth = 7;
             this.LogTextBox.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.LogTextBox.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.LogTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.LogTextBox.Font = new System.Drawing.Font("Consolas", 9.75F);
+            this.LogTextBox.Font = new System.Drawing.Font("Consolas", 9F);
             this.LogTextBox.IsReplaceMode = false;
             this.LogTextBox.Location = new System.Drawing.Point(3, 3);
             this.LogTextBox.Name = "LogTextBox";
@@ -295,9 +298,7 @@ namespace Script
         }
 
         #endregion
-
-        private System.Windows.Forms.Button buttonStartStop;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button CreateServ;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel StatusBarLable;
         private System.Windows.Forms.ToolStripStatusLabel StatusBarDesc;
@@ -312,10 +313,11 @@ namespace Script
         private System.Windows.Forms.DataGridViewTextBoxColumn GridColumnName;
         private System.Windows.Forms.DataGridViewTextBoxColumn GridColumnStatus;
         private System.Windows.Forms.DataGridViewButtonColumn GridColumnSetMode;
+        private System.Windows.Forms.DataGridView grid;
         private System.Windows.Forms.DataGridViewTextBoxColumn GridViewID;
         private System.Windows.Forms.DataGridViewTextBoxColumn GridViewName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn GridViewDescription;
         private System.Windows.Forms.DataGridViewTextBoxColumn GridViewStatus;
         private System.Windows.Forms.DataGridViewButtonColumn GridViewSetMode;
-        private System.Windows.Forms.DataGridView grid;
     }
 }

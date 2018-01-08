@@ -36,15 +36,7 @@ namespace Script
 
         public bool InProgress { get; private set; }
         public static string LocalPath => Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-        private string ConfigPath
-        {
-            get => _configPath;
-            set
-            {
-                _configPath = value;
-                this.Text = string.Format("Script {0}", value);
-            }
-        }
+
 
 
 
@@ -62,11 +54,12 @@ namespace Script
             grid.Columns.Add(GridColumnPath);
 
 
-            DataGridViewRow row = new DataGridViewRow();
             //grid.Rows[rowIndex].Cells[columnIndex].Value = value;
 
-            grid.Rows.Add(new object[]{ 1, "SPA.Configuration", "Processing...", "Stop", @"C:\1\1.sxml" });
-            grid.Rows.Add(new object[]{ 2, "CRM.Configuration", "Processing...", "Stop", @"C:\1\2.sxml" });
+            grid.Rows.Add(new object[]{ 0, "Timesheet", "Get Stats", "None", "Start", @"C:\1\1.sxml" });
+            grid.Rows.Add(new object[]{ 1, "SPA.Configuration", "BPM Process", "None", "Start", @"C:\1\1.sxml" });
+            grid.Rows.Add(new object[]{ 2, "SPA.Configuration", "SA Process", "None", "Start", @"C:\1\1.sxml" });
+            grid.Rows.Add(new object[]{ 3, "CRM.Configuration", "Create Requests", "None", "Start", @"C:\1\2.sxml" });
 
 
             ConfigStyle colored = new ConfigStyle(SXML_Config);
@@ -76,22 +69,27 @@ namespace Script
 
             try
             {
-                ConfigPath = Path.Combine(LocalPath, "Script.Config.sxml");
-                if (!File.Exists(ConfigPath))
+                _configPath = Path.Combine(LocalPath, "Script.Config.sxml");
+                if (!File.Exists(_configPath))
                 {
-                    using (StreamWriter writer = new StreamWriter(ConfigPath, false, Functions.Enc))
+                    using (StreamWriter writer = new StreamWriter(_configPath, false, Functions.Enc))
                     {
                         //writer.Write(Properties.Resources.Script_Config);
                         writer.Write(ScriptTemplate.GetExampleOfConfig());
                         writer.Close();
                     }
                 }
-                SXML_Config.Text = ConfigPath.LoadFileByPath();
+                SXML_Config.Text = _configPath.LoadFileByPath();
             }
             catch (Exception ex)
             {
                 ChangeStatusBar(ProcessStatus.Exception, ex.Message);
             }
+        }
+
+        void LoadProcess()
+        {
+
         }
 
         void GridColumnPath_ButtonClick(object sender, EventArgs arg)
@@ -104,8 +102,8 @@ namespace Script
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    ConfigPath = openFileDialog.FileName;
-                    SXML_Config.Text = ConfigPath.LoadFileByPath();
+                    _configPath = openFileDialog.FileName;
+                    SXML_Config.Text = _configPath.LoadFileByPath();
                 }
             }
             grid.BeginEdit(false);
@@ -129,8 +127,8 @@ namespace Script
 
                     if (openFileDialog.ShowDialog() == DialogResult.OK)
                     {
-                        ConfigPath = openFileDialog.FileName;
-                        SXML_Config.Text = ConfigPath.LoadFileByPath();
+                        _configPath = openFileDialog.FileName;
+                        SXML_Config.Text = _configPath.LoadFileByPath();
                     }
                 }
             }
@@ -167,9 +165,9 @@ namespace Script
             try
             {
                 InProgress = true;
-                Invoke(new Action(() => buttonStartStop.Text = @"Stop"));
+                //Invoke(new Action(() => buttonStartStop.Text = @"Stop"));
                 string sourceControl = string.Empty;
-                Invoke(new Action(() => sourceControl = SXML_Config.Text.SaveStreamToFile(ConfigPath)));
+                Invoke(new Action(() => sourceControl = SXML_Config.Text.SaveStreamToFile(_configPath)));
 
                 XmlDocument xdoc = new XmlDocument();
                 xdoc.LoadXml(sourceControl);
@@ -189,7 +187,7 @@ namespace Script
                 ChangeStatusBar(ProcessStatus.Completed);
             asyncExceptions = 0;
             InProgress = false;
-            Invoke(new Action(() => buttonStartStop.Text = @"Start"));
+            //Invoke(new Action(() => buttonStartStop.Text = @"Start"));
         }
 
 
@@ -213,13 +211,12 @@ namespace Script
         protected override void Dispose(bool disposing)
         {
             asyncPerforming.Abort();
-            SXML_Config.Text.SaveStreamToFile(ConfigPath);
+            SXML_Config.Text.SaveStreamToFile(_configPath);
             if (disposing && (components != null))
             {
                 components.Dispose();
             }
             base.Dispose(disposing);
         }
-
     }
 }
