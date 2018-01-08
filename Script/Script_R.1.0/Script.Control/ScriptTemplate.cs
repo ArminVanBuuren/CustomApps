@@ -101,12 +101,18 @@ namespace Script.Control
             set { LogShell.ScriptExceptionsCount = value; }
         }
 
-        public ScriptTemplate(string filePath)
+        ScriptTemplate(string filePath)
         {
             DynamicFunction = GetResources;
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(filePath);
             PerformChild(xmlDoc);
+            Initializator();
+        }
+        public ScriptTemplate(XmlDocument document)
+        {
+            DynamicFunction = GetResources;
+            PerformChild(document);
             Initializator();
         }
 
