@@ -38,7 +38,7 @@ namespace Script.Control.Handlers.Timesheet.Project
         public void Load(string htmlBody, int fid)
         {
             string monthPeriod = new Regex(@"My Timesheet.+?\((.+?)\)", RegexOptions.IgnoreCase).Match(htmlBody).Groups[1].Value;
-            Autorization.FullName = new Regex(@"<u.+" + Autorization.DomainUserName + ".+?>(.+?)<", RegexOptions.IgnoreCase).Match(htmlBody).Groups[1].Value;
+            Autorization.FullName = new Regex(@"<u.+" + Regex.Escape(Autorization.DomainUserName) + ".+?>(.+?)<", RegexOptions.IgnoreCase).Match(htmlBody).Groups[1].Value;
             htmlBody = ReplaceByRegex(htmlBody);
             LoadXml(htmlBody, fid, monthPeriod);
         }
