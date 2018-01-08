@@ -14,6 +14,7 @@ using System.Xml;
 using FastColoredTextBoxNS;
 using Script.ColoredStyle;
 using Script.Control;
+using Script.DataGridViewCustom;
 using XPackage;
 
 namespace Script
@@ -50,8 +51,15 @@ namespace Script
         public MainWindow()
         {
             InitializeComponent();
-            grid.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(grid, true, null);
-
+            grid.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(grid, true, null);
+            DataGridViewTextButtonColumn GridColumnPath = new DataGridViewCustom.DataGridViewTextButtonColumn
+                                  {
+                                      AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill,
+                                      ValueType = typeof(string),
+                                      HeaderText = @"Path",
+                                      ButtonClickHandler = GridColumnPath_ButtonClick
+                                  };
+            grid.Columns.Add(GridColumnPath);
 
             ConfigStyle colored = new ConfigStyle(SXML_Config);
             asyncPerforming.DoWork += AsyncPerforming_DoWork;

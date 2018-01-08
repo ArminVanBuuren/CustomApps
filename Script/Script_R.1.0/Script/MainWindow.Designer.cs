@@ -38,6 +38,8 @@ namespace Script
             this.GridColumnName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.GridColumnStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.GridColumnSetMode = new System.Windows.Forms.DataGridViewButtonColumn();
+            
+
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.TabProcess.SuspendLayout();
@@ -129,19 +131,13 @@ namespace Script
             this.grid.TabIndex = 0;
             this.grid.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.grid_DataError);
 
-            DataGridViewCustom.DataGridViewTextButtonColumn GridColumnPath = new DataGridViewCustom.DataGridViewTextButtonColumn {
-                                                                                                                                 AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill,
-                                                                                                                                 ValueType = typeof(string),
-                                                                                                                                 HeaderText = "Path",
-                                                                                                                                 ButtonClickHandler = GridColumnPath_ButtonClick
-                                                                                                                             };
+            
 
             this.grid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
                                                                                          this.GridColumnID,
                                                                                          this.GridColumnName,
                                                                                          this.GridColumnStatus,
-                                                                                         this.GridColumnSetMode,
-                                                                                         GridColumnPath
+                                                                                         this.GridColumnSetMode
                                                                                      });
             this.grid.RowHeadersDefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopRight;
             this.grid.RowHeadersDefaultCellStyle.Padding = new System.Windows.Forms.Padding(0);
@@ -317,11 +313,6 @@ namespace Script
         private System.Windows.Forms.TabPage TabProcess;
         private System.Windows.Forms.DataGridView grid;
         private System.Windows.Forms.ProgressBar progressBar1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn GridID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn GridConfigureName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn GridStatus;
-        private System.Windows.Forms.DataGridViewButtonColumn GridSetMode;
-        private DataGridViewCustom.DataGridViewTextButtonColumn GridPath;
         private System.Windows.Forms.DataGridViewTextBoxColumn GridColumnID;
         private System.Windows.Forms.DataGridViewTextBoxColumn GridColumnName;
         private System.Windows.Forms.DataGridViewTextBoxColumn GridColumnStatus;
