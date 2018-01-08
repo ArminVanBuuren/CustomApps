@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Script.Control")]
+[assembly: AssemblyTitle("Script")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Khovanskiy Vladimir")]
-[assembly: AssemblyProduct("Script.Control")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("Script")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("0c5d9987-d33f-493c-b855-f507d8d5fcd5")]
+[assembly: Guid("bada2e9f-b09a-4774-a439-42ce744afea3")]
 
 // Version information for an assembly consists of the following four values:
 //
