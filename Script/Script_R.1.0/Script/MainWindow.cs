@@ -61,6 +61,14 @@ namespace Script
                                   };
             grid.Columns.Add(GridColumnPath);
 
+
+            DataGridViewRow row = new DataGridViewRow();
+            //grid.Rows[rowIndex].Cells[columnIndex].Value = value;
+
+            grid.Rows.Add(new object[]{ 1, "SPA.Configuration", "Processing...", "Stop", @"C:\1\1.sxml" });
+            grid.Rows.Add(new object[]{ 2, "CRM.Configuration", "Processing...", "Stop", @"C:\1\2.sxml" });
+
+
             ConfigStyle colored = new ConfigStyle(SXML_Config);
             asyncPerforming.DoWork += AsyncPerforming_DoWork;
             asyncPerforming.RunWorkerCompleted += AsyncPerforming_RunWorkerCompleted;
