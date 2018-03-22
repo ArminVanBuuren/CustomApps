@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using NAudio.Wave;
 
 namespace ASOTCutter
 {
@@ -72,11 +73,19 @@ namespace ASOTCutter
                     string dirName = Path.GetFileName(path);
                     List<Track>  tracks = ReadCue(dirName, fileCuePath);
 
-                    foreach (Track track in tracks)
-                    {
-                        string outputTrackResult = Path.Combine(path, "Result", track.TrackFileName + ".mp3");
 
-                        //TrimMp3(fileName + ".mp3", outputTrackResult, TimeSpan.FromMinutes(2), TimeSpan.FromMinutes(2.5));
+                    string pathResult = Path.Combine(path, "Result");
+
+                    using (var reader = new Mp3FileReader(fileName + ".mp3"))
+                    {
+                        if (!Directory.Exists(pathResult))
+                            Directory.CreateDirectory(pathResult);
+
+                        for (int i = 0; i < tracks.Count; i++)
+                        {
+                            string outputTrackResult = Path.Combine(pathResult, tracks[i].TrackFileName + ".mp3");
+                            TrimMp3(reader, outputTrackResult, tracks[i].Start, i >= tracks.Count -1 ? TimeSpan.Zero : tracks[i + 1].Start);
+                        }
                     }
                 }
             }
@@ -127,23 +136,29 @@ namespace ASOTCutter
             return SetTracks;
         }
 
-        //void TrimMp3(string inputPath, string outputPath, TimeSpan? begin, TimeSpan? end)
-        //{
-        //    if (begin.HasValue && end.HasValue && begin > end)
-        //        throw new ArgumentOutOfRangeException("end", "end should be greater than begin");
+        void TrimMp3(Mp3FileReader reader, string outputPath, TimeSpan? begin, TimeSpan? end)
+        {
+           
+                if (end == TimeSpan.Zero)
+                    end = reader.TotalTime;
 
-        //    using (var reader = new Mp3FileReader(inputPath))
-        //    using (var writer = File.Create(outputPath))
-        //    {
-        //        Mp3Frame frame;
-        //        while ((frame = reader.ReadNextFrame()) != null)
-        //            if (reader.CurrentTime >= begin || !begin.HasValue)
-        //            {
-        //                if (reader.CurrentTime <= end || !end.HasValue)
-        //                    writer.Write(frame.RawData, 0, frame.RawData.Length);
-        //                else break;
-        //            }
-        //    }
-        //}
+                if (begin.HasValue && end.HasValue && begin > end)
+                    throw new ArgumentOutOfRangeException(@"end", @"end should be greater than begin");
+
+
+                using (var writer = File.Create(outputPath))
+                {
+
+                    Mp3Frame frame;
+                    while ((frame = reader.ReadNextFrame()) != null)
+                        if (reader.CurrentTime >= begin || !begin.HasValue)
+                        {
+                            if (reader.CurrentTime <= end || !end.HasValue)
+                                writer.Write(frame.RawData, 0, frame.RawData.Length);
+                            else break;
+                        }
+                }
+            
+        }
     }
 }
