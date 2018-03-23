@@ -37,6 +37,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tempstat = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatusTextLable = new System.Windows.Forms.ToolStripStatusLabel();
+            this.exceptionMessage = new System.Windows.Forms.RichTextBox();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -46,7 +47,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxDirPath.Location = new System.Drawing.Point(67, 12);
             this.textBoxDirPath.Name = "textBoxDirPath";
-            this.textBoxDirPath.Size = new System.Drawing.Size(355, 20);
+            this.textBoxDirPath.Size = new System.Drawing.Size(313, 20);
             this.textBoxDirPath.TabIndex = 0;
             // 
             // label1
@@ -61,7 +62,7 @@
             // ButtonDirPath
             // 
             this.ButtonDirPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.ButtonDirPath.Location = new System.Drawing.Point(428, 10);
+            this.ButtonDirPath.Location = new System.Drawing.Point(386, 10);
             this.ButtonDirPath.Name = "ButtonDirPath";
             this.ButtonDirPath.Size = new System.Drawing.Size(75, 23);
             this.ButtonDirPath.TabIndex = 2;
@@ -75,7 +76,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxFormat.Location = new System.Drawing.Point(67, 39);
             this.textBoxFormat.Name = "textBoxFormat";
-            this.textBoxFormat.Size = new System.Drawing.Size(355, 20);
+            this.textBoxFormat.Size = new System.Drawing.Size(313, 20);
             this.textBoxFormat.TabIndex = 3;
             // 
             // label2
@@ -90,7 +91,7 @@
             // ButtonStartStop
             // 
             this.ButtonStartStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.ButtonStartStop.Location = new System.Drawing.Point(429, 35);
+            this.ButtonStartStop.Location = new System.Drawing.Point(387, 35);
             this.ButtonStartStop.Name = "ButtonStartStop";
             this.ButtonStartStop.Size = new System.Drawing.Size(75, 23);
             this.ButtonStartStop.TabIndex = 5;
@@ -103,9 +104,9 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tempstat,
             this.StatusTextLable});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 98);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 166);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(515, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(473, 22);
             this.statusStrip1.TabIndex = 6;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -120,11 +121,23 @@
             this.StatusTextLable.Name = "StatusTextLable";
             this.StatusTextLable.Size = new System.Drawing.Size(0, 17);
             // 
+            // exceptionMessage
+            // 
+            this.exceptionMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.exceptionMessage.Location = new System.Drawing.Point(15, 75);
+            this.exceptionMessage.Name = "exceptionMessage";
+            this.exceptionMessage.Size = new System.Drawing.Size(446, 79);
+            this.exceptionMessage.TabIndex = 7;
+            this.exceptionMessage.Text = "";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(515, 120);
+            this.ClientSize = new System.Drawing.Size(473, 188);
+            this.Controls.Add(this.exceptionMessage);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.ButtonStartStop);
             this.Controls.Add(this.label2);
@@ -152,6 +165,7 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel tempstat;
         private System.Windows.Forms.ToolStripStatusLabel StatusTextLable;
+        private System.Windows.Forms.RichTextBox exceptionMessage;
     }
 }
 
