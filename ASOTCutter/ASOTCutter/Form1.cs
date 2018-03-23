@@ -158,29 +158,6 @@ namespace ASOTCutter
                 {
                     using (Stream stream = new FileStream(sourceASOTMp3Path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
                     {
-
-                        //Mp3Frame frame = Mp3Frame.LoadFromStream(stream, false);
-                        //if (frame.SampleRate == 48000)
-                        //{
-                        //    ReturnException(string.Format("'{0}' was skip. Because need frame 44100.", sourceASOTMp3Path));
-                        //    using (var reader = new WaveFileReader(stream))
-                        //    {
-                        //        for (int i = 0; i < tracks.Count; i++)
-                        //        {
-                        //            string outputTrackResult = Path.Combine(pathResult, tracks[i].TrackFileName + ".mp3");
-
-                        //            int bytesPerMillisecond = reader.WaveFormat.AverageBytesPerSecond / 1000;
-
-                        //            int startPos = (int)tracks[i].Start.TotalMilliseconds * bytesPerMillisecond;
-                        //            startPos = startPos - startPos % reader.WaveFormat.BlockAlign;
-
-                        //            int endBytes = (int)(i >= tracks.Count - 1 ? reader.TotalTime : tracks[i + 1].Start).TotalMilliseconds * bytesPerMillisecond;
-                        //            endBytes = endBytes - endBytes % reader.WaveFormat.BlockAlign;
-                        //            int endPos = (int)reader.Length - endBytes;
-                        //        }
-                        //    }
-                        //}
-
                         Directory.CreateDirectory(pathResult);
 
                         using (var reader = new Mp3FileReader(stream))
@@ -191,7 +168,6 @@ namespace ASOTCutter
                                 TrimMp3(reader, outputTrackResult, tracks[i].Start, i >= tracks.Count - 1 ? reader.TotalTime : tracks[i + 1].Start);
                             }
                         }
-
                     }
                 }
                 catch (InvalidOperationException ex)
@@ -276,6 +252,29 @@ namespace ASOTCutter
 
         private static void TrimWavFile(WaveFileReader reader, string outputPath, int startPos, int endPos)
         {
+            //Mp3Frame frame = Mp3Frame.LoadFromStream(stream, false);
+            //if (frame.SampleRate == 48000)
+            //{
+            //    ReturnException(string.Format("'{0}' was skip. Because need frame 44100.", sourceASOTMp3Path));
+            //    using (var reader = new WaveFileReader(stream))
+            //    {
+            //        for (int i = 0; i < tracks.Count; i++)
+            //        {
+            //            string outputTrackResult = Path.Combine(pathResult, tracks[i].TrackFileName + ".mp3");
+
+            //            int bytesPerMillisecond = reader.WaveFormat.AverageBytesPerSecond / 1000;
+
+            //            int startPos = (int)tracks[i].Start.TotalMilliseconds * bytesPerMillisecond;
+            //            startPos = startPos - startPos % reader.WaveFormat.BlockAlign;
+
+            //            int endBytes = (int)(i >= tracks.Count - 1 ? reader.TotalTime : tracks[i + 1].Start).TotalMilliseconds * bytesPerMillisecond;
+            //            endBytes = endBytes - endBytes % reader.WaveFormat.BlockAlign;
+            //            int endPos = (int)reader.Length - endBytes;
+            //        }
+            //    }
+            //}
+
+
             using (WaveFileWriter writer = new WaveFileWriter(outputPath, reader.WaveFormat))
             {
                 reader.Position = startPos;
