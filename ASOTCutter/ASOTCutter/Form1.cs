@@ -25,6 +25,8 @@ namespace ASOTCutter
 
         public Form1()
         {
+            
+
             InitializeComponent();
             textBoxDirPath.Text = @"D:\MUSIC\ ASOT\600-699\600";
             textBoxFormat.Text = @"[ASOT %DIR_NAME%] %TRACK%. %PERFORMER% - %TITLE%";
@@ -58,13 +60,16 @@ namespace ASOTCutter
                     return;
                 }
 
-                _asyncThread = new Thread(() => StartProcess(textBoxDirPath.Text));
-                _asyncThread.Start();
                 StatusTextLable.Text = @"Working...";
                 ButtonStartStop.Text = @"Stop";
                 textBoxDirPath.Enabled = false;
                 textBoxFormat.Enabled = false;
                 ButtonDirPath.Enabled = false;
+                exceptionMessage.Text = string.Empty;
+
+                _asyncThread = new Thread(() => StartProcess(textBoxDirPath.Text));
+                _asyncThread.Start();
+                
             }
             else
             {
@@ -77,7 +82,12 @@ namespace ASOTCutter
         {
             try
             {
-                FindAllCueDirAndSubDir(dirPath);
+                string[] DirPaths = Directory.GetDirectories(dirPath, "*", SearchOption.AllDirectories);
+                foreach (var dir in DirPaths)
+                {
+                    GetCueAndMp3(dirPath);
+                }
+
                 StoppedProcessActivateForm("Finished");
             }
             catch (ThreadAbortException)
@@ -93,7 +103,7 @@ namespace ASOTCutter
                     detailException = detailException + "\r\n" + string.Format("{0}\r\n{1}", ex.Message, ex.StackTrace);
                     ex = ex.InnerException;
                 }
-                ReturnException(detailException, true);
+                ReturnException(detailException);
                 StoppedProcessActivateForm("Catched Exception");
             }
         }
@@ -111,25 +121,15 @@ namespace ASOTCutter
             }));
         }
 
-        public void ReturnException(string info, bool stopProcess)
+        public void ReturnException(string info)
         {
             if (string.IsNullOrEmpty(info))
                 return;
 
             Invoke(new MethodInvoker(delegate
             {
-                exceptionMessage.Text = info;
+                exceptionMessage.Text = info + Environment.NewLine + exceptionMessage.Text;
             }));
-        }
-
-        void FindAllCueDirAndSubDir(string dirPath)
-        {
-            string[] DirPaths = Directory.GetDirectories(dirPath, "*", SearchOption.AllDirectories);
-            foreach (var dir in DirPaths)
-            {
-                FindAllCueDirAndSubDir(dir);
-            }
-            GetCueAndMp3(dirPath);
         }
 
         void GetCueAndMp3(string path)
@@ -156,16 +156,48 @@ namespace ASOTCutter
 
                 try
                 {
-                    using (var reader = new Mp3FileReader(sourceASOTMp3Path))
+                    using (Stream stream = new FileStream(sourceASOTMp3Path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
                     {
+
+                        //Mp3Frame frame = Mp3Frame.LoadFromStream(stream, false);
+                        //if (frame.SampleRate == 48000)
+                        //{
+                        //    ReturnException(string.Format("'{0}' was skip. Because need frame 44100.", sourceASOTMp3Path));
+                        //    using (var reader = new WaveFileReader(stream))
+                        //    {
+                        //        for (int i = 0; i < tracks.Count; i++)
+                        //        {
+                        //            string outputTrackResult = Path.Combine(pathResult, tracks[i].TrackFileName + ".mp3");
+
+                        //            int bytesPerMillisecond = reader.WaveFormat.AverageBytesPerSecond / 1000;
+
+                        //            int startPos = (int)tracks[i].Start.TotalMilliseconds * bytesPerMillisecond;
+                        //            startPos = startPos - startPos % reader.WaveFormat.BlockAlign;
+
+                        //            int endBytes = (int)(i >= tracks.Count - 1 ? reader.TotalTime : tracks[i + 1].Start).TotalMilliseconds * bytesPerMillisecond;
+                        //            endBytes = endBytes - endBytes % reader.WaveFormat.BlockAlign;
+                        //            int endPos = (int)reader.Length - endBytes;
+                        //        }
+                        //    }
+                        //}
+
                         Directory.CreateDirectory(pathResult);
 
-                        for (int i = 0; i < tracks.Count; i++)
+                        using (var reader = new Mp3FileReader(stream))
                         {
-                            string outputTrackResult = Path.Combine(pathResult, tracks[i].TrackFileName + ".mp3");
-                            TrimMp3(reader, outputTrackResult, tracks[i].Start, i >= tracks.Count - 1 ? TimeSpan.Zero : tracks[i + 1].Start);
+                            for (int i = 0; i < tracks.Count; i++)
+                            {
+                                string outputTrackResult = Path.Combine(pathResult, tracks[i].TrackFileName + ".mp3");
+                                TrimMp3(reader, outputTrackResult, tracks[i].Start, i >= tracks.Count - 1 ? reader.TotalTime : tracks[i + 1].Start);
+                            }
                         }
+
                     }
+                }
+                catch (InvalidOperationException ex)
+                {
+                    ReturnException(string.Format("'{0}' was skip. Exception:{1}.", sourceASOTMp3Path, ex.Message));
+                    Directory.Delete(pathResult);
                 }
                 catch (Exception ex)
                 {
@@ -173,6 +205,8 @@ namespace ASOTCutter
                 }
             }
         }
+
+
 
         class CutterTrack
         {
@@ -240,20 +274,33 @@ namespace ASOTCutter
             return corrected.Replace("�", "O"); // Orjan Nilsen
         }
 
+        private static void TrimWavFile(WaveFileReader reader, string outputPath, int startPos, int endPos)
+        {
+            using (WaveFileWriter writer = new WaveFileWriter(outputPath, reader.WaveFormat))
+            {
+                reader.Position = startPos;
+                byte[] buffer = new byte[1024];
+                while (reader.Position < endPos)
+                {
+                    int bytesRequired = (int)(endPos - reader.Position);
+                    if (bytesRequired > 0)
+                    {
+                        int bytesToRead = Math.Min(bytesRequired, buffer.Length);
+                        int bytesRead = reader.Read(buffer, 0, bytesToRead);
+                        if (bytesRead > 0)
+                        {
+                            writer.WriteData(buffer, 0, bytesRead);
+                        }
+                    }
+                }
+
+            }
+        }
+
         void TrimMp3(Mp3FileReader reader, string outputPath, TimeSpan? begin, TimeSpan? end)
         {
-            if (end == TimeSpan.Zero)
-                end = reader.TotalTime;
-
             if (begin.HasValue && end.HasValue && begin > end)
                 throw new ArgumentOutOfRangeException(nameof(end), @"end should be greater than begin");
-
-            //string sourceOutputPath = outputPath;
-            //int i = 0;
-            //while (File.Exists(outputPath))
-            //{
-            //    outputPath = sourceOutputPath + "_" + i++;
-            //}
 
             if (File.Exists(outputPath))
                 File.Delete(outputPath);
@@ -269,9 +316,6 @@ namespace ASOTCutter
                         else break;
                     }
             }
-
-            //if(i > 0)
-            //    File.Replace();
 
         }
     }
