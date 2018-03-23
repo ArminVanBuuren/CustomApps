@@ -38,6 +38,9 @@
             this.tempstat = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatusTextLable = new System.Windows.Forms.ToolStripStatusLabel();
             this.exceptionMessage = new System.Windows.Forms.RichTextBox();
+            this.deleteSourceSet = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.outputDirectory = new System.Windows.Forms.TextBox();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -126,17 +129,49 @@
             this.exceptionMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.exceptionMessage.Location = new System.Drawing.Point(15, 75);
+            this.exceptionMessage.Location = new System.Drawing.Point(15, 91);
             this.exceptionMessage.Name = "exceptionMessage";
-            this.exceptionMessage.Size = new System.Drawing.Size(446, 79);
+            this.exceptionMessage.Size = new System.Drawing.Size(446, 63);
             this.exceptionMessage.TabIndex = 7;
             this.exceptionMessage.Text = "";
+            // 
+            // deleteSourceSet
+            // 
+            this.deleteSourceSet.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.deleteSourceSet.AutoSize = true;
+            this.deleteSourceSet.Location = new System.Drawing.Point(336, 67);
+            this.deleteSourceSet.Name = "deleteSourceSet";
+            this.deleteSourceSet.Size = new System.Drawing.Size(125, 17);
+            this.deleteSourceSet.TabIndex = 8;
+            this.deleteSourceSet.Text = "Delete source SET ?";
+            this.deleteSourceSet.UseVisualStyleBackColor = true;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(12, 68);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(87, 13);
+            this.label3.TabIndex = 9;
+            this.label3.Text = "Output Directory:";
+            // 
+            // outputDirectory
+            // 
+            this.outputDirectory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.outputDirectory.Location = new System.Drawing.Point(105, 65);
+            this.outputDirectory.Name = "outputDirectory";
+            this.outputDirectory.Size = new System.Drawing.Size(225, 20);
+            this.outputDirectory.TabIndex = 10;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(473, 188);
+            this.Controls.Add(this.outputDirectory);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.deleteSourceSet);
             this.Controls.Add(this.exceptionMessage);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.ButtonStartStop);
@@ -166,6 +201,9 @@
         private System.Windows.Forms.ToolStripStatusLabel tempstat;
         private System.Windows.Forms.ToolStripStatusLabel StatusTextLable;
         private System.Windows.Forms.RichTextBox exceptionMessage;
+        private System.Windows.Forms.CheckBox deleteSourceSet;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox outputDirectory;
     }
 }
 

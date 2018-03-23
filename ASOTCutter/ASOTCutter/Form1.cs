@@ -22,13 +22,15 @@ namespace ASOTCutter
         static readonly string invalid = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
         private bool isWorked = false;
         private Thread _asyncThread;
-
+        private DeleteSourceFiles deleteSourceFiles;
+        delegate void DeleteSourceFiles(string cuePath, string mp3Path);
 
         public Form1()
         {
             InitializeComponent();
-            textBoxDirPath.Text = @"D:\MUSIC\ ASOT\600-699";
+            textBoxDirPath.Text = @"D:\MUSIC\ ASOT\400-499\464";
             textBoxFormat.Text = @"[ASOT %DIR_NAME%] %TRACK%. %PERFORMER% - %TITLE%";
+            outputDirectory.Text = @"Result";
         }
 
         private void ButtonDirPath_Click(object sender, EventArgs e)
@@ -64,7 +66,22 @@ namespace ASOTCutter
                 textBoxDirPath.Enabled = false;
                 textBoxFormat.Enabled = false;
                 ButtonDirPath.Enabled = false;
+                deleteSourceSet.Enabled = false;
+                outputDirectory.Enabled = false;
                 exceptionMessage.Text = string.Empty;
+
+                if (deleteSourceSet.Checked)
+                {
+                    deleteSourceFiles = (cuePath, mp3Path) =>
+                    {
+                        File.Delete(cuePath);
+                        File.Delete(mp3Path);
+                    };
+                }
+                else
+                {
+                    deleteSourceFiles = null;
+                }
 
                 _asyncThread = new Thread(() => StartProcess(textBoxDirPath.Text));
                 _asyncThread.Start();
@@ -86,6 +103,7 @@ namespace ASOTCutter
                 {
                     GetCueAndMp3(dir);
                 }
+                GetCueAndMp3(dirPath);
 
                 StoppedProcessActivateForm("Finished");
             }
@@ -117,6 +135,8 @@ namespace ASOTCutter
                 textBoxDirPath.Enabled = true;
                 textBoxFormat.Enabled = true;
                 ButtonDirPath.Enabled = true;
+                deleteSourceSet.Enabled = true;
+                outputDirectory.Enabled = true;
             }));
         }
 
@@ -131,13 +151,19 @@ namespace ASOTCutter
             }));
         }
 
+
+
         void GetCueAndMp3(string path)
         {
             //string dirPath = Path.GetDirectoryName(cuePath); - полный путь к папке без файла
 
-            string pathResult = Path.Combine(path, "Result");
-            if (Directory.Exists(pathResult)) // пропускаем если уже есть папка Result, не перезаписываем треки
-                return;
+            string pathResult = path;
+            if (!outputDirectory.Text.IsNullOrEmpty())
+            {
+                pathResult = Path.Combine(path, outputDirectory.Text);
+                if (Directory.Exists(pathResult)) // пропускаем если уже есть папка Result, не перезаписываем треки
+                    return;
+            }
 
             if (pathResult.Length > 250)
                 throw new Exception("Length of directory path too high. More than 250");
@@ -155,12 +181,17 @@ namespace ASOTCutter
                 string dirName = Path.GetFileName(path);
                 List<CutterTrack> tracks = ReadCue(pathResult.Length, dirName, sourceASOTCuePath);
 
+                bool newDirIsCreated = false;
+                if (!Directory.Exists(pathResult))
+                {
+                    Directory.CreateDirectory(pathResult);
+                    newDirIsCreated = true;
+                }
+
                 try
                 {
                     using (Stream stream = new FileStream(sourceASOTMp3Path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
                     {
-                        Directory.CreateDirectory(pathResult);
-
                         using (var reader = new Mp3FileReader(stream))
                         {
                             for (int i = 0; i < tracks.Count; i++)
@@ -170,6 +201,8 @@ namespace ASOTCutter
                             }
                         }
                     }
+
+                    deleteSourceFiles?.Invoke(sourceASOTCuePath, sourceASOTMp3Path);
                 }
                 catch (ThreadAbortException)
                 {
@@ -178,9 +211,9 @@ namespace ASOTCutter
                 catch (InvalidOperationException ex)
                 {
                     ReturnException(string.Format("'{0}' was skip. Exception:{1}.", sourceASOTMp3Path, ex.Message));
-                    Directory.Delete(pathResult);
+                    if (newDirIsCreated)
+                        Directory.Delete(pathResult);
                 }
-
                 catch (Exception ex)
                 {
                     throw new Exception(string.Format("Exception \"{0}\" when read or write track {1}.", ex.GetType(), sourceASOTMp3Path), ex);
