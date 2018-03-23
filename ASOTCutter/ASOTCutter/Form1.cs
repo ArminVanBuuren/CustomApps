@@ -26,8 +26,6 @@ namespace ASOTCutter
 
         public Form1()
         {
-            
-
             InitializeComponent();
             textBoxDirPath.Text = @"D:\MUSIC\ ASOT\600-699";
             textBoxFormat.Text = @"[ASOT %DIR_NAME%] %TRACK%. %PERFORMER% - %TITLE%";
@@ -190,11 +188,16 @@ namespace ASOTCutter
             }
         }
 
-
-        static readonly Regex cueTrackNum = new Regex(@"TRACK\s*(?<TRACK>\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        static readonly Regex cueTrackPerf = new Regex(@"PERFORMER\s*\""(?<PERFORMER>.+?)\""", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        static readonly Regex cueTrackTitle = new Regex(@"TITLE\s*\""(?<TITLE>.+?)\""", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        static readonly Regex cueTrackIndex = new Regex(@"INDEX\s*01\s*(?<INDEX>\d+:\d+:\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private const string TRACK = "TRACK";
+        private const string PERFORMER = "PERFORMER";
+        private const string TITLE = "TITLE";
+        private const string INDEX = "INDEX";
+        private const string DIR_NAME = "DIR_NAME";
+        //.+?\s*TRACK\s*(?<TRACK>\d+)\s*.+?PERFORMER\s*\""(?<PERFORMER>.+?)\"".+?TITLE\s*\""(?<TITLE>.+?)\"".+?INDEX\s*01\s*(?<INDEX>\d+:\d+:\d+)
+        static readonly Regex cueTrackNum = new Regex(TRACK + @"\s*(?<" + TRACK + @">\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        static readonly Regex cueTrackPerf = new Regex(PERFORMER + @"\s*(\""|)(?<" + PERFORMER  + @">.+?)(\""|)$", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Multiline);
+        static readonly Regex cueTrackTitle = new Regex(TITLE + @"\s*(\""|)(?<" + TITLE + @">.+?)(\""|)$", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Multiline);
+        static readonly Regex cueTrackIndex = new Regex(INDEX + @"\s*01\s*(?<"+ INDEX + @">\d+:\d+:\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         static readonly Regex regASOTNum = new Regex(@"^\d*", RegexOptions.Compiled);
         class CutterTrack
         {
@@ -202,13 +205,15 @@ namespace ASOTCutter
             {
                 try
                 {
+                    var collect = cueTrackPerf.Match(trackData);
+
                     TrackFileName = sourceTemplate;
-                    TrackFileName = ReplacerTrackName(TrackFileName, cueTrackNum.GetGroupNames()[1], cueTrackNum.Match(trackData).Groups[1].Value);
-                    TrackFileName = ReplacerTrackName(TrackFileName, cueTrackPerf.GetGroupNames()[1], cueTrackPerf.Match(trackData).Groups[1].Value);
-                    TrackFileName = ReplacerTrackName(TrackFileName, cueTrackTitle.GetGroupNames()[1], cueTrackTitle.Match(trackData).Groups[1].Value);
-                    string indexTrack = cueTrackIndex.Match(trackData).Groups[1].Value;
-                    TrackFileName = ReplacerTrackName(TrackFileName, cueTrackIndex.GetGroupNames()[1], indexTrack);
-                    TrackFileName = ReplacerTrackName(TrackFileName, "DIR_NAME", regASOTNum.Match(parentDirName).Value);
+                    TrackFileName = ReplacerTrackName(TrackFileName, TRACK, cueTrackNum.Match(trackData).Groups[TRACK].Value);
+                    TrackFileName = ReplacerTrackName(TrackFileName, PERFORMER, cueTrackPerf.Match(trackData).Groups[PERFORMER].Value);
+                    TrackFileName = ReplacerTrackName(TrackFileName, TITLE, cueTrackTitle.Match(trackData).Groups[TITLE].Value);
+                    string indexTrack = cueTrackIndex.Match(trackData).Groups[INDEX].Value;
+                    TrackFileName = ReplacerTrackName(TrackFileName, INDEX, indexTrack);
+                    TrackFileName = ReplacerTrackName(TrackFileName, DIR_NAME, regASOTNum.Match(parentDirName).Value);
                     TrackFileName = GetCorrectEncoding(TrackFileName);
 
                     int excess = TrackFileName.Length + outDirPathLength - 254;
@@ -251,12 +256,9 @@ namespace ASOTCutter
 
             public override string ToString()
             {
-                return string.Format("{1} | {0}", TrackFileName, Start.ToString("G"));
+                return string.Format("{1:G} | {0}", TrackFileName, Start);
             }
         }
-
-        //.+?\s*TRACK\s*(?<TRACK>\d+)\s*.+?PERFORMER\s*\""(?<PERFORMER>.+?)\"".+?TITLE\s*\""(?<TITLE>.+?)\"".+?INDEX\s*01\s*(?<INDEX>\d+:\d+:\d+)
-
 
         List<CutterTrack> ReadCue(int outDirPathLength, string parentDirName, string cuePath)
         {
@@ -277,9 +279,6 @@ namespace ASOTCutter
             }
             return cutterTracks;
         }
-
-        
-
 
 
         private static void TrimWavFile(WaveFileReader reader, string outputPath, int startPos, int endPos)
