@@ -267,11 +267,9 @@ namespace ASOTCutter
                 }
             }
 
-
-
             public string TrackFileName { get; }
             public TimeSpan Start { get; }
-            //E:\Temp\4
+
             static string GetCorrectEncoding(string sample)
             {
                 byte[] encoded = System.Text.Encoding.GetEncoding(1251).GetBytes(sample);
