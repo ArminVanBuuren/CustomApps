@@ -267,21 +267,25 @@ namespace ASOTCutter
                 }
             }
 
+
+
             public string TrackFileName { get; }
             public TimeSpan Start { get; }
-
+            //E:\Temp\4
             static string GetCorrectEncoding(string sample)
             {
-                byte[] encoded = Encoding.GetEncoding(1251).GetBytes(sample);
-                string corrected = Encoding.UTF8.GetString(encoded);
+                byte[] encoded = System.Text.Encoding.GetEncoding(1251).GetBytes(sample);
+                string corrected = System.Text.Encoding.GetEncoding(1250).GetString(encoded);
 
                 foreach (char c in invalid)
                 {
                     corrected = corrected.Replace(c.ToString(), "");
                 }
 
-                return corrected.Replace("�", "O"); // Orjan Nilsen
+                return corrected;
             }
+
+
             static string ReplacerTrackName(string source, string groupName, string parcedValue)
             {
                 return new Regex(string.Format(@"%\s*{0}\s*%", groupName), RegexOptions.IgnoreCase).Replace(source, parcedValue);
