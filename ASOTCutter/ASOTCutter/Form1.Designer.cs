@@ -38,9 +38,10 @@
             this.tempstat = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatusTextLable = new System.Windows.Forms.ToolStripStatusLabel();
             this.exceptionMessage = new System.Windows.Forms.RichTextBox();
-            this.deleteSourceSet = new System.Windows.Forms.CheckBox();
+            this.deleteSourceCUE = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.outputDirectory = new System.Windows.Forms.TextBox();
+            this.deleteSourceMP3 = new System.Windows.Forms.CheckBox();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -48,26 +49,27 @@
             // 
             this.textBoxDirPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxDirPath.Location = new System.Drawing.Point(67, 12);
+            this.textBoxDirPath.Location = new System.Drawing.Point(105, 12);
             this.textBoxDirPath.Name = "textBoxDirPath";
-            this.textBoxDirPath.Size = new System.Drawing.Size(313, 20);
+            this.textBoxDirPath.Size = new System.Drawing.Size(293, 20);
             this.textBoxDirPath.TabIndex = 0;
+            this.textBoxDirPath.Text = "E:\\Temp2";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 15);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(52, 13);
+            this.label1.Size = new System.Drawing.Size(89, 13);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Directory:";
+            this.label1.Text = "Source Directory:";
             // 
             // ButtonDirPath
             // 
             this.ButtonDirPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.ButtonDirPath.Location = new System.Drawing.Point(386, 10);
+            this.ButtonDirPath.Location = new System.Drawing.Point(404, 10);
             this.ButtonDirPath.Name = "ButtonDirPath";
-            this.ButtonDirPath.Size = new System.Drawing.Size(75, 23);
+            this.ButtonDirPath.Size = new System.Drawing.Size(43, 23);
             this.ButtonDirPath.TabIndex = 2;
             this.ButtonDirPath.Text = "Open";
             this.ButtonDirPath.UseVisualStyleBackColor = true;
@@ -77,26 +79,28 @@
             // 
             this.textBoxFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxFormat.Location = new System.Drawing.Point(67, 39);
+            this.textBoxFormat.Location = new System.Drawing.Point(105, 39);
             this.textBoxFormat.Name = "textBoxFormat";
-            this.textBoxFormat.Size = new System.Drawing.Size(313, 20);
+            this.textBoxFormat.Size = new System.Drawing.Size(342, 20);
             this.textBoxFormat.TabIndex = 3;
+            this.textBoxFormat.Tag = "";
+            this.textBoxFormat.Text = "[ASOT %DIR_NAME%] %TRACK%. %PERFORMER% - %TITLE%";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(12, 42);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(42, 13);
+            this.label2.Size = new System.Drawing.Size(93, 13);
             this.label2.TabIndex = 4;
-            this.label2.Text = "Format:";
+            this.label2.Text = "Out Track Format:";
             // 
             // ButtonStartStop
             // 
-            this.ButtonStartStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.ButtonStartStop.Location = new System.Drawing.Point(387, 35);
+            this.ButtonStartStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.ButtonStartStop.Location = new System.Drawing.Point(357, 157);
             this.ButtonStartStop.Name = "ButtonStartStop";
-            this.ButtonStartStop.Size = new System.Drawing.Size(75, 23);
+            this.ButtonStartStop.Size = new System.Drawing.Size(90, 23);
             this.ButtonStartStop.TabIndex = 5;
             this.ButtonStartStop.Text = "Start";
             this.ButtonStartStop.UseVisualStyleBackColor = true;
@@ -107,9 +111,9 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tempstat,
             this.StatusTextLable});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 166);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 190);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(473, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(459, 22);
             this.statusStrip1.TabIndex = 6;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -131,47 +135,60 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.exceptionMessage.Location = new System.Drawing.Point(15, 91);
             this.exceptionMessage.Name = "exceptionMessage";
-            this.exceptionMessage.Size = new System.Drawing.Size(446, 63);
+            this.exceptionMessage.Size = new System.Drawing.Size(432, 60);
             this.exceptionMessage.TabIndex = 7;
             this.exceptionMessage.Text = "";
             // 
-            // deleteSourceSet
+            // deleteSourceCUE
             // 
-            this.deleteSourceSet.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.deleteSourceSet.AutoSize = true;
-            this.deleteSourceSet.Location = new System.Drawing.Point(336, 67);
-            this.deleteSourceSet.Name = "deleteSourceSet";
-            this.deleteSourceSet.Size = new System.Drawing.Size(125, 17);
-            this.deleteSourceSet.TabIndex = 8;
-            this.deleteSourceSet.Text = "Delete source SET ?";
-            this.deleteSourceSet.UseVisualStyleBackColor = true;
+            this.deleteSourceCUE.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.deleteSourceCUE.AutoSize = true;
+            this.deleteSourceCUE.Location = new System.Drawing.Point(12, 161);
+            this.deleteSourceCUE.Name = "deleteSourceCUE";
+            this.deleteSourceCUE.Size = new System.Drawing.Size(126, 17);
+            this.deleteSourceCUE.TabIndex = 8;
+            this.deleteSourceCUE.Text = "Delete source CUE ?";
+            this.deleteSourceCUE.UseVisualStyleBackColor = true;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 68);
+            this.label3.Location = new System.Drawing.Point(11, 68);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(87, 13);
+            this.label3.Size = new System.Drawing.Size(115, 13);
             this.label3.TabIndex = 9;
-            this.label3.Text = "Output Directory:";
+            this.label3.Text = "Output DirectoryName:";
             // 
             // outputDirectory
             // 
             this.outputDirectory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.outputDirectory.Location = new System.Drawing.Point(105, 65);
+            this.outputDirectory.Location = new System.Drawing.Point(132, 65);
             this.outputDirectory.Name = "outputDirectory";
-            this.outputDirectory.Size = new System.Drawing.Size(225, 20);
+            this.outputDirectory.Size = new System.Drawing.Size(315, 20);
             this.outputDirectory.TabIndex = 10;
+            this.outputDirectory.Text = "Result";
+            // 
+            // deleteSourceMP3
+            // 
+            this.deleteSourceMP3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.deleteSourceMP3.AutoSize = true;
+            this.deleteSourceMP3.Location = new System.Drawing.Point(144, 161);
+            this.deleteSourceMP3.Name = "deleteSourceMP3";
+            this.deleteSourceMP3.Size = new System.Drawing.Size(126, 17);
+            this.deleteSourceMP3.TabIndex = 14;
+            this.deleteSourceMP3.Text = "Delete source MP3 ?";
+            this.deleteSourceMP3.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(473, 188);
+            this.ClientSize = new System.Drawing.Size(459, 212);
+            this.Controls.Add(this.deleteSourceMP3);
             this.Controls.Add(this.outputDirectory);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.deleteSourceSet);
+            this.Controls.Add(this.deleteSourceCUE);
             this.Controls.Add(this.exceptionMessage);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.ButtonStartStop);
@@ -180,6 +197,7 @@
             this.Controls.Add(this.ButtonDirPath);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBoxDirPath);
+            this.MinimumSize = new System.Drawing.Size(390, 214);
             this.Name = "Form1";
             this.Text = "ASOT Cutter";
             this.statusStrip1.ResumeLayout(false);
@@ -201,9 +219,10 @@
         private System.Windows.Forms.ToolStripStatusLabel tempstat;
         private System.Windows.Forms.ToolStripStatusLabel StatusTextLable;
         private System.Windows.Forms.RichTextBox exceptionMessage;
-        private System.Windows.Forms.CheckBox deleteSourceSet;
+        private System.Windows.Forms.CheckBox deleteSourceCUE;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox outputDirectory;
+        private System.Windows.Forms.CheckBox deleteSourceMP3;
     }
 }
 

@@ -22,15 +22,13 @@ namespace ASOTCutter
         static readonly string invalid = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
         private bool isWorked = false;
         private Thread _asyncThread;
-        private DeleteSourceFiles deleteSourceFiles;
-        delegate void DeleteSourceFiles(string cuePath, string mp3Path);
+        //private DeleteSourceFiles delSourceCUE;
+        //private DeleteSourceFiles delSourceMP3;
+        //delegate void DeleteSourceFiles(string path);
 
         public Form1()
         {
             InitializeComponent();
-            textBoxDirPath.Text = @"D:\MUSIC\ ASOT\400-499\464";
-            textBoxFormat.Text = @"[ASOT %DIR_NAME%] %TRACK%. %PERFORMER% - %TITLE%";
-            outputDirectory.Text = @"Result";
         }
 
         private void ButtonDirPath_Click(object sender, EventArgs e)
@@ -66,22 +64,12 @@ namespace ASOTCutter
                 textBoxDirPath.Enabled = false;
                 textBoxFormat.Enabled = false;
                 ButtonDirPath.Enabled = false;
-                deleteSourceSet.Enabled = false;
+                deleteSourceCUE.Enabled = false;
+                deleteSourceMP3.Enabled = false;
                 outputDirectory.Enabled = false;
                 exceptionMessage.Text = string.Empty;
 
-                if (deleteSourceSet.Checked)
-                {
-                    deleteSourceFiles = (cuePath, mp3Path) =>
-                    {
-                        File.Delete(cuePath);
-                        File.Delete(mp3Path);
-                    };
-                }
-                else
-                {
-                    deleteSourceFiles = null;
-                }
+                
 
                 _asyncThread = new Thread(() => StartProcess(textBoxDirPath.Text));
                 _asyncThread.Start();
@@ -98,12 +86,7 @@ namespace ASOTCutter
         {
             try
             {
-                string[] DirPaths = Directory.GetDirectories(dirPath, "*", SearchOption.AllDirectories);
-                foreach (var dir in DirPaths)
-                {
-                    GetCueAndMp3(dir);
-                }
-                GetCueAndMp3(dirPath);
+                GetDirectory(dirPath);
 
                 StoppedProcessActivateForm("Finished");
             }
@@ -125,6 +108,16 @@ namespace ASOTCutter
             }
         }
 
+        void GetDirectory(string dirPath)
+        {
+            string[] DirPaths = Directory.GetDirectories(dirPath, "*", SearchOption.TopDirectoryOnly);
+            foreach (var dir in DirPaths)
+            {
+                GetDirectory(dir);
+            }
+            GetCueAndMp3(dirPath);
+        }
+
         void StoppedProcessActivateForm(string bottomStr)
         {
             Invoke(new MethodInvoker(delegate
@@ -135,7 +128,8 @@ namespace ASOTCutter
                 textBoxDirPath.Enabled = true;
                 textBoxFormat.Enabled = true;
                 ButtonDirPath.Enabled = true;
-                deleteSourceSet.Enabled = true;
+                deleteSourceCUE.Enabled = true;
+                deleteSourceMP3.Enabled = true;
                 outputDirectory.Enabled = true;
             }));
         }
@@ -155,7 +149,21 @@ namespace ASOTCutter
 
         void GetCueAndMp3(string path)
         {
-            //string dirPath = Path.GetDirectoryName(cuePath); - полный путь к папке без файла
+
+            //if (!regexPatterReplaceDir.Text.IsNullOrEmpty() && !regexPatterReplacementDir.Text.IsNullOrEmpty())
+            //{
+            //    //string fullDirPath = Path.GetDirectoryName(path);
+            //    string[] dir = path.Split('\\');
+            //    //DirectoryInfo temp = Directory.GetParent(fullDirPath);
+
+                
+            //    string newDir = Regex.Replace(dir[dir.Length - 1], regexPatterReplaceDir.Text, regexPatterReplacementDir.Text, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            //    string newPath = Path.Combine(string.Join("\\", dir.Take(dir.Length - 1)), newDir);
+                
+            //    //Directory.Move(newPath, Path.Combine(newDir));
+            //    return;
+            //}
+
 
             string pathResult = path;
             if (!outputDirectory.Text.IsNullOrEmpty())
@@ -202,7 +210,12 @@ namespace ASOTCutter
                         }
                     }
 
-                    deleteSourceFiles?.Invoke(sourceASOTCuePath, sourceASOTMp3Path);
+
+                    if (deleteSourceCUE.Checked)
+                        File.Delete(sourceASOTCuePath);
+
+                    if (deleteSourceMP3.Checked)
+                        File.Delete(sourceASOTMp3Path);
                 }
                 catch (ThreadAbortException)
                 {
