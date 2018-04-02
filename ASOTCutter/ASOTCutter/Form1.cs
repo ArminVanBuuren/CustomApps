@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using NAudio.MediaFoundation;
 using NAudio.Wave;
 
 namespace ASOTCutter
@@ -210,7 +211,6 @@ namespace ASOTCutter
                         }
                     }
 
-
                     if (deleteSourceCUE.Checked)
                         File.Delete(sourceASOTCuePath);
 
@@ -402,7 +402,8 @@ namespace ASOTCutter
                     }
                 }
             }
-
         }
+
+        
     }
 }

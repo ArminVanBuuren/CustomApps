@@ -53,7 +53,7 @@
             this.textBoxDirPath.Name = "textBoxDirPath";
             this.textBoxDirPath.Size = new System.Drawing.Size(293, 20);
             this.textBoxDirPath.TabIndex = 0;
-            this.textBoxDirPath.Text = "E:\\Temp2";
+            this.textBoxDirPath.Text = "D:\\MUSIC\\ ASOT\\000-099\\000 (2001-05-18)";
             // 
             // label1
             // 
