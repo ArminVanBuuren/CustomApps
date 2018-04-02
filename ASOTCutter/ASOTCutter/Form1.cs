@@ -377,22 +377,30 @@ namespace ASOTCutter
 
         void TrimMp3(Mp3FileReader reader, string outputPath, TimeSpan? begin, TimeSpan? end)
         {
-            if (begin.HasValue && end.HasValue && begin > end)
-                throw new ArgumentOutOfRangeException(nameof(end), @"end should be greater than begin");
-
+            // удаляем существующий файл для перезаписи
             if (File.Exists(outputPath))
                 File.Delete(outputPath);
+
+            // если начало и конец совпадают или фрейм начала больше фактического конца аудио файла
+            if (begin.HasValue && end.HasValue && (begin == end || begin >= reader.TotalTime))
+                return;
+
+            if (begin.HasValue && end.HasValue && begin > end)
+                throw new ArgumentOutOfRangeException(nameof(end), @"end should be greater than begin");
 
             using (var writer = File.Create(outputPath))
             {
                 Mp3Frame frame;
                 while ((frame = reader.ReadNextFrame()) != null)
+                {
                     if (reader.CurrentTime >= begin || !begin.HasValue)
                     {
                         if (reader.CurrentTime <= end || !end.HasValue)
                             writer.Write(frame.RawData, 0, frame.RawData.Length);
-                        else break;
+                        else
+                            break;
                     }
+                }
             }
 
         }
