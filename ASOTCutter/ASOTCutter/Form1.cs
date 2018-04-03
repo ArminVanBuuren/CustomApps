@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using NAudio.Lame;
 using NAudio.MediaFoundation;
 using NAudio.Wave;
 
@@ -30,6 +31,10 @@ namespace ASOTCutter
         public Form1()
         {
             InitializeComponent();
+
+            //ConvertToMP3(@"E:\Google Drive\TEMP\Armin van Buuren - A State Of Trance 000 (2001-05-18).mp3", @"E:\Google Drive\TEMP\Armin van Buuren - A State Of Trance 000 (2001-05-18)_1.mp3");
+            //var dd = ConvertWavToMp3(@"E:\Google Drive\TEMP\Armin van Buuren - A State Of Trance 000 (2001-05-18).mp3");
+
         }
 
         private void ButtonDirPath_Click(object sender, EventArgs e)
@@ -404,6 +409,34 @@ namespace ASOTCutter
             }
         }
 
-        
+
+        public static byte[] ConvertWavToMp3(string sourcePath)
+        {
+            
+            using (var destination = new MemoryStream())
+            using (var file = new FileStream(sourcePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+            using (var retMs = new MemoryStream())
+            {
+                file.CopyTo(destination);
+                using (var rdr = new WaveFileReader(destination))
+                using (var wtr = new LameMP3FileWriter(retMs, rdr.WaveFormat, 320))
+                {
+                    rdr.CopyTo(wtr);
+                    wtr.Flush();
+                    return retMs.ToArray();
+                }
+            }
+        }
+
+        static void ConvertToMP3(string sourceFilename, string targetFilename)
+        {
+            //using (var reader = new NAudio.Wave.AudioFileReader(sourceFilename))
+            using (var reader = new WaveFileReader(sourceFilename))
+            using (var writer = new NAudio.Lame.LameMP3FileWriter(targetFilename, reader.WaveFormat, NAudio.Lame.LAMEPreset.STANDARD))
+            {
+                reader.CopyTo(writer);
+            }
+        }
+
     }
 }
