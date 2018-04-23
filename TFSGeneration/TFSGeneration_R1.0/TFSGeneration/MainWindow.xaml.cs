@@ -93,6 +93,11 @@ namespace TFSGeneration
                 tfsControl.Settings.MailOption.Password.PropertyChanged += MailPassword_PropertyChanged;
                 ToolTipService.SetInitialShowDelay(MailPassword, timeoutToShowToolTip);
 
+                TFSUserPassword.Password = tfsControl.Settings.TFSOption.TFSUserPassword.Value;
+                TFSUserPassword.PasswordChanged += TFSUserPassword_PasswordChanged;
+                tfsControl.Settings.TFSOption.TFSUserPassword.PropertyChanged += TFSUserPassword_PropertyChanged;
+                ToolTipService.SetInitialShowDelay(TFSUserPassword, timeoutToShowToolTip);
+
                 FilterStartDate.Text =
                     tfsControl.Settings.MailOption.StartDate.Value; // при зменении все равно вырезается время, остается только дата, по этому тоже биндим по особеному
                 FilterStartDate.SelectedDateChanged += FilterStartDate_OnSelectedDateChanged;
@@ -115,6 +120,7 @@ namespace TFSGeneration
 
                 //================Options TFS===================================
                 DefaultBinding(TFSUri, TextBox.TextProperty, tfsControl.Settings.TFSOption.TFSUri);
+                DefaultBinding(TFSUserName, TextBox.TextProperty, tfsControl.Settings.TFSOption.TFSUserName);
                 Paragraph par = new Paragraph(new Run(tfsControl.Settings.TFSOption.GetDublicateTFS[0].Value)) {LineHeight = 1};
                 GetDublicateTFS.Document.Blocks.Add(par);
                 GetDublicateTFS.TextChanged += GetDublicateTFS_OnTextChanged;
@@ -160,6 +166,8 @@ namespace TFSGeneration
                 ShowMyForm(this, EventArgs.Empty);
             }
         }
+
+
 
 
         /// <summary>
@@ -507,33 +515,29 @@ namespace TFSGeneration
         }
 
         /// <summary>
-        /// обновлем пароль из внутренних настроек в форму
+        /// обновляем пароль из формы во внутрениие настройки
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void MailPassword_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void TFSUserPassword_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            if (!_thisIsLoaded)
+            if (tfsControl == null)
                 return;
 
-            Dispatcher?.Invoke(() =>
+            try
             {
-                try
-                {
-                    MailPassword.PasswordChanged -= MailPassword_OnPasswordChanged;
-                    MailPassword.Password = tfsControl.Settings.MailOption.Password.Value;
-                }
-                catch (Exception)
-                {
-                    // null
-                }
-                finally
-                {
-                    MailPassword.PasswordChanged += MailPassword_OnPasswordChanged;
-                }
-            });
+                tfsControl.Settings.TFSOption.TFSUserPassword.PropertyChanged -= TFSUserPassword_PropertyChanged;
+                tfsControl.Settings.TFSOption.TFSUserPassword.Value = TFSUserPassword.Password;
+            }
+            catch (Exception)
+            {
+                // null
+            }
+            finally
+            {
+                tfsControl.Settings.TFSOption.TFSUserPassword.PropertyChanged += TFSUserPassword_PropertyChanged;
+            }
         }
-
 
         /// <summary>
         /// изменяем дату начала обработки из формы во внутрениие настройки
@@ -561,6 +565,62 @@ namespace TFSGeneration
         }
 
         /// <summary>
+        /// обновлем пароль из внутренних настроек в форму
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MailPassword_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (!_thisIsLoaded)
+                return;
+
+            Dispatcher?.Invoke(() =>
+                               {
+                                   try
+                                   {
+                                       MailPassword.PasswordChanged -= MailPassword_OnPasswordChanged;
+                                       MailPassword.Password = tfsControl.Settings.MailOption.Password.Value;
+                                   }
+                                   catch (Exception)
+                                   {
+                                       // null
+                                   }
+                                   finally
+                                   {
+                                       MailPassword.PasswordChanged += MailPassword_OnPasswordChanged;
+                                   }
+                               });
+        }
+
+        /// <summary>
+        /// обновлем пароль из внутренних настроек в форму
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TFSUserPassword_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (!_thisIsLoaded)
+                return;
+
+            Dispatcher?.Invoke(() =>
+                               {
+                                   try
+                                   {
+                                       TFSUserPassword.PasswordChanged -= TFSUserPassword_PasswordChanged;
+                                       TFSUserPassword.Password = tfsControl.Settings.TFSOption.TFSUserPassword.Value;
+                                   }
+                                   catch (Exception)
+                                   {
+                                       // null
+                                   }
+                                   finally
+                                   {
+                                       TFSUserPassword.PasswordChanged += TFSUserPassword_PasswordChanged;
+                                   }
+                               });
+        }
+
+        /// <summary>
         /// изменяем дату начала обработки из внутренних настроек в форму
         /// </summary>
         /// <param name="sender"></param>
@@ -571,21 +631,21 @@ namespace TFSGeneration
                 return;
 
             Dispatcher?.Invoke(() =>
-            {
-                try
-                {
-                    FilterStartDate.SelectedDateChanged -= FilterStartDate_OnSelectedDateChanged;
-                    FilterStartDate.Text = tfsControl.Settings.MailOption.StartDate.Value;
-                }
-                catch (Exception)
-                {
-                    // null
-                }
-                finally
-                {
-                    FilterStartDate.SelectedDateChanged += FilterStartDate_OnSelectedDateChanged;
-                }
-            });
+                               {
+                                   try
+                                   {
+                                       FilterStartDate.SelectedDateChanged -= FilterStartDate_OnSelectedDateChanged;
+                                       FilterStartDate.Text = tfsControl.Settings.MailOption.StartDate.Value;
+                                   }
+                                   catch (Exception)
+                                   {
+                                       // null
+                                   }
+                                   finally
+                                   {
+                                       FilterStartDate.SelectedDateChanged += FilterStartDate_OnSelectedDateChanged;
+                                   }
+                               });
         }
 
         /// <summary>

@@ -112,6 +112,7 @@ namespace TFSGeneration.Control
             _exchangeService.TraceFlags = TraceFlags.All;
             _exchangeService.TraceEnabled = Settings.MailOption.DebugLogging.Value;
             _exchangeService.KeepAlive = true;
+            _exchangeService.Timeout = 15000;
 
             SecureString _mailPassword = new SecureString();
             if (Settings.MailOption.Password.Value != null)
@@ -181,27 +182,34 @@ namespace TFSGeneration.Control
                 }
             }
 
-
-
-
-            //   Uri TfsURL = new Uri(Settings.TFSOption.TFSUri.Value);
-            //   NetworkCredential credential = new NetworkCredential("vhovanskij", "February2018", "bss");
-            //   TfsTeamProjectCollection collection = new TfsTeamProjectCollection(TfsURL, credential);
-            //   collection.Authenticate();
-            //   collection.EnsureAuthenticated();
-            //   _workItemStore = collection.GetService<WorkItemStore>();
-
-
-            //если в настройках нет данных о создании TFS
+            // Если в настройках xml файла нет указаний на создание каких либо TFS
             if (Settings.TFSOption.TFSCreate.TeamProjects == null || Settings.TFSOption.TFSCreate.TeamProjects.Length == 0)
                 throw new TFSFieldsException("TeamProjects Not Found! Please check config file.");
 
             Uri collectionUri = new Uri(Settings.TFSOption.TFSUri.Value);
-            _tfsService = TfsTeamProjectCollectionFactory.GetTeamProjectCollection(collectionUri);
+
+            if (!Settings.TFSOption.TFSUserName.Value.IsNullOrEmptyTrim())
+            {
+                string[] tfs_domain_username = Settings.TFSOption.TFSUserName.Value.Split('\\');
+                if (tfs_domain_username.Length != 2 || tfs_domain_username[0].IsNullOrEmpty() || tfs_domain_username[1].IsNullOrEmpty())
+                    throw new ArgumentException("You must add TFS-UserName and TFS-Domain like: \"Domain\\Username\"");
+
+                SecureString _tfsUserPassword = new SecureString();
+                if (Settings.TFSOption.TFSUserPassword.Value != null)
+                    foreach (char ch in Settings.TFSOption.TFSUserPassword.Value)
+                        _tfsUserPassword.AppendChar(ch);
+
+                NetworkCredential credential = new NetworkCredential(tfs_domain_username[1].Trim(), _tfsUserPassword, tfs_domain_username[0].Trim());
+                _tfsService = new TfsTeamProjectCollection(collectionUri, credential);
+            }
+            else
+            {
+                _tfsService = TfsTeamProjectCollectionFactory.GetTeamProjectCollection(collectionUri);
+            }
+
             _tfsService.Authenticate();
             _tfsService.EnsureAuthenticated();
             _workItemStore = _tfsService.GetService<WorkItemStore>();
-
 
             //NotifyUserIfHasError(WarnSeverity.Warning, string.Format("Please see log tab. Catched: {0} processing errors!", 10), "1111");
             //Test1();

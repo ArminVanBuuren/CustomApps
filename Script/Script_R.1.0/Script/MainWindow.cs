@@ -51,14 +51,14 @@ namespace Script
         public MainWindow()
         {
             InitializeComponent();
-            grid.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(grid, true, null);
+            ProcessGrid.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(ProcessGrid, true, null);
             DataGridViewTextButtonColumn GridColumnPath = new DataGridViewCustom.DataGridViewTextButtonColumn {
-                                                                                                                  AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill,
+                                                                                                                  AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
                                                                                                                   ValueType = typeof(string),
                                                                                                                   HeaderText = @"Path",
                                                                                                                   ButtonClickHandler = GridColumnPath_ButtonClick
                                                                                                               };
-            grid.Columns.Add(GridColumnPath);
+            ProcessGrid.Columns.Add(GridColumnPath);
 
             if (File.Exists(AppConfigPath))
                 AppSettings = DeserializeSettings(AppConfigPath);
@@ -68,7 +68,7 @@ namespace Script
             uint i = 0;
             foreach (ConfigurationProcess proc in AppSettings.ProcessList)
             {
-                grid.Rows.Add(new object[] {
+                ProcessGrid.Rows.Add(new object[] {
                                                i, proc.ConfiguraionName, proc.Description, "None", "Start", proc.Path
                                            });
                 i++;
@@ -110,7 +110,7 @@ namespace Script
 
         void GridColumnPath_ButtonClick(object sender, EventArgs arg)
         {
-            grid.EndEdit();
+            ProcessGrid.EndEdit();
             using (var openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.InitialDirectory = Directory.GetCurrentDirectory();
@@ -122,14 +122,14 @@ namespace Script
                     SXML_Config.Text = _configPath.LoadFileByPath();
                 }
             }
-            grid.BeginEdit(false);
+            ProcessGrid.BeginEdit(false);
         }
 
 
         private void grid_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
             e.Cancel = true;
-            MessageBox.Show(this, @"Invalid value: " + grid[e.ColumnIndex, e.RowIndex].EditedFormattedValue, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            MessageBox.Show(this, @"Invalid value: " + ProcessGrid[e.ColumnIndex, e.RowIndex].EditedFormattedValue, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
         private void Open_Click(object sender, EventArgs e)
@@ -278,6 +278,21 @@ namespace Script
                 components.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        private void ProcessGrid_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ProcessGrid_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+
+        }
+
+        private void ProcessGrid_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
+        {
+
         }
     }
 }

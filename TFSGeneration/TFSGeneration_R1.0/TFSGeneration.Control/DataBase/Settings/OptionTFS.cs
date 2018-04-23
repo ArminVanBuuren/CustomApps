@@ -11,6 +11,8 @@ namespace TFSGeneration.Control.DataBase.Settings
 	public class OptionTFS
 	{
 		private SettingValue<string> _tFSUri = new SettingValue<string> { Value = "https://tfs.bss.nvision-group.com" };
+		private SettingValue<string> _tFSUserName = new SettingValue<string> { Value = "" };
+		private SettingValue<string> _tFSUserPassword = new SettingValue<string> { Value = "" };
 
 		XmlNode[] _cdataGetDublicateTFS =
 		{
@@ -25,7 +27,21 @@ namespace TFSGeneration.Control.DataBase.Settings
 			set { _tFSUri = value ?? _tFSUri; }
 		}
 
-		[XmlElement("GetDublicateTFS")]
+	    [XmlElement("TFSUserName")]
+	    public SettingValue<string> TFSUserName
+        {
+	        get { return _tFSUserName; }
+	        set { _tFSUserName = value ?? _tFSUserName; }
+	    }
+
+	    [XmlIgnore]
+        public SettingValue<string> TFSUserPassword
+        {
+	        get { return _tFSUserPassword; }
+	        set { _tFSUserPassword = value ?? _tFSUserPassword; }
+	    }
+
+        [XmlElement("GetDublicateTFS")]
 		public XmlNode[] GetDublicateTFS
 		{
 			get { return _cdataGetDublicateTFS; }
