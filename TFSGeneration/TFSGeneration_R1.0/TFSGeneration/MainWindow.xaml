@@ -78,6 +78,7 @@
                         <Label        Grid.Column="0" Grid.Row="2" VerticalAlignment="Center">Address:</Label>
                         <Label        Grid.Column="0" Grid.Row="3" VerticalAlignment="Center">User Name:</Label>
                         <Label        Grid.Column="0" Grid.Row="4" VerticalAlignment="Center">Password:</Label>
+                        <Label        Grid.Column="0" Grid.Row="5" VerticalAlignment="Center">Timeout:</Label>
 
                         <Label        Grid.Column="3" Grid.Row="2" VerticalAlignment="Center">Start:</Label>
                         <Label        Grid.Column="3" Grid.Row="3" VerticalAlignment="Center">Folder:</Label>
@@ -87,6 +88,8 @@
                         <TextBox      Grid.Column="1" Grid.Row="2" Name="MailAddress"       Margin="0 5 5 5"  ToolTip="Enter Address of mailbox" />
                         <TextBox      Grid.Column="1" Grid.Row="3" Name="MailUserName"      Margin="0 5 5 5"  ToolTip="Enter Domain\UserName of mailbox" />
                         <PasswordBox  Grid.Column="1" Grid.Row="4" Name="MailPassword"      Margin="0 5 5 5"  ToolTip="Enter Password of mailbox" />
+                        <TextBox      Grid.Column="1" Grid.Row="5" Name="AuthorTimeout"     Margin="0 5 5 5"  ToolTip="Enter Authorization Timeout in sec." />
+                        
                         <DatePicker   Grid.Column="4" Grid.Row="2" Name="FilterStartDate"   Margin="0 5 5 5"  ToolTip="Get mails between start date and current date" SelectedDate="{x:Static sys:DateTime.Now}" />
                         <TextBox      Grid.Column="4" Grid.Row="3" Name="FilterFolder"      Margin="0 5 5 5"  ToolTip="Read letters from a Folder" />
                         <TextBox      Grid.Column="4" Grid.Row="4" Name="FilterFrom"        Margin="0 5 5 5"  ToolTip="Filter mail address by Regex expression" />

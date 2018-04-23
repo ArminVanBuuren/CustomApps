@@ -112,7 +112,7 @@ namespace TFSGeneration.Control
             _exchangeService.TraceFlags = TraceFlags.All;
             _exchangeService.TraceEnabled = Settings.MailOption.DebugLogging.Value;
             _exchangeService.KeepAlive = true;
-            _exchangeService.Timeout = 15000;
+            _exchangeService.Timeout = int.Parse(Settings.MailOption.AuthorizationTimeout.Value) * 1000;
 
             SecureString _mailPassword = new SecureString();
             if (Settings.MailOption.Password.Value != null)
@@ -188,6 +188,7 @@ namespace TFSGeneration.Control
 
             Uri collectionUri = new Uri(Settings.TFSOption.TFSUri.Value);
 
+            // Коннект по кастомному логину и паролю
             if (!Settings.TFSOption.TFSUserName.Value.IsNullOrEmptyTrim())
             {
                 string[] tfs_domain_username = Settings.TFSOption.TFSUserName.Value.Split('\\');

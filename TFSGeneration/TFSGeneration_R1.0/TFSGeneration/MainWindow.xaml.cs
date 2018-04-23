@@ -79,11 +79,15 @@ namespace TFSGeneration
                 //================Main Tab Default Bindings=======================
                 DefaultBinding(MailAddress, TextBox.TextProperty, tfsControl.Settings.MailOption.Address);
                 DefaultBinding(MailUserName, TextBox.TextProperty, tfsControl.Settings.MailOption.UserName);
+                DefaultBinding(AuthorTimeout, TextBox.TextProperty, tfsControl.Settings.MailOption.AuthorizationTimeout);
                 DefaultBinding(FilterFolder, TextBox.TextProperty, tfsControl.Settings.MailOption.SourceFolder);
                 DefaultBinding(FilterFrom, TextBox.TextProperty, tfsControl.Settings.MailOption.FilterMailFrom);
                 DefaultBinding(FilterSubject, TextBox.TextProperty, tfsControl.Settings.MailOption.FilterSubject);
                 DefaultBinding(CreateBoot, ToggleButton.IsCheckedProperty, tfsControl.Settings.BootRun);
                 DefaultBinding(IntervalTextBox, TextBox.TextProperty, tfsControl.Settings.Interval);
+
+                AuthorTimeout.TextChanged += IntervalTextBox_TextChanged;
+                AuthorTimeout.TextChanged += IntervalTextBox_OnLostFocus;
                 IntervalTextBox.TextChanged += IntervalTextBox_TextChanged; // проверям на валидность интервал
                 IntervalTextBox.LostFocus += IntervalTextBox_OnLostFocus; // проверям на валидность интервал, где число должно быть больше 1
 
@@ -655,26 +659,30 @@ namespace TFSGeneration
         /// <param name="e"></param>
         private void IntervalTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            int caretIndex = IntervalTextBox.CaretIndex;
-            string oldValue = IntervalTextBox.Text;
+            TextBox AnyIntervalTextBox = (TextBox) sender;
 
-            CustomFunc.GetOnlyNumberWithCaret(ref oldValue, ref caretIndex, 3);
+            int caretIndex = AnyIntervalTextBox.CaretIndex;
+            string oldValue = AnyIntervalTextBox.Text;
 
-            IntervalTextBox.Text = oldValue;
-            IntervalTextBox.CaretIndex = caretIndex;
+            CustomFunc.GetOnlyNumberWithCaret(ref oldValue, ref caretIndex, 4);
+
+            AnyIntervalTextBox.Text = oldValue;
+            AnyIntervalTextBox.CaretIndex = caretIndex;
         }
 
         private void IntervalTextBox_OnLostFocus(object sender, RoutedEventArgs e)
         {
+            TextBox AnyIntervalTextBox = (TextBox)sender;
+
             int interval;
-            if (!int.TryParse(IntervalTextBox.Text, out interval))
+            if (!int.TryParse(AnyIntervalTextBox.Text, out interval))
                 interval = 10;
             if (interval < 1)
                 interval = 1;
-            if (interval > 600)
-                interval = 600;
+            if (interval > 7200)
+                interval = 7200;
 
-            IntervalTextBox.Text = interval.ToString();
+            AnyIntervalTextBox.Text = interval.ToString();
         }
 
         private void RegexSubjectParce_OnTextChanged(object sender, TextChangedEventArgs e)

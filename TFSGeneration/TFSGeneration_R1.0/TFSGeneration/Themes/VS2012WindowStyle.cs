@@ -228,7 +228,7 @@ namespace TFSGeneration.Themes
 			windowInfo.MinWidth = 350;
 			windowInfo.MinHeight = 100;
 			windowInfo.MaxWidth = 350;
-			windowInfo.MaxHeight = 150;
+			windowInfo.MaxHeight = 100;
 			windowInfo.Owner = mainWindow;
 			windowInfo.SizeToContent = SizeToContent.WidthAndHeight;
 			windowInfo.WindowStartupLocation = WindowStartupLocation.CenterOwner;

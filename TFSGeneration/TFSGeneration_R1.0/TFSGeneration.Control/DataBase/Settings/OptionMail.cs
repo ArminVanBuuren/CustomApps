@@ -9,6 +9,7 @@ namespace TFSGeneration.Control.DataBase.Settings
 	public class OptionMail
 	{
 		private SettingValue<string> _exchangeUri = new SettingValue<string> {Value = "https://e-mail.mts.ru/ews/exchange.asmx"};
+		private SettingValue<string> _authorizationTimeout = new SettingValue<string> {Value = "15"};
 		private SettingValue<bool> _debugLogging = new SettingValue<bool> {Value = false};
 	    private SettingValue<string> _startDate = new SettingValue<string> { Value = DateTime.Now.ToString("G") };
 	    private SettingValue<string> _filterMailFrom = new SettingValue<string> { Value = "jira@mts.by" };
@@ -43,7 +44,14 @@ namespace TFSGeneration.Control.DataBase.Settings
 	        set { _exchangeUri = value ?? _exchangeUri; }
 	    }
 
-	    [XmlElement("StartDate")]
+	    [XmlElement("AuthorizationTimeout")]
+	    public SettingValue<string> AuthorizationTimeout
+        {
+	        get { return _authorizationTimeout; }
+	        set { _authorizationTimeout = value ?? _authorizationTimeout; }
+	    }
+
+        [XmlElement("StartDate")]
 	    public SettingValue<string> StartDate
 	    {
 	        get

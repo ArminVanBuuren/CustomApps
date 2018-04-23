@@ -115,8 +115,8 @@ namespace TFSGeneration.Control.Utils
 			else
 				newCoretIndex = caretIndex;
 
-			if (correctValue.Length > 3)
-				correctValue = correctValue.Substring(0, 3);
+			if (correctValue.Length > maxLength)
+				correctValue = correctValue.Substring(0, maxLength);
 
 			caretIndex = newCoretIndex < 0 ? 0 : newCoretIndex > correctValue.Length ? correctValue.Length : newCoretIndex;
 			oldValue = correctValue;
