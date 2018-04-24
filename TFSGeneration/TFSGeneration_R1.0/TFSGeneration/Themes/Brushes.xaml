@@ -18,12 +18,54 @@
     <CornerRadius x:Key="TabItemCornerRadius">0,0,0,0</CornerRadius>
 
 
+    <!-- ### Other Colors ###-->
+    
+    <Color x:Key="LableCustomBrush1">#FF97E9E9</Color> <!-- GradientStop Color -->
+    <Color x:Key="LableCustomBrush2">#FF2CC8C8</Color> <!-- GradientStop Color -->
+    <Color x:Key="ExpandergridGradient1">Black</Color> <!-- GradientStop Color -->
+    <Color x:Key="ButtonPressed">#32ebfb</Color> <!-- SolidColorBrush.Color -->
+    <Color x:Key="MenuItemIsHighlighted">#eee</Color> <!-- MenuItem Foreground -->
+    <Color x:Key="CalendarButtonInactive">#FF777777</Color> <!-- SplineColorKeyFrame Value -->
+    <Color x:Key="CalendarButtonSelectedText">#FFCCCCCC</Color> <!-- SolidColorBrush Color -->
+    <Color x:Key="CalendarButtonSelectedText2">#FFCCCDDD</Color> <!-- SolidColorBrush Color -->
+    <Color x:Key="ToggleButton_OccupadoEllipseFill1">#FFA7A7A7</Color> <!-- GradientStop Color -->
+    <Color x:Key="ToggleButton_OccupadoEllipseFill2">#FFC2C2C2</Color> <!-- GradientStop Color -->
+    <Color x:Key="ToggleButton_OccupadoEllipseStroke1">#FF353535</Color> <!-- GradientStop Color -->
+    <Color x:Key="ToggleButton_OccupadoEllipseStroke2">#FF1B1B1B</Color> <!-- GradientStop Color -->
+    <Color x:Key="ComboBoxItemHoverOff">#FFEEEFFF</Color> <!-- SolidColorBrush Color -->
+    
+    <SolidColorBrush x:Key="TgButtnCheckedElementBorder1" Color="#D0494a4d" /> <!-- Border BorderBrush -->
+    <SolidColorBrush x:Key="TgButtnCheckedElementBorder2" Color="#70303030" /> <!-- Border BorderBrush -->
+    <SolidColorBrush x:Key="TgButtnCheckedElementBorder3" Color="#30303030" /> <!-- Border BorderBrush -->
+    <SolidColorBrush x:Key="TgButtnCheckedElementBorder4" Color="#10303030" /> <!-- Border BorderBrush -->
+    <SolidColorBrush x:Key="RepeatButtonArrowBrush" Color="#FFF"/> <!-- RepeatButtonArrow Fill -->
+    <SolidColorBrush x:Key="ToolTipIsEnabledFalse" Color="#888" /> <!-- ToolTip Foreground -->
+    <SolidColorBrush x:Key="DatePickerBackground" Color="#11FFFFFF"/> <!-- Grid Background -->
+    <SolidColorBrush x:Key="InnerBorderMenuItem" Color="#ddd"/> <!-- InnerBorderSubmenuItem Stroke -->
+    <SolidColorBrush x:Key="DatePickerDisabledRectangle" Color="#a6FFFFFF" /> <!-- Rectangle Fill -->
+    <SolidColorBrush x:Key="ThumbBackground1" Color="#00FFFFFF" /> <!-- Border Background -->
+    <SolidColorBrush x:Key="DataGridCellFocusVisual" Color="#FF111111" /> <!-- Rectangle Stroke -->
+    <SolidColorBrush x:Key="ToggleButton_OccupadoBackground" Color="#FF1F3B53" /> <!-- ToggleButton Background -->
+    <SolidColorBrush x:Key="CalendarDayButtonForeground" Color="Lime" /> <!-- CalendarDayButton Foreground -->
+    <SolidColorBrush x:Key="LabelForeground" Color="White" /> <!-- Label Foreground -->
+    <SolidColorBrush x:Key="ScrollViewerDockPanelRectangle" Color="White" /> <!-- Rectangle Fill -->
+    <SolidColorBrush x:Key="ThumbRectangleFill" Color="White" /> <!-- Rectangle Fill -->
+    <SolidColorBrush x:Key="CalendarItemIsEnabledFalse" Color="Black" /> <!-- CalendarItem Fill -->
+    <SolidColorBrush x:Key="DataGridRowTextBlockForeground" Color="Red" /> <!-- TextBlock Foreground -->
+    <SolidColorBrush x:Key="ToggleButtonPath1" Color="White" /> <!-- Path Stroke -->
+    <SolidColorBrush x:Key="ToggleButtonPath2" Color="White" /> <!-- Path Fill -->
+    <SolidColorBrush x:Key="CustomProgressBarBackground" Color="Green" />
+    <SolidColorBrush x:Key="CustomProgressBarBorderBrush" Color="Black" />
+
+    <!-- ########################### -->
+
     <SolidColorBrush x:Key="TitleBarBackgroundBrush" Color="#FF424242" />
     <SolidColorBrush x:Key="AuthorWindowTopBorderBrush" Color="#FF00A0B9" />
     <SolidColorBrush x:Key="AuthorWindowTopBorderTextBrush" Color="#FFA5FFFF" />
     <SolidColorBrush x:Key="VS2012WindowBorderBrush" Color="#007ACC" />
     <SolidColorBrush x:Key="VS2012WindowBorderBrushInactive" Color="#999999" />
-    <SolidColorBrush x:Key="VS2012WindowBorderBrushMouseOver" Color="White" />
+    <Color x:Key="VS2012WindowBorderBrushNormal">Black</Color>
+    <SolidColorBrush x:Key="VS2012WindowBorderBrushMouseOver" Color="#FFFFFF" />
     <SolidColorBrush x:Key="VS2012WindowStatusForeground" Color="#FFFFFF" />
     <SolidColorBrush x:Key="VS2012WindowStatusForegroundInactive" Color="#FFFFFF" />
 
@@ -42,7 +84,7 @@
 		<GradientStop Color="#FF76E0E0"/>
 	</LinearGradientBrush>
 	<LinearGradientBrush x:Key="ControlForegroundText" EndPoint="1,1" StartPoint="0,0">
-		<GradientStop Color="White" Offset="1"/>
+        <GradientStop Color="#FFFFFF" Offset="1"/>
 		<GradientStop Color="#FFC5EEEE"/>
 	</LinearGradientBrush>
 
@@ -187,7 +229,7 @@
     </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="BackgroundToolTipDisabled" StartPoint="0,0" EndPoint="0,1">
-        <GradientStop Color="White" Offset="0.0"/>
+        <GradientStop Color="#FFFFFF" Offset="0.0"/>
         <GradientStop Color="#FFCCCCCC" Offset="1.0"/>
     </LinearGradientBrush>
     
@@ -342,12 +384,5 @@
     <controls:Thickness x:Key="MarginBorderButton">0</controls:Thickness>
     <controls:Thickness x:Key="MarginContentButton">0</controls:Thickness>
     <controls:Thickness x:Key="MarginBorderButtonOver">0</controls:Thickness>
-
-
-
-
-
-
-   
 
 </ResourceDictionary>

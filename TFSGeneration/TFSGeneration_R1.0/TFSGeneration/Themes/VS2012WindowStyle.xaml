@@ -339,7 +339,7 @@
 							<Setter TargetName="PART_Border" Property="Effect">
 								<Setter.Value>
 									<DropShadowEffect
-                                        Color="black"
+                                        Color="{StaticResource VS2012WindowBorderBrushNormal}"
                                         Opacity="0.5"
                                         BlurRadius="7"
                                         ShadowDepth="2"
