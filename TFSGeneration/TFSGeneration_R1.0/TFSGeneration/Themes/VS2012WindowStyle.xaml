@@ -52,7 +52,10 @@
 		<Setter Property="WindowStyle" Value="None" />
 		
 		<Setter Property="AllowsTransparency" Value="true" />
-		<Setter Property="Background" Value="Transparent" />
+        <Setter Property="Background" Value="{StaticResource MainFormBackground}" />
+        <Setter Property="Foreground" Value="{StaticResource ControlForeground}"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontFamily" Value="Verdana"/>
 		<Setter Property="ResizeMode" Value="CanResizeWithGrip" />
 
 		<Setter Property="WindowChrome.WindowChrome">
@@ -113,7 +116,7 @@
 								Width="Auto"
 								Height="Auto"
 								
-								Background="{StaticResource MainFormBackground}"
+								Background="{TemplateBinding Background}"
 								BorderBrush="{StaticResource VS2012WindowBorderBrush}"
 								BorderThickness="1"
 								Padding="0"
@@ -164,11 +167,11 @@
 										<TextBlock HorizontalAlignment="Left"
 												x:Name="Caption"
 												Grid.Column="1"
-												Foreground="{StaticResource ControlForeground}"
+												Foreground="{TemplateBinding Foreground}"
 												VerticalAlignment="Center"
 												Margin="4,-10,0,0"
-												FontFamily="Segoe UI"
-												FontSize="12"
+												FontFamily="Sergio UI"
+												FontSize="{TemplateBinding FontSize}"
 												Opacity="0.66"
 												Text="{Binding Path=Title, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
                                             />
@@ -179,7 +182,7 @@
 											Width="34"
 											Height="20"
 											Margin="0 0 0 0"
-											Foreground="{StaticResource ControlForeground}"
+											Foreground="{TemplateBinding Foreground}"
 											Style="{StaticResource VS2012WindowStyleTitleBarButton}"
 											Click="Information_OnClick"
 											WindowChrome.IsHitTestVisibleInChrome="True">
@@ -203,7 +206,7 @@
 												Width="34"
 												Height="20"
 												Margin="0 0 0 0"
-												Foreground="{StaticResource ControlForeground}"
+												Foreground="{TemplateBinding Foreground}"
 												Style="{StaticResource VS2012WindowStyleTitleBarButton}"
 												Click="MinButtonClick"
 											    WindowChrome.IsHitTestVisibleInChrome="True">
@@ -227,7 +230,7 @@
 												Width="34"
 												Height="20"
 												Margin="0 0 0 0"
-												Foreground="{StaticResource ControlForeground}"
+												Foreground="{TemplateBinding Foreground}"
 												Style="{StaticResource VS2012WindowStyleTitleBarButton}"
 												Click="MaxButtonClick"
 											    WindowChrome.IsHitTestVisibleInChrome="True">
@@ -252,7 +255,7 @@
 												Width="34"
 												Height="20"
 												Margin="0 0 0 0"
-												Foreground="{StaticResource ControlForeground}"
+												Foreground="{TemplateBinding Foreground}"
 												Style="{StaticResource VS2012WindowStyleTitleBarButton}"
 												Click="CloseButtonClick"
 											    WindowChrome.IsHitTestVisibleInChrome="True">
@@ -391,7 +394,7 @@
 		<Style.Resources>
 			<Style TargetType="{x:Type StatusBar}">
 				<Setter Property="Foreground" Value="{StaticResource VS2012WindowStatusForeground}" />
-				<Setter Property="Background" Value="{StaticResource VS2012WindowBorderBrush}" />
+                <Setter Property="Background" Value="{StaticResource VS2012WindowBorderBrushBottom}" />
 				<Setter Property="Template">
 					<Setter.Value>
 						<ControlTemplate TargetType="{x:Type StatusBar}">

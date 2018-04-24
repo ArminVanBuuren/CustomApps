@@ -13,7 +13,7 @@
         Title="TFS Generation" 
                             
         MinWidth="545" Width="555"
-        MinHeight="715" Height="715"
+        MinHeight="650" Height="650"
                             
         xmlns:mylocal="clr-namespace:TFSGeneration"
         ResizeMode="CanResizeWithGrip"
@@ -52,10 +52,10 @@
                 <StackPanel x:Name="MailOptions">
                     <Grid Height="Auto" VerticalAlignment="Stretch" >
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition MaxWidth="76"  MinWidth="76"/>
+                            <ColumnDefinition MaxWidth="80"  MinWidth="80"/>
                             <ColumnDefinition MinWidth="140" Width="1.01*" MaxWidth="300" />
                             <ColumnDefinition MaxWidth="10"  MinWidth="10"  />
-                            <ColumnDefinition MaxWidth="55"  MinWidth="55"  />
+                            <ColumnDefinition MaxWidth="59"  MinWidth="59"  />
                             <ColumnDefinition MinWidth="103" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
@@ -105,7 +105,7 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition MaxWidth="88"/>
+                            <ColumnDefinition MaxWidth="93"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <Label     Grid.Column="0" Grid.Row="0"  VerticalAlignment="Center">Exchange Uri:</Label>
@@ -232,7 +232,7 @@
 				<Label    Grid.Column="0" Margin="5 0 0 0" VerticalAlignment="Center">Interval:</Label>
 				<TextBox Name="IntervalTextBox" Grid.Column="1" Margin="0 0 5 0" HorizontalAlignment="Stretch" ToolTip="Interval in seconds, to read new messages" />
 			</Grid>
-            <CheckBox  Grid.Column="1" Name="CreateBoot" Margin="5" VerticalAlignment="Center" ToolTip="Enable Instant Upload" HorizontalAlignment="Left">Boot Run</CheckBox>
+            <CheckBox  Grid.Column="1" Name="CreateBoot" Margin="5" VerticalAlignment="Center" ToolTip="Enable Instant Upload" HorizontalAlignment="Left">BootRun</CheckBox>
 			<Button    Grid.Column="2" Name="ButtonStart" Height="40" IsDefault="True" IsEnabled="False" Margin="10 0" MaxWidth="120" HorizontalAlignment="Right" Width="120" Content="Start" FontSize="20" Click="ButtonBase_OnClick"/>
 		</Grid>
 	
@@ -254,7 +254,9 @@
 		</StatusBar>
 	    <Grid.Resources>
             <Style TargetType="Label" x:Key="LableCustom">
-                <Setter Property="FontSize" Value="35"/>
+                <Setter Property="FontSize" Value="29"/>
+                <Setter Property="FontFamily" Value="Stencil"/>
+                
                 <!--Setter Property="FontFamily" Value="./Images/#Beyond Wonderland"/-->
                 <Setter Property="Foreground" Value="{StaticResource ControlForegroundTextLable}"/>
                 <Setter Property="Margin" Value="0"/>

@@ -207,14 +207,19 @@ namespace TFSGeneration.Themes
             WindowNew windowInfo = new WindowNew(false, false);
 			windowInfo.Title = "Vladimir Khovanskiy";
 			windowInfo.Style = style;
+		    windowInfo.FontFamily = new FontFamily("Segoe UI");
+		    windowInfo.FontSize = 13;
 
-			//windowInfo.Icon = mainWindow.Icon;
-			//new BitmapImage(Properties.Resources.Overwolf);
-			//Properties.Resources.Overwolf
-			windowInfo.Icon = new BitmapImage(new Uri(@"pack://application:,,,/Images/overwolf.ico"));
-			//windowInfo.Icon = BitmapFrame.Create(Application.GetResourceStream(new Uri("LiveJewel.png", UriKind.RelativeOrAbsolute)).Stream);
+            //windowInfo.Icon = mainWindow.Icon;
+            //new BitmapImage(Properties.Resources.Overwolf);
+            //Properties.Resources.Overwolf
+            windowInfo.Icon = new BitmapImage(new Uri(@"pack://application:,,,/Images/overwolf.ico"));
+            //windowInfo.Icon = BitmapFrame.Create(Application.GetResourceStream(new Uri("LiveJewel.png", UriKind.RelativeOrAbsolute)).Stream);
+		    windowInfo.Background = (Brush)new BrushConverter().ConvertFrom("#333");
+            windowInfo.Foreground = (Brush)new BrushConverter().ConvertFrom("#FF32EBFB");
 
-			TextBlock text = new TextBlock();
+
+            TextBlock text = new TextBlock();
 			text.Padding = new Thickness(0,0,7,7);
 			text.Foreground = Brushes.White;
 			text.TextWrapping = TextWrapping.Wrap;
@@ -223,7 +228,12 @@ namespace TFSGeneration.Themes
 			text.VerticalAlignment = VerticalAlignment.Center;
 			text.TextAlignment = TextAlignment.Center;
 			text.Text = "Hello! Thanks for choosing my application!";
-			windowInfo.Content = text;
+		    text.Foreground = (Brush)new BrushConverter().ConvertFrom("#FFF7F7F7");
+		    
+		    
+		    
+
+            windowInfo.Content = text;
 
 			windowInfo.MinWidth = 350;
 			windowInfo.MinHeight = 100;

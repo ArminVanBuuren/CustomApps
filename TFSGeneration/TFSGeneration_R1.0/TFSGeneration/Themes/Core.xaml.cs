@@ -246,36 +246,38 @@ namespace TFSGeneration.Themes
 
 
 
-		void DatePickerChanged(object sender, RoutedEventArgs e)
-		{
-			TextBox textox = (TextBox) sender;
+	    void DatePickerChanged(object sender, RoutedEventArgs e)
+	    {
+	        TextBox textox = (TextBox) sender;
 
-			string _result = _firstParce.Matches(textox.Text).Cast<Match>().Aggregate(string.Empty, (current, stry) => current + stry.Value);
+	        string _result = _firstParce.Matches(textox.Text).Cast<Match>().Aggregate(string.Empty, (current, stry) => current + stry.Value);
 
-			if (_lock)
-			{
-				DateTime? chooseDate= ((DatePicker) textox.TemplatedParent).SelectedDate;
-				if(chooseDate == null)
-					return;
+	        if (_lock)
+	        {
+	            DateTime? chooseDate = ((DatePicker) textox.TemplatedParent).SelectedDate;
+	            if (chooseDate == null)
+	                return;
 
-				string _cooseDateTime = string.Format("{0} {1}", 
-					((DateTime)chooseDate).ToString(GET_DATE), 
-					DateTime.Parse(_hashTable[textox]).ToString(GET_TIME));
+	            DateTime getTime = DateTime.Now;
+	            if (_hashTable.Count > 0)
+	                DateTime.TryParse(_hashTable[textox], out getTime);
 
-				((DatePicker)textox.TemplatedParent).SelectedDate =  DateTime.Parse(_cooseDateTime);
-				textox.Text = _cooseDateTime;
-				_hashTable[textox] = _cooseDateTime;
-				return;
-			}
+	            string _cooseDateTime = string.Format("{0} {1}", ((DateTime) chooseDate).ToString(GET_DATE), getTime.ToString(GET_TIME));
 
-			DateTime _temp;
-			if (DateTime.TryParse(_result, out _temp))
-			{
-				_hashTable[textox] = _result;
-			}
-		}
+	            ((DatePicker) textox.TemplatedParent).SelectedDate = DateTime.Parse(_cooseDateTime);
+	            textox.Text = _cooseDateTime;
+	            _hashTable[textox] = _cooseDateTime;
+	            return;
+	        }
 
-		void SetCorrectDateTime(TextBox currentDateText, string _result)
+	        DateTime _temp;
+	        if (DateTime.TryParse(_result, out _temp))
+	        {
+	            _hashTable[textox] = _result;
+	        }
+	    }
+
+	    void SetCorrectDateTime(TextBox currentDateText, string _result)
 		{
 			if (!AccessDate(currentDateText, _result))
 			{

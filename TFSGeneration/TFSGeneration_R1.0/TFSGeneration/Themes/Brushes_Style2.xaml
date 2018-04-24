@@ -7,9 +7,21 @@
     
     <!--themes:FontSize Size="14" x:Key="TextBoxFontSize2"/-->
     <system:String x:Key="DateStringFormat">dd.MM.yyyy HH:mm</system:String>
+    <system:Double x:Key="TextBoxFontSize">13</system:Double>
+    <system:Double x:Key="TextBoxHeight">34</system:Double>
+    <Thickness x:Key="TextBoxPadding">5</Thickness>
+    <Thickness x:Key="TextBoxBorderThickness">1</Thickness>
+    <CornerRadius x:Key="WindowCornerRadius">6</CornerRadius>
+    <CornerRadius x:Key="WindowCornerRadiusTop">6,6,0,0</CornerRadius>
+    <system:Double x:Key="WindowCornerRadiusTopRight">6</system:Double>
+    <CornerRadius x:Key="WindowCornerRadiusBottom">0,0,6,6</CornerRadius>
     <CornerRadius x:Key="TabItemCornerRadius">0,0,0,0</CornerRadius>
-    <Thickness x:Key="TabControlPadding">4,1,3,2</Thickness>
+
+
     <!-- ### Other Colors ###-->
+    
+    <Color x:Key="LableCustomBrush1">#FF97E9E9</Color> <!-- GradientStop Color -->
+    <Color x:Key="LableCustomBrush2">#FF2CC8C8</Color> <!-- GradientStop Color -->
     <Color x:Key="ExpandergridGradient1">Black</Color> <!-- GradientStop Color -->
     <Color x:Key="ButtonPressed">#32ebfb</Color> <!-- SolidColorBrush.Color -->
     <Color x:Key="MenuItemIsHighlighted">#eee</Color> <!-- MenuItem Foreground -->
@@ -35,7 +47,7 @@
     <SolidColorBrush x:Key="DataGridCellFocusVisual" Color="#FF111111" /> <!-- Rectangle Stroke -->
     <SolidColorBrush x:Key="ToggleButton_OccupadoBackground" Color="#FF1F3B53" /> <!-- ToggleButton Background -->
     <SolidColorBrush x:Key="CalendarDayButtonForeground" Color="Lime" /> <!-- CalendarDayButton Foreground -->
-    
+    <SolidColorBrush x:Key="LabelForeground" Color="White" /> <!-- Label Foreground -->
     <SolidColorBrush x:Key="ScrollViewerDockPanelRectangle" Color="White" /> <!-- Rectangle Fill -->
     <SolidColorBrush x:Key="ThumbRectangleFill" Color="White" /> <!-- Rectangle Fill -->
     <SolidColorBrush x:Key="CalendarItemIsEnabledFalse" Color="Black" /> <!-- CalendarItem Fill -->
@@ -46,116 +58,42 @@
     <SolidColorBrush x:Key="CustomProgressBarBorderBrush" Color="Black" />
 
     <!-- ########################### -->
-    
+
+    <SolidColorBrush x:Key="TitleBarBackgroundBrush" Color="#FF424242" />
     <SolidColorBrush x:Key="AuthorWindowTopBorderBrush" Color="#FF00A0B9" />
     <SolidColorBrush x:Key="AuthorWindowTopBorderTextBrush" Color="#FFA5FFFF" />
-
-
-    <!-- ################################## My Changes ################################## -->
-    
-    
-    <SolidColorBrush x:Key="BorderBrushVisual" Color="Transparent"/>
-    <SolidColorBrush x:Key="ControlPressedVisualBrush" Color="Transparent"/>
-
-
-    <!-- ################ Window ################ -->
-    <CornerRadius x:Key="WindowCornerRadius">6</CornerRadius>
-    <CornerRadius x:Key="WindowCornerRadiusTop">6,6,0,0</CornerRadius>
-    <CornerRadius x:Key="WindowCornerRadiusBottom">0,0,6,6</CornerRadius>
-    <system:Double x:Key="WindowCornerRadiusTopRight">6</system:Double>
-    <SolidColorBrush x:Key="TitleBarBackgroundBrush" Color="#FF424242" /> <!-- Top -->
-    <SolidColorBrush x:Key="VS2012WindowBorderBrush" Color="#007ACC" /> <!-- Bottom -->
-    <SolidColorBrush x:Key="VS2012WindowBorderBrushBottom" Color="#007ACC" /> <!-- Bottom -->
-    <SolidColorBrush x:Key="MainFormBackground" Color="#333" /> <!-- MainFormBackground - фон самого окна -->
-    <SolidColorBrush x:Key="ControlForeground" Color="#FF32EBFB" /> <!-- signs and words -->
+    <SolidColorBrush x:Key="VS2012WindowBorderBrush" Color="#007ACC" />
     <SolidColorBrush x:Key="VS2012WindowBorderBrushInactive" Color="#999999" />
+    <Color x:Key="VS2012WindowBorderBrushNormal">Black</Color>
     <SolidColorBrush x:Key="VS2012WindowBorderBrushMouseOver" Color="#FFFFFF" />
     <SolidColorBrush x:Key="VS2012WindowStatusForeground" Color="#FFFFFF" />
     <SolidColorBrush x:Key="VS2012WindowStatusForegroundInactive" Color="#FFFFFF" />
-    <Color x:Key="VS2012WindowBorderBrushNormal">Black</Color>
-    <!-- ################################ -->
 
-    <!-- ################ Text ################ -->
-    <system:Double x:Key="TextBoxFontSize">13</system:Double>
-    <Color x:Key="LableCustomBrush1">#FF97E9E9</Color> <!-- GradientStop Color -->
-    <Color x:Key="LableCustomBrush2">#FF2CC8C8</Color> <!-- GradientStop Color -->
-    <Color x:Key="ColorForegroundWhite">#FFEEEFFF</Color>
-    <Color x:Key="ColorForeground">#FF32EBFB</Color> <!-- TabItemText -->
-    <SolidColorBrush x:Key="ControlForegroundWhite" Color="#FFEEEFFF" /> <!-- Control text Foreground -->
-    <SolidColorBrush x:Key="LabelForeground" Color="{StaticResource ColorForegroundWhite}" /> <!-- Label Foreground -->
-    <!-- ################################ -->
+    <!-- ################################## My Changes ################################## -->
 
-    <!-- ################ Lable ################ -->
-    <LinearGradientBrush x:Key="ControlForegroundTextLable" EndPoint="1,1" StartPoint="0,0">
-        <GradientStop Color="#FFDEF5F5" Offset="1"/>
-        <GradientStop Color="#FF76E0E0"/>
-    </LinearGradientBrush>
-    <LinearGradientBrush x:Key="ControlForegroundText" EndPoint="1,1" StartPoint="0,0">
+
+    <SolidColorBrush x:Key="ControlForeground" Color="#FF32EBFB" />
+	<!-- MainFormBackground - фон самого окна -->
+	<SolidColorBrush x:Key="MainFormBackground" Color="#333" /> 
+	<SolidColorBrush x:Key="ControlForegroundWhite" Color="#FFEEEFFF" />
+    <SolidColorBrush x:Key="BorderBrushVisual" Color="Transparent"/>
+    <SolidColorBrush x:Key="ControlPressedVisualBrush" Color="Transparent"/>
+
+	<LinearGradientBrush x:Key="ControlForegroundTextLable" EndPoint="1,1" StartPoint="0,0">
+		<GradientStop Color="#FFDEF5F5" Offset="1"/>
+		<GradientStop Color="#FF76E0E0"/>
+	</LinearGradientBrush>
+	<LinearGradientBrush x:Key="ControlForegroundText" EndPoint="1,1" StartPoint="0,0">
         <GradientStop Color="#FFFFFF" Offset="1"/>
-        <GradientStop Color="#FFC5EEEE"/>
-    </LinearGradientBrush>
-    <!-- ################################ -->
+		<GradientStop Color="#FFC5EEEE"/>
+	</LinearGradientBrush>
 
-    <!-- ################ Panel background checkbox, datetimepicker ################ -->
-    <LinearGradientBrush x:Key="ControlBackgroundNormal" EndPoint="0,1" StartPoint="0,0">
+
+	<LinearGradientBrush x:Key="ControlBackgroundNormal" EndPoint="0,1" StartPoint="0,0">
         <GradientStop Color="#FF605F5F" Offset="0"/>
         <GradientStop Color="#FF030303" Offset="1"/>
     </LinearGradientBrush>
-    <!-- ################################ -->
 
-    <!-- ################ TextBox; PasswordBox; RichTextBox ################ -->
-    <Color x:Key="BorderLightBrushGradientColor1">#FF878585</Color> <!-- должен быть такой же как и ControlLightBackground -->
-    <Color x:Key="BorderLightBrushGradientColor2">#FF525252</Color> <!-- должен быть такой же как и ControlLightBackground -->
-    <Color x:Key="ControlEnabledGradient1">#FF878585</Color>
-    <Color x:Key="ControlEnabledGradient2">#FF525252</Color>
-    <Color x:Key="BorderBrushGradientColor1">#FF1D83BE</Color>
-    <Color x:Key="BorderBrushGradientColor2">#FF1ECDA7</Color>
-    <Color x:Key="ControlDisabledGradient1">#FFC4C4C4</Color>
-    <Color x:Key="ControlDisabledGradient2">#FFB7B7B7</Color>
-    <Color x:Key="ControlDisabledGradient3">#FFA2A2A2</Color>
-    <system:Double x:Key="TextBoxHeight">28</system:Double>
-    <Thickness x:Key="TextBoxPadding">4,0,4,0</Thickness>
-    <Thickness x:Key="TextBoxBorderThickness">1,1,1,1</Thickness>
-    
-    <LinearGradientBrush x:Key="ControlLightBackground" EndPoint="0,1" StartPoint="0,0">
-        <GradientStop Color="{StaticResource BorderLightBrushGradientColor1}" Offset="0"/>
-        <GradientStop Color="{StaticResource BorderLightBrushGradientColor2}" Offset="1"/>
-    </LinearGradientBrush>
-    <!-- фокусировке или HoverOn на TextBox -->
-    <RadialGradientBrush x:Key="ControlBackgroundLine">
-        <RadialGradientBrush.RelativeTransform>
-            <TransformGroup>
-                <ScaleTransform CenterX="0.5" CenterY="0.95" ScaleX="1.804" ScaleY="0.743" />
-                <SkewTransform CenterX="0.5" CenterY="0.95" />
-                <RotateTransform CenterX="0.5" CenterY="0.95" />
-                <TranslateTransform Y="0.57999998927116394" />
-            </TransformGroup>
-        </RadialGradientBrush.RelativeTransform>
-        <GradientStop Color="#FF50D2F3" Offset="0.009" />
-        <GradientStop Color="#0098DAFF" Offset="1" />
-        <GradientStop Color="#FF8DDFFB" Offset="0" />
-    </RadialGradientBrush>
-    <!-- Каретка (курсорнаяпалка в textbox) -->
-    <LinearGradientBrush x:Key="ControlActiveBorderBrush" StartPoint="0,0.5" EndPoint="1,0.5">
-        <GradientStop Color="#FFA0CAE2" Offset="0.204" />
-        <GradientStop Color="#FFDEF3EF" Offset="0.864" />
-    </LinearGradientBrush>
-    <!-- ################################ -->
-    
-    <!-- ################ Border для всех элементов ################ -->
-    <Color x:Key="BorderBrushSolidColor1">#FF686868</Color> <!-- должен быть такой же как и ControlBorderBrush -->
-    <Color x:Key="BorderBrushSolidColor2">#FF686868</Color> <!-- должен быть такой же как и ControlBorderBrush -->
-    <LinearGradientBrush x:Key="ControlBorderBrush" StartPoint="0,0.5" EndPoint="1,0.5">
-        <GradientStop Color="{StaticResource BorderBrushSolidColor1}" Offset="0.204" />
-        <GradientStop Color="{StaticResource BorderBrushSolidColor2}" Offset="0.864" />
-    </LinearGradientBrush>
-    <!-- ################################ -->
-
-    
-    
-    
-    
-    
     <LinearGradientBrush x:Key="ControlBackgroundOver" EndPoint="0,1" StartPoint="0,0">
         <GradientStop Color="#FF605F5F" Offset="0"/>
         <GradientStop Color="#FF030303" Offset="1"/>
@@ -166,7 +104,10 @@
         <GradientStop Color="#FF1F1E1E" Offset="1"/>
     </LinearGradientBrush>
 
-
+    <LinearGradientBrush x:Key="ControlLightBackground" EndPoint="0,1" StartPoint="0,0">
+        <GradientStop Color="#FF878585" Offset="0"/>
+        <GradientStop Color="#FF525252" Offset="1"/>
+    </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="DisabledBrush" EndPoint="0,1" StartPoint="0,0">
         <GradientStop Color="#FFC4C4C4" Offset="0"/>
@@ -180,14 +121,40 @@
     <SolidColorBrush x:Key="DisabledForeground2" Color="#FFAAAAAA"/>
     <SolidColorBrush x:Key="ControlHighlight" Color="#80CCCCCC" />
     <SolidColorBrush x:Key="FocusVisualBrush" Color="#B6BBBBBB" />
+    
+    <LinearGradientBrush x:Key="ControlBorderBrush" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#FF686868" Offset="0.204" />
+        <GradientStop Color="#FF686868" Offset="0.864" />
+    </LinearGradientBrush>
+
+	<!-- Каретка (курсорнаяпалка в textbox) -->
+    <LinearGradientBrush x:Key="ControlActiveBorderBrush" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#FFA0CAE2" Offset="0.204" />
+		<GradientStop Color="#FFDEF3EF" Offset="0.864" />
+	</LinearGradientBrush>
+    
 
     <LinearGradientBrush x:Key="ToggleButtonHoverBrush" EndPoint="0,1" StartPoint="0,0">
         <GradientStop Color="#FF605F5F" Offset="0"/>
         <GradientStop Color="#FF030303" Offset="1"/>
     </LinearGradientBrush>
 
+	<!-- фокусировке или HoverOn на TextBox -->
+	<RadialGradientBrush x:Key="ControlBackgroundLine">
+        <RadialGradientBrush.RelativeTransform>
+            <TransformGroup>
+                <ScaleTransform CenterX="0.5" CenterY="0.95" ScaleX="1.804" ScaleY="0.743" />
+                <SkewTransform CenterX="0.5" CenterY="0.95" />
+                <RotateTransform CenterX="0.5" CenterY="0.95" />
+                <TranslateTransform Y="0.57999998927116394" />
+            </TransformGroup>
+        </RadialGradientBrush.RelativeTransform>
+        <GradientStop Color="#FF50D2F3" Offset="0.009" />
+        <GradientStop Color="#0098DAFF" Offset="1" />
+        <GradientStop Color="#FF8DDFFB" Offset="0" />
+    </RadialGradientBrush>
 
-
+    <!-- Brush for ToggleButton Occupado-->
 
     <RadialGradientBrush x:Key="ToggleButtonBorderBrush_forOccupado" GradientOrigin="0,0" RadiusX="0.8" RadiusY="0.8">
         <GradientStop Color="#FF7D7D7D" Offset="1"/>
@@ -220,7 +187,7 @@
         <GradientStop Color="#FF353535" Offset="1"/>
         <GradientStop Color="#FF1B1B1B"/>
     </LinearGradientBrush>
-
+    <!---->
     
     <LinearGradientBrush x:Key="ScrollBarThumbBackground" EndPoint="1,1" StartPoint="0,0">
         <GradientStop Color="#FF97E9E9" Offset="1"/>
@@ -265,12 +232,7 @@
         <GradientStop Color="#FFFFFF" Offset="0.0"/>
         <GradientStop Color="#FFCCCCCC" Offset="1.0"/>
     </LinearGradientBrush>
-
     
-    
-    <!-- ##################### TabControl ############################ -->
-    
-
     <LinearGradientBrush x:Key="TabControlItemBackgroundNormal" EndPoint="0,1" StartPoint="0,0">
         <GradientStop Color="#FF727171" Offset="0"/>
         <GradientStop Color="#FF494949" Offset="1"/>
@@ -280,18 +242,13 @@
         <GradientStop Color="#FF8E8E8C" Offset="0"/>
         <GradientStop Color="#FF676767" Offset="1"/>
     </LinearGradientBrush>
-
+    
     <RadialGradientBrush x:Key="NormalBackgroundTabControl" GradientOrigin="0,0" RadiusX="0.8" RadiusY="0.8">
         <GradientStop Color="#222" Offset="1"/>
         <GradientStop Color="#4e4e4c" Offset="0"/>
     </RadialGradientBrush>
-
-    <!-- ######################################################## -->
-
-
-
-    <!-- ##################### Menu ##################### -->
     
+    <!-- Menu -->
     <SolidColorBrush x:Key="BorderMenuItem" Color="#FFCCCCCC"/>
     <SolidColorBrush x:Key="SelectedHeadermenu" Color="Black"/>
 
@@ -309,11 +266,8 @@
         <GradientStop Color="#bbacadad" Offset="0"/>
         <GradientStop Color="#bb7a7b7b" Offset="1"/>
     </LinearGradientBrush>
-
-    <!-- ######################################################## -->
-
-    <!-- ##################### Expander ##################### -->
     
+    <!-- Expander -->
     <LinearGradientBrush x:Key="BackgroundExpanderLeft" EndPoint="1,0.5" StartPoint="0,0.5">
         <GradientStop Color="#FF878585" Offset="0"/>
         <GradientStop Color="#FF525252" Offset="1"/>
@@ -330,11 +284,8 @@
     </LinearGradientBrush>
 
     <SolidColorBrush x:Key="SliderSelectRange" Color="#FF0A8FE4"/>
-
-    <!-- ########################################## -->
-
-    <!-- ##################### Calendar ##################### -->
     
+    <!-- Calendar -->
     <LinearGradientBrush x:Key="HoverBackgroundCalendar" EndPoint="0,1" StartPoint="0,0">
         <GradientStop Color="#FFB7B7B7" Offset="0"/>
         <GradientStop Color="#FF777777" Offset="1"/>
@@ -367,16 +318,24 @@
     <SolidColorBrush x:Key="DisabledArrowFrame" Color="#FF888888"/>
     <SolidColorBrush x:Key="PressedBackgroundButtonFrame" Color="#FF888888"/>
 
-    <!-- ########################################## -->
-
-    <!-- ##################### Colors ##################### -->
+    <!-- Colors -->
     <Color x:Key="DisabledForeground">#FF474747</Color>
     <Color x:Key="DisabledForeground3">#FF171717</Color>
+    <Color x:Key="ColorForeground">#FF32EBFB</Color>
+    <Color x:Key="ColorForegroundWhite">#FFEEEFFF</Color>
+    <Color x:Key="BorderBrushSolidColor">#FF686868</Color>
+    <Color x:Key="BorderBrushGradientColor1">#FF1D83BE</Color>
+    <Color x:Key="BorderBrushGradientColor2">#FF1ECDA7</Color>
+    <Color x:Key="BorderLightBrushGradientColor1">#FF878585</Color>
+    <Color x:Key="BorderLightBrushGradientColor2">#FF525252</Color>
     <Color x:Key="HighlightComboBoxItem1">#FF333333</Color>
     <Color x:Key="HighlightComboBoxItem2">#FF474747</Color>
     <Color x:Key="ArrowBrushComboBox">#FFDDDEEE</Color>
-
-
+	<Color x:Key="ControlDisabledGradient1">#FFC4C4C4</Color>
+	<Color x:Key="ControlDisabledGradient2">#FFB7B7B7</Color>
+	<Color x:Key="ControlDisabledGradient3">#FFA2A2A2</Color>
+	<Color x:Key="ControlEnabledGradient1">#FF878585</Color>
+	<Color x:Key="ControlEnabledGradient2">#FF525252</Color>
 	<Color x:Key="ForegroundDisabledGradient">#FFEEEFFF</Color>
 	<Color x:Key="ForegroundEnabledGradient">#FFEEEFFF</Color>
 

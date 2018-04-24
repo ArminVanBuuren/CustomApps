@@ -10,9 +10,8 @@
     <!-- ################################## My Changes ################################## -->
 
 	<!-- Custom Lable -->
-	<Style TargetType="Label" x:Key="LableCustom">
-		<Setter Property="FontSize" Value="12"/>
-		<Setter Property="FontFamily" Value="./Images/#Beyond Wonderland"/>
+    <Style TargetType="Label" x:Key="LableCustom">
+        <Setter Property="FontFamily" Value="./Images/#Beyond Wonderland"/>
 		<Setter Property="Foreground">
 			<Setter.Value>
 				<LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
@@ -26,7 +25,6 @@
 	</Style>
 
     <Style TargetType="Label">
-        <Setter Property="FontSize" Value="13"/>
         <Setter Property="Foreground" Value="{StaticResource LabelForeground}"/>
     </Style>
 
@@ -206,9 +204,9 @@
                         </Storyboard>
                         <Storyboard x:Key="HoverOff">
                             <ColorAnimation Storyboard.TargetProperty="(Rectangle.Stroke).(GradientBrush.GradientStops)[0].(GradientStop.Color)" Storyboard.TargetName="background_checkbox"
-                                            Duration="0:0:0.3" To="{StaticResource BorderBrushSolidColor}"/>
+                                            Duration="0:0:0.3" To="{StaticResource BorderBrushSolidColor1}"/>
                             <ColorAnimation Storyboard.TargetProperty="(Rectangle.Stroke).(GradientBrush.GradientStops)[1].(GradientStop.Color)" Storyboard.TargetName="background_checkbox"
-                                            Duration="0:0:0.3" To="{StaticResource BorderBrushSolidColor}"/>
+                                            Duration="0:0:0.3" To="{StaticResource BorderBrushSolidColor2}"/>
                         </Storyboard>
                     </ControlTemplate.Resources>
                     <BulletDecorator Background="Transparent">
@@ -274,9 +272,9 @@
                         </Storyboard>
                         <Storyboard x:Key="HoverOff">
                             <ColorAnimation Storyboard.TargetProperty="(Rectangle.Stroke).(GradientBrush.GradientStops)[0].(GradientStop.Color)" Storyboard.TargetName="background_radiobutton"
-                                            Duration="0:0:0.3" To="{StaticResource BorderBrushSolidColor}"/>
+                                            Duration="0:0:0.3" To="{StaticResource BorderBrushSolidColor1}"/>
                             <ColorAnimation Storyboard.TargetProperty="(Rectangle.Stroke).(GradientBrush.GradientStops)[1].(GradientStop.Color)" Storyboard.TargetName="background_radiobutton"
-                                            Duration="0:0:0.3" To="{StaticResource BorderBrushSolidColor}"/>
+                                            Duration="0:0:0.3" To="{StaticResource BorderBrushSolidColor2}"/>
                         </Storyboard>
                     </ControlTemplate.Resources>
                     <BulletDecorator Background="Transparent">
@@ -324,8 +322,7 @@
     <Style TargetType="{x:Type TextBox}" BasedOn="{x:Null}">
         <Setter Property="Background" Value="{StaticResource ControlLightBackground}" />
         <Setter Property="BorderBrush" Value="{StaticResource ControlBorderBrush}" />
-		<Setter Property="BorderThickness" Value="{StaticResource TextBoxBorderThickness}" />
-		<Setter Property="FontSize" Value="{StaticResource TextBoxFontSize}" />
+        <Setter Property="BorderThickness" Value="{StaticResource TextBoxBorderThickness}" />
         <Setter Property="Foreground" Value="{StaticResource ControlForegroundWhite}" />
         <Setter Property="CaretBrush" Value="{StaticResource ControlActiveBorderBrush}"/>
         <Setter Property="AllowDrop" Value="True"/>
@@ -360,16 +357,16 @@
                         </Storyboard>
 						<Storyboard x:Key="FocusOff">
 							<ColorAnimation Storyboard.TargetProperty="(Border.BorderBrush).(GradientBrush.GradientStops)[0].(GradientStop.Color)" Storyboard.TargetName="txb_border"
-                                            Duration="0:0:0.4" To="{StaticResource BorderBrushSolidColor}"/>
+                                            Duration="0:0:0.4" To="{StaticResource BorderBrushSolidColor1}"/>
 							<ColorAnimation Storyboard.TargetProperty="(Border.BorderBrush).(GradientBrush.GradientStops)[1].(GradientStop.Color)" Storyboard.TargetName="txb_border"
-                                            Duration="0:0:0.4" To="{StaticResource BorderBrushSolidColor}"/>
+                                            Duration="0:0:0.4" To="{StaticResource BorderBrushSolidColor2}"/>
 						</Storyboard>
 
 						<Storyboard x:Key="IsEnabled">
 							<ColorAnimation Storyboard.TargetProperty="(Border.Background).(GradientBrush.GradientStops)[0].(GradientStop.Color)" Storyboard.TargetName="txb_border"
-		                                    Duration="0:0:0.2" To="{StaticResource ControlEnabledGradient1}"/>
+		                                    Duration="0:0:0.2" To="{StaticResource BorderLightBrushGradientColor1}"/>
 							<ColorAnimation Storyboard.TargetProperty="(Border.Background).(GradientBrush.GradientStops)[1].(GradientStop.Color)" Storyboard.TargetName="txb_border"
-		                                    Duration="0:0:0.2" To="{StaticResource ControlEnabledGradient2}"/>
+		                                    Duration="0:0:0.2" To="{StaticResource BorderLightBrushGradientColor2}"/>
 						</Storyboard>
 	                    <Storyboard x:Key="IsDisabled">
 							<ColorAnimation Storyboard.TargetProperty="(Border.Background).(GradientBrush.GradientStops)[0].(GradientStop.Color)" Storyboard.TargetName="txb_border"
@@ -427,9 +424,8 @@
     <Style TargetType="{x:Type PasswordBox}" BasedOn="{x:Null}">
         <Setter Property="Background" Value="{StaticResource ControlLightBackground}" />
         <Setter Property="BorderBrush" Value="{StaticResource ControlBorderBrush}" />
-		<Setter Property="BorderThickness" Value="{StaticResource TextBoxBorderThickness}" />
-		<Setter Property="FontSize" Value="{StaticResource TextBoxFontSize}" />
-		<Setter Property="Foreground" Value="{StaticResource ControlForegroundWhite}" />
+        <Setter Property="BorderThickness" Value="{StaticResource TextBoxBorderThickness}" />
+        <Setter Property="Foreground" Value="{StaticResource ControlForegroundWhite}" />
         <Setter Property="CaretBrush" Value="{StaticResource ControlActiveBorderBrush}"/>
         <Setter Property="AllowDrop" Value="True"/>
 		<Setter Property="Height" Value="{StaticResource TextBoxHeight}"/>
@@ -463,23 +459,23 @@
                         </Storyboard>
                         <Storyboard x:Key="FocusOff">
                             <ColorAnimation Storyboard.TargetProperty="(Border.BorderBrush).(GradientBrush.GradientStops)[0].(GradientStop.Color)" Storyboard.TargetName="txb_border"
-                                            Duration="0:0:0.4" To="{StaticResource BorderBrushSolidColor}"/>
+                                            Duration="0:0:0.4" To="{StaticResource BorderBrushSolidColor1}"/>
                             <ColorAnimation Storyboard.TargetProperty="(Border.BorderBrush).(GradientBrush.GradientStops)[1].(GradientStop.Color)" Storyboard.TargetName="txb_border"
-                                            Duration="0:0:0.4" To="{StaticResource BorderBrushSolidColor}"/>
+                                            Duration="0:0:0.4" To="{StaticResource BorderBrushSolidColor2}"/>
                         </Storyboard>
-	                    <Storyboard x:Key="IsDisabled">
-		                    <ColorAnimation Storyboard.TargetProperty="(Border.Background).(GradientBrush.GradientStops)[0].(GradientStop.Color)" Storyboard.TargetName="txb_border"
+                        <Storyboard x:Key="IsEnabled">
+                            <ColorAnimation Storyboard.TargetProperty="(Border.Background).(GradientBrush.GradientStops)[0].(GradientStop.Color)" Storyboard.TargetName="txb_border"
+                                            Duration="0:0:0.2" To="{StaticResource BorderLightBrushGradientColor1}"/>
+                            <ColorAnimation Storyboard.TargetProperty="(Border.Background).(GradientBrush.GradientStops)[1].(GradientStop.Color)" Storyboard.TargetName="txb_border"
+                                            Duration="0:0:0.2" To="{StaticResource BorderLightBrushGradientColor2}"/>
+                        </Storyboard>
+                        <Storyboard x:Key="IsDisabled">
+                            <ColorAnimation Storyboard.TargetProperty="(Border.Background).(GradientBrush.GradientStops)[0].(GradientStop.Color)" Storyboard.TargetName="txb_border"
 		                                    Duration="0:0:0.2" To="{StaticResource ControlDisabledGradient1}"/>
-		                    <ColorAnimation Storyboard.TargetProperty="(Border.Background).(GradientBrush.GradientStops)[1].(GradientStop.Color)" Storyboard.TargetName="txb_border"
+                            <ColorAnimation Storyboard.TargetProperty="(Border.Background).(GradientBrush.GradientStops)[1].(GradientStop.Color)" Storyboard.TargetName="txb_border"
 		                                    Duration="0:0:0.2" To="{StaticResource ControlDisabledGradient2}"/>
-	                    </Storyboard>
-	                    <Storyboard x:Key="IsEnabled">
-		                    <ColorAnimation Storyboard.TargetProperty="(Border.Background).(GradientBrush.GradientStops)[0].(GradientStop.Color)" Storyboard.TargetName="txb_border"
-		                                    Duration="0:0:0.2" To="{StaticResource ControlEnabledGradient1}"/>
-		                    <ColorAnimation Storyboard.TargetProperty="(Border.Background).(GradientBrush.GradientStops)[1].(GradientStop.Color)" Storyboard.TargetName="txb_border"
-		                                    Duration="0:0:0.2" To="{StaticResource ControlEnabledGradient2}"/>
-	                    </Storyboard>
-					</ControlTemplate.Resources>
+                        </Storyboard>
+                    </ControlTemplate.Resources>
                     <Grid>
                         <Border x:Name="txb_mouseOver2" Background="{TemplateBinding Background}" Opacity="0" CornerRadius="4" />
                         <Border x:Name="txb_mouseOver1" Background="{StaticResource ControlBackgroundLine}" Opacity="0" CornerRadius="4" />
@@ -539,6 +535,7 @@
         <Setter Property="Height" Value="34"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Padding" Value="5"/>
+        
 		<Setter Property="AutoWordSelection" Value="False"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -552,9 +549,9 @@
                         </Storyboard>
                         <Storyboard x:Key="FocusOff">
                             <ColorAnimation Storyboard.TargetProperty="(Border.BorderBrush).(GradientBrush.GradientStops)[0].(GradientStop.Color)" Storyboard.TargetName="txb_border"
-                                            Duration="0:0:0.4" To="{StaticResource BorderBrushSolidColor}"/>
+                                            Duration="0:0:0.4" To="{StaticResource BorderBrushSolidColor1}"/>
                             <ColorAnimation Storyboard.TargetProperty="(Border.BorderBrush).(GradientBrush.GradientStops)[1].(GradientStop.Color)" Storyboard.TargetName="txb_border"
-                                            Duration="0:0:0.4" To="{StaticResource BorderBrushSolidColor}"/>
+                                            Duration="0:0:0.4" To="{StaticResource BorderBrushSolidColor2}"/>
                         </Storyboard>
                         <Storyboard x:Key="IsEnabled">
                             <ColorAnimation Storyboard.TargetProperty="(Border.Background).(GradientBrush.GradientStops)[0].(GradientStop.Color)" Storyboard.TargetName="txb_border"
@@ -866,9 +863,9 @@
                         </Storyboard>
                         <Storyboard x:Key="HoverOff">
                             <ColorAnimation Storyboard.TargetProperty="(Border.BorderBrush).(GradientBrush.GradientStops)[0].(GradientStop.Color)" Storyboard.TargetName="Border"
-                                            Duration="0:0:0.4" To="{StaticResource BorderBrushSolidColor}"/>
+                                            Duration="0:0:0.4" To="{StaticResource BorderBrushSolidColor1}"/>
                             <ColorAnimation Storyboard.TargetProperty="(Border.BorderBrush).(GradientBrush.GradientStops)[1].(GradientStop.Color)" Storyboard.TargetName="Border"
-                                            Duration="0:0:0.4" To="{StaticResource BorderBrushSolidColor}"/>
+                                            Duration="0:0:0.4" To="{StaticResource BorderBrushSolidColor2}"/>
                             <ColorAnimation Storyboard.TargetProperty="(Path.Fill).(GradientBrush.GradientStops)[0].(GradientStop.Color)" Storyboard.TargetName="ArrowDown"
                                 Duration="0:0:0.4" To="{StaticResource ArrowBrushComboBox}"/>
                             <ColorAnimation Storyboard.TargetProperty="(Path.Fill).(GradientBrush.GradientStops)[1].(GradientStop.Color)" Storyboard.TargetName="ArrowDown"
@@ -1360,14 +1357,13 @@
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusLine}"/>
         <Setter Property="Background" Value="{StaticResource TabControlItemBackgroundNormal}"/>
         <Setter Property="Foreground" Value="{StaticResource ControlForegroundWhite}"/>
-        <Setter Property="Padding" Value="5"/>
+        <Setter Property="Padding" Value="{StaticResource TabControlPadding}"/>
         <Setter Property="BorderBrush" Value="{StaticResource ControlBorderBrush}"/>
         <Setter Property="BorderThickness" Value="1,1,1,0" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <Setter Property="VerticalContentAlignment" Value="Stretch"/>
         <Setter Property="MinWidth" Value="10" />
-		<Setter Property="MinHeight" Value="26" />
-		
+        <Setter Property="MinHeight" Value="15" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabItem}">
@@ -1381,12 +1377,12 @@
                                             To="{StaticResource ColorForegroundWhite}"/>
                         </Storyboard>
                     </ControlTemplate.Resources>
-                        <Grid SnapsToDevicePixels="True" x:Name="grid" Background="Transparent" Margin="0,0,3,0">
+                        <Grid SnapsToDevicePixels="True" x:Name="grid" Background="Transparent" Margin="0,0,2,0">
                             <Border x:Name="border_inner" BorderBrush="{TemplateBinding BorderBrush}" 
 									BorderThickness="1,1,1,0" Padding="{TemplateBinding Padding}"
 									CornerRadius="{StaticResource TabItemCornerRadius}"
                                     Background="{TemplateBinding Background}">
-                                <ContentPresenter x:Name="Content" 
+                                <ContentPresenter x:Name="Content"
 												  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
                                                   HorizontalAlignment="{Binding Path=HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" 
                                                   VerticalAlignment="{Binding Path=VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" 
@@ -1463,7 +1459,6 @@
                                 <Condition Property="IsSelected" Value="True"/>
                                 <Condition Property="TabStripPlacement" Value="Left"/>
                             </MultiTrigger.Conditions>
-
                             <Setter Property="Margin" Value="-2,-2,-1,-2"/>
                             <Setter Property="Margin" TargetName="Content" Value="0,0,1,0"/>
                         </MultiTrigger>
@@ -2970,7 +2965,7 @@
 		<Setter Property="IsTodayHighlighted" Value="True"/>
 		<Setter Property="SelectedDateFormat" Value="Short"/>
 		<Setter Property="Background" Value="Transparent"/>
-		<Setter Property="FontSize" Value="{StaticResource TextBoxFontSize}"/>
+		
 		<Setter Property="Padding" Value="{StaticResource TextBoxPadding}"/>
 		<Setter Property="BorderThickness" Value="{StaticResource TextBoxBorderThickness}"/>
 		<Setter Property="HorizontalContentAlignment" Value="Stretch"/>

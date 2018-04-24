@@ -22,7 +22,7 @@
 		<TextBlock Padding="10" x:Name="ErrorMessage" 
 				   Foreground="White" 
 				   TextWrapping="Wrap" 
-				   FontSize="{StaticResource TextBoxFontSize}"
+				  
 		           HorizontalAlignment="Center"
 		           VerticalAlignment="Center"
 				   TextAlignment="Center"
