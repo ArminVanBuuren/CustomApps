@@ -211,11 +211,11 @@ namespace XPathEvaluator.XmlRtfStyle
 
         public override string ToString()
         {
-            StringBuilder builder = new StringBuilder(@"{\rtf1\unicode\ansicpg1252\deff0\deflang1033");
+            StringBuilder builder = new StringBuilder(@"{\rtf1\unicode\ansicpg1251\deff0\deflang1033");
             builder.Append(@"{\fonttbl");
             for (int i = 0; i < _fontTable.Count; i++)
             {
-                builder.Append(string.Format(@"{{\f{0}\fswiss\fcharset0 {1};}}", i, _fontTable[i]));
+                builder.Append(string.Format(@"{{\f{0}\fswiss\fcharset204 {1};}}", i, _fontTable[i]));
             }
             builder.Append("}");
             if (_palette.Count > 0)

@@ -33,9 +33,9 @@ namespace XPathEvaluator.XmlRtfStyle
 
         public RtfFontStyles CommentStyle { get; set; } = RtfFontStyles.Regular;
 
-        public string FontName { get; set; } = "Arial Cyr";
+        public string FontName { get; set; } = "Verdana";
 
-        public int FontSize { get; set; } = 18;
+        public int FontSize { get; set; } = 20;
 
         public uint QuoteColor { get; set; } = 0xff;
 
