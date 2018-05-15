@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 
 namespace TFSGeneration.Themes
 {
@@ -196,18 +197,17 @@ namespace TFSGeneration.Themes
 		private void Information_OnClick(object sender, RoutedEventArgs e)
 		{
 			WindowNew mainWindow = Application.Current.MainWindow as WindowNew;
-		    if (mainWindow == null)
-		        return;
 
-            Style style = mainWindow.FindResource("VS2012WindowStyle") as Style;
+		    Style style = mainWindow?.FindResource("VS2012WindowStyle") as Style;
 		    if (style == null)
 		        return;
 
 
             WindowNew windowInfo = new WindowNew(false, false);
-			windowInfo.Title = "Vladimir Khovanskiy";
+		    windowInfo.Title = "Vladimir Khovanskiy";
+            windowInfo.ResizeMode = ResizeMode.NoResize;
 			windowInfo.Style = style;
-		    windowInfo.FontFamily = new FontFamily("Segoe UI");
+            windowInfo.FontFamily = new FontFamily("Segoe UI");
 		    windowInfo.FontSize = 13;
 
             //windowInfo.Icon = mainWindow.Icon;
@@ -229,9 +229,6 @@ namespace TFSGeneration.Themes
 			text.TextAlignment = TextAlignment.Center;
 			text.Text = "Hello! Thanks for choosing my application!";
 		    text.Foreground = (Brush)new BrushConverter().ConvertFrom("#FFF7F7F7");
-		    
-		    
-		    
 
             windowInfo.Content = text;
 

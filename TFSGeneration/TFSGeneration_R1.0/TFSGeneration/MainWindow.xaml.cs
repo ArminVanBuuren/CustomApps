@@ -34,24 +34,25 @@ namespace TFSGeneration
         }
     }
 
-    /// 
+    /// <inheritdoc cref="" />
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
     public partial class MainWindow
     {
-        private int timeoutMSECToShowToolTip = 700;
-        private const int timeoutToShowToolTip = 700;
+        private const int timeoutMSECToShowToolTip = 2700;
+        private const int timeoutToShowToolTip = 2700;
+
         private const int timerToCollectAndActivateUnUsedWindow = 120 * 1000;
         private int _openedWarningWindowCount = 0;
         private System.Windows.Forms.NotifyIcon notification;
-        private TFSControl tfsControl { get; set; }
         private Timer _timerActivateWindow;
         private Timer _timerGC;
         private WindowWarning warnWindow;
         private bool _thisIsLoaded = false; // фиксит ошибку при закрытии окна остановку таймера
         private DateTime? LastDeactivationDate = null;
 
+        private TFSControl tfsControl { get; set; }
 
         public MainWindow()
         {
@@ -103,7 +104,7 @@ namespace TFSGeneration
                 ToolTipService.SetInitialShowDelay(TFSUserPassword, timeoutToShowToolTip);
 
                 FilterStartDate.Text =
-                    tfsControl.Settings.MailOption.StartDate.Value; // при зменении все равно вырезается время, остается только дата, по этому тоже биндим по особеному
+                        tfsControl.Settings.MailOption.StartDate.Value; // при зменении все равно вырезается время, остается только дата, по этому тоже биндим по особеному
                 FilterStartDate.SelectedDateChanged += FilterStartDate_OnSelectedDateChanged;
                 tfsControl.Settings.MailOption.StartDate.PropertyChanged += StartDate_PropertyChanged;
                 ToolTipService.SetInitialShowDelay(FilterStartDate, timeoutToShowToolTip);
@@ -125,43 +126,41 @@ namespace TFSGeneration
                 //================Options TFS===================================
                 DefaultBinding(TFSUri, TextBox.TextProperty, tfsControl.Settings.TFSOption.TFSUri);
                 DefaultBinding(TFSUserName, TextBox.TextProperty, tfsControl.Settings.TFSOption.TFSUserName);
-                Paragraph par = new Paragraph(new Run(tfsControl.Settings.TFSOption.GetDublicateTFS[0].Value)) {LineHeight = 1};
+                Paragraph par = new Paragraph(new Run(tfsControl.Settings.TFSOption.GetDublicateTFS[0].Value)) {
+                                                                                                                   LineHeight = 1
+                                                                                                               };
                 GetDublicateTFS.Document.Blocks.Add(par);
                 GetDublicateTFS.TextChanged += GetDublicateTFS_OnTextChanged;
                 ToolTipService.SetInitialShowDelay(GetDublicateTFS, timeoutToShowToolTip);
 
                 //================Notification Bar==============================
-                notification = new System.Windows.Forms.NotifyIcon
-                {
-                    BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info,
-                    Icon = Properties.Resources.Rick,
-                    Visible = true
-                };
+                notification = new System.Windows.Forms.NotifyIcon {
+                                                                       BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info,
+                                                                       Icon = Properties.Resources.Rick,
+                                                                       Visible = true
+                                                                   };
                 notification.BalloonTipClicked += ShowMyForm;
                 notification.DoubleClick += ShowMyForm;
 
                 //================Activate Button Start And Start Timer==============================
                 ButtonStart.IsEnabled = true;
 
-                _timerActivateWindow = new Timer
-                {
-                    Interval = timerToCollectAndActivateUnUsedWindow
-                };
+                _timerActivateWindow = new Timer {
+                                                     Interval = timerToCollectAndActivateUnUsedWindow
+                                                 };
                 _timerActivateWindow.Elapsed += CheckWorking;
                 _timerActivateWindow.AutoReset = false;
                 _timerActivateWindow.Enabled = true;
 
-                _timerGC = new Timer
-                {
-                    Interval = 300 * 1000
-                };
+                _timerGC = new Timer {
+                                         Interval = 300 * 1000
+                                     };
                 _timerGC.Elapsed += _timerCollect;
                 _timerGC.Start();
             }
             catch (Exception ex)
             {
-                NotifyUser(WarnSeverity.Error, ex.Message, string.Format("{0}{1}{2}", ex.Message, Environment.NewLine, ex.StackTrace),
-                    true);
+                NotifyUser(WarnSeverity.Error, ex.Message, string.Format("{0}{1}{2}", ex.Message, Environment.NewLine, ex.StackTrace), true);
                 DisableWindow();
             }
             finally
@@ -170,8 +169,6 @@ namespace TFSGeneration
                 ShowMyForm(this, EventArgs.Empty);
             }
         }
-
-
 
 
         /// <summary>
@@ -724,5 +721,7 @@ namespace TFSGeneration
                     Activate();
             });
         }
+
+
     }
 }

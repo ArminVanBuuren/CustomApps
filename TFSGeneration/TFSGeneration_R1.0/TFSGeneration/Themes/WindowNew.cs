@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
+using System.Windows.Shapes;
 
 namespace TFSGeneration.Themes
 {
@@ -71,11 +72,6 @@ namespace TFSGeneration.Themes
                 //		DragMove();
                 //};
             }
-
-
-
-
-
         }
 
 
@@ -121,11 +117,30 @@ namespace TFSGeneration.Themes
                 var infButtom = (Button)mainWindow.Template.FindName("Information", mainWindow);
                 var minButtom = (Button)mainWindow.Template.FindName("MinButton", mainWindow);
                 var maxButtom = (Button)mainWindow.Template.FindName("MaxButton", mainWindow);
+
                 infButtom.Visibility = Visibility.Collapsed;
                 minButtom.Visibility = Visibility.Collapsed;
                 maxButtom.Visibility = Visibility.Collapsed;
+
+                if (this.ResizeMode == ResizeMode.NoResize)
+                {
+                    DisableResizeMode(mainWindow.Template.FindName("Left", mainWindow));
+                    DisableResizeMode(mainWindow.Template.FindName("Right", mainWindow));
+                    DisableResizeMode(mainWindow.Template.FindName("Bottom", mainWindow));
+                    DisableResizeMode(mainWindow.Template.FindName("rectSizeNorthWest", mainWindow));
+                    DisableResizeMode(mainWindow.Template.FindName("rectSizeNorthEast", mainWindow));
+                    DisableResizeMode(mainWindow.Template.FindName("rectSizeSouthWest", mainWindow));
+                    DisableResizeMode(mainWindow.Template.FindName("rectSizeSouthEast", mainWindow));
+                }
             }
 
+        }
+
+        static void DisableResizeMode(object frame)
+        {
+            FrameworkElement element = frame as FrameworkElement;
+            if (element != null)
+                element.Cursor = null;
         }
 
         private static void Window_Closing(object sender, CancelEventArgs e)
@@ -156,8 +171,6 @@ namespace TFSGeneration.Themes
         {
 
         }
-
-
 
         void WindowStateChanged(object sender, EventArgs e)
         {

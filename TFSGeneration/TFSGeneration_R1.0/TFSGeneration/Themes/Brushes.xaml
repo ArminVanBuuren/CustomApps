@@ -113,8 +113,8 @@
     <Color x:Key="ControlDisabledGradient1">#FFC4C4C4</Color>
     <Color x:Key="ControlDisabledGradient2">#FFB7B7B7</Color>
     <Color x:Key="ControlDisabledGradient3">#FFA2A2A2</Color>
-    <system:Double x:Key="TextBoxHeight">28</system:Double>
-    <Thickness x:Key="TextBoxPadding">4,0,4,0</Thickness>
+    <system:Double x:Key="TextBoxHeight">25</system:Double>
+    <Thickness x:Key="TextBoxPadding">4,4,4,4</Thickness>
     <Thickness x:Key="TextBoxBorderThickness">1,1,1,1</Thickness>
     
     <LinearGradientBrush x:Key="ControlLightBackground" EndPoint="0,1" StartPoint="0,0">
@@ -137,8 +137,8 @@
     </RadialGradientBrush>
     <!-- Каретка (курсорнаяпалка в textbox) -->
     <LinearGradientBrush x:Key="ControlActiveBorderBrush" StartPoint="0,0.5" EndPoint="1,0.5">
-        <GradientStop Color="#FFA0CAE2" Offset="0.204" />
-        <GradientStop Color="#FFDEF3EF" Offset="0.864" />
+        <GradientStop Color="#FF00FFE8" Offset="0.204" />
+        <GradientStop Color="#FF8AFFE9" Offset="0.864" />
     </LinearGradientBrush>
     <!-- ################################ -->
     

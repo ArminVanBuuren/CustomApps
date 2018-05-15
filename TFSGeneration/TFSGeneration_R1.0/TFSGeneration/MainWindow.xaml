@@ -13,7 +13,7 @@
         Title="TFS Generation" 
                             
         MinWidth="545" Width="555"
-        MinHeight="650" Height="650"
+        MinHeight="655" Height="655"
                             
         xmlns:mylocal="clr-namespace:TFSGeneration"
         ResizeMode="CanResizeWithGrip"
@@ -48,87 +48,85 @@
 		</Grid.RowDefinitions>
 		<TabControl Grid.Row="0" Margin="10 0 10 10" >
             <TabItem Header="Mail Options" >
-                <!--<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Margin="0,0,0,0" VerticalAlignment="Top">-->
-                <StackPanel x:Name="MailOptions">
-                    <Grid Height="Auto" VerticalAlignment="Stretch" >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition MaxWidth="80"  MinWidth="80"/>
-                            <ColumnDefinition MinWidth="140" Width="1.01*" MaxWidth="300" />
-                            <ColumnDefinition MaxWidth="10"  MinWidth="10"  />
-                            <ColumnDefinition MaxWidth="59"  MinWidth="59"  />
-                            <ColumnDefinition MinWidth="103" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition MaxHeight="5" MinHeight="5"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                        </Grid.RowDefinitions>
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Margin="0,0,0,0" VerticalAlignment="Top">
+                    <StackPanel x:Name="MailOptions" >
+                        <Grid Height="Auto" VerticalAlignment="Stretch" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition MaxWidth="80"  MinWidth="80"/>
+                                <ColumnDefinition MinWidth="140" Width="1.01*" MaxWidth="300" />
+                                <ColumnDefinition MaxWidth="5"  MinWidth="5"  />
+                                <ColumnDefinition MaxWidth="61"  MinWidth="61"  />
+                                <ColumnDefinition MinWidth="103" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition MaxHeight="5" MinHeight="5"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
 
-                        <Border Name="BorderTemp" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5" BorderBrush="#000" BorderThickness="0,0,0,1" Margin="0,0,0,-1"/>
-                        <Border Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5" BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="0,0,0,0"/>
-                        <Border Grid.Column="2" Grid.Row="0" Grid.RowSpan="6" BorderBrush="#000" BorderThickness="1,0,0,0" Margin="4,0,0,0"/>
-                        <Border Grid.Column="2" Grid.Row="0" Grid.RowSpan="6" BorderBrush="#bbb" BorderThickness="1,0,0,0" Margin="3,0,0,0"/>
+                            <Border Name="BorderTemp" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5" BorderBrush="#000" BorderThickness="0,0,0,1" Margin="0,0,0,-1"/>
+                            <Border Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5" BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="0,0,0,0"/>
+                            <Border Grid.Column="2" Grid.Row="0" Grid.RowSpan="6" BorderBrush="#000" BorderThickness="1,0,0,0" Margin="4,0,0,0"/>
+                            <Border Grid.Column="2" Grid.Row="0" Grid.RowSpan="6" BorderBrush="#bbb" BorderThickness="1,0,0,0" Margin="3,0,0,0"/>
 
-                        <Label        Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Style="{DynamicResource LableCustom}">Authorization</Label>
-                        <Label        Grid.Column="3" Grid.Row="0" Grid.ColumnSpan="2" Style="{DynamicResource LableCustom}">Filter</Label>
+                            <Label        Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Style="{DynamicResource LableCustom}">Authorization</Label>
+                            <Label        Grid.Column="3" Grid.Row="0" Grid.ColumnSpan="2" Style="{DynamicResource LableCustom}">Filter</Label>
 
-                        <Label        Grid.Column="0" Grid.Row="2" VerticalAlignment="Center">Address:</Label>
-                        <Label        Grid.Column="0" Grid.Row="3" VerticalAlignment="Center">User Name:</Label>
-                        <Label        Grid.Column="0" Grid.Row="4" VerticalAlignment="Center">Password:</Label>
-                        <Label        Grid.Column="0" Grid.Row="5" VerticalAlignment="Center">Timeout:</Label>
+                            <Label        Grid.Column="0" Grid.Row="2" VerticalAlignment="Center">Address:</Label>
+                            <Label        Grid.Column="0" Grid.Row="3" VerticalAlignment="Center">User Name:</Label>
+                            <Label        Grid.Column="0" Grid.Row="4" VerticalAlignment="Center">Password:</Label>
+                            <Label        Grid.Column="0" Grid.Row="5" VerticalAlignment="Center">Timeout:</Label>
 
-                        <Label        Grid.Column="3" Grid.Row="2" VerticalAlignment="Center">Start:</Label>
-                        <Label        Grid.Column="3" Grid.Row="3" VerticalAlignment="Center">Folder:</Label>
-                        <Label        Grid.Column="3" Grid.Row="4" VerticalAlignment="Center">From:</Label>
-                        <Label        Grid.Column="3" Grid.Row="5" VerticalAlignment="Center" Content="Subject:" />
+                            <Label        Grid.Column="3" Grid.Row="2" VerticalAlignment="Center">Start:</Label>
+                            <Label        Grid.Column="3" Grid.Row="3" VerticalAlignment="Center">Folder:</Label>
+                            <Label        Grid.Column="3" Grid.Row="4" VerticalAlignment="Center">From:</Label>
+                            <Label        Grid.Column="3" Grid.Row="5" VerticalAlignment="Center" Content="Subject:" />
 
-                        <TextBox      Grid.Column="1" Grid.Row="2" Name="MailAddress"       Margin="0 5 5 5"  ToolTip="Enter Address of mailbox" />
-                        <TextBox      Grid.Column="1" Grid.Row="3" Name="MailUserName"      Margin="0 5 5 5"  ToolTip="Enter Domain\UserName of mailbox" />
-                        <PasswordBox  Grid.Column="1" Grid.Row="4" Name="MailPassword"      Margin="0 5 5 5"  ToolTip="Enter Password of mailbox" />
-                        <TextBox      Grid.Column="1" Grid.Row="5" Name="AuthorTimeout"     Margin="0 5 5 5"  ToolTip="Enter Authorization Timeout in sec." />
-                        
-                        <DatePicker   Grid.Column="4" Grid.Row="2" Name="FilterStartDate"   Margin="0 5 5 5"  ToolTip="Get mails between start date and current date" SelectedDate="{x:Static sys:DateTime.Now}" />
-                        <TextBox      Grid.Column="4" Grid.Row="3" Name="FilterFolder"      Margin="0 5 5 5"  ToolTip="Read letters from a Folder" />
-                        <TextBox      Grid.Column="4" Grid.Row="4" Name="FilterFrom"        Margin="0 5 5 5"  ToolTip="Filter mail address by Regex expression" />
-                        <TextBox      Grid.Column="4" Grid.Row="5" Name="FilterSubject"     Margin="0 5 5 5"  ToolTip="Filter mail subject by Regex expression" />
-                    </Grid>
+                            <TextBox      Grid.Column="1" Grid.Row="2" Name="MailAddress"       Margin="0 5 5 5"  ToolTip="Enter Address of mailbox" />
+                            <TextBox      Grid.Column="1" Grid.Row="3" Name="MailUserName"      Margin="0 5 5 5"  ToolTip="Enter Domain\UserName of mailbox" />
+                            <PasswordBox  Grid.Column="1" Grid.Row="4" Name="MailPassword"      Margin="0 5 5 5"  ToolTip="Enter Password of mailbox" />
+                            <TextBox      Grid.Column="1" Grid.Row="5" Name="AuthorTimeout"     Margin="0 5 5 5"  ToolTip="Enter Authorization Timeout in sec." />
 
-                    <Border BorderBrush="#000" BorderThickness="0,0,0,1" Margin="0,0,0,-6"/>
-                    <Border BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="0,0,0,-5"/>
+                            <DatePicker   Grid.Column="4" Grid.Row="2" Name="FilterStartDate"   Margin="0 5 5 5"  ToolTip="Get mails between start date and current date" SelectedDate="{x:Static sys:DateTime.Now}" />
+                            <TextBox      Grid.Column="4" Grid.Row="3" Name="FilterFolder"      Margin="0 5 5 5"  ToolTip="Read letters from a Folder" />
+                            <TextBox      Grid.Column="4" Grid.Row="4" Name="FilterFrom"        Margin="0 5 5 5"  ToolTip="Filter mail address by Regex expression" />
+                            <TextBox      Grid.Column="4" Grid.Row="5" Name="FilterSubject"     Margin="0 5 5 5"  ToolTip="Filter mail subject by Regex expression" />
+                        </Grid>
 
-                    <Grid Margin="0 10 0 5">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition MaxWidth="93"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Label     Grid.Column="0" Grid.Row="0"  VerticalAlignment="Center">Exchange Uri:</Label>
-                        <TextBox   Grid.Column="1" Grid.Row="0"  Name="MailExchangeUri" Margin="5" ToolTip="etc.: https://{myserver}/ews/exchange.asmx" />
-                        <CheckBox  Grid.Column="0" Grid.Row="1"  Grid.ColumnSpan="2" Name="SetDebugLogging" Margin="5" VerticalAlignment="Center" ToolTip="Enable Debug Logging" HorizontalAlignment="Left">Debug Log</CheckBox>
-                    </Grid>
+                        <Border BorderBrush="#000" BorderThickness="0,0,0,1" Margin="0,0,0,-6"/>
+                        <Border BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="0,0,0,-5"/>
 
-                    <Border BorderBrush="#000" BorderThickness="0,0,0,1" Margin="0,0,0,-2"/>
-                    <Border BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="0,0,0,0"/>
+                        <Grid Margin="0 10 0 5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition MaxWidth="93"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Label     Grid.Column="0" Grid.Row="0"  VerticalAlignment="Center">Exchange Uri:</Label>
+                            <TextBox   Grid.Column="1" Grid.Row="0"  Name="MailExchangeUri" Margin="5" ToolTip="etc.: https://{myserver}/ews/exchange.asmx" />
+                            <CheckBox  Grid.Column="0" Grid.Row="1"  Grid.ColumnSpan="2" Name="SetDebugLogging" Margin="5" VerticalAlignment="Center" ToolTip="Enable Debug Logging" HorizontalAlignment="Left">Debug Log</CheckBox>
+                        </Grid>
 
-                    <Label Name="LableParceSubject" VerticalAlignment="Center" >111</Label>
-                    <Grid MinWidth="445" Margin="0 0 0 5">
-                        <TextBox Name="RegexSubjectParce" Margin="5"  ToolTip="Regex Pattern For Parce Subject" />
-                    </Grid>
+                        <Border BorderBrush="#000" BorderThickness="0,0,0,1" Margin="0,0,0,-2"/>
+                        <Border BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="0,0,0,0"/>
 
-                    <Border BorderBrush="#000" BorderThickness="0,0,0,1" Margin="0,0,0,-2"/>
-                    <Border BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="0,0,0,0"/>
+                        <Label Name="LableParceSubject" VerticalAlignment="Center" >111</Label>
+                        <TextBox Name="RegexSubjectParce" Margin="5 5 5 10"  ToolTip="Regex Pattern For Parce Subject" AutoWordSelection="False" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True"/>
 
-                    <Label Name="LableParceBody"   VerticalAlignment="Center" >222</Label>
-                    <Grid MinWidth="445" >
-                        <TextBox Name="RegexBodyParce" Margin="5" ToolTip="Regex Pattern For Parce Body" />
-                    </Grid>
-                </StackPanel>
+                        <Border BorderBrush="#000" BorderThickness="0,0,0,1" Margin="0,0,0,-2"/>
+                        <Border BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="0,0,0,0"/>
+
+                        <Label Name="LableParceBody"   VerticalAlignment="Center" >222</Label>
+                        <TextBox  MaxHeight="70" Name="RegexBodyParce" Margin="5" ToolTip="Regex Pattern For Parce Body" AutoWordSelection="False" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" />
+
+                    </StackPanel>
+                </ScrollViewer>
             </TabItem>
             <TabItem Header="TFS Options" Name="TFSOptTab">
 				<!--<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Margin="0,0,0,10" VerticalAlignment="Top">-->
@@ -230,7 +228,7 @@
 					<ColumnDefinition/>
 				</Grid.ColumnDefinitions>
 				<Label    Grid.Column="0" Margin="5 0 0 0" VerticalAlignment="Center">Interval:</Label>
-				<TextBox Name="IntervalTextBox" Grid.Column="1" Margin="0 0 5 0" HorizontalAlignment="Stretch" ToolTip="Interval in seconds, to read new messages" />
+				<TextBox Name="IntervalTextBox" Grid.Column="1" Margin="0 0 5 0" Height="28" HorizontalAlignment="Stretch" ToolTip="Interval in seconds, to read new messages" />
 			</Grid>
             <CheckBox  Grid.Column="1" Name="CreateBoot" Margin="5" VerticalAlignment="Center" ToolTip="Enable Instant Upload" HorizontalAlignment="Left">BootRun</CheckBox>
 			<Button    Grid.Column="2" Name="ButtonStart" Height="40" IsDefault="True" IsEnabled="False" Margin="10 0" MaxWidth="120" HorizontalAlignment="Right" Width="120" Content="Start" FontSize="20" Click="ButtonBase_OnClick"/>
