@@ -35,15 +35,23 @@ namespace Script.Control.Handlers.Timesheet.Stats
 
             foreach (string item in groupBy)
             {
-                string groupName = item.Substring(0, item.IndexOf('['));
-                string projects = item.Substring(item.IndexOf('[') + 1, item.IndexOf(']') - item.IndexOf('[') - 1);
-                string[] projects_collection = projects.Split(',');
-                if (!string.IsNullOrEmpty(projects.Trim()))
-                    parentGroups.Add(groupName, projects_collection);
-                else
+                try
                 {
-                    OTHER_STAT = groupName;
-                    parentGroups.Add(OTHER_STAT, new string[] { });
+                    string groupName = item.Substring(0, item.IndexOf('['));
+                    string projects = item.Substring(item.IndexOf('[') + 1, item.IndexOf(']') - item.IndexOf('[') - 1);
+                    string[] projects_collection = projects.Split(',');
+                    if (!string.IsNullOrEmpty(projects.Trim()))
+                        parentGroups.Add(groupName, projects_collection);
+                    else
+                    {
+                        OTHER_STAT = groupName;
+                        parentGroups.Add(OTHER_STAT, new string[] {
+                                                                  });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Please check your GroupBy format. Example: \"GROUP_NAME_1[VALUE_1,VALUE_2];GROUP_NAME_2[VALUE_1,VALUE_2]\"", ex);
                 }
             }
         }
