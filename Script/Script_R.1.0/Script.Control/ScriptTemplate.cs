@@ -165,7 +165,12 @@ namespace Script.Control
             LogShell = logFill;
         }
 
-
+        /// <summary>
+        /// Основной метод, который ищет созданные объекты по названию нод в xml конфиге
+        /// </summary>
+        /// <param name="parentPack"></param>
+        /// <param name="node"></param>
+        /// <returns></returns>
         public override XPack GetNewXPack(XPack parentPack, XmlNode node)
         {
             if (node.Name.Equals(GetType().Name, StringComparison.CurrentCultureIgnoreCase))
@@ -202,9 +207,9 @@ namespace Script.Control
 
         }
 
-        XPack CreateNewHandler(string assebly, string className, XPack parentPack, XmlNode node)
+        XPack CreateNewHandler(string assembly, string className, XPack parentPack, XmlNode node)
         {
-            string verifyAssembly = assebly;
+            string verifyAssembly = assembly;
             if (!File.Exists(verifyAssembly))
                 throw new HandlerInitializationException("Assembly=[{0}] Not Found!", verifyAssembly);
 
