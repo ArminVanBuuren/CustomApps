@@ -191,7 +191,7 @@ namespace Script.Control.Handlers
                 List<TFS> tfss = project.Where(tfs => tfs.Fid >= FidStart && tfs.Fid <= FidEnd).ToList();
                 if (tfss.Any())
                 {
-                    TFSProject prj = new TFSProject(project.Name);
+                    TFSProject prj = new TFSProject(project.Name, project.PM, project.PM_Mail);
                     prj.AddRange(tfss);
                     prjs.Add(prj);
                 }
@@ -200,7 +200,7 @@ namespace Script.Control.Handlers
             Statistic stats = new Statistic(projects.Autorization.FullName, groupBy);
             foreach (TFSProject proj in prjs)
             {
-                Statistic childProject = new Statistic(proj.Name);
+                Statistic childProject = new Statistic(proj.Name, proj.PM, proj.PM_Mail);
                 var ff = proj.GroupBy(s => s.Id).Select(grp => grp.ToList()).ToList();
                 foreach (List<TFS> tf in ff)
                 {

@@ -13,14 +13,25 @@ namespace Script.Control.Handlers.Timesheet.Stats
         private Dictionary<string, string[]> parentGroups;
         public List<Statistic> ChildItems { get; private set; }
         public string Name { get; }
+        public string PM { get; }
+        public string PM_Mail { get; }
         public virtual DateTime PeriodStart => ChildItems.Min(m => m.PeriodStart);
         public virtual DateTime PeriodEnd => ChildItems.Max(m => m.PeriodEnd);
         public virtual double TotalTimeByAnyDay => ChildItems.Sum(x => x.TotalTimeByAnyDay);
-        public Statistic(string name)
+
+        public Statistic(string name) :this(name, string.Empty, string.Empty)
+        {
+
+        }
+
+        public Statistic(string name, string pm, string pm_mail)
         {
             Name = name;
+            PM = pm;
+            PM_Mail = pm_mail;
             ChildItems = new List<Statistic>();
         }
+
         public Statistic(string name, string[] groupBy)
         {
             Name = name;

@@ -47,7 +47,8 @@ namespace Script.Control.Handlers.Timesheet.WriteData
                 headerRange.Font.ColorIndex = WdColorIndex.wdRed;
                 headerRange.Font.Size = 8;
                 //headerRange.Font.Bold = 1;
-                headerRange.Text = TimesheetHandler.TIMESHEET_NAME;
+                
+                //headerRange.Text = TimesheetHandler.TIMESHEET_NAME;
             }
         }
 
@@ -91,7 +92,7 @@ namespace Script.Control.Handlers.Timesheet.WriteData
             }
         }
 
-        public void AddCellsData(string projectName, string stringStat, string tfsCollection)
+        public void AddCellsData(string projectName, string pm, string pm_mail, string stringStat, string tfsCollection)
         {
             WordTable.Rows.Add();
             row++;
@@ -101,7 +102,7 @@ namespace Script.Control.Handlers.Timesheet.WriteData
             WordTable.Rows[row].Range.GrammarChecked = false;
             WordTable.Rows[row].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
             WordTable.Cell(row, 1).WordWrap = true;
-            WordTable.Cell(row, 1).Range.Text = ReplaceWordText(projectName);
+            WordTable.Cell(row, 1).Range.Text = ReplaceWordText(projectName) + "\v" + "PM: " + pm;
             WordTable.Cell(row, 1).Range.Borders[WdBorderType.wdBorderTop].LineStyle =  WdLineStyle.wdLineStyleSingle;
             WordTable.Cell(row, 2).Range.Text = ReplaceWordText(stringStat);
 

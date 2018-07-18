@@ -59,6 +59,8 @@ namespace Script.Control.Handlers.Timesheet.Project
             {
                 XmlNode newNode = findedNode.Clone();
                 var temp_prjName = newNode.SelectSingleNode("//td[@class='SIT_TAB_tblcelprj']/text()") ?? newNode.SelectSingleNode("//td[@class='SIT_TAB_tblcelprj SIT_TAB_tblcel_filling']/text()");
+                var temp_PM = newNode.SelectSingleNode("//td[@class='SIT_TAB_tblcelprj']/a/text()") ?? newNode.SelectSingleNode("//td[@class='SIT_TAB_tblcelprj SIT_TAB_tblcel_filling']/a/text()");
+                var temp_PM_Mail = newNode.SelectSingleNode("//td[@class='SIT_TAB_tblcelprj']/a/@href") ?? newNode.SelectSingleNode("//td[@class='SIT_TAB_tblcelprj SIT_TAB_tblcel_filling']/a/@href");
                 if (temp_prjName != null)
                 {
                     string prjName = temp_prjName.Value.Trim();
@@ -69,7 +71,7 @@ namespace Script.Control.Handlers.Timesheet.Project
                     }
                     else
                     {
-                        tfsList = new TFSProject(prjName);
+                        tfsList = new TFSProject(prjName, temp_PM?.Value.Trim(), temp_PM_Mail?.Value.Trim());
                         tfsList.Add(new TFS(newNode, fid, monthPeriod));
                         Add(tfsList);
                     }

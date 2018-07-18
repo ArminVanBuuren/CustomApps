@@ -56,7 +56,7 @@ namespace Script.Control.Handlers.Timesheet.WriteData
 
                 foreach (Statistic statTfsPrj in sortedCollection)
                 {
-                    wd.AddCellsData(statTfsPrj.Name, statTfsPrj.GetStat(), string.Join(Environment.NewLine, statTfsPrj.ChildItems.Select(x => x.GetStat())));
+                    wd.AddCellsData(statTfsPrj.Name, statTfsPrj.PM, statTfsPrj.PM_Mail, statTfsPrj.GetStat(), string.Join(Environment.NewLine, statTfsPrj.ChildItems.Select(x => x.GetStat())));
                 }
 
                 wd.AddTableFooter(statByGroup.GetStat());
