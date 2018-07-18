@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace TFSGeneration.Control
+namespace TFSAssist.Control
 {
     public static class CertificateCallback
     {

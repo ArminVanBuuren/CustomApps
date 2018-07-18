@@ -1,4 +1,4 @@
-﻿namespace TFSGeneration.Trash
+﻿namespace TFSAssist.Trash
 {
 	class Trash
 	{

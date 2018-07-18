@@ -1,7 +1,7 @@
 ﻿using System.Windows;
-using TFSGeneration.Themes;
+using TFSAssist.Themes;
 
-namespace TFSGeneration
+namespace TFSAssist
 {
 	/// <summary>
 	/// Логика взаимодействия для WindowWarning.xaml

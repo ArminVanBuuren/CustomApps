@@ -7,8 +7,8 @@
     <ProjectGuid>{E53CB879-B60B-4679-82D8-EFCCA6F0520A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TFSGeneration.Control</RootNamespace>
-    <AssemblyName>TFSGeneration.Control</AssemblyName>
+    <RootNamespace>TFSAssist.Control</RootNamespace>
+    <AssemblyName>TFSAssist.Control</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>

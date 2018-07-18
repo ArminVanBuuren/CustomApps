@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TFSGeneration.Control.ConditionEx.Collections
+namespace TFSAssist.Control.ConditionEx.Collections
 {
     /// <summary>
     /// колличество условных блоков в связке and или or

@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
-using TFSGeneration.Control.Utils;
+using TFSAssist.Control.Utils;
 
-namespace TFSGeneration.Control.DataBase.Settings
+namespace TFSAssist.Control.DataBase.Settings
 {
     [Serializable]
 	public class SettingValue<T> : INotifyPropertyChanged
@@ -50,11 +49,11 @@ namespace TFSGeneration.Control.DataBase.Settings
         {
             get
             {
-                return CustomFunc.EnabledBootRun(TFSControl.ApplicationName);
+                return CustomFunc.EnabledBootRun(TFSAssist.Control.TFSControl.ApplicationName);
             }
             set
             {
-                CustomFunc.SetBootStartup(TFSControl.ApplicationName, TFSControl.ApplicationPath, value);
+                CustomFunc.SetBootStartup(TFSAssist.Control.TFSControl.ApplicationName, TFSAssist.Control.TFSControl.ApplicationPath, value);
                 base.Value = value;
             }
         }

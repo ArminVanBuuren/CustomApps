@@ -2,19 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Security;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Microsoft.Exchange.WebServices.Data;
 using Microsoft.TeamFoundation.Client;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
-using TFSGeneration.Control.DataBase;
-using TFSGeneration.Control.DataBase.Datas;
-using TFSGeneration.Control.DataBase.Settings;
-using TFSGeneration.Control.Utils;
+using TFSAssist.Control.DataBase;
+using TFSAssist.Control.DataBase.Datas;
+using TFSAssist.Control.DataBase.Settings;
 
-namespace TFSGeneration.Control
+namespace TFSAssist.Control
 {
     public sealed partial class TFSControl
     {
@@ -120,7 +118,7 @@ namespace TFSGeneration.Control
                     _mailPassword.AppendChar(ch);
 
 
-            if (!Settings.MailOption.ExchangeUri.Value.IsNullOrEmptyTrim() && !Settings.MailOption.UserName.Value.IsNullOrEmptyTrim())
+            if (!TM.IsNullOrEmptyTrim(Settings.MailOption.ExchangeUri.Value) && !TM.IsNullOrEmptyTrim(Settings.MailOption.UserName.Value))
             {
                 string[] domain_username = Settings.MailOption.UserName.Value.Split('\\');
                 if (domain_username.Length != 2 || domain_username[0].IsNullOrEmpty() || domain_username[1].IsNullOrEmpty())
@@ -130,7 +128,7 @@ namespace TFSGeneration.Control
                 _exchangeService.Url = new Uri(Settings.MailOption.ExchangeUri.Value);
                 //AlternateIdBase response = _exchangeService.ConvertId(new AlternateId(IdFormat.EwsId, "Placeholder", domain_username[1].Trim()), IdFormat.EwsId);
             }
-            else if (!Settings.MailOption.Address.Value.IsNullOrEmptyTrim() && _checkEmailAddress.IsMatch(Settings.MailOption.Address.Value)) // Необходим только Email Address и пароль, т.к. вызывается другой способ подключения
+            else if (!TM.IsNullOrEmptyTrim(Settings.MailOption.Address.Value) && _checkEmailAddress.IsMatch(Settings.MailOption.Address.Value)) // Необходим только Email Address и пароль, т.к. вызывается другой способ подключения
             {
                 _exchangeService.Credentials = new NetworkCredential(Settings.MailOption.Address.Value, _mailPassword);
                 _exchangeService.AutodiscoverUrl(Settings.MailOption.Address.Value, RedirectionUrlValidationCallback);
@@ -142,9 +140,9 @@ namespace TFSGeneration.Control
             {
                 throw new ArgumentException(string.Format(
                     "Mail Address=[{0}] Or Domain\\Username=[{1}] With ExchangeUri=[{2}] is Incorrect! Please check fields.",
-                    Settings.MailOption.Address.Value.ToStringIsNullOrEmptyTrim(),
-                    Settings.MailOption.UserName.Value.ToStringIsNullOrEmptyTrim(),
-                    Settings.MailOption.ExchangeUri.Value.ToStringIsNullOrEmptyTrim()));
+                    TM.ToStringIsNullOrEmptyTrim(Settings.MailOption.Address.Value),
+                    TM.ToStringIsNullOrEmptyTrim(Settings.MailOption.UserName.Value),
+                    TM.ToStringIsNullOrEmptyTrim(Settings.MailOption.ExchangeUri.Value)));
             }
 
             // проверяем коннект к почтовому серверу
@@ -189,7 +187,7 @@ namespace TFSGeneration.Control
             Uri collectionUri = new Uri(Settings.TFSOption.TFSUri.Value);
 
             // Коннект по кастомному логину и паролю
-            if (!Settings.TFSOption.TFSUserName.Value.IsNullOrEmptyTrim())
+            if (!TM.IsNullOrEmptyTrim(Settings.TFSOption.TFSUserName.Value))
             {
                 string[] tfs_domain_username = Settings.TFSOption.TFSUserName.Value.Split('\\');
                 if (tfs_domain_username.Length != 2 || tfs_domain_username[0].IsNullOrEmpty() || tfs_domain_username[1].IsNullOrEmpty())
@@ -446,7 +444,7 @@ namespace TFSGeneration.Control
             {
                 parced.Add(new DataMail
                 {
-                    Name = string.Format("{0}_{1}", nameof(Settings.MailOption.ParceSubject), match),
+                    Name = string.Format("{0}_{1}", nameof(OptionMail.ParceSubject), match),
                     Value = fromSubject[match].Value
                 });
             }
@@ -456,7 +454,7 @@ namespace TFSGeneration.Control
             {
                 parced.Add(new DataMail
                 {
-                    Name = string.Format("{0}_{1}", nameof(Settings.MailOption.ParceBody), match),
+                    Name = string.Format("{0}_{1}", nameof(OptionMail.ParceBody), match),
                     Value = fromBody[match].Value
                 });
 

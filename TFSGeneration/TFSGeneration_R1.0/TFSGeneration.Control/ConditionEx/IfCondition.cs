@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Text;
-using TFSGeneration.Control.ConditionEx.Utils;
+using TFSAssist.Control.ConditionEx.Utils;
 
-namespace TFSGeneration.Control.ConditionEx
+namespace TFSAssist.Control.ConditionEx
 {
 	public class IfConditionException : Exception
 	{

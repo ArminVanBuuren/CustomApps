@@ -10,7 +10,7 @@ using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.XPath;
 
-namespace TFSGeneration.Control.ConditionEx.Utils
+namespace TFSAssist.Control.ConditionEx.Utils
 {
 	public class StaffFunk
 	{

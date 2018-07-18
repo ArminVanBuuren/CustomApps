@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using TFSGeneration.Control.ConditionEx.Base;
-using TFSGeneration.Control.ConditionEx.Utils;
+using TFSAssist.Control.ConditionEx.Base;
+using TFSAssist.Control.ConditionEx.Utils;
 
-namespace TFSGeneration.Control.ConditionEx.Collections
+namespace TFSAssist.Control.ConditionEx.Collections
 {
     internal class ConditionBlock : List<Condition>
     {

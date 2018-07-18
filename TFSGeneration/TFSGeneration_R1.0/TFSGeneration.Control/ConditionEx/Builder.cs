@@ -1,7 +1,7 @@
-﻿using TFSGeneration.Control.ConditionEx.Base;
-using TFSGeneration.Control.ConditionEx.Collections;
+﻿using TFSAssist.Control.ConditionEx.Base;
+using TFSAssist.Control.ConditionEx.Collections;
 
-namespace TFSGeneration.Control.ConditionEx
+namespace TFSAssist.Control.ConditionEx
 {
     internal class Builder
     {

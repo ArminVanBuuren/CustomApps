@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
-using TFSGeneration.Control.Utils;
 
-namespace TFSGeneration.Control.DataBase.Settings
+namespace TFSAssist.Control.DataBase.Settings
 {
     [Serializable, XmlRoot("Settings")]
 	public class SettingsCollection

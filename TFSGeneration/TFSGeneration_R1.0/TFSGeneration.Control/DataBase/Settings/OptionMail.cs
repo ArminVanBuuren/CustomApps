@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace TFSGeneration.Control.DataBase.Settings
+namespace TFSAssist.Control.DataBase.Settings
 {
 	[XmlRoot("MailOption", IsNullable = false)]
 	public class OptionMail

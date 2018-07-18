@@ -1,17 +1,15 @@
 ﻿using System;
 using System.IO;
-using System.Net.Mime;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using System.Xml.Serialization;
-using TFSGeneration.Control.Utils;
-using static TFSGeneration.Control.Utils.Crypto;
-using TFSGeneration.Control.DataBase.Datas;
-using TFSGeneration.Control.DataBase.Settings;
+using TFSAssist.Control.DataBase.Datas;
+using TFSAssist.Control.DataBase.Settings;
+using TFSAssist.Control.Utils;
 
-namespace TFSGeneration.Control
+namespace TFSAssist.Control
 {
     public delegate void NotifyStatusHandler(string message);
     public delegate void WriteLogHandler(string stackTrace);
@@ -67,9 +65,9 @@ namespace TFSGeneration.Control
         /// Получить TFSControl
         /// </summary>
         /// <returns></returns>
-        public static TFSControl GetControl()
+        public static TFSAssist.Control.TFSControl GetControl()
         {
-            TFSControl tfsControl = null;
+            TFSAssist.Control.TFSControl tfsControl = null;
 
             //десериализация необходимых свойств класса TFSControl
             if (File.Exists(AccountStorePath))
@@ -78,7 +76,7 @@ namespace TFSGeneration.Control
                 {
                     using (Stream stream = new FileStream(AccountStorePath, FileMode.Open, FileAccess.Read))
                     {
-                        tfsControl = new BinaryFormatter().Deserialize(stream) as TFSControl;
+                        tfsControl = new BinaryFormatter().Deserialize(stream) as TFSAssist.Control.TFSControl;
                     }
                 }
                 catch (Exception ex)
@@ -89,7 +87,7 @@ namespace TFSGeneration.Control
             }
 
             if (tfsControl == null)
-                tfsControl = new TFSControl();
+                tfsControl = new TFSAssist.Control.TFSControl();
 
             return tfsControl;
         }
@@ -159,13 +157,13 @@ namespace TFSGeneration.Control
                                 string settValue = result.Value as string;
                                 if (settValue == null)
                                     continue;
-                                prop.SetValue(tpObj, new SettingValue<string> {Value = DecryptStringAES(settValue, RegeditKey)});
+                                prop.SetValue(tpObj, new SettingValue<string> {Value = Crypto.DecryptStringAES(settValue, RegeditKey)});
                             }
                         }
                     }
                 }
             }
-            catch (CryptoException ex)
+            catch (Crypto.CryptoException ex)
             {
                 //расшифровка файла неудачна, возможно если ключ в реестре отличается от ключа зашифрованных значений
                 NotifyUserIfHasError(WarnSeverity.Attention, string.Format(NotifyDeSerializetionFailor, AccountStorePath), ex, true);
@@ -208,7 +206,7 @@ namespace TFSGeneration.Control
 
 
                         SettingValue<string> fieldTextBox = (SettingValue<string>)prop.GetValue(tpObj);
-                        propertyBag.AddValue(prop.Name, EncryptStringAES(fieldTextBox.Value, RegeditKey));
+                        propertyBag.AddValue(prop.Name, Crypto.EncryptStringAES(fieldTextBox.Value, RegeditKey));
                         break;
                     }
                 }

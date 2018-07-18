@@ -1,5 +1,5 @@
 ﻿
-namespace TFSGeneration.Control
+namespace TFSAssist.Control
 {
 	public static class TM
 	{

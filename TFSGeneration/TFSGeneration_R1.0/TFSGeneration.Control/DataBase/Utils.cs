@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace TFSGeneration.Control.DataBase
+namespace TFSAssist.Control.DataBase
 {
 	public static class Utils
 	{

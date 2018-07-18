@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TFSGeneration.Control.DataBase.Settings
+namespace TFSAssist.Control.DataBase.Settings
 {
 	[Serializable]
 	public class TFSFieldsException : Exception

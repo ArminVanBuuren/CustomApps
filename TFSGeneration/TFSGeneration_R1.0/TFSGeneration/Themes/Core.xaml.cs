@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-//using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
-using System.Xml.Serialization;
+//using System.Globalization;
 
-namespace TFSGeneration.Themes
+namespace TFSAssist.Themes
 {
 	public class FontSizeExtension : MarkupExtension
 	{

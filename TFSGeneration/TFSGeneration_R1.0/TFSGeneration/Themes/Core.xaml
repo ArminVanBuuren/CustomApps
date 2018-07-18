@@ -1,7 +1,7 @@
-﻿<ResourceDictionary x:Class="TFSGeneration.Themes.Core"
+﻿<ResourceDictionary x:Class="TFSAssist.Themes.Core"
                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:TFSGeneration.Themes">
+                    xmlns:local="clr-namespace:TFSAssist.Themes">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="../Themes/Brushes.xaml" />
@@ -2959,7 +2959,7 @@
     </Style>
 
 
-	<local:DateTimeConverter x:Key="DateTimeConverter"/>
+    <local:DateTimeConverter x:Key="DateTimeConverter"/>
 	
 	<!-- DatePicker -->
 	<Style TargetType="{x:Type DatePicker}">

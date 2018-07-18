@@ -1,13 +1,14 @@
-﻿<customizedWindow:WindowNew x:Class="TFSGeneration.WindowWarning"
+﻿<themes:WindowNew x:Class="TFSAssist.WindowWarning"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TFSGeneration"
+        xmlns:local="clr-namespace:TFSAssist"
         mc:Ignorable="d"
         Icon="Images/WarningIcon.ico"
         Title="Attention!"
-        xmlns:customizedWindow="clr-namespace:TFSGeneration.Themes"
+        xmlns:customizedWindow="clr-namespace:TFSAssist.Themes"
+        xmlns:themes="clr-namespace:TFSAssist.Themes"
         ResizeMode="NoResize"
         Style="{StaticResource VS2012WindowStyle}"
         MaxWidth="525" 
@@ -30,4 +31,5 @@
 		<Button Grid.Row="1" Margin="5" Height="25" Width="50" Content="OK" Click="Button_Click" />
 	</Grid>
 	
-</customizedWindow:WindowNew>
+</themes:WindowNew>
+

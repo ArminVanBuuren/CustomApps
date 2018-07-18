@@ -3,7 +3,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace TFSGeneration.Control.Utils
+namespace TFSAssist.Control.Utils
 {
 	internal class Crypto
 	{

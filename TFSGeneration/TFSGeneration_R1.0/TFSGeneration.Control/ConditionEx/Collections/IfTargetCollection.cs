@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TFSGeneration.Control.ConditionEx.Collections
+namespace TFSAssist.Control.ConditionEx.Collections
 {
     internal class IfTargetCollection : List<IfTarget>
     {

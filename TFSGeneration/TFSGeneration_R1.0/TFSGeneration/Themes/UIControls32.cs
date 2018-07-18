@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 
-namespace TFSGeneration.Themes
+namespace TFSAssist.Themes
 {
     public class WOSVersion
     {

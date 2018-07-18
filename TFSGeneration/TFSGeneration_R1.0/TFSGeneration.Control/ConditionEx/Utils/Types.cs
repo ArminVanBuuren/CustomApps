@@ -2,7 +2,7 @@
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace TFSGeneration.Control.ConditionEx.Utils
+namespace TFSAssist.Control.ConditionEx.Utils
 {
 	public enum TypeParam
 	{

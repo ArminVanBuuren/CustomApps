@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 
-namespace TFSGeneration.Control.ConditionEx.Utils
+namespace TFSAssist.Control.ConditionEx.Utils
 {
 	public enum OSNames
 	{

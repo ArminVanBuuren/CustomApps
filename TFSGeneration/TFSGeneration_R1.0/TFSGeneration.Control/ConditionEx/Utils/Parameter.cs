@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TFSGeneration.Control.ConditionEx.Utils
+namespace TFSAssist.Control.ConditionEx.Utils
 {
 	public class Parameter : IDisposable
 	{

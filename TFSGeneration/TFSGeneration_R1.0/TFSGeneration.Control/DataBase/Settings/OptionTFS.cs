@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Xml;
+﻿using System.Xml;
 using System.Xml.Serialization;
-using TFSGeneration.Control.ConditionEx;
 
-namespace TFSGeneration.Control.DataBase.Settings
+namespace TFSAssist.Control.DataBase.Settings
 {
 	[XmlRoot("TFSOption")]
 	public class OptionTFS

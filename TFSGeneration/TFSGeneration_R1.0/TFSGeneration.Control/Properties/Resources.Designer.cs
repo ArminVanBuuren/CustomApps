@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TFSGeneration.Control.Properties {
+namespace TFSAssist.Control.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace TFSGeneration.Control.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TFSGeneration.Control.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TFSAssist.Control.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -67,7 +67,7 @@ namespace TFSGeneration.Control.Properties {
         ///  &lt;BootRun Value=&quot;false&quot; /&gt;
         ///  &lt;MailOption&gt;
         ///    &lt;ExchangeUri Value=&quot;https://e-mail.mts.ru/ews/exchange.asmx&quot; /&gt;
-        ///    &lt;StartDate Value=&quot;04.01.2018 12:40:06&quot; /&gt;
+        ///    &lt;StartDate Value=&quot;04.01.2018 12:40:00&quot; /&gt;
         ///    &lt;SourceFolder Value=&quot;jira&quot; /&gt;
         ///    &lt;FilterMailFrom Value=&quot;jira@mts.by&quot; /&gt;
         ///    &lt;FilterSubject Value=&quot;Приоритет&quot; /&gt;

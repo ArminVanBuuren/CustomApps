@@ -1,18 +1,11 @@
 using System;
-using System.ComponentModel;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
-namespace TFSGeneration.Themes
+namespace TFSAssist.Themes
 {
 	public partial class VS2012WindowStyle
 	{

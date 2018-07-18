@@ -1,6 +1,6 @@
-﻿using TFSGeneration.Control.ConditionEx.Utils;
+﻿using TFSAssist.Control.ConditionEx.Utils;
 
-namespace TFSGeneration.Control.ConditionEx.Base
+namespace TFSAssist.Control.ConditionEx.Base
 {
     internal class ComponentCondition
     {

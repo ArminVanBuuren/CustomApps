@@ -1,14 +1,14 @@
-﻿using Microsoft.Exchange.WebServices.Data;
-using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Text.RegularExpressions;
+using Microsoft.Exchange.WebServices.Data;
+using Microsoft.Win32;
 
-namespace TFSGeneration.Control.Utils
+namespace TFSAssist.Control.Utils
 {
 	public static class CustomFunc
 	{

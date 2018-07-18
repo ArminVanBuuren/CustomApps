@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
-using TFSGeneration.Control.ConditionEx;
+using TFSAssist.Control.ConditionEx;
 
-namespace TFSGeneration.Control.DataBase.Settings
+namespace TFSAssist.Control.DataBase.Settings
 {
     [XmlRoot("CreateTFS")]
     public class CreateTFS

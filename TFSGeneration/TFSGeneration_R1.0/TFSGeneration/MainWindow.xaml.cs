@@ -1,22 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
-using TFSGeneration.Control;
-using TFSGeneration.Control.DataBase.Settings;
-using TFSGeneration.Control.Utils;
+using TFSAssist.Control;
+using TFSAssist.Control.Utils;
 using Timer = System.Timers.Timer;
 
-namespace TFSGeneration
+namespace TFSAssist
 {
 
     public class LogFlowDocumentConverter : IValueConverter
