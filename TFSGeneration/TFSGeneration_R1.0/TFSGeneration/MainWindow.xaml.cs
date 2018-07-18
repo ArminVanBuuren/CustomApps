@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -52,6 +55,18 @@ namespace TFSAssist
 
         public MainWindow()
         {
+            // Проверить запущен ли уже экземпляр приложения, если запущен то не запускать новый
+            List<Process> processExists = Process.GetProcesses().Where(p => p.ProcessName == nameof(TFSAssist)).ToList();
+            if (processExists.Count > 1)
+            {
+                warnWindow = new WindowWarning(Width, WarnSeverity.Warning.ToString("G"), string.Format("{0} already started. Please check your notification area.", nameof(TFSAssist)));
+                warnWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                warnWindow.Focus();
+                warnWindow.ShowDialog();
+                Process.GetCurrentProcess().Kill();  // принудительно грохаем текущий процесс
+                return;
+            }
+
             System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor;
             InitializeComponent();
 
