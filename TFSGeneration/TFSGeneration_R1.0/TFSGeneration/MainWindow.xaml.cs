@@ -60,6 +60,7 @@ namespace TFSAssist
             if (processExists.Count > 1)
             {
                 warnWindow = new WindowWarning(Width, WarnSeverity.Warning.ToString("G"), string.Format("{0} already started. Please check your notification area.", nameof(TFSAssist)));
+                warnWindow.Topmost = true;
                 warnWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                 warnWindow.Focus();
                 warnWindow.ShowDialog();
