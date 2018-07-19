@@ -4,7 +4,7 @@
   <BootRun Value="false" />
   <MailOption>
     <ExchangeUri Value="https://e-mail.mts.ru/ews/exchange.asmx" />
-    <StartDate Value="04.01.2018 12:40:00" />
+    <StartDate Value="19.07.2018 09:00:00" />
     <SourceFolder Value="jira" />
     <FilterMailFrom Value="jira@mts.by" />
     <FilterSubject Value="Приоритет" />
@@ -13,7 +13,7 @@
     <ParceSubject><![CDATA[.+Приоритет:\s*\[(?<SEVERITY>.+?)\].+]]></ParceSubject>
   </MailOption>
   <TFSOption>
-    <TFSUri Value="https://tfs.bss.nvision-group.com" />
+    <TFSUri Value="https://tfs.mtsit.com" />
     <GetDublicateTFS>
       <![CDATA[SELECT [System.Id]
 FROM WorkItems
