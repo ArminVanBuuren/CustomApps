@@ -25,17 +25,21 @@ namespace Script.Control.Handlers.Timesheet.WriteData
                 objWord.Visible = true;
             objDoc = objWord.Documents.Add(ref oMissing, ref oMissing, ref oMissing, ref oMissing);
             objDoc.GrammarChecked = false;
+            
         }
 
 
         public void AddDocHeader(string fullUserName, string header)
         {
             wrdRng = objDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            
             Paragraph objPara = objDoc.Content.Paragraphs.Add(ref wrdRng);
             objPara.Range.InsertParagraphAfter();
             objPara.Range.Text = fullUserName + "\v" + ReplaceWordText(header) + "\v";
             objPara.Range.Font.Size = 16;
             objPara.Format.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+            objPara.LeftIndent = -45;
+
             //return;
             //Add header into the document
             foreach (Section section in objDoc.Sections)
@@ -58,11 +62,23 @@ namespace Script.Control.Handlers.Timesheet.WriteData
             wrdRng = objDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
             Paragraph objPara = objDoc.Content.Paragraphs.Add(ref wrdRng);
             objPara.Range.InsertParagraphAfter();
+            objPara.LeftIndent = -45;
+            objPara.RightIndent = -45;
+
             WordTable = objDoc.Tables.Add((Range) wrdRng, 2, numColumns, ref oMissing, ref oMissing);
-            WordTable.AllowAutoFit = true;
+            WordTable.AllowAutoFit = false;
+            //WordTable.PreferredWidth = 700;
+            WordTable.PreferredWidthType = WdPreferredWidthType.wdPreferredWidthAuto;
+
+            //WordTable.LeftPadding = 1;
+            //WordTable.RightPadding = 1;
+            //WordTable.Spacing = 0;
+
             WordTable.Borders.Enable = 1;
             WordTable.Range.ParagraphFormat.SpaceAfter = 7;
             WordTable.Range.GrammarChecked = false;
+            WordTable.Rows.LeftIndent = -45;
+
             WordTable.Rows[row].Range.Text = ReplaceWordText(tableHeader);
             WordTable.Rows[row].Range.Font.Bold = 1;
             WordTable.Rows[row].Range.Font.Size = 24;
@@ -70,11 +86,11 @@ namespace Script.Control.Handlers.Timesheet.WriteData
             WordTable.Rows[row].Range.Font.Name = "Times New Roman";
 
 
-            WordTable.Columns[2].Width = WordTable.Columns[1].Width - 100 + WordTable.Columns[2].Width;
-            WordTable.Columns[1].Width = 100;
+            WordTable.Columns[1].Width = 170;
+            WordTable.Columns[2].Width = 350;
+            
             WordTable.Rows[row].Cells[1].Merge(WordTable.Rows[row].Cells[2]);
             WordTable.Cell(row, 1).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
-
         }
 
         public void AddColumnsName(params string[] nameColumn)
@@ -96,14 +112,23 @@ namespace Script.Control.Handlers.Timesheet.WriteData
         {
             WordTable.Rows.Add();
             row++;
-            WordTable.Rows[row].Range.Font.Bold = 0;
             WordTable.Rows[row].Range.Font.Italic = 0;
             WordTable.Rows[row].Range.Font.Size = 11;
             WordTable.Rows[row].Range.GrammarChecked = false;
             WordTable.Rows[row].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
             WordTable.Cell(row, 1).WordWrap = true;
-            WordTable.Cell(row, 1).Range.Text = ReplaceWordText(projectName) + "\v" + "PM: " + pm;
+            WordTable.Cell(row, 1).Range.Font.Bold = 0;
+
+            // оттетинть Проект от PM
+            string project = ReplaceWordText(projectName);
+            WordTable.Cell(row, 1).Range.Text = project + "\v" + "PM: " + pm;
+            Microsoft.Office.Interop.Word.Range boldrange_1 = WordTable.Cell(row, 1).Range;
+            int prjStart = WordTable.Cell(row, 1).Range.Start;
+            boldrange_1.SetRange(prjStart, prjStart + project.Length);
+            boldrange_1.Bold = 1;
+
             WordTable.Cell(row, 1).Range.Borders[WdBorderType.wdBorderTop].LineStyle =  WdLineStyle.wdLineStyleSingle;
+            WordTable.Cell(row, 2).Range.Font.Bold = 0;
             WordTable.Cell(row, 2).Range.Text = ReplaceWordText(stringStat);
 
             //WordTable.Cell(row, 1).Range.Collapse(WdCollapseDirection.wdCollapseEnd);
@@ -111,19 +136,26 @@ namespace Script.Control.Handlers.Timesheet.WriteData
             //WordTable.Cell(row, 2).Width = WordTable.Cell(row, 1).Width - 100 + WordTable.Cell(row, 2).Width;
             //WordTable.Cell(row, 1).Width = 100;
 
+
+
+
+
+
             WordTable.Rows.Add();
             row++;
             WordTable.Rows[row].Range.Font.Bold = 0;
             WordTable.Rows[row].Range.Font.Italic = 0;
-            WordTable.Rows[row].Range.Font.Size = 8;
             WordTable.Rows[row].Range.GrammarChecked = false;
             WordTable.Rows[row].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
             WordTable.Cell(row, 1).WordWrap = true;
             WordTable.Cell(row, 1).Range.Borders[WdBorderType.wdBorderTop].LineStyle = WdLineStyle.wdLineStyleNone;
+            WordTable.Cell(row, 1).Range.Font.Size = 11;
             WordTable.Cell(row, 1).Range.Text = string.Empty;
+            WordTable.Cell(row, 2).Range.Font.Size = 8;
             WordTable.Cell(row, 2).Range.Text = ReplaceWordText(tfsCollection);
 
         }
+
         public void AddTableFooter(string footer)
         {
             WordTable.Rows.Add();
