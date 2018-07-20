@@ -70,6 +70,7 @@ namespace TFSAssist
             System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor;
             InitializeComponent();
 
+            Title = nameof(TFSAssist);
             Loaded += MainWindow_Loaded;
             Unloaded += MainWindow_Unloaded;
             Activated += MainWindow_Activated;

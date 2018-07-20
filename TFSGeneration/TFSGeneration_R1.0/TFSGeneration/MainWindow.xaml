@@ -10,7 +10,7 @@
                             
         
         Icon="Images/Rick.ico"
-        Title="TFS Assist" 
+        
                             
         MinWidth="545" Width="555"
         MinHeight="655" Height="655"
