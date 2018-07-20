@@ -25,7 +25,7 @@ AND [System.Title] Contains '%ParceBody_ITHD%']]>
         <WorkItem Condition="#{if('%ParceBody_REQTYPE%'^='Запрос на изменение')}" Value="Task">
           <Field Name="Control.AssignedTo" Value="Костюченко Ольга Вячеславовна" />
           <Field Name="System.Title" Value="[%ParceBody_ITHD%] %ParceBody_TITLE%" />
-          <Field Name="Sitronics.RND.StsProject" Value="B13002_MTSMinsk_TS_ALL_in_2017" />
+          <Field Name="Sitronics.RND.StsProject" Value="B13003_MTSMinsk_TS_FORIS_in_2018" />
           <Field Name="Sitronics.RND.Support.ServiceDeskCode" Value="%ParceBody_ITHD%" />
           <Field Name="Sitronics.RND.Region" Value="MTS.Bel" />
           <Field Name="Description" Value="&lt;p&gt;TFS Assist&lt;/p&gt;&lt;a href=&quot;%ParceBody_URL%&quot;&gt;%ParceBody_URL%&lt;/a&gt;" />
@@ -47,7 +47,7 @@ AND [System.Title] Contains '%ParceBody_ITHD%']]>
         <WorkItem Condition="#{if('%ParceBody_REQTYPE%'^='Вопрос')}" Value="Task">
           <Field Name="Control.AssignedTo" Value="Костюченко Ольга Вячеславовна" />
           <Field Name="System.Title" Value="[%ParceBody_ITHD%] %ParceBody_TITLE%" />
-          <Field Name="Sitronics.RND.StsProject" Value="B13002_MTSMinsk_TS_ALL_in_2017" />
+          <Field Name="Sitronics.RND.StsProject" Value="B13003_MTSMinsk_TS_FORIS_in_2018" />
           <Field Name="Sitronics.RND.Support.ServiceDeskCode" Value="%ParceBody_ITHD%" />
           <Field Name="Sitronics.RND.Region" Value="MTS.Bel" />
           <Field Name="Description" Value="&lt;p&gt;TFS Assist&lt;/p&gt;&lt;a href=&quot;%ParceBody_URL%&quot;&gt;%ParceBody_URL%&lt;/a&gt;" />
@@ -63,7 +63,7 @@ AND [System.Title] Contains '%ParceBody_ITHD%']]>
         <WorkItem Condition="#{if('%ParceBody_REQTYPE%'^='ошибка')}" Value="Issue">
           <Field Name="Control.AssignedTo" Value="Костюченко Ольга Вячеславовна" />
           <Field Name="System.Title" Value="[%ParceBody_ITHD%] %ParceBody_TITLE%" />
-          <Field Name="Sitronics.RND.StsProject" Value="B13002_MTSMinsk_TS_ALL_in_2017" />
+          <Field Name="Sitronics.RND.StsProject" Value="B13003_MTSMinsk_TS_FORIS_in_2018" />
           <Field Name="Sitronics.RND.Support.ServiceDeskCode" Value="%ParceBody_ITHD%" />
           <Field Name="Sitronics.RND.Region" Value="MTS.Bel" />
           <Field Name="Description" Value="&lt;p&gt;TFS Assist&lt;/p&gt;&lt;a href=&quot;%ParceBody_URL%&quot;&gt;%ParceBody_URL%&lt;/a&gt;" />
