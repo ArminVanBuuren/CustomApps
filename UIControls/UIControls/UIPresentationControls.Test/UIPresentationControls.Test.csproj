@@ -96,9 +96,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\UIPresentationControls\UIPresentationControls.csproj">
-      <Project>{efd2dc75-b791-4d2b-844c-d6b30cc7e2c9}</Project>
-      <Name>UIPresentationControls</Name>
+    <ProjectReference Include="..\UIControls\UIControls.csproj">
+      <Project>{7b033b56-cec2-41aa-9ea7-0b26000c324e}</Project>
+      <Name>UIControls</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

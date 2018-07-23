@@ -44,8 +44,8 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="UIPresentationControls">
-      <HintPath>..\..\UIControls\UIControls\UIPresentationControls\bin\Debug\UIPresentationControls.dll</HintPath>
+    <Reference Include="UIControls">
+      <HintPath>..\..\UIControls\UIControls\UIControls\bin\Debug\UIControls.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />

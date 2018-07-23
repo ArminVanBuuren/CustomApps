@@ -4,17 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WCFChat"
-        xmlns:mainControl="clr-namespace:UIPresentationControls.MainControl;assembly=UIPresentationControls"
+        xmlns:mainControl="clr-namespace:UIControls.MainControl;assembly=UIControls"
         mc:Ignorable="d"
-        Title="Chat" Height="350" Width="525"
-                      Style="{DynamicResource VSUIWindowStyle1}"
-                      >
+        Title="Chat" Height="350" Width="525" Style="{DynamicResource VSUIWindowStyle1}" >
 
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/UIPresentationControls;component/MainControl/UIWindowStyle.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/UIPresentationControls;component/Styles/Core.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/UIControls;component/MainControl/UIWindowStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/UIControls;component/Styles/Core.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <Style x:Key="VSUIWindowStyle1" TargetType="{x:Type mainControl:UIWindow}" BasedOn="{StaticResource VSUIWindowStyle}" />
         </ResourceDictionary>
