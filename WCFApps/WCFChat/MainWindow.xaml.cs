@@ -12,16 +12,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using UIPresentationControls.MainControl;
 
-namespace UIPresentationControls.Test
+namespace WCFChat
 {
     /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
+    /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow
+    public partial class MainWindow : Window
     {
-        public MainWindow ()
+        public MainWindow()
         {
             InitializeComponent();
         }

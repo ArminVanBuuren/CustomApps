@@ -1,15 +1,21 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Security.Policy;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
+using System.Windows.Markup;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
+using UIPresentationControls.Utils;
 
-namespace TFSAssist.Themes
+namespace UIPresentationControls.MainControl
 {
-    public class WindowNew : Window
+    public partial class UIWindow : Window
     {
         //static WindowNew()
         //{
@@ -25,13 +31,28 @@ namespace TFSAssist.Themes
         private bool _isBlured, _isBlured2;
         public bool CanDragMove { get; private set; } = true;
         public bool PanelItemsIsVisible { get; private set; } = true;
-        public WindowNew(bool canDragMove = true, bool panelItemIsVisible = true)
+        public UIWindow(bool canDragMove = true, bool panelItemIsVisible = true)
         {
             //Application.Current.Resources.MergedDictionaries.Clear();
 
             //ResourceDictionary myResourceDictionary1 = new ResourceDictionary();
-            //myResourceDictionary1.Source = new Uri("../Themes/Core.xaml", UriKind.Relative);
+            //myResourceDictionary1.Source = new Uri(@"../MainControl/UIWindowStyle.xaml", UriKind.Relative);
             //Resources.MergedDictionaries.Add(myResourceDictionary1);
+
+
+            //UIElement rootElement;
+            //FileStream s = new FileStream(Path.Combine(@"C:\@MyRepos\CustomApp\UIControls\UIControls\UIPresentationControls\MainControl\UIWindowStyle.xaml"), FileMode.Open);
+            //var reader = new XamlXmlReader(@"../../UserControl1.xaml", XamlReader.GetWpfSchemaContext());
+            //var userControl = XamlReader.Load(reader) as UserControl1;
+            //rootElement = (UIElement)XamlReader.Load(s);
+            //s.Close();
+
+            this.Resources.MergedDictionaries.Clear();
+            // Это окно необходимо чтобы скомпилировать и добавить ресурс "../MainControl/UIWindowStyle.xaml" иначе через код-бехайнд его скомпилировать и подклоючить невозможно
+            Resources.MergedDictionaries.Add(new LoadResource().Resources.MergedDictionaries.FirstOrDefault());
+            Style style = this.FindResource("VSUIWindowStyle") as Style;
+            Style = style;
+
 
             //ResourceDictionary myResourceDictionary2 = new ResourceDictionary();
             //myResourceDictionary2.Source = new Uri("../Themes/Brushes.xaml", UriKind.Relative);
@@ -41,8 +62,14 @@ namespace TFSAssist.Themes
             //myResourceDictionary3.Source = new Uri("../Themes/VS2012WindowStyle.xaml", UriKind.Relative);
             //Resources.MergedDictionaries.Add(myResourceDictionary3);
 
-            //Style style = this.FindResource("VS2012WindowStyle") as Style;
+            //Style style = this.FindResource("VSUIWindowStyle") as Style;
             //Style = style;
+
+            //Style style = Application.Current.FindResource("VSUIWindowStyle") as Style;
+
+            //ResourceDictionary res = (ResourceDictionary)Application.LoadComponent(new Uri(@"C:\@MyRepos\CustomApp\UIControls\UIControls\UIPresentationControls\MainControl\UIWindoiwStyle.xaml", UriKind.RelativeOrAbsolute));
+
+
 
             CanDragMove = canDragMove;
             PanelItemsIsVisible = panelItemIsVisible;
@@ -104,7 +131,10 @@ namespace TFSAssist.Themes
 
         void WindowLoaded(object sender, RoutedEventArgs e)
         {
-            WindowNew mainWindow = (WindowNew)this;
+            UIWindow mainWindow = (UIWindow)this;
+
+            //Style style = this.FindResource("VSUIWindowStyle") as Style;
+            //mainWindow.Style = style;
 
             OpacityActivate(mainWindow);
 
@@ -146,12 +176,11 @@ namespace TFSAssist.Themes
             e.Cancel = true;
             var anim = new DoubleAnimation(0, (Duration)TimeSpan.FromSeconds(0.2));
             //после завершения эффекта закрывает окно
-            //anim.Completed += (s, _) => mainWindow.Close();
-            anim.Completed += (s, _) => Process.GetCurrentProcess().Kill(); // такое уничтожение процесса безопаснее
+            anim.Completed += (s, _) => Process.GetCurrentProcess().Kill();
             mainWindow.BeginAnimation(UIElement.OpacityProperty, anim);
         }
 
-        static void OpacityActivate(WindowNew mainWindow)
+        static void OpacityActivate(UIWindow mainWindow)
         {
             //эффект перехода из прозрачного в нормальный режим и из размытого в четкий
             Storyboard sb = mainWindow.FindResource("HoverOn") as Storyboard;

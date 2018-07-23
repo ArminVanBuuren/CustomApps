@@ -1,0 +1,29 @@
+﻿<local:UIWindow
+    x:Class="UIPresentationControls.MainControl.UIWindow_TEMP"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:UIPresentationControls.MainControl"
+        
+        
+        >
+    <!--Style="{DynamicResource VSUIWindowStyle}"-->
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../MainControl/UIWindowStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    
+    
+    <!--<Window.Style>
+        <StaticResource ResourceKey="VSUIWindowStyle" />
+    </Window.Style>-->
+
+    <Grid>
+            
+    </Grid>
+</local:UIWindow>
