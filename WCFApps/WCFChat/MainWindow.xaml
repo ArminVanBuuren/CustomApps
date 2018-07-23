@@ -21,34 +21,52 @@
     </Window.Resources>
 
 
-    
-    
+
     <Grid>
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="356*"/>
+            <ColumnDefinition MinWidth="61" Width="61" MaxWidth="61"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="35" />
         </Grid.RowDefinitions>
-        <RichTextBox Grid.Column="1" Grid.Row="0" x:Name="DialogHistory" HorizontalAlignment="Left" Height="Auto"  IsReadOnly="True"  >
-            <FlowDocument>
-                <Paragraph>
-                    <Run Text="DialogHistory"/>
-                </Paragraph>
-            </FlowDocument>
-        </RichTextBox>
-        <Border Grid.Column="1" Grid.Row="1" BorderBrush="#FF6C6C6C" BorderThickness="0,1,0,0" Margin="0,-1,0,0"/>
-        <RichTextBox Grid.Column="1" Grid.Row="1" x:Name="DialogWindow" HorizontalAlignment="Left"    >
-            <FlowDocument>
-                <Paragraph>
-                    <Run Text="DialogWindow"/>
-                </Paragraph>
-            </FlowDocument>
-        </RichTextBox>
-        <Button Grid.Column="1" Grid.Row="1" x:Name="SendMessage" Content="Send" HorizontalAlignment="Right"  Width="60" Margin="0,1,2,1" />
+        <ListBox Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"  >
+            <Label Content="Говнюк"/>
+            <Label Content="Группа"/>
+        </ListBox>
+
+        <RichTextBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" CaretBrush="Black" FontFamily="Calibri" FontSize="15"  x:Name="DialogHistory" Height="Auto"  IsReadOnly="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="Black"  >
+                <FlowDocument>
+                <Paragraph >
+                        <Run Text="DialogHistory"/>
+                    </Paragraph>
+                </FlowDocument>
+                <RichTextBox.Background>
+                    <LinearGradientBrush EndPoint="0.2,2.5" StartPoint="2.9,0">
+                        <GradientStop Color="#FFA4A4A4"/>
+                        <GradientStop Color="#FF00FFC5" Offset="1"/>
+                    </LinearGradientBrush>
+                </RichTextBox.Background>
+            </RichTextBox>
+
+                <!--<Border Grid.Column="1" Grid.RowSpan="2" BorderBrush="#FF6C6C6C" BorderThickness="0,1,0,0" Margin="0,283,0,0" />-->
+        <RichTextBox Grid.Column="1" Grid.Row="1" x:Name="DialogWindow" CaretBrush="Black" FontFamily="Calibri" FontSize="15" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" Margin="0,0,0,1" Foreground="Black" Padding="1" >
+                    <FlowDocument>
+                        <Paragraph >
+                            <Run Text="DialogWindow"/>
+                        </Paragraph>
+                    </FlowDocument>
+                    <RichTextBox.Background>
+                        <LinearGradientBrush EndPoint="0.6,11.5" StartPoint="1.9,0">
+                            <GradientStop Color="White"/>
+                            <GradientStop Color="#FF00E2EC" Offset="1"/>
+                        </LinearGradientBrush>
+                    </RichTextBox.Background>
+                </RichTextBox>
+                <Button Grid.Column="2" Grid.Row="1" x:Name="SendMessage" Content="Send" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Width="60"  Margin="0,0,1,1" />
 
     </Grid>
 </mainControl:UIWindow>
-
