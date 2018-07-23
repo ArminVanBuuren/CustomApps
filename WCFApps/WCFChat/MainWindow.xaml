@@ -1,11 +1,28 @@
-﻿<Window x:Class="WCFChat.MainWindow"
+﻿<mainControl:UIWindow x:Class="WCFChat.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WCFChat"
+        xmlns:mainControl="clr-namespace:UIPresentationControls.MainControl;assembly=UIPresentationControls"
         mc:Ignorable="d"
-        Title="Chat" Height="350" Width="525">
+        Title="Chat" Height="350" Width="525"
+                      Style="{DynamicResource VSUIWindowStyle1}"
+                      >
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/UIPresentationControls;component/MainControl/UIWindowStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/UIPresentationControls;component/Styles/Core.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Style x:Key="VSUIWindowStyle1" TargetType="{x:Type mainControl:UIWindow}" BasedOn="{StaticResource VSUIWindowStyle}" />
+        </ResourceDictionary>
+    </Window.Resources>
+
+
+    
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"/>
@@ -15,7 +32,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="35" />
         </Grid.RowDefinitions>
-        <RichTextBox Grid.Column="1" Grid.Row="0" x:Name="DialogHistory" HorizontalAlignment="Left" >
+        <RichTextBox Grid.Column="1" Grid.Row="0" x:Name="DialogHistory" HorizontalAlignment="Left" Height="Auto"  IsReadOnly="True"  >
             <FlowDocument>
                 <Paragraph>
                     <Run Text="DialogHistory"/>
@@ -30,7 +47,8 @@
                 </Paragraph>
             </FlowDocument>
         </RichTextBox>
-        <Button Grid.Column="1" Grid.Row="1" x:Name="SendMessage" Content="Send" HorizontalAlignment="Right"  Width="60" />
+        <Button Grid.Column="1" Grid.Row="1" x:Name="SendMessage" Content="Send" HorizontalAlignment="Right"  Width="60" Margin="0,1,2,1" />
 
     </Grid>
-</Window>
+</mainControl:UIWindow>
+

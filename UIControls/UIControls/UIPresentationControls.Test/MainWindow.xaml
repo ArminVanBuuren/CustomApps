@@ -2,7 +2,6 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mainControl="clr-namespace:UIPresentationControls.MainControl;assembly=UIPresentationControls"
-        xmlns:uiPresentationControls="clr-namespace:UIPresentationControls;assembly=UIPresentationControls"
                       Style="{DynamicResource VSUIWindowStyle}"
                       
                       >
