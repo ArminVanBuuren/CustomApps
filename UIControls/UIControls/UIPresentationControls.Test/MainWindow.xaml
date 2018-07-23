@@ -2,7 +2,18 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mainControl="clr-namespace:UIPresentationControls.MainControl;assembly=UIPresentationControls"
-        xmlns:uiPresentationControls="clr-namespace:UIPresentationControls;assembly=UIPresentationControls">
+        xmlns:uiPresentationControls="clr-namespace:UIPresentationControls;assembly=UIPresentationControls"
+                      Style="{DynamicResource VSUIWindowStyle}"
+                      
+                      >
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/UIPresentationControls;component/MainControl/UIWindowStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    
     <Grid>
         <!--<Grid.Background>
             <LinearGradientBrush EndPoint="0.2,2.5" StartPoint="1.9,0">

@@ -15,7 +15,7 @@ using UIPresentationControls.Utils;
 
 namespace UIPresentationControls.MainControl
 {
-    public partial class UIWindow : Window
+    public class UIWindow : Window
     {
         //static WindowNew()
         //{
@@ -31,6 +31,8 @@ namespace UIPresentationControls.MainControl
         private bool _isBlured, _isBlured2;
         public bool CanDragMove { get; private set; } = true;
         public bool PanelItemsIsVisible { get; private set; } = true;
+
+
         public UIWindow(bool canDragMove = true, bool panelItemIsVisible = true)
         {
             //Application.Current.Resources.MergedDictionaries.Clear();
@@ -47,11 +49,11 @@ namespace UIPresentationControls.MainControl
             //rootElement = (UIElement)XamlReader.Load(s);
             //s.Close();
 
-            this.Resources.MergedDictionaries.Clear();
-            // Это окно необходимо чтобы скомпилировать и добавить ресурс "../MainControl/UIWindowStyle.xaml" иначе через код-бехайнд его скомпилировать и подклоючить невозможно
-            Resources.MergedDictionaries.Add(new LoadResource().Resources.MergedDictionaries.FirstOrDefault());
-            Style style = this.FindResource("VSUIWindowStyle") as Style;
-            Style = style;
+            //Resources.MergedDictionaries.Clear();
+            //// Это окно необходимо чтобы скомпилировать и добавить ресурс "../MainControl/UIWindowStyle.xaml" иначе через код-бехайнд его скомпилировать и подклоючить невозможно
+            //Resources.MergedDictionaries.Add(new LoadResource().Resources.MergedDictionaries.FirstOrDefault());
+            //Style style = this.FindResource("VSUIWindowStyle") as Style;
+            //Style = style;
 
 
             //ResourceDictionary myResourceDictionary2 = new ResourceDictionary();
@@ -74,13 +76,13 @@ namespace UIPresentationControls.MainControl
             CanDragMove = canDragMove;
             PanelItemsIsVisible = panelItemIsVisible;
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
-            Loaded += WindowLoaded;
-            Activated += WindowNew_Activated;
-            Closing += Window_Closing;
-            StateChanged += WindowStateChanged;
+            Loaded += UIWindowLoaded;
+            Activated += UIWindowActivated;
+            Closing += UIWindowClosing;
+            StateChanged += UIWindowStateChanged;
 
             if (!CanDragMove)
-                SourceInitialized += DisableWindowMoving;
+                SourceInitialized += DisableUIWindowMoving;
             else
             {
                 //this.PreviewMouseLeftButtonDown += (s, e) =>
@@ -97,9 +99,12 @@ namespace UIPresentationControls.MainControl
             }
         }
 
+        private void UIWindowClosed(object sender, EventArgs e)
+        {
+            //throw new NotImplementedException();
+        }
 
-
-        private void WindowNew_Activated(object sender, EventArgs e)
+        private void UIWindowActivated(object sender, EventArgs e)
         {
 
         }
@@ -122,14 +127,14 @@ namespace UIPresentationControls.MainControl
         //	return IntPtr.Zero;
         //}
 
-        private void DisableWindowMoving(object sender, EventArgs e)
+        private void DisableUIWindowMoving(object sender, EventArgs e)
         {
             WindowInteropHelper helper = new WindowInteropHelper(this);
             HwndSource source = HwndSource.FromHwnd(helper.Handle);
             source?.AddHook(UIControls32.WndProc);
         }
 
-        void WindowLoaded(object sender, RoutedEventArgs e)
+        void UIWindowLoaded(object sender, RoutedEventArgs e)
         {
             UIWindow mainWindow = (UIWindow)this;
 
@@ -169,14 +174,17 @@ namespace UIPresentationControls.MainControl
                 element.Cursor = null;
         }
 
-        private static void Window_Closing(object sender, CancelEventArgs e)
+        private void UIWindowClosing(object sender, CancelEventArgs e)
         {
             Window mainWindow = (Window)sender;
-            mainWindow.Closing -= Window_Closing;
+            mainWindow.Closing -= UIWindowClosing;
             e.Cancel = true;
             var anim = new DoubleAnimation(0, (Duration)TimeSpan.FromSeconds(0.2));
             //после завершения эффекта закрывает окно
-            anim.Completed += (s, _) => Process.GetCurrentProcess().Kill();
+            anim.Completed += (s, _) =>
+                              {
+                                  mainWindow.Close();
+                              };
             mainWindow.BeginAnimation(UIElement.OpacityProperty, anim);
         }
 
@@ -198,7 +206,7 @@ namespace UIPresentationControls.MainControl
 
         }
 
-        void WindowStateChanged(object sender, EventArgs e)
+        void UIWindowStateChanged(object sender, EventArgs e)
         {
             var w = (Window)sender;
 

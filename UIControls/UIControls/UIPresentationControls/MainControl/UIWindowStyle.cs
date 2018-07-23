@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Xaml;
 using UIPresentationControls.Utils;
 
 namespace UIPresentationControls.MainControl
@@ -174,8 +175,8 @@ namespace UIPresentationControls.MainControl
 		{
 			UIWindow mainWindow = (UIWindow)sender;
 
-			//чтобы можно было перемещать окно по нажатию клавиши в любой точки окна, а не только через верхнюю панель
-			Grid parentGrid = (Grid)mainWindow.Template.FindName("LayoutRoot", mainWindow);
+            //чтобы можно было перемещать окно по нажатию клавиши в любой точки окна, а не только через верхнюю панель
+            Grid parentGrid = (Grid)mainWindow.Template.FindName("LayoutRoot", mainWindow);
 
             parentGrid.MouseLeftButtonDown += (o, args) =>
             {
@@ -192,24 +193,32 @@ namespace UIPresentationControls.MainControl
 		{
 			UIWindow mainWindow = Application.Current.MainWindow as UIWindow;
 
-		    Style style = mainWindow?.FindResource("VS2012WindowStyle") as Style;
-		    if (style == null)
-		        return;
+		    //Style style = mainWindow?.FindResource("VS2012WindowStyle") as Style;
+		    //if (style == null)
+		    //    return;
 
 
             UIWindow windowInfo = new UIWindow(false, false);
 		    windowInfo.Title = "Vladimir Khovanskiy";
             windowInfo.ResizeMode = ResizeMode.NoResize;
-			windowInfo.Style = style;
+		    windowInfo.Resources.MergedDictionaries.Add(mainWindow.Resources);
+            windowInfo.Style = mainWindow.Style;
             windowInfo.FontFamily = new FontFamily("Segoe UI");
 		    windowInfo.FontSize = 13;
 
             //windowInfo.Icon = mainWindow.Icon;
             //new BitmapImage(Properties.Resources.Overwolf);
             //Properties.Resources.Overwolf
-            windowInfo.Icon = new BitmapImage(new Uri(@"pack://application:,,,/Images/overwolf.ico"));
+
+
+            //image.Source = new BitmapImage(new Uri("pack://application:,,,/YourAssemblyName;component/Resources/someimage.png", UriKind.Absolute));
+
+            //windowInfo.Icon = new BitmapImage(new Uri(@"pack://application:,,,/Images/overwolf.ico"));
+            //windowInfo.Icon = new BitmapImage(new Uri("../Images/overwolf.ico", UriKind.RelativeOrAbsolute));
+            //pack://application:,,,/AssemblyNameContainingResource;component/Resources/my_image.png
+            windowInfo.Icon = new BitmapImage(new Uri(@"C:\@MyRepos\CustomApp\UIControls\UIControls\UIPresentationControls\Images\overwolf.ico", UriKind.RelativeOrAbsolute));
             //windowInfo.Icon = BitmapFrame.Create(Application.GetResourceStream(new Uri("LiveJewel.png", UriKind.RelativeOrAbsolute)).Stream);
-		    windowInfo.Background = (Brush)new BrushConverter().ConvertFrom("#333");
+            windowInfo.Background = (Brush)new BrushConverter().ConvertFrom("#333");
             windowInfo.Foreground = (Brush)new BrushConverter().ConvertFrom("#FF32EBFB");
 
 

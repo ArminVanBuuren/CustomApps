@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
@@ -146,8 +145,8 @@ namespace TFSAssist.Themes
             e.Cancel = true;
             var anim = new DoubleAnimation(0, (Duration)TimeSpan.FromSeconds(0.2));
             //после завершения эффекта закрывает окно
-            //anim.Completed += (s, _) => mainWindow.Close();
-            anim.Completed += (s, _) => Process.GetCurrentProcess().Kill(); // такое уничтожение процесса безопаснее
+            
+            anim.Completed += (s, _) => mainWindow.Close();
             mainWindow.BeginAnimation(UIElement.OpacityProperty, anim);
         }
 
