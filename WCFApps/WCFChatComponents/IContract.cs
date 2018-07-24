@@ -12,12 +12,12 @@ namespace WCFChatComponents
     interface IContract
     {
         [OperationContract]
-        void Login(string guid);
+        string Login(string name);
 
         [OperationContract]
         void Say(string input);
 
         [OperationContract]
-        void Logoff();
+        void Logoff(string guid);
     }
 }

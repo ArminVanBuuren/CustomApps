@@ -188,22 +188,30 @@ namespace UIControls.MainControl
             };
         }
 
-		private void Information_OnClick(object sender, RoutedEventArgs e)
-		{
-			UIWindow mainWindow = Application.Current.MainWindow as UIWindow;
+        private void Information_OnClick(object sender, RoutedEventArgs e)
+        {
+            UIWindow mainWindow = Application.Current.MainWindow as UIWindow;
+            if(mainWindow == null)
+                return;
 
-		    //Style style = mainWindow?.FindResource("VS2012WindowStyle") as Style;
-		    //if (style == null)
-		    //    return;
+            Presenter vkhovanskiy = new Presenter(false, false);
+            vkhovanskiy.Owner = mainWindow;
+            vkhovanskiy.Loaded += WindowInfo_Loaded;
+            mainWindow.IsBlured = true;
+            vkhovanskiy.ShowDialog();
+            vkhovanskiy.Loaded -= WindowInfo_Loaded;
+            mainWindow.IsBlured = false;
+        }
 
-
+        void CreatePresenterInCode(UIWindow mainWindow)
+        {
             UIWindow windowInfo = new UIWindow(false, false);
-		    windowInfo.Title = "Vladimir Khovanskiy";
+            windowInfo.Title = "Vladimir Khovanskiy";
             windowInfo.ResizeMode = ResizeMode.NoResize;
-		    windowInfo.Resources.MergedDictionaries.Add(mainWindow.Resources);
+            windowInfo.Resources.MergedDictionaries.Add(mainWindow.Resources);
             windowInfo.Style = mainWindow.Style;
             windowInfo.FontFamily = new FontFamily("Segoe UI");
-		    windowInfo.FontSize = 13;
+            windowInfo.FontSize = 13;
 
             //windowInfo.Icon = mainWindow.Icon;
             //new BitmapImage(Properties.Resources.Overwolf);
@@ -211,45 +219,88 @@ namespace UIControls.MainControl
 
 
             //image.Source = new BitmapImage(new Uri("pack://application:,,,/YourAssemblyName;component/Resources/someimage.png", UriKind.Absolute));
-
             //windowInfo.Icon = new BitmapImage(new Uri(@"pack://application:,,,/Images/overwolf.ico"));
             //windowInfo.Icon = new BitmapImage(new Uri("../Images/overwolf.ico", UriKind.RelativeOrAbsolute));
             //pack://application:,,,/AssemblyNameContainingResource;component/Resources/my_image.png
-            windowInfo.Icon = new BitmapImage(new Uri(@"C:\@Repos\CustomApp\UIControls\UIControls\UIControls\Images\overwolf.ico", UriKind.RelativeOrAbsolute));
+
             //windowInfo.Icon = BitmapFrame.Create(Application.GetResourceStream(new Uri("LiveJewel.png", UriKind.RelativeOrAbsolute)).Stream);
+            //string[] samples = new[] {
+            //                             @"../Resources/overwolf.ico",
+            //                             @"Resources/overwolf.ico",
+            //                             @"Resources/overwolf",
+            //                             @"pack://application:,,,/UIControls;component/Resources/overwolf.ico",
+            //                             @"pack://application:,,,/UIControls;component/Resources/overwolf",
+            //                             @"pack://application:,,,/UIControls.dll;component/Resources/overwolf.ico",
+            //                             @"pack://application:,,,/UIControls.dll;component/Resources/overwolf",
+            //                             @"pack://application:,,,/Images/overwolf.ico",
+            //                             @"pack://application:,,,/UIControls/Images/overwolf.ico"
+            //                         };
+
+            //var dd = System.Reflection.Assembly.GetEntryAssembly().GetManifestResourceStream("UIControls.Resources.overwolf.ico");
+
+
+
+            //string res = string.Empty;
+            //foreach (string VARIABLE in samples)
+            //{
+            //    try
+            //    {
+            //        res = VARIABLE;
+            //        windowInfo.Icon = (new ImageSourceConverter()).ConvertFromString(VARIABLE) as ImageSource;
+            //        break;
+            //    }
+            //    catch (Exception ex)
+            //    {
+
+            //    }
+            //}
+
+
+            //windowInfo.Icon = new BitmapImage(new Uri(VARIABLE, UriKind.RelativeOrAbsolute));
+            //windowInfo.Icon = new BitmapImage(new Uri(@"Resources/overwolf.ico", UriKind.RelativeOrAbsolute));
+
             windowInfo.Background = (Brush)new BrushConverter().ConvertFrom("#333");
             windowInfo.Foreground = (Brush)new BrushConverter().ConvertFrom("#FF32EBFB");
 
 
             TextBlock text = new TextBlock();
-			text.Padding = new Thickness(0,0,7,7);
-			text.Foreground = Brushes.White;
-			text.TextWrapping = TextWrapping.Wrap;
-			text.FontSize = 12;
-			text.HorizontalAlignment = HorizontalAlignment.Center;
-			text.VerticalAlignment = VerticalAlignment.Center;
-			text.TextAlignment = TextAlignment.Center;
-			text.Text = "Hello! Thanks for choosing my application!";
-		    text.Foreground = (Brush)new BrushConverter().ConvertFrom("#FFF7F7F7");
+            text.Padding = new Thickness(3, 0, 3, 10);
+            text.TextWrapping = TextWrapping.Wrap;
+            text.FontSize = 12;
+            text.HorizontalAlignment = HorizontalAlignment.Center;
+            text.VerticalAlignment = VerticalAlignment.Center;
+            text.TextAlignment = TextAlignment.Center;
+            text.Text = "Hello! Thanks for choosing my application!";
+            text.Foreground = (Brush)new BrushConverter().ConvertFrom("#FFF7F7F7");
 
             windowInfo.Content = text;
 
-			windowInfo.MinWidth = 350;
-			windowInfo.MinHeight = 100;
-			windowInfo.MaxWidth = 350;
-			windowInfo.MaxHeight = 100;
-			windowInfo.Owner = mainWindow;
-			windowInfo.SizeToContent = SizeToContent.WidthAndHeight;
-			windowInfo.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-			windowInfo.Loaded += WindowInfo_Loaded;
+            windowInfo.MinWidth = 300;
+            windowInfo.MinHeight = 93;
+            windowInfo.MaxWidth = 300;
+            windowInfo.MaxHeight = 93;
+            windowInfo.Owner = mainWindow;
+            windowInfo.SizeToContent = SizeToContent.WidthAndHeight;
+            windowInfo.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            windowInfo.Loaded += WindowInfo_Loaded;
 
-			mainWindow.IsBlured = true;
-			windowInfo.ShowDialog();
-			windowInfo.Loaded -= WindowInfo_Loaded;
-			mainWindow.IsBlured = false;
-		}
+            mainWindow.IsBlured = true;
+            windowInfo.ShowDialog();
+            windowInfo.Loaded -= WindowInfo_Loaded;
+            mainWindow.IsBlured = false;
+        }
 
-		private void WindowInfo_Loaded(object sender, RoutedEventArgs e)
+
+        public static BitmapSource ConvertBitmap(System.Drawing.Bitmap source)
+        {
+            return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+                                                                                source.GetHbitmap(),
+                                                                                IntPtr.Zero,
+                                                                                Int32Rect.Empty,
+                                                                                System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
+        }
+
+        private void WindowInfo_Loaded(object sender, RoutedEventArgs e)
 		{
 			UIWindow mainWindow = (UIWindow) sender;
 			Border infButtom = (Border)mainWindow.Template.FindName("TitleBar", mainWindow);
