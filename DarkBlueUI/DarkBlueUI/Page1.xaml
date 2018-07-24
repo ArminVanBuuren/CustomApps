@@ -1,0 +1,17 @@
+﻿<Page x:Class="DarkBlue.Page1"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="150" d:DesignWidth="350"
+	Title="LINQ">
+    <TextBlock TextWrapping="Wrap" Padding="5" Foreground="#eee">
+        LINQ (Language Integrated Query) - язык запросов, полностью интегрированный в C#. 
+        LINQ значительно облегчает работу с коллекциями, позволяя создавать структурированные запросы, при этом предлагаются так же развитые 
+        API-интерфейсы <Hyperlink NavigateUri="Page2.xaml" Foreground="LimeGreen">LINQ to XML</Hyperlink> (взамен устаревшего W3C XML DOM), LINQ to DataSet &amp; SQL и LINQ to Entities (для запросов к базе данных), 
+        и совершенно новый интерфейс Parallel LINQ (PLINQ), позволяющий создавать параллельные запросы, тем самым увеличивая 
+        производительность приложений на компьютерах с многоядерным процессором.
+    </TextBlock>
+</Page>
+

@@ -1,0 +1,17 @@
+﻿<Page x:Class="DarkBlue.Page2"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="150" d:DesignWidth="350"
+	Title="LINQ to XML">
+    <TextBlock TextWrapping="Wrap" Padding="5" Foreground="#eee">
+        LINQ to XML — название, назначенное <Hyperlink NavigateUri="Page1.xaml" Foreground="LimeGreen">API-интерфейсу LINQ</Hyperlink>, который ориентирован на работу с XML.
+        В Microsoft не только добавили необходимые библиотеки XML для работы с LINQ, но также восполнили недостатки стандартной модели XML DOM, 
+        существенно облегчив работу с XML. Прошли времена, когда нужно было создавать XmlDocument только для того, чтобы поработать с небольшим фрагментом XML-кода. 
+        Чтобы воспользоваться преимуществами LINQ to XML, в проект понадобится добавить ссылку на сборку System.Xml.Linq.dll и 
+        директиву using System.Xml.Linq.
+    </TextBlock>
+</Page>
+
