@@ -1,28 +1,21 @@
-﻿<customizedWindow:WindowNew x:Class="TFSAssist.MainWindow"
+﻿<mainControl:UIWindow x:Class="TFSAssist.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        xmlns:local="clr-namespace:TFSAssist"
-        xmlns:customizedWindow="clr-namespace:TFSAssist.Themes"
-				
-       Style="{StaticResource VS2012WindowStyle}"
-                            
-        
-        Icon="Images/Rick.ico"
-        
-                            
+        xmlns:mainControl="clr-namespace:UIControls.MainControl;assembly=UIControls"
+                      xmlns:local="clr-namespace:TFSAssist"
+                      
+                            Style="{DynamicResource VSUIWindowStyle1}"
+        Icon="Images/Rick.ico"    
         MinWidth="545" Width="555"
         MinHeight="655" Height="655"
-                            
-        xmlns:mylocal="clr-namespace:TFSAssist"
-        xmlns:tfsAssist="clr-namespace:TFSAssist"
-        xmlns:themes="clr-namespace:TFSAssist.Themes"
         ResizeMode="CanResizeWithGrip"
 							
 		>
     <Window.Resources>
-        <tfsAssist:LogFlowDocumentConverter x:Key="LogFlowDocumentConverter"/>
+        <local:LogFlowDocumentConverter x:Key="LogFlowDocumentConverter"/>
+        
         <XmlDataProvider x:Key="TFS_FIELDS_DATA" XPath="Fields">
             <x:XData>
                 <Fields xmlns="">
@@ -36,6 +29,8 @@
             </x:XData>
         </XmlDataProvider>
     </Window.Resources>
+    
+    
 	<Window.Effect>
 		<BlurEffect Radius="0"></BlurEffect>
 	</Window.Effect>
@@ -264,4 +259,4 @@
             </Style>
         </Grid.Resources>
     </Grid>
-</customizedWindow:WindowNew>
+</mainControl:UIWindow>

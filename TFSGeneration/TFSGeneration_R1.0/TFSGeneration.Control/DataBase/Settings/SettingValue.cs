@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
-using TFSAssist.Control.Utils;
+using Utils;
 
 namespace TFSAssist.Control.DataBase.Settings
 {
@@ -49,11 +49,11 @@ namespace TFSAssist.Control.DataBase.Settings
         {
             get
             {
-                return CustomFunc.EnabledBootRun(TFSAssist.Control.TFSControl.ApplicationName);
+                return Customs.EnabledBootRun(TFSAssist.Control.TFSControl.ApplicationName);
             }
             set
             {
-                CustomFunc.SetBootStartup(TFSAssist.Control.TFSControl.ApplicationName, TFSAssist.Control.TFSControl.ApplicationPath, value);
+                Customs.SetBootStartup(TFSAssist.Control.TFSControl.ApplicationName, TFSAssist.Control.TFSControl.ApplicationPath, value);
                 base.Value = value;
             }
         }

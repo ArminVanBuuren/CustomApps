@@ -11,6 +11,7 @@ using Microsoft.TeamFoundation.WorkItemTracking.Client;
 using TFSAssist.Control.DataBase;
 using TFSAssist.Control.DataBase.Datas;
 using TFSAssist.Control.DataBase.Settings;
+using Utils;
 
 namespace TFSAssist.Control
 {
@@ -118,7 +119,7 @@ namespace TFSAssist.Control
                     _mailPassword.AppendChar(ch);
 
 
-            if (!TM.IsNullOrEmptyTrim(Settings.MailOption.ExchangeUri.Value) && !TM.IsNullOrEmptyTrim(Settings.MailOption.UserName.Value))
+            if (!Utility.IsNullOrEmptyTrim(Settings.MailOption.ExchangeUri.Value) && !Utility.IsNullOrEmptyTrim(Settings.MailOption.UserName.Value))
             {
                 string[] domain_username = Settings.MailOption.UserName.Value.Split('\\');
                 if (domain_username.Length != 2 || domain_username[0].IsNullOrEmpty() || domain_username[1].IsNullOrEmpty())
@@ -128,7 +129,7 @@ namespace TFSAssist.Control
                 _exchangeService.Url = new Uri(Settings.MailOption.ExchangeUri.Value);
                 //AlternateIdBase response = _exchangeService.ConvertId(new AlternateId(IdFormat.EwsId, "Placeholder", domain_username[1].Trim()), IdFormat.EwsId);
             }
-            else if (!TM.IsNullOrEmptyTrim(Settings.MailOption.Address.Value) && _checkEmailAddress.IsMatch(Settings.MailOption.Address.Value)) // Необходим только Email Address и пароль, т.к. вызывается другой способ подключения
+            else if (!Utility.IsNullOrEmptyTrim(Settings.MailOption.Address.Value) && _checkEmailAddress.IsMatch(Settings.MailOption.Address.Value)) // Необходим только Email Address и пароль, т.к. вызывается другой способ подключения
             {
                 _exchangeService.Credentials = new NetworkCredential(Settings.MailOption.Address.Value, _mailPassword);
                 _exchangeService.AutodiscoverUrl(Settings.MailOption.Address.Value, RedirectionUrlValidationCallback);
@@ -140,9 +141,9 @@ namespace TFSAssist.Control
             {
                 throw new ArgumentException(string.Format(
                     "Mail Address=[{0}] Or Domain\\Username=[{1}] With ExchangeUri=[{2}] is Incorrect! Please check fields.",
-                    TM.ToStringIsNullOrEmptyTrim(Settings.MailOption.Address.Value),
-                    TM.ToStringIsNullOrEmptyTrim(Settings.MailOption.UserName.Value),
-                    TM.ToStringIsNullOrEmptyTrim(Settings.MailOption.ExchangeUri.Value)));
+                    Utility.ToStringIsNullOrEmptyTrim(Settings.MailOption.Address.Value),
+                    Utility.ToStringIsNullOrEmptyTrim(Settings.MailOption.UserName.Value),
+                    Utility.ToStringIsNullOrEmptyTrim(Settings.MailOption.ExchangeUri.Value)));
             }
 
             // проверяем коннект к почтовому серверу
@@ -187,7 +188,7 @@ namespace TFSAssist.Control
             Uri collectionUri = new Uri(Settings.TFSOption.TFSUri.Value);
 
             // Коннект по кастомному логину и паролю
-            if (!TM.IsNullOrEmptyTrim(Settings.TFSOption.TFSUserName.Value))
+            if (!Utility.IsNullOrEmptyTrim(Settings.TFSOption.TFSUserName.Value))
             {
                 string[] tfs_domain_username = Settings.TFSOption.TFSUserName.Value.Split('\\');
                 if (tfs_domain_username.Length != 2 || tfs_domain_username[0].IsNullOrEmpty() || tfs_domain_username[1].IsNullOrEmpty())

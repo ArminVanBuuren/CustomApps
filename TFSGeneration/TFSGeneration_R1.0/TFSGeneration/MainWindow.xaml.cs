@@ -12,7 +12,7 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Threading;
 using TFSAssist.Control;
-using TFSAssist.Control.Utils;
+using Utils;
 using Timer = System.Timers.Timer;
 
 namespace TFSAssist
@@ -674,7 +674,7 @@ namespace TFSAssist
             int caretIndex = AnyIntervalTextBox.CaretIndex;
             string oldValue = AnyIntervalTextBox.Text;
 
-            CustomFunc.GetOnlyNumberWithCaret(ref oldValue, ref caretIndex, 4);
+            Customs.GetOnlyNumberWithCaret(ref oldValue, ref caretIndex, 4);
 
             AnyIntervalTextBox.Text = oldValue;
             AnyIntervalTextBox.CaretIndex = caretIndex;

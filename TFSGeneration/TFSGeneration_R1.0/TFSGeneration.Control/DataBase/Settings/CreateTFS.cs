@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
-using TFSAssist.Control.ConditionEx;
+using Utils.ConditionEx;
+using Utils;
 
 namespace TFSAssist.Control.DataBase.Settings
 {

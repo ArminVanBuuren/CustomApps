@@ -269,7 +269,7 @@ namespace UIControls.MainControl
             {
                 return _isBlured;
             }
-            internal set
+            set
             {
                 if (Style == null)
                     return;

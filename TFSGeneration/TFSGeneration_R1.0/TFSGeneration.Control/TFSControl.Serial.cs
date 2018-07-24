@@ -7,7 +7,7 @@ using System.Threading;
 using System.Xml.Serialization;
 using TFSAssist.Control.DataBase.Datas;
 using TFSAssist.Control.DataBase.Settings;
-using TFSAssist.Control.Utils;
+using Utils;
 
 namespace TFSAssist.Control
 {
@@ -40,13 +40,13 @@ namespace TFSAssist.Control
         static TFSControl()
         {
             CertificateCallback.Initialize();
-            AccountStorePath = CustomFunc.AccountFilePath + ".dat";
-            SettingsPath = CustomFunc.AccountFilePath + ".xml";
-            DataBasePath = CustomFunc.AccountFilePath + ".Data.xml";
+            AccountStorePath = Customs.AccountFilePath + ".dat";
+            SettingsPath = Customs.AccountFilePath + ".xml";
+            DataBasePath = Customs.AccountFilePath + ".Data.xml";
             //ApplicationName = Assembly.GetCallingAssembly().GetName().Name;
             ApplicationName = Assembly.GetEntryAssembly().GetName().Name;
             ApplicationPath = Assembly.GetEntryAssembly().Location;
-            RegeditKey = CustomFunc.GetOrSetRegedit(ApplicationName);
+            RegeditKey = Customs.GetOrSetRegedit(ApplicationName);
             System.Globalization.CultureInfo culture = System.Globalization.CultureInfo.CreateSpecificCulture("ru-RU");
             System.Globalization.CultureInfo.DefaultThreadCurrentCulture = culture;
             System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = culture;
@@ -163,7 +163,7 @@ namespace TFSAssist.Control
                     }
                 }
             }
-            catch (Crypto.CryptoException ex)
+            catch (CryptoException ex)
             {
                 //расшифровка файла неудачна, возможно если ключ в реестре отличается от ключа зашифрованных значений
                 NotifyUserIfHasError(WarnSeverity.Attention, string.Format(NotifyDeSerializetionFailor, AccountStorePath), ex, true);

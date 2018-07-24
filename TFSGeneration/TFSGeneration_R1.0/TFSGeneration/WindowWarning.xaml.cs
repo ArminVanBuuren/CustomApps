@@ -1,12 +1,11 @@
 ﻿using System.Windows;
-using TFSAssist.Themes;
 
 namespace TFSAssist
 {
 	/// <summary>
 	/// Логика взаимодействия для WindowWarning.xaml
 	/// </summary>
-	public partial class WindowWarning : WindowNew
+	public partial class WindowWarning
 	{
 		public WindowWarning(double width, string title, string message):base(false, false)
 		{

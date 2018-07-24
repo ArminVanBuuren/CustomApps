@@ -1,4 +1,4 @@
-﻿<themes:WindowNew x:Class="TFSAssist.WindowWarning"
+﻿<mainControl:UIWindow x:Class="TFSAssist.WindowWarning"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,15 +7,21 @@
         mc:Ignorable="d"
         Icon="Images/WarningIcon.ico"
         Title="Attention!"
-        xmlns:customizedWindow="clr-namespace:TFSAssist.Themes"
-        xmlns:themes="clr-namespace:TFSAssist.Themes"
+        
+        
+        xmlns:mainControl="clr-namespace:UIControls.MainControl;assembly=UIControls"
         ResizeMode="NoResize"
-        Style="{StaticResource VS2012WindowStyle}"
+                  
         MaxWidth="525" 
         MaxHeight="300" 
-        SizeToContent="WidthAndHeight">
+        SizeToContent="WidthAndHeight"
+                      
+                      Style="{DynamicResource VSUIWindowStyle1}"
+                      
+                      >
 
-	<Grid x:Name="ChildBlock" Margin="0,0,0,0">
+
+    <Grid x:Name="ChildBlock" Margin="0,0,0,0">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
@@ -31,5 +37,7 @@
 		<Button Grid.Row="1" Margin="5" Height="25" Width="50" Content="OK" Click="Button_Click" />
 	</Grid>
 	
-</themes:WindowNew>
+</mainControl:UIWindow>
+
+
 
