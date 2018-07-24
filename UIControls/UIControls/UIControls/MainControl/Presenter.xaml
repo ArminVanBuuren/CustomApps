@@ -18,7 +18,6 @@
     MaxHeight="93"
     SizeToContent="WidthAndHeight"
     WindowStartupLocation="CenterOwner"
-    Icon="C:\@MyRepos\CustomApp\UIControls\UIControls\UIControls\Images\overwolf.ico"
     >
     <Window.Resources>
         <ResourceDictionary>
