@@ -5,13 +5,13 @@ using System.ServiceModel;
 
 namespace WCFChat.Service
 {
-    [ServiceContract(Namespace = "http://My", CallbackContract = typeof(IChatCallback), SessionMode = SessionMode.Required)]
+    [ServiceContract(CallbackContract = typeof(IChatCallback), SessionMode = SessionMode.Required)]
     public interface IChat
     {
         [OperationContract(IsInitiating = true)]
         bool Login(User user);
 
-        [OperationContract(IsOneWay = true, IsInitiating = false, IsTerminating = false)]
+        [OperationContract(IsOneWay = true)]
         void Say(Message message);
 
         [OperationContract(IsOneWay = true, IsTerminating = true)]
@@ -20,10 +20,12 @@ namespace WCFChat.Service
 
     public interface IChatCallback
     {
-        [OperationContract(IsOneWay = true)]
+        // IsOneWay - означает что сервис не будет ждать выполнение запроса на клиенте
+        // также если IsOneWay=true то возвращать значения нельзя, только void
+        [OperationContract(IsOneWay = false)]
         DateTime RefreshClientsAndGetEarlyDataMessage(List<Client> clients, bool isGetEarlyMessage);
 
-        [OperationContract(IsOneWay = true)]
+        [OperationContract(IsOneWay = false)]
         List<Message> GetAllContentHistory();
 
         [OperationContract(IsOneWay = true)]

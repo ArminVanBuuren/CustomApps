@@ -13,13 +13,9 @@ namespace WCFChat.Service
         object syncObj = new object();
         Dictionary<User, IChatCallback> clients = new Dictionary<User, IChatCallback>();
 
+        public IChatCallback CurrentCallback => OperationContext.Current.GetCallbackChannel<IChatCallback>();
 
-        public IChatCallback CurrentCallback
-        {
-            get { return OperationContext.Current.GetCallbackChannel<IChatCallback>(); }
-        }
-
-        private User SearchClientsByName(string guid)
+        private User SearchClientsByGuid(string guid)
         {
             foreach (User user in clients.Keys)
             {
@@ -31,13 +27,34 @@ namespace WCFChat.Service
             return null;
         }
 
+        private User SearchClientsBySameName(string name)
+        {
+            foreach (User user in clients.Keys)
+            {
+                if (user.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase) )
+                {
+                    return user;
+                }
+            }
+            return null;
+        }
+
         public bool Login(User newUser)
         {
             lock (syncObj)
             {
-                User userInBase = SearchClientsByName(newUser.GUID);
+                // Если в системе уже есть другой юзер с тем же именем
+                User findedUserByName = SearchClientsBySameName(newUser.Name);
+                if (findedUserByName != null && findedUserByName.GUID != newUser.GUID)
+                    return false;
+
+                User userInBase = SearchClientsByGuid(newUser.GUID);
                 if (userInBase != null)
+                {
+                    // грохаем юзера который уже есть в чате но с другого приложения, т.е. грохаем его на старом приложении
+                    clients[userInBase].Terminate();
                     clients.Remove(userInBase);
+                }
 
                 clients.Add(newUser, CurrentCallback);
 
@@ -75,7 +92,7 @@ namespace WCFChat.Service
 
         public void Logoff(Client client)
         {
-            User user = SearchClientsByName(client.GUID);
+            User user = SearchClientsByGuid(client.GUID);
             lock (syncObj)
             {
                 clients.Remove(user);

@@ -12,7 +12,6 @@ namespace Utils
 	public static class Customs
 	{
 		public static string AccountFilePath => Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), Assembly.GetEntryAssembly().GetName().Name);
-
 		public static void AddAllAccessPermissions(string filePath)
 		{
 			DirectoryInfo dInfo = new DirectoryInfo(filePath);
