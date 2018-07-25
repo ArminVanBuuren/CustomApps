@@ -3,10 +3,10 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Utils
+namespace Utils.Crypto
 {
-	public class Crypto
-	{
+	public class AES
+    {
 
 		//While an app specific salt is not the best practice for
 		//password based encryption, it's probably safe enough as long as

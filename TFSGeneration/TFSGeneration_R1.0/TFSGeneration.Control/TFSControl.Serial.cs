@@ -8,6 +8,7 @@ using System.Xml.Serialization;
 using TFSAssist.Control.DataBase.Datas;
 using TFSAssist.Control.DataBase.Settings;
 using Utils;
+using Utils.Crypto;
 
 namespace TFSAssist.Control
 {
@@ -157,7 +158,7 @@ namespace TFSAssist.Control
                                 string settValue = result.Value as string;
                                 if (settValue == null)
                                     continue;
-                                prop.SetValue(tpObj, new SettingValue<string> {Value = Crypto.DecryptStringAES(settValue, RegeditKey)});
+                                prop.SetValue(tpObj, new SettingValue<string> {Value = AES.DecryptStringAES(settValue, RegeditKey)});
                             }
                         }
                     }
@@ -206,7 +207,7 @@ namespace TFSAssist.Control
 
 
                         SettingValue<string> fieldTextBox = (SettingValue<string>)prop.GetValue(tpObj);
-                        propertyBag.AddValue(prop.Name, Crypto.EncryptStringAES(fieldTextBox.Value, RegeditKey));
+                        propertyBag.AddValue(prop.Name, AES.EncryptStringAES(fieldTextBox.Value, RegeditKey));
                         break;
                     }
                 }

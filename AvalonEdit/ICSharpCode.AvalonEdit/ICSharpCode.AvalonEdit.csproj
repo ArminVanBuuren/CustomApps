@@ -110,12 +110,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AvalonEditCommands.cs" />
-    <Compile Include="CodeCompletion\CompletionListBox.cs" />
-    <Compile Include="CodeCompletion\CompletionWindowBase.cs" />
     <Compile Include="CodeCompletion\CompletionList.cs" />
-    <Compile Include="CodeCompletion\CompletionWindow.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="CodeCompletion\CompletionListBox.cs" />
+    <Compile Include="CodeCompletion\CompletionWindow.cs" />
+    <Compile Include="CodeCompletion\CompletionWindowBase.cs" />
     <Compile Include="CodeCompletion\ICompletionData.cs" />
     <Compile Include="CodeCompletion\InsightWindow.cs" />
     <Compile Include="CodeCompletion\IOverloadProvider.cs" />
@@ -364,7 +362,6 @@
     <Compile Include="TextEditorComponent.cs">
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Document\DocumentChangeEventArgs.cs" />
     <Compile Include="Document\GapTextBuffer.cs">
       <DependentUpon>TextDocument.cs</DependentUpon>
     </Compile>
@@ -429,8 +426,14 @@
     <EmbeddedResource Include="Highlighting\Resources\XmlDoc.xshd" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="CodeCompletion\CompletionList.xaml" />
-    <Page Include="CodeCompletion\InsightWindow.xaml" />
+    <Page Include="CodeCompletion\CompletionList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="CodeCompletion\InsightWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Search\SearchPanel.xaml">
       <DependentUpon>SearchPanel.cs</DependentUpon>
     </Page>

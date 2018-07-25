@@ -1,48 +1,41 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.ServiceModel;
 
 namespace WCFChat.Service
 {
-    [ServiceContract(Namespace = "http://My")]
-    interface IChat
+    [ServiceContract(Namespace = "http://My", CallbackContract = typeof(IChatCallback), SessionMode = SessionMode.Required)]
+    public interface IChat
     {
-        [OperationContract]
-        string Login(string name, string password);
+        [OperationContract(IsInitiating = true)]
+        bool Login(User user);
 
-        [OperationContract]
-        void Say(string guid, string input);
+        [OperationContract(IsOneWay = true, IsInitiating = false, IsTerminating = false)]
+        void Say(Message message);
 
-        [OperationContract]
-        void Logoff(string guid);
+        [OperationContract(IsOneWay = true, IsTerminating = true)]
+        void Logoff(Client client);
     }
 
-
-    interface ICustomer
+    public interface IChatCallback
     {
-        string GuidId();
-        string Name();
-        string Password();
-    }
+        [OperationContract(IsOneWay = true)]
+        DateTime RefreshClientsAndGetEarlyDataMessage(List<Client> clients, bool isGetEarlyMessage);
 
-    enum Status
-    {
-        Success = 0,
-        InvalidPassword = 1,
-        NameAlreadyUsed = 2
-    }
+        [OperationContract(IsOneWay = true)]
+        List<Message> GetAllContentHistory();
 
-    [DataContract(Namespace = "OtherNamespace")]
-    public class Point
-    {
-        [DataMember]
-        public double x;
-        [DataMember]
-        public double y;
+        [OperationContract(IsOneWay = true)]
+        void RefreshContentHistory(List<Message> messages);
 
-        public Point(double x, double y)
-        {
-            this.x = x;
-            this.y = y;
-        }
+        [OperationContract(IsOneWay = true)]
+        void Receive(Message msg);
+
+        [OperationContract(IsOneWay = true)]
+        void IsWritingCallback(Client client);
+
+        [OperationContract(IsOneWay = true)]
+        void Terminate();
     }
 }

@@ -8,18 +8,6 @@
         mc:Ignorable="d"
         Title="Chat" Height="350" Width="525" Style="{DynamicResource VSUIWindowStyle1}" >
 
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/UIControls;component/MainControl/UIWindowStyle.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/UIControls;component/Styles/Core.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-            <Style x:Key="VSUIWindowStyle1" TargetType="{x:Type mainControl:UIWindow}" BasedOn="{StaticResource VSUIWindowStyle}" />
-        </ResourceDictionary>
-    </Window.Resources>
-
-
-
     <Grid>
 
         <Grid.ColumnDefinitions>

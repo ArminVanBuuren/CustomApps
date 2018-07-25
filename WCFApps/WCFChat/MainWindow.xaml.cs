@@ -1,4 +1,6 @@
-﻿namespace WCFChat.Client
+﻿using Utils.Crypto;
+
+namespace WCFChat.Client
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
