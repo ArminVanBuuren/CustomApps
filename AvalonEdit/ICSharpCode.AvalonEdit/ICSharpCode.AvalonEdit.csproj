@@ -69,7 +69,7 @@
       <Name>ICSharpCode.NRefactory</Name>
     </ProjectReference>
     <Reference Include="Microsoft.CSharp">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+      <HintPath>..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\Microsoft.CSharp.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
@@ -92,7 +92,7 @@
     <Reference Include="System.Web" Condition="!$(DefineConstants.Contains('DOTNET4'))" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+      <HintPath>..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Xaml.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq">
@@ -119,98 +119,69 @@
     <Compile Include="CodeCompletion\IOverloadProvider.cs" />
     <Compile Include="CodeCompletion\OverloadInsightWindow.cs" />
     <Compile Include="CodeCompletion\OverloadViewer.cs" />
-    <Compile Include="Document\DocumentChangeOperation.cs">
-      <DependentUpon>UndoStack.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Document\DocumentChangeEventArgs.cs" />
+    <Compile Include="Document\DocumentChangeOperation.cs" />
+    <Compile Include="Document\DocumentLine.cs" />
+    <Compile Include="Document\DocumentLineTree.cs" />
     <Compile Include="Document\DocumentTextWriter.cs" />
+    <Compile Include="Document\GapTextBuffer.cs" />
     <Compile Include="Document\IDocument.cs" />
     <Compile Include="Document\ILineTracker.cs" />
     <Compile Include="Document\ITextAnchor.cs" />
     <Compile Include="Document\ITextSource.cs" />
-    <Compile Include="Document\SimpleSegment.cs" />
-    <Compile Include="Document\RopeTextSource.cs" />
-    <Compile Include="Document\IUndoableOperation.cs">
-      <DependentUpon>UndoStack.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Document\LineNode.cs">
-      <DependentUpon>DocumentLine.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Document\IUndoableOperation.cs" />
+    <Compile Include="Document\LineManager.cs" />
+    <Compile Include="Document\LineNode.cs" />
     <Compile Include="Document\NewLineFinder.cs" />
     <Compile Include="Document\OffsetChangeMap.cs" />
-    <Compile Include="Document\TextDocumentWeakEventManager.cs">
-      <DependentUpon>TextDocument.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Document\TextLocation.cs" />
-    <Compile Include="Document\TextSegmentCollection.cs" />
+    <Compile Include="Document\RopeTextSource.cs" />
+    <Compile Include="Document\SimpleSegment.cs" />
     <Compile Include="Document\TextAnchor.cs" />
-    <Compile Include="Document\TextAnchorNode.cs">
-      <DependentUpon>TextAnchor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Document\TextAnchorTree.cs">
-      <DependentUpon>TextAnchor.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Document\TextAnchorNode.cs" />
+    <Compile Include="Document\TextAnchorTree.cs" />
+    <Compile Include="Document\TextDocument.cs" />
+    <Compile Include="Document\TextDocumentWeakEventManager.cs" />
+    <Compile Include="Document\TextLocation.cs" />
     <Compile Include="Document\TextSegment.cs" />
+    <Compile Include="Document\TextSegmentCollection.cs" />
     <Compile Include="Document\TextSourceVersionProvider.cs" />
     <Compile Include="Document\TextUtilities.cs" />
-    <Compile Include="Document\UndoOperationGroup.cs">
-      <DependentUpon>UndoStack.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Document\UndoStack.cs">
-    </Compile>
-    <Compile Include="Document\WeakLineTracker.cs">
-      <DependentUpon>ILineTracker.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Document\UndoOperationGroup.cs" />
+    <Compile Include="Document\UndoStack.cs" />
+    <Compile Include="Document\WeakLineTracker.cs" />
     <Compile Include="Editing\AbstractMargin.cs" />
     <Compile Include="Editing\Caret.cs" />
-    <Compile Include="Editing\CaretLayer.cs">
-    </Compile>
-    <Compile Include="Editing\CaretNavigationCommandHandler.cs">
-    </Compile>
+    <Compile Include="Editing\CaretLayer.cs" />
+    <Compile Include="Editing\CaretNavigationCommandHandler.cs" />
     <Compile Include="Editing\CaretWeakEventHandler.cs" />
     <Compile Include="Editing\DottedLineMargin.cs" />
     <Compile Include="Editing\DragDropException.cs" />
     <Compile Include="Editing\EditingCommandHandler.cs" />
-    <Compile Include="Editing\EmptySelection.cs">
-      <DependentUpon>Selection.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Editing\EmptySelection.cs" />
     <Compile Include="Editing\ImeNativeWrapper.cs" />
-    <Compile Include="Editing\MouseSelectionMode.cs" />
-    <Compile Include="Editing\SelectionSegment.cs" />
     <Compile Include="Editing\ImeSupport.cs" />
+    <Compile Include="Editing\IReadOnlySectionProvider.cs" />
+    <Compile Include="Editing\LineNumberMargin.cs" />
+    <Compile Include="Editing\MouseSelectionMode.cs" />
+    <Compile Include="Editing\NoReadOnlySections.cs" />
+    <Compile Include="Editing\RectangleSelection.cs" />
+    <Compile Include="Editing\Selection.cs" />
+    <Compile Include="Editing\SelectionColorizer.cs" />
+    <Compile Include="Editing\SelectionLayer.cs" />
+    <Compile Include="Editing\SelectionMouseHandler.cs" />
+    <Compile Include="Editing\SelectionSegment.cs" />
+    <Compile Include="Editing\SimpleSelection.cs" />
+    <Compile Include="Editing\TextArea.cs" />
     <Compile Include="Editing\TextAreaAutomationPeer.cs" />
+    <Compile Include="Editing\TextAreaDefaultInputHandlers.cs" />
+    <Compile Include="Editing\TextAreaInputHandler.cs" />
     <Compile Include="Editing\TextRangeProvider.cs" />
+    <Compile Include="Editing\TextSegmentReadOnlySectionProvider.cs" />
     <Compile Include="Folding\FoldingElementGenerator.cs" />
     <Compile Include="Folding\FoldingManager.cs" />
     <Compile Include="Folding\FoldingMargin.cs" />
     <Compile Include="Folding\FoldingMarginMarker.cs" />
     <Compile Include="Folding\FoldingSection.cs" />
-    <Compile Include="Editing\IReadOnlySectionProvider.cs" />
-    <Compile Include="Editing\LineNumberMargin.cs" />
-    <Compile Include="Editing\NoReadOnlySections.cs">
-      <DependentUpon>IReadOnlySectionProvider.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Editing\RectangleSelection.cs">
-      <DependentUpon>Selection.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Editing\Selection.cs" />
-    <Compile Include="Editing\SelectionColorizer.cs">
-      <DependentUpon>Selection.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Editing\SelectionLayer.cs">
-      <DependentUpon>Selection.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Editing\SelectionMouseHandler.cs">
-      <DependentUpon>Selection.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Editing\SimpleSelection.cs">
-      <DependentUpon>Selection.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Editing\TextArea.cs" />
-    <Compile Include="Editing\TextAreaDefaultInputHandlers.cs" />
-    <Compile Include="Editing\TextAreaInputHandler.cs" />
-    <Compile Include="Editing\TextSegmentReadOnlySectionProvider.cs">
-      <DependentUpon>IReadOnlySectionProvider.cs</DependentUpon>
-    </Compile>
     <Compile Include="Folding\NewFolding.cs" />
     <Compile Include="Folding\XmlFoldingStrategy.cs" />
     <Compile Include="Highlighting\DocumentHighlighter.cs" />
@@ -224,17 +195,16 @@
     <Compile Include="Highlighting\HighlightingDefinitionTypeConverter.cs" />
     <Compile Include="Highlighting\HighlightingEngine.cs" />
     <Compile Include="Highlighting\HighlightingManager.cs" />
+    <Compile Include="Highlighting\HighlightingRule.cs" />
+    <Compile Include="Highlighting\HighlightingRuleSet.cs" />
+    <Compile Include="Highlighting\HighlightingSpan.cs" />
     <Compile Include="Highlighting\HtmlClipboard.cs" />
     <Compile Include="Highlighting\HtmlOptions.cs" />
     <Compile Include="Highlighting\HtmlRichTextWriter.cs" />
     <Compile Include="Highlighting\IHighlighter.cs" />
     <Compile Include="Highlighting\IHighlightingDefinition.cs" />
-    <Compile Include="Highlighting\HighlightingRule.cs" />
+    <Compile Include="Highlighting\IHighlightingDefinitionReferenceResolver.cs" />
     <Compile Include="Highlighting\Resources\Resources.cs" />
-    <Compile Include="Highlighting\HighlightingRuleSet.cs" />
-    <Compile Include="Highlighting\HighlightingSpan.cs" />
-    <Compile Include="Highlighting\IHighlightingDefinitionReferenceResolver.cs">
-    </Compile>
     <Compile Include="Highlighting\RichText.cs" />
     <Compile Include="Highlighting\RichTextColorizer.cs" />
     <Compile Include="Highlighting\RichTextModel.cs" />
@@ -246,20 +216,21 @@
     <Compile Include="Highlighting\Xshd\V2Loader.cs" />
     <Compile Include="Highlighting\Xshd\XmlHighlightingDefinition.cs" />
     <Compile Include="Highlighting\Xshd\XshdColor.cs" />
+    <Compile Include="Highlighting\Xshd\XshdElement.cs" />
     <Compile Include="Highlighting\Xshd\XshdImport.cs" />
+    <Compile Include="Highlighting\Xshd\XshdKeywords.cs" />
     <Compile Include="Highlighting\Xshd\XshdProperty.cs" />
     <Compile Include="Highlighting\Xshd\XshdReference.cs" />
-    <Compile Include="Highlighting\Xshd\XshdElement.cs" />
-    <Compile Include="Highlighting\Xshd\XshdKeywords.cs" />
     <Compile Include="Highlighting\Xshd\XshdRule.cs" />
     <Compile Include="Highlighting\Xshd\XshdRuleSet.cs" />
     <Compile Include="Highlighting\Xshd\XshdSpan.cs" />
     <Compile Include="Highlighting\Xshd\XshdSyntaxDefinition.cs" />
-    <Compile Include="Indentation\CSharp\IndentationReformatter.cs" />
     <Compile Include="Indentation\CSharp\CSharpIndentationStrategy.cs" />
     <Compile Include="Indentation\CSharp\DocumentAccessor.cs" />
+    <Compile Include="Indentation\CSharp\IndentationReformatter.cs" />
     <Compile Include="Indentation\DefaultIndentationStrategy.cs" />
     <Compile Include="Indentation\IIndentationStrategy.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\BackgroundGeometryBuilder.cs">
       <DependentUpon>IBackgroundRenderer.cs</DependentUpon>
     </Compile>
@@ -361,18 +332,6 @@
     <Compile Include="TextEditorAutomationPeer.cs" />
     <Compile Include="TextEditorComponent.cs">
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Document\GapTextBuffer.cs">
-      <DependentUpon>TextDocument.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Document\LineManager.cs">
-      <DependentUpon>TextDocument.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Document\DocumentLine.cs" />
-    <Compile Include="Document\DocumentLineTree.cs">
-      <DependentUpon>DocumentLine.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Document\TextDocument.cs" />
     <Compile Include="TextEditorOptions.cs" />
     <Compile Include="TextEditorWeakEventManager.cs">
       <DependentUpon>TextEditor.cs</DependentUpon>
@@ -405,25 +364,7 @@
     <Compile Include="Utils\PixelSnapHelpers.cs" />
     <Compile Include="Utils\ThrowUtil.cs" />
     <Compile Include="Utils\Win32.cs" />
-    <CodeAnalysisDictionary Include="Properties\CodeAnalysisDictionary.xml" />
     <Resource Include="themes\RightArrow.cur" />
-    <EmbeddedResource Include="Highlighting\Resources\ASPX.xshd" />
-    <EmbeddedResource Include="Highlighting\Resources\Boo.xshd" />
-    <EmbeddedResource Include="Highlighting\Resources\Coco-Mode.xshd" />
-    <EmbeddedResource Include="Highlighting\Resources\CPP-Mode.xshd" />
-    <EmbeddedResource Include="Highlighting\Resources\HTML-Mode.xshd" />
-    <EmbeddedResource Include="Highlighting\Resources\Java-Mode.xshd" />
-    <EmbeddedResource Include="Highlighting\Resources\JavaScript-Mode.xshd" />
-    <EmbeddedResource Include="Highlighting\Resources\Patch-Mode.xshd" />
-    <EmbeddedResource Include="Highlighting\Resources\PHP-Mode.xshd" />
-    <EmbeddedResource Include="Highlighting\Resources\Python-Mode.xshd" />
-    <EmbeddedResource Include="Highlighting\Resources\Tex-Mode.xshd" />
-    <EmbeddedResource Include="Highlighting\Resources\VB-Mode.xshd" />
-    <EmbeddedResource Include="Highlighting\Resources\XML-Mode.xshd" />
-    <EmbeddedResource Include="Highlighting\Resources\ModeV1.xsd" />
-    <EmbeddedResource Include="Highlighting\Resources\ModeV2.xsd" />
-    <EmbeddedResource Include="Highlighting\Resources\CSharp-Mode.xshd" />
-    <EmbeddedResource Include="Highlighting\Resources\XmlDoc.xshd" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="CodeCompletion\CompletionList.xaml">
@@ -436,27 +377,49 @@
     </Page>
     <Page Include="Search\SearchPanel.xaml">
       <DependentUpon>SearchPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Search\DropDownButton.xaml">
       <DependentUpon>DropDownButton.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="TextEditor.xaml" />
-    <Page Include="themes\generic.xaml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Highlighting\Resources\CSS-Mode.xshd" />
+    <Page Include="themes\generic.xaml">
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Search\next.png" />
     <Resource Include="Search\prev.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Highlighting\Resources\PowerShell.xshd" />
+    <None Include="Highlighting\Resources\ASPX.xshd" />
+    <None Include="Highlighting\Resources\Boo.xshd" />
+    <None Include="Highlighting\Resources\Coco-Mode.xshd" />
+    <None Include="Highlighting\Resources\CPP-Mode.xshd" />
+    <None Include="Highlighting\Resources\CSharp-Mode.xshd" />
+    <None Include="Highlighting\Resources\CSS-Mode.xshd" />
+    <None Include="Highlighting\Resources\HTML-Mode.xshd" />
+    <None Include="Highlighting\Resources\Java-Mode.xshd" />
+    <None Include="Highlighting\Resources\JavaScript-Mode.xshd" />
+    <None Include="Highlighting\Resources\MarkDown-Mode.xshd" />
+    <None Include="Highlighting\Resources\ModeV1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Highlighting\Resources\ModeV2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Highlighting\Resources\Patch-Mode.xshd" />
+    <None Include="Highlighting\Resources\PHP-Mode.xshd" />
+    <None Include="Highlighting\Resources\PowerShell.xshd" />
+    <None Include="Highlighting\Resources\Python-Mode.xshd" />
+    <None Include="Highlighting\Resources\Tex-Mode.xshd" />
+    <None Include="Highlighting\Resources\TSQL-Mode.xshd" />
+    <None Include="Highlighting\Resources\VB-Mode.xshd" />
+    <None Include="Highlighting\Resources\XML-Mode.xshd" />
+    <None Include="Highlighting\Resources\XmlDoc.xshd" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Highlighting\Resources\MarkDown-Mode.xshd" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Highlighting\Resources\TSQL-Mode.xshd" />
+    <Content Include="Properties\CodeAnalysisDictionary.xml" />
   </ItemGroup>
 </Project>
