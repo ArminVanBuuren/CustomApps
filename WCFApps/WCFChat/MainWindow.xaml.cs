@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.ServiceModel;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 using Utils;
 using Utils.Crypto;
 using WCFChat.Client.CS;
@@ -19,27 +21,40 @@ namespace WCFChat.Client
         internal static string AccountStorePath { get; }
         private CS.ChatClient proxy = null;
         private GeneratedUser localUser = null;
-
+        private WindowInfo authorizationWindow;
         static MainWindow()
         {
             AccountStorePath = Customs.AccountFilePath + ".dat";
         }
-        
+
+        WindowInfo GetWindowNotificationTemplate(string title, string message)
+        {
+            WindowInfo windowError = new WindowInfo(Width, message) {
+                                                                        Topmost = true,
+                                                                        Title = "Authorization Error!",
+                                                                        WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen
+                                                                    };
+            windowError.Focus();
+            return windowError;
+        }
+
         public MainWindow()
         {
+            GeneratedUser possibleUser = null;
+            
             try
             {
                 if (File.Exists(AccountStorePath))
                 {
                     using (Stream stream = new FileStream(AccountStorePath, FileMode.Open, FileAccess.Read))
                     {
-                        localUser = new BinaryFormatter().Deserialize(stream) as GeneratedUser;
+                        possibleUser = new BinaryFormatter().Deserialize(stream) as GeneratedUser;
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                
+                File.Delete(AccountStorePath);
             }
 
             try
@@ -50,87 +65,162 @@ namespace WCFChat.Client
                 string serviceListenPort = proxy.Endpoint.Address.Uri.Port.ToString();
                 proxy.Endpoint.Address = new EndpointAddress(@"http://localhost:" + serviceListenPort + servicePath);
                 proxy.Open();
-                //proxy.InnerDuplexChannel.Faulted += new EventHandler(InnerDuplexChannel_Faulted);
-                //proxy.InnerDuplexChannel.Opened += new EventHandler(InnerDuplexChannel_Opened);
-                //proxy.InnerDuplexChannel.Closed += new EventHandler(InnerDuplexChannel_Closed);
-                //proxy.ConnectCompleted += new EventHandler<ConnectCompletedEventArgs>(proxy_ConnectCompleted);
-                
+                proxy.InnerDuplexChannel.Faulted += new EventHandler(InnerDuplexChannel_Faulted);
+                proxy.InnerDuplexChannel.Opened += new EventHandler(InnerDuplexChannel_Opened);
+                proxy.InnerDuplexChannel.Closed += new EventHandler(InnerDuplexChannel_Closed);
+
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                throw;
+                WindowInfo authorizationError = GetWindowNotificationTemplate("Server Error!", e.Message);
+                authorizationError.ShowDialog();
+                Process.GetCurrentProcess().Kill();
+                return;
             }
 
+            authorizationWindow = new WindowInfo
+                                    {
+                                        Title = "Authorization",
+                                        Topmost = true,
+                                        WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen
+                                    };
+            authorizationWindow.Focus();
 
-
-            WindowWarning newUser = new WindowWarning();
-            newUser.Title = "Authorization";
-            newUser.Topmost = true;
-            newUser.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
-            newUser.Focus();
-
-            
-            if (localUser == null)
+            if (possibleUser == null)
             {
-                newUser.CheckAuthorization += (sender, args) =>
+                authorizationWindow.CheckAuthorization += (sender, args) =>
                                               {
-                                                  KeyValuePair<string, string> userData = (KeyValuePair<string, string>)sender;
-                                                  User newuser = new User() {
-                                                                                Name = userData.Key,
-                                                                                Password = userData.Value,
-                                                                                GUID = Guid.NewGuid().ToString("D"),
-                                                                                Time = DateTime.Now
-                                                                            };
-
-                                                  newUser.WaitOwner();
-                                                  
+                                                  KeyValuePair<string, string> userData = (KeyValuePair<string, string>) sender;
+                                                  possibleUser = new GeneratedUser(new User() {
+                                                                                                  Name = userData.Key,
+                                                                                                  Password = userData.Value,
+                                                                                                  GUID = Guid.NewGuid().ToString("D"),
+                                                                                                  Time = DateTime.Now
+                                                                                              });
+                                                  TryToConnect(possibleUser);
                                               };
             }
             else
             {
-                newUser.CheckAuthorization += (sender, args) =>
+                authorizationWindow.CheckAuthorization += (sender, args) =>
                                               {
-                                                  KeyValuePair<string, string> userData = (KeyValuePair<string, string>)sender;
-                                                  if (localUser.MyUser.Name.Equals(userData.Key) && localUser.MyUser.Password.Equals(userData.Value))
+                                                  KeyValuePair<string, string> userData = (KeyValuePair<string, string>) sender;
+                                                  if (possibleUser.MyUser.Name.Equals(userData.Key, StringComparison.CurrentCultureIgnoreCase) && possibleUser.MyUser.Password.Equals(userData.Value))
                                                   {
-                                                      newUser.Close();
+                                                      TryToConnect(possibleUser);
                                                   }
                                                   else
                                                   {
-                                                      newUser.IsBlured = true;
-                                                      WindowWarning authorizationError = new WindowWarning(Width, "Username or password is incorrect. Please try again.");
-                                                      authorizationError.Title = "Authorization Error!";
-                                                      authorizationError.ShowDialog();
-                                                      newUser.IsBlured = false;
+                                                      authorizationWindow.InfoWarningMessage("Username or password is incorrect. Please try again.");
                                                   }
                                               };
             }
-            newUser.Closed += (sender, args) =>
+            authorizationWindow.Closed += (sender, args) =>
                               {
-                                  
-                                  this.Close();
+                                  if (localUser == null)
+                                      this.Close();
                               };
-            newUser.ShowDialog();
+            authorizationWindow.ShowDialog();
+
 
 
             InitializeComponent();
         }
 
-        bool TryToConnect(User user)
+        void TryToConnect(GeneratedUser generedUser)
         {
-            Task<bool> result;
-            result = proxy.LoginAsync(user);
-            result.Start();
-            return false;
+            authorizationWindow.WaitWhenConnect();
+            proxy.LoginAsync(generedUser.MyUser).ContinueWith((antecedent) =>
+                                                {
+                                                    if (antecedent.Result)
+                                                    {
+                                                        localUser = generedUser;
+                                                        HandleProxy();
+                                                    }
+                                                    else
+                                                    {
+                                                        authorizationWindow.Dispatcher?.Invoke(() => authorizationWindow.InfoWarningMessage(string.Format("Username \"{0}\" already exist. Choose another.", generedUser.MyUser.Name)));
+                                                    }
+                                                });
         }
 
-        //KeyValuePair<string, string> GetUserAuthorization()
-        //{
+        /// <summary>
+        /// This is the most method I like, it helps us alot
+        /// We may can't know when a connection is lost in 
+        /// of network failure or service stopped.
+        /// And also to maintain performance client doesnt know
+        /// that the connection will be lost when hitting the 
+        /// disconnect button, but when a session is terminated
+        /// this method will be called, and it will handle everything.
+        /// </summary>
+        private void HandleProxy()
+        {
+            if (proxy != null)
+            {
+                switch (this.proxy.State)
+                {
+                    case CommunicationState.Closed:
+                        proxy = null;
 
-        //    if(newUser.Closed)
-        //    return new KeyValuePair<string, string>(newUser.UserName.Text, newUser.Password.Text);
-        //}
+                        break;
+                    case CommunicationState.Closing:
+                        break;
+                    case CommunicationState.Created:
+                        break;
+                    case CommunicationState.Faulted:
+                        proxy.Abort();
+                        proxy = null;
+
+                        break;
+                    case CommunicationState.Opened:
+                        if (authorizationWindow.IsEnabled)
+                        {
+                            authorizationWindow.Dispatcher?.Invoke(authorizationWindow.Close);
+                        }
+                        break;
+                    case CommunicationState.Opening:
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+
+
+        //When the communication object turns to fault state it will
+        //require another thread to invoke a fault event
+        private delegate void FaultedInvoker();
+        void InnerDuplexChannel_Closed(object sender, EventArgs e)
+        {
+            if (!this.Dispatcher.CheckAccess())
+            {
+                this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new FaultedInvoker(HandleProxy));
+                return;
+            }
+            HandleProxy();
+        }
+
+        void InnerDuplexChannel_Opened(object sender, EventArgs e)
+        {
+            if (!this.Dispatcher.CheckAccess())
+            {
+                this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new FaultedInvoker(HandleProxy));
+                return;
+            }
+            HandleProxy();
+        }
+
+        void InnerDuplexChannel_Faulted(object sender, EventArgs e)
+        {
+            if (!this.Dispatcher.CheckAccess())
+            {
+                this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new FaultedInvoker(HandleProxy));
+                return;
+            }
+            HandleProxy();
+        }
+
 
         public Message[] GetAllContentHistory()
         {

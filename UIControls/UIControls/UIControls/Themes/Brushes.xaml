@@ -46,7 +46,7 @@
     <SolidColorBrush x:Key="CustomProgressBarBorderBrush" Color="Black" />
 
     <!-- ########################### -->
-    
+
     <SolidColorBrush x:Key="AuthorWindowTopBorderBrush" Color="#FF00A0B9" />
     <SolidColorBrush x:Key="AuthorWindowTopBorderTextBrush" Color="#FFA5FFFF" />
 
