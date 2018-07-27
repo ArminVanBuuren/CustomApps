@@ -39,7 +39,7 @@ namespace WCFChat.Host.Console
 
         public bool Login(Host.Console.User newUser)
         {
-            System.Console.WriteLine("connect!!!!!");
+            System.Console.WriteLine("try to connect!!!!!");
             lock (syncObj)
             {
                 // Если в системе уже есть другой юзер с тем же именем
