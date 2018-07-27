@@ -19,7 +19,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using UIControls.Utils;
-using WCFChat.Client.CS;
+using WCFChat.Client.ServiceReference1;
 
 namespace WCFChat.Client
 {
@@ -29,20 +29,30 @@ namespace WCFChat.Client
     public partial class AuthorizationWindow
     {
         private MainWindow mainWindow;
-        public event EventHandler CheckAuthorization;
         GeneratedUser currentUser = null;
-        private CS.ChatClient proxy = null;
+        private ChatClient proxy = null;
+        IChat proxy2 = null;
 
-        public AuthorizationWindow()
+        public AuthorizationWindow():base(true, false)
         {
-            Title = "Authorization";
-            WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
-            Topmost = true;
-            Progress.IsIndeterminate = true;
             InitializeComponent();
+            this.Closing += AuthorizationWindow_Closing;
+            mainWindow = new MainWindow();
+            mainWindow.Closing += MainWindow_Closing;
+            WorkingProgressBar.IsIndeterminate = true;
 
             Task.Run(() => Initialize()).ContinueWith(SuccessfulConnected, TaskScheduler.FromCurrentSynchronizationContext());
+        }
+
+        private void AuthorizationWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            mainWindow.Close();
+        }
+
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (this.Visibility != Visibility.Visible)
+                this.Close();
         }
 
         WindowInfo GetWindowNotificationTemplate(string title, string message)
@@ -57,7 +67,7 @@ namespace WCFChat.Client
             return windowError;
         }
 
-        void Initialize()
+        bool Initialize()
         {
             try
             {
@@ -74,39 +84,66 @@ namespace WCFChat.Client
                 File.Delete(MainWindow.AccountStorePath);
             }
 
+            
             try
             {
-                InstanceContext context = new InstanceContext(this);
-                proxy = new CS.ChatClient(context);
-                string servicePath = proxy.Endpoint.ListenUri.AbsolutePath;
-                string serviceListenPort = proxy.Endpoint.Address.Uri.Port.ToString();
-                proxy.Endpoint.Address = new EndpointAddress(@"http://localhost:" + serviceListenPort + servicePath);
-                proxy.Open();
-                proxy.InnerDuplexChannel.Faulted += new EventHandler(InnerDuplexChannel_Faulted);
-                proxy.InnerDuplexChannel.Opened += new EventHandler(InnerDuplexChannel_Opened);
-                proxy.InnerDuplexChannel.Closed += new EventHandler(InnerDuplexChannel_Closed);
+                
+
+                InstanceContext context = new InstanceContext(mainWindow);
+                DuplexChannelFactory<IChat> factory = new DuplexChannelFactory<IChat>(context, new WSDualHttpBinding(), @"http://localhost:8040/WPFHost/");
+                proxy2 = factory.CreateChannel();
+                proxy2.Login(new User());
+
+                //proxy = new ChatClient(context);
+                //string servicePath = proxy.Endpoint.ListenUri.AbsolutePath;
+                //string serviceListenPort = proxy.Endpoint.Address.Uri.Port.ToString();
+                //proxy.Endpoint.Address = new EndpointAddress(@"http://localhost:" + serviceListenPort + servicePath);
+                //proxy.Open();
+                //proxy.InnerDuplexChannel.Faulted += new EventHandler(InnerDuplexChannel_Faulted);
+                //proxy.InnerDuplexChannel.Opened += new EventHandler(InnerDuplexChannel_Opened);
+                //proxy.InnerDuplexChannel.Closed += new EventHandler(InnerDuplexChannel_Closed);
+                return true;
             }
             catch (Exception e)
             {
-                WindowInfo authorizationError = GetWindowNotificationTemplate("Server Error!", e.Message);
-                authorizationError.ShowDialog();
-                Process.GetCurrentProcess().Kill();
-                return;
+                ((ICommunicationObject) proxy2)?.Abort();
+
+                InfoWarningMessage(e.InnerException != null ? string.Format("Exception when connect to Server!\r\n{0}", e.InnerException.Message) : string.Format("Exception when connect to Server!\r\n{0}", e.Message));
+                return false;
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        public void SuccessfulConnected(Task<bool> antecedent)
         {
-            CheckAuthorization?.Invoke(new KeyValuePair<string, string>(UserName.Text, Password.Text), e);
+            Dispatcher.Invoke(() =>
+                              {
+                                  ButtonOK.Visibility = Visibility.Visible;
 
+                                  WorkingProgressBar.Visibility = Visibility.Collapsed;
+                                  NotWorkingProgressBar.Visibility = Visibility.Visible;
 
+                                  if (antecedent.Result)
+                                  {
+                                      Authorization.Visibility = Visibility.Visible;
+                                      ButtonOK.Click += ButtonOkOnClickConnect;
+                                  }
+                                  else
+                                      ButtonOK.Click += ButtonOkOnClickClose;
+                              });
+        }
+
+        private void ButtonOkOnClickClose(object sender, RoutedEventArgs routedEventArgs)
+        {
+            Close();
+        }
+
+        private void ButtonOkOnClickConnect(object sender, RoutedEventArgs e)
+        {
             if (currentUser == null)
             {
-
-                KeyValuePair<string, string> userData = (KeyValuePair<string, string>) sender;
                 currentUser = new GeneratedUser(new User() {
-                                                               Name = userData.Key,
-                                                               Password = userData.Value,
+                                                               Name = UserName.Text,
+                                                               Password = Password.Password,
                                                                GUID = Guid.NewGuid().ToString("D"),
                                                                Time = DateTime.Now
                                                            });
@@ -115,9 +152,7 @@ namespace WCFChat.Client
             }
             else
             {
-
-                KeyValuePair<string, string> userData = (KeyValuePair<string, string>) sender;
-                if (currentUser.MyUser.Name.Equals(userData.Key, StringComparison.CurrentCultureIgnoreCase) && currentUser.MyUser.Password.Equals(userData.Value))
+                if (currentUser.MyUser.Name.Equals(UserName.Text, StringComparison.CurrentCultureIgnoreCase) && currentUser.MyUser.Password.Equals(Password.Password))
                 {
                     TryToConnect(currentUser);
                 }
@@ -132,43 +167,38 @@ namespace WCFChat.Client
         void TryToConnect(GeneratedUser generedUser)
         {
             WaitWhenLoggning();
-            proxy.LoginAsync(generedUser.MyUser).ContinueWith((antecedent) =>
+            proxy2.LoginAsync(generedUser.MyUser).ContinueWith((antecedent) =>
                                                               {
+                                                                  LoggingCompleted();
                                                                   if (antecedent.Result)
                                                                   {
-                                                                      HandleProxy();
+                                                                      this.Visibility = Visibility.Collapsed;
+                                                                      mainWindow.Show(currentUser, proxy2);
                                                                   }
                                                                   else
                                                                   {
-                                                                      Dispatcher?.Invoke(() => InfoWarningMessage(string.Format("Username \"{0}\" already exist. Please choose another.", generedUser.MyUser.Name)));
-                                                                      LoggningFailed();
+                                                                      Dispatcher?.Invoke(() => InfoWarningMessage(string.Format("Username \"{0}\" already exist. Please choose another.", generedUser.MyUser.Name)));   
                                                                   }
                                                               });
         }
 
-        public void SuccessfulConnected(Task antecedent)
-        {
-            Dispatcher.Invoke(() =>
-                              {
-                                  Authorization.Visibility = Visibility.Visible;
-                                  ButtonOK.Visibility = Visibility.Visible;
-                                  Progress.IsIndeterminate = false;
-                              });
-        }
+
 
         public void WaitWhenLoggning()
         {
-            Progress.IsIndeterminate = true;
+            WorkingProgressBar.Visibility = Visibility.Visible;
+            NotWorkingProgressBar.Visibility = Visibility.Collapsed;
             UserName.IsEnabled = false;
             Password.IsEnabled = false;
             ButtonOK.IsEnabled = false;
         }
 
-        public void LoggningFailed()
+        public void LoggingCompleted()
         {
             Dispatcher.Invoke(() =>
                               {
-                                  Progress.IsIndeterminate = false;
+                                  WorkingProgressBar.Visibility = Visibility.Collapsed;
+                                  NotWorkingProgressBar.Visibility = Visibility.Visible;
                                   UserName.IsEnabled = true;
                                   Password.IsEnabled = true;
                                   ButtonOK.IsEnabled = true;
@@ -177,9 +207,12 @@ namespace WCFChat.Client
 
         public void InfoWarningMessage(string msg)
         {
-            ErrorMessage.Visibility = Visibility.Visible;
-            ErrorMessage.Text = msg;
-            ErrorMessage.Foreground = (Brush)new BrushConverter().ConvertFrom("#FFCB0000");
+            Dispatcher?.Invoke(() =>
+                               {
+                                   ErrorMessage.Visibility = Visibility.Visible;
+                                   ErrorMessage.Text = msg;
+                                   ErrorMessage.Foreground = (Brush)new BrushConverter().ConvertFrom("#FFFF7070");
+                               });
         }
 
         private void UserName_OnTextChanged(object sender, TextChangedEventArgs e)
@@ -188,87 +221,86 @@ namespace WCFChat.Client
                 ErrorMessage.Visibility = Visibility.Collapsed;
         }
 
-        private void Password_OnTextChanged(object sender, TextChangedEventArgs e)
+        private void Password_OnPasswordChanged(object sender, RoutedEventArgs e)
         {
             if (ErrorMessage.Visibility == Visibility.Visible)
                 ErrorMessage.Visibility = Visibility.Collapsed;
         }
 
-        
-        /// <summary>
-        /// This is the most method I like, it helps us alot
-        /// We may can't know when a connection is lost in 
-        /// of network failure or service stopped.
-        /// And also to maintain performance client doesnt know
-        /// that the connection will be lost when hitting the 
-        /// disconnect button, but when a session is terminated
-        /// this method will be called, and it will handle everything.
-        /// </summary>
-        private void HandleProxy()
-        {
-            if (proxy != null)
-            {
-                switch (this.proxy.State)
-                {
-                    case CommunicationState.Closed:
-                        proxy = null;
-                        mainWindow?.Close();
-                        break;
-                    case CommunicationState.Closing:
-                        break;
-                    case CommunicationState.Created:
-                        break;
-                    case CommunicationState.Faulted:
-                        proxy.Abort();
-                        proxy = null;
-                        mainWindow?.Close();
-                        break;
-                    case CommunicationState.Opened:
-                        this.Visibility = Visibility.Collapsed;
-                        mainWindow = new MainWindow(currentUser, proxy);
-                        mainWindow.Show();
-                        break;
-                    case CommunicationState.Opening:
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
+        ///// <summary>
+        ///// This is the most method I like, it helps us alot
+        ///// We may can't know when a connection is lost in 
+        ///// of network failure or service stopped.
+        ///// And also to maintain performance client doesnt know
+        ///// that the connection will be lost when hitting the 
+        ///// disconnect button, but when a session is terminated
+        ///// this method will be called, and it will handle everything.
+        ///// </summary>
+        //private void HandleProxy()
+        //{
+        //    if (proxy2 != null)
+        //    {
+        //        switch (this.proxy.State)
+        //        {
+        //            case CommunicationState.Closed:
+        //                proxy = null;
+        //                mainWindow?.Close();
+        //                break;
+        //            case CommunicationState.Closing:
+        //                break;
+        //            case CommunicationState.Created:
+        //                break;
+        //            case CommunicationState.Faulted:
+        //                proxy.Abort();
+        //                proxy = null;
+        //                mainWindow?.Close();
+        //                break;
+        //            case CommunicationState.Opened:
+        //                this.Visibility = Visibility.Collapsed;
+        //                mainWindow.Show(currentUser, proxy);
+        //                break;
+        //            case CommunicationState.Opening:
+        //                break;
+        //            default:
+        //                break;
+        //        }
+        //    }
+        //}
 
 
 
         //When the communication object turns to fault state it will
         //require another thread to invoke a fault event
-        private delegate void FaultedInvoker();
-        void InnerDuplexChannel_Closed(object sender, EventArgs e)
-        {
-            if (!this.Dispatcher.CheckAccess())
-            {
-                this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new FaultedInvoker(HandleProxy));
-                return;
-            }
-            HandleProxy();
-        }
+        //private delegate void FaultedInvoker();
+        //void InnerDuplexChannel_Closed(object sender, EventArgs e)
+        //{
+        //    if (!this.Dispatcher.CheckAccess())
+        //    {
+        //        this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new FaultedInvoker(HandleProxy));
+        //        return;
+        //    }
+        //    HandleProxy();
+        //}
 
-        void InnerDuplexChannel_Opened(object sender, EventArgs e)
-        {
-            if (!this.Dispatcher.CheckAccess())
-            {
-                this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new FaultedInvoker(HandleProxy));
-                return;
-            }
-            HandleProxy();
-        }
+        //void InnerDuplexChannel_Opened(object sender, EventArgs e)
+        //{
+        //    if (!this.Dispatcher.CheckAccess())
+        //    {
+        //        this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new FaultedInvoker(HandleProxy));
+        //        return;
+        //    }
+        //    HandleProxy();
+        //}
 
-        void InnerDuplexChannel_Faulted(object sender, EventArgs e)
-        {
-            if (!this.Dispatcher.CheckAccess())
-            {
-                this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new FaultedInvoker(HandleProxy));
-                return;
-            }
-            HandleProxy();
-        }
+        //void InnerDuplexChannel_Faulted(object sender, EventArgs e)
+        //{
+        //    if (!this.Dispatcher.CheckAccess())
+        //    {
+        //        this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new FaultedInvoker(HandleProxy));
+        //        return;
+        //    }
+        //    HandleProxy();
+        //}
+
     }
 }

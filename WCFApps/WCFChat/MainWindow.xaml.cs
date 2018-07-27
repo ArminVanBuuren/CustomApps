@@ -9,49 +9,42 @@ using System.Threading.Tasks;
 using System.Windows.Threading;
 using Utils;
 using Utils.Crypto;
-using WCFChat.Client.CS;
+using WCFChat.Client.ServiceReference1;
 
 namespace WCFChat.Client
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : CS.IChatCallback, IDisposable
+    public partial class MainWindow : ServiceReference1.IChatCallback
     {
         internal static string AccountStorePath { get; }
-        private CS.ChatClient proxy = null;
+        private IChat proxy = null;
         private GeneratedUser user = null;
-        private AuthorizationWindow authorizationWindow;
+
         static MainWindow()
         {
             AccountStorePath = Customs.AccountFilePath + ".dat";
         }
 
-        public MainWindow(GeneratedUser user, CS.ChatClient proxy)
+        public MainWindow()
         {
-            this.user = user;
-            this.proxy = proxy;
             InitializeComponent();
         }
 
+        public void Show(GeneratedUser user, IChat proxy)
+        {
+            this.user = user;
+            this.proxy = proxy;
+            this.ShowDialog();
+        }
+
+        public DateTime RefreshClientsAndGetEarlyDataMessage(ServiceReference1.Client[] clients, bool isGetEarlyMessage)
+        {
+            throw new NotImplementedException();
+        }
 
         public Message[] GetAllContentHistory()
-        {
-            
-            throw new NotImplementedException();
-        }
-
-        public void IsWritingCallback(CS.Client client)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Receive(Message msg)
-        {
-            throw new NotImplementedException();
-        }
-
-        public DateTime RefreshClientsAndGetEarlyDataMessage(CS.Client[] clients, bool isGetEarlyMessage)
         {
             throw new NotImplementedException();
         }
@@ -61,12 +54,17 @@ namespace WCFChat.Client
             throw new NotImplementedException();
         }
 
-        public void Terminate()
+        public void Receive(Message msg)
         {
             throw new NotImplementedException();
         }
 
-        public void Dispose()
+        public void IsWritingCallback(ServiceReference1.Client client)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Terminate()
         {
             throw new NotImplementedException();
         }
