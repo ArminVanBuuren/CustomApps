@@ -16,14 +16,14 @@ namespace WCFChat.Host.Console
             ServiceHost host = null;
             try
             {
-                Uri httpAdrs = new Uri("http://localhost:8040/WPFHost/");
+                //Uri httpAdrs = new Uri("http://localhost:8040/WPFHost/");
                 host = new ServiceHost(typeof(ChatService));
-                WSDualHttpBinding dualBinding = new WSDualHttpBinding();
-                dualBinding.MaxBufferPoolSize = (int) 67108864;
-                dualBinding.MaxReceivedMessageSize = (int) 67108864;
-                dualBinding.ReaderQuotas.MaxArrayLength = 67108864;
-                dualBinding.ReaderQuotas.MaxBytesPerRead = 67108864;
-                dualBinding.ReaderQuotas.MaxStringContentLength = 67108864;
+                //WSDualHttpBinding dualBinding = new WSDualHttpBinding();
+                //dualBinding.MaxBufferPoolSize = (int) 67108864;
+                //dualBinding.MaxReceivedMessageSize = (int) 67108864;
+                //dualBinding.ReaderQuotas.MaxArrayLength = 67108864;
+                //dualBinding.ReaderQuotas.MaxBytesPerRead = 67108864;
+                //dualBinding.ReaderQuotas.MaxStringContentLength = 67108864;
 
                 //ServiceThrottlingBehavior throttle;
                 //throttle = host.Description.Behaviors.Find<ServiceThrottlingBehavior>();

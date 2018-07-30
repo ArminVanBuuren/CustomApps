@@ -13,9 +13,7 @@ using WCFChat.Client.ServiceReference1;
 
 namespace WCFChat.Client
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+    [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Multiple)]
     public partial class MainWindow : ServiceReference1.IChatCallback
     {
         internal static string AccountStorePath { get; }

@@ -88,11 +88,20 @@ namespace WCFChat.Client
             try
             {
                 
-
                 InstanceContext context = new InstanceContext(mainWindow);
-                DuplexChannelFactory<IChat> factory = new DuplexChannelFactory<IChat>(context, new WSDualHttpBinding(), @"http://localhost:8040/WPFHost/");
-                proxy2 = factory.CreateChannel();
-                proxy2.Login(new User());
+                ServiceReference1.ChatClient client = new ChatClient(context);
+                client.Open();
+                client.Login(new User());
+
+                //DuplexChannelFactory<IChat> factory1 = new DuplexChannelFactory<IChat>(context, new WSDualHttpBinding(), new EndpointAddress(new Uri("http://localhost:8040/WPFHost/")));
+                //IChat channel = factory1.CreateChannel();
+
+                //channel.Login(new User());
+
+                //InstanceContext context = new InstanceContext(mainWindow);
+                //DuplexChannelFactory<IChat> factory = new DuplexChannelFactory<IChat>(context, new WSDualHttpBinding(), @"http://localhost:8040/WPFHost/");
+                //proxy2 = factory.CreateChannel();
+                //proxy2.Login(new User());
 
                 //proxy = new ChatClient(context);
                 //string servicePath = proxy.Endpoint.ListenUri.AbsolutePath;
