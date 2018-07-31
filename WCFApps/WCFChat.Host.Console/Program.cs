@@ -16,8 +16,11 @@ namespace WCFChat.Host.Console
             ServiceHost host = null;
             try
             {
-                //Uri httpAdrs = new Uri("http://localhost:8040/WPFHost/");
                 host = new ServiceHost(typeof(ChatService));
+
+
+                //Uri httpAdrs = new Uri("http://localhost:8040/WPFHost/");
+
                 //WSDualHttpBinding dualBinding = new WSDualHttpBinding();
                 //dualBinding.MaxBufferPoolSize = (int) 67108864;
                 //dualBinding.MaxReceivedMessageSize = (int) 67108864;
@@ -42,7 +45,7 @@ namespace WCFChat.Host.Console
                 //ServiceMetadataBehavior mBehave = new ServiceMetadataBehavior();
                 //host.Description.Behaviors.Add(mBehave);
 
-                
+
                 //host.AddServiceEndpoint(typeof(IMetadataExchange), MetadataExchangeBindings.CreateMexTcpBinding(), "http://localhost:8040/WPFHost/mex");
 
 

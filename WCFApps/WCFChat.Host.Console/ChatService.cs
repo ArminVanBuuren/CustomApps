@@ -135,7 +135,7 @@ namespace WCFChat.Host.Console
                 List<Client> clientList = clients.Keys.Cast<Client>().ToList();
                 foreach (IChatCallback callback in clients.Values)
                 {
-                    //callback.RefreshClientsAndGetEarlyDataMessage(clientList, false);
+                    callback.RefreshClientsAndGetEarlyDataMessage(clientList, false);
                 }
             }
         }

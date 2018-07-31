@@ -38,10 +38,10 @@ namespace WCFChat.Client
             base.Show();
         }
 
-        public void RefreshClientsAndGetEarlyDataMessage(ServiceReference1.Client[] clients, bool isGetEarlyMessage)
+        public DateTime RefreshClientsAndGetEarlyDataMessage(ServiceReference1.Client[] clients, bool isGetEarlyMessage)
         {
             MessageBox.Show("RefreshClientsAndGetEarlyDataMessage");
-            //return DateTime.Now;
+            return DateTime.Now;
         }
 
         public Message[] GetAllContentHistory()

@@ -19,8 +19,8 @@ namespace WCFChat.Host.Console
 
     public interface IChatCallback
     {
-        [OperationContract(IsOneWay = true)]
-        void RefreshClientsAndGetEarlyDataMessage(List<Client> clients, bool isGetEarlyMessage);
+        [OperationContract(IsOneWay = false)]
+        DateTime RefreshClientsAndGetEarlyDataMessage(List<Client> clients, bool isGetEarlyMessage);
 
         [OperationContract(IsOneWay = false)]
         List<Message> GetAllContentHistory();

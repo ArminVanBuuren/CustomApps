@@ -217,8 +217,8 @@ namespace WCFChat.Client.ServiceReference1 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface IChatCallback {
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChat/RefreshClientsAndGetEarlyDataMessage")]
-        void RefreshClientsAndGetEarlyDataMessage(WCFChat.Client.ServiceReference1.Client[] clients, bool isGetEarlyMessage);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChat/RefreshClientsAndGetEarlyDataMessage", ReplyAction="http://tempuri.org/IChat/RefreshClientsAndGetEarlyDataMessageResponse")]
+        System.DateTime RefreshClientsAndGetEarlyDataMessage(WCFChat.Client.ServiceReference1.Client[] clients, bool isGetEarlyMessage);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChat/GetAllContentHistory", ReplyAction="http://tempuri.org/IChat/GetAllContentHistoryResponse")]
         WCFChat.Client.ServiceReference1.Message[] GetAllContentHistory();
