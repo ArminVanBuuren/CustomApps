@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
+using System.ServiceModel.Channels;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace WCFChat.Host.Console
 {
@@ -39,42 +42,76 @@ namespace WCFChat.Host.Console
 
         public bool Login(User newUser)
         {
-            System.Console.WriteLine("try to connect!!!!!");
-            lock (syncObj)
+            try
             {
-                // Если в системе уже есть другой юзер с тем же именем
-                User findedUserByName = SearchClientsBySameName(newUser.Name);
-                if (findedUserByName != null && findedUserByName.GUID != newUser.GUID)
-                    return false;
-
-                User userInBase = SearchClientsByGuid(newUser.GUID);
-                if (userInBase != null)
+                lock (syncObj)
                 {
-                    // грохаем юзера который уже есть в чате но с другого приложения, т.е. грохаем его на старом приложении
-                    clients[userInBase].Terminate();
-                    clients.Remove(userInBase);
-                }
+                    RemoteEndpointMessageProperty prop = (RemoteEndpointMessageProperty)OperationContext.Current.IncomingMessageProperties[RemoteEndpointMessageProperty.Name];
+                    System.Console.WriteLine("Try To Connect {0}:{1}", prop.Address, prop.Port);
 
-                clients.Add(newUser, CurrentCallback);
+                    // Если в системе уже есть другой юзер с тем же именем
+                    User findedUserByName = SearchClientsBySameName(newUser.Name);
+                    if (findedUserByName != null && findedUserByName.GUID != newUser.GUID)
+                        return false;
 
-                User getHistoryFromClient = null;
-                DateTime earlyDatamessage = DateTime.Now;
-                List<Client> clientList = clients.Keys.Cast<Client>().ToList();
-                foreach (KeyValuePair<User, IChatCallback> client in clients)
-                {
-                    DateTime earlyData = client.Value.RefreshClientsAndGetEarlyDataMessage(clientList, true);
-                    if (earlyData < earlyDatamessage)
+                    User userInBase = SearchClientsByGuid(newUser.GUID);
+                    if (userInBase != null)
                     {
-                        getHistoryFromClient = client.Key;
-                        earlyDatamessage = earlyData;
+                        // грохаем юзера который уже есть в чате но с другого приложения, т.е. грохаем его на старом приложении
+                        clients[userInBase].Terminate();
+                        clients.Remove(userInBase);
+                    }
+
+
+                    clients.Add(newUser, CurrentCallback);
+
+
+                    User getHistoryFromClient = null;
+                    DateTime earlyDatamessage = DateTime.Now;
+                    List<Client> clientList = clients.Keys.Cast<Client>().ToList();
+
+                    //Task.Run(() =>
+                    //         {
+                    //             Thread.Sleep(10 * 1000);
+                    //         }).ContinueWith((antecedent) =>
+                    //                         {
+                    //                             CurrentCallback.RefreshClientsAndGetEarlyDataMessage(clientList, false);
+                    //                         });
+
+                    
+                    // DateTime res;
+                    CurrentCallback.RefreshClientsAndGetEarlyDataMessage(clientList, false);
+
+                    
+
+                    foreach (KeyValuePair<User, IChatCallback> client in clients)
+                    {
+                        if (client.Key == newUser)
+                            continue;
+
+                        //DateTime earlyData = client.Value.RefreshClientsAndGetEarlyDataMessage(clientList, true);
+                        //if (earlyData < earlyDatamessage)
+                        //{
+                        //    getHistoryFromClient = client.Key;
+                        //    earlyDatamessage = earlyData;
+                        //}
+                    }
+
+
+
+                    if (getHistoryFromClient != null)
+                    {
+                        CurrentCallback.RefreshContentHistory(clients[getHistoryFromClient].GetAllContentHistory());
                     }
                 }
-
-                if (getHistoryFromClient != null)
-                {
-                    CurrentCallback.RefreshContentHistory(clients[getHistoryFromClient].GetAllContentHistory());
-                }
             }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine(false);
+                System.Console.WriteLine(ex);
+                return false;
+            }
+            System.Console.WriteLine(true);
             return true;
         }
 
@@ -98,7 +135,7 @@ namespace WCFChat.Host.Console
                 List<Client> clientList = clients.Keys.Cast<Client>().ToList();
                 foreach (IChatCallback callback in clients.Values)
                 {
-                    callback.RefreshClientsAndGetEarlyDataMessage(clientList, false);
+                    //callback.RefreshClientsAndGetEarlyDataMessage(clientList, false);
                 }
             }
         }

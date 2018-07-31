@@ -19,10 +19,8 @@ namespace WCFChat.Host.Console
 
     public interface IChatCallback
     {
-        // IsOneWay - означает что сервис не будет ждать выполнение запроса на клиенте
-        // также если IsOneWay=true то возвращать значения нельзя, только void
-        [OperationContract(IsOneWay = false)]
-        DateTime RefreshClientsAndGetEarlyDataMessage(List<Client> clients, bool isGetEarlyMessage);
+        [OperationContract(IsOneWay = true)]
+        void RefreshClientsAndGetEarlyDataMessage(List<Client> clients, bool isGetEarlyMessage);
 
         [OperationContract(IsOneWay = false)]
         List<Message> GetAllContentHistory();

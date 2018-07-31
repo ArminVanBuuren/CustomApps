@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.ServiceModel;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Threading;
 using Utils;
 using Utils.Crypto;
@@ -13,7 +14,7 @@ using WCFChat.Client.ServiceReference1;
 
 namespace WCFChat.Client
 {
-    [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Multiple)]
+    [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
     public partial class MainWindow : ServiceReference1.IChatCallback
     {
         internal static string AccountStorePath { get; }
@@ -34,37 +35,39 @@ namespace WCFChat.Client
         {
             this.user = user;
             this.proxy = proxy;
-            this.ShowDialog();
+            base.Show();
         }
 
-        public DateTime RefreshClientsAndGetEarlyDataMessage(ServiceReference1.Client[] clients, bool isGetEarlyMessage)
+        public void RefreshClientsAndGetEarlyDataMessage(ServiceReference1.Client[] clients, bool isGetEarlyMessage)
         {
-            throw new NotImplementedException();
+            MessageBox.Show("RefreshClientsAndGetEarlyDataMessage");
+            //return DateTime.Now;
         }
 
         public Message[] GetAllContentHistory()
         {
-            throw new NotImplementedException();
+            MessageBox.Show("GetAllContentHistory");
+            return new Message[]{new Message() };
         }
 
         public void RefreshContentHistory(Message[] messages)
         {
-            throw new NotImplementedException();
+            MessageBox.Show("RefreshContentHistory");
         }
 
         public void Receive(Message msg)
         {
-            throw new NotImplementedException();
+            MessageBox.Show("Receive");
         }
 
         public void IsWritingCallback(ServiceReference1.Client client)
         {
-            throw new NotImplementedException();
+            MessageBox.Show("IsWritingCallback");
         }
 
         public void Terminate()
         {
-            throw new NotImplementedException();
+            MessageBox.Show("Terminate");
         }
     }
 }
