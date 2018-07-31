@@ -26,8 +26,8 @@
             <RowDefinition Height="35" />
         </Grid.RowDefinitions>
         <ListBox Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"  >
-            <Label Content="Группа"/>
-            <Label Content="Говнюк"/>
+            <Label Content="Test_1"/>
+            <Label Content="Govno"/>
         </ListBox>
 
         <RichTextBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" CaretBrush="Black" FontFamily="Calibri" FontSize="15"  x:Name="DialogHistory" Height="Auto"  IsReadOnly="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="Black"  >

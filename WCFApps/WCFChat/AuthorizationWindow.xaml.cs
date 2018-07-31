@@ -245,15 +245,7 @@ namespace WCFChat.Client
                 ErrorMessage.Visibility = Visibility.Collapsed;
         }
 
-        /// <summary>
-        /// This is the most method I like, it helps us alot
-        /// We may can't know when a connection is lost in 
-        /// of network failure or service stopped.
-        /// And also to maintain performance client doesnt know
-        /// that the connection will be lost when hitting the 
-        /// disconnect button, but when a session is terminated
-        /// this method will be called, and it will handle everything.
-        /// </summary>
+
         private void HandleProxy()
         {
             if (proxy != null)
@@ -285,9 +277,6 @@ namespace WCFChat.Client
         }
 
 
-
-        //When the communication object turns to fault state it will
-        //require another thread to invoke a fault event
         private delegate void FaultedInvoker();
         void InnerDuplexChannel_Closed(object sender, EventArgs e)
         {

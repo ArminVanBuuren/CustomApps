@@ -16,13 +16,7 @@ namespace WCFChat.Client
         }
         public User MyUser { get; }
 
-        /// <summary>
-        /// Специальный вариант конструктора. 
-        /// SerializationInfo - объект в который помещаем все пары имя-значение представляющие состояние объекта.
-        /// SerializationInfo - мешок со свойствами (property bag)
-        /// </summary>
-        /// <param name="propertyBag"></param>
-        /// <param name="context"></param>
+
         GeneratedUser(SerializationInfo propertyBag, StreamingContext context)
         {
             MyUser = new User();
@@ -32,11 +26,6 @@ namespace WCFChat.Client
             MyUser.Time = propertyBag.GetDateTime("zaqwsxcde");
         }
 
-        /// <summary>
-        /// Метод ISerializable.GetObjectData() вызывается Formatter-ом
-        /// </summary>
-        /// <param name="propertyBag"></param>
-        /// <param name="context"></param>
         void ISerializable.GetObjectData(SerializationInfo propertyBag, StreamingContext context)
         {
             propertyBag.AddValue("qazwsxedc", MyUser.Name);
