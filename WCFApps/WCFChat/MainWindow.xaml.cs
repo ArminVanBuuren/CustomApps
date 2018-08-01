@@ -5,12 +5,14 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.ServiceModel;
+using System.ServiceModel.Channels;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using Utils;
 using Utils.Crypto;
 using WCFChat.Client.ServiceReference1;
+using Message = WCFChat.Client.ServiceReference1.Message;
 
 namespace WCFChat.Client
 {
@@ -38,10 +40,14 @@ namespace WCFChat.Client
             base.Show();
         }
 
-        public DateTime RefreshClientsAndGetEarlyDataMessage(ServiceReference1.Client[] clients, bool isGetEarlyMessage)
+
+        public DateTime Refresh(WCFChatClient[] clients, bool isGetEarlyMessage)
         {
-            MessageBox.Show("RefreshClientsAndGetEarlyDataMessage");
-            return DateTime.Now;
+            foreach (WCFChatClient VARIABLE in clients)
+            {
+                User ss = (User) VARIABLE;
+            }
+            return DateTime.MaxValue;
         }
 
         public Message[] GetAllContentHistory()
@@ -55,19 +61,22 @@ namespace WCFChat.Client
             MessageBox.Show("RefreshContentHistory");
         }
 
-        public void Receive(Message msg)
+        public DateTime Receive(Message msg)
         {
-            MessageBox.Show("Receive");
+            //MessageBox.Show("Receive");
+            return DateTime.MaxValue;
         }
 
-        public void IsWritingCallback(ServiceReference1.Client client)
+        public void IsWritingCallback(WCFChatClient client)
         {
             MessageBox.Show("IsWritingCallback");
         }
 
+
         public void Terminate()
         {
-            MessageBox.Show("Terminate");
+            RemoteEndpointMessageProperty prop = (RemoteEndpointMessageProperty)OperationContext.Current.IncomingMessageProperties[RemoteEndpointMessageProperty.Name];
+            MessageBox.Show($"Try to Connect From {prop.Address} : {prop.Port}");
         }
     }
 }

@@ -68,7 +68,7 @@ namespace WCFChat.Host.Console
 
                     User getHistoryFromClient = null;
                     DateTime earlyDatamessage = DateTime.Now;
-                    List<Client> clientList = clients.Keys.Cast<Client>().ToList();
+                    List<WCFChatClient> clientList = clients.Keys.Cast<WCFChatClient>().ToList();
 
                     //Task.Run(() =>
                     //         {
@@ -78,11 +78,16 @@ namespace WCFChat.Host.Console
                     //                             CurrentCallback.RefreshClientsAndGetEarlyDataMessage(clientList, false);
                     //                         });
 
-                    
-                    // DateTime res;
-                    CurrentCallback.RefreshClientsAndGetEarlyDataMessage(clientList, false);
 
-                    
+                    //CollectionClient temp = new CollectionClient() {
+                    //                                                   Clients = clientList
+                    //                                               };
+                    //CurrentCallback.RefreshClientsAndGetEarlyDataMessage(temp, false);
+                    DateTime ff11 = CurrentCallback.Receive(new Message());
+                    WCFChatClient[] ww = clientList.ToArray();
+                    DateTime ff = CurrentCallback.Refresh(ww, true);
+
+
 
                     foreach (KeyValuePair<User, IChatCallback> client in clients)
                     {
@@ -101,7 +106,7 @@ namespace WCFChat.Host.Console
 
                     if (getHistoryFromClient != null)
                     {
-                        CurrentCallback.RefreshContentHistory(clients[getHistoryFromClient].GetAllContentHistory());
+                        CurrentCallback.RefreshContentHistory(clients[getHistoryFromClient].GetAllContentHistory().ToArray());
                     }
                 }
             }
@@ -126,17 +131,17 @@ namespace WCFChat.Host.Console
             }
         }
 
-        public void Logoff(Client client)
+        public void Logoff(WCFChatClient client)
         {
             User user = SearchClientsByGuid(client.GUID);
             lock (syncObj)
             {
                 clients.Remove(user);
-                List<Client> clientList = clients.Keys.Cast<Client>().ToList();
-                foreach (IChatCallback callback in clients.Values)
-                {
-                    callback.RefreshClientsAndGetEarlyDataMessage(clientList, false);
-                }
+                //CollectionClient clientList = (CollectionClient)clients.Keys.Cast<Client>().ToList();
+                //foreach (IChatCallback callback in clients.Values)
+                //{
+                //    callback.RefreshClientsAndGetEarlyDataMessage(clientList, false);
+                //}
             }
         }
     }

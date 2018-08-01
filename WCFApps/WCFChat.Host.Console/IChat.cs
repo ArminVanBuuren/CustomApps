@@ -14,25 +14,25 @@ namespace WCFChat.Host.Console
         void Say(Message message);
 
         [OperationContract(IsOneWay = true, IsTerminating = true)]
-        void Logoff(Client client);
+        void Logoff(WCFChatClient client);
     }
 
     public interface IChatCallback
     {
         [OperationContract(IsOneWay = false)]
-        DateTime RefreshClientsAndGetEarlyDataMessage(List<Client> clients, bool isGetEarlyMessage);
+        DateTime Refresh(WCFChatClient[] clients, bool isGetEarlyMessage);
 
         [OperationContract(IsOneWay = false)]
         List<Message> GetAllContentHistory();
 
         [OperationContract(IsOneWay = true)]
-        void RefreshContentHistory(List<Message> messages);
+        void RefreshContentHistory(Message[] messages);
+
+        [OperationContract(IsOneWay = false)]
+        DateTime Receive(Message msg);
 
         [OperationContract(IsOneWay = true)]
-        void Receive(Message msg);
-
-        [OperationContract(IsOneWay = true)]
-        void IsWritingCallback(Client client);
+        void IsWritingCallback(WCFChatClient client);
 
         [OperationContract(IsOneWay = true)]
         void Terminate();

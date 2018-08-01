@@ -25,22 +25,22 @@
   <xs:element name="Logoff">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/WCFChat.Host.Console" minOccurs="0" name="client" nillable="true" type="q3:Client" />
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/WCFChat.Host.Console" minOccurs="0" name="client" nillable="true" type="q3:WCFChatClient" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="RefreshClientsAndGetEarlyDataMessage">
+  <xs:element name="Refresh">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/WCFChat.Host.Console" minOccurs="0" name="clients" nillable="true" type="q4:ArrayOfClient" />
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/WCFChat.Host.Console" minOccurs="0" name="clients" nillable="true" type="q4:ArrayOfWCFChatClient" />
         <xs:element minOccurs="0" name="isGetEarlyMessage" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="RefreshClientsAndGetEarlyDataMessageResponse">
+  <xs:element name="RefreshResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="RefreshClientsAndGetEarlyDataMessageResult" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="RefreshResult" type="xs:dateTime" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -70,10 +70,17 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="ReceiveResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ReceiveResult" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="IsWritingCallback">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/WCFChat.Host.Console" minOccurs="0" name="client" nillable="true" type="q8:Client" />
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/WCFChat.Host.Console" minOccurs="0" name="client" nillable="true" type="q8:WCFChatClient" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

@@ -15,10 +15,10 @@ namespace WCFChat.Client.ServiceReference1 {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="Client", Namespace="http://schemas.datacontract.org/2004/07/WCFChat.Host.Console")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="WCFChatClient", Namespace="http://schemas.datacontract.org/2004/07/WCFChat.Host.Console")]
     [System.SerializableAttribute()]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(WCFChat.Client.ServiceReference1.User))]
-    public partial class Client : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class WCFChatClient : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -95,7 +95,7 @@ namespace WCFChat.Client.ServiceReference1 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="User", Namespace="http://schemas.datacontract.org/2004/07/WCFChat.Host.Console")]
     [System.SerializableAttribute()]
-    public partial class User : WCFChat.Client.ServiceReference1.Client {
+    public partial class User : WCFChat.Client.ServiceReference1.WCFChatClient {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string PasswordField;
@@ -208,17 +208,17 @@ namespace WCFChat.Client.ServiceReference1 {
         System.Threading.Tasks.Task SayAsync(WCFChat.Client.ServiceReference1.Message message);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, IsTerminating=true, Action="http://tempuri.org/IChat/Logoff")]
-        void Logoff(WCFChat.Client.ServiceReference1.Client client);
+        void Logoff(WCFChat.Client.ServiceReference1.WCFChatClient client);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, IsTerminating=true, Action="http://tempuri.org/IChat/Logoff")]
-        System.Threading.Tasks.Task LogoffAsync(WCFChat.Client.ServiceReference1.Client client);
+        System.Threading.Tasks.Task LogoffAsync(WCFChat.Client.ServiceReference1.WCFChatClient client);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface IChatCallback {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChat/RefreshClientsAndGetEarlyDataMessage", ReplyAction="http://tempuri.org/IChat/RefreshClientsAndGetEarlyDataMessageResponse")]
-        System.DateTime RefreshClientsAndGetEarlyDataMessage(WCFChat.Client.ServiceReference1.Client[] clients, bool isGetEarlyMessage);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChat/Refresh", ReplyAction="http://tempuri.org/IChat/RefreshResponse")]
+        System.DateTime Refresh(WCFChat.Client.ServiceReference1.WCFChatClient[] clients, bool isGetEarlyMessage);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChat/GetAllContentHistory", ReplyAction="http://tempuri.org/IChat/GetAllContentHistoryResponse")]
         WCFChat.Client.ServiceReference1.Message[] GetAllContentHistory();
@@ -226,11 +226,11 @@ namespace WCFChat.Client.ServiceReference1 {
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChat/RefreshContentHistory")]
         void RefreshContentHistory(WCFChat.Client.ServiceReference1.Message[] messages);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChat/Receive")]
-        void Receive(WCFChat.Client.ServiceReference1.Message msg);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChat/Receive", ReplyAction="http://tempuri.org/IChat/ReceiveResponse")]
+        System.DateTime Receive(WCFChat.Client.ServiceReference1.Message msg);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChat/IsWritingCallback")]
-        void IsWritingCallback(WCFChat.Client.ServiceReference1.Client client);
+        void IsWritingCallback(WCFChat.Client.ServiceReference1.WCFChatClient client);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChat/Terminate")]
         void Terminate();
@@ -280,11 +280,11 @@ namespace WCFChat.Client.ServiceReference1 {
             return base.Channel.SayAsync(message);
         }
         
-        public void Logoff(WCFChat.Client.ServiceReference1.Client client) {
+        public void Logoff(WCFChat.Client.ServiceReference1.WCFChatClient client) {
             base.Channel.Logoff(client);
         }
         
-        public System.Threading.Tasks.Task LogoffAsync(WCFChat.Client.ServiceReference1.Client client) {
+        public System.Threading.Tasks.Task LogoffAsync(WCFChat.Client.ServiceReference1.WCFChatClient client) {
             return base.Channel.LogoffAsync(client);
         }
     }

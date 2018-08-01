@@ -32,11 +32,11 @@
   <wsdl:message name="IChat_Logoff_InputMessage">
     <wsdl:part name="parameters" element="tns:Logoff" />
   </wsdl:message>
-  <wsdl:message name="IChat_RefreshClientsAndGetEarlyDataMessage_OutputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:RefreshClientsAndGetEarlyDataMessage" />
+  <wsdl:message name="IChat_Refresh_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:Refresh" />
   </wsdl:message>
-  <wsdl:message name="IChat_RefreshClientsAndGetEarlyDataMessage_InputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:RefreshClientsAndGetEarlyDataMessageResponse" />
+  <wsdl:message name="IChat_Refresh_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:RefreshResponse" />
   </wsdl:message>
   <wsdl:message name="IChat_GetAllContentHistory_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:GetAllContentHistory" />
@@ -49,6 +49,9 @@
   </wsdl:message>
   <wsdl:message name="IChat_Receive_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:Receive" />
+  </wsdl:message>
+  <wsdl:message name="IChat_Receive_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ReceiveResponse" />
   </wsdl:message>
   <wsdl:message name="IChat_IsWritingCallback_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:IsWritingCallback" />
@@ -67,9 +70,9 @@
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="true" name="Logoff">
       <wsdl:input wsaw:Action="http://tempuri.org/IChat/Logoff" message="tns:IChat_Logoff_InputMessage" />
     </wsdl:operation>
-    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="RefreshClientsAndGetEarlyDataMessage">
-      <wsdl:output wsaw:Action="http://tempuri.org/IChat/RefreshClientsAndGetEarlyDataMessage" message="tns:IChat_RefreshClientsAndGetEarlyDataMessage_OutputCallbackMessage" />
-      <wsdl:input wsaw:Action="http://tempuri.org/IChat/RefreshClientsAndGetEarlyDataMessageResponse" message="tns:IChat_RefreshClientsAndGetEarlyDataMessage_InputCallbackMessage" />
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="Refresh">
+      <wsdl:output wsaw:Action="http://tempuri.org/IChat/Refresh" message="tns:IChat_Refresh_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IChat/RefreshResponse" message="tns:IChat_Refresh_InputCallbackMessage" />
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="GetAllContentHistory">
       <wsdl:output wsaw:Action="http://tempuri.org/IChat/GetAllContentHistory" message="tns:IChat_GetAllContentHistory_OutputCallbackMessage" />
@@ -80,6 +83,7 @@
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="Receive">
       <wsdl:output wsaw:Action="http://tempuri.org/IChat/Receive" message="tns:IChat_Receive_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IChat/ReceiveResponse" message="tns:IChat_Receive_InputCallbackMessage" />
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="IsWritingCallback">
       <wsdl:output wsaw:Action="http://tempuri.org/IChat/IsWritingCallback" message="tns:IChat_IsWritingCallback_OutputCallbackMessage" />
@@ -112,8 +116,8 @@
         <soap12:body use="literal" />
       </wsdl:input>
     </wsdl:operation>
-    <wsdl:operation name="RefreshClientsAndGetEarlyDataMessage">
-      <soap12:operation soapAction="http://tempuri.org/IChat/RefreshClientsAndGetEarlyDataMessage" style="document" />
+    <wsdl:operation name="Refresh">
+      <soap12:operation soapAction="http://tempuri.org/IChat/Refresh" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -138,6 +142,9 @@
     </wsdl:operation>
     <wsdl:operation name="Receive">
       <soap12:operation soapAction="http://tempuri.org/IChat/Receive" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
