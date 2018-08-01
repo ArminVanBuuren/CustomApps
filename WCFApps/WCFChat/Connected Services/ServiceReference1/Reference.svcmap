@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="61b8dd20-2ddb-4b96-82fb-3345da37155f" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="18e8cde2-2e13-4266-ac3e-f8f4d779e83a" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
@@ -19,13 +19,14 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://localhost:8040/WPFHost/mex" Protocol="mex" SourceId="1" />
+    <MetadataSource Address="http://localhost:8040/WPFHost/" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="eddcdf37-c2a0-4f18-be82-4549c77c2b73" SourceId="1" SourceUrl="http://localhost:8040/WPFHost/mex" />
-    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="2d6a37f5-dcc8-49d9-93d2-93664fd9cb78" SourceId="1" SourceUrl="http://localhost:8040/WPFHost/mex" />
-    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="44706eb6-1f25-4d51-8639-0f7da4192d17" SourceId="1" SourceUrl="http://localhost:8040/WPFHost/mex" />
-    <MetadataFile FileName="WCFChat.Host.Console.xsd" MetadataType="Schema" ID="08867322-901b-477e-bb04-ce32b1550c30" SourceId="1" SourceUrl="http://localhost:8040/WPFHost/mex" />
+    <MetadataFile FileName="item.disco" MetadataType="Disco" ID="752f97b8-b03d-41f4-b796-d12ab48b4684" SourceId="1" SourceUrl="http://localhost:8040/WPFHost/?disco" />
+    <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="90f62717-c741-461f-be35-ffd8f0c1aae5" SourceId="1" SourceUrl="http://localhost:8040/WPFHost/?xsd=xsd2" />
+    <MetadataFile FileName="item1.xsd" MetadataType="Schema" ID="4748a65e-acb9-4db2-a147-23739755b75f" SourceId="1" SourceUrl="http://localhost:8040/WPFHost/?xsd=xsd1" />
+    <MetadataFile FileName="ChatService.wsdl" MetadataType="Wsdl" ID="c976c4f1-5138-480b-a3a1-414d06cc8b00" SourceId="1" SourceUrl="http://localhost:8040/WPFHost/?wsdl" />
+    <MetadataFile FileName="item2.xsd" MetadataType="Schema" ID="134e6472-4243-4d31-be52-2042335ba1e8" SourceId="1" SourceUrl="http://localhost:8040/WPFHost/?xsd=xsd0" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

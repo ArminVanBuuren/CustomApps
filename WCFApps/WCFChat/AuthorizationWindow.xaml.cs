@@ -157,7 +157,6 @@ namespace WCFChat.Client
                                                                Time = DateTime.Now
                                                            });
                 TryToConnect(newGenUser);
-
             }
             else
             {

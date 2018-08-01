@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
+using System.ServiceModel.Channels;
+using System.ServiceModel.Configuration;
 using System.ServiceModel.Description;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +20,25 @@ namespace WCFChat.Host.Console
             {
                 host = new ServiceHost(typeof(ChatService));
 
+
+
+
+                //List<Binding> bindings = new List<Binding>();
+                //bindings.Add(new BasicHttpBinding());        
+                //bindings.Add(new WSDualHttpBinding());      
+                //bindings.Add(new WSHttpBinding());           
+                //bindings.Add(new WSFederationHttpBinding()); 
+                //bindings.Add(new NetHttpBinding()); 
+                //bindings.Add(new NetHttpsBinding()); 
+                //foreach (Binding binding in bindings)
+                //{
+                //    System.Console.ForegroundColor = ConsoleColor.Green;
+                //    System.Console.WriteLine("\nShowing Binding Elements for {0}", binding.GetType().Name);
+                //    System.Console.ForegroundColor = ConsoleColor.Gray;
+
+                //    foreach (BindingElement element in binding.CreateBindingElements()) // все элементы из который состоит кажддая привязка
+                //        System.Console.WriteLine("\t{0}", element.GetType().Name);
+                //}
 
                 //Uri httpAdrs = new Uri("http://localhost:8040/WPFHost/");
 
@@ -50,6 +71,7 @@ namespace WCFChat.Host.Console
 
 
                 host.Open();
+                
             }
             catch (Exception ex)
             {
