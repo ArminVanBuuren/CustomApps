@@ -18,7 +18,7 @@ namespace WCFChat.Host.Console
             ServiceHost host = null;
             try
             {
-                host = new ServiceHost(typeof(ChatService));
+                host = new ServiceHost(typeof(MainServer));
 
 
 
