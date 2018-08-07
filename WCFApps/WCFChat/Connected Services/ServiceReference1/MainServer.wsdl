@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://localhost/services/server" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MainServer" targetNamespace="http://localhost/services/server" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://localhost/services" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:i0="http://localhost/services/server" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:i1="http://localhost/services/chat" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MainServer" targetNamespace="http://localhost/services" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsp:Policy wsu:Id="WSDualHttpBinding_IMainContract_policy">
     <wsp:ExactlyOne>
       <wsp:All>
@@ -13,64 +13,23 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
-  <wsdl:types>
-    <xsd:schema targetNamespace="http://localhost/services/server/Imports">
-      <xsd:import schemaLocation="http://localhost:8040/Services/Main?xsd=xsd0" namespace="http://localhost/services/server" />
-      <xsd:import schemaLocation="http://localhost:8040/Services/Main?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://localhost:8040/Services/Main?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/WCFChat.Service" />
-    </xsd:schema>
-  </wsdl:types>
-  <wsdl:message name="IMainContract_CreateCloud_InputMessage">
-    <wsdl:part name="parameters" element="tns:CreateCloud" />
-  </wsdl:message>
-  <wsdl:message name="IMainContract_Unbind_InputMessage">
-    <wsdl:part name="parameters" element="tns:Unbind" />
-  </wsdl:message>
-  <wsdl:message name="IMainContract_GetCloud_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetCloud" />
-  </wsdl:message>
-  <wsdl:message name="IMainContract_RequestForAccessResult_InputMessage">
-    <wsdl:part name="parameters" element="tns:RequestForAccessResult" />
-  </wsdl:message>
-  <wsdl:message name="IMainContract_CreateCloudResult_OutputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:CreateCloudResult" />
-  </wsdl:message>
-  <wsdl:message name="IMainContract_UnbindResult_OutputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:UnbindResult" />
-  </wsdl:message>
-  <wsdl:message name="IMainContract_RequestForAccess_OutputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:RequestForAccess" />
-  </wsdl:message>
-  <wsdl:message name="IMainContract_GetCloudResult_OutputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:GetCloudResult" />
-  </wsdl:message>
-  <wsdl:portType name="IMainContract">
-    <wsdl:operation name="CreateCloud">
-      <wsdl:input wsaw:Action="http://localhost/services/server/IMainContract/CreateCloud" message="tns:IMainContract_CreateCloud_InputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="Unbind">
-      <wsdl:input wsaw:Action="http://localhost/services/server/IMainContract/Unbind" message="tns:IMainContract_Unbind_InputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetCloud">
-      <wsdl:input wsaw:Action="http://localhost/services/server/IMainContract/GetCloud" message="tns:IMainContract_GetCloud_InputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="RequestForAccessResult">
-      <wsdl:input wsaw:Action="http://localhost/services/server/IMainContract/RequestForAccessResult" message="tns:IMainContract_RequestForAccessResult_InputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="CreateCloudResult">
-      <wsdl:output wsaw:Action="http://localhost/services/server/IMainContract/CreateCloudResult" message="tns:IMainContract_CreateCloudResult_OutputCallbackMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="UnbindResult">
-      <wsdl:output wsaw:Action="http://localhost/services/server/IMainContract/UnbindResult" message="tns:IMainContract_UnbindResult_OutputCallbackMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="RequestForAccess">
-      <wsdl:output wsaw:Action="http://localhost/services/server/IMainContract/RequestForAccess" message="tns:IMainContract_RequestForAccess_OutputCallbackMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetCloudResult">
-      <wsdl:output wsaw:Action="http://localhost/services/server/IMainContract/GetCloudResult" message="tns:IMainContract_GetCloudResult_OutputCallbackMessage" />
-    </wsdl:operation>
-  </wsdl:portType>
-  <wsdl:binding name="WSDualHttpBinding_IMainContract" type="tns:IMainContract">
+  <wsp:Policy wsu:Id="WSDualHttpBinding_IChat_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <wsrm:RMAssertion xmlns:wsrm="http://schemas.xmlsoap.org/ws/2005/02/rm/policy">
+          <wsrm:InactivityTimeout Milliseconds="1200000" />
+          <wsrm:AcknowledgementInterval Milliseconds="200" />
+        </wsrm:RMAssertion>
+        <cdp:CompositeDuplex xmlns:cdp="http://schemas.microsoft.com/net/2006/06/duplex" />
+        <ow:OneWay xmlns:ow="http://schemas.microsoft.com/ws/2005/05/routing/policy" />
+        <wsaw:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:import namespace="http://localhost/services/server" location="http://localhost:8040/?wsdl=wsdl0" />
+  <wsdl:import namespace="http://localhost/services/chat" location="http://localhost:8040/?wsdl=wsdl1" />
+  <wsdl:types />
+  <wsdl:binding name="WSDualHttpBinding_IMainContract" type="i0:IMainContract">
     <wsp:PolicyReference URI="#WSDualHttpBinding_IMainContract_policy" />
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="CreateCloud">
@@ -91,20 +50,14 @@
         <soap12:body use="literal" />
       </wsdl:input>
     </wsdl:operation>
-    <wsdl:operation name="RequestForAccessResult">
-      <soap12:operation soapAction="http://localhost/services/server/IMainContract/RequestForAccessResult" style="document" />
+    <wsdl:operation name="RemoveOrAccessUser">
+      <soap12:operation soapAction="http://localhost/services/server/IMainContract/RemoveOrAccessUser" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
     </wsdl:operation>
     <wsdl:operation name="CreateCloudResult">
       <soap12:operation soapAction="http://localhost/services/server/IMainContract/CreateCloudResult" style="document" />
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="UnbindResult">
-      <soap12:operation soapAction="http://localhost/services/server/IMainContract/UnbindResult" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
@@ -122,11 +75,84 @@
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
+  <wsdl:binding name="WSDualHttpBinding_IChat" type="i1:IChat">
+    <wsp:PolicyReference URI="#WSDualHttpBinding_IChat_policy" />
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Connect">
+      <soap12:operation soapAction="http://localhost/services/chat/IChat/Connect" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Say">
+      <soap12:operation soapAction="http://localhost/services/chat/IChat/Say" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="IsWriting">
+      <soap12:operation soapAction="http://localhost/services/chat/IChat/IsWriting" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="Disconnect">
+      <soap12:operation soapAction="http://localhost/services/chat/IChat/Disconnect" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="SetPrivilege">
+      <soap12:operation soapAction="http://localhost/services/chat/IChat/SetPrivilege" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TransferHistory">
+      <soap12:operation soapAction="http://localhost/services/chat/IChat/TransferHistory" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Receive">
+      <soap12:operation soapAction="http://localhost/services/chat/IChat/Receive" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsWritingCallback">
+      <soap12:operation soapAction="http://localhost/services/chat/IChat/IsWritingCallback" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Terminate">
+      <soap12:operation soapAction="http://localhost/services/chat/IChat/Terminate" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
   <wsdl:service name="MainServer">
     <wsdl:port name="WSDualHttpBinding_IMainContract" binding="tns:WSDualHttpBinding_IMainContract">
-      <soap12:address location="http://localhost:8040/Services/Main" />
+      <soap12:address location="http://localhost:8040/MainServer" />
       <wsa10:EndpointReference>
-        <wsa10:Address>http://localhost:8040/Services/Main</wsa10:Address>
+        <wsa10:Address>http://localhost:8040/MainServer</wsa10:Address>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+    <wsdl:port name="WSDualHttpBinding_IChat" binding="tns:WSDualHttpBinding_IChat">
+      <soap12:address location="http://localhost:8040/ChatServer" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>http://localhost:8040/ChatServer</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
   </wsdl:service>

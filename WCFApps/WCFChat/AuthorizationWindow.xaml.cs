@@ -23,36 +23,19 @@ using System.Windows.Threading;
 using UIControls.Utils;
 using Utils;
 using WCFChat.Client.ServiceReference1;
-using WCFChat.Client.ServiceReference2;
-
+using WCFChat.Service;
 
 namespace WCFChat.Client
 {
+    public delegate void AccessResult(ServerResult result, User user);
     [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
     public partial class AuthorizationWindow : IMainContractCallback
     {
+        
+
         private object sync = new object();
-        private MainContractClient proxyMainServer = null;
+        private MainContractClient mainProxy = null;
 
-        private MainContractClient MainProxy
-        {
-            get
-            {
-                try
-                {
-                    if (proxyMainServer == null)
-                        return null;
-
-                    if (proxyMainServer.State != CommunicationState.Opened)
-                        proxyMainServer.Open();
-                }
-                catch (Exception e)
-                {
-                    Informing(e.Message);
-                }
-                return null;
-            }
-        }
         internal static string AccountStorePath { get; }
         internal static string RegeditKey { get; }
 
@@ -101,21 +84,27 @@ namespace WCFChat.Client
 
             try
             {
-                InstanceContext context = new InstanceContext(this);
-                proxyMainServer = new MainContractClient(context);
-                proxyMainServer.Open();
-                proxyMainServer.InnerDuplexChannel.Faulted += new EventHandler(InnerDuplexChannel_Faulted);
-                proxyMainServer.InnerDuplexChannel.Opened += new EventHandler(InnerDuplexChannel_Opened);
-                proxyMainServer.InnerDuplexChannel.Closed += new EventHandler(InnerDuplexChannel_Closed);
+                OpenOrReopenConnection();
                 return true;
             }
             catch (Exception e)
             {
-                ((ICommunicationObject) proxyMainServer)?.Abort();
-                proxyMainServer = null;
+                ((ICommunicationObject)mainProxy)?.Abort();
+                mainProxy = null;
                 //InfoWarningMessage(e.InnerException != null ? string.Format("Exception when connect to Server!\r\n{0}", e.InnerException.Message) : string.Format("Exception when connect to Server!\r\n{0}", e.Message));
                 return false;
             }
+        }
+
+        void OpenOrReopenConnection()
+        {
+            mainProxy?.Abort();
+            InstanceContext context = new InstanceContext(this);
+            mainProxy = new MainContractClient(context);
+            mainProxy.Open();
+            mainProxy.InnerDuplexChannel.Faulted += new EventHandler(InnerDuplexChannel_Faulted);
+            mainProxy.InnerDuplexChannel.Opened += new EventHandler(InnerDuplexChannel_Opened);
+            mainProxy.InnerDuplexChannel.Closed += new EventHandler(InnerDuplexChannel_Closed);
         }
 
         public void ConnectionCompleted(Task<bool> antecedent)
@@ -146,21 +135,13 @@ namespace WCFChat.Client
 
 
 
-        void IMainContractCallback.RequestForAccess(ServiceReference1.User user, string address)
-        {
-            throw new NotImplementedException();
-        }
-
-
-
-
         private void Create_OnClick(object sender, RoutedEventArgs e)
         {
             if (!IsTransactionOpen())
                 return;
 
             
-            if (MainProxy != null)
+            if (mainProxy != null)
             {
                 IsEnabledWindow = false;
                 IAsyncResult asyncResult = new Func<string, string, string>(TryCreateCloud).BeginInvoke(NickName.Text, CloudAddress.Text, new AsyncCallback(TryCreateCloudCallBack), null);
@@ -168,21 +149,39 @@ namespace WCFChat.Client
         }
 
         private ServiceHost host;
-        private ServiceReference1.Cloud currentCloud;
-        private ServiceReference1.User currentUser;
+        private Cloud currentCloud;
+        private User currentUser;
         private string innerTransactionId;
         private MainWindowChatServer innerChatServer;
+
+        
+        void IMainContractCallback.RequestForAccess(User user, string address)
+        {
+            if (innerChatServer != null)
+            {
+                innerChatServer.IncomingRequestForAccess(user, address);
+                
+            }
+        }
+
+        void RequestForAccessResult(ServerResult result, User user)
+        {
+            if (mainProxy != null)
+            {
+                mainProxy.RemoveOrAccessUser(result, user);
+            }
+        }
 
         string TryCreateCloud(string nickName, string cloudName)
         {
             try
             {
                 innerTransactionId = Guid.NewGuid().ToString("D");
-                currentUser = new ServiceReference1.User {
-                                                             Name = nickName,
-                                                             CloudName = cloudName,
-                                                             GUID = RegeditKey
-                                                         };
+                currentUser = new User {
+                                           Name = nickName,
+                                           CloudName = cloudName,
+                                           GUID = RegeditKey
+                                       };
 
                 if (host == null)
                 {
@@ -197,12 +196,12 @@ namespace WCFChat.Client
                     host.Open();
                 }
 
-                currentCloud = new ServiceReference1.Cloud {
-                                                               Name = cloudName,
-                                                               Address = host.Description.Endpoints[0].Address.ToString()
-                                                           };
+                currentCloud = new Cloud {
+                                             Name = cloudName,
+                                             Address = host.Description.Endpoints[0].Address.ToString()
+                                         };
 
-                MainProxy.CreateCloudAsync(currentUser, currentCloud, innerTransactionId);
+                mainProxy.CreateCloudAsync(currentUser, currentCloud, innerTransactionId);
                 return string.Empty;
             }
             catch (Exception exception)
@@ -243,7 +242,7 @@ namespace WCFChat.Client
                                 Dispatcher?.Invoke(() =>
                                                   {
                                                       this.Visibility = Visibility.Collapsed;
-                                                      innerChatServer.Show(innerTransactionId);
+                                                      innerChatServer.Show(innerTransactionId, RequestForAccessResult);
                                                   });
                                 break;
                             case CloudResult.FAILURE:
@@ -278,35 +277,35 @@ namespace WCFChat.Client
             if (!IsTransactionOpen())
                 return;
 
-            if (MainProxy != null)
+            if (mainProxy != null)
             {
                 IsEnabledWindow = false;
-                currentUser = new ServiceReference1.User {
+                currentUser = new User {
                                                              Name = NickName.Text,
                                                              CloudName = CloudAddress.Text,
                                                              GUID = RegeditKey
                                                          };
-                MainProxy.GetCloudAsync(currentUser);
+                mainProxy.GetCloudAsync(currentUser);
             }
         }
 
         private MainWindowChatClient innerChatClient;
-        void IMainContractCallback.GetCloudResult(CloudResult result, Cloud cloud)
+        void IMainContractCallback.GetCloudResult(ServerResult result, Cloud cloud)
         {
             if (!IsEnabledWindow)
             {
                 IsEnabledWindow = true;
                 switch (result)
                 {
-                    case CloudResult.CloudNotFound:
+                    case ServerResult.CloudNotFound:
                         Informing($"Incoming:GetCloudResult. Cloud not found on MainServer!");
                         break;
-                    case CloudResult.FAILURE:
+                    case ServerResult.FAILURE:
                         Informing($"Incoming:GetCloudResult. MainServer-error when create cloud!");
                         break;
-                    case CloudResult.SUCCESS:
+                    case ServerResult.AccessGranted:
+                    case ServerResult.SUCCESS:
                         innerChatClient = new MainWindowChatClient(cloud);
-                        
                         break;
                     default:
                         Informing($"Incoming:GetCloudResult. Result:{result}!");
@@ -320,37 +319,10 @@ namespace WCFChat.Client
             if (!IsTransactionOpen())
                 return;
 
-            if (MainProxy != null && sender is MainWindowChatServer)
+            if (mainProxy != null && sender is MainWindowChatServer)
             {
                 IsEnabledWindow = false;
-                MainProxy.UnbindAsync(((MainWindowChatServer)sender).TransactionID);
-            }
-        }
-
-        void IMainContractCallback.UnbindResult(CloudResult result, string transactionID)
-        {
-            try
-            {
-                if (!IsEnabledWindow)
-                {
-                    IsEnabledWindow = true;
-                    if (innerChatServer != null && transactionID.Equals(innerChatServer.TransactionID))
-                    {
-                        innerChatServer.IsUnbinded = true;
-                    }
-                    else
-                    {
-                        Informing($"Incoming:UnbindResult. Internal Error! Local server Not Created.");
-                    }
-                }
-                else
-                {
-                    Informing($"Incoming:UnbindResult. Request was not expected from MainServer! Result:{result:F}");
-                }
-            }
-            catch (Exception e)
-            {
-                Informing(e.Message);
+                mainProxy.UnbindAsync(((MainWindowChatServer)sender).TransactionID);
             }
         }
 
@@ -413,21 +385,11 @@ namespace WCFChat.Client
                                    }
                                    else
                                    {
-                                       GetWindowNotificationTemplate(isError ? "Error" : "Warning", msg).ShowDialog();
+                                       WindowInfo windowError = new WindowInfo(isError ? "Error" : "Warning", msg);
+                                       windowError.Focus();
+                                       windowError.ShowDialog();
                                    }
                                });
-        }
-
-        WindowInfo GetWindowNotificationTemplate(string title, string message)
-        {
-            WindowInfo windowError = new WindowInfo(Width, message)
-                                     {
-                                         Topmost = true,
-                                         Title = title,
-                                         WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen
-                                     };
-            windowError.Focus();
-            return windowError;
         }
 
         //private void ButtonOkOnClickConnect(object sender, RoutedEventArgs e)
@@ -513,9 +475,9 @@ namespace WCFChat.Client
 
         private void HandleProxy()
         {
-            if (MainProxy != null)
+            if (mainProxy != null)
             {
-                switch (this.MainProxy.State)
+                switch (this.mainProxy.State)
                 {
                     case CommunicationState.Closed:
                         break;
@@ -524,6 +486,7 @@ namespace WCFChat.Client
                     case CommunicationState.Created:
                         break;
                     case CommunicationState.Faulted:
+                        OpenOrReopenConnection();
                         break;
                     case CommunicationState.Opened:
                         break;
@@ -566,6 +529,7 @@ namespace WCFChat.Client
             }
             HandleProxy();
         }
+
 
     }
 }

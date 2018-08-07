@@ -46,10 +46,7 @@ namespace WCFChat.Service
         CloudIsBusy = 3,
 
         [EnumMember]
-        YourRequestInProgress = 4,
-
-        [EnumMember]
-        NotFound = 5
+        NotFound = 4
     }
 
     [ServiceContract(Namespace = "http://localhost/services/server",
@@ -80,7 +77,7 @@ namespace WCFChat.Service
         void GetCloud(User user);
 
         [OperationContract(IsOneWay = true)]
-        void RequestForAccessResult(CloudResult result, User user);
+        void RemoveOrAccessUser(ServerResult result, User user);
     }
 
     public interface IMainCallback
@@ -92,14 +89,6 @@ namespace WCFChat.Service
         /// <param name="transactionID"></param>
         [OperationContract(IsOneWay = true)]
         void CreateCloudResult(CloudResult result, string transactionID);
-
-        /// <summary>
-        /// Результат отвязки от основного сервера, чтобы больше никто не смог подконнектиться к облаку
-        /// </summary>
-        /// <param name="result"></param>
-        /// <param name="transactionID"></param>
-        [OperationContract(IsOneWay = true)]
-        void UnbindResult(CloudResult result, string transactionID);
 
         /// <summary>
         /// Получить адрес облака к которому хочет подконнектиться юзер
@@ -115,7 +104,7 @@ namespace WCFChat.Service
         /// <param name="result"></param>
         /// <param name="cloud"></param>
         [OperationContract(IsOneWay = true)]
-        void GetCloudResult(CloudResult result, Cloud cloud);
+        void GetCloudResult(ServerResult result, Cloud cloud);
     }
 
 }

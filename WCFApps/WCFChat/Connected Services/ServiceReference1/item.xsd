@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://localhost/services/server" elementFormDefault="qualified" targetNamespace="http://localhost/services/server" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://localhost:8040/Services/Main?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/WCFChat.Service" />
+  <xs:import schemaLocation="http://localhost:8040/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/WCFChat.Service" />
   <xs:element name="CreateCloud">
     <xs:complexType>
       <xs:sequence>
@@ -24,10 +24,10 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="RequestForAccessResult">
+  <xs:element name="RemoveOrAccessUser">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/WCFChat.Service" minOccurs="0" name="result" type="q4:CloudResult" />
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/WCFChat.Service" minOccurs="0" name="result" type="q4:ServerResult" />
         <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/WCFChat.Service" minOccurs="0" name="user" nillable="true" type="q5:User" />
       </xs:sequence>
     </xs:complexType>
@@ -40,18 +40,10 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="UnbindResult">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/WCFChat.Service" minOccurs="0" name="result" type="q7:CloudResult" />
-        <xs:element minOccurs="0" name="transactionID" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
   <xs:element name="RequestForAccess">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/WCFChat.Service" minOccurs="0" name="user" nillable="true" type="q8:User" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/WCFChat.Service" minOccurs="0" name="user" nillable="true" type="q7:User" />
         <xs:element minOccurs="0" name="address" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -59,8 +51,8 @@
   <xs:element name="GetCloudResult">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/WCFChat.Service" minOccurs="0" name="result" type="q9:CloudResult" />
-        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/WCFChat.Service" minOccurs="0" name="cloud" nillable="true" type="q10:Cloud" />
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/WCFChat.Service" minOccurs="0" name="result" type="q8:ServerResult" />
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/WCFChat.Service" minOccurs="0" name="cloud" nillable="true" type="q9:Cloud" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

@@ -17,24 +17,29 @@
         Style="{DynamicResource VSUIWindowStyle1}"
                       
                       >
-
-
-    <Grid x:Name="ChildBlock" Margin="0,0,0,0">
-		<Grid.RowDefinitions>
-			<RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <TextBlock Padding="10" x:Name="ErrorMessage" Visibility="Visible"
-				   Foreground="White" 
-				   TextWrapping="Wrap" 
-		           HorizontalAlignment="Center"
-		           VerticalAlignment="Center"
-				   TextAlignment="Center"
-				   ></TextBlock>
- 
-		<Button Name="ButtonOK" Grid.Row="1" Margin="0 0 0 5" Height="25" Width="50" Content="OK" />
-	</Grid>
-	
+    <StackPanel>
+        <TextBlock Padding="5" x:Name="ErrorMessage" Visibility="Visible"
+               Foreground="White" 
+               TextWrapping="Wrap" 
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"
+               TextAlignment="Center"></TextBlock>
+        <Grid x:Name="InfoGrid" Margin="0,0,0,0" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Button Grid.Row="1" Margin="0 0 0 5" Height="25" Width="50" Content="OK" Click="ButtonOK_OnClick" />
+        </Grid>
+        <Grid x:Name="AcceptNewUser" Margin="0,0,0,0" Visibility="Visible">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Name="Accept" Grid.Column="0" Margin="5" Height="25" Width="50" Content="Accept" Click="Accept_OnClick" />
+            <Button Name="Reject" Grid.Column="1" Margin="5" Height="25" Width="50" Content="Reject" Click="Reject_OnClick" />
+        </Grid>
+    </StackPanel>
 </mainControl:UIWindow>
 
 

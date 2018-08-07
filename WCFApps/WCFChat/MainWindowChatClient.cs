@@ -5,26 +5,38 @@ using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Threading;
-using WCFChat.Client.ServiceReference2;
+using WCFChat.Client.ServiceReference1;
+using WCFChat.Service;
+using IChatCallback = WCFChat.Service.IChatCallback;
+
 
 namespace WCFChat.Client
 {
     [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
-    class MainWindowChatClient : IChatCallback
+    class MainWindowChatClient : WCFChat.Service.IChatCallback
     {
         private MainWindow window;
         private ChatClient proxy;
-        public MainWindowChatClient(ServiceReference1.Cloud cloud)
+        private Cloud cloud;
+        public MainWindowChatClient(Cloud cloud)
         {
+            this.cloud = cloud;
+            OpenOrReopenConnection();
+            window = new MainWindow();
+            window.Show();
+        }
+
+        void OpenOrReopenConnection()
+        {
+            proxy?.Abort();
             InstanceContext context = new InstanceContext(this);
             proxy = new ChatClient(context);
             proxy.Open();
-            window = new MainWindow();
             proxy.InnerDuplexChannel.Faulted += new EventHandler(InnerDuplexChannel_Faulted);
             proxy.InnerDuplexChannel.Opened += new EventHandler(InnerDuplexChannel_Opened);
             proxy.InnerDuplexChannel.Closed += new EventHandler(InnerDuplexChannel_Closed);
-
         }
+
         public void IsWritingCallback(User client)
         {
             throw new NotImplementedException();
@@ -44,8 +56,7 @@ namespace WCFChat.Client
         {
             throw new NotImplementedException();
         }
-
-        public void TransferHistory(User[] users, Message[] messages)
+        public void TransferHistory(List<User> users, List<Message> messages)
         {
             throw new NotImplementedException();
         }
@@ -63,6 +74,7 @@ namespace WCFChat.Client
                     case CommunicationState.Created:
                         break;
                     case CommunicationState.Faulted:
+                        OpenOrReopenConnection();
                         break;
                     case CommunicationState.Opened:
                         break;
@@ -105,5 +117,7 @@ namespace WCFChat.Client
             }
             HandleProxy();
         }
+
+
     }
 }

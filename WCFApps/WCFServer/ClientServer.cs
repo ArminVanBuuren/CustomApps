@@ -20,11 +20,13 @@ namespace WCFChat.Service
         [EnumMember]
         NameIsBusy = 3,
         [EnumMember]
-        AwaitConfirmation = 2,
+        AwaitConfirmation = 4,
         [EnumMember]
-        AccessDenied = 3,
+        AccessDenied = 5,
         [EnumMember]
-        AccessGranted = 4
+        AccessGranted = 6,
+        [EnumMember]
+        YourRequestInProgress = 7
     }
 
     [DataContract]
