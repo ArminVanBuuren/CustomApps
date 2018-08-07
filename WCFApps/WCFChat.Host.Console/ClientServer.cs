@@ -1,206 +1,223 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
-using System.Text;
-using System.Threading.Tasks;
+using System.Timers;
+using WCFChat.Service;
+using Message = WCFChat.Service.Message;
 
 namespace WCFChat.Host.Console
 {
-    [DataContract]
-    public enum ServerResult
+
+    class CloudUser
     {
-        [EnumMember]
-        SUCCESS = 0,
-        [EnumMember]
-        FAILURE = 1,
-        [EnumMember]
-        NameIsBusy = 1,
-        [EnumMember]
-        AwaitConfirmation = 2,
-        [EnumMember]
-        AccessDenied = 3,
-        [EnumMember]
-        AccessGranted = 4
+        public CloudUser(User user, IChatCallback callBack, CloudArgs cloudBind)
+        {
+            User = user;
+            CallBack = callBack;
+            CloudBind = cloudBind;
+        }
+        public User User { get; }
+        public IChatCallback CallBack { get; }
+        public CloudArgs CloudBind { get; }
     }
 
-    [DataContract]
-    public enum ServerPrivelege
+    class CloudBinding
     {
-        [EnumMember]
-        Admin = 0,
-        [EnumMember]
-        User = 1
+        public CloudBinding(CloudArgs cloud)
+        {
+            Cloud = cloud;
+        }
+        public CloudArgs Cloud { get; }
+        public List<Message> Messages { get; } = new List<Message>();
+        public List<CloudUser> CloudUserCollection { get; } = new List<CloudUser>(); 
     }
 
-    [DataContract]
-    public class Message
-    {
-        [DataMember]
-        public User Sender { get; set; }
-
-        [DataMember]
-        public string Content { get; set; }
-
-        [DataMember]
-        public DateTime Time { get; set; }
-    }
-
-    // [KnownType(typeof(User))] - в случа апкаста чтобы свойство Password из наследника передавалось в запрос то нужен этот аттрибут иначе серализация не сработает
-    // Конструктор должен быть всегда без параметров иначе сериализатор не сможет создать экземпляр
-    [ServiceContract(CallbackContract = typeof(IChatCallback), SessionMode = SessionMode.Required)]
-    public interface IChat
-    {
-        [OperationContract(IsOneWay = false, IsInitiating = true)]
-        ServerResult Connect(User user);
-
-        [OperationContract(IsOneWay = true)]
-        void Say(Message message);
-
-        [OperationContract(IsOneWay = true)]
-        void IsWriting(User client, bool isWriting);
-
-        [OperationContract(IsOneWay = true, IsTerminating = true)]
-        void Disconnect(User client);
-    }
-
-    public interface IChatCallback
-    {
-        [OperationContract(IsOneWay = true)]
-        void SetPrivilege(User user, ServerPrivelege privelege);
-
-        [OperationContract(IsOneWay = false)]
-        void TransferHistory(List<User> users, List<Message> messages);
-
-        [OperationContract(IsOneWay = false)]
-        void Receive(Message msg);
-
-        [OperationContract(IsOneWay = true)]
-        void IsWritingCallback(User client);
-
-        [OperationContract(IsOneWay = true)]
-        void Terminate();
-    }
-
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
+    [ServiceBehavior(Namespace = "http://localhost/services/chat",
+        InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
     public class ClientServer : IChat
     {
         object syncObj = new object();
-        Dictionary<Cloud, IChatCallback> clouds = new Dictionary<Cloud, IChatCallback>();
-        Dictionary<User, KeyValuePair<CloudArgs, IChatCallback>> users = new Dictionary<User, KeyValuePair<CloudArgs, IChatCallback>>();
+        Dictionary<CloudArgs, CloudBinding> clouds = new Dictionary<CloudArgs, CloudBinding>();
         public IChatCallback CurrentCallback => OperationContext.Current.GetCallbackChannel<IChatCallback>();
         public bool CurrentIsOpened => ((IChannel)CurrentCallback).State == CommunicationState.Opened;
+
+        public ClientServer()
+        {
+            Timer _timer = new Timer {
+                                         Interval = 30 * 1000
+                                     };
+            _timer.Elapsed += (sender, args) =>
+                              {
+                                  lock (syncObj)
+                                  {
+                                      foreach (var cloud in clouds)
+                                      {
+                                          cloud.Value.CloudUserCollection.RemoveAll((a) => ((IChannel) a.CallBack).State != CommunicationState.Opened);
+                                          foreach (CloudUser user in cloud.Value.CloudUserCollection)
+                                          {
+                                              user.CallBack.TransferHistory(cloud.Value.CloudUserCollection.Select(p => p.User).ToList(), null);
+                                          }
+                                      }
+                                  }
+                              };
+            _timer.Start();
+        }
 
         public ServerResult Connect(User newUser)
         {
             lock (syncObj)
             {
-                CloudArgs existCloud = MainServer.Clouds.GetCloud(newUser);
-                if(!existCloud.IsAvailable)
-                    return ServerResult.AccessDenied;
-
-                // Если в системе уже есть другой юзер с тем же именем
-                User existUserName = users.Keys.FirstOrDefault(p => p.Name.Equals(newUser.Name, StringComparison.CurrentCultureIgnoreCase));
-                if (existUserName != null && newUser.GUID != existUserName.GUID)
-                    return ServerResult.NameIsBusy;
-
-                User existGUID = users.Keys.FirstOrDefault(p => p.GUID.Equals(newUser.GUID)
-                                                        && p.CloudName.Equals(existCloud.CloudConfig.Name, StringComparison.CurrentCultureIgnoreCase));
-
-                if (existGUID != null)
+                try
                 {
-                    // грохаем юзера который уже есть в чате но с другого приложения, т.е. грохаем его на старом приложении
-                    users[existGUID].Value.Terminate();
-                    users.Remove(existGUID);
-                }
+                    CloudArgs existCloud = MainServer.Clouds.GetCloud(newUser);
+                    if (existCloud == null)
+                        return ServerResult.CloudNotFound;
+                    if (!existCloud.IsAvailable) // если облако содано на локальном сервере и недоступно для новых пользователей
+                        return ServerResult.AccessDenied;
 
-                users.Add(newUser, new KeyValuePair<CloudArgs, IChatCallback>(existCloud, CurrentCallback));
-
-                foreach (KeyValuePair<User, KeyValuePair<CloudArgs, IChatCallback>> cloudUser in users.Where(p => p.Value.Key.CloudConfig.Name.Equals(existCloud.CloudConfig.Name, StringComparison.CurrentCultureIgnoreCase)))
-                {
-                    if (((IChannel) cloudUser.Value.Value).State == CommunicationState.Opened)
+                    CloudBinding cloudBinding;
+                    List<CloudUser> cloudUsers;
+                    bool existInLocalServer = clouds.TryGetValue(existCloud, out cloudBinding);
+                    if (!existInLocalServer)
                     {
-                        cloudUser.Value.Value.TransferHistory(users.Keys.ToList(), null);
+                        cloudBinding = new CloudBinding(existCloud);
+                        cloudBinding.CloudUserCollection.Add(new CloudUser(newUser, CurrentCallback, existCloud));
+                        cloudUsers = cloudBinding.CloudUserCollection;
+                        clouds.Add(existCloud, cloudBinding);
                     }
-                }
+                    else
+                    {
+                        cloudUsers = cloudBinding.CloudUserCollection;
+                        CloudUser existUser = cloudUsers.FirstOrDefault(p => p.User.Name.Equals(newUser.Name, StringComparison.CurrentCultureIgnoreCase));
+                        // Если в системе уже есть другой юзер с тем же именем
+                        if (existUser != null && existUser.User.GUID != newUser.GUID)
+                            return ServerResult.NameIsBusy;
+                        else if (existUser != null)
+                        {
+                            // грохаем юзера который уже есть в чате но с другого приложения, т.е. грохаем его на старом приложении
+                            if (((IChannel) existUser.CallBack).State == CommunicationState.Opened)
+                                existUser.CallBack.Terminate();
+                            cloudUsers.Remove(existUser);
+                        }
 
-                return ServerResult.SUCCESS;
+                        cloudUsers.Add(new CloudUser(newUser, CurrentCallback, existCloud));
+                    }
+
+                    List<User> usersInCloud = cloudUsers.Select(c => c.User).ToList();
+                    foreach (CloudUser cloudUser in cloudBinding.CloudUserCollection)
+                    {
+                        if (((IChannel) cloudUser.CallBack).State == CommunicationState.Opened)
+                            cloudUser.CallBack.TransferHistory(usersInCloud, cloudBinding.Messages);
+                    }
+
+                    return ServerResult.SUCCESS;
+                }
+                catch (Exception e)
+                {
+                    return ServerResult.FAILURE;
+                }
             }
         }
 
-        public void Disconnect(User client)
+        public void Disconnect(User user)
         {
-            throw new NotImplementedException();
+            lock (syncObj)
+            {
+                try
+                {
+                    CloudBinding cloudBinding;
+                    if (!GetCloudUsers(user, out cloudBinding))
+                        return;
+
+
+                    cloudBinding.CloudUserCollection.RemoveAll((u) => u.User.GUID == user.GUID);
+                    List<User> usersInCloud = cloudBinding.CloudUserCollection.Select(s => s.User).ToList();
+                    foreach (var cloudUser in cloudBinding.CloudUserCollection)
+                    {
+                        if (((IChannel)cloudUser.CallBack).State == CommunicationState.Opened)
+                            cloudUser.CallBack.TransferHistory(usersInCloud, null);
+                    }
+                }
+                catch (Exception e)
+                {
+                    // ignored
+                }
+            }
         }
 
-        public void IsWriting(User client, bool isWriting)
+        public void IsWriting(User user, bool isWriting)
         {
-            throw new NotImplementedException();
+            lock (syncObj)
+            {
+                try
+                {
+                    CloudBinding cloudBinding;
+                    if (!GetCloudUsers(user, out cloudBinding))
+                        return;
+
+
+                    bool userInGroup = cloudBinding.CloudUserCollection.Any(p => p.User.GUID == user.GUID);
+                    if (!userInGroup)
+                        return;
+
+                    foreach (CloudUser cloudUser in cloudBinding.CloudUserCollection)
+                    {
+                        if (((IChannel)cloudUser.CallBack).State == CommunicationState.Opened)
+                            cloudUser.CallBack.IsWritingCallback(user);
+                    }
+                }
+                catch (Exception e)
+                {
+                    // ignored
+                }
+            }
         }
 
         public void Say(Message message)
         {
-            throw new NotImplementedException();
+            lock (syncObj)
+            {
+                try
+                {
+                    CloudBinding cloudBinding;
+                    if (!GetCloudUsers(message.Sender, out cloudBinding))
+                        return;
+
+
+                    bool userInGroup = cloudBinding.CloudUserCollection.Any(p => p.User.GUID == message.Sender.GUID);
+                    if (!userInGroup)
+                        return;
+
+
+                    foreach (CloudUser cloudUser in cloudBinding.CloudUserCollection)
+                    {
+                        if (((IChannel)cloudUser.CallBack).State == CommunicationState.Opened)
+                            cloudUser.CallBack.Receive(message);
+                    }
+                }
+                catch (Exception e)
+                {
+                    // ignored
+                }
+            }
+        }
+
+        bool GetCloudUsers(User user, out CloudBinding cloudBinding)
+        {
+            cloudBinding = null;
+            CloudArgs existCloud = MainServer.Clouds.GetCloud(user);
+            if (existCloud == null)
+                return false;
+            if (!existCloud.IsLocalServer)
+                return false;
+
+
+            bool isExist = clouds.TryGetValue(existCloud, out cloudBinding);
+            if (!isExist)
+                return false;
+            return true;
         }
     }
-
-
-    //public class Cloud1
-    //{
-    //    public Dictionary<User, IChatCallback> AwaitsConfirmaton { get; }
-    //    public Dictionary<User, IChatCallback> Users { get; }
-    //    public List<WCFChatClient> Clients { get; }
-    //    public string Name { get; }
-
-    //    public Cloud(string name)
-    //    {
-    //        Name = name;
-    //        Users = new Dictionary<User, IChatCallback>();
-    //        AwaitsConfirmaton = new Dictionary<User, IChatCallback>();
-    //        Clients = new List<WCFChatClient>();
-    //    }
-
-    //    public UserConfirmed Add(User newUser, IChatCallback callBack)
-    //    {
-    //        UserConfirmed result = new UserConfirmed();
-    //        if (Users.Count == 0)
-    //        {
-    //            AddNewUser(newUser, callBack);
-    //            result.Result = ServerResult.YouAreAdmin;
-    //            return result;
-    //        }
-
-    //        User exist = Users.Keys.First(p => p.Name.Equals(newUser.Name, StringComparison.CurrentCultureIgnoreCase));
-    //        if (exist != null && exist.GUID != newUser.GUID)
-    //        {
-    //            result.Result = ServerResult.UserNameBusy;
-    //            return result;
-    //        }
-
-
-    //        if (exist != null)
-    //        {
-    //            Users[exist].Terminate();
-    //            Users.Remove(exist);
-    //            Clients.Remove(Clients.First(p => p.GUID.Equals(exist.GUID)));
-    //        }
-
-    //        AddNewUser(newUser, callBack);
-    //        result.Result = ServerResult.AwaitConfirmation;
-    //        return result;
-    //    }
-
-    //    void AddNewUser(User newUser, IChatCallback callBack)
-    //    {
-    //        Users.Add(newUser, callBack);
-    //        Clients.Add(new WCFChatClient()
-    //                    {
-    //                        GUID = newUser.GUID,
-    //                        Name = newUser.Name,
-    //                        Time = newUser.Time
-    //                    });
-    //    }
-    //}
 }

@@ -11,6 +11,8 @@ namespace Utils
 {
 	public static class Customs
 	{
+	    public static string ApplicationName = Assembly.GetEntryAssembly().GetName().Name;
+	    public static string ApplicationPath = Assembly.GetEntryAssembly().Location; 
 		public static string AccountFilePath => Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), Assembly.GetEntryAssembly().GetName().Name);
 		public static void AddAllAccessPermissions(string filePath)
 		{
@@ -27,12 +29,13 @@ namespace Utils
 			File.SetAccessControl(filePath, access);
 		}
 
-		/// <summary>
-		/// Создание или получение записи в реестре с сгенеринным ключем и данными о приложении
-		/// </summary>
-		/// <param name="applicationName"></param>
-		/// <returns></returns>
-		public static string GetOrSetRegedit(string applicationName)
+	    /// <summary>
+	    /// Создание или получение записи в реестре с сгенеринным ключем и данными о приложении
+	    /// </summary>
+	    /// <param name="applicationName"></param>
+	    /// <param name="description"></param>
+	    /// <returns></returns>
+	    public static string GetOrSetRegedit(string applicationName, string description)
 		{
 			RegistryKey software = Registry.CurrentUser.OpenSubKey("SOFTWARE", true);
 			if (software == null)
@@ -40,13 +43,14 @@ namespace Utils
 
 			RegistryKey myProject = software.OpenSubKey(applicationName, true) ?? software.CreateSubKey(applicationName);
 
-			if ((string)myProject.GetValue("Description") == null)
-				myProject.SetValue("Description", "This application implements reading mail items and creation of TFS.");
+		    string currentDesc = (string) myProject.GetValue("Description") ?? string.Empty;
+            if (!currentDesc.Equals(description))
+		        myProject.SetValue("Description", description);
 
 			string result = (string)myProject.GetValue("Key");
 			if (result == null)
 			{
-				result = Guid.NewGuid().ToString();
+				result = Guid.NewGuid().ToString("D");
 				myProject.SetValue("Key", result);
 			}
 

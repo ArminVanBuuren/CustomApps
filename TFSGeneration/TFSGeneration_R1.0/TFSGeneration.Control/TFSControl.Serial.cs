@@ -46,8 +46,8 @@ namespace TFSAssist.Control
             DataBasePath = Customs.AccountFilePath + ".Data.xml";
             //ApplicationName = Assembly.GetCallingAssembly().GetName().Name;
             ApplicationName = Assembly.GetEntryAssembly().GetName().Name;
-            ApplicationPath = Assembly.GetEntryAssembly().Location;
-            RegeditKey = Customs.GetOrSetRegedit(ApplicationName);
+            ApplicationPath = Assembly.GetEntryAssembly().Location; 
+            RegeditKey = Customs.GetOrSetRegedit(ApplicationName, "This application implements reading mail items and on their basis creation TFS.");
             System.Globalization.CultureInfo culture = System.Globalization.CultureInfo.CreateSpecificCulture("ru-RU");
             System.Globalization.CultureInfo.DefaultThreadCurrentCulture = culture;
             System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = culture;

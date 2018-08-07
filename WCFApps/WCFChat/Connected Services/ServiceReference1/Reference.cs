@@ -15,22 +15,21 @@ namespace WCFChat.Client.ServiceReference1 {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="WCFChatClient", Namespace="http://schemas.datacontract.org/2004/07/WCFChat.Host.Console")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="User", Namespace="http://schemas.datacontract.org/2004/07/WCFChat.Service")]
     [System.SerializableAttribute()]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(WCFChat.Client.ServiceReference1.User))]
-    public partial class WCFChatClient : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class User : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CloudNameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string GUIDField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string NameField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.DateTime TimeField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -39,6 +38,19 @@ namespace WCFChat.Client.ServiceReference1 {
             }
             set {
                 this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string CloudName {
+            get {
+                return this.CloudNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CloudNameField, value) != true)) {
+                    this.CloudNameField = value;
+                    this.RaisePropertyChanged("CloudName");
+                }
             }
         }
         
@@ -68,19 +80,6 @@ namespace WCFChat.Client.ServiceReference1 {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.DateTime Time {
-            get {
-                return this.TimeField;
-            }
-            set {
-                if ((this.TimeField.Equals(value) != true)) {
-                    this.TimeField = value;
-                    this.RaisePropertyChanged("Time");
-                }
-            }
-        }
-        
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         
         protected void RaisePropertyChanged(string propertyName) {
@@ -93,44 +92,18 @@ namespace WCFChat.Client.ServiceReference1 {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="User", Namespace="http://schemas.datacontract.org/2004/07/WCFChat.Host.Console")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="Cloud", Namespace="http://schemas.datacontract.org/2004/07/WCFChat.Service")]
     [System.SerializableAttribute()]
-    public partial class User : WCFChat.Client.ServiceReference1.WCFChatClient {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string PasswordField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Password {
-            get {
-                return this.PasswordField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.PasswordField, value) != true)) {
-                    this.PasswordField = value;
-                    this.RaisePropertyChanged("Password");
-                }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="Message", Namespace="http://schemas.datacontract.org/2004/07/WCFChat.Host.Console")]
-    [System.SerializableAttribute()]
-    public partial class Message : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class Cloud : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string ContentField;
+        private string AddressField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string GUIDField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.DateTime TimeField;
+        private string NameField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -143,40 +116,27 @@ namespace WCFChat.Client.ServiceReference1 {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Content {
+        public string Address {
             get {
-                return this.ContentField;
+                return this.AddressField;
             }
             set {
-                if ((object.ReferenceEquals(this.ContentField, value) != true)) {
-                    this.ContentField = value;
-                    this.RaisePropertyChanged("Content");
+                if ((object.ReferenceEquals(this.AddressField, value) != true)) {
+                    this.AddressField = value;
+                    this.RaisePropertyChanged("Address");
                 }
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string GUID {
+        public string Name {
             get {
-                return this.GUIDField;
+                return this.NameField;
             }
             set {
-                if ((object.ReferenceEquals(this.GUIDField, value) != true)) {
-                    this.GUIDField = value;
-                    this.RaisePropertyChanged("GUID");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.DateTime Time {
-            get {
-                return this.TimeField;
-            }
-            set {
-                if ((this.TimeField.Equals(value) != true)) {
-                    this.TimeField = value;
-                    this.RaisePropertyChanged("Time");
+                if ((object.ReferenceEquals(this.NameField, value) != true)) {
+                    this.NameField = value;
+                    this.RaisePropertyChanged("Name");
                 }
             }
         }
@@ -191,101 +151,132 @@ namespace WCFChat.Client.ServiceReference1 {
         }
     }
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ServiceReference1.IChat", CallbackContract=typeof(WCFChat.Client.ServiceReference1.IChatCallback), SessionMode=System.ServiceModel.SessionMode.Required)]
-    public interface IChat {
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CloudResult", Namespace="http://schemas.datacontract.org/2004/07/WCFChat.Service")]
+    public enum CloudResult : int {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChat/Login", ReplyAction="http://tempuri.org/IChat/LoginResponse")]
-        bool Login(WCFChat.Client.ServiceReference1.User user);
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SUCCESS = 0,
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChat/Login", ReplyAction="http://tempuri.org/IChat/LoginResponse")]
-        System.Threading.Tasks.Task<bool> LoginAsync(WCFChat.Client.ServiceReference1.User user);
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        FAILURE = 1,
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChat/Say")]
-        void Say(WCFChat.Client.ServiceReference1.Message message);
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CloudNotFound = 2,
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChat/Say")]
-        System.Threading.Tasks.Task SayAsync(WCFChat.Client.ServiceReference1.Message message);
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CloudIsBusy = 3,
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, IsTerminating=true, Action="http://tempuri.org/IChat/Logoff")]
-        void Logoff(WCFChat.Client.ServiceReference1.WCFChatClient client);
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        YourRequestInProgress = 4,
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, IsTerminating=true, Action="http://tempuri.org/IChat/Logoff")]
-        System.Threading.Tasks.Task LogoffAsync(WCFChat.Client.ServiceReference1.WCFChatClient client);
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NotFound = 5,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IChatCallback {
+    [System.ServiceModel.ServiceContractAttribute(Namespace="http://localhost/services/server", ConfigurationName="ServiceReference1.IMainContract", CallbackContract=typeof(WCFChat.Client.ServiceReference1.IMainContractCallback))]
+    public interface IMainContract {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChat/Refresh", ReplyAction="http://tempuri.org/IChat/RefreshResponse")]
-        System.DateTime Refresh(WCFChat.Client.ServiceReference1.WCFChatClient[] clients, bool isGetEarlyMessage);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/CreateCloud")]
+        void CreateCloud(WCFChat.Client.ServiceReference1.User user, WCFChat.Client.ServiceReference1.Cloud cloud, string transactionID);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChat/GetAllContentHistory", ReplyAction="http://tempuri.org/IChat/GetAllContentHistoryResponse")]
-        WCFChat.Client.ServiceReference1.Message[] GetAllContentHistory();
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/CreateCloud")]
+        System.Threading.Tasks.Task CreateCloudAsync(WCFChat.Client.ServiceReference1.User user, WCFChat.Client.ServiceReference1.Cloud cloud, string transactionID);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChat/RefreshContentHistory")]
-        void RefreshContentHistory(WCFChat.Client.ServiceReference1.Message[] messages);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/Unbind")]
+        void Unbind(string transactionID);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChat/Receive", ReplyAction="http://tempuri.org/IChat/ReceiveResponse")]
-        System.DateTime Receive(WCFChat.Client.ServiceReference1.Message msg);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/Unbind")]
+        System.Threading.Tasks.Task UnbindAsync(string transactionID);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChat/IsWritingCallback")]
-        void IsWritingCallback(WCFChat.Client.ServiceReference1.WCFChatClient client);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/GetCloud")]
+        void GetCloud(WCFChat.Client.ServiceReference1.User user);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChat/Terminate")]
-        void Terminate();
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/GetCloud")]
+        System.Threading.Tasks.Task GetCloudAsync(WCFChat.Client.ServiceReference1.User user);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/RequestForAccessResult")]
+        void RequestForAccessResult(WCFChat.Client.ServiceReference1.CloudResult result, WCFChat.Client.ServiceReference1.User user);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/RequestForAccessResult")]
+        System.Threading.Tasks.Task RequestForAccessResultAsync(WCFChat.Client.ServiceReference1.CloudResult result, WCFChat.Client.ServiceReference1.User user);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IChatChannel : WCFChat.Client.ServiceReference1.IChat, System.ServiceModel.IClientChannel {
+    public interface IMainContractCallback {
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/CreateCloudResult")]
+        void CreateCloudResult(WCFChat.Client.ServiceReference1.CloudResult result, string transactionID);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/UnbindResult")]
+        void UnbindResult(WCFChat.Client.ServiceReference1.CloudResult result, string transactionID);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/RequestForAccess")]
+        void RequestForAccess(WCFChat.Client.ServiceReference1.User user, string address);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/GetCloudResult")]
+        void GetCloudResult(WCFChat.Client.ServiceReference1.CloudResult result, WCFChat.Client.ServiceReference1.Cloud cloud);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface IMainContractChannel : WCFChat.Client.ServiceReference1.IMainContract, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class ChatClient : System.ServiceModel.DuplexClientBase<WCFChat.Client.ServiceReference1.IChat>, WCFChat.Client.ServiceReference1.IChat {
+    public partial class MainContractClient : System.ServiceModel.DuplexClientBase<WCFChat.Client.ServiceReference1.IMainContract>, WCFChat.Client.ServiceReference1.IMainContract {
         
-        public ChatClient(System.ServiceModel.InstanceContext callbackInstance) : 
+        public MainContractClient(System.ServiceModel.InstanceContext callbackInstance) : 
                 base(callbackInstance) {
         }
         
-        public ChatClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
+        public MainContractClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
                 base(callbackInstance, endpointConfigurationName) {
         }
         
-        public ChatClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
+        public MainContractClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
                 base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public ChatClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public MainContractClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public ChatClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public MainContractClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public bool Login(WCFChat.Client.ServiceReference1.User user) {
-            return base.Channel.Login(user);
+        public void CreateCloud(WCFChat.Client.ServiceReference1.User user, WCFChat.Client.ServiceReference1.Cloud cloud, string transactionID) {
+            base.Channel.CreateCloud(user, cloud, transactionID);
         }
         
-        public System.Threading.Tasks.Task<bool> LoginAsync(WCFChat.Client.ServiceReference1.User user) {
-            return base.Channel.LoginAsync(user);
+        public System.Threading.Tasks.Task CreateCloudAsync(WCFChat.Client.ServiceReference1.User user, WCFChat.Client.ServiceReference1.Cloud cloud, string transactionID) {
+            return base.Channel.CreateCloudAsync(user, cloud, transactionID);
         }
         
-        public void Say(WCFChat.Client.ServiceReference1.Message message) {
-            base.Channel.Say(message);
+        public void Unbind(string transactionID) {
+            base.Channel.Unbind(transactionID);
         }
         
-        public System.Threading.Tasks.Task SayAsync(WCFChat.Client.ServiceReference1.Message message) {
-            return base.Channel.SayAsync(message);
+        public System.Threading.Tasks.Task UnbindAsync(string transactionID) {
+            return base.Channel.UnbindAsync(transactionID);
         }
         
-        public void Logoff(WCFChat.Client.ServiceReference1.WCFChatClient client) {
-            base.Channel.Logoff(client);
+        public void GetCloud(WCFChat.Client.ServiceReference1.User user) {
+            base.Channel.GetCloud(user);
         }
         
-        public System.Threading.Tasks.Task LogoffAsync(WCFChat.Client.ServiceReference1.WCFChatClient client) {
-            return base.Channel.LogoffAsync(client);
+        public System.Threading.Tasks.Task GetCloudAsync(WCFChat.Client.ServiceReference1.User user) {
+            return base.Channel.GetCloudAsync(user);
+        }
+        
+        public void RequestForAccessResult(WCFChat.Client.ServiceReference1.CloudResult result, WCFChat.Client.ServiceReference1.User user) {
+            base.Channel.RequestForAccessResult(result, user);
+        }
+        
+        public System.Threading.Tasks.Task RequestForAccessResultAsync(WCFChat.Client.ServiceReference1.CloudResult result, WCFChat.Client.ServiceReference1.User user) {
+            return base.Channel.RequestForAccessResultAsync(result, user);
         }
     }
 }

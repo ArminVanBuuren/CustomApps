@@ -7,6 +7,7 @@ using System.ServiceModel.Configuration;
 using System.ServiceModel.Description;
 using System.Text;
 using System.Threading.Tasks;
+using WCFChat.Service;
 
 namespace WCFChat.Host.Console
 {
@@ -16,9 +17,11 @@ namespace WCFChat.Host.Console
         static void Main(string[] args)
         {
             ServiceHost host = null;
+            ServiceHost host2 = null;
             try
             {
-                host = new ServiceHost(typeof(MainServer));
+                //host = new ServiceHost(typeof(ClientServer));
+                host2 = new ServiceHost(typeof(MainServer));
 
 
 
@@ -70,7 +73,8 @@ namespace WCFChat.Host.Console
                 //host.AddServiceEndpoint(typeof(IMetadataExchange), MetadataExchangeBindings.CreateMexTcpBinding(), "http://localhost:8040/WPFHost/mex");
 
 
-                host.Open();
+                //host.Open();
+                host2.Open();
                 
             }
             catch (Exception ex)

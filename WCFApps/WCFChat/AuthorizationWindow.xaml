@@ -9,7 +9,7 @@
                       Title="Authentication"
                       xmlns:mainControl="clr-namespace:UIControls.MainControl;assembly=UIControls"
                       ResizeMode="NoResize"
-                      MinWidth="300"
+                      MinWidth="250"
                       MaxWidth="400" 
                       MaxHeight="500" 
                       SizeToContent="WidthAndHeight"
@@ -23,7 +23,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TextBlock Padding="10" x:Name="ErrorMessage" Visibility="Collapsed"
+        <TextBlock Padding="5 0" x:Name="ErrorMessage" Visibility="Collapsed"
 				   Foreground="White" 
 				   TextWrapping="Wrap" 
 		           HorizontalAlignment="Center"
@@ -31,24 +31,38 @@
 				   TextAlignment="Center"
 				   ></TextBlock>
 
-        <Grid Grid.Row="1" Name="Authorization" Visibility="Collapsed">
+        <Grid Name="AuthorizationBlock" Grid.Row="1"  Visibility="Collapsed" Margin="5">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition  />
+                <RowDefinition  />
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="62"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Grid.Row="0" Content="Name:" Margin="0 5"/>
-            <TextBox Name="UserName" Grid.Column="1" Grid.Row="0"  Margin="5" TextChanged="UserName_OnTextChanged" HorizontalAlignment="Stretch"/>
-            <Label Grid.Column="0" Grid.Row="1" Content="Password:" Margin="0 5"/>
-            <PasswordBox Name="Password" Grid.Column="1" Grid.Row="1"  Margin="5" PasswordChanged="Password_OnPasswordChanged" HorizontalAlignment="Stretch"/>
+            
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25" />
+                    <RowDefinition  />
+                    <RowDefinition Height="25" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="43"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Grid.Row="0" Content="Nick:" />
+                <TextBox Grid.Column="1" Grid.Row="0" Name="NickName"  TextChanged="UserName_OnTextChanged" HorizontalAlignment="Stretch"/>
+                <Border Margin="3" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="1" />
+                <Label Grid.Column="0" Grid.Row="2" Content="Cloud:" />
+                <TextBox Grid.Column="1" Grid.Row="2" Name="CloudAddress"  TextChanged="CloudAddress_OnTextChanged" HorizontalAlignment="Stretch"/>
+            </Grid>
+
+            <StackPanel Grid.Row="1"  Orientation="Horizontal" HorizontalAlignment="Right" Margin="1 5 1 1">
+                <Button Name="Create" Visibility="Visible" Margin="0 0 5 0" Height="25" Width="65" Content="Create" Click="Create_OnClick" />
+                <Button Name="Connect" Visibility="Visible"   Height="25" Width="65" Content="Connect" Click="Connect_OnClick"/>
+            </StackPanel>
         </Grid>
 
         <ProgressBar Name="WorkingProgressBar" Visibility="Visible" Grid.Row="2" Grid.Column="0" Margin="5" />
         <ProgressBar Name="NotWorkingProgressBar" Visibility="Collapsed" Grid.Row="2" Grid.Column="0" Margin="5"  />
-        <Button Name="ButtonOK" Visibility="Collapsed" Grid.Row="3" Margin="0 0 0 5" Height="25" Width="50" Content="OK" />
+        
     </Grid>
 
 </mainControl:UIWindow>
