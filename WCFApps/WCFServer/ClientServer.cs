@@ -57,8 +57,8 @@ namespace WCFChat.Service
         CallbackContract = typeof(IChatCallback), SessionMode = SessionMode.Required)]
     public interface IChat
     {
-        [OperationContract(IsOneWay = false, IsInitiating = true)]
-        ServerResult Connect(User user);
+        [OperationContract(IsOneWay = true, IsInitiating = true)]
+        void Connect(User user);
 
         [OperationContract(IsOneWay = true)]
         void Say(Message message);
@@ -73,6 +73,9 @@ namespace WCFChat.Service
     public interface IChatCallback
     {
         [OperationContract(IsOneWay = true)]
+        void ConnectResult(ServerResult result);
+
+        [OperationContract(IsOneWay = true)]
         void SetPrivilege(User user, ServerPrivelege privelege);
 
         [OperationContract(IsOneWay = false)]
@@ -82,7 +85,7 @@ namespace WCFChat.Service
         void Receive(Message msg);
 
         [OperationContract(IsOneWay = true)]
-        void IsWritingCallback(User client);
+        void IsWritingCallback(User client, bool isWriting);
 
         [OperationContract(IsOneWay = true)]
         void Terminate();

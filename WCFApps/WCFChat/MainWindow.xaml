@@ -15,21 +15,174 @@
     <Window.Resources>
         <Image x:Key="MyImage1" Source="Images/accept.png"/>
         <Image x:Key="MyImage2" Source="Images/reject.png"/>
-        <StackPanel x:Key="TemplateForUserAdmin" Orientation="Horizontal" Background="Red">
-            <Label Name="UserName" Content="12345" FontSize="9"/>
-            <Button Name="ButtonAccept" Content="{StaticResource MyImage1}" Height="15" Width="15" Background="Transparent"></Button>
-            <Button Name="ButtonReject" Content="{StaticResource MyImage2}" Height="15" Width="15" Background="Transparent"></Button>
-        </StackPanel>
-        <StackPanel x:Key="TemplateForUser" Orientation="Horizontal">
-            <Label  Content="12345" FontSize="9"/>
-        </StackPanel>
+
+
+
+
+        <LinearGradientBrush x:Key="ControlBackgroundOver" EndPoint="0,1" StartPoint="0,0">
+            <GradientStop Color="#FF605F5F" Offset="0"/>
+            <GradientStop Color="#FF030303" Offset="1"/>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="ControlActiveBorderBrush" StartPoint="0,0" EndPoint="1,0.6">
+            <GradientStop Color="#FF7C7C7C" Offset="0"/>
+            <GradientStop Color="#FF1F1E1E" Offset="1"/>
+        </LinearGradientBrush>
+        <Style TargetType="{x:Type Button}" x:Key="ButtonCustom">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid x:Name="Root">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualStateGroup.Transitions>
+                                        <VisualTransition GeneratedDuration="0:0:0.4" />
+                                        <VisualTransition To="Pressed" />
+                                        <VisualTransition From="Pressed" />
+                                    </VisualStateGroup.Transitions>
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="MouseOver">
+                                        <Storyboard>
+                                            <DoubleAnimation Duration="0" Storyboard.TargetName="PressedElement" Storyboard.TargetProperty="(FrameworkElement.Opacity)" To="0" />
+                                            <DoubleAnimation Duration="0" Storyboard.TargetName="MouseOverElement" Storyboard.TargetProperty="(FrameworkElement.Opacity)" To="1" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <DoubleAnimation Duration="0" Storyboard.TargetName="NormalElement" Storyboard.TargetProperty="(FrameworkElement.Opacity)" To="0.25" />
+                                            <DoubleAnimation Duration="0" Storyboard.TargetName="PressedElement" Storyboard.TargetProperty="(FrameworkElement.Opacity)" To="1" />
+                                            <DoubleAnimation Duration="0" Storyboard.TargetName="MouseOverElement" Storyboard.TargetProperty="(FrameworkElement.Opacity)" To="0" />
+                                            <ColorAnimation Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="ContentHost" To="{StaticResource ButtonPressed}"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled">
+                                        <Storyboard>
+                                            <DoubleAnimation Duration="0" Storyboard.TargetName="NormalElement" Storyboard.TargetProperty="(FrameworkElement.Opacity)" To="0" />
+                                            <DoubleAnimation Duration="0" Storyboard.TargetName="DisabledElement" Storyboard.TargetProperty="(FrameworkElement.Opacity)" To="1" />
+                                            <DoubleAnimation Duration="0" Storyboard.TargetName="ContentHost" Storyboard.TargetProperty="(FrameworkElement.Opacity)" To="0.75" />
+                                            <ColorAnimation Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="ContentHost" To="{StaticResource DisabledForeground}"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="FocusStates">
+                                    <VisualState x:Name="Focused"/>
+                                    <VisualState x:Name="Unfocused" />
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Border x:Name="DisabledElement" Background="#FFC4C4C4" CornerRadius="8" Opacity="0">
+                                <Border BorderBrush="#66000000" BorderThickness="0,0,1,1" CornerRadius="2" />
+                            </Border>
+                            <Border x:Name="NormalElement" Background="{TemplateBinding Background}" CornerRadius="8"/>
+                            <!--<Border x:Name="NormalElement" Background="{StaticResource ControlActiveBorderBrush}" CornerRadius="8"/>-->
+                            <Border x:Name="MouseOverElement"  Background="{StaticResource ControlBackgroundOver}" CornerRadius="8" Opacity="0" />
+                            <Border x:Name="PressedElement" Background="{StaticResource ControlActiveBorderBrush}" CornerRadius="8" Opacity="0" />
+                            <ContentPresenter x:Name="ContentHost" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+        <Style TargetType="{x:Type ListBoxItem}" x:Key="ListBoxItemUser">
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                        <ControlTemplate.Resources>
+                            <Storyboard x:Key="HoverOn">
+                                <ColorAnimation Duration="0:0:0.3" Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="content"
+                                            To="#FF32EBFB"/>
+                            </Storyboard>
+                            <Storyboard x:Key="HoverOff">
+                                <ColorAnimation Duration="0:0:0.3" Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="content"
+                                            To="#FFEEEFFF"/>
+                            </Storyboard>
+                            <Storyboard x:Key="SelectedOn">
+                                <DoubleAnimation Duration="0:0:0.3" Storyboard.TargetName="selected_bg" Storyboard.TargetProperty="(FrameworkElement.Opacity)"
+                                             To="1"/>
+                            </Storyboard>
+                            <Storyboard x:Key="SelectedOff">
+                                <DoubleAnimation Duration="0:0:0.3" Storyboard.TargetName="selected_bg" Storyboard.TargetProperty="(FrameworkElement.Opacity)"
+                                             To="0"/>
+                            </Storyboard>
+                        </ControlTemplate.Resources>
+                        <Grid Background="{TemplateBinding Background}" Margin="0" SnapsToDevicePixels="True" x:Name="grid">
+                            <Rectangle x:Name="bg" IsHitTestVisible="False" Fill="Transparent"/>
+                            <Rectangle x:Name="selected_bg" IsHitTestVisible="False" Opacity="0" Fill="Transparent"/>
+
+                            <ContentPresenter x:Name="content" Margin="1" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="True"/>
+                                    <Condition Property="IsSelected" Value="False"/>
+                                </MultiTrigger.Conditions>
+                                <MultiTrigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource HoverOn}"/>
+                                </MultiTrigger.EnterActions>
+                                <MultiTrigger.ExitActions>
+                                    <BeginStoryboard Storyboard="{StaticResource HoverOff}"/>
+                                </MultiTrigger.ExitActions>
+                            </MultiTrigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Foreground" Value="#FF32EBFB"/>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource HoverOn}"/>
+                                    <BeginStoryboard Storyboard="{StaticResource SelectedOn}"/>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard Storyboard="{StaticResource SelectedOff}"/>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground">
+                                    <Setter.Value>
+                                        <SolidColorBrush Color="#FF474747"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+        <Grid x:Key="UserTemplateSimple">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Border Grid.ColumnSpan="1" CornerRadius="8" Background="#FF555555" Height="15" />
+            <TextBlock Grid.Column="0" Name="UserNameSimple" ToolTip="UserName" FontSize="10" Padding="12 0 5 0" >12345567</TextBlock>
+            <TextBlock Grid.Column="0" Name="StatusSimple"   ToolTip="Status"   Foreground="LightGreen" Margin="4 -2 0 0">●</TextBlock>
+        </Grid>
+
+
+        <Grid x:Key="UserTemplateForAdmin">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Border Grid.ColumnSpan="4" CornerRadius="8" Background="#FF555555" Height="15" />
+            <TextBlock  Grid.Column="0" Name="UserNameAdmin" ToolTip="UserName" FontSize="10" Padding="12 0 1 0" >12347</TextBlock>
+            <TextBlock Grid.Column="0"  Name="StatusAdmin"   ToolTip="Status" Foreground="Red" Margin="4 -2 0 0">●</TextBlock>
+            <Button Grid.Column="2"     Name="AcceptAdmin"   ToolTip="Accept" Content="{StaticResource MyImage1}"  Height="15" Width="15" Background="Transparent" BorderThickness="0" Style="{StaticResource ButtonCustom}"/>
+            <Button Grid.Column="3"     Name="RejectAdmin"   ToolTip="Reject" Content="{StaticResource MyImage2}"  Height="15" Width="15" Background="Transparent" BorderThickness="0" Style="{StaticResource ButtonCustom}"/>
+        </Grid>
+
     </Window.Resources>
     <Grid>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="80" MinWidth="40"  MaxWidth="150" />
             <ColumnDefinition Width="*"   MinWidth="150"  />
-            <ColumnDefinition Width="80"  MinWidth="40"  MaxWidth="150"/>
+            <ColumnDefinition Width="90"  MinWidth="40"  MaxWidth="150"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"  MinHeight="50" />
@@ -59,15 +212,12 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="35" MinHeight="35"/>
             </Grid.RowDefinitions>
-            <ListBox Grid.Row="0" Name="Users">
-
-                
+            <ListBox Grid.Row="0" Name="Users" >
+ 
             </ListBox>
             <Button Grid.Row="1" x:Name="SendMessage"  Content="Send" HorizontalAlignment="Stretch" Height="35"   Margin="0,0,1,1" />
         </Grid>
-        
-        
-        
+
         <!--<Border Grid.Column="1" Grid.RowSpan="2" BorderBrush="#FF6C6C6C" BorderThickness="0,1,0,0" Margin="0,283,0,0" />-->
         <RichTextBox Grid.Column="1" Grid.Row="1" x:Name="DialogWindow" CaretBrush="Black" FontFamily="Calibri" FontSize="13" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" Margin="0,0,0,1" Foreground="Black" Padding="1" >
             <FlowDocument>

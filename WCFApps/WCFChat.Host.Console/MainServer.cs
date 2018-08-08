@@ -100,7 +100,7 @@ namespace WCFChat.Host.Console
         CloudCollection Clouds { get; } = new CloudCollection();
         Dictionary<User, IMainCallback> waitForAccessToCloud = new Dictionary<User, IMainCallback>();
         public IMainCallback Main_CurrentCallback => OperationContext.Current.GetCallbackChannel<IMainCallback>();
-        public bool Main_CurrentCallbackIsOpened => ((IChannel) Main_CurrentCallback).State == CommunicationState.Opened;
+        public bool Main_CurrentCallbackIsOpen => ((IChannel) Main_CurrentCallback).State == CommunicationState.Opened;
         ServiceHost host = null;
         Dictionary<string, KeyValuePair<Cloud, IMainCallback>> cloudInMainServer = new Dictionary<string, KeyValuePair<Cloud, IMainCallback>>();
 
@@ -140,24 +140,24 @@ namespace WCFChat.Host.Console
 
                         if (isOpenned)
                         {
-                            if (Main_CurrentCallbackIsOpened)
+                            if (Main_CurrentCallbackIsOpen)
                                 Main_CurrentCallback.CreateCloudResult(CloudResult.SUCCESS, transactionID);
                         }
                         else
                         {
-                            if (Main_CurrentCallbackIsOpened)
+                            if (Main_CurrentCallbackIsOpen)
                                 Main_CurrentCallback.CreateCloudResult(CloudResult.FAILURE, transactionID);
                         }
                     }
                     else
                     {
-                        if (Main_CurrentCallbackIsOpened)
+                        if (Main_CurrentCallbackIsOpen)
                             Main_CurrentCallback.CreateCloudResult(CloudResult.CloudIsBusy, transactionID);
                     }
                 }
                 catch (Exception e)
                 {
-                    if (Main_CurrentCallbackIsOpened)
+                    if (Main_CurrentCallbackIsOpen)
                         Main_CurrentCallback.CreateCloudResult(CloudResult.FAILURE, transactionID);
                 }
             }
@@ -193,7 +193,7 @@ namespace WCFChat.Host.Console
                 {
                     if (waitForAccessToCloud.ContainsKey(user))
                     {
-                        if (Main_CurrentCallbackIsOpened)
+                        if (Main_CurrentCallbackIsOpen)
                             Main_CurrentCallback.GetCloudResult(ServerResult.YourRequestInProgress, null);
                         return;
                     }
@@ -218,7 +218,7 @@ namespace WCFChat.Host.Console
                             else
                             {
                                 Clouds.Remove(transactionID);
-                                if (Main_CurrentCallbackIsOpened)
+                                if (Main_CurrentCallbackIsOpen)
                                     Main_CurrentCallback.GetCloudResult(ServerResult.CloudNotFound, null);
                                 return;
                             }
@@ -227,7 +227,7 @@ namespace WCFChat.Host.Console
                 }
                 catch (Exception ex)
                 {
-                    if (Main_CurrentCallbackIsOpened)
+                    if (Main_CurrentCallbackIsOpen)
                         Main_CurrentCallback.GetCloudResult(ServerResult.FAILURE, null);
                 }
             }
@@ -268,24 +268,39 @@ namespace WCFChat.Host.Console
         object syncObj = new object();
         Dictionary<CloudArgs, CloudBinding> clouds = new Dictionary<CloudArgs, CloudBinding>();
         public IChatCallback Chat_CurrentCallback => OperationContext.Current.GetCallbackChannel<IChatCallback>();
-        public bool Chat_CurrentCallbackIsOpened => ((IChannel)Chat_CurrentCallback).State == CommunicationState.Opened;
+        public bool Chat_CurrentCallbackIsOpen => ((IChannel)Chat_CurrentCallback).State == CommunicationState.Opened;
         private CloudCollection MainClouds;
         MainServer(CloudCollection Clouds)
         {
             MainClouds = Clouds;
         }
 
-        public ServerResult Connect(User newUser)
+        public void Connect(User newUser)
         {
             lock (syncObj)
             {
                 try
                 {
+                    if (newUser == null || string.IsNullOrEmpty(newUser.GUID) || string.IsNullOrEmpty(newUser.Name))
+                    {
+                        if (Chat_CurrentCallbackIsOpen)
+                            Chat_CurrentCallback.ConnectResult(ServerResult.AccessDenied);
+                        return;
+                    }
+
                     CloudArgs existCloud = MainClouds.GetCloud(newUser);
                     if (existCloud == null)
-                        return ServerResult.CloudNotFound;
+                    {
+                        if(Chat_CurrentCallbackIsOpen)
+                            Chat_CurrentCallback.ConnectResult(ServerResult.CloudNotFound);
+                        return;
+                    }
                     if (!existCloud.IsAvailable) // если облако содано на локальном сервере и недоступно для новых пользователей
-                        return ServerResult.AccessDenied;
+                    {
+                        if (Chat_CurrentCallbackIsOpen)
+                            Chat_CurrentCallback.ConnectResult(ServerResult.AccessDenied);
+                        return;
+                    }
 
                     CloudBinding cloudBinding;
                     List<CloudUser> cloudUsers;
@@ -310,7 +325,11 @@ namespace WCFChat.Host.Console
                         CloudUser existUserName = cloudUsers.FirstOrDefault(p => p.User.Name.Equals(newUser.Name, StringComparison.CurrentCultureIgnoreCase));
                         // Если в системе уже есть другой юзер с тем же именем
                         if (existUserName != null && existUserName.User.GUID != newUser.GUID)
-                            return ServerResult.NameIsBusy;
+                        {
+                            if (Chat_CurrentCallbackIsOpen)
+                                Chat_CurrentCallback.ConnectResult(ServerResult.NameIsBusy);
+                            return;
+                        }
                         else if (existUserName != null)
                         {
                             // грохаем юзера который уже есть в чате но с другого приложения, т.е. грохаем его на старом приложении
@@ -332,15 +351,20 @@ namespace WCFChat.Host.Console
                     // отправляем всем юзерам обновленный список юзеров в облаке
                     foreach (CloudUser cloudUser in cloudBinding.CloudUserCollection)
                     {
+                        if(createdUser == cloudUser)
+                            continue;
+
                         if (((IChannel) cloudUser.CallBack).State == CommunicationState.Opened)
                             cloudUser.CallBack.TransferHistory(usersInCloud, null);
                     }
 
-                    return ServerResult.SUCCESS;
+                    if (Chat_CurrentCallbackIsOpen)
+                        Chat_CurrentCallback.ConnectResult(ServerResult.SUCCESS);
                 }
                 catch (Exception e)
                 {
-                    return ServerResult.FAILURE;
+                    if (Chat_CurrentCallbackIsOpen)
+                        Chat_CurrentCallback.ConnectResult(ServerResult.FAILURE);
                 }
             }
         }
@@ -389,7 +413,7 @@ namespace WCFChat.Host.Console
                     foreach (CloudUser cloudUser in cloudBinding.CloudUserCollection)
                     {
                         if (((IChannel)cloudUser.CallBack).State == CommunicationState.Opened)
-                            cloudUser.CallBack.IsWritingCallback(user);
+                            cloudUser.CallBack.IsWritingCallback(user, isWriting);
                     }
                 }
                 catch (Exception e)
@@ -431,6 +455,8 @@ namespace WCFChat.Host.Console
         bool GetCloudUsers(User user, out CloudBinding cloudBinding)
         {
             cloudBinding = null;
+            if (user == null)
+                return false;
             CloudArgs existCloud = MainClouds.GetCloud(user);
             if (existCloud == null)
                 return false;

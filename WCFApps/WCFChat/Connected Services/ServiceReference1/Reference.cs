@@ -118,11 +118,11 @@ namespace WCFChat.Client.ServiceReference1 {
     [System.ServiceModel.ServiceContractAttribute(Namespace="http://localhost/services/chat", ConfigurationName="ServiceReference1.IChat", CallbackContract=typeof(WCFChat.Client.ServiceReference1.IChatCallback), SessionMode=System.ServiceModel.SessionMode.Required)]
     public interface IChat {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://localhost/services/chat/IChat/Connect", ReplyAction="http://localhost/services/chat/IChat/ConnectResponse")]
-        WCFChat.Service.ServerResult Connect(WCFChat.Service.User user);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/chat/IChat/Connect")]
+        void Connect(WCFChat.Service.User user);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://localhost/services/chat/IChat/Connect", ReplyAction="http://localhost/services/chat/IChat/ConnectResponse")]
-        System.Threading.Tasks.Task<WCFChat.Service.ServerResult> ConnectAsync(WCFChat.Service.User user);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/chat/IChat/Connect")]
+        System.Threading.Tasks.Task ConnectAsync(WCFChat.Service.User user);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/chat/IChat/Say")]
         void Say(WCFChat.Service.Message message);
@@ -146,6 +146,9 @@ namespace WCFChat.Client.ServiceReference1 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface IChatCallback {
         
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/chat/IChat/ConnectResult")]
+        void ConnectResult(WCFChat.Service.ServerResult result);
+        
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/chat/IChat/SetPrivilege")]
         void SetPrivilege(WCFChat.Service.User user, WCFChat.Service.ServerPrivelege privelege);
         
@@ -156,7 +159,7 @@ namespace WCFChat.Client.ServiceReference1 {
         void Receive(WCFChat.Service.Message msg);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/chat/IChat/IsWritingCallback")]
-        void IsWritingCallback(WCFChat.Service.User client);
+        void IsWritingCallback(WCFChat.Service.User client, bool isWriting);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/chat/IChat/Terminate")]
         void Terminate();
@@ -190,11 +193,11 @@ namespace WCFChat.Client.ServiceReference1 {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public WCFChat.Service.ServerResult Connect(WCFChat.Service.User user) {
-            return base.Channel.Connect(user);
+        public void Connect(WCFChat.Service.User user) {
+            base.Channel.Connect(user);
         }
         
-        public System.Threading.Tasks.Task<WCFChat.Service.ServerResult> ConnectAsync(WCFChat.Service.User user) {
+        public System.Threading.Tasks.Task ConnectAsync(WCFChat.Service.User user) {
             return base.Channel.ConnectAsync(user);
         }
         

@@ -36,7 +36,10 @@ namespace WCFChat.Client
             proxy.InnerDuplexChannel.Opened += new EventHandler(InnerDuplexChannel_Opened);
             proxy.InnerDuplexChannel.Closed += new EventHandler(InnerDuplexChannel_Closed);
         }
-
+        public void ConnectResult(ServerResult result)
+        {
+            throw new NotImplementedException();
+        }
         public void IsWritingCallback(User client)
         {
             throw new NotImplementedException();

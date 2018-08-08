@@ -171,5 +171,8 @@
     <Resource Include="Images\accept.png" />
     <Resource Include="Images\reject.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Templates\UserSimple.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

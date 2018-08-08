@@ -59,5 +59,22 @@ namespace WCFChat.Client.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to         &lt;ListBoxItem x:Key=&quot;UserTemplateSimple&quot;&gt;
+        ///            &lt;Grid&gt;
+        ///                &lt;Grid.ColumnDefinitions&gt;
+        ///                    &lt;ColumnDefinition/&gt;
+        ///                    &lt;ColumnDefinition/&gt;
+        ///                &lt;/Grid.ColumnDefinitions&gt;
+        ///                &lt;Border Grid.ColumnSpan=&quot;1&quot; CornerRadius=&quot;8&quot; Background=&quot;#FF555555&quot; Height=&quot;15&quot; /&gt;
+        ///                &lt;TextBlock Grid.Column=&quot;0&quot; Name=&quot;UserNameSimple&quot; ToolTip=&quot;UserName&quot; FontSize=&quot;10&quot; Padding=&quot;12 0 5 0&quot; &gt;12345567&lt;/TextBlock&gt;
+        ///                &lt;TextBlock Grid.Col [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string UserSimple {
+            get {
+                return ResourceManager.GetString("UserSimple", resourceCulture);
+            }
+        }
     }
 }

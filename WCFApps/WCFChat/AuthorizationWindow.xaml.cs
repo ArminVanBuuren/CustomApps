@@ -31,8 +31,6 @@ namespace WCFChat.Client
     [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
     public partial class AuthorizationWindow : IMainContractCallback
     {
-        
-
         private object sync = new object();
         private MainContractClient mainProxy = null;
 
@@ -66,22 +64,6 @@ namespace WCFChat.Client
 
         bool ConnectToMainServer()
         {
-            //try
-            //{
-            //    if (File.Exists(MainWindow.AccountStorePath))
-            //    {
-            //        using (Stream stream = new FileStream(MainWindow.AccountStorePath, FileMode.Open, FileAccess.Read))
-            //        {
-            //            currentUser = new BinaryFormatter().Deserialize(stream) as GeneratedUser;
-            //        }
-            //    }
-            //}
-            //catch (Exception)
-            //{
-            //    File.Delete(MainWindow.AccountStorePath);
-            //}
-
-
             try
             {
                 OpenOrReopenConnection();
@@ -242,7 +224,7 @@ namespace WCFChat.Client
                                 Dispatcher?.Invoke(() =>
                                                   {
                                                       this.Visibility = Visibility.Collapsed;
-                                                      innerChatServer.Show(innerTransactionId, RequestForAccessResult);
+                                                      innerChatServer.Show(innerTransactionId, currentUser, RequestForAccessResult);
                                                   });
                                 break;
                             case CloudResult.FAILURE:
@@ -391,87 +373,6 @@ namespace WCFChat.Client
                                    }
                                });
         }
-
-        //private void ButtonOkOnClickConnect(object sender, RoutedEventArgs e)
-        //{
-        //    if (currentUser == null)
-        //    {
-        //        GeneratedUser newGenUser = new GeneratedUser(new User() {
-        //                                                       Name = UserName.Text,
-        //                                                       Password = Password.Password,
-        //                                                       GUID = Guid.NewGuid().ToString("D"),
-        //                                                       Time = DateTime.Now
-        //                                                   });
-        //        TryToConnect(newGenUser);
-        //    }
-        //    else
-        //    {
-        //        if (currentUser.MyUser.Name.Equals(UserName.Text, StringComparison.CurrentCultureIgnoreCase) && currentUser.MyUser.Password.Equals(Password.Password))
-        //        {
-        //            TryToConnect(currentUser);
-        //        }
-        //        else
-        //        {
-        //            InfoWarningMessage("Username or password is incorrect. Please try again.");
-        //        }
-
-        //    }
-        //}
-
-        //void TryToConnect(GeneratedUser generedUser)
-        //{
-        //    WaitWhenLoggning();
-        //    proxy.LoginAsync(generedUser.MyUser).ContinueWith((antecedent) =>
-        //                                                      {
-        //                                                          LoggingCompleted();
-        //                                                          if (antecedent.Result)
-        //                                                          {
-        //                                                              currentUser = generedUser;
-        //                                                              ShowMainWindow();
-        //                                                          }
-        //                                                          else
-        //                                                          {
-        //                                                              Dispatcher?.Invoke(() => InfoWarningMessage(string.Format("Username \"{0}\" already exist. Please choose another.", generedUser.MyUser.Name)));   
-        //                                                          }
-        //                                                      });
-        //}
-
-        //void ShowMainWindow()
-        //{
-        //    Dispatcher?.Invoke(() =>
-        //                       {
-        //                           this.Visibility = Visibility.Collapsed;
-        //                           mainWindow.Show(currentUser, proxy);
-        //                           mainWindow.Closing += MainWindow_Closing;
-        //                           this.Closing -= AuthorizationWindow_Closing;
-        //                       });
-        //}
-
-        //public void WaitWhenLoggning()
-        //{
-        //    WorkingProgressBar.Visibility = Visibility.Visible;
-        //    NotWorkingProgressBar.Visibility = Visibility.Collapsed;
-        //    UserName.IsEnabled = false;
-        //    Password.IsEnabled = false;
-        //    ButtonOK.IsEnabled = false;
-        //}
-
-        //public void LoggingCompleted()
-        //{
-        //    Dispatcher.Invoke(() =>
-        //                      {
-        //                          WorkingProgressBar.Visibility = Visibility.Collapsed;
-        //                          NotWorkingProgressBar.Visibility = Visibility.Visible;
-        //                          UserName.IsEnabled = true;
-        //                          Password.IsEnabled = true;
-        //                          ButtonOK.IsEnabled = true;
-        //                      });
-        //}
-
-
-
-
-
 
         private void HandleProxy()
         {

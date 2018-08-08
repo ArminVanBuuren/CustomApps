@@ -11,9 +11,6 @@
   <wsdl:message name="IChat_Connect_InputMessage">
     <wsdl:part name="parameters" element="tns:Connect" />
   </wsdl:message>
-  <wsdl:message name="IChat_Connect_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ConnectResponse" />
-  </wsdl:message>
   <wsdl:message name="IChat_Say_InputMessage">
     <wsdl:part name="parameters" element="tns:Say" />
   </wsdl:message>
@@ -22,6 +19,9 @@
   </wsdl:message>
   <wsdl:message name="IChat_Disconnect_InputMessage">
     <wsdl:part name="parameters" element="tns:Disconnect" />
+  </wsdl:message>
+  <wsdl:message name="IChat_ConnectResult_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ConnectResult" />
   </wsdl:message>
   <wsdl:message name="IChat_SetPrivilege_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:SetPrivilege" />
@@ -47,7 +47,6 @@
   <wsdl:portType msc:usingSession="true" name="IChat">
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="Connect">
       <wsdl:input wsaw:Action="http://localhost/services/chat/IChat/Connect" message="tns:IChat_Connect_InputMessage" />
-      <wsdl:output wsaw:Action="http://localhost/services/chat/IChat/ConnectResponse" message="tns:IChat_Connect_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="Say">
       <wsdl:input wsaw:Action="http://localhost/services/chat/IChat/Say" message="tns:IChat_Say_InputMessage" />
@@ -57,6 +56,9 @@
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="true" name="Disconnect">
       <wsdl:input wsaw:Action="http://localhost/services/chat/IChat/Disconnect" message="tns:IChat_Disconnect_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ConnectResult">
+      <wsdl:output wsaw:Action="http://localhost/services/chat/IChat/ConnectResult" message="tns:IChat_ConnectResult_OutputCallbackMessage" />
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="SetPrivilege">
       <wsdl:output wsaw:Action="http://localhost/services/chat/IChat/SetPrivilege" message="tns:IChat_SetPrivilege_OutputCallbackMessage" />

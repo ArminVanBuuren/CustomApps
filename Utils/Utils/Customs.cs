@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Security.AccessControl;
 using System.Security.Principal;
@@ -29,13 +30,51 @@ namespace Utils
 			File.SetAccessControl(filePath, access);
 		}
 
-	    /// <summary>
-	    /// Создание или получение записи в реестре с сгенеринным ключем и данными о приложении
-	    /// </summary>
-	    /// <param name="applicationName"></param>
-	    /// <param name="description"></param>
-	    /// <returns></returns>
-	    public static string GetOrSetRegedit(string applicationName, string description)
+	    private static Random random = new Random();
+        /// <summary>
+        /// Возвращает рандомные буквы
+        /// </summary>
+        /// <param name="length"></param>
+        /// <returns></returns>
+	    public static string RandomString(int length)
+	    {
+	        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	        return ReturnRandomObject(chars, length);
+        }
+        /// <summary>
+        /// Возвращает раномные цифры
+        /// </summary>
+        /// <param name="length"></param>
+        /// <returns></returns>
+	    public static string RandomNumbers(int length)
+	    {
+	        const string chars = "1234567890";
+	        return ReturnRandomObject(chars, length);
+        }
+        /// <summary>
+        /// Возвращает рандомные цифры и буквы
+        /// </summary>
+        /// <param name="length"></param>
+        /// <returns></returns>
+	    public static string RandomStringNumbers(int length)
+	    {
+	        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+	        return ReturnRandomObject(chars, length);
+	    }
+
+	    static string ReturnRandomObject(string chars, int length)
+	    {
+	        return new string(Enumerable.Repeat(chars, length)
+	                                    .Select(s => s[random.Next(s.Length)]).ToArray());
+
+        }
+        /// <summary>
+        /// Создание или получение записи в реестре с сгенеринным ключем и данными о приложении
+        /// </summary>
+        /// <param name="applicationName"></param>
+        /// <param name="description"></param>
+        /// <returns></returns>
+        public static string GetOrSetRegedit(string applicationName, string description)
 		{
 			RegistryKey software = Registry.CurrentUser.OpenSubKey("SOFTWARE", true);
 			if (software == null)

@@ -83,9 +83,6 @@
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="Say">
       <soap12:operation soapAction="http://localhost/services/chat/IChat/Say" style="document" />
@@ -104,6 +101,12 @@
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectResult">
+      <soap12:operation soapAction="http://localhost/services/chat/IChat/ConnectResult" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="SetPrivilege">
       <soap12:operation soapAction="http://localhost/services/chat/IChat/SetPrivilege" style="document" />
