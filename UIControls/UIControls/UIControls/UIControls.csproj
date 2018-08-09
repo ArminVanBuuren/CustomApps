@@ -66,6 +66,7 @@
       <DependentUpon>Core.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\UIControls32.cs" />
+    <Compile Include="Utils\UIPropertyBinding.cs" />
     <Compile Include="Utils\WOSComponents.cs" />
     <Compile Include="Utils\WOSVersion.cs" />
   </ItemGroup>

@@ -11,87 +11,32 @@ using Message = WCFChat.Service.Message;
 namespace WCFChat.Client
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
-    class MainWindowChatServer : WCFChat.Service.IChat
+    class MainWindowChatServer : WindowControl, WCFChat.Service.IChat
     {
-        object sync = new object();
-        public event EventHandler Closing;
-        public event EventHandler Unbind;
         public string TransactionID { get; private set; }
-        public bool OnClose { get; private set; } = false;
-        public bool IsUnbinded { get; set; } = false;
-        private MainWindow window;
         private AccessResult OnRemoveOrAccessUser;
         private User admin;
 
-        public void Show(string transactionId, User sourceUser, AccessResult removeOrAcceptUser)
+        public MainWindowChatServer():base(true)
         {
-            OnRemoveOrAccessUser = removeOrAcceptUser;
+            
+        }
+
+        public void Show(string transactionId, User initiator, AccessResult removeOrAcceptUser)
+        {
             TransactionID = transactionId;
-            lock (sync)
-            {
-                admin = new User() {
-                                                GUID = "ADMIN",
-                                                Name = sourceUser.Name,
-                                                CloudName = sourceUser.CloudName
-                                            };
-                acceptedUsers.Add("ADMIN", new UserBindings(admin, null, ".$my_localhost::", string.Empty));
-                
-                window = new MainWindow();
-                window.Show();
-                window.OnAccessOrRemoveUser += Window_OnAccessOrRemoveUser;
-                window.OnUserWriting += AdminIsWriting;
-                window.OnUserSay += AdminSay;
-                window.Closing += Window_Closing;
-                window.AddUser(admin, "localhost");
-            }
-        }
-
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            lock (sync)
-            {
-                OnClose = true;
-                Closing?.Invoke(this, EventArgs.Empty);
-            }
-        }
-
-        public void Close()
-        {
-            lock (sync)
-            {
-                if (!OnClose)
-                    window?.Close();
-            }
+            OnRemoveOrAccessUser = removeOrAcceptUser;
+            admin = new User()
+                    {
+                        GUID = UserBindings.GUID_ADMIN,
+                        Name = initiator.Name,
+                        CloudName = initiator.CloudName
+                    };
+            UserBindings userBind = new UserBindings(admin);
+            AddUser(userBind, ".$my_localhost::");
         }
 
 
-        public void UnbindCurrentServerFromMain()
-        {
-            IsUnbinded = true;
-            Unbind?.Invoke(this, EventArgs.Empty);
-        }
-
-
-        class UserBindings
-        {
-            public UserBindings(User user, IChatCallback callback, string address, string port)
-            {
-                SelfUser = user;
-                CallBack = callback;
-                Address = address;
-                Port = port;
-            }
-
-            public User SelfUser { get; }
-            public IChatCallback CallBack { get; set; }
-            public string Address { get; }
-            public string Port { get; }
-        }
-
-        public List<Message> Messages { get; } = new List<Message>();
-        Dictionary<string, UserBindings> acceptedUsers = new Dictionary<string, UserBindings>(StringComparer.CurrentCulture);
-        Dictionary<string, UserBindings> waitingAccess = new Dictionary<string, UserBindings>(StringComparer.CurrentCulture);
-        
         public IChatCallback CurrentCallback => OperationContext.Current.GetCallbackChannel<IChatCallback>();
         public bool CurrentCallbackIsOpen => ((IChannel)CurrentCallback).State == CommunicationState.Opened;
 
@@ -116,89 +61,39 @@ namespace WCFChat.Client
             }
         }
 
-        void AddWaiter(User newUser, IChatCallback callback, string address, string port)
-        {
-            waitingAccess.Add(newUser.GUID, new UserBindings(newUser, callback, address, port));
-            window.Admin_AddUser(newUser, $"{address}:{port}");
-        }
-
-        void RemoveAcceptedUser(User user)
-        {
-            acceptedUsers.Remove(user.GUID);
-            window.RemoveUser(user);
-        }
-
-        void UpdateUserList(UserBindings createdUser)
-        {
-            List<User> allUsers = acceptedUsers.Values.Where(p => p.CallBack != null).Select(p => p.SelfUser).ToList();
-
-            if (((IChannel)createdUser.CallBack).State == CommunicationState.Opened)
-                createdUser.CallBack.TransferHistory(allUsers, Messages);
-
-            foreach (UserBindings existUser in acceptedUsers.Values)
-            {
-                if (createdUser == existUser)
-                    continue;
-
-                if (existUser.CallBack != null && ((IChannel)existUser.CallBack).State == CommunicationState.Opened)
-                    existUser.CallBack.TransferHistory(allUsers, null);
-            }
-        }
-
-        private bool Window_OnAccessOrRemoveUser(string guid, bool isRemove)
+        protected override void AccessOrRemoveUser(UserBindings userBind, bool isRemove)
         {
             lock (sync)
             {
-                UserBindings result;
-                bool waiterIsExist = waitingAccess.TryGetValue(guid, out result);
-                if (waiterIsExist)
+                if (isRemove)
                 {
-                    waitingAccess.Remove(result.SelfUser.GUID);
-                    if (isRemove)
+                    if (userBind.CallBack == null)
                     {
-                        if (result.CallBack == null)
-                        {
-                            OnRemoveOrAccessUser?.BeginInvoke(ServerResult.AccessDenied, result.SelfUser, null, null);
-                        }
-                        else
-                        {
-                            if (((IChannel)result.CallBack).State == CommunicationState.Opened)
-                                result.CallBack.ConnectResult(ServerResult.AccessDenied);
-                        }
+                        OnRemoveOrAccessUser?.BeginInvoke(ServerResult.AccessDenied, userBind.User, null, null);
                     }
                     else
                     {
-                        acceptedUsers.Add(result.SelfUser.GUID, result);
-                        if (result.CallBack == null)
-                        {
-                            OnRemoveOrAccessUser?.BeginInvoke(ServerResult.AccessGranted, result.SelfUser, null, null);
-                        }
-                        else
-                        {
-                            if (((IChannel) result.CallBack).State == CommunicationState.Opened)
-                            {
-                                result.CallBack.ConnectResult(ServerResult.AccessGranted);
-                                UpdateUserList(result);
-                                window.ChangeUserStatusIsActive(result.SelfUser);
-                            }
-                            return true;
-                        }
+                        if (((IChannel)userBind.CallBack).State == CommunicationState.Opened)
+                            userBind.CallBack.ConnectResult(ServerResult.AccessDenied);
                     }
+                    base.AccessOrRemoveUser(userBind, true);
                 }
                 else
                 {
-                    if (isRemove)
+                    if (userBind.CallBack == null)
                     {
-                        bool acceptedIsExist = acceptedUsers.TryGetValue(guid, out result);
-                        if (acceptedIsExist)
+                        OnRemoveOrAccessUser?.BeginInvoke(ServerResult.AccessGranted, userBind.User, null, null);
+                    }
+                    else
+                    {
+                        if (((IChannel) userBind.CallBack).State == CommunicationState.Opened)
                         {
-                            acceptedUsers.Remove(guid);
-                            if (((IChannel) result.CallBack).State == CommunicationState.Opened)
-                                result.CallBack.Terminate();
+                            userBind.CallBack.ConnectResult(ServerResult.AccessGranted);
+                            UpdateUserList(userBind);
+                            ChangeUserStatusIsActive(userBind);
                         }
                     }
                 }
-                return false;
             }
         }
 
@@ -217,87 +112,78 @@ namespace WCFChat.Client
                         return;
                     }
 
-                    RemoteEndpointMessageProperty prop = (RemoteEndpointMessageProperty)OperationContext.Current.IncomingMessageProperties[RemoteEndpointMessageProperty.Name];
+                    RemoteEndpointMessageProperty prop = (RemoteEndpointMessageProperty) OperationContext.Current.IncomingMessageProperties[RemoteEndpointMessageProperty.Name];
                     UserBindings userForAccess;
-                    bool result = acceptedUsers.TryGetValue(newUser.GUID, out userForAccess);
+                    bool result = AllUsers.TryGetValue(newUser.GUID, out userForAccess);
                     if (result)
                     {
-                        if (userForAccess.Address == prop.Address)
+                        switch (userForAccess.Status)
                         {
-                            if (userForAccess.CallBack == null)
-                            {
-                                userForAccess.CallBack = CurrentCallback;
-                            }
-                            else
-                            {
-                                if (((IChannel) userForAccess.CallBack).State == CommunicationState.Opened && userForAccess.CallBack != CurrentCallback)
+                            case UserStatus.User:
+                                if (userForAccess.Address.Value == prop.Address)
+                                {
+                                    if (userForAccess.CallBack == null)
+                                    {
+                                        userForAccess.CallBack = CurrentCallback;
+                                    }
+                                    else
+                                    {
+                                        if (((IChannel) userForAccess.CallBack).State == CommunicationState.Opened && userForAccess.CallBack != CurrentCallback)
+                                        {
+                                            if (CurrentCallbackIsOpen)
+                                                CurrentCallback.ConnectResult(ServerResult.AccessDenied);
+                                            return;
+                                        }
+                                        else
+                                        {
+                                            userForAccess.CallBack = CurrentCallback;
+                                        }
+                                    }
+
+                                    if (!userForAccess.User.Name.Equals(newUser.Name, StringComparison.CurrentCultureIgnoreCase))
+                                    {
+                                        userForAccess.User.Name = newUser.Name;
+                                        ChangeUserName(newUser);
+                                    }
+
+                                    if (CurrentCallbackIsOpen)
+                                    {
+                                        CurrentCallback.ConnectResult(ServerResult.SUCCESS);
+                                        UpdateUserList(userForAccess);
+                                        ChangeUserStatusIsActive(userForAccess);
+                                    }
+                                    return;
+                                }
+                                else
                                 {
                                     if (CurrentCallbackIsOpen)
                                         CurrentCallback.ConnectResult(ServerResult.AccessDenied);
                                     return;
                                 }
-                                else
-                                {
-                                    userForAccess.CallBack = CurrentCallback;
-                                }
-                            }
-
-                            if (!userForAccess.SelfUser.Name.Equals(newUser.Name, StringComparison.CurrentCultureIgnoreCase))
-                            {
-                                userForAccess.SelfUser.Name = newUser.Name;
-                                window.ChangeUserName(newUser);
-                            }
-
-                            if (CurrentCallbackIsOpen)
-                            {
-                                CurrentCallback.ConnectResult(ServerResult.SUCCESS);
-                                UpdateUserList(userForAccess);
-                                window.ChangeUserStatusIsActive(userForAccess.SelfUser);
-                            }
-                            return;
-                        }
-                        else 
-                        {
-                            if (CurrentCallbackIsOpen)
-                                CurrentCallback.ConnectResult(ServerResult.AccessDenied);
-                            return;
+                            case UserStatus.Waiter:
+                                if (CurrentCallbackIsOpen)
+                                    CurrentCallback.ConnectResult(ServerResult.YourRequestInProgress);
+                                return;
+                            default:
+                                return;
                         }
                     }
 
+
                     if (IsUnbinded)
                     {
-                        if(CurrentCallbackIsOpen)
+                        if (CurrentCallbackIsOpen)
                             CurrentCallback.ConnectResult(ServerResult.AccessDenied);
                         return;
                     }
 
 
-                    result = waitingAccess.TryGetValue(newUser.GUID, out userForAccess);
-                    if (result)
+                    bool uniqueName = AllUsers.Values.Any(p => p.User.Name.Equals(newUser.Name, StringComparison.CurrentCultureIgnoreCase));
+                    if (uniqueName)
                     {
                         if (CurrentCallbackIsOpen)
-                            CurrentCallback.ConnectResult(ServerResult.YourRequestInProgress);
+                            CurrentCallback.ConnectResult(ServerResult.NameIsBusy);
                         return;
-                    }
-                    else
-                    {
-                        bool uniqueName = acceptedUsers.Values.Any(p => p.SelfUser.Name.Equals(newUser.Name, StringComparison.CurrentCultureIgnoreCase));
-                        if (uniqueName)
-                        {
-                            if (CurrentCallbackIsOpen)
-                                CurrentCallback.ConnectResult(ServerResult.NameIsBusy);
-                            return;
-                        }
-                        else
-                        {
-                            uniqueName = waitingAccess.Values.Any(p => p.SelfUser.Name.Equals(newUser.Name, StringComparison.CurrentCultureIgnoreCase));
-                            if (uniqueName)
-                            {
-                                if (CurrentCallbackIsOpen)
-                                    CurrentCallback.ConnectResult(ServerResult.NameIsBusy);
-                                return;
-                            }
-                        }
                     }
 
 
@@ -313,7 +199,22 @@ namespace WCFChat.Client
             }
         }
 
+        void UpdateUserList(UserBindings createdUser)
+        {
+            List<User> allUsers = AllUsers.Values.Where(p => p.CallBack != null || p.User.GUID == UserBindings.GUID_ADMIN).Select(p => p.User).ToList();
 
+            if (((IChannel)createdUser.CallBack).State == CommunicationState.Opened)
+                createdUser.CallBack.TransferHistory(allUsers, Messages);
+
+            foreach (UserBindings existUser in AllUsers.Values)
+            {
+                if (createdUser == existUser)
+                    continue;
+
+                if (existUser.CallBack != null && ((IChannel)existUser.CallBack).State == CommunicationState.Opened)
+                    existUser.CallBack.TransferHistory(allUsers, null);
+            }
+        }
 
         void IChat.Disconnect(User user)
         {
@@ -325,10 +226,10 @@ namespace WCFChat.Client
                     if(!GetUserBinding(user, out userBind))
                         return;
 
-                    RemoveAcceptedUser(user);
+                    RemoveUser(user);
 
-                    List<User> allUsers = acceptedUsers.Values.Where(p => p.CallBack != null).Select(p => p.SelfUser).ToList();
-                    foreach (UserBindings existUser in acceptedUsers.Values)
+                    List<User> allUsers = AllUsers.Values.Where(p => p.CallBack != null || p.User.GUID == UserBindings.GUID_ADMIN).Select(p => p.User).ToList();
+                    foreach (UserBindings existUser in AllUsers.Values)
                     {
                         if (existUser.CallBack != null && ((IChannel)existUser.CallBack).State == CommunicationState.Opened)
                             existUser.CallBack.TransferHistory(allUsers, null);
@@ -341,15 +242,12 @@ namespace WCFChat.Client
             }
         }
 
-        void AdminIsWriting(bool isWriting)
+        protected override void CurrentUserIsWriting(bool isWriting)
         {
             lock (sync)
             {
-                foreach (UserBindings existUser in acceptedUsers.Values)
+                foreach (UserBindings existUser in AllUsers.Values)
                 {
-                    if (existUser.SelfUser == admin)
-                        continue;
-
                     if (existUser.CallBack != null && ((IChannel)existUser.CallBack).State == CommunicationState.Opened)
                         existUser.CallBack.IsWritingCallback(admin, isWriting);
                 }
@@ -366,11 +264,11 @@ namespace WCFChat.Client
                     if (!GetUserBinding(user, out userBind))
                         return;
 
-                    window.IncomingIsWriting(user, isWriting);
+                    SomeoneUserIsWriting(user, isWriting);
 
-                    foreach (UserBindings existUser in acceptedUsers.Values)
+                    foreach (UserBindings existUser in AllUsers.Values)
                     {
-                        if(existUser.SelfUser == user)
+                        if(existUser.User == user)
                             continue;
 
                         if (existUser.CallBack != null && ((IChannel)existUser.CallBack).State == CommunicationState.Opened)
@@ -384,21 +282,19 @@ namespace WCFChat.Client
             }
         }
 
-        void AdminSay(string msg)
+        protected override void CurrentUserIsSaying(string msg)
         {
             lock (sync)
             {
-                foreach (UserBindings existUser in acceptedUsers.Values)
+                Message adminSay = new Message() {
+                                                     Sender = admin,
+                                                     Content = msg,
+                                                     Time = DateTime.Now
+                                                 };
+                foreach (UserBindings existUser in AllUsers.Values)
                 {
-                    if (existUser.SelfUser == admin)
-                        continue;
-
                     if (existUser.CallBack != null && ((IChannel) existUser.CallBack).State == CommunicationState.Opened)
-                        existUser.CallBack.Receive(new Message() {
-                                                                     Sender = admin,
-                                                                     Content = msg,
-                                                                     Time = DateTime.Now
-                                                                 });
+                        existUser.CallBack.Receive(adminSay);
                 }
             }
         }
@@ -413,11 +309,11 @@ namespace WCFChat.Client
                     if (!GetUserBinding(message.Sender, out userBind))
                         return;
 
-                    window.IncomingReceve(message);
+                    SomeoneUserReceveMessage(message);
 
-                    foreach (UserBindings existUser in acceptedUsers.Values)
+                    foreach (UserBindings existUser in AllUsers.Values)
                     {
-                        if (existUser.SelfUser == message.Sender)
+                        if (existUser.User == message.Sender)
                             continue;
 
                         if (existUser.CallBack != null && ((IChannel)existUser.CallBack).State == CommunicationState.Opened)
@@ -438,12 +334,15 @@ namespace WCFChat.Client
             if (user == null || string.IsNullOrEmpty(user.GUID) || string.IsNullOrEmpty(user.Name))
                 return false;
 
-            RemoteEndpointMessageProperty prop = (RemoteEndpointMessageProperty)OperationContext.Current.IncomingMessageProperties[RemoteEndpointMessageProperty.Name];
+            RemoteEndpointMessageProperty prop = (RemoteEndpointMessageProperty) OperationContext.Current.IncomingMessageProperties[RemoteEndpointMessageProperty.Name];
             UserBindings userForAccess;
-            bool result = acceptedUsers.TryGetValue(user.GUID, out userForAccess);
+            bool result = AllUsers.TryGetValue(user.GUID, out userForAccess);
             if (result)
             {
-                if (userForAccess.Address == prop.Address)
+                if (userForAccess.CallBack != CurrentCallback)
+                    return false;
+
+                if (userForAccess.Address.Value == prop.Address)
                 {
                     userBind = userForAccess;
                     return true;

@@ -72,6 +72,7 @@
     <Compile Include="GeneratedClient.cs" />
     <Compile Include="MainWindowChatClient.cs" />
     <Compile Include="MainWindowChatServer.cs" />
+    <Compile Include="WindowControl.cs" />
     <Compile Include="WindowInfo.xaml.cs">
       <DependentUpon>WindowInfo.xaml</DependentUpon>
     </Compile>
