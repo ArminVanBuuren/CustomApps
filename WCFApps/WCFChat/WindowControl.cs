@@ -7,9 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Media;
 using UIControls.Utils;
 using WCFChat.Service;
+using Timer = System.Timers.Timer;
 
 namespace WCFChat.Client
 {
@@ -75,9 +77,9 @@ namespace WCFChat.Client
         public void AddUIControl(ListBoxItem parent, TextBlock userName, TextBlock userStatus)
         {
             UIControls = new UserControlUI(parent, userName, userStatus);
-            UIPropertyBinding.DefaultBinding(userName, TextBlock.TextProperty, Name);
-            UIPropertyBinding.DefaultBinding(userName, TextBlock.ToolTipProperty, Name);
-            UIPropertyBinding.DefaultBinding(userStatus, TextBlock.ToolTipProperty, Address);
+            UICustomCommands.DefaultBinding(userName, TextBlock.TextProperty, Name);
+            UICustomCommands.DefaultBinding(userName, FrameworkElement.ToolTipProperty, Name);
+            UICustomCommands.DefaultBinding(userStatus, FrameworkElement.ToolTipProperty, Address);
         }
 
         public UIPropertyValue<string> GUID { get; private set; }
@@ -130,13 +132,24 @@ namespace WCFChat.Client
         private MainWindow window;
         internal Dictionary<string, UserBindings> AllUsers { get; } = new Dictionary<string, UserBindings>(StringComparer.CurrentCulture);
         internal List<Message> Messages { get; } = new List<Message>();
+        private Timer _timerActivateWindow;
 
         public WindowControl(bool isAdmin = false)
         {
             window = new MainWindow();
             window.Closing += Window_Closing;
+            window.DialogWindow.TextChanged += DialogWindow_TextChanged;
+            window.SendMessage.Click += SendMessage_Click;
             this.isAdmin = isAdmin;
+
+            _timerActivateWindow = new Timer();
+            _timerActivateWindow.Interval = 5000;
+            _timerActivateWindow.Elapsed += UserNotWriting;
+            _timerActivateWindow.AutoReset = false;
+            _timerActivateWindow.Enabled = false;
         }
+
+
 
         public void Close()
         {
@@ -216,29 +229,11 @@ namespace WCFChat.Client
             }
         }
 
-        /// <summary>
-        /// Клонирует уже существующие объекты представленные в xaml, очень важная хрень!!!!!!!!! Облегчает все в разы. Потому что в ебанном wpf нельзя просто так клонировать объекты.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public T XamlClone<T>(T source)
-        {
-            string savedObject = System.Windows.Markup.XamlWriter.Save(source);
-
-            // Load the XamlObject
-            StringReader stringReader = new StringReader(savedObject);
-            System.Xml.XmlReader xmlReader = System.Xml.XmlReader.Create(stringReader);
-            T target = (T)System.Windows.Markup.XamlReader.Load(xmlReader);
-
-            return target;
-        }
-
         void AddUser(UserBindings user, string address, string gridName, string textblockUser, string textblockStatus)
         {
             ListBoxItem newUserItem = new ListBoxItem();
             newUserItem.Style = (Style)window.FindResource("ListBoxItemUser");
-            Grid cloneExist = XamlClone((Grid)window.FindResource(gridName));
+            Grid cloneExist = UICustomCommands.XamlClone((Grid)window.FindResource(gridName));
             TextBlock userName = null;
             TextBlock userStatus = null;
 
@@ -361,17 +356,59 @@ namespace WCFChat.Client
 
         protected void SomeoneUserIsWriting(User user, bool isWriting)
         {
-
+            UserBindings userBind;
+            bool isExist = AllUsers.TryGetValue(user.GUID, out userBind);
+            if (isExist)
+            {
+                
+            }
         }
 
         protected void SomeoneUserReceveMessage(Message msg)
         {
+            Paragraph par = new Paragraph();
 
+            Run userName = new Run($"[{msg.Sender:G}]:");
+            userName.Name = msg.Sender.GUID;
+            userName.Foreground = Brushes.Aqua;
+            userName.Background = Brushes.Black;
+            userName.ToolTip = msg.Time;
+
+            par.Inlines.Add(new Bold(userName));
+            par.Inlines.Add(msg.Content.Trim());
         }
+
+       
+
+        private void DialogWindow_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (_timerActivateWindow.Enabled)
+            {
+                _timerActivateWindow.Interval = 5000;
+            }
+            else
+            {
+                CurrentUserIsWriting(true);
+                _timerActivateWindow.Enabled = true;
+            }
+        }
+
+        private void UserNotWriting(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            CurrentUserIsWriting(false);
+        }
+
 
         protected virtual void CurrentUserIsWriting(bool isWriting)
         {
             
+        }
+
+        private void SendMessage_Click(object sender, RoutedEventArgs e)
+        {
+            string richText = new TextRange(window.DialogWindow.Document.ContentStart, window.DialogWindow.Document.ContentEnd).Text;
+            CurrentUserIsSaying(richText);
+            window.DialogWindow.Document.Blocks.Clear();
         }
 
         protected virtual void CurrentUserIsSaying(string msg)

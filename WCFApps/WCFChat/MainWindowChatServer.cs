@@ -291,6 +291,9 @@ namespace WCFChat.Client
                                                      Content = msg,
                                                      Time = DateTime.Now
                                                  };
+
+                SomeoneUserReceveMessage(adminSay);
+
                 foreach (UserBindings existUser in AllUsers.Values)
                 {
                     if (existUser.CallBack != null && ((IChannel) existUser.CallBack).State == CommunicationState.Opened)

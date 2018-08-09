@@ -48,7 +48,7 @@ namespace UIControls.Utils
         }
     }
 
-    public class UIPropertyBinding
+    public class UICustomCommands
     {
         /// <summary>
         /// Биндим все необходимые свойства с параметрами в Windows форме. Чтобы значения синхронизировались, если изменить свойство в INotifyPropertyChanged
@@ -79,7 +79,7 @@ namespace UIControls.Utils
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
         /// <returns></returns>
-        public T XamlClone<T>(T source)
+        public static T XamlClone<T>(T source)
         {
             string savedObject = System.Windows.Markup.XamlWriter.Save(source);
 
