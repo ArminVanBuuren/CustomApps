@@ -52,7 +52,7 @@ namespace WCFChat.Client
 
         private void AuthorizationWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            innerChatServer?.Close();
+            mainServerControl?.Close();
         }
 
         private void MainWindow_Closing(object sender, EventArgs e)
@@ -116,74 +116,57 @@ namespace WCFChat.Client
         }
 
 
+        private ServiceHost host;
+        private Cloud currentCloud;
+        private User currentUser;
+        private string innerTransactionId;
+        private WindowControl mainServerControl;
+        private WindowControl mainClientControl;
 
         private void Create_OnClick(object sender, RoutedEventArgs e)
         {
             if (!IsTransactionOpen())
                 return;
 
-            
-            if (mainProxy != null)
+            if (mainServerControl == null)
+            {
+                mainServerControl = new MainWindowChatServer();
+                mainServerControl.Closing += MainWindow_Closing;
+                mainServerControl.Unbind += MainChatServer_Unbind;
+            }
+
+            IsEnabledWindow = false;
+            IAsyncResult asyncResult = new Func<string, string, bool, string>(TryCreateCloud).BeginInvoke(NickName.Text, CloudAddress.Text, mainProxy == null, new AsyncCallback(TryCreateCloudCallBack), null);
+        }
+
+        private void MainChatServer_Unbind(object sender, EventArgs e)
+        {
+            if (!IsTransactionOpen())
+                return;
+
+            if (mainProxy != null && sender is MainWindowChatServer)
             {
                 IsEnabledWindow = false;
-                IAsyncResult asyncResult = new Func<string, string, string>(TryCreateCloud).BeginInvoke(NickName.Text, CloudAddress.Text, new AsyncCallback(TryCreateCloudCallBack), null);
+                mainProxy.UnbindAsync(((MainWindowChatServer)sender).TransactionID);
             }
         }
 
-        private ServiceHost host;
-        private Cloud currentCloud;
-        private User currentUser;
-        private string innerTransactionId;
-        private MainWindowChatServer innerChatServer;
-
-        
-        void IMainContractCallback.RequestForAccess(User user, string address)
-        {
-            if (innerChatServer != null)
-            {
-                innerChatServer.IncomingRequestForAccess(user, address);
-                
-            }
-        }
-
-        void RequestForAccessResult(ServerResult result, User user)
-        {
-            if (mainProxy != null)
-            {
-                mainProxy.RemoveOrAccessUser(result, user);
-            }
-        }
-
-        string TryCreateCloud(string nickName, string cloudName)
+        string TryCreateCloud(string nickName, string cloudName, bool withoutMainServer)
         {
             try
             {
-                innerTransactionId = Guid.NewGuid().ToString("D");
-                currentUser = new User {
-                                           Name = nickName,
-                                           CloudName = cloudName,
-                                           GUID = RegeditKey
-                                       };
-
-                if (host == null)
+                if (withoutMainServer)
                 {
-                    innerChatServer = new MainWindowChatServer();
-                    innerChatServer.Closing += MainWindow_Closing;
-                    innerChatServer.Unbind += MainChatServer_Unbind;
-                    host = new ServiceHost(innerChatServer);
-                    host.Open();
+                    OpenLocalHost(nickName, null);
+                    CreateLocalCloud();
                 }
-                else if (host.State != CommunicationState.Opened)
+                else
                 {
-                    host.Open();
+                    OpenLocalHost(nickName, cloudName);
+                    innerTransactionId = Guid.NewGuid().ToString("D");
+                    mainProxy.CreateCloudAsync(currentUser, currentCloud, innerTransactionId);
                 }
 
-                currentCloud = new Cloud {
-                                             Name = cloudName,
-                                             Address = host.Description.Endpoints[0].Address.ToString()
-                                         };
-
-                mainProxy.CreateCloudAsync(currentUser, currentCloud, innerTransactionId);
                 return string.Empty;
             }
             catch (Exception exception)
@@ -192,10 +175,36 @@ namespace WCFChat.Client
             }
         }
 
+        void OpenLocalHost(string nickName, string cloudName)
+        {
+            if (host == null)
+            {
+                host = new ServiceHost(mainServerControl);
+                host.Open();
+            }
+            else if (host.State != CommunicationState.Opened)
+            {
+                host.Open();
+            }
+
+            currentUser = new User
+                          {
+                              Name = nickName,
+                              CloudName = cloudName,
+                              GUID = RegeditKey
+                          };
+
+            currentCloud = new Cloud
+                           {
+                               Name = cloudName,
+                               Address = host.Description.Endpoints[0].Address.ToString()
+                           };
+        }
+
         void TryCreateCloudCallBack(IAsyncResult asyncResult)
         {
             AsyncResult ar = asyncResult as AsyncResult;
-            Func<string, string, string> caller = (Func<string, string, string>)ar.AsyncDelegate;
+            Func<string, string, bool, string> caller = (Func<string, string, bool, string>)ar.AsyncDelegate;
             string sumResult = caller.EndInvoke(asyncResult);
             if (!sumResult.IsNullOrEmpty())
             {
@@ -212,7 +221,7 @@ namespace WCFChat.Client
                 if (!IsEnabledWindow)
                 {
                     IsEnabledWindow = true;
-                    if (innerChatServer == null)
+                    if (mainServerControl == null)
                     {
                         Informing($"Incoming:CreateCloudResult. Internal Error! There was no request to create a local server.");
                     }
@@ -221,11 +230,7 @@ namespace WCFChat.Client
                         switch (result)
                         {
                             case CloudResult.SUCCESS:
-                                Dispatcher?.Invoke(() =>
-                                                  {
-                                                      this.Visibility = Visibility.Collapsed;
-                                                      innerChatServer.Show(innerTransactionId, currentUser, RequestForAccessResult);
-                                                  });
+                                CreateLocalCloud();
                                 break;
                             case CloudResult.FAILURE:
                                 Informing($"Incoming:CreateCloudResult. MainServer-error when create cloud!");
@@ -253,60 +258,123 @@ namespace WCFChat.Client
             }
         }
 
-       
+        void CreateLocalCloud()
+        {
+            Dispatcher?.Invoke(() =>
+                               {
+                                   this.Visibility = Visibility.Collapsed;
+                                   mainServerControl.CreateCloud(currentUser, currentCloud, innerTransactionId, RequestForAccessResult);
+                               });
+        }
+
+        void IMainContractCallback.RequestForAccess(User user, string address)
+        {
+            if (mainServerControl != null)
+            {
+                mainServerControl.IncomingRequestForAccess(user, address);
+            }
+        }
+
+        void RequestForAccessResult(ServerResult result, User user)
+        {
+            if (mainProxy != null)
+            {
+                mainProxy.RemoveOrAccessUser(result, user);
+            }
+        }
+
+
+
         private void Connect_OnClick(object sender, RoutedEventArgs e)
         {
             if (!IsTransactionOpen())
                 return;
 
+
+            currentUser = new User {
+                                       Name = NickName.Text,
+                                       CloudName = CloudAddress.Text,
+                                       GUID = RegeditKey
+                                   };
+
+            if (mainClientControl == null)
+            {
+                mainClientControl = new MainWindowChatServer();
+                mainClientControl.Closing += MainWindow_Closing;
+            }
+
+
+            IsEnabledWindow = false;
             if (mainProxy != null)
             {
-                IsEnabledWindow = false;
-                currentUser = new User {
-                                                             Name = NickName.Text,
-                                                             CloudName = CloudAddress.Text,
-                                                             GUID = RegeditKey
-                                                         };
+
                 mainProxy.GetCloudAsync(currentUser);
             }
+            else
+            {
+                currentCloud = new Cloud {
+                                             Name = null,
+                                             Address = CloudAddress.Text
+                                         };
+
+                Task.Run(() =>
+                         {
+                             try
+                             {
+                                 mainClientControl.JoinToCloud(currentUser, currentCloud);
+                                 return string.Empty;
+                             }
+                             catch (Exception ex)
+                             {
+                                 return ex.Message;
+                             }
+                         }).ContinueWith((antecedent) =>
+                                         {
+                                             if (antecedent.Result.IsNullOrEmpty())
+                                             {
+                                                 this.Visibility = Visibility.Collapsed;
+                                             }
+                                             else
+                                             {
+                                                 Informing(antecedent.Result);
+                                             }
+                                         }, TaskScheduler.FromCurrentSynchronizationContext());
+
+            }
         }
 
-        private MainWindowChatClient innerChatClient;
         void IMainContractCallback.GetCloudResult(ServerResult result, Cloud cloud)
         {
-            if (!IsEnabledWindow)
+            try
             {
-                IsEnabledWindow = true;
-                switch (result)
+                if (!IsEnabledWindow)
                 {
-                    case ServerResult.CloudNotFound:
-                        Informing($"Incoming:GetCloudResult. Cloud not found on MainServer!");
-                        break;
-                    case ServerResult.FAILURE:
-                        Informing($"Incoming:GetCloudResult. MainServer-error when create cloud!");
-                        break;
-                    case ServerResult.AccessGranted:
-                    case ServerResult.SUCCESS:
-                        innerChatClient = new MainWindowChatClient(cloud);
-                        break;
-                    default:
-                        Informing($"Incoming:GetCloudResult. Result:{result}!");
-                        break;
+                    IsEnabledWindow = true;
+                    switch (result)
+                    {
+                        case ServerResult.AccessGranted:
+                        case ServerResult.SUCCESS:
+                            mainClientControl.JoinToCloud(currentUser, cloud);
+                            break;
+                        case ServerResult.CloudNotFound:
+                            Informing($"Incoming:GetCloudResult. Cloud not found on MainServer!");
+                            break;
+                        case ServerResult.FAILURE:
+                            Informing($"Incoming:GetCloudResult. MainServer-error when create cloud!");
+                            break;
+                        default:
+                            Informing($"Incoming:GetCloudResult. Result:{result}!");
+                            break;
+                    }
                 }
             }
-        }
-
-        private void MainChatServer_Unbind(object sender, EventArgs e)
-        {
-            if (!IsTransactionOpen())
-                return;
-
-            if (mainProxy != null && sender is MainWindowChatServer)
+            catch (Exception ex)
             {
-                IsEnabledWindow = false;
-                mainProxy.UnbindAsync(((MainWindowChatServer)sender).TransactionID);
+                Informing(ex.Message);
             }
         }
+
+        
 
 
 

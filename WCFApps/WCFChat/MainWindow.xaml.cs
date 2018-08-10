@@ -18,12 +18,26 @@ using System.Reflection;
 using System.Windows.Markup;
 using System.Xml;
 using System.Resources;
+using System.Windows.Data;
 using WCFChat.Service;
 using Message = WCFChat.Service.Message;
 
 namespace WCFChat.Client
 {
+    public class LogFlowDocumentConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if ((double)value < 1800)
+                return 1800;
+            return (double)value - 28;
+        }
 
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
     public partial class MainWindow
     {
         public MainWindow()

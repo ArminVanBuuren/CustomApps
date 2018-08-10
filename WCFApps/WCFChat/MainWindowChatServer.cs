@@ -22,7 +22,7 @@ namespace WCFChat.Client
             
         }
 
-        public void Show(string transactionId, User initiator, AccessResult removeOrAcceptUser)
+        public override void CreateCloud(User initiator, Cloud cloud, string transactionId, AccessResult removeOrAcceptUser)
         {
             TransactionID = transactionId;
             OnRemoveOrAccessUser = removeOrAcceptUser;
@@ -34,6 +34,7 @@ namespace WCFChat.Client
                     };
             UserBindings userBind = new UserBindings(admin);
             AddUser(userBind, ".$my_localhost::");
+            base.CreateCloud(initiator, cloud, transactionId, removeOrAcceptUser);
         }
 
 
@@ -45,7 +46,7 @@ namespace WCFChat.Client
         /// </summary>
         /// <param name="user"></param>
         /// <param name="address"></param>
-        public void IncomingRequestForAccess(User user, string address)
+        public override void IncomingRequestForAccess(User user, string address)
         {
             lock (sync)
             {
@@ -140,10 +141,9 @@ namespace WCFChat.Client
                                         }
                                     }
 
-                                    if (!userForAccess.User.Name.Equals(newUser.Name, StringComparison.CurrentCultureIgnoreCase))
+                                    if (!userForAccess.Name.Value.Equals(newUser.Name, StringComparison.CurrentCultureIgnoreCase))
                                     {
-                                        userForAccess.User.Name = newUser.Name;
-                                        ChangeUserName(newUser);
+                                        ChangeUserName(userForAccess, newUser);
                                     }
 
                                     if (CurrentCallbackIsOpen)
@@ -264,11 +264,11 @@ namespace WCFChat.Client
                     if (!GetUserBinding(user, out userBind))
                         return;
 
-                    SomeoneUserIsWriting(user, isWriting);
+                    SomeoneUserIsWriting(userBind, isWriting);
 
                     foreach (UserBindings existUser in AllUsers.Values)
                     {
-                        if(existUser.User == user)
+                        if(existUser.User.GUID == user.GUID)
                             continue;
 
                         if (existUser.CallBack != null && ((IChannel)existUser.CallBack).State == CommunicationState.Opened)
@@ -292,6 +292,7 @@ namespace WCFChat.Client
                                                      Time = DateTime.Now
                                                  };
 
+                Messages.Add(adminSay);
                 SomeoneUserReceveMessage(adminSay);
 
                 foreach (UserBindings existUser in AllUsers.Values)
@@ -312,11 +313,12 @@ namespace WCFChat.Client
                     if (!GetUserBinding(message.Sender, out userBind))
                         return;
 
+                    Messages.Add(message);
                     SomeoneUserReceveMessage(message);
 
                     foreach (UserBindings existUser in AllUsers.Values)
                     {
-                        if (existUser.User == message.Sender)
+                        if (existUser.User.GUID == message.Sender.GUID)
                             continue;
 
                         if (existUser.CallBack != null && ((IChannel)existUser.CallBack).State == CommunicationState.Opened)

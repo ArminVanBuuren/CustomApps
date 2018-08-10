@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Mail;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -10,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using UIControls.Utils;
+using Utils;
 using WCFChat.Service;
 using Timer = System.Timers.Timer;
 
@@ -21,19 +23,7 @@ namespace WCFChat.Client
         User = 1,
         Waiter = 2
     }
-    internal class UserControlUI
-    {
-        public TextBlock Name { get; }
-        public TextBlock Status { get; }
-        public ListBoxItem ParentListBox { get; }
 
-        public UserControlUI(ListBoxItem parent, TextBlock userName, TextBlock userStatus)
-        {
-            ParentListBox = parent;
-            Name = userName;
-            Status = userStatus;
-        }
-    }
 
     internal class UserBindings
     {
@@ -74,9 +64,25 @@ namespace WCFChat.Client
             User = user;
         }
 
-        public void AddUIControl(ListBoxItem parent, TextBlock userName, TextBlock userStatus)
+        public class UserControlUI
         {
-            UIControls = new UserControlUI(parent, userName, userStatus);
+            public ListBoxItem ParentListBox { get; }
+            public Border Background { get; }
+            public TextBlock Name { get; }
+            public TextBlock Status { get; }
+
+            internal UserControlUI(ListBoxItem parent, Border userBackground, TextBlock userName, TextBlock userStatus)
+            {
+                ParentListBox = parent;
+                Background = userBackground;
+                Name = userName;
+                Status = userStatus;
+            }
+        }
+
+        public void AddUIControl(ListBoxItem parent, Border userBackground, TextBlock userName, TextBlock userStatus)
+        {
+            UIControls = new UserControlUI(parent, userBackground, userName, userStatus);
             UICustomCommands.DefaultBinding(userName, TextBlock.TextProperty, Name);
             UICustomCommands.DefaultBinding(userName, FrameworkElement.ToolTipProperty, Name);
             UICustomCommands.DefaultBinding(userStatus, FrameworkElement.ToolTipProperty, Address);
@@ -127,7 +133,7 @@ namespace WCFChat.Client
         public event EventHandler Closing;
         public bool OnClose { get; private set; } = false;
         public bool IsUnbinded { get; private set; } = false;
-
+        private bool windowIsOpened = false;
         private bool isAdmin = false;
         private MainWindow window;
         internal Dictionary<string, UserBindings> AllUsers { get; } = new Dictionary<string, UserBindings>(StringComparer.CurrentCulture);
@@ -150,12 +156,13 @@ namespace WCFChat.Client
         }
 
 
-
         public void Close()
         {
             if (!OnClose)
                 window?.Close();
         }
+
+        
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -163,27 +170,50 @@ namespace WCFChat.Client
             Closing?.Invoke(this, EventArgs.Empty);
         }
 
-        public void UnbindCurrentServerFromMain()
+        public virtual void CreateCloud(User initiator, Cloud cloud, string transactionId, AccessResult removeOrAcceptUser)
+        {
+            window.NameOfCloud.Items.Add(new Label()
+                                         {
+                                             Content = cloud.Name.IsNullOrEmpty() ? cloud.Address : cloud.Name
+                                         });
+            if (!windowIsOpened)
+            {
+                windowIsOpened = true;
+                window.Show();
+            }
+        }
+
+        public virtual void JoinToCloud(User initiator, Cloud cloud)
+        {
+            window.NameOfCloud.Items.Add(new Label()
+                                         {
+                                             Content = cloud.Name.IsNullOrEmpty() ? cloud.Address : cloud.Name
+                                         });
+            if (!windowIsOpened)
+            {
+                windowIsOpened = true;
+                window.Show();
+            }
+        }
+
+        public virtual void IncomingRequestForAccess(User user, string address)
+        {
+
+        }
+
+        void UnbindCurrentServerFromMain()
         {
             IsUnbinded = true;
             Unbind?.Invoke(this, EventArgs.Empty);
         }
 
-        public void AddCloud(string name)
-        {
-            window.NameOfCloud.Items.Add(new Label()
-                                  {
-                                      Content = name
-                                  });
-        }
-
-        public void AddWaiter(User newUser, IChatCallback callback, string address, string port)
+        protected void AddWaiter(User newUser, IChatCallback callback, string address, string port)
         {
             UserBindings userBind = new UserBindings(newUser, callback, address, port);
             AddUser(userBind, $"{address}:{port}");
         }
 
-        public void RemoveUser(UserBindings userBind)
+        protected void RemoveUser(UserBindings userBind)
         {
             if (userBind == null)
                 return;
@@ -195,7 +225,7 @@ namespace WCFChat.Client
             }
         }
 
-        public void RemoveUser(User user)
+        protected void RemoveUser(User user)
         {
             if (user == null)
                 return;
@@ -203,7 +233,7 @@ namespace WCFChat.Client
             RemoveUser(user.GUID);
         }
 
-        public void RemoveUser(string guid)
+        protected void RemoveUser(string guid)
         {
             if (guid == null)
                 return;
@@ -221,46 +251,51 @@ namespace WCFChat.Client
         {
             if (isAdmin)
             {
-                AddUser(userBind, address, "UserTemplateForAdmin", "UserNameAdmin", "StatusAdmin");
+                AddUser(userBind, address, "UserTemplateForAdmin", "UserNameAdmin", "StatusAdmin", "BackgroundAdmin");
             }
             else
             {
-                AddUser(userBind, address, "UserTemplateSimple", "UserNameSimple", "StatusSimple");
+                AddUser(userBind, address, "UserTemplateSimple", "UserNameSimple", "StatusSimple", "BackgroundSimple");
             }
         }
 
-        void AddUser(UserBindings user, string address, string gridName, string textblockUser, string textblockStatus)
+        void AddUser(UserBindings user, string address, string gridName, string textblockUser, string textblockStatus, string borderName)
         {
             ListBoxItem newUserItem = new ListBoxItem();
             newUserItem.Style = (Style)window.FindResource("ListBoxItemUser");
             Grid cloneExist = UICustomCommands.XamlClone((Grid)window.FindResource(gridName));
             TextBlock userName = null;
             TextBlock userStatus = null;
+            Border userBackgound = null;
 
             foreach (var item in cloneExist.Children)
             {
-                if (item is TextBlock result)
+                if (item is TextBlock resultText)
                 {
-                    if (result.Name == textblockUser)
+                    if (resultText.Name == textblockUser)
                     {
-                        userName = result;
+                        userName = resultText;
                         //result.Text = user.Name;
                         //result.ToolTip = user.GUID;
                     }
-                    else if (result.Name == textblockStatus)
+                    else if (resultText.Name == textblockStatus)
                     {
-                        userStatus = result;
+                        userStatus = resultText;
                         //result.ToolTip = address;
                     }
                 }
-                else if (item is Button resultBut)
+                else if (item is Border resultBorder)
                 {
-                    resultBut.Click += ButtonAccessRejectClick;
+                    userBackgound = resultBorder;
+                }
+                else if (item is Button resultButton)
+                {
+                    resultButton.Click += ButtonAccessRejectClick;
                 }
             }
 
             newUserItem.Content = cloneExist;
-            user.AddUIControl(newUserItem, userName, userStatus);
+            user.AddUIControl(newUserItem, userBackgound, userName, userStatus);
 
             window.Users.Items.Add(newUserItem);
             AllUsers.Add(user.GUID.Value, user);
@@ -302,21 +337,18 @@ namespace WCFChat.Client
             }
         }
 
-        public void ChangeUserStatusIsActive(UserBindings user)
+        protected void ChangeUserStatusIsActive(UserBindings user)
         {
             user.Status = UserStatus.User;
             user.UIControls.Status.Foreground = (Brush)new BrushConverter().ConvertFrom("#FF90EE90"); // когда юзер непосредственно подсоединился к чату Зеленый цвет
         }
 
-        public void ChangeUserName(User user)
+        protected void ChangeUserName(UserBindings userBind, User userNewName)
         {
-            UserBindings userBind;
-            bool exist = AllUsers.TryGetValue(user.GUID, out userBind);
-            if (exist)
-                userBind.Name.Value = user.Name;
+            userBind.Name.Value = userNewName.Name;
         }
 
-        public void UpdateUserList(List<User> allUsers)
+        protected void UpdateUserList(List<User> allUsers)
         {
             foreach (User user in allUsers)
             {
@@ -354,31 +386,65 @@ namespace WCFChat.Client
             }
         }
 
-        protected void SomeoneUserIsWriting(User user, bool isWriting)
+        protected void SomeoneUserIsWriting(UserBindings userBind, bool isWriting)
         {
-            UserBindings userBind;
-            bool isExist = AllUsers.TryGetValue(user.GUID, out userBind);
-            if (isExist)
+            if (isWriting)
             {
+                userBind.UIControls.Background.Background = (Brush) new BrushConverter().ConvertFrom("#FF07C1C1"); // когда какой то юзер начал что то писать
+            }
+            else
+            {
+                userBind.UIControls.Background.Background = (Brush) new BrushConverter().ConvertFrom("#FF555555"); // когда какой то юзер пересатл что то писать
+            }
+        }
+
+        internal class MyParagraph : Paragraph
+        {
+            public string GUID { get; }
+            public List<Message> Messages { get; } = new List<Message>();
+
+            internal MyParagraph(Message msg)
+            {
+                LineHeight = 1;
+                GUID = msg.Sender.GUID;
+                AddMessage(msg, true);
+            }
+
+            public void AddMessage(Message msg, bool newParagraph = false)
+            {
+                Messages.Add(msg);
+                if (newParagraph)
+                {
+                    Run userName = new Run($"{msg.Sender:G}:");
+                    userName.Foreground = Brushes.Aqua;
+                    userName.Background = Brushes.Black;
+                    //userName.ToolTip = msg.Time;
+                    Inlines.Add(new Bold(userName));
+                }
+                else
+                {
+                    Inlines.Add(new LineBreak());
+                }
                 
+                Inlines.Add($"{msg.Content.Trim()}");
+                Inlines.Add($"[{msg.Time.ToString("T").Trim()}]");
             }
         }
 
         protected void SomeoneUserReceveMessage(Message msg)
         {
-            Paragraph par = new Paragraph();
+            if (window.DialogHistory.Document.Blocks.LastBlock is MyParagraph exist)
+            {
+                if (exist.GUID == msg.Sender.GUID)
+                {
+                    exist.AddMessage(msg);
+                    return;
+                }
+            }
 
-            Run userName = new Run($"[{msg.Sender:G}]:");
-            userName.Name = msg.Sender.GUID;
-            userName.Foreground = Brushes.Aqua;
-            userName.Background = Brushes.Black;
-            userName.ToolTip = msg.Time;
-
-            par.Inlines.Add(new Bold(userName));
-            par.Inlines.Add(msg.Content.Trim());
+            MyParagraph par = new MyParagraph(msg);
+            window.DialogHistory.Document.Blocks.Add(par);
         }
-
-       
 
         private void DialogWindow_TextChanged(object sender, TextChangedEventArgs e)
         {

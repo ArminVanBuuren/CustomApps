@@ -4,6 +4,7 @@
                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                       xmlns:mainControl="clr-namespace:UIControls.MainControl;assembly=UIControls"
+                      xmlns:client="clr-namespace:WCFChat.Client"
                       mc:Ignorable="d"
                       Icon="Images/Rick.ico"
                       Title="Chat" 
@@ -13,10 +14,16 @@
                       Width="525" 
                       Style="{DynamicResource VSUIWindowStyle1}" >
     <Window.Resources>
+        <client:LogFlowDocumentConverter x:Key="LogFlowDocumentConverter"/>
         <Image x:Key="MyImage1" Source="Images/accept.png"/>
         <Image x:Key="MyImage2" Source="Images/reject.png"/>
 
-
+        <Style TargetType="{x:Type Paragraph}">
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="LineHeight" Value="1"/>
+            <Setter Property="FontSize" Value="9pt" />
+            <Setter Property="FontFamily" Value="Candara, Verdana" />
+        </Style>
 
 
         <LinearGradientBrush x:Key="ControlBackgroundOver" EndPoint="0,1" StartPoint="0,0">
@@ -51,7 +58,7 @@
                                             <DoubleAnimation Duration="0" Storyboard.TargetName="NormalElement" Storyboard.TargetProperty="(FrameworkElement.Opacity)" To="0.25" />
                                             <DoubleAnimation Duration="0" Storyboard.TargetName="PressedElement" Storyboard.TargetProperty="(FrameworkElement.Opacity)" To="1" />
                                             <DoubleAnimation Duration="0" Storyboard.TargetName="MouseOverElement" Storyboard.TargetProperty="(FrameworkElement.Opacity)" To="0" />
-                                            <ColorAnimation Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="ContentHost" To="{StaticResource ButtonPressed}"/>
+                                            <ColorAnimation Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="ContentHost" To="#32ebfb"/>
                                         </Storyboard>
                                     </VisualState>
                                     <VisualState x:Name="Disabled">
@@ -59,7 +66,7 @@
                                             <DoubleAnimation Duration="0" Storyboard.TargetName="NormalElement" Storyboard.TargetProperty="(FrameworkElement.Opacity)" To="0" />
                                             <DoubleAnimation Duration="0" Storyboard.TargetName="DisabledElement" Storyboard.TargetProperty="(FrameworkElement.Opacity)" To="1" />
                                             <DoubleAnimation Duration="0" Storyboard.TargetName="ContentHost" Storyboard.TargetProperty="(FrameworkElement.Opacity)" To="0.75" />
-                                            <ColorAnimation Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="ContentHost" To="{StaticResource DisabledForeground}"/>
+                                            <ColorAnimation Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="ContentHost" To="#FFAAAAAA"/>
                                         </Storyboard>
                                     </VisualState>
                                 </VisualStateGroup>
@@ -150,15 +157,18 @@
             </Setter>
         </Style>
 
+        <Style x:Key="Simple" TargetType="TextBox">
+            
+        </Style>
 
         <Grid x:Key="UserTemplateSimple">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Border Grid.ColumnSpan="1" CornerRadius="8" Background="#FF555555" Height="15" />
-            <TextBlock Grid.Column="0" Name="UserNameSimple" FontSize="10" Padding="12 0 5 0" >12345567</TextBlock>
-            <TextBlock Grid.Column="0" Name="StatusSimple"   Foreground="LightGreen" Margin="4 -2 0 0">●</TextBlock>
+            <Border Grid.ColumnSpan="1" Name="BackgroundSimple" CornerRadius="8" Background="#FF555555" Height="15" />
+            <TextBlock Grid.Column="0"  Name="UserNameSimple" FontSize="10" Padding="12 0 5 0" >12345567</TextBlock>
+            <TextBlock Grid.Column="0"  Name="StatusSimple"   Foreground="LightGreen" Margin="4 -2 0 0">●</TextBlock>
         </Grid>
 
 
@@ -169,7 +179,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Border Grid.ColumnSpan="4" CornerRadius="8" Background="#FF555555" Height="15" />
+            <Border Grid.ColumnSpan="4" Name="BackgroundAdmin" CornerRadius="8" Background="#FF555555" Height="15" />
             <TextBlock  Grid.Column="0" Name="UserNameAdmin" ToolTip="UserName" FontSize="10" Padding="12 0 1 0" >12347</TextBlock>
             <TextBlock Grid.Column="0"  Name="StatusAdmin"   ToolTip="Status" Foreground="Red" Margin="4 -2 0 0">●</TextBlock>
             <Button Grid.Column="2"     Name="AcceptAdmin"   ToolTip="Accept" Content="{StaticResource MyImage1}"  Height="15" Width="15" Background="Transparent" BorderThickness="0" Style="{StaticResource ButtonCustom}"/>
@@ -192,12 +202,52 @@
         <ListBox Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Name="NameOfCloud"  >
            
         </ListBox>
-        
-        <RichTextBox Grid.Column="1"  Grid.Row="0" CaretBrush="Black" FontFamily="Calibri" FontSize="13"  x:Name="DialogHistory" Height="Auto"  IsReadOnly="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="Black"  >
+
+        <!--<Border Grid.Column="1"  Grid.Row="0" CornerRadius="2" BorderThickness="1"  >
+            <Border CornerRadius="6" VerticalAlignment="Top" HorizontalAlignment="Stretch" >
+                <Grid Background="Transparent">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0" Background="Black" CornerRadius="5">
+                        <TextBox Foreground="Aqua" Background="Transparent" Style="{StaticResource Simple}" Text="USERNAME" IsReadOnly="True" Padding="0 0 5 0"/>
+                    </Border>
+                    <Border Grid.Column="2" Background="#FFE8FFE8" CornerRadius="5">
+                        <TextBox Foreground="Black" BorderThickness="0" Style="{StaticResource Simple}" Background="Transparent" Text="Content" IsReadOnly="True" Padding="1"/>
+                    </Border>
+                    <TextBox Grid.Column="3" Foreground="Black" Style="{StaticResource Simple}" BorderThickness="0" Background="Transparent" IsReadOnly="True" Text="12:51:51"/>
+                </Grid>
+            </Border>
+            <Border.BorderBrush>
+                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                    <GradientStop Color="#FF686868" Offset="0.204" />
+                    <GradientStop Color="#FF686868" Offset="0.864" />
+                </LinearGradientBrush>
+            </Border.BorderBrush>
+            <Border.Background>
+                <LinearGradientBrush EndPoint="0.2,2.5" StartPoint="2.9,0">
+                    <GradientStop Color="#FF00B9FF"/>
+                    <GradientStop Color="#FF00FFC5" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>-->
+
+        <RichTextBox Grid.Column="1"  Grid.Row="0" 
+                     FontFamily="Calibri" 
+                     FontSize="12"  
+                     x:Name="DialogHistory" 
+                     Height="Auto"  
+                     IsReadOnly="True" 
+                     HorizontalAlignment="Stretch" 
+                     VerticalAlignment="Stretch" 
+                     CaretBrush="Black" 
+                     Foreground="Black"
+                     AcceptsTab="True">
             <FlowDocument>
-                <Paragraph >
-                    <Run Text=""/>
-                </Paragraph>
+
             </FlowDocument>
             <RichTextBox.Background>
                 <LinearGradientBrush EndPoint="0.2,2.5" StartPoint="2.9,0">

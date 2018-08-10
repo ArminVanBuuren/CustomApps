@@ -7,23 +7,22 @@ using System.Threading.Tasks;
 using System.Windows.Threading;
 using WCFChat.Client.ServiceReference1;
 using WCFChat.Service;
-using IChatCallback = WCFChat.Service.IChatCallback;
-
 
 namespace WCFChat.Client
 {
     [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
-    class MainWindowChatClient : WCFChat.Service.IChatCallback
+    class MainWindowChatClient : WindowControl, Service.IChatCallback
     {
-        private MainWindow window;
         private ChatClient proxy;
         private Cloud cloud;
-        public MainWindowChatClient(Cloud cloud)
+        private User currentUser;
+
+        public override void JoinToCloud(User initiator, Cloud cloud)
         {
             this.cloud = cloud;
+            this.currentUser = initiator;
             OpenOrReopenConnection();
-            window = new MainWindow();
-            window.Show();
+            base.JoinToCloud(initiator, cloud);
         }
 
         void OpenOrReopenConnection()
@@ -32,15 +31,15 @@ namespace WCFChat.Client
             InstanceContext context = new InstanceContext(this);
             proxy = new ChatClient(context);
             proxy.Open();
-            proxy.InnerDuplexChannel.Faulted += new EventHandler(InnerDuplexChannel_Faulted);
-            proxy.InnerDuplexChannel.Opened += new EventHandler(InnerDuplexChannel_Opened);
-            proxy.InnerDuplexChannel.Closed += new EventHandler(InnerDuplexChannel_Closed);
+            //proxy.InnerDuplexChannel.Faulted += new EventHandler(InnerDuplexChannel_Faulted);
+            //proxy.InnerDuplexChannel.Opened += new EventHandler(InnerDuplexChannel_Opened);
+            //proxy.InnerDuplexChannel.Closed += new EventHandler(InnerDuplexChannel_Closed);
         }
         public void ConnectResult(ServerResult result)
         {
             throw new NotImplementedException();
         }
-        public void IsWritingCallback(User client)
+        public void IsWritingCallback(User client, bool isWriting)
         {
             throw new NotImplementedException();
         }
@@ -90,36 +89,36 @@ namespace WCFChat.Client
         }
 
 
-        private delegate void FaultedInvoker();
-        void InnerDuplexChannel_Closed(object sender, EventArgs e)
-        {
-            if (!window.Dispatcher.CheckAccess())
-            {
-                window.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new FaultedInvoker(HandleProxy));
-                return;
-            }
-            HandleProxy();
-        }
+        //private delegate void FaultedInvoker();
+        //void InnerDuplexChannel_Closed(object sender, EventArgs e)
+        //{
+        //    if (!window.Dispatcher.CheckAccess())
+        //    {
+        //        window.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new FaultedInvoker(HandleProxy));
+        //        return;
+        //    }
+        //    HandleProxy();
+        //}
 
-        void InnerDuplexChannel_Opened(object sender, EventArgs e)
-        {
-            if (!window.Dispatcher.CheckAccess())
-            {
-                window.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new FaultedInvoker(HandleProxy));
-                return;
-            }
-            HandleProxy();
-        }
+        //void InnerDuplexChannel_Opened(object sender, EventArgs e)
+        //{
+        //    if (!window.Dispatcher.CheckAccess())
+        //    {
+        //        window.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new FaultedInvoker(HandleProxy));
+        //        return;
+        //    }
+        //    HandleProxy();
+        //}
 
-        void InnerDuplexChannel_Faulted(object sender, EventArgs e)
-        {
-            if (!window.Dispatcher.CheckAccess())
-            {
-                window.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new FaultedInvoker(HandleProxy));
-                return;
-            }
-            HandleProxy();
-        }
+        //void InnerDuplexChannel_Faulted(object sender, EventArgs e)
+        //{
+        //    if (!window.Dispatcher.CheckAccess())
+        //    {
+        //        window.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new FaultedInvoker(HandleProxy));
+        //        return;
+        //    }
+        //    HandleProxy();
+        //}
 
 
     }
