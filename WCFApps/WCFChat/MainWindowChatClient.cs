@@ -37,7 +37,27 @@ namespace WCFChat.Client
         }
         public void ConnectResult(ServerResult result)
         {
-            throw new NotImplementedException();
+            switch (result)
+            {
+                case ServerResult.SUCCESS:
+                    break;
+                case ServerResult.FAILURE:
+                    break;
+                case ServerResult.CloudNotFound:
+                    break;
+                case ServerResult.NameIsBusy:
+                    break;
+                case ServerResult.AwaitConfirmation:
+                    break;
+                case ServerResult.AccessDenied:
+                    break;
+                case ServerResult.AccessGranted:
+                    break;
+                case ServerResult.YourRequestInProgress:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(result), result, null);
+            }
         }
         public void IsWritingCallback(User client, bool isWriting)
         {

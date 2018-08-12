@@ -21,6 +21,8 @@ namespace UIControls.MainControl
 	    //    MergedDictionaries.Add(myResourceDictionary2);
      //   }
 
+
+
 		public bool DragMovePass { get; private set; } = false;
 		void OnSizeSouth(object sender, MouseButtonEventArgs e) { OnSize(sender, SizingAction.South); }
 		void OnSizeNorth(object sender, MouseButtonEventArgs e) { OnSize(sender, SizingAction.North); }
@@ -53,81 +55,100 @@ namespace UIControls.MainControl
 			}
 		}
 
+        private UIWindow mainWindow;
 
-     //   bool ResizeInProcess = false;
+        private void WindowLoaded(object sender, RoutedEventArgs e)
+        {
+            mainWindow = (UIWindow)sender;
 
-	    //private void Resize_Init(object sender, MouseButtonEventArgs e)
-	    //{
+            //чтобы можно было перемещать окно по нажатию клавиши в любой точки окна, а не только через верхнюю панель
+            Grid parentGrid = (Grid)mainWindow.Template.FindName("LayoutRoot", mainWindow);
 
-	    //    Border senderRect = sender as Border;
-	    //    if (senderRect != null)
-	    //    {
-	    //        ResizeInProcess = true;
+            parentGrid.MouseLeftButtonDown += (o, args) =>
+            {
+                //если менялся размер окна то не перемещаем окно
+                if (!DragMovePass)
+                    mainWindow.DragMove();
+                else
+                    DragMovePass = false;
+                args.Handled = true;
+            };
+        }
 
-	    //        senderRect.CaptureMouse();
-	    //    }
-	    //}
+        //   bool ResizeInProcess = false;
 
-	    //private void Resize_End(object sender, MouseButtonEventArgs e)
-	    //{
-	    //    Border senderRect = sender as Border;
-	    //    if (senderRect != null)
-	    //    {
-	    //        ResizeInProcess = false;
+        //private void Resize_Init(object sender, MouseButtonEventArgs e)
+        //{
 
-	    //        senderRect.ReleaseMouseCapture();
-	    //    }
-	    //}
+        //    Border senderRect = sender as Border;
+        //    if (senderRect != null)
+        //    {
+        //        ResizeInProcess = true;
 
-	    //private void Resizeing_Form(object sender, MouseEventArgs e)
-	    //{
-	    //    if (ResizeInProcess)
-	    //    {
-	    //        Border senderRect = sender as Border;
-	    //        Window mainWindow = senderRect.Tag as Window;
-	    //        if (senderRect != null)
-	    //        {
-	    //            double width = e.GetPosition(mainWindow).X;
-	    //            double height = e.GetPosition(mainWindow).Y;
-	    //            senderRect.CaptureMouse();
-	    //            if (senderRect.Name.Equals("Right", StringComparison.CurrentCultureIgnoreCase))
-	    //            {
-	    //                width += 5;
-	    //                if (width > 0)
-	    //                    mainWindow.Width = width;
-	    //            }
-	    //            if (senderRect.Name.Equals("Left", StringComparison.CurrentCultureIgnoreCase))
-	    //            {
-	    //                width -= 5;
-	    //                mainWindow.Left += width;
-	    //                width = mainWindow.Width - width;
-	    //                if (width > 0)
-	    //                {
-	    //                    mainWindow.Width = width;
-	    //                }
-	    //            }
-	    //            if (senderRect.Name.Equals("Bottom", StringComparison.CurrentCultureIgnoreCase))
-	    //            {
-	    //                height += 5;
-	    //                if (height > 0)
-	    //                    mainWindow.Height = height;
-	    //            }
-	    //            if (senderRect.Name.Equals("Top", StringComparison.CurrentCultureIgnoreCase))
-	    //            {
-	    //                height -= 5;
-	    //                mainWindow.Top += height;
-	    //                height = mainWindow.Height - height;
-	    //                if (height > 0)
-	    //                {
-	    //                    mainWindow.Height = height;
-	    //                }
-	    //            }
-	    //        }
-	    //    }
-	    //}
+        //        senderRect.CaptureMouse();
+        //    }
+        //}
+
+        //private void Resize_End(object sender, MouseButtonEventArgs e)
+        //{
+        //    Border senderRect = sender as Border;
+        //    if (senderRect != null)
+        //    {
+        //        ResizeInProcess = false;
+
+        //        senderRect.ReleaseMouseCapture();
+        //    }
+        //}
+
+        //private void Resizeing_Form(object sender, MouseEventArgs e)
+        //{
+        //    if (ResizeInProcess)
+        //    {
+        //        Border senderRect = sender as Border;
+        //        Window mainWindow = senderRect.Tag as Window;
+        //        if (senderRect != null)
+        //        {
+        //            double width = e.GetPosition(mainWindow).X;
+        //            double height = e.GetPosition(mainWindow).Y;
+        //            senderRect.CaptureMouse();
+        //            if (senderRect.Name.Equals("Right", StringComparison.CurrentCultureIgnoreCase))
+        //            {
+        //                width += 5;
+        //                if (width > 0)
+        //                    mainWindow.Width = width;
+        //            }
+        //            if (senderRect.Name.Equals("Left", StringComparison.CurrentCultureIgnoreCase))
+        //            {
+        //                width -= 5;
+        //                mainWindow.Left += width;
+        //                width = mainWindow.Width - width;
+        //                if (width > 0)
+        //                {
+        //                    mainWindow.Width = width;
+        //                }
+        //            }
+        //            if (senderRect.Name.Equals("Bottom", StringComparison.CurrentCultureIgnoreCase))
+        //            {
+        //                height += 5;
+        //                if (height > 0)
+        //                    mainWindow.Height = height;
+        //            }
+        //            if (senderRect.Name.Equals("Top", StringComparison.CurrentCultureIgnoreCase))
+        //            {
+        //                height -= 5;
+        //                mainWindow.Top += height;
+        //                height = mainWindow.Height - height;
+        //                if (height > 0)
+        //                {
+        //                    mainWindow.Height = height;
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
 
-	    void MaximisedWindow(Window w)
+        void MaximisedWindow(Window w)
 		{
 			w.WindowState = WindowState.Maximized;
 			UIControls32.MoveWindow(w.GetWindowHandle(), //, (IntPtr)(-7), (IntPtr)(-7),
@@ -170,29 +191,13 @@ namespace UIControls.MainControl
 			sender.ForWindowFromTemplate(w => w.Close());
 		}
 
-		private void WindowLoaded(object sender, RoutedEventArgs e)
-		{
-			UIWindow mainWindow = (UIWindow)sender;
 
-            //чтобы можно было перемещать окно по нажатию клавиши в любой точки окна, а не только через верхнюю панель
-            Grid parentGrid = (Grid)mainWindow.Template.FindName("LayoutRoot", mainWindow);
-
-            parentGrid.MouseLeftButtonDown += (o, args) =>
-            {
-                //если менялся размер окна то не перемещаем окно
-                if (!DragMovePass)
-                    mainWindow.DragMove();
-                else
-                    DragMovePass = false;
-                args.Handled = true;
-            };
-        }
 
         private void Information_OnClick(object sender, RoutedEventArgs e)
         {
-            UIWindow mainWindow = Application.Current.MainWindow as UIWindow;
-            if(mainWindow == null)
-                return;
+            //UIWindow mainWindow = Application.Current.MainWindow as UIWindow;
+            //if(!(sender is UIWindow mainWindow))
+            //    return;
 
             Presenter vkhovanskiy = new Presenter(false, false);
             vkhovanskiy.Owner = mainWindow;
@@ -203,15 +208,25 @@ namespace UIControls.MainControl
             mainWindow.IsBlured = false;
         }
 
+        private void WindowInfo_Loaded(object sender, RoutedEventArgs e)
+        {
+            UIWindow mainWindow = (UIWindow)sender;
+            Border infButtom = (Border)mainWindow.Template.FindName("TitleBar", mainWindow);
+            TextBlock infText = (TextBlock)mainWindow.Template.FindName("Caption", mainWindow);
+            infButtom.Background = (Brush)mainWindow.FindResource("AuthorWindowTopBorderBrush");
+            infText.Foreground = (Brush)mainWindow.FindResource("AuthorWindowTopBorderTextBrush");
+            infText.Opacity = 1;
+        }
+
         void CreatePresenterInCode(UIWindow mainWindow)
         {
-            UIWindow windowInfo = new UIWindow(false, false);
-            windowInfo.Title = "Vladimir Khovanskiy";
-            windowInfo.ResizeMode = ResizeMode.NoResize;
-            windowInfo.Resources.MergedDictionaries.Add(mainWindow.Resources);
-            windowInfo.Style = mainWindow.Style;
-            windowInfo.FontFamily = new FontFamily("Segoe UI");
-            windowInfo.FontSize = 13;
+            //UIWindow windowInfo = new UIWindow(false, false);
+            //windowInfo.Title = "Vladimir Khovanskiy";
+            //windowInfo.ResizeMode = ResizeMode.NoResize;
+            //windowInfo.Resources.MergedDictionaries.Add(mainWindow.Resources);
+            //windowInfo.Style = mainWindow.Style;
+            //windowInfo.FontFamily = new FontFamily("Segoe UI");
+            //windowInfo.FontSize = 13;
 
             //windowInfo.Icon = mainWindow.Icon;
             //new BitmapImage(Properties.Resources.Overwolf);
@@ -259,35 +274,35 @@ namespace UIControls.MainControl
             //windowInfo.Icon = new BitmapImage(new Uri(VARIABLE, UriKind.RelativeOrAbsolute));
             //windowInfo.Icon = new BitmapImage(new Uri(@"Resources/overwolf.ico", UriKind.RelativeOrAbsolute));
 
-            windowInfo.Background = (Brush)new BrushConverter().ConvertFrom("#333");
-            windowInfo.Foreground = (Brush)new BrushConverter().ConvertFrom("#FF32EBFB");
+            //windowInfo.Background = (Brush)new BrushConverter().ConvertFrom("#333");
+            //windowInfo.Foreground = (Brush)new BrushConverter().ConvertFrom("#FF32EBFB");
 
 
-            TextBlock text = new TextBlock();
-            text.Padding = new Thickness(3, 0, 3, 10);
-            text.TextWrapping = TextWrapping.Wrap;
-            text.FontSize = 12;
-            text.HorizontalAlignment = HorizontalAlignment.Center;
-            text.VerticalAlignment = VerticalAlignment.Center;
-            text.TextAlignment = TextAlignment.Center;
-            text.Text = "Hello! Thanks for choosing my application!";
-            text.Foreground = (Brush)new BrushConverter().ConvertFrom("#FFF7F7F7");
+            //TextBlock text = new TextBlock();
+            //text.Padding = new Thickness(3, 0, 3, 10);
+            //text.TextWrapping = TextWrapping.Wrap;
+            //text.FontSize = 12;
+            //text.HorizontalAlignment = HorizontalAlignment.Center;
+            //text.VerticalAlignment = VerticalAlignment.Center;
+            //text.TextAlignment = TextAlignment.Center;
+            //text.Text = "Hello! Thanks for choosing my application!";
+            //text.Foreground = (Brush)new BrushConverter().ConvertFrom("#FFF7F7F7");
 
-            windowInfo.Content = text;
+            //windowInfo.Content = text;
 
-            windowInfo.MinWidth = 300;
-            windowInfo.MinHeight = 93;
-            windowInfo.MaxWidth = 300;
-            windowInfo.MaxHeight = 93;
-            windowInfo.Owner = mainWindow;
-            windowInfo.SizeToContent = SizeToContent.WidthAndHeight;
-            windowInfo.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            windowInfo.Loaded += WindowInfo_Loaded;
+            //windowInfo.MinWidth = 300;
+            //windowInfo.MinHeight = 93;
+            //windowInfo.MaxWidth = 300;
+            //windowInfo.MaxHeight = 93;
+            //windowInfo.Owner = mainWindow;
+            //windowInfo.SizeToContent = SizeToContent.WidthAndHeight;
+            //windowInfo.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            //windowInfo.Loaded += WindowInfo_Loaded;
 
-            mainWindow.IsBlured = true;
-            windowInfo.ShowDialog();
-            windowInfo.Loaded -= WindowInfo_Loaded;
-            mainWindow.IsBlured = false;
+            //mainWindow.IsBlured = true;
+            //windowInfo.ShowDialog();
+            //windowInfo.Loaded -= WindowInfo_Loaded;
+            //mainWindow.IsBlured = false;
         }
 
 
@@ -300,14 +315,6 @@ namespace UIControls.MainControl
                                                                                 System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
         }
 
-        private void WindowInfo_Loaded(object sender, RoutedEventArgs e)
-		{
-			UIWindow mainWindow = (UIWindow) sender;
-			Border infButtom = (Border)mainWindow.Template.FindName("TitleBar", mainWindow);
-			TextBlock infText = (TextBlock)mainWindow.Template.FindName("Caption", mainWindow);
-			infButtom.Background = (Brush)mainWindow.FindResource("AuthorWindowTopBorderBrush");
-			infText.Foreground = (Brush)mainWindow.FindResource("AuthorWindowTopBorderTextBrush");
-			infText.Opacity = 1;
-		}
+
 	}
 }

@@ -198,9 +198,9 @@
             <RowDefinition Height="*"  MinHeight="50" />
             <RowDefinition Height="35" MinHeight="35" MaxHeight="150" />
         </Grid.RowDefinitions>
-        
+
         <ListBox Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Name="NameOfCloud"  >
-           
+
         </ListBox>
 
         <!--<Border Grid.Column="1"  Grid.Row="0" CornerRadius="2" BorderThickness="1"  >
@@ -263,7 +263,7 @@
                 <RowDefinition Height="35" MinHeight="35"/>
             </Grid.RowDefinitions>
             <ListBox Grid.Row="0" Name="Users" >
- 
+                
             </ListBox>
             <Button Grid.Row="1" x:Name="SendMessage"  Content="Send" HorizontalAlignment="Stretch" Height="35"   Margin="0,0,1,1" />
         </Grid>

@@ -35,12 +35,12 @@ namespace WCFChat.Client
         private MainContractClient mainProxy = null;
 
         internal static string AccountStorePath { get; }
-        internal static string RegeditKey { get; }
+        internal static string RegeditKey => Guid.NewGuid().ToString("D");
 
         static AuthorizationWindow()
         {
             AccountStorePath = Customs.AccountFilePath + ".dat";
-            RegeditKey = Customs.GetOrSetRegedit(Customs.ApplicationName, "This application create WCF chat client-server or only client to Main foreign server.");
+            //RegeditKey = Customs.GetOrSetRegedit(Customs.ApplicationName, "This application create WCF chat client-server or only client to Main foreign server.");
         }
         public AuthorizationWindow():base(true, false)
         {
@@ -141,12 +141,8 @@ namespace WCFChat.Client
 
         private void MainChatServer_Unbind(object sender, EventArgs e)
         {
-            if (!IsTransactionOpen())
-                return;
-
             if (mainProxy != null && sender is MainWindowChatServer)
             {
-                IsEnabledWindow = false;
                 mainProxy.UnbindAsync(((MainWindowChatServer)sender).TransactionID);
             }
         }

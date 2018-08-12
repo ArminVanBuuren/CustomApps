@@ -46,7 +46,8 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="UIControls">
+    <Reference Include="UIControls, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\UIControls\UIControls\UIControls\bin\Debug\UIControls.dll</HintPath>
     </Reference>
     <Reference Include="Utils">

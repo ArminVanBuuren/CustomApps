@@ -4,6 +4,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using WCFChat.Service;
+using System.Timers;
 using Message = WCFChat.Service.Message;
 
 namespace WCFChat.Host.Console
@@ -95,8 +96,8 @@ namespace WCFChat.Host.Console
         }
 
 
-        object syncServer = new object();
-        object syncOperation = new object();
+        object syncObj = new object();
+
         CloudCollection Clouds { get; } = new CloudCollection();
         Dictionary<User, IMainCallback> waitForAccessToCloud = new Dictionary<User, IMainCallback>();
         public IMainCallback Main_CurrentCallback => OperationContext.Current.GetCallbackChannel<IMainCallback>();
@@ -105,12 +106,16 @@ namespace WCFChat.Host.Console
         Dictionary<string, KeyValuePair<Cloud, IMainCallback>> cloudInMainServer = new Dictionary<string, KeyValuePair<Cloud, IMainCallback>>();
 
 
-        public void CreateCloud(User user, Cloud cloud, string transactionID)
+        public void CreateCloud(Cloud cloud, string transactionID)
         {
-            lock (syncServer)
+            lock (syncObj)
             {
                 try
                 {
+                    if(string.IsNullOrEmpty(cloud.Name))
+                        if (Main_CurrentCallbackIsOpen)
+                            Main_CurrentCallback.CreateCloudResult(CloudResult.FAILURE, transactionID);
+
                     bool exist = Clouds.IsExist(cloud);
                     if (!exist)
                     {
@@ -165,7 +170,7 @@ namespace WCFChat.Host.Console
 
         public void Unbind(string transactionID)
         {
-            lock (syncServer)
+            lock (syncObj)
             {
                 try
                 {
@@ -187,7 +192,7 @@ namespace WCFChat.Host.Console
 
         public void GetCloud(User user)
         {
-            lock (syncServer)
+            lock (syncObj)
             {
                 try
                 {
@@ -235,7 +240,7 @@ namespace WCFChat.Host.Console
 
         public void RemoveOrAccessUser(ServerResult result, User user)
         {
-            lock (syncServer)
+            lock (syncObj)
             {
                 try
                 {
@@ -265,7 +270,7 @@ namespace WCFChat.Host.Console
         }
 
 
-        object syncObj = new object();
+
         Dictionary<CloudArgs, CloudBinding> clouds = new Dictionary<CloudArgs, CloudBinding>();
         public IChatCallback Chat_CurrentCallback => OperationContext.Current.GetCallbackChannel<IChatCallback>();
         public bool Chat_CurrentCallbackIsOpen => ((IChannel)Chat_CurrentCallback).State == CommunicationState.Opened;
@@ -273,6 +278,34 @@ namespace WCFChat.Host.Console
         MainServer(CloudCollection Clouds)
         {
             MainClouds = Clouds;
+
+            Timer _timer = new Timer
+            {
+                Interval = 120 * 1000
+            };
+            _timer.Elapsed += (sender, args) =>
+            {
+                lock (syncObj)
+                {
+                    try
+                    {
+                        foreach (var cloud in clouds)
+                        {
+                            cloud.Value.CloudUserCollection.RemoveAll((a) => ((IChannel) a.CallBack).State != CommunicationState.Opened);
+                            foreach (CloudUser user in cloud.Value.CloudUserCollection)
+                            {
+                                user.CallBack.TransferHistory(cloud.Value.CloudUserCollection.Select(p => p.User).ToList(), null);
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+                }
+            };
+            _timer.AutoReset = true;
+            _timer.Start();
         }
 
         public void Connect(User newUser)

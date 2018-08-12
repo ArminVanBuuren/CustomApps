@@ -41,7 +41,7 @@ namespace WCFChat.Service
     [DataContract]
     public class Message
     {
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public User Sender { get; set; }
 
         [DataMember]

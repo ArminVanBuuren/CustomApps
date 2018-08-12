@@ -10,20 +10,20 @@ namespace WCFChat.Service
     [DataContract]
     public class User
     {
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string GUID { get; set; }
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string Name { get; set; }
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string CloudName { get; set; }
     }
 
     [DataContract]
     public class Cloud
     {
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string Name { get; set; }
 
         [DataMember]
@@ -60,7 +60,7 @@ namespace WCFChat.Service
         /// <param name="cloud"></param>
         /// <param name="transactionID"></param>
         [OperationContract(IsOneWay = true)]
-        void CreateCloud(User user, Cloud cloud, string transactionID);
+        void CreateCloud(Cloud cloud, string transactionID);
 
         /// <summary>
         /// Стать самостоятельным сервером и отвязаться от сервера

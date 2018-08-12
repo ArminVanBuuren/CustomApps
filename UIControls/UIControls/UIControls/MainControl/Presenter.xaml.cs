@@ -13,16 +13,14 @@ namespace UIControls.MainControl
 {
     public partial class Presenter
     {
-        const string ICON_PATH = @"C:\@MyRepos\CustomApp\UIControls\UIControls\UIControls\Images\overwolf.ico";
-        public Presenter(bool canDragMove = true, bool panelItemIsVisible = true) :base(canDragMove, panelItemIsVisible)
+        public Presenter(bool canDragMove = true, bool panelItemIsVisible = true) : base(canDragMove, panelItemIsVisible)
         {
             InitializeComponent();
+            this.Icon = UIControls.Properties.Resources.overwolf.ToImageSource();
 
-            if (File.Exists(ICON_PATH))
-            {
-                Uri uriIcon = new Uri(ICON_PATH, UriKind.RelativeOrAbsolute);
-                this.Icon = new BitmapImage(uriIcon);
-            }
+            //Uri uriIcon = new Uri(@"C:\@MyRepos\CustomApp\UIControls\UIControls\UIControls\Images\overwolf.ico", UriKind.RelativeOrAbsolute);
+            //this.Icon = new BitmapImage(uriIcon);
+
         }
     }
 }

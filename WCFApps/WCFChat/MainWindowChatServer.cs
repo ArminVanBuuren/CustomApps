@@ -6,6 +6,7 @@ using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
 using WCFChat.Service;
+using System.Timers;
 using Message = WCFChat.Service.Message;
 
 namespace WCFChat.Client
@@ -16,6 +17,8 @@ namespace WCFChat.Client
         public string TransactionID { get; private set; }
         private AccessResult OnRemoveOrAccessUser;
         private User admin;
+        public IChatCallback CurrentCallback => OperationContext.Current.GetCallbackChannel<IChatCallback>();
+        public bool CurrentCallbackIsOpen => ((IChannel)CurrentCallback).State == CommunicationState.Opened;
 
         public MainWindowChatServer():base(true)
         {
@@ -34,12 +37,45 @@ namespace WCFChat.Client
                     };
             UserBindings userBind = new UserBindings(admin);
             AddUser(userBind, ".$my_localhost::");
+
+
+
+            Timer _timer = new Timer
+            {
+                Interval = 120 * 1000
+            };
+            _timer.Elapsed += (sender, args) =>
+            {
+                lock (sync)
+                {
+                    try
+                    {
+                        List<string> forRemove = (from userBindItem in AllUsers.Values where userBindItem.CallBack != null && ((IChannel) userBindItem.CallBack).State != CommunicationState.Opened select userBindItem.GUID.Value).ToList();
+
+                        foreach (string removeUser in forRemove)
+                        {
+                            RemoveUser(removeUser);
+                        }
+
+                        List<User> users = AllUsers.Values.Where(p => p.CallBack != null || p.Status == UserStatus.Admin).Select(p => p.User).ToList();
+                        foreach (UserBindings existUser in AllUsers.Values)
+                        {
+                            if (existUser.CallBack != null && ((IChannel)existUser.CallBack).State == CommunicationState.Opened)
+                                existUser.CallBack.TransferHistory(users, null);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+                }
+            };
+            _timer.AutoReset = true;
+            _timer.Start();
+            
+
             base.CreateCloud(initiator, cloud, transactionId, removeOrAcceptUser);
         }
-
-
-        public IChatCallback CurrentCallback => OperationContext.Current.GetCallbackChannel<IChatCallback>();
-        public bool CurrentCallbackIsOpen => ((IChannel)CurrentCallback).State == CommunicationState.Opened;
 
         /// <summary>
         /// Main сервер запрашивает можно ли новому узеру присоединить к текущему облаку
@@ -201,7 +237,7 @@ namespace WCFChat.Client
 
         void UpdateUserList(UserBindings createdUser)
         {
-            List<User> allUsers = AllUsers.Values.Where(p => p.CallBack != null || p.User.GUID == UserBindings.GUID_ADMIN).Select(p => p.User).ToList();
+            List<User> allUsers = AllUsers.Values.Where(p => p.CallBack != null || p.Status == UserStatus.Admin).Select(p => p.User).ToList();
 
             if (((IChannel)createdUser.CallBack).State == CommunicationState.Opened)
                 createdUser.CallBack.TransferHistory(allUsers, Messages);
@@ -228,7 +264,7 @@ namespace WCFChat.Client
 
                     RemoveUser(user);
 
-                    List<User> allUsers = AllUsers.Values.Where(p => p.CallBack != null || p.User.GUID == UserBindings.GUID_ADMIN).Select(p => p.User).ToList();
+                    List<User> allUsers = AllUsers.Values.Where(p => p.CallBack != null || p.Status == UserStatus.Admin).Select(p => p.User).ToList();
                     foreach (UserBindings existUser in AllUsers.Values)
                     {
                         if (existUser.CallBack != null && ((IChannel)existUser.CallBack).State == CommunicationState.Opened)

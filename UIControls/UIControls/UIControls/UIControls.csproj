@@ -65,6 +65,7 @@
     <Compile Include="Styles\Core.xaml.cs">
       <DependentUpon>Core.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UIUtils.cs" />
     <Compile Include="Utils\UIControls32.cs" />
     <Compile Include="Utils\UIPropertyBinding.cs" />
     <Compile Include="Utils\WOSComponents.cs" />

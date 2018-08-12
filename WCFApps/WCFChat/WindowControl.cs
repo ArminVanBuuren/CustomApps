@@ -84,8 +84,9 @@ namespace WCFChat.Client
         {
             UIControls = new UserControlUI(parent, userBackground, userName, userStatus);
             UICustomCommands.DefaultBinding(userName, TextBlock.TextProperty, Name);
-            UICustomCommands.DefaultBinding(userName, FrameworkElement.ToolTipProperty, Name);
-            UICustomCommands.DefaultBinding(userStatus, FrameworkElement.ToolTipProperty, Address);
+            UICustomCommands.DefaultBinding(userName, FrameworkElement.ToolTipProperty, GUID);
+            if (!Address.Value.IsNullOrEmpty())
+                UICustomCommands.DefaultBinding(userStatus, FrameworkElement.ToolTipProperty, Address);
         }
 
         public UIPropertyValue<string> GUID { get; private set; }
@@ -128,6 +129,13 @@ namespace WCFChat.Client
     
     class WindowControl
     {
+        internal static readonly Brush AdminBackground = (Brush)new BrushConverter().ConvertFrom("#FF009EAE"); // обычный фон ячейки админа 
+        internal static readonly Brush UserBackground = (Brush)new BrushConverter().ConvertFrom("#FF555555"); // обычный фон ячейки юзера
+        internal static readonly Brush UserWritingBackground = (Brush)new BrushConverter().ConvertFrom("#FF07C1C1"); // когда какой то юзер начал что то писать
+        internal static readonly Brush UserIsWaiterStatus = (Brush)new BrushConverter().ConvertFrom("#FF555555");
+        internal static readonly Brush UserIsNotLogOnYetStatus = (Brush)new BrushConverter().ConvertFrom("#FFFFDC00"); // ждем его непосредственного коннекта Желтый цвет
+        internal static readonly Brush UserIsActiveStatus = (Brush)new BrushConverter().ConvertFrom("#FF90EE90"); // когда юзер непосредственно подсоединился к чату Зеленый цвет
+
         protected object sync = new object();
         public event EventHandler Unbind;
         public event EventHandler Closing;
@@ -137,7 +145,23 @@ namespace WCFChat.Client
         private bool isAdmin = false;
         private MainWindow window;
         internal Dictionary<string, UserBindings> AllUsers { get; } = new Dictionary<string, UserBindings>(StringComparer.CurrentCulture);
-        internal List<Message> Messages { get; } = new List<Message>();
+
+        internal List<Message> Messages
+        {
+            get
+            {
+                List<Message> allMesages = new List<Message>();
+                foreach (var block in window.DialogHistory.Document.Blocks)
+                {
+                    if (block is MyParagraph mypar)
+                    {
+                        allMesages.AddRange(mypar.Messages);
+                    }
+                }
+                return allMesages;
+            }
+        }
+
         private Timer _timerActivateWindow;
 
         public WindowControl(bool isAdmin = false)
@@ -152,17 +176,14 @@ namespace WCFChat.Client
             _timerActivateWindow.Interval = 5000;
             _timerActivateWindow.Elapsed += UserNotWriting;
             _timerActivateWindow.AutoReset = false;
-            _timerActivateWindow.Enabled = false;
+            _timerActivateWindow.Start();
         }
-
 
         public void Close()
         {
             if (!OnClose)
                 window?.Close();
         }
-
-        
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -172,15 +193,35 @@ namespace WCFChat.Client
 
         public virtual void CreateCloud(User initiator, Cloud cloud, string transactionId, AccessResult removeOrAcceptUser)
         {
-            window.NameOfCloud.Items.Add(new Label()
-                                         {
-                                             Content = cloud.Name.IsNullOrEmpty() ? cloud.Address : cloud.Name
-                                         });
+            StackPanel stack = new StackPanel();
+            stack.Orientation = Orientation.Horizontal;
+            CheckBox unbind = new CheckBox();
+            unbind.VerticalAlignment = VerticalAlignment.Center;
+            unbind.Margin = new Thickness(0, 0, 0, -4);
+            unbind.ToolTip = "Unbind from main server";
+            unbind.Checked += Unbind_Checked;
+            stack.Children.Add(new Label()
+            {
+                Content = cloud.Name.IsNullOrEmpty() ? cloud.Address : cloud.Name
+            });
+            stack.Children.Add(unbind);
+            window.NameOfCloud.Items.Add(stack);
+
             if (!windowIsOpened)
             {
                 windowIsOpened = true;
                 window.Show();
             }
+
+           
+        }
+
+        private void Unbind_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBox unbindChk = (CheckBox) sender;
+            unbindChk.IsEnabled = false;
+            IsUnbinded = true;
+            Unbind?.Invoke(this, EventArgs.Empty);
         }
 
         public virtual void JoinToCloud(User initiator, Cloud cloud)
@@ -199,12 +240,6 @@ namespace WCFChat.Client
         public virtual void IncomingRequestForAccess(User user, string address)
         {
 
-        }
-
-        void UnbindCurrentServerFromMain()
-        {
-            IsUnbinded = true;
-            Unbind?.Invoke(this, EventArgs.Empty);
         }
 
         protected void AddWaiter(User newUser, IChatCallback callback, string address, string port)
@@ -249,7 +284,7 @@ namespace WCFChat.Client
 
         internal void AddUser(UserBindings userBind, string address)
         {
-            if (isAdmin)
+            if (isAdmin && userBind.Status != UserStatus.Admin)
             {
                 AddUser(userBind, address, "UserTemplateForAdmin", "UserNameAdmin", "StatusAdmin", "BackgroundAdmin");
             }
@@ -287,6 +322,7 @@ namespace WCFChat.Client
                 else if (item is Border resultBorder)
                 {
                     userBackgound = resultBorder;
+                    userBackgound.Background = user.Status == UserStatus.Admin ? AdminBackground : UserBackground;
                 }
                 else if (item is Button resultButton)
                 {
@@ -319,7 +355,7 @@ namespace WCFChat.Client
                 if (button.Name.Equals("AcceptAdmin"))
                 {
                     if (isExist)
-                        userBind.UIControls.Status.Foreground = (Brush) new BrushConverter().ConvertFrom("#FFFFDC00"); // ждем его непосредственного коннекта Желтый цвет
+                        userBind.UIControls.Status.Foreground = UserIsNotLogOnYetStatus; // ждем его непосредственного коннекта Желтый цвет
                     AccessOrRemoveUser(userBind, false);
                 }
                 else
@@ -340,7 +376,7 @@ namespace WCFChat.Client
         protected void ChangeUserStatusIsActive(UserBindings user)
         {
             user.Status = UserStatus.User;
-            user.UIControls.Status.Foreground = (Brush)new BrushConverter().ConvertFrom("#FF90EE90"); // когда юзер непосредственно подсоединился к чату Зеленый цвет
+            user.UIControls.Status.Foreground = UserIsActiveStatus; // когда юзер непосредственно подсоединился к чату Зеленый цвет
         }
 
         protected void ChangeUserName(UserBindings userBind, User userNewName)
@@ -390,11 +426,11 @@ namespace WCFChat.Client
         {
             if (isWriting)
             {
-                userBind.UIControls.Background.Background = (Brush) new BrushConverter().ConvertFrom("#FF07C1C1"); // когда какой то юзер начал что то писать
+                userBind.UIControls.Background.Background = UserWritingBackground; // когда какой то юзер начал что то писать
             }
             else
             {
-                userBind.UIControls.Background.Background = (Brush) new BrushConverter().ConvertFrom("#FF555555"); // когда какой то юзер пересатл что то писать
+                userBind.UIControls.Background.Background = userBind.Status == UserStatus.Admin ? AdminBackground : UserBackground;
             }
         }
 
@@ -415,11 +451,12 @@ namespace WCFChat.Client
                 Messages.Add(msg);
                 if (newParagraph)
                 {
-                    Run userName = new Run($"{msg.Sender:G}:");
+                    Run userName = new Run($"{msg.Sender.Name:G}:");
                     userName.Foreground = Brushes.Aqua;
                     userName.Background = Brushes.Black;
                     //userName.ToolTip = msg.Time;
                     Inlines.Add(new Bold(userName));
+                    Inlines.Add(" ");
                 }
                 else
                 {
