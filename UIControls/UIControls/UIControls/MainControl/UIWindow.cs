@@ -29,6 +29,7 @@ namespace UIControls.MainControl
 
         public UIWindow(bool canDragMove = true, bool panelItemIsVisible = true)
         {
+            
             //Application.Current.Resources.MergedDictionaries.Clear();
 
             //ResourceDictionary myResourceDictionary1 = new ResourceDictionary();
@@ -91,6 +92,27 @@ namespace UIControls.MainControl
                 //		DragMove();
                 //};
             }
+        }
+
+        protected override void OnStateChanged(EventArgs e)
+        {
+            if (WindowState == System.Windows.WindowState.Maximized)
+                MaxWindowImage(this);
+            else if (WindowState == System.Windows.WindowState.Minimized || WindowState == System.Windows.WindowState.Normal)
+                MinWindowImage(this);
+            base.OnStateChanged(e);
+        }
+
+        void MaxWindowImage(UIWindow window)
+        {
+            Image imageIcon = (Image)window.Template.FindName("Icon", window);
+            imageIcon.Margin = new Thickness(4, -2, 0, 2);
+        }
+
+        void MinWindowImage(UIWindow window)
+        {
+            Image imageIcon = (Image)window.Template.FindName("Icon", window);
+            imageIcon.Margin = new Thickness(4, -10, 0, 7);
         }
 
         private void UIWindowClosed(object sender, EventArgs e)

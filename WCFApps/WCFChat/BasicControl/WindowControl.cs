@@ -1,132 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net.Mail;
-using System.Net.Mime;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using UIControls.MainControl;
 using UIControls.Utils;
 using Utils;
 using WCFChat.Service;
 using Timer = System.Timers.Timer;
 
-namespace WCFChat.Client
+namespace WCFChat.Client.BasicControl
 {
-    internal enum UserStatus
-    {
-        Admin = 0,
-        User = 1,
-        Waiter = 2
-    }
-
-
-    internal class UserBindings
-    {
-        internal const string GUID_ADMIN = "ADMIN";
-        internal UserBindings(User user)
-        {
-            InitBase(user);
-            if (user.GUID == GUID_ADMIN)
-                Status = UserStatus.Admin;
-            else
-                Status = UserStatus.User;
-            CallBack = null;
-            Address = new UIPropertyValue<string> {
-                                                      Value = string.Empty
-                                                  };
-            Port = string.Empty;
-        }
-
-        internal UserBindings(User user, IChatCallback callback, string address, string port)
-        {
-            InitBase(user);
-            CallBack = callback;
-            Address = new UIPropertyValue<string> {
-                                                      Value = address
-                                                  };
-            Port = port;
-            Status = UserStatus.Waiter;
-        }
-
-        void InitBase(User user)
-        {
-            GUID = new UIPropertyValue<string> {
-                                                   Value = user.GUID
-                                               };
-            Name = new UIPropertyValue<string> {
-                                                   Value = user.Name
-                                               };
-            User = user;
-        }
-
-        public class UserControlUI
-        {
-            public ListBoxItem ParentListBox { get; }
-            public Border Background { get; }
-            public TextBlock Name { get; }
-            public TextBlock Status { get; }
-
-            internal UserControlUI(ListBoxItem parent, Border userBackground, TextBlock userName, TextBlock userStatus)
-            {
-                ParentListBox = parent;
-                Background = userBackground;
-                Name = userName;
-                Status = userStatus;
-            }
-        }
-
-        public void AddUIControl(ListBoxItem parent, Border userBackground, TextBlock userName, TextBlock userStatus)
-        {
-            UIControls = new UserControlUI(parent, userBackground, userName, userStatus);
-            UICustomCommands.DefaultBinding(userName, TextBlock.TextProperty, Name);
-            UICustomCommands.DefaultBinding(userName, FrameworkElement.ToolTipProperty, GUID);
-            if (!Address.Value.IsNullOrEmpty())
-                UICustomCommands.DefaultBinding(userStatus, FrameworkElement.ToolTipProperty, Address);
-        }
-
-        public UIPropertyValue<string> GUID { get; private set; }
-        public UIPropertyValue<string> Name { get; private set; }
-        public User User { get; private set; }
-
-        internal IChatCallback CallBack { get; set; }
-        public UIPropertyValue<string> Address { get; }
-        public string Port { get; }
-        internal UserControlUI UIControls { get; private set; }
-        public UserStatus Status { get; internal set; }
-
-        //public override bool Equals(object obj)
-        //{
-        //    if (!(obj is User))
-        //        return false;
-        //    User input = (User) obj;
-        //    if (input.GUID == base.GUID)
-        //        return true;
-        //    return false;
-        //}
-
-        //protected bool Equals(UserBindings other)
-        //{
-        //    return Equals(CallBack, other.CallBack) && string.Equals(Address, other.Address) && string.Equals(Port, other.Port) && Equals(UIControls, other.UIControls);
-        //}
-
-        //public override int GetHashCode()
-        //{
-        //    unchecked
-        //    {
-        //        var hashCode = (CallBack != null ? CallBack.GetHashCode() : 0);
-        //        hashCode = (hashCode * 397) ^ (Address != null ? Address.GetHashCode() : 0);
-        //        hashCode = (hashCode * 397) ^ (Port != null ? Port.GetHashCode() : 0);
-        //        hashCode = (hashCode * 397) ^ (UIControls != null ? UIControls.GetHashCode() : 0);
-        //        return hashCode;
-        //    }
-        //}
-    }
-    
     class WindowControl
     {
         internal static readonly Brush AdminBackground = (Brush)new BrushConverter().ConvertFrom("#FF009EAE"); // обычный фон ячейки админа 
@@ -136,105 +22,56 @@ namespace WCFChat.Client
         internal static readonly Brush UserIsNotLogOnYetStatus = (Brush)new BrushConverter().ConvertFrom("#FFFFDC00"); // ждем его непосредственного коннекта Желтый цвет
         internal static readonly Brush UserIsActiveStatus = (Brush)new BrushConverter().ConvertFrom("#FF90EE90"); // когда юзер непосредственно подсоединился к чату Зеленый цвет
 
-        protected object sync = new object();
+        
         public event EventHandler Unbind;
-        public event EventHandler Closing;
-        public bool OnClose { get; private set; } = false;
         public bool IsUnbinded { get; private set; } = false;
-        private bool windowIsOpened = false;
         private bool isAdmin = false;
-        private MainWindow window;
+
+        //private MainWindow window;
+
+        private ListBox Users;
+        private RichTextBox DialogHistory;
+        private RichTextBox DialogWindow;
+        private UIWindow mainWindow;
+
         internal Dictionary<string, UserBindings> AllUsers { get; } = new Dictionary<string, UserBindings>(StringComparer.CurrentCulture);
 
-        internal List<Message> Messages
+        public string TransactionID { get; private set; }
+        public UserBindings Initiator { get; private set; }
+        public Cloud CurrentCloud { get; private set; }
+
+        internal List<Message> Messages()
         {
-            get
+            List<Message> allMesages = new List<Message>();
+            foreach (var block in DialogHistory.Document.Blocks)
             {
-                List<Message> allMesages = new List<Message>();
-                foreach (var block in window.DialogHistory.Document.Blocks)
+                if (block is MyParagraph mypar)
                 {
-                    if (block is MyParagraph mypar)
-                    {
-                        allMesages.AddRange(mypar.Messages);
-                    }
+                    allMesages.AddRange(mypar.Messages);
                 }
-                return allMesages;
             }
+            return allMesages;
         }
 
-        private Timer _timerActivateWindow;
+        private Timer _timerWritingUser;
 
-        public WindowControl(bool isAdmin = false)
+        public WindowControl(UIWindow mainWindow, User initiator, Cloud cloud, string transactionId, bool isAdmin = false)
         {
-            window = new MainWindow();
-            window.Closing += Window_Closing;
-            window.DialogWindow.TextChanged += DialogWindow_TextChanged;
-            window.SendMessage.Click += SendMessage_Click;
+            Users = new ListBox();
+            DialogHistory = new RichTextBox();
+            DialogWindow = new RichTextBox();
+            this.mainWindow = mainWindow;
+
+            TransactionID = transactionId;
+            Initiator = new UserBindings(initiator, true);
+            AddUser(Initiator, ".$my_localhost::");
+            CurrentCloud = cloud;
             this.isAdmin = isAdmin;
 
-            _timerActivateWindow = new Timer();
-            _timerActivateWindow.Interval = 5000;
-            _timerActivateWindow.Elapsed += UserNotWriting;
-            _timerActivateWindow.AutoReset = false;
-            _timerActivateWindow.Start();
-        }
-
-        public void Close()
-        {
-            if (!OnClose)
-                window?.Close();
-        }
-
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            OnClose = true;
-            Closing?.Invoke(this, EventArgs.Empty);
-        }
-
-        public virtual void CreateCloud(User initiator, Cloud cloud, string transactionId, AccessResult removeOrAcceptUser)
-        {
-            StackPanel stack = new StackPanel();
-            stack.Orientation = Orientation.Horizontal;
-            CheckBox unbind = new CheckBox();
-            unbind.VerticalAlignment = VerticalAlignment.Center;
-            unbind.Margin = new Thickness(0, 0, 0, -4);
-            unbind.ToolTip = "Unbind from main server";
-            unbind.Checked += Unbind_Checked;
-            stack.Children.Add(new Label()
-            {
-                Content = cloud.Name.IsNullOrEmpty() ? cloud.Address : cloud.Name
-            });
-            stack.Children.Add(unbind);
-            window.NameOfCloud.Items.Add(stack);
-
-            if (!windowIsOpened)
-            {
-                windowIsOpened = true;
-                window.Show();
-            }
-
-           
-        }
-
-        private void Unbind_Checked(object sender, RoutedEventArgs e)
-        {
-            CheckBox unbindChk = (CheckBox) sender;
-            unbindChk.IsEnabled = false;
-            IsUnbinded = true;
-            Unbind?.Invoke(this, EventArgs.Empty);
-        }
-
-        public virtual void JoinToCloud(User initiator, Cloud cloud)
-        {
-            window.NameOfCloud.Items.Add(new Label()
-                                         {
-                                             Content = cloud.Name.IsNullOrEmpty() ? cloud.Address : cloud.Name
-                                         });
-            if (!windowIsOpened)
-            {
-                windowIsOpened = true;
-                window.Show();
-            }
+            _timerWritingUser = new Timer();
+            _timerWritingUser.Interval = 5000;
+            _timerWritingUser.Elapsed += UserNotWriting;
+            _timerWritingUser.AutoReset = false;
         }
 
         public virtual void IncomingRequestForAccess(User user, string address)
@@ -256,7 +93,7 @@ namespace WCFChat.Client
             if (AllUsers.ContainsKey(userBind.GUID.Value))
             {
                 AllUsers.Remove(userBind.GUID.Value);
-                window.Users.Items.Remove(userBind.UIControls.ParentListBox);
+                Users.Items.Remove(userBind.UIControls.ParentListBox);
             }
         }
 
@@ -277,7 +114,7 @@ namespace WCFChat.Client
             if (isExist)
             {
                 AllUsers.Remove(userBind.GUID.Value);
-                window.Users.Items.Remove(userBind.UIControls.ParentListBox);
+                Users.Items.Remove(userBind.UIControls.ParentListBox);
             }
         }
 
@@ -297,8 +134,8 @@ namespace WCFChat.Client
         void AddUser(UserBindings user, string address, string gridName, string textblockUser, string textblockStatus, string borderName)
         {
             ListBoxItem newUserItem = new ListBoxItem();
-            newUserItem.Style = (Style)window.FindResource("ListBoxItemUser");
-            Grid cloneExist = UICustomCommands.XamlClone((Grid)window.FindResource(gridName));
+            newUserItem.Style = (Style)mainWindow.FindResource("ListBoxItemUser");
+            Grid cloneExist = UICustomCommands.XamlClone((Grid)mainWindow.FindResource(gridName));
             TextBlock userName = null;
             TextBlock userStatus = null;
             Border userBackgound = null;
@@ -333,12 +170,12 @@ namespace WCFChat.Client
             newUserItem.Content = cloneExist;
             user.AddUIControl(newUserItem, userBackgound, userName, userStatus);
 
-            window.Users.Items.Add(newUserItem);
+            Users.Items.Add(newUserItem);
             AllUsers.Add(user.GUID.Value, user);
         }
 
 
-
+        object sync = new object();
         private void ButtonAccessRejectClick(object sender, RoutedEventArgs e)
         {
             lock (sync)
@@ -386,6 +223,9 @@ namespace WCFChat.Client
 
         protected void UpdateUserList(List<User> allUsers)
         {
+            if (allUsers == null)
+                return;
+
             foreach (User user in allUsers)
             {
                 UserBindings userBind;
@@ -470,7 +310,7 @@ namespace WCFChat.Client
 
         protected void SomeoneUserReceveMessage(Message msg)
         {
-            if (window.DialogHistory.Document.Blocks.LastBlock is MyParagraph exist)
+            if (DialogHistory.Document.Blocks.LastBlock is MyParagraph exist)
             {
                 if (exist.GUID == msg.Sender.GUID)
                 {
@@ -480,19 +320,19 @@ namespace WCFChat.Client
             }
 
             MyParagraph par = new MyParagraph(msg);
-            window.DialogHistory.Document.Blocks.Add(par);
+            DialogHistory.Document.Blocks.Add(par);
         }
 
         private void DialogWindow_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (_timerActivateWindow.Enabled)
+            if (_timerWritingUser.Enabled)
             {
-                _timerActivateWindow.Interval = 5000;
+                _timerWritingUser.Interval = 5000;
             }
             else
             {
                 CurrentUserIsWriting(true);
-                _timerActivateWindow.Enabled = true;
+                _timerWritingUser.Enabled = true;
             }
         }
 
@@ -509,14 +349,23 @@ namespace WCFChat.Client
 
         private void SendMessage_Click(object sender, RoutedEventArgs e)
         {
-            string richText = new TextRange(window.DialogWindow.Document.ContentStart, window.DialogWindow.Document.ContentEnd).Text;
+            string richText = new TextRange(DialogWindow.Document.ContentStart, DialogWindow.Document.ContentEnd).Text;
             CurrentUserIsSaying(richText);
-            window.DialogWindow.Document.Blocks.Clear();
+            DialogWindow.Document.Blocks.Clear();
         }
 
         protected virtual void CurrentUserIsSaying(string msg)
         {
 
+        }
+
+        protected virtual bool GetUserBinding(User user, out UserBindings userBind)
+        {
+            userBind = null;
+            if (user == null || string.IsNullOrEmpty(user.GUID) || string.IsNullOrEmpty(user.Name))
+                return false;
+            
+            return AllUsers.TryGetValue(user.GUID, out userBind);
         }
     }
 }

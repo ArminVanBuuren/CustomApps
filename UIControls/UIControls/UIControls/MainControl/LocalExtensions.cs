@@ -6,9 +6,9 @@ namespace UIControls.MainControl
 {
     internal static class LocalExtensions
     {
-        public static void ForWindowFromTemplate(this object templateFrameworkElement, Action<Window> action)
+        public static void ForWindowFromTemplate(this object templateFrameworkElement, Action<UIWindow> action)
         {
-            Window window = ((FrameworkElement)templateFrameworkElement).TemplatedParent as Window;
+            UIWindow window = ((FrameworkElement)templateFrameworkElement).TemplatedParent as UIWindow;
             if (window != null)
                 action(window);
         }

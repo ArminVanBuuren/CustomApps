@@ -7,94 +7,93 @@ using System.Text;
 using System.Threading.Tasks;
 using WCFChat.Service;
 using System.Timers;
+using UIControls.MainControl;
+using WCFChat.Client.BasicControl;
 using Message = WCFChat.Service.Message;
 
-namespace WCFChat.Client
+namespace WCFChat.Client.BasicControl
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
-    class MainWindowChatServer : WindowControl, WCFChat.Service.IChat
+    class MainWindowChatServer : WCFChat.Service.IChat
     {
-        public string TransactionID { get; private set; }
+        protected object sync = new object();
         private AccessResult OnRemoveOrAccessUser;
-        private User admin;
         public IChatCallback CurrentCallback => OperationContext.Current.GetCallbackChannel<IChatCallback>();
         public bool CurrentCallbackIsOpen => ((IChannel)CurrentCallback).State == CommunicationState.Opened;
 
-        public MainWindowChatServer():base(true)
+        protected Dictionary<string, WindowControl> Clouds { get; } = new Dictionary<string, WindowControl>();
+        private UIWindow mainWindow;
+
+        public MainWindowChatServer(UIWindow mainWindow, AccessResult removeOrAcceptUser)
         {
-            
+            OnRemoveOrAccessUser = removeOrAcceptUser;
+            this.mainWindow = mainWindow;
         }
 
-        public override void CreateCloud(User initiator, Cloud cloud, string transactionId, AccessResult removeOrAcceptUser)
+        public void CreateCloud(User initiator, Cloud cloud, string transactionId)
         {
             TransactionID = transactionId;
-            OnRemoveOrAccessUser = removeOrAcceptUser;
-            admin = new User()
-                    {
-                        GUID = UserBindings.GUID_ADMIN,
-                        Name = initiator.Name,
-                        CloudName = initiator.CloudName
-                    };
-            UserBindings userBind = new UserBindings(admin);
-            AddUser(userBind, ".$my_localhost::");
+
+            Clouds.Add(cloud.Name, new WindowControl(mainWindow, initiator, cloud));
 
 
 
-            Timer _timer = new Timer
-            {
-                Interval = 120 * 1000
-            };
-            _timer.Elapsed += (sender, args) =>
-            {
-                lock (sync)
-                {
-                    try
-                    {
-                        List<string> forRemove = (from userBindItem in AllUsers.Values where userBindItem.CallBack != null && ((IChannel) userBindItem.CallBack).State != CommunicationState.Opened select userBindItem.GUID.Value).ToList();
+            //Timer _timer = new Timer
+            //{
+            //    Interval = 120 * 1000
+            //};
+            //_timer.Elapsed += (sender, args) =>
+            //{
+            //    lock (sync)
+            //    {
+            //        try
+            //        {
+            //            List<string> forRemove = (from userBindItem in AllUsers.Values where userBindItem.CallBack != null && ((IChannel) userBindItem.CallBack).State != CommunicationState.Opened select userBindItem.GUID.Value).ToList();
 
-                        foreach (string removeUser in forRemove)
-                        {
-                            RemoveUser(removeUser);
-                        }
+            //            foreach (string removeUser in forRemove)
+            //            {
+            //                RemoveUser(removeUser);
+            //            }
 
-                        List<User> users = AllUsers.Values.Where(p => p.CallBack != null || p.Status == UserStatus.Admin).Select(p => p.User).ToList();
-                        foreach (UserBindings existUser in AllUsers.Values)
-                        {
-                            if (existUser.CallBack != null && ((IChannel)existUser.CallBack).State == CommunicationState.Opened)
-                                existUser.CallBack.TransferHistory(users, null);
-                        }
-                    }
-                    catch (Exception e)
-                    {
+            //            List<User> users = AllUsers.Values.Where(p => p.CallBack != null || p.Status == UserStatus.Admin).Select(p => p.User).ToList();
+            //            foreach (UserBindings existUser in AllUsers.Values)
+            //            {
+            //                if (existUser.CallBack != null && ((IChannel)existUser.CallBack).State == CommunicationState.Opened)
+            //                    existUser.CallBack.TransferHistory(users, null);
+            //            }
+            //        }
+            //        catch (Exception e)
+            //        {
 
-                    }
-                }
-            };
-            _timer.AutoReset = true;
-            _timer.Start();
-            
+            //        }
+            //    }
+            //};
+            //_timer.AutoReset = true;
+            //_timer.Start();
 
-            base.CreateCloud(initiator, cloud, transactionId, removeOrAcceptUser);
         }
 
         /// <summary>
         /// Main сервер запрашивает можно ли новому узеру присоединить к текущему облаку
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="newUser"></param>
         /// <param name="address"></param>
-        public override void IncomingRequestForAccess(User user, string address)
+        public void IncomingRequestForAccess(User newUser, string address)
         {
             lock (sync)
             {
-                if (user == null || string.IsNullOrEmpty(user.GUID) || string.IsNullOrEmpty(user.Name))
+                if (newUser == null || string.IsNullOrEmpty(newUser.GUID) || string.IsNullOrEmpty(newUser.Name) || IsUnbinded)
                 {
                     if (CurrentCallbackIsOpen)
                         CurrentCallback.ConnectResult(ServerResult.AccessDenied);
                     return;
                 }
 
+                if (!IsUniqueNames(newUser))
+                    return;
+
                 string[] addr = address.Split(':');
-                AddWaiter(user, null, addr[0], addr[1]);
+                AddWaiter(newUser, null, addr[0], addr[1]);
             }
         }
 
@@ -110,8 +109,17 @@ namespace WCFChat.Client
                     }
                     else
                     {
-                        if (((IChannel)userBind.CallBack).State == CommunicationState.Opened)
-                            userBind.CallBack.ConnectResult(ServerResult.AccessDenied);
+                        if (((IChannel) userBind.CallBack).State == CommunicationState.Opened)
+                        {
+                            if (userBind.Status == UserStatus.Waiter)
+                            {
+                                userBind.CallBack.ConnectResult(ServerResult.AccessDenied);
+                            }
+                            else
+                            {
+                                userBind.CallBack.Terminate(CurrentCloud);
+                            }
+                        }
                     }
                     base.AccessOrRemoveUser(userBind, true);
                 }
@@ -214,14 +222,8 @@ namespace WCFChat.Client
                     }
 
 
-                    bool uniqueName = AllUsers.Values.Any(p => p.User.Name.Equals(newUser.Name, StringComparison.CurrentCultureIgnoreCase));
-                    if (uniqueName)
-                    {
-                        if (CurrentCallbackIsOpen)
-                            CurrentCallback.ConnectResult(ServerResult.NameIsBusy);
+                    if (!IsUniqueNames(newUser))
                         return;
-                    }
-
 
                     AddWaiter(newUser, CurrentCallback, prop.Address, prop.Port.ToString());
                     if (CurrentCallbackIsOpen)
@@ -235,12 +237,24 @@ namespace WCFChat.Client
             }
         }
 
+        bool IsUniqueNames(User newUser)
+        {
+            bool currentNameAlreadyExist = AllUsers.Values.Any(p => p.User.Name.Equals(newUser.Name, StringComparison.CurrentCultureIgnoreCase));
+            if (currentNameAlreadyExist)
+            {
+                if (CurrentCallbackIsOpen)
+                    CurrentCallback.ConnectResult(ServerResult.NameIsBusy);
+                return false;
+            }
+            return true;
+        }
+
         void UpdateUserList(UserBindings createdUser)
         {
             List<User> allUsers = AllUsers.Values.Where(p => p.CallBack != null || p.Status == UserStatus.Admin).Select(p => p.User).ToList();
 
             if (((IChannel)createdUser.CallBack).State == CommunicationState.Opened)
-                createdUser.CallBack.TransferHistory(allUsers, Messages);
+                createdUser.CallBack.TransferHistory(allUsers, Messages());
 
             foreach (UserBindings existUser in AllUsers.Values)
             {
@@ -285,7 +299,7 @@ namespace WCFChat.Client
                 foreach (UserBindings existUser in AllUsers.Values)
                 {
                     if (existUser.CallBack != null && ((IChannel)existUser.CallBack).State == CommunicationState.Opened)
-                        existUser.CallBack.IsWritingCallback(admin, isWriting);
+                        existUser.CallBack.IsWritingCallback(Initiator.User, isWriting);
                 }
             }
         }
@@ -323,12 +337,11 @@ namespace WCFChat.Client
             lock (sync)
             {
                 Message adminSay = new Message() {
-                                                     Sender = admin,
+                                                     Sender = Initiator.User,
                                                      Content = msg,
                                                      Time = DateTime.Now
                                                  };
 
-                Messages.Add(adminSay);
                 SomeoneUserReceveMessage(adminSay);
 
                 foreach (UserBindings existUser in AllUsers.Values)
@@ -349,7 +362,6 @@ namespace WCFChat.Client
                     if (!GetUserBinding(message.Sender, out userBind))
                         return;
 
-                    Messages.Add(message);
                     SomeoneUserReceveMessage(message);
 
                     foreach (UserBindings existUser in AllUsers.Values)
@@ -369,7 +381,7 @@ namespace WCFChat.Client
         }
 
 
-        bool GetUserBinding(User user, out UserBindings userBind)
+        protected override bool GetUserBinding(User user, out UserBindings userBind)
         {
             userBind = null;
             if (user == null || string.IsNullOrEmpty(user.GUID) || string.IsNullOrEmpty(user.Name))
@@ -380,6 +392,7 @@ namespace WCFChat.Client
             bool result = AllUsers.TryGetValue(user.GUID, out userForAccess);
             if (result)
             {
+                // если коллбек инициатора запроса и коллбек который мы сохранили отличаются, то реджектим
                 if (userForAccess.CallBack != CurrentCallback)
                     return false;
 
@@ -391,6 +404,5 @@ namespace WCFChat.Client
             }
             return false;
         }
-
     }
 }

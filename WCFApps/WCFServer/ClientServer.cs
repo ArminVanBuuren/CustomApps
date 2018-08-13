@@ -18,15 +18,15 @@ namespace WCFChat.Service
         [EnumMember]
         CloudNotFound = 2,
         [EnumMember]
-        NameIsBusy = 3,
+        NameIsBusy = 4,
         [EnumMember]
-        AwaitConfirmation = 4,
+        AwaitConfirmation = 8,
         [EnumMember]
-        AccessDenied = 5,
+        AccessDenied = 16,
         [EnumMember]
-        AccessGranted = 6,
+        AccessGranted = 32,
         [EnumMember]
-        YourRequestInProgress = 7
+        YourRequestInProgress = 64
     }
 
     [DataContract]
@@ -75,9 +75,6 @@ namespace WCFChat.Service
         [OperationContract(IsOneWay = true)]
         void ConnectResult(ServerResult result);
 
-        [OperationContract(IsOneWay = true)]
-        void SetPrivilege(User user, ServerPrivelege privelege);
-
         [OperationContract(IsOneWay = false)]
         void TransferHistory(List<User> users, List<Message> messages);
 
@@ -88,7 +85,7 @@ namespace WCFChat.Service
         void IsWritingCallback(User client, bool isWriting);
 
         [OperationContract(IsOneWay = true)]
-        void Terminate();
+        void Terminate(Cloud cloud);
     }
 
 

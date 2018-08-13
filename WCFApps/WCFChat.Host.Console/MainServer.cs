@@ -32,6 +32,7 @@ namespace WCFChat.Host.Console
         public List<Message> Messages { get; } = new List<Message>();
         public List<CloudUser> CloudUserCollection { get; } = new List<CloudUser>();
     }
+
     class CloudArgs
     {
         public CloudArgs(Cloud cloud, IMainCallback authorCallBack, bool localServer):this(cloud, authorCallBack)
@@ -248,7 +249,7 @@ namespace WCFChat.Host.Console
                         return;
 
                     IMainCallback callBackWaiter = waitForAccessToCloud[user];
-                    if (result == ServerResult.AccessGranted)
+                    if (result == ServerResult.AccessGranted || result == ServerResult.SUCCESS)
                     {
                         CloudArgs cloudRes = Clouds.GetCloud(user);
                         if (((IChannel) callBackWaiter).State == CommunicationState.Opened)
@@ -367,7 +368,7 @@ namespace WCFChat.Host.Console
                         {
                             // грохаем юзера который уже есть в чате но с другого приложения, т.е. грохаем его на старом приложении
                             if (((IChannel) existUserName.CallBack).State == CommunicationState.Opened)
-                                existUserName.CallBack.Terminate();
+                                existUserName.CallBack.Terminate(existUserName.CloudBind.CloudConfig);
                             cloudUsers.Remove(existUserName);
                         }
 

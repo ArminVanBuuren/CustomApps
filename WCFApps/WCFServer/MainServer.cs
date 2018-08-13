@@ -43,10 +43,7 @@ namespace WCFChat.Service
         CloudNotFound = 2,
 
         [EnumMember]
-        CloudIsBusy = 3,
-
-        [EnumMember]
-        NotFound = 4
+        CloudIsBusy = 3
     }
 
     [ServiceContract(Namespace = "http://localhost/services/server",

@@ -65,15 +65,15 @@
     <Compile Include="AuthorizationWindow.xaml.cs">
       <DependentUpon>AuthorizationWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BasicControl\UserBindings.cs" />
     <Compile Include="Connected Services\ServiceReference1\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="GeneratedClient.cs" />
-    <Compile Include="MainWindowChatClient.cs" />
-    <Compile Include="MainWindowChatServer.cs" />
-    <Compile Include="WindowControl.cs" />
+    <Compile Include="BasicControl\MainWindowChatClient.cs" />
+    <Compile Include="BasicControl\MainWindowChatServer.cs" />
+    <Compile Include="BasicControl\WindowControl.cs" />
     <Compile Include="WindowInfo.xaml.cs">
       <DependentUpon>WindowInfo.xaml</DependentUpon>
     </Compile>

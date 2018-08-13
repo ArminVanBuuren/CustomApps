@@ -61,6 +61,8 @@ namespace UIControls.MainControl
         {
             mainWindow = (UIWindow)sender;
 
+            
+            
             //чтобы можно было перемещать окно по нажатию клавиши в любой точки окна, а не только через верхнюю панель
             Grid parentGrid = (Grid)mainWindow.Template.FindName("LayoutRoot", mainWindow);
 
@@ -150,14 +152,14 @@ namespace UIControls.MainControl
 
         void MaximisedWindow(Window w)
 		{
-			w.WindowState = WindowState.Maximized;
+            w.WindowState = WindowState.Maximized;
 			UIControls32.MoveWindow(w.GetWindowHandle(), //, (IntPtr)(-7), (IntPtr)(-7),
 				(IntPtr)System.Windows.Forms.SystemInformation.WorkingArea.Width + 7,
 				(IntPtr)System.Windows.Forms.SystemInformation.WorkingArea.Height + 7,
 				(IntPtr)System.Windows.Forms.SystemInformation.PrimaryMonitorSize.Width + 7,
 				(IntPtr)System.Windows.Forms.SystemInformation.PrimaryMonitorSize.Height + 7, 
 				false);
-		}
+        }
 
 		void IconMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
@@ -172,21 +174,37 @@ namespace UIControls.MainControl
 			sender.ForWindowFromTemplate(w => SystemCommands.ShowSystemMenu(w, point));
 		}
 
-		void MinButtonClick(object sender, RoutedEventArgs e)
-		{
-			sender.ForWindowFromTemplate(w => SystemCommands.MinimizeWindow(w));
-		}
+
 
 		void MaxButtonClick(object sender, RoutedEventArgs e)
 		{
 			sender.ForWindowFromTemplate(w =>
 			{
-				if (w.WindowState == WindowState.Maximized)
-					SystemCommands.RestoreWindow(w);
-				else SystemCommands.MaximizeWindow(w);
-			});
-		}
-		void CloseButtonClick(object sender, RoutedEventArgs e)
+			    if (w.WindowState == WindowState.Maximized)
+			    {
+			        SystemCommands.RestoreWindow(w);
+			       // MinWindowImage(w);
+                }
+			    else
+			    {
+			        SystemCommands.MaximizeWindow(w);
+			        //MaxWindowImage(w);
+			    }
+            });
+        }
+
+        void MinButtonClick(object sender, RoutedEventArgs e)
+        {
+            sender.ForWindowFromTemplate(w =>
+                                         {
+                                             SystemCommands.MinimizeWindow(w);
+                                             //MinWindowImage(w);
+                                         });
+        }
+
+
+
+        void CloseButtonClick(object sender, RoutedEventArgs e)
 		{
 			sender.ForWindowFromTemplate(w => w.Close());
 		}

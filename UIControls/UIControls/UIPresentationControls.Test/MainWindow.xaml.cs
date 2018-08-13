@@ -23,6 +23,18 @@ namespace UIPresentationControls.Test
         public MainWindow ()
         {
             InitializeComponent();
+            //Closed += MainWindow_Closed;
+            //text.TextChanged += Text_TextChanged;
+        }
+
+        private void Text_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            MessageBox.Show("1111");
+        }
+
+        private void MainWindow_Closed(object sender, EventArgs e)
+        {
+            MessageBox.Show("2222");
         }
     }
 }
