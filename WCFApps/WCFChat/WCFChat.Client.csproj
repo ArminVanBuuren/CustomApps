@@ -62,10 +62,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Auth.xaml.cs">
+      <DependentUpon>Auth.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AuthorizationWindow.xaml.cs">
       <DependentUpon>AuthorizationWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="BasicControl\UserBindings.cs" />
+    <Compile Include="BasicControl\WindowControl.cs" />
+    <Compile Include="BasicControl\WindowResources.xaml.cs">
+      <DependentUpon>WindowResources.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Connected Services\ServiceReference1\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -73,11 +80,21 @@
     </Compile>
     <Compile Include="BasicControl\MainWindowChatClient.cs" />
     <Compile Include="BasicControl\MainWindowChatServer.cs" />
-    <Compile Include="BasicControl\WindowControl.cs" />
+    <Compile Include="StartApp.xaml.cs">
+      <DependentUpon>StartApp.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WindowInfo.xaml.cs">
       <DependentUpon>WindowInfo.xaml</DependentUpon>
     </Compile>
+    <Page Include="Auth.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="AuthorizationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BasicControl\WindowResources.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -93,6 +110,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="StartApp.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WindowInfo.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

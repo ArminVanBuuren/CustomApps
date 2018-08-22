@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics.Eventing.Reader;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
@@ -26,6 +27,28 @@ namespace UIControls.MainControl
         public bool CanDragMove { get; private set; } = true;
         public bool PanelItemsIsVisible { get; private set; } = true;
 
+        public string Title
+        {
+            get => base.Title;
+            set
+            {
+                base.Title = value;
+                CheckTitle(value);
+            }
+        }
+
+        void CheckTitle(string value)
+        {
+            var topBorderButt = this.Template.FindName("TopBorderTitButt", this);
+            if (!(topBorderButt is Grid))
+                return;
+
+            Grid res = (Grid)topBorderButt;
+            if (string.IsNullOrEmpty(value))
+                res.Visibility = Visibility.Collapsed;
+            else
+                res.Visibility = Visibility.Visible;
+        }
 
         public UIWindow(bool canDragMove = true, bool panelItemIsVisible = true)
         {
@@ -153,6 +176,8 @@ namespace UIControls.MainControl
         void UIWindowLoaded(object sender, RoutedEventArgs e)
         {
             UIWindow mainWindow = (UIWindow)this;
+
+            CheckTitle(Title);
 
             //Style style = this.FindResource("VSUIWindowStyle") as Style;
             //mainWindow.Style = style;

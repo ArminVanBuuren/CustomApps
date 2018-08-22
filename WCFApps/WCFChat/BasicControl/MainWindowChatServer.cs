@@ -32,9 +32,7 @@ namespace WCFChat.Client.BasicControl
 
         public void CreateCloud(User initiator, Cloud cloud, string transactionId)
         {
-            TransactionID = transactionId;
-
-            Clouds.Add(cloud.Name, new WindowControl(mainWindow, initiator, cloud));
+            Clouds.Add(cloud.Name, new WindowControl(mainWindow, initiator, cloud, transactionId));
 
 
 

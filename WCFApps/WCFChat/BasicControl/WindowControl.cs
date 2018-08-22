@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -13,7 +15,7 @@ using Timer = System.Timers.Timer;
 
 namespace WCFChat.Client.BasicControl
 {
-    class WindowControl
+    internal class WindowControl
     {
         internal static readonly Brush AdminBackground = (Brush)new BrushConverter().ConvertFrom("#FF009EAE"); // обычный фон ячейки админа 
         internal static readonly Brush UserBackground = (Brush)new BrushConverter().ConvertFrom("#FF555555"); // обычный фон ячейки юзера
@@ -22,7 +24,7 @@ namespace WCFChat.Client.BasicControl
         internal static readonly Brush UserIsNotLogOnYetStatus = (Brush)new BrushConverter().ConvertFrom("#FFFFDC00"); // ждем его непосредственного коннекта Желтый цвет
         internal static readonly Brush UserIsActiveStatus = (Brush)new BrushConverter().ConvertFrom("#FF90EE90"); // когда юзер непосредственно подсоединился к чату Зеленый цвет
 
-        
+
         public event EventHandler Unbind;
         public bool IsUnbinded { get; private set; } = false;
         private bool isAdmin = false;
@@ -30,20 +32,20 @@ namespace WCFChat.Client.BasicControl
         //private MainWindow window;
 
         private ListBox Users;
-        private RichTextBox DialogHistory;
-        private RichTextBox DialogWindow;
+        private FlowDocument DialogHistory;
+        private FlowDocument DialogWindow;
         private UIWindow mainWindow;
 
         internal Dictionary<string, UserBindings> AllUsers { get; } = new Dictionary<string, UserBindings>(StringComparer.CurrentCulture);
 
         public string TransactionID { get; private set; }
-        public UserBindings Initiator { get; private set; }
+        internal UserBindings Initiator { get; private set; }
         public Cloud CurrentCloud { get; private set; }
 
         internal List<Message> Messages()
         {
             List<Message> allMesages = new List<Message>();
-            foreach (var block in DialogHistory.Document.Blocks)
+            foreach (var block in DialogHistory.Blocks)
             {
                 if (block is MyParagraph mypar)
                 {
@@ -58,8 +60,8 @@ namespace WCFChat.Client.BasicControl
         public WindowControl(UIWindow mainWindow, User initiator, Cloud cloud, string transactionId, bool isAdmin = false)
         {
             Users = new ListBox();
-            DialogHistory = new RichTextBox();
-            DialogWindow = new RichTextBox();
+            DialogHistory = new FlowDocument();
+            DialogWindow = new FlowDocument();
             this.mainWindow = mainWindow;
 
             TransactionID = transactionId;
@@ -85,7 +87,7 @@ namespace WCFChat.Client.BasicControl
             AddUser(userBind, $"{address}:{port}");
         }
 
-        protected void RemoveUser(UserBindings userBind)
+        internal void RemoveUser(UserBindings userBind)
         {
             if (userBind == null)
                 return;
@@ -147,13 +149,10 @@ namespace WCFChat.Client.BasicControl
                     if (resultText.Name == textblockUser)
                     {
                         userName = resultText;
-                        //result.Text = user.Name;
-                        //result.ToolTip = user.GUID;
                     }
                     else if (resultText.Name == textblockStatus)
                     {
                         userStatus = resultText;
-                        //result.ToolTip = address;
                     }
                 }
                 else if (item is Border resultBorder)
@@ -180,8 +179,8 @@ namespace WCFChat.Client.BasicControl
         {
             lock (sync)
             {
-                Button button = (Button) sender;
-                Grid parentGrid = (Grid) button.Parent;
+                Button button = (Button)sender;
+                Grid parentGrid = (Grid)button.Parent;
                 TextBlock userName = parentGrid.Children.OfType<TextBlock>().FirstOrDefault(p => p.Name == "UserNameAdmin");
 
                 if (userName == null)
@@ -202,7 +201,7 @@ namespace WCFChat.Client.BasicControl
             }
         }
 
-        protected virtual void AccessOrRemoveUser(UserBindings userBind, bool isRemove)
+        internal virtual void AccessOrRemoveUser(UserBindings userBind, bool isRemove)
         {
             if (isRemove)
             {
@@ -210,13 +209,13 @@ namespace WCFChat.Client.BasicControl
             }
         }
 
-        protected void ChangeUserStatusIsActive(UserBindings user)
+        internal void ChangeUserStatusIsActive(UserBindings user)
         {
             user.Status = UserStatus.User;
             user.UIControls.Status.Foreground = UserIsActiveStatus; // когда юзер непосредственно подсоединился к чату Зеленый цвет
         }
 
-        protected void ChangeUserName(UserBindings userBind, User userNewName)
+        internal void ChangeUserName(UserBindings userBind, User userNewName)
         {
             userBind.Name.Value = userNewName.Name;
         }
@@ -262,7 +261,7 @@ namespace WCFChat.Client.BasicControl
             }
         }
 
-        protected void SomeoneUserIsWriting(UserBindings userBind, bool isWriting)
+        internal void SomeoneUserIsWriting(UserBindings userBind, bool isWriting)
         {
             if (isWriting)
             {
@@ -302,7 +301,7 @@ namespace WCFChat.Client.BasicControl
                 {
                     Inlines.Add(new LineBreak());
                 }
-                
+
                 Inlines.Add($"{msg.Content.Trim()}");
                 Inlines.Add($"[{msg.Time.ToString("T").Trim()}]");
             }
@@ -310,7 +309,7 @@ namespace WCFChat.Client.BasicControl
 
         protected void SomeoneUserReceveMessage(Message msg)
         {
-            if (DialogHistory.Document.Blocks.LastBlock is MyParagraph exist)
+            if (DialogHistory.Blocks.LastBlock is MyParagraph exist)
             {
                 if (exist.GUID == msg.Sender.GUID)
                 {
@@ -320,7 +319,7 @@ namespace WCFChat.Client.BasicControl
             }
 
             MyParagraph par = new MyParagraph(msg);
-            DialogHistory.Document.Blocks.Add(par);
+            DialogHistory.Blocks.Add(par);
         }
 
         private void DialogWindow_TextChanged(object sender, TextChangedEventArgs e)
@@ -344,14 +343,14 @@ namespace WCFChat.Client.BasicControl
 
         protected virtual void CurrentUserIsWriting(bool isWriting)
         {
-            
+
         }
 
         private void SendMessage_Click(object sender, RoutedEventArgs e)
         {
-            string richText = new TextRange(DialogWindow.Document.ContentStart, DialogWindow.Document.ContentEnd).Text;
+            string richText = new TextRange(DialogWindow.ContentStart, DialogWindow.ContentEnd).Text;
             CurrentUserIsSaying(richText);
-            DialogWindow.Document.Blocks.Clear();
+            DialogWindow.Blocks.Clear();
         }
 
         protected virtual void CurrentUserIsSaying(string msg)
@@ -359,12 +358,12 @@ namespace WCFChat.Client.BasicControl
 
         }
 
-        protected virtual bool GetUserBinding(User user, out UserBindings userBind)
+        internal virtual bool GetUserBinding(User user, out UserBindings userBind)
         {
             userBind = null;
             if (user == null || string.IsNullOrEmpty(user.GUID) || string.IsNullOrEmpty(user.Name))
                 return false;
-            
+
             return AllUsers.TryGetValue(user.GUID, out userBind);
         }
     }

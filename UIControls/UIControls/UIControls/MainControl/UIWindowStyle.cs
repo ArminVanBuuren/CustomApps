@@ -332,7 +332,5 @@ namespace UIControls.MainControl
                                                                                 Int32Rect.Empty,
                                                                                 System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
         }
-
-
 	}
 }

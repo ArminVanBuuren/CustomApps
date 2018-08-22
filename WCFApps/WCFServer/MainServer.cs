@@ -71,7 +71,7 @@ namespace WCFChat.Service
         /// </summary>
         /// <param name="user"></param>
         [OperationContract(IsOneWay = true)]
-        void GetCloud(User user);
+        void GetCloud(User user, string transactionID);
 
         [OperationContract(IsOneWay = true)]
         void RemoveOrAccessUser(ServerResult result, User user);
@@ -101,7 +101,7 @@ namespace WCFChat.Service
         /// <param name="result"></param>
         /// <param name="cloud"></param>
         [OperationContract(IsOneWay = true)]
-        void GetCloudResult(ServerResult result, Cloud cloud);
+        void GetCloudResult(ServerResult result, Cloud cloud, string transactionID);
     }
 
 }

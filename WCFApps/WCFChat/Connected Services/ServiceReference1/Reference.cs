@@ -16,10 +16,10 @@ namespace WCFChat.Client.ServiceReference1 {
     public interface IMainContract {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/CreateCloud")]
-        void CreateCloud(WCFChat.Service.User user, WCFChat.Service.Cloud cloud, string transactionID);
+        void CreateCloud(WCFChat.Service.Cloud cloud, string transactionID);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/CreateCloud")]
-        System.Threading.Tasks.Task CreateCloudAsync(WCFChat.Service.User user, WCFChat.Service.Cloud cloud, string transactionID);
+        System.Threading.Tasks.Task CreateCloudAsync(WCFChat.Service.Cloud cloud, string transactionID);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/Unbind")]
         void Unbind(string transactionID);
@@ -28,10 +28,10 @@ namespace WCFChat.Client.ServiceReference1 {
         System.Threading.Tasks.Task UnbindAsync(string transactionID);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/GetCloud")]
-        void GetCloud(WCFChat.Service.User user);
+        void GetCloud(WCFChat.Service.User user, string transactionID);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/GetCloud")]
-        System.Threading.Tasks.Task GetCloudAsync(WCFChat.Service.User user);
+        System.Threading.Tasks.Task GetCloudAsync(WCFChat.Service.User user, string transactionID);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/RemoveOrAccessUser")]
         void RemoveOrAccessUser(WCFChat.Service.ServerResult result, WCFChat.Service.User user);
@@ -50,7 +50,7 @@ namespace WCFChat.Client.ServiceReference1 {
         void RequestForAccess(WCFChat.Service.User user, string address);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/GetCloudResult")]
-        void GetCloudResult(WCFChat.Service.ServerResult result, WCFChat.Service.Cloud cloud);
+        void GetCloudResult(WCFChat.Service.ServerResult result, WCFChat.Service.Cloud cloud, string transactionID);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -81,12 +81,12 @@ namespace WCFChat.Client.ServiceReference1 {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public void CreateCloud(WCFChat.Service.User user, WCFChat.Service.Cloud cloud, string transactionID) {
-            base.Channel.CreateCloud(user, cloud, transactionID);
+        public void CreateCloud(WCFChat.Service.Cloud cloud, string transactionID) {
+            base.Channel.CreateCloud(cloud, transactionID);
         }
         
-        public System.Threading.Tasks.Task CreateCloudAsync(WCFChat.Service.User user, WCFChat.Service.Cloud cloud, string transactionID) {
-            return base.Channel.CreateCloudAsync(user, cloud, transactionID);
+        public System.Threading.Tasks.Task CreateCloudAsync(WCFChat.Service.Cloud cloud, string transactionID) {
+            return base.Channel.CreateCloudAsync(cloud, transactionID);
         }
         
         public void Unbind(string transactionID) {
@@ -97,12 +97,12 @@ namespace WCFChat.Client.ServiceReference1 {
             return base.Channel.UnbindAsync(transactionID);
         }
         
-        public void GetCloud(WCFChat.Service.User user) {
-            base.Channel.GetCloud(user);
+        public void GetCloud(WCFChat.Service.User user, string transactionID) {
+            base.Channel.GetCloud(user, transactionID);
         }
         
-        public System.Threading.Tasks.Task GetCloudAsync(WCFChat.Service.User user) {
-            return base.Channel.GetCloudAsync(user);
+        public System.Threading.Tasks.Task GetCloudAsync(WCFChat.Service.User user, string transactionID) {
+            return base.Channel.GetCloudAsync(user, transactionID);
         }
         
         public void RemoveOrAccessUser(WCFChat.Service.ServerResult result, WCFChat.Service.User user) {
@@ -149,9 +149,6 @@ namespace WCFChat.Client.ServiceReference1 {
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/chat/IChat/ConnectResult")]
         void ConnectResult(WCFChat.Service.ServerResult result);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/chat/IChat/SetPrivilege")]
-        void SetPrivilege(WCFChat.Service.User user, WCFChat.Service.ServerPrivelege privelege);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://localhost/services/chat/IChat/TransferHistory", ReplyAction="http://localhost/services/chat/IChat/TransferHistoryResponse")]
         void TransferHistory(WCFChat.Service.User[] users, WCFChat.Service.Message[] messages);
         
@@ -162,7 +159,7 @@ namespace WCFChat.Client.ServiceReference1 {
         void IsWritingCallback(WCFChat.Service.User client, bool isWriting);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/chat/IChat/Terminate")]
-        void Terminate();
+        void Terminate(WCFChat.Service.Cloud cloud);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]

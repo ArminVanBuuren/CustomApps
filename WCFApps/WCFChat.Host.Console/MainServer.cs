@@ -100,7 +100,7 @@ namespace WCFChat.Host.Console
         object syncObj = new object();
 
         CloudCollection Clouds { get; } = new CloudCollection();
-        Dictionary<User, IMainCallback> waitForAccessToCloud = new Dictionary<User, IMainCallback>();
+        Dictionary<User, KeyValuePair<string, IMainCallback>> waitForAccessToCloud = new Dictionary<User, KeyValuePair<string, IMainCallback>>();
         public IMainCallback Main_CurrentCallback => OperationContext.Current.GetCallbackChannel<IMainCallback>();
         public bool Main_CurrentCallbackIsOpen => ((IChannel) Main_CurrentCallback).State == CommunicationState.Opened;
         ServiceHost host = null;
@@ -191,7 +191,7 @@ namespace WCFChat.Host.Console
             }
         }
 
-        public void GetCloud(User user)
+        public void GetCloud(User user, string transactionID)
         {
             lock (syncObj)
             {
@@ -200,7 +200,7 @@ namespace WCFChat.Host.Console
                     if (waitForAccessToCloud.ContainsKey(user))
                     {
                         if (Main_CurrentCallbackIsOpen)
-                            Main_CurrentCallback.GetCloudResult(ServerResult.YourRequestInProgress, null);
+                            Main_CurrentCallback.GetCloudResult(ServerResult.YourRequestInProgress, null, transactionID);
                         return;
                     }
 
@@ -210,22 +210,22 @@ namespace WCFChat.Host.Console
                     string[] cloudTrnIDs = Clouds.Keys.ToArray();
                     for (int i = 0; i < cloudTrnIDs.Length; i++)
                     {
-                        string transactionID = cloudTrnIDs[i];
-                        CloudArgs exist = Clouds.GetCloudArgs(transactionID);
+                        string trnID = cloudTrnIDs[i];
+                        CloudArgs exist = Clouds.GetCloudArgs(trnID);
                         if (exist != null && exist.CloudConfig.Name.Equals(user.CloudName, StringComparison.CurrentCultureIgnoreCase))
                         {
                             IMainCallback cloudCreator = exist.AuthorCallBack;
                             if (((IChannel) cloudCreator).State == CommunicationState.Opened)
                             {
                                 cloudCreator.RequestForAccess(user, address);
-                                waitForAccessToCloud.Add(user, Main_CurrentCallback);
+                                waitForAccessToCloud.Add(user, new KeyValuePair<string, IMainCallback>(transactionID, Main_CurrentCallback));
                                 return;
                             }
                             else
                             {
-                                Clouds.Remove(transactionID);
+                                Clouds.Remove(trnID);
                                 if (Main_CurrentCallbackIsOpen)
-                                    Main_CurrentCallback.GetCloudResult(ServerResult.CloudNotFound, null);
+                                    Main_CurrentCallback.GetCloudResult(ServerResult.CloudNotFound, null, transactionID);
                                 return;
                             }
                         }
@@ -234,7 +234,7 @@ namespace WCFChat.Host.Console
                 catch (Exception ex)
                 {
                     if (Main_CurrentCallbackIsOpen)
-                        Main_CurrentCallback.GetCloudResult(ServerResult.FAILURE, null);
+                        Main_CurrentCallback.GetCloudResult(ServerResult.FAILURE, null, transactionID);
                 }
             }
         }
@@ -248,17 +248,17 @@ namespace WCFChat.Host.Console
                     if (!waitForAccessToCloud.ContainsKey(user))
                         return;
 
-                    IMainCallback callBackWaiter = waitForAccessToCloud[user];
+                    KeyValuePair<string, IMainCallback> callBackWaiter = waitForAccessToCloud[user];
                     if (result == ServerResult.AccessGranted || result == ServerResult.SUCCESS)
                     {
                         CloudArgs cloudRes = Clouds.GetCloud(user);
-                        if (((IChannel) callBackWaiter).State == CommunicationState.Opened)
-                            callBackWaiter.GetCloudResult(result, cloudRes.CloudConfig);
+                        if (((IChannel) callBackWaiter.Value).State == CommunicationState.Opened)
+                            callBackWaiter.Value.GetCloudResult(result, cloudRes.CloudConfig, callBackWaiter.Key);
                     }
                     else
                     {
-                        if (((IChannel) callBackWaiter).State == CommunicationState.Opened)
-                            callBackWaiter.GetCloudResult(result, null);
+                        if (((IChannel) callBackWaiter.Value).State == CommunicationState.Opened)
+                            callBackWaiter.Value.GetCloudResult(result, null, callBackWaiter.Key);
                     }
                     waitForAccessToCloud.Remove(user);
 

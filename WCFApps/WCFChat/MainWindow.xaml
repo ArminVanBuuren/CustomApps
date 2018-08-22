@@ -17,7 +17,8 @@
     <Window.Resources>
         <Image x:Key="MyImage1" Source="Images/accept.png"/>
         <Image x:Key="MyImage2" Source="Images/reject.png"/>
-
+        
+        
         <Style TargetType="{x:Type Paragraph}">
             <Setter Property="Margin" Value="0"/>
             <Setter Property="LineHeight" Value="1"/>
@@ -89,6 +90,12 @@
             </Setter>
         </Style>
 
+        <Style x:Key="Simple" TargetType="TextBox">
+
+        </Style>
+
+
+
 
         <Style TargetType="{x:Type ListBoxItem}" x:Key="ListBoxItemUser">
             <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -157,9 +164,6 @@
             </Setter>
         </Style>
 
-        <Style x:Key="Simple" TargetType="TextBox">
-            
-        </Style>
 
         <Grid x:Key="UserTemplateSimple">
             <Grid.ColumnDefinitions>
@@ -185,6 +189,7 @@
             <Button Grid.Column="2"     Name="AcceptAdmin"   ToolTip="Accept" Content="{StaticResource MyImage1}"  Height="15" Width="15" Background="Transparent" BorderThickness="0" Style="{StaticResource ButtonCustom}"/>
             <Button Grid.Column="3"     Name="RejectAdmin"   ToolTip="Reject" Content="{StaticResource MyImage2}"  Height="15" Width="15" Background="Transparent" BorderThickness="0" Style="{StaticResource ButtonCustom}"/>
         </Grid>
+
     </Window.Resources>
     
     <Grid>
@@ -195,7 +200,7 @@
         <ListBox Grid.Column="0" Name="NameOfCloud" >
             <StackPanel Orientation="Horizontal" Name="TopStack">
                 <Button Content="+" Width="20" Height="20" Margin="0 0 0 0" Name="AddCloud" Click="AddCloud_OnClick"/>
-                <Button Content="-" Width="20" Height="20" Margin="5 0 0 0" Name="RemoveCloud" Click="RemoveCloud_OnClick"/>
+                <Button Content="-" Width="20" Height="20" Margin="5 0 0 0" Padding="-1 0 0 2" Name="RemoveCloud" Click="RemoveCloud_OnClick"/>
             </StackPanel>
         </ListBox>
         

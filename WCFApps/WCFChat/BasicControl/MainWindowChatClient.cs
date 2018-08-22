@@ -13,16 +13,16 @@ using WCFChat.Service;
 namespace WCFChat.Client.BasicControl
 {
     [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
-    class MainWindowChatClient : WindowControl, Service.IChatCallback
+    class MainWindowChatClient : Service.IChatCallback
     {
         private ChatClient proxy;
 
-        public MainWindowChatClient(UIWindow window) : base(window)
+        public MainWindowChatClient(UIWindow window)
         {
             
         }
 
-        public override void JoinToCloud(User initiator, Cloud jointoCloud)
+        public void JoinToCloud(User initiator, Cloud jointoCloud)
         {
             OpenOrReopenConnection();
             base.JoinToCloud(initiator, jointoCloud);

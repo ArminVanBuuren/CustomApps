@@ -37,19 +37,11 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="SetPrivilege">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/WCFChat.Service" minOccurs="0" name="user" nillable="true" type="q6:User" />
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/WCFChat.Service" minOccurs="0" name="privelege" type="q7:ServerPrivelege" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
   <xs:element name="TransferHistory">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/WCFChat.Service" minOccurs="0" name="users" nillable="true" type="q8:ArrayOfUser" />
-        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/WCFChat.Service" minOccurs="0" name="messages" nillable="true" type="q9:ArrayOfMessage" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/WCFChat.Service" minOccurs="0" name="users" nillable="true" type="q6:ArrayOfUser" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/WCFChat.Service" minOccurs="0" name="messages" nillable="true" type="q7:ArrayOfMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -61,7 +53,7 @@
   <xs:element name="Receive">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/WCFChat.Service" minOccurs="0" name="msg" nillable="true" type="q10:Message" />
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/WCFChat.Service" minOccurs="0" name="msg" nillable="true" type="q8:Message" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -73,14 +65,16 @@
   <xs:element name="IsWritingCallback">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/WCFChat.Service" minOccurs="0" name="client" nillable="true" type="q11:User" />
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/WCFChat.Service" minOccurs="0" name="client" nillable="true" type="q9:User" />
         <xs:element minOccurs="0" name="isWriting" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="Terminate">
     <xs:complexType>
-      <xs:sequence />
+      <xs:sequence>
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/WCFChat.Service" minOccurs="0" name="cloud" nillable="true" type="q10:Cloud" />
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
 </xs:schema>

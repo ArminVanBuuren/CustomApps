@@ -14,7 +14,7 @@
     </Window.Resources>
     
     <Grid>
-        <TextBox Height="20" VerticalAlignment="Top" Name="text"></TextBox>
+        
         <!--<Grid.Background>
             <LinearGradientBrush EndPoint="0.2,2.5" StartPoint="1.9,0">
                 <GradientStop Color="Black"/>
