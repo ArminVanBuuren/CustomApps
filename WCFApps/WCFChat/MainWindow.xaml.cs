@@ -204,8 +204,13 @@ namespace WCFChat.Client
                 switch (result)
                 {
                     case CloudResult.SUCCESS:
-                        currentServer.CreateCloud(createCloud.User, createCloud.Cloud, transactionID);
-                        ActiveWaitCloud(createCloud.Grid);
+                        if (currentServer.CreateCloud(createCloud.User, createCloud.Cloud, transactionID))
+                            ActiveWaitCloud(createCloud.Grid);
+                        else
+                        {
+                            Informing($"Cloud name '{createCloud.Cloud?.Name}' already exist. Cloud must have unique name.");
+                            RemoveWaitCloud(createCloud.Grid, transactionID);
+                        }
                         break;
                     case CloudResult.CloudIsBusy:
                         Informing($"Cloud '{createCloud.Cloud?.Name}' is busy! Choose another name.");
@@ -338,6 +343,16 @@ namespace WCFChat.Client
                 }
             }
             NameOfCloud.Items.Remove(selectedListBoxItem);
+
+            //todo: удаление подключения
+        }
+
+        private void ChooseCloud(object sender, RoutedEventArgs e)
+        {
+            if (e.OriginalSource is Grid)
+            {
+
+            }
         }
 
         public void Informing(string msg, bool isError = true)

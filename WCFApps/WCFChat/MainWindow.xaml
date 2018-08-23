@@ -197,7 +197,7 @@
             <ColumnDefinition Width="80" MinWidth="65"  MaxWidth="150" />
             <ColumnDefinition Width="*"  MinWidth="200"  />
         </Grid.ColumnDefinitions>
-        <ListBox Grid.Column="0" Name="NameOfCloud" >
+        <ListBox Grid.Column="0" Name="NameOfCloud" ButtonBase.Click="ChooseCloud" >
             <StackPanel Orientation="Horizontal" Name="TopStack">
                 <Button Content="+" Width="20" Height="20" Margin="0 0 0 0" Name="AddCloud" Click="AddCloud_OnClick"/>
                 <Button Content="-" Width="20" Height="20" Margin="5 0 0 0" Padding="-1 0 0 2" Name="RemoveCloud" Click="RemoveCloud_OnClick"/>

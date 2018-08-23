@@ -21,7 +21,7 @@ namespace WCFChat.Client.BasicControl
         public IChatCallback CurrentCallback => OperationContext.Current.GetCallbackChannel<IChatCallback>();
         public bool CurrentCallbackIsOpen => ((IChannel)CurrentCallback).State == CommunicationState.Opened;
 
-        protected Dictionary<string, WindowControl> Clouds { get; } = new Dictionary<string, WindowControl>();
+        protected Dictionary<string, WindowControl> Clouds { get; } = new Dictionary<string, WindowControl>(StringComparer.CurrentCultureIgnoreCase);
         private UIWindow mainWindow;
 
         public MainWindowChatServer(UIWindow mainWindow, AccessResult removeOrAcceptUser)
@@ -30,12 +30,15 @@ namespace WCFChat.Client.BasicControl
             this.mainWindow = mainWindow;
         }
 
-        public void CreateCloud(User initiator, Cloud cloud, string transactionId)
+        public bool CreateCloud(User initiator, Cloud cloud, string transactionId)
         {
-            Clouds.Add(cloud.Name, new WindowControl(mainWindow, initiator, cloud, transactionId));
-
-
-
+            lock (sync)
+            {
+                if (Clouds.ContainsKey(cloud.Name))
+                    return false;
+                WindowControl control = new WindowControl(mainWindow, initiator, cloud, transactionId);
+                Clouds.Add(cloud.Name, control);
+            }
             //Timer _timer = new Timer
             //{
             //    Interval = 120 * 1000
@@ -68,7 +71,7 @@ namespace WCFChat.Client.BasicControl
             //};
             //_timer.AutoReset = true;
             //_timer.Start();
-
+            return true;
         }
 
         /// <summary>
