@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TraceSchema Name="FORIS.SPA.SPF">
+  <TraceSchemaItem Name="SPF.ProcessingUnit">
+    <!--Message Name="SPF.ProcUnit.ERROR"/>
+    <Message Name="SPF.ProcUnit.ENTER"/>
+    <Message Name="SPF.ProcUnit.LEAVE"/>
+    <Message Name="SPF.ProcUnit.TRACE1"/>
+    <Message Name="SPF.ProcUnit.TRACE2"/>
+    <Message Name="SPF.ProcUnit.TRACE3"/>
+    <Message Name="SPF.ProcUnit.TRACE4"/>
+    <Message Name="SPF.ProcUnit.TRACE5"/>
+    <Message Name="SPF.ProcUnit.TRACE6"/>
+    <Message Name="SPF.ProcUnit.TRACE7"/>
+    <Message Name="SPF.ProcUnit.TRACE8"/-->
+  </TraceSchemaItem>
+  <TraceSchemaItem Name="SPF">
+    <!--Message Name="SPF.ERROR"/>
+    <Message Name="SPF.EXECUTING"/>
+    <Message Name="SPF.EXECUTED"/>
+    <Message Name="SPF.START"/>
+    <Message Name="SPF.STOP"/>
+    <Message Name="SPF.PAUSE"/>
+    <Message Name="SPF.RESUME"/>
+    <Message Name="SPF.DEBUG"/-->
+  </TraceSchemaItem>
+</TraceSchema>

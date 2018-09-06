@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TraceSchema Name="FORIS.SPA.SA.Hardware">
+	<TraceSchemaItem Name="SoapSocket">
+		<!--Message Name="SoapSocket.INITIALIZATION"/>
+		<Message Name="SoapSocket.WARNING"/>
+		<Message Name="SoapSocket.ERROR"/>
+		<Message Name="SoapSocket.RX_MESSAGE"/>
+		<Message Name="SoapSocket.TX_MESSAGE"/-->
+	</TraceSchemaItem>
+	<TraceSchemaItem Name="CmisSocket">
+		<!--Message Name="CmisSocket.ERROR"/>
+		<Message Name="CmisSocket.CONNECT"/>
+		<Message Name="CmisSocket.TRANSMIT"/>
+		<Message Name="CmisSocket.RECEIVE"/-->
+	</TraceSchemaItem>
+	<TraceSchemaItem Name="CmisThread">
+		<!--Message Name="CmisThread.ERROR"/>
+		<Message Name="CmisThread.REPORT"/>
+		<Message Name="CmisThread.RX_ERROR"/>
+		<Message Name="CmisThread.TX_MESSAGE"/>
+		<Message Name="CmisThread.RX_MESSAGE"/>
+		<Message Name="CmisThread.CREATE"/>
+		<Message Name="CmisThread.DELETE"/>
+		<Message Name="CmisThread.CONNECT"/>
+		<Message Name="CmisThread.WARNING"/-->
+	</TraceSchemaItem>
+	<TraceSchemaItem Name="Ftp">
+		<!--Message Name="Ftp.ERROR"/>
+		<Message Name="Ftp.UPLOADING"/>
+		<Message Name="Ftp.UPLOADED"/>
+		<Message Name="Ftp.DOWNLOADING"/>
+		<Message Name="Ftp.DOWNLOADED"/>
+		<Message Name="Ftp.TRACE1"/>
+		<Message Name="Ftp.TRACE2"/>
+		<Message Name="Ftp.TRACE3"/>
+		<Message Name="Ftp.TRACE4"/>
+		<Message Name="Ftp.TRACE5"/>
+		<Message Name="Ftp.RX_MESSAGE"/>
+		<Message Name="Ftp.TX_MESSAGE"/-->
+	</TraceSchemaItem>
+	<TraceSchemaItem Name="FtpSocket">
+		<!--Message Name="FtpSocket.ERROR"/>
+		<Message Name="FtpSocket.TX_MESSAGE"/>
+		<Message Name="FtpSocket.RX_MESSAGE"/-->
+	</TraceSchemaItem>
+	<TraceSchemaItem Name="BmsSocket">
+		<!--Message Name="BmsSocket.ERROR"/>
+		<Message Name="BmsSocket.TX_MESSAGE"/>
+		<Message Name="BmsSocket.RX_MESSAGE"/>
+		<Message Name="BmsSocket.CLOSE"/>
+		<Message Name="BmsSocket.WCF_THREAD"/>
+		<Message Name="BmsSocket.CONNECTION"/-->
+	</TraceSchemaItem>
+	<TraceSchemaItem Name="HttpSocket">
+		<!--Message Name="HttpSocket.ERROR"/>
+		<Message Name="HttpSocket.TRACE1"/>
+		<Message Name="HttpSocket.TRACE2"/>
+		<Message Name="HttpSocket.TRACE3"/>
+		<Message Name="HttpSocket.TRACE4"/>
+		<Message Name="HttpSocket.TX_MESSAGE"/>
+		<Message Name="HttpSocket.RX_MESSAGE"/-->
+	</TraceSchemaItem>
+	<TraceSchemaItem Name="UdpSocket">
+		<!--Message Name="UdpSocket.ERROR"/>
+		<Message Name="UdpSocket.INITIALIZATION"/>
+		<Message Name="UdpSocket.RX_MESSAGE"/>
+		<Message Name="UdpSocket.TX_MESSAGE"/>
+		<Message Name="UdpSocket.STOP"/-->
+	</TraceSchemaItem>
+	<TraceSchemaItem Name="SerialPort">
+		<!--Message Name="SerialPort.ERROR"/>
+		<Message Name="SerialPort.WARNING"/>
+		<Message Name="SerialPort.INITIALIZATION"/>
+		<Message Name="SerialPort.START"/>
+		<Message Name="SerialPort.STOP"/>
+		<Message Name="SerialPort.TRANSMIT"/>
+		<Message Name="SerialPort.RECEIVE"/>
+		<Message Name="SerialPort.RECEIVE.ERROR"/>
+		<Message Name="SerialPort.PINCHANGED"/-->
+	</TraceSchemaItem>
+	<TraceSchemaItem Name="SmppSocket">
+		<!--Message Name="SmppSocket.ERROR"/>
+		<Message Name="SmppSocket.INITIALIZATION"/>
+		<Message Name="SmppSocket.DEAD_MESSAGE"/>
+		<Message Name="SmppSocket.TX_MESSAGE"/>
+		<Message Name="SmppSocket.RX_MESSAGE"/-->
+	</TraceSchemaItem>
+	<TraceSchemaItem Name="SshSocket">
+		<!--Message Name="SshSocket.ERROR"/>
+		<Message Name="SshSocket.INITIALIZATION"/>
+		<Message Name="SshSocket.STOP"/>
+		<Message Name="SshSocket.INFORMATION"/>
+		<Message Name="SshSocket.TX_MESSAGE"/>
+		<Message Name="SshSocket.RX_MESSAGE"/>
+		<Message Name="SshSocket.TRACE5"/-->
+	</TraceSchemaItem>
+	<TraceSchemaItem Name="TelnetSocket">
+		<!--Message Name="TelnetSocket.ERROR"/>
+		<Message Name="TelnetSocket.INITIALIZATION"/>
+		<Message Name="TelnetSocket.STOP"/>
+		<Message Name="TelnetSocket.INFORMATION"/>
+		<Message Name="TelnetSocket.TX_MESSAGE"/>
+		<Message Name="TelnetSocket.RX_MESSAGE"/>
+		<Message Name="TelnetSocket.TRACE5"/-->
+	</TraceSchemaItem>
+	<TraceSchemaItem Name="DatabaseSocket">
+		<!--Message Name="DatabaseSocket.ERROR"/>
+		<Message Name="DatabaseSocket.INITIALIZATION"/>
+		<Message Name="DatabaseSocket.RX_MESSAGE"/>
+		<Message Name="DatabaseSocket.TX_MESSAGE"/-->
+	</TraceSchemaItem>
+	<TraceSchemaItem Name="InstantLinkSocket">
+		<!--Message Name="InstantLinkSocket.ERROR"/>
+		<Message Name="InstantLinkSocket.INITIALIZATION"/>
+		<Message Name="InstantLinkSocket.STOP"/>
+		<Message Name="InstantLinkSocket.INFORMATION"/>
+		<Message Name="InstantLinkSocket.TX_MESSAGE"/>
+		<Message Name="InstantLinkSocket.RX_MESSAGE"/>
+		<Message Name="InstantLinkSocket.TRACE5"/-->
+	</TraceSchemaItem>
+	<TraceSchemaItem Name="InstantLink">
+		<!--Message Name="InstantLink.ALARM"/>
+		<Message Name="InstantLink.DISPOSE"/>
+		<Message Name="InstantLink.ERROR"/>
+		<Message Name="InstantLink.START"/>
+		<Message Name="InstantLink.RX_MESSAGE"/>
+		<Message Name="InstantLink.TX_MESSAGE"/>
+		<Message Name="InstantLink.TIMEOUT"/>
+		<Message Name="InstantLink.LOGIN"/>
+		<Message Name="InstantLink.LOGIN_ACK"/>
+		<Message Name="InstantLink.REGISTER"/>
+		<Message Name="InstantLink.REGISTER_ACK"/>
+		<Message Name="InstantLink.LOGOUT"/>
+		<Message Name="InstantLink.LOGOUT_ACK"/>
+		<Message Name="InstantLink.CMDERROR"/>
+		<Message Name="InstantLink.RESPONSE"/>
+		<Message Name="InstantLink.RESPONSE_ACK"/>
+		<Message Name="InstantLink.UNEXPECTED_MESSAGE"/-->
+	</TraceSchemaItem>
+	<TraceSchemaItem Name="AmResponseThread">
+		<!--Message Name="AmResponseThread.DISPOSE"/>
+		<Message Name="AmResponseThread.ERROR"/>
+		<Message Name="AmResponseThread.INITIALIZATION"/>
+		<Message Name="AmResponseThread.WARNING"/>
+		<Message Name="AmResponseThread.START"/>
+		<Message Name="AmResponseThread.STOP"/>
+		<Message Name="AmResponseThread.TRACE1"/>
+		<Message Name="AmResponseThread.TRACE1"/>
+		<Message Name="AmResponseThread.TRACE2"/>
+		<Message Name="AmResponseThread.TRACE3"/>
+		<Message Name="AmResponseThread.TRACE4"/>
+		<Message Name="AmResponseThread.TRACE5"/>
+		<Message Name="AmResponseThread.REJECT"/>
+		<Message Name="AmResponseThread.RX_MESSAGE"/>
+		<Message Name="AmResponseThread.TX_MESSAGE"/-->
+	</TraceSchemaItem>
+	<TraceSchemaItem Name="AsyncProcessor">
+		<!--Message Name="AsyncProcessor.DISPOSE"/>
+		<Message Name="AsyncProcessor.ERROR"/>
+		<Message Name="AsyncProcessor.INITIALIZATION"/>
+		<Message Name="AsyncProcessor.REPORT"/>
+		<Message Name="AsyncProcessor.START"/>
+		<Message Name="AsyncProcessor.STOP"/-->
+	</TraceSchemaItem>
+	<TraceSchemaItem Name="AsyncReqDispatcher">
+		<!--Message Name="AsyncReqDispatcher.RX_MESSAGE"/>
+		<Message Name="AsyncReqDispatcher.ERROR"/>
+		<Message Name="AsyncReqDispatcher.DISPOSE"/>
+		<Message Name="AsyncReqDispatcher.START"/>
+		<Message Name="AsyncReqDispatcher.STOP"/-->
+	</TraceSchemaItem>
+	<TraceSchemaItem Name="AmSocket">
+		<!--Message Name="AmSocket.ERROR"/>
+		<Message Name="AmSocket.INITIALIZATION"/>
+		<Message Name="AmSocket.WARNING"/>
+		<Message Name="AmSocket.START"/>
+		<Message Name="AmSocket.STOP"/>
+		<Message Name="AmSocket.TRACE1"/>
+		<Message Name="AmSocket.TRACE1"/>
+		<Message Name="AmSocket.TRACE2"/>
+		<Message Name="AmSocket.TRACE3"/>
+		<Message Name="AmSocket.TRACE4"/>
+		<Message Name="AmSocket.TRACE5"/>
+		<Message Name="AmSocket.RX_MESSAGE"/>
+		<Message Name="AmSocket.TX_MESSAGE"/>
+		<Message Name="AmSocket.CLOSE" />
+		<Message Name="AmSocket.REM_THREAD" />
+		<Message Name="AmSocket.WCF_THREAD" /-->
+	</TraceSchemaItem>
+	<TraceSchemaItem Name="ScpSocket">
+		<!--Message Name="ScpSocket.ERROR"/>
+		<Message Name="ScpSocket.INITIALIZATION"/>
+		<Message Name="ScpSocket.WARNING"/>
+		<Message Name="ScpSocket.START"/>
+		<Message Name="ScpSocket.STOP"/>
+		<Message Name="ScpSocket.TRACE1"/>
+		<Message Name="ScpSocket.TRACE1"/>
+		<Message Name="ScpSocket.TRACE2"/>
+		<Message Name="ScpSocket.TRACE3"/>
+		<Message Name="ScpSocket.TRACE4"/>
+		<Message Name="ScpSocket.TRACE5"/>
+		<Message Name="ScpSocket.RX_MESSAGE"/>
+		<Message Name="ScpSocket.TX_MESSAGE"/>
+		<Message Name="ScpSocket.CLOSE" />
+		<Message Name="ScpSocket.REM_THREAD" />
+		<Message Name="ScpSocket.WCF_THREAD" />
+		<Message Name="ScpSocket.CONNECT" />
+		<Message Name="ScpSocket.REFRESH" /-->
+	</TraceSchemaItem>
+	<TraceSchemaItem Name="ZteHlrSocket">
+		<!--Message Name="ZteHlrSocket.ERROR"/>
+		<Message Name="ZteHlrSocket.INITIALIZATION"/>
+		<Message Name="ZteHlrSocket.WARNING"/>
+		<Message Name="ZteHlrSocket.START"/>
+		<Message Name="ZteHlrSocket.STOP"/>
+		<Message Name="ZteHlrSocket.TRACE1"/>
+		<Message Name="ZteHlrSocket.TRACE1"/>
+		<Message Name="ZteHlrSocket.TRACE2"/>
+		<Message Name="ZteHlrSocket.TRACE3"/>
+		<Message Name="ZteHlrSocket.TRACE4"/>
+		<Message Name="ZteHlrSocket.TRACE5"/>
+		<Message Name="ZteHlrSocket.RX_MESSAGE"/>
+		<Message Name="ZteHlrSocket.TX_MESSAGE"/-->
+	</TraceSchemaItem>
+	<TraceSchemaItem Name="ZteAaaSocket">
+		<!--Message Name="ZteAaaSocket.ERROR"/>
+		<Message Name="ZteAaaSocket.INITIALIZATION"/>
+		<Message Name="ZteAaaSocket.WARNING"/>
+		<Message Name="ZteAaaSocket.START"/>
+		<Message Name="ZteAaaSocket.STOP"/>
+		<Message Name="ZteAaaSocket.TRACE1"/>
+		<Message Name="ZteAaaSocket.TRACE1"/>
+		<Message Name="ZteAaaSocket.TRACE2"/>
+		<Message Name="ZteAaaSocket.TRACE3"/>
+		<Message Name="ZteAaaSocket.TRACE4"/>
+		<Message Name="ZteAaaSocket.TRACE5"/>
+		<Message Name="ZteAaaSocket.RX_MESSAGE"/>
+		<Message Name="ZteAaaSocket.TX_MESSAGE"/-->
+	</TraceSchemaItem>
+</TraceSchema>

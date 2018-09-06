@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TraceSchema Name="FORIS.SPA.Communication">
+	<TraceSchemaItem Name="CommMSMQ">
+		<!--Message Name="CommMSMQ.ERROR"/>
+		<Message Name="CommMSMQ.INITIALIZATION"/>
+		<Message Name="CommMSMQ.INFORMATION"/>
+		<Message Name="CommMSMQ.REPORT"/>		
+		<Message Name="CommMSMQ.RX_MESSAGE"/>
+		<Message Name="CommMSMQ.START"/>
+		<Message Name="CommMSMQ.STOP"/>
+		<Message Name="CommMSMQ.TX_ERROR"/>
+		<Message Name="CommMSMQ.TX_MESSAGE"/>
+		<Message Name="CommMSMQ.BEGIN_TX_MESSAGE"/>
+		<Message Name="CommMSMQ.ThreadInterrupted"/-->
+	</TraceSchemaItem>
+	<TraceSchemaItem Name="CommMSMQSwitch">
+		<!--Message Name="CommMSMQSwitch.CorrectMessageCount"/>
+		<Message Name="CommMSMQSwitch.INITIALIZATION"/-->
+	</TraceSchemaItem>
+	<TraceSchemaItem Name="CommMultiMSMQ">
+		<!--Message Name="CommMultiMSMQ.ERROR"/>
+		<Message Name="CommMultiMSMQ.INITIALIZATION"/-->
+	</TraceSchemaItem>
+	<TraceSchemaItem Name="CommTCP">
+		<!--Message Name="CommTCP.ERROR"/>
+		<Message Name="CommTCP.WARNING"/>
+		<Message Name="CommTCP.INFORMATION"/>
+		<Message Name="CommTCP.CONNECT"/>
+		<Message Name="CommTCP.DISCONNECT"/>
+		<Message Name="CommTCP.RX_MESSAGE"/>
+		<Message Name="CommTCP.TX_MESSAGE"/-->
+	</TraceSchemaItem>
+	<TraceSchemaItem Name="CommBpmSaDB">
+		<!--Message Name="CommBpmSaDB.CommBpmSaDB.INITIALIZATION"/>
+		<Message Name="CommBpmSaDB.ERROR"/>
+		<Message Name="ProxyDB.TrySend"/>
+		<Message Name="ProxyDB.Receive"/>
+		<Message Name="ProxyDB.Send"/>
+		<Message Name="CommBpmSaDB.RX_MESSAGE"/>
+		<Message Name="CommBpmSaDB.Cancel_RX_MESSAGE"/-->
+	</TraceSchemaItem>
+	<TraceSchemaItem Name="CommDispBpmDB">
+		<!--Message Name="CommDispBpmDB.Cancel_RX_MESSAGE"/>
+		<Message Name="CommDispBpmDB.ERROR"/>
+		<Message Name="CommDispBpmDB.INITIALIZATION"/>
+		<Message Name="CommDispBpmDB.RX_MESSAGE"/-->
+	</TraceSchemaItem>
+  	<TraceSchemaItem Name="CommRemoting">
+    		<!--Message Name="CommRemoting.ERROR"/>
+    		<Message Name="CommRemoting.INITIALIZATION"/>
+    		<Message Name="CommRemoting.START"/>
+    		<Message Name="CommRemoting.RX_MESSAGE"/>
+    		<Message Name="CommRemoting.TX_MESSAGE"/-->
+  	</TraceSchemaItem>
+  	<TraceSchemaItem Name="CallForwarding">
+    		<!--Message Name="CallForwarding.ERROR"/-->
+  	</TraceSchemaItem>
+</TraceSchema>

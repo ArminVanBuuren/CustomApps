@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="DeleteSubscribersInTheFP">
+  <objectList>
+    <object name="BySubscirbersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="ByPASplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterByIdentity" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
+    <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll"/>	
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+  </objectList>
+  <automat>
+    <!-- Remove TD -->
+    <node name="BySubscirbersSplitter" object="BySubscirbersSplitter">
+      <resultlist>
+        <result value="0" node="SingleSubscirverRequestDequeuer"/>
+      </resultlist>
+    </node>
+    <node name="SingleSubscirverRequestDequeuer" object="Dequeuer">
+      <resultlist>
+        <result value="0" node="DeleteTDOnFINPlatform"/>
+        <result value="1" node="ByPASplitter"/>
+      </resultlist>
+      <parameterslist>
+        <param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+      </parameterslist>
+    </node>
+    <node name="DeleteTDOnFINPlatform" object="Commander">
+      <resultlist>
+        <result value="" node="dummySUCCESS1"/>
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary"/>
+        <param name="Command" value="DeleteTDOnFINPlatform"/>
+        <param name="Script" value="Command"/>
+        <param name="AppendSubscribersData" value="true"/>
+        <param name="ErrorDecodingType" value="ByString"/>
+        <param name="Asynchronous" value="true" />
+      </parameterslist>
+    </node>
+      		<node name="dummySUCCESS1" object="DummyResponder">
+			<resultlist>
+				<result value="" node="ResponseAssembler1"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OverallResult" value="SUCCESS"/>
+				<param name="DetailedResult" value="SUCCESS"/>
+				<param name="Delay" value="0"/>
+			</parameterslist>
+		</node>		
+    <node name="ResponseAssembler1" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="SingleSubscirverRequestDequeuer"/>
+      </resultlist>
+    </node>
+    <!-- Remove PA -->
+    <node name="ByPASplitter" object="ByPASplitter">
+      <resultlist>
+        <result value="0" node="SinglePARequestDequeuer"/>
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectInContext" value="parentRequest" />
+        <param name="IdentityName" value="PersonalAccountNumber" />
+      </parameterslist>
+    </node>
+    <node name="SinglePARequestDequeuer" object="Dequeuer">
+      <resultlist>
+        <result value="0" node="SwitchNode"/>
+        <result value="1" node=""/>
+      </resultlist>
+      <parameterslist>
+        <param name="queueName" value="requestsSplittedByIdentityQueue"/>
+      </parameterslist>
+    </node>
+    <node name="SwitchNode" object="Switch">
+      <resultlist>
+        <result value="0" node="SinglePARequestDequeuer"/>
+        <result value="1" node="SinglePARequestDequeuer"/>
+        <result value="2" node="SinglePARequestDequeuer"/>
+        <result value="3" node="DeletePAOnFINPlatform"/>
+      </resultlist>
+      <parameterslist>
+        <param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/WithdrawalList/Subscriber/IsNeedDeletePersonalAccount"/>
+        <param name="Value:2" value="False"/>
+        <param name="Value:3" value="True"/>
+      </parameterslist>
+    </node>
+    <node name="DeletePAOnFINPlatform" object="Commander">
+      <resultlist>
+        <result value="" node="dummySUCCESS2"/>
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary"/>
+        <param name="Command" value="DeletePAOnFINPlatform"/>
+        <param name="Script" value="Command"/>
+        <param name="AppendSubscribersData" value="true"/>
+        <param name="ErrorDecodingType" value="ByString"/>
+        <param name="Asynchronous" value="true" />
+      </parameterslist>
+    </node>
+      		<node name="dummySUCCESS2" object="DummyResponder">
+			<resultlist>
+				<result value="" node="ResponseAssembler2"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OverallResult" value="SUCCESS"/>
+				<param name="DetailedResult" value="SUCCESS"/>
+				<param name="Delay" value="0"/>
+			</parameterslist>
+		</node>		
+    <node name="ResponseAssembler2" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="SinglePARequestDequeuer"/>
+      </resultlist>
+    </node>
+  </automat>
+</scenario>

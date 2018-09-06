@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="DeleteTDOnFINPlatform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>DeleteTDOnFINPlatform</Description>
+  <Author Name="Oleg Safonov" Date="2011-02-08+12:35"/>
+  <Properties GenerationType="DataSetXml" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[<DataSet Name="DeleteTDCDataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Attributes>
+    <Attribute Name="Label" Type="System.String" Value="DeleteTerminalDeviceContracts;reversecut({0},4);SPA"/>
+    <Attribute Name="Protocol" Type="System.String" Value="Msmq"/>
+  </Attributes>
+  <DataTable Name="DeleteTDCDataTable">
+    <Columns>
+      <Column Name="REQUEST_ID" Type="System.String"/>
+      <Column Name="PERSONAL_ACCOUNT_ID" Type="System.Int64"/>
+      <Column Name="TERMINAL_DEVICE_CONTRACT_ID" Type="System.Int64"/>
+    </Columns>
+    <Rows>
+      <Row REQUEST_ID="reversecut({0},4)" PERSONAL_ACCOUNT_ID="{2}" TERMINAL_DEVICE_CONTRACT_ID="{3}"/>
+    </Rows>
+  </DataTable>
+</DataSet>]]>
+    </RequestTemplate>
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="org.id" Type="Wellknown"/>
+    <Item Name="id" Type="Wellknown"/>
+    <Item Name="PersonalAccount" Type="Wellknown"/>
+    <Item Name="TerminalDeviceID" Type="Wellknown"/>
+    <!--Item Name="datetime" Type="Wellknown"/-->
+    <!--Item Name="uid" Type="Wellknown" /-->
+  </Request>
+  <VariablesList>
+    <Variable Name="ASYNC_REQUEST_ID" Template="reversecut({0},4)"/>
+  </VariablesList>
+  <ErrorsList CodePage="ascii"/>
+</Command>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="DeleteBlockAIISKUE" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>'Разблокировка абонентов АИИСКУЭ'</Description>
+	<Author Name="Timur Khamzin" Date="2017-01-11+16:31"/>
+	<Request Template='Mod BscEx:IMSI={0},BPOS=0;^M'>
+		<Item Name="imsi" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="windows-1251">
+	</ErrorsList>
+</Command>

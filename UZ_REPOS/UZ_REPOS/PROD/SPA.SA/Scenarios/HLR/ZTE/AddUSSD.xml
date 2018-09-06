@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="AddUSSD">
+	<objectList>
+		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+                <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
+	</objectList>
+	<automat>
+		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
+			<resultlist>
+				<result value="0" node="SingleSubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+		<node name="SingleSubscriberRequestDequeuer" object="Dequeuer">
+			<resultlist>
+				<result value="0" node="ParameterSwitch"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="ParameterSwitch" object="Switch">
+			<resultlist>
+				<result value="2" node="AddUSSDSCP"/>
+				<result value="3" node="AddUSSDAM"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/BalanceStorage/HostCode"/>
+				<param name="Value:2" value="MS"/>
+				<param name="Value:3" value="05"/>
+			</parameterslist>
+		</node>
+                <node name="AddUSSDSCP" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddUSSDSCP"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>
+                <node name="AddUSSDAM" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddUSSDAM"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>
+         	<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="SingleSubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>
