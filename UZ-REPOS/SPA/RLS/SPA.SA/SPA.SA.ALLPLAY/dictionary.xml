@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Dictionary>
+  <WellknownsList>
+    <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
+    <Wellknown Name="msisdn.cc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,0,1)"/>
+    <Wellknown Name="msisdn.ndc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,1,3)"/>
+    <Wellknown Name="msisdn.sn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,4)"/>
+    <Wellknown Name="msisdn.fn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,1)"/>
+    <Wellknown Name="imsi" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;)"/>
+    <Wellknown Name="imsi.mcc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,0,3)"/>
+    <Wellknown Name="imsi.mnc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,3,2)"/>
+    <Wellknown Name="imsi.msin" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,5)"/>
+  </WellknownsList>
+  <ErrorsList CodePage="ascii">
+    <Error Name="OK 100"  Value="SUCCESS"               Description="Podklyuchenie servisa proshlo uspeshno"/>   
+    <Error Name="OK 101"  Value="SUCCESS"               Description="Popytka podklyucheniya uzhe aktivnogo servisa u abonenta (povtornoe podklyuchenie)"/>  
+    <Error Name="OK 102"  Value="FAILURE"               Description="Oshibka podklyucheniya servisa"/>     
+    <Error Name="OK 200"  Value="SUCCESS"               Description="Otklyuchenie servisa proshlo uspeshno"/> 
+    <Error Name="OK 201"  Value="SUCCESS"               Description="Popytka otklyucheniya nesushchestvuyushchego servisa u abonenta (takogo servisa u abonenta net ili abonent ne sushchestvuet)"/> 
+    <Error Name="OK 202"  Value="SUCCESS"               Description="Popytka otklyucheniya uzhe otklyuchennogo servisa u abonenta (povtornoe otklyuchenie)"/> 
+    <Error Name="OK 203"  Value="FAILURE"               Description="Oshibka otklyucheniya servisa"/>  
+    <Error Name="OK 300"  Value="SUCCESS"               Description="Podklyuchenie vsekh servisov proshlo uspeshno"/>  
+    <Error Name="OK 301"  Value="FAILURE"               Description="Popytka podklyucheniya vsekh servisov u nesushchestvuyushchego abonenta"/> 
+    <Error Name="OK 302"  Value="FAILURE"               Description="Oshibka podklyucheniya vsekh servisov" />  
+    <Error Name="OK 400"  Value="SUCCESS"               Description="Otklyuchenie vsekh servisov proshlo uspeshno"/>      
+    <Error Name="OK 401"  Value="SUCCESS"               Description="Popytka otklyucheniya vsekh servisov u nesushchestvuyushchego abonenta"/> 
+    <Error Name="OK 402"  Value="SUCCESS"               Description="Oshibka otklyucheniya vsekh servisov"/> 
+    <Error Name="OK 500"  Value="SUCCESS"               Description="Aktivaciya abonenta proshlo uspeshno"/>
+    <Error Name="OK 501"  Value="SUCCESS"               Description="Popytka aktivacii nesushchestvuyushchego abonenta"/>   
+    <Error Name="OK 502"  Value="SUCCESS"               Description="Popytka aktivacii uzhe aktivnogo abonenta (povtornaya aktivaciya)"/> 
+    <Error Name="OK 600"  Value="SUCCESS"               Description="Deaktivaciya abonenta proshlo uspeshno"/> 
+    <Error Name="OK 601"  Value="SUCCESS"               Description="Popytka deaktivacii nesushchestvuyushchego abonenta"/>
+    <Error Name="OK 602"  Value="SUCCESS"               Description="Popytka deaktivacii uzhe neaktivnogo abonenta (povtornaya deaktivaciya)"/> 
+    <Error Name="OK 701"  Value="FAILURE"               Description="Zapros informacii o nesushchestvuyushchem abonente"/>   
+    <Error Name="ERROR 100"  Value="FAILURE"               Description="Ne peredan parametr passwd (parol')"/>  
+    <Error Name="ERROR 101"  Value="FAILURE"               Description="Peredan pustoj parametr passwd (parol')"/>
+    <Error Name="ERROR 102"  Value="FAILURE"               Description="Nepravil'nyj parol' (passwd)"/>  
+    <Error Name="ERROR 103"  Value="FAILURE"               Description="Ne peredan parametr msisdn (nomer abonenta)"/> 
+    <Error Name="ERROR 104"  Value="FAILURE"               Description="Peredan pustoj parametr msisdn (nomer abonenta)"/>
+    <Error Name="ERROR 105"  Value="FAILURE"               Description="Ne peredan parametr command"/>
+    <Error Name="ERROR 106"  Value="FAILURE"               Description="Peredan pustoj parametr command"/>
+    <Error Name="ERROR 107"  Value="FAILURE"               Description="Peredannaya nesushchestvuyushchaya komanda (command) otlichnaya ot add, dell, on, off, info"/>  
+    <Error Name="ERROR 108"  Value="FAILURE"               Description="Ne peredan parametr short_number (korotkij nomer)"/> 
+    <Error Name="ERROR 109"  Value="FAILURE"               Description="Peredan pustoj parametr short_number (korotkij nomer)"/> 
+    <Error Name="ERROR 110"  Value="FAILURE"               Description="Ne peredan parametr keyword (klyuchevoe slovo)"/>
+    <Error Name="ERROR 111"  Value="FAILURE"               Description="Peredano pustoj parametr keyword (klyuchevoe slovo)"/>
+    <Error Name="ERROR 112"  Value="FAILURE"               Description="Oshibka korotkogo nomera i prefiksa"/> 
+    <Error Name="ERROR 113"  Value="FAILURE"               Description="Oshibka nesushchestvuyushchij servis"/>
+    <Error Name="ERROR 114"  Value="FAILURE"               Description="Oshibka nevernyj nomer abonenta"/>
+  </ErrorsList>
+  <RegexpsList>
+    <Regexp Name="Error" Value="(?&lt;ERROR&gt;^(OK|ERROR))"/>
+  </RegexpsList>               
+  <ConstantsList/>
+  <ParametersList>
+    <Parameter Name="NewMsisdn">
+      <Source Path="ExtendedRequestMessage/AdditionalData//NewMSISDN"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+  </ParametersList>
+  <DynamicParametersList/>
+  <CommandsList Root="Commands" Mask="*.xml">
+    <!-- All new commands are included by Mask=*.xml attribute -->
+  </CommandsList>
+</Dictionary>

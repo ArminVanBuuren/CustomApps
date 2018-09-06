@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="ReSubscribeFRINSPECTDelete">
+	<objectList>
+		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ScenarioProcessor" class="FORIS.ScenarioProcessing.Base.SPF.SubscenarioProcessingUnit" assembly="FORIS.SPA.SPF.dll" />
+		<object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>	
+                <object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll"/>		
+                <object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll"/>
+                <object name="XmlNodesReplacer" class="FORIS.ScenarioProcessing.CommonUnits.XmlReplacerConditional" assembly="FORIS.SPA.SPF.dll"/>
+                <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
+	</objectList>
+	<automat>
+		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
+			<resultlist>
+				<result value="0" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+			<resultlist>
+				<result value="0" node="CheckCustomer"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>	
+                <node name="CheckCustomer" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="GetTP"/>
+				<result value="" node="dummySUCCESS"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="//AdditionalData/RegisteredList/FRINSPECT"/>
+				<param name="OrXmlPath:1" value="//IdentifiersList//MSISDN[text()='998919139871']"/>
+			</parameterslist>
+		</node>		
+                <node name="GetTP" object="DataBaseProcessor">
+			<resultlist>
+				<result value="" node="ExtractTP"/>
+			</resultlist>
+			<parameterslist>
+				<param name="DataBaseName" value="FORIS.SPA.CBP"/>
+				<param name="FunctionName" value="FRINSPECT_TP"/>
+				<param name="FunctionType" value="procedure"/>
+				<param name="OutXml" value="db_unit_result"/>
+				<param name="DbParameterName:0" value="p_msisdn"/>
+				<param name="DbParameterDirection:0" value="Input"/>
+				<param name="DbParameterType:0" value="Varchar2"/>
+				<param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN" />
+				<param name="DbParameterName:1" value="p_old_tp"/>
+				<param name="DbParameterDirection:1" value="Output"/>
+				<param name="DbParameterType:1" value="Varchar2"/>
+				<param name="DbParameterValue:1" value="" />
+				<param name="DbParameterName:2" value="p_new_tp"/>
+				<param name="DbParameterDirection:2" value="Output"/>
+				<param name="DbParameterType:2" value="Varchar2"/>
+				<param name="DbParameterValue:2" value="" />
+			</parameterslist>
+		</node>
+                <node name="ExtractTP" object="XmlNodesCopier">
+			<resultlist>
+				<result value="" node="OldTPParameterSwitch"/>
+			</resultlist>
+			<parameterslist>
+				<param name="SrcXml" value="db_unit_result"/>
+				<param name="DstMessage" value="xmlrequest"/>
+				<param name="CopyContentType" value="InnerText"/>
+				<param name="SrcXmlPath:0" value="//var[@name='p_old_tp']"/>
+				<param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/TP/OldTP"/>
+				<param name="SrcXmlPath:1" value="//var[@name='p_new_tp']"/>
+				<param name="DstXmlPath:1" value="ExtendedRequestMessage/AdditionalData/TP/NewTP"/>
+                	</parameterslist>
+		</node>
+                <node name="OldTPParameterSwitch" object="Switch">
+			<resultlist>
+				<result value="1" node="AddInspectOldTP"/>
+				<result value="2" node="dummySUCCESS"/>
+			</resultlist>
+			<parameterslist>
+				<param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/TP/OldTP"/>
+				<param name="Value:2" value="0"/>
+			</parameterslist>
+		</node>
+                <node name="AddInspectOldTP" object="XmlNodesCopier">
+			<resultlist>
+				<result value="" node="DeleteFRINSPECT"/>
+			</resultlist>
+			<parameterslist>
+				<param name="SrcXml" value="xmlrequest"/>
+				<param name="DstMessage" value="xmlrequest"/>
+				<param name="CopyContentType" value="InnerText"/>
+				<param name="SrcXmlPath:0" value="ExtendedRequestMessage/AdditionalData/TP/OldTP"/>
+				<param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/InspectID"/>
+                	</parameterslist>
+		</node>
+		<node name="DeleteFRINSPECT" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="DeleteFRINSPECT"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByRegexp"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>
+                <node name="dummySUCCESS" object="DummyResponder">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OverallResult" value="SUCCESS"/>
+				<param name="DetailedResult" value="SUCCESS"/>
+				<param name="Delay" value="0"/>
+			</parameterslist>
+		</node>	
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

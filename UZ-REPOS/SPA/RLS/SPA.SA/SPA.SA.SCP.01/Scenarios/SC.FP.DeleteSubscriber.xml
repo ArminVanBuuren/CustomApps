@@ -1,0 +1,160 @@
+<scenario name="SC.FP.DeleteSubscriber">
+  <objectList>
+    <object name="ByIdentityCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterByIdentity" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IdentifiersGenerator" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.IdentifiersGenerator" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="RequestCopier" class="FORIS.ScenarioProcessing.CommonUnits.RequestCopier" assembly="FORIS.SPA.SPF.dll" />
+    <object name="ConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+    <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+  </objectList>
+  <automat>
+    <!-- Начало Dummy проверок -->
+    <node name="CheckSingleSCPEnabled" object="ConditionsResolver">
+      <resultlist>
+        <result value="0" node="SingleSCPDummyResponder" />
+        <result value="" node="RequestCopier" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="*['processingFlag(SingleSCPEnabled)'='True']" />
+        <param name="IfXmlPath:1" value="//PreviousPlatform/HostCode" />
+        <param name="IfNotXmlPath:0" value="//BalanceStorage/HostCode[contains('[HOST_CODE_BS]',.)]"/>
+      </parameterslist>
+    </node>
+    <node name="SingleSCPDummyResponder" object="DummyResponder">
+      <resultlist>
+        <result value="" node="SkipResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="OverallResult" value="SUCCESS" />
+        <param name="DetailedResult" value="SUCCESS" />
+        <param name="DetailedResultDescription" value="Command not sending because of old destination was SCP and Single SCP is enabled" />
+      </parameterslist>
+    </node>
+    <node name="SkipResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="" />
+      </resultlist>
+    </node>
+    <!-- Окончание Dummy проверок -->
+    <node name="RequestCopier" object="RequestCopier">
+      <resultlist>
+        <result value="" node="BySubscribersCutter" />
+      </resultlist>
+      <parameterslist>
+        <param name="SrcName" value="request" />
+        <param name="DstName" value="parentRequest" />
+      </parameterslist>
+    </node>
+    <!-- Remove TD -->
+    <node name="BySubscribersCutter" object="ByIdentityCutter">
+      <resultlist>
+        <result value="0" node="IdentifiersGeneratorTD" />
+        <result value="1" node="ByPACutter" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectInContext" value="request" />
+        <param name="IdentityName" value="TerminalDeviceId" />
+        <param name="Queue" value="requestsSplittedByTDQueue" />
+      </parameterslist>
+    </node>
+    <node name="IdentifiersGeneratorTD" object="IdentifiersGenerator">
+      <parameterslist>
+        <param name="WellknownName" value="GlobalUid" />
+      </parameterslist>
+      <resultlist>
+        <result value="0" node="SwitchNodeTD" />
+      </resultlist>
+    </node>
+    <node name="SwitchNodeTD" object="Switch">
+      <resultlist>
+        <result value="0" node="DeleteTDOnFINPlatform" />
+        <result value="1" node="DeleteTDOnFINPlatform" />
+        <result value="2" node="BySubscribersCutter" />
+        <result value="3" node="DeleteTDOnFINPlatform" />
+        <result value="4" node="BySubscribersCutter" />
+        <result value="5" node="DeleteTDOnFINPlatform" />
+      </resultlist>
+      <parameterslist>
+        <param name="XmlPath" value="//AdditionalData/RemoveList/RFS_FP_SUBSCRIBER/Subscriber/IsNeedDeleteTerminalDevice" />
+        <param name="Value:2" value="False" />
+        <param name="Value:3" value="True" />
+        <param name="Value:4" value="0" />
+        <param name="Value:5" value="1" />
+      </parameterslist>
+    </node>
+    <node name="DeleteTDOnFINPlatform" object="Commander">
+      <resultlist>
+        <result value="0" node="ResponseAssembler1" />
+        <result value="" node="" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="Command" value="SC.DeleteTD" />
+        <param name="Script" value="Command" />
+        <param name="AppendSubscribersData" value="true" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="Asynchronous" value="true" />
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler1" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="BySubscribersCutter" />
+      </resultlist>
+    </node>
+    <!-- Remove PA -->
+    <node name="ByPACutter" object="ByIdentityCutter">
+      <resultlist>
+        <result value="0" node="IdentifiersGeneratorPA" />
+        <result value="1" node="" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectInContext" value="parentRequest" />
+        <param name="IdentityName" value="PersonalAccountNumber" />
+      </parameterslist>
+    </node>
+    <node name="IdentifiersGeneratorPA" object="IdentifiersGenerator">
+      <parameterslist>
+        <param name="WellknownName" value="GlobalUid" />
+      </parameterslist>
+      <resultlist>
+        <result value="0" node="SwitchNode" />
+      </resultlist>
+    </node>
+    <node name="SwitchNode" object="Switch">
+      <resultlist>
+        <result value="0" node="DeletePAOnFINPlatform" />
+        <result value="1" node="DeletePAOnFINPlatform" />
+        <result value="2" node="ByPACutter" />
+        <result value="3" node="DeletePAOnFINPlatform" />
+        <result value="4" node="ByPACutter" />
+        <result value="5" node="DeletePAOnFINPlatform" />
+      </resultlist>
+      <parameterslist>
+        <param name="XmlPath" value="//AdditionalData/RemoveList/RFS_FP_SUBSCRIBER/Subscriber/IsNeedDeletePersonalAccount" />
+        <param name="Value:2" value="False" />
+        <param name="Value:3" value="True" />
+        <param name="Value:4" value="0" />
+        <param name="Value:5" value="1" />
+      </parameterslist>
+    </node>
+    <node name="DeletePAOnFINPlatform" object="Commander">
+      <resultlist>
+        <result value="" node="ResponseAssembler2" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="Command" value="SC.DeletePA" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="Asynchronous" value="true" />
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler2" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="ByPACutter" />
+      </resultlist>
+    </node>
+  </automat>
+</scenario>

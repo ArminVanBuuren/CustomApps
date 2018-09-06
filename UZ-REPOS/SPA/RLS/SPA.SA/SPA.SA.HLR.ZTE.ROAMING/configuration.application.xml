@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+  <serviceInstances>
+    <serviceInstance hardwareID="HLR:ROAMING">
+      <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
+        <fileScenarioSource dir="..\SPA.SA\SPA.SA.HLR.ZTE.ROAMING\Scenarios"/>
+      </scenarioSource>
+      <socketList poolSize="14" autoconnect="1" maxConnections="14" minConnections="14" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="4000" periodDuration="10" reconfigurationTimeout="0">
+        <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
+          <config autoconnect="1" workingmode="wmPermanentEmulation">
+            <socket type="FORIS.ServiceProvisioning.Communication.TelnetSocket, FORIS.SPA.Communication">
+              <config host="10.160.25.19" port="3003"/>
+            </socket>
+            <Emulation Success="..\SPA.SA\SPA.SA.HLR.ZTE.ROAMING\Emulation\printout.success.txt" Failure="..\SPA.SA\SPA.SA.HLR.ZTE.ROAMING\Emulation\printout.failure.txt" RandomizePrintout="false" OverwriteCommandPrintout="true"  Lifetime="00:00:00.00"/>
+            <Timers IdleTimeout="10"/>
+            <PredefinedScripts Login="Login" Logoff="Logoff"/>
+            <ScriptsList>
+              <Script Name="Login" Path="..\SPA.SA\SPA.SA.HLR.ZTE.ROAMING\Scripts\login.xml"/>
+              <Script Name="Logoff" Path="..\SPA.SA\SPA.SA.HLR.ZTE.ROAMING\Scripts\logoff.xml"/>
+              <Script Name="Command" Path="..\SPA.SA\SPA.SA.HLR.ZTE.ROAMING\Scripts\command.xml"/>
+            </ScriptsList>
+          </config>
+        </socket>
+      </socketList>
+      <context>
+        <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
+          <config path="..\SPA.SA\SPA.SA.HLR.ZTE.ROAMING" xml="Dictionary.xml" lifetime="00:01:30"/>
+        </object>
+        <object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
+          <fileTableSource path="..\SPA.SA\Misc" xml="RepetitionTable.xml"/>
+        </object>
+      </context>
+    </serviceInstance>
+  </serviceInstances>
+</Configuration>

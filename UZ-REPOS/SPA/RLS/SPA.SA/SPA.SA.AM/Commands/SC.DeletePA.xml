@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="SC.DeletePA" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>DeletePAOnFINPlatform</Description>
+  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
+  <Properties GenerationType="DataSetXml" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[<DataSet Name="DeletePADataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Attributes>
+    <Attribute Name="Label" Type="System.String" Value="DeletePA;##datetime##;[SCP_MARKER]"/>
+    <Attribute Name="Protocol" Type="System.String" Value="Msmq"/>
+  </Attributes>
+  <DataTable Name="DeletePADataTable">
+    <Columns>
+      <Column Name="REQUEST_ID" Type="System.String"/>
+      <Column Name="PERSONAL_ACCOUNT_ID" Type="System.Int64"/>
+      <Column Name="KEEP_BALANCES" Type="System.Boolean"/>
+    </Columns>
+    <Rows>
+      <Row REQUEST_ID="##ASYNC_REQUEST_ID##" PERSONAL_ACCOUNT_ID="##PersonalAccount##" KEEP_BALANCES="##SC.KEEP_BALANCES##"/>
+    </Rows>
+  </DataTable>
+</DataSet>]]>
+    </RequestTemplate>
+    <Item Name="datetime" Type="Wellknown"/>
+    <Item Name="PersonalAccount" Type="Wellknown"/>
+    <Item Name="SC.KEEP_BALANCES" Type="Parameter"/>
+  </Request>
+  <ErrorsList CodePage="ascii"/>
+</Command>

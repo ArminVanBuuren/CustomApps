@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+  <Application Path="C:\FORIS\SPA\Configuration\SPA.SA\configuration.application.gate.xml"/>
+  <Settings>
+    <Add Key="ReportTimeout" Value="300"/>
+    <Add Key="DictionaryCommandsOnDisk" Value="true"/>
+    <Add Key="CreatePerformanceCounters" Value="false"/>
+    <Add Key="PermanentEmulation.DefaultResultType" Value="SUCCESS"/>
+    <Add Key="PermanentEmulation.RandomizeResultTypes" Value="false"/>
+    <Add Key="Requests.MaxQueuedPerHost" Value="150"/>
+    <Add Key="Requests.PollPeriod" Value="2"/>
+    <Add Key="Requests.PollIdlePeriod" Value="2"/>
+    <Add Key="Responses.WritersCount" Value="1"/>
+    <Add Key="CloseSessionOnCommandTimeOut" Value="true"/>
+    <Add Key="InfiniteLoopWarningThreshold" Value="1000" />
+    <Add Key="InfiniteLoopInterruptThreshold" Value="10000" />
+  </Settings>
+  <DatabaseObjects Remotable="false">
+    <Add Name="FORIS.SPA.CBP" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.CBP"/>
+    <Add Name="FORIS.SPA.ARCHIVE" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.ARCHIVE"/>
+    <Add Name="FORIS.SPA.ROBP" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.ROBP"/>
+    <Add Name="FORIS.SPA.STATE" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.STATE"/>
+    <Add Name="FORIS.RI" ConnectionDataType="uri" ConnectionData="http://f-clust-ri-spa:25192/ServiceProvisioningService"/>
+  </DatabaseObjects>
+  <Profiler>
+    <Configuration>
+      <SysTrace TraceMask="11111111"/>
+      <TraceSchema path="C:\FORIS\SPA\Configuration\SPA.SA\Schemas\GATE\Normal\Schema.Application.xml"/>
+      <TraceSchema path="C:\FORIS\SPA\Configuration\SPA.SA\Schemas\GATE\Normal\Schema.Communication.xml"/>
+      <TraceSchema path="C:\FORIS\SPA\Configuration\SPA.SA\Schemas\GATE\Normal\Schema.SPA.SA.Core.xml"/>
+      <TraceSchema path="C:\FORIS\SPA\Configuration\SPA.SA\Schemas\GATE\Normal\Schema.SPA.SA.Hardware.xml"/>
+      <TraceSchema path="C:\FORIS\SPA\Configuration\SPA.SA\Schemas\GATE\Normal\Schema.Tracers.xml"/>
+      <TraceSchema path="C:\FORIS\SPA\Configuration\SPA.SA\Schemas\GATE\Normal\Schema.Errors.xml"/>
+      <TraceSchema path="C:\FORIS\SPA\Configuration\SPA.SA\Schemas\GATE\Normal\Schema.Script.xml"/>
+      <TraceSchema path="C:\FORIS\SPA\Configuration\SPA.SA\Schemas\GATE\Normal\Schema.Report.xml"/>
+      <TraceSchema path="C:\FORIS\SPA\Configuration\SPA.SA\Schemas\GATE\Normal\Schema.Database.xml"/>
+      <TraceSchema path="C:\FORIS\SPA\Configuration\SPA.SA\Schemas\GATE\Normal\Schema.SPA.SPF.xml"/>
+    </Configuration>
+    <LoggingActivationList>
+      <Activate Name="Permanent" Path="C:\FORISLOG\SPA\SA\GATE\Permanent\sa.Permanent.GATE.%DATE%_N%ID%" ChangeOn="00:30:00">
+        <TraceSchema Name="FORIS.SPA.Application">
+          <TraceSchemaItem Name="Application"/>
+        </TraceSchema>
+        <TraceSchema Name="FORIS.SPA.Communication">
+          <TraceSchemaItem Name="CommMSMQ"/>
+          <TraceSchemaItem Name="CommTCP"/>
+          <TraceSchemaItem Name="CallForwarding"/>
+        </TraceSchema>
+        <TraceSchema Name="FORIS.SPA.Database">
+          <TraceSchemaItem Name="Database"/>
+        </TraceSchema>
+        <TraceSchema Name="FORIS.SPA.SPF">
+          <TraceSchemaItem Name="SPF.ProcessingUnit"/>
+          <TraceSchemaItem Name="SPF"/>
+        </TraceSchema>
+        <TraceSchema Name="FORIS.SPA.SA.Core">
+          <TraceSchemaItem Name="Activator"/>
+          <TraceSchemaItem Name="Framework"/>
+          <TraceSchemaItem Name="ReqProcessor"/>
+          <TraceSchemaItem Name="ReqDispatcher"/>
+          <TraceSchemaItem Name="ReqDbDispatcher"/>
+          <TraceSchemaItem Name="ReqCoprocessor"/>
+          <TraceSchemaItem Name="SocketsManager"/>
+          <TraceSchemaItem Name="Dictionary"/>
+        </TraceSchema>
+        <TraceSchema Name="FORIS.SPA.SA.Hardware">
+          <TraceSchemaItem Name="CmisThread"/>
+          <TraceSchemaItem Name="CmisSocket"/>
+          <TraceSchemaItem Name="HttpSocket"/>
+          <TraceSchemaItem Name="UdpSocket"/>
+          <TraceSchemaItem Name="DatabaseSocket"/>
+          <TraceSchemaItem Name="SerialPort"/>
+          <TraceSchemaItem Name="TelnetSocket"/>
+          <TraceSchemaItem Name="Ftp"/>
+          <TraceSchemaItem Name="FtpSocket"/>
+          <TraceSchemaItem Name="AmResponseThread"/>
+          <TraceSchemaItem Name="AsyncProcessor"/>
+          <TraceSchemaItem Name="AmSocket"/>
+          <TraceSchemaItem Name="ScpSocket"/>
+          <TraceSchemaItem Name="AsyncReqDispatcher"/>
+          <TraceSchemaItem Name="BmsSocket"/>
+          <TraceSchemaItem Name="InstantLinkSocket"/>
+          <TraceSchemaItem Name="InstantLink"/>
+          <TraceSchemaItem Name="SoapSocket"/>
+          <TraceSchemaItem Name="ZteHlrSocket"/>
+          <TraceSchemaItem Name="ZteAaaSocket"/>
+        </TraceSchema>
+        <TraceSchema Name="Tracers">
+          <TraceSchemaItem Name="Tracers"/>
+        </TraceSchema>
+        <TraceSchema Name="FORIS.SPA.Script">
+          <TraceSchemaItem Name="SimpleScriptProcessor"/>
+          <TraceSchemaItem Name="ScriptSocket"/>
+        </TraceSchema>
+      </Activate>
+      <Activate Name="Reports" Path="C:\FORISLOG\SPA\SA\GATE\Reports\sa.reports.GATE.%DATE%_N%ID%" ChangeOn="00:30:00">
+        <TraceSchema Name="FORIS.SPA.Reports">
+          <TraceSchemaItem Name="Reports"/>
+        </TraceSchema>
+      </Activate>
+      <Activate Name="Errors" Path="C:\FORISLOG\SPA\SA\GATE\Errors\sa.errors.GATE.%DATE%_N%ID%" ChangeOn="00:30:00">
+        <TraceSchema Name="FORIS.SPA.Errors">
+          <TraceSchemaItem Name="Errors"/>
+        </TraceSchema>
+        <EventLog Source="TopOwner" Log="SPA.SA.GATE"/>
+      </Activate>
+    </LoggingActivationList>
+  </Profiler>
+</Configuration>

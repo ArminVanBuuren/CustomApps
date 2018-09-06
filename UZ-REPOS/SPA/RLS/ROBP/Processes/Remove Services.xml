@@ -1,0 +1,234 @@
+<BusinessProcessData name="Remove Services">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="OperationOnSA" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="SCProcessingUnit" object="SCProcessingUnit">
+          <parameterslist />
+          <resultlist>
+            <result value="" node="DeleteCB264" />
+          </resultlist>
+        </node>
+        <node name="DeleteCB264" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteCB264" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteCB532" />
+          </resultlist>
+        </node>
+        <node name="DeleteCB532" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteCB532" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteCB9831" />
+          </resultlist>
+        </node>
+        <node name="DeleteCB9831" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteCB9831" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteCB573" />
+          </resultlist>
+        </node>
+        <node name="DeleteCB573" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteCB573" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteCB10363" />
+          </resultlist>
+        </node>
+        <node name="DeleteCB10363" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteCB10363" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteCB108" />
+          </resultlist>
+        </node>
+        <node name="DeleteCB108" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteCB108" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteCB123" />
+          </resultlist>
+        </node>
+        <node name="DeleteCB123" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteCB123" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteCB266HLR" />
+          </resultlist>
+        </node>
+        <node name="DeleteCB266HLR" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteCB266HLR" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteCB6376" />
+          </resultlist>
+        </node>
+        <node name="DeleteCB6376" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteCB6376" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFRANTIOP" />
+          </resultlist>
+        </node>
+        <node name="DeleteFRANTIOP" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteFRANTIOP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFRMGDOSTUP" />
+          </resultlist>
+        </node>
+        <node name="DeleteFRMGDOSTUP" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteFRMGDOSTUP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteUSSD" />
+          </resultlist>
+        </node>
+        <node name="DeleteUSSD" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteUSSD" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteCB6311" />
+          </resultlist>
+        </node>
+        <node name="DeleteCB6311" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteCB6311" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFRIP" />
+          </resultlist>
+        </node>
+        <node name="DeleteFRIP" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteFRIP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFRASKUE" />
+          </resultlist>
+        </node>
+        <node name="DeleteFRASKUE" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteFRASKUE" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteBSNSSRMNG" />
+          </resultlist>
+        </node>
+        <node name="DeleteBSNSSRMNG" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteBSNSSRMNG" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteLGHTRMNG" />
+          </resultlist>
+        </node>
+        <node name="DeleteLGHTRMNG" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteLGHTRMNG" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteReduceSpeed" />
+          </resultlist>
+        </node>
+        <node name="DeleteReduceSpeed" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteReduceSpeed" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFRPOLDOV" />
+          </resultlist>
+        </node>
+        <node name="DeleteFRPOLDOV" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteFRPOLDOV" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteSCPBREAKSESSION" />
+          </resultlist>
+        </node>
+        <node name="DeleteSCPBREAKSESSION" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteSCPBREAKSESSION" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteSCPBREAKSESSIONSCG" />
+          </resultlist>
+        </node>
+        <node name="DeleteSCPBREAKSESSIONSCG" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteSCPBREAKSESSIONSCG" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFRPARTAPN" />
+          </resultlist>
+        </node>
+        <node name="DeleteFRPARTAPN" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteFRPARTAPN" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteCorporateAPN" />
+          </resultlist>
+        </node>
+        <node name="DeleteCorporateAPN" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteCorporateAPN" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteLTE" />
+          </resultlist>
+        </node>
+        <node name="DeleteLTE" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteLTE" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteMST" />
+          </resultlist>
+        </node>
+        <node name="DeleteMST" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteMST" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFRNEWSCG" />
+          </resultlist>
+        </node>
+        <node name="DeleteFRNEWSCG" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteFRNEWSCG" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteM2MAPN" />
+          </resultlist>
+        </node>
+        <node name="DeleteM2MAPN" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteM2MAPN" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

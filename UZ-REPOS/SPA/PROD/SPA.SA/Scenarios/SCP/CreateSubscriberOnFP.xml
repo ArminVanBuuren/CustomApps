@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="CreateSubscriberOnFP">
+	<objectList>
+		<object name="BySubscirbersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+                <object name="IdentifiersGenerator" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.IdentifiersGenerator" assembly="FORIS.SPA.MmlProcessing.dll" />
+	</objectList>
+	<automat>
+		<node name="BySubscirbersSplitter" object="BySubscirbersSplitter">
+			<resultlist>
+				<result value="0" node="SingleSubscirverRequestDequeuer"/>
+			</resultlist>
+		</node>
+		<node name="SingleSubscirverRequestDequeuer" object="Dequeuer">
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue" />
+			</parameterslist>
+			<resultlist>
+				<result value="" node="" />
+				<result value="0" node="IdentifiersGenerator" />
+			</resultlist>
+		</node>	
+                <node  name="IdentifiersGenerator" object="IdentifiersGenerator">
+			<parameterslist>
+				<param name="WellknownName" value="GlobalUid" />
+			</parameterslist>
+			<resultlist>
+				<result value="0" node="SwitchNode" />
+			</resultlist>
+		</node>
+
+		<node name="SwitchNode" object="Switch">
+			<resultlist>
+				<result value="0" node="ResponseAssembler"/>
+				<result value="1" node="ResponseAssembler"/>
+				<result value="2" node="CreateTDOnFINPlatform"/>
+				<result value="3" node="CreatePAOnFINPlatform"/>
+			</resultlist>
+			<parameterslist>
+				<param name="XmlPath" value="//AdditionalData/ProvisionList/Subscriber/IsNeedCreatePersonalAccount"/>
+				<param name="Value:2" value="False"/>
+				<param name="Value:3" value="True"/>
+			</parameterslist>
+		</node>	
+		<node name="CreateTDOnFINPlatform" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler" />
+			</resultlist>	
+			<parameterslist>
+				<param name="AppendSubscribersData" value="true" />
+				<param name="OverwriteDetailedResult" value="true" />
+				<param name="Command" value="CreateTDOnFINPlatform" />
+				<param name="Script" value="Command" />
+				<param name="ErrorDecodingType" value="ByString" />
+				<param name="CommandSource" value="Dictionary" />
+			</parameterslist>
+		</node>		
+		<node name="CreatePAOnFINPlatform" object="Commander">
+			<resultlist>
+				<result value="0" node="CreatePAOnFINPlatform2" />
+				<result value="" node="ResponseAssembler" />
+			</resultlist>	
+			<parameterslist>
+				<param name="AppendSubscribersData" value="true" />
+				<param name="OverwriteDetailedResult" value="true" />
+				<param name="Command" value="CreatePAOnFINPlatform" />
+				<param name="Script" value="Command" />
+				<param name="ErrorDecodingType" value="ByString" />
+				<param name="CommandSource" value="Dictionary" />
+			</parameterslist>
+		</node>	
+		<node name="CreatePAOnFINPlatform2" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler" />
+			</resultlist>	
+			<parameterslist>
+				<param name="AppendSubscribersData" value="true" />
+				<param name="OverwriteDetailedResult" value="true" />
+				<param name="Command" value="CreateTDOnFINPlatform" />
+				<param name="Script" value="Command" />
+				<param name="ErrorDecodingType" value="ByString" />
+				<param name="CommandSource" value="Dictionary" />
+			</parameterslist>
+		</node>
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="SingleSubscirverRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

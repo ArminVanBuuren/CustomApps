@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="AddCallForwardingCFNRY" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Добавление услуги 'Переадресация вызова'</Description>
+	<Author Name="Timur Khamzin" Date="2015-11-16+15:00"/>
+	<Request Template='MOD SS:MSISDN={0},CFNRY=1,CFNRYNTC=1,CFNRYNTF=1;^M'>
+		<Item Name="msisdn" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="windows-1251"/>
+</Command>

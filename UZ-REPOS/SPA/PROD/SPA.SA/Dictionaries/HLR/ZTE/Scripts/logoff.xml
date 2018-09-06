@@ -1,0 +1,4 @@
+<Script Name="Logoff">
+	<write data="EXIT ^M"/>
+	<wait data="$" timeout="30000"/>
+</Script>

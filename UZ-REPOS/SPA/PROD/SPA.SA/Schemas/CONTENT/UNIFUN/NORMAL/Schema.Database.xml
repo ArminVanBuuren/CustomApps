@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TraceSchema Name="FORIS.SPA.Database">
+	<TraceSchemaItem Name="Database">
+		<!--Message Name="Database.DBCommunication"/>
+        	<Message Name="Database.ORAInterface"/>
+		<Message Name="Database.REPORT"/>
+		<Message Name="Database.REPORT.ERROR"/>
+		<Message Name="Database.REPORT.WARNING"/>
+		<Message Name="SPA.DataBase.Error"/>
+		<Message Name="Warning.CBP"/-->
+	</TraceSchemaItem>
+</TraceSchema>

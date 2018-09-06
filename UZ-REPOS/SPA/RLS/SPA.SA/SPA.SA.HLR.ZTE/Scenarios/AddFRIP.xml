@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="AddFRIP">
+	<objectList>
+		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+                <object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll"/>
+                <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll"/>
+	</objectList>
+	<automat>
+		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
+			<resultlist>
+				<result value="0" node="SingleSubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+		<node name="SingleSubscriberRequestDequeuer" object="Dequeuer">
+			<resultlist>
+				<result value="0" node="CheckFRPARTAPN"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+                <node name="CheckFRPARTAPN" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="DataBaseProcessorADDNUM_DEALER"/>
+				<result value="" node="DataBaseProcessorADDNUM"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="//AdditionalData/RegisteredList/FRPARTAPN"/>                                 
+                                <param name="OrXmlPath:1" value="//AdditionalData/ProvisionList/FRPARTAPN"/>            
+			</parameterslist>
+		</node>		
+                <node name="DataBaseProcessorADDNUM" object="DataBaseProcessor">
+			<resultlist>
+				<result value="" node="ExtractIP"/>
+			</resultlist>
+			<parameterslist>
+				<param name="DataBaseName" value="FORIS.SPA.ARCHIVE"/>
+				<param name="FunctionName" value="STATIC_IP_ADD"/>
+				<param name="FunctionType" value="function"/>
+				<param name="OutXml" value="db_unit_result"/>
+				<param name="DbParameterName:0" value="p_msisdn"/>
+				<param name="DbParameterDirection:0" value="Input"/>
+				<param name="DbParameterType:0" value="Varchar2"/>
+				<param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN" />
+				<param name="DbParameterName:1" value="p_result"/>
+				<param name="DbParameterDirection:1" value="ReturnValue"/>
+				<param name="DbParameterType:1" value="Varchar2"/>
+                                <param name="DbParameterValue:1" value=""/>
+			</parameterslist>
+		</node>
+                <node name="ExtractIP" object="XmlNodesCopier">
+			<resultlist>
+				<result value="" node="ParameterSwitch"/>
+			</resultlist>
+			<parameterslist>
+				<param name="SrcXml" value="db_unit_result"/>
+				<param name="DstMessage" value="xmlrequest"/>
+				<param name="CopyContentType" value="InnerText"/>
+				<param name="SrcXmlPath:0" value="root/return"/>
+				<param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/IP"/>
+                	</parameterslist>
+		</node>
+                <node name="ParameterSwitch" object="Switch">
+			<resultlist>
+				<result value="2" node="DummyResponder"/>
+				<result value="" node="AddMODGRPS"/>
+			</resultlist>
+			<parameterslist>
+				<param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/IP"/>
+				<param name="Value:2" value="err001"/>
+			</parameterslist>
+		</node>
+                <node name="AddMODGRPS" object="Commander">
+			<resultlist>
+                                <result value="0" node="ResponseAssembler"/>
+				<result value="" node="DataBaseProcessorDELETENUM"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddFRIP"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>
+                <node name="DataBaseProcessorDELETENUM" object="DataBaseProcessor">
+			<resultlist>
+				<result value="" node="DeleteStaticIP"/>
+			</resultlist>
+			<parameterslist>
+				<param name="DataBaseName" value="FORIS.SPA.ARCHIVE"/>
+				<param name="FunctionName" value="STATIC_IP_DELETE"/>
+				<param name="FunctionType" value="procedure"/>
+				<param name="OutXml" value="db_unit_result"/>
+				<param name="DbParameterName:0" value="p_msisdn"/>
+				<param name="DbParameterDirection:0" value="Input"/>
+				<param name="DbParameterType:0" value="Varchar2"/>
+				<param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN" />
+			</parameterslist>
+		</node>
+                <node name="DeleteStaticIP" object="Commander">
+			<resultlist>
+				<result value="" node="DummyResponder"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="DeleteFRIP"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>             
+                <node name="DataBaseProcessorADDNUM_DEALER" object="DataBaseProcessor">
+			<resultlist>
+				<result value="" node="ExtractIP_DEALER"/>
+			</resultlist>
+			<parameterslist>
+				<param name="DataBaseName" value="FORIS.SPA.ARCHIVE"/>
+				<param name="FunctionName" value="STATIC_IP_ADD_DEALER"/>
+				<param name="FunctionType" value="function"/>
+				<param name="OutXml" value="db_unit_result"/>
+				<param name="DbParameterName:0" value="p_msisdn"/>
+				<param name="DbParameterDirection:0" value="Input"/>
+				<param name="DbParameterType:0" value="Varchar2"/>
+				<param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN" />
+				<param name="DbParameterName:1" value="p_result"/>
+				<param name="DbParameterDirection:1" value="ReturnValue"/>
+				<param name="DbParameterType:1" value="Varchar2"/>
+                                <param name="DbParameterValue:1" value=""/>
+			</parameterslist>
+		</node>
+                <node name="ExtractIP_DEALER" object="XmlNodesCopier">
+			<resultlist>
+				<result value="" node="ParameterSwitch_DEALER"/>
+			</resultlist>
+			<parameterslist>
+				<param name="SrcXml" value="db_unit_result"/>
+				<param name="DstMessage" value="xmlrequest"/>
+				<param name="CopyContentType" value="InnerText"/>
+				<param name="SrcXmlPath:0" value="root/return"/>
+				<param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/IP"/>
+                	</parameterslist>
+		</node>
+                <node name="ParameterSwitch_DEALER" object="Switch">
+			<resultlist>
+				<result value="2" node="DummyResponder"/>
+				<result value="" node="DeleteBasicGPRS_APN_DEALER"/>
+			</resultlist>
+			<parameterslist>
+				<param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/IP"/>
+				<param name="Value:2" value="err001"/>
+			</parameterslist>
+		</node>
+                <node name="DeleteBasicGPRS_APN_DEALER" object="Commander">
+			<resultlist>
+                                <result value="" node="AddBasicGPRS_APN_DEALER"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="DeleteBasicGPRS_APN_DEALER"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>
+                <node name="AddBasicGPRS_APN_DEALER" object="Commander">
+			<resultlist>
+                                <result value="" node="AddFRIP_DEALER"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddBasicGPRS_APN_DEALER"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>
+                <node name="AddFRIP_DEALER" object="Commander">
+			<resultlist>
+                                <result value="0" node="ResponseAssembler"/>
+				<result value="" node="DataBaseProcessorDELETENUM_DEALER"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddFRIP_DEALER"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>
+                <node name="DataBaseProcessorDELETENUM_DEALER" object="DataBaseProcessor">
+			<resultlist>
+				<result value="" node="DeleteStaticIP_DEALER"/>
+			</resultlist>
+			<parameterslist>
+				<param name="DataBaseName" value="FORIS.SPA.ARCHIVE"/>
+				<param name="FunctionName" value="STATIC_IP_DELETE_DEALER"/>
+				<param name="FunctionType" value="procedure"/>
+				<param name="OutXml" value="db_unit_result"/>
+				<param name="DbParameterName:0" value="p_msisdn"/>
+				<param name="DbParameterDirection:0" value="Input"/>
+				<param name="DbParameterType:0" value="Varchar2"/>
+				<param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN" />
+			</parameterslist>
+		</node>
+                <node name="DeleteStaticIP_DEALER" object="Commander">
+			<resultlist>
+				<result value="" node="DummyResponder"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="DeleteFRIP_DEALER"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>           
+                <node name="DummyResponder" object="DummyResponder">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OverallResult" value="FAILURE"/>
+				<param name="DetailedResult" value="FAILURE"/>
+				<param name="Delay" value="0"/>
+			</parameterslist>
+		</node>				
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="SingleSubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

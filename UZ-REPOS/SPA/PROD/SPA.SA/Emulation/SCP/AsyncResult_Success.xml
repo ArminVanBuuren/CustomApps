@@ -1,0 +1,18 @@
+<RequestResultDataSet>
+  <RequestResultDataTable>
+    <IndexToInputTable>0</IndexToInputTable>
+    <REQUEST_ID>#+RequestId+#</REQUEST_ID>
+    <ITEM_ID>87664</ITEM_ID>
+    <REQUEST_COMPLETION_DATE>2012-02-13T09:53:40.4400296+04:00</REQUEST_COMPLETION_DATE>
+    <ERROR_CODE>0</ERROR_CODE>
+    <RESULT_MESSAGE>Operation was successful</RESULT_MESSAGE>
+    <EMULATION>RESULT:0</EMULATION>
+  </RequestResultDataTable>
+  <ServiceResultDataTable>
+    <IndexToInputTable>0</IndexToInputTable>
+    <REQUEST_ID>#+RequestId+#</REQUEST_ID>
+    <ITEM_ID>87664</ITEM_ID>
+    <SERVICE_CODE>PKG123</SERVICE_CODE>
+    <SERVICE_ACTION_RESULT_CODE>0</SERVICE_ACTION_RESULT_CODE>
+  </ServiceResultDataTable>
+</RequestResultDataSet>

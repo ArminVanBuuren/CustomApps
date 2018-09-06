@@ -1,0 +1,64 @@
+﻿<scenario name="SC.FP.ChangeTariff.ChangeCug">
+  <objectList>
+    <object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ByServicesCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterByXmlNodes" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponderConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+    <object name="RiParametersReader" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RiLinkedDataInitializer" assembly="FORIS.SPA.MmlProcessing.dll" />
+  </objectList>
+  <automat>
+    <node name="BySubscribersCutter" object="BySubscribersCutter">
+      <resultlist>
+        <result value="0" node="CheckForeignSubscriber" />
+        <result value="1" node="" />
+      </resultlist>
+    </node>
+    <!-- Проверка на необходимость отправки запроса -->
+    <node name="CheckForeignSubscriber" object="ConditionsResolver">
+      <resultlist>
+        <result value="0" node="CheckHostTypeCode" />
+        <result value="" node="DummyResponderSuccess" />
+      </resultlist>
+      <parameterslist>
+        <param name="MultiLevelCondition" value="(//IdentifiersList/Identifier//IMSI[text()!='0']) AND NOT (//SkipFP/Value[text()='1'])" />
+      </parameterslist>
+    </node>
+    <!--  Макрос HOST_CODE_AM должен быть текущей платформой активатора-->
+    <node name="CheckHostTypeCode" object="ConditionsResolver">
+      <resultlist>
+        <result value="0" node="AssignService" />
+        <result value="1" node="DummyResponderSuccess" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//BalanceStorage/HostTypeCode[text()='ST']" />
+      </parameterslist>
+    </node>
+    <node name="DummyResponderSuccess" object="DummyResponder">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="OverallResult" value="SUCCESS" />
+        <param name="DetailedResult" value="SUCCESS" />
+        <param name="DetailedResultDescription" value="Command not sending" />
+      </parameterslist>
+    </node>
+    <node name="AssignService" object="Commander">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.AssignCugService" />
+        <param name="Asynchronous" value="true" />
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="BySubscribersCutter" />
+      </resultlist>
+    </node>
+  </automat>
+</scenario>

@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="MoneyTransfer" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>'Дебеторский перевод средств'</Description>
+	<Author Name="Timur Khamzin" Date="2016-04-28+11:09"/>
+	<Request Template='&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"&gt;
+  &lt;soap:Body&gt;
+    &lt;TestMethod xmlns="http://sitronicsts.com/MessagingGateway"&gt;
+      &lt;Methodname&gt;PtPMoneyTransfer&lt;/Methodname&gt;
+      &lt;StringOfParams&gt;lang=ru;amount={2};customer={0};receiver={1}&lt;/StringOfParams&gt;
+    &lt;/TestMethod&gt;
+  &lt;/soap:Body&gt;
+&lt;/soap:Envelope&gt;'>
+		<Item Name="msisdn" Type="Wellknown"/>
+                <Item Name="receiver" Type="Parameter"/>
+                <Item Name="amount" Type="Parameter"/>
+	</Request>
+	<ErrorsList CodePage="ASCII">
+		<Error Name="-3" Value="SUCCESS"/>
+	</ErrorsList>
+</Command>

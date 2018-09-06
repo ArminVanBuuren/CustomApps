@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Command Name="ChangeContractOwner" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>ChangeContractOwner</Description>
+  <Author Name="Nick Vilenski" Date="2016-05-18+17:00"/>
+  <Properties GenerationType="DataSetXml" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[<DataSet Name="AccountSync.ChangeContractOwner" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Attributes>
+    <Attribute Name="Protocol" Type="System.String" Value="Wcf"/>
+    <Attribute Name="Procedure" Type="System.String" Value="AccountSync.ChangeContractOwner"/>
+    <Attribute Name="ClientId" Type="System.String" Value="SPA"/>
+    <Attribute Name="RequestId" Type="System.String" Value="##org.id##"/>
+    <Attribute Name="ContractNumber" Type="System.String" Value="##cn##"/>
+    <Attribute Name="CustomerTypeId" Type="System.String" Value="{2}"/>
+  </Attributes>
+</DataSet>]]>
+    </RequestTemplate>
+    <Item Name="org.id" Type="Wellknown"/>
+    <Item Name="cn" Type="Wellknown"/>
+    <Item Name="CUSTOMER_TYPE_ID" Type="Parameter"/>
+  </Request>
+</Command>
+
