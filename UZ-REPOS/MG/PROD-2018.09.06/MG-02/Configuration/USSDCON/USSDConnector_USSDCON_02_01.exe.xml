@@ -1,0 +1,69 @@
+<Application configClass="FORIS.MessagingGateway.SMSConnector.SMSConnectorConfiguration" type="SMSCON">
+  <BlackList propertyName="Sender" regExpBan="^88">
+    <Ban>603221981</Ban>
+    <Ban>555715</Ban>
+  </BlackList>
+  <Settings>
+    <Item name="ModuleType" value="SMSCON" />
+    <Item name="ModuleName" value="USSDCON_02_01" />
+    <Item name="CRMCacheCleanInterval" value="1200" />
+    <Item name="StoringInterval" value="10" />
+    <Item name="StoringHWM" value="200" />
+    <Item name="SMSCBindRetryDelay" value="10" />
+    <Item name="EnquireLinkInterval" value="60" />
+    <Item name="DefaultEncoding" value="unicodefffe" />
+    <Item name="RegisteredDelivery" value="1" />
+    <Item name="SrcTon" value="1" />
+    <Item name="SrcNpi" value="1" />
+    <Item name="DstTon" value="1" />
+    <Item name="DstNpi" value="1" />
+    <Item name="SubmitEsmClass" value="0" />
+    <Item name="SubmitUssdServiceOp" value="0" />
+    <Item name="SplittingType" value="UDH" />
+    <Item name="ContentField" value="ShortMessage" />
+    <Item name="SplitBy" value="160" />
+    <Item name="SplitAfter" value="160" />
+    <Item name="Window" value="5" />
+    <Item name="WindowExceededDelay" value="60" />
+    <Item name="ResponseTimeout" value="10000" />
+    <Item name="SuccessResponseCodes" value="0,40" />
+    <Item name="HealthAlgo" value="Simple" />
+    <Item name="HealthParam" value="300" />
+    <Item name="UtcOffset" value="04+" />
+    <Item name="FetchLimit" value="200" />
+    <Item name="ThreadMultiplifier" value="1" />	
+  </Settings>
+  <TemplateProcessors defaultConfig="Configuration\USSDCON\USSDTemplateProcessor.01.xml">
+    <Processor dll="DefaultTemplates.dll" class="SMSTemplateProcessor" config="Configuration\USSDCON\USSDTemplateProcessor.01.xml" />
+  </TemplateProcessors>
+  <Anumbertransformations />
+  <SMSCenters>
+    <Connection host="10.160.33.34" port="8888" systemType="6" systemId="mediatel" pass="telmed" />
+  </SMSCenters>
+  <Encodings>
+    <Outgoing>
+      <Table name="iso-8859-1" encoding="0" special="7bit" />
+      <Table name="ascii" encoding="1" special="" />
+      <Table name="ascii" encoding="2" special="" />
+      <Table name="iso-8859-3" encoding="3" special="" />
+      <Table name="ascii" encoding="4" special="" />
+      <Table name="windows-1251" encoding="4"/>
+      <Table name="shift-jis" encoding="5" special="" />
+      <Table name="iso-8859-5" encoding="6" special=""/>
+      <Table name="iso-8859-8" encoding="7" special="" />
+      <Table name="unicodefffe" encoding="8" special="" />
+    </Outgoing>
+    <Incoming>
+      <Table name="gsm 03.38" encoding="0" special="" />
+      <Table name="ascii" encoding="1" special="" />
+      <Table name="ascii" encoding="2" special="" />
+      <Table name="iso-8859-3" encoding="3" special="" />
+      <Table name="windows-1251" encoding="4"/>
+      <Table name="ascii" encoding="4" special="" />
+      <Table name="shift-jis" encoding="5" special="" />
+      <Table name="iso-8859-5" encoding="6" special="" />
+      <Table name="iso-8859-8" encoding="7" special="" />
+      <Table name="unicodefffe" encoding="8" special=""/>
+    </Incoming>
+  </Encodings>
+</Application>

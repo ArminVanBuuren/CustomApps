@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SPA</RootNamespace>
     <AssemblyName>SPA</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -1161,7 +1162,7 @@
     <Content Include="PROD-2018.09.06\SPA.SA\Schemas\SMSC\Normal\Schema.SPA.SA.Hardware.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Schemas\SMSC\Normal\Schema.SPA.SPF.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Schemas\SMSC\Normal\Schema.Tracers.xml" />
-    <Content Include="RLS\Dispatching.xml" />
+    <Content Include="RLS\SPA.BPM\Dispatching.xml" />
     <Content Include="RLS\ROBP\Processes\Activate Call Forwarding Sync.xml" />
     <Content Include="RLS\ROBP\Processes\Add MCA Serice.xml" />
     <Content Include="RLS\ROBP\Processes\Add RBT Service.xml" />
@@ -1210,7 +1211,17 @@
     <Content Include="RLS\ROBP\Processes\TestInformer.xml" />
     <Content Include="RLS\ROBP\Processes\Unblock Subscriber.xml" />
     <Content Include="RLS\ROBP\Processes\Update Call Forwarding.xml" />
-    <Content Include="RLS\ROBP\SC-CT4 %28MST%29\ServiceCatalog.xml" />
+    <Content Include="RLS\ROBP\SC-CT4 %28MST%29\ServiceCatalog-CT4.xml" />
+    <Content Include="RLS\ROBP\SC-CT6 %28ALLPLAY%29\ServiceCatalog-CT6.xml" />
+    <Content Include="RLS\ROBP\SC-FP %28SCP.01, AM%29\ServiceCatalog-FP.xml" />
+    <Content Include="RLS\ROBP\SC-GT %28MG%29\ServiceCatalog-GT.xml" />
+    <Content Include="RLS\ROBP\SC-HL %28ZTE%29\ServiceCatalog-HL.xml" />
+    <Content Include="RLS\ROBP\SC-HLR %28ZTE.ROAMING%29\ServiceCatalog-HLR.xml" />
+    <Content Include="RLS\ROBP\SC-IVR\ServiceCatalog-IVR.xml" />
+    <Content Include="RLS\ROBP\SC-MA %28MCA%29\ServiceCatalog-MA.xml" />
+    <Content Include="RLS\ROBP\SC-RBT %28INTECH%29\ServiceCatalog-RBT.xml" />
+    <Content Include="RLS\ROBP\SC-SCG\ServiceCatalog-SCG.xml" />
+    <Content Include="RLS\ROBP\SC-SM %28SMSC%29\ServiceCatalog.xml" />
     <Content Include="RLS\SPA.BPM\SPA.BPM.01\configuration.application.xml" />
     <Content Include="RLS\SPA.BPM\SPA.BPM.01\configuration.common.xml" />
     <Content Include="RLS\SPA.BPM\SPA.BPM.TEST\configuration.application.xml" />
@@ -1264,7 +1275,9 @@
     <Content Include="RLS\SPA.SA\SPA.SA.AM\Commands\SC.UpdateTDCDataSet.xml" />
     <Content Include="RLS\SPA.SA\SPA.SA.AM\Commands\UpdateLanguageOnFP.xml" />
     <Content Include="RLS\SPA.SA\SPA.SA.AM\Commands\UpdatePAAttributes.xml" />
-    <Content Include="RLS\SPA.SA\SPA.SA.AM\configuration.application.xml" />
+    <Content Include="RLS\SPA.SA\SPA.SA.AM\configuration.application.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="RLS\SPA.SA\SPA.SA.AM\configuration.common.xml" />
     <Content Include="RLS\SPA.SA\SPA.SA.AM\Decoders\FinancialPlatformDecoder.xml" />
     <Content Include="RLS\SPA.SA\SPA.SA.AM\dictionary.xml" />
@@ -1880,16 +1893,6 @@
     <Folder Include="PROD-2018.09.06\SPA.SA\Emulation\RBT_INTECH\" />
     <Folder Include="PROD-2018.09.06\SPA.SA\Emulation\SCG\" />
     <Folder Include="PROD-2018.09.06\SPA.SA\Emulation\SMSC\" />
-    <Folder Include="RLS\ROBP\SC-CT6 %28ALLPLAY%29\" />
-    <Folder Include="RLS\ROBP\SC-FP %28SCP.01, AM%29\" />
-    <Folder Include="RLS\ROBP\SC-GT %28MG%29\" />
-    <Folder Include="RLS\ROBP\SC-HL %28ZTE%29\" />
-    <Folder Include="RLS\ROBP\SC-HLR %28ZTE.ROAMING%29\" />
-    <Folder Include="RLS\ROBP\SC-IVR\" />
-    <Folder Include="RLS\ROBP\SC-MA %28MCA%29\" />
-    <Folder Include="RLS\ROBP\SC-RBT %28INTECH%29\" />
-    <Folder Include="RLS\ROBP\SC-SCG\" />
-    <Folder Include="RLS\ROBP\SC-SM %28SMSC%29\" />
     <Folder Include="RLS\SPA.SA\SPA.SA.MCA\Scenarios\" />
     <Folder Include="RLS\SPA.SA\SPA.SA.MG\Scenarios\" />
     <Folder Include="RLS\SPA.SA\SPA.SA.RBT.INTECH\Scenarios\" />

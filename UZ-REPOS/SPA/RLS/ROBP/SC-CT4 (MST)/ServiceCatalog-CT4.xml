@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Configuration markers="*" scenarioPrefix="SC." mainIdentities="MSISDN,PersonalAccountNumber,ContractNumber" SICreation="" formatVersion="1">
+  <HostTypeList>
+  </HostTypeList>
+  <IdentityList>
+    <Identity name="ContractNumber" description="Номер контракта" />
+    <Identity name="ICCID" description="Номер ICCID" />
+    <Identity name="IMSI" description="Номер IMSI" />
+    <Identity name="KI" path="//AdditionalData//EncryptedKi" description="Ключ шифрования" />
+    <Identity name="MSISDN" description="Номер MSISDN" />
+  </IdentityList>
+  <AttributeList>
+    <Attribute name="A3A8" path="//AdditionalData//VersionsA3A8" description="Алгоритм шифрования" />
+    <Attribute name="PersonalAccountNumber" path="//IdentifiersList/Identifier/PersonalAccountNumber" description="Номер ЛС" />
+    <Attribute name="TerminalDeviceId" path="//IdentifiersList/Identifier/TerminalDeviceId" description="Идентификатор ПО" />
+  </AttributeList>
+  <ResourceList>
+  </ResourceList>
+  <RFSParameterList>
+    <RFSParameter name="ChangeTP" path="xml(//ChangeTP)" description="Параметры смены тарифного плана" />
+    <RFSParameter name="Subscriber" path="xml(//Subscriber)" description="Параметры создания абонента" />
+    <RFSParameter name="NewIMSI" description="Новый номер IMSI" />
+    <RFSParameter name="NewMSISDN" path="//ChangeMsisdn/NewMSISDN" description="Новый номер MSISDN" />
+  </RFSParameterList>
+  <FlagList />
+  <RFSList>
+    <RFS name="RFS_MST_SUBSCRIPTION" hostType="CT4" processType="Subscription" description="Абонент на платформе MST" />
+    <RFS name="RFS_MST_CHANGE_MSISDN" hostType="CT4" description="Изменение номера MSISDN на платформе MST" >
+      <RFSParameter name="NewMSISDN" path="//ChangeMsisdn/NewMSISDN" />
+    </RFS>
+  </RFSList>
+  <CFSList>
+    <CFS name="ChangeMsisdn" description="Изменение номера">
+      <RFS name="RFS_MST_CHANGE_MSISDN" linkType="Add" dependsOn="RFS_MST_SUBSCRIPTION" />
+    </CFS>
+    <CFS name="FRCLUBUMS" description="FRCLUBUMS">
+      <RFS name="RFS_MST_SUBSCRIPTION" linkType="Add" />
+    </CFS>
+  </CFSList>
+  <CFSGroupList >
+  </CFSGroupList>
+  <RFSGroupList />
+  <RFSDependencyList />
+  <HandlerList >
+  </HandlerList>
+  <ScenarioList>
+    <Scenario name="MST.CreateSubscriber" description="Создание абонента на MST">
+      <RFS name="RFS_MST_SUBSCRIPTION" scenarioType="Add"/>
+    </Scenario>
+    <Scenario name="MST.DeleteSubscriber" description="Удаление абонента на MST">
+      <RFS name="RFS_MST_SUBSCRIPTION" scenarioType="Remove" />
+    </Scenario>
+    <Scenario name="MST.ChangeMSISDN" description="Изменение номера на MST">
+      <RFS name="RFS_MST_CHANGE_MSISDN" scenarioType="Add" />
+    </Scenario>
+  </ScenarioList>
+  <WfmScenarioList />
+</Configuration>

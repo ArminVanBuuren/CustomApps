@@ -1,0 +1,8 @@
+<Application>
+  <Settings>
+    <Item name="ModuleType" value="WCFHND" />
+    <Item name="ModuleName" value="WCFHND_01_01" />
+    <Item name="NumOfThreads" value="4" />
+  </Settings>
+  <WCFAdapter assembly="FORIS.MessagingGateway.BMSServiceAdapter.dll" type="FORIS.MessagingGateway.BMSServiceAdapter.BMSServiceAdapter"/>
+</Application>

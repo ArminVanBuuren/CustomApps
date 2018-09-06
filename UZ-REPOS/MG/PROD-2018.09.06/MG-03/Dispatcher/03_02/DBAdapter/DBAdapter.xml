@@ -1,0 +1,230 @@
+﻿<?xml version="1.0"?>
+<plugin name="DBAdapter">
+  <Connections>
+    <Handler name="mg" type="OracleClient" connectionString="Server=crm;User ID=mg;Password=mg_for_is;Min Pool size=2"/>
+  </Connections>
+  <ThreadPooling use="true" forwarding="true" minThreads="16"/>
+  <Procedures>
+    <Procedure cond="/Message/@type='serviceorder' and /Message/Item/@action='IsDifferrentRegion'" call="IS_SP_L1_DIFFERENT" using="mg">
+      <Parameters>
+        <param name="p_msisdn1" type="string" value="${customer}"/>
+        <param name="p_msisdn2" type="string" value="${receiver}"/>
+        <param name="p_result" type="out:string" value=""/>
+      </Parameters>
+      <SendTemplate>
+	<Message type="serviceorderresult" hostname="dispatcher" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+		<Item customer="${customer}" dbresult="${p_result}"/>
+	</Message>
+      </SendTemplate>
+    </Procedure>
+    <Procedure cond="/Message/@type='verificationrequest' and /Message/Item/Attribute[@name='checkivrservice']/@value='6' and  /Message/Item/Attribute[@name='checkblocks']/@value='0'" call="OPERATION_GATEWAY.CHECK_SERVICES" using="mg">
+      <Parameters>
+        <param name="P_MSISDN" type="string" value="${customer}"/>
+        <param name="P_TYPE" type="string" value="0"/>
+        <param name="IVR_CODE" type="out:string" value=""/>
+        <param name="last_date" type="out:string" value=""/>
+        <param name="charging" type="out:string" value=""/>
+        <param name="IN_PLATFORM" type="out:string" value=""/>
+        <param name="PERSONAL_ACCOUNT" type="out:string" value=""/>
+        <param name="TDC" type="out:string" value=""/>
+        <param name="I" type="out:string" value=""/>
+        <param name="DBRESULT" type="out:string" value=""/>
+      </Parameters>
+      <SendTemplate>
+        <Message type="verificationresult" hostname="dispatcher" id="@{newGuid}" session_id="${session_id}" request_id="${id}">${I}
+				<Item customer="${customer}" tdc="1" tariffplan="${IVR_CODE}" charge="${charging}" state="0" dbresult="${DBRESULT}">${I}
+					<Attribute name="password" value=""/>${I}
+					<Attribute name="day" value="${last_date}"/>${I}
+					<Attribute name="regioncode" value=""/>${I}
+					<Attribute name="customerblocks" value=""/>${I}
+				</Item>${I}
+			</Message>
+      </SendTemplate>
+    </Procedure>
+    <Procedure cond="/Message/@type='verificationrequest' and /Message/Item/Attribute[@name='checkivrservice']/@value='2' and  /Message/Item/Attribute[@name='checkblocks']/@value='0'" call="OPERATION_GATEWAY.CHECK_SERVICES" using="mg">
+      <Parameters>
+        <param name="P_MSISDN" type="string" value="${customer}"/>
+        <param name="P_TYPE" type="string" value="1"/>
+        <param name="IVR_CODE" type="out:string" value=""/>
+        <param name="last_date" type="out:string" value=""/>
+        <param name="charging" type="out:string" value=""/>
+        <param name="IN_PLATFORM" type="out:string" value=""/>
+        <param name="PERSONAL_ACCOUNT" type="out:string" value=""/>
+        <param name="TDC" type="out:string" value=""/>
+        <param name="I" type="out:string" value=""/>
+        <param name="DBRESULT" type="out:string" value=""/>
+      </Parameters>
+      <SendTemplate>
+        <Message type="verificationresult" hostname="dispatcher" id="@{newGuid}" session_id="${session_id}" request_id="${id}">${I}
+				<Item customer="${customer}" tdc="1" tariffplan="" charge="${charging}" state="0" dbresult="${DBRESULT}">${I}
+					<Attribute name="inplatform" value="${IN_PLATFORM}"/>${I}
+					<Attribute name="personalaccount" value="${PERSONAL_ACCOUNT}"/>${I}
+					<Attribute name="tdc" value="${TDC}"/>${I}
+				</Item>${I}
+			</Message>
+      </SendTemplate>
+    </Procedure>
+    <Procedure cond="/Message/@type='setupservicerequest' and /Message/Item/Attribute/@name='inplatform'" call="OPERATION_GATEWAY.CHANGE_LANGUAGE" using="mg">
+      <Parameters>
+        <param name="P_MSISDN" type="string" value="${customer}"/>
+        <param name="LANG1" type="string" value="${scplang}"/>
+        <param name="LANG2" type="string" value="${ussdlang}"/>
+        <param name="IN_PLATFORM" type="string" value="${inplatform}"/>
+        <param name="I" type="out:string" value=""/>
+        <param name="DBRESULT" type="out:string" value=""/>
+      </Parameters>
+      <SendTemplate>
+        <Message type="setupserviceresult" hostname="dispatcher" id="@{newGuid}" session_id="${session_id}" request_id="${id}">${I}
+				<Item customer="${customer}" tdc="1" state="0" dbresult="${DBRESULT}">${I}
+					<Attribute name="index" value="-1"/>${I}
+				</Item>${I}
+			</Message>
+      </SendTemplate>
+    </Procedure>
+    <Procedure cond="/Message/@type='retrievecustomerdata' and /Message/Item/@subject='checkpayments' and /Message/Item/Attribute[@name='index']/@value='0'" call="OPERATION_GATEWAY.CHECK_LAST_PAYMENTS" using="mg">
+      <Parameters>
+        <param name="P_MSISDN" type="string" value="${customer}"/>
+        <param name="AMOUNT" type="out:string" value=""/>
+        <param name="CURRENCY" type="out:string" value=""/>
+        <param name="DATE_PAY" type="out:string" value=""/>
+        <param name="I" type="out:string" value=""/>
+        <param name="DBRESULT" type="out:string" value=""/>
+      </Parameters>
+      <SendTemplate>
+        <Message type="retrievecustomerdataresult" hostname="dispatcher" id="@{newGuid}" session_id="${session_id}" request_id="${id}">${I}
+				<Item customer="${customer}" subject="payments" tdc="1" dbresult="${DBRESULT}">${I}
+					<Attribute name="intpartfracpart" value="${AMOUNT}"/>${I}
+					<Attribute name="day" value="${DATE_PAY}"/>${I}
+					<Attribute name="currency" value="${CURRENCY}"/>${I}
+				</Item>${I}
+			</Message>
+      </SendTemplate>
+    </Procedure>
+    <Procedure cond="/Message/@type='retrievecustomerdata' and /Message/Item/@subject='exchangerate'" call="OPERATION_GATEWAY.EXCHANGE_VALUE" using="mg">
+      <Parameters>
+        <param name="P_VALUE" type="string" value="${value}"/>
+        <param name="DATE_IN" type="string" value="${day}"/>
+        <param name="CURRENCY_IN" type="string" value="${currecyin}"/>
+        <param name="CURRENCY_TO" type="string" value="${currecyto}"/>
+        <param name="CALC_CURRENCY" type="out:string" value=""/>
+        <param name="CURRENCY_OUT" type="out:string" value=""/>
+        <param name="I" type="out:string" value=""/>
+        <param name="DBRESULT" type="out:string" value=""/>
+      </Parameters>
+      <SendTemplate>
+        <Message type="retrievecustomerdataresult" hostname="dispatcher" id="@{newGuid}" session_id="${session_id}" request_id="${id}">${I}
+				<Item subject="exchangerate" tdc="1" dbresult="${DBRESULT}">${I}
+					<Attribute name="calccurr" value="${CALC_CURRENCY}"/>${I}
+					<Attribute name="currecy" value="${CURRENCY_OUT}"/>${I}
+				</Item>${I}
+			</Message>
+      </SendTemplate>
+    </Procedure>
+    <Procedure cond="/Message/@type='retrievecustomerdata' and /Message/Item/@subject='getbalance' and /Message/Item/Attribute[@name='unpayment']/@value='6' and /Message/Item/Attribute[@name='requestcountertype']/@value='0'" call="OPERATION_GATEWAY.GET_BALANCE" using="mg">
+      <Parameters>
+        <param name="P_MSISDN" type="string" value="${customer}"/>
+        <param name="P_ROUNDING" type="string" value="${rounding}"/>
+        <param name="SUBSCRIBER_BALANCE" type="out:string" value=""/>
+        <param name="CURRCODE" type="out:string" value=""/>
+        <param name="I" type="out:string" value=""/>
+        <param name="DBRESULT" type="out:string" value=""/>
+      </Parameters>
+      <SendTemplate>
+        <Message type="retrievecustomerdataresult" hostname="dispatcher" id="@{newGuid}" session_id="${session_id}" request_id="${id}" language_id="0">${I}
+				<Item customer="${customer}" tdc="1" subject="getbalance" dbresult="${DBRESULT}" state="active">${I}
+					<Attribute name="balanceintpartdotpart" value="${SUBSCRIBER_BALANCE}"/>${I}
+					<Attribute name="accumulator" value=""/>${I}
+					<Attribute name="disconnectiontime" value=""/>${I}
+					<Attribute name="recommendedprepayment" value=""/>${I}
+					<Attribute name="currency" value="${CURRCODE}"/>${I}
+				</Item>${I}
+			</Message>
+      </SendTemplate>
+    </Procedure>
+    <Procedure cond="/Message/@type='retrievecustomerdata' and /Message/Item/@customer!='' and /Message/Item/@subject='getcurrentcharge'" call="OPERATION_GATEWAY.GET_CURRENT_CHARGE" using="mg">
+      <Parameters>
+        <param name="P_MSISDN" type="string" value="${customer}"/>
+        <param name="P_CONVERT" type="string" value="${convert}"/>
+        <param name="V_RESULT" type="out:string" value=""/>
+        <param name="CURRENCY" type="out:string" value=""/>
+        <param name="I" type="out:string" value=""/>
+        <param name="DBRESULT" type="out:string" value=""/>
+      </Parameters>
+      <SendTemplate>
+        <Message type="retrievecustomerdataresult" hostname="dispatcher" id="@{newGuid}" session_id="${session_id}" request_id="${id}">${I}
+				<Item customer="${customer}" subject="getcurrentcharge" tdc="1" dbresult="${DBRESULT}">${I}
+					<Attribute name="includeresult" value="${V_RESULT}"/>${I}
+					<Attribute name="currency" value="${CURRENCY}"/>${I}
+				</Item>${I}
+			</Message>
+      </SendTemplate>
+    </Procedure>
+    <Procedure cond="/Message/@type='retrievecustomerdata' and /Message/Item/@customer!='' and /Message/Item/@subject='getlastdetails'" call="OPERATION_GATEWAY.GET_ALL_DETAILS" using="mg">
+      <Parameters>
+        <param name="P_MSISDN" type="string" value="${customer}"/>
+        <param name="P_CONVERT" type="string" value="${convert}"/>
+        <param name="P_LINES" type="string" value="${lines}"/>
+        <param name="P_LAST_DAYS" type="string" value="${lastdays}"/>
+        <param name="P_RESULT" type="out:string" value=""/>
+        <param name="I" type="out:string" value=""/>
+        <param name="DBRESULT" type="out:string" value=""/>
+      </Parameters>
+      <SendTemplate>
+        <Message type="retrievecustomerdataresult" hostname="dispatcher" id="@{newGuid}" session_id="${session_id}" request_id="${id}">${I}
+				<Item customer="${customer}" subject="getlastdetails" tdc="1" dbresult="${DBRESULT}">${I}
+					<Attribute name="includeresult" value="${P_RESULT}"/>${I}
+				</Item>${I}
+			</Message>
+      </SendTemplate>
+    </Procedure>
+    <Procedure cond="/Message/@type='getbmsplatformcountersrequest' and /Message/Item/Attribute[@name='querycounterstype']/@value='3' and /Message/Item/Attribute[@name='targetplatform']/@value='7'" call="OPERATION_GATEWAY.GET_BMS_BALANCE" using="mg">
+      <Parameters>
+        <param name="MSISDN" type="string" value="${customer}"/>
+        <param name="P_CUR_START_DATE" type="out:string" value=""/>
+        <param name="P_CUR_END_DATE" type="out:string" value=""/>
+        <param name="P_DIS_CUR_UNITS" type="out:string" value=""/>
+        <param name="P_CUR_EARNED_UNITS" type="out:string" value=""/>
+        <param name="P_CUR_REDEEMED_UNITS" type="out:string" value=""/>
+        <param name="P_PREV_START_DATE" type="out:string" value=""/>
+        <param name="P_PREV_EARNED_UNITS" type="out:string" value=""/>
+        <param name="P_PREV_REDEEMED_UNITS" type="out:string" value=""/>
+        <param name="I" type="out:string" value=""/>
+        <param name="DBRESULT" type="out:string" value=""/>
+      </Parameters>
+      <SendTemplate>
+        <Message type="getbmsplatformcountersresult" hostname="dispatcher" id="@{newGuid}" session_id="${session_id}" request_id="${id}">${I}
+				<Item customer="${customer}" dbresult="${DBRESULT}">${I}
+					<Attribute name="curstartdate" value="${P_CUR_START_DATE}"/>${I}
+					<Attribute name="curenddate" value="${P_CUR_END_DATE}"/>${I}
+					<Attribute name="discurunits" value="${P_DIS_CUR_UNITS}"/>${I}
+					<Attribute name="curearnedunits" value="${P_CUR_EARNED_UNITS}"/>${I}
+					<Attribute name="curredeemedunits" value="${P_CUR_REDEEMED_UNITS}"/>${I}
+					<Attribute name="prevstartdate" value="${P_PREV_START_DATE}"/>${I}
+					<Attribute name="prevearnedunits" value="${P_PREV_EARNED_UNITS}"/>${I}
+					<Attribute name="prevredeemedunts" value="${P_PREV_REDEEMED_UNITS}"/>${I}
+				</Item>${I}
+			</Message>
+      </SendTemplate>
+    </Procedure>
+    <Procedure cond="/Message/@type='getlanguage' and /Message/Item/@customer!=''" call="OPERATION_GATEWAY.GET_INDATA_BY_MSISDN" using="mg">
+      <Parameters>
+        <param name="P_MSISDN" type="string" value="${customer}"/>
+        <param name="BALANCE" type="out:string" value=""/>
+        <param name="CURRCODE" type="out:string" value=""/>
+        <param name="INPLATFORM_LANG" type="out:string" value=""/>
+        <param name="SMS_USSD_LANG" type="out:string" value=""/>
+        <param name="DBRESULT" type="out:string" value=""/>
+      </Parameters>
+      <SendTemplate>
+        <Message type="getlanguageresult" hostname="dispatcher" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+				<Item customer="${customer}" dbresult="${DBRESULT}">
+					<Attribute name="inlang" value="${INPLATFORM_LANG}"/>
+					<Attribute name="smsussdlang" value="${SMS_USSD_LANG}"/>
+					<Attribute name="balance" value="${BALANCE}"/>
+					<Attribute name="currcode" value="${CURRCODE}"/>
+				</Item>
+			</Message>
+      </SendTemplate>
+    </Procedure>
+  </Procedures>
+</plugin>

@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Application configClass="FORIS.MessagingGateway.MSMQConnector.MSMQConnectorConfiguration" type="MSMQCON">
+  <Queues>
+    <InputQueue path=".\msmqconnector_queue" />
+    <OutputQueues>
+      <OutputQueue path="a14-spa-bpm01\bpm_client_incoming" name="FORIS" timeToBeReceived="1000" timeToReachQueue="10" recoverable="false" />
+    </OutputQueues>
+  </Queues>
+  <Settings>
+    <Item name="ModuleType" value="MSMQCON" />
+    <Item name="ModuleName" value="MSMQCON_01_01" />
+    <Item name="CRMCacheCleanInterval" value="1200" />
+    <Item name="StoringInterval" value="20" />
+    <Item name="StoringHWM" value="200" />
+    <Item name="FetchLimit" value="200" />
+  </Settings>
+  <TemplateProcessors defaultConfig="Configuration\MSMQCON\MSMQTemplateProcessor.xml">
+    <Processor dll="DefaultTemplates.dll" class="MSMQTemplateProcessor" config="Configuration\MSMQCON\MSMQTemplateProcessor.xml" />
+  </TemplateProcessors>
+</Application>

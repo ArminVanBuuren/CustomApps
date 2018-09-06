@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Application>
+	<Queues>
+		<InputQueue name=".\crmfilter_output_1"/>
+		<OutputQueue name=".\crmfilter_input_1" timeToBeReceived="1000" timeToReachQueue="10" recoverable="false">
+			<Override connector="IVRCON_03_02" timeToBeReceived="20" recoverable="true"/>
+		</OutputQueue>
+	</Queues>
+	<Settings>
+		<Item name="ModuleName" value="CRMCON_03_01"/>
+		<Item name="ModuleType" value="CRMCON"/>
+		<Item name="CRMCacheCleanInterval" value="1200"/>      <!-- 1200 -->
+		<Item name="StoringInterval" value="60"/>              <!--20-->
+		<Item name="StoringHWM" value="1200"/>                 <!--200-->
+		<Item name="XmlEncoding" value="utf-16"/>                                  
+		<Item name="MSMQLimit" value="4194304"/>
+		<Item name="ReportTemplates" value="^Delivery"/>
+		<Item name="SupportLargeMessages" value="true"/>
+		<Item name="ThreadMultiplifier" value="8" />
+	</Settings>
+	<TemplateToConnector>
+		<Map template_id="InvokeRequest"              connector="IVRCON_03_01"     template_name="INER_proc"/>
+	</TemplateToConnector>
+</Application>
