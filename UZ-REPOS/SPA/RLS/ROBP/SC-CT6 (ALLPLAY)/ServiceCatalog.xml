@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Configuration markers="*" scenarioPrefix="SC." mainIdentities="MSISDN,PersonalAccountNumber,ContractNumber" SICreation="" formatVersion="1">
+  <HostTypeList>
+  </HostTypeList>
+  <IdentityList>
+    <Identity name="ContractNumber" description="Номер контракта" />
+    <Identity name="ICCID" description="Номер ICCID" />
+    <Identity name="IMSI" description="Номер IMSI" />
+    <Identity name="KI" path="//AdditionalData//EncryptedKi" description="Ключ шифрования" />
+    <Identity name="MSISDN" description="Номер MSISDN" />
+  </IdentityList>
+  <AttributeList>
+    <Attribute name="A3A8" path="//AdditionalData//VersionsA3A8" description="Алгоритм шифрования" />
+    <Attribute name="PersonalAccountNumber" path="//IdentifiersList/Identifier/PersonalAccountNumber" description="Номер ЛС" />
+    <Attribute name="TerminalDeviceId" path="//IdentifiersList/Identifier/TerminalDeviceId" description="Идентификатор ПО" />
+  </AttributeList>
+  <ResourceList>
+  </ResourceList>
+  <RFSParameterList>
+  </RFSParameterList>
+  <FlagList />
+  <RFSList>
+  </RFSList>
+  <CFSList>
+  </CFSList>
+  <CFSGroupList>
+  </CFSGroupList>
+  <RFSGroupList />
+  <RFSDependencyList />
+  <HandlerList >
+  </HandlerList>
+  <ScenarioList>
+  </ScenarioList>
+  <WfmScenarioList />
+</Configuration>
