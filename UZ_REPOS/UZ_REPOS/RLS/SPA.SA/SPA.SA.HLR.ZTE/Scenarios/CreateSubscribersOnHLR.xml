@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="CreateSubscribersOnHLR">
+	<include>
+		<scenario name="Sync\AddServices_sync" />
+		<scenario name="Sync\AddGPRSService_Sync" />
+		<scenario name="Sync\AddBarringService_Sync" />
+      		<scenario name="Sub\AddFRIP_Sub" />
+      		<scenario name="Sub\AddCallForwardingOriginating_Sub" />
+	</include>
+	<objectList>
+		<object name="BySubscirbersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll"/>	
+		<object name="ScenarioProcessor" class="FORIS.ScenarioProcessing.Base.SPF.SubscenarioProcessingUnit" assembly="FORIS.SPA.SPF.dll" />
+		<object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll"/>
+	</objectList>
+	<automat>
+		<node name="BySubscirbersSplitter" object="BySubscirbersSplitter">
+			<resultlist>
+				<result value="0" node="SingleSubscirverRequestDequeuer"/>
+			</resultlist>
+		</node>
+		<node name="SingleSubscirverRequestDequeuer" object="Dequeuer">
+			<resultlist>
+				<result value="0" node="DeleteSubscriber"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>		
+		<node name="DeleteSubscriber" object="Commander">
+			<resultlist>
+				<result value="0" node="CreateSubscriber"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="DeleteSubscriber"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Script" value="Command"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>			
+		<node name="CreateSubscriber" object="Commander">
+			<resultlist>
+				<result value="0" node="CheckFRASKUE"/> 
+				<result value="" node="ResponseAssembler"/> 
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="CreateSubscriber"/>
+				<param name="Script" value="Command"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>
+		<node name="CheckFRASKUE" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="AddCommandList"/>
+				<result value="1" node="CheckFRPARTAPN"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="//RegisteredList/FRASKUE"/>
+				<param name="OrXmlPath:1" value="//ProvisionList/FRASKUE"/>
+			</parameterslist>
+		</node>
+		<node name="CheckFRPARTAPN" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="AddCommandList"/>
+				<result value="1" node="AddCallForwardingOriginating_Sub"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="//RegisteredList/FRPARTAPN"/>
+				<param name="OrXmlPath:1" value="//ProvisionList/FRPARTAPN"/>
+			</parameterslist>
+		</node>
+		<node  name="AddCallForwardingOriginating_Sub" object="ScenarioProcessor">
+			<resultlist>
+				<result value="0" node="AddServices_sync" />
+				<result value="" node="ResponseAssembler" />
+			</resultlist>
+			<parameterslist>
+				<param name="Scenario" value="Sub\AddCallForwardingOriginating_Sub" />
+			</parameterslist>
+		</node>		
+		<node  name="AddServices_sync" object="ScenarioProcessor">
+			<resultlist>
+				<result value="0" node="AddGPRSService_Sync" />
+				<result value="" node="ResponseAssembler" />
+			</resultlist>
+			<parameterslist>
+				<param name="Scenario" value="Sync\AddServices_sync" />
+			</parameterslist>
+		</node>		
+		<node  name="AddGPRSService_Sync" object="ScenarioProcessor">
+			<resultlist>
+				<result value="0" node="AddBarringService_Sync" />
+				<result value="" node="ResponseAssembler" />
+			</resultlist>
+			<parameterslist>
+				<param name="Scenario" value="Sync\AddGPRSService_Sync" />
+			</parameterslist>
+		</node>		
+		<node  name="AddBarringService_Sync" object="ScenarioProcessor">
+			<resultlist>
+				<result value="0" node="CheckFRIP" />
+				<result value="" node="ResponseAssembler" />
+			</resultlist>
+			<parameterslist>
+				<param name="Scenario" value="Sync\AddBarringService_Sync" />
+			</parameterslist>
+		</node>
+                <node name="CheckFRIP" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="AddFRIP"/>
+				<result value="1" node="AddCommandList"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData/RegisteredList/FRIP"/>
+			</parameterslist>
+		</node>
+                <node  name="AddFRIP" object="ScenarioProcessor">
+			<resultlist>
+				<result value="" node="AddCommandList" />
+			</resultlist>
+			<parameterslist>
+				<param name="Scenario" value="Sub\AddFRIP_sub" />
+			</parameterslist>
+		</node>	
+                <node name="AddCommandList" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="GetCBDataByMsisdn"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Script" value="Command"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>	       
+		<node name="dummySUCCESS" object="DummyResponder">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OverallResult" value="SUCCESS"/>
+				<param name="DetailedResult" value="SUCCESS"/>
+				<param name="Delay" value="0"/>
+			</parameterslist>
+		</node>		
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="SingleSubscirverRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

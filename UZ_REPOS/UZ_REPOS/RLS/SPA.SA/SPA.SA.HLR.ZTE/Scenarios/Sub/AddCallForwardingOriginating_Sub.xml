@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="AddCallForwardingOriginating_Sub">
+	<objectList>
+		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+                <object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll"/>
+                <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
+	</objectList>
+	<automat>
+                <node name="DataBaseProcessorGetHost" object="DataBaseProcessor">
+			<resultlist>
+				<result value="" node="ExtractCode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="DataBaseName" value="FORIS.SPA.ARCHIVE"/>
+				<param name="FunctionName" value="GET_HOST_BY_MSISDN"/>
+				<param name="FunctionType" value="function"/>
+				<param name="OutXml" value="db_unit_result"/>
+				<param name="DbParameterName:0" value="p_msisdn"/>
+				<param name="DbParameterDirection:0" value="Input"/>
+				<param name="DbParameterType:0" value="Varchar2"/>
+				<param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN" />
+				<param name="DbParameterName:1" value="p_result"/>
+				<param name="DbParameterDirection:1" value="ReturnValue"/>
+				<param name="DbParameterType:1" value="Varchar2"/>
+                                <param name="DbParameterValue:1" value=""/>
+			</parameterslist>
+		</node>
+                <node name="ExtractCode" object="XmlNodesCopier">
+			<resultlist>
+				<result value="" node="AddCallForwardingOriginating"/>
+			</resultlist>
+			<parameterslist>
+				<param name="SrcXml" value="db_unit_result"/>
+				<param name="DstMessage" value="xmlrequest"/>
+				<param name="CopyContentType" value="InnerText"/>
+				<param name="SrcXmlPath:0" value="root/return"/>
+				<param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/Originating"/>
+                	</parameterslist>
+		</node>
+                <node name="AddCallForwardingOriginating" object="Commander">
+			<resultlist>
+                                <result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddCallForwardingOriginating"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node=""/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

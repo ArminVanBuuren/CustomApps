@@ -1,0 +1,131 @@
+<scenario name="SC.FP.Remove.Vug">
+  <objectList>
+    <object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ByServicesCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterByXmlNodes" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="RiParametersReader" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RiLinkedDataInitializer" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+  </objectList>
+  <automat>
+    <!-- первый цикл по группам -->
+    <node name="ByServicesCutterCreateGroup-Node" object="ByServicesCutter">
+      <resultlist>
+        <result value="0" node="DeleteCallingCircle" />
+        <result value="" node="BySubscribersCutter" />
+      </resultlist>
+      <parameterslist>
+        <param name="Queue" value="requestsSplittedByServicesQueue" />
+        <param name="XmlPath:0" value="//AdditionalData/RemoveList/RFS_FP_SERVICE_VUG" />
+      </parameterslist>
+    </node>
+    <node name="DeleteCallingCircle" object="IfCommander">
+      <resultlist>
+        <result value="0" node="ByServicesCutterCreateGroup-Node" />
+        <result value="1538" node="ByServicesCutterCreateGroup-Node" />
+        <result value="" node="FinalResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//AdditionalData/RemoveList/RFS_FP_SERVICE_VUG/CugAvailableOnFP/Value[text()='1']" />
+        <param name="OrXmlPath:0" value="//AdditionalData/RemoveList/RFS_FP_SERVICE_VUG/DeleteGroup/Value[text()='1']" />
+        <param name="Command" value="SC.DeleteCallingCircle" />
+      </parameterslist>
+    </node>
+    <!-- второй цикл по абонам и услугам -->
+    <node name="BySubscribersCutter" object="BySubscribersCutter">
+      <resultlist>
+        <result value="0" node="ByServicesCutter-Node" />
+        <result value="1" node="" />
+      </resultlist>
+    </node>
+    <node name="ByServicesCutter-Node" object="ByServicesCutter">
+      <resultlist>
+        <result value="0" node="DeleteCallingCircleMembers" />
+        <result value="" node="CycledResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Queue" value="requestsSplittedByServicesQueue" />
+        <param name="XmlPath:0" value="//AdditionalData/RemoveList/RFS_FP_SERVICE_VUG" />
+      </parameterslist>
+    </node>
+    <node name="DeleteCallingCircleMembers" object="IfCommander">
+      <resultlist>
+        <result value="0" node="DeleteCallingCircleAbcMembers-Node" />
+        <result value="1538" node="DeleteCallingCircleAbcMembers-Node" />
+        <result value="" node="FinalResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//AdditionalData/RemoveList/RFS_FP_SERVICE_VUG/CugAvailableOnFP/Value[text()='1']" />
+        <param name="IfNotXmlPath:1" value="//AdditionalData/RemoveList/RFS_FP_SERVICE_VUG/DeleteGroup/Value[text()='1']" />
+        <param name="Command" value="SC.DeleteCallingCircleMembers" />
+      </parameterslist>
+    </node>
+    <node name="DeleteCallingCircleAbcMembers-Node" object="IfCommander">
+      <resultlist>
+        <result value="0" node="CheckForeignSubscriber" />
+        <result value="1538" node="CheckForeignSubscriber" />
+        <result value="" node="FinalResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//Identifier/MsisdnAbc[text()!='']" />
+        <param name="IfNotXmlPath:1" value="//AdditionalData/RemoveList/RFS_FP_SERVICE_VUG/DeleteGroup/Value[text()='1']" />
+        <param name="Command" value="SC.DeleteCallingCircleAbcMembers" />
+      </parameterslist>
+    </node>
+    <node name="CheckForeignSubscriber" object="ConditionsResolver">
+      <resultlist>
+        <result value="0" node="RiParametersReader" />
+        <result value="" node="ByServicesCutter-Node" />
+      </resultlist>
+      <parameterslist>
+        <param name="MultiLevelCondition" value="(//IdentifiersList/Identifier//IMSI[text()!='0']) AND NOT (//RemoveList/RFS_FP_SERVICE_VUG/SkipFP/Value[text()='1'])" />
+      </parameterslist>
+    </node>
+    <node name="RiParametersReader" object="RiParametersReader">
+      <resultlist>
+        <result value="0" node="CheckHostTypeCode" />
+        <result value="" node="ByServicesCutter-Node" />
+      </resultlist>
+      <parameterslist>
+        <param name="DataType" value="GetBalanceStorageByImsiList" />
+        <param name="IdentityName" value="IMSI" />
+        <param name="IdentityXmlPath" value="//IdentifiersList/Identifier/IMSI" />
+      </parameterslist>
+    </node>
+    <node name="CheckHostTypeCode" object="ConditionsResolver">
+      <resultlist>
+        <result value="0" node="RemoveService" />
+        <result value="1" node="ByServicesCutter-Node" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="RiDataXml" />
+        <param name="IfXmlPath:0" value="//Host_x0020_code[contains('contextXpathParam(xmlrequest,//Destination)',.)]" />
+      </parameterslist>
+    </node>
+    <node name="RemoveService" object="Commander">
+      <resultlist>
+        <result value="0" node="ByServicesCutter-Node" />
+        <result value="" node="FinalResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.RemoveCugService" />
+        <param name="Asynchronous" value="true" />
+      </parameterslist>
+    </node>
+    <node name="CycledResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="BySubscribersCutter" />
+      </resultlist>
+    </node>
+    <node name="FinalResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="" />
+      </resultlist>
+      <parameterslist>
+        <param name="FinalStepCheck" value="true" />
+      </parameterslist>
+    </node>
+  </automat>
+</scenario>

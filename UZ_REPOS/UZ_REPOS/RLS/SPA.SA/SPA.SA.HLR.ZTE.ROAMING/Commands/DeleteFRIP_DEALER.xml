@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="DeleteFRIP_DEALER" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>DeleteFRIP_DEALER</Description>
+	<Author Name="Timur Khamzin" Date="2015-11-16+15:00"/>
+	<Request Template='MOD PDP:MSISDN={0},OAPN=DEALERS.UMS.UZ,OPDPTYPE=0,OaddrOption=1,PDPAddr=0.0.0.0;^M'>
+              <Item Name="msisdn" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="windows-1251" />
+</Command>

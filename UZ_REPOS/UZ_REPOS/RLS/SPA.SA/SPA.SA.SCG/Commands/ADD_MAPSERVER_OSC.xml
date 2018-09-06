@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ADD_MAPSERVER_OSC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Добавление абонента на платформу SCG'</Description>
+	<Author Name="Vladimir Khovanskiy" Date="2009-04-26+11:09"/>
+	<Request>
+		<RequestTemplate>
+			<![CDATA[<soapenv:Envelope 
+xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
+xmlns:bas="http://basicservices.scg.huawei.com" 
+xmlns:com="http://com.huawei.scg.basicservices.request" 
+xmlns:com1="http://com.huawei.scg.schema">
+   <soapenv:Header>
+      <bas:timeStamp>20110602101750</bas:timeStamp>
+      <bas:version>v1</bas:version>
+   </soapenv:Header>
+   <soapenv:Body>
+      <bas:synchronizeOCSInfoRequest>
+         <!--Zero or more repetitions:-->
+         <bas:ocsMappingInfo>
+            <com:userID>
+               <com1:ID>##msisdn##</com1:ID>
+               <com1:type>##Profile##</com1:type>
+            </com:userID>
+            <com:ocsInfo>
+               <com1:ID>##Profile##</com1:ID>
+               <com1:Host>10.160.21.24</com1:Host>
+               <com1:Port>3868</com1:Port>
+            </com:ocsInfo>
+            <com:updateFlag>0</com:updateFlag>
+         </bas:ocsMappingInfo>
+      </bas:synchronizeOCSInfoRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]>
+		</RequestTemplate>
+		<EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+		<Item Name="msisdn" Type="Wellknown"/>	
+		<Item Name="Profile" Type="Parameter"/>	
+	</Request>
+	<ErrorsList CodePage="windows-1251" />
+</Command>

@@ -1,0 +1,180 @@
+<scenario name="SC.FP.ChangeTariff.CreateTD">
+  <objectList>
+    <object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="DummyResponderSwitch" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponderSwitch" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="FPCommandDataConstructor" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.FPProcessingUnits.FPCommandDataConstructor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IdentifiersGenerator" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.IdentifiersGenerator" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="RollbackUnit" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.StackRollbackUnit" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="ScenarioProcessor" class="FORIS.ScenarioProcessing.Base.SPF.SubscenarioProcessingUnit" assembly="FORIS.SPA.SPF.dll" />
+    <object name="ConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+  </objectList>
+  <automat>
+    <!-- Если Single SCP и добавляется с SCP платформы - не создаем TerminalDevice, а изменяем (вызываем сценарий SC.FP.ChangeTariff.ChangeTD) -->
+    <node name="CheckSingleSCPEnabled" object="ConditionsResolver">
+      <resultlist>
+        <result value="0" node="ChangeTD-Node" />
+        <result value="" node="BySubscribersCutter" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="*['processingFlag(SingleSCPEnabled)'='True']" />
+        <param name="IfXmlPath:1" value="//PreviousPlatform/HostCode" />
+        <param name="IfNotXmlPath:0" value="//PreviousPlatform/HostCode[contains('[HOST_CODE_BS]',.)]"/>
+      </parameterslist>
+    </node>
+    <node name="ChangeTD-Node" object="ScenarioProcessor">
+      <resultlist>
+        <result value="" node=""/>
+      </resultlist>
+      <parameterslist>
+        <param name="Scenario" value="SC.FP.ChangeTariff.ChangeTD"/>
+      </parameterslist>
+    </node>
+    <node name="BySubscribersCutter" object="BySubscribersCutter">
+      <resultlist>
+        <result value="0" node="IdentifiersGenerator" />
+        <result value="1" node="" />
+      </resultlist>
+    </node>
+    <node name="IdentifiersGenerator" object="IdentifiersGenerator">
+      <parameterslist>
+        <param name="WellknownName" value="GlobalUid" />
+      </parameterslist>
+      <resultlist>
+        <result value="0" node="CommandDataConstructorExt-Node" />
+      </resultlist>
+    </node>
+    <node name="CommandDataConstructorExt-Node" object="FPCommandDataConstructor">
+      <resultlist>
+        <result value="0" node="CommandDataConstructorExt-Node2" />
+        <result value="1538" node="CommandDataConstructorExt-Node2" />
+        <result value="" node="FinalResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="ServicesDynamicObject" value="RegisteredServices" />
+        <param name="ParametersDynamicObject" value="RegisteredServicesParams" />
+        <param name="ServicesCommand" value="SC.CreateTDC.ServiceRow" />
+        <param name="ParametersCommand" value="SC.Service.ParameterRow" />
+        <param name="XmlPath" value="//AdditionalData/EndList/RFS_FP_SERVICE_GENERAL" />
+      </parameterslist>
+    </node>
+    <node name="CommandDataConstructorExt-Node2" object="FPCommandDataConstructor">
+      <resultlist>
+        <result value="0" node="CommandDataConstructor-Node" />
+        <result value="1538" node="CommandDataConstructor-Node" />
+        <result value="" node="FinalResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="ServicesDynamicObject" value="InitialServices" />
+        <param name="ParametersDynamicObject" value="InitialServicesParams" />
+        <param name="ServicesCommand" value="SC.CreateTDC.ServiceRow" />
+        <param name="ParametersCommand" value="SC.Service.ParameterRow" />
+        <param name="XmlPath" value="//AdditionalData/StartList/RFS_FP_SERVICE_GENERAL" />
+      </parameterslist>
+    </node>
+    <node name="CommandDataConstructor-Node" object="FPCommandDataConstructor">
+      <resultlist>
+        <result value="0" node="CommandDataConstructor-Node2" />
+        <result value="1538" node="CommandDataConstructor-Node2" />
+        <result value="" node="FinalResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="ServicesDynamicObject" value="RegisteredCounters" />
+        <param name="ServicesCommand" value="SC.CounterRow" />
+        <param name="XmlPath" value="//AdditionalData/AddList//Counters/*" />
+      </parameterslist>
+    </node>
+    <node name="CommandDataConstructor-Node2" object="FPCommandDataConstructor">
+      <resultlist>
+        <result value="0" node="CommandDataConstructor-Node3" />
+        <result value="1538" node="CommandDataConstructor-Node3" />
+        <result value="" node="FinalResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="ServicesDynamicObject" value="RegisteredFavoriteNumbers" />
+        <param name="ServicesCommand" value="SC.ChangeTariff.FavoriteNumberRow" />
+        <param name="XmlPath" value="//AdditionalData/EndList/RFS_FP_SERVICE_FAVORITE_NUMBER" />
+      </parameterslist>
+    </node>
+    <node name="CommandDataConstructor-Node3" object="FPCommandDataConstructor">
+      <resultlist>
+        <result value="0" node="CommandDataConstructor-Node4" />
+        <result value="1538" node="CommandDataConstructor-Node4" />
+        <result value="" node="FinalResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="ServicesDynamicObject" value="FavoriteNumbersServices" />
+        <param name="ServicesCommand" value="SC.CreateTDC.ServiceRow" />
+        <param name="XmlPath" value="//AdditionalData/EndList/RFS_FP_SERVICE_FAVORITE_NUMBER" />
+      </parameterslist>
+    </node>
+    <node name="CommandDataConstructor-Node4" object="FPCommandDataConstructor">
+      <resultlist>
+        <result value="0" node="CommandDataConstructor-AdditionalNumberList" />
+        <result value="1538" node="CommandDataConstructor-AdditionalNumberList" />
+        <result value="" node="FinalResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="ServicesDynamicObject" value="InitialFavoriteNumbersServices" />
+        <param name="ServicesCommand" value="SC.CreateTDC.ServiceRow" />
+        <param name="XmlPath" value="//AdditionalData/StartList/RFS_FP_SERVICE_FAVORITE_NUMBER" />
+      </parameterslist>
+    </node>
+    <node name="CommandDataConstructor-AdditionalNumberList" object="FPCommandDataConstructor">
+      <resultlist>
+        <result value="0" node="CreateTDOnFINPlatform" />
+        <result value="1538" node="CreateTDOnFINPlatform" />
+        <result value="" node="FinalResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="ServicesDynamicObject" value="AdditionalNumbers" />
+        <param name="ServicesCommand" value="SC.AdditionalNumber.ServiceRow" />
+        <param name="XmlPath" value="//AdditionalData/EndList/RFS_FP_SERVICE_ADDITIONAL_NUMBER" />
+      </parameterslist>
+    </node>
+    <node name="CreateTDOnFINPlatform" object="Commander">
+      <resultlist>
+        <result value="0" node="AddAutopayment-Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.ChangeTariff" />
+        <param name="AppendSubscribersData" value="true" />
+        <param name="Asynchronous" value="true" />
+      </parameterslist>
+    </node>
+    <node name="AddAutopayment-Node" object="IfCommander">
+      <comment>Добавление услуги автоплатежа</comment>
+      <resultlist>
+        <result value="0" node="ResponseAssembler" />
+        <result value="1538" node="ResponseAssembler" />
+        <result value="" node="FinalResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//AdditionalData//RFS_FP_SERVICE_AUTO_PAYMENT/AutoPaymentThreshold"/>
+        <param name="Command" value="SC.SetAutopayment" />
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="BySubscribersCutter" />
+      </resultlist>
+    </node>
+    <node name="FinalResponseAssembler" object="ResponseAssembler">
+      <parameterslist>
+        <param name="FinalStepCheck" value="true" />
+      </parameterslist>
+      <resultlist>
+        <result value="" node="RollbackNode"/>
+      </resultlist>
+    </node>
+    <node name="RollbackNode" object="RollbackUnit">
+      <resultlist>
+        <result value="" node=""/>
+      </resultlist>
+      <parameterslist/>
+    </node>
+  </automat>
+</scenario>

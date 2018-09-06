@@ -1,0 +1,69 @@
+﻿<scenario name="SC.FP.Sync.Services">
+  <objectList>
+    <object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll" />
+    <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="FPCommandDataConstructor" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.FPProcessingUnits.FPCommandDataConstructor" assembly="FORIS.SPA.MmlProcessing.dll" />
+  </objectList>
+  <automat>
+    <!-- при использовании каталога данный сценарий вызывается дважды: из Assign CUG in All platform(есть флаг IsCUGProcess) и 
+         Assign Services on Financial Platform. В случае с вызовом НЕ из CUG процесса данный сценарий нужно выполнить, иначе - пропустить -->
+    <node name="SkipDummyResponderNode" object="DummyResponder">
+      <resultlist>
+        <result value="" node="SkipResponseAssembler" />
+        <result value="1538" node="BySubscribersCutter" />
+      </resultlist>
+      <parameterslist>
+        <param name="MultiLevelCondition" value="(//ProcessingOptions/IsShareProcess) OR (//ProcessingOptions/IsCUGProcess) OR (//ProcessingOptions/IsCounterProcess) OR (NOT //AdditionalData/*/RFS_FP_SERVICE_GENERAL/SkipFP/Value[text()='0'])" />
+        <param name="OverallResult" value="SUCCESS" />
+        <param name="DetailedResult" value="SUCCESS" />
+        <param name="DetailedResultDescription" value="Skip because of CUG/CounterReinitialization/DoNotProcessingInFinancialPlatform" />
+      </parameterslist>
+    </node>
+    <node name="SkipResponseAssembler" object="ResponseAssembler">
+      <parameterslist/>
+      <resultlist>
+        <result value="" node="" />
+      </resultlist>
+    </node>
+    <!-- цикл по абонам -->
+    <node name="BySubscribersCutter" object="BySubscribersCutter">
+      <resultlist>
+        <result value="0" node="CommandDataConstructorExt-Node" />
+        <result value="1" node="" />
+      </resultlist>
+    </node>
+    <node name="CommandDataConstructorExt-Node" object="FPCommandDataConstructor">
+      <resultlist>
+        <result value="0" node="SyncServices-Node" />
+        <result value="1538" node="SyncServices-Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="ServicesDynamicObject" value="Services" />
+        <param name="ParametersDynamicObject" value="ServicesParams" />
+        <param name="ServicesCommand" value="SC.Service.ServiceRow" />
+        <param name="ParametersCommand" value="SC.Service.ParameterRow" />
+        <param name="XmlPath" value="//AdditionalData/*/RFS_FP_SERVICE_GENERAL" />
+      </parameterslist>
+    </node>
+    <node name="SyncServices-Node" object="Commander">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//AdditionalData/*/RFS_FP_SERVICE_GENERAL" />
+        <param name="Command" value="SC.SyncService" />
+        <param name="AppendSubscribersData" value="true" />
+        <param name="Asynchronous" value="true" />
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="BySubscribersCutter" />
+      </resultlist>
+    </node>
+  </automat>
+</scenario>
