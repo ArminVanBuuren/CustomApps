@@ -1,1 +1,0 @@
-dbresult=0
