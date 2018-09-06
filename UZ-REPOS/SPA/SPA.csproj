@@ -1695,21 +1695,11 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.IVR\Emulation\printout.success.txt" />
     <Content Include="EDITION\SPA.SA\SPA.SA.IVR\Scenarios\SC.ImportContacts.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.IVR\Scenarios\SC.ImportContactsStatistic.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.MCA\Commands\AddFRMCA.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.MCA\Commands\ChangeMSISDNOnMCA.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.MCA\Commands\DeleteFRMCA.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MCA\configuration.application.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MCA\configuration.common.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MCA\dictionary.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MCA\Emulation\printout.failure.txt" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MCA\Emulation\printout.success.txt" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.MG\Commands\AddGatesm.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.MG\Commands\AddIP.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.MG\Commands\AddPRGATE.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.MG\Commands\AddService.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.MG\Commands\BreakSessionInformator.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.MG\Commands\MoneyTransfer.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.MG\Commands\TestInformator.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MG\configuration.application.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MG\configuration.common.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MG\dictionary.xml" />
@@ -1726,10 +1716,6 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.MST\Scenarios\SC.MST.ChangeMSISDN.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MST\Scenarios\SC.MST.CreateSubscriber.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MST\Scenarios\SC.MST.DeleteSubscriber.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.RBT.INTECH\Commands\AddFRCRBT.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.RBT.INTECH\Commands\CreateSubscriber.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.RBT.INTECH\Commands\DeleteFRCRBT.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.RBT.INTECH\Commands\DeleteSubscriber.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.RBT.INTECH\configuration.application.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.RBT.INTECH\configuration.common.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.RBT.INTECH\dictionary.xml" />
@@ -1834,17 +1820,6 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.SCP.01\Scenarios\SC.FP.Sync.Services.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCP.01\Scenarios\SC.FP.TransferTD.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCP.01\Xslt\TransformToAPNStyle.xslt" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SMSC\Commands\AddSubscriberOnSMSC.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SMSC\Commands\ChangeIMSI.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SMSC\Commands\ChangeMSISDN.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SMSC\Commands\ChangeSMSCProfile.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SMSC\Commands\DeleteSubscriberOnSMSC.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SMSC\Commands\DeleteSubscriberOnSMSC_IMSI.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SMSC\Commands\DeleteSubscriberOnSMSC_MSISDN.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SMSC\Commands\DeleteSubscriberOnSMSC_NEW_IMSI.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SMSC\Commands\DeleteSubscriberOnSMSC_NEW_MSISDN.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SMSC\Commands\GetSubscriberByIMSI.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SMSC\Commands\GetSubscriberByMSISDN.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SMSC\configuration.application.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SMSC\configuration.common.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SMSC\dictionary.xml" />
@@ -1881,9 +1856,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="EDITION\SPA.SA\SPA.SA.MCA\Commands\" />
     <Folder Include="EDITION\SPA.SA\SPA.SA.MCA\Scenarios\" />
+    <Folder Include="EDITION\SPA.SA\SPA.SA.MG\Commands\" />
     <Folder Include="EDITION\SPA.SA\SPA.SA.MG\Scenarios\" />
+    <Folder Include="EDITION\SPA.SA\SPA.SA.RBT.INTECH\Commands\" />
     <Folder Include="EDITION\SPA.SA\SPA.SA.RBT.INTECH\Scenarios\" />
+    <Folder Include="EDITION\SPA.SA\SPA.SA.SMSC\Commands\" />
     <Folder Include="EDITION\SPA.SA\SPA.SA.SMSC\Scenarios\" />
     <Folder Include="PROD-2018.09.06\SPA.SA\Dictionaries\IVR\Caller\Decoders\" />
     <Folder Include="PROD-2018.09.06\SPA.SA\Emulation\CONTENT\ALLPLAY\" />

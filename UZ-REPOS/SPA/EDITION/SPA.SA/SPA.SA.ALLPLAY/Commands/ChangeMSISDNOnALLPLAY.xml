@@ -2,8 +2,12 @@
 <Command Name="ChangeMSISDNOnALLPLAY" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
 	<Description>AddALLPLAY</Description>
 	<Author Name="Timur Khamzin" Date="2017-07-31+15:00"/>
-	<Request Template="msisdn={0}&amp;command=add&amp;service=mobtv">
-		<Item Name="NewMsisdn" Type="Parameter"/>
-	</Request>                                                                                            
-	<ErrorsList CodePage="ASCII"/>
+  <Request>
+    <RequestTemplate>
+      <![CDATA[msisdn=##NewMsisdn##&command=add&service=mobtv]]>
+    </RequestTemplate>
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="NewMsisdn" Type="Parameter"/>
+  </Request>
+  <ErrorsList CodePage="ASCII"/>
 </Command>

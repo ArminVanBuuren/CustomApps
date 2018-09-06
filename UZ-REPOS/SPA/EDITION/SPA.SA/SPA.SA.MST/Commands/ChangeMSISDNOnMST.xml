@@ -2,8 +2,12 @@
 <Command Name="ChangeMSISDNOnMST" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
 	<Description>ChangeMSISDNOnMST</Description>
 	<Author Name="Timur Khamzin" Date="2015-11-27+15:00"/>
-	<Request Template="msisdn={0}&amp;command=add&amp;service=558">
-		<Item Name="NewMsisdn" Type="Parameter"/>
-	</Request>                                                                                            
+  <Request>
+    <RequestTemplate>
+      <![CDATA[msisdn=##NewMsisdn##&command=add&service=558]]>
+    </RequestTemplate>
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="NewMsisdn" Type="Parameter"/>
+  </Request>                                                                                           
 	<ErrorsList CodePage="ASCII"/>
 </Command>
