@@ -42,7 +42,7 @@ namespace WCFChat.Client
         private MainWindowChatServer currentServer;
         private MainWindowChatClient currentClient;
         private string localAddressUri;
-        private Dictionary<string, InnerWaiterCloud> listBoxClouds = new Dictionary<string, InnerWaiterCloud>();
+        private Dictionary<string, InnerWaiterCloud> listBoxAllClouds = new Dictionary<string, InnerWaiterCloud>();
 
         public MainWindow()
         {
@@ -97,7 +97,7 @@ namespace WCFChat.Client
                 currentServer.CreateCloud(user, cloud, trnID);
                 lock (sync)
                 {
-                    listBoxClouds.Add(trnID, new InnerWaiterCloud(user, cloud, AddCloudToListbox(cloud, true)));
+                    listBoxAllClouds.Add(trnID, new InnerWaiterCloud(user, cloud, AddCloudToListbox(cloud, trnID, true), true));
                 }
             }
             else
@@ -105,36 +105,40 @@ namespace WCFChat.Client
                 mainProxy.CreateCloudAsync(cloud, trnID);
                 lock (sync)
                 {
-                    listBoxClouds.Add(trnID, new InnerWaiterCloud(user, cloud, AddWaitCloudToListbox(cloud, true)));
+                    listBoxAllClouds.Add(trnID, new InnerWaiterCloud(user, cloud, AddWaitCloudToListbox(cloud, trnID, true), true));
                 }
             }
         }
 
         class InnerWaiterCloud
         {
-            public InnerWaiterCloud(User user, Cloud cloud, Grid grid)
+            public InnerWaiterCloud(User user, Cloud cloud, Grid grid, bool isCurrentServer = false)
             {
                 User = user;
                 Cloud = cloud;
                 Grid = grid;
+                IsCurrentServer = isCurrentServer;
             }
             public User User { get; }
             public Cloud Cloud { get; }
             public Grid Grid { get; }
+            public bool IsCurrentServer { get; }
         }
 
-        Grid AddWaitCloudToListbox(Cloud cloud, bool isAdmin)
+        Grid AddWaitCloudToListbox(Cloud cloud, string trnID, bool isAdmin)
         {
             Grid grd = new Grid();
+            grd.ToolTip = trnID;
             grd.Children.Add(new ProgressBar() { IsIndeterminate = true });
             AddStackText(grd, cloud, isAdmin);
             NameOfCloud.Items.Add(grd);
             return grd;
         }
 
-        Grid AddCloudToListbox(Cloud cloud, bool isAdmin)
+        Grid AddCloudToListbox(Cloud cloud, string trnID, bool isAdmin)
         {
             Grid grd = new Grid();
+            grd.ToolTip = trnID;
             AddStackText(grd, cloud, isAdmin);
             NameOfCloud.Items.Add(grd);
             return grd;
@@ -165,6 +169,13 @@ namespace WCFChat.Client
         {
             CheckBox unbindChk = (CheckBox)sender;
             unbindChk.IsEnabled = false;
+
+            if (mainProxy != null)
+            {
+                StackPanel panel = (StackPanel)unbindChk.Parent;
+                Grid grid = (Grid)panel.Parent;
+                mainProxy.UnbindAsync(grid.ToolTip.ToString());
+            }
         }
 
         void ActiveWaitCloud(Grid grid)
@@ -184,7 +195,7 @@ namespace WCFChat.Client
             NameOfCloud.Items.Remove(grid);
             lock (sync)
             {
-                listBoxClouds.Remove(trnID);
+                listBoxAllClouds.Remove(trnID);
             }
         }
 
@@ -193,7 +204,7 @@ namespace WCFChat.Client
             InnerWaiterCloud createCloud;
             lock (sync)
             {
-                bool isWaiting = listBoxClouds.TryGetValue(transactionID, out createCloud);
+                bool isWaiting = listBoxAllClouds.TryGetValue(transactionID, out createCloud);
 
                 if (!isWaiting)
                     return;
@@ -238,8 +249,8 @@ namespace WCFChat.Client
             Grid newItemGrid;
             lock (sync)
             {
-                newItemGrid = AddWaitCloudToListbox(cloud, false);
-                listBoxClouds.Add(trnID, new InnerWaiterCloud(user, cloud, newItemGrid));
+                newItemGrid = AddWaitCloudToListbox(cloud, trnID, false);
+                listBoxAllClouds.Add(trnID, new InnerWaiterCloud(user, cloud, newItemGrid));
             }
 
             if (mainProxy == null)
@@ -248,7 +259,7 @@ namespace WCFChat.Client
                 {
                     try
                     {
-                        currentClient.JoinToCloud(user, cloud);
+                        currentClient.JoinToCloud(user, cloud, trnID);
                         return string.Empty;
                     }
                     catch (Exception ex)
@@ -278,7 +289,7 @@ namespace WCFChat.Client
             InnerWaiterCloud createCloud;
             lock (sync)
             {
-                bool isWaiting = listBoxClouds.TryGetValue(transactionID, out createCloud);
+                bool isWaiting = listBoxAllClouds.TryGetValue(transactionID, out createCloud);
 
                 if (!isWaiting)
                     return;
@@ -290,7 +301,7 @@ namespace WCFChat.Client
                 {
                     case ServerResult.AccessGranted:
                     case ServerResult.SUCCESS:
-                        currentClient.JoinToCloud(createCloud.User, cloud);
+                        currentClient.JoinToCloud(createCloud.User, cloud, transactionID);
                         ActiveWaitCloud(createCloud.Grid);
                         break;
                     case ServerResult.CloudNotFound:
@@ -331,29 +342,60 @@ namespace WCFChat.Client
         {
             object selectedItem = NameOfCloud.SelectedItem;
             var selectedListBoxItem = NameOfCloud.ItemContainerGenerator.ContainerFromItem(selectedItem);
-            lock (sync)
+            if (selectedListBoxItem is Grid grid)
             {
-                foreach (KeyValuePair<string, InnerWaiterCloud> item in listBoxClouds)
+                lock (sync)
                 {
-                    if (item.Value.Grid.Equals(selectedListBoxItem))
+                    if (listBoxAllClouds.TryGetValue(grid.ToolTip.ToString(), out var res))
                     {
-                        listBoxClouds.Remove(item.Key);
-                        break;
+                        if (res.IsCurrentServer)
+                            currentServer.RemoveCloud(res.Cloud);
+                        //todo: удаление подключения с клиента
+
+
+                        listBoxAllClouds.Remove(grid.ToolTip.ToString());
                     }
                 }
+                NameOfCloud.Items.Remove(selectedListBoxItem);
             }
-            NameOfCloud.Items.Remove(selectedListBoxItem);
-
-            //todo: удаление подключения
         }
 
         private void ChooseCloud(object sender, RoutedEventArgs e)
         {
-            if (e.OriginalSource is Grid)
+            if (e.OriginalSource is Grid grid)
             {
-
+                lock (sync)
+                {
+                    if (listBoxAllClouds.TryGetValue(grid.ToolTip.ToString(), out var res))
+                    {
+                        if (res.IsCurrentServer)
+                        {
+                            WindowControl control;
+                            if (currentServer.Clouds.TryGetValue(res.Cloud.Name, out control))
+                            {
+                                DialogHistory.Document = control.DialogHistory;
+                                DialogWindow.Document = control.DialogWindow;
+                                Users = control.Users;
+                                return;
+                            }
+                        }
+                    }
+                }
             }
         }
+
+        //KeyValuePair<string, InnerWaiterCloud>? GetCloudByGrid(Grid grid)
+        //{
+        //    lock (sync)
+        //    {
+        //        foreach (KeyValuePair<string, InnerWaiterCloud> item in listBoxAllClouds)
+        //        {
+        //            if (item.Value.Grid.Equals(grid))
+        //                return item;
+        //        }
+        //    }
+        //    return null;
+        //}
 
         public void Informing(string msg, bool isError = true)
         {

@@ -12,40 +12,114 @@ using WCFChat.Service;
 
 namespace WCFChat.Client.BasicControl
 {
-    [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
-    class MainWindowChatClient : Service.IChatCallback
+    class ChatWaiter
     {
-        private ChatClient proxy;
+        private InstanceContext context;
+        public string TransactionId { get; }
+        public ChatClient Proxy { get; private set; }
+        public User Initiator { get; }
+        public Cloud JoinToCloud { get; }
 
-        public MainWindowChatClient(UIWindow window)
+        public ChatWaiter(InstanceContext context, User initiator, Cloud joinToCloud, string transactionId)
         {
-            
-        }
+            this.context = context;
+            TransactionId = transactionId;
+            Initiator = initiator;
+            JoinToCloud = joinToCloud;
 
-        public void JoinToCloud(User initiator, Cloud jointoCloud)
-        {
-            OpenOrReopenConnection();
-            base.JoinToCloud(initiator, jointoCloud);
+            Proxy = new ChatClient(context);
+            Proxy.Open();
+            Proxy.InnerDuplexChannel.Faulted += new EventHandler(InnerDuplexChannel_Faulted);
+            Proxy.InnerDuplexChannel.Opened += new EventHandler(InnerDuplexChannel_Opened);
+            Proxy.InnerDuplexChannel.Closed += new EventHandler(InnerDuplexChannel_Closed);
+            Proxy.Connect(initiator);
         }
 
         void OpenOrReopenConnection()
         {
-            proxy?.Abort();
-            InstanceContext context = new InstanceContext(this);
-            proxy = new ChatClient(context);
-            proxy.Open();
-            proxy.InnerDuplexChannel.Faulted += new EventHandler(InnerDuplexChannel_Faulted);
-            proxy.InnerDuplexChannel.Opened += new EventHandler(InnerDuplexChannel_Opened);
-            proxy.InnerDuplexChannel.Closed += new EventHandler(InnerDuplexChannel_Closed);
-            proxy.Connect(Initiator.User);
+            Proxy.Abort();
+            Proxy = new ChatClient(context);
+            Proxy.Open();
+            Proxy.InnerDuplexChannel.Faulted += new EventHandler(InnerDuplexChannel_Faulted);
+            Proxy.InnerDuplexChannel.Opened += new EventHandler(InnerDuplexChannel_Opened);
+            Proxy.InnerDuplexChannel.Closed += new EventHandler(InnerDuplexChannel_Closed);
+            Proxy.Connect(Initiator);
+        }
+
+        private void HandleProxy()
+        {
+            if (Proxy != null)
+            {
+                switch (this.Proxy.State)
+                {
+                    case CommunicationState.Closed:
+                        break;
+                    case CommunicationState.Closing:
+                        break;
+                    case CommunicationState.Created:
+                        break;
+                    case CommunicationState.Faulted:
+                        OpenOrReopenConnection();
+                        break;
+                    case CommunicationState.Opened:
+                        break;
+                    case CommunicationState.Opening:
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        private delegate void FaultedInvoker();
+        void InnerDuplexChannel_Closed(object sender, EventArgs e)
+        {
+            HandleProxy();
+        }
+
+        void InnerDuplexChannel_Opened(object sender, EventArgs e)
+        {
+            HandleProxy();
+        }
+
+        void InnerDuplexChannel_Faulted(object sender, EventArgs e)
+        {
+            HandleProxy();
+        }
+    }
+
+    [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
+    class MainWindowChatClient : Service.IChatCallback
+    {
+        protected object sync = new object();
+        private InstanceContext context;
+        private UIWindow mainWindow;
+        public Dictionary<ChatClient, WindowControl> Clouds { get; } = new Dictionary<ChatClient, WindowControl>();
+
+        public Dictionary<string, ChatWaiter> currentWaiterToCloud = new Dictionary<string, ChatWaiter>();
+
+        public MainWindowChatClient(UIWindow window)
+        {
+            context = new InstanceContext(this);
+            this.mainWindow = window;
+        }
+
+        public void JoinToCloud(User initiator, Cloud joinToCloud, string transactionId)
+        {
+            currentWaiterToCloud.Add(transactionId, new ChatWaiter(context, initiator, joinToCloud, transactionId));
         }
 
         public void ConnectResult(ServerResult result)
         {
+            ChatWaiter chat;
+            currentWaiterToCloud.TryGetValue()
+
             switch (result)
             {
                 case ServerResult.AccessGranted:
                 case ServerResult.SUCCESS:
+                    WindowControl control = new WindowControl(mainWindow, initiator, joinToCloud, transactionId);
+                    Clouds.Add(control);
                     break;
                 case ServerResult.CloudNotFound:
                     break;
@@ -145,60 +219,6 @@ namespace WCFChat.Client.BasicControl
             }
         }
 
-        private void HandleProxy()
-        {
-            if (proxy != null)
-            {
-                switch (this.proxy.State)
-                {
-                    case CommunicationState.Closed:
-                        break;
-                    case CommunicationState.Closing:
-                        break;
-                    case CommunicationState.Created:
-                        break;
-                    case CommunicationState.Faulted:
-                        OpenOrReopenConnection();
-                        break;
-                    case CommunicationState.Opened:
-                        break;
-                    case CommunicationState.Opening:
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-
-        private delegate void FaultedInvoker();
-        void InnerDuplexChannel_Closed(object sender, EventArgs e)
-        {
-            //if (!window.Dispatcher.CheckAccess())
-            //{
-            //    window.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new FaultedInvoker(HandleProxy));
-            //    return;
-            //}
-            HandleProxy();
-        }
-
-        void InnerDuplexChannel_Opened(object sender, EventArgs e)
-        {
-            //if (!window.Dispatcher.CheckAccess())
-            //{
-            //    window.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new FaultedInvoker(HandleProxy));
-            //    return;
-            //}
-            HandleProxy();
-        }
-
-        void InnerDuplexChannel_Faulted(object sender, EventArgs e)
-        {
-            //if (!window.Dispatcher.CheckAccess())
-            //{
-            //    window.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new FaultedInvoker(HandleProxy));
-            //    return;
-            //}
-            HandleProxy();
-        }
+        
     }
 }

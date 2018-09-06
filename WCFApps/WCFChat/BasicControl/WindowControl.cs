@@ -15,6 +15,14 @@ using Timer = System.Timers.Timer;
 
 namespace WCFChat.Client.BasicControl
 {
+    public enum UserChanges
+    {
+        Access = 0,
+        Remove = 1
+    }
+
+    internal delegate void UserCloudChanges(UserBindings userBind, WindowControl cloud, UserChanges changes);
+
     internal class WindowControl
     {
         internal static readonly Brush AdminBackground = (Brush)new BrushConverter().ConvertFrom("#FF009EAE"); // обычный фон ячейки админа 
@@ -24,16 +32,15 @@ namespace WCFChat.Client.BasicControl
         internal static readonly Brush UserIsNotLogOnYetStatus = (Brush)new BrushConverter().ConvertFrom("#FFFFDC00"); // ждем его непосредственного коннекта Желтый цвет
         internal static readonly Brush UserIsActiveStatus = (Brush)new BrushConverter().ConvertFrom("#FF90EE90"); // когда юзер непосредственно подсоединился к чату Зеленый цвет
 
-
-        public event EventHandler Unbind;
+        public event UserCloudChanges AdminChangedUserList;
         public bool IsUnbinded { get; private set; } = false;
         private bool isAdmin = false;
 
         //private MainWindow window;
 
-        private ListBox Users;
-        private FlowDocument DialogHistory;
-        private FlowDocument DialogWindow;
+        public ListBox Users;
+        public FlowDocument DialogHistory;
+        public FlowDocument DialogWindow;
         private UIWindow mainWindow;
 
         internal Dictionary<string, UserBindings> AllUsers { get; } = new Dictionary<string, UserBindings>(StringComparer.CurrentCulture);
@@ -76,12 +83,18 @@ namespace WCFChat.Client.BasicControl
             _timerWritingUser.AutoReset = false;
         }
 
+        public bool IsUniqueNames(User newUser)
+        {
+            bool currentNameAlreadyExist = AllUsers.Values.Any(p => p.User.Name.Equals(newUser.Name, StringComparison.CurrentCultureIgnoreCase));
+            return !currentNameAlreadyExist;
+        }
+
         public virtual void IncomingRequestForAccess(User user, string address)
         {
 
         }
 
-        protected void AddWaiter(User newUser, IChatCallback callback, string address, string port)
+        public void AddWaiter(User newUser, IChatCallback callback, string address, string port)
         {
             UserBindings userBind = new UserBindings(newUser, callback, address, port);
             AddUser(userBind, $"{address}:{port}");
@@ -133,7 +146,7 @@ namespace WCFChat.Client.BasicControl
             }
         }
 
-        void AddUser(UserBindings user, string address, string gridName, string textblockUser, string textblockStatus, string borderName)
+        void AddUser(UserBindings userBind, string address, string gridName, string textblockUser, string textblockStatus, string borderName)
         {
             ListBoxItem newUserItem = new ListBoxItem();
             newUserItem.Style = (Style)mainWindow.FindResource("ListBoxItemUser");
@@ -158,7 +171,7 @@ namespace WCFChat.Client.BasicControl
                 else if (item is Border resultBorder)
                 {
                     userBackgound = resultBorder;
-                    userBackgound.Background = user.Status == UserStatus.Admin ? AdminBackground : UserBackground;
+                    userBackgound.Background = userBind.Status == UserStatus.Admin ? AdminBackground : UserBackground;
                 }
                 else if (item is Button resultButton)
                 {
@@ -167,10 +180,10 @@ namespace WCFChat.Client.BasicControl
             }
 
             newUserItem.Content = cloneExist;
-            user.AddUIControl(newUserItem, userBackgound, userName, userStatus);
+            userBind.AddUIControl(newUserItem, userBackgound, userName, userStatus);
 
             Users.Items.Add(newUserItem);
-            AllUsers.Add(user.GUID.Value, user);
+            AllUsers.Add(userBind.GUID.Value, userBind);
         }
 
 
@@ -192,22 +205,17 @@ namespace WCFChat.Client.BasicControl
                 {
                     if (isExist)
                         userBind.UIControls.Status.Foreground = UserIsNotLogOnYetStatus; // ждем его непосредственного коннекта Желтый цвет
-                    AccessOrRemoveUser(userBind, false);
+                    AdminChangedUserList?.Invoke(userBind, this, UserChanges.Access);
                 }
                 else
                 {
-                    AccessOrRemoveUser(userBind, true);
+                    AdminChangedUserList?.Invoke(userBind, this, UserChanges.Remove);
+                    RemoveUser(userBind);
                 }
             }
         }
 
-        internal virtual void AccessOrRemoveUser(UserBindings userBind, bool isRemove)
-        {
-            if (isRemove)
-            {
-                RemoveUser(userBind);
-            }
-        }
+        
 
         internal void ChangeUserStatusIsActive(UserBindings user)
         {
@@ -307,7 +315,7 @@ namespace WCFChat.Client.BasicControl
             }
         }
 
-        protected void SomeoneUserReceveMessage(Message msg)
+        public void SomeoneUserReceveMessage(Message msg)
         {
             if (DialogHistory.Blocks.LastBlock is MyParagraph exist)
             {
@@ -341,9 +349,16 @@ namespace WCFChat.Client.BasicControl
         }
 
 
-        protected virtual void CurrentUserIsWriting(bool isWriting)
+        protected void CurrentUserIsWriting(bool isWriting)
         {
-
+            lock (sync)
+            {
+                foreach (UserBindings existUser in AllUsers.Values)
+                {
+                    if (existUser.CallBack != null && ((System.ServiceModel.Channels.IChannel)existUser.CallBack).State == System.ServiceModel.CommunicationState.Opened)
+                        existUser.CallBack.IsWritingCallback(Initiator.User, isWriting);
+                }
+            }
         }
 
         private void SendMessage_Click(object sender, RoutedEventArgs e)
@@ -353,9 +368,25 @@ namespace WCFChat.Client.BasicControl
             DialogWindow.Blocks.Clear();
         }
 
-        protected virtual void CurrentUserIsSaying(string msg)
+        protected void CurrentUserIsSaying(string msg)
         {
+            lock (sync)
+            {
+                Message adminSay = new Message()
+                {
+                    Sender = Initiator.User,
+                    Content = msg,
+                    Time = DateTime.Now
+                };
 
+                SomeoneUserReceveMessage(adminSay);
+
+                foreach (UserBindings existUser in AllUsers.Values)
+                {
+                    if (existUser.CallBack != null && ((System.ServiceModel.Channels.IChannel)existUser.CallBack).State == System.ServiceModel.CommunicationState.Opened)
+                        existUser.CallBack.Receive(adminSay);
+                }
+            }
         }
 
         internal virtual bool GetUserBinding(User user, out UserBindings userBind)
