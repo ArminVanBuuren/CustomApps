@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XML Spy v4.4 U (http://www.xmlspy.com) by name (company) -->
+<Command Name="DeleteCallForwardingCFB" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Удаление услуги 'Переадресация вызова'</Description>
+	<Author Name="Timur Khamzin" Date="2015-11-16+15:00"/>
+	<Request Template='MOD SS: MSISDN={0},CFB=0;^M'>
+		<Item Name="msisdn" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="windows-1251"/>
+</Command>

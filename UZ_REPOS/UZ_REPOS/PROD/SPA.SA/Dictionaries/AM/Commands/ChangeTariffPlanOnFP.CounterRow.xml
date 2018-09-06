@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ChangeTariffPlanOnFP.CounterRow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>Change Tariff Plan (counters table)</Description>
+  <Author Name="Oleg Safonov" Date="2011-02-08+12:35"/>
+  <Properties GenerationType="MmlXml" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[<Row 
+REQUEST_ID="reversecut({0},4)-{6}" 
+TERMINAL_DEVICE_CONTRACT_ID="{2}" 
+COUNTER_ID="{3}" 
+COUNTER_VALUE="{4}"
+{5}/>]]>
+    </RequestTemplate>
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="org.id" Type="Wellknown"/>
+    <Item Name="id" Type="Wellknown"/>
+    <Item Name="TerminalDeviceID" Type="Wellknown"/>
+    <Item Name="COUNTER_ID" Type="LocalParameter"/>
+    <Item Name="Value" Type="LocalParameter"/>
+    <Item Name="ExpirationDate" Type="LocalParameter"/>
+    <Item Name="GlobalUid" Type="Wellknown" />
+  </Request>
+  <ParametersList>
+    <Parameter Name="COUNTER_ID">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList/ChangeTP/Counters/*[1]/Code[string-length(.) > 0]"/>
+    </Parameter>
+    <Parameter Name="Value">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList/ChangeTP/Counters/*[1]/Value[string-length(.) > 0]"/>
+    </Parameter>
+    <Parameter Name="ExpirationDate">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList/ChangeTP/Counters/*[1]/ExpirationDate[string-length(.) > 0]"
+      AbsenceValue="" PostFormat="EXPIRATION_EVENT=&quot;{0}&quot;"/>
+    </Parameter> 
+  </ParametersList>
+  <ErrorsList CodePage="ascii"/>
+</Command>

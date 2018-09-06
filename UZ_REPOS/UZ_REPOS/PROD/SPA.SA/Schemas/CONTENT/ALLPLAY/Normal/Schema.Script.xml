@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TraceSchema Name="FORIS.SPA.Script">
+	<TraceSchemaItem Name="SimpleScriptProcessor">
+		<!--Message Name="Script.ALARM"/>
+		<Message Name="Script.CONNECT"/>
+		<Message Name="Script.ERROR"/>
+		<Message Name="Script.INFORMATION"/>
+		<Message Name="Script.INITIALIZATION"/>
+		<Message Name="Script.START"/>
+		<Message Name="Script.STOP"/>
+		<Message Name="Script.RECEIVE"/-->
+		<!--Message Name="Script.TRACE0"/>
+		<Message Name="Script.TRACE1"/>
+		<Message Name="Script.TRACE2"/>
+		<Message Name="Script.TRACE3"/>
+		<Message Name="Script.TRACE4"/>
+		<Message Name="Script.TRACE5"/-->
+	</TraceSchemaItem>
+	<TraceSchemaItem Name="ScriptSocket">
+		<!--Message Name="ScriptSocket.ERROR"/>
+		<Message Name="ScriptSocket.WARNING"/>
+		<Message Name="ScriptSocket.INFORMATION"/>
+		<Message Name="ScriptSocket.INITIALIZATION"/>
+		<Message Name="ScriptSocket.CONNECT"/>
+		<Message Name="ScriptSocket.DISCONNECT"/>
+		<Message Name="ScriptSocket.LOGIN"/>
+		<Message Name="ScriptSocket.TX_MESSAGE"/>
+		<Message Name="ScriptSocket.RX_MESSAGE"/-->
+		<!--Message Name="ScriptSocket.TRACE5"/-->
+	</TraceSchemaItem>
+</TraceSchema>

@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="AddLTE_3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Добавление услуги 'LTE 4G' 3</Description>
+	<Author Name="Timur Khamzin" Date="2016-05-31+15:00"/>
+	<Request Template='Set EPCBsc:MSISDN={0},EPCCHARGCHRT=8,EPCRFSP=0,EPCSTNSR=FFFFFFFFFFFFFFF,EPCICSIND=0,EPCAMBRUP=100000000,EPCAMBRDOWN=100000000;^M'>
+                                             
+		<Item Name="msisdn" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="windows-1251"/>
+</Command>

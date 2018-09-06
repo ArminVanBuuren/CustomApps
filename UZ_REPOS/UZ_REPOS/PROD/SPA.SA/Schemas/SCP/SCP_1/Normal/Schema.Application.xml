@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TraceSchema Name="FORIS.SPA.Application">
+	<TraceSchemaItem Name="Application">
+		<!--Message Name="Application.ERROR"/>
+		<Message Name="Application.INITIALIZATION"/>
+		<Message Name="Application.REPORT"/>
+		<Message Name="Application.START"/>
+  		<Message Name="Application.STOP"/>
+               <Message Name="Application.ASSEMBLIES"/-->
+         </TraceSchemaItem>
+</TraceSchema>

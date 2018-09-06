@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="DeleteBasicGPRS_APN_FREE" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Удаление услуги 'GPRS'APN_FREE</Description>
+	<Author Name="Timur Khamzin" Date="2015-11-16+15:00"/>
+	<Request Template='Del PDP:MSISDN={0},OAPN={1},OPDPTYPE=0;^M'>
+		<Item Name="msisdn" Type="Wellknown"/>
+                <Item Name="apn_free" Type="Parameter"/>
+	</Request>
+	<ErrorsList CodePage="windows-1251"/>
+</Command>
