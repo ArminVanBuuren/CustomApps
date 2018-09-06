@@ -42,7 +42,9 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="EDITION\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="PROD-2018.09.06\MG-01\Configuration\CRMCON\CRMConnector_CRMCON_01_01.exe.xml" />
     <Content Include="PROD-2018.09.06\MG-01\Configuration\DBCON\DBConnector_DBCON_01_01.exe.xml" />
