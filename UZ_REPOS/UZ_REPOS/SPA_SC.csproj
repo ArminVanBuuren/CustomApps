@@ -1196,7 +1196,6 @@
     <Content Include="RELEASE\ROBP\Processes\TestInformer.xml" />
     <Content Include="RELEASE\ROBP\Processes\Unblock Subscriber.xml" />
     <Content Include="RELEASE\ROBP\Processes\Update Call Forwarding.xml" />
-    <Content Include="RELEASE\SPA.BPM\SPA.BPM.01\2018.09.06.xml" />
     <Content Include="RELEASE\SPA.BPM\SPA.BPM.01\configuration.application.xml" />
     <Content Include="RELEASE\SPA.BPM\SPA.BPM.01\configuration.common.xml" />
     <Content Include="RELEASE\SPA.BPM\SPA.BPM.TEST\configuration.application.xml" />
