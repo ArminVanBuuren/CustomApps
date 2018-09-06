@@ -1236,7 +1236,6 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.ALLPLAY\dictionary.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.ALLPLAY\Emulation\printout.failure.txt" />
     <Content Include="EDITION\SPA.SA\SPA.SA.ALLPLAY\Emulation\printout.success.txt" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.ALLPLAY\SC.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.ALLPLAY\Scenarios\SC.ALLPLAY.ChangeMSISDN.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.ALLPLAY\Scenarios\SC.ALLPLAY.CreateSubscriber.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.ALLPLAY\Scenarios\SC.ALLPLAY.DeleteSubscriber.xml" />
