@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.XPath;
-using XPathEvaluator.XmlRtfStyle;
+using Utils.XmlRtfStyle;
 
 namespace XPathEvaluator
 {
