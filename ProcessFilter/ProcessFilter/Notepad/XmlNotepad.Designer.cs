@@ -42,7 +42,7 @@
             this.TabControlObj.Location = new System.Drawing.Point(0, 0);
             this.TabControlObj.Name = "TabControlObj";
             this.TabControlObj.SelectedIndex = 0;
-            this.TabControlObj.Size = new System.Drawing.Size(1320, 762);
+            this.TabControlObj.Size = new System.Drawing.Size(734, 762);
             this.TabControlObj.TabIndex = 0;
             // 
             // XmlNotepad
@@ -50,7 +50,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1320, 762);
+            this.ClientSize = new System.Drawing.Size(734, 762);
             this.Controls.Add(this.TabControlObj);
             this.Name = "XmlNotepad";
             this.Text = "Xml Editor";
