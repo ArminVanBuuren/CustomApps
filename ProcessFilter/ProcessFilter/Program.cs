@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace ProcessFilter
 {
@@ -16,6 +18,7 @@ namespace ProcessFilter
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            //Application.Run(new ProcessFilterForm());
             Application.Run(new ProcessFilterForm());
         }
         public static string TrimEnd(this string input, string suffixToRemove, StringComparison comparisonType = StringComparison.CurrentCultureIgnoreCase)
@@ -71,5 +74,72 @@ namespace ProcessFilter
             return cnt.Values.All(c => c == 0);
         }
 
+        public static XmlDocument LoadXml(string path, bool toLower = false)
+        {
+            if (File.Exists(path))
+            {
+                string context;
+                using (StreamReader sr = new StreamReader(path))
+                {
+                    context = toLower ? sr.ReadToEnd().ToLower() : sr.ReadToEnd();
+                }
+
+                if (!string.IsNullOrEmpty(context) && context.TrimStart().StartsWith("<"))
+                {
+                    try
+                    {
+                        XmlDocument xmlSetting = new XmlDocument();
+                        xmlSetting.LoadXml(context);
+                        return xmlSetting;
+                    }
+                    catch (Exception ex)
+                    {
+                        //null
+                    }
+                }
+            }
+            return null;
+        }
+
+        
+
+        public static bool IsXml(string path, out XmlDocument xmldoc, out string source)
+        {
+            xmldoc = null;
+            source = null;
+            if (File.Exists(path))
+            {
+                string context;
+                using (StreamReader sr = new StreamReader(path))
+                {
+                    context = sr.ReadToEnd();
+                }
+                if (IsXml(context, out xmldoc))
+                {
+                    source = context;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static bool IsXml(string source, out XmlDocument xmldoc)
+        {
+            xmldoc = null;
+            if (!string.IsNullOrEmpty(source) && source.TrimStart().StartsWith("<"))
+            {
+                try
+                {
+                    xmldoc = new XmlDocument();
+                    xmldoc.LoadXml(source);
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    //null
+                }
+            }
+            return false;
+        }
     }
 }

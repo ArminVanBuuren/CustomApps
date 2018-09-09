@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ProcessFilter
+namespace ProcessFilter.SPA
 {
-    public class NetworkElements
+    public class CollectionNetworkElements
     {
         public NetworkElementCollection Elements { get; } = new NetworkElementCollection();
 
-        public NetworkElements(string opsPath)
+        public CollectionNetworkElements(string opsPath)
         {
             string[] dirs = Directory.GetDirectories(opsPath);
             foreach (string dirNetElem in dirs)
@@ -69,6 +65,11 @@ namespace ProcessFilter
     public class NetworkElement : ObjectTempalte
     {
         public List<NetworkElementOpartion> Operations { get; private set; } = new List<NetworkElementOpartion>();
+
+        public NetworkElement(string path, List<NetworkElementOpartion> ops) :base(path)
+        {
+            Operations.AddRange(ops);
+        }
 
         public NetworkElement(string path) : base(path)
         {

@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FastColoredTextBox, Version=2.16.23.0, Culture=neutral, PublicKeyToken=fb8aa12b994ef61b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\CustomApp\FastColoredTextBox\FastColoredTextBox\bin\Debug\FastColoredTextBox.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.DirectoryServices" />
@@ -49,18 +53,28 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="SPA\CollectionCommands.cs" />
+    <Compile Include="SPA\ObjectTempalte.cs" />
+    <Compile Include="SPA\CollectionScenarios.cs" />
+    <Compile Include="Notepad\XmlEditor.cs" />
+    <Compile Include="ProcessFilterForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="ProcessFilterForm.Designer.cs">
+      <DependentUpon>ProcessFilterForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="NetwokElements.cs" />
-    <Compile Include="BusinessProcesses.cs" />
+    <Compile Include="SPA\CollectionNetwokElements.cs" />
+    <Compile Include="SPA\CollectionBusinessProcess.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Notepad\XmlNotepad.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Notepad\XmlNotepad.Designer.cs">
+      <DependentUpon>XmlNotepad.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="ProcessFilterForm.resx">
+      <DependentUpon>ProcessFilterForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -70,7 +84,11 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Notepad\XmlNotepad.resx">
+      <DependentUpon>XmlNotepad.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -83,6 +101,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Add.png" />
+    <Content Include="Resources\Close.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
