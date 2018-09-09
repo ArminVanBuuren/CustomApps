@@ -40,6 +40,10 @@ namespace ProcessFilter.Notepad
 
         private void XmlNotepad_Closed(object sender, EventArgs e)
         {
+            foreach (XmlEditor editor in listOfXmlFiles)
+            {
+                editor.Dispose();
+            }
             WindowIsClosed = true;
         }
 

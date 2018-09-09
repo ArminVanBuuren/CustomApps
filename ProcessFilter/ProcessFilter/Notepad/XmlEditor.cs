@@ -11,7 +11,7 @@ using Utils.IOExploitation;
 
 namespace ProcessFilter.Notepad
 {
-    public class XmlEditor
+    public class XmlEditor : IDisposable
     {
         public string Name { get; private set; }
         public string Path { get; private set; }
@@ -170,6 +170,11 @@ namespace ProcessFilter.Notepad
             fctbInput.SyntaxHighlighter.XMLSyntaxHighlight(fctbInput.Range);
             fctbInput.Range.ClearFoldingMarkers();
             IsContentChanged = !fctbInput.Text.Equals(Source);
+        }
+
+        public void Dispose()
+        {
+            FCTextBox.Dispose();
         }
     }
 }
