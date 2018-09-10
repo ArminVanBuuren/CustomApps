@@ -13,11 +13,15 @@ using System.Xml.Schema;
 using ProcessFilter.Notepad;
 using ProcessFilter.SPA;
 using Utils;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace ProcessFilter
 {
-    public partial class ProcessFilterForm : Form
+    [Serializable]
+    public partial class ProcessFilterForm : Form, ISerializable
     {
+        public static string SerializationDataPath => $"{Customs.AccountFilePath}.bin";
         private XmlNotepad notepad;
         public CollectionBusinessProcess Processes { get; private set; }
         public CollectionNetworkElements NetElements { get; private set; }
@@ -26,16 +30,48 @@ namespace ProcessFilter
 
         public ProcessFilterForm()
         {
-            InitializeComponent();
-            ProcessesTextBox.Text = @"C:\temp\SPA\Processes";
-            OperationTextBox.Text = @"C:\temp\SPA\Operations";
-            ScenariosTextBox.Text = @"C:\temp\SPA\SPA.SA.HLR.ZTE\Scenarios";
-            CommandsTextBox.Text = @"C:\temp\SPA\SPA.SA.HLR.ZTE\Commands";
+            MainInit();
 
-            ProcessesTextBox_TextChanged(null, null);
-            OperationTextBox_TextChanged(null, null);
-            ScenariosTextBox_TextChanged(null, null);
-            CommandsTextBox_TextChanged(null, null);
+            //ProcessesTextBox.Text = @"C:\temp\SPA\Processes";
+            //OperationTextBox.Text = @"C:\temp\SPA\Operations";
+            //ScenariosTextBox.Text = @"C:\temp\SPA\SPA.SA.HLR.ZTE\Scenarios";
+            //CommandsTextBox.Text = @"C:\temp\SPA\SPA.SA.HLR.ZTE\Commands";
+
+            //ProcessesTextBox_TextChanged(null, null);
+            //OperationTextBox_TextChanged(null, null);
+            //ScenariosTextBox_TextChanged(null, null);
+            //CommandsTextBox_TextChanged(null, null);
+        }
+
+        private void ProcessFilterForm_Closing(object sender, CancelEventArgs e)
+        {
+            using (FileStream stream = new FileStream(SerializationDataPath, FileMode.Create, FileAccess.ReadWrite))
+            {
+                new BinaryFormatter().Serialize(stream, this);
+            }
+        }
+
+        ProcessFilterForm(SerializationInfo propertyBag, StreamingContext context)
+        {
+            MainInit();
+            ProcessesTextBox.Text = propertyBag.GetString("ADWFFW");
+            OperationTextBox.Text = propertyBag.GetString("AAEERF");
+            ScenariosTextBox.Text = propertyBag.GetString("DFWDRT");
+            CommandsTextBox.Text = propertyBag.GetString("WWWERT");
+        }
+
+        void ISerializable.GetObjectData(SerializationInfo propertyBag, StreamingContext context)
+        {
+            propertyBag.AddValue("ADWFFW", ProcessesTextBox.Text);
+            propertyBag.AddValue("AAEERF", OperationTextBox.Text);
+            propertyBag.AddValue("DFWDRT", ScenariosTextBox.Text);
+            propertyBag.AddValue("WWWERT", CommandsTextBox.Text);
+        }
+
+        void MainInit()
+        {
+            InitializeComponent();
+            this.Closing += ProcessFilterForm_Closing;
         }
 
         private void buttonFilterClick(object sender, EventArgs e)
