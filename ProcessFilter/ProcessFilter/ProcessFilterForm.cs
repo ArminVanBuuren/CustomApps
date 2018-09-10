@@ -251,19 +251,20 @@ namespace ProcessFilter
             {
                 table.Columns.Add(prop.Name, prop.PropertyType);
             }
-            foreach (T VARIABLE in data)
+            foreach (T instance in data)
             {
-                Type tp = VARIABLE.GetType();
+                Type tp = instance.GetType();
                 PropertyInfo[] props2 = tp.GetProperties(BindingFlags.Instance | BindingFlags.Public);
                 object[] objs = new object[props2.Length];
                 int i = 0;
                 foreach (PropertyInfo prop in props2)
                 {
-                    objs[i] = prop.GetValue(VARIABLE, null);
+                    objs[i] = prop.GetValue(instance, null);
                     i++;
                 }
                 table.Rows.Add(objs);
             }
+            
 
 
             grid.BeginInit();
