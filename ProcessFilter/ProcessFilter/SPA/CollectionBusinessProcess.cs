@@ -33,7 +33,7 @@ namespace ProcessFilter.SPA
 
     public class BusinessProcess : ObjectTempalte
     {
-        public List<string> Operations { get; } = new List<string>();
+        internal List<string> Operations { get; } = new List<string>();
         public int ID { get; }
 
         public BusinessProcess(string path, int id) : base(path)

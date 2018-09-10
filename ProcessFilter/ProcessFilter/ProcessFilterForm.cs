@@ -15,6 +15,7 @@ using ProcessFilter.SPA;
 using Utils;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Reflection;
 
 namespace ProcessFilter
 {
@@ -238,8 +239,38 @@ namespace ProcessFilter
 
         void AssignDataGrid<T>(DataGridView grid, IList<T> data)
         {
-            // TODO: сделать нормальный импорт данных чтобы был без тормозов
-            grid.DataSource = data;
+
+            grid.DataSource = null;
+            grid.Columns.Clear();
+            grid.Rows.Clear();
+
+            DataTable table = new DataTable();
+            Type typeParameterType = typeof(T);
+            PropertyInfo[] props = typeParameterType.GetProperties(BindingFlags.Instance | BindingFlags.Public);
+            foreach (PropertyInfo prop in props)
+            {
+                table.Columns.Add(prop.Name, prop.PropertyType);
+            }
+            foreach (T VARIABLE in data)
+            {
+                Type tp = VARIABLE.GetType();
+                PropertyInfo[] props2 = tp.GetProperties(BindingFlags.Instance | BindingFlags.Public);
+                object[] objs = new object[props2.Length];
+                int i = 0;
+                foreach (PropertyInfo prop in props2)
+                {
+                    objs[i] = prop.GetValue(VARIABLE, null);
+                    i++;
+                }
+                table.Rows.Add(objs);
+            }
+
+
+            grid.BeginInit();
+            grid.DataSource = table;
+            grid.EndInit();
+
+
             foreach (DataGridViewRow row in grid.Rows)
             {
                 row.DefaultCellStyle.Padding = new Padding(0, 0, 15, 0);

@@ -34,7 +34,7 @@ namespace ProcessFilter.SPA
 
     public class Scenario : ObjectTempalte
     {
-        public List<string> Commands { get; } = new List<string>();
+        internal List<string> Commands { get; } = new List<string>();
         public Scenario(string path) : base(path)
         {
 

@@ -52,6 +52,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DGVEnhancer.cs" />
     <Compile Include="SPA\CollectionCommands.cs" />
     <Compile Include="SPA\ObjectTempalte.cs" />
     <Compile Include="SPA\CollectionScenarios.cs" />
