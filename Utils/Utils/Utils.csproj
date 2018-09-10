@@ -60,9 +60,11 @@
     <Compile Include="Crypto\DH.cs" />
     <Compile Include="Customs.cs" />
     <Compile Include="IOExploitation\FilesEmployee.cs" />
+    <Compile Include="IOExploitation\IOHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerializationHelper\SerialHelper.cs" />
     <Compile Include="Utility.cs" />
+    <Compile Include="XmlHelper\XmlHelper.cs" />
     <Compile Include="XmlRtfStyle\RtfAlignment.cs" />
     <Compile Include="XmlRtfStyle\RtfBuilder.cs" />
     <Compile Include="XmlRtfStyle\RtfFontStyles.cs" />

@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Text.RegularExpressions;
+using System.Xml;
 using Microsoft.Win32;
 
 namespace Utils
@@ -160,5 +161,14 @@ namespace Utils
 			oldValue = correctValue;
 		}
 
+
+        public static string TrimEnd(this string input, string suffixToRemove, StringComparison comparisonType = StringComparison.CurrentCultureIgnoreCase)
+	    {
+	        if (input != null && suffixToRemove != null && input.EndsWith(suffixToRemove, comparisonType))
+	        {
+	            return input.Substring(0, input.Length - suffixToRemove.Length);
+	        }
+	        else return input;
+	    }
     }
 }
