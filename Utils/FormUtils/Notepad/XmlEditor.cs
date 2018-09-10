@@ -13,6 +13,7 @@ using Utils.XmlHelper;
 
 namespace FormUtils.Notepad
 {
+
     public class XmlEditor : IDisposable
     {
         public string Name { get; private set; }
