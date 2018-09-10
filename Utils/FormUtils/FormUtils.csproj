@@ -85,6 +85,8 @@
   <ItemGroup>
     <Content Include="Notepad\Resources\Add.png" />
     <Content Include="Notepad\Resources\Close.png" />
+    <Content Include="Notepad\Resources\icons8-xml-48.ico" />
+    <None Include="Resources\icons8-xml-48.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

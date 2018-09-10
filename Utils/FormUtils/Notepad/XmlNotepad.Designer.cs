@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(XmlNotepad));
             this.TabControlObj = new System.Windows.Forms.TabControl();
             this.SuspendLayout();
             // 
@@ -52,6 +53,7 @@
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1035, 648);
             this.Controls.Add(this.TabControlObj);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "XmlNotepad";
             this.Text = "Xml Editor";
             this.ResumeLayout(false);
