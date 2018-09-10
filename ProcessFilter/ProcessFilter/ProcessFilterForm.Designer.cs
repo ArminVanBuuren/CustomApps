@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProcessFilterForm));
             this.ProcessesTextBox = new System.Windows.Forms.TextBox();
             this.OperationTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -442,6 +443,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.OperationTextBox);
             this.Controls.Add(this.ProcessesTextBox);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(634, 400);
             this.Name = "ProcessFilterForm";
             this.Text = "Process Filter";
