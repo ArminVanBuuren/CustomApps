@@ -10,12 +10,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Schema;
-using ProcessFilter.Notepad;
 using ProcessFilter.SPA;
 using Utils;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Reflection;
+using FormUtils.Notepad;
+using FormUtils.DataGridViewHelper;
+using Utils.XmlHelper;
 
 namespace ProcessFilter
 {
@@ -32,16 +34,6 @@ namespace ProcessFilter
         public ProcessFilterForm()
         {
             MainInit();
-
-            //ProcessesTextBox.Text = @"C:\temp\SPA\Processes";
-            //OperationTextBox.Text = @"C:\temp\SPA\Operations";
-            //ScenariosTextBox.Text = @"C:\temp\SPA\SPA.SA.HLR.ZTE\Scenarios";
-            //CommandsTextBox.Text = @"C:\temp\SPA\SPA.SA.HLR.ZTE\Commands";
-
-            //ProcessesTextBox_TextChanged(null, null);
-            //OperationTextBox_TextChanged(null, null);
-            //ScenariosTextBox_TextChanged(null, null);
-            //CommandsTextBox_TextChanged(null, null);
         }
 
         private void ProcessFilterForm_Closing(object sender, CancelEventArgs e)
@@ -159,7 +151,7 @@ namespace ProcessFilter
             int endOfBpCollection = bpCollection.Count;
             for (int i = 0; i < endOfBpCollection; i++)
             {
-                XmlDocument document = Program.LoadXml(bpCollection[i].Path, true);
+                XmlDocument document = XmlHelper.LoadXml(bpCollection[i].Path, true);
                 if (document != null)
                 {
                     bpCollection[i].AddBodyOperations(document);
@@ -189,7 +181,7 @@ namespace ProcessFilter
 
                     foreach (Scenario scenario in scenarios)
                     {
-                        XmlDocument document = Program.LoadXml(scenario.Path, true);
+                        XmlDocument document = XmlHelper.LoadXml(scenario.Path, true);
                         if (document != null)
                         {
                             scenario.AddBodyCommands(document);

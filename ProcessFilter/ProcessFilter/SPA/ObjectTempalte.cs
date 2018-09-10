@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Utils.IOExploitation;
 
 namespace ProcessFilter.SPA
 {
@@ -12,7 +13,7 @@ namespace ProcessFilter.SPA
     {
         public ObjectTempalte(string path)
         {
-            Name = path.GetLastNameInPath();
+            Name = path.GetLastNameInPath(true);
             Path = path;
         }
 
