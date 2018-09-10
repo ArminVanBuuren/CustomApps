@@ -145,7 +145,7 @@
             this.dataGridProcessesResults.Name = "dataGridProcessesResults";
             this.dataGridProcessesResults.ReadOnly = true;
             this.dataGridProcessesResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridProcessesResults.Size = new System.Drawing.Size(605, 221);
+            this.dataGridProcessesResults.Size = new System.Drawing.Size(605, 242);
             this.dataGridProcessesResults.TabIndex = 4;
             this.dataGridProcessesResults.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridProcessesResults_CellMouseDoubleClick);
             // 
@@ -225,7 +225,7 @@
             this.tabControl1.Location = new System.Drawing.Point(3, 169);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(613, 247);
+            this.tabControl1.Size = new System.Drawing.Size(613, 268);
             this.tabControl1.TabIndex = 14;
             // 
             // tabPage1
@@ -234,7 +234,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(605, 221);
+            this.tabPage1.Size = new System.Drawing.Size(605, 242);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Processes";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -394,6 +394,7 @@
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(613, 23);
             this.progressBar.TabIndex = 23;
+            this.progressBar.Visible = false;
             // 
             // SenariosStat
             // 
