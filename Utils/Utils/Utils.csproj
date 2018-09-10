@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CollectionHelper\CollectionHelper.cs" />
     <Compile Include="ConditionEx\Base\Arguments.cs" />
     <Compile Include="ConditionEx\Base\Condition.cs" />
     <Compile Include="ConditionEx\Base\ConditionParameter.cs" />
