@@ -139,6 +139,8 @@ namespace XPathEvaluator
                     string finded = xmlObject.FindedObject.Replace("\n", "");
                     int findedText = finded.Length;
                     int append = ((finded[0] == '\r') ? 1 : 0);
+
+                    //TODO: сделать корректное выделение, т.к. в первый раз он выделяет нормально, а потом Range заполняется почему то всем контекстом xml
                     //xmlBodyRichTextBox.Select(fillTextLength - findedText + append, findedText);
                     Range range = fctb.GetRange(fillTextLength - findedText + append, fillTextLength);
                     

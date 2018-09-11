@@ -355,6 +355,7 @@ namespace Utils.XmlRtfStyle
         {
             string source = string.Empty;
             string findedStr = string.Empty;
+            //TODO: сделать корректный поиск по нодам, т.к. XmlDocument формируект ноды, а отступы мы должны делать основываясь на источнике контекста xml
             XMlType type = ProcessXmlGetPosition(xml.DocumentElement, ref source, ref findedStr, 0, find);
 
             //int position = 0;
