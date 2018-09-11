@@ -378,66 +378,6 @@ namespace Utils.XmlRtfStyle
             return null;
         }
 
-
-
-        static void GetPosition(XmlNode findNode, ref int position, int rankNewLine, bool isPrimary)
-        {
-            if (findNode.ParentNode == null)
-            {
-                position = position + findNode.Name.Length * 2 + 5;
-                return;
-            }
-            foreach (XmlNode nodeBrothers in findNode.ParentNode.ChildNodes)
-            {
-                if (nodeBrothers.Equals(findNode))
-                {
-                    rankNewLine = rankNewLine - 1;
-                    GetPosition(findNode.ParentNode, ref position, rankNewLine, false);
-                    break;
-                }
-                if (isPrimary && nodeBrothers.Attributes != null)
-                {
-                    if (GetPositionInNode(findNode, nodeBrothers, ref position, rankNewLine))
-                    {
-                        rankNewLine = rankNewLine - 1;
-                        GetPosition(findNode.ParentNode, ref position, rankNewLine, false);
-                        break;
-                    }
-                    AppendPossAndSpaces(nodeBrothers, ref position, rankNewLine);
-                }
-                else
-                    AppendPossAndSpaces(nodeBrothers, ref position, rankNewLine);
-            }
-        }
-
-        static void AppendPossAndSpaces(XmlNode nodeBrothers, ref int position, int rankNewLine)
-        {
-            position = position + nodeBrothers.OuterXml.Length + rankNewLine * 3;
-            AppendSpaces(nodeBrothers, ref position, rankNewLine);
-        }
-        static void AppendSpaces(XmlNode nodeBrothers, ref int position, int rankNewLine)
-        {
-            foreach (XmlNode childNode in nodeBrothers.ChildNodes)
-            {
-                position = position + rankNewLine * 3 + 1;
-                AppendSpaces(childNode, ref position, rankNewLine + 1);
-            }
-        }
-        static bool GetPositionInNode(XmlNode findNode, XmlNode nodeBrothers, ref int position, int rankNewLine)
-        {
-            int getPosAttr = 0;
-            foreach (XmlAttribute attribute in nodeBrothers.Attributes)
-            {
-                getPosAttr = getPosAttr + string.Format(" {0}=\"{1}\"", attribute.Name, attribute.InnerXml).Length;
-                if (attribute.Equals(findNode))
-                {
-                    position = position + getPosAttr + nodeBrothers.Name.Length + 1 + rankNewLine * 3;
-                    return true;
-                }
-            }
-            return false;
-        }
-
         static XMlType ProcessXmlGetPosition(XmlNode node, ref string source, ref string finded, int nested, XmlNode findNode)
         {
             string inputSource = source;
@@ -529,6 +469,68 @@ namespace Utils.XmlRtfStyle
             }
             return XMlType.Unknown;
         }
+
+
+
+        static void GetPosition(XmlNode findNode, ref int position, int rankNewLine, bool isPrimary)
+        {
+            if (findNode.ParentNode == null)
+            {
+                position = position + findNode.Name.Length * 2 + 5;
+                return;
+            }
+            foreach (XmlNode nodeBrothers in findNode.ParentNode.ChildNodes)
+            {
+                if (nodeBrothers.Equals(findNode))
+                {
+                    rankNewLine = rankNewLine - 1;
+                    GetPosition(findNode.ParentNode, ref position, rankNewLine, false);
+                    break;
+                }
+                if (isPrimary && nodeBrothers.Attributes != null)
+                {
+                    if (GetPositionInNode(findNode, nodeBrothers, ref position, rankNewLine))
+                    {
+                        rankNewLine = rankNewLine - 1;
+                        GetPosition(findNode.ParentNode, ref position, rankNewLine, false);
+                        break;
+                    }
+                    AppendPossAndSpaces(nodeBrothers, ref position, rankNewLine);
+                }
+                else
+                    AppendPossAndSpaces(nodeBrothers, ref position, rankNewLine);
+            }
+        }
+
+        static void AppendPossAndSpaces(XmlNode nodeBrothers, ref int position, int rankNewLine)
+        {
+            position = position + nodeBrothers.OuterXml.Length + rankNewLine * 3;
+            AppendSpaces(nodeBrothers, ref position, rankNewLine);
+        }
+        static void AppendSpaces(XmlNode nodeBrothers, ref int position, int rankNewLine)
+        {
+            foreach (XmlNode childNode in nodeBrothers.ChildNodes)
+            {
+                position = position + rankNewLine * 3 + 1;
+                AppendSpaces(childNode, ref position, rankNewLine + 1);
+            }
+        }
+        static bool GetPositionInNode(XmlNode findNode, XmlNode nodeBrothers, ref int position, int rankNewLine)
+        {
+            int getPosAttr = 0;
+            foreach (XmlAttribute attribute in nodeBrothers.Attributes)
+            {
+                getPosAttr = getPosAttr + string.Format(" {0}=\"{1}\"", attribute.Name, attribute.InnerXml).Length;
+                if (attribute.Equals(findNode))
+                {
+                    position = position + getPosAttr + nodeBrothers.Name.Length + 1 + rankNewLine * 3;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        
 
         static int ReadCdata(RtfFromXml settings, RtfBuilder rtf, StringBuilder temp, int waitTag, int state, char c)
         {

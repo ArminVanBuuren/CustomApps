@@ -1,4 +1,6 @@
-﻿namespace XPathEvaluator
+﻿
+
+namespace XPathEvaluator
 {
     partial class MainWindow
     {
@@ -28,21 +30,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
-
-
-
-
-
-
-
-
             this.XPathText = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.buttonFind = new System.Windows.Forms.Button();
             this.tabMain = new System.Windows.Forms.TabControl();
             this.tabXmlBody = new System.Windows.Forms.TabPage();
-            this.xmlBodyRichTextBox = new System.Windows.Forms.RichTextBox();
+            this.fctb = new FastColoredTextBoxNS.FastColoredTextBox();
             this.tabXPathResult = new System.Windows.Forms.TabPage();
             this.exceptionMessage = new System.Windows.Forms.Label();
             this.xpathResultDataGrid = new System.Windows.Forms.DataGridView();
@@ -51,32 +46,33 @@
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabMain.SuspendLayout();
             this.tabXmlBody.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fctb)).BeginInit();
             this.tabXPathResult.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xpathResultDataGrid)).BeginInit();
             this.SuspendLayout();
             // 
             // XPathText
             // 
-            this.XPathText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.XPathText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.XPathText.Location = new System.Drawing.Point(12, 25);
+            this.XPathText.Location = new System.Drawing.Point(99, 12);
             this.XPathText.Name = "XPathText";
-            this.XPathText.Size = new System.Drawing.Size(669, 20);
+            this.XPathText.Size = new System.Drawing.Size(679, 20);
             this.XPathText.TabIndex = 0;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Location = new System.Drawing.Point(3, 15);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(90, 13);
+            this.label1.Size = new System.Drawing.Size(93, 13);
             this.label1.TabIndex = 1;
-            this.label1.Text = "XPath Expression";
+            this.label1.Text = "XPath Expression:";
             // 
             // buttonFind
             // 
             this.buttonFind.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonFind.Location = new System.Drawing.Point(687, 25);
+            this.buttonFind.Location = new System.Drawing.Point(784, 12);
             this.buttonFind.Name = "buttonFind";
             this.buttonFind.Size = new System.Drawing.Size(75, 21);
             this.buttonFind.TabIndex = 2;
@@ -86,39 +82,60 @@
             // 
             // tabMain
             // 
-            this.tabMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.tabMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabMain.Controls.Add(this.tabXmlBody);
             this.tabMain.Controls.Add(this.tabXPathResult);
-            this.tabMain.Location = new System.Drawing.Point(12, 52);
+            this.tabMain.Location = new System.Drawing.Point(0, 38);
             this.tabMain.Name = "tabMain";
             this.tabMain.SelectedIndex = 0;
-            this.tabMain.Size = new System.Drawing.Size(750, 388);
+            this.tabMain.Size = new System.Drawing.Size(863, 517);
             this.tabMain.TabIndex = 6;
             // 
             // tabXmlBody
             // 
-            this.tabXmlBody.Controls.Add(this.xmlBodyRichTextBox);
+            this.tabXmlBody.Controls.Add(this.fctb);
             this.tabXmlBody.Location = new System.Drawing.Point(4, 22);
             this.tabXmlBody.Name = "tabXmlBody";
             this.tabXmlBody.Padding = new System.Windows.Forms.Padding(3);
-            this.tabXmlBody.Size = new System.Drawing.Size(742, 362);
+            this.tabXmlBody.Size = new System.Drawing.Size(855, 491);
             this.tabXmlBody.TabIndex = 0;
             this.tabXmlBody.Text = "XmlBody";
             this.tabXmlBody.UseVisualStyleBackColor = true;
             // 
-            // xmlBodyRichTextBox
+            // fctb
             // 
-            this.xmlBodyRichTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.fctb.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.xmlBodyRichTextBox.HideSelection = false;
-            this.xmlBodyRichTextBox.Location = new System.Drawing.Point(3, 3);
-            this.xmlBodyRichTextBox.Name = "xmlBodyRichTextBox";
-            this.xmlBodyRichTextBox.Size = new System.Drawing.Size(736, 356);
-            this.xmlBodyRichTextBox.TabIndex = 0;
-            this.xmlBodyRichTextBox.Text = "";
+            this.fctb.AutoCompleteBracketsList = new char[] {
+        '(',
+        ')',
+        '{',
+        '}',
+        '[',
+        ']',
+        '\"',
+        '\"',
+        '\'',
+        '\''};
+            this.fctb.AutoScrollMinSize = new System.Drawing.Size(0, 14);
+            this.fctb.BackBrush = null;
+            this.fctb.CharHeight = 14;
+            this.fctb.CharWidth = 8;
+            this.fctb.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.fctb.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.fctb.IsReplaceMode = false;
+            this.fctb.Location = new System.Drawing.Point(-4, 0);
+            this.fctb.Name = "fctb";
+            this.fctb.Paddings = new System.Windows.Forms.Padding(0);
+            this.fctb.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.fctb.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fctb.ServiceColors")));
+            this.fctb.Size = new System.Drawing.Size(859, 491);
+            this.fctb.TabIndex = 0;
+            this.fctb.WordWrap = true;
+            this.fctb.Zoom = 100;
             // 
             // tabXPathResult
             // 
@@ -128,7 +145,7 @@
             this.tabXPathResult.Location = new System.Drawing.Point(4, 22);
             this.tabXPathResult.Name = "tabXPathResult";
             this.tabXPathResult.Padding = new System.Windows.Forms.Padding(3);
-            this.tabXPathResult.Size = new System.Drawing.Size(742, 362);
+            this.tabXPathResult.Size = new System.Drawing.Size(855, 491);
             this.tabXPathResult.TabIndex = 1;
             this.tabXPathResult.Text = "XPath Result";
             this.tabXPathResult.UseVisualStyleBackColor = true;
@@ -138,7 +155,7 @@
             this.exceptionMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.exceptionMessage.AutoSize = true;
             this.exceptionMessage.ForeColor = System.Drawing.Color.Red;
-            this.exceptionMessage.Location = new System.Drawing.Point(60, 342);
+            this.exceptionMessage.Location = new System.Drawing.Point(60, 455);
             this.exceptionMessage.Name = "exceptionMessage";
             this.exceptionMessage.Size = new System.Drawing.Size(0, 13);
             this.exceptionMessage.TabIndex = 4;
@@ -149,8 +166,8 @@
             this.xpathResultDataGrid.AllowUserToDeleteRows = false;
             this.xpathResultDataGrid.AllowUserToOrderColumns = true;
             this.xpathResultDataGrid.AllowUserToResizeRows = false;
-            this.xpathResultDataGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.xpathResultDataGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.xpathResultDataGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.xpathResultDataGrid.BackgroundColor = System.Drawing.SystemColors.ButtonFace;
@@ -163,14 +180,14 @@
             this.xpathResultDataGrid.Name = "xpathResultDataGrid";
             this.xpathResultDataGrid.ReadOnly = true;
             this.xpathResultDataGrid.RowHeadersVisible = false;
-            this.xpathResultDataGrid.Size = new System.Drawing.Size(736, 336);
+            this.xpathResultDataGrid.Size = new System.Drawing.Size(849, 449);
             this.xpathResultDataGrid.TabIndex = 3;
             // 
             // exceptionLabel
             // 
             this.exceptionLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.exceptionLabel.AutoSize = true;
-            this.exceptionLabel.Location = new System.Drawing.Point(6, 342);
+            this.exceptionLabel.Location = new System.Drawing.Point(6, 455);
             this.exceptionLabel.Name = "exceptionLabel";
             this.exceptionLabel.Size = new System.Drawing.Size(57, 13);
             this.exceptionLabel.TabIndex = 1;
@@ -187,36 +204,28 @@
             this.Column2.HeaderText = "Column2";
             this.Column2.Name = "Column2";
             this.Column2.ReadOnly = true;
-
-
-
             // 
             // MainWindow
             // 
-
-
-            // 
-            // XPathWindow
-            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Text = "XPath Evaluater";
-            this.ClientSize = new System.Drawing.Size(784, 461);
+            this.ClientSize = new System.Drawing.Size(863, 555);
             this.Controls.Add(this.tabMain);
             this.Controls.Add(this.buttonFind);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.XPathText);
-            this.MinimumSize = new System.Drawing.Size(800, 500);
-            this.Name = "XPathWindow";
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(257, 135);
+            this.Name = "MainWindow";
+            this.Text = "XPath Evaluater";
             this.tabMain.ResumeLayout(false);
             this.tabXmlBody.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.fctb)).EndInit();
             this.tabXPathResult.ResumeLayout(false);
             this.tabXPathResult.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xpathResultDataGrid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
-
 
         }
 
@@ -229,7 +238,7 @@
         private System.Windows.Forms.TabControl tabMain;
         private System.Windows.Forms.TabPage tabXmlBody;
         private System.Windows.Forms.TabPage tabXPathResult;
-        private System.Windows.Forms.RichTextBox xmlBodyRichTextBox;
+        private FastColoredTextBoxNS.FastColoredTextBox fctb;
         private System.Windows.Forms.Label exceptionLabel;
         private System.Windows.Forms.DataGridView xpathResultDataGrid;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;

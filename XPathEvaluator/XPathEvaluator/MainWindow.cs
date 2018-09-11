@@ -1,21 +1,29 @@
-﻿using System;
+﻿using FastColoredTextBoxNS;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.XPath;
+using Utils.IOExploitation;
+using Utils.XmlHelper;
 using Utils.XmlRtfStyle;
 
 namespace XPathEvaluator
 {
     public partial class MainWindow : Form
     {
+        private SolidBrush solidRed = new SolidBrush(Color.PaleVioletRed);
+        private SolidBrush solidTransparent = new SolidBrush(Color.Transparent);
+
         bool _xmlBodyChanged = false;
         XmlDocument _currentXmlBody;
         XpathCollection strLines;
@@ -24,16 +32,22 @@ namespace XPathEvaluator
         public MainWindow()
         {
             InitializeComponent();
-            xmlBodyRichTextBox.TextChanged += XmlBodyRichTextBoxOnTextChanged;
+            fctb.TextChanged += XmlBodyRichTextBoxOnTextChanged;
             //xpathResultDataGrid.CellDoubleClick += XpathResultDataGrid_CellDoubleClick;
 
             xpathResultDataGrid.CellMouseDoubleClick += XpathResultDataGrid_CellMouseDoubleClick;
             //xpathResultDataGrid.DoubleClick += XpathResultDataGrid_DoubleClick;
             xpathResultDataGrid.ColumnHeaderMouseClick += XpathResultDataGrid_ColumnHeaderMouseClick;
 
+            this.tabMain.DrawMode = TabDrawMode.OwnerDrawFixed;
+            this.tabMain.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tabControl1_DrawItem);
+
+
             KeyPreview = true;
             KeyDown += XPathWindow_KeyDown;
+            fctb.KeyDown += XmlBodyRichTextBox_KeyDown;
         }
+
 
         private void XPathWindow_KeyDown(object sender, KeyEventArgs e)
         {
@@ -42,8 +56,29 @@ namespace XPathEvaluator
             {
                 buttonFind_Click(this, EventArgs.Empty);
                 e.SuppressKeyPress = true;  // Stops other controls on the form receiving event.
+            }           
+        }
+
+        private object sync = new object();
+        private bool isInsert = false;
+        [DllImport("user32.dll")]
+        private static extern short GetAsyncKeyState(Keys vKey);
+        private void XmlBodyRichTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && KeyIsDown(Keys.ControlKey) && KeyIsDown(Keys.V))
+            {
+                lock (sync)
+                {
+                    isInsert = true;
+                }
             }
         }
+
+        private bool KeyIsDown(Keys key)
+        {
+            return (GetAsyncKeyState(key) < 0);
+        }
+
 
         void XpathResultDataGrid_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
@@ -104,11 +139,35 @@ namespace XPathEvaluator
                     string finded = xmlObject.FindedObject.Replace("\n", "");
                     int findedText = finded.Length;
                     int append = ((finded[0] == '\r') ? 1 : 0);
-                    xmlBodyRichTextBox.Select(fillTextLength - findedText + append, findedText);
+                    //xmlBodyRichTextBox.Select(fillTextLength - findedText + append, findedText);
+                    Range range = fctb.GetRange(fillTextLength - findedText + append, fillTextLength);
+                    
+                    range.SelectAll();
                 }
             }
         }
 
+        private Brush _mainTabBrush = new SolidBrush(Color.Transparent);
+        private Brush MainTabBrush
+        {
+            get => _mainTabBrush;
+            set
+            {
+                _mainTabBrush = value;
+                tabMain.Invalidate();
+            }
+        }
+
+        private Brush _resultTabBrush = new SolidBrush(Color.Transparent);
+        private Brush ResultTabBrush
+        {
+            get => _resultTabBrush;
+            set
+            {
+                _resultTabBrush = value;
+                tabMain.Invalidate();
+            }
+        }
 
         void XmlBodyRichTextBoxOnTextChanged(object sender, EventArgs eventArgs)
         {
@@ -117,21 +176,46 @@ namespace XPathEvaluator
                 if (_xmlBodyChanged)
                     return;
                 ClearResultTap();
-                if (string.IsNullOrEmpty(xmlBodyRichTextBox.Text))
+                _xmlBodyChanged = true;
+
+                bool isXml = XmlHelper.IsXml(fctb.Text, out XmlDocument document);
+
+                if (isXml)
+                {
+                    lock (sync)
+                    {
+                        if (isInsert)
+                        {
+                            string formatting = RtfFromXml.GetXmlString(document);
+                            fctb.Text = formatting;
+                            isInsert = false;
+                        }
+                    }
+
+                    _currentXmlBody = document;
+                    
+                    MainTabBrush = solidTransparent;
+                }
+                else
                 {
                     _currentXmlBody = null;
-                    return;
+                    MainTabBrush = solidRed;
+                    
                 }
-                _xmlBodyChanged = true;
-                _currentXmlBody = RtfFromXml.GetXmlDocument(xmlBodyRichTextBox.Text);
 
-                if (_currentXmlBody != null)
-                {
-                    int oldSelectionStart = xmlBodyRichTextBox.SelectionStart;
-                    xmlBodyRichTextBox.Rtf = RtfFromXml.Convert(_currentXmlBody);
-                    xmlBodyRichTextBox.SelectionStart = oldSelectionStart;
-                    xmlBodyRichTextBox.HideSelection = false;
-                }
+                fctb.SyntaxHighlighter.InitStyleSchema(Language.XML);
+                fctb.SyntaxHighlighter.XMLSyntaxHighlight(fctb.Range);
+                fctb.Range.ClearFoldingMarkers();
+                
+
+                
+                //if (_currentXmlBody != null)
+                //{
+                //    int oldSelectionStart = xmlBodyRichTextBox.SelectionStart;
+                //    xmlBodyRichTextBox.Rtf = RtfFromXml.Convert(_currentXmlBody);
+                //    xmlBodyRichTextBox.SelectionStart = oldSelectionStart;
+                //    xmlBodyRichTextBox.HideSelection = false;
+                //}
             }
             catch (Exception ex)
             {
@@ -142,6 +226,26 @@ namespace XPathEvaluator
                 _xmlBodyChanged = false;
             }
         }
+
+        
+
+
+
+        private void tabControl1_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            Brush setBrush = e.Index == 0 ? MainTabBrush : ResultTabBrush;
+
+            e.Graphics.FillRectangle(setBrush, e.Bounds);
+            SizeF sz = e.Graphics.MeasureString(tabMain.TabPages[e.Index].Text, e.Font);
+            e.Graphics.DrawString(tabMain.TabPages[e.Index].Text, e.Font, Brushes.Black, e.Bounds.Left + (e.Bounds.Width - sz.Width) / 2, e.Bounds.Top + (e.Bounds.Height - sz.Height) / 2 + 1);
+
+            Rectangle rect = e.Bounds;
+            rect.Offset(0, 1);
+            rect.Inflate(0, -1);
+            e.Graphics.DrawRectangle(Pens.DarkGray, rect);
+            e.DrawFocusRectangle();
+        }
+
 
         void buttonFind_Click(object sender, EventArgs e)
         {
@@ -213,7 +317,14 @@ namespace XPathEvaluator
         {
             exceptionMessage.Text = strEx;
             if (!string.IsNullOrEmpty(strEx))
+            {
+                ResultTabBrush = solidRed;
                 tabMain.SelectTab(tabXPathResult);
+            }
+            else
+            {
+                ResultTabBrush = solidTransparent;
+            }
         }
 
         XpathCollection XmlExpression(XPathNavigator navigator, string xpath)
@@ -280,5 +391,6 @@ namespace XPathEvaluator
                     return null;
             }
         }
+
     }
 }
