@@ -1,0 +1,569 @@
+<templates connector="SMS">
+	<macros>
+		<!-- ==========================  REDIRECT CONNECTORS   ========================= -->
+		<define name="_SMSCON_ISSA"                     value="SMSCON_01_02"/>
+		<define name="_USSD_1"                          value="USSDCON_01_01"/>
+		<!-- ==========================  REDIRECT CONNECTORS   ========================= -->
+
+		<!-- ==========================  SMSCON SPECIAL   ========================= -->
+		<define name="_SMS_NUM_1"                       value="111"/>
+		<define name="_SMS_NUM_2"                       value="1771"/>
+		<!-- ==========================  SMSCON SPECIAL   ========================= -->
+		
+		<!-- ==========================  SERVICE PROVISIONING  ========================= -->
+		<define name="_GET_SERVICE_RESULT"              value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@info_${sDbresult}__GET_LANG}'='','#{if('#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@info_${sDbresult}__GET_LANG}'='','_GET_DBRESULT','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@info_${sDbresult}__GET_LANG}')}','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@info_${sDbresult}__GET_LANG}')}"/>
+		<define name="_GET_CONFIRM_SERVICE_RESULT"      value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[@service_code='_SERVICE_CODE']/@info_${sDbresult}__GET_LANG}'='','#{if('#{document('_SERVICE_PATH')/ServiceList/Group[@name='#{document('_SERVICE_PATH')/ServiceList/GroupList/Item[@id='#{document('_SERVICE_PATH')/ServiceList/Service[@service_code='_SERVICE_CODE']/@group}']/@name}']/@info_${sDbresult}__GET_LANG}'='','_GET_DBRESULT','#{document('_SERVICE_PATH')/ServiceList/Group[@name='#{document('_SERVICE_PATH')/ServiceList/GroupList/Item[@id='#{document('_SERVICE_PATH')/ServiceList/Service[@service_code='_SERVICE_CODE']/@group}']/@name}']/@info_${sDbresult}__GET_LANG}')}','#{document('_SERVICE_PATH')/ServiceList/Service[@service_code='_SERVICE_CODE']/@info_${sDbresult}__GET_LANG}')}"/>
+		<define name="_SERVICE_CONFIRM_NAME"            value="#{document('_SERVICE_PATH')/ServiceList/Service[@service_code='_SERVICE_CODE']/@service_name__GET_LANG}"/>
+		<define name="_SERVICE_TP_CNT"                  value="#{if(count(document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/tplist[1][ivrcode/@value='#{//Message/Item/@tariffplan}']/ivrcode)>0,count(document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/tplist[1][ivrcode/@value='#{//Message/Item/@tariffplan}']/ivrcode),count(document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/tplist[1][ivrcode/@value='#{//Message/Item/@tariffplan}']/ivrcode))}"/>
+		<define name="_SERVICE_TP_ISAVAIL"                 value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/tplist[1]/@available}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/tplist[1]/@available}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/tplist[1]/@available}')}"/>
+		<define name="_SERVICE_TP_NOTAVALINFO"             value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/tplist[1]/@info_notaval__GET_LANG}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/tplist[1]/@info_notaval__GET_LANG}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/tplist[1]/@info_notaval__GET_LANG}')}"/>
+		<define name="_SERVICE_CUSTLST_CNT"             value="#{if(count(document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/customerlist[1]/customer[@value='${customer}']/@value)>0,count(document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/customerlist[1]/customer[@value='${customer}']/@value),count(document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/customerlist[1]/customer[@value='${customer}']/@value))}"/>
+		<define name="_SERVICE_CUSTLST_ISAVAIL"            value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/customerlist[1]/@available}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/customerlist[1]/@available}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/customerlist[1]/@available}')}"/>
+		<define name="_SERVICE_CUSTLST_NOTAVAILINFO"       value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/customerlist[1]/@info_notaval__GET_LANG}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/customerlist[1]/@info_notaval__GET_LANG}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/customerlist[1]/@info_notaval__GET_LANG}')}"/>
+		<define name="_SERVICE_SRVBIND_CNT"             value="#{if(count(document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service)>0,count(document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service),count(document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/servicebindinglist[1]/service))}"/>
+		<define name="_SERVICE_SRVBIND_SRVCODE"            value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@service_code}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@service_code}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/servicebindinglist[1]/service[${sCnt}]/@service_code}')}"/>
+		<define name="_SERVICE_SRVBIND_SUBSR"              value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@subscription}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@subscription}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/servicebindinglist[1]/service[${sCnt}]/@subscription}')}"/>
+		<define name="_SERVICE_SRVBIND_STORE"              value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@store}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@store}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/servicebindinglist[1]/service[${sCnt}]/@store}')}"/>
+		<define name="_SERVICE_SRVBIND_INFO"               value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@info_notaval__GET_LANG}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@info_notaval__GET_LANG}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/servicebindinglist[1]/service[${sCnt}]/@info_notaval__GET_LANG}')}"/>
+		<define name="_SERVICE_SUCCESSFUL_RESPONSE"     value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@successful_response}'='','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@successful_response}','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@successful_response}')}"/>
+		<define name="_SERVICE_CHECKBLOCK"              value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@check_block}'='','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@check_block}','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@check_block}')}"/>
+		<define name="_SERVICE_REDIRECT"                value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@redirect}'='','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@redirect}','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@redirect}')}"/>
+		<define name="_SERVICE_AVAIL_BAL"               value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@availbalance}'='','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@availbalance}','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@availbalance}')}"/>
+		<define name="_SERVICE_TIMETOPROGRESS"          value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[@service_code='#{if('${sServiceCode}'='','_SERVICE_CODE','${sServiceCode}')}']/@timetoprogress}'='','#{document('_SERVICE_PATH')/ServiceList/Group[@name='#{if('${sGroupName}'='','_SERVICE_GROUPNAME','${sGroupName}')}']/@timetoprogress}','#{document('_SERVICE_PATH')/ServiceList/Service[@service_code='#{if('${sServiceCode}'='','_SERVICE_CODE','${sServiceCode}')}']/@timetoprogress}')}"/>
+		<define name="_SERVICE_DATEFROM"                value="#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@datefrom}"/>
+		<define name="_SERVICE_DATETO"                  value="#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@dateto}"/>
+		<define name="_SERVICE_NAME"                    value="#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@service_name__GET_LANG}"/>
+		<define name="_SERVICE_GROUPNAME"               value="#{document('_SERVICE_PATH')/ServiceList/GroupList/Item[@id='#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@group}']/@name}"/>
+		<define name="_SERVICE_COMM_ACTION"             value="#{document('_SERVICE_PATH')/ServiceList/CommandList/Command[_CURRENT_MODULE/@value='${sAction}']/@action}"/>
+		<define name="_SERVICE_COMM_STATUS"             value="#{document('_SERVICE_PATH')/ServiceList/CommandList/Command[_CURRENT_MODULE/@value='${sAction}']/@status}"/>
+		<define name="_SERVICE_COMM_CODE"               value="#{document('_SERVICE_PATH')/ServiceList/CommandList/Command[_CURRENT_MODULE/@value='${sAction}']/@code}"/>
+		<define name="_SERVICE_COMM_ACTPARCE"           value="#{document('_SERVICE_PATH')/ServiceList/CommandList/Command[_CURRENT_MODULE/@value='${sAction}']/@parce}"/>
+		<define name="_SERVICE_CRMSTATUS"               value="#{document('_SERVICE_PATH')/ServiceList/CommandList/Command[@status='${subscription}']/@parce}"/>
+		<define name="_SERVICE_CRMACTION_ADD"           value="#{document('_SERVICE_PATH')/ServiceList/CommandList/Command[@action='2']/@parce}"/>
+		<define name="_SERVICE_CRMACTION_DEL"           value="#{document('_SERVICE_PATH')/ServiceList/CommandList/Command[@action='3']/@parce}"/>
+		<define name="_SERVICE_CODE"                    value="#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@service_code}"/>
+		<!-- ==========================  SERVICE PROVISIONING  ========================= -->
+
+		<!-- ==========================  CHANGE TP   ========================= -->
+		<define name="_GET_TARIFF_RESULT"               value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@info_${sDbresult}__GET_LANG}'='','#{if('#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/@info_${sDbresult}__GET_LANG}'='','_GET_DBRESULT','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/@info_${sDbresult}__GET_LANG}')}','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@info_${sDbresult}__GET_LANG}')}"/>
+		<define name="_GET_CONFIRM_TARIFF_RESULT"       value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@info_${sDbresult}__GET_LANG}'='','#{if('#{document('_TARIF_PATH')/TariffPlans/Group[@name='#{document('_TARIF_PATH')/TariffPlans/GroupList/Item[@id='#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@group}']/@name}']/@info_${sDbresult}__GET_LANG}'='','_GET_DBRESULT','#{document('_TARIF_PATH')/TariffPlans/Group[@name='#{document('_TARIF_PATH')/TariffPlans/GroupList/Item[@id='#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@group}']/@name}']/@info_${sDbresult}__GET_LANG}')}','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@info_${sDbresult}__GET_LANG}')}"/>
+		<define name="_TARIFF_TP_CNT"                   value="#{if(count(document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/tplist[1][ivrcode/@value='#{//Message/Item/@tariffplan}'])>0,count(document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/tplist[1][ivrcode/@value='#{//Message/Item/@tariffplan}']),count(document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/tplist[1][ivrcode/@value='#{//Message/Item/@tariffplan}']))}"/>
+		<define name="_TARIFF_TP_ISAVAIL"                  value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/tplist[1]/@available}'!='','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/tplist[1]/@available}','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/tplist[1]/@available}')}"/>
+		<define name="_TARIFF_TP_NOTAVAILINFO"             value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/tplist[1]/@info_notaval__GET_LANG}'!='','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/tplist[1]/@info_notaval__GET_LANG}','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/tplist[1]/@info_notaval__GET_LANG}')}"/>
+		<define name="_TARIFF_CUSTLST_CNT"              value="#{if(count(document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/customerlist[1]/customer[@value='${customer}'])>0,count(document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/customerlist[1]/customer[@value='${customer}']),count(document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/customerlist[1]/customer[@value='${customer}']))}"/>
+		<define name="_TARIFF_CUSTLST_ISAVAIL"             value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/customerlist[1]/@available}'!='','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/customerlist[1]/@available}','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/customerlist[1]/@available}')}"/>
+		<define name="_TARIFF_CUSTLST_NOTAVAILINFO"        value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/customerlist[1]/@info_notaval__GET_LANG}'!='','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/customerlist[1]/@info_notaval__GET_LANG}','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/customerlist[1]/@info_notaval__GET_LANG}')}"/>
+		<define name="_TARIFF_SRVBIND_CNT"              value="#{if(count(document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/servicebindinglist[1]/service)>0,count(document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/servicebindinglist[1]/service),count(document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/servicebindinglist[1]/service))}"/>
+		<define name="_TARIFF_SRVBIND_SRVCODE"             value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/servicebindinglist[1]/service[${sCnt}]/@service_code}'!='','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/servicebindinglist[1]/service[${sCnt}]/@service_code}','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/servicebindinglist[1]/service[${sCnt}]/@service_code}')}"/>
+		<define name="_TARIFF_SRVBIND_SUBSR"               value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/servicebindinglist[1]/service[${sCnt}]/@subscription}'!='','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/servicebindinglist[1]/service[${sCnt}]/@subscription}','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/servicebindinglist[1]/service[${sCnt}]/@subscription}')}"/>
+		<define name="_TARIFF_SRVBIND_STORE"               value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/servicebindinglist[1]/service[${sCnt}]/@store}'!='','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/servicebindinglist[1]/service[${sCnt}]/@store}','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/servicebindinglist[1]/service[${sCnt}]/@store}')}"/>
+		<define name="_TARIFF_SRVBIND_INFO"                value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/servicebindinglist[1]/service[${sCnt}]/@info_notaval__GET_LANG}'!='','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/servicebindinglist[1]/service[${sCnt}]/@info_notaval__GET_LANG}','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/servicebindinglist[1]/service[${sCnt}]/@info_notaval__GET_LANG}')}"/>
+		<define name="_TARIFF_SUCCESSFUL_RESPONSE"      value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@successful_response}'='','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/@successful_response}','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@successful_response}')}"/>
+		<define name="_TARIFF_CHECKBLOCK"               value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@check_block}'='','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/@check_block}','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@check_block}')}"/>
+		<define name="_TARIFF_REDIRECT"                 value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@redirect}'='','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/@redirect}','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@redirect}')}"/>
+		<define name="_TARIFF_TIMETOPROGRESS"           value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[@ivrcode='#{if('${sTariffIvrCode}'='','_TARIFF_IVRCODE','${sTariffIvrCode}')}']/@timetoprogress}'='','#{document('_TARIF_PATH')/TariffPlans/Group[@name='#{if('${sGroupName}'='','_TARIFF_GROUPNAME','${sGroupName}')}']/@timetoprogress}','#{document('_TARIF_PATH')/TariffPlans/Tariff[@ivrcode='#{if('${sTariffIvrCode}'='','_TARIFF_IVRCODE','${sTariffIvrCode}')}']/@timetoprogress}')}"/>
+		<define name="_TARIFF_AVAIL_BAL"                value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@availbalance}'='','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/@availbalance}','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@availbalance}')}"/>
+		<define name="_TARIFF_DATEFROM"                 value="#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@datefrom}"/>
+		<define name="_TARIFF_DATETO"                   value="#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@dateto}"/>
+		<define name="_TARIFF_NAME"                     value="#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@tariffname__GET_LANG}"/>
+		<define name="_TARIFF_GROUPNAME"                value="#{document('_TARIF_PATH')/TariffPlans/GroupList/Item[@id='#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@group}']/@name}"/>
+		<define name="_TARIFF_CURRENT_NAME"             value="#{document('_TARIF_PATH')/TariffPlans/Tariff[@ivrcode='#{//Message/Item/@tariffplan}']/@tariffname__GET_LANG}"/>
+		<define name="_TARIFF_IVRCODE"                  value="#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@ivrcode}"/>
+		<!-- ==========================  CHANGE TP  ========================= -->
+
+		<!-- ==========================  ALL SERVICE   ========================= -->
+		<define name="_COUNTERS_TYPE"                   value="#{document('_COUNTERS_PATH')/Counters/Group[_CURRENT_MODULE/@value='${sCountertype}']/@name}"/>
+		<define name="_GET_ALL_SRV_RESULT"              value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@info_${sDbresult}__GET_LANG}"/>
+		<define name="_ALLSERVICE_TP_CNT"               value="count(document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/tplist[1][ivrcode/@value='#{//Message/Item/@tariffplan}'])"/>
+		<define name="_ALLSERVICE_TP_ISAVAIL"               value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/tplist[1]/@available}"/>
+		<define name="_ALLSERVICE_TP_NOTAVAILINFO"          value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/tplist[1]/@info_notaval__GET_LANG}"/>
+		<define name="_ALLSERVICE_CUSTLST_CNT"          value="count(document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/customerlist[1]/customer[@value='${customer}'])"/>
+		<define name="_ALLSERVICE_CUSTLST_ISAVAIL"          value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/customerlist[1]/@available}"/>
+		<define name="_ALLSERVICE_CUSTLST_NOTAVAILINFO"     value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/customerlist[1]/@info_notaval__GET_LANG}"/>
+		<define name="_ALLSERVICE_SRVBIND_CNT"          value="count(document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service)"/>
+		<define name="_ALLSERVICE_SRVBIND_SRVCODE"          value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@service_code}"/>
+		<define name="_ALLSERVICE_SRVBIND_SUBSR"            value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@subscription}"/>
+		<define name="_ALLSERVICE_SRVBIND_STORE"            value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@store}"/>
+		<define name="_ALLSERVICE_SRVBIND_INFO"             value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@info_notaval__GET_LANG}"/>
+		<define name="_ALLSERVICE_SUCCESSFUL_RESPONSE"  value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@successful_response}"/>
+		<define name="_ALLSERVICE_CHECKBLOCK"           value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@check_block}"/>
+		<define name="_ALLSERVICE_REDIRECT"             value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@redirect}"/>
+		<define name="_ALLSERVICE_TIMETOPROGRESS"       value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@timetoprogress}"/>
+		<define name="_ALLSERVICE_AVAIL_BAL"            value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@availbalance}"/>
+		<define name="_ALLSERVICE_NAME"                 value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@name}"/>
+		<!-- ==========================  ALL SERVICE   ========================= -->
+		
+		<!-- ==========================  SETTINGS   ========================= -->
+		<define name="_WAIT_IFASYNC_INPROCESS"          value="#{if('${sDbresult}'='redirect','#{if(not(matches('${sInProgress}','_IF_TRUE')),'true','')}','')}" />
+		<define name="_GET_TODAY"                       value="#{concat(substring('@{now}',7,4),substring('@{now}',4,2),substring('@{now}',1,2))}"/>
+		<define name="_GET_SECONDS"                     value="#{(number(substring('@{now}',12,2)) * 60 * 60) + (number(substring('@{now}',15,2)) * 60) + number(substring('@{now}',18,2))}"/>
+		<define name="_GET_DBRESULT"                    value="#{document('_DICTIONARY_PATH')/DBresults/Item[code/@value='${sDbresult}']/@info__GET_LANG}"/>
+		<define name="_GET_LENGTH_DBRESULT"             value="#{string-length(document('_DICTIONARY_PATH')/DBresults/Item[code/@value='${sDbresult}']/@info__GET_LANG)}"/>
+		<define name="_GET_AFTER_VERIFY_DBRESULT"       value="#{if('#{document('_DICTIONARY_PATH')/DBresults/Item[code/@value='${customerblocks}']/@info__GET_LANG}'!='','${customerblocks}','${dbresult}')}"/>
+		<define name="_ENCODING"                        value="#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@param='_GET_LANG']/@encoding}"/>
+		<define name="_INLANGUAGE"                      value="#{if('#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@scp='${inlang}' and @ussd='${smsussdlang}']/@param}'='','#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@scp='' and @ussd='']/@param}','#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@scp='${inlang}' and @ussd='${smsussdlang}']/@param}')}" />
+		<define name="_GET_LANG"                        value="#{if('${sLang}'='','#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@scp='' and @ussd='']/@param}','${sLang}')}" />
+		<define name="_DEFAULT_ERR"                     value="#{if('${dbresult}'='-1','err001','${dbresult}')}" />
+		<define name="_REDIRECT_TO_SMS"                 value="^[Ss][Mm][Ss]$" />
+		<define name="_REDIRECT_TO_CURRENT"             value="^[Nn][Oo][Tt][Rr][Ee][Dd][Ii][Rr][Ee][Cc][Tt]$" />
+		<define name="_IF_TRUE"                         value="^([Tt][Rr][Uu][Ee]|1)$" />
+		<define name="_BYCRM"                           value="[Bb][Yy][Cc][Rr][Mm]" />
+		<define name="_CURRENT_MODULE"                  value="#{if('${sModule}'!='','${sModule}','smscon')}" />
+		<define name="_SERVICE_PATH"                    value="..\..\Config\Service\SERVICE.xml"/>
+		<define name="_ALLSERVICE_PATH"                 value="..\..\Config\Service\All_SERVICE.xml"/>
+		<define name="_TARIF_PATH"                      value="..\..\Config\Tariff\TARIFF_PLANS.xml"/>
+		<define name="_COUNTERS_PATH"                   value="..\..\Config\Service\COUNTERS.xml"/>
+		<define name="_DICTIONARY_PATH"                 value="..\..\Config\GET_DBRESULT.xml"/>
+		<define name="_CONFIRM_VALUE"                   value="confirm"/>
+		<define name="_CURRENT_INITIATOR"               value="smscon"/>
+		<!-- ==========================  SETTINGS   ========================= -->
+
+	</macros>
+	<template procedureName="GET_BILL_DETAIL" sessionStorage="Memory" sessionLifetime="30" persistent="false">
+		<condition>
+			<test item="${Recipient}" matches="^(_SMS_NUM_1|_SMS_NUM_2)$"/>
+			<test item="${Content}" matches="^([Bb][Ii][Ll][Ll])$"/>
+		</condition>
+		<receiveTemplate>
+			<Message type="retrievecustomerdata" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(@{newGuid})}">
+				<Item customer="${Sender}" subject="getcurrentcharge">
+					<Attribute name="convert" value="0"/>
+					<Attribute name="index" value="5"/>
+				</Item>
+				@{store(sRecipient,${Recipient})}
+				@{store(sModule,_CURRENT_MODULE)}
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate conditionEx="#{'${dbresult}'='0' or '${dbresult}'='320555'}">
+			<set item="Content" value="${no-escape:includeresult}"/>
+			<set item="Sender" value="${sRecipient}"/>
+			<set item="Recipient" value="${customer}"/>
+			<set item="Encoding" value="unicodefffe"/>
+			<set conditionEx="0@{freeSession}"  />
+		</deliveryTemplate>
+		<deliveryTemplate>
+			<set item="Content" value="Dannyi zapros seichas ne mozhet byt vypolnen. Povtorite pozhaluista pozzhe."/>
+			<set item="Content" condition="//Item/@dbresult=320768" value="Na Vashem nomere net rashodov za poslednie 5 dnei"/>
+			<set item="Sender" value="${sRecipient}"/>
+			<set item="Recipient" value="${customer}"/>
+			<set item="Encoding" value="unicodefffe"/>
+			<set conditionEx="0@{freeSession}"  />
+		</deliveryTemplate>
+	</template>
+	<template procedureName="SendPriceSMS">
+		<condition>
+			<test item="0" matches="1"/>
+		</condition>
+		<receiveTemplate/>
+		<retry delay="5" attempts="2"/>
+		<deliveryConstraint>
+			<day from="0" to="6" />
+			<hour from="8" to="22" />
+		</deliveryConstraint>
+		<deliveryTemplate>
+			<set item="Content" value="#{//Content/text()}"/>
+			<set item="Recipient" value="${customer}"/>
+			<set item="Sender" value="_SMS_NUM_1"/>
+			<set item="Encoding" value="_ENCODING"/>
+		</deliveryTemplate>
+	</template>
+	<template procedureName="DeliveryRequest">
+		<condition>
+			<test item="0" matches="1"/>
+		</condition>
+		<receiveTemplate/>
+		<deliveryConstraint>
+			<day from="0" to="6" />
+			<hour from="8" to="22" />
+		</deliveryConstraint>
+		<deliveryTemplate >
+			<set item="Content" value="${no-escape:content}"/>
+			<set item="Sender" value="_SMS_NUM_1"/>
+			<set item="Recipient" value="${Customer}"/>
+			<set item="Encoding" value="_ENCODING"/>
+		</deliveryTemplate>
+	</template>
+	<template procedureName="DeliveryRequestAutoInformation">
+		<condition>
+			<test item="0" matches="1"/>
+		</condition>
+		<receiveTemplate/>
+		<deliveryTemplate>
+			<set item="Content" value="${no-escape:Content}"/>
+			<set item="Sender" value="_SMS_NUM_1"/>
+			<set item="Recipient" value="${customer}"/>
+			<set item="Encoding" value="_ENCODING"/>
+		</deliveryTemplate>
+	</template>
+	<template procedureName="DeliveryRequestFromISSA" >
+		<condition>
+			<test item="0" matches="1"/>
+		</condition>
+		<receiveTemplate/>
+		<deliveryTemplate>
+			<set item="Content" value="${no-escape:content}"/>
+			<set item="Sender" value="_SMS_NUM_1"/>
+			<set item="Recipient" value="${customer}"/>
+			<set item="Encoding" value="unicodefffe"/>
+		</deliveryTemplate>
+	</template>
+	<template procedureName="ServiceStringFormat" sessionStorage="Memory" sessionLifetime="120">
+		<retry delay="1" attempts="1" />
+		<condition>
+			<test item="0" matches="1"/>
+		</condition>
+		<receiveTemplate/>
+		<deliveryTemplate dropReply="true" conditionEx="#{'${dbresult}'='0' and matches('${sDbresult}','success_') and (matches('${sRequi}','_BYCRM') or matches('_SERVICE_SUCCESSFUL_RESPONSE','_BYCRM')) and matches('${sIsFreeSession}','_IF_TRUE')}">
+			<set conditionEx="0@{freeSession}"  />
+		</deliveryTemplate>
+		<deliveryTemplate dropReply="true" conditionEx="#{'${dbresult}'='0' and matches('${sDbresult}','success_') and (matches('${sRequi}','_BYCRM') or matches('_SERVICE_SUCCESSFUL_RESPONSE','_BYCRM'))}"/>
+		<deliveryTemplate conditionEx="#{'${dbresult}'='0' and (not(matches('${sDbresult}','success_')) or matches('${sIsFreeSession}','_IF_TRUE'))}">
+			<set item="Content" value="${no-escape:result}"/>
+			<set item="Sender" value="_SMS_NUM_1"/>
+			<set item="Recipient" value="${customer}"/>
+			<set item="Encoding" value="_ENCODING"/>
+			<set conditionEx="0@{freeSession}"  />
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="#{'${dbresult}'='0'}">
+			<set item="Content" value="${no-escape:result}"/>
+			<set item="Sender" value="_SMS_NUM_1"/>
+			<set item="Recipient" value="${customer}"/>
+			<set item="Encoding" value="_ENCODING"/>
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="#{'${customer}'!='' and matches('@{SessionExists(${session_id})}','_IF_TRUE')}">
+			<set conditionEx="0@{store(sDbresult,_DEFAULT_ERR)}" />
+			<set item="Content" value="_GET_DBRESULT"/>
+			<set item="Sender"     value="_SMS_NUM_1"/>
+			<set item="Recipient"  value="${customer}"/>
+			<set item="Encoding"   value="_ENCODING"/>
+			<set conditionEx="0@{freeSession}"  />
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="true@{freeSession}" dropReply="true"/>
+	</template>
+	<template procedureName="TariffPlanStringFormat" sessionStorage="Memory" sessionLifetime="120">
+		<retry delay="1" attempts="1" />
+		<condition>
+			<test item="0" matches="1"/>
+		</condition>
+		<receiveTemplate/>
+		<deliveryTemplate dropReply="true" conditionEx="#{'${dbresult}'='0' and matches('${sDbresult}','success') and (matches('${sRequi}','_BYCRM') or matches('_TARIF_SUCCESSFUL_RESPONSE','_BYCRM')) and matches('${sIsFreeSession}','_IF_TRUE')}">
+			<set conditionEx="0@{freeSession}"  />
+		</deliveryTemplate>
+		<deliveryTemplate dropReply="true" conditionEx="#{'${dbresult}'='0' and matches('${sDbresult}','success') and (matches('${sRequi}','_BYCRM') or matches('_TARIF_SUCCESSFUL_RESPONSE','_BYCRM'))}"/>
+		<deliveryTemplate conditionEx="#{'${dbresult}'='0' and (not(matches('${sDbresult}','success')) or matches('${sIsFreeSession}','_IF_TRUE'))}">
+			<set item="Content" value="${no-escape:result}"/>
+			<set item="Sender" value="_SMS_NUM_1"/>
+			<set item="Recipient" value="${customer}"/>
+			<set item="Encoding" value="_ENCODING"/>
+			<set conditionEx="0@{freeSession}"  />
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="#{'${dbresult}'='0'}">
+			<set item="Content" value="${no-escape:result}"/>
+			<set item="Sender" value="_SMS_NUM_1"/>
+			<set item="Recipient" value="${customer}"/>
+			<set item="Encoding" value="_ENCODING"/>
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="#{'${customer}'!='' and matches('@{SessionExists(${session_id})}','_IF_TRUE')}">
+			<set conditionEx="0@{store(sDbresult,_DEFAULT_ERR)}" />
+			<set item="Content" value="_GET_DBRESULT"/>
+			<set item="Sender"     value="_SMS_NUM_1"/>
+			<set item="Recipient"  value="${customer}"/>
+			<set item="Encoding"   value="_ENCODING"/>
+			<set conditionEx="0@{freeSession}"  />
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="true@{freeSession}" dropReply="true"/>
+	</template>
+	<template procedureName="ALLServiceStringFormat" sessionStorage="Memory" sessionLifetime="120">
+		<retry delay="1" attempts="1" />
+		<condition>
+			<test item="0" matches="1"/>
+		</condition>
+		<receiveTemplate/>
+		<deliveryTemplate dropReply="true" conditionEx="#{'${dbresult}'='0' and matches('${sDbresult}','success') and (matches('${sRequi}','_BYCRM') or matches('_ALLSERVICE_SUCCESSFUL_RESPONSE','_BYCRM')) and matches('${sIsFreeSession}','_IF_TRUE')}">
+			<set conditionEx="0@{freeSession}"  />
+		</deliveryTemplate>
+		<deliveryTemplate dropReply="true" conditionEx="#{'${dbresult}'='0' and matches('${sDbresult}','success') and (matches('${sRequi}','_BYCRM') or matches('_ALLSERVICE_SUCCESSFUL_RESPONSE','_BYCRM'))}"/>
+		<deliveryTemplate conditionEx="#{'${dbresult}'='0' and (not(matches('${sDbresult}','success')) or matches('${sIsFreeSession}','_IF_TRUE'))}">
+			<set item="Content" value="${no-escape:result}"/>
+			<set item="Sender" value="_SMS_NUM_1"/>
+			<set item="Recipient" value="${customer}"/>
+			<set item="Encoding" value="_ENCODING"/>
+			<set conditionEx="0@{freeSession}"  />
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="#{'${dbresult}'='0'}">
+			<set item="Content" value="${no-escape:result}"/>
+			<set item="Sender" value="_SMS_NUM_1"/>
+			<set item="Recipient" value="${customer}"/>
+			<set item="Encoding" value="_ENCODING"/>
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="#{'${customer}'!='' and matches('@{SessionExists(${session_id})}','_IF_TRUE')}">
+			<set conditionEx="0@{store(sDbresult,_DEFAULT_ERR)}" />
+			<set item="Content" value="_GET_DBRESULT"/>
+			<set item="Sender"     value="_SMS_NUM_1"/>
+			<set item="Recipient"  value="${customer}"/>
+			<set item="Encoding"   value="_ENCODING"/>
+			<set conditionEx="0@{freeSession}"  />
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="true@{freeSession}" dropReply="true"/>
+	</template>
+	<template procedureName="SMStoEMAIL" contentSeparator=";" persistent="false" >
+		<condition>
+			<test item="${Sender}" matches="^\d+(9119831|4344342)$"/>
+			<test item="${Content}" matches="^.+?\;([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})\;.+$"/>
+		</condition>
+		<receiveTemplate>
+			<Message process="dispatcher" initiator="_CURRENT_INITIATOR" type="Email_Test" id="@{newGuid}" session_id="@{newGuid}">
+				<Package package_id="@{newGuid}" template_id="Email_Test" >
+					<Item customer="${token1}">
+						<Content type="test" subject="${token0}" text="${token2}"  />
+					</Item>
+				</Package>
+			</Message>
+		</receiveTemplate>
+	</template>
+	<template procedureName="SendSMS" contentSeparator=";" persistent="false" >
+		<condition>
+			<test item="${Sender}" matches="^\d+(9119831|4344342)$"/>
+			<test item="${Content}" matches="^.+?\;\d+?\;.+$"/>
+		</condition>
+		<receiveTemplate>
+			<Message type="convertencoding" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{newGuid}">
+				<Item customer="${token0}">
+					<Sender value="${token0}"/>
+					<Recipient value="${token1}"/>
+					<Content value="${token2}"/>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate conditionEx="#{'#{string-length('${Sender}')}'='12'}"    connector="_SMSCON_ISSA"/>
+		<deliveryTemplate conditionEx="#{matches('${Sender}','[Uu][Ss][Ss][Dd]')}" connector="_USSD_1"/>
+                <deliveryTemplate conditionEx="#{matches('${Sender}','[Ff][Ll][Aa][Ss][Hh]')}">
+			<set item="Content" value="${no-escape:Content}"/>
+			<set item="Sender" value="_SMS_NUM_1"/>
+			<set item="Recipient" value="${Recipient}"/>
+			<set item="Encoding" value="utf-32BE"/>
+                        <set item="IsFlash" value="true" />
+		</deliveryTemplate>
+		<deliveryTemplate>
+			<set item="Content" value="${no-escape:Content}"/>
+			<set item="Sender" value="${Sender}"/>
+			<set item="Recipient" value="${Recipient}"/>
+			<set item="Encoding" value="unicodefffe"/>
+			<!--set item="RegisteredDelivery" value="false" /-->
+		</deliveryTemplate>
+	</template>
+        <template procedureName="CheckNumberOwner" sessionStorage="Memory" sessionLifetime="30" persistent="false">
+		<retry delay="1" attempts="1" />
+		<condition>
+			<test item="0" matches="1"/>
+		</condition>
+		<receiveTemplate/>
+		<deliveryTemplate>
+			<set item="Content" value="${no-escape:result}"/>
+			<set item="Sender" value="_SMS_NUM_1"/>
+			<set item="Recipient" value="${customer}"/>
+			<set item="Encoding" value="unicodefffe"/>
+			<set conditionEx="0@{freeSession}"  />
+		</deliveryTemplate>
+	</template>
+        <template procedureName="CheckNumberByMask" sessionStorage="Memory" sessionLifetime="30" persistent="false">
+		<retry delay="1" attempts="1" />
+		<condition>
+			<test item="0" matches="1"/>
+		</condition>
+		<receiveTemplate/>
+		<deliveryTemplate>
+			<set item="Content" value="${no-escape:result}"/>
+			<set item="Sender" value="_SMS_NUM_1"/>
+			<set item="Recipient" value="${customer}"/>
+			<set item="Encoding" value="unicodefffe"/>
+			<set conditionEx="0@{freeSession}"  />
+		</deliveryTemplate>
+	</template>
+        <template procedureName="SlujebNumberCodeCheck" sessionStorage="Memory" sessionLifetime="30" persistent="false">
+		<retry delay="1" attempts="1" />
+		<condition>
+			<test item="0" matches="1"/>
+		</condition>
+		<receiveTemplate/>
+		<deliveryTemplate>
+			<set item="Content" value="${no-escape:result} Dlya perehoda naberite *171*4444*nomer*kod#"/>
+			<set item="Sender" value="_SMS_NUM_1"/>
+			<set item="Recipient" value="${customer}"/>
+			<set item="Encoding" value="ascii"/>
+			<set conditionEx="0@{freeSession}"  />
+		</deliveryTemplate>
+	</template>
+	<template procedureName="GetInfo" persistent="false">
+		<retry delay="1" attempts="1" />
+		<condition>
+			<test item="0" matches="1"/>
+		</condition>
+		<receiveTemplate/>
+		<deliveryTemplate>
+			<set item="Content" value="${no-escape:Content}"/>
+			<set item="Sender" value="${Sender}"/>
+			<set item="Recipient" value="${Recipient}"/>
+			<set item="Encoding" value="_ENCODING"/>
+		</deliveryTemplate>
+	</template>
+        <template procedureName="Million" persistent="false">
+		<retry delay="1" attempts="1" />
+		<condition>
+			<test item="0" matches="1"/>
+		</condition>
+		<receiveTemplate/>
+		<deliveryTemplate conditionEx="#{'${result}'='1'}">
+			<set item="Content" value="Pozdravlyaem! Vi uchastvuete v aktsii *Millioni uje v puti!*"/>
+			<set item="Sender" value="_SMS_NUM_1"/>
+			<set item="Recipient" value="${customer}"/>
+			<set item="Encoding" value="_ENCODING"/>
+		</deliveryTemplate>
+                <deliveryTemplate conditionEx="#{'${result}'='9'}">
+			<set item="Content" value="Vi uje avtorizirovanni"/>
+			<set item="Sender" value="_SMS_NUM_1"/>
+			<set item="Recipient" value="${customer}"/>
+			<set item="Encoding" value="_ENCODING"/>
+		</deliveryTemplate>
+	</template>
+	<template procedureName="SMSMonitoring" reportDelivery="false">
+		<retry delay="1" attempts="1" />
+		<condition>
+			<test item="0" matches="1"/>
+		</condition>
+		<receiveTemplate/>
+		<deliveryTemplate>
+			<set item="Content" value="${no-escape:Content}"/>
+			<set item="Sender" value="_SMS_NUM_1"/>
+			<set item="Recipient" value="${customer}"/>
+			<set item="Encoding" value="_ENCODING"/>
+		</deliveryTemplate>
+	</template>
+        <template procedureName="SMSInform" reportDelivery="false">
+		<retry delay="1" attempts="1" />
+		<condition>
+			<test item="0" matches="1"/>
+		</condition>
+		<receiveTemplate/>
+		<deliveryTemplate>
+			<set item="Content" value="${no-escape:Content}"/>
+			<set item="Sender" value="_SMS_NUM_1"/>
+			<set item="Recipient" value="${customer}"/>
+			<set item="Encoding" value="_ENCODING"/>
+		</deliveryTemplate>
+	</template>
+        <template procedureName="SMSInformRus" reportDelivery="false">
+		<retry delay="1" attempts="1" />
+		<condition>
+			<test item="0" matches="1"/>
+		</condition>
+		<receiveTemplate/>
+		<deliveryTemplate>
+			<set item="Content" value="${no-escape:Content}"/>
+			<set item="Sender" value="_SMS_NUM_1"/>
+			<set item="Recipient" value="${customer}"/>
+			<set item="Encoding" value="unicodefffe"/>
+		</deliveryTemplate>
+	</template>
+	<template procedureName="SMSlocal" reportDelivery="false">
+		<retry delay="1" attempts="1" />
+		<condition>
+			<test item="0" matches="1"/>
+		</condition>
+		<receiveTemplate/>
+		<deliveryTemplate>
+			<set item="Content" value="${no-escape:Content}"/>
+			<set item="Sender" value="${sender}"/>
+			<set item="Recipient" value="${customer}"/>
+			<set item="Encoding" value="_ENCODING"/>
+		</deliveryTemplate>
+	</template>
+	<template procedureName="USSDIncomingContent" sessionStorage="Memory" sessionLifetime="30" persistent="false">
+		<retry delay="1" attempts="1" />
+		<condition>
+			<test item="0" matches="1"/>
+		</condition>
+		<receiveTemplate/>
+		<deliveryTemplate>
+			<set item="Content" value="_GET_DBRESULT"/>
+			<set item="Sender" value="${sRecipient}"/>
+			<set item="Recipient" value="${customer}"/>
+			<set item="Encoding" value="_ENCODING"/>
+			<set conditionEx="0@{freeSession}"  />
+		</deliveryTemplate>
+	</template>
+	<template procedureName="SMSIncomingContent" sessionStorage="Memory" sessionLifetime="30" persistent="false">
+		<retry delay="1" attempts="1" />
+		<condition>
+			<test item="1" matches="1"/>
+		</condition>
+		<receiveTemplate>
+			<Message type="getlanguage" process="dispatcher" initiator="ussd" id="@{newGuid}" session_id="@{setSessionId(@{newGuid})}">
+				<Item customer="${Sender}"/>
+				@{store(sRecipient,${Recipient})}
+				@{store(sContent,${Content})}
+				@{store(sModule,_CURRENT_MODULE)}
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate conditionEx="false@{store(sLang,_INLANGUAGE)}"/>
+		<deliveryTemplate conditionEx="false@{store(sDbresult,sms_err${sContent})}" />
+		<deliveryTemplate>
+			<set conditionEx="0@{store(sDbresult,#{if(_GET_LENGTH_DBRESULT>0,'${sDbresult}','sms_err')})}"  />
+			<set item="Content" value="_GET_DBRESULT"/>
+			<set item="Sender" value="${sRecipient}"/>
+			<set item="Recipient" value="${customer}"/>
+			<set item="Encoding" value="_ENCODING"/>
+			<set conditionEx="0@{freeSession}"  />
+		</deliveryTemplate>
+	</template>
+        <template procedureName="PartialBlockLimit_Step2" sessionStorage="Memory" sessionLifetime="30" persistent="true">
+		<retry delay="1" attempts="1" />
+		<condition>
+			<test item="0" matches="1"/>
+		</condition>
+                <deliveryTemplate conditionEx="#{'${result}'='${sLimit}'}" >
+                        <set conditionEx="0@{store(sDbresult,LimitAlreadyEx)}"/>
+			<set item="Content" value="_GET_DBRESULT"/>
+			<set item="Sender" value="_SMS_NUM_1"/>
+			<set item="Recipient" value="${sCustomer}"/>
+			<set item="Encoding" value="ascii"/>
+                        <set conditionEx="0@{freeSession}"  />
+		</deliveryTemplate>
+                <deliveryTemplate conditionEx="#{'${result}'='0' and '${sLimit}'='-5'}" >
+                        <set conditionEx="0@{store(sDbresult,LimitActivated)}"/>
+			<set item="Content" value="_GET_DBRESULT"/>
+			<set item="Sender" value="_SMS_NUM_1"/>
+			<set item="Recipient" value="${sCustomer}"/>
+			<set item="Encoding" value="ascii"/>
+                        <set conditionEx="0@{freeSession}"  />
+		</deliveryTemplate>
+                <deliveryTemplate conditionEx="#{'${result}'='0' and '${sLimit}'='-0.1'}" >
+                        <set conditionEx="0@{store(sDbresult,LimitDeactivated)}"/>
+			<set item="Content" value="_GET_DBRESULT"/>
+			<set item="Sender" value="_SMS_NUM_1"/>
+			<set item="Recipient" value="${sCustomer}"/>
+			<set item="Encoding" value="ascii"/>
+                        <set conditionEx="0@{freeSession}"  />
+		</deliveryTemplate>
+                <deliveryTemplate conditionEx="#{'${result}'='-5' and '${sLimit}'='-0.1'}" >
+			<set item="Content" value="Usluga 'Na polnom doverii' uje bila deaktivirovana"/>
+			<set item="Sender" value="_SMS_NUM_1"/>
+			<set item="Recipient" value="${sCustomer}"/>
+			<set item="Encoding" value="ascii"/>
+                        <set conditionEx="0@{freeSession}"  />
+		</deliveryTemplate>
+        </template> 
+        <template procedureName="CheckService" sessionStorage="Memory" sessionLifetime="30" persistent="true">
+		<retry delay="1" attempts="1" />
+		<condition>
+			<test item="0" matches="1"/>
+		</condition>
+                <deliveryTemplate> 
+			<set item="Content" value="${no-escape:result}"/>
+			<set item="Sender" value="_SMS_NUM_1"/>
+			<set item="Recipient" value="${sCustomer}"/>
+			<set item="Encoding" value="unicodefffe"/>
+                        <set conditionEx="0@{freeSession}"  />
+		</deliveryTemplate>              
+        </template> 
+</templates>

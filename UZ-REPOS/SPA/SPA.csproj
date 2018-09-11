@@ -223,6 +223,7 @@
     <Content Include="EDITION\ROBP\Operations\SM\CreateSubscriberOnSMSC.xml" />
     <Content Include="EDITION\ROBP\Operations\SM\DeleteSubscriberOnSMSC.xml" />
     <Content Include="EDITION\ROBP\Operations\SM\SynchronizeOnSMSC.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Scenarios\BreakSessionSCG.xml" />
     <Content Include="PROD-2018.09.06\ROBP\Operations\CT4\AddMST.xml" />
     <Content Include="PROD-2018.09.06\ROBP\Operations\CT4\DeleteMST.xml" />
     <Content Include="PROD-2018.09.06\ROBP\Operations\CT4\DeleteMSTSubscriber.xml" />

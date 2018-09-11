@@ -24,6 +24,7 @@ namespace ProcessFilter
     [Serializable]
     public partial class ProcessFilterForm : Form, ISerializable
     {
+        private string lastPath = string.Empty;
         public static string SerializationDataPath => $"{Customs.AccountFilePath}.bin";
         private XmlNotepad notepad;
         public CollectionBusinessProcess Processes { get; private set; }
@@ -327,6 +328,7 @@ namespace ProcessFilter
         {
             if(Directory.Exists(prcsPath.Trim(' ')))
             {
+                UpdateLastPath(prcsPath.Trim(' '));
                 Processes = new CollectionBusinessProcess(prcsPath.Trim(' '));
                 ProcessesComboBox.DataSource = Processes.Select(p => p.Name).ToList();
             }
@@ -353,6 +355,7 @@ namespace ProcessFilter
         {
             if (Directory.Exists(opPath.Trim(' ')))
             {
+                UpdateLastPath(opPath.Trim(' '));
                 NetElements = new CollectionNetworkElements(opPath.Trim(' '));
                 NetSettComboBox.DataSource = NetElements.Elements.AllNetworkElements;
                 OperationComboBox.DataSource = NetElements.Elements.AllOperationsName;
@@ -385,6 +388,7 @@ namespace ProcessFilter
         {
             if (Directory.Exists(scoPath.Trim(' ')))
             {
+                UpdateLastPath(scoPath.Trim(' '));
                 Scenarios = new CollectionScenarios(scoPath.Trim(' '));
                 SenariosStat.Text = $"Scenarios:{Scenarios.Count}";
             }
@@ -407,6 +411,7 @@ namespace ProcessFilter
         {
             if (Directory.Exists(cmmPath.Trim(' ')))
             {
+                UpdateLastPath(cmmPath.Trim(' '));
                 Commands = new CollectionCommands(cmmPath.Trim(' '));
                 CommandsStat.Text = $"Commands:{Commands.Count}";
             }
@@ -421,16 +426,23 @@ namespace ProcessFilter
         {
             using (var fbd = new FolderBrowserDialog())
             {
+                if(!lastPath.IsNullOrEmpty())
+                    fbd.SelectedPath = lastPath;
                 DialogResult result = fbd.ShowDialog();
 
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
                 {
+                    UpdateLastPath(fbd.SelectedPath);
                     return fbd.SelectedPath;
                 }
             }
             return null;
         }
 
-        
+        void UpdateLastPath(string path)
+        {
+            if (!path.IsNullOrEmpty())
+                lastPath = path;
+        }
     }
 }

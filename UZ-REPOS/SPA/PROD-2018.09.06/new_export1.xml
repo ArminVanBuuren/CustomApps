@@ -1,0 +1,3 @@
+<groups>
+  <ServiceList>&lt;parameters&gt;&lt;ExternalServiceCode Type="Optional" /&gt;&lt;SERVICE_CODE Type="Optional" /&gt;&lt;DateFrom Type="Mandatory" /&gt;&lt;DiscountType Type="Optional" /&gt;&lt;DiscountValue Type="Optional" /&gt;&lt;CounterCoefficient Type="Optional" /&gt;&lt;DoNotProcessingInFinancialPlatform Type="Mandatory" /&gt;&lt;FavoriteNumberTypeCode Type="Restricted" /&gt;&lt;AvailableCugHostTypes Type="Restricted" /&gt;&lt;AvailableCugHostTypes Type="Restricted" /&gt;&lt;/parameters&gt;</ServiceList>
+</groups>

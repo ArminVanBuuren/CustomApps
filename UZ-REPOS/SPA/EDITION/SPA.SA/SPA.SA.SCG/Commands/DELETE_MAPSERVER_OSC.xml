@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="DELETE_MAPSERVER_OSC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description> абонента на платформу SCG'</Description>
+	<Description>Удаление абонента с платформы SCG</Description>
 	<Author Name="Vladimir Khovanskiy" Date="2009-04-26+11:09"/>
 	<Request>
 		<RequestTemplate>
@@ -34,6 +34,7 @@ xmlns:com1="http://com.huawei.scg.schema">
 		</RequestTemplate>
 		<EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
 		<Item Name="msisdn" Type="Wellknown"/>
-	</Request>
+	  <Item Name="ID" Type="Parameter"/>
+  </Request>
 	<ErrorsList CodePage="windows-1251" />
 </Command>

@@ -1,0 +1,49 @@
+1.	Replace
+'Config\GET_DBRESULT.xml'
+'_DICTIONARY_PATH'
+
+'Config\Service\All_SERVICE.xml'
+'_ALLSERVICE_PATH'
+
+'Config\Tariff\TARIFF_PLANS.xml'
+'_TARIF_PATH'
+
+'Config\Service\SERVICE.xml'
+'_SERVICE_PATH'
+
+
+'Config\Service\COUNTERS.xml'
+'_COUNTERS_PATH'
+
+
+2.	Add
+		<define name="_SERVICE_PATH"                    value="..\..\Config\Service\SERVICE.xml"/>
+		<define name="_ALLSERVICE_PATH"                 value="..\..\Config\Service\All_SERVICE.xml"/>
+		<define name="_TARIF_PATH"                      value="..\..\Config\Tariff\TARIFF_PLANS.xml"/>
+		<define name="_COUNTERS_PATH"                   value="..\..\Config\Service\COUNTERS.xml"/>
+		<define name="_DICTIONARY_PATH"                 value="..\..\Config\GET_DBRESULT.xml"/>
+		
+		<define name="_DEALERPORTAL_PATH"               value="..\..\Config\Portal\DealerUSSDPortal_01.xml"/>
+		<define name="_SERIES_PATH"                     value="..\..\Config\Service\SERIES.xml"/>
+		
+3.	Create
+sc create FORIS.MG.CRMFilter binpath= "C:\Foris\Messaging Gateway\CRMFilter\Dispatcher.exe" start= auto obj= "NT AUTHORITY\NetworkService" password= ""
+sc create FORIS.MG.SMSConnector.01.01 binpath= "C:\Foris\Messaging Gateway\FORIS.MessagingGateway.SMSConnector.exe SMSCON_01_01 "C:\Foris\Messaging Gateway\MGCommon.xml" start= auto obj= "NT AUTHORITY\NetworkService" password= ""
+
+sc delete FORIS.MessagingGateway.CRMConnector.01.01
+sc delete FORIS.MessagingGateway.CRMFilter.01
+sc delete FORIS.MessagingGateway.CRMFilter.02
+sc delete FORIS.MessagingGateway.DBConnector.01.01
+sc delete FORIS.MessagingGateway.EmailConnector.01.01
+sc delete FORIS.MessagingGateway.SMSConnector.01.CONTENT
+sc delete FORIS.MessagingGateway.SMSConnector.01.02.ISSA
+sc delete FORIS.MessagingGateway.SMSConnector.01.EMAIL
+sc delete FORIS.MessagingGateway.SMSConnector.01.INFORM
+sc delete FORIS.MessagingGateway.SOAP.SCGConnector.01.01
+sc delete FORIS.MessagingGateway.SOAP.SMSConnector.01.01
+sc delete FORIS.MessagingGateway.SOAP.SPAConnector.01.01
+sc delete FORIS.MessagingGateway.SOAP.USSDConnector.01.01
+sc delete FORIS.MessagingGateway.SOAP.USSDConnector.01.02
+sc delete FORIS.MessagingGateway.USSDConnector.01.01
+sc delete FORIS.MessagingGateway.USSDConnector.01.02
+sc delete FORIS.MessagingGateway.WFCHandler.01.01
