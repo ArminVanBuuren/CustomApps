@@ -19,7 +19,6 @@ namespace ProcessFilter
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new ProcessFilterForm());
 
             ProcessFilterForm mainControl = null;
             if (File.Exists(ProcessFilterForm.SerializationDataPath))

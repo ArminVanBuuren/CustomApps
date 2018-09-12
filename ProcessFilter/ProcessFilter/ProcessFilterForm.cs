@@ -223,61 +223,10 @@ namespace ProcessFilter
                 }
             }
 
-            AssignDataGrid(dataGridProcessesResults, bpCollection);
-            AssignDataGrid(dataGridOperationsResult, netElemCollection.AllOperations);
-            AssignDataGrid(dataGridScenariosResult, scoCollection);
-            AssignDataGrid(dataGridCommandsResult, cmmCollection);
-            
-        }
-
-        void AssignDataGrid<T>(DataGridView grid, IList<T> data)
-        {
-
-            grid.DataSource = null;
-            grid.Columns.Clear();
-            grid.Rows.Clear();
-
-            DataTable table = new DataTable();
-            Type typeParameterType = typeof(T);
-            PropertyInfo[] props = typeParameterType.GetProperties(BindingFlags.Instance | BindingFlags.Public);
-            foreach (PropertyInfo prop in props)
-            {
-                table.Columns.Add(prop.Name, prop.PropertyType);
-            }
-            foreach (T instance in data)
-            {
-                Type tp = instance.GetType();
-                PropertyInfo[] props2 = tp.GetProperties(BindingFlags.Instance | BindingFlags.Public);
-                object[] objs = new object[props2.Length];
-                int i = 0;
-                foreach (PropertyInfo prop in props2)
-                {
-                    objs[i] = prop.GetValue(instance, null);
-                    i++;
-                }
-                table.Rows.Add(objs);
-            }
-            
-
-
-            grid.BeginInit();
-            grid.DataSource = table;
-            grid.EndInit();
-
-
-            foreach (DataGridViewRow row in grid.Rows)
-            {
-                row.DefaultCellStyle.Padding = new Padding(0, 0, 15, 0);
-                
-            }
-            for (var index = 0; index < grid.Columns.Count; index++)
-            {
-                DataGridViewColumn column = grid.Columns[index];
-                if (index < grid.Columns.Count - 1)
-                    column.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-                else
-                    column.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            }
+            dataGridProcessesResults.AssignListToDataGrid(bpCollection, new Padding(0, 0, 15, 0));
+            dataGridOperationsResult.AssignListToDataGrid(netElemCollection.AllOperations, new Padding(0, 0, 15, 0));
+            dataGridScenariosResult.AssignListToDataGrid(scoCollection, new Padding(0, 0, 15, 0));
+            dataGridCommandsResult.AssignListToDataGrid(cmmCollection, new Padding(0, 0, 15, 0));
         }
 
         private void dataGridProcessesResults_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -316,7 +265,8 @@ namespace ProcessFilter
 
         private void ProcessesButtonOpen_Click(object sender, EventArgs e)
         {
-            ProcessesTextBox.Text = OpenFolder();
+            ProcessesTextBox.Text = OpenFolder() ?? ProcessesTextBox.Text;
+            CheckProcessesPath(ProcessesTextBox.Text);
         }
 
         private void ProcessesTextBox_TextChanged(object sender, EventArgs e)
@@ -343,7 +293,7 @@ namespace ProcessFilter
 
         private void OperationButtonOpen_Click(object sender, EventArgs e)
         {
-            OperationTextBox.Text = OpenFolder();
+            OperationTextBox.Text = OpenFolder() ?? OperationTextBox.Text;
             CheckOperationsPath(OperationTextBox.Text);
         }
         private void OperationTextBox_TextChanged(object sender, EventArgs e)
@@ -373,11 +323,9 @@ namespace ProcessFilter
             OperationComboBox.ValueMember = null;
         }
 
-        
-
         private void ScenariosButtonOpen_Click(object sender, EventArgs e)
         {
-            ScenariosTextBox.Text = OpenFolder();
+            ScenariosTextBox.Text = OpenFolder() ?? ScenariosTextBox.Text;
             CheckScenariosPath(ScenariosTextBox.Text);
         }
         private void ScenariosTextBox_TextChanged(object sender, EventArgs e)
@@ -400,7 +348,7 @@ namespace ProcessFilter
 
         private void CommnadsButtonOpen_Click(object sender, EventArgs e)
         {
-            CommandsTextBox.Text = OpenFolder();
+            CommandsTextBox.Text = OpenFolder() ?? CommandsTextBox.Text;
             CheckCommandsPath(CommandsTextBox.Text);
         }
         private void CommandsTextBox_TextChanged(object sender, EventArgs e)
@@ -420,7 +368,6 @@ namespace ProcessFilter
                 CommandsStat.Text = "Commands:";
             }
         }
-
 
         string OpenFolder()
         {
