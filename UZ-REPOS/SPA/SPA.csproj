@@ -224,6 +224,7 @@
     <Content Include="EDITION\ROBP\Operations\SM\DeleteSubscriberOnSMSC.xml" />
     <Content Include="EDITION\ROBP\Operations\SM\SynchronizeOnSMSC.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Scenarios\BreakSessionSCG.xml" />
+    <Content Include="EDITION\Заметки.txt" />
     <Content Include="PROD-2018.09.06\ROBP\Operations\CT4\AddMST.xml" />
     <Content Include="PROD-2018.09.06\ROBP\Operations\CT4\DeleteMST.xml" />
     <Content Include="PROD-2018.09.06\ROBP\Operations\CT4\DeleteMSTSubscriber.xml" />
@@ -1998,6 +1999,7 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.SMSC\Emulation\printout.success.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="EDITION\DOC\SCG\Анализ настроек.docx" />
     <None Include="PROD-2018.09.06\SPA.SA\Dictionaries\CONTENT\ALLPLAY\Commands\Command.xsd">
       <SubType>Designer</SubType>
     </None>
