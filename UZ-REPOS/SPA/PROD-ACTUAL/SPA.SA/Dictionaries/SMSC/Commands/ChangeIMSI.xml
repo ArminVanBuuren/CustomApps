@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ChangeIMSI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Change IMSI on SMSC</Description>
+	<Author Name="Vladimir Khovanskiy" Date="2010-03-16+15:00"/>
+	<Request Template="OPERATION=SUBSCRIBER-PROV-EDIT&amp;MSISDN={0}&amp;NIMSI={1}&amp;ID={2}">
+		<Item Name="msisdn" Type="Wellknown"/>
+		<Item Name="NewIMSI" Type="Parameter"/>
+		<Item Name="SCP_Profile" Type="Parameter"/>
+	</Request>
+	<ErrorsList CodePage="ASCII"/>
+</Command>

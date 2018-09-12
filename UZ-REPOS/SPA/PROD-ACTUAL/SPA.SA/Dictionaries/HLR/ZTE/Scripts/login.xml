@@ -1,0 +1,5 @@
+<Script Name="Login">
+	<sleep timeout="100" addToLog="true"/>
+	<write data='LOGIN:USER=ums,PSWD=ums ^M'/>
+	<wait data="$" timeout="20000"/>
+</Script>

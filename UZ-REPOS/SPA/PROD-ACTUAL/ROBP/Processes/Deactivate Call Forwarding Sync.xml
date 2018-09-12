@@ -1,0 +1,19 @@
+<BusinessProcessData name="Deactivate Call Forwarding Sync">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="OperationOnSA" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="DeactivateCallForwarding" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeactivateCallForwarding" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

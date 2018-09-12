@@ -1,0 +1,27 @@
+<BusinessProcessData name="Remove APNs">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="OperationOnSA" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="DeleteFRDILAPN" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteFRDILAPN" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFRDLAPN" />
+          </resultlist>
+        </node>
+        <node name="DeleteFRDLAPN" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteFRDLAPN" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

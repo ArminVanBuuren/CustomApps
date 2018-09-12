@@ -1,0 +1,27 @@
+<BusinessProcessData name="Add MCA Serice">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="OperationOnSA" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="AddFRMCAHLR" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddFRMCAHLR" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFRMCAMCA" />
+          </resultlist>
+        </node>
+        <node name="AddFRMCAMCA" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddFRMCAMCA" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

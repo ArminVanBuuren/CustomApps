@@ -1,0 +1,251 @@
+<BusinessProcessData name="Assign Services" successOnNoOperation="true">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="OperationOnSA" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="AddCB264" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddCB264" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB532" />
+          </resultlist>
+        </node>
+        <node name="AddCB532" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddCB532" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB9831" />
+          </resultlist>
+        </node>
+        <node name="AddCB9831" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddCB9831" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB10363" />
+          </resultlist>
+        </node>
+        <node name="AddCB10363" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddCB10363" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB108" />
+          </resultlist>
+        </node>
+        <node name="AddCB108" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddCB108" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB123" />
+          </resultlist>
+        </node>
+        <node name="AddCB123" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddCB123" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB266HLR" />
+          </resultlist>
+        </node>
+        <node name="AddCB266HLR" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddCB266HLR" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB573" />
+          </resultlist>
+        </node>
+        <node name="AddCB573" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddCB573" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB6376" />
+          </resultlist>
+        </node>
+        <node name="AddCB6376" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddCB6376" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFRANTIOP" />
+          </resultlist>
+        </node>
+        <node name="AddFRANTIOP" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddFRANTIOP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFRMGDOSTUP" />
+          </resultlist>
+        </node>
+        <node name="AddFRMGDOSTUP" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddFRMGDOSTUP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFRSYNC" />
+          </resultlist>
+        </node>
+        <node name="AddFRSYNC" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddFRSYNC" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddGATEInformation" />
+          </resultlist>
+        </node>
+        <node name="AddGATEInformation" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddGATEInformation" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddUSSD" />
+          </resultlist>
+        </node>
+        <node name="AddUSSD" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddUSSD" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB6311" />
+          </resultlist>
+        </node>
+        <node name="AddCB6311" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddCB6311" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFRIP" />
+          </resultlist>
+        </node>
+        <node name="AddFRIP" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddFRIP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddIP" />
+          </resultlist>
+        </node>
+        <node name="AddIP" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddIP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFRASKUE" />
+          </resultlist>
+        </node>
+        <node name="AddFRASKUE" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddFRASKUE" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddBSNSSRMNG" />
+          </resultlist>
+        </node>
+        <node name="AddBSNSSRMNG" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddBSNSSRMNG" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddLGHTRMNG" />
+          </resultlist>
+        </node>
+        <node name="AddLGHTRMNG" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddLGHTRMNG" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddReduceSpeed" />
+          </resultlist>
+        </node>
+        <node name="AddReduceSpeed" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddReduceSpeed" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFRPOLDOVSCP" />
+          </resultlist>
+        </node>
+        <node name="AddFRPOLDOVSCP" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddFRPOLDOVSCP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddSCPBREAKSESSION" />
+          </resultlist>
+        </node>
+        <node name="AddSCPBREAKSESSION" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddSCPBREAKSESSION" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddSCPBREAKSESSIONSCG" />
+          </resultlist>
+        </node>
+        <node name="AddSCPBREAKSESSIONSCG" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddSCPBREAKSESSIONSCG" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFRPARTAPN" />
+          </resultlist>
+        </node>
+        <node name="AddFRPARTAPN" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddFRPARTAPN" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCorporateAPN" />
+          </resultlist>
+        </node>
+        <node name="AddCorporateAPN" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddCorporateAPN" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddLTE" />
+          </resultlist>
+        </node>
+        <node name="AddLTE" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddLTE" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddMST" />
+          </resultlist>
+        </node>
+        <node name="AddMST" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddMST" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFRNEWSCG" />
+          </resultlist>
+        </node>
+        <node name="AddFRNEWSCG" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddFRNEWSCG" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddM2MAPN" />
+          </resultlist>
+        </node>
+        <node name="AddM2MAPN" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddM2MAPN" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

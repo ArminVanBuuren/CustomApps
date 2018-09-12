@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="AddSubscriberOnSMSC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Add Subscriber On SMSC</Description>
+	<Author Name="Vladimir Khovanskiy" Date="2010-03-16+15:00"/>
+	<Request Template="OPERATION=SUBSCRIBER-PROV-ADD&amp;MSISDN={0}&amp;IMSI={1}&amp;ID={2}">
+		<Item Name="msisdn" Type="Wellknown"/>
+		<Item Name="imsi" Type="Wellknown"/>
+		<Item Name="SCP_Profile" Type="Parameter"/>
+	</Request>
+	<!--ErrorsList CodePage="windows-1251" >
+		<Error Name="000" Value="SUCCESS"/>
+		<Error Name="105" Value="SUCCESS"/>
+		<Error Name="106" Value="SUCCESS"/>
+		<Error Name="101" Value="MsisdnAlreadyDefined"/>
+	</ErrorsList-->
+
+</Command>
