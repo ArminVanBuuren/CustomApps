@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Application configClass="FORIS.MessagingGateway.Configuration.CommonConfiguration">
+  <Connections>
+    <Database type="OracleClient" scheme="mg" interfacePackage="API" connectionString="Server=crm;User ID=mg;Password=mg_for_is" cmdTimeout="0"/>
+
+    <Connector name="IVRCON_03_01"        type="IVRCON"   host="a14-mg03" port="11130" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.03.01"        config="Configuration\IVRCON\IVRConnector_IVRCON_03_01.exe.xml"/>
+    <Connector name="IVRCON_03_02"        type="IVRCON"   host="a14-mg03" port="11131" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.03.02"        config="Configuration\IVRCON\IVRConnector_IVRCON_03_02.exe.xml"/>
+    <Connector name="DBCON_03_01"         type="DBCON"    host="a14-mg03" port="11141" sessionHandler="false" serviceName="FORIS.MessagingGateway.DBConnector.03.01"         config="Configuration\DBCON\DBConnector_DBCON_03_01.exe.xml"/>
+    <Connector name="SOAPCON_03_TEST"     type="SOAPCON"  host="a14-mg03" port="11195" sessionHandler="false" serviceName="FORIS.MessagingGateway.SOAP.Connector.03.TEST"    config="Configuration\SOAPCON\SOAPConnector_SOAPCON_03_TEST.exe.xml"/>
+    <Connector name="SOAPCON_03_DEVELOP"  type="SOAPCON"  host="a14-mg03" port="11190" sessionHandler="false" serviceName="FORIS.MessagingGateway.SOAP.Connector.03.DEVELOP" config="Configuration\SOAPCON\SOAPConnector_SOAPCON_03_DEVELOP.exe.xml"/>
+
+    <Handler   name="CRMCON_03_01"        type="CRMCON"   host="a14-mg03" port="11103" sessionHandler="false" serviceName="FORIS.MessagingGateway.CRMConnector.03.01"        config="Configuration\CRMCON\CRMConnector_CRMCON_03_01.exe.xml"/>
+
+    <Monitor type="CRMCON" port="0" sessionHandler="false"/>
+  </Connections>
+  <Settings/>
+  <Logging>
+    <Data enabled="true" file="data.log" directory="c:\FORISLOG\MG\data" buffer="20" newLine="true"/>
+    <!--Activity enabled="true" file="activity.log" directory="c:\FORISLOG\MG\activity" buffer="100" newLine="true" severity="ProcessingError"/-->
+    <Activity enabled="true" file="activity.log" directory="c:\FORISLOG\MG\activity" buffer="100" newLine="true" severity="Debug"/>
+    <Error enabled="true" file="error.log" directory="c:\FORISLOG\MG\error" buffer="200" newLine="true"/>
+    <EventLog enabled="false" severity="Debug"/>
+  </Logging>
+</Application>
