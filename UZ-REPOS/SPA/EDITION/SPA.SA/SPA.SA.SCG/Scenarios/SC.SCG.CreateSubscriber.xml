@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scenario name="SC.SCG.CreateSubscriber">
+  <include>
+    <scenario name="SubDeleteSubscriberOnSCG" />
+  </include>
 	<objectList>
 		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
 		<object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
@@ -21,13 +24,22 @@
 		</node>
 		<node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
 			<resultlist>
-				<result value="0" node="ADD_MAPSERVER_OSC"/>
+				<result value="0" node="SubDeleteSubscriberOnSCG"/>
 				<result value="1" node=""/>
 			</resultlist>
 			<parameterslist>
 				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
 			</parameterslist>
 		</node>
+	  <node  name="SubDeleteSubscriberOnSCG" object="ScenarioProcessor">
+	    <resultlist>
+	      <result value="0" node="ADD_MAPSERVER_OSC" />
+	      <result value="" node="ResponseAssembler" />
+	    </resultlist>
+	    <parameterslist>
+	      <param name="Scenario" value="SubDeleteSubscriberOnSCG" />
+	    </parameterslist>
+	  </node>
 		<node name="ADD_MAPSERVER_OSC" object="Commander">
 			<resultlist>
 				<result value="" node="ResponseAssembler"/>

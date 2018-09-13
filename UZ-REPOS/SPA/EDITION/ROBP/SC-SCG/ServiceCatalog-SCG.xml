@@ -16,7 +16,6 @@
   </AttributeList>
   <ResourceList>
     <Resource name="RES_SCG_PROFILE" description="Профиль абонента на SCG" />
-    <Resource name="RES_SCG_SUBCRIPTION_TYPE" description="Тип подписки абонента на SCG" />
   </ResourceList>
   <RFSParameterList>
     <RFSParameter name="ChangeTP" path="xml(//ChangeTP)" description="Параметры смены тарифного плана" />
@@ -28,20 +27,14 @@
   <RFSList>
     <RFS name="RFS_SCG_SUBSCRIBER" hostType="SCG" processType="Subscription" description="Абонент на платформе SCG" >
       <Resource name="RES_SCG_PROFILE" value="" useType="Mandatory">
-        <Value hosts="FP:MS" value="1" />
         <Value hosts="FP:05" value="0" />
+        <Value hosts="FP:MS" value="1" />
       </Resource>
-    </RFS>
-    <RFS name="RFS_SCG_SUBSCRIPTION_ABSOLUT"  hostType="SCG" description="Добавить подписку абонента на SCG для ТП ABSOLUT" >
-      <Resource name="RES_SCG_SUBCRIPTION_TYPE" value="111" />
-    </RFS>
-    <RFS name="RFS_SCG_SUBSCRIPTION_OPTIMA"  hostType="SCG" description="Добавить подписку абонента на SCG для ТП OPTIMA" >
-      <Resource name="RES_SCG_SUBCRIPTION_TYPE" value="112" />
     </RFS>
     <RFS name="RFS_SCG_CHANGE_MSISDN" hostType="SCG" description="Изменение номера MSISDN на платформе SCG">
       <Resource name="RES_SCG_PROFILE" value="" useType="Mandatory">
-        <Value hosts="FP:MS" value="1" />
         <Value hosts="FP:05" value="0" />
+        <Value hosts="FP:MS" value="1" />
       </Resource>
       <RFSParameter name="NewMSISDN" path="//ChangeMsisdn/NewMSISDN" />
     </RFS>
@@ -49,6 +42,12 @@
       <Resource name="RES_SCG_PROFILE" value="" useType="Mandatory">
         <Value condition="//ChangeTP/NewPlatform/HostCode[text()='MS']" value="1" />
         <Value condition="//ChangeTP/NewPlatform/HostCode[text()='05']" value="0" />
+      </Resource>
+    </RFS>
+    <RFS name="RFS_SCG_BREAKSESSION"  hostType="SCG" description="Разрыв GPRS сессии на SCG" >
+      <Resource name="RES_SCG_PROFILE" value="" useType="Mandatory">
+        <Value hosts="FP:05" value="0" />
+        <Value hosts="FP:MS" value="1" />
       </Resource>
     </RFS>
   </RFSList>
@@ -66,18 +65,11 @@
     <CFS name="FRASKUE" description="АИИСКУЭ">
       <RFS name="RFS_SCG_SUBSCRIBER" linkType="Add" />
     </CFS>
-    <CFS name="FRAPABSOLUT" description="Абонентская плата за ТП ABSOLUT">
-      <RFS name="RFS_SCG_SUBSCRIPTION_ABSOLUT" linkType="Add" />
-    </CFS>
-    <CFS name="FRAPOPTIMA" description="Абонентская плата за ТП Optima">
-      <RFS name="RFS_SCG_SUBSCRIPTION_OPTIMA" linkType="Add" />
+    <CFS name="SCPBREAKSESSION" description="Разрыв GPRS сессии на SCG">
+      <RFS name="RFS_SCG_BREAKSESSION" linkType="Add" />
     </CFS>
   </CFSList>
   <CFSGroupList >
-    <CFSGroup name="CFS_GROUP_SCG" type="Mutex" description="Взаимоисключающие услуги для ТП">
-      <CFS name="FRAPABSOLUT" />
-      <CFS name="FRAPOPTIMA" />
-    </CFSGroup>
   </CFSGroupList>
   <RFSGroupList />
   <RFSDependencyList />
@@ -86,13 +78,11 @@
   <ScenarioList>
     <Scenario name="SCG.CreateSubscriber" description="Создание абонента на SCG">
       <RFS name="RFS_SCG_SUBSCRIBER" scenarioType="Add" />
+      <RFS name="RFS_SCG_BREAKSESSION" scenarioType="Remove" />
     </Scenario>
     <Scenario name="SCG.DeleteSubscriber" description="Удаление абонента на SCG">
       <RFS name="RFS_SCG_SUBSCRIBER" scenarioType="Remove" />
-    </Scenario>
-    <Scenario name="SCG.Add.Subscription" description="Добавить подписку абонента на SCG">
-      <RFS name="RFS_SCG_SUBSCRIPTION_ABSOLUT" scenarioType="Add" />
-      <RFS name="RFS_SCG_SUBSCRIPTION_OPTIMA" scenarioType="Add" />
+      <RFS name="RFS_SCG_BREAKSESSION" scenarioType="Add" />
     </Scenario>
     <Scenario name="SCG.ChangeMSISDN" description="Изменение номера на SCG">
       <RFS name="RFS_SCG_CHANGE_MSISDN" scenarioType="Add" />
