@@ -136,7 +136,7 @@ namespace ProcessFilter.SPA
                     }
                 }
 
-                ParceScenario getSub = ParceXmlScenario(subScenario);
+                ParceScenario getSub = ParceXmlScenario(subScenarioPath);
                 if (getSub == null)
                     continue;
 
