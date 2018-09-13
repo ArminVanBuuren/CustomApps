@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
 
@@ -14,12 +16,13 @@ namespace ProcessFilter.SPA
 
         public CollectionBusinessProcess(string prcsPath)
         {
-            string[] files = Directory.GetFiles(prcsPath);
+            List<string> files = Directory.GetFiles(prcsPath).ToList();
+            files.Sort(StringComparer.CurrentCulture);
+
             int i = 0;
             foreach (string bpPath in files)
             {
-                Add(new BusinessProcess(bpPath, i));
-                i++;
+                Add(new BusinessProcess(bpPath, ++i));
             }
         }
 
@@ -34,9 +37,8 @@ namespace ProcessFilter.SPA
     public class BusinessProcess : ObjectTempalte
     {
         internal List<string> Operations { get; } = new List<string>();
-        public int ID { get; }
 
-        public BusinessProcess(string path, int id) : base(path)
+        public BusinessProcess(string path, int id) : base(path, id)
         {
             Match match = Regex.Match(Name, @"(.+)\.\(\s*(\d+)\s*\)");
             if (match.Success && int.TryParse(match.Groups[2].Value, out int res))
@@ -53,7 +55,8 @@ namespace ProcessFilter.SPA
             Operations.Clear();
             foreach (XmlNode xm in document.SelectNodes(@"//param[@name='operation']/@value"))
             {
-                Operations.Add(xm.InnerText);
+                if (!Operations.Any(p => p.Equals(xm.InnerText)))
+                    Operations.Add(xm.InnerText);
             }
         }
     }

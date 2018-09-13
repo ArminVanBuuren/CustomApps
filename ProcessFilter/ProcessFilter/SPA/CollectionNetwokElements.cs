@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using FormUtils.DataGridViewHelper;
+using static FormUtils.DataGridViewHelper.DGVEnhancer;
 
 namespace ProcessFilter.SPA
 {
@@ -10,10 +13,13 @@ namespace ProcessFilter.SPA
 
         public CollectionNetworkElements(string opsPath)
         {
-            string[] dirs = Directory.GetDirectories(opsPath);
+            List<string> dirs = Directory.GetDirectories(opsPath).ToList();
+            dirs.Sort(StringComparer.CurrentCulture);
+
+            int i = 0;
             foreach (string dirNetElem in dirs)
             {
-                Elements.Add(new NetworkElement(dirNetElem));
+                Elements.Add(new NetworkElement(dirNetElem, ++i));
             }
         }
     }
@@ -66,23 +72,26 @@ namespace ProcessFilter.SPA
     {
         public List<NetworkElementOpartion> Operations { get; private set; } = new List<NetworkElementOpartion>();
 
-        public NetworkElement(string path, List<NetworkElementOpartion> ops) :base(path)
+        public NetworkElement(string path, int id, List<NetworkElementOpartion> ops) :base(path, id)
         {
             Operations.AddRange(ops);
         }
 
-        public NetworkElement(string path) : base(path)
+        public NetworkElement(string path, int id) : base(path, id)
         {
-            string[] files = Directory.GetFiles(path);
+            List<string> files = Directory.GetFiles(path).ToList();
+            files.Sort(StringComparer.CurrentCulture);
+
+            int i = 0;
             foreach (string operation in files)
             {
-                Operations.Add(new NetworkElementOpartion(operation, this));
+                Operations.Add(new NetworkElementOpartion(operation, ++i, this));
             }
         }
 
         public NetworkElement Clone()
         {
-            NetworkElement cloneElement =  MemberwiseClone() as NetworkElement;
+            NetworkElement cloneElement = MemberwiseClone() as NetworkElement;
             cloneElement.Operations = new List<NetworkElementOpartion>();
             cloneElement.Operations.AddRange(Operations);
             return cloneElement;
@@ -92,9 +101,14 @@ namespace ProcessFilter.SPA
     public class NetworkElementOpartion : ObjectTempalte
     {
         private NetworkElement parent;
+
+        [DGVColumn(ColumnPosition.After, "Operation")]
+        public override string Name { get; protected set; }
+
+        [DGVColumn(ColumnPosition.Before, "Network Element")]
         public string NetworkElement => parent.Name;
 
-        public NetworkElementOpartion(string path, NetworkElement parentElement) :base(path)
+        public NetworkElementOpartion(string path, int id, NetworkElement parentElement) :base(path, id)
         {
             parent = parentElement;
         }

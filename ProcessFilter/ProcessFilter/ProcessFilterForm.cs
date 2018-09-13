@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -65,8 +66,11 @@ namespace ProcessFilter
         void MainInit()
         {
             InitializeComponent();
+            dataGridScenariosResult.CellFormatting += DataGridScenariosResult_CellFormatting;
             this.Closing += ProcessFilterForm_Closing;
         }
+
+        
 
         private void buttonFilterClick(object sender, EventArgs e)
         {
@@ -74,6 +78,7 @@ namespace ProcessFilter
             NetworkElementCollection netElemCollection;
             CollectionScenarios scoCollection = new CollectionScenarios();
             CollectionCommands cmmCollection = new CollectionCommands();
+            List<Scenario> subScenarios = new List<Scenario>();
 
             if (Processes == null || NetElements == null)
             {
@@ -142,7 +147,7 @@ namespace ProcessFilter
 
                     if (ops.Count > 0)
                     {
-                        NetworkElement fileteredElementAndOps = new NetworkElement(nec.Path, ops);
+                        NetworkElement fileteredElementAndOps = new NetworkElement(nec.Path, nec.ID, ops);
                         netElemCollection2.Add(fileteredElementAndOps);
                     }
                 }
@@ -182,11 +187,10 @@ namespace ProcessFilter
 
                     foreach (Scenario scenario in scenarios)
                     {
-                        XmlDocument document = XmlHelper.LoadXml(scenario.Path, true);
-                        if (document != null)
+                        if (scenario.AddBodyCommands())
                         {
-                            scenario.AddBodyCommands(document);
                             scoCollection.Add(scenario);
+                            subScenarios.AddRange(scenario.SubScenarios);
                         }
                     }
                 };
@@ -223,10 +227,24 @@ namespace ProcessFilter
                 }
             }
 
+            subScenarios = subScenarios.Distinct(new ItemEqualityComparer()).ToList();
+            scoCollection.AddRange(subScenarios);
+
             dataGridProcessesResults.AssignListToDataGrid(bpCollection, new Padding(0, 0, 15, 0));
             dataGridOperationsResult.AssignListToDataGrid(netElemCollection.AllOperations, new Padding(0, 0, 15, 0));
             dataGridScenariosResult.AssignListToDataGrid(scoCollection, new Padding(0, 0, 15, 0));
             dataGridCommandsResult.AssignListToDataGrid(cmmCollection, new Padding(0, 0, 15, 0));
+        }
+
+        private void DataGridScenariosResult_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            DataGridViewRow row = dataGridScenariosResult.Rows[e.RowIndex];// get you required index
+            // check the cell value under your specific column and then you can toggle your colors
+            if (row.Cells[0].Value.ToString() == "-1")
+            {
+                row.DefaultCellStyle.BackColor = Color.Yellow;
+            }
+
         }
 
         private void dataGridProcessesResults_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)

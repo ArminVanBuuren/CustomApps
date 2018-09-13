@@ -5,6 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using FormUtils.DataGridViewHelper;
+using Utils;
+using Utils.IOExploitation;
+using Utils.XmlHelper;
+using static FormUtils.DataGridViewHelper.DGVEnhancer;
 
 namespace ProcessFilter.SPA
 {
@@ -17,10 +22,14 @@ namespace ProcessFilter.SPA
 
         public CollectionScenarios(string path)
         {
-            string[] files = Directory.GetFiles(path, "*.xml", SearchOption.AllDirectories);
+            //List<string> files = Directory.GetFiles(path, "*.xml", SearchOption.AllDirectories).OrderBy(c => c).ToList();
+            List<string> files = Directory.GetFiles(path, "*.xml", SearchOption.TopDirectoryOnly).ToList();
+            files.Sort(StringComparer.CurrentCulture);
+
+            int i = 0;
             foreach (string bpPath in files)
             {
-                Add(new Scenario(bpPath));
+                Add(new Scenario(bpPath, ++i));
             }
         }
 
@@ -32,21 +41,126 @@ namespace ProcessFilter.SPA
         }
     }
 
+    class ItemEqualityComparer : IEqualityComparer<Scenario>
+    {
+        public bool Equals(Scenario x, Scenario y)
+        {
+            return x.Name.Trim().Equals(y.Name.Trim(), StringComparison.CurrentCultureIgnoreCase);
+        }
+
+        public int GetHashCode(Scenario obj)
+        {
+            return obj.Name.ToLower().GetHashCode();
+        }
+    }
+
     public class Scenario : ObjectTempalte
     {
-        internal List<string> Commands { get; } = new List<string>();
-        public Scenario(string path) : base(path)
+        internal List<string> Commands { get; private set; } = new List<string>();
+        internal CollectionScenarios SubScenarios { get; private set; } = new CollectionScenarios();
+
+        [DGVColumn(ColumnPosition.Before, "Scenario")]
+        public override string Name { get; protected set; }
+
+        [DGVColumn(ColumnPosition.After, "SubScenario Count")]
+        public int ExistSubScenarios => SubScenarios.Count;
+
+        
+
+        public Scenario(string path, int id) : base(path, id)
         {
 
         }
 
-        public void AddBodyCommands(XmlDocument document)
+        public bool AddBodyCommands()
         {
             Commands.Clear();
-            foreach (XmlNode xm in document.SelectNodes(@"//parameterslist/param[@name='command']/@value"))
+            SubScenarios.Clear();
+
+            ParceScenario allfinded = ParceXmlScenario(Path);
+            if (allfinded == null)
+                return false;
+
+            Commands = allfinded.Commands.Distinct().ToList();
+            foreach (string subScenarioPath in allfinded.SubScenarios.Distinct().ToList())
             {
-                Commands.Add(xm.InnerText);
+                SubScenarios.Add(new Scenario(subScenarioPath, -1));
             }
+
+            return true;
         }
+
+        
+
+        class ParceScenario
+        {
+            public List<string> Commands { get; set; }
+            public List<string> SubScenarios { get; set; }
+        }
+
+
+        ParceScenario ParceXmlScenario(string scenarioPath)
+        {
+            if (scenarioPath.IsNullOrEmpty())
+                return null;
+
+            XmlDocument document = XmlHelper.LoadXml(scenarioPath, true);
+            if (document == null)
+                return null;
+
+            ParceScenario prsCs = new ParceScenario();
+            prsCs.Commands = EvaluateXPath(document, @"//parameterslist/param[@name='command']/@value");
+            prsCs.SubScenarios = EvaluateXPath(document, @"//parameterslist/param[@name='scenario']/@value");
+
+            int i = -1;
+            string getParentDirectory = Path.GetParentDirectoryInPath();
+            for (var index = 0; index < prsCs.SubScenarios.Count; index++)
+            {
+                string subScenario = prsCs.SubScenarios[index];
+                i++;
+                string subScenarioPath = subScenario + ".xml";
+                if (File.Exists(subScenario))
+                {
+                    prsCs.SubScenarios[i] = subScenarioPath;
+                }
+                else
+                {
+                    subScenarioPath = $"{getParentDirectory}\\{subScenario}.xml";
+                    if (File.Exists(subScenarioPath))
+                    {
+                        prsCs.SubScenarios[i] = subScenarioPath;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+
+                ParceScenario getSub = ParceXmlScenario(subScenario);
+                if (getSub == null)
+                    continue;
+
+                prsCs.Commands.AddRange(getSub.Commands);
+                prsCs.SubScenarios.AddRange(getSub.SubScenarios);
+            }
+            return prsCs;
+        }
+
+        List<string> EvaluateXPath(XmlDocument document, string xpath)
+        {
+            List<string> collection = new List<string>();
+            XmlNodeList listByXpath = document.SelectNodes(xpath);
+            if (listByXpath == null)
+                return collection;
+
+            foreach (XmlNode xm in listByXpath)
+            {
+                //if (!collection.Any(p => p.Equals(xm.InnerText)))
+                collection.Add(xm.InnerText);
+            }
+            return collection;
+        }
+
+        
     }
 }

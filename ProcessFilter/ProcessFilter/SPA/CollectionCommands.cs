@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static FormUtils.DataGridViewHelper.DGVEnhancer;
 
 namespace ProcessFilter.SPA
 {
@@ -15,10 +16,13 @@ namespace ProcessFilter.SPA
         }
         public CollectionCommands(string path)
         {
-            string[] files = Directory.GetFiles(path, "*.xml", SearchOption.TopDirectoryOnly);
+            List<string> files = Directory.GetFiles(path, "*.xml", SearchOption.TopDirectoryOnly).ToList();
+            files.Sort(StringComparer.CurrentCulture);
+
+            int i = 0;
             foreach (string bpPath in files)
             {
-                Add(new Command(bpPath));
+                Add(new Command(bpPath, ++i));
             }
         }
         public CollectionCommands Clone()
@@ -31,9 +35,12 @@ namespace ProcessFilter.SPA
 
     public class Command : ObjectTempalte
     {
-        public Command(string path):base(path)
+        public Command(string path, int id):base(path, id)
         {
             
         }
+
+        [DGVColumn(ColumnPosition.Before, "Command")]
+        public override string Name { get; protected set; }
     }
 }

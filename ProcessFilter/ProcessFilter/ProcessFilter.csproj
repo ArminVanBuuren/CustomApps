@@ -38,8 +38,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\CustomApp\FastColoredTextBox\FastColoredTextBox\bin\Release\FastColoredTextBox.dll</HintPath>
     </Reference>
-    <Reference Include="FormUtils">
-      <HintPath>..\..\..\CustomApp\Utils\FormUtils\bin\Release\FormUtils.dll</HintPath>
+    <Reference Include="FormUtils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\CustomApp\Utils\FormUtils\bin\Debug\FormUtils.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
