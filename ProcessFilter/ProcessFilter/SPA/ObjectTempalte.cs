@@ -18,7 +18,7 @@ namespace ProcessFilter.SPA
         {
             ID = id;
             Name = path.GetLastNameInPath(true);
-            Path = path;
+            FilePath = path;
         }
 
         public static bool CheckRow(object obj)
@@ -37,7 +37,7 @@ namespace ProcessFilter.SPA
         public virtual string Name { get; protected set; }
 
         [DGVColumn(ColumnPosition.Last, "File Path")]
-        public virtual string Path { get; }
+        public virtual string FilePath { get; }
 
         public override string ToString()
         {

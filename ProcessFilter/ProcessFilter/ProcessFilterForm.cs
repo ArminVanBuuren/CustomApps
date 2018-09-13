@@ -147,7 +147,7 @@ namespace ProcessFilter
 
                     if (ops.Count > 0)
                     {
-                        NetworkElement fileteredElementAndOps = new NetworkElement(nec.Path, nec.ID, ops);
+                        NetworkElement fileteredElementAndOps = new NetworkElement(nec.FilePath, nec.ID, ops);
                         netElemCollection2.Add(fileteredElementAndOps);
                     }
                 }
@@ -157,7 +157,7 @@ namespace ProcessFilter
             int endOfBpCollection = bpCollection.Count;
             for (int i = 0; i < endOfBpCollection; i++)
             {
-                XmlDocument document = XmlHelper.LoadXml(bpCollection[i].Path, true);
+                XmlDocument document = XmlHelper.LoadXml(bpCollection[i].FilePath, true);
                 if (document != null)
                 {
                     bpCollection[i].AddBodyOperations(document);

@@ -77,7 +77,7 @@ namespace ProcessFilter.SPA
             Commands.Clear();
             SubScenarios.Clear();
 
-            ParceScenario allfinded = ParceXmlScenario(Path);
+            ParceScenario allfinded = ParceXmlScenario(FilePath);
             if (allfinded == null)
                 return false;
 
@@ -113,7 +113,7 @@ namespace ProcessFilter.SPA
             prsCs.SubScenarios = EvaluateXPath(document, @"//parameterslist/param[@name='scenario']/@value");
 
             int i = -1;
-            string getParentDirectory = Path.GetParentDirectoryInPath();
+            string getParentDirectory = FilePath.GetParentDirectoryInPath();
             for (var index = 0; index < prsCs.SubScenarios.Count; index++)
             {
                 string subScenario = prsCs.SubScenarios[index];
@@ -125,7 +125,7 @@ namespace ProcessFilter.SPA
                 }
                 else
                 {
-                    subScenarioPath = $"{getParentDirectory}\\{subScenario}.xml";
+                    subScenarioPath = Path.GetFullPath($"{getParentDirectory}\\{subScenario}.xml");
                     if (File.Exists(subScenarioPath))
                     {
                         prsCs.SubScenarios[i] = subScenarioPath;
