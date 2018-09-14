@@ -1006,10 +1006,13 @@
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\SCG\DeleteSubscription.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Scenarios\ReSubscribeFRINSPECTAdd.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Scenarios\ReSubscribeFRINSPECTDelete.xml" />
+    <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\SCG\ReSubscribeFRINSPECTAdd.xml" />
+    <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\SCG\ReSubscribeFRINSPECTDelete.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\SCG\ReSubscribeSCGAdd.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\SCG\ReSubscribeSCGDelete.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\SCG\SubDeleteSubscriberOnSCG.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Scenarios\SynchronizeOnSCG.xml" />
+    <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\SCG\SynchronizeOnSCG.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\SCG\UpdateSubscription.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\SCP\AddFRPOLDOVSCP.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\SCP\ChangeBillingGroupOnFP.xml" />
@@ -1804,7 +1807,6 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.RBT.INTECH\Emulation\printout.failure.txt" />
     <Content Include="EDITION\SPA.SA\SPA.SA.RBT.INTECH\Emulation\printout.success.txt" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Commands\ADD_MAPSERVER_OSC.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Commands\ChangeMSISDNOnSCG.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Commands\DELETE_MAPSERVER_OSC0.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCG\configuration.application.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCG\configuration.common.xml" />

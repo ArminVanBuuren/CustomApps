@@ -98,10 +98,7 @@ namespace ProcessFilter
                 else
                     getCollection = Processes.Where(p => p.Name.Equals(ProcessesComboBox.Text, StringComparison.CurrentCultureIgnoreCase));
 
-                foreach (var bp in getCollection)
-                {
-                    bpCollection.Add(bp);
-                }
+                bpCollection.AddRange(getCollection);
             }
             else
             {
@@ -111,10 +108,13 @@ namespace ProcessFilter
             if (!NetSettComboBox.Text.IsNullOrEmpty())
             {
                 netElemCollection = new NetworkElementCollection();
-                foreach (NetworkElement netElem in NetElements.Elements.Where(p => p.Name.Equals(NetSettComboBox.Text, StringComparison.CurrentCultureIgnoreCase)))
-                {
-                    netElemCollection.Add(netElem.Clone());
-                }
+                IEnumerable<NetworkElement> getCollection;
+                if (NetSettComboBox.Text[0] == '%' || NetSettComboBox.Text[NetSettComboBox.Text.Length - 1] == '%')
+                    getCollection = NetElements.Elements.Where(p => p.Name.IndexOf(NetSettComboBox.Text.Replace("%", ""), StringComparison.CurrentCultureIgnoreCase) != -1);
+                else
+                    getCollection = NetElements.Elements.Where(p => p.Name.Equals(NetSettComboBox.Text, StringComparison.CurrentCultureIgnoreCase));
+
+                netElemCollection.AddRange(getCollection.Select(netElem => netElem.Clone()));
             }
             else
             {
@@ -161,7 +161,8 @@ namespace ProcessFilter
                 if (document != null)
                 {
                     bpCollection[i].AddBodyOperations(document);
-                    bool hasMatch = bpCollection[i].Operations.Any(x => netElemCollection.AllOperationsName.Any(y => x.IndexOf(y, StringComparison.CurrentCultureIgnoreCase) != -1));
+                    //bool hasMatch = bpCollection[i].Operations.Any(x => netElemCollection.AllOperationsName.Any(y => x.IndexOf(y, StringComparison.CurrentCultureIgnoreCase) != -1));
+                    bool hasMatch = bpCollection[i].Operations.Any(x => netElemCollection.AllOperationsName.Any(y => x.Equals(y, StringComparison.CurrentCultureIgnoreCase)));
 
                     if (!hasMatch)
                     {

@@ -53,18 +53,20 @@
     <RFS name="RFS_SCG_SUBSCRIPTION"  hostType="SCG" description="Добавить подписку абонента на SCG" />
   </RFSList>
   <CFSList>
-    <CFS name="Subscriber" priority="1" type="ManagedObject" description="Абонент" />
-    <CFS name="ChangeMsisdn" description="Изменение номера">
-      <RFS name="RFS_SCG_CHANGE_MSISDN" linkType="Add" dependsOn="RFS_SCG_SUBSCRIBER" />
-    </CFS>
-    <CFS name="ChangeTP" description="Изменение ТП">
-      <RFS name="RFS_SCG_CHANGE_PLATFORM" linkType="Add" dependsOn="RFS_SCG_SUBSCRIBER" />
+    <CFS name="Subscriber" priority="1" type="ManagedObject" description="Абонент" >
+      <RFS name="RFS_SCG_SUBSCRIBER" linkType="Add" />
     </CFS>
     <CFS name="CB406278" description="Мобильный интернет">
       <RFS name="RFS_SCG_SUBSCRIBER" linkType="Add" />
     </CFS>
     <CFS name="FRASKUE" description="АИИСКУЭ">
       <RFS name="RFS_SCG_SUBSCRIBER" linkType="Add" />
+    </CFS>
+    <CFS name="ChangeMsisdn" description="Изменение номера">
+      <RFS name="RFS_SCG_CHANGE_MSISDN" linkType="Add" dependsOn="RFS_SCG_SUBSCRIBER" />
+    </CFS>
+    <CFS name="ChangeTP" description="Изменение ТП">
+      <RFS name="RFS_SCG_CHANGE_PLATFORM" linkType="Add" dependsOn="RFS_SCG_SUBSCRIBER" />
     </CFS>
     <CFS name="SCPBREAKSESSION" description="Разрыв GPRS сессии на SCG">
       <RFS name="RFS_SCG_BREAKSESSION" linkType="Add" />

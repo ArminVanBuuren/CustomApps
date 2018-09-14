@@ -21,10 +21,6 @@
     <Constant Name="_MakroRegion" Value="2"/>
   </ConstantsList>
   <ParametersList>
-    <Parameter Name="NewMsisdn">
-      <Source Path="ExtendedRequestMessage/AdditionalData//NewMSISDN"/>
-      <PossibleValues StringToKeyTable="true"/>
-    </Parameter>
     <Parameter Name="Profile">
       <Source Path="//AddList//RES_SCG_PROFILE/Value[text()!='']"/>
       <PossibleValues StringToKeyTable="true"/>
