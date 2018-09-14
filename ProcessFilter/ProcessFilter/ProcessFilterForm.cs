@@ -238,13 +238,11 @@ namespace ProcessFilter
 
         private void DataGridScenariosResult_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            DataGridViewRow row = dataGridScenariosResult.Rows[e.RowIndex];// get you required index
-            // check the cell value under your specific column and then you can toggle your colors
+            DataGridViewRow row = dataGridScenariosResult.Rows[e.RowIndex];
             if (row.Cells[0].Value.ToString() == "-1")
             {
                 row.DefaultCellStyle.BackColor = Color.Yellow;
             }
-
         }
 
         private void dataGridProcessesResults_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
