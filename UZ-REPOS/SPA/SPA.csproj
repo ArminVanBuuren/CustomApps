@@ -3082,6 +3082,7 @@
     <None Include="PROD-ACTUAL\SPA.SA\Scenarios\SCP\ChangeTPOnFINPlatform.xml.new" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="EDITION\DOC\MST\" />
     <Folder Include="EDITION\ROBP\Operations\CT4\" />
     <Folder Include="EDITION\ROBP\Operations\CT6\" />
     <Folder Include="EDITION\SPA.SA\SPA.SA.MCA\Commands\" />
