@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scenario name="ReSubscribeFRINSPECTDelete">
+<scenario name="SC.SCG.Subscription.Delete">
   <objectList>
     <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
@@ -14,24 +14,24 @@
     <object name="XmlNodesReplacer" class="FORIS.ScenarioProcessing.CommonUnits.XmlReplacerConditional" assembly="FORIS.SPA.SPF.dll"/>
     <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
   </objectList>
-  <automat>
-    <node name="BySubscribersSplitter" object="BySubscribersSplitter">
-      <resultlist>
-        <result value="0" node="BySubscriberRequestDequeuer"/>
-      </resultlist>
-      <parameterslist>
-        <param name="queueName" value="requestsSplittedBySubscriberQueue"/>
-      </parameterslist>
-    </node>
-    <node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
-      <resultlist>
-        <result value="0" node="GetTP"/>
-        <result value="1" node=""/>
-      </resultlist>
-      <parameterslist>
-        <param name="queueName" value="requestsSplittedBySubscriberQueue"/>
-      </parameterslist>
-    </node>
+	<automat>
+		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
+			<resultlist>
+				<result value="0" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+			<resultlist>
+				<result value="0" node="GetTP"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
     <node name="GetTP" object="DataBaseProcessor">
       <resultlist>
         <result value="" node="ExtractTP"/>
@@ -114,31 +114,31 @@
       </parameterslist>
     </node>
     <node name="DeleteSubscription" object="Commander">
-      <resultlist>
-        <result value="" node="ResponseAssembler"/>
-      </resultlist>
-      <parameterslist>
-        <!--<param name="Session:Url" value="services/BasicServices"/>-->
-        <param name="Command" value="DeleteSubscription"/>
-        <param name="Script" value="Command"/>
-        <param name="ErrorDecodingType" value="ByRegexp"/>
-        <param name="CommandSource" value="Dictionary"/>
-      </parameterslist>
-    </node>
-    <node name="dummySUCCESS" object="DummyResponder">
-      <resultlist>
-        <result value="" node="ResponseAssembler"/>
-      </resultlist>
-      <parameterslist>
-        <param name="OverallResult" value="SUCCESS"/>
-        <param name="DetailedResult" value="SUCCESS"/>
-        <param name="Delay" value="0"/>
-      </parameterslist>
-    </node>
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Session:Url" value="services/BasicServices"/>
+				<param name="Command" value="SubscriptionDelete"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByRegexp"/>
+				<param name="CommandSource" value="Dictionary"/>
+			</parameterslist>
+		</node>
+	  <node name="dummySUCCESS" object="DummyResponder">
+	    <resultlist>
+	      <result value="" node="ResponseAssembler"/>
+	    </resultlist>
+	    <parameterslist>
+	      <param name="OverallResult" value="SUCCESS"/>
+	      <param name="DetailedResult" value="SUCCESS"/>
+	      <param name="Delay" value="0"/>
+	    </parameterslist>
+	  </node>
     <node name="ResponseAssembler" object="ResponseAssembler">
-      <resultlist>
-        <result value="" node="BySubscriberRequestDequeuer"/>
-      </resultlist>
-    </node>
-  </automat>
+			<resultlist>
+				<result value="" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
 </scenario>

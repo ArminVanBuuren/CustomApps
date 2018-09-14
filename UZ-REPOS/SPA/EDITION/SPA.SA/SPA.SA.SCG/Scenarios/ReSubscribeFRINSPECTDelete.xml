@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scenario name="ReSubscribeFRINSPECTAdd">
+<scenario name="ReSubscribeFRINSPECTDelete">
   <objectList>
     <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
@@ -91,7 +91,7 @@
     </node>
     <node name="AddInspectNewTP" object="XmlNodesCopier">
       <resultlist>
-        <result value="" node="AddSubscription"/>
+        <result value="" node="DeleteSubscription"/>
       </resultlist>
       <parameterslist>
         <param name="SrcXml" value="xmlrequest"/>
@@ -103,7 +103,7 @@
     </node>
     <node name="AddInspectOldTP" object="XmlNodesCopier">
       <resultlist>
-        <result value="" node="AddSubscription"/>
+        <result value="" node="DeleteSubscription"/>
       </resultlist>
       <parameterslist>
         <param name="SrcXml" value="xmlrequest"/>
@@ -113,13 +113,13 @@
         <param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/InspectID"/>
       </parameterslist>
     </node>
-    <node name="AddSubscription" object="Commander">
+    <node name="DeleteSubscription" object="Commander">
       <resultlist>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <!--<param name="Session:Url" value="services/BasicServices"/>-->
-        <param name="Command" value="AddSubscription"/>
+        <param name="Session:Url" value="services/BasicServices"/>
+        <param name="Command" value="SubscriptionDelete"/>
         <param name="Script" value="Command"/>
         <param name="ErrorDecodingType" value="ByRegexp"/>
         <param name="CommandSource" value="Dictionary"/>

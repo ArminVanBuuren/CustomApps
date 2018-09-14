@@ -36,6 +36,10 @@
         <Item Key="05" StringValue="0"/>
       </PossibleValues>
     </Parameter>
+    <Parameter Name="InspectID">
+      <Source Path="ExtendedRequestMessage/AdditionalData/InspectID"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
   </ParametersList>
   <DynamicParametersList/>
   <CommandsList Root="Commands" Mask="*.xml">

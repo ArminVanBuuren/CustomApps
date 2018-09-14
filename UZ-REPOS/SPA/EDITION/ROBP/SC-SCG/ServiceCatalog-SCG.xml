@@ -50,6 +50,7 @@
         <Value hosts="FP:MS" value="1" />
       </Resource>
     </RFS>
+    <RFS name="RFS_SCG_SUBSCRIPTION"  hostType="SCG" description="Добавить подписку абонента на SCG" />
   </RFSList>
   <CFSList>
     <CFS name="Subscriber" priority="1" type="ManagedObject" description="Абонент" />
@@ -67,6 +68,9 @@
     </CFS>
     <CFS name="SCPBREAKSESSION" description="Разрыв GPRS сессии на SCG">
       <RFS name="RFS_SCG_BREAKSESSION" linkType="Add" />
+    </CFS>
+    <CFS name="FRINSPECT" description="Инспектор">
+      <RFS name="RFS_SCG_SUBSCRIPTION" linkType="Add" />
     </CFS>
   </CFSList>
   <CFSGroupList >
@@ -89,6 +93,12 @@
     </Scenario>
     <Scenario name="SCG.ChangePlatform" description="Изменение профайла на SCG">
       <RFS name="RFS_SCG_CHANGE_PLATFORM" scenarioType="Add" />
+    </Scenario>
+    <Scenario name="SCG.Subscription.Add" description="Добавить подписку абонента на SCG">
+      <RFS name="RFS_SCG_SUBSCRIPTION" scenarioType="Add" />
+    </Scenario>
+    <Scenario name="SCG.Subscription.Delete" description="Удалить подписку абонента на SCG">
+      <RFS name="RFS_SCG_SUBSCRIPTION" scenarioType="Remove" />
     </Scenario>
   </ScenarioList>
   <WfmScenarioList />
