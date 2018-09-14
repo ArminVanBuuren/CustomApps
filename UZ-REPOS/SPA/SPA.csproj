@@ -108,6 +108,7 @@
     <Content Include="EDITION\ROBP\Processes\Assign 3G Services.xml" />
     <Content Include="EDITION\ROBP\Processes\Assign APNs.xml" />
     <Content Include="EDITION\ROBP\Processes\Assign InOut Services.xml" />
+    <Content Include="EDITION\ROBP\Processes\Assign Services Content.xml" />
     <Content Include="EDITION\ROBP\Processes\Assign Services on Financial Platform.xml" />
     <Content Include="EDITION\ROBP\Processes\Assign Services SCG.xml" />
     <Content Include="EDITION\ROBP\Processes\Assign Services.xml" />
@@ -129,6 +130,7 @@
     <Content Include="EDITION\ROBP\Processes\IVR Caller.xml" />
     <Content Include="EDITION\ROBP\Processes\Remove 3G Services.xml" />
     <Content Include="EDITION\ROBP\Processes\Remove InOut Services.xml" />
+    <Content Include="EDITION\ROBP\Processes\Remove Services Content.xml" />
     <Content Include="EDITION\ROBP\Processes\Remove Services from Financial Platform.xml" />
     <Content Include="EDITION\ROBP\Processes\Remove Services SCG.xml" />
     <Content Include="EDITION\ROBP\Processes\Remove Services.xml" />
@@ -3026,6 +3028,8 @@
     <Content Include="PROD-ACTUAL\SPA.SA\Schemas\SMSC\Normal\Schema.Tracers.xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="EDITION\DOC\ALLPLAY\Модель услуг CT6.xlsx" />
+    <None Include="EDITION\DOC\ALLPLAY\Перевод управления CT6 на SC.v0.1.docx" />
     <None Include="EDITION\DOC\SCG\Анализ настроек.docx" />
     <None Include="EDITION\DOC\SPA_Stat_2018.09.12.xlsx" />
     <None Include="PROD-2018.09.06\rd_service.xlsx" />

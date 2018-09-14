@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="ChangeMSISDNOnALLPLAY" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description>AddALLPLAY</Description>
+	<Description>Изменение номера на ALLPLAY</Description>
 	<Author Name="Timur Khamzin" Date="2017-07-31+15:00"/>
   <Request>
     <RequestTemplate>

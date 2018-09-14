@@ -30,27 +30,26 @@
     </RFS>
   </RFSList>
   <CFSList>
+    <CFS name="Subscriber" priority="1" type="ManagedObject" description="Абонент на ALLPLAY">
+      <RFS name="RFS_ALLPLAY_SUBSCRIPTION" linkType="Add" />
+    </CFS>
     <CFS name="ChangeMsisdn" description="Изменение номера">
       <RFS name="RFS_ALLPLAY_CHANGE_MSISDN" linkType="Add" dependsOn="RFS_ALLPLAY_SUBSCRIPTION" />
     </CFS>
-    <CFS name="FRMOBTV" description="FRMOBTV">
+    <CFS name="FRMOBTV" description="Мобильное ТВ">
       <RFS name="RFS_ALLPLAY_SUBSCRIPTION" linkType="Add" />
     </CFS>
-    <CFS name="FRMOBTVTEST" description="FRMOBTVTEST">
+    <CFS name="FRMOBTVTEST" description="Мобильное ТВ тест">
       <RFS name="RFS_ALLPLAY_SUBSCRIPTION" linkType="Add" />
     </CFS>
-    <CFS name="FRMOBTV1D" description="FRMOBTV1D">
+    <CFS name="FRMOBTV1D" description="Мобильное ТВ 1 день">
       <RFS name="RFS_ALLPLAY_SUBSCRIPTION" linkType="Add" />
     </CFS>
-    <CFS name="FRMOBTV7D" description="FRMOBTV7D">
+    <CFS name="FRMOBTV7D" description="Мобильное ТВ 7 дней">
       <RFS name="RFS_ALLPLAY_SUBSCRIPTION" linkType="Add" />
     </CFS>
   </CFSList>
   <CFSGroupList >
-    <CFSGroup name="CFS_GROUP_SCG" type="Mutex" description="Взаимоисключающие услуги для ТП">
-      <CFS name="FRAPABSOLUT" />
-      <CFS name="FRAPOPTIMA" />
-    </CFSGroup>
   </CFSGroupList>
   <RFSGroupList />
   <RFSDependencyList />
