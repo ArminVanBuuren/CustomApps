@@ -57,6 +57,11 @@ namespace WCFChat.Client
             currentClient = new MainWindowChatClient(this);
         }
 
+        public void UpdateProxy(MainContractClient newMainProxy)
+        {
+            mainProxy = newMainProxy ?? throw new ArgumentException(nameof(MainContractClient));
+        }
+
         void IMainContractCallback.RequestForAccess(User user, string address)
         {
             if (currentServer != null)
@@ -74,10 +79,7 @@ namespace WCFChat.Client
             mainProxy?.RemoveOrAccessUser(result, user);
         }
 
-        public void UpdateProxy(MainContractClient newMainProxy)
-        {
-            mainProxy = newMainProxy ?? throw new ArgumentException(nameof(MainContractClient));
-        }
+
 
         private void AddCloud_OnClick(object sender, RoutedEventArgs e)
         {
@@ -127,120 +129,144 @@ namespace WCFChat.Client
 
         Grid AddWaitCloudToListbox(Cloud cloud, string trnID, bool isAdmin)
         {
-            Grid grd = new Grid();
-            grd.ToolTip = trnID;
-            grd.Children.Add(new ProgressBar() { IsIndeterminate = true });
-            AddStackText(grd, cloud, isAdmin);
-            NameOfCloud.Items.Add(grd);
+            Grid grd = null;
+            Dispatcher?.Invoke(() =>
+            {
+                grd = new Grid();
+                grd.ToolTip = trnID;
+                grd.Children.Add(new ProgressBar() {IsIndeterminate = true});
+                AddStackText(grd, cloud, isAdmin);
+                NameOfCloud.Items.Add(grd);
+            });
             return grd;
         }
 
         Grid AddCloudToListbox(Cloud cloud, string trnID, bool isAdmin)
         {
-            Grid grd = new Grid();
-            grd.ToolTip = trnID;
-            AddStackText(grd, cloud, isAdmin);
-            NameOfCloud.Items.Add(grd);
+            Grid grd = null;
+            Dispatcher?.Invoke(() =>
+            {
+                grd = new Grid();
+                grd.ToolTip = trnID;
+                AddStackText(grd, cloud, isAdmin);
+                NameOfCloud.Items.Add(grd);
+                return grd;
+            });
             return grd;
         }
 
         void AddStackText(Grid grd, Cloud cloud, bool isAdmin)
         {
-            if (isAdmin)
+            Dispatcher?.Invoke(() =>
             {
-                StackPanel curentCloud = new StackPanel();
-                curentCloud.Orientation = Orientation.Horizontal;
-                CheckBox unbind = new CheckBox();
-                unbind.VerticalAlignment = VerticalAlignment.Center;
-                unbind.Margin = new Thickness(0, 0, 0, -4);
-                unbind.ToolTip = "Unbind chat from main server";
-                unbind.Checked += Unbind_Checked;
-                curentCloud.Children.Add(new TextBlock() { Margin = new Thickness(5, 0, 5, 0), Text = cloud.Name ?? cloud.Address });
-                curentCloud.Children.Add(unbind);
-                grd.Children.Add(curentCloud);
-            }
-            else
-            {
-                grd.Children.Add(new TextBlock() { Margin = new Thickness(5, 0, 5, 0), Text = cloud.Name ?? cloud.Address });
-            }
+                if (isAdmin)
+                {
+                    StackPanel curentCloud = new StackPanel();
+                    curentCloud.Orientation = Orientation.Horizontal;
+                    CheckBox unbind = new CheckBox();
+                    unbind.VerticalAlignment = VerticalAlignment.Center;
+                    unbind.Margin = new Thickness(0, 0, 0, -4);
+                    unbind.ToolTip = "Unbind chat from main server";
+                    unbind.Checked += Unbind_Checked;
+                    curentCloud.Children.Add(new TextBlock() {Margin = new Thickness(5, 0, 5, 0), Text = cloud.Name ?? cloud.Address});
+                    curentCloud.Children.Add(unbind);
+                    grd.Children.Add(curentCloud);
+                }
+                else
+                {
+                    grd.Children.Add(new TextBlock() {Margin = new Thickness(5, 0, 5, 0), Text = cloud.Name ?? cloud.Address});
+                }
+            });
         }
 
         private void Unbind_Checked(object sender, RoutedEventArgs e)
         {
-            CheckBox unbindChk = (CheckBox)sender;
-            unbindChk.IsEnabled = false;
-
-            if (mainProxy != null)
+            Dispatcher?.Invoke(() =>
             {
-                StackPanel panel = (StackPanel)unbindChk.Parent;
-                Grid grid = (Grid)panel.Parent;
-                mainProxy.UnbindAsync(grid.ToolTip.ToString());
-            }
+                CheckBox unbindChk = (CheckBox) sender;
+                unbindChk.IsEnabled = false;
+
+                if (mainProxy != null)
+                {
+                    StackPanel panel = (StackPanel) unbindChk.Parent;
+                    Grid grid = (Grid) panel.Parent;
+                    mainProxy.UnbindAsync(grid.ToolTip.ToString());
+                }
+            });
         }
 
         void ActiveWaitCloud(Grid grid)
         {
-            foreach (var item in grid.Children)
+            Dispatcher?.Invoke(() =>
             {
-                if (item is ProgressBar progressBar)
+                foreach (var item in grid.Children)
                 {
-                    grid.Children.Remove(progressBar);
-                    return;
+                    if (item is ProgressBar progressBar)
+                    {
+                        grid.Children.Remove(progressBar);
+                        return;
+                    }
                 }
-            }
+            });
         }
 
         void RemoveWaitCloud(Grid grid, string trnID)
         {
-            NameOfCloud.Items.Remove(grid);
-            lock (sync)
+            Dispatcher?.Invoke(() =>
             {
-                listBoxAllClouds.Remove(trnID);
-            }
+                NameOfCloud.Items.Remove(grid);
+                lock (sync)
+                {
+                    listBoxAllClouds.Remove(trnID);
+                }
+            });
         }
 
         void IMainContractCallback.CreateCloudResult(CloudResult result, string transactionID)
         {
-            InnerWaiterCloud createCloud;
-            lock (sync)
+            Dispatcher?.Invoke(() =>
             {
-                bool isWaiting = listBoxAllClouds.TryGetValue(transactionID, out createCloud);
-
-                if (!isWaiting)
-                    return;
-            }
-
-            try
-            {
-                switch (result)
+                InnerWaiterCloud createCloud;
+                lock (sync)
                 {
-                    case CloudResult.SUCCESS:
-                        if (currentServer.CreateCloud(createCloud.User, createCloud.Cloud, transactionID))
-                            ActiveWaitCloud(createCloud.Grid);
-                        else
-                        {
-                            Informing($"Cloud name '{createCloud.Cloud?.Name}' already exist. Cloud must have unique name.");
-                            RemoveWaitCloud(createCloud.Grid, transactionID);
-                        }
-                        break;
-                    case CloudResult.CloudIsBusy:
-                        Informing($"Cloud '{createCloud.Cloud?.Name}' is busy! Choose another name.");
-                        RemoveWaitCloud(createCloud.Grid, transactionID);
-                        break;
-                    case CloudResult.CloudNotFound:
-                    case CloudResult.FAILURE:
-                        Informing($"Unknown MainServer-Error when create Cloud '{createCloud.Cloud?.Name}'.");
-                        RemoveWaitCloud(createCloud.Grid, transactionID);
-                        break;
-                    default:
-                        break;
+                    bool isWaiting = listBoxAllClouds.TryGetValue(transactionID, out createCloud);
+
+                    if (!isWaiting)
+                        return;
                 }
-            }
-            catch (Exception ex)
-            {
-                Informing($"Exception '{ex}' when create Cloud '{createCloud.Cloud?.Name}'.");
-                RemoveWaitCloud(createCloud.Grid, transactionID);
-            }
+
+                try
+                {
+                    switch (result)
+                    {
+                        case CloudResult.SUCCESS:
+                            if (currentServer.CreateCloud(createCloud.User, createCloud.Cloud, transactionID))
+                                ActiveWaitCloud(createCloud.Grid);
+                            else
+                            {
+                                Informing($"Cloud name '{createCloud.Cloud?.Name}' already exist. Cloud must have unique name.");
+                                RemoveWaitCloud(createCloud.Grid, transactionID);
+                            }
+                            break;
+                        case CloudResult.CloudIsBusy:
+                            Informing($"Cloud '{createCloud.Cloud?.Name}' is busy! Choose another name.");
+                            RemoveWaitCloud(createCloud.Grid, transactionID);
+                            break;
+                        case CloudResult.CloudNotFound:
+                        case CloudResult.FAILURE:
+                            Informing($"Unknown MainServer-Error when create Cloud '{createCloud.Cloud?.Name}'.");
+                            RemoveWaitCloud(createCloud.Grid, transactionID);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Informing($"Exception '{ex}' when create Cloud '{createCloud.Cloud?.Name}'.");
+                    RemoveWaitCloud(createCloud.Grid, transactionID);
+                }
+            });
         }
 
         private void Auth_IsConnect(User user, Cloud cloud)
@@ -286,78 +312,84 @@ namespace WCFChat.Client
 
         void IMainContractCallback.GetCloudResult(ServerResult result, Cloud cloud, string transactionID)
         {
-            InnerWaiterCloud createCloud;
-            lock (sync)
+            Dispatcher?.Invoke(() =>
             {
-                bool isWaiting = listBoxAllClouds.TryGetValue(transactionID, out createCloud);
-
-                if (!isWaiting)
-                    return;
-            }
-
-            try
-            {
-                switch (result)
+                InnerWaiterCloud createCloud;
+                lock (sync)
                 {
-                    case ServerResult.AccessGranted:
-                    case ServerResult.SUCCESS:
-                        currentClient.JoinToCloud(createCloud.User, cloud, transactionID);
-                        ActiveWaitCloud(createCloud.Grid);
-                        break;
-                    case ServerResult.CloudNotFound:
-                        Informing($"Cloud '{createCloud.User?.CloudName}' not found on Mainserver!");
-                        RemoveWaitCloud(createCloud.Grid, transactionID);
-                        break;
-                    case ServerResult.NameIsBusy:
-                        Informing($"Nick name '{createCloud.User?.Name}' in Cloud '{createCloud.User?.CloudName}' is busy! Try again.");
-                        RemoveWaitCloud(createCloud.Grid, transactionID);
-                        break;
-                    case ServerResult.AccessDenied:
-                        Informing($"Access is denied for access to the Cloud '{createCloud.User?.CloudName}'.");
-                        RemoveWaitCloud(createCloud.Grid, transactionID);
-                        break;
-                    case ServerResult.AwaitConfirmation:
-                    case ServerResult.YourRequestInProgress:
-                        Informing($"Your request for access to the Cloud '{createCloud.User?.CloudName}' in progress.");
-                        RemoveWaitCloud(createCloud.Grid, transactionID);
+                    bool isWaiting = listBoxAllClouds.TryGetValue(transactionID, out createCloud);
+
+                    if (!isWaiting)
                         return;
-                    case ServerResult.FAILURE:
-                        Informing($"MainServer-error when get Cloud '{createCloud.User?.CloudName}'!");
-                        RemoveWaitCloud(createCloud.Grid, transactionID);
-                        break;
-                    default:
-                        Informing($"Result:{result}!");
-                        RemoveWaitCloud(createCloud.Grid, transactionID);
-                        break;
                 }
-            }
-            catch (Exception ex)
-            {
-                Informing($"Exception '{ex}' when get Cloud '{createCloud.User?.CloudName}'.");
-                RemoveWaitCloud(createCloud.Grid, transactionID);
-            }
+
+                try
+                {
+                    switch (result)
+                    {
+                        case ServerResult.AccessGranted:
+                        case ServerResult.SUCCESS:
+                            currentClient.JoinToCloud(createCloud.User, cloud, transactionID);
+                            ActiveWaitCloud(createCloud.Grid);
+                            break;
+                        case ServerResult.CloudNotFound:
+                            Informing($"Cloud '{createCloud.User?.CloudName}' not found on Mainserver!");
+                            RemoveWaitCloud(createCloud.Grid, transactionID);
+                            break;
+                        case ServerResult.NameIsBusy:
+                            Informing($"Nick name '{createCloud.User?.Name}' in Cloud '{createCloud.User?.CloudName}' is busy! Try again.");
+                            RemoveWaitCloud(createCloud.Grid, transactionID);
+                            break;
+                        case ServerResult.AccessDenied:
+                            Informing($"Access is denied for access to the Cloud '{createCloud.User?.CloudName}'.");
+                            RemoveWaitCloud(createCloud.Grid, transactionID);
+                            break;
+                        case ServerResult.AwaitConfirmation:
+                        case ServerResult.YourRequestInProgress:
+                            Informing($"Your request for access to the Cloud '{createCloud.User?.CloudName}' in progress.");
+                            RemoveWaitCloud(createCloud.Grid, transactionID);
+                            return;
+                        case ServerResult.FAILURE:
+                            Informing($"MainServer-error when get Cloud '{createCloud.User?.CloudName}'!");
+                            RemoveWaitCloud(createCloud.Grid, transactionID);
+                            break;
+                        default:
+                            Informing($"Result:{result}!");
+                            RemoveWaitCloud(createCloud.Grid, transactionID);
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Informing($"Exception '{ex}' when get Cloud '{createCloud.User?.CloudName}'.");
+                    RemoveWaitCloud(createCloud.Grid, transactionID);
+                }
+            });
         }
 
         private void RemoveCloud_OnClick(object sender, RoutedEventArgs e)
         {
-            object selectedItem = NameOfCloud.SelectedItem;
-            var selectedListBoxItem = NameOfCloud.ItemContainerGenerator.ContainerFromItem(selectedItem);
-            if (selectedListBoxItem is Grid grid)
+            Dispatcher?.Invoke(() =>
             {
-                lock (sync)
+                object selectedItem = NameOfCloud.SelectedItem;
+                var selectedListBoxItem = NameOfCloud.ItemContainerGenerator.ContainerFromItem(selectedItem);
+                if (selectedListBoxItem is Grid grid)
                 {
-                    if (listBoxAllClouds.TryGetValue(grid.ToolTip.ToString(), out var res))
+                    lock (sync)
                     {
-                        if (res.IsCurrentServer)
-                            currentServer.RemoveCloud(res.Cloud);
-                        //todo: удаление подключения с клиента
+                        if (listBoxAllClouds.TryGetValue(grid.ToolTip.ToString(), out var res))
+                        {
+                            if (res.IsCurrentServer)
+                                currentServer.RemoveCloud(res.Cloud);
+                            //todo: удаление подключения с клиента
 
 
-                        listBoxAllClouds.Remove(grid.ToolTip.ToString());
+                            listBoxAllClouds.Remove(grid.ToolTip.ToString());
+                        }
                     }
+                    NameOfCloud.Items.Remove(selectedListBoxItem);
                 }
-                NameOfCloud.Items.Remove(selectedListBoxItem);
-            }
+            });
         }
 
         private void ChooseCloud(object sender, RoutedEventArgs e)

@@ -111,112 +111,112 @@ namespace WCFChat.Client.BasicControl
 
         public void ConnectResult(ServerResult result)
         {
-            ChatWaiter chat;
-            currentWaiterToCloud.TryGetValue()
+            //ChatWaiter chat;
+            //currentWaiterToCloud.TryGetValue()
 
-            switch (result)
-            {
-                case ServerResult.AccessGranted:
-                case ServerResult.SUCCESS:
-                    WindowControl control = new WindowControl(mainWindow, initiator, joinToCloud, transactionId);
-                    Clouds.Add(control);
-                    break;
-                case ServerResult.CloudNotFound:
-                    break;
-                case ServerResult.NameIsBusy:
-                    break;    
-                case ServerResult.AccessDenied:
-                    break;
-                case ServerResult.AwaitConfirmation:
-                case ServerResult.YourRequestInProgress:
-                    return;
-                case ServerResult.FAILURE:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(result), result, null);
-            }
+            //switch (result)
+            //{
+            //    case ServerResult.AccessGranted:
+            //    case ServerResult.SUCCESS:
+            //        WindowControl control = new WindowControl(mainWindow, initiator, joinToCloud, transactionId);
+            //        Clouds.Add(control);
+            //        break;
+            //    case ServerResult.CloudNotFound:
+            //        break;
+            //    case ServerResult.NameIsBusy:
+            //        break;    
+            //    case ServerResult.AccessDenied:
+            //        break;
+            //    case ServerResult.AwaitConfirmation:
+            //    case ServerResult.YourRequestInProgress:
+            //        return;
+            //    case ServerResult.FAILURE:
+            //        break;
+            //    default:
+            //        throw new ArgumentOutOfRangeException(nameof(result), result, null);
+            //}
         }
 
         public void IsWritingCallback(User client, bool isWriting)
         {
-            lock (sync)
-            {
-                try
-                {
-                    UserBindings userBind;
-                    if (!GetUserBinding(client, out userBind))
-                        return;
+            //lock (sync)
+            //{
+            //    try
+            //    {
+            //        UserBindings userBind;
+            //        if (!GetUserBinding(client, out userBind))
+            //            return;
 
-                    SomeoneUserIsWriting(userBind, isWriting);
+            //        SomeoneUserIsWriting(userBind, isWriting);
 
-                }
-                catch (Exception e)
-                {
+            //    }
+            //    catch (Exception e)
+            //    {
 
-                }
-            }
+            //    }
+            //}
         }
 
-        protected override void CurrentUserIsSaying(string msg)
+        protected void CurrentUserIsSaying(string msg)
         {
-            Message newMessage = new Message() {
-                                                   Sender = Initiator.User,
-                                                   Content = msg,
-                                                   Time = DateTime.Now
-                                               };
-            SomeoneUserReceveMessage(newMessage);
-            proxy?.SayAsync(newMessage);
+            //Message newMessage = new Message() {
+            //                                       Sender = Initiator.User,
+            //                                       Content = msg,
+            //                                       Time = DateTime.Now
+            //                                   };
+            //SomeoneUserReceveMessage(newMessage);
+            //proxy?.SayAsync(newMessage);
         }
 
-        protected override void CurrentUserIsWriting(bool isWriting)
+        protected  void CurrentUserIsWriting(bool isWriting)
         {
-            proxy?.IsWritingAsync(Initiator.User, isWriting);
+            //proxy?.IsWritingAsync(Initiator.User, isWriting);
         }
 
         public void Receive(Message msg)
         {
-            lock (sync)
-            {
-                try
-                {
-                    UserBindings userBind;
-                    if (!GetUserBinding(msg.Sender, out userBind))
-                        return;
+            //lock (sync)
+            //{
+            //    try
+            //    {
+            //        UserBindings userBind;
+            //        if (!GetUserBinding(msg.Sender, out userBind))
+            //            return;
 
-                    SomeoneUserReceveMessage(msg);
-                }
-                catch (Exception e)
-                {
+            //        SomeoneUserReceveMessage(msg);
+            //    }
+            //    catch (Exception e)
+            //    {
 
-                }
-            }
+            //    }
+            //}
         }
 
         public void Terminate(Cloud cloud)
         {
-            proxy?.Abort();
+            //proxy?.Abort();
         }
 
         public void TransferHistory(List<User> users, List<Message> messages)
         {
-            lock (sync)
-            {
-                try
-                {
-                    UpdateUserList(users);
-                    if (messages != null)
-                    {
-                        foreach (Message msg in messages)
-                        {
-                            SomeoneUserReceveMessage(msg);
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
+            //lock (sync)
+            //{
+            //    try
+            //    {
+            //        UpdateUserList(users);
+            //        if (messages != null)
+            //        {
+            //            foreach (Message msg in messages)
+            //            {
+            //                SomeoneUserReceveMessage(msg);
+            //            }
+            //        }
+            //    }
+            //    catch (Exception e)
+            //    {
 
-                }
-            }
+            //    }
+            //}
         }
 
         

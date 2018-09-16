@@ -26,11 +26,11 @@ namespace WCFChat.Client
         private Brush defaultBorderBrush;
         public Auth(string guid, string localAddressUri)
         {
+            InitializeComponent();
             defaultBorderBrush = NickName.BorderBrush;
             KeyDown += Auth_KeyDown;
             _guid = guid;
             _localAddressUri = localAddressUri;
-            InitializeComponent();
         }
 
         private void Auth_KeyDown(object sender, KeyEventArgs e)

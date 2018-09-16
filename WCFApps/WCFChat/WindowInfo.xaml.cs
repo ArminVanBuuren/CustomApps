@@ -14,10 +14,10 @@ namespace WCFChat.Client
 	    public event EventHandler DecisionAccepted;
 		public WindowInfo(string title, string message):base(false, false)
 		{
-		    Title = title;
+		    Initialize(message);
+            Title = title;
             InfoGrid.Visibility = Visibility.Visible;
 		    AcceptNewUser.Visibility = Visibility.Collapsed;
-            Initialize(message);
         }
 
 	    public WindowInfo(string message) : base(false, false)

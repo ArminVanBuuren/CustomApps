@@ -68,17 +68,17 @@ namespace WCFChat.Client
         {
             Dispatcher.Invoke(() =>
             {
-                if (!antecedent.Result)
-                { 
+                if (antecedent.Result)
+                {
+                    mainWin.Show();
+                    this.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
                     ErrorMessage.Visibility = Visibility.Visible;
                     WorkingProgressBar.Visibility = Visibility.Collapsed;
                     Title = "Error!";
                     ErrorMessage.Text = "Failed when connect to Mainserver";
-                }
-                else
-                {
-                    mainWin.Show();
-                    this.Visibility = Visibility.Collapsed;
                 }
             });
         }

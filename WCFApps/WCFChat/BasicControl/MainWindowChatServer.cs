@@ -14,14 +14,14 @@ using Message = WCFChat.Service.Message;
 namespace WCFChat.Client.BasicControl
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
-    class MainWindowChatServer : WCFChat.Service.IChat
+    public class MainWindowChatServer : WCFChat.Service.IChat
     {
         protected object sync = new object();
         private AccessResult OnRemoveOrAccessUser;
         public IChatCallback CurrentCallback => OperationContext.Current.GetCallbackChannel<IChatCallback>();
         public bool CurrentCallbackIsOpen => ((IChannel)CurrentCallback).State == CommunicationState.Opened;
 
-        public Dictionary<string, WindowControl> Clouds { get; } = new Dictionary<string, WindowControl>(StringComparer.CurrentCultureIgnoreCase);
+        internal Dictionary<string, WindowControl> Clouds { get; } = new Dictionary<string, WindowControl>(StringComparer.CurrentCultureIgnoreCase);
         private UIWindow mainWindow;
 
         public MainWindowChatServer(UIWindow mainWindow, AccessResult removeOrAcceptUser)
@@ -110,7 +110,7 @@ namespace WCFChat.Client.BasicControl
             }
         }
 
-        protected void AccessOrRemoveUser(UserBindings userBind, WindowControl control, UserChanges changes)
+        internal void AccessOrRemoveUser(UserBindings userBind, WindowControl control, UserChanges changes)
         {
             lock (sync)
             {
@@ -383,7 +383,7 @@ namespace WCFChat.Client.BasicControl
         }
 
 
-        protected bool GetUserBinding(User user, out UserBindings userBind, out WindowControl control)
+        internal bool GetUserBinding(User user, out UserBindings userBind, out WindowControl control)
         {
             userBind = null;
             control = null;
