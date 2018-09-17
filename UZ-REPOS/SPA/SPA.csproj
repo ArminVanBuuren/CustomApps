@@ -3030,6 +3030,8 @@
   <ItemGroup>
     <None Include="EDITION\DOC\ALLPLAY\Модель услуг CT6.xlsx" />
     <None Include="EDITION\DOC\ALLPLAY\Перевод управления CT6 на SC.v0.1.docx" />
+    <None Include="EDITION\DOC\MST\Модель услуг CT4.xlsx" />
+    <None Include="EDITION\DOC\MST\Перевод управления CT4 на SC.v0.1.docx" />
     <None Include="EDITION\DOC\SCG\Анализ настроек.docx" />
     <None Include="EDITION\DOC\SPA_Stat_2018.09.12.xlsx" />
     <None Include="PROD-2018.09.06\rd_service.xlsx" />
@@ -3082,7 +3084,6 @@
     <None Include="PROD-ACTUAL\SPA.SA\Scenarios\SCP\ChangeTPOnFINPlatform.xml.new" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="EDITION\DOC\MST\" />
     <Folder Include="EDITION\ROBP\Operations\CT4\" />
     <Folder Include="EDITION\ROBP\Operations\CT6\" />
     <Folder Include="EDITION\SPA.SA\SPA.SA.MCA\Commands\" />

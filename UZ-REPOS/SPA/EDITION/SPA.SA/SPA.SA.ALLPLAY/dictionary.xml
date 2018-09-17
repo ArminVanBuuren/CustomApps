@@ -57,6 +57,10 @@
       <Source Path="ExtendedRequestMessage/AdditionalData//NewMSISDN"/>
       <PossibleValues StringToKeyTable="true"/>
     </Parameter>
+    <Parameter Name="ServiceId">
+      <Source Path="ExtendedRequestMessage/AdditionalData//RES_ALLPLAY_SERVICE_ID"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
   </ParametersList>
   <DynamicParametersList/>
   <CommandsList Root="Commands" Mask="*.xml">

@@ -4,10 +4,11 @@
 	<Author Name="Timur Khamzin" Date="2015-11-27+15:00"/>
   <Request>
     <RequestTemplate>
-      <![CDATA[msisdn=##NewMsisdn##&command=add&service=558]]>
+      <![CDATA[msisdn=##NewMsisdn##&command=add&service=##ServiceId##]]>
     </RequestTemplate>
     <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
     <Item Name="NewMsisdn" Type="Parameter"/>
+    <Item Name="ServiceId" Type="Parameter"/>
   </Request>                                                                                           
 	<ErrorsList CodePage="ASCII"/>
 </Command>

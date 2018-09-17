@@ -15,6 +15,7 @@
     <Attribute name="TerminalDeviceId" path="//IdentifiersList/Identifier/TerminalDeviceId" description="Идентификатор ПО" />
   </AttributeList>
   <ResourceList>
+    <Resource name="RES_ALLPLAY_SERVICE_ID" description="ServiceID на ALLPLAY" />
   </ResourceList>
   <RFSParameterList>
     <RFSParameter name="ChangeTP" path="xml(//ChangeTP)" description="Параметры смены тарифного плана" />
@@ -24,29 +25,32 @@
   </RFSParameterList>
   <FlagList />
   <RFSList>
-    <RFS name="RFS_ALLPLAY_SUBSCRIPTION" hostType="CT6" processType="Subscription" description="Абонент на платформе ALLPLAY" />
+    <RFS name="RFS_ALLPLAY_SUBSCRIPTION" hostType="CT6" description="Метка абонента на платформе ALLPLAY" >
+      <Resource name="RES_ALLPLAY_SERVICE_ID" useType="Mandatory" />
+    </RFS>
+    <RFS name="RFS_ALLPLAY_MOBTV" hostType="CT6" base="RFS_ALLPLAY_SUBSCRIPTION" description="Мобильное ТВ" >
+      <Resource name="RES_ALLPLAY_SERVICE_ID" value="mobtv" />
+    </RFS>
     <RFS name="RFS_ALLPLAY_CHANGE_MSISDN" hostType="CT6" description="Изменение номера MSISDN на платформе ALLPLAY" >
       <RFSParameter name="NewMSISDN" path="//ChangeMsisdn/NewMSISDN" />
     </RFS>
   </RFSList>
   <CFSList>
-    <CFS name="Subscriber" priority="1" type="ManagedObject" description="Абонент на ALLPLAY">
-      <RFS name="RFS_ALLPLAY_SUBSCRIPTION" linkType="Add" />
-    </CFS>
+    <CFS name="Subscriber" priority="1" type="ManagedObject" description="Абонент на ALLPLAY"/>
     <CFS name="ChangeMsisdn" description="Изменение номера">
       <RFS name="RFS_ALLPLAY_CHANGE_MSISDN" linkType="Add" dependsOn="RFS_ALLPLAY_SUBSCRIPTION" />
     </CFS>
     <CFS name="FRMOBTV" description="Мобильное ТВ">
-      <RFS name="RFS_ALLPLAY_SUBSCRIPTION" linkType="Add" />
+      <RFS name="RFS_ALLPLAY_MOBTV" linkType="Add" />
     </CFS>
     <CFS name="FRMOBTVTEST" description="Мобильное ТВ тест">
-      <RFS name="RFS_ALLPLAY_SUBSCRIPTION" linkType="Add" />
+      <RFS name="RFS_ALLPLAY_MOBTV" linkType="Add" />
     </CFS>
     <CFS name="FRMOBTV1D" description="Мобильное ТВ 1 день">
-      <RFS name="RFS_ALLPLAY_SUBSCRIPTION" linkType="Add" />
+      <RFS name="RFS_ALLPLAY_MOBTV" linkType="Add" />
     </CFS>
     <CFS name="FRMOBTV7D" description="Мобильное ТВ 7 дней">
-      <RFS name="RFS_ALLPLAY_SUBSCRIPTION" linkType="Add" />
+      <RFS name="RFS_ALLPLAY_MOBTV" linkType="Add" />
     </CFS>
   </CFSList>
   <CFSGroupList >
@@ -64,6 +68,7 @@
     </Scenario>
     <Scenario name="ALLPLAY.ChangeMSISDN" description="Изменение номера на ALLPLAY">
       <RFS name="RFS_ALLPLAY_CHANGE_MSISDN" scenarioType="Add" />
+      <Append name="RFS_ALLPLAY_MOBTV" listType="EndList" />
     </Scenario>
   </ScenarioList>
   <WfmScenarioList />
