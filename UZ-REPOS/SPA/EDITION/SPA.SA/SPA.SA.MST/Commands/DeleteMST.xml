@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="DeleteMST" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description>DeleteMST</Description>
+	<Description>Удаление абонента на MST</Description>
 	<Author Name="Timur Khamzin" Date="2016-11-27+15:00"/>
   <Request>
     <RequestTemplate>

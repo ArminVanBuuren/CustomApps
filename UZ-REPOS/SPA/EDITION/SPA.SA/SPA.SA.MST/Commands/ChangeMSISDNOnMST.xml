@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="ChangeMSISDNOnMST" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description>ChangeMSISDNOnMST</Description>
+	<Description>Изменение номера абонента на MST</Description>
 	<Author Name="Timur Khamzin" Date="2015-11-27+15:00"/>
   <Request>
     <RequestTemplate>
