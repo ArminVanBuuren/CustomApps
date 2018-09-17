@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="ChangeMSISDNOnMST" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description>Изменение номера абонента на MST</Description>
-	<Author Name="Timur Khamzin" Date="2015-11-27+15:00"/>
+  <Description>Изменение номера абонента на MST</Description>
+  <Author Name="Timur Khamzin" Date="2015-11-27+15:00"/>
   <Request>
     <RequestTemplate>
       <![CDATA[msisdn=##NewMsisdn##&command=add&service=##ServiceId##]]>
@@ -9,6 +9,6 @@
     <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
     <Item Name="NewMsisdn" Type="Parameter"/>
     <Item Name="ServiceId" Type="Parameter"/>
-  </Request>                                                                                           
-	<ErrorsList CodePage="ASCII"/>
+  </Request>
+  <ErrorsList CodePage="ASCII"/>
 </Command>

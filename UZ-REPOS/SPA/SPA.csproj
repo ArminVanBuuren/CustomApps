@@ -121,6 +121,7 @@
     <Content Include="EDITION\ROBP\Processes\Change tariff plan.xml" />
     <Content Include="EDITION\ROBP\Processes\Create Subscriber in All platform.xml" />
     <Content Include="EDITION\ROBP\Processes\Create Subscriber.xml" />
+    <Content Include="EDITION\ROBP\Processes\Delete Content.xml" />
     <Content Include="EDITION\ROBP\Processes\Delete MCA Service.xml" />
     <Content Include="EDITION\ROBP\Processes\Delete RBT Service.xml" />
     <Content Include="EDITION\ROBP\Processes\Delete Subscriber in All platform.xml" />

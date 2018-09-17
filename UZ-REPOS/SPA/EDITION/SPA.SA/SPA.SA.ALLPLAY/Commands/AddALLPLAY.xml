@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="AddALLPLAY" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description>Создание абонента на ALLPLAY</Description>
-	<Author Name="Timur Khamzin" Date="2017-07-31+15:00"/>
+  <Description>Создание абонента на ALLPLAY</Description>
+  <Author Name="Timur Khamzin" Date="2017-07-31+15:00"/>
   <Request>
     <RequestTemplate>
       <![CDATA[msisdn=##msisdn##&command=add&service=##ServiceId##]]>
@@ -9,6 +9,6 @@
     <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
     <Item Name="msisdn" Type="Wellknown"/>
     <Item Name="ServiceId" Type="Parameter"/>
-  </Request>                                                                                          
-	<ErrorsList CodePage="ASCII"/>
+  </Request>
+  <ErrorsList CodePage="ASCII"/>
 </Command>
