@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Configuration markers="*" scenarioPrefix="SC." mainIdentities="MSISDN,PersonalAccountNumber,ContractNumber" SICreation="" formatVersion="1">
   <HostTypeList>
-    <HostType name="SCG" nriType="RI" allowTerminalDeviceType="mobile" description="Service Content ALLPLAY" />
+    <HostType name="SCG" nriType="RI" allowTerminalDeviceType="mobile" description="SCG онлайн GPRS" />
   </HostTypeList>
   <IdentityList>
     <Identity name="ContractNumber" description="Номер контракта" />
