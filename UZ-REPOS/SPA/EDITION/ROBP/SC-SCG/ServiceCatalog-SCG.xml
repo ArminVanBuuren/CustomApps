@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Configuration markers="*" scenarioPrefix="SC." mainIdentities="MSISDN,PersonalAccountNumber,ContractNumber" SICreation="" formatVersion="1">
   <HostTypeList>
+    <HostType name="SCG" nriType="RI" allowTerminalDeviceType="mobile" description="Service Content ALLPLAY" />
   </HostTypeList>
   <IdentityList>
     <Identity name="ContractNumber" description="Номер контракта" />
@@ -25,29 +26,21 @@
   </RFSParameterList>
   <FlagList />
   <RFSList>
-    <RFS name="RFS_SCG_SUBSCRIBER" hostType="SCG" processType="Subscription" description="Абонент на платформе SCG" >
+    <RFS name="RFS_SCG_PROFILE" hostType="SCG" description="Профиль абонент на платформе SCG">
       <Resource name="RES_SCG_PROFILE" value="" useType="Mandatory">
         <Value hosts="FP:05" value="0" />
         <Value hosts="FP:MS" value="1" />
       </Resource>
     </RFS>
-    <RFS name="RFS_SCG_CHANGE_MSISDN" hostType="SCG" description="Изменение номера MSISDN на платформе SCG">
-      <Resource name="RES_SCG_PROFILE" value="" useType="Mandatory">
-        <Value hosts="FP:05" value="0" />
-        <Value hosts="FP:MS" value="1" />
-      </Resource>
+    <RFS name="RFS_SCG_SUBSCRIBER" hostType="SCG" processType="Subscription" description="Абонент на платформе SCG" />
+    <RFS name="RFS_SCG_CHANGE_MSISDN"  hostType="SCG"  description="Изменение номера MSISDN на платформе SCG">
       <RFSParameter name="NewMSISDN" path="//ChangeMsisdn/NewMSISDN" />
     </RFS>
+    <RFS name="RFS_SCG_BREAKSESSION" hostType="SCG" description="Разрыв GPRS сессии на SCG" />
     <RFS name="RFS_SCG_CHANGE_PLATFORM" hostType="SCG" description="Изменение профайла на SCG" >
       <Resource name="RES_SCG_PROFILE" value="" useType="Mandatory">
         <Value condition="//ChangeTP/NewPlatform/HostCode[text()='MS']" value="1" />
         <Value condition="//ChangeTP/NewPlatform/HostCode[text()='05']" value="0" />
-      </Resource>
-    </RFS>
-    <RFS name="RFS_SCG_BREAKSESSION"  hostType="SCG" description="Разрыв GPRS сессии на SCG" >
-      <Resource name="RES_SCG_PROFILE" value="" useType="Mandatory">
-        <Value hosts="FP:05" value="0" />
-        <Value hosts="FP:MS" value="1" />
       </Resource>
     </RFS>
     <RFS name="RFS_SCG_SUBSCRIPTION"  hostType="SCG" description="Добавить подписку абонента на SCG" />
@@ -55,21 +48,26 @@
   <CFSList>
     <CFS name="Subscriber" priority="1" type="ManagedObject" description="Абонент" >
       <RFS name="RFS_SCG_SUBSCRIBER" linkType="Add" />
+      <RFS name="RFS_SCG_PROFILE" linkType="Info" />
     </CFS>
     <CFS name="CB406278" description="Мобильный интернет">
       <RFS name="RFS_SCG_SUBSCRIBER" linkType="Add" />
+      <RFS name="RFS_SCG_PROFILE" linkType="Info" />
     </CFS>
     <CFS name="FRASKUE" description="АИИСКУЭ">
       <RFS name="RFS_SCG_SUBSCRIBER" linkType="Add" />
+      <RFS name="RFS_SCG_PROFILE" linkType="Info" />
     </CFS>
     <CFS name="ChangeMsisdn" description="Изменение номера">
       <RFS name="RFS_SCG_CHANGE_MSISDN" linkType="Add" dependsOn="RFS_SCG_SUBSCRIBER" />
-    </CFS>
-    <CFS name="ChangeTP" description="Изменение ТП">
-      <RFS name="RFS_SCG_CHANGE_PLATFORM" linkType="Add" dependsOn="RFS_SCG_SUBSCRIBER" />
+      <RFS name="RFS_SCG_PROFILE" linkType="Info"  />
     </CFS>
     <CFS name="SCPBREAKSESSION" description="Разрыв GPRS сессии на SCG">
       <RFS name="RFS_SCG_BREAKSESSION" linkType="Add" />
+      <RFS name="RFS_SCG_PROFILE" linkType="Info" />
+    </CFS>
+    <CFS name="ChangeTP" description="Изменение ТП">
+      <RFS name="RFS_SCG_CHANGE_PLATFORM" linkType="Add" dependsOn="RFS_SCG_SUBSCRIBER" />
     </CFS>
     <CFS name="FRINSPECT" description="Инспектор">
       <RFS name="RFS_SCG_SUBSCRIPTION" linkType="Add" />
@@ -85,22 +83,19 @@
     <Scenario name="SCG.CreateSubscriber" description="Создание абонента на SCG">
       <RFS name="RFS_SCG_SUBSCRIBER" scenarioType="Add" />
       <RFS name="RFS_SCG_BREAKSESSION" scenarioType="Remove" />
+      <Append name="RFS_SCG_PROFILE" listType="EndList" />
     </Scenario>
     <Scenario name="SCG.DeleteSubscriber" description="Удаление абонента на SCG">
       <RFS name="RFS_SCG_SUBSCRIBER" scenarioType="Remove" />
       <RFS name="RFS_SCG_BREAKSESSION" scenarioType="Add" />
+      <Append name="RFS_SCG_PROFILE" listType="EndList" />
     </Scenario>
     <Scenario name="SCG.ChangeMSISDN" description="Изменение номера на SCG">
       <RFS name="RFS_SCG_CHANGE_MSISDN" scenarioType="Add" />
+      <Append name="RFS_SCG_PROFILE" listType="EndList" />
     </Scenario>
     <Scenario name="SCG.ChangePlatform" description="Изменение профайла на SCG">
       <RFS name="RFS_SCG_CHANGE_PLATFORM" scenarioType="Add" />
-    </Scenario>
-    <Scenario name="SCG.Subscription.Add" description="Добавить подписку абонента на SCG">
-      <RFS name="RFS_SCG_SUBSCRIPTION" scenarioType="Add" />
-    </Scenario>
-    <Scenario name="SCG.Subscription.Delete" description="Удалить подписку абонента на SCG">
-      <RFS name="RFS_SCG_SUBSCRIPTION" scenarioType="Remove" />
     </Scenario>
   </ScenarioList>
   <WfmScenarioList />

@@ -23,8 +23,8 @@ xmlns:com1="http://com.huawei.scg.schema">
             </com:userID>
             <com:ocsInfo>
                <com1:ID>1</com1:ID>
-               <com1:Host>10.160.21.24</com1:Host>
-               <com1:Port>3868</com1:Port>
+               <com1:Host>##OSC_HOST##</com1:Host>
+               <com1:Port>##OSC_PORT##</com1:Port>
             </com:ocsInfo>
             <com:updateFlag>2</com:updateFlag>
          </bas:ocsMappingInfo>
@@ -34,6 +34,8 @@ xmlns:com1="http://com.huawei.scg.schema">
     </RequestTemplate>
     <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
     <Item Name="msisdn" Type="Wellknown"/>
+    <Item Name="OSC_HOST" Type="Constant"/>
+    <Item Name="OSC_PORT" Type="Constant"/>
   </Request>
   <ErrorsList CodePage="windows-1251" />
 </Command>

@@ -18,11 +18,12 @@
     <Regexp Name="Error" Value=".*resultCode xmlns:ns1=&quot;http://com.huawei.scg.schema&quot;&gt;(?&lt;ERROR&gt;\d{8})"/>
   </RegexpsList>
   <ConstantsList>
-    <Constant Name="_MakroRegion" Value="2"/>
+    <Constant Name="OSC_HOST" Value="10.160.21.24"/>
+    <Constant Name="OSC_PORT" Value="3868"/>
   </ConstantsList>
   <ParametersList>
     <Parameter Name="Profile">
-      <Source Path="//AddList//RES_SCG_PROFILE/Value[text()!='']"/>
+      <Source Path="//RES_SCG_PROFILE/Value[text()!='']"/>
       <PossibleValues StringToKeyTable="true"/>
     </Parameter>
     <Parameter Name="SCP_Profile">

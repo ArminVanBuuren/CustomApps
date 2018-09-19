@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scenario name="SC.SCG.ChangeMSISDN">
+  <include>
+    <scenario name="SubDeleteSubscriberOnSCG" />
+  </include>
   <objectList>
-    <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll"/>
     <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
     <object name="ScenarioProcessor" class="FORIS.ScenarioProcessing.Base.SPF.SubscenarioProcessingUnit" assembly="FORIS.SPA.SPF.dll" />
     <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll"/>
@@ -13,24 +14,13 @@
     <object name="WellknownsRestorer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.WellknownsRestorer" assembly="FORIS.SPA.MmlProcessing.dll"/>
   </objectList>
   <automat>
-    <node name="BySubscribersSplitter" object="BySubscribersSplitter">
+    <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
       <resultlist>
-        <result value="0" node="BySubscriberRequestDequeuer"/>
-      </resultlist>
-      <parameterslist>
-        <param name="queueName" value="requestsSplittedBySubscriberQueue"/>
-      </parameterslist>
-    </node>
-    <node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
-      <resultlist>
-        <result value="0" node="SubDeleteSubscriberOnSCG"/>
+        <result value="0" node="SubDeleteSubscriberOnSCGOld"/>
         <result value="1" node=""/>
       </resultlist>
-      <parameterslist>
-        <param name="queueName" value="requestsSplittedBySubscriberQueue"/>
-      </parameterslist>
     </node>
-    <node  name="SubDeleteSubscriberOnSCG" object="ScenarioProcessor">
+    <node  name="SubDeleteSubscriberOnSCGOld" object="ScenarioProcessor">
       <resultlist>
         <result value="0" node="WellknownsReplacerNode" />
         <result value="" node="ResponseAssembler" />
@@ -41,13 +31,13 @@
     </node>
     <node name="WellknownsReplacerNode" object="WellknownsReplacer">
       <resultlist>
-        <result value="" node="ReCreateSubscriberOnSCG2"/>
+        <result value="" node="ReCreateSubscriberOnSCGNew"/>
       </resultlist>
       <parameterslist>
         <param name="msisdn" value="xmlsubstr(&quot;//AdditionalData//NewMSISDN&quot;)"/>
       </parameterslist>
     </node>
-    <node  name="ReCreateSubscriberOnSCG2" object="ScenarioProcessor">
+    <node  name="ReCreateSubscriberOnSCGNew" object="ScenarioProcessor">
       <resultlist>
         <result value="0" node="ADD_MAPSERVER_OSC" />
         <result value="" node="ResponseAssembler" />
@@ -69,7 +59,7 @@
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">
       <resultlist>
-        <result value="" node="BySubscriberRequestDequeuer"/>
+        <result value="" node="RequestCutterBySubscribers"/>
       </resultlist>
     </node>
   </automat>

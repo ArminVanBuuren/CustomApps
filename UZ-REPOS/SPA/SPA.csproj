@@ -143,8 +143,8 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.MST\Scenarios\SC.CT4.ChangeMSISDN.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Commands\SubscriptionAdd.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Commands\SubscriptionDelete.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Scenarios\SC.SCG.Subscription.Add.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Scenarios\SC.SCG.Subscription.Delete.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Scenarios\SC.Add.RFS_SCG_SUBSCRIPTION.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Scenarios\SC.Remove.RFS_SCG_SUBSCRIPTION.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Commands\ADD_MAPSERVER_OSC_BYHOST.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Commands\DELETE_MAPSERVER_OSC1.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Scenarios\SubDeleteSubscriberOnSCG.xml" />
@@ -3031,7 +3031,7 @@
     <None Include="EDITION\DOC\ALLPLAY\Перевод управления CT6 на SC.v0.1.docx" />
     <None Include="EDITION\DOC\MST\Модель услуг CT4.xlsx" />
     <None Include="EDITION\DOC\MST\Перевод управления CT4 на SC.v0.1.docx" />
-    <None Include="EDITION\DOC\SCG\Анализ настроек.docx" />
+    <None Include="EDITION\DOC\SCG\Перевод управления SCG на SC v0.1.docx" />
     <None Include="EDITION\DOC\SPA_Stat_2018.09.12.xlsx" />
     <None Include="PROD-2018.09.06\rd_service.xlsx" />
     <None Include="PROD-2018.09.06\SPA.SA\Dictionaries\CONTENT\ALLPLAY\Commands\Command.xsd">

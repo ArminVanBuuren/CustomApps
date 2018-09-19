@@ -4,8 +4,7 @@
     <scenario name="SubDeleteSubscriberOnSCG" />
   </include>
   <objectList>
-    <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll"/>
@@ -14,22 +13,11 @@
     <object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll"/>
   </objectList>
   <automat>
-    <node name="BySubscribersSplitter" object="BySubscribersSplitter">
-      <resultlist>
-        <result value="0" node="BySubscriberRequestDequeuer"/>
-      </resultlist>
-      <parameterslist>
-        <param name="queueName" value="requestsSplittedBySubscriberQueue"/>
-      </parameterslist>
-    </node>
-    <node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+    <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
       <resultlist>
         <result value="0" node="CheckSORM"/>
         <result value="1" node=""/>
       </resultlist>
-      <parameterslist>
-        <param name="queueName" value="requestsSplittedBySubscriberQueue"/>
-      </parameterslist>
     </node>
     <node name="CheckSORM" object="IfMultipleXmlConditionsResolver">
       <resultlist>
@@ -76,7 +64,7 @@
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">
       <resultlist>
-        <result value="" node="BySubscriberRequestDequeuer"/>
+        <result value="" node="RequestCutterBySubscribers"/>
       </resultlist>
     </node>
   </automat>
