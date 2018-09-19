@@ -50,14 +50,11 @@
       <RFS name="RFS_SCG_SUBSCRIBER" linkType="Add" />
       <RFS name="RFS_SCG_PROFILE" linkType="Info" />
     </CFS>
-    <CFS name="CB406278" description="Мобильный интернет">
+    <CFS name="CB406278" isMarker="true" description="Мобильный интернет">
       <RFS name="RFS_SCG_SUBSCRIBER" linkType="Add" />
       <RFS name="RFS_SCG_PROFILE" linkType="Info" />
     </CFS>
-    <CFS name="FRASKUE" description="АИИСКУЭ">
-      <RFS name="RFS_SCG_SUBSCRIBER" linkType="Add" />
-      <RFS name="RFS_SCG_PROFILE" linkType="Info" />
-    </CFS>
+    <CFS name="FRASKUE" copyOf="CB406278" description="АИИСКУЭ"/>
     <CFS name="ChangeMsisdn" description="Изменение номера">
       <RFS name="RFS_SCG_CHANGE_MSISDN" linkType="Add" dependsOn="RFS_SCG_SUBSCRIBER" />
       <RFS name="RFS_SCG_PROFILE" linkType="Info"  />
