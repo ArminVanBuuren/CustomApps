@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scenario name="SC.MST.CreateSubscriber">
+<scenario name="SC.Remove.RFS_CT4_SUBSCRIPTION">
   <objectList>
-    <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
@@ -11,29 +11,18 @@
     <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll"/>
   </objectList>
   <automat>
-    <node name="BySubscribersSplitter" object="BySubscribersSplitter">
+    <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
       <resultlist>
-        <result value="0" node="BySubscriberRequestDequeuer"/>
-      </resultlist>
-      <parameterslist>
-        <param name="queueName" value="requestsSplittedBySubscriberQueue"/>
-      </parameterslist>
-    </node>
-    <node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
-      <resultlist>
-        <result value="0" node="AddMST"/>
+        <result value="0" node="DeleteMST"/>
         <result value="1" node=""/>
       </resultlist>
-      <parameterslist>
-        <param name="queueName" value="requestsSplittedBySubscriberQueue"/>
-      </parameterslist>
     </node>
-    <node name="AddMST" object="Commander">
+    <node name="DeleteMST" object="Commander">
       <resultlist>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="Command" value="AddMST"/>
+        <param name="Command" value="DeleteMST"/>
         <param name="Script" value="Command"/>
         <param name="ErrorDecodingType" value="ByRegexp"/>
         <param name="CommandSource" value="Dictionary"/>

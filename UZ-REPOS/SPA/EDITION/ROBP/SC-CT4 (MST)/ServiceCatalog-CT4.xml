@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Configuration markers="*" scenarioPrefix="SC." mainIdentities="MSISDN,PersonalAccountNumber,ContractNumber" SICreation="" formatVersion="1">
   <HostTypeList>
+    <HostType name="CT4" nriType="RI" allowTerminalDeviceType="mobile" description="Service Content MST" />
   </HostTypeList>
   <IdentityList>
     <Identity name="ContractNumber" description="Номер контракта" />
@@ -15,7 +16,7 @@
     <Attribute name="TerminalDeviceId" path="//IdentifiersList/Identifier/TerminalDeviceId" description="Идентификатор ПО" />
   </AttributeList>
   <ResourceList>
-    <Resource name="RES_MST_SERVICE_ID" description="ServiceID на MST" />
+    <Resource name="RES_CT4_SERVICE_ID" description="ServiceID на CT4" />
   </ResourceList>
   <RFSParameterList>
     <RFSParameter name="ChangeTP" path="xml(//ChangeTP)" description="Параметры смены тарифного плана" />
@@ -25,22 +26,19 @@
   </RFSParameterList>
   <FlagList />
   <RFSList>
-    <RFS name="RFS_MST_SUBSCRIPTION" hostType="CT4" description="Метка абонента на платформе MST" >
-      <Resource name="RES_MST_SERVICE_ID" useType="Mandatory" />
+    <RFS name="RFS_CT4_SUBSCRIPTION" hostType="CT4" description="Метка абонента на платформе CT4" >
+      <Resource name="RES_CT4_SERVICE_ID" value="558" />
     </RFS>
-    <RFS name="RFS_MST_DATING" hostType="CT4" base="RFS_MST_SUBSCRIPTION" description="КОНТЕНТ club ums dating на платформе MST" >
-      <Resource name="RES_MST_SERVICE_ID" value="558" />
-    </RFS>
-    <RFS name="RFS_MST_CHANGE_MSISDN" hostType="CT4" description="Изменение номера MSISDN на платформе MST" >
+    <RFS name="RFS_CT4_CHANGE_MSISDN" hostType="CT4" description="Изменение номера MSISDN на платформе CT4" >
       <RFSParameter name="NewMSISDN" path="//ChangeMsisdn/NewMSISDN" />
     </RFS>
   </RFSList>
   <CFSList>
     <CFS name="ChangeMsisdn" description="Изменение номера">
-      <RFS name="RFS_MST_CHANGE_MSISDN" linkType="Add" dependsOn="RFS_MST_SUBSCRIPTION" />
+      <RFS name="RFS_CT4_CHANGE_MSISDN" linkType="Add" dependsOn="RFS_CT4_SUBSCRIPTION" />
     </CFS>
     <CFS name="FRCLUBUMS" description="КОНТЕНТ club ums dating">
-      <RFS name="RFS_MST_DATING" linkType="Add" />
+      <RFS name="RFS_CT4_SUBSCRIPTION" linkType="Add" />
     </CFS>
   </CFSList>
   <CFSGroupList >
@@ -50,15 +48,9 @@
   <HandlerList >
   </HandlerList>
   <ScenarioList>
-    <Scenario name="MST.CreateSubscriber" description="Создание абонента на MST">
-      <RFS name="RFS_MST_SUBSCRIPTION" scenarioType="Add"/>
-    </Scenario>
-    <Scenario name="MST.DeleteSubscriber" description="Удаление абонента на MST">
-      <RFS name="RFS_MST_SUBSCRIPTION" scenarioType="Remove" />
-    </Scenario>
-    <Scenario name="MST.ChangeMSISDN" description="Изменение номера на MST">
-      <RFS name="RFS_MST_CHANGE_MSISDN" scenarioType="Add" />
-      <Append name="RFS_MST_DATING" listType="EndList" />
+    <Scenario name="CT4.ChangeMSISDN" description="Изменение номера на CT4">
+      <RFS name="RFS_CT4_CHANGE_MSISDN" scenarioType="Add" />
+      <Append name="RFS_CT4_SUBSCRIPTION" listType="EndList" />
     </Scenario>
   </ScenarioList>
   <WfmScenarioList />
