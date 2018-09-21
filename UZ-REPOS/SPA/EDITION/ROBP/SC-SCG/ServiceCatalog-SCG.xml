@@ -37,12 +37,7 @@
       <RFSParameter name="NewMSISDN" path="//ChangeMsisdn/NewMSISDN" />
     </RFS>
     <RFS name="RFS_SCG_BREAKSESSION" hostType="SCG" description="Разрыв GPRS сессии на SCG" />
-    <RFS name="RFS_SCG_CHANGE_PLATFORM" hostType="SCG" description="Изменение профайла на SCG" >
-      <Resource name="RES_SCG_PROFILE" value="" useType="Mandatory">
-        <Value condition="//ChangeTP/NewPlatform/HostCode[text()='MS']" value="1" />
-        <Value condition="//ChangeTP/NewPlatform/HostCode[text()='05']" value="0" />
-      </Resource>
-    </RFS>
+    <RFS name="RFS_SCG_CHANGE_PLATFORM" hostType="SCG" description="Изменение профайла на SCG" />
     <RFS name="RFS_SCG_SUBSCRIPTION"  hostType="SCG" description="Добавить подписку абонента на SCG" />
   </RFSList>
   <CFSList>
@@ -65,6 +60,7 @@
     </CFS>
     <CFS name="ChangeTP" description="Изменение ТП">
       <RFS name="RFS_SCG_CHANGE_PLATFORM" linkType="Add" dependsOn="RFS_SCG_SUBSCRIBER" />
+      <RFS name="RFS_SCG_PROFILE" linkType="Info" />
     </CFS>
     <CFS name="FRINSPECT" description="Инспектор">
       <RFS name="RFS_SCG_SUBSCRIPTION" linkType="Add" />
@@ -93,6 +89,7 @@
     </Scenario>
     <Scenario name="SCG.ChangePlatform" description="Изменение профайла на SCG">
       <RFS name="RFS_SCG_CHANGE_PLATFORM" scenarioType="Add" />
+      <Append name="RFS_SCG_PROFILE" listType="EndList" />
     </Scenario>
   </ScenarioList>
   <WfmScenarioList />

@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Configuration markers="*" scenarioPrefix="SC." mainIdentities="MSISDN,PersonalAccountNumber,ContractNumber" SICreation="" formatVersion="1">
   <HostTypeList>
+    <HostType name="HL" nriType="RI" allowTerminalDeviceType="mobile" description="Home Location Register" />
   </HostTypeList>
   <IdentityList>
     <Identity name="ContractNumber" description="Номер контракта" />
@@ -20,8 +21,28 @@
   </RFSParameterList>
   <FlagList />
   <RFSList>
+    <RFS name="RFS_HLR_CFB" hostType="HL" description="Call forwarding on mobile subscriber busy - TS10">
+      <RFSParameter name="CallForwardType">
+        <Value condition="(//ActionNameOriginal[text()='Update Call Forwarding'])" value="Foris" />
+        <Value condition="(//WithdrawalList/CallForwarding/CFB)" value="Deactivate" />
+      </RFSParameter>
+      <RFSParameter name="ForwardedToNumber">
+        <Value hosts="HL:2694,HL:2704,HL:2711,HL:2713,HL:2754,HL:2757,HL:2786,HL:2812" condition="(//CFB/ForwardingToAddress[text()='voicemail'])" value="79122410860" />
+        <Value hosts="HL:2694,HL:2704,HL:2711,HL:2713,HL:2754,HL:2757,HL:2786,HL:2812" path="//CFB/ForwardingToAddress[text()!='voicemail']" />
+        <Value hosts="HL:14088,HL:14090,HL:14094,HL:14099,HL:14105,HL:14139,HL:14140,HL:PENZA" condition="(//CFB/ForwardingToAddress[text()='voicemail'])" value="79101200860" />
+        <Value hosts="HL:242844,HL:2707,HL:2741,HL:2751,HL:2777,HL:2794" condition="(//CFB/ForwardingToAddress[text()='voicemail'])" value="79101200860" />
+        <Value hosts="HL:14088,HL:14090,HL:14094,HL:14099,HL:14105,HL:14139,HL:14140,HL:PENZA" path="//CFB/ForwardingToAddress[text()!='voicemail']" />
+        <Value hosts="HL:242844,HL:2707,HL:2741,HL:2751,HL:2777,HL:2794" path="//CFB/ForwardingToAddress[text()!='voicemail']" />
+      </RFSParameter>
+    </RFS>
   </RFSList>
   <CFSList>
+    <CFS name="CallForwarding" description="Активация пользовательской переадресации вызова">
+      <RFS name="RFS_HLR_CFB" linkType="Add" />
+      <RFS name="RFS_HLR_CFU" linkType="Add" />
+      <RFS name="RFS_HLR_CFNRC" linkType="Add" />
+      <RFS name="RFS_HLR_CFNRY" linkType="Add" />
+    </CFS>
   </CFSList>
   <CFSGroupList>
   </CFSGroupList>
