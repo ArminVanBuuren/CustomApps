@@ -13,7 +13,8 @@
   </WellknownsList>
   <ErrorsList CodePage="windows-1251">
     <Error Name="000000" Value="SUCCESS"/>
-    <Error Name="110109" Value="SUCCESS"/>  <!--Subscriber does not exist--> 
+    <Error Name="110109" Value="SUCCESS"/>
+    <!--Subscriber does not exist-->
     <Error Name="101040" Value="FAILURE"/>
     <Error Name="ERR3007" Value="DuplicateManagedObjectInstance"/>
     <Error Name="ERR3050" Value="ImsiAssinedToAnotherSubscriber"/>
@@ -31,7 +32,8 @@
     <Error Name="ERR1033" Value="FAILURE"/>
     <Error Name="ERR3015" Value="NoServices"/>
     <Error Name="ERR3027" Value="NoServices"/>
-    <Error Name="000008" Value="InvalidParameterValue"/>  <!--Parameter[profile] is error-->
+    <Error Name="000008" Value="InvalidParameterValue"/>
+    <!--Parameter[profile] is error-->
   </ErrorsList>
   <RegexpsList>
     <Regexp Name="Error" Value="RETN=(?&lt;ERROR&gt;\d{6})"/>
@@ -84,28 +86,28 @@
     <Parameter Name="apn">
       <Source Path="//AdditionalData/CorporateService"/>
       <PossibleValues StringToKeyTable="false">
-	<Item Key="FRCORPAPN" StringValue="TEST.LTE"/>
-	<Item Key="FRAPNXB" StringValue="XB.APN.UZ"/>
-	<Item Key="FRAPNZIYOD" StringValue="ZIYOD.UMS.UZ"/>
+        <Item Key="FRCORPAPN" StringValue="TEST.LTE"/>
+        <Item Key="FRAPNXB" StringValue="XB.APN.UZ"/>
+        <Item Key="FRAPNZIYOD" StringValue="ZIYOD.UMS.UZ"/>
       </PossibleValues>
-    </Parameter> 
+    </Parameter>
     <Parameter Name="apn_m2m">
       <Source Path="//AdditionalData/M2MService"/>
       <PossibleValues StringToKeyTable="false">
-	<Item Key="FRM2MAPNFMS" StringValue="FMS.APN"/>
-	<Item Key="FRM2MAPNNGMK" StringValue="NGMK.APN"/>
-	<Item Key="FRM2MAPNBEPRO" StringValue="UZGPS.APN"/>
-	<Item Key="FRM2MAPN" StringValue="M2M.APN"/>
-	<Item Key="FRM2MAPNBANK" StringValue="BANK.APN"/>
-	<Item Key="VPNUMS" StringValue="UMS-VPN.UMS.UZ"/>
+        <Item Key="FRM2MAPNFMS" StringValue="FMS.APN"/>
+        <Item Key="FRM2MAPNNGMK" StringValue="NGMK.APN"/>
+        <Item Key="FRM2MAPNBEPRO" StringValue="UZGPS.APN"/>
+        <Item Key="FRM2MAPN" StringValue="M2M.APN"/>
+        <Item Key="FRM2MAPNBANK" StringValue="BANK.APN"/>
+        <Item Key="VPNUMS" StringValue="UMS-VPN.UMS.UZ"/>
       </PossibleValues>
-    </Parameter> 
+    </Parameter>
     <Parameter Name="apn_free">
       <Source Path="//AdditionalData/FreeService"/>
       <PossibleValues StringToKeyTable="false">
-	<Item Key="FRFREE" StringValue="DAVRA.UMS.APN"/>
+        <Item Key="FRFREE" StringValue="DAVRA.UMS.APN"/>
       </PossibleValues>
-    </Parameter> 
+    </Parameter>
     <Parameter Name="KI">
       <Source Path="ExtendedRequestMessage/AdditionalData/KI"/>
       <PossibleValues StringToKeyTable="true"/>
@@ -145,18 +147,18 @@
         <Source Type="IfNotXmlPath:1" Path="//AdditionalData/ProvisionList/FRASKUE"/>
         <Source Type="IfNotXmlPath:2" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
         <Source Type="IfNotXmlPath:3" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
-		<Source Type="IfNotXmlPath:4" Path="//AdditionalData/RegisteredList/FRDGU"/>
-		<Source Type="IfNotXmlPath:5" Path="//AdditionalData/ProvisionList/FRDGU"/>
-		<Source Type="IfXmlPath:0" Path="//AdditionalData/BalanceStorage/HostCode[text()='MS']"/>
+        <Source Type="IfNotXmlPath:4" Path="//AdditionalData/RegisteredList/FRDGU"/>
+        <Source Type="IfNotXmlPath:5" Path="//AdditionalData/ProvisionList/FRDGU"/>
+        <Source Type="IfXmlPath:0" Path="//AdditionalData/BalanceStorage/HostCode[text()='MS']"/>
       </SourcesList>
       <SourcesList PresenceValue="51">
         <Source Type="IfNotXmlPath:0" Path="//AdditionalData/RegisteredList/FRASKUE"/>
         <Source Type="IfNotXmlPath:1" Path="//AdditionalData/ProvisionList/FRASKUE"/>
         <Source Type="IfNotXmlPath:2" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
         <Source Type="IfNotXmlPath:3" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
-		<Source Type="IfNotXmlPath:4" Path="//AdditionalData/RegisteredList/FRDGU"/>
-		<Source Type="IfNotXmlPath:5" Path="//AdditionalData/ProvisionList/FRDGU"/>
-		<Source Type="IfXmlPath:0" Path="//AdditionalData/BalanceStorage/HostCode[text()='05']"/>
+        <Source Type="IfNotXmlPath:4" Path="//AdditionalData/RegisteredList/FRDGU"/>
+        <Source Type="IfNotXmlPath:5" Path="//AdditionalData/ProvisionList/FRDGU"/>
+        <Source Type="IfXmlPath:0" Path="//AdditionalData/BalanceStorage/HostCode[text()='05']"/>
       </SourcesList>
       <SourcesList PresenceValue="10">
         <Source Type="OrXmlPath:0" Path="//AdditionalData/RegisteredList/FRASKUE"/>
@@ -166,7 +168,7 @@
         <Source Type="OrXmlPath:0" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
         <Source Type="OrXmlPath:1" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
       </SourcesList>
-	  <SourcesList PresenceValue="11">
+      <SourcesList PresenceValue="11">
         <Source Type="OrXmlPath:0" Path="//AdditionalData/RegisteredList/FRDGU"/>
         <Source Type="OrXmlPath:1" Path="//AdditionalData/ProvisionList/FRDGU"/>
       </SourcesList>
@@ -177,8 +179,8 @@
         <Source Type="IfNotXmlPath:1" Path="//AdditionalData/ProvisionList/FRASKUE"/>
         <Source Type="IfNotXmlPath:2" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
         <Source Type="IfNotXmlPath:3" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
-		<Source Type="IfNotXmlPath:4" Path="//AdditionalData/RegisteredList/FRDGU"/>
-		<Source Type="IfNotXmlPath:5" Path="//AdditionalData/ProvisionList/FRDGU"/>
+        <Source Type="IfNotXmlPath:4" Path="//AdditionalData/RegisteredList/FRDGU"/>
+        <Source Type="IfNotXmlPath:5" Path="//AdditionalData/ProvisionList/FRDGU"/>
         <Source Type="IfXmlPath:0"    Path="//AdditionalData/ProvisionList/ChangeTP/NewPlatform/HostCode[text()='MS']"/>
       </SourcesList>
       <SourcesList PresenceValue="51">
@@ -186,8 +188,8 @@
         <Source Type="IfNotXmlPath:1" Path="//AdditionalData/ProvisionList/FRASKUE"/>
         <Source Type="IfNotXmlPath:2" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
         <Source Type="IfNotXmlPath:3" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
-		<Source Type="IfNotXmlPath:4" Path="//AdditionalData/RegisteredList/FRDGU"/>
-		<Source Type="IfNotXmlPath:5" Path="//AdditionalData/ProvisionList/FRDGU"/>
+        <Source Type="IfNotXmlPath:4" Path="//AdditionalData/RegisteredList/FRDGU"/>
+        <Source Type="IfNotXmlPath:5" Path="//AdditionalData/ProvisionList/FRDGU"/>
         <Source Type="IfXmlPath:0"    Path="//AdditionalData/ProvisionList/ChangeTP/NewPlatform/HostCode[text()='05']"/>
       </SourcesList>
       <SourcesList PresenceValue="10">
@@ -205,14 +207,14 @@
         <Source Type="IfNotXmlPath:1" Path="//AdditionalData/ProvisionList/FRASKUE"/>
         <Source Type="IfNotXmlPath:2" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
         <Source Type="IfNotXmlPath:3" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
-	<Source Type="IfXmlPath:0" Path="//AdditionalData/BalanceStorage/HostCode[text()='MS']"/>
+        <Source Type="IfXmlPath:0" Path="//AdditionalData/BalanceStorage/HostCode[text()='MS']"/>
       </SourcesList>
       <SourcesList PresenceValue="51">
         <Source Type="IfNotXmlPath:0" Path="//AdditionalData/RegisteredList/FRASKUE"/>
         <Source Type="IfNotXmlPath:1" Path="//AdditionalData/ProvisionList/FRASKUE"/>
         <Source Type="IfNotXmlPath:2" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
         <Source Type="IfNotXmlPath:3" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
-	<Source Type="IfXmlPath:0" Path="//AdditionalData/BalanceStorage/HostCode[text()='05']"/>
+        <Source Type="IfXmlPath:0" Path="//AdditionalData/BalanceStorage/HostCode[text()='05']"/>
       </SourcesList>
       <SourcesList PresenceValue="10">
         <Source Type="OrXmlPath:0" Path="//AdditionalData/RegisteredList/FRASKUE"/>
@@ -222,12 +224,12 @@
         <Source Type="OrXmlPath:0" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
         <Source Type="OrXmlPath:1" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
       </SourcesList>
-	  <SourcesList PresenceValue="11">
+      <SourcesList PresenceValue="11">
         <Source Type="OrXmlPath:0" Path="//AdditionalData/RegisteredList/FRDGU"/>
         <Source Type="OrXmlPath:1" Path="//AdditionalData/ProvisionList/FRDGU"/>
       </SourcesList>
     </LogicalGroupParameter>
-   </LogicalGroupParametersList>
+  </LogicalGroupParametersList>
   <CommandsList Root="Commands" Mask="*.xml">
     <!-- All new commands are included by Mask=*.xml attribute -->
   </CommandsList>

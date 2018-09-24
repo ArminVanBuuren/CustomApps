@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="SC.Add_MCA_SERVICE_NEW_MSISDN" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Description>Добавление услуги MCA при изменении номера</Description>
+	<Author Name="Vladimir Khovanskiy" Date="2010-03-16+15:00"/>
+	<Request>
+		<RequestTemplate>
+			<![CDATA[command=add&msisdn=##New_Msisdn##]]>
+		</RequestTemplate>	
+		<Item Name="New_Msisdn" Type="LocalParameter"/>
+	</Request>
+	<ParametersList>
+		<Parameter Name="New_Msisdn">
+			<Source Path="//NewMSISDN" />
+		</Parameter>
+	</ParametersList>
+	<ErrorsList CodePage="ASCII"/>
+</Command>
