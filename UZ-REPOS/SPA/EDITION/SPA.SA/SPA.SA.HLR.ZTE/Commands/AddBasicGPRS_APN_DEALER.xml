@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="AddBasicGPRS_APN_DEALER" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description>Добавление услуги 'GPRS'APN_DEALER</Description>
-	<Author Name="Timur Khamzin" Date="2015-11-16+15:00"/>
-	<Request Template='SET TPLGPRS:MSISDN={0},GPRSTPL=20;^M'>
-		<Item Name="msisdn" Type="Wellknown"/>
-	</Request>
-	<ErrorsList CodePage="windows-1251"/>
-</Command>

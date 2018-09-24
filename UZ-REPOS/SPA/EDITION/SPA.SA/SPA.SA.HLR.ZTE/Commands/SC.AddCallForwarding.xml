@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="SC.AddCallForwarding" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Добавление услуги переадресация</Description>
+  <Author Name="Khovanskiy Vladimir" Date="2015-11-16+15:00"/>
+  <Request>
+    <RequestTemplate>
+      <![CDATA[MOD SS:MSISDN=##msisdn##,##CallForwardName##;^M]]>
+    </RequestTemplate>
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="msisdn" Type="Wellknown"/>
+    <Item Name="CallForwardName" Type="LocalParameter"/>
+  </Request>
+  <ParametersList>
+    <Parameter Name="CallForwardName" IsChoice="true" AbsenceValue="">
+      <Source Path="//RFS_HL_CFB" PostFormat="CFB=1,CFBNTC=1,CFBNTF=1" />
+      <Source Path="//RFS_HL_CFU" PostFormat="CFU=1,CFUNTC=1" />
+      <Source Path="//RFS_HL_CFNRC" PostFormat="CFNRC=1,CFNRCNTC=1" />
+      <Source Path="//RFS_HL_CFNRY" PostFormat="CFNRY=1,CFNRYNTC=1,CFNRYNTF=1" />
+    </Parameter>
+  </ParametersList>
+  <ErrorsList CodePage="windows-1251" />
+</Command>

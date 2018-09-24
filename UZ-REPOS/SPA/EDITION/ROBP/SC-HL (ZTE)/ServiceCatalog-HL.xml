@@ -18,30 +18,55 @@
   <ResourceList>
   </ResourceList>
   <RFSParameterList>
+    <RFSParameter name="CallForwardType" description="Тип установки переадресаций" />
+    <RFSParameter name="CallForwardMode" description="Режим переадресации" />
+    <RFSParameter name="ForwardedToNumber" description="Номер переадресации" />
+    <RFSParameter name="CallForwardingTimer" description="Таймер переадресации" />
   </RFSParameterList>
   <FlagList />
   <RFSList>
-    <RFS name="RFS_HLR_CFB" hostType="HL" description="Call forwarding on mobile subscriber busy - TS10">
+    <RFS name="RFS_HL_CLLFRWD_TYPE" hostType="HL" description="Тип установки переадресаций">
       <RFSParameter name="CallForwardType">
-        <Value condition="(//ActionNameOriginal[text()='Update Call Forwarding'])" value="Foris" />
+        <Value condition="(//ActionNameOriginal[text()='Update Call Forwarding'])" value="Provision" />
+      </RFSParameter>
+    </RFS>
+    <RFS name="RFS_HL_CFB" hostType="HL" description="Call forwarding on mobile subscriber busy - TS10">
+      <RFSParameter name="CallForwardMode">
+        <Value condition="(//ProvisionList/CallForwarding/CFB)" value="Activate" />
         <Value condition="(//WithdrawalList/CallForwarding/CFB)" value="Deactivate" />
       </RFSParameter>
-      <RFSParameter name="ForwardedToNumber">
-        <Value hosts="HL:2694,HL:2704,HL:2711,HL:2713,HL:2754,HL:2757,HL:2786,HL:2812" condition="(//CFB/ForwardingToAddress[text()='voicemail'])" value="79122410860" />
-        <Value hosts="HL:2694,HL:2704,HL:2711,HL:2713,HL:2754,HL:2757,HL:2786,HL:2812" path="//CFB/ForwardingToAddress[text()!='voicemail']" />
-        <Value hosts="HL:14088,HL:14090,HL:14094,HL:14099,HL:14105,HL:14139,HL:14140,HL:PENZA" condition="(//CFB/ForwardingToAddress[text()='voicemail'])" value="79101200860" />
-        <Value hosts="HL:242844,HL:2707,HL:2741,HL:2751,HL:2777,HL:2794" condition="(//CFB/ForwardingToAddress[text()='voicemail'])" value="79101200860" />
-        <Value hosts="HL:14088,HL:14090,HL:14094,HL:14099,HL:14105,HL:14139,HL:14140,HL:PENZA" path="//CFB/ForwardingToAddress[text()!='voicemail']" />
-        <Value hosts="HL:242844,HL:2707,HL:2741,HL:2751,HL:2777,HL:2794" path="//CFB/ForwardingToAddress[text()!='voicemail']" />
+      <RFSParameter name="ForwardedToNumber" path="//CFB/ForwardingToAddress" />
+    </RFS>
+    <RFS name="RFS_HL_CFU" hostType="HL" description="Call forwarding unconditional - TS10">
+      <RFSParameter name="CallForwardMode">
+        <Value condition="(//ProvisionList/CallForwarding/CFU)" value="Activate" />
+        <Value condition="(//WithdrawalList/CallForwarding/CFU)" value="Deactivate" />
       </RFSParameter>
+      <RFSParameter name="ForwardedToNumber" path="//CFU/ForwardingToAddress" />
+    </RFS>
+    <RFS name="RFS_HL_CFNRC" hostType="HL" description="Call forwarding on mobile subscriber not reachable - TS10">
+      <RFSParameter name="CallForwardMode">
+        <Value condition="(//ProvisionList/CallForwarding/CFNRC)" value="Activate" />
+        <Value condition="(//WithdrawalList/CallForwarding/CFNRC)" value="Deactivate" />
+      </RFSParameter>
+      <RFSParameter name="ForwardedToNumber" path="//CFNRC/ForwardingToAddress" />
+    </RFS>
+    <RFS name="RFS_HL_CFNRY" hostType="HL" description="Call forwarding on no reply - TS10">
+      <RFSParameter name="CallForwardMode">
+        <Value condition="(//ProvisionList/CallForwarding/CFNRY)" value="Activate" />
+        <Value condition="(//WithdrawalList/CallForwarding/CFNRY)" value="Deactivate" />
+      </RFSParameter>
+      <RFSParameter name="ForwardedToNumber" path="//CFNRY/ForwardingToAddress" />
+      <RFSParameter name="CallForwardingTimer" path="//CFNRY/NoReplyTimer" />
     </RFS>
   </RFSList>
   <CFSList>
     <CFS name="CallForwarding" description="Активация пользовательской переадресации вызова">
-      <RFS name="RFS_HLR_CFB" linkType="Add" />
-      <RFS name="RFS_HLR_CFU" linkType="Add" />
-      <RFS name="RFS_HLR_CFNRC" linkType="Add" />
-      <RFS name="RFS_HLR_CFNRY" linkType="Add" />
+      <RFS name="RFS_HL_CFB" linkType="Add" />
+      <RFS name="RFS_HL_CFU" linkType="Add" />
+      <RFS name="RFS_HL_CFNRC" linkType="Add" />
+      <RFS name="RFS_HL_CFNRY" linkType="Add" />
+      <RFS name="RFS_HL_CLLFRWD_TYPE" linkType="Info" />
     </CFS>
   </CFSList>
   <CFSGroupList>
@@ -51,6 +76,13 @@
   <HandlerList >
   </HandlerList>
   <ScenarioList>
+    <Scenario name="CallForwarding" description="Добавление-удаление, активация-деактивация переадресаций">
+      <RFS name="RFS_HL_CFB" scenarioType="Add, Remove" />
+      <RFS name="RFS_HL_CFU" scenarioType="Add, Remove" />
+      <RFS name="RFS_HL_CFNRC" scenarioType="Add, Remove" />
+      <RFS name="RFS_HL_CFNRY" scenarioType="Add, Remove" />
+      <Append name="RFS_HL_CLLFRWD_TYPE" listType="All" />
+    </Scenario>
   </ScenarioList>
   <WfmScenarioList />
 </Configuration>

@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="SC.ActivateCallForwarding" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Активация услуги переадресация вызова</Description>
+  <Author Name="Khovanskiy Vladimir" Date="2015-11-16+15:00"/>
+  <Request>
+    <RequestTemplate>
+      <![CDATA[Reg FN:MSISDN=##msisdn##,SS=##CallForwardName##,Bsg=0,Register=1,Active=1,FwdNum=00##ForwardedToNumber####CallForwardingTimer##;^M]]>
+    </RequestTemplate>
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="msisdn" Type="Wellknown"/>
+    <Item Name="CallForwardName" Type="LocalParameter"/>
+    <Item Name="ForwardedToNumber" Type="LocalParameter"/>
+    <Item Name="CallForwardingTimer" Type="LocalParameter"/>
+  </Request>
+  <ParametersList>
+    <Parameter Name="CallForwardName" IsChoice="true" AbsenceValue="">
+      <Source Path="//RFS_HL_CFB" PostFormat="CFB" />
+      <Source Path="//RFS_HL_CFU" PostFormat="CFU" />
+      <Source Path="//RFS_HL_CFNRC" PostFormat="CFNRC" />
+      <Source Path="//RFS_HL_CFNRY" PostFormat="CFNRY" />
+    </Parameter>
+    <Parameter Name="ForwardedToNumber">
+      <Source Path="//ForwardedToNumber/Value"/>
+    </Parameter>
+    <Parameter Name="CallForwardingTimer" IsChoice="true" AbsenceValue="">
+      <Source Path="//CallForwardingTimer/Value" PostFormat=",Time={0}" />
+    </Parameter>
+  </ParametersList>
+  <ErrorsList CodePage="windows-1251" />
+</Command>
