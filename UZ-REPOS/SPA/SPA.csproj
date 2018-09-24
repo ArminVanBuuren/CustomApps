@@ -875,7 +875,6 @@
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\GT\MoneyTransfer.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\GT\TestBPMdummy.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\GT\TestBPMInf.xml" />
-    <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\ActivateCallForwarding.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\AddAPN_CORP.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\AddAPN_LIKE.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\AddBlockOnAllCalls.xml" />
@@ -924,7 +923,6 @@
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\CreateSubscribersInTheHLR.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\CreateSubscribersOnHLR.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\CreateSubscriberTelecom.xml" />
-    <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\DeactivateCallForwarding.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\DeleteAPN_CORP.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\DeleteBlockOnAllCalls.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\DeleteBSNSSRMNG.xml" />
@@ -981,7 +979,6 @@
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\Sync\AddGPRSService_Sync.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\Sync\AddServices_sync.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\Sync\AssignServices_sync.xml" />
-    <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\UpdateCallForwardingOnHLR.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE_ROAMING\AddBIC0.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE_ROAMING\AddBIC1.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE_ROAMING\AddBOC0.xml" />
