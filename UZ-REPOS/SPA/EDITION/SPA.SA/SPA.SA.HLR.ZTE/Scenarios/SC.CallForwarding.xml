@@ -6,39 +6,9 @@
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="RequestCutterByXmlNodes" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterByXmlNodes" assembly="FORIS.SPA.MmlProcessing.dll" />
-    <object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
     <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
   </objectList>
   <automat>
-    <!--<node name="AssignCFW" object="IfMultipleXmlConditionsResolver">
-      <resultlist>
-        <result value="0" node="DeleteCallForwarding" />
-        <result value="" node="ActivateCFW" />
-      </resultlist>
-      <parameterslist>
-        <param name="IfXmlPath:0" value="//RemoveList/RFS_HL_CFW_SERVICE" />
-      </parameterslist>
-    </node>
-    <node name="ActivateCFW" object="IfMultipleXmlConditionsResolver">
-      <resultlist>
-        <result value="0" node="DeleteCallForwarding" />
-        <result value="" node="UpdateCFW" />
-      </resultlist>
-      <parameterslist>
-        <param name="IfXmlPath:0" value="//CallForwardType/Value[text()='Provision']" />
-      </parameterslist>
-    </node>
-    <node name="UpdateCFW" object="IfMultipleXmlConditionsResolver">
-      <resultlist>
-        <result value="0" node="DeleteCallForwarding" />
-        <result value="" node="DeactivateCallForwarding" />
-      </resultlist>
-      <parameterslist>
-        <param name="IfXmlPath:0" value="//CallForwardType/Value[text()='Provision']" />
-      </parameterslist>
-    </node>-->
-    
-    
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
       <resultlist>
         <result value="0" node="RequestCutterByXmlNodes"/>
