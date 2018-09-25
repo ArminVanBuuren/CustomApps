@@ -7,21 +7,22 @@
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="RequestCutterByXmlNodes" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterByXmlNodes" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+    <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
   </objectList>
   <automat>
-    <node name="AssignCFW" object="IfMultipleXmlConditionsResolver">
+    <!--<node name="AssignCFW" object="IfMultipleXmlConditionsResolver">
       <resultlist>
         <result value="0" node="DeleteCallForwarding" />
-        <result value="" node="DeactivateCallForwarding" />
+        <result value="" node="ActivateCFW" />
       </resultlist>
       <parameterslist>
-        <param name="IfXmlPath:0" value="//CallForwardType/Value[text()='Provision']" />
+        <param name="IfXmlPath:0" value="//RemoveList/RFS_HL_CFW_SERVICE" />
       </parameterslist>
     </node>
     <node name="ActivateCFW" object="IfMultipleXmlConditionsResolver">
       <resultlist>
         <result value="0" node="DeleteCallForwarding" />
-        <result value="" node="DeactivateCallForwarding" />
+        <result value="" node="UpdateCFW" />
       </resultlist>
       <parameterslist>
         <param name="IfXmlPath:0" value="//CallForwardType/Value[text()='Provision']" />
@@ -35,7 +36,7 @@
       <parameterslist>
         <param name="IfXmlPath:0" value="//CallForwardType/Value[text()='Provision']" />
       </parameterslist>
-    </node>
+    </node>-->
     
     
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
@@ -73,8 +74,8 @@
     </node>
     <node name="AddCallForwarding" object="IfCommander">
       <resultlist>
-        <result value="0" node="DeactivateCallForwarding"/>
-        <result value="1538" node="DeactivateCallForwarding"/>
+        <result value="0" node="SwitchMode"/>
+        <result value="1538" node="SwitchMode"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
@@ -86,25 +87,34 @@
         <param name="DynamicObject" value="(empty)"/>
       </parameterslist>
     </node>
-    <node name="DeactivateCallForwarding" object="IfCommander">
+    <node name="SwitchMode" object="Switch">
       <resultlist>
-        <result value="0" node="ActivateCallForwarding"/>
-        <result value="1538" node="RequestCutterByXmlNodes"/>
+        <result value="0" node="RequestCutterByXmlNodes"/>
+        <result value="1" node="RequestCutterByXmlNodes"/>
+        <result value="2" node="ActivateCallForwarding_1"/>
+        <result value="3" node="DeactivateCallForwarding"/>
+      </resultlist>
+      <parameterslist>
+        <param name="XmlPath" value="//CallForwardMode/Value/text()"/>
+        <param name="Value:2" value="Activate"/>
+        <param name="Value:3" value="Deactivate"/>
+      </parameterslist>
+    </node>
+    <node name="ActivateCallForwarding_1" object="Commander">
+      <resultlist>
+        <result value="0" node="ActivateCallForwarding_2"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="OrXmlPath:0" value="//CallForwardMode/Value[text()='Activate']"/>
-        <param name="OrXmlPath:1" value="//CallForwardMode/Value[text()='Deactivate']"/>
         <param name="CommandSource" value="Dictionary"/>
         <param name="AppendSubscribersData" value="false"/>
         <param name="Command" value="SC.DeactivateCallForwarding"/>
         <param name="DynamicObject" value="(empty)"/>
       </parameterslist>
     </node>
-    <node name="ActivateCallForwarding" object="IfCommander">
+    <node name="ActivateCallForwarding_2" object="Commander">
       <resultlist>
         <result value="0" node="RequestCutterByXmlNodes"/>
-        <result value="1538" node="RequestCutterByXmlNodes"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
@@ -112,6 +122,18 @@
         <param name="CommandSource" value="Dictionary"/>
         <param name="AppendSubscribersData" value="false"/>
         <param name="Command" value="SC.ActivateCallForwarding"/>
+        <param name="DynamicObject" value="(empty)"/>
+      </parameterslist>
+    </node>
+    <node name="DeactivateCallForwarding" object="Commander">
+      <resultlist>
+        <result value="0" node="RequestCutterByXmlNodes"/>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary"/>
+        <param name="AppendSubscribersData" value="false"/>
+        <param name="Command" value="SC.DeactivateCallForwarding"/>
         <param name="DynamicObject" value="(empty)"/>
       </parameterslist>
     </node>
