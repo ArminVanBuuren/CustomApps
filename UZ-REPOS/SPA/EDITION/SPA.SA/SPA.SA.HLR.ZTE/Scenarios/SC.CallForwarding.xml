@@ -88,7 +88,6 @@
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="IfXmlPath:0" value="//CallForwardMode/Value[text()='Activate']"/>
         <param name="CommandSource" value="Dictionary"/>
         <param name="AppendSubscribersData" value="false"/>
         <param name="Command" value="SC.ActivateCallForwarding"/>
