@@ -25,7 +25,8 @@
   </RFSParameterList>
   <FlagList />
   <RFSList>
-    <RFS name="RFS_HL_CLLFRWD_TYPE" hostType="HL" description="Тип установки переадресаций">
+    <RFS name="RFS_HL_CFW_SERVICE" hostType="HL" description="Call forwarding service"/>
+    <RFS name="RFS_HL_CFW" hostType="HL" description="Тип установки переадресаций">
       <RFSParameter name="CallForwardType">
         <Value condition="(//ActionNameOriginal[text()='Update Call Forwarding'])" value="Provision" />
       </RFSParameter>
@@ -62,11 +63,18 @@
   </RFSList>
   <CFSList>
     <CFS name="CallForwarding" description="Активация пользовательской переадресации вызова">
-      <RFS name="RFS_HL_CFB" linkType="Add" />
-      <RFS name="RFS_HL_CFU" linkType="Add" />
-      <RFS name="RFS_HL_CFNRC" linkType="Add" />
-      <RFS name="RFS_HL_CFNRY" linkType="Add" />
-      <RFS name="RFS_HL_CLLFRWD_TYPE" linkType="Info" />
+      <RFS name="RFS_HL_CFW" linkType="Add" />
+      <RFS name="RFS_HL_CFB" linkType="Info" />
+      <RFS name="RFS_HL_CFU" linkType="Info" />
+      <RFS name="RFS_HL_CFNRC" linkType="Info" />
+      <RFS name="RFS_HL_CFNRY" linkType="Info" />
+    </CFS>
+    <CFS name="CB532" description="Переадресация вызова (периодическая)">
+      <RFS name="RFS_HL_CFW_SERVICE" linkType="Add" />
+      <RFS name="RFS_HL_CFB" linkType="Info" />
+      <RFS name="RFS_HL_CFU" linkType="Info" />
+      <RFS name="RFS_HL_CFNRC" linkType="Info" />
+      <RFS name="RFS_HL_CFNRY" linkType="Info" />
     </CFS>
   </CFSList>
   <CFSGroupList>
@@ -77,11 +85,12 @@
   </HandlerList>
   <ScenarioList>
     <Scenario name="CallForwarding" description="Добавление-удаление, активация-деактивация переадресаций">
-      <RFS name="RFS_HL_CFB" scenarioType="Add, Remove" />
-      <RFS name="RFS_HL_CFU" scenarioType="Add, Remove" />
-      <RFS name="RFS_HL_CFNRC" scenarioType="Add, Remove" />
-      <RFS name="RFS_HL_CFNRY" scenarioType="Add, Remove" />
-      <Append name="RFS_HL_CLLFRWD_TYPE" listType="All" />
+      <RFS name="RFS_HL_CFW" scenarioType="Add, Remove" />
+      <RFS name="RFS_HL_CFW_SERVICE" scenarioType="Add, Remove" />
+      <Append name="RFS_HL_CFB" listType="All" />
+      <Append name="RFS_HL_CFU" listType="All" />
+      <Append name="RFS_HL_CFNRC" listType="All" />
+      <Append name="RFS_HL_CFNRY" listType="All" />
     </Scenario>
   </ScenarioList>
   <WfmScenarioList />
