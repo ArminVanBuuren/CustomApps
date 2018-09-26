@@ -145,6 +145,7 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.DeleteCallForwarding.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.AddCallForwarding.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.ActivateCallForwarding.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\!Example.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.CallForwarding.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MCA\Commands\SC.Add_MCA_SERVICE.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MCA\Commands\SC.Add_MCA_SERVICE_NEW_MSISDN.xml" />

@@ -4,7 +4,7 @@
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
   <Request>
     <RequestTemplate>
-      <![CDATA[Reg FN:MSISDN=##msisdn##,SS=##CallForwardName##,Bsg=0,Register=1,Active=1,FwdNum=00##ForwardedToNumber####CallForwardingTimer##;^M]]>
+      <![CDATA[Reg FN:MSISDN=##msisdn##,SS=##CallForwardName##,Bsg=0,Register=1,Active=1##ForwardedToNumber####CallForwardingTimer##;^M]]>
     </RequestTemplate>
     <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
     <Item Name="msisdn" Type="Wellknown"/>
@@ -18,9 +18,11 @@
       <Source Path="//RFS_HL_CFU" PostFormat="CFU" />
       <Source Path="//RFS_HL_CFNRC" PostFormat="CFNRC" />
       <Source Path="//RFS_HL_CFNRY" PostFormat="CFNRY" />
+      <Source Path="//RFS_HL_CFD" PostFormat="CFD" />
     </Parameter>
-    <Parameter Name="ForwardedToNumber">
-      <Source Path="//ForwardedToNumber/Value"/>
+    <Parameter Name="ForwardedToNumber" IsChoice="true" AbsenceValue="">
+      <Source Path="//ForwardedToNumber/Value" PostFormat=",FwdNum=00{0}" />
+      <Source Path="//RFS_HL_CFD" PostFormat=",CFDNRcAddr=998970000007" />
     </Parameter>
     <Parameter Name="CallForwardingTimer" IsChoice="true" AbsenceValue="">
       <Source Path="//CallForwardingTimer/Value" PostFormat=",Time={0}" />

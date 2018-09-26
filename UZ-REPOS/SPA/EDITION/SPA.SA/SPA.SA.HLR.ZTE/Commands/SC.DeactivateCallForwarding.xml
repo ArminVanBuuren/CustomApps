@@ -4,7 +4,7 @@
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
   <Request>
     <RequestTemplate>
-      <![CDATA[Reg FN :MSISDN=##msisdn##,SS=##CallForwardName##,Bsg=0,Register=0,Active=0;^M]]>
+      <![CDATA[Reg FN:MSISDN=##msisdn##,SS=##CallForwardName##,Bsg=0,Register=0,Active=0;^M]]>
     </RequestTemplate>
     <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
     <Item Name="msisdn" Type="Wellknown"/>
@@ -16,6 +16,7 @@
       <Source Path="//RFS_HL_CFU" PostFormat="CFU" />
       <Source Path="//RFS_HL_CFNRC" PostFormat="CFNRC" />
       <Source Path="//RFS_HL_CFNRY" PostFormat="CFNRY" />
+      <Source Path="//RFS_HL_CFD" PostFormat="CFD" />
     </Parameter>
   </ParametersList>
   <ErrorsList CodePage="windows-1251" />

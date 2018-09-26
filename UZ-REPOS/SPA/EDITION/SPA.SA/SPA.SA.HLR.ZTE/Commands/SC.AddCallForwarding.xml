@@ -16,6 +16,7 @@
       <Source Path="//RFS_HL_CFU" PostFormat="CFU=1,CFUNTC=1" />
       <Source Path="//RFS_HL_CFNRC" PostFormat="CFNRC=1,CFNRCNTC=1" />
       <Source Path="//RFS_HL_CFNRY" PostFormat="CFNRY=1,CFNRYNTC=1,CFNRYNTF=1" />
+      <Source Path="//RFS_HL_CFD" PostFormat="CFD=1,CFDNTC=1,CFDNTF=1" />
     </Parameter>
   </ParametersList>
   <ErrorsList CodePage="windows-1251" />

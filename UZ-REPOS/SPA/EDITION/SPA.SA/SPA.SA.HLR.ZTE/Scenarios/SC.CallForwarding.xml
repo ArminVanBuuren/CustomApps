@@ -70,12 +70,15 @@
         <param name="Value:3" value="Deactivate"/>
       </parameterslist>
     </node>
-    <node name="ActivateCallForwarding_1" object="Commander">
+    <node name="ActivateCallForwarding_1" object="IfCommander">
       <resultlist>
         <result value="0" node="ActivateCallForwarding_2"/>
+        <result value="1538" node="ActivateCallForwarding_2"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
+        <param name="IfNotXmlPath:0" value="//CallForwardType/Value[text()='Provision']"/>
+        <param name="IfNotXmlPath:1" value="//RFS_HL_CF_SERVICE"/>
         <param name="CommandSource" value="Dictionary"/>
         <param name="AppendSubscribersData" value="false"/>
         <param name="Command" value="SC.DeactivateCallForwarding"/>
