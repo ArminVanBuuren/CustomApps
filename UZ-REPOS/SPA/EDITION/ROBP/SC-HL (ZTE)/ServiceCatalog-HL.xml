@@ -98,7 +98,7 @@
   <HandlerList >
   </HandlerList>
   <ScenarioList>
-    <Scenario name="CallForwarding" description="Добавление-удаление, активация-деактивация переадресаций">
+    <Scenario name="HL.CallForwarding" description="Добавление-удаление, активация-деактивация переадресаций">
       <RFS name="RFS_HL_CF" scenarioType="Add, Remove" />
       <RFS name="RFS_HL_CF_SERVICE" scenarioType="Add, Remove" />
       <Append name="RFS_HL_CFB" listType="All" />
@@ -107,7 +107,10 @@
       <Append name="RFS_HL_CFNRY" listType="All" />
       <Append name="RFS_HL_CFD" listType="All" />
     </Scenario>
-    <Scenario name="AssignServices" description="Добавление услуг">
+    <Scenario name="HL.AssignServices" description="Добавление услуг">
+      <RFS name="RFS_HL_RBT" scenarioType="Add" />
+    </Scenario>
+    <Scenario name="HL.RemoveServices" description="Добавление услуг">
       <RFS name="RFS_HL_RBT" scenarioType="Add" />
     </Scenario>
   </ScenarioList>
