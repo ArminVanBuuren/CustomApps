@@ -140,7 +140,7 @@
     <Content Include="EDITION\ROBP\Processes\Roaming Test Util Request.xml" />
     <Content Include="EDITION\ROBP\Processes\Synchronize Subscriber Data.xml" />
     <Content Include="EDITION\ROBP\Processes\Unblock Subscriber.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.AddSimpleService.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\!Example.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.DeactivateCallForwarding.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.DeleteCallForwarding.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.AddCallForwarding.xml" />
@@ -875,7 +875,6 @@
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\AddCB264.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\AddCB266HLR.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\AddCB406278.xml" />
-    <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\AddCB532.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\AddCB537.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\AddCB6311.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\AddCB6376.xml" />
@@ -921,7 +920,6 @@
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\DeleteCB264.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\DeleteCB266HLR.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\DeleteCB406278.xml" />
-    <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\DeleteCB532.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\DeleteCB6311.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\DeleteCB6376.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\DeleteCB9831.xml" />

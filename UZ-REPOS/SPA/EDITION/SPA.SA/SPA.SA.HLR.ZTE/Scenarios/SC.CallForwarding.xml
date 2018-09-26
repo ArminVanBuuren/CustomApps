@@ -35,7 +35,7 @@
       </resultlist>
       <parameterslist>
         <param name="OrXmlPath:0" value="//CallForwardType/Value[text()='Provision']"/>
-        <param name="OrXmlPath:1" value="//RemoveList/RFS_HL_CFW_SERVICE"/>
+        <param name="OrXmlPath:1" value="//RemoveList/RFS_HL_CF_SERVICE"/>
         <param name="CommandSource" value="Dictionary"/>
         <param name="AppendSubscribersData" value="false"/>
         <param name="Command" value="SC.DeleteCallForwarding"/>
@@ -50,7 +50,7 @@
       </resultlist>
       <parameterslist>
         <param name="OrXmlPath:0" value="//CallForwardType/Value[text()='Provision']"/>
-        <param name="OrXmlPath:1" value="//AddList/RFS_HL_CFW_SERVICE"/>
+        <param name="OrXmlPath:1" value="//AddList/RFS_HL_CF_SERVICE"/>
         <param name="CommandSource" value="Dictionary"/>
         <param name="AppendSubscribersData" value="false"/>
         <param name="Command" value="SC.AddCallForwarding"/>
