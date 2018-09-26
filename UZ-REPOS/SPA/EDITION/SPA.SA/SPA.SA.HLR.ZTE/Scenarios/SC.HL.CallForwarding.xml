@@ -17,7 +17,7 @@
     </node>
     <node name="RequestCutterByXmlNodes" object="RequestCutterByXmlNodes">
       <resultlist>
-        <result value="0" node="DeleteCF"/>
+        <result value="0" node="CallForwarding_Delete"/>
         <result value="1" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
@@ -27,10 +27,10 @@
         <param name="XmlPath:1" value="//EndList/*"/>
       </parameterslist>
     </node>
-    <node name="DeleteCF" object="IfCommander">
+    <node name="CallForwarding_Delete" object="IfCommander">
       <resultlist>
-        <result value="0" node="AddCF"/>
-        <result value="1538" node="AddCF"/>
+        <result value="0" node="CallForwarding_Add"/>
+        <result value="1538" node="CallForwarding_Add"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
@@ -42,7 +42,7 @@
         <param name="DynamicObject" value="(empty)"/>
       </parameterslist>
     </node>
-    <node name="AddCF" object="IfCommander">
+    <node name="CallForwarding_Add" object="IfCommander">
       <resultlist>
         <result value="0" node="SwitchMode"/>
         <result value="1538" node="SwitchMode"/>
@@ -61,8 +61,8 @@
       <resultlist>
         <result value="0" node="RequestCutterByXmlNodes"/>
         <result value="1" node="RequestCutterByXmlNodes"/>
-        <result value="2" node="ActivateCF_1"/>
-        <result value="3" node="DeactivateCF"/>
+        <result value="2" node="CallForwarding_Activate"/>
+        <result value="3" node="CallForwarding_Deactivate"/>
       </resultlist>
       <parameterslist>
         <param name="XmlPath" value="//CallForwardMode/Value/text()"/>
@@ -70,10 +70,10 @@
         <param name="Value:3" value="Deactivate"/>
       </parameterslist>
     </node>
-    <node name="ActivateCF_1" object="IfCommander">
+    <node name="CallForwarding_Activate" object="IfCommander">
       <resultlist>
-        <result value="0" node="ActivateCF_2"/>
-        <result value="1538" node="ActivateCF_2"/>
+        <result value="0" node="CallForwarding_ActivateNode2"/>
+        <result value="1538" node="CallForwarding_ActivateNode2"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
@@ -85,7 +85,7 @@
         <param name="DynamicObject" value="(empty)"/>
       </parameterslist>
     </node>
-    <node name="ActivateCF_2" object="Commander">
+    <node name="CallForwarding_ActivateNode2" object="Commander">
       <resultlist>
         <result value="0" node="RequestCutterByXmlNodes"/>
         <result value="" node="ResponseAssembler"/>
@@ -97,7 +97,7 @@
         <param name="DynamicObject" value="(empty)"/>
       </parameterslist>
     </node>
-    <node name="DeactivateCF" object="Commander">
+    <node name="CallForwarding_Deactivate" object="Commander">
       <resultlist>
         <result value="0" node="RequestCutterByXmlNodes"/>
         <result value="" node="ResponseAssembler"/>

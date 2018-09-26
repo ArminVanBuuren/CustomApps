@@ -4,14 +4,10 @@
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
   <Request>
     <RequestTemplate>
-      <![CDATA[SET TPLGPRS:MSISDN={0},GPRSTPL=##GPRSTPL##;^M]]>
+      <![CDATA[SET TPLGPRS:MSISDN={0},GPRSTPL=51;^M]]>
     </RequestTemplate>
     <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
     <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="GPRSTPL" Type="LocalParameter"/>
   </Request>
-  <Parameter Name="GPRSTPL">
-    <Source Path="//RES_HL_INTERNET_TEMPLATE/Value"/>
-  </Parameter>
   <ErrorsList CodePage="windows-1251" />
 </Command>

@@ -68,10 +68,8 @@
       <RFSParameter name="ForwardedToNumber" value="998970000007" />
     </RFS>
     <RFS name="RFS_HL_RBT" hostType="HL" description="GOODOK"/>
-    <RFS name="RFS_HL_SERVICE_INTERNET" hostType="HL" description="Мобильный интернет">
-      <Resource name="RES_HL_INTERNET_TEMPLATE" value="51" useType="Mandatory" />
-    </RFS>
-    <RFS name="RFS_HL_SERVICE_LTE" hostType="HL" description="Мобильный интернет"/>
+    <RFS name="RFS_HL_SERVICE_INTERNET" hostType="HL" description="Мобильный интернет GPRS"/>
+    <RFS name="RFS_HL_SERVICE_LTE" hostType="HL" description="Мобильный интернет LTE"/>
   </RFSList>
   <CFSList>
     <CFS name="Subscriber" type="ManagedObject" description="Абонент" />
