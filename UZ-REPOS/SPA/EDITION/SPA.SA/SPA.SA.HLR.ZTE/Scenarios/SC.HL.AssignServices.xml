@@ -3,7 +3,7 @@
   <objectList>
     <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    
+    <object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
     
     <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
@@ -19,8 +19,8 @@
     </node>
     <node name="AddRBT" object="IfCommander">
       <resultlist>
-        <result value="0" node=""/>
-        <result value="1538" node=""/>
+        <result value="0" node="CheckServiceInternet"/>
+        <result value="1538" node="CheckServiceInternet"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
@@ -31,6 +31,55 @@
         <param name="DynamicObject" value="(empty)"/>
       </parameterslist>
     </node>
+
+
+    <node name="CheckServiceInternet" object="IfMultipleXmlConditionsResolver">
+      <resultlist>
+        <result value="0" node="AddBasicGPRS_NAM" />
+        <result value="" node="CheckServiceLte" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="request" />
+        <param name="IfXmlPath:0" value="//RFS_HL_SERVICE_INTERNET" />
+      </parameterslist>
+    </node>
+    <node name="AddBasicGPRS_NAM" object="Commander">
+      <resultlist>
+        <result value="0" node="AddBasicGPRS_APN"/>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary"/>
+        <param name="AppendSubscribersData" value="false"/>
+        <param name="Command" value="SC.AddBasicGPRS_NAM"/>
+        <param name="DynamicObject" value="(empty)"/>
+      </parameterslist>
+    </node>
+    <node name="AddBasicGPRS_APN" object="Commander">
+      <resultlist>
+        <result value="0" node="CheckServiceLte"/>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary"/>
+        <param name="AppendSubscribersData" value="false"/>
+        <param name="Command" value="SC.AddBasicGPRS_APN"/>
+        <param name="DynamicObject" value="(empty)"/>
+      </parameterslist>
+    </node>
+
+    <node name="CheckServiceLte" object="IfMultipleXmlConditionsResolver">
+      <resultlist>
+        <result value="0" node="UpdateIPoERadiusGroupNode" />
+        <result value="" node="UpdatePPPoERadiusGroupNode" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="request" />
+        <param name="IfXmlPath:0" value="//RFS_HL_SERVICE_LTE" />
+      </parameterslist>
+    </node>
+
+
     <node name="ResponseAssembler" object="ResponseAssembler">
       <resultlist>
         <result value="" node="RequestCutterBySubscribers"/>

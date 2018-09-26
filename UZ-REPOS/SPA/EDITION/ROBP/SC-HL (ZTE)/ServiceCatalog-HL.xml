@@ -16,6 +16,7 @@
     <Attribute name="TerminalDeviceId" path="//IdentifiersList/Identifier/TerminalDeviceId" description="Идентификатор ПО" />
   </AttributeList>
   <ResourceList>
+    <Resource name="RES_HL_INTERNET_TEMPLATE" description="APN профиль абонента на HLR" />
   </ResourceList>
   <RFSParameterList>
     <RFSParameter name="CallForwardType" description="Тип установки переадресаций" />
@@ -64,8 +65,13 @@
       <RFSParameter name="CallForwardMode">
         <Value condition="(//ProvisionList)" value="Activate" />
       </RFSParameter>
+      <RFSParameter name="ForwardedToNumber" value="998970000007" />
     </RFS>
     <RFS name="RFS_HL_RBT" hostType="HL" description="GOODOK"/>
+    <RFS name="RFS_HL_SERVICE_INTERNET" hostType="HL" description="Мобильный интернет">
+      <Resource name="RES_HL_INTERNET_TEMPLATE" value="51" useType="Mandatory" />
+    </RFS>
+    <RFS name="RFS_HL_SERVICE_LTE" hostType="HL" description="Мобильный интернет"/>
   </RFSList>
   <CFSList>
     <CFS name="Subscriber" type="ManagedObject" description="Абонент" />
@@ -90,6 +96,12 @@
     <CFS name="FRCRBT" description="GOODOK">
       <RFS name="RFS_HL_RBT" linkType="Add" />
     </CFS>
+    <CFS name="CB406278" description="Мобильный интернет">
+      <RFS name="RFS_HL_SERVICE_INTERNET" linkType="Add" />
+    </CFS>
+    <CFS name="FRUNLIMLTE" description="Доступ к сети 4G LTE">
+      <RFS name="RFS_HL_SERVICE_LTE" linkType="Add" />
+    </CFS>
   </CFSList>
   <CFSGroupList>
   </CFSGroupList>
@@ -109,9 +121,11 @@
     </Scenario>
     <Scenario name="HL.AssignServices" description="Добавление услуг">
       <RFS name="RFS_HL_RBT" scenarioType="Add" />
+      <RFS name="RFS_HL_SERVICE_INTERNET" scenarioType="Add" />
     </Scenario>
-    <Scenario name="HL.RemoveServices" description="Добавление услуг">
-      <RFS name="RFS_HL_RBT" scenarioType="Add" />
+    <Scenario name="HL.RemoveServices" description="Удаление услуг">
+      <RFS name="RFS_HL_RBT" scenarioType="Remove" />
+      <RFS name="RFS_HL_SERVICE_INTERNET" scenarioType="Remove" />
     </Scenario>
   </ScenarioList>
   <WfmScenarioList />

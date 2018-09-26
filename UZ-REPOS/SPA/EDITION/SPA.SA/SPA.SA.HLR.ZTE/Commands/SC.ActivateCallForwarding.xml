@@ -21,8 +21,11 @@
       <Source Path="//RFS_HL_CFD" PostFormat="CFD" />
     </Parameter>
     <Parameter Name="ForwardedToNumber" IsChoice="true" AbsenceValue="">
-      <Source Path="//ForwardedToNumber/Value" PostFormat=",FwdNum=00{0}" />
-      <Source Path="//RFS_HL_CFD" PostFormat=",CFDNRcAddr=998970000007" />
+      <Source Path="//RFS_HL_CFB//ForwardedToNumber/Value" PostFormat=",FwdNum=00{0}" />
+      <Source Path="//RFS_HL_CFU//ForwardedToNumber/Value" PostFormat=",FwdNum=00{0}" />
+      <Source Path="//RFS_HL_CFNRC//ForwardedToNumber/Value" PostFormat=",FwdNum=00{0}" />
+      <Source Path="//RFS_HL_CFNRY//ForwardedToNumber/Value" PostFormat=",FwdNum=00{0}" />
+      <Source Path="//RFS_HL_CFD//ForwardedToNumber/Value" PostFormat=",CFDNRcAddr={0}" />
     </Parameter>
     <Parameter Name="CallForwardingTimer" IsChoice="true" AbsenceValue="">
       <Source Path="//CallForwardingTimer/Value" PostFormat=",Time={0}" />

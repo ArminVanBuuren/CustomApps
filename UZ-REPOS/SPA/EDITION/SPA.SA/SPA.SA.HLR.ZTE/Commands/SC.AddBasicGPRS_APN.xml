@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="SC.AddBasicGPRS_APN" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Добавление услуги 'GPRS'APN</Description>
+  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
+  <Request>
+    <RequestTemplate>
+      <![CDATA[SET TPLGPRS:MSISDN={0},GPRSTPL=##GPRSTPL##;^M]]>
+    </RequestTemplate>
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="msisdn" Type="Wellknown"/>
+    <Item Name="GPRSTPL" Type="LocalParameter"/>
+  </Request>
+  <Parameter Name="GPRSTPL">
+    <Source Path="//RES_HL_INTERNET_TEMPLATE/Value"/>
+  </Parameter>
+  <ErrorsList CodePage="windows-1251" />
+</Command>
