@@ -21,15 +21,6 @@ namespace ProcessFilter.SPA
             FilePath = path;
         }
 
-        public static bool CheckRow(object obj)
-        {
-            return false;
-        }
-        public static void ChangeRow(DataGridViewRow row)
-        {
-            
-        }
-
         [DGVColumn(ColumnPosition.First, "ID")]
         public int ID { get; protected set; }
 
