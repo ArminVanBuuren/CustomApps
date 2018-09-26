@@ -17,7 +17,7 @@
     </node>
     <node name="RequestCutterByXmlNodes" object="RequestCutterByXmlNodes">
       <resultlist>
-        <result value="0" node="DeleteCallForwarding"/>
+        <result value="0" node="DeleteCF"/>
         <result value="1" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
@@ -27,10 +27,10 @@
         <param name="XmlPath:1" value="//EndList/*"/>
       </parameterslist>
     </node>
-    <node name="DeleteCallForwarding" object="IfCommander">
+    <node name="DeleteCF" object="IfCommander">
       <resultlist>
-        <result value="0" node="AddCallForwarding"/>
-        <result value="1538" node="AddCallForwarding"/>
+        <result value="0" node="AddCF"/>
+        <result value="1538" node="AddCF"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
@@ -38,11 +38,11 @@
         <param name="OrXmlPath:1" value="//RemoveList/RFS_HL_CF_SERVICE"/>
         <param name="CommandSource" value="Dictionary"/>
         <param name="AppendSubscribersData" value="false"/>
-        <param name="Command" value="SC.DeleteCallForwarding"/>
+        <param name="Command" value="SC.CallForwarding_Delete"/>
         <param name="DynamicObject" value="(empty)"/>
       </parameterslist>
     </node>
-    <node name="AddCallForwarding" object="IfCommander">
+    <node name="AddCF" object="IfCommander">
       <resultlist>
         <result value="0" node="SwitchMode"/>
         <result value="1538" node="SwitchMode"/>
@@ -53,7 +53,7 @@
         <param name="OrXmlPath:1" value="//AddList/RFS_HL_CF_SERVICE"/>
         <param name="CommandSource" value="Dictionary"/>
         <param name="AppendSubscribersData" value="false"/>
-        <param name="Command" value="SC.AddCallForwarding"/>
+        <param name="Command" value="SC.CallForwarding_Add"/>
         <param name="DynamicObject" value="(empty)"/>
       </parameterslist>
     </node>
@@ -61,8 +61,8 @@
       <resultlist>
         <result value="0" node="RequestCutterByXmlNodes"/>
         <result value="1" node="RequestCutterByXmlNodes"/>
-        <result value="2" node="ActivateCallForwarding_1"/>
-        <result value="3" node="DeactivateCallForwarding"/>
+        <result value="2" node="ActivateCF_1"/>
+        <result value="3" node="DeactivateCF"/>
       </resultlist>
       <parameterslist>
         <param name="XmlPath" value="//CallForwardMode/Value/text()"/>
@@ -70,10 +70,10 @@
         <param name="Value:3" value="Deactivate"/>
       </parameterslist>
     </node>
-    <node name="ActivateCallForwarding_1" object="IfCommander">
+    <node name="ActivateCF_1" object="IfCommander">
       <resultlist>
-        <result value="0" node="ActivateCallForwarding_2"/>
-        <result value="1538" node="ActivateCallForwarding_2"/>
+        <result value="0" node="ActivateCF_2"/>
+        <result value="1538" node="ActivateCF_2"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
@@ -81,11 +81,11 @@
         <param name="IfNotXmlPath:1" value="//RFS_HL_CF_SERVICE"/>
         <param name="CommandSource" value="Dictionary"/>
         <param name="AppendSubscribersData" value="false"/>
-        <param name="Command" value="SC.DeactivateCallForwarding"/>
+        <param name="Command" value="SC.CallForwarding_Deactivate"/>
         <param name="DynamicObject" value="(empty)"/>
       </parameterslist>
     </node>
-    <node name="ActivateCallForwarding_2" object="Commander">
+    <node name="ActivateCF_2" object="Commander">
       <resultlist>
         <result value="0" node="RequestCutterByXmlNodes"/>
         <result value="" node="ResponseAssembler"/>
@@ -93,11 +93,11 @@
       <parameterslist>
         <param name="CommandSource" value="Dictionary"/>
         <param name="AppendSubscribersData" value="false"/>
-        <param name="Command" value="SC.ActivateCallForwarding"/>
+        <param name="Command" value="SC.CallForwarding_Activate"/>
         <param name="DynamicObject" value="(empty)"/>
       </parameterslist>
     </node>
-    <node name="DeactivateCallForwarding" object="Commander">
+    <node name="DeactivateCF" object="Commander">
       <resultlist>
         <result value="0" node="RequestCutterByXmlNodes"/>
         <result value="" node="ResponseAssembler"/>
@@ -105,7 +105,7 @@
       <parameterslist>
         <param name="CommandSource" value="Dictionary"/>
         <param name="AppendSubscribersData" value="false"/>
-        <param name="Command" value="SC.DeactivateCallForwarding"/>
+        <param name="Command" value="SC.CallForwarding_Deactivate"/>
         <param name="DynamicObject" value="(empty)"/>
       </parameterslist>
     </node>

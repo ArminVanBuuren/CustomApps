@@ -27,7 +27,7 @@
         <param name="IfXmlPath:0" value="//RFS_HL_RBT"/>
         <param name="CommandSource" value="Dictionary"/>
         <param name="AppendSubscribersData" value="false"/>
-        <param name="Command" value="SC.DeleteRBT"/>
+        <param name="Command" value="SC.RBT_Delete"/>
         <param name="DynamicObject" value="(empty)"/>
       </parameterslist>
     </node>

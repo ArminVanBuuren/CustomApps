@@ -27,7 +27,7 @@
         <param name="IfXmlPath:0" value="//RFS_HL_RBT"/>
         <param name="CommandSource" value="Dictionary"/>
         <param name="AppendSubscribersData" value="false"/>
-        <param name="Command" value="SC.AddRBT"/>
+        <param name="Command" value="SC.RBT_Add"/>
         <param name="DynamicObject" value="(empty)"/>
       </parameterslist>
     </node>
@@ -51,7 +51,7 @@
       <parameterslist>
         <param name="CommandSource" value="Dictionary"/>
         <param name="AppendSubscribersData" value="false"/>
-        <param name="Command" value="SC.AddBasicGPRS_NAM"/>
+        <param name="Command" value="SC.GPRSNAM_Add"/>
         <param name="DynamicObject" value="(empty)"/>
       </parameterslist>
     </node>
@@ -63,7 +63,7 @@
       <parameterslist>
         <param name="CommandSource" value="Dictionary"/>
         <param name="AppendSubscribersData" value="false"/>
-        <param name="Command" value="SC.AddBasicGPRS_APN"/>
+        <param name="Command" value="SC.GPRSAPN_Add"/>
         <param name="DynamicObject" value="(empty)"/>
       </parameterslist>
     </node>
