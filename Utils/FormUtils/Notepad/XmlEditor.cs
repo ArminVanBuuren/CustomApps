@@ -21,9 +21,10 @@ namespace FormUtils.Notepad
         public string Source { get; private set; }
         public FastColoredTextBox FCTextBox { get; private set; }
         public event EventHandler OnSomethingChanged;
-
+        private FileSystemWatcher watcher;
         public bool IsContentChanged { get; private set; } = false;
         static object Sync { get; } = new object();
+        private bool isDisposed = false;
 
         public XmlEditor()
         {
@@ -40,7 +41,9 @@ namespace FormUtils.Notepad
             Source = source;
             FCTextBox = InitTextBox(Source);
 
-            FileSystemWatcher watcher = new FileSystemWatcher();
+
+            DisposeWatcher();
+            watcher = new FileSystemWatcher();
             string[] paths = path.Split('\\');
             watcher.Path = string.Join("\\", paths.Take(paths.Length - 1));
             watcher.Filter = paths[paths.Length - 1];
@@ -54,7 +57,14 @@ namespace FormUtils.Notepad
             return true;
         }
 
-        
+        void DisposeWatcher()
+        {
+            if (watcher == null)
+                return;
+            watcher.EnableRaisingEvents = false;
+            watcher.Dispose();
+            watcher = null;
+        }
 
         private void OnChanged(object source, FileSystemEventArgs e)
         {
@@ -69,15 +79,21 @@ namespace FormUtils.Notepad
                     Source = WaitForFile(Path);
                 }
 
+                if (isDisposed)
+                    return;
+
                 IsContentChanged = !FCTextBox.Text.Equals(Source);
                 OnSomethingChanged?.Invoke(this, null);
             }
         }
 
-        public static string WaitForFile(string path)
+        public string WaitForFile(string path)
         {
             while (!FilesEmployee.IsFileReady(path))
             {
+                if (isDisposed)
+                    return null;
+
                 System.Threading.Thread.Sleep(500);
             }
             return File.ReadAllText(path);
@@ -177,7 +193,9 @@ namespace FormUtils.Notepad
 
         public void Dispose()
         {
+            isDisposed = true;
             FCTextBox.Dispose();
+            DisposeWatcher();
         }
     }
 }
