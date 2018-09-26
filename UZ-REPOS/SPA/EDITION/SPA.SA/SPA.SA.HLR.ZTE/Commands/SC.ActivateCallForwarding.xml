@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.ActivateCallForwarding" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
   <Description>Активация услуги переадресация вызова</Description>
-  <Author Name="Khovanskiy Vladimir" Date="2015-11-16+15:00"/>
+  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
   <Request>
     <RequestTemplate>
       <![CDATA[Reg FN:MSISDN=##msisdn##,SS=##CallForwardName##,Bsg=0,Register=1,Active=1,FwdNum=00##ForwardedToNumber####CallForwardingTimer##;^M]]>
