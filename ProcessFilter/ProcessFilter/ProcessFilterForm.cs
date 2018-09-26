@@ -396,7 +396,6 @@ namespace ProcessFilter
 
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
                 {
-                    UpdateLastPath(fbd.SelectedPath);
                     return fbd.SelectedPath;
                 }
             }
