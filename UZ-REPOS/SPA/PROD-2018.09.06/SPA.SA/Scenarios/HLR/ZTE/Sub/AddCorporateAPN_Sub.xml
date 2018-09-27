@@ -1,220 +1,219 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <scenario name="AddCorporateAPN_Sub">
-	<objectList>
-		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
-		<object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
-		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
-		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
-                <object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll"/>
-		<object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll"/>
-                <object name="XmlNodesReplacer" class="FORIS.ScenarioProcessing.CommonUnits.XmlReplacerConditional" assembly="FORIS.SPA.SPF.dll"/>
-		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll"/>
-                <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
-		<object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll"/>
-	</objectList>
-	<automat>
-		<node name="AddBasicGPRS_NAM" object="Commander">
-			<resultlist>
-				<result value="0" node="CheckCorporateAPN_1"/>
-				<result value="" node="ResponseAssembler"/>
-			</resultlist>
-			<parameterslist>
-				<param name="CommandSource" value="Dictionary"/>
-				<param name="Command" value="AddBasicGPRS_NAM"/>
-				<param name="Script" value="Command"/>
-				<param name="AppendSubscribersData" value="false"/>
-				<param name="ErrorDecodingType" value="ByString"/>
-				<param name="DynamicObject" value="(empty)"/>
-				<param name="OverwriteDetailedResult" value="true"/>
-			</parameterslist>
-		</node>
-                <node name="CheckCorporateAPN_1" object="IfMultipleXmlConditionsResolver">
-			<resultlist>
-				<result value="0" node="XmlReplacerConditional_1"/>
-				<result value="" node="DummyResponderSuccess"/>
-			</resultlist>
-			<parameterslist>
-				<param name="OrXmlPath:0" value="//AdditionalData/RegisteredList/FRCORPAPN"/>                                 
-                                <param name="OrXmlPath:1" value="//AdditionalData/ProvisionList/FRCORPAPN"/>            
-				<param name="OrXmlPath:2" value="//AdditionalData/RegisteredList/FRAPNXB"/>                                 
-                                <param name="OrXmlPath:3" value="//AdditionalData/ProvisionList/FRAPNXB"/>            
-				<param name="OrXmlPath:4" value="//AdditionalData/RegisteredList/FRAPNZIYOD"/>                                 
-                                <param name="OrXmlPath:5" value="//AdditionalData/ProvisionList/FRAPNZIYOD"/>            
-			</parameterslist>
-		</node>	
-                <node name="XmlReplacerConditional_1" object="XmlNodesReplacer">
-                        <resultlist>
-                                <result value="" node="XmlReplacerConditional_2"/>
-                        </resultlist>
-                        <parameterslist>
-                                <param name="ObjectNameInContext" value="xmlrequest"/>
-                                <param name="IfXmlPath:0" value="//AdditionalData//FRCORPAPN"/>
-                                <param name="DstXml" value="xmlrequest"/>
-                                <param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/CorporateService"/>       
-                                <param name="DstInnerText:0" value="FRCORPAPN"/>    
-                        </parameterslist>
-                </node>	
-                <node name="XmlReplacerConditional_2" object="XmlNodesReplacer">
-                        <resultlist>
-                                <result value="" node="XmlReplacerConditional_3"/>
-                        </resultlist>
-                        <parameterslist>
-                                <param name="ObjectNameInContext" value="xmlrequest"/>
-                                <param name="IfXmlPath:0" value="//AdditionalData//FRAPNXB"/>
-                                <param name="DstXml" value="xmlrequest"/>
-                                <param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/CorporateService"/>       
-                                <param name="DstInnerText:0" value="FRAPNXB"/>    
-                        </parameterslist>
-                </node>	
-                <node name="XmlReplacerConditional_3" object="XmlNodesReplacer">
-                        <resultlist>
-                                <result value="" node="SelectIPCorporateAPN"/>
-                        </resultlist>
-                        <parameterslist>
-                                <param name="ObjectNameInContext" value="xmlrequest"/>
-                                <param name="IfXmlPath:0" value="//AdditionalData//FRAPNZIYOD"/>
-                                <param name="DstXml" value="xmlrequest"/>
-                                <param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/CorporateService"/>       
-                                <param name="DstInnerText:0" value="FRAPNZIYOD"/>    
-                        </parameterslist>
-                </node>	
-                <node name="SelectIPCorporateAPN" object="DataBaseProcessor">
-			<resultlist>
-				<result value="" node="ExtractIP"/>
-			</resultlist>
-			<parameterslist>
-				<param name="DataBaseName" value="FORIS.SPA.ARCHIVE"/>
-				<param name="FunctionName" value="CORPORATE_APN_ADD"/>
-				<param name="FunctionType" value="function"/>
-				<param name="OutXml" value="db_unit_result"/>
-				<param name="DbParameterName:0" value="p_msisdn"/>
-				<param name="DbParameterDirection:0" value="Input"/>
-				<param name="DbParameterType:0" value="Varchar2"/>
-				<param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN" />
-				<param name="DbParameterName:1" value="p_service"/>
-				<param name="DbParameterDirection:1" value="Input"/>
-				<param name="DbParameterType:1" value="Varchar2"/>
-				<param name="DbParameterXpathValue:1" value="ExtendedRequestMessage/AdditionalData/CorporateService" />
-				<param name="DbParameterName:2" value="p_result"/>
-				<param name="DbParameterDirection:2" value="ReturnValue"/>
-				<param name="DbParameterType:2" value="Varchar2"/>
-                                <param name="DbParameterValue:2" value=""/>
-			</parameterslist>
-		</node>
-                <node name="ExtractIP" object="XmlNodesCopier">
-			<resultlist>
-				<result value="" node="ParameterSwitch"/>
-			</resultlist>
-			<parameterslist>
-				<param name="SrcXml" value="db_unit_result"/>
-				<param name="DstMessage" value="xmlrequest"/>
-				<param name="CopyContentType" value="InnerText"/>
-				<param name="SrcXmlPath:0" value="root/return"/>
-				<param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/IP"/>
-                	</parameterslist>
-		</node>
-                <node name="ParameterSwitch" object="Switch">
-			<resultlist>
-				<result value="2" node="DummyResponder"/>
-				<result value="" node="AddCorporateAPN"/>
-			</resultlist>
-			<parameterslist>
-				<param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/IP"/>
-				<param name="Value:2" value="err001"/>
-			</parameterslist>
-		</node>
-                <node name="AddCorporateAPN" object="Commander">
-			<resultlist>
-				<result value="0" node="CheckDynamic"/>
-                                <result value="" node="ResponseAssembler"/>
-			</resultlist>
-			<parameterslist>
-				<param name="CommandSource" value="Dictionary"/>
-				<param name="Command" value="AddCorporateAPN"/>
-				<param name="Script" value="Command"/>
-				<param name="AppendSubscribersData" value="false"/>
-				<param name="ErrorDecodingType" value="ByString"/>
-				<param name="DynamicObject" value="(empty)"/>
-				<param name="OverwriteDetailedResult" value="true"/>
-			</parameterslist>
-		</node>
-                <node name="CheckDynamic" object="IfMultipleXmlConditionsResolver">
-			<resultlist>
-				<result value="0" node="ResponseAssembler"/>
-				<result value="1" node="AddCorporateAPN_IP"/>
-			</resultlist>
-			<parameterslist>
-				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/IP[text()='DYNAMIC']"/>
-			</parameterslist>
-		</node>		
-                <node name="AddCorporateAPN_IP" object="Commander">
-			<resultlist>
-                                <result value="0" node="ResponseAssembler"/>
-				<result value="" node="DataBaseProcessorDELETENUM"/>
-			</resultlist>
-			<parameterslist>
-				<param name="CommandSource" value="Dictionary"/>
-				<param name="Command" value="AddCorporateAPN_IP"/>
-				<param name="Script" value="Command"/>
-				<param name="AppendSubscribersData" value="false"/>
-				<param name="ErrorDecodingType" value="ByString"/>
-				<param name="DynamicObject" value="(empty)"/>
-				<param name="OverwriteDetailedResult" value="true"/>
-			</parameterslist>
-		</node>
-                <node name="DataBaseProcessorDELETENUM" object="DataBaseProcessor">
-			<resultlist>
-				<result value="" node="DeleteCorporateAPN"/>
-			</resultlist>
-			<parameterslist>
-				<param name="DataBaseName" value="FORIS.SPA.ARCHIVE"/>
-				<param name="FunctionName" value="CORPORATE_APN_DELETE"/>
-				<param name="FunctionType" value="procedure"/>
-				<param name="OutXml" value="db_unit_result"/>
-				<param name="DbParameterName:0" value="p_msisdn"/>
-				<param name="DbParameterDirection:0" value="Input"/>
-				<param name="DbParameterType:0" value="Varchar2"/>
-				<param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN" />
-			</parameterslist>
-		</node>
-                <node name="DeleteCorporateAPN" object="Commander">
-			<resultlist>
-				<result value="" node="DummyResponder"/>
-			</resultlist>
-			<parameterslist>
-				<param name="CommandSource" value="Dictionary"/>
-				<param name="Command" value="DeleteCorporateAPN"/>
-				<param name="Script" value="Command"/>
-				<param name="AppendSubscribersData" value="false"/>
-				<param name="ErrorDecodingType" value="ByString"/>
-				<param name="DynamicObject" value="(empty)"/>
-				<param name="OverwriteDetailedResult" value="true"/>
-			</parameterslist>
-		</node>      
-                <node name="DummyResponder" object="DummyResponder">
-			<resultlist>
-				<result value="" node="ResponseAssembler"/>
-			</resultlist>
-			<parameterslist>
-				<param name="OverallResult" value="FAILURE"/>
-				<param name="DetailedResult" value="FAILURE"/>
-				<param name="Delay" value="0"/>
-			</parameterslist>
-		</node>				
-                <node name="DummyResponderSuccess" object="DummyResponder">
-			<resultlist>
-				<result value="" node="ResponseAssembler"/>
-			</resultlist>
-			<parameterslist>
-				<param name="OverallResult" value="SUCCESS"/>
-				<param name="DetailedResult" value="SUCCESS"/>
-				<param name="Delay" value="0"/>
-			</parameterslist>
-		</node>				
-		<node name="ResponseAssembler" object="ResponseAssembler">
-			<resultlist>
-				<result value="" node=""/>
-			</resultlist>
-		</node>
-	</automat>
+   <objectList>
+      <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll" />
+      <object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll" />
+      <object name="XmlNodesReplacer" class="FORIS.ScenarioProcessing.CommonUnits.XmlReplacerConditional" assembly="FORIS.SPA.SPF.dll" />
+      <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll" />
+      <object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+   </objectList>
+   <automat>
+      <node name="AddBasicGPRS_NAM" object="Commander">
+         <resultlist>
+            <result value="0" node="CheckCorporateAPN_1" />
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="CommandSource" value="Dictionary" />
+            <param name="Command" value="AddBasicGPRS_NAM" />
+            <param name="Script" value="Command" />
+            <param name="AppendSubscribersData" value="false" />
+            <param name="ErrorDecodingType" value="ByString" />
+            <param name="DynamicObject" value="(empty)" />
+            <param name="OverwriteDetailedResult" value="true" />
+         </parameterslist>
+      </node>
+      <node name="CheckCorporateAPN_1" object="IfMultipleXmlConditionsResolver">
+         <resultlist>
+            <result value="0" node="XmlReplacerConditional_1" />
+            <result value="" node="DummyResponderSuccess" />
+         </resultlist>
+         <parameterslist>
+            <param name="OrXmlPath:0" value="//AdditionalData/RegisteredList/FRCORPAPN" />
+            <param name="OrXmlPath:1" value="//AdditionalData/ProvisionList/FRCORPAPN" />
+            <param name="OrXmlPath:2" value="//AdditionalData/RegisteredList/FRAPNXB" />
+            <param name="OrXmlPath:3" value="//AdditionalData/ProvisionList/FRAPNXB" />
+            <param name="OrXmlPath:4" value="//AdditionalData/RegisteredList/FRAPNZIYOD" />
+            <param name="OrXmlPath:5" value="//AdditionalData/ProvisionList/FRAPNZIYOD" />
+         </parameterslist>
+      </node>
+      <node name="XmlReplacerConditional_1" object="XmlNodesReplacer">
+         <resultlist>
+            <result value="" node="XmlReplacerConditional_2" />
+         </resultlist>
+         <parameterslist>
+            <param name="ObjectNameInContext" value="xmlrequest" />
+            <param name="IfXmlPath:0" value="//AdditionalData//FRCORPAPN" />
+            <param name="DstXml" value="xmlrequest" />
+            <param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/CorporateService" />
+            <param name="DstInnerText:0" value="FRCORPAPN" />
+         </parameterslist>
+      </node>
+      <node name="XmlReplacerConditional_2" object="XmlNodesReplacer">
+         <resultlist>
+            <result value="" node="XmlReplacerConditional_3" />
+         </resultlist>
+         <parameterslist>
+            <param name="ObjectNameInContext" value="xmlrequest" />
+            <param name="IfXmlPath:0" value="//AdditionalData//FRAPNXB" />
+            <param name="DstXml" value="xmlrequest" />
+            <param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/CorporateService" />
+            <param name="DstInnerText:0" value="FRAPNXB" />
+         </parameterslist>
+      </node>
+      <node name="XmlReplacerConditional_3" object="XmlNodesReplacer">
+         <resultlist>
+            <result value="" node="SelectIPCorporateAPN" />
+         </resultlist>
+         <parameterslist>
+            <param name="ObjectNameInContext" value="xmlrequest" />
+            <param name="IfXmlPath:0" value="//AdditionalData//FRAPNZIYOD" />
+            <param name="DstXml" value="xmlrequest" />
+            <param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/CorporateService" />
+            <param name="DstInnerText:0" value="FRAPNZIYOD" />
+         </parameterslist>
+      </node>
+      <node name="SelectIPCorporateAPN" object="DataBaseProcessor">
+         <resultlist>
+            <result value="" node="ExtractIP" />
+         </resultlist>
+         <parameterslist>
+            <param name="DataBaseName" value="FORIS.SPA.ARCHIVE" />
+            <param name="FunctionName" value="CORPORATE_APN_ADD" />
+            <param name="FunctionType" value="function" />
+            <param name="OutXml" value="db_unit_result" />
+            <param name="DbParameterName:0" value="p_msisdn" />
+            <param name="DbParameterDirection:0" value="Input" />
+            <param name="DbParameterType:0" value="Varchar2" />
+            <param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN" />
+            <param name="DbParameterName:1" value="p_service" />
+            <param name="DbParameterDirection:1" value="Input" />
+            <param name="DbParameterType:1" value="Varchar2" />
+            <param name="DbParameterXpathValue:1" value="ExtendedRequestMessage/AdditionalData/CorporateService" />
+            <param name="DbParameterName:2" value="p_result" />
+            <param name="DbParameterDirection:2" value="ReturnValue" />
+            <param name="DbParameterType:2" value="Varchar2" />
+            <param name="DbParameterValue:2" value="" />
+         </parameterslist>
+      </node>
+      <node name="ExtractIP" object="XmlNodesCopier">
+         <resultlist>
+            <result value="" node="ParameterSwitch" />
+         </resultlist>
+         <parameterslist>
+            <param name="SrcXml" value="db_unit_result" />
+            <param name="DstMessage" value="xmlrequest" />
+            <param name="CopyContentType" value="InnerText" />
+            <param name="SrcXmlPath:0" value="root/return" />
+            <param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/IP" />
+         </parameterslist>
+      </node>
+      <node name="ParameterSwitch" object="Switch">
+         <resultlist>
+            <result value="2" node="DummyResponder" />
+            <result value="" node="AddCorporateAPN" />
+         </resultlist>
+         <parameterslist>
+            <param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/IP" />
+            <param name="Value:2" value="err001" />
+         </parameterslist>
+      </node>
+      <node name="AddCorporateAPN" object="Commander">
+         <resultlist>
+            <result value="0" node="CheckDynamic" />
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="CommandSource" value="Dictionary" />
+            <param name="Command" value="AddCorporateAPN" />
+            <param name="Script" value="Command" />
+            <param name="AppendSubscribersData" value="false" />
+            <param name="ErrorDecodingType" value="ByString" />
+            <param name="DynamicObject" value="(empty)" />
+            <param name="OverwriteDetailedResult" value="true" />
+         </parameterslist>
+      </node>
+      <node name="CheckDynamic" object="IfMultipleXmlConditionsResolver">
+         <resultlist>
+            <result value="0" node="ResponseAssembler" />
+            <result value="1" node="AddCorporateAPN_IP" />
+         </resultlist>
+         <parameterslist>
+            <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/IP[text()='DYNAMIC']" />
+         </parameterslist>
+      </node>
+      <node name="AddCorporateAPN_IP" object="Commander">
+         <resultlist>
+            <result value="0" node="ResponseAssembler" />
+            <result value="" node="DataBaseProcessorDELETENUM" />
+         </resultlist>
+         <parameterslist>
+            <param name="CommandSource" value="Dictionary" />
+            <param name="Command" value="AddCorporateAPN_IP" />
+            <param name="Script" value="Command" />
+            <param name="AppendSubscribersData" value="false" />
+            <param name="ErrorDecodingType" value="ByString" />
+            <param name="DynamicObject" value="(empty)" />
+            <param name="OverwriteDetailedResult" value="true" />
+         </parameterslist>
+      </node>
+      <node name="DataBaseProcessorDELETENUM" object="DataBaseProcessor">
+         <resultlist>
+            <result value="" node="DeleteCorporateAPN" />
+         </resultlist>
+         <parameterslist>
+            <param name="DataBaseName" value="FORIS.SPA.ARCHIVE" />
+            <param name="FunctionName" value="CORPORATE_APN_DELETE" />
+            <param name="FunctionType" value="procedure" />
+            <param name="OutXml" value="db_unit_result" />
+            <param name="DbParameterName:0" value="p_msisdn" />
+            <param name="DbParameterDirection:0" value="Input" />
+            <param name="DbParameterType:0" value="Varchar2" />
+            <param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN" />
+         </parameterslist>
+      </node>
+      <node name="DeleteCorporateAPN" object="Commander">
+         <resultlist>
+            <result value="" node="DummyResponder" />
+         </resultlist>
+         <parameterslist>
+            <param name="CommandSource" value="Dictionary" />
+            <param name="Command" value="DeleteCorporateAPN" />
+            <param name="Script" value="Command" />
+            <param name="AppendSubscribersData" value="false" />
+            <param name="ErrorDecodingType" value="ByString" />
+            <param name="DynamicObject" value="(empty)" />
+            <param name="OverwriteDetailedResult" value="true" />
+         </parameterslist>
+      </node>
+      <node name="DummyResponder" object="DummyResponder">
+         <resultlist>
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="OverallResult" value="FAILURE" />
+            <param name="DetailedResult" value="FAILURE" />
+            <param name="Delay" value="0" />
+         </parameterslist>
+      </node>
+      <node name="DummyResponderSuccess" object="DummyResponder">
+         <resultlist>
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="OverallResult" value="SUCCESS" />
+            <param name="DetailedResult" value="SUCCESS" />
+            <param name="Delay" value="0" />
+         </parameterslist>
+      </node>
+      <node name="ResponseAssembler" object="ResponseAssembler">
+         <resultlist>
+            <result value="" node="" />
+         </resultlist>
+      </node>
+   </automat>
 </scenario>

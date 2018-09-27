@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scenario name="SC.HL.AssignServices">
+<scenario name="SC.HL.BasicServicesRemove">
   <objectList>
     <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
-    
     <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    
+    
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="RequestCutterByXmlNodes" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterByXmlNodes" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
@@ -13,73 +13,38 @@
   <automat>
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
       <resultlist>
-        <result value="0" node="RBT_Add"/>
+        <result value="0" node="DeleteRBT"/>
         <result value="1" node=""/>
       </resultlist>
     </node>
-    <node name="RBT_Add" object="IfCommander">
+    <node name="DeleteRBT" object="IfCommander">
       <resultlist>
-        <result value="0" node="CheckServiceInternet"/>
-        <result value="1538" node="CheckServiceInternet"/>
+        <result value="0" node="InterRoaming_Delete"/>
+        <result value="1538" node="InterRoaming_Delete"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
         <param name="IfXmlPath:0" value="//RFS_HL_RBT"/>
         <param name="CommandSource" value="Dictionary"/>
         <param name="AppendSubscribersData" value="false"/>
-        <param name="Command" value="SC.RBT_Add"/>
+        <param name="Command" value="SC.RBT_Delete"/>
         <param name="DynamicObject" value="(empty)"/>
       </parameterslist>
     </node>
-
-
-    <node name="CheckServiceInternet" object="IfMultipleXmlConditionsResolver">
+    <node name="InterRoaming_Delete" object="IfCommander">
       <resultlist>
-        <result value="0" node="GPRSNAM_Add" />
-        <result value="" node="CheckServiceLte" />
-      </resultlist>
-      <parameterslist>
-        <param name="ObjectNameInContext" value="request" />
-        <param name="IfXmlPath:0" value="//RFS_HL_SERVICE_INTERNET" />
-      </parameterslist>
-    </node>
-    <node name="GPRSNAM_Add" object="Commander">
-      <resultlist>
-        <result value="0" node="GPRSAPN_Add"/>
+        <result value="0" node="ResponseAssembler"/>
+        <result value="1538" node="ResponseAssembler"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
+        <param name="IfXmlPath:0" value="//RFS_HL_ROAMING"/>
         <param name="CommandSource" value="Dictionary"/>
         <param name="AppendSubscribersData" value="false"/>
-        <param name="Command" value="SC.GPRSNAM_Add"/>
+        <param name="Command" value="SC.InterRoaming_Delete"/>
         <param name="DynamicObject" value="(empty)"/>
       </parameterslist>
     </node>
-    <node name="GPRSAPN_Add" object="Commander">
-      <resultlist>
-        <result value="0" node="CheckServiceLte"/>
-        <result value="" node="ResponseAssembler"/>
-      </resultlist>
-      <parameterslist>
-        <param name="CommandSource" value="Dictionary"/>
-        <param name="AppendSubscribersData" value="false"/>
-        <param name="Command" value="SC.GPRSAPN_Add"/>
-        <param name="DynamicObject" value="(empty)"/>
-      </parameterslist>
-    </node>
-
-    <node name="CheckServiceLte" object="IfMultipleXmlConditionsResolver">
-      <resultlist>
-        <result value="0" node="UpdateIPoERadiusGroupNode" />
-        <result value="" node="UpdatePPPoERadiusGroupNode" />
-      </resultlist>
-      <parameterslist>
-        <param name="ObjectNameInContext" value="request" />
-        <param name="IfXmlPath:0" value="//RFS_HL_SERVICE_LTE" />
-      </parameterslist>
-    </node>
-
-
     <node name="ResponseAssembler" object="ResponseAssembler">
       <resultlist>
         <result value="" node="RequestCutterBySubscribers"/>

@@ -16,9 +16,10 @@
     <Attribute name="TerminalDeviceId" path="//IdentifiersList/Identifier/TerminalDeviceId" description="Идентификатор ПО" />
   </AttributeList>
   <ResourceList>
-    <Resource name="RES_HL_INTERNET_TEMPLATE" description="APN профиль абонента на HLR" />
+    <Resource name="RES_HL_REDUCE_SPEED_APN" description="APN ограничения скорости GPRS до 128кбс для LTE" />
   </ResourceList>
   <RFSParameterList>
+    <RFSParameter name="ReduceSpeedAPN" description="Тип установки переадресаций" />
     <RFSParameter name="CallForwardType" description="Тип установки переадресаций" />
     <RFSParameter name="CallForwardMode" description="Режим переадресации" />
     <RFSParameter name="ForwardedToNumber" description="Номер переадресации" />
@@ -69,7 +70,9 @@
     </RFS>
     <RFS name="RFS_HL_RBT" hostType="HL" description="GOODOK"/>
     <RFS name="RFS_HL_INET_GPRS" hostType="HL" description="Мобильный интернет GPRS"/>
-    <RFS name="RFS_HL_INET_LTE" hostType="HL" description="Мобильный интернет LTE"/>
+    <RFS name="RFS_HL_INET_LTE" hostType="HL" description="Мобильный интернет LTE">
+      <Resource name="RES_HL_REDUCE_SPEED_APN" value="NET.UMS.UZ" />
+    </RFS>
     <RFS name="RFS_HL_ROAMING" hostType="HL" description="Роуминг"/>
   </RFSList>
   <CFSList>
@@ -101,6 +104,11 @@
     <CFS name="FRUNLIMLTE" description="Доступ к сети 4G LTE">
       <RFS name="RFS_HL_INET_LTE" linkType="Add" />
     </CFS>
+    <CFS name="LIMITSPEED" description="Ограничение скорости">
+      
+    </CFS>
+
+
     <CFS name="CB123" description="Международный роуминг">
       <RFS name="RFS_HL_ROAMING" linkType="Add" />
     </CFS>
@@ -124,11 +132,13 @@
       <Append name="RFS_HL_CFNRY" listType="All" />
       <Append name="RFS_HL_CFD" listType="All" />
     </Scenario>
-    <Scenario name="HL.AssignServices" description="Добавление услуг">
+    <Scenario name="HL.BasicServicesAssign" description="Добавление услуг">
       <RFS name="RFS_HL_RBT" scenarioType="Add" />
+      <RFS name="RFS_HL_ROAMING" scenarioType="Add" />
     </Scenario>
-    <Scenario name="HL.RemoveServices" description="Удаление услуг">
+    <Scenario name="HL.BasicServicesRemove" description="Удаление услуг">
       <RFS name="RFS_HL_RBT" scenarioType="Remove" />
+      <RFS name="RFS_HL_ROAMING" scenarioType="Remove" />
     </Scenario>
     <Scenario name="HL.InternetServiceAssign" description="Добавление интернет услуг">
       <RFS name="RFS_HL_INET_GPRS" scenarioType="Add" />
