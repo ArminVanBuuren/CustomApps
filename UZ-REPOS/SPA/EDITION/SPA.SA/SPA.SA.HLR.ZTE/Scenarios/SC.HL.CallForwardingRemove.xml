@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="SC.HL.CallForwardingRemove">
+  <objectList>
+    <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="RequestCutterByXmlNodes" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterByXmlNodes" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
+    <object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+  </objectList>
+  <automat>
+    <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
+      <resultlist>
+        <result value="0" node="RequestCutterByXmlNodes"/>
+        <result value="1" node=""/>
+      </resultlist>
+    </node>
+    <node name="RequestCutterByXmlNodes" object="RequestCutterByXmlNodes">
+      <resultlist>
+        <result value="0" node="CheckCFWService"/>
+        <result value="1" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectInContext" value="request" />
+        <param name="Queue" value="requestsSplittedByFrwdTypeQueue"/>
+        <param name="XmlPath:0" value="//RemoveList/*"/>
+      </parameterslist>
+    </node>
+    <node name="CheckCFWService" object="IfMultipleXmlConditionsResolver">
+      <resultlist>
+        <result value="0" node="CallForwarding_Delete" />
+        <result value="" node="RequestCutterByXmlNodes" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="request" />
+        <param name="OrXmlPath:0" value="//RemoveList/RFS_HL_CFB" />
+        <param name="OrXmlPath:1" value="//RemoveList/RFS_HL_CFU" />
+        <param name="OrXmlPath:2" value="//RemoveList/RFS_HL_CFNRC" />
+        <param name="OrXmlPath:3" value="//RemoveList/RFS_HL_CFNRY" />
+        <param name="OrXmlPath:4" value="//RemoveList/RFS_HL_CFD" />
+      </parameterslist>
+    </node>
+    <node name="CallForwarding_Delete" object="IfCommander">
+      <resultlist>
+        <result value="0" node="RequestCutterByXmlNodes"/>
+        <result value="1538" node="CallForwarding_Deactivate"/>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//CallForwardType/Value[text()='Provision']"/>
+        <param name="CommandSource" value="Dictionary"/>
+        <param name="AppendSubscribersData" value="false"/>
+        <param name="Command" value="SC.CallForwarding_Delete"/>
+        <param name="DynamicObject" value="(empty)"/>
+      </parameterslist>
+    </node>
+    <node name="CallForwarding_Deactivate" object="IfCommander">
+      <resultlist>
+        <result value="0" node="RequestCutterByXmlNodes"/>
+        <result value="1538" node="RequestCutterByXmlNodes"/>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//CallForwardMode/Value[text()='Deactivate']"/>
+        <param name="CommandSource" value="Dictionary"/>
+        <param name="AppendSubscribersData" value="false"/>
+        <param name="Command" value="SC.CallForwarding_Deactivate"/>
+        <param name="DynamicObject" value="(empty)"/>
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="RequestCutterBySubscribers"/>
+      </resultlist>
+    </node>
+  </automat>
+</scenario>

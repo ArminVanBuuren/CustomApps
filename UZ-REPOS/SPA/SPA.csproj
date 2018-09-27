@@ -158,12 +158,13 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CallForwarding_Delete.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CallForwarding_Add.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CallForwarding_Activate.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.CallForwardingAssign.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.InternetServiceRemove.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.InternetServiceAssign.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.BasicServicesRemove.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.BasicServicesAssign.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\!Example.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.CallForwarding.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.CallForwardingRemove.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MCA\Commands\SC.Add_MCA_SERVICE.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MCA\Commands\SC.Add_MCA_SERVICE_NEW_MSISDN.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MCA\Commands\SC.Remove_MCA_SERVICE.xml" />
@@ -2857,7 +2858,7 @@
   <ItemGroup>
     <Folder Include="EDITION\ROBP\Operations\CT4\" />
     <Folder Include="EDITION\ROBP\Operations\CT6\" />
-    <Folder Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SubScenario\" />
+    <Folder Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SubScenarios\" />
     <Folder Include="EDITION\SPA.SA\SPA.SA.MG\Commands\" />
     <Folder Include="EDITION\SPA.SA\SPA.SA.MG\Scenarios\" />
     <Folder Include="EDITION\SPA.SA\SPA.SA.RBT.INTECH\Commands\" />

@@ -19,7 +19,6 @@
     <Resource name="RES_HL_REDUCE_SPEED_APN" description="APN ограничения скорости GPRS до 128кбс для LTE" />
   </ResourceList>
   <RFSParameterList>
-    <RFSParameter name="ReduceSpeedAPN" description="Тип установки переадресаций" />
     <RFSParameter name="CallForwardType" description="Тип установки переадресаций" />
     <RFSParameter name="CallForwardMode" description="Режим переадресации" />
     <RFSParameter name="ForwardedToNumber" description="Номер переадресации" />
@@ -27,34 +26,53 @@
   </RFSParameterList>
   <FlagList />
   <RFSList>
-    <RFS name="RFS_HL_CF_SERVICE" hostType="HL" description="Call forwarding service"/>
-    <RFS name="RFS_HL_CF" hostType="HL" description="Активация переадресаций">
+    <RFS name="RFS_HL_CFB" hostType="HL" description="Call forwarding on mobile subscriber busy - TS10"/>
+    <RFS name="RFS_HL_CFB_ACT" base="RFS_HL_CFB" hostType="HL" description="Activate Call forwarding on mobile subscriber busy - TS10">
       <RFSParameter name="CallForwardType">
-        <Value condition="(//ActionNameOriginal[text()='Update Call Forwarding'])" value="Provision" />
+        <Value condition="(//ActionNameOriginal[text()='Update Call Forwarding'])" value="Update" />
       </RFSParameter>
-    </RFS>
-    <RFS name="RFS_HL_CFB" hostType="HL" description="Call forwarding on mobile subscriber busy - TS10">
       <RFSParameter name="CallForwardMode">
         <Value condition="(//ProvisionList/CallForwarding/CFB)" value="Activate" />
         <Value condition="(//WithdrawalList/CallForwarding/CFB)" value="Deactivate" />
       </RFSParameter>
       <RFSParameter name="ForwardedToNumber" path="//CFB/ForwardingToAddress" />
     </RFS>
-    <RFS name="RFS_HL_CFU" hostType="HL" description="Call forwarding unconditional - TS10">
+    <RFS name="RFS_HL_CFB_PRV" base="RFS_HL_CFB" hostType="HL" description="Provision Call forwarding on mobile subscriber busy - TS10">
+      <RFSParameter name="CallForwardType" value="Provision"/>
+    </RFS>
+    <RFS name="RFS_HL_CFU" hostType="HL" description="Call forwarding unconditional - TS10"/>
+    <RFS name="RFS_HL_CFU_ACT" base="RFS_HL_CFU" hostType="HL" description="Activate Call forwarding unconditional - TS10">
+      <RFSParameter name="CallForwardType">
+        <Value condition="(//ActionNameOriginal[text()='Update Call Forwarding'])" value="Update" />
+      </RFSParameter>
       <RFSParameter name="CallForwardMode">
         <Value condition="(//ProvisionList/CallForwarding/CFU)" value="Activate" />
         <Value condition="(//WithdrawalList/CallForwarding/CFU)" value="Deactivate" />
       </RFSParameter>
       <RFSParameter name="ForwardedToNumber" path="//CFU/ForwardingToAddress" />
     </RFS>
-    <RFS name="RFS_HL_CFNRC" hostType="HL" description="Call forwarding on mobile subscriber not reachable - TS10">
+    <RFS name="RFS_HL_CFU_PRV" base="RFS_HL_CFU" hostType="HL" description="Provision Call forwarding unconditional - TS10">
+      <RFSParameter name="CallForwardType" value="Provision"/>
+    </RFS>
+    <RFS name="RFS_HL_CFNRC" hostType="HL" description="Call forwarding on mobile subscriber not reachable - TS10"/>
+    <RFS name="RFS_HL_CFNRC_ACT" base="RFS_HL_CFNRC" hostType="HL" description="Activate Call forwarding on mobile subscriber not reachable - TS10">
+      <RFSParameter name="CallForwardType">
+        <Value condition="(//ActionNameOriginal[text()='Update Call Forwarding'])" value="Update" />
+      </RFSParameter>
       <RFSParameter name="CallForwardMode">
         <Value condition="(//ProvisionList/CallForwarding/CFNRC)" value="Activate" />
         <Value condition="(//WithdrawalList/CallForwarding/CFNRC)" value="Deactivate" />
       </RFSParameter>
       <RFSParameter name="ForwardedToNumber" path="//CFNRC/ForwardingToAddress" />
     </RFS>
-    <RFS name="RFS_HL_CFNRY" hostType="HL" description="Call forwarding on no reply - TS10">
+    <RFS name="RFS_HL_CFNRC_PRV" base="RFS_HL_CFNRC" hostType="HL" description="Provision Call forwarding on mobile subscriber not reachable - TS10">
+      <RFSParameter name="CallForwardType" value="Provision"/>
+    </RFS>
+    <RFS name="RFS_HL_CFNRY" hostType="HL" description="Call forwarding on no reply - TS10"/>
+    <RFS name="RFS_HL_CFNRY_ACT" base="RFS_HL_CFNRY" hostType="HL" description="Activate Call forwarding on no reply - TS10">
+      <RFSParameter name="CallForwardType">
+        <Value condition="(//ActionNameOriginal[text()='Update Call Forwarding'])" value="Update" />
+      </RFSParameter>
       <RFSParameter name="CallForwardMode">
         <Value condition="(//ProvisionList/CallForwarding/CFNRY)" value="Activate" />
         <Value condition="(//WithdrawalList/CallForwarding/CFNRY)" value="Deactivate" />
@@ -62,12 +80,18 @@
       <RFSParameter name="ForwardedToNumber" path="//CFNRY/ForwardingToAddress" />
       <RFSParameter name="CallForwardingTimer" path="//CFNRY/NoReplyTimer" />
     </RFS>
-    <RFS name="RFS_HL_CFD" hostType="HL" description="Call forwarding (to MCA) on mobile subscriber busy">
-      <RFSParameter name="CallForwardMode">
-        <Value condition="(//ProvisionList)" value="Activate" />
-      </RFSParameter>
+    <RFS name="RFS_HL_CFNRY_PRV" base="RFS_HL_CFNRY" hostType="HL" description="Provision Call forwarding on no reply - TS10">
+      <RFSParameter name="CallForwardType" value="Provision"/>
+    </RFS>
+    <RFS name="RFS_HL_CFD" hostType="HL" description="Call forwarding (to MCA) on mobile subscriber busy"/>
+    <RFS name="RFS_HL_CFD_TRUE" base="RFS_HL_CFD" hostType="HL" description="Call forwarding (to MCA) on mobile subscriber busy">
+      <RFSParameter name="CallForwardType" value="Provision"/>
+      <RFSParameter name="CallForwardMode" value="Activate" />
       <RFSParameter name="ForwardedToNumber" value="998970000007" />
     </RFS>
+    <RFS name="RFS_HL_CFD_FALSE" base="RFS_HL_CFD" hostType="HL" description="Call forwarding (to MCA) on mobile subscriber busy"/>
+    
+    
     <RFS name="RFS_HL_RBT" hostType="HL" description="GOODOK"/>
     <RFS name="RFS_HL_INET_GPRS" hostType="HL" description="Мобильный интернет GPRS"/>
     <RFS name="RFS_HL_INET_LTE" hostType="HL" description="Мобильный интернет LTE">
@@ -78,23 +102,22 @@
   <CFSList>
     <CFS name="Subscriber" type="ManagedObject" description="Абонент" />
     <CFS name="CallForwarding" description="Активация пользовательской переадресации вызова">
-      <RFS name="RFS_HL_CF" linkType="Add" />
-      <RFS name="RFS_HL_CFB" linkType="Info" />
-      <RFS name="RFS_HL_CFU" linkType="Info" />
-      <RFS name="RFS_HL_CFNRC" linkType="Info" />
-      <RFS name="RFS_HL_CFNRY" linkType="Info" />
+      <RFS name="RFS_HL_CFB_ACT" linkType="Add" />
+      <RFS name="RFS_HL_CFU_ACT" linkType="Add" />
+      <RFS name="RFS_HL_CFNRC_ACT" linkType="Add" />
+      <RFS name="RFS_HL_CFNRY_ACT" linkType="Add" />
     </CFS>
     <CFS name="CB532" description="Переадресация вызова (периодическая)">
-      <RFS name="RFS_HL_CF_SERVICE" linkType="Add" />
-      <RFS name="RFS_HL_CFB" linkType="Info" />
-      <RFS name="RFS_HL_CFU" linkType="Info" />
-      <RFS name="RFS_HL_CFNRC" linkType="Info" />
-      <RFS name="RFS_HL_CFNRY" linkType="Info" />
+      <RFS name="RFS_HL_CFB_PRV" linkType="Add" />
+      <RFS name="RFS_HL_CFU_PRV" linkType="Add" />
+      <RFS name="RFS_HL_CFNRC_PRV" linkType="Add" />
+      <RFS name="RFS_HL_CFNRY_PRV" linkType="Add" />
     </CFS>
     <CFS name="FRMCA" description="Вам звонили / Я на связи">
-      <RFS name="RFS_HL_CF_SERVICE" linkType="Add" />
-      <RFS name="RFS_HL_CFD" linkType="Info" />
+      <RFS name="RFS_HL_CFD_TRUE" linkType="Add" />
     </CFS>
+    
+    
     <CFS name="FRCRBT" description="Caller Ring Back Tone. GOODOK">
       <RFS name="RFS_HL_RBT" linkType="Add" />
     </CFS>
@@ -104,11 +127,6 @@
     <CFS name="FRUNLIMLTE" description="Доступ к сети 4G LTE">
       <RFS name="RFS_HL_INET_LTE" linkType="Add" />
     </CFS>
-    <CFS name="LIMITSPEED" description="Ограничение скорости">
-      
-    </CFS>
-
-
     <CFS name="CB123" description="Международный роуминг">
       <RFS name="RFS_HL_ROAMING" linkType="Add" />
     </CFS>
@@ -123,14 +141,19 @@
   <HandlerList >
   </HandlerList>
   <ScenarioList>
-    <Scenario name="HL.CallForwarding" description="Добавление-удаление, активация-деактивация переадресаций">
-      <RFS name="RFS_HL_CF" scenarioType="Add, Remove" />
-      <RFS name="RFS_HL_CF_SERVICE" scenarioType="Add, Remove" />
-      <Append name="RFS_HL_CFB" listType="All" />
-      <Append name="RFS_HL_CFU" listType="All" />
-      <Append name="RFS_HL_CFNRC" listType="All" />
-      <Append name="RFS_HL_CFNRY" listType="All" />
-      <Append name="RFS_HL_CFD" listType="All" />
+    <Scenario name="HL.CallForwardingAssign" description="Добавление, активация-деактивация переадресаций">
+      <RFS name="RFS_HL_CFB" scenarioType="Add" />
+      <RFS name="RFS_HL_CFU" scenarioType="Add" />
+      <RFS name="RFS_HL_CFNRC" scenarioType="Add" />
+      <RFS name="RFS_HL_CFNRY" scenarioType="Add" />
+      <RFS name="RFS_HL_CFD_TRUE" scenarioType="Add" />
+    </Scenario>
+    <Scenario name="HL.CallForwardingRemove" description="Удаление переадресаций">
+      <RFS name="RFS_HL_CFB" scenarioType="Remove" />
+      <RFS name="RFS_HL_CFU" scenarioType="Remove" />
+      <RFS name="RFS_HL_CFNRC" scenarioType="Remove" />
+      <RFS name="RFS_HL_CFNRY" scenarioType="Remove" />
+      <RFS name="RFS_HL_CFD_FALSE" scenarioType="Remove" />
     </Scenario>
     <Scenario name="HL.BasicServicesAssign" description="Добавление услуг">
       <RFS name="RFS_HL_RBT" scenarioType="Add" />
