@@ -83,13 +83,11 @@
     <RFS name="RFS_HL_CFNRY_PRV" base="RFS_HL_CFNRY" hostType="HL" description="Provision Call forwarding on no reply - TS10">
       <RFSParameter name="CallForwardType" value="Provision"/>
     </RFS>
-    <RFS name="RFS_HL_CFD" hostType="HL" description="Call forwarding (to MCA) on mobile subscriber busy"/>
-    <RFS name="RFS_HL_CFD_TRUE" base="RFS_HL_CFD" hostType="HL" description="Call forwarding (to MCA) on mobile subscriber busy">
+    <RFS name="RFS_HL_CFD" hostType="HL" description="Call forwarding (to MCA) on mobile subscriber busy">
       <RFSParameter name="CallForwardType" value="Provision"/>
       <RFSParameter name="CallForwardMode" value="Activate" />
       <RFSParameter name="ForwardedToNumber" value="998970000007" />
     </RFS>
-    <RFS name="RFS_HL_CFD_FALSE" base="RFS_HL_CFD" hostType="HL" description="Call forwarding (to MCA) on mobile subscriber busy"/>
     
     
     <RFS name="RFS_HL_RBT" hostType="HL" description="GOODOK"/>
@@ -114,7 +112,7 @@
       <RFS name="RFS_HL_CFNRY_PRV" linkType="Add" />
     </CFS>
     <CFS name="FRMCA" description="Вам звонили / Я на связи">
-      <RFS name="RFS_HL_CFD_TRUE" linkType="Add" />
+      <RFS name="RFS_HL_CFD" linkType="Add" />
     </CFS>
     
     
@@ -146,14 +144,14 @@
       <RFS name="RFS_HL_CFU" scenarioType="Add" />
       <RFS name="RFS_HL_CFNRC" scenarioType="Add" />
       <RFS name="RFS_HL_CFNRY" scenarioType="Add" />
-      <RFS name="RFS_HL_CFD_TRUE" scenarioType="Add" />
+      <RFS name="RFS_HL_CFD" scenarioType="Add" />
     </Scenario>
     <Scenario name="HL.CallForwardingRemove" description="Удаление переадресаций">
       <RFS name="RFS_HL_CFB" scenarioType="Remove" />
       <RFS name="RFS_HL_CFU" scenarioType="Remove" />
       <RFS name="RFS_HL_CFNRC" scenarioType="Remove" />
       <RFS name="RFS_HL_CFNRY" scenarioType="Remove" />
-      <RFS name="RFS_HL_CFD_FALSE" scenarioType="Remove" />
+      <RFS name="RFS_HL_CFD" scenarioType="Remove" />
     </Scenario>
     <Scenario name="HL.BasicServicesAssign" description="Добавление услуг">
       <RFS name="RFS_HL_RBT" scenarioType="Add" />
