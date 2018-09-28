@@ -90,7 +90,7 @@
     </RFS>
     
     
-    <RFS name="RFS_HL_RBT" hostType="HL" description="GOODOK"/>
+    <RFS name="RFS_HL_RBT" hostType="HL" description="Caller Ring Back Tone. GOODOK"/>
     <RFS name="RFS_HL_INET_GPRS" hostType="HL" description="Мобильный интернет GPRS"/>
     <RFS name="RFS_HL_INET_LTE" hostType="HL" description="Мобильный интернет LTE">
       <Resource name="RES_HL_REDUCE_SPEED_APN" value="NET.UMS.UZ" />
