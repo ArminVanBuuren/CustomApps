@@ -102,7 +102,6 @@
     <Content Include="EDITION\ROBP\Operations\HL\RestoreSession.xml" />
     <Content Include="EDITION\ROBP\Operations\HL\SynchronizeOnHLR.xml" />
     <Content Include="EDITION\ROBP\Operations\HL\UpdateCallForwardingOnHLR.xml" />
-    <Content Include="EDITION\ROBP\Operations\SCG\BreakSessionSCG.xml" />
     <Content Include="EDITION\ROBP\Processes\Add MCA Serice.xml" />
     <Content Include="EDITION\ROBP\Processes\Add RBT Service.xml" />
     <Content Include="EDITION\ROBP\Processes\Assign 3G Services.xml" />
@@ -174,12 +173,8 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.MST\Scenarios\SC.CT4.ChangeMSISDN.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Commands\SubscriptionAdd.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Commands\SubscriptionDelete.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Scenarios\SC.Add.RFS_SCG_SUBSCRIPTION.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Scenarios\SC.Remove.RFS_SCG_SUBSCRIPTION.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Commands\ADD_MAPSERVER_OSC_BYHOST.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Commands\DELETE_MAPSERVER_OSC1.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Scenarios\SubDeleteSubscriberOnSCG.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Scenarios\BreakSessionSCG.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Scenarios\SC.SCG.SubscriptionAdd.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Scenarios\SC.SCG.SubscriptionRemove.xml" />
     <Content Include="PROD-2018.09.06\new_export1.xml" />
     <Content Include="PROD-2018.09.06\request_services.xml" />
     <Content Include="PROD-2018.09.06\ROBP\Operations\CT4\DeleteMSTSubscriber.xml" />
@@ -385,9 +380,6 @@
     <Content Include="EDITION\ROBP\Operations\RBT\CreateSubscriberRBT_INTECH.xml" />
     <Content Include="EDITION\ROBP\Operations\RBT\DeleteFRCRBTRBT_INTECH.xml" />
     <Content Include="EDITION\ROBP\Operations\RBT\DeleteSubscriberRBT_INTECH.xml" />
-    <Content Include="EDITION\ROBP\Operations\SCG\ReSubscribeFRINSPECTAdd.xml" />
-    <Content Include="EDITION\ROBP\Operations\SCG\ReSubscribeFRINSPECTDelete.xml" />
-    <Content Include="EDITION\ROBP\Operations\SCG\SynchronizeOnSCG.xml" />
     <Content Include="EDITION\ROBP\Operations\SC\CreateSubscriberOnFP.xml" />
     <Content Include="EDITION\ROBP\Operations\SC\DeleteSubscribersInTheFP.xml" />
     <Content Include="EDITION\ROBP\Operations\SC\DummySuccess.xml" />
@@ -1030,14 +1022,11 @@
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\SCG\DeleteSCPBREAKSESSIONSCG.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\SCG\DeleteSubscriberOnSCG.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\SCG\DeleteSubscription.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Scenarios\ReSubscribeFRINSPECTAdd.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Scenarios\ReSubscribeFRINSPECTDelete.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\SCG\ReSubscribeFRINSPECTAdd.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\SCG\ReSubscribeFRINSPECTDelete.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\SCG\ReSubscribeSCGAdd.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\SCG\ReSubscribeSCGDelete.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\SCG\SubDeleteSubscriberOnSCG.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Scenarios\SynchronizeOnSCG.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\SCG\SynchronizeOnSCG.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\SCG\UpdateSubscription.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\SCP\AddFRPOLDOVSCP.xml" />
@@ -1592,14 +1581,11 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.RBT.INTECH\dictionary.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.RBT.INTECH\Emulation\printout.failure.txt" />
     <Content Include="EDITION\SPA.SA\SPA.SA.RBT.INTECH\Emulation\printout.success.txt" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Commands\ADD_MAPSERVER_OSC.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Commands\DELETE_MAPSERVER_OSC0.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Commands\MapServerOSC_Add.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Commands\MapServerOSC_Delete.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCG\configuration.application.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCG\configuration.common.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCG\dictionary.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Emulation\printout.failure.txt" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Emulation\printout.success.txt" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Scenarios\SC.SCG.ChangeMSISDN.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Scenarios\SC.SCG.CreateSubscriber.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Scenarios\SC.SCG.DeleteSubscriber.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCP.01\Commands\ChangeBillingGroupOnFP.xml" />
@@ -2805,6 +2791,8 @@
   <ItemGroup>
     <None Include="EDITION\DOC\ALLPLAY\Модель услуг CT6.xlsx" />
     <None Include="EDITION\DOC\ALLPLAY\Перевод управления CT6 на SC.v0.1.docx" />
+    <None Include="EDITION\DOC\Example\Модель услуг BB v.0.1.xlsx" />
+    <None Include="EDITION\DOC\Example\Перевод управления BB на SC.v0.1.docx" />
     <None Include="EDITION\DOC\MST\Модель услуг CT4.xlsx" />
     <None Include="EDITION\DOC\MST\Перевод управления CT4 на SC.v0.1.docx" />
     <None Include="EDITION\DOC\SCG\Перевод управления SCG на SC v0.1.docx" />
@@ -2858,6 +2846,7 @@
   <ItemGroup>
     <Folder Include="EDITION\ROBP\Operations\CT4\" />
     <Folder Include="EDITION\ROBP\Operations\CT6\" />
+    <Folder Include="EDITION\ROBP\Operations\SCG\" />
     <Folder Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SubScenarios\" />
     <Folder Include="EDITION\SPA.SA\SPA.SA.MG\Commands\" />
     <Folder Include="EDITION\SPA.SA\SPA.SA.MG\Scenarios\" />

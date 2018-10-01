@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SubscriptionAdd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
 	<Description>Добавление подписки услуги на платформу SCG</Description>
-	<Author Name="Vladimir Khovanskiy" Date="2009-04-26+11:09"/>
+  <Author Name="Vladimir Khovanskiy" Date="2018-10-01+11:09"/>
 	<Request>
 		<RequestTemplate>
 			<![CDATA[<soapenv:Envelope
@@ -16,7 +16,7 @@ xmlns:sch="http://schema.ib.sdp.huawei.com">
          <req:subInfoList>
             <bas:item>               
                <sch:payType>0</sch:payType>
-               <sch:productID>1000##InspectID##</sch:productID>
+               <sch:productID>##productID##</sch:productID>
                <sch:subType>0</sch:subType>
             </bas:item>
          </req:subInfoList>
@@ -30,7 +30,7 @@ xmlns:sch="http://schema.ib.sdp.huawei.com">
 		</RequestTemplate>
 		<EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
 		<Item Name="msisdn" Type="Wellknown"/>	
-		<Item Name="InspectID" Type="Parameter"/>	
+		<Item Name="productID" Type="Parameter"/>	
 	</Request>
 	<ErrorsList CodePage="windows-1251" />
 </Command>

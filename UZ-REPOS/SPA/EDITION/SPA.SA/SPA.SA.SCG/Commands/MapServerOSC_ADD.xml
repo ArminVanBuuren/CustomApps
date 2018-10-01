@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="DELETE_MAPSERVER_OSC1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-  <Description>Удаление абонента с платформы SCG профиль 1</Description>
-  <Author Name="Vladimir Khovanskiy" Date="2009-04-26+11:09"/>
-  <Request>
-    <RequestTemplate>
-      <![CDATA[<soapenv:Envelope 
+<Command Name="MapServerOSC_Add" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Добавление абонента на платформу SCG</Description>
+	<Author Name="Vladimir Khovanskiy" Date="2018-10-01+11:09"/>
+	<Request>
+		<RequestTemplate>
+			<![CDATA[<soapenv:Envelope 
 xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
 xmlns:bas="http://basicservices.scg.huawei.com" 
 xmlns:com="http://com.huawei.scg.basicservices.request" 
@@ -19,23 +19,24 @@ xmlns:com1="http://com.huawei.scg.schema">
          <bas:ocsMappingInfo>
             <com:userID>
                <com1:ID>##msisdn##</com1:ID>
-               <com1:type>0</com1:type>
+               <com1:type>##Profile##</com1:type>
             </com:userID>
             <com:ocsInfo>
-               <com1:ID>1</com1:ID>
+               <com1:ID>##Profile##</com1:ID>
                <com1:Host>##OSC_HOST##</com1:Host>
                <com1:Port>##OSC_PORT##</com1:Port>
             </com:ocsInfo>
-            <com:updateFlag>2</com:updateFlag>
+            <com:updateFlag>0</com:updateFlag>
          </bas:ocsMappingInfo>
       </bas:synchronizeOCSInfoRequest>
    </soapenv:Body>
 </soapenv:Envelope>]]>
-    </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="OSC_HOST" Type="Constant"/>
-    <Item Name="OSC_PORT" Type="Constant"/>
-  </Request>
-  <ErrorsList CodePage="windows-1251" />
+		</RequestTemplate>
+		<EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+		<Item Name="msisdn" Type="Wellknown"/>	
+		<Item Name="Profile" Type="Parameter"/>
+	  <Item Name="OSC_HOST" Type="Constant"/>
+	  <Item Name="OSC_PORT" Type="Constant"/>
+	</Request>
+	<ErrorsList CodePage="windows-1251" />
 </Command>

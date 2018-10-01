@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="DELETE_MAPSERVER_OSC0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description>Удаление абонента с платформы SCG профиль 0</Description>
-	<Author Name="Vladimir Khovanskiy" Date="2009-04-26+11:09"/>
+<Command Name="MapServerOSC_Delete" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Удаление абонента с платформы SCG</Description>
+  <Author Name="Vladimir Khovanskiy" Date="2018-10-01+11:09"/>
 	<Request>
 		<RequestTemplate>
 			<![CDATA[<soapenv:Envelope 
@@ -23,6 +23,18 @@ xmlns:com1="http://com.huawei.scg.schema">
             </com:userID>
             <com:ocsInfo>
                <com1:ID>0</com1:ID>
+               <com1:Host>##OSC_HOST##</com1:Host>
+               <com1:Port>##OSC_PORT##</com1:Port>
+            </com:ocsInfo>
+            <com:updateFlag>2</com:updateFlag>
+         </bas:ocsMappingInfo>
+         <bas:ocsMappingInfo>
+            <com:userID>
+               <com1:ID>##msisdn##</com1:ID>
+               <com1:type>1</com1:type>
+            </com:userID>
+            <com:ocsInfo>
+               <com1:ID>1</com1:ID>
                <com1:Host>##OSC_HOST##</com1:Host>
                <com1:Port>##OSC_PORT##</com1:Port>
             </com:ocsInfo>

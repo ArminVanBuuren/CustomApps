@@ -15,7 +15,7 @@
     <Error Name="22999999;" Expression="$(Error)" Value="FAILURE"/>
   </ErrorsList>
   <RegexpsList>
-    <Regexp Name="Error" Value=".*resultCode xmlns:ns1=&quot;http://com.huawei.scg.schema&quot;&gt;(?&lt;ERROR&gt;\d{8})"/>
+    <Regexp Name="Error" Value="resultCode\s\S*(?&lt;ERROR&gt;\d{8})"/>
   </RegexpsList>
   <ConstantsList>
     <Constant Name="OSC_HOST" Value="10.160.21.24"/>
@@ -26,15 +26,8 @@
       <Source Path="//RES_SCG_PROFILE/Value[text()!='']"/>
       <PossibleValues StringToKeyTable="true"/>
     </Parameter>
-    <Parameter Name="SCP_Profile">
-      <Source Path="//AdditionalData/BalanceStorage/HostCode"/>
-      <PossibleValues StringToKeyTable="false">
-        <Item Key="MS" StringValue="1"/>
-        <Item Key="05" StringValue="0"/>
-      </PossibleValues>
-    </Parameter>
-    <Parameter Name="InspectID">
-      <Source Path="ExtendedRequestMessage/AdditionalData/InspectID"/>
+    <Parameter Name="productID">
+      <Source Path="//RES_SCG_PRODUCT_ID/Value[text()!='']"/>
       <PossibleValues StringToKeyTable="true"/>
     </Parameter>
   </ParametersList>

@@ -1,29 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scenario name="SC.SCG.DeleteSubscriber">
+<scenario name="SC.SCG.SubscriptionRemove">
   <objectList>
     <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
   </objectList>
   <automat>
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
       <resultlist>
-        <result value="0" node="MapServerOSC_Delete"/>
+        <result value="0" node="DeleteSubscription"/>
         <result value="1" node=""/>
       </resultlist>
     </node>
-    <node name="MapServerOSC_Delete" object="Commander">
+    <node name="DeleteSubscription" object="Commander">
       <resultlist>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="CommandSource" value="Dictionary"/>
-        <param name="Command" value="MapServerOSC_Delete"/>
+        <param name="Session:Url" value="services/BasicServices"/>
+        <param name="Command" value="SubscriptionDelete"/>
         <param name="Script" value="Command"/>
-        <param name="AppendSubscribersData" value="false"/>
         <param name="ErrorDecodingType" value="ByRegexp"/>
-        <param name="DynamicObject" value="(empty)"/>
-        <param name="OverwriteDetailedResult" value="true"/>
+        <param name="CommandSource" value="Dictionary"/>
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">

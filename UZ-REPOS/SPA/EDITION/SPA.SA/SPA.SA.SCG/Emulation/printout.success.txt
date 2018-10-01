@@ -1,1 +1,0 @@
-resultCode xmlns:ns1="http://com.huawei.scg.schema">00000000
