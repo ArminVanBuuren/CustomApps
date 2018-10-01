@@ -51,6 +51,7 @@
     <Compile Include="EDITION\SPA.SA\SPA.SA.SCP.01\Func\ifstringformat_scp.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="EDITION\DOC\SC_DOCs.txt" />
     <Content Include="EDITION\ROBP\Operations\HL\ActivateCallForwarding.xml" />
     <Content Include="EDITION\ROBP\Operations\HL\AddBlockOnAllCalls.xml" />
     <Content Include="EDITION\ROBP\Operations\HL\AddBSNSSRMNG.xml" />
@@ -171,8 +172,8 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.MCA\Scenarios\SC.Add.RFS_MA_SUBSCRIPTION.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MCA\Scenarios\SC.Remove.RFS_MA_SUBSCRIPTION.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MST\Scenarios\SC.CT4.ChangeMSISDN.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Commands\SubscriptionAdd.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Commands\SubscriptionDelete.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Commands\Subscription_Add.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Commands\Subscription_Delete.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Scenarios\SC.SCG.SubscriptionAdd.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Scenarios\SC.SCG.SubscriptionRemove.xml" />
     <Content Include="PROD-2018.09.06\new_export1.xml" />

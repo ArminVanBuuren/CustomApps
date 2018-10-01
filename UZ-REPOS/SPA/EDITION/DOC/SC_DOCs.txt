@@ -1,0 +1,53 @@
+﻿https://wiki.mtsit.com/pages/viewpage.action?pageId=64851469 модель управления услугами
+
+при настройке СК следует руководствоваться документами
+https://wiki.mtsit.com/pages/viewpage.action?pageId=63115770
+https://wiki.mtsit.com/pages/viewpage.action?pageId=64851469
+
+https://wiki.mtsit.com/pages/viewpage.action?pageId=65537318
+https://wiki.mtsit.com/pages/viewpage.action?pageId=87687642
+
+
+
+1. при настройке руководствоваться методикой описанной в https://wiki.mtsit.com/pages/viewpage.action?pageId=63115770
+2. по результату работы должно получиться два документа 
+- модель услуг 
+- документ по переводу на SC с анализом текущих настроек и необходимых настроек для SC 
+их обязательно прикладывать к таску вместе с настройками (примеры можно посмотреть тут 1301284 или в других дочерних у 1303650)
+3. все настройки обязательно тестировать всеми типами заявок которые обрабатывает платформа, шаблоны заявок приложить к таску
+4. к таску приложить также оригинальные (старые) настройки, имеющиеся документы\приказы по настройке провиженинга
+5. выгрузить и приложить к таску wsdl (если взаимодействие с платформой по http)
+6. если в сценариях используются "костыли" в виде селектов из бд для выборки каких либо данных, от них надо избавляться через настройки окат для передачи параметров в заявке
+7. в сценариях заменить использование объекта RequestSplitterBySubscribers на RequestCutterBySubscribers
+8. в конфиге заменить использование HttpSocket\SoapSocket на GenericSoapSocket
+9. переделать команды на CDATA и именованные параметры
+т.е. ужас вида
+<Request Template="
+&lt;env:Envelope xmlns:env=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;&gt;
+  &lt;env:Header /&gt;
+    &lt;env:Body&gt;
+    &lt;create xmlns=&quot;http://ws.fmccap.inlinetelecom.ru/&quot;&gt;
+      &lt;requestId xmlns=&quot;&quot;&gt;{0}&lt;/requestId&gt;
+      &lt;MSISDN xmlns=&quot;&quot;&gt;{1}&lt;/MSISDN&gt;
+      &lt;code xmlns=&quot;&quot;&gt;{2}&lt;/code&gt;
+    &lt;/create&gt;
+  &lt;/env:Body&gt;
+&lt;/env:Envelope&gt;">
+<Item Name="Req_ID" Type="Parameter"/>
+<Item Name="MSISDN" Type="Wellknown"/>
+<Item Name="code" Type="LocalComplexParameter"/>
+</Request>
+
+переделать в красоту вида:
+  <Request>
+    <RequestTemplate>
+      <![CDATA[<create xmlns="http://ws.fmccap.inlinetelecom.ru/">
+<requestId xmlns="">##OriginalID##</requestId>
+<MSISDN xmlns="">##msisdn##</MSISDN>
+<code xmlns="">##ServiceCode##</code>
+</create>]]>
+    </RequestTemplate>
+    <Item Name="OriginalID" Type="Wellknown"/>
+    <Item Name="msisdn" Type="Wellknown"/>
+    <Item Name="ServiceCode" Type="LocalParameter"/>
+  </Request>
