@@ -4,16 +4,8 @@
     <HostType name="HL" nriType="RI" allowTerminalDeviceType="mobile" description="Home Location Register" />
   </HostTypeList>
   <IdentityList>
-    <Identity name="ContractNumber" description="Номер контракта" />
-    <Identity name="ICCID" description="Номер ICCID" />
-    <Identity name="IMSI" description="Номер IMSI" />
-    <Identity name="KI" path="//AdditionalData//EncryptedKi" description="Ключ шифрования" />
-    <Identity name="MSISDN" description="Номер MSISDN" />
   </IdentityList>
   <AttributeList>
-    <Attribute name="A3A8" path="//AdditionalData//VersionsA3A8" description="Алгоритм шифрования" />
-    <Attribute name="PersonalAccountNumber" path="//IdentifiersList/Identifier/PersonalAccountNumber" description="Номер ЛС" />
-    <Attribute name="TerminalDeviceId" path="//IdentifiersList/Identifier/TerminalDeviceId" description="Идентификатор ПО" />
   </AttributeList>
   <ResourceList>
     <Resource name="RES_HL_REDUCE_SPEED_APN" description="APN ограничения скорости GPRS до 128кбс для LTE" />

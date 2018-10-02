@@ -4,24 +4,13 @@
     <HostType name="CT6" nriType="RI" allowTerminalDeviceType="mobile" description="Service Content ALLPLAY" />
   </HostTypeList>
   <IdentityList>
-    <Identity name="ContractNumber" description="Номер контракта" />
-    <Identity name="ICCID" description="Номер ICCID" />
-    <Identity name="IMSI" description="Номер IMSI" />
-    <Identity name="KI" path="//AdditionalData//EncryptedKi" description="Ключ шифрования" />
-    <Identity name="MSISDN" description="Номер MSISDN" />
   </IdentityList>
   <AttributeList>
-    <Attribute name="A3A8" path="//AdditionalData//VersionsA3A8" description="Алгоритм шифрования" />
-    <Attribute name="PersonalAccountNumber" path="//IdentifiersList/Identifier/PersonalAccountNumber" description="Номер ЛС" />
-    <Attribute name="TerminalDeviceId" path="//IdentifiersList/Identifier/TerminalDeviceId" description="Идентификатор ПО" />
   </AttributeList>
   <ResourceList>
     <Resource name="RES_CT6_SERVICE_ID" description="ServiceID на CT6" />
   </ResourceList>
   <RFSParameterList>
-    <RFSParameter name="ChangeTP" path="xml(//ChangeTP)" description="Параметры смены тарифного плана" />
-    <RFSParameter name="Subscriber" path="xml(//Subscriber)" description="Параметры создания абонента" />
-    <RFSParameter name="NewIMSI" description="Новый номер IMSI" />
     <RFSParameter name="NewMSISDN" path="//ChangeMsisdn/NewMSISDN" description="Новый номер MSISDN" />
   </RFSParameterList>
   <FlagList />
