@@ -2,7 +2,6 @@
 
 при настройке СК следует руководствоваться документами
 https://wiki.mtsit.com/pages/viewpage.action?pageId=63115770
-https://wiki.mtsit.com/pages/viewpage.action?pageId=64851469
 
 https://wiki.mtsit.com/pages/viewpage.action?pageId=65537318
 https://wiki.mtsit.com/pages/viewpage.action?pageId=87687642

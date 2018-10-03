@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="SC.LTEs2_Add" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+<Command Name="SC.LTEs2_Add" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>Добавление услуги 'LTE 4G' 2</Description>
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
   <Request>

@@ -140,6 +140,8 @@
     <Content Include="EDITION\ROBP\Processes\Roaming Test Util Request.xml" />
     <Content Include="EDITION\ROBP\Processes\Synchronize Subscriber Data.xml" />
     <Content Include="EDITION\ROBP\Processes\Unblock Subscriber.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.VideoCall_Delete.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.VideoCall_Add.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.GPRSAPN_Delete.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.GPRSNAM_Delete.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.LTEs3_Add.xml" />
@@ -1544,8 +1546,6 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Decoders\MML.ZTE.CallForwardingServicesDecoder.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Decoders\MML.ZTE.SupplementaryServicesDecoder.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\dictionary.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Emulation\printout.failure.txt" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Emulation\printout.success.txt" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scripts\command.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scripts\login.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scripts\logoff.xml" />

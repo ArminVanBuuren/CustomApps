@@ -11,7 +11,7 @@
             <socket type="FORIS.ServiceProvisioning.Communication.TelnetSocket, FORIS.SPA.Communication">
               <config host="10.160.25.19" port="3003"/>              
             </socket>
-            <Emulation Success="..\SPA.SA\SPA.SA.HLR.ZTE\Emulation\printout.success.txt" Failure="..\SPA.SA\SPA.SA.HLR.ZTE\Emulation\printout.failure.txt" RandomizePrintout="false" OverwriteCommandPrintout="true"  Lifetime="00:00:00.00"/>
+            <Emulation Success="RETN=000000" Failure="RETN=101040" RandomizePrintout="false" OverwriteCommandPrintout="true"  Lifetime="00:00:00.00"/>
             <Timers IdleTimeout="10"/>
             <PredefinedScripts Login="Login" Logoff="Logoff"/>
             <ScriptsList>
