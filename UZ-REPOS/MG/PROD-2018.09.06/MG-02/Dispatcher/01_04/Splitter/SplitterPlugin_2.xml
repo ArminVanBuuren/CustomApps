@@ -1,5 +1,0 @@
-﻿<plugin name="SplitterPlugin_2" >
-      <condition expression="/Message/@type">
-            <match value="serviceorder" />
-      </condition>
-</plugin>

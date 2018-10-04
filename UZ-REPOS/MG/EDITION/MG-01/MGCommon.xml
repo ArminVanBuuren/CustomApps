@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Application configClass="FORIS.MessagingGateway.Configuration.CommonConfiguration">
+  <Connections>
+    <Database forisDataKey="MG" interfacePackage="API" />
+    <Handler   name="CRMCON_01_01"        type="CRMCON"   host="localhost" port="11100" sessionHandler="false" serviceName="FORIS.MG.CRMCON.01.01"              config="Configuration\CRMCON\CRMCON_01_01.exe.xml"/>
+    <Handler   name="WCFHND_01_01"        type="WCFHND"   host="localhost" port="11190" sessionHandler="false" serviceName="FORIS.MG.WCFHND.01.01"              config="Configuration\WCFHND\WCFHND_01_01.exe.xml"/>
+    <Connector name="DBCON_01_01"         type="DBCON"    host="localhost" port="11341" sessionHandler="false" serviceName="FORIS.MG.DBCON.01.01"               config="Configuration\DBCON\DBCON_01_01.exe.xml"/>
+    <Connector name="EMAILCON_01_01"      type="EMAILCON" host="localhost" port="11150" sessionHandler="false" serviceName="FORIS.MG.EMAILCON.01.01"            config="Configuration\EMAILCON\EMAILCON_01_01.exe.xml"/>
+    <Connector name="SMSCON_01_01"        type="SMSCON"   host="localhost" port="11110" sessionHandler="false" serviceName="FORIS.MG.SMSCON.01.01"              config="Configuration\SMSCON\SMSCON_01_01.exe.xml"/>
+    <Connector name="SMSCON_01_02"        type="SMSCON"   host="localhost" port="11111" sessionHandler="false" serviceName="FORIS.MG.SMSCON.01.02.ISSA"         config="Configuration\SMSCON\SMSCON_01_02.ISSA.exe.xml"/>
+    <Connector name="SMSCON_01_INFORM"    type="SMSCON"   host="localhost" port="11115" sessionHandler="false" serviceName="FORIS.MG.SMSCON.01.INFORM"          config="Configuration\SMSCON\SMSCON_01_INFORM.exe.xml"/>
+    <Connector name="SMSCON_01_CONTENT"   type="SMSCON"   host="localhost" port="11116" sessionHandler="false" serviceName="FORIS.MG.SMSCON.01.CONTENT"         config="Configuration\SMSCON\SMSCON_01_CONTENT.exe.xml"/>
+    <Connector name="SMSCON_01_EMAIL"     type="SMSCON"   host="localhost" port="11117" sessionHandler="false" serviceName="FORIS.MG.SMSCON.01.EMAIL"           config="Configuration\SMSCON\SMSCON_01_EMAIL.exe.xml"/>
+    <Connector name="SOAP_USSDCON_01_01"  type="SOAPCON"  host="localhost" port="11120" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.USSD.01.01"        config="Configuration\SOAPCON\SOAPCON_USSD_01_01.exe.xml"/>
+    <Connector name="SOAP_USSDCON_01_02"  type="SOAPCON"  host="localhost" port="11140" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.USSD.01.02"        config="Configuration\SOAPCON\SOAPCON_USSD_01_02.exe.xml"/>
+    <Connector name="SOAP_SMSCON_01_01"   type="SOAPCON"  host="localhost" port="11130" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.SMS.01.01"         config="Configuration\SOAPCON\SOAPCON_SMS_01_01.exe.xml"/>
+    <Connector name="SOAP_SPA_01_01"      type="SOAPCON"  host="localhost" port="11121" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.SPA.01.01"         config="Configuration\SOAPCON\SOAPCON_SPA_01_01.exe.xml"/>
+    <Connector name="SOAP_SCG_01_01"      type="SOAPCON"  host="localhost" port="11122" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.SCG.01.01"         config="Configuration\SOAPCON\SOAPCON_SCG_01_01.exe.xml"/>
+    <Connector name="USSDCON_01_01"       type="SMSCON"   host="localhost" port="11170" sessionHandler="false" serviceName="FORIS.MG.USSDCON.01.01"             config="Configuration\USSDCON\USSDCON_01_01.exe.xml"/>
+    <Connector name="USSDCON_01_02"       type="SMSCON"   host="localhost" port="11171" sessionHandler="false" serviceName="FORIS.MG.USSDCON.01.02"             config="Configuration\USSDCON\USSDCON_01_02.exe.xml"/>
+
+    <Connector name="SOAP_USSDCON_02_01"  type="SOAPCON"  host="mg02"      port="11150" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.USSD.02.01"        config="Configuration\SOAPCON\SOAPCON_USSD_02_01.exe.xml"/>
+    <Connector name="SOAP_USSDCON_02_02"  type="SOAPCON"  host="mg02"      port="11120" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.USSD.02.02"        config="Configuration\SOAPCON\SOAPCON_USSD_02_02.exe.xml"/>
+    <Connector name="SOAP_USSDCON_02_KP"  type="SOAPCON"  host="mg02"      port="11123" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.USSD.02.KP"        config="Configuration\SOAPCON\SOAPCON_USSD_02_KP.exe.xml"/>
+    <Connector name="SOAP_PAYNET"         type="SOAPCON"  host="mg02"      port="11100" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.PAYNET"            config="Configuration\SOAPCON\SOAPCON_PAYNET.exe.xml"/>
+    <Connector name="SOAP_CLICK"          type="SOAPCON"  host="mg02"      port="11101" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.CLICK"             config="Configuration\SOAPCON\SOAPCON_CLICK.exe.xml"/>
+    <Connector name="SOAP_RBT"            type="SOAPCON"  host="mg02"      port="11105" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.RBT"               config="Configuration\SOAPCON\SOAPCON_RBT.exe.xml"/>
+    <Connector name="SOAP_SMSCON_02_01"   type="SOAPCON"  host="mg02"      port="11110" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.SMS.02.01"         config="Configuration\SOAPCON\SOAPCON_SMS_02_01.exe.xml"/>    
+    <Connector name="SOAP_BMS_02_01"      type="SOAPCON"  host="mg02"      port="11125" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.BMS.02.01"         config="Configuration\SOAPCON\SOAPCON_BMS_02_01.exe.xml"/>
+    <Connector name="SOAP_ANTIFRAUD"      type="SOAPCON"  host="mg02"      port="11151" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.ANTIFRAUD"         config="Configuration\SOAPCON\SOAPCON_ANTIFRAUD.exe.xml"/>
+    <Connector name="IVRCON_02_01"        type="IVRCON"   host="mg02"      port="11130" sessionHandler="false" serviceName="FORIS.MG.IVRCON.02.01"              config="Configuration\IVRCON\IVRCON_02_01.exe.xml"/>
+    <Connector name="IVRCON_02_02"        type="IVRCON"   host="mg02"      port="11131" sessionHandler="false" serviceName="FORIS.MG.IVRCON.02.02"              config="Configuration\IVRCON\IVRCON_02_02.exe.xml"/>
+    <Connector name="IVRCON_02_07"        type="IVRCON"   host="mg02"      port="11136" sessionHandler="false" serviceName="FORIS.MG.IVRCON.SCP.02.01"          config="Configuration\IVRCON\IVRCON_SCP_02_07.exe.xml"/>
+    <Connector name="IVRCON_02_08"        type="IVRCON"   host="mg02"      port="11137" sessionHandler="false" serviceName="FORIS.MG.IVRCON.SCP.02.02"          config="Configuration\IVRCON\IVRCON_SCP_02_08.exe.xml"/>
+    <Connector name="DBCON_02_01"         type="DBCON"    host="mg02"      port="11141" sessionHandler="false" serviceName="FORIS.MG.DBCON.02.01"               config="Configuration\DBCON\DBCON_02_01.exe.xml"/>
+    <Connector name="SMSCON_02_01"        type="SMSCON"   host="mg02"      port="11310" sessionHandler="false" serviceName="FORIS.MG.SMSCON.02.01"              config="Configuration\SMSCON\SMSCON_02_01.exe.xml"/>
+    <Connector name="SMSCON_02_02"        type="SMSCON"   host="mg02"      port="11311" sessionHandler="false" serviceName="FORIS.MG.SMSCON.02.02.ISSA"         config="Configuration\SMSCON\SMSCON_02_02.ISSA.exe.xml"/>
+
+  </Connections>
+  <log4net>
+    <appender name="BufferingDataFileAppender" type="log4net.Appender.BufferingForwardingAppender">
+      <bufferSize value="20"/>
+      <appender-ref ref="DataFileAppender"/>
+    </appender>
+
+    <appender name="DataFileAppender" type="log4net.Appender.RollingFileAppender">
+      <file type="log4net.Util.PatternString" value="C:\FORISLOG\MG\%property{TYPE}_%property{NAME}_data.log"/>
+      <staticLogFileName value="false"/>
+      <countDirection value="1"/>
+      <maxSizeRollBackups value="-1"/>
+      <maximumFileSize value="300MB"/>
+      <lockingModel type="log4net.Appender.FileAppender+MinimalLock"/>
+      <filter type="log4net.Filter.LevelRangeFilter">
+        <levelMin value="ProcessingContent"/>
+        <levelMax value="ProcessingContent"/>
+      </filter>
+      <layout type="log4net.Layout.PatternLayout">
+        <conversionPattern value="%date{dd.MM.yyyy HH:mm:ss.fff} [%17level] %thread: %message%newline"/>
+      </layout>
+    </appender>
+
+    <appender name="BufferingActivityFileAppender" type="log4net.Appender.BufferingForwardingAppender">
+      <bufferSize value="100"/>
+      <appender-ref ref="ActivityFileAppender"/>
+    </appender>
+
+    <appender name="ActivityFileAppender" type="log4net.Appender.RollingFileAppender">
+      <file type="log4net.Util.PatternString" value="C:\FORISLOG\MG\%property{TYPE}_%property{NAME}_activity.log"/>
+      <staticLogFileName value="false"/>
+      <countDirection value="1"/>
+      <maxSizeRollBackups value="-1"/>
+      <maximumFileSize value="300MB"/>
+      <lockingModel type="log4net.Appender.FileAppender+MinimalLock"/>
+      <filter type="log4net.Filter.LevelRangeFilter">
+        <levelMin value="DEBUG"/>
+        <levelMax value="FATAL"/>
+      </filter>
+      <layout type="log4net.Layout.PatternLayout">
+        <conversionPattern value="%date{dd.MM.yyyy HH:mm:ss.fff} [%17level] %thread: %message%newline"/>
+      </layout>
+    </appender>
+
+    <appender name="ErrorFileAppender" type="log4net.Appender.RollingFileAppender">
+      <file type="log4net.Util.PatternString" value="C:\FORISLOG\MG\%property{TYPE}_%property{NAME}_error.log"/>
+      <staticLogFileName value="false"/>
+      <countDirection value="1"/>
+      <maxSizeRollBackups value="-1"/>
+      <maximumFileSize value="300MB"/>
+      <lockingModel type="log4net.Appender.FileAppender+MinimalLock"/>
+      <filter type="log4net.Filter.LevelRangeFilter">
+        <levelMin value="ERROR"/>
+        <levelMax value="FATAL"/>
+      </filter>
+      <layout type="log4net.Layout.PatternLayout">
+        <conversionPattern value="%date{dd.MM.yyyy HH:mm:ss.fff} [%17level] %thread: %message%newline"/>
+      </layout>
+    </appender>
+
+    <logger name="MG">
+      <level value="DEBUG"/>
+      <appender-ref ref="BufferingActivityFileAppender"/>
+      <appender-ref ref="BufferingDataFileAppender"/>
+      <appender-ref ref="ErrorFileAppender"/>
+    </logger>
+  </log4net>
+
+  <XPathExtentionFile>defaultXPATH.xml</XPathExtentionFile>
+</Application>
