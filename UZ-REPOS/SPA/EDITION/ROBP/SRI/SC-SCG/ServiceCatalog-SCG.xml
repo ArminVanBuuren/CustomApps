@@ -1,99 +1,99 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Configuration markers="*" scenarioPrefix="SC." mainIdentities="MSISDN,PersonalAccountNumber,ContractNumber" SICreation="" formatVersion="1">
-	<HostTypeList>
-		<HostType name="SCG" nriType="RI" allowTerminalDeviceType="mobile" description="SCG онлайн GPRS"/>
-		<HostType name="SCGS" nriType="RI" allowTerminalDeviceType="mobile" description="SCG онлайн GPRS Service"/>
-	</HostTypeList>
-	<ResourceList>
-		<Resource name="RES_SCG_USERTYPE" description="Тип абонента на SCG"/>
-		<Resource name="RES_SCG_PRODUCT_ID" description="Тип подписки абонента на SCG"/>
-	</ResourceList>
-	<RFSList>
-		<RFS name="RFS_SCG_CHANGE_PLATFORM" hostType="SCG" description="Изменение типа абонента на платформе SCG"/>
-		<RFS name="RFS_SCG_BREAKSESSION" hostType="SCG" description="Разрыв GPRS сессии на SCG"/>
-		<RFS name="RFS_SCG_SUBSCRIBER" hostType="SCG" processType="Subscription" description="Абонент на платформе SCG">
-			<Resource name="RES_SCG_USERTYPE" useType="Mandatory">
-				<Value hosts="FP:05" value="0"/>
-				<Value hosts="FP:MS" value="1"/>
-			</Resource>
-		</RFS>
-		<RFS name="RFS_SCG_SYNCHRONIZE" hostType="SCG" description="Обработка кнопки Синхронизировать в СПА"/>
-  <!-- START ==== НАСТРОЙКИ ДЛЯ SCGS -->
-		<RFS name="RFS_SCGS_SUBSCRIPTION" hostType="SCGS" processType="Subscription" description="Подписка абонента на продукт платформы SCG">
-			<Resource name="RES_SCG_PRODUCT_ID" useType="Mandatory"/>
-		</RFS>
-		<RFS name="RFS_SCGS_PRODUCT_CORPORATE777" base="RFS_SCGS_SUBSCRIPTION" hostType="SCGS" description="Продукт ТП Corporate 777">
-			<Resource name="RES_SCG_PRODUCT_ID" value="1000150"/>
-		</RFS>
-		<RFS name="RFS_SCGS_PRODUCT_MAXI" base="RFS_SCGS_SUBSCRIPTION" hostType="SCGS" description="Продукт ТП Corporate MAXI">
-			<Resource name="RES_SCG_PRODUCT_ID" value="1000113"/>
-		</RFS>
-		<RFS name="RFS_SCGS_PRODUCT_PERFECT_MAXI_NEWSUM" base="RFS_SCGS_SUBSCRIPTION" hostType="SCGS" description="Продукт ТП Corporate Perfect и ТП Maxi New SUM">
-			<Resource name="RES_SCG_PRODUCT_ID" value="1000148"/>
-		</RFS>
-		<RFS name="RFS_SCGS_PRODUCT_ULTRA_VIP" base="RFS_SCGS_SUBSCRIPTION" hostType="SCGS" description="Продукт ТП Corporate Ultra и ТП Corporate VIP">
-			<Resource name="RES_SCG_PRODUCT_ID" value="1000155"/>
-		</RFS>
-  <!-- END ==== НАСТРОЙКИ ДЛЯ SCGS -->
-	</RFSList>
-	<CFSList>
-		<!-- START ==== НАСТРОЙКИ ДЛЯ SCGS -->
-		<CFS name="FRAPCORP777" description="Абонентская плата за ТП Corporate 777">
-			<RFS name="RFS_SCGS_PRODUCT_CORPORATE777" linkType="Add"/>
-		</CFS>
-		<CFS name="FRAPCORPPERF" description="Абонентская плата за ТП Corporate Perfect">
-			<RFS name="RFS_SCGS_PRODUCT_PERFECT_MAXI_NEWSUM" linkType="Add"/>
-		</CFS>
-		<CFS name="FRAPCORMAXI" description="Абонентская плата за ТП Corporate MAXI">
-			<RFS name="RFS_SCGS_PRODUCT_MAXI" linkType="Add"/>
-		</CFS>
-		<CFS name="FRAPMAXINEWSUM" description="Абонентская плата за ТП Maxi New SUM">
-			<RFS name="RFS_SCGS_PRODUCT_PERFECT_MAXI_NEWSUM" linkType="Add"/>
-		</CFS>
-		<CFS name="FRAPCORPULTRA" description="Абонентская плата за ТП Corporate Ultra">
-			<RFS name="RFS_SCGS_PRODUCT_ULTRA_VIP" linkType="Add"/>
-		</CFS>
-		<CFS name="FRAPCORPVIP" description="Абонентская плата за ТП Corporate VIP">
-			<RFS name="RFS_SCGS_PRODUCT_ULTRA_VIP" linkType="Add"/>
-		</CFS>
-		<!-- END ==== НАСТРОЙКИ ДЛЯ SCGS -->
-		<CFS name="CB406278" isMarker="true" description="Мобильный интернет">
-			<RFS name="RFS_SCG_SUBSCRIBER" linkType="Add"/>
-		</CFS>
-		<CFS name="FRASKUE" copyOf="CB406278" description="АИИСКУЭ"/>
-		<CFS name="SCPBREAKSESSION" description="Разрыв GPRS сессии на SCG">
-			<RFS name="RFS_SCG_BREAKSESSION" linkType="Add" dependsOn="RFS_SCG_SUBSCRIBER"/>
-		</CFS>
-		<CFS name="ChangeTP" description="Изменение ТП">
-			<RFS name="RFS_SCG_CHANGE_PLATFORM" linkType="Add" dependsOn="RFS_SCG_SUBSCRIBER"/>
-		</CFS>
-		<CFS name="Synchronize" priority="1" description="Обработка кнопки Синхронизировать в СПА">
-			<RFS name="RFS_SCG_SYNCHRONIZE" linkType="Add" dependsOn="RFS_SCG_SUBSCRIBER"/>
-		</CFS>
-		<CFS name="Subscriber" priority="1" type="ManagedObject" description="Абонент"/>
-	</CFSList>
-	<CFSGroupList>
-		<CFSGroup name="CFS_GROUP_SCG_TP" type="Mutex" description="Группа взаимоисключающих услуг АП">
-			<CFS name="FRAPCORMAXI"/>
-			<CFS name="FRAPCORPPERF"/>
-			<CFS name="FRAPMAXINEWSUM"/>
-			<CFS name="FRAPCORP777"/>
-			<CFS name="FRAPCORPULTRA"/>
-			<CFS name="FRAPCORPVIP"/>
-		</CFSGroup>
-	</CFSGroupList>
-	<ScenarioList>
- 		<Scenario name="SCG.CreateSubscriber" description="Создание абонента на SCG">
-			<RFS name="RFS_SCG_BREAKSESSION" scenarioType="Remove"/>
-			<RFS name="RFS_SCG_CHANGE_PLATFORM" scenarioType="Add"/>
-			<RFS name="RFS_SCG_SUBSCRIBER" scenarioType="Add"/>
-			<RFS name="RFS_SCG_SYNCHRONIZE" scenarioType="Add"/>
-			<Append name="RFS_SCG_SUBSCRIBER" listType="EndList"/>
-		</Scenario>
-		<Scenario name="SCG.DeleteSubscriber" description="Удаление абонента на SCG">
-			<RFS name="RFS_SCG_BREAKSESSION" scenarioType="Add"/>
-			<RFS name="RFS_SCG_SUBSCRIBER" scenarioType="Remove"/>
-			<Append name="RFS_SCG_SUBSCRIBER" listType="EndList"/>
-		</Scenario>
-	</ScenarioList>
+  <HostTypeList>
+    <HostType name="SCG" nriType="RI" allowTerminalDeviceType="mobile" description="SCG онлайн GPRS"/>
+    <HostType name="SCGS" nriType="RI" allowTerminalDeviceType="mobile" description="SCG онлайн GPRS Service"/>
+  </HostTypeList>
+  <ResourceList>
+    <Resource name="RES_SCG_USERTYPE" description="Тип абонента на SCG"/>
+    <Resource name="RES_SCG_PRODUCT_ID" description="Тип подписки абонента на SCG"/>
+  </ResourceList>
+  <RFSList>
+    <RFS name="RFS_SCG_CHANGE_PLATFORM" hostType="SCG" description="Изменение типа абонента на платформе SCG"/>
+    <RFS name="RFS_SCG_BREAKSESSION" hostType="SCG" description="Разрыв GPRS сессии на SCG"/>
+    <RFS name="RFS_SCG_SUBSCRIBER" hostType="SCG" processType="Subscription" description="Абонент на платформе SCG">
+      <Resource name="RES_SCG_USERTYPE" useType="Mandatory">
+        <Value hosts="FP:05" value="0"/>
+        <Value hosts="FP:MS" value="1"/>
+      </Resource>
+    </RFS>
+    <RFS name="RFS_SCG_SYNCHRONIZE" hostType="SCG" description="Обработка кнопки Синхронизировать в СПА"/>
+    <!-- START ==== НАСТРОЙКИ ДЛЯ SCGS -->
+    <RFS name="RFS_SCGS_SUBSCRIPTION" hostType="SCGS" processType="Subscription" description="Подписка абонента на продукт платформы SCG">
+      <Resource name="RES_SCG_PRODUCT_ID" useType="Mandatory"/>
+    </RFS>
+    <RFS name="RFS_SCGS_PRODUCT_CORPORATE777" base="RFS_SCGS_SUBSCRIPTION" hostType="SCGS" description="Продукт ТП Corporate 777">
+      <Resource name="RES_SCG_PRODUCT_ID" value="1000150"/>
+    </RFS>
+    <RFS name="RFS_SCGS_PRODUCT_MAXI" base="RFS_SCGS_SUBSCRIPTION" hostType="SCGS" description="Продукт ТП Corporate MAXI">
+      <Resource name="RES_SCG_PRODUCT_ID" value="1000113"/>
+    </RFS>
+    <RFS name="RFS_SCGS_PRODUCT_PERFECT_MAXI_NEWSUM" base="RFS_SCGS_SUBSCRIPTION" hostType="SCGS" description="Продукт ТП Corporate Perfect и ТП Maxi New SUM">
+      <Resource name="RES_SCG_PRODUCT_ID" value="1000148"/>
+    </RFS>
+    <RFS name="RFS_SCGS_PRODUCT_ULTRA_VIP" base="RFS_SCGS_SUBSCRIPTION" hostType="SCGS" description="Продукт ТП Corporate Ultra и ТП Corporate VIP">
+      <Resource name="RES_SCG_PRODUCT_ID" value="1000155"/>
+    </RFS>
+    <!-- END ==== НАСТРОЙКИ ДЛЯ SCGS -->
+  </RFSList>
+  <CFSList>
+    <!-- START ==== НАСТРОЙКИ ДЛЯ SCGS -->
+    <CFS name="FRAPCORP777" description="Абонентская плата за ТП Corporate 777">
+      <RFS name="RFS_SCGS_PRODUCT_CORPORATE777" linkType="Add"/>
+    </CFS>
+    <CFS name="FRAPCORPPERF" description="Абонентская плата за ТП Corporate Perfect">
+      <RFS name="RFS_SCGS_PRODUCT_PERFECT_MAXI_NEWSUM" linkType="Add"/>
+    </CFS>
+    <CFS name="FRAPCORMAXI" description="Абонентская плата за ТП Corporate MAXI">
+      <RFS name="RFS_SCGS_PRODUCT_MAXI" linkType="Add"/>
+    </CFS>
+    <CFS name="FRAPMAXINEWSUM" description="Абонентская плата за ТП Maxi New SUM">
+      <RFS name="RFS_SCGS_PRODUCT_PERFECT_MAXI_NEWSUM" linkType="Add"/>
+    </CFS>
+    <CFS name="FRAPCORPULTRA" description="Абонентская плата за ТП Corporate Ultra">
+      <RFS name="RFS_SCGS_PRODUCT_ULTRA_VIP" linkType="Add"/>
+    </CFS>
+    <CFS name="FRAPCORPVIP" description="Абонентская плата за ТП Corporate VIP">
+      <RFS name="RFS_SCGS_PRODUCT_ULTRA_VIP" linkType="Add"/>
+    </CFS>
+    <!-- END ==== НАСТРОЙКИ ДЛЯ SCGS -->
+    <CFS name="CB406278" isMarker="true" description="Мобильный интернет">
+      <RFS name="RFS_SCG_SUBSCRIBER" linkType="Add"/>
+    </CFS>
+    <CFS name="FRASKUE" copyOf="CB406278" description="АИИСКУЭ"/>
+    <CFS name="SCPBREAKSESSION" description="Разрыв GPRS сессии на SCG">
+      <RFS name="RFS_SCG_BREAKSESSION" linkType="Add" dependsOn="RFS_SCG_SUBSCRIBER"/>
+    </CFS>
+    <CFS name="ChangeTP" description="Изменение ТП">
+      <RFS name="RFS_SCG_CHANGE_PLATFORM" linkType="Add" dependsOn="RFS_SCG_SUBSCRIBER"/>
+    </CFS>
+    <CFS name="Synchronize" priority="1" description="Обработка кнопки Синхронизировать в СПА">
+      <RFS name="RFS_SCG_SYNCHRONIZE" linkType="Add" dependsOn="RFS_SCG_SUBSCRIBER"/>
+    </CFS>
+    <CFS name="Subscriber" priority="1" type="ManagedObject" description="Абонент"/>
+  </CFSList>
+  <CFSGroupList>
+    <CFSGroup name="CFS_GROUP_SCG_TP" type="Mutex" description="Группа взаимоисключающих услуг АП">
+      <CFS name="FRAPCORMAXI"/>
+      <CFS name="FRAPCORPPERF"/>
+      <CFS name="FRAPMAXINEWSUM"/>
+      <CFS name="FRAPCORP777"/>
+      <CFS name="FRAPCORPULTRA"/>
+      <CFS name="FRAPCORPVIP"/>
+    </CFSGroup>
+  </CFSGroupList>
+  <ScenarioList>
+    <Scenario name="SCG.CreateSubscriber" description="Создание абонента на SCG">
+      <RFS name="RFS_SCG_BREAKSESSION" scenarioType="Remove"/>
+      <RFS name="RFS_SCG_CHANGE_PLATFORM" scenarioType="Add"/>
+      <RFS name="RFS_SCG_SUBSCRIBER" scenarioType="Add"/>
+      <RFS name="RFS_SCG_SYNCHRONIZE" scenarioType="Add"/>
+      <Append name="RFS_SCG_SUBSCRIBER" listType="EndList"/>
+    </Scenario>
+    <Scenario name="SCG.DeleteSubscriber" description="Удаление абонента на SCG">
+      <RFS name="RFS_SCG_BREAKSESSION" scenarioType="Add"/>
+      <RFS name="RFS_SCG_SUBSCRIBER" scenarioType="Remove"/>
+      <Append name="RFS_SCG_SUBSCRIBER" listType="EndList"/>
+    </Scenario>
+  </ScenarioList>
 </Configuration>
