@@ -2,8 +2,6 @@
 <Dictionary xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <WellknownsList>
     <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
-    <Wellknown Name="imsi" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;)"/>
-    <Wellknown Name="id" Value="xmlsubstr(&quot;ExtendedRequestMessage/ID&quot;)"/>
   </WellknownsList>
   <ErrorsList CodePage="ASCII">
     <Error Name="00000000;" Expression="$(Error)" Value="SUCCESS"/>
@@ -22,16 +20,9 @@
     <Constant Name="OSC_PORT" Value="3868"/>
   </ConstantsList>
   <ParametersList>
-    <Parameter Name="Profile">
-      <Source Path="//RES_SCG_PROFILE/Value[text()!='']"/>
-      <PossibleValues StringToKeyTable="true"/>
-    </Parameter>
     <Parameter Name="productID">
       <Source Path="//RES_SCG_PRODUCT_ID/Value[text()!='']"/>
-      <PossibleValues StringToKeyTable="true"/>
     </Parameter>
   </ParametersList>
-  <DynamicParametersList/>
-  <CommandsList Root="Commands" Mask="*.xml">
-  </CommandsList>
+  <CommandsList Root="Commands" Mask="*.xml"/>
 </Dictionary>

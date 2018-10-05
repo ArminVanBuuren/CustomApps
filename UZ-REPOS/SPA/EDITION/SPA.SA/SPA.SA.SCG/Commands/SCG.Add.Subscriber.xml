@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="SCG.Add.Subscriber" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Добавление абонента на платформу SCG</Description>
+	<Author Name="Vladimir Khovanskiy" Date="2018-10-01+11:09"/>
+	<Request>
+		<RequestTemplate>
+			<![CDATA[
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:bas="http://basicservices.scg.huawei.com" xmlns:com="http://com.huawei.scg.basicservices.request" xmlns:com1="http://com.huawei.scg.schema">
+	<soapenv:Header>
+		<bas:timeStamp>20110602101750</bas:timeStamp>
+		<bas:version>v1</bas:version>
+	</soapenv:Header>
+	<soapenv:Body>
+		<bas:synchronizeOCSInfoRequest>
+			<!--Zero or more repetitions:-->
+			<bas:ocsMappingInfo>
+				<com:userID>
+					<com1:ID>##msisdn##</com1:ID>
+					<com1:type>##UserType##</com1:type>
+				</com:userID>
+				<com:ocsInfo>
+					<com1:ID>##UserType##</com1:ID>
+					<com1:Host>##OSC_HOST##</com1:Host>
+					<com1:Port>##OSC_PORT##</com1:Port>
+				</com:ocsInfo>
+				<com:updateFlag>0</com:updateFlag>
+			</bas:ocsMappingInfo>
+		</bas:synchronizeOCSInfoRequest>
+	</soapenv:Body>
+</soapenv:Envelope>]]>
+		</RequestTemplate>
+		<Item Name="msisdn" Type="Wellknown"/>	
+		<Item Name="UserType" Type="LocalParameter"/>
+		<Item Name="OSC_HOST" Type="Constant"/>
+		<Item Name="OSC_PORT" Type="Constant"/>
+	</Request>
+	<ParametersList>
+		<Parameter Name="UserType">
+			<Source Path="//RES_SCG_USERTYPE/Value[text()!='']"/>
+		</Parameter>
+	</ParametersList>
+	<ErrorsList CodePage="windows-1251" />
+</Command>
