@@ -236,7 +236,7 @@ namespace ProcessFilter
             dataGridScenariosResult.AssignListToDataGrid(scoCollection, new Padding(0, 0, 15, 0));
             dataGridCommandsResult.AssignListToDataGrid(cmmCollection, new Padding(0, 0, 15, 0));
         }
-
+        
         private void DataGridScenariosResult_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             DataGridViewRow row = dataGridScenariosResult.Rows[e.RowIndex];

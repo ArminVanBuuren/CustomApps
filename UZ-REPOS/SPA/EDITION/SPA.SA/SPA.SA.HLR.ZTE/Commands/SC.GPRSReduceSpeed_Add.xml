@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="SC.LTEsReduceSpeed_Add" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Description>Добавление ограничения скорости GPRS до 128кбс для LTE</Description>
+<Command Name="SC.GPRSReduceSpeed_Add" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>Добавление ограничения скорости GPRS до 128кбс</Description>
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
   <Request>
     <RequestTemplate>
-      <![CDATA[Mod APNPROF:MSISDN=##msisdn##,OAPNCFGID=1,NEWEPCAPN=##BaseAPN##,EPSQOSID=107;^M]]>
+      <![CDATA[MOD PDP:MSISDN=##msisdn##,OAPN=##BaseAPN##,OPDPTYPE=0,QOSID=107;^M]]>
     </RequestTemplate>
     <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
     <Item Name="msisdn" Type="Wellknown"/>

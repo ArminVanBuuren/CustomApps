@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="SC.ODB_IC_Modify" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>Модификация баррингов входящей связи</Description>
+  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
+  <Request>
+    <RequestTemplate>
+      <![CDATA[MOD ODB:MSISDN=##msisdn##,BIC=##IncomingCallsBarring##;^M]]>
+    </RequestTemplate>
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="msisdn" Type="Wellknown"/>
+    <Item Name="IncomingCallsBarring" Type="LocalParameter"/>
+  </Request>
+  <ParametersList>
+    <Parameter Name="IncomingCallsBarring">
+      <Source Path="//RFS_HL_ODB_IC/RES_HL_ODB_IC/Value"/>
+      <PossibleValues StringToKeyTable="true">
+        <Item Key="1" StringValue="NoCalls"/>
+        <Item Key="0" StringValue="AllCalls"/>
+      </PossibleValues>
+    </Parameter>
+  </ParametersList>
+  <ErrorsList CodePage="windows-1251" />
+</Command>

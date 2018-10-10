@@ -1,0 +1,16 @@
+﻿1. костыль
+
+Услуги
+      FRCORPAPN
+      FRAPNXB
+      FRAPNZIYOD
+
+Операции
+HL	AddCorporateAPN	C:\@MyRepos\FORIS_WORK\UZ-REPOS\SPA\PROD-2018.09.06\ROBP\Operations\HL\AddCorporateAPN.xml
+HL	DeleteCorporateAPN	C:\@MyRepos\FORIS_WORK\UZ-REPOS\SPA\PROD-2018.09.06\ROBP\Operations\HL\DeleteCorporateAPN.xml
+
+Сценарии
+AddCorporateAPN	1	C:\@MyRepos\FORIS_WORK\UZ-REPOS\SPA\PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\AddCorporateAPN.xml
+DeleteCorporateAPN	1	C:\@MyRepos\FORIS_WORK\UZ-REPOS\SPA\PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\DeleteCorporateAPN.xml
+addcorporateapn_sub	0	C:\@MyRepos\FORIS_WORK\UZ-REPOS\SPA\PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\sub\addcorporateapn_sub.xml
+deletecorporateapn_sub	0	C:\@MyRepos\FORIS_WORK\UZ-REPOS\SPA\PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\sub\deletecorporateapn_sub.xml

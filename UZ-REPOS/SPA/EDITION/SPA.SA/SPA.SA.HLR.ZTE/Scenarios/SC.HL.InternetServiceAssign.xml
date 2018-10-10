@@ -5,53 +5,60 @@
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
     <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
   </objectList>
   <automat>
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
       <resultlist>
-        <result value="0" node="CheckGPRSService"/>
+        <result value="0" node="GPRSNAM_Add"/>
         <result value="1" node=""/>
       </resultlist>
     </node>
-    <node name="CheckGPRSService" object="IfMultipleXmlConditionsResolver">
+    <node name="GPRSNAM_Add" object="IfCommander">
       <resultlist>
-        <result value="0" node="GPRSNAM_Add" />
-        <result value="" node="CheckLTEService" />
-      </resultlist>
-      <parameterslist>
-        <param name="ObjectNameInContext" value="request" />
-        <param name="IfXmlPath:0" value="//RFS_HL_INET_GPRS" />
-      </parameterslist>
-    </node>
-    <node name="GPRSNAM_Add" object="Commander">
-      <resultlist>
-        <result value="0" node="GPRSAPN_Add"/>
+        <result value="0" node="TimeOut1"/>
+        <result value="1538" node="CheckLTEService"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="CommandSource" value="Dictionary"/>
-        <param name="AppendSubscribersData" value="false"/>
+        <param name="IfXmlPath:0" value="//RFS_HL_INET_GPRS" />
         <param name="Command" value="SC.GPRSNAM_Add"/>
-        <param name="DynamicObject" value="(empty)"/>
+      </parameterslist>
+    </node>
+    <node name="TimeOut1" object="DummyResponder">
+      <resultlist>
+        <result value="" node="GPRSAPN_Add"/>
+      </resultlist>
+      <parameterslist>
+        <param name="OverallResult" value="SUCCESS"/>
+        <param name="DetailedResult" value="SUCCESS"/>
+        <param name="Delay" value="500"/>
       </parameterslist>
     </node>
     <node name="GPRSAPN_Add" object="Commander">
       <resultlist>
-        <result value="0" node="CheckLTEService"/>
+        <result value="0" node="TimeOut2"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="CommandSource" value="Dictionary"/>
-        <param name="AppendSubscribersData" value="false"/>
         <param name="Command" value="SC.GPRSAPN_Add"/>
-        <param name="DynamicObject" value="(empty)"/>
+      </parameterslist>
+    </node>
+    <node name="TimeOut2" object="DummyResponder">
+      <resultlist>
+        <result value="" node="CheckLTEService"/>
+      </resultlist>
+      <parameterslist>
+        <param name="OverallResult" value="SUCCESS"/>
+        <param name="DetailedResult" value="SUCCESS"/>
+        <param name="Delay" value="500"/>
       </parameterslist>
     </node>
     <node name="CheckLTEService" object="IfMultipleXmlConditionsResolver">
       <resultlist>
         <result value="0" node="InterRoaming_Delete" />
-        <result value="" node="ResponseAssembler" />
+        <result value="" node="GPRSReduceSpeed_Add" />
       </resultlist>
       <parameterslist>
         <param name="ObjectNameInContext" value="request" />
@@ -60,16 +67,23 @@
     </node>
     <node name="InterRoaming_Delete" object="IfCommander">
       <resultlist>
-        <result value="0" node="LTEs1_Add"/>
+        <result value="0" node="TimeOut3"/>
         <result value="1538" node="LTEs1_Add"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
         <param name="IfNotXmlPath:0" value="//RFS_HL_ROAMING"/>
-        <param name="CommandSource" value="Dictionary"/>
-        <param name="AppendSubscribersData" value="false"/>
         <param name="Command" value="SC.InterRoaming_Delete"/>
-        <param name="DynamicObject" value="(empty)"/>
+      </parameterslist>
+    </node>
+    <node name="TimeOut3" object="DummyResponder">
+      <resultlist>
+        <result value="" node="LTEs1_Add"/>
+      </resultlist>
+      <parameterslist>
+        <param name="OverallResult" value="SUCCESS"/>
+        <param name="DetailedResult" value="SUCCESS"/>
+        <param name="Delay" value="500"/>
       </parameterslist>
     </node>
     <node name="LTEs1_Add" object="Commander">
@@ -78,10 +92,7 @@
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="CommandSource" value="Dictionary"/>
-        <param name="AppendSubscribersData" value="false"/>
         <param name="Command" value="SC.LTEs1_Add"/>
-        <param name="DynamicObject" value="(empty)"/>
       </parameterslist>
     </node>
     <node name="LTEs2_Add" object="Commander">
@@ -90,10 +101,7 @@
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="CommandSource" value="Dictionary"/>
-        <param name="AppendSubscribersData" value="false"/>
         <param name="Command" value="SC.LTEs2_Add"/>
-        <param name="DynamicObject" value="(empty)"/>
       </parameterslist>
     </node>
     <node name="LTEs3_Add" object="Commander">
@@ -102,24 +110,48 @@
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="CommandSource" value="Dictionary"/>
-        <param name="AppendSubscribersData" value="false"/>
         <param name="Command" value="SC.LTEs3_Add"/>
-        <param name="DynamicObject" value="(empty)"/>
       </parameterslist>
     </node>
-    <node name="LTEsReduceSpeed_Add" object="IfCommander">
+    <node name="LTEsReduceSpeed_Add" object="Commander">
       <resultlist>
+        <result value="0" node="GPRSReduceSpeed_Add"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="IfXmlPath:0" value="//RFS_HL_INET_GPRS"/>
-        <param name="CommandSource" value="Dictionary"/>
-        <param name="AppendSubscribersData" value="false"/>
         <param name="Command" value="SC.LTEsReduceSpeed_Add"/>
-        <param name="DynamicObject" value="(empty)"/>
       </parameterslist>
     </node>
+    <node name="GPRSReduceSpeed_Add" object="IfCommander">
+      <resultlist>
+        <!--<result value="0" node="CheckCorporateAPN"/>
+        <result value="1538" node="CheckCorporateAPN"/>-->
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//RFS_HL_INET_LIMITSPEED"/>
+        <param name="Command" value="SC.GPRSReduceSpeed_Add"/>
+      </parameterslist>
+    </node>
+
+    <!--<node name="CheckCorporateAPN" object="IfMultipleXmlConditionsResolver">
+      <resultlist>
+        --><!--<result value="0" node="AddCorporateAPN"/>--><!--
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="OrXmlPath:0" value="//AdditionalData/RegisteredList/FRCORPAPN"/>
+      </parameterslist>
+    </node>
+    <node  name="AddCorporateAPN" object="ScenarioProcessor">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Scenario" value="Sub\AddCorporateAPN_Sub" />
+      </parameterslist>
+    </node>--> 
+    
     <node name="ResponseAssembler" object="ResponseAssembler">
       <resultlist>
         <result value="" node="RequestCutterBySubscribers"/>

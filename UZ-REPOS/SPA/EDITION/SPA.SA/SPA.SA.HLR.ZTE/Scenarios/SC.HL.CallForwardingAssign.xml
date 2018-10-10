@@ -63,10 +63,7 @@
       <parameterslist>
         <param name="OrXmlPath:0" value="//CallForwardMode/Value[text()='Activate']"/>
         <param name="OrXmlPath:1" value="//CallForwardMode/Value[text()='Deactivate']"/>
-        <param name="CommandSource" value="Dictionary"/>
-        <param name="AppendSubscribersData" value="false"/>
         <param name="Command" value="SC.CallForwarding_Delete"/>
-        <param name="DynamicObject" value="(empty)"/>
       </parameterslist>
     </node>
     <node name="CallForwardingUpdate_2" object="Commander">
@@ -75,10 +72,7 @@
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="CommandSource" value="Dictionary"/>
-        <param name="AppendSubscribersData" value="false"/>
         <param name="Command" value="SC.CallForwarding_Add"/>
-        <param name="DynamicObject" value="(empty)"/>
       </parameterslist>
     </node>
     <node name="CallForwardingProvision" object="Commander">
@@ -87,10 +81,7 @@
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="CommandSource" value="Dictionary"/>
-        <param name="AppendSubscribersData" value="false"/>
         <param name="Command" value="SC.CallForwarding_Add"/>
-        <param name="DynamicObject" value="(empty)"/>
       </parameterslist>
     </node>
     <node name="SwitchMode" object="Switch">
@@ -115,10 +106,7 @@
       <parameterslist>
         <param name="IfNotXmlPath:0" value="//CallForwardType/Value[text()='Update']"/>
         <param name="IfNotXmlPath:1" value="//CallForwardType/Value[text()='Provision']"/>
-        <param name="CommandSource" value="Dictionary"/>
-        <param name="AppendSubscribersData" value="false"/>
         <param name="Command" value="SC.CallForwarding_Deactivate"/>
-        <param name="DynamicObject" value="(empty)"/>
       </parameterslist>
     </node>
     <node name="CallForwarding_ActivateNode2" object="Commander">
@@ -127,10 +115,7 @@
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="CommandSource" value="Dictionary"/>
-        <param name="AppendSubscribersData" value="false"/>
         <param name="Command" value="SC.CallForwarding_Activate"/>
-        <param name="DynamicObject" value="(empty)"/>
       </parameterslist>
     </node>
     <node name="CallForwarding_Deactivate" object="Commander">
@@ -139,10 +124,7 @@
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="CommandSource" value="Dictionary"/>
-        <param name="AppendSubscribersData" value="false"/>
         <param name="Command" value="SC.CallForwarding_Deactivate"/>
-        <param name="DynamicObject" value="(empty)"/>
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">

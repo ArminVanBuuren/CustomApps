@@ -8,9 +8,11 @@
   <AttributeList>
   </AttributeList>
   <ResourceList>
-    <Resource name="RES_HL_REDUCE_SPEED_APN" description="APN ограничения скорости GPRS до 128кбс для LTE" />
+    <Resource name="RES_HL_ODB_OC" description="Барринг исходящей связи"/>
+    <Resource name="RES_HL_ODB_IC" description="Барринг входящей связи"/>
   </ResourceList>
   <RFSParameterList>
+    <RFSParameter name="BaseAPN" pathMode="Absolute" description="Название точки доступа (Access Point Name)" />
     <RFSParameter name="CallForwardType" description="Тип установки переадресаций" />
     <RFSParameter name="CallForwardMode" description="Режим переадресации" />
     <RFSParameter name="ForwardedToNumber" description="Номер переадресации" />
@@ -18,6 +20,7 @@
   </RFSParameterList>
   <FlagList />
   <RFSList>
+    <!--START ==== Call Fworwarding ====-->
     <RFS name="RFS_HL_CFB" hostType="HL" description="Call forwarding on mobile subscriber busy - TS10"/>
     <RFS name="RFS_HL_CFB_ACT" base="RFS_HL_CFB" hostType="HL" description="Activate Call forwarding on mobile subscriber busy - TS10">
       <RFSParameter name="CallForwardType">
@@ -80,17 +83,60 @@
       <RFSParameter name="CallForwardMode" value="Activate" />
       <RFSParameter name="ForwardedToNumber" value="998970000007" />
     </RFS>
+    <!--END ==== Call Fworwarding ====-->
     
-    
-    <RFS name="RFS_HL_RBT" hostType="HL" description="Caller Ring Back Tone. GOODOK"/>
+    <!--START ==== INTERNET ====-->
     <RFS name="RFS_HL_INET_GPRS" hostType="HL" description="Мобильный интернет GPRS"/>
     <RFS name="RFS_HL_INET_LTE" hostType="HL" description="Мобильный интернет LTE">
-      <Resource name="RES_HL_REDUCE_SPEED_APN" value="NET.UMS.UZ" />
+      <RFSParameter name="BaseAPN" value="NET.UMS.UZ" />
     </RFS>
+    <RFS name="RFS_HL_INET_LIMITSPEED" hostType="HL" description="Ограничение скорости GPRS">
+      <RFSParameter name="BaseAPN" value="NET.UMS.UZ" />
+    </RFS>
+    <!--END ==== INTERNET ====-->
+    
+    <!--START ==== BASIC SERVICE ====-->
+    <RFS name="RFS_HL_RBT" hostType="HL" description="Caller Ring Back Tone. GOODOK"/>
     <RFS name="RFS_HL_ROAMING" hostType="HL" description="Роуминг"/>
+    <RFS name="RFS_HL_VIDEOCALL" hostType="HL" description="Video Call"/>
+    <RFS name="RFS_HL_MPTY" hostType="HL" description="Конференц-связь вызова"/>
+    <RFS name="RFS_HL_CLIP" hostType="HL" description="Определитель номера"/>
+    <RFS name="RFS_HL_SMS" hostType="HL" description="Служба коротких сообщений (SMS)"/>
+    <RFS name="RFS_HL_DATATRANSFER" hostType="HL" description="Мобильная передача данных"/>
+    <RFS name="RFS_HL_CWCH" hostType="HL" description="Ожидание / Удержание вызова"/>
+    <RFS name="RFS_HL_CLIR" hostType="HL" description="Запрет определения номера"/>
+    <!--END ==== BASIC SERVICE ====-->
+    
+    <!--START ==== Барринги и связь ====-->
+    <RFS name="RFS_HL_ODB_OC" hostType="HL" description="Барринг исходящей связи">
+      <Resource name="RES_HL_ODB_OC" useType="Mandatory" />
+    </RFS>
+    <RFS name="RFS_HL_ODB_OC_NONE" base="RFS_HL_ODB_OC" hostType="HL" description="Барринг исходящей связи – запрещены все исходящие вызовы">
+      <Resource name="RES_HL_ODB_OC" value="NoCalls" useType="Mandatory" />
+    </RFS>
+    <RFS name="RFS_HL_ODB_OC_INTERNATIONAL_CALLS" base="RFS_HL_ODB_OC" hostType="HL" description="Барринг исходящей связи – разрешены исходящие международные вызовы">
+      <Resource name="RES_HL_ODB_OC" value="InternationalCalls" useType="Mandatory" />
+    </RFS>
+    <RFS name="RFS_HL_ODB_OC_INTERCITY_CALLS" base="RFS_HL_ODB_OC" hostType="HL" description="Барринг исходящей связи – разрешены исходящие междугородные вызовы">
+      <Resource name="RES_HL_ODB_OC" value="IntercityCalls" useType="Mandatory" />
+    </RFS>
+    <RFS name="RFS_HL_ODB_OC_LOCAL_CALLS" base="RFS_HL_ODB_OC" hostType="HL" description="Барринг исходящей связи – разрешены исходящие местные вызовы">
+      <Resource name="RES_HL_ODB_OC" value="LocalCalls" useType="Mandatory" />
+    </RFS>
+    <RFS name="RFS_HL_ODB_IC" hostType="HL" description="Барринг входящей связи">
+      <Resource name="RES_HL_ODB_IC" useType="Mandatory" />
+    </RFS>
+    <RFS name="RFS_HL_ODB_OC_NONE" base="RFS_HL_ODB_IC" hostType="HL" description="Барринг входящей связи – запрещены все входящие вызовы">
+      <Resource name="RES_HL_ODB_IC" value="NoCalls" useType="Mandatory" />
+    </RFS>
+    <RFS name="RFS_HL_ODB_OC_LOCAL_ALL_CALLS" base="RFS_HL_ODB_IC" hostType="HL" description="Барринг входящей связи – разрешены все входящие вызовы">
+      <Resource name="RES_HL_ODB_IC" value="AllCalls" useType="Mandatory" />
+    </RFS>
+    <!--END ==== Барринги и связь ====-->
+    
   </RFSList>
   <CFSList>
-    <CFS name="Subscriber" type="ManagedObject" description="Абонент" />
+    <!--START ==== Call Fworwarding ====-->
     <CFS name="CallForwarding" description="Активация пользовательской переадресации вызова">
       <RFS name="RFS_HL_CFB_ACT" linkType="Add" />
       <RFS name="RFS_HL_CFU_ACT" linkType="Add" />
@@ -103,19 +149,33 @@
       <RFS name="RFS_HL_CFNRC_PRV" linkType="Add" />
       <RFS name="RFS_HL_CFNRY_PRV" linkType="Add" />
     </CFS>
+    <CFS name="CB6311" description="Условная переадресация">
+      <RFS name="RFS_HL_CFB_PRV" linkType="Add" />
+      <RFS name="RFS_HL_CFNRC_PRV" linkType="Add" />
+      <RFS name="RFS_HL_CFNRY_PRV" linkType="Add" />
+    </CFS>
     <CFS name="FRMCA" description="Вам звонили / Я на связи">
       <RFS name="RFS_HL_CFD" linkType="Add" />
     </CFS>
+    <!--END ==== Call Fworwarding ====-->
     
     
-    <CFS name="FRCRBT" description="Caller Ring Back Tone. GOODOK">
-      <RFS name="RFS_HL_RBT" linkType="Add" />
-    </CFS>
-    <CFS name="CB406278" description="Мобильный интернет">
+    <!--START ==== INTERNET ====-->
+    <CFS name="CB406278" description="Мобильный интернет GPRS">
       <RFS name="RFS_HL_INET_GPRS" linkType="Add" />
     </CFS>
     <CFS name="FRUNLIMLTE" description="Доступ к сети 4G LTE">
-      <RFS name="RFS_HL_INET_LTE" linkType="Add" />
+      <RFS name="RFS_HL_INET_LTE" linkType="Add" dependsOn="RFS_HL_INET_GPRS" />
+    </CFS>
+    <CFS name="LIMITSPEED" description="Ограничение скорости GPRS">
+      <RFS name="RFS_HL_INET_LIMITSPEED" linkType="Add" dependsOn="RFS_HL_INET_GPRS" />
+    </CFS>
+    <!--END ==== INTERNET ====-->
+    
+    
+    <!--START ==== BASIC SERVICE ====-->
+    <CFS name="FRCRBT" description="Caller Ring Back Tone. GOODOK">
+      <RFS name="RFS_HL_RBT" linkType="Add" />
     </CFS>
     <CFS name="CB123" description="Международный роуминг">
       <RFS name="RFS_HL_ROAMING" linkType="Add" />
@@ -123,6 +183,37 @@
     <CFS name="BSNSSRMNG" description="Business Роуминг">
       <RFS name="RFS_HL_ROAMING" linkType="Add" />
     </CFS>
+    <CFS name="FRVIDCALL" description="Video Call">
+      <RFS name="RFS_HL_VIDEOCALL" linkType="Add" />
+    </CFS>
+    <CFS name="CB10363" description="Конференц-связь вызова">
+      <RFS name="RFS_HL_MPTY" linkType="Add" />
+    </CFS>
+    <CFS name="CB264" description="Определитель номера">
+      <RFS name="RFS_HL_CLIP" linkType="Add" />
+    </CFS>
+    <CFS name="CB266" description="Служба коротких сообщений (SMS)">
+      <RFS name="RFS_HL_SMS" linkType="Add" />
+    </CFS>
+    <CFS name="CB6376" description="Передача данных">
+      <RFS name="RFS_HL_DATATRANSFER" linkType="Add" />
+    </CFS>
+    <CFS name="CB9831" description="Ожидание / Удержание вызова">
+      <RFS name="RFS_HL_CWCH" linkType="Add" />
+    </CFS>
+    <CFS name="FRANTIOP" description="Запрет определения номера">
+      <RFS name="RFS_HL_CLIR" linkType="Add" />
+    </CFS>
+    <!--END ==== BASIC SERVICE ====-->
+
+    
+    <!--START ==== Барринги и связь ====-->
+    <CFS name="CB108" description="Международный доступ">
+      <RFS name="RFS_HL_ODB_OC_INTERNATIONAL_CALLS" linkType="Modify" />
+    </CFS>
+    <!--END ==== Барринги и связь ====-->
+    
+    <CFS name="Subscriber" type="ManagedObject" description="Абонент" />
   </CFSList>
   <CFSGroupList>
   </CFSGroupList>
@@ -131,38 +222,52 @@
   <HandlerList >
   </HandlerList>
   <ScenarioList>
-    <Scenario name="HL.CallForwardingAssign" description="Добавление, активация-деактивация переадресаций">
+    <!--START ==== Call Fworwarding ====-->
+    <Scenario name="HL.CallForwardingAssign" description="Добавление/активация переадресаций">
       <RFS name="RFS_HL_CFB" scenarioType="Add" />
       <RFS name="RFS_HL_CFU" scenarioType="Add" />
       <RFS name="RFS_HL_CFNRC" scenarioType="Add" />
       <RFS name="RFS_HL_CFNRY" scenarioType="Add" />
       <RFS name="RFS_HL_CFD" scenarioType="Add" />
     </Scenario>
-    <Scenario name="HL.CallForwardingRemove" description="Удаление переадресаций">
+    <Scenario name="HL.CallForwardingRemove" description="Удаление/деактивация переадресаций">
       <RFS name="RFS_HL_CFB" scenarioType="Remove" />
       <RFS name="RFS_HL_CFU" scenarioType="Remove" />
       <RFS name="RFS_HL_CFNRC" scenarioType="Remove" />
       <RFS name="RFS_HL_CFNRY" scenarioType="Remove" />
       <RFS name="RFS_HL_CFD" scenarioType="Remove" />
     </Scenario>
-    <Scenario name="HL.BasicServicesAssign" description="Добавление услуг">
-      <RFS name="RFS_HL_RBT" scenarioType="Add" />
-      <RFS name="RFS_HL_ROAMING" scenarioType="Add" />
-    </Scenario>
-    <Scenario name="HL.BasicServicesRemove" description="Удаление услуг">
-      <RFS name="RFS_HL_RBT" scenarioType="Remove" />
-      <RFS name="RFS_HL_ROAMING" scenarioType="Remove" />
-    </Scenario>
+    <!--END ==== Call Fworwarding ====-->
+    
+    
+    <!--START ==== INTERNET ====-->
     <Scenario name="HL.InternetServiceAssign" description="Добавление интернет услуг">
       <RFS name="RFS_HL_INET_GPRS" scenarioType="Add" />
       <RFS name="RFS_HL_INET_LTE" scenarioType="Add" />
-      <Append name="RFS_HL_INET_LTE" listType="EndList" />
+      <RFS name="RFS_HL_INET_LIMITSPEED" scenarioType="Add" />
       <Append name="RFS_HL_ROAMING" listType="EndList" />
     </Scenario>
     <Scenario name="HL.InternetServiceRemove" description="Удаление интернет услуг">
       <RFS name="RFS_HL_INET_GPRS" scenarioType="Remove" />
       <RFS name="RFS_HL_INET_LTE" scenarioType="Remove" />
+      <RFS name="RFS_HL_INET_LIMITSPEED" scenarioType="Remove" />
     </Scenario>
+    <!--END ==== INTERNET ====-->
+    
+    
+    <!--START ==== Барринги и связь ====-->
+    <Scenario name="HL.ModifyOutgoingCallsBarring" description="Управление ограничениями исходящей связи на HLR">
+      <RFS name="RES_HL_ODB_OC" scenarioType="Modify" useType="Mandatory"/>
+      <Append name="RES_HL_ODB_OC" listType="EndList"/>
+      <Append name="RFS_HL_ODB_IC" listType="EndList"/>
+    </Scenario>
+    <Scenario name="HL.ModifyIncomingCallsBarring" description="Управление ограничениями входящей связи на HLR">
+      <RFS name="RFS_HL_ODB_IC" scenarioType="Modify" useType="Mandatory"/>
+      <Append name="RES_HL_ODB_OC" listType="EndList"/>
+      <Append name="RFS_HL_ODB_IC" listType="EndList"/>
+    </Scenario>
+    <!--END ==== Барринги и связь ====-->
+
   </ScenarioList>
   <WfmScenarioList />
 </Configuration>

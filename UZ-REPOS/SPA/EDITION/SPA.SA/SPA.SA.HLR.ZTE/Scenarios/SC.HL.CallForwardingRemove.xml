@@ -49,10 +49,7 @@
       </resultlist>
       <parameterslist>
         <param name="IfXmlPath:0" value="//CallForwardType/Value[text()='Provision']"/>
-        <param name="CommandSource" value="Dictionary"/>
-        <param name="AppendSubscribersData" value="false"/>
         <param name="Command" value="SC.CallForwarding_Delete"/>
-        <param name="DynamicObject" value="(empty)"/>
       </parameterslist>
     </node>
     <node name="CallForwarding_Deactivate" object="IfCommander">
@@ -63,10 +60,7 @@
       </resultlist>
       <parameterslist>
         <param name="IfXmlPath:0" value="//CallForwardMode/Value[text()='Deactivate']"/>
-        <param name="CommandSource" value="Dictionary"/>
-        <param name="AppendSubscribersData" value="false"/>
         <param name="Command" value="SC.CallForwarding_Deactivate"/>
-        <param name="DynamicObject" value="(empty)"/>
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">

@@ -1,45 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scenario name="SC.HL.InternetServiceRemove">
+<scenario name="SC.Add.RFS_HL_SMS">
   <objectList>
     <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
   </objectList>
   <automat>
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
       <resultlist>
-        <result value="0" node="GPRSAPN_Delete"/>
+        <result value="0" node="SMMO_Add"/>
         <result value="1" node=""/>
       </resultlist>
     </node>
-    <node name="GPRSAPN_Delete" object="IfCommander">
+    <node name="SMMO_Add" object="Commander">
       <resultlist>
-        <result value="0" node="GPRSNAM_Delete"/>
-        <result value="1538" node="LTE_Delete"/>
+        <result value="0" node="SMMT_Add"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="IfXmlPath:0" value="//RFS_HL_INET_GPRS" />
-        <param name="Command" value="SC.GPRSAPN_Delete"/>
+        <param name="Command" value="SC.SMMO_Add"/>
       </parameterslist>
     </node>
-    <node name="GPRSNAM_Delete" object="Commander">
-      <resultlist>
-        <result value="0" node="LTE_Delete"/>
-        <result value="" node="ResponseAssembler"/>
-      </resultlist>
-      <parameterslist>
-        <param name="Command" value="SC.GPRSNAM_Delete"/>
-      </parameterslist>
-    </node>
-    <node name="LTE_Delete" object="IfCommander">
+    <node name="SMMT_Add" object="Commander">
       <resultlist>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="IfXmlPath:0" value="//RFS_HL_INET_LTE"/>
-        <param name="Command" value="SC.LTE_Delete"/>
+        <param name="Command" value="SC.SMMT_Add"/>
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">

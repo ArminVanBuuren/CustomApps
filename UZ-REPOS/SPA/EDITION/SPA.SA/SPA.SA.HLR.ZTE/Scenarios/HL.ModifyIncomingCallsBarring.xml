@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scenario name="AAAAAAAAAAAAAAAA">
+<scenario name="HL.ModifyIncomingCallsBarring">
   <objectList>
     <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
@@ -8,16 +8,16 @@
   <automat>
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
       <resultlist>
-        <result value="0" node="AAAAAAAAAAAAAAAA"/>
+        <result value="0" node="ODB_IC_Modify"/>
         <result value="1" node=""/>
       </resultlist>
     </node>
-    <node name="AAAAAAAAAAAAAAAA" object="Commander">
+    <node name="ODB_IC_Modify" object="Commander">
       <resultlist>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="Command" value="AAAAAAAAAAAAAAAA"/>
+        <param name="Command" value="SC.ODB_IC_Modify"/>
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">
