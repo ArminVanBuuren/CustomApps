@@ -6,11 +6,29 @@
       FRAPNZIYOD
 
 Операции
-HL	AddCorporateAPN	C:\@MyRepos\FORIS_WORK\UZ-REPOS\SPA\PROD-2018.09.06\ROBP\Operations\HL\AddCorporateAPN.xml
-HL	DeleteCorporateAPN	C:\@MyRepos\FORIS_WORK\UZ-REPOS\SPA\PROD-2018.09.06\ROBP\Operations\HL\DeleteCorporateAPN.xml
+      HL	AddCorporateAPN	C:\@MyRepos\FORIS_WORK\UZ-REPOS\SPA\PROD-2018.09.06\ROBP\Operations\HL\AddCorporateAPN.xml
+      HL	DeleteCorporateAPN	C:\@MyRepos\FORIS_WORK\UZ-REPOS\SPA\PROD-2018.09.06\ROBP\Operations\HL\DeleteCorporateAPN.xml
 
 Сценарии
-AddCorporateAPN	1	C:\@MyRepos\FORIS_WORK\UZ-REPOS\SPA\PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\AddCorporateAPN.xml
-DeleteCorporateAPN	1	C:\@MyRepos\FORIS_WORK\UZ-REPOS\SPA\PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\DeleteCorporateAPN.xml
-addcorporateapn_sub	0	C:\@MyRepos\FORIS_WORK\UZ-REPOS\SPA\PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\sub\addcorporateapn_sub.xml
-deletecorporateapn_sub	0	C:\@MyRepos\FORIS_WORK\UZ-REPOS\SPA\PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\sub\deletecorporateapn_sub.xml
+      AddCorporateAPN	1	C:\@MyRepos\FORIS_WORK\UZ-REPOS\SPA\PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\AddCorporateAPN.xml
+      DeleteCorporateAPN	1	C:\@MyRepos\FORIS_WORK\UZ-REPOS\SPA\PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\DeleteCorporateAPN.xml
+      addcorporateapn_sub	0	C:\@MyRepos\FORIS_WORK\UZ-REPOS\SPA\PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\sub\addcorporateapn_sub.xml
+      deletecorporateapn_sub	0	C:\@MyRepos\FORIS_WORK\UZ-REPOS\SPA\PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\sub\deletecorporateapn_sub.xml
+
+
+
+
+2. Отложить на потом и костыль
+
+Переоздание абона с новым профилем
+Услуги
+      FRASKUE
+Операции
+      HL	AddFRASKUE	C:\@MyRepos\FORIS_WORK\UZ-REPOS\SPA\PROD-2018.09.06\ROBP\Operations\HL\AddFRASKUE.xml
+      HL	DeleteFRASKUE	C:\@MyRepos\FORIS_WORK\UZ-REPOS\SPA\PROD-2018.09.06\ROBP\Operations\HL\DeleteFRASKUE.xml
+
+Сценарии
+	AddFRASKUE	0	C:\@MyRepos\FORIS_WORK\UZ-REPOS\SPA\PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\AddFRASKUE.xml
+	DeleteFRASKUE	2	C:\@MyRepos\FORIS_WORK\UZ-REPOS\SPA\PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\DeleteFRASKUE.xml
+	addcallforwardingoriginating_sub	0	C:\@MyRepos\FORIS_WORK\UZ-REPOS\SPA\PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\sub\addcallforwardingoriginating_sub.xml
+	addm2mapn_sub	0	C:\@MyRepos\FORIS_WORK\UZ-REPOS\SPA\PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\sub\addm2mapn_sub.xml
