@@ -17,3 +17,6 @@ sc create FORIS.SPA.SA.SCG binpath= "C:\Foris\SPA\SA\FORIS.SPA.ServiceActivator.
 sc create FORIS.SPA.SA.SCP.01 binpath= "C:\Foris\SPA\SA\FORIS.SPA.ServiceActivator.exe -cmd FORIS.SPA.SA.SCP.01 C:\Foris\SPA\SPA.SA\SPA.SA.SCP.01\configuration.common.xml" start= auto obj= "NT AUTHORITY\NetworkService" password= ""
 sc create FORIS.SPA.SA.SMSC binpath= "C:\Foris\SPA\SA\FORIS.SPA.ServiceActivator.exe -cmd FORIS.SPA.SA.SMSC C:\Foris\SPA\SPA.SA\SPA.SA.SMSC\configuration.common.xml" start= auto obj= "NT AUTHORITY\NetworkService" password= ""
 sc create FORIS.SPA.SA.UNIFUN binpath= "C:\Foris\SPA\SA\FORIS.SPA.ServiceActivator.exe -cmd FORIS.SPA.SA.UNIFUN C:\Foris\SPA\SPA.SA\SPA.SA.UNIFUN\configuration.common.xml" start= auto obj= "NT AUTHORITY\NetworkService" password= ""
+
+
+sc create Foris.SelfCare.MGAdapter_FAST binpath= "C:\FORIS\TelCRM\CustomerSelfCare\WindowsServices\MGAdapter\Foris.SelfCare.MGAdapter_FAST.exe -cmd MGAdapter_FAST C:\FORIS\TelCRM\CustomerSelfCare\WindowsServices\MGAdapter\Foris.SelfCare.MGAdapter_FAST.exe.config" start= auto obj= "NT AUTHORITY\NetworkService" password= ""

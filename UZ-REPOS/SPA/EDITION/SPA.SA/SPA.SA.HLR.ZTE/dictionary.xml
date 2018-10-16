@@ -43,8 +43,6 @@
     <Parameter Name="BaseAPN">
       <Source Path="//BaseAPN/Value"/>
     </Parameter>
-    
-    
     <Parameter Name="xCSI_ID">
       <Source Path="//BalanceStorage/HostCode"/>
       <PossibleValues StringToKeyTable="false">

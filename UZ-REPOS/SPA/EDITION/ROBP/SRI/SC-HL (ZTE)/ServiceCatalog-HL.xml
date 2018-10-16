@@ -10,6 +10,8 @@
   <ResourceList>
     <Resource name="RES_HL_ODB_OC" description="Барринг исходящей связи"/>
     <Resource name="RES_HL_ODB_IC" description="Барринг входящей связи"/>
+    <Resource name="RES_HL_SMS_OC" description="Барринг на исходящей SMS"/>
+    <Resource name="RES_HL_SMS_IC" description="Барринг на входящей SMS"/>
   </ResourceList>
   <RFSParameterList>
     <RFSParameter name="BaseAPN" pathMode="Absolute" description="Название точки доступа (Access Point Name)" />
@@ -95,19 +97,19 @@
     </RFS>
     <!--END ==== INTERNET ====-->
     
-    <!--START ==== BASIC SERVICE ====-->
+    <!--START ==== SIMPLE SERVICE ====-->
     <RFS name="RFS_HL_RBT" hostType="HL" description="Caller Ring Back Tone. GOODOK"/>
     <RFS name="RFS_HL_ROAMING" hostType="HL" description="Роуминг"/>
     <RFS name="RFS_HL_VIDEOCALL" hostType="HL" description="Video Call"/>
     <RFS name="RFS_HL_MPTY" hostType="HL" description="Конференц-связь вызова"/>
     <RFS name="RFS_HL_CLIP" hostType="HL" description="Определитель номера"/>
-    <RFS name="RFS_HL_SMS" hostType="HL" description="Служба коротких сообщений (SMS)"/>
     <RFS name="RFS_HL_DATATRANSFER" hostType="HL" description="Мобильная передача данных"/>
     <RFS name="RFS_HL_CWCH" hostType="HL" description="Ожидание / Удержание вызова"/>
     <RFS name="RFS_HL_CLIR" hostType="HL" description="Запрет определения номера"/>
-    <!--END ==== BASIC SERVICE ====-->
+    <RFS name="RFS_HL_PLSS" hostType="HL" description="Запрос баланса по USSD"/>
+    <!--END ==== SIMPLE SERVICE ====-->
     
-    <!--START ==== Барринги и связь ====-->
+    <!--START ==== Барринги на связь, смс, интернет ====-->
     <RFS name="RFS_HL_ODB_OC" hostType="HL" description="Барринг исходящей связи">
       <Resource name="RES_HL_ODB_OC" useType="Mandatory" />
     </RFS>
@@ -126,13 +128,32 @@
     <RFS name="RFS_HL_ODB_IC" hostType="HL" description="Барринг входящей связи">
       <Resource name="RES_HL_ODB_IC" useType="Mandatory" />
     </RFS>
-    <RFS name="RFS_HL_ODB_OC_NONE" base="RFS_HL_ODB_IC" hostType="HL" description="Барринг входящей связи – запрещены все входящие вызовы">
+    <RFS name="RFS_HL_ODB_IC_NONE" base="RFS_HL_ODB_IC" hostType="HL" description="Барринг входящей связи – запрещены все входящие вызовы">
       <Resource name="RES_HL_ODB_IC" value="NoCalls" useType="Mandatory" />
     </RFS>
-    <RFS name="RFS_HL_ODB_OC_LOCAL_ALL_CALLS" base="RFS_HL_ODB_IC" hostType="HL" description="Барринг входящей связи – разрешены все входящие вызовы">
+    <RFS name="RFS_HL_ODB_IC_LOCAL_ALL_CALLS" base="RFS_HL_ODB_IC" hostType="HL" description="Барринг входящей связи – разрешены все входящие вызовы">
       <Resource name="RES_HL_ODB_IC" value="AllCalls" useType="Mandatory" />
     </RFS>
-    <!--END ==== Барринги и связь ====-->
+
+    <RFS name="RFS_HL_SMS_OC" hostType="HL" description="Служба коротких сообщений (SMS) исходящие">
+      <Resource name="RES_HL_SMS_OC" useType="Mandatory" />
+    </RFS>
+    <RFS name="RFS_HL_SMS_OC_NONE" base="RFS_HL_SMS_OC" hostType="HL" description="Барринг на исходящие SMS - запрещен">
+      <Resource name="RES_HL_SMS_OC" value="NoSMS" useType="Mandatory" />
+    </RFS>
+    <RFS name="RFS_HL_SMS_OC_ACCESS" base="RFS_HL_SMS_OC" hostType="HL" description="Барринг на исходящие SMS - разрешен">
+      <Resource name="RES_HL_SMS_OC" value="AccessSMS" useType="Mandatory" />
+    </RFS>
+    <RFS name="RFS_HL_SMS_IC" hostType="HL" description="Служба коротких сообщений (SMS) входящие">
+      <Resource name="RES_HL_SMS_IC" useType="Mandatory" />
+    </RFS>
+    <RFS name="RFS_HL_SMS_IC_NONE" base="RFS_HL_SMS_IC" hostType="HL" description="Барринг на входящие SMS - запрещен">
+      <Resource name="RES_HL_SMS_IC" value="NoSMS" useType="Mandatory" />
+    </RFS>
+    <RFS name="RFS_HL_SMS_IC_ACCESS" base="RFS_HL_SMS_IC" hostType="HL" description="Барринг на входящие SMS - разрешен">
+      <Resource name="RES_HL_SMS_IC" value="AccessSMS" useType="Mandatory" />
+    </RFS>
+    <!--END ==== Барринги на связь, смс, интернет ====-->
     
   </RFSList>
   <CFSList>
@@ -173,7 +194,7 @@
     <!--END ==== INTERNET ====-->
     
     
-    <!--START ==== BASIC SERVICE ====-->
+    <!--START ==== SIMPLE SERVICE ====-->
     <CFS name="FRCRBT" description="Caller Ring Back Tone. GOODOK">
       <RFS name="RFS_HL_RBT" linkType="Add" />
     </CFS>
@@ -181,6 +202,9 @@
       <RFS name="RFS_HL_ROAMING" linkType="Add" />
     </CFS>
     <CFS name="BSNSSRMNG" description="Business Роуминг">
+      <RFS name="RFS_HL_ROAMING" linkType="Add" />
+    </CFS>
+    <CFS name="LGHTRMNG" description="Light Роуминг">
       <RFS name="RFS_HL_ROAMING" linkType="Add" />
     </CFS>
     <CFS name="FRVIDCALL" description="Video Call">
@@ -193,7 +217,8 @@
       <RFS name="RFS_HL_CLIP" linkType="Add" />
     </CFS>
     <CFS name="CB266" description="Служба коротких сообщений (SMS)">
-      <RFS name="RFS_HL_SMS" linkType="Add" />
+      <RFS name="RFS_HL_SMS_OC_ACCESS" linkType="Add" />
+      <RFS name="RFS_HL_SMS_IC_ACCESS" linkType="Add" />
     </CFS>
     <CFS name="CB6376" description="Передача данных">
       <RFS name="RFS_HL_DATATRANSFER" linkType="Add" />
@@ -204,13 +229,42 @@
     <CFS name="FRANTIOP" description="Запрет определения номера">
       <RFS name="RFS_HL_CLIR" linkType="Add" />
     </CFS>
-    <!--END ==== BASIC SERVICE ====-->
+    <CFS name="FRUSSDBAL" description="Запрос баланса по USSD">
+      <RFS name="RFS_HL_PLSS" linkType="Add" />
+    </CFS>
+    <!--END ==== SIMPLE SERVICE ====-->
 
     
     <!--START ==== Барринги и связь ====-->
     <CFS name="CB108" description="Международный доступ">
       <RFS name="RFS_HL_ODB_OC_INTERNATIONAL_CALLS" linkType="Modify" />
     </CFS>
+    <CFS name="FRPARTBL" isMarker="true" description="Частичная блокировка">
+      <RFS name="RFS_HL_ODB_OC_NONE" linkType="Add" />
+      <RFS name="RFS_HL_SMS_OC_NONE" linkType="Add" />
+    </CFS>
+    <CFS name="FRBLOUTGO" copyOf="FRPARTBL" description="Предварительная ФРОД блокировка"/>
+    <CFS name="FRBLKFIN" isMarker="true" description="Принудительная блокировка">
+      <RFS name="RFS_HL_ODB_OC_NONE" linkType="Add" />
+      <RFS name="RFS_HL_ODB_IC_NONE" linkType="Add" />
+      <RFS name="RFS_HL_SMS_OC_NONE" linkType="Add" />
+      <RFS name="RFS_HL_SMS_IC_NONE" linkType="Add" />
+    </CFS>
+    <CFS name="FRBLKCHK" copyOf="FRBLKFIN" description="Блокировка проверка"/>
+    <CFS name="FRBLKPAY" copyOf="FRBLKFIN" description="Принудительная блокировка по неоплате счета"/>
+    <CFS name="FRBLKUSER" copyOf="FRBLKFIN" description="Добавление  услуги  Добровольная блокировка"/>
+    <CFS name="FRBLKTIME" copyOf="FRBLKFIN" description="Блокировка срок годности комплекта истек"/>
+    <CFS name="BLTDLIM" copyOf="FRBLKFIN" description="Блокировка по превышению локального лимита"/>
+    <CFS name="FRBLKNAR" copyOf="FRBLKFIN" description="Блокировка за нарушение договорных обязательств"/>
+    <CFS name="FRTECHBLK" isMarker="true" description="Технологическая блокировка">
+      <RFS name="RFS_HL_ODB_OC_NONE" linkType="Modify" />
+      <RFS name="RFS_HL_ODB_IC_NONE" linkType="Modify" />
+      <RFS name="RFS_HL_SMS_OC_NONE" linkType="Modify" />
+      <RFS name="RFS_HL_SMS_IC_NONE" linkType="Modify" />
+      <RFS name="RFS_HL_PLSS" linkType="Remove" />
+    </CFS>
+    <CFS name="FRBLKFROD" copyOf="FRTECHBLK" description="Фрод блокировка"/>
+    <CFS name="FRBLKDZ" copyOf="FRTECHBLK" description="Блокировка при ДЗ свыше 90 дней"/>
     <!--END ==== Барринги и связь ====-->
     
     <CFS name="Subscriber" type="ManagedObject" description="Абонент" />
@@ -220,6 +274,27 @@
   <RFSGroupList />
   <RFSDependencyList />
   <HandlerList >
+    <Handler name="MERGE_RFS_HL_SMS_OC" type="MergeRFS" description="Блокировка исх. смс">
+      <Configuration>
+        <RFS type="Source" name="RFS_HL_SMS_OC_NONE"/>
+        <RFS type="Source" name="RFS_HL_SMS_OC_ACCESS"/>
+        <RFS type="Result" name="RFS_HL_SMS_OC_NONE"/>
+      </Configuration>
+    </Handler>
+    <Handler name="MERGE_RFS_HL_SMS_IC" type="MergeRFS" description="Блокировка вх. смс">
+      <Configuration>
+        <RFS type="Source" name="RFS_HL_SMS_IC_NONE"/>
+        <RFS type="Source" name="RFS_HL_SMS_IC_ACCESS"/>
+        <RFS type="Result" name="RFS_HL_SMS_IC_NONE"/>
+      </Configuration>
+    </Handler>
+    <Handler name="MERGE_RFS_HL_ODB_OC" type="MergeRFS" description="Блокировка исх. связи">
+      <Configuration>
+        <RFS type="Source" name="RFS_HL_ODB_OC_NONE"/>
+        <RFS type="Source" name="RFS_HL_ODB_OC_INTERNATIONAL_CALLS"/>
+        <RFS type="Result" name="RFS_HL_ODB_OC_NONE"/>
+      </Configuration>
+    </Handler>
   </HandlerList>
   <ScenarioList>
     <!--START ==== Call Fworwarding ====-->
@@ -256,16 +331,17 @@
     
     
     <!--START ==== Барринги и связь ====-->
-    <Scenario name="HL.ModifyOutgoingCallsBarring" description="Управление ограничениями исходящей связи на HLR">
-      <RFS name="RES_HL_ODB_OC" scenarioType="Modify" useType="Mandatory"/>
-      <Append name="RES_HL_ODB_OC" listType="EndList"/>
-      <Append name="RFS_HL_ODB_IC" listType="EndList"/>
+    <Scenario name="HL.ModifyAllBarrings" description="Управление ограничениями связи, смс, интернет на HLR">
+      <RFS name="RFS_HL_ODB_OC" scenarioType="Add, Modify" />
+      <RFS name="RFS_HL_ODB_IC" scenarioType="Add, Modify" />
+      <RFS name="RFS_HL_SMS_OC" scenarioType="Add, Modify" />
+      <RFS name="RFS_HL_SMS_IC" scenarioType="Add, Modify" />
     </Scenario>
-    <Scenario name="HL.ModifyIncomingCallsBarring" description="Управление ограничениями входящей связи на HLR">
+    <!--<Scenario name="HL.ModifyIncomingCallsBarring" description="Управление ограничениями входящей связи на HLR">
       <RFS name="RFS_HL_ODB_IC" scenarioType="Modify" useType="Mandatory"/>
-      <Append name="RES_HL_ODB_OC" listType="EndList"/>
+      <Append name="RFS_HL_ODB_OC" listType="EndList"/>
       <Append name="RFS_HL_ODB_IC" listType="EndList"/>
-    </Scenario>
+    </Scenario>-->
     <!--END ==== Барринги и связь ====-->
 
   </ScenarioList>

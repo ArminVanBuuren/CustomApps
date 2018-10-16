@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="SC.CLIR_Delete" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Description>Удалить АнтиАОН</Description>
+<Command Name="SC.PLSS_Delete" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>Удалить USSD</Description>
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
   <Request>
     <RequestTemplate>
-      <![CDATA[MOD SS: MSISDN=##msisdn##,CLIR=0;^M]]>
+      <![CDATA[MOD SS: MSISDN=##msisdn##,PLSS_D=1;^M]]>
     </RequestTemplate>
     <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
     <Item Name="msisdn" Type="Wellknown"/>

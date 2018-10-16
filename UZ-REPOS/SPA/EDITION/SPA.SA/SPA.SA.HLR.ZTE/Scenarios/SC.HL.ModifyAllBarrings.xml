@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="SC.HL.ModifyAllBarrings">
+  <objectList>
+    <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
+  </objectList>
+  <automat>
+    <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
+      <resultlist>
+        <result value="0" node="ODB_OC_Modify"/>
+        <result value="1" node=""/>
+      </resultlist>
+    </node>
+    <node name="ODB_OC_Modify" object="IfCommander">
+      <resultlist>
+        <result value="0" node="ODB_IC_Modify"/>
+        <result value="1538" node="ODB_IC_Modify"/>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//RFS_HL_ODB_OC"/>
+        <param name="Command" value="SC.ODB_OC_Modify"/>
+      </parameterslist>
+    </node>
+    <node name="ODB_IC_Modify" object="IfCommander">
+      <resultlist>
+        <result value="0" node="SMMO_Modify"/>
+        <result value="1538" node="SMMO_Modify"/>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//RFS_HL_ODB_IC"/>
+        <param name="Command" value="SC.ODB_IC_Modify"/>
+      </parameterslist>
+    </node>
+    <node name="SMMO_Modify" object="IfCommander">
+      <resultlist>
+        <result value="0" node="SMMT_Modify"/>
+        <result value="1538" node="SMMT_Modify"/>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//RFS_HL_SMS_OC"/>
+        <param name="Command" value="SC.SMMO_Modify"/>
+      </parameterslist>
+    </node>
+    <node name="SMMT_Modify" object="IfCommander">
+      <resultlist>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//RFS_HL_SMS_IC"/>
+        <param name="Command" value="SC.SMMT_Modify"/>
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="RequestCutterBySubscribers"/>
+      </resultlist>
+    </node>
+  </automat>
+</scenario>

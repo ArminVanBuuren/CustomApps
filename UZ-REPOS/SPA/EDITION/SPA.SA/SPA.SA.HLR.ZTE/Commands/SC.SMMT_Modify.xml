@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="SC.SMMT_Modify" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>Добавление/удаление услуги 'Служба коротких сообщений'Входящие</Description>
+  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
+  <Request>
+    <RequestTemplate>
+      <![CDATA[MOD TELE: MSISDN=##msisdn##,SMMT=##SMSBarring##;^M]]>
+    </RequestTemplate>
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="msisdn" Type="Wellknown"/>
+    <Item Name="SMSBarring" Type="LocalParameter"/>
+  </Request>
+  <ParametersList>
+    <Parameter Name="SMSBarring">
+      <Source Path="//RFS_HL_SMS_IC/RES_HL_SMS_IC/Value"/>
+      <PossibleValues StringToKeyTable="true">
+        <Item Key="0" StringValue="NoSMS"/>
+        <Item Key="1" StringValue="AccessSMS"/>
+      </PossibleValues>
+    </Parameter>
+  </ParametersList>
+  <ErrorsList CodePage="windows-1251" />
+</Command>
