@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scenario name="SC.HL.InternetServiceAssign">
+<scenario name="SC.HL.GPRSAssign">
   <objectList>
     <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
@@ -11,19 +11,17 @@
   <automat>
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
       <resultlist>
-        <result value="0" node="GPRSNAM_Add"/>
+        <result value="0" node="GPRSNAM_Modify"/>
         <result value="1" node=""/>
       </resultlist>
     </node>
-    <node name="GPRSNAM_Add" object="IfCommander">
+    <node name="GPRSNAM_Modify" object="Commander">
       <resultlist>
         <result value="0" node="TimeOut1"/>
-        <result value="1538" node="CheckLTEService"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="IfXmlPath:0" value="//RFS_HL_INET_GPRS" />
-        <param name="Command" value="SC.GPRSNAM_Add"/>
+        <param name="Command" value="SC.GPRSNAM_Modify"/>
       </parameterslist>
     </node>
     <node name="TimeOut1" object="DummyResponder">
@@ -47,37 +45,6 @@
     </node>
     <node name="TimeOut2" object="DummyResponder">
       <resultlist>
-        <result value="" node="CheckLTEService"/>
-      </resultlist>
-      <parameterslist>
-        <param name="OverallResult" value="SUCCESS"/>
-        <param name="DetailedResult" value="SUCCESS"/>
-        <param name="Delay" value="500"/>
-      </parameterslist>
-    </node>
-    <node name="CheckLTEService" object="IfMultipleXmlConditionsResolver">
-      <resultlist>
-        <result value="0" node="InterRoaming_Delete" />
-        <result value="" node="GPRSReduceSpeed_Add" />
-      </resultlist>
-      <parameterslist>
-        <param name="ObjectNameInContext" value="request" />
-        <param name="IfXmlPath:0" value="//RFS_HL_INET_LTE" />
-      </parameterslist>
-    </node>
-    <node name="InterRoaming_Delete" object="IfCommander">
-      <resultlist>
-        <result value="0" node="TimeOut3"/>
-        <result value="1538" node="LTEs1_Add"/>
-        <result value="" node="ResponseAssembler"/>
-      </resultlist>
-      <parameterslist>
-        <param name="IfNotXmlPath:0" value="//RFS_HL_ROAMING"/>
-        <param name="Command" value="SC.InterRoaming_Delete"/>
-      </parameterslist>
-    </node>
-    <node name="TimeOut3" object="DummyResponder">
-      <resultlist>
         <result value="" node="LTEs1_Add"/>
       </resultlist>
       <parameterslist>
@@ -86,12 +53,14 @@
         <param name="Delay" value="500"/>
       </parameterslist>
     </node>
-    <node name="LTEs1_Add" object="Commander">
+    <node name="LTEs1_Add" object="IfCommander">
       <resultlist>
         <result value="0" node="LTEs2_Add"/>
+        <result value="1538" node="GPRSReduceSpeed_Add"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
+        <param name="IfXmlPath:0" value="//RFS_HL_INET_LTE"/>
         <param name="Command" value="SC.LTEs1_Add"/>
       </parameterslist>
     </node>
@@ -129,7 +98,7 @@
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="IfXmlPath:0" value="//RFS_HL_INET_LIMITSPEED"/>
+        <param name="IfXmlPath:0" value="//RFS_HL_GPRS_LIMITSPEED"/>
         <param name="Command" value="SC.GPRSReduceSpeed_Add"/>
       </parameterslist>
     </node>

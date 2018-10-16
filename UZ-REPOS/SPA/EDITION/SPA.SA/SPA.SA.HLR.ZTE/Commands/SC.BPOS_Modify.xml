@@ -1,13 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="SC.SMMO_Delete" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Description>Удаление услуги 'Служба коротких сообщений'Исходящие</Description>
+<Command Name="SC.BPOS_Modify" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>Изменение барринга GPRS</Description>
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
   <Request>
     <RequestTemplate>
-      <![CDATA[MOD TELE: MSISDN=##msisdn##,SMMO=0;^M]]>
+      <![CDATA[Mod BscEx:MSISDN=##msisdn##,BPOS=##GPRSStatus##;^M]]>
     </RequestTemplate>
     <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
     <Item Name="msisdn" Type="Wellknown"/>
+    <Item Name="GPRSStatus" Type="Parameter"/>
   </Request>
   <ErrorsList CodePage="windows-1251" />
 </Command>
