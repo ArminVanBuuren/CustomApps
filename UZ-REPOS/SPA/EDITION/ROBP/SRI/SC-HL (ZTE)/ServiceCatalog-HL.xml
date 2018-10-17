@@ -9,13 +9,12 @@
   </AttributeList>
   <ResourceList>
     <Resource name="RES_HL_ODB_OC" description="Барринг исходящей связи"/>
-    <Resource name="RES_HL_ODB_IC" description="Барринг входящей связи"/>
     <Resource name="RES_HL_SMS_OC" description="Барринг на исходящей SMS"/>
     <Resource name="RES_HL_SMS_IC" description="Барринг на входящей SMS"/>
     <Resource name="RES_HL_GPRS" description="Барринг на GPRS"/>
+    <Resource name="RES_HL_REDUCE_APN" description="Название точки доступа (Access Point Name) для занижения скорости интернета"/>
   </ResourceList>
   <RFSParameterList>
-    <RFSParameter name="BaseAPN" pathMode="Absolute" description="Название точки доступа (Access Point Name)" />
     <RFSParameter name="CallForwardType" description="Тип установки переадресаций" />
     <RFSParameter name="CallForwardMode" description="Режим переадресации" />
     <RFSParameter name="ForwardedToNumber" description="Номер переадресации" />
@@ -98,11 +97,9 @@
     <RFS name="RFS_HL_GPRS_FALSE" base="RFS_HL_GPRS" hostType="HL" description="Мобильный интернет GPRS выкл.">
       <Resource name="RES_HL_GPRS" value="Deactivate" useType="Mandatory" />
     </RFS>
-    <RFS name="RFS_HL_GPRS_LIMITSPEED" hostType="HL" description="Ограничение скорости GPRS">
-      <RFSParameter name="BaseAPN" value="NET.UMS.UZ" />
-    </RFS>
-    <RFS name="RFS_HL_LTE" hostType="HL" description="Мобильный интернет LTE">
-      <RFSParameter name="BaseAPN" value="NET.UMS.UZ" />
+    <RFS name="RFS_HL_LTE" hostType="HL" description="Мобильный интернет LTE"/>
+    <RFS name="RFS_HL_LIMITSPEED" hostType="HL" description="Ограничение скорости Интернет">
+      <Resource name="RES_HL_REDUCE_APN" value="NET.UMS.UZ" useType="Mandatory" />
     </RFS>
     <!--END ==== INTERNET ====-->
     
@@ -125,24 +122,13 @@
     <RFS name="RFS_HL_ODB_OC_NONE" base="RFS_HL_ODB_OC" hostType="HL" description="Барринг исходящей связи – запрещены все исходящие вызовы">
       <Resource name="RES_HL_ODB_OC" value="NoCalls" useType="Mandatory" />
     </RFS>
-    <RFS name="RFS_HL_ODB_OC_INTERNATIONAL_CALLS" base="RFS_HL_ODB_OC" hostType="HL" description="Барринг исходящей связи – разрешены исходящие международные вызовы">
-      <Resource name="RES_HL_ODB_OC" value="InternationalCalls" useType="Mandatory" />
-    </RFS>
     <RFS name="RFS_HL_ODB_OC_INTERCITY_CALLS" base="RFS_HL_ODB_OC" hostType="HL" description="Барринг исходящей связи – разрешены исходящие междугородные вызовы">
       <Resource name="RES_HL_ODB_OC" value="IntercityCalls" useType="Mandatory" />
     </RFS>
-    <RFS name="RFS_HL_ODB_OC_LOCAL_CALLS" base="RFS_HL_ODB_OC" hostType="HL" description="Барринг исходящей связи – разрешены исходящие местные вызовы">
-      <Resource name="RES_HL_ODB_OC" value="LocalCalls" useType="Mandatory" />
+    <RFS name="RFS_HL_ODB_OC_INTERNATIONAL_CALLS" base="RFS_HL_ODB_OC" hostType="HL" description="Барринг исходящей связи – разрешены исходящие международные вызовы">
+      <Resource name="RES_HL_ODB_OC" value="InternationalCalls" useType="Mandatory" />
     </RFS>
-    <RFS name="RFS_HL_ODB_IC" hostType="HL" description="Барринг входящей связи">
-      <Resource name="RES_HL_ODB_IC" useType="Mandatory" />
-    </RFS>
-    <RFS name="RFS_HL_ODB_IC_NONE" base="RFS_HL_ODB_IC" hostType="HL" description="Барринг входящей связи – запрещены все входящие вызовы">
-      <Resource name="RES_HL_ODB_IC" value="NoCalls" useType="Mandatory" />
-    </RFS>
-    <RFS name="RFS_HL_ODB_IC_LOCAL_ALL_CALLS" base="RFS_HL_ODB_IC" hostType="HL" description="Барринг входящей связи – разрешены все входящие вызовы">
-      <Resource name="RES_HL_ODB_IC" value="AllCalls" useType="Mandatory" />
-    </RFS>
+    <RFS name="RFS_HL_ODB_IC_NONE" hostType="HL" description="Барринг входящей связи – запрещены все входящие вызовы"/>
 
     <RFS name="RFS_HL_SMS_OC" hostType="HL" description="Служба коротких сообщений (SMS) исходящие">
       <Resource name="RES_HL_SMS_OC" useType="Mandatory" />
@@ -194,11 +180,11 @@
     <CFS name="CB406278" description="Мобильный интернет GPRS">
       <RFS name="RFS_HL_GPRS_TRUE" linkType="Add" />
     </CFS>
-    <CFS name="LIMITSPEED" description="Ограничение скорости GPRS">
-      <RFS name="RFS_HL_GPRS_LIMITSPEED" linkType="Add" dependsOn="RFS_HL_GPRS_TRUE" />
-    </CFS>
     <CFS name="FRUNLIMLTE" description="Доступ к сети 4G LTE">
-      <RFS name="RFS_HL_LTE" linkType="Add" />
+      <RFS name="RFS_HL_LTE" linkType="Add" dependsOn="RFS_HL_GPRS_TRUE" />
+    </CFS>
+    <CFS name="LIMITSPEED" description="Ограничение скорости Интернета">
+      <RFS name="RFS_HL_LIMITSPEED" linkType="Add" dependsOn="RFS_HL_GPRS_TRUE" />
     </CFS>
     <!--END ==== INTERNET ====-->
     
@@ -243,20 +229,20 @@
     
     <!--START ==== Барринги и связь ====-->
     <CFS name="CB108" description="Международный доступ">
-      <RFS name="RFS_HL_ODB_OC_INTERNATIONAL_CALLS" linkType="Modify" />
+      <RFS name="RFS_HL_ODB_OC_INTERNATIONAL_CALLS" linkType="Add" />
     </CFS>
     <CFS name="FRMGDOSTUP" description="Междугородный доступ">
-      <RFS name="RFS_HL_ODB_OC_INTERCITY_CALLS" linkType="Modify" />
+      <RFS name="RFS_HL_ODB_OC_INTERCITY_CALLS" linkType="Add" />
     </CFS>
     <CFS name="FRPARTBL" isMarker="true" description="Частичная блокировка">
-      <RFS name="RFS_HL_ODB_OC_NONE" linkType="Modify" />
+      <RFS name="RFS_HL_ODB_OC_NONE" linkType="Add" />
       <RFS name="RFS_HL_SMS_OC_NONE" linkType="Modify" />
       <RFS name="RFS_HL_GPRS_FALSE" linkType="Modify" />
     </CFS>
     <CFS name="FRBLOUTGO" copyOf="FRPARTBL" description="Предварительная ФРОД блокировка"/>
     <CFS name="FRBLKFIN" isMarker="true" description="Принудительная блокировка">
-      <RFS name="RFS_HL_ODB_OC_NONE" linkType="Modify" />
-      <RFS name="RFS_HL_ODB_IC_NONE" linkType="Modify" />
+      <RFS name="RFS_HL_ODB_OC_NONE" linkType="Add" />
+      <RFS name="RFS_HL_ODB_IC_NONE" linkType="Add" />
       <RFS name="RFS_HL_SMS_OC_NONE" linkType="Modify" />
       <RFS name="RFS_HL_SMS_IC_NONE" linkType="Modify" />
       <RFS name="RFS_HL_GPRS_FALSE" linkType="Modify" />
@@ -268,8 +254,8 @@
     <CFS name="BLTDLIM" copyOf="FRBLKFIN" description="Блокировка по превышению локального лимита"/>
     <CFS name="FRBLKNAR" copyOf="FRBLKFIN" description="Блокировка за нарушение договорных обязательств"/>
     <CFS name="FRTECHBLK" isMarker="true" description="Технологическая блокировка">
-      <RFS name="RFS_HL_ODB_OC_NONE" linkType="Modify" />
-      <RFS name="RFS_HL_ODB_IC_NONE" linkType="Modify" />
+      <RFS name="RFS_HL_ODB_OC_NONE" linkType="Add" />
+      <RFS name="RFS_HL_ODB_IC_NONE" linkType="Add" />
       <RFS name="RFS_HL_SMS_OC_NONE" linkType="Modify" />
       <RFS name="RFS_HL_SMS_IC_NONE" linkType="Modify" />
       <RFS name="RFS_HL_GPRS_FALSE" linkType="Modify" />
@@ -282,16 +268,49 @@
     <CFS name="Subscriber" type="ManagedObject" description="Абонент" />
   </CFSList>
   <CFSGroupList>
+    <CFSGroup  name="CFS_GROUP_ROAMING_LTE" type="Mutex" description="Группа взаимоисключающих услуг роуминг и LTE">
+      <CFS name="CB123" />
+      <CFS name="FRUNLIMLTE" />
+    </CFSGroup>
+    <CFSGroup  name="CFS_GROUP_BSROAMING_LTE" type="Mutex" description="Группа взаимоисключающих услуг роуминг и LTE">
+      <CFS name="CB123" />
+      <CFS name="BSNSSRMNG" />
+    </CFSGroup>
+    <CFSGroup  name="CFS_GROUP_LGROAMING_LTE" type="Mutex" description="Группа взаимоисключающих услуг роуминг и LTE">
+      <CFS name="CB123" />
+      <CFS name="LGHTRMNG" />
+    </CFSGroup>
   </CFSGroupList>
   <RFSGroupList />
   <RFSDependencyList />
-  <HandlerList >
-    <Handler name="MERGE_RFS_HL_ODB_OC" type="MergeRFS" description="Блокировка исх. связи">
+  <HandlerList>
+    <Handler name="MERGE_RFS_HL_ODB_OC_SUSPEND_ALL" type="MergeRFS" description="Блок всей исх. связи">
+      <Configuration>
+        <RFS type="Source" name="RFS_HL_ODB_OC_NONE"/>
+        <RFS type="Source" name="RFS_HL_ODB_OC_INTERCITY_CALLS"/>
+        <RFS type="Source" name="RFS_HL_ODB_OC_INTERNATIONAL_CALLS"/>
+        <RFS type="Result" name="RFS_HL_ODB_OC_NONE"/>
+      </Configuration>
+    </Handler>
+    <Handler name="MERGE_RFS_HL_ODB_OC_SUSPEND_INTERCITY" type="MergeRFS" description="Блок всей исх. связи">
+      <Configuration>
+        <RFS type="Source" name="RFS_HL_ODB_OC_NONE"/>
+        <RFS type="Source" name="RFS_HL_ODB_OC_INTERCITY_CALLS"/>
+        <RFS type="Result" name="RFS_HL_ODB_OC_NONE"/>
+      </Configuration>
+    </Handler>
+    <Handler name="MERGE_RFS_HL_ODB_OC_SUSPEND_INTERNATIONAL" type="MergeRFS" description="Блок всей исх. связи">
       <Configuration>
         <RFS type="Source" name="RFS_HL_ODB_OC_NONE"/>
         <RFS type="Source" name="RFS_HL_ODB_OC_INTERNATIONAL_CALLS"/>
-        <RFS type="Source" name="RFS_HL_ODB_OC_INTERCITY_CALLS"/>
         <RFS type="Result" name="RFS_HL_ODB_OC_NONE"/>
+      </Configuration>
+    </Handler>
+    <Handler name="MERGE_RFS_HL_ODB_OC_INTERNATIONAL" type="MergeRFS" description="Исх. международный доступ">
+      <Configuration>
+        <RFS type="Source" name="RFS_HL_ODB_OC_INTERNATIONAL_CALLS"/>
+        <RFS type="Source" name="RFS_HL_ODB_OC_INTERCITY_CALLS"/>
+        <RFS type="Result" name="RFS_HL_ODB_OC_INTERNATIONAL_CALLS"/>
       </Configuration>
     </Handler>
     <Handler name="MERGE_RFS_HL_SMS_OC" type="MergeRFS" description="Блокировка исх. смс">
@@ -308,7 +327,7 @@
         <RFS type="Result" name="RFS_HL_SMS_IC_NONE"/>
       </Configuration>
     </Handler>
-    <Handler name="MERGE_RFS_HL_GPRS" type="MergeRFS" description="Блокировка вх. смс">
+    <Handler name="MERGE_RFS_HL_GPRS" type="MergeRFS" description="Блокировка GPRS">
       <Configuration>
         <RFS type="Source" name="RFS_HL_GPRS_FALSE"/>
         <RFS type="Source" name="RFS_HL_GPRS_TRUE"/>
@@ -318,14 +337,14 @@
   </HandlerList>
   <ScenarioList>
     <!--START ==== Call Fworwarding ====-->
-    <Scenario name="HL.CallForwardingAssign" description="Добавление/активация переадресаций">
+    <Scenario name="HL.CallForwardingAssign" description="Добавление или активация переадресаций">
       <RFS name="RFS_HL_CFB" scenarioType="Add" />
       <RFS name="RFS_HL_CFU" scenarioType="Add" />
       <RFS name="RFS_HL_CFNRC" scenarioType="Add" />
       <RFS name="RFS_HL_CFNRY" scenarioType="Add" />
       <RFS name="RFS_HL_CFD" scenarioType="Add" />
     </Scenario>
-    <Scenario name="HL.CallForwardingRemove" description="Удаление/деактивация переадресаций">
+    <Scenario name="HL.CallForwardingRemove" description="Удаление или деактивация переадресаций">
       <RFS name="RFS_HL_CFB" scenarioType="Remove" />
       <RFS name="RFS_HL_CFU" scenarioType="Remove" />
       <RFS name="RFS_HL_CFNRC" scenarioType="Remove" />
@@ -338,12 +357,12 @@
     <!--START ==== INTERNET ====-->
     <Scenario name="HL.GPRSAssign" description="Добавление услуги GPRS">
       <RFS name="RFS_HL_GPRS" scenarioType="Add" />
-      <Append name="RFS_HL_GPRS_LIMITSPEED" listType="EndList" />
+      <Append name="RFS_HL_LIMITSPEED" listType="EndList" />
       <Append name="RFS_HL_LTE" listType="EndList" />
     </Scenario>
-    <Scenario name="HL.LTEAssign" description="Добавление услуги LTE">
-      <RFS name="RFS_HL_LTE" scenarioType="Add" />
-      <Append name="RFS_HL_ROAMING" listType="EndList" />
+    <Scenario name="HL.ModifyLimitSpeed" description="Изменение скорости Интернета">
+      <RFS name="RFS_HL_LIMITSPEED" scenarioType="Add, Remove" />
+      <Append name="RFS_HL_LTE" listType="EndList" />
     </Scenario>
     <!--END ==== INTERNET ====-->
 
@@ -351,7 +370,7 @@
     <!--START ==== Барринги на связь и смс ====-->
     <Scenario name="HL.ModifyODB" description="Управление ограничениями связи на HLR">
       <RFS name="RFS_HL_ODB_OC" scenarioType="Add, Remove, Modify" />
-      <RFS name="RFS_HL_ODB_IC" scenarioType="Add, Remove, Modify" />
+      <RFS name="RFS_HL_ODB_IC_NONE" scenarioType="Add, Remove, Modify" />
     </Scenario>
     <Scenario name="HL.ModifySMS" description="Управление ограничениями смс на HLR">
       <RFS name="RFS_HL_SMS_OC" scenarioType="Add, Remove, Modify" />

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="SC.GPRSReduceSpeed_Modify" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>Изменение ограничения скорости GPRS до 128кбс</Description>
+  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
+  <Request>
+    <RequestTemplate>
+      <![CDATA[MOD PDP:MSISDN=##msisdn##,OAPN=##REDUCE_SPEED_APN##,OPDPTYPE=0,QOSID=##REDUCE_SPEED_QOSID##;^M]]>
+    </RequestTemplate>
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="msisdn" Type="Wellknown"/>
+    <Item Name="REDUCE_SPEED_APN" Type="Parameter"/>
+    <Item Name="REDUCE_SPEED_QOSID" Type="Parameter"/>
+  </Request>
+  <ErrorsList CodePage="windows-1251" />
+</Command>

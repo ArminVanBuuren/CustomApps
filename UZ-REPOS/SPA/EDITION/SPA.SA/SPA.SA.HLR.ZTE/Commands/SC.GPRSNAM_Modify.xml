@@ -4,11 +4,11 @@
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
   <Request>
     <RequestTemplate>
-      <![CDATA[MOD NAM:MSISDN=##msisdn##,NAM=##GPRSStatus##,Keep=1,KEEPEPS=1;^M]]>
+      <![CDATA[MOD NAM:MSISDN=##msisdn##,NAM=##GPRS_STATUS##,Keep=1,KEEPEPS=1;^M]]>
     </RequestTemplate>
     <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
     <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="GPRSStatus" Type="Parameter"/>
+    <Item Name="GPRS_STATUS" Type="Parameter"/>
   </Request>
   <ErrorsList CodePage="windows-1251" />
 </Command>

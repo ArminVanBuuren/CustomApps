@@ -11,14 +11,12 @@
     <Item Name="OutgoingCallsBarring" Type="LocalParameter"/>
   </Request>
   <ParametersList>
-    <Parameter Name="OutgoingCallsBarring">
-      <Source Path="//RFS_HL_ODB_OC/RES_HL_ODB_OC/Value"/>
-      <PossibleValues StringToKeyTable="true">
-        <Item Key="1" StringValue="NoCalls"/>
-        <Item Key="0" StringValue="InternationalCalls"/>
-        <Item Key="2" StringValue="IntercityCalls"/>
-        <Item Key="3" StringValue="LocalCalls"/>
-      </PossibleValues>
+    <Parameter Name="OutgoingCallsBarring" IsChoice="true" AbsenceValue="">
+      <Source Path="//AddList/RFS_HL_ODB_OC/RES_HL_ODB_OC/Value[text()='NoCalls']" PostFormat="1" />
+      <Source Path="//ModifyList/RFS_HL_ODB_OC/RES_HL_ODB_OC/Value[text()='NoCalls']" PostFormat="1" />
+      <Source Path="//RemoveList/RFS_HL_ODB_OC/RES_HL_ODB_OC/Value[text()='NoCalls']" PostFormat="3" />
+      <Source Path="//RFS_HL_ODB_OC/RES_HL_ODB_OC/Value[text()='IntercityCalls']" PostFormat="2" />
+      <Source Path="//RFS_HL_ODB_OC/RES_HL_ODB_OC/Value[text()='InternationalCalls']" PostFormat="0" />
     </Parameter>
   </ParametersList>
   <ErrorsList CodePage="windows-1251" />

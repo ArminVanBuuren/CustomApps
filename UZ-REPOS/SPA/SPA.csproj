@@ -142,7 +142,6 @@
     <Content Include="EDITION\ROBP\Processes\Unblock Subscriber.xml" />
     <Content Include="EDITION\ROBP\SRI\SC-SCG\ServiceCatalog-SCG.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.BPOS_Modify.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.GPRSReduceSpeed_Delete.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.PLSS_Add.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.PLSS_Delete.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CLIR_Delete.xml" />
@@ -162,13 +161,13 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.ODB_OC_Modify.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.MPTY_Delete.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.MPTY_Add.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.GPRSReduceSpeed_Add.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.GPRSReduceSpeed_Modify.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.VideoCall_Delete.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.VideoCall_Add.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.GPRSAPN_Delete.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.LTEs3_Add.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.LTE_Delete.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.LTEsReduceSpeed_Add.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.LTEsReduceSpeed_Modify.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.LTEs2_Add.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.LTEs1_Add.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.InterRoaming_Delete.xml" />
@@ -182,11 +181,10 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CallForwarding_Delete.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CallForwarding_Add.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CallForwarding_Activate.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Add.RFS_HL_GPRS_LIMITSPEED.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.ModifyLimitSpeed.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Add.RFS_HL_PLSS.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Remove.RFS_HL_GPRS_LIMITSPEED.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Remove.RFS_HL_LTE.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.LTEAssign.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Add.RFS_HL_LTE.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Modify.RFS_HL_GPRS.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.ModifySMS.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.ModifyODB.xml" />

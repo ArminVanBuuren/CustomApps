@@ -1,23 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scenario name="SC.Add.RFS_HL_GPRS_LIMITSPEED">
+<scenario name="SC.HL.ModifyLimitSpeed">
   <objectList>
     <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
   </objectList>
   <automat>
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
       <resultlist>
-        <result value="0" node="GPRSReduceSpeed_Add"/>
+        <result value="0" node="GPRSReduceSpeed_Modify"/>
         <result value="1" node=""/>
       </resultlist>
     </node>
-    <node name="GPRSReduceSpeed_Add" object="Commander">
+    <node name="GPRSReduceSpeed_Modify" object="Commander">
+      <resultlist>
+        <result value="0" node="LTEsReduceSpeed_Modify"/>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.GPRSReduceSpeed_Modify"/>
+      </parameterslist>
+    </node>
+    <node name="LTEsReduceSpeed_Modify" object="IfCommander">
       <resultlist>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SC.GPRSReduceSpeed_Add"/>
+        <param name="IfXmlPath:0" value="//RFS_HL_LTE"/>
+        <param name="Command" value="SC.LTEsReduceSpeed_Modify"/>
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">

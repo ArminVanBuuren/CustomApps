@@ -11,12 +11,9 @@
     <Item Name="IncomingCallsBarring" Type="LocalParameter"/>
   </Request>
   <ParametersList>
-    <Parameter Name="IncomingCallsBarring">
-      <Source Path="//RFS_HL_ODB_IC/RES_HL_ODB_IC/Value"/>
-      <PossibleValues StringToKeyTable="true">
-        <Item Key="1" StringValue="NoCalls"/>
-        <Item Key="0" StringValue="AllCalls"/>
-      </PossibleValues>
+    <Parameter Name="IncomingCallsBarring" IsChoice="true" AbsenceValue="">
+      <Source Path="//AddList/RFS_HL_ODB_IC_NONE" PostFormat="1" />
+      <Source Path="//RemoveList/RFS_HL_ODB_IC_NONE" PostFormat="0" />
     </Parameter>
   </ParametersList>
   <ErrorsList CodePage="windows-1251" />
