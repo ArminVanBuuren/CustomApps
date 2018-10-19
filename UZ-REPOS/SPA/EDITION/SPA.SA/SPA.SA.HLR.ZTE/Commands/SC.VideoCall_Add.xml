@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.VideoCall_Add" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Description>Видео звонок</Description>
+  <Description>Добавление видео звонка</Description>
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
   <Request>
     <RequestTemplate>

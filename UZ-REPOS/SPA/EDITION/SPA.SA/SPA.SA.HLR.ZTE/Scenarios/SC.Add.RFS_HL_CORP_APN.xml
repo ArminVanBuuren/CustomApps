@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="SC.Add.RFS_HL_CORP_APN">
+  <objectList>
+    <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll"/>
+    <object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll"/>
+    <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll"/>
+  </objectList>
+  <automat>
+    <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
+      <resultlist>
+        <result value="0" node="GPRSNAM_Add"/>
+        <result value="1" node=""/>
+      </resultlist>
+    </node>
+    <node name="GPRSNAM_Add" object="Commander">
+      <resultlist>
+        <result value="0" node="SelectIPCorporateAPN"/>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.GPRSNAM_Add"/>
+      </parameterslist>
+    </node>
+    <node name="SelectIPCorporateAPN" object="DataBaseProcessor">
+      <resultlist>
+        <result value="" node="ExtractIP"/>
+      </resultlist>
+      <parameterslist>
+        <param name="DataBaseName" value="FORIS.SPA.ARCHIVE"/>
+        <param name="FunctionName" value="CORPORATE_APN_ADD"/>
+        <param name="FunctionType" value="function"/>
+        <param name="OutXml" value="db_unit_result"/>
+        <param name="DbParameterName:0" value="p_msisdn"/>
+        <param name="DbParameterDirection:0" value="Input"/>
+        <param name="DbParameterType:0" value="Varchar2"/>
+        <param name="DbParameterXpathValue:0" value="//IdentifiersList/Identifier/MSISDN" />
+        <param name="DbParameterName:1" value="p_service"/>
+        <param name="DbParameterDirection:1" value="Input"/>
+        <param name="DbParameterType:1" value="Varchar2"/>
+        <param name="DbParameterXpathValue:1" value="//RES_HL_CORP_APN_SERVICE/Value/text()" />
+        <param name="DbParameterName:2" value="p_result"/>
+        <param name="DbParameterDirection:2" value="ReturnValue"/>
+        <param name="DbParameterType:2" value="Varchar2"/>
+        <param name="DbParameterValue:2" value=""/>
+      </parameterslist>
+    </node>
+    <node name="ExtractIP" object="XmlNodesCopier">
+      <resultlist>
+        <result value="" node="ParameterSwitch"/>
+      </resultlist>
+      <parameterslist>
+        <param name="SrcXml" value="db_unit_result"/>
+        <param name="DstMessage" value="xmlrequest"/>
+        <param name="CopyContentType" value="InnerText"/>
+        <param name="SrcXmlPath:0" value="root/return"/>
+        <param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/IP"/>
+      </parameterslist>
+    </node>
+    <node name="ParameterSwitch" object="Switch">
+      <resultlist>
+        <result value="2" node="DummyResponderFAILURE"/>
+        <result value="" node="CorporateAPN_Add"/>
+      </resultlist>
+      <parameterslist>
+        <param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/IP"/>
+        <param name="Value:2" value="err001"/>
+      </parameterslist>
+    </node>
+    <node name="CorporateAPN_Add" object="Commander">
+      <resultlist>
+        <result value="0" node="CheckDynamic"/>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.CorporateAPN_Add"/>
+      </parameterslist>
+    </node>
+    <node name="CheckDynamic" object="IfMultipleXmlConditionsResolver">
+      <resultlist>
+        <result value="0" node="ResponseAssembler"/>
+        <result value="1" node="CorporateAPN_IP_Add"/>
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/IP[text()='DYNAMIC']"/>
+      </parameterslist>
+    </node>
+    <node name="CorporateAPN_IP_Add" object="Commander">
+      <resultlist>
+        <result value="0" node="ResponseAssembler"/>
+        <result value="" node="DataBaseProcessorDELETENUM"/>
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.CorporateAPN_IP_Add"/>
+      </parameterslist>
+    </node>
+    <node name="DataBaseProcessorDELETENUM" object="DataBaseProcessor">
+      <resultlist>
+        <result value="" node="CorporateAPN_Delete"/>
+      </resultlist>
+      <parameterslist>
+        <param name="DataBaseName" value="FORIS.SPA.ARCHIVE"/>
+        <param name="FunctionName" value="CORPORATE_APN_DELETE"/>
+        <param name="FunctionType" value="procedure"/>
+        <param name="OutXml" value="db_unit_result"/>
+        <param name="DbParameterName:0" value="p_msisdn"/>
+        <param name="DbParameterDirection:0" value="Input"/>
+        <param name="DbParameterType:0" value="Varchar2"/>
+        <param name="DbParameterXpathValue:0" value="//IdentifiersList/Identifier/MSISDN" />
+      </parameterslist>
+    </node>
+    <node name="CorporateAPN_Delete" object="Commander">
+      <resultlist>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.CorporateAPN_Delete"/>
+      </parameterslist>
+    </node>
+    <node name="DummyResponderFAILURE" object="DummyResponder">
+      <resultlist>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="OverallResult" value="FAILURE"/>
+        <param name="DetailedResult" value="FAILURE"/>
+        <param name="Delay" value="0"/>
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="RequestCutterBySubscribers"/>
+      </resultlist>
+    </node>
+  </automat>
+</scenario>

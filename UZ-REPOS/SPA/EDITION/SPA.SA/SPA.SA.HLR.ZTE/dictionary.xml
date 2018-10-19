@@ -2,14 +2,7 @@
 <Dictionary>
   <WellknownsList>
     <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
-    <Wellknown Name="msisdn.cc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,0,3)"/>
-    <Wellknown Name="msisdn.ndc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,3,2)"/>
-    <Wellknown Name="msisdn.sn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,5)"/>
-    <Wellknown Name="msisdn.fn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,3)"/>
     <Wellknown Name="imsi" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;)"/>
-    <Wellknown Name="imsi.mcc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,0,3)"/>
-    <Wellknown Name="imsi.mnc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,3,2)"/>
-    <Wellknown Name="imsi.msin" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,5)"/>
   </WellknownsList>
   <ErrorsList CodePage="windows-1251">
     <Error Name="000000" Value="SUCCESS"/>
@@ -41,20 +34,36 @@
   <ConstantsList/>
   <ParametersList>
     <Parameter Name="GPRS_STATUS">
-      <Source Path="//RFS_HL_GPRS/RES_HL_GPRS/Value"/>
+      <Source Path="//RES_HL_GPRS/Value"/>
       <PossibleValues StringToKeyTable="true">
         <Item Key="0" StringValue="Activate"/>
         <Item Key="1" StringValue="Deactivate"/>
       </PossibleValues>
     </Parameter>
-    <Parameter Name="REDUCE_SPEED_APN">
-      <Source Path="//RFS_HL_LIMITSPEED/RES_HL_REDUCE_APN/Value"/>
+    <Parameter Name="DEFAULT_APN">
+      <Source Path="//RES_HL_DEFAULT_APN/Value"/>
+    </Parameter>
+    <Parameter Name="DEALER_APN">
+      <Source Path="//RES_HL_DEALER_APN/Value"/>
     </Parameter>
     <Parameter Name="REDUCE_SPEED_QOSID" IsChoice="true" AbsenceValue="">
       <Source Path="//AddList/RFS_HL_LIMITSPEED" PostFormat="107" />
       <Source Path="//RemoveList/RFS_HL_LIMITSPEED" PostFormat="100" />
     </Parameter>
-
+    <Parameter Name="CORPORATE_APN">
+      <Source Path="//RFS_HL_CORP_APN/RES_HL_CORP_APN_SERVICE"/>
+      <PossibleValues StringToKeyTable="false">
+        <Item Key="FRCORPAPN" StringValue="TEST.LTE"/>
+        <Item Key="FRAPNXB" StringValue="XB.APN.UZ"/>
+        <Item Key="FRAPNZIYOD" StringValue="ZIYOD.UMS.UZ"/>
+      </PossibleValues>
+    </Parameter>
+    <Parameter Name="IP">
+      <Source Path="//AdditionalData/IP"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    
+    
 
     <Parameter Name="xCSI_ID">
       <Source Path="//BalanceStorage/HostCode"/>

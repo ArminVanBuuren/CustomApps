@@ -1,13 +1,15 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="SC.VideoCall_Delete" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Description>Удаление видео звонка</Description>
+<Command Name="SC.CorporateAPN_IP_Add" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description></Description>
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
   <Request>
     <RequestTemplate>
-      <![CDATA[MOD Bear:MSISDN=##msisdn##,GenCDS=0;^M]]>
+      <![CDATA[MOD PDP:MSISDN=##msisdn##,OAPN=##CORPORATE_APN##,OPDPTYPE=0,PDPAddr=##IP##;^M]]>
     </RequestTemplate>
     <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
     <Item Name="msisdn" Type="Wellknown"/>
+    <Item Name="CORPORATE_APN" Type="Parameter"/>
+    <Item Name="IP" Type="Parameter"/>
   </Request>
   <ErrorsList CodePage="windows-1251" />
 </Command>

@@ -32,3 +32,5 @@
 	DeleteFRASKUE	2	C:\@MyRepos\FORIS_WORK\UZ-REPOS\SPA\PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\DeleteFRASKUE.xml
 	addcallforwardingoriginating_sub	0	C:\@MyRepos\FORIS_WORK\UZ-REPOS\SPA\PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\sub\addcallforwardingoriginating_sub.xml
 	addm2mapn_sub	0	C:\@MyRepos\FORIS_WORK\UZ-REPOS\SPA\PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\sub\addm2mapn_sub.xml
+
+

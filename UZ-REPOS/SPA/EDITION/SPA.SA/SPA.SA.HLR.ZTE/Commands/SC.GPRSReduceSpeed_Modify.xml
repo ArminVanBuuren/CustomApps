@@ -4,11 +4,11 @@
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
   <Request>
     <RequestTemplate>
-      <![CDATA[MOD PDP:MSISDN=##msisdn##,OAPN=##REDUCE_SPEED_APN##,OPDPTYPE=0,QOSID=##REDUCE_SPEED_QOSID##;^M]]>
+      <![CDATA[MOD PDP:MSISDN=##msisdn##,OAPN=##DEFAULT_APN##,OPDPTYPE=0,QOSID=##REDUCE_SPEED_QOSID##;^M]]>
     </RequestTemplate>
     <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
     <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="REDUCE_SPEED_APN" Type="Parameter"/>
+    <Item Name="DEFAULT_APN" Type="Parameter"/>
     <Item Name="REDUCE_SPEED_QOSID" Type="Parameter"/>
   </Request>
   <ErrorsList CodePage="windows-1251" />

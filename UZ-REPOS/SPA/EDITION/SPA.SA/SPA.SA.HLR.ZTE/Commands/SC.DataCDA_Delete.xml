@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="SC.VideoCall_Delete" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Description>Удаление видео звонка</Description>
+<Command Name="SC.DataCDA_Delete" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>Уделение VideoCall</Description>
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
   <Request>
     <RequestTemplate>
-      <![CDATA[MOD Bear:MSISDN=##msisdn##,GenCDS=0;^M]]>
+      <![CDATA[Mod BscEx:MSISDN=##msisdn##,GENCDA=0,GENCDS=0;^M]]>
     </RequestTemplate>
     <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
     <Item Name="msisdn" Type="Wellknown"/>
