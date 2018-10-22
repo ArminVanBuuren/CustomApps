@@ -206,6 +206,9 @@
     <CFS name="LIMITSPEED" description="Ограничение скорости Интернета">
       <RFS name="RFS_HL_LIMITSPEED" linkType="Add" dependsOn="RFS_HL_GPRS_TRUE" />
     </CFS>
+    <CFS name="FRIP" description="Статический IP адрес">
+      <RFS name="RFS_HL_STATIC_IP" linkType="Add" dependsOn="RFS_HL_GPRS_TRUE" />
+    </CFS>
     <CFS name="FRCORPAPN" description="Корпоративный APN">
       <RFS name="RFS_HL_CORP_APN_BS" linkType="Add" />
     </CFS>
@@ -214,9 +217,6 @@
     </CFS>
     <CFS name="FRAPNZIYOD" description="Корпоративный APN Ziyod">
       <RFS name="RFS_HL_CORP_APN_ZD" linkType="Add" />
-    </CFS>
-    <CFS name="FRIP" description="Статический IP адрес">
-      <RFS name="RFS_HL_STATIC_IP" linkType="Add" dependsOn="RFS_HL_GPRS_TRUE" />
     </CFS>
     <CFS name="FRPARTAPN" description="Создание абонентов Partner APN">
       <RFS name="RFS_HL_PART_APN" linkType="Add" />
@@ -327,6 +327,16 @@
       <CFS name="FRUNLIMLTE" />
     </CFSGroup>
   </CFSGroupList>
+  <RestrictionList>
+    <Restriction name="RESTRICTION_ROAMING_LTE" description="Невозможно добавить одновременно LTE и роуминг, т.к. взаимоисключающие сервисы">
+      <RFS name="RFS_HL_LTE" scenarioType="Add" />
+      <RFS name="RFS_HL_ROAMING" scenarioType="Add" />
+    </Restriction>
+    <Restriction name="RESTRICTION_ROAMING_LTE" description="Невозможно добавить одновременно GPRS и корпоративный интернет, т.к. взаимоисключающие сервисы">
+      <RFS name="RFS_HL_GPRS_TRUE" scenarioType="Add" />
+      <RFS name="RFS_HL_CORP_APN" scenarioType="Add" />
+    </Restriction>
+  </RestrictionList>
   <RFSGroupList />
   <RFSDependencyList />
   <HandlerList>

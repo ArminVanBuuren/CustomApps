@@ -19,6 +19,8 @@ using System.Reflection;
 using FormUtils.Notepad;
 using FormUtils.DataGridViewHelper;
 using Utils.XmlHelper;
+using Timer = System.Timers.Timer;
+using System.Threading;
 
 namespace ProcessFilter
 {
@@ -32,6 +34,8 @@ namespace ProcessFilter
         public CollectionNetworkElements NetElements { get; private set; }
         public CollectionScenarios Scenarios { get; private set; }
         public CollectionCommands Commands { get; private set; }
+        private object sync = new object();
+        private Timer _timerGC;
 
         public ProcessFilterForm()
         {
@@ -40,9 +44,21 @@ namespace ProcessFilter
 
         private void ProcessFilterForm_Closing(object sender, CancelEventArgs e)
         {
-            using (FileStream stream = new FileStream(SerializationDataPath, FileMode.Create, FileAccess.ReadWrite))
+            SaveFile();
+        }
+        private void _timerCollect(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            SaveFile();
+        }
+
+        void SaveFile()
+        {
+            lock (sync)
             {
-                new BinaryFormatter().Serialize(stream, this);
+                using (FileStream stream = new FileStream(SerializationDataPath, FileMode.Create, FileAccess.ReadWrite))
+                {
+                    new BinaryFormatter().Serialize(stream, this);
+                }
             }
         }
 
@@ -66,37 +82,147 @@ namespace ProcessFilter
         void MainInit()
         {
             InitializeComponent();
+
+            dataGridProcessesResults.KeyDown += DataGridProcessesResults_KeyDown;
+            dataGridOperationsResult.KeyDown += DataGridOperationsResult_KeyDown;
+            dataGridScenariosResult.KeyDown += DataGridScenariosResult_KeyDown;
+            dataGridCommandsResult.KeyDown += DataGridCommandsResult_KeyDown;
+
+            tabControl1.KeyDown += ProcessFilterForm_KeyDown;
+            ProcessesTextBox.KeyDown += ProcessFilterForm_KeyDown;
+            OperationTextBox.KeyDown += ProcessFilterForm_KeyDown;
+            ScenariosTextBox.KeyDown += ProcessFilterForm_KeyDown;
+            CommandsTextBox.KeyDown += ProcessFilterForm_KeyDown;
+            ProcessesComboBox.KeyDown += ProcessFilterForm_KeyDown;
+            NetSettComboBox.KeyDown += ProcessFilterForm_KeyDown;
+            OperationComboBox.KeyDown += ProcessFilterForm_KeyDown;
+            dataGridProcessesResults.KeyDown += ProcessFilterForm_KeyDown;
+            dataGridOperationsResult.KeyDown += ProcessFilterForm_KeyDown;
+            dataGridScenariosResult.KeyDown += ProcessFilterForm_KeyDown;
+            dataGridCommandsResult.KeyDown += ProcessFilterForm_KeyDown;
+            this.KeyDown += ProcessFilterForm_KeyDown;
+
             dataGridScenariosResult.CellFormatting += DataGridScenariosResult_CellFormatting;
             this.Closing += ProcessFilterForm_Closing;
+
+            _timerGC = new Timer
+                       {
+                           Interval = 5 * 1000
+                       };
+            _timerGC.Elapsed += _timerCollect;
+            _timerGC.Start();
         }
 
-        
+        private void ProcessFilterForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F5)
+            {
+                buttonFilterClick(this, EventArgs.Empty);
+            }
+        }
+
+
+
+        bool _filterCompleted = false;
+        int _filterProgress = 1;
+        int _totalProgress = 9;
 
         private void buttonFilterClick(object sender, EventArgs e)
         {
-            CollectionBusinessProcess bpCollection;
-            NetworkElementCollection netElemCollection;
-            CollectionScenarios scoCollection = new CollectionScenarios();
-            CollectionCommands cmmCollection = new CollectionCommands();
-            List<Scenario> subScenarios = new List<Scenario>();
-
             if (Processes == null || NetElements == null)
             {
                 dataGridProcessesResults.DataSource = null;
                 dataGridOperationsResult.DataSource = null;
                 return;
             }
-            
+
+            try
+            {
+                progressBar.Visible = true;
+                _filterCompleted = false;
+
+                dataGridProcessesResults.DataSource = null;
+                dataGridOperationsResult.DataSource = null;
+                dataGridScenariosResult.DataSource = null;
+                dataGridCommandsResult.DataSource = null;
+                dataGridProcessesResults.Refresh();
+                dataGridOperationsResult.Refresh();
+                dataGridScenariosResult.Refresh();
+                dataGridCommandsResult.Refresh();
+
+                Action datafilter = new Action(DataFilter);
+                IAsyncResult asyncResult = datafilter.BeginInvoke(FilterCompleted, datafilter);
+
+                Progress();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        void FilterCompleted(IAsyncResult asyncResult)
+        {
+            Action dataDilter = (Action) asyncResult.AsyncState;
+            dataDilter.EndInvoke(asyncResult);
+
+            _filterCompleted = true;
+            _filterProgress = 1;
+            progressBar.Invoke(new MethodInvoker(delegate
+                                                 {
+                                                     progressBar.Visible = false;
+                                                 }));
+
+        }
 
 
-            if (!ProcessesComboBox.Text.IsNullOrEmpty())
+        Task Progress()
+        {
+            return Task.Run(() =>
+                            {
+                                while (!_filterCompleted)
+                                {
+                                    if (_filterProgress != 0 && _totalProgress != 0)
+                                    {
+
+                                        double calc = (double)_filterProgress / _totalProgress;
+                                        progressBar.Invoke(new MethodInvoker(delegate
+                                                                             {
+                                                                                 progressBar.Value = (int)(calc * 100);
+                                                                             }));
+                                        Thread.Sleep(5);
+                                    }
+                                }
+                            });
+        }
+
+        void DataFilter()
+        {
+
+            CollectionBusinessProcess bpCollection;
+            NetworkElementCollection netElemCollection;
+            CollectionScenarios scoCollection = new CollectionScenarios();
+            CollectionCommands cmmCollection = new CollectionCommands();
+            List<Scenario> subScenarios = new List<Scenario>();
+
+            string processFilter = null, netElemFilter = null, operFilter = null;
+            progressBar.Invoke(new MethodInvoker(delegate
+                                                 {
+                                                     processFilter = ProcessesComboBox.Text;
+                                                     netElemFilter = NetSettComboBox.Text;
+                                                     operFilter = OperationComboBox.Text;
+                                                 }));
+
+            _filterProgress = 1;
+
+            if (!processFilter.IsNullOrEmpty())
             {
                 bpCollection = new CollectionBusinessProcess();
                 IEnumerable<BusinessProcess> getCollection;
-                if (ProcessesComboBox.Text[0] == '%' || ProcessesComboBox.Text[ProcessesComboBox.Text.Length - 1] == '%')
-                    getCollection = Processes.Where(p => p.Name.IndexOf(ProcessesComboBox.Text.Replace("%", ""), StringComparison.CurrentCultureIgnoreCase) != -1);
+                if (processFilter[0] == '%' || processFilter[processFilter.Length - 1] == '%')
+                    getCollection = Processes.Where(p => p.Name.IndexOf(processFilter.Replace("%", ""), StringComparison.CurrentCultureIgnoreCase) != -1);
                 else
-                    getCollection = Processes.Where(p => p.Name.Equals(ProcessesComboBox.Text, StringComparison.CurrentCultureIgnoreCase));
+                    getCollection = Processes.Where(p => p.Name.Equals(processFilter, StringComparison.CurrentCultureIgnoreCase));
 
                 bpCollection.AddRange(getCollection);
             }
@@ -105,14 +231,16 @@ namespace ProcessFilter
                 bpCollection = Processes.Clone();
             }
 
-            if (!NetSettComboBox.Text.IsNullOrEmpty())
+            _filterProgress = 2;
+
+            if (!netElemFilter.IsNullOrEmpty())
             {
                 netElemCollection = new NetworkElementCollection();
                 IEnumerable<NetworkElement> getCollection;
-                if (NetSettComboBox.Text[0] == '%' || NetSettComboBox.Text[NetSettComboBox.Text.Length - 1] == '%')
-                    getCollection = NetElements.Elements.Where(p => p.Name.IndexOf(NetSettComboBox.Text.Replace("%", ""), StringComparison.CurrentCultureIgnoreCase) != -1);
+                if (netElemFilter[0] == '%' || netElemFilter[netElemFilter.Length - 1] == '%')
+                    getCollection = NetElements.Elements.Where(p => p.Name.IndexOf(netElemFilter.Replace("%", ""), StringComparison.CurrentCultureIgnoreCase) != -1);
                 else
-                    getCollection = NetElements.Elements.Where(p => p.Name.Equals(NetSettComboBox.Text, StringComparison.CurrentCultureIgnoreCase));
+                    getCollection = NetElements.Elements.Where(p => p.Name.Equals(netElemFilter, StringComparison.CurrentCultureIgnoreCase));
 
                 netElemCollection.AddRange(getCollection.Select(netElem => netElem.Clone()));
             }
@@ -121,7 +249,9 @@ namespace ProcessFilter
                 netElemCollection = NetElements.Elements.Clone();
             }
 
-            if (!OperationComboBox.Text.IsNullOrEmpty() && netElemCollection != null)
+            _filterProgress = 3;
+
+            if (!operFilter.IsNullOrEmpty() && netElemCollection != null)
             {
                 NetworkElementCollection netElemCollection2 = new NetworkElementCollection();
                 foreach (NetworkElement nec in netElemCollection)
@@ -129,16 +259,16 @@ namespace ProcessFilter
                     List<NetworkElementOpartion> ops = new List<NetworkElementOpartion>();
                     foreach (NetworkElementOpartion neo in nec.Operations)
                     {
-                        if (OperationComboBox.Text[0] == '%' || OperationComboBox.Text[OperationComboBox.Text.Length - 1] == '%')
+                        if (operFilter[0] == '%' || operFilter[operFilter.Length - 1] == '%')
                         {
-                            if (neo.Name.IndexOf(OperationComboBox.Text.Replace("%", ""), StringComparison.CurrentCultureIgnoreCase) != -1)
+                            if (neo.Name.IndexOf(operFilter.Replace("%", ""), StringComparison.CurrentCultureIgnoreCase) != -1)
                             {
                                 ops.Add(neo);
                             }
                         }
                         else
                         {
-                            if (neo.Name.Equals(OperationComboBox.Text, StringComparison.CurrentCultureIgnoreCase))
+                            if (neo.Name.Equals(operFilter, StringComparison.CurrentCultureIgnoreCase))
                             {
                                 ops.Add(neo);
                             }
@@ -153,6 +283,8 @@ namespace ProcessFilter
                 }
                 netElemCollection = netElemCollection2;
             }
+
+            _filterProgress = 4;
 
             int endOfBpCollection = bpCollection.Count;
             for (int i = 0; i < endOfBpCollection; i++)
@@ -179,23 +311,27 @@ namespace ProcessFilter
                 }
             }
 
+            _filterProgress = 5;
+
             Action<NetworkElementOpartion> getScenario = null;
             if (Scenarios != null)
             {
                 getScenario = operation =>
-                {
-                    List<Scenario> scenarios = Scenarios.Where(p => p.Name.Equals(operation.Name, StringComparison.CurrentCultureIgnoreCase)).ToList();
+                              {
+                                  List<Scenario> scenarios = Scenarios.Where(p => p.Name.Equals(operation.Name, StringComparison.CurrentCultureIgnoreCase)).ToList();
 
-                    foreach (Scenario scenario in scenarios)
-                    {
-                        if (scenario.AddBodyCommands())
-                        {
-                            scoCollection.Add(scenario);
-                            subScenarios.AddRange(scenario.SubScenarios);
-                        }
-                    }
-                };
+                                  foreach (Scenario scenario in scenarios)
+                                  {
+                                      if (scenario.AddBodyCommands())
+                                      {
+                                          scoCollection.Add(scenario);
+                                          subScenarios.AddRange(scenario.SubScenarios);
+                                      }
+                                  }
+                              };
             }
+
+            _filterProgress = 6;
 
             foreach (var netElem in netElemCollection)
             {
@@ -216,6 +352,8 @@ namespace ProcessFilter
                 }
             }
 
+            _filterProgress = 7;
+
             if (Commands != null && scoCollection.Count > 0)
             {
                 foreach (Command command in Commands)
@@ -228,15 +366,25 @@ namespace ProcessFilter
                 }
             }
 
+            _filterProgress = 8;
+
             subScenarios = subScenarios.Distinct(new ItemEqualityComparer()).ToList();
             scoCollection.AddRange(subScenarios);
 
-            dataGridProcessesResults.AssignListToDataGrid(bpCollection, new Padding(0, 0, 15, 0));
-            dataGridOperationsResult.AssignListToDataGrid(netElemCollection.AllOperations, new Padding(0, 0, 15, 0));
-            dataGridScenariosResult.AssignListToDataGrid(scoCollection, new Padding(0, 0, 15, 0));
-            dataGridCommandsResult.AssignListToDataGrid(cmmCollection, new Padding(0, 0, 15, 0));
+
+            progressBar.Invoke(new MethodInvoker(delegate
+                                                 {
+                                                     dataGridProcessesResults.AssignListToDataGrid(bpCollection, new Padding(0, 0, 15, 0));
+                                                     dataGridOperationsResult.AssignListToDataGrid(netElemCollection.AllOperations, new Padding(0, 0, 15, 0));
+                                                     dataGridScenariosResult.AssignListToDataGrid(scoCollection, new Padding(0, 0, 15, 0));
+                                                     dataGridCommandsResult.AssignListToDataGrid(cmmCollection, new Padding(0, 0, 15, 0));
+                                                 }));
+
+            _filterProgress = 9;
+
         }
-        
+
+
         private void DataGridScenariosResult_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             DataGridViewRow row = dataGridScenariosResult.Rows[e.RowIndex];
@@ -244,25 +392,50 @@ namespace ProcessFilter
             {
                 row.DefaultCellStyle.BackColor = Color.Yellow;
             }
+            else
+            {
+                row.DefaultCellStyle.BackColor = Color.White;
+            }
         }
 
         private void dataGridProcessesResults_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             OpenEditor(dataGridProcessesResults);
         }
+        private void DataGridProcessesResults_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                OpenEditor(dataGridProcessesResults);
+        }
 
         private void dataGridOperationsResult_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             OpenEditor(dataGridOperationsResult);
         }
+        private void DataGridOperationsResult_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                OpenEditor(dataGridOperationsResult);
+        }
+
         private void dataGridScenariosResult_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             OpenEditor(dataGridScenariosResult);
+        }
+        private void DataGridScenariosResult_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                OpenEditor(dataGridScenariosResult);
         }
 
         private void dataGridCommandsResult_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             OpenEditor(dataGridCommandsResult);
+        }
+        private void DataGridCommandsResult_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                OpenEditor(dataGridCommandsResult);
         }
 
         void OpenEditor(DataGridView grid)
@@ -271,7 +444,11 @@ namespace ProcessFilter
             if (notepad == null || notepad.WindowIsClosed)
             {
                 notepad = new XmlNotepad(path);
-                notepad.Show();
+                //notepad.StartPosition = FormStartPosition.CenterScreen;
+                notepad.TopMost = true;
+                notepad.Location = this.Location;
+                notepad.WindowState = FormWindowState.Maximized;
+                notepad.Show(this);
             }
             else
             {
