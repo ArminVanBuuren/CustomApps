@@ -141,7 +141,7 @@ namespace FormUtils.DataGridViewHelper
             int columnsCount = positionOfColumn.Count;
             foreach (T instance in data)
             {
-                
+
                 Type tp = instance.GetType();
                 PropertyInfo[] props2 = tp.GetProperties(propertyFlags);
                 object[] objs = new object[columnsCount];
@@ -155,12 +155,10 @@ namespace FormUtils.DataGridViewHelper
                     }
                 }
 
-                
+
                 table.Rows.Add(objs);
                 j++;
             }
-
-            
 
             grid.BeginInit();
             grid.DataSource = table;
