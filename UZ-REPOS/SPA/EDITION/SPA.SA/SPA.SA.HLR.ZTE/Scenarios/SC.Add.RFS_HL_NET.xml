@@ -1,27 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scenario name="SC.Add.RFS_HL_CORP_APN">
+<scenario name="SC.Add.RFS_HL_NET">
   <objectList>
     <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll"/>
     <object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll"/>
-    <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll"/>
   </objectList>
   <automat>
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
       <resultlist>
-        <result value="0" node="GPRSNAM_Add"/>
+        <result value="0" node="GPRSNAM_Modify"/>
         <result value="1" node=""/>
       </resultlist>
     </node>
-    <node name="GPRSNAM_Add" object="Commander">
+    <node name="GPRSNAM_Modify" object="Commander">
       <resultlist>
-        <result value="0" node="SelectIPCorporateAPN"/>
+        <result value="0" node="TimeOut1"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SC.GPRSNAM_Add"/>
+        <param name="Command" value="SC.GPRSNAM_Modify"/>
+      </parameterslist>
+    </node>
+    <node name="TimeOut1" object="DummyResponder">
+      <resultlist>
+        <result value="" node="GPRSAPN_Add"/>
+      </resultlist>
+      <parameterslist>
+        <param name="OverallResult" value="SUCCESS"/>
+        <param name="DetailedResult" value="SUCCESS"/>
+        <param name="Delay" value="500"/>
+      </parameterslist>
+    </node>
+    <node name="GPRSAPN_Add" object="IfCommander">
+      <resultlist>
+        <result value="0" node="TimeOut2"/>
+        <result value="1538" node="SelectIPCorporateAPN"/>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//RFS_HL_NET/RES_HL_NET_SERVICE[Value()='GPRS']"/>
+        <param name="Command" value="SC.GPRSAPN_Add"/>
+      </parameterslist>
+    </node>
+    <node name="TimeOut2" object="DummyResponder">
+      <resultlist>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="OverallResult" value="SUCCESS"/>
+        <param name="DetailedResult" value="SUCCESS"/>
+        <param name="Delay" value="500"/>
       </parameterslist>
     </node>
     <node name="SelectIPCorporateAPN" object="DataBaseProcessor">
@@ -40,7 +72,7 @@
         <param name="DbParameterName:1" value="p_service"/>
         <param name="DbParameterDirection:1" value="Input"/>
         <param name="DbParameterType:1" value="Varchar2"/>
-        <param name="DbParameterXpathValue:1" value="//RES_HL_CORP_APN_SERVICE/Value/text()" />
+        <param name="DbParameterXpathValue:1" value="//RES_HL_NET_SERVICE/Value/text()" />
         <param name="DbParameterName:2" value="p_result"/>
         <param name="DbParameterDirection:2" value="ReturnValue"/>
         <param name="DbParameterType:2" value="Varchar2"/>

@@ -83,6 +83,9 @@ namespace ProcessFilter
         {
             InitializeComponent();
 
+            //progressBar.Visible = true;
+            //progressBar.Value = 100;
+
             dataGridProcessesResults.KeyDown += DataGridProcessesResults_KeyDown;
             dataGridOperationsResult.KeyDown += DataGridOperationsResult_KeyDown;
             dataGridScenariosResult.KeyDown += DataGridScenariosResult_KeyDown;
@@ -125,7 +128,8 @@ namespace ProcessFilter
 
         bool _filterCompleted = false;
         int _filterProgress = 1;
-        int _totalProgress = 9;
+        int _totalProgress = 10;
+
 
         private void buttonFilterClick(object sender, EventArgs e)
         {
@@ -140,6 +144,7 @@ namespace ProcessFilter
             {
                 progressBar.Visible = true;
                 _filterCompleted = false;
+                _filterProgress = 1;
 
                 dataGridProcessesResults.DataSource = null;
                 dataGridOperationsResult.DataSource = null;
@@ -150,10 +155,9 @@ namespace ProcessFilter
                 dataGridScenariosResult.Refresh();
                 dataGridCommandsResult.Refresh();
 
+                Progress();
                 Action datafilter = new Action(DataFilter);
                 IAsyncResult asyncResult = datafilter.BeginInvoke(FilterCompleted, datafilter);
-
-                Progress();
             }
             catch (Exception ex)
             {
@@ -167,12 +171,10 @@ namespace ProcessFilter
             dataDilter.EndInvoke(asyncResult);
 
             _filterCompleted = true;
-            _filterProgress = 1;
             progressBar.Invoke(new MethodInvoker(delegate
                                                  {
                                                      progressBar.Visible = false;
                                                  }));
-
         }
 
 
@@ -182,23 +184,22 @@ namespace ProcessFilter
                             {
                                 while (!_filterCompleted)
                                 {
-                                    if (_filterProgress != 0 && _totalProgress != 0)
-                                    {
+                                    if (_filterProgress == 0 || _totalProgress == 0)
+                                        continue;
 
-                                        double calc = (double)_filterProgress / _totalProgress;
-                                        progressBar.Invoke(new MethodInvoker(delegate
-                                                                             {
-                                                                                 progressBar.Value = (int)(calc * 100);
-                                                                             }));
-                                        Thread.Sleep(5);
-                                    }
+                                    double calc = (double) _filterProgress / _totalProgress;
+                                    int progr = ((int) (calc * 100)) >= 100 ? 100 : ((int)(calc * 100));
+                                    progressBar.Invoke(new MethodInvoker(delegate
+                                                                         {
+                                                                             progressBar.Value = progr;
+                                                                             progressBar.SetProgressNoAnimation(progr);
+                                                                         }));
                                 }
                             });
         }
 
         void DataFilter()
         {
-
             CollectionBusinessProcess bpCollection;
             NetworkElementCollection netElemCollection;
             CollectionScenarios scoCollection = new CollectionScenarios();
@@ -212,7 +213,6 @@ namespace ProcessFilter
                                                      netElemFilter = NetSettComboBox.Text;
                                                      operFilter = OperationComboBox.Text;
                                                  }));
-
             _filterProgress = 1;
 
             if (!processFilter.IsNullOrEmpty())
@@ -231,6 +231,7 @@ namespace ProcessFilter
                 bpCollection = Processes.Clone();
             }
 
+
             _filterProgress = 2;
 
             if (!netElemFilter.IsNullOrEmpty())
@@ -248,8 +249,6 @@ namespace ProcessFilter
             {
                 netElemCollection = NetElements.Elements.Clone();
             }
-
-            _filterProgress = 3;
 
             if (!operFilter.IsNullOrEmpty() && netElemCollection != null)
             {
@@ -284,7 +283,8 @@ namespace ProcessFilter
                 netElemCollection = netElemCollection2;
             }
 
-            _filterProgress = 4;
+
+            _filterProgress = 3;
 
             int endOfBpCollection = bpCollection.Count;
             for (int i = 0; i < endOfBpCollection; i++)
@@ -311,7 +311,8 @@ namespace ProcessFilter
                 }
             }
 
-            _filterProgress = 5;
+
+            _filterProgress = 4;
 
             Action<NetworkElementOpartion> getScenario = null;
             if (Scenarios != null)
@@ -331,7 +332,8 @@ namespace ProcessFilter
                               };
             }
 
-            _filterProgress = 6;
+
+            _filterProgress = 5;
 
             foreach (var netElem in netElemCollection)
             {
@@ -352,7 +354,7 @@ namespace ProcessFilter
                 }
             }
 
-            _filterProgress = 7;
+            _filterProgress = 6;
 
             if (Commands != null && scoCollection.Count > 0)
             {
@@ -366,7 +368,8 @@ namespace ProcessFilter
                 }
             }
 
-            _filterProgress = 8;
+
+            _filterProgress = 7;
 
             subScenarios = subScenarios.Distinct(new ItemEqualityComparer()).ToList();
             scoCollection.AddRange(subScenarios);
@@ -374,14 +377,16 @@ namespace ProcessFilter
 
             progressBar.Invoke(new MethodInvoker(delegate
                                                  {
+                                                     _filterProgress = 8;
                                                      dataGridProcessesResults.AssignListToDataGrid(bpCollection, new Padding(0, 0, 15, 0));
                                                      dataGridOperationsResult.AssignListToDataGrid(netElemCollection.AllOperations, new Padding(0, 0, 15, 0));
+                                                     _filterProgress = 9;
                                                      dataGridScenariosResult.AssignListToDataGrid(scoCollection, new Padding(0, 0, 15, 0));
                                                      dataGridCommandsResult.AssignListToDataGrid(cmmCollection, new Padding(0, 0, 15, 0));
+                                                     _filterProgress = 10;
                                                  }));
 
-            _filterProgress = 9;
-
+            
         }
 
 
@@ -445,10 +450,11 @@ namespace ProcessFilter
             {
                 notepad = new XmlNotepad(path);
                 //notepad.StartPosition = FormStartPosition.CenterScreen;
-                notepad.TopMost = true;
+                //notepad.TopMost = true;
                 notepad.Location = this.Location;
                 notepad.WindowState = FormWindowState.Maximized;
-                notepad.Show(this);
+                //notepad.Show(this);
+                notepad.Show();
             }
             else
             {

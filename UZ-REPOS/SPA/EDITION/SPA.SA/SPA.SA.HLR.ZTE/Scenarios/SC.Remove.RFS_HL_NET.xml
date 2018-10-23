@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="SC.Remove.RFS_HL_NET">
+  <objectList>
+    <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll"/>
+  </objectList>
+  <automat>
+    <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
+      <resultlist>
+        <result value="0" node="GPRSAPN_Delete"/>
+        <result value="1" node=""/>
+      </resultlist>
+    </node>
+    <node name="GPRSAPN_Delete" object="IfCommander">
+      <resultlist>
+        <result value="0" node="GPRSNAM_Modify"/>
+        <result value="1538" node="CorporateAPN_Delete"/>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//RFS_HL_NET/RES_HL_NET_SERVICE[Value()='GPRS']"/>
+        <param name="Command" value="SC.GPRSAPN_Delete"/>
+      </parameterslist>
+    </node>
+    <node name="CorporateAPN_Delete" object="Commander">
+      <resultlist>
+        <result value="0" node="DataBaseProcessorDELETENUM"/>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.CorporateAPN_Delete"/>
+      </parameterslist>
+    </node>
+    <node name="DataBaseProcessorDELETENUM" object="DataBaseProcessor">
+      <resultlist>
+        <result value="" node="GPRSNAM_Modify"/>
+      </resultlist>
+      <parameterslist>
+        <param name="DataBaseName" value="FORIS.SPA.ARCHIVE"/>
+        <param name="FunctionName" value="CORPORATE_APN_DELETE"/>
+        <param name="FunctionType" value="procedure"/>
+        <param name="OutXml" value="db_unit_result"/>
+        <param name="DbParameterName:0" value="p_msisdn"/>
+        <param name="DbParameterDirection:0" value="Input"/>
+        <param name="DbParameterType:0" value="Varchar2"/>
+        <param name="DbParameterXpathValue:0" value="//IdentifiersList/Identifier/MSISDN" />
+      </parameterslist>
+    </node>
+    <node name="GPRSNAM_Modify" object="Commander">
+      <resultlist>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.GPRSNAM_Modify"/>
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="RequestCutterBySubscribers"/>
+      </resultlist>
+    </node>
+  </automat>
+</scenario>

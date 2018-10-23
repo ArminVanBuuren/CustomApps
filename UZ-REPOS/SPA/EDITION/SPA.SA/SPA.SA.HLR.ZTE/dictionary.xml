@@ -33,11 +33,18 @@
   </RegexpsList>
   <ConstantsList/>
   <ParametersList>
-    <Parameter Name="GPRS_STATUS">
-      <Source Path="//RES_HL_GPRS/Value"/>
-      <PossibleValues StringToKeyTable="true">
-        <Item Key="0" StringValue="Activate"/>
-        <Item Key="1" StringValue="Deactivate"/>
+    <Parameter Name="NET_STATUS" IsChoice="true" AbsenceValue="">
+      <Source Path="//AddList/RFS_HL_NET" PostFormat="0" />
+      <Source Path="//RemoveList/RFS_HL_NET" PostFormat="1" />
+      <Source Path="//ModifyList/RFS_HL_NET[Value()!='Suspend']" PostFormat="0" />
+      <Source Path="//ModifyList/RFS_HL_NET[Value()='Suspend']" PostFormat="1" />
+    </Parameter>
+    <Parameter Name="CORPORATE_APN">
+      <Source Path="//RFS_HL_NET/RES_HL_NET_SERVICE"/>
+      <PossibleValues StringToKeyTable="false">
+        <Item Key="FRCORPAPN" StringValue="TEST.LTE"/>
+        <Item Key="FRAPNXB" StringValue="XB.APN.UZ"/>
+        <Item Key="FRAPNZIYOD" StringValue="ZIYOD.UMS.UZ"/>
       </PossibleValues>
     </Parameter>
     <Parameter Name="DEFAULT_APN">
@@ -49,14 +56,6 @@
     <Parameter Name="REDUCE_SPEED_QOSID" IsChoice="true" AbsenceValue="">
       <Source Path="//AddList/RFS_HL_LIMITSPEED" PostFormat="107" />
       <Source Path="//RemoveList/RFS_HL_LIMITSPEED" PostFormat="100" />
-    </Parameter>
-    <Parameter Name="CORPORATE_APN">
-      <Source Path="//RFS_HL_CORP_APN/RES_HL_CORP_APN_SERVICE"/>
-      <PossibleValues StringToKeyTable="false">
-        <Item Key="FRCORPAPN" StringValue="TEST.LTE"/>
-        <Item Key="FRAPNXB" StringValue="XB.APN.UZ"/>
-        <Item Key="FRAPNZIYOD" StringValue="ZIYOD.UMS.UZ"/>
-      </PossibleValues>
     </Parameter>
     <Parameter Name="IP">
       <Source Path="//AdditionalData/IP"/>

@@ -4,11 +4,11 @@
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
   <Request>
     <RequestTemplate>
-      <![CDATA[Mod BscEx:MSISDN=##msisdn##,BPOS=##GPRS_STATUS##;^M]]>
+      <![CDATA[Mod BscEx:MSISDN=##msisdn##,BPOS=##NET_STATUS##;^M]]>
     </RequestTemplate>
     <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
     <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="GPRS_STATUS" Type="Parameter"/>
+    <Item Name="NET_STATUS" Type="Parameter"/>
   </Request>
   <ErrorsList CodePage="windows-1251" />
 </Command>

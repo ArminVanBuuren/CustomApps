@@ -141,6 +141,7 @@
     <Content Include="EDITION\ROBP\Processes\Synchronize Subscriber Data.xml" />
     <Content Include="EDITION\ROBP\Processes\Unblock Subscriber.xml" />
     <Content Include="EDITION\ROBP\SRI\SC-SCG\ServiceCatalog-SCG.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CancelLocation.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.GPRSAPNDealer_Add.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.GPRSAPNDealer_Delete.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.StaticIPDealer_Delete.xml" />
@@ -152,8 +153,6 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CorporateAPN_Delete.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CorporateAPN_IP_Add.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CorporateAPN_Add.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.GPRSNAM_Delete.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.GPRSNAM_Add.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.DataCDA_Delete.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.DataCDA_Add.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.Tele_Delete.xml" />
@@ -200,15 +199,13 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CallForwarding_Activate.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.StaticIP_Delete.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.StaticIP_Add.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Add.RFS_HL_CORP_APN.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Remove.RFS_HL_CORP_APN.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Remove.RFS_HL_CALLS_SUSPEND.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Add.RFS_HL_CALLS_SUSPEND.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.ModifyLimitSpeed.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Add.RFS_HL_PLSS_SUSPEND.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Remove.RFS_HL_LTE.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Add.RFS_HL_LTE.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Modify.RFS_HL_GPRS.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.ModifyNET.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.ModifySMS.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.ModifyODB.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Add.RFS_HL_CLIR.xml" />
@@ -230,8 +227,8 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Add.RFS_HL_VIDEOCALL.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Add.RFS_HL_ROAMING.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.CallForwardingAssign.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Remove.RFS_HL_GPRS.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Add.RFS_HL_GPRS.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Remove.RFS_HL_NET.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Add.RFS_HL_NET.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Remove.RFS_HL_ROAMING.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Remove.RFS_HL_RBT.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Add.RFS_HL_RBT.xml" />
@@ -245,6 +242,8 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.MCA\Scenarios\SC.Add.RFS_MA_SUBSCRIPTION.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MCA\Scenarios\SC.Remove.RFS_MA_SUBSCRIPTION.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MST\Scenarios\SC.CT4.ChangeMSISDN.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.RBT.INTECH\Commands\SC.RBT.Modify.Subscriber.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.RBT.INTECH\Scenarios\SC.RBT.Modify.Subscriber.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Commands\SCG.Add.Subscriber.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Commands\SCG.Delete.Subscriber.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCG\Commands\SCGS.Add.Product.xml" />
@@ -1671,8 +1670,6 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.RBT.INTECH\configuration.application.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.RBT.INTECH\configuration.common.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.RBT.INTECH\dictionary.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.RBT.INTECH\Emulation\printout.failure.txt" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.RBT.INTECH\Emulation\printout.success.txt" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCG\configuration.application.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCG\configuration.common.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SCG\dictionary.xml" />
@@ -2941,8 +2938,6 @@
     <Folder Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SubScenarios\" />
     <Folder Include="EDITION\SPA.SA\SPA.SA.MG\Commands\" />
     <Folder Include="EDITION\SPA.SA\SPA.SA.MG\Scenarios\" />
-    <Folder Include="EDITION\SPA.SA\SPA.SA.RBT.INTECH\Commands\" />
-    <Folder Include="EDITION\SPA.SA\SPA.SA.RBT.INTECH\Scenarios\" />
     <Folder Include="EDITION\SPA.SA\SPA.SA.SMSC\Commands\" />
     <Folder Include="EDITION\SPA.SA\SPA.SA.SMSC\Scenarios\" />
     <Folder Include="PROD-2018.09.06\SPA.SA\Dictionaries\IVR\Caller\Decoders\" />
