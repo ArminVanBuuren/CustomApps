@@ -24,7 +24,7 @@
         <result value="" node="DataBaseProcessorADDNUM"/>
       </resultlist>
       <parameterslist>
-        <param name="IfXmlPath:0" value="//RFS_HL_PART_APN"/>
+        <param name="IfXmlPath:0" value="//RFS_HL_SUBSCRIPTION/Value[text()='DillerAPN']"/>
       </parameterslist>
     </node>
     <node name="DataBaseProcessorADDNUM" object="DataBaseProcessor">

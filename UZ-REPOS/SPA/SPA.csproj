@@ -141,9 +141,14 @@
     <Content Include="EDITION\ROBP\Processes\Synchronize Subscriber Data.xml" />
     <Content Include="EDITION\ROBP\Processes\Unblock Subscriber.xml" />
     <Content Include="EDITION\ROBP\SRI\SC-SCG\ServiceCatalog-SCG.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CreateSubscriber.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.DeleteSubscriberByIMSI.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.DeleteSubscriberByMSISDN.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CancelLocation.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.GPRSAPNDealer_Add.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.GPRSAPNDealer_Delete.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.GPRSAPN_MYUMS_Delete.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.GPRSAPN_MYUMS_Add.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.StaticIPDealer_Delete.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.StaticIP_Delete.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.StaticIPDealer_Add.xml" />
@@ -197,8 +202,11 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CallForwarding_Delete.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CallForwarding_Add.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CallForwarding_Activate.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Add.RFS_HL_SUBSCRIPTION.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Add.RFS_NEW_SCG.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.StaticIP_Delete.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.StaticIP_Add.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Remove.RFS_NEW_SCG.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Remove.RFS_HL_CALLS_SUSPEND.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Add.RFS_HL_CALLS_SUSPEND.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.ModifyLimitSpeed.xml" />

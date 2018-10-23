@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="SC.Add.RFS_HL_SUBSCRIPTION">
+  <objectList>
+    <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+  </objectList>
+  <automat>
+    <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
+      <resultlist>
+        <result value="0" node="DeleteSubscriberByMSISDN"/>
+        <result value="1" node=""/>
+      </resultlist>
+    </node>
+    <node name="DeleteSubscriberByMSISDN" object="Commander">
+      <resultlist>
+        <result value="0" node="DeleteSubscriberByIMSI"/>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.DeleteSubscriberByMSISDN"/>
+      </parameterslist>
+    </node>
+    <node name="DeleteSubscriberByIMSI" object="Commander">
+      <resultlist>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.DeleteSubscriberByIMSI"/>
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="RequestCutterBySubscribers"/>
+      </resultlist>
+    </node>
+  </automat>
+</scenario>

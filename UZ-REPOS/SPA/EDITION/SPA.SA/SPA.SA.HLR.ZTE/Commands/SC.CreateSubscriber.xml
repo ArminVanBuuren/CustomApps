@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="SC.CreateSubscriber" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>Создание абонента</Description>
+  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
+  <Request>
+    <RequestTemplate>
+      <![CDATA[ADD User:IMSI=##imsi##,MSISDN=##msisdn##,Profile=##HLR_PROFILE##;^M]]>
+    </RequestTemplate>
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="msisdn"      Type="Wellknown"/>
+    <Item Name="imsi"        Type="Wellknown"/>
+    <Item Name="HLR_PROFILE" Type="LocalParameter"/>
+  </Request>
+  <ParametersList>
+    <Parameter Name="HLR_PROFILE">
+      <Source Path="//RES_HL_SUBSCRIPTION_PROFILE"/>
+      <PossibleValues StringToKeyTable="false">
+        <Item Key="Postpaid" StringValue="51"/>
+        <Item Key="Prepaid" StringValue="55"/>
+        <Item Key="AIISKUE" StringValue="10"/>
+        <Item Key="DillerAPN" StringValue="20"/>
+        <Item Key="DGU" StringValue="11"/>
+      </PossibleValues>
+    </Parameter>
+  </ParametersList>
+  <ErrorsList CodePage="windows-1251" />
+</Command>

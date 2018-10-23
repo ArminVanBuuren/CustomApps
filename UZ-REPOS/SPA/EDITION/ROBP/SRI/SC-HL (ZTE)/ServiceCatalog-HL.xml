@@ -19,6 +19,7 @@
     <Resource name="RES_HL_NET_SERVICE" description="Барринг на GPRS"/>
     <Resource name="RES_HL_DEFAULT_APN" description="Название точки доступа (Access Point Name)"/>
     <Resource name="RES_HL_DEALER_APN" description="Название дилерской точки доступа (Access Point Name)"/>
+    <Resource name="RES_HL_SUBSCRIPTION_PROFILE" description="Профиль абонента на HLR"/>
   </ResourceList>
   <RFSParameterList>
     <RFSParameter name="CallForwardType" description="Тип установки переадресаций" />
@@ -92,7 +93,28 @@
       <RFSParameter name="ForwardedToNumber" value="998970000007" />
     </RFS>
     <!--END ==== Call Forwarding ====-->
-    
+
+    <!--START ==== SUBSCRIPTION ====-->
+    <RFS name="RFS_HL_SUBSCRIPTION" processType="Subscription" hostType="HL" description="Создание абонента на HLR">
+      <Resource name="RES_HL_SUBSCRIPTION_PROFILE" useType="Mandatory" />
+    </RFS>
+    <RFS name="RFS_HL_SUBSCRIPTION_COMMON" parent="RFS_HL_SUBSCRIPTION" hostType="HL" description="Услуга передачи данных ТП ДГУ">
+      <Resource name="RES_HL_SUBSCRIPTION_PROFILE" useType="Mandatory" >
+        <Value hosts="FP:05" value="Postpaid"/>
+        <Value hosts="FP:MS" value="Prepaid"/>
+      </Resource>
+    </RFS>
+    <RFS name="RFS_HL_SUBSCRIPTION_AIISKUE" parent="RFS_HL_SUBSCRIPTION" hostType="HL" description="Создание абонентов ASKUE - АИИСКУЭ">
+      <Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="AIISKUE" useType="Mandatory" />
+    </RFS>
+    <RFS name="RFS_HL_SUBSCRIPTION_PARTAPN" parent="RFS_HL_SUBSCRIPTION" hostType="HL" description="Создание абонентов Partner APN">
+      <Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="DillerAPN" useType="Mandatory" />
+    </RFS>
+    <RFS name="RFS_HL_SUBSCRIPTION_DGU" parent="RFS_HL_SUBSCRIPTION" hostType="HL" description="Создание абонента ТП ДГУ">
+      <Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="DGU" useType="Mandatory" />
+    </RFS>
+    <!--END ==== SUBSCRIPTION ====-->
+
     <!--START ==== INTERNET ====-->
     <RFS name="RFS_HL_NET" hostType="HL" description="Мобильный интернет">
       <Resource name="RES_HL_NET_SERVICE" useType="Mandatory" />
@@ -120,7 +142,9 @@
       <Resource name="RES_HL_DEFAULT_APN" value="NET.UMS.UZ" useType="Mandatory" />
       <Resource name="RES_HL_DEALER_APN" value="DEALERS.UMS.UZ" useType="Mandatory" />
     </RFS>
-    <RFS name="RFS_HL_PART_APN" hostType="HL" description="Создание абонентов Partner APN"/>
+    <RFS name="RFS_NEW_SCG" hostType="HL" description="Новый SCG">
+      <Resource name="RES_HL_DEFAULT_APN" value="MY.UMS.UZ" useType="Mandatory" />
+    </RFS>
     <!--END ==== INTERNET ====-->
     
     <!--START ==== SIMPLE SERVICE ====-->
@@ -195,7 +219,21 @@
       <RFS name="RFS_HL_CFD" linkType="Add" />
     </CFS>
     <!--END ==== Call Fworwarding ====-->
-    
+
+    <!--START ==== SUBSCRIPTION ====-->
+    <CFS name="Subscriber" type="ManagedObject" description="Абонент на HLR" >
+      <RFS name="RFS_HL_SUBSCRIPTION_COMMON" linkType="Add" />
+    </CFS>
+    <CFS name="FRASKUE" type="ManagedObject" description="Создание абонентов ASKUE - АИИСКУЭ">
+      <RFS name="RFS_HL_SUBSCRIPTION_AIISKUE" linkType="Add" />
+    </CFS>
+    <CFS name="FRPARTAPN" type="ManagedObject" description="Создание абонентов Partner APN">
+      <RFS name="RFS_HL_SUBSCRIPTION_PARTAPN" linkType="Add" />
+    </CFS>
+    <CFS name="FRDGU" type="ManagedObject" description="Услуга передачи данных ТП ДГУ">
+      <RFS name="RFS_HL_SUBSCRIPTION_DGU" linkType="Add" />
+    </CFS>
+    <!--END ==== SUBSCRIPTION ====-->
     
     <!--START ==== INTERNET ====-->
     <CFS name="CB406278" description="Мобильный интернет GPRS">
@@ -210,17 +248,17 @@
     <CFS name="FRIP" description="Статический IP адрес">
       <RFS name="RFS_HL_STATIC_IP" linkType="Add" dependsOn="RFS_HL_NET_GPRS" />
     </CFS>
-    <CFS name="FRCORPAPN" description="Корпоративный APN">
+    <CFS name="FRNEWSCG" description="Новый SCG">
+      <RFS name="RFS_NEW_SCG" linkType="Add" dependsOn="RFS_HL_NET_GPRS"  />
+    </CFS>
+    <CFS name="FRCORPAPN" priority="9999" description="Корпоративный APN">
       <RFS name="RFS_HL_NET_CORP_APN_BS" linkType="Add" />
     </CFS>
-    <CFS name="FRAPNXB" description="Корпоративный APN Халк Банк">
+    <CFS name="FRAPNXB" priority="9998" description="Корпоративный APN Халк Банк">
       <RFS name="RFS_HL_NET_CORP_APN_XB" linkType="Add" />
     </CFS>
-    <CFS name="FRAPNZIYOD" description="Корпоративный APN Ziyod">
+    <CFS name="FRAPNZIYOD" priority="9997" description="Корпоративный APN Ziyod">
       <RFS name="RFS_HL_NET_CORP_APN_ZD" linkType="Add" />
-    </CFS>
-    <CFS name="FRPARTAPN" description="Создание абонентов Partner APN">
-      <RFS name="RFS_HL_PART_APN" linkType="Add" />
     </CFS>
     <!--END ==== INTERNET ====-->
     
@@ -263,12 +301,6 @@
     <CFS name="FRANTIOP" description="Запрет определения номера">
       <RFS name="RFS_HL_CLIR" linkType="Add" />
     </CFS>
-    <CFS name="FRZAPRETGS" description="Запрет голосовой связи">
-      <RFS name="RFS_HL_CALLS_SUSPEND" linkType="Add" />
-    </CFS>
-    <CFS name="CB2986" description="Запрет вызова">
-      <RFS name="RFS_HL_CALLS_SUSPEND" linkType="Add" />
-    </CFS>
     <!--END ==== SIMPLE SERVICE ====-->
 
     
@@ -279,13 +311,19 @@
     <CFS name="FRMGDOSTUP" description="Междугородный доступ">
       <RFS name="RFS_HL_ODB_OC_INTERCITY_CALLS" linkType="Add" />
     </CFS>
-    <CFS name="FRPARTBL" isMarker="true" description="Частичная блокировка">
+    <CFS name="FRZAPRETGS" description="Запрет голосовой связи">
+      <RFS name="RFS_HL_CALLS_SUSPEND" linkType="Add" />
+    </CFS>
+    <CFS name="CB2986" description="Запрет вызова">
+      <RFS name="RFS_HL_CALLS_SUSPEND" linkType="Add" />
+    </CFS>
+    <CFS name="FRPARTBL" priority="1" isMarker="true" description="Частичная блокировка">
       <RFS name="RFS_HL_ODB_OC_NONE" linkType="Add" />
       <RFS name="RFS_HL_SMS_OC_NONE" linkType="Modify" />
       <RFS name="RFS_HL_NET_SUSPEND" linkType="Modify" />
     </CFS>
-    <CFS name="FRBLOUTGO" copyOf="FRPARTBL" description="Предварительная ФРОД блокировка"/>
-    <CFS name="FRBLKFIN" isMarker="true" description="Принудительная блокировка">
+    <CFS name="FRBLOUTGO" priority="1" copyOf="FRPARTBL" description="Предварительная ФРОД блокировка"/>
+    <CFS name="FRBLKFIN" priority="1" isMarker="true" description="Принудительная блокировка">
       <RFS name="RFS_HL_ODB_OC_NONE" linkType="Add" />
       <RFS name="RFS_HL_ODB_IC_NONE" linkType="Add" />
       <RFS name="RFS_HL_SMS_OC_NONE" linkType="Modify" />
@@ -293,13 +331,13 @@
       <RFS name="RFS_HL_NET_SUSPEND" linkType="Modify" />
       <RFS name="RFS_HL_ROAMING" linkType="Remove" />
     </CFS>
-    <CFS name="FRBLKINIT" copyOf="FRBLKFIN" description="Первоначальная блокировка"/>
-    <CFS name="FRBLKPAY" copyOf="FRBLKFIN" description="Принудительная блокировка по неоплате счета"/>
-    <CFS name="FRBLKUSER" copyOf="FRBLKFIN" description="Добавление  услуги  Добровольная блокировка"/>
-    <CFS name="FRBLKTIME" copyOf="FRBLKFIN" description="Блокировка срок годности комплекта истек"/>
-    <CFS name="BLTDLIM" copyOf="FRBLKFIN" description="Блокировка по превышению локального лимита"/>
-    <CFS name="FRBLKNAR" copyOf="FRBLKFIN" description="Блокировка за нарушение договорных обязательств"/>
-    <CFS name="FRTECHBLK" isMarker="true" description="Технологическая блокировка">
+    <CFS name="FRBLKINIT" priority="1" copyOf="FRBLKFIN" description="Первоначальная блокировка"/>
+    <CFS name="FRBLKPAY" priority="1" copyOf="FRBLKFIN" description="Принудительная блокировка по неоплате счета"/>
+    <CFS name="FRBLKUSER" priority="1" copyOf="FRBLKFIN" description="Добавление  услуги  Добровольная блокировка"/>
+    <CFS name="FRBLKTIME" priority="1" copyOf="FRBLKFIN" description="Блокировка срок годности комплекта истек"/>
+    <CFS name="BLTDLIM" priority="1" copyOf="FRBLKFIN" description="Блокировка по превышению локального лимита"/>
+    <CFS name="FRBLKNAR" priority="1" copyOf="FRBLKFIN" description="Блокировка за нарушение договорных обязательств"/>
+    <CFS name="FRTECHBLK" priority="1" isMarker="true" description="Технологическая блокировка">
       <RFS name="RFS_HL_ODB_OC_NONE" linkType="Add" />
       <RFS name="RFS_HL_ODB_IC_NONE" linkType="Add" />
       <RFS name="RFS_HL_SMS_OC_NONE" linkType="Modify" />
@@ -308,14 +346,17 @@
       <RFS name="RFS_HL_ROAMING" linkType="Remove" />
       <RFS name="RFS_HL_PLSS_SUSPEND" linkType="Add" />
     </CFS>
-    <CFS name="FRBLKCHK" copyOf="FRTECHBLK" description="Блокировка проверка"/>
-    <CFS name="FRBLKFROD" copyOf="FRTECHBLK" description="Фрод блокировка"/>
-    <CFS name="FRBLKDZ" copyOf="FRTECHBLK" description="Блокировка при ДЗ свыше 90 дней"/>
+    <CFS name="FRBLKCHK" priority="1" copyOf="FRTECHBLK" description="Блокировка проверка"/>
+    <CFS name="FRBLKFROD" priority="1" copyOf="FRTECHBLK" description="Фрод блокировка"/>
+    <CFS name="FRBLKDZ" priority="1" copyOf="FRTECHBLK" description="Блокировка при ДЗ свыше 90 дней"/>
     <!--END ==== Барринги и голос ====-->
-    
-    <CFS name="Subscriber" type="ManagedObject" description="Абонент" />
   </CFSList>
   <CFSGroupList>
+    <CFSGroup name="CFS_GROUP_SUBSCRIPTION" type="Mutex" description="Группа взаимоисключающих услуг при создания абонента на HLR">
+      <CFS name="FRASKUE" />
+      <CFS name="FRPARTAPN" />
+      <CFS name="FRDGU" />
+    </CFSGroup>
     <CFSGroup name="CFS_GROUP_GPRS_CORPAPN_BS" type="Mutex" description="Группа взаимоисключающих услуг GPRS и Корпортативный APN">
       <CFS name="CB406278" />
       <CFS name="FRCORPAPN" />
@@ -330,40 +371,20 @@
     </CFSGroup>
   </CFSGroupList>
   <RestrictionList>
-    <Restriction name="RESTRICTION_ROAMING_LTE" description="Невозможно добавить одновременно LTE и роуминг, т.к. взаимоисключающие сервисы">
+    <Restriction name="RESTRICTION_ROAMING_LTE" description="Невозможно добавить одновременно LTE и роуминг, т.к. это взаимоисключающие сервисы">
       <RFS name="RFS_HL_LTE" scenarioType="Add" />
       <RFS name="RFS_HL_ROAMING" scenarioType="Add" />
-    </Restriction>
-    <Restriction name="RESTRICTION_ROAMING_LTE" description="Невозможно добавить одновременно GPRS и корпоративный интернет, т.к. взаимоисключающие сервисы">
-      <RFS name="RFS_HL_NET_GPRS" scenarioType="Add" />
-      <RFS name="RFS_HL_CORP_APN" scenarioType="Add" />
     </Restriction>
   </RestrictionList>
   <RFSGroupList />
   <RFSDependencyList />
   <HandlerList>
-    <Handler name="MERGE_RFS_HL_ODB_OC_SUSPEND_ALL" type="MergeRFS" description="Блок всей исх. связи">
+    <!--<Handler name="RecreateSubscriberOnHL" type="RecreateSubscriber" description="Обработчик RFS для пересоздания абонента на HLR">
       <Configuration>
-        <RFS type="Source" name="RFS_HL_ODB_OC_NONE"/>
-        <RFS type="Source" name="RFS_HL_ODB_OC_INTERCITY_CALLS"/>
-        <RFS type="Source" name="RFS_HL_ODB_OC_INTERNATIONAL_CALLS"/>
-        <RFS type="Result" name="RFS_HL_ODB_OC_NONE"/>
+        <RFS name="RFS_HL_SUBSCRIPTION" action="Remove" order="-10" />
+        <RFS name="RFS_HL_SUBSCRIPTION" action="Add" order="10" />
       </Configuration>
-    </Handler>
-    <Handler name="MERGE_RFS_HL_ODB_OC_SUSPEND_INTERCITY" type="MergeRFS" description="Блок всей исх. связи">
-      <Configuration>
-        <RFS type="Source" name="RFS_HL_ODB_OC_NONE"/>
-        <RFS type="Source" name="RFS_HL_ODB_OC_INTERCITY_CALLS"/>
-        <RFS type="Result" name="RFS_HL_ODB_OC_NONE"/>
-      </Configuration>
-    </Handler>
-    <Handler name="MERGE_RFS_HL_ODB_OC_SUSPEND_INTERNATIONAL" type="MergeRFS" description="Блок всей исх. связи">
-      <Configuration>
-        <RFS type="Source" name="RFS_HL_ODB_OC_NONE"/>
-        <RFS type="Source" name="RFS_HL_ODB_OC_INTERNATIONAL_CALLS"/>
-        <RFS type="Result" name="RFS_HL_ODB_OC_NONE"/>
-      </Configuration>
-    </Handler>
+    </Handler>-->
     <Handler name="MERGE_RFS_HL_ODB_OC_INTERNATIONAL" type="MergeRFS" description="Исх. международный доступ">
       <Configuration>
         <RFS type="Source" name="RFS_HL_ODB_OC_INTERNATIONAL_CALLS"/>
@@ -371,77 +392,30 @@
         <RFS type="Result" name="RFS_HL_ODB_OC_INTERNATIONAL_CALLS"/>
       </Configuration>
     </Handler>
-    <Handler name="MERGE_RFS_HL_SMS_OC" type="MergeRFS" description="Блокировка исх. смс">
+
+    <!--<Handler name="test1" type="MergeRFS" description="Исх. международный доступ">
       <Configuration>
-        <RFS type="Source" name="RFS_HL_SMS_OC_NONE"/>
-        <RFS type="Source" name="RFS_HL_SMS_OC_ACCESS"/>
-        <RFS type="Result" name="RFS_HL_SMS_OC_NONE"/>
+        <RFS type="Source" name="RFS_HL_SUBSCRIPTION_AIISKUE"/>
+        <RFS type="Source" name="RFS_HL_SUBSCRIPTION_COMMON"/>
+        <RFS type="Result" name="RFS_HL_SUBSCRIPTION_AIISKUE"/>
       </Configuration>
     </Handler>
-    <Handler name="MERGE_RFS_HL_SMS_IC" type="MergeRFS" description="Блокировка вх. смс">
+    <Handler name="test2" type="MergeRFS" description="Исх. международный доступ">
       <Configuration>
-        <RFS type="Source" name="RFS_HL_SMS_IC_NONE"/>
-        <RFS type="Source" name="RFS_HL_SMS_IC_ACCESS"/>
-        <RFS type="Result" name="RFS_HL_SMS_IC_NONE"/>
+        <RFS type="Source" name="RFS_HL_SUBSCRIPTION_PARTAPN"/>
+        <RFS type="Source" name="RFS_HL_SUBSCRIPTION_COMMON"/>
+        <RFS type="Result" name="RFS_HL_SUBSCRIPTION_PARTAPN"/>
       </Configuration>
     </Handler>
-    <Handler name="MERGE_RFS_HL_BLOCK_NET_1" type="MergeRFS" description="Блокировка GPRS">
+    <Handler name="test3" type="MergeRFS" description="Исх. международный доступ">
       <Configuration>
-        <RFS type="Source" name="RFS_HL_NET_SUSPEND"/>
-        <RFS type="Source" name="RFS_HL_NET_GPRS"/>
-        <RFS type="Result" name="RFS_HL_NET_SUSPEND"/>
+        <RFS type="Source" name="RFS_HL_SUBSCRIPTION_DGU"/>
+        <RFS type="Source" name="RFS_HL_SUBSCRIPTION_COMMON"/>
+        <RFS type="Result" name="RFS_HL_SUBSCRIPTION_DGU"/>
       </Configuration>
-    </Handler>
-    <Handler name="MERGE_RFS_HL_BLOCK_NET_2" type="MergeRFS" description="Корпоративный интернет и блокировка">
-      <Configuration>
-        <RFS type="Source" name="RFS_HL_NET_SUSPEND"/>
-        <RFS type="Source" name="RFS_HL_NET_CORP_APN_BS"/>
-        <RFS type="Result" name="RFS_HL_NET_SUSPEND"/>
-      </Configuration>
-    </Handler>
-    <Handler name="MERGE_RFS_HL_BLOCK_NET_3" type="MergeRFS" description="Корпоративный интернет и блокировка">
-      <Configuration>
-        <RFS type="Source" name="RFS_HL_NET_SUSPEND"/>
-        <RFS type="Source" name="RFS_HL_NET_CORP_APN_XB"/>
-        <RFS type="Result" name="RFS_HL_NET_SUSPEND"/>
-      </Configuration>
-    </Handler>
-    <Handler name="MERGE_RFS_HL_BLOCK_NET_4" type="MergeRFS" description="Корпоративный интернет и блокировка">
-      <Configuration>
-        <RFS type="Source" name="RFS_HL_NET_SUSPEND"/>
-        <RFS type="Source" name="RFS_HL_NET_CORP_APN_ZD"/>
-        <RFS type="Result" name="RFS_HL_NET_SUSPEND"/>
-      </Configuration>
-    </Handler>
-    <Handler name="MERGE_RFS_HL_NET_CORP_APN_1" type="MergeRFS" description="Корпоративный интернет 1">
-      <Configuration>
-        <RFS type="Source" name="RFS_HL_NET_CORP_APN_BS"/>
-        <RFS type="Source" name="RFS_HL_NET_CORP_APN_XB"/>
-        <RFS type="Source" name="RFS_HL_NET_CORP_APN_ZD"/>
-        <RFS type="Result" name="RFS_HL_NET_CORP_APN_ZD"/>
-      </Configuration>
-    </Handler>
-    <Handler name="MERGE_RFS_HL_NET_CORP_APN_2" type="MergeRFS" description="Корпоративный интернет 2">
-      <Configuration>
-        <RFS type="Source" name="RFS_HL_NET_CORP_APN_XB"/>
-        <RFS type="Source" name="RFS_HL_NET_CORP_APN_ZD"/>
-        <RFS type="Result" name="RFS_HL_NET_CORP_APN_ZD"/>
-      </Configuration>
-    </Handler>
-    <Handler name="MERGE_RFS_HL_NET_CORP_APN_3" type="MergeRFS" description="Корпоративный интернет 3">
-      <Configuration>
-        <RFS type="Source" name="RFS_HL_NET_CORP_APN_BS"/>
-        <RFS type="Source" name="RFS_HL_NET_CORP_APN_ZD"/>
-        <RFS type="Result" name="RFS_HL_NET_CORP_APN_ZD"/>
-      </Configuration>
-    </Handler>
-    <Handler name="MERGE_RFS_HL_NET_CORP_APN_4" type="MergeRFS" description="Корпоративный интернет 4">
-      <Configuration>
-        <RFS type="Source" name="RFS_HL_NET_CORP_APN_BS"/>
-        <RFS type="Source" name="RFS_HL_NET_CORP_APN_XB"/>
-        <RFS type="Result" name="RFS_HL_NET_CORP_APN_XB"/>
-      </Configuration>
-    </Handler>
+    </Handler>-->
+
+
   </HandlerList>
   <ScenarioList>
     <!--START ==== Call Fworwarding ====-->
@@ -460,8 +434,14 @@
       <RFS name="RFS_HL_CFD" scenarioType="Remove" />
     </Scenario>
     <!--END ==== Call Fworwarding ====-->
-    
-    
+
+    <!--START ==== SUBSCRIPTION ====-->
+    <!--<Scenario name="HL.CreateSubscriber" description="Создание абонента на HLR">
+      <RFS name="RFS_HL_SUBSCRIPTION" scenarioType="Add" />
+      <Append name="RFS_HL_ROAMING" listType="EndList" />
+    </Scenario>-->
+    <!--END ==== SUBSCRIPTION ====-->
+
     <!--START ==== INTERNET ====-->
     <Scenario name="HL.ModifyNET" description="Блокировка или разблокировка сервисов интернет">
       <RFS name="RFS_HL_NET" scenarioType="Modify" />
@@ -473,12 +453,12 @@
     </Scenario>
     <Scenario name="HL.StaticIP_Add" description="Добавить статический IP адрес">
       <RFS name="RFS_HL_STATIC_IP" scenarioType="Add" />
-      <Append name="RFS_HL_PART_APN" listType="EndList" />
+      <Append name="RFS_HL_SUBSCRIPTION" listType="EndList" />
       <Append name="RFS_HL_LTE" listType="EndList" />
     </Scenario>
     <Scenario name="HL.StaticIP_Delete" description="Удалить статический IP адрес">
       <RFS name="RFS_HL_STATIC_IP" scenarioType="Remove" />
-      <Append name="RFS_HL_PART_APN" listType="EndList" />
+      <Append name="RFS_HL_SUBSCRIPTION" listType="EndList" />
       <Append name="RFS_HL_LTE" listType="EndList" />
     </Scenario>
     <!--END ==== INTERNET ====-->
