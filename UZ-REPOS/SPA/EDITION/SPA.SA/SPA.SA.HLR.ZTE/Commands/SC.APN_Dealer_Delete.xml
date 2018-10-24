@@ -1,14 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="SC.CorporateAPN_Delete" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Description></Description>
+<Command Name="SC.APN_Dealer_Delete" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>Удаление услуги 'GPRS'APN_DEALER</Description>
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
   <Request>
     <RequestTemplate>
-      <![CDATA[Del PDP:MSISDN=##msisdn##,OAPN=##CORPORATE_APN##,OPDPTYPE=0,OADDROPTION=1;^M]]>
+      <![CDATA[SET TPLGPRS:MSISDN=##msisdn##,GPRSTPLDEL=20;^M]]>
     </RequestTemplate>
     <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
     <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="CORPORATE_APN" Type="Parameter"/>
   </Request>
   <ErrorsList CodePage="windows-1251" />
 </Command>

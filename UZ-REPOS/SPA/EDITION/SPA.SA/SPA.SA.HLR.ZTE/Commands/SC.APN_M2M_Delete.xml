@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="SC.GPRSAPN_MYUMS_Add" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Description>Добавление услуги 'GPRS'APN_MYUMS</Description>
+<Command Name="SC.APN_M2M_Delete" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>Удаление услуги 'GPRS'APN_M2M</Description>
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
   <Request>
     <RequestTemplate>
-      <![CDATA[Add PDP:MSISDN=##msisdn##,PDPType=0,APN=##DEFAULT_APN##,QOSID=100;^M]]>
+      <![CDATA[Del PDP:MSISDN=##msisdn##,OAPN=##NET_APN##,OPDPTYPE=0;^M]]>
     </RequestTemplate>
     <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
     <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="DEFAULT_APN" Type="Parameter"/>
+    <Item Name="NET_APN" Type="Parameter"/>
   </Request>
   <ErrorsList CodePage="windows-1251" />
 </Command>

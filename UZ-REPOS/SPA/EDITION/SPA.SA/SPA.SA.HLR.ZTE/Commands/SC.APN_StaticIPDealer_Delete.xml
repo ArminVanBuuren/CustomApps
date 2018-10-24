@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="SC.StaticIP_Delete" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Description>Удалить статический IP</Description>
+<Command Name="SC.APN_StaticIPDealer_Delete" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>Удалить дилерский статический IP</Description>
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
   <Request>
     <RequestTemplate>
-      <![CDATA[MOD PDP:MSISDN=##msisdn##,OAPN=##DEFAULT_APN##,OPDPTYPE=0,OaddrOption=1,PDPAddr=0.0.0.0;^M]]>
+      <![CDATA[MOD PDP:MSISDN=##msisdn##,OAPN=##DEALER_APN##,OPDPTYPE=0,OaddrOption=1,PDPAddr=0.0.0.0;^M]]>
     </RequestTemplate>
     <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
     <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="DEFAULT_APN" Type="Parameter"/>
+    <Item Name="DEALER_APN" Type="Parameter"/>
   </Request>
   <ErrorsList CodePage="windows-1251" >
     <Error Name="104080" Value="SUCCESS"/> <!--Can not find the corresponding PDP information-->

@@ -1,15 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="SC.CorporateAPN_IP_Add" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Description></Description>
+<Command Name="SC.APN_MYUMS_Add" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>Добавление услуги 'GPRS'APN_MYUMS</Description>
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
   <Request>
     <RequestTemplate>
-      <![CDATA[MOD PDP:MSISDN=##msisdn##,OAPN=##CORPORATE_APN##,OPDPTYPE=0,PDPAddr=##IP##;^M]]>
+      <![CDATA[Add PDP:MSISDN=##msisdn##,PDPType=0,APN=##NET_APN##,QOSID=100;^M]]>
     </RequestTemplate>
     <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
     <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="CORPORATE_APN" Type="Parameter"/>
-    <Item Name="IP" Type="Parameter"/>
+    <Item Name="NET_APN" Type="Parameter"/>
   </Request>
   <ErrorsList CodePage="windows-1251" />
 </Command>

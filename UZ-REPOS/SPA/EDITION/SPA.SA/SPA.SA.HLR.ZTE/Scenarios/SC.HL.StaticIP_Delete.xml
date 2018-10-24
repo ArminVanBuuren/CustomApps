@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scenario name="SC.HL.StaticIP_Delete">
+<scenario name="SC.HL.APN_StaticIP_Delete">
   <objectList>
     <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
@@ -18,23 +18,23 @@
     </node>
     <node name="CheckPartAPN" object="IfMultipleXmlConditionsResolver">
       <resultlist>
-        <result value="0" node="StaticIPDealer_Delete"/>
-        <result value="" node="StaticIP_Delete"/>
+        <result value="0" node="APN_StaticIPDealer_Delete"/>
+        <result value="" node="APN_StaticIP_Delete"/>
       </resultlist>
       <parameterslist>
         <param name="IfXmlPath:0" value="//RFS_HL_SUBSCRIPTION/Value[text()='DillerAPN']"/>
       </parameterslist>
     </node>
-    <node name="StaticIP_Delete" object="Commander">
+    <node name="APN_StaticIP_Delete" object="Commander">
       <resultlist>
-        <result value="0" node="StaticIPLTE_Delete"/>
+        <result value="0" node="APN_StaticIPLTE_Delete"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SC.StaticIP_Delete"/>
+        <param name="Command" value="SC.APN_StaticIP_Delete"/>
       </parameterslist>
     </node>
-    <node name="StaticIPLTE_Delete" object="IfCommander">
+    <node name="APN_StaticIPLTE_Delete" object="IfCommander">
       <resultlist>
         <result value="0" node="DataBaseProcessorDELETENUM"/>
         <result value="1538" node="DataBaseProcessorDELETENUM"/>
@@ -42,7 +42,7 @@
       </resultlist>
       <parameterslist>
         <param name="IfXmlPath:0" value="//RFS_HL_LTE"/>
-        <param name="Command" value="SC.StaticIPLTE_Delete"/>
+        <param name="Command" value="SC.APN_StaticIPLTE_Delete"/>
       </parameterslist>
     </node>
     <node name="DataBaseProcessorDELETENUM" object="DataBaseProcessor">
@@ -60,13 +60,13 @@
         <param name="DbParameterXpathValue:0" value="//IdentifiersList/Identifier/MSISDN" />
       </parameterslist>
     </node>
-    <node name="StaticIPDealer_Delete" object="Commander">
+    <node name="APN_StaticIPDealer_Delete" object="Commander">
       <resultlist>
         <result value="0" node="DataBaseProcessorDELETENUM_DEALER"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SC.StaticIPDealer_Delete"/>
+        <param name="Command" value="SC.APN_StaticIPDealer_Delete"/>
       </parameterslist>
     </node>
     <node name="DataBaseProcessorDELETENUM_DEALER" object="DataBaseProcessor">

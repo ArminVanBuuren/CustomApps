@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="SC.GPRSAPNDealer_Delete" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Description>Удаление услуги 'GPRS'APN_DEALER</Description>
+<Command Name="SC.Subscriber_DeleteByMSISDN" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>Удаление абонента по MSISDN</Description>
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
   <Request>
     <RequestTemplate>
-      <![CDATA[SET TPLGPRS:MSISDN=##msisdn##,GPRSTPLDEL=20;^M]]>
+      <![CDATA[Del User: MSISDN=##msisdn##;^M]]>
     </RequestTemplate>
     <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
     <Item Name="msisdn" Type="Wellknown"/>

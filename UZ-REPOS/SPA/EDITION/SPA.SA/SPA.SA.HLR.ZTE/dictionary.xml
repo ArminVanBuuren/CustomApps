@@ -39,16 +39,8 @@
       <Source Path="//ModifyList/RFS_HL_NET[Value()!='Suspend']" PostFormat="0" />
       <Source Path="//ModifyList/RFS_HL_NET[Value()='Suspend']" PostFormat="1" />
     </Parameter>
-    <Parameter Name="CORPORATE_APN">
-      <Source Path="//RFS_HL_NET/RES_HL_NET_SERVICE"/>
-      <PossibleValues StringToKeyTable="false">
-        <Item Key="FRCORPAPN" StringValue="TEST.LTE"/>
-        <Item Key="FRAPNXB" StringValue="XB.APN.UZ"/>
-        <Item Key="FRAPNZIYOD" StringValue="ZIYOD.UMS.UZ"/>
-      </PossibleValues>
-    </Parameter>
-    <Parameter Name="DEFAULT_APN">
-      <Source Path="//RES_HL_DEFAULT_APN/Value"/>
+    <Parameter Name="NET_APN">
+      <Source Path="//RES_HL_NET_APN/Value"/>
     </Parameter>
     <Parameter Name="DEALER_APN">
       <Source Path="//RES_HL_DEALER_APN/Value"/>
@@ -58,23 +50,10 @@
       <Source Path="//RemoveList/RFS_HL_LIMITSPEED" PostFormat="100" />
     </Parameter>
     <Parameter Name="IP">
-      <Source Path="//AdditionalData/IP"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/IP"/>
       <PossibleValues StringToKeyTable="true"/>
     </Parameter>
-    
-    
 
-    <Parameter Name="xCSI_ID">
-      <Source Path="//BalanceStorage/HostCode"/>
-      <PossibleValues StringToKeyTable="false">
-        <Item Key="MS4" StringValue="2"/>
-        <Item Key="MS5" StringValue="2"/>
-        <Item Key="MS3" StringValue="3"/>
-        <Item Key="MS6" StringValue="3"/>
-      </PossibleValues>
-    </Parameter>
-
-    
     
     <Parameter Name="NewIMSI">
       <Source Path="ExtendedRequestMessage/AdditionalData//NewIMSI"/>
@@ -82,10 +61,6 @@
     </Parameter>
     <Parameter Name="NewMSISDN">
       <Source Path="ExtendedRequestMessage/AdditionalData//NewMSISDN"/>
-      <PossibleValues StringToKeyTable="true"/>
-    </Parameter>
-    <Parameter Name="IP">
-      <Source Path="ExtendedRequestMessage/AdditionalData/IP"/>
       <PossibleValues StringToKeyTable="true"/>
     </Parameter>
     <Parameter Name="Originating">
