@@ -176,6 +176,7 @@
     <RFS name="RFS_HL_MYUMS_APN" hostType="HL" description="Новый SCG. APN MYUMS">
       <Resource name="RES_HL_NET_APN" value="MY.UMS.UZ" useType="Mandatory" />
     </RFS>
+    <RFS name="RFS_HL_BREAKSESSION" hostType="HL" description="Разрыв сессии на HLR (Не штатная услуга)"/>
     <!--END ==== INTERNET ====-->
     
     <!--START ==== SIMPLE SERVICE ====-->
@@ -353,6 +354,12 @@
     </CFS>
     <CFS name="FRANTIOP" description="Запрет определения номера">
       <RFS name="RFS_HL_CLIR" linkType="Add" />
+    </CFS>
+    <CFS name="FRUSSD" description="Запрос баланса по USSD">
+      <RFS name="RFS_HL_BREAKSESSION" linkType="Add" />
+    </CFS>
+    <CFS name="SCPBREAKSESSION" description="Разрыв сессии на HLR (Не штатная услуга)">
+      <RFS name="RFS_HL_BREAKSESSION" linkType="Add" />
     </CFS>
     <!--END ==== SIMPLE SERVICE ====-->
 
@@ -610,6 +617,11 @@
     <Scenario name="HL.StaticIP_Delete" description="Удалить статический IP адрес">
       <RFS name="RFS_HL_STATIC_IP" scenarioType="Remove" />
       <Append name="RFS_HL_SUBSCRIPTION" listType="EndList" />
+      <Append name="RFS_HL_LTE" listType="EndList" />
+    </Scenario>
+    <Scenario name="HL.BreakSession" description="Разрыв сессии на HLR (Не штатный вызов)">
+      <RFS name="RES_HL_NET" scenarioType="Modify" />
+      <Append name="RFS_HL_NET" listType="EndList" />
       <Append name="RFS_HL_LTE" listType="EndList" />
     </Scenario>
     <!--END ==== INTERNET ====-->

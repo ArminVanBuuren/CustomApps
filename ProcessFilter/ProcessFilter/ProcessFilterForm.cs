@@ -405,54 +405,100 @@ namespace ProcessFilter
 
         private void dataGridProcessesResults_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            OpenEditor(dataGridProcessesResults);
+            CallAndCheckDataGridKey(dataGridProcessesResults);
         }
         private void DataGridProcessesResults_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
-                OpenEditor(dataGridProcessesResults);
+            CallAndCheckDataGridKey(dataGridProcessesResults, e);
         }
 
         private void dataGridOperationsResult_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            OpenEditor(dataGridOperationsResult);
+            CallAndCheckDataGridKey(dataGridOperationsResult);
         }
         private void DataGridOperationsResult_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
-                OpenEditor(dataGridOperationsResult);
+            CallAndCheckDataGridKey(dataGridOperationsResult, e);
         }
 
         private void dataGridScenariosResult_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            OpenEditor(dataGridScenariosResult);
+            CallAndCheckDataGridKey(dataGridScenariosResult);
         }
         private void DataGridScenariosResult_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
-                OpenEditor(dataGridScenariosResult);
+            CallAndCheckDataGridKey(dataGridScenariosResult, e);
         }
 
         private void dataGridCommandsResult_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            OpenEditor(dataGridCommandsResult);
-        }
-        private void DataGridCommandsResult_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-                OpenEditor(dataGridCommandsResult);
+            CallAndCheckDataGridKey(dataGridCommandsResult);
         }
 
-        void OpenEditor(DataGridView grid)
+        private void DataGridCommandsResult_KeyDown(object sender, KeyEventArgs e)
         {
-            string path = grid.SelectedRows[0].Cells[grid.ColumnCount - 1].Value.ToString();
+            CallAndCheckDataGridKey(dataGridCommandsResult, e);
+        }
+
+        void CallAndCheckDataGridKey(DataGridView grid, KeyEventArgs e = null)
+        {
+            string path;
+            if (grid.SelectedRows.Count > 0)
+                path = grid.SelectedRows[0].Cells[grid.ColumnCount - 1].Value.ToString();
+            else
+            {
+                MessageBox.Show(@"Please select a row!");
+                return;
+            }
+            if (e != null)
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.Enter:
+                        OpenEditor(grid, path);
+                        break;
+                    case Keys.Delete:
+                        if (File.Exists(path))
+                        {
+                            try
+                            {
+                                File.Delete(path);
+                                UpdateFilteredData();
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message);
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                OpenEditor(grid, path);
+            }
+        }
+
+        void UpdateFilteredData()
+        {
+            CheckProcessesPath(ProcessesTextBox.Text, true);
+            CheckOperationsPath(OperationTextBox.Text, true);
+            CheckScenariosPath(ScenariosTextBox.Text);
+            CheckCommandsPath(CommandsTextBox.Text);
+            buttonFilterClick(this, EventArgs.Empty);
+        }
+
+        void OpenEditor(DataGridView grid, string path)
+        {
             if (notepad == null || notepad.WindowIsClosed)
             {
                 notepad = new XmlNotepad(path);
-                //notepad.StartPosition = FormStartPosition.CenterScreen;
-                //notepad.TopMost = true;
                 notepad.Location = this.Location;
                 notepad.WindowState = FormWindowState.Maximized;
+                //notepad.StartPosition = FormStartPosition.CenterScreen;
+                //notepad.TopMost = true;
                 //notepad.Show(this);
                 notepad.Show();
             }
@@ -460,6 +506,7 @@ namespace ProcessFilter
             {
                 notepad.AddNewDocument(path);
                 notepad.Focus();
+                notepad.Activate();
             }
         }
 
@@ -474,8 +521,9 @@ namespace ProcessFilter
             CheckProcessesPath(ProcessesTextBox.Text);
         }
 
-        void CheckProcessesPath(string prcsPath)
+        void CheckProcessesPath(string prcsPath, bool saveLastSett = false)
         {
+            string lastSettProcess = saveLastSett ? ProcessesComboBox.Text : null;
             if(Directory.Exists(prcsPath.Trim(' ')))
             {
                 UpdateLastPath(prcsPath.Trim(' '));
@@ -486,9 +534,9 @@ namespace ProcessFilter
             {
                 ProcessesComboBox.DataSource = null;
             }
-            ProcessesComboBox.Text = null;
-            ProcessesComboBox.DisplayMember = null;
-            ProcessesComboBox.ValueMember = null;
+            ProcessesComboBox.Text = lastSettProcess;
+            ProcessesComboBox.DisplayMember = lastSettProcess;
+            //ProcessesComboBox.ValueMember = lastSettProcess;
         }
 
         private void OperationButtonOpen_Click(object sender, EventArgs e)
@@ -501,8 +549,11 @@ namespace ProcessFilter
             CheckOperationsPath(OperationTextBox.Text);
         }
 
-        void CheckOperationsPath(string opPath)
+        void CheckOperationsPath(string opPath, bool saveLastSett = false)
         {
+            string lastSettNetSett = saveLastSett ? NetSettComboBox.Text : null;
+            string lastSettOper = saveLastSett ? OperationComboBox.Text : null;
+
             if (Directory.Exists(opPath.Trim(' ')))
             {
                 UpdateLastPath(opPath.Trim(' '));
@@ -515,12 +566,12 @@ namespace ProcessFilter
                 NetSettComboBox.DataSource = null;
                 OperationComboBox.DataSource = null;
             }
-            NetSettComboBox.Text = null;
-            NetSettComboBox.DisplayMember = null;
-            NetSettComboBox.ValueMember = null;
-            OperationComboBox.Text = null;
-            OperationComboBox.DisplayMember = null;
-            OperationComboBox.ValueMember = null;
+            NetSettComboBox.Text = lastSettNetSett;
+            NetSettComboBox.DisplayMember = lastSettNetSett;
+            //NetSettComboBox.ValueMember = lastSettNetSett;
+            OperationComboBox.Text = lastSettOper;
+            OperationComboBox.DisplayMember = lastSettOper;
+            //OperationComboBox.ValueMember = lastSettOper;
         }
 
         private void ScenariosButtonOpen_Click(object sender, EventArgs e)
@@ -568,6 +619,8 @@ namespace ProcessFilter
                 CommandsStat.Text = "Commands:";
             }
         }
+
+
 
         string OpenFolder()
         {
