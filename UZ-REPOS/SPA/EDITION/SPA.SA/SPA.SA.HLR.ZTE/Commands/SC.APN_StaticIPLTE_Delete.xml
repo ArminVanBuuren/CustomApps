@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="SC.StaticIP_LTE_Delete" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<Command Name="SC.APN_StaticIPLTE_Delete" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>Удалить статический IP</Description>
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
   <Request>

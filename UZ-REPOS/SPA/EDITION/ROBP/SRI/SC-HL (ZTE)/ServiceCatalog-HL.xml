@@ -176,7 +176,6 @@
     <RFS name="RFS_HL_MYUMS_APN" hostType="HL" description="Новый SCG. APN MYUMS">
       <Resource name="RES_HL_NET_APN" value="MY.UMS.UZ" useType="Mandatory" />
     </RFS>
-    <RFS name="RFS_HL_BREAKSESSION" hostType="HL" description="Разрыв сессии на HLR (Не штатная услуга)"/>
     <!--END ==== INTERNET ====-->
     
     <!--START ==== SIMPLE SERVICE ====-->
@@ -253,9 +252,9 @@
     <!--END ==== Call Fworwarding ====-->
 
     <!--START ==== SUBSCRIPTION ====-->
-    <!--<CFS name="Synchronize" priority="1" description="Обработка кнопки Синхронизировать в СПА">
+    <CFS name="Synchronize" priority="9999" description="Обработка кнопки Синхронизировать в СПА">
       <RFSGroup name="RFS_GROUP_HL_CREATE_SUBSCRIBER" />
-    </CFS>-->
+    </CFS>
     <CFS name="Subscriber" priority="9999" type="ManagedObject" description="Абонент на HLR">
       <RFS name="RFS_HL_SUBSCRIPTION_COMMON" linkType="Add" />
     </CFS>
@@ -295,7 +294,6 @@
     <CFS name="FRAPNZIYOD" priority="9997" description="Корпоративный APN Ziyod">
       <RFS name="RFS_HL_NET_CORP_APN_ZD" linkType="Add" />
     </CFS>
-    
     <CFS name="FRM2MAPNFMS" priority="9999" description="M2M APN Fleet Managment Solutuons">
       <RFS name="RFS_HL_NET_M2M_APN_FMS" linkType="Add" />
     </CFS>
@@ -354,12 +352,6 @@
     </CFS>
     <CFS name="FRANTIOP" description="Запрет определения номера">
       <RFS name="RFS_HL_CLIR" linkType="Add" />
-    </CFS>
-    <CFS name="FRUSSD" description="Запрос баланса по USSD">
-      <RFS name="RFS_HL_BREAKSESSION" linkType="Add" />
-    </CFS>
-    <CFS name="SCPBREAKSESSION" description="Разрыв сессии на HLR (Не штатная услуга)">
-      <RFS name="RFS_HL_BREAKSESSION" linkType="Add" />
     </CFS>
     <!--END ==== SIMPLE SERVICE ====-->
 
@@ -535,39 +527,18 @@
     </Restriction>
   </RestrictionList>
   <RFSGroupList >
-    <!--<RFSGroup name="RFS_GROUP_HL_CREATE_SUBSCRIBER" type="Choice" description="Группа RFS для пересоздания абонента на HLR">
-      <RFS name="RFS_HL_SUBSCRIPTION_COMMON" linkType="Add" handler="RecreateSubscriberOnHLCOMMON" />
-      <RFS name="RFS_HL_SUBSCRIPTION_AIISKUE" linkType="Add" handler="RecreateSubscriberOnHLAIISKUE" />
-      <RFS name="RFS_HL_SUBSCRIPTION_PARTAPN" linkType="Add" handler="RecreateSubscriberOnHLPARTAPN" />
-      <RFS name="RFS_HL_SUBSCRIPTION_DGU" linkType="Add" handler="RecreateSubscriberOnHLDGU" />
-    </RFSGroup>-->
+    <RFSGroup name="RFS_GROUP_HL_CREATE_SUBSCRIBER" type="Choice" description="Группа RFS для пересоздания абонента на HLR">
+      <RFS name="RFS_HL_SUBSCRIPTION" linkType="Add" handler="HL_RecreateSubscriber" />
+    </RFSGroup>
   </RFSGroupList>
   <RFSDependencyList />
   <HandlerList>
-    <!--<Handler name="RecreateSubscriberOnHLCOMMON" type="RecreateSubscriber" description="Обработчик RFS для пересоздания абонента на HLR">
+    <Handler name="HL_RecreateSubscriber" type="RecreateSubscriber" description="Обработчик RFS для пересоздания абонента на HLR">
       <Configuration>
-        <RFS name="RFS_HL_SUBSCRIPTION_COMMON" action="Remove" order="-10" />
-        <RFS name="RFS_HL_SUBSCRIPTION_COMMON" action="Add" order="10" />
+        <RFS name="RFS_HL_SUBSCRIPTION" action="Remove" />
+        <RFS name="RFS_HL_SUBSCRIPTION" action="Add" />
       </Configuration>
     </Handler>
-    <Handler name="RecreateSubscriberOnHLAIISKUE" type="RecreateSubscriber" description="Обработчик RFS для пересоздания абонента на HLR">
-      <Configuration>
-        <RFS name="RFS_HL_SUBSCRIPTION_AIISKUE" action="Remove" order="-10" />
-        <RFS name="RFS_HL_SUBSCRIPTION_AIISKUE" action="Add" order="10" />
-      </Configuration>
-    </Handler>
-    <Handler name="RecreateSubscriberOnHLPARTAPN" type="RecreateSubscriber" description="Обработчик RFS для пересоздания абонента на HLR">
-      <Configuration>
-        <RFS name="RFS_HL_SUBSCRIPTION_PARTAPN" action="Remove" order="-10" />
-        <RFS name="RFS_HL_SUBSCRIPTION_PARTAPN" action="Add" order="10" />
-      </Configuration>
-    </Handler>
-    <Handler name="RecreateSubscriberOnHLDGU" type="RecreateSubscriber" description="Обработчик RFS для пересоздания абонента на HLR">
-      <Configuration>
-        <RFS name="RFS_HL_SUBSCRIPTION_DGU" action="Remove" order="-10" />
-        <RFS name="RFS_HL_SUBSCRIPTION_DGU" action="Add" order="10" />
-      </Configuration>
-    </Handler>-->
     <Handler name="MERGE_RFS_HL_ODB_OC_INTERNATIONAL" type="MergeRFS" description="Исх. международный доступ">
       <Configuration>
         <RFS type="Source" name="RFS_HL_ODB_OC_INTERNATIONAL_CALLS"/>
@@ -596,7 +567,7 @@
 
     <!--START ==== SUBSCRIPTION ====-->
     <Scenario name="HL.CreateSubscriber" description="Создание абонента на HLR">
-      <RFS name="RFS_HL_SUBSCRIPTION" scenarioType="Add" />
+      <RFS name="RFS_HL_SUBSCRIPTION" scenarioType="Add" useType="Mandatory" />
     </Scenario>
     <!--END ==== SUBSCRIPTION ====-->
 
@@ -617,11 +588,6 @@
     <Scenario name="HL.StaticIP_Delete" description="Удалить статический IP адрес">
       <RFS name="RFS_HL_STATIC_IP" scenarioType="Remove" />
       <Append name="RFS_HL_SUBSCRIPTION" listType="EndList" />
-      <Append name="RFS_HL_LTE" listType="EndList" />
-    </Scenario>
-    <Scenario name="HL.BreakSession" description="Разрыв сессии на HLR (Не штатный вызов)">
-      <RFS name="RES_HL_NET" scenarioType="Modify" />
-      <Append name="RFS_HL_NET" listType="EndList" />
       <Append name="RFS_HL_LTE" listType="EndList" />
     </Scenario>
     <!--END ==== INTERNET ====-->
