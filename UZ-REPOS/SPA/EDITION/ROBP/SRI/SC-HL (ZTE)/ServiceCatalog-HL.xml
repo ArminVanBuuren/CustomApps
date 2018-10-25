@@ -113,7 +113,6 @@
     <RFS name="RFS_HL_SUBSCRIPTION_DGU" base="RFS_HL_SUBSCRIPTION" hostType="HL" description="Создание абонента ТП ДГУ">
       <Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="DGU" useType="Mandatory" />
     </RFS>
-    <RFS name="RFS_HL_RECREATE" hostType="HL" description="Пересоздание абонента на HLR"/>
     <!--END ==== SUBSCRIPTION ====-->
 
     <!--START ==== INTERNET ====-->
