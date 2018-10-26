@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="SC.Subscriber_DeleteByIMSI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Description>Удаление абонента по IMSI</Description>
+<Command Name="SC.SubscriberAUC_Delete" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>Удаление IMSI на AUC</Description>
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
   <Request>
     <RequestTemplate>
-      <![CDATA[Del User: IMSI=##imsi##;^M]]>
+      <![CDATA[Del Auth : IMSI=##imsi##;^M]]>
     </RequestTemplate>
     <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
     <Item Name="imsi" Type="Wellknown"/>

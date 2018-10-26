@@ -16,6 +16,7 @@
     <Resource name="RES_HL_ODB_OC" description="Барринг исходящей связи"/>
     <Resource name="RES_HL_SMS_OC" description="Барринг на исходящей SMS"/>
     <Resource name="RES_HL_SMS_IC" description="Барринг на входящей SMS"/>
+    <Resource name="RES_HL_PLSS_MODE" description="Режим USSD"/>
     <Resource name="RES_HL_NET_SERVICE" description="Услуги и барринги на интернет"/>
     <Resource name="RES_HL_NET_APN" description="Название точки доступа (Access Point Name)"/>
     <Resource name="RES_HL_DEALER_APN" description="Название дилерской точки доступа (Access Point Name)"/>
@@ -24,8 +25,9 @@
   <RFSParameterList>
     <RFSParameter name="CallForwardType" description="Тип установки переадресаций" />
     <RFSParameter name="CallForwardMode" description="Режим переадресации" />
-    <RFSParameter name="ForwardedToNumber" description="Номер переадресации" />
     <RFSParameter name="CallForwardingTimer" description="Таймер переадресации" />
+    <RFSParameter name="ForwardedToNumber" description="Номер переадресации" />
+    <RFSParameter name="CancelLocationDirect" description="Тип станции для сброса информации" />
   </RFSParameterList>
   <FlagList />
   <RFSList>
@@ -99,19 +101,19 @@
       <Resource name="RES_HL_SUBSCRIPTION_PROFILE" useType="Mandatory" />
     </RFS>
     <RFS name="RFS_HL_SUBSCRIPTION_COMMON" base="RFS_HL_SUBSCRIPTION" hostType="HL" description="Услуга передачи данных ТП ДГУ">
-      <Resource name="RES_HL_SUBSCRIPTION_PROFILE" useType="Mandatory" >
+      <Resource name="RES_HL_SUBSCRIPTION_PROFILE" >
         <Value hosts="FP:05" value="Postpaid"/>
         <Value hosts="FP:MS" value="Prepaid"/>
       </Resource>
     </RFS>
     <RFS name="RFS_HL_SUBSCRIPTION_AIISKUE" base="RFS_HL_SUBSCRIPTION" hostType="HL" description="Создание абонентов ASKUE - АИИСКУЭ">
-      <Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="AIISKUE" useType="Mandatory" />
+      <Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="AIISKUE" />
     </RFS>
     <RFS name="RFS_HL_SUBSCRIPTION_PARTAPN" base="RFS_HL_SUBSCRIPTION" hostType="HL" description="Создание абонентов Partner APN">
-      <Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="DillerAPN" useType="Mandatory" />
+      <Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="DillerAPN" />
     </RFS>
     <RFS name="RFS_HL_SUBSCRIPTION_DGU" base="RFS_HL_SUBSCRIPTION" hostType="HL" description="Создание абонента ТП ДГУ">
-      <Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="DGU" useType="Mandatory" />
+      <Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="DGU" />
     </RFS>
     <!--END ==== SUBSCRIPTION ====-->
 
@@ -175,6 +177,15 @@
     <RFS name="RFS_HL_MYUMS_APN" hostType="HL" description="Новый SCG. APN MYUMS">
       <Resource name="RES_HL_NET_APN" value="MY.UMS.UZ" useType="Mandatory" />
     </RFS>
+    <RFS name="RFS_HL_CNCLOC" hostType="HL" description="Сброс информации о локации абонета на MSC, VLR, SGSN станциях">
+      <RFSParameter name="CancelLocationDirect" useType="Mandatory" />
+    </RFS>
+    <RFS name="RFS_HL_CNCLOC_SGSN" parent="RFS_HL_CNCLOC" hostType="HL" description="Сброс информации о локации абонета на SGSN станции">
+      <RFSParameter name="CancelLocationDirect" value="SGSN" />
+    </RFS>
+    <RFS name="RFS_HL_CNCLOC_LTE" parent="RFS_HL_CNCLOC" hostType="HL" description="Сброс информации о локации абонета на PS-EPS станции">
+      <RFSParameter name="CancelLocationDirect" value="LTE" />
+    </RFS>
     <!--END ==== INTERNET ====-->
     
     <!--START ==== SIMPLE SERVICE ====-->
@@ -186,7 +197,15 @@
     <RFS name="RFS_HL_DATATRANSFER" hostType="HL" description="Мобильная передача данных"/>
     <RFS name="RFS_HL_CWCH" hostType="HL" description="Ожидание / Удержание вызова"/>
     <RFS name="RFS_HL_CLIR" hostType="HL" description="Запрет определения номера"/>
-    <RFS name="RFS_HL_PLSS_SUSPEND" hostType="HL" description="Запрет запроса по USSD"/>
+    <RFS name="RFS_HL_PLSS" hostType="HL" description="Запроса по USSD">
+      <Resource name="RES_HL_PLSS_MODE" useType="Mandatory" />
+    </RFS>
+    <RFS name="RFS_HL_PLSS_PRV" base="RFS_HL_PLSS" hostType="HL" description="Запроса по USSD">
+      <Resource name="RES_HL_PLSS_MODE" value="Provision" useType="Mandatory" />
+    </RFS>
+    <RFS name="RFS_HL_PLSS_SUSPEND" base="RFS_HL_PLSS" hostType="HL" description="Запрет запроса по USSD">
+      <Resource name="RES_HL_PLSS_MODE" value="Suspend" useType="Mandatory" />
+    </RFS>
     <RFS name="RFS_HL_CALLS_SUSPEND" hostType="HL" description="Запрет голосовой связи"/>
     <!--END ==== SIMPLE SERVICE ====-->
     
@@ -251,7 +270,7 @@
     <!--END ==== Call Fworwarding ====-->
 
     <!--START ==== SUBSCRIPTION ====-->
-    <CFS name="Synchronize" priority="9999" description="Обработка кнопки Синхронизировать в СПА">
+    <CFS name="Synchronize" priority="1" description="Обработка кнопки Синхронизировать в СПА">
       <RFSGroup name="RFS_GROUP_HL_CREATE_SUBSCRIBER" />
     </CFS>
     <CFS name="Subscriber" priority="9999" type="ManagedObject" description="Абонент на HLR">
@@ -272,9 +291,6 @@
     <CFS name="CB406278" description="Мобильный интернет GPRS">
       <RFS name="RFS_HL_NET_GPRS" linkType="Add" />
     </CFS>
-    <CFS name="FRUNLIMLTE" description="Доступ к сети 4G LTE">
-      <RFS name="RFS_HL_LTE" linkType="Add" dependsOn="RFS_HL_NET_GPRS" />
-    </CFS>
     <CFS name="LIMITSPEED" description="Ограничение скорости Интернета">
       <RFS name="RFS_HL_LIMITSPEED" linkType="Add" dependsOn="RFS_HL_NET_GPRS" />
     </CFS>
@@ -283,6 +299,9 @@
     </CFS>
     <CFS name="FRNEWSCG" description="Новый SCG">
       <RFS name="RFS_HL_MYUMS_APN" linkType="Add" dependsOn="RFS_HL_NET_GPRS"  />
+    </CFS>
+    <CFS name="FRUNLIMLTE" description="Доступ к сети 4G LTE">
+      <RFS name="RFS_HL_LTE" linkType="Add" />
     </CFS>
     <CFS name="FRCORPAPN" priority="9999" description="Корпоративный APN">
       <RFS name="RFS_HL_NET_CORP_APN_BS" linkType="Add" />
@@ -310,6 +329,14 @@
     </CFS>
     <CFS name="VPNUMS" priority="9994" description="VPN UMS">
       <RFS name="RFS_HL_NET_VPN_APN" linkType="Add" />
+    </CFS>
+    <CFS name="CancelLocation" description="Сброс информации о локации абонета на MSC, VLR, SGSN станциях">
+      <RFS name="RFS_HL_CNCLOC_SGSN" linkType="Add" />
+      <RFS name="RFS_HL_CNCLOC_LTE" linkType="Add" dependsOn="RFS_HL_LTE" />
+    </CFS>
+    <CFS name="CancelLocationSGSN" description="Сброс информации о локации абонета на MSC, VLR, SGSN станциях">
+      <RFS name="RFS_HL_CNCLOC_SGSN" linkType="Add"  />
+      <RFS name="RFS_HL_CNCLOC_LTE" linkType="Add" dependsOn="RFS_HL_LTE" />
     </CFS>
     <!--END ==== INTERNET ====-->
     
@@ -351,6 +378,9 @@
     </CFS>
     <CFS name="FRANTIOP" description="Запрет определения номера">
       <RFS name="RFS_HL_CLIR" linkType="Add" />
+    </CFS>
+    <CFS name="FRUSSD" description="USSD запросы">
+      <RFS name="RFS_HL_PLSS_PRV" linkType="Add" />
     </CFS>
     <!--END ==== SIMPLE SERVICE ====-->
 
@@ -395,7 +425,7 @@
       <RFS name="RFS_HL_SMS_IC_NONE" linkType="Modify" />
       <RFS name="RFS_HL_NET_SUSPEND" linkType="Modify" />
       <RFS name="RFS_HL_ROAMING" linkType="Remove" />
-      <RFS name="RFS_HL_PLSS_SUSPEND" linkType="Add" />
+      <RFS name="RFS_HL_PLSS_SUSPEND" linkType="Set" />
     </CFS>
     <CFS name="FRBLKCHK" priority="1" copyOf="FRTECHBLK" description="Блокировка проверка"/>
     <CFS name="FRBLKFROD" priority="1" copyOf="FRTECHBLK" description="Фрод блокировка"/>
@@ -532,6 +562,30 @@
   </RFSGroupList>
   <RFSDependencyList />
   <HandlerList>
+    <!--<Handler name="MERGE_RFS_AIISKU" type="MergeRFS" description="merge profile">
+      <Configuration>
+        <RFS type="Source" name="RFS_HL_SUBSCRIPTION_COMMON" />
+        <RFS type="Source" name="RFS_HL_SUBSCRIPTION_AIISKUE" />
+        <RFS type="Result" name="RFS_HL_SUBSCRIPTION_AIISKUE" />
+      </Configuration>
+    </Handler>
+    <Handler name="MERGE_RFS_DGU" type="MergeRFS" description="merge profile">
+      <Configuration>
+        <RFS type="Source" name="RFS_HL_SUBSCRIPTION_COMMON" />
+        <RFS type="Source" name="RFS_HL_SUBSCRIPTION_DGU" />
+        <RFS type="Result" name="RFS_HL_SUBSCRIPTION_DGU" />
+      </Configuration>
+    </Handler>
+    <Handler name="MERGE_RFS_PARTAPN" type="MergeRFS" description="merge profile">
+      <Configuration>
+        <RFS type="Source" name="RFS_HL_SUBSCRIPTION_COMMON" />
+        <RFS type="Source" name="RFS_HL_SUBSCRIPTION_PARTAPN" />
+        <RFS type="Result" name="RFS_HL_SUBSCRIPTION_PARTAPN" />
+      </Configuration>
+    </Handler>-->
+    <Handler name="ServicesDiffHandler" type="ServicesDiff" description="Обработчик RFS для изменения тарифного плана">
+      <Configuration />
+    </Handler>
     <Handler name="HL_RecreateSubscriber" type="RecreateSubscriber" description="Обработчик RFS для пересоздания абонента на HLR">
       <Configuration>
         <RFS name="RFS_HL_SUBSCRIPTION" action="Remove" />
@@ -564,11 +618,17 @@
     </Scenario>
     <!--END ==== Call Fworwarding ====-->
 
-    <!--START ==== SUBSCRIPTION ====-->
+    <!--START ==== COMMON ====-->
     <Scenario name="HL.CreateSubscriber" description="Создание абонента на HLR">
       <RFS name="RFS_HL_SUBSCRIPTION" scenarioType="Add" useType="Mandatory" />
     </Scenario>
-    <!--END ==== SUBSCRIPTION ====-->
+    <Scenario name="HL.CancelLocation" description="Сброс информации о локации абонета на MSC, VLR, SGSN станциях">
+      <RFS name="RFS_HL_CNCLOC" scenarioType="Add, Remove, Modify" />
+    </Scenario>
+    <Scenario name="HL.ModifyUSSD" description="Изменение статуса USSD">
+      <RFS name="RFS_HL_PLSS" scenarioType="Add, Remove, Modify" />
+    </Scenario>
+    <!--END ==== COMMON ====-->
 
     <!--START ==== INTERNET ====-->
     <Scenario name="HL.ModifyNET" description="Блокировка или разблокировка сервисов интернет">

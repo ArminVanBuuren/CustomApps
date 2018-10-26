@@ -8,25 +8,43 @@
   <automat>
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
       <resultlist>
-        <result value="0" node="Subscriber_DeleteByMSISDN"/>
+        <result value="0" node="SubscriberMSISDN_Delete"/>
         <result value="1" node=""/>
       </resultlist>
     </node>
-    <node name="Subscriber_DeleteByMSISDN" object="Commander">
+    <node name="SubscriberMSISDN_Delete" object="Commander">
       <resultlist>
-        <result value="0" node="Subscriber_DeleteByIMSI"/>
+        <result value="0" node="SubscriberIMSI_Delete"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SC.Subscriber_DeleteByMSISDN"/>
+        <param name="Command" value="SC.SubscriberMSISDN_Delete"/>
       </parameterslist>
     </node>
-    <node name="Subscriber_DeleteByIMSI" object="Commander">
+    <node name="SubscriberIMSI_Delete" object="Commander">
+      <resultlist>
+        <result value="0" node="Subscriber_Create"/>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.SubscriberIMSI_Delete"/>
+      </parameterslist>
+    </node>
+    <node name="Subscriber_Create" object="Commander">
+      <resultlist>
+        <result value="0" node="GetCBDataByMsisdn"/>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.Subscriber_Create"/>
+      </parameterslist>
+    </node>
+    <node name="GetCBDataByMsisdn" object="Commander">
       <resultlist>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SC.Subscriber_DeleteByIMSI"/>
+        <param name="Command" value="SC.GetCBDataByMsisdn"/>
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">

@@ -1,14 +1,21 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.CancelLocation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Description>Modify Location Information</Description>
+  <Description>Сброс информации о локации абонета на MSC, VLR, SGSN станциях</Description>
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
   <Request>
     <RequestTemplate>
-      <![CDATA[MOD LOC: MSISDN=##msisdn##,MSCNumber=*,VLRnumber=*,SGSNNumber=*,SGSNAddr=*;^M]]>
+      <![CDATA[MOD LOC: MSISDN=##msisdn##,##CancelLocationDirect##;^M]]>
     </RequestTemplate>
     <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
     <Item Name="msisdn" Type="Wellknown"/>
+    <Item Name="CancelLocationDirect" Type="LocalParameter"/>
   </Request>
+  <ParametersList>
+    <Parameter Name="CancelLocationDirect" IsChoice="true" AbsenceValue="MSCNumber=*,VLRnumber=*,SGSNNumber=*,SGSNAddr=*">
+      <Source Path="//CancelLocationDirect/Value[text()='SGSN']" PostFormat="SGSNNumber=*,SGSNAddr=*" />
+      <Source Path="//CancelLocationDirect/Value[text()='LTE']" PostFormat="EPCMMEHost=*,EPCMMERealm=*,EPCSGSNHost=*,EPCSGSNRealm=*" />
+    </Parameter>
+  </ParametersList>
   <ErrorsList CodePage="windows-1251" >
     <Error Name="101040" Value="SUCCESS"/> <!--ISDN is unavailable-->
   </ErrorsList>
