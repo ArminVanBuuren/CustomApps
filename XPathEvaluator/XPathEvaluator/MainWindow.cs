@@ -134,20 +134,84 @@ namespace XPathEvaluator
                 XmlObjectIndex xmlObject = RtfFromXml.GetPositionByXmlNode(_currentXmlBody, node);
                 if (xmlObject != null)
                 {
-                    tabMain.SelectTab(tabXmlBody);
-                    int fillTextLength = xmlObject.FillText.Replace("\n", "").Length;
-                    string finded = xmlObject.FindedObject.Replace("\n", "");
-                    int findedText = finded.Length;
-                    int append = ((finded[0] == '\r') ? 1 : 0);
+                    bool isCorrect = GetCorrectXmlNodeStart(xmlObject);
+                    if (!isCorrect)
+                        return;
 
-                    //TODO: сделать корректное выделение, т.к. в первый раз он выделяет нормально, а потом Range заполняется почему то всем контекстом xml
-                    //xmlBodyRichTextBox.Select(fillTextLength - findedText + append, findedText);
-                    Range range = fctb.GetRange(fillTextLength - findedText + append, fillTextLength);
-                    
-                    range.SelectAll();
+                    tabMain.SelectTab(tabXmlBody);
+                    Range range = fctb.GetRange(xmlObject.FillText.Length - xmlObject.FindedObject.Length, xmlObject.FillText.Length);
+
+                    fctb.Selection = range;
+                    fctb.DoSelectionVisible();
+                    fctb.Invalidate();
                 }
             }
         }
+
+        /// <summary>
+        /// Колхозно, но зато работает корректно.
+        /// Тут проблема в том что XmlDocument обрезает лишние пробелы, а в исходном тексте чтобы выделить ноду нужно правильно подобрать позиции, поэтому нужно считать все прпуски и найти правильную позицию учитывая все пропуски
+        /// </summary>
+        /// <param name="findedObj"></param>
+        /// <returns></returns>
+        bool GetCorrectXmlNodeStart(XmlObjectIndex findedObj)
+        {
+            bool finished = false;
+            int i = -1;
+            int j = -1;
+            int findedIndexStart = findedObj.FillText.Length - findedObj.FindedObject.TrimStart().Length;
+            int correctfindedIndexStart = -1;
+
+            while (true)
+            {
+                i++;
+                j++;
+
+                if (j >= findedIndexStart && correctfindedIndexStart == -1)
+                    correctfindedIndexStart = i - 1;
+
+                if (j > findedObj.FillText.Length - 1)
+                    break;
+                while (findedObj.FillText[j] == ' ' || findedObj.FillText[j] == '\t' || findedObj.FillText[j] == '\r' || findedObj.FillText[j] == '\n')
+                {
+                    j++;
+                    if (j > findedObj.FillText.Length - 1)
+                    {
+                        finished = true;
+                        break;
+                    }
+                }
+
+                if (i > fctb.Text.Length - 1)
+                {
+                    i = -1;
+                    break;
+                }
+                while (fctb.Text[i] == ' ' || fctb.Text[i] == '\t' || fctb.Text[i] == '\r' || fctb.Text[i] == '\n')
+                {
+                    i++;
+                    if (i > fctb.Text.Length - 1)
+                    {
+                        i = -1;
+                        break;
+                    }
+                }
+
+
+
+                if (finished)
+                    break;
+
+            }
+
+            if (i == -1 || correctfindedIndexStart == -1)
+                return false;
+            findedObj.FillText = fctb.Text.Substring(0, i);
+            findedObj.FindedObject = fctb.Text.Substring(correctfindedIndexStart, i - correctfindedIndexStart);
+            return true;
+
+        }
+
 
         private Brush _mainTabBrush = new SolidBrush(Color.Transparent);
         private Brush MainTabBrush
