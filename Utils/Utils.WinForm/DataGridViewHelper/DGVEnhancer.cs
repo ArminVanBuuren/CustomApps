@@ -2,19 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FormUtils.DataGridViewHelper
+namespace Utils.WinForm.DataGridViewHelper
 {
-    
-
     public static class DGVEnhancer
     {
         [DllImport("user32.dll")]

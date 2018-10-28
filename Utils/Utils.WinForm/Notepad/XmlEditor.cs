@@ -7,13 +7,10 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Xml;
 using FastColoredTextBoxNS;
-using Utils;
 using Utils.IOExploitation;
-using Utils.XmlHelper;
 
-namespace FormUtils.Notepad
+namespace Utils.WinForm.Notepad
 {
-
     public class XmlEditor : IDisposable
     {
         public string Name { get; private set; }
@@ -33,7 +30,7 @@ namespace FormUtils.Notepad
 
         public bool Load(string path)
         {
-            if (!XmlHelper.IsXml(path, out XmlDocument document, out string source))
+            if (!XmlHelper.XmlHelper.IsXml(path, out XmlDocument document, out string source))
                 return false;
 
             Path = path;
@@ -110,36 +107,112 @@ namespace FormUtils.Notepad
         {
             FastColoredTextBox fctb = new FastColoredTextBox();
             ((ISupportInitialize)(fctb)).BeginInit();
-            fctb.Anchor = ((AnchorStyles)((((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right)));
-            fctb.AutoCompleteBracketsList = new char[] { '(', ')', '{', '}', '[', ']', '\"', '\"', '\'', '\'' };
-            fctb.AutoScrollMinSize = new Size(0, 14);
+            //fctb.Anchor = ((AnchorStyles)((((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right)));
+            //fctb.AutoScrollMinSize = new Size(0, 14);
+            //fctb.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);";
+            //fctb.ImeMode = System.Windows.Forms.ImeMode.Off;
+            //fctb.BackBrush = null;
+            //fctb.CharHeight = 14;
+            //fctb.CharWidth = 8;
+            //fctb.Cursor = Cursors.IBeam;
+            //fctb.DisabledColor = Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            //fctb.IsReplaceMode = false;
+            //fctb.LeftBracket = '(';
+            //fctb.Name = "fctb";
+            //fctb.Paddings = new Padding(0);
+            //fctb.RightBracket = ')';
+            //fctb.SelectionColor = Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            //fctb.ServiceColors = null;
+            //fctb.TabIndex = 4;
+            //fctb.WordWrap = true;
+            //fctb.Zoom = 100;
+            //fctb.Text = source;
+
+
+            //fctb.SyntaxHighlighter.InitStyleSchema(Language.XML);
+            //fctb.SyntaxHighlighter.XMLSyntaxHighlight(fctb.Range);
+            //fctb.Range.ClearFoldingMarkers();
+            //fctb.Dock = DockStyle.Fill;
+
+            //fctb.TextChanged += Fctb_TextChanged;
+            //fctb.KeyDown += Fctb_KeyDownSaveDocument;
+
+            //fctb.ClearStylesBuffer();
+            //fctb.Range.ClearStyle(StyleIndex.All);
+            //fctb.Language = Language.XML;
+            //fctb.SelectionChangedDelayed += fctb_SelectionChangedDelayed;
+
+
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(XmlEditor));
+            fctb.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                                                                      | System.Windows.Forms.AnchorStyles.Left)
+                                                                     | System.Windows.Forms.AnchorStyles.Right)));
+            fctb.Text = source;
+            fctb.AutoCompleteBracketsList = new char[] {
+                '(',
+                ')',
+                '{',
+                '}',
+                '[',
+                ']',
+                '\"',
+                '\"',
+                '\'',
+                '\''};
+            fctb.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);";
+            fctb.AutoScrollMinSize = new System.Drawing.Size(0, 14);
             fctb.BackBrush = null;
             fctb.CharHeight = 14;
             fctb.CharWidth = 8;
-            fctb.Cursor = Cursors.IBeam;
-            fctb.DisabledColor = Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            fctb.Cursor = System.Windows.Forms.Cursors.IBeam;
+            fctb.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            fctb.ImeMode = System.Windows.Forms.ImeMode.Off;
             fctb.IsReplaceMode = false;
-            fctb.LeftBracket = '(';
             fctb.Name = "fctb";
-            fctb.Paddings = new Padding(0);
-            fctb.RightBracket = ')';
-            fctb.SelectionColor = Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            fctb.Paddings = new System.Windows.Forms.Padding(0);
+            fctb.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             fctb.ServiceColors = null;
-            fctb.TabIndex = 4;
+            fctb.Size = new System.Drawing.Size(859, 491);
+            fctb.TabIndex = 0;
             fctb.WordWrap = true;
             fctb.Zoom = 100;
-            fctb.Text = source;
-            fctb.SyntaxHighlighter.InitStyleSchema(Language.XML);
-            fctb.SyntaxHighlighter.XMLSyntaxHighlight(fctb.Range);
-            fctb.Range.ClearFoldingMarkers();
+
             fctb.TextChanged += Fctb_TextChanged;
             fctb.KeyDown += Fctb_KeyDownSaveDocument;
-            fctb.Dock = DockStyle.Fill;
+            fctb.ClearStylesBuffer();
+            fctb.Range.ClearStyle(StyleIndex.All);
+            fctb.Language = Language.XML;
+            fctb.SelectionChangedDelayed += fctb_SelectionChangedDelayed;
+
             ((ISupportInitialize)(fctb)).EndInit();
             //fctb.Location = new Point(0, 0);
             //fctb.Size = new System.Drawing.Size(1047, 695);
+
+
+
+
             return fctb;
         }
+
+        MarkerStyle SameWordsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(40, Color.Gray)));
+        private void fctb_SelectionChangedDelayed(object sender, EventArgs e)
+        {
+            FCTextBox.VisibleRange.ClearStyle(SameWordsStyle);
+            if (!FCTextBox.Selection.IsEmpty)
+                return;//user selected diapason
+
+            //get fragment around caret
+            var fragment = FCTextBox.Selection.GetFragment(@"\w");
+            string text = fragment.Text;
+            if (text.Length == 0)
+                return;
+            //highlight same words
+            var ranges = FCTextBox.VisibleRange.GetRanges("\\b" + text + "\\b").ToArray();
+            if (ranges.Length > 1)
+                foreach (var r in ranges)
+                    r.SetStyle(SameWordsStyle);
+        }
+
 
         [DllImport("user32.dll")]
         private static extern short GetAsyncKeyState(Keys vKey);
@@ -155,7 +228,7 @@ namespace FormUtils.Notepad
                         if (!IsContentChanged)
                             return;
 
-                        if (XmlHelper.IsXml(FCTextBox.Text, out XmlDocument document))
+                        if (XmlHelper.XmlHelper.IsXml(FCTextBox.Text, out XmlDocument document))
                         {
                             FilesEmployee.WriteFile(Path, FCTextBox.Text);
                         }
@@ -188,6 +261,13 @@ namespace FormUtils.Notepad
             fctbInput.SyntaxHighlighter.InitStyleSchema(Language.XML);
             fctbInput.SyntaxHighlighter.XMLSyntaxHighlight(fctbInput.Range);
             fctbInput.Range.ClearFoldingMarkers();
+
+            //fctbInput.Language = Language.XML;
+            //fctbInput.ClearStylesBuffer();
+            //fctbInput.Range.ClearStyle(StyleIndex.All);
+            //fctbInput.AddStyle(SameWordsStyle);
+            //fctbInput.OnSyntaxHighlight(new TextChangedEventArgs(fctbInput.Range));
+
             IsContentChanged = !fctbInput.Text.Equals(Source);
         }
 

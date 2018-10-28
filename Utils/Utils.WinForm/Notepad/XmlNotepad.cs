@@ -4,14 +4,15 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.Xml;
+using Utils.XmlRtfStyle;
 
-namespace FormUtils.Notepad
+namespace Utils.WinForm.Notepad
 {
     public partial class XmlNotepad : Form
     {
         public bool WindowIsClosed { get; private set; } = false;
         List<XmlEditor> listOfXmlFiles = new List<XmlEditor>();
-
 
         public XmlNotepad(string path)
         {
@@ -79,7 +80,7 @@ namespace FormUtils.Notepad
             {
                 var tabRect = this.TabControlObj.GetTabRect(i);
                 tabRect.Inflate(-2, -2);
-                var closeImage = FormUtils.Properties.Resources.Close;
+                var closeImage = Utils.WinForm.Properties.Resources.Close;
                 var imageRect = new Rectangle(
                     (tabRect.Right - closeImage.Width),
                     tabRect.Top + (tabRect.Height - closeImage.Height) / 2,
@@ -96,19 +97,16 @@ namespace FormUtils.Notepad
             }
         }
 
-
-
         private void tabControl1_DrawItem(object sender, DrawItemEventArgs e)
         {
             var tabPage = this.TabControlObj.TabPages[e.Index];
             var tabRect = this.TabControlObj.GetTabRect(e.Index);
             tabRect.Inflate(-2, -2);
 
-            var closeImage = FormUtils.Properties.Resources.Close;
+            var closeImage = Utils.WinForm.Properties.Resources.Close;
             e.Graphics.DrawImage(closeImage, (tabRect.Right - closeImage.Width), (tabRect.Top + (tabRect.Height - closeImage.Height) / 2) + 2);
             TextRenderer.DrawText(e.Graphics, tabPage.Text, tabPage.Font, tabRect, tabPage.ForeColor, tabPage.BackColor, TextFormatFlags.VerticalCenter);
         }
-
 
         public bool AddNewDocument(string path)
         {
@@ -149,6 +147,9 @@ namespace FormUtils.Notepad
                 {
                     ChangePageColor(page, editor);
                 };
+
+
+
                 return true;
             }
 
@@ -165,6 +166,20 @@ namespace FormUtils.Notepad
                 page.Text = editor.Name;
                 tabControl1_Selecting(null, null);
             }));
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            TabPage tabPage = this.TabControlObj.SelectedTab;
+            FastColoredTextBoxNS.FastColoredTextBox fctb = (FastColoredTextBoxNS.FastColoredTextBox)tabPage.Controls[0];
+            //XML Print
+
+            bool isXml = XmlHelper.XmlHelper.IsXml(fctb.Text, out XmlDocument document);
+            if (isXml)
+            {
+                string formatting = RtfFromXml.GetXmlString(document);
+                fctb.Text = formatting;
+            }
         }
     }
 }

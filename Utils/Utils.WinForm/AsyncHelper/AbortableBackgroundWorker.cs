@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Threading;
 
-namespace FormUtils.AsyncHelper
+namespace Utils.WinForm.AsyncHelper
 {
     public class AbortableBackgroundWorker : BackgroundWorker
     {
