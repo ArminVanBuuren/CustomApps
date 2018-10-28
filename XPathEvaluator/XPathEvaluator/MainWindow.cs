@@ -46,8 +46,30 @@ namespace XPathEvaluator
             KeyPreview = true;
             KeyDown += XPathWindow_KeyDown;
             fctb.KeyDown += XmlBodyRichTextBox_KeyDown;
+
+            fctb.ClearStylesBuffer();
+            fctb.Range.ClearStyle(StyleIndex.All);
+            fctb.Language = Language.XML;
+            fctb.SelectionChangedDelayed += fctb_SelectionChangedDelayed;
         }
 
+        private void fctb_SelectionChangedDelayed(object sender, EventArgs e)
+        {
+            fctb.VisibleRange.ClearStyle(SameWordsStyle);
+            if (!fctb.Selection.IsEmpty)
+                return;//user selected diapason
+
+            //get fragment around caret
+            var fragment = fctb.Selection.GetFragment(@"\w");
+            string text = fragment.Text;
+            if (text.Length == 0)
+                return;
+            //highlight same words
+            var ranges = fctb.VisibleRange.GetRanges("\\b" + text + "\\b").ToArray();
+            if (ranges.Length > 1)
+                foreach (var r in ranges)
+                    r.SetStyle(SameWordsStyle);
+        }
 
         private void XPathWindow_KeyDown(object sender, KeyEventArgs e)
         {
@@ -65,6 +87,7 @@ namespace XPathEvaluator
         private static extern short GetAsyncKeyState(Keys vKey);
         private void XmlBodyRichTextBox_KeyDown(object sender, KeyEventArgs e)
         {
+            // флаг то что текст был проинсертин в окно CNTR+V, чтобы можно было сразу корреткно отформатировать
             if (e.Control && KeyIsDown(Keys.ControlKey) && KeyIsDown(Keys.V))
             {
                 lock (sync)
@@ -197,11 +220,8 @@ namespace XPathEvaluator
                     }
                 }
 
-
-
                 if (finished)
                     break;
-
             }
 
             if (i == -1 || correctfindedIndexStart == -1)
@@ -235,6 +255,7 @@ namespace XPathEvaluator
             }
         }
 
+        MarkerStyle SameWordsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(40, Color.Gray)));
         void XmlBodyRichTextBoxOnTextChanged(object sender, EventArgs eventArgs)
         {
             try
@@ -248,15 +269,15 @@ namespace XPathEvaluator
 
                 if (isXml)
                 {
-                    lock (sync)
-                    {
-                        if (isInsert)
-                        {
-                            string formatting = RtfFromXml.GetXmlString(document);
-                            fctb.Text = formatting;
-                            isInsert = false;
-                        }
-                    }
+                    //lock (sync)
+                    //{
+                    //    if (isInsert)
+                    //    {
+                    //        string formatting = RtfFromXml.GetXmlString(document);
+                    //        fctb.Text = formatting;
+                    //        isInsert = false;
+                    //    }
+                    //}
 
                     _currentXmlBody = document;
                     
@@ -266,12 +287,19 @@ namespace XPathEvaluator
                 {
                     _currentXmlBody = null;
                     MainTabBrush = solidRed;
-                    
+                    isInsert = false;
                 }
 
-                fctb.SyntaxHighlighter.InitStyleSchema(Language.XML);
-                fctb.SyntaxHighlighter.XMLSyntaxHighlight(fctb.Range);
-                fctb.Range.ClearFoldingMarkers();
+                fctb.Language = Language.XML;
+                fctb.ClearStylesBuffer();
+                fctb.Range.ClearStyle(StyleIndex.All);
+                fctb.AddStyle(SameWordsStyle);
+                fctb.OnSyntaxHighlight(new TextChangedEventArgs(fctb.Range));
+
+
+                //fctb.SyntaxHighlighter.InitStyleSchema(Language.XML);
+                //fctb.SyntaxHighlighter.XMLSyntaxHighlight(fctb.Range);
+                //fctb.Range.ClearFoldingMarkers();
                 
 
                 
@@ -293,7 +321,16 @@ namespace XPathEvaluator
             }
         }
 
-        
+        private void buttonPrettyPrint_Click(object sender, EventArgs e)
+        {
+            if (_currentXmlBody == null)
+                return;
+
+
+            string formatting = RtfFromXml.GetXmlString(_currentXmlBody);
+            fctb.Text = formatting;
+
+        }
 
 
 
@@ -457,6 +494,7 @@ namespace XPathEvaluator
                     return null;
             }
         }
+
 
     }
 }

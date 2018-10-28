@@ -44,6 +44,7 @@ namespace XPathEvaluator
             this.exceptionLabel = new System.Windows.Forms.Label();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.buttonPrettyPrint = new System.Windows.Forms.Button();
             this.tabMain.SuspendLayout();
             this.tabXmlBody.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fctb)).BeginInit();
@@ -57,7 +58,7 @@ namespace XPathEvaluator
             | System.Windows.Forms.AnchorStyles.Right)));
             this.XPathText.Location = new System.Drawing.Point(99, 12);
             this.XPathText.Name = "XPathText";
-            this.XPathText.Size = new System.Drawing.Size(679, 20);
+            this.XPathText.Size = new System.Drawing.Size(590, 20);
             this.XPathText.TabIndex = 0;
             // 
             // label1
@@ -72,7 +73,7 @@ namespace XPathEvaluator
             // buttonFind
             // 
             this.buttonFind.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonFind.Location = new System.Drawing.Point(784, 12);
+            this.buttonFind.Location = new System.Drawing.Point(695, 11);
             this.buttonFind.Name = "buttonFind";
             this.buttonFind.Size = new System.Drawing.Size(75, 21);
             this.buttonFind.TabIndex = 2;
@@ -120,12 +121,15 @@ namespace XPathEvaluator
         '\"',
         '\'',
         '\''};
+            this.fctb.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);";
             this.fctb.AutoScrollMinSize = new System.Drawing.Size(0, 14);
             this.fctb.BackBrush = null;
             this.fctb.CharHeight = 14;
             this.fctb.CharWidth = 8;
             this.fctb.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctb.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.fctb.Font = new System.Drawing.Font("Courier New", 9.75F);
+            this.fctb.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.fctb.IsReplaceMode = false;
             this.fctb.Location = new System.Drawing.Point(-4, 0);
             this.fctb.Name = "fctb";
@@ -180,14 +184,14 @@ namespace XPathEvaluator
             this.xpathResultDataGrid.Name = "xpathResultDataGrid";
             this.xpathResultDataGrid.ReadOnly = true;
             this.xpathResultDataGrid.RowHeadersVisible = false;
-            this.xpathResultDataGrid.Size = new System.Drawing.Size(849, 449);
+            this.xpathResultDataGrid.Size = new System.Drawing.Size(849, 467);
             this.xpathResultDataGrid.TabIndex = 3;
             // 
             // exceptionLabel
             // 
             this.exceptionLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.exceptionLabel.AutoSize = true;
-            this.exceptionLabel.Location = new System.Drawing.Point(6, 455);
+            this.exceptionLabel.Location = new System.Drawing.Point(6, 473);
             this.exceptionLabel.Name = "exceptionLabel";
             this.exceptionLabel.Size = new System.Drawing.Size(57, 13);
             this.exceptionLabel.TabIndex = 1;
@@ -205,11 +209,23 @@ namespace XPathEvaluator
             this.Column2.Name = "Column2";
             this.Column2.ReadOnly = true;
             // 
+            // buttonPrettyPrint
+            // 
+            this.buttonPrettyPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonPrettyPrint.Location = new System.Drawing.Point(776, 11);
+            this.buttonPrettyPrint.Name = "buttonPrettyPrint";
+            this.buttonPrettyPrint.Size = new System.Drawing.Size(75, 21);
+            this.buttonPrettyPrint.TabIndex = 7;
+            this.buttonPrettyPrint.Text = "XML Print";
+            this.buttonPrettyPrint.UseVisualStyleBackColor = true;
+            this.buttonPrettyPrint.Click += new System.EventHandler(this.buttonPrettyPrint_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(863, 555);
+            this.Controls.Add(this.buttonPrettyPrint);
             this.Controls.Add(this.tabMain);
             this.Controls.Add(this.buttonFind);
             this.Controls.Add(this.label1);
@@ -244,5 +260,6 @@ namespace XPathEvaluator
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.Label exceptionMessage;
+        private System.Windows.Forms.Button buttonPrettyPrint;
     }
 }
