@@ -18,7 +18,7 @@
     </node>
     <node name="RequestCutterByXmlNodes" object="RequestCutterByXmlNodes">
       <resultlist>
-        <result value="0" node="CheckCFWService"/>
+        <result value="0" node="CheckCFService"/>
         <result value="1" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
@@ -27,9 +27,9 @@
         <param name="XmlPath:0" value="//RemoveList/*"/>
       </parameterslist>
     </node>
-    <node name="CheckCFWService" object="IfMultipleXmlConditionsResolver">
+    <node name="CheckCFService" object="IfMultipleXmlConditionsResolver">
       <resultlist>
-        <result value="0" node="CallForwarding_Delete" />
+        <result value="0" node="CF_Delete" />
         <result value="" node="RequestCutterByXmlNodes" />
       </resultlist>
       <parameterslist>
@@ -41,18 +41,18 @@
         <param name="OrXmlPath:4" value="//RemoveList/RFS_HL_CFD" />
       </parameterslist>
     </node>
-    <node name="CallForwarding_Delete" object="IfCommander">
+    <node name="CF_Delete" object="IfCommander">
       <resultlist>
         <result value="0" node="RequestCutterByXmlNodes"/>
-        <result value="1538" node="CallForwarding_Deactivate"/>
+        <result value="1538" node="CF_Deactivate"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
         <param name="IfXmlPath:0" value="//CallForwardType/Value[text()='Provision']"/>
-        <param name="Command" value="SC.CallForwarding_Delete"/>
+        <param name="Command" value="SC.CF_Delete"/>
       </parameterslist>
     </node>
-    <node name="CallForwarding_Deactivate" object="IfCommander">
+    <node name="CF_Deactivate" object="IfCommander">
       <resultlist>
         <result value="0" node="RequestCutterByXmlNodes"/>
         <result value="1538" node="RequestCutterByXmlNodes"/>
@@ -60,7 +60,7 @@
       </resultlist>
       <parameterslist>
         <param name="IfXmlPath:0" value="//CallForwardMode/Value[text()='Deactivate']"/>
-        <param name="Command" value="SC.CallForwarding_Deactivate"/>
+        <param name="Command" value="SC.CF_Deactivate"/>
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">

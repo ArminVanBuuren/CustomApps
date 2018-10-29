@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="SC.CallForwarding_Delete" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Description>Удаление услуги переадресация</Description>
+<Command Name="SC.CF_Add" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>Добавление услуги переадресация</Description>
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
   <Request>
     <RequestTemplate>
@@ -12,11 +12,11 @@
   </Request>
   <ParametersList>
     <Parameter Name="CallForwardName" IsChoice="true" AbsenceValue="">
-      <Source Path="//RFS_HL_CFB" PostFormat="CFB=0" />
-      <Source Path="//RFS_HL_CFU" PostFormat="CFU=0" />
-      <Source Path="//RFS_HL_CFNRC" PostFormat="CFNRC=0" />
-      <Source Path="//RFS_HL_CFNRY" PostFormat="CFNRY=0" />
-      <Source Path="//RFS_HL_CFD" PostFormat="CFD=0" />
+      <Source Path="//RFS_HL_CFB" PostFormat="CFB=1,CFBNTC=1,CFBNTF=1" />
+      <Source Path="//RFS_HL_CFU" PostFormat="CFU=1,CFUNTC=1" />
+      <Source Path="//RFS_HL_CFNRC" PostFormat="CFNRC=1,CFNRCNTC=1" />
+      <Source Path="//RFS_HL_CFNRY" PostFormat="CFNRY=1,CFNRYNTC=1,CFNRYNTF=1" />
+      <Source Path="//RFS_HL_CFD" PostFormat="CFD=1,CFDNTC=1,CFDNTF=1" />
     </Parameter>
   </ParametersList>
   <ErrorsList CodePage="windows-1251" />

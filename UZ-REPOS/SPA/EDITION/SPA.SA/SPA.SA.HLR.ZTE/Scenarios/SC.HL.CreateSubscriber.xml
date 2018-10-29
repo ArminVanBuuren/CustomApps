@@ -34,7 +34,7 @@
     </node>
     <node name="User_Create" object="Commander">
       <resultlist>
-        <result value="0" node="UserMSISDN_GetCBData"/>
+        <result value="0" node="CFOrigin_Add"/>
         <result value="1793" node="GetKI" />
         <result value="" node="ResponseAssembler"/>
       </resultlist>
@@ -83,7 +83,15 @@
         <param name="Command" value="SC.AuthKI_Add" />
       </parameterslist>
     </node>
-    
+    <node name="CFOrigin_Add" object="Commander">
+      <resultlist>
+        <result value="0" node=""/>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.CFOrigin_Add"/>
+      </parameterslist>
+    </node>
     
     
     
