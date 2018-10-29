@@ -22,6 +22,7 @@
     <Resource name="RES_HL_DEALER_APN" description="Название дилерской точки доступа (Access Point Name)"/>
     <Resource name="RES_HL_SUBSCRIPTION_PROFILE" description="Профиль абонента на HLR"/>
     <Resource name="RES_HL_CNCLOC_DIRECT" description="Тип станции для сброса информации" />
+    <Resource name="RES_HL_CF_ORIGIN" description="Код региона для Переадресации" />
   </ResourceList>
   <RFSParameterList>
     <RFSParameter name="CallForwardType" description="Тип установки переадресаций" />
@@ -114,6 +115,27 @@
     </RFS>
     <RFS name="RFS_HL_SUBSCRIPTION_DGU" base="RFS_HL_SUBSCRIPTION" hostType="HL" description="Создание абонента ТП ДГУ">
       <Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="DGU" />
+    </RFS>
+    <RFS name="RFS_HL_CF_ORIGIN" hostType="HL" description="Определение региона для Переадресации">
+      <Resource name="RES_HL_CF_ORIGIN" value="" useType="Mandatory">
+        <Value hosts="HL:TASH_HLR"   value="TASH_HLR" />
+        <Value hosts="HL:GIL_HLR"    value="GIL_HLR" />
+        <Value hosts="HL:JSK_HLR"    value="JSK_HLR" />
+        <Value hosts="HL:CHIRCH_HLR" value="CHIRCH_HLR" />
+        <Value hosts="HL:YANGL_HLR"  value="YANGL_HLR" />
+        <Value hosts="HL:AND_HLR"    value="AND_HLR" />
+        <Value hosts="HL:NMNGN_HLR"  value="NMNGN_HLR" />
+        <Value hosts="HL:FRGN_HLR"   value="FRGN_HLR" />
+        <Value hosts="HL:SMRKND_HLR" value="SMRKND_HLR" />
+        <Value hosts="HL:BUH_HLR"    value="BUH_HLR" />
+        <Value hosts="HL:KARSHI_HLR" value="KARSHI_HLR" />
+        <Value hosts="HL:NAVOI_HLR"  value="NAVOI_HLR" />
+        <Value hosts="HL:TRMZ_HLR"   value="TRMZ_HLR" />
+        <Value hosts="HL:SHAHRS_HLR" value="SHAHRS_HLR" />
+        <Value hosts="HL:URG_HLR"    value="URG_HLR" />
+        <Value hosts="HL:NUKHUS_HLR" value="NUKHUS_HLR" />
+        <Value hosts="HL:TEST_HLR"   value="TEST_HLR" />
+      </Resource>
     </RFS>
     <!--END ==== SUBSCRIPTION ====-->
 
@@ -275,27 +297,32 @@
     <!--START ==== SUBSCRIPTION ====-->
     <CFS name="Subscriber" priority="9999" type="ManagedObject" description="Абонент на HLR">
       <RFS name="RFS_HL_SUBSCRIPTION_COMMON" linkType="Add" />
+      <RFS name="RFS_HL_CF_ORIGIN" linkType="Info" />
     </CFS>
     <CFS name="FRASKUE" description="Создание абонентов ASKUE - АИИСКУЭ">
       <RFS name="RFS_HL_SUBSCRIPTION_AIISKUE" linkType="Add" />
+      <RFS name="RFS_HL_CF_ORIGIN" linkType="Info" />
     </CFS>
     <CFS name="FRPARTAPN" description="Создание абонентов Partner APN">
       <RFS name="RFS_HL_SUBSCRIPTION_PARTAPN" linkType="Add" />
+      <RFS name="RFS_HL_CF_ORIGIN" linkType="Info" />
     </CFS>
     <CFS name="FRDGU" description="Услуга передачи данных ТП ДГУ">
       <RFS name="RFS_HL_SUBSCRIPTION_DGU" linkType="Add" />
+      <RFS name="RFS_HL_CF_ORIGIN" linkType="Info" />
     </CFS>
     <CFS name="Synchronize" priority="1" description="Обработка кнопки Синхронизировать в СПА">
       <RFSGroup name="RFS_GROUP_HL_CREATE_SUBSCRIBER" />
+      <RFS name="RFS_HL_CF_ORIGIN" linkType="Info" />
     </CFS>
     <CFS name="ChangeMsisdn" priority="9999" type="OneTime" description="Изменение номера MSISDN">
-      
+      <RFS name="RFS_HL_CF_ORIGIN" linkType="Info" />
     </CFS>
     <CFS name="ChangeImsi" priority="9999" type="OneTime" description="Изменение номера IMSI">
-      
+      <RFS name="RFS_HL_CF_ORIGIN" linkType="Info" />
     </CFS>
     <CFS name="ChangeTP" priority="9999" type="OneTime" description="Изменение тарифного плана">
-      
+      <RFS name="RFS_HL_CF_ORIGIN" linkType="Info" />
     </CFS>
     <!--END ==== SUBSCRIPTION ====-->
     
@@ -630,6 +657,7 @@
     <!--START ==== COMMON ====-->
     <Scenario name="HL.CreateSubscriber" description="Создание абонента на HLR">
       <RFS name="RFS_HL_SUBSCRIPTION" scenarioType="Add" useType="Mandatory" />
+      <Append name="RFS_HL_CF_ORIGIN" listType="EndList" />
     </Scenario>
     <Scenario name="HL.CancelLocation" description="Сброс информации о локации абонета на MSC, VLR, SGSN станциях">
       <RFS name="RFS_HL_CNCLOC" scenarioType="Add, Remove, Modify" />

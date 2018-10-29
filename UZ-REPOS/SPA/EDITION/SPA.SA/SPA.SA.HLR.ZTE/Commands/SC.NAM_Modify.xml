@@ -10,5 +10,7 @@
     <Item Name="msisdn" Type="Wellknown"/>
     <Item Name="NET_STATUS" Type="Parameter"/>
   </Request>
-  <ErrorsList CodePage="windows-1251" />
+  <ErrorsList CodePage="windows-1251">
+    <Error Name="110109" Value="SUCCESS"/> <!--Subscriber does not exist-->
+  </ErrorsList>
 </Command>

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.APN_CorporateIP_Add" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Description></Description>
+  <Description>Добавление услуги 'Корпоративный APN'Статический IP</Description>
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
   <Request>
     <RequestTemplate>
@@ -11,5 +11,7 @@
     <Item Name="NET_APN" Type="Parameter"/>
     <Item Name="IP" Type="Parameter"/>
   </Request>
-  <ErrorsList CodePage="windows-1251" />
+  <ErrorsList CodePage="windows-1251">
+    <Error Name="110703" Value="SUCCESS"/> <!--The format of the entered IP address is illegal-->
+  </ErrorsList>
 </Command>

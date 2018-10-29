@@ -19,5 +19,7 @@
       <Source Path="//RFS_HL_ODB_OC/RES_HL_ODB_OC/Value[text()='InternationalCalls']" PostFormat="0" />
     </Parameter>
   </ParametersList>
-  <ErrorsList CodePage="windows-1251" />
+  <ErrorsList CodePage="windows-1251">
+    <Error Name="110109" Value="SUCCESS"/> <!--Subscriber does not exist-->
+  </ErrorsList>
 </Command>

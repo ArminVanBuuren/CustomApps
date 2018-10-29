@@ -4,15 +4,15 @@
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
   <Request>
     <RequestTemplate>
-      <![CDATA[Mod BscEx:MSISDN=##msisdn##,ORIGINFAID=##ORIGINAL_FAID##;^M]]>
+      <![CDATA[Mod BscEx:MSISDN=##msisdn##,ORIGINFAID=##CF_ORIGIN##;^M]]>
     </RequestTemplate>
     <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
     <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="ORIGINAL_FAID" Type="LocalParameter"/>
+    <Item Name="CF_ORIGIN" Type="LocalParameter"/>
   </Request>
   <ParametersList>
-    <Parameter Name="ORIGINAL_FAID" AbsenceValue="">
-      <Source Path="//RFS_HL_ORIGINAL_FAID" />
+    <Parameter Name="CF_ORIGIN" AbsenceValue="">
+      <Source Path="//RES_HL_CF_ORIGIN" />
     </Parameter>
   </ParametersList>
   <ErrorsList CodePage="windows-1251" />

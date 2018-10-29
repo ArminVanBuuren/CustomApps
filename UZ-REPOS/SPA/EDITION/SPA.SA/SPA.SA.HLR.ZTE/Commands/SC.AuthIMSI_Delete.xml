@@ -9,5 +9,8 @@
     <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
     <Item Name="imsi" Type="Wellknown"/>
   </Request>
-  <ErrorsList CodePage="windows-1251" />
+  <ErrorsList CodePage="windows-1251">
+    <Error Name="101040" Value="SUCCESS"/> <!--ISDN is unavailable-->
+    <Error Name="101030" Value="SUCCESS"/> <!--IMSI does not exist-->
+  </ErrorsList>
 </Command>

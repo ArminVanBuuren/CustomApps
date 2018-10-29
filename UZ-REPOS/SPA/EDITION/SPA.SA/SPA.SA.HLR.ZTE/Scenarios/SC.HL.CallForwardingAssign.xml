@@ -45,8 +45,8 @@
       <resultlist>
         <result value="0" node="SwitchMode"/>
         <result value="1" node="SwitchMode"/>
-        <result value="2" node="CFUpdate_1"/>
-        <result value="3" node="CFProvision"/>
+        <result value="2" node="CF_Update"/>
+        <result value="3" node="CF_Add"/>
       </resultlist>
       <parameterslist>
         <param name="XmlPath" value="//CallForwardType/Value/text()"/>
@@ -54,9 +54,9 @@
         <param name="Value:3" value="Provision"/>
       </parameterslist>
     </node>
-    <node name="CFUpdate_1" object="IfCommander">
+    <node name="CF_Update" object="IfCommander">
       <resultlist>
-        <result value="0" node="CFUpdate_2"/>
+        <result value="0" node="CF_Add"/>
         <result value="1538" node="RequestCutterByXmlNodes"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
@@ -66,16 +66,7 @@
         <param name="Command" value="SC.CF_Delete"/>
       </parameterslist>
     </node>
-    <node name="CFUpdate_2" object="Commander">
-      <resultlist>
-        <result value="0" node="SwitchMode"/>
-        <result value="" node="ResponseAssembler"/>
-      </resultlist>
-      <parameterslist>
-        <param name="Command" value="SC.CF_Add"/>
-      </parameterslist>
-    </node>
-    <node name="CFProvision" object="Commander">
+    <node name="CF_Add" object="Commander">
       <resultlist>
         <result value="0" node="SwitchMode"/>
         <result value="" node="ResponseAssembler"/>

@@ -85,16 +85,33 @@
     </node>
     <node name="CFOrigin_Add" object="Commander">
       <resultlist>
-        <result value="0" node=""/>
+        <result value="0" node="SetLanguage"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
         <param name="Command" value="SC.CFOrigin_Add"/>
       </parameterslist>
     </node>
-    
-    
-    
+    <node name="SetLanguage" object="DataBaseProcessor">
+      <resultlist>
+        <result value="0" node="UserMSISDN_GetCBData" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="DataBaseName" value="FORIS.SPA.CBP" />
+        <param name="FunctionName" value="CHANGE_INPLATFORM_LANG" />
+        <param name="FunctionType" value="procedure" />
+        <param name="OutXml" value="db_unit_result" />
+        <param name="DbParameterName:0" value="p_msisdn" />
+        <param name="DbParameterDirection:0" value="Input" />
+        <param name="DbParameterType:0" value="Varchar2" />
+        <param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN" />
+        <param name="DbParameterName:1" value="p_lang_id" />
+        <param name="DbParameterDirection:1" value="Input" />
+        <param name="DbParameterType:1" value="Varchar2" />
+        <param name="DbParameterValue:1" value="4" />
+      </parameterslist>
+    </node>
     <node name="UserMSISDN_GetCBData" object="Commander">
       <resultlist>
         <result value="" node="ResponseAssembler"/>
