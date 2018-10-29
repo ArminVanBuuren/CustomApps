@@ -26,6 +26,9 @@ namespace Utils.WinForm.Notepad
 
             this.TabControlObj.MouseDown += tabControl1_MouseDown;
 
+            button1.KeyDown += XmlNotepad_KeyDown;
+            TabControlObj.KeyDown += XmlNotepad_KeyDown;
+            this.KeyDown += XmlNotepad_KeyDown;
 
             this.TabControlObj.Selecting += tabControl1_Selecting;
             this.TabControlObj.HandleCreated += tabControl1_HandleCreated;
@@ -69,9 +72,8 @@ namespace Utils.WinForm.Notepad
             if (TabControlObj.SelectedTab.Controls.Count == 0)
                 return;
 
-            XmlEditor editor = listOfXmlFiles.First(p => p.FCTextBox == TabControlObj.SelectedTab.Controls[0]);
-            Text = editor.Path;
-
+            if (GetCurrentEditor(out var editor))
+                Text = editor.Path;
         }
 
         private void tabControl1_MouseDown(object sender, MouseEventArgs e)
@@ -168,18 +170,24 @@ namespace Utils.WinForm.Notepad
             }));
         }
 
+        private void XmlNotepad_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F5)
+            {
+                button1_Click(null, EventArgs.Empty);
+            }
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
-            TabPage tabPage = this.TabControlObj.SelectedTab;
-            FastColoredTextBoxNS.FastColoredTextBox fctb = (FastColoredTextBoxNS.FastColoredTextBox)tabPage.Controls[0];
-            //XML Print
+            if (GetCurrentEditor(out var editor))
+                editor.XMLPrint();
+        }
 
-            bool isXml = XmlHelper.XmlHelper.IsXml(fctb.Text, out XmlDocument document);
-            if (isXml)
-            {
-                string formatting = RtfFromXml.GetXmlString(document);
-                fctb.Text = formatting;
-            }
+        bool GetCurrentEditor(out XmlEditor editor)
+        {
+            editor = listOfXmlFiles.First(p => p.FCTextBox == TabControlObj.SelectedTab.Controls[0]);
+            return editor != null;
         }
     }
 }

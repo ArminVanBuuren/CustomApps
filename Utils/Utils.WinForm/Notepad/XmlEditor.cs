@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Xml;
 using FastColoredTextBoxNS;
 using Utils.IOExploitation;
+using Utils.XmlRtfStyle;
 
 namespace Utils.WinForm.Notepad
 {
@@ -247,6 +248,10 @@ namespace Utils.WinForm.Notepad
                         OnSomethingChanged?.Invoke(this, null);
                     }
                 }
+                else if (e.KeyCode == Keys.F5)
+                {
+                    XMLPrint();
+                }
             }
         }
 
@@ -269,6 +274,16 @@ namespace Utils.WinForm.Notepad
             //fctbInput.OnSyntaxHighlight(new TextChangedEventArgs(fctbInput.Range));
 
             IsContentChanged = !fctbInput.Text.Equals(Source);
+        }
+
+        public void XMLPrint()
+        {
+            bool isXml = XmlHelper.XmlHelper.IsXml(FCTextBox.Text, out XmlDocument document);
+            if (isXml)
+            {
+                string formatting = RtfFromXml.GetXmlString(document);
+                FCTextBox.Text = formatting;
+            }
         }
 
         public void Dispose()
