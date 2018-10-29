@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="SC.LTEsReduceSpeed_Modify" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<Command Name="SC.APN_ReduceSpeedLTE_Modify" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>Изменение ограничения скорости LTE до 128кбс</Description>
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
   <Request>

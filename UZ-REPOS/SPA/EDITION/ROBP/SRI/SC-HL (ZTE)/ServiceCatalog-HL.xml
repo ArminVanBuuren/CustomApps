@@ -21,13 +21,13 @@
     <Resource name="RES_HL_NET_APN" description="Название точки доступа (Access Point Name)"/>
     <Resource name="RES_HL_DEALER_APN" description="Название дилерской точки доступа (Access Point Name)"/>
     <Resource name="RES_HL_SUBSCRIPTION_PROFILE" description="Профиль абонента на HLR"/>
+    <Resource name="RES_HL_CNCLOC_DIRECT" description="Тип станции для сброса информации" />
   </ResourceList>
   <RFSParameterList>
     <RFSParameter name="CallForwardType" description="Тип установки переадресаций" />
     <RFSParameter name="CallForwardMode" description="Режим переадресации" />
     <RFSParameter name="CallForwardingTimer" description="Таймер переадресации" />
     <RFSParameter name="ForwardedToNumber" description="Номер переадресации" />
-    <RFSParameter name="CancelLocationDirect" description="Тип станции для сброса информации" />
   </RFSParameterList>
   <FlagList />
   <RFSList>
@@ -178,14 +178,17 @@
       <Resource name="RES_HL_NET_APN" value="MY.UMS.UZ" useType="Mandatory" />
     </RFS>
     <RFS name="RFS_HL_CNCLOC" hostType="HL" description="Сброс информации о локации абонета на MSC, VLR, SGSN станциях">
-      <RFSParameter name="CancelLocationDirect" useType="Mandatory" />
+      <Resource name="RES_HL_CNCLOC_DIRECT" useType="Mandatory" />
     </RFS>
     <RFS name="RFS_HL_CNCLOC_SGSN" parent="RFS_HL_CNCLOC" hostType="HL" description="Сброс информации о локации абонета на SGSN станции">
-      <RFSParameter name="CancelLocationDirect" value="SGSN" />
+      <Resource name="RES_HL_CNCLOC_DIRECT" value="SGSN" />
     </RFS>
     <RFS name="RFS_HL_CNCLOC_LTE" parent="RFS_HL_CNCLOC" hostType="HL" description="Сброс информации о локации абонета на PS-EPS станции">
-      <RFSParameter name="CancelLocationDirect" value="LTE" />
+      <Resource name="RES_HL_CNCLOC_DIRECT" value="LTE" />
     </RFS>
+    <!--<RFS name="RFS_HL_CNCLOC_SGSN" hostType="HL" description="Сброс информации о локации абонета на SGSN станции"/>
+    <RFS name="RFS_HL_CNCLOC_LTE" hostType="HL" description="Сброс информации о локации абонета на PS-EPS станции"/>-->
+    
     <!--END ==== INTERNET ====-->
     
     <!--START ==== SIMPLE SERVICE ====-->
@@ -270,9 +273,6 @@
     <!--END ==== Call Fworwarding ====-->
 
     <!--START ==== SUBSCRIPTION ====-->
-    <CFS name="Synchronize" priority="1" description="Обработка кнопки Синхронизировать в СПА">
-      <RFSGroup name="RFS_GROUP_HL_CREATE_SUBSCRIBER" />
-    </CFS>
     <CFS name="Subscriber" priority="9999" type="ManagedObject" description="Абонент на HLR">
       <RFS name="RFS_HL_SUBSCRIPTION_COMMON" linkType="Add" />
     </CFS>
@@ -284,6 +284,18 @@
     </CFS>
     <CFS name="FRDGU" description="Услуга передачи данных ТП ДГУ">
       <RFS name="RFS_HL_SUBSCRIPTION_DGU" linkType="Add" />
+    </CFS>
+    <CFS name="Synchronize" priority="1" description="Обработка кнопки Синхронизировать в СПА">
+      <RFSGroup name="RFS_GROUP_HL_CREATE_SUBSCRIBER" />
+    </CFS>
+    <CFS name="ChangeMsisdn" priority="9999" type="OneTime" description="Изменение номера MSISDN">
+      
+    </CFS>
+    <CFS name="ChangeImsi" priority="9999" type="OneTime" description="Изменение номера IMSI">
+      
+    </CFS>
+    <CFS name="ChangeTP" priority="9999" type="OneTime" description="Изменение тарифного плана">
+      
     </CFS>
     <!--END ==== SUBSCRIPTION ====-->
     
@@ -330,14 +342,11 @@
     <CFS name="VPNUMS" priority="9994" description="VPN UMS">
       <RFS name="RFS_HL_NET_VPN_APN" linkType="Add" />
     </CFS>
-    <CFS name="CancelLocation" description="Сброс информации о локации абонета на MSC, VLR, SGSN станциях">
+    <CFS name="CancelLocation" type="OneTime" description="Сброс информации о локации абонета на MSC, VLR, SGSN станциях">
       <RFS name="RFS_HL_CNCLOC_SGSN" linkType="Add" />
       <RFS name="RFS_HL_CNCLOC_LTE" linkType="Add" dependsOn="RFS_HL_LTE" />
     </CFS>
-    <CFS name="CancelLocationSGSN" description="Сброс информации о локации абонета на MSC, VLR, SGSN станциях">
-      <RFS name="RFS_HL_CNCLOC_SGSN" linkType="Add"  />
-      <RFS name="RFS_HL_CNCLOC_LTE" linkType="Add" dependsOn="RFS_HL_LTE" />
-    </CFS>
+    <CFS name="CancelLocationSGSN" type="OneTime" copyOf="CancelLocation" description="Сброс информации о локации абонета на MSC, VLR, SGSN станциях"/>
     <!--END ==== INTERNET ====-->
     
     
@@ -624,6 +633,8 @@
     </Scenario>
     <Scenario name="HL.CancelLocation" description="Сброс информации о локации абонета на MSC, VLR, SGSN станциях">
       <RFS name="RFS_HL_CNCLOC" scenarioType="Add, Remove, Modify" />
+      <!--<RFS name="RFS_HL_CNCLOC_SGSN" scenarioType="Add, Remove, Modify" />
+      <RFS name="RFS_HL_CNCLOC_LTE" scenarioType="Add, Remove, Modify" />-->
     </Scenario>
     <Scenario name="HL.ModifyUSSD" description="Изменение статуса USSD">
       <RFS name="RFS_HL_PLSS" scenarioType="Add, Remove, Modify" />
@@ -650,7 +661,6 @@
       <Append name="RFS_HL_LTE" listType="EndList" />
     </Scenario>
     <!--END ==== INTERNET ====-->
-    
     
     <!--START ==== Барринги на связь и смс ====-->
     <Scenario name="HL.ModifyODB" description="Управление ограничениями связи на HLR">

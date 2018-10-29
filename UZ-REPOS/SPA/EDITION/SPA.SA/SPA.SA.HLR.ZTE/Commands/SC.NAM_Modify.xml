@@ -1,13 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="SC.CallHold_Delete" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Description>Удаление услуги 'Удержание вызова'</Description>
+<Command Name="SC.NAM_Modify" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>Изменение услуги 'GPRS'NAM</Description>
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
   <Request>
     <RequestTemplate>
-      <![CDATA[MOD SS: MSISDN=##msisdn##,CH=0;^M]]>
+      <![CDATA[MOD NAM:MSISDN=##msisdn##,NAM=##NET_STATUS##,Keep=1,KEEPEPS=1;^M]]>
     </RequestTemplate>
     <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
     <Item Name="msisdn" Type="Wellknown"/>
+    <Item Name="NET_STATUS" Type="Parameter"/>
   </Request>
   <ErrorsList CodePage="windows-1251" />
 </Command>

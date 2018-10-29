@@ -8,25 +8,25 @@
   <automat>
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
       <resultlist>
-        <result value="0" node="CallWaiting_Delete"/>
+        <result value="0" node="CW_Delete"/>
         <result value="1" node=""/>
       </resultlist>
     </node>
-    <node name="CallWaiting_Delete" object="Commander">
+    <node name="CW_Delete" object="Commander">
       <resultlist>
-        <result value="0" node="CallHold_Delete"/>
+        <result value="0" node="CH_Delete"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SC.CallWaiting_Delete"/>
+        <param name="Command" value="SC.CW_Delete"/>
       </parameterslist>
     </node>
-    <node name="CallHold_Delete" object="Commander">
+    <node name="CH_Delete" object="Commander">
       <resultlist>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SC.CallHold_Delete"/>
+        <param name="Command" value="SC.CH_Delete"/>
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">

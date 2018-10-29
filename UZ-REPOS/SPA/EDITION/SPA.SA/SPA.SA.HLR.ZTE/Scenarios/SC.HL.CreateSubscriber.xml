@@ -4,47 +4,95 @@
     <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll" />
+    <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
   </objectList>
   <automat>
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
       <resultlist>
-        <result value="0" node="SubscriberMSISDN_Delete"/>
+        <result value="0" node="UserMSISDN_Delete"/>
         <result value="1" node=""/>
       </resultlist>
     </node>
-    <node name="SubscriberMSISDN_Delete" object="Commander">
+    <node name="UserMSISDN_Delete" object="Commander">
       <resultlist>
-        <result value="0" node="SubscriberIMSI_Delete"/>
+        <result value="0" node="UserIMSI_Delete"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SC.SubscriberMSISDN_Delete"/>
+        <param name="Command" value="SC.UserMSISDN_Delete"/>
       </parameterslist>
     </node>
-    <node name="SubscriberIMSI_Delete" object="Commander">
+    <node name="UserIMSI_Delete" object="Commander">
       <resultlist>
-        <result value="0" node="Subscriber_Create"/>
+        <result value="0" node="User_Create"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SC.SubscriberIMSI_Delete"/>
+        <param name="Command" value="SC.UserIMSI_Delete"/>
       </parameterslist>
     </node>
-    <node name="Subscriber_Create" object="Commander">
+    <node name="User_Create" object="Commander">
       <resultlist>
-        <result value="0" node="GetCBDataByMsisdn"/>
+        <result value="0" node="UserMSISDN_GetCBData"/>
+        <result value="1793" node="GetKI" />
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SC.Subscriber_Create"/>
+        <param name="Command" value="SC.User_Create"/>
       </parameterslist>
     </node>
-    <node name="GetCBDataByMsisdn" object="Commander">
+    <node name="GetKI" object="DataBaseProcessor">
+      <resultlist>
+        <result value="" node="ExtractKI" />
+      </resultlist>
+      <parameterslist>
+        <param name="DataBaseName" value="FORIS.SPA.CBP" />
+        <param name="FunctionName" value="GET_KI" />
+        <param name="FunctionType" value="function" />
+        <param name="OutXml" value="db_unit_result" />
+        <param name="DbParameterName:0" value="p_imsi" />
+        <param name="DbParameterDirection:0" value="Input" />
+        <param name="DbParameterType:0" value="Varchar2" />
+        <param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/IdentifiersList/Identifier/IMSI" />
+        <param name="DbParameterName:1" value="p_result" />
+        <param name="DbParameterDirection:1" value="ReturnValue" />
+        <param name="DbParameterType:1" value="Varchar2" />
+        <param name="DbParameterValue:1" value="" />
+      </parameterslist>
+    </node>
+    <node name="ExtractKI" object="XmlNodesCopier">
+      <resultlist>
+        <result value="" node="AuthKI_Add" />
+      </resultlist>
+      <parameterslist>
+        <param name="SrcXml" value="db_unit_result" />
+        <param name="DstMessage" value="xmlrequest" />
+        <param name="CopyContentType" value="InnerText" />
+        <param name="SrcXmlPath:0" value="root/return" />
+        <param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/KI" />
+      </parameterslist>
+    </node>
+    <node name="AuthKI_Add" object="IfCommander">
+      <resultlist>
+        <result value="0" node="User_Create" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//ExtendedRequestMessage/AdditionalData/KI[text()!='1']"/>
+        <param name="Command" value="SC.AuthKI_Add" />
+      </parameterslist>
+    </node>
+    
+    
+    
+    
+    <node name="UserMSISDN_GetCBData" object="Commander">
       <resultlist>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SC.GetCBDataByMsisdn"/>
+        <param name="Command" value="SC.UserMSISDN_GetCBData"/>
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">

@@ -21,7 +21,7 @@
       <parameterslist>
         <param name="ObjectInContext" value="request" />
         <param name="Queue" value="requestsSplittedByFrwdTypeQueue"/>
-        <param name="XmlPath:0" value="//CancelLocationDirect/Value"/>
+        <param name="XmlPath:0" value="//RES_HL_CNCLOC_DIRECT/*"/>
       </parameterslist>
     </node>
     <node name="CancelLocation" object="Commander">

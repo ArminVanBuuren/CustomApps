@@ -13,17 +13,17 @@
   <automat>
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
       <resultlist>
-        <result value="0" node="GPRSNAM_Modify"/>
+        <result value="0" node="NAM_Modify"/>
         <result value="1" node=""/>
       </resultlist>
     </node>
-    <node name="GPRSNAM_Modify" object="Commander">
+    <node name="NAM_Modify" object="Commander">
       <resultlist>
         <result value="0" node="TimeOut"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SC.GPRSNAM_Modify"/>
+        <param name="Command" value="SC.NAM_Modify"/>
       </parameterslist>
     </node>
     <node name="TimeOut" object="DummyResponder">

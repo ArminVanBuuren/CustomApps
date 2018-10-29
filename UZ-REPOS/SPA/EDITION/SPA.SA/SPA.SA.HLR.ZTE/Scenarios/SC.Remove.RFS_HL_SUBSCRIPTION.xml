@@ -8,25 +8,25 @@
   <automat>
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
       <resultlist>
-        <result value="0" node="SubscriberMSISDN_Delete"/>
+        <result value="0" node="UserMSISDN_Delete"/>
         <result value="1" node=""/>
       </resultlist>
     </node>
-    <node name="SubscriberMSISDN_Delete" object="Commander">
+    <node name="UserMSISDN_Delete" object="Commander">
       <resultlist>
-        <result value="0" node="SubscriberAUC_Delete"/>
+        <result value="0" node="AuthIMSI_Delete"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SC.SubscriberMSISDN_Delete"/>
+        <param name="Command" value="SC.UserMSISDN_Delete"/>
       </parameterslist>
     </node>
-    <node name="SubscriberAUC_Delete" object="Commander">
+    <node name="AuthIMSI_Delete" object="Commander">
       <resultlist>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SC.SubscriberAUC_Delete"/>
+        <param name="Command" value="SC.AuthIMSI_Delete"/>
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">
