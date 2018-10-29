@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using FormUtils.DataGridViewHelper;
+using Utils.WinForm.DataGridViewHelper;
 using Utils.IOExploitation;
-using static FormUtils.DataGridViewHelper.DGVEnhancer;
+using static Utils.WinForm.DataGridViewHelper.DGVEnhancer;
 
 namespace ProcessFilter.SPA
 {

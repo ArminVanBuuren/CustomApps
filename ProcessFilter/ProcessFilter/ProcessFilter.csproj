@@ -38,10 +38,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\CustomApp\FastColoredTextBox\FastColoredTextBox\bin\Release\FastColoredTextBox.dll</HintPath>
     </Reference>
-    <Reference Include="FormUtils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\CustomApp\Utils\FormUtils\bin\Debug\FormUtils.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.DirectoryServices" />
@@ -58,6 +54,9 @@
     <Reference Include="Utils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\CustomApp\Utils\Utils\bin\Release\Utils.dll</HintPath>
+    </Reference>
+    <Reference Include="Utils.WinForm">
+      <HintPath>..\..\..\CustomApp\Utils\Utils.WinForm\bin\Release\Utils.WinForm.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

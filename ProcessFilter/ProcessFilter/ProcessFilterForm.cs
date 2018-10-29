@@ -16,11 +16,11 @@ using Utils;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Reflection;
-using FormUtils.Notepad;
-using FormUtils.DataGridViewHelper;
 using Utils.XmlHelper;
 using Timer = System.Timers.Timer;
 using System.Threading;
+using Utils.WinForm.DataGridViewHelper;
+using Utils.WinForm.Notepad;
 
 namespace ProcessFilter
 {

@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
-using FormUtils.DataGridViewHelper;
+using Utils.WinForm.DataGridViewHelper;
 using Utils;
 using Utils.IOExploitation;
 using Utils.XmlHelper;
-using static FormUtils.DataGridViewHelper.DGVEnhancer;
+using static Utils.WinForm.DataGridViewHelper.DGVEnhancer;
 
 namespace ProcessFilter.SPA
 {

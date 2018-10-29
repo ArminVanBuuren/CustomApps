@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using FormUtils.DataGridViewHelper;
-using static FormUtils.DataGridViewHelper.DGVEnhancer;
+using Utils.WinForm.DataGridViewHelper;
+using static Utils.WinForm.DataGridViewHelper.DGVEnhancer;
 
 namespace ProcessFilter.SPA
 {

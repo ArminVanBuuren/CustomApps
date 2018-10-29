@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static FormUtils.DataGridViewHelper.DGVEnhancer;
+using static Utils.WinForm.DataGridViewHelper.DGVEnhancer;
 
 namespace ProcessFilter.SPA
 {
