@@ -26,7 +26,7 @@ namespace Utils.WinForm.Notepad
 
             this.TabControlObj.MouseDown += tabControl1_MouseDown;
 
-            button1.KeyDown += XmlNotepad_KeyDown;
+            //button1.KeyDown += XmlNotepad_KeyDown;
             TabControlObj.KeyDown += XmlNotepad_KeyDown;
             this.KeyDown += XmlNotepad_KeyDown;
 
@@ -174,15 +174,16 @@ namespace Utils.WinForm.Notepad
         {
             if (e.KeyCode == Keys.F5)
             {
-                button1_Click(null, EventArgs.Empty);
+                if (GetCurrentEditor(out var editor))
+                    editor.XMLPrint();
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            if (GetCurrentEditor(out var editor))
-                editor.XMLPrint();
-        }
+        //private void button1_Click(object sender, EventArgs e)
+        //{
+        //    if (GetCurrentEditor(out var editor))
+        //        editor.XMLPrint();
+        //}
 
         bool GetCurrentEditor(out XmlEditor editor)
         {

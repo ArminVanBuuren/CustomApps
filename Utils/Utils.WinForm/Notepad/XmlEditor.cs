@@ -118,10 +118,10 @@ namespace Utils.WinForm.Notepad
             //fctb.Cursor = Cursors.IBeam;
             //fctb.DisabledColor = Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             //fctb.IsReplaceMode = false;
-            //fctb.LeftBracket = '(';
+            //!!!!!fctb.LeftBracket = '(';
             //fctb.Name = "fctb";
             //fctb.Paddings = new Padding(0);
-            //fctb.RightBracket = ')';
+            //!!!!!fctb.RightBracket = ')';
             //fctb.SelectionColor = Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             //fctb.ServiceColors = null;
             //fctb.TabIndex = 4;
@@ -143,49 +143,38 @@ namespace Utils.WinForm.Notepad
             //fctb.Language = Language.XML;
             //fctb.SelectionChangedDelayed += fctb_SelectionChangedDelayed;
 
-
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(XmlEditor));
-            fctb.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                                                                      | System.Windows.Forms.AnchorStyles.Left)
-                                                                     | System.Windows.Forms.AnchorStyles.Right)));
+            fctb.ClearStylesBuffer();
+            fctb.Range.ClearStyle(StyleIndex.All);
+            fctb.Language = Language.XML;
+            fctb.Anchor = ((AnchorStyles)((((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right)));
             fctb.Text = source;
-            fctb.AutoCompleteBracketsList = new char[] {
-                '(',
-                ')',
-                '{',
-                '}',
-                '[',
-                ']',
-                '\"',
-                '\"',
-                '\'',
-                '\''};
+            fctb.AutoCompleteBracketsList = new char[] {'(',')','{','}','[',']','\"','\"','\'','\''};
             fctb.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);";
             fctb.AutoScrollMinSize = new System.Drawing.Size(0, 14);
             fctb.BackBrush = null;
             fctb.CharHeight = 14;
             fctb.CharWidth = 8;
-            fctb.Cursor = System.Windows.Forms.Cursors.IBeam;
-            fctb.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            fctb.ImeMode = System.Windows.Forms.ImeMode.Off;
+            fctb.Cursor = Cursors.IBeam;
+            fctb.DisabledColor = Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            fctb.ImeMode = ImeMode.Off;
             fctb.IsReplaceMode = false;
             fctb.Name = "fctb";
-            fctb.Paddings = new System.Windows.Forms.Padding(0);
-            fctb.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            fctb.Paddings = new Padding(0);
+            fctb.SelectionColor = Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             fctb.ServiceColors = null;
-            fctb.Size = new System.Drawing.Size(859, 491);
             fctb.TabIndex = 0;
             fctb.WordWrap = true;
             fctb.Zoom = 100;
+            fctb.Dock = DockStyle.Fill;
 
             fctb.TextChanged += Fctb_TextChanged;
             fctb.KeyDown += Fctb_KeyDownSaveDocument;
-            fctb.ClearStylesBuffer();
-            fctb.Range.ClearStyle(StyleIndex.All);
-            fctb.Language = Language.XML;
             fctb.SelectionChangedDelayed += fctb_SelectionChangedDelayed;
 
             ((ISupportInitialize)(fctb)).EndInit();
+
+
+
             //fctb.Location = new Point(0, 0);
             //fctb.Size = new System.Drawing.Size(1047, 695);
 

@@ -17,7 +17,7 @@ namespace Tester.WinForm
 
             try
             {
-                Application.Run(new XmlNotepad(@"C:\@Repos\CustomApp\Utils\Tester.WinForm\bin\Debug\!text.xml"));
+                Application.Run(new XmlNotepad(@"C:\Users\vhovanskij\Desktop\2018.09.06\ROBP\Processes\Create Subscriber in All platform.xml"));
             }
             catch (Exception e)
             {
