@@ -186,14 +186,15 @@
 											Style="{StaticResource VSUIWindowStyleTitleBarButton}"
 											Click="Information_OnClick"
 											WindowChrome.IsHitTestVisibleInChrome="True">
-                                            <Grid MaxHeight="11" MaxWidth="11" >
-                                                <Path
+                                            <Grid MaxHeight="15" MaxWidth="15"  >
+                                                <TextBlock FontSize="11" Margin="3 0 0 0" RenderOptions.EdgeMode="Aliased" FontWeight="Bold">?</TextBlock>
+                                                <!--<Path
 													Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
 													StrokeThickness="1"
 													Stretch="None"
 													RenderOptions.EdgeMode="Aliased"
                                                     Data="M0,4 L4,8 L8,4 Z "
-												/>
+												/>-->
                                             </Grid>
                                             <Button.Resources>
                                                 <CornerRadius x:Key="ButtonBorders">0, 0, 0, 0</CornerRadius>

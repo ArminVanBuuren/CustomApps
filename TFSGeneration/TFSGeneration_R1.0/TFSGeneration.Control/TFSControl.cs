@@ -141,9 +141,9 @@ namespace TFSAssist.Control
             {
                 throw new ArgumentException(string.Format(
                     "Mail Address=[{0}] Or Domain\\Username=[{1}] With ExchangeUri=[{2}] is Incorrect! Please check fields.",
-                    Utility.ToStringIsNullOrEmptyTrim(Settings.MailOption.Address.Value),
-                    Utility.ToStringIsNullOrEmptyTrim(Settings.MailOption.UserName.Value),
-                    Utility.ToStringIsNullOrEmptyTrim(Settings.MailOption.ExchangeUri.Value)));
+                    Settings.MailOption.Address.Value.ToStringIsNullOrEmptyTrim(),
+                    Settings.MailOption.UserName.Value.ToStringIsNullOrEmptyTrim(),
+                    Settings.MailOption.ExchangeUri.Value.ToStringIsNullOrEmptyTrim()));
             }
 
             // проверяем коннект к почтовому серверу
@@ -354,19 +354,19 @@ namespace TFSAssist.Control
                     continue;
 
                 //Если это письмо уже обрабатывалось, то проверяем на валидность создания TFS
-                TMData _task = Datas.IsExist(item);
-                if (_task != null)
+                TMData task = Datas.IsExist(item);
+                if (task != null)
                 {
                     //Если успешно он раньше был создан то пропускаем обработку
-                    if (_task.Status == ProcessingStatus.Created || _task.Status == ProcessingStatus.Skipped)
+                    if (task.Status == ProcessingStatus.Created || task.Status == ProcessingStatus.Skipped)
                         continue;
-                    Datas.Remove(_task);
+                    Datas.Remove(task);
                 }
 
                 // если валидация прошла успешно и пустопуло новое письмо или в предыдущей обработке таск был создан ошибочно, то будет пересоздаваться
                 countOfProcessing++;
 
-                _task = new TMData
+                task = new TMData
                 {
                     ID = item.ID,
                     From = item.From,
@@ -380,38 +380,52 @@ namespace TFSAssist.Control
 
                     if (parced.Count > 0)
                     {
-                        _task.Executed = new ItemExecuted
+                        task.Executed = new ItemExecuted
                         {
                             MailParcedItems = parced
                         };
                         string tfsId;
                         //создаем ТФС
-                        bool resultCreateTFS = CheckAndCreateTFSItem(_task.Executed.ReplaceParcedValues, out tfsId);
-                        _task.Executed.TFSID = tfsId;
+                        bool resultCreateTFS = CheckAndCreateTFSItem(task.Executed, out tfsId);
+                        task.Executed.TFSID = tfsId;
                         //Если уже TFS создавался то пропускаем обработку, и записываем ранее созданный TFSID
-                        _task.Status = resultCreateTFS ? ProcessingStatus.Created : ProcessingStatus.Skipped;
+                        task.Status = resultCreateTFS ? ProcessingStatus.Created : ProcessingStatus.Skipped;
                     }
                     else
                     {
-                        _task.Status = ProcessingStatus.Skipped;
+                        task.Status = ProcessingStatus.Skipped;
                     }
 
-                    Datas.Add(_task);
+                    Datas.Add(task);
                 }
-                catch (TFSFieldsException ex)
+                catch (TFSFieldsException ex1)
                 {
                     //Если в настройках что то было неверно заполненно
-                    _task.Status = ProcessingStatus.Failure;
-                    Datas.Add(_task);
+                    task.Status = ProcessingStatus.Failure;
+                    Datas.Add(task);
 
                     countErrors++;
-                    logProcessing += string.Format("Processing Error!{0}ReceivedDate=[{1}] Subject=[{2}]{0}{3}{0}{4}{0}{5}{0}", Environment.NewLine, item.ReceivedDate, item.Subject, ex.Message, ex.StackTrace, new string('=', 47));
+
+                    logProcessing += string.Format("Processing Error!{0}ReceivedDate=[{1}] Subject=[{2}]{0}", Environment.NewLine, item.ReceivedDate, item.Subject);
+                    Exception ex2 = ex1;
+                    while (true)
+                    {
+                        logProcessing += string.Format("{0}{1}{0}{2}{0}", Environment.NewLine, ex2.Message, ex2.StackTrace);
+
+                        if (ex2.InnerException != null)
+                        {
+                            ex2 = ex2.InnerException;
+                            continue;
+                        }
+                        break;
+                    }
+                    logProcessing += new string('=', 47) + Environment.NewLine;
                 }
                 catch (Exception)
                 {
                     //Фатальная ошибка если ее выкинул сам TFS обработчик при поиске и создания TFS
-                    _task.Status = ProcessingStatus.FatalException;
-                    Datas.Add(_task);
+                    task.Status = ProcessingStatus.FatalException;
+                    Datas.Add(task);
 
                     throw;
                 }
@@ -443,34 +457,35 @@ namespace TFSAssist.Control
 
             foreach (string match in ParceSubject.GetGroupNames())
             {
-                parced.Add(new DataMail
+                if (!match.IsNumber())
                 {
-                    Name = string.Format("{0}_{1}", nameof(OptionMail.ParceSubject), match),
-                    Value = fromSubject[match].Value
-                });
+                    parced.Add(new DataMail {
+                                                Name = string.Format("{0}_{1}", nameof(OptionMail.ParceSubject), match),
+                                                Value = fromSubject[match].Value
+                                            });
+                }
             }
 
 
             foreach (string match in ParceBody.GetGroupNames())
             {
-                parced.Add(new DataMail
+                if (!match.IsNumber())
                 {
-                    Name = string.Format("{0}_{1}", nameof(OptionMail.ParceBody), match),
-                    Value = fromBody[match].Value
-                });
-
+                    parced.Add(new DataMail {
+                                                Name = string.Format("{0}_{1}", nameof(OptionMail.ParceBody), match),
+                                                Value = fromBody[match].Value
+                                            });
+                }
             }
 
             return parced;
         }
 
-
-
-        bool CheckAndCreateTFSItem(GetParcedValue getParcedValue, out string createdTfsId)
+        bool CheckAndCreateTFSItem(ItemExecuted itemExec, out string createdTfsId)
         {
             createdTfsId = string.Empty;
             //запускаем скрипт по поиску дублей
-            string query = getParcedValue(Settings.TFSOption.GetDublicateTFS[0].Value);
+            string query = itemExec.ReplaceParcedValues(Settings.TFSOption.GetDublicateTFS[0].Value);
             WorkItemCollection workQuery = _workItemStore.Query(query);
 
             if (workQuery.Count > 0)
@@ -482,15 +497,15 @@ namespace TFSAssist.Control
                 return false;
             }
 
-            return CreateTFSItem(getParcedValue, ref createdTfsId);
+            return CreateTFSItem(itemExec, ref createdTfsId);
         }
 
-        bool CreateTFSItem(GetParcedValue getParcedValue, ref string createdTfsId)
+        bool CreateTFSItem(ItemExecuted itemExec, ref string createdTfsId)
         {
             foreach (TeamProjectCondition teamProj in Settings.TFSOption.TFSCreate.TeamProjects)
             {
                 //проверяем условие в аттрибуте Condition, но сначала выполняется функция getParcedValue для замены необходимых спарсенных данных
-                if (!teamProj.GetConditionResult(getParcedValue))
+                if (!teamProj.GetConditionResult(itemExec.ReplaceParcedValues))
                     continue;
 
                 //если не указана имя проекта TFS
@@ -504,7 +519,7 @@ namespace TFSAssist.Control
                 foreach (WorkItemCondition workItem in teamProj.WorkItems)
                 {
                     //проверяем условие в аттрибуте Condition, но сначала выполняется функция getParcedValue для замены необходимых спарсенных данных
-                    if (!workItem.GetConditionResult(getParcedValue))
+                    if (!workItem.GetConditionResult(itemExec.ReplaceParcedValues))
                         continue;
 
                     //если не указан тип создания заявки TFS
@@ -515,6 +530,7 @@ namespace TFSAssist.Control
 
 
                     WorkItemType workItemType = teamProject.WorkItemTypes[workItem.Value];
+                    string displayForm = workItemType.DisplayForm;
                     WorkItem tfsWorkItem = new WorkItem(workItemType);
 
                     try
@@ -522,16 +538,34 @@ namespace TFSAssist.Control
                         //заполняем все поля которые были указаны в конфиге для обпределенного типа заявки TFS
                         foreach (FieldCondition field in workItem.Fields)
                         {
-                            //кастомный аттрибут "Control.AssignedTo", если он не заполнен то подставляется текущий пользователь
+                            string getFormattedValue = field.GetSwitchValue(itemExec.ReplaceParcedValues, OnWriteLog).Trim();
                             if (field.Name.Equals("Control.AssignedTo", StringComparison.CurrentCultureIgnoreCase))
                             {
-                                string getAssignTo = field.GetSwitchValue(getParcedValue).Trim();
-                                tfsWorkItem.Fields["Assigned To"].Value = getAssignTo.IsNullOrEmpty()
+                                //кастомный аттрибут "Control.AssignedTo", если он не заполнен то подставляется текущий пользователь
+                                tfsWorkItem.Fields["Assigned To"].Value = getFormattedValue.Trim().IsNullOrEmpty()
                                     ? _tfsService.AuthorizedIdentity.DisplayName
-                                    : getAssignTo;
+                                    : getFormattedValue.Trim();
                                 continue;
                             }
-                            tfsWorkItem.Fields[field.Name].Value = field.GetSwitchValue(getParcedValue);
+                            if (field.Name.Equals("Control.Links", StringComparison.CurrentCultureIgnoreCase))
+                            {
+                                //кастомный аттрибут "Control.Links", если он не заполнен то к этому item линкуются все возможные таски
+                                foreach (string link in getFormattedValue.Split(';'))
+                                {
+                                    int linkTfsId;
+                                    if (int.TryParse(link, out linkTfsId))
+                                    {
+                                        tfsWorkItem.Links.Add(new RelatedLink(linkTfsId));
+                                    }
+                                    else
+                                    {
+                                        throw new TFSFieldsException("Not Correct Item Control.Links=[{0}]! Incorrect=[{1}] Value=[{2}]", field.Value, getFormattedValue, link);
+                                    }
+                                }
+                                continue;
+                            }
+
+                            tfsWorkItem.Fields[field.Name].Value = field.GetSwitchValue(itemExec.ReplaceParcedValues, OnWriteLog);
                         }
 
                         tfsWorkItem.Save();
@@ -545,6 +579,12 @@ namespace TFSAssist.Control
 
                         throw new TFSFieldsException("Error in creating TFS item! Please check workitem's fields in config.",
                                                      new TFSFieldsException(string.Format("Error in {0}=[{1}] / {2}=[{3}]{4}Required fields:{4}{5}", teamProj.Value, teamProj.Condition, workItem.Value, workItem.Condition, Environment.NewLine, reqFields), ex));
+                    }
+                    catch (Exception)
+                    {
+                        if (!displayForm.IsNullOrEmpty())
+                            OnWriteLog(string.Format("Detailed display form for [{3}:{2}]:{0}{1}", Environment.NewLine, displayForm, workItem.Value, teamProj.Value));
+                        throw;
                     }
                 }
             }
@@ -602,7 +642,7 @@ This message is automatically generated by JIRA.
             //string temp = _task.Executed.ReplaceParcedValues(Settings.TFSOption.GetDublicateTFS[0].Value);
 
             string idResult = string.Empty;
-            CreateTFSItem(_task.Executed.ReplaceParcedValues, ref idResult);
+            CreateTFSItem(_task.Executed, ref idResult);
         }
 
         void Test2()

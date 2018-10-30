@@ -55,11 +55,10 @@ namespace UIControls.MainControl
 			}
 		}
 
-        private UIWindow mainWindow;
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
-            mainWindow = (UIWindow)sender;
+            UIWindow mainWindow = (UIWindow)sender;
 
             
             
@@ -174,8 +173,6 @@ namespace UIControls.MainControl
 			sender.ForWindowFromTemplate(w => SystemCommands.ShowSystemMenu(w, point));
 		}
 
-
-
 		void MaxButtonClick(object sender, RoutedEventArgs e)
 		{
 			sender.ForWindowFromTemplate(w =>
@@ -213,17 +210,21 @@ namespace UIControls.MainControl
 
         private void Information_OnClick(object sender, RoutedEventArgs e)
         {
-            //UIWindow mainWindow = Application.Current.MainWindow as UIWindow;
+            UIWindow mainWindow = Application.Current.MainWindow as UIWindow;
             //if(!(sender is UIWindow mainWindow))
             //    return;
-
-            Presenter vkhovanskiy = new Presenter(false, false);
-            vkhovanskiy.Owner = mainWindow;
-            vkhovanskiy.Loaded += WindowInfo_Loaded;
-            mainWindow.IsBlured = true;
-            vkhovanskiy.ShowDialog();
-            vkhovanskiy.Loaded -= WindowInfo_Loaded;
-            mainWindow.IsBlured = false;
+            //if (sender is DependencyObject)
+            //Window parentWindow = Window.GetWindow((DependencyObject) sender);
+            if (mainWindow != null)
+            {
+                Presenter vkhovanskiy = new Presenter(false, false);
+                vkhovanskiy.Owner = mainWindow;
+                vkhovanskiy.Loaded += WindowInfo_Loaded;
+                mainWindow.IsBlured = true;
+                vkhovanskiy.ShowDialog();
+                vkhovanskiy.Loaded -= WindowInfo_Loaded;
+                mainWindow.IsBlured = false;
+            }
         }
 
         private void WindowInfo_Loaded(object sender, RoutedEventArgs e)

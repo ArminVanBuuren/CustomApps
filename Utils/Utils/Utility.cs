@@ -28,9 +28,15 @@ namespace Utils
         {
             return string.IsNullOrEmpty(value) || string.IsNullOrEmpty(value.Trim());
         }
+
         public static string ToStringIsNullOrEmptyTrim(this string value)
         {
             return string.IsNullOrEmpty(value) || string.IsNullOrEmpty(value.Trim()) ? "Null" : value;
+        }
+
+        public static bool IsNumber(this string value)
+        {
+            return int.TryParse(value, out _);
         }
     }
 }

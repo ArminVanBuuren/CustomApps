@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using Utils.ConditionEx;
 using Utils;
@@ -142,21 +143,51 @@ namespace TFSAssist.Control.DataBase.Settings
         /// </summary>
         /// <param name="getParcedValue"></param>
         /// <returns></returns>
-        internal string GetSwitchValue(GetParcedValue getParcedValue)
+        internal string GetSwitchValue(GetParcedValue getParcedValue, NotifyStatusHandler writeErrLog)
         {
             if (Switch.IsNullOrEmpty() && Items.Count <= 0)
                 return getParcedValue(Value);
 
 
+            string resultSwitch = GetParcedValueSwitch(getParcedValue, out var errLog);
+            if (!errLog.IsNullOrEmpty())
+                writeErrLog(errLog);
+
+            return resultSwitch;
+        }
+
+        /// <summary>
+        /// Выбрать правильный вариант функции Switch-Map
+        /// </summary>
+        /// <param name="getParcedValue"></param>
+        /// <param name="errorLog"></param>
+        /// <returns></returns>
+        string GetParcedValueSwitch(GetParcedValue getParcedValue, out string errorLog)
+        {
+            errorLog = null;
             string switchValue = getParcedValue(Switch).Trim();
             foreach (MappingValue mapValue in Items)
             {
-                if (mapValue.Case.Trim().Equals(switchValue, StringComparison.CurrentCultureIgnoreCase))
-                {
+                string mapCasePattern = mapValue.Case.Trim();
+                if(mapCasePattern.IsNullOrEmpty() && switchValue.IsNullOrEmpty())
                     return getParcedValue(mapValue.Value);
+
+                try
+                {
+                    if (Regex.IsMatch(switchValue, mapCasePattern, RegexOptions.IgnoreCase))
+                    {
+                        return getParcedValue(mapValue.Value);
+                    }
+                }
+                catch (Exception e)
+                {
+                    errorLog += $"Incorrect Case of Map collection. Case=[{mapCasePattern}]{Environment.NewLine}Exception:{e.Message}";
+                    //if (mapValue.Case.Trim().Equals(switchValue, StringComparison.CurrentCultureIgnoreCase))
+                    //{
+                    //    return getParcedValue(mapValue.Value);
+                    //}
                 }
             }
-
 
             return getParcedValue(Value);
         }
