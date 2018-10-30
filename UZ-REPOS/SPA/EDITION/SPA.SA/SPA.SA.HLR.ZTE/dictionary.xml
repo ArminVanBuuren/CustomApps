@@ -51,13 +51,166 @@
       <Source Path="ExtendedRequestMessage/AdditionalData/IP"/>
       <PossibleValues StringToKeyTable="true"/>
     </Parameter>
+
+
+    
+    
+    
+    <Parameter Name="NewIMSI">
+      <Source Path="ExtendedRequestMessage/AdditionalData//NewIMSI"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="NewMSISDN">
+      <Source Path="ExtendedRequestMessage/AdditionalData//NewMSISDN"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="Originating">
+      <Source Path="//AdditionalData/Originating"/>
+      <PossibleValues StringToKeyTable="false">
+        <Item Key="TASH_HLR" StringValue="1"/>
+        <Item Key="CHIRCH_HLR" StringValue="2"/>
+        <Item Key="YANGL_HLR" StringValue="2"/>
+        <Item Key="GIL_HLR" StringValue="3"/>
+        <Item Key="JSK_HLR" StringValue="4"/>
+        <Item Key="AND_HLR" StringValue="5"/>
+        <Item Key="BUH_HLR" StringValue="6"/>
+        <Item Key="KARSHI_HLR" StringValue="7"/>
+        <Item Key="SHAHRS_HLR" StringValue="7"/>
+        <Item Key="NAVOI_HLR" StringValue="8"/>
+        <Item Key="NMNGN_HLR" StringValue="9"/>
+        <Item Key="NUKHUS_HLR" StringValue="10"/>
+        <Item Key="SMRKND_HLR" StringValue="11"/>
+        <Item Key="TRMZ_HLR" StringValue="12"/>
+        <Item Key="URG_HLR" StringValue="13"/>
+        <Item Key="FRGN_HLR" StringValue="14"/>
+        <Item Key="TEST_HLR" StringValue="2"/>
+      </PossibleValues>
+    </Parameter>
+    <Parameter Name="apn">
+      <Source Path="//AdditionalData/CorporateService"/>
+      <PossibleValues StringToKeyTable="false">
+        <Item Key="FRCORPAPN" StringValue="TEST.LTE"/>
+        <Item Key="FRAPNXB" StringValue="XB.APN.UZ"/>
+        <Item Key="FRAPNZIYOD" StringValue="ZIYOD.UMS.UZ"/>
+      </PossibleValues>
+    </Parameter>
+    <Parameter Name="apn_m2m">
+      <Source Path="//AdditionalData/M2MService"/>
+      <PossibleValues StringToKeyTable="false">
+        <Item Key="FRM2MAPNFMS" StringValue="FMS.APN"/>
+        <Item Key="FRM2MAPNNGMK" StringValue="NGMK.APN"/>
+        <Item Key="FRM2MAPNBEPRO" StringValue="UZGPS.APN"/>
+        <Item Key="FRM2MAPN" StringValue="M2M.APN"/>
+        <Item Key="FRM2MAPNBANK" StringValue="BANK.APN"/>
+        <Item Key="VPNUMS" StringValue="UMS-VPN.UMS.UZ"/>
+      </PossibleValues>
+    </Parameter>
+    <Parameter Name="apn_free">
+      <Source Path="//AdditionalData/FreeService"/>
+      <PossibleValues StringToKeyTable="false">
+        <Item Key="FRFREE" StringValue="DAVRA.UMS.APN"/>
+      </PossibleValues>
+    </Parameter>
     <Parameter Name="KI">
       <Source Path="ExtendedRequestMessage/AdditionalData/KI"/>
       <PossibleValues StringToKeyTable="true"/>
     </Parameter>
   </ParametersList>
   <DynamicParametersList/>
-  <LogicalGroupParametersList/>
+  <LogicalGroupParametersList>
+    <LogicalGroupParameter Name="HLR_Profile" AbsenceValue="">
+      <SourcesList PresenceValue="55">
+        <Source Type="IfNotXmlPath:0" Path="//AdditionalData/RegisteredList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:1" Path="//AdditionalData/ProvisionList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:2" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
+        <Source Type="IfNotXmlPath:3" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
+        <Source Type="IfNotXmlPath:4" Path="//AdditionalData/RegisteredList/FRDGU"/>
+        <Source Type="IfNotXmlPath:5" Path="//AdditionalData/ProvisionList/FRDGU"/>
+        <Source Type="IfXmlPath:0" Path="//AdditionalData/BalanceStorage/HostCode[text()='MS']"/>
+      </SourcesList>
+      <SourcesList PresenceValue="51">
+        <Source Type="IfNotXmlPath:0" Path="//AdditionalData/RegisteredList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:1" Path="//AdditionalData/ProvisionList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:2" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
+        <Source Type="IfNotXmlPath:3" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
+        <Source Type="IfNotXmlPath:4" Path="//AdditionalData/RegisteredList/FRDGU"/>
+        <Source Type="IfNotXmlPath:5" Path="//AdditionalData/ProvisionList/FRDGU"/>
+        <Source Type="IfXmlPath:0" Path="//AdditionalData/BalanceStorage/HostCode[text()='05']"/>
+      </SourcesList>
+      <SourcesList PresenceValue="10">
+        <Source Type="OrXmlPath:0" Path="//AdditionalData/RegisteredList/FRASKUE"/>
+        <Source Type="OrXmlPath:1" Path="//AdditionalData/ProvisionList/FRASKUE"/>
+      </SourcesList>
+      <SourcesList PresenceValue="20">
+        <Source Type="OrXmlPath:0" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
+        <Source Type="OrXmlPath:1" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
+      </SourcesList>
+      <SourcesList PresenceValue="11">
+        <Source Type="OrXmlPath:0" Path="//AdditionalData/RegisteredList/FRDGU"/>
+        <Source Type="OrXmlPath:1" Path="//AdditionalData/ProvisionList/FRDGU"/>
+      </SourcesList>
+    </LogicalGroupParameter>
+    <LogicalGroupParameter Name="NewHLR_Profile" AbsenceValue="">
+      <SourcesList PresenceValue="55">
+        <Source Type="IfNotXmlPath:0" Path="//AdditionalData/RegisteredList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:1" Path="//AdditionalData/ProvisionList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:2" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
+        <Source Type="IfNotXmlPath:3" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
+        <Source Type="IfNotXmlPath:4" Path="//AdditionalData/RegisteredList/FRDGU"/>
+        <Source Type="IfNotXmlPath:5" Path="//AdditionalData/ProvisionList/FRDGU"/>
+        <Source Type="IfXmlPath:0" Path="//NewPlatform/HostCode[text()='MS']"/>
+      </SourcesList>
+      <SourcesList PresenceValue="51">
+        <Source Type="IfNotXmlPath:0" Path="//AdditionalData/RegisteredList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:1" Path="//AdditionalData/ProvisionList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:2" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
+        <Source Type="IfNotXmlPath:3" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
+        <Source Type="IfNotXmlPath:4" Path="//AdditionalData/RegisteredList/FRDGU"/>
+        <Source Type="IfNotXmlPath:5" Path="//AdditionalData/ProvisionList/FRDGU"/>
+        <Source Type="IfXmlPath:0" Path="//NewPlatform/HostCode[text()='05']"/>
+      </SourcesList>
+      <SourcesList PresenceValue="10">
+        <Source Type="OrXmlPath:0" Path="//AdditionalData/RegisteredList/FRASKUE"/>
+        <Source Type="OrXmlPath:1" Path="//AdditionalData/ProvisionList/FRASKUE"/>
+      </SourcesList>
+      <SourcesList PresenceValue="20">
+        <Source Type="OrXmlPath:0" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
+        <Source Type="OrXmlPath:1" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
+      </SourcesList>
+      <SourcesList PresenceValue="11">
+        <Source Type="OrXmlPath:0" Path="//AdditionalData/RegisteredList/FRDGU"/>
+        <Source Type="OrXmlPath:1" Path="//AdditionalData/ProvisionList/FRDGU"/>
+      </SourcesList>
+    </LogicalGroupParameter>
+    <LogicalGroupParameter Name="HLR_IMSI_Profile" AbsenceValue="">
+      <SourcesList PresenceValue="55">
+        <Source Type="IfNotXmlPath:0" Path="//AdditionalData/RegisteredList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:1" Path="//AdditionalData/ProvisionList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:2" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
+        <Source Type="IfNotXmlPath:3" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
+        <Source Type="IfXmlPath:0" Path="//AdditionalData/BalanceStorage/HostCode[text()='MS']"/>
+      </SourcesList>
+      <SourcesList PresenceValue="51">
+        <Source Type="IfNotXmlPath:0" Path="//AdditionalData/RegisteredList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:1" Path="//AdditionalData/ProvisionList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:2" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
+        <Source Type="IfNotXmlPath:3" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
+        <Source Type="IfXmlPath:0" Path="//AdditionalData/BalanceStorage/HostCode[text()='05']"/>
+      </SourcesList>
+      <SourcesList PresenceValue="10">
+        <Source Type="OrXmlPath:0" Path="//AdditionalData/RegisteredList/FRASKUE"/>
+        <Source Type="OrXmlPath:1" Path="//AdditionalData/ProvisionList/FRASKUE"/>
+      </SourcesList>
+      <SourcesList PresenceValue="20">
+        <Source Type="OrXmlPath:0" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
+        <Source Type="OrXmlPath:1" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
+      </SourcesList>
+      <SourcesList PresenceValue="11">
+        <Source Type="OrXmlPath:0" Path="//AdditionalData/RegisteredList/FRDGU"/>
+        <Source Type="OrXmlPath:1" Path="//AdditionalData/ProvisionList/FRDGU"/>
+      </SourcesList>
+    </LogicalGroupParameter>
+  </LogicalGroupParametersList>
   <CommandsList Root="Commands" Mask="*.xml">
     <!-- All new commands are included by Mask=*.xml attribute -->
   </CommandsList>

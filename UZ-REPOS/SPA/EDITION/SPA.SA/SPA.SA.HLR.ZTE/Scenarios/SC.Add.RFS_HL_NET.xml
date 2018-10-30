@@ -42,7 +42,7 @@
         <result value="1" node="DummyResponderFAILURE"/>
         <result value="2" node="APN_GPRS_Add"/>
         <result value="3" node="APN_M2M_Add"/>
-        <result value="3" node="SelectIPCorporateAPN"/>
+        <result value="4" node="SelectIPCorporateAPN"/>
       </resultlist>
       <parameterslist>
         <param name="XmlPath" value="//RFS_HL_NET/RES_HL_NET_SERVICE/Value/text()"/>

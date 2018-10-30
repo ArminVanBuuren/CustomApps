@@ -1,360 +1,358 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <scenario name="SynchronizeOnHLR">
-	<include>
-		<scenario name="Sync\AddServices_sync" />
-		<scenario name="Sync\AddGPRSService_Sync" />
-		<scenario name="Sync\AddBarringService_Sync" />
-      		<scenario name="Sub\AddFRIP_Sub" />
-      		<scenario name="Sub\AddCallForwardingOriginating_Sub" />
-      		<scenario name="Sub\AddCorporateAPN_Sub" />
-      		<scenario name="Sub\AddM2MAPN_Sub" />
-      		<scenario name="Sub\AddFreeAPN_Sub" />
-	</include>
-	<objectList>
-		<object name="BySubscirbersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
-		<object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
-		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
-		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
-		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll"/>	
-		<object name="ScenarioProcessor" class="FORIS.ScenarioProcessing.Base.SPF.SubscenarioProcessingUnit" assembly="FORIS.SPA.SPF.dll" />
-		<object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll"/>
-                <object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll"/>
-		<object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll"/>
-                <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
-		<object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>	
-	</objectList>
-	<automat>
-		<node name="BySubscirbersSplitter" object="BySubscirbersSplitter">
-			<resultlist>
-				<result value="0" node="SingleSubscirverRequestDequeuer"/>
-			</resultlist>
-		</node>
-		<node name="SingleSubscirverRequestDequeuer" object="Dequeuer">
-			<resultlist>
-				<result value="0" node="FirstCommandList"/>
-				<result value="1" node=""/>
-			</resultlist>
-			<parameterslist>
-				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
-			</parameterslist>
-		</node>
-                <node name="FirstCommandList" object="Commander">
-			<resultlist>
-				<result value="" node="CheckSORM"/>
-			</resultlist>
-			<parameterslist>
-				<param name="CommandSource" value="Dictionary"/>
-				<param name="Command" value="GetCBDataByMsisdn"/>
-				<param name="AppendSubscribersData" value="false"/>
-				<param name="Script" value="Command"/>
-				<param name="DynamicObject" value="(empty)"/>
-				<param name="ErrorDecodingType" value="ByString"/>
-			</parameterslist>
-		</node>	       
-                <node name="CheckSORM" object="IfMultipleXmlConditionsResolver">
-			<resultlist>
-				<result value="0" node="dummySUCCESS"/>
-				<result value="1" node="CheckFRBLKOUT"/>
-			</resultlist>
-			<parameterslist>
-				<param name="OrXmlPath:0" value="//IdentifiersList//MSISDN[text()='998974344342']"/>
-                                <param name="OrXmlPath:1" value="//IdentifiersList//MSISDN[text()='998971317131']"/>
-                                <param name="OrXmlPath:2" value="//IdentifiersList//MSISDN[text()='998977530000']"/>
-                                <param name="OrXmlPath:3" value="//IdentifiersList//MSISDN[text()='998974900909']"/>
-                                <param name="OrXmlPath:4" value="//IdentifiersList//MSISDN[text()='998974421111']"/>
-                                <param name="OrXmlPath:5" value="//IdentifiersList//MSISDN[text()='998974700077']"/>
-                                <param name="OrXmlPath:6" value="//IdentifiersList//MSISDN[text()='998977070538']"/>
-			</parameterslist>
-		</node>		
-                <node name="CheckFRBLKOUT" object="IfMultipleXmlConditionsResolver">
-			<resultlist>
-				<result value="0" node="dummySUCCESS"/>
-				<result value="1" node="CancelLocation"/>
-			</resultlist>
-			<parameterslist>
-				<param name="OrXmlPath:0" value="//RegisteredList/FRBLKOUT"/>
-				<param name="OrXmlPath:1" value="//ProvisionList/FRBLKOUT"/>
-			</parameterslist>
-		</node>	
-		<node name="CancelLocation" object="Commander">
-			<resultlist>
-				<result value="0" node="DeleteSubscriber"/>
-				<result value="" node="ResponseAssembler"/>				
-			</resultlist>
-			<parameterslist>
-				<param name="CommandSource" value="Dictionary"/>
-				<param name="Command" value="CancelLocation"/>
-				<param name="Script" value="Command"/>
-				<param name="AppendSubscribersData" value="false"/>
-				<param name="ErrorDecodingType" value="ByString"/>
-				<param name="DynamicObject" value="(empty)"/>
-				<param name="OverwriteDetailedResult" value="true"/>
-			</parameterslist>
-		</node>
-		<node name="DeleteSubscriber" object="Commander">
-			<resultlist>
-				<result value="0" node="CreateSubscriber"/>
-				<result value="" node="ResponseAssembler"/>
-			</resultlist>
-			<parameterslist>
-				<param name="CommandSource" value="Dictionary"/>
-				<param name="Command" value="DeleteSubscriber"/>
-				<param name="AppendSubscribersData" value="false"/>
-				<param name="Script" value="Command"/>
-				<param name="DynamicObject" value="(empty)"/>
-				<param name="ErrorDecodingType" value="ByString"/>
-			</parameterslist>
-		</node>			
-		<node name="CreateSubscriber" object="Commander">
-			<resultlist>
-				<result value="0" node="CheckFRASKUE"/> 
-				<result value="1793" node="GetKI"/>
-				<result value="" node="ResponseAssembler"/> 
-			</resultlist>
-			<parameterslist>
-				<param name="CommandSource" value="Dictionary"/>
-				<param name="Command" value="CreateSubscriber"/>
-				<param name="Script" value="Command"/>
-				<param name="DynamicObject" value="(empty)"/>
-				<param name="AppendSubscribersData" value="false"/>
-				<param name="ErrorDecodingType" value="ByString"/>
-			</parameterslist>
-		</node>
-                <node name="GetKI" object="DataBaseProcessor">
-			<resultlist>
-				<result value="" node="ExtractKI"/>
-			</resultlist>
-			<parameterslist>
-				<param name="DataBaseName" value="FORIS.SPA.CBP"/>
-				<param name="FunctionName" value="GET_KI"/>
-				<param name="FunctionType" value="function"/>
-				<param name="OutXml" value="db_unit_result"/>
-				<param name="DbParameterName:0" value="p_imsi"/>
-				<param name="DbParameterDirection:0" value="Input"/>
-				<param name="DbParameterType:0" value="Varchar2"/>
-				<param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/IdentifiersList/Identifier/IMSI" />
-				<param name="DbParameterName:1" value="p_result"/>
-				<param name="DbParameterDirection:1" value="ReturnValue"/>
-				<param name="DbParameterType:1" value="Varchar2"/>
-                                <param name="DbParameterValue:1" value=""/>
-			</parameterslist>
-		</node>
-                <node name="ExtractKI" object="XmlNodesCopier">
-			<resultlist>
-				<result value="" node="ParameterSwitchKI"/>
-			</resultlist>
-			<parameterslist>
-				<param name="SrcXml" value="db_unit_result"/>
-				<param name="DstMessage" value="xmlrequest"/>
-				<param name="CopyContentType" value="InnerText"/>
-				<param name="SrcXmlPath:0" value="root/return"/>
-				<param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/KI"/>
-                	</parameterslist>
-		</node>
-                <node name="ParameterSwitchKI" object="Switch">
-			<resultlist>
-				<result value="2" node="ResponseAssembler"/>
-				<result value="" node="AddKI"/>
-			</resultlist>
-			<parameterslist>
-				<param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/KI"/>
-				<param name="Value:2" value="1"/>
-			</parameterslist>
-		</node>
-		<node name="AddKI" object="Commander">
-			<resultlist>
-				<result value="0" node="CreateSubscriber"/>
-				<result value="" node="ResponseAssembler"/>	
-			</resultlist>
-			<parameterslist>
-				<param name="CommandSource" value="Dictionary"/>
-				<param name="Command" value="AddKI"/>
-				<param name="Script" value="Command"/>
-				<param name="DynamicObject" value="(empty)"/>
-				<param name="AppendSubscribersData" value="false"/>
-				<param name="ErrorDecodingType" value="ByString"/>
-			</parameterslist>
-		</node>
-		<node name="CheckFRASKUE" object="IfMultipleXmlConditionsResolver">
-			<resultlist>
-				<result value="0" node="AddCommandList"/>
-				<result value="1" node="CheckFRPARTAPN"/>
-			</resultlist>
-			<parameterslist>
-				<param name="OrXmlPath:0" value="//RegisteredList/FRASKUE"/>
-				<param name="OrXmlPath:1" value="//ProvisionList/FRASKUE"/>
-			</parameterslist>
-		</node>
-		<node name="CheckFRPARTAPN" object="IfMultipleXmlConditionsResolver">
-			<resultlist>
-				<result value="0" node="CheckFRIP"/>
-				<result value="1" node="AddCallForwardingOriginating_Sub"/>
-			</resultlist>
-			<parameterslist>
-				<param name="OrXmlPath:0" value="//RegisteredList/FRPARTAPN"/>
-				<param name="OrXmlPath:1" value="//ProvisionList/FRPARTAPN"/>
-			</parameterslist>
-		</node>
-		<node  name="AddCallForwardingOriginating_Sub" object="ScenarioProcessor">
-			<resultlist>
-				<result value="0" node="AddServices_sync" />
-				<result value="" node="ResponseAssembler" />
-			</resultlist>
-			<parameterslist>
-				<param name="Scenario" value="Sub\AddCallForwardingOriginating_Sub" />
-			</parameterslist>
-		</node>		
-		<node  name="AddServices_sync" object="ScenarioProcessor">
-			<resultlist>
-				<result value="0" node="AddGPRSService_Sync" />
-				<result value="" node="ResponseAssembler" />
-			</resultlist>
-			<parameterslist>
-				<param name="Scenario" value="Sync\AddServices_sync" />
-			</parameterslist>
-		</node>		
-		<node  name="AddGPRSService_Sync" object="ScenarioProcessor">
-			<resultlist>
-				<result value="0" node="AddBarringService_Sync" />
-				<result value="" node="ResponseAssembler" />
-			</resultlist>
-			<parameterslist>
-				<param name="Scenario" value="Sync\AddGPRSService_Sync" />
-			</parameterslist>
-		</node>		
-		<node  name="AddBarringService_Sync" object="ScenarioProcessor">
-			<resultlist>
-				<result value="0" node="CheckBlocks" />
-				<result value="" node="ResponseAssembler" />
-			</resultlist>
-			<parameterslist>
-				<param name="Scenario" value="Sync\AddBarringService_Sync" />
-			</parameterslist>
-		</node>
-		<node name="CheckBlocks" object="IfMultipleXmlConditionsResolver">
-			<resultlist>
-				<result value="0" node="AddCommandList"/>
-				<result value="1" node="CheckCorporateAPN"/>
-			</resultlist>
-			<parameterslist>
-                                <param name="OrXmlPath:0"  value="//AdditionalData//FRBLKFIN"/>
-				<param name="OrXmlPath:1"  value="//AdditionalData//CBBLKLOST"/>
-				<param name="OrXmlPath:2"  value="//AdditionalData//FRBLKCHK"/>
-				<param name="OrXmlPath:3"  value="//AdditionalData//FRBLKTIME"/>
-				<param name="OrXmlPath:4"  value="//AdditionalData//FRBLKUSER"/>
-				<param name="OrXmlPath:5"  value="//AdditionalData//FRBLAPP"/>
-				<param name="OrXmlPath:6"  value="//AdditionalData//BLTDLIM"/>
-				<param name="OrXmlPath:7"  value="//AdditionalData//FRBLKPAY"/>
-				<param name="OrXmlPath:8"  value="//AdditionalData//FRTECHBLK"/>
-                                <param name="OrXmlPath:9" value="//AdditionalData//FRBLKOUT"/>
-                                <param name="OrXmlPath:10" value="//AdditionalData//FRBLKFROD"/>
-                                <param name="OrXmlPath:11" value="//AdditionalData//FRPARTBL"/>
-                                <param name="OrXmlPath:12" value="//AdditionalData//FRBLKDZ"/>
-                                <param name="OrXmlPath:13" value="//AdditionalData//FRBLOUTGO"/>
-
-			</parameterslist>
-		</node>
-                <node name="CheckCorporateAPN" object="IfMultipleXmlConditionsResolver">
-			<resultlist>
-				<result value="0" node="AddCorporateAPN"/>
-				<result value="1" node="CheckM2MAPN"/>
-			</resultlist>
-			<parameterslist>
-				<param name="OrXmlPath:0" value="//AdditionalData/RegisteredList/FRCORPAPN"/>
-				<param name="OrXmlPath:1" value="//AdditionalData/RegisteredList/FRAPNXB"/>
-			</parameterslist>
-		</node>
-                <node  name="AddCorporateAPN" object="ScenarioProcessor">
-			<resultlist>
-				<result value="" node="AddCommandList" />
-			</resultlist>
-			<parameterslist>
-				<param name="Scenario" value="Sub\AddCorporateAPN_Sub" />
-			</parameterslist>
-		</node>	
-                <node name="CheckM2MAPN" object="IfMultipleXmlConditionsResolver">
-			<resultlist>
-				<result value="0" node="AddM2MAPN"/>
-				<result value="1" node="CheckFRIP"/>
-			</resultlist>
-			<parameterslist>
-				<param name="OrXmlPath:0" value="//AdditionalData/RegisteredList/FRM2MAPNFMS"/>
-				<param name="OrXmlPath:1" value="//AdditionalData/RegisteredList/FRM2MAPNNGMK"/>
-				<param name="OrXmlPath:2" value="//AdditionalData/RegisteredList/FRM2MAPNBEPRO"/>
-				<param name="OrXmlPath:3" value="//AdditionalData/RegisteredList/FRM2MAPN"/>
-				<param name="OrXmlPath:4" value="//AdditionalData/RegisteredList/FRM2MAPNBANK"/>
-				<param name="OrXmlPath:5" value="//AdditionalData/RegisteredList/VPNUMS"/>
-			</parameterslist>
-		</node>
-                <node  name="AddM2MAPN" object="ScenarioProcessor">
-			<resultlist>
-				<result value="" node="AddCommandList" />
-			</resultlist>
-			<parameterslist>
-				<param name="Scenario" value="Sub\AddM2MAPN_Sub" />
-			</parameterslist>
-		</node>	
-                <node name="CheckFRIP" object="IfMultipleXmlConditionsResolver">
-			<resultlist>
-				<result value="0" node="AddFRIP"/>
-				<result value="1" node="CheckFreeAPN"/>
-			</resultlist>
-			<parameterslist>
-				<param name="IfXmlPath" value="//AdditionalData/RegisteredList/FRIP"/>
-			</parameterslist>
-		</node>
-                <node  name="AddFRIP" object="ScenarioProcessor">
-			<resultlist>
-				<result value="" node="AddCommandList" />
-			</resultlist>
-			<parameterslist>
-				<param name="Scenario" value="Sub\AddFRIP_sub" />
-			</parameterslist>
-		</node>	
-                <node name="CheckFreeAPN" object="IfMultipleXmlConditionsResolver">
-			<resultlist>
-				<result value="0" node="AddFreeAPN"/>
-				<result value="1" node="AddCommandList"/>
-			</resultlist>
-			<parameterslist>
-				<param name="OrXmlPath:0" value="//AdditionalData/RegisteredList/FRFREE"/>
-			</parameterslist>
-		</node>
-                <node  name="AddFreeAPN" object="ScenarioProcessor">
-			<resultlist>
-				<result value="" node="AddCommandList" />
-			</resultlist>
-			<parameterslist>
-				<param name="Scenario" value="Sub\AddFreeAPN_Sub" />
-			</parameterslist>
-		</node>	
-                <node name="AddCommandList" object="Commander">
-			<resultlist>
-				<result value="" node="ResponseAssembler"/>
-			</resultlist>
-			<parameterslist>
-				<param name="CommandSource" value="Dictionary"/>
-				<param name="Command" value="GetCBDataByMsisdn"/>
-				<param name="AppendSubscribersData" value="false"/>
-				<param name="Script" value="Command"/>
-				<param name="DynamicObject" value="(empty)"/>
-				<param name="ErrorDecodingType" value="ByString"/>
-			</parameterslist>
-		</node>	       
-      		<node name="dummySUCCESS" object="DummyResponder">
-			<resultlist>
-				<result value="" node="ResponseAssembler"/>
-			</resultlist>
-			<parameterslist>
-				<param name="OverallResult" value="SUCCESS"/>
-				<param name="DetailedResult" value="SUCCESS"/>
-				<param name="Delay" value="0"/>
-			</parameterslist>
-		</node>		
-		<node name="ResponseAssembler" object="ResponseAssembler">
-			<resultlist>
-				<result value="" node="SingleSubscirverRequestDequeuer"/>
-			</resultlist>
-		</node>
-	</automat>
+   <include>
+      <scenario name="Sync\AddServices_sync" />
+      <scenario name="Sync\AddGPRSService_Sync" />
+      <scenario name="Sync\AddBarringService_Sync" />
+      <scenario name="Sub\AddFRIP_Sub" />
+      <scenario name="Sub\AddCallForwardingOriginating_Sub" />
+      <scenario name="Sub\AddCorporateAPN_Sub" />
+      <scenario name="Sub\AddM2MAPN_Sub" />
+      <scenario name="Sub\AddFreeAPN_Sub" />
+   </include>
+   <objectList>
+      <object name="BySubscirbersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="ScenarioProcessor" class="FORIS.ScenarioProcessing.Base.SPF.SubscenarioProcessingUnit" assembly="FORIS.SPA.SPF.dll" />
+      <object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+      <object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll" />
+      <object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll" />
+      <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll" />
+      <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
+   </objectList>
+   <automat>
+      <node name="BySubscirbersSplitter" object="BySubscirbersSplitter">
+         <resultlist>
+            <result value="0" node="SingleSubscirverRequestDequeuer" />
+         </resultlist>
+      </node>
+      <node name="SingleSubscirverRequestDequeuer" object="Dequeuer">
+         <resultlist>
+            <result value="0" node="FirstCommandList" />
+            <result value="1" node="" />
+         </resultlist>
+         <parameterslist>
+            <param name="queueName" value="requestsSplittedBySubscriberQueue" />
+         </parameterslist>
+      </node>
+      <node name="FirstCommandList" object="Commander">
+         <resultlist>
+            <result value="" node="CheckSORM" />
+         </resultlist>
+         <parameterslist>
+            <param name="CommandSource" value="Dictionary" />
+            <param name="Command" value="GetCBDataByMsisdn" />
+            <param name="AppendSubscribersData" value="false" />
+            <param name="Script" value="Command" />
+            <param name="DynamicObject" value="(empty)" />
+            <param name="ErrorDecodingType" value="ByString" />
+         </parameterslist>
+      </node>
+      <node name="CheckSORM" object="IfMultipleXmlConditionsResolver">
+         <resultlist>
+            <result value="0" node="dummySUCCESS" />
+            <result value="1" node="CheckFRBLKOUT" />
+         </resultlist>
+         <parameterslist>
+            <param name="OrXmlPath:0" value="//IdentifiersList//MSISDN[text()='998974344342']" />
+            <param name="OrXmlPath:1" value="//IdentifiersList//MSISDN[text()='998971317131']" />
+            <param name="OrXmlPath:2" value="//IdentifiersList//MSISDN[text()='998977530000']" />
+            <param name="OrXmlPath:3" value="//IdentifiersList//MSISDN[text()='998974900909']" />
+            <param name="OrXmlPath:4" value="//IdentifiersList//MSISDN[text()='998974421111']" />
+            <param name="OrXmlPath:5" value="//IdentifiersList//MSISDN[text()='998974700077']" />
+            <param name="OrXmlPath:6" value="//IdentifiersList//MSISDN[text()='998977070538']" />
+         </parameterslist>
+      </node>
+      <node name="CheckFRBLKOUT" object="IfMultipleXmlConditionsResolver">
+         <resultlist>
+            <result value="0" node="dummySUCCESS" />
+            <result value="1" node="CancelLocation" />
+         </resultlist>
+         <parameterslist>
+            <param name="OrXmlPath:0" value="//RegisteredList/FRBLKOUT" />
+            <param name="OrXmlPath:1" value="//ProvisionList/FRBLKOUT" />
+         </parameterslist>
+      </node>
+      <node name="CancelLocation" object="Commander">
+         <resultlist>
+            <result value="0" node="DeleteSubscriber" />
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="CommandSource" value="Dictionary" />
+            <param name="Command" value="CancelLocation" />
+            <param name="Script" value="Command" />
+            <param name="AppendSubscribersData" value="false" />
+            <param name="ErrorDecodingType" value="ByString" />
+            <param name="DynamicObject" value="(empty)" />
+            <param name="OverwriteDetailedResult" value="true" />
+         </parameterslist>
+      </node>
+      <node name="DeleteSubscriber" object="Commander">
+         <resultlist>
+            <result value="0" node="CreateSubscriber" />
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="CommandSource" value="Dictionary" />
+            <param name="Command" value="DeleteSubscriber" />
+            <param name="AppendSubscribersData" value="false" />
+            <param name="Script" value="Command" />
+            <param name="DynamicObject" value="(empty)" />
+            <param name="ErrorDecodingType" value="ByString" />
+         </parameterslist>
+      </node>
+      <node name="CreateSubscriber" object="Commander">
+         <resultlist>
+            <result value="0" node="CheckFRASKUE" />
+            <result value="1793" node="GetKI" />
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="CommandSource" value="Dictionary" />
+            <param name="Command" value="CreateSubscriber" />
+            <param name="Script" value="Command" />
+            <param name="DynamicObject" value="(empty)" />
+            <param name="AppendSubscribersData" value="false" />
+            <param name="ErrorDecodingType" value="ByString" />
+         </parameterslist>
+      </node>
+      <node name="GetKI" object="DataBaseProcessor">
+         <resultlist>
+            <result value="" node="ExtractKI" />
+         </resultlist>
+         <parameterslist>
+            <param name="DataBaseName" value="FORIS.SPA.CBP" />
+            <param name="FunctionName" value="GET_KI" />
+            <param name="FunctionType" value="function" />
+            <param name="OutXml" value="db_unit_result" />
+            <param name="DbParameterName:0" value="p_imsi" />
+            <param name="DbParameterDirection:0" value="Input" />
+            <param name="DbParameterType:0" value="Varchar2" />
+            <param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/IdentifiersList/Identifier/IMSI" />
+            <param name="DbParameterName:1" value="p_result" />
+            <param name="DbParameterDirection:1" value="ReturnValue" />
+            <param name="DbParameterType:1" value="Varchar2" />
+            <param name="DbParameterValue:1" value="" />
+         </parameterslist>
+      </node>
+      <node name="ExtractKI" object="XmlNodesCopier">
+         <resultlist>
+            <result value="" node="ParameterSwitchKI" />
+         </resultlist>
+         <parameterslist>
+            <param name="SrcXml" value="db_unit_result" />
+            <param name="DstMessage" value="xmlrequest" />
+            <param name="CopyContentType" value="InnerText" />
+            <param name="SrcXmlPath:0" value="root/return" />
+            <param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/KI" />
+         </parameterslist>
+      </node>
+      <node name="ParameterSwitchKI" object="Switch">
+         <resultlist>
+            <result value="2" node="ResponseAssembler" />
+            <result value="" node="AddKI" />
+         </resultlist>
+         <parameterslist>
+            <param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/KI" />
+            <param name="Value:2" value="1" />
+         </parameterslist>
+      </node>
+      <node name="AddKI" object="Commander">
+         <resultlist>
+            <result value="0" node="CreateSubscriber" />
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="CommandSource" value="Dictionary" />
+            <param name="Command" value="AddKI" />
+            <param name="Script" value="Command" />
+            <param name="DynamicObject" value="(empty)" />
+            <param name="AppendSubscribersData" value="false" />
+            <param name="ErrorDecodingType" value="ByString" />
+         </parameterslist>
+      </node>
+      <node name="CheckFRASKUE" object="IfMultipleXmlConditionsResolver">
+         <resultlist>
+            <result value="0" node="AddCommandList" />
+            <result value="1" node="CheckFRPARTAPN" />
+         </resultlist>
+         <parameterslist>
+            <param name="OrXmlPath:0" value="//RegisteredList/FRASKUE" />
+            <param name="OrXmlPath:1" value="//ProvisionList/FRASKUE" />
+         </parameterslist>
+      </node>
+      <node name="CheckFRPARTAPN" object="IfMultipleXmlConditionsResolver">
+         <resultlist>
+            <result value="0" node="CheckFRIP" />
+            <result value="1" node="AddCallForwardingOriginating_Sub" />
+         </resultlist>
+         <parameterslist>
+            <param name="OrXmlPath:0" value="//RegisteredList/FRPARTAPN" />
+            <param name="OrXmlPath:1" value="//ProvisionList/FRPARTAPN" />
+         </parameterslist>
+      </node>
+      <node name="AddCallForwardingOriginating_Sub" object="ScenarioProcessor">
+         <resultlist>
+            <result value="0" node="AddServices_sync" />
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="Scenario" value="Sub\AddCallForwardingOriginating_Sub" />
+         </parameterslist>
+      </node>
+      <node name="AddServices_sync" object="ScenarioProcessor">
+         <resultlist>
+            <result value="0" node="AddGPRSService_Sync" />
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="Scenario" value="Sync\AddServices_sync" />
+         </parameterslist>
+      </node>
+      <node name="AddGPRSService_Sync" object="ScenarioProcessor">
+         <resultlist>
+            <result value="0" node="AddBarringService_Sync" />
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="Scenario" value="Sync\AddGPRSService_Sync" />
+         </parameterslist>
+      </node>
+      <node name="AddBarringService_Sync" object="ScenarioProcessor">
+         <resultlist>
+            <result value="0" node="CheckBlocks" />
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="Scenario" value="Sync\AddBarringService_Sync" />
+         </parameterslist>
+      </node>
+      <node name="CheckBlocks" object="IfMultipleXmlConditionsResolver">
+         <resultlist>
+            <result value="0" node="AddCommandList" />
+            <result value="1" node="CheckCorporateAPN" />
+         </resultlist>
+         <parameterslist>
+            <param name="OrXmlPath:0" value="//AdditionalData//FRBLKFIN" />
+            <param name="OrXmlPath:1" value="//AdditionalData//CBBLKLOST" />
+            <param name="OrXmlPath:2" value="//AdditionalData//FRBLKCHK" />
+            <param name="OrXmlPath:3" value="//AdditionalData//FRBLKTIME" />
+            <param name="OrXmlPath:4" value="//AdditionalData//FRBLKUSER" />
+            <param name="OrXmlPath:5" value="//AdditionalData//FRBLAPP" />
+            <param name="OrXmlPath:6" value="//AdditionalData//BLTDLIM" />
+            <param name="OrXmlPath:7" value="//AdditionalData//FRBLKPAY" />
+            <param name="OrXmlPath:8" value="//AdditionalData//FRTECHBLK" />
+            <param name="OrXmlPath:9" value="//AdditionalData//FRBLKOUT" />
+            <param name="OrXmlPath:10" value="//AdditionalData//FRBLKFROD" />
+            <param name="OrXmlPath:11" value="//AdditionalData//FRPARTBL" />
+            <param name="OrXmlPath:12" value="//AdditionalData//FRBLKDZ" />
+            <param name="OrXmlPath:13" value="//AdditionalData//FRBLOUTGO" />
+         </parameterslist>
+      </node>
+      <node name="CheckCorporateAPN" object="IfMultipleXmlConditionsResolver">
+         <resultlist>
+            <result value="0" node="AddCorporateAPN" />
+            <result value="1" node="CheckM2MAPN" />
+         </resultlist>
+         <parameterslist>
+            <param name="OrXmlPath:0" value="//AdditionalData/RegisteredList/FRCORPAPN" />
+            <param name="OrXmlPath:1" value="//AdditionalData/RegisteredList/FRAPNXB" />
+         </parameterslist>
+      </node>
+      <node name="AddCorporateAPN" object="ScenarioProcessor">
+         <resultlist>
+            <result value="" node="AddCommandList" />
+         </resultlist>
+         <parameterslist>
+            <param name="Scenario" value="Sub\AddCorporateAPN_Sub" />
+         </parameterslist>
+      </node>
+      <node name="CheckM2MAPN" object="IfMultipleXmlConditionsResolver">
+         <resultlist>
+            <result value="0" node="AddM2MAPN" />
+            <result value="1" node="CheckFRIP" />
+         </resultlist>
+         <parameterslist>
+            <param name="OrXmlPath:0" value="//AdditionalData/RegisteredList/FRM2MAPNFMS" />
+            <param name="OrXmlPath:1" value="//AdditionalData/RegisteredList/FRM2MAPNNGMK" />
+            <param name="OrXmlPath:2" value="//AdditionalData/RegisteredList/FRM2MAPNBEPRO" />
+            <param name="OrXmlPath:3" value="//AdditionalData/RegisteredList/FRM2MAPN" />
+            <param name="OrXmlPath:4" value="//AdditionalData/RegisteredList/FRM2MAPNBANK" />
+            <param name="OrXmlPath:5" value="//AdditionalData/RegisteredList/VPNUMS" />
+         </parameterslist>
+      </node>
+      <node name="AddM2MAPN" object="ScenarioProcessor">
+         <resultlist>
+            <result value="" node="AddCommandList" />
+         </resultlist>
+         <parameterslist>
+            <param name="Scenario" value="Sub\AddM2MAPN_Sub" />
+         </parameterslist>
+      </node>
+      <node name="CheckFRIP" object="IfMultipleXmlConditionsResolver">
+         <resultlist>
+            <result value="0" node="AddFRIP" />
+            <result value="1" node="CheckFreeAPN" />
+         </resultlist>
+         <parameterslist>
+            <param name="IfXmlPath" value="//AdditionalData/RegisteredList/FRIP" />
+         </parameterslist>
+      </node>
+      <node name="AddFRIP" object="ScenarioProcessor">
+         <resultlist>
+            <result value="" node="AddCommandList" />
+         </resultlist>
+         <parameterslist>
+            <param name="Scenario" value="Sub\AddFRIP_sub" />
+         </parameterslist>
+      </node>
+      <node name="CheckFreeAPN" object="IfMultipleXmlConditionsResolver">
+         <resultlist>
+            <result value="0" node="AddFreeAPN" />
+            <result value="1" node="AddCommandList" />
+         </resultlist>
+         <parameterslist>
+            <param name="OrXmlPath:0" value="//AdditionalData/RegisteredList/FRFREE" />
+         </parameterslist>
+      </node>
+      <node name="AddFreeAPN" object="ScenarioProcessor">
+         <resultlist>
+            <result value="" node="AddCommandList" />
+         </resultlist>
+         <parameterslist>
+            <param name="Scenario" value="Sub\AddFreeAPN_Sub" />
+         </parameterslist>
+      </node>
+      <node name="AddCommandList" object="Commander">
+         <resultlist>
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="CommandSource" value="Dictionary" />
+            <param name="Command" value="GetCBDataByMsisdn" />
+            <param name="AppendSubscribersData" value="false" />
+            <param name="Script" value="Command" />
+            <param name="DynamicObject" value="(empty)" />
+            <param name="ErrorDecodingType" value="ByString" />
+         </parameterslist>
+      </node>
+      <node name="dummySUCCESS" object="DummyResponder">
+         <resultlist>
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="OverallResult" value="SUCCESS" />
+            <param name="DetailedResult" value="SUCCESS" />
+            <param name="Delay" value="0" />
+         </parameterslist>
+      </node>
+      <node name="ResponseAssembler" object="ResponseAssembler">
+         <resultlist>
+            <result value="" node="SingleSubscirverRequestDequeuer" />
+         </resultlist>
+      </node>
+   </automat>
 </scenario>

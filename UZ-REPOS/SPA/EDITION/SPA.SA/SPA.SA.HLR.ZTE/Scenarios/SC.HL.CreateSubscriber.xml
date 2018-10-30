@@ -6,6 +6,11 @@
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll" />
     <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll" />
+    <object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+    <object name="WellknownsReplacer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.WellknownsReplacer" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="WellknownsRestorer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.WellknownsRestorer" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll" />
   </objectList>
   <automat>
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
@@ -16,11 +21,54 @@
     </node>
     <node name="UserMSISDN_Delete" object="Commander">
       <resultlist>
-        <result value="0" node="UserIMSI_Delete"/>
+        <result value="0" node="CheckNewMSISDN"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
         <param name="Command" value="SC.UserMSISDN_Delete"/>
+      </parameterslist>
+    </node>
+    <node name="CheckNewMSISDN" object="IfMultipleXmlConditionsResolver">
+      <resultlist>
+        <result value="0" node="WellknownsReplacerNewMSISDN"/>
+        <result value="" node="CheckNewIMSI"/>
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//NewMSISDN/Value[text()!='']"/>
+      </parameterslist>
+    </node>
+    <node name="WellknownsReplacerNewMSISDN" object="WellknownsReplacer">
+      <resultlist>
+        <result value="" node="NewMSISDN_Delete" />
+      </resultlist>
+      <parameterslist>
+        <param name="msisdn" value="xmlsubstr(&quot;//AdditionalData//NewMSISDN&quot;)" />
+      </parameterslist>
+    </node>
+    <node name="NewMSISDN_Delete" object="Commander">
+      <resultlist>
+        <result value="0" node="User_Create"/>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.UserMSISDN_Delete"/>
+      </parameterslist>
+    </node>
+    <node name="CheckNewIMSI" object="IfMultipleXmlConditionsResolver">
+      <resultlist>
+        <result value="0" node="WellknownsReplacerNewIMSI"/>
+        <result value="" node="UserIMSI_Delete"/>
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//NewIMSI/Value[text()!='']"/>
+      </parameterslist>
+    </node>
+    <node name="WellknownsReplacerNewIMSI" object="WellknownsReplacer">
+      <resultlist>
+        <result value="" node="UserIMSI_Delete" />
+      </resultlist>
+      <parameterslist>
+        <param name="imsi" value="xmlsubstr(&quot;//AdditionalData//NewIMSI&quot;)" />
       </parameterslist>
     </node>
     <node name="UserIMSI_Delete" object="Commander">
@@ -34,7 +82,7 @@
     </node>
     <node name="User_Create" object="Commander">
       <resultlist>
-        <result value="0" node="CFOrigin_Add"/>
+        <result value="0" node="SwitchMode"/>
         <result value="1793" node="GetKI" />
         <result value="" node="ResponseAssembler"/>
       </resultlist>
@@ -83,6 +131,25 @@
         <param name="Command" value="SC.AuthKI_Add" />
       </parameterslist>
     </node>
+    <node name="SwitchMode" object="Switch">
+      <resultlist>
+        <result value="0" node="UserMSISDN_GetCBData"/>
+        <result value="1" node="UserMSISDN_GetCBData"/>
+        <result value="2" node="CFOrigin_Add"/>
+        <result value="3" node="CFOrigin_Add"/>
+        <result value="4" node="UserMSISDN_GetCBData"/>
+        <result value="5" node="UserMSISDN_GetCBData"/>
+        <result value="6" node="CFOrigin_Add"/>
+      </resultlist>
+      <parameterslist>
+        <param name="XmlPath" value="//RES_HL_SUBSCRIPTION_PROFILE/Value/text()"/>
+        <param name="Value:2" value="Postpaid"/>
+        <param name="Value:3" value="Prepaid"/>
+        <param name="Value:4" value="AIISKUE"/>
+        <param name="Value:5" value="DEALERS"/>
+        <param name="Value:6" value="DGU"/>
+      </parameterslist>
+    </node>
     <node name="CFOrigin_Add" object="Commander">
       <resultlist>
         <result value="0" node="SetLanguage"/>
@@ -112,6 +179,30 @@
         <param name="DbParameterValue:1" value="4" />
       </parameterslist>
     </node>
+
+    <!--<node name="CLIP_Delete" object="IfCommander">
+      <resultlist>
+        <result value="0" node="User_Create" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfNotXmlPath:0" value="//RFS_HL_CLIP"/>
+        <param name="Command" value="SC.CLIP_Delete" />
+      </parameterslist>
+    </node>
+    <node name="CLIP_Delete" object="IfCommander">
+      <resultlist>
+        <result value="0" node="User_Create" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfNotXmlPath:0" value="//RFS_HL_CLIP"/>
+        <param name="Command" value="SC.CLIP_Delete" />
+      </parameterslist>
+    </node>-->
+
+
+
     <node name="UserMSISDN_GetCBData" object="Commander">
       <resultlist>
         <result value="" node="ResponseAssembler"/>

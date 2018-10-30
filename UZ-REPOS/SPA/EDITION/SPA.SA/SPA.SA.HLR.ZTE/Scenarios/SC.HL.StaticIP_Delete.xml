@@ -22,7 +22,7 @@
         <result value="" node="APN_StaticIP_Delete"/>
       </resultlist>
       <parameterslist>
-        <param name="IfXmlPath:0" value="//RFS_HL_SUBSCRIPTION/Value[text()='DillerAPN']"/>
+        <param name="IfXmlPath:0" value="//RFS_HL_SUBSCRIPTION/Value[text()='DEALERS']"/>
       </parameterslist>
     </node>
     <node name="APN_StaticIP_Delete" object="Commander">

@@ -1020,8 +1020,6 @@
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\AddM2MAPN.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\AddPartialBlockHLR.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\AddReduceSpeed.xml" />
-    <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\AddSCPBREAKSESSION.xml" />
-    <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\AddUSSD.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\BreakSession.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\CancelLocation.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\CancelLocationSGSN.xml" />
@@ -1052,8 +1050,6 @@
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\DeleteFRANTIOP.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\DeleteFRASKUE.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\DeleteFRCRBTHLR.xml" />
-    <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\DeleteFRDILAPN.xml" />
-    <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\DeleteFRDLAPN.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\DeleteFreeAPN.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\DeleteFRIP.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\DeleteFRMCAHLR.xml" />
@@ -1067,7 +1063,6 @@
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\DeleteM2MAPN.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\DeletePartialBlockHLR.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\DeleteReduceSpeed.xml" />
-    <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\DeleteSCPBREAKSESSION.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\DeleteSubscribersInTheHLR.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\DeleteUSSD.xml" />
     <Content Include="PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\GeneratePromo.xml" />
