@@ -152,7 +152,7 @@ namespace Utils.XmlRtfStyle
             {
                 foreach (XmlAttribute attribute in node.Attributes)
                 {
-                    str2 = str2 + string.Format(" {0}=\"{1}\"", attribute.Name, attribute.InnerXml.Replace("&", "&amp;").Replace("\"", "&quot;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("'", "&apos;"));
+                    str2 = str2 + string.Format(" {0}=\"{1}\"", attribute.Name, attribute.InnerXml.Replace("&", "&amp;").Replace("\"", "&quot;").Replace("<", "&lt;").Replace(">", "&gt;"));
                 }
                 string str4 = (nested != 0) ? Environment.NewLine : string.Empty;
                 if ((node.ChildNodes.Count <= 0) && string.IsNullOrEmpty(node.InnerText))

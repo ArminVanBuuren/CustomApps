@@ -209,6 +209,11 @@ namespace Utils.WinForm.Notepad
 
         private void Fctb_KeyDownSaveDocument(object sender, KeyEventArgs e)
         {
+            SaveOrFormatDocument(e);
+        }
+
+        public void SaveOrFormatDocument(KeyEventArgs e)
+        {
             lock (Sync)
             {
                 if (e.Control && KeyIsDown(Keys.ControlKey) && KeyIsDown(Keys.S))
@@ -265,7 +270,7 @@ namespace Utils.WinForm.Notepad
             IsContentChanged = !fctbInput.Text.Equals(Source);
         }
 
-        public void XMLPrint()
+        void XMLPrint()
         {
             bool isXml = XmlHelper.XmlHelper.IsXml(FCTextBox.Text, out XmlDocument document);
             if (isXml)

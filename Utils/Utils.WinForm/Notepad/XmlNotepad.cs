@@ -172,11 +172,8 @@ namespace Utils.WinForm.Notepad
 
         private void XmlNotepad_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.F5)
-            {
-                if (GetCurrentEditor(out var editor))
-                    editor.XMLPrint();
-            }
+            if (GetCurrentEditor(out var editor))
+                editor.SaveOrFormatDocument(e);
         }
 
         //private void button1_Click(object sender, EventArgs e)
