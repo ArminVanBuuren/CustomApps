@@ -123,7 +123,7 @@ AND [System.Title] Contains '%ParceBody_ITHD%']]>
       </TeamProject>
       <TeamProject Condition="#{if('%ParceSubject_ISNF%'!='')}" Value="FORIS_Mobile">
         <WorkItem Condition="#{if('true'='true')}" Value="Issue">
-          <Field Name="Control.AssignedTo" Value="Хованский Владимир Дмитриевич" />
+          <Field Name="Control.AssignedTo" Value="Костюченко Ольга Вячеславовна" />
           <Field Name="System.Title" Value="[%ParceBody_ITHD%] [НФ] %ParceSubject_NFTITLE%" />
           <Field Name="Sitronics.RND.StsProject" Value="B14006_MTSMinsk MSCP 1.5.x implementation" />
           <Field Name="Sitronics.RND.Issue.Category" Value="Other" />
