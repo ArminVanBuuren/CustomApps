@@ -12,12 +12,12 @@
   </Request>
   <ParametersList>
     <Parameter Name="USSD_STATUS" IsChoice="true" AbsenceValue="">
-      <Source Path="//AddList/RFS_HL_PLSS/RES_HL_PLSS_MODE/Value[text()='Provision']" PostFormat="0" />
-      <Source Path="//ModifyList/RFS_HL_PLSS/RES_HL_PLSS_MODE/Value[text()='Provision']" PostFormat="0" />
-      <Source Path="//RemoveList/RFS_HL_PLSS/RES_HL_PLSS_MODE/Value[text()='Suspend']" PostFormat="0" />
-      <Source Path="//RemoveList/RFS_HL_PLSS/RES_HL_PLSS_MODE/Value[text()='Provision']" PostFormat="1" />
-      <Source Path="//AddList/RFS_HL_PLSS/RES_HL_PLSS_MODE/Value[text()='Suspend']" PostFormat="1" />
-      <Source Path="//ModifyList/RFS_HL_PLSS/RES_HL_PLSS_MODE/Value[text()='Suspend']" PostFormat="1" />
+      <Source Path="//AddList/RFS_HL_USSD/RES_HL_USSD/Value[text()='Provision']" PostFormat="0" />
+      <Source Path="//ModifyList/RFS_HL_USSD/RES_HL_USSD/Value[text()='Provision']" PostFormat="0" />
+      <Source Path="//RemoveList/RFS_HL_USSD/RES_HL_USSD/Value[text()='Suspend']" PostFormat="0" />
+      <Source Path="//RemoveList/RFS_HL_USSD/RES_HL_USSD/Value[text()='Provision']" PostFormat="1" />
+      <Source Path="//AddList/RFS_HL_USSD/RES_HL_USSD/Value[text()='Suspend']" PostFormat="1" />
+      <Source Path="//ModifyList/RFS_HL_USSD/RES_HL_USSD/Value[text()='Suspend']" PostFormat="1" />
     </Parameter>
   </ParametersList>
   <ErrorsList CodePage="windows-1251" />

@@ -17,8 +17,8 @@
       <PossibleValues StringToKeyTable="false">
         <Item Key="Postpaid" StringValue="51"/>
         <Item Key="Prepaid" StringValue="55"/>
-        <Item Key="AIISKUE" StringValue="10"/>
         <Item Key="DEALERS" StringValue="20"/>
+        <Item Key="AIISKUE" StringValue="10"/>
         <Item Key="DGU" StringValue="11"/>
       </PossibleValues>
     </Parameter>

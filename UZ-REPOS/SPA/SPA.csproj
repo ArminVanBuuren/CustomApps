@@ -51,6 +51,7 @@
     <Compile Include="EDITION\SPA.SA\SPA.SA.SCP.01\Func\ifstringformat_scp.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="EDITION\DOC\HLR\Profile Information.txt" />
     <Content Include="EDITION\DOC\SC_DOCs.txt" />
     <Content Include="EDITION\ROBP\Operations\HL\ActivateCallForwarding.xml" />
     <Content Include="EDITION\ROBP\Operations\HL\AddBlockOnAllCalls.xml" />
@@ -2898,11 +2899,15 @@
     <None Include="EDITION\DOC\ALLPLAY\Перевод управления CT6 на SC.v0.1.docx" />
     <None Include="EDITION\DOC\Example\Модель услуг BB v.0.1.xlsx" />
     <None Include="EDITION\DOC\Example\Перевод управления BB на SC.v0.1.docx" />
+    <None Include="EDITION\DOC\HLR\ZXUN_USPP_V4_14_10_interface_specification.pdf" />
+    <None Include="EDITION\DOC\HLR\Модель услуг HLR Переадресации v.0.1.xlsx" />
     <None Include="EDITION\DOC\MST\Модель услуг CT4.xlsx" />
     <None Include="EDITION\DOC\MST\Перевод управления CT4 на SC.v0.1.docx" />
     <None Include="EDITION\DOC\RdService.xlsx" />
     <None Include="EDITION\DOC\SCG\Annex 5.1 - Provision Interface between Provision and SCG V1.0.doc" />
     <None Include="EDITION\DOC\SCG\Annex 6.1 - Interface Between the SCG and the OCS Mapping Server V1.0.doc" />
+    <None Include="EDITION\DOC\HLR\Модель услуг HLR Создание абонента v.0.1.xlsx" />
+    <None Include="EDITION\DOC\HLR\Перевод управления HLR на SC v0.1.docx" />
     <None Include="EDITION\DOC\SCG\Модель услуг SCG v.0.2.xlsx" />
     <None Include="EDITION\DOC\SCG\Перевод управления SCG на SC v0.2.docx" />
     <None Include="EDITION\DOC\SPA_Stat_2018.09.12.xlsx" />

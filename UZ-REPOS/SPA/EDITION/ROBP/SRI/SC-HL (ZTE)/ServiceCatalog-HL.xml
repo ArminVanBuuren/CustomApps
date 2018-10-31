@@ -17,7 +17,7 @@
     <Resource name="RES_HL_ODB_OC" description="Барринг исходящей связи"/>
     <Resource name="RES_HL_SMS_MO" description="Барринг на исходящей SMS"/>
     <Resource name="RES_HL_SMS_MT" description="Барринг на входящей SMS"/>
-    <Resource name="RES_HL_PLSS_MODE" description="Режим USSD"/>
+    <Resource name="RES_HL_USSD" description="Cтатус USSD"/>
     <Resource name="RES_HL_NET_SERVICE" description="Услуги и барринги на интернет"/>
     <Resource name="RES_HL_NET_APN" description="Название точки доступа (Access Point Name)"/>
     <Resource name="RES_HL_DEALER_APN" description="Название дилерской точки доступа (Access Point Name)"/>
@@ -46,11 +46,11 @@
         <Value hosts="FP:MS" value="Prepaid"/>
       </Resource>
     </RFS>
-    <RFS name="RFS_HL_SUBSCRIPTION_AIISKUE" base="RFS_HL_SUBSCRIPTION" hostType="HL" description="Создание абонентов ASKUE - АИИСКУЭ">
-      <Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="AIISKUE" />
-    </RFS>
     <RFS name="RFS_HL_SUBSCRIPTION_PARTAPN" base="RFS_HL_SUBSCRIPTION" hostType="HL" description="Создание дилерских абонентов">
       <Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="DEALERS" />
+    </RFS>
+    <RFS name="RFS_HL_SUBSCRIPTION_AIISKUE" base="RFS_HL_SUBSCRIPTION" hostType="HL" description="Создание абонентов ASKUE - АИИСКУЭ">
+      <Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="AIISKUE" />
     </RFS>
     <RFS name="RFS_HL_SUBSCRIPTION_DGU" base="RFS_HL_SUBSCRIPTION" hostType="HL" description="Создание абонента ТП ДГУ">
       <Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="DGU" />
@@ -237,14 +237,14 @@
     <RFS name="RFS_HL_DATATRANSFER" hostType="HL" description="Мобильная передача данных"/>
     <RFS name="RFS_HL_CWCH" hostType="HL" description="Ожидание / Удержание вызова"/>
     <RFS name="RFS_HL_CLIR" hostType="HL" description="Запрет определения номера"/>
-    <RFS name="RFS_HL_PLSS" hostType="HL" description="Запроса по USSD">
-      <Resource name="RES_HL_PLSS_MODE" useType="Mandatory" />
+    <RFS name="RFS_HL_USSD" hostType="HL" description="Запроса по USSD">
+      <Resource name="RES_HL_USSD" useType="Mandatory" />
     </RFS>
-    <RFS name="RFS_HL_PLSS_PRV" base="RFS_HL_PLSS" hostType="HL" description="Запроса по USSD">
-      <Resource name="RES_HL_PLSS_MODE" value="Provision" useType="Mandatory" />
+    <RFS name="RFS_HL_USSD_PRV" base="RFS_HL_USSD" hostType="HL" description="Запроса по USSD">
+      <Resource name="RES_HL_USSD" value="Provision" useType="Mandatory" />
     </RFS>
-    <RFS name="RFS_HL_PLSS_SUSPEND" base="RFS_HL_PLSS" hostType="HL" description="Запрет запроса по USSD">
-      <Resource name="RES_HL_PLSS_MODE" value="Suspend" useType="Mandatory" />
+    <RFS name="RFS_HL_USSD_SUSPEND" base="RFS_HL_USSD" hostType="HL" description="Запрет запроса по USSD">
+      <Resource name="RES_HL_USSD" value="Suspend" useType="Mandatory" />
     </RFS>
     <RFS name="RFS_HL_CALLS_SUSPEND" hostType="HL" description="Запрет голосовой связи"/>
     <!--END ==== SIMPLE SERVICE ====-->
@@ -440,7 +440,7 @@
       <RFS name="RFS_HL_CLIR" linkType="Add" />
     </CFS>
     <CFS name="FRUSSD" description="USSD запросы">
-      <RFS name="RFS_HL_PLSS_PRV" linkType="Add" />
+      <RFS name="RFS_HL_USSD_PRV" linkType="Add" />
     </CFS>
     <!--END ==== SIMPLE SERVICE ====-->
 
@@ -485,7 +485,7 @@
       <RFS name="RFS_HL_SMS_MT_NONE" linkType="Modify" />
       <RFS name="RFS_HL_NET_SUSPEND" linkType="Modify" />
       <RFS name="RFS_HL_ROAMING" linkType="Remove" />
-      <RFS name="RFS_HL_PLSS_SUSPEND" linkType="Set" />
+      <RFS name="RFS_HL_USSD_SUSPEND" linkType="Set" />
     </CFS>
     <CFS name="FRBLKCHK" priority="1" copyOf="FRTECHBLK" description="Блокировка проверка"/>
     <CFS name="FRBLKFROD" priority="1" copyOf="FRTECHBLK" description="Фрод блокировка"/>
@@ -680,7 +680,7 @@
       <RFS name="RFS_HL_CNCLOC" scenarioType="Add, Remove, Modify" />
     </Scenario>
     <Scenario name="HL.ModifyUSSD" description="Изменение статуса USSD">
-      <RFS name="RFS_HL_PLSS" scenarioType="Add, Remove, Modify" />
+      <RFS name="RFS_HL_USSD" scenarioType="Add, Remove, Modify" />
     </Scenario>
     <!--END ==== COMMON ====-->
 
