@@ -11,8 +11,8 @@
     <Item Name="SMSBarring" Type="LocalParameter"/>
   </Request>
   <ParametersList>
-    <Parameter Name="SMSBarring">
-      <Source Path="//RFS_HL_SMS_OC/RES_HL_SMS_OC/Value"/>
+    <Parameter Name="SMSBarring" AbsenceValue="0">
+      <Source Path="//RFS_HL_SMS_MO/RES_HL_SMS_MO/Value"/>
       <PossibleValues StringToKeyTable="true">
         <Item Key="0" StringValue="NoSMS"/>
         <Item Key="1" StringValue="AccessSMS"/>

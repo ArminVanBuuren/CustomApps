@@ -20,7 +20,7 @@
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="IfXmlPath:0" value="//RFS_HL_SMS_OC"/>
+        <param name="IfXmlPath:0" value="//RFS_HL_SMS_MO"/>
         <param name="Command" value="SC.SMMO_Modify"/>
       </parameterslist>
     </node>
@@ -29,7 +29,7 @@
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="IfXmlPath:0" value="//RFS_HL_SMS_IC"/>
+        <param name="IfXmlPath:0" value="//RFS_HL_SMS_MT"/>
         <param name="Command" value="SC.SMMT_Modify"/>
       </parameterslist>
     </node>

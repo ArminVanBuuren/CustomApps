@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scenario name="SC.Remove.RFS_HL_SUBSCRIPTION">
+<scenario name="SC.HL.DeleteSubscriber">
   <objectList>
     <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
   </objectList>
   <automat>
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
@@ -21,11 +22,12 @@
         <param name="Command" value="SC.UserMSISDN_Delete"/>
       </parameterslist>
     </node>
-    <node name="AuthIMSI_Delete" object="Commander">
+    <node name="AuthIMSI_Delete" object="IfCommander">
       <resultlist>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
+        <param name="IfNotXmlPath:0" value="//RFS_HL_SUBSCRIPTION_MODIFY"/>
         <param name="Command" value="SC.AuthIMSI_Delete"/>
       </parameterslist>
     </node>

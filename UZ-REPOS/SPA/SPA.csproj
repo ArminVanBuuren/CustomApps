@@ -141,8 +141,13 @@
     <Content Include="EDITION\ROBP\Processes\Synchronize Subscriber Data.xml" />
     <Content Include="EDITION\ROBP\Processes\Unblock Subscriber.xml" />
     <Content Include="EDITION\ROBP\SRI\SC-SCG\ServiceCatalog-SCG.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CFOrigin_Add.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CFD_Delete.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CFNRY_Delete.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CFNRC_Delete.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CFU_Delete.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.OriginFAID_Add.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.AuthKI_Add.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CFB_Delete.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.UserMSISDN_GetSSData.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.UserMSISDN_GetLTEData.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.UserMSISDN_GetLOCData.xml" />
@@ -172,8 +177,8 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.APN_Corporate_Add.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CDACDS_Delete.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CDACDS_Add.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.Tele_Delete.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.Tele_Add.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.Telephony_Delete.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.Telephony_Add.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.BPOS_Modify.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.PLSS_D_Modify.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CLIR_Delete.xml" />
@@ -214,7 +219,7 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CF_Add.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CF_Activate.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.CancelLocation.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Remove.RFS_HL_SUBSCRIPTION.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.DeleteSubscriber.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.CreateSubscriber.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Add.RFS_HL_MYUMS_APN.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.StaticIP_Delete.xml" />

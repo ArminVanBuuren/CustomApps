@@ -8,17 +8,17 @@
   <automat>
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
       <resultlist>
-        <result value="0" node="Tele_Add"/>
+        <result value="0" node="Telephony_Add"/>
         <result value="1" node=""/>
       </resultlist>
     </node>
-    <node name="Tele_Add" object="Commander">
+    <node name="Telephony_Add" object="Commander">
       <resultlist>
         <result value="0" node="CDACDS_Add"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SC.Tele_Add"/>
+        <param name="Command" value="SC.Telephony_Add"/>
       </parameterslist>
     </node>
     <node name="CDACDS_Add" object="Commander">
