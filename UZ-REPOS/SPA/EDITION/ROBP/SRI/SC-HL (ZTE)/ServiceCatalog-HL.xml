@@ -271,7 +271,7 @@
       <Resource name="RES_HL_SMS_MO" value="NoSMS" useType="Mandatory" />
     </RFS>
     <RFS name="RFS_HL_SMS_MO_ACCESS" base="RFS_HL_SMS_MO" hostType="HL" description="Барринг на исходящие SMS - разрешен">
-      <Resource name="RES_HL_SMS_MO" value="AccessSMS" useType=W"Mandatory" />
+      <Resource name="RES_HL_SMS_MO" value="AccessSMS" useType="Mandatory" />
     </RFS>
     <RFS name="RFS_HL_SMS_MT" hostType="HL" description="Служба коротких сообщений (SMS) входящие">
       <Resource name="RES_HL_SMS_MT" useType="Mandatory" />
