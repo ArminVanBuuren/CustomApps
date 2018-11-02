@@ -161,48 +161,48 @@
       <Resource name="RES_HL_NET_APN" useType="Mandatory" />
     </RFS>
     <RFS name="RFS_HL_NET_GPRS" base="RFS_HL_NET" hostType="HL" description="Мобильный интернет GPRS">
-      <Resource name="RES_HL_NET_SERVICE" value="GPRS" useType="Mandatory" />
-      <Resource name="RES_HL_NET_APN" value="51" useType="Mandatory" />
+      <Resource name="RES_HL_NET_SERVICE" value="GPRS" />
+      <Resource name="RES_HL_NET_APN" value="51" />
     </RFS>
     <RFS name="RFS_HL_NET_CORP_APN_BS" base="RFS_HL_NET" hostType="HL" description="Корпоративный APN">
-      <Resource name="RES_HL_NET_SERVICE" value="CorpAPN" useType="Mandatory" />
-      <Resource name="RES_HL_NET_APN" value="TEST.LTE" useType="Mandatory" />
+      <Resource name="RES_HL_NET_SERVICE" value="CorpAPN" />
+      <Resource name="RES_HL_NET_APN" value="TEST.LTE" />
     </RFS>
     <RFS name="RFS_HL_NET_CORP_APN_XB" base="RFS_HL_NET" hostType="HL" description="Корпоративный APN Халк Банк">
-      <Resource name="RES_HL_NET_SERVICE" value="CorpAPN" useType="Mandatory" />
-      <Resource name="RES_HL_NET_APN" value="XB.APN.UZ" useType="Mandatory" />
+      <Resource name="RES_HL_NET_SERVICE" value="CorpAPN" />
+      <Resource name="RES_HL_NET_APN" value="XB.APN.UZ" />
     </RFS>
     <RFS name="RFS_HL_NET_CORP_APN_ZD" base="RFS_HL_NET" hostType="HL" description="Корпоративный APN Ziyod">
-      <Resource name="RES_HL_NET_SERVICE" value="CorpAPN" useType="Mandatory" />
-      <Resource name="RES_HL_NET_APN" value="ZIYOD.UMS.UZ" useType="Mandatory" />
+      <Resource name="RES_HL_NET_SERVICE" value="CorpAPN" />
+      <Resource name="RES_HL_NET_APN" value="ZIYOD.UMS.UZ" />
     </RFS>
     <RFS name="RFS_HL_NET_M2M_APN_BS" base="RFS_HL_NET" hostType="HL" description="M2M APN">
-      <Resource name="RES_HL_NET_SERVICE" value="M2M" useType="Mandatory" />
-      <Resource name="RES_HL_NET_APN" value="M2M.APN" useType="Mandatory" />
+      <Resource name="RES_HL_NET_SERVICE" value="M2M" />
+      <Resource name="RES_HL_NET_APN" value="M2M.APN" />
     </RFS>
     <RFS name="RFS_HL_NET_M2M_APN_FMS" base="RFS_HL_NET" hostType="HL" description="M2M APN Fleet Managment Solutuons">
-      <Resource name="RES_HL_NET_SERVICE" value="M2M" useType="Mandatory" />
-      <Resource name="RES_HL_NET_APN" value="FMS.APN" useType="Mandatory" />
+      <Resource name="RES_HL_NET_SERVICE" value="M2M" />
+      <Resource name="RES_HL_NET_APN" value="FMS.APN" />
     </RFS>
     <RFS name="RFS_HL_NET_M2M_APN_NGMK" base="RFS_HL_NET" hostType="HL" description="M2M APN NGMK">
-      <Resource name="RES_HL_NET_SERVICE" value="M2M" useType="Mandatory" />
-      <Resource name="RES_HL_NET_APN" value="NGMK.APN" useType="Mandatory" />
+      <Resource name="RES_HL_NET_SERVICE" value="M2M" />
+      <Resource name="RES_HL_NET_APN" value="NGMK.APN" />
     </RFS>
     <RFS name="RFS_HL_NET_M2M_APN_BEPRO" base="RFS_HL_NET" hostType="HL" description="M2M APN BEPRO">
-      <Resource name="RES_HL_NET_SERVICE" value="M2M" useType="Mandatory" />
-      <Resource name="RES_HL_NET_APN" value="UZGPS.APN" useType="Mandatory" />
+      <Resource name="RES_HL_NET_SERVICE" value="M2M" />
+      <Resource name="RES_HL_NET_APN" value="UZGPS.APN" />
     </RFS>
     <RFS name="RFS_HL_NET_M2M_APN_BK" base="RFS_HL_NET" hostType="HL" description="M2M APN BANK">
-      <Resource name="RES_HL_NET_SERVICE" value="M2M" useType="Mandatory" />
-      <Resource name="RES_HL_NET_APN" value="BANK.APN" useType="Mandatory" />
+      <Resource name="RES_HL_NET_SERVICE" value="M2M" />
+      <Resource name="RES_HL_NET_APN" value="BANK.APN" />
     </RFS>
     <RFS name="RFS_HL_NET_VPN_APN" base="RFS_HL_NET" hostType="HL" description="VPN UMS">
-      <Resource name="RES_HL_NET_SERVICE" value="M2M" useType="Mandatory" />
-      <Resource name="RES_HL_NET_APN" value="UMS-VPN.UMS.UZ" useType="Mandatory" />
+      <Resource name="RES_HL_NET_SERVICE" value="M2M" />
+      <Resource name="RES_HL_NET_APN" value="UMS-VPN.UMS.UZ" />
     </RFS>
     <RFS name="RFS_HL_NET_SUSPEND" base="RFS_HL_NET" hostType="HL" description="Блок сервисов интернета">
-      <Resource name="RES_HL_NET_SERVICE" value="Suspend" useType="Mandatory" />
-      <Resource name="RES_HL_NET_APN" value="0" useType="Mandatory" />
+      <Resource name="RES_HL_NET_SERVICE" value="Suspend" />
+      <Resource name="RES_HL_NET_APN" value="" />
     </RFS>
     <RFS name="RFS_HL_LTE" hostType="HL" description="Мобильный интернет LTE"/>
     <RFS name="RFS_HL_LIMITSPEED" hostType="HL" description="Ограничение скорости Интернет">
@@ -241,10 +241,10 @@
       <Resource name="RES_HL_USSD" useType="Mandatory" />
     </RFS>
     <RFS name="RFS_HL_USSD_PRV" base="RFS_HL_USSD" hostType="HL" description="Запроса по USSD">
-      <Resource name="RES_HL_USSD" value="Provision" useType="Mandatory" />
+      <Resource name="RES_HL_USSD" value="Provision" />
     </RFS>
     <RFS name="RFS_HL_USSD_SUSPEND" base="RFS_HL_USSD" hostType="HL" description="Запрет запроса по USSD">
-      <Resource name="RES_HL_USSD" value="Suspend" useType="Mandatory" />
+      <Resource name="RES_HL_USSD" value="Suspend" />
     </RFS>
     <RFS name="RFS_HL_CALLS_SUSPEND" hostType="HL" description="Запрет голосовой связи"/>
     <!--END ==== SIMPLE SERVICE ====-->
@@ -255,32 +255,32 @@
       <Resource name="RES_HL_ODB_OC" useType="Mandatory" />
     </RFS>
     <RFS name="RFS_HL_ODB_OC_NONE" base="RFS_HL_ODB_OC" hostType="HL" description="Барринг исходящей связи – запрещены все исходящие вызовы">
-      <Resource name="RES_HL_ODB_OC" value="NoCalls" useType="Mandatory" />
+      <Resource name="RES_HL_ODB_OC" value="NoCalls" />
     </RFS>
     <RFS name="RFS_HL_ODB_OC_INTERCITY_CALLS" base="RFS_HL_ODB_OC" hostType="HL" description="Барринг исходящей связи – разрешены исходящие междугородные вызовы">
-      <Resource name="RES_HL_ODB_OC" value="IntercityCalls" useType="Mandatory" />
+      <Resource name="RES_HL_ODB_OC" value="IntercityCalls" />
     </RFS>
     <RFS name="RFS_HL_ODB_OC_INTERNATIONAL_CALLS" base="RFS_HL_ODB_OC" hostType="HL" description="Барринг исходящей связи – разрешены исходящие международные вызовы">
-      <Resource name="RES_HL_ODB_OC" value="InternationalCalls" useType="Mandatory" />
+      <Resource name="RES_HL_ODB_OC" value="InternationalCalls" />
     </RFS>
     <RFS name="RFS_HL_ODB_IC_NONE" hostType="HL" description="Барринг входящей связи – запрещены все входящие вызовы"/>
     <RFS name="RFS_HL_SMS_MO" hostType="HL" description="Служба коротких сообщений (SMS) исходящие">
       <Resource name="RES_HL_SMS_MO" useType="Mandatory" />
     </RFS>
     <RFS name="RFS_HL_SMS_MO_NONE" base="RFS_HL_SMS_MO" hostType="HL" description="Барринг на исходящие SMS - запрещен">
-      <Resource name="RES_HL_SMS_MO" value="NoSMS" useType="Mandatory" />
+      <Resource name="RES_HL_SMS_MO" value="NoSMS" />
     </RFS>
     <RFS name="RFS_HL_SMS_MO_ACCESS" base="RFS_HL_SMS_MO" hostType="HL" description="Барринг на исходящие SMS - разрешен">
-      <Resource name="RES_HL_SMS_MO" value="AccessSMS" useType="Mandatory" />
+      <Resource name="RES_HL_SMS_MO" value="AccessSMS" />
     </RFS>
     <RFS name="RFS_HL_SMS_MT" hostType="HL" description="Служба коротких сообщений (SMS) входящие">
       <Resource name="RES_HL_SMS_MT" useType="Mandatory" />
     </RFS>
     <RFS name="RFS_HL_SMS_MT_NONE" base="RFS_HL_SMS_MT" hostType="HL" description="Барринг на входящие SMS - запрещен">
-      <Resource name="RES_HL_SMS_MT" value="NoSMS" useType="Mandatory" />
+      <Resource name="RES_HL_SMS_MT" value="NoSMS" />
     </RFS>
     <RFS name="RFS_HL_SMS_MT_ACCESS" base="RFS_HL_SMS_MT" hostType="HL" description="Барринг на входящие SMS - разрешен">
-      <Resource name="RES_HL_SMS_MT" value="AccessSMS" useType="Mandatory" />
+      <Resource name="RES_HL_SMS_MT" value="AccessSMS" />
     </RFS>
     <!--END ==== Барринги на связь, смс, интернет ====-->
     

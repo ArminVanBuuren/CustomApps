@@ -145,7 +145,7 @@
     <node name="IsNotSubscriptionModify" object="IfMultipleXmlConditionsResolver">
       <resultlist>
         <result value="0" node="SetLanguage"/>
-        <result value="" node="CLIP_Delete"/>
+        <result value="" node="OriginFAID_Add"/>
       </resultlist>
       <parameterslist>
         <param name="IfNotXmlPath:0" value="//RFS_HL_SUBSCRIPTION_MODIFY"/>
