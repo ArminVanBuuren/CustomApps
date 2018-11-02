@@ -74,7 +74,10 @@ namespace Utils.WinForm.Notepad
                 }
                 else if (e.ChangeType == WatcherChangeTypes.Created || e.ChangeType == WatcherChangeTypes.Changed)
                 {
-                    Source = WaitForFile(Path);
+                    if (WaitForFile(Path, out string result))
+                        Source = result;
+                    else
+                        MessageBox.Show($"Can't access to file: {Path}");
                 }
 
                 if (isDisposed)
@@ -85,16 +88,25 @@ namespace Utils.WinForm.Notepad
             }
         }
 
-        public string WaitForFile(string path)
+        public bool WaitForFile(string path, out string result)
         {
+            int tryCount = 0;
+            result = null;
             while (!FilesEmployee.IsFileReady(path))
             {
+                if (tryCount >= 5)
+                    return false;
+
+
                 if (isDisposed)
-                    return null;
+                    return false;
+
 
                 System.Threading.Thread.Sleep(500);
+                tryCount++;
             }
-            return File.ReadAllText(path);
+            result = File.ReadAllText(path);
+            return true;
         }
 
         private void OnRenamed(object source, RenamedEventArgs e)

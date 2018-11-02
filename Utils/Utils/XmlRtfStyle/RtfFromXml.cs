@@ -152,7 +152,7 @@ namespace Utils.XmlRtfStyle
             {
                 foreach (XmlAttribute attribute in node.Attributes)
                 {
-                    str2 = str2 + string.Format(" {0}=\"{1}\"", attribute.Name, attribute.InnerXml.Replace("&", "&amp;").Replace("\"", "&quot;").Replace("<", "&lt;").Replace(">", "&gt;"));
+                    str2 = str2 + string.Format(" {0}=\"{1}\"", attribute.Name, attribute.InnerXml.Replace("\"", "&quot;").Replace("<", "&lt;").Replace(">", "&gt;"));
                 }
                 string str4 = (nested != 0) ? Environment.NewLine : string.Empty;
                 if ((node.ChildNodes.Count <= 0) && string.IsNullOrEmpty(node.InnerText))
@@ -355,7 +355,6 @@ namespace Utils.XmlRtfStyle
         {
             string source = string.Empty;
             string findedStr = string.Empty;
-            //TODO: сделать корректный поиск по нодам, т.к. XmlDocument формируект ноды, а отступы мы должны делать основываясь на источнике контекста xml
             XMlType type = ProcessXmlGetPosition(xml.DocumentElement, ref source, ref findedStr, 0, find);
 
             //int position = 0;
