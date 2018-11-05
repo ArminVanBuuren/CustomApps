@@ -256,7 +256,6 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Remove.RFS_HL_RBT.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Add.RFS_HL_RBT.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.CallForwardingRemove.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Заметки.txt" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MCA\Commands\SC.Add_MCA_SERVICE.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MCA\Commands\SC.Add_MCA_SERVICE_NEW_MSISDN.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MCA\Commands\SC.Remove_MCA_SERVICE.xml" />
