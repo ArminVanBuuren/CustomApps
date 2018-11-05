@@ -14,26 +14,9 @@
   <automat>
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
       <resultlist>
-        <result value="0" node="CheckNewMSISDN"/>
+        <result value="0" node="CheckNewIMSI"/>
         <result value="1" node=""/>
       </resultlist>
-    </node>
-    <node name="CheckNewMSISDN" object="IfMultipleXmlConditionsResolver">
-      <resultlist>
-        <result value="0" node="WellknownsReplacerNewMSISDN"/>
-        <result value="" node="CheckNewIMSI"/>
-      </resultlist>
-      <parameterslist>
-        <param name="IfXmlPath:0" value="//NewMSISDN/Value[text()!='']"/>
-      </parameterslist>
-    </node>
-    <node name="WellknownsReplacerNewMSISDN" object="WellknownsReplacer">
-      <resultlist>
-        <result value="" node="UserMSISDN_Delete" />
-      </resultlist>
-      <parameterslist>
-        <param name="msisdn" value="xmlsubstr(&quot;//AdditionalData//NewMSISDN&quot;)" />
-      </parameterslist>
     </node>
     <node name="CheckNewIMSI" object="IfMultipleXmlConditionsResolver">
       <resultlist>

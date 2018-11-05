@@ -23,7 +23,7 @@
     <Resource name="RES_HL_DEALER_APN" description="Название дилерской точки доступа (Access Point Name)"/>
     <Resource name="RES_HL_SUBSCRIPTION_PROFILE" description="Профиль абонента на HLR"/>
     <Resource name="RES_HL_CNCLOC_DIRECT" description="Тип станции для сброса информации" />
-    <Resource name="RES_HL_REGION" description="Определение кода региона для переадресации" />
+    <Resource name="RES_HL_REGION" description="Код региона для переадресации" />
   </ResourceList>
   <RFSParameterList>
     <RFSParameter name="CallForwardType" description="Тип установки переадресаций" />
@@ -56,15 +56,12 @@
       <Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="DGU" />
     </RFS>
     <RFS name="RFS_HL_SUBSCRIPTION_MODIFY" hostType="HL" description="Изменение или пересоздание абонента на HLR"/>
-    <RFS name="RFS_HL_CHANGE_MSISDN" base="RFS_HL_SUBSCRIPTION_MODIFY" hostType="HL" description="Изменение номера MSISDN на HLR">
-      <RFSParameter name="NewMSISDN" />
-    </RFS>
     <RFS name="RFS_HL_CHANGE_IMSI" base="RFS_HL_SUBSCRIPTION_MODIFY" hostType="HL" description="Изменение номера IMSI на HLR">
       <RFSParameter name="NewIMSI" />
     </RFS>
     <RFS name="RFS_HL_CHANGE_PROFILE" base="RFS_HL_SUBSCRIPTION_MODIFY" hostType="HL" description="Изменение профиля на HLR" />
     <RFS name="RFS_HL_SYNCHRONIZE" base="RFS_HL_SUBSCRIPTION_MODIFY" hostType="HL" description="Синхронизация абонента на HLR" />
-    <RFS name="RFS_HL_REGION" hostType="HL" description="Определение региона для Переадресации">
+    <RFS name="RFS_HL_REGION" hostType="HL" description="Определение кода региона для переадресации">
       <Resource name="RES_HL_REGION" value="" useType="Mandatory">
         <Value hosts="HL:TASH_HLR"   value="TASH_HLR" />
         <Value hosts="HL:01"         value="TASH_HLR" />
@@ -257,6 +254,9 @@
     <RFS name="RFS_HL_ODB_OC_NONE" base="RFS_HL_ODB_OC" hostType="HL" description="Барринг исходящей связи – запрещены все исходящие вызовы">
       <Resource name="RES_HL_ODB_OC" value="NoCalls" />
     </RFS>
+    <RFS name="RFS_HL_ODB_OC_LOCAL_CALLS" base="RFS_HL_ODB_OC" hostType="HL" description="Барринг исходящей связи – разрешены исходящие локальные вызовы">
+      <Resource name="RES_HL_ODB_OC" value="LocalCalls" />
+    </RFS>
     <RFS name="RFS_HL_ODB_OC_INTERCITY_CALLS" base="RFS_HL_ODB_OC" hostType="HL" description="Барринг исходящей связи – разрешены исходящие междугородные вызовы">
       <Resource name="RES_HL_ODB_OC" value="IntercityCalls" />
     </RFS>
@@ -303,11 +303,7 @@
       <RFS name="RFS_HL_SUBSCRIPTION_DGU" linkType="Add" />
       <RFS name="RFS_HL_REGION" linkType="Add" />
     </CFS>
-    <CFS name="ChangeMsisdn" priority="9999" type="OneTime" description="Изменение номера MSISDN">
-      <RFSGroup name="RFS_GROUP_HL_CREATE_SUBSCRIBER" />
-      <RFS name="RFS_HL_CHANGE_MSISDN" linkType="Info" />
-      <RFS name="RFS_HL_REGION" linkType="Add" dependsOn="RFS_GROUP_HL_SUBSCRIPTIONS_FOR_CFORIGIN" />
-    </CFS>
+    <CFS name="ChangeMsisdn" priority="9999" type="OneTime" description="Изменение номера MSISDN"/>
     <CFS name="ChangeImsi" priority="9999" type="OneTime" description="Изменение номера IMSI">
       <RFSGroup name="RFS_GROUP_HL_CREATE_SUBSCRIBER" />
       <RFS name="RFS_HL_CHANGE_IMSI" linkType="Info" />
@@ -405,15 +401,10 @@
     <CFS name="FRCRBT" description="Caller Ring Back Tone. GOODOK">
       <RFS name="RFS_HL_RBT" linkType="Add" />
     </CFS>
-    <CFS name="CB123" description="Международный роуминг">
+    <CFS name="CB123" isMarker="true" description="Международный роуминг">
       <RFS name="RFS_HL_ROAMING" linkType="Add" />
     </CFS>
-    <CFS name="BSNSSRMNG" description="Business Роуминг">
-      <RFS name="RFS_HL_ROAMING" linkType="Add" />
-    </CFS>
-    <CFS name="LGHTRMNG" description="Light Роуминг">
-      <RFS name="RFS_HL_ROAMING" linkType="Add" />
-    </CFS>
+    <CFS name="BSNSSRMNG" copyOf="CB123" description="Business Роуминг" /> 
     <CFS name="FRVIDCALL" description="Video Call">
       <RFS name="RFS_HL_VIDEOCALL" linkType="Add" />
     </CFS>
@@ -446,10 +437,14 @@
 
     
     <!--START ==== Барринги и связь ====-->
-    <CFS name="CB108" description="Международный доступ">
+    <CFS name="LGHTRMNG" priority="9997" description="Light Роуминг">
+      <RFS name="RFS_HL_ODB_OC_LOCAL_CALLS" linkType="Add" />
+      <RFS name="RFS_HL_ROAMING" linkType="Add" />
+    </CFS>
+    <CFS name="CB108" priority="9998" description="Международный доступ">
       <RFS name="RFS_HL_ODB_OC_INTERNATIONAL_CALLS" linkType="Add" />
     </CFS>
-    <CFS name="FRMGDOSTUP" description="Междугородный доступ">
+    <CFS name="FRMGDOSTUP" priority="9999" description="Междугородный доступ">
       <RFS name="RFS_HL_ODB_OC_INTERCITY_CALLS" linkType="Add" />
     </CFS>
     <CFS name="FRZAPRETGS" description="Запрет голосовой связи">
@@ -505,11 +500,11 @@
       <CFS name="CB406278" />
       <CFS name="FRCORPAPN" />
     </CFSGroup>
-    <CFSGroup name="CFS_GROUP_GPRS_CORPAPN_XB" type="Mutex" description="Группа взаимоисключающих услуг GPRS и Корпортативный APN">
+    <CFSGroup name="CFS_GROUP_GPRS_CORPAPN_XB" type="Mutex" description="Группа взаимоисключающих услуг GPRS и Корпортативный APN Халк Банк">
       <CFS name="CB406278" />
       <CFS name="FRAPNXB" />
     </CFSGroup>
-    <CFSGroup name="CFS_GROUP_GPRS_CORPAPN_ZD" type="Mutex" description="Группа взаимоисключающих услуг GPRS и Корпортативный APN">
+    <CFSGroup name="CFS_GROUP_GPRS_CORPAPN_ZD" type="Mutex" description="Группа взаимоисключающих услуг GPRS и Корпортативный APN Ziyod">
       <CFS name="CB406278" />
       <CFS name="FRAPNZIYOD" />
     </CFSGroup>
@@ -617,6 +612,8 @@
       <RFS name="RFS_HL_ROAMING" scenarioType="Add" />
     </Restriction>
   </RestrictionList>
+  <RFSDependencyList>
+  </RFSDependencyList>
   <RFSGroupList>
     <!-- TODO:RFSGroupList  -->
     <RFSGroup name="RFS_GROUP_HL_CREATE_SUBSCRIBER" type="Choice" description="Группа RFS для пересоздания абонента на HLR">
@@ -641,13 +638,6 @@
       <Configuration>
         <RFS name="RFS_HL_SUBSCRIPTION" action="Remove" />
         <RFS name="RFS_HL_SUBSCRIPTION" action="Add" />
-      </Configuration>
-    </Handler>
-    <Handler name="MERGE_RFS_HL_ODB_OC_INTERNATIONAL" type="MergeRFS" description="Исх. международный доступ">
-      <Configuration>
-        <RFS type="Source" name="RFS_HL_ODB_OC_INTERNATIONAL_CALLS"/>
-        <RFS type="Source" name="RFS_HL_ODB_OC_INTERCITY_CALLS"/>
-        <RFS type="Result" name="RFS_HL_ODB_OC_INTERNATIONAL_CALLS"/>
       </Configuration>
     </Handler>
   </HandlerList>
