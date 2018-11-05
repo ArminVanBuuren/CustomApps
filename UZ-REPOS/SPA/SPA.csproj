@@ -212,7 +212,6 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.BR_Add.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.APN_GPRS_Add.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.NAM_Modify.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\!Example.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.PLSS_5_Delete.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.PLSS_5_Add.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CF_Deactivate.xml" />
@@ -241,7 +240,6 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Add.RFS_HL_SMS.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Add.RFS_HL_CLIP.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Add.RFS_HL_MPTY.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Add.AAAAAAAAAAA.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Remove.RFS_HL_CLIR.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Remove.RFS_HL_CWCH.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Remove.RFS_HL_DATATRANSFER.xml" />
@@ -249,7 +247,6 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Remove.RFS_HL_CLIP.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Remove.RFS_HL_MPTY.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Remove.RFS_HL_VIDEOCALL.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Remove.AAAAAAAAAAA.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Add.RFS_HL_VIDEOCALL.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Add.RFS_HL_ROAMING.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.CallForwardingAssign.xml" />
@@ -258,7 +255,6 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Remove.RFS_HL_ROAMING.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Remove.RFS_HL_RBT.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Add.RFS_HL_RBT.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\!Example.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.CallForwardingRemove.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Заметки.txt" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MCA\Commands\SC.Add_MCA_SERVICE.xml" />
@@ -2908,6 +2904,7 @@
     <None Include="EDITION\DOC\SCG\Annex 6.1 - Interface Between the SCG and the OCS Mapping Server V1.0.doc" />
     <None Include="EDITION\DOC\HLR\Модель услуг HLR Создание абонента v.0.1.xlsx" />
     <None Include="EDITION\DOC\HLR\Перевод управления HLR на SC v0.1.docx" />
+    <None Include="EDITION\DOC\HLR\Модель услуг HLR v.0.1.xlsx" />
     <None Include="EDITION\DOC\SCG\Модель услуг SCG v.0.2.xlsx" />
     <None Include="EDITION\DOC\SCG\Перевод управления SCG на SC v0.2.docx" />
     <None Include="EDITION\DOC\SPA_Stat_2018.09.12.xlsx" />
