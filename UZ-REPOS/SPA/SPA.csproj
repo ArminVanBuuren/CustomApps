@@ -2908,6 +2908,7 @@
     <None Include="EDITION\DOC\SCG\Annex 6.1 - Interface Between the SCG and the OCS Mapping Server V1.0.doc" />
     <None Include="EDITION\DOC\HLR\Модель услуг HLR Создание абонента v.0.1.xlsx" />
     <None Include="EDITION\DOC\HLR\Перевод управления HLR на SC v0.1.docx" />
+    <None Include="EDITION\DOC\HLR\Модель услуг HLR v.0.1.xlsx" />
     <None Include="EDITION\DOC\SCG\Модель услуг SCG v.0.2.xlsx" />
     <None Include="EDITION\DOC\SCG\Перевод управления SCG на SC v0.2.docx" />
     <None Include="EDITION\DOC\SPA_Stat_2018.09.12.xlsx" />

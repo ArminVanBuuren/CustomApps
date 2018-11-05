@@ -176,10 +176,6 @@
       <Resource name="RES_HL_NET_SERVICE" value="CorpAPN" />
       <Resource name="RES_HL_NET_APN" value="ZIYOD.UMS.UZ" />
     </RFS>
-    <RFS name="RFS_HL_NET_M2M_APN_BS" base="RFS_HL_NET" hostType="HL" description="M2M APN">
-      <Resource name="RES_HL_NET_SERVICE" value="M2M" />
-      <Resource name="RES_HL_NET_APN" value="M2M.APN" />
-    </RFS>
     <RFS name="RFS_HL_NET_M2M_APN_FMS" base="RFS_HL_NET" hostType="HL" description="M2M APN Fleet Managment Solutuons">
       <Resource name="RES_HL_NET_SERVICE" value="M2M" />
       <Resource name="RES_HL_NET_APN" value="FMS.APN" />
@@ -191,6 +187,10 @@
     <RFS name="RFS_HL_NET_M2M_APN_BEPRO" base="RFS_HL_NET" hostType="HL" description="M2M APN BEPRO">
       <Resource name="RES_HL_NET_SERVICE" value="M2M" />
       <Resource name="RES_HL_NET_APN" value="UZGPS.APN" />
+    </RFS>
+    <RFS name="RFS_HL_NET_M2M_APN_BS" base="RFS_HL_NET" hostType="HL" description="M2M APN">
+      <Resource name="RES_HL_NET_SERVICE" value="M2M" />
+      <Resource name="RES_HL_NET_APN" value="M2M.APN" />
     </RFS>
     <RFS name="RFS_HL_NET_M2M_APN_BK" base="RFS_HL_NET" hostType="HL" description="M2M APN BANK">
       <Resource name="RES_HL_NET_SERVICE" value="M2M" />
