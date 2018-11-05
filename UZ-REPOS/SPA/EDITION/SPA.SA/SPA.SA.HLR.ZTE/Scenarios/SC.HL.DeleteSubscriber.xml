@@ -15,11 +15,20 @@
     </node>
     <node name="UserMSISDN_Delete" object="Commander">
       <resultlist>
-        <result value="0" node="AuthIMSI_Delete"/>
+        <result value="0" node="UserIMSI_Delete"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
         <param name="Command" value="SC.UserMSISDN_Delete"/>
+      </parameterslist>
+    </node>
+    <node name="UserIMSI_Delete" object="Commander">
+      <resultlist>
+        <result value="0" node="AuthIMSI_Delete"/>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.UserIMSI_Delete"/>
       </parameterslist>
     </node>
     <node name="AuthIMSI_Delete" object="IfCommander">
