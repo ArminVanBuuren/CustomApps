@@ -70,6 +70,14 @@
             <param name="operation" value="DeleteUNIFUN" />
           </parameterslist>
           <resultlist>
+            <result value="" node="ReSubscribeFRINSPECTDelete" />
+          </resultlist>
+        </node>
+        <node name="ReSubscribeFRINSPECTDelete" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="ReSubscribeFRINSPECTDelete" />
+          </parameterslist>
+          <resultlist>
             <result value="" node="" />
           </resultlist>
         </node>
