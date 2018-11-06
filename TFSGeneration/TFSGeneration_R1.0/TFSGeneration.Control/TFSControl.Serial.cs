@@ -158,7 +158,9 @@ namespace TFSAssist.Control
                                 string settValue = result.Value as string;
                                 if (settValue == null)
                                     continue;
-                                prop.SetValue(tpObj, new SettingValue<string> {Value = AES.DecryptStringAES(settValue, RegeditKey)});
+                                prop.SetValue(tpObj, new SettingValue<string>() {
+                                                                                    Value = AES.DecryptStringAES(settValue, RegeditKey)
+                                                                                });
                             }
                         }
                     }
@@ -176,8 +178,8 @@ namespace TFSAssist.Control
         }
 
         /// <summary>
-        /// Когда происходит сериализация класса TFSControl, мы помещаем в "сумку" необходимые свойства (с аттрибутом XmlIgnore)
-        /// которые нужно сериализовать и шифровать по ключю их реестра
+        /// Когда происходит сериализация класса TFSControl (с аттрибутом XmlIgnore)
+        /// которые нужно сериализовать и шифровать по ключю из реестра
         /// </summary>
         /// <param name="propertyBag"></param>
         /// <param name="context"></param>
@@ -265,23 +267,23 @@ namespace TFSAssist.Control
 
         #region Deserialize - Serialize Settings And Datas
 
-        static SettingsCollection DeserializeSettings(string settPath)
+        /// <summary>
+        /// Сериализуем (обновляем) обработанные данные
+        /// </summary>
+        public void SerializeDatas()
         {
-            if (!File.Exists(settPath))
-                return null;
-
             try
             {
-                using (FileStream stream = new FileStream(settPath, FileMode.Open, FileAccess.Read))
+                using (FileStream stream = new FileStream(DataBasePath, FileMode.Create, FileAccess.ReadWrite))
                 {
-                    return new XmlSerializer(typeof(SettingsCollection)).Deserialize(stream) as SettingsCollection;
+                    new XmlSerializer(typeof(DataCollection)).Serialize(stream, Datas);
                 }
             }
-            catch (Exception ex)
+            catch (Exception exSer)
             {
-                NotifyUserIfHasError(WarnSeverity.Attention, string.Format(NotifyDeSerializetionFailor, settPath), ex, true);
+                NotifyUserIfHasError(WarnSeverity.Error, string.Format("Cant't save Datas to=[{1}]{0}{2}", Environment.NewLine, DataBasePath, exSer.Message),
+                                     exSer);
             }
-            return null;
         }
 
         static DataCollection DeserializeDatas(string datasPath)
@@ -322,22 +324,34 @@ namespace TFSAssist.Control
             }
         }
 
-        /// <summary>
-        /// Сериализуем (обновляем) обработанные данные
-        /// </summary>
-        public void SerializeDatas()
+        static SettingsCollection DeserializeSettings(string settPath)
         {
+            if (!File.Exists(settPath))
+                return null;
+
             try
             {
-                using (FileStream stream = new FileStream(DataBasePath, FileMode.Create, FileAccess.ReadWrite))
+                using (FileStream stream = new FileStream(settPath, FileMode.Open, FileAccess.Read))
                 {
-                    new XmlSerializer(typeof(DataCollection)).Serialize(stream, Datas);
+                    return new XmlSerializer(typeof(SettingsCollection)).Deserialize(stream) as SettingsCollection;
                 }
             }
-            catch (Exception exSer)
+            catch (Exception ex)
             {
-                NotifyUserIfHasError(WarnSeverity.Error, string.Format("Cant't save Datas to=[{1}]{0}{2}", Environment.NewLine, DataBasePath, exSer.Message),
-                    exSer);
+                NotifyUserIfHasError(WarnSeverity.Attention, string.Format(NotifyDeSerializetionFailor, settPath), ex, true);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// сериализация приватных данных, паролей и логинов
+        /// </summary>
+        /// <param name="mainControl"></param>
+        static void SerializePrivateDatas(TFSControl mainControl)
+        {
+            using (FileStream stream = new FileStream(AccountStorePath, FileMode.Create, FileAccess.ReadWrite))
+            {
+                new BinaryFormatter().Serialize(stream, mainControl);
             }
         }
 
@@ -438,12 +452,12 @@ namespace TFSAssist.Control
 
             SerializeSettings();
             SerializeDatas();
-
+            SerializePrivateDatas(this);
             //сериализация приватных данных, паролей и логинов
-            using (FileStream stream = new FileStream(AccountStorePath, FileMode.Create, FileAccess.ReadWrite))
-            {
-                new BinaryFormatter().Serialize(stream, this);
-            }
+            //using (FileStream stream = new FileStream(AccountStorePath, FileMode.Create, FileAccess.ReadWrite))
+            //{
+            //    new BinaryFormatter().Serialize(stream, this);
+            //}
         }
 
 

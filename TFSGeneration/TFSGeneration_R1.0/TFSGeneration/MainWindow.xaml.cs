@@ -83,6 +83,16 @@ namespace TFSAssist
             try
             {
                 _thisIsLoaded = true;
+                //================Notification Bar==============================
+                notification = new System.Windows.Forms.NotifyIcon
+                               {
+                                   BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info,
+                                   Icon = Properties.Resources.Rick,
+                                   Visible = true
+                               };
+                notification.BalloonTipClicked += ShowMyForm;
+                notification.DoubleClick += ShowMyForm;
+
                 //===========Initialize And Set Events===========
                 TFSControl.NotifyUserAnError += NotifyUser; //static event
                 tfsControl = TFSControl.GetControl();
@@ -146,14 +156,6 @@ namespace TFSAssist
                 GetDublicateTFS.TextChanged += GetDublicateTFS_OnTextChanged;
                 ToolTipService.SetInitialShowDelay(GetDublicateTFS, timeoutToShowToolTip);
 
-                //================Notification Bar==============================
-                notification = new System.Windows.Forms.NotifyIcon {
-                                                                       BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info,
-                                                                       Icon = Properties.Resources.Rick,
-                                                                       Visible = true
-                                                                   };
-                notification.BalloonTipClicked += ShowMyForm;
-                notification.DoubleClick += ShowMyForm;
 
                 //================Activate Button Start And Start Timer==============================
                 ButtonStart.IsEnabled = true;
@@ -407,6 +409,7 @@ namespace TFSAssist
             if (IsActive || messageHeader.IsNullOrEmpty() || messageDetails.IsNullOrEmpty() || countNotWatchedNotifications != 0)
                 return;
 
+            
             notification.Text = TFSControl.ApplicationName;
             notification.Visible = true;
             notification.BalloonTipTitle = messageHeader;
