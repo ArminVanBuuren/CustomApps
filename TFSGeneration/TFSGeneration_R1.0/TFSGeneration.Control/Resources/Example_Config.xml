@@ -10,7 +10,7 @@
     <FilterMailFrom Value="jira" />
     <FilterSubject Value="(Приоритет)|(\[нф\])" />
     <DebugLogging Value="false" />
-    <ParceBody><![CDATA[.+((На\s*вашу\s*группу\s*\[.+?\]\s*назначена\s*новая\s*заявка\.\s*(?<TITLE>.+?))|((?<TITLE>(?<ISNF>\[НФ\]).+?)(\-+|))\s*)Код:\s*(?<ITHD>.+?)\s*URL:\s*(?<URL>.+?)\s*Проект:\s*(?<PROJECT>.+?)\s*Тип\s*запроса:\s*(?<REQTYPE>.+?)\s*$.+]]></ParceBody>
+    <ParceBody><![CDATA[.+((На\s*вашу\s*группу\s*\[.+?\]\s*назначена\s*новая\s*заявка\.\s*(?<TITLE>.+?))|(?<TITLE>(?<ISNF>\[НФ\]).+?)\n+.*?)Код:\s*(?<ITHD>.+?)\s*URL:\s*(?<URL>.+?)\s*Проект:\s*(?<PROJECT>.+?)\s*Тип\s*запроса:\s*(?<REQTYPE>.+?)\s*$.+]]></ParceBody>
     <ParceSubject><![CDATA[.+Приоритет:\s*\[(?<SEVERITY>.+?)\].+]]></ParceSubject>
   </MailOption>
   <TFSOption>
@@ -18,7 +18,7 @@
     <GetDublicateTFS>
       <![CDATA[SELECT [System.Id]
 FROM WorkItems
-WHERE [System.TeamProject] = 'Support'
+WHERE ([System.TeamProject] = 'Support' OR [System.TeamProject] = 'FORIS_Mobile')
 AND [System.Title] Contains '%ParceBody_ITHD%']]>
     </GetDublicateTFS>
     <CreateTFS>
@@ -36,7 +36,7 @@ AND [System.Title] Contains '%ParceBody_ITHD%']]>
             <Map Case="(MessagingGateway)|(Gateway)|(dispatcher)|(connector)|(система мечта)" Value="Support\Resource Management Domain\MessagingGateway" />
             <Map Case="(rating)|(bms)|(umrs)|(sups)|(smbp)|(Guiding)" Value="Support\Rating Domain" />
             <Map Case="(scp)|(sdp)|(medio)" Value="Support\Medio" />
-            <Map Case="(crm)|(sales)|(okat)|(pam)|(говно)" Value="Support\CRM Domain" />
+            <Map Case="(crm)|(sales)|(okat)|(pam)|(фигня)" Value="Support\CRM Domain" />
           </Field>
           <Field Name="System.IterationPath" Value="Support\Release 4.7.1" />
           <Field Name="Microsoft.VSTS.Scheduling.StartDate" Value="%now%" />
@@ -64,7 +64,7 @@ AND [System.Title] Contains '%ParceBody_ITHD%']]>
             <Map Case="(MessagingGateway)|(Gateway)|(dispatcher)|(connector)|(система мечта)" Value="Support\Resource Management Domain\MessagingGateway" />
             <Map Case="(rating)|(bms)|(umrs)|(sups)|(smbp)|(Guiding)" Value="Support\Rating Domain" />
             <Map Case="(scp)|(sdp)|(medio)" Value="Support\Medio" />
-            <Map Case="(crm)|(sales)|(okat)|(pam)|(говно)" Value="Support\CRM Domain" />
+            <Map Case="(crm)|(sales)|(okat)|(pam)|(фигня)" Value="Support\CRM Domain" />
           </Field>
           <Field Name="System.IterationPath" Value="Support\Release 4.7.1" />
           <Field Name="Microsoft.VSTS.Scheduling.StartDate" Value="%now%" />
@@ -86,7 +86,7 @@ AND [System.Title] Contains '%ParceBody_ITHD%']]>
             <Map Case="(MessagingGateway)|(Gateway)|(dispatcher)|(connector)|(система мечта)" Value="Support\Resource Management Domain\MessagingGateway" />
             <Map Case="(rating)|(bms)|(umrs)|(sups)|(smbp)|(Guiding)" Value="Support\Rating Domain" />
             <Map Case="(scp)|(sdp)|(medio)" Value="Support\Medio" />
-            <Map Case="(crm)|(sales)|(okat)|(pam)|(говно)" Value="Support\CRM Domain" />
+            <Map Case="(crm)|(sales)|(okat)|(pam)|(фигня)" Value="Support\CRM Domain" />
           </Field>
           <Field Name="System.IterationPath" Value="Support\Release 4.7.1" />
           <Field Name="Microsoft.VSTS.Scheduling.StartDate" Value="%now%" />

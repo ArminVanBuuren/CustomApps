@@ -486,17 +486,19 @@ namespace TFSAssist.Control
             createdTfsId = string.Empty;
             //запускаем скрипт по поиску дублей
             string query = itemExec.ReplaceParcedValues(Settings.TFSOption.GetDublicateTFS[0].Value);
-            WorkItemCollection workQuery = _workItemStore.Query(query);
-
-            if (workQuery.Count > 0)
+            if (!query.IsNullOrEmptyTrim())
             {
-                foreach (WorkItem queryResult in workQuery)
-                {
-                    createdTfsId += queryResult.Id + ";";
-                }
-                return false;
-            }
+                WorkItemCollection workQuery = _workItemStore.Query(query);
 
+                if (workQuery.Count > 0)
+                {
+                    foreach (WorkItem queryResult in workQuery)
+                    {
+                        createdTfsId += queryResult.Id + ";";
+                    }
+                    return false;
+                }
+            }
             return CreateTFSItem(itemExec, ref createdTfsId);
         }
 

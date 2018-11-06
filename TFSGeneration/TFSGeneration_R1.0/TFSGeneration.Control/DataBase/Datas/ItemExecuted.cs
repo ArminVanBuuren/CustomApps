@@ -30,7 +30,7 @@ namespace TFSAssist.Control.DataBase.Datas
             {
                 _result = _result.Replace(@"&amp;", @"&");
             }
-            _result = _result.Replace(@"\r", "\r").Replace(@"\n", "\n").Replace(@"&lt;", @"<").Replace(@"&gt;", @">").Replace(@"&quot;", "\"").Replace(@"&apos;", @"'");
+            _result = _result.Replace(@"\r", "\r").Replace(@"\n", "\n").Replace(@"&lt;", @"<").Replace(@"&gt;", @">").Replace(@"&quot;", "\"").Replace(@"&apos;", @"'").Replace("&#xD;","\r").Replace("&#xA;", "\n");
 
             // реплейсим динамические параметры на спарсенные параметры из запроса, по ситаксису %ParceBody_TITLE%
             foreach (DataMail mailParceItem in MailParcedItems)

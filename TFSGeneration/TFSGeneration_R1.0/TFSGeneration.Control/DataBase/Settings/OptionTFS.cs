@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System.Configuration;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace TFSAssist.Control.DataBase.Settings
@@ -31,9 +32,18 @@ namespace TFSAssist.Control.DataBase.Settings
         [XmlElement("GetDublicateTFS")]
 		public XmlNode[] GetDublicateTFS
 		{
-			get { return _cdataGetDublicateTFS; }
-			set { _cdataGetDublicateTFS = value ?? _cdataGetDublicateTFS; }
-		}
+            get
+            {
+                return _cdataGetDublicateTFS; 
+                
+            }
+            set
+            {
+                if (value != null && value.Length > 0 && value[0] == null)
+                    value[0] = new XmlDocument().CreateCDataSection("");
+                _cdataGetDublicateTFS = value ?? _cdataGetDublicateTFS;
+            }
+        }
 
 		[XmlElement("CreateTFS")]
 		public CreateTFS TFSCreate { get; set; } = new CreateTFS();
