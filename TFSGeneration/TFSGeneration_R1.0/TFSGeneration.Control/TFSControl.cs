@@ -462,7 +462,7 @@ namespace TFSAssist.Control
                     parced.Add(new DataMail {
                                                 Name = string.Format("{0}_{1}", nameof(OptionMail.ParceSubject), match),
                                                 Value = fromSubject[match].Value
-                                            });
+                    });
                 }
             }
 
@@ -474,7 +474,7 @@ namespace TFSAssist.Control
                     parced.Add(new DataMail {
                                                 Name = string.Format("{0}_{1}", nameof(OptionMail.ParceBody), match),
                                                 Value = fromBody[match].Value
-                                            });
+                    });
                 }
             }
 
