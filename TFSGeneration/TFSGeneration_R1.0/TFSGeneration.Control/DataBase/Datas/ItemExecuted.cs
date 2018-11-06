@@ -25,6 +25,7 @@ namespace TFSAssist.Control.DataBase.Datas
         {
             string _result = source;
 
+            //https://doremifaso.ca/archives/unicode/latin1.html - таблицы со спец символами html
             // реплейсим спец символы xml в обычный текст
             while (_result.IndexOf("&amp;", StringComparison.Ordinal) != -1)
             {
