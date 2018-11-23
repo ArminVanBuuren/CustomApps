@@ -17,8 +17,8 @@ namespace TFSAssist.Control
     struct StatusString
     {
         public const string Initialization = "Initialization...";
-        public const string ConnectingMail = "Connecting to Mail...";
-        public const string ConnectingTFS = "Connecting to TFS...";
+        public const string ConnectingMail = "Connecting to Mail-server...";
+        public const string ConnectingTFS = "Connecting to TFS-server...";
         public const string Processing = "Processing...";
         public const string Sleeping = "Sleeping...";
         public const string Completed = "Completed";
@@ -205,7 +205,7 @@ namespace TFSAssist.Control
             {
                 string[] tfs_domain_username = Settings.TFSOption.TFSUserName.Value.Split('\\');
                 if (tfs_domain_username.Length != 2 || tfs_domain_username[0].IsNullOrEmpty() || tfs_domain_username[1].IsNullOrEmpty())
-                    throw new ArgumentException("You must add TFS-UserName and TFS-Domain like: \"Domain\\Username\"");
+                    throw new ArgumentException("You must add Domain and UserName for TFS-server like: \"Domain\\Username\"");
 
                 SecureString _tfsUserPassword = new SecureString();
                 if (Settings.TFSOption.TFSUserPassword.Value != null)
@@ -324,7 +324,7 @@ namespace TFSAssist.Control
         MailItem[] ExchangeExceptionHandle(ExchangeService service, FolderId folderId, int numberOfMessages, ref int numberOfAttempts, Exception ex)
         {
             if (numberOfAttempts >= 5)
-                throw new Exception(string.Format("Error connecting to Exchange Server! {0} connection attempts were made to the server.", numberOfAttempts), ex);
+                throw new Exception($"Error connecting to Exchange Server! {numberOfAttempts} connection attempts were made to the Mail-server.", ex);
 
             Thread.Sleep(30 * 1000);
             return GetUnreadMailFromInbox(service, folderId, numberOfMessages, ref numberOfAttempts);
@@ -479,7 +479,7 @@ namespace TFSAssist.Control
                 if (!match.IsNumber())
                 {
                     parced.Add(new DataMail {
-                                                Name = string.Format("{0}_{1}", nameof(OptionMail.ParceSubject), match),
+                                                Name = $"{nameof(OptionMail.ParceSubject)}_{match}",
                                                 Value = fromSubject[match].Value
                     });
                 }
@@ -491,7 +491,7 @@ namespace TFSAssist.Control
                 if (!match.IsNumber())
                 {
                     parced.Add(new DataMail {
-                                                Name = string.Format("{0}_{1}", nameof(OptionMail.ParceBody), match),
+                                                Name = $"{nameof(OptionMail.ParceBody)}_{match}",
                                                 Value = fromBody[match].Value
                     });
                 }
@@ -533,7 +533,7 @@ namespace TFSAssist.Control
                 if (teamProj.Value.IsNullOrEmpty())
                     throw new TFSFieldsException("TeamProject's Attribute=[Value] Must Not Be Empty!");
                 if (teamProj.WorkItems == null || teamProj.WorkItems.Length == 0)
-                    throw new TFSFieldsException("Not Found WorkItems From Project=[{0}]!", teamProj.Value);
+                    throw new TFSFieldsException($"Not Found WorkItems From Project=[{teamProj.Value}]!");
 
                 Project teamProject = _workItemStore.Projects[teamProj.Value];
 
@@ -547,7 +547,7 @@ namespace TFSAssist.Control
                     if (workItem.Value.IsNullOrEmpty())
                         throw new TFSFieldsException("WorkItem's Attribute=[Value] Must Not Be Empty!");
                     if (workItem.Fields == null || workItem.Fields.Length == 0)
-                        throw new TFSFieldsException("Not Found Fields From WorkItem=[{0}]!", workItem.Value);
+                        throw new TFSFieldsException($"Not Found Fields From WorkItem=[{workItem.Value}]!");
 
 
                     WorkItemType workItemType = teamProject.WorkItemTypes[workItem.Value];
@@ -580,7 +580,7 @@ namespace TFSAssist.Control
                                     }
                                     else
                                     {
-                                        throw new TFSFieldsException("Not Correct Item Control.Links=[{0}]! Incorrect=[{1}] Value=[{2}]", field.Value, getFormattedValue, link);
+                                        throw new TFSFieldsException($"Not Correct Item Control.Links=[{field.Value}]! Incorrect=[{getFormattedValue}] Value=[{link}]");
                                     }
                                 }
                                 continue;

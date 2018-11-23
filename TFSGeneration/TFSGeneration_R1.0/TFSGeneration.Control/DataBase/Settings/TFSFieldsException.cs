@@ -17,9 +17,5 @@ namespace TFSAssist.Control.DataBase.Settings
 	    {
 
 	    }
-        public TFSFieldsException(string fromat, params string[] obj_params) : base(string.Format(fromat, obj_params))
-		{
-
-		}
 	}
 }

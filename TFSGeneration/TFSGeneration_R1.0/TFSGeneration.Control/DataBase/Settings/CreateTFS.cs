@@ -50,7 +50,7 @@ namespace TFSAssist.Control.DataBase.Settings
             }
             catch (Exception ex)
             {
-                throw new TFSFieldsException("Condition=[{0}]=[{1}] Is Incorrect!\r\n{2}", Condition, value, ex.Message);
+                throw new TFSFieldsException($"Source condition=[{Condition}]; Final condition=[{value}] Is Incorrect!\r\n{ex.Message}");
             }
         }
 
