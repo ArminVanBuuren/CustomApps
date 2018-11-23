@@ -8,25 +8,25 @@ using System.Threading;
 using Microsoft.Exchange.WebServices.Data;
 using Microsoft.TeamFoundation.Client;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
-using TFSAssist.Control.DataBase;
 using TFSAssist.Control.DataBase.Datas;
 using TFSAssist.Control.DataBase.Settings;
 using Utils;
 
 namespace TFSAssist.Control
 {
+    struct StatusString
+    {
+        public const string Initialization = "Initialization...";
+        public const string ConnectingMail = "Connecting to Mail...";
+        public const string ConnectingTFS = "Connecting to TFS...";
+        public const string Processing = "Processing...";
+        public const string Sleeping = "Sleeping...";
+        public const string Completed = "Completed";
+        public const string Aborted = "Aborted";
+        public const string Processing_Error = "Processing Error";
+    }
     public sealed partial class TFSControl
     {
-        private const string STR_INITIALIZATION = "Initialization...";
-        private const string STR_CONNECTING = "Connecting...";
-        private const string STR_PROCESSING = "Processing...";
-        private const string STR_SLEEPING = "Sleeping...";
-        private const string STR_COMPLETED = "Completed";
-        private const string STR_ABORTED = "Aborted";
-        private const string STR_PROC_ERROR = "Processing Error";
-
-
-
         public event EventHandler IsCompleted;
         private const RegexOptions _default = RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase;
 
@@ -50,8 +50,9 @@ namespace TFSAssist.Control
                 {
                     //=========================================================
                     InProgress = true;
-                    NotifyUserCurrentStatus(STR_INITIALIZATION);
+                    NotifyUserCurrentStatus(StatusString.Initialization);
                     _workerThread = Thread.CurrentThread;
+                    OnWriteLog($"ProcessThread:{_workerThread}");
 
                     string mailFilterFrom = Settings.MailOption.FilterMailFrom.Value.Trim();
                     string mailFilterSubject = Settings.MailOption.FilterSubject.Value.Trim();
@@ -72,16 +73,17 @@ namespace TFSAssist.Control
                     ParceSubject = new Regex(Settings.MailOption.ParceSubject[0].Value, _default);
                     ParceBody = new Regex(Settings.MailOption.ParceBody[0].Value, _default | RegexOptions.Multiline);
                     //=========================================================
-                    Connect();
+                    ConntectToMailServer();
+                    ConnectToTFSServer();
                     //=========================================================
                     StartProcess();
                     //=========================================================
-                    NotifyUserCurrentStatus(STR_COMPLETED);
+                    NotifyUserCurrentStatus(StatusString.Completed);
                 }
                 catch (ThreadAbortException)
                 {
                     //Thread.ResetAbort();
-                    NotifyUserCurrentStatus(STR_ABORTED);
+                    NotifyUserCurrentStatus(StatusString.Aborted);
                 }
                 catch (Exception fatal)
                 {
@@ -100,11 +102,11 @@ namespace TFSAssist.Control
         }
 
         /// <summary>
-        /// Коннект к TFS и Mail
+        /// Коннект к MAIL
         /// </summary>
-        void Connect()
+        void ConntectToMailServer()
         {
-            NotifyUserCurrentStatus(STR_CONNECTING);
+            NotifyUserCurrentStatus(StatusString.ConnectingMail);
 
             _exchangeService = new ExchangeService(ExchangeVersion.Exchange2013_SP1);
             _exchangeService.TraceListener = new TraceListener(OnWriteLog);
@@ -119,7 +121,7 @@ namespace TFSAssist.Control
                     _mailPassword.AppendChar(ch);
 
 
-            if (!Utility.IsNullOrEmptyTrim(Settings.MailOption.ExchangeUri.Value) && !Utility.IsNullOrEmptyTrim(Settings.MailOption.UserName.Value))
+            if (!Settings.MailOption.ExchangeUri.Value.IsNullOrEmptyTrim() && !Settings.MailOption.UserName.Value.IsNullOrEmptyTrim())
             {
                 string[] domain_username = Settings.MailOption.UserName.Value.Split('\\');
                 if (domain_username.Length != 2 || domain_username[0].IsNullOrEmpty() || domain_username[1].IsNullOrEmpty())
@@ -129,7 +131,7 @@ namespace TFSAssist.Control
                 _exchangeService.Url = new Uri(Settings.MailOption.ExchangeUri.Value);
                 //AlternateIdBase response = _exchangeService.ConvertId(new AlternateId(IdFormat.EwsId, "Placeholder", domain_username[1].Trim()), IdFormat.EwsId);
             }
-            else if (!Utility.IsNullOrEmptyTrim(Settings.MailOption.Address.Value) && _checkEmailAddress.IsMatch(Settings.MailOption.Address.Value)) // Необходим только Email Address и пароль, т.к. вызывается другой способ подключения
+            else if (!Settings.MailOption.Address.Value.IsNullOrEmptyTrim() && _checkEmailAddress.IsMatch(Settings.MailOption.Address.Value)) // Необходим только Email Address и пароль, т.к. вызывается другой способ подключения
             {
                 _exchangeService.Credentials = new NetworkCredential(Settings.MailOption.Address.Value, _mailPassword);
                 _exchangeService.AutodiscoverUrl(Settings.MailOption.Address.Value, RedirectionUrlValidationCallback);
@@ -146,11 +148,12 @@ namespace TFSAssist.Control
                     Settings.MailOption.ExchangeUri.Value.ToStringIsNullOrEmptyTrim()));
             }
 
+            Folder checkConnect;
             // проверяем коннект к почтовому серверу
             try
             {
                 _exchangeFolder = new FolderId(WellKnownFolderName.Inbox);
-                Folder checkConnect = Folder.Bind(_exchangeService, _exchangeFolder);
+                checkConnect = Folder.Bind(_exchangeService, _exchangeFolder);
             }
             catch (ServiceRequestException ex)
             {
@@ -168,7 +171,7 @@ namespace TFSAssist.Control
             {
                 //находим все дочение папки из папки Входящие (Inbox)
                 FindFoldersResults inboxFolders = _exchangeService.FindFolders(WellKnownFolderName.Inbox,
-                    new FolderView(int.MaxValue) {Traversal = FolderTraversal.Deep});
+                    new FolderView(int.MaxValue) { Traversal = FolderTraversal.Deep });
                 if (inboxFolders != null)
                 {
                     foreach (Folder folder in inboxFolders)
@@ -181,6 +184,16 @@ namespace TFSAssist.Control
                 }
             }
 
+            OnWriteLog($"Successful connected to Mail-server.\r\nMailBox: FolderName:{_exchangeFolder.FolderName.ToString()}; Name:{checkConnect.DisplayName}");
+        }
+
+        /// <summary>
+        /// Коннект к TFS
+        /// </summary>
+        void ConnectToTFSServer()
+        {
+            NotifyUserCurrentStatus(StatusString.ConnectingTFS);
+
             // Если в настройках xml файла нет указаний на создание каких либо TFS
             if (Settings.TFSOption.TFSCreate.TeamProjects == null || Settings.TFSOption.TFSCreate.TeamProjects.Length == 0)
                 throw new TFSFieldsException("TeamProjects Not Found! Please check config file.");
@@ -188,7 +201,7 @@ namespace TFSAssist.Control
             Uri collectionUri = new Uri(Settings.TFSOption.TFSUri.Value);
 
             // Коннект по кастомному логину и паролю
-            if (!Utility.IsNullOrEmptyTrim(Settings.TFSOption.TFSUserName.Value))
+            if (!Settings.TFSOption.TFSUserName.Value.IsNullOrEmptyTrim())
             {
                 string[] tfs_domain_username = Settings.TFSOption.TFSUserName.Value.Split('\\');
                 if (tfs_domain_username.Length != 2 || tfs_domain_username[0].IsNullOrEmpty() || tfs_domain_username[1].IsNullOrEmpty())
@@ -201,19 +214,25 @@ namespace TFSAssist.Control
 
                 NetworkCredential credential = new NetworkCredential(tfs_domain_username[1].Trim(), _tfsUserPassword, tfs_domain_username[0].Trim());
                 _tfsService = new TfsTeamProjectCollection(collectionUri, credential);
+
+                OnWriteLog($"Authorized as \"{tfs_domain_username[0].Trim()}\\{tfs_domain_username[1].Trim()}\"");
             }
             else
             {
                 _tfsService = TfsTeamProjectCollectionFactory.GetTeamProjectCollection(collectionUri);
+                OnWriteLog($"Authorized auto");
             }
 
             _tfsService.Authenticate();
             _tfsService.EnsureAuthenticated();
             _workItemStore = _tfsService.GetService<WorkItemStore>();
 
+            OnWriteLog($"Successful connected to TFS-server.");
             //NotifyUserIfHasError(WarnSeverity.Warning, string.Format("Please see log tab. Catched: {0} processing errors!", 10), "1111");
             //Test1();
         }
+
+        
 
 
         /// <summary>
@@ -248,7 +267,7 @@ namespace TFSAssist.Control
             while (true)
             {
                 Processing();
-                NotifyUserCurrentStatus(STR_SLEEPING);
+                NotifyUserCurrentStatus(StatusString.Sleeping);
                 Thread.Sleep(Settings.Interval.Value * 1000);
             }
         }
@@ -324,7 +343,7 @@ namespace TFSAssist.Control
             //    return;
 
 
-            NotifyUserCurrentStatus(STR_PROCESSING);
+            NotifyUserCurrentStatus(StatusString.Processing);
             string logProcessing = string.Empty;
             int countErrors = 0;
             int numberOfAttempts = 0;
@@ -438,7 +457,7 @@ namespace TFSAssist.Control
             if (countErrors > 0)
             {
                 //отправляем список ошибок которые возможно связанны с настроками конфига
-                NotifyUserCurrentStatus(STR_PROC_ERROR);
+                NotifyUserCurrentStatus(StatusString.Processing_Error);
                 NotifyUserIfHasError(WarnSeverity.Warning, string.Format("Please see log tab. Catched: {0} processing errors!", countErrors),
                     logProcessing.Trim());
                 Thread.Sleep(10 * 1000);
@@ -593,76 +612,5 @@ namespace TFSAssist.Control
 
             return !createdTfsId.IsNullOrEmpty();
         }
-
-
-
-        void Test1()
-        {
-            string query = @"SELECT [System.Id]
-            FROM WorkItems
-            WHERE [System.ID] = '1373710'";
-            WorkItemCollection workQuery = _workItemStore.Query(query);
-            foreach (WorkItem item in workQuery)
-            {
-                foreach (Field field in item.Fields)
-                {
-                    string fefe = field.Name;
-                    object fefe123 = field.Value;
-                }
-            }
-
-
-            TMData _task = new TMData
-            {
-                ID = "1221",
-                From = "JIRA",
-                ReceivedDate = DateTime.Now.ToString("G")
-            };
-
-            List<DataMail> parced = ParceBodyAndSubject(@"[JIRA]  (ITHD-268244) Приоритет: [Высокий] Отв. группа: [МедиаТел(HD)]", @"
-     [ http://jira:8090/browse/ITHD-268244?page=com.atlassian.jira.plugin.system.issuetabpanels:all-tabpanel ]
-
-	Здравствуйте!
-	На вашу группу [ МедиаТел(HD) ] назначена новая заявка.
-
-	Сообщения в счета
-
-	Код: ITHD-268244
-	URL: http://jira:8090/browse/ITHD-268244?page=com.atlassian.jira.plugin.system.issuetabpanels:all-tabpanel
-	Проект: ХелпДеск
-	Тип запроса: Ошибка
-
--- 
-This message is automatically generated by JIRA.
-");
-
-            _task.Executed = new ItemExecuted
-            {
-                MailParcedItems = parced
-            };
-
-            //string temp = _task.Executed.ReplaceParcedValues(Settings.TFSOption.GetDublicateTFS[0].Value);
-
-            string idResult = string.Empty;
-            CreateTFSItem(_task.Executed, ref idResult);
-        }
-
-        void Test2()
-        {
-            //WorkItemStore workItemStore = _tfsService.GetService<WorkItemStore>();
-            Project teamProject = _workItemStore.Projects["Support"];
-            WorkItemType workItemType = teamProject.WorkItemTypes["Task"];
-            WorkItem tfsTask = new WorkItem(workItemType);
-            tfsTask.Fields["Title"].Value = "MyTest";
-            tfsTask.Fields["Activity"].Value = "Other";
-            tfsTask.Fields["Assigned To"].Value = _tfsService.AuthorizedIdentity.DisplayName;
-            tfsTask.Fields["Severity"].Value = @"High";
-            tfsTask.Fields["System.AreaPath"].Value = @"Support\Resource Management Domain\SPA";
-            tfsTask.Fields["System.IterationPath"].Value = @"Support\Release 4.7.1";
-            tfsTask.Fields["Sitronics.RND.Region"].Value = @"MTS.Bel";
-            tfsTask.Fields["Sitronics.RND.StsProject"].Value = @"B13002_MTSMinsk_TS_ALL_in_2017";
-            tfsTask.Save();
-        }
-
     }
 }

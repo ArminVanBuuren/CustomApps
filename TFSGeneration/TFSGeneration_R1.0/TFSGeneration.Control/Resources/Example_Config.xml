@@ -130,7 +130,13 @@ AND [System.Title] Contains '%ParceBody_ITHD%']]>
           <Field Name="Sitronics.RND.Region" Value="MTS.Bel" />
           <Field Name="Description" Value="&lt;p&gt;TFS Assist&lt;/p&gt;&lt;a href=&quot;%ParceBody_URL%&quot;&gt;%ParceBody_URL%&lt;/a&gt;" />
           <Field Name="Microsoft.VSTS.TCM.ReproSteps" Value="&lt;p&gt;TFS Assist&lt;/p&gt;&lt;a href=&quot;%ParceBody_URL%&quot;&gt;%ParceBody_URL%&lt;/a&gt;" />
-          <Field Name="System.AreaPath" Value="FORIS_Mobile\Project" />
+          <Field Name="System.AreaPath" Value="FORIS_Mobile\Project" Switch="%ParceBody_TITLE%" >
+            <Map Case="(spa)|(bpm)|(активатор)|(идеальная система)" Value="FORIS_Mobile\Resource Management Domain\SPA" />
+            <Map Case="(MessagingGateway)|(Gateway)|(dispatcher)|(connector)|(система мечта)" Value="FORIS_Mobile\Resource Management Domain\MessagingGateway" />
+            <Map Case="(rating)|(bms)|(umrs)|(sups)|(smbp)|(Guiding)" Value="FORIS_Mobile\Rating Domain" />
+            <Map Case="(scp)|(sdp)|(medio)" Value="FORIS_Mobile\MEDIO" />
+            <Map Case="(crm)|(sales)|(okat)|(pam)|(фигня)" Value="FORIS_Mobile\CRM Domain" />
+          </Field>
           <Field Name="System.IterationPath" Value="FORIS_Mobile\Release 4.7.1\Minsk-Ukraine (Branch R1)" />
           <Field Name="Severity" Value="Critical" />
           <Field Name="Sitronics.ForisFix.ExternalCode" Value="%ParceBody_ITHD%" />
