@@ -1,4 +1,6 @@
-﻿namespace Tester.Console
+﻿using Utils;
+
+namespace Tester.Console
 {
     class Program
     {

@@ -15,7 +15,8 @@ namespace Utils
 	{
 	    public static string ApplicationName = Assembly.GetEntryAssembly().GetName().Name;
 	    public static string ApplicationPath = Assembly.GetEntryAssembly().Location; 
-		public static string AccountFilePath => Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), Assembly.GetEntryAssembly().GetName().Name);
+		public static string ApplicationDirectory => Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), Assembly.GetEntryAssembly().GetName().Name);
+		public static string ApplicationFilePath => System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
 		public static void AddAllAccessPermissions(string filePath)
 		{
 			DirectoryInfo dInfo = new DirectoryInfo(filePath);

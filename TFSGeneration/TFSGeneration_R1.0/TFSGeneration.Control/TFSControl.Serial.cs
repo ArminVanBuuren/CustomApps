@@ -9,6 +9,7 @@ using TFSAssist.Control.DataBase.Datas;
 using TFSAssist.Control.DataBase.Settings;
 using Utils;
 using Utils.Crypto;
+using static Utils.Customs;
 
 namespace TFSAssist.Control
 {
@@ -40,14 +41,15 @@ namespace TFSAssist.Control
 
         static TFSControl()
         {
+            
             CertificateCallback.Initialize();
-            AccountStorePath = Customs.AccountFilePath + ".dat";
-            SettingsPath = Customs.AccountFilePath + ".xml";
-            DataBasePath = Customs.AccountFilePath + ".Data.xml";
+            AccountStorePath = $"{ApplicationFilePath}.dat";
+            SettingsPath = $"{ApplicationFilePath}.xml";
+            DataBasePath = $"{ApplicationFilePath}.Data.xml";
             //ApplicationName = Assembly.GetCallingAssembly().GetName().Name;
             ApplicationName = Assembly.GetEntryAssembly().GetName().Name;
             ApplicationPath = Assembly.GetEntryAssembly().Location; 
-            RegeditKey = Customs.GetOrSetRegedit(ApplicationName, "This application implements reading mail items and on their basis creation TFS.");
+            RegeditKey = GetOrSetRegedit(ApplicationName, "This application implements reading mail items and on their basis creation TFS.");
             System.Globalization.CultureInfo culture = System.Globalization.CultureInfo.CreateSpecificCulture("ru-RU");
             System.Globalization.CultureInfo.DefaultThreadCurrentCulture = culture;
             System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = culture;

@@ -8,7 +8,7 @@
     <StartDate Value="26.10.2018 16:18:25" />
     <SourceFolder Value="jira" />
     <FilterMailFrom Value="jira" />
-    <FilterSubject Value="(Приоритет)|(\[нф\])" />
+    <FilterSubject Value="Приоритет" />
     <DebugLogging Value="false" />
     <ParceBody><![CDATA[.+((На\s*вашу\s*группу\s*\[.+?\]\s*назначена\s*новая\s*заявка\.\s*(?<TITLE>.+?))|(?<TITLE>(?<ISNF>\[НФ\]).+?)\n+.*?)Код:\s*(?<ITHD>.+?)\n*\s*URL:\s*(?<URL>.+?)\n*\s*Проект:\s*(?<PROJECT>.+?)\n*\s*Тип\s*запроса:\s*(?<REQTYPE>.+?)\n*\s*$.+]]></ParceBody>
     <ParceSubject><![CDATA[.+Приоритет:\s*\[(?<SEVERITY>.+?)\].+]]></ParceSubject>
