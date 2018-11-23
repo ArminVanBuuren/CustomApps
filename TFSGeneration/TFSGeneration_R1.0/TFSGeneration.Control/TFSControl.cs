@@ -52,7 +52,7 @@ namespace TFSAssist.Control
                     InProgress = true;
                     NotifyUserCurrentStatus(StatusString.Initialization);
                     _workerThread = Thread.CurrentThread;
-                    OnWriteLog($"ProcessThread:{_workerThread}");
+                    OnWriteLog($"ProcessThread:{_workerThread.ManagedThreadId} Priority:{_workerThread.Priority}");
 
                     string mailFilterFrom = Settings.MailOption.FilterMailFrom.Value.Trim();
                     string mailFilterSubject = Settings.MailOption.FilterSubject.Value.Trim();
@@ -184,7 +184,7 @@ namespace TFSAssist.Control
                 }
             }
 
-            OnWriteLog($"Successful connected to Mail-server.\r\nMailBox: FolderName:{_exchangeFolder.FolderName.ToString()}; Name:{checkConnect.DisplayName}");
+            OnWriteLog($"Successful connected to Mail-server.\r\nMailBox FolderName:{checkConnect.DisplayName}");
         }
 
         /// <summary>
