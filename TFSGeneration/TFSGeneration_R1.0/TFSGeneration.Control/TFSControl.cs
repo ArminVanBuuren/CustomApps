@@ -167,6 +167,7 @@ namespace TFSAssist.Control
 
             // если указан фильтр по папке, то найти папку на почте и обрабатывать письмо только из этой папки
             string findFolder = Settings.MailOption.SourceFolder.Value.Trim();
+            Folder folderFilter = null;
             if (!findFolder.IsNullOrEmpty())
             {
                 //находим все дочение папки из папки Входящие (Inbox)
@@ -178,13 +179,13 @@ namespace TFSAssist.Control
                     {
                         if (!folder.DisplayName.Equals(findFolder, StringComparison.CurrentCultureIgnoreCase))
                             continue;
-                        _exchangeFolder = folder.Id;
+                        _exchangeFolder = (folderFilter = folder).Id;
                         break;
                     }
                 }
             }
 
-            OnWriteLog($"Successful connected to Mail-server.\r\nMailBox FolderName:{checkConnect.DisplayName}");
+            OnWriteLog($"Successful connected to Mail-server.\r\nSearch in folder {checkConnect.DisplayName}->{folderFilter?.DisplayName}");
         }
 
         /// <summary>
