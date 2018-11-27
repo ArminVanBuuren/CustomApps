@@ -25,6 +25,7 @@ namespace TFSAssist.Control
         public const string Aborted = "Aborted";
         public const string Processing_Error = "Processing Error";
     }
+
     public sealed partial class TFSControl
     {
         public event EventHandler IsCompleted;
@@ -88,9 +89,7 @@ namespace TFSAssist.Control
                 catch (Exception fatal)
                 {
                     NotifyUserCurrentStatus(fatal.Message);
-                    NotifyUserIfHasError(WarnSeverity.Error,
-                        string.Format("Processing was stopped. {0}{1}", Environment.NewLine, fatal.Message), fatal,
-                        true);
+                    NotifyUserIfHasError(WarnSeverity.Error, $"Processing was stopped. {Environment.NewLine}{fatal.Message}", fatal, true);
                 }
                 finally
                 {
@@ -135,17 +134,13 @@ namespace TFSAssist.Control
             {
                 _exchangeService.Credentials = new NetworkCredential(Settings.MailOption.Address.Value, _mailPassword);
                 _exchangeService.AutodiscoverUrl(Settings.MailOption.Address.Value, RedirectionUrlValidationCallback);
-                OnWriteLog(string.Format("Absolute Uri to Exchange Server - \"{0}\"", _exchangeService.Url.AbsoluteUri));
+                OnWriteLog($"Absolute Uri to Exchange Server - \"{_exchangeService.Url.AbsoluteUri}\"");
                 Settings.MailOption.ExchangeUri.Value =
-                    _exchangeService.Url.AbsoluteUri; // обновляем ссылку на путь до Exchange сервера почты
+                        _exchangeService.Url.AbsoluteUri; // обновляем ссылку на путь до Exchange сервера почты
             }
             else
             {
-                throw new ArgumentException(string.Format(
-                    "Mail Address=[{0}] Or Domain\\Username=[{1}] With ExchangeUri=[{2}] is Incorrect! Please check fields.",
-                    Settings.MailOption.Address.Value.ToStringIsNullOrEmptyTrim(),
-                    Settings.MailOption.UserName.Value.ToStringIsNullOrEmptyTrim(),
-                    Settings.MailOption.ExchangeUri.Value.ToStringIsNullOrEmptyTrim()));
+                throw new ArgumentException($"Mail Address=[{Settings.MailOption.Address.Value.ToStringIsNullOrEmptyTrim()}] Or Domain\\Username=[{Settings.MailOption.UserName.Value.ToStringIsNullOrEmptyTrim()}] With ExchangeUri=[{Settings.MailOption.ExchangeUri.Value.ToStringIsNullOrEmptyTrim()}] is Incorrect! Please check fields.");
             }
 
             Folder checkConnect;
@@ -172,7 +167,9 @@ namespace TFSAssist.Control
             {
                 //находим все дочение папки из папки Входящие (Inbox)
                 FindFoldersResults inboxFolders = _exchangeService.FindFolders(WellKnownFolderName.Inbox,
-                    new FolderView(int.MaxValue) { Traversal = FolderTraversal.Deep });
+                                                                               new FolderView(int.MaxValue) {
+                                                                                                                Traversal = FolderTraversal.Deep
+                                                                                                            });
                 if (inboxFolders != null)
                 {
                     foreach (Folder folder in inboxFolders)
@@ -233,7 +230,7 @@ namespace TFSAssist.Control
             //Test1();
         }
 
-        
+
 
 
         /// <summary>
@@ -296,21 +293,20 @@ namespace TFSAssist.Control
                 ServiceResponseCollection<GetItemResponse> items = service.BindToItems(findResults.Select(item => item.Id), GetItemsPropertySet);
 
                 return items.Select(item =>
-                {
-                    string[] uniqueId = item.Item.Id.UniqueId.Split('+');
-                    return new MailItem
-                    {
-                        //ID = item.Item.Id.ChangeKey + item.Item.Id.UniqueId,
-                        ID = uniqueId[uniqueId.Length - 1],
-                        From = ((EmailAddress) item.Item[EmailMessageSchema.From]).Address,
-                        Recipients = ((EmailAddressCollection) item.Item[EmailMessageSchema.ToRecipients])
-                            .Select(recipient => recipient.Address)
-                            .ToArray(),
-                        Subject = item.Item.Subject,
-                        ReceivedDate = item.Item.DateTimeReceived,
-                        Body = item.Item.Body.Text
-                    };
-                }).ToArray();
+                                    {
+                                        string[] uniqueId = item.Item.Id.UniqueId.Split('+');
+                                        return new MailItem {
+                                                                //ID = item.Item.Id.ChangeKey + item.Item.Id.UniqueId,
+                                                                ID = uniqueId[uniqueId.Length - 1],
+                                                                From = ((EmailAddress) item.Item[EmailMessageSchema.From]).Address,
+                                                                Recipients = ((EmailAddressCollection) item.Item[EmailMessageSchema.ToRecipients])
+                                                                        .Select(recipient => recipient.Address)
+                                                                        .ToArray(),
+                                                                Subject = item.Item.Subject,
+                                                                ReceivedDate = item.Item.DateTimeReceived,
+                                                                Body = item.Item.Body.Text
+                                                            };
+                                    }).ToArray();
             }
             catch (ServiceRequestException ex)
             {
@@ -386,12 +382,11 @@ namespace TFSAssist.Control
                 // если валидация прошла успешно и пустопуло новое письмо или в предыдущей обработке таск был создан ошибочно, то будет пересоздаваться
                 countOfProcessing++;
 
-                task = new TMData
-                {
-                    ID = item.ID,
-                    From = item.From,
-                    ReceivedDate = item.ReceivedDate.ToString("G")
-                };
+                task = new TMData {
+                                      ID = item.ID,
+                                      From = item.From,
+                                      ReceivedDate = item.ReceivedDate.ToString("G")
+                                  };
 
                 try
                 {
@@ -400,10 +395,9 @@ namespace TFSAssist.Control
 
                     if (parced.Count > 0)
                     {
-                        task.Executed = new ItemExecuted
-                        {
-                            MailParcedItems = parced
-                        };
+                        task.Executed = new ItemExecuted {
+                                                             MailParcedItems = parced
+                                                         };
                         string tfsId;
                         //создаем ТФС
                         bool resultCreateTFS = CheckAndCreateTFSItem(task.Executed, out tfsId);
@@ -426,11 +420,11 @@ namespace TFSAssist.Control
 
                     countErrors++;
 
-                    logProcessing += string.Format("Processing Error!{0}ReceivedDate=[{1}] Subject=[{2}]{0}", Environment.NewLine, item.ReceivedDate, item.Subject);
+                    logProcessing += $"Processing Error!{Environment.NewLine}ReceivedDate=[{item.ReceivedDate}] Subject=[{item.Subject}]{Environment.NewLine}";
                     Exception ex2 = ex1;
                     while (true)
                     {
-                        logProcessing += string.Format("{0}{1}{0}{2}{0}", Environment.NewLine, ex2.Message, ex2.StackTrace);
+                        logProcessing += $"{Environment.NewLine}{ex2.Message}{Environment.NewLine}{ex2.StackTrace}{Environment.NewLine}";
 
                         if (ex2.InnerException != null)
                         {
@@ -459,8 +453,8 @@ namespace TFSAssist.Control
             {
                 //отправляем список ошибок которые возможно связанны с настроками конфига
                 NotifyUserCurrentStatus(StatusString.Processing_Error);
-                NotifyUserIfHasError(WarnSeverity.Warning, string.Format("Please see log tab. Catched: {0} processing errors!", countErrors),
-                    logProcessing.Trim());
+                NotifyUserIfHasError(WarnSeverity.Warning, $"Please see log tab. Catched: {countErrors} processing errors!",
+                                     logProcessing.Trim());
                 Thread.Sleep(10 * 1000);
             }
 
@@ -482,7 +476,7 @@ namespace TFSAssist.Control
                     parced.Add(new DataMail {
                                                 Name = $"{nameof(OptionMail.ParceSubject)}_{match}",
                                                 Value = fromSubject[match].Value
-                    });
+                                            });
                 }
             }
 
@@ -494,7 +488,7 @@ namespace TFSAssist.Control
                     parced.Add(new DataMail {
                                                 Name = $"{nameof(OptionMail.ParceBody)}_{match}",
                                                 Value = fromBody[match].Value
-                    });
+                                            });
                 }
             }
 
@@ -600,12 +594,12 @@ namespace TFSAssist.Control
                                                       .Aggregate(string.Empty, (current, field) => current + (field.ReferenceName + Environment.NewLine)).Trim();
 
                         throw new TFSFieldsException("Error in creating TFS item! Please check workitem's fields in config.",
-                                                     new TFSFieldsException(string.Format("Error in {0}=[{1}] / {2}=[{3}]{4}Required fields:{4}{5}", teamProj.Value, teamProj.Condition, workItem.Value, workItem.Condition, Environment.NewLine, reqFields), ex));
+                                                     new TFSFieldsException($"Error in {teamProj.Value}=[{teamProj.Condition}] / {workItem.Value}=[{workItem.Condition}]{Environment.NewLine}Required fields:{Environment.NewLine}{reqFields}", ex));
                     }
                     catch (Exception)
                     {
                         if (!displayForm.IsNullOrEmpty())
-                            OnWriteLog(string.Format("Detailed display form for [{3}:{2}]:{0}{1}", Environment.NewLine, displayForm, workItem.Value, teamProj.Value));
+                            OnWriteLog($"Detailed display form for [{teamProj.Value}:{workItem.Value}]:{Environment.NewLine}{displayForm}");
                         throw;
                     }
                 }
