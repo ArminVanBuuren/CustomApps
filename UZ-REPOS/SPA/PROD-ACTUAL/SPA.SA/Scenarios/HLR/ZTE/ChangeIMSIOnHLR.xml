@@ -20,6 +20,7 @@
                 <object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll"/>
 		<object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll"/>
                 <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="DataBaseProcessorEncoder" class="FORIS.ScenarioProcessing.OtherParty.DataBaseProcessorEncoder" assembly="FORIS.SPA.OTHERPARTY.dll"/>
 	</objectList>
 	<automat>
 		<node name="BySubscirbersSplitter" object="BySubscirbersSplitter">
@@ -29,7 +30,7 @@
 		</node>
 		<node name="SingleSubscirverRequestDequeuer" object="Dequeuer">
 			<resultlist>
-				<result value="0" node="DeleteSubscriber"/>
+				<result value="0" node="CheckCustomer"/>
 				<result value="1" node=""/>
 			</resultlist>
 			<parameterslist>
@@ -42,7 +43,8 @@
 				<result value="" node="DeleteSubscriber"/>
 			</resultlist>
 			<parameterslist>
-				<param name="OrXmlPath:0" value="//IdentifiersList//MSISDN[text()='998977103051']"/>
+				<param name="OrXmlPath:0" value="//RegisteredList/FRAPSPECSVYAZ"/>
+				<param name="OrXmlPath:1" value="//IdentifiersList//MSISDN[text()='998973307879']"/>
 			</parameterslist>
 		</node>		
 		<node name="DeleteSubscriber" object="Commander">
@@ -102,7 +104,7 @@
 				<param name="ErrorDecodingType" value="ByString"/>
 			</parameterslist>
 		</node>
-                <node name="GetKI" object="DataBaseProcessor">
+                <node name="GetKI" object="DataBaseProcessorEncoder">
 			<resultlist>
 				<result value="" node="ExtractKI"/>
 			</resultlist>
