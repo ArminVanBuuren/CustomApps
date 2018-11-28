@@ -49,6 +49,7 @@
                                 <param name="OrXmlPath:9"  value="//AdditionalData//FRBLKOUT"/>
                                 <param name="OrXmlPath:10" value="//AdditionalData//FRBLKFROD"/>
                                 <param name="OrXmlPath:11" value="//AdditionalData//FRBLKDZ"/>
+                                <param name="OrXmlPath:12" value="//AdditionalData//FRBLOUTGO"/>
 
 			</parameterslist>
 		</node>

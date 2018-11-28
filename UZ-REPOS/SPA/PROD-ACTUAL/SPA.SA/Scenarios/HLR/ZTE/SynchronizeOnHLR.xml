@@ -22,6 +22,7 @@
 		<object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll"/>
                 <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
 		<object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>	
+		<object name="DataBaseProcessorEncoder" class="FORIS.ScenarioProcessing.OtherParty.DataBaseProcessorEncoder" assembly="FORIS.SPA.OTHERPARTY.dll"/>
 	</objectList>
 	<automat>
 		<node name="BySubscirbersSplitter" object="BySubscirbersSplitter">
@@ -57,7 +58,7 @@
 				<result value="1" node="CheckFRBLKOUT"/>
 			</resultlist>
 			<parameterslist>
-				<param name="OrXmlPath:0" value="//IdentifiersList//MSISDN[text()='998974344342']"/>
+				<param name="OrXmlPath:0" value="//RegisteredList/FRAPSPECSVYAZ"/>
                                 <param name="OrXmlPath:1" value="//IdentifiersList//MSISDN[text()='998971317131']"/>
                                 <param name="OrXmlPath:2" value="//IdentifiersList//MSISDN[text()='998977530000']"/>
                                 <param name="OrXmlPath:3" value="//IdentifiersList//MSISDN[text()='998974900909']"/>
@@ -120,7 +121,7 @@
 				<param name="ErrorDecodingType" value="ByString"/>
 			</parameterslist>
 		</node>
-                <node name="GetKI" object="DataBaseProcessor">
+                <node name="GetKI" object="DataBaseProcessorEncoder">
 			<resultlist>
 				<result value="" node="ExtractKI"/>
 			</resultlist>
