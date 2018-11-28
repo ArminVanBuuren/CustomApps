@@ -61,7 +61,7 @@
     </RFS>
     <RFS name="RFS_HL_CHANGE_PROFILE" base="RFS_HL_SUBSCRIPTION_MODIFY" hostType="HL" description="Изменение профиля на HLR" />
     <RFS name="RFS_HL_SYNCHRONIZE" base="RFS_HL_SUBSCRIPTION_MODIFY" hostType="HL" description="Синхронизация абонента на HLR" />
-    <RFS name="RFS_HL_REGION" hostType="HL" description="Определение кода региона для переадресации">
+    <RFS name="RFS_HL_REGION" hostType="HL" dependsOn="RFS_GROUP_HL_SUBSCRIPTIONS_FOR_CFORIGIN" description="Определение кода региона для переадресации">
       <Resource name="RES_HL_REGION" value="" useType="Mandatory">
         <Value hosts="HL:TASH_HLR"   value="TASH_HLR" />
         <Value hosts="HL:01"         value="TASH_HLR" />
@@ -219,7 +219,7 @@
     <RFS name="RFS_HL_CNCLOC_SGSN" parent="RFS_HL_CNCLOC" hostType="HL" description="Сброс информации о локации абонета на SGSN станции">
       <Resource name="RES_HL_CNCLOC_DIRECT" value="SGSN" />
     </RFS>
-    <RFS name="RFS_HL_CNCLOC_LTE" parent="RFS_HL_CNCLOC" hostType="HL" description="Сброс информации о локации абонета на PS-EPS станции">
+    <RFS name="RFS_HL_CNCLOC_LTE" parent="RFS_HL_CNCLOC" dependsOn="RFS_GROUP_HL_CNCLOC_LTE_DEPENDS" hostType="HL" description="Сброс информации о локации абонета на PS-EPS станции">
       <Resource name="RES_HL_CNCLOC_DIRECT" value="LTE" />
     </RFS>
     <!--END ==== INTERNET ====-->
@@ -307,17 +307,17 @@
     <CFS name="ChangeImsi" priority="9999" type="OneTime" description="Изменение номера IMSI">
       <RFSGroup name="RFS_GROUP_HL_CREATE_SUBSCRIBER" />
       <RFS name="RFS_HL_CHANGE_IMSI" linkType="Info" />
-      <RFS name="RFS_HL_REGION" linkType="Add" dependsOn="RFS_GROUP_HL_SUBSCRIPTIONS_FOR_CFORIGIN" />
+      <RFS name="RFS_HL_REGION" linkType="Add" />
     </CFS>
     <CFS name="ChangeTP" priority="9999" type="OneTime" description="Изменение тарифного плана">
       <RFSGroup name="RFS_GROUP_HL_CREATE_SUBSCRIBER" />
       <RFS name="RFS_HL_CHANGE_PROFILE" linkType="Info" />
-      <RFS name="RFS_HL_REGION" linkType="Add" dependsOn="RFS_GROUP_HL_SUBSCRIPTIONS_FOR_CFORIGIN" />
+      <RFS name="RFS_HL_REGION" linkType="Add" />
     </CFS>
     <CFS name="Synchronize" priority="1" type="OneTime" description="Обработка кнопки Синхронизировать в СПА">
       <RFSGroup name="RFS_GROUP_HL_CREATE_SUBSCRIBER" />
       <RFS name="RFS_HL_SYNCHRONIZE" linkType="Info" />
-      <RFS name="RFS_HL_REGION" linkType="Add" dependsOn="RFS_GROUP_HL_SUBSCRIPTIONS_FOR_CFORIGIN" />
+      <RFS name="RFS_HL_REGION" linkType="Add" />
     </CFS>
     <!--END ==== SUBSCRIPTION ====-->
     
@@ -391,7 +391,7 @@
     </CFS>
     <CFS name="CancelLocation" type="OneTime" description="Сброс информации о локации абонета на MSC, VLR, SGSN станциях">
       <RFS name="RFS_HL_CNCLOC_SGSN" linkType="Add" />
-      <RFS name="RFS_HL_CNCLOC_LTE" linkType="Add" dependsOn="RFS_GROUP_HL_CNCLOC_LTE_DEPENDS" />
+      <RFS name="RFS_HL_CNCLOC_LTE" linkType="Add" />
     </CFS>
     <CFS name="CancelLocationSGSN" type="OneTime" copyOf="CancelLocation" description="Сброс информации о локации абонета на MSC, VLR, SGSN станциях"/>
     <!--END ==== INTERNET ====-->
@@ -628,7 +628,6 @@
       <RFS name="RFS_HL_SUBSCRIPTION_DGU" linkType="Add" />
     </RFSGroup>
   </RFSGroupList>
-  <RFSDependencyList />
   <HandlerList>
     <!-- TODO:HandlerList  -->
     <Handler name="ServicesDiffHandler" type="ServicesDiff" description="Обработчик RFS для изменения тарифного плана">
