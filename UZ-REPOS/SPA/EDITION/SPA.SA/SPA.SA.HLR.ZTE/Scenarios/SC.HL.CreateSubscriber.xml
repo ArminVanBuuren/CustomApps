@@ -29,10 +29,10 @@
     </node>
     <node name="WellknownsReplacerNewIMSI" object="WellknownsReplacer">
       <resultlist>
-        <result value="" node="UserIMSI_Delete" />
+        <result value="" node="User_Create" />
       </resultlist>
       <parameterslist>
-        <param name="imsi" value="xmlsubstr(&quot;//AdditionalData//NewIMSI&quot;)" />
+        <param name="imsi" value="xmlsubstr(&quot;//NewIMSI&quot;)" />
       </parameterslist>
     </node>
     <node name="User_Create" object="Commander">

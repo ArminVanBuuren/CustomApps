@@ -322,7 +322,7 @@
     <!--END ==== SUBSCRIPTION ====-->
     
     
-    <!--START ==== Call Fworwarding ====-->
+    <!--START ==== Call Forwarding ====-->
     <CFS name="CallForwarding" description="Активация пользовательской переадресации вызова">
       <RFS name="RFS_HL_CFB_ACT" linkType="Add" />
       <RFS name="RFS_HL_CFU_ACT" linkType="Add" />
@@ -343,7 +343,7 @@
     <CFS name="FRMCA" description="Вам звонили / Я на связи">
       <RFS name="RFS_HL_CFD" linkType="Add" />
     </CFS>
-    <!--END ==== Call Fworwarding ====-->
+    <!--END ==== Call Forwarding ====-->
 
     
     <!--START ==== INTERNET ====-->
@@ -663,7 +663,7 @@
     </Scenario>
     <Scenario name="HL.DeleteSubscriber" description="Удаление абонента на HLR">
       <RFS name="RFS_HL_SUBSCRIPTION" scenarioType="Remove" useType="Mandatory" />
-      <Append name="RFS_HL_SUBSCRIPTION_MODIFY" listType="All" />
+      <Append name="RFS_HL_SUBSCRIPTION_MODIFY" listType="All"  />
     </Scenario>
     <Scenario name="HL.CancelLocation" description="Сброс информации о локации абонета на MSC, VLR, SGSN станциях">
       <RFS name="RFS_HL_CNCLOC" scenarioType="Add, Remove, Modify" />

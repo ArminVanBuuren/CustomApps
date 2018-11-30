@@ -53,6 +53,7 @@
   <ItemGroup>
     <Content Include="EDITION\DOC\HLR\Profile Information.txt" />
     <Content Include="EDITION\DOC\SC_DOCs.txt" />
+    <Content Include="EDITION\DOC\XMLFile1.xml" />
     <Content Include="EDITION\ROBP\Operations\HL\ActivateCallForwarding.xml" />
     <Content Include="EDITION\ROBP\Operations\HL\AddBlockOnAllCalls.xml" />
     <Content Include="EDITION\ROBP\Operations\HL\AddBSNSSRMNG.xml" />
