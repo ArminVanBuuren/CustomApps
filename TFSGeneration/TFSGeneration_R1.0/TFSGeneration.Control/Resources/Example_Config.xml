@@ -34,9 +34,9 @@ AND [System.Title] Contains '%ParceBody_ITHD%']]>
           <Field Name="System.AreaPath" Value="Support\All" Switch="%ParceBody_TITLE%" >
             <Map Case="(spa)|(bpm)|(активатор)|(идеальная система)" Value="Support\Resource Management Domain\SPA" />
             <Map Case="(MessagingGateway)|(Gateway)|(dispatcher)|(connector)|(система мечта)" Value="Support\Resource Management Domain\MessagingGateway" />
-            <Map Case="(rating)|(bms)|(umrs)|(sups)|(smbp)|(Guiding)" Value="Support\Rating Domain" />
+            <Map Case="(rating)|(bms)|(umrs)|(sups)|(smbp)|(guiding)" Value="Support\Rating Domain" />
             <Map Case="(scp)|(sdp)|(medio)" Value="Support\Medio" />
-            <Map Case="(crm)|(sales)|(okat)|(pam)|(фигня)" Value="Support\CRM Domain" />
+            <Map Case="(crm)|(sales)|(okat)|(pam)|(марти)|(marti)|(кэо)|(gui)|(фигня)" Value="Support\CRM Domain" />
           </Field>
           <Field Name="System.IterationPath" Value="Support\Release 4.7.1" />
           <Field Name="Microsoft.VSTS.Scheduling.StartDate" Value="%now%" />
@@ -62,9 +62,9 @@ AND [System.Title] Contains '%ParceBody_ITHD%']]>
           <Field Name="System.AreaPath" Value="Support\All" Switch="%ParceBody_TITLE%" >
             <Map Case="(spa)|(bpm)|(активатор)|(идеальная система)" Value="Support\Resource Management Domain\SPA" />
             <Map Case="(MessagingGateway)|(Gateway)|(dispatcher)|(connector)|(система мечта)" Value="Support\Resource Management Domain\MessagingGateway" />
-            <Map Case="(rating)|(bms)|(umrs)|(sups)|(smbp)|(Guiding)" Value="Support\Rating Domain" />
+            <Map Case="(rating)|(bms)|(umrs)|(sups)|(smbp)|(guiding)" Value="Support\Rating Domain" />
             <Map Case="(scp)|(sdp)|(medio)" Value="Support\Medio" />
-            <Map Case="(crm)|(sales)|(okat)|(pam)|(фигня)" Value="Support\CRM Domain" />
+            <Map Case="(crm)|(sales)|(okat)|(pam)|(марти)|(marti)|(кэо)|(gui)|(фигня)" Value="Support\CRM Domain" />
           </Field>
           <Field Name="System.IterationPath" Value="Support\Release 4.7.1" />
           <Field Name="Microsoft.VSTS.Scheduling.StartDate" Value="%now%" />
@@ -84,9 +84,9 @@ AND [System.Title] Contains '%ParceBody_ITHD%']]>
           <Field Name="System.AreaPath" Value="Support\All" Switch="%ParceBody_TITLE%" >
             <Map Case="(spa)|(bpm)|(активатор)|(идеальная система)" Value="Support\Resource Management Domain\SPA" />
             <Map Case="(MessagingGateway)|(Gateway)|(dispatcher)|(connector)|(система мечта)" Value="Support\Resource Management Domain\MessagingGateway" />
-            <Map Case="(rating)|(bms)|(umrs)|(sups)|(smbp)|(Guiding)" Value="Support\Rating Domain" />
+            <Map Case="(rating)|(bms)|(umrs)|(sups)|(smbp)|(guiding)" Value="Support\Rating Domain" />
             <Map Case="(scp)|(sdp)|(medio)" Value="Support\Medio" />
-            <Map Case="(crm)|(sales)|(okat)|(pam)|(фигня)" Value="Support\CRM Domain" />
+            <Map Case="(crm)|(sales)|(okat)|(pam)|(марти)|(marti)|(кэо)|(gui)|(фигня)" Value="Support\CRM Domain" />
           </Field>
           <Field Name="System.IterationPath" Value="Support\Release 4.7.1" />
           <Field Name="Microsoft.VSTS.Scheduling.StartDate" Value="%now%" />
@@ -133,9 +133,9 @@ AND [System.Title] Contains '%ParceBody_ITHD%']]>
           <Field Name="System.AreaPath" Value="FORIS_Mobile\Project" Switch="%ParceBody_TITLE%" >
             <Map Case="(spa)|(bpm)|(активатор)|(идеальная система)" Value="FORIS_Mobile\Resource Management Domain\SPA" />
             <Map Case="(MessagingGateway)|(Gateway)|(dispatcher)|(connector)|(система мечта)" Value="FORIS_Mobile\Resource Management Domain\MessagingGateway" />
-            <Map Case="(rating)|(bms)|(umrs)|(sups)|(smbp)|(Guiding)" Value="FORIS_Mobile\Rating Domain" />
+            <Map Case="(rating)|(bms)|(umrs)|(sups)|(smbp)|(guiding)" Value="FORIS_Mobile\Rating Domain" />
             <Map Case="(scp)|(sdp)|(medio)" Value="FORIS_Mobile\MEDIO" />
-            <Map Case="(crm)|(sales)|(okat)|(pam)|(фигня)" Value="FORIS_Mobile\CRM Domain" />
+            <Map Case="(crm)|(sales)|(okat)|(pam)|(марти)|(marti)|(кэо)|(gui)|(фигня)" Value="FORIS_Mobile\CRM Domain" />
           </Field>
           <Field Name="System.IterationPath" Value="FORIS_Mobile\Release 4.7.1\Minsk-Ukraine (Branch R1)" />
           <Field Name="Severity" Value="Critical" />
