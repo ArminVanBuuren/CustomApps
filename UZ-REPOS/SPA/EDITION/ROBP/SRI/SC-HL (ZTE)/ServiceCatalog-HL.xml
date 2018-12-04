@@ -24,6 +24,7 @@
     <Resource name="RES_HL_SUBSCRIPTION_PROFILE" description="Профиль абонента на HLR"/>
     <Resource name="RES_HL_CNCLOC_DIRECT" description="Тип станции для сброса информации" />
     <Resource name="RES_HL_REGION" description="Код региона для переадресации" />
+    <Resource name="RES_HL_BS" description="Код региона для переадресации" />
   </ResourceList>
   <RFSParameterList>
     <RFSParameter name="CallForwardType" description="Тип установки переадресаций" />
@@ -33,34 +34,38 @@
     <RFSParameter name="NewMSISDN" path="//NewMSISDN" description="Новый номер MSISDN"/>
     <RFSParameter name="NewIMSI" path="//NewIMSI" description="Новый номер IMSISDN"/>
   </RFSParameterList>
-  <FlagList />
+  <FlagList >
+  </FlagList>
   <RFSList>
     <!-- TODO:RFSList  -->
     <!--START ==== SUBSCRIPTION ====-->
     <RFS name="RFS_HL_SUBSCRIPTION" processType="Subscription" hostType="HL" description="Создание абонента на HLR">
-      <Resource name="RES_HL_SUBSCRIPTION_PROFILE" useType="Mandatory" />
-    </RFS>
-    <RFS name="RFS_HL_SUBSCRIPTION_COMMON" base="RFS_HL_SUBSCRIPTION" processType="Subscription" hostType="HL" description="Услуга передачи данных ТП ДГУ">
-      <Resource name="RES_HL_SUBSCRIPTION_PROFILE" >
+      <!--<Resource name="RES_HL_SUBSCRIPTION_PROFILE" useType="Mandatory" />-->
+      <Resource name="RES_HL_SUBSCRIPTION_PROFILE">
         <Value hosts="FP:05" value="Postpaid"/>
         <Value hosts="FP:MS" value="Prepaid"/>
       </Resource>
     </RFS>
-    <RFS name="RFS_HL_SUBSCRIPTION_AIISKUE" base="RFS_HL_SUBSCRIPTION" processType="Subscription" hostType="HL" description="Создание абонентов ASKUE - АИИСКУЭ">
+    <RFS name="RFS_HL_SUBSCRIPTION_DEFAULT" base="RFS_HL_SUBSCRIPTION" processType="Subscription" hostType="HL" description="Создание абонента"/>
+      <!--<Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="DEFAULT" />
+    </RFS>-->
+    <RFS name="RFS_HL_SUBSCRIPTION_AIISKUE" base="RFS_HL_SUBSCRIPTION" processType="Subscription" hostType="HL" description="Создание абонента ASKUE - АИИСКУЭ">
       <Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="AIISKUE" />
     </RFS>
-    <RFS name="RFS_HL_SUBSCRIPTION_PARTAPN" base="RFS_HL_SUBSCRIPTION" processType="Subscription" hostType="HL" description="Создание дилерских абонентов">
+    <RFS name="RFS_HL_SUBSCRIPTION_PARTAPN" base="RFS_HL_SUBSCRIPTION" processType="Subscription" hostType="HL" description="Создание дилерского абонента">
       <Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="DEALERS" />
     </RFS>
     <RFS name="RFS_HL_SUBSCRIPTION_DGU" base="RFS_HL_SUBSCRIPTION" processType="Subscription" hostType="HL" description="Создание абонента ТП ДГУ">
       <Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="DGU" />
     </RFS>
-    <RFS name="RFS_HL_SUBSCRIPTION_MODIFY" hostType="HL" description="Изменение или пересоздание абонента на HLR"/>
-    <RFS name="RFS_HL_CHANGE_IMSI" base="RFS_HL_SUBSCRIPTION_MODIFY" hostType="HL" description="Изменение номера IMSI на HLR">
+    <RFS name="RFS_HL_MODIFY_SUBSCRIPTION" hostType="HL" description="Изменение или пересоздание абонента на HLR"/>
+    <RFS name="RFS_HL_CHANGE_IMSI" base="RFS_HL_MODIFY_SUBSCRIPTION" hostType="HL" description="Изменение номера IMSI на HLR">
       <RFSParameter name="NewIMSI" />
     </RFS>
-    <RFS name="RFS_HL_CHANGE_PROFILE" base="RFS_HL_SUBSCRIPTION_MODIFY" hostType="HL" description="Изменение профиля на HLR" />
-    <RFS name="RFS_HL_SYNCHRONIZE" base="RFS_HL_SUBSCRIPTION_MODIFY" hostType="HL" description="Синхронизация абонента на HLR" />
+    <RFS name="RFS_HL_CHANGE_PROFILE" base="RFS_HL_MODIFY_SUBSCRIPTION" hostType="HL" description="Изменение профиля на HLR" >
+    </RFS>
+    <RFS name="RFS_HL_SYNCHRONIZE" base="RFS_HL_MODIFY_SUBSCRIPTION" hostType="HL" description="Синхронизация абонента на HLR" >
+    </RFS>
     <RFS name="RFS_HL_REGION" hostType="HL" dependsOn="RFS_GROUP_HL_SUBSCRIPTIONS_FOR_CFORIGIN" description="Определение кода региона для переадресации">
       <Resource name="RES_HL_REGION" value="" useType="Mandatory">
         <Value hosts="HL:TASH_HLR"   value="TASH_HLR" />
@@ -290,7 +295,7 @@
     <!-- TODO:CFSList  -->
     <!--START ==== SUBSCRIPTION ====-->
     <CFS name="Subscriber" priority="9999" type="ManagedObject" description="Абонент на HLR">
-      <RFS name="RFS_HL_SUBSCRIPTION_COMMON" linkType="Add" />
+      <RFS name="RFS_HL_SUBSCRIPTION_DEFAULT" linkType="Add" />
       <RFS name="RFS_HL_REGION" linkType="Add" />
     </CFS>
     <CFS name="FRASKUE" priority="9998" description="Создание абонентов ASKUE - АИИСКУЭ">
@@ -306,17 +311,17 @@
     <CFS name="ChangeMsisdn" priority="9999" type="OneTime" description="Изменение номера MSISDN"/>
     <CFS name="ChangeImsi" priority="9999" type="OneTime" description="Изменение номера IMSI">
       <RFSGroup name="RFS_GROUP_HL_CREATE_SUBSCRIBER" />
-      <RFS name="RFS_HL_CHANGE_IMSI" linkType="Info" />
+      <RFS name="RFS_HL_CHANGE_IMSI" linkType="Add" />
       <RFS name="RFS_HL_REGION" linkType="Add" />
     </CFS>
     <CFS name="ChangeTP" priority="9999" type="OneTime" description="Изменение тарифного плана">
       <RFSGroup name="RFS_GROUP_HL_CREATE_SUBSCRIBER" />
-      <RFS name="RFS_HL_CHANGE_PROFILE" linkType="Info" />
+      <RFS name="RFS_HL_CHANGE_PROFILE" linkType="Add" />
       <RFS name="RFS_HL_REGION" linkType="Add" />
     </CFS>
     <CFS name="Synchronize" priority="1" description="Обработка кнопки Синхронизировать в СПА">
       <RFSGroup name="RFS_GROUP_HL_CREATE_SUBSCRIBER" />
-      <RFS name="RFS_HL_SYNCHRONIZE" linkType="Info" />
+      <RFS name="RFS_HL_SYNCHRONIZE" linkType="Add" />
       <RFS name="RFS_HL_REGION" linkType="Add" />
     </CFS>
     <!--END ==== SUBSCRIPTION ====-->
@@ -624,7 +629,7 @@
       <RFS name="RFS_HL_LTE" linkType="Add" />
     </RFSGroup>
     <RFSGroup name="RFS_GROUP_HL_SUBSCRIPTIONS_FOR_CFORIGIN" type="Any" description="Группа RFS указывающий регион для переадресации">
-      <RFS name="RFS_HL_SUBSCRIPTION_COMMON" linkType="Add" />
+      <RFS name="RFS_HL_SUBSCRIPTION_DEFAULT" linkType="Add" />
       <RFS name="RFS_HL_SUBSCRIPTION_DGU" linkType="Add" />
     </RFSGroup>
   </RFSGroupList>
@@ -659,11 +664,13 @@
       <RFS name="RFS_HL_CFNRC" scenarioType="Add" />
       <RFS name="RFS_HL_CFNRY" scenarioType="Add" />
       <RFS name="RFS_HL_CFD" scenarioType="Add" />
-      <Append name="RFS_HL_SUBSCRIPTION_MODIFY" listType="All" />
+      <RFS name="RFS_HL_MODIFY_SUBSCRIPTION" scenarioType="Add" />
+      <Append name="RFS_HL_MODIFY_SUBSCRIPTION" listType="All"  />
     </Scenario>
     <Scenario name="HL.DeleteSubscriber" description="Удаление абонента на HLR">
       <RFS name="RFS_HL_SUBSCRIPTION" scenarioType="Remove" useType="Mandatory" />
-      <Append name="RFS_HL_SUBSCRIPTION_MODIFY" listType="All"  />
+      <RFS name="RFS_HL_MODIFY_SUBSCRIPTION" scenarioType="Add" />
+      <Append name="RFS_HL_MODIFY_SUBSCRIPTION" listType="All"  />
     </Scenario>
     <Scenario name="HL.CancelLocation" description="Сброс информации о локации абонета на MSC, VLR, SGSN станциях">
       <RFS name="RFS_HL_CNCLOC" scenarioType="Add, Remove, Modify" />
