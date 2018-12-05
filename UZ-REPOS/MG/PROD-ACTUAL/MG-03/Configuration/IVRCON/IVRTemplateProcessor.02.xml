@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<templates connector="IVR">
+	<macros>
+		<define name="_SMSCON" value="SMSCON_02_01"/>
+	</macros>
+	<template procedureName="SendPriceSMSExt">
+		<receiveTemplate>
+			<Message type="deliveryrequest" initiator="smscon" id="@{newGuid}" session_id="@{newGuid}">
+				<Item customer="${recipient}" sender="${sender}">
+					<Content encoding="unicodefffe">${content}</Content>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate direction="input" terminating="false">
+			<set item="param:dbresult" value="0"/>
+		</deliveryTemplate>
+		<deliveryTemplate direction="input" connector="_SMSCON"/>
+		<input>
+			<param name="codingscheme"/>
+			<param name="recipient"/>
+			<param name="content"/>
+			<param name="smscenter"/>
+			<param name="sender"/>
+		</input>
+		<output>
+			<param name="dbresult" type="3" value="0"/>
+		</output>
+	</template>
+	<template procedureName="SendPriceSMS">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="deliveryrequest" initiator="smscon" id="@{newGuid}" session_id="@{newGuid}">
+				<Item customer="${recipient}" sender="111">
+					<Content encoding="unicodefffe">${content}</Content>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate direction="input" terminating="false">
+			<set item="param:dbresult" value="0"/>
+		</deliveryTemplate>
+		<deliveryTemplate direction="input" connector="_SMSCON">
+		</deliveryTemplate>
+		<input>
+			<param name="sender"/>
+			<param name="recipient"/>
+			<param name="content"/>
+			<param name="anumber"/>
+		</input>
+		<output>
+			<param name="dbresult" type="3" value="0"/>
+		</output>
+	</template>
+</templates>

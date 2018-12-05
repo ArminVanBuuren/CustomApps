@@ -14,8 +14,8 @@
 		<Add Key="Requests.PollIdlePeriod" Value="2"/>
 		<Add Key="Responses.WritersCount" Value="4"/>
 		<Add Key="CloseSessionOnCommandTimeOut" Value="true"/>
-		<Add Key="InfiniteLoopWarningThreshold" Value="1000" />
-		<Add Key="InfiniteLoopInterruptThreshold" Value="10000" />
+		<Add Key="InfiniteLoopWarningThreshold" Value="200" />
+		<Add Key="InfiniteLoopInterruptThreshold" Value="500" />
 	</Settings>
 	<DatabaseObjects Remotable="false">
 		<Add Name="FORIS.SPA.CBP" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.CBP"/>

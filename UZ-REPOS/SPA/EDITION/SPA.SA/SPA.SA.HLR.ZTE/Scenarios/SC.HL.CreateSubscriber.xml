@@ -108,21 +108,17 @@
     </node>
     <node name="SwitchMode" object="Switch">
       <resultlist>
-        <result value="0" node="UserMSISDN_GetCBData"/>
-        <result value="1" node="UserMSISDN_GetCBData"/>
+        <result value="0" node="IsNotSubscriptionModify"/>
+        <result value="1" node="IsNotSubscriptionModify"/>
         <result value="2" node="IsNotSubscriptionModify"/>
-        <result value="3" node="IsNotSubscriptionModify"/>
-        <result value="4" node="IsNotSubscriptionModify"/>
-        <result value="5" node="UserMSISDN_GetCBData"/>
-        <result value="6" node="UserMSISDN_GetCBData"/>
+        <result value="3" node="UserMSISDN_GetCBData"/>
+        <result value="4" node="UserMSISDN_GetCBData"/>
       </resultlist>
       <parameterslist>
         <param name="XmlPath" value="//RES_HL_SUBSCRIPTION_PROFILE/Value/text()"/>
-        <param name="Value:2" value="Postpaid"/>
-        <param name="Value:3" value="Prepaid"/>
-        <param name="Value:4" value="DGU"/>
-        <param name="Value:5" value="AIISKUE"/>
-        <param name="Value:6" value="DEALERS"/>
+        <param name="Value:2" value="DGU"/>
+        <param name="Value:3" value="AIISKUE"/>
+        <param name="Value:4" value="DEALERS"/>
       </parameterslist>
     </node>
     <node name="IsNotSubscriptionModify" object="IfMultipleXmlConditionsResolver">
@@ -131,7 +127,7 @@
         <result value="" node="OriginFAID_Add"/>
       </resultlist>
       <parameterslist>
-        <param name="IfNotXmlPath:0" value="//RFS_HL_SUBSCRIPTION_MODIFY"/>
+        <param name="IfNotXmlPath:0" value="//RFS_HL_MODIFY_SUBSCRIPTION"/>
       </parameterslist>
     </node>
     <node name="SetLanguage" object="DataBaseProcessor">
@@ -161,7 +157,7 @@
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="IfXmlPath:0" value="//RFS_HL_REGION"/>
+        <param name="IfXmlPath:0" value="//RES_HL_REGION"/>
         <param name="Command" value="SC.OriginFAID_Add"/>
       </parameterslist>
     </node>

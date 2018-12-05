@@ -1,0 +1,7 @@
+<plugin name="XSLTPlugin">
+	<transform condition="1=1"  successTemplate="balance.xsl"  />
+	<!--<transform condition="/Message/@type='retrievecustomerdataresult' and boolean(//Attribute[@name='balanceintpartdotpart']/@value)"  successTemplate="balance.xsl"  />-->
+     <!--<transform condition="1=1" validation="1=0" successTemplate="service_order_answer.xsl" errorTemplate="reject.xsl" />
+     <transform condition="/Message/@type='internalresult'"  successTemplate="internalresult.xsl"  />
+     <transform condition="/Message/Item/@recipient!=1771 and /Message/Item/@recipient!=1777 and /Message/Channel/@id='sms'" validation="1=1" successTemplate="success.xsl" errorTemplate="reject.xsl" />-->
+</plugin>

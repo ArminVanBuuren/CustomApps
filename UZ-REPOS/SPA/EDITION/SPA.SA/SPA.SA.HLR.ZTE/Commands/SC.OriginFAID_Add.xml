@@ -12,7 +12,7 @@
   </Request>
   <ParametersList>
     <Parameter Name="REGION" AbsenceValue="">
-      <Source Path="//RFS_HL_REGION" />
+      <Source Path="//RES_HL_REGION/Value" />
     </Parameter>
   </ParametersList>
   <ErrorsList CodePage="windows-1251" />

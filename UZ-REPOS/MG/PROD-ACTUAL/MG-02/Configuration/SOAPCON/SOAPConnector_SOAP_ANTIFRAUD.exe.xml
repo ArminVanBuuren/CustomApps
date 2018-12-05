@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Application>
+	<Settings>
+		<Item name="ModuleType" value="SOAPCON" />
+		<Item name="ModuleName" value="SOAP_ANTIFRAUD" />
+		<Item name="ListeningPort" value="6690" />
+		<!-- remoting interface listens this port -->
+		<Item name="ConnectionsLimit" value="150"/> <!-- quantity of simultaneous connections is limited -->
+		<Item name="ConnectionTTL" value="1200"/>    <!-- remote invocation's time-to-live 60 -->  
+		<Item name="URI" value="SOAP"/>            <!-- URI of service. Must be unique within the host -->  
+		<Item name="SessionCleanInterval" value="120" />         <!-- 120 -->
+		<Item name="CRMCacheCleanInterval" value="1200"/>         <!-- 120 -->
+		<Item name="StoringInterval" value="20" />
+		<Item name="StoringHWM" value="200" />
+		<Item name="FetchLimit" value="200" />
+		<Item name="HealthAlgo" value="Delta" />    <!-- Simple, Adaptive , Delta-->
+		<Item name="HealthParam" value="2000" />
+		<Item name="ThreadMultiplifier" value="4" />
+                <Item name="NumberOfWorkThreads" value="8" />
+	</Settings>
+	<TemplateProcessors defaultConfig="Configuration\SOAPCON\SOAPTemplateProcessor_ANTIFRAUD.xml">
+		<Processor dll="DefaultTemplates.dll" class="SOAPTemplateProcessor" config="Configuration\SOAPCON\SOAPTemplateProcessor_ANTIFRAUD.xml" />  
+	</TemplateProcessors>  
+</Application>

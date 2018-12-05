@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Application>
+	<Queues>
+		<InputQueue name=".\crmfilter_output_1"/>
+		<OutputQueue name=".\crmfilter_input_1" timeToBeReceived="1000" timeToReachQueue="10" recoverable="false">
+			<Override connector="IVRCON_02_02" timeToBeReceived="20" recoverable="true"/>
+			<Override connector="SMSCON_02_01" timeToBeReceived="20"/>
+		</OutputQueue>
+	</Queues>
+	<Settings>
+		<Item name="ModuleName" value="CRMCON_02_01"/>
+		<Item name="ModuleType" value="CRMCON"/>
+		<Item name="CRMCacheCleanInterval" value="1200"/>      <!-- 1200 -->
+		<Item name="StoringInterval" value="20"/>              <!--20-->
+		<Item name="StoringHWM" value="1200"/>                 <!--200-->
+		<Item name="XmlEncoding" value="utf-16"/>                                  
+		<Item name="MSMQLimit" value="4194304"/>
+		<Item name="ReportTemplates" value="^Delivery"/>
+		<Item name="SupportLargeMessages" value="true"/>
+		<Item name="ThreadMultiplifier" value="8" />
+	</Settings>
+	<TemplateToConnector>
+		<Map template_id="InvokeRequest"              connector="IVRCON_02_01"     template_name="INER_proc"/>
+		<Map template_id="sms -2"                     connector="SMSCON_02_01"     template_name="DeliveryRequest"/>
+		<Map template_id="SMS-spam"                   connector="SMSCON_02_01"     template_name="DeliveryRequest"/>
+		<Map template_id="AutoInformationOfBalance"   connector="SMSCON_02_01"     template_name="DeliveryRequestAutoInformation"/>
+		<Map template_id="SMSAutoInformation"         connector="SMSCON_02_01"     template_name="DeliveryRequestAutoInformation"/>
+		<Map template_id="SMSMonitoring"              connector="SMSCON_02_01"     template_name="SMSMonitoring"/>
+                <Map template_id="SMSlocal"                   connector="SMSCON_02_01"     template_name="SMSlocal"/>
+		<Map template_id="AddToGroup_onClean"         connector="SMSCON_02_01"     template_name="AddToGroup_onClean_MTSGROUP" processor="SMSTemplateProcessor"/>
+                <Map template_id="SMSmnformat"                connector="SMSCON_02_02"     template_name="SMSmnformat"/>
+		<Map template_id="DirectSendSMS"              connector="SMSCON_02_02"     template_name="DeliveryRequestFromISSA"/>
+       		<Map template_id="SMSNewCustomer"             connector="SMSCON_02_01"     template_name="SMSNewCustomer"/>
+	</TemplateToConnector>
+</Application>
