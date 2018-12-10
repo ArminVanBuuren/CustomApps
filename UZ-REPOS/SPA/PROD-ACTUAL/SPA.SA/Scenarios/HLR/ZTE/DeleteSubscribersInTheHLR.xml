@@ -30,7 +30,7 @@
 				<result value="1" node="DeleteSubscriber"/>
 			</resultlist>
 			<parameterslist>
-				<param name="OrXmlPath:0" value="//RegisteredList/FRAPSPECSVYAZ"/>
+				<param name="OrXmlPath:0" value="//RegisteredList/OLOLO"/>
                                 <param name="OrXmlPath:1" value="//IdentifiersList//MSISDN[text()='998971317131']"/>
                                 <param name="OrXmlPath:2" value="//IdentifiersList//MSISDN[text()='998977530000']"/>
                                 <param name="OrXmlPath:3" value="//IdentifiersList//MSISDN[text()='998974900909']"/>
