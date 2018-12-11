@@ -14,13 +14,11 @@
   </AttributeList>
   <ResourceList>
     <!-- TODO:ResourceList  -->
-    <Resource name="RES_HL_ODB_IC" description="Барринг входящей связи"/>
     <Resource name="RES_HL_ODB_OC" description="Барринг исходящей связи"/>
     <Resource name="RES_HL_SMS_MO" description="Барринг на исходящей SMS"/>
     <Resource name="RES_HL_SMS_MT" description="Барринг на входящей SMS"/>
     <Resource name="RES_HL_USSD" description="Cтатус USSD"/>
-    <Resource name="RES_HL_NET_STATUS" description="Доступ к сервису интернет"/>
-    <Resource name="RES_HL_NET_SERVICE" description="Услуги на интернет"/>
+    <Resource name="RES_HL_NET_SERVICE" description="Услуги и барринги на интернет"/>
     <Resource name="RES_HL_NET_APN" description="Название точки доступа (Access Point Name)"/>
     <Resource name="RES_HL_DEALER_APN" description="Название дилерской точки доступа (Access Point Name)"/>
     <Resource name="RES_HL_SUBSCRIPTION_PROFILE" description="Профиль абонента на HLR"/>
@@ -43,28 +41,10 @@
     <!--START ==== SUBSCRIPTION ====-->
     <RFS name="RFS_HL_SUBSCRIPTION" processType="Subscription" hostType="HL" description="Создание абонента на HLR">
       <Resource name="RES_HL_SUBSCRIPTION_PROFILE" useType="Mandatory" />
-    </RFS>
-    <RFS name="RFS_HL_SUBSCRIPTION_DEFAULT" base="RFS_HL_SUBSCRIPTION" processType="Subscription" hostType="HL" description="Создание абонента">
-      <Resource name="RES_HL_SUBSCRIPTION_PROFILE">
+      <Resource name="RES_HL_BS">
         <Value hosts="FP:05" value="Postpaid"/>
         <Value hosts="FP:MS" value="Prepaid"/>
       </Resource>
-    </RFS>
-    <RFS name="RFS_HL_SUBSCRIPTION_AIISKUE" base="RFS_HL_SUBSCRIPTION" processType="Subscription" hostType="HL" description="Создание абонента ASKUE - АИИСКУЭ">
-      <Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="AIISKUE" />
-    </RFS>
-    <RFS name="RFS_HL_SUBSCRIPTION_DEALERS" base="RFS_HL_SUBSCRIPTION" processType="Subscription" hostType="HL" description="Создание дилерского абонента">
-      <Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="DEALERS" />
-    </RFS>
-    <RFS name="RFS_HL_SUBSCRIPTION_DGU" base="RFS_HL_SUBSCRIPTION" processType="Subscription" hostType="HL" description="Создание абонента ТП ДГУ">
-      <Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="DGU" />
-    </RFS>
-    <RFS name="RFS_HL_RECREATE_SUBSCRIPTION" hostType="HL" description="Маркер который указывает что абонент пересоздается"/>
-    <RFS name="RFS_HL_MODIFY_SUBSCRIPTION" hostType="HL" description="Изменение или пересоздание абонента на HLR"/>
-    <RFS name="RFS_HL_CHANGE_IMSI" parent="RFS_HL_MODIFY_SUBSCRIPTION" hostType="HL" description="Изменение номера IMSI на HLR">
-      <RFSParameter name="NewIMSI" />
-    </RFS>
-    <RFS name="RFS_HL_REGION" hostType="HL" description="Определение кода региона для переадресации">
       <Resource name="RES_HL_REGION" value="" useType="Mandatory">
         <Value hosts="HL:TASH_HLR"   value="TASH_HLR" />
         <Value hosts="HL:01"         value="TASH_HLR" />
@@ -85,6 +65,21 @@
         <Value hosts="HL:NUKHUS_HLR" value="NUKHUS_HLR" />
         <Value hosts="HL:TEST_HLR"   value="TEST_HLR" />
       </Resource>
+    </RFS>
+    <RFS name="RFS_HL_SUBSCRIPTION_DEFAULT" base="RFS_HL_SUBSCRIPTION" processType="Subscription" hostType="HL" description="Создание абонента"/>
+    <RFS name="RFS_HL_SUBSCRIPTION_AIISKUE" base="RFS_HL_SUBSCRIPTION" processType="Subscription" hostType="HL" description="Создание абонента ASKUE - АИИСКУЭ">
+      <Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="AIISKUE" />
+    </RFS>
+    <RFS name="RFS_HL_SUBSCRIPTION_PARTAPN" base="RFS_HL_SUBSCRIPTION" processType="Subscription" hostType="HL" description="Создание дилерского абонента">
+      <Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="DEALERS" />
+    </RFS>
+    <RFS name="RFS_HL_SUBSCRIPTION_DGU" base="RFS_HL_SUBSCRIPTION" processType="Subscription" hostType="HL" description="Создание абонента ТП ДГУ">
+      <Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="DGU" />
+    </RFS>
+    <RFS name="RFS_HL_RECREATE_SUBSCRIPTION" hostType="HL" description="Маркер который указывает что абонент пересоздается"/>
+    <RFS name="RFS_HL_MODIFY_SUBSCRIPTION" hostType="HL" description="Изменение или пересоздание абонента на HLR"/>
+    <RFS name="RFS_HL_CHANGE_IMSI" parent="RFS_HL_MODIFY_SUBSCRIPTION" hostType="HL" description="Изменение номера IMSI на HLR">
+      <RFSParameter name="NewIMSI" />
     </RFS>
     <!--END ==== SUBSCRIPTION ====-->
     
@@ -156,58 +151,53 @@
 
     
     <!--START ==== INTERNET ====-->
-    <RFS name="RFS_HL_NET" hostType="HL" description="Базовый сервис интернета">
-      <Resource name="RES_HL_NET_STATUS" useType="Mandatory" />
-    </RFS>
-    <RFS name="RFS_HL_NET_ACCESS" base="RFS_HL_NET" hostType="HL" description="Доступ в интернет разрешен">
-      <Resource name="RES_HL_NET_STATUS" value="Access" />
-    </RFS>
-    <RFS name="RFS_HL_NET_SUSPEND" base="RFS_HL_NET" hostType="HL" description="Доступ в интернет запрещен">
-      <Resource name="RES_HL_NET_STATUS" value="Suspend" />
-    </RFS>
-    <RFS name="RFS_HL_NET_APN" hostType="HL" description="Назначение APN">
+    <RFS name="RFS_HL_NET" hostType="HL" description="Мобильный интернет">
       <Resource name="RES_HL_NET_SERVICE" useType="Mandatory" />
       <Resource name="RES_HL_NET_APN" useType="Mandatory" />
     </RFS>
-    <RFS name="RFS_HL_NET_APN_GPRS" base="RFS_HL_NET_APN" hostType="HL" description="Мобильный интернет GPRS">
+    <RFS name="RFS_HL_NET_GPRS" base="RFS_HL_NET" hostType="HL" description="Мобильный интернет GPRS">
       <Resource name="RES_HL_NET_SERVICE" value="GPRS" />
       <Resource name="RES_HL_NET_APN" value="51" />
     </RFS>
-    <RFS name="RFS_HL_NET_APN_CORP_BS" base="RFS_HL_NET_APN" hostType="HL" description="Корпоративный APN">
+    <RFS name="RFS_HL_NET_CORP_APN_BS" base="RFS_HL_NET" hostType="HL" description="Корпоративный APN">
       <Resource name="RES_HL_NET_SERVICE" value="CorpAPN" />
       <Resource name="RES_HL_NET_APN" value="TEST.LTE" />
     </RFS>
-    <RFS name="RFS_HL_NET_APN_CORP_XB" base="RFS_HL_NET_APN" hostType="HL" description="Корпоративный APN Халк Банк">
+    <RFS name="RFS_HL_NET_CORP_APN_XB" base="RFS_HL_NET" hostType="HL" description="Корпоративный APN Халк Банк">
       <Resource name="RES_HL_NET_SERVICE" value="CorpAPN" />
       <Resource name="RES_HL_NET_APN" value="XB.APN.UZ" />
     </RFS>
-    <RFS name="RFS_HL_NET_APN_CORP_ZD" base="RFS_HL_NET_APN" hostType="HL" description="Корпоративный APN Ziyod">
+    <RFS name="RFS_HL_NET_CORP_APN_ZD" base="RFS_HL_NET" hostType="HL" description="Корпоративный APN Ziyod">
       <Resource name="RES_HL_NET_SERVICE" value="CorpAPN" />
       <Resource name="RES_HL_NET_APN" value="ZIYOD.UMS.UZ" />
     </RFS>
-    <RFS name="RFS_HL_NET_APN_M2M_FMS" base="RFS_HL_NET_APN" hostType="HL" description="M2M APN Fleet Managment Solutuons">
+    <RFS name="RFS_HL_NET_M2M_APN_FMS" base="RFS_HL_NET" hostType="HL" description="M2M APN Fleet Managment Solutuons">
       <Resource name="RES_HL_NET_SERVICE" value="M2M" />
       <Resource name="RES_HL_NET_APN" value="FMS.APN" />
     </RFS>
-    <RFS name="RFS_HL_NET_APN_M2M_NGMK" base="RFS_HL_NET_APN" hostType="HL" description="M2M APN NGMK">
+    <RFS name="RFS_HL_NET_M2M_APN_NGMK" base="RFS_HL_NET" hostType="HL" description="M2M APN NGMK">
       <Resource name="RES_HL_NET_SERVICE" value="M2M" />
       <Resource name="RES_HL_NET_APN" value="NGMK.APN" />
     </RFS>
-    <RFS name="RFS_HL_NET_APN_M2M_BEPRO" base="RFS_HL_NET_APN" hostType="HL" description="M2M APN BEPRO">
+    <RFS name="RFS_HL_NET_M2M_APN_BEPRO" base="RFS_HL_NET" hostType="HL" description="M2M APN BEPRO">
       <Resource name="RES_HL_NET_SERVICE" value="M2M" />
       <Resource name="RES_HL_NET_APN" value="UZGPS.APN" />
     </RFS>
-    <RFS name="RFS_HL_NET_APN_M2M_BS" base="RFS_HL_NET_APN" hostType="HL" description="M2M APN">
+    <RFS name="RFS_HL_NET_M2M_APN_BS" base="RFS_HL_NET" hostType="HL" description="M2M APN">
       <Resource name="RES_HL_NET_SERVICE" value="M2M" />
       <Resource name="RES_HL_NET_APN" value="M2M.APN" />
     </RFS>
-    <RFS name="RFS_HL_NET_APN_M2M_BK" base="RFS_HL_NET_APN" hostType="HL" description="M2M APN BANK">
+    <RFS name="RFS_HL_NET_M2M_APN_BK" base="RFS_HL_NET" hostType="HL" description="M2M APN BANK">
       <Resource name="RES_HL_NET_SERVICE" value="M2M" />
       <Resource name="RES_HL_NET_APN" value="BANK.APN" />
     </RFS>
-    <RFS name="RFS_HL_NET_APN_VPN" base="RFS_HL_NET_APN" hostType="HL" description="VPN UMS">
+    <RFS name="RFS_HL_NET_VPN_APN" base="RFS_HL_NET" hostType="HL" description="VPN UMS">
       <Resource name="RES_HL_NET_SERVICE" value="M2M" />
       <Resource name="RES_HL_NET_APN" value="UMS-VPN.UMS.UZ" />
+    </RFS>
+    <RFS name="RFS_HL_NET_SUSPEND" base="RFS_HL_NET" hostType="HL" description="Блок сервисов интернета">
+      <Resource name="RES_HL_NET_SERVICE" value="Suspend" />
+      <Resource name="RES_HL_NET_APN" value="" />
     </RFS>
     <RFS name="RFS_HL_LTE" hostType="HL" description="Мобильный интернет LTE"/>
     <RFS name="RFS_HL_LIMITSPEED" hostType="HL" description="Ограничение скорости Интернет">
@@ -236,7 +226,7 @@
     <!--START ==== SIMPLE SERVICE ====-->
     <RFS name="RFS_HL_SPECSVYAZ" hostType="HL" processType="CancelHostType" description="Проверка на спецсвязь (на спа не выполняется)"/>
     <RFS name="RFS_HL_RBT" hostType="HL" description="Caller Ring Back Tone. GOODOK"/>
-    <RFS name="RFS_HL_ROAMING" hostType="HL" description="Международный роуминг"/>
+    <RFS name="RFS_HL_ROAMING" hostType="HL" description="Роуминг"/>
     <RFS name="RFS_HL_VIDEOCALL" hostType="HL" description="Video Call"/>
     <RFS name="RFS_HL_MPTY" hostType="HL" description="Конференц-связь вызова"/>
     <RFS name="RFS_HL_CLIP" hostType="HL" description="Определитель номера"/>
@@ -272,15 +262,7 @@
     <RFS name="RFS_HL_ODB_OC_INTERNATIONAL_CALLS" base="RFS_HL_ODB_OC" hostType="HL" description="Барринг исходящей связи – разрешены исходящие международные вызовы">
       <Resource name="RES_HL_ODB_OC" value="InternationalCalls" />
     </RFS>
-    <RFS name="RFS_HL_ODB_IC" hostType="HL" description="Барринг входящей связи">
-      <Resource name="RES_HL_ODB_IC" useType="Mandatory" />
-    </RFS>
-    <RFS name="RFS_HL_ODB_IC_NONE" base="RFS_HL_ODB_IC" hostType="HL" description="Барринг входящей связи – запрещены все входящие вызовы">
-      <Resource name="RES_HL_ODB_IC" value="NoCalls" />
-    </RFS>
-    <RFS name="RFS_HL_ODB_IC_ALL_CALLS" base="RFS_HL_ODB_IC" hostType="HL" description="Барринг исходящей связи – разрешены все входящие локальные вызовы">
-      <Resource name="RES_HL_ODB_IC" value="AllCalls" />
-    </RFS>
+    <RFS name="RFS_HL_ODB_IC_NONE" hostType="HL" description="Барринг входящей связи – запрещены все входящие вызовы"/>
     <RFS name="RFS_HL_SMS_MO" hostType="HL" description="Служба коротких сообщений (SMS) исходящие">
       <Resource name="RES_HL_SMS_MO" useType="Mandatory" />
     </RFS>
@@ -306,26 +288,17 @@
   <CFSList>
     <!-- TODO:CFSList  -->
     <!--START ==== SUBSCRIPTION ====-->
-    <CFS name="Subscriber" priority="9999" type="ManagedObject" description="Абонент на HLR"/>
-    <CFS name="CB101" priority="9998" description="Базовая услуга абонента">
+    <CFS name="Subscriber" priority="9999" type="ManagedObject" description="Абонент на HLR">
       <RFS name="RFS_HL_SUBSCRIPTION_DEFAULT" linkType="Add" />
-      <RFS name="RFS_HL_ODB_OC_LOCAL_CALLS" linkType="Add" />
-      <RFS name="RFS_HL_ODB_IC_ALL_CALLS" linkType="Add" />
-      <RFS name="RFS_HL_REGION" linkType="Add" />
     </CFS>
-    <CFS name="FRDGU" priority="9997" description="Услуга передачи данных ТП ДГУ">
-      <RFS name="RFS_HL_SUBSCRIPTION_DGU" linkType="Add" />
-      <RFS name="RFS_HL_ODB_OC_LOCAL_CALLS" linkType="Add" />
-      <RFS name="RFS_HL_ODB_IC_ALL_CALLS" linkType="Add" />
-      <RFS name="RFS_HL_REGION" linkType="Add" />
-    </CFS>
-    <CFS name="FRPARTAPN" priority="9997" description="Создание абонентов Partner APN">
-      <RFS name="RFS_HL_SUBSCRIPTION_DEALERS" linkType="Add" />
-      <RFS name="RFS_HL_NET_ACCESS" linkType="Add" />
-    </CFS>
-    <CFS name="FRASKUE" priority="9997" description="Создание абонентов ASKUE - АИИСКУЭ">
+    <CFS name="FRASKUE" priority="9998" description="Создание абонентов ASKUE - АИИСКУЭ">
       <RFS name="RFS_HL_SUBSCRIPTION_AIISKUE" linkType="Add" />
-      <RFS name="RFS_HL_NET_ACCESS" linkType="Add" />
+    </CFS>
+    <CFS name="FRPARTAPN" priority="9998" description="Создание абонентов Partner APN">
+      <RFS name="RFS_HL_SUBSCRIPTION_PARTAPN" linkType="Add" />
+    </CFS>
+    <CFS name="FRDGU" priority="9998" description="Услуга передачи данных ТП ДГУ">
+      <RFS name="RFS_HL_SUBSCRIPTION_DGU" linkType="Add" />
     </CFS>
     <CFS name="ChangeMsisdn" priority="9999" type="OneTime" description="Изменение номера MSISDN"/>
     <CFS name="ChangeImsi" priority="9999" type="OneTime" description="Изменение номера IMSI">
@@ -372,47 +345,46 @@
     
     <!--START ==== INTERNET ====-->
     <CFS name="CB406278" description="Мобильный интернет GPRS">
-      <RFS name="RFS_HL_NET_ACCESS" linkType="Add" />
-      <RFS name="RFS_HL_NET_APN_GPRS" linkType="Add" />
+      <RFS name="RFS_HL_NET_GPRS" linkType="Add" />
     </CFS>
     <CFS name="FRUNLIMLTE" description="Доступ к сети 4G LTE">
-      <RFS name="RFS_HL_LTE" linkType="Add" dependsOn="RFS_HL_NET" />
+      <RFS name="RFS_HL_LTE" linkType="Add" dependsOn="RFS_HL_NET_GPRS" />
     </CFS>
     <CFS name="LIMITSPEED" description="Ограничение скорости Интернета">
-      <RFS name="RFS_HL_LIMITSPEED" linkType="Add" dependsOn="RFS_HL_NET" />
+      <RFS name="RFS_HL_LIMITSPEED" linkType="Add" dependsOn="RFS_HL_NET_GPRS" />
     </CFS>
     <CFS name="FRIP" description="Статический IP адрес">
-      <RFS name="RFS_HL_STATIC_IP" linkType="Add" dependsOn="RFS_HL_NET" />
+      <RFS name="RFS_HL_STATIC_IP" linkType="Add" dependsOn="RFS_HL_NET_GPRS" />
     </CFS>
     <CFS name="FRNEWSCG" description="Новый SCG">
-      <RFS name="RFS_HL_MYUMS_APN" linkType="Add" dependsOn="RFS_HL_NET"  />
+      <RFS name="RFS_HL_MYUMS_APN" linkType="Add" dependsOn="RFS_HL_NET_GPRS"  />
     </CFS>
     <CFS name="FRCORPAPN" priority="9999" description="Корпоративный APN">
-      <RFS name="RFS_HL_NET_APN_CORP_BS" linkType="Add" dependsOn="RFS_HL_NET" />
+      <RFS name="RFS_HL_NET_CORP_APN_BS" linkType="Add" />
     </CFS>
     <CFS name="FRAPNXB" priority="9998" description="Корпоративный APN Халк Банк">
-      <RFS name="RFS_HL_NET_APN_CORP_XB" linkType="Add" dependsOn="RFS_HL_NET" />
+      <RFS name="RFS_HL_NET_CORP_APN_XB" linkType="Add" />
     </CFS>
     <CFS name="FRAPNZIYOD" priority="9997" description="Корпоративный APN Ziyod">
-      <RFS name="RFS_HL_NET_APN_CORP_ZD" linkType="Add" dependsOn="RFS_HL_NET" />
+      <RFS name="RFS_HL_NET_CORP_APN_ZD" linkType="Add" />
     </CFS>
     <CFS name="FRM2MAPNFMS" priority="9999" description="M2M APN Fleet Managment Solutuons">
-      <RFS name="RFS_HL_NET_APN_M2M_FMS" linkType="Add" dependsOn="RFS_HL_NET" />
+      <RFS name="RFS_HL_NET_M2M_APN_FMS" linkType="Add" />
     </CFS>
     <CFS name="FRM2MAPNNGMK" priority="9998" description="M2M APN NGMK">
-      <RFS name="RFS_HL_NET_APN_M2M_NGMK" linkType="Add" dependsOn="RFS_HL_NET" />
+      <RFS name="RFS_HL_NET_M2M_APN_NGMK" linkType="Add" />
     </CFS>
     <CFS name="FRM2MAPNBEPRO" priority="9997" description="M2M APN BEPRO">
-      <RFS name="RFS_HL_NET_APN_M2M_BEPRO" linkType="Add" dependsOn="RFS_HL_NET" />
+      <RFS name="RFS_HL_NET_M2M_APN_BEPRO" linkType="Add" />
     </CFS>
     <CFS name="FRM2MAPN" priority="9996" description="M2M APN">
-      <RFS name="RFS_HL_NET_APN_M2M_BS" linkType="Add" dependsOn="RFS_HL_NET" />
+      <RFS name="RFS_HL_NET_M2M_APN_BS" linkType="Add" />
     </CFS>
     <CFS name="FRM2MAPNBANK" priority="9995" description="M2M APN BANK">
-      <RFS name="RFS_HL_NET_APN_M2M_BK" linkType="Add" dependsOn="RFS_HL_NET" />
+      <RFS name="RFS_HL_NET_M2M_APN_BK" linkType="Add" />
     </CFS>
     <CFS name="VPNUMS" priority="9994" description="VPN UMS">
-      <RFS name="RFS_HL_NET_APN_VPN" linkType="Add" dependsOn="RFS_HL_NET" />
+      <RFS name="RFS_HL_NET_VPN_APN" linkType="Add" />
     </CFS>
     <CFS name="CancelLocation" type="OneTime" description="Сброс информации о локации абонета на MSC, VLR, SGSN станциях">
       <RFS name="RFS_HL_CNCLOC_SGSN" linkType="Add" />
@@ -429,6 +401,10 @@
     <CFS name="FRCRBT" description="Caller Ring Back Tone. GOODOK">
       <RFS name="RFS_HL_RBT" linkType="Add" />
     </CFS>
+    <CFS name="CB123" isMarker="true" description="Международный роуминг">
+      <RFS name="RFS_HL_ROAMING" linkType="Add" />
+    </CFS>
+    <CFS name="BSNSSRMNG" copyOf="CB123" description="Business Роуминг" /> 
     <CFS name="FRVIDCALL" description="Video Call">
       <RFS name="RFS_HL_VIDEOCALL" linkType="Add" />
     </CFS>
@@ -461,19 +437,15 @@
 
     
     <!--START ==== Барринги и связь ====-->
-    <CFS name="CB123" isMarker="true" priority="99" description="Международный роуминг">
+    <CFS name="LGHTRMNG" priority="9997" description="Light Роуминг">
+      <RFS name="RFS_HL_ODB_OC_LOCAL_CALLS" linkType="Add" />
       <RFS name="RFS_HL_ROAMING" linkType="Add" />
     </CFS>
-    <CFS name="BSNSSRMNG" copyOf="CB123" priority="99" description="Business Роуминг" />
-    <CFS name="LGHTRMNG" priority="99" description="Light Роуминг">
-      <RFS name="RFS_HL_ODB_OC_LOCAL_CALLS" linkType="Set" />
-      <RFS name="RFS_HL_ROAMING" linkType="Add" />
+    <CFS name="CB108" priority="9998" description="Международный доступ">
+      <RFS name="RFS_HL_ODB_OC_INTERNATIONAL_CALLS" linkType="Add" />
     </CFS>
-    <CFS name="CB108" priority="100" description="Международный доступ">
-      <RFS name="RFS_HL_ODB_OC_INTERNATIONAL_CALLS" linkType="Set" />
-    </CFS>
-    <CFS name="FRMGDOSTUP" priority="101" description="Междугородный доступ">
-      <RFS name="RFS_HL_ODB_OC_INTERCITY_CALLS" linkType="Set" />
+    <CFS name="FRMGDOSTUP" priority="9999" description="Междугородный доступ">
+      <RFS name="RFS_HL_ODB_OC_INTERCITY_CALLS" linkType="Add" />
     </CFS>
     <CFS name="FRZAPRETGS" description="Запрет голосовой связи">
       <RFS name="RFS_HL_CALLS_SUSPEND" linkType="Add" />
@@ -482,17 +454,18 @@
       <RFS name="RFS_HL_CALLS_SUSPEND" linkType="Add" />
     </CFS>
     <CFS name="FRPARTBL" priority="1" isMarker="true" description="Частичная блокировка">
-      <RFS name="RFS_HL_ODB_OC_NONE" linkType="Modify" />
+      <RFS name="RFS_HL_ODB_OC_NONE" linkType="Add" />
       <RFS name="RFS_HL_SMS_MO_NONE" linkType="Modify" />
       <RFS name="RFS_HL_NET_SUSPEND" linkType="Modify" />
     </CFS>
     <CFS name="FRBLOUTGO" priority="1" copyOf="FRPARTBL" description="Предварительная ФРОД блокировка"/>
     <CFS name="FRBLKFIN" priority="1" isMarker="true" description="Принудительная блокировка">
-      <RFS name="RFS_HL_ODB_OC_NONE" linkType="Modify" />
-      <RFS name="RFS_HL_ODB_IC_NONE" linkType="Modify" />
+      <RFS name="RFS_HL_ODB_OC_NONE" linkType="Add" />
+      <RFS name="RFS_HL_ODB_IC_NONE" linkType="Add" />
       <RFS name="RFS_HL_SMS_MO_NONE" linkType="Modify" />
       <RFS name="RFS_HL_SMS_MT_NONE" linkType="Modify" />
       <RFS name="RFS_HL_NET_SUSPEND" linkType="Modify" />
+      <RFS name="RFS_HL_ROAMING" linkType="Remove" />
     </CFS>
     <CFS name="FRBLKINIT" priority="1" copyOf="FRBLKFIN" description="Первоначальная блокировка"/>
     <CFS name="FRBLKPAY" priority="1" copyOf="FRBLKFIN" description="Принудительная блокировка по неоплате счета"/>
@@ -501,11 +474,12 @@
     <CFS name="BLTDLIM" priority="1" copyOf="FRBLKFIN" description="Блокировка по превышению локального лимита"/>
     <CFS name="FRBLKNAR" priority="1" copyOf="FRBLKFIN" description="Блокировка за нарушение договорных обязательств"/>
     <CFS name="FRTECHBLK" priority="1" isMarker="true" description="Технологическая блокировка">
-      <RFS name="RFS_HL_ODB_OC_NONE" linkType="Modify" />
-      <RFS name="RFS_HL_ODB_IC_NONE" linkType="Modify" />
+      <RFS name="RFS_HL_ODB_OC_NONE" linkType="Add" />
+      <RFS name="RFS_HL_ODB_IC_NONE" linkType="Add" />
       <RFS name="RFS_HL_SMS_MO_NONE" linkType="Modify" />
       <RFS name="RFS_HL_SMS_MT_NONE" linkType="Modify" />
       <RFS name="RFS_HL_NET_SUSPEND" linkType="Modify" />
+      <RFS name="RFS_HL_ROAMING" linkType="Remove" />
       <RFS name="RFS_HL_USSD_SUSPEND" linkType="Set" />
     </CFS>
     <CFS name="FRBLKCHK" priority="1" copyOf="FRTECHBLK" description="Блокировка проверка"/>
@@ -646,7 +620,7 @@
       <RFS name="RFS_HL_SUBSCRIPTION" linkType="Add" handler="HL_RecreateSubscriber" />
     </RFSGroup>
     <RFSGroup name="RFS_GROUP_HL_CNCLOC_LTE_DEPENDS" type="All" description="Группа RFS для cброса информации о локации абонета для LTE">
-      <RFS name="RFS_HL_NET_ACCESS" linkType="Add" />
+      <RFS name="RFS_HL_NET_GPRS" linkType="Add" />
       <RFS name="RFS_HL_LTE" linkType="Add" />
     </RFSGroup>
   </RFSGroupList>
@@ -668,14 +642,11 @@
     <!--START ==== COMMON ====-->
     <Scenario name="HL.CreateSubscriber" description="Создание абонента на HLR">
       <RFS name="RFS_HL_SUBSCRIPTION" scenarioType="Add" useType="Mandatory" />
-      <RFS name="RFS_HL_REGION" scenarioType="Add" />
-      <RFS name="RFS_HL_ODB_OC" scenarioType="Add" />
-      <RFS name="RFS_HL_ODB_IC" scenarioType="Add" />
-      <RFS name="RFS_HL_SMS_MO" scenarioType="Add" />
-      <RFS name="RFS_HL_SMS_MT" scenarioType="Add" />
       <RFS name="RFS_HL_CLIP" scenarioType="Add" />
       <RFS name="RFS_HL_CWCH" scenarioType="Add" />
       <RFS name="RFS_HL_MPTY" scenarioType="Add" />
+      <RFS name="RFS_HL_SMS_MO" scenarioType="Add" />
+      <RFS name="RFS_HL_SMS_MT" scenarioType="Add" />
       <RFS name="RFS_HL_DATATRANSFER" scenarioType="Add" />
       <RFS name="RFS_HL_VIDEOCALL" scenarioType="Add" />
       <RFS name="RFS_HL_CFB" scenarioType="Add" />
@@ -683,8 +654,6 @@
       <RFS name="RFS_HL_CFNRC" scenarioType="Add" />
       <RFS name="RFS_HL_CFNRY" scenarioType="Add" />
       <RFS name="RFS_HL_CFD" scenarioType="Add" />
-      <RFS name="RFS_HL_NET" scenarioType="Add" />
-      <RFS name="RFS_HL_ROAMING" scenarioType="Add" />
       <RFS name="RFS_HL_MODIFY_SUBSCRIPTION" scenarioType="Add" />
     </Scenario>
     <Scenario name="HL.DeleteSubscriber" description="Удаление абонента на HLR">
@@ -696,10 +665,6 @@
     </Scenario>
     <Scenario name="HL.ModifyUSSD" description="Изменение статуса USSD">
       <RFS name="RFS_HL_USSD" scenarioType="Add, Remove, Modify" />
-    </Scenario>
-    <Scenario name="HL.RoamingRemove" description="Удаление услуги роуминг">
-      <RFS name="RFS_HL_ROAMING" scenarioType="Remove" />
-      <Append name="RFS_HL_NET" listType="EndList" />
     </Scenario>
     <!--END ==== COMMON ====-->
 
@@ -723,14 +688,6 @@
     
     
     <!--START ==== INTERNET ====-->
-    <Scenario name="HL.NET_APN_Add" description="Добавление интернет и APN">
-      <RFS name="RFS_HL_NET" scenarioType="Add" />
-      <RFS name="RFS_HL_NET_APN" scenarioType="Add" />
-    </Scenario>
-    <Scenario name="HL.NET_APN_Remove" description="Удаление интернет и APN">
-      <RFS name="RFS_HL_NET" scenarioType="Remove" />
-      <RFS name="RFS_HL_NET_APN" scenarioType="Remove" />
-    </Scenario>
     <Scenario name="HL.ModifyNET" description="Блокировка или разблокировка сервисов интернет">
       <RFS name="RFS_HL_NET" scenarioType="Modify" />
       <Append name="RFS_HL_ROAMING" listType="EndList" />

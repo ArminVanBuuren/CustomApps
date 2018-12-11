@@ -110,15 +110,13 @@
       <resultlist>
         <result value="0" node="IsNotSubscriptionModify"/>
         <result value="1" node="IsNotSubscriptionModify"/>
-        <result value="2" node="IsNotSubscriptionModify"/>
-        <result value="3" node="UserMSISDN_GetCBData"/>
-        <result value="4" node="UserMSISDN_GetCBData"/>
+        <result value="2" node="BPOS_Modify"/>
+        <result value="3" node="BPOS_Modify"/>
       </resultlist>
       <parameterslist>
         <param name="XmlPath" value="//RES_HL_SUBSCRIPTION_PROFILE/Value/text()"/>
-        <param name="Value:2" value="DGU"/>
-        <param name="Value:3" value="AIISKUE"/>
-        <param name="Value:4" value="DEALERS"/>
+        <param name="Value:2" value="AIISKUE"/>
+        <param name="Value:3" value="DEALERS"/>
       </parameterslist>
     </node>
     <node name="IsNotSubscriptionModify" object="IfMultipleXmlConditionsResolver">
@@ -152,13 +150,57 @@
     </node>
     <node name="OriginFAID_Add" object="IfCommander">
       <resultlist>
-        <result value="0" node="CLIP_Delete"/>
-        <result value="1538" node="CLIP_Delete"/>
+        <result value="0" node="ODB_OC_Modify"/>
+        <result value="1538" node="ODB_OC_Modify"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
         <param name="IfXmlPath:0" value="//RES_HL_REGION"/>
         <param name="Command" value="SC.OriginFAID_Add"/>
+      </parameterslist>
+    </node>
+    <node name="ODB_OC_Modify" object="IfCommander">
+      <resultlist>
+        <result value="0" node="ODB_IC_Modify"/>
+        <result value="1538" node="ODB_IC_Modify"/>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="MultiLevelCondition" value="(NOT //RFS_HL_ODB_OC) OR (//RFS_HL_ODB_OC/RES_HL_ODB_OC/Value[text()!='LocalCalls'])"/>
+        <param name="Command" value="SC.ODB_OC_Modify"/>
+      </parameterslist>
+    </node>
+    <node name="ODB_IC_Modify" object="IfCommander">
+      <resultlist>
+        <result value="0" node="SMMO_Modify"/>
+        <result value="1538" node="SMMO_Modify"/>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="MultiLevelCondition" value="(NOT //RFS_HL_ODB_IC) OR (//RFS_HL_ODB_IC/RES_HL_ODB_IC/Value[text()='NoCalls'])"/>
+        <param name="Command" value="SC.ODB_IC_Modify"/>
+      </parameterslist>
+    </node>
+    <node name="SMMO_Modify" object="IfCommander">
+      <resultlist>
+        <result value="0" node="SMMT_Modify"/>
+        <result value="1538" node="SMMT_Modify"/>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="MultiLevelCondition" value="(NOT //RFS_HL_SMS_MO) OR (//RFS_HL_SMS_MO/RES_HL_SMS_MO/Value[text()='NoSMS'])"/>
+        <param name="Command" value="SC.SMMO_Modify"/>
+      </parameterslist>
+    </node>
+    <node name="SMMT_Modify" object="IfCommander">
+      <resultlist>
+        <result value="0" node="CLIP_Delete"/>
+        <result value="1538" node="CLIP_Delete"/>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="MultiLevelCondition" value="(NOT //RFS_HL_SMS_MT) OR (//RFS_HL_SMS_MT/RES_HL_SMS_MT/Value[text()='NoSMS'])"/>
+        <param name="Command" value="SC.SMMT_Modify"/>
       </parameterslist>
     </node>
     <node name="CLIP_Delete" object="IfCommander">
@@ -194,35 +236,13 @@
     </node>
     <node name="MPTY_Delete" object="IfCommander">
       <resultlist>
-        <result value="0" node="SMMO_Modify" />
-        <result value="1538" node="SMMO_Modify" />
+        <result value="0" node="CDA9600_Delete" />
+        <result value="1538" node="CDA9600_Delete" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
         <param name="IfNotXmlPath:0" value="//RFS_HL_MPTY"/>
         <param name="Command" value="SC.MPTY_Delete" />
-      </parameterslist>
-    </node>
-    <node name="SMMO_Modify" object="IfCommander">
-      <resultlist>
-        <result value="0" node="SMMT_Modify"/>
-        <result value="1538" node="SMMT_Modify"/>
-        <result value="" node="ResponseAssembler"/>
-      </resultlist>
-      <parameterslist>
-        <param name="IfNotXmlPath:0" value="//RFS_HL_SMS_MO"/>
-        <param name="Command" value="SC.SMMO_Modify"/>
-      </parameterslist>
-    </node>
-    <node name="SMMT_Modify" object="IfCommander">
-      <resultlist>
-        <result value="0" node="CDA9600_Delete"/>
-        <result value="1538" node="CDA9600_Delete"/>
-        <result value="" node="ResponseAssembler"/>
-      </resultlist>
-      <parameterslist>
-        <param name="IfNotXmlPath:0" value="//RFS_HL_SMS_MT"/>
-        <param name="Command" value="SC.SMMT_Modify"/>
       </parameterslist>
     </node>
     <node name="CDA9600_Delete" object="IfCommander">
@@ -293,13 +313,57 @@
     </node>
     <node name="CFD_Delete" object="IfCommander">
       <resultlist>
-        <result value="0" node="UserMSISDN_GetCBData"/>
-        <result value="1538" node="UserMSISDN_GetCBData"/>
+        <result value="0" node="BR_Add"/>
+        <result value="1538" node="BR_Add"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
         <param name="IfNotXmlPath:0" value="//RFS_HL_CFD"/>
         <param name="Command" value="SC.CFD_Delete"/>
+      </parameterslist>
+    </node>
+    <node name="BR_Add" object="IfCommander">
+      <resultlist>
+        <result value="0" node="BPOS_Modify"/>
+        <result value="1538" node="BPOS_Modify"/>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//RFS_HL_ROAMING"/>
+        <param name="Command" value="SC.BR_Add"/>
+      </parameterslist>
+    </node>
+    <node name="BPOS_Modify" object="IfCommander">
+      <resultlist>
+        <result value="0" node="NAM_Modify"/>
+        <result value="1538" node="NAM_Add"/>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//RFS_HL_NET/RES_HL_NET_STATUS/Value[text()='Suspend']"/>
+        <param name="Command" value="SC.BPOS_Modify"/>
+      </parameterslist>
+    </node>
+    <node name="NAM_Modify" object="IfCommander">
+      <resultlist>
+        <result value="0" node="UserMSISDN_GetCBData"/>
+        <result value="1538" node="NAM_Add"/>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//RFS_HL_ROAMING"/>
+        <param name="Command" value="SC.NAM_Modify"/>
+      </parameterslist>
+    </node>
+    <node name="NAM_Add" object="IfCommander">
+      <resultlist>
+        <result value="0" node="UserMSISDN_GetCBData"/>
+        <result value="1538" node="UserMSISDN_GetCBData"/>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//RFS_HL_NET"/>
+        <param name="Command" value="SC.NAM_Add"/>
       </parameterslist>
     </node>
     <node name="UserMSISDN_GetCBData" object="Commander">

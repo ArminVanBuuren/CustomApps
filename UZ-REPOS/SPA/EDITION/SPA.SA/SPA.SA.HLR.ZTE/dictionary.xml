@@ -32,10 +32,8 @@
   <ConstantsList/>
   <ParametersList>
     <Parameter Name="NET_STATUS" IsChoice="true" AbsenceValue="">
-      <Source Path="//AddList/RFS_HL_NET" PostFormat="0" />
-      <Source Path="//RemoveList/RFS_HL_NET" PostFormat="1" />
-      <Source Path="//ModifyList/RFS_HL_NET[Value()!='Suspend']" PostFormat="0" />
-      <Source Path="//ModifyList/RFS_HL_NET[Value()='Suspend']" PostFormat="1" />
+      <Source Path="//RES_HL_NET_STATUS/Value[text()='Access']" PostFormat="0" />
+      <Source Path="//RES_HL_NET_STATUS/Value[text()='Suspend']" PostFormat="1" />
     </Parameter>
     <Parameter Name="NET_APN">
       <Source Path="//RES_HL_NET_APN/Value"/>

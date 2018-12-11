@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scenario name="SC.Add.RFS_HL_NET">
+<scenario name="SC.HL.NET_APN_Add">
   <objectList>
     <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
@@ -17,12 +17,14 @@
         <result value="1" node=""/>
       </resultlist>
     </node>
-    <node name="NAM_Modify" object="Commander">
+    <node name="NAM_Modify" object="IfCommander">
       <resultlist>
         <result value="0" node="TimeOut"/>
+        <result value="1538" node="SwitchType"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
+        <param name="IfXmlPath:0" value="//AddList/RFS_HL_NET"/>
         <param name="Command" value="SC.NAM_Modify"/>
       </parameterslist>
     </node>
@@ -45,7 +47,7 @@
         <result value="4" node="SelectIPCorporateAPN"/>
       </resultlist>
       <parameterslist>
-        <param name="XmlPath" value="//RFS_HL_NET/RES_HL_NET_SERVICE/Value/text()"/>
+        <param name="XmlPath" value="//RFS_HL_NET_APN/RES_HL_NET_SERVICE/Value/text()"/>
         <param name="Value:2" value="GPRS"/>
         <param name="Value:3" value="M2M"/>
         <param name="Value:4" value="CorpAPN"/>

@@ -29,7 +29,7 @@ namespace ProcessFilter
     public partial class ProcessFilterForm : Form, ISerializable
     {
         private string lastPath = string.Empty;
-        public static string SerializationDataPath => $"{Customs.AccountFilePath}.bin";
+        public static string SerializationDataPath => $"{Customs.ApplicationFilePath}.bin";
         private XmlNotepad notepad;
         public CollectionBusinessProcess Processes { get; private set; }
         public CollectionNetworkElements NetElements { get; private set; }

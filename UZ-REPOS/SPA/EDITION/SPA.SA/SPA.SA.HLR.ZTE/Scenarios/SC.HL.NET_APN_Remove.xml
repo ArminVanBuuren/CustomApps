@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scenario name="SC.Remove.RFS_HL_NET">
+<scenario name="SC.HL.NET_APN_Remove">
   <objectList>
     <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll"/>
     <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
+    <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
   </objectList>
   <automat>
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
       <resultlist>
-        <result value="0" node="APN_GPRS_Delete"/>
+        <result value="0" node="SwitchType"/>
         <result value="1" node=""/>
       </resultlist>
     </node>
@@ -23,7 +25,7 @@
         <result value="3" node="APN_Corporate_Delete"/>
       </resultlist>
       <parameterslist>
-        <param name="XmlPath" value="//RFS_HL_NET/RES_HL_NET_SERVICE/Value/text()"/>
+        <param name="XmlPath" value="//RFS_HL_NET_APN/RES_HL_NET_SERVICE/Value/text()"/>
         <param name="Value:2" value="GPRS"/>
         <param name="Value:3" value="M2M"/>
         <param name="Value:4" value="CorpAPN"/>
@@ -71,12 +73,23 @@
         <param name="DbParameterXpathValue:0" value="//IdentifiersList/Identifier/MSISDN" />
       </parameterslist>
     </node>
-    <node name="NAM_Modify" object="Commander">
+    <node name="NAM_Modify" object="IfCommander">
       <resultlist>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
+        <param name="IfXmlPath:0" value="//RemoveList/RFS_HL_NET"/>
         <param name="Command" value="SC.NAM_Modify"/>
+      </parameterslist>
+    </node>
+    <node name="DummyResponderFAILURE" object="DummyResponder">
+      <resultlist>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="OverallResult" value="FAILURE"/>
+        <param name="DetailedResult" value="FAILURE"/>
+        <param name="Delay" value="0"/>
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">

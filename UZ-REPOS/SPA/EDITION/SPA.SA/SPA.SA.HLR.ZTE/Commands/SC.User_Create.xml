@@ -9,32 +9,19 @@
     <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
     <Item Name="msisdn"      Type="Wellknown"/>
     <Item Name="imsi"        Type="Wellknown"/>
-    <Item Name="HLR_PROFILE" Type="LocalLogicalGroupParameter"/>
+    <Item Name="HLR_PROFILE" Type="LocalParameter"/>
   </Request>
-  <LogicalGroupParametersList>
-    <LogicalGroupParameter Name="HLR_PROFILE" AbsenceValue="">
-      <SourcesList PresenceValue="55">
-        <Source Type="IfNotXmlPath:0" Path="//RES_HL_SUBSCRIPTION_PROFILE/Value[text()='DEALERS']"/>
-        <Source Type="IfNotXmlPath:1" Path="//RES_HL_SUBSCRIPTION_PROFILE/Value[text()='AIISKUE']"/>
-        <Source Type="IfNotXmlPath:2" Path="//RES_HL_SUBSCRIPTION_PROFILE/Value[text()='DGU']"/>
-        <Source Type="IfXmlPath:0" Path="//RES_HL_BS/Value[text()='Prepaid']"/>
-      </SourcesList>
-      <SourcesList PresenceValue="51">
-        <Source Type="IfNotXmlPath:0" Path="//RES_HL_SUBSCRIPTION_PROFILE/Value[text()='DEALERS']"/>
-        <Source Type="IfNotXmlPath:1" Path="//RES_HL_SUBSCRIPTION_PROFILE/Value[text()='AIISKUE']"/>
-        <Source Type="IfNotXmlPath:2" Path="//RES_HL_SUBSCRIPTION_PROFILE/Value[text()='DGU']"/>
-        <Source Type="IfXmlPath:0" Path="//RES_HL_BS/Value[text()='Postpaid']"/>
-      </SourcesList>
-      <SourcesList PresenceValue="20">
-        <Source Type="IfXmlPath:0" Path="//RES_HL_SUBSCRIPTION_PROFILE/Value[text()='DEALERS']"/>
-      </SourcesList>
-      <SourcesList PresenceValue="11">
-        <Source Type="IfXmlPath:0" Path="//RES_HL_SUBSCRIPTION_PROFILE/Value[text()='DGU']"/>
-      </SourcesList>
-      <SourcesList PresenceValue="10">
-        <Source Type="IfXmlPath:0" Path="//RES_HL_SUBSCRIPTION_PROFILE/Value[text()='AIISKUE']"/>
-      </SourcesList>
-    </LogicalGroupParameter>
-  </LogicalGroupParametersList>
+  <ParametersList>
+    <Parameter Name="HLR_PROFILE">
+      <Source Path="//RES_HL_SUBSCRIPTION_PROFILE"/>
+      <PossibleValues StringToKeyTable="false">
+        <Item Key="Prepaid" StringValue="55"/>
+        <Item Key="Postpaid" StringValue="51"/>
+        <Item Key="DEALERS" StringValue="20"/>
+        <Item Key="DGU" StringValue="11"/>
+        <Item Key="AIISKUE" StringValue="10"/>
+      </PossibleValues>
+    </Parameter>
+  </ParametersList>
   <ErrorsList CodePage="windows-1251" />
 </Command>

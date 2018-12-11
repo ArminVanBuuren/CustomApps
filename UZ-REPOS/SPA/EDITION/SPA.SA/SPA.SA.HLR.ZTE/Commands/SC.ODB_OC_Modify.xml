@@ -11,7 +11,7 @@
     <Item Name="OutgoingCallsBarring" Type="LocalParameter"/>
   </Request>
   <ParametersList>
-    <Parameter Name="OutgoingCallsBarring" IsChoice="true" AbsenceValue="">
+    <Parameter Name="OutgoingCallsBarring" IsChoice="true" AbsenceValue="1">
       <Source Path="//AddList/RFS_HL_ODB_OC/RES_HL_ODB_OC/Value[text()='NoCalls']" PostFormat="1" />
       <Source Path="//ModifyList/RFS_HL_ODB_OC/RES_HL_ODB_OC/Value[text()='NoCalls']" PostFormat="1" />
       <Source Path="//RemoveList/RFS_HL_ODB_OC/RES_HL_ODB_OC/Value[text()='NoCalls']" PostFormat="3" />
