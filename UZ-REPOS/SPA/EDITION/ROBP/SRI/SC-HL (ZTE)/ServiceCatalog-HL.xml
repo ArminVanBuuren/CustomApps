@@ -524,7 +524,7 @@
   </CFSList>
   <CFSGroupList>
     <!-- TODO:CFSGroupList  -->
-    <CFSGroup name="CFS_GROUP_SUBSCRIPTION" type="Mutex" description="Группа взаимоисключающих услуг при создания абонента на HLR">
+    <CFSGroup name="CFS_GROUP_SUBSCRIPTION" type="Mutex" description="Группа взаимоисключающих услуг при создании абонента на HLR">
       <CFS name="FRASKUE" />
       <CFS name="FRPARTAPN" />
       <CFS name="FRDGU" />
