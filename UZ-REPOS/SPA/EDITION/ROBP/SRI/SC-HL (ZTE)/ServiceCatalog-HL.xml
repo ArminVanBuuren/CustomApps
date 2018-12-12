@@ -50,14 +50,14 @@
         <Value hosts="FP:MS" value="Prepaid"/>
       </Resource>
     </RFS>
-    <RFS name="RFS_HL_SUBSCRIPTION_AIISKUE" base="RFS_HL_SUBSCRIPTION" processType="Subscription" hostType="HL" description="Создание абонента ASKUE - АИИСКУЭ">
-      <Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="AIISKUE" />
+    <RFS name="RFS_HL_SUBSCRIPTION_DGU" base="RFS_HL_SUBSCRIPTION" processType="Subscription" hostType="HL" description="Создание абонента ТП ДГУ">
+      <Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="DGU" />
     </RFS>
     <RFS name="RFS_HL_SUBSCRIPTION_DEALERS" base="RFS_HL_SUBSCRIPTION" processType="Subscription" hostType="HL" description="Создание дилерского абонента">
       <Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="DEALERS" />
     </RFS>
-    <RFS name="RFS_HL_SUBSCRIPTION_DGU" base="RFS_HL_SUBSCRIPTION" processType="Subscription" hostType="HL" description="Создание абонента ТП ДГУ">
-      <Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="DGU" />
+    <RFS name="RFS_HL_SUBSCRIPTION_AIISKUE" base="RFS_HL_SUBSCRIPTION" processType="Subscription" hostType="HL" description="Создание абонента ASKUE - АИИСКУЭ">
+      <Resource name="RES_HL_SUBSCRIPTION_PROFILE" value="AIISKUE" />
     </RFS>
     <RFS name="RFS_HL_RECREATE_SUBSCRIPTION" hostType="HL" description="Маркер который указывает что абонент пересоздается"/>
     <RFS name="RFS_HL_MODIFY_SUBSCRIPTION" hostType="HL" description="Изменение или пересоздание абонента на HLR"/>
