@@ -319,11 +319,11 @@
       <RFS name="RFS_HL_ODB_IC_ALL_CALLS" linkType="Add" />
       <RFS name="RFS_HL_REGION" linkType="Add" />
     </CFS>
-    <CFS name="FRPARTAPN" priority="9997" description="Создание абонентов Partner APN">
+    <CFS name="FRPARTAPN" priority="9997" description="Создание абонентов Partner APN (APN Profile ID - 20 DEALERS.UMS.UZ)">
       <RFS name="RFS_HL_SUBSCRIPTION_DEALERS" linkType="Add" />
       <RFS name="RFS_HL_NET_ACCESS" linkType="Add" />
     </CFS>
-    <CFS name="FRASKUE" priority="9997" description="Создание абонентов ASKUE - АИИСКУЭ">
+    <CFS name="FRASKUE" priority="9997" description="Создание абонентов АИИСКУЭ (APN Profile ID - 10 ASKUE)">
       <RFS name="RFS_HL_SUBSCRIPTION_AIISKUE" linkType="Add" />
       <RFS name="RFS_HL_NET_ACCESS" linkType="Add" />
     </CFS>
@@ -387,32 +387,41 @@
     <CFS name="FRNEWSCG" description="Новый SCG">
       <RFS name="RFS_HL_MYUMS_APN" linkType="Add" dependsOn="RFS_HL_NET"  />
     </CFS>
-    <CFS name="FRCORPAPN" priority="9999" description="Корпоративный APN">
-      <RFS name="RFS_HL_NET_APN_CORP_BS" linkType="Add" dependsOn="RFS_HL_NET" />
+    <CFS name="FRCORPAPN" description="Корпоративный APN">
+      <RFS name="RFS_HL_NET_ACCESS" linkType="Add" />
+      <RFS name="RFS_HL_NET_APN_CORP_BS" linkType="Add" />
     </CFS>
-    <CFS name="FRAPNXB" priority="9998" description="Корпоративный APN Халк Банк">
-      <RFS name="RFS_HL_NET_APN_CORP_XB" linkType="Add" dependsOn="RFS_HL_NET" />
+    <CFS name="FRAPNXB" description="Корпоративный APN Халк Банк">
+      <RFS name="RFS_HL_NET_ACCESS" linkType="Add" />
+      <RFS name="RFS_HL_NET_APN_CORP_XB" linkType="Add" />
     </CFS>
-    <CFS name="FRAPNZIYOD" priority="9997" description="Корпоративный APN Ziyod">
-      <RFS name="RFS_HL_NET_APN_CORP_ZD" linkType="Add" dependsOn="RFS_HL_NET" />
+    <CFS name="FRAPNZIYOD" description="Корпоративный APN Ziyod">
+      <RFS name="RFS_HL_NET_ACCESS" linkType="Add" />
+      <RFS name="RFS_HL_NET_APN_CORP_ZD" linkType="Add" />
     </CFS>
-    <CFS name="FRM2MAPNFMS" priority="9999" description="M2M APN Fleet Managment Solutuons">
-      <RFS name="RFS_HL_NET_APN_M2M_FMS" linkType="Add" dependsOn="RFS_HL_NET" />
+    <CFS name="FRM2MAPNFMS" description="M2M APN Fleet Managment Solutuons">
+      <RFS name="RFS_HL_NET_ACCESS" linkType="Add" />
+      <RFS name="RFS_HL_NET_APN_M2M_FMS" linkType="Add" />
     </CFS>
-    <CFS name="FRM2MAPNNGMK" priority="9998" description="M2M APN NGMK">
-      <RFS name="RFS_HL_NET_APN_M2M_NGMK" linkType="Add" dependsOn="RFS_HL_NET" />
+    <CFS name="FRM2MAPNNGMK" description="M2M APN NGMK">
+      <RFS name="RFS_HL_NET_ACCESS" linkType="Add" />
+      <RFS name="RFS_HL_NET_APN_M2M_NGMK" linkType="Add" />
     </CFS>
-    <CFS name="FRM2MAPNBEPRO" priority="9997" description="M2M APN BEPRO">
-      <RFS name="RFS_HL_NET_APN_M2M_BEPRO" linkType="Add" dependsOn="RFS_HL_NET" />
+    <CFS name="FRM2MAPNBEPRO" description="M2M APN BEPRO">
+      <RFS name="RFS_HL_NET_ACCESS" linkType="Add" />
+      <RFS name="RFS_HL_NET_APN_M2M_BEPRO" linkType="Add" />
     </CFS>
-    <CFS name="FRM2MAPN" priority="9996" description="M2M APN">
-      <RFS name="RFS_HL_NET_APN_M2M_BS" linkType="Add" dependsOn="RFS_HL_NET" />
+    <CFS name="FRM2MAPN" description="M2M APN">
+      <RFS name="RFS_HL_NET_ACCESS" linkType="Add" />
+      <RFS name="RFS_HL_NET_APN_M2M_BS" linkType="Add" />
     </CFS>
-    <CFS name="FRM2MAPNBANK" priority="9995" description="M2M APN BANK">
-      <RFS name="RFS_HL_NET_APN_M2M_BK" linkType="Add" dependsOn="RFS_HL_NET" />
+    <CFS name="FRM2MAPNBANK" description="M2M APN BANK">
+      <RFS name="RFS_HL_NET_ACCESS" linkType="Add" />
+      <RFS name="RFS_HL_NET_APN_M2M_BK" linkType="Add"  />
     </CFS>
-    <CFS name="VPNUMS" priority="9994" description="VPN UMS">
-      <RFS name="RFS_HL_NET_APN_VPN" linkType="Add" dependsOn="RFS_HL_NET" />
+    <CFS name="VPNUMS" description="VPN UMS">
+      <RFS name="RFS_HL_NET_ACCESS" linkType="Add" />
+      <RFS name="RFS_HL_NET_APN_VPN" linkType="Add" />
     </CFS>
     <CFS name="CancelLocation" type="OneTime" description="Сброс информации о локации абонета на MSC, VLR, SGSN станциях">
       <RFS name="RFS_HL_CNCLOC_SGSN" linkType="Add" />
@@ -522,113 +531,19 @@
       <CFS name="FRPARTAPN" />
       <CFS name="FRDGU" />
     </CFSGroup>
-    <CFSGroup name="CFS_GROUP_GPRS_CORPAPN_BS" type="Mutex" description="Группа взаимоисключающих услуг GPRS и Корпортативный APN">
+    <CFSGroup name="CFS_GROUP_GPRS_CORPAPN_BS" type="Mutex" description="Группа взаимоисключающих услуг GPRS APN, Корпортативный APN, M2M APN, ASKUE APN и DEALERS APN">
       <CFS name="CB406278" />
       <CFS name="FRCORPAPN" />
-    </CFSGroup>
-    <CFSGroup name="CFS_GROUP_GPRS_CORPAPN_XB" type="Mutex" description="Группа взаимоисключающих услуг GPRS и Корпортативный APN Халк Банк">
-      <CFS name="CB406278" />
       <CFS name="FRAPNXB" />
-    </CFSGroup>
-    <CFSGroup name="CFS_GROUP_GPRS_CORPAPN_ZD" type="Mutex" description="Группа взаимоисключающих услуг GPRS и Корпортативный APN Ziyod">
-      <CFS name="CB406278" />
-      <CFS name="FRAPNZIYOD" />
-    </CFSGroup>
-    <CFSGroup name="CFS_GROUP_GPRS_M2M_1" type="Mutex" description="Группа взаимоисключающих услуг GPRS и M2M">
-      <CFS name="CB406278" />
-      <CFS name="FRM2MAPNFMS" />
-    </CFSGroup>
-    <CFSGroup name="CFS_GROUP_GPRS_M2M_2" type="Mutex" description="Группа взаимоисключающих услуг GPRS и M2M">
-      <CFS name="CB406278" />
-      <CFS name="FRM2MAPNNGMK" />
-    </CFSGroup>
-    <CFSGroup name="CFS_GROUP_GPRS_M2M_3" type="Mutex" description="Группа взаимоисключающих услуг GPRS и M2M">
-      <CFS name="CB406278" />
-      <CFS name="FRM2MAPNBEPRO" />
-    </CFSGroup>
-    <CFSGroup name="CFS_GROUP_GPRS_M2M_4" type="Mutex" description="Группа взаимоисключающих услуг GPRS и M2M">
-      <CFS name="CB406278" />
-      <CFS name="FRM2MAPN" />
-    </CFSGroup>
-    <CFSGroup name="CFS_GROUP_GPRS_M2M_5" type="Mutex" description="Группа взаимоисключающих услуг GPRS и M2M">
-      <CFS name="CB406278" />
-      <CFS name="FRM2MAPNBANK" />
-    </CFSGroup>
-    <CFSGroup name="CFS_GROUP_GPRS_M2M_6" type="Mutex" description="Группа взаимоисключающих услуг GPRS и M2M">
-      <CFS name="CB406278" />
-      <CFS name="VPNUMS" />
-    </CFSGroup>
-    <CFSGroup name="CFS_GROUP_CORPAPN_BS_M2M_1" type="Mutex" description="Группа взаимоисключающих услуг Корпортативный APN и M2M">
-      <CFS name="FRCORPAPN" />
-      <CFS name="FRM2MAPNFMS" />
-    </CFSGroup>
-    <CFSGroup name="CFS_GROUP_CORPAPN_BS_M2M_2" type="Mutex" description="Группа взаимоисключающих услуг Корпортативный APN и M2M">
-      <CFS name="FRCORPAPN" />
-      <CFS name="FRM2MAPNNGMK" />
-    </CFSGroup>
-    <CFSGroup name="CFS_GROUP_CORPAPN_BS_M2M_3" type="Mutex" description="Группа взаимоисключающих услуг Корпортативный APN и M2M">
-      <CFS name="FRCORPAPN" />
-      <CFS name="FRM2MAPNBEPRO" />
-    </CFSGroup>
-    <CFSGroup name="CFS_GROUP_CORPAPN_BS_M2M_4" type="Mutex" description="Группа взаимоисключающих услуг Корпортативный APN и M2M">
-      <CFS name="FRCORPAPN" />
-      <CFS name="FRM2MAPN" />
-    </CFSGroup>
-    <CFSGroup name="CFS_GROUP_CORPAPN_BS_M2M_5" type="Mutex" description="Группа взаимоисключающих услуг Корпортативный APN и M2M">
-      <CFS name="FRCORPAPN" />
-      <CFS name="FRM2MAPNBANK" />
-    </CFSGroup>
-    <CFSGroup name="CFS_GROUP_CORPAPN_BS_M2M_6" type="Mutex" description="Группа взаимоисключающих услуг Корпортативный APN и M2M">
-      <CFS name="FRCORPAPN" />
-      <CFS name="VPNUMS" />
-    </CFSGroup>
-    <CFSGroup name="CFS_GROUP_CORPAPN_XB_M2M_1" type="Mutex" description="Группа взаимоисключающих услуг Корпортативный APN Халк Банк и M2M">
-      <CFS name="FRAPNXB" />
-      <CFS name="FRM2MAPNFMS" />
-    </CFSGroup>
-    <CFSGroup name="CFS_GROUP_CORPAPN_XB_M2M_2" type="Mutex" description="Группа взаимоисключающих услуг Корпортативный APN Халк Банк и M2M">
-      <CFS name="FRAPNXB" />
-      <CFS name="FRM2MAPNNGMK" />
-    </CFSGroup>
-    <CFSGroup name="CFS_GROUP_CORPAPN_XB_M2M_3" type="Mutex" description="Группа взаимоисключающих услуг Корпортативный APN Халк Банк и M2M">
-      <CFS name="FRAPNXB" />
-      <CFS name="FRM2MAPNBEPRO" />
-    </CFSGroup>
-    <CFSGroup name="CFS_GROUP_CORPAPN_XB_M2M_4" type="Mutex" description="Группа взаимоисключающих услуг Корпортативный APN Халк Банк и M2M">
-      <CFS name="FRAPNXB" />
-      <CFS name="FRM2MAPN" />
-    </CFSGroup>
-    <CFSGroup name="CFS_GROUP_CORPAPN_XB_M2M_5" type="Mutex" description="Группа взаимоисключающих услуг Корпортативный APN Халк Банк и M2M">
-      <CFS name="FRAPNXB" />
-      <CFS name="FRM2MAPNBANK" />
-    </CFSGroup>
-    <CFSGroup name="CFS_GROUP_CORPAPN_XB_M2M_6" type="Mutex" description="Группа взаимоисключающих услуг Корпортативный APN Халк Банк и M2M">
-      <CFS name="FRAPNXB" />
-      <CFS name="VPNUMS" />
-    </CFSGroup>
-    <CFSGroup name="CFS_GROUP_CORPAPN_ZD_M2M_1" type="Mutex" description="Группа взаимоисключающих услуг Корпортативный APN Ziyod и M2M">
       <CFS name="FRAPNZIYOD" />
       <CFS name="FRM2MAPNFMS" />
-    </CFSGroup>
-    <CFSGroup name="CFS_GROUP_CORPAPN_ZD_M2M_2" type="Mutex" description="Группа взаимоисключающих услуг Корпортативный APN Ziyod и M2M">
-      <CFS name="FRAPNZIYOD" />
       <CFS name="FRM2MAPNNGMK" />
-    </CFSGroup>
-    <CFSGroup name="CFS_GROUP_CORPAPN_ZD_M2M_3" type="Mutex" description="Группа взаимоисключающих услуг Корпортативный APN Ziyod и M2M">
-      <CFS name="FRAPNZIYOD" />
       <CFS name="FRM2MAPNBEPRO" />
-    </CFSGroup>
-    <CFSGroup name="CFS_GROUP_CORPAPN_ZD_M2M_4" type="Mutex" description="Группа взаимоисключающих услуг Корпортативный APN Ziyod и M2M">
-      <CFS name="FRAPNZIYOD" />
       <CFS name="FRM2MAPN" />
-    </CFSGroup>
-    <CFSGroup name="CFS_GROUP_CORPAPN_ZD_M2M_5" type="Mutex" description="Группа взаимоисключающих услуг Корпортативный APN Ziyod и M2M">
-      <CFS name="FRAPNZIYOD" />
       <CFS name="FRM2MAPNBANK" />
-    </CFSGroup>
-    <CFSGroup name="CFS_GROUP_CORPAPN_ZD_M2M_6" type="Mutex" description="Группа взаимоисключающих услуг Корпортативный APN Ziyod и M2M">
-      <CFS name="FRAPNZIYOD" />
       <CFS name="VPNUMS" />
+      <CFS name="FRASKUE" />
+      <CFS name="FRPARTAPN" />
     </CFSGroup>
   </CFSGroupList>
   <RestrictionList>
@@ -647,6 +562,7 @@
     </RFSGroup>
     <RFSGroup name="RFS_GROUP_HL_CNCLOC_LTE_DEPENDS" type="All" description="Группа RFS для cброса информации о локации абонета для LTE">
       <RFS name="RFS_HL_NET_ACCESS" linkType="Add" />
+      <RFS name="RFS_HL_NET_SUSPEND" linkType="Add" />
       <RFS name="RFS_HL_LTE" linkType="Add" />
     </RFSGroup>
   </RFSGroupList>
@@ -697,6 +613,10 @@
     <Scenario name="HL.ModifyUSSD" description="Изменение статуса USSD">
       <RFS name="RFS_HL_USSD" scenarioType="Add, Remove, Modify" />
     </Scenario>
+    <Scenario name="HL.RoamingAdd" description="Добавление удаление услуги роуминг">
+      <RFS name="RFS_HL_ROAMING" scenarioType="Add" />
+      <Append name="RFS_HL_NET" listType="EndList" />
+    </Scenario>
     <Scenario name="HL.RoamingRemove" description="Удаление услуги роуминг">
       <RFS name="RFS_HL_ROAMING" scenarioType="Remove" />
       <Append name="RFS_HL_NET" listType="EndList" />
@@ -725,7 +645,7 @@
     <!--START ==== INTERNET ====-->
     <Scenario name="HL.NET_APN_Add" description="Добавление интернет и APN">
       <RFS name="RFS_HL_NET" scenarioType="Add" />
-      <RFS name="RFS_HL_NET_APN" scenarioType="Add" />
+      <RFS name="RFS_HL_NET_APN" scenarioType="Add, Modify" />
     </Scenario>
     <Scenario name="HL.NET_APN_Remove" description="Удаление интернет и APN">
       <RFS name="RFS_HL_NET" scenarioType="Remove" />

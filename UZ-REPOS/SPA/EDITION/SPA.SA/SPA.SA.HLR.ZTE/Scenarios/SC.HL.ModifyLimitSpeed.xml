@@ -15,20 +15,20 @@
     </node>
     <node name="APN_ReduceSpeedGPRS_Modify" object="Commander">
       <resultlist>
-        <result value="0" node="APN_LTEReduceSpeed_Modify"/>
+        <result value="0" node="APN_ReduceSpeedLTE_Modify"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
         <param name="Command" value="SC.APN_ReduceSpeedGPRS_Modify"/>
       </parameterslist>
     </node>
-    <node name="APN_LTEReduceSpeed_Modify" object="IfCommander">
+    <node name="APN_ReduceSpeedLTE_Modify" object="IfCommander">
       <resultlist>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
         <param name="IfXmlPath:0" value="//RFS_HL_LTE"/>
-        <param name="Command" value="SC.APN_LTEReduceSpeed_Modify"/>
+        <param name="Command" value="SC.APN_ReduceSpeedLTE_Modify"/>
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">

@@ -1,0 +1,21 @@
+﻿<ExtendedRequestMessage>
+  <AdditionalData  Executable="True">
+    <WithdrawalList>
+      <CallForwarding>
+        <CFB>
+          <ForwardingToAddress />
+        </CFB>
+      </CallForwarding>
+    </WithdrawalList>
+  </AdditionalData>
+  <MustBeConfirmed>false</MustBeConfirmed>
+  <ActionName>Deactivate Call Forwarding Sync</ActionName>
+  <ActionNameAlias>Деактивирование услуги Переадресация вызова</ActionNameAlias>
+  <IdentifiersList>
+    <Identifier>
+      <MSISDN>998977938600</MSISDN>
+      <IMSI>434070131373903</IMSI>
+    </Identifier>
+  </IdentifiersList>
+  <ContinueByDefault>true</ContinueByDefault>
+</ExtendedRequestMessage>

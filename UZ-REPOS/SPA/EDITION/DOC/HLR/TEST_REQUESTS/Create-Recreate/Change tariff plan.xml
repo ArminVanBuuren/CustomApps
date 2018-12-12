@@ -1,0 +1,29 @@
+﻿<ExtendedRequestMessage>
+  <Priority>2</Priority>
+  <AdditionalData  Executable="True">
+    <ProvisionList>
+      <ChangeTP />
+    </ProvisionList>
+    <BalanceStorage>
+      <HostTypeCode>ST</HostTypeCode>
+      <HostId>MS</HostId>
+      <HostCode>MS</HostCode>
+    </BalanceStorage>
+    <SubscriberType>Normal</SubscriberType>
+    <EncryptedKi />
+    <VersionsA3A8 />
+    <RegisteredList>
+      <CB101 />
+      <CB10363 />
+      <CB266 />
+      <CB6311 />
+      <FRANTIOP />
+    </RegisteredList>
+    <SourceType>4</SourceType>
+  </AdditionalData>
+  <MustBeConfirmed>false</MustBeConfirmed>
+  <ActionName>Change tariff plan</ActionName>
+  <ActionNameAlias>Change tariff plan</ActionNameAlias>
+  <IdentifiersList />
+  <ContinueByDefault>true</ContinueByDefault>
+</ExtendedRequestMessage>

@@ -1,0 +1,27 @@
+﻿<ExtendedRequestMessage>
+  <Priority>2</Priority>
+  <AdditionalData  Executable="True">
+    <ProvisionList>
+      <ChangeImsi>
+        <NewIMSI>11111111</NewIMSI>
+      </ChangeImsi>
+    </ProvisionList>
+    <BalanceStorage>
+      <HostTypeCode>ST</HostTypeCode>
+      <HostId>MS</HostId>
+      <HostCode>MS</HostCode>
+    </BalanceStorage>
+    <SubscriberType>Normal</SubscriberType>
+    <EncryptedKi />
+    <VersionsA3A8 />
+    <RegisteredList>
+      <CB101 />
+    </RegisteredList>
+    <SourceType>4</SourceType>
+  </AdditionalData>
+  <MustBeConfirmed>false</MustBeConfirmed>
+  <ActionName>Change MSI</ActionName>
+  <ActionNameAlias>Изменение номеров IMSI и MSISDN</ActionNameAlias>
+  <IdentifiersList />
+  <ContinueByDefault>true</ContinueByDefault>
+</ExtendedRequestMessage>

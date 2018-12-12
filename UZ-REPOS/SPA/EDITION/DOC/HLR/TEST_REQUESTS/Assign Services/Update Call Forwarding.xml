@@ -1,0 +1,21 @@
+﻿<ExtendedRequestMessage>
+  <AdditionalData  Executable="True">
+    <ProvisionList>
+      <CallForwarding>
+        <CFB>
+          <ForwardingToAddress>998901746546</ForwardingToAddress>
+        </CFB>
+      </CallForwarding>
+    </ProvisionList>
+  </AdditionalData>
+  <MustBeConfirmed>false</MustBeConfirmed>
+  <ActionName>Update Call Forwarding</ActionName>
+  <ActionNameAlias>Обновление услуги Переадресация вызова</ActionNameAlias>
+  <IdentifiersList>
+    <Identifier>
+      <MSISDN>998974021681</MSISDN>
+      <IMSI>434070130802539</IMSI>
+    </Identifier>
+  </IdentifiersList>
+  <ContinueByDefault>true</ContinueByDefault>
+</ExtendedRequestMessage>

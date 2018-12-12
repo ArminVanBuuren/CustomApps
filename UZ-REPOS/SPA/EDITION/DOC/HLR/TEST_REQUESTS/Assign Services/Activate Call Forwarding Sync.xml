@@ -1,0 +1,24 @@
+﻿<ExtendedRequestMessage>
+  <PackSize>0</PackSize>
+  <Comment />
+  <Priority>3</Priority>
+  <AdditionalData  Executable="True">
+    <BalanceStorage>
+      <HostTypeCode>ST</HostTypeCode>
+      <HostId>MS</HostId>
+      <HostCode>MS</HostCode>
+    </BalanceStorage>
+    <ProvisionList>
+      <CallForwarding>
+        <CFB>
+          <ForwardingToAddress>998933347080</ForwardingToAddress>
+        </CFB>
+      </CallForwarding>
+    </ProvisionList>
+  </AdditionalData>
+  <MustBeConfirmed>false</MustBeConfirmed>
+  <ActionName>Activate Call Forwarding Sync</ActionName>
+  <ActionNameAlias>Активирование услуги Переадресация вызова</ActionNameAlias>
+  <IdentifiersList />
+  <ContinueByDefault>true</ContinueByDefault>
+</ExtendedRequestMessage>
