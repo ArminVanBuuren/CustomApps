@@ -18,22 +18,20 @@
     <Resource name="RES_HL_ODB_OC" description="Барринг исходящей связи"/>
     <Resource name="RES_HL_SMS_MO" description="Барринг на исходящей SMS"/>
     <Resource name="RES_HL_SMS_MT" description="Барринг на входящей SMS"/>
-    <Resource name="RES_HL_USSD" description="Cтатус USSD"/>
+    <Resource name="RES_HL_USSD" description="Доступ к USSD"/>
     <Resource name="RES_HL_NET_STATUS" description="Доступ к сервису интернет"/>
-    <Resource name="RES_HL_NET_SERVICE" description="Услуги на интернет"/>
+    <Resource name="RES_HL_NET_SERVICE" description="Услуга интернет"/>
     <Resource name="RES_HL_NET_APN" description="Название точки доступа (Access Point Name)"/>
     <Resource name="RES_HL_DEALER_APN" description="Название дилерской точки доступа (Access Point Name)"/>
     <Resource name="RES_HL_SUBSCRIPTION_PROFILE" description="Профиль абонента на HLR"/>
     <Resource name="RES_HL_CNCLOC_DIRECT" description="Тип станции для сброса информации" />
     <Resource name="RES_HL_REGION" description="Код региона для переадресации" />
-    <Resource name="RES_HL_BS" description="Место хранение баланса" />
   </ResourceList>
   <RFSParameterList>
     <RFSParameter name="CallForwardType" description="Тип установки переадресаций" />
     <RFSParameter name="CallForwardMode" description="Режим переадресации" />
     <RFSParameter name="CallForwardingTimer" description="Таймер переадресации" />
     <RFSParameter name="ForwardedToNumber" description="Номер переадресации" />
-    <RFSParameter name="NewMSISDN" path="//NewMSISDN" description="Новый номер MSISDN"/>
     <RFSParameter name="NewIMSI" path="//NewIMSI" description="Новый номер IMSISDN"/>
   </RFSParameterList>
   <FlagList >
@@ -227,7 +225,7 @@
     <RFS name="RFS_HL_CNCLOC_SGSN" parent="RFS_HL_CNCLOC" hostType="HL" description="Сброс информации о локации абонета на SGSN станции">
       <Resource name="RES_HL_CNCLOC_DIRECT" value="SGSN" />
     </RFS>
-    <RFS name="RFS_HL_CNCLOC_LTE" parent="RFS_HL_CNCLOC" dependsOn="RFS_GROUP_HL_CNCLOC_LTE_DEPENDS" hostType="HL" description="Сброс информации о локации абонета на PS-EPS станции">
+    <RFS name="RFS_HL_CNCLOC_LTE" parent="RFS_HL_CNCLOC" hostType="HL" description="Сброс информации о локации абонета на PS-EPS станции">
       <Resource name="RES_HL_CNCLOC_DIRECT" value="LTE" />
     </RFS>
     <!--END ==== INTERNET ====-->
@@ -425,7 +423,7 @@
     </CFS>
     <CFS name="CancelLocation" type="OneTime" description="Сброс информации о локации абонета на MSC, VLR, SGSN станциях">
       <RFS name="RFS_HL_CNCLOC_SGSN" linkType="Add" />
-      <RFS name="RFS_HL_CNCLOC_LTE" linkType="Add" />
+      <RFS name="RFS_HL_CNCLOC_LTE" linkType="Add" dependsOn="RFS_HL_LTE" />
     </CFS>
     <CFS name="CancelLocationSGSN" type="OneTime" copyOf="CancelLocation" description="Сброс информации о локации абонета на MSC, VLR, SGSN станциях"/>
     <!--END ==== INTERNET ====-->
@@ -559,11 +557,6 @@
     <!-- TODO:RFSGroupList  -->
     <RFSGroup name="RFS_GROUP_HL_CREATE_SUBSCRIBER" type="Choice" description="Группа RFS для пересоздания абонента на HLR">
       <RFS name="RFS_HL_SUBSCRIPTION" linkType="Add" handler="HL_RecreateSubscriber" />
-    </RFSGroup>
-    <RFSGroup name="RFS_GROUP_HL_CNCLOC_LTE_DEPENDS" type="All" description="Группа RFS для cброса информации о локации абонета для LTE">
-      <RFS name="RFS_HL_NET_ACCESS" linkType="Add" />
-      <RFS name="RFS_HL_NET_SUSPEND" linkType="Add" />
-      <RFS name="RFS_HL_LTE" linkType="Add" />
     </RFSGroup>
   </RFSGroupList>
   <HandlerList>
