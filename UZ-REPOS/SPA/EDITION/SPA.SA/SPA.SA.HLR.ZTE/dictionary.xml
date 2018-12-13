@@ -49,7 +49,10 @@
       <Source Path="ExtendedRequestMessage/AdditionalData/IP"/>
       <PossibleValues StringToKeyTable="true"/>
     </Parameter>
-
+    <Parameter Name="KI">
+      <Source Path="ExtendedRequestMessage/AdditionalData/KI"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
 
     
     
@@ -108,10 +111,6 @@
       <PossibleValues StringToKeyTable="false">
         <Item Key="FRFREE" StringValue="DAVRA.UMS.APN"/>
       </PossibleValues>
-    </Parameter>
-    <Parameter Name="KI">
-      <Source Path="ExtendedRequestMessage/AdditionalData/KI"/>
-      <PossibleValues StringToKeyTable="true"/>
     </Parameter>
   </ParametersList>
   <DynamicParametersList/>
