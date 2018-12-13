@@ -64,24 +64,24 @@
     </RFS>
     <RFS name="RFS_HL_REGION" hostType="HL" description="Определение кода региона для переадресации">
       <Resource name="RES_HL_REGION" value="" useType="Mandatory">
-        <Value hosts="HL:TASH_HLR"   value="TASH_HLR" />
-        <Value hosts="HL:01"         value="TASH_HLR" />
-        <Value hosts="HL:GIL_HLR"    value="GIL_HLR" />
-        <Value hosts="HL:JSK_HLR"    value="JSK_HLR" />
-        <Value hosts="HL:CHIRCH_HLR" value="CHIRCH_HLR" />
-        <Value hosts="HL:YANGL_HLR"  value="YANGL_HLR" />
-        <Value hosts="HL:AND_HLR"    value="AND_HLR" />
-        <Value hosts="HL:NMNGN_HLR"  value="NMNGN_HLR" />
-        <Value hosts="HL:FRGN_HLR"   value="FRGN_HLR" />
-        <Value hosts="HL:SMRKND_HLR" value="SMRKND_HLR" />
-        <Value hosts="HL:BUH_HLR"    value="BUH_HLR" />
-        <Value hosts="HL:KARSHI_HLR" value="KARSHI_HLR" />
-        <Value hosts="HL:NAVOI_HLR"  value="NAVOI_HLR" />
-        <Value hosts="HL:TRMZ_HLR"   value="TRMZ_HLR" />
-        <Value hosts="HL:SHAHRS_HLR" value="SHAHRS_HLR" />
-        <Value hosts="HL:URG_HLR"    value="URG_HLR" />
-        <Value hosts="HL:NUKHUS_HLR" value="NUKHUS_HLR" />
-        <Value hosts="HL:TEST_HLR"   value="TEST_HLR" />
+        <Value hosts="HL:TASH_HLR"   value="1" />
+        <Value hosts="HL:01"         value="1" />
+        <Value hosts="HL:TEST_HLR"   value="2" />
+        <Value hosts="HL:CHIRCH_HLR" value="2" />
+        <Value hosts="HL:YANGL_HLR"  value="2" />
+        <Value hosts="HL:GIL_HLR"    value="3" />
+        <Value hosts="HL:JSK_HLR"    value="4" />
+        <Value hosts="HL:AND_HLR"    value="5" />
+        <Value hosts="HL:BUH_HLR"    value="6" />
+        <Value hosts="HL:KARSHI_HLR" value="7" />
+        <Value hosts="HL:SHAHRS_HLR" value="7" />
+        <Value hosts="HL:NAVOI_HLR"  value="8" />
+        <Value hosts="HL:NMNGN_HLR"  value="9" />
+        <Value hosts="HL:NUKHUS_HLR" value="10" />
+        <Value hosts="HL:SMRKND_HLR" value="11" />
+        <Value hosts="HL:TRMZ_HLR"   value="12" />
+        <Value hosts="HL:URG_HLR"    value="13" />
+        <Value hosts="HL:FRGN_HLR"   value="14" />
       </Resource>
     </RFS>
     <!--END ==== SUBSCRIPTION ====-->
