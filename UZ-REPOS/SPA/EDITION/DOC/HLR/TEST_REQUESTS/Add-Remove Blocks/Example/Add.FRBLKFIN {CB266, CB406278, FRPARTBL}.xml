@@ -1,0 +1,43 @@
+﻿<ExtendedRequestMessage>
+  <Source />
+  <ID>0</ID>
+  <OriginalSource>TEST</OriginalSource>
+  <OriginalID>210024</OriginalID>
+  <PackID />
+  <PackSize>0</PackSize>
+  <Comment />
+  <Priority>0</Priority>
+  <AdditionalData  Executable="True">
+    <ProvisionList>
+      <FRBLKFIN />
+    </ProvisionList>
+    <InitialList>
+      <CB101 />
+      <CB266 />
+      <CB406278 />
+      <FRPARTBL />
+    </InitialList>
+    <RegisteredList>
+      <CB101 />
+      <CB266 />
+      <CB406278 />
+      <FRPARTBL />
+      <FRBLKFIN />
+    </RegisteredList>
+    <BalanceStorage>
+      <HostTypeCode>ST</HostTypeCode>
+      <HostId>MS</HostId>
+      <HostCode>MS</HostCode>
+    </BalanceStorage>
+  </AdditionalData>
+  <MustBeConfirmed>true</MustBeConfirmed>
+  <ActionName>Block Subscriber</ActionName>
+  <ActionNameAlias>Block Subscriber</ActionNameAlias>
+  <ActionNameOriginal>Block Subscriber</ActionNameOriginal>
+  <IdentifiersList>
+    <Identifier>
+      <MSISDN>998971231212</MSISDN>
+      <IMSI>250018886400556</IMSI>
+    </Identifier>
+  </IdentifiersList>
+</ExtendedRequestMessage>

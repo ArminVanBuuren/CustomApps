@@ -22,7 +22,7 @@
         <result value="1" node="DummyResponderFAILURE"/>
         <result value="2" node="APN_GPRS_Delete"/>
         <result value="3" node="APN_M2M_Delete"/>
-        <result value="3" node="APN_Corporate_Delete"/>
+        <result value="4" node="APN_Corporate_Delete"/>
       </resultlist>
       <parameterslist>
         <param name="XmlPath" value="//RFS_HL_NET_APN/RES_HL_NET_SERVICE/Value/text()"/>

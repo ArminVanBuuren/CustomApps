@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scenario name="SC.HL.ModifyBarrings">
+<scenario name="SC.HL.ModifyODB">
   <objectList>
     <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
@@ -25,22 +25,11 @@
     </node>
     <node name="ODB_IC_Modify" object="IfCommander">
       <resultlist>
-        <result value="0" node="BR_Add"/>
-        <result value="1538" node="BR_Add"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
-        <param name="IfXmlPath:0" value="//RFS_HL_ODB_IC_NONE"/>
+        <param name="IfXmlPath:0" value="//RFS_HL_ODB_IC"/>
         <param name="Command" value="SC.ODB_IC_Modify"/>
-      </parameterslist>
-    </node>
-    <node name="BR_Add" object="IfCommander">
-      <resultlist>
-        <result value="" node="ResponseAssembler"/>
-      </resultlist>
-      <parameterslist>
-        <param name="IfXmlPath:0" value="//AddList/RFS_HL_ROAMING"/>
-        <param name="Command" value="SC.BR_Add"/>
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">

@@ -305,7 +305,7 @@
     <!-- TODO:CFSList  -->
     <!--START ==== SUBSCRIPTION ====-->
     <CFS name="Subscriber" priority="9999" type="ManagedObject" description="Абонент на HLR"/>
-    <CFS name="CB101" priority="9998" description="Базовая услуга абонента">
+    <CFS name="CB101" priority="9998" description="Голосовая связь - базовая услуга абонента">
       <RFS name="RFS_HL_SUBSCRIPTION_DEFAULT" linkType="Add" />
       <RFS name="RFS_HL_ODB_OC_LOCAL_CALLS" linkType="Add" />
       <RFS name="RFS_HL_ODB_IC_ALL_CALLS" linkType="Add" />
@@ -668,7 +668,7 @@
     <!--START ==== Барринги на связь и смс ====-->
     <Scenario name="HL.ModifyODB" description="Управление ограничениями связи на HLR">
       <RFS name="RFS_HL_ODB_OC" scenarioType="Add, Remove, Modify" />
-      <RFS name="RFS_HL_ODB_IC_NONE" scenarioType="Add, Remove, Modify" />
+      <RFS name="RFS_HL_ODB_IC" scenarioType="Add, Remove, Modify" />
     </Scenario>
     <Scenario name="HL.ModifySMS" description="Управление ограничениями смс на HLR">
       <RFS name="RFS_HL_SMS_MO" scenarioType="Add, Remove, Modify" />
