@@ -482,12 +482,10 @@
     <CFS name="FRMGDOSTUP" priority="101" description="Междугородный доступ">
       <RFS name="RFS_HL_ODB_OC_INTERCITY_CALLS" linkType="Set" />
     </CFS>
-    <CFS name="FRZAPRETGS" description="Запрет голосовой связи">
+    <CFS name="FRZAPRETGS" isMarker="true" description="Запрет голосовой связи">
       <RFS name="RFS_HL_CALLS_SUSPEND" linkType="Add" />
     </CFS>
-    <CFS name="CB2986" description="Запрет вызова">
-      <RFS name="RFS_HL_CALLS_SUSPEND" linkType="Add" />
-    </CFS>
+    <CFS name="CB2986" copyOf="FRZAPRETGS" description="Запрет вызова"/>
     <CFS name="FRPARTBL" priority="1" isMarker="true" description="Частичная блокировка">
       <RFS name="RFS_HL_ODB_OC_NONE" linkType="Modify" />
       <RFS name="RFS_HL_SMS_MO_NONE" linkType="Modify" />
