@@ -94,8 +94,8 @@
         <Value condition="(//ActionNameOriginal[text()='Update Call Forwarding'])" value="Update" />
       </RFSParameter>
       <RFSParameter name="CallForwardMode">
-        <Value condition="(//ProvisionList/CallForwarding/CFB)" value="Activate" />
-        <Value condition="(//WithdrawalList/CallForwarding/CFB)" value="Deactivate" />
+        <Value condition="(//ProvisionList//CFB)" value="Activate" />
+        <Value condition="(//WithdrawalList//CFB)" value="Deactivate" />
       </RFSParameter>
       <RFSParameter name="ForwardedToNumber" path="//CFB/ForwardingToAddress" />
     </RFS>
@@ -108,8 +108,8 @@
         <Value condition="(//ActionNameOriginal[text()='Update Call Forwarding'])" value="Update" />
       </RFSParameter>
       <RFSParameter name="CallForwardMode">
-        <Value condition="(//ProvisionList/CallForwarding/CFU)" value="Activate" />
-        <Value condition="(//WithdrawalList/CallForwarding/CFU)" value="Deactivate" />
+        <Value condition="(//ProvisionList//CFU)" value="Activate" />
+        <Value condition="(//WithdrawalList//CFU)" value="Deactivate" />
       </RFSParameter>
       <RFSParameter name="ForwardedToNumber" path="//CFU/ForwardingToAddress" />
     </RFS>
@@ -122,8 +122,8 @@
         <Value condition="(//ActionNameOriginal[text()='Update Call Forwarding'])" value="Update" />
       </RFSParameter>
       <RFSParameter name="CallForwardMode">
-        <Value condition="(//ProvisionList/CallForwarding/CFNRC)" value="Activate" />
-        <Value condition="(//WithdrawalList/CallForwarding/CFNRC)" value="Deactivate" />
+        <Value condition="(//ProvisionList//CFNRC)" value="Activate" />
+        <Value condition="(//WithdrawalList//CFNRC)" value="Deactivate" />
       </RFSParameter>
       <RFSParameter name="ForwardedToNumber" path="//CFNRC/ForwardingToAddress" />
     </RFS>
@@ -136,8 +136,8 @@
         <Value condition="(//ActionNameOriginal[text()='Update Call Forwarding'])" value="Update" />
       </RFSParameter>
       <RFSParameter name="CallForwardMode">
-        <Value condition="(//ProvisionList/CallForwarding/CFNRY)" value="Activate" />
-        <Value condition="(//WithdrawalList/CallForwarding/CFNRY)" value="Deactivate" />
+        <Value condition="(//ProvisionList//CFNRY)" value="Activate" />
+        <Value condition="(//WithdrawalList//CFNRY)" value="Deactivate" />
       </RFSParameter>
       <RFSParameter name="ForwardedToNumber" path="//CFNRY/ForwardingToAddress" />
       <RFSParameter name="CallForwardingTimer" path="//CFNRY/NoReplyTimer" />
