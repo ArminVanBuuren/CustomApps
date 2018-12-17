@@ -12,7 +12,7 @@
   </Request>
   <ParametersList>
     <Parameter Name="SMSBarring">
-      <Source Path="//RFS_HL_SMS_MT/RES_HL_SMS_MT/Value" AbsenceValue="0"/>
+      <Source Path="//AddList/RFS_HL_SMS_MT/RES_HL_SMS_MT/Value | //ModifyList/RFS_HL_SMS_MT/RES_HL_SMS_MT/Value" AbsenceValue="0"/>
       <PossibleValues StringToKeyTable="true">
         <Item Key="0" StringValue="NoSMS"/>
         <Item Key="1" StringValue="AccessSMS"/>

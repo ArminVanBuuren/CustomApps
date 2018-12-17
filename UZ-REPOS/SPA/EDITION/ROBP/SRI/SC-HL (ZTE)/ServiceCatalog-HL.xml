@@ -421,11 +421,11 @@
       <RFS name="RFS_HL_NET_ACCESS" linkType="Add" />
       <RFS name="RFS_HL_NET_APN_VPN" linkType="Add" />
     </CFS>
-    <CFS name="CancelLocation" type="OneTime" description="Сброс информации о локации абонета на MSC, VLR, SGSN станциях">
+    <CFS name="CancelLocation" description="Сброс информации о локации абонета на MSC, VLR, SGSN станциях">
       <RFS name="RFS_HL_CNCLOC_SGSN" linkType="Add" />
       <RFS name="RFS_HL_CNCLOC_LTE" linkType="Add" dependsOn="RFS_HL_LTE" />
     </CFS>
-    <CFS name="CancelLocationSGSN" type="OneTime" copyOf="CancelLocation" description="Сброс информации о локации абонета на MSC, VLR, SGSN станциях"/>
+    <CFS name="CancelLocationSGSN" copyOf="CancelLocation" description="Сброс информации о локации абонета на MSC, VLR, SGSN станциях"/>
     <!--END ==== INTERNET ====-->
     
     
