@@ -18,7 +18,7 @@
     <Resource name="RES_HL_ODB_OC" description="Барринг исходящей связи"/>
     <Resource name="RES_HL_SMS_MO" description="Барринг на исходящей SMS"/>
     <Resource name="RES_HL_SMS_MT" description="Барринг на входящей SMS"/>
-    <Resource name="RES_HL_USSD" description="Доступ к USSD"/>
+    <Resource name="RES_HL_USSD_STATUS" description="Доступ к USSD"/>
     <Resource name="RES_HL_NET_STATUS" description="Доступ к сервису интернет"/>
     <Resource name="RES_HL_NET_SERVICE" description="Услуга интернет"/>
     <Resource name="RES_HL_NET_APN" description="Название точки доступа (Access Point Name)"/>
@@ -242,13 +242,13 @@
     <RFS name="RFS_HL_CWCH" hostType="HL" description="Ожидание / Удержание вызова"/>
     <RFS name="RFS_HL_CLIR" hostType="HL" description="Запрет определения номера"/>
     <RFS name="RFS_HL_USSD" hostType="HL" description="Запроса по USSD">
-      <Resource name="RES_HL_USSD" useType="Mandatory" />
+      <Resource name="RES_HL_USSD_STATUS" useType="Mandatory" />
     </RFS>
-    <RFS name="RFS_HL_USSD_PRV" base="RFS_HL_USSD" hostType="HL" description="Запроса по USSD">
-      <Resource name="RES_HL_USSD" value="Provision" />
+    <RFS name="RFS_HL_USSD_ACCESS" base="RFS_HL_USSD" hostType="HL" description="Запроса по USSD">
+      <Resource name="RES_HL_USSD_STATUS" value="Access" />
     </RFS>
     <RFS name="RFS_HL_USSD_SUSPEND" base="RFS_HL_USSD" hostType="HL" description="Запрет запроса по USSD">
-      <Resource name="RES_HL_USSD" value="Suspend" />
+      <Resource name="RES_HL_USSD_STATUS" value="Suspend" />
     </RFS>
     <RFS name="RFS_HL_CALLS_SUSPEND" hostType="HL" description="Запрет голосовой связи"/>
     <!--END ==== SIMPLE SERVICE ====-->
@@ -462,7 +462,7 @@
       <RFS name="RFS_HL_CLIR" linkType="Add" />
     </CFS>
     <CFS name="FRUSSD" description="USSD запросы">
-      <RFS name="RFS_HL_USSD_PRV" linkType="Add" />
+      <RFS name="RFS_HL_USSD_ACCESS" linkType="Add" />
     </CFS>
     <!--END ==== SIMPLE SERVICE ====-->
 
