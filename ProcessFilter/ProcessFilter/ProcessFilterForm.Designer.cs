@@ -69,10 +69,10 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.BPCount = new System.Windows.Forms.ToolStripStatusLabel();
+            this.NEElementsCount = new System.Windows.Forms.ToolStripStatusLabel();
             this.OperationsCount = new System.Windows.Forms.ToolStripStatusLabel();
             this.ScenariosCount = new System.Windows.Forms.ToolStripStatusLabel();
             this.CommandsCount = new System.Windows.Forms.ToolStripStatusLabel();
-            this.NEElementsCount = new System.Windows.Forms.ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridProcessesResults)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -226,7 +226,7 @@
             this.buttonFilter.Name = "buttonFilter";
             this.buttonFilter.Size = new System.Drawing.Size(75, 23);
             this.buttonFilter.TabIndex = 13;
-            this.buttonFilter.Text = "Filter";
+            this.buttonFilter.Text = "Get";
             this.buttonFilter.UseVisualStyleBackColor = true;
             this.buttonFilter.Click += new System.EventHandler(this.buttonFilterClick);
             // 
@@ -414,9 +414,9 @@
             // 
             this.ButtonGenerateSC.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.ButtonGenerateSC.Enabled = false;
-            this.ButtonGenerateSC.Location = new System.Drawing.Point(785, 261);
+            this.ButtonGenerateSC.Location = new System.Drawing.Point(711, 217);
             this.ButtonGenerateSC.Name = "ButtonGenerateSC";
-            this.ButtonGenerateSC.Size = new System.Drawing.Size(83, 23);
+            this.ButtonGenerateSC.Size = new System.Drawing.Size(79, 23);
             this.ButtonGenerateSC.TabIndex = 26;
             this.ButtonGenerateSC.Text = "Generate SC";
             this.ButtonGenerateSC.UseVisualStyleBackColor = true;
@@ -540,6 +540,12 @@
             this.BPCount.Size = new System.Drawing.Size(61, 17);
             this.BPCount.Text = "Processes:";
             // 
+            // NEElementsCount
+            // 
+            this.NEElementsCount.Name = "NEElementsCount";
+            this.NEElementsCount.Size = new System.Drawing.Size(30, 17);
+            this.NEElementsCount.Text = "NEs:";
+            // 
             // OperationsCount
             // 
             this.OperationsCount.Name = "OperationsCount";
@@ -557,12 +563,6 @@
             this.CommandsCount.Name = "CommandsCount";
             this.CommandsCount.Size = new System.Drawing.Size(72, 17);
             this.CommandsCount.Text = "Commands:";
-            // 
-            // NEElementsCount
-            // 
-            this.NEElementsCount.Name = "NEElementsCount";
-            this.NEElementsCount.Size = new System.Drawing.Size(30, 17);
-            this.NEElementsCount.Text = "NEs:";
             // 
             // ProcessFilterForm
             // 
