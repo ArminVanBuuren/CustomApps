@@ -422,10 +422,18 @@ namespace ProcessFilter
                                                      {
                                                          _filterProgress = 8;
                                                          dataGridProcessesResults.AssignListToDataGrid(filteredBPCollection, new Padding(0, 0, 15, 0));
+                                                         ProcessStatRefresh(filteredBPCollection);
+
                                                          dataGridOperationsResult.AssignListToDataGrid(filteredNetElemCollection.AllOperations, new Padding(0, 0, 15, 0));
+                                                         NEStatRefresh(filteredNetElemCollection);
+                                                         OperationsStatRefresh(filteredNetElemCollection);
+
                                                          _filterProgress = 9;
                                                          dataGridScenariosResult.AssignListToDataGrid(filteredScenarioCollection, new Padding(0, 0, 15, 0));
+                                                         ScenariosStatRefresh(filteredScenarioCollection);
+
                                                          dataGridCommandsResult.AssignListToDataGrid(filteredCMMCollection, new Padding(0, 0, 15, 0));
+                                                         CommandsStatRefresh(filteredCMMCollection);
                                                          _filterProgress = 10;
                                                      }));
             }
@@ -597,14 +605,21 @@ namespace ProcessFilter
                 UpdateLastPath(prcsPath.Trim(' '));
                 Processes = new CollectionBusinessProcess(prcsPath.Trim(' '));
                 ProcessesComboBox.DataSource = Processes.Select(p => p.Name).ToList();
+                ProcessStatRefresh(Processes);
             }
             else
             {
                 ProcessesComboBox.DataSource = null;
+                ProcessStatRefresh(null);
             }
             ProcessesComboBox.Text = lastSettProcess;
             ProcessesComboBox.DisplayMember = lastSettProcess;
             //ProcessesComboBox.ValueMember = lastSettProcess;
+        }
+
+        void ProcessStatRefresh(CollectionBusinessProcess processes)
+        {
+            BPCount.Text = $"Processes: {(processes == null ? string.Empty : processes.Count.ToString())}";
         }
 
         private void OperationButtonOpen_Click(object sender, EventArgs e)
@@ -629,11 +644,15 @@ namespace ProcessFilter
                 NetElements = new CollectionNetworkElements(opPath.Trim(' '));
                 NetSettComboBox.DataSource = NetElements.Elements.AllNetworkElements;
                 OperationComboBox.DataSource = NetElements.Elements.AllOperationsName;
+                NEStatRefresh(NetElements.Elements);
+                OperationsStatRefresh(NetElements.Elements);
             }
             else
             {
                 NetSettComboBox.DataSource = null;
                 OperationComboBox.DataSource = null;
+                NEStatRefresh(null);
+                OperationsStatRefresh(null);
             }
 
             CheckButtonGenerateSC();
@@ -644,6 +663,16 @@ namespace ProcessFilter
             OperationComboBox.Text = lastSettOper;
             OperationComboBox.DisplayMember = lastSettOper;
             //OperationComboBox.ValueMember = lastSettOper;
+        }
+
+        void NEStatRefresh(NetworkElementCollection netElems)
+        {
+            NEElementsCount.Text = $"NEs: {(netElems == null ? string.Empty : netElems.AllNetworkElements.Count.ToString())}";
+        }
+
+        void OperationsStatRefresh(NetworkElementCollection netElems)
+        {
+            OperationsCount.Text = $"Operations: {(netElems == null ? string.Empty : netElems.AllOperationsName.Count.ToString())}";
         }
 
         private void ScenariosButtonOpen_Click(object sender, EventArgs e)
@@ -662,12 +691,17 @@ namespace ProcessFilter
             {
                 UpdateLastPath(scoPath.Trim(' '));
                 Scenarios = new CollectionScenarios(scoPath.Trim(' '));
-                SenariosStat.Text = $"Scenarios:{Scenarios.Count}";
+                ScenariosStatRefresh(Scenarios);
             }
             else
             {
-                SenariosStat.Text = @"Scenarios:";
+                ScenariosStatRefresh(null);
             }
+        }
+
+        void ScenariosStatRefresh(CollectionScenarios scenarios)
+        {
+            ScenariosCount.Text = $"Scenarios: {(scenarios == null ? string.Empty : scenarios.Count.ToString())}";
         }
 
         private void CommnadsButtonOpen_Click(object sender, EventArgs e)
@@ -686,12 +720,17 @@ namespace ProcessFilter
             {
                 UpdateLastPath(cmmPath.Trim(' '));
                 Commands = new CollectionCommands(cmmPath.Trim(' '));
-                CommandsStat.Text = $"Commands:{Commands.Count}";
+                CommandsStatRefresh(Commands);
             }
             else
             {
-                CommandsStat.Text = @"Commands:";
+                CommandsStatRefresh(null);
             }
+        }
+
+        void CommandsStatRefresh(CollectionCommands commands)
+        {
+            CommandsCount.Text = $"Commands: {(commands == null ? string.Empty : commands.Count.ToString())}";
         }
 
         void CheckButtonGenerateSC()

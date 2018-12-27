@@ -26,7 +26,7 @@ namespace ProcessFilter.SPA
 
     public class NetworkElementCollection : List<NetworkElement>
     {
-        public List<string> AllNetworkElements => this.Select(p => p.Name).ToList();
+        public List<string> AllNetworkElements => this.Where(x => x.Operations.Count > 0).Select(p => p.Name).ToList();
 
         public List<string> AllOperationsName
         {

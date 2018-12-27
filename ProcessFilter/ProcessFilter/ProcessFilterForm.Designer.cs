@@ -66,9 +66,13 @@
             this.label3 = new System.Windows.Forms.Label();
             this.CommandsTextBox = new System.Windows.Forms.TextBox();
             this.progressBar = new System.Windows.Forms.ProgressBar();
-            this.SenariosStat = new System.Windows.Forms.Label();
-            this.CommandsStat = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.BPCount = new System.Windows.Forms.ToolStripStatusLabel();
+            this.OperationsCount = new System.Windows.Forms.ToolStripStatusLabel();
+            this.ScenariosCount = new System.Windows.Forms.ToolStripStatusLabel();
+            this.CommandsCount = new System.Windows.Forms.ToolStripStatusLabel();
+            this.NEElementsCount = new System.Windows.Forms.ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridProcessesResults)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -80,6 +84,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridCommandsResult)).BeginInit();
             this.GenerateSC.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // ProcessesTextBox
@@ -157,7 +162,7 @@
             this.dataGridProcessesResults.Name = "dataGridProcessesResults";
             this.dataGridProcessesResults.ReadOnly = true;
             this.dataGridProcessesResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridProcessesResults.Size = new System.Drawing.Size(794, 123);
+            this.dataGridProcessesResults.Size = new System.Drawing.Size(794, 245);
             this.dataGridProcessesResults.TabIndex = 4;
             this.dataGridProcessesResults.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridProcessesResults_CellMouseDoubleClick);
             // 
@@ -166,9 +171,9 @@
             this.OperationComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.OperationComboBox.FormattingEnabled = true;
-            this.OperationComboBox.Location = new System.Drawing.Point(415, 19);
+            this.OperationComboBox.Location = new System.Drawing.Point(456, 19);
             this.OperationComboBox.Name = "OperationComboBox";
-            this.OperationComboBox.Size = new System.Drawing.Size(280, 21);
+            this.OperationComboBox.Size = new System.Drawing.Size(320, 21);
             this.OperationComboBox.TabIndex = 10;
             // 
             // NetSettComboBox
@@ -176,7 +181,7 @@
             this.NetSettComboBox.FormattingEnabled = true;
             this.NetSettComboBox.Location = new System.Drawing.Point(102, 49);
             this.NetSettComboBox.Name = "NetSettComboBox";
-            this.NetSettComboBox.Size = new System.Drawing.Size(238, 21);
+            this.NetSettComboBox.Size = new System.Drawing.Size(280, 21);
             this.NetSettComboBox.TabIndex = 9;
             // 
             // label6
@@ -191,7 +196,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(353, 22);
+            this.label7.Location = new System.Drawing.Point(394, 22);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(56, 13);
             this.label7.TabIndex = 7;
@@ -202,7 +207,7 @@
             this.ProcessesComboBox.FormattingEnabled = true;
             this.ProcessesComboBox.Location = new System.Drawing.Point(62, 19);
             this.ProcessesComboBox.Name = "ProcessesComboBox";
-            this.ProcessesComboBox.Size = new System.Drawing.Size(280, 21);
+            this.ProcessesComboBox.Size = new System.Drawing.Size(320, 21);
             this.ProcessesComboBox.TabIndex = 12;
             // 
             // label8
@@ -217,7 +222,7 @@
             // buttonFilter
             // 
             this.buttonFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonFilter.Location = new System.Drawing.Point(620, 58);
+            this.buttonFilter.Location = new System.Drawing.Point(701, 58);
             this.buttonFilter.Name = "buttonFilter";
             this.buttonFilter.Size = new System.Drawing.Size(75, 23);
             this.buttonFilter.TabIndex = 13;
@@ -238,7 +243,7 @@
             this.tabControl1.Location = new System.Drawing.Point(3, 211);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(802, 149);
+            this.tabControl1.Size = new System.Drawing.Size(802, 271);
             this.tabControl1.TabIndex = 14;
             // 
             // tabPage1
@@ -247,7 +252,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(794, 123);
+            this.tabPage1.Size = new System.Drawing.Size(794, 245);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Processes";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -258,7 +263,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(874, 174);
+            this.tabPage2.Size = new System.Drawing.Size(794, 245);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Operations";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -277,7 +282,7 @@
             this.dataGridOperationsResult.Name = "dataGridOperationsResult";
             this.dataGridOperationsResult.ReadOnly = true;
             this.dataGridOperationsResult.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridOperationsResult.Size = new System.Drawing.Size(874, 174);
+            this.dataGridOperationsResult.Size = new System.Drawing.Size(794, 245);
             this.dataGridOperationsResult.TabIndex = 0;
             this.dataGridOperationsResult.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridOperationsResult_CellDoubleClick);
             // 
@@ -286,7 +291,7 @@
             this.tabPage3.Controls.Add(this.dataGridScenariosResult);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(874, 174);
+            this.tabPage3.Size = new System.Drawing.Size(794, 245);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Scenarios";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -305,7 +310,7 @@
             this.dataGridScenariosResult.Name = "dataGridScenariosResult";
             this.dataGridScenariosResult.ReadOnly = true;
             this.dataGridScenariosResult.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridScenariosResult.Size = new System.Drawing.Size(874, 174);
+            this.dataGridScenariosResult.Size = new System.Drawing.Size(794, 245);
             this.dataGridScenariosResult.TabIndex = 5;
             this.dataGridScenariosResult.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridScenariosResult_CellDoubleClick);
             // 
@@ -314,7 +319,7 @@
             this.tabPage4.Controls.Add(this.dataGridCommandsResult);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(874, 174);
+            this.tabPage4.Size = new System.Drawing.Size(794, 245);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Commands";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -333,7 +338,7 @@
             this.dataGridCommandsResult.Name = "dataGridCommandsResult";
             this.dataGridCommandsResult.ReadOnly = true;
             this.dataGridCommandsResult.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridCommandsResult.Size = new System.Drawing.Size(874, 174);
+            this.dataGridCommandsResult.Size = new System.Drawing.Size(794, 245);
             this.dataGridCommandsResult.TabIndex = 1;
             this.dataGridCommandsResult.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridCommandsResult_CellMouseDoubleClick);
             // 
@@ -349,16 +354,16 @@
             this.GenerateSC.Controls.Add(this.OpenSCXlsx);
             this.GenerateSC.Location = new System.Drawing.Point(4, 22);
             this.GenerateSC.Name = "GenerateSC";
-            this.GenerateSC.Size = new System.Drawing.Size(874, 174);
+            this.GenerateSC.Size = new System.Drawing.Size(794, 245);
             this.GenerateSC.TabIndex = 4;
             this.GenerateSC.Text = "Generate SC";
             // 
             // RootSCExportPathButton
             // 
             this.RootSCExportPathButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.RootSCExportPathButton.Location = new System.Drawing.Point(785, 12);
+            this.RootSCExportPathButton.Location = new System.Drawing.Point(717, 12);
             this.RootSCExportPathButton.Name = "RootSCExportPathButton";
-            this.RootSCExportPathButton.Size = new System.Drawing.Size(83, 23);
+            this.RootSCExportPathButton.Size = new System.Drawing.Size(73, 23);
             this.RootSCExportPathButton.TabIndex = 30;
             this.RootSCExportPathButton.Text = "Root";
             this.RootSCExportPathButton.UseVisualStyleBackColor = true;
@@ -380,16 +385,16 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ExportSCPath.Location = new System.Drawing.Point(82, 14);
             this.ExportSCPath.Name = "ExportSCPath";
-            this.ExportSCPath.Size = new System.Drawing.Size(698, 20);
+            this.ExportSCPath.Size = new System.Drawing.Size(627, 20);
             this.ExportSCPath.TabIndex = 28;
             this.ExportSCPath.TextChanged += new System.EventHandler(this.ExportSCPath_TextChanged);
             // 
             // OpenSevExelButton
             // 
             this.OpenSevExelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.OpenSevExelButton.Location = new System.Drawing.Point(785, 41);
+            this.OpenSevExelButton.Location = new System.Drawing.Point(717, 41);
             this.OpenSevExelButton.Name = "OpenSevExelButton";
-            this.OpenSevExelButton.Size = new System.Drawing.Size(83, 23);
+            this.OpenSevExelButton.Size = new System.Drawing.Size(73, 23);
             this.OpenSevExelButton.TabIndex = 27;
             this.OpenSevExelButton.Text = "Open xlsx";
             this.OpenSevExelButton.UseVisualStyleBackColor = true;
@@ -409,7 +414,7 @@
             // 
             this.ButtonGenerateSC.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.ButtonGenerateSC.Enabled = false;
-            this.ButtonGenerateSC.Location = new System.Drawing.Point(785, 139);
+            this.ButtonGenerateSC.Location = new System.Drawing.Point(785, 261);
             this.ButtonGenerateSC.Name = "ButtonGenerateSC";
             this.ButtonGenerateSC.Size = new System.Drawing.Size(83, 23);
             this.ButtonGenerateSC.TabIndex = 26;
@@ -423,7 +428,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.OpenSCXlsx.Location = new System.Drawing.Point(82, 43);
             this.OpenSCXlsx.Name = "OpenSCXlsx";
-            this.OpenSCXlsx.Size = new System.Drawing.Size(698, 20);
+            this.OpenSCXlsx.Size = new System.Drawing.Size(627, 20);
             this.OpenSCXlsx.TabIndex = 0;
             this.OpenSCXlsx.TextChanged += new System.EventHandler(this.OpenSCXlsx_TextChanged);
             // 
@@ -493,29 +498,11 @@
             // 
             this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar.Location = new System.Drawing.Point(7, 350);
+            this.progressBar.Location = new System.Drawing.Point(7, 468);
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(794, 10);
             this.progressBar.TabIndex = 23;
             this.progressBar.Visible = false;
-            // 
-            // SenariosStat
-            // 
-            this.SenariosStat.AutoSize = true;
-            this.SenariosStat.Location = new System.Drawing.Point(722, 128);
-            this.SenariosStat.Name = "SenariosStat";
-            this.SenariosStat.Size = new System.Drawing.Size(57, 13);
-            this.SenariosStat.TabIndex = 24;
-            this.SenariosStat.Text = "Scenarios:";
-            // 
-            // CommandsStat
-            // 
-            this.CommandsStat.AutoSize = true;
-            this.CommandsStat.Location = new System.Drawing.Point(722, 145);
-            this.CommandsStat.Name = "CommandsStat";
-            this.CommandsStat.Size = new System.Drawing.Size(62, 13);
-            this.CommandsStat.TabIndex = 25;
-            this.CommandsStat.Text = "Commands:";
             // 
             // groupBox1
             // 
@@ -528,21 +515,64 @@
             this.groupBox1.Controls.Add(this.buttonFilter);
             this.groupBox1.Location = new System.Drawing.Point(15, 118);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(701, 87);
+            this.groupBox1.Size = new System.Drawing.Size(782, 87);
             this.groupBox1.TabIndex = 26;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Filter Settings";
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.BPCount,
+            this.NEElementsCount,
+            this.OperationsCount,
+            this.ScenariosCount,
+            this.CommandsCount});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 485);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(807, 22);
+            this.statusStrip1.TabIndex = 27;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // BPCount
+            // 
+            this.BPCount.Name = "BPCount";
+            this.BPCount.Size = new System.Drawing.Size(61, 17);
+            this.BPCount.Text = "Processes:";
+            // 
+            // OperationsCount
+            // 
+            this.OperationsCount.Name = "OperationsCount";
+            this.OperationsCount.Size = new System.Drawing.Size(68, 17);
+            this.OperationsCount.Text = "Operations:";
+            // 
+            // ScenariosCount
+            // 
+            this.ScenariosCount.Name = "ScenariosCount";
+            this.ScenariosCount.Size = new System.Drawing.Size(60, 17);
+            this.ScenariosCount.Text = "Scenarios:";
+            // 
+            // CommandsCount
+            // 
+            this.CommandsCount.Name = "CommandsCount";
+            this.CommandsCount.Size = new System.Drawing.Size(72, 17);
+            this.CommandsCount.Text = "Commands:";
+            // 
+            // NEElementsCount
+            // 
+            this.NEElementsCount.Name = "NEElementsCount";
+            this.NEElementsCount.Size = new System.Drawing.Size(30, 17);
+            this.NEElementsCount.Text = "NEs:";
             // 
             // ProcessFilterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(807, 361);
+            this.ClientSize = new System.Drawing.Size(807, 507);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.CommandsStat);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.CommnadsButtonOpen);
-            this.Controls.Add(this.SenariosStat);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.CommandsTextBox);
             this.Controls.Add(this.ScenariosButtonOpen);
@@ -572,6 +602,8 @@
             this.GenerateSC.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -607,8 +639,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox CommandsTextBox;
         private System.Windows.Forms.ProgressBar progressBar;
-        private System.Windows.Forms.Label SenariosStat;
-        private System.Windows.Forms.Label CommandsStat;
         private System.Windows.Forms.Button ButtonGenerateSC;
         private System.Windows.Forms.TabPage GenerateSC;
         private System.Windows.Forms.Button OpenSevExelButton;
@@ -618,6 +648,12 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox ExportSCPath;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel BPCount;
+        private System.Windows.Forms.ToolStripStatusLabel OperationsCount;
+        private System.Windows.Forms.ToolStripStatusLabel ScenariosCount;
+        private System.Windows.Forms.ToolStripStatusLabel CommandsCount;
+        private System.Windows.Forms.ToolStripStatusLabel NEElementsCount;
     }
 }
 
