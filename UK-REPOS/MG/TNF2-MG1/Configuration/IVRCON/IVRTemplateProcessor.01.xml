@@ -1,0 +1,2591 @@
+<templates connector="IVR">
+	#include "C:\FORIS\Messaging Gateway\config\get_bms_counters\ivr.xml"
+	#include "C:\FORIS\Messaging Gateway\config\BundleEvents\ivr.xml"
+	#include "C:\FORIS\Messaging Gateway\config\FavouriteCountry\ivr.xml"
+	#include "C:\FORIS\Messaging Gateway\config\PoPTemplates\ivr.xml"
+	#include "C:\FORIS\Messaging Gateway\config\GetCountersFromStateIn\ivr.xml"
+	#include "C:\FORIS\Messaging Gateway\config\GuaranteedPayment\IVR.xml"
+	#include "C:\FORIS\Messaging Gateway\config\ServiceHandler\IVR.xml"
+
+	<!--macros>
+		<define name="_BMS_Accum_Id" value="1" />
+    <define name="PRP_REGISTERED" value="3" />
+	</macros-->
+
+	<template procedureName="DB_Counter_2010" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.DB_Counter_2010">
+					<Attribute name="cust" type="STRING" value="${customer}" />
+					<Attribute name="gift1" type="STRING" value="${giftcode1}" /> 
+					<Attribute name="gift2" type="STRING" value="${giftcode2}" /> 
+					<Attribute name="gift3" type="STRING" value="${giftcode3}" /> 
+					<Attribute name="gift4" type="STRING" value="${giftcode4}" /> 
+					<Attribute name="gift5" type="STRING" value="${giftcode5}" /> 
+					<Attribute name="p_dbres" type="STRING" />
+					<Attribute name="value1_res" type="STRING" />
+					<Attribute name="value2_res" type="STRING" />
+					<Attribute name="value3_res" type="STRING" />
+					<Attribute name="value4_res" type="STRING" />
+					<Attribute name="value5_res" type="STRING" />
+					<Attribute name="value6_res" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbres}'='',-1,number('${p_dbres}'))}" />
+			<set item="param:value1_result" value="${value1_res}" />
+			<set item="param:value2_result" value="${value2_res}" />
+			<set item="param:value3_result" value="${value3_res}" />
+			<set item="param:value4_result" value="${value4_res}" />
+			<set item="param:value5_result" value="${value5_res}" />
+			<set item="param:value6_result" value="${value6_res}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+			<param name="giftcode1" />
+			<param name="giftcode2" />
+			<param name="giftcode3" />
+			<param name="giftcode4" />
+			<param name="giftcode5" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="" />
+			<param name="value1_result"   type="1" value="" />
+			<param name="value2_result"   type="1" value="" />
+			<param name="value3_result"   type="1" value="" />
+			<param name="value4_result"   type="1" value="" />
+			<param name="value5_result"   type="1" value="" />
+			<param name="value6_result"   type="1" value="" />
+		</output>
+	</template>
+
+
+	<template procedureName="GET_FF_CHILD" handler="DBCON_01" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.ff_child">
+					<Attribute name="p_msisdn1" type="STRING" value="${customer}" />
+					<Attribute name="p_msisdn2" type="STRING" value="${msisdn}" />
+					<Attribute name="p_dbresult" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+			<param name="msisdn" />
+
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_BalanceChild" persistent="false">
+
+		<receiveTemplate>
+			<Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}" subject="balance" />
+			</Message>
+		</receiveTemplate>
+		<input>
+			<param name="Customer"/>
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="balanceintpartdotpart"     type="3" value="0"/>
+			<param name="balance_expiration_date"         type="1" value="0"/>
+			<!--param name="accumulator"               type="3" value="0" />   
+   <param name="DisconnectionTime"         type="3" value="0"/>
+   <param name="recommendedprepayment"     type="3" value="0"/-->
+
+		</output>
+	</template>	
+
+	<template procedureName="INER_proc" inerBcsm="0xC9" persistent="false">
+		<input />
+		<output spc="0x72">
+			<!-- in INER we use INParameters which should be specified with nameByte -->         
+			<param name="SubId" nameByte="34" type="3" value="2" />
+			<param name="Subscriber" nameByte="5" type="1" value="" />
+			<param name="SubscriberTime" nameByte="35" type="1" value="" />
+			<param name="QueueID" nameByte="7" type="8" value="1" />
+			<param name="QType" nameByte="36" type="2" value="2" />
+			<param name="OperatorPhone" nameByte="6" type="1" value="" />
+			<!-- this CallProperties has special type 133 -->
+			<param name="CallProperties" type="133" value="256" />
+		</output>
+	</template>
+
+
+	<template procedureName="DB_BMS_ChangeTP1" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}">
+					<Service id="${service}" action="${action}" class="${class}" createrequest="1"/>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<input>
+			<param name="customer" />
+			<param name="service" />
+			<param name="class" />
+			<param name="action" />
+		</input>
+		<output>
+			<param name="dbresult" type="3" value="0" /> 
+			<param name="Subscription" type="2" value="0" />
+			<param name="Status" type="2" value="0" />
+			<param name="ISCharged" type="2" value="0" />
+		</output>
+	</template>
+
+	<template procedureName="DB_BMS_ChangeTP2" handler="DBCON_22" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="accounts.balance_correction">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_correction_amount" type="STRING" value="-${costbal}" />
+					<Attribute name="p_request_date" type="DATETIME" value="${time}" />
+					<Attribute name="p_request_reason" type="STRING" />
+					<Attribute name="p_channel_code" type="STRING" />
+					<Attribute name="p_external_code" type="STRING" />
+					<Attribute name="p_user_id_of_change" type="STRING" />
+					<Attribute name="p_new_balance" type="STRING" />
+					<Attribute name="p_handle_tran" type="STRING" />
+					<Attribute name="p_result" type="STRING" />
+					<Attribute name="p_err_msg" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="${p_result}" />
+		</deliveryTemplate>	  
+		<input>
+			<param name="customer" />
+			<param name="costbal" />
+			<param name="time" />
+		</input>
+		<output>
+			<param name="dbresult" type="3" value="0" /> 
+		</output>
+	</template>
+
+
+
+	<template procedureName="UMCGET_PERCENT" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_PERCENT">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_percent" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="${p_dbresult}" />
+			<set item="param:percent_result" value="${p_percent}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="percent_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+
+	<template procedureName="BMS_GetCounter" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_BONUS">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_bonus_result" type="STRING" />
+					<Attribute name="p_tariffplan_type" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:bonus_result" value="${p_bonus_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="bonus_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+
+
+	<template procedureName="DB_ACCOUNT_ENDDATE" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE2" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_2">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+
+	<template procedureName="DB_ACCOUNT_ENDDATE3" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_3">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE4" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_4">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+
+	<template procedureName="DB_ACCOUNT_ENDDATE5" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_5">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE6" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_6">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+
+	<template procedureName="DB_ACCOUNT_ENDDATE7" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_7">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE8" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_8">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE9" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_9">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE10" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_10">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE11" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_11">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE12" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_12">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+
+	<template procedureName="DB_ACCOUNT_ENDDATE13" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_13">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE14" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_14">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE15" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_15">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE16" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_16">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE17" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_17">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE18" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_18">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE19" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_19">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE21" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_21">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE22" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_22">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE23" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_23">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE24" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_24">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE25" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_25">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE26" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_26">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE27" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_27">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE30" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_30">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE31" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_31">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE32" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_32">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE33" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_33">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE34" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_34">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE35" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_35">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE36" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_36">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	
+		<template procedureName="DB_ACCOUNT_ENDDATE37" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_37">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+	
+	<template procedureName="DB_ACCOUNT_ENDDATE38" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_38">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE39" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_39">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE40" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_40">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="DB_ACCOUNT_ENDDATE41" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_41">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+  
+  	<template procedureName="DB_ACCOUNT_ENDDATE42" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_42">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+ 
+  	<template procedureName="DB_ACCOUNT_ENDDATE43" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_43">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+  	<template procedureName="DB_ACCOUNT_ENDDATE44" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_44">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+  	<template procedureName="DB_ACCOUNT_ENDDATE45" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.UMC_GET_ENDDATE_45">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+	
+	<template procedureName="GET_INFO_VM" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.GET_INFO_VM">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_date_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="GET_INFO_TP" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.GET_INFO_TP">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="p_result" type="STRING" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:tariffplan" value="${p_result}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"  type="3" value="" />
+			<param name="tariffplan"   type="1" value="" />
+		</output>	
+	</template>
+
+	<!--template procedureName="DB_ACCOUNT_ENDDATE" handler="DBCON_21" persistent="false">
+  <receiveTemplate>
+    <Message initiator="ussd" id="${guid}" session_id="@{newGuid}">
+      <Item procedureName="MG.UMC_GET_ENDDATE">
+				<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+				<Attribute name="p_service_id" type="STRING" value="${service_id}" />
+				<Attribute name="p_dbresult" type="STRING" />
+				<Attribute name="p_date_result" type="STRING" />
+      </Item>
+    </Message>
+  </receiveTemplate>
+	<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:date_result" value="${p_date_result}" />
+	</deliveryTemplate>
+  <input>
+			<param name="customer" />
+			<param name="service_id" />
+  </input>
+  <output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="date_result"   type="1" value="-1" />
+  </output>	
+</template> -->
+
+
+
+
+	<!--  Здесь будет нужна доработка 
+	<template procedureName="BMS_GetCounter">
+        <receiveTemplate>
+			<Message type="retrievecustomerdata"  initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}" subject="balance" >
+					<Attribute name="requestcountertype" value="???" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="${dbresult}" />
+			<set item="param:counter" value="#{if(#{count(/Message/Item/accumulators/accumulator[@id='_BMS_Accum_Id'])}>0,/Message/Item/accumulators/accumulator[@id='_BMS_Accum_Id']/@val,0)}" />
+		</deliveryTemplate>
+	    <input>
+			<param name="customer" />
+	    </input>
+	    <output>
+			<param name="dbresult"  type="3" value="-1" />
+			<param name="counter"   type="3" value="-1" />
+	    </output>	
+	</template>
+-->
+	<!--template procedureName="BMS_OrderGift">
+        <receiveTemplate>
+			<Message type="orderbonusgiftrequest" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}">
+					<Attribute name="giftcode" value="${giftcode}" />
+				</Item>
+			</Message>
+        </receiveTemplate>
+		<deliveryTemplate />
+	    <input>
+			<param name="customer" />
+			<param name="giftcode" />
+	    </input>
+	    <output>
+			<param name="dbresult"        type="3"  value="-1" />
+			<param name="giftprovisionid" type="1"  value="" />
+			<param name="ordercost"       type="3"  value="-1" />
+			<param name="newbalance"      type="3"  value="-1" />
+	    </output>
+	</template-->
+
+	<template procedureName="CRM_MoneyTransfer_MmatoAma" sessionLifetime="15" sessionStorage="Memory">
+		<receiveTemplate>
+			<Message type="crmmoney" initiator="ivrcon"  id="${guid}" session_id="@{setSessionId(@{newGuid})}"> 
+				<Item customer="${Customer}" />				                  
+				@{store(sCustomer,${Customer})}         
+			</Message>
+		</receiveTemplate>  
+		<deliveryTemplate conditionEx="#{${dbresult}=0}" call="CRM_MoneyTransfer_MmatoAmaOK">
+			<!--set item="Content" value="dbresult=${dbresult} calcmethod=${calcmethod} call(CRM_MoneyTransfer_MmatoAmaOK);"/-->               
+			<!--set item="customer" value="123" /-->
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:cust" value="${Customer}" />
+			<set conditionEx="0@{freeSession}" /> 
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="#{${dbresult}!=0}" call="CRM_MoneyTransfer_MmatoAmaNotOK">
+			<!--set item="Content" value="dbresult=${dbresult} calcmethod=${calcmethod} call(CRM_MoneyTransfer_MmatoAmaOK);"/-->               
+			<!--set item="customer" value="123" /-->
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:cust" value="${Customer}" />
+			<set conditionEx="0@{freeSession}" /> 
+		</deliveryTemplate>
+		<input>
+			<param name="Customer" />
+		</input>
+		<output>
+			<param name="dbresult" type="1"  value="" /> 
+			<param name="cust" type="1"  value="" />  
+		</output>
+	</template>
+
+	<template procedureName="CRM_MoneyTransfer_MmatoAmaNotOK" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="deliveryrequest" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}">
+					<Content encoding="7bit" charset="iso-8859-2">"test"</Content>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<input>
+			<param name="cust" type="1"/>
+			<param name="Customer" type="1"/>      
+		</input>
+		<output>
+			<param name="dbresult"        type="3"  value="100" /> 
+		</output>
+	</template>
+
+
+
+	<template procedureName="CRM_MoneyTransfer_MmatoAmaOK" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="${session_id}">
+				<Item customer="${Customer}">
+					<Service id="AMA10" action="2" class="1" createrequest="1" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<input>
+			<param name="cust" type="1"/>
+			<param name="Customer" type="1"/>      
+		</input>
+		<output>
+			<param name="dbresult"        type="1"  value="${dbresult}" /> 
+		</output>
+	</template>
+
+
+	<template procedureName="CRM_action_ivr" sessionLifetime="15" sessionStorage="Memory">
+		<receiveTemplate>
+			<Message type="ivrtest${CRM_action_id}" initiator="ivrcon" id="${guid}" session_id="@{setSessionId(@{newGuid})}"> 
+				<Item customer="${Customer}" />				                  
+				@{store(sCustomer,${Customer})}         
+			</Message>
+		</receiveTemplate>
+		<!--dlia uslug po service_code-->  
+		<!--deliveryTemplate>
+      <set item="param:dbresult" value="#{if('${p_dbresult}'='',10,number('${p_dbresult}'))}" />
+    </deliveryTemplate-->
+		<!--deliveryTemplate conditionEx="#{${CRM_action_id}!='001'}">
+      <set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+      <set conditionEx="0@{freeSession}" /> 
+    </deliveryTemplate-->
+		<input>
+			<param name="Customer" />
+			<param name="CRM_action_id" />
+		</input>
+		<output>
+			<param name="dbresult" type="1"  value="-1" /> 
+		</output>
+	</template>
+
+
+	<!--template procedureName="BMS_OrderGift" sessionLifetime="15" sessionStorage="Memory">
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" initiator="ivrcon" id="@{setMessageId(@{newGuid})}" session_id="@{setSessionId(@{newGuid})}">
+        <Item customer="${customer}"  subject="category" />
+        @{store(sGiftcode,${giftcode})} 				                  
+        @{store(sCustomer,${customer})}         
+      </Message>
+    </receiveTemplate>      
+    <deliveryTemplate  conditionEx="#{document('config\Common\bmsgifts.xml')/gifts/gift[@needPrpReg='true']/@code='${sGiftcode}'}" call="BMS_OrderGiftTest">
+      <set item="param:ordercost" value="${sCustomer}" /> 
+      <set item="param:giftprovisionid" value="${sGiftcode}" />    
+    </deliveryTemplate>
+   <deliveryTemplate conditionEx="#{${dbresult}=0}" call="BMS_OrderGiftOK">
+      <set item="param:ordercost" value="${sCustomer}" /> 
+      <set item="param:giftprovisionid" value="${sGiftcode}" />
+    </deliveryTemplate> 
+    <input>
+      <param name="customer" />
+      <param name="giftcode" />
+    </input>
+	    <output>
+		   <param name="dbresult"        type="3"  value="-1" />
+			 <param name="giftprovisionid" type="1"  value="" />
+			 <param name="ordercost"       type="1"  value="" />
+       <param name="newbalance"      type="3"  value="-1" />
+      param name="customer"      type="3"  value="" / 
+      param name="giftcode"      type="1"  value="" /               	
+			</output>
+  </template>
+
+  <template procedureName="BMS_OrderGiftTest" handler="DBCON_21" persistent="false">
+    <receiveTemplate>
+    <Message initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+          <Item procedureName="MG.NAME_jj">
+            <Attribute name="p_msisdn" type="STRING" value="${ordercost}" />
+            <Attribute name="p_code" type="STRING" value="${giftprovisionid}" />            
+            <Attribute name="p_result" type="STRING" />
+            <Attribute name="o_msisdn" type="STRING" />
+            <Attribute name="o_code" type="STRING" />                        
+          </Item>
+        </Message>
+      </receiveTemplate>
+	<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_result}'='',-1,number('${p_result}'))}" />
+	</deliveryTemplate>
+  <input>
+      <param name="ordercost" />
+      <param name="giftprovisionid" />
+  </input>
+  <output>
+			<param name="dbresult"  type="3" value="-1" />
+  </output>	
+  </template>
+
+
+<template procedureName="BMS_OrderGiftOK" > 
+    <receiveTemplate>
+      <Message type="orderbonusgiftrequest" initiator="ivrcon" id="${guid}" session_id="${SessionId}">
+        <Item customer="${ordercost}">
+          <Attribute name="giftcode" value="${giftprovisionid}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <input>    
+		   <param name="dbresult" />
+			 <param name="giftprovisionid" />
+			 <param name="ordercost" />
+			 <param name="newbalance" />
+           				
+    </input>
+	    <output>
+			<param name="dbresult"        type="3"  value="-1" />
+			<param name="giftprovisionid" type="1"  value="" />
+			<param name="ordercost"       type="3"  value="-1" />
+			<param name="newbalance"      type="3"  value="-1" />
+	    </output>
+  </template>
+  
+   
+   <template procedureName="BMS_OrderGiftFALCE">
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceinterrogation" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${ordercost}">
+          <Service id="${giftprovisionid}" action="interrogation" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+		<set item="param:dbresult" type="3"  value="-1" />
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" connector="SMSCON_01">
+    </deliveryTemplate>
+	<input>
+		  <param name="dbresult" />
+			<param name="giftprovisionid" />
+			<param name="ordercost" />
+			<param name="newbalance" />
+			
+    </input>
+    <output>
+ 			<param name="dbresult"        type="3"  value="-1" />
+			<param name="giftprovisionid" type="1"  value="" />
+			<param name="ordercost"       type="3"  value="-1" />
+			<param name="newbalance"      type="3"  value="-1" />
+    </output>
+  </template-->
+
+	<template procedureName="BMS_OrderGiftPRT" handler="DBCON_21" persistent="false">
+		<receiveTemplate>
+			<Message initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="MG.NAME_jj">
+					<Attribute name="p_msisdn" type="STRING" value="${customer}" />
+					<Attribute name="p_code" type="STRING" value="${giftcode}" />            
+					<Attribute name="p_dbresult" type="STRING" />
+					<Attribute name="o_msisdn" type="STRING" />
+					<Attribute name="o_code" type="STRING" />                        
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if('${p_dbresult}'='',-1,number('${p_dbresult}'))}" />
+			<set item="param:giftprovisionid" value="${o_code}" />
+			<set item="param:ordercost" value="${p_dbresult}" />
+			<set item="param:newbalance" value="${p_dbresult}" />
+		</deliveryTemplate>      
+		<input>
+			<param name="customer" />
+			<param name="giftcode" />
+		</input>
+		<output>
+			<param name="dbresult"        type="3"  value="" />
+			<param name="giftprovisionid" type="1"  value="" />
+			<param name="ordercost"       type="3"  value="-1" />
+			<param name="newbalance"      type="3"  value="-1" />
+		</output>	
+	</template>
+
+	<template procedureName="BMS_OrderGift" >
+		<receiveTemplate>
+			<Message type="orderbonusgiftrequest" initiator="ivrcon" id="${guid}" session_id="${SessionId}">
+				<Item customer="${customer}">
+					<Attribute name="giftcode" value="${giftcode}" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<input>    
+			<param name="customer" />
+			<param name="giftcode" />         				
+		</input>
+		<output>
+			<param name="dbresult"        type="3"  value="-1" />
+			<param name="giftprovisionid" type="1"  value="" />
+			<param name="ordercost"       type="3"  value="-1" />
+			<param name="newbalance"      type="3"  value="-1" />
+		</output>
+	</template>
+
+
+	<template procedureName="BMS_StartingDate" persistent="false">
+		<receiveTemplate>
+			<Message type="getstartingdataformsisdnrequest" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}">
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate />
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult"        type="3"  value="-1" />
+			<param name="startingdate"    type="1"  value="" />
+		</output>
+	</template>
+
+	<template procedureName="BMS_GetCampaignParticipationsRequest" persistent="false">
+		<receiveTemplate>
+			<Message type="getbonuscampaignparticipationsrequest" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}">
+					<Attribute name="campaignid" value="${campaignid}" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="#{if(count(transform('config\BonusCampaigns\GetCurrentCampaign.xsl')/Current/Campaign)=0,'320114','0')}" />
+			<set item="param:startdate" value="#{transform('config\BonusCampaigns\GetCurrentCampaign.xsl')/Current/Campaign/@startdate}" />
+			<set item="param:enddate" value="#{transform('config\BonusCampaigns\GetCurrentCampaign.xsl')/Current/Campaign/@enddate}" />
+			<set item="param:additionalinfo" value="#{transform('config\BonusCampaigns\GetCurrentCampaign.xsl')/Current/Campaign/@additionalinfo}" />
+			<set item="param:campaignname" value="#{transform('config\BonusCampaigns\GetCurrentCampaign.xsl')/Current/Campaign/@campaignname}" />
+			<set item="param:campaignid" value="#{transform('config\BonusCampaigns\GetCurrentCampaign.xsl')/Current/Campaign/@campaign_id}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+			<param name="campaignid" />
+		</input>
+		<output>
+			<param name="dbresult"          type="3"  value="-1" />
+			<param name="campaignid"        type="1"  value="" />
+			<param name="campaignname"      type="1"  value="" />
+			<param name="startdate"         type="1"  value="" />
+			<param name="enddate"           type="1"  value="" />
+			<param name="additionalinfo"    type="1"  value="" />
+		</output>
+	</template>
+
+	<template procedureName="DB_LangSetting" persistent="false"> 
+		<receiveTemplate>
+			<Message type="setprofile" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}" >
+					<Attribute name="communicationlanguage" value="${communicationlanguage}"/>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+			<param name="communicationlanguage" />	  
+		</input>
+		<output>
+			<param name="dbresult" type="3" value="0" /> 
+		</output>
+	</template>
+
+
+	<template procedureName="DB_TORBA" persistent="false"> 
+		<receiveTemplate>
+			<Message type="setprofileqqq" initiator="ivrcon" id="${guid}" session_id="@{newGuid}" reply="mazzday">
+				<Item customer="${customer}" >
+					<Attribute name="communicationlanguage"  value="#{substring(${communicationlanguage},1,4)}.#{substring(${communicationlanguage},5,2)}.#{substring(${communicationlanguage},7,3)}"/>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+			<param name="communicationlanguage" />	  
+		</input>
+		<output>
+			<param name="dbresult" type="3" value="0" /> 
+		</output>
+	</template>
+
+
+	<template procedureName="DB_LastPeriodBill" persistent="false">
+		<receiveTemplate>
+			<Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}" subject="lastperiodbill" />
+				<Attribute name="startdate" value="${startdate}" />
+				<Attribute name="enddate" value="${enddate}" />
+			</Message>
+		</receiveTemplate>
+		<input>
+			<param name="customer" />      
+		</input>
+		<output>
+			<param name="draftintdotpart" type="3" value="0" />
+			<param name="beginday" type="1" value="" />
+			<param name="endday" type="1" value="" />
+		</output>
+	</template>
+
+	<template procedureName="DB_CustomerCategoryRetriev" persistent="false">
+		<receiveTemplate>
+			<Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}" subject="category" />
+			</Message>
+		</receiveTemplate>
+		<input>
+			<param name="customer" />      
+		</input>
+		<output>
+			<param name="customercategory" type="2" value="0" />
+			<param name="clientstatus" type="3" value="0" />
+			<param name="personalaccounttype" type="3" value="0" />
+		</output>
+	</template>
+
+	<template procedureName="DB_AverageSpendingsRetriev" persistent="false">
+		<receiveTemplate>
+			<Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}" subject="averagespendings" />
+			</Message>
+		</receiveTemplate>
+		<input>
+			<param name="customer" />      
+		</input>
+		<output>
+			<param name="speedintpartdotpart" type="3" value="0" />
+		</output>
+	</template>
+
+
+	<template procedureName="DB_FaxUpdating" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="setprofile" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}">
+					<Attribute name="faxnumber" value="${faxnumber}" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+
+		<input>
+			<param name="customer" />
+			<param name="faxnumber" />
+		</input>
+		<output>
+		</output>
+	</template>
+
+	<template procedureName="DB_FavCost" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="setprofile" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}" action="${action}">
+					<Attribute name="favouritenumber" value="${favouritenumber}" />
+					<Attribute name="index" value="${index}" />
+					<Attribute name="favouritenumbertypeid" value="${favouritenumbertypeid}" />
+					<Attribute name="createrequest" value="0" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+
+		<input>
+			<param name="customer" />
+			<param name="index" />
+			<param name="action" />
+			<param name="favouritenumber" />
+			<param name="favouritenumbertypeid" />
+		</input>
+		<output>
+			<param name="dbresult" type="3" value="0" /> 
+			<param name="favouritenumber" type="1" value="" />
+			<param name="count" type="3" value="0" />
+			<param name="
+      " type="3" value="0" />
+		</output>
+	</template>
+
+	<template procedureName="DB_FavUpdate" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="setprofile" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}" action="${action}">
+					<Attribute name="favouritenumber" value="${favouritenumber}" />
+					<Attribute name="index" value="${index}" />
+					<Attribute name="favouritenumbertypeid" value="${favouritenumbertypeid}" />
+					<Attribute name="createrequest" value="1" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+
+		<input>
+			<param name="customer" />
+			<param name="index" />
+			<param name="action" />
+			<param name="favouritenumber" />
+			<param name="favouritenumbertypeid" />
+		</input>
+		<output>
+			<param name="dbresult" type="3" value="0" /> 
+			<param name="favouritenumber" type="1" value="" />
+			<param name="count" type="3" value="0" />
+			<!--param name="chargedamount" type="3" value="0" /-->
+		</output>
+	</template>
+
+	<template procedureName="DB_CAuthentication" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="authenticationrequest" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}" pin="${password}" />
+			</Message>
+		</receiveTemplate>
+
+		<input>
+			<param name="customer" />
+			<param name="password" />
+		</input>
+		<output>
+			<param name="TariffPlan" type="3" value="0" />
+			<param name="State" type="2" value="0" />
+			<param name="regioncode" type="3" value="0" />
+		</output>
+	</template>
+
+
+	<template procedureName="DB_ProcessDate" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="internal" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}" action="${action}">
+					<Attribute name="startdate" value="${startdate}" />
+					<Attribute name="enddate" value="${enddate}" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+
+		<input>
+			<param name="customer" />
+			<param name="action" />
+			<param name="startdate" />
+			<param name="enddate" />
+		</input>
+		<output>
+			<param name="startdate" type="1" value="" />
+			<param name="enddate" type="1" value="" />
+		</output>
+	</template>
+
+	<template procedureName="DB_BalanceRetriev" persistent="false">
+		<input>
+			<param name="Customer"/>
+		</input>
+		<output>
+			<param name="balanceintpartdotpart"     type="3" value="0"/>
+			<param name="accumulator"               type="3" value="0" />   
+			<param name="DisconnectionTime"         type="3" value="0"/>
+			<param name="recommendedprepayment"     type="3" value="0"/>
+
+		</output>
+		<receiveTemplate>
+			<Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}" subject="balance" />
+			</Message>
+		</receiveTemplate>
+
+	</template>
+
+	<template procedureName="DB_KEOAuthorisation" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}">
+					<Service id="keoactivation" action="5">
+						<Attribute name="keonumber" value="${keonumber}" />
+					</Service>
+				</Item>
+			</Message>
+		</receiveTemplate>
+
+		<input>
+			<param name="customer" />
+			<param name="keonumber" />
+		</input>
+		<output>
+			<param name="allowed" type="2" value="0" />
+			<param name="amount" type="3" value="0" />
+			<!-- <param name="enddate" type="1" value="" /> -->
+		</output>
+	</template>
+
+	<template procedureName="DB_SInterrogation" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="serviceinterrogation" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}">
+					<Service id="${service}" action="interrogation" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+
+		<input>
+			<param name="customer" />
+			<param name="service" />
+		</input>
+		<output>
+			<param name="dbresult" type="3" value="0" /> 
+			<param name="Allowed" type="2" value="0" />
+			<param name="Subscription" type="2" value="0" />
+			<param name="Status" type="2" value="0" />
+			<param name="Class" type="3" value="0" />
+			<param name="ChargedAmount" type="3" value="0" />
+		</output>
+	</template>
+
+	<!--template procedureName="DB_SInterrogation"  sessionStorage="Memory" sessionLifetime="180"> 
+		<condition>
+		</condition>
+		<receiveTemplate>
+		  <Message type="serviceinterrogation" initiator="ivrcon" id="${guid}" session_id="@{setSessionId(BLOCK__${customer})}">
+			<Item customer="${customer}">
+			  <Service id="#{if(count(document('config\Common\Replace.xml')//Replace/Item[@ivr='${service}'])!=0,document('config\Common\Replace.xml')//Replace/Item[@ivr='${service}']/@crm,-1)}" action="interrogation" />
+			</Item>
+		  </Message>
+		</receiveTemplate>
+		<deliveryTemplate direction="input" conditionEx="#{'${sdbresult}'='320347' and not(contains('${scustomerblocks}','FRBLKUSER') and //Service/@id='FRBLKUSER')}"> 
+			<set item="param:dbresult" value="0" /> 
+			<set item="param:Allowed" value="0" /> 
+			<set item="param:Subscription" value="0" /> 
+			<set item="param:Status" value="0" /> 
+			<set item="param:Class" value="0" /> 
+			<set item="param:ChargedAmount" value="0" /> 
+		</deliveryTemplate>    
+		<deliveryTemplate /> 
+		<input>
+		  <param name="customer" />
+		  <param name="service" />
+		</input>
+		<output>
+		  <param name="dbresult" type="3" value="0" /> 
+		  <param name="Allowed" type="2" value="0" />
+		  <param name="Subscription" type="2" value="0" />
+		  <param name="Status" type="2" value="0" />
+		  <param name="Class" type="3" value="0" />
+		  <param name="ChargedAmount" type="3" value="0" />
+		</output>
+  </template-->
+
+
+	<template procedureName="DB_PassChange" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="setprofile" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}">
+					<Attribute name="oldpassword" value="${password}" />
+					<Attribute name="newpassword" value="${newpassword}" />
+					<Attribute name="confirmpassword" value="${confirmpassword}" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+
+		<input>
+			<param name="customer" />
+			<param name="password" />
+			<param name="newpassword" />
+			<param name="confirmpassword" />
+		</input>
+		<output>
+			<param name="newpassword" type="1" value="" />
+		</output>
+	</template>
+
+	<template procedureName="DB_SProcessing" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}">
+					<Service id="${service}" action="${action}" class="${class}" createrequest="1"/>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate conditionEx="#{${dbresult} != 0}" connector="SMSCON_01" call="ServiceOrderErrorHandler.SendProvisionErrorMessage" terminating="false" />
+		<deliveryTemplate conditionEx="#{${dbresult}=document('config\SelfDescriptiveCodes.xml')/dbresults/dbresult}" connector="SMSCON_01" call="ServiceOrderErrorHandler.SendCRMErrorMessage" terminating="false" />
+		<deliveryTemplate/>
+		<input>
+			<param name="customer" />
+			<param name="service" />
+			<param name="class" />
+			<param name="action" />
+		</input>
+		<output>
+			<param name="dbresult" type="3" value="0" /> 
+			<param name="Subscription" type="2" value="0" />
+			<param name="Status" type="2" value="0" />
+			<param name="ISCharged" type="2" value="0" />
+		</output>
+	</template>
+
+	<template procedureName="DB_HARPELUK" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}">
+					<Service id="${service}" action="${action}" class="${class}" createrequest="${createrequest}"/>
+				</Item>
+			</Message>
+		</receiveTemplate>
+
+		<input>
+			<param name="customer" />
+			<param name="service" />
+			<param name="action" />
+			<param name="class" />
+			<param name="createrequest" />
+		</input>
+		<output>
+			<param name="dbresult" type="3" value="0" /> 
+			<param name="price" type="3" value="0" />
+		</output>
+	</template>
+
+	<template procedureName="DB_YUSTAS" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}">
+					<Service id="${service}" action="${action}" class="${class}" createrequest="${createrequest}"/>
+				</Item>
+			</Message>
+		</receiveTemplate>
+
+		<input>
+			<param name="customer" />
+			<param name="service" />
+			<param name="class" />
+			<param name="action" />
+			<param name="createrequest" />
+		</input>
+		<output>
+			<param name="dbresult" type="3" value="0" /> 
+			<param name="price" type="2" value="0" />
+		</output>
+	</template>
+
+	<template procedureName="DB_CCPayments" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}">
+					<Service id="creditcardpayment" action="5">
+						<Attribute name="amount" value="${amount}" />
+					</Service>
+				</Item>
+			</Message>
+		</receiveTemplate>
+
+		<input>
+			<param name="customer" />
+			<param name="amount" />
+		</input>
+		<output>
+			<param name="allowed" type="2" value="0" />
+			<param name="amount" type="3" value="0" />
+		</output>
+	</template>
+
+	<template procedureName="DB_FaxRetriev" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="retrieveinfo" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}" subject="faxnumber" />
+			</Message>
+		</receiveTemplate>
+
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="assigned" type="2" value="0" />
+			<param name="faxnumber" type="1" value="" />
+		</output>
+	</template>
+
+	<template procedureName="dbAdd" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}" subject="balance" />
+			</Message>
+		</receiveTemplate>
+
+		<input>
+			<param name="Customer" />
+			<param name="Param2" />
+		</input>
+		<output>
+		</output>
+	</template>
+
+	<template procedureName="DB_CValidation" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="verificationrequest" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}" />
+			</Message>
+		</receiveTemplate>
+
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="TariffPlan" type="3" value="0" />
+			<param name="State" type="2" value="0" />
+			<param name="Password" type="1" value="" />
+			<param name="regioncode" type="3" value="0" />
+		</output>
+	</template>
+
+	<template procedureName="DB_BillsRetriev" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}" subject="bills">
+					<Attribute name="index" value="${index}" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+
+		<input>
+			<param name="customer" />
+			<param name="index" />
+		</input>
+		<output>
+			<param name="count" type="3" value="0" />
+			<param name="begindate" type="1" value="" />
+			<param name="enddate" type="1" value="" />
+		</output>
+	</template>
+	<template procedureName="DB_AR">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="setprofile" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}" action="#{if('${serviceaction}'='2','add',if('${serviceaction}'='3','remove',-1))}">
+				</Item>
+			</Message>
+		</receiveTemplate>
+
+		<input>
+			<param name="customer" />
+			<param name="serviceaction" />
+		</input>
+		<output>
+			<param name="dbresult" type="3" value="0" /> 
+		</output>
+	</template>
+
+
+	<template procedureName="DB_PaymentRetriev" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}" subject="payments">
+					<Attribute name="index" value="${index}" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+
+		<input>
+			<param name="customer" />
+			<param name="index" />
+		</input>
+		<output>
+			<param name="count" type="3" value="0" />
+			<param name="day" type="4" value="" />
+			<param name="currency" type="3" value="0" />
+			<param name="intpartfracpart" type="3" value="0" />
+		</output>
+	</template>
+
+	<template procedureName="DB_CustomerBlock" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}">
+					<Service id="blockphone" action="4">
+						<Attribute name="state" value="${action}" />
+						<Attribute name="start" value="${start}" />
+						<Attribute name="end" value="${end}" />
+					</Service>
+				</Item>
+			</Message>
+		</receiveTemplate>
+
+		<input>
+			<param name="customer" />
+			<param name="start" />
+			<param name="end" />
+			<param name="action" />
+		</input>
+		<output>
+			<param name="state" type="3" value="0" />
+		</output>
+	</template>
+
+	<template procedureName="DB_ExchangeRate" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="retrieveinfo" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}" subject="currencyrate" />
+			</Message>
+		</receiveTemplate>
+
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="rateintpartdotpart" type="3" value="0" />
+		</output>
+	</template>
+
+	<template procedureName="VM_CRM_SETLANGUAGE" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="InvokeResult" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item request_id="${requestId}">
+					<Result paremeter1="0" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+
+		<input>
+			<param name="ResultCode" />
+		</input>
+		<output>
+			<param name="Subscriber" type="1" value="" />
+			<param name="Language" type="3" value="0" />
+		</output>
+	</template>
+
+	<template procedureName="DB_PrepaymentBill" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}">
+					<Service id="otprepaymentbill" action="4">
+						<Attribute name="faxnumber" value="${faxnumber}" />
+						<Attribute name="amountintpartdotpart" value="${amountintpartdotpart}" />
+					</Service>
+				</Item>
+			</Message>
+		</receiveTemplate>
+
+		<input>
+			<param name="customer" />
+			<param name="amountintpartdotpart" />
+			<param name="faxnumber" />
+		</input>
+		<output>
+		</output>
+	</template>
+
+	<template procedureName="DB_PayVerification" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}">
+					<Service id="guaranteedpayment" action="6" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="allowed" type="2" value="0" />
+			<param name="pending" type="2" value="0" />
+			<param name="maximumusd" type="3" value="0" />
+			<param name="maximumrur" type="3" value="0" />
+		</output>
+	</template>
+
+	<template procedureName="DB_PayAcceptance" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}">
+					<Service id="guaranteedpayment" action="7">
+						<Attribute name="amount" value="${amount}" />
+						<Attribute name="currency" value="${currency}" />
+					</Service>
+				</Item>
+			</Message>
+		</receiveTemplate>
+
+		<input>
+			<param name="customer" />
+			<param name="currency" />
+			<param name="amount" />
+		</input>
+		<output>
+		</output>
+	</template>
+
+	<template procedureName="DB_GrInterrogation" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="groupinterrogation" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}">
+					<Service id="${groupcode}" action="interrogation" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+
+		<input>
+			<param name="customer" />
+			<param name="groupcode" />
+		</input>
+		<output>
+			<param name="service_id" type="3" value="0" />
+		</output>
+	</template>
+
+
+	<template procedureName="DB_PRequest" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}">
+					<Service action="4" id="@{switch(${Service}|???,10|otdetailedbill,11|otbillviafax,12|otdetailedbalance,13|otprepaymentbill)}">
+						<Attribute name="start" value="${start}" />
+						<Attribute name="end" value="${end}" />
+						<Attribute name="faxnumber" value="${faxnumber}" />
+					</Service>
+				</Item>
+			</Message>
+		</receiveTemplate>
+
+		<input>
+			<param name="Customer" />
+			<param name="Service" />
+			<param name="Start" />
+			<param name="End" />
+			<param name="FaxNumber" />
+		</input>
+		<output>
+		</output>
+	</template>
+
+	<template procedureName="ServiceTypeTest" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="verificationrequest" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}" />
+			</Message>
+		</receiveTemplate>
+
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="TariffPlan" type="9" value="test2" />
+			<param name="State" type="2" value="0" />
+			<param name="Password" type="1" value="" />
+			<param name="regioncode" type="3" value="0" />
+		</output>
+	</template>
+
+
+	<template procedureName="SendPriceSMS" sessionStorage="Database" sessionLifetime="60">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="verificationrequest" initiator="smscon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+				<Item customer="${recipient}">
+					<Attribute name="checkivrservice" value="0"/>
+					<Attribute name="checkblocks" value="0"/>
+				</Item>
+				@{store(sContent,${content})}
+			</Message>
+		</receiveTemplate>
+
+		<deliveryTemplate direction="input" terminating="false">
+			<set item="param:dbresult" value="0" />
+		</deliveryTemplate>
+
+		<deliveryTemplate direction="input" connector="SMSCON_02"/>
+
+		<input>
+			<param name="anumber" />
+			<param name="sender" />
+			<param name="content" />
+			<param name="recipient" />
+		</input>
+
+		<output>
+			<param name="dbresult" type="3" value="0"/> 
+		</output>
+	</template>
+
+	<template procedureName="SendSMS" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="deliveryrequest" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${recipient}" sender="${sender}">
+					<Content encoding="7bit" charset="unicodefffe">${content}</Content>
+				</Item>
+			</Message>
+		</receiveTemplate>
+
+		<deliveryTemplate direction="input" terminating="false">
+			<set item="param:dbresult" value="0" />
+		</deliveryTemplate>
+
+		<deliveryTemplate direction="input" connector="SMSCON_01">
+		</deliveryTemplate>
+
+		<input>
+			<param name="anumber" />
+			<param name="recipient" />
+			<param name="content" />
+			<param name="sender" />
+		</input>
+
+		<output>
+			<param name="dbresult" type="3" value="0"/>	
+		</output>
+	</template>
+
+	<!--template procedureName="DB_BalanceRetriev3" persistent="false">
+		<input>
+			<param name="Customer"/>
+		</input>
+		<output>
+			<param name="dbresult"		 type="3" value="0"/>
+			<param name="balanceintpartdotpart"	 type="3" value="0"/>
+			<param name="accumulator"		 type="3" value="-1"/>
+			<param name="accumulatorSMS"		 type="3" value="-1"/>
+			<param name="accumulatorGPRS"	 type="3" value="-1"/>
+			<param name="accumulatorMinutesUsed"	 type="3" value="-1"/>
+			<param name="accumulatorMMS"		 type="3" value="-1"/>
+			<param name="currency"		 type="3" value="0"/>
+			<param name="balance_expiration_date"		 type="4" value=""/>
+			<param name="creditlimitintpartdotpart"		type="3" value="0"/>
+			<param name="debtintpartdotpart"	type="3" value="0"/>
+			<param name="dateofissue"	type="4" value=""/>
+		</output>
+		<receiveTemplate>
+			<Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}" subject="balance" datasource="db" />
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate conditionEx="#{count(/Message/Item/accumulators/accumulator)>=1}">
+			<set item="param:dbresult" value="${dbresult}" />
+			<set item="param:balanceintpartdotpart" value="${balanceintpartdotpart}" />
+			<set item="param:accumulator" value="#{if(/Message/Item/accumulators/accumulator/@id='voicemin',/Message/Item/accumulators/accumulator[@id='voicemin']/@val,if(/Message/Item/accumulators/accumulator/@id='voicesec',round(/Message/Item/accumulators/accumulator[@id='voicesec']/@val div 60),-1))}" />
+			<set item="param:accumulatorSMS" value="#{if(/Message/Item/accumulators/accumulator/@id='sms',/Message/Item/accumulators/accumulator[@id='sms']/@val,-1)}" />
+			<set item="param:accumulatorGPRS" value="#{if(/Message/Item/accumulators/accumulator/@id='gprs',/Message/Item/accumulators/accumulator[@id='gprs']/@val,-1)}" />
+			<set item="param:accumulatorMinutesUsed" value="#{if(/Message/Item/accumulators/accumulator/@id='usedmin',/Message/Item/accumulators/accumulator[@id='usedmin']/@val,if(/Message/Item/accumulators/accumulator/@id='usedsec',round(/Message/Item/accumulators/accumulator[@id='usedsec']/@val div 60),-1))}" />
+			<set item="param:accumulatorMMS" value="#{if(/Message/Item/accumulators/accumulator/@id='mms',/Message/Item/accumulators/accumulator[@id='mms']/@val,-1)}" />
+			<set item="param:currency" value="#{if('${currency}'='',0,number('${currency}'))}" />
+			<set item="param:balance_expiration_date" value="${balance_expiration_date}" />
+			<set item="param:creditlimitintpartdotpart" value="${creditlimitintpartdotpart}" />
+			<set item="param:debtintpartdotpart" value="${debtintpartdotpart}" />
+			<set item="param:dateofissue" value="${dateofissue}" />
+		</deliveryTemplate>
+		<deliveryTemplate />
+	</template-->
+
+
+	<template procedureName="InerBySMS" inerBcsm="0xC9" persistent="false">
+		<input /> 
+		<output spc="0x72">
+			<!--  in INER we use IN Parameters which should be specified with nameByte   --> 
+			<param name="SubId" 	nameByte="1" type="3" value="2" /> 
+			<param name="Sender" 	nameByte="2" type="1" value="" /> 
+			<param name="Recipient" 	nameByte="3" type="1" value="" />
+			<param name="SMSContent" nameByte="4" type="1" value="" /> 
+			<param name="MGSPC" 	nameByte="5" type="3" value="785" /> 
+			<param name="SMSCenter" 	nameByte="6" type="1" value="10106" /> 
+			<!-- this CallProperties has special type 133   --> 
+			<param name="CallProperties" type="133" value="256" /> 
+		</output>
+	</template>
+
+
+	<template procedureName="CRM_Activation_FRWLD" sessionLifetime="15" sessionStorage="Memory">
+		<receiveTemplate>
+			<Message type="crmfrwld" initiator="ivrcon"  id="${guid}" session_id="@{setSessionId(@{newGuid})}"> 
+				<Item customer="${Customer}" />				                  
+				@{store(sCustomer,${Customer})}         
+			</Message>
+		</receiveTemplate>  
+		<deliveryTemplate conditionEx="#{${dbresult}=0}" call="CRM_Activation_FRWLDOK">
+			<!--set item="param:dbresult" value="0" />
+       <set item="param:cust" value="${Customer}" /-->
+			<set conditionEx="0@{freeSession}" /> 
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="#{${dbresult}=320205}" call="CRM_Activation_FRWLDNOTOK1" >
+			<set conditionEx="0@{freeSession}" />            
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="#{${dbresult}=3202051}" call="CRM_Activation_FRWLDNOTOK2">
+			<set conditionEx="0@{freeSession}" />            
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+			<param name="service" />
+			<param name="class" />
+			<param name="action" />
+		</input>
+		<output>
+			<param name="dbresult" type="1"  value="" /> 
+			<param name="Customer" type="1"  value="" />
+		</output>
+	</template> 
+
+
+	<template procedureName="CRM_Activation_FRWLDOK" persistent="false">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="${session_id}">
+				<Item customer="${Customer}">
+					<Service id="FRWLD" action="2" class="1" createrequest="1" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<input>
+			<param name="cust" type="1"/>
+			<param name="Customer" type="1"/>      
+		</input>
+		<output>
+			<param name="dbresult" type="1"  value="${dbresult}" /> 
+			<param name="Subscription" type="2" value="0" />
+			<param name="Status" type="2" value="0" />
+			<param name="ISCharged" type="2" value="0" />
+		</output>
+	</template>
+
+	<template procedureName="CRM_Activation_FRWLDNOTOK1" persistent="false">
+		<receiveTemplate> 
+			<Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}" subject="category"/>
+			</Message>
+		</receiveTemplate> 
+		<deliveryTemplate>
+			<set item="param:dbresult" value="320205" />
+			<set conditionEx="0@{freeSession}" />            
+		</deliveryTemplate>
+		<input>
+			<param name="cust" type="1"/>
+			<param name="Customer" type="1"/>      
+		</input>
+		<output>
+			<param name="dbresult" type="1"  value="320205" /> 
+			<param name="Subscription" type="2" value="0" />
+			<param name="Status" type="2" value="0" />
+			<param name="ISCharged" type="2" value="0" />
+		</output>
+	</template>
+
+	<template procedureName="CRM_Activation_FRWLDNOTOK2" persistent="false">
+		<receiveTemplate> 
+			<Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}" subject="category"/>
+			</Message>
+		</receiveTemplate> 
+		<deliveryTemplate>
+			<set item="param:dbresult" value="3202051" />
+			<set conditionEx="0@{freeSession}" />            
+		</deliveryTemplate>
+		<input>
+			<param name="cust" type="1"/>
+			<param name="Customer" type="1"/>      
+		</input>
+		<output>
+			<param name="dbresult" type="1"  value="3202051" /> 
+			<param name="Subscription" type="2" value="0" />
+			<param name="Status" type="2" value="0" />
+			<param name="ISCharged" type="2" value="0" />
+		</output>
+	</template>
+
+</templates>

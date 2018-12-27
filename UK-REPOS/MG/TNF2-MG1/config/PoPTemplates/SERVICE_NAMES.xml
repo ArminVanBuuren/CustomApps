@@ -1,0 +1,362 @@
+﻿<!-- Created by Vladimir Khovanskiy - Task 782279
++ Fixed - Task 801618
+-->
+<ServiceList name="SERVICE_NAMES">
+
+	<!--      Kod "_TEST1234" neobhodim po vsem tekstam soobsheniy DBRESULT !!!     -->
+	<service service_code="_TEST1234"
+
+			info_service_active_ru="Usluga aktivna"
+			info_service_active_ua="Posluga aktyvna"
+			info_service_active_en="Service is active"
+
+			info_service_deacive_ru="Usluga neaktivna"
+			info_service_deacive_ua="Posluga neaktyvna"
+			info_service_deacive_en="Service is inactive"
+
+			info_success_active_ru="Zakaz na podklyuchenie uslugi prinyat."
+			info_success_active_ua="Zakaz na podklyuchenie uslugi prinyat."
+			info_success_active_en="Zakaz na podklyuchenie uslugi prinyat."
+
+			info_success_deacive_ru="Zakaz na deaktivatsiyu uslugi prinyat."
+			info_success_deacive_ua="Zakaz na deaktivatsiyu uslugi prinyat."
+			info_success_deacive_en="Zakaz na deaktivatsiyu uslugi prinyat."
+
+			info_320347_ru="Ustanovlena blokirovka. Operaciya nedostupna."
+			info_320347_ua="Ustanovlena blokirovka. Operaciya nedostupna."
+			info_320347_en="Ustanovlena blokirovka. Operaciya nedostupna."
+
+			info_320412_ru="Operaciya nevozmozhna. Ne podklyuchena zavisimaya usluga."
+			info_320412_ua="Operaciya nevozmozhna. Ne podklyuchena zavisimaya usluga."
+			info_320412_en="Operaciya nevozmozhna. Ne podklyuchena zavisimaya usluga."
+
+			info_320204_ru="Usluga ne dostupna dlya Vashogo taryfnogo plana"
+			info_320204_ua="Posluga ne dostupna dlya Vashogo taryfnogo planu"
+			info_320204_en="Service is unavailable for Your tariff model"
+
+			info_320191_ru="Nedostatochno sredstv na balanse dlya provedeniya operacii."
+			info_320191_ua="Nedostatochno sredstv na balanse dlya provedeniya operacii."
+			info_320191_en="Nedostatochno sredstv na balanse dlya provedeniya operacii."
+
+			info_320205_ru="Usluga uzhe ustanovlenna."
+			info_320205_ua="Usluga uzhe ustanovlenna."
+			info_320205_en="Usluga uzhe ustanovlenna."
+
+			info_320206_ru="Usluga ne ustanovlenna."
+			info_320206_ua="Usluga ne ustanovlenna."
+			info_320206_en="Usluga ne ustanovlenna."
+
+			info_320114_ru="Summa nachislenii ne mozhet byt ravna nulyu."
+			info_320114_ua="Summa nachislenii ne mozhet byt ravna nulyu."
+			info_320114_en="Summa nachislenii ne mozhet byt ravna nulyu."
+
+			info_320060_ru="U Vas net prav na provedenie operacii."
+			info_320060_ua="U Vas net prav na provedenie operacii."
+			info_320060_en="U Vas net prav na provedenie operacii."
+
+			info_320203_ru="Operaciya ne mozhet byt vypolnenna, poka nezavershitsya predydushaya."
+			info_320203_ua="Operaciya ne mozhet byt vypolnenna, poka nezavershitsya predydushaya."
+			info_320203_en="Operaciya ne mozhet byt vypolnenna, poka nezavershitsya predydushaya."
+
+			info_320341_ru="Vashego nomera net v billinge"
+			info_320341_ua="Vashego nomera net v billinge"
+			info_320341_en="Vashego nomera net v billinge"
+
+			info_320343_ru="Vas ne ustanovlena usluga Mobil'ny'y pomoshnik. Pozhaluy'sta obratites' v sluzhbu podderzhki MTS."
+			info_320343_ua="Vas ne ustanovlena usluga Mobil'ny'y pomoshnik. Pozhaluy'sta obratites' v sluzhbu podderzhki MTS."
+			info_320343_en="Vas ne ustanovlena usluga Mobil'ny'y pomoshnik. Pozhaluy'sta obratites' v sluzhbu podderzhki MTS."
+
+			info_499999_ru="Operaciya nevozmozhna."
+			info_499999_ua="Operaciya nevozmozhna."
+			info_499999_en="Operaciya nevozmozhna."
+			>
+	</service>
+
+	<service service_code="POPGTRB" info_check_date="0"
+
+			service_name_ru="Turbo-knopka"
+			service_name_ua="Turbo-knopka"
+			service_name_en="Turbo-button"
+
+			info_success_active_ru="Zakaz na podklyuchenie uslugi 'Turbo-knopka' prinyat. Stoimost’ aktivatsii – 0,80 grn s NDS + 7.5% PF. Po faktu podklyucheniya Vam postupit SMS."
+			info_success_active_ua="Zamovlennia na pidklyuchennia poslugy 'Turbo-knopka' pryjnyato. Vartist’ aktyvaciji - 0,80 grn z PDV + 7.5% PF. Pry pidklyuchenni Vam nadijde SMS."
+			info_success_active_en="Request for 'Turbo-button' activation has been accepted. Activation price – 0,80 UAH incl. VAT+7.5% in PF. You will be informed by SMS."
+
+			info_320191_ru="Na Vashem schetu nedostatochno sredstv dlya zakaza uslugi 'Turbo-knopka'. Popolnite vash schet."
+			info_320191_ua="Na Vashomu rahunku nedostatn'o koshtiv dlya zamovlennya poslugy 'Turbo-knopka'. Popovnit' vash rahunok."
+			info_320191_en="Your balance is not enough to order service 'Turbo-button'. Recharge your balance"
+
+			info_320347_ru="K sozhaleniju polzovanie uslugoj ogranicheno. Pozhalujsta popolnite schet dlja vosstanovlenija dejstvija Vashego nomera."
+			info_320347_ua="Na zhal korystuvannja poslugoju obmezheno. Bud laska popovnit rakhunok dlja vidnovlennya dii Vashogo nomera."
+			info_320347_en="Unfotunately your service has been suspended. Please recharge your account for reactivation of your number."
+
+			info_320205_ru="Zajavka na podklyuchenie uslugi 'Turbo-knopka' uzhe byla otpravlena. Proverit’ status uslugi *110*221#."
+			info_320205_ua="Zamovlennia na pidklyuchennia poslugy 'Turbo-knopka' vzhe bulo vidpravleno. Pereviryty status poslugy *110*221#."
+			info_320205_en="Request for activation of 'Turbo-button' has already been sent. To check the service status *110*221#."
+
+			info_320206_ru="Usluga 'Turbo-knopka' otklyuchena. Dlya podklyucheniya naberite *110*231#. Stoimost’ – 0,80 grn s NDS + 7.5% PF."
+			info_320206_ua="Poslugu 'Turbo-knopka' vidklyucheno. Dlya pidklyuchennia naberit *110*231#. Vartist’ -  0,80 grn z PDV + 7.5% PF"
+			info_320206_en="Service 'Turbo-button' is not activated. To activate this service press *110*231#. Price – 0,80 UAH incl. VAT+7.5% in PF"
+
+			info_320412_ru="K sozhaleniju polzovanie uslugoj ogranicheno. 'Turbo-knopka' dostupna tol'ko pri aktivirovannoj usluge: “Super Bezlimit na mesyac,“Super Bezlimit na nedelju”, “Super Internet na den”, “Super Internet”."
+			info_320412_ua="Na zhal korystuvannja poslugoju obmezheno. 'Turbo-knopka' nadajet'sja til'ky pry aktyvovanij posluzi: ”Super Bezlimit na  misyac”, Super Bezlimit na  tyzhden”, ”Super Internet na  den”, ”Super Internet”."
+			info_320412_en="Unfotunately your service has been suspended. 'Turbo-button' is accessible only at the activated service: “Super Unlim for month”, Super Unlim for week”, “Super Internet for day”, “Super Internet”."
+			>
+		<!--servicebinding code="POP2SI1" />
+		<servicebinding code="POP2SID" />
+		<servicebinding code="POP2SUW" />
+		<servicebinding code="POP2SUM" /-->
+	</service>
+
+
+	<service service_code="POP2SI1" check_accumulator="0"
+
+			service_name_ru="Super Internet"
+			service_name_ua="Super Internet"
+			service_name_en="Super Internet"
+
+			info_success_active_ru="Zakaz na aktivaciu uslugi «Super Internet» prinyat. Ozhydajte SMS s podtverzhdeniem aktivacii."
+			info_success_active_ua="Zamovlennja na aktyvaciju poslugy «Super Internet» pryjnyato. Ochikujte SMS s pidtverdzhennyam aktyvacii."
+			info_success_active_en="Your offer to activate « Super Internet» is fulfilled. Wait for SMS confirming the activation."
+
+			info_success_deacive_ru="Zakaz na deaktivatsiyu «Super Internet» prinyat. Dlya aktivatsii naberite *110*225# (besplatno)."
+			info_success_deacive_ua="Zamovlennya na deaktivatsiyu «Super Internet» pryjnyato. Dlya aktyvatsii naberit' *110*225# (bezkoshtovno)"
+			info_success_deacive_en="Request for «Super Internet» deactivation has been accepted. To activate this service press *110*225# (Activation is free)"
+
+			info_320191_ru="Summy na schetu nedostatochno dlja aktivatsii uslugi «Super Internet»"
+			info_320191_ua="Sumy na rahunku nedostatn’o dlja aktyvatsii' poslugy «Super Internet»"
+			info_320191_en="Balance on your account does not allow you to pay for the offered «Super Internet»"
+
+			info_320205_ru="Usluga ‘Super Internet’ uzhe aktivirovana ranee. Proverka ostatka MB - *110*229#, otklyuchit' uslugu - *110*235#."
+			info_320205_ua="Posluga ’Super Internet‘ vzhe aktyvovana. Perevirka zalyshku MB - *110*229#, vidklyuchyty poslugu - *110*235#."
+			info_320205_en="Service ’Super Internet‘ has already been activated. To check balance - *110*229#, to deactivate - *110*235#"
+
+			info_320206_ru="Usluga ‘Super Internet’ ne aktivirovana. Dlya aktivatsii naberite *110*225# (besplatno)."
+			info_320206_ua="Posluga ’Super Internet‘ ne aktyvovana. Dlya aktyvatsii naberit' *110*225# (bezkoshtovno)"
+			info_320206_en="Service ’Super Internet‘ is not activated. To activate this service press *110*225# (Activation is free)"
+			>
+	</service>
+
+	<service service_code="POP2SID"
+
+			service_name_ru="Super Internet na den"
+			service_name_ua="Super Internet na den"
+			service_name_en="Super Internet for day"
+
+			info_success_active_ru="Zakaz na aktivaciu uslugi «Super Internet na den’» prinyat. Ozhydajte SMS s podtverzhdeniem aktivacii."
+			info_success_active_ua="Zamovlennja na aktyvaciju poslugy «Super Internet na den’» pryjnyato. Ochikujte SMS s pidtverdzhennyam aktyvacii."
+			info_success_active_en="Your offer to activate « Super Internet for day» is fulfilled. Wait for SMS confirming the activation."
+
+			info_success_deacive_ru="Zakaz na deaktivatsiyu «Super Internet naden‘» prinyat. Dlya aktivatsii naberite *110*224#  (besplatno)."
+			info_success_deacive_ua="Zamovlennya na deaktivatsiyu «Super Internet na den‘» pryjnyato. Dlya aktyvatsii naberit' *110*224# (bezkoshtovno)"
+			info_success_deacive_en="Request for «Super Internet for day» deactivation has been accepted. To activate this service press *110*224#  (Activation is free)"
+
+			info_320191_ru="Summy na schetu nedostatochno dlja aktivatsii uslugi «Super Internet na den’»"
+			info_320191_ua="Sumy na rahunku nedostatn’o dlja aktyvatsii' poslugy «Super Internet na den’»"
+			info_320191_en="Balance on your account does not allow you to pay for the offered «Super Internet for day»"
+
+			info_320205_ru="Usluga ‘Super Internet na den’ uzhe aktivirovana ranee. Proverka ostatka MB - *110*228#, otklyuchit' uslugu - *110*234#."
+			info_320205_ua="Posluga ’Super Internet na den‘ vzhe aktyvovana. Perevirka zalyshku MB -  *110*228#, vidklyuchyty poslugu - *110*234#"
+			info_320205_en="Service ’Super Internet for day‘ has already been activated. To check balance -  *110*228#, to deactivate - *110*234#"
+
+			info_320206_ru="Usluga ‘Super Internet na den’ ne aktivirovana. Dlya aktivatsii naberite *110*224#  (besplatno)."
+			info_320206_ua="Posluga ’Super Internet na den‘ ne aktyvovana. Dlya aktyvatsii naberit'  *110*224# (bezkoshtovno)"
+			info_320206_en="Service ’Super Internet for day‘ is not activated. To activate this service press *110*224# (Activation is free)"
+			>
+	</service>
+
+	<service service_code="POP2SUW"
+
+			service_name_ru="Super Bezlimit na nedelju"
+			service_name_ua="Super Bezlimit na tyzhden"
+			service_name_en="Super Unlim for week"
+
+			info_success_active_ru="Zakaz na aktivatsiyu ‘Super Bezlimit na nedelju‘ prinyat. Usluga budet avtomaticheski prodlevat'sja kazhdye 7 dnej. Stoimost’ - 7 grn. s NDS + 7.5% PF."
+			info_success_active_ua="Zamovlennya na aktivatsiyu ’Super Bezlimit na tyzhden‘ pryjnyato. Posluga bude avtomatychno podovzhuvatys' kozhni 7 dniv. Vartist’ - 7 grn. z PDV + 7.5% PF."
+			info_success_active_en="Request for ’Super Unlim for week‘ activation has been accepted. Service will be automatically prolonged each 7 days. Price – 7 UAH incl. VAT+7.5% in PF."
+
+			info_success_deacive_ru="Zakaz na deaktivatsiyu ‘Super Bezlimit na nedelju‘ prinyat.  Dlya aktivatsii naberite *110*223#. Stoimost’ - 7 grn. s NDS + 7.5% PF."
+			info_success_deacive_ua="Zamovlennya na deaktivatsiyu ’Super Bezlimit na tyzhden‘ pryjnyato.  Dlya aktyvatsii naberit' *110*223#. Vartist’ -  7 grn. z PDV + 7.5% PF."
+			info_success_deacive_en="Request for ’Super Unlim for week‘ deactivation has been accepted. To activate this service press *110*223#.. Price – 7 UAH incl. VAT+7.5% in PF."
+
+			info_320191_ru="Na Vashem schete nedostatochno sredstv dlya zakaza uslugi ’Super Bezlimit na nedelju‘. Popolnite, pozhalujsta, Vash schet."
+			info_320191_ua="Na Vashomu rahunku nedostatn'o koshtiv dlya zamovlennya poslugy  ’Super Bezlimit na tyzhden‘. Popovnit', bud' laska, Vash rahunok."
+			info_320191_en="Your balance is not enough to order ‘Super Unlim for week‘ service. Please,top up your account."
+
+			info_320205_ru="Usluga ‘Super Bezlimit na nedelju‘ uzhe aktivirovana ranee. Proverka statusa - *110*227#, otklyuchit' uslugu - *110*233#"
+			info_320205_ua="Posluga ’Super Bezlimit na tyzhden‘ vzhe aktyvovana. Perevirka statusu - *110*227#, vidklyuchyty poslugu - *110*233# "
+			info_320205_en="Service ’Super Unlim for week‘ has already been activated. To check status - *110*227#, to deactivate - *110*233# "
+
+			info_320206_ru="Usluga ’Super Bezlimit na nedelju’ ne aktivirovana. Dlya aktivatsii naberite *110*223#. Stoimost’ - 7 grn. s NDS + 7.5% PF."
+			info_320206_ua="Posluga ’Super Bezlimit na tyzhden’ ne aktyvovana. Dlya aktyvatsii naberit' *110*223#. Vartist’ -  7 grn. z PDV + 7.5% PF."
+			info_320206_en="’Super Unlim for week‘ service has already been deactivated. To activate this service press *110*223#. Price – 7 UAH incl. VAT+7.5% in PF."
+			>
+	</service>
+
+
+	<service service_code="POP2SUM"
+
+			service_name_ru="Super Bezlimit na mesyac"
+			service_name_ua="Super Bezlimit na  misyac"
+			service_name_en="Super Unlim for month"
+
+			info_success_active_ru="Zakaz na aktivatsiyu ‘Super Bezlimit na mesyac‘ prinyat. Usluga budet avtomaticheski prodlevat'sja kazhdyi mesyac. Stoimost’ - 24 grn. s NDS + 7.5% PF."
+			info_success_active_ua="Zamovlennya na activatsiyu ’Super Bezlimit na misyac‘ pryjnyato. Posluga bude avtomatychno podovzhuvatys' kozhnyi misyacy. Vartist’ -  24 grn. z PDV + 7.5% PF."
+			info_success_active_en="Request for ’Super Unlim for month‘ activation has been accepted. Service will be automatically prolonged every month. Price – 24 UAH incl. VAT+7.5% in PF."
+
+			info_success_deacive_ru="Zakaz na deaktivatsiyu ‘Super Bezlimit na mesyac‘ prinyat.  Dlya aktivatsii naberite *110*222#. Stoimost’ - 24 grn. s NDS + 7.5% PF."
+			info_success_deacive_ua="Zamovlennya na deaktivatsiyu ’Super Bezlimit na misyac‘ pryjnyato.  Dlya aktyvatsii naberit' 110*222#. Vartist’ -  24 grn. z PDV + 7.5% PF."
+			info_success_deacive_en="Request for ’Super Unlim for month‘ deactivation has been accepted. To activate this service press *110*222#.. Price – 24 UAH incl. VAT+7.5% in PF."
+
+			info_320191_ru="Na Vashem schete nedostatochno sredstv dlya zakaza uslugi ’Super Bezlimit na mesyac‘. Popolnite, pozhalujsta, Vash schet."
+			info_320191_ua="Na Vashomu rahunku nedostatn'o koshtiv dlya zamovlennya poslugy  ’Super Bezlimit na  misyac‘. Popovnit', bud' laska, Vash rahunok."
+			info_320191_en="Your balance is not enough to order service ‘Super Unlim for month‘. Please, top up your account."
+
+			info_320205_ru="Usluga ‘Super Bezlimit na mesyac’ uzhe aktivirovana ranee. Proverka ostatka MB - *110*226#, otklyuchit' uslugu - *110*232#."
+			info_320205_ua="Posluga ’Super Bezlimit na  misyac‘ vzhe aktyvovana. Perevirka zalyshku MB - *110*226#, vidklyuchyty poslugu - *110*232#."
+			info_320205_en="Service ’Super Unlim for month‘ has already been activated. To check balance - *110*226#, to deactivate - *110*232#"
+
+			info_320206_ru="Usluga ’Super Bezlimit na mesyac’ ne aktivirovana. Dlya aktivatsii naberite *110*222#. Stoimost’ - 24 grn. s NDS + 7.5% PF."
+			info_320206_ua="Posluga ’Super Bezlimit na misyac’ ne aktyvovana. Dlya aktyvatsii naberit' *110*222#. Vartist’ -  24 grn. z PDV + 7.5% PF."
+			info_320206_en="’Super Unlim for month‘ service has already been deactivated. To activate this service press *110*222#. Price – 24 UAH incl. VAT+7.5% in PF."
+			>
+	</service>
+
+
+	<service service_code="POP2DISTBSID"
+
+			service_name_ru="skidka Super Internet na den'"
+			service_name_ua="snyzhka Super Internet na den'"
+			service_name_en="the discount Super Internet for a day"
+
+			info_success_active_ru="Vam podkljuchena skidka na uslugu &quot;Super Internet na den'&quot; - 7 dnej besplatno."
+			info_success_active_ua="Vam pidkljuchena snyzhka na poslugu &quot;Super Internet na den'&quot; - 7 dniv bezkoshtovno."
+			info_success_active_en="You activated the discount for the service &quot;Super Internet for a day&quot; - 7 days for free"
+			>
+	</service>
+
+	<service service_code="POP2DISTBSUW"
+
+			service_name_ru="skidka Super Bezlimit na nedelju"
+			service_name_ua="snyzhka Super Bezlimit na tyzhden"
+			service_name_en="the discount Super Unlim fo week"
+
+			info_success_active_ru="Vam podkljuchena skidka na uslugu &quot;Super Bezlimit na nedelju&quot; - 7 dnej besplatno."
+			info_success_active_ua="Vam pidkljuchena snyzhka na poslugu &quot;Super Bezlimit na tyzhden&quot; - 7 dniv bezkoshtovno."
+			info_success_active_en="You activated the discount for the service &quot;Super Unlim fo week&quot; - 7 days for free"
+			>
+	</service>
+
+	<service service_code="POP2DISTBSUM"
+
+			service_name_ru="skidka Super Bezlimit na mesyac"
+			service_name_ua="snyzhka Super Bezlimit na misyac"
+			service_name_en="the discount Super Unlim fo month"
+
+			info_success_active_ru="Vam podkljuchena skidka na uslugu &quot;Super Bezlimit na mesyac&quot; - do konca mesyaca besplatno."
+			info_success_active_ua="Vam pidkljuchena snyzhka na poslugu &quot;Super Bezlimit na misyac&quot; - do kinyca misyacya bezkoshtovno."
+			info_success_active_en="You activated the discount for the service &quot;Super Unlim fo month&quot; - to the end of the month for free"
+			>
+	</service>
+
+	<service service_code="POP2TBSUM"
+
+			service_name_ru="Akciya Super Bezlimit na mesyac"
+			service_name_ua="Akciya Super Bezlimit na misyac"
+			service_name_en="campaign Super Unlim fo month"
+
+			info_success_active_ru="Vam podkljuchena Akciya! Stoimost' &quot;Super Bezlimit na mesyac&quot; - 36 grn. za 3 pervyh mesyaca. Dalee - 24 grn. v mesyac."
+			info_success_active_ua="Vam podkljucheno Akciyu! Vartist' &quot;Super Bezlimit na misyac&quot; - 36 grn. za 3 pershi misyaci. Dalee - 24 grn. v misyac."
+			info_success_active_en="You activated campaign for the service &quot;Super Unlim fo month&quot; - 36 UAH for 3 first monthes. Next - 24 UAH per month."
+			>
+	</service>
+
+
+	<service service_code="POPPCCDMA"
+
+			service_name_ru="Roditel'skij kontrol’"
+			service_name_ua="Bat'kivs'kyj kontrol'"
+			service_name_en="Parental Control"
+
+			info_service_active_ru="Usluga ’Roditel'skij kontrol’ activirovana."
+			info_service_active_ua="Posluga ‘Bat'kivs'kyj kontrol' – actyvovana."
+			info_service_active_en="Service ‘Parental Control' is active."
+
+			info_service_deacive_ru="Usluga ’Roditel'skij kontrol’ otklyuchena. Dlya podklyucheniya naberite *110*241#. Stoimost’ – 1,00 grn s NDS + 7.5% PF."
+			info_service_deacive_ua="Poslugu ‘Bat'kivs'kyj kontrol' vidklyucheno. Dlya pidklyuchennia naberit 110*241#. Vartist’ -  1,00 grn z PDV + 7.5% PF"
+			info_service_deacive_en="Service ‘Parental Control' is not activated. To activate this service press *110*241#. Price – 1,00 UAH incl. VAT+7.5% in PF"
+
+			info_success_active_ru="Vash zakaz na podklyuchenie uslugi prinyat. Zapros budet obrabotan v techenie sutok, o chem dopolnitel'no Vy budete uvedomleny SMS."
+			info_success_active_ua="Vashe zamovlennya na pidklyuchennya poslugy pryjnyato. Zapyt bude obrobleno protyagom doby, pro shcho Vam bude dodatkovo povidomleno za dopomogoyu SMS"
+			info_success_active_en="Your activation request is received. The request will be processed within 24 hours of which you will be additionally informed by SMS."
+
+			info_success_deacive_ru="Usluga ‘Roditel'skij kontrol’  neaktivna "
+			info_success_deacive_ua="Poslugu ‘Bat'kivs'kyj kontrol'  deaktyvovano"
+			info_success_deacive_en="Service ‘Parental Control' is deactivated"
+
+			info_320347_ru="Predostavlenie uslug po Vashemu nomeru vremenno ogranicheno. Za detalnoj informatsiej zvonite 111"
+			info_320347_ua="Nadannja poslug po vashomu nomeru tymchasovo obmezheno. Za detalnoju informatsijeju telefonujte 111"
+			info_320347_en="Provision of services for your number is temporarily suspended. For detailed information call 111"
+
+			info_320205_ru="Usluga ‘Roditel'skij kontrol’ aktivna"
+			info_320205_ua="Posluga ‘Bat'kivs'kyj kontrol’ aktyvna"
+			info_320205_en="Service ‘Parental Control' is already activated"
+
+			info_320206_ru="Usluga ‘Roditel'skij kontrol' ne aktivirovana. Dlya podklyucheniya naberite *110*241#"
+			info_320206_ua="Poslugu ‘Bat'kivs'kyj kontrol’ ne aktyvovano. Dlya pidklyuchennya naberit' *110*241#"
+			info_320206_en="Service‘Parental Control' is unavailable. To activate dial *110*241#"
+			>
+	</service>
+
+	<service service_code="POPPCGSM"
+
+			service_name_ru="Roditel'skij kontrol’"
+			service_name_ua="Bat'kivs'kyj kontrol'"
+			service_name_en="Parental Control"
+
+			info_service_active_ru="Usluga ’Roditel'skij kontrol’ activirovana."
+			info_service_active_ua="Posluga ‘Bat'kivs'kyj kontrol' – actyvovana."
+			info_service_active_en="Service ‘Parental Control' is active."
+
+			info_service_deacive_ru="Usluga ’Roditel'skij kontrol’ otklyuchena. Dlya podklyucheniya naberite *110*241#. Stoimost’ – 1,00 grn s NDS + 7.5% PF."
+			info_service_deacive_ua="Poslugu ‘Bat'kivs'kyj kontrol' vidklyucheno. Dlya pidklyuchennia naberit 110*241#. Vartist’ -  1,00 grn z PDV + 7.5% PF"
+			info_service_deacive_en="Service ‘Parental Control' is not activated. To activate this service press *110*241#. Price – 1,00 UAH incl. VAT+7.5% in PF"
+
+			info_success_active_ru="Vash zakaz na podklyuchenie uslugi prinyat. Zapros budet obrabotan v techenie sutok, o chem dopolnitel'no Vy budete uvedomleny SMS."
+			info_success_active_ua="Vashe zamovlennya na pidklyuchennya poslugy pryjnyato. Zapyt bude obrobleno protyagom doby, pro shcho Vam bude dodatkovo povidomleno za dopomogoyu SMS"
+			info_success_active_en="Your activation request is received. The request will be processed within 24 hours of which you will be additionally informed by SMS."
+
+			info_success_deacive_ru="Usluga ‘Roditel'skij kontrol’  neaktivna "
+			info_success_deacive_ua="Poslugu ‘Bat'kivs'kyj kontrol'  deaktyvovano"
+			info_success_deacive_en="Service ‘Parental Control' is deactivated"
+
+			info_320347_ru="Predostavlenie uslug po Vashemu nomeru vremenno ogranicheno. Za detalnoj informatsiej zvonite 111"
+			info_320347_ua="Nadannja poslug po vashomu nomeru tymchasovo obmezheno. Za detalnoju informatsijeju telefonujte 111"
+			info_320347_en="Provision of services for your number is temporarily suspended. For detailed information call 111"
+
+			info_320205_ru="Usluga ‘Roditel'skij kontrol’ aktivna"
+			info_320205_ua="Posluga ‘Bat'kivs'kyj kontrol’ aktyvna"
+			info_320205_en="Service ‘Parental Control' is already activated"
+
+			info_320206_ru="Usluga ‘Roditel'skij kontrol' ne aktivirovana. Dlya podklyucheniya naberite *110*241#"
+			info_320206_ua="Poslugu ‘Bat'kivs'kyj kontrol’ ne aktyvovano. Dlya pidklyuchennya naberit' *110*241#"
+			info_320206_en="Service‘Parental Control' is unavailable. To activate dial *110*241#"
+			>
+	</service>
+
+
+	<item action="2" status="1" text="Dobavlenie" parce="active" code="320205" >
+		<command val="a"/>
+		<command val="A"/>
+		<command val="Add"/>
+		<command val="add"/>
+	</item>
+	<item action="3" status="0" text="Udalenie" parce="deacive" code="320206" >
+		<command val="d"/>
+		<command val="D"/>
+		<command val="Del"/>
+		<command val="del"/>
+		<command val="delete"/>
+		<command val="Delete"/>
+	</item>  
+</ServiceList>

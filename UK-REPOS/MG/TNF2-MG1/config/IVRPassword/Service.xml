@@ -1,0 +1,37 @@
+﻿<Services>
+	<Service id="FRSMSMAIL" text="«SMSMAIL»" cont="29471" />
+	<Service id="FRPACK50SMS" text="«Пакет 50 SMS»" cont="6273" />
+	<Service id="FRPK100SMS" text="«Пакет 100 SMS»" cont="6274" />
+	<Service id="FRPK7MMS" text="«Пакет 7 MMS»" cont="6275" />
+	
+	<Service id="FR9344" text="«Internet 15»" cont="22666" add="510" del="511"/>
+	<Service id="FR9363" text="«Internet 40»" cont="22666" add="520" del="521"/>
+	<Service id="FR9366" text="«Internet 100»" cont="22666" add="530" del="531"/>
+	<Service id="FR10919" text="«Internet 300»" cont="22666" add="540" del="541"/>
+	<Service id="FRSMSUNLIM" text="SMS безлимит" cont="22666" add="540" del="541" text2=". Стоимость подключения – 30 руб."/>
+	<Service id="FRDISCOBL" text="Скидка область" cont="22666" add="540" del="541" text2="."/>
+	<Service id="FRNOPROB" text="Год без забот" cont="22666" add="540" del="541" text2="."/>
+	<Service id="FRZVMTS5K" text="Звонки внутри сети – 5 коп" cont="22666" add="540" del="541" text2="."/>
+	<Service id="FRRED5K" text="Звонки внутри тарифа RED - 5 коп" cont="22666" add="540" del="541" text2="."/>
+	<Service id="FRROAMMN" text="СуперОтдых" cont="22666" add="540" del="541" text2="."/>
+	<Service id="CVAFTER5MIN" text="Звонки внутри сети по 0,15 руб. после 5-ти минут разговора в день" cont="6273" add="5" del="05" text2="."/>
+	<Service id="CVAFTER7MIN" text="Звонки внутри сети по 0,15 руб. после 7-ми минут разговора в день" cont="6273" add="7" del="07" text2="."/>
+	<Service id="CVAFTER10MIN" text="Звонки внутри сети по 0,15 руб. после 10-ти минут разговора в день" cont="6273" add="10" del="010" text2="."/>
+	<Service id="FRMMSFREE" text="MMS бесплатно" cont="22666" add="540" del="541" text2="."/>
+	<Service id="FRCMV1" text="ТЕСТ Пакеты на Comverse Услуга 1"/>
+	<Service id="FRCMV1_A" text="ТЕСТ Пакеты на Comverse Услуга 1_A"/>
+	<Service id="FRCMV2" text="ТЕСТ Пакеты на Comverse Услуга 2"/>
+	<Service id="FRCMV2_A" text="ТЕСТ Пакеты на Comverse Услуга 2_A"/>
+	<Service id="FRCMV3" text="ТЕСТ Пакеты на Comverse Услуга 3"/>
+	<Service id="FRCMV3_A" text="ТЕСТ Пакеты на Comverse Услуга 3_A"/>
+	<Service id="FRCMV4" text="ТЕСТ Пакеты на Comverse Услуга 4"/>
+	<Service id="FRCMV4_A" text="ТЕСТ Пакеты на Comverse Услуга 4_A"/>
+	<Service id="FRAC2008SMS" text="«Участник акции 2008 олимпийских SMS»"/>
+	<Service id="FRCMVKON" text="Минута на конкурентов за минуту входящей связи" cont="6275"/>
+	<Service id="FR2008SMSF" text="2008 Олимпийских SMS"/>
+	<Service id="FR2008SMSC" text="2008 Олимпийских SMS"/>
+	<Service id="FRBONUS" text="Растущий бонус"/>
+	<Service id="FRRED" text="RED music"/>
+	<Service id="FRBONUS" text="Растущий бонус"/>
+	<Service id="FRVETOMTS" text="Запрет приема информационных SMS и SMS/MMS с сайта МТС"/>
+</Services>

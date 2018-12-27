@@ -1,0 +1,200 @@
+﻿<!-- 
+Шаблоны SMS по задаче 846980 "Нотификация абонентов. продложение"
+Версия файла: 1.00
+-->
+<templateGroup name="StateInCountersTemplates">
+  <macros>
+    <define name="_SMS_SERVICE_NUMBER" value="606"/>
+    <define name="_INHND" value="WCFHND_StateIN_01"/>
+    <define name="_MSCPHND" value="WCFHND_03"/>
+	<define name="_RIHND" value="WCFHND_02"/>
+  </macros>
+
+  <!--Пример шаблона для запроса счётчика, с указание счётчиков в запросе-->
+  <template procedureName="GetCountersInfo" sessionStorage="Memory" sessionLifetime="300">
+    <condition>
+      <test item="${Recipient}" matches="^_SMS_SERVICE_NUMBER$"/>
+      <test item="${Content}" matches="^123456$"/>
+    </condition>
+    <receiveTemplate>
+      <Message initiator="smscon">
+        <Item customer="${Sender}" />
+        <!--Item CountersCodes="CR1781|CR1782|CR1783|CR1784" /-->
+        <Item CountersCodes="CR1781" />
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" forward="DB_MessageFromOtherConnectors" >
+    </deliveryTemplate>
+  </template>
+
+  <template procedureName="DB_MessageFromOtherConnectors" sessionStorage="Memory" sessionLifetime="300">
+    <condition>
+      <test item="1" matches="0"/>
+    </condition>
+    <receiveTemplate>
+    </receiveTemplate>
+    <deliveryTemplate call="GetPlatform" >
+      <set conditionEx="#{'@{setSessionId(${guid})}' = ''}"/>
+      <set conditionEx="0@{store(sSender,${customer})}"/>
+      <set conditionEx="0@{store(sEncoding,unicodefffe)}"/>
+      <set conditionEx="0@{store(sCountersCodes,${CountersCodes})}"/>
+      <set item="Content" value="Content" />
+      <set item="Sender" value="${customer}" />
+      <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
+      <set item="Encoding" value="unicodefffe"/>
+    </deliveryTemplate>
+  </template>
+  
+    <!--Получение платформы абона-->
+  <template procedureName="GetPlatform" handler="_RIHND" >
+    <condition>
+      <test item="1" matches="0"/>
+    </condition>
+    <receiveTemplate>
+      <Message type="gethost" initiator="smscon" id="${guid}" session_id="${session_id}">
+        <Item procedureName="GetHost">
+          <Attribute name="Customer" type="String" value="${Sender}"/>
+          <Attribute name="HostType" type="String" value="SC"/>
+          <Attribute name="HostCode"/>
+          <Attribute name="HostName"/>
+          <Attribute name="HostAddress"/>
+          <Attribute name="Result"/>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <!--абон наш. Остальные методы-->
+    <deliveryTemplate conditionEx="#{${Result}=0}" call="GetCommunicationLangForCounters">
+      <set item="Sender" value="${sSender}"/>
+      <set item="Encoding" value="${sEncoding}"/>
+      <set conditionEx="0@{store(sHostCode,${HostCode})}"/>
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${sSender}"/>
+      <set item="Encoding" value="${sEncoding}"/>
+      <set item="Content" value="Servis tymchasovo nedostupnyy"/>
+      <set conditionEx="0@{freeSession}"/>
+    </deliveryTemplate>
+  </template>
+  
+  <!--Получение текущего языка.-->
+  <!--Шаблон #1 для поддержки мультиязычности. Вызывается перед каждым запросом - поэтому распределяет шаблоны. language_id: 3 - рус, 1- англ, 4 - укр-->
+  <template procedureName="GetCommunicationLangForCounters" handler="_MSCPHND">
+    <condition>
+      <test item="1" matches="0"/>
+    </condition>
+    <receiveTemplate>
+      <Message type="scnauthenticate" initiator="smscon" id="${guid}" session_id="${session_id}">
+        <Item procedureName="SCN_AUTHENTICATE">
+          <Attribute name="CustomEndpointMSCP" type="String" value="${sHostCode}"/>
+          <Attribute name="CLIENT_ID" type="String" value="911"/>
+          <Attribute name="REQUEST_ID" type="String" value="#{substring('${guid}',1,10)}"/>
+          <Attribute name="SUBSCR_NUMBER" value="+${sSender}"/>
+          <Attribute name="AUTH_TYPE" type="Int32" value="0"/>
+          <Attribute name="PASSWORD" type="String" value=""/>
+          <Attribute name="RESULT_CODE"/>
+          <Attribute name="REQUEST_ID"/>
+          <Attribute name="RESULT_MESSAGE"/>
+          <Attribute name="MSISDN"/>
+          <Attribute name="TARIFF_PLAN_ID"/>
+          <Attribute name="LANGUAGE_ID"/>
+          <Attribute name="CUST_STATUS"/>
+          <Attribute name="CUST_ADM_STATUSES"/>
+          <Attribute name="ACTIVATION_COUNT"/>
+          <Attribute name="ACTIVATION_COUNTDOWN"/>
+          <Attribute name="LAST_ACTIVITY"/>
+          <Attribute name="Loc_No"/>
+          <Attribute name="SERVICE_PROVIDER_CODE"/>
+          <Attribute name="PA_ID"/>
+          <Attribute name="TDC_ID"/>
+          <!-- <Attribute name="ADDITIONAL_DATA" /> -->
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'${RESULT_CODE}'='0'}" terminating="false">
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${sSender}"/>
+      <set item="Content" conditionEx="#{'${LANGUAGE_ID}'='1'}" value="Thank you, your request has been accepted, wait for SMS with result"/>
+      <set item="Content" conditionEx="#{'${LANGUAGE_ID}'='3'}" value="Спасибо, Ваша заявка принята, ждите SMS с результатом"/>
+      <set item="Content" conditionEx="#{not(matches('${LANGUAGE_ID}','^(1|3)$'))}" value="Дякуємо, Ваша заявка прийнята, чекайте SMS з результатом"/>
+      <set item="Encoding" value="${sEncoding}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${RESULT_CODE}'='0'}" call="GetCountersInfoFromStateIn" >
+      <set item="Sender" value="${sSender}"/>
+      <set item="Encoding" value="${sEncoding}"/>
+      <set conditionEx="0@{store(sLanguage,${LANGUAGE_ID})}"/>
+      <set conditionEx="0@{store(sTdcId,${TDC_ID})}"/>
+      <set conditionEx="0@{store(sPaId,${PA_ID})}"/>
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${sSender}"/>
+      <set item="Encoding" value="${sEncoding}"/>
+      <set item="Content" value="Servis tymchasovo nedostupnyy"/>
+    </deliveryTemplate>
+  </template>
+
+  <template procedureName="GetCountersInfoFromStateIn" handler="_INHND">
+    <condition>
+      <test item="1" matches="0"/>
+    </condition>
+    <receiveTemplate>
+      <Message type="queryphoneinformation" initiator="smscon" id="${guid}" session_id="${session_id}">
+        <Item procedureName="IStateInWcf.QueryPhoneInformation">
+          <Attribute name="TerminalDeviceID" type="String" value="${sTdcId}" />
+          <Attribute name="PersonalAccountID" type="String" value="${sPaId}" />
+          <Attribute name="Msisdn" type="String" value="${sSender}" />
+          <Attribute name="CountersCodes" type="String" value="${sCountersCodes}" />
+          <Attribute name="FormatString" type="String" value="@{switch(${sLanguage}|{0} залишилось {4} {5}.Пакет буде оновлений {1:yyyy.MM.dd},1|{0} left {4} {5}. Package will be reset at {1:yyyy.MM.dd},3|{0} осталось {4} {5}. Пакет будет обновлен {1:yyyy.MM.dd})}" />
+          <!-- где {0} CounterName, {1} DateOfNextReset, {2} DateOfExpiry, {3} CounterCode, {4} CounterValue, {5} CounterMetricUnit, {6} Subject, {7} CounterType -->
+          <Attribute name="FormatStringDelimiter" type="String" value="," />
+          <!-- Разделитель нескольких счётчиков. В последнем счётчике он удаляется. -->
+          <Attribute name="CountersResult" />
+          <Attribute name="ProcessResult" />
+          <Attribute name="CountersExists" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'${ProcessResult}' = '0' and '${CountersExists}' = '1'}">
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${sSender}"/>
+	  <set conditionEx="@{store(sResult,${CountersResult})}"  />
+	  
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="@{store(sResult,#{replace('${sResult}','SECOND','seconds')})}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="@{store(sResult,#{replace('${sResult}','MINUTE','minutes')})}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="@{store(sResult,#{replace('${sResult}','HOUR','hours')})}"/>
+	  
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="@{store(sResult,#{replace('${sResult}','SECOND','секунд')})}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="@{store(sResult,#{replace('${sResult}','MINUTE','минут')})}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="@{store(sResult,#{replace('${sResult}','HOUR','часов')})}"/>
+
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="@{store(sResult,#{replace('${sResult}','SECOND','хвилин')})}"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="@{store(sResult,#{replace('${sResult}','MINUTE','секунд')})}"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="@{store(sResult,#{replace('${sResult}','HOUR','годин')})}"/>
+	  
+	  
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Within ${sResult}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="В рамках ${sResult}"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="В межах ${sResult}"/>
+      <set item="Encoding" value="${sEncoding}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${ProcessResult}' = '0'}">
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${sSender}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Сounters are missing"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Счётчики отсутсвуют"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Лічильники відсутні"/>
+      <set item="Encoding" value="${sEncoding}"/>
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${sSender}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Service temporarily unavailable"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Servis vremenno nedostupen"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Servis tymchasovo nedostupnyy"/>
+      <set item="Encoding" value="${sEncoding}"/>
+    </deliveryTemplate>
+  </template>
+
+
+</templateGroup>

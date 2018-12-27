@@ -1,0 +1,436 @@
+<templateGroup name="NCC_BMS">
+	<macros>
+		<define name="_BMSHND" value="WCFHND_01" />
+		<define name="_USER_ID_OF_CHANGE" value="0"/>
+		<define name="_CHANNEL_CODE" value="SMS"/>
+		<define name="_CAMPAIGN_CODE" value="1001361"/> <!-- 1001361 1001006 -->
+		<define name="_LANGUAGE_CODE" value="4"/>
+		<define name="_CURRENT_INITIATOR" value="SMS"/>
+		<define name="_GET_DBRESULT" value="#{if('${Result}'='','#{if('${dbresult}'!='','${dbresult}','-1')}','${Result}')}"/>
+	</macros>	
+	<!-- Регистрация в BMS -->
+	<template procedureName="AssingToCampaing" handler="_BMSHND">
+		<receiveTemplate>
+			<Message type="assignaccounttocampaign" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{newGuid}">
+				<Item procedureName="AssignAccountToCampaign">
+					<Attribute name="AssignAccount" value="${customer}" />
+					<Attribute name="CampaignCode" value="_CAMPAIGN_CODE" />
+					<Attribute name="ChannelCode" value="_CHANNEL_CODE" />
+					<Attribute name="UserIdOfChange" value="_USER_ID_OF_CHANGE" />
+					<Attribute name="AssignResponse" />
+					<Attribute name="Result" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="oparam:dbresult" value="_GET_DBRESULT" />
+			<set item="oparam:AssignResponse" value="${AssignResponse}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer"/>
+		</input>
+		<output>
+			<param name="dbresult"/>
+			<param name="AssignResponse"/>
+		</output>
+	</template>
+	<!-- Отключение абонента от программы -->
+	<template procedureName="RemoveFromCampaign" handler="_BMSHND" sessionStorage="Memory" sessionLifetime="300">
+		<receiveTemplate>
+			<Message type="getaccountcampaignparticipations" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(@{newGuid})}">
+				<Item procedureName="GetAccountCampaignParticipations">
+					<Attribute name="Account" value="${customer}" />
+					<Attribute name="CampaignCode" value="_CAMPAIGN_CODE" />
+					<Attribute name="LanguageCode" value="_LANGUAGE_CODE" />
+					<Attribute name="CampaignExists" />
+					<Attribute name="Result" />
+				</Item>
+				@{store(sCustomer,${customer})}
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate conditionEx="#{'${Result}'='0' and '${CampaignExists}'='1'}" call="RemoveFromCampaign_Part2" />
+		<deliveryTemplate>
+			<set item="oparam:dbresult" value="350001" /> <!-- абонент не участвует в программе бонус -->
+			<set conditionEx="0@{freeSession}"  />
+		</deliveryTemplate>
+		<input>
+			<param name="customer"/>
+		</input>
+		<output>
+			<param name="dbresult"/>
+		</output>
+	</template>
+	<template procedureName="RemoveFromCampaign_Part2" handler="_BMSHND" sessionStorage="Memory" >
+		<receiveTemplate>
+			<Message type="removeaccountfromcampaign" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+				<Item procedureName="RemoveAccountFromCampaign">
+					<Attribute name="RemoveAccount" value="${sCustomer}" />
+					<Attribute name="CampaignCode" value="_CAMPAIGN_CODE" />
+					<Attribute name="ChannelCode" value="_CHANNEL_CODE" />
+					<Attribute name="UserIdOfChange" value="_USER_ID_OF_CHANGE" />
+					<Attribute name="RemoveResponse" />
+					<Attribute name="Result" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="oparam:dbresult" value="_GET_DBRESULT" />
+			<set item="oparam:RemoveResponse" value="${RemoveResponse}" />
+			<set conditionEx="0@{freeSession}"  />
+		</deliveryTemplate>
+		<input>
+			<param name="customer"/>
+		</input>
+		<output>
+			<param name="dbresult"/>
+			<param name="RemoveResponse"/>
+		</output>
+	</template>
+	<!-- Проверка абонента на участие в бонусной программе -->
+	<template procedureName="CheckAccount" handler="_BMSHND" >
+		<receiveTemplate>
+			<Message type="getaccountcampaignparticipationstatus" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{newGuid}">
+				<Item procedureName="GetAccountCampaignParticipationStatus">
+					<Attribute name="Account" value="${customer}" />
+					<Attribute name="CampaignCode" value="_CAMPAIGN_CODE" />
+					<Attribute name="LanguageCode" value="_LANGUAGE_CODE" />
+					<Attribute name="ParticipationStatus" />
+					<Attribute name="Result" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="oparam:dbresult" value="350001" /> <!-- абонент не участвует в программе бонус -->
+			<set item="oparam:dbresult" conditionEx="#{'${Result}'='0' and '${ParticipationStatus}'='ACT'}" value="0" /> <!-- абонент участвует в программе бонус  -->
+			<set item="oparam:dbresult" conditionEx="#{'${Result}'='0' and '${ParticipationStatus}'='AWC'}" value="320044" />  <!-- абон находится в процессе регистрации в программе бонус  -->
+			<set item="oparam:dbresult" conditionEx="#{'${Result}'!='0'}" value="_GET_DBRESULT" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer"/>
+		</input>
+		<output>
+			<param name="dbresult"/>
+		</output>
+	</template>
+	<!-- Запрос баланса на БМС -->
+	<template procedureName="GetBMSBalance" handler="_BMSHND" >
+		<receiveTemplate>
+			<Message type="getcounters" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{newGuid}">
+				<Item procedureName="GetBalance">
+					<Attribute name="Customer" type="String" value="${customer}" />
+					<Attribute name="Balance" />
+					<Attribute name="Counters" />
+					<Attribute name="CreateDate" />
+					<Attribute name="Result" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="oparam:dbresult" value="_GET_DBRESULT" />
+			<set item="oparam:balance" value="${Balance}" />
+			<!--set item="oparam:Counters" value="#{NodesetToString(nodeset('${Counters}'))}" /-->
+			<set item="oparam:CreateDate" value="${CreateDate}" />
+			<set item="oparam:RecalculateDate" value="#{nodeset('${Counters}')/Counters/CounterData[Code='Sremain-Coldest']/RecalculateDate/text()}" />
+			<set item="oparam:Counters" value="#{nodeset('${Counters}')/Counters/CounterData[Code='Sremain-Coldest']/Value/text()}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer"/>
+		</input>
+		<output>
+			<param name="dbresult"/>
+			<param name="balance"/>
+			<param name="CreateDate"/>
+			<param name="Counters"/>
+			<param name="RecalculateDate"/>
+		</output>
+	</template>
+	<template procedureName="GetBonusBalance" handler="_BMSHND">
+		<receiveTemplate>
+			<Message type="getaccountbalance" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{newGuid}">
+				<Item procedureName="GetAccountBalance">
+					<Attribute name="Customer" type="String" value="${customer}" />
+					<Attribute name="LanguageCode" value="_LANGUAGE_CODE" />
+					<Attribute name="Balance" />
+					<Attribute name="GiftPromotion" />
+					<Attribute name="Result" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="oparam:dbresult" value="_GET_DBRESULT" />
+			<set item="oparam:balance" value="${Balance}" />
+			<set item="oparam:GiftPromotion" value="${GiftPromotion}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer"/>
+		</input>
+		<output>
+			<param name="dbresult"/>
+			<param name="balance"/>
+			<param name="GiftPromotion"/>
+		</output>
+	</template>
+	<!-- Возвращает значения счетчиков -->
+	<template procedureName="GetCounters" handler="_BMSHND" >
+		<receiveTemplate>
+			<Message type="getautumncounters" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{newGuid}">
+				<Item procedureName="GetMsisdnCurrentCounterInstances">
+					<Attribute name="Customer" type="String" value="${customer}" />
+					<Attribute name="CounterInstances" />
+					<Attribute name="Result" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="oparam:dbresult" value="_GET_DBRESULT" />
+			<set item="oparam:CounterInstances" value="#{NodesetToString(nodeset('${CounterInstances}'))}" />
+		<!-- 0 - ОК
+             -771001 – Unknown database error
+             -771003 – MSISDN not found or not valid
+             other – Unknown error 
+		-->
+		</deliveryTemplate>
+		<input>
+			<param name="customer"/>
+		</input>
+		<output>
+			<param name="dbresult"/>
+			<param name="CounterInstances"/>
+		</output>
+	</template>
+	<!-- Запрос прогноза ближайшего сгорания баллов -->
+	<template procedureName="GetBonusBalanceFutureExpiration" handler="_BMSHND">
+		<receiveTemplate>
+			<Message type="getaccountbalancefutureexpiration" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{newGuid}">
+				<Item procedureName="GetAccountBalanceFutureExpiration">
+					<Attribute name="Account" type="String" value="${customer}" />
+					<Attribute name="DateDays" type="String" value="30" />
+					<Attribute name="ToDate" />
+					<Attribute name="ExpirationBalance" />
+					<Attribute name="Balance" />
+					<Attribute name="Result" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="oparam:dbresult" value="_GET_DBRESULT" />
+			<set item="oparam:balance" value="${Balance}" />
+			<set item="oparam:ToDate" value="${ToDate}" />
+			<set item="oparam:ExpirationBalance" value="${ExpirationBalance}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer"/>
+		</input>
+		<output>
+			<param name="dbresult"/>
+			<param name="balance"/>
+			<param name="ToDate"/>
+			<param name="ExpirationBalance"/>
+		</output>
+	</template>
+	<!-- Отключение от ежемесячного информирования о балансе -->
+	<template procedureName="SetAccountNotificationType" handler="_BMSHND">
+		<receiveTemplate>
+			<Message type="setaccountnotificationtype" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{newGuid}">
+				<Item procedureName="SetAccountNotificationType">
+					<Attribute name="Account" type="String" value="${customer}" />
+					<Attribute name="NotificationTypeCode" type="String" value="BALANCE_STATE" />
+					<Attribute name="Enabled" type="String" value="0" />
+					<Attribute name="Result" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="oparam:dbresult" value="_GET_DBRESULT" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer"/>
+		</input>
+		<output>
+			<param name="dbresult"/>
+		</output>
+	</template>
+	<!-- Пригласить друга -->
+	<template procedureName="AddCampaignInvitation" handler="_BMSHND" >
+		<receiveTemplate>
+			<Message type="addcampaigninvitation" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{newGuid}">
+				<Item procedureName="AddCampaignInvitation">
+					<Attribute name="InvitationSourceAccount" value="${customer}" />
+					<Attribute name="CampaignCode" value="_CAMPAIGN_CODE" />
+					<Attribute name="InvitedAccount" value="${targetaccount}" />
+					<Attribute name="UserIdOfChange" value="_USER_ID_OF_CHANGE" />
+					<Attribute name="InvitationResponse" />
+					<Attribute name="Result" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="oparam:dbresult" value="_GET_DBRESULT" /> <!-- -770740 - абонент уже приглашен; -771002 - InvitationResponse; 0 - приглашение отправлено   -->
+			<set item="oparam:InvitationResponse" value="${InvitationResponse}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer"/>
+			<param name="targetaccount"/>
+		</input>
+		<output>
+			<param name="dbresult"/>
+			<param name="InvitationResponse"/>
+		</output>
+	</template>
+	<!-- Заказ подарка через MGA !!! не работает !!! -->
+	<template procedureName="AssignGift">
+		<receiveTemplate>
+			<Message type="orderbonusgiftrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{newGuid}">
+				<Item customer="${customer}">
+					<Attribute name="giftcode" value="${giftcode}"/>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="oparam:dbresult" value="${dbresult}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer"/>
+			<param name="giftcode"/>
+		</input>
+		<output>
+			<param name="dbresult"/>
+		</output>
+	</template>
+	<!-- Заказ подарка через HND -->
+	<template procedureName="OrderGift" handler="_BMSHND" >
+		<receiveTemplate>
+			<Message type="ordergift" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{newGuid}">
+				<Item procedureName="OrderGift">
+					<Attribute name="Msisdn" value="${customer}" />
+					<Attribute name="GiftCode" value="${giftcode}" />
+					<Attribute name="Quantity" value="1" />
+					<Attribute name="ChannelCode" value="_CHANNEL_CODE" />
+					<Attribute name="TargetMsisdn" value="" />
+					<Attribute name="UserIdOfChange" value="_USER_ID_OF_CHANGE" />
+					<Attribute name="ResultReason" />
+					<Attribute name="Result" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="oparam:dbresult" value="_GET_DBRESULT" /> <!-- -771003(абонент не зареген в программе бонус) -771009(недостаточно баллов для заказа пакета); -771002(ResultReason); -771001,-771040(По техническим причинам заказ данного вознаграждения будет доступен позднее)   -->
+			<set item="oparam:ResultReason" value="${ResultReason}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer"/>
+			<param name="giftcode"/>
+		</input>
+		<output>
+			<param name="dbresult"/>
+			<param name="ResultReason"/>
+		</output>
+	</template>
+	<!-- Регистрация перевода баллов  -->
+	<template procedureName="GiftTransfer" handler="_BMSHND" sessionStorage="Memory" sessionLifetime="600">
+		<receiveTemplate>
+			<Message type="checkaccountpairactivecampaignparticipation" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(@{newGuid})}">
+				<Item procedureName="CheckAccountPairActiveCampaignParticipation">
+					<Attribute name="AccountA" type="String" value="${customer}" />
+					<Attribute name="AccountB" type="String" value="${targetaccount}" />
+					<Attribute name="CampaignCode" value="_CAMPAIGN_CODE" />
+					<Attribute name="SameInstanceResult" />
+					<Attribute name="SameCampaignResult" />
+					<Attribute name="ResultReason" />
+					<Attribute name="Result" />
+				</Item>
+				@{store(sCustomer,${customer})}
+				@{store(sTargetAccount,${targetaccount})}
+				@{store(sBonusCount,${bonuscount})}
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate conditionEx="#{'${Result}'='0' and '${SameInstanceResult}'='1' and '${SameCampaignResult}'='1'}" call="OrderGiftTransfer" />
+		<deliveryTemplate>
+			<set item="oparam:dbresult" value="_GET_DBRESULT" />
+			<set item="oparam:dbresult" conditionEx="#{'${Result}'='-771042' or '${SameInstanceResult}'='0'}" value="350003" /> <!-- Ошибка по техническим причинам -->
+			<set item="oparam:dbresult" conditionEx="#{('${Result}'='-771047' or '${SameCampaignResult}'='0') and '${Result}'!='-771042'}" value="350002" /> <!-- Абонент2 не в программе бонус -->
+			<set item="oparam:dbresult" conditionEx="#{'${Result}'!='-771047' and '${Result}'!='-771042'}" value="350003" /> <!-- Ошибка по техническим причинам -->
+			<set item="oparam:dbresult" conditionEx="#{'${Result}'='-771003'}" value="350002" /> <!-- Абонент2 не в программе бонус -->
+			<set item="oparam:ResultReason" value="${ResultReason}" />
+			<set conditionEx="0@{freeSession}"  />
+		</deliveryTemplate>
+		<input>
+			<param name="customer"/>
+			<param name="targetaccount"/>
+			<param name="bonuscount"/>
+		</input>
+		<output>
+			<param name="dbresult"/>
+			<param name="ResultReason"/>
+		</output>
+	</template>
+	<template procedureName="OrderGiftTransfer" handler="_BMSHND" sessionStorage="Memory">
+		<receiveTemplate>
+			<Message type="ordergift" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+				<Item procedureName="OrderGift">
+					<Attribute name="Msisdn" value="${sCustomer}" />
+					<Attribute name="GiftCode" value="BONUS_TRANSFER" />
+					<Attribute name="Quantity" value="${sBonusCount}" />
+					<Attribute name="ChannelCode" value="_CHANNEL_CODE" />
+					<Attribute name="TargetMsisdn" value="${sTargetAccount}" />
+					<Attribute name="UserIdOfChange" value="_USER_ID_OF_CHANGE" />
+					<Attribute name="ResultReason" />
+					<Attribute name="Result" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate conditionEx="#{'${Result}'='0'}" call="TransferConfirmation" >
+			<set item="iparam:customer" value="${sTargetAccount}" />
+			<set item="iparam:gifteraccount" value="${sCustomer}" />
+			<set item="iparam:confirmation" value="1" />
+		</deliveryTemplate>
+		<deliveryTemplate>
+			<set item="oparam:dbresult" value="_GET_DBRESULT" />
+			<set item="oparam:ResultReason" value="${ResultReason}" />
+			<set conditionEx="0@{freeSession}"  />
+		</deliveryTemplate>
+		<input>
+		</input>
+		<output>
+			<param name="dbresult"/>
+			<param name="ResultReason"/>
+			<param name="customer"/>
+			<param name="gifteraccount"/>
+			<param name="confirmation"/>
+		</output>
+	</template>
+	<!-- Подтверждение получения или отказа от баллов  -->
+	<template procedureName="TransferConfirmation" handler="_BMSHND" sessionStorage="Memory" >
+		<receiveTemplate>
+			<Message type="giftprovisionconfirmation" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+				<Item procedureName="GiftProvisionConfirmation">
+					<Attribute name="Account" value="${customer}" />
+					<Attribute name="GifterAccount" value="${gifteraccount}" />
+					<Attribute name="Confirmation" value="${confirmation}" />
+					<Attribute name="LanguageCode" value="_LANGUAGE_CODE" />
+					<Attribute name="GiftCode" value="BONUS_TRANSFER" />
+					<Attribute name="GetResult" />
+					<Attribute name="GiftExists" />
+					<Attribute name="ResultReason" />
+					<Attribute name="Result" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="oparam:dbresult" value="_GET_DBRESULT" />
+			<set item="oparam:dbresult" conditionEx="#{'${Result}'='0' and '${GetResult}'='0'}" value="350005" /> <!-- нет непринятых призов от абонента gifteraccount -->
+			<set item="oparam:dbresult" conditionEx="#{'${Result}'='0' and '${GetResult}'='0' and '${GiftExists}'='1'}" value="0" /> <!-- Подарок успешно принят или отказан -->
+			<set item="oparam:ResultReason" value="${ResultReason}" />
+			<set conditionEx="0@{freeSession}"  />
+		</deliveryTemplate>
+		<input>
+			<param name="customer"/> <!-- акцептор -->
+			<param name="gifteraccount"/> <!-- инициатор предоставления подарка -->
+			<param name="confirmation"/> <!-- 1(подтвердить); 0(отказаться) -->
+		</input>
+		<output>
+			<param name="dbresult"/>
+			<param name="ResultReason"/>
+		</output>
+	</template>
+</templateGroup>

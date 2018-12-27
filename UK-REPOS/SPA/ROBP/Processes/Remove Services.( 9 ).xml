@@ -1,0 +1,130 @@
+<BusinessProcessData name="Remove Services" successOnNoOperation="true">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="BPMProcessingUnit" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="OperationOnSAUnitConditional" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnitConditional" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="DeleteHLRBasicServices" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="DeleteHLRBasicServices" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteHLRSupplementaryServices" />
+          </resultlist>
+        </node>
+        <node name="DeleteHLRSupplementaryServices" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="DeleteHLRSupplementaryServices" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DelOCSI_TCSI_Services" />
+          </resultlist>
+        </node>
+        <node name="DelOCSI_TCSI_Services" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="DelOCSI_TCSI_Services" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFRVMonHLR" />
+          </resultlist>
+        </node>
+        <node name="DeleteFRVMonHLR" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="DeleteFRVMonHLR" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteNationalRoaming" />
+          </resultlist>
+        </node>
+        <node name="DeleteNationalRoaming" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="DeleteNationalRoaming" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteVMonCCS" />
+          </resultlist>
+        </node>
+        <node name="DeleteVMonCCS" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="DeleteVMonCCS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteMCAonCCS" />
+          </resultlist>
+        </node>
+        <node name="DeleteMCAonCCS" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="DeleteMCAonCCS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFRGOOD" />
+          </resultlist>
+        </node>
+        <node name="DeleteFRGOOD" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="DeleteFRGOOD" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="RemoveServiceOnGSR" />
+          </resultlist>
+        </node>
+        <node name="RemoveServiceOnGSR" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="RemoveServiceOnGSR" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteDPIService" />
+          </resultlist>
+        </node>
+        <node name="DeleteDPIService" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="DeleteDPIService" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DelNewToSOnGSR" />
+          </resultlist>
+        </node>
+        <node name="DelNewToSOnGSR" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="DelNewToSOnGSR" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="RemoveServiceOnFINPlatform" />
+          </resultlist>
+        </node>
+        <node name="RemoveServiceOnFINPlatform" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="RemoveServiceOnFINPlatform" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeactivateServiceOnMID" />
+          </resultlist>
+        </node>
+        <node name="DeactivateServiceOnMID" object="OperationOnSAUnitConditional">
+          <parameterslist>
+            <param name="SrcXml" value="$XmlRequest" />
+            <param name="IfNotXmlPath:0" value="ExtendedRequestMessage/Sender[translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='tnf-frs\mobileid']" />
+            <param name="IfNotXmlPath:1" value="ExtendedRequestMessage/Sender[translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='frs\mobileid']" />
+            <param name="operation" value="DeactivateServiceOnMID" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeactivateSubscriberOnMID" />
+          </resultlist>
+        </node>
+        <node name="DeactivateSubscriberOnMID" object="OperationOnSAUnitConditional">
+          <parameterslist>
+            <param name="SrcXml" value="$XmlRequest" />
+            <param name="IfNotXmlPath:0" value="ExtendedRequestMessage/Sender[translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='tnf-frs\mobileid']" />
+            <param name="IfNotXmlPath:1" value="ExtendedRequestMessage/Sender[translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='frs\mobileid']" />
+            <param name="operation" value="DeactivateSubscriberOnMID" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

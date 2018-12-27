@@ -11,20 +11,26 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Schema;
-using ProcessFilter.SPA;
-using Utils;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading;
+
+using Utils;
 using Utils.XmlHelper;
 using Timer = System.Timers.Timer;
-using System.Threading;
+using XmlHelper = Utils.XmlHelper.XmlHelper;
 using Utils.WinForm.DataGridViewHelper;
 using Utils.WinForm.Notepad;
+using ProcessFilter.SPA;
+using OfficeOpenXml;
+using ProcessFilter.SPA.SC;
 
 namespace ProcessFilter
 {
+    
+
     [Serializable]
     public partial class ProcessFilterForm : Form, ISerializable
     {
@@ -37,6 +43,7 @@ namespace ProcessFilter
         public CollectionCommands Commands { get; private set; }
         private object sync = new object();
         private Timer _timerGC;
+        private bool IsInitialization { get; } = true;
 
         public ProcessFilterForm()
         {
@@ -47,13 +54,16 @@ namespace ProcessFilter
         {
             SaveFile();
         }
-        private void _timerCollect(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            SaveFile();
-        }
+        //private void _timerCollect(object sender, System.Timers.ElapsedEventArgs e)
+        //{
+        //    SaveFile();
+        //}
 
         void SaveFile()
         {
+            if (IsInitialization)
+                return;
+
             lock (sync)
             {
                 using (FileStream stream = new FileStream(SerializationDataPath, FileMode.Create, FileAccess.ReadWrite))
@@ -63,14 +73,29 @@ namespace ProcessFilter
             }
         }
 
+        
+
         ProcessFilterForm(SerializationInfo propertyBag, StreamingContext context)
         {
             MainInit();
-            ProcessesTextBox.Text = propertyBag.GetString("ADWFFW");
-            OperationTextBox.Text = propertyBag.GetString("AAEERF");
-            ScenariosTextBox.Text = propertyBag.GetString("DFWDRT");
-            CommandsTextBox.Text = propertyBag.GetString("WWWERT");
+            try
+            {
+                ProcessesTextBox.Text = propertyBag.GetString("ADWFFW");
+                OperationTextBox.Text = propertyBag.GetString("AAEERF");
+                ScenariosTextBox.Text = propertyBag.GetString("DFWDRT");
+                CommandsTextBox.Text = propertyBag.GetString("WWWERT");
+                ExportSCPath.Text = propertyBag.GetString("FFFGHJ");
+                OpenSCXlsx.Text = propertyBag.GetString("GGHHRR");
+            }
+            catch (Exception)
+            {
+            }
+            finally
+            {
+                IsInitialization = false;
+            }
         }
+    
 
         void ISerializable.GetObjectData(SerializationInfo propertyBag, StreamingContext context)
         {
@@ -78,6 +103,8 @@ namespace ProcessFilter
             propertyBag.AddValue("AAEERF", OperationTextBox.Text);
             propertyBag.AddValue("DFWDRT", ScenariosTextBox.Text);
             propertyBag.AddValue("WWWERT", CommandsTextBox.Text);
+            propertyBag.AddValue("FFFGHJ", ExportSCPath.Text);
+            propertyBag.AddValue("GGHHRR", OpenSCXlsx.Text);
         }
 
         void MainInit()
@@ -116,12 +143,12 @@ namespace ProcessFilter
             dataGridScenariosResult.CellFormatting += DataGridScenariosResult_CellFormatting;
             this.Closing += ProcessFilterForm_Closing;
 
-            _timerGC = new Timer
-                       {
-                           Interval = 5 * 1000
-                       };
-            _timerGC.Elapsed += _timerCollect;
-            _timerGC.Start();
+            //_timerGC = new Timer
+            //           {
+            //               Interval = 5 * 1000
+            //           };
+            //_timerGC.Elapsed += _timerCollect;
+            //_timerGC.Start();
         }
 
 
@@ -164,7 +191,7 @@ namespace ProcessFilter
                 dataGridScenariosResult.Refresh();
                 dataGridCommandsResult.Refresh();
 
-                Progress();
+                this.ProgressAsync();
                 Action datafilter = new Action(DataFilter);
                 IAsyncResult asyncResult = datafilter.BeginInvoke(FilterCompleted, datafilter);
             }
@@ -187,7 +214,7 @@ namespace ProcessFilter
         }
 
 
-        Task Progress()
+        Task ProgressAsync()
         {
             return Task.Run(() =>
                             {
@@ -207,15 +234,20 @@ namespace ProcessFilter
                             });
         }
 
+
+        CollectionBusinessProcess filteredBPCollection;
+        NetworkElementCollection filteredNetElemCollection;
+        CollectionScenarios filteredScenarioCollection = new CollectionScenarios();
+        CollectionCommands filteredCMMCollection = new CollectionCommands();
+        List<Scenario> filteredSubScenarios = new List<Scenario>();
+
         void DataFilter()
         {
             try
             {
-                CollectionBusinessProcess bpCollection;
-                NetworkElementCollection netElemCollection;
-                CollectionScenarios scoCollection = new CollectionScenarios();
-                CollectionCommands cmmCollection = new CollectionCommands();
-                List<Scenario> subScenarios = new List<Scenario>();
+                filteredScenarioCollection = new CollectionScenarios();
+                filteredCMMCollection = new CollectionCommands();
+                filteredSubScenarios = new List<Scenario>();
 
                 string processFilter = null, netElemFilter = null, operFilter = null;
                 progressBar.Invoke(new MethodInvoker(delegate
@@ -228,18 +260,18 @@ namespace ProcessFilter
 
                 if (!processFilter.IsNullOrEmpty())
                 {
-                    bpCollection = new CollectionBusinessProcess();
+                    filteredBPCollection = new CollectionBusinessProcess();
                     IEnumerable<BusinessProcess> getCollection;
                     if (processFilter[0] == '%' || processFilter[processFilter.Length - 1] == '%')
                         getCollection = Processes.Where(p => p.Name.IndexOf(processFilter.Replace("%", ""), StringComparison.CurrentCultureIgnoreCase) != -1);
                     else
                         getCollection = Processes.Where(p => p.Name.Equals(processFilter, StringComparison.CurrentCultureIgnoreCase));
 
-                    bpCollection.AddRange(getCollection);
+                    filteredBPCollection.AddRange(getCollection);
                 }
                 else
                 {
-                    bpCollection = Processes.Clone();
+                    filteredBPCollection = Processes.Clone();
                 }
 
 
@@ -247,24 +279,24 @@ namespace ProcessFilter
 
                 if (!netElemFilter.IsNullOrEmpty())
                 {
-                    netElemCollection = new NetworkElementCollection();
+                    filteredNetElemCollection = new NetworkElementCollection();
                     IEnumerable<NetworkElement> getCollection;
                     if (netElemFilter[0] == '%' || netElemFilter[netElemFilter.Length - 1] == '%')
                         getCollection = NetElements.Elements.Where(p => p.Name.IndexOf(netElemFilter.Replace("%", ""), StringComparison.CurrentCultureIgnoreCase) != -1);
                     else
                         getCollection = NetElements.Elements.Where(p => p.Name.Equals(netElemFilter, StringComparison.CurrentCultureIgnoreCase));
 
-                    netElemCollection.AddRange(getCollection.Select(netElem => netElem.Clone()));
+                    filteredNetElemCollection.AddRange(getCollection.Select(netElem => netElem.Clone()));
                 }
                 else
                 {
-                    netElemCollection = NetElements.Elements.Clone();
+                    filteredNetElemCollection = NetElements.Elements.Clone();
                 }
 
-                if (!operFilter.IsNullOrEmpty() && netElemCollection != null)
+                if (!operFilter.IsNullOrEmpty() && filteredNetElemCollection != null)
                 {
                     NetworkElementCollection netElemCollection2 = new NetworkElementCollection();
-                    foreach (NetworkElement nec in netElemCollection)
+                    foreach (NetworkElement nec in filteredNetElemCollection)
                     {
                         List<NetworkElementOpartion> ops = new List<NetworkElementOpartion>();
                         foreach (NetworkElementOpartion neo in nec.Operations)
@@ -291,32 +323,32 @@ namespace ProcessFilter
                             netElemCollection2.Add(fileteredElementAndOps);
                         }
                     }
-                    netElemCollection = netElemCollection2;
+                    filteredNetElemCollection = netElemCollection2;
                 }
 
 
                 _filterProgress = 3;
 
-                int endOfBpCollection = bpCollection.Count;
+                int endOfBpCollection = filteredBPCollection.Count;
                 for (int i = 0; i < endOfBpCollection; i++)
                 {
-                    XmlDocument document = XmlHelper.LoadXml(bpCollection[i].FilePath, true);
+                    XmlDocument document = XmlHelper.LoadXml(filteredBPCollection[i].FilePath, true);
                     if (document != null)
                     {
-                        bpCollection[i].AddBodyOperations(document);
+                        filteredBPCollection[i].AddBodyOperations(document);
                         //bool hasMatch = bpCollection[i].Operations.Any(x => netElemCollection.AllOperationsName.Any(y => x.IndexOf(y, StringComparison.CurrentCultureIgnoreCase) != -1));
-                        bool hasMatch = bpCollection[i].Operations.Any(x => netElemCollection.AllOperationsName.Any(y => x.Equals(y, StringComparison.CurrentCultureIgnoreCase)));
+                        bool hasMatch = filteredBPCollection[i].Operations.Any(x => filteredNetElemCollection.AllOperationsName.Any(y => x.Equals(y, StringComparison.CurrentCultureIgnoreCase)));
 
                         if (!hasMatch)
                         {
-                            bpCollection.Remove(bpCollection[i]);
+                            filteredBPCollection.Remove(filteredBPCollection[i]);
                             i--;
                             endOfBpCollection--;
                         }
                     }
                     else
                     {
-                        bpCollection.Remove(bpCollection[i]);
+                        filteredBPCollection.Remove(filteredBPCollection[i]);
                         i--;
                         endOfBpCollection--;
                     }
@@ -336,8 +368,8 @@ namespace ProcessFilter
                                       {
                                           if (scenario.AddBodyCommands())
                                           {
-                                              scoCollection.Add(scenario);
-                                              subScenarios.AddRange(scenario.SubScenarios);
+                                              filteredScenarioCollection.Add(scenario);
+                                              filteredSubScenarios.AddRange(scenario.SubScenarios);
                                           }
                                       }
                                   };
@@ -346,12 +378,12 @@ namespace ProcessFilter
 
                 _filterProgress = 5;
 
-                foreach (var netElem in netElemCollection)
+                foreach (var netElem in filteredNetElemCollection)
                 {
                     int endOfOpCollection = netElem.Operations.Count;
                     for (int i = 0; i < endOfOpCollection; i++)
                     {
-                        bool hasMatch = bpCollection.Any(x => x.Operations.Any(y => netElem.Operations[i].Name.Equals(y, StringComparison.CurrentCultureIgnoreCase)));
+                        bool hasMatch = filteredBPCollection.Any(x => x.Operations.Any(y => netElem.Operations[i].Name.Equals(y, StringComparison.CurrentCultureIgnoreCase)));
 
                         if (hasMatch)
                         {
@@ -367,14 +399,14 @@ namespace ProcessFilter
 
                 _filterProgress = 6;
 
-                if (Commands != null && scoCollection.Count > 0)
+                if (Commands != null && filteredScenarioCollection.Count > 0)
                 {
                     foreach (Command command in Commands)
                     {
-                        bool hasValue = scoCollection.Any(x => x.Commands.Any(y => y.Equals(command.Name, StringComparison.CurrentCultureIgnoreCase)));
+                        bool hasValue = filteredScenarioCollection.Any(x => x.Commands.Any(y => y.Equals(command.Name, StringComparison.CurrentCultureIgnoreCase)));
                         if (hasValue)
                         {
-                            cmmCollection.Add(command);
+                            filteredCMMCollection.Add(command);
                         }
                     }
                 }
@@ -382,18 +414,18 @@ namespace ProcessFilter
 
                 _filterProgress = 7;
 
-                subScenarios = subScenarios.Distinct(new ItemEqualityComparer()).ToList();
-                scoCollection.AddRange(subScenarios);
+                filteredSubScenarios = filteredSubScenarios.Distinct(new ItemEqualityComparer()).ToList();
+                filteredScenarioCollection.AddRange(filteredSubScenarios);
 
 
                 progressBar.Invoke(new MethodInvoker(delegate
                                                      {
                                                          _filterProgress = 8;
-                                                         dataGridProcessesResults.AssignListToDataGrid(bpCollection, new Padding(0, 0, 15, 0));
-                                                         dataGridOperationsResult.AssignListToDataGrid(netElemCollection.AllOperations, new Padding(0, 0, 15, 0));
+                                                         dataGridProcessesResults.AssignListToDataGrid(filteredBPCollection, new Padding(0, 0, 15, 0));
+                                                         dataGridOperationsResult.AssignListToDataGrid(filteredNetElemCollection.AllOperations, new Padding(0, 0, 15, 0));
                                                          _filterProgress = 9;
-                                                         dataGridScenariosResult.AssignListToDataGrid(scoCollection, new Padding(0, 0, 15, 0));
-                                                         dataGridCommandsResult.AssignListToDataGrid(cmmCollection, new Padding(0, 0, 15, 0));
+                                                         dataGridScenariosResult.AssignListToDataGrid(filteredScenarioCollection, new Padding(0, 0, 15, 0));
+                                                         dataGridCommandsResult.AssignListToDataGrid(filteredCMMCollection, new Padding(0, 0, 15, 0));
                                                          _filterProgress = 10;
                                                      }));
             }
@@ -498,7 +530,7 @@ namespace ProcessFilter
 
         [DllImport("user32.dll")]
         private static extern short GetAsyncKeyState(Keys vKey);
-        private bool KeyIsDown(Keys key)
+        private static bool KeyIsDown(Keys key)
         {
             return (GetAsyncKeyState(key) < 0);
         }
@@ -554,6 +586,7 @@ namespace ProcessFilter
         private void ProcessesTextBox_TextChanged(object sender, EventArgs e)
         {
             CheckProcessesPath(ProcessesTextBox.Text);
+            SaveFile();
         }
 
         void CheckProcessesPath(string prcsPath, bool saveLastSett = false)
@@ -582,6 +615,7 @@ namespace ProcessFilter
         private void OperationTextBox_TextChanged(object sender, EventArgs e)
         {
             CheckOperationsPath(OperationTextBox.Text);
+            SaveFile();
         }
 
         void CheckOperationsPath(string opPath, bool saveLastSett = false)
@@ -590,7 +624,7 @@ namespace ProcessFilter
             string lastSettOper = saveLastSett ? OperationComboBox.Text : null;
 
             if (Directory.Exists(opPath.Trim(' ')))
-            {
+            {   
                 UpdateLastPath(opPath.Trim(' '));
                 NetElements = new CollectionNetworkElements(opPath.Trim(' '));
                 NetSettComboBox.DataSource = NetElements.Elements.AllNetworkElements;
@@ -601,6 +635,9 @@ namespace ProcessFilter
                 NetSettComboBox.DataSource = null;
                 OperationComboBox.DataSource = null;
             }
+
+            CheckButtonGenerateSC();
+
             NetSettComboBox.Text = lastSettNetSett;
             NetSettComboBox.DisplayMember = lastSettNetSett;
             //NetSettComboBox.ValueMember = lastSettNetSett;
@@ -617,6 +654,7 @@ namespace ProcessFilter
         private void ScenariosTextBox_TextChanged(object sender, EventArgs e)
         {
             CheckScenariosPath(ScenariosTextBox.Text);
+            SaveFile();
         }
         void CheckScenariosPath(string scoPath)
         {
@@ -628,7 +666,7 @@ namespace ProcessFilter
             }
             else
             {
-                SenariosStat.Text = "Scenarios:";
+                SenariosStat.Text = @"Scenarios:";
             }
         }
 
@@ -640,6 +678,7 @@ namespace ProcessFilter
         private void CommandsTextBox_TextChanged(object sender, EventArgs e)
         {
             CheckCommandsPath(CommandsTextBox.Text);
+            SaveFile();
         }
         void CheckCommandsPath(string cmmPath)
         {
@@ -651,17 +690,128 @@ namespace ProcessFilter
             }
             else
             {
-                CommandsStat.Text = "Commands:";
+                CommandsStat.Text = @"Commands:";
             }
         }
 
+        void CheckButtonGenerateSC()
+        {
+            if (NetElements?.Elements != null && NetElements?.Elements.Count > 0 && ExportSCPath.Text != null && ExportSCPath.Text.Length > 3)
+            {
+                ButtonGenerateSC.Enabled = true;
+                return;
+            }
 
+            ButtonGenerateSC.Enabled = false;
+        }
+
+        private void ExportSCPath_TextChanged(object sender, EventArgs e)
+        {
+            CheckButtonGenerateSC();
+            SaveFile();
+        }
+
+        private void OpenSCXlsx_TextChanged(object sender, EventArgs e)
+        {
+            SaveFile();
+        }
+
+        private void RootSCExportPathButton_Click(object sender, EventArgs e)
+        {
+            ExportSCPath.Text = OpenFolder() ?? ExportSCPath.Text;
+        }
+
+        private void OpenSevExelButton_Click(object sender, EventArgs e)
+        {
+            using (var fbd = new OpenFileDialog())
+            {
+                fbd.Filter = @"(*.xlsx) | *.xlsx";
+                DialogResult result = fbd.ShowDialog();
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.FileName))
+                {
+                    OpenSCXlsx.Text = fbd.FileName;
+                }
+            }
+        }
+
+        private void ButtonGenerateSC_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!Directory.Exists(ExportSCPath.Text))
+                {
+                    Directory.CreateDirectory(ExportSCPath.Text);
+                }
+
+                DataTable serviceTable = GetServiceXslx();
+
+                
+
+                ServiceCatalog sc = null;
+                if (filteredNetElemCollection != null)
+                    sc = new ServiceCatalog(filteredNetElemCollection, serviceTable);
+                else if (NetElements?.Elements != null)
+                    sc = new ServiceCatalog(NetElements.Elements, serviceTable);
+
+                sc.Save(ExportSCPath.Text);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        DataTable GetServiceXslx()
+        {
+            DataTable serviceTable = null;
+            if (!OpenSCXlsx.Text.IsNullOrEmptyTrim() && File.Exists(OpenSCXlsx.Text))
+            {
+                using (ExcelPackage xlPackage = new ExcelPackage(new FileInfo(OpenSCXlsx.Text)))
+                {
+                    serviceTable = new DataTable();
+
+                    var myWorksheet = xlPackage.Workbook.Worksheets.First(); //sheet
+                    var totalRows = myWorksheet.Dimension.End.Row;
+                    var totalColumns = myWorksheet.Dimension.End.Column;
+
+                    var columnsNames = myWorksheet.Cells[1, 1, 1, totalColumns].Select(c => c.Value == null ? string.Empty : c.Value.ToString());
+
+                    if (!columnsNames.Any())
+                        return null;
+
+                    foreach (var columnName in columnsNames)
+                    {
+                        serviceTable.Columns.Add(columnName.ToUpper(), typeof(string));
+                    }
+
+                    totalColumns = columnsNames.Count();
+
+                    for (int rowNum = 2; rowNum <= totalRows; rowNum++)
+                    {
+                        //var row = myWorksheet.Cells[rowNum, 1, rowNum, totalColumns].Select(c => c.Value == null ? string.Empty : c.Value.ToString());
+                        var row = myWorksheet.Cells[rowNum, 1, rowNum, totalColumns].Select(c => c.Value == null ? string.Empty : c.Value.ToString()).Take(totalColumns);
+                        //IEnumerable<string> ff = row.Take(totalColumns);
+                        
+                        serviceTable.Rows.Add(values: row.ToArray());
+
+                    }
+                }
+            }
+
+            return serviceTable;
+        }
+
+        void UpdateLastPath(string path)
+        {
+            if (!path.IsNullOrEmpty())
+                lastPath = path;
+        }
 
         string OpenFolder()
         {
             using (var fbd = new FolderBrowserDialog())
             {
-                if(!lastPath.IsNullOrEmpty())
+                if (!lastPath.IsNullOrEmpty())
                     fbd.SelectedPath = lastPath;
                 DialogResult result = fbd.ShowDialog();
 
@@ -673,10 +823,6 @@ namespace ProcessFilter
             return null;
         }
 
-        void UpdateLastPath(string path)
-        {
-            if (!path.IsNullOrEmpty())
-                lastPath = path;
-        }
+
     }
 }

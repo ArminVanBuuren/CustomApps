@@ -1,0 +1,10 @@
+<OperationData Name="DeleteSubscriberOnMID" NEType="MID" NEAlias="MobileID">
+  <Request Name="RequestMessage">
+    <AdditionalData Executable="True">
+      <RegisteredList HaltMode="CancelOperation" Type="AnyOfListed">
+        <SERVMOBOT Type="Mandatory" />
+      </RegisteredList>
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage" />
+</OperationData>

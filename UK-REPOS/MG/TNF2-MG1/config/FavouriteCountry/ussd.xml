@@ -1,0 +1,90 @@
+<templateGroup name="FavouriteCountry">
+	<macros>
+		<define name="_ADDFAVCOUNTRY_SERVICE_NUMBER" value="111" />
+		<define name="_GETFAVCOUNTRY_SERVICE_NUMBER" value="333" />
+		<define name="_SMSCON" value="SMSCON_01" />
+	</macros>
+	<template procedureName="AddFavouriteCountry">
+		<condition>
+			<test item="${Recipient}" matches="^_ADDFAVCOUNTRY_SERVICE_NUMBER$" />
+			<test item="${Content}" matches="^\w+\s*$" />
+			<test item="#{if(document('C:\Foris\Messaging Gateway\config\Common\FavouriteCountry.xml')/favcountries/favcountry/@ussdcode='#{normalize-space('${content}')}',1,0)}" matches="1" />
+		</condition>
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="ussd" id="${guid}" session_id="${guid}">
+				<Item customer="${sender}">
+					<Service id="#{document('C:\Foris\Messaging Gateway\config\Common\FavouriteCountry.xml')/favcountries/favcountry[@ussdcode='#{normalize-space('${content}')}']/@crmcode}" action="2" needtariffication="0">
+						<Attribute name="isparametricaldiscount" value="1" />
+					</Service>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate direction="input" terminating="false">
+			<set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
+			<set item="Sender" value="_ADDFAVCOUNTRY_SERVICE_NUMBER" />
+			<set item="Recipient" value="${customer}" />
+			<set item="Encoding" value="unicodefffe" />
+		</deliveryTemplate>
+		<deliveryTemplate connector="_SMSCON" />
+	</template>
+
+	<template procedureName="AddFavouriteCountryError">
+		<condition>
+			<test item="${Recipient}" matches="^_ADDFAVCOUNTRY_SERVICE_NUMBER$" />
+		</condition>
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="${guid}">
+				<Item customer="${sender}" content="${content}"/>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate direction="input">
+			<set item="Content"  value="Неизвестный код '#{normalize-space('${content}')}' для добавления Любимой страны" />
+			<set item="Sender" value="_ADDFAVCOUNTRY_SERVICE_NUMBER" />
+			<set item="Recipient" value="${customer}" />
+			<set item="Encoding" value="unicodefffe" />
+		</deliveryTemplate>
+	</template>
+	
+
+
+	<template procedureName="GetFavouriteCountry" sessionStorage="Remoting" sessionLifetime="300">
+		<condition>
+			<test item="${Recipient}" matches="^_GETFAVCOUNTRY_SERVICE_NUMBER$" />
+			<test item="${Content}" matches="^\w+\s*$" />
+			<test item="#{if(document('C:\Foris\Messaging Gateway\config\Common\FavouriteCountry.xml')/favcountries/favcountry/@ussdcode='#{normalize-space('${content}')}',1,0)}" matches="1" />
+		</condition>
+		<receiveTemplate>
+			<Message type="retrievecustomerdata" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+				<Item customer="${sender}" subject="get_parametrical_discount">
+				    <Attribute name="service_id" value="#{document('C:\Foris\Messaging Gateway\config\Common\FavouriteCountry.xml')/favcountries/favcountry[@ussdcode='#{normalize-space('${content}')}']/@crmcode}" />
+				</Item>
+				@{store(sCode,USSD-код:#{normalize-space('${Content}')})}
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate direction="input" terminating="false">
+			<set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
+			<set item="Sender" value="_GETFAVCOUNTRY_SERVICE_NUMBER" />
+			<set item="Recipient" value="${customer}" />
+			<set item="Encoding" value="unicodefffe" />
+		</deliveryTemplate>
+		<deliveryTemplate connector="_SMSCON" />
+	</template>
+
+	<template procedureName="GetFavouriteCountryError">
+		<condition>
+			<test item="${Recipient}" matches="^_GETFAVCOUNTRY_SERVICE_NUMBER$" />
+		</condition>
+		<receiveTemplate>
+			<Message initiator="ussd" id="${guid}" session_id="${guid}">
+				<Item customer="${sender}" content="${content}"/>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate direction="input">
+			<set item="Content"  value="Не найдена Любимая страна с кодом '#{normalize-space('${content}')}'" />
+			<set item="Sender" value="_GETFAVCOUNTRY_SERVICE_NUMBER" />
+			<set item="Recipient" value="${customer}" />
+			<set item="Encoding" value="unicodefffe" />
+		</deliveryTemplate>
+	</template>
+
+</templateGroup>

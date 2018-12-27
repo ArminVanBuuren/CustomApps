@@ -1,0 +1,111 @@
+<templateGroup name="FavouriteCountry">
+	<macros>
+		<define name="_ADDFAVCOUNTRY_SERVICE_NUMBER" value="" />
+		<define name="_GETFAVCOUNTRY_SERVICE_NUMBER" value="" />
+	</macros>
+	<template procedureName="AddFavouriteCountry">
+		<condition>
+			<test item="${Recipient}" matches="^_ADDFAVCOUNTRY_SERVICE_NUMBER$" />
+			<test item="${Content}" matches="^\s*\w+\s*$" />
+			<test item="#{if(document('C:\Foris\Messaging Gateway\config\Common\FavouriteCountry.xml')/favcountries/favcountry/@smscode='#{normalize-space('${content}')}',1,0)}" matches="1" />
+		</condition>
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="smscon" id="${guid}" session_id="${guid}">
+				<Item customer="${sender}">
+					<Service id="#{document('C:\Foris\Messaging Gateway\config\Common\FavouriteCountry.xml')/favcountries/favcountry[@smscode='#{normalize-space('${content}')}']/@crmcode}" action="2" needtariffication="0">
+						<Attribute name="isparametricaldiscount" value="1" />
+					</Service>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+            <set item="Content" value="Ошибка при добавлении Любимой страны" />
+            <set item="Content" conditionEx="#{${dbresult}=0}" value="Заявка на добавление Любимой страны '#{document('C:\Foris\Messaging Gateway\config\Common\FavouriteCountry.xml')/favcountries/favcountry[@crmcode='${service_id}']/@name}' зарегистрирована" />
+            <set item="Content" conditionEx="#{${dbresult}=320203}" value="Добавление Любимой страны '#{document('C:\Foris\Messaging Gateway\config\Common\FavouriteCountry.xml')/favcountries/favcountry[@crmcode='${service_id}']/@name}' невозможно пока не завершится предыдущая операция" />
+            <set item="Content" conditionEx="#{${dbresult}=320204}" value="Любимая страна '#{document('C:\Foris\Messaging Gateway\config\Common\FavouriteCountry.xml')/favcountries/favcountry[@crmcode='${service_id}']/@name}' не доступна для вашего тарифного плана" />
+            <set item="Content" conditionEx="#{${dbresult}=320205}" value="Любимая страна '#{document('C:\Foris\Messaging Gateway\config\Common\FavouriteCountry.xml')/favcountries/favcountry[@crmcode='${service_id}']/@name}' была добавлена ранее" />
+            <set item="Content" conditionEx="#{${dbresult}=320191}" value="Недостаточно средств на балансе для проведения операции" />
+			<set item="Sender" value="_ADDFAVCOUNTRY_SERVICE_NUMBER" />
+			<set item="Recipient" value="${customer}" />
+			<set item="Encoding" value="unicodefffe" />
+		</deliveryTemplate>
+	</template>
+
+	<template procedureName="AddFavouriteCountryError">
+		<condition>
+			<test item="${Recipient}" matches="^_ADDFAVCOUNTRY_SERVICE_NUMBER$" />
+		</condition>
+		<receiveTemplate>
+			<Message initiator="smscon" id="${guid}" session_id="${guid}">
+				<Item customer="${sender}" content="${content}"/>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate direction="input">
+			<set item="Content"  value="Неизвестный код '#{normalize-space('${content}')}' для добавления Любимой страны" />
+			<set item="Sender" value="_ADDFAVCOUNTRY_SERVICE_NUMBER" />
+			<set item="Recipient" value="${customer}" />
+			<set item="Encoding" value="unicodefffe" />
+		</deliveryTemplate>
+	</template>
+	
+
+
+	<template procedureName="GetFavouriteCountry" sessionStorage="Remoting" sessionLifetime="300">
+		<condition>
+			<test item="${Recipient}" matches="^_GETFAVCOUNTRY_SERVICE_NUMBER$" />
+			<test item="${Content}" matches="^\s*\w+\s*$" />
+			<test item="#{if(document('C:\Foris\Messaging Gateway\config\Common\FavouriteCountry.xml')/favcountries/favcountry/@smscode='#{normalize-space('${Content}')}',1,0)}" matches="1" />
+		</condition>
+		<receiveTemplate>
+			<Message type="retrievecustomerdata" initiator="smscon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+				<Item customer="${sender}" subject="get_parametrical_discount">
+				    <Attribute name="service_id" value="#{document('C:\Foris\Messaging Gateway\config\Common\FavouriteCountry.xml')/favcountries/favcountry[@smscode='#{normalize-space('${content}')}']/@crmcode}" />
+				</Item>
+				@{store(sCode,SMS-код:#{normalize-space('${Content}')})}
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate conditionEx="#{${dbresult}=0}">
+            <set item="Content" value="Скидка '#{/Message/Item/row/Attribute[@name='service_name']/@value}': #{/Message/Item/row/Attribute[@name='discount_value']/@value}@{switch(#{/Message/Item/row/Attribute[@name='discount_type']/@value}|?,1|%,2|#{document('C:\Foris\Messaging Gateway\config\Common\currencies.xml')/currencies/currency[@code='#{/Message/Item/row/Attribute[@name='currency_code']/@value}']/@value})}; коэф.сч-ка #{/Message/Item/row/Attribute[@name='discount_counter']/@value}" />
+			<set item="Sender" value="_GETFAVCOUNTRY_SERVICE_NUMBER" />
+			<set item="Recipient" value="${customer}" />
+			<set item="Encoding" value="unicodefffe" />
+			<set conditionEx="0@{freeSession}" />
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="#{'${sCode}'=''}">
+			<set item="Content" value="Ошибка запроса информации о Любимой стране" />
+			<set item="Content" conditionEx="#{${dbresult}=320348}" value="У Вас есть запрошенная услуга 'Любимая страна'" />
+			<set item="Content" conditionEx="#{${dbresult}=320956}" value="У Вас нет запрошенной услуги 'Любимая страна'" />
+			<set item="Sender" value="_GETFAVCOUNTRY_SERVICE_NUMBER" />
+			<set item="Recipient" value="${customer}" />
+			<set item="Encoding" value="unicodefffe" />
+			<set conditionEx="0@{freeSession}" />
+		</deliveryTemplate>
+		<deliveryTemplate>
+			<set item="Content" value="Ошибка запроса информации о Любимой стране" />
+			<set item="Content" conditionEx="#{${dbresult}=320348}" value="У Вас есть услуга 'Любимая страна (${sCode})'" />
+			<set item="Content" conditionEx="#{${dbresult}=320956}" value="У Вас нет услуги 'Любимая страна (${sCode})'" />
+			<set item="Sender" value="_GETFAVCOUNTRY_SERVICE_NUMBER" />
+			<set item="Recipient" value="${customer}" />
+			<set item="Encoding" value="unicodefffe" />
+			<set conditionEx="0@{freeSession}" />
+		</deliveryTemplate>
+	</template>
+
+	<template procedureName="GetFavouriteCountryError">
+		<condition>
+			<test item="${Recipient}" matches="^_GETFAVCOUNTRY_SERVICE_NUMBER$" />
+		</condition>
+		<receiveTemplate>
+			<Message initiator="smscon" id="${guid}" session_id="${guid}">
+				<Item customer="${sender}" content="${content}"/>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate direction="input">
+			<set item="Content"  value="Не найдена Любимая страна с SMS-кодом '#{normalize-space('${content}')}'" />
+			<set item="Sender" value="_GETFAVCOUNTRY_SERVICE_NUMBER" />
+			<set item="Recipient" value="${customer}" />
+			<set item="Encoding" value="unicodefffe" />
+		</deliveryTemplate>
+	</template>
+
+</templateGroup>

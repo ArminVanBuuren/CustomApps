@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="DN_CreateOrUpdate" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Create and/or update DN</Description>
+	<Author Name="Khovanskiy Vladimir" Date="2017-11-14+10:00"/>
+	<Request>
+		<RequestTemplate>
+<![CDATA[
+{0}
+	"bgid": {2},
+	"dn": "{3}",
+	"node": 44301
+{1}
+]]>
+		</RequestTemplate>
+		<EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+		<Item Name="SYMBOL_START" Type="Constant"/>
+		<Item Name="SYMBOL_END" Type="Constant"/>
+		<Item Name="BG_ID" Type="Parameter"/>
+		<Item Name="MSISDN" Type="Wellknown"/>
+		<Item Name="DN_CSNode" Type="Parameter"/>
+	</Request>
+	<ErrorsList CodePage="ascii"/>
+</Command>

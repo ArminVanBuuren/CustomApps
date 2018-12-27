@@ -1,0 +1,1430 @@
+<!-- 
+Шаблоны SMS по задаче 686391 "Разработка шаблонов MG для самообслуживания абонентов PoP через SMS-запросы"
+Версия файла: 1.14
+
+Changes 15.01.2014 (made by Max Smirnov) TFS Task #766324:
++ Fixed template name
+
+Changes 14.01.2014 (made by Max Smirnov) TFS Task #762701:
++ Secured methods added
+
+Changes 20.09.2013 (made by Max Smirnov) TFS Task #703255:
++ FnF added
+
+Changes 13.09.2013 (made by Konstantin Cherkashin) TFS Task #699462:
++ Language changes: 1, 2 - english, 3 - russian, 4 - ukrainian
++ Default response language ukrainian
+-->
+<templateGroup name="PoPTemplate">
+  <macros>
+    <define name="_SMS_SERVICE_NUMBER" value="110"/>
+    <define name="_BMSHND" value="WCFHND_01"/>
+    <define name="_MSCPHND" value="WCFHND_03"/>
+    <define name="_RIHND" value="WCFHND_02"/>
+    <!--Флаги конкретного запроса-->
+    <define name="_SERVICE_CODE" value="#{document('C:\Foris\Messaging Gateway\config\PoPTemplates\Services.xml')/services/service/sms[@text='${sCode}']/parent::service/@service_code}"/>
+    <define name="_SERVICE_ACTION" value="#{document('C:\Foris\Messaging Gateway\config\PoPTemplates\Services.xml')/services/service/sms[@text='${sCode}']/@action}"/>
+    <define name="_SERVICE_INTERROGATION" value="#{document('C:\Foris\Messaging Gateway\config\PoPTemplates\Services.xml')/services/service/sms[@text=${sCode}]/@serviceinterrogation}"/>
+    <define name="_SERVICE_ORDER" value="#{document('C:\Foris\Messaging Gateway\config\PoPTemplates\Services.xml')/services/service/sms[@text=${sCode}]/@serviceorder}"/>
+    <!--Сообщение: описание услуги-->
+    <define name="_INFO_RU" value="#{document('C:\Foris\Messaging Gateway\config\PoPTemplates\Services.xml')/services/service/sms[@text='${sCode}']/parent::service/@info_ru}"/>
+    <define name="_INFO_UA" value="#{document('C:\Foris\Messaging Gateway\config\PoPTemplates\Services.xml')/services/service/sms[@text='${sCode}']/parent::service/@info_ua}"/>
+    <define name="_INFO_EN" value="#{document('C:\Foris\Messaging Gateway\config\PoPTemplates\Services.xml')/services/service/sms[@text='${sCode}']/parent::service/@info_en}"/>
+    <!--Сообщение: услуга не активна-->
+    <define name="_INFO_NOT_ACTIVE_RU" value="#{document('C:\Foris\Messaging Gateway\config\PoPTemplates\Services.xml')/services/service/sms[@text='${sCode}']/parent::service/@info_not_active_ru}"/>
+    <define name="_INFO_NOT_ACTIVE_UA" value="#{document('C:\Foris\Messaging Gateway\config\PoPTemplates\Services.xml')/services/service/sms[@text='${sCode}']/parent::service/@info_not_active_ua}"/>
+    <define name="_INFO_NOT_ACTIVE_EN" value="#{document('C:\Foris\Messaging Gateway\config\PoPTemplates\Services.xml')/services/service/sms[@text='${sCode}']/parent::service/@info_not_active_en}"/>
+    <!--Сообщение: услуга активна-->
+    <define name="_INFO_ACTIVE_RU" value="#{document('C:\Foris\Messaging Gateway\config\PoPTemplates\Services.xml')/services/service/sms[@text='${sCode}']/parent::service/@info_active_ru}"/>
+    <define name="_INFO_ACTIVE_UA" value="#{document('C:\Foris\Messaging Gateway\config\PoPTemplates\Services.xml')/services/service/sms[@text='${sCode}']/parent::service/@info_active_ua}"/>
+    <define name="_INFO_ACTIVE_EN" value="#{document('C:\Foris\Messaging Gateway\config\PoPTemplates\Services.xml')/services/service/sms[@text='${sCode}']/parent::service/@info_active_en}"/>
+    <!--Сообщение: заявка на подключение принята-->
+    <define name="_INFO_SUCCESS_ACTIVATION_RU" value="#{document('C:\Foris\Messaging Gateway\config\PoPTemplates\Services.xml')/services/service/sms[@text='${sCode}']/parent::service/@info_success_activation_ru}"/>
+    <define name="_INFO_SUCCESS_ACTIVATION_UA" value="#{document('C:\Foris\Messaging Gateway\config\PoPTemplates\Services.xml')/services/service/sms[@text='${sCode}']/parent::service/@info_success_activation_ua}"/>
+    <define name="_INFO_SUCCESS_ACTIVATION_EN" value="#{document('C:\Foris\Messaging Gateway\config\PoPTemplates\Services.xml')/services/service/sms[@text='${sCode}']/parent::service/@info_success_activation_en}"/>
+    <!--Сообщение: заявка на отключение принята-->
+    <define name="_INFO_SUCCESS_DEACTIVATION_RU" value="#{document('C:\Foris\Messaging Gateway\config\PoPTemplates\Services.xml')/services/service/sms[@text='${sCode}']/parent::service/@info_success_deactivation_ru}"/>
+    <define name="_INFO_SUCCESS_DEACTIVATION_UA" value="#{document('C:\Foris\Messaging Gateway\config\PoPTemplates\Services.xml')/services/service/sms[@text='${sCode}']/parent::service/@info_success_deactivation_ua}"/>
+    <define name="_INFO_SUCCESS_DEACTIVATION_EN" value="#{document('C:\Foris\Messaging Gateway\config\PoPTemplates\Services.xml')/services/service/sms[@text='${sCode}']/parent::service/@info_success_deactivation_en}"/>
+
+    <define name="_CHECK_LANGUAGE_ID" value="0@{store(sLanguage,#{if('${sLanguage}'='','${LANGUAGE_ID}','${sLanguage}')})}"/>
+  </macros>
+  <!--Получение платформы абона-->
+  <template procedureName="GetPlatform" handler="_RIHND" sessionStorage="Memory" sessionLifetime="300">
+    <condition>
+      <test item="${Recipient}" matches="^_SMS_SERVICE_NUMBER$"/>
+      <test item="${Content}" matches="^(\d{1,4})|(\d{1,4}\*\d{1,12})|(\d{1,4}\*\d{1,12}\*\d{1,12})$"/>
+    </condition>
+    <receiveTemplate>
+      <Message type="gethost" initiator="smscon" id="${guid}" session_id="@{setSessionId(${guid})}">
+        @{store(sContent,${Content})}
+        @{store(sSender,${Sender})}
+        @{store(sRecipient,${Recipient})}
+        @{store(sEncoding,${Encoding})}
+        @{store(sPassword,${token1})}
+        @{store(sCode,${token0})}
+        <Item procedureName="GetHost">
+          <Attribute name="Customer" type="String" value="${Sender}"/>
+          <Attribute name="HostType" type="String" value="SC"/>
+          <Attribute name="HostCode"/>
+          <Attribute name="HostName"/>
+          <Attribute name="HostAddress"/>
+          <Attribute name="Result"/>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <!--абон не наш-->
+    <deliveryTemplate conditionEx="#{'${Result}' = '0' and '${HostCode}'=''}">
+      <set item="Content" value="${sContent}"/>
+      <set item="Sender" value="${sSender}"/>
+      <set item="Recipient" value="102157"/>
+      <set item="Encoding" value="${sEncoding}"/>
+    </deliveryTemplate>
+    <!--абон наш. Установка языка-->
+    <deliveryTemplate conditionEx="#{${Result}=0 and matches('${sContent}','^(801|802|803)$')}" call="SetCommunicationLang">
+      <set item="Content" value="${sContent}"/>
+      <set item="Sender" value="${sSender}"/>
+      <set item="Recipient" value="${sRecipient}"/>
+      <set item="Encoding" value="${sEncoding}"/>
+    </deliveryTemplate>
+    <!--абон наш. Остальные методы-->
+    <deliveryTemplate conditionEx="#{${Result}=0}" call="GetCommunicationLang">
+      <set item="Content" value="${sContent}"/>
+      <set item="Sender" value="${sSender}"/>
+      <set item="Recipient" value="${sRecipient}"/>
+      <set item="Encoding" value="${sEncoding}"/>
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${sSender}"/>
+      <set item="Encoding" value="${sEncoding}"/>
+      <set item="Content" value="Servis tymchasovo nedostupnyy"/>
+    </deliveryTemplate>
+  </template>
+  <!--Получение текущего языка. Код 80-->
+  <!--Шаблон #1 для поддержки мультиязычности. Вызывается перед каждым запросом - поэтому распределяет шаблоны. language_id: 3 - рус, 1- англ, 4 - укр-->
+  <template procedureName="GetCommunicationLang" handler="_MSCPHND">
+    <condition>
+      <test item="1" matches="0"/>
+    </condition>
+    <receiveTemplate>
+      <Message type="scnauthenticate" initiator="smscon" id="${guid}" session_id="${session_id}">
+        <Item procedureName="SCN_AUTHENTICATE">
+          <Attribute name="CLIENT_ID" type="String" value="911"/>
+          <Attribute name="REQUEST_ID" type="String" value="#{substring('${guid}',1,10)}"/>
+          <Attribute name="SUBSCR_NUMBER" value="+${sSender}"/>
+          <Attribute name="AUTH_TYPE" type="Int32" value="0"/>
+          <Attribute name="PASSWORD" type="String" value=""/>
+          <Attribute name="RESULT_CODE"/>
+          <Attribute name="REQUEST_ID"/>
+          <Attribute name="RESULT_MESSAGE"/>
+          <Attribute name="MSISDN"/>
+          <Attribute name="TARIFF_PLAN_ID"/>
+          <Attribute name="LANGUAGE_ID"/>
+          <Attribute name="CUST_STATUS"/>
+          <Attribute name="CUST_ADM_STATUSES"/>
+          <Attribute name="ACTIVATION_COUNT"/>
+          <Attribute name="ACTIVATION_COUNTDOWN"/>
+          <Attribute name="LAST_ACTIVITY"/>
+          <Attribute name="Loc_No"/>
+          <Attribute name="SERVICE_PROVIDER_CODE"/>
+          <Attribute name="PA_ID"/>
+          <Attribute name="TDC_ID"/>
+          <!-- <Attribute name="ADDITIONAL_DATA" /> -->
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <!--Для прямого запроса языка. Код 80-->
+    <deliveryTemplate conditionEx="#{'${RESULT_CODE}'='0' and matches('${sCode}','^80$') and matches('${LANGUAGE_ID}','^(1|2)$')}">
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+      <set item="Content" value="To change language to Ukrainian, send 801, to Russian, send 802."/>
+      <set item="Encoding" value="ascii"/>
+      <set conditionEx="0@{freeSession}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${RESULT_CODE}'='0' and matches('${sCode}','^80$') and '${LANGUAGE_ID}'='3'}">
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+      <set item="Content" value="Dlja izmenenija jazyka na ukrainskij, otprav'te 801, na anglijskij 803."/>
+      <set item="Encoding" value="ascii"/>
+      <set conditionEx="0@{freeSession}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${RESULT_CODE}'='0' and matches('${sCode}','^80$') and '${LANGUAGE_ID}'='4'}">
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+      <set item="Content" value="Dlja zminy movy na rosijs’ku, vidpravte 802, na anglijs’ku 803."/>
+      <set item="Encoding" value="ascii"/>
+      <set conditionEx="0@{freeSession}"/>
+    </deliveryTemplate>
+    <!--Для мультиязычности-->
+    <deliveryTemplate conditionEx="#{'${RESULT_CODE}'='0' and  matches('${sCode}','^(30|301|302|303|40|401|402|403|404|405|41|411|412|413|50|501|502|503|51|511|512|513|52|521|522|523|53|531|532|533|403|405|402|133|134|135|136|60|603|61|611|612|613|62|611|612|613)')}" call="Entry">
+      <set item="Content" value="${sContent}"/>
+      <set item="Sender" value="${sSender}"/>
+      <set item="Recipient" value="${sRecipient}"/>
+      <set item="Encoding" value="${sEncoding}"/>
+      <set conditionEx="_CHECK_LANGUAGE_ID"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${RESULT_CODE}'='0' and  matches('${sCode}','^(601|602)$')}" call="ManageInternetPackages">
+      <set item="Content" value="${sContent}"/>
+      <set item="Sender" value="${sSender}"/>
+      <set item="Recipient" value="${sRecipient}"/>
+      <set item="Encoding" value="${sEncoding}"/>
+      <set conditionEx="0@{store(sLanguage,${LANGUAGE_ID})}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${RESULT_CODE}'='0' and  matches('${sCode}','^0$')}">
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+      <set item="Encoding" value="${Encoding}"/>
+      <set item="Content" conditionEx="#{'${LANGUAGE_ID}'='3'}" value="Dlja poluchenija Finansovoj informatsii po lichnomu schetu otpravte1, informatsii po kontraktu 2. Upravlenie uslugami 3, 4, 5, 6, 8"/>
+      <set item="Content" conditionEx="#{'${LANGUAGE_ID}'='1'}" value="To obtain Finance Information for Customer Account, send 1, Information for Customer Contract 2. Service management 3, 4, 5, 6, 8"/>
+      <set item="Content" conditionEx="#{not(matches('${LANGUAGE_ID}','^(1|3)$'))}" value="Dlja otrymannja Finansovoi informatsi po osobovomu rakhunku vidpravte 1, informatsii po kontraktu 2. Keruvannja poslugamy 3, 4, 5, 6, 8"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${RESULT_CODE}'='0' and  matches('${sCode}','^1$')}">
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+      <set item="Encoding" value="${Encoding}"/>
+      <set item="Content" conditionEx="#{'${LANGUAGE_ID}'='3'}" value="Sostojanie scheta 10. Poslednie platezhi 11. Poslednie scheta 12. Schet za mesjats 13. Kolichestvo bonusov 14"/>
+      <set item="Content" conditionEx="#{'${LANGUAGE_ID}'='1'}" value="Account status 10. Last payments 11. Last bills 12. Monthly accounts check 13. Bonus account 14"/>
+      <set item="Content" conditionEx="#{not(matches('${LANGUAGE_ID}','^(1|3)$'))}" value="Stan rakhunku 10. Ostanni platezhi 11. Ostanni rakhunky 12. Rakhunok za misjats 13. Kilkist bonusiv 14"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${RESULT_CODE}'='0' and  matches('${sCode}','^2$')}">
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+      <set item="Encoding" value="${Encoding}"/>
+      <set item="Content" conditionEx="#{'${LANGUAGE_ID}'='3'}" value="Dlja proverki ostatka min, paketa uslug otpravte 20. Tarifnogo paketa 21. Dopolnitelnogo soglashenija 22"/>
+      <set item="Content" conditionEx="#{'${LANGUAGE_ID}'='1'}" value="To check Rest of min, service package, send 20. Tariff package 21. Additional agreement 22"/>
+      <set item="Content" conditionEx="#{not(matches('${LANGUAGE_ID}','^(1|3)$'))}" value="Dlja perevirky Zalyshku khv, paketa poslug vidpravte 20. Taryfnogo paketu 21. Dodatkovoi ugody 22"/>
+    </deliveryTemplate>     
+    <deliveryTemplate conditionEx="#{'${RESULT_CODE}'='0' and  matches('${sCode}','^10$')}" call="DB_BalanceRetriev">
+      <set item="Content" value="${sContent}"/>
+      <set item="Sender" value="${sSender}"/>
+      <set item="Recipient" value="${sRecipient}"/>
+      <set item="Encoding" value="${sEncoding}"/>
+      <set conditionEx="0@{store(sLanguage,${LANGUAGE_ID})}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${RESULT_CODE}'='0' and  matches('${sCode}','^11$')}" call="DB_PaymentsInformation_CheckSecuredState">
+      <set item="Content" value="${sContent}"/>
+      <set item="Sender" value="${sSender}"/>
+      <set item="Recipient" value="${sRecipient}"/>
+      <set item="Encoding" value="${sEncoding}"/>
+      <set conditionEx="_CHECK_LANGUAGE_ID"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${RESULT_CODE}'='0' and  matches('${sCode}','^12$')}" call="DB_BillsInformation_CheckSecuredState">
+      <set item="Content" value="${sContent}"/>
+      <set item="Sender" value="${sSender}"/>
+      <set item="Recipient" value="${sRecipient}"/>
+      <set item="Encoding" value="${sEncoding}"/>
+      <set conditionEx="_CHECK_LANGUAGE_ID"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${RESULT_CODE}'='0' and  matches('${sCode}','^13$')}" call="MonthlyAccountsCheck">
+      <set item="Content" value="${sContent}"/>
+      <set item="Sender" value="${sSender}"/>
+      <set item="Recipient" value="${sRecipient}"/>
+      <set item="Encoding" value="${sEncoding}"/>
+      <set conditionEx="0@{store(sLanguage,${LANGUAGE_ID})}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${RESULT_CODE}'='0' and  matches('${sCode}','^14$')}" call="GetBMSBalance">
+      <set item="Content" value="${sContent}"/>
+      <set item="Sender" value="${sSender}"/>
+      <set item="Recipient" value="${sRecipient}"/>
+      <set item="Encoding" value="${sEncoding}"/>
+      <set conditionEx="0@{store(sLanguage,${LANGUAGE_ID})}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${RESULT_CODE}'='0' and  matches('${sCode}','^2$')}">
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+      <set item="Encoding" value="${Encoding}"/>
+      <set item="Content" value="Dlja proverki ostatka min, paketa uslug otpravte 20. Tarifnogo paketa 21. Dopolnitelnogo soglashenija 22."/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${RESULT_CODE}'='0' and  matches('${sCode}','^20$')}" call="PackageUsageCheck">
+      <set item="Content" value="${sContent}"/>
+      <set item="Sender" value="${sSender}"/>
+      <set item="Recipient" value="${sRecipient}"/>
+      <set item="Encoding" value="${sEncoding}"/>
+      <set conditionEx="0@{store(sLanguage,${LANGUAGE_ID})}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${RESULT_CODE}'='0' and  matches('${sCode}','^21$')}" call="TariffInformationCheck">
+      <set item="Content" value="${sContent}"/>
+      <set item="Sender" value="${sSender}"/>
+      <set item="Recipient" value="${sRecipient}"/>
+      <set item="Encoding" value="${sEncoding}"/>
+      <set conditionEx="0@{store(sLanguage,${LANGUAGE_ID})}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${RESULT_CODE}'='0' and  matches('${sCode}','^22$')}" call="AdditionalAgreement">
+      <set item="Content" value="${sContent}"/>
+      <set item="Sender" value="${sSender}"/>
+      <set item="Recipient" value="${sRecipient}"/>
+      <set item="Encoding" value="${sEncoding}"/>
+      <set conditionEx="0@{store(sLanguage,${LANGUAGE_ID})}"/>
+    </deliveryTemplate>
+
+    <deliveryTemplate conditionEx="#{'${RESULT_CODE}'='0' and  matches('${sContent}','^404(1|2|3|4|5)$')}" call="ViewFnFNumber">
+      <set item="Content" value="${sContent}"/>
+      <set item="Sender" value="${sSender}"/>
+      <set item="Recipient" value="${sRecipient}"/>
+      <set item="Encoding" value="${sEncoding}"/>
+      <set conditionEx="0@{store(sLanguage,${LANGUAGE_ID})}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${RESULT_CODE}'='0' and  matches('${sContent}','^405(1|2|3|4|5)\*\d+$')}" call="SetFnFNumber">
+      <set item="Content" value="${sContent}"/>
+      <set item="Sender" value="${sSender}"/>
+      <set item="Recipient" value="${sRecipient}"/>
+      <set item="Encoding" value="${sEncoding}"/>
+      <set conditionEx="0@{store(sLanguage,${LANGUAGE_ID})}"/>
+    </deliveryTemplate>
+
+    <deliveryTemplate conditionEx="#{'${RESULT_CODE}'='0' and  matches('${sContent}','^123\*\d+\*\d+$')}" call="ChangeMobilePassword">
+      <set item="Content" value="${sContent}"/>
+      <set item="Sender" value="${sSender}"/>
+      <set item="Recipient" value="${sRecipient}"/>
+      <set item="Encoding" value="${sEncoding}"/>
+      <set conditionEx="_CHECK_LANGUAGE_ID"/>
+    </deliveryTemplate>
+
+    <deliveryTemplate conditionEx="#{'${RESULT_CODE}'='0'}">
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+      <set item="Encoding" value="${Encoding}"/>
+      <set item="Content" value="Nevernyi format sms"/>
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+      <set item="Encoding" value="${Encoding}"/>
+      <set item="Content" value="Servis tymchasovo nedostupnyy"/>
+    </deliveryTemplate>
+  </template>
+
+  <!--Код 801/802/803-->
+  <template procedureName="SetCommunicationLang">
+    <condition>
+      <test item="1" matches="0"/>
+    </condition>
+    <receiveTemplate>
+      <Message type="setprofile" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${sSender}">
+          <Attribute name="communicationlanguage" value="@{switch(${sContent}|-1,801|4,802|3,803|1)}"/>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0 and ${communicationlanguage}=3}">
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+      <set item="Content" value="Zajavka na izmenenie jazyka prinjata"/>
+      <set item="Encoding" value="ascii"/>
+      <set conditionEx="0@{freeSession}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0 and ${communicationlanguage}=1}">
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+      <set item="Content" value="Order for language change is accepted"/>
+      <set item="Encoding" value="ascii"/>
+      <set conditionEx="0@{freeSession}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0 and ${communicationlanguage}=4}">
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+      <set item="Content" value="Zamovlennja na zminu movy pryjnjato"/>
+      <set item="Encoding" value="ascii"/>
+      <set conditionEx="0@{freeSession}"/>
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+      <set item="Content" value="Servis tymchasovo nedostupnyy"/>
+    </deliveryTemplate>
+  </template>
+
+  <!--Код 10, Account status -->
+  <template procedureName="DB_BalanceRetriev" handler="_MSCPHND">
+    <condition>
+      <test item="1" matches="0"/>
+    </condition>
+    <receiveTemplate>
+      <Message type="scnsbcgetbalance" initiator="smscon" id="${guid}" session_id="${session_id}">
+        <Item procedureName="SCN_SBC_GET_BALANCE">
+          <Attribute name="CLIENT_ID" type="String" value="911"/>
+          <Attribute name="REQUEST_ID" type="String" value="#{substring('${guid}',1,10)}"/>
+          <Attribute name="MSISDN" value="+${Sender}"/>
+          <Attribute name="RESULT_CODE"/>
+          <Attribute name="REQUEST_ID"/>
+          <Attribute name="BALANCE"/>
+          <Attribute name="CURRENCY"/>
+          <Attribute name="CUST_STATUS"/>
+          <Attribute name="EXPIRE_DATE"/>
+          <Attribute name="BLOCKED_END_DATE"/>
+          <Attribute name="REQUEST_DATE"/>
+          <Attribute name="SYSTEM_TIME_ZONE"/>
+          <Attribute name="ADDITIONAL_DATA"/>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'${RESULT_CODE}' = '0'}">
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${sSender}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Your advance money is #{${BALANCE} div 1000000} UAH"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Vash avans sostavljaet #{${BALANCE} div 1000000} grn"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Vash avans skladaje: #{${BALANCE} div 1000000} grn"/>
+      <set item="Encoding" value="${Encoding}"/>
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${sSender}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Service temporarily unavailable"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Servis vremenno nedostupen"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Servis tymchasovo nedostupnyy"/>
+      <set item="Encoding" value="${Encoding}"/>
+    </deliveryTemplate>
+  </template>
+
+  <!--Код 11, Last payments -->
+  <!-- проверка на наличие пароля в реквесте. от его наличия вызываем либо обычный, либо secured метод -->
+  <template procedureName="DB_PaymentsInformation_CheckSecuredState">
+    <condition>
+      <test item="0" matches="1"/>
+    </condition>
+    <receiveTemplate>
+      <Message initiator="smscon" id="${guid}" session_id="${session_id}">        
+        <Item Content="${Content}"/>
+        <Item Sender="${Sender}"/>
+        <Item Recipient="${Recipient}"/>
+        <Item Encoding="${Encoding}"/>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" conditionEx="#{'${sPassword}'=''}" call="DB_PaymentsInformation">
+      <set item="Content" value="${Content}"/>
+      <set item="Sender" value="${Sender}"/>
+      <set item="Recipient" value="${Recipient}"/>
+      <set item="Encoding" value="${Encoding}"/>
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" call="DB_PaymentsInformation_Secured">
+      <set item="Content" value="${Content}"/>
+      <set item="Sender" value="${Sender}"/>
+      <set item="Recipient" value="${Recipient}"/>
+      <set item="Encoding" value="${Encoding}"/>
+    </deliveryTemplate>    
+  </template>
+
+  <!--Код 11, Last payments -->
+  <template procedureName="DB_PaymentsInformation">
+    <condition>
+      <test item="1" matches="0"/>
+    </condition>
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" initiator="smscon" id="${guid}" session_id="${session_id}">
+        <Item customer="${sSender}" subject="payments">
+          <Attribute name="index" value="0"/>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=320060}">
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Нет прав на выполнения данной операции"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Customer has no right on this operation"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Нет прав на выполнения данной операции."/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${intpartfracpart}'!='' and ${dbresult}=0}">
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Vash posledniy platezh #{/Message/Item/Attribute[@name='intpartfracpart']/@value div 100} grn postupil ${day}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Your last payment #{/Message/Item/Attribute[@name='intpartfracpart']/@value div 100} UAH received ${day}"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Vash ostannij platizh #{/Message/Item/Attribute[@name='intpartfracpart']/@value div 100} grn otrymanyj ${day}"/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Za poslednie 6 mesjatsev platezhi ne postupali."/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Your do not have any payment for last 6 months"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Za ostanni 6 misjaciv platezhi ne nadhodyly"/>
+      <set item="Content" conditionEx="#{${dbresult} = -1  and '${sLanguage}'='3'}" value="Dannij zapros ne mozhet bit' vipolnen"/>
+      <set item="Content" conditionEx="#{${dbresult} = -1  and '${sLanguage}'='1'}" value="This request can not be processed"/>
+      <set item="Content" conditionEx="#{${dbresult} = -1  and not(matches('${sLanguage}','^(1|3)$'))}" value="Danyj zapyt ne mozhe buty obroblenyj"/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+  </template>
+
+  <!--Код 11, Last payments. Secured version-->
+  <!--
+Eng
+Your payments: dd.mm.yy XX,yy UAH; dd.mm.yy XX,yy UAH; dd.mm.yy XX,yy UAH; dd.mm.yy XX,yy UAH; dd.mm.yy XX,yy UAH; dd.mm.yy XX,yy UAH
+Ukr
+Vashi platezhi: dd.mm.rr. XX,yy grn; dd.mm.rr. XX,yy grn; dd.mm.rr. XX,yy grn; dd.mm.rr. XX,yy grn; dd.mm.rr. XX,yy grn; dd.mm.rr. XX grn
+Ru
+Vashi platezhi: dd.mm.gg. XX,yy grn; dd.mm.gg. XX,yy grn; dd.mm.gg. XX,yy grn; dd.mm.gg. XX,yy grn; dd.mm.gg. XX,yy grn; dd.mm.gg. XX,yy grn
+-->
+  <template procedureName="DB_PaymentsInformation_Secured" sessionStorage="Memory" sessionLifetime="600">
+    <condition>
+      <test item="1" matches="0"/>
+    </condition>
+    <receiveTemplate>
+      <Message type="retrievecustomerdatasecured" initiator="smscon" id="@{newGuid}" session_id="${session_id}">
+        <Item customer="${sSender}" subject="paymentssecured" pin="${sPassword}">
+          @{store(sCount,#{if('${sCount}'='',0,number(${sCount}))})}
+          <Attribute name="index" value="#{number(${sCount})}" />
+        </Item>
+      </Message>      
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=320060}">
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Нет прав на выполнения данной операции"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Customer has no right on this operation"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Нет прав на выполнения данной операции."/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=320012}">
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Неверный пароль"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Incorrect password"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Неверный пароль"/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${intpartfracpart}'!='' and ${dbresult}=0 and 6>number('${sCount}')}" call="DB_PaymentsInformation_Secured">
+      <set conditionEx="0@{store(sCount,#{number(${sCount})+1})}" />
+      <set conditionEx="0@{store(sResult,${sResult} ${day} #{substring('${intpartfracpart}',1,string-length('${intpartfracpart}')-2)}---#{substring('${intpartfracpart}',string-length('${intpartfracpart}')-1)} #{if('${sLanguage}'='3','grn','')}#{if('${sLanguage}'='1','UAH','')}#{if(not(matches('${sLanguage}','^(1|3)$')),'grn','')};)}" />
+      <set item="Content" value="Call*DB_PaymentsInformation_Secured"/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{number('${sCount}')>0}">
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Vashi platezhi: #{replace('${sResult}','---',',')}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Your payments: #{replace('${sResult}','---',',')}"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Vashi platezhi: #{replace('${sResult}','---',',')}"/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Za poslednie 6 mesjatsev platezhi ne postupali."/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Your do not have any payment for last 6 months"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Za ostanni 6 misjaciv platezhi ne nadhodyly"/>
+      <set item="Content" conditionEx="#{${dbresult} = -1  and '${sLanguage}'='3'}" value="Dannij zapros ne mozhet bit' vipolnen"/>
+      <set item="Content" conditionEx="#{${dbresult} = -1  and '${sLanguage}'='1'}" value="This request can not be processed"/>
+      <set item="Content" conditionEx="#{${dbresult} = -1  and not(matches('${sLanguage}','^(1|3)$'))}" value="Danyj zapyt ne mozhe buty obroblenyj"/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+  </template>
+
+  <!--Код 12, Last bills -->
+  <template procedureName="DB_LastPeriodBill">
+    <condition>
+      <test item="1" matches="0"/>
+    </condition>
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" initiator="smscon" id="${guid}" session_id="${session_id}">
+        <Item customer="${sSender}" subject="lastperiodbill">
+          <Attribute name="start" value="#{FirstDayOfMonth(Now())}"/>
+          <Attribute name="end" value="#{LastDayOfMonth(Now())}"/>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult} = 0}">
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Summa poslednego scheta (s NDS) za period ${beginday} - ${endday} sostavljaet #{/Message/Item/Attribute[@name='draftintdotpart']/@value div 100} grn."/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Your last bill (VAT incl.) for period ${beginday} - ${endday} is #{/Message/Item/Attribute[@name='draftintdotpart']/@value div 100} hrn."/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Suma ostann'ogo rahunku (z PDV) za period ${beginday} - ${endday} stanovyt' #{/Message/Item/Attribute[@name='draftintdotpart']/@value div 100} hrn."/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=320060}">
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Нет прав на выполнения данной операции"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Customer has no right on this operation"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Нет прав на выполнения данной операции."/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult} = 320341}">
+      <!-- RC_InvalidNumber 320341 Phone number is not valid -->
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Nevernyj nomer telefona"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Invalid phone number"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Nevirnyj nomer abonenta"/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult} = 320600}">
+      <!-- RC_HaveNoBills 320600 Customer has no bills -->
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="U vas net schetov"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Your do not have any bill"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="U vas nemaje rahunkiv"/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Servis vremenno nedostupen"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Service temporarily unavailable"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Servis tymchasovo nedostupnyy"/>
+    </deliveryTemplate>
+  </template>
+
+  <!--Код 13, Bills -->
+  <!-- проверка на наличие пароля в реквесте. от его наличия вызываем либо обычный, либо secured метод -->
+  <template procedureName="DB_BillsInformation_CheckSecuredState">
+    <condition>
+      <test item="0" matches="1"/>
+    </condition>
+    <receiveTemplate>
+      <Message initiator="smscon" id="${guid}" session_id="${session_id}">        
+        <Item Content="${Content}"/>
+        <Item Sender="${Sender}"/>
+        <Item Recipient="${Recipient}"/>
+        <Item Encoding="${Encoding}"/>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" conditionEx="#{'${sPassword}'=''}" call="DB_LastPeriodBill">
+      <set item="Content" value="${Content}"/>
+      <set item="Sender" value="${Sender}"/>
+      <set item="Recipient" value="${Recipient}"/>
+      <set item="Encoding" value="${Encoding}"/>
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" call="DB_BillsInformation_Secured">
+      <set item="Content" value="${Content}"/>
+      <set item="Sender" value="${Sender}"/>
+      <set item="Recipient" value="${Recipient}"/>
+      <set item="Encoding" value="${Encoding}"/>
+    </deliveryTemplate>    
+  </template>
+
+  <!--Код 13, Bills -->
+  <template procedureName="DB_BillsInformation">
+    <condition>
+      <test item="0" matches="1"/>
+    </condition>    
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" initiator="smscon" id="${guid}" session_id="${session_id}">
+        <Item customer="${sSender}" subject="bills">
+          <Attribute name="index" value="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{${count}=0}">
+      <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+      <set item="Recipient" value="${Customer}" />      
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Шановний абоненте! Поповнення за Вашим рахунком відсутні. Будь ласка, поповніть рахунок."/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Уважаемый абонент! Пополнения по Вашему счету отсутствуют. Пожалуйста, пополните счет."/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Dear subscriber! There is no topping up on your account. Please recharge your account."/>
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0}">
+      <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+      <set item="Recipient" value="${Customer}" />
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Последнее пополнение Вашего счета произошло ${day} на сумму #{substring('${intpartfracpart}',1,string-length('${intpartfracpart}')-2)}.#{substring('${intpartfracpart}',string-length('${intpartfracpart}')-1)} грн"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Останнє поповнення Вашого рахунку відбулося ${day} на суму #{substring('${intpartfracpart}',1,string-length('${intpartfracpart}')-2)}.#{substring('${intpartfracpart}',string-length('${intpartfracpart}')-1)} грн"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Date of last payment was ${day}. Sum of your last payment was #{substring('${intpartfracpart}',1,string-length('${intpartfracpart}')-2)}.#{substring('${intpartfracpart}',string-length('${intpartfracpart}')-1)}"/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>    
+    <deliveryTemplate>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${Customer}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Servis vremenno nedostupen"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Service temporarily unavailable"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Servis tymchasovo nedostupnyy"/>
+    </deliveryTemplate>
+  </template>
+  
+  <!--Код 13, Bills. Secured version -->
+  <!--
+Eng
+Your bill (VAT incl.) for m3.yy - XX,yy UAH; m2.yy - XX,yy UAH; m1.yy - XX,yy UAH
+Ukr
+Suma rakhunku (z PDV) za m3.rr – XX,yy grn; m2.rr - XX,yy grn; m1.rr - XX,yy grn
+Ru
+Summa scheta (s NDS) za m3.gg - XX,yy grn; m2.gg - XX,yy grn; m1.gg - XX,yy grn
+-->
+  <template procedureName="DB_BillsInformation_Secured" sessionStorage="Memory" sessionLifetime="600">
+    <condition>
+      <test item="0" matches="1"/>
+    </condition>    
+    <receiveTemplate>
+      <Message type="retrievecustomerdatasecured" initiator="smscon" id="@{newGuid}" session_id="${session_id}">
+        <Item customer="${sSender}" subject="billssecured" pin="${sPassword}">
+          @{store(sCount,#{if('${sCount}'='',1,number(${sCount}))})}
+          <Attribute name="startdate" value="#{FirstDayOfMonth(AddMonths(Now(), number(-${sCount})))}"/>
+          <Attribute name="enddate" value="#{LastDayOfMonth(AddMonths(Now(), number(-${sCount})))}"/>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=320060}">
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Нет прав на выполнения данной операции"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Customer has no right on this operation"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Нет прав на выполнения данной операции."/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=320012}">
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Неверный пароль"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Incorrect password"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Неверный пароль"/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{4>number(${sCount}) and ${dbresult}=0}"  call="DB_BillsInformation_Secured">
+      <set conditionEx="0@{store(sCount,#{number(${sCount})+1})}" />
+      <set conditionEx="0@{store(sResult,#{substring('${endday}',4)} - #{substring('${draftintdotpart}',1,string-length('${draftintdotpart}')-2)}---#{substring('${draftintdotpart}',string-length('${draftintdotpart}')-1)} #{if('${sLanguage}'='3','grn','')}#{if('${sLanguage}'='1','UAH','')}#{if(not(matches('${sLanguage}','^(1|3)$')),'grn','')}; ${sResult})}" />
+      <set item="Content" value="Call*DB_BillsInformation_Secured"/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{4>number(${sCount}) and ${dbresult}=320600}" call="DB_BillsInformation_Secured">
+      <set conditionEx="0@{store(sCount,#{number(${sCount})+1})}" />
+      <set item="Content" value="Call*DB_BillsInformation_Secured"/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${sResult}'!=''}">
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Summa scheta (s NDS) za #{replace('${sResult}','---',',')}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Your bill (VAT incl.) for #{replace('${sResult}','---',',')}"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Suma rakhunku (z PDV) za #{replace('${sResult}','---',',')}"/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${sResult}'='' and ${dbresult} = 320600}">
+      <!-- RC_HaveNoBills 320600 Customer has no bills -->
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Vy poluchite Vash pervyj schet v sledujuschem mesjatse"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="You will get your first bill next month."/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Vy otrymaete Vash pershyj rahunok nastupnogo misjatsja"/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${Customer}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Servis vremenno nedostupen"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Service temporarily unavailable"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Servis tymchasovo nedostupnyy"/>
+    </deliveryTemplate>
+  </template>
+
+
+  <!--Код 14, Bonus account -->
+  <template procedureName="GetBMSBalance" handler="_BMSHND">
+    <condition>
+      <test item="1" matches="0"/>
+    </condition>
+    <receiveTemplate>
+      <Message type="getcounters" initiator="smscon" id="${guid}" session_id="${session_id}">
+        <Item procedureName="GetBalance">
+          <Attribute name="Customer" type="String" value="${sSender}"/>
+          <Attribute name="Balance"/>
+          <Attribute name="Counters"/>
+          <Attribute name="CreateDate"/>
+          <Attribute name="Result"/>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <!--
+Eng
+On personal account X.XXXXXXXX: XXX bonuses. On DD.ММ.YY ХХХ bonuses will be expired.
+Ukr
+Na osobovomu rakhunku X.XXXXXXXX: XXX bonusiv. DD.MM.YY zakinchytsja termin diji ХХХ bonusiv.
+Ru
+Na lichnom schete X.XXXXXXXX: XXX bonusov. DD.MM.YY zakanchivaetsja srok dejstvija XXX bonusov.
+-->
+    <deliveryTemplate conditionEx="#{'${Result}' = '0'}">
+      <set conditionEx="0@{store(sDate,#{nodeset('${Counters}')/Counters/CounterData[Code='Sremain-Coldest']/RecalculateDate/text()})}"/>
+      <set conditionEx="0@{store(sDateFormated,#{formatDate('${sDate}', 'dd:MM:yyyy')})}"/>
+      <set conditionEx="0@{store(sAmount,#{nodeset('${Counters}')/Counters/CounterData[Code='Sremain-Coldest']/Value/text()})}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Na vashem lichnom schete ${Balance} bonusov. ${sDateFormated} zakanchivaetsja srok dejstvija ${sAmount} bonusov."/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="On your personal account there are ${Balance} bonuses. On ${sDateFormated} ${sAmount} bonuses will be expired."/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Na osobovomu rakhunku ${Balance} bonusiv. ${sDateFormated} zakinchytsja termin diji ${sAmount} bonusiv."/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+      <set item="Encoding" value="${Encoding}"/>
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Servis vremenno nedostupen"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Service temporarily unavailable"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Servis tymchasovo nedostupnyy"/>
+    </deliveryTemplate>
+  </template>
+  <!--Код 20, Rest of minutes, service package -->
+  <template procedureName="PackageUsageCheck">
+    <condition>
+      <test item="1" matches="0"/>
+    </condition>
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" initiator="smscon" id="${guid}" session_id="${session_id}">
+        <Item customer="${sSender}" subject="packages"/>
+      </Message>
+    </receiveTemplate>
+    <!--
+Eng
+Rest: XXX UAH XX kop (VAT incl.). XXX min for MTS. XXX extra minutes. XX minutes, XX SMS, XX MMS.
+Ukr
+Zalyshok: XXX grn. XX kop (z PDV). XXX khvylyn v merezhi MTS. XXX dodatkovyh khvylyn. XX minutes, XX SMS, XX MMS.
+Ru
+Ostatok: XXX grn. XX kop (s NDS). XXX minut v seti MTS. XXX dopolnitel’nyh minut. XX minutes, XX SMS, XX MMS.
+-->
+    <!--deliveryTemplate direction="input">
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="V svyazi s formirovaniem scheta poluchenie dannoj informatsii vremenno nedostupno. Povtorite Vash zapros  pozdnee."/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Due to account formation, it is currently impossible to obtain this information. Please repeat your request later."/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="U zvyazku z formuvannyam rahunku otrymannya dannoi informatsii tymchasovo nemozhlyvo. Sprobujte piznishe."/>
+    </deliveryTemplate-->
+    <!--временно отключено-->
+    <deliveryTemplate conditionEx="#{${dbresult}=0}">
+      <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Content" value="${Content}"/>
+      <set item="Encoding" value="${Encoding}" />
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Servis vremenno nedostupen"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Service temporarily unavailable" />
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Servis tymchasovo nedostupnyy" />
+    </deliveryTemplate>
+  </template>
+
+  <!-- Код 21, Получение информации о тарифу -->
+  <template procedureName="TariffInformationCheck">
+    <condition>
+      <test item="1" matches="0"/>
+    </condition>
+    <receiveTemplate>
+      <Message type="verificationrequest" initiator="smscon" id="${guid}" session_id="${session_id}">
+        <Item customer="${sSender}">
+          <Attribute name="checkivrservice" value="0"/>
+          <Attribute name="checkblocks" value="1"/>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0}">
+      <set conditionEx="0@{store(sTariffPlan,#{//Item/@tariffplan})}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Vash tarifnyjj plan #{document('C:\Foris\Messaging Gateway\config\PoPTemplates\TPList.xml')/TariffPlans/TariffPlan/TARIFF_PLAN_ID[text()='${sTariffPlan}']/parent::TariffPlan/TARIFF_PLAN_NAME1}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Your tariff package is #{document('C:\Foris\Messaging Gateway\config\PoPTemplates\TPList.xml')/TariffPlans/TariffPlan/TARIFF_PLAN_ID[text()='${sTariffPlan}']/parent::TariffPlan/TARIFF_PLAN_NAME1}"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Vash taryfnyjj plan #{document('C:\Foris\Messaging Gateway\config\PoPTemplates\TPList.xml')/TariffPlans/TariffPlan/TARIFF_PLAN_ID[text()='${sTariffPlan}']/parent::TariffPlan/TARIFF_PLAN_NAME1}"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+      <set item="Encoding" value="${Encoding}"/>
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Servis vremenno nedostupen"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Service temporarily unavailable"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Servis tymchasovo nedostupnyy"/>
+    </deliveryTemplate>
+  </template>
+
+  <!--Код 22, Additional agreement -->
+  <template procedureName="AdditionalAgreement">
+    <condition>
+      <test item="1" matches="0"/>
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceinterrogation" initiator="smscon" id="${guid}" session_id="${session_id}">
+        <Item customer="${sSender}">
+          <Service id="" action="interrogation"/>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <!--
+Eng
+Your additional agreement is “AA name”. Start date dd.mm.yy, end date dd.mm.yy
+Ukr
+Dodatkova ugoda “AA name”. Pochatok: dd.mm.rr. Zakinchennia: dd.mm.rr.
+Ru
+Dopolnitel'noe soglashenije “AA name”. Nachalo: dd.mm.gg. Okonchanije: dd.mm.gg.
+-->
+    <!-- НЕ РЕАЛИЗОВАНО -->
+    <deliveryTemplate direction="input">
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Servis vremenno nedostupen"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Service temporarily unavailable"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Servis tymchasovo nedostupnyy"/>
+    </deliveryTemplate>
+  </template>
+
+  <!--Код 404x, View FnF number -->
+  <template procedureName="ViewFnFNumber">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="setprofile" initiator="smscon" id="${guid}" session_id="${session_id}">
+        <Item customer="${sSender}" action="8">
+          @{store(sIndex, #{substring-after('${token0}','404')})
+          <Attribute name="favouritenumber" value="" />
+          <Attribute name="index" value="${sIndex}" />
+          <Attribute name="favouritenumbertypeid" value="1" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0 and //Item/Attribute[@name='favouritenumber']/@value='')}">
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Nomer otsutstvuet v ${sIndex} jachejke. Vnesti nomer otpravte 405${sIndex}."/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="There is no number in ${sIndex} cell. To enter the number send 405${sIndex}."/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Nomer vіdsutnіj u ${sIndex} komіrcі. Vnesti nomer vdpravte 405${sIndex}."/>
+      <set item="Encoding" value="${sEncoding}" />
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0}">
+      <set conditionEx="0@{store(sFavouriteNumber,#{//Item/Attribute[@name='favouritenumber']/@value})}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="№ ${sFavouriteNumber} sohranen v ${sIndex} jachejke. Izmenit' nomer otpravte 405${sIndex}."/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="№ ${sFavouriteNumber} is saved in ${sIndex} cell. To change number send 405${sIndex}."/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="№ ${sFavouriteNumber} zberezheno u ${sIndex} komirci. Zminiti nomer vidpravte 405${sIndex}."/>
+      <set item="Encoding" value="${sEncoding}" />
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Servis vremenno nedostupen"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Service temporarily unavailable"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Servis tymchasovo nedostupnyy"/>
+    </deliveryTemplate>
+  </template>
+
+  <!--Код 405x*number, Set FnF number -->
+  <template procedureName="SetFnFNumber">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="setprofile" initiator="smscon" id="${guid}" session_id="${session_id}">
+        <Item customer="${sSender}" action="9">
+          @{store(sIndex, #{substring-after('${token0}','405')})
+          @{store(sFavouriteNumber, ${token1})}
+          <Attribute name="favouritenumber" value="${sNumber}" />
+          <Attribute name="index" value="${sIndex}" />
+          <Attribute name="favouritenumbertypeid" value="1" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0}">
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="№ ${sFavouriteNumber} sohranen v ${sIndex} jachejke. Izmenit' nomer otpravte 405${sIndex}."/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="№ ${sFavouriteNumber} is saved in ${sIndex} cell. To change number send 405${sIndex}."/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="№ ${sFavouriteNumber} zberezheno u ${sIndex} komirci. Zminiti nomer vidpravte 405${sIndex}."/>
+      <set item="Encoding" value="${sEncoding}" />
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+    <!-- ошибка, если номера нет в предыдущей ячейке. TODO: dbresult error code for empty previous cell  -->
+    <deliveryTemplate conditionEx="#{${dbresult}=1234}">
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Nomer otsutstvuet v #{number(${sIndex})-1} jachejke. Snachala vnesite nomer v jachejku #{number(${sIndex})-1}. Vnesti nomer otpravte 405#{number(${sIndex})-1}. "/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="There is no number in #{number(${sIndex})-1} cell. Enter the number in #{number(${sIndex})-1} cell. To enter the number send 405#{number(${sIndex})-1}."/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Nomer vіdsutnіj u #{number(${sIndex})-1} komіrcі. Spochatku vnesit nomer u #{number(${sIndex})-1} komіrku. Vnesti nomer vdpravte 405#{number(${sIndex})-1}."/>
+      <set item="Encoding" value="${sEncoding}" />
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Servis vremenno nedostupen"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Service temporarily unavailable"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Servis tymchasovo nedostupnyy"/>
+    </deliveryTemplate>
+  </template>
+
+  <!-- Ветка обработки услуг -->
+  <template procedureName="Entry">
+    <condition>
+      <test item="1" matches="0"/>
+    </condition>
+    <receiveTemplate>
+      <Message initiator="smscon" id="${guid}" session_id="${session_id}">
+        <Item Content="${Content}"/>
+        <Item Sender="${Sender}"/>
+        <Item Recipient="${Recipient}"/>
+        <Item Encoding="${Encoding}"/>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" conditionEx="#{'_SERVICE_ACTION' = '3' }">
+      <!--получить инфо-->
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="_INFO_UA"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="_INFO_EN"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="_INFO_RU"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${sSender}"/>
+      <set item="Encoding" value="${Encoding}"/>
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" conditionEx="#{'_SERVICE_ORDER' = '1' and '_SERVICE_INTERROGATION' = '0'}" call="DB_ServiceActivation">
+      <set item="Content" value="${Content}"/>
+      <set item="Sender" value="${Sender}"/>
+      <set item="Recipient" value="${Recipient}"/>
+      <set item="Encoding" value="${Encoding}"/>
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" call="DB_SInterrogation">
+      <set item="Content" value="${Content}"/>
+      <set item="Sender" value="${Sender}"/>
+      <set item="Recipient" value="${Recipient}"/>
+      <set item="Encoding" value="${Encoding}"/>
+    </deliveryTemplate>
+  </template>
+  <!-- Делаем запрос состояния услуги serviceinterrogation (DB_SInterrogation) -->
+  <template procedureName="DB_SInterrogation">
+    <condition>
+      <test item="0" matches="1"/>
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceinterrogation" initiator="smscon" id="${guid}" session_id="${session_id}">
+        <Item customer="${sSender}">
+          <Service id="_SERVICE_CODE" action="interrogation"/>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <!-- услуги нет -->
+    <deliveryTemplate conditionEx="#{${dbresult} = 0 and '${subscription}' = '0'}" call="CheckServiceActivate">
+      <set item="Content" value="${Content}"/>
+      <set item="Sender" value="${Sender}"/>
+      <set item="Recipient" value="${Recipient}"/>
+      <set item="Encoding" value="${Encoding}"/>
+    </deliveryTemplate>
+    <!-- услуга есть -->
+    <deliveryTemplate conditionEx="#{${dbresult} = 0 and '${subscription}' = '1'}" call="CheckServiceDeactivate">
+      <set item="Content" value="${Content}"/>
+      <set item="Sender" value="${Sender}"/>
+      <set item="Recipient" value="${Recipient}"/>
+      <set item="Encoding" value="${Encoding}"/>
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${sSender}"/>
+      <set item="Encoding" value="${Encoding}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Servis vremenno nedostupen"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Service temporarily unavailable"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Servis tymchasovo nedostupnyy"/>
+    </deliveryTemplate>
+  </template>
+  <!-- услуги нет - смотрим, что в запросе - активация (1) или деактивация (2) -->
+  <template procedureName="CheckServiceActivate">
+    <condition>
+      <test item="0" matches="1"/>
+    </condition>
+    <receiveTemplate>
+      <Message initiator="smscon" id="${guid}" session_id="${session_id}">
+        <Item Content="${Content}"/>
+        <Item Sender="${Sender}"/>
+        <Item Recipient="${Recipient}"/>
+        <Item Encoding="${Encoding}"/>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" conditionEx="#{'_SERVICE_ORDER' = '0'}">
+      <!--подключать не надо-->
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="_INFO_NOT_ACTIVE_UA"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="_INFO_NOT_ACTIVE_EN"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="_INFO_NOT_ACTIVE_RU"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${sSender}"/>
+      <set item="Encoding" value="${Encoding}"/>
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" conditionEx="#{'_SERVICE_ACTION' = '2'}">
+      <!--хотим отключить. тут делать нечего-->
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="_INFO_NOT_ACTIVE_UA"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="_INFO_NOT_ACTIVE_EN"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="_INFO_NOT_ACTIVE_RU"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${sSender}"/>
+      <set item="Encoding" value="${Encoding}"/>
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" conditionEx="#{'_SERVICE_ACTION' = '1' }" call="DB_ServiceActivation_CheckSecuredState">
+      <set item="Content" value="${Content}"/>
+      <set item="Sender" value="${Sender}"/>
+      <set item="Recipient" value="${Recipient}"/>
+      <set item="Encoding" value="${Encoding}"/>
+    </deliveryTemplate>
+  </template>
+  <!-- услуга есть - смотрим, что в запросе - активация (1) или деактивация (2) -->
+  <template procedureName="CheckServiceDeactivate">
+    <condition>
+      <test item="0" matches="1"/>
+    </condition>
+    <receiveTemplate>
+      <Message initiator="smscon" id="${guid}" session_id="${session_id}">
+        <Item Content="${Content}"/>
+        <Item Sender="${Sender}"/>
+        <Item Recipient="${Recipient}"/>
+        <Item Encoding="${Encoding}"/>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" conditionEx="#{'_SERVICE_ORDER' = '0'}">
+      <!--подключать не надо-->
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="_INFO_ACTIVE_UA"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="_INFO_ACTIVE_EN"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="_INFO_ACTIVE_RU"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${sSender}"/>
+      <set item="Encoding" value="${Encoding}"/>
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" conditionEx="#{'_SERVICE_ACTION' = '1'}">
+      <!--хотим подключить. тут делать нечего-->
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="_INFO_ACTIVE_UA"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="_INFO_ACTIVE_EN"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="_INFO_ACTIVE_RU"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${sSender}"/>
+      <set item="Encoding" value="${Encoding}"/>
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" conditionEx="#{'_SERVICE_ACTION' = '2' }" call="DB_ServiceActivation_CheckSecuredState">
+      <set item="Content" value="${Content}"/>
+      <set item="Sender" value="${Sender}"/>
+      <set item="Recipient" value="${Recipient}"/>
+      <set item="Encoding" value="${Encoding}"/>
+    </deliveryTemplate>
+  </template>
+
+  <!-- проверка на наличие пароля в реквесте. от его наличия вызываем либо обычный, либо secured метод -->
+  <template procedureName="DB_ServiceActivation_CheckSecuredState">
+    <condition>
+      <test item="0" matches="1"/>
+    </condition>
+    <receiveTemplate>
+      <Message initiator="smscon" id="${guid}" session_id="${session_id}">        
+        <Item Content="${Content}"/>
+        <Item Sender="${Sender}"/>
+        <Item Recipient="${Recipient}"/>
+        <Item Encoding="${Encoding}"/>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" conditionEx="#{'${sPassword}'=''}" call="DB_ServiceActivation">
+      <set item="Content" value="${Content}"/>
+      <set item="Sender" value="${Sender}"/>
+      <set item="Recipient" value="${Recipient}"/>
+      <set item="Encoding" value="${Encoding}"/>
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" call="DB_ServiceActivation_Secured">
+      <set item="Content" value="${Content}"/>
+      <set item="Sender" value="${Sender}"/>
+      <set item="Recipient" value="${Recipient}"/>
+      <set item="Encoding" value="${Encoding}"/>
+    </deliveryTemplate>    
+  </template>
+
+  <!-- Делаем запрос serviceorder (DB_ServiceActivation) на подключение/отключение услуги -->
+  <template procedureName="DB_ServiceActivation">
+    <condition>
+      <test item="0" matches="1"/>
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="${session_id}">
+        <Item customer="${sSender}">
+          <Service id="_SERVICE_CODE" action="@{switch(_SERVICE_ACTION|,1|2,2|3)}" class="0"/>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0}">
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="@{switch(_SERVICE_ACTION|,1|_INFO_SUCCESS_ACTIVATION_UA,2|_INFO_SUCCESS_DEACTIVATION_UA)}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="@{switch(_SERVICE_ACTION|,1|_INFO_SUCCESS_ACTIVATION_EN,2|_INFO_SUCCESS_DEACTIVATION_EN)}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="@{switch(_SERVICE_ACTION|,1|_INFO_SUCCESS_ACTIVATION_RU,2|_INFO_SUCCESS_DEACTIVATION_RU)}"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${sSender}"/>
+      <set item="Encoding" value="${Encoding}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=330117}">
+      <!-- RC_AddNoPackageProduct  330117  Package contains product that is not on customer TP -->
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Paket soderzhit uslugu kotoraja nedostupna v vashem tarifnom plane"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Package contains product that is not on your tariff plan"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Paket mistyt' poslugu, jaka nedostupna u vashomu taprifnom plani"/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>  
+    <deliveryTemplate conditionEx="#{${dbresult}=320012}">
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Неверный пароль"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Incorrect password"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Неверный пароль"/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=320204}">
+      <!-- RC_ServiceNotInTP  320204  Service not present in current tariff plan -->
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Usluga otsutstvujet v vashem tarifnom plane"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Service not present in your tariff plan"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Posluga vidsutnja u vashomu taryfnomu plani"/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Sboy dobavlenija uslugi"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Service activation failure"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Zbij dodavannja poslugy"/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+  </template>
+
+  <!-- Делаем запрос serviceorderSecured (DB_ServiceActivation_Secured) на подключение/отключение услуги с паролем -->
+  <template procedureName="DB_ServiceActivation_Secured">
+    <condition>
+      <test item="0" matches="1"/>
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceordersecured" initiator="smscon" id="${guid}" session_id="${session_id}">
+        <Item customer="${sSender}" pin="${sPassword}">
+         <Service id="_SERVICE_CODE" action="@{switch(_SERVICE_ACTION|,1|2,2|3)}" class="0"/>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0}">
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="@{switch(_SERVICE_ACTION|,1|_INFO_SUCCESS_ACTIVATION_UA,2|_INFO_SUCCESS_DEACTIVATION_UA)}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="@{switch(_SERVICE_ACTION|,1|_INFO_SUCCESS_ACTIVATION_EN,2|_INFO_SUCCESS_DEACTIVATION_EN)}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="@{switch(_SERVICE_ACTION|,1|_INFO_SUCCESS_ACTIVATION_RU,2|_INFO_SUCCESS_DEACTIVATION_RU)}"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${sSender}"/>
+      <set item="Encoding" value="${Encoding}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=320012}">
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Неверный пароль"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Incorrect password"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Неверный пароль"/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=330117}">
+      <!-- RC_AddNoPackageProduct  330117  Package contains product that is not on customer TP -->
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Paket soderzhit uslugu kotoraja nedostupna v vashem tarifnom plane"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Package contains product that is not on your tariff plan"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Paket mistyt' poslugu, jaka nedostupna u vashomu taprifnom plani"/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>  
+    <deliveryTemplate conditionEx="#{${dbresult}=320012}">
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Неверный пароль"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Incorrect password"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Неверный пароль"/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=320204}">
+      <!-- RC_ServiceNotInTP  320204  Service not present in current tariff plan -->
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Usluga otsutstvujet v vashem tarifnom plane"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Service not present in your tariff plan"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Posluga vidsutnja u vashomu taryfnomu plani"/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Sboy dobavlenija uslugi"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Service activation failure"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Zbij dodavannja poslugy"/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+  </template>
+
+  <!--Пакеты услуг. Код 601/602-->
+  <template procedureName="ManageInternetPackages">
+    <condition>
+      <test item="1" matches="0"/>
+    </condition>
+    <receiveTemplate>
+      <Message initiator="smscon" id="${guid}" session_id="${session_id}">
+        <Item Content="${Content}"/>
+        <Item Sender="${Sender}"/>
+        <Item Recipient="${Recipient}"/>
+        <Item Encoding="${Encoding}"/>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" conditionEx="#{${Content} = '601' }" call="DB_ServiceActivation2">
+      <set item="Content" value="${Content}"/>
+      <set item="Sender" value="${Sender}"/>
+      <set item="Recipient" value="${Recipient}"/>
+      <set item="Encoding" value="${Encoding}"/>
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" conditionEx="#{${Content} = '602' }" call="DB_ServiceDeactivation2">
+      <set item="Content" value="${Content}"/>
+      <set item="Sender" value="${Sender}"/>
+      <set item="Recipient" value="${Recipient}"/>
+      <set item="Encoding" value="${Encoding}"/>
+    </deliveryTemplate>
+  </template>
+  <!--Метод активации пакета-->
+  <template procedureName="DB_ServiceActivation2">
+    <condition>
+      <test item="0" matches="1"/>
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="${session_id}">
+        <Item customer="${sSender}" action="9.2">
+          <Product code="PRODUCT_PACKAGE#214"/>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0}">
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="@{switch(_SERVICE_ACTION|,1|_INFO_SUCCESS_ACTIVATION_UA,2|_INFO_SUCCESS_DEACTIVATION_UA)}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="@{switch(_SERVICE_ACTION|,1|_INFO_SUCCESS_ACTIVATION_EN,2|_INFO_SUCCESS_DEACTIVATION_EN)}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="@{switch(_SERVICE_ACTION|,1|_INFO_SUCCESS_ACTIVATION_RU,2|_INFO_SUCCESS_DEACTIVATION_RU)}"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${sSender}"/>
+      <set item="Encoding" value="${Encoding}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=330117}">
+      <!-- RC_AddNoPackageProduct  330117  Package contains product that is not on customer TP -->
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Paket soderzhit uslugu kotoraja nedostupna v vashem tarifnom plane"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Package contains product that is not on your tariff plan"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Paket mistyt' poslugu, jaka nedostupna u vashomu taprifnom plani"/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=320204}">
+      <!-- RC_ServiceNotInTP  320204  Service not present in current tariff plan -->
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Usluga otsutstvujet v vashem tarifnom plane"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Service not present in your tariff plan"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Posluga vidsutnja u vashomu taryfnomu plani"/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Sboy dobavlenija uslugi"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Service activation failure"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Zbij dodavannja poslugy"/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+  </template>
+  <!--Метод деактивации пакета-->
+  <template procedureName="DB_ServiceDeactivation2">
+    <condition>
+      <test item="0" matches="1"/>
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="${session_id}">
+        <Item customer="${sSender}" action="10.2">
+          <Product code="PRODUCT_PACKAGE#214"/>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0}">
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="@{switch(_SERVICE_ACTION|,1|_INFO_SUCCESS_ACTIVATION_UA,2|_INFO_SUCCESS_DEACTIVATION_UA)}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="@{switch(_SERVICE_ACTION|,1|_INFO_SUCCESS_ACTIVATION_EN,2|_INFO_SUCCESS_DEACTIVATION_EN)}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="@{switch(_SERVICE_ACTION|,1|_INFO_SUCCESS_ACTIVATION_RU,2|_INFO_SUCCESS_DEACTIVATION_RU)}"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${sSender}"/>
+      <set item="Encoding" value="${Encoding}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=330117}">
+      <!-- RC_AddNoPackageProduct  330117  Package contains product that is not on customer TP -->
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Paket soderzhit uslugu kotoraja nedostupna v vashem tarifnom plane"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Package contains product that is not on your tariff plan"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Paket mistyt' poslugu, jaka nedostupna u vashomu taprifnom plani"/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=320204}">
+      <!-- RC_ServiceNotInTP  320204  Service not present in current tariff plan -->
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Usluga otsutstvujet v vashem tarifnom plane"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Service not present in your tariff plan"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Posluga vidsutnja u vashomu taryfnomu plani"/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Sboy dobavlenija uslugi"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Service activation failure"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Zbij dodavannja poslugy"/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+    </deliveryTemplate>
+  </template>
+
+  <!--Смена пароля-->
+  <template procedureName="ChangeMobilePassword">
+    <condition>
+      <test item="0" matches="1"/>
+    </condition>    
+    <receiveTemplate>
+      <Message type="changemobilepassword" initiator="smscon" id="${guid}" session_id="${session_id}">
+        <Item customer="${Sender}" pin="${token1}">
+          <Attribute name="communicationlanguage" value="${sLanguage}" />
+          <Attribute name="newpassword" value="${token2}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0}">
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Смена пароля прошла успешно" />
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Смена пароля прошла успешно" />
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Смена пароля прошла успешно" />
+      <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+      <set item="Recipient" value="${sSender}" />
+      <set item="Encoding" value="${sEncoding}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=320022}">
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Не верно указан старый пароль" />
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Не верно указан старый пароль" />
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Не верно указан старый пароль" />
+      <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+      <set item="Recipient" value="${sSender}" />
+      <set item="Encoding" value="${sEncoding}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=320586}">
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Текущий пароль не установлен" />
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Текущий пароль не установлен" />
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Текущий пароль не установлен" />
+      <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+      <set item="Recipient" value="${sSender}" />
+      <set item="Encoding" value="${sEncoding}" />
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+      <set item="Recipient" value="${customer}"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='3'}" value="Servis vremenno nedostupen"/>
+      <set item="Content" conditionEx="#{'${sLanguage}'='1'}" value="Service temporarily unavailable"/>
+      <set item="Content" conditionEx="#{not(matches('${sLanguage}','^(1|3)$'))}" value="Servis tymchasovo nedostupnyy"/>
+    </deliveryTemplate>
+  </template>
+
+  <template procedureName="DB_MessageFromSOAP" sessionStorage="Memory" sessionLifetime="300">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+    </receiveTemplate>
+    <deliveryTemplate call="GetCommunicationLang" >
+      <set conditionEx="#{'@{setSessionId(${guid})}' = ''}"/>
+      <set conditionEx="0@{store(sContent,${text})}"/>
+      <set conditionEx="0@{store(sSender,${customer})}"/>
+      <set conditionEx="0@{store(sRecipient,_SMS_SERVICE_NUMBER)}"/>
+      <set conditionEx="0@{store(sEncoding,unicodefffe)}"/>
+      <set conditionEx="0@{store(sPassword,${Password})}"/>
+      <set conditionEx="0@{store(sCode,${Code})}"/>
+      <set conditionEx="0@{store(sLanguage,${LanguageId})}"/>
+      <set item="Content" value="${text}" />
+      <set item="Encoding" value="ascii" />
+      <set item="Sender" value="${customer}" />
+      <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
+      <set item="Encoding" value="unicodefffe"/>
+    </deliveryTemplate>
+  </template>
+  
+</templateGroup>

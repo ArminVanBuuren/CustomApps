@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="GetBGID">
+	<objectList>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+		<object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll"/>
+	</objectList>
+	<automat>
+		<node name="GetListOfBGs" object="Commander">
+			<comment>Operation returns list of BGs that already exist in system.</comment>
+			<resultlist>
+				<result value="0" node="CopyBGsToRequest"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Session:MethodName" value="GET"/>
+				<param name="Session:Method" value="GET"/>
+				<param name="Session:Url" value="[BGS_URL]"/>
+				<param name="CommandSource" value="Implicit"/>
+				<param name="Command" value=" "/>
+				<param name="ErrorDecodingType" value="ByRegexp"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="OverwriteDetailedResult" value="false"/>
+				<param name="DecodedXmlDocumentName" value="BGS_LIST"/>
+				<param name="ApplyingDecoderList:0" value="BGSCollection"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="CopyBGsToRequest" object="XmlNodesCopier">
+			<comment>Copy list of BGs to SPA.BPM Request.</comment>
+			<resultlist>
+				<result value="0" node="CopyOriginalBGIDToXmlRequest"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="SrcXml" value="BGS_LIST"/>
+				<param name="DstMessage" value="xmlrequest"/>
+				<param name="CopyContentType" value="InnerXml"/>
+				<param name="SrcXmlPath:0" value="[SRC_BGS_LIST]"/>
+				<param name="DstXmlPath:0" value="[DST_BGS_LIST]"/>
+			</parameterslist>
+		</node>
+		<node name="CopyOriginalBGIDToXmlRequest" object="XmlNodesCopier">
+			<comment>Find BG by name from SPA.BPM Request. If existing - Copy results to SPA.BPM Request, else - Create New BG with current name.</comment>
+			<resultlist>
+				<result value="0" node="CopyOriginalBGIDToRequest"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="SrcXml" value="xmlrequest"/>
+				<param name="DstMessage" value="xmlrequest"/>
+				<param name="CopyContentType" value="InnerXml"/>
+				<param name="SrcXmlPath:0" value="[DST_BGS_LIST]/BG[name/text()=//WithdrawalList/FMCList//UserGroupCode]"/>
+				<param name="DstXmlPath:0" value="[DST_CURRENT_DATA]"/>
+				<param name="SrcXmlPath:1" value="[DST_BGS_LIST]/BG[name/text()=//ProvisionList/FMCList//UserGroupCode]"/>
+				<param name="DstXmlPath:1" value="[DST_CURRENT_DATA]"/>
+			</parameterslist>
+		</node>
+		<node name="CopyOriginalBGIDToRequest" object="XmlNodesCopier">
+			<comment>Find BG by name from SPA.BPM Request. If existing - Copy results to SPA.BPM Request, else - Create New BG with current name.</comment>
+			<resultlist>
+				<result value="0" node="dummySUCCESS"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="SrcXml" value="xmlrequest"/>
+				<param name="DstMessage" value="request"/>
+				<param name="CopyContentType" value="InnerXml"/>
+				<param name="SrcXmlPath:0" value="[DST_BGS_LIST]/BG[name/text()=//WithdrawalList/FMCList//UserGroupCode]"/>
+				<param name="DstXmlPath:0" value="[DST_CURRENT_DATA]"/>
+				<param name="SrcXmlPath:1" value="[DST_BGS_LIST]/BG[name/text()=//ProvisionList/FMCList//UserGroupCode]"/>
+				<param name="DstXmlPath:1" value="[DST_CURRENT_DATA]"/>
+			</parameterslist>
+		</node>
+		<node name="dummySUCCESS" object="DummyResponder">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OverallResult" value="SUCCESS"/>
+				<param name="DetailedResult" value="SUCCESS"/>
+				<param name="Delay" value="0"/>
+			</parameterslist>
+		</node>
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node=""/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

@@ -1,0 +1,12 @@
+<RepetitionTable xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="RepetitionTable.xsd">
+	<param name="RepeatForResult" value="HardwareConnectionError;cnt=3;timeout=1000;progression=algebraic;coef=2000"/>
+	<param name="RepeatForResult" value="FAILURE;cnt=5;timeout=1000;progression=algebraic;coef=2000"/>
+	<param name="RepeatForResult" value="NoPrintout;cnt=5;timeout=10000;progression=algebraic;coef=2000"/>
+	<param name="RepeatForResult" value="ResourceLimitation;cnt=12;timeout=5000;progression=algebraic;coef=5000"/>
+	<param name="RepeatForResult" value="OperationCancelled;cnt=3;timeout=1000;progression=algebraic;coef=2000"/>
+    <param name="RepeatForResult" value="InternalException;cnt=10;timeout=5000;progression=algebraic;coef=5000"/>
+    <param name="RepeatForResult" value="SoftwareError;cnt=4;timeout=25000;progression=algebraic;coef=5000"/>	
+	<param name="RepeatForResult" value="ProcessingFailure;cnt=10;timeout=25000;progression=Geometric;coef=5"/>	
+	<param name="RepeatForResult" value="DuplicateManagedObjectInstance;cnt=3;timeout=50000;progression=algebraic;coef=2000"/>
+	<!--param name="RepeatForResult" value="CommandTimedOut;cnt=1;timeout=50000;progression=algebraic;coef=2000"/-->	
+</RepetitionTable>

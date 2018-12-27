@@ -1,0 +1,183 @@
+﻿<templateGroup name="POP">
+  <macros>
+    <define name="_POP_SMSCON" value="SMSCON_02" />
+    <define name="_POP_SOAP_SUCCESS_RESULT" value="0" />
+  </macros>
+
+  <template procedureName="ServiceActivateSecured">
+    <receiveTemplate>
+      <Message type="serviceorderSecured" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Msisdn}" language_id="${LanguageId}" pin="${Password}">
+          <Service id="${ServiceCode}" action="2" class="0"  />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="oparam:Success" value="_POP_SOAP_SUCCESS_RESULT"/>
+    </deliveryTemplate>
+    <deliveryTemplate connector="_POP_SMSCON" call="POP.ServiceActivateSecured"/>
+    <input>
+      <param name="Msisdn" />
+      <param name="LanguageId" />
+      <param name="ServiceCode" />
+      <param name="Password" />
+    </input>
+    <output>
+      <param name="Success"  />
+    </output>
+  </template>
+
+
+  <template procedureName="ServiceDeactivateSecured">
+    <receiveTemplate>
+      <Message type="serviceorderSecured" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Msisdn}" language_id="${LanguageId}" pin="${Password}">
+          <Service id="${ServiceCode}" action="3" class="0"  />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="oparam:Success" value="_POP_SOAP_SUCCESS_RESULT"/>
+    </deliveryTemplate>
+    <deliveryTemplate connector="_POP_SMSCON" call="POP.ServiceDeactivateSecured"/>
+    <input>
+      <param name="Msisdn" />
+      <param name="LanguageId" />
+      <param name="ServiceCode" />
+      <param name="Password" />
+    </input>
+    <output>
+      <param name="Success"  />
+    </output>
+  </template>
+
+
+  <template procedureName="DB_PaymentsInformationSecured" persistent="false">
+    <receiveTemplate>
+      <Message type="retrievecustomerdataSecured" initiator="smscon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item customer="${Msisdn}" subject="paymentsSecured" pin="${Password}">
+          <Attribute name="index" value="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="oparam:Success" value="_POP_SOAP_SUCCESS_RESULT"/>
+    </deliveryTemplate>
+    <deliveryTemplate connector="_POP_SMSCON" call="POP.DB_PaymentsInformationSecured"/>
+    <input>
+      <param name="Msisdn" />
+      <param name="LanguageId" />
+      <param name="ServiceCode" />
+      <param name="Password" />
+    </input>
+    <output>
+      <param name="Success"  />
+    </output>
+  </template>
+
+  <template procedureName="DB_PaymentsInformationSecuredSync" persistent="false">
+    <receiveTemplate>
+      <Message type="retrievecustomerdataSecured" initiator="smscon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item customer="${Msisdn}" subject="paymentsSecured" pin="${Password}">
+          <Attribute name="index" value="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item='oparam:dbresult' value='${dbresult}' />
+      <set item='oparam:DateTo' value='${dateto}' />
+      <set item='oparam:DateFrom' value='${datefrom}' />
+      <set item='oparam:ServiceCode' value='${additionalagreementcode}' />
+      <set item='oparam:DaysLeft' value='${daysbeforetheend}' />
+    </deliveryTemplate>
+    <input>
+      <param name="Msisdn" />
+      <param name="LanguageId" />
+      <param name="PaymentsCount" />
+      <param name="Password" />
+    </input>
+    <output>
+      <param name="dbresult"  />
+      <param name="DateTo"  />
+      <param name="DateFrom"  />
+      <param name="ServiceCode"  />
+      <param name="DaysLeft"  />
+    </output>
+  </template>
+
+
+  <template procedureName="DB_BillsInformationSecured" persistent="false">
+    <receiveTemplate>
+      <Message type="retrievecustomerdataSecured" initiator="smscon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item customer="${Msisdn}" subject="billsSecured" pin="${Password}">
+          <Attribute name="index" value="0" />
+        </Item>
+      </Message>
+      <deliveryTemplate direction="input" terminating="false">
+        <set item="oparam:Success" value="_POP_SOAP_SUCCESS_RESULT"/>
+      </deliveryTemplate>
+      <deliveryTemplate connector="_POP_SMSCON" call="POP.DB_BillsInformationSecured" />
+      <input>
+        <param name="Msisdn" />
+        <param name="LanguageId" />
+        <param name="ServiceCode" />
+        <param name="Password" />
+      </input>
+      <output>
+        <param name="Success"  />
+      </output>
+    </receiveTemplate>
+  </template>
+
+  <template procedureName="DB_BillsInformationSecuredSync" persistent="false">
+    <receiveTemplate>
+      <Message type="retrievecustomerdataSecured" initiator="smscon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item customer="${Msisdn}" subject="billsSecured" pin="${Password}">
+          <Attribute name="index" value="0" />
+        </Item>
+      </Message>
+      <deliveryTemplate>
+        <set item='oparam:dbresult' value='${dbresult}' />
+        <set item='oparam:IvrAccountInfoInactive' value='${dateto}' />
+        <set item='oparam:Bills' value='${datefrom}' />
+      </deliveryTemplate>
+      <input>
+        <param name="Msisdn" />
+        <param name="LanguageId" />
+        <param name="BillsCount" />
+        <param name="Password" />
+      </input>
+      <output>
+        <param name="dbresult"  />
+        <param name="IvrAccountInfoInactive"  />
+        <param name="Bills"  />
+      </output>
+    </receiveTemplate>
+  </template>
+
+
+  <template procedureName="ChangeMobilePassword">
+    <receiveTemplate>
+      <Message type="serviceorderSecured" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Msisdn}" pin="${Password}">
+          <Attribute name="communicationlanguage" value="${LanguageId}" />
+          <Attribute name="newPassword" value="${NewPassword}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="oparam:Success" value="_POP_SOAP_SUCCESS_RESULT"/>
+    </deliveryTemplate>
+    <deliveryTemplate connector="_POP_SMSCON" call="POP.ChangeMobilePassword"/>
+    <input>
+      <param name="Msisdn" />
+      <param name="LanguageId" />
+      <param name="NewPassword" />
+      <param name="Password" />
+    </input>
+    <output>
+      <param name="Success"  />
+    </output>
+  </template>
+
+</templateGroup>

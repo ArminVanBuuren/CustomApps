@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Application>
+	<Settings>
+		<Item name="ModuleName" value="CRMCON_01" />
+		<Item name="ModuleType" value="CRMCON" />
+		<Item name="XmlEncoding" value="utf-16" />
+		<Item name="InternalNode" value="" />
+		<Item name="MaxThreadCount" value="10" />
+		<Item name="MessagesLimit" value="10" />
+		<Item name="CRMCacheCleanInterval" value="300" />
+		<Item name="MSMQLimit" value="4194304" />
+		<Item name="ReportTemplates" value="^Delivery" />
+		<Item name="HealthAlgo" value="Simple" />
+		<Item name="ExposeMessageSendingService" value="true"/>
+		<Item name="SMSAgreementSessionLifeTime" value="120"/>  
+	</Settings>
+	<templateProcessors>
+		<CRMInvokedProcessor />
+	</templateProcessors>
+	<Queues>
+		<InputQueue name=".\crmfilter_output" />
+		<OutputQueue name=".\crmfilter_in" timeToBeReceived="1000" timeToReachQueue="10">
+			<Override connector="IVRCON_01" timeToBeReceived="20" />
+			<Override connector="IVRCON_02" timeToBeReceived="20" />
+			<Override connector="SMSCON_01" timeToBeReceived="20" />
+			<Override connector="SMSCON_02" timeToBeReceived="20" />
+			<Override connector="DeliveryReport" timeToBeReceived="500" />
+		</OutputQueue>
+	</Queues>
+	<TemplateToConnector>
+		<Map template_id="SMSAgreementTemplate" connector="SMSCON_02" template_name="DeliveryRequest" />
+		<Map template_id="ActualChargeCR178" connector="SMSCON_02" template_name="DeliveryRequestActualCharge178" /> 
+		<Map template_id="SMSAutoInformationSendSMS" connector="SMSCON_02" template_name="DeliveryRequestSendSMS" processor="SMSTemplateProcessor"/>
+		<Map template_id="SMSAutoInformation" connector="SMSCON_02" template_name="DeliveryRequest" />
+		<Map template_id="sms -2" connector="SMSCON_02" template_name="DeliveryRequest" processor="SMSTemplateProcessor"  />
+		<Map template_id="DeliveryRequestRestricted" connector="SMSCON_01" template_name="DeliveryRequestRestricted" />
+		<Map template_id="fax -2" connector="FAXCON_01" template_name="DeliveryRequest" />
+		<Map template_id="DirectSendUSSD" connector="SMSCON_03" template_name="DeliveryRequestFlash" />
+		<Map template_id="DirectSendSMS" connector="SMSCON_01" template_name="DeliveryRequestIssa" processor="SMSTemplateProcessor" />
+		<Map template_id="email -2" connector="EMAILCON_01" template_name="DeliveryRequestVM" />
+		<Map template_id="Email" connector="EMAILCON_01" template_name="DeliveryRequest" />
+		<Map template_id="DirectSendEmail" connector="EMAILCON_01" template_name="DeliveryRequest"  />
+		<Map template_id="DeliveryRequestTest" connector="SMSCON_05" template_name="DeliveryRequestTest" />
+		<Map template_id="BMSAutoinformationBBPrecheck" connector="SMSCON_02" template_name="DeliveryRequestBMSAutoInformationBBPrecheck" />
+		<Map template_id="BMSAutoinformationBBNoBalance" connector="SMSCON_02" template_name="DeliveryRequestBMSAutoInformationBBNoBalance" />
+		<Map template_id="BMSAutoinformationBBNoExpences" connector="SMSCON_02" template_name="DeliveryRequestBMSAutoInformationBNoExpences" />
+		<Map template_id="BMSAutoinformationBB" connector="SMSCON_02" template_name="DeliveryRequestBMSAutoInformationBB" />
+	</TemplateToConnector>
+</Application>

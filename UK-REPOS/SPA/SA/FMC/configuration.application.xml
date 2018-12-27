@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<serviceInstances>
+		<serviceInstance hardwareID="FC:FMC">
+			<scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
+				<fileScenarioSource dir="c:\foris\spa\sa.configuration\Scenarios\FMC"/>
+			</scenarioSource>
+			<socketList poolSize="30" maxConnections="5" minConnections="1" averageTime="1000" deltaAverageTime="1000" maxCommandsPerPeriod="300" periodDuration="1" autoconnect="0" reconfigurationTimeout="0">
+				<socket type="FORIS.ServiceProvisioning.Communication.Script.SimpleManagedSocket, FORIS.SPA.Communication">
+					<config autoconnect="0" workingmode="wmGeneral">
+						<socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
+							<config>
+								<ParametersList>
+									<Parameter Key="Host"              Value="fmctest.kyivstar.ua"/>
+									<Parameter Key="Port"              Value="443"/>
+									<Parameter Key="MethodName" 	   Value="POST"/>
+									<Parameter Key="Method"            Value="POST"/>
+									<Parameter Key="Url"               Value="sa/rest/v1/prov/bgs"/>
+									<Parameter Key="UserName"          Value="apitester"/>
+									<Parameter Key="UserPwd"           Value="HmvaC1FXggMYQEbvXI4B"/>
+									<Parameter Key="ContentType"       Value="application/json; charset=utf-8"/>
+									<Parameter Key="Encoding.Request"  Value="UTF-8"/>
+									<Parameter Key="Encoding.Response" Value="UTF-8"/>
+									<Parameter Key="UseSSL"            Value="true" />
+									<Parameter Key="Proxy.Server"      Value="proxy.ural.mts.ru" />
+									<Parameter Key="Proxy.Port"        Value="3128" />
+								</ParametersList>
+							</config>
+						</socket>
+						<Emulation Success="HTTP/1.1 200 OK" Failure="HTTP/1.1 409 Conflict" RandomizePrintout="false" OverwriteCommandPrintout="true"  Lifetime="00:00:00.00"/>
+					</config>
+				</socket>
+			</socketList>
+			<context>
+				<object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
+					<config path="c:\foris\spa\sa.configuration\Dictionaries\FMC" xml="Dictionary.xml" lifetime="00:00:01.500"/>
+				</object>
+				<object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
+					<fileTableSource path="c:\foris\spa\sa.configuration\Misc" xml="RepetitionTable.xml"/>
+				</object>
+			</context>
+		</serviceInstance>
+	</serviceInstances>
+</Configuration>

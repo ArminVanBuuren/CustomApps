@@ -1,0 +1,6 @@
+<counters>
+	<counter ussd_code="20" ivr_code="20" bms_code="1062" />
+	<counter ussd_code="456" ivr_code="654" bms_code="1043" />
+	<counter ussd_code="789" ivr_code="987" bms_code="1043" />
+	<counter ussd_code="30" ivr_code="30" bms_code="1095" />	<!-- For testing Autumn 2012 -->
+</counters>

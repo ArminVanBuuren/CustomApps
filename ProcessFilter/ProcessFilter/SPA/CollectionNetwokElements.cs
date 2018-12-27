@@ -72,7 +72,8 @@ namespace ProcessFilter.SPA
     {
         public List<NetworkElementOpartion> Operations { get; private set; } = new List<NetworkElementOpartion>();
 
-        public NetworkElement(string path, int id, List<NetworkElementOpartion> ops) :base(path, id)
+        public NetworkElement(string path, int id, List<NetworkElementOpartion> ops)
+            : base(path, id)
         {
             Operations.AddRange(ops);
         }
@@ -108,7 +109,8 @@ namespace ProcessFilter.SPA
         [DGVColumn(ColumnPosition.Before, "Network Element")]
         public string NetworkElement => parent.Name;
 
-        public NetworkElementOpartion(string path, int id, NetworkElement parentElement) :base(path, id)
+        public NetworkElementOpartion(string path, int id, NetworkElement parentElement)
+            : base(path, id)
         {
             parent = parentElement;
         }

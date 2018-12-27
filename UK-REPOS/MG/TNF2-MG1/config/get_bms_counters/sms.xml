@@ -1,0 +1,54 @@
+<templateGroup name="BMS">
+	<macros>
+		<define name="_GET_BMS_COUNTER"	value="101" />
+	</macros>
+
+	<template procedureName="GetBMSBalance" sessionStorage="Remoting">
+        <condition>
+            <test item="0" matches="1" />
+        </condition>
+        <receiveTemplate>
+            <Message />
+        </receiveTemplate>
+        <deliveryTemplate conditionEx="#{'${Result}'='0'}">
+			<set conditionEx="0@{store(sDate,#{nodeset('${Counters}')/Counters/CounterData[Code='Sremain-Coldest']/RecalculateDate/text()})}" />
+			<set conditionEx="0@{store(sDateFormated,#{formatDate('${sDate}', 'dd:MM:yyyy')})}" />
+			<set conditionEx="0@{store(sAmount,#{nodeset('${Counters}')/Counters/CounterData[Code='Sremain-Coldest']/Value/text()})}" />				
+            <set item="Content" value="Ваш баланс в баллах: ${Balance}. На дату ${sDateFormated} сгорит ${sAmount} бал." />
+            <set item="Sender" value="_GET_BMS_COUNTER" />
+            <set item="Recipient" value="${Customer}" />
+            <set item="Encoding" value="unicodefffe" />
+            <set item="ScheduleDeliveryTime" value="#{getTimeInRange('0', '08:00','21:00')}" />  <!-- 000000HHMMSS000R -->
+            <set item="ValidityPeriod" value="#{getTimeInRange('0', '11:00','23:59')}" />  <!-- 000000HHMMSS000R -->
+            <set conditionEx="0@{freeSession}"  />
+        </deliveryTemplate>
+        <deliveryTemplate>
+			<set item="Content"   value="Ошибка получения баланса'" />
+            <set item="Sender"   value="_GET_BMS_COUNTER" />
+            <set item="Recipient" value="${Customer}" />
+            <set item="Encoding" value="unicodefffe" />
+            <set item="ScheduleDeliveryTime" value="#{getTimeInRange('08:00','21:00')}" />  <!-- 000000HHMMSS000R -->
+            <set item="ValidityPeriod" value="#{getTimeInRange('11:00','23:59')}" />  <!-- 000000HHMMSS000R -->
+            <set conditionEx="0@{freeSession}"  />
+        </deliveryTemplate>
+	</template>
+ 
+ 	<template procedureName="GetAutumnCounter" sessionStorage="Remoting">
+        <condition>
+            <test item="0" matches="1" />
+        </condition>
+        <receiveTemplate>
+            <Message />
+        </receiveTemplate>
+        <deliveryTemplate conditionEx="#{'${Result}'='0'}">
+            <set item="Content" value="По акції &quot;Доплачуємо за розмови 75 грн&quot; Ваші витрати на сьогодні становлять #{if('#{concat(substring-before('#{nodeset('${CounterInstances}')/CounterInstances/CounterInstance[CounterId='${sBMScode}']/CounterValue/text()}','.'),'.',substring((substring-after('#{nodeset('${CounterInstances}')/CounterInstances/CounterInstance[CounterId='${sBMScode}']/CounterValue/text()}','.')),1,2))}'='.','#{nodeset('${CounterInstances}')/CounterInstances/CounterInstance[CounterId='${sBMScode}']/CounterValue/text()}','#{concat(substring-before('#{nodeset('${CounterInstances}')/CounterInstances/CounterInstance[CounterId='${sBMScode}']/CounterValue/text()}','.'),'.',substring((substring-after('#{nodeset('${CounterInstances}')/CounterInstances/CounterInstance[CounterId='${sBMScode}']/CounterValue/text()}','.')),1,2))}')} грн. При перевищенні 25 грн. до #{nodeset('${CounterInstances}')/CounterInstances/CounterInstance[CounterId='${sBMScode}']/EndDate/text()} - Ви отримаєте у подарунок 75 грн." />
+			<set item="Sender" value="_GET_BMS_COUNTER" />
+            <set item="Recipient" value="${Customer}" />
+            <set item="Encoding" value="unicodefffe" />
+            <set item="ScheduleDeliveryTime" value="#{getTimeInRange('08:00','21:00')}" />  <!-- 000000HHMMSS000R -->
+            <set item="ValidityPeriod" value="#{getTimeInRange('11:00','23:59')}" />  <!-- 000000HHMMSS000R -->
+            <set conditionEx="0@{freeSession}"  />
+        </deliveryTemplate>
+	</template>
+
+</templateGroup>

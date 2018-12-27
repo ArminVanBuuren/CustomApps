@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="UTF-8"?>
+@namespace html url(http://www.w3.org/1999/xhtml); :root {                       font:small Verdana;        font-weight: bold;         padding: 2em;              padding-left:4em;       }                          * {                           display: block;            padding-left: 2em;      }                          html|style {                  display: none;          }                          html|span, html|a {           display: inline;           padding: 0;                font-weight: normal;       text-decoration: none;  }                          html|span.block {             display: block;         }                          *[html|hidden],            span.block[html|hidden] {     display: none;          }                          .expand {                     display: block;         }                          .expand:before {              content: '+';              color: red;                position: absolute;        left: -1em;             }  .collapse {                   display: block;         }                          .collapse:before {            content: '-';              color: red;                position: absolute;        left:-1em;              }                         
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+		targetNamespace="http://sitronicsts.com/MessagingGateway" 
+		xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 
+		xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" 
+		xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+		xmlns:tns="http://sitronicsts.com/MessagingGateway" 
+		xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" 
+		xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" 
+		xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" 
+		xmlns:s="http://www.w3.org/2001/XMLSchema">
+
+
+	<wsdl:types>
+
+
+		<s:schema targetNamespace="http://sitronicsts.com/MessagingGateway" 
+				elementFormDefault="qualified">
+
+
+			<s:element name="InvokeMethod">
+
+
+				<s:complexType>
+
+
+					<s:sequence>
+
+						<s:element name="Methodname" type="s:string" maxOccurs="1" minOccurs="0"/>
+
+						<s:element name="MethodParams" type="tns:ArrayOfDictionaryItem" maxOccurs="1" 
+								minOccurs="0"/>
+
+					</s:sequence>
+
+				</s:complexType>
+
+			</s:element>
+
+
+			<s:complexType name="ArrayOfDictionaryItem">
+
+
+				<s:sequence>
+
+					<s:element name="DictionaryItem" type="tns:DictionaryItem" maxOccurs="unbounded" 
+							minOccurs="0"/>
+
+				</s:sequence>
+
+			</s:complexType>
+
+
+			<s:complexType name="DictionaryItem">
+
+
+				<s:sequence>
+
+					<s:element name="Name" type="s:string" maxOccurs="1" minOccurs="0"/>
+
+					<s:element name="Value" type="s:string" maxOccurs="1" minOccurs="0"/>
+
+				</s:sequence>
+
+			</s:complexType>
+
+
+			<s:element name="InvokeMethodResponse">
+
+
+				<s:complexType>
+
+
+					<s:sequence>
+
+						<s:element name="InvokeMethodResult" type="tns:ArrayOfDictionaryItem" 
+								maxOccurs="1" minOccurs="0"/>
+
+					</s:sequence>
+
+				</s:complexType>
+
+			</s:element>
+
+
+			<s:element name="InvokeMethodPlain">
+
+
+				<s:complexType>
+
+
+					<s:sequence>
+
+						<s:element name="Methodname" type="s:string" maxOccurs="1" minOccurs="0"/>
+
+						<s:element name="StringOfParams" type="s:string" maxOccurs="1" minOccurs="0"/>
+
+					</s:sequence>
+
+				</s:complexType>
+
+			</s:element>
+
+
+			<s:element name="InvokeMethodPlainResponse">
+
+
+				<s:complexType>
+
+
+					<s:sequence>
+
+						<s:element name="InvokeMethodPlainResult" type="s:string" maxOccurs="1" 
+								minOccurs="0"/>
+
+					</s:sequence>
+
+				</s:complexType>
+
+			</s:element>
+
+
+			<s:element name="InvokeMethodViaHttp">
+
+
+				<s:complexType>
+
+
+					<s:sequence>
+
+						<s:element name="Methodname" type="s:string" maxOccurs="1" minOccurs="0"/>
+
+						<s:element name="StringOfParams" type="s:string" maxOccurs="1" minOccurs="0"/>
+
+					</s:sequence>
+
+				</s:complexType>
+
+			</s:element>
+
+
+			<s:element name="InvokeMethodViaHttpResponse">
+
+
+				<s:complexType>
+
+
+					<s:sequence>
+
+						<s:element name="InvokeMethodViaHttpResult" type="s:string" maxOccurs="1" 
+								minOccurs="0"/>
+
+					</s:sequence>
+
+				</s:complexType>
+
+			</s:element>
+
+
+			<s:element name="TestMethod">
+
+
+				<s:complexType>
+
+
+					<s:sequence>
+
+						<s:element name="Methodname" type="s:string" maxOccurs="1" minOccurs="0"/>
+
+						<s:element name="StringOfParams" type="s:string" maxOccurs="1" minOccurs="0"/>
+
+					</s:sequence>
+
+				</s:complexType>
+
+			</s:element>
+
+
+			<s:element name="TestMethodResponse">
+
+
+				<s:complexType>
+
+
+					<s:sequence>
+
+						<s:element name="TestMethodResult" type="s:string" maxOccurs="1" minOccurs="0"/>
+
+					</s:sequence>
+
+				</s:complexType>
+
+			</s:element>
+
+		</s:schema>
+
+	</wsdl:types>
+
+
+	<wsdl:message name="InvokeMethodSoapIn">
+
+		<wsdl:part name="parameters" element="tns:InvokeMethod"/>
+
+	</wsdl:message>
+
+
+	<wsdl:message name="InvokeMethodSoapOut">
+
+		<wsdl:part name="parameters" element="tns:InvokeMethodResponse"/>
+
+	</wsdl:message>
+
+
+	<wsdl:message name="InvokeMethodPlainSoapIn">
+
+		<wsdl:part name="parameters" element="tns:InvokeMethodPlain"/>
+
+	</wsdl:message>
+
+
+	<wsdl:message name="InvokeMethodPlainSoapOut">
+
+		<wsdl:part name="parameters" element="tns:InvokeMethodPlainResponse"/>
+
+	</wsdl:message>
+
+
+	<wsdl:message name="InvokeMethodViaHttpSoapIn">
+
+		<wsdl:part name="parameters" element="tns:InvokeMethodViaHttp"/>
+
+	</wsdl:message>
+
+
+	<wsdl:message name="InvokeMethodViaHttpSoapOut">
+
+		<wsdl:part name="parameters" element="tns:InvokeMethodViaHttpResponse"/>
+
+	</wsdl:message>
+
+
+	<wsdl:message name="TestMethodSoapIn">
+
+		<wsdl:part name="parameters" element="tns:TestMethod"/>
+
+	</wsdl:message>
+
+
+	<wsdl:message name="TestMethodSoapOut">
+
+		<wsdl:part name="parameters" element="tns:TestMethodResponse"/>
+
+	</wsdl:message>
+
+
+	<wsdl:portType name="WebAdapterSoap">
+
+
+		<wsdl:operation name="InvokeMethod">
+
+			<wsdl:input message="tns:InvokeMethodSoapIn"/>
+
+			<wsdl:output message="tns:InvokeMethodSoapOut"/>
+
+		</wsdl:operation>
+
+
+		<wsdl:operation name="InvokeMethodPlain">
+
+			<wsdl:input message="tns:InvokeMethodPlainSoapIn"/>
+
+			<wsdl:output message="tns:InvokeMethodPlainSoapOut"/>
+
+		</wsdl:operation>
+
+
+		<wsdl:operation name="InvokeMethodViaHttp">
+
+			<wsdl:input message="tns:InvokeMethodViaHttpSoapIn"/>
+
+			<wsdl:output message="tns:InvokeMethodViaHttpSoapOut"/>
+
+		</wsdl:operation>
+
+
+		<wsdl:operation name="TestMethod">
+
+			<wsdl:input message="tns:TestMethodSoapIn"/>
+
+			<wsdl:output message="tns:TestMethodSoapOut"/>
+
+		</wsdl:operation>
+
+	</wsdl:portType>
+
+
+	<wsdl:binding name="WebAdapterSoap" type="tns:WebAdapterSoap">
+
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+
+
+		<wsdl:operation name="InvokeMethod">
+
+			<soap:operation style="document" 
+					soapAction="http://sitronicsts.com/MessagingGateway/InvokeMethod"/>
+
+
+			<wsdl:input>
+
+				<soap:body use="literal"/>
+
+			</wsdl:input>
+
+
+			<wsdl:output>
+
+				<soap:body use="literal"/>
+
+			</wsdl:output>
+
+		</wsdl:operation>
+
+
+		<wsdl:operation name="InvokeMethodPlain">
+
+			<soap:operation style="document" 
+					soapAction="http://sitronicsts.com/MessagingGateway/InvokeMethodPlain"/>
+
+
+			<wsdl:input>
+
+				<soap:body use="literal"/>
+
+			</wsdl:input>
+
+
+			<wsdl:output>
+
+				<soap:body use="literal"/>
+
+			</wsdl:output>
+
+		</wsdl:operation>
+
+
+		<wsdl:operation name="InvokeMethodViaHttp">
+
+			<soap:operation style="document" 
+					soapAction="http://sitronicsts.com/MessagingGateway/InvokeMethodViaHttp"/>
+
+
+			<wsdl:input>
+
+				<soap:body use="literal"/>
+
+			</wsdl:input>
+
+
+			<wsdl:output>
+
+				<soap:body use="literal"/>
+
+			</wsdl:output>
+
+		</wsdl:operation>
+
+
+		<wsdl:operation name="TestMethod">
+
+			<soap:operation style="document" 
+					soapAction="http://sitronicsts.com/MessagingGateway/TestMethod"/>
+
+
+			<wsdl:input>
+
+				<soap:body use="literal"/>
+
+			</wsdl:input>
+
+
+			<wsdl:output>
+
+				<soap:body use="literal"/>
+
+			</wsdl:output>
+
+		</wsdl:operation>
+
+	</wsdl:binding>
+
+
+	<wsdl:binding name="WebAdapterSoap12" type="tns:WebAdapterSoap">
+
+		<soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+
+
+		<wsdl:operation name="InvokeMethod">
+
+			<soap12:operation style="document" 
+					soapAction="http://sitronicsts.com/MessagingGateway/InvokeMethod"/>
+
+
+			<wsdl:input>
+
+				<soap12:body use="literal"/>
+
+			</wsdl:input>
+
+
+			<wsdl:output>
+
+				<soap12:body use="literal"/>
+
+			</wsdl:output>
+
+		</wsdl:operation>
+
+
+		<wsdl:operation name="InvokeMethodPlain">
+
+			<soap12:operation style="document" 
+					soapAction="http://sitronicsts.com/MessagingGateway/InvokeMethodPlain"/>
+
+
+			<wsdl:input>
+
+				<soap12:body use="literal"/>
+
+			</wsdl:input>
+
+
+			<wsdl:output>
+
+				<soap12:body use="literal"/>
+
+			</wsdl:output>
+
+		</wsdl:operation>
+
+
+		<wsdl:operation name="InvokeMethodViaHttp">
+
+			<soap12:operation style="document" 
+					soapAction="http://sitronicsts.com/MessagingGateway/InvokeMethodViaHttp"/>
+
+
+			<wsdl:input>
+
+				<soap12:body use="literal"/>
+
+			</wsdl:input>
+
+
+			<wsdl:output>
+
+				<soap12:body use="literal"/>
+
+			</wsdl:output>
+
+		</wsdl:operation>
+
+
+		<wsdl:operation name="TestMethod">
+
+			<soap12:operation style="document" 
+					soapAction="http://sitronicsts.com/MessagingGateway/TestMethod"/>
+
+
+			<wsdl:input>
+
+				<soap12:body use="literal"/>
+
+			</wsdl:input>
+
+
+			<wsdl:output>
+
+				<soap12:body use="literal"/>
+
+			</wsdl:output>
+
+		</wsdl:operation>
+
+	</wsdl:binding>
+
+
+	<wsdl:service name="WebAdapter">
+
+
+		<wsdl:port name="WebAdapterSoap" binding="tns:WebAdapterSoap">
+
+			<soap:address location="http://localhost/WebAdapter/service.asmx"/>
+
+		</wsdl:port>
+
+
+		<wsdl:port name="WebAdapterSoap12" binding="tns:WebAdapterSoap12">
+
+			<soap12:address location="http://localhost/WebAdapter/service.asmx"/>
+
+		</wsdl:port>
+
+	</wsdl:service>
+
+</wsdl:definitions>

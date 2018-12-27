@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>  
+<Application configClass="FORIS.MessagingGateway.SMSConnector.SMSConnectorConfiguration" type="SMSCON">
+	<SMSCenters>
+		<!--Connection host="localhost" port="9003" systemType="502" systemId="admin" pass="admin" /-->
+		<Connection host="172.20.162.150" port="2777" systemType="502" systemId="fomgt2" pass="GZ4aTMjV" /> 
+	</SMSCenters>
+	<Settings>
+		<Item name="ModuleType" value="SMSCON" />
+		<Item name="ModuleName" value="SMSCON_03" />
+		<Item name="CRMCacheCleanInterval" value="1000"/>
+		<Item name="SMSCBindRetryDelay" value="10"/>
+		<Item name="SendSpeedLimit" value="30" />
+		<Item name="DefaultCustomerSource" value="502" />
+		<Item name="Window" value="20" />
+		<Item name="WindowExceededDelay" value="60" />
+		<Item name="SuccessResponseCodes" value="0,40" />
+		<Item name="EnquireLinkInterval" value="3600" />
+		<Item name="DefaultEncoding" value="unicodefffe" /> <!-- ascii -->
+		<Item name="FetchLimit" value="200" />
+		<Item name="StatusToResend" value="20" />
+		<Item name="ResponseTimeout" value="8000" /> 
+		<Item name="RegisteredDelivery" value="false" />
+		<Item name="SrcTon" value="5" />
+		<Item name="SrcNpi" value="0"/>
+		<Item name="DstTon" value="1"/>
+		<Item name="DstNpi" value="1"/>
+		<Item name="SubmitEsmClass" value="0" />
+		<Item name="UtcOffset" value="08+" />
+		<Item name="SubmitUssdServiceOp" value="0" />
+		<Item name="SplittingType" value="UDH" />
+		<Item name="ContentField" value="ShortMessage" />
+		<Item name="SplitBy" value="134" />
+		<Item name="SplitAfter" value="140" />
+	</Settings>
+	<Anumbertransformations>
+	</Anumbertransformations>
+	<TemplateProcessors defaultConfig="C:\FORIS\Messaging Gateway\Configuration\SMSCON\SMSTemplateProcessor.01.xml">
+		<Processor dll="DefaultTemplates.dll" class="SMSTemplateProcessor" config="C:\FORIS\Messaging Gateway\Configuration\SMSCON\SMSTemplateProcessor.01.xml" />
+	</TemplateProcessors>
+	<BlackList propertyName="Sender" regExpBan="^88" >
+		<Ban>603221981</Ban>
+		<Ban>555715</Ban>
+	</BlackList>
+	<Encodings>
+		<Outgoing>
+			<Table name="iso-8859-1" encoding="0" special="" />
+			<Table name="ascii" encoding="1" special="" />
+			<Table name="ascii" encoding="2" special="" />
+			<Table name="iso-8859-1" encoding="3" special="" />
+			<Table name="ascii" encoding="4" special="" />
+			<Table name="shift-jis" encoding="5" special="" />
+			<Table name="iso-8859-5" encoding="6" special="" />
+			<Table name="iso-8859-8" encoding="7" special="" />
+			<Table name="unicodefffe" encoding="24" special="" /> <!-- by Yuriy Levitsky "Поставьте dcs = 0x18" for Bandle ph3 -->
+			<Table name="Windows-1252" encoding="1" special=""/> 
+		</Outgoing>
+		<Incoming>
+			<Table name="iso-8859-1" encoding="0" special="" />
+			<Table name="ascii" encoding="1" special="" />
+			<Table name="ascii" encoding="2" special="" />
+			<Table name="iso-8859-1" encoding="3" special="" />
+			<Table name="ascii" encoding="4" special="" />
+			<Table name="shift-jis" encoding="5" special="" />
+			<Table name="iso-8859-5" encoding="6" special="" />
+			<Table name="iso-8859-8" encoding="7" special="" />
+			<Table name="unicodefffe" encoding="24" special="" /> <!-- by Yuriy Levitsky "Поставьте dcs = 0x18" for Bandle ph3 -->
+			<Table name="Windows-1252" encoding="1" special=""/> 
+		</Incoming>				  
+	</Encodings>
+</Application>

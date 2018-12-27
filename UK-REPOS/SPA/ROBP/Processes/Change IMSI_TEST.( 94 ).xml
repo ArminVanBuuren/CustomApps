@@ -1,0 +1,33 @@
+<BusinessProcessData name="Change IMSI_TEST">
+  <response />
+  <contextslist>
+    <context name="Set New State">
+      <operation name="AddFRCSCRDnew">
+        <param name="request" ctx_name="AddFRCSCRDnew:request" />
+        <param name="response" ctx_name="AddFRCSCRDnew:response" />
+      </operation>
+    </context>
+    <context name="Store Initial State" />
+    <context name="Restore Initial State" />
+  </contextslist>
+  <businessprocess>
+    <scenario name="Set New State">
+      <objectlist>
+        <object name="AddFRCSCRDnew" class="FORIS.TelMD.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="AddFRCSDnew" object="AddFRCSDnew">
+          <parameterslist>
+            <param name="request" value="AddFRCSDnew:request" />
+            <param name="response" value="AddFRCSDnew:response" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+    <scenario name="Store Initial State" />
+    <scenario name="Restore Initial State" />
+  </businessprocess>
+</BusinessProcessData>

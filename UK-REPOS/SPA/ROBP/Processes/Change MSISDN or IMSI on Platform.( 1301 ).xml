@@ -1,0 +1,162 @@
+<BusinessProcessData name="Change MSISDN or IMSI on Platform">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="IfChange" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnitConditional" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="BPMProcessingUnit" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="NewHostDataInitializer" class="FORIS.ServiceProvisioning.BPM.NewHostDataInitializer" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="RecreateSubscribersOnHLR" class="FORIS.ServiceProvisioning.BPM.HostRedirectingProcessor" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="SplitProcess" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+        <object name="SplitCDMAprocess" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+        <object name="SplitPopProcess" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+        <object name="DummyResultCreator" class="FORIS.ScenarioProcessing.CommonUnits.ConditionalDummyResultCreator" assembly="FORIS.SPA.SPF.dll" />
+        <object name="CheckISDNforDummy" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+        <object name="TerminalStub" class="FORIS.ServiceProvisioning.BPM.TerminalStub" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="CheckISDNforDummy" object="CheckISDNforDummy">
+          <parameterslist>
+            <param name="XmlNameInContext" value="$XmlRequest" />
+            <param name="OrXmlPath:0" value="//ProvisionList/POPISDNMAP" />
+            <param name="OrXmlPath:1" value="//RegisteredList/POPISDNMAP" />
+          </parameterslist>
+          <resultlist>
+            <result value="0" node="DummyResultCreator" />
+            <result value="" node="ChangeIMSIOrMSISDNOnMID" />
+          </resultlist>
+        </node>
+        <node name="DummyResultCreator" object="DummyResultCreator">
+          <parameterslist>
+            <param name="XmlNameInContext" value="$XmlRequest" />
+            <param name="DetailedResult" value="0" />
+            <param name="DetailedResultDescription" value="SUCCESS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+        <node name="ChangeIMSIOrMSISDNOnMID" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="ChangeIMSIOrMSISDNOnMID" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeIMSIonHLR" />
+          </resultlist>
+        </node>
+        <node name="ChangeIMSIonHLR" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="ChangeIMSI" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeIMSIonGSR_PrP" />
+          </resultlist>
+        </node>
+        <node name="ChangeIMSIonGSR_PrP" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="ChangeIMSIonGSR_PrP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeIMSIonGSR" />
+          </resultlist>
+        </node>
+        <node name="ChangeIMSIonGSR" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="ChangeIMSIonGSR" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeIMSIonBB" />
+          </resultlist>
+        </node>
+        <node name="ChangeIMSIonBB" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="ChangeIMSIonBB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeIMSIonFP" />
+          </resultlist>
+        </node>
+        <node name="ChangeIMSIonFP" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="ChangeIMSIonFP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDN" />
+          </resultlist>
+        </node>
+        <!-- Change MSISDN -->
+        <node name="ChangeMSISDN" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDN" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonBMS" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonBMS" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonBMS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonGSR" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonGSR" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonGSR" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonLBS" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonLBS" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonLBS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonBB" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonBB" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonBB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonRBT" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonRBT" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonRBT" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonSDP" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonSDP" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonSDP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonCCS" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonCCS" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonCCS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonFP" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonFP" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonFP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

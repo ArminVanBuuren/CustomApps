@@ -1,0 +1,254 @@
+<templateGroup name="PoPTemplate">
+  <macros>
+    <define name="_MSCPHND" value="WCFHND_03" />
+    <define name="_BMSHND" value="WCFHND_01" />
+    <define name="_SMSCON" value="SMSCON_01" />
+  </macros>
+
+  <template procedureName="DB_CustData" handler="_MSCPHND" sessionStorage="Memory" sessionLifetime="30">
+    <receiveTemplate>
+      <Message type="scnauthenticate" initiator="ivrcon" id="${guid}" session_id="@{setSessionId(${guid})}">
+        <Item procedureName="SCN_AUTHENTICATE">
+          <Attribute name="CLIENT_ID" type="String" value="911" />
+          <Attribute name="REQUEST_ID" type="String" value="#{substring('${guid}',1,10)}" />
+          <Attribute name="SUBSCR_NUMBER" value="${Customer}"/>
+          <Attribute name="AUTH_TYPE" type="Int32" value="0" />
+          <Attribute name="PASSWORD" type="String" value="" />
+
+          <Attribute name="RESULT_CODE" />
+          <Attribute name="REQUEST_ID" />
+          <Attribute name="RESULT_MESSAGE" />
+
+          <Attribute name="MSISDN" />
+          <Attribute name="TARIFF_PLAN_ID" />
+          <Attribute name="LANGUAGE_ID" />
+          <Attribute name="CUST_STATUS" />
+          <Attribute name="CUST_ADM_STATUSES" />
+          <Attribute name="ACTIVATION_COUNT" />
+          <Attribute name="ACTIVATION_COUNTDOWN" />
+          <Attribute name="LAST_ACTIVITY" />
+          <Attribute name="Loc_No" />
+          <Attribute name="ADDITIONAL_DATA" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate />
+    <input>
+      <param name="CLIENT_ID" />
+      <param name="REQUEST_ID" />
+      <param name="SUBSCR_NUMBER" />
+      <param name="AUTH_TYPE" />
+      <param name="PASSWORD" />
+    </input>
+    <output>
+      <param name="RESULT_CODE" value="0" />
+      <param name="REQUEST_ID" value="0" />
+      <param name="RESULT_MESSAGE" value="0" />
+      <param name="MSISDN"  value="0" />
+      <param name="TARIFF_PLAN_ID" value="0" />
+      <param name="LANGUAGE_ID" value="0" />
+      <param name="CUST_STATUS" value="0" />
+      <param name="CUST_ADM_STATUSES" value="0" />
+      <param name="ACTIVATION_COUNT" value="0" />
+      <param name="ACTIVATION_COUNTDOWN" value="0" />
+      <param name="LAST_ACTIVITY" value="0" />
+      <param name="Loc_No" value="0" />
+      <param name="ADDITIONAL_DATA" value="0" />
+    </output>
+  </template>
+
+
+  <template procedureName="GetBMSBalance" handler="_BMSHND" sessionStorage="Remoting" sessionLifetime="300">
+    <receiveTemplate>
+      <Message type="getcounters" initiator="soapcon" id="${guid}" session_id="@{setSessionId(${guid})}">
+        <Item procedureName="GetBalance">
+          <Attribute name="Customer" type="String" value="${Msisdn}" />
+          <Attribute name="Balance" />
+          <Attribute name="Counters" />
+          <Attribute name="CreateDate" />
+          <Attribute name="Result" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="oparam:Success" value="0"/>
+    </deliveryTemplate>
+    <deliveryTemplate />
+    <input>
+      <param name="Msisdn" />
+      <param name="LanguageId" />
+    </input>
+    <output>
+      <param name="Success"  />
+    </output>
+  </template>
+
+
+  <template procedureName="DB_AdditionalAgreementInformation">
+    <receiveTemplate>
+      <Message type="additionalagreementinfo" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Msisdn}" language_id="${LanguageId}" >
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="oparam:Success" value="0"/>
+    </deliveryTemplate>
+    <deliveryTemplate/>
+    <input>
+      <param name="Msisdn" />
+      <param name="LanguageId" />
+    </input>
+    <output>
+      <param name="Success"  />
+    </output>
+  </template>
+
+
+  <template procedureName="DB_BalanceRetriev">
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}" subject="balance">
+          <Attribute name="unpayment" value="0" />
+          <Attribute name="requestcountertype" value="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:dbresult" value="${dbresult}" />
+      <set item="oparam:balanceintpartdotpart" value="${balanceintpartdotpart}" />
+    </deliveryTemplate>
+    <input>
+      <param name="Customer" />
+    </input>
+    <output>
+      <param name="dbresult" value="-1" />
+      <param name="balanceintpartdotpart" value="" />
+    </output>
+  </template>
+
+
+  <template procedureName="DB_PaymentRetriev">
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}" subject="payments">
+          <Attribute name="index" value="${index}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate />
+    <input>
+      <param name="customer" />
+      <param name="index" />
+    </input>
+    <output>
+      <param name="count" value="0" />
+      <param name="day" value="" />
+      <param name="currency" value="0" />
+      <param name="intpartfracpart" value="0" />
+    </output>
+  </template>
+
+
+  <template procedureName="DB_LastPeriodBill">
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}" subject="lastperiodbill">
+          <Attribute name="startdate" value="${startdate}" />
+          <Attribute name="enddate" value="${enddate}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate />
+    <input>
+      <param name="customer" />
+      <param name="startdate" />
+      <param name="enddate" />
+    </input>
+    <output>
+      <param name="dbresult" value=""/>
+      <param name="draftintdotpart"  value="0"/>
+      <param name="beginday"  value=""/>
+      <param name="endday"  value=""/>
+    </output>
+  </template>
+
+
+  <template procedureName="DB_SInterrogation">
+    <receiveTemplate>
+      <Message type="serviceinterrogation" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}">
+          <Service id="${service}" action="interrogation" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate />
+    <input>
+      <param name="customer" />
+      <param name="service" />
+    </input>
+    <output>
+      <param name="Allowed" type="2" value="0" />
+      <param name="Subscription" type="2" value="0" />
+      <param name="Status" type="2" value="0" />
+      <param name="Class" type="3" value="0" />
+      <param name="ChargedAmount" type="3" value="0" />
+    </output>
+  </template>
+
+
+  <template procedureName="DB_ChargesInfoSync">
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Msisdn}" subject="charges">
+          <Attribute name="index" value="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate/>
+    <input>
+      <param name="Msisdn" />
+      <param name="LanguageId" />
+    </input>
+    <output>
+      <param name="dbresult"  />
+      <param name="Totals"  />
+    </output>
+  </template>
+
+
+  <!--не делаем, пока заглушкой-->
+  <template procedureName="DB_AccountInformationForPeriod">
+    <receiveTemplate>
+      <Message type="accountinformation" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}"/>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input">
+      <set item="param:dbresult" value="0"/>
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+    </input>
+    <output>
+      <param name="dbresult" value="0" />
+    </output>
+  </template>
+
+  <template procedureName="GetRetrieveTdLimit" sessionStorage="Memory" sessionLifetime="300">
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="retrievetdlimit" initiator="ivrcon" id="${guid}" session_id="@{setSessionId(${guid})}">
+        <Item customer="${MSISDN}"/>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate connector="_SMSCON"/>
+    <input>
+      <param name="MSISDN" />
+    </input>
+    <output>
+    </output>
+  </template>
+
+</templateGroup>

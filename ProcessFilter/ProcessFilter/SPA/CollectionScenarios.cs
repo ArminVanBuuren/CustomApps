@@ -146,7 +146,7 @@ namespace ProcessFilter.SPA
             return prsCs;
         }
 
-        List<string> EvaluateXPath(XmlDocument document, string xpath)
+        public static List<string> EvaluateXPath(XmlDocument document, string xpath)
         {
             List<string> collection = new List<string>();
             XmlNodeList listByXpath = document.SelectNodes(xpath);

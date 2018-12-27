@@ -69,5 +69,34 @@ namespace ProcessFilter.Properties {
                 return ((System.Drawing.Icon)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;Configuration markers=&quot;*&quot; scenarioPrefix=&quot;SC.&quot; mainIdentities=&quot;MSISDN,PersonalAccountNumber,ContractNumber&quot; SICreation=&quot;&quot; formatVersion=&quot;1&quot;&gt;
+        ///  &lt;HostTypeList&gt;
+        ///  &lt;/HostTypeList&gt;
+        ///  &lt;IdentityList&gt;
+        ///  &lt;/IdentityList&gt;
+        ///  &lt;AttributeList&gt;
+        ///  &lt;/AttributeList&gt;
+        ///  &lt;ResourceList&gt;
+        ///  &lt;/ResourceList&gt;
+        ///  &lt;RFSParameterList&gt;
+        ///  &lt;/RFSParameterList&gt;
+        ///  &lt;FlagList /&gt;
+        ///  &lt;RFSList&gt;
+        ///  &lt;/RFSList&gt;
+        ///  &lt;CFSList&gt;
+        ///  &lt;/CFSList&gt;
+        ///  &lt;CFSGroupList&gt;
+        ///  &lt;/CFSGroupList&gt;
+        ///  &lt;RFSGroupList /&gt;
+        ///  &lt;RFSD [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Template {
+            get {
+                return ResourceManager.GetString("Template", resourceCulture);
+            }
+        }
     }
 }

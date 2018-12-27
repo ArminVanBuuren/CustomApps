@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<plugin name="RouterPlugin">
+	<queues>
+		<queue refName="a1" name=".\trash" />
+		<queue refName="dummyrequest" name=".\telcrm_output" />
+	</queues>
+	<condition expression="/Message/Item/Service/@id" match="Epte_musor_siplat">
+		<!--condition expression="/Message/Item/Service/@id" match="FR25DAY"-->
+		<route-to ref="a1" />		
+	</condition>
+	<condition expression="/Message/@type" match="dummyrequest">
+		<route-to ref="dummyrequest" />		
+	</condition>
+</plugin>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<Application>
+	<TargetDatabase>                                                                
+		<Database forisDataKey="BONUS" interfacePackage="" />
+	</TargetDatabase>
+	<Settings>
+		<Item name="ModuleType" value="DBCON" />
+		<Item name="ModuleName" value="DBCON_02" />
+		<Item name="CRMCacheCleanInterval" value="60" />
+		<Item name="StoringInterval" value="4" />
+		<Item name="NumOfThreads" value="6" />
+	</Settings>
+	<Monitors>
+		<HeartBeat periodSec="10" />
+		<ProcessTime periodSec="60" />
+		<NoActivity defaultThresholdSec="10">
+			<MonitoredInterval thresholdSec="20">
+				<day from="1" to="5" />
+				<hour from="2" to="6" />
+			</MonitoredInterval>
+			<MonitoredInterval thresholdSec="40">
+				<day from="1" to="5" />
+				<hour from="16" to="20" />
+			</MonitoredInterval>
+			<MonitoredInterval thresholdSec="5">
+				<day from="3" to="4" />
+				<hour from="16" to="17" />
+			</MonitoredInterval>
+		</NoActivity>
+		<NoDBConnection  periodSec="5" />
+		<NoDeviceConnection  periodSec="5" />
+		<NoDiscSpace  periodSec="10">
+			<warning threshold="20" />
+			<minor threshold="30" />
+			<major threshold="40" />
+			<critical threshold="50" />
+		</NoDiscSpace>
+	</Monitors>	
+</Application>

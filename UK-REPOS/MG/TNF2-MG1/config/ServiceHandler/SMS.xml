@@ -1,0 +1,363 @@
+<templateGroup name="ServiceHandler">
+	<macros>
+
+		<!-- Created by Vladimir Khovanskiy  -->
+		
+		<!-- ==========================  SERVICE PROVISION  ========================== -->
+		<define name="_SERVICE_RESULT_INFO"                   value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/@info_${sDBResult}_${sActParce}__GET_LANG}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/@info_${sDBResult}_${sActParce}__GET_LANG}','#{if('#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@info_${sDBResult}_${sActParce}__GET_LANG}'!='','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@info_${sDBResult}_${sActParce}__GET_LANG}','#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/@info_${sDBResult}__GET_LANG}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/@info_${sDBResult}__GET_LANG}','#{if('#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@info_${sDBResult}__GET_LANG}'!='','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@info_${sDBResult}__GET_LANG}','_GET_DBRESULT_INFO')}')}')}')}"/>
+		<!-- Проверка доступности или недоступности добавления/удаления сервиса, для опреденных тарифных планов -->
+		<define name="_SERVICE_TP_CONDITIONS_CHECK"           value="#{if(count(document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/tplist/ivrcode)>0,count(document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/tplist/ivrcode),count(document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/tplist/ivrcode))}"/>
+		<define name="_SERVICE_TP_CONDITIONS_EXIST"           value="#{if(count(document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/tplist[ivrcode/@value='#{//Message/Item/@tariffplan}']/ivrcode)>0,count(document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/tplist[ivrcode/@value='#{//Message/Item/@tariffplan}']/ivrcode),count(document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/tplist[ivrcode/@value='#{//Message/Item/@tariffplan}']/ivrcode))}"/>
+		<define name="_SERVICE_TP_CONDITIONS_NAMETP"          value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/tplist/ivrcode[@value='#{//Message/Item/@tariffplan}']/@name}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/tplist/ivrcode[@value='#{//Message/Item/@tariffplan}']/@name}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/tplist/ivrcode[@value='#{//Message/Item/@tariffplan}']/@name}')}"/>
+		<define name="_SERVICE_TP_CONDITIONS_ISAVAIL"         value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/tplist[ivrcode/@value='#{//Message/Item/@tariffplan}']/@available}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/tplist[ivrcode/@value='#{//Message/Item/@tariffplan}']/@available}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/tplist[ivrcode/@value='#{//Message/Item/@tariffplan}']/@available}')}"/>
+		<define name="_SERVICE_TP_CONDITIONS_NOTAVALINFO"     value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/tplist[ivrcode/@value='#{//Message/Item/@tariffplan}']/@info_notaval__GET_LANG}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/tplist[ivrcode/@value='#{//Message/Item/@tariffplan}']/@info_notaval__GET_LANG}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/tplist[ivrcode/@value='#{//Message/Item/@tariffplan}']/@info_notaval__GET_LANG}')}"/>
+		<!-- Проверка доступности или недоступности добавления/удаления сервиса, для опреденных абонентов -->
+		<define name="_SERVICE_CUST_CONDITIONS_CHECK"         value="#{if(count(document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/customerlist[1]/customer[@value='${customer}']/@value)>0,count(document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/customerlist[1]/customer[@value='${customer}']/@value),count(document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/customerlist[1]/customer[@value='${customer}']/@value))}"/>
+		<define name="_SERVICE_CUST_CONDITIONS_ISAVAIL"       value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/customerlist[1]/@available}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/customerlist[1]/@available}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/customerlist[1]/@available}')}"/>
+		<define name="_SERVICE_CUST_CONDITIONS_NOTAVAILINFO"  value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/customerlist[1]/@info_notaval__GET_LANG}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/customerlist[1]/@info_notaval__GET_LANG}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/customerlist[1]/@info_notaval__GET_LANG}')}"/>
+		<!-- Проверка доступности или недоступности добавления/удаления сервиса, для опреденных назначенных или удаленных услуг у абонента -->
+		<define name="_SERVICE_SRV_CONDITIONS_CHECK"          value="#{if(count(document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/servicebindinglist[1]/service)>0,count(document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/servicebindinglist[1]/service),count(document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/servicebindinglist[1]/service))}"/>
+		<define name="_SERVICE_SRV_CONDITIONS_SRVCODE"        value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@service_code}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@service_code}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/servicebindinglist[1]/service[${sCnt}]/@service_code}')}"/>
+		<define name="_SERVICE_SRV_CONDITIONS_STATUS"         value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@subscription}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@subscription}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/servicebindinglist[1]/service[${sCnt}]/@subscription}')}"/>
+		<define name="_SERVICE_SRV_CONDITIONS_STORE"          value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@store}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@store}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/servicebindinglist[1]/service[${sCnt}]/@store}')}"/>
+		<define name="_SERVICE_SRV_CONDITIONS_INFO"           value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@info_notaval__GET_LANG}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@info_notaval__GET_LANG}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/servicebindinglist[1]/service[${sCnt}]/@info_notaval__GET_LANG}')}"/>
+		<!-- Если заключительный ответ должен идти через смс канал и через CRM. Оберегает от спама сообщений -->
+		<define name="_SERVICE_SUCCESS_RESPONSE_BY"           value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/@successful_response}'='','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@successful_response}','#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/@successful_response}')}"/>
+		<define name="_SERVICE_BLOCK_CHECK"                   value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/@check_block}'='','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@check_block}','#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/@check_block}')}"/>
+		<!-- Предварительно проверяется добавлена или удалена у абонента услуга, которую нужно назначить или удалить -->
+		<define name="_SERVICE_SRVINTERROGATION_CHECK"        value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/@service_interrogation}'='','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@service_interrogation}','#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/@service_interrogation}')}"/>
+		<define name="_SERVICE_BALANCE_CHECK"                 value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/@availbalance}'='','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@availbalance}','#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/@availbalance}')}"/>
+		<!-- Среднее время обработки заявки в CRM. -->
+		<define name="_SERVICE_TIMETOPROGRESS"                value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/@timetoprogress}'='','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@timetoprogress}','#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/@timetoprogress}')}"/>
+		<define name="_SERVICE_GET_REASON_OR_DBRESULT"        value="#{if('#{//Message/Item/Service/Error/Attribute[@name='reason']/@value}'!='' and '${dbresult}'='-1','#{//Message/Item/Service/Error/Attribute[@name='reason']/@value}','${dbresult}')}"/>
+		<define name="_SERVICE_DATEFROM"                      value="#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/@datefrom}"/>
+		<define name="_SERVICE_DATETO"                        value="#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/@dateto}"/>
+		<define name="_SERVICE_NAME"                          value="#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/@service_name__GET_LANG}"/>
+		<define name="_SERVICE_CODE"                          value="#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/@service_code}"/>
+		<define name="_SERVICE_REDIRECT"                      value="#{document('_SERVICE_PATH')/ServiceList/Service/_PERFORMING_MODULE[@value='${sService}']/@redirect}"/>
+		<define name="_SERVICE_GROUPNAME"                     value="#{document('_SERVICE_PATH')/ServiceList/GroupList/Item[@id='#{document('_SERVICE_PATH')/ServiceList/Service[_PERFORMING_MODULE/@value='${sService}']/@group}']/@name}"/>
+		<define name="_SERVICE_COMMAND_ACTION"                value="#{document('_SERVICE_PATH')/ServiceList/CommandList/Command[_PERFORMING_MODULE/@value='${sAction}']/@action}"/>
+		<define name="_SERVICE_COMMAND_STATUS"                value="#{document('_SERVICE_PATH')/ServiceList/CommandList/Command[_PERFORMING_MODULE/@value='${sAction}']/@status}"/>
+		<define name="_SERVICE_COMMAND_CODE"                  value="#{document('_SERVICE_PATH')/ServiceList/CommandList/Command[_PERFORMING_MODULE/@value='${sAction}']/@code}"/>
+		<define name="_SERVICE_COMMAND_ACTPARCE"              value="#{document('_SERVICE_PATH')/ServiceList/CommandList/Command[_PERFORMING_MODULE/@value='${sAction}']/@parce}"/>
+		<define name="_SERVICE_CRMSTATUS"                     value="#{document('_SERVICE_PATH')/ServiceList/CommandList/Command[@status='${subscription}']/@parce}"/>
+		<define name="_SERVICE_CRMACTION_ADD"                 value="#{document('_SERVICE_PATH')/ServiceList/CommandList/Command[@action='2']/@parce}"/>
+		<define name="_SERVICE_CRMACTION_DEL"                 value="#{document('_SERVICE_PATH')/ServiceList/CommandList/Command[@action='3']/@parce}"/>
+		<!-- ==========================  SERVICE PROVISION  ========================== -->
+		
+		<!-- ==========================  SETTINGS   ========================== -->
+		<define name="_WAIT_FIRST_FLOW"                 value="#{if(matches('${sDBResult}','^(redirect|alrprogress|inprogress)$'),'true','')}"/>
+		<define name="_CHECK_IF_INPROGRESS"             value="#{if(not(matches('${sStartSecond}','_IF_NAN')) and number(${sTimeToProgress})>0,'#{if(number(${sStartSecond})+number(${sTimeToProgress})>number(_GET_SECONDS) and number(_GET_SECONDS)-number(${sStartSecond})>0,'true','false')}','false')}"/>
+		<define name="_GET_TODAY"                       value="#{concat(substring('@{now}',7,4),substring('@{now}',4,2),substring('@{now}',1,2))}"/>
+		<define name="_GET_SECONDS"                     value="#{(number(replace('@{now}','_RGXPTT_DATE','$1')) * 60 * 60) + (number(replace('@{now}','_RGXPTT_DATE','$2')) * 60) + number(replace('@{now}','_RGXPTT_DATE','$3'))}"/>
+		<define name="_RGXPTT_DATE"                     value="^\d+\.\d+\.\d+\s+(\d+)\:(\d+)\:(\d+)$"/>
+		<define name="_GET_DBRESULT_INFO"               value="#{document('_DICTIONARY_PATH')/Dictionary/DBResults/Item[code/@value='${sDBResult}']/@info__GET_LANG}"/>
+		<define name="_GET_LENGTH_DBRESULT"             value="#{string-length(document('_DICTIONARY_PATH')/Dictionary/DBResults/Item[code/@value='${sDBResult}']/@info__GET_LANG)}"/>
+		<define name="_GET_AFTER_VERIFY_DBRESULT"       value="#{if('#{document('_DICTIONARY_PATH')/Dictionary/DBResults/Item[code/@value='${customerblocks}']/@info__GET_LANG}'!='','${customerblocks}','${dbresult}')}"/>
+		<define name="_GET_LANG"                        value="#{if('${sLang}'='','_INLANGUAGE','${sLang}')}" />
+		<define name="_INLANGUAGE"                      value="#{if('#{document('_DICTIONARY_PATH')/Dictionary/Language/lang[item/@value='${language_id}']/@param}'='','#{document('_DICTIONARY_PATH')/Dictionary/Language/lang[item/@value='']/@param}','#{document('_DICTIONARY_PATH')/Dictionary/Language/lang[item/@value='${language_id}']/@param}')}" />
+		<define name="_PERFORMING_MODULE"               value="#{if('${sModule}'!='','${sModule}','_CURRENT_MODULE')}" />
+		<define name="_IF_TRUE"                         value="^([Tt][Rr][Uu][Ee]|1)$"/>
+		<define name="_IF_NAN"                          value="^([Nn][Aa][Nn]|)$"/>
+		<define name="_IF_FINALRESPONCE_BYCRM"          value="[Bb][Yy][Cc][Rr][Mm]"/>
+		<define name="_SERVICE_PATH"                    value="C:\Foris\Messaging Gateway\Config\ServiceHandler\Common\SERVICE_LIST.xml"/>
+		<define name="_DICTIONARY_PATH"                 value="C:\Foris\Messaging Gateway\Config\Common\DBR_DICTIONARY.xml"/>
+		<!-- ==========================  SETTINGS   ========================== -->
+		
+		<!-- ==========================  CONNECTOR SPECIAL  ========================== -->
+		<define name="_SMS_SERVICE_NUMBER"              value="810" />
+		<define name="_ENCODING"                        value="unicodefffe"/>
+		<define name="_CURRENT_MODULE"                  value="smscon" />
+		<define name="_CURRENT_INITIATOR"               value="smscon"/>
+		<!-- ==========================  CONNECTOR SPECIAL  ========================== -->
+	</macros>
+
+	<template procedureName="ServiceProvision" sessionStorage="Database" sessionLifetime="300">
+		<condition>
+			<test item="${Recipient}" matches="^_SMS_SERVICE_NUMBER$" />
+			<test item="#{document('_SERVICE_PATH')/ServiceList/CommandList/Command[_CURRENT_MODULE/@value='#{StrToLower('${token0}')}']/@action}" matches="\d+"/>
+			<test item="#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='#{StrToLower('${token1}')}']/@service_code}" matches="[A-z0-9]+"/>
+		</condition>
+		<receiveTemplate>
+			<Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(SrvProv_${Sender})}">
+				<Item customer="${Sender}">
+					<Attribute name="checkivrservice" value="0"/>
+					<Attribute name="checkblocks" value="0"/>
+				</Item>
+				@{store(sCustomer,${Sender})}
+				@{store(sService,#{StrToLower('${token1}')})}
+				@{store(sAction,#{StrToLower('${token0}')})}
+				@{store(sModule,_CURRENT_MODULE)}
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate conditionEx="false@{store(sLang,_INLANGUAGE)}"/>
+		<deliveryTemplate conditionEx="#{matches('_CHECK_IF_INPROGRESS','_IF_TRUE')}" call="ServiceStringFormat">
+			<set item="Content" conditionEx="#{'${sServiceCode}'='_SERVICE_CODE' and '${sActParce}'='_SERVICE_COMMAND_ACTPARCE'}" value="@{store(sDBResult,alrprogress)}"/>
+			<set item="Content" conditionEx="#{'${sServiceCode}'!='_SERVICE_CODE' or '${sActParce}'!='_SERVICE_COMMAND_ACTPARCE'}" value="@{store(sDBResult,inprogress)}"/>
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="false@{store(sServiceCode,_SERVICE_CODE)}"/>
+		<deliveryTemplate conditionEx="false@{store(sGroupName,_SERVICE_GROUPNAME)}"/>
+		<deliveryTemplate conditionEx="false@{store(sActParce,_SERVICE_COMMAND_ACTPARCE)}"/>
+		<deliveryTemplate conditionEx="false@{store(sParams,_SERVICE_NAME)}"/>
+		<deliveryTemplate conditionEx="false@{store(sTimeToProgress,#{number(#{if(matches('_SERVICE_TIMETOPROGRESS','^\d+$'),'_SERVICE_TIMETOPROGRESS','0')})})}"/>
+		<deliveryTemplate conditionEx="false@{store(sStartSecond,_GET_SECONDS)}" />
+		<deliveryTemplate conditionEx="false@{store(sRedirectToDevice,)}" />
+		<deliveryTemplate conditionEx="#{'${dbresult}'!='0'}" call="ServiceStringFormat">
+			<set conditionEx="0@{store(sDBResult,${dbresult})}"/>
+			<set item="Content" value=""/>
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="#{'${sServiceCode}'='' or '${sService}'='' or '${sCustomer}'='' or '${sAction}'=''}" call="ServiceStringFormat">
+			<set conditionEx="0@{store(sDBResult,329990)}"/>
+			<set item="Content" value=""/>
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="#{((_SERVICE_CUST_CONDITIONS_CHECK>0 and not(matches('_SERVICE_CUST_CONDITIONS_ISAVAIL','_IF_TRUE'))) or (_SERVICE_CUST_CONDITIONS_CHECK=0 and matches('_SERVICE_CUST_CONDITIONS_ISAVAIL','_IF_TRUE'))) and '_SERVICE_CUST_CONDITIONS_NOTAVAILINFO'!=''}" call="ServiceStringFormat">
+			<set conditionEx="0@{store(sDBResult,notallowed)}" />
+			<set item="Content" value="_SERVICE_CUST_CONDITIONS_NOTAVAILINFO"/>
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="#{'_GET_TODAY' > '_SERVICE_DATETO'}" call="ServiceStringFormat">
+			<set conditionEx="0@{store(sDBResult,notavailable)}"/>
+			<set item="Content" value=""/>
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="#{'_GET_TODAY' &lt; '_SERVICE_DATEFROM'}" call="ServiceStringFormat">
+			<set conditionEx="0@{store(sDBResult,unavailable)}"/>
+			<set conditionEx="0@{store(sParams,${sParams};#{concat(substring('_SERVICE_DATEFROM',7,2),'.',substring('_SERVICE_DATEFROM',5,2),'.',substring('_SERVICE_DATEFROM',1,4))})}"/>
+			<set item="Content" value=""/>
+		</deliveryTemplate>
+		<!-- Проверки: 1) добавлна/удалена услуга 2) проверка баланса 3) проверка условий по услугам (добавлены/удалены) 4) проверка на блокировку и доступность данной услуги на тп 5) вызов на добавление/удаление - бмс-услуг, блокировки, остальных услуг/пакетов -->
+		<deliveryTemplate conditionEx="#{matches('_SERVICE_SRVINTERROGATION_CHECK','_IF_TRUE')}" call="ServiceProvision_Inter_Step2"/>
+		<deliveryTemplate conditionEx="#{matches('_SERVICE_BALANCE_CHECK','^(\-|)\d+$') and not(matches('${sIsBindBalAval}','_IF_TRUE'))}" call="ServiceProvisionChckBndBal"/>
+		<deliveryTemplate conditionEx="#{_SERVICE_SRV_CONDITIONS_CHECK>0 and not(matches('${sIsBindSrvAval}','_IF_TRUE'))}" call="ServiceProvisionChckBndSrv"/>
+		<deliveryTemplate conditionEx="#{_SERVICE_TP_CONDITIONS_CHECK>0 or matches('_SERVICE_BLOCK_CHECK','_IF_TRUE')}" call="ServiceProvision_Vrf_Step3"/>
+		<deliveryTemplate conditionEx="#{'${sGroupName}'='BMS'}" call="ServiceProvision_BMS_Step6"/>
+		<deliveryTemplate conditionEx="#{'${sGroupName}'='BLOCKS'}" call="ServiceProvision_Block_Step5"/>
+		<deliveryTemplate call="ServiceProvision_Order_Step4" />
+	</template>
+	<template procedureName="ServiceProvision_Inter_Step2" sessionStorage="Database" sessionLifetime="300" persistent="false">
+		<condition>
+			<test item="0" matches="1"/>
+		</condition>
+		<receiveTemplate>
+			<Message type="serviceinterrogation" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+				<Item customer="${sCustomer}">
+					<Service id="${sServiceCode}" action="interrogation"/>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate conditionEx="#{'${dbresult}'!='0' or '_SERVICE_COMMAND_STATUS'='' or '_SERVICE_COMMAND_ACTION'=''}" call="ServiceStringFormat">
+			<set conditionEx="0@{store(WaitFirstFlow,_WAIT_FIRST_FLOW)}" />
+			<set item="Content" conditionEx="#{'${dbresult}'!='0'}" value="@{store(sDBResult,${dbresult})}"/>
+			<set item="Content" conditionEx="#{'${dbresult}'='0'}" value="@{store(sDBResult,329990)}"/>
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="#{'_SERVICE_COMMAND_STATUS'='${subscription}'}" call="ServiceStringFormat">
+			<set conditionEx="0@{store(WaitFirstFlow,_WAIT_FIRST_FLOW)}" />
+			<set conditionEx="0@{store(sDBResult,_SERVICE_COMMAND_CODE)}"/>
+			<set item="Content" value=""/>
+		</deliveryTemplate>
+		<!-- Проверки: 1) проверка баланса 2) проверка условий по услугам (добавлены/удалены) 3) проверка на блокировку и доступность данной услуги на тп 4) вызов на добавление/удаление - бмс-услуг, блокировки, остальных услуг/пакетов  -->
+		<deliveryTemplate conditionEx="#{matches('_SERVICE_BALANCE_CHECK','^(\-|)\d+$') and not(matches('${sIsBindBalAval}','_IF_TRUE'))}" call="ServiceProvisionChckBndBal"/>
+		<deliveryTemplate conditionEx="#{_SERVICE_SRV_CONDITIONS_CHECK>0 and not(matches('${sIsBindSrvAval}','_IF_TRUE'))}" call="ServiceProvisionChckBndSrv"/>
+		<deliveryTemplate conditionEx="#{_SERVICE_TP_CONDITIONS_CHECK>0 or matches('_SERVICE_BLOCK_CHECK','_IF_TRUE')}" call="ServiceProvision_Vrf_Step3"/>
+		<deliveryTemplate conditionEx="#{'${sGroupName}'='BMS'}" call="ServiceProvision_BMS_Step6"/>
+		<deliveryTemplate conditionEx="#{'${sGroupName}'='BLOCKS'}" call="ServiceProvision_Block_Step5"/>
+		<deliveryTemplate call="ServiceProvision_Order_Step4" />
+	</template>
+	<template procedureName="ServiceProvisionChckBndBal" sessionStorage="Database" sessionLifetime="300" persistent="false">
+		<condition>
+			<test item="0" matches="1"/>
+		</condition>
+		<receiveTemplate>
+			<Message type="retrievecustomerdata" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+				<Item customer="${sCustomer}" subject="balance">
+					<Attribute name="unpayment" value="0"/>
+					<Attribute name="requestcountertype" value="0"/>
+				</Item>
+				@{store(sIsBindBalAval,true)}
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate conditionEx="#{'${dbresult}'!='0'}" call="ServiceStringFormat">
+			<set conditionEx="0@{store(WaitFirstFlow,_WAIT_FIRST_FLOW)}"/>
+			<set conditionEx="0@{store(sDBResult,${dbresult})}"/>
+			<set conditionEx="0@{store(sIsBindBalAval,false)}"/>
+			<set item="Content" value=""/>
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="#{number(${balanceintpartdotpart} div 100) &lt; _SERVICE_BALANCE_CHECK}" call="ServiceStringFormat">
+			<set conditionEx="0@{store(WaitFirstFlow,_WAIT_FIRST_FLOW)}"/>
+			<set conditionEx="0@{store(sDBResult,notavailbalance)}"/>
+			<set conditionEx="0@{store(sParams,${sParams};number(${balanceintpartdotpart} div 100))}" />
+			<set conditionEx="0@{store(sIsBindBalAval,false)}"/>
+			<set item="Content" value=""/>
+		</deliveryTemplate>
+		<!-- Проверки: 1) проверка условий по услугам (добавлены/удалены) 2) проверка на блокировку и доступность данной услуги на тп 3) вызов на добавление/удаление - бмс-услуг, блокировки, остальных услуг/пакетов  -->
+		<deliveryTemplate conditionEx="#{_SERVICE_SRV_CONDITIONS_CHECK>0 and not(matches('${sIsBindSrvAval}','_IF_TRUE'))}" call="ServiceProvisionChckBndSrv"/>
+		<deliveryTemplate conditionEx="#{_SERVICE_TP_CONDITIONS_CHECK>0 or matches('_SERVICE_BLOCK_CHECK','_IF_TRUE')}" call="ServiceProvision_Vrf_Step3"/>
+		<deliveryTemplate conditionEx="#{'${sGroupName}'='BMS'}" call="ServiceProvision_BMS_Step6"/>
+		<deliveryTemplate conditionEx="#{'${sGroupName}'='BLOCKS'}" call="ServiceProvision_Block_Step5"/>
+		<deliveryTemplate call="ServiceProvision_Order_Step4" />
+	</template>
+	<template procedureName="ServiceProvisionChckBndSrv" sessionStorage="Database" sessionLifetime="300" persistent="false">
+		<condition>
+			<test item="0" matches="1"/>
+		</condition>
+		<receiveTemplate>
+			<Message type="serviceinterrogation" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+				@{store(sCnt,#{if('${sCnt}'='',1,#{number('${sCnt}') + 1})})}
+				<Item customer="${sCustomer}">
+					<Service id="_SERVICE_SRV_CONDITIONS_SRVCODE" action="interrogation"/>
+				</Item>
+				@{store(sIsBindSrvAval,true)}
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate conditionEx="#{'${dbresult}'!='0'}" call="ServiceStringFormat">
+			<set conditionEx="0@{store(WaitFirstFlow,_WAIT_FIRST_FLOW)}"/>
+			<set conditionEx="0@{store(sDBResult,${dbresult})}"/>
+			<set conditionEx="0@{store(sIsBindSrvAval,false)}"/>
+			<set item="Content" value=""/>
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="#{'_SERVICE_SRV_CONDITIONS_INFO'!='' and '${subscription}'='_SERVICE_SRV_CONDITIONS_STATUS'}" call="ServiceStringFormat">
+			<set conditionEx="0@{store(WaitFirstFlow,_WAIT_FIRST_FLOW)}"/>
+			<set conditionEx="0@{store(sIsBindSrvAval,false)}"/>
+			<set conditionEx="0@{store(sDBResult,notallowed)}" />
+			<set item="Content" value="_SERVICE_SRV_CONDITIONS_INFO"/>
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="#{'_SERVICE_SRV_CONDITIONS_STORE'!=''}" terminating="false" >
+			<set conditionEx="0@{store(sRequi,#{if('${sRequi}'='','_SERVICE_SRV_CONDITIONS_STORE','${sRequi};_SERVICE_SRV_CONDITIONS_STORE')})}"/>
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="#{_SERVICE_SRV_CONDITIONS_CHECK>${sCnt}}" call="ServiceProvisionChckBndSrv"/>
+		<!-- Проверки: 1) проверка на блокировку и доступность данной услуги на тп 2) вызов на добавление/удаление - бмс-услуг, блокировки, остальных услуг/пакетов  -->
+		<deliveryTemplate conditionEx="#{_SERVICE_TP_CONDITIONS_CHECK>0 or matches('_SERVICE_BLOCK_CHECK','_IF_TRUE')}" call="ServiceProvision_Vrf_Step3"/>
+		<deliveryTemplate conditionEx="#{'${sGroupName}'='BMS'}" call="ServiceProvision_BMS_Step6"/>
+		<deliveryTemplate conditionEx="#{'${sGroupName}'='BLOCKS'}" call="ServiceProvision_Block_Step5"/>
+		<deliveryTemplate call="ServiceProvision_Order_Step4" />
+	</template>
+	<template procedureName="ServiceProvision_Vrf_Step3" sessionStorage="Database" sessionLifetime="300" persistent="false">
+		<condition>
+			<test item="0" matches="1"/>
+		</condition>
+		<receiveTemplate>
+			<Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+				<Item customer="${sCustomer}">
+					<Attribute name="checkivrservice" value="0"/>
+					<Attribute name="checkblocks" value="1"/>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate conditionEx="#{('${customerblocks}'!='' or '${dbresult}'='320347') and matches('_SERVICE_BLOCK_CHECK','_IF_TRUE')}" call="ServiceStringFormat">
+			<set conditionEx="0@{store(WaitFirstFlow,_WAIT_FIRST_FLOW)}"/>
+			<set conditionEx="0@{store(sDBResult,_GET_AFTER_VERIFY_DBRESULT)}"/>
+			<set item="Content" value=""/>
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="#{'${dbresult}'!='0' and '${dbresult}'!='320347'}" call="ServiceStringFormat">
+			<set conditionEx="0@{store(WaitFirstFlow,_WAIT_FIRST_FLOW)}"/>
+			<set conditionEx="0@{store(sDBResult,${dbresult})}"/>
+			<set item="Content" value=""/>
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="#{((_SERVICE_TP_CONDITIONS_EXIST>0 and not(matches('_SERVICE_TP_CONDITIONS_ISAVAIL','_IF_TRUE'))) or (_SERVICE_TP_CONDITIONS_EXIST=0 and matches('_SERVICE_TP_CONDITIONS_ISAVAIL','_IF_TRUE'))) and '_SERVICE_TP_CONDITIONS_NOTAVALINFO'!=''}" call="ServiceStringFormat">
+			<set conditionEx="0@{store(WaitFirstFlow,_WAIT_FIRST_FLOW)}"/>
+			<set conditionEx="0@{store(sParams,${sParams};_SERVICE_TP_CONDITIONS_NAMETP)}"/>
+			<set conditionEx="0@{store(sDBResult,notallowed)}" />
+			<set item="Content" value="_SERVICE_TP_CONDITIONS_NOTAVALINFO"/>
+		</deliveryTemplate>
+		<!-- 1) вызов на добавление/удаление - бмс-услуг, блокировки, остальных услуг/пакетов  -->
+		<deliveryTemplate conditionEx="#{'${sGroupName}'='BMS'}"    call="ServiceProvision_BMS_Step6"/>
+		<deliveryTemplate conditionEx="#{'${sGroupName}'='BLOCKS'}" call="ServiceProvision_Block_Step5"/>
+		<deliveryTemplate call="ServiceProvision_Order_Step4" />
+	</template>
+	<template procedureName="ServiceProvision_Order_Step4" sessionStorage="Database" sessionLifetime="300" persistent="true">
+		<condition>
+			<test item="0" matches="1"/>
+		</condition>
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+				<Item customer="${sCustomer}">
+					<Service id="${sServiceCode}" action="_SERVICE_COMMAND_ACTION" class="0"/>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate call="ServiceStringFormat">
+			<set conditionEx="0@{store(WaitFirstFlow,_WAIT_FIRST_FLOW)}"/>
+			<set item="Content" conditionEx="#{'${dbresult}'='0'}" value="@{store(sDBResult,success)}"/>
+			<set item="Content" conditionEx="#{'${dbresult}'!='0'}" value="@{store(sDBResult,_SERVICE_GET_REASON_OR_DBRESULT)}"/>
+		</deliveryTemplate>
+	</template>
+	<template procedureName="ServiceProvision_Block_Step5" sessionStorage="Database" sessionLifetime="300" persistent="false">
+		<condition>
+			<test item="0" matches="1"/>
+		</condition>
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+				<Item customer="${sCustomer}">
+					<Service id="blockphone" action="4">
+						<Attribute name="state" value="_SERVICE_COMMAND_STATUS"/>
+						<Attribute name="start" value="#{substring('@{now}',1,10)}"/>
+					</Service>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate call="ServiceStringFormat">
+			<set conditionEx="0@{store(WaitFirstFlow,_WAIT_FIRST_FLOW)}"/>
+			<set item="Content" conditionEx="#{'${dbresult}'='0'}" value="@{store(sDBResult,success)}"/>
+			<set item="Content" conditionEx="#{'${dbresult}'!='0'}" value="@{store(sDBResult,_SERVICE_GET_REASON_OR_DBRESULT)}"/>
+		</deliveryTemplate>
+	</template>
+	<template procedureName="ServiceProvision_BMS_Step6" sessionStorage="Database" sessionLifetime="300" persistent="false">
+		<condition>
+			<test item="0" matches="1"/>
+		</condition>
+		<receiveTemplate>
+			<Message type="orderbonusgiftrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+				<Item customer="${sCustomer}">
+					<Attribute name="giftcode" value="${sServiceCode}"/>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate call="ServiceStringFormat">
+			<set conditionEx="0@{store(WaitFirstFlow,_WAIT_FIRST_FLOW)}"/>
+			<set item="Content" conditionEx="#{'${dbresult}'='0'}" value="@{store(sDBResult,success)}"/>
+			<set item="Content" conditionEx="#{'${dbresult}'!='0'}" value="@{store(sDBResult,_SERVICE_GET_REASON_OR_DBRESULT)}"/>
+		</deliveryTemplate>
+	</template>
+	<template procedureName="ServiceStringFormat" sessionStorage="Database" sessionLifetime="300" persistent="false">
+		<condition>
+			<test item="0" matches="1"/>
+		</condition>
+		<receiveTemplate>
+			<Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+				<Item customer="${sCustomer}" timestamp="@{now}">
+					<Content charset="${encoding}">#{StrFormat('#{if('${Content}'!='','${Content}','_SERVICE_RESULT_INFO')}','${sParams}')}@{store(WaitFirstFlow,)}</Content>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<!-- Проверяется, находится ли процесс уже в обработке (inprogress) или необходимо чтобы конечный ответ был отправлен через другой коннектор (redirect). Здесь отвечаем что ваша заявка принята или уже находится в обработке -->
+		<!-- Параметр WaitFirstFlow проверяется, если сообщение еще не успело доставиться в синхронном потоке, и параметр sDBResult перетерся в другое значение в асинхронном.  -->
+		<deliveryTemplate conditionEx="#{matches('${sDBResult}','^(redirect|alrprogress|inprogress)$') or matches('${WaitFirstFlow}','_IF_TRUE')}">
+			<set conditionEx="0@{store(WaitFirstFlow,)}" />
+			<set item="Content"    value="${no-escape:Content}"/>
+			<set item="Sender"     value="_SMS_SERVICE_NUMBER"/>
+			<set item="Recipient"  value="${sCustomer}"/>
+			<set item="Encoding"   value="_ENCODING"/>
+		</deliveryTemplate>
+		<!-- Если конечный ответ должен отправить CRM, то ничего не отвечаем и очищаем сессию если не задано время обработки -->
+		<deliveryTemplate dropReply="true" conditionEx="#{(matches('${sRequi}','_BYCRM') or matches('_SERVICE_SUCCESS_RESPONSE_BY','_BYCRM')) and number(${sTimeToProgress})=0 and '${sDBResult}'='success'}">
+			<set conditionEx="0@{freeSession}"  />
+		</deliveryTemplate>
+		<!-- Если конечный ответ должен отправить CRM, то ничего не отвечаем -->
+		<deliveryTemplate dropReply="true" conditionEx="#{(matches('${sRequi}','_BYCRM') or matches('_SERVICE_SUCCESS_RESPONSE_BY','_BYCRM')) and '${sDBResult}'='success'}">
+			<set conditionEx="0@{store(sStartSecond,_GET_SECONDS)}" />
+		</deliveryTemplate>
+		<!-- Очищаем сессию в случае если не задано время обработки процесса или произошла ошибка во время регистрации заявки -->
+		<deliveryTemplate conditionEx="#{'${sDBResult}'!='success' or number(${sTimeToProgress})=0}">
+			<set item="Content"    value="${no-escape:Content}"/>
+			<set item="Sender"     value="_SMS_SERVICE_NUMBER"/>
+			<set item="Recipient"  value="${sCustomer}"/>
+			<set item="Encoding"   value="_ENCODING"/>
+			<set conditionEx="0@{freeSession}"  />
+		</deliveryTemplate>
+		<deliveryTemplate>
+			<set conditionEx="0@{store(sStartSecond,_GET_SECONDS)}" />
+			<set item="Content"    value="${no-escape:Content}"/>
+			<set item="Sender"     value="_SMS_SERVICE_NUMBER"/>
+			<set item="Recipient"  value="${sCustomer}"/>
+			<set item="Encoding"   value="_ENCODING"/>
+		</deliveryTemplate>
+	</template>
+</templateGroup>

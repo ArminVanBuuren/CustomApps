@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Application>
+	<Connections>
+		<Database forisDataKey="MG" interfacePackage="API" />
+		<Connector name="IVRCON_01"           type="IVRCON"    host="tnf2-mg1" port="2201" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.01"         config="C:\FORIS\Messaging Gateway\configuration\IVRCON\IVRConnector.01.exe.xml" />
+		<Connector name="IVRCON_02"           type="IVRCON"    host="tnf2-mg1" port="2202" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.02"         config="C:\FORIS\Messaging Gateway\configuration\IVRCON\IVRConnector.02.exe.xml" />
+		<Connector name="IVRCON_03"           type="IVRCON"    host="tnf2-mg1" port="2203" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.03"         config="C:\FORIS\Messaging Gateway\configuration\IVRCON\IVRConnector.03.exe.xml" />
+		<Connector name="IVRCON_04"           type="IVRCON"    host="tnf2-mg1" port="2204" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.04"         config="C:\FORIS\Messaging Gateway\configuration\IVRCON\IVRConnector.04.exe.xml" />
+		<Connector name="IVRCON_05"           type="IVRCON"    host="tnf2-mg1" port="2205" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.05"         config="C:\FORIS\Messaging Gateway\configuration\IVRCON\IVRConnector.05.exe.xml" />
+		<Connector name="IVRCON_06"           type="IVRCON"    host="tnf2-mg1" port="2206" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.06"         config="C:\FORIS\Messaging Gateway\configuration\IVRCON\IVRConnector.06.exe.xml" />
+		<Connector name="IVRCON_07"           type="IVRCON"    host="tnf2-mg1" port="2207" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.07"         config="C:\FORIS\Messaging Gateway\configuration\IVRCON\IVRConnector.07.exe.xml" />
+		<Connector name="IVRCON_08"           type="IVRCON"    host="tnf2-mg1" port="2208" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.08"         config="C:\FORIS\Messaging Gateway\configuration\IVRCON\IVRConnector.08.exe.xml" />
+		<Connector name="IVRCON_09"           type="IVRCON"    host="tnf2-mg1" port="2209" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.09"         config="C:\FORIS\Messaging Gateway\configuration\IVRCON\IVRConnector.09.exe.xml" />
+		<Connector name="IVRCON_010"          type="IVRCON"    host="tnf2-mg1" port="2210" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.10"         config="C:\FORIS\Messaging Gateway\configuration\IVRCON\IVRConnector.10.exe.xml" />
+		<Connector name="IVRCON_011"          type="IVRCON"    host="tnf2-mg1" port="2212" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.11"         config="C:\FORIS\Messaging Gateway\configuration\IVRCON\IVRConnector.11.exe.xml" />
+		<Connector name="IVRCON_012"          type="IVRCON"    host="tnf2-mg1" port="2213" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.12"         config="C:\FORIS\Messaging Gateway\configuration\IVRCON\IVRConnector.12.exe.xml" />
+		<Connector name="SMSCON_01"           type="SMSCON"    host="tnf2-mg1" port="5550" sessionHandler="false" serviceName="FORIS.MessagingGateway.SMSConnector.01"         config="C:\FORIS\Messaging Gateway\configuration\SMSCON\SMSConnector.01.exe.xml" />
+		<Connector name="SMSCON_02"           type="SMSCON"    host="tnf2-mg1" port="5678" sessionHandler="false" serviceName="FORIS.MessagingGateway.SMSConnector.02"         config="C:\FORIS\Messaging Gateway\configuration\SMSCON\SMSConnector.02.exe.xml" />
+		<Connector name="SMSCON_03"           type="SMSCON"    host="tnf2-mg1" port="5679" sessionHandler="false" serviceName="FORIS.MessagingGateway.SMSConnector.03"         config="C:\FORIS\Messaging Gateway\configuration\SMSCON\SMSConnector.03.exe.xml" />
+		<Connector name="SMSCON_04"           type="SMSCON"    host="tnf2-mg1" port="5680" sessionHandler="false" serviceName="FORIS.MessagingGateway.SMSConnector.04"         config="C:\FORIS\Messaging Gateway\configuration\SMSCON\SMSConnector.04.exe.xml" />
+		<Connector name="SMSCON_05"           type="SMSCON"    host="tnf2-mg1" port="5681" sessionHandler="false" serviceName="FORIS.MessagingGateway.SMSConnector.05"         config="C:\FORIS\Messaging Gateway\configuration\SMSCON\SMSConnector.05.exe.xml" />
+		<Connector name="EMAILCON_01"         type="EMAILCON"  host="tnf2-mg1" port="2211" sessionHandler="false" serviceName="FORIS.MessagingGateway.EmailConnector.01"       config="C:\FORIS\Messaging Gateway\configuration\EMAILCON\EmailConnector.01.exe.xml" />
+		<Connector name="SOAPCON_01"          type="SOAPCON"   host="tnf2-mg1" port="7550" sessionHandler="false" serviceName="FORIS.MessagingGateway.SOAPConnector.01"        config="C:\FORIS\Messaging Gateway\configuration\SOAPCON\SOAPConnector.01.exe.xml" />
+		<Connector name="SOAPCON_02"          type="SOAPCON"   host="tnf2-mg1" port="7551" sessionHandler="false" serviceName="FORIS.MessagingGateway.SOAPConnector.CS"        config="C:\FORIS\Messaging Gateway\configuration\SOAPCON\SOAPConnector.CS.exe.xml" />
+		<Connector name="SOAPCON_03"          type="SOAPCON"   host="tnf2-mg1" port="7552" sessionHandler="false" serviceName="FORIS.MessagingGateway.SOAPConnector.ALC"       config="C:\FORIS\Messaging Gateway\configuration\SOAPCON\SOAPConnector.ALC.exe.xml" />
+		<Connector name="SOAPCON_TEST_01"     type="SOAPCON"   host="tnf2-mg1" port="2550" sessionHandler="false" serviceName="FORIS.MessagingGateway.SOAPConnector.TEST"      config="C:\FORIS\Messaging Gateway\configuration\SOAPCON\SOAPConnector.TEST.exe.xml" />
+		<Handler   name="CRMCON_01"           type="CRMCON"    host="tnf2-mg1" port="7770" sessionHandler="false" serviceName="FORIS.MessagingGateway.CRMConnector.01"         config="C:\FORIS\Messaging Gateway\configuration\CRMCON\CRMConnector.01.exe.xml" />
+		<Handler   name="DBCON_01"            type="DBCON"     host="tnf2-mg1" port="2200" sessionHandler="false" serviceName="FORIS.MessagingGateway.DBConnector.01"          config="C:\FORIS\Messaging Gateway\configuration\DBCON\DBConnector.01.exe.xml" />
+		<Handler   name="DBCON_02"            type="DBCON"     host="tnf2-mg1" port="3300" sessionHandler="false" serviceName="FORIS.MessagingGateway.DBConnector.02"          config="C:\FORIS\Messaging Gateway\configuration\DBCON\DBConnector.02.exe.xml" />
+		<Handler   name="DBCON_03"            type="DBCON"     host="tnf2-mg1" port="3301" sessionHandler="false" serviceName="FORIS.MessagingGateway.DBConnector.03"          config="C:\FORIS\Messaging Gateway\configuration\DBCON\DBConnector.03.exe.xml" />
+		<Handler   name="DBCON_04"            type="DBCON"     host="tnf2-mg1" port="4400" sessionHandler="false" serviceName="FORIS.MessagingGateway.DBConnector.04"          config="C:\FORIS\Messaging Gateway\configuration\DBCON\DBConnector.04.exe.xml" />
+		<Handler   name="DBCON_05"            type="DBCON"     host="tnf2-mg1" port="4501" sessionHandler="false" serviceName="FORIS.MessagingGateway.DBConnector.05"          config="C:\FORIS\Messaging Gateway\configuration\DBCON\DBConnector.05.exe.xml" />
+		<Handler   name="DBCON_BSCS"          type="DBCON"     host="tnf2-mg1" port="4401" sessionHandler="false" serviceName="FORIS.MessagingGateway.DBConnector.BSCS"        config="C:\FORIS\Messaging Gateway\configuration\DBCON\DBConnector.BSCS.exe.xml" />
+		<Handler   name="WCFHND_01"           type="WCFHND"    host="tnf2-mg1" port="3302" sessionHandler="false" serviceName="FORIS.MessagingGateway.WCFHandler.BMS"          config="C:\FORIS\Messaging Gateway\configuration\WCFHND\WCFHandler.BMS.exe.xml" />
+		<Handler   name="WCFHND_02"           type="WCFHND"    host="tnf2-mg1" port="3303" sessionHandler="false" serviceName="FORIS.MessagingGateway.WCFHandler.RI"           config="C:\FORIS\Messaging Gateway\configuration\WCFHND\WCFHandler.RI.exe.xml" />
+		<Handler   name="WCFHND_03"           type="WCFHND"    host="tnf2-mg1" port="3304" sessionHandler="false" serviceName="FORIS.MessagingGateway.WCFHandler.MSCP"         config="C:\FORIS\Messaging Gateway\configuration\WCFHND\WCFHandler.MSCP.exe.xml" />
+		<Handler   name="WCFHND_StateIN_01"   type="WCFHND"    host="tnf2-mg1" port="3305" sessionHandler="false" serviceName="FORIS.MessagingGateway.WCFHandler.StateIN"      config="C:\FORIS\Messaging Gateway\configuration\WCFHND\WCFHandler.StateIN.exe.xml" />
+		<Monitor   name="MONITOR"             type="MONITOR"   host="tnf2-mg1" port="9900" sessionHandler="false" serviceName="FORIS.MessagingGateway.Monitor"                 config="C:\FORIS\Messaging Gateway\configuration\MONITOR\Monitor.exe.xml" />
+
+
+		<Connector name="IVRCON_21"           type="IVRCON"    host="tnf2-mg2" port="2201" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.01"         config="C:\FORIS\Messaging Gateway\configuration\IVRCON\IVRConnector.01.exe.xml" />
+		<Connector name="IVRCON_22"           type="IVRCON"    host="tnf2-mg2" port="2202" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.02"         config="C:\FORIS\Messaging Gateway\configuration\IVRCON\IVRConnector.02.exe.xml" />
+		<Connector name="IVRCON_23"           type="IVRCON"    host="tnf2-mg2" port="2203" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.03"         config="C:\FORIS\Messaging Gateway\configuration\IVRCON\IVRConnector.03.exe.xml" />
+		<Connector name="IVRCON_24"           type="IVRCON"    host="tnf2-mg2" port="2204" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.04"         config="C:\FORIS\Messaging Gateway\configuration\IVRCON\IVRConnector.04.exe.xml" />
+		<Connector name="IVRCON_25"           type="IVRCON"    host="tnf2-mg2" port="2205" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.05"         config="C:\FORIS\Messaging Gateway\configuration\IVRCON\IVRConnector.05.exe.xml" />
+		<Connector name="IVRCON_26"           type="IVRCON"    host="tnf2-mg2" port="2206" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.06"         config="C:\FORIS\Messaging Gateway\configuration\IVRCON\IVRConnector.06.exe.xml" />
+		<Connector name="IVRCON_27"           type="IVRCON"    host="tnf2-mg2" port="2207" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.07"         config="C:\FORIS\Messaging Gateway\configuration\IVRCON\IVRConnector.07.exe.xml" />
+		<Connector name="IVRCON_28"           type="IVRCON"    host="tnf2-mg2" port="2208" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.08"         config="C:\FORIS\Messaging Gateway\configuration\IVRCON\IVRConnector.08.exe.xml" />
+		<Connector name="IVRCON_29"           type="IVRCON"    host="tnf2-mg2" port="2209" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.09"         config="C:\FORIS\Messaging Gateway\configuration\IVRCON\IVRConnector.09.exe.xml" />
+		<Connector name="IVRCON_210"          type="IVRCON"    host="tnf2-mg2" port="2210" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.10"         config="C:\FORIS\Messaging Gateway\configuration\IVRCON\IVRConnector.10.exe.xml" />
+		<Connector name="IVRCON_211"          type="IVRCON"    host="tnf2-mg2" port="2212" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.11"         config="C:\FORIS\Messaging Gateway\configuration\IVRCON\IVRConnector.11.exe.xml" />
+		<Connector name="IVRCON_212"          type="IVRCON"    host="tnf2-mg2" port="2213" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.12"         config="C:\FORIS\Messaging Gateway\configuration\IVRCON\IVRConnector.12.exe.xml" />
+		<Connector name="SMSCON_21"           type="SMSCON"    host="tnf2-mg2" port="5550" sessionHandler="false" serviceName="FORIS.MessagingGateway.SMSConnector.01"         config="C:\FORIS\Messaging Gateway\configuration\SMSCON\SMSConnector.01.exe.xml" />
+		<Connector name="SMSCON_22"           type="SMSCON"    host="tnf2-mg2" port="5678" sessionHandler="false" serviceName="FORIS.MessagingGateway.SMSConnector.02"         config="C:\FORIS\Messaging Gateway\configuration\SMSCON\SMSConnector.02.exe.xml" />
+		<Connector name="EMAILCON_21"         type="EMAILCON"  host="tnf2-mg2" port="2211" sessionHandler="false" serviceName="FORIS.MessagingGateway.EmailConnector.01"       config="C:\FORIS\Messaging Gateway\configuration\EMAILCON\EmailConnector.01.exe.xml" />
+		<Connector name="SOAPCON_21"          type="SOAPCON"   host="tnf2-mg2" port="7550" sessionHandler="false" serviceName="FORIS.MessagingGateway.SOAPConnector.01"        config="C:\FORIS\Messaging Gateway\configuration\SOAPCON\SOAPConnector.01.exe.xml" />
+		<Connector name="SOAPCON_22"          type="SOAPCON"   host="tnf2-mg2" port="7551" sessionHandler="false" serviceName="FORIS.MessagingGateway.SOAPConnector.CS"        config="C:\FORIS\Messaging Gateway\configuration\SOAPCON\SOAPConnector.CS.exe.xml" />
+		<Connector name="SOAPCON_23"          type="SOAPCON"   host="tnf2-mg2" port="7552" sessionHandler="false" serviceName="FORIS.MessagingGateway.SOAPConnector.ALC"       config="C:\FORIS\Messaging Gateway\configuration\SOAPCON\SOAPConnector.ALC.exe.xml" />
+		<Handler   name="CRMCON_21"           type="CRMCON"    host="tnf2-mg2" port="7770" sessionHandler="false" serviceName="FORIS.MessagingGateway.CRMConnector.01"         config="C:\FORIS\Messaging Gateway\configuration\CRMCON\CRMConnector.01.exe.xml" />
+		<Handler   name="DBCON_21"            type="DBCON"     host="tnf2-mg2" port="2200" sessionHandler="false" serviceName="FORIS.MessagingGateway.DBConnector.01"          config="C:\FORIS\Messaging Gateway\configuration\DBCON\DBConnector.01.exe.xml" />
+		<Handler   name="DBCON_22"            type="DBCON"     host="tnf2-mg2" port="3300" sessionHandler="false" serviceName="FORIS.MessagingGateway.DBConnector.02"          config="C:\FORIS\Messaging Gateway\configuration\DBCON\DBConnector.02.exe.xml" />
+		<Handler   name="DBCON_23"            type="DBCON"     host="tnf2-mg2" port="3301" sessionHandler="false" serviceName="FORIS.MessagingGateway.DBConnector.03"          config="C:\FORIS\Messaging Gateway\configuration\DBCON\DBConnector.03.exe.xml" />
+		<Handler   name="DBCON_24"            type="DBCON"     host="tnf2-mg2" port="4400" sessionHandler="false" serviceName="FORIS.MessagingGateway.DBConnector.04"          config="C:\FORIS\Messaging Gateway\configuration\DBCON\DBConnector.04.exe.xml" />
+		<Handler   name="WCFHND_21"           type="WCFHND"    host="tnf2-mg2" port="3302" sessionHandler="false" serviceName="FORIS.MessagingGateway.WCFHandler.BMS"          config="C:\FORIS\Messaging Gateway\configuration\WCFHND\WCFHandler.BMS.exe.xml" />
+		<Handler   name="WCFHND_22"           type="WCFHND"    host="tnf2-mg2" port="3303" sessionHandler="false" serviceName="FORIS.MessagingGateway.WCFHandler.RI"           config="C:\FORIS\Messaging Gateway\configuration\WCFHND\WCFHandler.RI.exe.xml" />
+		<Handler   name="WCFHND_23"           type="WCFHND"    host="tnf2-mg2" port="3304" sessionHandler="false" serviceName="FORIS.MessagingGateway.WCFHandler.MSCP"         config="C:\FORIS\Messaging Gateway\configuration\WCFHND\WCFHandler.MSCP.exe.xml" />
+		<Handler   name="WCFHND_StateIN_02"   type="WCFHND"    host="tnf2-mg2" port="3305" sessionHandler="false" serviceName="FORIS.MessagingGateway.WCFHandler.StateIN"      config="C:\FORIS\Messaging Gateway\configuration\WCFHND\WCFHandler.StateIN.exe.xml" />
+		<Monitor   name="MONITOR"             type="MONITOR"   host="tnf2-mg2" port="9900" sessionHandler="false" serviceName="FORIS.MessagingGateway.Monitor"                 config="C:\FORIS\Messaging Gateway\configuration\MONITOR\Monitor.exe.xml" />
+
+	</Connections>
+
+	<log4net>
+		<appender name="BufferingDataFileAppender" type="log4net.Appender.BufferingForwardingAppender">
+			<bufferSize value="20"/>
+			<appender-ref ref="DataFileAppender"/>
+		</appender>
+		<appender name="DataFileAppender" type="log4net.Appender.RollingFileAppender">
+			<file type="log4net.Util.PatternString" value="C:\FORISLOG\MG\data\%property{TYPE}_%property{NAME}_data"/>
+			<staticLogFileName value="false"/>
+			<countDirection value="1"/>
+			<maxSizeRollBackups value="-1"/>
+			<maximumFileSize value="1024MB"/>
+			<lockingModel type="log4net.Appender.FileAppender+MinimalLock"/>
+      <filter type="log4net.Filter.LevelRangeFilter">
+        <levelMin value="ProcessingContent" />
+        <levelMax value="ProcessingContent" />
+      </filter>
+			<layout type="log4net.Layout.PatternLayout">
+				<conversionPattern value="%date{dd.MM.yyyy HH:mm:ss.fff} [%17level] %thread: %message%newline"/>
+			</layout>
+		</appender>
+		<appender name="BufferingActivityFileAppender" type="log4net.Appender.BufferingForwardingAppender">
+			<bufferSize value="100"/>
+			<appender-ref ref="ActivityFileAppender"/>
+		</appender>
+		<appender name="ActivityFileAppender" type="log4net.Appender.RollingFileAppender">
+			<file type="log4net.Util.PatternString" value="C:\FORISLOG\MG\activity\%property{TYPE}_%property{NAME}_activity"/>
+			<staticLogFileName value="false"/>
+			<countDirection value="1"/>
+			<maxSizeRollBackups value="-1"/>
+			<maximumFileSize value="1024MB"/>
+			<lockingModel type="log4net.Appender.FileAppender+MinimalLock"/>
+      <filter type="log4net.Filter.LevelRangeFilter">
+        <levelMin value="Debug" />
+        <levelMax value="Debug" />
+      </filter>
+			<layout type="log4net.Layout.PatternLayout">
+				<conversionPattern value="%date{dd.MM.yyyy HH:mm:ss.fff} [%17level] %thread: %message%newline"/>
+			</layout>
+		</appender>
+		<appender name="ErrorFileAppender" type="log4net.Appender.RollingFileAppender">
+			<file type="log4net.Util.PatternString" value="C:\FORISLOG\MG\error\%property{TYPE}_%property{NAME}_error"/>
+			<staticLogFileName value="false"/>
+			<countDirection value="1"/>
+			<maxSizeRollBackups value="-1"/>
+			<maximumFileSize value="1024MB"/>
+			<lockingModel type="log4net.Appender.FileAppender+MinimalLock"/>
+      <filter type="log4net.Filter.LevelRangeFilter">
+        <levelMin value="ERROR" />
+        <levelMax value="FATAL" />
+      </filter>
+			<layout type="log4net.Layout.PatternLayout">
+				<conversionPattern value="%date{dd.MM.yyyy HH:mm:ss.fff} [%17level] %thread: %message%newline"/>
+			</layout>
+		</appender>
+		<logger name="MG">
+			<level value="DEBUG"/>
+			<appender-ref ref="BufferingActivityFileAppender"/>
+			<appender-ref ref="BufferingDataFileAppender"/>
+			<appender-ref ref="ErrorFileAppender"/>
+		</logger>
+	</log4net>
+
+	<XPathExtentionFile>defaultXPATH.xml</XPathExtentionFile>
+</Application>

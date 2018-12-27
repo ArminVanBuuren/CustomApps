@@ -1,0 +1,364 @@
+<!-- 
+Created by Vladimir Khovanskiy  
+-->
+<Dictionary>
+	<DBResults>
+		<Item
+				info_ru="Ваша заявка принята, ждите СМС с результатом"
+				info_uk="Ваша заявка принята, ждите СМС с результатом"
+				info_en="Your request is accepted. Expect SMS with the result"
+				info_ivr="123456"
+				>
+			<code value="redirect"/>
+			<code value="ussd_ExcessLength"/>
+			<code value="123456"/>
+		</Item>
+		<Item
+				info_ru="Заявка по Вашему обращению зарегистрирована."
+				info_uk="Заявка по Вашему обращению зарегистрирована."
+				info_en="Заявка по Вашему обращению зарегистрирована."
+				info_ivr="0"
+				>
+			<code value="success"/>
+		</Item>
+		<Item
+				info_ru="Услуга больше недоступна для подключения"
+				info_uk="Услуга больше недоступна для подключения"
+				info_en="Услуга больше недоступна для подключения"
+				info_ivr="320208"
+				>
+			<code value="notavailable"/>
+		</Item>
+		<Item
+				info_ru="Услуга будет доступна позже"
+				info_uk="Услуга будет доступна позже"
+				info_en="Услуга будет доступна позже"
+				info_ivr="320208"
+				>
+			<code value="unavailable"/>
+		</Item>
+		<Item
+				info_ru="Предыдущая заявка находится в обработке. Попробуйте позже."
+				info_uk="Предыдущая заявка находится в обработке. Попробуйте позже."
+				info_en="Предыдущая заявка находится в обработке. Попробуйте позже."
+				info_ivr="320203"
+				>
+			<code value="alrprogress"/>
+			<code value="inprogress"/>
+		</Item>
+		<Item
+				info_ru="Недостаточно средств на балансе для проведения операции."
+				info_uk="Недостаточно средств на балансе для проведения операции."
+				info_en="Недостаточно средств на балансе для проведения операции."
+				info_ivr="320191"
+				>
+			<code value="notavailbalance"/>
+		</Item>
+		<Item
+				info_ru="Операция выполнена."
+				info_uk="Операция выполнена."
+				info_en="Operation completed."
+				info_ivr="0"
+				>
+			<code value="0"/>
+		</Item>
+		<Item
+				info_ru="Oshibka. Vy ne otnosites k sisteme."
+				info_uk="Oshibka. Vy ne otnosites k sisteme."
+				info_en="Error. You do not belong to the system."
+				info_ivr="320001"
+				>
+			<code value="320001"/>
+		</Item>
+		<Item
+				info_ru="Смена тарифного плана не предусмотрена."
+				info_uk="Смена тарифного плана не предусмотрена."
+				info_en="Tariff plan change is not possible."
+				info_ivr="320400"
+				>
+			<code value="320400"/>
+		</Item>
+		<Item
+				info_ru="Операция невозможна. Не подключена зависимая услуга."
+				info_uk="Операция невозможна. Не подключена зависимая услуга."
+				info_en="Operation is not possible. Not exist a dependent service on your account."
+				info_ivr="320412"
+				>
+			<code value="320412"/>
+		</Item>
+		<Item
+				info_ru="Ваша заявка в процессе обработки. Обратитесь позже."
+				info_uk="Ваша заявка в процессе обработки. Обратитесь позже."
+				info_en="Request on current task in progress. Refer later."
+				info_ivr="320174"
+				>
+			<code value="320174"/>
+			<code value="320704"/>
+		</Item>
+		<Item
+				info_ru="Услуга недоступна."
+				info_uk="Услуга недоступна."
+				info_en="Услуга недоступна."
+				info_ivr="320208"
+				>
+			<code value="320208"/>
+		</Item>
+		<Item
+				info_ru="Тестовым абонентам запрещено пользоваться данной операцией."
+				info_uk="Тестовым абонентам запрещено пользоваться данной операцией."
+				info_en="Test^s subscribers is forbidden to use this operation."
+				info_ivr="310001"
+				>
+			<code value="310001"/>
+		</Item>
+		<Item
+				info_ru="Недостаточно средств на балансе для проведения операции."
+				info_uk="Недостаточно средств на балансе для проведения операции."
+				info_en="Not enough money on your account"
+				info_ivr="320191"
+				>
+			<code value="320191"/>
+		</Item>
+		<Item
+				info_ru="Операция не может быть выполненна, пока незавершится предыдущая."
+				info_uk="Операция не может быть выполненна, пока незавершится предыдущая."
+				info_en="The operation will allowed only when previously request close."
+				info_ivr="320203"
+				>
+			<code value="320203"/>
+		</Item>
+		<Item
+				info_ru="Услуга не доступна для Вашего тарифного плана"
+				info_uk="Услуга не доступна для Вашего тарифного плана"
+				info_en="Service not present in current tariff plan"
+				info_ivr="320204"
+				>
+			<code value="320204"/>
+			<code value="320194"/>
+		</Item>
+		<Item
+				info_ru="Услуга уже установлена"
+				info_uk="Услуга уже установлена"
+				info_en="Service already added"
+				info_ivr="320205"
+				>
+			<code value="320205"/>
+		</Item>
+		<Item
+				info_ru="Услуга уже удалена"
+				info_uk="Услуга уже удалена"
+				info_en="Service already deleted"
+				info_ivr="320206"
+				>
+			<code value="320206"/>
+		</Item>
+		<Item
+				info_ru="Сумма начислений не может быть равна нулю."
+				info_uk="Сумма начислений не может быть равна нулю."
+				info_en="The amount of calculation cannot be zero."
+				info_ivr="320114"
+				>
+			<code value="320114"/>
+		</Item>
+		<Item
+				info_ru="Заданный пароль неверный."
+				info_uk="Заданный пароль неверный."
+				info_en="Empty or not valid password"
+				info_ivr="320012"
+				>
+			<code value="320012"/>
+			<code value="320583"/>
+			<code value="320584"/>
+			<code value="320586"/>
+		</Item>
+		<Item
+				info_ru="В Вашем регионе данная операция недоступна."
+				info_uk="В Вашем регионе данная операция недоступна."
+				info_en="In your region this operation is not available."
+				info_ivr="330000"
+				>
+			<code value="330000"/>
+		</Item>
+		<Item
+				info_ru="У Вас не установлена услуга Мобильный помощник. Пожалуйста, обратитесь в службу поддержки Vodafone."
+				info_uk="У Вас не установлена услуга Мобильный помощник. Пожалуйста, обратитесь в службу поддержки Vodafone."
+				info_en="You don&apos;t have service *Mobile Assistant*. Contact your support Vodafone."
+				info_ivr="320060"
+				>
+			<code value="320060"/>
+			<code value="320343"/>
+		</Item>
+		<Item
+				info_ru="Длина Вашего номера не соответсвует стандартному."
+				info_uk="Длина Вашего номера не соответсвует стандартному."
+				info_en="Wrong length of your number"
+				info_ivr="320020"
+				>
+			<code value="320020"/>
+		</Item>
+		<Item
+				info_ru="Данный сервис Вам недоступен."
+				info_uk="Данный сервис Вам недоступен."
+				info_en="Service not available to you."
+				info_ivr="320172"
+				>
+			<code value="320172"/>
+			<code value="320341"/>
+			<code value="notallowed"/>
+		</Item>
+		<Item
+				info_ru="Ошибка авторизации. Операция недоступна."
+				info_uk="Ошибка авторизации. Операция недоступна."
+				info_en="Oshibka avtorizacii. Operaciya nedostupna."
+				info_ivr="320344"
+				>
+			<code value="320344"/>
+			<code value="320966"/>
+		</Item>
+		<Item
+				info_ru="Слишком частый запрос баланса. Обратитесь позже."
+				info_uk="Слишком частый запрос баланса. Обратитесь позже."
+				info_en="Slishkom chastyi zapros balansa. Obratites pozzhe."
+				info_ivr="320155"
+				>
+			<code value="320155"/>
+		</Item>
+		<Item
+				info_ru="Слишком частый запрос. Обратитесь позже."
+				info_uk="Слишком частый запрос. Обратитесь позже."
+				info_en="Slishkom chastyi zapros. Obratites pozzhe."
+				info_ivr="320156"
+				>
+			<code value="320156"/>
+		</Item>
+		<Item
+				info_ru="Нет данных по Вашему балансу."
+				info_uk="Нет данных по Вашему балансу."
+				info_en="No data on your balance."
+				info_ivr="320967"
+				>
+			<code value="320967"/>
+		</Item>
+		<Item
+				info_ru="Запрос баланса недоступен."
+				info_uk="Запрос баланса недоступен."
+				info_en="Balance request is not available."
+				info_ivr="320044"
+				>
+			<code value="320044"/>
+		</Item>
+		<Item
+				info_ru="Ошибка получения баланса."
+				info_uk="Ошибка получения баланса."
+				info_en="Error getting a balance."
+				info_ivr="320045"
+				>
+			<code value="320045"/>
+			<code value="320344"/>
+		</Item>
+		<Item
+				info_ru="Недоступно. Вы являетесь анонимным абонентом."
+				info_uk="Недоступно. Вы являетесь анонимным абонентом."
+				info_en="Not available. You are an anonymous caller."
+				info_ivr="320340"
+				>
+			<code value="320340"/>
+		</Item>
+		<Item
+				info_ru="Obeshannyi platyozh uzhe nachislen."
+				info_uk="Obeshannyi platyozh uzhe nachislen."
+				info_en="Promised payment already in use."
+				info_ivr="330124"
+				>
+			<code value="330124"/>
+		</Item>
+		<Item
+				info_ru="Превышена максимальная сумма обещанного платежа."
+				info_uk="Превышена максимальная сумма обещанного платежа."
+				info_en="Maximal amount of promised payment is exceed."
+				info_ivr="320111"
+				>
+			<code value="320111"/>
+		</Item>
+		<Item
+				info_ru="Обещанный платеж не может быть зарегистрирован."
+				info_uk="Обещанный платеж не может быть зарегистрирован."
+				info_en="Promised payment can not be registered."
+				info_ivr="320121"
+				>
+			<code value="320121"/>
+		</Item>
+		<Item
+				info_ru="Код авторизации устарел."
+				info_uk="Код авторизации устарел."
+				info_en="Authorization code is out of date."
+				info_ivr="320999"
+				>
+			<code value="320999"/>
+		</Item>
+		<Item
+				info_ru="Неверная сумма."
+				info_uk="Неверная сумма."
+				info_en="Bad input sum."
+				info_ivr="320900"
+				>
+			<code value="320900"/>
+		</Item>
+		<Item
+				info_ru="Установлена блокировка. Операция недоступна."
+				info_uk="Установлена блокировка. Операция недоступна."
+				info_en="Ustanovlena blokirovka. Operaciya nedostupna."
+				info_ivr="330112"
+				>
+			<code value="330112"/>
+			<code value="320347"/>
+			<code value="320312"/>
+		</Item>
+		<Item
+				info_ru="Установлена Принудительная Блокировка. Пожалуйста, пополните свой счет."
+				info_uk="Установлена Принудительная Блокировка. Пожалуйста, пополните свой счет."
+				info_en="Ustanovlena Prinuditelnaya Blokirovka. Pozhaluista, popolnite svoi schet."
+				info_ivr="330112"
+				>
+			<code value="FRBLKFIN"/>
+		</Item>
+		<Item
+				info_ru="Ошибка регистрации заявки."
+				info_uk="Ошибка регистрации заявки."
+				info_en="Ошибка регистрации заявки."
+				info_ivr="-1"
+				>
+			<code value="InsufficientCustomParameters"/>
+		</Item>
+		<Item
+				info_ru="Возникла непредвиденная ошибка. Попробуйте, пожалуйста, ещё раз."
+				info_uk="Виникла непередбачена помилка. Спробуйте, будь ласка, ще раз."
+				info_en="Unexpected error occurred. Please, try one more time."
+				info_ivr="-1"
+				>
+			<code value=""/>
+			<code value="-1"/>
+			<code value="320001"/>
+			<code value="320965"/>
+			<code value="320968"/>
+			<code value="329990"/>
+			<code value="329991"/>
+			<code value="err001"/>
+		</Item>
+	</DBResults>
+	<Language>
+		<lang param="ru" text="Русский"  >
+			<item value="3"/>
+		</lang>
+		<lang param="uk" text="Украинский" >
+			<item value=""/>
+			<item value="4"/>
+		</lang>
+		<lang param="en" text="English" >
+			<item value="1"/>
+		</lang>
+		<lang param="ivr" text="IVR_CODES" >
+			<item value="ivr"/>
+		</lang>
+	</Language>
+</Dictionary>

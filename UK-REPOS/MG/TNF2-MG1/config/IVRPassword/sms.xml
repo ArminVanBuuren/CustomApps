@@ -1,0 +1,140 @@
+﻿<templateGroup name="POP">
+  <macros>
+    <define name="_RUSSIAN_LANG" value="3" />
+    <define name="_UKRAINIAN_LANG" value="4" />
+    <define name="_ENGLISH_LANG" value="1" />
+    <define name="_POP_SMS_SERVICE_NUMBER" value="123" />
+  </macros>
+
+  <template procedureName="ServiceActivateSecured">
+    <receiveTemplate>
+      <Message/>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0}">
+      <set item="Content" value="Подключение услуги '#{document( 'C:\Foris\Messaging Gateway\config\IVRPassword\Service.xml')/Services/Service[@id='#{/Message/Item/Service/@id}']/@text}' подтверждено" />
+      <set item="Content" conditionEx="#{'${language_id}'='_UKRAINIAN_LANG'}" value="Подключение услуги '#{document( 'C:\Foris\Messaging Gateway\config\IVRPassword\Service.xml')/Services/Service[@id='#{/Message/Item/Service/@id}']/@text}' подтверждено" />
+      <set item="Content" conditionEx="#{'${language_id}'='_ENGLISH_LANG'}" value="Подключение услуги '#{document( 'C:\Foris\Messaging Gateway\config\IVRPassword\Service.xml')/Services/Service[@id='#{/Message/Item/Service/@id}']/@text}' подтверждено" />
+      <set item="Sender" value="_POP_SMS_SERVICE_NUMBER" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Ошибка добавления услуги" />
+      <set item="Sender" value="_POP_SMS_SERVICE_NUMBER" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+  </template>
+
+
+  <template procedureName="ServiceDeactivateSecured">
+    <receiveTemplate>
+      <Message/>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0}">
+      <set item="Content" value="Отключение услуги '#{document( 'C:\Foris\Messaging Gateway\config\IVRPassword\Service.xml')/Services/Service[@id='#{/Message/Item/Service/@id}']/@text}' подтверждено" />
+      <set item="Content" conditionEx="#{'${language_id}'='_UKRAINIAN_LANG'}" value="Отключение услуги '#{document( 'C:\Foris\Messaging Gateway\config\IVRPassword\Service.xml')/Services/Service[@id='#{/Message/Item/Service/@id}']/@text}' подтверждено" />
+      <set item="Content" conditionEx="#{'${language_id}'='_ENGLISH_LANG'}" value="Отключение услуги '#{document( 'C:\Foris\Messaging Gateway\config\IVRPassword\Service.xml')/Services/Service[@id='#{/Message/Item/Service/@id}']/@text}' подтверждено" />
+      <set item="Sender" value="_POP_SMS_SERVICE_NUMBER" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Ошибка удаления услуги" />
+      <set item="Sender" value="_POP_SMS_SERVICE_NUMBER" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+  </template>
+
+
+  <template procedureName="DB_PaymentsInformationSecured" persistent="false">
+    <receiveTemplate>
+      <Message/>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{${count}=0}">
+      <set item="Sender" value="_POP_SMS_SERVICE_NUMBER" />
+      <set item="Recipient" value="${customer}" />
+
+      <set item="Content" value="Уважаемый абонент! Пополнения по Вашему счету отсутствуют. Пожалуйста, пополните счет." />
+      <set item="Content" conditionEx="#{'${language_id}'='_ENGLISH_LANG'}"  value="Dear subscriber! There is no topping up on your account. Please recharge your account." />
+      <set item="Content" conditionEx="#{'${language_id}'='_UKRAINIAN_LANG'}" value="Шановний абоненте! Поповнення за Вашим рахунком відсутні. Будь ласка, поповніть рахунок." />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0}">
+      <set item="Sender" value="_POP_SMS_SERVICE_NUMBER" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Content" value="Последнее пополнение Вашего счета произошло ${day} на сумму #{substring('${intpartfracpart}',1,string-length('${intpartfracpart}')-2)}.#{substring('${intpartfracpart}',string-length('${intpartfracpart}')-1)} грн" />
+      <set item="Content" conditionEx="#{'${language_id}'='_ENGLISH_LANG'}"  value="Date of last payment was ${day}. Sum of your last payment was #{substring('${intpartfracpart}',1,string-length('${intpartfracpart}')-2)}.#{substring('${intpartfracpart}',string-length('${intpartfracpart}')-1)}" />
+      <set item="Content" conditionEx="#{'${language_id}'='_UKRAINIAN_LANG'}" value="Останнє поповнення Вашого рахунку відбулося ${day} на суму #{substring('${intpartfracpart}',1,string-length('${intpartfracpart}')-2)}.#{substring('${intpartfracpart}',string-length('${intpartfracpart}')-1)} грн" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Sender" value="_POP_SMS_SERVICE_NUMBER" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Content" value="Уважаемый абонент! Запрос о Вашем пополнении недоступен сейчас. Пожалуйста, повторите попытку позже." />
+      <set item="Content" conditionEx="#{'${language_id}'='_ENGLISH_LANG'}"  value="Dear subscriber! Request about your topping up is not available right now. Please try again later." />
+      <set item="Content" conditionEx="#{'${language_id}'='_UKRAINIAN_LANG'}" value="Шановний абоненте! Запит про Ваше поповнення зараз недоступний. Будь, ласка, спробуйте пізніше." />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+  </template>
+
+
+  <template procedureName="DB_BillsInformationSecured" persistent="false">
+    <receiveTemplate>
+      <Message/>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{${count}=0}">
+      <set item="Sender" value="MTS" />
+      <set item="Recipient" value="${sCustomer}" />
+      <set item="Content" value="Уважаемый абонент! Пополнения по Вашему счету отсутствуют. Пожалуйста, пополните счет."/>
+      <set item="Content" conditionEx="#{'${language_id}'='_UKRAINIAN_LANG'}" value="Шановний абоненте! Поповнення за Вашим рахунком відсутні. Будь ласка, поповніть рахунок."/>
+      <set item="Content" conditionEx="#{'${language_id}'='_ENGLISH_LANG'}" value="Dear subscriber! There is no topping up on your account. Please recharge your account."/>
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0}">
+      <set item="Sender" value="MTS" />
+      <set item="Recipient" value="${sCustomer}" />
+      <set item="Content" value="Последнее пополнение Вашего счета произошло ${day} на сумму #{substring('${intpartfracpart}',1,string-length('${intpartfracpart}')-2)}.#{substring('${intpartfracpart}',string-length('${intpartfracpart}')-1)} грн"/>
+      <set item="Content" conditionEx="#{'${language_id}'='_UKRAINIAN_LANG'}" value="Останнє поповнення Вашого рахунку відбулося ${day} на суму #{substring('${intpartfracpart}',1,string-length('${intpartfracpart}')-2)}.#{substring('${intpartfracpart}',string-length('${intpartfracpart}')-1)} грн"/>
+      <set item="Content" conditionEx="#{'${language_id}'='_ENGLISH_LANG'}" value="Date of last payment was ${day}. Sum of your last payment was #{substring('${intpartfracpart}',1,string-length('${intpartfracpart}')-2)}.#{substring('${intpartfracpart}',string-length('${intpartfracpart}')-1)}"/>
+      <set item="Encoding" value="unicodefffe"/>
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Sender" value="MTS" />
+      <set item="Recipient" value="${sCustomer}" />
+      <set item="Content" value="Уважаемый абонент! Запрос о Вашем пополнении недоступен сейчас. Пожалуйста, повторите попытку позже."/>
+      <set item="Content" conditionEx="#{'${language_id}'='_UKRAINIAN_LANG'}" value="Шановний абоненте! Запит про Ваше поповнення зараз недоступний. Будь, ласка, спробуйте пізніше."/>
+      <set item="Content" conditionEx="#{'${language_id}'='_ENGLISH_LANG'}" value="Dear subscriber! Request about your topping up is not available right now. Please try again later."/>
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+  </template>
+
+
+  <template procedureName="ChangeMobilePassword">
+    <receiveTemplate>
+      <Message/>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0}">
+      <set item="Content" value="Смена пароля прошла успешно." />
+      <set item="Content" conditionEx="#{'${language_id}'='_UKRAINIAN_LANG'}" value="Смена пароля прошла успешно." />
+      <set item="Content" conditionEx="#{'${language_id}'='_ENGLISH_LANG'}" value="Смена пароля прошла успешно." />
+      <set item="Sender" value="_POP_SMS_SERVICE_NUMBER" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Ошибка смены пароля" />
+      <set item="Sender" value="_POP_SMS_SERVICE_NUMBER" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+  </template>
+
+</templateGroup>

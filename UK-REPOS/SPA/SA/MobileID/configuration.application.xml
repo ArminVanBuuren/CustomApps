@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<serviceInstances>
+		<serviceInstance hardwareID="MID:MID">
+			<scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
+				<fileScenarioSource dir="..\sa.configuration\Scenarios\MobileID"/>
+			</scenarioSource>
+			<socketList poolSize="30" maxConnections="5" minConnections="1" averageTime="1000" deltaAverageTime="1000" maxCommandsPerPeriod="300" periodDuration="1" autoconnect="0" reconfigurationTimeout="0">
+				<socket type="FORIS.ServiceProvisioning.Communication.Script.SimpleManagedSocket, FORIS.SPA.Communication">
+					<config autoconnect="0" workingmode="wmGeneral">
+						<socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
+							<config>
+								<ParametersList>
+									<Parameter Key="Host"              Value="172.25.41.14"/>
+									<Parameter Key="Port"              Value="8080"/>
+									<Parameter Key="MethodName" 	   Value="POST"/>
+									<Parameter Key="Method"            Value="POST"/>
+									<Parameter Key="Url"               Value="operatorintegration/api/operator-transactions"/>
+									<!--Parameter Key="UserName"          Value="apitester"/>
+									<Parameter Key="UserPwd"           Value="HmvaC1FXggMYQEbvXI4B"/-->
+									<Parameter Key="ContentType"       Value="application/json; charset=utf-8"/>
+									<Parameter Key="Encoding.Request"  Value="UTF-8"/>
+									<Parameter Key="Encoding.Response" Value="UTF-8"/>
+									<!--Parameter Key="UseSSL"            Value="true" /-->
+								</ParametersList>
+							</config>
+						</socket>
+						<Emulation Success="HTTP/1.1 200 OK" Failure="HTTP/1.1 409 Conflict" RandomizePrintout="false" OverwriteCommandPrintout="true"  Lifetime="00:00:00.00"/>
+					</config>
+				</socket>
+			</socketList>
+			<context>
+				<object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
+					<config path="..\sa.configuration\Dictionaries\MobileID" xml="Dictionary.xml" lifetime="00:00:01.500"/>
+				</object>
+				<object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
+					<fileTableSource path="..\sa.configuration\Misc" xml="RepetitionTable.xml"/>
+				</object>
+				<object name="generatorID" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.DatabaseIdentifiersGenerator, FORIS.SPA.MmlProcessing">
+					<config name="GENERATORID_MID" wellknown="Uid" length="10" maxlength="10" />
+				</object>
+			</context>
+		</serviceInstance>
+	</serviceInstances>
+</Configuration>

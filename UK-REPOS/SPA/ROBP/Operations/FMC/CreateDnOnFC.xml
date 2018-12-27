@@ -1,0 +1,12 @@
+<OperationData Name="CreateDnOnFC" NEType="FC" NEAlias="Fixed Mobile Convergent">
+  <Request Name="RequestMessage">
+    <AdditionalData Executable="True">
+      <ProvisionList HaltMode="CancelOperation" Type="AnyOfListed" Copy="CopyListed">
+        <Include groupName="FMCList" />
+      </ProvisionList>
+      <DeviceInfo Type="Optional" />
+      <BalanceStorage Type="Optional" />
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage" />
+</OperationData>

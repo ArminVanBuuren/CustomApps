@@ -1,0 +1,14 @@
+<plugin name="XSLTPlugin_out">
+
+	<transform condition="/Message/@type='retrievecustomerdataresult' and /Message/Item/@dbresult=0 and  count(/Message/Item/accumulators/accumulator)>0"     
+		validation="1=1"  	
+		successTemplate="XSLTPlugin\Scripts\AccumulatorPostParse.xsl"  
+		errorTemplate="" />
+
+
+	<transform condition="/Message/@type='prp2popmigrationprocessresult' or /Message/@type='prp2popmigrationpossibilityresult' or /Message/@type='prp2popgetservicestatusresult'"               
+		validation="1=1"               
+		successTemplate="XSLTPlugin\Scripts\restore2.xsl"  
+		errorTemplate=""  />
+				
+</plugin>

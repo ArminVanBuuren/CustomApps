@@ -1,0 +1,156 @@
+﻿<templateGroup name="GuaranteedPayment">
+	<macros>
+		<!-- ==========================  SETTINGS   ========================== -->
+		<define name="_GRNTDPAY_RESULT_INFO"            value="#{if('#{document('_GRNTDPAY_CONFIG_PATH')/ServiceConfig/Group[@name='${sGroup}']/Item[code/@value='${sDBResult}']/@info__GET_LANG}'!='','#{document('_GRNTDPAY_CONFIG_PATH')/ServiceConfig/Group[@name='${sGroup}']/Item[code/@value='${sDBResult}']/@info__GET_LANG}','_GRNTDPAY_SPECIAL_RESULT_INFO')}"/>
+		<define name="_GRNTDPAY_SPECIAL_RESULT_INFO"    value="#{if('#{document('_GRNTDPAY_CONFIG_PATH')/ServiceConfig/Group[@name='Common']/Item[code/@value='${sDBResult}']/@info__GET_LANG}'!='','#{document('_GRNTDPAY_CONFIG_PATH')/ServiceConfig/Group[@name='Common']/Item[code/@value='${sDBResult}']/@info__GET_LANG}','_GET_DBRESULT_INFO')}"/>
+		<define name="_GET_DBRESULT_INFO"               value="#{document('_DICTIONARY_PATH')/Dictionary/DBResults/Item[code/@value='${sDBResult}']/@info__GET_LANG}"/>
+		<define name="_GET_LANG"                        value="#{if('${sLang}'='','_INLANGUAGE','${sLang}')}" />
+		<define name="_INLANGUAGE"                      value="#{if('#{document('_DICTIONARY_PATH')/Dictionary/Language/lang[item/@value='${language_id}']/@param}'='','#{document('_DICTIONARY_PATH')/Dictionary/Language/lang[item/@value='']/@param}','#{document('_DICTIONARY_PATH')/Dictionary/Language/lang[item/@value='${language_id}']/@param}')}" />
+		<define name="_GET_PROHIBITED_TPGROUPS"         value="#{document('_GRNTDPAY_CONFIG_PATH')/ServiceConfig/Group[@name='${sGroup}']/@prohibited_tpgroups}" />
+		<define name="_GET_DEFAULT_PARAMS"              value="#{if('${maximumusd}'!='','#{number('${maximumusd}') div 100}','')};#{if('${balance}'!='','#{number('${balance}') div 100}','')};"/>
+		<define name="_GRNTDPAY_CONFIG_PATH"            value="C:\Foris\Messaging Gateway\Config\GuaranteedPayment\Common\GRNTDPAY_CONFIG.xml"/>
+		<define name="_DICTIONARY_PATH"                 value="C:\Foris\Messaging Gateway\Config\Common\DBR_DICTIONARY.xml"/>
+		<!-- ==========================  SETTINGS   ========================== -->
+		
+		<!-- ==========================  CONNECTOR SPECIAL  ========================== -->
+		<define name="_CURRENT_INITIATOR"               value="smscon"/>
+		<define name="_GET_INITIATOR"                   value="#{replace('${sInputParams}','_REG_PATTERN','$1')}"/>
+		<define name="_GET_AMOUNT"                      value="#{replace('${sInputParams}','_REG_PATTERN','$2')}"/>
+		<define name="_REG_PATTERN"                     value="(.*)_(.*)"/>
+		<define name="_ENCODING"                        value="unicodefffe"/>
+		<!-- ==========================  CONNECTOR SPECIAL  ========================== -->
+	</macros>
+
+	<template procedureName="List" sessionStorage="Database" sessionLifetime="60" >
+		<condition>
+			<test item="${Recipient}" matches="^811$" />
+		</condition>
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(Get_GrntPay_${Sender})}">
+				<Item customer="${Sender}">
+					<Service id="guaranteedpayment" action="6"/>
+				</Item>
+				@{store(sInputParams,_CURRENT_INITIATOR_)}
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate conditionEx="false@{store(sLang,_INLANGUAGE)}"/>
+		<deliveryTemplate conditionEx="false@{store(sGroup,List)}"/>
+		<deliveryTemplate conditionEx="#{'${dbresult}'!='330140'}" call="List_Step2" >
+			<set item="Content" value="" />
+			<set item="Sender" value="${customer}"/>
+			<set item="Recipient" value="Vodafone"/>
+			<set item="Encoding" value="_ENCODING"/>
+			<set conditionEx="0@{store(sParams,_GET_DEFAULT_PARAMS)}" />
+		</deliveryTemplate>
+		<deliveryTemplate>
+			<set conditionEx="0@{store(sDBResult,${dbresult})}" />
+			<set item="Content" value="#{StrFormat('_GRNTDPAY_RESULT_INFO','_GET_DEFAULT_PARAMS')}" />
+			<set item="Sender" value="Vodafone"/>
+			<set item="Recipient" value="${customer}"/>
+			<set item="Encoding" value="_ENCODING"/>
+			<set conditionEx="0@{freeSession}" />
+		</deliveryTemplate>
+	</template>
+	<template procedureName="List_Step2" sessionStorage="Database" sessionLifetime="60" persistent="false" >
+		<condition>
+			<test item="0" matches="1"/>
+		</condition>
+		<receiveTemplate>
+			<Message type="retrievecustomerdata" initiator="_GET_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+				<Item customer="${Sender}" subject="get_guaranteedpayment"/>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set conditionEx="0@{store(sDBResult,#{if('${dbresult}'='0','#{if('${count}'='0','notexistdata','0')}','${dbresult}')})}" />
+			<set conditionEx="0@{store(sParams,${sParams}#{if('${count}'='0','','#{number('#{//row/Attribute[@name='intpartfracpart']/@value}') div 100};#{replace('#{//row/Attribute[@name='expirationdate']/@value}','(.+)\:.*','$1')};')})}" />
+			<set item="Content" value="#{StrFormat('_GRNTDPAY_RESULT_INFO','${sParams}')}" />
+			<set item="Sender" value="Vodafone"/>
+			<set item="Recipient" value="${customer}"/>
+			<set item="Encoding" value="_ENCODING"/>
+			<set conditionEx="0@{freeSession}" />
+		</deliveryTemplate>
+	</template>
+	<template procedureName="Acceptance" sessionStorage="Database" sessionLifetime="60" >
+		<condition>
+			<test item="${Recipient}" matches="^810$" />
+		</condition>
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(GrntPay_${Sender})}">
+				<Item customer="${Sender}">
+					<Service id="guaranteedpayment" action="6"/>
+				</Item>
+				@{store(sInputParams,_CURRENT_INITIATOR_)}
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate conditionEx="false@{store(sLang,_INLANGUAGE)}"/>
+		<deliveryTemplate conditionEx="false@{store(sGroup,Acceptance)}"/>
+		<deliveryTemplate conditionEx="#{${dbresult}=0}" call="Acceptance_Step2" >
+			<set item="Content" value="" />
+			<set item="Sender" value="${customer}"/>
+			<set item="Recipient" value="Vodafone"/>
+			<set item="Encoding" value="_ENCODING"/>
+			<set conditionEx="0@{store(sParams,_GET_DEFAULT_PARAMS)}" />
+			<set conditionEx="0@{store(sAmount,#{number(#{if('_GET_AMOUNT'='','${maximumusd}','_GET_AMOUNT * 100')})})}" />
+		</deliveryTemplate>
+		<deliveryTemplate>
+			<set conditionEx="0@{store(sDBResult,${dbresult})}" />
+			<set item="Content" value="#{StrFormat('_GRNTDPAY_RESULT_INFO','_GET_DEFAULT_PARAMS')}" />
+			<set item="Sender" value="Vodafone"/>
+			<set item="Recipient" value="${customer}"/>
+			<set item="Encoding" value="_ENCODING"/>
+			<set conditionEx="0@{freeSession}" />
+		</deliveryTemplate>
+	</template>
+	<template procedureName="Acceptance_Step2" sessionStorage="Database" sessionLifetime="60" persistent="false">
+		<condition>
+			<test item="0" matches="1"/>
+		</condition>
+		<receiveTemplate>
+			<Message type="checktpgroupsaccess" process="dbadapter" initiator="_GET_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+				<Item customer="${Sender}" prohibited_list="_GET_PROHIBITED_TPGROUPS" />
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate conditionEx="#{${dbresult}=0}" call="Acceptance_Step3" >
+			<set item="Content" value="" />
+			<set item="Sender" value="${customer}"/>
+			<set item="Recipient" value="Vodafone"/>
+			<set item="Encoding" value="_ENCODING"/>
+		</deliveryTemplate>
+		<deliveryTemplate>
+			<set conditionEx="0@{store(sDBResult,${dbresult})}" />
+			<set item="Content" value="#{StrFormat('_GRNTDPAY_RESULT_INFO','${sParams}')}" />
+			<set item="Sender" value="Vodafone"/>
+			<set item="Recipient" value="${customer}"/>
+			<set item="Encoding" value="_ENCODING"/>
+			<set conditionEx="0@{freeSession}" />
+		</deliveryTemplate>
+	</template>
+	<template procedureName="Acceptance_Step3" sessionStorage="Database" sessionLifetime="60" persistent="false">
+		<condition>
+			<test item="0" matches="1"/>
+		</condition>
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="_GET_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+				<Item customer="${Sender}">
+					<Service id="guaranteedpayment" action="7">
+						<Attribute name="amount" value="${sAmount}"/>
+						<Attribute name="currency" value="980"/>
+					</Service>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate dropReply="true" conditionEx="#{${dbresult}=0}" >
+			<set conditionEx="0@{freeSession}" />
+		</deliveryTemplate>
+		<deliveryTemplate>
+			<set conditionEx="0@{store(sDBResult,${dbresult})}" />
+			<set conditionEx="0@{store(sParams,${sParams}#{number('${amount}') div 100};${expireddate};)}" />
+			<set item="Content" value="#{StrFormat('_GRNTDPAY_RESULT_INFO','${sParams}')}" />
+			<set item="Sender" value="Vodafone"/>
+			<set item="Recipient" value="${customer}"/>
+			<set item="Encoding" value="_ENCODING"/>
+			<set conditionEx="0@{freeSession}" />
+		</deliveryTemplate>
+	</template>
+
+</templateGroup>

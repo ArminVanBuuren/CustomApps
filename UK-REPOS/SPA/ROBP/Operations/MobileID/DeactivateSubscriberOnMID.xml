@@ -1,0 +1,16 @@
+<OperationData Name="DeactivateSubscriberOnMID" NEType="MID" NEAlias="MobileID">
+  <Request Name="RequestMessage">
+    <AdditionalData Executable="True">
+      <WithdrawalList HaltMode="CancelOperation" Type="AnyOfListed">
+        <SERVMOBOT Type="Optional" />
+      </WithdrawalList>
+      <RegisteredList Type="Optional" />
+      <BalanceStorage Type="Optional">
+        <HostTypeCode Type="Optional" />
+        <HostId Type="Optional" />
+        <HostCode Type="Optional" />
+      </BalanceStorage>
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage" />
+</OperationData>

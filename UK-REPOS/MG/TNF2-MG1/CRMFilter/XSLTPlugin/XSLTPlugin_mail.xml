@@ -1,0 +1,14 @@
+<plugin name="XSLTPlugin">
+
+	<transform condition="/Message/@type='incomingcontent' and /Message/@initiator='emailcon' and (contains(/Message/Item/Content,'Mphone') or contains(/Message/Item/Content,'mphone'))"
+			validation="1=1"
+			successTemplate="XSLTPlugin\Scripts\RegistrationDataParse.xsl"  
+			errorTemplate="" />
+
+	<transform condition="/Message/@type='prp2popmigrationprocess' or /Message/@type='prp2popmigrationpossibility' or /Message/@type='prp2popgetservicestatus'"  
+			validation="1=1"  
+			successTemplate="XSLTPlugin\Scripts\restore1.xsl"  
+			errorTemplate=""  />
+
+</plugin>
+

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="DeactivateService" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Отключить услугу</Description>
+	<Author Name="Khovanskiy Vladimir" Date="2017-11-14+10:00"/>
+	<Request>
+		<RequestTemplate>
+<![CDATA[
+{0}
+	"login" : "{2}",
+	"requestId" : "{3}-{4}",
+	"msisdn" : "{5}",
+	"imsi" : "{6}",
+	"action" : "DEACTIVATE_SERVICE"
+{1}
+]]>
+		</RequestTemplate>
+		<EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+		<Item Name="SYMBOL_START" Type="Constant"/>
+		<Item Name="SYMBOL_END" Type="Constant"/>
+		<Item Name="LOGIN_FORIS" Type="Constant"/>
+		<Item Name="org.id" Type="Wellknown"/>
+		<Item Name="GlobalUid" Type="Wellknown" />
+		<Item Name="msisdn" Type="Wellknown"/>
+		<Item Name="imsi" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="ASCII">
+		<Error Name="SVC_NOT_PROVIDED" Value="SUCCESS"/>
+		<Error Name="SIM_NOT_FOUND" Value="SUCCESS"/>
+		<Error Name="DEACTIVATED" Value="SUCCESS"/>
+	</ErrorsList>
+</Command>

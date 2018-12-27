@@ -1,0 +1,77 @@
+<templates connector="Email">
+	<template procedureName="SplittingPattern" >
+		<condition>
+			<test item="${IsSplitted}" matches="1" />
+		</condition>
+		<receiveTemplate>
+			<Message type="deliveryrequest" id="${MessageId}" session_id="${SessionId}">
+				<Package package_id="${PackageId}" template_id="email -2">
+					<Item customer="${To}">
+						<Content encoding="${MailEncoding}" charset="${MailCharSet}" contenttype="${ContentType}" subject="${Subject}" disposition="body">${BodyText}</Content>
+						${no-escape:attachmentBlock}
+					</Item>
+				</Package>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate/>
+	</template>
+
+	<template procedureName="DeliveryRequest" reportDelivery="true" >
+		<deliveryTemplate>
+			<set item="BodyText" value="#{//Content[@disposition='body']}" />
+			<set item="From" value="mts1@mtsdev.dream.net.ua" />
+			<set item="To" value="${customer}" />
+			<set item="ContentType" value="#{//Content[@disposition='body']/@type}" />
+			<set item="MailEncoding" value="8bit" />
+			<set item="MailCharSet" value="#{if('#{//Content[@disposition='body']/@charset}'='','utf-8','#{//Content[@disposition='body']/@charset}')}" />
+			<set item="Subject" value="#{//Content[@disposition='body']/@subject}" />
+		</deliveryTemplate>
+	</template>
+	<template procedureName="DeliveryRequestVM" reportDelivery="true" >
+		<deliveryTemplate>
+			<set item="BodyText" value="#{//Content[@disposition='body']}" />
+			<set item="From" value="vm@vodafone.ua" />
+			<set item="To" value="${customer}" />
+			<set item="ContentType" value="#{//Content[@disposition='body']/@type}" />
+			<set item="MailEncoding" value="8bit" />
+			<set item="MailCharSet" value="#{if('#{//Content[@disposition='body']/@charset}'='','utf-8','#{//Content[@disposition='body']/@charset}')}" />
+			<set item="Subject" value="#{//Content[@disposition='body']/@subject}" />
+		</deliveryTemplate>
+	</template>
+
+
+	<template procedureName="IncomingContent" >
+		<receiveTemplate>
+			<Message type="incomingcontent" initiator="emailcon" id="${guid}">
+				<Channel id="email" />
+				<Item recipient="mgtw@strom.cz" sender="${From}" senderaddress="${FromAddress}" timestamp="@{now}">
+					<Content encoding="${MailEncoding}" charset="${MailCharSet}" contenttype="${ContentType}" subject="${Subject}" disposition="body">${BodyText}</Content>
+					${no-escape:attachmentBlock}          
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate dropReply="true" />
+	</template>
+
+	<template procedureName="Adaptive" >
+		<deliveryTemplate>
+			<set item="BodyText" value="Your balance is ${creditbalance}" />
+			<set item="ContentType" value="#{/Message/Package/Item/Content/@type}" />
+			<set item="From" value="mg@wateen.net" />
+			<set item="Subject" value="#{/Message/Package/Item/Content/@subject}" />
+			<set item="To" value="${customer}" />
+		</deliveryTemplate>
+		<sampleTemplate>
+			<Message type="deliveryrequest" id="181526" session_id="a76e88-83a1b0">
+				<Package package_id="1" template_id="email f">
+					<Item customer="mg@wateen.net">
+						<Content disposition="body" type="text/plain" encoding="7bit" charset="iso-8859-2" subject="Change of credit">
+							<Attribute name="creditdifference" value="32" />
+							<Attribute name="creditbalance" value="2019" />
+						</Content>
+					</Item>
+				</Package>
+			</Message>
+		</sampleTemplate>
+	</template>
+</templates>

@@ -1,0 +1,58 @@
+<Application>
+	<EmailConnections>
+		<SMTP server="172.20.154.213" port="25" delay="500">
+			<Account from="foris_tnf2_mts@tnf2-mail.tnf-frs.mts.com.ua" name="foris_tnf2_mts" password="foris123" />
+		</SMTP>
+		<!--POP3 server="172.25.80.171" port="110" wait="30000">
+			<Account name="foris" password="foris" />
+		</POP3-->
+	</EmailConnections>
+	<FTPConnections>
+		<FTP server="172.20.154.172" port="21" account="tnf-frs\ftptbilldoc" password="Qwerty_1" />
+		<FTP server="172.20.154.185" port="21" account="tnf-frs\ftptbilldoc" password="Qwerty_1" />
+		<FTP server="tnf2-doc1" port="21" account="tnf-frs\ftptbilldoc" password="Qwerty_1" />
+		<FTP server="tnf2-report1" port="21" account="tnf-frs\ftptbilldoc" password="Qwerty_1" />
+	</FTPConnections>
+	<Settings>
+		<Item name="ModuleType" value="EMAILCON" />
+		<Item name="ModuleName" value="EMAILCON_01" />
+		<Item name="DefaultCharset" value="unicodefffe" />
+		<Item name="DefaultEncoding" value="unicodefffe" />
+		<Item name="CRMCacheCleanInterval" value="100" />
+		<Item name="SessionCleanInterval" value="5" />
+		<Item name="FetchLimit" value="20" />
+		<Item name="StoringInterval" value="20" />
+		<Item name="StoringHWM" value="10" />
+		<Item name="HealthAlgo" value="None" />
+		<Item name="MailSendQueueSize" value="128" />
+		<Item name="MailSendQueueDelaySec" value="60" />
+		<Item name="SplitBy" value="1024" />
+		<Item name="TempDir" value="C:\FORIS\Messaging Gateway\Configuration\EMAILCON\Temp" />
+		<Item name="ArchivatorName" value="C:\FORIS\Messaging Gateway\Configuration\EMAILCON\Utils\rar.exe"/>
+		<Item name="ArchivatorLine" value="m -v{0}k -ep -m3 {1} {2}" />
+		<Item name="PgpHomeDirectory" value="Configuration\EMAILCON\Utils\gnupg" />
+		<Item name="PgpPassPhrase" value="psdireg" />
+		<Item name="PgpAlwaysTrust" value="true" />
+		<Item name="PgpDropNonCrypted" value="true" />
+	</Settings>
+	<TemplateProcessors defaultConfig="C:\FORIS\Messaging Gateway\Configuration\EMAILCON\EmailTemplateProcessor.01.xml">
+		<Processor dll="DefaultTemplates.dll" class="EmailTemplateProcessor" config="C:\FORIS\Messaging Gateway\Configuration\EMAILCON\EmailTemplateProcessor.01.xml" />
+	</TemplateProcessors>
+	<Monitors>
+		<HeartBeat periodSec="30" />
+		<NoActivity defaultThresholdSec="30">
+			<MonitoredInterval thresholdSec="120">
+				<day from="1" to="5" />
+				<hour from="2" to="6" />
+			</MonitoredInterval>
+		</NoActivity>
+		<NoDBConnection  periodSec="60" />
+		<NoDeviceConnection  periodSec="60" />
+		<NoDiscSpace  periodSec="120">
+			<warning threshold="20" />
+			<minor threshold="30" />
+			<major threshold="40" />
+			<critical threshold="50" />
+		</NoDiscSpace>
+	</Monitors>
+</Application>

@@ -1,0 +1,129 @@
+<templateGroup name="DeliveryRBT">
+  <macros>
+    <define name="_RIHND" value="WCFHND_02" />
+    <define name="_DBCON" value="DBCON_04" />
+    <define name="_PROC_ACTIVATE" value="subscribeForSmsc4" />
+    <define name="_PROC_DEACTIVATE" value="unsubscribeForSmsc4 " />
+		<define name="_SMS_SERVICE_NUMBER" value="110"/>
+	</macros>
+	<template procedureName="CheckRequest" contentSeparator="*">
+		<condition>
+			<test item="${Recipient}" matches="^_SMS_SERVICE_NUMBER$"/>
+			<test item="${Content}" matches="^\d$"/>
+		</condition>
+		<deliveryTemplate call="DeliveryRBT.GetPlatform">
+			<set item="Content" value="#{//Content/text()}"/>
+			<set item="Sender" value="${Sender}"/>
+			<set item="Recipient" value="${Customer}"/>
+			<set item="Encoding" value="#{if(count(/Message/Package/Item/Content/@charset)>0,/Message/Package/Item/Content/@charset,'unicodefffe')}"/>
+		</deliveryTemplate>
+	</template>
+	<template procedureName="GetPlatform" handler="_RIHND" sessionStorage="Memory" sessionLifetime="300">
+		<condition>
+			<test item="${Recipient}" matches="^_SMS_SERVICE_NUMBER$"/>
+			<test item="${Content}" matches="^\d$"/>
+		</condition>
+		<receiveTemplate>
+			<Message type="gethost" initiator="smscon" id="${guid}" session_id="@{setSessionId(${guid})}">
+        @{store(sContent,${Content})}
+        @{store(sSender,${Sender})}
+        @{store(sRecipient,${Recipient})}
+        @{store(sEncoding,${Encoding})}
+        <Item procedureName="GetHost">
+					<Attribute name="Customer" type="String" value="${Sender}"/>
+					<Attribute name="HostType" type="String" value="SC"/>
+					<Attribute name="HostCode"/>
+					<Attribute name="HostName"/>
+					<Attribute name="HostAddress"/>
+					<Attribute name="Result"/>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<!--deliveryTemplate conditionEx="'${Result}' = '0' and '${HostCode}' = '0'" call="DeliveryRBT.DeliveryRequestCallBSCS">
+			<set item="Content" value="${sContent}"/>
+			<set item="Sender" value="${sSender}"/>
+			<set item="Recipient" value="${sRecipient}"/>
+			<set item="Encoding" value="${sEncoding}"/>
+		</deliveryTemplate-->
+		<!--deliveryTemplate conditionEx="#{'${Result}'='0' and '${HostCode}'='0'}" call="DeliveryRBT.DeliveryRequestCallBSCS"-->
+		<deliveryTemplate conditionEx="#{'${Result}' = '0' and '${HostCode}'=''}">
+			<set item="Content" value="${sContent}"/>
+			<set item="Sender" value="${sSender}"/>
+			<set item="Recipient" value="102157"/>
+			<set item="Encoding" value="${sEncoding}"/>
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="#{'${Result}' = '0'}" call="DeliveryRBT.ServiceOrder">
+			<set item="Content" value="${sContent}"/>
+			<set item="Sender" value="${sSender}"/>
+			<set item="Recipient" value="${sRecipient}"/>
+			<set item="Encoding" value="${sEncoding}"/>
+		</deliveryTemplate>
+		<!-- smth gone wrong -->
+		<deliveryTemplate>
+			<set item="Content" value="Ошибка при выполнении запроса"/>
+			<set item="Sender" value="${sRecipient}"/>
+			<set item="Recipient" value="${sSender}"/>
+			<set item="Encoding" value="${sEncoding}"/>
+		</deliveryTemplate>
+	</template>
+	<template procedureName="ServiceOrder">
+		<condition>
+			<test item="${Recipient}" matches="^_SMS_SERVICE_NUMBER$"/>
+			<test item="${Content}" matches="^\d$"/>
+		</condition>
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${Sender}">
+					<Service id="SMS4" class="1" action="${token0}"/>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="Content" value="Ошибка при добавлении услуги"/>
+			<set item="Content" conditionEx="#{${dbresult} = 0}" value="Заявка принята"/>
+			<!-- add more error codes here -->
+			<set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+			<set item="Recipient" value="${Recipient}"/>
+			<set item="Encoding" value="${Encoding}"/>
+		</deliveryTemplate>
+	</template>
+	<template procedureName="DeliveryRequestCallBSCS" sessionStorage="Memory" handler="_DBCON">
+		<condition>
+			<test item="${Recipient}" matches="^_SMS_SERVICE_NUMBER$"/>
+			<test item="${Content}" matches="^\d$"/>
+		</condition>
+		<receiveTemplate>
+			<Message type="retrievecustomerdata" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="@{switch(${token0}|,2|_PROC_ACTIVATE,3|_PROC_DEACTIVATE)}">
+					<Attribute name="i_msisdn" type="String" value="${Sender}"/>
+					<Attribute name="i_prov_source_name" type="String" value="SMS4"/>
+					<Attribute name="o_return_code" type="Int32"/>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="Content" value="Ошибка при добавлении услуги"/>
+			<set item="Content" conditionEx="#{${o_return_code} = 0}" value="Заявка принята"/>
+			<!-- add more error codes here -->
+			<set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+			<set item="Recipient" value="${Recipient}"/>
+			<set item="Encoding" value="${Encoding}"/>
+		</deliveryTemplate>
+		<!-- smth gone wrong -->
+		<deliveryTemplate dropReply="true"/>
+	</template>
+	<template procedureName="WrongRequest">
+		<condition>
+			<test item="${Recipient}" matches="^_SMS_SERVICE_NUMBER$"/>
+		</condition>
+		<receiveTemplate>
+			<Message customer="${Sender}"/>
+		</receiveTemplate>
+		<deliveryTemplate direction="input">
+			<set item="Content" value="Ошибка в формате запроса."/>
+			<set item="Sender" value="_SMS_SERVICE_NUMBER"/>
+			<set item="Recipient" value="${Recipient}"/>
+			<set item="Encoding" value="${Encoding}"/>
+		</deliveryTemplate>
+	</template>
+</templateGroup>

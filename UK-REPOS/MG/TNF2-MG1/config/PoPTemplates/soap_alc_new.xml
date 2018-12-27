@@ -1,0 +1,367 @@
+<templateGroup name="PoPTemplate_new">
+	<macros>
+		<define name="_SMSCON" value="SMSCON_02" />
+		<define name="_BMSCON" value="WCFHND_01"/>
+		<define name="_MSCPHND" value="WCFHND_03" />
+	</macros>
+
+
+<!-- 	<template procedureName="DB_OrderBonusVoucher" sessionLifetime="300">
+		<receiveTemplate>
+			<Message type="CustomerBonusRequest" initiator="ivrcon" id="${guid}" session_id="@{setSessionId(${guid})}">
+				<Item customer="${customer}">
+					<Attribute name="BonusCode" value="${bonuscode}"/>
+					<Attribute name="language_id" value="1"/>
+				</Item>
+				@{store(Msisdn,${customer})}
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate conditionEx="#{'${dbresult}'='0'}" call="OrderBonusVoucher">
+			<set item="iparam:Msisdn" value="${Msisdn}"/>
+			<set item="iparam:FirstName" value="${FirstName}"/>
+			<set item="iparam:LastName" value="${LastName}"/>
+			<set item="iparam:OrganizationName" value="${OrganizationName}"/>
+			<set item="iparam:PANumber" value="${PANumber}"/>
+			<set item="iparam:TerminalDeviceID" value="${TerminalDeviceID}"/>
+			<set item="iparam:ResponsiblePerson" value="${ResponsiblePerson}"/>
+			<set item="iparam:ContactPhone" value="${ContactPhone}"/>
+			<set item="iparam:ZIP" value="${ZIP}"/>
+			<set item="iparam:City" value="${City}"/>
+			<set item="iparam:Street" value="${Street}"/>
+			<set item="iparam:House" value="${House}"/>
+			<set item="iparam:Flat" value="${Flat}"/>
+			<set item="iparam:District" value="${District}"/>
+			<set item="iparam:Region" value="${Region}"/>
+			<set item="iparam:Description" value="${Description}"/>
+			<set item="iparam:Code" value="${Code}"/>
+			<set item="iparam:Name" value="${Name}"/>
+		</deliveryTemplate>
+		<deliveryTemplate>
+			<set item="oparam:dbresult" value="${dbresult}"/>
+		</deliveryTemplate>
+		<input>
+			<param name="customer"/>
+			<param name="bonuscode"/>
+		</input>
+		<output>
+			<param name="dbresult" type="3" value="-1"/>
+		</output>
+	</template>
+	<template procedureName="OrderBonusVoucher" handler="DBCON_05">
+		<receiveTemplate>
+			<Message initiator="ivrcon" id="${guid}" session_id="@{setSessionId(${guid})}">
+				<Item procedureName="WEBAPP.INSERT_ORDER_VOUCHER">
+					<Attribute name="i_addr_first_name" type="STRING" value="${FirstName}"/>
+					<Attribute name="i_addr_last_name" type="STRING" value="${LastName}"/>
+					<Attribute name="i_msisdn" type="STRING" value="${Msisdn}"/>
+					<Attribute name="i_acc_number" value="${PANumber}"/>
+					<Attribute name="i_phys_res_id" type="INT" value="${TerminalDeviceID}"/>
+					<Attribute name="i_vouch_desc" type="STRING" value="${Name}"/>
+					<Attribute name="i_vouch_type" type="STRING" value="${Code}"/>
+					<Attribute name="i_user_name" type="STRING" value="USSD"/>
+					<Attribute name="i_create_date" type="DATETIME" value="@{now}"/>
+					<Attribute name="i_date_process" type="DATETIME" value=""/>
+					<Attribute name="i_zip" type="STRING" value="${ZIP}"/>
+					<Attribute name="i_city" type="STRING" value="${City}"/>
+					<Attribute name="i_street" type="STRING" value="${Street}"/>
+					<Attribute name="i_house" type="STRING" value="${House}"/>
+					<Attribute name="i_float_addr" type="STRING" value="${Flat}"/>
+					<Attribute name="i_name_addr" type="STRING" value="${FirstName}"/>
+					<Attribute name="i_phone_addr" type="STRING" value="${Msisdn}"/>
+					<Attribute name="i_note_addr" type="STRING" value=""/>
+					<Attribute name="i_is_mail" type="INT" value="0"/>
+					<Attribute name="i_region" type="STRING" value="${Region}"/>
+					<Attribute name="i_district" type="STRING" value="${District}"/>
+					<Attribute name="i_user_proc" type="STRING" value=""/>
+					<Attribute name="i_amount" type="INT" value="1"/>
+					<Attribute name="i_cust_type" type="INT" value="0"/>
+					<Attribute name="i_request_id" type="INT" value=""/>
+					<Attribute name="reqnumber" type="out:INT"/>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="oparam:dbresult" value="${dbresult}"/>
+			<set item="oparam:reqnumber" value="${reqnumber}"/>
+		</deliveryTemplate>
+		<input>
+			<param name="Msisdn"/>
+			<param name="FirstName"/>
+			<param name="LastName"/>
+			<param name="OrganizationName"/>
+			<param name="PANumber"/>
+			<param name="TerminalDeviceID"/>
+			<param name="ResponsiblePerson"/>
+			<param name="ContactPhone"/>
+			<param name="ZIP"/>
+			<param name="City"/>
+			<param name="Street"/>
+			<param name="House"/>
+			<param name="Flat"/>
+			<param name="District"/>
+			<param name="Region"/>
+			<param name="Description"/>
+			<param name="Code"/>
+			<param name="Name"/>
+		</input>
+		<output>
+			<param name="dbresult" type="3" value="-1"/>
+			<param name="reqnumber" type="3" value="-1"/>
+		</output>
+	</template>
+	<template procedureName="DB_OrderBonusGift" handler="DBCON_05">
+		<receiveTemplate>
+			<Message initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="WEBAPP.FRS_CUSTOMER_REQUEST.INSERT_REQUEST_BY_MSISDN">
+					<Attribute name="I_MSISDN" type="STRING" value="${Customer}"/>
+					<Attribute name="I_SERVICE_ID" type="INT" value="${Code}"/>
+					<Attribute name="I_REQ_TYPE" type="INT" value="1"/>
+					<Attribute name="I_REQ_COMMENT" type="STRING" value=""/>
+					<Attribute name="I_REQ_PRIORITY" type="INT" value="0"/>
+					<Attribute name="I_REQ_PARAM" type="STRING" value=""/>
+					<Attribute name="I_REQ_USER" type="STRING" value="USSD"/>
+					<Attribute name="I_MARKET" type="INT" value="0"/>
+					<Attribute name="I_SALESMAN_ID" type="INT" value=""/>
+					<Attribute name="I_SALE_POINT_CODE" type="STRING" value=""/>
+					<Attribute name="RAISE_ERRORS_FLAG" type="STRING" value="False"/>
+					<Attribute name="reqnumber" type="out:INT"/>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="oparam:dbresult" value="${dbresult}"/>
+			<set item="oparam:reqnumber" value="${reqnumber}"/>
+		</deliveryTemplate>
+		<input>
+			<param name="Customer"/>
+			<param name="Code"/>
+		</input>
+		<output>
+			<param name="dbresult" type="3" value="-1"/>
+			<param name="reqnumber" type="3" value="-1"/>
+		</output>
+	</template>
+ -->
+
+ <!-- FORIS.MessagingGateway.Templates 11.41.2_CR-650 -->
+
+	 <template procedureName="DB_OrderBonusVoucher" handler="_BMSCON" sessionLifetime="300">
+		<receiveTemplate>
+			<Message type="ordergiftvalidation " initiator="soap" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+				<Item procedureName="OrderGiftValidation ">
+					<Attribute name="Msisdn" value="${customer}" />
+					<Attribute name="GiftCode" value="${code}" />
+
+					<Attribute name="isAvailable" />
+					<Attribute name="Result" />
+				</Item>
+				@{store(Msisdn,${customer})}
+				@{store(sBonusCode,${code})}
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate conditionEx="#{'${Result}'='0' and '${isAvailable}'='1'}" call="DB_OrderBonusVoucherCheck" />
+		<deliveryTemplate conditionEx="#{'${Result}'='0'}" >
+			<set item="oparam:dbresult" value="0"/>
+			<set item="oparam:bmsresult" value="-771009"/>
+			<set item="oparam:reqnumber " value="0"/>
+			<set conditionEx="0@{freeSession}"/>
+		</deliveryTemplate>
+		<deliveryTemplate > 
+			<set item="oparam:dbresult" value="0"/>
+			<set item="oparam:bmsresult" value="${Result}"/>
+			<set item="oparam:reqnumber " value="0"/>
+			<set conditionEx="0@{freeSession}"/>
+		</deliveryTemplate>
+		<input>
+			<param name="customer"/>
+			<param name="bonuscode"/>
+		</input>
+		<output>
+			<param name="dbresult" type="3" value="-1"/>
+			<param name="bmsresult" type="3" value="-1"/>
+			<param name="reqnumber" type="3" value="-1"/>
+		</output>	
+	</template>
+	<template procedureName="DB_OrderBonusVoucherCheck" sessionLifetime="300">
+		<receiveTemplate>
+			<Message type="CustomerBonusRequest" initiator="ivrcon" id="@{newGuid}" session_id="${session_id}">
+				<Item customer="${Msisdn}">
+					<Attribute name="BonusCode" value="${sBonusCode}"/>
+					<Attribute name="language_id" value="1"/>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate conditionEx="#{'${dbresult}'='0'}" call="OrderBonusVoucher">
+			<set item="iparam:Msisdn" value="${Msisdn}"/>
+			<set item="iparam:FirstName" value="${FirstName}"/>
+			<set item="iparam:LastName" value="${LastName}"/>
+			<set item="iparam:OrganizationName" value="${OrganizationName}"/>
+			<set item="iparam:PANumber" value="${PANumber}"/>
+			<set item="iparam:TerminalDeviceID" value="${TerminalDeviceID}"/>
+			<set item="iparam:ResponsiblePerson" value="${ResponsiblePerson}"/>
+			<set item="iparam:ContactPhone" value="${ContactPhone}"/>
+			<set item="iparam:ZIP" value="${ZIP}"/>
+			<set item="iparam:City" value="${City}"/>
+			<set item="iparam:Street" value="${Street}"/>
+			<set item="iparam:House" value="${House}"/>
+			<set item="iparam:Flat" value="${Flat}"/>
+			<set item="iparam:District" value="${District}"/>
+			<set item="iparam:Region" value="${Region}"/>
+			<set item="iparam:Description" value="${Description}"/>
+			<set item="iparam:Code" value="${Code}"/>
+			<set item="iparam:Name" value="${Name}"/>
+		</deliveryTemplate>
+		<deliveryTemplate>
+			<set item="oparam:dbresult" value="0"/>
+			<set item="oparam:bmsresult" value="${Result}"/>
+			<set item="oparam:reqnumber " value="0"/>
+			<set conditionEx="0@{freeSession}"/>
+		</deliveryTemplate>
+		<input>
+			<param name="customer"/>
+			<param name="bonuscode"/>
+		</input>
+		<output>
+			<param name="dbresult" type="3" value="-1"/>
+		</output>
+	</template>
+	<template procedureName="OrderBonusVoucher" handler="DBCON_05"  sessionLifetime="300">
+		<receiveTemplate>
+			<Message initiator="ivrcon" id="@{newGuid}" session_id="${session_id}">
+				<Item procedureName="WEBAPP.INSERT_ORDER_VOUCHER">
+					<Attribute name="i_addr_first_name" type="STRING" value="${FirstName}"/>
+					<Attribute name="i_addr_last_name" type="STRING" value="${LastName}"/>
+					<Attribute name="i_msisdn" type="STRING" value="${Msisdn}"/>
+					<Attribute name="i_acc_number" value="${PANumber}"/>
+					<Attribute name="i_phys_res_id" type="INT" value="${TerminalDeviceID}"/>
+					<Attribute name="i_vouch_desc" type="STRING" value="${Name}"/>
+					<Attribute name="i_vouch_type" type="STRING" value="${Code}"/>
+					<Attribute name="i_user_name" type="STRING" value="USSD"/>
+					<Attribute name="i_create_date" type="DATETIME" value="@{now}"/>
+					<Attribute name="i_date_process" type="DATETIME" value=""/>
+					<Attribute name="i_zip" type="STRING" value="${ZIP}"/>
+					<Attribute name="i_city" type="STRING" value="${City}"/>
+					<Attribute name="i_street" type="STRING" value="${Street}"/>
+					<Attribute name="i_house" type="STRING" value="${House}"/>
+					<Attribute name="i_float_addr" type="STRING" value="${Flat}"/>
+					<Attribute name="i_name_addr" type="STRING" value="${FirstName}"/>
+					<Attribute name="i_phone_addr" type="STRING" value="${Msisdn}"/>
+					<Attribute name="i_note_addr" type="STRING" value=""/>
+					<Attribute name="i_is_mail" type="INT" value="0"/>
+					<Attribute name="i_region" type="STRING" value="${Region}"/>
+					<Attribute name="i_district" type="STRING" value="${District}"/>
+					<Attribute name="i_user_proc" type="STRING" value=""/>
+					<Attribute name="i_amount" type="INT" value="1"/>
+					<Attribute name="i_cust_type" type="INT" value="0"/>
+					<Attribute name="i_request_id" type="INT" value=""/>
+					<Attribute name="reqnumber" type="out:INT"/>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="oparam:dbresult" value="${dbresult}"/>
+			<set item="oparam:reqnumber" value="${reqnumber}"/>
+			<set item="oparam:bmsresult" value="0"/>
+			<set conditionEx="0@{freeSession}"/>
+		</deliveryTemplate>
+		<input>
+			<param name="Msisdn"/>
+			<param name="FirstName"/>
+			<param name="LastName"/>
+			<param name="OrganizationName"/>
+			<param name="PANumber"/>
+			<param name="TerminalDeviceID"/>
+			<param name="ResponsiblePerson"/>
+			<param name="ContactPhone"/>
+			<param name="ZIP"/>
+			<param name="City"/>
+			<param name="Street"/>
+			<param name="House"/>
+			<param name="Flat"/>
+			<param name="District"/>
+			<param name="Region"/>
+			<param name="Description"/>
+			<param name="Code"/>
+			<param name="Name"/>
+		</input>
+		<output>
+			<param name="dbresult" type="3" value="-1"/>
+			<param name="reqnumber" type="3" value="-1"/>
+			<param name="bmsresult" type="3" value="-1"/>
+		</output>
+	</template>
+
+	<template procedureName="DB_OrderBonusGift" handler="_BMSCON">
+		<receiveTemplate>
+			<Message type="ordergiftvalidation " initiator="soap" id="${guid}" session_id="${guid}">
+				<Item procedureName="OrderGiftValidation ">
+					<Attribute name="Msisdn" value="${Customer}" />
+					<Attribute name="GiftCode" value="${Code}" />
+
+					<Attribute name="isAvailable" />
+					<Attribute name="Result" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate conditionEx="#{'${Result}'='0' and '${isAvailable}'='1'}" call="DB_OrderBonusGiftTest" >
+			<set item="iparam:Customer" value="${Msisdn}"/>
+			<set item="iparam:Code" value="${GiftCode}"/>
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="#{'${Result}'='0'}" >
+			<set item="oparam:dbresult" value="0"/>
+			<set item="oparam:bmsresult" value="-771009"/>
+			<set item="oparam:reqnumber " value="0"/>
+			<set conditionEx="0@{freeSession}"/>
+		</deliveryTemplate>
+		<deliveryTemplate > 
+			<set item="oparam:dbresult" value="0"/>
+			<set item="oparam:bmsresult" value="${Result}"/>
+			<set item="oparam:reqnumber " value="0"/>
+			<set conditionEx="0@{freeSession}"/>
+		</deliveryTemplate>
+		<input>
+			<param name="Customer"/>
+			<param name="Code"/>
+		</input>
+		<output>
+			<param name="dbresult" type="3" value="-1"/>
+			<param name="bmsresult" type="3" value="-1"/>
+			<param name="reqnumber" type="3" value="-1"/>
+		</output>	
+	</template>
+	<template procedureName="DB_OrderBonusGiftCheck" handler="DBCON_05">
+		<receiveTemplate>
+			<Message initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="WEBAPP.FRS_CUSTOMER_REQUEST.WRAPPER_INSERT_REQUEST_MSISDN">
+					<Attribute name="I_MSISDN" type="STRING" value="${Customer}"/>
+					<Attribute name="I_FRS_SERVICE_CODE" type="STRING" value="${Code}"/>
+					<Attribute name="I_REQ_TYPE" type="INT" value="1"/>
+					<Attribute name="I_REQ_COMMENT" type="STRING" value=""/>
+					<Attribute name="I_REQ_PRIORITY" type="INT" value="0"/>
+					<Attribute name="I_REQ_PARAM" type="STRING" value=""/>
+					<Attribute name="I_REQ_USER" type="STRING" value="USSD"/>
+					<Attribute name="I_MARKET" type="INT" value="0"/>
+					<Attribute name="I_SALESMAN_ID" type="INT" value=""/>
+					<Attribute name="I_SALE_POINT_CODE" type="STRING" value=""/>
+					<Attribute name="RAISE_ERRORS_FLAG" type="STRING" value="False"/>
+					<Attribute name="reqnumber" type="out:INT"/>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="oparam:dbresult" value="${dbresult}"/>
+			<set item="oparam:reqnumber" value="${reqnumber}"/>
+			<set item="oparam:bmsresult" value="0"/>
+		</deliveryTemplate>
+		<input>
+			<param name="Customer"/>
+			<param name="Code"/>
+		</input>
+		<output>
+			<param name="dbresult" type="3" value="-1"/>
+			<param name="reqnumber" type="3" value="-1"/>
+			<param name="bmsresult" type="3" value="-1"/>
+		</output>
+	</template>
+
+</templateGroup>

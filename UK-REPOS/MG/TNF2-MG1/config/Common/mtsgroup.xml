@@ -1,0 +1,71 @@
+<root>
+  <MTS>
+
+   <inviter102207a>
+    <tp id="1363" />
+    <tp id="1364" />
+  </inviter102207a>
+   <inviter102207b>
+    <tp id="1262" />
+    <tp id="1263" />
+  </inviter102207b>
+  <inviter102701a>
+    <tp id="1352" />
+    <tp id="1353" />
+	<tp id="1354" />
+    <tp id="1355" />
+	<tp id="1362" />
+    <tp id="1364" />
+	<tp id="1363" />
+  </inviter102701a>
+   <inviter102701b>
+    <tp id="1262" />
+    <tp id="1263" />
+	<tp id="1348" />
+    <tp id="1346" />
+	<tp id="1347" />
+    <tp id="1359" />
+	<tp id="1344" />
+    <tp id="1342" />
+	<tp id="1360" />
+    <tp id="1361" />
+	<tp id="1349" />
+    <tp id="1341" />	
+  </inviter102701b>
+   <inviter102702a>
+    <tp id="1352" />
+    <tp id="1353" />
+	<tp id="1354" />
+    <tp id="1355" />
+	<tp id="1362" />
+    <tp id="1364" />
+	<tp id="1363" />
+  </inviter102702a>
+   <inviter102702b>
+    <tp id="1262" />
+    <tp id="1263" />
+	<tp id="1348" />
+    <tp id="1346" />
+	<tp id="1347" />
+    <tp id="1359" />
+	<tp id="1344" />
+    <tp id="1342" />
+	<tp id="1360" />
+    <tp id="1361" />
+	<tp id="1349" />
+    <tp id="1341" />
+  </inviter102702b>
+   <inviter102204a>
+    <tp id="1367" />
+  </inviter102204a>
+  <inviter102204b>
+    <tp id="1352" />
+    <tp id="1353" />
+    <tp id="1354" />
+    <tp id="1355" />
+    <tp id="1362" />
+    <tp id="1363" />
+    <tp id="1364" />	
+  </inviter102204b>
+ </MTS>
+</root>

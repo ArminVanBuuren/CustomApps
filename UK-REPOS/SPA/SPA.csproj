@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E8F05AC9-4387-487A-9BAB-C20331016504}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SPA</RootNamespace>
+    <AssemblyName>SPA</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BPM\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ROBP\Operations\MobileID\ActivateServiceOnMID.xml" />
+    <Content Include="ROBP\Operations\MobileID\ChangeIMSIOrMSISDNOnMID.xml" />
+    <Content Include="ROBP\Operations\MobileID\DeactivateServiceOnMID.xml" />
+    <Content Include="ROBP\Operations\MobileID\DeactivateSubscriberOnMID.xml" />
+    <Content Include="ROBP\Operations\MobileID\DeleteSubscriberOnMID.xml" />
+    <Content Include="ROBP\Operations\MobileID\RegisterSIMOnMID.xml" />
+    <Content Include="ROBP\Operations\MobileID\ResumeServiceOnMID.xml" />
+    <Content Include="ROBP\Operations\MobileID\SuspendServiceOnMID.xml" />
+    <Content Include="ROBP\Operations\MobileID\ULTRAResumeOnMID.xml" />
+    <Content Include="ROBP\Operations\MobileID\ULTRASuspendOnMID.xml" />
+    <Content Include="ROBP\Processes\Assign Services test.%28 1132 %29.xml" />
+    <Content Include="ROBP\Processes\Assign Services.%28 10 %29.xml" />
+    <Content Include="ROBP\Processes\Block Subscriber in All Platform.%28 1419 %29.xml" />
+    <Content Include="ROBP\Processes\Block Subscriber.%28 17 %29.xml" />
+    <Content Include="ROBP\Processes\BlockSubscriberTST.%28 348 %29.xml" />
+    <Content Include="ROBP\Processes\Change IMSI_TEST.%28 94 %29.xml" />
+    <Content Include="ROBP\Processes\Change MSISDN or IMSI on Platform.%28 1301 %29.xml" />
+    <Content Include="ROBP\Processes\Delete Subscriber.%28 4 %29.xml" />
+    <Content Include="ROBP\Processes\Remove Services.%28 9 %29.xml" />
+    <Content Include="ROBP\Processes\Resume Service.%28 4489 %29.xml" />
+    <Content Include="ROBP\Processes\Suspend Service.%28 4490 %29.xml" />
+    <Content Include="ROBP\Processes\Unblock Subscriber in All Platform.%28 1483 %29.xml" />
+    <Content Include="ROBP\Processes\Unblock Subscriber.%28 15 %29.xml" />
+    <Content Include="ROBP\Processes\UnblockSubscriberTST.%28 349 %29.xml" />
+    <Content Include="SA\FMC\configuration.application.xml" />
+    <Content Include="SA\FMC\configuration.common.xml" />
+    <Content Include="SA\FMC\Commands\BG_Create.xml" />
+    <Content Include="SA\FMC\Commands\BG_Update.xml" />
+    <Content Include="SA\FMC\Commands\DN_CreateOrUpdate.xml" />
+    <Content Include="SA\FMC\Decoders\BGSCollection.xml" />
+    <Content Include="SA\FMC\Decoders\FMCDescriptionError.xml" />
+    <Content Include="SA\FMC\dictionary.xml" />
+    <Content Include="ROBP\Processes\Assign CUG in All platform.xml" />
+    <Content Include="ROBP\Operations\FMC\CreateDnOnFC.xml" />
+    <Content Include="SA\FMC\misc\Generator.IMODE.xml" />
+    <Content Include="SA\FMC\misc\GeneratorID.SG.xml" />
+    <Content Include="SA\FMC\misc\generatorID.xml" />
+    <Content Include="SA\FMC\misc\RepetitionTable.DMS.xml" />
+    <Content Include="SA\FMC\misc\RepetitionTable.DSTK.xml" />
+    <Content Include="SA\FMC\misc\RepetitionTable.LS.xml" />
+    <Content Include="SA\FMC\misc\RepetitionTable.MCA.xml" />
+    <Content Include="SA\FMC\misc\RepetitionTable.RIM.xml" />
+    <Content Include="SA\FMC\misc\RepetitionTable.SMS.xml" />
+    <Content Include="SA\FMC\misc\RepetitionTable.VM.xml" />
+    <Content Include="SA\FMC\misc\RepetitionTable.xml" />
+    <Content Include="SA\FMC\scenarios\CreateDnOnFC.xml" />
+    <Content Include="SA\FMC\scenarios\DeleteDnOnFC.xml" />
+    <Content Include="SA\FMC\scenarios\SubScenarios\GetBGID.xml" />
+    <Content Include="SA\FMC\scenarios\SubScenarios\GetOrSetBGID.xml" />
+    <Content Include="SA\FMC\scenarios\TestScenario_1.xml" />
+    <Content Include="SA\FMC\scenarios\TestScenario_2.xml" />
+    <Content Include="SA\MobileID\Commands\ActivateService.xml" />
+    <Content Include="SA\MobileID\Commands\DeactivateService.xml" />
+    <Content Include="SA\MobileID\Commands\DeactivateSubscriber.xml" />
+    <Content Include="SA\MobileID\Commands\RegisterSIM.xml" />
+    <Content Include="SA\MobileID\Commands\ResumeService.xml" />
+    <Content Include="SA\MobileID\Commands\SendRequest.xml" />
+    <Content Include="SA\MobileID\Commands\SuspendService.xml" />
+    <Content Include="SA\MobileID\configuration.application.xml" />
+    <Content Include="SA\MobileID\configuration.common.xml" />
+    <Content Include="SA\MobileID\dictionary.xml" />
+    <Content Include="SA\MobileID\Scenarios\ActivateServiceOnMID.xml" />
+    <Content Include="SA\MobileID\Scenarios\ChangeIMSIOrMSISDNOnMID.xml" />
+    <Content Include="SA\MobileID\Scenarios\DeactivateServiceOnMID.xml" />
+    <Content Include="SA\MobileID\Scenarios\DeactivateSubscriberOnMID.xml" />
+    <Content Include="SA\MobileID\Scenarios\DeleteSubscriberOnMID.xml" />
+    <Content Include="SA\MobileID\Scenarios\RegisterSIMOnMID.xml" />
+    <Content Include="SA\MobileID\Scenarios\ResumeServiceOnMID.xml" />
+    <Content Include="SA\MobileID\Scenarios\SC.MID.SendRequest.xml" />
+    <Content Include="SA\MobileID\Scenarios\SuspendServiceOnMID.xml" />
+    <Content Include="SA\MobileID\Scenarios\ULTRAResumeOnMID.xml" />
+    <Content Include="SA\MobileID\Scenarios\ULTRASuspendOnMID.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SA\FMC\DOC\LOG\FORIS.SPA.SA.FMC_20171127_153445.lg" />
+    <None Include="SA\FMC\DOC\Service Activator provisioning API.docx" />
+    <None Include="SA\FMC\DOC\Service.wsdl" />
+    <None Include="SA\FMC\misc\RepetitionTable.xml.2005-12-19" />
+    <None Include="SA\FMC\misc\vssver.scc" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

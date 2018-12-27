@@ -1,0 +1,59 @@
+﻿<templateGroup name="ServiceOrderErrorHandler">
+	<macros>
+		<define name="_ERROR_SENDER_NUMBER" value="2200" />
+		<define name="_SEND_FINAL_MESSAGE" value="TRUE" />  <!-- possible values: FALSE or TRUE -->
+    <define name="_SendSMSErrorAddService" value="TRUE" />  <!-- possible values: FALSE or TRUE -->
+    <define name="_MSG" value="#{/Message/Item/Service/Error[1]/Attribute[@name='message']/text()}" />   
+	</macros>
+
+	<template procedureName="SendCRMErrorMessage" persistent="false">
+		<condition>
+			<test item="0" matches="1" />
+		</condition>
+		<receiveTemplate>
+			<Message id="${guid}" session_id="${guid}" />
+		</receiveTemplate>
+		<deliveryTemplate conditionEx="#{count(/Message/Item/Service/Error)>0}" terminating="false">
+			<set item="Content" value="#{/Message/Item/Service/Error[1]/Attribute[@name='message']/text()}" />
+			<set item="Sender" value="_ERROR_SENDER_NUMBER" />
+			<set item="Recipient" value="${customer}" />
+			<set item="Encoding" value="unicodefffe" />
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="#{count(/Message/Item/Service/Error)>1}" terminating="false">
+			<set item="Content" value="#{/Message/Item/Service/Error[2]/Attribute[@name='message']/text()}" />
+			<set item="Sender" value="_ERROR_SENDER_NUMBER" />
+			<set item="Recipient" value="${customer}" />
+			<set item="Encoding" value="unicodefffe" />
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="#{count(/Message/Item/Service/Error)>2}" terminating="false">
+			<set item="Content" value="#{/Message/Item/Service/Error[3]/Attribute[@name='message']/text()}" />
+			<set item="Sender" value="_ERROR_SENDER_NUMBER" />
+			<set item="Recipient" value="${customer}" />
+			<set item="Encoding" value="unicodefffe" />
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="#{'_SEND_FINAL_MESSAGE'='TRUE'}">
+			<set item="Content" value="Выполнить запрос невозможно. Обратитесь, пожалуйста, в офис Vodafone за дополнительной информацией." />
+			<set item="Sender" value="_ERROR_SENDER_NUMBER" />
+			<set item="Recipient" value="${customer}" />
+			<set item="Encoding" value="unicodefffe" />
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="#{'_SEND_FINAL_MESSAGE'!='TRUE'}" dropReply="true" />
+	</template>
+
+  <template procedureName="SendProvisionErrorMessage" persistent="false">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message id="${guid}" session_id="${guid}" />
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{count(/Message/Item/Service/Error)>0 and (/Message/Item/Service/Error[1]/Attribute[@name='reason']/text() = 'SMSNotifyRestriction') and '_SendSMSErrorAddService'='TRUE'}">
+      <set item="Content" value="_MSG" />
+      <set item="Sender" value="_ERROR_SENDER_NUMBER" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+	  <deliveryTemplate dropReply="true" />
+  </template>
+	
+</templateGroup>

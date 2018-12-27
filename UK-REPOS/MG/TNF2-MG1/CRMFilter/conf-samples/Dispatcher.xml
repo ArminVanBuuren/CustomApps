@@ -1,0 +1,18 @@
+<configuration cleanerPeriod="2" remotingPort="9100" logDirectoryPath="logs">
+  <filter input=".\crmfilter_input" default=".\crmfilter_output" alternative=".\telcrm_input" name="IN_01" >
+    <logging level="debug" buffer="200" />
+<!--<plugin typeName="SplitterPlugin" fileName="Splitter.dll" />
+    <plugin typeName="DebtorOldRequestPlugin" fileName="DebtorOldRequest.dll" />
+    <plugin typeName="XSLTPlugin" fileName="XSLT.dll" config="XSLTPlugin_01.xml"  store="120" />
+    <plugin typeName="SMSTarifPlugin" fileName="sms.dll" />
+    <plugin typeName="SMSFavoritePlugin" fileName="sms.dll" />
+    <plugin typeName="DebtorPlugin" fileName="Debtor.dll" />
+    <plugin typeName="ReplacePlugin" fileName="Replace.dll" />-->
+  </filter>
+
+
+  <filter input=".\crmfilter_output" default=".\telcrm_output" alternative=".\telcrm_output" name="OUT_01" SupportLargeMessages="false" SetDateInMessage="false">
+    <logging level="debug" buffer="200" />
+    <plugin typeName="CRMTestPlugin" fileName="CRMTest.dll" config="CRMTestPlugin.xml" />
+  </filter>
+</configuration>
