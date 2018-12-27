@@ -242,10 +242,10 @@ namespace TFSAssist.Control
                 if (fileInfo.Exists)
                 {
                     int index = 0;
-                    string bakFileName = string.Format("{0}_Incorrect.bak", settPath);
+                    string bakFileName = $"{settPath}_Incorrect.bak";
                     while (File.Exists(bakFileName))
                     {
-                        bakFileName = string.Format("{0}_Incorrect_{1}.bak", settPath, ++index);
+                        bakFileName = $"{settPath}_Incorrect_{++index}.bak";
                     }
                     File.Copy(settPath, bakFileName);
                 }

@@ -109,6 +109,15 @@ namespace Utils.XmlRtfStyle
             return GetRtfString(source, settings);
         }
 
+        public static string GetXmlString(string xmlString)
+        {
+            XmlDocument xml = new XmlDocument();
+            xml.LoadXml(xmlString);
+            string source = string.Empty;
+            ProcessXmlInnerText(xml.DocumentElement, ref source, 0);
+            return source;
+        }
+
         public static string GetXmlString(XmlDocument xml)
         {
             string source = string.Empty;
