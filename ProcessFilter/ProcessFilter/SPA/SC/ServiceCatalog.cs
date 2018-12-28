@@ -1,22 +1,23 @@
-﻿using System.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Xml;
+using System.Xml.XPath;
+using System.Data;
 using System.Text;
+using Utils.XmlHelper;
+using Utils.XmlRtfStyle;
 
 namespace ProcessFilter.SPA.SC
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Xml;
-    using System.Xml.XPath;
-
-    using Utils.XmlHelper;
-
     public class ServiceCatalog
     {
         CollectionCFS cfsList;
+        private NetworkElementCollection NetworkElements { get; }
 
-        public ServiceCatalog(List<NetworkElement> networkElements, DataTable serviceTable = null)
+        public ServiceCatalog(NetworkElementCollection networkElements, DataTable serviceTable = null)
         {
+            NetworkElements = networkElements;
             cfsList = new CollectionCFS(serviceTable);
             foreach (NetworkElement netElement in networkElements)
             {
@@ -28,7 +29,7 @@ namespace ProcessFilter.SPA.SC
                     try
                     {
                         XmlDocument document = XmlHelper.LoadXml(neOP.FilePath);
-                        cfsList.Add(document, neOP.NetworkElement);
+                        cfsList.Add(Path.GetFileName(neOP.FilePath), document, neOP.NetworkElement);
                     }
                     catch (Exception ex)
                     {
@@ -44,21 +45,20 @@ namespace ProcessFilter.SPA.SC
 
         public void Save(string exportFilePath)
         {
+            StringBuilder hostsList = new StringBuilder();
+            foreach (string netElem in NetworkElements.AllNetworkElements)
+            {
+                hostsList.Append($"<HostType name=\"{netElem}\" nriType=\"RI\" allowTerminalDeviceType=\"mobile\" description=\"-\" />");
+            }
+
             string res =
-                @"<Configuration markers=""*"" scenarioPrefix=""SC."" mainIdentities=""MSISDN,PersonalAccountNumber,ContractNumber"" SICreation="""" formatVersion=""1"">
-  <HostTypeList />
-  <IdentityList />
-  <AttributeList />
-  <ResourceList />
-  <RFSParameterList />
-  <FlagList />" + cfsList.ToXml() +
-                @"  <CFSGroupList />
-  <RFSGroupList />
-  <RFSDependencyList />
-  <HandlerList />
-  <ScenarioList />
-  <WfmScenarioList />
-</Configuration>";
+                "<Configuration markers=\"*\" scenarioPrefix=\"SC.\" mainIdentities=\"MSISDN,PersonalAccountNumber,ContractNumber\" SICreation=\"\" formatVersion=\"1\">"
+                + "<HostTypeList>" + hostsList.ToString() + "</HostTypeList>" + cfsList.ToXml() +
+                "</Configuration>";
+
+
+            res = RtfFromXml.GetXmlString(res);
+
             using (StreamWriter writer = new StreamWriter($"SC_{DateTime.Now:yyyyMMdd-HHmmss}.xml"))
             {
                 writer.Write(res);
@@ -67,11 +67,11 @@ namespace ProcessFilter.SPA.SC
 
             //File.Create(Path.Combine(exportFilePath, ));
 
-                //XmlDocument document = new XmlDocument();
-                //document.LoadXml(Properties.Resources.Template.ToString());
-                //XPathNavigator navigator = document.CreateNavigator();
-                //navigator.MoveToChild("CFSList", "http://www.contoso.com/books");
-                //navigator.AppendChild()
-            }
+            //XmlDocument document = new XmlDocument();
+            //document.LoadXml(Properties.Resources.Template.ToString());
+            //XPathNavigator navigator = document.CreateNavigator();
+            //navigator.MoveToChild("CFSList", "http://www.contoso.com/books");
+            //navigator.AppendChild()
+        }
     }
 }

@@ -77,7 +77,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SPA\SC\CFS.cs" />
+    <Compile Include="SPA\SC\Resource.cs" />
     <Compile Include="SPA\SC\RFS.cs" />
+    <Compile Include="SPA\SC\RFSGroup.cs" />
     <Compile Include="SPA\SC\ServiceCatalog.cs" />
     <EmbeddedResource Include="ProcessFilterForm.resx">
       <DependentUpon>ProcessFilterForm.cs</DependentUpon>
