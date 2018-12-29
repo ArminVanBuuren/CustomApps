@@ -161,28 +161,40 @@ namespace TFSAssist.Control
 
 
             // если указан фильтр по папке, то найти папку на почте и обрабатывать письмо только из этой папки
-            string findFolder = Settings.MailOption.SourceFolder.Value.Trim();
+            string folderName = Settings.MailOption.SourceFolder.Value.Trim();
             Folder folderFilter = null;
-            if (!findFolder.IsNullOrEmpty())
+            if (!folderName.IsNullOrEmpty())
             {
-                //находим все дочение папки из папки Входящие (Inbox)
-                FindFoldersResults inboxFolders = _exchangeService.FindFolders(WellKnownFolderName.Inbox,
-                                                                               new FolderView(int.MaxValue) {
-                                                                                                                Traversal = FolderTraversal.Deep
-                                                                                                            });
-                if (inboxFolders != null)
+                FindFoldersResults inboxFolders =  _exchangeService.FindFolders(WellKnownFolderName.MsgFolderRoot, new FolderView(int.MaxValue)
                 {
-                    foreach (Folder folder in inboxFolders)
-                    {
-                        if (!folder.DisplayName.Equals(findFolder, StringComparison.CurrentCultureIgnoreCase))
-                            continue;
-                        _exchangeFolder = (folderFilter = folder).Id;
-                        break;
-                    }
+                    Traversal = FolderTraversal.Deep
+                });
+
+                if (GetFolderId(inboxFolders, folderName, out folderFilter))
+                {
+                    _exchangeFolder = folderFilter.Id;
+                }
+                else
+                {
+
                 }
             }
 
-            OnWriteLog($"Successful connected to Mail-server.\r\nSearch in folder {checkConnect.DisplayName}->{folderFilter?.DisplayName}");
+            OnWriteLog($"Successful connected to Mail-server.\r\nSearch in folder {folderFilter?.DisplayName}");
+        }
+
+        static bool GetFolderId(FindFoldersResults inboxFolders, string folderName, out Folder folderOut)
+        {
+            folderOut = null;
+            foreach (Folder folder in inboxFolders)
+            {
+                if (!folder.DisplayName.Equals(folderName, StringComparison.CurrentCultureIgnoreCase))
+                    continue;
+                folderOut = folder;
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
