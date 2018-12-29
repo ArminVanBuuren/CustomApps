@@ -29,7 +29,7 @@ namespace ProcessFilter.SPA.SC
                     try
                     {
                         XmlDocument document = XmlHelper.LoadXml(neOP.FilePath);
-                        cfsList.Add(Path.GetFileName(neOP.FilePath), document, neOP.NetworkElement);
+                        cfsList.Add(neOP.Name, document, neOP.NetworkElement);
                     }
                     catch (Exception ex)
                     {

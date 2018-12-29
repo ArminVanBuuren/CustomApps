@@ -24,52 +24,28 @@ namespace ProcessFilter.SPA.SC
         public void Add(string fileName, XmlDocument document, string hostType)
         {
             string operationName = fileName;
-            if (operationName.StartsWith("Add", StringComparison.CurrentCultureIgnoreCase))
+            foreach (string prefix in new[]{ "Add", "Assign", "Delete", "Del", "Remove", "FR", "CB" })
             {
-                operationName = operationName.Substring(3, operationName.Length - 3);
+                RemovePrefix(ref operationName, prefix);
             }
 
-            if (operationName.StartsWith("Assign", StringComparison.CurrentCultureIgnoreCase))
-            {
-                operationName = operationName.Substring(6, operationName.Length - 6);
-            }
-
-            if (operationName.StartsWith("Delete", StringComparison.CurrentCultureIgnoreCase))
-            {
-                operationName = operationName.Substring(6, operationName.Length - 6);
-            }
-
-            if (operationName.StartsWith("Del", StringComparison.CurrentCultureIgnoreCase))
-            {
-                operationName = operationName.Substring(3, operationName.Length - 3);
-            }
-
-            if (operationName.StartsWith("Remove", StringComparison.CurrentCultureIgnoreCase))
-            {
-                operationName = operationName.Substring(6, operationName.Length - 6);
-            }
-
-            if (operationName.StartsWith("FR", StringComparison.CurrentCultureIgnoreCase))
-            {
-                operationName = operationName.Substring(2, operationName.Length - 2);
-            }
-
-            if (operationName.StartsWith("CB", StringComparison.CurrentCultureIgnoreCase))
-            {
-                operationName = operationName.Substring(2, operationName.Length - 2);
-            }
-
-            if (operationName.EndsWith(".xml", StringComparison.CurrentCultureIgnoreCase))
-            {
-                operationName = operationName.Substring(0, operationName.Length - 4);
-            }
-
-
+            //if (operationName.EndsWith(".xml", StringComparison.CurrentCultureIgnoreCase))
+            //{
+            //    operationName = operationName.Substring(0, operationName.Length - 4);
+            //}
 
             List<string> regList = EvaluateXPath(document, "//RegisteredList/*");
 
             LoadService(operationName, EvaluateXPath(document, "//ProvisionList/*"), regList, hostType);
             LoadService(operationName, EvaluateXPath(document, "//WithdrawalList/*"), regList, hostType);
+        }
+
+        void RemovePrefix(ref string operationName, string prefix)
+        {
+            if (operationName.StartsWith(prefix, StringComparison.CurrentCultureIgnoreCase))
+            {
+                operationName = operationName.Substring(prefix.Length, operationName.Length - prefix.Length);
+            }
         }
 
         public static List<string> EvaluateXPath(XmlDocument document, string xpath)
@@ -115,11 +91,15 @@ namespace ProcessFilter.SPA.SC
                 }
                 else
                 {
-                    if (operationName == "ChangeMSISDNOnSCG")
+                    if (mainCFS == null)
                     {
-
+                        ifExist.AddAddition(hostType, operationName, regList);
+                        mainCFS = ifExist;
                     }
-                    ifExist.AddAddition(hostType, operationName, regList);
+                    else
+                    {
+                        ifExist.AddAddition(hostType, mainCFS, regList);
+                    }
                 }
             }
         }
@@ -269,7 +249,7 @@ namespace ProcessFilter.SPA.SC
             hostOp.AddDependenceService(dependsServices);
         }
 
-        void AddAddition(string hostType, CFS baseCFS, List<string> dependsServices)
+        internal void AddAddition(string hostType, CFS baseCFS, List<string> dependsServices)
         {
             HostOperation hostOp;
             if (!HostOperations.TryGetValue(hostType, out hostOp))
