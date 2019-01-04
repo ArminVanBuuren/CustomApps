@@ -12,13 +12,14 @@ namespace ProcessFilter.SPA.SC
 {
     public class ServiceCatalog
     {
-        CollectionCFS cfsList;
+        CatalogComponents cfsList;
         private NetworkElementCollection NetworkElements { get; }
-
-        public ServiceCatalog(NetworkElementCollection networkElements, DataTable serviceTable = null)
+        private ProgressBarCompetition _progressComp;
+        public ServiceCatalog(NetworkElementCollection networkElements, ProgressBarCompetition progressComp, DataTable serviceTable)
         {
+            _progressComp = progressComp;
             NetworkElements = networkElements;
-            cfsList = new CollectionCFS(serviceTable);
+            cfsList = new CatalogComponents(serviceTable);
             foreach (NetworkElement netElement in networkElements)
             {
                 foreach (NetworkElementOpartion neOP in netElement.Operations)
@@ -26,18 +27,12 @@ namespace ProcessFilter.SPA.SC
                     if (!File.Exists(neOP.FilePath))
                         continue;
 
-                    try
-                    {
-                        XmlDocument document = XmlHelper.LoadXml(neOP.FilePath);
-                        cfsList.Add(neOP.Name, document, neOP.NetworkElement);
-                    }
-                    catch (Exception ex)
-                    {
-                        // ignored
-                    }
+                    XmlDocument document = XmlHelper.LoadXml(neOP.FilePath);
+                    cfsList.Add(neOP.Name, document, neOP.NetworkElement);
                 }
             }
 
+            _progressComp.ProgressValue = 3;
             cfsList.GenerateRFS();
         }
 
@@ -45,6 +40,7 @@ namespace ProcessFilter.SPA.SC
 
         public void Save(string exportFilePath)
         {
+            _progressComp.ProgressValue = 4;
             StringBuilder hostsList = new StringBuilder();
             foreach (string netElem in NetworkElements.AllNetworkElements)
             {
@@ -56,22 +52,15 @@ namespace ProcessFilter.SPA.SC
                 + "<HostTypeList>" + hostsList.ToString() + "</HostTypeList>" + cfsList.ToXml() +
                 "</Configuration>";
 
-
+            _progressComp.ProgressValue = 5;
             res = RtfFromXml.GetXmlString(res);
+            _progressComp.ProgressValue = 6;
 
             using (StreamWriter writer = new StreamWriter($"SC_{DateTime.Now:yyyyMMdd-HHmmss}.xml"))
             {
                 writer.Write(res);
                 writer.Flush();
             }
-
-            //File.Create(Path.Combine(exportFilePath, ));
-
-            //XmlDocument document = new XmlDocument();
-            //document.LoadXml(Properties.Resources.Template.ToString());
-            //XPathNavigator navigator = document.CreateNavigator();
-            //navigator.MoveToChild("CFSList", "http://www.contoso.com/books");
-            //navigator.AppendChild()
         }
     }
 }

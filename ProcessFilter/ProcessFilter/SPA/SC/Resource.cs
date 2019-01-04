@@ -41,5 +41,10 @@ namespace ProcessFilter.SPA.SC
         {
             return $"<Resource name=\"{Name}\" description=\"{Description}\"/>";
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

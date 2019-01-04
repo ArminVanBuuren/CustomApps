@@ -36,5 +36,10 @@ namespace ProcessFilter.SPA.SC
 
             return header + rfsList + "</RFSGroup>";
         }
+
+        public override string ToString()
+        {
+            return $"TYPE=[{Type}];RFS=[{string.Join(",", DependenceRFSList.OrderBy(p => p))}]";
+        }
     }
 }
