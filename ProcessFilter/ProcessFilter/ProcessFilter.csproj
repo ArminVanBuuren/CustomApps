@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EPPlus">
-      <HintPath>E:\DOWNLOADS\Chrome\epplus.4.5.2.1\lib\net40\EPPlus.dll</HintPath>
+      <HintPath>..\ForeignLib\EPPlus.dll</HintPath>
     </Reference>
     <Reference Include="FastColoredTextBox, Version=2.16.23.0, Culture=neutral, PublicKeyToken=fb8aa12b994ef61b, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
