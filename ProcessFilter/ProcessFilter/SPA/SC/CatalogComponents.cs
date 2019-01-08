@@ -5,12 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using Utils.XmlRtfStyle;
 using Utils.XPathHelper;
 
 namespace ProcessFilter.SPA.SC
 {
     public class CatalogComponents
     {
+        private List<HostOperation> _hostOperations = new List<HostOperation>();
         public Dictionary<string, CFS> CollectionCFS { get; } = new Dictionary<string, CFS>();
         public Dictionary<string, RFS> CollectionRFS { get; } = new Dictionary<string, RFS>();
         public Dictionary<string, Resource> CollectionResource { get; } = new Dictionary<string, Resource>();
@@ -37,8 +39,16 @@ namespace ProcessFilter.SPA.SC
 
             BindingServices bindSrv = new BindingServices(document);
 
-            LoadService(operationName, XPathHelper.Execute(document.CreateNavigator(), "//ProvisionList/*"), bindSrv, hostType);
-            LoadService(operationName, XPathHelper.Execute(document.CreateNavigator(), "//WithdrawalList/*"), bindSrv, hostType);
+
+            Dictionary<string, XPathResult> getServices = new Dictionary<string, XPathResult>();
+            AppendServices(getServices, XPathHelper.Execute(document.CreateNavigator(), "//ProvisionList/*"));
+            AppendServices(getServices, XPathHelper.Execute(document.CreateNavigator(), "//WithdrawalList/*"));
+
+            if (getServices.Count > 0)
+            {
+                HostOperation hostOp = new HostOperation(operationName, hostType, RtfFromXml.GetXmlString(document.OuterXml), bindSrv);
+                LoadService(hostOp, getServices, bindSrv);
+            }
         }
 
         void RemovePrefix(ref string operationName, string prefix)
@@ -49,52 +59,46 @@ namespace ProcessFilter.SPA.SC
             }
         }
 
-        void LoadService(string operationName, XPathResultCollection srvCodeList, BindingServices bindSrv, string hostType)
+        static void AppendServices(Dictionary<string, XPathResult> services, XPathResultCollection result)
         {
-            if (srvCodeList == null || srvCodeList.Count == 0)
+            if(result == null || result.Count == 0)
                 return;
-
-            CFS mainCFS = null;
-            foreach (XPathResult srvCode in srvCodeList)
+            foreach (XPathResult res in result)
             {
-                if (srvCode.NodeName.Equals("Include", StringComparison.CurrentCultureIgnoreCase))
+                if (res.NodeName.Equals("Include", StringComparison.CurrentCultureIgnoreCase))
                     continue;
 
-                if (BindingServices.isExistValueType(srvCode, "Restricted"))
+                if (BindingServices.isAttributeContains(res, "Type", "Restricted"))
                     continue;
 
-                CFS ifExist;
-                if (!CollectionCFS.TryGetValue(srvCode.NodeName, out ifExist))
+                if (!services.ContainsKey(res.NodeName))
+                    services.Add(res.NodeName, res);
+            }
+        }
+
+        void LoadService(HostOperation hostOp, Dictionary<string, XPathResult> srvCodeList, BindingServices bindSrv)
+        {
+            foreach (XPathResult srvCode in srvCodeList.Values)
+            {
+                if (!CollectionCFS.TryGetValue(srvCode.NodeName, out CFS getOrCreateCFS))
                 {
                     string description = _getDescription?.Invoke(srvCode.NodeName);
                     description = string.IsNullOrEmpty(description) ? "-" : description;
 
-                    CFS newCFS;
-                    if (mainCFS == null)
-                    {
-                        newCFS = new CFS(srvCode.NodeName, hostType, description, bindSrv, operationName);
-                        mainCFS = newCFS;
-                    }
-                    else
-                    {
-                        newCFS = new CFS(srvCode.NodeName, hostType, description, bindSrv, mainCFS);
-                    }
+                    getOrCreateCFS = new CFS(srvCode.NodeName, description, hostOp);
+                    CollectionCFS.Add(srvCode.NodeName, getOrCreateCFS);
 
-                    CollectionCFS.Add(srvCode.NodeName, newCFS);
+                    hostOp.ChildCFS.Add(getOrCreateCFS);
                 }
                 else
                 {
-                    if (mainCFS == null)
-                    {
-                        ifExist.AddAddition(hostType, operationName, bindSrv);
-                        mainCFS = ifExist;
-                    }
-                    else
-                    {
-                        ifExist.AddAddition(hostType, mainCFS, bindSrv);
-                    }
+                    if (getOrCreateCFS.IsNewHost(hostOp))
+                        hostOp.ChildCFS.Add(getOrCreateCFS);
                 }
             }
+
+            if (hostOp.ChildCFS.Count > 0)
+                _hostOperations.Add(hostOp);
         }
 
 
@@ -115,16 +119,15 @@ namespace ProcessFilter.SPA.SC
 
         public void GenerateRFS()
         {
-            foreach (CFS cfs in CollectionCFS.Values)
+            foreach (HostOperation hostOp in _hostOperations)
             {
-                cfs.GenerateRFS();
+                hostOp.GenerateRFS();
             }
         }
 
         public string ToXml()
         {
             StringBuilder cfsXmlList = new StringBuilder();
-            List<RFS> rfsList = new List<RFS>();
             StringBuilder rfsXmlList = new StringBuilder();
             StringBuilder resourceXmlList = new StringBuilder();
             StringBuilder rfsGroupXmlList = new StringBuilder();
@@ -132,18 +135,20 @@ namespace ProcessFilter.SPA.SC
             foreach (CFS cfs in CollectionCFS.Values)
             {
                 cfsXmlList.Append(cfs.ToXml(this));
-                rfsList.AddRange(cfs.RFSList);
+
+                foreach (RFS rfs in cfs.RFSList)
+                {
+                    if (!CollectionRFS.ContainsKey(rfs.Name))
+                        CollectionRFS.Add(rfs.Name, rfs);
+                }
             }
 
-            foreach (RFS rfs in rfsList.OrderBy(p => p.HostType).ThenBy(x => x.Name))
+            foreach (RFS rfs in CollectionRFS.Values.OrderBy(p => p.HostType).ThenBy(x => x.Name))
             {
-                CollectionRFS.Add(rfs.Name, rfs);
-
                 rfsXmlList.Append(rfs.ToXml());
-                if (rfs.SC_Resource != null)
+                if (rfs.SC_Resource != null && !CollectionResource.ContainsKey(rfs.SC_Resource.Name))
                 {
                     CollectionResource.Add(rfs.SC_Resource.Name, rfs.SC_Resource);
-
                     resourceXmlList.Append(rfs.SC_Resource.ToXml());
                 }
             }

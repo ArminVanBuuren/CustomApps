@@ -81,6 +81,7 @@
     <Compile Include="SPA\SC\CatalogComponents.cs" />
     <Compile Include="SPA\SC\CFS.cs" />
     <Compile Include="SPA\SC\HostOperation.cs" />
+    <Compile Include="SPA\SC\Utils.cs" />
     <Compile Include="SPA\SC\Resource.cs" />
     <Compile Include="SPA\SC\RFS.cs" />
     <Compile Include="SPA\SC\CFSGroup.cs" />

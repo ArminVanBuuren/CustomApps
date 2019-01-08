@@ -10,15 +10,13 @@ namespace ProcessFilter.SPA.SC
     {
         public string Name { get; }
         public string Description { get; }
-        public CFS ParentCFS { get; }
         public HostOperation HostOperation { get; }
 
-        public Resource(CFS parentCFS, HostOperation hostOperation)
+        public Resource(HostOperation hostOperation)
         {
             Name = $"RES_{hostOperation.HostType}_{hostOperation.OperationName}";
-            Description = $"Общий ресурс для услуг - {parentCFS.ServiceCode},{string.Join(",", hostOperation.ChildCFS.Select(p => p.ServiceCode))}";
+            Description = $"Общий ресурс для услуг - {string.Join(",", hostOperation.ChildCFS.Select(p => p.ServiceCode))}";
             HostOperation = hostOperation;
-            ParentCFS = parentCFS;
         }
 
         public string GetBaseCFSResource()

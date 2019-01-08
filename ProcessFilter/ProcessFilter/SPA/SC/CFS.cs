@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -10,62 +11,31 @@ using System.Xml;
 using Utils.XmlRtfStyle;
 
 namespace ProcessFilter.SPA.SC
-{
+{   
     public class CFS
     {
         public string ServiceCode { get; }
         public string Description { get; }
-        internal Dictionary<string, HostOperation> HostOperations = new Dictionary<string, HostOperation>();
+        internal Dictionary<string, List<HostOperation>> HostOperations = new Dictionary<string, List<HostOperation>>();
         public List<RFS> RFSList { get; } = new List<RFS>();
 
-
-        public CFS(string srvCode, string hostType, string description, BindingServices bindSrv, string operationName)
+        public CFS(string srvCode, string description, [NotNull] HostOperation hostOp)
         {
             ServiceCode = srvCode;
             Description = description;
-            AddAddition(hostType, operationName, bindSrv);
+            IsNewHost(hostOp);
         }
 
-        public CFS(string srvCode, string hostType, string description, BindingServices bindSrv, CFS baseCFS)
+        internal bool IsNewHost([NotNull] HostOperation hostOp)
         {
-            ServiceCode = srvCode;
-            Description = description;
-            AddAddition(hostType, baseCFS, bindSrv);
-        }
-
-        internal void AddAddition(string hostType, string operationName, BindingServices bindSrv)
-        {
-            HostOperation hostOp;
-            if (!HostOperations.TryGetValue(hostType, out hostOp))
+            if (HostOperations.TryGetValue(hostOp.HostType, out List<HostOperation> hostOpList))
             {
-                hostOp = new HostOperation(operationName, hostType, bindSrv);
-                HostOperations.Add(hostType, hostOp);
+                hostOpList.Add(hostOp);
+                return false;
             }
-            else
-                hostOp.BindServices.AddRange(bindSrv);
-        }
 
-        internal void AddAddition(string hostType, CFS baseCFS, BindingServices bindSrv)
-        {
-            HostOperation hostOp;
-            if (!HostOperations.TryGetValue(hostType, out hostOp))
-            {
-                HostOperation parentHostOp = baseCFS.HostOperations[hostType];
-                parentHostOp.ChildCFS.Add(this);
-
-                hostOp = new HostOperation(baseCFS, parentHostOp.OperationName, hostType, parentHostOp.ChildCFS.Count + 1, bindSrv);
-                HostOperations.Add(hostType, hostOp);
-            }
-            else
-                hostOp.BindServices.AddRange(bindSrv);
-        }
-
-        public void GenerateRFS()
-        {
-            foreach (KeyValuePair<string, HostOperation> element in HostOperations)
-            {
-                RFSList.Add(element.Value.GenerateRFS(this));
-            }
+            HostOperations.Add(hostOp.HostType, new List<HostOperation> { hostOp });
+            return true;
         }
 
         public string ToXml(CatalogComponents allCompontens)
@@ -78,37 +48,20 @@ namespace ProcessFilter.SPA.SC
                 xmlStrMiddle += rfs.ToXmlCFSChild(allCompontens.CollectionCFS, allCompontens.CollectionRFSGroup);
             }
 
-            if (ServiceCode == "FRPOPMAP")
+
+            List<string> servicesRestrictionInAllHosts = new List<string>();
+            foreach (List<HostOperation> aaa in HostOperations.Values)
             {
-
-            }
-
-            //if (HostOperations.Values.All(p => p.BindServices.RestrictedServices.Count > 0))
-            {
-                StringBuilder allOperationsWithCFS = new StringBuilder();
-                List<string> listOfRestrictedOnCFS = new List<string>();
-
-                var restSrv = HostOperations.Values.Select(p => p.BindServices.RestrictedServices);
-                var intersection = restSrv
-                    .Skip(1)
-                    .Aggregate(new HashSet<string>(restSrv.First()), (h, e) => { h.IntersectWith(e); return h; });
-
-                allCompontens.CollectionMutexCFSGroup.AddCFSGroup(ServiceCode, intersection);
-
-                HashSet<string> xmlBody = new HashSet<string>();
-                foreach (var VARIABLE in HostOperations.Values.Where(p => p.BindServices.RestrictedServices.Count > 0).Select(x => x.BindServices.XML_BODY))
+                foreach (HostOperation bbb in aaa)
                 {
-                    foreach (string VARIABLE2 in VARIABLE)
+                    foreach (string srv in bbb.BindServices.RestrictedServices)
                     {
-                        xmlBody.Add(VARIABLE2);
+                        servicesRestrictionInAllHosts.Add(srv);
                     }
                 }
-
-                allOperationsWithCFS.Append(string.Join("\r\n", xmlBody));
-                string allOperationsWithCFSRes = "<XML>" + allOperationsWithCFS.ToString() + "</XML>";
             }
 
-            
+            allCompontens.CollectionMutexCFSGroup.AddCFSGroup(ServiceCode, servicesRestrictionInAllHosts);
 
             return xmlStrStart + xmlStrMiddle + "</CFS>";
         }

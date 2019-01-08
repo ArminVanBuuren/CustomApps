@@ -8,92 +8,89 @@ namespace ProcessFilter.SPA.SC
 {
     public class RFS
     {
-        public string Name => $"RFS_{HostType}_{MainHostOperation.OperationName}";
-        public CFS ParentCFS { get; }
+        private int _index;
+        public string Name
+        {
+            get
+            {
+                if (_index > 0)
+                    return $"RFS_{MainHostOperation.ToString()}_{(_index <= 9 ? "0" + _index : _index.ToString())}";
+                return $"RFS_{MainHostOperation.ToString()}";
+            }
+        }
+
         public string HostType => MainHostOperation.HostType;
+        public CFS ParentCFS { get; }
         HostOperation MainHostOperation { get; }
         public Resource SC_Resource { get; }
-        public RFS(CFS parentCFS, HostOperation hostOp)
+        public RFS(CFS parentCFS, HostOperation hostOp, Resource resource = null, int index = -1)
         {
             ParentCFS = parentCFS;
             MainHostOperation = hostOp;
-
-            if (MainHostOperation.ChildCFS.Count > 0)
-            {
-                SC_Resource = new Resource(parentCFS, hostOp);
-            }
+            SC_Resource = resource;
+            _index = index;
         }
 
         public string ToXmlCFSChild(Dictionary<string, CFS> allCFSs, Dictionary<string, RFSGroup> allRfsGroup)
         {
-            string currentRFSName = Name;
-            if (MainHostOperation.ChildCFS.Count > 0)
-                currentRFSName = $"{currentRFSName}_01";
-
             if (MainHostOperation.BindServices.DependenceServices.Count > 0)
             {
                 HashSet<string> RFSDeps = new HashSet<string>();
                 foreach (string depSrv in MainHostOperation.BindServices.DependenceServices)
                 {
-                    if (!allCFSs.TryGetValue(depSrv, out var getDepCFS))
+                    if (!allCFSs.TryGetValue(depSrv, out CFS getDepCFS))
                         continue;
 
-                    HostOperation getHostOp;
-                    if (!getDepCFS.HostOperations.TryGetValue(HostType, out getHostOp))
+                    RFS getExistRFS = getDepCFS.RFSList.FirstOrDefault(p => p.HostType == HostType);
+                    if (getExistRFS == null)
                         continue;
 
-                    if (getHostOp.BaseCFS != null && getHostOp.BaseCFS.HostOperations.TryGetValue(HostType, out HostOperation hostOp))
+                    if (getExistRFS._index > 0)
                     {
-                        RFSDeps.Add(hostOp.SC_RFS.Name + "_BASE");
+                        RFSDeps.Add($"RFS_{getExistRFS.MainHostOperation.ToString()}_BASE");
                     }
                     else
                     {
-                        if (getHostOp.ChildCFS.Count > 0)
-                        {
-                            RFSDeps.Add(getHostOp.SC_RFS.Name + "_BASE");
-                            continue;
-                        }
-                        RFSDeps.Add(getHostOp.SC_RFS.Name);
+                        RFSDeps.Add(getExistRFS.Name);
                     }
                 }
 
                 if (RFSDeps.Count == 1)
                 {
-                    return $"<RFS name=\"{currentRFSName}\" linkType=\"Add\" dependsOn=\"{RFSDeps.First()}\" />";
+                    return $"<RFS name=\"{Name}\" linkType=\"Add\" dependsOn=\"{RFSDeps.First()}\" />";
                 }
                 else if (RFSDeps.Count > 1)
                 {
                     RFSGroup newRFSGroup = new RFSGroup(MainHostOperation.BindServices.DependenceType, RFSDeps);
                     string rfsGroupID = newRFSGroup.ToString();
-                    if (allRfsGroup.TryGetValue(rfsGroupID, out var ifExist))
+                    if (allRfsGroup.TryGetValue(rfsGroupID, out RFSGroup ifExist))
                     {
-                        return $"<RFS name=\"{currentRFSName}\" linkType=\"Add\" dependsOn=\"{ifExist.Name}\" />";
+                        return $"<RFS name=\"{Name}\" linkType=\"Add\" dependsOn=\"{ifExist.Name}\" />";
                     }
 
                     allRfsGroup.Add(rfsGroupID, newRFSGroup);
-                    return $"<RFS name=\"{currentRFSName}\" linkType=\"Add\" dependsOn=\"{newRFSGroup.Name}\" />";
+                    return $"<RFS name=\"{Name}\" linkType=\"Add\" dependsOn=\"{newRFSGroup.Name}\" />";
                 }
             }
 
-            return $"<RFS name=\"{currentRFSName}\" linkType=\"Add\" />";
+            return $"<RFS name=\"{Name}\" linkType=\"Add\" />";
         }
 
         public string ToXml()
         {
-            //если CFS является базовым
-            if (MainHostOperation.ChildCFS.Count > 0)
+            //если в хосте операции несколько RFS
+            if (_index > 0)
             {
-                return $"<RFS name=\"{Name}_BASE\" hostType=\"{HostType}\" description=\"Базовая RFS\">" + SC_Resource.GetBaseCFSResource() + "</RFS>" +
-                       $"<RFS name=\"{Name}_01\" base=\"{Name}_BASE\" hostType=\"{HostType}\" description=\"{ParentCFS.Description}\">" 
-                       + SC_Resource.GetChildCFSResource(ParentCFS.ServiceCode) + "</RFS>";
-            }
+                string currentRFS = $"<RFS name=\"{Name}\" base=\"RFS_{MainHostOperation.ToString()}_BASE\" hostType=\"{HostType}\" description=\"{ParentCFS.Description}\">" + SC_Resource.GetChildCFSResource(ParentCFS.ServiceCode) + "</RFS>";
 
-            //если CFS не является базовым
-            if (MainHostOperation.BaseCFS != null && MainHostOperation.BaseCFS.HostOperations.TryGetValue(HostType, out var baseHostOp))
-            {
-                return
-                    $"<RFS name=\"{Name}\" base=\"RFS_{HostType}_{baseHostOp.OperationName}_BASE\" hostType=\"{HostType}\" description=\"{ParentCFS.Description}\">" +
-                    baseHostOp.SC_RFS.SC_Resource.GetChildCFSResource(ParentCFS.ServiceCode) + "</RFS>";
+                if (_index == 1)
+                {
+                    return $"<RFS name=\"RFS_{MainHostOperation.ToString()}_BASE\" hostType=\"{HostType}\" description=\"Базовая RFS\">" + SC_Resource.GetBaseCFSResource() + "</RFS>" + currentRFS;
+                }
+                else
+                {
+                    return currentRFS;
+                }
             }
 
             return $"<RFS name=\"{Name}\" hostType=\"{HostType}\" description=\"{ParentCFS.Description}\" />";

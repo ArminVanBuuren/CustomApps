@@ -12,7 +12,6 @@ namespace ProcessFilter.SPA.SC
 {
     public class BindingServices
     {
-        public List<string> XML_BODY { get; } = new List<string>();
         public HashSet<string> DependenceServices { get; } = new HashSet<string>();
         public HashSet<string> RestrictedServices { get; } = new HashSet<string>();
         public string DependenceType { get; private set; } = "Any";
@@ -22,39 +21,44 @@ namespace ProcessFilter.SPA.SC
         {
             XPathNavigator navigator = document.CreateNavigator();
             XPathResultCollection getServices = XPathHelper.Execute(document.CreateNavigator(), "//RegisteredList/*");
+            XPathResultCollection getHaltMode = XPathHelper.Execute(document.CreateNavigator(), "//RegisteredList/@HaltMode");
+            bool isDependency = getHaltMode != null && getHaltMode.Count != 0 && (getHaltMode.First().Value.Equals("CancelOperation"));
+            
 
             if (getServices != null)
             {
                 foreach (XPathResult srv in getServices)
                 {
-                    if (isExistValueType(srv, "Restricted"))
+                    if (srv.NodeName.Equals("Include", StringComparison.CurrentCultureIgnoreCase))
+                        continue;
+
+                    if (isAttributeContains(srv, "Type", "Restricted"))
                     {
                         RestrictedServices.Add(srv.NodeName);
                         continue;
                     }
-                    else if (isExistValueType(srv, "Mandatory"))
+                    else if (isAttributeContains(srv, "Type", "Mandatory"))
                     {
                         DependenceType = "All";
                     }
 
-                    if (!srv.NodeName.Equals("Include", StringComparison.CurrentCultureIgnoreCase))
+                    
+                    if (isDependency || isAttributeContains(srv, "HaltMode", "CancelOperation"))
+                    {
                         DependenceServices.Add(srv.NodeName);
+                    }
                 }
             }
-
-
-            if (RestrictedServices.Count > 0 || DependenceServices.Count > 0)
-                XML_BODY.Add(RtfFromXml.GetXmlString(document.OuterXml));
         }
 
 
-        public static bool isExistValueType(XPathResult xmlResult, string typeValue)
+        public static bool isAttributeContains(XPathResult xmlResult, string attributeName, string typeValue)
         {
             if (xmlResult.Node.Attributes != null)
             {
                 foreach (XmlAttribute attr in xmlResult.Node.Attributes)
                 {
-                    if (attr.Name.Equals("Type", StringComparison.CurrentCultureIgnoreCase))
+                    if (attr.Name.Equals(attributeName, StringComparison.CurrentCultureIgnoreCase))
                     {
                         if (attr.Value.Equals(typeValue, StringComparison.CurrentCultureIgnoreCase))
                         {
@@ -82,8 +86,6 @@ namespace ProcessFilter.SPA.SC
             {
                 RestrictedServices.Add(serviceCode);
             }
-
-            XML_BODY.AddRange(bindServ.XML_BODY);
         }
 
         public override string ToString()
