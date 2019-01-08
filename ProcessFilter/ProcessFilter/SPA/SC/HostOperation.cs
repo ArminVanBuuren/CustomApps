@@ -13,7 +13,7 @@ namespace ProcessFilter.SPA.SC
         public string XML_BODY { get; }
         public List<CFS> ChildCFS { get; } = new List<CFS>();
         public BindingServices BindServices { get; }
-
+        
         public HostOperation(string opName, string hostType, string xmlBody, BindingServices bindServ)
         {
             OperationName = opName;

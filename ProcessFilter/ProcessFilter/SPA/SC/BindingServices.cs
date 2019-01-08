@@ -22,8 +22,11 @@ namespace ProcessFilter.SPA.SC
             XPathNavigator navigator = document.CreateNavigator();
             XPathResultCollection getServices = XPathHelper.Execute(document.CreateNavigator(), "//RegisteredList/*");
             XPathResultCollection getHaltMode = XPathHelper.Execute(document.CreateNavigator(), "//RegisteredList/@HaltMode");
-            bool isDependency = getHaltMode != null && getHaltMode.Count != 0 && (getHaltMode.First().Value.Equals("CancelOperation"));
-            
+            XPathResultCollection getType = XPathHelper.Execute(document.CreateNavigator(), "//RegisteredList/@Type");
+            bool isDependency = getHaltMode != null && getHaltMode.Count > 0 && (getHaltMode.First().Value.Equals("CancelOperation", StringComparison.CurrentCultureIgnoreCase));
+            bool isAny = getType != null && getType.Count > 0 && getType.First().Value.Equals("AnyOfListed", StringComparison.CurrentCultureIgnoreCase);
+
+
 
             if (getServices != null)
             {
@@ -37,7 +40,7 @@ namespace ProcessFilter.SPA.SC
                         RestrictedServices.Add(srv.NodeName);
                         continue;
                     }
-                    else if (isAttributeContains(srv, "Type", "Mandatory"))
+                    else if (!isAny && isAttributeContains(srv, "Type", "Mandatory"))
                     {
                         DependenceType = "All";
                     }

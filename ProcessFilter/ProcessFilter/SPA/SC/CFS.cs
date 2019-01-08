@@ -11,12 +11,13 @@ using System.Xml;
 using Utils.XmlRtfStyle;
 
 namespace ProcessFilter.SPA.SC
-{   
+{
     public class CFS
     {
         public string ServiceCode { get; }
         public string Description { get; }
-        internal Dictionary<string, List<HostOperation>> HostOperations = new Dictionary<string, List<HostOperation>>();
+        Dictionary<string, List<HostOperation>> hostOperations = new Dictionary<string, List<HostOperation>>();
+        public HostOperation CombineHostOperation { get; private set; }
         public List<RFS> RFSList { get; } = new List<RFS>();
 
         public CFS(string srvCode, string description, [NotNull] HostOperation hostOp)
@@ -28,13 +29,13 @@ namespace ProcessFilter.SPA.SC
 
         internal bool IsNewHost([NotNull] HostOperation hostOp)
         {
-            if (HostOperations.TryGetValue(hostOp.HostType, out List<HostOperation> hostOpList))
+            if (hostOperations.TryGetValue(hostOp.HostType, out List<HostOperation> hostOpList))
             {
                 hostOpList.Add(hostOp);
                 return false;
             }
 
-            HostOperations.Add(hostOp.HostType, new List<HostOperation> { hostOp });
+            hostOperations.Add(hostOp.HostType, new List<HostOperation> { hostOp });
             return true;
         }
 
@@ -48,9 +49,8 @@ namespace ProcessFilter.SPA.SC
                 xmlStrMiddle += rfs.ToXmlCFSChild(allCompontens.CollectionCFS, allCompontens.CollectionRFSGroup);
             }
 
-
-            List<string> servicesRestrictionInAllHosts = new List<string>();
-            foreach (List<HostOperation> aaa in HostOperations.Values)
+            HashSet<string> servicesRestrictionInAllHosts = new HashSet<string>();
+            foreach (List<HostOperation> aaa in hostOperations.Values)
             {
                 foreach (HostOperation bbb in aaa)
                 {

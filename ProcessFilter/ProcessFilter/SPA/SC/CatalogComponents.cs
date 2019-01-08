@@ -37,8 +37,9 @@ namespace ProcessFilter.SPA.SC
                 RemovePrefix(ref operationName, prefix);
             }
 
-            BindingServices bindSrv = new BindingServices(document);
+            operationName = operationName.Replace(" ", "");
 
+            BindingServices bindSrv = new BindingServices(document);
 
             Dictionary<string, XPathResult> getServices = new Dictionary<string, XPathResult>();
             AppendServices(getServices, XPathHelper.Execute(document.CreateNavigator(), "//ProvisionList/*"));
@@ -78,6 +79,7 @@ namespace ProcessFilter.SPA.SC
 
         void LoadService(HostOperation hostOp, Dictionary<string, XPathResult> srvCodeList, BindingServices bindSrv)
         {
+            Dictionary<HostOperation, List<RFS>> resHostOp = new Dictionary<HostOperation, List<RFS>>();
             foreach (XPathResult srvCode in srvCodeList.Values)
             {
                 if (!CollectionCFS.TryGetValue(srvCode.NodeName, out CFS getOrCreateCFS))
