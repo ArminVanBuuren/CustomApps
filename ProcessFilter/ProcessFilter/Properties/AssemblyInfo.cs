@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("SPAFilter")]
 [assembly: AssemblyDescription("SPA process filter")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Khovanskiy")]
+[assembly: AssemblyCompany("Valdimir Khovanskiy")]
 [assembly: AssemblyProduct("SPAFilter")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
