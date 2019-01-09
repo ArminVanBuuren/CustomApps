@@ -49,7 +49,9 @@
     <Compile Include="AsyncHelper\AbortableBackgroundWorker.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="CustomProgressBar.cs">
+    <Compile Include="CustomProgressBar\ProgressBarCompetition.cs" />
+    <Compile Include="CustomProgressBar\ProgressBarUtils.cs" />
+    <Compile Include="CustomProgressBar\ProgressBarWithPercent.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DataGridViewHelper\DGVEnhancer.cs" />

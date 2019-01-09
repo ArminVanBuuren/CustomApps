@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Utils.WinForm
+namespace Utils.WinForm.CustomProgressBar
 {
     public enum ProgressBarDisplayText
     {
@@ -10,7 +10,7 @@ namespace Utils.WinForm
         CustomText
     }
 
-    public class CustomProgressBar : ProgressBar
+    public class ProgressBarWithPercent : ProgressBar
     {
         //Property to set to decide whether to print a % or Text
         public ProgressBarDisplayText DisplayStyle { get; set; }
@@ -18,7 +18,7 @@ namespace Utils.WinForm
         //Property to hold the custom text
         public String CustomText { get; set; }
 
-        public CustomProgressBar()
+        public ProgressBarWithPercent()
         {
             // Modify the ControlStyles flags
             //http://msdn.microsoft.com/en-us/library/system.windows.forms.controlstyles.aspx
