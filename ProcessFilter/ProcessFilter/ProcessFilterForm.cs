@@ -29,8 +29,6 @@ using ProcessFilter.SPA.SC;
 
 namespace ProcessFilter
 {
-    
-
     [Serializable]
     public partial class ProcessFilterForm : Form, ISerializable
     {
@@ -42,7 +40,6 @@ namespace ProcessFilter
         public CollectionScenarios Scenarios { get; private set; }
         public CollectionCommands Commands { get; private set; }
         private object sync = new object();
-        private Timer _timerGC;
         private bool IsInitialization { get; } = true;
 
         public ProcessFilterForm()
@@ -54,10 +51,6 @@ namespace ProcessFilter
         {
             SaveFile();
         }
-        //private void _timerCollect(object sender, System.Timers.ElapsedEventArgs e)
-        //{
-        //    SaveFile();
-        //}
 
         void SaveFile()
         {
@@ -142,13 +135,6 @@ namespace ProcessFilter
 
             dataGridScenariosResult.CellFormatting += DataGridScenariosResult_CellFormatting;
             this.Closing += ProcessFilterForm_Closing;
-
-            //_timerGC = new Timer
-            //           {
-            //               Interval = 5 * 1000
-            //           };
-            //_timerGC.Elapsed += _timerCollect;
-            //_timerGC.Start();
         }
 
 
@@ -159,11 +145,6 @@ namespace ProcessFilter
                 buttonFilterClick(this, EventArgs.Empty);
             }
         }
-
-
-
-        
-
 
         private void buttonFilterClick(object sender, EventArgs e)
         {
@@ -195,19 +176,20 @@ namespace ProcessFilter
             }
         }
 
-        CollectionBusinessProcess filteredBPCollection;
-        NetworkElementCollection filteredNetElemCollection;
-        CollectionScenarios filteredScenarioCollection = new CollectionScenarios();
-        CollectionCommands filteredCMMCollection = new CollectionCommands();
-        List<Scenario> filteredSubScenarios = new List<Scenario>();
+        CollectionBusinessProcess _filteredProcessCollection;
+        NetworkElementCollection _filteredNetElemCollection;
+        CollectionScenarios _filteredScenarioCollection = new CollectionScenarios();
+        List<Scenario> _filteredSubScenarios = new List<Scenario>();
+        CollectionCommands _filteredCMMCollection = new CollectionCommands();
+        
 
         bool DataFilter(ProgressBarCompetition<bool> progressComp)
         {
             try
             {
-                filteredScenarioCollection = new CollectionScenarios();
-                filteredCMMCollection = new CollectionCommands();
-                filteredSubScenarios = new List<Scenario>();
+                _filteredScenarioCollection = new CollectionScenarios();
+                _filteredCMMCollection = new CollectionCommands();
+                _filteredSubScenarios = new List<Scenario>();
 
                 string processFilter = null, netElemFilter = null, operFilter = null;
                 progressBar.Invoke(new MethodInvoker(delegate
@@ -220,18 +202,18 @@ namespace ProcessFilter
 
                 if (!processFilter.IsNullOrEmpty())
                 {
-                    filteredBPCollection = new CollectionBusinessProcess();
+                    _filteredProcessCollection = new CollectionBusinessProcess();
                     IEnumerable<BusinessProcess> getCollection;
                     if (processFilter[0] == '%' || processFilter[processFilter.Length - 1] == '%')
                         getCollection = Processes.Where(p => p.Name.IndexOf(processFilter.Replace("%", ""), StringComparison.CurrentCultureIgnoreCase) != -1);
                     else
                         getCollection = Processes.Where(p => p.Name.Equals(processFilter, StringComparison.CurrentCultureIgnoreCase));
 
-                    filteredBPCollection.AddRange(getCollection);
+                    _filteredProcessCollection.AddRange(getCollection);
                 }
                 else
                 {
-                    filteredBPCollection = Processes.Clone();
+                    _filteredProcessCollection = Processes.Clone();
                 }
 
 
@@ -239,24 +221,24 @@ namespace ProcessFilter
 
                 if (!netElemFilter.IsNullOrEmpty())
                 {
-                    filteredNetElemCollection = new NetworkElementCollection();
+                    _filteredNetElemCollection = new NetworkElementCollection();
                     IEnumerable<NetworkElement> getCollection;
                     if (netElemFilter[0] == '%' || netElemFilter[netElemFilter.Length - 1] == '%')
                         getCollection = NetElements.Elements.Where(p => p.Name.IndexOf(netElemFilter.Replace("%", ""), StringComparison.CurrentCultureIgnoreCase) != -1);
                     else
                         getCollection = NetElements.Elements.Where(p => p.Name.Equals(netElemFilter, StringComparison.CurrentCultureIgnoreCase));
 
-                    filteredNetElemCollection.AddRange(getCollection.Select(netElem => netElem.Clone()));
+                    _filteredNetElemCollection.AddRange(getCollection.Select(netElem => netElem.Clone()));
                 }
                 else
                 {
-                    filteredNetElemCollection = NetElements.Elements.Clone();
+                    _filteredNetElemCollection = NetElements.Elements.Clone();
                 }
 
-                if (!operFilter.IsNullOrEmpty() && filteredNetElemCollection != null)
+                if (!operFilter.IsNullOrEmpty() && _filteredNetElemCollection != null)
                 {
                     NetworkElementCollection netElemCollection2 = new NetworkElementCollection();
-                    foreach (NetworkElement nec in filteredNetElemCollection)
+                    foreach (NetworkElement nec in _filteredNetElemCollection)
                     {
                         List<NetworkElementOpartion> ops = new List<NetworkElementOpartion>();
                         foreach (NetworkElementOpartion neo in nec.Operations)
@@ -283,32 +265,32 @@ namespace ProcessFilter
                             netElemCollection2.Add(fileteredElementAndOps);
                         }
                     }
-                    filteredNetElemCollection = netElemCollection2;
+                    _filteredNetElemCollection = netElemCollection2;
                 }
 
 
                 progressComp.ProgressValue = 3;
 
-                int endOfBpCollection = filteredBPCollection.Count;
+                int endOfBpCollection = _filteredProcessCollection.Count;
                 for (int i = 0; i < endOfBpCollection; i++)
                 {
-                    XmlDocument document = XmlHelper.LoadXml(filteredBPCollection[i].FilePath, true);
+                    XmlDocument document = XmlHelper.LoadXml(_filteredProcessCollection[i].FilePath, true);
                     if (document != null)
                     {
-                        filteredBPCollection[i].AddBodyOperations(document);
+                        _filteredProcessCollection[i].AddBodyOperations(document);
                         //bool hasMatch = bpCollection[i].Operations.Any(x => netElemCollection.AllOperationsName.Any(y => x.IndexOf(y, StringComparison.CurrentCultureIgnoreCase) != -1));
-                        bool hasMatch = filteredBPCollection[i].Operations.Any(x => filteredNetElemCollection.AllOperationsName.Any(y => x.Equals(y, StringComparison.CurrentCultureIgnoreCase)));
+                        bool hasMatch = _filteredProcessCollection[i].Operations.Any(x => _filteredNetElemCollection.AllOperationsName.Any(y => x.Equals(y, StringComparison.CurrentCultureIgnoreCase)));
 
                         if (!hasMatch)
                         {
-                            filteredBPCollection.Remove(filteredBPCollection[i]);
+                            _filteredProcessCollection.Remove(_filteredProcessCollection[i]);
                             i--;
                             endOfBpCollection--;
                         }
                     }
                     else
                     {
-                        filteredBPCollection.Remove(filteredBPCollection[i]);
+                        _filteredProcessCollection.Remove(_filteredProcessCollection[i]);
                         i--;
                         endOfBpCollection--;
                     }
@@ -328,8 +310,8 @@ namespace ProcessFilter
                                       {
                                           if (scenario.AddBodyCommands())
                                           {
-                                              filteredScenarioCollection.Add(scenario);
-                                              filteredSubScenarios.AddRange(scenario.SubScenarios);
+                                              _filteredScenarioCollection.Add(scenario);
+                                              _filteredSubScenarios.AddRange(scenario.SubScenarios);
                                           }
                                       }
                                   };
@@ -338,12 +320,12 @@ namespace ProcessFilter
 
                 progressComp.ProgressValue = 5;
 
-                foreach (var netElem in filteredNetElemCollection)
+                foreach (var netElem in _filteredNetElemCollection)
                 {
                     int endOfOpCollection = netElem.Operations.Count;
                     for (int i = 0; i < endOfOpCollection; i++)
                     {
-                        bool hasMatch = filteredBPCollection.Any(x => x.Operations.Any(y => netElem.Operations[i].Name.Equals(y, StringComparison.CurrentCultureIgnoreCase)));
+                        bool hasMatch = _filteredProcessCollection.Any(x => x.Operations.Any(y => netElem.Operations[i].Name.Equals(y, StringComparison.CurrentCultureIgnoreCase)));
 
                         if (hasMatch)
                         {
@@ -359,14 +341,14 @@ namespace ProcessFilter
 
                 progressComp.ProgressValue = 6;
 
-                if (Commands != null && filteredScenarioCollection.Count > 0)
+                if (Commands != null && _filteredScenarioCollection.Count > 0)
                 {
                     foreach (Command command in Commands)
                     {
-                        bool hasValue = filteredScenarioCollection.Any(x => x.Commands.Any(y => y.Equals(command.Name, StringComparison.CurrentCultureIgnoreCase)));
+                        bool hasValue = _filteredScenarioCollection.Any(x => x.Commands.Any(y => y.Equals(command.Name, StringComparison.CurrentCultureIgnoreCase)));
                         if (hasValue)
                         {
-                            filteredCMMCollection.Add(command);
+                            _filteredCMMCollection.Add(command);
                         }
                     }
                 }
@@ -374,26 +356,26 @@ namespace ProcessFilter
 
                 progressComp.ProgressValue = 7;
 
-                filteredSubScenarios = filteredSubScenarios.Distinct(new ItemEqualityComparer()).ToList();
-                filteredScenarioCollection.AddRange(filteredSubScenarios);
+                _filteredSubScenarios = _filteredSubScenarios.Distinct(new ItemEqualityComparer()).ToList();
+                _filteredScenarioCollection.AddRange(_filteredSubScenarios);
 
 
                 progressBar.Invoke(new MethodInvoker(delegate
                                                      {
                                                          progressComp.ProgressValue = 8;
-                                                         dataGridProcessesResults.AssignListToDataGrid(filteredBPCollection, new Padding(0, 0, 15, 0));
-                                                         ProcessStatRefresh(filteredBPCollection);
+                                                         dataGridProcessesResults.AssignListToDataGrid(_filteredProcessCollection, new Padding(0, 0, 15, 0));
+                                                         ProcessStatRefresh(_filteredProcessCollection);
 
-                                                         dataGridOperationsResult.AssignListToDataGrid(filteredNetElemCollection.AllOperations, new Padding(0, 0, 15, 0));
-                                                         NEStatRefresh(filteredNetElemCollection);
-                                                         OperationsStatRefresh(filteredNetElemCollection);
+                                                         dataGridOperationsResult.AssignListToDataGrid(_filteredNetElemCollection.AllOperations, new Padding(0, 0, 15, 0));
+                                                         NEStatRefresh(_filteredNetElemCollection);
+                                                         OperationsStatRefresh(_filteredNetElemCollection);
 
                                                          progressComp.ProgressValue = 9;
-                                                         dataGridScenariosResult.AssignListToDataGrid(filteredScenarioCollection, new Padding(0, 0, 15, 0));
-                                                         ScenariosStatRefresh(filteredScenarioCollection);
+                                                         dataGridScenariosResult.AssignListToDataGrid(_filteredScenarioCollection, new Padding(0, 0, 15, 0));
+                                                         ScenariosStatRefresh(_filteredScenarioCollection);
 
-                                                         dataGridCommandsResult.AssignListToDataGrid(filteredCMMCollection, new Padding(0, 0, 15, 0));
-                                                         CommandsStatRefresh(filteredCMMCollection);
+                                                         dataGridCommandsResult.AssignListToDataGrid(_filteredCMMCollection, new Padding(0, 0, 15, 0));
+                                                         CommandsStatRefresh(_filteredCMMCollection);
                                                          progressComp.ProgressValue = 10;
                                                      }));
                 return true;
@@ -562,7 +544,10 @@ namespace ProcessFilter
         void CheckProcessesPath(string prcsPath, bool saveLastSett = false)
         {
             string lastSettProcess = saveLastSett ? ProcessesComboBox.Text : null;
-            if(Directory.Exists(prcsPath.Trim(' ')))
+            Processes?.Clear();
+            _filteredProcessCollection?.Clear();
+
+            if (Directory.Exists(prcsPath.Trim(' ')))
             {
                 UpdateLastPath(prcsPath.Trim(' '));
                 Processes = new CollectionBusinessProcess(prcsPath.Trim(' '));
@@ -599,6 +584,8 @@ namespace ProcessFilter
         {
             string lastSettNetSett = saveLastSett ? NetSettComboBox.Text : null;
             string lastSettOper = saveLastSett ? OperationComboBox.Text : null;
+            NetElements?.Elements?.Clear();
+            _filteredNetElemCollection?.Clear();
 
             if (Directory.Exists(opPath.Trim(' ')))
             {   
@@ -649,6 +636,10 @@ namespace ProcessFilter
         }
         void CheckScenariosPath(string scoPath)
         {
+            Scenarios?.Clear();
+            _filteredScenarioCollection?.Clear();
+            _filteredSubScenarios?.Clear();
+
             if (Directory.Exists(scoPath.Trim(' ')))
             {
                 UpdateLastPath(scoPath.Trim(' '));
@@ -678,6 +669,9 @@ namespace ProcessFilter
         }
         void CheckCommandsPath(string cmmPath)
         {
+            Commands?.Clear();
+            _filteredCMMCollection?.Clear();
+
             if (Directory.Exists(cmmPath.Trim(' ')))
             {
                 UpdateLastPath(cmmPath.Trim(' '));
@@ -765,9 +759,9 @@ namespace ProcessFilter
                 DataTable serviceTable = GetServiceXslx();
                 progressComp.ProgressValue = 2;
 
-                if (filteredNetElemCollection != null)
-                    sc = new ServiceCatalog(filteredNetElemCollection, progressComp, serviceTable);
-                else if (NetElements?.Elements != null)
+                if (_filteredNetElemCollection != null && _filteredNetElemCollection.Count > 0)
+                    sc = new ServiceCatalog(_filteredNetElemCollection, progressComp, serviceTable);
+                else if (NetElements?.Elements != null && NetElements?.Elements.Count > 0)
                     sc = new ServiceCatalog(NetElements.Elements, progressComp, serviceTable);
 
                 return sc?.Save(ExportSCPath.Text);
