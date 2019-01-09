@@ -10,7 +10,7 @@ namespace ProcessFilter.SPA.SC
     public class CFSGroups : SComponentBase
     {
         public Dictionary<string, List<string>> _tempCFSGroupCollection { get; } = new Dictionary<string, List<string>>();
-        public Dictionary<string, List<string>> CFSGroupCollection { get; private set; }
+        public Dictionary<string, IEnumerable<string>> CFSGroupCollection { get; private set; }
 
         protected internal void AddCFSGroup(string mainCFS, IEnumerable<string> listRestrictedCFS)
         {
@@ -28,7 +28,7 @@ namespace ProcessFilter.SPA.SC
             StringBuilder cfsGroupsStr = new StringBuilder();
             CFSGroupCollection = Calculate(_tempCFSGroupCollection);
 
-            foreach (KeyValuePair<string, List<string>> cfsGroup in CFSGroupCollection)
+            foreach (KeyValuePair<string, IEnumerable<string>> cfsGroup in CFSGroupCollection)
             {
                 cfsGroupsStr.Append(GetCFSGroupString(cfsGroup.Key, cfsGroup.Value));
             }
@@ -36,7 +36,7 @@ namespace ProcessFilter.SPA.SC
             return cfsGroupsStr.ToString();
         }
 
-        static string GetCFSGroupString(string name, List<string> cfsList)
+        static string GetCFSGroupString(string name, IEnumerable<string> cfsList)
         {
             StringBuilder cfsGroupStr = new StringBuilder();
             string header = $"<CFSGroup name=\"{name}\" type=\"Mutex\" description=\"Группа взаимоисключающих услуг\">";
@@ -50,7 +50,7 @@ namespace ProcessFilter.SPA.SC
         }
 
 
-        Dictionary<string, List<string>> Calculate(Dictionary<string, List<string>> allList)
+        Dictionary<string, IEnumerable<string>> Calculate(Dictionary<string, List<string>> allList)
         {
             Dictionary<string, Dictionary<string, bool>> filtered = new Dictionary<string, Dictionary<string, bool>>();
             foreach (List<string> cfsRestrList in allList.Values)
@@ -87,20 +87,20 @@ namespace ProcessFilter.SPA.SC
                 }
             }
 
-            Dictionary<string, List<string>> filtered3 = new Dictionary<string, List<string>>();
+            Dictionary<string, IEnumerable<string>> filtered3 = new Dictionary<string, IEnumerable<string>>();
             foreach (KeyValuePair<string, List<string>> filt1 in filtered2)
             {
                 foreach (KeyValuePair<string, List<string>> filt2 in filtered2)
                 {
                     if (filt1.Key != filt2.Key)
                     {
-                        List<string> intersectCFS = filt1.Value.ToList().Intersect(filt2.Value.ToList()).OrderBy(p => p).ToList();
+                        IOrderedEnumerable<string> intersectCFS = filt1.Value.Intersect(filt2.Value).OrderBy(p => p);
                         string getKey = string.Join(":", intersectCFS);
-                        if (intersectCFS.Count == 1 && !filtered3.ContainsKey(filt1.Key))
+                        if (intersectCFS.Count() == 1 && !filtered3.ContainsKey(filt1.Key))
                         {
-                            filtered3.Add(filt1.Key, filt1.Value);
+                            filtered3.Add(filt1.Key, (IEnumerable<string>)filt1.Value);
                         }
-                        else if (!filtered3.ContainsKey(getKey) && intersectCFS.Count > 1)
+                        else if (!filtered3.ContainsKey(getKey) && intersectCFS.Count() > 1)
                         {
                             filtered3.Add(getKey, intersectCFS);
                         }
@@ -110,14 +110,14 @@ namespace ProcessFilter.SPA.SC
 
             int i = 0;
             filtered3 = filtered3.OrderByDescending(x => x.Key.Length).ToDictionary(x => x.Key, x => x.Value);
-            Dictionary<string, List<string>> filtered4 = new Dictionary<string, List<string>>();
-            foreach (KeyValuePair<string, List<string>> dd in filtered3)
+            Dictionary<string, IEnumerable<string>> filtered4 = new Dictionary<string, IEnumerable<string>>();
+            foreach (KeyValuePair<string, IEnumerable<string>> dd in filtered3)
             {
                 bool isExist = false;
-                foreach (List<string> cfss in filtered4.Values)
+                foreach (IEnumerable<string> cfss in filtered4.Values)
                 {
                     int count = cfss.Intersect(dd.Value.ToList()).Count();
-                    if (count == dd.Value.Count)
+                    if (count == dd.Value.Count())
                     {
                         isExist = true;
                     }

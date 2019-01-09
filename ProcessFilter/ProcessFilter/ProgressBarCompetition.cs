@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,24 +9,24 @@ using System.Windows.Forms;
 
 namespace ProcessFilter
 {
-    public class ProgressBarCompetition
+    public class ProgressBarCompetition<T>
     {
         private IAsyncResult _asyncResult;
-        private Action<ProgressBarCompetition> _datafilter;
+        private Func<ProgressBarCompetition<T>, T> _datafilter;
         private ProgressBar _progressBar;
 
         public bool ProgressCompleted { get; private set; } = false;
         public int ProgressValue { get; set; } = 0;
         public int TotalProgress { get; }
-        private Action _someMethodForComplete;
-        public ProgressBarCompetition(ProgressBar progressBar, int totalProgress, Action someMethodForComplete = null)
+        private Action<T> _someMethodForComplete;
+        public ProgressBarCompetition(ProgressBar progressBar, int totalProgress, Action<T> someMethodForComplete = null)
         {
             _progressBar = progressBar;
             TotalProgress = totalProgress;
             _someMethodForComplete = someMethodForComplete;
         }
 
-        public void StartProgress(Action<ProgressBarCompetition> method)
+        public void StartProgress(Func<ProgressBarCompetition<T>, T> method)
         {
             ProgressValue = 0;
             _progressBar.Visible = true;
@@ -33,7 +34,7 @@ namespace ProcessFilter
 
 
             this.ProgressAsync();
-            _datafilter = new Action<ProgressBarCompetition>(method);
+            _datafilter = new Func<ProgressBarCompetition<T>, T>(method);
             _asyncResult = _datafilter.BeginInvoke(this, IsCompleted, _datafilter);
         }
 
@@ -56,13 +57,14 @@ namespace ProcessFilter
         void IsCompleted(IAsyncResult asyncResult)
         {
             ProgressCompleted = true;
-            Action<ProgressBarCompetition> dataDilter = (Action<ProgressBarCompetition>)asyncResult.AsyncState;
-            dataDilter.EndInvoke(asyncResult);
-
+            AsyncResult ar = asyncResult as AsyncResult;
+            Func<ProgressBarCompetition<T>, T> caller = (Func<ProgressBarCompetition<T>, T>)ar.AsyncDelegate;
+            T result = caller.EndInvoke(asyncResult);
+            
             _progressBar.Invoke(new MethodInvoker(delegate
             {
                 _progressBar.Visible = false;
-                _someMethodForComplete?.Invoke();
+                _someMethodForComplete?.Invoke(result);
             }));
         }
 

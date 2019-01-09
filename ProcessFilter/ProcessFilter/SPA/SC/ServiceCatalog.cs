@@ -14,8 +14,8 @@ namespace ProcessFilter.SPA.SC
     {
         CatalogComponents cfsList;
         private NetworkElementCollection NetworkElements { get; }
-        private ProgressBarCompetition _progressComp;
-        public ServiceCatalog(NetworkElementCollection networkElements, ProgressBarCompetition progressComp, DataTable serviceTable)
+        private ProgressBarCompetition<string> _progressComp;
+        public ServiceCatalog(NetworkElementCollection networkElements, ProgressBarCompetition<string> progressComp, DataTable serviceTable)
         {
             _progressComp = progressComp;
             NetworkElements = networkElements;
@@ -36,7 +36,7 @@ namespace ProcessFilter.SPA.SC
             cfsList.GenerateRFS();
         }
 
-        public void Save(string exportFilePath)
+        public string Save(string exportFilePath)
         {
             _progressComp.ProgressValue = 4;
             StringBuilder hostsList = new StringBuilder();
@@ -54,11 +54,14 @@ namespace ProcessFilter.SPA.SC
             res = RtfFromXml.GetXmlString(res);
             _progressComp.ProgressValue = 6;
 
-            using (StreamWriter writer = new StreamWriter($"SC_{DateTime.Now:yyyyMMdd-HHmmss}.xml"))
+            string destinationPath = Path.Combine(exportFilePath, $"SC_{DateTime.Now:yyyyMMdd-HHmmss}.xml");
+            using (StreamWriter writer = new StreamWriter(destinationPath))
             {
                 writer.Write(res);
                 writer.Flush();
             }
+
+            return destinationPath;
         }
     }
 }

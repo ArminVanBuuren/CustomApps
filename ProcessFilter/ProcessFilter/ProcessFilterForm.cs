@@ -185,7 +185,7 @@ namespace ProcessFilter
                 dataGridScenariosResult.Refresh();
                 dataGridCommandsResult.Refresh();
 
-                ProgressBarCompetition progress = new ProgressBarCompetition(progressBar, 10);
+                ProgressBarCompetition<bool> progress = new ProgressBarCompetition<bool>(progressBar, 10);
                 progress.StartProgress(DataFilter);
                 
             }
@@ -201,7 +201,7 @@ namespace ProcessFilter
         CollectionCommands filteredCMMCollection = new CollectionCommands();
         List<Scenario> filteredSubScenarios = new List<Scenario>();
 
-        void DataFilter(ProgressBarCompetition progressComp)
+        bool DataFilter(ProgressBarCompetition<bool> progressComp)
         {
             try
             {
@@ -396,10 +396,12 @@ namespace ProcessFilter
                                                          CommandsStatRefresh(filteredCMMCollection);
                                                          progressComp.ProgressValue = 10;
                                                      }));
+                return true;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                return false;
             }
         }
 
@@ -467,7 +469,7 @@ namespace ProcessFilter
                 else if (e.KeyCode == Keys.Enter || (!altIsDown && f4IsDown))
                 {
                     if (GetFilePathCurrentRow(grid, out var filePath1))
-                        OpenEditor(grid, filePath1);
+                        OpenEditor(filePath1);
                 }
                 else if (e.KeyCode == Keys.Delete)
                 {
@@ -492,7 +494,7 @@ namespace ProcessFilter
             else
             {
                 if (GetFilePathCurrentRow(grid, out var path))
-                    OpenEditor(grid, path);
+                    OpenEditor(path);
             }
         }
 
@@ -525,7 +527,7 @@ namespace ProcessFilter
             buttonFilterClick(this, EventArgs.Empty);
         }
 
-        void OpenEditor(DataGridView grid, string path)
+        void OpenEditor(string path)
         {
             if (notepad == null || notepad.WindowIsClosed)
             {
@@ -742,11 +744,19 @@ namespace ProcessFilter
 
             GenerateSC.Enabled = false;
 
-            ProgressBarCompetition progress = new ProgressBarCompetition(progressBar, 6, EnableGenerateSCForm);
+            ProgressBarCompetition<string> progress = new ProgressBarCompetition<string>(progressBar, 6, EnableGenerateSCForm);
             progress.StartProgress(GenerateSCMethod);
         }
+        void EnableGenerateSCForm(string result)
+        {
+            GenerateSC.Enabled = true;
+            if (!result.IsNullOrEmpty() && File.Exists(result))
+            {
+                OpenEditor(result);
+            }
+        }
 
-        void GenerateSCMethod(ProgressBarCompetition progressComp)
+        string GenerateSCMethod(ProgressBarCompetition<string> progressComp)
         {
             try
             {
@@ -760,17 +770,13 @@ namespace ProcessFilter
                 else if (NetElements?.Elements != null)
                     sc = new ServiceCatalog(NetElements.Elements, progressComp, serviceTable);
 
-                sc?.Save(ExportSCPath.Text);
+                return sc?.Save(ExportSCPath.Text);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                return null;
             }
-        }
-
-        void EnableGenerateSCForm()
-        {
-            GenerateSC.Enabled = true;
         }
 
         private string[] mandatoryXslxColumns = new string[] { "#", "SPA_SERVICE_CODE", "GLOBAL_SERVICE_CODE", "SERVICE_NAME", "SERVICE_FULL_NAME", "SERVICE_FULL_NAME2", "DESCRIPTION", "SERVICE_CODE", "SERVICE_NAME2", "EXTERNAL_CODE", "EXTERNAL_CODE2" };
