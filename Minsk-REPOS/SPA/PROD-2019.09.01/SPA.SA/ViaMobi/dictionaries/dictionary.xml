@@ -1,0 +1,81 @@
+<Dictionary>
+	<WellknownsList>
+		<Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
+	</WellknownsList>
+	<ErrorsList CodePage="ASCII">
+		<Error Name="&#34;status&#34;:&#34;0&#34;" Value="SUCCESS"/>
+		<Error Name="&#34;status&#34;:&#34;-1&#34;" Value="FAILURE"/>
+		<Error Name="&#34;status&#34;:&#34;-2&#34;" Value="FAILURE"/>
+		<Error Name="&#34;status&#34;:&#34;-3&#34;" Value="ResourceLimitation"/>
+		<Error Name="&#34;status&#34;:&#34;-4&#34;" Value="MsisdnAlreadyDefined"/>
+		<Error Name="503 Service Temporarily Unavailable" Value="ResourceLimitation"/>
+		<Error Name="500 Internal Server Error" Value="ResourceLimitation"/>
+		<Error Name="503 Service Unavailable" Value="ConnectionError"/> 
+		<Error Name="502 Bad Gateway" Value="ConnectionError"/> 
+		<Error Name="502 Proxy Error" Value="ConnectionError"/>	
+	</ErrorsList>
+	<RegexpsList>
+		<Regexp Name="Error" Value="(?&lt;ERROR&gt;(Bad Request))"/>
+	</RegexpsList>
+	<ConstantsList />
+	<ParametersList>
+		<Parameter Name="NewMSISDN">
+			<Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//NewMSISDN"/>
+			<PossibleValues StringToKeyTable="true" />
+		</Parameter>
+	</ParametersList>
+	<DynamicParametersList />
+	<CommandsList Root=".\ViaMobi\Dictionaries\Commands\">
+		<Command Path="AddNotifService.xml"/>	
+		<Command Path="DelNotifService.xml"/>	
+		<Command Path="ChangeMSISDN.xml"/>	
+		<Command Path="DeleteSubscriber.xml"/>	
+		<Command Path="Block.xml"/>	
+		<Command Path="UnBlock.xml"/>	
+		<Command Path="AddNotifServiceENG.xml"/>	
+		<Command Path="BlockENG.xml"/>	
+		<Command Path="ChangeMSISDNENG.xml"/>	
+		<Command Path="DeleteSubscriberENG.xml"/>	
+		<Command Path="DelNotifServiceENG.xml"/>	
+		<Command Path="UnBlockENG.xml"/>	
+		<Command Path="AddNotifServicePage404.xml"/>	
+		<Command Path="DelNotifServicePage404.xml"/>	
+		<Command Path="ChangeMSISDNPage404.xml"/>	
+		<Command Path="AddNotifServiceDuels.xml"/>	
+		<Command Path="DelNotifServiceDuels.xml"/>	
+		<Command Path="BlockDuels.xml"/>	
+		<Command Path="UnBlockDuels.xml"/>	
+		<Command Path="DeleteSubscriberDuels.xml"/>	
+		<Command Path="ChangeMSISDNDuels.xml"/>	
+		<Command Path="AddNotifServiceStars.xml"/>	
+		<Command Path="BlockStars.xml"/>	
+		<Command Path="ChangeMSISDNStars.xml"/>	
+		<Command Path="DeleteSubscriberStars.xml"/>	
+		<Command Path="DelNotifServiceStars.xml"/>	
+		<Command Path="UnBlockStars.xml"/>	
+		<Command Path="AddLessRus.xml"/>	
+		<Command Path="DelLessRus.xml"/>	
+		<Command Path="BlockLessRus.xml"/>	
+		<Command Path="UnBlockLessRus.xml"/>	
+		<Command Path="ChangeMSISDNLessRus.xml"/>	
+		<Command Path="DeleteSubscriberLessRus.xml"/>	
+		<Command Path="AddLessEng.xml"/>	
+		<Command Path="BlockLessEng.xml"/>	
+		<Command Path="ChangeMSISDNLessEng.xml"/>	
+		<Command Path="DelLessEng.xml"/>	
+		<Command Path="UnBlockLessEng.xml"/>	
+		<Command Path="DeleteSubscriberLessEng.xml"/>
+		<Command Path="AddLessPl.xml"/>	
+		<Command Path="BlockLessPl.xml"/>	
+		<Command Path="ChangeMSISDNLessPl.xml"/>	
+		<Command Path="DelLessPl.xml"/>	
+		<Command Path="UnBlockLessPl.xml"/>	
+		<Command Path="DeleteSubscriberLessPl.xml"/>
+		<Command Path="AddLessBy.xml"/>	
+		<Command Path="BlockLessBy.xml"/>	
+		<Command Path="ChangeMSISDNLessBy.xml"/>	
+		<Command Path="DelLessBy.xml"/>	
+		<Command Path="UnBlockLessBy.xml"/>	
+		<Command Path="DeleteSubscriberLessBy.xml"/>		
+	</CommandsList>
+</Dictionary>

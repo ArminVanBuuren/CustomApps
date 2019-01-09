@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="DeactivateCallForwarding">
+	<objectList>
+		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll" />
+	</objectList>
+	<automat>
+		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
+			<resultlist>
+				<result value="0" node="SingleSubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+		<node name="SingleSubscriberRequestDequeuer" object="Dequeuer">
+			<resultlist>
+				<result value="0" node="CheckCFB"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="CheckCFB" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="DeactivateCFBNode"/>
+				<result value="1" node="CheckCFNRC"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/WithdrawalList//CFB"/>
+			</parameterslist>
+		</node>
+		<node name="DeactivateCFBNode" object="Commander">
+			<resultlist>
+				<result value="" node="AddCFBNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="DeleteCFB"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>	
+		<node name="AddCFBNode" object="Commander">
+			<resultlist>
+				<result value="" node="CheckCFNRC"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddCFB"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>		
+		<node name="CheckCFNRC" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="DeactivateCFNRCNode"/>
+				<result value="1" node="CheckCFNRY"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/WithdrawalList//CFNRC"/>
+			</parameterslist>
+		</node>
+		<node name="DeactivateCFNRCNode" object="Commander">
+			<resultlist>
+				<result value="" node="AddCFNRCNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="DeleteCFNRC"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="AddCFNRCNode" object="Commander">
+			<resultlist>
+				<result value="" node="CheckCFNRY"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddCFNRC"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="CheckCFNRY" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="DeactivateCFNRYNode"/>
+				<result value="1" node="CheckCFU"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/WithdrawalList//CFNRY"/>
+			</parameterslist>
+		</node>
+		<node name="DeactivateCFNRYNode" object="Commander">
+			<resultlist>
+				<result value="" node="AddCFNRYNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="DeleteCFNRY"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="AddCFNRYNode" object="Commander">
+			<resultlist>
+				<result value="" node="CheckCFU"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddCFNRY"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="CheckCFU" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="DeactivateCFUNode"/>
+				<result value="1" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/WithdrawalList//CFU"/>
+			</parameterslist>
+		</node>
+		<node name="DeactivateCFUNode" object="Commander">
+			<resultlist>
+				<result value="" node="AddCFUNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="DeleteCFU"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>	
+		<node name="AddCFUNode" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddCFU"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="SingleSubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

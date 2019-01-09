@@ -1,0 +1,38 @@
+<BusinessProcessData name="Unblock Subscriber in financial platform" successOnNoOperation="true">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="BPMProcessingUnit" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="SplitForVirtualTD" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+      </objectlist>
+      <automat>
+        <node name="SplitForVirtualTD" object="SplitForVirtualTD">
+          <parameterslist>
+            <param name="XmlNameInContext" value="$XmlRequest" />
+            <param name="IfXmlPath:0" value="//AdditionalData/DeviceInfo/TerminalDeviceType[text()='virtual']" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeStatusesOnFINPlatform" />
+            <result value="0" node="DeleteBlockOnBMS" />
+          </resultlist>
+        </node>
+        <node name="ChangeStatusesOnFINPlatform" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="ChangeStatusesOnFINPlatform" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteBlockOnBMS" />
+          </resultlist>
+        </node>
+        <node name="DeleteBlockOnBMS" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="DeleteBlockOnBMS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

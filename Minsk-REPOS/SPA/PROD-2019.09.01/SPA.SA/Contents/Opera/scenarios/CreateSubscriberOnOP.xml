@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="CreateSubscriberOnOP">
+	<objectList>
+		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+		<object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="HttpCmd" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />		
+		<object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />	
+		<object name="IfHttpCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
+	</objectList>
+	<automat>
+		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
+			<resultlist>
+				<result value="0" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+			<resultlist>
+				<result value="0" node="Add_404_NODE"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="Add_404_NODE" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="App_AddService_NODE"/>
+				<result value="1538" node="App_AddService_NODE"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="mtsopera404/"/>
+				<param name="Command" value="AddService404"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="89"/>
+				<param name="Connection.MethodName" value="GET"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html;charset=UTF-8"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR12655" />
+			</parameterslist>
+		</node>			
+		<node name="App_AddService_NODE" object="IfCommander">
+			<resultlist>
+				<result value="0" node="Kids_AddService_NODE"/>
+				<result value="1538" node="Kids_AddService_NODE"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="SubscrService"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11647" />
+			</parameterslist>
+		</node>			
+		<node name="Kids_AddService_NODE" object="IfCommander">
+			<resultlist>
+				<result value="0" node="Fitness_AddService_NODE"/>
+				<result value="1538" node="Fitness_AddService_NODE"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="SubscrServiceKids"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR15719" />
+			</parameterslist>
+		</node>	
+		<node name="Fitness_AddService_NODE" object="IfCommander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="SubscrServiceFitness"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16286" />
+			</parameterslist>
+		</node>			
+		<node name="DummyResponderNode" object="DummyResponder">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+		<parameterslist>
+			<param name="OverallResult" value="SUCCESS"/>
+			<param name="DetailedResult" value="SUCCESS"/>
+			<param name="Delay" value="0"/>
+		</parameterslist>
+		</node>			
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

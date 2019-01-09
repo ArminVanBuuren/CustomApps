@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="AddFR2370onDB">
+	<objectList>
+		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+	</objectList>
+	<automat>
+		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
+			<resultlist>
+				<result value="0" node="SingleSubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+		<node name="SingleSubscriberRequestDequeuer" object="Dequeuer">
+			<resultlist>
+				<result value="0" node="IfFTTXNode"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="IfFTTXNode" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="AddSyncBlockingNODE"/>
+				<result value="1" node="AddSyncBlockingTDBNODE"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR7474"/>
+				<param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR7450"/>
+				<param name="OrXmlPath:2" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR7451"/>
+				<param name="OrXmlPath:3" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR7475"/>
+				<param name="OrXmlPath:4" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR7241"/>
+				<param name="OrXmlPath:5" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR7242"/>
+				<param name="OrXmlPath:6" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR7967"/>
+				<param name="OrXmlPath:7" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR7243"/>
+				<param name="OrXmlPath:8" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR7244"/>
+				<param name="OrXmlPath:9" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR7245"/>
+				<param name="OrXmlPath:10" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR9749"/>
+				<param name="OrXmlPath:11" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR9750"/>
+				<param name="OrXmlPath:12" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR9751"/>
+				<param name="OrXmlPath:13" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR9752"/>
+				<param name="OrXmlPath:14" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR10864"/>
+				<param name="OrXmlPath:15" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR10865"/>
+				<param name="OrXmlPath:16" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR10866"/>
+				<param name="OrXmlPath:17" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR10867"/>
+				<param name="OrXmlPath:18" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR8740"/>
+				<param name="OrXmlPath:19" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR8741"/>
+				<param name="OrXmlPath:20" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR8742"/>
+				<param name="OrXmlPath:21" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR8743"/>
+				<param name="OrXmlPath:22" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11885"/>
+				<param name="OrXmlPath:23" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR10235"/>
+				<param name="OrXmlPath:24" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR12083"/>
+				<param name="OrXmlPath:25" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR12141"/>
+				<param name="OrXmlPath:26" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR12439"/>
+				<param name="OrXmlPath:27" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR12440"/>
+				<param name="OrXmlPath:28" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR12441"/>
+				<param name="OrXmlPath:29" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR12442"/>
+				<param name="OrXmlPath:30" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR14994"/>
+				<param name="OrXmlPath:31" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR14995"/>
+				<param name="OrXmlPath:32" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR15506"/>
+				<param name="OrXmlPath:33" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR15507"/>
+			</parameterslist>
+		</node>	
+		<node name="AddSyncBlockingNODE" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddSyncBlocking"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="DataBaseName" value="FORIS.SPA.BILLING" />				
+				</parameterslist>
+		</node>	
+		<node name="AddSyncBlockingTDBNODE" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddSyncBlockingTDB"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="DataBaseName" value="FORIS.SPA.BILLING" />				
+				</parameterslist>
+		</node>			
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="SingleSubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

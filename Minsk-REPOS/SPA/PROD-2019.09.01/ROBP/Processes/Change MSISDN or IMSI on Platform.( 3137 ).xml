@@ -1,0 +1,625 @@
+<BusinessProcessData name="Change MSISDN or IMSI on Platform">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="Change" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="SplitForDummy" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+        <object name="DummyResult" class="FORIS.ScenarioProcessing.CommonUnits.ConditionalDummyResultCreator" assembly="FORIS.SPA.SPF.dll" />
+      </objectlist>
+      <automat>
+        <node name="SplitForDummy" object="SplitForDummy">
+          <parameterslist>
+            <param name="XmlNameInContext" value="$XmlRequest" />
+            <param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16324" />
+          </parameterslist>
+          <resultlist>
+            <result value="0" node="DummyResult" />
+            <result value="" node="ChangeCB118OnBS" />
+          </resultlist>
+        </node>
+        <node name="DummyResult" object="DummyResult">
+          <parameterslist>
+            <param name="XmlNameInContext" value="$XmlRequest" />
+            <param name="DetailedResult" value="0" />
+            <param name="DetailedResultDescription" value="SUCCESS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+        <node name="ChangeCB118OnBS" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeCB118OnBS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonQP" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonQP" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonQP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonRT" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonRT" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonRT" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonSE" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonSE" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonSE" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonVM" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonSM" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonSM" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonVM" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonVM" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonVM" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonDB" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonDB" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonDB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonFP" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonFP" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonFP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNInCUGOnFP" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNInCUGOnFP" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNInCUGOnFP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonVD" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonVD" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonVD" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonMO" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonMO" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonMO" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonZN" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonZN" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonZN" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonME" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonME" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonME" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonMT" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonMT" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonMT" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonBI" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonBI" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonBI" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonUF" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonUF" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonUF" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonSL" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonSL" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonSL" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonM2" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonM2" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonM2" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonDR" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonDR" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonDR" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonMA" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonMA" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonMA" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonBB" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonBB" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonBB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonVI" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonVI" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonVI" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonMU" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonMU" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonMU" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonGS" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonGS" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonGS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonRG" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonRG" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonRG" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonSF" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonSF" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonSF" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonOP" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonOP" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonOP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonPF" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonPF" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonPF" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonUM" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonUM" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonUM" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonFK" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonFK" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonFK" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonVA" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonVA" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonVA" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonLB" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonLB" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonLB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonMI" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonMI" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonMI" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDN" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDN" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDN" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeIMSIOnFP" />
+          </resultlist>
+        </node>
+        <node name="ChangeIMSIOnFP" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeIMSIOnFP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeIMSIonDM" />
+          </resultlist>
+        </node>
+        <node name="ChangeIMSIonDM" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeIMSIonDM" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeIMSIonRP" />
+          </resultlist>
+        </node>
+        <node name="ChangeIMSIonRP" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeIMSIonRP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeIMSI" />
+          </resultlist>
+        </node>
+        <node name="ChangeIMSI" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeIMSI" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeIMSIonQP" />
+          </resultlist>
+        </node>
+        <node name="ChangeIMSIonQP" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeIMSIonQP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118" />
+          </resultlist>
+        </node>
+        <node name="AddCB118" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB537onDM" />
+          </resultlist>
+        </node>
+        <node name="AddCB537onDM" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB537onDM" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB537onRP" />
+          </resultlist>
+        </node>
+        <node name="AddCB537onRP" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB537onRP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB537" />
+          </resultlist>
+        </node>
+        <node name="AddCB537" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB537" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB537onQP" />
+          </resultlist>
+        </node>
+        <node name="AddCB537onQP" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB537onQP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onRT" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onRT" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onRT" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onSE" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onSE" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onSE" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onQP" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onQP" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onQP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onVM" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onSM" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onSM" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onVM" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onVM" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onVM" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onDB" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onDB" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onDB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onVD" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onVD" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onVD" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onMO" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onMO" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onMO" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onZN" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onZN" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onZN" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onME" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onME" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onME" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onMT" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onMT" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onMT" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onBI" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onBI" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onBI" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onUF" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onUF" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onUF" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onSL" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onSL" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onSL" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onM2" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onM2" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onM2" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onDR" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onDR" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onDR" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onMA" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onMA" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onMA" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onBB" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onBB" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onBB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onVI" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onVI" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onVI" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onMU" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onMU" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onMU" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onGS" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onGS" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onGS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onRG" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onRG" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onRG" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onSF" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onSF" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onSF" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onOP" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onOP" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onOP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onUM" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onUM" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onUM" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onPF" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onPF" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onPF" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onFK" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onFK" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onFK" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onVA" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onVA" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onVA" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onLB" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onLB" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onLB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onMI" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onMI" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onMI" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

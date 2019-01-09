@@ -1,0 +1,32 @@
+<Dictionary>
+	<WellknownsList>
+		<Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
+		<Wellknown Name="imsi" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;)"/>
+	</WellknownsList>
+	<ErrorsList CodePage="ASCII">
+		<Error Name="0 Ok" Value="SUCCESS"/>
+		<Error Name="imei-1:" Value="SUCCESS"/>
+		<Error Name="3 Subscriber" Value="SUCCESS"/>
+		<Error Name="3 Unknown" Value="SUCCESS"/>
+		<Error Name="4 Unknown" Value="SUCCESS"/>
+		<Error Name="12 Request Failed" Value="SUCCESS"/>
+	</ErrorsList>
+	<RegexpsList>
+        <Regexp Name="Error" Value="(?&lt;ERROR&gt;-*\d)"/>
+    </RegexpsList>
+	<ConstantsList/>
+	<ParametersList>
+		<Parameter Name="NewMSISDN">
+			<Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//NewMSISDN"/>
+			<PossibleValues StringToKeyTable="true" />
+		</Parameter>
+		<Parameter Name="NewIMSI">
+			<Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//NewIMSI"/>
+			<PossibleValues StringToKeyTable="true" />
+		</Parameter>
+	</ParametersList>
+	<DynamicParametersList/>
+	<CommandsList Root=".\VR\Dictionaries\Commands\">
+		<Command Path="DeleteSubscriber.xml"/>
+	</CommandsList>
+</Dictionary>

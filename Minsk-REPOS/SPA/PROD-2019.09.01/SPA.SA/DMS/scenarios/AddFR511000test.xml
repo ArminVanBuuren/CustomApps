@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="AddFR511000">
+	<objectList>
+		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
+	</objectList>
+	<automat>
+		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
+			<resultlist>
+				<result value="0" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+			<resultlist>
+				<result value="0" node="SwitchByProfileNode"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="SwitchByProfileNode" object="Switch">
+			<resultlist>
+				<result value="0" node="ResponseAssembler"/>
+				<result value="1" node="ResponseAssembler"/>
+				<result value="2" node="CreateContractSubscriberWithoutProfileNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/Profile"/>
+				<param name="Value:2" value="All"/>
+				<param name="Value:3" value="Internet"/>
+				<param name="Value:4" value="WAP"/>
+				<param name="Value:5" value="MMS"/>
+			</parameterslist>
+		</node>			
+		<node name="InternetNode" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Command" value="SendSettingsInternet"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

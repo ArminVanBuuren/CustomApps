@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="CreateUser" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Создание абонента</Description>
+	<Author Name="YAI" Date="2014-10-22+10:52"/>
+	<Request Template="mts.php?format=xml&amp;request=CreateUser&amp;actionUser=1&amp;usrNumDog={0}&amp;usrMAC={1}">
+		<Item Name="msisdn" Type="Wellknown"/>
+		<Item Name="MACADDR" Type="DynamicParameter" />
+	</Request>
+	<ErrorsList CodePage="ASCII"/>
+</Command>

@@ -1,0 +1,19 @@
+<BusinessProcessData name="Assign Call Forwarding Sync">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="AddCallForwarding" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="AddCallForwarding" object="AddCallForwarding">
+          <parameterslist>
+            <param name="operation" value="AddCallForwarding" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

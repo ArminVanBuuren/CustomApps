@@ -1,0 +1,59 @@
+<BusinessProcessData name="Assign RBT NEW Services">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="AddService" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="AssignServiceOnFINPlatform" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AssignServiceOnFINPlatform" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR806onDB" />
+          </resultlist>
+        </node>
+        <node name="AddFR806onDB" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR806onDB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR12174onRT" />
+          </resultlist>
+        </node>
+        <node name="AddFR12174onRT" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR12174onRT" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR12174" />
+          </resultlist>
+        </node>
+        <node name="AddFR12174" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR12174" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR12176onRT" />
+          </resultlist>
+        </node>
+        <node name="AddFR12176onRT" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR12176onRT" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR12175onRT" />
+          </resultlist>
+        </node>
+        <node name="AddFR12175onRT" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR12175onRT" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

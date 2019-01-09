@@ -1,0 +1,47 @@
+<Dictionary>
+	<WellknownsList>
+		<Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
+		<Wellknown Name="imsi" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;)"/>
+	</WellknownsList>
+	<ErrorsList CodePage="ASCII">
+		<Error Name="&lt;value xsi:type=&quot;xsd:int&quot;&gt;0&lt;/value&gt;" Value="SUCCESS"/>
+		<Error Name="&lt;value xsi:type=&quot;xsd:int&quot;&gt;1&lt;/value&gt;" Value="FAILURE"/>
+		<Error Name="&lt;value xsi:type=&quot;xsd:int&quot;&gt;2&lt;/value&gt;" Value="FAILURE"/>
+		<Error Name="&lt;value xsi:type=&quot;xsd:int&quot;&gt;3&lt;/value&gt;" Value="FAILURE"/>
+		<Error Name="&lt;value xsi:type=&quot;xsd:int&quot;&gt;4&lt;/value&gt;" Value="FAILURE"/>
+		<Error Name="&lt;value xsi:type=&quot;xsd:int&quot;&gt;5&lt;/value&gt;" Value="FAILURE"/>
+		<Error Name="&lt;value xsi:type=&quot;xsd:int&quot;&gt;6&lt;/value&gt;" Value="FAILURE"/>
+		<Error Name="&lt;value xsi:type=&quot;xsd:int&quot;&gt;7&lt;/value&gt;" Value="FAILURE"/>
+		<Error Name="&lt;value xsi:type=&quot;xsd:int&quot;&gt;8&lt;/value&gt;" Value="FAILURE"/>
+		<Error Name="&lt;value xsi:type=&quot;xsd:int&quot;&gt;10&lt;/value&gt;" Value="FAILURE"/>
+		<Error Name="&lt;value xsi:type=&quot;xsd:int&quot;&gt;11&lt;/value&gt;" Value="FAILURE"/>
+		<Error Name="&lt;value xsi:type=&quot;xsd:int&quot;&gt;12&lt;/value&gt;" Value="FAILURE"/>
+		<Error Name="&lt;value xsi:type=&quot;xsd:int&quot;&gt;13&lt;/value&gt;" Value="FAILURE"/>
+		<Error Name="&lt;value xsi:type=&quot;xsd:int&quot;&gt;14&lt;/value&gt;" Value="FAILURE"/>
+	</ErrorsList>
+	<RegexpsList>
+        <Regexp Name="Error" Value="(?&lt;ERROR&gt;-*\d)"/>
+    </RegexpsList>
+	<ConstantsList />
+	<ParametersList>
+		<Parameter Name="NewMSISDN">
+			<Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//NewMSISDN"/>
+			<PossibleValues StringToKeyTable="true" />
+		</Parameter>
+		<Parameter Name="NewIMSI">
+			<Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//NewIMSI"/>
+			<PossibleValues StringToKeyTable="true" />
+		</Parameter>
+	</ParametersList>
+	<DynamicParametersList />
+	<CommandsList Root=".\IMMO2\Dictionaries\Commands\">
+		<Command Path="AddGudokOut.xml"/>
+		<Command Path="DeleteGudokOut.xml"/>
+		<Command Path="Block.xml"/>
+		<Command Path="UnBlock.xml"/>		
+		<Command Path="ChangeMSISDN.xml"/>		
+	</CommandsList>
+	<!--DecodersList Root=".\Dictionaries\Decoders">
+		<Decoder Path="RbtDecoder.xml"/>
+	</DecodersList-->
+</Dictionary>

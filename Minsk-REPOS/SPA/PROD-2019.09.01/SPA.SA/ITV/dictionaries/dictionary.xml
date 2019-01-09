@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Dictionary>
+<WellknownsList>
+		<Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
+	</WellknownsList>
+	<ErrorsList CodePage="ASCII">
+		<Error Name="[STATUS] => 0" Value="SUCCESS"/>
+		<Error Name="[STATUS] => 1" Value="FAILURE"/>
+		<Error Name="[STATUS] => 2" Value="FAILURE"/>
+		<Error Name="[STATUS] => 3" Value="NoSuchObjectInstance"/>
+		<Error Name="[STATUS] => -1" Value="FAILURE"/>
+	</ErrorsList>
+	<RegexpsList/>
+   <ParametersList>
+      <Parameter Name="NewMSISDN">
+         <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//NewMSISDN" />
+         <PossibleValues StringToKeyTable="true" />
+      </Parameter>
+      <Parameter Name="NewIMSI">
+         <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//NewIMSI" />
+         <PossibleValues StringToKeyTable="true" />
+      </Parameter>
+      <Parameter Name="MACADDR2">
+         <Source Path="ExtendedRequestMessage/AdditionalData/MACADDR" />
+         <PossibleValues StringToKeyTable="true" />
+      </Parameter>	  
+   </ParametersList>
+	<DynamicParametersList>
+		<DynamicParameter Name="MACADDR">
+			<Source Path="root/return/record/column[@name='MACADDRFTTX']" /> 
+			<DynamicObject Name="db_get_macaddr" /> 
+		</DynamicParameter>
+	</DynamicParametersList>
+	<CommandsList Root=".\ITV\Dictionaries\Commands\">
+		<Command Path="Deact.xml"/>
+		<Command Path="Act.xml"/>
+		<Command Path="CreateUser.xml"/>
+		<Command Path="CreateUserNM.xml"/>
+		<Command Path="AddITV.xml"/>
+		<Command Path="DeleteITV.xml"/>
+		<Command Path="ActNM.xml"/>
+		<Command Path="AddITVNM.xml"/>
+		<Command Path="DeleteITVNM.xml"/>
+		<Command Path="DeactNM.xml"/>		
+	</CommandsList>
+</Dictionary>

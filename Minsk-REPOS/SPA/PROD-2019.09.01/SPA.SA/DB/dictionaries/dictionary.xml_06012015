@@ -1,0 +1,308 @@
+<Dictionary>
+	<WellknownsList />
+	<ErrorsList CodePage="ASCII">
+		<Error Name="&lt;returned value=&quot;1&quot; /&gt;" Value="SUCCESS"/>
+		<Error Name="&lt;returned value=&quot;0&quot; /&gt;" Value="SUCCESS"/> 
+		<Error Name="&lt;returned value=&quot;-1&quot; /&gt;" Value="ResourceLimitation"/> 		
+		<Error Name="&lt;returned value=&quot;-2&quot; /&gt;" Value="FAILURE"/> 	
+		<Error Name="&lt;returned value=&quot;-3&quot; /&gt;" Value="FAILURE"/> 			
+	</ErrorsList>
+	<RegexpsList />
+	<ConstantsList />
+	<ParametersList/>
+	<DynamicParametersList />
+	<DatabaseParametersList>
+			<DatabaseParameter Name="MSISDN">
+				<Properties DatabaseArgumentName="msisdn" DatabaseArgumentType="number" />
+					<Source Path="ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN"/>
+				<PossibleValues StringToKeyTable="true"/>
+			</DatabaseParameter>
+			<DatabaseParameter Name="IMSI">
+				<Properties DatabaseArgumentName="imsi" DatabaseArgumentType="number" />
+					<Source Path="ExtendedRequestMessage/IdentifiersList/Identifier/IMSI"/>
+				<PossibleValues StringToKeyTable="true"/>
+			</DatabaseParameter>
+		<DatabaseParameter Name="SERVICE_CODE">
+  			<Properties DatabaseArgumentName="SERVICE_CODE" DatabaseArgumentType="varchar2" />
+				<Source Path="ExtendedRequestMessage/ActionName"/>
+  			<PossibleValues StringToKeyTable="true" />
+ 		</DatabaseParameter>	
+		<DatabaseParameter Name="Event">
+  			<Properties DatabaseArgumentName="Event" DatabaseArgumentType="number" />
+				<Source Path="dummy" AbsenceValue="0" />
+  			<PossibleValues StringToKeyTable="true" />
+ 		</DatabaseParameter>
+		<DatabaseParameter Name="NewMSISDN">
+  			<Properties DatabaseArgumentName="Param" DatabaseArgumentType="varchar2" />
+				<Source Path="dummy" AbsenceValue="0" />
+  			<PossibleValues StringToKeyTable="true" />
+ 		</DatabaseParameter>	
+		<DatabaseParameter Name="add_param">
+  			<Properties DatabaseArgumentName="Additional_param" DatabaseArgumentType="varchar2" />
+				<Source Path="dummy" AbsenceValue="0" />
+  			<PossibleValues StringToKeyTable="true" />
+ 		</DatabaseParameter>			
+	</DatabaseParametersList>	
+	<CommandsList Root=".\DB\Dictionaries\Commands\">
+		<Command Path="ChangeMSISDN.xml"/> 
+		<Command Path="Addmultinumber.xml"/>
+		<Command Path="Deletemultinumber.xml"/>
+		<Command Path="Addtwincard.xml"/>		
+		<Command Path="Deletetwincard.xml"/>
+		<Command Path="AddDeniedInfoPayments.xml"/>		
+		<Command Path="DeleteDeniedInfoPayments.xml"/>		
+		<Command Path="SynchronizeSubscriberDataOnDB.xml"/>
+		<Command Path="AddFR511001onDB.xml"/>		
+		<Command Path="DeleteFR511001onDB.xml"/>			
+		<Command Path="AddFR300onDB.xml"/>		
+		<Command Path="DeleteFR300onDB.xml"/>
+		<Command Path="AddFR5595onDB.xml"/>		
+		<Command Path="DeleteFR5595onDB.xml"/>
+		<Command Path="AddFR5596onDB.xml"/>		
+		<Command Path="DeleteFR5596onDB.xml"/>		
+		<Command Path="AddFR2040onDB.xml"/>		
+		<Command Path="DeleteFR2040onDB.xml"/>	
+		<Command Path="AddADSL1DB.xml"/>		
+		<Command Path="DeleteADSL1DB.xml"/>			
+		<Command Path="AddADSL2DB.xml"/>		
+		<Command Path="DeleteADSL2DB.xml"/>		
+		<Command Path="AddHomeConnect1DB.xml"/>		
+		<Command Path="DeleteHomeConnect1DB.xml"/>			
+		<Command Path="AddHomeConnect2DB.xml"/>		
+		<Command Path="DeleteHomeConnect2DB.xml"/>
+		<Command Path="AddHomeConnect3DB.xml"/>		
+		<Command Path="DeleteHomeConnect3DB.xml"/>			
+		<Command Path="AddHomeConnect4DB.xml"/>		
+		<Command Path="DeleteHomeConnect4DB.xml"/>	
+		<Command Path="AddHomeUnlim1DB.xml"/>		
+		<Command Path="DeleteHomeUnlim1DB.xml"/>			
+		<Command Path="AddSynchronizeSubscriberDataOnDB.xml"/>		
+		<Command Path="AddSIP.xml"/>		
+		<Command Path="DeleteSIP.xml"/>
+		<Command Path="AddSIPv6.xml"/>		
+		<Command Path="DeleteSIPv6.xml"/>		
+		<Command Path="Block.xml"/>
+		<Command Path="UnBlock.xml"/>		
+		<Command Path="AddDeleteSubscriber.xml"/>
+		<Command Path="AddBusinessConnect1DB.xml"/>		
+		<Command Path="DeleteBusinessConnect1DB.xml"/>			
+		<Command Path="AddBusinessConnect2DB.xml"/>		
+		<Command Path="DeleteBusinessConnect2DB.xml"/>	
+		<Command Path="AddBusinessConnect3DB.xml"/>		
+		<Command Path="DeleteBusinessConnect3DB.xml"/>	
+		<Command Path="AddBusinessConnect4DB.xml"/>		
+		<Command Path="DeleteBusinessConnect4DB.xml"/>	
+		<Command Path="AddBusinessConnect5DB.xml"/>		
+		<Command Path="DeleteBusinessConnect5DB.xml"/>	
+		<Command Path="AddHomeConnectTurboDB.xml"/>		
+		<Command Path="DeleteHomeConnectTurboDB.xml"/>
+		<Command Path="AddSIP4Fix.xml"/>		
+		<Command Path="DeleteSIP4Fix.xml"/>		
+		<Command Path="AddSIP8Fix.xml"/>		
+		<Command Path="DeleteSIP8Fix.xml"/>				
+		<Command Path="AddSIP16Fix.xml"/>		
+		<Command Path="DeleteSIP16Fix.xml"/>
+		<Command Path="AddSIP32Fix.xml"/>		
+		<Command Path="DeleteSIP32Fix.xml"/>
+		<Command Path="AddInternetPoliceDB.xml"/>		
+		<Command Path="DeleteInternetPoliceDB.xml"/>		
+		<Command Path="AddEventRestore.xml"/>		
+		<Command Path="AddSyncBlocking.xml"/>
+		<Command Path="AddBanSelfServiceDB.xml"/>		
+		<Command Path="DeleteBanSelfServiceDB.xml"/>	
+		<Command Path="BlockAccessInternetDB.xml"/>		
+		<Command Path="UnBlockAccessInternetDB.xml"/>	
+		<Command Path="AddSmart1.xml"/>		
+		<Command Path="DeleteSmart1.xml"/>	
+		<Command Path="AddSmart2.xml"/>		
+		<Command Path="DeleteSmart2.xml"/>	
+		<Command Path="AddSyncBlockingTDB.xml"/>	
+		<Command Path="AddHomeConnectTechDB.xml"/>	
+		<Command Path="DeleteHomeConnectTechDB.xml"/>		
+		<Command Path="AddKitInternet1DB.xml"/>
+		<Command Path="AddKitInternet2DB.xml"/>
+		<Command Path="AddFR8798onDB.xml"/>
+		<Command Path="DeleteFR8798onDB.xml"/>
+		<Command Path="AddCreditsMethodDB.xml"/>
+		<Command Path="DeleteCreditsMethodDB.xml"/>
+		<Command Path="AddStatDNSDB.xml"/>
+		<Command Path="DeleteStatDNSDB.xml"/>		
+		<Command Path="AddPresDB.xml"/>
+		<Command Path="DeletePresDB.xml"/>		
+		<Command Path="AddSkyDB.xml"/>
+		<Command Path="DeleteSkyDB.xml"/>			
+		<Command Path="AddUpQuotaDB.xml"/>	
+		<Command Path="AddBusinessConnect6DB.xml"/>		
+		<Command Path="DeleteBusinessConnect6DB.xml"/>			
+		<Command Path="Delete100MbContract.xml"/>			
+		<Command Path="Delete100minContract.xml"/>			
+		<Command Path="Delete200MbContract.xml"/>			
+		<Command Path="Delete200MinContract.xml"/>		
+		<Command Path="Delete100minAllNet.xml"/>		
+		<Command Path="Delete200minAllNet.xml"/>		
+		<Command Path="Delete300minOnlyHomeNet.xml"/>		
+		<Command Path="Delete300Mb.xml"/>		
+		<Command Path="Delete300minAllNet.xml"/>		
+		<Command Path="Delete400minOnlyHomeNet.xml"/>		
+		<Command Path="Delete400Mb.xml"/>		
+		<Command Path="Delete400minAllNet.xml"/>		
+		<Command Path="DeleteUnlimOnlyHomeNet.xml"/>		
+		<Command Path="Delete500Mb.xml"/>		
+		<Command Path="Delete500minAllNet.xml"/>		
+		<Command Path="DeleteFRBLKINITDB.xml"/>	
+		<Command Path="AddIPTVZALADB.xml"/>		
+		<Command Path="DeleteIPTVZALADB.xml"/>			
+		<Command Path="AddSmartKinoDB.xml"/>			
+		<Command Path="DeleteSmartKinoDB.xml"/>			
+		<Command Path="AddMTSKinoDB.xml"/>			
+		<Command Path="DeleteMTSKinoDB.xml"/>
+		<Command Path="AddBusinessConnect7DB.xml"/>		
+		<Command Path="DeleteBusinessConnect7DB.xml"/>	
+		<Command Path="AddBusinessConnect8DB.xml"/>		
+		<Command Path="DeleteBusinessConnect8DB.xml"/>			
+		<Command Path="AddHomeConnect1NewDB.xml"/>			
+		<Command Path="AddHomeConnect2NewDB.xml"/>			
+		<Command Path="AddHomeConnect3NewDB.xml"/>			
+		<Command Path="AddHomeConnect4NewDB.xml"/>			
+		<Command Path="DeleteHomeConnect1NewDB.xml"/>			
+		<Command Path="DeleteHomeConnect2NewDB.xml"/>			
+		<Command Path="DeleteHomeConnect3NewDB.xml"/>			
+		<Command Path="DeleteHomeConnect4NewDB.xml"/>			
+		<Command Path="AddSyncQPS.xml"/>			
+		<Command Path="AddInternetFilterDB.xml"/>
+		<Command Path="DeleteInternetFilterDB.xml"/>
+		<Command Path="AddFR10361onDB.xml"/>
+		<Command Path="DeleteFR10361onDB.xml"/>		
+		<Command Path="AddAntivirusDB.xml"/>
+		<Command Path="DeleteAntivirusDB.xml"/>			
+		<Command Path="AddITVDB.xml"/>
+		<Command Path="DeleteITVDB.xml"/>
+		<Command Path="AddWoTDB.xml"/>
+		<Command Path="AddWoWDB.xml"/>
+		<Command Path="AddReturnTVBOXDB.xml"/>
+		<Command Path="AddWoWPDB.xml"/>
+		<Command Path="AddFR10767onDB.xml"/>
+		<Command Path="AddFR10768onDB.xml"/>
+		<Command Path="AddFR10769onDB.xml"/>
+		<Command Path="DeleteFR10767onDB.xml"/>
+		<Command Path="DeleteFR10768onDB.xml"/>
+		<Command Path="DeleteFR10769onDB.xml"/>
+		<Command Path="AddSmartBoxDB.xml"/>
+		<Command Path="DeleteSmartBoxDB.xml"/>
+		<Command Path="AddITVConnect1DB.xml"/>
+		<Command Path="DeleteITVConnect1DB.xml"/>
+		<Command Path="AddITVConnect2DB.xml"/>
+		<Command Path="DeleteITVConnect2DB.xml"/>
+		<Command Path="AddITVConnect3DB.xml"/>
+		<Command Path="DeleteITVConnect3DB.xml"/>
+		<Command Path="AddITVConnect4DB.xml"/>
+		<Command Path="DeleteITVConnect4DB.xml"/>
+		<Command Path="AddGetBoxDB.xml"/>
+		<Command Path="DeleteGetBoxDB.xml"/>
+		<Command Path="AddGPON1DB.xml"/>
+		<Command Path="AddGPON3DB.xml"/>
+		<Command Path="AddGPON2DB.xml"/>
+		<Command Path="AddGPON4DB.xml"/>
+		<Command Path="DeleteGPON1DB.xml"/>
+		<Command Path="DeleteGPON2DB.xml"/>
+		<Command Path="DeleteGPON3DB.xml"/>
+		<Command Path="DeleteGPON4DB.xml"/>
+		<Command Path="AddTicketCinemaDB.xml"/>	
+		<Command Path="AddSkyInsightDB.xml"/>
+		<Command Path="DeleteSkyInsightDB.xml"/>
+		<Command Path="AddWoT50GoldDB.xml"/>
+		<Command Path="AddWoT100GoldDB.xml"/>
+		<Command Path="AddWoT250GoldDB.xml"/>
+		<Command Path="AddWoT500GoldDB.xml"/>
+		<Command Path="AddWoT1DayPremiumDB.xml"/>
+		<Command Path="AddHomeConnect100000DB.xml"/>
+		<Command Path="DeleteHomeConnect100000DB.xml"/>
+		<Command Path="AddVPNBPCDB.xml"/>
+		<Command Path="DeleteVPNBPCDB.xml"/>
+		<Command Path="AddVPNMinskODOPervomay.xml"/>
+		<Command Path="DeleteVPNMinskODOPervomay.xml"/>
+		<Command Path="AddVPNMinskODOLenin.xml"/>
+		<Command Path="DeleteVPNMinskODOLenin.xml"/>
+		<Command Path="AddVPNMinskODOFrunze.xml"/>
+		<Command Path="DeleteVPNMinskODOFrunze.xml"/>
+		<Command Path="AddVPNMinskODOZavod.xml"/>
+		<Command Path="DeleteVPNMinskODOZavod.xml"/>
+		<Command Path="AddVPNMinskODOSovet.xml"/>
+		<Command Path="DeleteVPNMinskODOSovet.xml"/>
+		<Command Path="AddVPNMinskODOMoscovsk.xml"/>
+		<Command Path="DeleteVPNMinskODOMoscovsk.xml"/>
+		<Command Path="AddVPNMinskODOCentral.xml"/>
+		<Command Path="DeleteVPNMinskODOCentral.xml"/>
+		<Command Path="AddVPNMinskODOPartizan.xml"/>
+		<Command Path="DeleteVPNMinskODOPartizan.xml"/>
+		<Command Path="AddVPNMinskODOOktyabr.xml"/>
+		<Command Path="DeleteVPNMinskODOOktyabr.xml"/>
+		<Command Path="AddVPNMinskGUVD.xml"/>
+		<Command Path="DeleteVPNMinskGUVD.xml"/>
+		<Command Path="AddVPNMinskOblODO.xml"/>
+		<Command Path="DeleteVPNMinskOblODO.xml"/>
+		<Command Path="AddVPNVitebskOblODO.xml"/>
+		<Command Path="DeleteVPNVitebskOblODO.xml"/>
+		<Command Path="AddVPNGrodnoOblODO.xml"/>
+		<Command Path="DeleteVPNGrodnoOblODO.xml"/>
+		<Command Path="AddVPNBrestOblODO.xml"/>
+		<Command Path="DeleteVPNBrestOblODO.xml"/>
+		<Command Path="AddVPNMogilevOblODO.xml"/>
+		<Command Path="DeleteVPNMogilevOblODO.xml"/>
+		<Command Path="AddVPNGomelOblODO.xml"/>
+		<Command Path="DeleteVPNGomelOblODO.xml"/>
+		<Command Path="AddVPNKorisGuard.xml"/>
+		<Command Path="DeleteVPNKorisGuard.xml"/>
+		<Command Path="AddVPNMinskTransport.xml"/>
+		<Command Path="DeleteVPNMinskTransport.xml"/>
+		<Command Path="AddBusinessVPN1DB.xml"/>
+		<Command Path="DeleteBusinessVPN1DB.xml"/>
+		<Command Path="AddBusinessVPN2DB.xml"/>
+		<Command Path="DeleteBusinessVPN2DB.xml"/>
+		<Command Path="AddBusinessVPN3DB.xml"/>
+		<Command Path="DeleteBusinessVPN3DB.xml"/>
+		<Command Path="AddBusinessVPN4DB.xml"/>
+		<Command Path="DeleteBusinessVPN4DB.xml"/>
+		<Command Path="AddBusinessVPN5DB.xml"/>
+		<Command Path="DeleteBusinessVPN5DB.xml"/>
+		<Command Path="AddBusinessVPN6DB.xml"/>
+		<Command Path="DeleteBusinessVPN6DB.xml"/>
+		<Command Path="AddBusinessVPN7DB.xml"/>
+		<Command Path="DeleteBusinessVPN7DB.xml"/>
+		<Command Path="AddBusinessVPN8DB.xml"/>
+		<Command Path="DeleteBusinessVPN8DB.xml"/>
+		<Command Path="AddBusinessMOBLVPN1DB.xml"/>
+		<Command Path="DeleteBusinessMOBLVPN1DB.xml"/>
+		<Command Path="AddBusinessMOBLVPN2DB.xml"/>
+		<Command Path="DeleteBusinessMOBLVPN2DB.xml"/>
+		<Command Path="AddBusinessMOBLVPN3DB.xml"/>
+		<Command Path="DeleteBusinessMOBLVPN3DB.xml"/>
+		<Command Path="AddBusinessMOBLVPN4DB.xml"/>
+		<Command Path="DeleteBusinessMOBLVPN4DB.xml"/>
+		<Command Path="AddBusinessMOBLVPN5DB.xml"/>
+		<Command Path="DeleteBusinessMOBLVPN5DB.xml"/>
+		<Command Path="AddBusinessMOBLVPN6DB.xml"/>
+		<Command Path="DeleteBusinessMOBLVPN6DB.xml"/>
+		<Command Path="AddBusinessMOBLVPN7DB.xml"/>
+		<Command Path="DeleteBusinessMOBLVPN7DB.xml"/>
+		<Command Path="AddBusinessMOBLVPN8DB.xml"/>
+		<Command Path="DeleteBusinessMOBLVPN8DB.xml"/>		
+		<Command Path="AddMTSTablet2DB.xml"/>		
+		<Command Path="DeleteMTSTablet2DB.xml"/>		
+		<Command Path="AddSMARTplusNEWDB.xml"/>		
+		<Command Path="DeleteSMARTplusNEWDB.xml"/>		
+		<Command Path="AddSMARTminiMIGRDB.xml"/>		
+		<Command Path="DeleteSMARTminiMIGRDB.xml"/>		
+		<Command Path="AddSMARTMIGRDB.xml"/>		
+		<Command Path="DeleteSMARTMIGRDB.xml"/>		
+		<Command Path="AddSMARTplusMIGRDB.xml"/>		
+		<Command Path="DeleteSMARTplusMIGRDB.xml"/>		
+		<Command Path="AddSMARTminiNEWDB.xml"/>		
+		<Command Path="DeleteSMARTminiNEWDB.xml"/>		
+		<Command Path="AddSMARTNEWDB.xml"/>		
+		<Command Path="DeleteSMARTNEWDB.xml"/>	
+		</CommandsList>
+		<DecodersList Root=".\DB\Dictionaries\Decoders">
+		<Decoder Path="DbReturnValueDecoder.xml"/>
+	</DecodersList>
+</Dictionary>

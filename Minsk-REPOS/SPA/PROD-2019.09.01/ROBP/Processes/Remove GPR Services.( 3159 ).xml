@@ -1,0 +1,51 @@
+<BusinessProcessData name="Remove GPR Services">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="DeleteService" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="RemoveServiceOnFINPlatform" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="RemoveServiceOnFINPlatform" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteCB410153" />
+          </resultlist>
+        </node>
+        <node name="DeleteCB410153" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteCB410153" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteCB405666" />
+          </resultlist>
+        </node>
+        <node name="DeleteCB410153onQP" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteCB410153onQP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteCB405666" />
+          </resultlist>
+        </node>
+        <node name="DeleteCB405666" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteCB405666" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFR7480" />
+          </resultlist>
+        </node>
+        <node name="DeleteFR7480" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteFR7480" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="MySafetyBasicSF" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Добавление Под защитой. Пакет базовый</Description>
+	<Author Name="YAI" Date="2017-04-11+10:21"/>
+	<Request Template="service=FR13172&amp;msisdn={0}">
+	<Item Name="msisdn" Type="Wellknown" />
+	</Request>
+	<ErrorsList CodePage="ASCII" >
+		<Error Name="&quot;substatus&quot;:&quot;100&quot;" Value="SUCCESS"/>
+		<Error Name="&quot;substatus&quot;:&quot;101&quot;" Value="SUCCESS"/>
+		<Error Name="&quot;substatus&quot;:&quot;102&quot;" Value="SUCCESS"/>
+		<Error Name="&quot;substatus&quot;:&quot;103&quot;" Value="SUCCESS"/>
+	</ErrorsList>
+</Command>

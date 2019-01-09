@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ActivateCFNRYtoVM" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>>Активания услуги Переадресация вызова (по не ответу) на VM</Description>
+	<Author Name="YAI" Date="2013-09-13+12:18"/>
+	<Request Template="REG CFNRY: ISDN=&quot;{0}&quot;, FTN=&quot;375297321321&quot;, NOREPTIME=30, PROPERTY=INTERNATIONAL, BSG=TS1X;">
+		<Item Name="msisdn" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="ASCII">
+		<Error Name="ERR3006" Value="SUCCESS" />
+	</ErrorsList>
+</Command>

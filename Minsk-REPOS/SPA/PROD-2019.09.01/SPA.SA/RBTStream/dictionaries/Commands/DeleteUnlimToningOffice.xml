@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="DeleteUnlimToningOffice" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Удаление Безлимитный Тонинг.Офис</Description>
+	<Author Name="YAI" Date="2016-07-14+10:21"/>
+	<Request Template="&#60;Envelope xmlns=&#34;http://schemas.xmlsoap.org/soap/envelope/&#34;&#62;
+&#60;Body&#62;
+&#60;unsubscribe xmlns=&#34;http://billadapter.mtsby.rbt.immo.ru/&#34;&#62;
+&#60;Msisdn xmlns=&#34;&#34;&#62;{0}&#60;/Msisdn&#62;
+&#60;ServiceCode xmlns=&#34;&#34;&#62;FR12175&#60;/ServiceCode&#62;
+&#60;SourceId xmlns=&#34;&#34;&#62;4&#60;/SourceId&#62;
+&#60;/unsubscribe&#62;
+&#60;/Body&#62;
+&#60;/Envelope&#62;">
+	<Item Name="msisdn" Type="Wellknown" />
+	</Request>
+	<ErrorsList CodePage="ASCII" >
+		<Error Name="&lt;statusCode&gt;561&lt;/statusCode&gt;" Value="SUCCESS"/>
+	</ErrorsList>
+</Command>

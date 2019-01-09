@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Command Name="AddTDPAOnFP" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>AddTDPAOnFP</Description>
+  <Author Name="Oleg Safonov" Date="2011-02-08+12:35"/>
+  <Properties GenerationType="DataSetXml" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[<DataSet Name="CreateTDCDataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Attributes>
+    <Attribute Name="Label" Type="System.String" Value="CreateTDC;{19};SPA"/>
+    <Attribute Name="Protocol" Type="System.String" Value="Msmq"/>
+  </Attributes>
+  <DataTable Name="CreateTDCDataTable">
+    <Columns>
+      <Column Name="REQUEST_ID" Type="System.String"/>
+      <Column Name="PERSONAL_ACCOUNT_ID" Type="System.Int64"/>
+      <Column Name="TERMINAL_DEVICE_CONTRACT_ID" Type="System.Int64"/>
+      <Column Name="TARIFF_PLAN_ID" Type="System.Int32"/>
+      <Column Name="BILLING_GROUP_ID" Type="System.Int64"/>
+      <Column Name="TERMINAL_DEVICE_STATE" Type="System.Int32"/>
+      <Column Name="ADMIN_BLOCK" Type="System.Int32"/>
+      <Column Name="ADMIN_BLOCKED_DATE" Type="System.DateTime"/>
+      <Column Name="FIRST_CALL_END_DATE" Type="System.DateTime"/>
+      <Column Name="MAX_INACTIVE_PERIOD" Type="System.Int32"/>
+      <Column Name="MSISDN" Type="System.String"/>
+      <Column Name="IMSI" Type="System.String"/>
+      <Column Name="LANGUAGE" Type="System.String"/>
+      <Column Name="TIME_ZONE" Type="System.Int32"/>
+      <Column Name="PRIVATE_USER_GROUPS" Type="System.String"/>
+      <Column Name="TERMINAL_DEVICE_CLASS" Type="System.Int32"/>
+      <Column Name="SMS_USSD_LANG" Type="System.Int32"/>
+    </Columns>
+    <Rows>
+      <Row REQUEST_ID="reversecut({0},4)-{20}" PERSONAL_ACCOUNT_ID="{1}" TERMINAL_DEVICE_CONTRACT_ID="{2}" TARIFF_PLAN_ID="{3}" BILLING_GROUP_ID="{4}" TERMINAL_DEVICE_STATE="{5}" {6} {7} {8} MAX_INACTIVE_PERIOD="{9}" MSISDN="{10}" IMSI="{11}" LANGUAGE="{12}" TIME_ZONE="{13}" PRIVATE_USER_GROUPS="{14}" TERMINAL_DEVICE_CLASS="{15}" SMS_USSD_LANG="{16}"/>
+    </Rows>
+  </DataTable>
+  <DataTable Name="ServiceCodeDataTable">
+    <Columns>
+      <Column Name="REQUEST_ID" Type="System.String"/>
+      <Column Name="PERSONAL_ACCOUNT_ID" Type="System.Int64"/>
+      <Column Name="TERMINAL_DEVICE_CONTRACT_ID" Type="System.Int64"/>
+      <Column Name="SERVICE_CODE" Type="System.String"/>
+      <Column Name="DATE_FROM" Type="System.DateTime"/>
+      <Column Name="DATE_TO" Type="System.DateTime"/>
+      <Column Name="COUNTER_COEFFICIENT" Type="System.Int32"/>
+      <Column Name="DISCOUNT_TYPE" Type="System.Decimal"/>
+      <Column Name="DISCOUNT_VALUE" Type="System.String"/>
+    </Columns>
+    <Rows>{18}</Rows>
+  </DataTable>
+</DataSet>
+]]>
+    </RequestTemplate>
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="org.id" Type="Wellknown"/>
+    <Item Name="PersonalAccount" Type="LocalParameter"/>
+    <Item Name="TerminalDeviceID" Type="Wellknown"/>
+    <Item Name="TARIFF_PLAN_ID" Type="Parameter"/>
+    <Item Name="BILLING_GROUP_ID" Type="Parameter"/>
+    <Item Name="TERMINAL_DEVICE_STATE" Type="Parameter"/>
+    <Item Name="ADMIN_BLOCK" Type="Parameter"/>
+    <Item Name="ADMIN_BLOCKED_DATE" Type="Parameter"/>
+    <Item Name="FIRST_CALL_END_DATE" Type="Parameter"/>
+    <Item Name="MAX_INACTIVE_PERIOD" Type="Parameter"/>
+    <Item Name="msisdn" Type="Wellknown"/>
+    <Item Name="imsi" Type="Wellknown"/>
+    <Item Name="LANGUAGE" Type="Parameter"/>
+    <Item Name="TIME_ZONE" Type="Parameter"/>
+    <Item Name="PRIVATE_USER_GROUPS" Type="Constant"/>
+    <Item Name="TERMINAL_DEVICE_CLASS" Type="Parameter"/>
+    <Item Name="SMS_USSD_LANG" Type="Parameter"/>
+    <Item Name="id" Type="Wellknown"/>
+    <Item Name="Services" Type="LocalDynamicParameter"/>
+    <Item Name="datetime" Type="Wellknown"/>
+    <Item Name="GlobalUid" Type="Wellknown" />
+  </Request>
+  <VariablesList>
+    <Variable Name="ASYNC_REQUEST_ID" Template="reversecut({0},4)-{20}"/>
+  </VariablesList>
+  <ParametersList>
+    <Parameter Name="PersonalAccount">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList/TransferTD/NewPersonalAccountNumber"/>
+    </Parameter>
+  </ParametersList>
+  <DynamicParametersList>
+    <DynamicParameter Name="Services">
+      <Source Path="//string"/>
+      <DynamicObject Name="RegisteredServices" SkipMissed="True"/>
+    </DynamicParameter>
+  </DynamicParametersList>
+  <ErrorsList CodePage="ascii"/>
+</Command>

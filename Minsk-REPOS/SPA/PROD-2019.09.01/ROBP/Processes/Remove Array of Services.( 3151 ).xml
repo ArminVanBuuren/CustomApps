@@ -1,0 +1,35 @@
+<BusinessProcessData name="Remove Array of Services">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="DeleteService" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="RemoveServiceOnFINPlatform" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="RemoveServiceOnFINPlatform" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteCB403864" />
+          </resultlist>
+        </node>
+        <node name="DeleteCB403864" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteCB403864" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteCB108" />
+          </resultlist>
+        </node>
+        <node name="DeleteCB108" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteCB108" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

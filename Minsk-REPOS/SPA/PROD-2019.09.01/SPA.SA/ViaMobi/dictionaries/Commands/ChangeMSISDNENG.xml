@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ChangeMSISDNENG" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Технологическая: интернет-подписка на сервисы ВиаМоби</Description>
+	<Author Name="YAI" Date="2016-03-10+09:50"/>
+	<Request Template="subsapi?action=changemsisdn&amp;service=engster&amp;msisdn={0}&amp;new_msisdn={1}">
+	<Item Name="msisdn" Type="Wellknown" />
+	<Item Name="NewMSISDN" Type="Parameter" /> 
+	</Request>
+	<ErrorsList CodePage="ascii" >
+		<Error Name="&#34;status&#34;:&#34;-2&#34;" Value="SUCCESS" />
+	</ErrorsList>
+</Command>

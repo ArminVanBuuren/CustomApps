@@ -1,0 +1,27 @@
+<BusinessProcessData name="Assign Multi-Sim">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="AddService" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="AssignServiceOnFINPlatform" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AssignServiceOnFINPlatform" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB10" />
+          </resultlist>
+        </node>
+        <node name="AddCB10" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddCB10" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

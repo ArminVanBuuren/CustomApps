@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<serviceInstances>
+		<serviceInstance hardwareID="UM:1842">
+			<scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
+				<fileScenarioSource dir=".\UkrMobGroup\Scenarios"/>
+			</scenarioSource>
+			<socketList poolSize="10" maxConnections="10" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="500" periodDuration="20" autoconnect="1" reconfigurationTimeout="0">
+				<socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
+					<config workingmode="wmGeneral">
+						<socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
+							<config>
+								<ParametersList>
+									<Parameter Key="Host" Value="10.128.213.41"/> 
+									<Parameter Key="Port" Value="86"/>
+									<Parameter Key="Url" Value=""/>
+									<Parameter Key="MethodName" Value="GET"/>
+									<Parameter Key="Method" Value="GET"/>
+									<Parameter Key="UserName" Value=""/>
+									<Parameter Key="UserPwd" Value=""/>
+									<Parameter Key="ContentType" Value="text/html; charset=utf-8"/>
+									<Parameter Key="ParameterName" Value=""/>
+								</ParametersList>
+							</config>
+						</socket>
+						<Emulation Success="&quot;description&quot;:&quot;1 - OK&quot;" Failure="&quot;code&quot;: -32600" RandomizePrintout="false" OverwriteCommandPrintout="true"  Lifetime="00:00:00.00"/>
+						<Timers IdleTimeout="6000"/>
+						<PredefinedScripts Login="Login" Command="Command" Idle="" Logoff=""/>
+						<ScriptsList> 
+							<Script Name="Login" Path=".\UkrMobGroup\Dictionaries\Scripts\Login.xml"/>
+							<Script Name="Logoff" Path=".\UkrMobGroup\Dictionaries\Scripts\logoff.xml"/>
+							<Script Name="Command" Path=".\UkrMobGroup\Dictionaries\Scripts\Command.xml"/>
+							<Script Name="NoSleep" Path=".\UkrMobGroup\Dictionaries\Scripts\nosleep.xml"/>
+						</ScriptsList> 
+					</config> 
+				</socket> 
+			</socketList>
+			<context>
+				<object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
+					<config path=".\UkrMobGroup\Dictionaries" xml="Dictionary.xml"/>
+				</object>
+				<object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
+					<fileTableSource path=".\UkrMobGroup\Misc" xml="RepetitionTable.xml"/>
+				</object>					
+			</context>
+		</serviceInstance>
+	</serviceInstances>
+</Configuration>

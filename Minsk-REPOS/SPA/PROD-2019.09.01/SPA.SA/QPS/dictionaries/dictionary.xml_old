@@ -1,0 +1,143 @@
+<Dictionary>
+	<WellknownsList>
+		<Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
+		<Wellknown Name="msisdn.cc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,0,3)"/>
+		<Wellknown Name="msisdn.ndc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,3,2)"/>
+		<Wellknown Name="msisdn.sn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,5)"/>
+		<Wellknown Name="msisdn.fn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,3)"/>
+		<Wellknown Name="imsi" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;)"/>
+		<Wellknown Name="imsi.mcc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,0,3)"/>
+		<Wellknown Name="imsi.mnc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,3,2)"/>
+		<Wellknown Name="imsi.msin" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,5)"/>
+	</WellknownsList>
+	<ErrorsList CodePage="ASCII">
+		<Error Name="&lt;errorCode&gt;0&lt;/errorCode&gt;" Value="SUCCESS"/>
+		<Error Name="&lt;errorCode&gt;1&lt;/errorCode&gt;" Value="SUCCESS"/>
+		<Error Name="&lt;errorCode&gt;2&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;3&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;4&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;5&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;6&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;7&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;8&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;9&lt;/errorCode&gt;" Value="MsisdnAlreadyDefined"/>
+		<Error Name="&lt;errorCode&gt;10&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;11&lt;/errorCode&gt;" Value="MsisdnNotDefined"/>
+		<Error Name="&lt;errorCode&gt;12&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;13&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;14&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;15&lt;/errorCode&gt;" Value="NoSuchObjectInstance"/>
+		<Error Name="&lt;errorCode&gt;48&lt;/errorCode&gt;" Value="NoSuchObjectInstance"/>
+		<Error Name="&lt;errorCode&gt;49&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;46&lt;/errorCode&gt;" Value="FAILURE"/>
+	</ErrorsList>
+	<RegexpsList>
+        <Regexp Name="Error" Value="(?&lt;ERROR&gt;-*\d)"/>
+    </RegexpsList>
+	<ConstantsList />
+	<ParametersList>
+		<Parameter Name="NewMSISDN">
+			<Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//NewMSISDN"/>
+			<PossibleValues StringToKeyTable="true" />
+		</Parameter>
+		<Parameter Name="NewIMSI">
+			<Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//NewIMSI"/>
+			<PossibleValues StringToKeyTable="true" />
+		</Parameter>
+	</ParametersList>
+	<DynamicParametersList>
+		<DynamicParameter Name="UserName">
+			<Source Path="root/return/record/column[@name='USERNAMEFTTX']" /> 
+			<DynamicObject Name="db_get_username" /> 
+		</DynamicParameter>
+	</DynamicParametersList>
+	<CommandsList Root=".\QPS\Dictionaries\Commands\">
+		<Command Path="CreateSubscriber.xml"/>
+		<Command Path="CreateSubscriberFTTX.xml"/>
+		<Command Path="DeleteSubscriber.xml"/>
+		<Command Path="ChangeMSISDN.xml"/>
+		<Command Path="ChangeMSISDN2.xml"/>
+		<Command Path="KeepAliveQP.xml"/>
+		<Command Path="AddUnlim.xml"/>
+		<Command Path="DeleteUnlim.xml"/>
+		<Command Path="AddUnlim2.xml"/>
+		<Command Path="DeleteUnlim2.xml"/>		
+		<Command Path="AddSmartBit.xml"/>
+		<Command Path="DeleteSmartBit.xml"/>
+		<Command Path="DeleteNewMSISDN.xml"/>
+		<Command Path="UpQuotaSmart.xml"/>
+		<Command Path="UpQuotaUnlim.xml"/>
+		<Command Path="UpQuotaUnlim2.xml"/>
+		<Command Path="AddBusinessConnect1.xml"/>
+		<Command Path="AddBusinessConnect2.xml"/>
+		<Command Path="AddBusinessConnect3.xml"/>
+		<Command Path="AddBusinessConnect4.xml"/>
+		<Command Path="AddBusinessConnect5.xml"/>
+		<Command Path="AddBusinessConnect6.xml"/>
+		<Command Path="AddBusinessConnect7.xml"/>
+		<Command Path="AddBusinessConnect8.xml"/>
+		<Command Path="AddHomeConnect1.xml"/>
+		<Command Path="AddHomeConnect2.xml"/>
+		<Command Path="AddHomeConnect3.xml"/>
+		<Command Path="AddHomeConnect4.xml"/>
+		<Command Path="AddHomeConnectTurbo.xml"/>
+		<Command Path="AddHomeConnectUnlim1Gb.xml"/>
+		<Command Path="AddMTSKino.xml"/>
+		<Command Path="AddPres.xml"/>
+		<Command Path="Block.xml"/>
+		<Command Path="DeleteBusinessConnect1.xml"/>
+		<Command Path="DeleteBusinessConnect2.xml"/>
+		<Command Path="DeleteBusinessConnect3.xml"/>
+		<Command Path="DeleteBusinessConnect4.xml"/>
+		<Command Path="DeleteBusinessConnect5.xml"/>
+		<Command Path="DeleteBusinessConnect6.xml"/>
+		<Command Path="DeleteBusinessConnect7.xml"/>
+		<Command Path="DeleteBusinessConnect8.xml"/>
+		<Command Path="DeleteHomeConnect1.xml"/>
+		<Command Path="DeleteHomeConnect2.xml"/>
+		<Command Path="DeleteHomeConnect3.xml"/>
+		<Command Path="DeleteHomeConnect4.xml"/>
+		<Command Path="DeleteHomeConnectTurbo.xml"/>
+		<Command Path="DeleteHomeConnectUnlim1Gb.xml"/>
+		<Command Path="DeleteMTSKino.xml"/>
+		<Command Path="DeletePres.xml"/>
+		<Command Path="UnBlock.xml"/>
+		<Command Path="UpQuota100Gb.xml"/>
+		<Command Path="AddHomeConnectNew1.xml"/>
+		<Command Path="AddHomeConnectNew2.xml"/>
+		<Command Path="AddHomeConnectNew3.xml"/>
+		<Command Path="AddHomeConnectNew4.xml"/>
+		<Command Path="DeleteBusinessConnectNew1.xml"/>
+		<Command Path="DeleteBusinessConnectNew2.xml"/>
+		<Command Path="DeleteBusinessConnectNew3.xml"/>
+		<Command Path="DeleteBusinessConnectNew4.xml"/>
+		<Command Path="ReleaseSessionUserName.xml"/>
+		<Command Path="AddMiniBit.xml"/>
+		<Command Path="DeleteMiniBit.xml"/>
+		<Command Path="UpQuotaMini.xml"/>
+		<Command Path="AddGOV.xml"/>
+		<Command Path="DeleteGOV.xml"/>
+		<Command Path="AddORD.xml"/>
+		<Command Path="DeleteORD.xml"/>	
+		<Command Path="AddITV.xml"/>
+		<Command Path="DeleteITV.xml"/>			
+		<Command Path="AddBit.xml"/>			
+		<Command Path="DeleteBit.xml"/>			
+		<Command Path="AddSuperBit.xml"/>			
+		<Command Path="DeleteSuperBit.xml"/>			
+		<Command Path="AddUnlimVIP.xml"/>			
+		<Command Path="DeleteUnlimVIP.xml"/>			
+		<Command Path="UpQuotaBit.xml"/>			
+		<Command Path="UpQuotaSuperBit.xml"/>			
+		<Command Path="UpQuotaUnlimVIP.xml"/>			
+		<Command Path="AddPeering.xml"/>			
+		<Command Path="DeletePeering.xml"/>			
+		<Command Path="AddHomeCinema.xml"/>			
+		<Command Path="DeleteHomeCinema.xml"/>		
+		<Command Path="AddHomeConnect100000.xml"/>			
+		<Command Path="DeleteHomeConnect100000.xml"/>			
+	</CommandsList>
+	<!--DecodersList Root=".\Dictionaries\Decoders">
+		<Decoder Path="RbtDecoder.xml"/>
+	</DecodersList-->
+</Dictionary>

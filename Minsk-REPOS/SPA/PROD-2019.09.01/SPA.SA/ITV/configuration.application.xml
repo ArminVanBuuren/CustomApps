@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<serviceInstances>
+		<serviceInstance hardwareID="TV:1824">
+			<scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
+				<fileScenarioSource dir=".\ITV\Scenarios"/>
+			</scenarioSource>
+			<socketList poolSize="5" maxConnections="5" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="250" periodDuration="10" autoconnect="1" reconfigurationTimeout="0">
+				<socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
+					<config workingmode="wmGeneral">
+						<socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
+							<config>
+								<ParametersList>
+									<!-- <Parameter Key="Host" Value="http://api.itv.by"/> -->
+									<Parameter Key="Host" Value="10.128.213.41"/>
+									<Parameter Key="Port" Value="80"/>
+									<Parameter Key="Url" Value="itvby/mts_fix/"/>
+									<Parameter Key="MethodName" Value="GET"/>
+									<Parameter Key="Method" Value="GET"/>
+									<Parameter Key="UserName" Value=""/>
+									<Parameter Key="UserPwd" Value=""/>
+									<Parameter Key="ContentType" Value="text/html,application/xhtml+xml,application/xml"/>
+									<Parameter Key="ParameterName" Value=""/>
+								</ParametersList>
+							</config>
+						</socket>
+						<Emulation Success="[STATUS] => 0" Failure="[STATUS] => -1" RandomizePrintout="false" OverwriteCommandPrintout="true"  Lifetime="00:00:00.00"/>
+						<Timers IdleTimeout="6000"/>
+						<PredefinedScripts Login="Login" Command="Command" Idle="" Logoff=""/>
+						<ScriptsList> 
+							<Script Name="Login" Path=".\ITV\Dictionaries\Scripts\Login.xml"/>
+							<Script Name="Logoff" Path=".\ITV\Dictionaries\Scripts\logoff.xml"/>
+							<Script Name="Command" Path=".\ITV\Dictionaries\Scripts\Command.xml"/>
+							<Script Name="NoSleep" Path=".\ITV\Dictionaries\Scripts\nosleep.xml"/>
+						</ScriptsList> 
+					</config> 
+				</socket> 
+			</socketList>
+			<context>
+				<object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
+					<config path=".\ITV\Dictionaries" xml="Dictionary.xml"/>
+				</object>
+				<object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
+					<fileTableSource path=".\ITV\Misc" xml="RepetitionTable.xml"/>
+				</object>					
+			</context>
+		</serviceInstance>
+	</serviceInstances>
+</Configuration>

@@ -1,0 +1,29 @@
+<Dictionary>
+	<WellknownsList>
+		<Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
+	</WellknownsList>
+	<ErrorsList CodePage="ASCII">
+		<Error Name="&#34;error_code&#34;:0" Value="SUCCESS"/>
+		<Error Name="&#34;error_code&#34;:12" Value="FAILURE"/>
+		<Error Name="&#34;error_code&#34;:22" Value="FAILURE"/>
+		<Error Name="&#34;error_code&#34;:25" Value="FAILURE"/>
+		<Error Name="&#34;error_code&#34;:23" Value="FAILURE"/>
+		<Error Name="&#34;error_code&#34;:24" Value="FAILURE"/>
+	</ErrorsList>	
+	<RegexpsList/>
+	<ConstantsList />
+	<ParametersList>
+		<Parameter Name="NewMSISDN">
+			<Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//NewMSISDN"/>
+			<PossibleValues StringToKeyTable="true" />
+		</Parameter>
+	</ParametersList>
+	<DynamicParametersList/>
+	<CommandsList Root=".\Contents\Jobsms\Dictionaries\Commands\">
+		<Command Path="DeleteService.xml"/>
+		<Command Path="AddService.xml"/>
+		<Command Path="BlockSubscriber.xml"/>
+		<Command Path="UnBlockSubscriber.xml"/>
+		<Command Path="ChangeMSISDN.xml"/>
+	</CommandsList>
+</Dictionary>

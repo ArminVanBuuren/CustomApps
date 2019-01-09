@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Dictionary>
+<WellknownsList>
+		<Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
+	</WellknownsList>
+	<ErrorsList CodePage="ASCII" >
+		<Error Name="204 No Content" Value="SUCCESS"/>
+		<Error Name="500 Internal Server Error" Value="FAILURE"/>
+	</ErrorsList>
+	<RegexpsList/>
+   <ParametersList>
+      <Parameter Name="NewMSISDN">
+         <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//NewMSISDN" />
+         <PossibleValues StringToKeyTable="true" />
+      </Parameter>
+   </ParametersList>
+   <DynamicParametersList/>
+	<CommandsList Root=".\Contents\LineB\Dictionaries\Commands\">
+		<Command Path="ChangeMSISDN.xml"/>
+		<Command Path="Block.xml"/>
+		<Command Path="UnBlock.xml"/>
+		<Command Path="DeleteSubscriber.xml"/>
+		<Command Path="DeleteAddNum1.xml"/>
+		<Command Path="DeleteAddNum2.xml"/>
+		<Command Path="DeleteAddNum3.xml"/>
+		<Command Path="DeleteAddNum4.xml"/>
+		<Command Path="DeleteAddNum5.xml"/>
+		<Command Path="DeleteAddNum6.xml"/>
+		<Command Path="DeleteServiceLineB.xml"/>
+	</CommandsList>
+	<!--<DecodersList/>
+		<Decoder Path="RbtDecoder.xml"/>
+	</DecodersList> -->
+</Dictionary>

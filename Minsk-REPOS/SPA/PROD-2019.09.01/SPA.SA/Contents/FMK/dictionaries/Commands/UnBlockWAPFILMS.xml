@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="UnBlockWAPFILMS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Удаление сервиса</Description>
+	<Author Name="YAI" Date="2017-09-27+13:21"/>
+	<Request Template="v1/subscribers/{0}/unblock?servicecode=FR14806">
+	<Item Name="msisdn" Type="Wellknown" />
+	</Request>
+	<ErrorsList CodePage="ASCII">
+		<Error Name="&#34;status&#34;:0" Value="SUCCESS"/>
+		<Error Name="&#34;status&#34;:1" Value="FAILURE"/>
+	</ErrorsList>
+</Command>

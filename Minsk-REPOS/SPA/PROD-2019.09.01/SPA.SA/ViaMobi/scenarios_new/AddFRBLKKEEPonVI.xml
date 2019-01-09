@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="AddFRBLKKEEPonVI">
+	<objectList>
+		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+		<object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="HttpCmd" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfHttpCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
+	</objectList>
+	<automat>
+		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
+			<resultlist>
+				<result value="0" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+			<resultlist>
+				<result value="0" node="BlockNode"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="BlockNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="BlockENGNode"/>
+				<result value="1538" node="BlockENGNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="viamobi/mts/"/>
+				<param name="Command" value="Block"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="82"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.UserName" value=""/>
+				<param name="Connection.UserPwd" value=""/>
+				<param name="Connection.ContentType" value="text/plain;charset=UTF-8"/>
+				<param name="Connection.Header.Authorization" value="Basic Base64(mtsby:CwpnCH2URncDKwXWvxRd)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR12217" />
+			</parameterslist>
+		</node> 
+		<node name="BlockENGNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="viamobi/mts/"/>
+				<param name="Command" value="BlockENG"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="82"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.UserName" value=""/>
+				<param name="Connection.UserPwd" value=""/>
+				<param name="Connection.ContentType" value="text/plain;charset=UTF-8"/>
+				<param name="Connection.Header.Authorization" value="Basic Base64(mtsby:CwpnCH2URncDKwXWvxRd)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR12280" />
+			</parameterslist>
+		</node> 		
+		<node name="DummyResponderNode" object="DummyResponder">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+		<parameterslist>
+			<param name="OverallResult" value="SUCCESS"/>
+			<param name="DetailedResult" value="SUCCESS"/>
+			<param name="Delay" value="0"/>
+		</parameterslist>
+		</node>			
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

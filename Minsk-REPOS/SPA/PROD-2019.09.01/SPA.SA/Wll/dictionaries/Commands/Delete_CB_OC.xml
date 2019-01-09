@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="Delete_CB_OC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>>Удаление ограничения исходящей связи</Description>
+	<Author Name="YAI" Date="2011-09-21+12:18"/>
+	<Request Template="MOD CB: IMSI=&quot;{0}&quot;, BAOC=FALSE;">
+		<Item Name="imsi" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="ASCII"/>
+</Command>

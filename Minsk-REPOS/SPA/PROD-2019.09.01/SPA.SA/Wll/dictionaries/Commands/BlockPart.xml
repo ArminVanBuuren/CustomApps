@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="BlockPart" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>>Блокировка исходящей связи на HLR HUAWEI</Description>
+	<Author Name="YAI" Date="2011-09-07+12:18"/>
+	<Request Template="MOD ODB: IMSI=&quot;{0}&quot;,ODBOC=BAOC,ODBIC=NOBIC;">
+		<Item Name="imsi" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="ASCII"/>
+</Command>

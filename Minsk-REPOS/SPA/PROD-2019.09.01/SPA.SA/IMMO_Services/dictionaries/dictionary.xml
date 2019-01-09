@@ -1,0 +1,57 @@
+<Dictionary>
+	<WellknownsList>
+		<Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
+		<Wellknown Name="newmsisdn2" Value="xmlsubstr(&quot;ExtendedRequestMessage/AdditionalData/ProvisionList//NewMSISDN&quot;, false)"/> 
+	</WellknownsList>
+	<ErrorsList CodePage="ASCII">
+		<Error Name="&#34;result&#34;:1" Value="SUCCESS"/>
+		<Error Name="&#34;result&#34;:2" Value="FAILURE"/>
+		<Error Name="code&#62;0&#60;" Value="SUCCESS"/>
+		<Error Name="code&#62;1030&#60;" Value="FAILURE"/>
+		<Error Name="code&#62;1020&#60;" Value="FAILURE"/>
+		<Error Name="code&#62;1010&#60;" Value="FAILURE"/>
+		<Error Name="code&#62;1011&#60;" Value="FAILURE"/>
+		<Error Name="code&#62;1000&#60;" Value="FAILURE"/>
+		<Error Name="500 Internal Server Error" Value="ResourceLimitation"/>
+		<Error Name="503 Service Temporarily Unavailable" Value="ConnectionError"/> 
+		<Error Name="502 Bad Gateway" Value="ConnectionError"/> 
+		<Error Name="502 Proxy Error" Value="ConnectionError"/>		
+	</ErrorsList>
+	<RegexpsList />
+    <!--    <Regexp Name="Error" Value="(?&lt;ERROR&gt;-*\d)"/>
+    </RegexpsList> -->
+	<ConstantsList />
+	<ParametersList>
+		<Parameter Name="NewMSISDN">
+			<Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//NewMSISDN"/>
+			<PossibleValues StringToKeyTable="true" />
+		</Parameter>
+	</ParametersList>
+	<DynamicParametersList>
+			<DynamicParameter Name="CUST_ID">
+			<Source Path="root/return/record/column[@name='CUSTID']" /> 
+			<DynamicObject Name="db_get_cust_id" /> 
+		</DynamicParameter>	
+	</DynamicParametersList>
+	<CommandsList Root=".\IMMO_Services\Dictionaries\Commands\">
+		<Command Path="DeleteSubscriberMTSInfo.xml"/>	
+		<Command Path="ChangeMSISDNMTSInfo.xml"/>	
+		<Command Path="DeleteServiceBudVKurse.xml"/>	
+		<Command Path="ChangeMSISDNBudVKurse.xml"/>	
+		<Command Path="Block.xml"/>	
+		<Command Path="UnBlock.xml"/>	
+		<Command Path="DeleteServicePBS.xml"/>	
+		<Command Path="ServicePressa.xml"/>	
+		<Command Path="ChangeMSISDNPressa.xml"/>	
+		<Command Path="DeleteServiceDengi.xml"/>	
+		<Command Path="AddServiceDengi.xml"/>	
+		<Command Path="BlockDengi.xml"/>	
+		<Command Path="UnBlockDengi.xml"/>	
+		<Command Path="ChangeMSISDNDengi.xml"/>
+		<Command Path="InteractiveBalance.xml"/>
+		<Command Path="ChangeMSISDNInteractiveBalance.xml"/>
+	</CommandsList>
+	<!--DecodersList Root=".\Dictionaries\Decoders">
+		<Decoder Path="RbtDecoder.xml"/>
+	</DecodersList-->
+</Dictionary>

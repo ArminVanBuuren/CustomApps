@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ChangeMSISDNMobileSecurity" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Замена номера</Description>
+	<Author Name="YAI" Date="2017-07-12+10:21"/>
+	<Request Template="v1/subscriptions/change_phone?phone_old={0}&amp;phone_new={1}&amp;service=FR14350">
+	<Item Name="msisdn" Type="Wellknown" />
+	<Item Name="NewMSISDN" Type="Parameter" /> 
+	</Request>
+	<ErrorsList CodePage="ASCII" >
+		<Error Name="&quot;code&quot;:&quot;SUBS_NOT_FOUND&quot;" Value="SUCCESS"/>
+	</ErrorsList>
+</Command>

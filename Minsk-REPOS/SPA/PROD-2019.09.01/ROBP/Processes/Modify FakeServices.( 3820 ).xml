@@ -1,0 +1,19 @@
+<BusinessProcessData name="Modify FakeServices">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="ModifyFR333" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="ModifyFR333" object="ModifyFR333">
+          <parameterslist>
+            <param name="operation" value="ModifyFR333" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

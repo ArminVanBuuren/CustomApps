@@ -1,0 +1,16 @@
+<OperationData>
+  <Request Name="RequestMessage">
+    <AdditionalData Executable="True">
+      <ProvisionList HaltMode="AbortProcess" Type="AnyOfListed">
+        <FR10869 HaltMode="CancelOperation" Type="Mandatory" />
+      </ProvisionList>
+      <RegisteredList Type="AnyOfListed" HaltMode="CancelOperation">
+        <FR10864 HaltMode="CancelOperation" Type="Optional" />
+        <FR10865 HaltMode="CancelOperation" Type="Optional" />
+        <FR10866 HaltMode="CancelOperation" Type="Optional" />
+        <FR10867 HaltMode="CancelOperation" Type="Optional" />
+      </RegisteredList>
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage" />
+</OperationData>

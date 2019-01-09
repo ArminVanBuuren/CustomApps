@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="DeleteUnlim2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Удаление Безлимит 2</Description>
+	<Author Name="YAI" Date="2015-03-26+10:21"/>
+	<Request Template="&#60;&#63;xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;&#63;&#62;
+	&#60;soapenv:Envelope xmlns:soapenv=&#34;http://schemas.xmlsoap.org/soap/envelope/&#34; xmlns:rm=&#34;rm:soap&#34;&#62;
+&#60;soapenv:Header/&#62;
+&#60;soapenv:Body&#62;
+&#60;rm:unSubscribeService&#62;
+&#60;inPara&#62;
+&#60;subscriber&#62;
+&#60;attribute&#62;
+&#60;key&#62;usrIdentifier&#60;/key&#62;
+&#60;value&#62;{0}&#60;/value&#62;
+&#60;/attribute&#62;
+&#60;/subscriber&#62;
+&#60;subscribedService&#62;
+&#60;attribute&#62;
+&#60;key&#62;srvName&#60;/key&#62;
+&#60;value&#62;FR5596&#60;/value&#62;
+&#60;/attribute&#62;
+&#60;/subscribedService&#62;
+&#60;/inPara&#62;
+&#60;/rm:unSubscribeService&#62;
+&#60;/soapenv:Body&#62;
+&#60;/soapenv:Envelope&#62;">
+	<Item Name="msisdn" Type="Wellknown" />
+	</Request>
+	<ErrorsList CodePage="ASCII"/>
+</Command>

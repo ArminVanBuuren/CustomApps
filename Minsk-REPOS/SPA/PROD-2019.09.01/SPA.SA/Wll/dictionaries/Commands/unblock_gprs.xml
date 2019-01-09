@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="unblock_gprs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Разблокировка входящей и исходящей связи и GPRS без МД на HLR HUAWEI</Description>
+	<Author Name="YAI" Date="2011-09-07+12:18"/>
+	<Request Template="MOD ODB: IMSI=&quot;{0}&quot;, ODBOC=BOIC, ODBIC=NOBIC;^JMOD GPRSLCK: IMSI=&quot;{0}&quot;, LOCK=FALSE;^JMOD RSZI: IMSI=&quot;{0}&quot;, RROPTION=ALL_PLMNS;">
+		<Item Name="imsi" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="ASCII"/>
+</Command>

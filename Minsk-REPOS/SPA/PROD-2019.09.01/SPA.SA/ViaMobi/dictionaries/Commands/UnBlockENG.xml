@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="UnBlockENG" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Технологическая: интернет-подписка на сервисы ВиаМоби</Description>
+	<Author Name="YAI" Date="2016-07-11+09:50"/>
+	<Request Template="subsapi?action=unsuspend&amp;service=engster&amp;msisdn={0}">
+	<Item Name="msisdn" Type="Wellknown" />
+	</Request>
+	<ErrorsList CodePage="ascii" />
+</Command>

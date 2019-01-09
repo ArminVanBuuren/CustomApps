@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="AddFTTXStaticIP8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Добавление StaticIP 8</Description>
+	<Author Name="YAI" Date="2018-06-28+15:21"/>
+	<Request Template="&#60;soapenv:Envelope xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34; xmlns:xsd=&#34;http://www.w3.org/2001/XMLSchema&#34; xmlns:soapenv=&#34;http://schemas.xmlsoap.org/soap/envelope/&#34; xmlns:imp=&#34;https://imperituroard&#34;&#62;
+&#60;soapenv:Header/&#62;
+&#60;soapenv:Body&#62;
+&#60;imp:mts_1_add_new_address soapenv:encodingStyle=&#34;http://schemas.xmlsoap.org/soap/encoding/&#34;&#62;
+&#60;type xsi:type=&#34;xsd:string&#34;&#62;{2}&#60;/type&#62;
+&#60;msisdn xsi:type=&#34;xsd:string&#34;&#62;{0}&#60;/msisdn&#62;
+&#60;region xsi:type=&#34;xsd:string&#34;&#62;{1}&#60;/region&#62;
+&#60;description xsi:type=&#34;xsd:string&#34;&#62;&#60;/description&#62;
+&#60;note xsi:type=&#34;xsd:string&#34;&#62;Billing.SPA&#60;/note&#62;
+&#60;ipcount xsi:type=&#34;xsd:string&#34;&#62;8&#60;/ipcount&#62;
+&#60;ipversion xsi:type=&#34;xsd:string&#34;&#62;4&#60;/ipversion&#62;
+&#60;/imp:mts_1_add_new_address&#62;
+&#60;/soapenv:Body&#62;
+&#60;/soapenv:Envelope&#62;">
+	<Item Name="msisdn" Type="Wellknown" />
+	<Item Name="RegionSubscriber" Type="LocalParameter" />
+	<Item Name="TypeSubscriber" Type="LocalParameter" />
+	</Request>
+	<ParametersList>
+		<Parameter Name="RegionSubscriber">
+			<Source Path="ExtendedRequestMessage/AdditionalData/RegionSubscriber" /> 
+			<PossibleValues StringToKeyTable="true" /> 
+		</Parameter>
+		<Parameter Name="TypeSubscriber">
+			<Source Path="ExtendedRequestMessage/AdditionalData/TypeSubscriber" /> 
+			<PossibleValues StringToKeyTable="true" /> 
+		</Parameter>		
+	</ParametersList>	
+	<ErrorsList CodePage="ASCII"/>
+</Command>

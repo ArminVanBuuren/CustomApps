@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<serviceInstances>
+		<serviceInstance hardwareID="ZN:1821">
+			<scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
+				<fileScenarioSource dir=".\IMMO3\Scenarios"/>
+			</scenarioSource>
+			<socketList poolSize="10" maxConnections="10" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="500" periodDuration="20" autoconnect="1" reconfigurationTimeout="0">
+				<socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
+					<config workingmode="wmGeneral">
+						<socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
+							<config>
+								<ParametersList>
+									<Parameter Key="Host" Value="178.124.129.131"/>
+									<Parameter Key="Port" Value="80"/>
+									<Parameter Key="Url" Value=""/>
+									<Parameter Key="MethodName" Value="GET"/>
+									<Parameter Key="Method" Value="GET"/>
+									<Parameter Key="UserName" Value=""/>
+									<Parameter Key="UserPwd" Value=""/>
+									<Parameter Key="ContentType" Value="text/xml;"/>
+									<Parameter Key="ParameterName" Value=""/>
+								</ParametersList>
+							</config>
+						</socket>
+						<Emulation Success="Ok" Failure="Wrong query" RandomizePrintout="false" OverwriteCommandPrintout="true"  Lifetime="00:00:00.00"/>
+						<Timers IdleTimeout="6000"/>
+						<PredefinedScripts Login="Login" Command="Command" Idle="" Logoff=""/>
+						<ScriptsList> 
+							<Script Name="Login" Path=".\IMMO3\Dictionaries\Scripts\Login.xml"/>
+							<Script Name="Logoff" Path=".\IMMO3\Dictionaries\Scripts\logoff.xml"/>
+							<Script Name="Command" Path=".\IMMO3\Dictionaries\Scripts\Command.xml"/>
+							<Script Name="NoSleep" Path=".\IMMO3\Dictionaries\Scripts\nosleep.xml"/>
+						</ScriptsList> 
+					</config> 
+				</socket> 
+			</socketList>
+			<context>
+				<object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
+					<config path=".\IMMO3\Dictionaries" xml="Dictionary.xml"/>
+				</object>
+				<object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
+					<fileTableSource path=".\IMMO3\Misc" xml="RepetitionTable.xml"/>
+				</object>				
+			</context>
+		</serviceInstance>
+	</serviceInstances>
+</Configuration>

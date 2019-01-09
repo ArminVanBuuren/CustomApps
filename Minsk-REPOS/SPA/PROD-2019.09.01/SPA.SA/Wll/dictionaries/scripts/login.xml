@@ -1,0 +1,4 @@
+<Script Name="Login">
+	<write data='LGI: HLRSN=1, OPNAME="bill", PWD="@billing@";'/>
+	<wait data="RETCODE = 0 Operation is successful" timeout="3000"/>
+</Script>

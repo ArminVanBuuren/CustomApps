@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ChangeMSISDNDengi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Change MSISDN</Description>
+	<Author Name="YAI" Date="2017-09-14+14:50"/>
+	<Request Template="contract_notification/msisdn_change?old={0}&amp;new={1}&amp;cust_id={2}">
+	<Item Name="msisdn" Type="Wellknown" />
+	<Item Name="NewMSISDN" Type="Parameter"/>
+	<Item Name="CUST_ID" Type="DynamicParameter" /> 
+	</Request>
+	<ErrorsList CodePage="ascii" >
+		<Error Name="202 Accepted" Value="SUCCESS" />
+		<Error Name="404 " Value="FAILURE" />
+		<Error Name="500 " Value="FAILURE" />
+	</ErrorsList>
+</Command>

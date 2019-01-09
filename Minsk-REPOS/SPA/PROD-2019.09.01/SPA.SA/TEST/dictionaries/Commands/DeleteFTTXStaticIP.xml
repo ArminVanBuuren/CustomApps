@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="DeleteFTTXStaticIP" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Удаление StaticIP</Description>
+	<Author Name="YAI" Date="2018-06-28+15:21"/>
+	<Request Template="&#60;soapenv:Envelope xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34; xmlns:xsd=&#34;http://www.w3.org/2001/XMLSchema&#34; xmlns:soapenv=&#34;http://schemas.xmlsoap.org/soap/envelope/&#34; xmlns:imp=&#34;https://imperituroard&#34;&#62;
+&#60;soapenv:Header/&#62;
+&#60;soapenv:Body&#62;
+&#60;imp:mts_2_delete_address soapenv:encodingStyle=&#34;http://schemas.xmlsoap.org/soap/encoding/&#34;&#62;
+&#60;msisdn xsi:type=&#34;xsd:string&#34;&#62;{0}&#60;/msisdn&#62;
+&#60;/imp:mts_2_delete_address&#62;
+&#60;/soapenv:Body&#62;
+&#60;/soapenv:Envelope&#62;">
+	<Item Name="msisdn" Type="Wellknown" />
+	</Request>
+	<ErrorsList CodePage="ASCII">
+		<Error Name="&gt;404&lt;/answercode&gt;" Value="SUCCESS"/>
+	</ErrorsList>
+</Command>

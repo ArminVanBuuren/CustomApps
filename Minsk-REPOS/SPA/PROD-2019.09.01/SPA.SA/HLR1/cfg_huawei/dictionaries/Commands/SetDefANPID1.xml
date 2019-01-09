@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="SetDefANPID1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>SetDefANPID1</Description>
+	<Author Name="YAI" Date="2015-12-02+12:18"/>
+	<Request Template="MOD OPTGPRS: ISDN=&quot;{0}&quot;, PROV=MODPDPCNTX, APN_TYPE=EPS_APN, APNTPLID=1, DEFAULTCFGFLAG=TRUE;">
+		<Item Name="msisdn" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="ASCII"/>
+</Command>

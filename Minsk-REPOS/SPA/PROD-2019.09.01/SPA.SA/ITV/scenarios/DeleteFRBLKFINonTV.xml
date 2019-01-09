@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="DeleteFRBLKFINonTV">
+	<objectList>
+		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll" />
+		<object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll" />	
+		<object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll" />		
+		<object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>		
+	</objectList>
+	<automat>
+		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
+			<resultlist>
+				<result value="0" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+			<resultlist>
+				<result value="0" node="ConnectIfBlockNode"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="ConnectIfBlockNode" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="DummyResponderNode"/>
+				<result value="1" node="IfServiceITVConnectNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/BLTDLIM"/>
+				<param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CBBLKLOST"/>
+				<param name="OrXmlPath:2" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKCHK"/>
+				<param name="OrXmlPath:3" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKFIN"/>
+				<param name="OrXmlPath:4" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKKEEP"/>
+				<param name="OrXmlPath:5" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKPAY"/>
+				<param name="OrXmlPath:6" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKP"/>
+				<param name="OrXmlPath:7" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKTIME"/>
+				<param name="OrXmlPath:8" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKUSER"/>
+			</parameterslist>
+		</node>			
+		<node name="IfServiceITVConnectNode" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="ConnectDataBaseProcessorMACADDRNode"/>
+				<result value="1" node="IfServiceITVNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR10864"/>
+				<param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR10865"/>
+				<param name="OrXmlPath:2" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR10866"/>
+				<param name="OrXmlPath:3" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR10867"/>
+			</parameterslist>
+		</node>			
+		<node name="ConnectDataBaseProcessorMACADDRNode" object="DataBaseProcessor">
+			<resultlist>
+				<result value="" node="ConnectExtractMACADDRNode" /> 
+			</resultlist>
+			<parameterslist>
+				<param name="DataBaseName" value="FORIS.SPA.SDP" /> 
+				<param name="FunctionName" value="select nvl(max(m.macaddrfttx),0) as MACADDRFTTX   from V_MACADDRESS m where m.customer = {0}" /> 
+				<param name="FunctionType" value="customQuery" /> 
+				<param name="OutXml" value="db_get_macaddr" /> 
+				<param name="DbParameterName:0" value="i_customer" /> 
+				<param name="DbParameterDirection:0" value="Input" /> 
+				<param name="DbParameterType:0" value="NVarchar2" /> 
+				<param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN" /> 
+			</parameterslist>
+		</node>
+		<node name="ConnectExtractMACADDRNode" object="XmlNodesCopier">
+			<resultlist>
+				<result value="" node="ConnectIFMACADDRNode" /> 
+			</resultlist>
+			<parameterslist>
+				<param name="SrcXml" value="db_get_macaddr" /> 
+				<param name="DstMessage" value="xmlrequest" /> 
+				<param name="CopyContentType" value="InnerText" /> 
+				<param name="SrcXmlPath:0" value="root/return/record/column[@name='MACADDRFTTX']" /> 
+				<param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/MACADDR" /> 
+			</parameterslist>
+		</node>
+		<node name="ConnectIFMACADDRNode" object="Switch">
+			<resultlist>
+				<result value="0" node="ConnectUnBlockNode"/>
+				<result value="1" node="ConnectUnBlockMACNode"/>
+				<result value="2" node="ConnectUnBlockNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/MACADDR"/>
+				<param name="Value:2" value="0"/>
+			</parameterslist>
+		</node>							
+		<node name="ConnectUnBlockMACNode" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Command" value="AddITV"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="ConnectUnBlockNode" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Command" value="AddITVNM"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>			
+		<node name="IfServiceITVNode" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="DataBaseProcessorMACADDRNode"/>
+				<result value="1" node="IfServiceITVSMARTNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR10312"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>	
+		<node name="IfServiceITVSMARTNode" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="IfBlockNode"/>
+				<result value="1" node="DummyResponderNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR10313"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>			
+		<node name="DataBaseProcessorMACADDRNode" object="DataBaseProcessor">
+			<resultlist>
+				<result value="" node="ExtractMACADDRNode" /> 
+			</resultlist>
+			<parameterslist>
+				<param name="DataBaseName" value="FORIS.SPA.SDP" /> 
+				<param name="FunctionName" value="select nvl(max(m.macaddrfttx),0) as MACADDRFTTX   from V_MACADDRESS m where m.customer = {0}" /> 
+				<param name="FunctionType" value="customQuery" /> 
+				<param name="OutXml" value="db_get_macaddr" /> 
+				<param name="DbParameterName:0" value="i_customer" /> 
+				<param name="DbParameterDirection:0" value="Input" /> 
+				<param name="DbParameterType:0" value="NVarchar2" /> 
+				<param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN" /> 
+			</parameterslist>
+		</node>
+		<node name="ExtractMACADDRNode" object="XmlNodesCopier">
+			<resultlist>
+				<result value="" node="IFMACADDRNode" /> 
+			</resultlist>
+			<parameterslist>
+				<param name="SrcXml" value="db_get_macaddr" /> 
+				<param name="DstMessage" value="xmlrequest" /> 
+				<param name="CopyContentType" value="InnerText" /> 
+				<param name="SrcXmlPath:0" value="root/return/record/column[@name='MACADDRFTTX']" /> 
+				<param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/MACADDR" /> 
+			</parameterslist>
+		</node>
+		<node name="IFMACADDRNode" object="Switch">
+			<resultlist>
+				<result value="0" node="DummyResponderNode"/>
+				<result value="1" node="IfBlockNode"/>
+				<result value="2" node="DummyResponderNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/MACADDR"/>
+				<param name="Value:2" value="0"/>
+			</parameterslist>
+		</node>			
+		<node name="IfBlockNode" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="DummyResponderNode"/>
+				<result value="1" node="IfServiceITVBLOCKNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/BLTDLIM"/>
+				<param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CBBLKLOST"/>
+				<param name="OrXmlPath:2" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKCHK"/>
+				<param name="OrXmlPath:3" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKFIN"/>
+				<param name="OrXmlPath:4" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKKEEP"/>
+				<param name="OrXmlPath:5" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKPAY"/>
+				<param name="OrXmlPath:6" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKP"/>
+				<param name="OrXmlPath:7" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKTIME"/>
+				<param name="OrXmlPath:8" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKUSER"/>
+			</parameterslist>
+		</node>			
+		<node name="IfServiceITVBLOCKNode" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="UnBlockNode"/>
+				<result value="1" node="IfServiceITVSMARTBLOCKNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR10312"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>	
+		<node name="IfServiceITVSMARTBLOCKNode" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="UnBlockSMARTNode"/>
+				<result value="1" node="DummyResponderNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR10313"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>			
+		<node name="UnBlockNode" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Command" value="AddITV"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="UnBlockSMARTNode" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Command" value="AddITVNM"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>		
+		<node name="DummyResponderNode" object="DummyResponder">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+		<parameterslist>
+			<param name="OverallResult" value="SUCCESS"/>
+			<param name="DetailedResult" value="SUCCESS"/>
+			<param name="Delay" value="0"/>
+		</parameterslist>
+		</node>		
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

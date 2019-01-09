@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="CreatePAOnFINPlatform.LowBalanceLimitsRow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>CreatePAOnFINPlatform (LowBalanceLimits table)</Description>
+  <Author Name="Max Smirnov" Date="2013-03-28+16:00"/>
+  <Properties GenerationType="MmlXml" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[<Row PERSONAL_ACCOUNT_ID="{0}" LIMIT_VALUE="{1}" {2} />]]>
+    </RequestTemplate>
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="PersonalAccount" Type="Wellknown"/>
+    <Item Name="LIMIT_VALUE" Type="Parameter"/>
+    <Item Name="LIMIT_LEVEL" Type="Parameter"/>
+  </Request>
+  <ParametersList/>
+  <ErrorsList CodePage="ascii"/>
+</Command>

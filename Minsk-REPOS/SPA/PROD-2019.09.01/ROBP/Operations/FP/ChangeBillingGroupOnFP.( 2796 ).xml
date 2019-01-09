@@ -1,0 +1,18 @@
+<OperationData>
+  <Request Name="ExtendedRequestMessage">
+    <AdditionalData>
+      <ProvisionList HaltMode="AbortProcess" Type="Mandatory">
+        <ChangeBillingGroup HaltMode="AbortProcess" Type="Mandatory">
+          <NewBillingGroupId HaltMode="AbortProcess" Type="Mandatory" />
+        </ChangeBillingGroup>
+      </ProvisionList>
+      <RegisteredList Type="Optional" Copy="CopyAll" />
+      <BalanceStorage Type="Optional">
+        <HostTypeCode Type="Optional" />
+        <HostId Type="Optional" />
+        <HostCode Type="Optional" />
+      </BalanceStorage>
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage" />
+</OperationData>

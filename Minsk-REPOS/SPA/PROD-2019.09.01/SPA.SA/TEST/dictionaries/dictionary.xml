@@ -1,0 +1,68 @@
+<Dictionary>
+	<WellknownsList>
+		<Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
+		<Wellknown Name="newsisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/AdditionalData/ProvisionList//NewMSISDN&quot;, false)"/>
+	</WellknownsList>
+	<ErrorsList CodePage="ASCII">
+		<Error Name="&gt;200&lt;/answercode&gt;" Value="SUCCESS"/>
+		<Error Name="&gt;500&lt;/answercode&gt;" Value="FAILURE"/>
+		<Error Name="WebException.Status=ConnectFailure" Value="HardwareConnectionError"/>
+		<Error Name="&lt;errorCode&gt;0&lt;/errorCode&gt;" Value="SUCCESS"/>
+		<Error Name="&lt;errorCode&gt;1&lt;/errorCode&gt;" Value="SUCCESS"/>
+		<Error Name="&lt;errorCode&gt;25&lt;/errorCode&gt;" Value="SUCCESS"/>
+		<Error Name="&lt;errorCode&gt;2&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;3&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;4&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;5&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;6&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;7&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;8&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;9&lt;/errorCode&gt;" Value="MsisdnAlreadyDefined"/>
+		<Error Name="&lt;errorCode&gt;10&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;11&lt;/errorCode&gt;" Value="MsisdnNotDefined"/>
+		<Error Name="&lt;errorCode&gt;12&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;13&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;14&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;15&lt;/errorCode&gt;" Value="NoSuchObjectInstance"/>
+		<Error Name="&lt;errorCode&gt;48&lt;/errorCode&gt;" Value="NoSuchObjectInstance"/>
+		<Error Name="&lt;errorCode&gt;45&lt;/errorCode&gt;" Value="NoSuchObjectInstance"/>
+		<Error Name="&lt;errorCode&gt;49&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;46&lt;/errorCode&gt;" Value="FAILURE"/>
+	</ErrorsList>
+	<RegexpsList />
+	<ConstantsList />
+	<ParametersList/>
+	<DynamicParametersList>
+		<DynamicParameter Name="RegionSubscriber">
+			<Source Path="root/return/record/column[@name='REGSUB']" /> 
+			<DynamicObject Name="db_GetRegionTypeSub" /> 
+		</DynamicParameter>	
+		<DynamicParameter Name="TypeSubscriber">
+			<Source Path="root/return/record/column[@name='TYPESUB']" /> 
+			<DynamicObject Name="db_GetRegionTypeSub" /> 
+		</DynamicParameter>	
+		<DynamicParameter Name="GiftUnlimDateService">
+			<Source Path="root/return/record/column[@name='DATESERVICE']" /> 
+			<DynamicObject Name="db_DateService" /> 
+		</DynamicParameter>			
+	</DynamicParametersList>	
+	<CommandsList Root=".\Test\Dictionaries\Commands\">
+		<Command Path="AddFTTXStaticIP1.xml"/> 
+		<Command Path="AddFTTXStaticIP4.xml"/> 
+		<Command Path="AddFTTXStaticIP8.xml"/> 
+		<Command Path="AddFTTXStaticIP16.xml"/> 
+		<Command Path="AddFTTXStaticIP32.xml"/> 
+		<Command Path="DeleteFTTXStaticIP.xml"/> 
+		<Command Path="SychrFTTXStaticIP.xml"/> 
+		<Command Path="test.xml"/> 
+		<Command Path="AddUnlim5.xml"/> 
+		<Command Path="UpQuotaTPUnlim5G_1GB.xml"/> 
+		<Command Path="AddBusinesVPN1VL.xml"/> 
+		<Command Path="AddActionGiftUnlimInet.xml"/> 
+		<Command Path="DeleteActionGiftUnlimInet.xml"/> 
+	</CommandsList>
+	<FunctionsList Root=".\Test\Dictionaries\Func" References="references.xml">
+		<Function Path="getlastdayofmonthbefore.cs" /> 
+		<Function Path="getlastdayofmonth.cs" /> 
+	</FunctionsList>	
+</Dictionary>

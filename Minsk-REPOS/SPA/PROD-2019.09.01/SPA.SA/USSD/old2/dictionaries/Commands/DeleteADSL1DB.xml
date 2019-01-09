@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="DeleteADSL1DB" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Удаление ADSL 1 </Description>
+	<Author Name="YAI" Date="2012-06-22+15:50"/>
+	<Properties GenerationType="Database" />
+	<Request Template="function spa_func.f_add_request({0},{1},{2},{3}) return number">
+		<Item Name="MSISDN" Type="DatabaseParameter"/>
+		<Item Name="ServiceID" Type="LocalDatabaseParameter"/>		
+		<Item Name="Action" Type="LocalDatabaseParameter"/>		
+		<Item Name="add_param" Type="DatabaseParameter"/>
+	</Request>
+	<DatabaseParametersList>
+		<DatabaseParameter Name="ServiceID">
+			<Properties DatabaseArgumentName="service_id" DatabaseArgumentType="number" />
+				<Source Path="dummy" AbsenceValue="35712" />
+			<PossibleValues StringToKeyTable="true"/>
+		</DatabaseParameter>
+		<DatabaseParameter Name="Action">
+			<Properties DatabaseArgumentName="event_id" DatabaseArgumentType="number" />
+				<Source Path="dummy" AbsenceValue="0" />
+			<PossibleValues StringToKeyTable="true"/>
+		</DatabaseParameter>		
+	</DatabaseParametersList>	
+	<ErrorsList CodePage="ASCII"/>
+</Command>

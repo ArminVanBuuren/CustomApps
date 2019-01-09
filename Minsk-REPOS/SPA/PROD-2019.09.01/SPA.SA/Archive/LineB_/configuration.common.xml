@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<Application Path=".\LineB\configuration.application.xml"/>
+	<Settings>
+		<Add Key="ReportTimeout" Value="180"/>
+		<Add Key="Requests.MaxQueuedPerHost" Value="500"/>
+		<Add Key="Requests.PollPeriod" Value="5"/>
+		<Add Key="Requests.PollIdlePeriod" Value="2"/>
+		<Add Key="Responses.WritersCount" Value="5"/>
+		<Add Key="ProfilerConfiguration" Value="Profiler.xml" />
+		<Add Key="InfiniteLoopWarningThreshold" Value="1000" />
+		<Add Key="InfiniteLoopInterruptThreshold" Value="10000" />
+
+	</Settings>
+	<DatabaseObjects Remotable="false">
+		<Add Name="FORIS.SPA.CBP" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.CBP" />
+		<Add Name="FORIS.SPA.ARCHIVE" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.ARCHIVE" />
+		<Add Name="FORIS.SPA.STATE" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.STATE" />
+		<Add Name="FORIS.SPA.ROBP" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.ROBP"/>
+		<Add Name="FORIS.RI" ConnectionDataType="uri" ConnectionData="http://f-ri-01:25192/ServiceProvisioningService"/>
+	</DatabaseObjects>
+</Configuration>

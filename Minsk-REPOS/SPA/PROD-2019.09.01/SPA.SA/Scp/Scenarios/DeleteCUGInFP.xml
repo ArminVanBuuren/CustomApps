@@ -1,0 +1,84 @@
+<scenario  name="DeleteCUGInFP">
+  <objectList>
+    <object name="BySubscirbersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll"/>
+  </objectList>
+  <automat>
+    <node name="ChechHostType-Node" object="ConditionsResolver">
+      <resultlist>
+        <result value="0" node="BySubscirbersSplitter-Node"/>
+        <result value="" node="DummyResponder-Node"/>
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//AvailableCugHostTypes/SC"/>
+      </parameterslist>
+    </node>
+    <node name="DummyResponder-Node" object="DummyResponder">
+      <parameterslist>
+        <param name="OverallResult" value="SUCCESS" />
+        <param name="Delay" value="0" />
+        <param name="DetailedResult" value="SUCCESS" />
+        <param name="DetailedResultDescription" value="Command not sending" />
+      </parameterslist>
+      <resultlist>
+        <result value="" node="WrongHostResponseAssembler-Node" />
+      </resultlist>
+    </node>
+    <node  name="WrongHostResponseAssembler-Node" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="" />
+      </resultlist>
+    </node>
+    <node  name="BySubscirbersSplitter-Node" object="BySubscirbersSplitter">
+      <resultlist>
+        <result value="0" node="SingleSubscirverRequestDequeuer" />
+      </resultlist>
+    </node>
+    <node  name="SingleSubscirverRequestDequeuer" object="Dequeuer">
+      <resultlist>
+        <result value="0" node="DeleteCallingCircleMembers-Node" />
+        <result value="1" node="DeleteCallingCircle-Node" />
+      </resultlist>
+      <parameterslist>
+        <param name="queueName" value="requestsSplittedBySubscriberQueue" />
+      </parameterslist>
+    </node>
+    <node  name="DeleteCallingCircleMembers-Node" object="Commander">
+      <resultlist>
+        <result value="" node="ResponseAssembler-Node" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="DeleteCallingCircleMembers" />
+      </parameterslist>
+    </node>
+    <node  name="ResponseAssembler-Node" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="SingleSubscirverRequestDequeuer" />
+      </resultlist>
+    </node>
+    <node  name="DeleteCallingCircle-Node" object="IfCommander">
+      <resultlist>
+        <result value="" node="DummyResponseAssembler-Node" />
+      </resultlist>
+      <parameterslist>
+        <param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/WithdrawalList/CUGList//IsNeedDeleteGroup[text()='True']" />
+        <param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/WithdrawalList/CUGList//IsNeedDeleteGroup[text()='1']" />
+        <param name="Command" value="DeleteCallingCircle" />
+      </parameterslist>
+    </node>
+    <node  name="DummyResponseAssembler-Node" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="" />
+      </resultlist>
+      <parameterslist>
+        <param name="FinalStepCheck" value="true" />
+      </parameterslist>
+    </node>
+  </automat>
+</scenario>

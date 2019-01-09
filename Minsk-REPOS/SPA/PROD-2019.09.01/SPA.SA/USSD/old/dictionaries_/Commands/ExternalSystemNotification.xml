@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Command Name="ExternalSystemNotification">
+  <Description>ExternalSystemNotification</Description>
+  <Author Name="Krivenko A" Date="2009-04-27+17:25" />
+  <Properties GenerationType="Mml" />
+  <Request Template="{0}#{1}">
+    <Item Name="_SuccessRequestUSSDResult" Type="Constant" />
+    <Item Name="ExternalIdentifier" Type="LocalParameter" />
+  </Request>
+  <ParametersList>
+    <Parameter Name="ExternalIdentifier">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ExternalIdentifier" />
+    </Parameter>
+  </ParametersList>
+</Command>

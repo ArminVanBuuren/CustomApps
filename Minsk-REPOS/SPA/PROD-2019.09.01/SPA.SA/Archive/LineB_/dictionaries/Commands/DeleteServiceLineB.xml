@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="DeleteServiceLineB" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Удаление</Description>
+	<Author Name="YAI" Date="2018-05-02+16:21"/>
+	<Request Template="{{&quot;msisdn&quot;:&quot;+{0}&quot;}}">
+	<Item Name="msisdn" Type="Wellknown" />
+	</Request>
+	<ErrorsList CodePage="ASCII">
+		<Error Name="&quot;error&quot;:&quot;pg: no rows in result set&quot;" Value="SUCCESS" /> 
+		<Error Name="item not found" Value="SUCCESS" /> 
+		<Error Name="&quot;code&quot;:2" Value="SUCCESS" /> 
+	</ErrorsList>
+</Command>

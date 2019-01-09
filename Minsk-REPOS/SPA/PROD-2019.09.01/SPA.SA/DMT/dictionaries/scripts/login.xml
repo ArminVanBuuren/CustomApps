@@ -1,0 +1,5 @@
+<Script Name="Login">
+	<wait data="Enter command:" timeout="8000"/>
+	<write data="LOGIN:dcr:dmstodms;^M"/>
+	<wait data="Enter command:" timeout="8000"/>
+</Script>

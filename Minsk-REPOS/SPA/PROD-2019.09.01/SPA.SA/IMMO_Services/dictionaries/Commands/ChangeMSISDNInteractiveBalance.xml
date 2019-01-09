@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ChangeMSISDNInteractiveBalance" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Замена номера</Description>
+	<Author Name="YAI" Date="2018-10-15+13:25"/>
+	<Request Template="">
+		<Item Name="msisdn" Type="Wellknown"/> 
+		<Item Name="newmsisdn2" Type="Wellknown"/> 
+	</Request>
+	<ErrorsList CodePage="ascii" >
+		<Error Name="200 ok" Value="SUCCESS" />
+		<Error Name="200 OK" Value="SUCCESS" />
+		<Error Name="404 " Value="SUCCESS" />
+		<Error Name="User not found" Value="SUCCESS" />
+		<Error Name="500 " Value="ResourceLimitation" />
+	</ErrorsList>
+</Command>

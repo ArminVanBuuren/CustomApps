@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="BlockLessBy" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Уроки родная мова</Description>
+	<Author Name="YAI" Date="2017-12-04+09:50"/>
+	<Request Template="subsapi?action=suspend&amp;service=engster-ru2by&amp;msisdn={0}">
+	<Item Name="msisdn" Type="Wellknown" />
+	</Request>
+	<ErrorsList CodePage="ascii" />
+</Command>

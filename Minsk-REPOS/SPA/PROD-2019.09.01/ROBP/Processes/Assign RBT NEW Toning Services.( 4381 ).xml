@@ -1,0 +1,43 @@
+<BusinessProcessData name="Assign RBT NEW Toning Services">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="AddService" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="AssignServiceOnFINPlatform" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AssignServiceOnFINPlatform" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR12173onRT" />
+          </resultlist>
+        </node>
+        <node name="AddFR12173onRT" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR12173onRT" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR12173" />
+          </resultlist>
+        </node>
+        <node name="AddFR12173" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR12173" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR12176onToning" />
+          </resultlist>
+        </node>
+        <node name="AddFR12176onToning" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR12176onDB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ChangeMSISDNFlirtContract" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Change MSISDN</Description>
+	<Author Name="YAI" Date="2018-07-13+10:30"/>
+	<Request Template="contractCpa/?msisdn={0}&amp;status=3&amp;new_msisdn={1}">
+		<Item Name="msisdn" Type="Wellknown"/>
+		<Item Name="NewMSISDN" Type="Parameter"/>
+	</Request>
+	<ErrorsList CodePage="ASCII"/>
+</Command>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="RemoveInPlatformServices">
+	<objectList>
+		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+	</objectList>
+	<automat>
+		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
+			<resultlist>
+				<result value="0" node="SingleSubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+		<node name="SingleSubscriberRequestDequeuer" object="Dequeuer">
+			<resultlist>
+				<result value="0" node="RemoveInPlatformServicesNode"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="RemoveInPlatformServicesNode" object="Commander">
+			<resultlist>
+				<result value="0" node="Remove_TCSINode"/>				
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="Remove_OCSI"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="Remove_TCSINode" object="Commander">
+			<resultlist>
+				<result value="0" node="Remove_SMSCSINode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="Remove_TCSI"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>		
+		<node name="Remove_SMSCSINode" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="Remove_SMSCSI"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>				
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="SingleSubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

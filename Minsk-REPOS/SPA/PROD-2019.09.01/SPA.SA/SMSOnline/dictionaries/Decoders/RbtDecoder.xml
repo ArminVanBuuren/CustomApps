@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Decoder Name="RbtAttributesList"  Type="FORIS.ServiceProvisioning.MmlProcessing.Dictionary.IdentifiersDecoder, FORIS.SPA.MmlProcessing">
+	<Attribute Key="Melody" RegexpPattern='(IsDefault"\s{0,}value="(?&lt;parameter&gt;\d{1,})")' RegexpOptions="11">
+		<PossibleValues StringToKeyTable="true">
+			<Item Key="murka" StringValue="9876"/>
+		</PossibleValues>
+	</Attribute>
+	<Attribute Key="Date" RegexpPattern='(MDateTime"\s{0,}value="(?&lt;parameter&gt;\d{1,})")' RegexpOptions="11"/>
+	<Attribute Key="IsBlock" RegexpPattern='(IsBlock"\s{0,}value="(?&lt;parameter&gt;\w{1,})")' RegexpOptions="11"/>
+	<Attribute Key="Test1" RegexpPattern='(IsDefault"\s{0,}value="(?&lt;parameter&gt;\d{1,})")' RegexpOptions="11"/>
+</Decoder>

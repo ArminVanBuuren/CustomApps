@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="CreateSubscriber" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Создание абонента на HLR HUAWEI</Description>
+	<Author Name="YAI" Date="2011-09-07+12:18"/>
+	<Request Template="ADD SUB: HLRSN=1, IMSI=&quot;{0}&quot;, ISDN=&quot;{1}&quot;, CARDTYPE=USIM, RROPTION=ALL_PLMNS, TS=TS11, ODBOC=BOIC, ODBROAM=BROHPLMNC, UTRANNOTALLOWED=FALSE, GERANNOTALLOWED=FALSE,NAM=BOTH, CATEGORY=COMMON, CCBS=FALSE, CCBSTARGET=FALSE;">
+		<Item Name="imsi" Type="Wellknown"/>
+		<Item Name="msisdn" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="ASCII"/>
+</Command>

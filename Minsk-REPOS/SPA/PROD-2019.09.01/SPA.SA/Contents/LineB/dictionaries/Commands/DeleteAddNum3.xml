@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="DeleteAddNum3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Удаление Дополнительного номера ID3</Description>
+	<Author Name="YAI" Date="2018-05-02+16:21"/>
+	<Request Template="{{&quot;msisdn&quot;:&quot;+{0}&quot;,&quot;service_id&quot;:&quot;FR15629&quot;}}">
+	<Item Name="msisdn" Type="Wellknown" />
+	</Request>
+	<ErrorsList CodePage="ASCII">
+		<Error Name="&quot;error&quot;:&quot;not found&quot;" Value="SUCCESS" /> 
+		<Error Name=" not found" Value="SUCCESS" /> 
+	</ErrorsList>
+</Command>

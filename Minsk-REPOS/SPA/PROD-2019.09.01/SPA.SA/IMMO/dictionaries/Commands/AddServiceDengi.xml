@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="AddServiceDengi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Add Service</Description>
+	<Author Name="YAI" Date="2017-09-19+14:50"/>
+	<Request Template="contract_notification/subscribe?msisdn={0}&amp;state=1">
+	<Item Name="msisdn" Type="Wellknown" />
+	</Request>
+	<ErrorsList CodePage="ascii" >
+		<Error Name="&#34;code&#34;:0" Value="SUCCESS" />
+		<Error Name="&#34;code&#34;:100" Value="FAILURE" />
+		<Error Name="&#34;code&#34;:102" Value="FAILURE" />
+		<Error Name="&#34;code&#34;:104" Value="MsisdnAlreadyDefined" />
+		<Error Name="&#34;code&#34;:105" Value="FAILURE" />
+		<Error Name="400 " Value="FAILURE" />
+	</ErrorsList>
+</Command>

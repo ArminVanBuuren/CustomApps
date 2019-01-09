@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<serviceInstances>
+		<serviceInstance hardwareID="DR:1833">
+			<scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
+				<fileScenarioSource dir=".\DrWeb\Scenarios"/>
+			</scenarioSource>
+			<socketList poolSize="10" maxConnections="10" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="500" periodDuration="20" autoconnect="1" reconfigurationTimeout="0">
+				<socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
+					<config workingmode="wmGeneral">
+						<socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
+							<config>
+								<ParametersList>
+									<!--<Parameter Key="Host" Value="10.128.8.164"/> -->
+									<Parameter Key="Host" Value="172.17.111.97"/>
+									<Parameter Key="Port" Value="80"/>
+									<Parameter Key="Url" Value=""/>
+									<Parameter Key="MethodName" Value="POST"/>
+									<Parameter Key="Method" Value="POST"/>
+									<Parameter Key="UserName" Value="root"/>
+									<Parameter Key="UserPwd" Value="12345"/>
+									<Parameter Key="ContentType" Value="text/xml; charset=utf-8"/>
+									<Parameter Key="Authorization" Value="Basic"/>
+									<Parameter Key="ParameterName" Value=""/>
+								</ParametersList>
+							</config>
+						</socket>
+						<Emulation Success="200" Failure="500" RandomizePrintout="false" OverwriteCommandPrintout="true"  Lifetime="00:00:00.00"/>
+						<Timers IdleTimeout="6000"/>
+						<PredefinedScripts Login="Login" Command="Command" Idle="" Logoff=""/>
+						<ScriptsList> 
+							<Script Name="Login" Path=".\DrWeb\Dictionaries\Scripts\Login.xml"/>
+							<Script Name="Logoff" Path=".\DrWeb\Dictionaries\Scripts\logoff.xml"/>
+							<Script Name="Command" Path=".\DrWeb\Dictionaries\Scripts\Command.xml"/>
+							<Script Name="NoSleep" Path=".\DrWeb\Dictionaries\Scripts\nosleep.xml"/>
+						</ScriptsList> 
+					</config> 
+				</socket> 
+			</socketList>
+			<context>
+				<object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
+					<config path=".\DrWeb\Dictionaries" xml="Dictionary.xml"/>
+				</object>
+				<object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
+					<fileTableSource path=".\DrWeb\Misc" xml="RepetitionTable.xml"/>
+				</object>				
+			</context>
+		</serviceInstance>
+	</serviceInstances>
+</Configuration>

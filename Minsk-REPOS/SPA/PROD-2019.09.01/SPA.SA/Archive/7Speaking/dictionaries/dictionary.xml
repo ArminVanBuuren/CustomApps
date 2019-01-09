@@ -1,0 +1,30 @@
+<Dictionary>
+	<WellknownsList>
+		<Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
+	</WellknownsList>
+	<ErrorsList CodePage="ASCII">
+		<Error Name="&#34;status&#34;:&#34;success&#34;" Value="SUCCESS"/>
+		<Error Name="&#34;status&#34;:&#34;error&#34;" Value="FAILURE"/>
+	</ErrorsList>
+	<RegexpsList />
+	<ConstantsList />
+	<ParametersList>
+		<Parameter Name="NewMSISDN">
+			<Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//NewMSISDN"/>
+			<PossibleValues StringToKeyTable="true" />
+		</Parameter>
+	</ParametersList>
+	<DynamicParametersList>
+		<DynamicParameter Name="UserPASS">
+			<Source Path="root/return/record/column[@name='USERPASS']" /> 
+			<DynamicObject Name="db_get_username" /> 
+		</DynamicParameter>
+	</DynamicParametersList>
+	<CommandsList Root=".\7Speaking\Dictionaries\Commands\">
+		<Command Path="AddServiceEnglish.xml"/>	
+		<Command Path="DeleteSubscriber.xml"/>	
+		<Command Path="Block.xml"/>	
+		<Command Path="UnBlock.xml"/>	
+		<Command Path="ChangeMSISDN.xml"/>	
+	</CommandsList>
+</Dictionary>

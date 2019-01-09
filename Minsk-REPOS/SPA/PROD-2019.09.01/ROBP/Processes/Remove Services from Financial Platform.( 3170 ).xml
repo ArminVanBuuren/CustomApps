@@ -1,0 +1,19 @@
+<BusinessProcessData name="Remove Services from Financial Platform">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="RemoveServiceOnFINPlatform" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="RemoveServiceOnFINPlatform" object="RemoveServiceOnFINPlatform">
+          <parameterslist>
+            <param name="operation" value="RemoveServiceOnFINPlatform" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

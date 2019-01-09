@@ -1,0 +1,137 @@
+<configuration>
+	<communication>
+		<clientsCommunicator commType="OracleQueue">
+			<queue path="AQ_BPM01" sources="CRM,Console,SPA.Monitor,CRM.OM, CBP, CRM.Sales, WF, CRM.BL, CRM.Production, Production" timeout="2000" idleTimeout="5000" />
+		</clientsCommunicator>  
+		<activatorsCommunicator>
+			<database readPeriod="2000" readCount="1000" messageSource="BPM1"/>
+		</activatorsCommunicator>
+	</communication>
+	<bpm>
+		<bpmmodules>
+			<RequestMessagePreprocessor>
+				<param name="poolSize" value="80"/>
+				<param name="loggingPeriod" value="0"/>
+				<param name="threadLoggingPeriod" value="0"/>
+				<param name="pollScheduledRecsPeriod" value="2"/>
+				<param name="getScheduledRecsFromDbCount" value="1000"/>
+				<param name="checkRequestDuplicates" value="false"/>
+				<param name="checkRequestDuplicatesPeriod" value="60"/>
+			</RequestMessagePreprocessor>
+			<RequestMessageProcessor>
+				<param name="poolSize" value="80"/>
+				<param name="loggingPeriod" value="0"/>
+			</RequestMessageProcessor>
+			<RequestMessagePostprocessor>
+				<param name="loggingPeriod" value="0"/>
+				<param name="asyncDelete" value="true"/>
+				<param name="pollPeriod" value="2"/>
+				<param name="pollIdlePeriod" value="2"/>
+				<param name="getParentRowsFromDbCount" value="1000"/>
+				<param name="invalidSourceAddressTTL" value="300"/>
+				<param name="poolSize" value="80"/>
+			</RequestMessagePostprocessor>
+			<ActivatorProxy>
+				<param name="confirmation_timeout" value="300"/>
+				<param name="response_timeout" value="300"/>
+				<param name="loggingPeriod" value="0"/>
+			</ActivatorProxy>
+			<BPM>
+				<param name="postprocTimeout" value="60"/>
+				<param name="loggingPeriod" value="0"/>
+				<param name="responseType" value="Default"/>
+			</BPM>
+		</bpmmodules>
+		<hostTypesTable>
+			<hostType type="SD" identity="IMSI" direct="1818"/>
+			<hostType type="SS" identity="IMSI" direct="1819"/>
+			<hostType type="US" identity="IMSI" direct="1919"/>
+			<hostType type="DT" identity="IMSI" direct="1717"/>
+			<hostType type="DP" identity="IMSI" direct="2222"/>
+			<hostType type="SE" identity="IMSI" direct="2121"/>
+			<hostType type="RB" identity="IMSI" direct="1616"/>
+			<hostType type="SM" identity="IMSI" direct="1212"/>
+			<hostType type="VM" identity="IMSI" direct="1313"/>
+			<hostType type="DM" identity="IMSI" direct="1515"/>
+			<hostType type="DB" identity="IMSI" direct="2525"/>
+			<hostType type="BT" identity="IMSI" direct="2626"/>
+			<hostType type="IM" identity="IMSI" direct="2727"/>
+			<hostType type="VD" identity="IMSI" direct="2323"/>
+			<hostType type="BS" identity="IMSI" direct="BS"/>
+			<hostType type="FP" codeXPath="//BalanceStorage/HostCode" identity="IMSI" method="GetBalanceStorageByImsiList"/>
+			<hostType type="MO" identity="IMSI" direct="2728"/>			
+			<hostType type="ZN" identity="IMSI" direct="1821"/>
+			<hostType type="SP" identity="IMSI" direct="1820"/>
+			<hostType type="QP" identity="IMSI" direct="2223"/>
+			<hostType type="ME" identity="IMSI" direct="1823"/>
+			<hostType type="TV" identity="IMSI" direct="1824"/>
+			<hostType type="MT" identity="IMSI" direct="1825"/>
+			<hostType type="HU" identity="IMSI" direct="1826"/>
+			<hostType type="BI" identity="IMSI" direct="1827"/>
+			<hostType type="BB" identity="IMSI" direct="1828"/>
+			<hostType type="UF" identity="IMSI" direct="1829"/>
+			<hostType type="SL" identity="IMSI" direct="1830"/>
+			<hostType type="M2" identity="IMSI" direct="1831"/>
+			<hostType type="OP" identity="IMSI" direct="1832"/>
+			<hostType type="DR" identity="IMSI" direct="1833"/>
+			<hostType type="EN" identity="IMSI" direct="1834"/>
+			<hostType type="MA" identity="IMSI" direct="1835"/>
+			<hostType type="RG" identity="IMSI" direct="1836"/>
+			<hostType type="RT" identity="IMSI" direct="1617"/>
+			<hostType type="MU" identity="IMSI" direct="1837"/>
+			<hostType type="VI" identity="IMSI" direct="1838"/>
+			<hostType type="GS" identity="IMSI" direct="1839"/>
+			<hostType type="SF" identity="IMSI" direct="1840"/>
+			<hostType type="PF" identity="IMSI" direct="1841"/>
+			<hostType type="UM" identity="IMSI" direct="1842"/>
+			<hostType type="FK" identity="IMSI" direct="1843"/>
+			<hostType type="MI" identity="IMSI" direct="1845"/>
+			<hostType type="LB" identity="IMSI" direct="1846"/>
+			<hostType type="RP" identity="IMSI" direct="1847"/>
+			<hostType type="KM" identity="IMSI" direct="1848"/>
+		</hostTypesTable>
+		<NoHostResultDecodingTable>
+			<hostType type="HL" result="NoHostForSubscriberHlr" />
+			<hostType type="SM" result="NoHostForSubscriberSmsc" />
+			<hostType type="VM" result="NoHostForSubscriberVm" />
+			<hostType type="RT" result="NoHostForSubscriberRbt" />
+			<hostType type="MM" result="NoHostForSubscriberMmsc" />
+			<hostType type="VN" result="NoHostForSubscriberVpn" />
+			<hostType type="SD" result="NoHostForSubscriberSdp" />
+			<hostType type="DB" result="NoHostForSubscriberSdp" />
+			<hostType type="BT" result="NoHostForSubscriberSdp" />
+			<hostType type="IM" result="NoHostForSubscriberSdp" /> 
+			<hostType type="VD" result="NoHostForSubscriberSdp" /> 
+			<hostType type="MO" result="NoHostForSubscriberSdp" /> 
+			<hostType type="ZN" result="NoHostForSubscriberSdp" /> 
+			<hostType type="SP" result="NoHostForSubscriberSdp" /> 
+			<hostType type="QP" result="NoHostForSubscriberSdp" />
+			<hostType type="ME" result="NoHostForSubscriberSdp" />
+			<hostType type="TV" result="NoHostForSubscriberSdp" />
+			<hostType type="MT" result="NoHostForSubscriberSdp" />
+			<hostType type="HU" result="NoHostForSubscriberSdp" />
+			<hostType type="BI" result="NoHostForSubscriberSdp" />
+			<hostType type="BB" result="NoHostForSubscriberSdp" />
+			<hostType type="UF" result="NoHostForSubscriberSdp" />
+			<hostType type="SL" result="NoHostForSubscriberSdp" />
+			<hostType type="M2" result="NoHostForSubscriberSdp" />
+			<hostType type="OP" result="NoHostForSubscriberSdp" />
+			<hostType type="DR" result="NoHostForSubscriberSdp" />
+			<hostType type="EN" result="NoHostForSubscriberSdp" />
+			<hostType type="MA" result="NoHostForSubscriberSdp" />
+			<hostType type="RG" result="NoHostForSubscriberSdp" />
+			<hostType type="RT" result="NoHostForSubscriberSdp" />
+			<hostType type="MU" result="NoHostForSubscriberSdp" />
+			<hostType type="VI" result="NoHostForSubscriberSdp" />
+			<hostType type="GS" result="NoHostForSubscriberSdp" />
+			<hostType type="SF" result="NoHostForSubscriberSdp" />
+			<hostType type="PF" result="NoHostForSubscriberSdp" />
+			<hostType type="UM" result="NoHostForSubscriberSdp" />
+			<hostType type="FK" result="NoHostForSubscriberSdp" />
+			<hostType type="MI" result="NoHostForSubscriberSdp" />
+			<hostType type="LB" result="NoHostForSubscriberSdp" />
+			<hostType type="RP" result="NoHostForSubscriberSdp" />
+			<hostType type="KM" result="NoHostForSubscriberSdp" />
+		</NoHostResultDecodingTable>
+	</bpm>
+</configuration>

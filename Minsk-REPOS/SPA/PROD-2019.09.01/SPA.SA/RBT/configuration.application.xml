@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<serviceInstances>
+		<serviceInstance hardwareID="RB:1616">
+			<scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
+				<fileScenarioSource dir=".\RBT\Scenarios"/>
+			</scenarioSource>
+			<socketList poolSize="4" maxConnections="2" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="5" periodDuration="5" autoconnect="1" reconfigurationTimeout="0">
+				<socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
+					<config workingmode="wmGeneral">
+						<socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
+							<config>
+								<ParametersList>
+									<Parameter Key="Host" Value="172.17.134.1"/> 
+									<Parameter Key="Port" Value="10085"/>
+									<Parameter Key="Url" Value="?OPERATION="/>
+									<Parameter Key="MethodName" Value="GET"/>
+									<Parameter Key="Method" Value="GET"/>
+									<Parameter Key="UserName" Value=""/>
+									<Parameter Key="UserPwd" Value=""/>
+									<Parameter Key="ContentType" Value="text/html"/>
+									<Parameter Key="ParameterName" Value=""/>
+								</ParametersList>
+							</config>
+						</socket>
+						<Emulation Success="RESULT:0" Failure="RESULT:-1" RandomizePrintout="false" OverwriteCommandPrintout="true"  Lifetime="00:00:00.00"/>
+						<Timers IdleTimeout="6000"/>
+						<PredefinedScripts Login="Login" Command="Command" Idle="" Logoff=""/>
+						<ScriptsList> 
+							<Script Name="Login" Path=".\RBT\Dictionaries\Scripts\Login.xml"/>
+							<Script Name="Logoff" Path=".\RBT\Dictionaries\Scripts\logoff.xml"/>
+							<Script Name="Command" Path=".\RBT\Dictionaries\Scripts\Command.xml"/>
+							<Script Name="NoSleep" Path=".\RBT\Dictionaries\Scripts\nosleep.xml"/>
+						</ScriptsList> 
+					</config> 
+				</socket> 
+			</socketList>
+			<context>
+				<object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
+					<config path=".\RBT\Dictionaries" xml="Dictionary.xml"/>
+				</object>
+				<object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
+					<fileTableSource path=".\RBT\Misc" xml="RepetitionTable.xml"/>
+				</object>					
+			</context>
+		</serviceInstance>
+	</serviceInstances>
+</Configuration>

@@ -1,0 +1,31 @@
+<scenario  name="DeleteRegisteredCUGInFP">
+  <include>
+    <scenario name="DeleteCUGInFP" />
+  </include>
+  <objectList>
+    <object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll"/>
+    <object name="ScenarioProcessor" class="FORIS.ScenarioProcessing.Base.SPF.SubscenarioProcessingUnit" assembly="FORIS.SPA.SPF.dll" />
+  </objectList>
+  <automat>
+    <node name="ModifyRequest-Node" object="XmlNodesCopier">
+      <resultlist>
+        <result value="" node="DeleteCUGInFP-Node"/>
+      </resultlist>
+      <parameterslist>
+        <param name="SrcXml" value="request"/>
+        <param name="DstMessage" value="request"/>
+        <param name="CopyContentType" value="InnerXml"/>
+        <param name="SrcXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList"/>
+        <param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/WithdrawalList/CUGList"/>
+      </parameterslist>
+    </node>
+    <node  name="DeleteCUGInFP-Node" object="ScenarioProcessor">
+      <resultlist>
+        <result value="" node="" />
+      </resultlist>
+      <parameterslist>
+        <param name="Scenario" value="DeleteCUGInFP" />
+      </parameterslist>
+    </node>
+  </automat>
+</scenario>

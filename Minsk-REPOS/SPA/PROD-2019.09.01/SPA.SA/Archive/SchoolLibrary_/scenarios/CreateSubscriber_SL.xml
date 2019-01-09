@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="CreateSubscriberOnSL">
+	<objectList>
+		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+		<object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="HttpCmd" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" /> 
+	</objectList>
+	<automat>
+		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
+			<resultlist>
+				<result value="0" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+			<resultlist>
+				<result value="0" node="IfFR11189Node"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="IfFR11189Node" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="AddServiceFR11189Node"/>
+				<result value="1" node="IfFR11190Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/ProvisionList/FR11189"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>			
+		<node name="AddServiceFR11189Node" object="HttpCmd">
+			<resultlist>
+				<result value="0" node="IfFR11190Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="mts_api/v1/user/contextWellknown(msisdn)/add_service/FR11189"/>
+				<param name="Command" value="Add5class"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.70.0.3"/>
+				<param name="Connection.Port" value="80"/>
+				<param name="Connection.MethodName" value="POST"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+			</parameterslist>
+		</node>		
+		<node name="IfFR11190Node" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="AddServiceFR11190Node"/>
+				<result value="1" node="IfFR11191Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/ProvisionList/FR11190"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>			
+		<node name="AddServiceFR11190Node" object="HttpCmd">
+			<resultlist>
+				<result value="0" node="IfFR11191Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="mts_api/v1/user/contextWellknown(msisdn)/add_service/FR11190"/>
+				<param name="Command" value="Add6class"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.70.0.3"/>
+				<param name="Connection.Port" value="80"/>
+				<param name="Connection.MethodName" value="POST"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+			</parameterslist>
+		</node>			
+		<node name="IfFR11191Node" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="AddServiceFR11191Node"/>
+				<result value="1" node="IfFR11192Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/ProvisionList/FR11191"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>			
+		<node name="AddServiceFR11191Node" object="HttpCmd">
+			<resultlist>
+				<result value="0" node="IfFR11192Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="mts_api/v1/user/contextWellknown(msisdn)/add_service/FR11191"/>
+				<param name="Command" value="Add7class"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.70.0.3"/>
+				<param name="Connection.Port" value="80"/>
+				<param name="Connection.MethodName" value="POST"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+			</parameterslist>
+		</node>			
+		<node name="IfFR11192Node" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="AddServiceFR11192Node"/>
+				<result value="1" node="IfFR11193Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/ProvisionList/FR11192"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>			
+		<node name="AddServiceFR11192Node" object="HttpCmd">
+			<resultlist>
+				<result value="0" node="IfFR11193Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="mts_api/v1/user/contextWellknown(msisdn)/add_service/FR11192"/>
+				<param name="Command" value="Add8class"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.70.0.3"/>
+				<param name="Connection.Port" value="80"/>
+				<param name="Connection.MethodName" value="POST"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+			</parameterslist>
+		</node>	
+		<node name="IfFR11193Node" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="AddServiceFR11193Node"/>
+				<result value="1" node="IfFR11194Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/ProvisionList/FR11193"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>			
+		<node name="AddServiceFR11193Node" object="HttpCmd">
+			<resultlist>
+				<result value="0" node="IfFR11194Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="mts_api/v1/user/contextWellknown(msisdn)/add_service/FR11193"/>
+				<param name="Command" value="Add9class"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.70.0.3"/>
+				<param name="Connection.Port" value="80"/>
+				<param name="Connection.MethodName" value="POST"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+			</parameterslist>
+		</node>	
+		<node name="IfFR11194Node" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="AddServiceFR11194Node"/>
+				<result value="1" node="IfFR11195Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/ProvisionList/FR11194"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>			
+		<node name="AddServiceFR11194Node" object="HttpCmd">
+			<resultlist>
+				<result value="0" node="IfFR11195Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="mts_api/v1/user/contextWellknown(msisdn)/add_service/FR11194"/>
+				<param name="Command" value="Add10class"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.70.0.3"/>
+				<param name="Connection.Port" value="80"/>
+				<param name="Connection.MethodName" value="POST"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+			</parameterslist>
+		</node>	
+		<node name="IfFR11195Node" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="AddServiceFR11195Node"/>
+				<result value="1" node="IfFR11196Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/ProvisionList/FR11195"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>			
+		<node name="AddServiceFR11195Node" object="HttpCmd">
+			<resultlist>
+				<result value="0" node="IfFR11196Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="mts_api/v1/user/contextWellknown(msisdn)/add_service/FR11195"/>
+				<param name="Command" value="Add11class"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.70.0.3"/>
+				<param name="Connection.Port" value="80"/>
+				<param name="Connection.MethodName" value="POST"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+			</parameterslist>
+		</node>	
+		<node name="IfFR11196Node" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="AddServiceFR11196Node"/>
+				<result value="1" node="DummyResponderNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/ProvisionList/FR11196"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>			
+		<node name="AddServiceFR11196Node" object="HttpCmd">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="mts_api/v1/user/contextWellknown(msisdn)/add_service/FR11196"/>
+				<param name="Command" value="AddAllclass"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.70.0.3"/>
+				<param name="Connection.Port" value="80"/>
+				<param name="Connection.MethodName" value="POST"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+			</parameterslist>
+		</node>	
+		<node name="DummyResponderNode" object="DummyResponder">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+		<parameterslist>
+			<param name="OverallResult" value="SUCCESS"/>
+			<param name="DetailedResult" value="SUCCESS"/>
+			<param name="Delay" value="0"/>
+		</parameterslist>
+		</node>	
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

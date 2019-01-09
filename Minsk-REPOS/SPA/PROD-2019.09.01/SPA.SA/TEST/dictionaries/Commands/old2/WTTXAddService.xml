@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="WTTXAddService" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Добавление услуги</Description>
+	<Author Name="YAI" Date="2013-11-29+10:21"/>
+	<Request Template="&#60;row&#62;
+&#60;field code=&#34;IMSI&#34; value=&#34;{1}&#34;&#62;
+&#60;field code=&#34;IMEI&#34; value=&#34;{2}&#34;&#62;
+&#60;field code=&#34;Status&#34; value=&#34;TRUE&#34;&#62;
+&#60;/row&#62;">
+	<Item Name="msisdn" Type="Wellknown" />
+	<Item Name="imsi" Type="Wellknown" />
+	<Item Name="IMEI" Type="DynamicParameter" />
+	<!--<Item Name="IMEI" Type="LocalParameter" />
+	<ParametersList>
+		<Parameter Name="IMEI">
+			<Source Path="ExtendedRequestMessage/AdditionalData/IMEI" />
+			<PossibleValues StringToKeyTable="true"/>
+		</Parameter>
+	</ParametersList> -->
+	</Request>
+	<ErrorsList CodePage="ASCII"/>
+</Command>

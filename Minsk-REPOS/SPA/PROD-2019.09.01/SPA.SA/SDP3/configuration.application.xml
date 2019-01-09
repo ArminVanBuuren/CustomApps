@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<serviceInstances>
+		<serviceInstance hardwareID="SP:1820"> 
+			<scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
+				<fileScenarioSource dir=".\SDP3\Scenarios"/>
+			</scenarioSource>
+			<socketList poolSize="5" maxConnections="1" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="40" periodDuration="10" autoconnect="1" reconfigurationTimeout="0">
+				<socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
+					<config workingmode="wmGeneral">
+						<socket type="FORIS.ServiceProvisioning.Communication.TelnetSocket, FORIS.SPA.Communication">
+							<config host="172.24.189.198" port="23"/> 
+						</socket> 
+						<Emulation Success="-->" Failure="Command failed" RandomizePrintout="false" OverwriteCommandPrintout="true"  Lifetime="00:00:00.00"/> 
+						<Timers IdleTimeout="5000"/> 
+						<PredefinedScripts Login="Login" Command="Command" Idle="NoSleep" Logoff="Logoff"/>
+						<ScriptsList> 
+							<Script Name="Login" Path=".\SDP3\Dictionaries\Scripts\Login.xml"/>
+							<Script Name="NoSleep" Path=".\SDP3\Dictionaries\Scripts\nosleep.xml"/>
+							<Script Name="Logoff" Path=".\SDP3\Dictionaries\Scripts\logoff.xml"/>
+							<Script Name="Command" Path=".\SDP3\Dictionaries\Scripts\Command.xml"/>
+						</ScriptsList> 
+					</config> 
+				</socket> 
+			</socketList>
+			<context>
+				<object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
+					<config path=".\SDP3\Dictionaries" xml="Dictionary.xml"/>
+				</object>
+				<object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
+					<fileTableSource path=".\SDP3\Misc" xml="RepetitionTable.xml"/>
+				</object>				
+			</context>
+		</serviceInstance>
+	</serviceInstances>
+</Configuration>

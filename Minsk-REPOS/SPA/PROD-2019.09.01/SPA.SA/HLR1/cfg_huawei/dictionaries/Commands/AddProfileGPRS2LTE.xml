@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="AddProfileGPRS2LTE" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>>Добавление GPRS профиль Premium</Description>
+	<Author Name="YAI" Date="2015-11-26+12:18"/>
+	<Request Template="MOD OPTGPRS: ISDN=&quot;{0}&quot;, PROV=ADDPDPCNTX, APN_TYPE=EPS_APN, APNTPLID=1, EPS_QOSTPLID=1, PDPTYPE=IPV4IPV6, ADDIND=DYNAMIC, VPLMN=FALSE, CHARGE=NORMAL, DEFAULTCFGFLAG=TRUE;">
+		<Item Name="msisdn" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="ASCII">
+		<Error Name="ERR3197" Value="SUCCESS" />
+	</ErrorsList>
+</Command>

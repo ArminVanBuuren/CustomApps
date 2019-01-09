@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ChangeMSISDNonVD" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Смена номера</Description>
+	<Author Name="YAI" Date="2013-04-15+10:50"/>
+	<Request Template="userchange.php?blogin=MTSby_bill_login&amp;bpsw=EcRd3wHOvGhZa_k&amp;ulogin={0}&amp;uloginnew={1}&amp;xml=1">
+	<Item Name="msisdn" Type="Wellknown" />
+	<Item Name="NewMSISDN" Type="Parameter"/>
+	</Request>
+	<ErrorsList CodePage="ascii" />
+</Command>

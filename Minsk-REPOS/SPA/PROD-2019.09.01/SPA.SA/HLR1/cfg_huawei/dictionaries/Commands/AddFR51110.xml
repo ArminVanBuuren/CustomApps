@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="AddFR51110" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>>Добавление услуги RBT Pause</Description>
+	<Author Name="YAI" Date="2011-10-05+12:18"/>
+	<Request Template="MOD PLMNSS: ISDN=&quot;{0}&quot;, PROV=FALSE, PLMNSPECSS=PLMN-SS-5;">
+		<Item Name="msisdn" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="ASCII"/>
+</Command>

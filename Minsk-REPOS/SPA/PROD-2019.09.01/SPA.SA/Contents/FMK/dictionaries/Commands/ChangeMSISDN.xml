@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ChangeMSISDN" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>ЗАмена номера</Description>
+	<Author Name="YAI" Date="2017-09-27+13:21"/>
+	<Request Template="v1/subscribers/{0}/change?new_msisdn={1}">
+	<Item Name="msisdn" Type="Wellknown" />
+	<Item Name="NewMSISDN" Type="Parameter" />
+	</Request>
+	<ErrorsList CodePage="ASCII">
+		<Error Name="&#34;status&#34;:0" Value="SUCCESS"/>
+		<Error Name="Msisdn already used." Value="SUCCESS"/>
+		<Error Name="&#34;status&#34;:1" Value="FAILURE"/>
+	</ErrorsList>
+</Command>

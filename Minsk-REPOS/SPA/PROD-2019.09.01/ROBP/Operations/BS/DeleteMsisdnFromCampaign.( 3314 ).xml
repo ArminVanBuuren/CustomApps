@@ -1,0 +1,10 @@
+<OperationData>
+  <Request Name="ExtendedRequestMessage">
+    <AdditionalData Executable="True">
+      <RegisteredList HaltMode="CancelOperation" Type="AnyOfListed" Copy="CopyListed">
+        <Include groupName="BMSList" />
+      </RegisteredList>
+    </AdditionalData>
+  </Request>
+  <Response Name="ExtendedResponseMessage" />
+</OperationData>

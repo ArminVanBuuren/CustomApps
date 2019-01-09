@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<serviceInstances>
+		<serviceInstance hardwareID="HL:101">
+		<scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
+				<fileScenarioSource dir=".\MVNO\Scenarios"/>
+			</scenarioSource>
+			<socketList poolSize="5" maxConnections="5" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="300" periodDuration="10" autoconnect="0" reconfigurationTimeout="0">
+				<socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
+					<config workingmode="wmGeneral">
+						<socket type="FORIS.ServiceProvisioning.Communication.TelnetSocket, FORIS.SPA.Communication">
+							<config host="172.24.67.145" port="7776"/> 
+						</socket>
+						<Emulation Success="SUCCESS0001" Failure="ERR1017" RandomizePrintout="false" OverwriteCommandPrintout="true"  Lifetime="00:00:00.00"/>
+						<Timers IdleTimeout="20"/>
+						<PredefinedScripts Login="Login" Command="Command" Idle="NoSleep" Logoff="Logoff"/>
+						<ScriptsList>
+							<Script Name="Login" Path=".\MVNO\Dictionaries\Scripts\Login.xml"/>
+							<Script Name="Logoff" Path=".\MVNO\Dictionaries\Scripts\Logoff.xml"/>
+							<Script Name="Command" Path=".\MVNO\Dictionaries\Scripts\Command.xml"/>
+							<Script Name="NoSleep" Path=".\MVNO\Dictionaries\Scripts\nosleep.xml"/>
+						</ScriptsList> 
+					</config> 
+				</socket> 
+			</socketList>
+			<context>
+				<object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
+					<config path=".\MVNO\Dictionaries" xml="Dictionary.xml"/>
+				</object>
+				<object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
+					<fileTableSource path=".\MVNO\Misc" xml="RepetitionTable.xml" /> 
+				</object>
+			</context>
+		</serviceInstance>
+	</serviceInstances>
+</Configuration>

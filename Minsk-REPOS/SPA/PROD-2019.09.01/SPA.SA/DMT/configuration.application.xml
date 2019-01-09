@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<serviceInstances>
+		<serviceInstance hardwareID="DT:1717">
+		<scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
+				<fileScenarioSource dir=".\DMT\Scenarios"/>
+			</scenarioSource>
+			<socketList poolSize="4" maxConnections="2" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="10" periodDuration="10" autoconnect="1" reconfigurationTimeout="0">
+				<socket type="FORIS.ServiceProvisioning.Communication.Script.ScriptSocketBlk, FORIS.SPA.Communication">
+					<config workingmode="wmGeneral">
+						<socket type="FORIS.ServiceProvisioning.Communication.TelnetSocket, FORIS.SPA.Communication">
+							 <config host="172.17.135.100" port="2323"/> 
+						</socket>
+						<Emulation Success="RESP:0" Failure="RESP:-1;" RandomizePrintout="false" OverwriteCommandPrintout="true"  Lifetime="00:00:00.00"/>
+						<Timers IdleTimeout="1800"/>
+						<PredefinedScripts Login="Login" Command="Command" Idle="NoSleep" Logoff="Logoff"/>
+						<ScriptsList>
+							<Script Name="Login" Path=".\DMT\Dictionaries\Scripts\Login.xml"/>
+							<Script Name="Logoff" Path=".\DMT\Dictionaries\Scripts\Logoff.xml"/>
+							<Script Name="Command" Path=".\DMT\Dictionaries\Scripts\Command.xml"/>
+							<Script Name="NoSleep" Path=".\DMT\Dictionaries\Scripts\NoSleep.xml"/>
+						</ScriptsList> 
+					</config> 
+				</socket> 
+			</socketList>
+			<context>
+				<object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
+					<config path=".\DMT\Dictionaries" xml="Dictionary.xml"/>
+				</object>
+				<object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
+					<fileTableSource path=".\DMT\Misc" xml="RepetitionTable.xml"/>
+				</object>				
+			</context>
+		</serviceInstance>
+	</serviceInstances>
+</Configuration>

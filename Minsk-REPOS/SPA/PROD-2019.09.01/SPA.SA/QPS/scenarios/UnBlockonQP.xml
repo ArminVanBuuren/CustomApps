@@ -1,0 +1,442 @@
+<scenario name="UnBlockonQP">
+	<objectList>
+		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+		<object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll" />
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+		<object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+		<object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll" />
+	</objectList>
+	<automat>
+		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
+			<resultlist>
+				<result value="0" node="BySubscriberRequestDequeuer" />
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue" />
+			</parameterslist>
+		</node>
+		<node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+			<resultlist>
+				<result value="0" node="SwitchNDCNode" />
+				<result value="1" node="" />
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue" />
+			</parameterslist>
+		</node>
+		<node name="SwitchNDCNode" object="Switch">
+			<resultlist>
+				<result value="1" node="MobileIfBlockNode" />
+				<result value="2" node="IfBlockNode" />
+			</resultlist>
+			<parameterslist>
+				<param name="XmlPath" value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,0,5)" />
+				<param name="Value:2" value="37500" />
+			</parameterslist>
+		</node>
+
+		<node name="IfBlockNode" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="IfServiceBusinessVPNNode" /> 
+				<result value="1" node="DummyResponderNode" />
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request" />
+				<param name="MultiLevelCondition" value="
+					((//WithdrawalList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER)
+					AND (NOT //RegisteredList/FR8725)
+					AND (NOT //RegisteredList/FR12152))
+					
+					OR
+					
+					((//WithdrawalList/CBBLKLOST)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER)
+					AND (NOT //RegisteredList/FR8725)
+					AND (NOT //RegisteredList/FR12152))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKCHK)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER)
+					AND (NOT //RegisteredList/FR8725)
+					AND (NOT //RegisteredList/FR12152))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKFIN)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER)
+					AND (NOT //RegisteredList/FR8725)
+					AND (NOT //RegisteredList/FR12152))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKKEEP)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER)
+					AND (NOT //RegisteredList/FR8725)
+					AND (NOT //RegisteredList/FR12152))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKPAY)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER)
+					AND (NOT //RegisteredList/FR8725)
+					AND (NOT //RegisteredList/FR12152))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKP)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER)
+					AND (NOT //RegisteredList/FR8725)
+					AND (NOT //RegisteredList/FR12152))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKTIME)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKUSER)
+					AND (NOT //RegisteredList/FR8725)
+					AND (NOT //RegisteredList/FR12152))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKUSER)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FR8725)
+					AND (NOT //RegisteredList/FR12152))
+					
+					
+					OR
+					
+					((//WithdrawalList/FR8725)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER)
+					AND (NOT //RegisteredList/FR12152))
+					
+					
+					OR
+					
+					((//WithdrawalList/FR12152)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER)
+					AND (NOT //RegisteredList/FR8725))
+					
+					" />
+			</parameterslist>
+		</node>
+		<node name="IfServiceBusinessVPNNode" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="UnBlockBusinessVPNNode" />
+				<result value="1" node="IfServiceMOBLVPNNode" />
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11385" />
+				<param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11386" />
+				<param name="OrXmlPath:2" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11387" />
+				<param name="OrXmlPath:3" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11388" />
+				<param name="OrXmlPath:4" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11389" />
+				<param name="OrXmlPath:5" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11390" />
+				<param name="OrXmlPath:6" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11391" />
+				<param name="OrXmlPath:7" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11392" />
+			</parameterslist>
+		</node>
+		<node name="UnBlockBusinessVPNNode" object="Commander">
+			<resultlist>
+				<result value="0" node="IfServiceMOBLVPNNode" />
+				<result value="" node="ResponseAssembler" />
+			</resultlist>
+			<parameterslist>
+				<param name="Command" value="UnBlockVL" />
+				<param name="Script" value="Command" />
+				<param name="ErrorDecodingType" value="ByString" />
+				<param name="CommandSource" value="Dictionary" />
+				<param name="DynamicObject" value="(empty)" />
+			</parameterslist>
+		</node>
+		<node name="IfServiceMOBLVPNNode" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="UnBlockMOBLVPNNode" />
+				<result value="1" node="UnBlockNode" />
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11393" />
+				<param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11394" />
+				<param name="OrXmlPath:2" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11395" />
+				<param name="OrXmlPath:3" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11396" />
+				<param name="OrXmlPath:4" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11397" />
+				<param name="OrXmlPath:5" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11398" />
+				<param name="OrXmlPath:6" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11399" />
+				<param name="OrXmlPath:7" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11400" />
+			</parameterslist>
+		</node>
+		<node name="UnBlockMOBLVPNNode" object="Commander">
+			<resultlist>
+				<result value="0" node="UnBlockNode" />
+				<result value="" node="ResponseAssembler" />
+			</resultlist>
+			<parameterslist>
+				<param name="Command" value="UnBlockVD" />
+				<param name="Script" value="Command" />
+				<param name="ErrorDecodingType" value="ByString" />
+				<param name="CommandSource" value="Dictionary" />
+				<param name="DynamicObject" value="(empty)" />
+			</parameterslist>
+		</node>
+		<node name="UnBlockNode" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler" />
+			</resultlist>
+			<parameterslist>
+				<param name="Command" value="UnBlock" />
+				<param name="Script" value="Command" />
+				<param name="ErrorDecodingType" value="ByString" />
+				<param name="CommandSource" value="Dictionary" />
+				<param name="DynamicObject" value="(empty)" />
+			</parameterslist>
+		</node>
+
+
+		<node name="MobileIfBlockNode" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="MobileIfFR11307Node" /> 
+				<result value="1" node="DummyResponderNode" />
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request" />
+				<param name="MultiLevelCondition" value="
+					((//WithdrawalList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/CBBLKLOST)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKCHK)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKFIN)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKKEEP)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKPAY)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKP)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKTIME)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKUSER)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME))
+					
+					" />
+			</parameterslist>
+		</node>
+		<node name="MobileIfServiceGPRSNode" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="MobileIfFR11307Node" />
+				<result value="1" node="DummyResponderNode" />
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB410153" />
+				<param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR511001" />
+				<param name="OrXmlPath:2" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR1058" />
+			</parameterslist>
+		</node>
+		<node name="MobileIfFR11307Node" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="MobileUnBlockNode" />
+				<result value="1" node="DummyResponderNode" />
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11307" />
+			</parameterslist>
+		</node>
+		<node name="MobileUnBlockNode" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler" />
+			</resultlist>
+			<parameterslist>
+				<param name="Command" value="UnBlock" />
+				<param name="Script" value="Command" />
+				<param name="ErrorDecodingType" value="ByString" />
+				<param name="CommandSource" value="Dictionary" />
+				<param name="DynamicObject" value="(empty)" />
+			</parameterslist>
+		</node>
+		<node name="DummyResponderNode" object="DummyResponder">
+			<resultlist>
+				<result value="" node="ResponseAssembler" />
+			</resultlist>
+			<parameterslist>
+				<param name="OverallResult" value="SUCCESS" />
+				<param name="DetailedResult" value="SUCCESS" />
+				<param name="Delay" value="0" />
+			</parameterslist>
+		</node>
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="BySubscriberRequestDequeuer" />
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

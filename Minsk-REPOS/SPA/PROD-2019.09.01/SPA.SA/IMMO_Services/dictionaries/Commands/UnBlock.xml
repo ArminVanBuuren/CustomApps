@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="UnBlock" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>UnBlock</Description>
+	<Author Name="YAI" Date="2016-11-17+20:21"/>
+	<Request Template="&#60;soapenv:Envelope xmlns:soapenv=&#34;http://schemas.xmlsoap.org/soap/envelope/&#34; xmlns:mes=&#34;http://sitronicsts.com/MessagingGateway&#34;&#62;
+&#60;soapenv:Header/&#62;
+&#60;soapenv:Body&#62;
+&#60;mes:UnBlockSubcriber&#62;
+&#60;mes:SubscriberData&#62;
+&#60;mes:msisdn&#62;{0}&#60;/mes:msisdn&#62;
+&#60;/mes:SubscriberData&#62;
+&#60;/mes:UnBlockSubcriber&#62;
+&#60;/soapenv:Body&#62;
+&#60;/soapenv:Envelope&#62;">
+	<Item Name="msisdn" Type="Wellknown" />
+	</Request>
+	<ErrorsList CodePage="ASCII"/>
+</Command>

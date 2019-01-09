@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="AddFR2370onDR">
+	<objectList>
+		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+		<object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="HttpCmd" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfHttpCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+	</objectList>
+	<automat>
+		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
+			<resultlist>
+				<result value="0" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+			<resultlist>
+				<result value="0" node="IfBlockNode"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="IfBlockNode" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="BlockSubscriberClassic1Node"/>
+				<result value="1" node="UnBlockSubscriberClassic1Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/BLTDLIM"/>
+				<param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CBBLKLOST"/>
+				<param name="OrXmlPath:2" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKCHK"/>
+				<param name="OrXmlPath:3" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKFIN"/>
+				<param name="OrXmlPath:4" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKKEEP"/>
+				<param name="OrXmlPath:5" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKPAY"/>
+				<param name="OrXmlPath:6" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKP"/>
+				<param name="OrXmlPath:7" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKTIME"/>
+				<param name="OrXmlPath:8" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKUSER"/>
+			</parameterslist>
+		</node>		
+		<node name="BlockSubscriberClassic1Node" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="BlockSubscriberClassic2Node"/>
+				<result value="1538" node="BlockSubscriberClassic2Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="api/block.php"/>
+				<param name="Command" value="BlockDrWebClassic1"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.8.164"/>
+				<param name="Connection.Port" value="80"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.UserName" value="root"/>
+				<param name="Connection.UserPwd" value="12345"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="Basic Base64(root:12345)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11808"/>
+			</parameterslist>
+		</node> 
+		<node name="BlockSubscriberClassic2Node" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="BlockSubscriberClassic3Node"/>
+				<result value="1538" node="BlockSubscriberClassic3Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="api/block.php"/>
+				<param name="Command" value="BlockDrWebClassic2"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.8.164"/>
+				<param name="Connection.Port" value="80"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.UserName" value="root"/>
+				<param name="Connection.UserPwd" value="12345"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="Basic Base64(root:12345)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11809"/>
+			</parameterslist>
+		</node> 
+		<node name="BlockSubscriberClassic3Node" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="BlockSubscriberPremium1Node"/>
+				<result value="1538" node="BlockSubscriberPremium1Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="api/block.php"/>
+				<param name="Command" value="BlockDrWebClassic3"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.8.164"/>
+				<param name="Connection.Port" value="80"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.UserName" value="root"/>
+				<param name="Connection.UserPwd" value="12345"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="Basic Base64(root:12345)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11810"/>
+			</parameterslist>
+		</node> 
+		<node name="BlockSubscriberPremium1Node" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="BlockSubscriberPremium2Node"/>
+				<result value="1538" node="BlockSubscriberPremium2Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="api/block.php"/>
+				<param name="Command" value="BlockDrWebPremium1"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.8.164"/>
+				<param name="Connection.Port" value="80"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.UserName" value="root"/>
+				<param name="Connection.UserPwd" value="12345"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="Basic Base64(root:12345)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11811"/>
+			</parameterslist>
+		</node> 
+		<node name="BlockSubscriberPremium2Node" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="BlockSubscriberPremium3Node"/>
+				<result value="1538" node="BlockSubscriberPremium3Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="api/block.php"/>
+				<param name="Command" value="BlockDrWebPremium2"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.8.164"/>
+				<param name="Connection.Port" value="80"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.UserName" value="root"/>
+				<param name="Connection.UserPwd" value="12345"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="Basic Base64(root:12345)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11812"/>
+			</parameterslist>
+		</node> 
+		<node name="BlockSubscriberPremium3Node" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="BlockSubscriberMobile1Node"/>
+				<result value="1538" node="BlockSubscriberMobile1Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="api/block.php"/>
+				<param name="Command" value="BlockDrWebPremium3"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.8.164"/>
+				<param name="Connection.Port" value="80"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.UserName" value="root"/>
+				<param name="Connection.UserPwd" value="12345"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="Basic Base64(root:12345)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11813"/>
+			</parameterslist>
+		</node> 
+		<node name="BlockSubscriberMobile1Node" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="BlockSubscriberMobile2Node"/>
+				<result value="1538" node="BlockSubscriberMobile2Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="api/block.php"/>
+				<param name="Command" value="BlockDrWebMobile1"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.8.164"/>
+				<param name="Connection.Port" value="80"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.UserName" value="root"/>
+				<param name="Connection.UserPwd" value="12345"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="Basic Base64(root:12345)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11814"/>
+			</parameterslist>
+		</node> 
+		<node name="BlockSubscriberMobile2Node" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="BlockSubscriberMobile3Node"/>
+				<result value="1538" node="BlockSubscriberMobile3Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="api/block.php"/>
+				<param name="Command" value="BlockDrWebMobile2"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.8.164"/>
+				<param name="Connection.Port" value="80"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.UserName" value="root"/>
+				<param name="Connection.UserPwd" value="12345"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="Basic Base64(root:12345)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11815"/>
+			</parameterslist>
+		</node> 
+		<node name="BlockSubscriberMobile3Node" object="IfHttpCommander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="api/block.php"/>
+				<param name="Command" value="BlockDrWebMobile3"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.8.164"/>
+				<param name="Connection.Port" value="80"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.UserName" value="root"/>
+				<param name="Connection.UserPwd" value="12345"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="Basic Base64(root:12345)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11816"/>
+			</parameterslist>
+		</node> 
+		<node name="UnBlockSubscriberClassic1Node" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlockSubscriberClassic2Node"/>
+				<result value="1538" node="UnBlockSubscriberClassic2Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="api/unblock.php"/>
+				<param name="Command" value="UnBlockDrWebClassic1"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.8.164"/>
+				<param name="Connection.Port" value="80"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.UserName" value="root"/>
+				<param name="Connection.UserPwd" value="12345"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="Basic Base64(root:12345)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11808"/>
+			</parameterslist>
+		</node> 
+		<node name="UnBlockSubscriberClassic2Node" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlockSubscriberClassic3Node"/>
+				<result value="1538" node="UnBlockSubscriberClassic3Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="api/unblock.php"/>
+				<param name="Command" value="UnBlockDrWebClassic2"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.8.164"/>
+				<param name="Connection.Port" value="80"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.UserName" value="root"/>
+				<param name="Connection.UserPwd" value="12345"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="Basic Base64(root:12345)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11809"/>
+			</parameterslist>
+		</node> 
+		<node name="UnBlockSubscriberClassic3Node" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlockSubscriberPremium1Node"/>
+				<result value="1538" node="UnBlockSubscriberPremium1Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="api/unblock.php"/>
+				<param name="Command" value="UnBlockDrWebClassic3"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.8.164"/>
+				<param name="Connection.Port" value="80"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.UserName" value="root"/>
+				<param name="Connection.UserPwd" value="12345"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="Basic Base64(root:12345)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11810"/>
+			</parameterslist>
+		</node> 
+		<node name="UnBlockSubscriberPremium1Node" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlockSubscriberPremium2Node"/>
+				<result value="1538" node="UnBlockSubscriberPremium2Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="api/unblock.php"/>
+				<param name="Command" value="UnBlockDrWebPremium1"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.8.164"/>
+				<param name="Connection.Port" value="80"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.UserName" value="root"/>
+				<param name="Connection.UserPwd" value="12345"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="Basic Base64(root:12345)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11811"/>
+			</parameterslist>
+		</node> 
+		<node name="UnBlockSubscriberPremium2Node" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlockSubscriberPremium3Node"/>
+				<result value="1538" node="UnBlockSubscriberPremium3Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="api/unblock.php"/>
+				<param name="Command" value="UnBlockDrWebPremium2"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.8.164"/>
+				<param name="Connection.Port" value="80"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.UserName" value="root"/>
+				<param name="Connection.UserPwd" value="12345"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="Basic Base64(root:12345)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11812"/>
+			</parameterslist>
+		</node> 
+		<node name="UnBlockSubscriberPremium3Node" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlockSubscriberMobile1Node"/>
+				<result value="1538" node="UnBlockSubscriberMobile1Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="api/unblock.php"/>
+				<param name="Command" value="UnBlockDrWebPremium3"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.8.164"/>
+				<param name="Connection.Port" value="80"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.UserName" value="root"/>
+				<param name="Connection.UserPwd" value="12345"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="Basic Base64(root:12345)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11813"/>
+			</parameterslist>
+		</node> 
+		<node name="UnBlockSubscriberMobile1Node" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlockSubscriberMobile2Node"/>
+				<result value="1538" node="UnBlockSubscriberMobile2Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="api/unblock.php"/>
+				<param name="Command" value="UnBlockDrWebMobile1"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.8.164"/>
+				<param name="Connection.Port" value="80"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.UserName" value="root"/>
+				<param name="Connection.UserPwd" value="12345"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="Basic Base64(root:12345)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11814"/>
+			</parameterslist>
+		</node> 
+		<node name="UnBlockSubscriberMobile2Node" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlockSubscriberMobile3Node"/>
+				<result value="1538" node="UnBlockSubscriberMobile3Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="api/unblock.php"/>
+				<param name="Command" value="UnBlockDrWebMobile2"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.8.164"/>
+				<param name="Connection.Port" value="80"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.UserName" value="root"/>
+				<param name="Connection.UserPwd" value="12345"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="Basic Base64(root:12345)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11815"/>
+			</parameterslist>
+		</node> 
+		<node name="UnBlockSubscriberMobile3Node" object="IfHttpCommander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="api/unblock.php"/>
+				<param name="Command" value="UnBlockDrWebMobile3"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.8.164"/>
+				<param name="Connection.Port" value="80"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.UserName" value="root"/>
+				<param name="Connection.UserPwd" value="12345"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="Basic Base64(root:12345)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11816"/>
+			</parameterslist>
+		</node> 					
+		<node name="DummyResponderNode" object="DummyResponder">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+		<parameterslist>
+			<param name="OverallResult" value="SUCCESS"/>
+			<param name="DetailedResult" value="SUCCESS"/>
+			<param name="Delay" value="0"/>
+		</parameterslist>
+		</node>			
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

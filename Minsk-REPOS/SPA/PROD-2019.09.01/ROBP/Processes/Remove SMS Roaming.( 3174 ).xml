@@ -1,0 +1,27 @@
+<BusinessProcessData name="Remove SMS Roaming">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="DeleteService" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="RemoveServiceOnFINPlatform" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="RemoveServiceOnFINPlatform" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteCB403864" />
+          </resultlist>
+        </node>
+        <node name="DeleteCB403864" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteCB403864" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

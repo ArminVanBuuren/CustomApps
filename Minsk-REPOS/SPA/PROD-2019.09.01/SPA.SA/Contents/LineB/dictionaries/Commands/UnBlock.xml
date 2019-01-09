@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="UnBlock" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Разблокировка</Description>
+	<Author Name="YAI" Date="2018-05-03+10:21"/>
+	<Request Template="{{&quot;msisdn&quot;:&quot;+{0}&quot;,&quot;pause&quot;:false}}">
+	<Item Name="msisdn" Type="Wellknown" />
+	</Request>
+	<ErrorsList CodePage="ASCII"/>
+</Command>
