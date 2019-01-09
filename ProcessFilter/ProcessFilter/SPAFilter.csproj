@@ -63,15 +63,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ProgressBarCompetition.cs" />
     <Compile Include="SPA\CollectionCommands.cs" />
     <Compile Include="SPA\ObjectTempalte.cs" />
     <Compile Include="SPA\CollectionScenarios.cs" />
-    <Compile Include="ProcessFilterForm.cs">
+    <Compile Include="SPAFilterForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ProcessFilterForm.Designer.cs">
-      <DependentUpon>ProcessFilterForm.cs</DependentUpon>
+    <Compile Include="SPAFilterForm.Designer.cs">
+      <DependentUpon>SPAFilterForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SPA\CollectionNetwokElements.cs" />
     <Compile Include="SPA\CollectionBusinessProcess.cs" />
@@ -87,8 +86,8 @@
     <Compile Include="SPA\SC\CFSGroup.cs" />
     <Compile Include="SPA\SC\RFSGroup.cs" />
     <Compile Include="SPA\SC\ServiceCatalog.cs" />
-    <EmbeddedResource Include="ProcessFilterForm.resx">
-      <DependentUpon>ProcessFilterForm.cs</DependentUpon>
+    <EmbeddedResource Include="SPAFilterForm.resx">
+      <DependentUpon>SPAFilterForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

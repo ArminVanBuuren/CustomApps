@@ -17,11 +17,12 @@ using Utils;
 using Utils.WinForm.DataGridViewHelper;
 using Utils.WinForm.Notepad;
 using XmlHelper = Utils.XmlHelper.XmlHelper;
+using Utils.WinForm.CustomProgressBar;
 
 namespace SPAFilter
 {
     [Serializable]
-    public partial class ProcessFilterForm : Form, ISerializable
+    public partial class SPAFilterForm : Form, ISerializable
     {
         private string lastPath = string.Empty;
         public static string SerializationDataPath => $"{Customs.ApplicationFilePath}.bin";
@@ -33,7 +34,7 @@ namespace SPAFilter
         private object sync = new object();
         private bool IsInitialization { get; } = true;
 
-        public ProcessFilterForm()
+        public SPAFilterForm()
         {
             IsInitialization = false;
             MainInit();
@@ -58,7 +59,7 @@ namespace SPAFilter
             }
         }
 
-        ProcessFilterForm(SerializationInfo propertyBag, StreamingContext context)
+        SPAFilterForm(SerializationInfo propertyBag, StreamingContext context)
         {
             MainInit();
             try
@@ -773,7 +774,7 @@ namespace SPAFilter
 
                     var myWorksheet = xlPackage.Workbook.Worksheets.First(); //sheet
                     var totalRows = myWorksheet.Dimension.End.Row;
-                    var totalColumns = myWorksheet.Dimension.End.Column;
+                    var totalColumns = mandatoryXslxColumns.Length;
 
                     var columnsNames = myWorksheet.Cells[1, 1, 1, totalColumns].Select(c => c.Value == null ? string.Empty : c.Value.ToString());
 
@@ -783,15 +784,16 @@ namespace SPAFilter
                     int i = 0;
                     foreach (var columnName in columnsNames)
                     {
-                        if(columnName.IsNullOrEmptyTrim())
-                            continue;
                         string columnNameUp = columnName.ToUpper();
                         if (mandatoryXslxColumns[i++] != columnNameUp)
                             throw new Exception($"Wrong column name before \'{columnNameUp}\' from file '{OpenSCXlsx.Text}'.\r\nColumns names should be like:\r\n'{string.Join("','", mandatoryXslxColumns)}'");
                         serviceTable.Columns.Add(columnNameUp, typeof(string));
+                        if (i == mandatoryXslxColumns.Length)
+                            break;
                     }
 
-                    totalColumns = i;
+                    if(i != mandatoryXslxColumns.Length)
+                        throw new Exception($"Wrong file '{OpenSCXlsx.Text}'. Missing some required columns. \r\nColumns names should be like:\r\n'{string.Join("','", mandatoryXslxColumns)}'");
 
                     for (int rowNum = 2; rowNum <= totalRows; rowNum++)
                     {

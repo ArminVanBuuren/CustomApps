@@ -16,24 +16,24 @@ namespace SPAFilter
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            ProcessFilterForm mainControl = null;
-            if (File.Exists(ProcessFilterForm.SerializationDataPath))
+            SPAFilterForm mainControl = null;
+            if (File.Exists(SPAFilterForm.SerializationDataPath))
             {
                 try
                 {
-                    using (Stream stream = new FileStream(ProcessFilterForm.SerializationDataPath, FileMode.Open, FileAccess.Read))
+                    using (Stream stream = new FileStream(SPAFilterForm.SerializationDataPath, FileMode.Open, FileAccess.Read))
                     {
-                        mainControl = new BinaryFormatter().Deserialize(stream) as ProcessFilterForm;
+                        mainControl = new BinaryFormatter().Deserialize(stream) as SPAFilterForm;
                     }
                 }
                 catch (Exception ex)
                 {
-                    File.Delete(ProcessFilterForm.SerializationDataPath);
+                    File.Delete(SPAFilterForm.SerializationDataPath);
                 }
             }
 
             if (mainControl == null)
-                mainControl = new ProcessFilterForm();
+                mainControl = new SPAFilterForm();
 
             Application.Run(mainControl);
         }

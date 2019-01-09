@@ -3,6 +3,7 @@ using System.Data;
 using System.IO;
 using System.Text;
 using System.Xml;
+using Utils.WinForm.CustomProgressBar;
 using Utils.XmlHelper;
 using Utils.XmlRtfStyle;
 
