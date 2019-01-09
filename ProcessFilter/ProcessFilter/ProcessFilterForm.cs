@@ -57,8 +57,6 @@ namespace SPAFilter
             }
         }
 
-        
-
         ProcessFilterForm(SerializationInfo propertyBag, StreamingContext context)
         {
             MainInit();
@@ -79,7 +77,6 @@ namespace SPAFilter
                 IsInitialization = false;
             }
         }
-    
 
         void ISerializable.GetObjectData(SerializationInfo propertyBag, StreamingContext context)
         {
@@ -121,8 +118,6 @@ namespace SPAFilter
             CommnadsButtonOpen.KeyDown += ProcessFilterForm_KeyDown;
             buttonFilter.KeyDown += ProcessFilterForm_KeyDown;
             this.KeyDown += ProcessFilterForm_KeyDown;
-
-
 
             dataGridScenariosResult.CellFormatting += DataGridScenariosResult_CellFormatting;
             this.Closing += ProcessFilterForm_Closing;
