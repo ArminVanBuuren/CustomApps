@@ -8,6 +8,11 @@ https://wiki.mtsit.com/pages/viewpage.action?pageId=87687642
 
 http://main-foris/SPA.Monitor/Docs/Doc?docName=Настройка%20и%20использование%20функционала&searchString=Проверка%20конфигурации%20каталога%20услуг
 
+
+select t.spa_service_code, t.global_service_code, TRANSLATE (t.service_name, 'x'||CHR(10)||CHR(13), 'x') service_name, TRANSLATE (t.service_full_name, 'x'||CHR(10)||CHR(13), 'x') service_full_name, TRANSLATE (t.service_full_name2, 'x'||CHR(10)||CHR(13), 'x') service_full_name2,  TRANSLATE (t.description, 'x'||CHR(10)||CHR(13), 'x') description, t.service_code, TRANSLATE (t.service_name2, 'x'||CHR(10)||CHR(13), 'x') service_name2,  t.external_code, t.external_code2 from service t
+Then replace: \"(.*?)\"(\,|) To: $1	
+
+
 Важно:
 Официальный документ лежит по ссылке: Перевод платформ на SC
 1. Если после миграции настроек в сценариях, словарях, командах остаются коды услуг в каком-либо виде (названия файлов, названия сущностей, проверки XML-путей и т.п.), то это признак неправильной модели управления услугами и неправильной конфигурации. Надо переделывать. 
