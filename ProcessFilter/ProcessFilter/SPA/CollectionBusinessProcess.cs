@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
 
-namespace ProcessFilter.SPA
+namespace SPAFilter.SPA
 {
     public class CollectionBusinessProcess : List<BusinessProcess>
     {

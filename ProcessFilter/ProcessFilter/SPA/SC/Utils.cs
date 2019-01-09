@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ProcessFilter.SPA.SC
+namespace SPAFilter.SPA.SC
 {
     public abstract class SComponentBase
     {

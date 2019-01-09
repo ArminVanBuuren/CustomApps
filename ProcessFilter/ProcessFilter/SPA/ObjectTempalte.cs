@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using Utils.IOExploitation;
 using Utils.WinForm.DataGridViewHelper;
-using Utils.IOExploitation;
-using static Utils.WinForm.DataGridViewHelper.DGVEnhancer;
 
-namespace ProcessFilter.SPA
+namespace SPAFilter.SPA
 {
 
     public class ObjectTempalte
@@ -21,13 +13,13 @@ namespace ProcessFilter.SPA
             FilePath = path;
         }
 
-        [DGVColumn(ColumnPosition.First, "ID")]
+        [DGVEnhancer.DGVColumnAttribute(DGVEnhancer.ColumnPosition.First, "ID")]
         public int ID { get; protected set; }
 
-        [DGVColumn(ColumnPosition.After, "Name")]
+        [DGVEnhancer.DGVColumnAttribute(DGVEnhancer.ColumnPosition.After, "Name")]
         public virtual string Name { get; protected set; }
 
-        [DGVColumn(ColumnPosition.Last, "File Path")]
+        [DGVEnhancer.DGVColumnAttribute(DGVEnhancer.ColumnPosition.Last, "File Path")]
         public virtual string FilePath { get; }
 
         public override string ToString()

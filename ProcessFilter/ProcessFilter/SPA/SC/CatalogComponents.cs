@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using Utils.XmlRtfStyle;
 using Utils.XPathHelper;
-using static ProcessFilter.SPA.SC.HostOperation;
 
-namespace ProcessFilter.SPA.SC
+namespace SPAFilter.SPA.SC
 {
     public class CatalogComponents
     {
@@ -46,13 +44,13 @@ namespace ProcessFilter.SPA.SC
 
             if (GetServices(getServices, XPathHelper.Execute(document.CreateNavigator(), "//ProvisionList/*")))
             {
-                if (!IsExistSameHostOperation(hostOp, getServices, LinkType.Add))
-                    LoadNewService(hostOp, getServices, bindSrv, LinkType.Add);
+                if (!IsExistSameHostOperation(hostOp, getServices, HostOperation.LinkType.Add))
+                    LoadNewService(hostOp, getServices, bindSrv, HostOperation.LinkType.Add);
             }
             else if (GetServices(getServices, XPathHelper.Execute(document.CreateNavigator(), "//WithdrawalList/*")))
             {
-                if (!IsExistSameHostOperation(hostOp, getServices, LinkType.Remove))
-                    LoadNewService(hostOp, getServices, bindSrv, LinkType.Remove);
+                if (!IsExistSameHostOperation(hostOp, getServices, HostOperation.LinkType.Remove))
+                    LoadNewService(hostOp, getServices, bindSrv, HostOperation.LinkType.Remove);
             }
         }
 
@@ -84,7 +82,7 @@ namespace ProcessFilter.SPA.SC
             return result.Count > 0;
         }
 
-        bool IsExistSameHostOperation(HostOperation newHostOp, Dictionary<string, XPathResult> newServices, LinkType type)
+        bool IsExistSameHostOperation(HostOperation newHostOp, Dictionary<string, XPathResult> newServices, HostOperation.LinkType type)
         {
             foreach (HostOperation existhostOp in _hostOperations)
             {
@@ -93,7 +91,7 @@ namespace ProcessFilter.SPA.SC
                 {
                     foreach (XPathResult srvCode in newServices.Values)
                     {
-                        if (existhostOp.ChildCFS.TryGetValue(srvCode.NodeName, out CFS_RFS cfs_rfs))
+                        if (existhostOp.ChildCFS.TryGetValue(srvCode.NodeName, out HostOperation.CFS_RFS cfs_rfs))
                         {
                             cfs_rfs.ChangeLinkType(type);
                         }
@@ -114,7 +112,7 @@ namespace ProcessFilter.SPA.SC
                 List<string> serviceForRemove = new List<string>();
                 foreach (KeyValuePair<string, XPathResult> srvCode in newServices)
                 {
-                    if (existhostOp.ChildCFS.TryGetValue(srvCode.Key, out CFS_RFS cfs_rfs))
+                    if (existhostOp.ChildCFS.TryGetValue(srvCode.Key, out HostOperation.CFS_RFS cfs_rfs))
                     {
                         cfs_rfs.ChangeLinkType(type);
                         serviceForRemove.Add(srvCode.Key);
@@ -134,7 +132,7 @@ namespace ProcessFilter.SPA.SC
             return newServices.Count == 0;
         }
 
-        void LoadNewService(HostOperation hostOp, Dictionary<string, XPathResult> srvCodeList, BindingServices bindSrv, LinkType link)
+        void LoadNewService(HostOperation hostOp, Dictionary<string, XPathResult> srvCodeList, BindingServices bindSrv, HostOperation.LinkType link)
         {
             Dictionary<HostOperation, List<RFS>> resHostOp = new Dictionary<HostOperation, List<RFS>>();
             foreach (XPathResult srvCode in srvCodeList.Values)
@@ -146,7 +144,7 @@ namespace ProcessFilter.SPA.SC
                 _hostOperations.Add(hostOp);
         }
 
-        void AddCFS(XPathResult srvCode, HostOperation hostOp, LinkType link)
+        void AddCFS(XPathResult srvCode, HostOperation hostOp, HostOperation.LinkType link)
         {
             if (!CollectionCFS.TryGetValue(srvCode.NodeName, out CFS getExistCFS))
             {

@@ -1,31 +1,20 @@
-﻿using System;
-using System.CodeDom.Compiler;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.XPath;
-using Utils.XPathHelper;
-using System.Xml;
-using Utils.XmlRtfStyle;
-using static ProcessFilter.SPA.SC.HostOperation;
+﻿using System.Collections.Generic;
 
-namespace ProcessFilter.SPA.SC
+namespace SPAFilter.SPA.SC
 {
     public sealed class CFS : SComponentBase
     {
         Dictionary<string, List<HostOperation>> hostOperations = new Dictionary<string, List<HostOperation>>();
         public List<RFS> RFSList { get; } = new List<RFS>();
 
-        internal CFS(string serviceCode, string description, [NotNull] HostOperation hostOp, LinkType linkType)
+        internal CFS(string serviceCode, string description, [NotNull] HostOperation hostOp, HostOperation.LinkType linkType)
         {
             Name = serviceCode;
             Description = description;
             IsNewHost(hostOp, linkType);
         }
 
-        internal bool IsNewHost([NotNull] HostOperation hostOp, LinkType linkType)
+        internal bool IsNewHost([NotNull] HostOperation hostOp, HostOperation.LinkType linkType)
         {
             if (hostOperations.TryGetValue(hostOp.HostType, out List<HostOperation> hostOpList))
             {

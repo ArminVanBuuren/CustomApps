@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.XPath;
-using Utils.XmlRtfStyle;
 using Utils.XPathHelper;
 
-namespace ProcessFilter.SPA.SC
+namespace SPAFilter.SPA.SC
 {
     public class BindingServices
     {

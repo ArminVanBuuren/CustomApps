@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Utils.WinForm.DataGridViewHelper.DGVEnhancer;
+using Utils.WinForm.DataGridViewHelper;
 
-namespace ProcessFilter.SPA
+namespace SPAFilter.SPA
 {
     public class CollectionCommands : List<Command>
     {
@@ -40,7 +38,7 @@ namespace ProcessFilter.SPA
             
         }
 
-        [DGVColumn(ColumnPosition.Before, "Command")]
+        [DGVEnhancer.DGVColumnAttribute(DGVEnhancer.ColumnPosition.Before, "Command")]
         public override string Name { get; protected set; }
     }
 }

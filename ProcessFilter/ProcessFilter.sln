@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.10
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessFilter", "ProcessFilter\ProcessFilter.csproj", "{2D965102-2CC6-4C82-AD78-DAB5ED41DD32}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPAFilter", "ProcessFilter\SPAFilter.csproj", "{2D965102-2CC6-4C82-AD78-DAB5ED41DD32}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

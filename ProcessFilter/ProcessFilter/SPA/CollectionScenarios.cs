@@ -2,16 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
-using Utils.WinForm.DataGridViewHelper;
 using Utils;
 using Utils.IOExploitation;
+using Utils.WinForm.DataGridViewHelper;
 using Utils.XmlHelper;
-using static Utils.WinForm.DataGridViewHelper.DGVEnhancer;
 
-namespace ProcessFilter.SPA
+namespace SPAFilter.SPA
 {
     public class CollectionScenarios : List<Scenario>
     {
@@ -59,10 +56,10 @@ namespace ProcessFilter.SPA
         internal List<string> Commands { get; private set; } = new List<string>();
         internal CollectionScenarios SubScenarios { get; private set; } = new CollectionScenarios();
 
-        [DGVColumn(ColumnPosition.Before, "Scenario")]
+        [DGVEnhancer.DGVColumnAttribute(DGVEnhancer.ColumnPosition.Before, "Scenario")]
         public override string Name { get; protected set; }
 
-        [DGVColumn(ColumnPosition.After, "SubScenario Count")]
+        [DGVEnhancer.DGVColumnAttribute(DGVEnhancer.ColumnPosition.After, "SubScenario Count")]
         public int ExistSubScenarios => SubScenarios.Count;
 
         

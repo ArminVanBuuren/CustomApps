@@ -1,33 +1,24 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Xml;
-using System.Xml.Schema;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Threading;
-
+using System.Windows.Forms;
+using System.Xml;
+using OfficeOpenXml;
+using SPAFilter.SPA;
+using SPAFilter.SPA.SC;
 using Utils;
-using Utils.XmlHelper;
-using Timer = System.Timers.Timer;
-using XmlHelper = Utils.XmlHelper.XmlHelper;
 using Utils.WinForm.DataGridViewHelper;
 using Utils.WinForm.Notepad;
-using ProcessFilter.SPA;
-using OfficeOpenXml;
-using ProcessFilter.SPA.SC;
+using XmlHelper = Utils.XmlHelper.XmlHelper;
 
-namespace ProcessFilter
+namespace SPAFilter
 {
     [Serializable]
     public partial class ProcessFilterForm : Form, ISerializable

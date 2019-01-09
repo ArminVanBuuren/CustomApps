@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Utils.WinForm.DataGridViewHelper;
-using static Utils.WinForm.DataGridViewHelper.DGVEnhancer;
 
-namespace ProcessFilter.SPA
+namespace SPAFilter.SPA
 {
     public class CollectionNetworkElements
     {
@@ -103,10 +102,10 @@ namespace ProcessFilter.SPA
     {
         private NetworkElement parent;
 
-        [DGVColumn(ColumnPosition.After, "Operation")]
+        [DGVEnhancer.DGVColumnAttribute(DGVEnhancer.ColumnPosition.After, "Operation")]
         public override string Name { get; protected set; }
 
-        [DGVColumn(ColumnPosition.Before, "Network Element")]
+        [DGVEnhancer.DGVColumnAttribute(DGVEnhancer.ColumnPosition.Before, "Network Element")]
         public string NetworkElement => parent.Name;
 
         public NetworkElementOpartion(string path, int id, NetworkElement parentElement)

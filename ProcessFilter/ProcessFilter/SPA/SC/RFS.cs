@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static ProcessFilter.SPA.SC.HostOperation;
 
-namespace ProcessFilter.SPA.SC
+namespace SPAFilter.SPA.SC
 {
     public class RFS : SComponentBase
     {
@@ -23,10 +19,10 @@ namespace ProcessFilter.SPA.SC
         public override string Description => ParentCFS_RFS.ParentCFS.Description;
 
         public string HostType => MainHostOperation.HostType;
-        internal CFS_RFS ParentCFS_RFS { get; }
+        internal HostOperation.CFS_RFS ParentCFS_RFS { get; }
         HostOperation MainHostOperation { get; }
         public Resource SC_Resource { get; }
-        internal RFS(CFS_RFS parentCFS, HostOperation hostOp, Resource resource = null, int index = -1)
+        internal RFS(HostOperation.CFS_RFS parentCFS, HostOperation hostOp, Resource resource = null, int index = -1)
         {
             ParentCFS_RFS = parentCFS;
             MainHostOperation = hostOp;

@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Xml;
-using System.Xml.XPath;
 using System.Data;
+using System.IO;
 using System.Text;
+using System.Xml;
 using Utils.XmlHelper;
 using Utils.XmlRtfStyle;
 
-namespace ProcessFilter.SPA.SC
+namespace SPAFilter.SPA.SC
 {
     public class ServiceCatalog
     {

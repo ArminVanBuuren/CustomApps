@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{2D965102-2CC6-4C82-AD78-DAB5ED41DD32}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>ProcessFilter</RootNamespace>
-    <AssemblyName>ProcessFilter</AssemblyName>
+    <RootNamespace>SPAFilter</RootNamespace>
+    <AssemblyName>SPAFilter</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

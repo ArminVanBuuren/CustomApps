@@ -1,4 +1,4 @@
-﻿namespace ProcessFilter
+﻿namespace SPAFilter
 {
     partial class ProcessFilterForm
     {
