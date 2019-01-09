@@ -1793,9 +1793,6 @@
     <Content Include="PROD-2019.09.01\ROBP\Operations\ZN\DeleteSubscriberOnZN.%28 3271 %29.xml" />
     <Content Include="PROD-2019.09.01\ROBP\Operations\ZN\SynchronizeSubscriberDataOnZN.%28 3244 %29.xml" />
     <Content Include="PROD-2019.09.01\ROBP\Operations\ZN\UnBlockonZN.%28 4681 %29.xml" />
-    <Content Include="PROD-2019.09.01\ROBP\Processes\%28 Archived %29\Assign RBT_NEW Services.%28 2437 %29.xml" />
-    <Content Include="PROD-2019.09.01\ROBP\Processes\%28 Archived %29\Modify Voice Mail Services.%28 2417 %29.xml" />
-    <Content Include="PROD-2019.09.01\ROBP\Processes\%28 Archived %29\Remove RBT_NEW Services.%28 2438 %29.xml" />
     <Content Include="PROD-2019.09.01\ROBP\Processes\Activate Call Forwarding Sync.%28 3100 %29.xml" />
     <Content Include="PROD-2019.09.01\ROBP\Processes\Assign 3G Services.%28 3101 %29.xml" />
     <Content Include="PROD-2019.09.01\ROBP\Processes\Assign Additional Number.%28 3102 %29.xml" />
@@ -7799,7 +7796,6 @@
     <None Include="PROD-2019.09.01\SPA.SA\ViaMobi\scenarios\DeleteSubscriberOnVI.xml_old" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="PROD-2019.09.01\ROBP\Operations\%28 Archived %29\" />
     <Folder Include="PROD-2019.09.01\SPA.SA\Archive\2Memory_\dictionaries\Decoders\" />
     <Folder Include="PROD-2019.09.01\SPA.SA\Archive\Playfon_\dictionaries\Decoders\" />
     <Folder Include="PROD-2019.09.01\SPA.SA\Archive\SchoolLibrary_\scenarios\old\" />
