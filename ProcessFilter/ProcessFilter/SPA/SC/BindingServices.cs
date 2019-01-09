@@ -17,7 +17,7 @@ namespace ProcessFilter.SPA.SC
         public string DependenceType { get; private set; } = "Any";
 
 
-        public BindingServices(XmlDocument document)
+        protected internal BindingServices(XmlDocument document)
         {
             XPathNavigator navigator = document.CreateNavigator();
             XPathResultCollection getServices = XPathHelper.Execute(document.CreateNavigator(), "//RegisteredList/*");
@@ -57,17 +57,17 @@ namespace ProcessFilter.SPA.SC
 
         public static bool isAttributeContains(XPathResult xmlResult, string attributeName, string typeValue)
         {
-            if (xmlResult.Node.Attributes != null)
+            if (xmlResult.Node.Attributes == null)
+                return false;
+
+            foreach (XmlAttribute attr in xmlResult.Node.Attributes)
             {
-                foreach (XmlAttribute attr in xmlResult.Node.Attributes)
+                if (!attr.Name.Equals(attributeName, StringComparison.CurrentCultureIgnoreCase))
+                    continue;
+
+                if (attr.Value.Equals(typeValue, StringComparison.CurrentCultureIgnoreCase))
                 {
-                    if (attr.Name.Equals(attributeName, StringComparison.CurrentCultureIgnoreCase))
-                    {
-                        if (attr.Value.Equals(typeValue, StringComparison.CurrentCultureIgnoreCase))
-                        {
-                            return true;
-                        }
-                    }
+                    return true;
                 }
             }
 
@@ -75,7 +75,7 @@ namespace ProcessFilter.SPA.SC
         }
 
 
-        public void AddRange(BindingServices bindServ)
+        protected internal void AddRange(BindingServices bindServ)
         {
             if (DependenceType != bindServ.DependenceType && bindServ.DependenceType == "All")
                 DependenceType = "All";

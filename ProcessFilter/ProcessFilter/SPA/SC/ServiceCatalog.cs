@@ -36,8 +36,6 @@ namespace ProcessFilter.SPA.SC
             cfsList.GenerateRFS();
         }
 
-        public bool IsValid => cfsList.Count > 0;
-
         public void Save(string exportFilePath)
         {
             _progressComp.ProgressValue = 4;

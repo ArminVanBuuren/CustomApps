@@ -15,7 +15,7 @@ namespace ProcessFilter.SPA.SC
         public Resource(HostOperation hostOperation)
         {
             Name = $"RES_{hostOperation.HostType}_{hostOperation.OperationName}";
-            Description = $"Общий ресурс для услуг - {string.Join(",", hostOperation.ChildCFS.Select(p => p.ServiceCode))}";
+            Description = $"Общий ресурс для услуг - {string.Join(",", hostOperation.ChildCFS.Keys)}";
             HostOperation = hostOperation;
         }
 

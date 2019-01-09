@@ -9,7 +9,7 @@ namespace ProcessFilter.SPA.SC
 {
     public class CFSGroups
     {
-        public List<List<string>> _tempCFSGroupCollection { get; } = new List<List<string>>();
+        public Dictionary<string, List<string>> _tempCFSGroupCollection { get; } = new Dictionary<string, List<string>>();
         public Dictionary<string, List<string>> CFSGroupCollection { get; private set; }
 
         public void AddCFSGroup(string mainCFS, IEnumerable<string> listRestrictedCFS)
@@ -17,7 +17,9 @@ namespace ProcessFilter.SPA.SC
             foreach (string cfsRestr in listRestrictedCFS)
             {
                 List<string> rest = new List<string> {mainCFS, cfsRestr};
-                _tempCFSGroupCollection.Add(rest);
+                string key = string.Join(":", rest.OrderBy(p => p));
+                if (!_tempCFSGroupCollection.ContainsKey(key))
+                    _tempCFSGroupCollection.Add(key, rest);
             }
         }
 
@@ -48,10 +50,10 @@ namespace ProcessFilter.SPA.SC
         }
 
 
-        Dictionary<string, List<string>> Calculate(List<List<string>> allList)
+        Dictionary<string, List<string>> Calculate(Dictionary<string, List<string>> allList)
         {
             Dictionary<string, Dictionary<string, bool>> filtered = new Dictionary<string, Dictionary<string, bool>>();
-            foreach (List<string> cfsRestrList in allList)
+            foreach (List<string> cfsRestrList in allList.Values)
             {
                 foreach (string cfsName in cfsRestrList)
                 {
@@ -128,10 +130,10 @@ namespace ProcessFilter.SPA.SC
             return filtered4;
         }
 
-        List<string> Calculate(string name, List<List<string>> allList)
+        List<string> Calculate(string name, Dictionary<string, List<string>> allList)
         {
             List<string> refreshList = new List<string>();
-            foreach (List<string> cfsRestrList in allList)
+            foreach (List<string> cfsRestrList in allList.Values)
             {
                 foreach (string cfsName in cfsRestrList)
                 {

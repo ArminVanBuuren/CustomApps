@@ -6,20 +6,67 @@ using System.Threading.Tasks;
 
 namespace ProcessFilter.SPA.SC
 {
+    [Flags]
+    public enum LinkType
+    {
+        Add = 0,
+        Remove = 1
+        //AddAndRemove = Add & Remove
+    }
+
+    
+
     public class HostOperation
     {
+        protected internal class CFS_RFS
+        {
+            private HostOperation _parent;
+            protected internal CFS_RFS(CFS cfs, LinkType link, HostOperation parent)
+            {
+                ParentCFS = cfs;
+                Link = link;
+                _parent = parent;
+            }
+
+            protected internal void ChangeLinkType(LinkType link)
+            {
+                Link = Link & link;
+            }
+
+            protected internal CFS ParentCFS { get; }
+            protected internal LinkType Link { get; private set; }
+            public override string ToString()
+            {
+                return $"{ParentCFS.ServiceCode}:{Link:G}";
+            }
+        }
+
+
         public string HostType { get; }
+        public string HostOperationName => $"{HostType}_{OperationName}";
         public string OperationName { get; }
-        public string XML_BODY { get; }
-        public List<CFS> ChildCFS { get; } = new List<CFS>();
-        public BindingServices BindServices { get; }
-        
+        protected internal List<string> XML_BODY { get; } = new List<string>();
+        protected internal Dictionary<string, CFS_RFS> ChildCFS { get; } = new Dictionary<string, CFS_RFS>();
+        protected internal BindingServices BindServices { get; }
+
         public HostOperation(string opName, string hostType, string xmlBody, BindingServices bindServ)
         {
             OperationName = opName;
             HostType = hostType;
-            XML_BODY = xmlBody;
+            XML_BODY.Add(xmlBody);
             BindServices = bindServ;
+        }
+
+        protected internal void CombineSameHostOperation(HostOperation hostOp)
+        {
+            XML_BODY.AddRange(hostOp.XML_BODY);
+            BindServices.AddRange(hostOp.BindServices);
+        }
+
+        protected internal void AddChildRFS(CFS cfs, LinkType linkType)
+        {
+            CFS_RFS cfsrfs = new CFS_RFS(cfs, linkType, this);
+            ChildCFS.Add(cfs.ServiceCode, cfsrfs);
         }
 
         public void GenerateRFS()
@@ -28,25 +75,25 @@ namespace ProcessFilter.SPA.SC
             {
                 Resource resource = new Resource(this);
                 int index = 0;
-                foreach (CFS cfs in ChildCFS)
+                foreach (CFS_RFS cfsRfs in ChildCFS.Values)
                 {
-                    RFS rfs = new RFS(cfs, this, resource, ++index);
-                    cfs.RFSList.Add(rfs);
+                    RFS rfs = new RFS(cfsRfs, this, resource, ++index);
+                    cfsRfs.ParentCFS.RFSList.Add(rfs);
                 }
             }
             else
             {
-                foreach (CFS cfs in ChildCFS)
+                foreach (CFS_RFS cfsRfs in ChildCFS.Values)
                 {
-                    RFS rfs = new RFS(cfs, this);
-                    cfs.RFSList.Add(rfs);
+                    RFS rfs = new RFS(cfsRfs, this);
+                    cfsRfs.ParentCFS.RFSList.Add(rfs);
                 }
             }
         }
 
         public override string ToString()
         {
-            return $"{HostType}_{OperationName}";
+            return HostOperationName;
         }
     }
 }

@@ -773,6 +773,8 @@ namespace ProcessFilter
             GenerateSC.Enabled = true;
         }
 
+        private string[] mandatoryXslxColumns = new string[] { "#", "SPA_SERVICE_CODE", "GLOBAL_SERVICE_CODE", "SERVICE_NAME", "SERVICE_FULL_NAME", "SERVICE_FULL_NAME2", "DESCRIPTION", "SERVICE_CODE", "SERVICE_NAME2", "EXTERNAL_CODE", "EXTERNAL_CODE2" };
+
         DataTable GetServiceXslx()
         {
             DataTable serviceTable = null;
@@ -791,9 +793,13 @@ namespace ProcessFilter
                     if (!columnsNames.Any())
                         return null;
 
+                    int i = 0;
                     foreach (var columnName in columnsNames)
                     {
-                        serviceTable.Columns.Add(columnName.ToUpper(), typeof(string));
+                        string columnNameUp = columnName.ToUpper();
+                        if (mandatoryXslxColumns[i++] != columnNameUp)
+                            throw new Exception($"Wrong column names from \'{columnNameUp}\'. Columns names should be like:\r\n'{string.Join("','", mandatoryXslxColumns)}'");
+                        serviceTable.Columns.Add(columnNameUp, typeof(string));
                     }
 
                     totalColumns = columnsNames.Count();

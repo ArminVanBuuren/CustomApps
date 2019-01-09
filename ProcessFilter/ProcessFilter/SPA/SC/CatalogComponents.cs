@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using Utils.XmlRtfStyle;
 using Utils.XPathHelper;
+using static ProcessFilter.SPA.SC.HostOperation;
 
 namespace ProcessFilter.SPA.SC
 {
@@ -40,15 +41,18 @@ namespace ProcessFilter.SPA.SC
             operationName = operationName.Replace(" ", "");
 
             BindingServices bindSrv = new BindingServices(document);
-
+            HostOperation hostOp = new HostOperation(operationName, hostType, RtfFromXml.GetXmlString(document.OuterXml), bindSrv);
             Dictionary<string, XPathResult> getServices = new Dictionary<string, XPathResult>();
-            AppendServices(getServices, XPathHelper.Execute(document.CreateNavigator(), "//ProvisionList/*"));
-            AppendServices(getServices, XPathHelper.Execute(document.CreateNavigator(), "//WithdrawalList/*"));
 
-            if (getServices.Count > 0)
+            if (GetServices(getServices, XPathHelper.Execute(document.CreateNavigator(), "//ProvisionList/*")))
             {
-                HostOperation hostOp = new HostOperation(operationName, hostType, RtfFromXml.GetXmlString(document.OuterXml), bindSrv);
-                LoadService(hostOp, getServices, bindSrv);
+                if (!IsExistSameHostOperation(hostOp, getServices, LinkType.Add))
+                    LoadNewService(hostOp, getServices, bindSrv, LinkType.Add);
+            }
+            else if (GetServices(getServices, XPathHelper.Execute(document.CreateNavigator(), "//WithdrawalList/*")))
+            {
+                if (!IsExistSameHostOperation(hostOp, getServices, LinkType.Remove))
+                    LoadNewService(hostOp, getServices, bindSrv, LinkType.Remove);
             }
         }
 
@@ -60,10 +64,11 @@ namespace ProcessFilter.SPA.SC
             }
         }
 
-        static void AppendServices(Dictionary<string, XPathResult> services, XPathResultCollection result)
+        bool GetServices(Dictionary<string, XPathResult> services, XPathResultCollection result)
         {
             if(result == null || result.Count == 0)
-                return;
+                return false;
+
             foreach (XPathResult res in result)
             {
                 if (res.NodeName.Equals("Include", StringComparison.CurrentCultureIgnoreCase))
@@ -75,35 +80,87 @@ namespace ProcessFilter.SPA.SC
                 if (!services.ContainsKey(res.NodeName))
                     services.Add(res.NodeName, res);
             }
+
+            return result.Count > 0;
         }
 
-        void LoadService(HostOperation hostOp, Dictionary<string, XPathResult> srvCodeList, BindingServices bindSrv)
+        bool IsExistSameHostOperation(HostOperation newHostOp, Dictionary<string, XPathResult> newServices, LinkType type)
+        {
+            foreach (HostOperation existhostOp in _hostOperations)
+            {
+                //string xmlTEMP = string.Join("\r\n\r\n", newHostOp.XML_BODY) + "\r\n\r\n" + string.Join("\r\n\r\n", existhostOp.XML_BODY);
+                if (existhostOp.HostOperationName.Equals(newHostOp.HostOperationName, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    foreach (XPathResult srvCode in newServices.Values)
+                    {
+                        if (existhostOp.ChildCFS.TryGetValue(srvCode.NodeName, out CFS_RFS cfs_rfs))
+                        {
+                            cfs_rfs.ChangeLinkType(type);
+                        }
+                        else
+                        {
+                            AddCFS(srvCode, existhostOp, type);
+                        }
+                    }
+
+                    newServices = null;
+                    existhostOp.CombineSameHostOperation(newHostOp);
+                    return true;
+                }
+
+                if (!existhostOp.HostType.Equals(newHostOp.HostType, StringComparison.CurrentCultureIgnoreCase))
+                    continue;
+
+                List<string> serviceForRemove = new List<string>();
+                foreach (KeyValuePair<string, XPathResult> srvCode in newServices)
+                {
+                    if (existhostOp.ChildCFS.TryGetValue(srvCode.Key, out CFS_RFS cfs_rfs))
+                    {
+                        cfs_rfs.ChangeLinkType(type);
+                        serviceForRemove.Add(srvCode.Key);
+                    }
+                }
+
+                if (serviceForRemove.Count > 0)
+                {
+                    foreach (string serviceCode in serviceForRemove)
+                    {
+                        newServices.Remove(serviceCode);
+                    }
+                    existhostOp.CombineSameHostOperation(newHostOp);
+                }
+            }
+
+            return newServices.Count == 0;
+        }
+
+        void LoadNewService(HostOperation hostOp, Dictionary<string, XPathResult> srvCodeList, BindingServices bindSrv, LinkType link)
         {
             Dictionary<HostOperation, List<RFS>> resHostOp = new Dictionary<HostOperation, List<RFS>>();
             foreach (XPathResult srvCode in srvCodeList.Values)
             {
-                if (!CollectionCFS.TryGetValue(srvCode.NodeName, out CFS getOrCreateCFS))
-                {
-                    string description = _getDescription?.Invoke(srvCode.NodeName);
-                    description = string.IsNullOrEmpty(description) ? "-" : description;
-
-                    getOrCreateCFS = new CFS(srvCode.NodeName, description, hostOp);
-                    CollectionCFS.Add(srvCode.NodeName, getOrCreateCFS);
-
-                    hostOp.ChildCFS.Add(getOrCreateCFS);
-                }
-                else
-                {
-                    if (getOrCreateCFS.IsNewHost(hostOp))
-                        hostOp.ChildCFS.Add(getOrCreateCFS);
-                }
+                AddCFS(srvCode, hostOp, link);
             }
 
             if (hostOp.ChildCFS.Count > 0)
                 _hostOperations.Add(hostOp);
         }
 
+        void AddCFS(XPathResult srvCode, HostOperation hostOp, LinkType link)
+        {
+            if (!CollectionCFS.TryGetValue(srvCode.NodeName, out CFS getExistCFS))
+            {
+                string description = _getDescription?.Invoke(srvCode.NodeName);
+                description = string.IsNullOrEmpty(description) ? "-" : description;
 
+                CFS createNewCFS = new CFS(srvCode.NodeName, description, hostOp, link);
+                CollectionCFS.Add(srvCode.NodeName, createNewCFS);
+            }
+            else
+            {
+                getExistCFS.IsNewHost(hostOp, link);
+            }
+        }
 
         string GetDescription(string serviceCode)
         {
@@ -116,8 +173,6 @@ namespace ProcessFilter.SPA.SC
 
             return results.First().ToString();
         }
-
-        public int Count => CollectionCFS.Count;
 
         public void GenerateRFS()
         {

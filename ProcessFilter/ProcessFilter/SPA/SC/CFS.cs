@@ -17,24 +17,29 @@ namespace ProcessFilter.SPA.SC
         public string ServiceCode { get; }
         public string Description { get; }
         Dictionary<string, List<HostOperation>> hostOperations = new Dictionary<string, List<HostOperation>>();
-        public HostOperation CombineHostOperation { get; private set; }
         public List<RFS> RFSList { get; } = new List<RFS>();
 
-        public CFS(string srvCode, string description, [NotNull] HostOperation hostOp)
+        public CFS(string srvCode, string description, [NotNull] HostOperation hostOp, LinkType linkType)
         {
             ServiceCode = srvCode;
             Description = description;
-            IsNewHost(hostOp);
+            IsNewHost(hostOp, linkType);
         }
 
-        internal bool IsNewHost([NotNull] HostOperation hostOp)
+        internal bool IsNewHost([NotNull] HostOperation hostOp, LinkType linkType)
         {
             if (hostOperations.TryGetValue(hostOp.HostType, out List<HostOperation> hostOpList))
             {
+                foreach (HostOperation existHostOp in hostOpList)
+                {
+                    if (existHostOp == hostOp)
+                        return false;
+                }
                 hostOpList.Add(hostOp);
                 return false;
             }
 
+            hostOp.AddChildRFS(this, linkType);
             hostOperations.Add(hostOp.HostType, new List<HostOperation> { hostOp });
             return true;
         }
