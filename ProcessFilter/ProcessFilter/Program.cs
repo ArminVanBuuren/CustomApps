@@ -32,7 +32,10 @@ namespace SPAFilter
                 }
             }
 
-            Application.Run(mainControl ?? new ProcessFilterForm());
+            if (mainControl == null)
+                mainControl = new ProcessFilterForm();
+
+            Application.Run(mainControl);
         }
 
         public static void SetProgressNoAnimation(this ProgressBar pb, int value)

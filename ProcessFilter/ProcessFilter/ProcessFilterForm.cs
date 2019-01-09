@@ -35,6 +35,7 @@ namespace SPAFilter
 
         public ProcessFilterForm()
         {
+            IsInitialization = false;
             MainInit();
         }
 
@@ -782,13 +783,15 @@ namespace SPAFilter
                     int i = 0;
                     foreach (var columnName in columnsNames)
                     {
+                        if(columnName.IsNullOrEmptyTrim())
+                            continue;
                         string columnNameUp = columnName.ToUpper();
                         if (mandatoryXslxColumns[i++] != columnNameUp)
-                            throw new Exception($"Wrong column names from \'{columnNameUp}\'. Columns names should be like:\r\n'{string.Join("','", mandatoryXslxColumns)}'");
+                            throw new Exception($"Wrong column name before \'{columnNameUp}\' from file '{OpenSCXlsx.Text}'.\r\nColumns names should be like:\r\n'{string.Join("','", mandatoryXslxColumns)}'");
                         serviceTable.Columns.Add(columnNameUp, typeof(string));
                     }
 
-                    totalColumns = columnsNames.Count();
+                    totalColumns = i;
 
                     for (int rowNum = 2; rowNum <= totalRows; rowNum++)
                     {

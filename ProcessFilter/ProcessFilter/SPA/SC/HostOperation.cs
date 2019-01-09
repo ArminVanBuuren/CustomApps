@@ -46,13 +46,13 @@ namespace SPAFilter.SPA.SC
         {
             OperationName = opName;
             HostType = hostType;
-            XML_BODY.Add(xmlBody);
+            //XML_BODY.Add(xmlBody);
             BindServices = bindServ;
         }
 
         protected internal void CombineSameHostOperation(HostOperation hostOp)
         {
-            XML_BODY.AddRange(hostOp.XML_BODY);
+            //XML_BODY.AddRange(hostOp.XML_BODY);
             BindServices.AddRange(hostOp.BindServices);
         }
 

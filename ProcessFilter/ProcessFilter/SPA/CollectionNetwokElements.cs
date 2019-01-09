@@ -103,14 +103,19 @@ namespace SPAFilter.SPA
         private NetworkElement parent;
 
         [DGVEnhancer.DGVColumnAttribute(DGVEnhancer.ColumnPosition.After, "Operation")]
-        public override string Name { get; protected set; }
+        public sealed override string Name { get; protected set; }
 
         [DGVEnhancer.DGVColumnAttribute(DGVEnhancer.ColumnPosition.Before, "Network Element")]
         public string NetworkElement => parent.Name;
 
-        public NetworkElementOpartion(string path, int id, NetworkElement parentElement)
-            : base(path, id)
+        public NetworkElementOpartion(string path, int id, NetworkElement parentElement) : base(path, id)
         {
+            if (BusinessProcess.IsNameWithId(Name, out string newName, out int newId))
+            {
+                Name = newName;
+                ID = newId;
+            }
+
             parent = parentElement;
         }
     }

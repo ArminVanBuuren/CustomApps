@@ -34,20 +34,32 @@ namespace SPAFilter.SPA
         }
     }
 
-    public class BusinessProcess : ObjectTempalte
+    public sealed class BusinessProcess : ObjectTempalte
     {
         internal List<string> Operations { get; } = new List<string>();
 
         public BusinessProcess(string path, int id) : base(path, id)
         {
-            Match match = Regex.Match(Name, @"(.+)\.\(\s*(\d+)\s*\)");
+            if (IsNameWithId(Name, out string newName, out int newId))
+            {
+                Name = newName;
+                ID = newId;
+            }
+        }
+
+        internal static bool IsNameWithId(string name, out string newName, out int newId)
+        {
+            Match match = Regex.Match(name, @"(.+)\.\(\s*(\d+)\s*\)");
             if (match.Success && int.TryParse(match.Groups[2].Value, out int res))
             {
-                Name = match.Groups[1].Value;
-                ID = res;
+                newName = match.Groups[1].Value;
+                newId = res;
+                return true;
             }
-            else
-                ID = id;
+
+            newName = name;
+            newId = -1;
+            return false;
         }
 
         public void AddBodyOperations(XmlDocument document)
