@@ -104,48 +104,48 @@ namespace Utils.XmlRtfStyle
             {
                 throw new ArgumentNullException(nameof(settings));
             }
-            string source = string.Empty;
+            StringBuilder source = new StringBuilder();
             ProcessXmlInnerText(xml.DocumentElement, ref source, 0);
-            return GetRtfString(source, settings);
+            return GetRtfString(source.ToString(), settings);
         }
 
         public static string GetXmlString(string xmlString)
         {
             XmlDocument xml = new XmlDocument();
             xml.LoadXml(xmlString);
-            string source = string.Empty;
+            StringBuilder source = new StringBuilder();
             ProcessXmlInnerText(xml.DocumentElement, ref source, 0);
-            return source;
+            return source.ToString();
         }
 
         public static string GetXmlString(XmlDocument xml)
         {
-            string source = string.Empty;
+            StringBuilder source = new StringBuilder();
             ProcessXmlInnerText(xml.DocumentElement, ref source, 0);
-            return source;
+            return source.ToString();
         }
 
-        static void ProcessXmlInnerText(XmlNode node, ref string source, int nested)
+        static void ProcessXmlInnerText(XmlNode node, ref StringBuilder source, int nested)
         {
             string str = string.Empty;
             for (int i = 0; i < nested; i++)
             {
                 str = str + " ";
             }
-            string str2 = string.Empty;
+            StringBuilder str2 = new StringBuilder();
             if (node.Attributes == null)
             {
                 if (string.Equals(node.Name, "#text"))
                 {
-                    source = source + node.OuterXml.Trim();
+                    source.Append(node.OuterXml.Trim());
                 }
                 else if (string.Equals(node.Name, "#comment"))
                 {
-                    source = source + string.Format("{1}{2}{0}", node.OuterXml.Trim(), Environment.NewLine, str);
+                    source.Append(string.Format("{1}{2}{0}", node.OuterXml.Trim(), Environment.NewLine, str));
                 }
                 else if (string.Equals(node.Name, "#cdata-section"))
                 {
-                    source = source + string.Format("{1}{2}{0}", node.OuterXml.Trim(), Environment.NewLine, str);
+                    source.Append(string.Format("{1}{2}{0}", node.OuterXml.Trim(), Environment.NewLine, str));
                 }
                 else
                 {
@@ -154,36 +154,36 @@ namespace Utils.XmlRtfStyle
                     {
                         innerText = node.InnerText.Remove(innerText.LastIndexOf("\n", StringComparison.Ordinal));
                     }
-                    source = source + string.Format("{0}", innerText);
+                    source.Append(innerText);
                 }
             }
             else
             {
                 foreach (XmlAttribute attribute in node.Attributes)
                 {
-                    str2 = str2 + string.Format(" {0}=\"{1}\"", attribute.Name, attribute.InnerXml.Replace("\"", "&quot;").Replace("<", "&lt;").Replace(">", "&gt;"));
+                    str2.Append($" {attribute.Name}=\"{attribute.InnerXml.Replace("\"", "&quot;").Replace("<", "&lt;").Replace(">", "&gt;")}\"");
                 }
                 string str4 = (nested != 0) ? Environment.NewLine : string.Empty;
                 if ((node.ChildNodes.Count <= 0) && string.IsNullOrEmpty(node.InnerText))
                 {
-                    if (string.IsNullOrEmpty(str2))
+                    if (string.IsNullOrEmpty(str2.ToString()))
                     {
-                        source = source + string.Format("{2}{0}<{1} />", str, node.Name, str4);
+                        source.Append(string.Format("{2}{0}<{1} />", str, node.Name, str4));
                     }
                     else
                     {
-                        source = source + string.Format("{3}{0}<{1}{2} />", str, node.Name, str2, str4);
+                        source.Append(string.Format("{3}{0}<{1}{2} />", str, node.Name, str2, str4));
                     }
                 }
                 else
                 {
-                    if (string.IsNullOrEmpty(str2))
+                    if (string.IsNullOrEmpty(str2.ToString()))
                     {
-                        source = source + string.Format("{2}{0}<{1}>", str, node.Name, str4);
+                        source.Append(string.Format("{2}{0}<{1}>", str, node.Name, str4));
                     }
                     else
                     {
-                        source = source + string.Format("{3}{0}<{1}{2}>", str, node.Name, str2, str4);
+                        source.Append(string.Format("{3}{0}<{1}{2}>", str, node.Name, str2, str4));
                     }
                     nested += 3;
                     foreach (XmlNode node2 in node.ChildNodes)
@@ -192,11 +192,11 @@ namespace Utils.XmlRtfStyle
                     }
                     if (((node.FirstChild != null) && (node.ChildNodes.Count == 1)) && string.Equals(node.FirstChild.Name, "#text"))
                     {
-                        source = source + string.Format("</{0}>", node.Name);
+                        source.Append($"</{node.Name}>");
                     }
                     else
                     {
-                        source = source + string.Format("{2}{0}</{1}>", str, node.Name, Environment.NewLine);
+                        source.Append(string.Format("{2}{0}</{1}>", str, node.Name, Environment.NewLine));
                     }
                 }
             }

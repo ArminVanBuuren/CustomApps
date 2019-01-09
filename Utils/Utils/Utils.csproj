@@ -70,6 +70,8 @@
     <Compile Include="XmlRtfStyle\RtfBuilder.cs" />
     <Compile Include="XmlRtfStyle\RtfFontStyles.cs" />
     <Compile Include="XmlRtfStyle\RtfFromXml.cs" />
+    <Compile Include="XPathHelper\XPathHelper.cs" />
+    <Compile Include="XPathHelper\XPathResult.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

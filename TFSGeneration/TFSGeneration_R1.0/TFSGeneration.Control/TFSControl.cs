@@ -567,9 +567,10 @@ namespace TFSAssist.Control
                         foreach (FieldCondition field in workItem.Fields)
                         {
                             string getFormattedValue = field.GetSwitchValue(itemExec.ReplaceParcedValues, OnWriteLog).Trim();
+                            //кастомный аттрибуты Control.XXX
                             if (field.Name.Equals("Control.AssignedTo", StringComparison.CurrentCultureIgnoreCase))
                             {
-                                //кастомный аттрибут "Control.AssignedTo", если он не заполнен то подставляется текущий пользователь
+                                //"Control.AssignedTo", если не заполнен то подставляется текущий пользователь
                                 tfsWorkItem.Fields["Assigned To"].Value = getFormattedValue.Trim().IsNullOrEmpty()
                                     ? _tfsService.AuthorizedIdentity.DisplayName
                                     : getFormattedValue.Trim();
