@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 
 namespace ProcessFilter.SPA.SC
 {
-    public class RFSGroup
+    public sealed class RFSGroup : SComponentBase
     {
-        public string Name { get; } = "RFS_GROUP";
         public string Type { get; }
         public IEnumerable<string> DependenceRFSList { get; }
 
         public RFSGroup(string type, IEnumerable<string> listOfRFS)
         {
+            Name = "RFS_GROUP";
+            Description = "Группа RFS";
             Type = type;
             DependenceRFSList = listOfRFS;
             foreach (string rfsName in DependenceRFSList)
@@ -25,16 +26,16 @@ namespace ProcessFilter.SPA.SC
             }
         }
 
-        public string ToXml()
+        public override string ToXml()
         {
-            string header = $"<RFSGroup name=\"{Name}\" type=\"{Type}\" description=\"Группа RFS\">";
-            string rfsList = string.Empty;
+            string header = $"<RFSGroup name=\"{Name}\" type=\"{Type}\" description=\"{Description}\">";
+            StringBuilder rfsList = new StringBuilder();
             foreach (string rfsName in DependenceRFSList)
             {
-                rfsList += $"<RFS name=\"{rfsName}\" linkType=\"Add\" />";
+                rfsList.Append($"<RFS name=\"{rfsName}\" linkType=\"Add\" />");
             }
 
-            return header + rfsList + "</RFSGroup>";
+            return header + rfsList.ToString() + "</RFSGroup>";
         }
 
         public override string ToString()

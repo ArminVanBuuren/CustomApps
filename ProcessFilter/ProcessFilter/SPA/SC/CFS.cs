@@ -9,19 +9,18 @@ using System.Xml.XPath;
 using Utils.XPathHelper;
 using System.Xml;
 using Utils.XmlRtfStyle;
+using static ProcessFilter.SPA.SC.HostOperation;
 
 namespace ProcessFilter.SPA.SC
 {
-    public class CFS
+    public sealed class CFS : SComponentBase
     {
-        public string ServiceCode { get; }
-        public string Description { get; }
         Dictionary<string, List<HostOperation>> hostOperations = new Dictionary<string, List<HostOperation>>();
         public List<RFS> RFSList { get; } = new List<RFS>();
 
-        public CFS(string srvCode, string description, [NotNull] HostOperation hostOp, LinkType linkType)
+        internal CFS(string serviceCode, string description, [NotNull] HostOperation hostOp, LinkType linkType)
         {
-            ServiceCode = srvCode;
+            Name = serviceCode;
             Description = description;
             IsNewHost(hostOp, linkType);
         }
@@ -46,7 +45,7 @@ namespace ProcessFilter.SPA.SC
 
         public string ToXml(CatalogComponents allCompontens)
         {
-            string xmlStrStart = $"<CFS name=\"{ServiceCode}\" description=\"{Description}\">";
+            string xmlStrStart = $"<CFS name=\"{Name}\" description=\"{Description}\">";
             string xmlStrMiddle = string.Empty;
 
             foreach (RFS rfs in RFSList)
@@ -66,14 +65,9 @@ namespace ProcessFilter.SPA.SC
                 }
             }
 
-            allCompontens.CollectionMutexCFSGroup.AddCFSGroup(ServiceCode, servicesRestrictionInAllHosts);
+            allCompontens.CollectionMutexCFSGroup.AddCFSGroup(Name, servicesRestrictionInAllHosts);
 
             return xmlStrStart + xmlStrMiddle + "</CFS>";
-        }
-
-        public override string ToString()
-        {
-            return ServiceCode;
         }
     }
 }

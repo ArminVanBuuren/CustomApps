@@ -6,18 +6,14 @@ using System.Threading.Tasks;
 
 namespace ProcessFilter.SPA.SC
 {
-    [Flags]
-    public enum LinkType
-    {
-        Add = 0,
-        Remove = 1
-        //AddAndRemove = Add & Remove
-    }
-
-    
-
     public class HostOperation
     {
+        [Flags]
+        protected internal enum LinkType
+        {
+            Add = 0,
+            Remove = 1
+        }
         protected internal class CFS_RFS
         {
             private HostOperation _parent;
@@ -37,7 +33,7 @@ namespace ProcessFilter.SPA.SC
             protected internal LinkType Link { get; private set; }
             public override string ToString()
             {
-                return $"{ParentCFS.ServiceCode}:{Link:G}";
+                return $"{ParentCFS.Name}:{Link:G}";
             }
         }
 
@@ -66,7 +62,7 @@ namespace ProcessFilter.SPA.SC
         protected internal void AddChildRFS(CFS cfs, LinkType linkType)
         {
             CFS_RFS cfsrfs = new CFS_RFS(cfs, linkType, this);
-            ChildCFS.Add(cfs.ServiceCode, cfsrfs);
+            ChildCFS.Add(cfs.Name, cfsrfs);
         }
 
         public void GenerateRFS()

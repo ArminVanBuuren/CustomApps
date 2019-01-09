@@ -7,12 +7,12 @@ using System.Windows.Forms;
 
 namespace ProcessFilter.SPA.SC
 {
-    public class CFSGroups
+    public class CFSGroups : SComponentBase
     {
         public Dictionary<string, List<string>> _tempCFSGroupCollection { get; } = new Dictionary<string, List<string>>();
         public Dictionary<string, List<string>> CFSGroupCollection { get; private set; }
 
-        public void AddCFSGroup(string mainCFS, IEnumerable<string> listRestrictedCFS)
+        protected internal void AddCFSGroup(string mainCFS, IEnumerable<string> listRestrictedCFS)
         {
             foreach (string cfsRestr in listRestrictedCFS)
             {
@@ -23,7 +23,7 @@ namespace ProcessFilter.SPA.SC
             }
         }
 
-        public string ToXml()
+        public override string ToXml()
         {
             StringBuilder cfsGroupsStr = new StringBuilder();
             CFSGroupCollection = Calculate(_tempCFSGroupCollection);
@@ -36,7 +36,7 @@ namespace ProcessFilter.SPA.SC
             return cfsGroupsStr.ToString();
         }
 
-        string GetCFSGroupString(string name, List<string> cfsList)
+        static string GetCFSGroupString(string name, List<string> cfsList)
         {
             StringBuilder cfsGroupStr = new StringBuilder();
             string header = $"<CFSGroup name=\"{name}\" type=\"Mutex\" description=\"Группа взаимоисключающих услуг\">";
@@ -130,7 +130,7 @@ namespace ProcessFilter.SPA.SC
             return filtered4;
         }
 
-        List<string> Calculate(string name, Dictionary<string, List<string>> allList)
+        static List<string> Calculate(string name, Dictionary<string, List<string>> allList)
         {
             List<string> refreshList = new List<string>();
             foreach (List<string> cfsRestrList in allList.Values)

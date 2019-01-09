@@ -7,10 +7,10 @@ using static ProcessFilter.SPA.SC.HostOperation;
 
 namespace ProcessFilter.SPA.SC
 {
-    public class RFS
+    public class RFS : SComponentBase
     {
         private int _index;
-        public string Name
+        public override string Name
         {
             get
             {
@@ -19,6 +19,8 @@ namespace ProcessFilter.SPA.SC
                 return $"RFS_{MainHostOperation.HostOperationName}";
             }
         }
+
+        public override string Description => ParentCFS_RFS.ParentCFS.Description;
 
         public string HostType => MainHostOperation.HostType;
         internal CFS_RFS ParentCFS_RFS { get; }
@@ -92,7 +94,7 @@ namespace ProcessFilter.SPA.SC
             return $"<RFS name=\"{Name}\" linkType=\"{ParentCFS_RFS.Link}\" />";
         }
 
-        bool AllServiceIsBaseRFS(KeyValuePair<HostOperation, HashSet<string>> finded, out HashSet<string> result)
+        static bool AllServiceIsBaseRFS(KeyValuePair<HostOperation, HashSet<string>> finded, out HashSet<string> result)
         {
             if (finded.Key.ChildCFS.Count > 1 && finded.Key.ChildCFS.Count == finded.Value.Count)
             {
@@ -107,19 +109,12 @@ namespace ProcessFilter.SPA.SC
             return false;
         }
 
-        RFSGroup CreateRFSGroup(HashSet<string> RFSDeps)
-        {
-            RFSGroup newRFSGroup = new RFSGroup(MainHostOperation.BindServices.DependenceType, RFSDeps);
-            string rfsGroupID = newRFSGroup.ToString();
-            return newRFSGroup;
-        }
-
-        public string ToXml()
+        public override string ToXml()
         {
             //если в хосте операции несколько RFS
             if (_index > 0)
             {
-                string currentRFS = $"<RFS name=\"{Name}\" base=\"RFS_{MainHostOperation.HostOperationName}_BASE\" hostType=\"{HostType}\" description=\"{ParentCFS_RFS.ParentCFS.Description}\">" + SC_Resource.GetChildCFSResource(ParentCFS_RFS.ParentCFS.ServiceCode) + "</RFS>";
+                string currentRFS = $"<RFS name=\"{Name}\" base=\"RFS_{MainHostOperation.HostOperationName}_BASE\" hostType=\"{HostType}\" description=\"{Description}\">" + SC_Resource.GetChildCFSResource(ParentCFS_RFS.ParentCFS.Name) + "</RFS>";
 
                 if (_index == 1)
                 {
@@ -131,12 +126,7 @@ namespace ProcessFilter.SPA.SC
                 }
             }
 
-            return $"<RFS name=\"{Name}\" hostType=\"{HostType}\" description=\"{ParentCFS_RFS.ParentCFS.Description}\" />";
-        }
-
-        public override string ToString()
-        {
-            return Name;
+            return $"<RFS name=\"{Name}\" hostType=\"{HostType}\" description=\"{Description}\" />";
         }
     }
 }

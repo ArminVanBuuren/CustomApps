@@ -1,11 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ProcessFilter.SPA.SC
 {
+    public abstract class SComponentBase
+    {
+        public virtual string Name { get; protected set; }
+        public virtual string Description { get; protected set; }
+
+        public virtual string ToXml()
+        {
+            return string.Empty;
+        }
+
+        public override string ToString()
+        {
+            return Name;
+        }
+    }
+
     /// <summary>
     /// Indicates that the value of marked element could never be <c>null</c>
     /// </summary>

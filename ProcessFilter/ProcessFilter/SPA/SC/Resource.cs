@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace ProcessFilter.SPA.SC
 {
-    public class Resource
+    public sealed class Resource : SComponentBase
     {
-        public string Name { get; }
-        public string Description { get; }
         public HostOperation HostOperation { get; }
 
-        public Resource(HostOperation hostOperation)
+        internal Resource(HostOperation hostOperation)
         {
             Name = $"RES_{hostOperation.HostType}_{hostOperation.OperationName}";
             Description = $"Общий ресурс для услуг - {string.Join(",", hostOperation.ChildCFS.Keys)}";
@@ -35,14 +33,9 @@ namespace ProcessFilter.SPA.SC
             return $"<Resource name=\"{Name}\" value=\"{resourceValue}\" />";
         }
 
-        public string ToXml()
+        public override string ToXml()
         {
             return $"<Resource name=\"{Name}\" description=\"{Description}\"/>";
-        }
-
-        public override string ToString()
-        {
-            return Name;
         }
     }
 }

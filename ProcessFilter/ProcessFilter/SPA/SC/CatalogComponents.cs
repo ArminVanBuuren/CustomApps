@@ -56,7 +56,7 @@ namespace ProcessFilter.SPA.SC
             }
         }
 
-        void RemovePrefix(ref string operationName, string prefix)
+        static void RemovePrefix(ref string operationName, string prefix)
         {
             if (operationName.StartsWith(prefix, StringComparison.CurrentCultureIgnoreCase))
             {
@@ -64,7 +64,7 @@ namespace ProcessFilter.SPA.SC
             }
         }
 
-        bool GetServices(Dictionary<string, XPathResult> services, XPathResultCollection result)
+        static bool GetServices(Dictionary<string, XPathResult> services, XPathResultCollection result)
         {
             if(result == null || result.Count == 0)
                 return false;
@@ -103,7 +103,7 @@ namespace ProcessFilter.SPA.SC
                         }
                     }
 
-                    newServices = null;
+                    newServices.Clear();
                     existhostOp.CombineSameHostOperation(newHostOp);
                     return true;
                 }
