@@ -573,7 +573,7 @@
     <!-- TODO:ScenarioList  -->
 
     <!--START ==== COMMON ====-->
-    <Scenario name="HL.CreateSubscriber" description="Создание абонента на HLR">
+    <Scenario name="HL.CreateSubscription" description="Создание абонента на HLR">
       <RFS name="RFS_HL_SUBSCRIPTION" scenarioType="Add" useType="Mandatory" />
       <RFS name="RFS_HL_REGION" scenarioType="Add" />
       <RFS name="RFS_HL_ODB_OC" scenarioType="Add" />
@@ -594,21 +594,21 @@
       <RFS name="RFS_HL_ROAMING" scenarioType="Add" />
       <RFS name="RFS_HL_MODIFY_SUBSCRIPTION" scenarioType="Add" />
     </Scenario>
-    <Scenario name="HL.DeleteSubscriber" description="Удаление абонента на HLR">
+    <Scenario name="HL.DeleteSubscription" description="Удаление абонента на HLR">
       <RFS name="RFS_HL_SUBSCRIPTION" scenarioType="Remove" useType="Mandatory" />
       <RFS name="RFS_HL_RECREATE_SUBSCRIPTION" scenarioType="Add" />
     </Scenario>
-    <Scenario name="HL.CancelLocation" description="Сброс информации о локации абонета на MSC, VLR, SGSN станциях">
+    <Scenario name="HL.Modify.CancelLocation" description="Сброс информации о локации абонета на MSC, VLR, SGSN станциях">
       <RFS name="RFS_HL_CNCLOC" scenarioType="Add, Remove, Modify" />
     </Scenario>
-    <Scenario name="HL.ModifyUSSD" description="Изменение статуса USSD">
+    <Scenario name="HL.Modify.USSD" description="Изменение статуса USSD">
       <RFS name="RFS_HL_USSD" scenarioType="Add, Remove, Modify" />
     </Scenario>
-    <Scenario name="HL.RoamingAdd" description="Добавление удаление услуги роуминг">
+    <Scenario name="HL.Add.Roaming" description="Добавление удаление услуги роуминг">
       <RFS name="RFS_HL_ROAMING" scenarioType="Add" />
       <Append name="RFS_HL_NET" listType="EndList" />
     </Scenario>
-    <Scenario name="HL.RoamingRemove" description="Удаление услуги роуминг">
+    <Scenario name="HL.Remove.Roaming" description="Удаление услуги роуминг">
       <RFS name="RFS_HL_ROAMING" scenarioType="Remove" />
       <Append name="RFS_HL_NET" listType="EndList" />
     </Scenario>
@@ -616,14 +616,14 @@
 
     
     <!--START ==== Call Forwarding ====-->
-    <Scenario name="HL.CallForwardingAssign" description="Добавление/активация переадресаций">
+    <Scenario name="HL.Add.CallForwarding" description="Добавление/активация переадресаций">
       <RFS name="RFS_HL_CFB" scenarioType="Add" />
       <RFS name="RFS_HL_CFU" scenarioType="Add" />
       <RFS name="RFS_HL_CFNRC" scenarioType="Add" />
       <RFS name="RFS_HL_CFNRY" scenarioType="Add" />
       <RFS name="RFS_HL_CFD" scenarioType="Add" />
     </Scenario>
-    <Scenario name="HL.CallForwardingRemove" description="Удаление/деактивация переадресаций">
+    <Scenario name="HL.Remove.CallForwarding" description="Удаление/деактивация переадресаций">
       <RFS name="RFS_HL_CFB" scenarioType="Remove" />
       <RFS name="RFS_HL_CFU" scenarioType="Remove" />
       <RFS name="RFS_HL_CFNRC" scenarioType="Remove" />
@@ -634,28 +634,28 @@
     
     
     <!--START ==== INTERNET ====-->
-    <Scenario name="HL.NET_APN_Add" description="Добавление интернет и APN">
+    <Scenario name="HL.Add.NET_APN" description="Добавление интернет и APN">
       <RFS name="RFS_HL_NET" scenarioType="Add" />
       <RFS name="RFS_HL_NET_APN" scenarioType="Add, Modify" />
     </Scenario>
-    <Scenario name="HL.NET_APN_Remove" description="Удаление интернет и APN">
+    <Scenario name="HL.Remove.NET_APN" description="Удаление интернет и APN">
       <RFS name="RFS_HL_NET" scenarioType="Remove" />
       <RFS name="RFS_HL_NET_APN" scenarioType="Remove" />
     </Scenario>
-    <Scenario name="HL.ModifyNET" description="Блокировка или разблокировка сервисов интернет">
+    <Scenario name="HL.Modify.NET" description="Блокировка или разблокировка сервисов интернет">
       <RFS name="RFS_HL_NET" scenarioType="Modify" />
       <Append name="RFS_HL_ROAMING" listType="EndList" />
     </Scenario>
-    <Scenario name="HL.ModifyLimitSpeed" description="Изменение скорости Интернета">
+    <Scenario name="HL.Modify.LimitSpeed" description="Изменение скорости Интернета">
       <RFS name="RFS_HL_LIMITSPEED" scenarioType="Add, Remove" />
       <Append name="RFS_HL_LTE" listType="EndList" />
     </Scenario>
-    <Scenario name="HL.StaticIP_Add" description="Добавить статический IP адрес">
+    <Scenario name="HL.Add.StaticIP" description="Добавить статический IP адрес">
       <RFS name="RFS_HL_STATIC_IP" scenarioType="Add" />
       <Append name="RFS_HL_SUBSCRIPTION" listType="EndList" />
       <Append name="RFS_HL_LTE" listType="EndList" />
     </Scenario>
-    <Scenario name="HL.StaticIP_Delete" description="Удалить статический IP адрес">
+    <Scenario name="HL.Remove.StaticIP" description="Удалить статический IP адрес">
       <RFS name="RFS_HL_STATIC_IP" scenarioType="Remove" />
       <Append name="RFS_HL_SUBSCRIPTION" listType="EndList" />
       <Append name="RFS_HL_LTE" listType="EndList" />
@@ -664,11 +664,11 @@
     
     
     <!--START ==== Барринги на связь и смс ====-->
-    <Scenario name="HL.ModifyODB" description="Управление ограничениями связи на HLR">
+    <Scenario name="HL.Modify.ODB" description="Управление ограничениями связи на HLR">
       <RFS name="RFS_HL_ODB_OC" scenarioType="Add, Remove, Modify" />
       <RFS name="RFS_HL_ODB_IC" scenarioType="Add, Remove, Modify" />
     </Scenario>
-    <Scenario name="HL.ModifySMS" description="Управление ограничениями смс на HLR">
+    <Scenario name="HL.Modify.SMS" description="Управление ограничениями смс на HLR">
       <RFS name="RFS_HL_SMS_MO" scenarioType="Add, Remove, Modify" />
       <RFS name="RFS_HL_SMS_MT" scenarioType="Add, Remove, Modify" />
     </Scenario>

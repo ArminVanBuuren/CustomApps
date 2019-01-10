@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scenario name="SC.HL.CallForwardingRemove">
+<scenario name="SC.HL.Remove.CallForwarding">
   <objectList>
     <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>

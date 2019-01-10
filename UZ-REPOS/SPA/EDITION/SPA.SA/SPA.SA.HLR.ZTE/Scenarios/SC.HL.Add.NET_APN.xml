@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scenario name="SC.HL.NET_APN_Add">
+<scenario name="SC.HL.Add.NET_APN">
   <objectList>
     <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
