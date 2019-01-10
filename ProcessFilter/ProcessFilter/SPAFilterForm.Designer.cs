@@ -564,7 +564,7 @@
             this.CommandsCount.Size = new System.Drawing.Size(72, 17);
             this.CommandsCount.Text = "Commands:";
             // 
-            // ProcessFilterForm
+            // SPAFilterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -587,7 +587,7 @@
             this.Controls.Add(this.ProcessesTextBox);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(823, 400);
-            this.Name = "ProcessFilterForm";
+            this.Name = "SPAFilterForm";
             this.Text = "Process Filter";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridProcessesResults)).EndInit();
             this.tabControl1.ResumeLayout(false);
