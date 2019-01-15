@@ -152,6 +152,7 @@
 		<define name="_ALLSERVICE_PATH"                 value="..\..\Config\Service\All_SERVICE.xml"/>
 		<define name="_TARIF_PATH"                      value="..\..\Config\Tariff\TARIFF_PLANS.xml"/>
 		<define name="_COUNTERS_PATH"                   value="..\..\Config\Service\COUNTERS.xml"/>
+    <define name="_DICTIONARY_PATH"                 value="..\..\Config\GET_DBRESULT.xml"/>
 		<define name="_DEALERPORTAL_PATH"               value="..\..\Config\Portal\DealerUSSDPortal_01.xml"/>
 		<define name="_SERIES_PATH"                     value="..\..\Config\Service\SERIES.xml"/>
 		<define name="_CONFIRM_VALUE"                   value="confirm"/>
