@@ -16,16 +16,16 @@ namespace Utils.WinForm.CustomProgressBar
         public ProgressBarDisplayText DisplayStyle { get; set; }
 
         //Property to hold the custom text
-        public String CustomText { get; set; }
+        public string CustomText { get; set; }
+        private Font _font;
 
-        public ProgressBarWithPercent()
+        public ProgressBarWithPercent(int size = 10, FontFamily fontFamily = null)
         {
+            _font = fontFamily != null ? new Font(fontFamily, size) : new Font(FontFamily.GenericMonospace, size);
             // Modify the ControlStyles flags
             //http://msdn.microsoft.com/en-us/library/system.windows.forms.controlstyles.aspx
             SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
         }
-
-        private Font f = new Font(FontFamily.GenericMonospace, 10);
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -44,13 +44,13 @@ namespace Utils.WinForm.CustomProgressBar
             // Set the Display text (Either a % amount or our custom text
             string text = DisplayStyle == ProgressBarDisplayText.Percentage ? Value.ToString() + '%' : CustomText;
 
-            SizeF len = g.MeasureString(text, f);
+            SizeF len = g.MeasureString(text, _font);
             // Calculate the location of the text (the middle of progress bar)
             // Point location = new Point(Convert.ToInt32((rect.Width / 2) - (len.Width / 2)), Convert.ToInt32((rect.Height / 2) - (len.Height / 2)));
             Point location = new Point(Convert.ToInt32((Width / 2) - len.Width / 2), Convert.ToInt32((Height / 2) - len.Height / 2));
             // The commented-out code will centre the text into the highlighted area only. This will centre the text regardless of the highlighted area.
             // Draw the custom text
-            g.DrawString(text, f, Brushes.Black, location);
+            g.DrawString(text, _font, Brushes.Black, location);
         }
 
         //protected override void OnPaint_2(PaintEventArgs e)
