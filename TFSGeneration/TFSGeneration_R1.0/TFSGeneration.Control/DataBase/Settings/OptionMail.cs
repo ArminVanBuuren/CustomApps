@@ -91,12 +91,12 @@ namespace TFSAssist.Control.DataBase.Settings
 	    }
 
 
-	    [XmlElement("DebugLogging")]
-	    public SettingValue<bool> DebugLogging
-	    {
-	        get { return _debugLogging; }
-	        set { _debugLogging = value ?? _debugLogging; }
-	    }
+	    //[XmlElement("DebugLogging")]
+	    //public SettingValue<bool> DebugLogging
+	    //{
+	    //    get { return _debugLogging; }
+	    //    set { _debugLogging = value ?? _debugLogging; }
+	    //}
 
         [XmlElement]
 		public XmlNode[] ParceBody

@@ -105,7 +105,7 @@
                             </Grid.ColumnDefinitions>
                             <Label     Grid.Column="0" Grid.Row="0"  VerticalAlignment="Center">Exchange Uri:</Label>
                             <TextBox   Grid.Column="1" Grid.Row="0"  Name="MailExchangeUri" Margin="5" ToolTip="etc.: https://{myserver}/ews/exchange.asmx" />
-                            <CheckBox  Grid.Column="0" Grid.Row="1"  Grid.ColumnSpan="2" Name="SetDebugLogging" Margin="5" VerticalAlignment="Center" ToolTip="Enable Debug Logging" HorizontalAlignment="Left">Debug Log</CheckBox>
+                            
                         </Grid>
 
                         <Border BorderBrush="#000" BorderThickness="0,0,0,1" Margin="0,0,0,-2"/>
@@ -213,9 +213,10 @@
 
 		<Grid Grid.Row="1" Margin="10 0 10 0">
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition MinWidth="130" Width="130"/>
-				<ColumnDefinition MinWidth="110" Width="110"/>
-				<ColumnDefinition MinWidth="140"/>
+                <ColumnDefinition MinWidth="130" Width="130" MaxWidth="130"/>
+                <ColumnDefinition MinWidth="90" Width="90" MaxWidth="90"/>
+                <ColumnDefinition MinWidth="100" Width="100" MaxWidth="100"/>
+				<ColumnDefinition />
 			</Grid.ColumnDefinitions>
 			<Grid Grid.Column="0">
 				<Grid.ColumnDefinitions>
@@ -226,7 +227,8 @@
 				<TextBox Name="IntervalTextBox" Grid.Column="1" Margin="0 0 5 0" Height="28" HorizontalAlignment="Stretch" ToolTip="Interval in seconds, to read new messages" />
 			</Grid>
             <CheckBox  Grid.Column="1" Name="CreateBoot" Margin="5" VerticalAlignment="Center" ToolTip="Enable Instant Upload" HorizontalAlignment="Left">BootRun</CheckBox>
-			<Button    Grid.Column="2" Name="ButtonStart" Height="40" IsDefault="True" IsEnabled="False" Margin="10 0" MaxWidth="120" HorizontalAlignment="Right" Width="120" Content="Start" FontSize="20" Click="ButtonBase_OnClick"/>
+            <CheckBox  Grid.Column="2" Name="SetDebugLogging" Margin="2" VerticalAlignment="Center" HorizontalContentAlignment="Left" ToolTip="Enable Debug Logging" HorizontalAlignment="Left">Debug Log</CheckBox>
+            <Button Grid.Column="3" Name="ButtonStart" Height="40" IsDefault="True" IsEnabled="False" Margin="10 0" MaxWidth="120" HorizontalAlignment="Right" Width="120" Content="{StaticResource STR_START}" FontSize="20" Click="ButtonBase_OnClick"/>
 		</Grid>
 	
 		<!--

@@ -74,7 +74,7 @@ namespace TFSAssist.Control
                     ParceSubject = new Regex(Settings.MailOption.ParceSubject[0].Value, _default);
                     ParceBody = new Regex(Settings.MailOption.ParceBody[0].Value, _default | RegexOptions.Multiline);
                     //=========================================================
-                    ConntectToMailServer();
+                    ConnectToMailServer();
                     ConnectToTFSServer();
                     //=========================================================
                     StartProcess();
@@ -103,14 +103,14 @@ namespace TFSAssist.Control
         /// <summary>
         /// Коннект к MAIL
         /// </summary>
-        void ConntectToMailServer()
+        void ConnectToMailServer()
         {
             NotifyUserCurrentStatus(StatusString.ConnectingMail);
 
             _exchangeService = new ExchangeService(ExchangeVersion.Exchange2013_SP1);
             _exchangeService.TraceListener = new TraceListener(OnWriteLog);
             _exchangeService.TraceFlags = TraceFlags.All;
-            _exchangeService.TraceEnabled = Settings.MailOption.DebugLogging.Value;
+            _exchangeService.TraceEnabled = true;
             _exchangeService.KeepAlive = true;
             _exchangeService.Timeout = int.Parse(Settings.MailOption.AuthorizationTimeout.Value) * 1000;
 
@@ -143,12 +143,11 @@ namespace TFSAssist.Control
                 throw new ArgumentException($"Mail Address=[{Settings.MailOption.Address.Value.ToStringIsNullOrEmptyTrim()}] Or Domain\\Username=[{Settings.MailOption.UserName.Value.ToStringIsNullOrEmptyTrim()}] With ExchangeUri=[{Settings.MailOption.ExchangeUri.Value.ToStringIsNullOrEmptyTrim()}] is Incorrect! Please check fields.");
             }
 
-            Folder checkConnect;
-            // проверяем коннект к почтовому серверу
+            // проверяем коннект к почтовому серверу через считывание папки Входящие
             try
             {
                 _exchangeFolder = new FolderId(WellKnownFolderName.Inbox);
-                checkConnect = Folder.Bind(_exchangeService, _exchangeFolder);
+                Folder.Bind(_exchangeService, _exchangeFolder);
             }
             catch (ServiceRequestException ex)
             {
@@ -173,10 +172,6 @@ namespace TFSAssist.Control
                 if (GetFolderId(inboxFolders, folderName, out folderFilter))
                 {
                     _exchangeFolder = folderFilter.Id;
-                }
-                else
-                {
-
                 }
             }
 

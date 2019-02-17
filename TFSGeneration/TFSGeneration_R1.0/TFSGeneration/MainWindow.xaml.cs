@@ -39,6 +39,10 @@ namespace TFSAssist
     /// </summary>
     public partial class MainWindow
     {
+        private const string STR_START = "START";
+        private const string STR_STOP = "STOP";
+        private const string ERR_SECOND_PROC = " already started. Please check your notification area. To run second process, you can rename the executable file.";
+
         private const int timeoutMSECToShowToolTip = 2700;
         private const int timeoutToShowToolTip = 2700;
 
@@ -55,11 +59,13 @@ namespace TFSAssist
 
         public MainWindow()
         {
+            Resources.Add("STR_START", STR_START);
+
             // Проверить запущен ли уже экземпляр приложения, если запущен то не запускать новый
             List<Process> processExists = Process.GetProcesses().Where(p => p.ProcessName == nameof(TFSAssist)).ToList();
             if (processExists.Count > 1)
             {
-                warnWindow = new WindowWarning(Width, WarnSeverity.Warning.ToString("G"), string.Format("{0} already started. Please check your notification area.", nameof(TFSAssist)));
+                warnWindow = new WindowWarning(Width, WarnSeverity.Warning.ToString("G"), $"{nameof(TFSAssist)}{ERR_SECOND_PROC}");
                 warnWindow.Topmost = true;
                 warnWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                 warnWindow.Focus();
@@ -175,7 +181,7 @@ namespace TFSAssist
             }
             catch (Exception ex)
             {
-                NotifyUser(WarnSeverity.Error, ex.Message, string.Format("{0}{1}{2}", ex.Message, Environment.NewLine, ex.StackTrace), true);
+                NotifyUser(WarnSeverity.Error, ex.Message, $"{ex.Message}{Environment.NewLine}{ex.StackTrace}", true);
                 DisableWindow();
             }
             finally
@@ -455,7 +461,7 @@ namespace TFSAssist
                 LogTextBox.Document.Blocks.Clear();
                 StatusBarInfo.Content = string.Empty;
                 MyProgeressBar.IsIndeterminate = true;
-                ButtonStart.Content = "Stop";
+                ButtonStart.Content = STR_STOP;
             }
             else
             {
@@ -486,7 +492,7 @@ namespace TFSAssist
                 };
                 ProgressBarGrid.Children.Add(MyProgeressBar);
 
-                ButtonStart.Content = "Start";
+                ButtonStart.Content = STR_START;
             });
         }
 
