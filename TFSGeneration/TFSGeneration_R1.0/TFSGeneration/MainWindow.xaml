@@ -82,7 +82,7 @@
 
                             <TextBox      Grid.Column="1" Grid.Row="2" Name="MailAddress"       Margin="0 5 5 5"  ToolTip="Enter Address of mailbox" />
                             <TextBox      Grid.Column="1" Grid.Row="3" Name="MailUserName"      Margin="0 5 5 5"  ToolTip="Enter Domain\UserName of mailbox" />
-                            <PasswordBox  Grid.Column="1" Grid.Row="4" Name="MailPassword"      Margin="0 5 5 5"  ToolTip="Enter Password of mailbox" />
+                            <PasswordBox  Grid.Column="1" Grid.Row="4" Name="MailPassword"      Margin="0 5 5 5"  ToolTip="Enter Password of mailbox" KeyDown="MailPassword_OnKeyDown"/>
                             <TextBox      Grid.Column="1" Grid.Row="5" Name="AuthorTimeout"     Margin="0 5 5 5"  ToolTip="Enter Authorization Timeout in sec." />
 
                             <DatePicker   Grid.Column="4" Grid.Row="2" Name="FilterStartDate"   Margin="0 5 5 5"  ToolTip="Get mails between start date and current date" SelectedDate="{x:Static sys:DateTime.Now}" />
@@ -228,7 +228,9 @@
 			</Grid>
             <CheckBox  Grid.Column="1" Name="CreateBoot" Margin="5" VerticalAlignment="Center" ToolTip="Enable Instant Upload" HorizontalAlignment="Left">BootRun</CheckBox>
             <CheckBox  Grid.Column="2" Name="SetDebugLogging" Margin="2" VerticalAlignment="Center" HorizontalContentAlignment="Left" ToolTip="Enable Debug Logging" HorizontalAlignment="Left">Debug Log</CheckBox>
-            <Button Grid.Column="3" Name="ButtonStart" Height="40" IsDefault="True" IsEnabled="False" Margin="10 0" MaxWidth="120" HorizontalAlignment="Right" Width="120" Content="{StaticResource STR_START}" FontSize="20" Click="ButtonBase_OnClick"/>
+            <Button Grid.Column="3" Name="ButtonStop" Height="40" IsDefault="True" Margin="10 0" MaxWidth="120" HorizontalAlignment="Right" Width="120" Content="{StaticResource STR_STOP}" FontSize="20" Click="ButtonStop_OnClick" Visibility="Hidden"/>
+            <Button Grid.Column="3" Name="ButtonStart" Height="40" IsDefault="True" IsEnabled="False" Margin="10 0" MaxWidth="120" HorizontalAlignment="Right" Width="120" Content="{StaticResource STR_START}" FontSize="20" Click="ButtonStart_OnClick" Visibility="Visible"/>
+            
 		</Grid>
 	
 		<!--

@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
@@ -87,6 +88,7 @@ namespace TFSAssist
 
 
             Resources.Add("STR_START", STR_START);
+            Resources.Add("STR_STOP", STR_STOP);
             System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor;
             InitializeComponent();
 
@@ -438,18 +440,30 @@ namespace TFSAssist
             LastDeactivationDate = DateTime.Now;
             countNotWatchedNotifications = 0;
 
-            if (WindowState == WindowState.Minimized)
-                ShowInTaskbar = false;
+            Dispatcher?.Invoke(() =>
+            {
+                if (WindowState == WindowState.Minimized)
+                    ShowInTaskbar = false;
+            });
         }
 
         #endregion
+
+
+        private void MailPassword_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                ButtonStart_OnClick(this, null);
+            }
+        }
 
         /// <summary>
         /// запуск процесса
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonStart_OnClick(object sender, RoutedEventArgs e)
         {
             if (!tfsControl.InProgress)
             {
@@ -458,12 +472,12 @@ namespace TFSAssist
                 LogTextBox.Document.Blocks.Clear();
                 StatusBarInfo.Content = string.Empty;
                 MyProgeressBar.IsIndeterminate = true;
-                ButtonStart.Content = STR_STOP;
             }
-            else
-            {
-                tfsControl.Stop();
-            }
+        }
+
+        private void ButtonStop_OnClick(object sender, RoutedEventArgs e)
+        {
+            tfsControl.Stop();
         }
 
         /// <summary>
@@ -488,13 +502,13 @@ namespace TFSAssist
                     Margin = new Thickness(10)
                 };
                 ProgressBarGrid.Children.Add(MyProgeressBar);
-
-                ButtonStart.Content = STR_START;
             });
         }
 
         void DisableWindow()
         {
+            ButtonStart.Visibility = Visibility.Hidden;
+            ButtonStop.Visibility = Visibility.Visible;
             MailOptions.IsEnabled = false;
             GridTFSOption.IsEnabled = false;
             IntervalTextBox.IsEnabled = false;
@@ -503,6 +517,8 @@ namespace TFSAssist
 
         void EnableWindow()
         {
+            ButtonStart.Visibility = Visibility.Visible;
+            ButtonStop.Visibility = Visibility.Hidden;
             MailOptions.IsEnabled = true;
             GridTFSOption.IsEnabled = true;
             IntervalTextBox.IsEnabled = true;
@@ -740,5 +756,7 @@ namespace TFSAssist
                     Activate();
             });
         }
+
+
     }
 }
