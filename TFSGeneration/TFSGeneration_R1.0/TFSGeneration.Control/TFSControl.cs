@@ -93,7 +93,7 @@ namespace TFSAssist.Control
                 catch (Exception fatal)
                 {
                     _log.OnStatusChanged(fatal.Message);
-                    _log.OnWriteLog(WarnSeverity.Error, $"Processing stopped. {Environment.NewLine}{fatal.Message}", fatal, true);
+                    _log.OnWriteLog(WarnSeverity.Error, $"Process stopped. {Environment.NewLine}{fatal.Message}", fatal, true);
                 }
                 finally
                 {
