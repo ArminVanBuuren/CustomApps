@@ -163,12 +163,12 @@
 						<Border BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="-1,0,1,-2"/>
 
 						<Label         VerticalAlignment="Center">Get Dublicate TFS Items:</Label>
-						<RichTextBox   Margin="5" Name="GetDublicateTFS" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalScrollBarVisibility="Auto"  HorizontalScrollBarVisibility="Hidden" MinHeight="100" MaxHeight="100" Height="100"   >
+                        <RichTextBox   Margin="5" Name="GetDublicateTFS" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalScrollBarVisibility="Auto"  HorizontalScrollBarVisibility="Hidden" MinHeight="265" MaxHeight="265" Height="265"   >
 							<FlowDocument PageWidth="{Binding Path=ActualWidth, ElementName=GetDublicateTFS, Mode=OneWay}" ></FlowDocument>
 						</RichTextBox>
 
-						<Border BorderBrush="#000" BorderThickness="0,0,0,1" Margin="1,0,0,-3"/>
-						<Border BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="-1,0,1,-2"/>
+						<!--<Border BorderBrush="#000" BorderThickness="0,0,0,1" Margin="1,0,0,-3"/>
+						<Border BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="-1,0,1,-2"/>-->
 
 						
 						
