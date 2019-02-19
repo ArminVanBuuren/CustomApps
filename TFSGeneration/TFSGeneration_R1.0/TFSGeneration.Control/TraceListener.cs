@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 using Microsoft.Exchange.WebServices.Data;
 
 namespace TFSAssist.Control
@@ -6,16 +7,16 @@ namespace TFSAssist.Control
     public class TraceListener : ITraceListener
     {
         public static Regex regReplace = new Regex(@"<.?Trace.*?>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        private WriteLogHandler _makeWriteLog;
+        private Action<string, bool> _writeLog;
 
-        public TraceListener(WriteLogHandler makeWriteLog)
+        public TraceListener(Action<string, bool> writeLog)
         {
-            _makeWriteLog = makeWriteLog;
+            _writeLog = writeLog;
         }
 
         public void Trace(string traceType, string traceMessage)
         {
-            _makeWriteLog?.Invoke(string.Format("{0} - {1}", traceType, regReplace.Replace(traceMessage, "").Trim()));
+            _writeLog?.Invoke(string.Format("{0} - {1}", traceType, regReplace.Replace(traceMessage, "").Trim()), true);
         }
     }
 }

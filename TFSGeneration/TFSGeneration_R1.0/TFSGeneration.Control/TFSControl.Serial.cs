@@ -13,35 +13,30 @@ using static Utils.Customs;
 
 namespace TFSAssist.Control
 {
-    public delegate void NotifyStatusHandler(string message);
-    public delegate void WriteLogHandler(string stackTrace);
-    public delegate void NotifyOfAnErrorHandler(WarnSeverity severity, string message, string stackMessage, bool lockProcess);
-
     public enum WarnSeverity
     {
-        Info = 0,
-        Attention = 1,
-        Warning = 2,
-        Error = 3
+        Error = 0,
+        Warning = 1,
+        Attention = 2,
+        Status = 4,
+        Normal = 8,
+        Debug = 16
     }
 
     [Serializable]
     sealed partial class TFSControl : ISerializable, IDisposable
     {
-        public static event NotifyOfAnErrorHandler NotifyUserAnError;
         public static string ApplicationName { get; }
         public static string ApplicationPath { get; }
-        public static string ShortDateTimeFormat { get; }
-        public static string LongDateTimeFormat { get; }
         internal static string AccountStorePath { get; }
         internal static string SettingsPath { get; }
         internal static string DataBasePath { get; }
         internal static string RegeditKey { get; }
-        internal static string NotifyDeSerializetionFailor { get; } = "File:\"{0}\" is incorrect! It will be re-created after exit this apllication.";
+        static string NotifyDeSerializetionFailor { get; } = "File:\"{0}\" is incorrect and will be re-created after exit this apllication.";
+        private LogPerformer _log;
 
         static TFSControl()
         {
-            
             CertificateCallback.Initialize();
             AccountStorePath = $"{ApplicationFilePath}.dat";
             SettingsPath = $"{ApplicationFilePath}.xml";
@@ -49,27 +44,18 @@ namespace TFSAssist.Control
             //ApplicationName = Assembly.GetCallingAssembly().GetName().Name;
             ApplicationName = Assembly.GetEntryAssembly().GetName().Name;
             ApplicationPath = Assembly.GetEntryAssembly().Location; 
-            RegeditKey = GetOrSetRegedit(ApplicationName, "This application implements reading mail items and on their basis creation TFS.");
-            System.Globalization.CultureInfo culture = System.Globalization.CultureInfo.CreateSpecificCulture("ru-RU");
-            System.Globalization.CultureInfo.DefaultThreadCurrentCulture = culture;
-            System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = culture;
-            Thread.CurrentThread.CurrentCulture = culture;
-            Thread.CurrentThread.CurrentUICulture = culture;
-            //Thread.CurrentThread.CurrentCulture = (CultureInfo)Thread.CurrentThread.CurrentCulture.Clone();
-
-            //обязательно устанавливаем необходимый формат даты под культуру "ru-RU"
-            ShortDateTimeFormat = "dd.MM.yyyy";
-            LongDateTimeFormat = "dd.MM.yyyy HH:mm:ss";
-            Thread.CurrentThread.CurrentCulture.DateTimeFormat.ShortDatePattern = ShortDateTimeFormat;
-            Thread.CurrentThread.CurrentCulture.DateTimeFormat.LongDatePattern = LongDateTimeFormat;
+            RegeditKey = GetOrSetRegedit(ApplicationName, "Application implements reading letters and by their basis create TFS items.");
         }
 
         /// <summary>
         /// Получить TFSControl
         /// </summary>
         /// <returns></returns>
-        public static TFSAssist.Control.TFSControl GetControl()
+        public static TFSAssist.Control.TFSControl GetControl(LogPerformer log)
         {
+            if (log == null)
+                throw new ArgumentException(nameof(_log));
+
             TFSAssist.Control.TFSControl tfsControl = null;
 
             //десериализация необходимых свойств класса TFSControl
@@ -84,21 +70,19 @@ namespace TFSAssist.Control
                 }
                 catch (Exception ex)
                 {
-                    //File.Delete(AccountStorePath);
-                    NotifyUserIfHasError(WarnSeverity.Attention, string.Format(NotifyDeSerializetionFailor, AccountStorePath), ex, true);
+                    log.OnWriteLog(WarnSeverity.Attention, string.Format(NotifyDeSerializetionFailor, AccountStorePath), ex, true);
                 }
             }
 
             if (tfsControl == null)
                 tfsControl = new TFSAssist.Control.TFSControl();
 
+            tfsControl._log = log;
+
             return tfsControl;
         }
 
         //-------------------------------------- Reference Instance Controls (Non-Static) -----------------------------------
-
-        public event NotifyStatusHandler NotifyUserAnStatus;
-        public event WriteLogHandler WriteLog;
 
         //public event EventHandler ActivateWindow;
         private Thread _asyncThread;
@@ -171,11 +155,11 @@ namespace TFSAssist.Control
             catch (CryptoException ex)
             {
                 //расшифровка файла неудачна, возможно если ключ в реестре отличается от ключа зашифрованных значений
-                NotifyUserIfHasError(WarnSeverity.Attention, string.Format(NotifyDeSerializetionFailor, AccountStorePath), ex, true);
+                _log.OnWriteLog(WarnSeverity.Attention, string.Format(NotifyDeSerializetionFailor, AccountStorePath), ex, true);
             }
             catch (Exception ex)
             {
-                NotifyUserIfHasError(WarnSeverity.Attention, string.Format(NotifyDeSerializetionFailor, AccountStorePath), ex, true);
+                _log.OnWriteLog(WarnSeverity.Attention, string.Format(NotifyDeSerializetionFailor, AccountStorePath), ex, true);
             }
         }
 
@@ -228,7 +212,7 @@ namespace TFSAssist.Control
             Datas = DeserializeDatas(DataBasePath) ?? new DataCollection();
         }
 
-        static SettingsCollection LoadSettings(string settPath, ref uint tryLoad)
+        SettingsCollection LoadSettings(string settPath, ref uint tryLoad)
         {
             SettingsCollection sett = DeserializeSettings(settPath);
 
@@ -283,12 +267,12 @@ namespace TFSAssist.Control
             }
             catch (Exception exSer)
             {
-                NotifyUserIfHasError(WarnSeverity.Error, string.Format("Cant't save Datas to=[{1}]{0}{2}", Environment.NewLine, DataBasePath, exSer.Message),
+                _log.OnWriteLog(WarnSeverity.Error, string.Format("Cant't save Datas to=[{1}]{0}{2}", Environment.NewLine, DataBasePath, exSer.Message),
                                      exSer);
             }
         }
 
-        static DataCollection DeserializeDatas(string datasPath)
+        DataCollection DeserializeDatas(string datasPath)
         {
             if (!File.Exists(datasPath))
                 return null;
@@ -302,7 +286,7 @@ namespace TFSAssist.Control
             }
             catch (Exception ex)
             {
-                NotifyUserIfHasError(WarnSeverity.Attention, string.Format(NotifyDeSerializetionFailor, datasPath), ex, true);
+                _log.OnWriteLog(WarnSeverity.Attention, string.Format(NotifyDeSerializetionFailor, datasPath), ex, true);
             }
             return null;
         }
@@ -321,12 +305,12 @@ namespace TFSAssist.Control
             }
             catch (Exception exSer)
             {
-                NotifyUserIfHasError(WarnSeverity.Error, string.Format("Cant't save Settings to=[{1}]{0}{2}", Environment.NewLine, SettingsPath, exSer.Message),
+                _log.OnWriteLog(WarnSeverity.Error, string.Format("Cant't save Settings to=[{1}]{0}{2}", Environment.NewLine, SettingsPath, exSer.Message),
                     exSer);
             }
         }
 
-        static SettingsCollection DeserializeSettings(string settPath)
+        SettingsCollection DeserializeSettings(string settPath)
         {
             if (!File.Exists(settPath))
                 return null;
@@ -340,7 +324,7 @@ namespace TFSAssist.Control
             }
             catch (Exception ex)
             {
-                NotifyUserIfHasError(WarnSeverity.Attention, string.Format(NotifyDeSerializetionFailor, settPath), ex, true);
+                _log.OnWriteLog(WarnSeverity.Attention, string.Format(NotifyDeSerializetionFailor, settPath), ex, true);
             }
             return null;
         }
@@ -382,63 +366,6 @@ namespace TFSAssist.Control
 
             _asyncThread?.Abort();
         }
-
-        #region Notifications To Main Window
-
-        /// <summary>
-        /// Уведомление пользователя по статусу работы приложения (нижняя строка приложения)
-        /// </summary>
-        /// <param name="message"></param>
-        void NotifyUserCurrentStatus(string message)
-        {
-            NotifyUserAnStatus?.Invoke(message);
-        }
-
-        /// <summary>
-        /// Нотифицируем в случае ошибки при выполнении - выскакивает окно с ошибкой
-        /// </summary>
-        /// <param name="severity"></param>
-        /// <param name="message"></param>
-        /// <param name="ex"></param>
-        /// <param name="lockProcess"></param>
-        static void NotifyUserIfHasError(WarnSeverity severity, string message, Exception ex, bool lockProcess = false)
-        {
-            if (NotifyUserAnError == null)
-                return;
-
-            string stackMessage = string.Empty;
-            GetSourceException(ex, ref stackMessage);
-            NotifyUserIfHasError(severity, message, string.Format("{0}{1}{2}", stackMessage, Environment.NewLine, ex.StackTrace), lockProcess);
-        }
-
-        static void GetSourceException(Exception ex, ref string result)
-        {
-            while (true)
-            {
-                result = string.Format("{0}[{1}]:{2}", result.IsNullOrEmpty() ? string.Empty : result + Environment.NewLine, ex.GetType().Name, ex.Message);
-
-                if (ex.InnerException != null)
-                {
-                    ex = ex.InnerException;
-                    continue;
-                }
-                break;
-            }
-        }
-
-        static void NotifyUserIfHasError(WarnSeverity severity, string message, string stackMessage, bool lockProcess = false)
-        {
-            NotifyUserAnError?.Invoke(severity, message, stackMessage, lockProcess);
-        }
-
-        void OnWriteLog (string stacktrace)
-        {
-            WriteLog?.Invoke(stacktrace);
-        }
-
-        #endregion
-
-
 
 
         public void Dispose()

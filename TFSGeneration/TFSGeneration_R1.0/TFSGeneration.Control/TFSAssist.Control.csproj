@@ -206,6 +206,7 @@
     <Compile Include="DataBase\Settings\SettingsCollection.cs" />
     <Compile Include="DataBase\Settings\OptionTFS.cs" />
     <Compile Include="DataBase\Settings\SettingValue.cs" />
+    <Compile Include="LogPerformer.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

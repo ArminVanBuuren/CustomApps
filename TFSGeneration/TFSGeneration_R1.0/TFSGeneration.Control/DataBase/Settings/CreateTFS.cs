@@ -143,7 +143,7 @@ namespace TFSAssist.Control.DataBase.Settings
         /// </summary>
         /// <param name="getParcedValue"></param>
         /// <returns></returns>
-        internal string GetSwitchValue(GetParcedValue getParcedValue, NotifyStatusHandler writeErrLog)
+        internal string GetSwitchValue(GetParcedValue getParcedValue, Action<string> writeErrLog)
         {
             if (Switch.IsNullOrEmpty() && Items.Count <= 0)
                 return getParcedValue(Value);

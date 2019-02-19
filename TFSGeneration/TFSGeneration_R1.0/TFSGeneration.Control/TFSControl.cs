@@ -51,9 +51,10 @@ namespace TFSAssist.Control
                 {
                     //=========================================================
                     InProgress = true;
-                    NotifyUserCurrentStatus(StatusString.Initialization);
+                    _log.OnWriteLog(StatusString.Initialization);
+                    _log.OnStatusChanged(StatusString.Initialization);
                     _workerThread = Thread.CurrentThread;
-                    OnWriteLog($"ProcessThread:{_workerThread.ManagedThreadId} Priority:{_workerThread.Priority}");
+                    _log.OnWriteLog($"ProcessThread:{_workerThread.ManagedThreadId} Priority:{_workerThread.Priority}");
 
                     string mailFilterFrom = Settings.MailOption.FilterMailFrom.Value.Trim();
                     string mailFilterSubject = Settings.MailOption.FilterSubject.Value.Trim();
@@ -77,19 +78,22 @@ namespace TFSAssist.Control
                     ConnectToMailServer();
                     ConnectToTFSServer();
                     //=========================================================
+                    _log.OnWriteLog(StatusString.Processing);
                     StartProcess();
                     //=========================================================
-                    NotifyUserCurrentStatus(StatusString.Completed);
+                    _log.OnStatusChanged(StatusString.Completed);
+                    _log.OnWriteLog(StatusString.Completed);
                 }
                 catch (ThreadAbortException)
                 {
                     //Thread.ResetAbort();
-                    NotifyUserCurrentStatus(StatusString.Aborted);
+                    _log.OnStatusChanged(StatusString.Aborted);
+                    _log.OnWriteLog(StatusString.Aborted);
                 }
                 catch (Exception fatal)
                 {
-                    NotifyUserCurrentStatus(fatal.Message);
-                    NotifyUserIfHasError(WarnSeverity.Error, $"Processing was stopped. {Environment.NewLine}{fatal.Message}", fatal, true);
+                    _log.OnStatusChanged(fatal.Message);
+                    _log.OnWriteLog(WarnSeverity.Error, $"Processing was stopped. {Environment.NewLine}{fatal.Message}", fatal, true);
                 }
                 finally
                 {
@@ -105,10 +109,10 @@ namespace TFSAssist.Control
         /// </summary>
         void ConnectToMailServer()
         {
-            NotifyUserCurrentStatus(StatusString.ConnectingMail);
+            _log.OnStatusChanged(StatusString.ConnectingMail);
 
             _exchangeService = new ExchangeService(ExchangeVersion.Exchange2013_SP1);
-            _exchangeService.TraceListener = new TraceListener(OnWriteLog);
+            _exchangeService.TraceListener = new TraceListener(_log.OnWriteLog);
             _exchangeService.TraceFlags = TraceFlags.All;
             _exchangeService.TraceEnabled = true;
             _exchangeService.KeepAlive = true;
@@ -126,6 +130,7 @@ namespace TFSAssist.Control
                 if (domain_username.Length != 2 || domain_username[0].IsNullOrEmpty() || domain_username[1].IsNullOrEmpty())
                     throw new ArgumentException("You must add UserName and Domain like: \"Domain\\Username\"");
 
+                _log.OnWriteLog($"Mail authorization: {Settings.MailOption.UserName.Value}");
                 _exchangeService.Credentials = new NetworkCredential(domain_username[1].Trim(), _mailPassword, domain_username[0].Trim());
                 _exchangeService.Url = new Uri(Settings.MailOption.ExchangeUri.Value);
                 //AlternateIdBase response = _exchangeService.ConvertId(new AlternateId(IdFormat.EwsId, "Placeholder", domain_username[1].Trim()), IdFormat.EwsId);
@@ -134,9 +139,8 @@ namespace TFSAssist.Control
             {
                 _exchangeService.Credentials = new NetworkCredential(Settings.MailOption.Address.Value, _mailPassword);
                 _exchangeService.AutodiscoverUrl(Settings.MailOption.Address.Value, RedirectionUrlValidationCallback);
-                OnWriteLog($"Absolute Uri to Exchange Server - \"{_exchangeService.Url.AbsoluteUri}\"");
-                Settings.MailOption.ExchangeUri.Value =
-                        _exchangeService.Url.AbsoluteUri; // обновляем ссылку на путь до Exchange сервера почты
+                _log.OnWriteLog($"Mail authorization: {Settings.MailOption.Address.Value}] Old Exchange URI:[{Settings.MailOption.ExchangeUri.Value}] New Exchange URI:[{_exchangeService.Url.AbsoluteUri}");
+                Settings.MailOption.ExchangeUri.Value = _exchangeService.Url.AbsoluteUri; // обновляем ссылку на путь до Exchange сервера почты
             }
             else
             {
@@ -175,7 +179,7 @@ namespace TFSAssist.Control
                 }
             }
 
-            OnWriteLog($"Successful connected to Mail-server.\r\nSearch in folder {folderFilter?.DisplayName}");
+            _log.OnWriteLog($"Successful connected to Mail-server. Read folder:[{folderFilter?.DisplayName}]");
         }
 
         static bool GetFolderId(FindFoldersResults inboxFolders, string folderName, out Folder folderOut)
@@ -197,7 +201,7 @@ namespace TFSAssist.Control
         /// </summary>
         void ConnectToTFSServer()
         {
-            NotifyUserCurrentStatus(StatusString.ConnectingTFS);
+            _log.OnStatusChanged(StatusString.ConnectingTFS);
 
             // Если в настройках xml файла нет указаний на создание каких либо TFS
             if (Settings.TFSOption.TFSCreate.TeamProjects == null || Settings.TFSOption.TFSCreate.TeamProjects.Length == 0)
@@ -220,21 +224,19 @@ namespace TFSAssist.Control
                 NetworkCredential credential = new NetworkCredential(tfs_domain_username[1].Trim(), _tfsUserPassword, tfs_domain_username[0].Trim());
                 _tfsService = new TfsTeamProjectCollection(collectionUri, credential);
 
-                OnWriteLog($"Authorized as \"{tfs_domain_username[0].Trim()}\\{tfs_domain_username[1].Trim()}\"");
+                _log.OnWriteLog($"TFS authorization: \"{tfs_domain_username[0].Trim()}\\{tfs_domain_username[1].Trim()}\"");
             }
             else
             {
                 _tfsService = TfsTeamProjectCollectionFactory.GetTeamProjectCollection(collectionUri);
-                OnWriteLog($"Authorized auto");
+                _log.OnWriteLog($"TFS authorization: Auto");
             }
 
             _tfsService.Authenticate();
             _tfsService.EnsureAuthenticated();
             _workItemStore = _tfsService.GetService<WorkItemStore>();
 
-            OnWriteLog($"Successful connected to TFS-server.");
-            //NotifyUserIfHasError(WarnSeverity.Warning, string.Format("Please see log tab. Catched: {0} processing errors!", 10), "1111");
-            //Test1();
+            _log.OnWriteLog($"Successful connected to TFS-server.");
         }
 
 
@@ -272,7 +274,7 @@ namespace TFSAssist.Control
             while (true)
             {
                 Processing();
-                NotifyUserCurrentStatus(StatusString.Sleeping);
+                _log.OnStatusChanged(StatusString.Sleeping);
                 Thread.Sleep(Settings.Interval.Value * 1000);
             }
         }
@@ -347,7 +349,7 @@ namespace TFSAssist.Control
             //    return;
 
 
-            NotifyUserCurrentStatus(StatusString.Processing);
+            _log.OnStatusChanged(StatusString.Processing);
             string logProcessing = string.Empty;
             int countErrors = 0;
             int numberOfAttempts = 0;
@@ -395,6 +397,8 @@ namespace TFSAssist.Control
                                       ReceivedDate = item.ReceivedDate.ToString("G")
                                   };
 
+                _log.OnWriteLog($"Received new mail item. ID=[{item.ID}] {task}", true);
+
                 try
                 {
                     //Распарсиваем необходимые нам данные из тела и темы письма
@@ -417,6 +421,7 @@ namespace TFSAssist.Control
                         task.Status = ProcessingStatus.Skipped;
                     }
 
+                    _log.OnWriteLog($"ID=[{item.ID}] {task.Status:G}", true);
                     Datas.Add(task);
                 }
                 catch (TFSFieldsException ex1)
@@ -459,9 +464,8 @@ namespace TFSAssist.Control
             if (countErrors > 0)
             {
                 //отправляем список ошибок которые возможно связанны с настроками конфига
-                NotifyUserCurrentStatus(StatusString.Processing_Error);
-                NotifyUserIfHasError(WarnSeverity.Warning, $"Please see log tab. Catched: {countErrors} processing errors!",
-                                     logProcessing.Trim());
+                _log.OnStatusChanged(StatusString.Processing_Error);
+                _log.OnWriteLog(WarnSeverity.Warning, $"Please see log tab. Catched: {countErrors} processing errors!", logProcessing.Trim());
                 Thread.Sleep(10 * 1000);
             }
 
@@ -472,30 +476,42 @@ namespace TFSAssist.Control
 
         List<DataMail> ParceBodyAndSubject(string subject, string body)
         {
-            GroupCollection fromSubject = ParceSubject.Match(subject).Groups;
-            GroupCollection fromBody = ParceBody.Match(body).Groups;
             List<DataMail> parced = new List<DataMail>();
+
+            GroupCollection fromSubject = ParceSubject.Match(subject).Groups;
+            _log.OnWriteLog($"Subject parce. Contains:[{subject}] RegexOptions:[{ParceSubject.Options:G}] RegexPattern:[{Settings.MailOption.ParceSubject[0].Value}]", true);
 
             foreach (string match in ParceSubject.GetGroupNames())
             {
                 if (!match.IsNumber())
                 {
-                    parced.Add(new DataMail {
-                                                Name = $"{nameof(OptionMail.ParceSubject)}_{match}",
-                                                Value = fromSubject[match].Value
-                                            });
+                    DataMail dm = new DataMail
+                    {
+                        Name = $"{nameof(OptionMail.ParceSubject)}_{match}",
+                        Value = fromSubject[match].Value
+                    };
+                    parced.Add(dm);
+
+                    _log.OnWriteLog($"{dm}", true);
                 }
             }
 
+
+            GroupCollection fromBody = ParceBody.Match(body).Groups;
+            _log.OnWriteLog($"Body parce. Contains:[{body}] RegexOptions:[{ParceBody.Options:G}] RegexPattern:[{Settings.MailOption.ParceBody[0].Value}]", true);
 
             foreach (string match in ParceBody.GetGroupNames())
             {
                 if (!match.IsNumber())
                 {
-                    parced.Add(new DataMail {
-                                                Name = $"{nameof(OptionMail.ParceBody)}_{match}",
-                                                Value = fromBody[match].Value
-                                            });
+                    DataMail dm = new DataMail
+                    {
+                        Name = $"{nameof(OptionMail.ParceBody)}_{match}",
+                        Value = fromBody[match].Value
+                    };
+                    parced.Add(dm);
+
+                    _log.OnWriteLog($"{dm}", true);
                 }
             }
 
@@ -509,6 +525,7 @@ namespace TFSAssist.Control
             string query = itemExec.ReplaceParcedValues(Settings.TFSOption.GetDublicateTFS[0].Value);
             if (!query.IsNullOrEmptyTrim())
             {
+                _log.OnWriteLog($"Run query {nameof(Settings.TFSOption.GetDublicateTFS)}=[{query}]", true);
                 WorkItemCollection workQuery = _workItemStore.Query(query);
 
                 if (workQuery.Count > 0)
@@ -517,6 +534,8 @@ namespace TFSAssist.Control
                     {
                         createdTfsId += queryResult.Id + ";";
                     }
+
+                    _log.OnWriteLog($"TFS item already exist: {createdTfsId}", true);
                     return false;
                 }
             }
@@ -561,20 +580,22 @@ namespace TFSAssist.Control
                         //заполняем все поля которые были указаны в конфиге для обпределенного типа заявки TFS
                         foreach (FieldCondition field in workItem.Fields)
                         {
-                            string getFormattedValue = field.GetSwitchValue(itemExec.ReplaceParcedValues, OnWriteLog).Trim();
+                            string getFormattedValue = field.GetSwitchValue(itemExec.ReplaceParcedValues, _log.OnWriteLog);
+                            _log.OnWriteLog($"Field:[{field.Name}] SourceValue=[{field.Value}] SetValue=[{getFormattedValue}]", true);
+
                             //кастомный аттрибуты Control.XXX
                             if (field.Name.Equals("Control.AssignedTo", StringComparison.CurrentCultureIgnoreCase))
                             {
                                 //"Control.AssignedTo", если не заполнен то подставляется текущий пользователь
                                 tfsWorkItem.Fields["Assigned To"].Value = getFormattedValue.Trim().IsNullOrEmpty()
                                     ? _tfsService.AuthorizedIdentity.DisplayName
-                                    : getFormattedValue.Trim();
+                                    : getFormattedValue;
                                 continue;
                             }
                             if (field.Name.Equals("Control.Links", StringComparison.CurrentCultureIgnoreCase))
                             {
                                 //кастомный аттрибут "Control.Links", если он не заполнен то к этому item линкуются все возможные таски
-                                foreach (string link in getFormattedValue.Split(';'))
+                                foreach (string link in getFormattedValue.Split(';',','))
                                 {
                                     int linkTfsId;
                                     if (int.TryParse(link, out linkTfsId))
@@ -589,11 +610,12 @@ namespace TFSAssist.Control
                                 continue;
                             }
 
-                            tfsWorkItem.Fields[field.Name].Value = field.GetSwitchValue(itemExec.ReplaceParcedValues, OnWriteLog);
+                            tfsWorkItem.Fields[field.Name].Value = getFormattedValue;
                         }
 
                         tfsWorkItem.Save();
                         createdTfsId += tfsWorkItem.Id + ";";
+                        _log.OnWriteLog($"Created TFS:[{createdTfsId}]", true);
                     }
                     catch (ValidationException ex) // ошибка если не все обязательные поля были заполнены
                     {
@@ -607,7 +629,7 @@ namespace TFSAssist.Control
                     catch (Exception)
                     {
                         if (!displayForm.IsNullOrEmpty())
-                            OnWriteLog($"Detailed display form for [{teamProj.Value}:{workItem.Value}]:{Environment.NewLine}{displayForm}");
+                            _log.OnWriteLog($"Detailed display form for [{teamProj.Value}:{workItem.Value}]:{Environment.NewLine}{displayForm}");
                         throw;
                     }
                 }

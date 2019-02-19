@@ -10,6 +10,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Windows.Shapes;
 using System.Windows.Threading;
 using TFSAssist.Control;
 using Utils;
@@ -17,7 +18,6 @@ using Timer = System.Timers.Timer;
 
 namespace TFSAssist
 {
-
     public class LogFlowDocumentConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -41,7 +41,7 @@ namespace TFSAssist
     {
         private const string STR_START = "START";
         private const string STR_STOP = "STOP";
-        private const string ERR_SECOND_PROC = " already started. Please check your notification area. To run second process, you can rename the executable file.";
+        private readonly string ERR_SECOND_PROC = $"{nameof(TFSAssist)} already started. Please check your notification area. To run second process, you can rename the executable file.";
 
         private const int timeoutMSECToShowToolTip = 2700;
         private const int timeoutToShowToolTip = 2700;
@@ -57,15 +57,26 @@ namespace TFSAssist
 
         private TFSControl tfsControl { get; set; }
 
+        static MainWindow()
+        {
+            System.Globalization.CultureInfo culture = System.Globalization.CultureInfo.CreateSpecificCulture("ru-RU");
+            System.Globalization.CultureInfo.DefaultThreadCurrentCulture = culture;
+            System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = culture;
+            System.Threading.Thread.CurrentThread.CurrentCulture = culture;
+            System.Threading.Thread.CurrentThread.CurrentUICulture = culture;
+            //Thread.CurrentThread.CurrentCulture = (CultureInfo)Thread.CurrentThread.CurrentCulture.Clone();
+            //обязательно устанавливаем необходимый формат даты под культуру "ru-RU"
+            System.Threading.Thread.CurrentThread.CurrentCulture.DateTimeFormat.ShortDatePattern = "dd.MM.yyyy";
+            System.Threading.Thread.CurrentThread.CurrentCulture.DateTimeFormat.LongDatePattern = "dd.MM.yyyy HH:mm:ss";
+        }
+
         public MainWindow()
         {
-            Resources.Add("STR_START", STR_START);
-
             // Проверить запущен ли уже экземпляр приложения, если запущен то не запускать новый
             List<Process> processExists = Process.GetProcesses().Where(p => p.ProcessName == nameof(TFSAssist)).ToList();
             if (processExists.Count > 1)
             {
-                warnWindow = new WindowWarning(Width, WarnSeverity.Warning.ToString("G"), $"{nameof(TFSAssist)}{ERR_SECOND_PROC}");
+                warnWindow = new WindowWarning(Width, WarnSeverity.Warning.ToString("G"), ERR_SECOND_PROC);
                 warnWindow.Topmost = true;
                 warnWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                 warnWindow.Focus();
@@ -74,6 +85,8 @@ namespace TFSAssist
                 return;
             }
 
+
+            Resources.Add("STR_START", STR_START);
             System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor;
             InitializeComponent();
 
@@ -100,11 +113,10 @@ namespace TFSAssist
                 notification.DoubleClick += ShowMyForm;
 
                 //===========Initialize And Set Events===========
-                TFSControl.NotifyUserAnError += NotifyUser; //static event
-                tfsControl = TFSControl.GetControl();
-                tfsControl.NotifyUserAnStatus += NotifyStatus;
+                LogPerformer log = new LogPerformer();
+                log.WriteLog += Informing;
+                tfsControl = TFSControl.GetControl(log);
                 tfsControl.IsCompleted += TfsControl_IsCompleted;
-                tfsControl.WriteLog += AddLog;
 
                 //================Main Tab Default Bindings=======================
                 DefaultBinding(MailAddress, TextBox.TextProperty, tfsControl.Settings.MailOption.Address);
@@ -140,7 +152,7 @@ namespace TFSAssist
 
                 //================Option Mail====================================
                 DefaultBinding(MailExchangeUri, TextBox.TextProperty, tfsControl.Settings.MailOption.ExchangeUri);
-                DefaultBinding(SetDebugLogging, ToggleButton.IsCheckedProperty, tfsControl.Settings.MailOption.DebugLogging);
+                //DefaultBinding(SetDebugLogging, ToggleButton.IsCheckedProperty, tfsControl.Settings.MailOption.DebugLogging);
 
                 LableParceSubject.Content = nameof(tfsControl.Settings.MailOption.ParceSubject) + ":";
                 RegexSubjectParce.Text = tfsControl.Settings.MailOption.ParceSubject[0].Value;
@@ -181,7 +193,7 @@ namespace TFSAssist
             }
             catch (Exception ex)
             {
-                NotifyUser(WarnSeverity.Error, ex.Message, $"{ex.Message}{Environment.NewLine}{ex.StackTrace}", true);
+                Informing(WarnSeverity.Error, DateTime.Now,  ex.Message, $"{ex.Message}{Environment.NewLine}{ex.StackTrace}", true);
                 DisableWindow();
             }
             finally
@@ -290,62 +302,6 @@ namespace TFSAssist
 
         #region Notify And Set Information On StatusBar
 
-        /// <summary>
-        /// Показать статус работы программы
-        /// </summary>
-        /// <param name="message"></param>
-        void NotifyStatus(string message)
-        {
-            if (!_thisIsLoaded)
-                return;
-
-            Dispatcher?.BeginInvoke(
-                DispatcherPriority.Normal,
-                new Action(() =>
-                    StatusBarInfo.Content = message
-                ));
-        }
-
-        /// <summary>
-        /// При фатальныхошибках выводить сообщение в новом окне, записать подробный лог и активировать окно
-        /// </summary>
-        /// <param name="error"></param>
-        /// <param name="message"></param>
-        /// <param name="stackTrace"></param>
-        /// <param name="lockProcess"></param>
-        void NotifyUser(WarnSeverity error, string message, string stackTrace, bool lockProcess)
-        {
-            if (!_thisIsLoaded)
-                return;
-
-            Dispatcher?.Invoke(() =>
-            {
-                AddLog(stackTrace);
-
-                // показывает уведомление при любых уведомлениях, если окно не активно или уже было одно уведомление
-                DisplayNotify(error.ToString("G"), message);
-
-                if (_openedWarningWindowCount >= 1 || !this.IsLoaded)
-                    return;
-
-                // Cразу активировать окно только при критических ошибках. При остальных уведомлениях появляется статус бар или по таймеру активируется окно если _openedWarningWindowCount > 0
-                if (error == WarnSeverity.Error)
-                    ShowMyForm(this, EventArgs.Empty);
-
-                warnWindow = new WindowWarning(Width, error.ToString("G"), message);
-                warnWindow.Loaded += Warn_Loaded;
-                warnWindow.Closed += WarnWindow_Closed;
-                warnWindow.Focus();
-                warnWindow.Owner = this;
-
-                if (lockProcess)
-                    warnWindow.ShowDialog();
-                else
-                    warnWindow.Show();
-
-            });
-        }
-
         private void Warn_Loaded(object sender, RoutedEventArgs e)
         {
             Dispatcher?.Invoke(() =>
@@ -365,43 +321,87 @@ namespace TFSAssist
             });
         }
 
-        /// <summary>
-        /// записать лог в отдельном окне
-        /// </summary>
-        /// <param name="stackTrace"></param>
-        void AddLog(string stackTrace)
+        private void Informing(WarnSeverity severity, DateTime dateLog, string message, string stackMessage, bool lockProcess)
         {
             if (!_thisIsLoaded)
                 return;
 
-            if (!stackTrace.IsNullOrEmpty())
+            switch (severity)
             {
-                Dispatcher?.Invoke(() =>
-                {
-                    //LogTextBox.AppendText(stackTrace.Trim());
-                    //LogTextBox.Document.Blocks.Add(new Paragraph(new Run(stackTrace.Trim())));
+                case WarnSeverity.Status:
+                    Dispatcher?.BeginInvoke(DispatcherPriority.Normal, new Action(() => StatusBarInfo.Content = message));
+                    break;
 
-                    //Run _runDate = new Run(string.Format("[{0:G}]:", DateTime.Now));
-                    //_runDate.Foreground = Brushes.Azure;
-                    //_runDate.Background = Brushes.Chartreuse;
-                    //Run _runLog = new Run(stackTrace.Trim());
-
-                    Paragraph par = new Paragraph();
-                    par.Inlines.Add(new Bold(new Run(string.Format("[{0:G}]:", DateTime.Now)))
+                case WarnSeverity.Error:
+                case WarnSeverity.Warning:
+                case WarnSeverity.Attention:
+                    Dispatcher?.Invoke(() =>
                     {
-                        Foreground = Brushes.Aqua,
-                        Background = Brushes.Black
+                        // показывает уведомление при любых уведомлениях, если окно не активно или уже было одно уведомление
+                        DisplayNotify(severity.ToString("G"), message);
+
+                        if (_openedWarningWindowCount >= 1 || !this.IsLoaded)
+                            return;
+
+                        // Cразу активировать окно только при критических ошибках. При остальных уведомлениях появляется статус бар или по таймеру активируется окно если _openedWarningWindowCount > 0
+                        if (severity == WarnSeverity.Error)
+                            ShowMyForm(this, EventArgs.Empty);
+
+                        warnWindow = new WindowWarning(Width, severity.ToString("G"), message);
+                        warnWindow.Loaded += Warn_Loaded;
+                        warnWindow.Closed += WarnWindow_Closed;
+                        warnWindow.Focus();
+                        warnWindow.Owner = this;
+
+                        if (lockProcess)
+                            warnWindow.ShowDialog();
+                        else
+                            warnWindow.Show();
                     });
-                    par.Inlines.Add(stackTrace.Trim());
 
+                    WriteLog(severity, dateLog, message, stackMessage);
+                    break;
 
-                    par.LineHeight = 1;
-                    LogTextBox.Document.Blocks.Add(par);
-                });
+                default:
+                    WriteLog(severity, dateLog, message, stackMessage);
+                    break;
             }
         }
 
+        /// <summary>
+        /// записать лог в отдельном окне
+        /// </summary>
+        /// <param name="stackTrace"></param>
+        void WriteLog(WarnSeverity severity, DateTime dateLog, string message, string stackMessage = null)
+        {
+            if (message.IsNullOrEmpty() && stackMessage.IsNullOrEmpty())
+                return;
 
+            Dispatcher?.Invoke(() =>
+            {
+                if (!(SetDebugLogging?.IsChecked == true && severity == WarnSeverity.Debug || severity == WarnSeverity.Normal || severity == WarnSeverity.Error || severity == WarnSeverity.Status))
+                    return;
+
+                Paragraph par = new Paragraph();
+                par.Inlines.Add(new Bold(new Run(string.Format("[{0:G}]:", dateLog)))
+                {
+                    Foreground = Brushes.Aqua,
+                    Background = Brushes.Black
+                });
+                if (!message.IsNullOrEmpty())
+                {
+                    par.Inlines.Add(message.Trim());
+                    if (!stackMessage.IsNullOrEmpty())
+                        par.Inlines.Add(new Line());
+                }
+
+                if (!stackMessage.IsNullOrEmpty())
+                    par.Inlines.Add(stackMessage.Trim());
+
+                par.LineHeight = 1;
+                LogTextBox.Document.Blocks.Add(par);
+            });
+        }
 
         uint countNotWatchedNotifications = 0;
 
@@ -424,8 +424,6 @@ namespace TFSAssist
             countNotWatchedNotifications++;
         }
 
-
-
         void MainWindow_Activated(object sender, EventArgs e)
         {
             LastDeactivationDate = null;
@@ -434,7 +432,6 @@ namespace TFSAssist
             if (!ShowInTaskbar)
                 ShowInTaskbar = true;
         }
-
 
         void MainWindow_Deactivated(object sender, EventArgs e)
         {
@@ -743,7 +740,5 @@ namespace TFSAssist
                     Activate();
             });
         }
-
-
     }
 }
