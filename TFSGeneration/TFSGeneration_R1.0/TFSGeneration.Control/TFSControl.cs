@@ -144,7 +144,7 @@ namespace TFSAssist.Control
             }
             else
             {
-                throw new ArgumentException($"Mail Address=[{Settings.MailOption.Address.Value.ToStringIsNullOrEmptyTrim()}] Or Domain\\Username=[{Settings.MailOption.UserName.Value.ToStringIsNullOrEmptyTrim()}] With ExchangeUri=[{Settings.MailOption.ExchangeUri.Value.ToStringIsNullOrEmptyTrim()}] is Incorrect! Please check fields.");
+                throw new ArgumentException($"Mail Address=[{Settings.MailOption.Address.Value.ToStringIsNullOrEmptyTrim()}] Or Domain\\Username=[{Settings.MailOption.UserName.Value.ToStringIsNullOrEmptyTrim()}] or ExchangeUri=[{Settings.MailOption.ExchangeUri.Value.ToStringIsNullOrEmptyTrim()}] is incorrect! Please check fields.");
             }
 
             // проверяем коннект к почтовому серверу через считывание папки Входящие
@@ -330,7 +330,7 @@ namespace TFSAssist.Control
         MailItem[] ExchangeExceptionHandle(ExchangeService service, FolderId folderId, int numberOfMessages, ref int numberOfAttempts, Exception ex)
         {
             if (numberOfAttempts >= 5)
-                throw new Exception($"Error connecting to Exchange Server! {numberOfAttempts} connection attempts were made to the Mail-server.", ex);
+                throw new Exception($"Error connecting to Exchange Server! {numberOfAttempts} connection attempts were made.", ex);
 
             Thread.Sleep(30 * 1000);
             return GetUnreadMailFromInbox(service, folderId, numberOfMessages, ref numberOfAttempts);
