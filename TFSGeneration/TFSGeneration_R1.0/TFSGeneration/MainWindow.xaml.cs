@@ -88,7 +88,6 @@ namespace TFSAssist
 
 
             Resources.Add("STR_START", STR_START);
-            Resources.Add("STR_STOP", STR_STOP);
             System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor;
             InitializeComponent();
 
@@ -454,7 +453,7 @@ namespace TFSAssist
         {
             if (e.Key == Key.Enter)
             {
-                ButtonStart_OnClick(this, null);
+                //ButtonStart_OnClick(this, null);
             }
         }
 
@@ -472,12 +471,12 @@ namespace TFSAssist
                 LogTextBox.Document.Blocks.Clear();
                 StatusBarInfo.Content = string.Empty;
                 MyProgeressBar.IsIndeterminate = true;
+                ButtonStart.Content = STR_STOP;
             }
-        }
-
-        private void ButtonStop_OnClick(object sender, RoutedEventArgs e)
-        {
-            tfsControl.Stop();
+            else
+            {
+                tfsControl.Stop();
+            }
         }
 
         /// <summary>
@@ -502,13 +501,13 @@ namespace TFSAssist
                     Margin = new Thickness(10)
                 };
                 ProgressBarGrid.Children.Add(MyProgeressBar);
+
+                ButtonStart.Content = STR_START;
             });
         }
 
         void DisableWindow()
         {
-            ButtonStart.Visibility = Visibility.Hidden;
-            ButtonStop.Visibility = Visibility.Visible;
             MailOptions.IsEnabled = false;
             GridTFSOption.IsEnabled = false;
             IntervalTextBox.IsEnabled = false;
@@ -517,8 +516,6 @@ namespace TFSAssist
 
         void EnableWindow()
         {
-            ButtonStart.Visibility = Visibility.Visible;
-            ButtonStop.Visibility = Visibility.Hidden;
             MailOptions.IsEnabled = true;
             GridTFSOption.IsEnabled = true;
             IntervalTextBox.IsEnabled = true;

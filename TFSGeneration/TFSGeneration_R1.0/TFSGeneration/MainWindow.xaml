@@ -228,9 +228,7 @@
 			</Grid>
             <CheckBox  Grid.Column="1" Name="CreateBoot" Margin="5" VerticalAlignment="Center" ToolTip="Enable Instant Upload" HorizontalAlignment="Left">BootRun</CheckBox>
             <CheckBox  Grid.Column="2" Name="SetDebugLogging" Margin="2" VerticalAlignment="Center" HorizontalContentAlignment="Left" ToolTip="Enable Debug Logging" HorizontalAlignment="Left">Debug Log</CheckBox>
-            <Button Grid.Column="3" Name="ButtonStop" Height="40" IsDefault="True" Margin="10 0" MaxWidth="120" HorizontalAlignment="Right" Width="120" Content="{StaticResource STR_STOP}" FontSize="20" Click="ButtonStop_OnClick" Visibility="Hidden"/>
-            <Button Grid.Column="3" Name="ButtonStart" Height="40" IsDefault="True" IsEnabled="False" Margin="10 0" MaxWidth="120" HorizontalAlignment="Right" Width="120" Content="{StaticResource STR_START}" FontSize="20" Click="ButtonStart_OnClick" Visibility="Visible"/>
-            
+            <Button Grid.Column="3" Name="ButtonStart" Height="40" IsDefault="True" IsEnabled="False" Margin="10 0" MaxWidth="120" HorizontalAlignment="Right" Width="120" Content="{StaticResource STR_START}" FontSize="20" Click="ButtonStart_OnClick"/>
 		</Grid>
 	
 		<!--
