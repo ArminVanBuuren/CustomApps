@@ -632,7 +632,7 @@ namespace TFSAssist.Control
                             tfsWorkItem.Fields[field.Name].Value = getFormattedValue;
                         }
 
-                        //tfsWorkItem.Save();
+                        tfsWorkItem.Save();
                         createdTfsId += tfsWorkItem.Id + ";";
                         _log.OnWriteLog($"Created TFS:[{createdTfsId}]", true);
                     }
