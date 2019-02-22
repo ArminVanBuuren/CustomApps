@@ -387,7 +387,7 @@ namespace TFSAssist.Control
                 //Если валидация по адресату или теме письма не совпадает с регулярным выражением то пропускаем обработку
                 if (!_letterValidation.Invoke(item.From, item.Subject))
                 {
-                    _log.OnWriteLog($"Ignored. Doesn't match the filter.", true);
+                    _log.OnWriteLog($"Ignored. Rejected by filter.", true);
                     continue;
                 }
 
