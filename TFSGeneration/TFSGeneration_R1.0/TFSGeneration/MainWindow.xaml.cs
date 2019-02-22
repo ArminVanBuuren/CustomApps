@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -23,9 +24,9 @@ namespace TFSAssist
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((double) value < 1800)
-                return 1800;
-            return (double) value - 28;
+            if ((double) value < 2000)
+                return 2000;
+            return (double) value - 25;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -331,6 +332,10 @@ namespace TFSAssist
             {
                 case WarnSeverity.Status:
                     Dispatcher?.BeginInvoke(DispatcherPriority.Normal, new Action(() => StatusBarInfo.Content = message));
+                    WriteLog(WarnSeverity.Normal, dateLog, message, stackMessage);
+                    break;
+                case WarnSeverity.StatusRegular:
+                    Dispatcher?.BeginInvoke(DispatcherPriority.Normal, new Action(() => StatusBarInfo.Content = message));
                     break;
 
                 case WarnSeverity.Error:
@@ -369,6 +374,11 @@ namespace TFSAssist
             }
         }
 
+        private void ButtonClearLog_OnClick(object sender, RoutedEventArgs e)
+        {
+            LogTextBox.Document.Blocks.Clear();
+        }
+
         /// <summary>
         /// записать лог в отдельном окне
         /// </summary>
@@ -391,7 +401,7 @@ namespace TFSAssist
                 });
                 if (!message.IsNullOrEmpty())
                 {
-                    par.Inlines.Add(message.Trim());
+                    HighlightTraces(par, message.Trim());
                     if (!stackMessage.IsNullOrEmpty())
                         par.Inlines.Add(new Line());
                 }
@@ -402,6 +412,67 @@ namespace TFSAssist
                 par.LineHeight = 1;
                 LogTextBox.Document.Blocks.Add(par);
             });
+        }
+
+        void HighlightTraces(Paragraph par, string message)
+        {
+            int startSmb = 0;
+            StringBuilder highlightBuilder = new StringBuilder();
+            StringBuilder notHighlighted = new StringBuilder();
+            foreach (char ch in message)
+            {
+                if (ch == '[')
+                {
+                    startSmb++;
+                    highlightBuilder.Append(ch);
+                    AppentNotHghText(par, notHighlighted);
+                    continue;
+                }
+
+                if (ch == ']')
+                {
+                    if (startSmb > 0)
+                        startSmb--;
+                    highlightBuilder.Append(ch);
+                    if (startSmb == 0)
+                        AppentHghText(par, highlightBuilder);
+                    continue;
+                }
+
+                if (startSmb > 0)
+                {
+                    highlightBuilder.Append(ch);
+                    continue;
+                }
+
+                notHighlighted.Append(ch);
+            }
+
+            AppentNotHghText(par, notHighlighted);
+            AppentHghText(par, highlightBuilder);
+        }
+
+        void AppentNotHghText(Paragraph par, StringBuilder builder)
+        {
+            if (builder.Length > 0)
+            {
+                par.Inlines.Add(builder.ToString());
+                builder.Clear();
+            }
+        }
+
+        void AppentHghText(Paragraph par, StringBuilder builder)
+        {
+            if (builder.Length > 0)
+            {
+                Run r = new Run(builder.ToString())
+                {
+                    Foreground = Brushes.LightPink,
+                    Background = Brushes.Black
+                };
+                par.Inlines.Add(r);
+                builder.Clear();
+            }
         }
 
         uint countNotWatchedNotifications = 0;
@@ -448,27 +519,13 @@ namespace TFSAssist
 
         #endregion
 
-
-        private void MailPassword_OnKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                //ButtonStart_OnClick(this, null);
-            }
-        }
-
-        /// <summary>
-        /// запуск процесса
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void ButtonStart_OnClick(object sender, RoutedEventArgs e)
         {
             if (!tfsControl.InProgress)
             {
                 tfsControl.Start();
                 DisableWindow();
-                LogTextBox.Document.Blocks.Clear();
+                ButtonClearLog_OnClick(this, null);
                 StatusBarInfo.Content = string.Empty;
                 MyProgeressBar.IsIndeterminate = true;
                 ButtonStart.Content = STR_STOP;
@@ -753,6 +810,7 @@ namespace TFSAssist
                     Activate();
             });
         }
+
 
 
     }

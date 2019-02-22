@@ -13,16 +13,6 @@ using static Utils.Customs;
 
 namespace TFSAssist.Control
 {
-    public enum WarnSeverity
-    {
-        Error = 0,
-        Warning = 1,
-        Attention = 2,
-        Status = 4,
-        Normal = 8,
-        Debug = 16
-    }
-
     [Serializable]
     sealed partial class TFSControl : ISerializable, IDisposable
     {

@@ -10,5 +10,21 @@ namespace TFSAssist.Control.DataBase.Datas
 		public string[] Recipients;
 		public string Subject;
 		public string Body;
-	}
+
+        public override bool Equals(object ob)
+        {
+            if (ob is MailItem)
+            {
+                MailItem input = (MailItem) ob;
+                return input.ReceivedDate == ReceivedDate && input.From == From && input.Subject == Subject && input.Body == Body;
+            }
+
+            return false;
+        }
+
+        //public override int GetHashCode()
+        //{
+        //    return ID.GetHashCode() ^ From.GetHashCode();
+        //}
+    }
 }

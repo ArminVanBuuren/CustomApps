@@ -23,25 +23,27 @@ namespace TFSAssist.Control
         public const string Sleeping = "Sleeping...";
         public const string Completed = "Completed";
         public const string Aborted = "Aborted";
-        public const string Processing_Error = "Processing Error";
+        public const string ProcessingError = "Processing Error";
+        public const string FatalExeption = "Fatal Exception!";
     }
 
     public sealed partial class TFSControl
     {
         public event EventHandler IsCompleted;
         private const RegexOptions _default = RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase;
+        const RegexOptions _filterRegOpt = RegexOptions.IgnoreCase | RegexOptions.Compiled;
 
-        Func<string, string, bool> _validation;
+        Func<string, string, bool> _letterValidation;
         private TfsTeamProjectCollection _tfsService;
         private WorkItemStore _workItemStore;
         private ExchangeService _exchangeService;
         private FolderId _exchangeFolder;
 
         private object _objectLock = new object();
-        private Thread _workerThread;
         Regex ParceSubject { get; set; }
         Regex ParceBody { get; set; }
         static Regex _checkEmailAddress = new Regex(@"^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,64}$", RegexOptions.Compiled);
+        private MailItem? _tempLastMailItem;
 
         void StartPerforming()
         {
@@ -51,48 +53,58 @@ namespace TFSAssist.Control
                 {
                     //=========================================================
                     InProgress = true;
-                    _log.OnWriteLog(StatusString.Initialization);
+                    _tempLastMailItem = null;
+                    _log.LogItemId = 0;
                     _log.OnStatusChanged(StatusString.Initialization);
-                    _workerThread = Thread.CurrentThread;
-                    _log.OnWriteLog($"ProcessThread:{_workerThread.ManagedThreadId} Priority:{_workerThread.Priority}");
+                    _log.OnWriteLog($"ThreadID=[{Thread.CurrentThread.ManagedThreadId}] Priority=[{Thread.CurrentThread.Priority}]");
 
                     string mailFilterFrom = Settings.MailOption.FilterMailFrom.Value.Trim();
                     string mailFilterSubject = Settings.MailOption.FilterSubject.Value.Trim();
+                    string logFilterRules = string.Empty;
 
-                    const RegexOptions regOpt = RegexOptions.IgnoreCase | RegexOptions.Compiled;
                     if (!string.IsNullOrEmpty(mailFilterFrom) && !string.IsNullOrEmpty(mailFilterSubject))
                     {
-                        _validation = (from, subject) => Regex.IsMatch(from, mailFilterFrom, regOpt) &&
-                                                         Regex.IsMatch(subject, mailFilterSubject, regOpt);
+                        _letterValidation = (from, subject) => Regex.IsMatch(from, mailFilterFrom, _filterRegOpt) &&
+                                                         Regex.IsMatch(subject, mailFilterSubject, _filterRegOpt);
+                        logFilterRules = $"From-Matches=[{mailFilterFrom}] Subject-Matches=[{mailFilterSubject}] Options=[{_filterRegOpt:G}]";
                     }
                     else if (!string.IsNullOrEmpty(mailFilterFrom))
-                        _validation = (from, subject) => Regex.IsMatch(from, mailFilterFrom, regOpt);
+                    {
+                        _letterValidation = (from, subject) => Regex.IsMatch(from, mailFilterFrom, _filterRegOpt);
+                        logFilterRules = $"From-Matches=[{mailFilterFrom}] Options=[{_filterRegOpt:G}]";
+                    }
                     else if (!string.IsNullOrEmpty(mailFilterSubject))
-                        _validation = (from, subject) => Regex.IsMatch(subject, mailFilterSubject, regOpt);
+                    {
+                        _letterValidation = (from, subject) => Regex.IsMatch(subject, mailFilterSubject, _filterRegOpt);
+                        logFilterRules = $"Subject-Matches=[{mailFilterSubject}] Options=[{_filterRegOpt:G}]";
+                    }
                     else
-                        _validation = (from, subject) => true;
+                    {
+                        _letterValidation = (from, subject) => true;
+                        logFilterRules = "No filter will be use.";
+                    }
 
+                    _log.OnWriteLog($"Filter: {logFilterRules}");
                     ParceSubject = new Regex(Settings.MailOption.ParceSubject[0].Value, _default);
+                    _log.OnWriteLog($"Subject-letter. Parce pattern=[{Settings.MailOption.ParceSubject[0].Value}] Options=[{ParceSubject.Options:G}]");
                     ParceBody = new Regex(Settings.MailOption.ParceBody[0].Value, _default | RegexOptions.Multiline);
+                    _log.OnWriteLog($"Body-letter. Parce pattern=[{Settings.MailOption.ParceBody[0].Value}] Options=[{ParceBody.Options:G}]");
                     //=========================================================
                     ConnectToMailServer();
                     ConnectToTFSServer();
                     //=========================================================
-                    _log.OnWriteLog(StatusString.Processing);
                     StartProcess();
                     //=========================================================
                     _log.OnStatusChanged(StatusString.Completed);
-                    _log.OnWriteLog(StatusString.Completed);
                 }
                 catch (ThreadAbortException)
                 {
                     //Thread.ResetAbort();
                     _log.OnStatusChanged(StatusString.Aborted);
-                    _log.OnWriteLog(StatusString.Aborted);
                 }
                 catch (Exception fatal)
                 {
-                    _log.OnStatusChanged(fatal.Message);
+                    _log.OnStatusChanged(StatusString.FatalExeption);
                     _log.OnWriteLog(WarnSeverity.Error, $"Process stopped. {Environment.NewLine}{fatal.Message}", fatal, true);
                 }
                 finally
@@ -130,7 +142,7 @@ namespace TFSAssist.Control
                 if (domain_username.Length != 2 || domain_username[0].IsNullOrEmpty() || domain_username[1].IsNullOrEmpty())
                     throw new ArgumentException("You must add UserName and Domain like: \"Domain\\Username\"");
 
-                _log.OnWriteLog($"Mail authorization: {Settings.MailOption.UserName.Value}");
+                _log.OnWriteLog($"Mail authorization=[{Settings.MailOption.UserName.Value}]");
                 _exchangeService.Credentials = new NetworkCredential(domain_username[1].Trim(), _mailPassword, domain_username[0].Trim());
                 _exchangeService.Url = new Uri(Settings.MailOption.ExchangeUri.Value);
                 //AlternateIdBase response = _exchangeService.ConvertId(new AlternateId(IdFormat.EwsId, "Placeholder", domain_username[1].Trim()), IdFormat.EwsId);
@@ -139,12 +151,12 @@ namespace TFSAssist.Control
             {
                 _exchangeService.Credentials = new NetworkCredential(Settings.MailOption.Address.Value, _mailPassword);
                 _exchangeService.AutodiscoverUrl(Settings.MailOption.Address.Value, RedirectionUrlValidationCallback);
-                _log.OnWriteLog($"Mail authorization: {Settings.MailOption.Address.Value}] Old Exchange URI:[{Settings.MailOption.ExchangeUri.Value}] New Exchange URI:[{_exchangeService.Url.AbsoluteUri}");
+                _log.OnWriteLog($"Mail authorization=[{Settings.MailOption.Address.Value}] Old Exchange URI=[{Settings.MailOption.ExchangeUri.Value}] New Exchange URI=[{_exchangeService.Url.AbsoluteUri}");
                 Settings.MailOption.ExchangeUri.Value = _exchangeService.Url.AbsoluteUri; // обновляем ссылку на путь до Exchange сервера почты
             }
             else
             {
-                throw new ArgumentException($"Mail Address=[{Settings.MailOption.Address.Value.ToStringIsNullOrEmptyTrim()}] Or Domain\\Username=[{Settings.MailOption.UserName.Value.ToStringIsNullOrEmptyTrim()}] or ExchangeUri=[{Settings.MailOption.ExchangeUri.Value.ToStringIsNullOrEmptyTrim()}] is incorrect! Please check fields.");
+                throw new ArgumentException($"Mail Address=[{Settings.MailOption.Address.Value}] Or Domain\\Username=[{Settings.MailOption.UserName.Value}] or ExchangeUri=[{Settings.MailOption.ExchangeUri.Value}] is incorrect! Please check fields.");
             }
 
             // проверяем коннект к почтовому серверу через считывание папки Входящие
@@ -155,7 +167,7 @@ namespace TFSAssist.Control
             }
             catch (ServiceRequestException ex)
             {
-                throw new Exception("Error connecting to Exchange Server! Please check your authorization data.", ex);
+                throw new Exception("Error connecting to Exchange server. Please check your authorization data.", ex);
             }
             finally
             {
@@ -168,7 +180,7 @@ namespace TFSAssist.Control
             Folder folderFilter = null;
             if (!folderName.IsNullOrEmpty())
             {
-                FindFoldersResults inboxFolders =  _exchangeService.FindFolders(WellKnownFolderName.MsgFolderRoot, new FolderView(int.MaxValue)
+                FindFoldersResults inboxFolders = _exchangeService.FindFolders(WellKnownFolderName.MsgFolderRoot, new FolderView(int.MaxValue)
                 {
                     Traversal = FolderTraversal.Deep
                 });
@@ -179,7 +191,7 @@ namespace TFSAssist.Control
                 }
             }
 
-            _log.OnWriteLog($"Successful connected to Mail-server. Read folder:[{folderFilter?.DisplayName}]");
+            _log.OnWriteLog($"Successful connected to Exchange server. Read folder:[{(folderFilter.DisplayName.IsNullOrEmpty() ? "Inbox" : folderFilter.DisplayName )}]");
         }
 
         static bool GetFolderId(FindFoldersResults inboxFolders, string folderName, out Folder folderOut)
@@ -224,12 +236,12 @@ namespace TFSAssist.Control
                 NetworkCredential credential = new NetworkCredential(tfs_domain_username[1].Trim(), _tfsUserPassword, tfs_domain_username[0].Trim());
                 _tfsService = new TfsTeamProjectCollection(collectionUri, credential);
 
-                _log.OnWriteLog($"TFS authorization: \"{tfs_domain_username[0].Trim()}\\{tfs_domain_username[1].Trim()}\"");
+                _log.OnWriteLog($"TFS authorization=[{tfs_domain_username[0].Trim()}\\{tfs_domain_username[1].Trim()}]");
             }
             else
             {
                 _tfsService = TfsTeamProjectCollectionFactory.GetTeamProjectCollection(collectionUri);
-                _log.OnWriteLog($"TFS authorization: Auto");
+                _log.OnWriteLog($"TFS authorization=[Auto Mode]");
             }
 
             _tfsService.Authenticate();
@@ -274,7 +286,7 @@ namespace TFSAssist.Control
             while (true)
             {
                 Processing();
-                _log.OnStatusChanged(StatusString.Sleeping);
+                _log.OnStatusChanged(StatusString.Sleeping, WarnSeverity.StatusRegular);
                 Thread.Sleep(Settings.Interval.Value * 1000);
             }
         }
@@ -330,12 +342,13 @@ namespace TFSAssist.Control
         MailItem[] ExchangeExceptionHandle(ExchangeService service, FolderId folderId, int numberOfMessages, ref int numberOfAttempts, Exception ex)
         {
             if (numberOfAttempts >= 5)
-                throw new Exception($"Error connecting to Exchange Server! {numberOfAttempts} connection attempts were made.", ex);
+                throw new Exception($"Error connecting to Exchange server! {numberOfAttempts} connection attempts were made.", ex);
 
             Thread.Sleep(30 * 1000);
             return GetUnreadMailFromInbox(service, folderId, numberOfMessages, ref numberOfAttempts);
         }
 
+        
         /// <summary>
         /// Основная обработка писем и создания TFS заявки
         /// </summary>
@@ -343,13 +356,7 @@ namespace TFSAssist.Control
         {
             DateTime lastProcessingDate = DateTime.Parse(Settings.MailOption.StartDate.Value);
 
-            // из за культуры могут возникнуть проблемы, т.к. текущая дата может быть одна, а дата на почте может быть совсем другая и обработка будет не корректной
-            // если выставленная дата больше чем текущая дата, то ждать когда эта дата наступит - данная модификация не верна, если только можно сделать синхронизацю культуры
-            //if (lastProcessingDate > DateTime.Now)
-            //    return;
-
-
-            _log.OnStatusChanged(StatusString.Processing);
+            _log.OnStatusChanged(StatusString.Processing, WarnSeverity.StatusRegular);
             string logProcessing = string.Empty;
             int countErrors = 0;
             int numberOfAttempts = 0;
@@ -361,22 +368,28 @@ namespace TFSAssist.Control
             if (items.Length <= 0)
                 return;
 
-            // получаем дату последнего письма, если дата заданного пользователем или последней обработки больше чем дата последнего письма в новой обработки то можно сразу же завершать действие, т.к. даже самое первое письмо не будет попадать под условие, остальные более тем более
-            DateTime dateOfFirstMailItem = items[0].ReceivedDate;
-            if (lastProcessingDate > dateOfFirstMailItem)
+            // получаем дату самого свежего письма, если дата заданного пользователем или последней обработки больше чем дата последнего письма в новой обработки то можно сразу же завершать действие, т.к. даже самое первое письмо не будет попадать под условие, остальные более тем более
+            MailItem firstMailItem = items[0];
+            if (lastProcessingDate > firstMailItem.ReceivedDate || _tempLastMailItem != null && _tempLastMailItem.Equals(firstMailItem))
                 return;
+            _tempLastMailItem = firstMailItem;
 
             int countOfProcessing = 0;
             foreach (MailItem item in items)
             {
-
                 //Если дата письма меньше чем дата начала то завершаем обработку
                 if (lastProcessingDate > item.ReceivedDate)
                     break;
 
+                _log.LogItemId++;
+                _log.OnWriteLog($"Received new item. ReceivedDate=[{item.ReceivedDate:G}] From=[{item.From}] Subject=[{item.Subject}]", true);
+
                 //Если валидация по адресату или теме письма не совпадает с регулярным выражением то пропускаем обработку
-                if (!_validation.Invoke(item.From, item.Subject))
+                if (!_letterValidation.Invoke(item.From, item.Subject))
+                {
+                    _log.OnWriteLog($"Ignored. Doesn't match the filter.", true);
                     continue;
+                }
 
                 //Если это письмо уже обрабатывалось, то проверяем на валидность создания TFS
                 TMData task = Datas.IsExist(item);
@@ -384,11 +397,15 @@ namespace TFSAssist.Control
                 {
                     //Если успешно он раньше был создан то пропускаем обработку
                     if (task.Status == ProcessingStatus.Created || task.Status == ProcessingStatus.Skipped)
+                    {
+                        _log.OnWriteLog($"TFS already exist. [{task.Executed.TFSID}]", true);
                         continue;
+                    }
+
                     Datas.Remove(task);
                 }
 
-                // если валидация прошла успешно и пустопуло новое письмо или в предыдущей обработке таск был создан ошибочно, то будет пересоздаваться
+                // если валидация прошла успешно и поступило новое письмо или в предыдущей обработке таск был создан ошибочно, то будет пересоздаваться
                 countOfProcessing++;
 
                 task = new TMData {
@@ -396,8 +413,6 @@ namespace TFSAssist.Control
                                       From = item.From,
                                       ReceivedDate = item.ReceivedDate.ToString("G")
                                   };
-
-                _log.OnWriteLog($"Received new mail item. ID=[{item.ID}] {task}", true);
 
                 try
                 {
@@ -421,7 +436,7 @@ namespace TFSAssist.Control
                         task.Status = ProcessingStatus.Skipped;
                     }
 
-                    _log.OnWriteLog($"ID=[{item.ID}] {task.Status:G}", true);
+                    _log.OnWriteLog($"{task.Status:G}", true);
                     Datas.Add(task);
                 }
                 catch (TFSFieldsException ex1)
@@ -432,11 +447,11 @@ namespace TFSAssist.Control
 
                     countErrors++;
 
-                    logProcessing += $"Processing Error!{Environment.NewLine}ReceivedDate=[{item.ReceivedDate}] Subject=[{item.Subject}]{Environment.NewLine}";
+                    logProcessing += $"Processing Error!\r\nReceivedDate=[{item.ReceivedDate}] Subject=[{item.Subject}]\r\n";
                     Exception ex2 = ex1;
                     while (true)
                     {
-                        logProcessing += $"{Environment.NewLine}{ex2.Message}{Environment.NewLine}{ex2.StackTrace}{Environment.NewLine}";
+                        logProcessing += $"\r\n{ex2.Message}\r\n{ex2.StackTrace}\r\n";
 
                         if (ex2.InnerException != null)
                         {
@@ -458,14 +473,14 @@ namespace TFSAssist.Control
             }
 
             //Обновляем данные в форме приложения и указываем что будем искать следующие письма от даты последнего письма, не важно попал ли он в валидацию или нет, т.к. мы его уже считали и все более старые от этого письма тоже
-            if (dateOfFirstMailItem > lastProcessingDate)
-                Settings.MailOption.StartDate.Value = dateOfFirstMailItem.ToString("G");
+            if (firstMailItem.ReceivedDate > lastProcessingDate)
+                Settings.MailOption.StartDate.Value = firstMailItem.ReceivedDate.ToString("G");
 
             if (countErrors > 0)
             {
                 //отправляем список ошибок которые возможно связанны с настроками конфига
-                _log.OnStatusChanged(StatusString.Processing_Error);
-                _log.OnWriteLog(WarnSeverity.Warning, $"Please see log tab. Catched: {countErrors} processing errors!", logProcessing.Trim());
+                _log.OnStatusChanged(StatusString.ProcessingError);
+                _log.OnWriteLog(WarnSeverity.Warning, $"Please see the logs report. Catched {countErrors} processing errors.", logProcessing.Trim());
                 Thread.Sleep(10 * 1000);
             }
 
@@ -479,7 +494,7 @@ namespace TFSAssist.Control
             List<DataMail> parced = new List<DataMail>();
 
             GroupCollection fromSubject = ParceSubject.Match(subject).Groups;
-            _log.OnWriteLog($"Subject parce. Contains:[{subject}] RegexOptions:[{ParceSubject.Options:G}] RegexPattern:[{Settings.MailOption.ParceSubject[0].Value}]", true);
+            _log.OnWriteLog($"Subject content=[{subject}]", true);
 
             foreach (string match in ParceSubject.GetGroupNames())
             {
@@ -498,7 +513,7 @@ namespace TFSAssist.Control
 
 
             GroupCollection fromBody = ParceBody.Match(body).Groups;
-            _log.OnWriteLog($"Body parce. Contains:[{body}] RegexOptions:[{ParceBody.Options:G}] RegexPattern:[{Settings.MailOption.ParceBody[0].Value}]", true);
+            _log.OnWriteLog($"Body content=[{body}]", true);
 
             foreach (string match in ParceBody.GetGroupNames())
             {
@@ -525,7 +540,7 @@ namespace TFSAssist.Control
             string query = itemExec.ReplaceParcedValues(Settings.TFSOption.GetDublicateTFS[0].Value);
             if (!query.IsNullOrEmptyTrim())
             {
-                _log.OnWriteLog($"Run query {nameof(Settings.TFSOption.GetDublicateTFS)}=[{query}]", true);
+                _log.OnWriteLog($"Running \"{nameof(Settings.TFSOption.GetDublicateTFS)}\" query=[{query}]", true);
                 WorkItemCollection workQuery = _workItemStore.Query(query);
 
                 if (workQuery.Count > 0)
@@ -535,9 +550,13 @@ namespace TFSAssist.Control
                         createdTfsId += queryResult.Id + ";";
                     }
 
-                    _log.OnWriteLog($"TFS item already exist: {createdTfsId}", true);
+                    _log.OnWriteLog($"Query result: [{createdTfsId}]", true);
                     return false;
                 }
+            }
+            else
+            {
+                _log.OnWriteLog($"Query \"{nameof(Settings.TFSOption.GetDublicateTFS)}\" ignored", true);
             }
             return CreateTFSItem(itemExec, ref createdTfsId);
         }
@@ -552,9 +571,9 @@ namespace TFSAssist.Control
 
                 //если не указана имя проекта TFS
                 if (teamProj.Value.IsNullOrEmpty())
-                    throw new TFSFieldsException("TeamProject's Attribute=[Value] Must Not Be Empty!");
+                    throw new TFSFieldsException("TeamProject's attribute=[Value] must not be empty!");
                 if (teamProj.WorkItems == null || teamProj.WorkItems.Length == 0)
-                    throw new TFSFieldsException($"Not Found WorkItems From Project=[{teamProj.Value}]!");
+                    throw new TFSFieldsException($"Not found workItems from project=[{teamProj.Value}]!");
 
                 Project teamProject = _workItemStore.Projects[teamProj.Value];
 
@@ -566,9 +585,9 @@ namespace TFSAssist.Control
 
                     //если не указан тип создания заявки TFS
                     if (workItem.Value.IsNullOrEmpty())
-                        throw new TFSFieldsException("WorkItem's Attribute=[Value] Must Not Be Empty!");
+                        throw new TFSFieldsException("WorkItem's attribute=[Value] must not be empty!");
                     if (workItem.Fields == null || workItem.Fields.Length == 0)
-                        throw new TFSFieldsException($"Not Found Fields From WorkItem=[{workItem.Value}]!");
+                        throw new TFSFieldsException($"Not found fields from workItem=[{workItem.Value}]");
 
 
                     WorkItemType workItemType = teamProject.WorkItemTypes[workItem.Value];
@@ -581,7 +600,7 @@ namespace TFSAssist.Control
                         foreach (FieldCondition field in workItem.Fields)
                         {
                             string getFormattedValue = field.GetSwitchValue(itemExec.ReplaceParcedValues, _log.OnWriteLog);
-                            _log.OnWriteLog($"Field:[{field.Name}] SourceValue=[{field.Value}] SetValue=[{getFormattedValue}]", true);
+                            _log.OnWriteLog($"Field=[{field.Name}] SourceValue=[{field.Value}] SetValue=[{getFormattedValue}]", true);
 
                             //кастомный аттрибуты Control.XXX
                             if (field.Name.Equals("Control.AssignedTo", StringComparison.CurrentCultureIgnoreCase))
@@ -613,7 +632,7 @@ namespace TFSAssist.Control
                             tfsWorkItem.Fields[field.Name].Value = getFormattedValue;
                         }
 
-                        tfsWorkItem.Save();
+                        //tfsWorkItem.Save();
                         createdTfsId += tfsWorkItem.Id + ";";
                         _log.OnWriteLog($"Created TFS:[{createdTfsId}]", true);
                     }
@@ -624,12 +643,12 @@ namespace TFSAssist.Control
                                                       .Aggregate(string.Empty, (current, field) => current + (field.ReferenceName + Environment.NewLine)).Trim();
 
                         throw new TFSFieldsException("Error in creating TFS item! Please check workitem's fields in config.",
-                                                     new TFSFieldsException($"Error in {teamProj.Value}=[{teamProj.Condition}] / {workItem.Value}=[{workItem.Condition}]{Environment.NewLine}Required fields:{Environment.NewLine}{reqFields}", ex));
+                                                     new TFSFieldsException($"Error in {teamProj.Value}=[{teamProj.Condition}] \\ {workItem.Value}=[{workItem.Condition}]\r\nAll required fields:\r\n{reqFields}", ex));
                     }
                     catch (Exception)
                     {
                         if (!displayForm.IsNullOrEmpty())
-                            _log.OnWriteLog($"Detailed display form for [{teamProj.Value}:{workItem.Value}]:{Environment.NewLine}{displayForm}");
+                            _log.OnWriteLog($"Detailed display form for [{teamProj.Value}:{workItem.Value}]=[{displayForm}]");
                         throw;
                     }
                 }

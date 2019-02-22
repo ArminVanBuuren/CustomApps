@@ -82,7 +82,7 @@
 
                             <TextBox      Grid.Column="1" Grid.Row="2" Name="MailAddress"       Margin="0 5 5 5"  ToolTip="Enter Address of mailbox" />
                             <TextBox      Grid.Column="1" Grid.Row="3" Name="MailUserName"      Margin="0 5 5 5"  ToolTip="Enter Domain\UserName of mailbox" />
-                            <PasswordBox  Grid.Column="1" Grid.Row="4" Name="MailPassword"      Margin="0 5 5 5"  ToolTip="Enter Password of mailbox" KeyDown="MailPassword_OnKeyDown"/>
+                            <PasswordBox  Grid.Column="1" Grid.Row="4" Name="MailPassword"      Margin="0 5 5 5"  ToolTip="Enter Password of mailbox" />
                             <TextBox      Grid.Column="1" Grid.Row="5" Name="AuthorTimeout"     Margin="0 5 5 5"  ToolTip="Enter Authorization Timeout in sec." />
 
                             <DatePicker   Grid.Column="4" Grid.Row="2" Name="FilterStartDate"   Margin="0 5 5 5"  ToolTip="Get mails between start date and current date" SelectedDate="{x:Static sys:DateTime.Now}" />
@@ -162,7 +162,7 @@
                         <Border BorderBrush="#000" BorderThickness="0,0,0,1" Margin="1,0,0,-3"/>
 						<Border BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="-1,0,1,-2"/>
 
-						<Label         VerticalAlignment="Center">Get Dublicate TFS Items:</Label>
+                        <Label VerticalAlignment="Center">Query for get TFS items duplicates:</Label>
                         <RichTextBox   Margin="5" Name="GetDublicateTFS" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalScrollBarVisibility="Auto"  HorizontalScrollBarVisibility="Hidden" MinHeight="265" MaxHeight="265" Height="265"   >
 							<FlowDocument PageWidth="{Binding Path=ActualWidth, ElementName=GetDublicateTFS, Mode=OneWay}" ></FlowDocument>
 						</RichTextBox>
@@ -196,18 +196,25 @@
 				</Grid>
 			</TabItem>
 			<TabItem Header="Log">
-                <RichTextBox Name="LogTextBox"
-                             
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="17"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Button  Grid.Row="0" Padding="0" Click="ButtonClearLog_OnClick">Clear</Button>
+                    <RichTextBox Name="LogTextBox"
+                             Grid.Row="1"
                              VerticalAlignment="Stretch" 
                              HorizontalAlignment="Stretch" 
                              Height="Auto" 
                              IsReadOnly="True" 
                              VerticalScrollBarVisibility="Auto"
                              HorizontalScrollBarVisibility="Auto">
-                    <FlowDocument PageWidth="{Binding Path=ActualWidth, ElementName=LogTextBox, Converter={StaticResource LogFlowDocumentConverter}, Mode=OneWay}" ></FlowDocument>
-                    
-                </RichTextBox>
-			</TabItem>
+                        <FlowDocument PageWidth="{Binding Path=ActualWidth, ElementName=LogTextBox, Converter={StaticResource LogFlowDocumentConverter}, Mode=OneWay}" ></FlowDocument>
+
+                    </RichTextBox>
+                </Grid>
+            </TabItem>
 		</TabControl>
 
 
@@ -228,7 +235,7 @@
 			</Grid>
             <CheckBox  Grid.Column="1" Name="CreateBoot" Margin="5" VerticalAlignment="Center" ToolTip="Enable Instant Upload" HorizontalAlignment="Left">BootRun</CheckBox>
             <CheckBox  Grid.Column="2" Name="SetDebugLogging" Margin="2" VerticalAlignment="Center" HorizontalContentAlignment="Left" ToolTip="Enable Debug Logging" HorizontalAlignment="Left">Debug Log</CheckBox>
-            <Button Grid.Column="3" Name="ButtonStart" Height="40" IsDefault="True" IsEnabled="False" Margin="10 0" MaxWidth="120" HorizontalAlignment="Right" Width="120" Content="{StaticResource STR_START}" FontSize="20" Click="ButtonStart_OnClick"/>
+            <Button Grid.Column="3" Name="ButtonStart" Height="40" IsEnabled="False" Margin="10 0" MaxWidth="120" HorizontalAlignment="Right" Width="120" Content="{StaticResource STR_START}" FontSize="20" IsDefault="True" Click="ButtonStart_OnClick"/>
 		</Grid>
 	
 		<!--

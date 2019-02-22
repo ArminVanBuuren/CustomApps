@@ -8,17 +8,29 @@ using System.Threading.Tasks;
 namespace TFSAssist.Control
 {
     public delegate void WriteLogHandler(WarnSeverity severity, DateTime dateLog, string message, string stackMessage, bool lockProcess);
+    public enum WarnSeverity
+    {
+        Error = 0,
+        Warning = 1,
+        Attention = 2,
+        Status = 4,
+        StatusRegular = 8,
+        Normal = 16,
+        Debug = 32
+    }
+
     public class LogPerformer
     {
         public event WriteLogHandler WriteLog;
+        internal uint LogItemId { get; set; } = 0;
 
         /// <summary>
         /// Уведомление пользователя по статусу работы приложения (нижняя строка приложения)
         /// </summary>
         /// <param name="status"></param>
-        internal void OnStatusChanged(string status)
+        internal void OnStatusChanged(string status, WarnSeverity severity = WarnSeverity.Status)
         {
-            OnWriteLog(WarnSeverity.Status, status);
+            OnWriteLog(severity, status);
         }
 
         /// <summary>
@@ -62,7 +74,7 @@ namespace TFSAssist.Control
 
         internal void OnWriteLog(WarnSeverity severity, string trace, string stackMessage = null, bool lockProcess = false)
         {
-            WriteLog?.Invoke(severity, DateTime.Now, trace, stackMessage, lockProcess);
+            WriteLog?.Invoke(severity, DateTime.Now, severity == WarnSeverity.Status || severity == WarnSeverity.StatusRegular ? trace : $"[{LogItemId}] {trace}", stackMessage, lockProcess);
         }
     }
 }
