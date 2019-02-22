@@ -553,10 +553,7 @@ namespace TFSAssist
                 MyProgeressBar.IsIndeterminate = false;
                 MyProgeressBar.Visibility = Visibility.Collapsed;
                 ProgressBarGrid.Children.Remove(MyProgeressBar);
-                MyProgeressBar = new ProgressBar
-                {
-                    Margin = new Thickness(10)
-                };
+                MyProgeressBar = new ProgressBar();
                 ProgressBarGrid.Children.Add(MyProgeressBar);
 
                 ButtonStart.Content = STR_START;

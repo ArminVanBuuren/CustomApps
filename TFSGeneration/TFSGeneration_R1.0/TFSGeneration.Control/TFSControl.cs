@@ -66,7 +66,7 @@ namespace TFSAssist.Control
                     {
                         _letterValidation = (from, subject) => Regex.IsMatch(from, mailFilterFrom, _filterRegOpt) &&
                                                          Regex.IsMatch(subject, mailFilterSubject, _filterRegOpt);
-                        logFilterRules = $"From-Matches=[{mailFilterFrom}] Subject-Matches=[{mailFilterSubject}] Options=[{_filterRegOpt:G}]";
+                        logFilterRules = $"From-Matches=[{mailFilterFrom}] And Subject-Matches=[{mailFilterSubject}] Options=[{_filterRegOpt:G}]";
                     }
                     else if (!string.IsNullOrEmpty(mailFilterFrom))
                     {
