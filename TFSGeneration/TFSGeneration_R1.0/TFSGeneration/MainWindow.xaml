@@ -9,7 +9,7 @@
                       Style="{DynamicResource VSUIWindowStyle1}"
                       Icon="Images/Rick.ico"    
                       MinWidth="520" Width="565"
-                      MinHeight="485" Height="485"
+                      MinHeight="483" Height="483"
                       ResizeMode="CanResizeWithGrip"
 		>
     <Window.Resources>
