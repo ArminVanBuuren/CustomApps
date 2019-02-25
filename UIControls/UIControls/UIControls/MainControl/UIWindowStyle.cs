@@ -217,7 +217,7 @@ namespace UIControls.MainControl
             //Window parentWindow = Window.GetWindow((DependencyObject) sender);
             if (mainWindow != null)
             {
-                Presenter vkhovanskiy = new Presenter(false, false);
+                Presenter vkhovanskiy = new Presenter(mainWindow.PresenterTitleContent, false, false);
                 vkhovanskiy.Owner = mainWindow;
                 vkhovanskiy.Loaded += WindowInfo_Loaded;
                 mainWindow.IsBlured = true;

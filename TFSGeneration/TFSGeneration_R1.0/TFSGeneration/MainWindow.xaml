@@ -63,7 +63,7 @@
                                 <ColumnDefinition MaxWidth="75"  MinWidth="75"/>
                                 <ColumnDefinition MinWidth="140" Width="1.01*" MaxWidth="300" />
                                 <ColumnDefinition MaxWidth="5"  MinWidth="5"  />
-                                <ColumnDefinition MaxWidth="55"  MinWidth="55"  />
+                                <ColumnDefinition MaxWidth="78"  MinWidth="78"  />
                                 <ColumnDefinition MinWidth="103" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
@@ -89,9 +89,9 @@
                             <Label FontSize="{DynamicResource TextFontSize}" Grid.Column="0" Grid.Row="5" VerticalAlignment="Center">Timeout:</Label>
 
                             <Label FontSize="{DynamicResource TextFontSize}" Grid.Column="3" Grid.Row="2" VerticalAlignment="Center">Start:</Label>
-                            <Label FontSize="{DynamicResource TextFontSize}" Grid.Column="3" Grid.Row="3" VerticalAlignment="Center">Folder:</Label>
-                            <Label FontSize="{DynamicResource TextFontSize}" Grid.Column="3" Grid.Row="4" VerticalAlignment="Center">From:</Label>
-                            <Label FontSize="{DynamicResource TextFontSize}" Grid.Column="3" Grid.Row="5" VerticalAlignment="Center" Content="Subject:" />
+                            <Label FontSize="{DynamicResource TextFontSize}" Grid.Column="3" Grid.Row="3" VerticalAlignment="Center">Folder like:</Label>
+                            <Label FontSize="{DynamicResource TextFontSize}" Grid.Column="3" Grid.Row="4" VerticalAlignment="Center">From like:</Label>
+                            <Label FontSize="{DynamicResource TextFontSize}" Grid.Column="3" Grid.Row="5" VerticalAlignment="Center">Subject like:</Label>
 
                             <TextBox     FontSize="{DynamicResource TextFontSize}" Grid.Column="1" Grid.Row="2" Name="MailAddress"       Margin="0 4 4 4"  ToolTip="Enter address of mailbox" />
                             <TextBox     FontSize="{DynamicResource TextFontSize}" Grid.Column="1" Grid.Row="3" Name="MailUserName"      Margin="0 4 4 4"  ToolTip="Enter domain\username of mailbox" />
@@ -125,13 +125,13 @@
                         <Border BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="0,0,0,0"/>
 
                         <Label   FontSize="{DynamicResource TextFontSize}" Name="LableParceSubject" VerticalAlignment="Center" >111</Label>
-                        <TextBox FontSize="{DynamicResource TextFontSize}" Name="RegexSubjectParce" Margin="5 0 5 6"  ToolTip="Regex pattern for parce letter-subject" AutoWordSelection="False" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True"/>
+                        <TextBox FontSize="{DynamicResource TextFontSize}" Name="RegexSubjectParce" Margin="5 0 5 6" AutoWordSelection="False" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True"/>
 
                         <Border BorderBrush="#000" BorderThickness="0,0,0,1" Margin="0,0,0,-2"/>
                         <Border BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="0,0,0,0"/>
 
                         <Label   FontSize="{DynamicResource TextFontSize}" Name="LableParceBody"   VerticalAlignment="Center" >222</Label>
-                        <TextBox FontSize="{DynamicResource TextFontSize}" Padding="5 10" MaxHeight="90" Name="RegexBodyParce" Margin="5 0" ToolTip="Regex pattern for parce letter-body" AutoWordSelection="False" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" />
+                        <TextBox FontSize="{DynamicResource TextFontSize}" Padding="5 10" MaxHeight="90" Name="RegexBodyParce" Margin="5 0" AutoWordSelection="False" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" />
 
                     </StackPanel>
                 </ScrollViewer>

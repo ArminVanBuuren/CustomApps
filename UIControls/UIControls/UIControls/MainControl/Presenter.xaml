@@ -12,10 +12,6 @@
     FontSize="11"
     Background="#333"
     Foreground="#FF32EBFB"
-    MinWidth="285"
-    MinHeight="87"
-    MaxWidth="285"
-    MaxHeight="87"
     SizeToContent="WidthAndHeight"
     WindowStartupLocation="CenterOwner"
     BorderBrush="#FF1087BF"
@@ -28,7 +24,7 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <TextBlock  Padding="1 0 1 7" Foreground="#FFF7F7F7" TextWrapping="Wrap" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" >
+    <TextBlock  Padding="10 0 10 5" Foreground="#FFF7F7F7" TextWrapping="Wrap" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Name="X_title" >
         Hello! Thanks for choosing my application!
     </TextBlock>
 </mainControl:UIWindow>

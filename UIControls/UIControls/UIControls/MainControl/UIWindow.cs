@@ -37,6 +37,8 @@ namespace UIControls.MainControl
             }
         }
 
+        public string PresenterTitleContent { get; protected set; }
+
         void CheckTitle(string value)
         {
             var topBorderButt = this.Template.FindName("TopBorderTitButt", this);
