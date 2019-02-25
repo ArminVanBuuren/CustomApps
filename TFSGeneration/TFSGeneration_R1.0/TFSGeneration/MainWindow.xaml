@@ -11,7 +11,7 @@
                       MinWidth="520" Width="555"
                       MinHeight="483" Height="483"
                       ResizeMode="CanResizeWithGrip"
-                      BorderBrush="#FF157676"
+                      BorderBrush="#FF1087BF"
 		>
     <Window.Resources>
         <local:LogFlowDocumentConverter x:Key="LogFlowDocumentConverter"/>
@@ -248,9 +248,9 @@
                 </ProgressBar.Effect>
             </ProgressBar>
         </StackPanel>
-        <TextBlock Name="StatusBarInfo" Grid.Row="2" Margin="6 -2" FontSize="10" Foreground="White" FontStretch="Normal" FontWeight="Bold">
+        <TextBlock Name="StatusBarInfo" Grid.Row="2" Margin="6 -3" FontSize="10" Foreground="White" FontStretch="Normal" FontWeight="Bold">
             <TextBlock.Effect>
-                <DropShadowEffect ShadowDepth="1" BlurRadius="1" Color="Black" />
+                <DropShadowEffect ShadowDepth="2" BlurRadius="1" Color="Black" />
             </TextBlock.Effect>
         </TextBlock>
     </Grid>

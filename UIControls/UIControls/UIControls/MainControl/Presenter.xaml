@@ -18,7 +18,7 @@
     MaxHeight="87"
     SizeToContent="WidthAndHeight"
     WindowStartupLocation="CenterOwner"
-    BorderBrush="#007ACC"
+    BorderBrush="#FF1087BF"
     >
     <Window.Resources>
         <ResourceDictionary>
