@@ -8,7 +8,7 @@
                       xmlns:local="clr-namespace:TFSAssist"
                       Style="{DynamicResource VSUIWindowStyle1}"
                       Icon="Images/Rick.ico"    
-                      MinWidth="520" Width="565"
+                      MinWidth="520" Width="555"
                       MinHeight="483" Height="483"
                       ResizeMode="CanResizeWithGrip"
 		>
