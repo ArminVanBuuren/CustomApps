@@ -47,7 +47,7 @@
         <Grid.RowDefinitions>
             <RowDefinition MinHeight="250" Height="*"/>
             <RowDefinition MinHeight="43" MaxHeight="43" />
-            <RowDefinition MinHeight="10" MaxHeight="10" />
+            <RowDefinition MinHeight="8" MaxHeight="8" />
         </Grid.RowDefinitions>
 
 
@@ -247,7 +247,7 @@
                 </ProgressBar.Effect>
             </ProgressBar>
         </StackPanel>
-        <TextBlock Name="StatusBarInfo" Grid.Row="2" Margin="5 -2" FontSize="10" Foreground="White" FontStretch="Normal" FontWeight="Bold">
+        <TextBlock Name="StatusBarInfo" Grid.Row="2" Margin="6 -2" FontSize="10" Foreground="White" FontStretch="Normal" FontWeight="Bold">
             <TextBlock.Effect>
                 <DropShadowEffect ShadowDepth="1" BlurRadius="1" Color="Black" />
             </TextBlock.Effect>

@@ -561,7 +561,7 @@ namespace TFSAssist
             });
         }
 
-        private double _isPbBlured = 15;
+        private double _isPbBlured = 35;
         private double _isPbNormal = 4;
         void ProgressBarBlurEffect(UIElement element, bool isBlur)
         {
@@ -587,7 +587,7 @@ namespace TFSAssist
                 {
                     Effect = new BlurEffect()
                     {
-                        Radius = _isPbBlured
+                        Radius = 15
                     },
                     BorderThickness = new Thickness(0)
                 };
