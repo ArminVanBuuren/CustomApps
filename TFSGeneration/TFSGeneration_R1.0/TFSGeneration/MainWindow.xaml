@@ -11,6 +11,7 @@
                       MinWidth="520" Width="555"
                       MinHeight="483" Height="483"
                       ResizeMode="CanResizeWithGrip"
+                      BorderBrush="#FF157676"
 		>
     <Window.Resources>
         <local:LogFlowDocumentConverter x:Key="LogFlowDocumentConverter"/>
