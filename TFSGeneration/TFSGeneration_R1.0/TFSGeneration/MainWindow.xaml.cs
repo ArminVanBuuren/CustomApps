@@ -12,6 +12,8 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Media.Effects;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using TFSAssist.Control;
@@ -45,8 +47,8 @@ namespace TFSAssist
         private const string STR_STOP = "STOP";
         private readonly string ERR_SECOND_PROC = $"{nameof(TFSAssist)} already started. Please check your notification area. To run second process, you can rename the executable file.";
 
-        private const int timeoutMSECToShowToolTip = 2700;
-        private const int timeoutToShowToolTip = 2700;
+        private const int timeoutMSECToShowToolTip = 2000;
+        private const int timeoutToShowToolTip = 2000;
 
         private const int timerToCollectAndActivateUnUsedWindow = 120 * 1000;
         private int _openedWarningWindowCount = 0;
@@ -92,7 +94,7 @@ namespace TFSAssist
             System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor;
             InitializeComponent();
 
-            Title = nameof(TFSAssist);
+            Title = "TFS Assist";
             Loaded += MainWindow_Loaded;
             Unloaded += MainWindow_Unloaded;
             Activated += MainWindow_Activated;
@@ -331,11 +333,11 @@ namespace TFSAssist
             switch (severity)
             {
                 case WarnSeverity.Status:
-                    Dispatcher?.BeginInvoke(DispatcherPriority.Normal, new Action(() => StatusBarInfo.Content = message));
+                    Dispatcher?.BeginInvoke(DispatcherPriority.Normal, new Action(() => StatusBarInfo.Text = message));
                     WriteLog(WarnSeverity.Normal, dateLog, message, stackMessage);
                     break;
                 case WarnSeverity.StatusRegular:
-                    Dispatcher?.BeginInvoke(DispatcherPriority.Normal, new Action(() => StatusBarInfo.Content = message));
+                    Dispatcher?.BeginInvoke(DispatcherPriority.Normal, new Action(() => StatusBarInfo.Text = message));
                     break;
 
                 case WarnSeverity.Error:
@@ -467,7 +469,7 @@ namespace TFSAssist
             {
                 Run r = new Run(builder.ToString())
                 {
-                    Foreground = Brushes.LightPink,
+                    Foreground = Brushes.HotPink,
                     Background = Brushes.Black
                 };
                 par.Inlines.Add(r);
@@ -526,8 +528,11 @@ namespace TFSAssist
                 tfsControl.Start();
                 DisableWindow();
                 ButtonClearLog_OnClick(this, null);
-                StatusBarInfo.Content = string.Empty;
+                StatusBarInfo.Text = string.Empty;
+
                 MyProgeressBar.IsIndeterminate = true;
+                ProgressBarBlurEffect(MyProgeressBar, false);
+
                 ButtonStart.Content = STR_STOP;
             }
             else
@@ -550,14 +555,44 @@ namespace TFSAssist
             {
                 EnableWindow();
 
-                MyProgeressBar.IsIndeterminate = false;
-                MyProgeressBar.Visibility = Visibility.Collapsed;
-                ProgressBarGrid.Children.Remove(MyProgeressBar);
-                MyProgeressBar = new ProgressBar();
-                ProgressBarGrid.Children.Add(MyProgeressBar);
+                ProgressBarBlurEffect(MyProgeressBar, true);
 
                 ButtonStart.Content = STR_START;
             });
+        }
+
+        private double _isPbBlured = 15;
+        private double _isPbNormal = 4;
+        void ProgressBarBlurEffect(UIElement element, bool isBlur)
+        {
+            BlurEffect effect = element.Effect as BlurEffect;
+            
+            if (isBlur)
+            {
+                effect.Changed += Effect_Changed;
+                effect.BeginAnimation(BlurEffect.RadiusProperty, new DoubleAnimation(_isPbBlured, TimeSpan.FromSeconds(0.5)));
+            }
+            else
+            {
+                effect.BeginAnimation(BlurEffect.RadiusProperty, new DoubleAnimation(_isPbNormal, TimeSpan.FromSeconds(0.5)));
+            }
+        }
+
+        private void Effect_Changed(object sender, EventArgs e)
+        {
+            if (((BlurEffect)MyProgeressBar.Effect).Radius == _isPbBlured)
+            {
+                ProgressBarGrid.Children.Remove(MyProgeressBar);
+                MyProgeressBar = new ProgressBar
+                {
+                    Effect = new BlurEffect()
+                    {
+                        Radius = _isPbBlured
+                    },
+                    BorderThickness = new Thickness(0)
+                };
+                ProgressBarGrid.Children.Add(MyProgeressBar);
+            }
         }
 
         void DisableWindow()

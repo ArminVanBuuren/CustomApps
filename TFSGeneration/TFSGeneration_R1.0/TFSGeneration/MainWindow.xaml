@@ -4,16 +4,16 @@
                       xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
                       xmlns:mainControl="clr-namespace:UIControls.MainControl;assembly=UIControls"
+                      xmlns:system="clr-namespace:System;assembly=mscorlib"
                       xmlns:local="clr-namespace:TFSAssist"
                       Style="{DynamicResource VSUIWindowStyle1}"
                       Icon="Images/Rick.ico"    
-                      MinWidth="545" Width="575"
-                      MinHeight="610" Height="610"
+                      MinWidth="520" Width="565"
+                      MinHeight="485" Height="485"
                       ResizeMode="CanResizeWithGrip"
 		>
     <Window.Resources>
         <local:LogFlowDocumentConverter x:Key="LogFlowDocumentConverter"/>
-
         <XmlDataProvider x:Key="TFS_FIELDS_DATA" XPath="Fields">
             <x:XData>
                 <Fields xmlns="">
@@ -28,29 +28,41 @@
         </XmlDataProvider>
     </Window.Resources>
 
-
     <Window.Effect>
         <BlurEffect Radius="0"></BlurEffect>
     </Window.Effect>
 
-
     <Grid Name="Root" Margin="0,0,0,0" >
+        <Grid.Resources>
+            <system:Double x:Key="TextFontSize">11</system:Double>
+            <Style TargetType="Label" x:Key="LableCustom">
+                <Setter Property="FontSize" Value="29"/>
+                <Setter Property="FontFamily" Value="Stencil"/>
+                <!--Setter Property="FontFamily" Value="./Images/#Beyond Wonderland"/-->
+                <Setter Property="Foreground" Value="{StaticResource ControlForegroundTextLable}"/>
+                <Setter Property="Margin" Value="-5"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+            </Style>
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition MinHeight="250" Height="*"/>
-            <RowDefinition MinHeight="55" MaxHeight="55" />
+            <RowDefinition MinHeight="43" MaxHeight="43" />
             <RowDefinition MinHeight="10" MaxHeight="10" />
-            <RowDefinition MinHeight="22" Height="22"/>
         </Grid.RowDefinitions>
-        <TabControl Grid.Row="0" Margin="10 0 10 5" >
-            <TabItem Header="Mail Options" >
+
+
+
+
+        <TabControl Grid.Row="0" Margin="10 0 10 0" FontSize="{DynamicResource TextFontSize}" >
+            <TabItem Header="Mail Options"  >
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Margin="0,0,0,0" VerticalAlignment="Top">
                     <StackPanel x:Name="MailOptions" >
                         <Grid Height="Auto" VerticalAlignment="Stretch" >
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition MaxWidth="80"  MinWidth="80"/>
+                                <ColumnDefinition MaxWidth="75"  MinWidth="75"/>
                                 <ColumnDefinition MinWidth="140" Width="1.01*" MaxWidth="300" />
                                 <ColumnDefinition MaxWidth="5"  MinWidth="5"  />
-                                <ColumnDefinition MaxWidth="61"  MinWidth="61"  />
+                                <ColumnDefinition MaxWidth="55"  MinWidth="55"  />
                                 <ColumnDefinition MinWidth="103" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
@@ -70,25 +82,25 @@
                             <Label        Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Style="{DynamicResource LableCustom}">Authorization</Label>
                             <Label        Grid.Column="3" Grid.Row="0" Grid.ColumnSpan="2" Style="{DynamicResource LableCustom}">Filter</Label>
 
-                            <Label        Grid.Column="0" Grid.Row="2" VerticalAlignment="Center">Address:</Label>
-                            <Label        Grid.Column="0" Grid.Row="3" VerticalAlignment="Center">User Name:</Label>
-                            <Label        Grid.Column="0" Grid.Row="4" VerticalAlignment="Center">Password:</Label>
-                            <Label        Grid.Column="0" Grid.Row="5" VerticalAlignment="Center">Timeout:</Label>
+                            <Label FontSize="{DynamicResource TextFontSize}" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center">Address:</Label>
+                            <Label FontSize="{DynamicResource TextFontSize}" Grid.Column="0" Grid.Row="3" VerticalAlignment="Center">User Name:</Label>
+                            <Label FontSize="{DynamicResource TextFontSize}" Grid.Column="0" Grid.Row="4" VerticalAlignment="Center">Password:</Label>
+                            <Label FontSize="{DynamicResource TextFontSize}" Grid.Column="0" Grid.Row="5" VerticalAlignment="Center">Timeout:</Label>
 
-                            <Label        Grid.Column="3" Grid.Row="2" VerticalAlignment="Center">Start:</Label>
-                            <Label        Grid.Column="3" Grid.Row="3" VerticalAlignment="Center">Folder:</Label>
-                            <Label        Grid.Column="3" Grid.Row="4" VerticalAlignment="Center">From:</Label>
-                            <Label        Grid.Column="3" Grid.Row="5" VerticalAlignment="Center" Content="Subject:" />
+                            <Label FontSize="{DynamicResource TextFontSize}" Grid.Column="3" Grid.Row="2" VerticalAlignment="Center">Start:</Label>
+                            <Label FontSize="{DynamicResource TextFontSize}" Grid.Column="3" Grid.Row="3" VerticalAlignment="Center">Folder:</Label>
+                            <Label FontSize="{DynamicResource TextFontSize}" Grid.Column="3" Grid.Row="4" VerticalAlignment="Center">From:</Label>
+                            <Label FontSize="{DynamicResource TextFontSize}" Grid.Column="3" Grid.Row="5" VerticalAlignment="Center" Content="Subject:" />
 
-                            <TextBox      Grid.Column="1" Grid.Row="2" Name="MailAddress"       Margin="0 5 5 5"  ToolTip="Enter Address of mailbox" />
-                            <TextBox      Grid.Column="1" Grid.Row="3" Name="MailUserName"      Margin="0 5 5 5"  ToolTip="Enter Domain\UserName of mailbox" />
-                            <PasswordBox  Grid.Column="1" Grid.Row="4" Name="MailPassword"      Margin="0 5 5 5"  ToolTip="Enter Password of mailbox" />
-                            <TextBox      Grid.Column="1" Grid.Row="5" Name="AuthorTimeout"     Margin="0 5 5 5"  ToolTip="Enter Authorization Timeout in sec." />
+                            <TextBox     FontSize="{DynamicResource TextFontSize}" Grid.Column="1" Grid.Row="2" Name="MailAddress"       Margin="0 4 4 4"  ToolTip="Enter address of mailbox" />
+                            <TextBox     FontSize="{DynamicResource TextFontSize}" Grid.Column="1" Grid.Row="3" Name="MailUserName"      Margin="0 4 4 4"  ToolTip="Enter domain\username of mailbox" />
+                            <PasswordBox FontSize="{DynamicResource TextFontSize}"  Grid.Column="1" Grid.Row="4" Name="MailPassword"      Margin="0 4 4 4"  ToolTip="Enter password of mailbox" />
+                            <TextBox     FontSize="{DynamicResource TextFontSize}"  Grid.Column="1" Grid.Row="5" Name="AuthorTimeout"     Margin="0 4 4 4"  ToolTip="Enter authorization timeout in sec." />
 
-                            <DatePicker   Grid.Column="4" Grid.Row="2" Name="FilterStartDate"   Margin="0 5 5 5"  ToolTip="Get mails between start date and current date" SelectedDate="{x:Static sys:DateTime.Now}" />
-                            <TextBox      Grid.Column="4" Grid.Row="3" Name="FilterFolder"      Margin="0 5 5 5"  ToolTip="Read letters from a Folder" />
-                            <TextBox      Grid.Column="4" Grid.Row="4" Name="FilterFrom"        Margin="0 5 5 5"  ToolTip="Filter mail address by Regex expression" />
-                            <TextBox      Grid.Column="4" Grid.Row="5" Name="FilterSubject"     Margin="0 5 5 5"  ToolTip="Filter mail subject by Regex expression" />
+                            <DatePicker  FontSize="{DynamicResource TextFontSize}" Grid.Column="4" Grid.Row="2" Name="FilterStartDate"   Margin="0 4 4 4"  ToolTip="Get mails between start date and current date" SelectedDate="{x:Static sys:DateTime.Now}" />
+                            <TextBox     FontSize="{DynamicResource TextFontSize}" Grid.Column="4" Grid.Row="3" Name="FilterFolder"      Margin="0 4 4 4"  ToolTip="Read letters from a folder" />
+                            <TextBox     FontSize="{DynamicResource TextFontSize}" Grid.Column="4" Grid.Row="4" Name="FilterFrom"        Margin="0 4 4 4"  ToolTip="Filter mail address by regex expression" />
+                            <TextBox      Grid.Column="4" Grid.Row="5" Name="FilterSubject"     Margin="0 4 4 4"  ToolTip="Filter mail subject by regex expression" />
                         </Grid>
 
                         <Border BorderBrush="#000" BorderThickness="0,0,0,1" Margin="0,0,0,-6"/>
@@ -100,65 +112,64 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition MaxWidth="93"/>
+                                <ColumnDefinition MaxWidth="86"/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <Label     Grid.Column="0" Grid.Row="0"  VerticalAlignment="Center">Exchange Uri:</Label>
-                            <TextBox   Grid.Column="1" Grid.Row="0"  Name="MailExchangeUri" Margin="5" ToolTip="etc.: https://{myserver}/ews/exchange.asmx" />
+                            <Label  FontSize="{DynamicResource TextFontSize}"   Grid.Column="0" Grid.Row="0"  VerticalAlignment="Center">Exchange Uri:</Label>
+                            <TextBox  FontSize="{DynamicResource TextFontSize}" Grid.Column="1" Grid.Row="0"  Name="MailExchangeUri" Margin="1" ToolTip="etc.: https://{myserver}/ews/exchange.asmx" />
 
                         </Grid>
 
                         <Border BorderBrush="#000" BorderThickness="0,0,0,1" Margin="0,0,0,-2"/>
                         <Border BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="0,0,0,0"/>
 
-                        <Label Name="LableParceSubject" VerticalAlignment="Center" >111</Label>
-                        <TextBox Name="RegexSubjectParce" Margin="5 5 5 10"  ToolTip="Regex Pattern For Parce Subject" AutoWordSelection="False" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True"/>
+                        <Label   FontSize="{DynamicResource TextFontSize}" Name="LableParceSubject" VerticalAlignment="Center" >111</Label>
+                        <TextBox FontSize="{DynamicResource TextFontSize}" Name="RegexSubjectParce" Margin="5 0 5 6"  ToolTip="Regex pattern for parce letter-subject" AutoWordSelection="False" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True"/>
 
                         <Border BorderBrush="#000" BorderThickness="0,0,0,1" Margin="0,0,0,-2"/>
                         <Border BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="0,0,0,0"/>
 
-                        <Label Name="LableParceBody"   VerticalAlignment="Center" >222</Label>
-                        <TextBox  MaxHeight="70" Name="RegexBodyParce" Margin="5" ToolTip="Regex Pattern For Parce Body" AutoWordSelection="False" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" />
+                        <Label   FontSize="{DynamicResource TextFontSize}" Name="LableParceBody"   VerticalAlignment="Center" >222</Label>
+                        <TextBox FontSize="{DynamicResource TextFontSize}" Padding="5 10" MaxHeight="90" Name="RegexBodyParce" Margin="5 0" ToolTip="Regex pattern for parce letter-body" AutoWordSelection="False" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" />
 
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="TFS Options" Name="TFSOptTab">
-                <!--<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Margin="0,0,0,10" VerticalAlignment="Top">-->
                 <Grid x:Name="GridTFSOption" Margin="0,0,0,10">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="105"/>
+                        <RowDefinition Height="80"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0" >
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="35"/>
-                            <RowDefinition Height="35"/>
-                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="26"/>
+                            <RowDefinition Height="26"/>
+                            <RowDefinition Height="26"/>
                         </Grid.RowDefinitions>
                         <Grid Row="0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="60"/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <Label     Grid.Column="0" VerticalAlignment="Center">TFS Uri:</Label>
-                            <TextBox   Grid.Column="1" Name="TFSUri"  Margin="5" />
+                            <Label   FontSize="{DynamicResource TextFontSize}"  Grid.Column="0" VerticalAlignment="Center">TFS Uri:</Label>
+                            <TextBox FontSize="{DynamicResource TextFontSize}"  Grid.Column="1" Name="TFSUri"  Margin="3" />
                         </Grid>
                         <Grid Row="1">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <Label     Grid.Column="0" VerticalAlignment="Center">User Name:</Label>
-                            <TextBox   Grid.Column="1" Name="TFSUserName"  Margin="5" />
+                            <Label   FontSize="{DynamicResource TextFontSize}"  Grid.Column="0" VerticalAlignment="Center">User Name:</Label>
+                            <TextBox FontSize="{DynamicResource TextFontSize}"  Grid.Column="1" Name="TFSUserName"  Margin="3" />
                         </Grid>
                         <Grid Row="2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <Label     Grid.Column="0" VerticalAlignment="Center">Password:</Label>
-                            <PasswordBox   Grid.Column="1" Name="TFSUserPassword"  Margin="5" />
+                            <Label  FontSize="{DynamicResource TextFontSize}"   Grid.Column="0" VerticalAlignment="Center">Password:</Label>
+                            <PasswordBox   Grid.Column="1" Name="TFSUserPassword"  Margin="3" />
                         </Grid>
                     </Grid>
                     <Grid Grid.Row="1">
@@ -171,37 +182,11 @@
                         <Border Grid.Row="0" BorderBrush="#000" BorderThickness="0,0,0,1" Margin="1,0,0,-3"/>
                         <Border Grid.Row="1" BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="-1,0,1,-2"/>
 
-                        <Label Grid.Row="2" VerticalAlignment="Center">Query for get TFS items duplicates:</Label>
-                        <RichTextBox Grid.Row="3" Margin="5,0" Name="GetDublicateTFS" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Hidden" Height="Auto">
+                        <Label FontSize="{DynamicResource TextFontSize}" Grid.Row="2" VerticalAlignment="Center">Query for get TFS items duplicates:</Label>
+                        <RichTextBox FontSize="{DynamicResource TextFontSize}" Grid.Row="3" Margin="5,0" Name="GetDublicateTFS" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Hidden" Height="Auto">
                             <FlowDocument PageWidth="{Binding Path=ActualWidth, ElementName=GetDublicateTFS, Mode=OneWay}" ></FlowDocument>
                         </RichTextBox>
                     </Grid>
-                    <!--<Border BorderBrush="#000" BorderThickness="0,0,0,1" Margin="1,0,0,-3"/>
-						<Border BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="-1,0,1,-2"/>-->
-
-
-
-                    <!--<Label Style="{DynamicResource LableCustom}" FontSize="20" Margin="0 0 0 0">Create TFS</Label>
-						<Label         VerticalAlignment="Center">Mandatory Fields:</Label>
-						<DataGrid Margin="5" 
-								  AutoGenerateColumns="False" 
-								  RowDetailsVisibilityMode="VisibleWhenSelected" 
-						          ItemsSource="{Binding Source={StaticResource TFS_FIELDS_DATA}, XPath=*}">
-							<DataGrid.RowDetailsTemplate>
-								<DataTemplate>
-									<Border Margin="8" Padding="8" BorderThickness="2" BorderBrush="#ddd" CornerRadius="5" MaxWidth="600">
-										<TextBlock TextWrapping="Wrap" Foreground="#fff" Text="{Binding XPath=Map/@Name}"/>
-									</Border>
-								</DataTemplate>
-							</DataGrid.RowDetailsTemplate>
-							<DataGrid.Columns>
-								<DataGridTextColumn Binding="{Binding XPath=@Name}" Header="Field Name" Width="*"  />
-								<DataGridTextColumn Binding="{Binding XPath=@Value}" Header="Field Value" Width="*" />
-								<DataGridTextColumn Binding="{Binding XPath=@Switch}" Header="Switch" Width="*" />
-							</DataGrid.Columns>
-						</DataGrid>-->
-
-
                 </Grid>
             </TabItem>
             <TabItem Header="Log">
@@ -210,8 +195,8 @@
                         <RowDefinition Height="17"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <Button  Grid.Row="0" Padding="0" Click="ButtonClearLog_OnClick">Clear</Button>
-                    <RichTextBox Name="LogTextBox"
+                    <Button FontSize="{DynamicResource TextFontSize}" Grid.Row="0" Padding="0" Click="ButtonClearLog_OnClick">Clear</Button>
+                    <RichTextBox FontSize="{DynamicResource TextFontSize}" Name="LogTextBox"
                              Grid.Row="1"
                              VerticalAlignment="Stretch" 
                              HorizontalAlignment="Stretch" 
@@ -239,12 +224,12 @@
                     <ColumnDefinition MinWidth="63" Width="63"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Label    Grid.Column="0" Margin="5 0 0 0" VerticalAlignment="Center">Interval:</Label>
-                <TextBox Name="IntervalTextBox" Grid.Column="1" Margin="0 0 5 0" Height="28" HorizontalAlignment="Stretch" ToolTip="Interval in seconds, to read new messages" />
+                <Label  FontSize="{DynamicResource TextFontSize}"  Grid.Column="0" Margin="5 0 0 0" VerticalAlignment="Center">Interval:</Label>
+                <TextBox FontSize="{DynamicResource TextFontSize}" Name="IntervalTextBox" Grid.Column="1" Margin="0 0 5 0" Height="{DynamicResource TextBoxHeight}" HorizontalAlignment="Stretch" ToolTip="Interval in seconds, to read new messages" />
             </Grid>
-            <CheckBox  Grid.Column="1" Name="CreateBoot" Margin="5" VerticalAlignment="Center" ToolTip="Enable Instant Upload" HorizontalAlignment="Left">BootRun</CheckBox>
-            <CheckBox  Grid.Column="2" Name="SetDebugLogging" Margin="2" VerticalAlignment="Center" HorizontalContentAlignment="Left" ToolTip="Enable Debug Logging" HorizontalAlignment="Left">Debug Log</CheckBox>
-            <Button Grid.Column="3" Name="ButtonStart" Height="35" IsEnabled="False" Margin="10 0" MaxWidth="120" HorizontalAlignment="Right" Width="120" Content="{StaticResource STR_START}" FontSize="23" IsDefault="True" Click="ButtonStart_OnClick" FontFamily="Stencil"/>
+            <CheckBox FontSize="{DynamicResource TextFontSize}" Grid.Column="1" Name="CreateBoot" Margin="5" VerticalAlignment="Center" ToolTip="Enable instant upload" HorizontalAlignment="Left">BootRun</CheckBox>
+            <CheckBox FontSize="{DynamicResource TextFontSize}" Grid.Column="2" Name="SetDebugLogging" Margin="2" VerticalAlignment="Center" HorizontalContentAlignment="Left" ToolTip="Enable debug logging" HorizontalAlignment="Left">Debug Log</CheckBox>
+            <Button Grid.Column="3" Name="ButtonStart" Height="30" IsEnabled="False" Margin="5 0" MaxWidth="120" HorizontalAlignment="Right" Width="120" Content="{StaticResource STR_START}" FontSize="20" IsDefault="True" Click="ButtonStart_OnClick" FontFamily="Stencil"/>
         </Grid>
 
         <!--
@@ -255,24 +240,17 @@
 		</Image>
 		-->
 
-        <Grid Name="ProgressBarGrid" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" >
-            <ProgressBar Name="MyProgeressBar" />
-        </Grid>
-
-
-        <StatusBar Grid.Row="3" VerticalAlignment="Bottom" >
-            <StatusBarItem Name="StatusBarInfo" Content=""  />
-        </StatusBar>
-        <Grid.Resources>
-            <Style TargetType="Label" x:Key="LableCustom">
-                <Setter Property="FontSize" Value="29"/>
-                <Setter Property="FontFamily" Value="Stencil"/>
-
-                <!--Setter Property="FontFamily" Value="./Images/#Beyond Wonderland"/-->
-                <Setter Property="Foreground" Value="{StaticResource ControlForegroundTextLable}"/>
-                <Setter Property="Margin" Value="0"/>
-                <Setter Property="HorizontalAlignment" Value="Center"/>
-            </Style>
-        </Grid.Resources>
+        <StackPanel Name="ProgressBarGrid" Grid.Row="2" Grid.RowSpan="2" Margin="0,0,0,0">
+            <ProgressBar Name="MyProgeressBar" BorderThickness="0" >
+                <ProgressBar.Effect>
+                    <BlurEffect Radius="15"></BlurEffect>
+                </ProgressBar.Effect>
+            </ProgressBar>
+        </StackPanel>
+        <TextBlock Name="StatusBarInfo" Grid.Row="2" Margin="5 -2" FontSize="10" Foreground="White" FontStretch="Normal" FontWeight="Bold">
+            <TextBlock.Effect>
+                <DropShadowEffect ShadowDepth="1" BlurRadius="1" Color="Black" />
+            </TextBlock.Effect>
+        </TextBlock>
     </Grid>
 </mainControl:UIWindow>

@@ -65,23 +65,27 @@
     <system:Double x:Key="WindowCornerRadiusTopRight">6</system:Double>
     <SolidColorBrush x:Key="TitleBarBackgroundBrush" Color="#FF424242" /> <!-- Top -->
     <SolidColorBrush x:Key="VS2012WindowBorderBrush" Color="#007ACC" /> <!-- Bottom -->
-    <SolidColorBrush x:Key="VS2012WindowBorderBrushBottom" Color="#007ACC" /> <!-- Bottom -->
+    <SolidColorBrush x:Key="VS2012WindowBorderBrushBottom" Color="#FF1DFFFF" /> <!-- Bottom -->
     <SolidColorBrush x:Key="MainFormBackground" Color="#333" /> <!-- MainFormBackground - фон самого окна -->
-    <SolidColorBrush x:Key="ControlForeground" Color="#FF32EBFB" /> <!-- signs and words -->
+    <SolidColorBrush x:Key="ControlForeground" Color="#FF35EFFF" /> <!-- signs and words -->
     <SolidColorBrush x:Key="VS2012WindowBorderBrushInactive" Color="#999999" />
     <SolidColorBrush x:Key="VS2012WindowBorderBrushMouseOver" Color="#FFFFFF" />
-    <SolidColorBrush x:Key="VS2012WindowStatusForeground" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="VS2012WindowStatusForeground" Color="#FFF51FFF" />
     <SolidColorBrush x:Key="VS2012WindowStatusForegroundInactive" Color="#FFFFFF" />
     <Color x:Key="VS2012WindowBorderBrushNormal">Black</Color>
     <!-- ################################ -->
+    <SolidColorBrush x:Key="!!!!!!!!" Color="#FFFF5FE9" />
+    <!-- Control text Foreground -->
+
 
     <!-- ################ Text ################ -->
-    <system:Double x:Key="TextBoxFontSize">13</system:Double>
+    <system:Double x:Key="TextBoxFontSize">11</system:Double>
     <Color x:Key="LableCustomBrush1">#FF97E9E9</Color> <!-- GradientStop Color -->
     <Color x:Key="LableCustomBrush2">#FF2CC8C8</Color> <!-- GradientStop Color -->
     <Color x:Key="ColorForegroundWhite">#FFEEEFFF</Color>
     <Color x:Key="ColorForeground">#FF32EBFB</Color> <!-- TabItemText -->
     <SolidColorBrush x:Key="ControlForegroundWhite" Color="#FFEEEFFF" /> <!-- Control text Foreground -->
+    
     <SolidColorBrush x:Key="LabelForeground" Color="{StaticResource ColorForegroundWhite}" /> <!-- Label Foreground -->
     <!-- ################################ -->
 
@@ -113,10 +117,12 @@
     <Color x:Key="ControlDisabledGradient1">#FFC4C4C4</Color>
     <Color x:Key="ControlDisabledGradient2">#FFB7B7B7</Color>
     <Color x:Key="ControlDisabledGradient3">#FFA2A2A2</Color>
-    <system:Double x:Key="TextBoxHeight">25</system:Double>
+    <system:Double x:Key="TextBoxHeight">20</system:Double>
     <Thickness x:Key="TextBoxPadding">4,4,4,4</Thickness>
     <Thickness x:Key="TextBoxBorderThickness">1,1,1,1</Thickness>
+
     
+
     <LinearGradientBrush x:Key="ControlLightBackground" EndPoint="0,1" StartPoint="0,0">
         <GradientStop Color="{StaticResource BorderLightBrushGradientColor1}" Offset="0"/>
         <GradientStop Color="{StaticResource BorderLightBrushGradientColor2}" Offset="1"/>
@@ -250,8 +256,8 @@
     </LinearGradientBrush>
                                         
     <LinearGradientBrush x:Key="BrushTrackProgressBar" EndPoint="0,0.5" StartPoint="1,0.5">
-        <GradientStop Color="#FF13E7D9" Offset="0"/>
-        <GradientStop Color="#FF16C38F" Offset="1"/>
+        <GradientStop Color="#FF35FFF2" Offset="0"/>
+        <GradientStop Color="#FF29C7BD" Offset="1"/>
     </LinearGradientBrush>
     
     <SolidColorBrush x:Key="BorderBrushToolTip" Color="#FFAAAAAA" />

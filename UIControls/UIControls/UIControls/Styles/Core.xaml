@@ -327,6 +327,7 @@
         <Setter Property="CaretBrush" Value="{StaticResource ControlActiveBorderBrush}"/>
         <Setter Property="AllowDrop" Value="True"/>
         <Setter Property="MinHeight" Value="{StaticResource TextBoxHeight}"/>
+        <!--<Setter Property="Height" Value="{StaticResource TextBoxHeight}"/>-->
         <!--<Setter Property="Cursor" Value="Arrow"/>-->
         <Setter Property="VerticalContentAlignment" Value="Center"/>
 		<Setter Property="Padding" Value="{StaticResource TextBoxPadding}"/>
@@ -381,7 +382,7 @@
                         <Border x:Name="txb_mouseOver1" Background="{StaticResource ControlBackgroundLine}" Opacity="0" CornerRadius="4" />
                         <Border x:Name="txb_border" Background="{TemplateBinding Background}" CornerRadius="4" 
                             BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                            <ScrollViewer x:Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            <ScrollViewer x:Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Margin="0 -5"/>
                         </Border>
                     </Grid>
                     <ControlTemplate.Triggers>
@@ -482,7 +483,7 @@
                         <Border x:Name="txb_mouseOver1" Background="{StaticResource ControlBackgroundLine}" Opacity="0" CornerRadius="4" />
                         <Border x:Name="txb_border" Background="{TemplateBinding Background}" CornerRadius="4" 
                             BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                            <ScrollViewer x:Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            <ScrollViewer x:Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Margin="0 -5"/>
                         </Border>
                     </Grid>
                     <ControlTemplate.Triggers>
@@ -1137,7 +1138,7 @@
         <Setter Property="Foreground" Value="{StaticResource ControlForegroundWhite}"/>
         <Setter Property="Background" Value="{StaticResource ControlLightBackground}"/>
         <Setter Property="Maximum" Value="100"/>
-        <Setter Property="Height" Value="20"/>
+        <Setter Property="Height" Value="15"/>
         <Setter Property="IsTabStop" Value="False"/>
         <Setter Property="BorderBrush" Value="{StaticResource ControlBorderBrush}"/>
         <Setter Property="Template">
@@ -1202,8 +1203,7 @@
         </Setter>
         <Setter Property="BorderThickness" Value="1"/>
     </Style>
-    
-    
+
     <!-- ToolTip -->
     <Style TargetType="{x:Type ToolTip}">
 		<Setter Property="OverridesDefaultStyle" Value="True"/>

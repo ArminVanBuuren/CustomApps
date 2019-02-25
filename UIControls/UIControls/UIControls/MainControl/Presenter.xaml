@@ -9,13 +9,13 @@
     Title="Vladimir Khovanskiy" 
     ResizeMode="NoResize"
     FontFamily="Segoe UI"
-    FontSize="13"
+    FontSize="11"
     Background="#333"
     Foreground="#FF32EBFB"
-    MinWidth="300"
-    MinHeight="93"
-    MaxWidth="300"
-    MaxHeight="93"
+    MinWidth="285"
+    MinHeight="87"
+    MaxWidth="285"
+    MaxHeight="87"
     SizeToContent="WidthAndHeight"
     WindowStartupLocation="CenterOwner"
     >
@@ -27,7 +27,7 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <TextBlock  Padding="3 0 3 10" Foreground="#FFF7F7F7" TextWrapping="Wrap" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" >
+    <TextBlock  Padding="1 0 1 7" Foreground="#FFF7F7F7" TextWrapping="Wrap" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" >
         Hello! Thanks for choosing my application!
     </TextBlock>
 </mainControl:UIWindow>
