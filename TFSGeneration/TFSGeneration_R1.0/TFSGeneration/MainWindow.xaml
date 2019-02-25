@@ -9,7 +9,7 @@
                       Style="{DynamicResource VSUIWindowStyle1}"
                       Icon="Images/Rick.ico"    
                       MinWidth="520" Width="555"
-                      MinHeight="483" Height="483"
+                      MinHeight="472" Height="472"
                       ResizeMode="CanResizeWithGrip"
                       BorderBrush="#FF1087BF"
 		>
@@ -37,7 +37,7 @@
         <Grid.Resources>
             <system:Double x:Key="TextFontSize">11</system:Double>
             <Style TargetType="Label" x:Key="LableCustom">
-                <Setter Property="FontSize" Value="29"/>
+                <Setter Property="FontSize" Value="21"/>
                 <Setter Property="FontFamily" Value="Stencil"/>
                 <!--Setter Property="FontFamily" Value="./Images/#Beyond Wonderland"/-->
                 <Setter Property="Foreground" Value="{StaticResource ControlForegroundTextLable}"/>
@@ -184,7 +184,7 @@
                         <Border Grid.Row="1" BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="-1,0,1,-2"/>
 
                         <Label FontSize="{DynamicResource TextFontSize}" Grid.Row="2" VerticalAlignment="Center">Query for get TFS items duplicates:</Label>
-                        <RichTextBox FontSize="{DynamicResource TextFontSize}" Grid.Row="3" Margin="5,0" Name="GetDublicateTFS" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Hidden" Height="Auto">
+                        <RichTextBox FontSize="{DynamicResource TextFontSize}" Grid.Row="3" Margin="5,0,5,-7" Name="GetDublicateTFS" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Hidden" Height="Auto">
                             <FlowDocument PageWidth="{Binding Path=ActualWidth, ElementName=GetDublicateTFS, Mode=OneWay}" ></FlowDocument>
                         </RichTextBox>
                     </Grid>
