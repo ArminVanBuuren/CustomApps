@@ -65,6 +65,7 @@
     <system:Double x:Key="WindowCornerRadiusTopRight">6</system:Double>
     <SolidColorBrush x:Key="TitleBarBackgroundBrush" Color="#FF424242" /> <!-- Top -->
     <SolidColorBrush x:Key="VS2012WindowBorderBrush" Color="#007ACC" /> <!-- Bottom -->
+    <SolidColorBrush x:Key="VS2012WindowBorderBrush2" Color="#FF157676" /> <!-- Bottom -->
     <SolidColorBrush x:Key="VS2012WindowBorderBrushBottom" Color="#FF1DFFFF" /> <!-- Bottom -->
     <SolidColorBrush x:Key="MainFormBackground" Color="#333" /> <!-- MainFormBackground - фон самого окна -->
     <SolidColorBrush x:Key="ControlForeground" Color="#FF35EFFF" /> <!-- signs and words -->
