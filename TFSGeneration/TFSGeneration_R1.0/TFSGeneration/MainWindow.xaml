@@ -101,7 +101,7 @@
                             <DatePicker  FontSize="{DynamicResource TextFontSize}" Grid.Column="4" Grid.Row="2" Name="FilterStartDate"   Margin="0 4 4 4"  ToolTip="Read mail between the specified start date and the current date" SelectedDate="{x:Static sys:DateTime.Now}" />
                             <TextBox     FontSize="{DynamicResource TextFontSize}" Grid.Column="4" Grid.Row="3" Name="FilterFolder"      Margin="0 4 4 4"  ToolTip="Read emails from a folder" />
                             <TextBox     FontSize="{DynamicResource TextFontSize}" Grid.Column="4" Grid.Row="4" Name="FilterFrom"        Margin="0 4 4 4"  ToolTip="Filter incoming email addresses by regular expression" />
-                            <TextBox      Grid.Column="4" Grid.Row="5" Name="FilterSubject"     Margin="0 4 4 4"  ToolTip="Filter incoming emails subject by regular expression" />
+                            <TextBox      Grid.Column="4" Grid.Row="5" Name="FilterSubject"     Margin="0 4 4 4"  ToolTip="Filter email's subject by regular expression" />
                         </Grid>
 
                         <Border BorderBrush="#000" BorderThickness="0,0,0,1" Margin="0,0,0,-6"/>
