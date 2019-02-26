@@ -89,7 +89,7 @@
                             <Label FontSize="{DynamicResource TextFontSize}" Grid.Column="0" Grid.Row="5" VerticalAlignment="Center">Timeout:</Label>
 
                             <Label FontSize="{DynamicResource TextFontSize}" Grid.Column="3" Grid.Row="2" VerticalAlignment="Center">Start:</Label>
-                            <Label FontSize="{DynamicResource TextFontSize}" Grid.Column="3" Grid.Row="3" VerticalAlignment="Center">Folder like:</Label>
+                            <Label FontSize="{DynamicResource TextFontSize}" Grid.Column="3" Grid.Row="3" VerticalAlignment="Center">Folder:</Label>
                             <Label FontSize="{DynamicResource TextFontSize}" Grid.Column="3" Grid.Row="4" VerticalAlignment="Center">From like:</Label>
                             <Label FontSize="{DynamicResource TextFontSize}" Grid.Column="3" Grid.Row="5" VerticalAlignment="Center">Subject like:</Label>
 
@@ -98,10 +98,10 @@
                             <PasswordBox FontSize="{DynamicResource TextFontSize}"  Grid.Column="1" Grid.Row="4" Name="MailPassword"      Margin="0 4 4 4"  ToolTip="Enter password of mailbox" />
                             <TextBox     FontSize="{DynamicResource TextFontSize}"  Grid.Column="1" Grid.Row="5" Name="AuthorTimeout"     Margin="0 4 4 4"  ToolTip="Enter authorization timeout in sec." />
 
-                            <DatePicker  FontSize="{DynamicResource TextFontSize}" Grid.Column="4" Grid.Row="2" Name="FilterStartDate"   Margin="0 4 4 4"  ToolTip="Get mails between start date and current date" SelectedDate="{x:Static sys:DateTime.Now}" />
-                            <TextBox     FontSize="{DynamicResource TextFontSize}" Grid.Column="4" Grid.Row="3" Name="FilterFolder"      Margin="0 4 4 4"  ToolTip="Read letters from a folder" />
-                            <TextBox     FontSize="{DynamicResource TextFontSize}" Grid.Column="4" Grid.Row="4" Name="FilterFrom"        Margin="0 4 4 4"  ToolTip="Filter mail address by regex expression" />
-                            <TextBox      Grid.Column="4" Grid.Row="5" Name="FilterSubject"     Margin="0 4 4 4"  ToolTip="Filter mail subject by regex expression" />
+                            <DatePicker  FontSize="{DynamicResource TextFontSize}" Grid.Column="4" Grid.Row="2" Name="FilterStartDate"   Margin="0 4 4 4"  ToolTip="Read mail between the specified start date and the current date" SelectedDate="{x:Static sys:DateTime.Now}" />
+                            <TextBox     FontSize="{DynamicResource TextFontSize}" Grid.Column="4" Grid.Row="3" Name="FilterFolder"      Margin="0 4 4 4"  ToolTip="Read emails from a folder" />
+                            <TextBox     FontSize="{DynamicResource TextFontSize}" Grid.Column="4" Grid.Row="4" Name="FilterFrom"        Margin="0 4 4 4"  ToolTip="Filter incoming email addresses by regular expression" />
+                            <TextBox      Grid.Column="4" Grid.Row="5" Name="FilterSubject"     Margin="0 4 4 4"  ToolTip="Filter incoming emails subject by regular expression" />
                         </Grid>
 
                         <Border BorderBrush="#000" BorderThickness="0,0,0,1" Margin="0,0,0,-6"/>
