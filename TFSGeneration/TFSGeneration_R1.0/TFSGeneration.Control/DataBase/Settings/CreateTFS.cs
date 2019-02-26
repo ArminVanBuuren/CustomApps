@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using Utils.ConditionEx;
 using Utils;
+using static Utils.Customs;
 
 namespace TFSAssist.Control.DataBase.Settings
 {
@@ -15,7 +16,7 @@ namespace TFSAssist.Control.DataBase.Settings
 
         public override string ToString()
         {
-            return string.Format("Projects:[{0}]", TeamProjects?.Length ?? 0);
+            return $"TeamProject's:[{(TeamProjects?.Length ?? 0)}]";
         }
     }
 
@@ -35,7 +36,7 @@ namespace TFSAssist.Control.DataBase.Settings
         /// </summary>
         /// <param name="getParcedValue"></param>
         /// <returns></returns>
-        internal bool GetConditionResult(GetParcedValue getParcedValue)
+        internal bool GetConditionResult(GetParcedValue getParcedValue, LogPerformer log)
         {
             if (Condition.IsNullOrEmpty())
                 return true;
@@ -46,11 +47,14 @@ namespace TFSAssist.Control.DataBase.Settings
             {
                 IfCondition ifCond = new IfCondition();
                 IfTarget target = ifCond.ExpressionEx(value);
-                return target.ResultCondition;
+                bool result = target.ResultCondition;
+
+                log.OnWriteLog($"Source value of {nameof(Condition)}=[{Condition}]; Final value of {nameof(Condition)}=[{value}]. Result=[{result}]", true);
+                return result;
             }
             catch (Exception ex)
             {
-                throw new TFSFieldsException($"Source condition=[{Condition}]; Final condition=[{value}] Is Incorrect!\r\n{ex.Message}");
+                throw new TFSFieldsException($"Final {nameof(Condition)}=[{value}] is incorrect! Source {nameof(Condition)}=[{Condition}];\r\n{ex.Message}", ex);
             }
         }
 
@@ -70,7 +74,7 @@ namespace TFSAssist.Control.DataBase.Settings
 
         public override string ToString()
         {
-            return string.Format("{1} WorkItems:[{0}]", WorkItems?.Length ?? 0, Value);
+            return $"{Value} WorkItem's:[{WorkItems?.Length ?? 0}]";
         }
     }
 
@@ -85,7 +89,7 @@ namespace TFSAssist.Control.DataBase.Settings
 
         public override string ToString()
         {
-            return string.Format("{1} TFSFields:[{0}]", Fields?.Length ?? 0, Value);
+            return $"{Value} Field's:[{Fields?.Length ?? 0}]";
         }
     }
 
@@ -107,13 +111,13 @@ namespace TFSAssist.Control.DataBase.Settings
             get
             {
                 if (_name.IsNullOrEmpty())
-                    throw new ArgumentException(string.Format("Field is incorrect! Attribute '{0}' must be declared and shouldn't be empty.", nameof(Name)));
+                    throw new ArgumentException($"Field is incorrect! Attribute=[{nameof(Name)}] must be declared and shouldn't be empty.");
                 return _name;
             }
             set
             {
                 if (value.IsNullOrEmpty())
-                    throw new ArgumentException(string.Format("Field is incorrect! Attribute '{0}' must be declared and shouldn't be empty.", nameof(Name)));
+                    throw new ArgumentException($"Field is incorrect! Attribute=[{nameof(Name)}] must be declared and shouldn't be empty.");
                 _name = value;
             }
         }
@@ -127,13 +131,13 @@ namespace TFSAssist.Control.DataBase.Settings
             get
             {
                 if (_value == null)
-                    throw new TFSFieldsException(string.Format("Field=[{0}] is incorrect! Attribute '{1}' must be declared.", Name, nameof(Value)));
+                    throw new TFSFieldsException($"Field {nameof(Name)}=[{Name}] is incorrect! Attribute '{nameof(Value)}' must be declared.");
                 return _value;
             }
             set
             {
                 if (value == null)
-                    throw new TFSFieldsException(string.Format("Field=[{0}] is incorrect! Attribute '{1}' must be declared.", Name, nameof(Value)));
+                    throw new TFSFieldsException($"Field {nameof(Name)}=[{Name}] is incorrect! Attribute '{nameof(Value)}' must be declared.");
                 _value = value;
             }
         }
@@ -181,7 +185,7 @@ namespace TFSAssist.Control.DataBase.Settings
                 }
                 catch (Exception e)
                 {
-                    errorLog += $"Incorrect Case of Map collection. Case=[{mapCasePattern}]{Environment.NewLine}Exception:{e.Message}";
+                    errorLog += $"Incorrect {nameof(mapValue.Case)} of Map collection. {nameof(mapValue.Case)}=[{mapCasePattern}]\r\nException:{e.Message}";
                     //if (mapValue.Case.Trim().Equals(switchValue, StringComparison.CurrentCultureIgnoreCase))
                     //{
                     //    return getParcedValue(mapValue.Value);
@@ -204,7 +208,12 @@ namespace TFSAssist.Control.DataBase.Settings
 
         public override string ToString()
         {
-            return string.Format("[{2}] Name:[{0}]; Value=[{1}]", Name, Value, Switch == null ? "Regular" : "Switch");
+            if (Switch != null)
+            {
+                return $"Field {nameof(Name)}:[{Name}]; {nameof(Switch)}=[{Switch}]; MapItems=[{Items.Count}]; Default {nameof(Value)}=[{Value}]; ";
+            }
+
+            return $"Field {nameof(Name)}:[{Name}]; {nameof(Value)}=[{Value}]";
         }
     }
 
@@ -220,13 +229,13 @@ namespace TFSAssist.Control.DataBase.Settings
             get
             {
                 if (_case == null)
-                    throw new TFSFieldsException(string.Format("Map is incorrect! Attribute '{0}' must be declared.", nameof(Case)));
+                    throw new TFSFieldsException($"Map is incorrect! Attribute '{nameof(Case)}' must be declared.");
                 return _case;
             }
             set
             {
                 if (value == null)
-                    throw new TFSFieldsException(string.Format("Map is incorrect! Attribute '{0}' must be declared.", nameof(Case)));
+                    throw new TFSFieldsException($"Map is incorrect! Attribute '{nameof(Case)}' must be declared.");
                 _case = value;
             }
         }
@@ -237,20 +246,20 @@ namespace TFSAssist.Control.DataBase.Settings
             get
             {
                 if (_value == null)
-                    throw new TFSFieldsException(string.Format("Map=[{0}] is incorrect! Attribute '{1}' must be declared.", Case, nameof(Value)));
+                    throw new TFSFieldsException($"Map {nameof(Case)}=[{Case}] is incorrect! Attribute '{nameof(Value)}' must be declared.");
                 return _value;
             }
             set
             {
                 if (value == null)
-                    throw new TFSFieldsException(string.Format("Map=[{0}] is incorrect! Attribute '{1}' must be declared.", Case, nameof(Value)));
+                    throw new TFSFieldsException($"Map {nameof(Case)}=[{Case}] is incorrect! Attribute '{nameof(Value)}' must be declared.");
                 _value = value;
             }
         }
 
         public override string ToString()
         {
-            return string.Format("Case:[{0}]; Value=[{1}]", Case, Value);
+            return $"{nameof(Case)}:[{Case}]; Value=[{Value}]";
         }
     }
 }

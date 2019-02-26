@@ -160,12 +160,12 @@ namespace TFSAssist
                 DefaultBinding(MailExchangeUri, TextBox.TextProperty, tfsControl.Settings.MailOption.ExchangeUri);
                 //DefaultBinding(SetDebugLogging, ToggleButton.IsCheckedProperty, tfsControl.Settings.MailOption.DebugLogging);
 
-                LableParceSubject.Content = $"Regex pattern for parsing subject of letter ({nameof(tfsControl.Settings.MailOption.ParceSubject)}__*):";
+                LableParceSubject.Content = $"Regex pattern for parsing subject of mail ({nameof(tfsControl.Settings.MailOption.ParceSubject)}__*):";
                 RegexSubjectParce.Text = tfsControl.Settings.MailOption.ParceSubject[0].Value;
                 RegexSubjectParce.TextChanged += RegexSubjectParce_OnTextChanged;
                 ToolTipService.SetInitialShowDelay(RegexSubjectParce, timeoutToShowToolTip);
 
-                LableParceBody.Content = $"Regex pattern for parsing body of letter ({nameof(tfsControl.Settings.MailOption.ParceBody)}__*):";
+                LableParceBody.Content = $"Regex pattern for parsing body of mail ({nameof(tfsControl.Settings.MailOption.ParceBody)}__*):";
                 RegexBodyParce.Text = tfsControl.Settings.MailOption.ParceBody[0].Value;
                 RegexBodyParce.TextChanged += RegexBodyParce_OnTextChanged;
                 ToolTipService.SetInitialShowDelay(RegexBodyParce, timeoutToShowToolTip);
@@ -403,17 +403,17 @@ namespace TFSAssist
                     Foreground = Brushes.Aqua,
                     Background = Brushes.Black
                 });
-                if (!message.IsNullOrEmpty())
-                {
-                    HighlightTraces(par, message.Trim());
-                    if (!stackMessage.IsNullOrEmpty())
-                        par.Inlines.Add(new Line());
-                }
 
                 if (!stackMessage.IsNullOrEmpty())
-                    par.Inlines.Add(stackMessage.Trim());
+                {
+                    HighlightTraces(par, stackMessage);
+                }
+                else
+                {
+                    HighlightTraces(par, message);
+                }
 
-                par.LineHeight = 1;
+                par.LineHeight = 0.1;
                 LogTextBox.Document.Blocks.Add(par);
             });
         }

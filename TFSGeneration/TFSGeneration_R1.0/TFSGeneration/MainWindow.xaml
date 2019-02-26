@@ -197,7 +197,7 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Button FontSize="{DynamicResource TextFontSize}" Grid.Row="0" Padding="0" Click="ButtonClearLog_OnClick">Clear</Button>
-                    <RichTextBox FontSize="{DynamicResource TextFontSize}" Name="LogTextBox"
+                    <RichTextBox FontSize="{DynamicResource TextFontSize}" Name="LogTextBox" Padding="0"
                              Grid.Row="1"
                              VerticalAlignment="Stretch" 
                              HorizontalAlignment="Stretch" 

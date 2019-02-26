@@ -22,7 +22,7 @@ namespace TFSAssist.Control
         internal static string SettingsPath { get; }
         internal static string DataBasePath { get; }
         internal static string RegeditKey { get; }
-        static string NotifyDeSerializetionFailor { get; } = "File:\"{0}\" is incorrect and will be re-created after exit this apllication.";
+        static string NotifyDeSerializetionFailor { get; } = "File:\"{0}\" is incorrect and will be re-created if you close this apllication.";
         private LogPerformer _log;
 
         static TFSControl()
@@ -34,7 +34,7 @@ namespace TFSAssist.Control
             //ApplicationName = Assembly.GetCallingAssembly().GetName().Name;
             ApplicationName = Assembly.GetEntryAssembly().GetName().Name;
             ApplicationPath = Assembly.GetEntryAssembly().Location; 
-            RegeditKey = GetOrSetRegedit(ApplicationName, "Application implements reading letters and by their basis create TFS items.");
+            RegeditKey = GetOrSetRegedit(ApplicationName, "Application implements reading mails, and by their basis creating TFS items.");
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace TFSAssist.Control
             Initialize();
 
             if (Settings == null)
-                throw new ArgumentException(string.Format("'{0}' Is Not Initialized!", SettingsPath));
+                throw new ArgumentException($"Wrong file configuration from Path=\"{SettingsPath}\". Please check!");
 
             try
             {
@@ -216,10 +216,10 @@ namespace TFSAssist.Control
                 if (fileInfo.Exists)
                 {
                     int index = 0;
-                    string bakFileName = $"{settPath}_Incorrect.bak";
+                    string bakFileName = $"{settPath}_incorrect.bak";
                     while (File.Exists(bakFileName))
                     {
-                        bakFileName = $"{settPath}_Incorrect_{++index}.bak";
+                        bakFileName = $"{settPath}_incorrect_{++index}.bak";
                     }
                     File.Copy(settPath, bakFileName);
                 }
@@ -257,8 +257,7 @@ namespace TFSAssist.Control
             }
             catch (Exception exSer)
             {
-                _log.OnWriteLog(WarnSeverity.Error, string.Format("Cant't save Datas to=[{1}]{0}{2}", Environment.NewLine, DataBasePath, exSer.Message),
-                                     exSer);
+                _log.OnWriteLog(WarnSeverity.Error, $"Unable to save '{nameof(DataCollection)}' to specified path=[{DataBasePath}]", exSer);
             }
         }
 
@@ -295,8 +294,7 @@ namespace TFSAssist.Control
             }
             catch (Exception exSer)
             {
-                _log.OnWriteLog(WarnSeverity.Error, string.Format("Cant't save Settings to=[{1}]{0}{2}", Environment.NewLine, SettingsPath, exSer.Message),
-                    exSer);
+                _log.OnWriteLog(WarnSeverity.Error, $"Unable to save '{nameof(SettingsCollection)}' to specified path=[{SettingsPath}]", exSer);
             }
         }
 

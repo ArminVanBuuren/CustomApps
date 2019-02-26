@@ -42,16 +42,17 @@ namespace TFSAssist.Control
         /// <param name="lockProcess"></param>
         internal void OnWriteLog(WarnSeverity severity, string trace, Exception ex, bool lockProcess = false)
         {
-            string stackMessage = string.Empty;
-            GetInnerException(ex, ref stackMessage);
-            OnWriteLog(severity, trace, string.Format("{0}{1}{2}", stackMessage, Environment.NewLine, ex.StackTrace), lockProcess);
+            string stackInnerMessage = string.Empty;
+            if (ex.InnerException != null)
+                GetInnerException(ex.InnerException, ref stackInnerMessage);
+            OnWriteLog(severity, $"{trace}\r\n{ex.Message}", $"{trace} {GetFormatException(ex)}\r\n{ex.StackTrace}\r\n{stackInnerMessage}".Trim(), lockProcess);
         }
 
-        void GetInnerException(Exception ex, ref string result)
+        void GetInnerException(Exception ex, ref string innerMessage)
         {
             while (true)
             {
-                result = string.Format("{0}[{1}]:{2}", result.IsNullOrEmpty() ? string.Empty : result + Environment.NewLine, ex.GetType().Name, ex.Message);
+                innerMessage = $"{(innerMessage.IsNullOrEmpty() ? string.Empty : innerMessage + "\r\n")}{GetFormatException(ex)}";
 
                 if (ex.InnerException != null)
                 {
@@ -60,6 +61,11 @@ namespace TFSAssist.Control
                 }
                 break;
             }
+        }
+
+        string GetFormatException(Exception ex)
+        {
+            return $"{ex.GetType().Name}=[{ex.Message}]";
         }
 
         internal void OnWriteLog(string trace)
