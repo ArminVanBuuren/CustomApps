@@ -76,8 +76,7 @@ namespace TFSAssist
         }
 
         public MainWindow()
-        {
-            PresenterTitleContent = "If you smart, you can do it!";
+        {   
             // Проверить запущен ли уже экземпляр приложения, если запущен то не запускать новый
             List<Process> processExists = Process.GetProcesses().Where(p => p.ProcessName == nameof(TFSAssist)).ToList();
             if (processExists.Count > 1)
@@ -91,7 +90,7 @@ namespace TFSAssist
                 return;
             }
 
-
+            //PresenterTitleContent = "You can do it!";
             Resources.Add("STR_START", STR_START);
             System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor;
 
@@ -161,12 +160,12 @@ namespace TFSAssist
                 DefaultBinding(MailExchangeUri, TextBox.TextProperty, tfsControl.Settings.MailOption.ExchangeUri);
                 //DefaultBinding(SetDebugLogging, ToggleButton.IsCheckedProperty, tfsControl.Settings.MailOption.DebugLogging);
 
-                LableParceSubject.Content = $"Rexex for parce letter-subject ({nameof(tfsControl.Settings.MailOption.ParceSubject)}__*):";
+                LableParceSubject.Content = $"Regex pattern for parsing subject of letter ({nameof(tfsControl.Settings.MailOption.ParceSubject)}__*):";
                 RegexSubjectParce.Text = tfsControl.Settings.MailOption.ParceSubject[0].Value;
                 RegexSubjectParce.TextChanged += RegexSubjectParce_OnTextChanged;
                 ToolTipService.SetInitialShowDelay(RegexSubjectParce, timeoutToShowToolTip);
 
-                LableParceBody.Content = $"Regex for parce letter-body ({nameof(tfsControl.Settings.MailOption.ParceBody)}__*):";
+                LableParceBody.Content = $"Regex pattern for parsing body of letter ({nameof(tfsControl.Settings.MailOption.ParceBody)}__*):";
                 RegexBodyParce.Text = tfsControl.Settings.MailOption.ParceBody[0].Value;
                 RegexBodyParce.TextChanged += RegexBodyParce_OnTextChanged;
                 ToolTipService.SetInitialShowDelay(RegexBodyParce, timeoutToShowToolTip);
