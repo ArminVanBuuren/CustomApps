@@ -199,7 +199,7 @@ namespace TFSAssist
             }
             catch (Exception ex)
             {
-                Informing(WarnSeverity.Error, DateTime.Now,  ex.Message, $"{ex.Message}{Environment.NewLine}{ex.StackTrace}", true);
+                Informing(WarnSeverity.Error, DateTime.Now,  ex.Message, $"{ex.Message}\r\n{ex.StackTrace}", true);
                 DisableWindow();
             }
             finally
