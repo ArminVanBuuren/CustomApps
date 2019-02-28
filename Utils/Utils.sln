@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "Utils\Utils.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils.WinForm", "Utils.WinForm\Utils.WinForm.csproj", "{E4433085-2226-40E5-80E9-1AF136E70F5B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tester.Console", "Tester.Console\Tester.Console.csproj", "{276F1C76-19D4-4466-BA96-68F1548B4783}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tester", "Tester.Console\Tester.csproj", "{276F1C76-19D4-4466-BA96-68F1548B4783}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tester.WinForm", "Tester.WinForm\Tester.WinForm.csproj", "{28899798-ABD2-49A1-8F07-49C683663FBB}"
 EndProject

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Utils
 {
-    public static class Utility
+    public static class StringCustoms
     {
         /// <summary>
         /// Взвращает дефолтное значение если параметр равен null
@@ -37,6 +37,20 @@ namespace Utils
         public static bool IsNumber(this string value)
         {
             return int.TryParse(value, out _);
+        }
+
+        public static string TrimEnd(this string input, string suffixToRemove, StringComparison comparisonType = StringComparison.CurrentCultureIgnoreCase)
+        {
+            if (input != null && suffixToRemove != null && input.EndsWith(suffixToRemove, comparisonType))
+            {
+                return input.Substring(0, input.Length - suffixToRemove.Length);
+            }
+            else return input;
+        }
+
+        public static bool Like(this string input, string value)
+        {
+            return input.Equals(value, StringComparison.CurrentCultureIgnoreCase);
         }
     }
 }

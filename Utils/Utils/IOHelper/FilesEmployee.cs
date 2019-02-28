@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Utils.IOExploitation
+namespace Utils.IOHelper
 {
     public class FilesEmployee
     {

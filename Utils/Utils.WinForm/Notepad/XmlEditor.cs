@@ -9,6 +9,7 @@ using System.Xml;
 using FastColoredTextBoxNS;
 using Utils.IOExploitation;
 using Utils.XmlRtfStyle;
+using Utils.IOHelper;
 
 namespace Utils.WinForm.Notepad
 {
