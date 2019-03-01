@@ -18,6 +18,7 @@ using Utils.WinForm.DataGridViewHelper;
 using Utils.WinForm.Notepad;
 using XmlHelper = Utils.XmlHelper.XmlHelper;
 using Utils.WinForm.CustomProgressBar;
+using Utils.AssemblyHelper;
 
 namespace SPAFilter
 {
