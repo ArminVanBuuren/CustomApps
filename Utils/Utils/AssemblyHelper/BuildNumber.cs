@@ -8,17 +8,26 @@ namespace Utils.AssemblyHelper
 {
     public class BuildNumber : IComparable
     {
+        public bool IsAnyBuild { get; } = false;
         public int Major { get; private set; }
         public int Minor { get; private set; }
         public int Build { get; private set; }
         public int Revision { get; private set; }
 
-        private BuildNumber()
+        private BuildNumber(bool isAnyBuild = false)
         {
             //Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
             //DateTime buildDate = new DateTime(2000, 1, 1)
             //    .AddDays(version.Build).AddSeconds(version.Revision * 2);
             //string displayableVersion = $"{version} ({buildDate})";
+            IsAnyBuild = isAnyBuild;
+            if (IsAnyBuild)
+            {
+                Major = 1;
+                Minor = 0;
+                Build = 0;
+                Revision = 0;
+            }
         }
 
         public static bool TryParse(string input, out BuildNumber buildNumber)
@@ -48,23 +57,19 @@ namespace Utils.AssemblyHelper
         /// integer is less than zero</exception>
         public static BuildNumber Parse(string buildNumber)
         {
-            if (buildNumber == null) throw new ArgumentNullException("buildNumber");
+            if (buildNumber == null)
+                throw new ArgumentNullException("buildNumber");
 
-            var versions = buildNumber
-                .Split(new[] {'.'},
-                    StringSplitOptions.RemoveEmptyEntries)
-                .Select(v => v.Trim())
-                .ToList();
+            if (buildNumber.Equals("ANY", StringComparison.CurrentCultureIgnoreCase))
+                return new BuildNumber(true);
+
+            var versions = buildNumber.Split(new[] {'.'}, StringSplitOptions.RemoveEmptyEntries).Select(v => v.Trim()).ToList();
 
             if (versions.Count < 2)
-            {
                 throw new ArgumentException("BuildNumber string was too short");
-            }
 
             if (versions.Count > 4)
-            {
                 throw new ArgumentException("BuildNumber string was too long");
-            }
 
             return new BuildNumber
             {
@@ -80,32 +85,48 @@ namespace Utils.AssemblyHelper
             int version;
 
             if (!int.TryParse(input, out version))
-            {
                 throw new FormatException("buildNumber string was not in a correct format");
-            }
 
             if (version < 0)
-            {
                 throw new ArgumentOutOfRangeException("buildNumber", "Versions must be greater than or equal to zero");
-            }
 
             return version;
         }
 
         public int CompareTo(object obj)
         {
-            if (obj == null) return 1;
-            var buildNumber = obj as BuildNumber;
-            if (buildNumber == null) return 1;
-            if (ReferenceEquals(this, buildNumber)) return 0;
+            if (obj == null)
+                return 1;
 
-            return (Major == buildNumber.Major)
-                ? (Minor == buildNumber.Minor)
-                    ? (Build == buildNumber.Build)
-                        ? Revision.CompareTo(buildNumber.Revision)
-                        : Build.CompareTo(buildNumber.Build)
-                    : Minor.CompareTo(buildNumber.Minor)
-                : Major.CompareTo(buildNumber.Major);
+            var buildNumber = obj as BuildNumber;
+            if (buildNumber == null)
+                return 1;
+
+            if (this.IsAnyBuild || buildNumber.IsAnyBuild)
+                return 0;
+
+            if (ReferenceEquals(this, buildNumber))
+                return 0;
+
+
+            if (Major == buildNumber.Major)
+            {
+                if (Minor == buildNumber.Minor)
+                {
+                    if (Build == buildNumber.Build)
+                        return Revision.CompareTo(buildNumber.Revision);
+                    else
+                        return Build.CompareTo(buildNumber.Build);
+                }
+                else
+                {
+                    return Minor.CompareTo(buildNumber.Minor);
+                }
+            }
+            else
+            {
+                return Major.CompareTo(buildNumber.Major);
+            }
         }
 
         public static bool operator >(BuildNumber first, BuildNumber second)
@@ -138,9 +159,7 @@ namespace Utils.AssemblyHelper
 
         public override string ToString()
         {
-            return string.Format("{0}.{1}{2}{3}", Major, Minor,
-                Build < 0 ? "" : "." + Build,
-                Revision < 0 ? "" : "." + Revision);
+            return string.Format("{0}.{1}{2}{3}", Major, Minor, Build < 0 ? "" : "." + Build, Revision < 0 ? "" : "." + Revision);
         }
     }
 }

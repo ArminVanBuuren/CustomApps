@@ -45,6 +45,10 @@
   <ItemGroup>
     <Compile Include="AssemblyHelper\BuildNumber.cs" />
     <Compile Include="AssemblyHelper\Customs.cs" />
+    <Compile Include="BuildUpdater\BuildPack.cs" />
+    <Compile Include="BuildUpdater\BuildPackCollection.cs" />
+    <Compile Include="BuildUpdater\Hasher.cs" />
+    <Compile Include="BuildUpdater\UploadProgress.cs" />
     <Compile Include="CollectionHelper\CollectionHelper.cs" />
     <Compile Include="CollectionHelper\DuplicateDictionary.cs" />
     <Compile Include="ConditionEx\Base\Arguments.cs" />

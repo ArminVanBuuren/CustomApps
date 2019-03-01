@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Utils.CollectionHelper
 {
     [Serializable]
-    public class DuplicateDictionary<TKey, TValue> : IDictionary<TKey, TValue>, IDictionary, ISerializable
+    public class DuplicateDictionary<TKey, TValue> : IDictionary<TKey, List<TValue>>, IDictionary, ISerializable, IDisposable
     {
         Dictionary<TKey, List<TValue>> _values;
 
@@ -50,18 +50,20 @@ namespace Utils.CollectionHelper
             get => ((IDictionary)_values)[key];
             set => ((IDictionary)_values)[key] = value; 
         }
-        TValue IDictionary<TKey, TValue>.this[TKey key]
-        {   get => ((IDictionary<TKey, TValue>)_values)[key];
-            set => ((IDictionary<TKey, TValue>)_values)[key] = value;
+
+        List<TValue> IDictionary<TKey, List<TValue>>.this[TKey key]
+        {
+            get => ((IDictionary<TKey, List<TValue>>) _values)[key];
+            set => ((IDictionary<TKey, List<TValue>>) _values)[key] = value;
         }
 
-        public ICollection<TKey> Keys => ((IDictionary<TKey, TValue>)_values).Keys;
+        public ICollection<TKey> Keys => ((IDictionary<TKey, List<TValue>>)_values).Keys;
 
-        public ICollection<TValue> Values => ((IDictionary<TKey, TValue>) _values).Values;
+        public ICollection<List<TValue>> Values => ((IDictionary<TKey, List<TValue>>) _values).Values;
 
         public int Count => _values.Count;
 
-        public bool IsReadOnly => ((IDictionary<TKey, TValue>)_values).IsReadOnly;
+        public bool IsReadOnly => ((IDictionary<TKey, List<TValue>>)_values).IsReadOnly;
 
         public bool IsFixedSize => ((IDictionary)_values).IsFixedSize;
 
@@ -72,6 +74,19 @@ namespace Utils.CollectionHelper
         ICollection IDictionary.Keys => ((IDictionary)_values).Keys;
 
         ICollection IDictionary.Values => ((IDictionary)_values).Values;
+        
+
+        public void Add(TKey key, List<TValue> value)
+        {
+            if (_values.TryGetValue(key, out List<TValue> tValue))
+            {
+                tValue.AddRange(value);
+            }
+            else
+            {
+                _values.Add(key, value);
+            }
+        }
 
         public void Add(TKey key, TValue value)
         {
@@ -85,7 +100,7 @@ namespace Utils.CollectionHelper
             }
         }
 
-        public void Add(KeyValuePair<TKey, TValue> item)
+        public void Add(KeyValuePair<TKey, List<TValue>> item)
         {
             Add(item.Key, item.Value);
         }
@@ -103,7 +118,7 @@ namespace Utils.CollectionHelper
             _values.Clear();
         }
 
-        public bool Contains(KeyValuePair<TKey, TValue> item)
+        public bool Contains(KeyValuePair<TKey, List<TValue>> item)
         {
             return ((IDictionary)_values).Contains(item);
         }
@@ -115,12 +130,12 @@ namespace Utils.CollectionHelper
 
         public bool ContainsKey(TKey key)
         {
-            return ((IDictionary<TKey, TValue>)_values).ContainsKey(key);
+            return ((IDictionary<TKey, List<TValue>>)_values).ContainsKey(key);
         }
 
-        public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
+        public void CopyTo(KeyValuePair<TKey, List<TValue>>[] array, int arrayIndex)
         {
-            ((IDictionary<TKey, TValue>)_values).CopyTo(array, arrayIndex);
+            ((IDictionary<TKey, List<TValue>>)_values).CopyTo(array, arrayIndex);
         }
 
         public void CopyTo(Array array, int index)
@@ -128,9 +143,14 @@ namespace Utils.CollectionHelper
             ((IDictionary)_values).CopyTo(array, index);
         }
 
-        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
+        public void Dispose()
         {
-            return ((IDictionary<TKey, TValue>)_values).GetEnumerator();
+            ((IDisposable)_values).Dispose();
+        }
+
+        public IEnumerator<KeyValuePair<TKey, List<TValue>>> GetEnumerator()
+        {
+            return ((IDictionary<TKey, List<TValue>>)_values).GetEnumerator();
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -140,12 +160,12 @@ namespace Utils.CollectionHelper
 
         public bool Remove(TKey key)
         {
-            return ((IDictionary<TKey, TValue>)_values).Remove(key);
+            return ((IDictionary<TKey, List<TValue>>)_values).Remove(key);
         }
 
-        public bool Remove(KeyValuePair<TKey, TValue> item)
+        public bool Remove(KeyValuePair<TKey, List<TValue>> item)
         {
-            return ((IDictionary<TKey, TValue>)_values).Remove(item);
+            return ((IDictionary<TKey, List<TValue>>)_values).Remove(item);
         }
 
         public void Remove(object key)
@@ -153,9 +173,9 @@ namespace Utils.CollectionHelper
             ((IDictionary)_values).Remove(key);
         }
 
-        public bool TryGetValue(TKey key, out TValue value)
+        public bool TryGetValue(TKey key, out List<TValue> value)
         {
-            return ((IDictionary<TKey, TValue>)_values).TryGetValue(key, out value);
+            return ((IDictionary<TKey, List<TValue>>)_values).TryGetValue(key, out value);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
