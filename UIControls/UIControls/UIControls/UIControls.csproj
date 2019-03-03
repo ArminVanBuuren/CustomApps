@@ -72,9 +72,6 @@
     <Compile Include="Utils\WOSVersion.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Images\overwolf.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Page Include="MainControl\LoadResource.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -97,6 +94,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Images\" />
     <Folder Include="Styles\Default\" />
     <Folder Include="Styles\Simple\" />
     <Folder Include="Themes\DarkBlue\" />
@@ -106,6 +104,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
