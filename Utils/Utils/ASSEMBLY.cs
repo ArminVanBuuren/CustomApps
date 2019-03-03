@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Utils.AssemblyHelper
+namespace Utils
 {
-    public static class Customs
+    public static class ASSEMBLY
     {
         public static string ApplicationName = Assembly.GetEntryAssembly().GetName().Name;
         public static string ApplicationPath = Assembly.GetEntryAssembly().Location;

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Reflection;
-using Utils;
+﻿using System.Reflection;
 using Utils.BuildUpdater;
 
-namespace Console
+namespace Tester
 {
     class Program
     {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Utils
 {
-    public static class Regedit
+    public static class REGEDIT
     {/// <summary>
      /// Создание или получение записи в реестре с сгенеринным ключем и данными о приложении
      /// </summary>

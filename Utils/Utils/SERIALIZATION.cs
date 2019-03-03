@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace Utils.SerializationHelper
+namespace Utils
 {
-    public static class Customs
+    public static class SERIALIZATION
     {
         /// <summary>
         /// Get root node element name for type. Determines and returns the name of the XmlElement that should represent instances of the given type

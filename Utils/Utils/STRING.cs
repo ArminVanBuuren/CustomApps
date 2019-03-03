@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Utils
 {
-    public static class StringCustoms
+    public static class STRING
     {
         /// <summary>
         /// Взвращает дефолтное значение если параметр равен null

@@ -4,7 +4,6 @@ using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using Utils.ConditionEx;
 using Utils;
-using static Utils.Customs;
 
 namespace TFSAssist.Control.DataBase.Settings
 {

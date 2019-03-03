@@ -6,8 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using Utils.CollectionHelper;
-using Utils.IOExploitation;
-using Utils.IOHelper;
 
 namespace Utils.XmlHelper
 {
@@ -53,7 +51,7 @@ namespace Utils.XmlHelper
 
         public static XmlDocument LoadXml(string path, bool convertToLower = false)
         {
-            string context = FilesEmployee.SafeReadFile(path, convertToLower);
+            string context = IO.SafeReadFile(path, convertToLower);
             if (!string.IsNullOrEmpty(context) && context.TrimStart().StartsWith("<"))
             {
                 try
@@ -74,7 +72,7 @@ namespace Utils.XmlHelper
         public static bool IsXml(string path, out XmlDocument xmldoc, out string source)
         {
             xmldoc = null;
-            source = FilesEmployee.SafeReadFile(path);
+            source = IO.SafeReadFile(path);
 
             if (!IsXml(source, out xmldoc))
                 return false;

@@ -13,7 +13,7 @@ using System.Xml.Serialization;
 
 namespace Utils
 {
-	public static class IntCustoms
+	public static class INT
 	{
         private static Random random = new Random();
         const string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";

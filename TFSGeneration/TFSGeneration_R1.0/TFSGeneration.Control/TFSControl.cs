@@ -11,7 +11,6 @@ using Microsoft.TeamFoundation.WorkItemTracking.Client;
 using TFSAssist.Control.DataBase.Datas;
 using TFSAssist.Control.DataBase.Settings;
 using Utils;
-using static Utils.Customs;
 
 namespace TFSAssist.Control
 {

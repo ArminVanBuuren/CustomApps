@@ -7,9 +7,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Xml;
 using FastColoredTextBoxNS;
-using Utils.IOExploitation;
 using Utils.XmlRtfStyle;
-using Utils.IOHelper;
 
 namespace Utils.WinForm.Notepad
 {
@@ -93,7 +91,7 @@ namespace Utils.WinForm.Notepad
         {
             int tryCount = 0;
             result = null;
-            while (!FilesEmployee.IsFileReady(path))
+            while (!IO.IsFileReady(path))
             {
                 if (tryCount >= 5)
                     return false;
@@ -238,7 +236,7 @@ namespace Utils.WinForm.Notepad
 
                         if (XmlHelper.XmlHelper.IsXml(FCTextBox.Text, out XmlDocument document))
                         {
-                            FilesEmployee.WriteFile(Path, FCTextBox.Text);
+                            IO.WriteFile(Path, FCTextBox.Text);
                         }
                         else
                         {

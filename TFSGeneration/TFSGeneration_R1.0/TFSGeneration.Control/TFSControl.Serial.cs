@@ -9,7 +9,8 @@ using TFSAssist.Control.DataBase.Datas;
 using TFSAssist.Control.DataBase.Settings;
 using Utils;
 using Utils.Crypto;
-using static Utils.Customs;
+using static Utils.ASSEMBLY;
+using static Utils.REGEDIT;
 
 namespace TFSAssist.Control
 {
