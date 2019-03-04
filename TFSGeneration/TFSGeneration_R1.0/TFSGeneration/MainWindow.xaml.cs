@@ -90,7 +90,6 @@ namespace TFSAssist
                 return;
             }
 
-            //PresenterTitleContent = "You can do it!";
             Resources.Add("STR_START", STR_START);
             System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor;
 

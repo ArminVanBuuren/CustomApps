@@ -8,39 +8,52 @@ namespace Utils.BuildUpdater
 {
     public interface IUploadProgress
     {
+        event UploadBuildHandler OnFetchComplete;
+        bool IsUploaded { get; }
+        long UploadedBytes { get; }
+        long TotalBytes { get; }
+        int ProgressPercent { get; }
         string GetProgressString();
-        int GetProgressPercent();
-        long GetUploadedBytes();
-        long GetTotalBytes();
+        void Fetch();
+        void Commit();
+        void RemoveTempFiles();
     }
 
-    public class UploadProgress : IUploadProgress
+    [Serializable]
+    public abstract class UploadProgress
     {
-        internal virtual bool Upload()
+        public virtual bool IsUploaded { get; protected set; } = false;
+        public virtual long UploadedBytes { get; protected set; } = 0l;
+        public virtual long TotalBytes { get; protected set; } = 0l;
+
+        public virtual int ProgressPercent
         {
-            return false;
+            get
+            {
+                FormatBytes(UploadedBytes, out double upload);
+                FormatBytes(TotalBytes, out double total);
+                return int.Parse(((upload / total) * 100).ToString());
+            }
         }
 
-        public virtual int GetProgressPercent()
+        public virtual void Fetch()
         {
-            FormatBytes(GetUploadedBytes(), out double upload);
-            FormatBytes(GetTotalBytes(), out double total);
-            return int.Parse(((upload / total) * 100).ToString());
+
+        }
+
+        public virtual void Commit()
+        {
+
+        }
+
+        public virtual void RemoveTempFiles()
+        {
+
         }
 
         public virtual string GetProgressString()
         {
-            return $"Downloaded {FormatBytes(GetUploadedBytes(), out double result)} of {FormatBytes(GetTotalBytes(), out double result2)}";
-        }
-
-        public virtual long GetTotalBytes()
-        {
-            return long.MinValue;
-        }
-
-        public virtual long GetUploadedBytes()
-        {
-            return long.MinValue;
+            return $"Downloaded {FormatBytes(UploadedBytes, out double result)} of {FormatBytes(TotalBytes, out double result2)}";
         }
 
         /// <summary>

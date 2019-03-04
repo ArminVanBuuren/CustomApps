@@ -9,7 +9,7 @@
                       Style="{DynamicResource VSUIWindowStyle1}"
                       Icon="Images/Rick.ico"    
                       MinWidth="520" Width="555"
-                      MinHeight="472" Height="472"
+                      MinHeight="474" Height="474"
                       ResizeMode="CanResizeWithGrip"
                       BorderBrush="#FF1087BF"
 		>
@@ -50,9 +50,6 @@
             <RowDefinition MinHeight="43" MaxHeight="43" />
             <RowDefinition MinHeight="8" MaxHeight="8" />
         </Grid.RowDefinitions>
-
-
-
 
         <TabControl Grid.Row="0" Margin="10 0 10 0" FontSize="{DynamicResource TextFontSize}" >
             <TabItem Header="Mail Options"  >
@@ -104,10 +101,18 @@
                             <TextBox      Grid.Column="4" Grid.Row="5" Name="FilterSubject"     Margin="0 4 4 4"  ToolTip="Filter email's subject by regular expression" />
                         </Grid>
 
-                        <Border BorderBrush="#000" BorderThickness="0,0,0,1" Margin="0,0,0,-6"/>
-                        <Border BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="0,0,0,-5"/>
-
-                        <Grid Margin="0 10 0 5">
+                        <!--<StackPanel Margin="0 2 0 0">
+                            <StackPanel.Effect>
+                                <BlurEffect Radius="6"/>
+                            </StackPanel.Effect> 
+                            <Border BorderBrush="Cyan" BorderThickness="0,0,0,7" Margin="0"/>
+                            <Border BorderBrush="#000" BorderThickness="0,0,0,1" Margin="1,0,0,0"/>
+                            <Border BorderBrush="#FFF86BFF" BorderThickness="0,0,0,1" Margin="1,0,0,0"/>
+                        </StackPanel>-->
+                        <Border BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="0 5 0 0"/>
+                        <Border BorderBrush="#000" BorderThickness="0,0,0,1" Margin="1,0,0,0"/>
+                        
+                        <Grid Margin="0 5 0 5">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
                                 <RowDefinition/>

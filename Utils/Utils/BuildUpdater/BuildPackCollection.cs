@@ -2,123 +2,167 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Utils.BuildUpdater
 {
+    [Serializable]
     public class BuildPackCollection : UploadProgress, IUploadProgress, IEnumerable<BuildPack>, IEnumerator<BuildPack>, IDisposable
     {
+        public event UploadBuildHandler OnFetchComplete;
         int index = -1;
         private List<BuildPack> _collection = new List<BuildPack>();
+        private Assembly _runningApp;
+        private object _lock = new object();
+        private int fetchCompleteCount = 0;
+        private bool _inProgress = false;
 
-        const string argument_start = "/C choice /C Y /N /D Y /T 4 & Start \"\" /D \"{0}\" \"{1}\"";
-        const string argument_update = "/C choice /C Y /N /D Y /T 4 & Del /F /Q \"{0}\" & choice /C Y /N /D Y /T 2 & Move /Y \"{1}\" \"{2}\"";
-        const string argument_update_start = argument_update + " & Start \"\" /D \"{3}\" \"{4}\" {5}";
-        const string argument_add = "/C choice /C Y /N /D Y /T 4 & Move /Y \"{0}\" \"{1}\"";
-        const string argument_remove = "/C choice /C Y /N /D Y /T 4 & Del /F /Q \"{0}\"";
-        
+        public override bool IsUploaded
+        {
+            get
+            {
+                foreach (BuildPack build in _collection)
+                {
+                    if (!build.IsUploaded)
+                        return false;
+                }
 
-        
+                return true;
+            }
+        }
+
+        public BuildPackCollection(Assembly runningApp)
+        {
+            _runningApp = runningApp;
+        }
+
         internal void Add(LocalAssemblyInfo currentFile, ServerAssemblyInfo serverFile)
         {
-            _collection.Add(new BuildPack(currentFile, serverFile));
+            BuildPack build = new BuildPack(currentFile, serverFile);
+            build.OnFetchComplete += Build_OnFetchComplete;
+            _collection.Add(build);
         }
 
-        internal bool Update()
+        BuildUpdaterProcessingArgs fetchArgs;
+
+        public override void Fetch()
         {
-            Upload();
-            //UpdateUploded();
-            return true;
+            lock (_lock)
+            {
+                if (!_inProgress)
+                {
+                    fetchArgs = new BuildUpdaterProcessingArgs(this);
+                    _inProgress = true;
+                    fetchCompleteCount = 0;
+                    foreach (BuildPack build in _collection)
+                    {
+                        build.Fetch();
+                    }
+                }
+            }
         }
 
+        private void Build_OnFetchComplete(object sender, BuildUpdaterProcessingArgs e)
+        {
+            lock (_lock)
+            {
+                fetchCompleteCount++;
 
-        internal override bool Upload()
+                if (e.Error != null)
+                    fetchArgs.InnerException.Add(e.Error);
+
+                if (_collection.Count != fetchCompleteCount)
+                    return;
+
+                if(fetchArgs.InnerException.Count > 0)
+                    fetchArgs.Error = new Exception("Catched exception when download files from server!");
+
+                _inProgress = false;
+                OnFetchComplete.Invoke(this, fetchArgs);
+            }
+        }
+
+        public override void Commit()
+        {
+            if(!IsUploaded)
+                return;
+
+            BuildPack runningApp = null;
+            foreach (BuildPack build in _collection)
+            {
+                if (build.CurrentFile.IsExecutingFile)
+                {
+                    runningApp = build;
+                    continue;
+                }
+
+                build.Commit();
+            }
+
+            if (runningApp != null)
+                BuildPack.EndOfCommit(runningApp);
+            else
+                BuildPack.EndOfCommit(_runningApp);
+
+            Process.GetCurrentProcess().Kill();
+        }
+
+        public override void RemoveTempFiles()
         {
             foreach (BuildPack build in _collection)
             {
-                
-            }
-
-            return false;
-        }
-
-        public bool UpdateUploded()
-        {
-            foreach (BuildPack build in _collection)
-            {
-
-            }
-
-            return false;
-        }
-
-        void UpdateApplications(List<FileAssemblyInfo> updatesList)
-        {
-            string argument_complete = "";
-
-            foreach (FileAssemblyInfo file in updatesList)
-            {
-                //if (file.Type == BuldPerformerType.CreateOrUpdate || file.Type == BuldPerformerType.Update || file.Type == BuldPerformerType.RollBack)
-                //{
-                //    //argument_complete = string.Format(argument_update, currentPaths[i], tempFilePaths[i], newPaths[i]);
-                //}
-                //else if ()
-                //{
-
-                //}
+                build.RemoveTempFiles();
             }
         }
 
-        void StartProcess(string arguments)
+        public override int ProgressPercent
         {
-            ProcessStartInfo cmd = new ProcessStartInfo
+            get
             {
-                Arguments = arguments,
-                WindowStyle = ProcessWindowStyle.Hidden,
-                CreateNoWindow = true,
-                FileName = "cmd.exe"
-            };
-            Process.Start(cmd);
+                int allFileProgress = 0;
+                foreach (BuildPack build in _collection)
+                {
+                    allFileProgress += build.ProgressPercent;
+                }
+
+                return allFileProgress / _collection.Count;
+            }
+        }
+
+        public override long UploadedBytes
+        {
+            get
+            {
+                long allFileUploads = 0l;
+                foreach (BuildPack build in _collection)
+                {
+                    allFileUploads += build.UploadedBytes;
+                }
+
+                return allFileUploads;
+            }
+        }
+
+        public override long TotalBytes
+        {
+            get
+            {
+                long allFileTotla = 0l;
+                foreach (BuildPack build in _collection)
+                {
+                    allFileTotla += build.TotalBytes;
+                }
+
+                return allFileTotla;
+            }
         }
 
         
-
-        public override int GetProgressPercent()
-        {
-            int allFileProgress = 0;
-            foreach (BuildPack build in _collection)
-            {
-                allFileProgress += build.GetProgressPercent();
-            }
-
-            return allFileProgress / _collection.Count;
-        }
-
-        public override long GetUploadedBytes()
-        {
-            long allFileUploads = 0l;
-            foreach (BuildPack build in _collection)
-            {
-                allFileUploads += build.GetUploadedBytes();
-            }
-
-            return allFileUploads;
-        }
-
-        public override long GetTotalBytes()
-        {
-            long allFileTotla = 0l;
-            foreach (BuildPack build in _collection)
-            {
-                allFileTotla += build.GetTotalBytes();
-            }
-
-            return allFileTotla;
-        }
-
-
         public int Count => _collection.Count;
 
         object IEnumerator.Current => _collection[index];
@@ -154,6 +198,11 @@ namespace Utils.BuildUpdater
         void IDisposable.Dispose()
         {
             ((IDisposable)_collection).Dispose();
+        }
+
+        public override string ToString()
+        {
+            return $"Type=[{this.GetType()}] Count=[{Count}]";
         }
     }
 }

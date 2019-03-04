@@ -11,6 +11,7 @@ using Utils.CollectionHelper;
 
 namespace Utils.BuildUpdater
 {
+    [Serializable]
     public enum BuldPerformerType
     {
         None = 0,
@@ -19,6 +20,8 @@ namespace Utils.BuildUpdater
         RollBack = 4,
         Remove = 8
     }
+
+    [Serializable]
     public abstract class FileAssemblyInfo
     {
         protected static BuildNumber GetBuild(string version)
@@ -32,56 +35,54 @@ namespace Utils.BuildUpdater
         }
 
         public BuildNumber Build { get; protected set; }
+        public string FilePath { get; protected set; }
         public string FileName { get; protected set; }
-        public string Description { get; protected set; }
+
+        public override string ToString()
+        {
+            return $"Version=[{Build.ToString()}] File=[{FilePath}]";
+        }
     }
 
+    [Serializable]
     public sealed class LocalAssemblyInfo : FileAssemblyInfo
     {
-        public string FilePath { get; }
-        public LocalAssemblyInfo(FileVersionInfo fileInfo, string directoryPath)
+        public bool IsExecutingFile { get; }
+
+        public LocalAssemblyInfo(string file, string assemblyDirPath, bool isExecFile = false)
         {
+            FileVersionInfo fileInfo = FileVersionInfo.GetVersionInfo(file);
             Build = GetBuild(fileInfo.FileVersion);
-            FileName = fileInfo.OriginalFilename ?? Path.GetFileName(fileInfo.FileName);
-            FilePath = Path.Combine(directoryPath, FileName);
-            Description = string.Empty;
+            FilePath = file;
+            FileName = file.Replace(assemblyDirPath, string.Empty).Trim('\\');
+            IsExecutingFile = isExecFile;
         }
 
-        public LocalAssemblyInfo(string version, string directoryPath, string fileName, string description = null)
+        public override string ToString()
         {
-            Build = GetBuild(version);
-            FileName = fileName;
-            FilePath = Path.Combine(directoryPath, FileName);
-            Description = description;
+            return base.ToString();
         }
     }
 
+    [Serializable]
     public sealed class ServerAssemblyInfo : FileAssemblyInfo
     {
         public Uri UriFilePath { get; }
+        public string DestinationFilePath { get; }
         public BuldPerformerType Type { get; }
-        public string MP5 { get; }
+        public string MD5 { get; }
+        public string Description { get; }
 
-        public ServerAssemblyInfo(DuplicateDictionary<string, string> dictionary, Uri server)
+        public ServerAssemblyInfo(DuplicateDictionary<string, string> collectionAttr, Uri server, string assemblyDirPath)
         {
-            string versionStr = dictionary["Version"]?.First() ?? "1.0.0.0";
+            string versionStr = collectionAttr["Version"]?.First() ?? "1.0.0.0";
             Build = GetBuild(versionStr);
-            FileName = dictionary["FileName"]?.First() ?? string.Empty;
+            FileName = collectionAttr["Location"]?.First() ?? string.Empty;
+            DestinationFilePath = Path.Combine(assemblyDirPath, FileName);
+            Description = collectionAttr["Description"]?.First() ?? string.Empty;
+            MD5 = collectionAttr["MD5"]?.First() ?? string.Empty;
 
-            string dirPath = dictionary["DirPath"]?.First();
-            if (!dirPath.IsNullOrEmptyTrim())
-            {
-                UriFilePath = new Uri($"{server.AbsoluteUri}/{dirPath}/{FileName}");
-            }
-            else
-            {
-                UriFilePath = new Uri($"{server.AbsoluteUri}/{FileName}");
-            }
-            
-            Description = dictionary["Description"]?.First() ?? string.Empty;
-            MP5 = dictionary["MP5"]?.First() ?? string.Empty;
-
-            string buildPerfType = dictionary["Type"]?.First() ?? string.Empty;
+            string buildPerfType = collectionAttr["Type"]?.First() ?? string.Empty;
             if (buildPerfType.Like("Update"))
                 Type = BuldPerformerType.Update;
             else if (buildPerfType.Like("RollBack"))
@@ -92,8 +93,17 @@ namespace Utils.BuildUpdater
                 Type = BuldPerformerType.Remove;
             else
                 Type = BuldPerformerType.None;
+
+            if (Type != BuldPerformerType.Remove)
+            {
+                FilePath = Path.GetTempFileName(); // Gets the temp file path for the downloaded file
+                UriFilePath = new Uri($"{server.AbsoluteUri}/{FileName.Replace("\\", "/")}");
+            }
+        }
+
+        public override string ToString()
+        {
+            return $"{base.ToString()} Uri=[{UriFilePath}] Destination=[{DestinationFilePath}]";
         }
     }
-
-
 }

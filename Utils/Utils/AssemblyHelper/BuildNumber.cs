@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Utils.AssemblyHelper
 {
+    [Serializable]
     public class BuildNumber : IComparable
     {
         public bool IsAnyBuild { get; } = false;

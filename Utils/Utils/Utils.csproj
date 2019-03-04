@@ -45,8 +45,11 @@
   <ItemGroup>
     <Compile Include="AssemblyHelper\BuildNumber.cs" />
     <Compile Include="ASSEMBLY.cs" />
-    <Compile Include="BuildUpdater\BuildPack.cs" />
+    <Compile Include="BuildUpdater\BuildPack.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="BuildUpdater\BuildPackCollection.cs" />
+    <Compile Include="BuildUpdater\BuildUnloader.cs" />
     <Compile Include="BuildUpdater\Hasher.cs" />
     <Compile Include="BuildUpdater\UploadProgress.cs" />
     <Compile Include="CollectionHelper\CollectionHelper.cs" />
