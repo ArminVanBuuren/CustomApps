@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace Utils.BuildUpdater
 {
+    [Serializable]
     public class WebDownload : WebClient
     {
         /// <summary>

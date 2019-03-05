@@ -8,7 +8,8 @@ using System.Net;
 using System.Reflection;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
-using System.Threading.Tasks;
+//using System.Threading;
+//using System.Threading.Tasks;
 using System.Timers;
 using System.Xml;
 using Utils.AssemblyHelper;
@@ -166,10 +167,8 @@ namespace Utils.BuildUpdater
             {
                 OnProcessingError?.Invoke(this, new BuildUpdaterProcessingArgs(ex));
             }
-            finally
-            {
-                _stopWatch.Enabled = true;
-            }
+
+            _stopWatch.Enabled = true;
         }
 
         private void DeltaList_OnFetchComplete(object sender, BuildUpdaterProcessingArgs e)
@@ -179,7 +178,6 @@ namespace Utils.BuildUpdater
                 if (sender == null || deltaList == null || !(sender is BuildPackCollection) || ((BuildPackCollection) sender) != deltaList)
                     return;
 
-                var eventListeners = UpdateOnNewVersion?.GetInvocationList();
                 if (!deltaList.IsUploaded || e.Error != null)
                 {
                     deltaList.RemoveTempFiles();
@@ -187,7 +185,9 @@ namespace Utils.BuildUpdater
                     _stopWatch.Enabled = true;
                     return;
                 }
-                else if (eventListeners == null || eventListeners.Count() == 0)
+
+                var eventListeners = UpdateOnNewVersion?.GetInvocationList();
+                if (eventListeners == null || eventListeners.Count() == 0)
                 {
                     _stopWatch.Enabled = true;
                     return;
@@ -214,6 +214,11 @@ namespace Utils.BuildUpdater
             }
 
             _stopWatch.Enabled = true;
+        }
+
+        void EnableTimer()
+        {
+
         }
 
         /// <summary>
