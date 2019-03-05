@@ -75,150 +75,164 @@ namespace Utils.BuildUpdater
         private Uri _uriToServerProject;
         private Assembly _runningApp;
         private BuildPackCollection deltaList;
+        private int _updateMSec;
+        object _lock = new object();
 
         public BuildUpdater(Assembly runningApp, string uriProject, int updateSec = 10)
         {
             _runningApp = runningApp;
             _uriToServerProject = new Uri(uriProject.TrimEnd('/'));
             _xmlVersionPath = new Uri(_uriToServerProject + "/version.xml");
+            _updateMSec = updateSec * 1000;
 
-            _stopWatch = new Timer
-            {
-                Interval = updateSec * 1000
-            };
-            
+            _stopWatch = new Timer();
             _stopWatch.Elapsed += GetNewestBuildsVersion;
+            _stopWatch.Interval = _updateMSec;
             _stopWatch.AutoReset = false;
             _stopWatch.Enabled = true;
         }
 
+        public void CheckNewVersion()
+        {
+            lock (_lock)
+            {
+                if (_stopWatch.Interval != _updateMSec)
+                    _stopWatch.Interval = _updateMSec;
+                if (_stopWatch.Enabled == true)
+                    _stopWatch.Enabled = false;
+            }
+
+            GetNewestBuildsVersion(this, null);
+        }
+
         private void GetNewestBuildsVersion(object sender, ElapsedEventArgs e)
         {
-            try
+            lock (_lock)
             {
-                if (UpdateOnNewVersion == null)
+                try
                 {
-                    _stopWatch.Enabled = true;
-                    return;
-                }
-
-                Dictionary<string, LocalAssemblyInfo> collectionFiles = new Dictionary<string, LocalAssemblyInfo>(StringComparer.CurrentCultureIgnoreCase);
-                string assemblyDirPath = _runningApp.GetDirectory();
-                foreach (string file in Directory.GetFiles(assemblyDirPath, "*.*", SearchOption.AllDirectories))
-                {
-                    LocalAssemblyInfo localFileInfo = new LocalAssemblyInfo(file, assemblyDirPath, file.Like(_runningApp.Location));
-                    collectionFiles.Add(localFileInfo.FileName, localFileInfo);
-                }
-
-                HttpWebRequest req = (HttpWebRequest) WebRequest.Create(_xmlVersionPath.AbsoluteUri);
-                HttpWebResponse resp = (HttpWebResponse) req.GetResponse();
-                resp.Close();
-
-                if (resp.StatusCode == HttpStatusCode.OK)
-                {
-                    ServicePointManager.ServerCertificateValidationCallback = (s, ce, ch, ssl) => true;
-                    XmlDocument doc = new XmlDocument();
-                    doc.Load(_xmlVersionPath.AbsoluteUri);
-
-
-                    XmlNodeList updateNodes = doc.DocumentElement.SelectNodes("/Versions/Build");
-                    List<ServerAssemblyInfo> serverVersions = new List<ServerAssemblyInfo>();
-                    foreach (XmlNode updateNode in updateNodes)
+                    if (UpdateOnNewVersion == null)
                     {
-                        if (updateNode == null)
-                            continue;
-
-                        var getNodesWithoutCase = updateNode.GetChildNodes(StringComparer.CurrentCultureIgnoreCase);
-                        serverVersions.Add(new ServerAssemblyInfo(getNodesWithoutCase, _uriToServerProject, assemblyDirPath));
-                    }
-
-                    deltaList = new BuildPackCollection(_runningApp);
-                    foreach (ServerAssemblyInfo server in serverVersions)
-                    {
-                        if (collectionFiles.TryGetValue(server.FileName, out LocalAssemblyInfo current))
-                        {
-                            if ((server.Type == BuldPerformerType.Update || server.Type == BuldPerformerType.CreateOrUpdate) && server.Build > current.Build)
-                                deltaList.Add(current, server);
-                            else if (server.Type == BuldPerformerType.RollBack && server.Build < current.Build)
-                                deltaList.Add(current, server);
-                            else if (server.Type == BuldPerformerType.Remove && server.Build == current.Build)
-                                deltaList.Add(current, server);
-                        }
-                        else if (server.Type == BuldPerformerType.CreateOrUpdate)
-                        {
-                            deltaList.Add(null, server);
-                        }
-                    }
-
-                    if (deltaList.Count > 0)
-                    {
-                        deltaList.OnFetchComplete += DeltaList_OnFetchComplete;
-                        deltaList.Fetch();
+                        _stopWatch.Enabled = true;
                         return;
                     }
-                }
-                else
-                {
-                    OnProcessingError?.Invoke(this,
-                        new BuildUpdaterProcessingArgs($"Catched exception when get status from server. Status=[{resp.StatusCode:G}] Uri=[{_xmlVersionPath.AbsoluteUri}]"));
-                }
-            }
-            catch (Exception ex)
-            {
-                OnProcessingError?.Invoke(this, new BuildUpdaterProcessingArgs(ex));
-            }
 
-            _stopWatch.Enabled = true;
+                    Dictionary<string, LocalAssemblyInfo> collectionFiles = new Dictionary<string, LocalAssemblyInfo>(StringComparer.CurrentCultureIgnoreCase);
+                    string assemblyDirPath = _runningApp.GetDirectory();
+                    foreach (string file in Directory.GetFiles(assemblyDirPath, "*.*", SearchOption.AllDirectories))
+                    {
+                        LocalAssemblyInfo localFileInfo = new LocalAssemblyInfo(file, assemblyDirPath, file.Like(_runningApp.Location));
+                        collectionFiles.Add(localFileInfo.FileName, localFileInfo);
+                    }
+
+                    HttpWebRequest req = (HttpWebRequest) WebRequest.Create(_xmlVersionPath.AbsoluteUri);
+                    HttpWebResponse resp = (HttpWebResponse) req.GetResponse();
+                    resp.Close();
+
+                    if (resp.StatusCode == HttpStatusCode.OK)
+                    {
+                        ServicePointManager.ServerCertificateValidationCallback = (s, ce, ch, ssl) => true;
+                        XmlDocument doc = new XmlDocument();
+                        doc.Load(_xmlVersionPath.AbsoluteUri);
+
+
+                        XmlNodeList updateNodes = doc.DocumentElement.SelectNodes("/Versions/Build");
+                        List<ServerAssemblyInfo> serverVersions = new List<ServerAssemblyInfo>();
+                        foreach (XmlNode updateNode in updateNodes)
+                        {
+                            if (updateNode == null)
+                                continue;
+
+                            var getNodesWithoutCase = updateNode.GetChildNodes(StringComparer.CurrentCultureIgnoreCase);
+                            serverVersions.Add(new ServerAssemblyInfo(getNodesWithoutCase, _uriToServerProject, assemblyDirPath));
+                        }
+
+                        deltaList = new BuildPackCollection(_runningApp);
+                        foreach (ServerAssemblyInfo server in serverVersions)
+                        {
+                            if (collectionFiles.TryGetValue(server.FileName, out LocalAssemblyInfo current))
+                            {
+                                if ((server.Type == BuldPerformerType.Update || server.Type == BuldPerformerType.CreateOrUpdate) && server.Build > current.Build)
+                                    deltaList.Add(current, server);
+                                else if (server.Type == BuldPerformerType.RollBack && server.Build < current.Build)
+                                    deltaList.Add(current, server);
+                                else if (server.Type == BuldPerformerType.Remove && server.Build == current.Build)
+                                    deltaList.Add(current, server);
+                            }
+                            else if (server.Type == BuldPerformerType.CreateOrUpdate)
+                            {
+                                deltaList.Add(null, server);
+                            }
+                        }
+
+                        if (deltaList.Count > 0)
+                        {
+                            deltaList.OnFetchComplete += DeltaList_OnFetchComplete;
+                            deltaList.Fetch();
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        OnProcessingError?.Invoke(this,
+                            new BuildUpdaterProcessingArgs($"Catched exception when get status from server. Status=[{resp.StatusCode:G}] Uri=[{_xmlVersionPath.AbsoluteUri}]"));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    OnProcessingError?.Invoke(this, new BuildUpdaterProcessingArgs(ex));
+                }
+
+                _stopWatch.Enabled = true;
+            }
         }
 
         private void DeltaList_OnFetchComplete(object sender, BuildUpdaterProcessingArgs e)
         {
-            try
+            lock (_lock)
             {
-                if (sender == null || deltaList == null || !(sender is BuildPackCollection) || ((BuildPackCollection) sender) != deltaList)
-                    return;
-
-                if (!deltaList.IsUploaded || e.Error != null)
+                try
                 {
-                    deltaList.RemoveTempFiles();
-                    OnProcessingError?.Invoke(this, e.Error == null ? new BuildUpdaterProcessingArgs("Not all files were successfully upload!", deltaList) : e);
-                    _stopWatch.Enabled = true;
-                    return;
-                }
+                    if (sender == null || deltaList == null || !(sender is BuildPackCollection) || ((BuildPackCollection) sender) != deltaList)
+                        return;
 
-                var eventListeners = UpdateOnNewVersion?.GetInvocationList();
-                if (eventListeners == null || eventListeners.Count() == 0)
-                {
-                    _stopWatch.Enabled = true;
-                    return;
-                }
-
-                BuildUpdaterArgs buildArgs = new BuildUpdaterArgs(deltaList);
-                foreach (BuildUpdaterHandler del in eventListeners)
-                {
-                    del.Invoke(this, buildArgs);
-                    if (buildArgs.Result != UpdateBuildResult.Update)
+                    if (!deltaList.IsUploaded || e.Error != null)
                     {
                         deltaList.RemoveTempFiles();
+                        OnProcessingError?.Invoke(this, e.Error == null ? new BuildUpdaterProcessingArgs("Not all files were successfully upload!", deltaList) : e);
                         _stopWatch.Enabled = true;
                         return;
                     }
+
+                    var eventListeners = UpdateOnNewVersion?.GetInvocationList();
+                    if (eventListeners == null || eventListeners.Count() == 0)
+                    {
+                        _stopWatch.Enabled = true;
+                        return;
+                    }
+
+                    BuildUpdaterArgs buildArgs = new BuildUpdaterArgs(deltaList);
+                    foreach (BuildUpdaterHandler del in eventListeners)
+                    {
+                        del.Invoke(this, buildArgs);
+                        if (buildArgs.Result != UpdateBuildResult.Update)
+                        {
+                            deltaList.RemoveTempFiles();
+                            _stopWatch.Enabled = true;
+                            return;
+                        }
+                    }
+
+                    deltaList.Commit();
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    OnProcessingError?.Invoke(this, new BuildUpdaterProcessingArgs(ex, deltaList));
                 }
 
-                deltaList.Commit();
-                return;
+                _stopWatch.Enabled = true;
             }
-            catch (Exception ex)
-            {
-                OnProcessingError?.Invoke(this, new BuildUpdaterProcessingArgs(ex, deltaList));
-            }
-
-            _stopWatch.Enabled = true;
-        }
-
-        void EnableTimer()
-        {
-
         }
 
         /// <summary>
