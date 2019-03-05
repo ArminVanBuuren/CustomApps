@@ -67,12 +67,20 @@ namespace Utils.BuildUpdater
         }
 
         // Download file
-        public override void Fetch()
+        public override bool Fetch()
         {
             try
             {
                 if (ServerFile.UriFilePath != null)
+                {
                     webClient.DownloadFileAsync(ServerFile.UriFilePath, ServerFile.FilePath);
+                    return true;
+                }
+                else
+                {
+                    IsUploaded = true;
+                }
+                return false;
             }
             catch
             {
@@ -90,6 +98,9 @@ namespace Utils.BuildUpdater
                 case BuldPerformerType.CreateOrUpdate:
                     if (CurrentFile == null)
                     {
+                        string dirpath = Path.GetDirectoryName(ServerFile.DestinationFilePath);
+                        if (!Directory.Exists(dirpath))
+                            Directory.CreateDirectory(dirpath);
                         argument_complete = string.Format(argument_add, ServerFile.FilePath, ServerFile.DestinationFilePath);
                     }
                     else
@@ -104,9 +115,7 @@ namespace Utils.BuildUpdater
                     Directory.CreateDirectory(Path.GetDirectoryName(ServerFile.DestinationFilePath));
                     break;
                 case BuldPerformerType.Remove:
-                    if (CurrentFile == null)
-                        return;
-                    argument_complete = string.Format(argument_remove, CurrentFile.FilePath);
+                    argument_complete = string.Format(argument_remove, ServerFile.DestinationFilePath);
                     break;
                 default:
                     return;
@@ -184,7 +193,7 @@ namespace Utils.BuildUpdater
 
         public override string ToString()
         {
-            return $"Type=[{this.GetType()}] ServerFile: {ServerFile}";
+            return ServerFile.ToString();
         }
     }
 }

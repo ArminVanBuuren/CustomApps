@@ -14,7 +14,7 @@ namespace Utils.BuildUpdater
         long TotalBytes { get; }
         int ProgressPercent { get; }
         string GetProgressString();
-        void Fetch();
+        bool Fetch();
         void Commit();
         void RemoveTempFiles();
     }
@@ -36,9 +36,9 @@ namespace Utils.BuildUpdater
             }
         }
 
-        public virtual void Fetch()
+        public virtual bool Fetch()
         {
-
+            return false;
         }
 
         public virtual void Commit()

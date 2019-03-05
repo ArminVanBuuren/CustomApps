@@ -19,7 +19,8 @@ namespace Utils.BuildUpdater
         private List<BuildPack> _collection = new List<BuildPack>();
         private Assembly _runningApp;
         private object _lock = new object();
-        private int fetchCompleteCount = 0;
+        private int _completedFetchCount = 0;
+        private int _waitingFetchCount = 0;
         private bool _inProgress = false;
 
         public override bool IsUploaded
@@ -50,20 +51,36 @@ namespace Utils.BuildUpdater
 
         BuildUpdaterProcessingArgs fetchArgs;
 
-        public override void Fetch()
+        public override bool Fetch()
         {
             lock (_lock)
             {
                 if (!_inProgress)
                 {
                     fetchArgs = new BuildUpdaterProcessingArgs(this);
-                    _inProgress = true;
-                    fetchCompleteCount = 0;
-                    foreach (BuildPack build in _collection)
+                    try
                     {
-                        build.Fetch();
+                        _inProgress = true;
+                        _completedFetchCount = 0;
+                        _waitingFetchCount = 0;
+                        foreach (BuildPack build in _collection)
+                        {
+                            if (build.Fetch())
+                            {
+                                _waitingFetchCount++;
+                            }
+                        }
+
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        _inProgress = false;
+                        fetchArgs.Error = ex;
+                        OnFetchComplete.Invoke(this, fetchArgs);
                     }
                 }
+                return false;
             }
         }
 
@@ -71,12 +88,21 @@ namespace Utils.BuildUpdater
         {
             lock (_lock)
             {
-                fetchCompleteCount++;
+                if (!_inProgress)
+                {
+                    if (sender != null && sender is BuildPack)
+                    {
+                        ((BuildPack)sender).RemoveTempFiles();
+                    }
+                    return;
+                }
+
+                _completedFetchCount++;
 
                 if (e.Error != null)
                     fetchArgs.InnerException.Add(e.Error);
 
-                if (_collection.Count != fetchCompleteCount)
+                if (_waitingFetchCount > _completedFetchCount)
                     return;
 
                 if(fetchArgs.InnerException.Count > 0)
@@ -95,7 +121,7 @@ namespace Utils.BuildUpdater
             BuildPack runningApp = null;
             foreach (BuildPack build in _collection)
             {
-                if (build.CurrentFile.IsExecutingFile)
+                if (build.CurrentFile != null && build.CurrentFile.IsExecutingFile)
                 {
                     runningApp = build;
                     continue;
@@ -202,7 +228,7 @@ namespace Utils.BuildUpdater
 
         public override string ToString()
         {
-            return $"Type=[{this.GetType()}] Count=[{Count}]";
+            return $"Count=[{Count}]";
         }
     }
 }

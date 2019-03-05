@@ -78,6 +78,7 @@
     <Compile Include="STRING.cs" />
     <Compile Include="BuildUpdater\FileAssemblyInfo.cs" />
     <Compile Include="BuildUpdater\BuildUpdater.cs" />
+    <Compile Include="WEB.cs" />
     <Compile Include="XmlHelper\XmlHelper.cs" />
     <Compile Include="XmlRtfStyle\RtfAlignment.cs" />
     <Compile Include="XmlRtfStyle\RtfBuilder.cs" />
@@ -89,6 +90,7 @@
   <ItemGroup>
     <Folder Include="IOHelper\" />
     <Folder Include="Types\" />
+    <Folder Include="WebHelper\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

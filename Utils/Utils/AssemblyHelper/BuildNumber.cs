@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,26 +10,29 @@ namespace Utils.AssemblyHelper
     [Serializable]
     public class BuildNumber : IComparable
     {
-        public bool IsAnyBuild { get; } = false;
         public int Major { get; private set; }
         public int Minor { get; private set; }
         public int Build { get; private set; }
         public int Revision { get; private set; }
 
-        private BuildNumber(bool isAnyBuild = false)
+        private BuildNumber()
         {
-            //Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-            //DateTime buildDate = new DateTime(2000, 1, 1)
-            //    .AddDays(version.Build).AddSeconds(version.Revision * 2);
-            //string displayableVersion = $"{version} ({buildDate})";
-            IsAnyBuild = isAnyBuild;
-            if (IsAnyBuild)
-            {
-                Major = 1;
-                Minor = 0;
-                Build = 0;
-                Revision = 0;
-            }
+
+        }
+
+        public BuildNumber(DateTime buildDateTime)
+        {
+            if (buildDateTime == null)
+                throw new ArgumentException(nameof(buildDateTime));
+
+            DateTime startOfDay = DateTime.ParseExact(buildDateTime.ToString("dd/MM/yyyy"), "dd/MM/yyyy", CultureInfo.CurrentCulture);
+            TimeSpan substrSec = buildDateTime.Subtract(startOfDay);
+            DateTime startOfYear = new DateTime(2000, 1, 1);
+            TimeSpan substrDay = buildDateTime.Subtract(startOfYear);
+            Major = 1;
+            Minor = 0;
+            Build = (int) substrDay.TotalDays;
+            Revision = (int) (substrSec.TotalSeconds / 2);
         }
 
         public static bool TryParse(string input, out BuildNumber buildNumber)
@@ -61,8 +65,8 @@ namespace Utils.AssemblyHelper
             if (buildNumber == null)
                 throw new ArgumentNullException("buildNumber");
 
-            if (buildNumber.Equals("ANY", StringComparison.CurrentCultureIgnoreCase))
-                return new BuildNumber(true);
+            if(DateTime.TryParse(buildNumber, out DateTime dateTime))
+                return new BuildNumber(dateTime);
 
             var versions = buildNumber.Split(new[] {'.'}, StringSplitOptions.RemoveEmptyEntries).Select(v => v.Trim()).ToList();
 
@@ -103,12 +107,8 @@ namespace Utils.AssemblyHelper
             if (buildNumber == null)
                 return 1;
 
-            if (this.IsAnyBuild || buildNumber.IsAnyBuild)
-                return 0;
-
             if (ReferenceEquals(this, buildNumber))
                 return 0;
-
 
             if (Major == buildNumber.Major)
             {
@@ -138,6 +138,16 @@ namespace Utils.AssemblyHelper
         public static bool operator <(BuildNumber first, BuildNumber second)
         {
             return (first.CompareTo(second) < 0);
+        }
+
+        public static bool operator ==(BuildNumber first, BuildNumber second)
+        {
+            return (first.CompareTo(second) == 0);
+        }
+
+        public static bool operator !=(BuildNumber first, BuildNumber second)
+        {
+            return (first.CompareTo(second) != 0);
         }
 
         public override bool Equals(object obj)

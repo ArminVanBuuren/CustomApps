@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using Utils.AssemblyHelper;
 using Utils.BuildUpdater;
 
 namespace Tester

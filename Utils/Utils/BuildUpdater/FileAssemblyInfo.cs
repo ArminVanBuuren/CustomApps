@@ -40,7 +40,7 @@ namespace Utils.BuildUpdater
 
         public override string ToString()
         {
-            return $"Version=[{Build.ToString()}] File=[{FilePath}]";
+            return $"Version=[{Build.ToString()}] File=[{FileName}]";
         }
     }
 
@@ -51,8 +51,16 @@ namespace Utils.BuildUpdater
 
         public LocalAssemblyInfo(string file, string assemblyDirPath, bool isExecFile = false)
         {
-            FileVersionInfo fileInfo = FileVersionInfo.GetVersionInfo(file);
-            Build = GetBuild(fileInfo.FileVersion);
+            FileVersionInfo fileVersion = FileVersionInfo.GetVersionInfo(file);
+            if (fileVersion.FileVersion == null)
+            {
+                DateTime lastChange = File.GetLastWriteTime(file);
+                Build = new BuildNumber(lastChange);
+            }
+            else
+            {
+                Build = GetBuild(fileVersion.FileVersion);
+            }
             FilePath = file;
             FileName = file.Replace(assemblyDirPath, string.Empty).Trim('\\');
             IsExecutingFile = isExecFile;
@@ -77,7 +85,7 @@ namespace Utils.BuildUpdater
         {
             string versionStr = collectionAttr["Version"]?.First() ?? "1.0.0.0";
             Build = GetBuild(versionStr);
-            FileName = collectionAttr["Location"]?.First() ?? string.Empty;
+            FileName = (collectionAttr["Location"]?.First() ?? string.Empty).Trim('\\');
             DestinationFilePath = Path.Combine(assemblyDirPath, FileName);
             Description = collectionAttr["Description"]?.First() ?? string.Empty;
             MD5 = collectionAttr["MD5"]?.First() ?? string.Empty;
@@ -103,7 +111,7 @@ namespace Utils.BuildUpdater
 
         public override string ToString()
         {
-            return $"{base.ToString()} Uri=[{UriFilePath}] Destination=[{DestinationFilePath}]";
+            return $"[{Type:G}] {base.ToString()} Uri=[{UriFilePath}]";
         }
     }
 }
