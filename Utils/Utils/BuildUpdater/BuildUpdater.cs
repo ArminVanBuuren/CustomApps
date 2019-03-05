@@ -22,7 +22,8 @@ namespace Utils.BuildUpdater
     public enum UpdateBuildResult
     {
         Cancel = 0,
-        Update = 1
+        Update = 1,
+        SelfUpdate = 2
     }
 
     public class BuildUpdaterArgs
@@ -77,6 +78,7 @@ namespace Utils.BuildUpdater
         private readonly Assembly _runningApp;
         private BuildPackCollection deltaList;
         private readonly int _updateMSec;
+        private bool _waitSelfUpdate = false;
         object _lock = new object();
 
         public BuildUpdater(Assembly runningApp, string uriProject, int updateSec = 10)
@@ -112,6 +114,9 @@ namespace Utils.BuildUpdater
             {
                 try
                 {
+                    if(_waitSelfUpdate)
+                        return;
+
                     if (UpdateOnNewVersion == null)
                     {
                         EnableTimer();
@@ -222,6 +227,12 @@ namespace Utils.BuildUpdater
                         }
                     }
 
+                    if (buildArgs.Result == UpdateBuildResult.SelfUpdate)
+                    {
+                        _waitSelfUpdate = true;
+                        return;
+                    }
+
                     deltaList.Commit();
                     return;
                 }
@@ -231,6 +242,33 @@ namespace Utils.BuildUpdater
                 }
 
                 EnableTimer();
+            }
+        }
+
+        public void SelfUpdate()
+        {
+            lock (_lock)
+            {
+                if (_waitSelfUpdate)
+                {
+                    try
+                    {
+                        if (deltaList == null || deltaList.Count == 0)
+                        {
+                            OnProcessingError?.Invoke(this, new BuildUpdaterProcessingArgs("Internal error. DeltaList is null.", deltaList));
+                            _waitSelfUpdate = false;
+                            EnableTimer();
+                            return;
+                        }
+                        deltaList.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        OnProcessingError?.Invoke(this, new BuildUpdaterProcessingArgs(ex, deltaList));
+                        _waitSelfUpdate = false;
+                        EnableTimer();
+                    }
+                }
             }
         }
 
