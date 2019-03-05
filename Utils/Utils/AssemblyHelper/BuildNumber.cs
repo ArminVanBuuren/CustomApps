@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,15 +18,15 @@ namespace Utils.AssemblyHelper
         public int Build { get; private set; }
         public int Revision { get; private set; }
 
-        private BuildNumber()
+        BuildNumber()
         {
 
         }
 
-        public BuildNumber(DateTime buildDateTime)
+        BuildNumber(DateTime buildDateTime)
         {
             if (buildDateTime == null)
-                throw new ArgumentException(nameof(buildDateTime));
+                throw new ArgumentNullException(nameof(buildDateTime));
 
             DateTime startOfDay = DateTime.ParseExact(buildDateTime.ToString("dd/MM/yyyy"), "dd/MM/yyyy", CultureInfo.CurrentCulture);
             TimeSpan substrSec = buildDateTime.Subtract(startOfDay);
@@ -33,6 +36,27 @@ namespace Utils.AssemblyHelper
             Minor = 0;
             Build = (int) substrDay.TotalDays;
             Revision = (int) (substrSec.TotalSeconds / 2);
+        }
+
+        public static BuildNumber FromFile(string file)
+        {
+            if (!File.Exists(file))
+                throw new ArgumentException($"File [{file}] not exist!");
+
+            FileVersionInfo fileVersion = FileVersionInfo.GetVersionInfo(file);
+            if (fileVersion.FileVersion == null)
+            {
+                DateTime lastChange = File.GetLastWriteTime(file);
+                return new BuildNumber(lastChange);
+            }
+            else
+            {
+                if (!BuildNumber.TryParse(fileVersion.FileVersion, out BuildNumber getVers))
+                {
+                    BuildNumber.TryParse("1.0.0.0", out getVers);
+                }
+                return getVers;
+            }
         }
 
         public static bool TryParse(string input, out BuildNumber buildNumber)

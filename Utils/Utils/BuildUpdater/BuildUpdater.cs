@@ -21,8 +21,8 @@ namespace Utils.BuildUpdater
 {
     public enum UpdateBuildResult
     {
-        Update = 0,
-        Cancel = 1
+        Cancel = 0,
+        Update = 1
     }
 
     public class BuildUpdaterArgs
@@ -30,7 +30,7 @@ namespace Utils.BuildUpdater
         internal BuildUpdaterArgs(BuildPackCollection buildPacks)
         {
             BuildPacks = buildPacks;
-            Result = UpdateBuildResult.Update;
+            Result = UpdateBuildResult.Cancel;
         }
         public BuildPackCollection BuildPacks { get; }
         public UpdateBuildResult Result { get; set; }
@@ -71,12 +71,12 @@ namespace Utils.BuildUpdater
     {
         public event BuildUpdaterHandler UpdateOnNewVersion;
         public event UploadBuildHandler OnProcessingError;
-        private Timer _stopWatch;
-        private Uri _xmlVersionPath;
-        private Uri _uriToServerProject;
-        private Assembly _runningApp;
+        private readonly Timer _stopWatch;
+        private readonly Uri _xmlVersionPath;
+        private readonly Uri _uriToServerProject;
+        private readonly Assembly _runningApp;
         private BuildPackCollection deltaList;
-        private int _updateMSec;
+        private readonly int _updateMSec;
         object _lock = new object();
 
         public BuildUpdater(Assembly runningApp, string uriProject, int updateSec = 10)
@@ -130,7 +130,6 @@ namespace Utils.BuildUpdater
 
                     if (resHttp == HttpStatusCode.OK)
                     {
-                        ServicePointManager.ServerCertificateValidationCallback = (s, ce, ch, ssl) => true;
                         XmlDocument doc = new XmlDocument();
                         doc.LoadXml(resultStr);
 
@@ -205,7 +204,7 @@ namespace Utils.BuildUpdater
                     }
 
                     var eventListeners = UpdateOnNewVersion?.GetInvocationList();
-                    if (eventListeners == null || eventListeners.Count() == 0)
+                    if (eventListeners == null || !eventListeners.Any())
                     {
                         EnableTimer();
                         return;
@@ -215,7 +214,7 @@ namespace Utils.BuildUpdater
                     foreach (BuildUpdaterHandler del in eventListeners)
                     {
                         del.Invoke(this, buildArgs);
-                        if (buildArgs.Result != UpdateBuildResult.Update)
+                        if (buildArgs.Result == UpdateBuildResult.Cancel)
                         {
                             deltaList.RemoveTempFiles();
                             EnableTimer();
