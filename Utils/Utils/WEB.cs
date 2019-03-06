@@ -11,6 +11,11 @@ namespace Utils
 {
     public class WEB
     {
+        public static string WebHttpStringData(string uri, out HttpStatusCode resultHttp, HttpRequestCacheLevel cashLevel = HttpRequestCacheLevel.Default)
+        {
+            return WebHttpStringData(new Uri(uri), out resultHttp, cashLevel);
+        }
+
         public static string WebHttpStringData(Uri uri, out HttpStatusCode resultHttp, HttpRequestCacheLevel cashLevel = HttpRequestCacheLevel.Default)
         {
             resultHttp = HttpStatusCode.BadRequest;
@@ -21,6 +26,14 @@ namespace Utils
                 resultHttp = response.StatusCode;
                 if (resultHttp == HttpStatusCode.OK)
                 {
+                    //List<string> ddd = new List<string>();
+                    //WebHeaderCollection dd = response.Headers;
+                    //foreach (string s in dd)
+                    //{
+                    //    ddd.Add(response.GetResponseHeader(s));
+                    //}
+
+
                     Stream receiveStream = response.GetResponseStream();
                     StreamReader readStream;
 
@@ -98,8 +111,14 @@ namespace Utils
         /// <param name="defaultLevel"></param>
         public static void SetDefaultPolicy(bool defaultCertificateValidation = true, HttpRequestCacheLevel defaultLevel = HttpRequestCacheLevel.Default)
         {
+            //Когда мне нужен клиент, который может подключиться к как можно большему количеству серверов (а не быть как можно более безопасным), я использую это (вместе с настройкой обратного вызова проверки)
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+
+            //Set a default policy level for the "http:" and "https" schemes.
             HttpRequestCachePolicy policy = new HttpRequestCachePolicy(defaultLevel);
             HttpWebRequest.DefaultCachePolicy = policy;
+
+            // Сертификат 
             if (defaultCertificateValidation)
                 ServicePointManager.ServerCertificateValidationCallback = (s, ce, ch, ssl) => true;
         }

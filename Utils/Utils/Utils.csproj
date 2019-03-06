@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -86,8 +87,17 @@
     <Compile Include="XmlRtfStyle\RtfFromXml.cs" />
     <Compile Include="XPathHelper\XPathHelper.cs" />
     <Compile Include="XPathHelper\XPathResult.cs" />
+    <Compile Include="ZIP.cs" />
+    <Compile Include="ZipHelper\System.Buffers.cs" />
+    <Compile Include="ZipHelper\ZipFile.Create.cs" />
+    <Compile Include="ZipHelper\ZipFile.Extract.cs" />
+    <Compile Include="ZipHelper\ZipFile.Utils.cs" />
+    <Compile Include="ZipHelper\ZipFileExtensions.ZipArchive.Create.cs" />
+    <Compile Include="ZipHelper\ZipFileExtensions.ZipArchive.Extract.cs" />
+    <Compile Include="ZipHelper\ZipFileExtensions.ZipArchiveEntry.Extract.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="DropBoxIntegration\" />
     <Folder Include="IOHelper\" />
     <Folder Include="Types\" />
     <Folder Include="WebHelper\" />

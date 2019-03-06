@@ -9,8 +9,6 @@ using System.Net.Cache;
 using System.Reflection;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
-//using System.Threading;
-//using System.Threading.Tasks;
 using System.Timers;
 using System.Xml;
 using Utils.AssemblyHelper;
@@ -275,36 +273,6 @@ namespace Utils.BuildUpdater
         void EnableTimer()
         {
             _stopWatch.Enabled = true;
-        }
-
-        /// <summary>
-        /// Checks the Uri to make sure file exist
-        /// </summary>
-        /// <param name="location">The Uri of the update.xml</param>
-        /// <returns>If the file exists</returns>
-        public static bool ExistsOnServer(Uri location)
-        {
-            if (location.ToString().StartsWith("file"))
-            {
-                return System.IO.File.Exists(location.LocalPath);
-            }
-            else
-            {
-                try
-                {
-                    // Request the update.xml
-                    HttpWebRequest req = (HttpWebRequest) WebRequest.Create(location.AbsoluteUri);
-                    // Read for response
-                    HttpWebResponse resp = (HttpWebResponse) req.GetResponse();
-                    resp.Close();
-
-                    return resp.StatusCode == HttpStatusCode.OK;
-                }
-                catch
-                {
-                    return false; 
-                }
-            }
         }
     }
 }

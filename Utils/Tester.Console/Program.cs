@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Net;
+using System.Net.Cache;
 using System.Reflection;
+using Utils;
 using Utils.AssemblyHelper;
 using Utils.BuildUpdater;
+
 
 namespace Tester
 {
@@ -10,7 +14,7 @@ namespace Tester
         static void Main(string[] args)
         {
             //Console.WriteLine("Fcuk yeah!");
-            //string test = "fefewfefew.fewfew.fewfew.xml".GetLastNameInPath(true);
+            
             BuildUpdater up = new BuildUpdater(Assembly.GetExecutingAssembly(), @"https://raw.githubusercontent.com/ArminVanBuuren/TFSAssist/master", 1);
             up.UpdateOnNewVersion += Up_FindedNewVersions;
             System.Console.ReadLine();
@@ -19,6 +23,14 @@ namespace Tester
         private static void Up_FindedNewVersions(object sender, BuildUpdaterArgs buildPack)
         {
             buildPack.Result = UpdateBuildResult.Update;
+        }
+
+        static string test()
+        {
+            using (var client = new WebClient())
+            {
+                return client.DownloadString("https://raw.githubusercontent.com/ArminVanBuuren/TFSAssist/master/version.xml");
+            }
         }
     }
 }
