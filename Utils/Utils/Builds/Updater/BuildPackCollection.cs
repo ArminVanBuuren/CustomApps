@@ -7,6 +7,8 @@ using System.Net;
 using System.Net.Cache;
 using System.Reflection;
 using System.Xml;
+using System.Xml.Serialization;
+using Utils.Builds.Unloader;
 using Utils.XmlHelper;
 
 namespace Utils.Builds.Updater
@@ -27,19 +29,19 @@ namespace Utils.Builds.Updater
         public BuildPackCollection(Assembly runningApp, Uri serverUri)
         {
             _runningApp = runningApp;
-            Dictionary<string, ServerAssemblyInfo> serverVersions = GetServerVersions(runningApp, serverUri);
+            Dictionary<string, ServerBuildInfo> serverVersions = GetServerVersions(runningApp, serverUri);
             if(serverVersions.Count == 0)
                 return;
 
-            Dictionary<string, LocalAssemblyInfo> localVersions = GetLocalVersions(runningApp);
+            Dictionary<string, FileBuildInfo> localVersions = BuildUnloader.GetLocalVersions(runningApp);
 
-            foreach (ServerAssemblyInfo server in serverVersions.Values)
+            foreach (ServerBuildInfo server in serverVersions.Values)
             {
-                if (localVersions.TryGetValue(server.FileName, out LocalAssemblyInfo current))
+                if (localVersions.TryGetValue(server.Location, out FileBuildInfo current))
                 {
-                    if ((server.Type == BuldPerformerType.Update || server.Type == BuldPerformerType.CreateOrUpdate) && server.Build > current.Build)
+                    if ((server.Type == BuldPerformerType.Update || server.Type == BuldPerformerType.CreateOrUpdate) && server.Version > current.Version)
                         Add(current, server);
-                    else if (server.Type == BuldPerformerType.RollBack && server.Build < current.Build)
+                    else if (server.Type == BuldPerformerType.RollBack && server.Version < current.Version)
                         Add(current, server);
                     else if (server.Type == BuldPerformerType.Remove)
                         Add(current, server);
@@ -51,39 +53,26 @@ namespace Utils.Builds.Updater
             }
         }
 
-        internal static Dictionary<string, LocalAssemblyInfo> GetLocalVersions(Assembly runningApp)
+        static Dictionary<string, ServerBuildInfo> GetServerVersions(Assembly runningApp, Uri serverUri)
         {
-            Dictionary<string, LocalAssemblyInfo> localVersions = new Dictionary<string, LocalAssemblyInfo>(StringComparer.CurrentCultureIgnoreCase);
-            string assemblyDirPath = runningApp.GetDirectory();
-            foreach (string file in Directory.GetFiles(assemblyDirPath, "*.*", SearchOption.AllDirectories))
-            {
-                LocalAssemblyInfo localFileInfo = new LocalAssemblyInfo(file, assemblyDirPath, file.Like(runningApp.Location));
-                localVersions.Add(localFileInfo.FileName, localFileInfo);
-            }
-
-            return localVersions;
-        }
-
-        internal static Dictionary<string, ServerAssemblyInfo> GetServerVersions(Assembly runningApp, Uri serverUri)
-        {
-            Uri versionsInfo = new Uri(serverUri + "/version.xml");
+            Uri versionsInfo = new Uri($"{serverUri}/{BuildInfoVersions.FILE_NAME}");
             string resultStr = WEB.WebHttpStringData(versionsInfo, out HttpStatusCode resHttp, HttpRequestCacheLevel.NoCacheNoStore);
 
             if (resHttp == HttpStatusCode.OK)
             {
-                XmlDocument doc = new XmlDocument();
-                doc.LoadXml(resultStr);
-
-                XmlNodeList updateNodes = doc.DocumentElement.SelectNodes("/Versions/Build");
-                Dictionary<string, ServerAssemblyInfo> serverVersions = new Dictionary<string, ServerAssemblyInfo>();
-                foreach (XmlNode updateNode in updateNodes)
+                XmlSerializer xsSubmit = new XmlSerializer(typeof(BuildInfoVersions));
+                BuildInfoVersions res;
+                using (TextReader reader = new StringReader(resultStr))
                 {
-                    if (updateNode == null)
-                        continue;
+                    res = (BuildInfoVersions)xsSubmit.Deserialize(reader);
+                }
 
-                    var getNodesWithoutCase = updateNode.GetChildNodes(StringComparer.CurrentCultureIgnoreCase);
-                    ServerAssemblyInfo serverFileInfo = new ServerAssemblyInfo(getNodesWithoutCase, serverUri, runningApp.GetDirectory());
-                    serverVersions.Add(serverFileInfo.FileName, serverFileInfo);
+                string assemblyDirPath = runningApp.GetDirectory();
+                Dictionary<string, ServerBuildInfo> serverVersions = new Dictionary<string, ServerBuildInfo>();
+                foreach (FileBuildInfo buildInfo in res.Builds)
+                {
+                    ServerBuildInfo serverFileInfo = new ServerBuildInfo(buildInfo, serverUri, assemblyDirPath);
+                    serverVersions.Add(serverFileInfo.Location, serverFileInfo);
                 }
 
                 return serverVersions;
@@ -92,7 +81,37 @@ namespace Utils.Builds.Updater
             throw new Exception($"Catched exception when get status from server. HttpStatus=[{resHttp:G}] Uri=[{versionsInfo.AbsoluteUri}]");
         }
 
-        void Add(LocalAssemblyInfo currentFile, ServerAssemblyInfo serverFile)
+        static Dictionary<string, ServerBuildInfo> GetServerVersionsViaXMLDoc(Assembly runningApp, Uri serverUri)
+        {
+            Uri versionsInfo = new Uri($"{serverUri}/{BuildInfoVersions.FILE_NAME}");
+            string resultStr = WEB.WebHttpStringData(versionsInfo, out HttpStatusCode resHttp, HttpRequestCacheLevel.NoCacheNoStore);
+
+            if (resHttp == HttpStatusCode.OK)
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml(resultStr);
+
+                XmlNodeList updateNodes = doc.DocumentElement.SelectNodes("/Versions/Build");
+                Dictionary<string, ServerBuildInfo> serverVersions = new Dictionary<string, ServerBuildInfo>();
+                foreach (XmlNode updateNode in updateNodes)
+                {
+                    if (updateNode == null)
+                        continue;
+
+                    var getNodesWithoutCase = updateNode.GetChildNodes(StringComparer.CurrentCultureIgnoreCase);
+                    ServerBuildInfo serverFileInfo = new ServerBuildInfo(getNodesWithoutCase, serverUri, runningApp.GetDirectory());
+                    serverVersions.Add(serverFileInfo.Location, serverFileInfo);
+                }
+
+                return serverVersions;
+            }
+
+            throw new Exception($"Catched exception when get status from server. HttpStatus=[{resHttp:G}] Uri=[{versionsInfo.AbsoluteUri}]");
+        }
+
+        
+
+        void Add(FileBuildInfo currentFile, ServerBuildInfo serverFile)
         {
             BuildPack build = new BuildPack(currentFile, serverFile);
             build.OnFetchComplete += Build_OnFetchComplete;

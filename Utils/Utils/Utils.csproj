@@ -46,10 +46,14 @@
   <ItemGroup>
     <Compile Include="Builds\BuildNumber.cs" />
     <Compile Include="ASSEMBLY.cs" />
+    <Compile Include="Builds\BuildInfoVersions.cs" />
     <Compile Include="Builds\Updater\BuildPack.cs" />
     <Compile Include="Builds\Updater\BuildPackCollection.cs" />
     <Compile Include="Builds\Unloader\BuildUnloader.cs" />
     <Compile Include="Builds\Hasher.cs" />
+    <Compile Include="Builds\Updater\BuildUpdaterArgs.cs" />
+    <Compile Include="Builds\Updater\BuildUpdaterProcessingArgs.cs" />
+    <Compile Include="Builds\Updater\ServerBuildInfo.cs" />
     <Compile Include="Builds\Updater\UploadProgress.cs" />
     <Compile Include="CollectionHelper\CollectionHelper.cs" />
     <Compile Include="CollectionHelper\DuplicateDictionary.cs" />
@@ -75,7 +79,7 @@
     <Compile Include="SERIALIZATION.cs" />
     <Compile Include="SerializationHelper\SerialHelper.cs" />
     <Compile Include="STRING.cs" />
-    <Compile Include="Builds\FileAssemblyInfo.cs" />
+    <Compile Include="Builds\FileBuildInfo.cs" />
     <Compile Include="Builds\Updater\BuildUpdater.cs" />
     <Compile Include="WEB.cs" />
     <Compile Include="WebHelper\WebDownload.cs">

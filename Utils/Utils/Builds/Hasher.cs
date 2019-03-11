@@ -27,14 +27,22 @@ namespace Utils.Builds
         /// <returns>The computed hash</returns>
         internal static string HashFile(string filePath, HashType algo)
         {
+            string fileSource = filePath;
+            var res = IO.WhoIsLocking(fileSource);
+            if (res.Count > 0)
+            {
+                fileSource = Path.GetTempFileName();
+                File.Copy(filePath, fileSource, true);
+            }
+
             switch (algo)
             {
                 case HashType.MD5:
-                    return MakeHashString(MD5.Create().ComputeHash(new FileStream(filePath, FileMode.Open)));
+                    return MakeHashString(MD5.Create().ComputeHash(new FileStream(fileSource, FileMode.Open)));
                 case HashType.SHA1:
-                    return MakeHashString(SHA1.Create().ComputeHash(new FileStream(filePath, FileMode.Open)));
+                    return MakeHashString(SHA1.Create().ComputeHash(new FileStream(fileSource, FileMode.Open)));
                 case HashType.SHA512:
-                    return MakeHashString(SHA512.Create().ComputeHash(new FileStream(filePath, FileMode.Open)));
+                    return MakeHashString(SHA512.Create().ComputeHash(new FileStream(fileSource, FileMode.Open)));
                 default:
                     return "";
             }

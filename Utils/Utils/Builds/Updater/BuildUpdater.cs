@@ -6,49 +6,6 @@ using System.Timers;
 
 namespace Utils.Builds.Updater
 {
-    public enum UpdateBuildResult
-    {
-        Cancel = 0,
-        Update = 1,
-        SelfUpdate = 2
-    }
-
-    public class BuildUpdaterArgs
-    {
-        internal BuildUpdaterArgs(BuildPackCollection buildPacks)
-        {
-            BuildPacks = buildPacks;
-            Result = UpdateBuildResult.Cancel;
-        }
-        public BuildPackCollection BuildPacks { get; }
-        public UpdateBuildResult Result { get; set; }
-    }
-
-    [Serializable]
-    public class BuildUpdaterProcessingArgs
-    {
-        internal BuildUpdaterProcessingArgs(string exception, IUploadProgress faildObj = null)
-        {
-            FaildObject = faildObj;
-            Error = new Exception(exception);
-        }
-
-        internal BuildUpdaterProcessingArgs(Exception error = null, IUploadProgress faildObj = null)
-        {
-            FaildObject = faildObj;
-            Error = error;
-        }
-
-        internal BuildUpdaterProcessingArgs(IUploadProgress faildObj)
-        {
-            FaildObject = faildObj;
-        }
-
-        public IUploadProgress FaildObject { get; }
-        public Exception Error { get; internal set; }
-        public List<Exception> InnerException { get; } = new List<Exception>();
-    }
-
     [Serializable]
     public delegate void UploadBuildHandler(object sender, BuildUpdaterProcessingArgs args);
 

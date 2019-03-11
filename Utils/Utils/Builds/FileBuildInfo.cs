@@ -1,0 +1,122 @@
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Xml.Serialization;
+using Utils.CollectionHelper;
+
+namespace Utils.Builds
+{
+    [Serializable]
+    public enum BuldPerformerType
+    {
+        None = 0,
+        CreateOrUpdate = 1,
+        Update = 2,
+        RollBack = 4,
+        Remove = 8
+    }
+
+    [Serializable, XmlRoot("Build", IsNullable = false)]
+    public class FileBuildInfo
+    {
+        private string _location = string.Empty, _md5 = string.Empty;
+
+        public FileBuildInfo()
+        {
+        }
+
+        public FileBuildInfo(string file, string assemblyDirPath, bool isExecFile)
+        {
+            Version = BuildNumber.FromFile(file);
+            Type = BuldPerformerType.None;
+            FilePath = file;
+            Location = file.Replace(assemblyDirPath, string.Empty).Trim('\\');
+            MD5 = Hasher.HashFile(file, HashType.MD5);
+            Description = @"Fixed and improved";
+            IsExecutingFile = isExecFile;
+        }
+
+        [XmlElement("Version")]
+        public string VersionString
+        {
+            get => Version.ToString();
+            set
+            {
+                if (!BuildNumber.TryParse(value, out BuildNumber getVers))
+                {
+                    BuildNumber.TryParse("1.0.0.0", out getVers);
+                }
+
+                Version = getVers;
+            }
+        }
+
+        [XmlIgnore]
+        public BuildNumber Version { get; set; }
+
+        [XmlElement("Type")]
+        public string TypeString
+        {
+            get => Type.ToString("G");
+            set
+            {
+                if (value.Like("Update"))
+                    Type = BuldPerformerType.Update;
+                else if (value.Like("RollBack"))
+                    Type = BuldPerformerType.RollBack;
+                else if (value.Like("CreateOrUpdate"))
+                    Type = BuldPerformerType.CreateOrUpdate;
+                else if (value.Like("Remove"))
+                    Type = BuldPerformerType.Remove;
+                else
+                    Type = BuldPerformerType.None;
+            }
+        }
+
+        [XmlIgnore]
+        public BuldPerformerType Type { get; set; }
+
+        /// <summary>
+        /// названия файлов и папок в ноде location регистрзависимы для URI!!!!
+        /// </summary>
+        [XmlElement]
+        public string Location
+        {
+            get => _location;
+            set
+            {
+                if (value.IsNullOrEmptyTrim())
+                    throw new ArgumentNullException("Location of file is null");
+
+                _location = value;
+            }
+        }
+
+        [XmlElement]
+        public string MD5
+        {
+            get => _md5;
+            set
+            {
+                if (value.IsNullOrEmptyTrim())
+                    throw new ArgumentNullException($"MD5 of file=[{Location}] is null");
+
+                _md5 = value;
+            }
+        }
+
+        [XmlElement]
+        public string Description { get; set; }
+
+        [XmlIgnore]
+        public string FilePath { get; set; }
+
+        [XmlIgnore]
+        public bool IsExecutingFile { get; set; }
+
+        public override string ToString()
+        {
+            return $"Version=[{Version.ToString()}] Location=[{Location}] Type=[{Type:G}]";
+        }
+    }
+}

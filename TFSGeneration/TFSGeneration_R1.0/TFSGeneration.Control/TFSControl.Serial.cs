@@ -242,7 +242,7 @@ namespace TFSAssist.Control
             }
         }
 
-        #region Deserialize - Serialize Settings And Datas
+        #region (Serialize - Deserialize) settings and datas
 
         /// <summary>
         /// Сериализуем (обновляем) обработанные данные

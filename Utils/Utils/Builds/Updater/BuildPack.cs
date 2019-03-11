@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Reflection;
+using Utils.Builds.Unloader;
 
 namespace Utils.Builds.Updater
 {
@@ -17,14 +18,14 @@ namespace Utils.Builds.Updater
         const string argument_remove = "/C choice /C Y /N /D Y /T 4 & Del /F /Q \"{0}\"";
 
         public event UploadBuildHandler OnFetchComplete;
-        public LocalAssemblyInfo CurrentFile { get; private set; }
-        public ServerAssemblyInfo ServerFile { get; private set; }
+        public FileBuildInfo CurrentFile { get; private set; }
+        public ServerBuildInfo ServerFile { get; private set; }
         /// <summary>
         /// The web client to download the update
         /// </summary>
         private WebClient webClient;
 
-        public BuildPack(LocalAssemblyInfo currentFile, ServerAssemblyInfo serverFile)
+        public BuildPack(FileBuildInfo currentFile, ServerBuildInfo serverFile)
         {
             CurrentFile = currentFile;
             ServerFile = serverFile;
