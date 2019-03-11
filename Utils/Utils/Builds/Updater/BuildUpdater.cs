@@ -71,10 +71,9 @@ namespace Utils.BuildUpdater
         public event BuildUpdaterHandler UpdateOnNewVersion;
         public event UploadBuildHandler OnProcessingError;
         private readonly Timer _stopWatch;
-        private readonly Uri _xmlVersionPath;
         private readonly Uri _uriToServerProject;
         private readonly Assembly _runningApp;
-        private BuildPackCollection deltaList;
+        private BuildPackCollection _newBuildVersions;
         private readonly int _updateMSec;
         private bool _waitSelfUpdate = false;
         object _lock = new object();
@@ -83,7 +82,6 @@ namespace Utils.BuildUpdater
         {
             _runningApp = runningApp;
             _uriToServerProject = new Uri(uriProject.TrimEnd('/'));
-            _xmlVersionPath = new Uri(_uriToServerProject + "/version.xml");
             _updateMSec = updateSec * 1000;
 
             _stopWatch = new Timer();
@@ -121,61 +119,13 @@ namespace Utils.BuildUpdater
                         return;
                     }
 
-                    Dictionary<string, LocalAssemblyInfo> currentVersions = new Dictionary<string, LocalAssemblyInfo>(StringComparer.CurrentCultureIgnoreCase);
-                    string assemblyDirPath = _runningApp.GetDirectory();
-                    foreach (string file in Directory.GetFiles(assemblyDirPath, "*.*", SearchOption.AllDirectories))
+
+                    _newBuildVersions = new BuildPackCollection(_runningApp, _uriToServerProject);
+                    if (_newBuildVersions.Count > 0)
                     {
-                        LocalAssemblyInfo localFileInfo = new LocalAssemblyInfo(file, assemblyDirPath, file.Like(_runningApp.Location));
-                        currentVersions.Add(localFileInfo.FileName, localFileInfo);
-                    }
-
-                    string resultStr = WEB.WebHttpStringData(_xmlVersionPath, out HttpStatusCode resHttp, HttpRequestCacheLevel.NoCacheNoStore);
-
-                    if (resHttp == HttpStatusCode.OK)
-                    {
-                        XmlDocument doc = new XmlDocument();
-                        doc.LoadXml(resultStr);
-
-                        XmlNodeList updateNodes = doc.DocumentElement.SelectNodes("/Versions/Build");
-                        List<ServerAssemblyInfo> serverVersions = new List<ServerAssemblyInfo>();
-                        foreach (XmlNode updateNode in updateNodes)
-                        {
-                            if (updateNode == null)
-                                continue;
-
-                            var getNodesWithoutCase = updateNode.GetChildNodes(StringComparer.CurrentCultureIgnoreCase);
-                            serverVersions.Add(new ServerAssemblyInfo(getNodesWithoutCase, _uriToServerProject, assemblyDirPath));
-                        }
-
-                        deltaList = new BuildPackCollection(_runningApp);
-                        foreach (ServerAssemblyInfo server in serverVersions)
-                        {
-                            if (currentVersions.TryGetValue(server.FileName, out LocalAssemblyInfo current))
-                            {
-                                if ((server.Type == BuldPerformerType.Update || server.Type == BuldPerformerType.CreateOrUpdate) && server.Build > current.Build)
-                                    deltaList.Add(current, server);
-                                else if (server.Type == BuldPerformerType.RollBack && server.Build < current.Build)
-                                    deltaList.Add(current, server);
-                                else if (server.Type == BuldPerformerType.Remove)
-                                    deltaList.Add(current, server);
-                            }
-                            else if (server.Type == BuldPerformerType.CreateOrUpdate)
-                            {
-                                deltaList.Add(null, server);
-                            }
-                        }
-
-                        if (deltaList.Count > 0)
-                        {
-                            deltaList.OnFetchComplete += DeltaList_OnFetchComplete;
-                            deltaList.Fetch();
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        OnProcessingError?.Invoke(this,
-                            new BuildUpdaterProcessingArgs($"Catched exception when get status from server. HttpStatus=[{resHttp:G}] Uri=[{_xmlVersionPath.AbsoluteUri}]"));
+                        _newBuildVersions.OnFetchComplete += DeltaList_OnFetchComplete;
+                        _newBuildVersions.Fetch();
+                        return;
                     }
                 }
                 catch (Exception ex)
@@ -187,7 +137,6 @@ namespace Utils.BuildUpdater
             }
         }
 
-        
 
         private void DeltaList_OnFetchComplete(object sender, BuildUpdaterProcessingArgs e)
         {
@@ -195,13 +144,13 @@ namespace Utils.BuildUpdater
             {
                 try
                 {
-                    if (sender == null || deltaList == null || !(sender is BuildPackCollection) || ((BuildPackCollection) sender) != deltaList)
+                    if (sender == null || _newBuildVersions == null || !(sender is BuildPackCollection) || ((BuildPackCollection) sender) != _newBuildVersions)
                         return;
 
-                    if (!deltaList.IsUploaded || e.Error != null)
+                    if (!_newBuildVersions.IsUploaded || e.Error != null)
                     {
-                        deltaList.RemoveTempFiles();
-                        OnProcessingError?.Invoke(this, e.Error == null ? new BuildUpdaterProcessingArgs("Not all files were successfully upload!", deltaList) : e);
+                        _newBuildVersions.RemoveTempFiles();
+                        OnProcessingError?.Invoke(this, e.Error == null ? new BuildUpdaterProcessingArgs("Not all files were successfully upload!", _newBuildVersions) : e);
                         EnableTimer();
                         return;
                     }
@@ -213,13 +162,13 @@ namespace Utils.BuildUpdater
                         return;
                     }
 
-                    BuildUpdaterArgs buildArgs = new BuildUpdaterArgs(deltaList);
+                    BuildUpdaterArgs buildArgs = new BuildUpdaterArgs(_newBuildVersions);
                     foreach (BuildUpdaterHandler del in eventListeners)
                     {
                         del.Invoke(this, buildArgs);
                         if (buildArgs.Result == UpdateBuildResult.Cancel)
                         {
-                            deltaList.RemoveTempFiles();
+                            _newBuildVersions.RemoveTempFiles();
                             EnableTimer();
                             return;
                         }
@@ -231,12 +180,12 @@ namespace Utils.BuildUpdater
                         return;
                     }
 
-                    deltaList.Commit();
+                    _newBuildVersions.Commit();
                     return;
                 }
                 catch (Exception ex)
                 {
-                    OnProcessingError?.Invoke(this, new BuildUpdaterProcessingArgs(ex, deltaList));
+                    OnProcessingError?.Invoke(this, new BuildUpdaterProcessingArgs(ex, _newBuildVersions));
                 }
 
                 EnableTimer();
@@ -251,18 +200,18 @@ namespace Utils.BuildUpdater
                 {
                     try
                     {
-                        if (deltaList == null || deltaList.Count == 0)
+                        if (_newBuildVersions == null || _newBuildVersions.Count == 0)
                         {
-                            OnProcessingError?.Invoke(this, new BuildUpdaterProcessingArgs("Internal error. DeltaList is null.", deltaList));
+                            OnProcessingError?.Invoke(this, new BuildUpdaterProcessingArgs("Internal error. Server builds not initialized.", _newBuildVersions));
                             _waitSelfUpdate = false;
                             EnableTimer();
                             return;
                         }
-                        deltaList.Commit();
+                        _newBuildVersions.Commit();
                     }
                     catch (Exception ex)
                     {
-                        OnProcessingError?.Invoke(this, new BuildUpdaterProcessingArgs(ex, deltaList));
+                        OnProcessingError?.Invoke(this, new BuildUpdaterProcessingArgs(ex, _newBuildVersions));
                         _waitSelfUpdate = false;
                         EnableTimer();
                     }

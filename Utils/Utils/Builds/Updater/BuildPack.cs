@@ -14,32 +14,6 @@ using System.Threading.Tasks;
 namespace Utils.BuildUpdater
 {
     [Serializable]
-    public class WebDownload : WebClient
-    {
-        /// <summary>
-        /// Time in milliseconds
-        /// </summary>
-        public int Timeout { get; set; } // default timeout is 100 seconds (ASP .NET is 90 seconds)
-
-        public WebDownload() : this(60000) { }
-
-        public WebDownload(int timeout)
-        {
-            this.Timeout = timeout;
-        }
-
-        protected override WebRequest GetWebRequest(Uri address)
-        {
-            var request = base.GetWebRequest(address);
-            if (request != null)
-            {
-                request.Timeout = this.Timeout;
-            }
-            return request;
-        }
-    }
-
-    [Serializable]
     public class BuildPack : UploadProgress, IUploadProgress
     {
         const string argument_start = "/C choice /C Y /N /D Y /T 4 & Start \"\" /D \"{0}\" \"{1}\"";

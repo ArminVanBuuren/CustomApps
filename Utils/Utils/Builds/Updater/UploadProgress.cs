@@ -8,14 +8,43 @@ namespace Utils.BuildUpdater
 {
     public interface IUploadProgress
     {
+        /// <summary>
+        /// Когда новые версии бильдов скачались на локальный диск в темповую папку. Либо загрузка завершилась неудачей
+        /// </summary>
         event UploadBuildHandler OnFetchComplete;
+        /// <summary>
+        /// Статус скачанных файлов с сервера
+        /// </summary>
         bool IsUploaded { get; }
+        /// <summary>
+        /// Количество скачанных байт
+        /// </summary>
         long UploadedBytes { get; }
+        /// <summary>
+        /// Размер файлов на сервере
+        /// </summary>
         long TotalBytes { get; }
+        /// <summary>
+        /// Прогресс в процентах скачиванных файлов с сервера
+        /// </summary>
         int ProgressPercent { get; }
+        /// <summary>
+        /// Прогресс скачиванных файлов с сервера
+        /// </summary>
+        /// <returns></returns>
         string GetProgressString();
+        /// <summary>
+        /// Скачать файлы с сервера
+        /// </summary>
+        /// <returns>Возвращает возможно ли скачать файлы. Возможно новые версии не были найдены или файлы необходимо удалить с локального диска, поэтому скачивать ничего не надо</returns>
         bool Fetch();
+        /// <summary>
+        /// Финальная стадия обновления. Когда все файлы успешно скачаны, в методе генерится список комманд на обновление и после успешного завершения програма принудительно закрывается
+        /// </summary>
         void Commit();
+        /// <summary>
+        /// Удаление темполвых файлов скачанных с сервера
+        /// </summary>
         void RemoveTempFiles();
     }
 

@@ -4,10 +4,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Cache;
 using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
+using Utils.XmlHelper;
 
 namespace Utils.BuildUpdater
 {
@@ -15,47 +19,95 @@ namespace Utils.BuildUpdater
     public class BuildPackCollection : UploadProgress, IUploadProgress, IEnumerable<BuildPack>, IEnumerator<BuildPack>, IDisposable
     {
         public event UploadBuildHandler OnFetchComplete;
-        int index = -1;
         private List<BuildPack> _collection = new List<BuildPack>();
+        int index = -1;
         private Assembly _runningApp;
         private object _lock = new object();
         private int _completedFetchCount = 0;
         private int _waitingFetchCount = 0;
         private bool _inProgress = false;
+        BuildUpdaterProcessingArgs fetchArgs;
 
-        public override bool IsUploaded
+        public BuildPackCollection(Assembly runningApp, Uri serverUri)
         {
-            get
-            {
-                foreach (BuildPack build in _collection)
-                {
-                    if (!build.IsUploaded)
-                        return false;
-                }
+            _runningApp = runningApp;
+            Dictionary<string, ServerAssemblyInfo> serverVersions = GetServerVersions(runningApp, serverUri);
+            if(serverVersions.Count == 0)
+                return;
 
-                return true;
+            Dictionary<string, LocalAssemblyInfo> localVersions = GetLocalVersions(runningApp);
+
+            foreach (ServerAssemblyInfo server in serverVersions.Values)
+            {
+                if (localVersions.TryGetValue(server.FileName, out LocalAssemblyInfo current))
+                {
+                    if ((server.Type == BuldPerformerType.Update || server.Type == BuldPerformerType.CreateOrUpdate) && server.Build > current.Build)
+                        Add(current, server);
+                    else if (server.Type == BuldPerformerType.RollBack && server.Build < current.Build)
+                        Add(current, server);
+                    else if (server.Type == BuldPerformerType.Remove)
+                        Add(current, server);
+                }
+                else if (server.Type == BuldPerformerType.CreateOrUpdate)
+                {
+                    Add(null, server);
+                }
             }
         }
 
-        public BuildPackCollection(Assembly runningApp)
+        internal static Dictionary<string, LocalAssemblyInfo> GetLocalVersions(Assembly runningApp)
         {
-            _runningApp = runningApp;
+            Dictionary<string, LocalAssemblyInfo> localVersions = new Dictionary<string, LocalAssemblyInfo>(StringComparer.CurrentCultureIgnoreCase);
+            string assemblyDirPath = runningApp.GetDirectory();
+            foreach (string file in Directory.GetFiles(assemblyDirPath, "*.*", SearchOption.AllDirectories))
+            {
+                LocalAssemblyInfo localFileInfo = new LocalAssemblyInfo(file, assemblyDirPath, file.Like(runningApp.Location));
+                localVersions.Add(localFileInfo.FileName, localFileInfo);
+            }
+
+            return localVersions;
         }
 
-        internal void Add(LocalAssemblyInfo currentFile, ServerAssemblyInfo serverFile)
+        internal static Dictionary<string, ServerAssemblyInfo> GetServerVersions(Assembly runningApp, Uri serverUri)
+        {
+            Uri versionsInfo = new Uri(serverUri + "/version.xml");
+            string resultStr = WEB.WebHttpStringData(versionsInfo, out HttpStatusCode resHttp, HttpRequestCacheLevel.NoCacheNoStore);
+
+            if (resHttp == HttpStatusCode.OK)
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml(resultStr);
+
+                XmlNodeList updateNodes = doc.DocumentElement.SelectNodes("/Versions/Build");
+                Dictionary<string, ServerAssemblyInfo> serverVersions = new Dictionary<string, ServerAssemblyInfo>();
+                foreach (XmlNode updateNode in updateNodes)
+                {
+                    if (updateNode == null)
+                        continue;
+
+                    var getNodesWithoutCase = updateNode.GetChildNodes(StringComparer.CurrentCultureIgnoreCase);
+                    ServerAssemblyInfo serverFileInfo = new ServerAssemblyInfo(getNodesWithoutCase, serverUri, runningApp.GetDirectory());
+                    serverVersions.Add(serverFileInfo.FileName, serverFileInfo);
+                }
+
+                return serverVersions;
+            }
+
+            throw new Exception($"Catched exception when get status from server. HttpStatus=[{resHttp:G}] Uri=[{versionsInfo.AbsoluteUri}]");
+        }
+
+        void Add(LocalAssemblyInfo currentFile, ServerAssemblyInfo serverFile)
         {
             BuildPack build = new BuildPack(currentFile, serverFile);
             build.OnFetchComplete += Build_OnFetchComplete;
             _collection.Add(build);
         }
 
-        BuildUpdaterProcessingArgs fetchArgs;
-
         public override bool Fetch()
         {
             lock (_lock)
             {
-                if (!_inProgress)
+                if (!_inProgress && Count > 0)
                 {
                     fetchArgs = new BuildUpdaterProcessingArgs(this);
                     try
@@ -146,17 +198,36 @@ namespace Utils.BuildUpdater
             }
         }
 
+        public override bool IsUploaded
+        {
+            get
+            {
+                int count = 0;
+                foreach (BuildPack build in _collection)
+                {
+                    count++;
+                    if (!build.IsUploaded)
+                        return false;
+                }
+
+                return count > 0;
+            }
+        }
+
         public override int ProgressPercent
         {
             get
             {
+                if (Count == 0)
+                    return 0;
+
                 int allFileProgress = 0;
                 foreach (BuildPack build in _collection)
                 {
                     allFileProgress += build.ProgressPercent;
                 }
 
-                return allFileProgress / _collection.Count;
+                return allFileProgress / Count;
             }
         }
 
