@@ -1,17 +1,11 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Utils.BuildUpdater
+namespace Utils.Builds.Updater
 {
     [Serializable]
     public class BuildPack : UploadProgress, IUploadProgress

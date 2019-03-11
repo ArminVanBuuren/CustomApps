@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Utils.AssemblyHelper
+namespace Utils.Builds
 {
     [Serializable]
     public class BuildNumber : IComparable

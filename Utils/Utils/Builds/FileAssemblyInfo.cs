@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Utils.AssemblyHelper;
 using Utils.CollectionHelper;
 
-namespace Utils.BuildUpdater
+namespace Utils.Builds
 {
     [Serializable]
     public enum BuldPerformerType

@@ -1,21 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Cache;
 using System.Reflection;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
 using System.Timers;
-using System.Xml;
-using Utils.AssemblyHelper;
-using Utils.CollectionHelper;
-using Utils.XmlHelper;
 
-namespace Utils.BuildUpdater
+namespace Utils.Builds.Updater
 {
     public enum UpdateBuildResult
     {

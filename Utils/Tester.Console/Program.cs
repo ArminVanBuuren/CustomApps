@@ -3,8 +3,7 @@ using System.Net;
 using System.Net.Cache;
 using System.Reflection;
 using Utils;
-using Utils.AssemblyHelper;
-using Utils.BuildUpdater;
+using Utils.Builds.Updater;
 
 
 namespace Tester
