@@ -36,6 +36,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,7 +50,6 @@
     <Compile Include="Builds\BuildInfoVersions.cs" />
     <Compile Include="Builds\Updater\BuildPack.cs" />
     <Compile Include="Builds\Updater\BuildPackCollection.cs" />
-    <Compile Include="Builds\Unloader\BuildUnloader.cs" />
     <Compile Include="Builds\Hasher.cs" />
     <Compile Include="Builds\Updater\BuildUpdaterArgs.cs" />
     <Compile Include="Builds\Updater\BuildUpdaterProcessingArgs.cs" />
@@ -93,13 +93,6 @@
     <Compile Include="XPathHelper\XPathHelper.cs" />
     <Compile Include="XPathHelper\XPathResult.cs" />
     <Compile Include="ZIP.cs" />
-    <Compile Include="ZipHelper\System.Buffers.cs" />
-    <Compile Include="ZipHelper\ZipFile.Create.cs" />
-    <Compile Include="ZipHelper\ZipFile.Extract.cs" />
-    <Compile Include="ZipHelper\ZipFile.Utils.cs" />
-    <Compile Include="ZipHelper\ZipFileExtensions.ZipArchive.Create.cs" />
-    <Compile Include="ZipHelper\ZipFileExtensions.ZipArchive.Extract.cs" />
-    <Compile Include="ZipHelper\ZipFileExtensions.ZipArchiveEntry.Extract.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DropBoxIntegration\" />

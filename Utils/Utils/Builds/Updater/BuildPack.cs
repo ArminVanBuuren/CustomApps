@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Reflection;
-using Utils.Builds.Unloader;
 
 namespace Utils.Builds.Updater
 {
@@ -142,6 +141,7 @@ namespace Utils.Builds.Updater
 
         private void WebClient_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
+            string downloadedMD5;
             BuildUpdaterProcessingArgs args = new BuildUpdaterProcessingArgs(this);
             if (e.Error != null || e.Cancelled)
             {
@@ -150,11 +150,8 @@ namespace Utils.Builds.Updater
             }
             else
             {
-                string downloadedMD5 = Hasher.HashFile(ServerFile.FilePath, HashType.MD5); //md5;
-                // Hash the file and compare to the hash in the update xml
-                //IsUploaded = downloadedMD5.Like(ServerFile.MD5);
-                
-                IsUploaded = true;
+                //downloadedMD5 = Hasher.HashFile(ServerFile.FilePath, HashType.MD5); //md5;
+                //IsUploaded = downloadedMD5.Like(ServerFile.MD5); // Hash the file and compare to the hash in the update xml
             }
 
             OnFetchComplete?.BeginInvoke(this, args, null, null);

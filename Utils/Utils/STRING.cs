@@ -8,6 +8,46 @@ namespace Utils
 {
     public static class STRING
     {
+        private static Random random = new Random();
+        const string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        const string nums = "1234567890";
+        const string numsWithLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+
+        /// <summary>
+        /// Возвращает рандомные буквы
+        /// </summary>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public static string RandomString(int length)
+        {
+            return ReturnRandomObject(letters, length);
+        }
+
+        /// <summary>
+        /// Возвращает рандомные цифры
+        /// </summary>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public static string RandomNumbers(int length)
+        {
+            return ReturnRandomObject(nums, length);
+        }
+
+        /// <summary>
+        /// Возвращает рандомные цифры и буквы
+        /// </summary>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public static string RandomStringNumbers(int length)
+        {
+            return ReturnRandomObject(numsWithLetters, length);
+        }
+
+        static string ReturnRandomObject(string chars, int length)
+        {
+            return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
         /// <summary>
         /// Взвращает дефолтное значение если параметр равен null
         /// </summary>
@@ -54,5 +94,7 @@ namespace Utils
                 return false;
             return input.Equals(value, StringComparison.CurrentCultureIgnoreCase);
         }
+
+        
     }
 }

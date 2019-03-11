@@ -19,7 +19,6 @@ namespace Utils.Builds.Updater
             VersionString = collectionAttr["Version"]?.First() ?? "1.0.0.0";
             TypeString = collectionAttr["Type"]?.First() ?? string.Empty;
             Location = (collectionAttr["Location"]?.First() ?? string.Empty).Trim('\\');
-            MD5 = collectionAttr["MD5"]?.First() ?? string.Empty;
             Description = collectionAttr["Description"]?.First() ?? string.Empty;
 
             Common(server, assemblyDirPath);
@@ -30,7 +29,6 @@ namespace Utils.Builds.Updater
             Version = build.Version;
             Type = build.Type;
             Location = build.Location;
-            MD5 = build.MD5;
             Description = build.Description;
 
             Common(server, assemblyDirPath);

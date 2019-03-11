@@ -19,7 +19,7 @@ namespace Utils.Builds
     [Serializable, XmlRoot("Build", IsNullable = false)]
     public class FileBuildInfo
     {
-        private string _location = string.Empty, _md5 = string.Empty;
+        private string _location = string.Empty;
 
         public FileBuildInfo()
         {
@@ -31,7 +31,6 @@ namespace Utils.Builds
             Type = BuldPerformerType.None;
             FilePath = file;
             Location = file.Replace(assemblyDirPath, string.Empty).Trim('\\');
-            MD5 = Hasher.HashFile(file, HashType.MD5);
             Description = @"Fixed and improved";
             IsExecutingFile = isExecFile;
         }
@@ -89,19 +88,6 @@ namespace Utils.Builds
                     throw new ArgumentNullException("Location of file is null");
 
                 _location = value;
-            }
-        }
-
-        [XmlElement]
-        public string MD5
-        {
-            get => _md5;
-            set
-            {
-                if (value.IsNullOrEmptyTrim())
-                    throw new ArgumentNullException($"MD5 of file=[{Location}] is null");
-
-                _md5 = value;
             }
         }
 

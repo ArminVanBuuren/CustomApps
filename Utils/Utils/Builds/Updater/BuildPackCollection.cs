@@ -8,7 +8,6 @@ using System.Net.Cache;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
-using Utils.Builds.Unloader;
 using Utils.XmlHelper;
 
 namespace Utils.Builds.Updater
@@ -33,7 +32,7 @@ namespace Utils.Builds.Updater
             if(serverVersions.Count == 0)
                 return;
 
-            Dictionary<string, FileBuildInfo> localVersions = BuildUnloader.GetLocalVersions(runningApp);
+            Dictionary<string, FileBuildInfo> localVersions = BuildInfoVersions.GetLocalVersions(runningApp);
 
             foreach (ServerBuildInfo server in serverVersions.Values)
             {

@@ -131,6 +131,13 @@ namespace Utils
             File.SetAccessControl(filePath, access);
         }
 
+        public static string GetTemporaryDirectory()
+        {
+            string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            Directory.CreateDirectory(tempDirectory);
+            return tempDirectory;
+        }
+
         static ArrayList tempGetFileProcesses(string strFile)
         {
             ArrayList myProcessArray = new ArrayList();
