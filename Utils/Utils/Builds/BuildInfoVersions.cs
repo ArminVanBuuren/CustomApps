@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -44,12 +45,11 @@ namespace Utils.Builds
             string tempFile = Path.GetTempFileName();
             try
             {
-                if (File.Exists(fileVersions))
-                    File.Delete(fileVersions);
+                File.Delete(fileVersions);
 
                 Builds = GetLocalVersions(assembliesDirPath).Values.ToList();
                 if (Builds.Count == 0)
-                    throw new ArgumentNullException($"Directory {assembliesDirPath} has no one file.");
+                    throw new ArgumentNullException($"Directory=[{assembliesDirPath}] has no one file.");
 
                 File.Delete(tempFile);
                 ZipFile.CreateFromDirectory(assembliesDirPath, tempFile, CompressionLevel.Optimal, false);
@@ -59,7 +59,6 @@ namespace Utils.Builds
 
                 MD5 = Hasher.HashFile(archDestpath, HashType.MD5);
 
-                
                 using (FileStream stream = new FileStream(fileVersions, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None))
                 {
                     new XmlSerializer(typeof(BuildInfoVersions)).Serialize(stream, this);
@@ -70,6 +69,18 @@ namespace Utils.Builds
                 File.Delete(tempFile);
                 throw e;
             }
+        }
+
+        void GotoServer()
+        {
+            string gitCommand = "git";
+            string gitAddArgument = @"add -A";
+            string gitCommitArgument = @"commit ""explanations_of_changes"" ";
+            string gitPushArgument = @"push our_remote";
+
+            Process.Start(gitCommand, gitAddArgument);
+            Process.Start(gitCommand, gitCommitArgument);
+            Process.Start(gitCommand, gitPushArgument);
         }
 
         internal static Dictionary<string, FileBuildInfo> GetLocalVersions(Assembly runningApp)
