@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LibGit2Sharp;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,8 +7,11 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using LibGit2Sharp.Handlers;
+using Utils;
 using Utils.Builds;
 using Utils.Builds.Updater;
+using System.Diagnostics;
 
 namespace Tester.Updater
 {
@@ -43,6 +47,7 @@ namespace Tester.Updater
             up.OnProcessingError += Up_OnProcessingError;
             System.Console.WriteLine($"{nameof(BuildUpdater)} created!");
         }
+
         private static void Up_FindedNewVersions(object sender, BuildUpdaterArgs buildPack)
         {
             buildPack.Result = UpdateBuildResult.Update;
@@ -57,9 +62,18 @@ namespace Tester.Updater
         public static void Upload()
         {
             start:
-            System.Console.WriteLine(@"Enter directory path. Like - C:\!MyRepos\CustomApp\Utils\TesterConsole\bin\Uploader\test1\OnServer");
-            string dirPath = System.Console.ReadLine();
-            if (!Directory.Exists(dirPath))
+            //System.Console.WriteLine(@"Enter builds directory path. Like - C:\!MyRepos\CustomApp\Utils\TesterConsole\bin\Uploader\test1\OnServer");
+            //string sourcePath = System.Console.ReadLine();
+            //System.Console.WriteLine(@"Enter destination directory path. Like - C:\!Builds\TFSAssist");
+            //string destPath = System.Console.ReadLine();
+            //System.Console.WriteLine($"Enter git repos, to push changes in remote server. Like - https://github.com/ArminVanBuuren/TFSAssist");
+            //string remoteGitRepos = System.Console.ReadLine();
+
+            string sourcePath = @"C:\!MyRepos\CustomApp\Utils\TesterConsole\bin\Uploader\test1\OnServer";
+            string destPath = @"C:\!Builds\TFSAssist";
+            string remoteGitRepos = @"https://github.com/ArminVanBuuren/TFSAssist";
+
+            if (!Directory.Exists(sourcePath))
             {
                 System.Console.WriteLine("Incorrect path!");
                 goto start;
@@ -67,12 +81,89 @@ namespace Tester.Updater
 
             try
             {
-                BuildInfoVersions bldVers = new BuildInfoVersions(dirPath);
+                if (Directory.Exists(destPath))
+                    ClearAllRepos(destPath);
+
+                UsernamePasswordCredentials credentials = new UsernamePasswordCredentials
+                {
+                    Username = "ArminVanBuuren",
+                    Password = "ArminOnly#3"
+                };
+
+                CloneOptions options = new CloneOptions
+                {
+                    CredentialsProvider = (_url, _user, _cred) => credentials
+                };
+
+                PushOptions pushIOpt = new PushOptions
+                {
+                    CredentialsProvider = new CredentialsHandler((url, usernameFromUrl, types) => credentials)
+                };
+
+                Signature signature = new Signature("ArminVanBuuren", "vkhovanskiy@gmail.com", DateTimeOffset.Now);
+                BuildVersionsInfo bldVers;
+
+                string path = Repository.Init(destPath, false);
+                using (var repo = new Repository(path))
+                {
+                    // создаем локальную ветку
+                    Remote remote = repo.Network.Remotes.Where(p => p.Name == "origin").First();
+                    if (remote == null)
+                        repo.Network.Remotes.Add("origin", remoteGitRepos);
+
+                    // вытягиваем весь репозиторий с сервера 
+                    Commands.Fetch(repo, "origin", new string[0], new FetchOptions
+                    {
+                        CredentialsProvider = options.CredentialsProvider
+                    }, null);
+                    // переносим все в локальную папку Fetch + Merge - это тоже самое что и pull
+                    repo.Merge(repo.Branches["origin/master"], signature);
+
+
+                    ClearAllRepos(destPath, false);
+                    bldVers = new BuildVersionsInfo(sourcePath, destPath);
+
+
+                    // git Add. Индексируем изменения
+                    Commands.Stage(repo, "*");
+                    // Делаем снимок проиндексированных файлов
+                    repo.Commit($"Initialized newest build - \"{bldVers.BuildPack}\"", signature, signature);
+
+
+
+                    // локальную ветку origin/master переносим в master что на сервере
+                    repo.Branches.Update(repo.Head,
+                        b => b.Remote = remote.Name,
+                        b => b.UpstreamBranch = repo.Head.CanonicalName);
+
+                    // заливаем на сервер в ветку master
+                    repo.Network.Push(repo.Branches["master"], pushIOpt);
+                }
+
                 System.Console.WriteLine($"Build successful assembled! Build:{bldVers.BuildPack}");
             }
             catch (Exception e)
             {
                 System.Console.WriteLine(e);
+            }
+        }
+
+        public static void ClearAllRepos(string directoryPath, bool deleteGit = true)
+        {
+            DirectoryInfo di = new DirectoryInfo(directoryPath);
+
+            foreach (FileInfo file in di.GetFiles())
+            {
+                file.Delete();
+            }
+
+            foreach (DirectoryInfo dir in di.GetDirectories())
+            {
+                if (dir.Name.Like(".git"))
+                    if (!deleteGit)
+                        continue;
+
+                dir.Delete(true);
             }
         }
     }

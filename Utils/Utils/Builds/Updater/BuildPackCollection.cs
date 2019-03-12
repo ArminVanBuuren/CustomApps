@@ -32,7 +32,7 @@ namespace Utils.Builds.Updater
             if(serverVersions.Count == 0)
                 return;
 
-            Dictionary<string, FileBuildInfo> localVersions = BuildInfoVersions.GetLocalVersions(runningApp);
+            Dictionary<string, FileBuildInfo> localVersions = BuildVersionsInfo.GetLocalVersions(runningApp);
 
             foreach (ServerBuildInfo server in serverVersions.Values)
             {
@@ -54,16 +54,16 @@ namespace Utils.Builds.Updater
 
         static Dictionary<string, ServerBuildInfo> GetServerVersions(Assembly runningApp, Uri serverUri)
         {
-            Uri versionsInfo = new Uri($"{serverUri}/{BuildInfoVersions.FILE_NAME}");
+            Uri versionsInfo = new Uri($"{serverUri}/{BuildVersionsInfo.FILE_NAME}");
             string resultStr = WEB.WebHttpStringData(versionsInfo, out HttpStatusCode resHttp, HttpRequestCacheLevel.NoCacheNoStore);
 
             if (resHttp == HttpStatusCode.OK)
             {
-                XmlSerializer xsSubmit = new XmlSerializer(typeof(BuildInfoVersions));
-                BuildInfoVersions res;
+                XmlSerializer xsSubmit = new XmlSerializer(typeof(BuildVersionsInfo));
+                BuildVersionsInfo res;
                 using (TextReader reader = new StringReader(resultStr))
                 {
-                    res = (BuildInfoVersions)xsSubmit.Deserialize(reader);
+                    res = (BuildVersionsInfo)xsSubmit.Deserialize(reader);
                 }
 
                 string assemblyDirPath = runningApp.GetDirectory();
@@ -82,7 +82,7 @@ namespace Utils.Builds.Updater
 
         static Dictionary<string, ServerBuildInfo> GetServerVersionsViaXMLDoc(Assembly runningApp, Uri serverUri)
         {
-            Uri versionsInfo = new Uri($"{serverUri}/{BuildInfoVersions.FILE_NAME}");
+            Uri versionsInfo = new Uri($"{serverUri}/{BuildVersionsInfo.FILE_NAME}");
             string resultStr = WEB.WebHttpStringData(versionsInfo, out HttpStatusCode resHttp, HttpRequestCacheLevel.NoCacheNoStore);
 
             if (resHttp == HttpStatusCode.OK)

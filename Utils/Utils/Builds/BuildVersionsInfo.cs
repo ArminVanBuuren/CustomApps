@@ -11,11 +11,12 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using Utils.GitHelper;
 
 namespace Utils.Builds
 {
     [Serializable, XmlRoot("Versions")]
-    public class BuildInfoVersions
+    public class BuildVersionsInfo
     {
         public const string FILE_NAME = "version.xml";
 
@@ -28,59 +29,50 @@ namespace Utils.Builds
         [XmlElement("Build")]
         public List<FileBuildInfo> Builds { get; set; } = new List<FileBuildInfo>();
 
-        public BuildInfoVersions()
+        public BuildVersionsInfo()
         {
 
         }
 
-        public BuildInfoVersions(Assembly assembly):this(assembly.GetDirectory())
+        public BuildVersionsInfo(Assembly assembly, string destinationPath) :this(assembly.GetDirectory(), destinationPath)
         {
 
         }
 
-        public BuildInfoVersions(string assembliesDirPath)
+
+        public BuildVersionsInfo(string assembliesDirPath, string destinationDirPath)
         {
-            string fileVersions = Path.Combine(assembliesDirPath, BuildInfoVersions.FILE_NAME);
+            if(!Directory.Exists(destinationDirPath))
+                throw new ArgumentException($"Destionation dirtctory=[{destinationDirPath}] doesn't exist");
+
             BuildPack = STRING.RandomStringNumbers(10) + ".zip";
-            string tempFile = Path.GetTempFileName();
+            string fileBuildsPath = Path.Combine(destinationDirPath, BuildPack);
+            string fileVersionsPath = Path.Combine(destinationDirPath, BuildVersionsInfo.FILE_NAME);
+            string tempFileBuildsPath = Path.GetTempFileName();
+
             try
             {
-                File.Delete(fileVersions);
-
                 Builds = GetLocalVersions(assembliesDirPath).Values.ToList();
                 if (Builds.Count == 0)
-                    throw new ArgumentNullException($"Directory=[{assembliesDirPath}] has no one file.");
+                    throw new ArgumentException($"Directory=[{assembliesDirPath}] has no one file.");
 
-                File.Delete(tempFile);
-                ZipFile.CreateFromDirectory(assembliesDirPath, tempFile, CompressionLevel.Optimal, false);
-                string archDestpath = Path.Combine(assembliesDirPath, BuildPack);
-                File.Copy(tempFile, archDestpath, true);
-                File.Delete(tempFile);
+                File.Delete(tempFileBuildsPath);
+                ZipFile.CreateFromDirectory(assembliesDirPath, tempFileBuildsPath, CompressionLevel.Optimal, false);
+                File.Copy(tempFileBuildsPath, fileBuildsPath, true);
+                File.Delete(tempFileBuildsPath);
 
-                MD5 = Hasher.HashFile(archDestpath, HashType.MD5);
+                MD5 = Hasher.HashFile(fileBuildsPath, HashType.MD5);
 
-                using (FileStream stream = new FileStream(fileVersions, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None))
+                using (FileStream stream = new FileStream(fileVersionsPath, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None))
                 {
-                    new XmlSerializer(typeof(BuildInfoVersions)).Serialize(stream, this);
+                    new XmlSerializer(typeof(BuildVersionsInfo)).Serialize(stream, this);
                 }
             }
             catch (Exception e)
             {
-                File.Delete(tempFile);
+                File.Delete(tempFileBuildsPath);
                 throw e;
             }
-        }
-
-        void GotoServer()
-        {
-            string gitCommand = "git";
-            string gitAddArgument = @"add -A";
-            string gitCommitArgument = @"commit ""explanations_of_changes"" ";
-            string gitPushArgument = @"push our_remote";
-
-            Process.Start(gitCommand, gitAddArgument);
-            Process.Start(gitCommand, gitCommitArgument);
-            Process.Start(gitCommand, gitPushArgument);
         }
 
         internal static Dictionary<string, FileBuildInfo> GetLocalVersions(Assembly runningApp)
@@ -101,9 +93,9 @@ namespace Utils.Builds
             return localVersions;
         }
 
-        public void SerializeAndDeserialize(BuildInfoVersions versions)
+        public void SerializeAndDeserialize(BuildVersionsInfo versions)
         {
-            XmlSerializer xsSubmit = new XmlSerializer(typeof(BuildInfoVersions));
+            XmlSerializer xsSubmit = new XmlSerializer(typeof(BuildVersionsInfo));
             var xml = "";
             using (var sww = new StringWriter())
             {
@@ -114,10 +106,10 @@ namespace Utils.Builds
                 }
             }
 
-            BuildInfoVersions res;
+            BuildVersionsInfo res;
             using (TextReader reader = new StringReader(xml))
             {
-                res = (BuildInfoVersions)xsSubmit.Deserialize(reader);
+                res = (BuildVersionsInfo)xsSubmit.Deserialize(reader);
             }
         }
     }

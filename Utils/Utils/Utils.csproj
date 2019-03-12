@@ -47,7 +47,7 @@
   <ItemGroup>
     <Compile Include="Builds\BuildNumber.cs" />
     <Compile Include="ASSEMBLY.cs" />
-    <Compile Include="Builds\BuildInfoVersions.cs" />
+    <Compile Include="Builds\BuildVersionsInfo.cs" />
     <Compile Include="Builds\Updater\BuildPack.cs" />
     <Compile Include="Builds\Updater\BuildPackCollection.cs" />
     <Compile Include="Builds\Hasher.cs" />
@@ -72,8 +72,12 @@
     <Compile Include="ConditionEx\Utils\Types.cs" />
     <Compile Include="Crypto\AES.cs" />
     <Compile Include="Crypto\DH.cs" />
+    <Compile Include="GitHelper\GitControl.cs" />
     <Compile Include="INT.cs" />
     <Compile Include="IO.cs" />
+    <Compile Include="ProcessEx\ProcessEx.cs" />
+    <Compile Include="ProcessEx\ProcessEx.overloads.cs" />
+    <Compile Include="ProcessEx\ProcessResults.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="REGEDIT.cs" />
     <Compile Include="SERIALIZATION.cs" />
