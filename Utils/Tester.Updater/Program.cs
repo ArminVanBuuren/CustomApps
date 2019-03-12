@@ -99,17 +99,19 @@ namespace Tester.Updater
                 {
                     CredentialsProvider = new CredentialsHandler((url, usernameFromUrl, types) => credentials)
                 };
-                Signature signature = new Signature("ArminVanBuuren", "vkhovanskiy@gmail.com", DateTimeOffset.Now);
+
+                Identity identity = new Identity("ArminVanBuuren", "vkhovanskiy@gmail.com");
+                Signature signature = new Signature(identity, DateTimeOffset.Now);
 
                 BuildVersionsInfo bldVers;
-
                 string path = Repository.Init(destPath, false);
-                using (var repo = new Repository(path))
+                using (var repo = new Repository(path, new RepositoryOptions { Identity = identity }))
                 {
                     // создаем локальную ветку
-                    Remote remote = repo.Network.Remotes.Where(p => p.Name == "origin").First();
+                    //https://stackoverflow.com/questions/8285627/linq-exception-as-sequence-contains-no-elements
+                    Remote remote = repo.Network.Remotes.Where(p => p.Name == "origin").FirstOrDefault();
                     if (remote == null)
-                        repo.Network.Remotes.Add("origin", remoteGitRepos);
+                        remote = repo.Network.Remotes.Add("origin", remoteGitRepos);
 
                     // вытягиваем весь репозиторий с сервера 
                     Commands.Fetch(repo, "origin", new string[0], new FetchOptions
@@ -119,10 +121,8 @@ namespace Tester.Updater
                     // переносим все в локальную папку Fetch + Merge - это тоже самое что и pull
                     repo.Merge(repo.Branches["origin/master"], signature);
 
-
                     ClearAllRepos(destPath, false);
                     bldVers = new BuildVersionsInfo(sourcePath, destPath);
-
 
                     // git Add. Индексируем изменения
                     Commands.Stage(repo, "*");
@@ -130,12 +130,10 @@ namespace Tester.Updater
                     repo.Commit($"Initialized newest build - \"{bldVers.BuildPack}\"", signature, signature);
 
 
-
                     // локальную ветку origin/master переносим в master что на сервере
                     repo.Branches.Update(repo.Head,
                         b => b.Remote = remote.Name,
                         b => b.UpstreamBranch = repo.Head.CanonicalName);
-
                     // заливаем на сервер в ветку master
                     repo.Network.Push(repo.Branches["master"], pushIOpt);
                 }
