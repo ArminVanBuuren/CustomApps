@@ -99,8 +99,8 @@ namespace Tester.Updater
                 {
                     CredentialsProvider = new CredentialsHandler((url, usernameFromUrl, types) => credentials)
                 };
-
                 Signature signature = new Signature("ArminVanBuuren", "vkhovanskiy@gmail.com", DateTimeOffset.Now);
+
                 BuildVersionsInfo bldVers;
 
                 string path = Repository.Init(destPath, false);
