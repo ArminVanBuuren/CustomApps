@@ -12,14 +12,6 @@ using System.Xml.Serialization;
 namespace Utils.AppUpdater
 {
     [Serializable, XmlRoot("Pack")]
-    public class BuildCollection : List<FileBuildInfo>
-
-    {
-        
-    }
-
-
-    [Serializable, XmlRoot("Pack")]
     public class BuildPack
     {
         [XmlAttribute]
@@ -103,6 +95,11 @@ namespace Utils.AppUpdater
             {
                 res = (Builds)xsSubmit.Deserialize(reader);
             }
+        }
+
+        public override string ToString()
+        {
+            return $"Name=[{Name}] Project=[{Project}]";
         }
     }
 }

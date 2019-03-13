@@ -35,16 +35,19 @@ namespace Utils.AppUpdater
                 File.Copy(filePath, fileSource, true);
             }
 
-            switch (algo)
+            using (FileStream stream = new FileStream(fileSource, FileMode.Open))
             {
-                case HashType.MD5:
-                    return MakeHashString(MD5.Create().ComputeHash(new FileStream(fileSource, FileMode.Open)));
-                case HashType.SHA1:
-                    return MakeHashString(SHA1.Create().ComputeHash(new FileStream(fileSource, FileMode.Open)));
-                case HashType.SHA512:
-                    return MakeHashString(SHA512.Create().ComputeHash(new FileStream(fileSource, FileMode.Open)));
-                default:
-                    return "";
+                switch (algo)
+                {
+                    case HashType.MD5:
+                        return MakeHashString(MD5.Create().ComputeHash(stream));
+                    case HashType.SHA1:
+                        return MakeHashString(SHA1.Create().ComputeHash(stream));
+                    case HashType.SHA512:
+                        return MakeHashString(SHA512.Create().ComputeHash(stream));
+                    default:
+                        return "";
+                }
             }
         }
 

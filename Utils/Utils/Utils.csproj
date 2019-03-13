@@ -50,11 +50,10 @@
     <Compile Include="AppUpdater\BuildPack.cs" />
     <Compile Include="AppUpdater\Builds.cs" />
     <Compile Include="AppUpdater\Updater\BuildUpdater.cs" />
-    <Compile Include="AppUpdater\Updater\BuildPackCollection.cs" />
+    <Compile Include="AppUpdater\Updater\BuildUpdaterCollection.cs" />
     <Compile Include="AppUpdater\Hasher.cs" />
     <Compile Include="AppUpdater\ApplicationUpdaterArgs.cs" />
     <Compile Include="AppUpdater\ApplicationUpdaterProcessingArgs.cs" />
-    <Compile Include="AppUpdater\Updater\ServerBuildInfo.cs" />
     <Compile Include="AppUpdater\Updater\UploadProgress.cs" />
     <Compile Include="CollectionHelper\CollectionHelper.cs" />
     <Compile Include="CollectionHelper\DuplicateDictionary.cs" />

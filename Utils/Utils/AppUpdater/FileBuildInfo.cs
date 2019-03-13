@@ -30,7 +30,6 @@ namespace Utils.AppUpdater
         {
             Version = BuildNumber.FromFile(file);
             Type = BuldPerformerType.None;
-            FilePath = file;
             Location = file.Replace(assemblyDirPath, string.Empty).Trim('\\');
             Description = @"Fixed and improved";
             IsExecutingFile = isExecFile;
@@ -64,10 +63,12 @@ namespace Utils.AppUpdater
                     Type = BuldPerformerType.Update;
                 else if (value.Like("RollBack"))
                     Type = BuldPerformerType.RollBack;
-                else if (value.Like("CreateOrUpdate"))
-                    Type = BuldPerformerType.CreateOrUpdate;
                 else if (value.Like("Remove"))
                     Type = BuldPerformerType.Remove;
+                else if (value.Like("CreateOrUpdate") || value.Like("Create"))
+                    Type = BuldPerformerType.CreateOrUpdate;
+                else if (value.Like("CreateOrReplace"))
+                    Type = BuldPerformerType.CreateOrReplace;
                 else
                     Type = BuldPerformerType.None;
             }
@@ -96,14 +97,11 @@ namespace Utils.AppUpdater
         public string Description { get; set; }
 
         [XmlIgnore]
-        public string FilePath { get; set; }
-
-        [XmlIgnore]
         public bool IsExecutingFile { get; set; }
 
         public override string ToString()
         {
-            return $"Version=[{Version.ToString()}] Location=[{Location}] Type=[{Type:G}]";
+            return $"Location=[{Location}] Version=[{Version.ToString()}] Type=[{Type:G}]";
         }
     }
 }

@@ -39,9 +39,7 @@ namespace Tester.Updater
 
         public static void Update()
         {
-            System.Console.WriteLine(@"Enter uri path. Like - https://raw.githubusercontent.com/ArminVanBuuren/TFSAssist/master");
-            string uriPath = System.Console.ReadLine();
-            ApplicationUpdater up = new ApplicationUpdater(Assembly.GetExecutingAssembly(), uriPath, 1);
+            ApplicationUpdater up = new ApplicationUpdater(Assembly.GetExecutingAssembly(), @"TFSAssist", string.Empty, 1);
             up.UpdateOnNewVersion += Up_FindedNewVersions;
             up.OnProcessingError += Up_OnProcessingError;
             System.Console.WriteLine($"{nameof(ApplicationUpdater)} created!");
@@ -72,7 +70,7 @@ namespace Tester.Updater
                 //System.Console.WriteLine($"Enter git repos, to push changes in remote server. Like - https://github.com/ArminVanBuuren/TFSAssist");
                 //string remoteGitRepos = System.Console.ReadLine();
 
-                string sourcePath = @"C:\!MyRepos\CustomApp\Utils\TesterConsole\bin\Uploader\test1\OnServer";
+                string sourcePath = @"C:\!MyRepos\CustomApp\Utils\Tester.Updater\bin\Uploader\test1\OnServer";
                 string destPath = @"C:\!Builds";
                 string projectStr = @"TFSAssist";
 
@@ -108,13 +106,14 @@ namespace Tester.Updater
                 Signature signature = new Signature(identity, DateTimeOffset.Now);
 
                 Console.WriteLine($"Start");
+                Directory.CreateDirectory(destPath);
                 string path = Repository.Init(destPath, false);
                 using (repo = new Repository(path, new RepositoryOptions {Identity = identity}))
                 {
                     // создаем локальную ветку
                     Remote remote = repo.Network.Remotes.Where(p => p.Name == "origin").FirstOrDefault();
                     if (remote == null)
-                        remote = repo.Network.Remotes.Add("origin", Builds.DEFAULT_PROJECT_URI);
+                        remote = repo.Network.Remotes.Add("origin", Builds.DEFAULT_PROJECT_GIT);
 
                     // вытягиваем весь репозиторий с сервера 
                     Commands.Fetch(repo, "origin", new string[0], new FetchOptions

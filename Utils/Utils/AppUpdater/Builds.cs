@@ -18,7 +18,8 @@ namespace Utils.AppUpdater
     [Serializable, XmlRoot("Builds")]
     public class Builds
     {
-        public const string DEFAULT_PROJECT_URI = @"https://github.com/ArminVanBuuren/Builds";
+        public const string DEFAULT_PROJECT_GIT = @"https://github.com/ArminVanBuuren/Builds";
+        public const string DEFAULT_PROJECT_RAW = @"https://raw.githubusercontent.com/ArminVanBuuren/Builds/master";
         public const string FILE_NAME = "versions.xml";
 
         [XmlElement("Pack")]

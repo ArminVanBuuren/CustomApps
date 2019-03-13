@@ -1,14 +1,16 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Reflection;
+using System.Security.Policy;
 
 namespace Utils.AppUpdater.Updater
 {
     [Serializable]
-    public class BuildUpdater : UploadProgress, IUploadProgress
+    public class BuildUpdater
     {
         const string argument_start = "/C choice /C Y /N /D Y /T 4 & Start \"\" /D \"{0}\" \"{1}\"";
         const string argument_update = "/C choice /C Y /N /D Y /T 4 & Del /F /Q \"{0}\" & choice /C Y /N /D Y /T 2 & Move /Y \"{1}\" \"{2}\"";
@@ -16,74 +18,62 @@ namespace Utils.AppUpdater.Updater
         const string argument_add = "/C choice /C Y /N /D Y /T 4 & Move /Y \"{0}\" \"{1}\"";
         const string argument_remove = "/C choice /C Y /N /D Y /T 4 & Del /F /Q \"{0}\"";
 
-        public event UploadBuildHandler OnFetchComplete;
-        public FileBuildInfo CurrentFile { get; private set; }
-        public ServerBuildInfo ServerFile { get; private set; }
-        /// <summary>
-        /// The web client to download the update
-        /// </summary>
-        private WebClient webClient;
 
-        public BuildUpdater(FileBuildInfo currentFile, ServerBuildInfo serverFile)
+        public string FileSource { get; private set; }
+        public string FileDestination { get; }
+
+        public bool IsExecutable
         {
-            CurrentFile = currentFile;
-            ServerFile = serverFile;
-
-            webClient = new WebClient();
-            webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
-            webClient.DownloadFileCompleted += WebClient_DownloadFileCompleted;
-        }
-
-        // Download file
-        public override bool Fetch()
-        {
-            try
+            get
             {
-                if (ServerFile.UriFilePath != null)
-                {
-                    webClient.DownloadFileAsync(ServerFile.UriFilePath, ServerFile.FilePath);
-                    return true;
-                }
-                else
-                {
-                    IsUploaded = true;
-                }
+                if (LocalFile != null)
+                    return LocalFile.IsExecutingFile;
                 return false;
             }
-            catch
-            {
-                IsUploaded = false;
-                throw;
-            }
         }
 
-        public override void Commit()
+        public FileBuildInfo LocalFile { get; }
+        public FileBuildInfo ServerFile { get; }
+
+        public BuildUpdater(FileBuildInfo localFile, FileBuildInfo serverFile, string locationApp)
+        {
+            if(serverFile == null)
+                throw new ArgumentNullException($"[{nameof(FileBuildInfo)}] from server cannot be null");
+
+
+            LocalFile = localFile;
+            ServerFile = serverFile;
+            FileDestination = Path.Combine(Path.GetDirectoryName(locationApp), ServerFile.Location);
+        }
+
+        internal void Commit(string sourceDirectory)
         {
             string argument_complete = "";
+            FileSource = Path.Combine(sourceDirectory, ServerFile.Location);
 
             switch (ServerFile.Type)
             {
                 case BuldPerformerType.CreateOrUpdate:
-                    if (CurrentFile == null)
+                    if (LocalFile == null)
                     {
-                        string dirpath = Path.GetDirectoryName(ServerFile.DestinationFilePath);
-                        if (!Directory.Exists(dirpath))
-                            Directory.CreateDirectory(dirpath);
-                        argument_complete = string.Format(argument_add, ServerFile.FilePath, ServerFile.DestinationFilePath);
+                        string destinationDir = Path.GetDirectoryName(FileDestination);
+                        if (!Directory.Exists(destinationDir))
+                            Directory.CreateDirectory(destinationDir);
+                        argument_complete = string.Format(argument_add, FileSource, FileDestination);
                     }
                     else
                     {
-                        argument_complete = string.Format(argument_update, CurrentFile.FilePath, ServerFile.FilePath, ServerFile.DestinationFilePath);
+                        argument_complete = string.Format(argument_update, FileDestination, FileSource, FileDestination);
                     }
-                    Directory.CreateDirectory(Path.GetDirectoryName(ServerFile.DestinationFilePath));
+                    Directory.CreateDirectory(Path.GetDirectoryName(FileDestination));
                     break;
                 case BuldPerformerType.RollBack:
                 case BuldPerformerType.Update:
-                    argument_complete = string.Format(argument_update, CurrentFile.FilePath, ServerFile.FilePath, ServerFile.DestinationFilePath);
-                    Directory.CreateDirectory(Path.GetDirectoryName(ServerFile.DestinationFilePath));
+                    argument_complete = string.Format(argument_update, FileDestination, FileSource, FileDestination);
+                    Directory.CreateDirectory(Path.GetDirectoryName(FileDestination));
                     break;
                 case BuldPerformerType.Remove:
-                    argument_complete = string.Format(argument_remove, ServerFile.DestinationFilePath);
+                    argument_complete = string.Format(argument_remove, FileDestination);
                     break;
                 default:
                     return;
@@ -92,29 +82,16 @@ namespace Utils.AppUpdater.Updater
             StartProcess(argument_complete);
         }
 
-        public override void RemoveTempFiles()
+        internal static void Pull(BuildUpdater runningApp)
         {
-            try
-            {
-                if (File.Exists(ServerFile.FilePath))
-                    File.Delete(ServerFile.FilePath);
-            }
-            catch (Exception e)
-            {
-
-            }
-        }
-
-        internal static void EndOfCommit(BuildUpdater runningApp)
-        {
-            string argument_complete = string.Format(argument_update_start, runningApp.CurrentFile.FilePath, runningApp.ServerFile.FilePath, runningApp.ServerFile.DestinationFilePath, Path.GetDirectoryName(runningApp.ServerFile.DestinationFilePath), Path.GetFileName(runningApp.ServerFile.DestinationFilePath), string.Empty);
+            string argument_complete = string.Format(argument_update_start, runningApp.FileDestination, runningApp.FileSource, runningApp.FileDestination, Path.GetDirectoryName(runningApp.FileDestination), Path.GetFileName(runningApp.FileDestination), string.Empty);
 
             StartProcess(argument_complete);
         }
 
-        internal static void EndOfCommit(Assembly runningApp)
+        internal static void Pull(string runningAppLocation)
         {
-            string argument_complete = string.Format(argument_start, Path.GetDirectoryName(runningApp.Location), Path.GetFileName(runningApp.Location));
+            string argument_complete = string.Format(argument_start, Path.GetDirectoryName(runningAppLocation), Path.GetFileName(runningAppLocation));
             StartProcess(argument_complete);
         }
 
@@ -127,39 +104,13 @@ namespace Utils.AppUpdater.Updater
                 CreateNoWindow = true,
                 FileName = "cmd.exe"
             };
+
             Process.Start(cmd);
-        }
-
-        /// <summary>
-        /// Downloads file from server
-        /// </summary>
-        private void WebClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
-        {
-            UploadedBytes = e.BytesReceived;
-            TotalBytes = e.TotalBytesToReceive;
-        }
-
-        private void WebClient_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
-        {
-            string downloadedMD5;
-            ApplicationUpdaterProcessingArgs args = new ApplicationUpdaterProcessingArgs(this);
-            if (e.Error != null || e.Cancelled)
-            {
-                args.Error = e.Error ?? new Exception($"Upload build \"{ServerFile.ToString()}\" cancelled!");
-                IsUploaded = false;
-            }
-            else
-            {
-                //downloadedMD5 = Hasher.HashFile(ServerFile.FilePath, HashType.MD5); //md5;
-                //IsUploaded = downloadedMD5.Like(ServerFile.MD5); // Hash the file and compare to the hash in the update xml
-            }
-
-            OnFetchComplete?.BeginInvoke(this, args, null, null);
         }
 
         public override string ToString()
         {
-            return ServerFile.ToString();
+            return $"[{ServerFile.Location}] Local=[{LocalFile?.Version}] Server=[{ServerFile.Version}]";
         }
     }
 }

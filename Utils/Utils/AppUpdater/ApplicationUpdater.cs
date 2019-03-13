@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Cache;
 using System.Reflection;
 using System.Timers;
 using Utils.AppUpdater.Updater;
@@ -22,17 +24,19 @@ namespace Utils.AppUpdater
         private bool _waitSelfUpdate = false;
         object _lock = new object();
 
-        private Assembly RunningApp { get; }
-        public string ProjectName { get; }
-        private Uri ProjectUri { get; }
-        private int UpdateMSec { get; }
+        public Assembly RunningApp { get; }
+        public string Project { get; }
+        public string PrevPackName { get; }
+        public Uri ProjectUri { get; }
+        public int UpdateMSec { get; }
         
 
-        public ApplicationUpdater(Assembly runningApp, string projectName, int updateSec = 10, string uriProject = null)
+        public ApplicationUpdater(Assembly runningApp, string projectName, string prevPackName, int updateSec = 10, string uriProject = null)
         {
             RunningApp = runningApp;
-            ProjectName = projectName;
-            ProjectUri = new Uri(uriProject == null ? Builds.DEFAULT_PROJECT_URI : uriProject.TrimEnd('/'));
+            Project = projectName;
+            PrevPackName = prevPackName;
+            ProjectUri = new Uri(uriProject == null ? Builds.DEFAULT_PROJECT_RAW : uriProject.TrimEnd('/'));
             UpdateMSec = updateSec * 1000;
 
             _stopWatch = new Timer();
@@ -57,14 +61,22 @@ namespace Utils.AppUpdater
                         return;
                     }
 
-
-                    _newBuildVersions = new BuildUpdaterCollection(RunningApp, ProjectUri, ProjectName);
-                    if (_newBuildVersions.Count > 0)
+                    Uri versionsInfo = new Uri($"{ProjectUri}/{Builds.FILE_NAME}");
+                    string contextStr = WEB.WebHttpStringData(versionsInfo, out HttpStatusCode resHttp, HttpRequestCacheLevel.NoCacheNoStore);
+                    if (resHttp == HttpStatusCode.OK)
                     {
-                        _newBuildVersions.OnFetchComplete += DeltaList_OnFetchComplete;
-                        _newBuildVersions.Fetch();
+                        Builds remoteBuilds = Builds.Deserialize(contextStr);
+
+                        _newBuildVersions = new BuildUpdaterCollection(this, remoteBuilds);
+                        if (_newBuildVersions.Count > 0 && _newBuildVersions.ProjectBuildPack.Name != PrevPackName)
+                        {
+                            _newBuildVersions.OnFetchComplete += DeltaList_OnFetchComplete;
+                            _newBuildVersions.Fetch();
+                        }
                         return;
                     }
+
+                    throw new Exception($"Catched exception when get status from server. HttpStatus=[{resHttp:G}] Uri=[{versionsInfo.AbsoluteUri}]");
                 }
                 catch (Exception ex)
                 {
@@ -82,13 +94,10 @@ namespace Utils.AppUpdater
             {
                 try
                 {
-                    if (sender == null || _newBuildVersions == null || !(sender is BuildUpdaterCollection) || ((BuildUpdaterCollection) sender) != _newBuildVersions)
-                        return;
-
-                    if (!_newBuildVersions.IsUploaded || e.Error != null)
+                    if (e.Error != null || _newBuildVersions.Status != UploaderStatus.Fetched)
                     {
-                        _newBuildVersions.RemoveTempFiles();
-                        OnProcessingError?.Invoke(this, e.Error == null ? new ApplicationUpdaterProcessingArgs("Not all files were successfully upload!", _newBuildVersions) : e);
+                        _newBuildVersions.Dispose();
+                        OnProcessingError?.Invoke(this, e.Error == null ? new ApplicationUpdaterProcessingArgs("Faild in upload build pack!", _newBuildVersions) : e);
                         EnableTimer();
                         return;
                     }
@@ -96,6 +105,7 @@ namespace Utils.AppUpdater
                     var eventListeners = UpdateOnNewVersion?.GetInvocationList();
                     if (eventListeners == null || !eventListeners.Any())
                     {
+                        _newBuildVersions.Dispose();
                         EnableTimer();
                         return;
                     }
@@ -106,7 +116,7 @@ namespace Utils.AppUpdater
                         del.Invoke(this, buildArgs);
                         if (buildArgs.Result == UpdateBuildResult.Cancel)
                         {
-                            _newBuildVersions.RemoveTempFiles();
+                            _newBuildVersions.Dispose();
                             EnableTimer();
                             return;
                         }
@@ -118,12 +128,13 @@ namespace Utils.AppUpdater
                         return;
                     }
 
-                    _newBuildVersions.Commit();
+                    _newBuildVersions.CommitAndPull();
                     return;
                 }
                 catch (Exception ex)
                 {
                     OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs(ex, _newBuildVersions));
+                    _newBuildVersions.Dispose();
                 }
 
                 EnableTimer();
@@ -155,25 +166,27 @@ namespace Utils.AppUpdater
         {
             lock (_lock)
             {
-                if (_waitSelfUpdate)
+                if (!_waitSelfUpdate)
+                    return;
+
+                try
                 {
-                    try
+                    if (_newBuildVersions == null || _newBuildVersions.Count == 0)
                     {
-                        if (_newBuildVersions == null || _newBuildVersions.Count == 0)
-                        {
-                            OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs("Internal error. Server builds not initialized.", _newBuildVersions));
-                            _waitSelfUpdate = false;
-                            EnableTimer();
-                            return;
-                        }
-                        _newBuildVersions.Commit();
-                    }
-                    catch (Exception ex)
-                    {
-                        OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs(ex, _newBuildVersions));
+                        OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs("Internal error. Server builds not initialized.", _newBuildVersions));
                         _waitSelfUpdate = false;
                         EnableTimer();
+                        return;
                     }
+
+                    _newBuildVersions.CommitAndPull();
+                }
+                catch (Exception ex)
+                {
+                    OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs(ex, _newBuildVersions));
+                    _newBuildVersions.Dispose();
+                    _waitSelfUpdate = false;
+                    EnableTimer();
                 }
             }
         }
