@@ -138,6 +138,9 @@ namespace Tester.Updater
                     repo.Network.Push(repo.Branches["master"], pushIOpt);
                 }
 
+                ClearAllRepos(destPath);
+                Directory.Delete(destPath);
+
                 System.Console.WriteLine($"Build successful assembled! Build:{bldVers.BuildPack}");
             }
             catch (Exception e)
