@@ -3,54 +3,46 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Timers;
+using Utils.AppUpdater.Updater;
 
-namespace Utils.Builds.Updater
+namespace Utils.AppUpdater
 {
     [Serializable]
-    public delegate void UploadBuildHandler(object sender, BuildUpdaterProcessingArgs args);
+    public delegate void UploadBuildHandler(object sender, ApplicationUpdaterProcessingArgs args);
 
     [Serializable]
-    public delegate void BuildUpdaterHandler(object sender, BuildUpdaterArgs buildPack);
+    public delegate void BuildUpdaterHandler(object sender, ApplicationUpdaterArgs buildPack);
 
-    public class BuildUpdater
+    public class ApplicationUpdater
     {
         public event BuildUpdaterHandler UpdateOnNewVersion;
         public event UploadBuildHandler OnProcessingError;
         private readonly Timer _stopWatch;
-        private readonly Uri _uriToServerProject;
-        private readonly Assembly _runningApp;
-        private BuildPackCollection _newBuildVersions;
-        private readonly int _updateMSec;
+        private BuildUpdaterCollection _newBuildVersions;
         private bool _waitSelfUpdate = false;
         object _lock = new object();
 
-        public BuildUpdater(Assembly runningApp, string uriProject, int updateSec = 10)
+        private Assembly RunningApp { get; }
+        public string ProjectName { get; }
+        private Uri ProjectUri { get; }
+        private int UpdateMSec { get; }
+        
+
+        public ApplicationUpdater(Assembly runningApp, string projectName, int updateSec = 10, string uriProject = null)
         {
-            _runningApp = runningApp;
-            _uriToServerProject = new Uri(uriProject.TrimEnd('/'));
-            _updateMSec = updateSec * 1000;
+            RunningApp = runningApp;
+            ProjectName = projectName;
+            ProjectUri = new Uri(uriProject == null ? Builds.DEFAULT_PROJECT_URI : uriProject.TrimEnd('/'));
+            UpdateMSec = updateSec * 1000;
 
             _stopWatch = new Timer();
-            _stopWatch.Elapsed += GetNewestBuildsVersion;
-            _stopWatch.Interval = _updateMSec;
+            _stopWatch.Elapsed += TimerCheckVersions;
+            _stopWatch.Interval = UpdateMSec;
             _stopWatch.AutoReset = false;
             EnableTimer();
         }
 
-        public void CheckNewVersion()
-        {
-            lock (_lock)
-            {
-                if (_stopWatch.Interval != _updateMSec)
-                    _stopWatch.Interval = _updateMSec;
-                if (_stopWatch.Enabled == true)
-                    EnableTimer();
-            }
-
-            GetNewestBuildsVersion(this, null);
-        }
-
-        private void GetNewestBuildsVersion(object sender, ElapsedEventArgs e)
+        private void TimerCheckVersions(object sender, ElapsedEventArgs e)
         {
             lock (_lock)
             {
@@ -66,7 +58,7 @@ namespace Utils.Builds.Updater
                     }
 
 
-                    _newBuildVersions = new BuildPackCollection(_runningApp, _uriToServerProject);
+                    _newBuildVersions = new BuildUpdaterCollection(RunningApp, ProjectUri, ProjectName);
                     if (_newBuildVersions.Count > 0)
                     {
                         _newBuildVersions.OnFetchComplete += DeltaList_OnFetchComplete;
@@ -76,7 +68,7 @@ namespace Utils.Builds.Updater
                 }
                 catch (Exception ex)
                 {
-                    OnProcessingError?.Invoke(this, new BuildUpdaterProcessingArgs(ex));
+                    OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs(ex));
                 }
 
                 EnableTimer();
@@ -84,19 +76,19 @@ namespace Utils.Builds.Updater
         }
 
 
-        private void DeltaList_OnFetchComplete(object sender, BuildUpdaterProcessingArgs e)
+        private void DeltaList_OnFetchComplete(object sender, ApplicationUpdaterProcessingArgs e)
         {
             lock (_lock)
             {
                 try
                 {
-                    if (sender == null || _newBuildVersions == null || !(sender is BuildPackCollection) || ((BuildPackCollection) sender) != _newBuildVersions)
+                    if (sender == null || _newBuildVersions == null || !(sender is BuildUpdaterCollection) || ((BuildUpdaterCollection) sender) != _newBuildVersions)
                         return;
 
                     if (!_newBuildVersions.IsUploaded || e.Error != null)
                     {
                         _newBuildVersions.RemoveTempFiles();
-                        OnProcessingError?.Invoke(this, e.Error == null ? new BuildUpdaterProcessingArgs("Not all files were successfully upload!", _newBuildVersions) : e);
+                        OnProcessingError?.Invoke(this, e.Error == null ? new ApplicationUpdaterProcessingArgs("Not all files were successfully upload!", _newBuildVersions) : e);
                         EnableTimer();
                         return;
                     }
@@ -108,7 +100,7 @@ namespace Utils.Builds.Updater
                         return;
                     }
 
-                    BuildUpdaterArgs buildArgs = new BuildUpdaterArgs(_newBuildVersions);
+                    ApplicationUpdaterArgs buildArgs = new ApplicationUpdaterArgs(_newBuildVersions);
                     foreach (BuildUpdaterHandler del in eventListeners)
                     {
                         del.Invoke(this, buildArgs);
@@ -131,14 +123,35 @@ namespace Utils.Builds.Updater
                 }
                 catch (Exception ex)
                 {
-                    OnProcessingError?.Invoke(this, new BuildUpdaterProcessingArgs(ex, _newBuildVersions));
+                    OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs(ex, _newBuildVersions));
                 }
 
                 EnableTimer();
             }
         }
 
-        public void SelfUpdate()
+        public void Stop()
+        {
+            lock (_lock)
+            {
+                _stopWatch.Stop();
+            }
+        }
+
+        public void Check()
+        {
+            lock (_lock)
+            {
+                if (_stopWatch.Interval != UpdateMSec)
+                    _stopWatch.Interval = UpdateMSec;
+                if (_stopWatch.Enabled == true)
+                    EnableTimer();
+            }
+
+            TimerCheckVersions(this, null);
+        }
+
+        public void Update()
         {
             lock (_lock)
             {
@@ -148,7 +161,7 @@ namespace Utils.Builds.Updater
                     {
                         if (_newBuildVersions == null || _newBuildVersions.Count == 0)
                         {
-                            OnProcessingError?.Invoke(this, new BuildUpdaterProcessingArgs("Internal error. Server builds not initialized.", _newBuildVersions));
+                            OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs("Internal error. Server builds not initialized.", _newBuildVersions));
                             _waitSelfUpdate = false;
                             EnableTimer();
                             return;
@@ -157,7 +170,7 @@ namespace Utils.Builds.Updater
                     }
                     catch (Exception ex)
                     {
-                        OnProcessingError?.Invoke(this, new BuildUpdaterProcessingArgs(ex, _newBuildVersions));
+                        OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs(ex, _newBuildVersions));
                         _waitSelfUpdate = false;
                         EnableTimer();
                     }

@@ -5,10 +5,10 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 
-namespace Utils.Builds.Updater
+namespace Utils.AppUpdater.Updater
 {
     [Serializable]
-    public class BuildPack : UploadProgress, IUploadProgress
+    public class BuildUpdater : UploadProgress, IUploadProgress
     {
         const string argument_start = "/C choice /C Y /N /D Y /T 4 & Start \"\" /D \"{0}\" \"{1}\"";
         const string argument_update = "/C choice /C Y /N /D Y /T 4 & Del /F /Q \"{0}\" & choice /C Y /N /D Y /T 2 & Move /Y \"{1}\" \"{2}\"";
@@ -24,7 +24,7 @@ namespace Utils.Builds.Updater
         /// </summary>
         private WebClient webClient;
 
-        public BuildPack(FileBuildInfo currentFile, ServerBuildInfo serverFile)
+        public BuildUpdater(FileBuildInfo currentFile, ServerBuildInfo serverFile)
         {
             CurrentFile = currentFile;
             ServerFile = serverFile;
@@ -105,7 +105,7 @@ namespace Utils.Builds.Updater
             }
         }
 
-        internal static void EndOfCommit(BuildPack runningApp)
+        internal static void EndOfCommit(BuildUpdater runningApp)
         {
             string argument_complete = string.Format(argument_update_start, runningApp.CurrentFile.FilePath, runningApp.ServerFile.FilePath, runningApp.ServerFile.DestinationFilePath, Path.GetDirectoryName(runningApp.ServerFile.DestinationFilePath), Path.GetFileName(runningApp.ServerFile.DestinationFilePath), string.Empty);
 
@@ -142,7 +142,7 @@ namespace Utils.Builds.Updater
         private void WebClient_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
             string downloadedMD5;
-            BuildUpdaterProcessingArgs args = new BuildUpdaterProcessingArgs(this);
+            ApplicationUpdaterProcessingArgs args = new ApplicationUpdaterProcessingArgs(this);
             if (e.Error != null || e.Cancelled)
             {
                 args.Error = e.Error ?? new Exception($"Upload build \"{ServerFile.ToString()}\" cancelled!");

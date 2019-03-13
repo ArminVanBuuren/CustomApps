@@ -3,25 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Utils.AppUpdater.Updater;
 
-namespace Utils.Builds.Updater
+namespace Utils.AppUpdater
 {
     [Serializable]
-    public class BuildUpdaterProcessingArgs
+    public class ApplicationUpdaterProcessingArgs
     {
-        internal BuildUpdaterProcessingArgs(string exception, IUploadProgress faildObj = null)
+        internal ApplicationUpdaterProcessingArgs(string exception, IUploadProgress faildObj = null)
         {
             FaildObject = faildObj;
             Error = new Exception(exception);
         }
 
-        internal BuildUpdaterProcessingArgs(Exception error = null, IUploadProgress faildObj = null)
+        internal ApplicationUpdaterProcessingArgs(Exception error = null, IUploadProgress faildObj = null)
         {
             FaildObject = faildObj;
             Error = error;
         }
 
-        internal BuildUpdaterProcessingArgs(IUploadProgress faildObj)
+        internal ApplicationUpdaterProcessingArgs(IUploadProgress faildObj)
         {
             FaildObject = faildObj;
         }

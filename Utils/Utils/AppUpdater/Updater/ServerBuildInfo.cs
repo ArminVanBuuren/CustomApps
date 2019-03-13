@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Utils.CollectionHelper;
 
-namespace Utils.Builds.Updater
+namespace Utils.AppUpdater.Updater
 {
     [Serializable]
     public sealed class ServerBuildInfo : FileBuildInfo

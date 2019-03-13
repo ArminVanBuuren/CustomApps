@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Cache;
 using System.Reflection;
@@ -10,29 +11,29 @@ using System.Xml;
 using System.Xml.Serialization;
 using Utils.XmlHelper;
 
-namespace Utils.Builds.Updater
+namespace Utils.AppUpdater.Updater
 {
     [Serializable]
-    public class BuildPackCollection : UploadProgress, IUploadProgress, IEnumerable<BuildPack>, IEnumerator<BuildPack>, IDisposable
+    public class BuildUpdaterCollection : UploadProgress, IUploadProgress, IEnumerable<BuildUpdater>, IEnumerator<BuildUpdater>, IDisposable
     {
         public event UploadBuildHandler OnFetchComplete;
-        private List<BuildPack> _collection = new List<BuildPack>();
+        private List<BuildUpdater> _collection = new List<BuildUpdater>();
         int index = -1;
         private Assembly _runningApp;
         private object _lock = new object();
         private int _completedFetchCount = 0;
         private int _waitingFetchCount = 0;
         private bool _inProgress = false;
-        BuildUpdaterProcessingArgs fetchArgs;
+        ApplicationUpdaterProcessingArgs fetchArgs;
 
-        public BuildPackCollection(Assembly runningApp, Uri serverUri)
+        public BuildUpdaterCollection(Assembly runningApp, Uri serverUri, string project)
         {
             _runningApp = runningApp;
-            Dictionary<string, ServerBuildInfo> serverVersions = GetServerVersions(runningApp, serverUri);
+            Dictionary<string, ServerBuildInfo> serverVersions = GetServerVersions(runningApp, serverUri, project);
             if(serverVersions.Count == 0)
                 return;
 
-            Dictionary<string, FileBuildInfo> localVersions = BuildVersionsInfo.GetLocalVersions(runningApp);
+            Dictionary<string, FileBuildInfo> localVersions = BuildPack.GetLocalVersions(runningApp);
 
             foreach (ServerBuildInfo server in serverVersions.Values)
             {
@@ -44,34 +45,43 @@ namespace Utils.Builds.Updater
                         Add(current, server);
                     else if (server.Type == BuldPerformerType.Remove)
                         Add(current, server);
+                    continue;
                 }
                 else if (server.Type == BuldPerformerType.CreateOrUpdate)
                 {
                     Add(null, server);
+                    continue;
+                }
+
+                if (server.Type == BuldPerformerType.CreateOrReplace)
+                {
+                    Add(current, server);
                 }
             }
         }
 
-        static Dictionary<string, ServerBuildInfo> GetServerVersions(Assembly runningApp, Uri serverUri)
+        static Dictionary<string, ServerBuildInfo> GetServerVersions(Assembly runningApp, Uri serverUri, string project)
         {
-            Uri versionsInfo = new Uri($"{serverUri}/{BuildVersionsInfo.FILE_NAME}");
-            string resultStr = WEB.WebHttpStringData(versionsInfo, out HttpStatusCode resHttp, HttpRequestCacheLevel.NoCacheNoStore);
+            Uri versionsInfo = new Uri($"{serverUri}/{Builds.FILE_NAME}");
+            string contextStr = WEB.WebHttpStringData(versionsInfo, out HttpStatusCode resHttp, HttpRequestCacheLevel.NoCacheNoStore);
 
             if (resHttp == HttpStatusCode.OK)
             {
-                XmlSerializer xsSubmit = new XmlSerializer(typeof(BuildVersionsInfo));
-                BuildVersionsInfo res;
-                using (TextReader reader = new StringReader(resultStr))
-                {
-                    res = (BuildVersionsInfo)xsSubmit.Deserialize(reader);
-                }
+                Builds res = Builds.Deserialize(contextStr);
 
                 string assemblyDirPath = runningApp.GetDirectory();
                 Dictionary<string, ServerBuildInfo> serverVersions = new Dictionary<string, ServerBuildInfo>();
-                foreach (FileBuildInfo buildInfo in res.Builds)
+                var getProjects = res.Packs.Where(p => p.Project == project);
+                if (getProjects != null && getProjects.Count() > 0)
                 {
-                    ServerBuildInfo serverFileInfo = new ServerBuildInfo(buildInfo, serverUri, assemblyDirPath);
-                    serverVersions.Add(serverFileInfo.Location, serverFileInfo);
+                    foreach (BuildPack pack in getProjects)
+                    {
+                        foreach (FileBuildInfo buildInfo in pack.Builds)
+                        {
+                            ServerBuildInfo serverFileInfo = new ServerBuildInfo(buildInfo, serverUri, assemblyDirPath);
+                            serverVersions.Add(serverFileInfo.Location, serverFileInfo);
+                        }
+                    }
                 }
 
                 return serverVersions;
@@ -82,7 +92,7 @@ namespace Utils.Builds.Updater
 
         static Dictionary<string, ServerBuildInfo> GetServerVersionsViaXMLDoc(Assembly runningApp, Uri serverUri)
         {
-            Uri versionsInfo = new Uri($"{serverUri}/{BuildVersionsInfo.FILE_NAME}");
+            Uri versionsInfo = new Uri($"{serverUri}/{Builds.FILE_NAME}");
             string resultStr = WEB.WebHttpStringData(versionsInfo, out HttpStatusCode resHttp, HttpRequestCacheLevel.NoCacheNoStore);
 
             if (resHttp == HttpStatusCode.OK)
@@ -112,7 +122,7 @@ namespace Utils.Builds.Updater
 
         void Add(FileBuildInfo currentFile, ServerBuildInfo serverFile)
         {
-            BuildPack build = new BuildPack(currentFile, serverFile);
+            BuildUpdater build = new BuildUpdater(currentFile, serverFile);
             build.OnFetchComplete += Build_OnFetchComplete;
             _collection.Add(build);
         }
@@ -123,13 +133,13 @@ namespace Utils.Builds.Updater
             {
                 if (!_inProgress && Count > 0)
                 {
-                    fetchArgs = new BuildUpdaterProcessingArgs(this);
+                    fetchArgs = new ApplicationUpdaterProcessingArgs(this);
                     try
                     {
                         _inProgress = true;
                         _completedFetchCount = 0;
                         _waitingFetchCount = 0;
-                        foreach (BuildPack build in _collection)
+                        foreach (BuildUpdater build in _collection)
                         {
                             if (build.Fetch())
                             {
@@ -150,15 +160,15 @@ namespace Utils.Builds.Updater
             }
         }
 
-        private void Build_OnFetchComplete(object sender, BuildUpdaterProcessingArgs e)
+        private void Build_OnFetchComplete(object sender, ApplicationUpdaterProcessingArgs e)
         {
             lock (_lock)
             {
                 if (!_inProgress)
                 {
-                    if (sender != null && sender is BuildPack)
+                    if (sender != null && sender is BuildUpdater)
                     {
-                        ((BuildPack)sender).RemoveTempFiles();
+                        ((BuildUpdater)sender).RemoveTempFiles();
                     }
                     return;
                 }
@@ -184,8 +194,8 @@ namespace Utils.Builds.Updater
             if(!IsUploaded)
                 return;
 
-            BuildPack runningApp = null;
-            foreach (BuildPack build in _collection)
+            BuildUpdater runningApp = null;
+            foreach (BuildUpdater build in _collection)
             {
                 if (build.CurrentFile != null && build.CurrentFile.IsExecutingFile)
                 {
@@ -197,16 +207,16 @@ namespace Utils.Builds.Updater
             }
 
             if (runningApp != null)
-                BuildPack.EndOfCommit(runningApp);
+                BuildUpdater.EndOfCommit(runningApp);
             else
-                BuildPack.EndOfCommit(_runningApp);
+                BuildUpdater.EndOfCommit(_runningApp);
 
             Process.GetCurrentProcess().Kill();
         }
 
         public override void RemoveTempFiles()
         {
-            foreach (BuildPack build in _collection)
+            foreach (BuildUpdater build in _collection)
             {
                 build.RemoveTempFiles();
             }
@@ -217,7 +227,7 @@ namespace Utils.Builds.Updater
             get
             {
                 int count = 0;
-                foreach (BuildPack build in _collection)
+                foreach (BuildUpdater build in _collection)
                 {
                     count++;
                     if (!build.IsUploaded)
@@ -236,7 +246,7 @@ namespace Utils.Builds.Updater
                     return 0;
 
                 int allFileProgress = 0;
-                foreach (BuildPack build in _collection)
+                foreach (BuildUpdater build in _collection)
                 {
                     allFileProgress += build.ProgressPercent;
                 }
@@ -250,7 +260,7 @@ namespace Utils.Builds.Updater
             get
             {
                 long allFileUploads = 0l;
-                foreach (BuildPack build in _collection)
+                foreach (BuildUpdater build in _collection)
                 {
                     allFileUploads += build.UploadedBytes;
                 }
@@ -264,7 +274,7 @@ namespace Utils.Builds.Updater
             get
             {
                 long allFileTotla = 0l;
-                foreach (BuildPack build in _collection)
+                foreach (BuildUpdater build in _collection)
                 {
                     allFileTotla += build.TotalBytes;
                 }
@@ -278,7 +288,7 @@ namespace Utils.Builds.Updater
 
         object IEnumerator.Current => _collection[index];
 
-        public BuildPack Current => _collection[index];
+        public BuildUpdater Current => _collection[index];
 
         bool IEnumerator.MoveNext()
         {
@@ -296,7 +306,7 @@ namespace Utils.Builds.Updater
             index = -1;
         }
 
-        public IEnumerator<BuildPack> GetEnumerator()
+        public IEnumerator<BuildUpdater> GetEnumerator()
         {
             return this;
         }

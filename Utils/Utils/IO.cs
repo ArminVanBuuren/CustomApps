@@ -116,19 +116,51 @@ namespace Utils
             return string.Join("\\", parentDir);
         }
 
-        public static void AddAllAccessPermissions(string filePath)
+        /// <summary>
+        /// Add all access permissions to file
+        /// </summary>
+        /// <param name="filePath"></param>
+        public static void AccessToFile(string filePath)
         {
-            DirectoryInfo dInfo = new DirectoryInfo(filePath);
-            DirectorySecurity dSecurity = dInfo.GetAccessControl();
-            dSecurity.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), FileSystemRights.FullControl,
-                InheritanceFlags.ObjectInherit | InheritanceFlags.ContainerInherit, PropagationFlags.NoPropagateInherit, AccessControlType.Allow));
-            dInfo.SetAccessControl(dSecurity);
+            AccessToDirectory(filePath);
 
             FileSecurity access = File.GetAccessControl(filePath);
             SecurityIdentifier everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
             access.AddAccessRule(new FileSystemAccessRule(everyone, FileSystemRights.ReadAndExecute, AccessControlType.Allow));
             //access.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), FileSystemRights.FullControl, InheritanceFlags.ObjectInherit | InheritanceFlags.ContainerInherit, PropagationFlags.NoPropagateInherit, AccessControlType.Allow));
             File.SetAccessControl(filePath, access);
+        }
+
+        /// <summary>
+        /// Add all access permissions to directory
+        /// </summary>
+        /// <param name="dirPath"></param>
+        public static void AccessToDirectory(string dirPath)
+        {
+            DirectoryInfo dInfo = new DirectoryInfo(dirPath);
+            DirectorySecurity dSecurity = dInfo.GetAccessControl();
+            dSecurity.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), FileSystemRights.FullControl,
+                InheritanceFlags.ObjectInherit | InheritanceFlags.ContainerInherit, PropagationFlags.NoPropagateInherit, AccessControlType.Allow));
+            dInfo.SetAccessControl(dSecurity);
+        }
+
+        /// <summary>
+        /// Recursively deletes a directory as well as any subdirectories and files. If the files are read-only, they are flagged as normal and then deleted.
+        /// </summary>
+        /// <param name="directory">The name of the directory to remove.</param>
+        public static void DeleteReadOnlyDirectory(string directory)
+        {
+            foreach (var subdirectory in Directory.EnumerateDirectories(directory))
+            {
+                DeleteReadOnlyDirectory(subdirectory);
+            }
+            foreach (var fileName in Directory.EnumerateFiles(directory))
+            {
+                var fileInfo = new FileInfo(fileName);
+                fileInfo.Attributes = FileAttributes.Normal;
+                fileInfo.Delete();
+            }
+            Directory.Delete(directory);
         }
 
         public static string GetTemporaryDirectory()

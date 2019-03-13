@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Utils.Builds.Updater
+namespace Utils.AppUpdater.Updater
 {
     public interface IUploadProgress
     {

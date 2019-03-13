@@ -4,7 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 
-namespace Utils.Builds
+namespace Utils.AppUpdater
 {
     [Serializable]
     public class BuildNumber : IComparable

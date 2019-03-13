@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Utils.Builds
+namespace Utils.AppUpdater
 {
     /// <summary>
     /// The type of hash to create

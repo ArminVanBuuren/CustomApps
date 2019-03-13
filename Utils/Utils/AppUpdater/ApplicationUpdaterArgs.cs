@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Utils.AppUpdater.Updater;
 
-namespace Utils.Builds.Updater
+namespace Utils.AppUpdater
 {
     public enum UpdateBuildResult
     {
@@ -13,14 +14,14 @@ namespace Utils.Builds.Updater
         SelfUpdate = 2
     }
 
-    public class BuildUpdaterArgs
+    public class ApplicationUpdaterArgs
     {
-        internal BuildUpdaterArgs(BuildPackCollection buildPacks)
+        internal ApplicationUpdaterArgs(BuildUpdaterCollection buildPacks)
         {
             BuildPacks = buildPacks;
             Result = UpdateBuildResult.Cancel;
         }
-        public BuildPackCollection BuildPacks { get; }
+        public BuildUpdaterCollection BuildPacks { get; }
         public UpdateBuildResult Result { get; set; }
     }
 }

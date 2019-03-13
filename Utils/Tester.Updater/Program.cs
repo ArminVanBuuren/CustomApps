@@ -9,8 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using LibGit2Sharp.Handlers;
 using Utils;
-using Utils.Builds;
-using Utils.Builds.Updater;
+using Utils.AppUpdater;
 using System.Diagnostics;
 
 namespace Tester.Updater
@@ -42,18 +41,18 @@ namespace Tester.Updater
         {
             System.Console.WriteLine(@"Enter uri path. Like - https://raw.githubusercontent.com/ArminVanBuuren/TFSAssist/master");
             string uriPath = System.Console.ReadLine();
-            BuildUpdater up = new BuildUpdater(Assembly.GetExecutingAssembly(), uriPath, 1);
+            ApplicationUpdater up = new ApplicationUpdater(Assembly.GetExecutingAssembly(), uriPath, 1);
             up.UpdateOnNewVersion += Up_FindedNewVersions;
             up.OnProcessingError += Up_OnProcessingError;
-            System.Console.WriteLine($"{nameof(BuildUpdater)} created!");
+            System.Console.WriteLine($"{nameof(ApplicationUpdater)} created!");
         }
 
-        private static void Up_FindedNewVersions(object sender, BuildUpdaterArgs buildPack)
+        private static void Up_FindedNewVersions(object sender, ApplicationUpdaterArgs buildPack)
         {
             buildPack.Result = UpdateBuildResult.Update;
         }
 
-        private static void Up_OnProcessingError(object sender, BuildUpdaterProcessingArgs args)
+        private static void Up_OnProcessingError(object sender, ApplicationUpdaterProcessingArgs args)
         {
             Console.WriteLine($"Error=[{args.Error}] InnerErrorCount=[{args.InnerException.Count}]");
         }
@@ -62,27 +61,32 @@ namespace Tester.Updater
         public static void Upload()
         {
             start:
-            //System.Console.WriteLine(@"Enter builds directory path. Like - C:\!MyRepos\CustomApp\Utils\TesterConsole\bin\Uploader\test1\OnServer");
-            //string sourcePath = System.Console.ReadLine();
-            //System.Console.WriteLine(@"Enter destination directory path. Like - C:\!Builds\TFSAssist");
-            //string destPath = System.Console.ReadLine();
-            //System.Console.WriteLine($"Enter git repos, to push changes in remote server. Like - https://github.com/ArminVanBuuren/TFSAssist");
-            //string remoteGitRepos = System.Console.ReadLine();
 
-            string sourcePath = @"C:\!MyRepos\CustomApp\Utils\TesterConsole\bin\Uploader\test1\OnServer";
-            string destPath = @"C:\!Builds\TFSAssist";
-            string remoteGitRepos = @"https://github.com/ArminVanBuuren/TFSAssist";
-
-            if (!Directory.Exists(sourcePath))
-            {
-                System.Console.WriteLine("Incorrect path!");
-                goto start;
-            }
-
+            Repository repo = null;
             try
-            {
+            {   
+                //System.Console.WriteLine(@"Enter builds directory path. Like - C:\!MyRepos\CustomApp\Utils\TesterConsole\bin\Uploader\test1\OnServer");
+                //string sourcePath = System.Console.ReadLine();
+                //System.Console.WriteLine(@"Enter destination directory path. Like - C:\!Builds\TFSAssist");
+                //string destPath = System.Console.ReadLine();
+                //System.Console.WriteLine($"Enter git repos, to push changes in remote server. Like - https://github.com/ArminVanBuuren/TFSAssist");
+                //string remoteGitRepos = System.Console.ReadLine();
+
+                string sourcePath = @"C:\!MyRepos\CustomApp\Utils\TesterConsole\bin\Uploader\test1\OnServer";
+                string destPath = @"C:\!Builds";
+                string projectStr = @"TFSAssist";
+
+                if (!Directory.Exists(sourcePath))
+                {
+                    System.Console.WriteLine("Incorrect path!");
+                    goto start;
+                }
+
                 if (Directory.Exists(destPath))
-                    ClearAllRepos(destPath);
+                {
+                    IO.AccessToDirectory(destPath);
+                    IO.DeleteReadOnlyDirectory(destPath);
+                }
 
                 UsernamePasswordCredentials credentials = new UsernamePasswordCredentials
                 {
@@ -90,44 +94,58 @@ namespace Tester.Updater
                     Password = "ArminOnly#3"
                 };
 
-                CloneOptions options = new CloneOptions
+                CloneOptions fetchOptions = new CloneOptions
                 {
                     CredentialsProvider = (_url, _user, _cred) => credentials
                 };
 
-                PushOptions pushIOpt = new PushOptions
+                PushOptions pushOptions = new PushOptions
                 {
                     CredentialsProvider = new CredentialsHandler((url, usernameFromUrl, types) => credentials)
                 };
 
-                Identity identity = new Identity("ArminVanBuuren", "vkhovanskiy@gmail.com");
+                Identity identity = new Identity(credentials.Username, "vkhovanskiy@gmail.com");
                 Signature signature = new Signature(identity, DateTimeOffset.Now);
 
-                BuildVersionsInfo bldVers;
+                Console.WriteLine($"Start");
                 string path = Repository.Init(destPath, false);
-                using (var repo = new Repository(path, new RepositoryOptions { Identity = identity }))
+                using (repo = new Repository(path, new RepositoryOptions {Identity = identity}))
                 {
                     // создаем локальную ветку
-                    //https://stackoverflow.com/questions/8285627/linq-exception-as-sequence-contains-no-elements
                     Remote remote = repo.Network.Remotes.Where(p => p.Name == "origin").FirstOrDefault();
                     if (remote == null)
-                        remote = repo.Network.Remotes.Add("origin", remoteGitRepos);
+                        remote = repo.Network.Remotes.Add("origin", Builds.DEFAULT_PROJECT_URI);
 
                     // вытягиваем весь репозиторий с сервера 
                     Commands.Fetch(repo, "origin", new string[0], new FetchOptions
                     {
-                        CredentialsProvider = options.CredentialsProvider
+                        CredentialsProvider = fetchOptions.CredentialsProvider
                     }, null);
                     // переносим все в локальную папку Fetch + Merge - это тоже самое что и pull
                     repo.Merge(repo.Branches["origin/master"], signature);
 
-                    ClearAllRepos(destPath, false);
-                    bldVers = new BuildVersionsInfo(sourcePath, destPath);
+
+                    string fileVersionsPath = Path.Combine(destPath, Builds.FILE_NAME);
+                    Builds buildVersions = null;
+                    if (File.Exists(fileVersionsPath))
+                    {
+                        string currentFileVersions = File.ReadAllText(fileVersionsPath);
+                        buildVersions = Builds.Deserialize(currentFileVersions);
+                    }
+                    else
+                    {
+                        buildVersions = new Builds();
+                    }
+
+                    buildVersions.Add(projectStr, sourcePath, destPath);
+                    Console.WriteLine($"You should correct file:'{fileVersionsPath}'. Then press any key for continue.");
+                    Console.ReadKey();
+
 
                     // git Add. Индексируем изменения
                     Commands.Stage(repo, "*");
                     // Делаем снимок проиндексированных файлов
-                    repo.Commit($"Initialized newest build - \"{bldVers.BuildPack}\"", signature, signature);
+                    repo.Commit($"Initialized latest build of the project \"{projectStr}\"", signature, signature);
 
 
                     // локальную ветку origin/master переносим в master что на сервере
@@ -135,17 +153,20 @@ namespace Tester.Updater
                         b => b.Remote = remote.Name,
                         b => b.UpstreamBranch = repo.Head.CanonicalName);
                     // заливаем на сервер в ветку master
-                    repo.Network.Push(repo.Branches["master"], pushIOpt);
+                    repo.Network.Push(repo.Branches["master"], pushOptions);
                 }
 
-                ClearAllRepos(destPath);
-                Directory.Delete(destPath);
-
-                System.Console.WriteLine($"Build successful assembled! Build:{bldVers.BuildPack}");
+                System.Console.WriteLine($"Build successful assembled! Project=[{projectStr}]");
             }
             catch (Exception e)
             {
                 System.Console.WriteLine(e);
+            }
+            finally
+            {
+                if(repo != null)
+                    repo.Dispose();
+                System.Console.Write($"End");
             }
         }
 
@@ -161,9 +182,12 @@ namespace Tester.Updater
             foreach (DirectoryInfo dir in di.GetDirectories())
             {
                 if (dir.Name.Like(".git"))
+                {
                     if (!deleteGit)
                         continue;
+                }
 
+                ClearAllRepos(dir.FullName);
                 dir.Delete(true);
             }
         }

@@ -4,16 +4,17 @@ using System.Linq;
 using System.Xml.Serialization;
 using Utils.CollectionHelper;
 
-namespace Utils.Builds
+namespace Utils.AppUpdater
 {
     [Serializable]
     public enum BuldPerformerType
     {
         None = 0,
-        CreateOrUpdate = 1,
-        Update = 2,
-        RollBack = 4,
-        Remove = 8
+        Update = 1,
+        RollBack = 2,
+        Remove = 4,
+        CreateOrUpdate = 8,
+        CreateOrReplace = 16
     }
 
     [Serializable, XmlRoot("Build", IsNullable = false)]
