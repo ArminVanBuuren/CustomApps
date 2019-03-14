@@ -85,8 +85,9 @@
     <Reference Include="UIControls">
       <HintPath>..\..\..\UIControls\UIControls\UIControls\bin\Debug\UIControls.dll</HintPath>
     </Reference>
-    <Reference Include="Utils">
-      <HintPath>..\..\..\Utils\Utils\bin\Debug\Utils.dll</HintPath>
+    <Reference Include="Utils, Version=1.0.7002.19054, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Utils\Utils\bin\Release\Utils.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -105,6 +106,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BottomNotification.cs" />
+    <Compile Include="Highlighter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -122,6 +125,7 @@
     </Compile>
     <Compile Include="Trash\Trash.cs" />
     <Compile Include="Trash\Temp1.cs" />
+    <Compile Include="UpdateComponents.cs" />
     <Compile Include="WebCam\WebcamControl.cs" />
     <Compile Include="WindowWarning.xaml.cs">
       <DependentUpon>WindowWarning.xaml</DependentUpon>

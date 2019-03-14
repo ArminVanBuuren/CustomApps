@@ -206,8 +206,7 @@ namespace Utils.AppUpdater
         /// <summary>
         /// Если при вызове эвента OnUpdate, был выбран статус - UpdateBuildResult.SelfUpdate, то контрольный процесс обязуется выполнить апдейт самостоятельно, при завершении своих внутренних процессов. При это проверка на наличия обновлений останавливается.
         /// </summary>
-        /// <param name="control"></param>
-        public void Update(IUpdater control)
+        public void Update(IUpdater control, bool onUpdate = true)
         {
             if (control == null)
                 throw new ArgumentNullException("control");
@@ -226,7 +225,15 @@ namespace Utils.AppUpdater
                         return;
 
                     _waitSelfUpdate = false;
-                    ((BuildUpdaterCollection) control).CommitAndPull();
+                    if (onUpdate)
+                    {
+                        ((BuildUpdaterCollection)control).CommitAndPull();
+                    }
+                    else
+                    {
+                        control.Dispose();
+                        EnableTimer();
+                    }
                 }
                 catch (Exception ex)
                 {

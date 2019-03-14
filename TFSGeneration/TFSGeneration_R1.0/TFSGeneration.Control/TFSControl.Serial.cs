@@ -32,7 +32,6 @@ namespace TFSAssist.Control
             AccountStorePath = $"{ApplicationFilePath}.dat";
             SettingsPath = $"{ApplicationFilePath}.xml";
             DataBasePath = $"{ApplicationFilePath}.Data.xml";
-            //ApplicationName = Assembly.GetCallingAssembly().GetName().Name;
             ApplicationName = Assembly.GetEntryAssembly().GetName().Name;
             ApplicationPath = Assembly.GetEntryAssembly().Location; 
             RegeditKey = GetOrSetRegedit(ApplicationName, "Application implements reading mails, and by their basis creating TFS items.");

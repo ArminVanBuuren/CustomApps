@@ -39,7 +39,7 @@ namespace Tester.Updater
 
         public static void Update()
         {
-            ApplicationUpdater up = new ApplicationUpdater(Assembly.GetExecutingAssembly(), @"TFSAssist", string.Empty, 1);
+            ApplicationUpdater up = new ApplicationUpdater(Assembly.GetExecutingAssembly(), @"Tester.Updater", string.Empty, 1);
             up.OnUpdate += Up_FindedNewVersions;
             up.OnProcessingError += Up_OnProcessingError;
             up.Start();
