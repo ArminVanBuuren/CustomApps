@@ -16,22 +16,22 @@ using Utils.GitHelper;
 namespace Utils.AppUpdater
 {
     [Serializable, XmlRoot("Builds")]
-    public class Builds
+    public class BuildsInfo
     {
         public const string DEFAULT_PROJECT_GIT = @"https://github.com/ArminVanBuuren/Builds";
         public const string DEFAULT_PROJECT_RAW = @"https://raw.githubusercontent.com/ArminVanBuuren/Builds/master";
         public const string FILE_NAME = "versions.xml";
 
         [XmlElement("Pack")]
-        public List<BuildPack> Packs { get; set; } = new List<BuildPack>();
+        public List<BuildPackInfo> Packs { get; set; } = new List<BuildPackInfo>();
 
         public void Add(string project, string assembliesDirPath, string destinationDirPath)
         {
             if (!Directory.Exists(destinationDirPath))
                 throw new ArgumentException($"Destination directory=[{destinationDirPath}] doesn't exist");
 
-            BuildPack pack = new BuildPack(project, assembliesDirPath, destinationDirPath);
-            List<BuildPack> prevPacks = new List<BuildPack>();
+            BuildPackInfo pack = new BuildPackInfo(project, assembliesDirPath, destinationDirPath);
+            List<BuildPackInfo> prevPacks = new List<BuildPackInfo>();
             Packs.RemoveAll(p =>
             {
                 if (p.Project == project)
@@ -46,7 +46,7 @@ namespace Utils.AppUpdater
 
             try
             {
-                Serialize(Path.Combine(destinationDirPath, Builds.FILE_NAME));
+                Serialize(Path.Combine(destinationDirPath, BuildsInfo.FILE_NAME));
             }
             catch (Exception ex)
             {
@@ -54,37 +54,41 @@ namespace Utils.AppUpdater
                 throw ex;
             }
 
-            foreach (BuildPack prevPack in prevPacks)
+            foreach (BuildPackInfo prevPack in prevPacks)
             {
                 File.Delete(Path.Combine(destinationDirPath, prevPack.Name));
             }
         }
-
-        public static Builds Deserialize(string contextStr)
+        public void Serialize(string fileVersionsPath)
         {
-            XmlSerializer xsSubmit = new XmlSerializer(typeof(Builds));
-            Builds result;
+            if (File.Exists(fileVersionsPath))
+                File.Delete(fileVersionsPath);
+
+            using (FileStream stream = new FileStream(fileVersionsPath, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None))
+            {
+                new XmlSerializer(typeof(BuildsInfo)).Serialize(stream, this);
+            }
+        }
+
+        public static BuildsInfo Deserialize(string contextStr)
+        {
+            XmlSerializer xsSubmit = new XmlSerializer(typeof(BuildsInfo));
+            BuildsInfo result;
             using (TextReader reader = new StringReader(contextStr))
             {
-                result = (Builds)xsSubmit.Deserialize(reader);
+                result = (BuildsInfo)xsSubmit.Deserialize(reader);
             }
 
             return result;
         }
-
-        public void Serialize(string fileVersionsPath)
-        {
-            if(File.Exists(fileVersionsPath))
-                File.Delete(fileVersionsPath);
-            
-            using (FileStream stream = new FileStream(fileVersionsPath, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None))
-            {
-                new XmlSerializer(typeof(Builds)).Serialize(stream, this);
-            }
-        }
     }
 
- 
+
+
+
+
+
+
 
 
 

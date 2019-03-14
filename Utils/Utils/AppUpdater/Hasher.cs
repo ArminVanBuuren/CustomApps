@@ -7,7 +7,7 @@ namespace Utils.AppUpdater
     /// <summary>
     /// The type of hash to create
     /// </summary>
-    internal enum HashType
+    public enum HashType
     {
         MD5,
         SHA1,
@@ -17,7 +17,7 @@ namespace Utils.AppUpdater
     /// <summary>
     /// Class used to generate hash sums of files
     /// </summary>
-    internal static class Hasher
+    public static class Hasher
     {
         /// <summary>
         /// Generate a hash sum of a file
@@ -25,7 +25,7 @@ namespace Utils.AppUpdater
         /// <param name="filePath">The file to hash</param>
         /// <param name="algo">The Type of hash</param>
         /// <returns>The computed hash</returns>
-        internal static string HashFile(string filePath, HashType algo)
+        public static string HashFile(string filePath, HashType algo)
         {
             string fileSource = filePath;
             var res = IO.WhoIsLocking(fileSource);

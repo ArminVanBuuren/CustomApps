@@ -46,9 +46,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppUpdater\BuildNumber.cs" />
+    <Compile Include="AppUpdater\Updater\IBuildUpdater.cs" />
+    <Compile Include="AppUpdater\Updater\IUpdater.cs" />
     <Compile Include="ASSEMBLY.cs" />
-    <Compile Include="AppUpdater\BuildPack.cs" />
-    <Compile Include="AppUpdater\Builds.cs" />
+    <Compile Include="AppUpdater\BuildPackInfo.cs" />
+    <Compile Include="AppUpdater\BuildsInfo.cs" />
     <Compile Include="AppUpdater\Updater\BuildUpdater.cs" />
     <Compile Include="AppUpdater\Updater\BuildUpdaterCollection.cs" />
     <Compile Include="AppUpdater\Hasher.cs" />

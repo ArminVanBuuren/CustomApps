@@ -40,7 +40,7 @@ namespace Tester.Updater
         public static void Update()
         {
             ApplicationUpdater up = new ApplicationUpdater(Assembly.GetExecutingAssembly(), @"TFSAssist", string.Empty, 1);
-            up.UpdateOnNewVersion += Up_FindedNewVersions;
+            up.OnUpdate += Up_FindedNewVersions;
             up.OnProcessingError += Up_OnProcessingError;
             System.Console.WriteLine($"{nameof(ApplicationUpdater)} created!");
         }
@@ -63,16 +63,11 @@ namespace Tester.Updater
             Repository repo = null;
             try
             {   
-                //System.Console.WriteLine(@"Enter builds directory path. Like - C:\!MyRepos\CustomApp\Utils\TesterConsole\bin\Uploader\test1\OnServer");
-                //string sourcePath = System.Console.ReadLine();
-                //System.Console.WriteLine(@"Enter destination directory path. Like - C:\!Builds\TFSAssist");
-                //string destPath = System.Console.ReadLine();
-                //System.Console.WriteLine($"Enter git repos, to push changes in remote server. Like - https://github.com/ArminVanBuuren/TFSAssist");
-                //string remoteGitRepos = System.Console.ReadLine();
-
-                string sourcePath = @"C:\!MyRepos\CustomApp\Utils\Tester.Updater\bin\Uploader\test1\OnServer";
+                System.Console.WriteLine(@"Enter builds directory path. Like - C:\!MyRepos\CustomApp\Utils\Tester.Updater\bin\Uploader\test1\OnServer");
+                string sourcePath = System.Console.ReadLine();
+                System.Console.WriteLine($"Enter project name. Like - TFSAssist");
+                string projectStr = System.Console.ReadLine();
                 string destPath = @"C:\!Builds";
-                string projectStr = @"TFSAssist";
 
                 if (!Directory.Exists(sourcePath))
                 {
@@ -113,7 +108,7 @@ namespace Tester.Updater
                     // создаем локальную ветку
                     Remote remote = repo.Network.Remotes.Where(p => p.Name == "origin").FirstOrDefault();
                     if (remote == null)
-                        remote = repo.Network.Remotes.Add("origin", Builds.DEFAULT_PROJECT_GIT);
+                        remote = repo.Network.Remotes.Add("origin", BuildsInfo.DEFAULT_PROJECT_GIT);
 
                     // вытягиваем весь репозиторий с сервера 
                     Commands.Fetch(repo, "origin", new string[0], new FetchOptions
@@ -124,16 +119,16 @@ namespace Tester.Updater
                     repo.Merge(repo.Branches["origin/master"], signature);
 
 
-                    string fileVersionsPath = Path.Combine(destPath, Builds.FILE_NAME);
-                    Builds buildVersions = null;
+                    string fileVersionsPath = Path.Combine(destPath, BuildsInfo.FILE_NAME);
+                    BuildsInfo buildVersions = null;
                     if (File.Exists(fileVersionsPath))
                     {
                         string currentFileVersions = File.ReadAllText(fileVersionsPath);
-                        buildVersions = Builds.Deserialize(currentFileVersions);
+                        buildVersions = BuildsInfo.Deserialize(currentFileVersions);
                     }
                     else
                     {
-                        buildVersions = new Builds();
+                        buildVersions = new BuildsInfo();
                     }
 
                     buildVersions.Add(projectStr, sourcePath, destPath);

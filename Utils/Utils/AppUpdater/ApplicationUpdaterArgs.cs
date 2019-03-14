@@ -16,12 +16,12 @@ namespace Utils.AppUpdater
 
     public class ApplicationUpdaterArgs
     {
-        internal ApplicationUpdaterArgs(BuildUpdaterCollection buildPacks)
+        internal ApplicationUpdaterArgs(IUpdater control)
         {
-            BuildPacks = buildPacks;
+            Control = control;
             Result = UpdateBuildResult.Cancel;
         }
-        public BuildUpdaterCollection BuildPacks { get; }
+        public IUpdater Control { get; }
         public UpdateBuildResult Result { get; set; }
     }
 }

@@ -1,37 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Utils.AppUpdater.Updater
 {
-    public interface IUploadProgress
-    {
-        /// <summary>
-        /// Когда новые версии бильдов скачались на локальный диск в темповую папку. Либо загрузка завершилась неудачей
-        /// </summary>
-        event UploadBuildHandler OnFetchComplete;
-        /// <summary>
-        /// Количество скачанных байт
-        /// </summary>
-        long UploadedBytes { get; }
-        /// <summary>
-        /// Размер файлов на сервере
-        /// </summary>
-        long TotalBytes { get; }
-        /// <summary>
-        /// Прогресс в процентах скачиванных файлов с сервера
-        /// </summary>
-        int ProgressPercent { get; }
-        UploaderStatus Status { get; }
-        /// <summary>
-        /// Прогресс скачиванных файлов с сервера
-        /// </summary>
-        /// <returns></returns>
-        string GetProgressString();
-    }
-
     [Serializable]
     public abstract class UploadProgress
     {
-        public UploaderStatus Status { get; protected set; } = UploaderStatus.None;
         public virtual long UploadedBytes { get; protected set; } = 0l;
         public virtual long TotalBytes { get; protected set; } = 0l;
 

@@ -10,24 +10,24 @@ namespace Utils.AppUpdater
     [Serializable]
     public class ApplicationUpdaterProcessingArgs
     {
-        internal ApplicationUpdaterProcessingArgs(string exception, IUploadProgress faildObj = null)
+        internal ApplicationUpdaterProcessingArgs(string exception, IUpdater control = null)
         {
-            FaildObject = faildObj;
+            Control = control;
             Error = new Exception(exception);
         }
 
-        internal ApplicationUpdaterProcessingArgs(Exception error = null, IUploadProgress faildObj = null)
+        internal ApplicationUpdaterProcessingArgs(Exception error = null, IUpdater control = null)
         {
-            FaildObject = faildObj;
+            Control = control;
             Error = error;
         }
 
-        internal ApplicationUpdaterProcessingArgs(IUploadProgress faildObj)
+        internal ApplicationUpdaterProcessingArgs(IUpdater control)
         {
-            FaildObject = faildObj;
+            Control = control;
         }
 
-        public IUploadProgress FaildObject { get; }
+        public IUpdater Control { get; }
         public Exception Error { get; internal set; }
         public List<Exception> InnerException { get; } = new List<Exception>();
     }

@@ -17,10 +17,9 @@ namespace Utils.AppUpdater
 
     public class ApplicationUpdater
     {
-        public event BuildUpdaterHandler UpdateOnNewVersion;
+        public event BuildUpdaterHandler OnUpdate;
         public event UploadBuildHandler OnProcessingError;
         private readonly Timer _stopWatch;
-        private BuildUpdaterCollection _newBuildVersions;
         private bool _waitSelfUpdate = false;
         object _lock = new object();
 
@@ -36,7 +35,7 @@ namespace Utils.AppUpdater
             RunningApp = runningApp;
             Project = projectName;
             PrevPackName = prevPackName;
-            ProjectUri = new Uri(uriProject == null ? Builds.DEFAULT_PROJECT_RAW : uriProject.TrimEnd('/'));
+            ProjectUri = new Uri(uriProject == null ? BuildsInfo.DEFAULT_PROJECT_RAW : uriProject.TrimEnd('/'));
             UpdateMSec = updateSec * 1000;
 
             _stopWatch = new Timer();
@@ -55,23 +54,23 @@ namespace Utils.AppUpdater
                     if(_waitSelfUpdate)
                         return;
 
-                    if (UpdateOnNewVersion == null)
+                    if (OnUpdate == null)
                     {
                         EnableTimer();
                         return;
                     }
 
-                    Uri versionsInfo = new Uri($"{ProjectUri}/{Builds.FILE_NAME}");
+                    Uri versionsInfo = new Uri($"{ProjectUri}/{BuildsInfo.FILE_NAME}");
                     string contextStr = WEB.WebHttpStringData(versionsInfo, out HttpStatusCode resHttp, HttpRequestCacheLevel.NoCacheNoStore);
                     if (resHttp == HttpStatusCode.OK)
                     {
-                        Builds remoteBuilds = Builds.Deserialize(contextStr);
+                        BuildsInfo remoteBuilds = BuildsInfo.Deserialize(contextStr);
 
-                        _newBuildVersions = new BuildUpdaterCollection(this, remoteBuilds);
-                        if (_newBuildVersions.Count > 0 && _newBuildVersions.ProjectBuildPack.Name != PrevPackName)
+                        BuildUpdaterCollection projectRemoteBuilds = new BuildUpdaterCollection(this, remoteBuilds);
+                        if (projectRemoteBuilds.Count > 0 && projectRemoteBuilds.ProjectBuildPack.Name != PrevPackName)
                         {
-                            _newBuildVersions.OnFetchComplete += DeltaList_OnFetchComplete;
-                            _newBuildVersions.Fetch();
+                            projectRemoteBuilds.OnFetchComplete += DeltaList_OnFetchComplete;
+                            projectRemoteBuilds.Fetch();
                         }
                         return;
                     }
@@ -94,29 +93,29 @@ namespace Utils.AppUpdater
             {
                 try
                 {
-                    if (e.Error != null || _newBuildVersions.Status != UploaderStatus.Fetched)
+                    if (e.Error != null || e.Control.Status != UploaderStatus.Fetched)
                     {
-                        _newBuildVersions.Dispose();
-                        OnProcessingError?.Invoke(this, e.Error == null ? new ApplicationUpdaterProcessingArgs("Faild in upload build pack!", _newBuildVersions) : e);
+                        OnProcessingError?.Invoke(this, e.Error == null ? new ApplicationUpdaterProcessingArgs("Faild in upload build pack!", e.Control) : e);
+                        e.Control.Dispose();
                         EnableTimer();
                         return;
                     }
 
-                    var eventListeners = UpdateOnNewVersion?.GetInvocationList();
+                    var eventListeners = OnUpdate?.GetInvocationList();
                     if (eventListeners == null || !eventListeners.Any())
                     {
-                        _newBuildVersions.Dispose();
+                        e.Control.Dispose();
                         EnableTimer();
                         return;
                     }
 
-                    ApplicationUpdaterArgs buildArgs = new ApplicationUpdaterArgs(_newBuildVersions);
+                    ApplicationUpdaterArgs buildArgs = new ApplicationUpdaterArgs(e.Control);
                     foreach (BuildUpdaterHandler del in eventListeners)
                     {
                         del.Invoke(this, buildArgs);
                         if (buildArgs.Result == UpdateBuildResult.Cancel)
                         {
-                            _newBuildVersions.Dispose();
+                            e.Control.Dispose();
                             EnableTimer();
                             return;
                         }
@@ -128,13 +127,13 @@ namespace Utils.AppUpdater
                         return;
                     }
 
-                    _newBuildVersions.CommitAndPull();
+                    ((BuildUpdaterCollection)e.Control).CommitAndPull();
                     return;
                 }
                 catch (Exception ex)
                 {
-                    OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs(ex, _newBuildVersions));
-                    _newBuildVersions.Dispose();
+                    OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs(ex, e.Control));
+                    e.Control.Dispose();
                 }
 
                 EnableTimer();
@@ -162,7 +161,11 @@ namespace Utils.AppUpdater
             TimerCheckVersions(this, null);
         }
 
-        public void Update()
+        /// <summary>
+        /// Если при вызове эвента OnUpdate, был выбран статус - UpdateBuildResult.SelfUpdate, то контрольный процесс обязуется выполнить апдейт самостоятельно, при завершении своих внутренних процессов. При это проверка на наличия обновлений останавливается.
+        /// </summary>
+        /// <param name="control"></param>
+        public void Update(IUpdater control)
         {
             lock (_lock)
             {
@@ -171,20 +174,20 @@ namespace Utils.AppUpdater
 
                 try
                 {
-                    if (_newBuildVersions == null || _newBuildVersions.Count == 0)
+                    if (control == null || control.Count == 0)
                     {
-                        OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs("Internal error. Server builds not initialized.", _newBuildVersions));
+                        OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs("Internal error. Server builds not initialized.", control));
                         _waitSelfUpdate = false;
                         EnableTimer();
                         return;
                     }
 
-                    _newBuildVersions.CommitAndPull();
+                    ((BuildUpdaterCollection)control).CommitAndPull();
                 }
                 catch (Exception ex)
                 {
-                    OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs(ex, _newBuildVersions));
-                    _newBuildVersions.Dispose();
+                    OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs(ex, control));
+                    control.Dispose();
                     _waitSelfUpdate = false;
                     EnableTimer();
                 }

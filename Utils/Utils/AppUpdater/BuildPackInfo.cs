@@ -12,7 +12,7 @@ using System.Xml.Serialization;
 namespace Utils.AppUpdater
 {
     [Serializable, XmlRoot("Pack")]
-    public class BuildPack
+    public class BuildPackInfo
     {
         [XmlAttribute]
         public string Project { get; set; }
@@ -26,12 +26,12 @@ namespace Utils.AppUpdater
         [XmlElement("Build")]
         public List<FileBuildInfo> Builds { get; set; } = new List<FileBuildInfo>();
 
-        public BuildPack()
+        public BuildPackInfo()
         {
 
         }
 
-        public BuildPack(string project, string assembliesDirPath, string destinationDirPath)
+        public BuildPackInfo(string project, string assembliesDirPath, string destinationDirPath)
         {
             Project = project;
             Name = STRING.RandomStringNumbers(15) + ".zip";
@@ -77,9 +77,9 @@ namespace Utils.AppUpdater
             return localVersions;
         }
 
-        public void SerializeAndDeserialize(Builds versions)
+        void SerializeAndDeserialize(BuildsInfo versions)
         {
-            XmlSerializer xsSubmit = new XmlSerializer(typeof(Builds));
+            XmlSerializer xsSubmit = new XmlSerializer(typeof(BuildsInfo));
             var xml = "";
             using (var sww = new StringWriter())
             {
@@ -90,10 +90,10 @@ namespace Utils.AppUpdater
                 }
             }
 
-            Builds res;
+            BuildsInfo res;
             using (TextReader reader = new StringReader(xml))
             {
-                res = (Builds)xsSubmit.Deserialize(reader);
+                res = (BuildsInfo)xsSubmit.Deserialize(reader);
             }
         }
 

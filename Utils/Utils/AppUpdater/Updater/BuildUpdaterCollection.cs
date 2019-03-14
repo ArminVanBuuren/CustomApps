@@ -16,34 +16,25 @@ using Utils.XmlHelper;
 namespace Utils.AppUpdater.Updater
 {
     [Serializable]
-    public enum UploaderStatus
-    {
-        None = 0,
-        Init = 1,
-        Fetched = 2,
-        Commited = 4,
-        Pulled = 8
-    }
-
-    [Serializable]
-    public class BuildUpdaterCollection : UploadProgress, IUploadProgress, IEnumerable<BuildUpdater>, IEnumerator<BuildUpdater>, IDisposable
+    internal class BuildUpdaterCollection : UploadProgress, IUpdater
     {
         public event UploadBuildHandler OnFetchComplete;
-        private List<BuildUpdater> _collection;
+        private List<IBuildUpdater> _collection;
         int index = -1;
         private object _lock = new object();
 
         ApplicationUpdaterProcessingArgs fetchArgs;
         private WebClient _webClient;
 
+        public UploaderStatus Status { get; protected set; } = UploaderStatus.None;
         public string LocationApp { get; }
         public Uri ProjectUri { get; }
-        public BuildPack ProjectBuildPack { get; }
+        public BuildPackInfo ProjectBuildPack { get; }
         public string FileTempPath { get; private set; }
         public string DiretoryTempPath { get; private set; }
 
 
-        public BuildUpdaterCollection(ApplicationUpdater updater, Builds remoteBuilds)
+        internal BuildUpdaterCollection(ApplicationUpdater updater, BuildsInfo remoteBuilds)
         {
             LocationApp = updater.RunningApp.Location;
             ProjectUri = updater.ProjectUri;
@@ -53,8 +44,8 @@ namespace Utils.AppUpdater.Updater
 
             //Dictionary<string, FileBuildInfo> serverVersions = ProjectBuildPack.ToDictionary(x => x.Location, x => x);
 
-            _collection = new List<BuildUpdater>();
-            Dictionary<string, FileBuildInfo> localVersions = BuildPack.GetLocalVersions(updater.RunningApp);
+            _collection = new List<IBuildUpdater>();
+            Dictionary<string, FileBuildInfo> localVersions = BuildPackInfo.GetLocalVersions(updater.RunningApp);
 
             foreach (FileBuildInfo serverFile in ProjectBuildPack.Builds)
             {
@@ -90,35 +81,37 @@ namespace Utils.AppUpdater.Updater
 
         void Add(FileBuildInfo localFile, FileBuildInfo serverFile)
         {
-            _collection.Add(new BuildUpdater(localFile, serverFile, LocationApp));
+            _collection.Add(new BuildUpdater(this, localFile, serverFile));
         }
 
         /// <summary>
         /// Download file
         /// </summary>
         /// <param name="uriProject"></param>
-        public bool Fetch()
+        internal bool Fetch()
         {
             lock (_lock)
             {
-                if(Status != UploaderStatus.None)
-                    return false;
-
-                fetchArgs = new ApplicationUpdaterProcessingArgs(this);
-
-                try
+                if (Status == UploaderStatus.None || Status == UploaderStatus.Init)
                 {
-                    FileTempPath = Path.GetTempFileName();
-                    _webClient.DownloadFileAsync(new Uri($"{ProjectUri}/{ProjectBuildPack.Name}"), FileTempPath);
-                    Status = UploaderStatus.Init;
-                }
-                catch (Exception ex)
-                {
-                    fetchArgs.Error = ex;
-                    OnFetchComplete.Invoke(this, fetchArgs);
+                    fetchArgs = new ApplicationUpdaterProcessingArgs(this);
+
+                    try
+                    {
+                        FileTempPath = Path.GetTempFileName();
+                        _webClient.DownloadFileAsync(new Uri($"{ProjectUri}/{ProjectBuildPack.Name}"), FileTempPath);
+                        Status = UploaderStatus.Init;
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        fetchArgs.Error = ex;
+                        OnFetchComplete.Invoke(this, fetchArgs);
+                        return false;
+                    }
                 }
 
-                return true;
+                return false;
             }
         }
 
@@ -130,7 +123,7 @@ namespace Utils.AppUpdater.Updater
 
         private void WebClient_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
-            //lock (_lock)
+            lock (_lock)
             {
                 if (e.Error != null || e.Cancelled)
                 {
@@ -143,11 +136,15 @@ namespace Utils.AppUpdater.Updater
                         string downloadedMD5 = Hasher.HashFile(FileTempPath, HashType.MD5);
                         if (downloadedMD5.Like(ProjectBuildPack.MD5))
                         {
+                            DiretoryTempPath = Path.Combine(Path.GetTempPath(), STRING.RandomString(15));
+                            Directory.CreateDirectory(DiretoryTempPath);
+                            ZipFile.ExtractToDirectory(FileTempPath, DiretoryTempPath);
+                            DeleteTempFile();
                             Status = UploaderStatus.Fetched;
                         }
                         else
                         {
-                            //fetchArgs.Error = new Exception($"Hash of uploaded file [{downloadedMD5}] is incorrect. Sever hash is [{ProjectBuildPack.MD5}]");
+                            fetchArgs.Error = new Exception($"Hash of uploaded file [{downloadedMD5}] is incorrect. Sever hash is [{ProjectBuildPack.MD5}]");
                         }
                     }
                     catch (Exception exception)
@@ -160,17 +157,12 @@ namespace Utils.AppUpdater.Updater
             }
         }
 
-        public bool CommitAndPull()
+        internal bool CommitAndPull()
         {
             lock (_lock)
             {
                 if(Status != UploaderStatus.Fetched)
                     return false;
-
-                DiretoryTempPath = Path.Combine(Path.GetTempPath(), STRING.RandomString(15));
-                Directory.CreateDirectory(DiretoryTempPath);
-                ZipFile.ExtractToDirectory(FileTempPath, DiretoryTempPath);
-                DeleteTempFile();
 
                 BuildUpdater runningApp = null;
                 foreach (BuildUpdater build in _collection)
@@ -181,13 +173,13 @@ namespace Utils.AppUpdater.Updater
                         continue;
                     }
 
-                    build.Commit(DiretoryTempPath);
+                    build.Commit();
                 }
 
                 Status = UploaderStatus.Commited;
 
                 if (runningApp != null)
-                    BuildUpdater.Pull(runningApp);
+                    runningApp.Pull();
                 else
                     BuildUpdater.Pull(LocationApp);
 
@@ -219,7 +211,7 @@ namespace Utils.AppUpdater.Updater
             }
         }
 
-        public BuildUpdater Current
+        public IBuildUpdater Current
         {
             get
             {
@@ -245,7 +237,7 @@ namespace Utils.AppUpdater.Updater
             index = -1;
         }
 
-        public IEnumerator<BuildUpdater> GetEnumerator()
+        public IEnumerator<IBuildUpdater> GetEnumerator()
         {
             return this;
         }
