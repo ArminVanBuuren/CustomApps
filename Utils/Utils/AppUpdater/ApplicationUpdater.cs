@@ -42,7 +42,6 @@ namespace Utils.AppUpdater
             _stopWatch.Elapsed += TimerCheckVersions;
             _stopWatch.Interval = UpdateMSec;
             _stopWatch.AutoReset = false;
-            EnableTimer();
         }
 
         private void TimerCheckVersions(object sender, ElapsedEventArgs e)
@@ -56,7 +55,7 @@ namespace Utils.AppUpdater
 
                     if (OnUpdate == null)
                     {
-                        EnableTimer();
+                        Start();
                         return;
                     }
 
@@ -72,17 +71,18 @@ namespace Utils.AppUpdater
                             projectRemoteBuilds.OnFetchComplete += DeltaList_OnFetchComplete;
                             projectRemoteBuilds.Fetch();
                         }
-                        return;
                     }
-
-                    throw new Exception($"Catched exception when get status from server. HttpStatus=[{resHttp:G}] Uri=[{versionsInfo.AbsoluteUri}]");
+                    else
+                    {
+                        throw new Exception($"Catched exception when get status from server. HttpStatus=[{resHttp:G}] Uri=[{versionsInfo.AbsoluteUri}]");
+                    }
                 }
                 catch (Exception ex)
                 {
                     OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs(ex));
                 }
 
-                EnableTimer();
+                Start();
             }
         }
 
@@ -97,7 +97,7 @@ namespace Utils.AppUpdater
                     {
                         OnProcessingError?.Invoke(this, e.Error == null ? new ApplicationUpdaterProcessingArgs("Error fetching build pack!", e.Control) : e);
                         e.Control.Dispose();
-                        EnableTimer();
+                        Start();
                         return;
                     }
 
@@ -105,7 +105,7 @@ namespace Utils.AppUpdater
                     if (eventListeners == null || !eventListeners.Any())
                     {
                         e.Control.Dispose();
-                        EnableTimer();
+                        Start();
                         return;
                     }
 
@@ -116,7 +116,7 @@ namespace Utils.AppUpdater
                         if (buildArgs.Result == UpdateBuildResult.Cancel)
                         {
                             e.Control.Dispose();
-                            EnableTimer();
+                            Start();
                             return;
                         }
                     }
@@ -136,7 +136,15 @@ namespace Utils.AppUpdater
                     e.Control.Dispose();
                 }
 
-                EnableTimer();
+                Start();
+            }
+        }
+
+        public void Start()
+        {
+            lock (_lock)
+            {
+                _stopWatch.Enabled = true;
             }
         }
 
@@ -155,7 +163,7 @@ namespace Utils.AppUpdater
                 if (_stopWatch.Interval != UpdateMSec)
                     _stopWatch.Interval = UpdateMSec;
                 if (_stopWatch.Enabled == true)
-                    EnableTimer();
+                    Start();
             }
 
             TimerCheckVersions(this, null);
@@ -187,14 +195,9 @@ namespace Utils.AppUpdater
                 {
                     OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs(ex, control));
                     control.Dispose();
-                    EnableTimer();
+                    Start();
                 }
             }
-        }
-
-        void EnableTimer()
-        {
-            _stopWatch.Enabled = true;
         }
     }
 }
