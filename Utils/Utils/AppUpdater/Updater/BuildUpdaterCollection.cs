@@ -26,7 +26,7 @@ namespace Utils.AppUpdater.Updater
         ApplicationUpdaterProcessingArgs fetchArgs;
         private WebClient _webClient;
 
-        public UploaderStatus Status { get; protected set; } = UploaderStatus.None;
+        public UploaderStatus Status { get; private set; } = UploaderStatus.None;
         public string LocationApp { get; }
         public Uri ProjectUri { get; }
         public BuildPackInfo ProjectBuildPack { get; }

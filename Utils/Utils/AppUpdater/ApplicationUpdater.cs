@@ -95,7 +95,7 @@ namespace Utils.AppUpdater
                 {
                     if (e.Error != null || e.Control.Status != UploaderStatus.Fetched)
                     {
-                        OnProcessingError?.Invoke(this, e.Error == null ? new ApplicationUpdaterProcessingArgs("Faild in upload build pack!", e.Control) : e);
+                        OnProcessingError?.Invoke(this, e.Error == null ? new ApplicationUpdaterProcessingArgs("Error fetching build pack!", e.Control) : e);
                         e.Control.Dispose();
                         EnableTimer();
                         return;
@@ -167,28 +167,26 @@ namespace Utils.AppUpdater
         /// <param name="control"></param>
         public void Update(IUpdater control)
         {
+            if (control == null)
+                throw new ArgumentNullException("control");
+
+            if (control.Count == 0)
+                throw new ArgumentException("No builds found for update.");
+
             lock (_lock)
             {
-                if (!_waitSelfUpdate)
-                    return;
-
                 try
                 {
-                    if (control == null || control.Count == 0)
-                    {
-                        OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs("Internal error. Server builds not initialized.", control));
-                        _waitSelfUpdate = false;
-                        EnableTimer();
+                    if (!_waitSelfUpdate)
                         return;
-                    }
 
-                    ((BuildUpdaterCollection)control).CommitAndPull();
+                    _waitSelfUpdate = false;
+                    ((BuildUpdaterCollection) control).CommitAndPull();
                 }
                 catch (Exception ex)
                 {
                     OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs(ex, control));
                     control.Dispose();
-                    _waitSelfUpdate = false;
                     EnableTimer();
                 }
             }
