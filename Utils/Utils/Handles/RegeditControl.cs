@@ -1,0 +1,110 @@
+﻿using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Utils.Handles
+{
+    public class RegeditControl : IDisposable
+    {
+        private RegistryKey software;
+        private RegistryKey myProject;
+        public RegeditControl(string applicationName)
+        {
+            software = Registry.CurrentUser.OpenSubKey("SOFTWARE", true);
+            if (software == null)
+                throw new Exception(@"Can't find HKEY_CURRENT_USER\SOFTWARE");
+
+            myProject = software.OpenSubKey(applicationName, true) ?? software.CreateSubKey(applicationName);
+        }
+
+        ///// <summary>
+        ///// Создание или получение записи в реестре с сгенеринным ключем и данными о приложении
+        ///// </summary>
+        ///// <param name="applicationName"></param>
+        ///// <param name="description"></param>
+        ///// <returns></returns>
+        //public static string GetOrSetRegedit(string applicationName, string description)
+        //{
+
+
+            
+
+        //    string currentDesc = (string) myProject.GetValue("Description") ?? string.Empty;
+        //    if (!currentDesc.Equals(description))
+        //        myProject.SetValue("Description", description);
+
+        //    string result = (string) myProject.GetValue("Key");
+        //    if (result == null)
+        //    {
+        //        result = Guid.NewGuid().ToString("D");
+        //        myProject.SetValue("Key", result);
+        //    }
+
+        //    software.Close();
+        //    myProject.Close();
+        //    return result;
+        //}
+
+        public string this[string propertyName]
+        {
+            get
+            {
+                string result = (string)myProject.GetValue(propertyName);
+                return result;
+            }
+            set
+            {
+                myProject.SetValue(propertyName, value);
+            }
+        }
+
+
+        public static bool EnabledBootRun(string applicationName)
+        {
+            RegistryKey software = GetBootRunKey();
+            string applicatinItemValue = (string) software.GetValue(applicationName);
+            if (!applicatinItemValue.IsNullOrEmpty())
+                applicatinItemValue = applicatinItemValue.Trim();
+
+            return !applicatinItemValue.IsNullOrEmpty();
+        }
+
+        public static bool SetBootStartup(string applicationName, string applicationPath, bool addToStartup)
+        {
+            RegistryKey software = GetBootRunKey(true);
+            string applicatinItemValue = (string) software.GetValue(applicationName);
+            if (!applicatinItemValue.IsNullOrEmpty())
+                applicatinItemValue = applicatinItemValue.Trim();
+
+
+            string setValue = string.Format("\"{0}\" /autostart", applicationPath);
+            if (addToStartup && setValue.Equals(applicatinItemValue))
+                return true;
+
+            if (addToStartup)
+                software.SetValue(applicationName, setValue);
+            else if (applicatinItemValue != null) // если в загрузке уже стоит данное приложение, если нет, то удалять нечего
+                software.DeleteValue(applicationName);
+
+            return true;
+        }
+
+        static RegistryKey GetBootRunKey(bool writeble = false)
+        {
+            RegistryKey software = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", writeble);
+            if (software == null)
+                throw new Exception(@"Can't find HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run");
+
+            return software;
+        }
+
+        public void Dispose()
+        {
+            software.Close();
+            myProject.Close();
+        }
+    }
+}

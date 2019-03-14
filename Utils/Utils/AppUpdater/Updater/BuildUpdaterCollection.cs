@@ -11,7 +11,6 @@ using System.Net.Cache;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
-using Utils.XmlHelper;
 
 namespace Utils.AppUpdater.Updater
 {

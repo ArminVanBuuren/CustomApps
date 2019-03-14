@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using System.Xml;
 using Utils.CollectionHelper;
 
-namespace Utils.XmlHelper
+namespace Utils
 {
-    public static class XmlHelper
+    public static class XML
     {
         public static string GetText(this XmlNode node, string nodeName)
         {

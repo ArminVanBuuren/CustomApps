@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-using Utils.GitHelper;
 
 namespace Utils.AppUpdater
 {

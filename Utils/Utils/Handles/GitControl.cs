@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Utils.GitHelper
+namespace Utils.Handles
 {
     public enum GitCommands
     {

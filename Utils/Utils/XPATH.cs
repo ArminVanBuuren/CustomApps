@@ -6,10 +6,24 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.XPath;
 
-namespace Utils.XPathHelper
+namespace Utils
 {
-    public class XPathHelper
+    public class XPATH
     {
+        public class XPathResult
+        {
+            public int ID { get; set; }
+            public string NodeType { get; set; }
+            public string NodeName { get; set; }
+            public string Value { get; set; }
+            public XmlNode Node { get; set; }
+        }
+
+        public class XPathResultCollection : List<XPathResult>
+        {
+
+        }
+
         public static XPathResultCollection Execute(XPathNavigator navigator, string xpath)
         {
             if (navigator == null)

@@ -9,8 +9,8 @@ using TFSAssist.Control.DataBase.Datas;
 using TFSAssist.Control.DataBase.Settings;
 using Utils;
 using Utils.Crypto;
+using Utils.Handles;
 using static Utils.ASSEMBLY;
-using static Utils.REGEDIT;
 
 namespace TFSAssist.Control
 {
@@ -33,8 +33,23 @@ namespace TFSAssist.Control
             SettingsPath = $"{ApplicationFilePath}.xml";
             DataBasePath = $"{ApplicationFilePath}.Data.xml";
             ApplicationName = Assembly.GetEntryAssembly().GetName().Name;
-            ApplicationPath = Assembly.GetEntryAssembly().Location; 
-            RegeditKey = GetOrSetRegedit(ApplicationName, "Application implements reading mails, and by their basis creating TFS items.");
+            ApplicationPath = Assembly.GetEntryAssembly().Location;
+
+            string description = "Application implements reading mails, and by their basis creating TFS items.";
+            using (RegeditControl regControl = new RegeditControl(ApplicationName))
+            {
+                if(!description.Equals(regControl["Description"]))
+                {
+                    regControl["Description"] = description;
+                }
+
+                RegeditKey = regControl["Key"];
+                if (RegeditKey.IsNullOrEmptyTrim())
+                {
+                    RegeditKey = Guid.NewGuid().ToString("D");
+                    regControl["Key"] = RegeditKey;
+                }
+            }
         }
 
         /// <summary>

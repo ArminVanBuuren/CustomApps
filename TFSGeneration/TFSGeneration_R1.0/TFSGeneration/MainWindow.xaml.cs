@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,6 +21,7 @@ using TFSAssist.Control;
 using UIControls.MainControl;
 using Utils;
 using Utils.AppUpdater;
+using Utils.Handles;
 using Timer = System.Timers.Timer;
 
 namespace TFSAssist
@@ -50,20 +52,22 @@ namespace TFSAssist
         private const string STR_START = "START";
         private const string STR_STOP = "STOP";
         private readonly string ERR_SECOND_PROC = $"{nameof(TFSAssist)} already started. Please check your notification area. To run second process, you can rename the executable file.";
-
         private const int timeoutMSECToShowToolTip = 2000;
         private const int timeoutToShowToolTip = 2000;
 
         private const int _intervalForActivateUnUsedWindow = 600 * 1000;
         private int _openedWarningWindowCount = 0;
-        
-        private Timer _timerActivateUnUsedWindow;
-        private Timer _timerGC;
+        private Timer _timerOnActivateUnUsingWindow;
+        private Timer _timerOnGC;
         private WindowWarning warnWindow;
         private bool _thisIsLoaded = false; // фиксит ошибку при закрытии окна остановку таймера
         private DateTime? LastDeactivationDate = null;
+        
+
         public TFSControl TfsControl { get; private set; }
-        private BottomNotification _bottomNotification;
+        public BottomNotification BottomNotification { get; private set; }
+        public ApplicationUpdater Updater { get; private set; }
+
         static MainWindow()
         {
             System.Globalization.CultureInfo culture = System.Globalization.CultureInfo.CreateSpecificCulture("ru-RU");
@@ -95,6 +99,7 @@ namespace TFSAssist
             }
 
             Resources.Add("STR_START", STR_START);
+
             System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor;
 
             InitializeComponent();
@@ -112,7 +117,7 @@ namespace TFSAssist
             {
                 _thisIsLoaded = true;
                 //================Notification Bar==============================
-                _bottomNotification = new BottomNotification(this, TFSControl.ApplicationName);
+                BottomNotification = new BottomNotification(this, TFSControl.ApplicationName);
                 //===========Initialize And Set Events===========
                 LogPerformer log = new LogPerformer();
                 log.WriteLog += Informing;
@@ -145,8 +150,7 @@ namespace TFSAssist
                 TfsControl.Settings.TFSOption.TFSUserPassword.PropertyChanged += TFSUserPassword_PropertyChanged;
                 ToolTipService.SetInitialShowDelay(TFSUserPassword, timeoutToShowToolTip);
 
-                FilterStartDate.Text =
-                        TfsControl.Settings.MailOption.StartDate.Value; // при зменении все равно вырезается время, остается только дата, по этому тоже биндим по особеному
+                FilterStartDate.Text = TfsControl.Settings.MailOption.StartDate.Value; // при изменении все равно вырезается время, остается только дата, по этому тоже биндим по особеному
                 FilterStartDate.SelectedDateChanged += FilterStartDate_OnSelectedDateChanged;
                 TfsControl.Settings.MailOption.StartDate.PropertyChanged += StartDate_PropertyChanged;
                 ToolTipService.SetInitialShowDelay(FilterStartDate, timeoutToShowToolTip);
@@ -176,25 +180,16 @@ namespace TFSAssist
                 ToolTipService.SetInitialShowDelay(GetDublicateTFS, timeoutToShowToolTip);
 
 
-                //================Activate Button Start And Start Timer==============================
+                //================Activate button Start and create Updater with Timers==============================
                 ButtonStart.IsEnabled = true;
 
-                _timerActivateUnUsedWindow = new Timer {
-                                                     Interval = _intervalForActivateUnUsedWindow
-                                                 };
-                _timerActivateUnUsedWindow.Elapsed += CheckWorking;
-                _timerActivateUnUsedWindow.AutoReset = false;
-                _timerActivateUnUsedWindow.Enabled = true;
 
-                _timerGC = new Timer {
-                                         Interval = 900 * 1000
-                                     };
-                _timerGC.Elapsed += GarbageCollect;
-                _timerGC.Start();
+                InitializeUpdater();
+                InitializeTimers();
             }
             catch (Exception ex)
             {
-                Informing(WarnSeverity.Error, DateTime.Now,  ex.Message, $"{ex.Message}\r\n{ex.StackTrace}", true);
+                Informing(WarnSeverity.Error, DateTime.Now, ex.Message, $"{ex.Message}\r\n{ex.StackTrace}", true);
                 DisableWindow();
             }
             finally
@@ -203,6 +198,61 @@ namespace TFSAssist
                 ShowMyForm(this, EventArgs.Empty);
             }
         }
+
+        void InitializeUpdater()
+        {
+            TFSAssistUpdater lastUpdate = TFSAssistUpdater.Deserialize();
+            if (lastUpdate != null)
+            {
+                WindowState = lastUpdate.WindowState;
+                if (lastUpdate.TfsInProgress)
+                {
+                    ButtonStart_OnClick(this, null);
+                }
+                lastUpdate.Dispose();
+            }
+
+            string currentVersionPack;
+            using (RegeditControl regControl = new RegeditControl(ASSEMBLY.ApplicationName))
+            {
+                currentVersionPack = regControl[nameof(BuildPackInfo)];
+            }
+
+            Updater = new ApplicationUpdater(Assembly.GetExecutingAssembly(), nameof(TFSAssist), currentVersionPack, 5);
+            Updater.OnUpdate += Updater_OnUpdate;
+            Updater.OnProcessingError += Updater_OnProcessingError;
+            Updater.Start();
+        }
+
+        void InitializeTimers()
+        {
+            _timerOnActivateUnUsingWindow = new Timer
+            {
+                Interval = _intervalForActivateUnUsedWindow
+            };
+            _timerOnActivateUnUsingWindow.Elapsed += CheckWorking;
+            _timerOnActivateUnUsingWindow.AutoReset = false;
+            _timerOnActivateUnUsingWindow.Enabled = true;
+
+            _timerOnGC = new Timer
+            {
+                Interval = 900 * 1000
+            };
+            _timerOnGC.Elapsed += GarbageCollect;
+            _timerOnGC.Start();
+        }
+
+        private void Updater_OnUpdate(object sender, ApplicationUpdaterArgs buildPack)
+        {
+            buildPack.Result = UpdateBuildResult.SelfUpdate;
+        }
+
+        private void Updater_OnProcessingError(object sender, ApplicationUpdaterProcessingArgs args)
+        {
+            WriteLog(WarnSeverity.Error, DateTime.Now, args.Error.Message, $"Error updater processing. Inner exceptions:[{args.InnerException.Count}]");
+        }
+
+
 
         /// <summary>
         /// Биндим все необходимые свойства с параметрами в Windows форме. Чтобы значения синхронизировались, если изменить свойство в INotifyPropertyChanged
@@ -229,7 +279,7 @@ namespace TFSAssist
         void MainWindow_Activated(object sender, EventArgs e)
         {
             LastDeactivationDate = null;
-            _bottomNotification.Clear();
+            BottomNotification.Clear();
 
             if (!ShowInTaskbar)
                 ShowInTaskbar = true;
@@ -238,7 +288,7 @@ namespace TFSAssist
         void MainWindow_Deactivated(object sender, EventArgs e)
         {
             LastDeactivationDate = DateTime.Now;
-            _bottomNotification.Clear();
+            BottomNotification.Clear();
 
             Dispatcher?.Invoke(() =>
             {
@@ -256,22 +306,22 @@ namespace TFSAssist
         {
             _thisIsLoaded = false;
             //удаляем таймер
-            if (_timerActivateUnUsedWindow != null)
+            if (_timerOnActivateUnUsingWindow != null)
             {
-                _timerActivateUnUsedWindow.Enabled = false;
-                _timerActivateUnUsedWindow.Stop();
-                _timerActivateUnUsedWindow.Dispose();
+                _timerOnActivateUnUsingWindow.Enabled = false;
+                _timerOnActivateUnUsingWindow.Stop();
+                _timerOnActivateUnUsingWindow.Dispose();
             }
 
-            if (_timerGC != null)
+            if (_timerOnGC != null)
             {
-                _timerGC.Enabled = false;
-                _timerGC.Stop();
-                _timerGC.Dispose();
+                _timerOnGC.Enabled = false;
+                _timerOnGC.Stop();
+                _timerOnGC.Dispose();
             }
 
             //Обязательно диспоузить, а то в окошке так и будет висеть
-            _bottomNotification?.Dispose();
+            BottomNotification?.Dispose();
             //обязательно диспоузить т.к. нужно результат сериализовать и остановить асинронный процесс
             TfsControl?.Dispose();
         }
@@ -294,20 +344,20 @@ namespace TFSAssist
                 if (timeSpan.Days > 0 || (timeSpan.Days == 0 && timeSpan.TotalMilliseconds >= _intervalForActivateUnUsedWindow))
                 {
                     ShowMyForm(this, EventArgs.Empty);
-                    _timerActivateUnUsedWindow.Interval = _intervalForActivateUnUsedWindow;
+                    _timerOnActivateUnUsingWindow.Interval = _intervalForActivateUnUsedWindow;
                 }
                 else
                 {
-                    _timerActivateUnUsedWindow.Interval = _intervalForActivateUnUsedWindow - timeSpan.TotalMilliseconds;
+                    _timerOnActivateUnUsingWindow.Interval = _intervalForActivateUnUsedWindow - timeSpan.TotalMilliseconds;
                 }
             }
             else
             {
-                _timerActivateUnUsedWindow.Interval = _intervalForActivateUnUsedWindow;
+                _timerOnActivateUnUsingWindow.Interval = _intervalForActivateUnUsedWindow;
             }
 
-            if (_timerActivateUnUsedWindow != null)
-                _timerActivateUnUsedWindow.Enabled = true;
+            if (_timerOnActivateUnUsingWindow != null)
+                _timerOnActivateUnUsingWindow.Enabled = true;
         }
 
         /// <summary>
@@ -367,7 +417,7 @@ namespace TFSAssist
                     Dispatcher?.Invoke(() =>
                     {
                         // показывает уведомление при любых уведомлениях, если окно не активно или уже было одно уведомление
-                        _bottomNotification.DisplayNotify(severity.ToString("G"), message);
+                        BottomNotification.DisplayNotify(severity.ToString("G"), message);
 
                         if (_openedWarningWindowCount >= 1 || !this.IsLoaded)
                             return;

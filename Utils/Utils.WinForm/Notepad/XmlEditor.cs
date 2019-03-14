@@ -30,7 +30,7 @@ namespace Utils.WinForm.Notepad
 
         public bool Load(string path)
         {
-            if (!XmlHelper.XmlHelper.IsXml(path, out XmlDocument document, out string source))
+            if (!XML.IsXml(path, out XmlDocument document, out string source))
                 return false;
 
             Path = path;
@@ -234,7 +234,7 @@ namespace Utils.WinForm.Notepad
                         if (!IsContentChanged)
                             return;
 
-                        if (XmlHelper.XmlHelper.IsXml(FCTextBox.Text, out XmlDocument document))
+                        if (XML.IsXml(FCTextBox.Text, out XmlDocument document))
                         {
                             IO.WriteFile(Path, FCTextBox.Text);
                         }
@@ -283,7 +283,7 @@ namespace Utils.WinForm.Notepad
 
         void XMLPrint()
         {
-            bool isXml = XmlHelper.XmlHelper.IsXml(FCTextBox.Text, out XmlDocument document);
+            bool isXml = XML.IsXml(FCTextBox.Text, out XmlDocument document);
             if (isXml)
             {
                 string formatting = RtfFromXml.GetXmlString(document);
