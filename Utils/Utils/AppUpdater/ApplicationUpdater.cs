@@ -15,6 +15,12 @@ namespace Utils.AppUpdater
     [Serializable]
     public delegate void BuildUpdaterHandler(object sender, ApplicationUpdaterArgs buildPack);
 
+    public enum AutoUpdaterStatus
+    {
+        Stopped = 0,
+        Working = 1
+    }
+
     public class ApplicationUpdater
     {
         public event BuildUpdaterHandler OnUpdate;
@@ -27,20 +33,28 @@ namespace Utils.AppUpdater
         public string Project { get; }
         public string PrevPackName { get; }
         public Uri ProjectUri { get; }
-        public int UpdateMSec { get; }
-        
+        public int CheckUpdatesEachMSec { get; }
+        public AutoUpdaterStatus Status { get; private set; } = AutoUpdaterStatus.Stopped;
 
-        public ApplicationUpdater(Assembly runningApp, string projectName, string prevPackName, int updateSec = 10, string uriProject = null)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="runningApp">Основное запущенное приложение (необходимо для того чтобы его перезагрузить в случае обновления)</param>
+        /// <param name="projectName">Имя проекта</param>
+        /// <param name="prevPackName">Предыдущее имя пакета обновлений</param>
+        /// <param name="checkUpdatesIntervalSec">Интервал проверка наличия новых билдов каждые (5 минут - дефолтное)</param>
+        /// <param name="uriProject">URI пути к удаленному серверу для выкачивания обновления</param>
+        public ApplicationUpdater(Assembly runningApp, string projectName, string prevPackName, int checkUpdatesIntervalSec = 300, string uriProject = null)
         {
             RunningApp = runningApp;
             Project = projectName;
             PrevPackName = prevPackName;
             ProjectUri = new Uri(uriProject == null ? BuildsInfo.DEFAULT_PROJECT_RAW : uriProject.TrimEnd('/'));
-            UpdateMSec = updateSec * 1000;
+            CheckUpdatesEachMSec = checkUpdatesIntervalSec * 1000;
 
             _stopWatch = new Timer();
             _stopWatch.Elapsed += TimerCheckVersions;
-            _stopWatch.Interval = UpdateMSec;
+            _stopWatch.Interval = CheckUpdatesEachMSec;
             _stopWatch.AutoReset = false;
         }
 
@@ -55,7 +69,7 @@ namespace Utils.AppUpdater
 
                     if (OnUpdate == null)
                     {
-                        Start();
+                        EnableTimer();
                         return;
                     }
 
@@ -82,7 +96,7 @@ namespace Utils.AppUpdater
                     OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs(ex));
                 }
 
-                Start();
+                EnableTimer();
             }
         }
 
@@ -97,7 +111,7 @@ namespace Utils.AppUpdater
                     {
                         OnProcessingError?.Invoke(this, e.Error == null ? new ApplicationUpdaterProcessingArgs("Error fetching build pack!", e.Control) : e);
                         e.Control.Dispose();
-                        Start();
+                        EnableTimer();
                         return;
                     }
 
@@ -105,7 +119,7 @@ namespace Utils.AppUpdater
                     if (eventListeners == null || !eventListeners.Any())
                     {
                         e.Control.Dispose();
-                        Start();
+                        EnableTimer();
                         return;
                     }
 
@@ -116,7 +130,7 @@ namespace Utils.AppUpdater
                         if (buildArgs.Result == UpdateBuildResult.Cancel)
                         {
                             e.Control.Dispose();
-                            Start();
+                            EnableTimer();
                             return;
                         }
                     }
@@ -136,34 +150,54 @@ namespace Utils.AppUpdater
                     e.Control.Dispose();
                 }
 
-                Start();
+                EnableTimer();
             }
         }
 
+        /// <summary>
+        /// Запустить автопроверку наличия обновления
+        /// </summary>
         public void Start()
         {
             lock (_lock)
             {
-                _stopWatch.Enabled = true;
+                Status = AutoUpdaterStatus.Working;
+                EnableTimer();
             }
         }
 
+        void EnableTimer()
+        {
+            if (Status == AutoUpdaterStatus.Working)
+                _stopWatch.Enabled = true;
+        }
+
+        /// <summary>
+        /// Остановить автопроверку наличия обновления
+        /// </summary>
         public void Stop()
         {
             lock (_lock)
             {
+                Status = AutoUpdaterStatus.Stopped;
                 _stopWatch.Stop();
             }
         }
 
+        /// <summary>
+        /// Проверить наличие обновлений
+        /// </summary>
         public void Check()
         {
             lock (_lock)
             {
-                if (_stopWatch.Interval != UpdateMSec)
-                    _stopWatch.Interval = UpdateMSec;
-                if (_stopWatch.Enabled == true)
-                    Start();
+                if (Status == AutoUpdaterStatus.Working)
+                {
+                    if (!_stopWatch.Enabled)
+                        return;
+                    if (_stopWatch.Interval != CheckUpdatesEachMSec)
+                        _stopWatch.Interval = CheckUpdatesEachMSec;
+                }
             }
 
             TimerCheckVersions(this, null);
@@ -181,6 +215,9 @@ namespace Utils.AppUpdater
             if (control.Count == 0)
                 throw new ArgumentException("No builds found for update.");
 
+            if(!(control is BuildUpdaterCollection))
+                throw new ArgumentException("control is incorrect.");
+
             lock (_lock)
             {
                 try
@@ -195,7 +232,7 @@ namespace Utils.AppUpdater
                 {
                     OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs(ex, control));
                     control.Dispose();
-                    Start();
+                    EnableTimer();
                 }
             }
         }

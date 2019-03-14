@@ -50,6 +50,9 @@ namespace Utils.AppUpdater.Updater
         /// Прогресс в процентах скачиванных файлов с сервера
         /// </summary>
         int ProgressPercent { get; }
+        /// <summary>
+        /// Количество файлов для обновления
+        /// </summary>
         int Count { get; }
         /// <summary>
         /// Прогресс скачиванных файлов с сервера
