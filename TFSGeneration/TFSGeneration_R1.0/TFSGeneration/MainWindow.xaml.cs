@@ -404,6 +404,7 @@ namespace TFSAssist
             {
                 try
                 {
+                    // TODO: добавить сюда всю информацию о предыдущем логировании
                     TFSAssistUpdater newUpdate = new TFSAssistUpdater(_updaterControl, WindowState, ShowInTaskbar, wasInProgress);
                     newUpdate.Serialize();
                 }
