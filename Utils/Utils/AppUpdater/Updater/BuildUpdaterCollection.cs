@@ -9,22 +9,35 @@ using System.Linq;
 using System.Net;
 using System.Net.Cache;
 using System.Reflection;
+using System.Threading;
 using System.Xml;
 using System.Xml.Serialization;
 
 namespace Utils.AppUpdater.Updater
 {
     [Serializable]
+    public delegate void UpdaterDownloadProgressChangedHandler(object sender, EventArgs empty);
+
+    [Serializable]
     internal class BuildUpdaterCollection : UploadProgress, IUpdater
     {
-        public event UploadBuildHandler OnFetchComplete;
-        private List<IBuildUpdater> _collection;
-        int index = -1;
-        private object _lock = new object();
+        /// <summary>
+        /// Когда новые версии билдов скачались на локальный диск в темповую папку. Либо загрузка завершилась неудачей
+        /// </summary>
+        [field: NonSerialized]
+        internal event UploadBuildHandler OnFetchComplete;
 
-        ApplicationUpdaterProcessingArgs fetchArgs;
+        private List<IBuildUpdater> _collection;
+        private int index = -1;
+        private object sync = new object();
+
+        private ApplicationUpdaterProcessingArgs _fetchArgs;
+
+        [NonSerialized]
         private WebClient _webClient;
 
+        [field: NonSerialized]
+        public event UpdaterDownloadProgressChangedHandler DownloadProgressChanged;
         public UploaderStatus Status { get; private set; } = UploaderStatus.None;
         public string LocationApp { get; }
         public Uri ProjectUri { get; }
@@ -33,18 +46,27 @@ namespace Utils.AppUpdater.Updater
         public string DiretoryTempPath { get; private set; }
 
 
-        internal BuildUpdaterCollection(ApplicationUpdater updater, BuildsInfo remoteBuilds)
+        internal BuildUpdaterCollection(Assembly runningApp, Uri projectUri, string project, BuildsInfo remoteBuilds)
         {
-            LocationApp = updater.RunningApp.Location;
-            ProjectUri = updater.ProjectUri;
-            ProjectBuildPack = remoteBuilds.Packs.Where(p => p.Project == updater.Project).FirstOrDefault();
+            if(runningApp == null)
+                throw new ArgumentNullException("runningApp");
+            if (projectUri == null)
+                throw new ArgumentNullException("projectUri");
+            if (project == null)
+                throw new ArgumentNullException("project");
+            if (remoteBuilds == null || remoteBuilds.Packs == null)
+                throw new ArgumentNullException("remoteBuilds");
+
+            LocationApp = runningApp.Location;
+            ProjectUri = projectUri;
+            ProjectBuildPack = remoteBuilds.Packs.Where(p => p.Project == project).FirstOrDefault();
             if (ProjectBuildPack == null || ProjectBuildPack.Builds.Count == 0)
                 return;
 
             //Dictionary<string, FileBuildInfo> serverVersions = ProjectBuildPack.ToDictionary(x => x.Location, x => x);
 
             _collection = new List<IBuildUpdater>();
-            Dictionary<string, FileBuildInfo> localVersions = BuildPackInfo.GetLocalVersions(updater.RunningApp);
+            Dictionary<string, FileBuildInfo> localVersions = BuildPackInfo.GetLocalVersions(runningApp);
 
             foreach (FileBuildInfo serverFile in ProjectBuildPack.Builds)
             {
@@ -52,21 +74,14 @@ namespace Utils.AppUpdater.Updater
                 {
                     if ((serverFile.Type == BuldPerformerType.Update || serverFile.Type == BuldPerformerType.CreateOrUpdate) && serverFile.Version > localFile.Version)
                         Add(localFile, serverFile);
-                    else if (serverFile.Type == BuldPerformerType.RollBack && serverFile.Version < localFile.Version)
+                    else if ((serverFile.Type == BuldPerformerType.RollBack || serverFile.Type == BuldPerformerType.CreateOrRollBack) && serverFile.Version < localFile.Version)
                         Add(localFile, serverFile);
                     else if (serverFile.Type == BuldPerformerType.Remove)
                         Add(localFile, serverFile);
-                    continue;
                 }
-                else if (serverFile.Type == BuldPerformerType.CreateOrUpdate)
+                else if (serverFile.Type == BuldPerformerType.CreateOrUpdate || serverFile.Type == BuldPerformerType.CreateOrRollBack)
                 {
                     Add(null, serverFile);
-                    continue;
-                }
-
-                if (serverFile.Type == BuldPerformerType.CreateOrReplace)
-                {
-                    Add(localFile, serverFile);
                 }
             }
 
@@ -89,105 +104,103 @@ namespace Utils.AppUpdater.Updater
         /// <param name="uriProject"></param>
         internal bool Fetch()
         {
-            lock (_lock)
+            if (Status == UploaderStatus.None || Status == UploaderStatus.Init)
             {
-                if (Status == UploaderStatus.None || Status == UploaderStatus.Init)
+                _fetchArgs = new ApplicationUpdaterProcessingArgs();
+
+                try
                 {
-                    fetchArgs = new ApplicationUpdaterProcessingArgs(this);
-
-                    try
-                    {
-                        FileTempPath = Path.GetTempFileName();
-                        _webClient.DownloadFileAsync(new Uri($"{ProjectUri}/{ProjectBuildPack.Name}"), FileTempPath);
-                        Status = UploaderStatus.Init;
-                        return true;
-                    }
-                    catch (Exception ex)
-                    {
-                        fetchArgs.Error = ex;
-                        OnFetchComplete.Invoke(this, fetchArgs);
-                        return false;
-                    }
+                    FileTempPath = Path.GetTempFileName();
+                    _webClient.DownloadFileAsync(new Uri($"{ProjectUri}/{ProjectBuildPack.Name}"), FileTempPath);
+                    ChangeStatus(UploaderStatus.Init);
+                    return true;
                 }
-
-                return false;
+                catch (Exception ex)
+                {
+                    _fetchArgs.Error = ex;
+                    OnFetchComplete.Invoke(this, _fetchArgs);
+                    return false;
+                }
             }
+
+            return false;
         }
 
         private void WebClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
             UploadedBytes = e.BytesReceived;
             TotalBytes = e.TotalBytesToReceive;
+            DownloadProgressChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void WebClient_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
-            lock (_lock)
+            if (e.Error != null || e.Cancelled)
             {
-                if (e.Error != null || e.Cancelled)
-                {
-                    fetchArgs.Error = e.Error ?? new Exception($"Upload pack of {ProjectBuildPack} from [{ProjectUri}] cancelled!");
-                }
-                else
-                {
-                    try
-                    {
-                        string downloadedMD5 = Hasher.HashFile(FileTempPath, HashType.MD5);
-                        if (downloadedMD5.Like(ProjectBuildPack.MD5))
-                        {
-                            DiretoryTempPath = Path.Combine(Path.GetTempPath(), STRING.RandomString(15));
-                            Directory.CreateDirectory(DiretoryTempPath);
-                            ZipFile.ExtractToDirectory(FileTempPath, DiretoryTempPath);
-                            DeleteTempFile();
-                            Status = UploaderStatus.Fetched;
-                        }
-                        else
-                        {
-                            fetchArgs.Error = new Exception($"Hash of uploaded file [{downloadedMD5}] is incorrect. Sever hash is [{ProjectBuildPack.MD5}]");
-                        }
-                    }
-                    catch (Exception exception)
-                    {
-                        fetchArgs.Error = exception;
-                    }
-                }
-
-                OnFetchComplete?.Invoke(this, fetchArgs);
+                _fetchArgs.Error = e.Error ?? new Exception($"Upload pack of {ProjectBuildPack} from [{ProjectUri}] cancelled!");
             }
+            else
+            {
+                try
+                {
+                    string downloadedMD5 = Hasher.HashFile(FileTempPath, HashType.MD5);
+                    if (downloadedMD5.Like(ProjectBuildPack.MD5))
+                    {
+                        DiretoryTempPath = Path.Combine(Path.GetTempPath(), STRING.RandomString(15));
+                        Directory.CreateDirectory(DiretoryTempPath);
+                        ZipFile.ExtractToDirectory(FileTempPath, DiretoryTempPath);
+                        DeleteTempFile();
+                        ChangeStatus(UploaderStatus.Fetched);
+                    }
+                    else
+                    {
+                        _fetchArgs.Error = new Exception($"Hash of uploaded file [{downloadedMD5}] is incorrect. Sever hash is [{ProjectBuildPack.MD5}]");
+                    }
+                }
+                catch (Exception exception)
+                {
+                    _fetchArgs.Error = exception;
+                }
+            }
+
+            OnFetchComplete?.Invoke(this, _fetchArgs);
         }
 
         internal bool CommitAndPull()
         {
-            lock (_lock)
+            if (Status != UploaderStatus.Fetched)
+                return false;
+
+            BuildUpdater runningApp = null;
+            foreach (BuildUpdater build in _collection)
             {
-                if(Status != UploaderStatus.Fetched)
-                    return false;
-
-                BuildUpdater runningApp = null;
-                foreach (BuildUpdater build in _collection)
+                if (build.IsExecutable)
                 {
-                    if (build.IsExecutable)
-                    {
-                        runningApp = build;
-                        continue;
-                    }
-
-                    build.Commit();
+                    runningApp = build;
+                    continue;
                 }
 
-                Status = UploaderStatus.Commited;
-
-                if (runningApp != null)
-                    runningApp.Pull();
-                else
-                    BuildUpdater.Pull(LocationApp);
-
-                Status = UploaderStatus.Pulled;
-
-                Process.GetCurrentProcess().Kill();
-
-                return true;
+                build.Commit();
             }
+
+            ChangeStatus(UploaderStatus.Commited);
+
+            if (runningApp != null)
+                runningApp.Pull();
+            else
+                BuildUpdater.Pull(LocationApp);
+
+            ChangeStatus(UploaderStatus.Pulled);
+
+            Process.GetCurrentProcess().Kill();
+
+            return true;
+        }
+
+        void ChangeStatus(UploaderStatus status)
+        {
+            lock (sync)
+                Status = status;
         }
 
         public int Count
@@ -248,14 +261,13 @@ namespace Utils.AppUpdater.Updater
 
         public void Dispose()
         {
-            RemoveTempObjects();
             try
             {
+                Status = UploaderStatus.Disposed;
+                RemoveTempObjects();
                 _webClient?.Dispose();
-                if (_collection != null)
-                    ((IDisposable) _collection).Dispose();
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
         }
@@ -293,7 +305,7 @@ namespace Utils.AppUpdater.Updater
 
         public override string ToString()
         {
-            return $"Count=[{Count}]";
+            return $"Status=[{Status:G}] Count=[{Count}]";
         }
     }
 }

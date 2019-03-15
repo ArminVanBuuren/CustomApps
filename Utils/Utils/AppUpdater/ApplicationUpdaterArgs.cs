@@ -7,21 +7,21 @@ using Utils.AppUpdater.Updater;
 
 namespace Utils.AppUpdater
 {
+    [Serializable]
     public enum UpdateBuildResult
     {
         Cancel = 0,
-        Update = 1,
-        SelfUpdate = 2
+        Update = 1
     }
 
+    [Serializable]
     public class ApplicationUpdaterArgs
     {
-        internal ApplicationUpdaterArgs(IUpdater control)
+        internal ApplicationUpdaterArgs()
         {
-            Control = control;
-            Result = UpdateBuildResult.Cancel;
+            Result = UpdateBuildResult.Update;
         }
-        public IUpdater Control { get; }
+
         public UpdateBuildResult Result { get; set; }
     }
 }

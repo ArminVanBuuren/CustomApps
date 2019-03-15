@@ -12,10 +12,11 @@ namespace Utils.AppUpdater.Updater
     [Serializable]
     internal class BuildUpdater : IBuildUpdater
     {
+        // & timeout /t 10 /nobreak - таймаут 10 секунд перед запуском приложения
         private BuildUpdaterCollection _parent;
-        const string argument_start = "/C choice /C Y /N /D Y /T 4 & Start \"\" /D \"{0}\" \"{1}\"";
+        const string argument_start = "/C choice /C Y /N /D Y /T 4 & timeout /t 10 /nobreak & Start \"\" /D \"{0}\" \"{1}\"";
         const string argument_update = "/C choice /C Y /N /D Y /T 4 & Del /F /Q \"{0}\" & choice /C Y /N /D Y /T 2 & Move /Y \"{1}\" \"{2}\"";
-        const string argument_update_start = argument_update + " & Start \"\" /D \"{3}\" \"{4}\" {5}";
+        const string argument_update_start = argument_update + "& timeout /t 10 /nobreak & Start \"\" /D \"{3}\" \"{4}\" {5}";
         const string argument_add = "/C choice /C Y /N /D Y /T 4 & Move /Y \"{0}\" \"{1}\"";
         const string argument_remove = "/C choice /C Y /N /D Y /T 4 & Del /F /Q \"{0}\"";
 
@@ -53,7 +54,7 @@ namespace Utils.AppUpdater.Updater
             switch (ServerFile.Type)
             {
                 case BuldPerformerType.CreateOrUpdate:
-                case BuldPerformerType.CreateOrReplace:
+                case BuldPerformerType.CreateOrRollBack:
                     if (LocalFile == null)
                     {
                         string destinationDir = Path.GetDirectoryName(FileDestination);
@@ -70,7 +71,6 @@ namespace Utils.AppUpdater.Updater
                 case BuldPerformerType.RollBack:
                 case BuldPerformerType.Update:
                     argument_complete = string.Format(argument_update, FileDestination, FileSource, FileDestination);
-                    Directory.CreateDirectory(Path.GetDirectoryName(FileDestination));
                     break;
                 case BuldPerformerType.Remove:
                     argument_complete = string.Format(argument_remove, FileDestination);

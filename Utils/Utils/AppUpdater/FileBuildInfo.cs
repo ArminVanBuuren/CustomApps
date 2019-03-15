@@ -14,7 +14,7 @@ namespace Utils.AppUpdater
         RollBack = 2,
         Remove = 4,
         CreateOrUpdate = 8,
-        CreateOrReplace = 16
+        CreateOrRollBack = 16
     }
 
     [Serializable, XmlRoot("Build", IsNullable = false)]
@@ -67,8 +67,8 @@ namespace Utils.AppUpdater
                     Type = BuldPerformerType.Remove;
                 else if (value.Like("CreateOrUpdate") || value.Like("Create"))
                     Type = BuldPerformerType.CreateOrUpdate;
-                else if (value.Like("CreateOrReplace"))
-                    Type = BuldPerformerType.CreateOrReplace;
+                else if (value.Like("CreateOrRollBack"))
+                    Type = BuldPerformerType.CreateOrRollBack;
                 else
                     Type = BuldPerformerType.None;
             }

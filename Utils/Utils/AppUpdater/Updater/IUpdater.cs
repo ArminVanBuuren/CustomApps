@@ -13,15 +13,13 @@ namespace Utils.AppUpdater.Updater
         Init = 1,
         Fetched = 2,
         Commited = 4,
-        Pulled = 8
+        Pulled = 8,
+        Disposed = 16
     }
 
     public interface IUpdater : IEnumerable<IBuildUpdater>, IEnumerator<IBuildUpdater>, IDisposable
     {
-        /// <summary>
-        /// Когда новые версии бильдов скачались на локальный диск в темповую папку. Либо загрузка завершилась неудачей
-        /// </summary>
-        event UploadBuildHandler OnFetchComplete;
+        event UpdaterDownloadProgressChangedHandler DownloadProgressChanged;
         /// <summary>
         /// Текущий статус выполнения обновления
         /// </summary>

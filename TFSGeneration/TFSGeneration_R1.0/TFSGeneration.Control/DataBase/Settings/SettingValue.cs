@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
-using static Utils.REGEDIT;
+using Utils.Handles;
 
 namespace TFSAssist.Control.DataBase.Settings
 {
@@ -49,11 +49,11 @@ namespace TFSAssist.Control.DataBase.Settings
         {
             get
             {
-                return EnabledBootRun(TFSAssist.Control.TFSControl.ApplicationName);
+                return RegeditControl.EnabledBootRun(TFSAssist.Control.TFSControl.ApplicationName);
             }
             set
             {
-                SetBootStartup(TFSAssist.Control.TFSControl.ApplicationName, TFSAssist.Control.TFSControl.ApplicationPath, value);
+                RegeditControl.SetBootStartup(TFSAssist.Control.TFSControl.ApplicationName, TFSAssist.Control.TFSControl.ApplicationPath, value);
                 base.Value = value;
             }
         }

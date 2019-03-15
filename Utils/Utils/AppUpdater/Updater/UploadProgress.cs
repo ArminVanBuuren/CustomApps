@@ -6,8 +6,8 @@ namespace Utils.AppUpdater.Updater
     [Serializable]
     public abstract class UploadProgress
     {
-        public virtual long UploadedBytes { get; protected set; } = 0l;
-        public virtual long TotalBytes { get; protected set; } = 0l;
+        public virtual long UploadedBytes { get; protected set; } = 0;
+        public virtual long TotalBytes { get; protected set; } = 0;
 
         public virtual int ProgressPercent
         {
@@ -15,13 +15,15 @@ namespace Utils.AppUpdater.Updater
             {
                 FormatBytes(UploadedBytes, out double upload);
                 FormatBytes(TotalBytes, out double total);
+                if (total == 0)
+                    return 0;
                 return int.Parse(((upload / total) * 100).ToString());
             }
         }
 
         public virtual string GetProgressString()
         {
-            return $"Downloaded {FormatBytes(UploadedBytes, out double result)} of {FormatBytes(TotalBytes, out double result2)}";
+            return $"{FormatBytes(UploadedBytes, out double result)} of {FormatBytes(TotalBytes, out double result2)}";
         }
 
         /// <summary>
@@ -37,8 +39,11 @@ namespace Utils.AppUpdater.Updater
             string formatString = "{0";
             string byteType = "B";
 
-            // Check if best size in KB
-            if (newBytes > 1024 && newBytes < 1048576)
+            if (newBytes <= 1024)
+            {
+                newBytes = bytes;
+            }
+            else if (newBytes > 1024 && newBytes < 1048576)
             {
                 newBytes /= 1024;
                 byteType = "KB";

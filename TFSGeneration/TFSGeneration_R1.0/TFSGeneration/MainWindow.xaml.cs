@@ -21,6 +21,7 @@ using TFSAssist.Control;
 using UIControls.MainControl;
 using Utils;
 using Utils.AppUpdater;
+using Utils.AppUpdater.Updater;
 using Utils.Handles;
 using Timer = System.Timers.Timer;
 
@@ -47,8 +48,6 @@ namespace TFSAssist
     /// </summary>
     public partial class MainWindow
     {
-        //ApplicationUpdater _updater = new ApplicationUpdater();
-
         private const string STR_START = "START";
         private const string STR_STOP = "STOP";
         private readonly string ERR_SECOND_PROC = $"{nameof(TFSAssist)} already started. Please check your notification area. To run second process, you can rename the executable file.";
@@ -67,6 +66,27 @@ namespace TFSAssist
         public TFSControl TfsControl { get; private set; }
         public BottomNotification BottomNotification { get; private set; }
         public ApplicationUpdater Updater { get; private set; }
+
+        public string CurrentPackUpdaterName
+        {
+            get
+            {
+                string _currentVal;
+                using (RegeditControl regControl = new RegeditControl(ASSEMBLY.ApplicationName))
+                {
+                    _currentVal = regControl[nameof(BuildPackInfo)];
+                }
+
+                return _currentVal;
+            }
+            private set
+            {
+                using (RegeditControl regControl = new RegeditControl(ASSEMBLY.ApplicationName))
+                {
+                    regControl[nameof(BuildPackInfo)] = value;
+                }
+            }
+        }
 
         static MainWindow()
         {
@@ -116,74 +136,7 @@ namespace TFSAssist
             try
             {
                 _thisIsLoaded = true;
-                //================Notification Bar==============================
-                BottomNotification = new BottomNotification(this, TFSControl.ApplicationName);
-                //===========Initialize And Set Events===========
-                LogPerformer log = new LogPerformer();
-                log.WriteLog += Informing;
-                TfsControl = TFSControl.GetControl(log);
-                TfsControl.IsCompleted += TfsControl_IsCompleted;
-
-                //================Main Tab Default Bindings=======================
-                DefaultBinding(MailAddress, TextBox.TextProperty, TfsControl.Settings.MailOption.Address);
-                DefaultBinding(MailUserName, TextBox.TextProperty, TfsControl.Settings.MailOption.UserName);
-                DefaultBinding(AuthorTimeout, TextBox.TextProperty, TfsControl.Settings.MailOption.AuthorizationTimeout);
-                DefaultBinding(FilterFolder, TextBox.TextProperty, TfsControl.Settings.MailOption.SourceFolder);
-                DefaultBinding(FilterFrom, TextBox.TextProperty, TfsControl.Settings.MailOption.FilterMailFrom);
-                DefaultBinding(FilterSubject, TextBox.TextProperty, TfsControl.Settings.MailOption.FilterSubject);
-                DefaultBinding(CreateBoot, ToggleButton.IsCheckedProperty, TfsControl.Settings.BootRun);
-                DefaultBinding(IntervalTextBox, TextBox.TextProperty, TfsControl.Settings.Interval);
-
-                AuthorTimeout.TextChanged += IntervalTextBox_TextChanged;
-                AuthorTimeout.TextChanged += IntervalTextBox_OnLostFocus;
-                IntervalTextBox.TextChanged += IntervalTextBox_TextChanged; // проверям на валидность интервал
-                IntervalTextBox.LostFocus += IntervalTextBox_OnLostFocus; // проверям на валидность интервал, где число должно быть больше 1
-
-                //================Main Tap Special Bindings=======================
-                MailPassword.Password = TfsControl.Settings.MailOption.Password.Value; // по дефолту нельзя биндить классы паролей, т.к. его свойства защищенные
-                MailPassword.PasswordChanged += MailPassword_OnPasswordChanged;
-                TfsControl.Settings.MailOption.Password.PropertyChanged += MailPassword_PropertyChanged;
-                ToolTipService.SetInitialShowDelay(MailPassword, timeoutToShowToolTip);
-
-                TFSUserPassword.Password = TfsControl.Settings.TFSOption.TFSUserPassword.Value;
-                TFSUserPassword.PasswordChanged += TFSUserPassword_PasswordChanged;
-                TfsControl.Settings.TFSOption.TFSUserPassword.PropertyChanged += TFSUserPassword_PropertyChanged;
-                ToolTipService.SetInitialShowDelay(TFSUserPassword, timeoutToShowToolTip);
-
-                FilterStartDate.Text = TfsControl.Settings.MailOption.StartDate.Value; // при изменении все равно вырезается время, остается только дата, по этому тоже биндим по особеному
-                FilterStartDate.SelectedDateChanged += FilterStartDate_OnSelectedDateChanged;
-                TfsControl.Settings.MailOption.StartDate.PropertyChanged += StartDate_PropertyChanged;
-                ToolTipService.SetInitialShowDelay(FilterStartDate, timeoutToShowToolTip);
-
-                //================Option Mail====================================
-                DefaultBinding(MailExchangeUri, TextBox.TextProperty, TfsControl.Settings.MailOption.ExchangeUri);
-                //DefaultBinding(SetDebugLogging, ToggleButton.IsCheckedProperty, tfsControl.Settings.MailOption.DebugLogging);
-
-                LableParceSubject.Content = $"Regex pattern for parsing subject of mail ({nameof(TfsControl.Settings.MailOption.ParceSubject)}__*):";
-                RegexSubjectParce.Text = TfsControl.Settings.MailOption.ParceSubject[0].Value;
-                RegexSubjectParce.TextChanged += RegexSubjectParce_OnTextChanged;
-                ToolTipService.SetInitialShowDelay(RegexSubjectParce, timeoutToShowToolTip);
-
-                LableParceBody.Content = $"Regex pattern for parsing body of mail ({nameof(TfsControl.Settings.MailOption.ParceBody)}__*):";
-                RegexBodyParce.Text = TfsControl.Settings.MailOption.ParceBody[0].Value;
-                RegexBodyParce.TextChanged += RegexBodyParce_OnTextChanged;
-                ToolTipService.SetInitialShowDelay(RegexBodyParce, timeoutToShowToolTip);
-
-                //================Options TFS===================================
-                DefaultBinding(TFSUri, TextBox.TextProperty, TfsControl.Settings.TFSOption.TFSUri);
-                DefaultBinding(TFSUserName, TextBox.TextProperty, TfsControl.Settings.TFSOption.TFSUserName);
-                Paragraph par = new Paragraph(new Run(TfsControl.Settings.TFSOption.GetDublicateTFS[0].Value)) {
-                                                                                                                   LineHeight = 1
-                                                                                                               };
-                GetDublicateTFS.Document.Blocks.Add(par);
-                GetDublicateTFS.TextChanged += GetDublicateTFS_OnTextChanged;
-                ToolTipService.SetInitialShowDelay(GetDublicateTFS, timeoutToShowToolTip);
-
-
-                //================Activate button Start and create Updater with Timers==============================
-                ButtonStart.IsEnabled = true;
-
-
+                InitializeForm();
                 InitializeUpdater();
                 InitializeTimers();
             }
@@ -199,12 +152,84 @@ namespace TFSAssist
             }
         }
 
+        void InitializeForm()
+        {
+            //================Notification Bar==============================
+            BottomNotification = new BottomNotification(this, TFSControl.ApplicationName);
+            //===========Initialize And Set Events===========
+            LogPerformer log = new LogPerformer();
+            log.WriteLog += Informing;
+            TfsControl = TFSControl.GetControl(log);
+            TfsControl.IsCompleted += TfsControl_IsCompleted;
+
+            //================Main Tab Default Bindings=======================
+            DefaultBinding(MailAddress, TextBox.TextProperty, TfsControl.Settings.MailOption.Address);
+            DefaultBinding(MailUserName, TextBox.TextProperty, TfsControl.Settings.MailOption.UserName);
+            DefaultBinding(AuthorTimeout, TextBox.TextProperty, TfsControl.Settings.MailOption.AuthorizationTimeout);
+            DefaultBinding(FilterFolder, TextBox.TextProperty, TfsControl.Settings.MailOption.SourceFolder);
+            DefaultBinding(FilterFrom, TextBox.TextProperty, TfsControl.Settings.MailOption.FilterMailFrom);
+            DefaultBinding(FilterSubject, TextBox.TextProperty, TfsControl.Settings.MailOption.FilterSubject);
+            DefaultBinding(CreateBoot, ToggleButton.IsCheckedProperty, TfsControl.Settings.BootRun);
+            DefaultBinding(IntervalTextBox, TextBox.TextProperty, TfsControl.Settings.Interval);
+
+            AuthorTimeout.TextChanged += IntervalTextBox_TextChanged;
+            AuthorTimeout.TextChanged += IntervalTextBox_OnLostFocus;
+            IntervalTextBox.TextChanged += IntervalTextBox_TextChanged; // проверям на валидность интервал
+            IntervalTextBox.LostFocus += IntervalTextBox_OnLostFocus; // проверям на валидность интервал, где число должно быть больше 1
+
+            //================Main Tap Special Bindings=======================
+            MailPassword.Password = TfsControl.Settings.MailOption.Password.Value; // по дефолту нельзя биндить классы паролей, т.к. его свойства защищенные
+            MailPassword.PasswordChanged += MailPassword_OnPasswordChanged;
+            TfsControl.Settings.MailOption.Password.PropertyChanged += MailPassword_PropertyChanged;
+            ToolTipService.SetInitialShowDelay(MailPassword, timeoutToShowToolTip);
+
+            TFSUserPassword.Password = TfsControl.Settings.TFSOption.TFSUserPassword.Value;
+            TFSUserPassword.PasswordChanged += TFSUserPassword_PasswordChanged;
+            TfsControl.Settings.TFSOption.TFSUserPassword.PropertyChanged += TFSUserPassword_PropertyChanged;
+            ToolTipService.SetInitialShowDelay(TFSUserPassword, timeoutToShowToolTip);
+
+            FilterStartDate.Text = TfsControl.Settings.MailOption.StartDate.Value; // при изменении все равно вырезается время, остается только дата, по этому тоже биндим по особеному
+            FilterStartDate.SelectedDateChanged += FilterStartDate_OnSelectedDateChanged;
+            TfsControl.Settings.MailOption.StartDate.PropertyChanged += StartDate_PropertyChanged;
+            ToolTipService.SetInitialShowDelay(FilterStartDate, timeoutToShowToolTip);
+
+            //================Option Mail====================================
+            DefaultBinding(MailExchangeUri, TextBox.TextProperty, TfsControl.Settings.MailOption.ExchangeUri);
+            //DefaultBinding(SetDebugLogging, ToggleButton.IsCheckedProperty, tfsControl.Settings.MailOption.DebugLogging);
+
+            LableParceSubject.Content = $"Regex pattern for parsing subject of mail ({nameof(TfsControl.Settings.MailOption.ParceSubject)}__*):";
+            RegexSubjectParce.Text = TfsControl.Settings.MailOption.ParceSubject[0].Value;
+            RegexSubjectParce.TextChanged += RegexSubjectParce_OnTextChanged;
+            ToolTipService.SetInitialShowDelay(RegexSubjectParce, timeoutToShowToolTip);
+
+            LableParceBody.Content = $"Regex pattern for parsing body of mail ({nameof(TfsControl.Settings.MailOption.ParceBody)}__*):";
+            RegexBodyParce.Text = TfsControl.Settings.MailOption.ParceBody[0].Value;
+            RegexBodyParce.TextChanged += RegexBodyParce_OnTextChanged;
+            ToolTipService.SetInitialShowDelay(RegexBodyParce, timeoutToShowToolTip);
+
+            //================Options TFS===================================
+            DefaultBinding(TFSUri, TextBox.TextProperty, TfsControl.Settings.TFSOption.TFSUri);
+            DefaultBinding(TFSUserName, TextBox.TextProperty, TfsControl.Settings.TFSOption.TFSUserName);
+            Paragraph par = new Paragraph(new Run(TfsControl.Settings.TFSOption.GetDublicateTFS[0].Value))
+            {
+                LineHeight = 1
+            };
+            GetDublicateTFS.Document.Blocks.Add(par);
+            GetDublicateTFS.TextChanged += GetDublicateTFS_OnTextChanged;
+            ToolTipService.SetInitialShowDelay(GetDublicateTFS, timeoutToShowToolTip);
+
+
+            //================Activate button Start and create Updater with Timers==============================
+            ButtonStart.IsEnabled = true;
+        }
+
         void InitializeUpdater()
         {
             TFSAssistUpdater lastUpdate = TFSAssistUpdater.Deserialize();
             if (lastUpdate != null)
             {
                 WindowState = lastUpdate.WindowState;
+                ShowInTaskbar = lastUpdate.ShowInTaskbar;
                 if (lastUpdate.TfsInProgress)
                 {
                     ButtonStart_OnClick(this, null);
@@ -212,16 +237,145 @@ namespace TFSAssist
                 lastUpdate.Dispose();
             }
 
-            string currentVersionPack;
-            using (RegeditControl regControl = new RegeditControl(ASSEMBLY.ApplicationName))
-            {
-                currentVersionPack = regControl[nameof(BuildPackInfo)];
-            }
-
-            Updater = new ApplicationUpdater(Assembly.GetExecutingAssembly(), nameof(TFSAssist), currentVersionPack, 5);
+            Updater = new ApplicationUpdater(Assembly.GetExecutingAssembly(), nameof(TFSAssist), CurrentPackUpdaterName, 5);
+            Updater.OnFetch += Updater_OnFetch;
             Updater.OnUpdate += Updater_OnUpdate;
             Updater.OnProcessingError += Updater_OnProcessingError;
             Updater.Start();
+        }
+
+        private int _onFetch = 0;
+        private int _onUpdate = 0;
+        private int _onProgress = 0;
+        private DateTime _dateTraceUpdater;
+        private Run _runInfo;
+        private IUpdater _updaterControl;
+        object sync = new object();
+        private void Updater_OnFetch(object sender, ApplicationUpdaterArgs buildPack)
+        {
+            _onFetch++;
+            if (!(sender is IUpdater))
+            {
+                buildPack.Result = UpdateBuildResult.Cancel;
+                return;
+            }
+
+            IUpdater updater = (IUpdater) sender;
+            updater.DownloadProgressChanged += Updater_DownloadProgressChanged;
+            _dateTraceUpdater = DateTime.Now;
+            Paragraph par = WriteLog(WarnSeverity.Normal, _dateTraceUpdater, "Downloaded update " + updater.GetProgressString());
+            foreach (var inline in par.Inlines)
+            {
+                if (inline is Run)
+                {
+                    _runInfo = (Run)inline;
+                }
+            }
+        }
+
+        private void Updater_DownloadProgressChanged(object sender, EventArgs empty)
+        {
+            lock (sync)
+            {
+                _onProgress++;
+                if (!(sender is IUpdater) || _dateTraceUpdater == null || _runInfo == null)
+                    return;
+
+                Dispatcher?.Invoke(() =>
+                {
+                    Paragraph parNew = GetHighLiteTrace(_dateTraceUpdater, "Downloaded update " + ((IUpdater) sender).GetProgressString());
+                    foreach (var inline in parNew.Inlines)
+                    {
+                        if (inline is Run)
+                        {
+                            _runInfo.Text = ((Run)inline).Text;
+                        }
+                    }
+                });
+            }
+        }
+
+        private void Updater_OnUpdate(object sender, ApplicationUpdaterArgs buildPack)
+        {
+            _onUpdate++;
+            buildPack.Result = UpdateBuildResult.Cancel;
+            Updater.Stop();
+            if (!(sender is IUpdater))
+                return;
+
+            _updaterControl = (IUpdater) sender;
+            
+            if (TfsControl.InProgress)
+            {
+                ButtonStart_OnClick(this, null);
+            }
+            else
+            {
+                InitiatorIsUpdater(false);
+            }
+        }
+
+        void InitiatorIsUpdater(bool wasInProgress)
+        {
+            if (_updaterControl == null)
+                return;
+
+
+            Dispatcher?.Invoke(() =>
+            {
+                try
+                {
+                    TFSAssistUpdater newUpdate = new TFSAssistUpdater(_updaterControl, WindowState, ShowInTaskbar, wasInProgress);
+                    newUpdate.Serialize();
+                }
+                catch (Exception ex)
+                {
+                    ErrorWhenUpdate($"Error when starting update. Message=[{ex.Message}]", ex, false, wasInProgress);
+                    return;
+                }
+
+                TfsControl.Dispose();
+                BottomNotification?.Dispose();
+                string prevPackUpdaterName = CurrentPackUpdaterName;
+                CurrentPackUpdaterName = _updaterControl.ProjectBuildPack.Name;
+                try
+                {
+                    if (!Updater.DoUpdate(_updaterControl))
+                    {
+                        ErrorWhenUpdate($"Update cancelled. {nameof(IUpdater)}=[{_updaterControl}]", null, true, wasInProgress);
+                        CurrentPackUpdaterName = prevPackUpdaterName;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ErrorWhenUpdate($"Error when starting update. {nameof(IUpdater)}=[{_updaterControl}] Message=[{ex.Message}]", ex, true, wasInProgress);
+                    CurrentPackUpdaterName = prevPackUpdaterName;
+                }
+            });
+        }
+
+        void ErrorWhenUpdate(string errorMessage, Exception ex, bool isDisposed, bool wasInProgress)
+        {
+            WriteLog(WarnSeverity.Error, DateTime.Now, errorMessage, ex?.StackTrace);
+            _updaterControl = null;
+            _runInfo = null;
+            _dateTraceUpdater = DateTime.MinValue;
+
+            if (isDisposed)
+            {
+                InitializeForm();
+            }
+
+            if (wasInProgress)
+            {
+                ButtonStart_OnClick(this, null);
+            }
+            Updater.Start();
+        }
+
+        private void Updater_OnProcessingError(object sender, ApplicationUpdaterProcessingArgs args)
+        {
+            WriteLog(WarnSeverity.Error, DateTime.Now, args.Error.Message, $"Error in processing updater. Inner exceptions:[{args.InnerException.Count}]");
         }
 
         void InitializeTimers()
@@ -240,16 +394,6 @@ namespace TFSAssist
             };
             _timerOnGC.Elapsed += GarbageCollect;
             _timerOnGC.Start();
-        }
-
-        private void Updater_OnUpdate(object sender, ApplicationUpdaterArgs buildPack)
-        {
-            buildPack.Result = UpdateBuildResult.SelfUpdate;
-        }
-
-        private void Updater_OnProcessingError(object sender, ApplicationUpdaterProcessingArgs args)
-        {
-            WriteLog(WarnSeverity.Error, DateTime.Now, args.Error.Message, $"Error updater processing. Inner exceptions:[{args.InnerException.Count}]");
         }
 
 
@@ -279,7 +423,7 @@ namespace TFSAssist
         void MainWindow_Activated(object sender, EventArgs e)
         {
             LastDeactivationDate = null;
-            BottomNotification.Clear();
+            BottomNotification?.Clear();
 
             if (!ShowInTaskbar)
                 ShowInTaskbar = true;
@@ -288,7 +432,7 @@ namespace TFSAssist
         void MainWindow_Deactivated(object sender, EventArgs e)
         {
             LastDeactivationDate = DateTime.Now;
-            BottomNotification.Clear();
+            BottomNotification?.Clear();
 
             Dispatcher?.Invoke(() =>
             {
@@ -456,35 +600,47 @@ namespace TFSAssist
         /// записать лог в отдельном окне
         /// </summary>
         /// <param name="stackTrace"></param>
-        void WriteLog(WarnSeverity severity, DateTime dateLog, string message, string stackMessage = null)
+        Paragraph WriteLog(WarnSeverity severity, DateTime dateLog, string message, string stackMessage = null)
         {
             if (message.IsNullOrEmpty() && stackMessage.IsNullOrEmpty())
-                return;
+                return null;
+
+            Paragraph par = null;
 
             Dispatcher?.Invoke(() =>
             {
                 if (!(SetDebugLogging?.IsChecked == true && severity == WarnSeverity.Debug || severity == WarnSeverity.Normal || severity == WarnSeverity.Error || severity == WarnSeverity.Status))
                     return;
 
-                Paragraph par = new Paragraph();
-                par.Inlines.Add(new Bold(new Run(string.Format("[{0:G}]:", dateLog)))
-                {
-                    Foreground = Brushes.Aqua,
-                    Background = Brushes.Black
-                });
-
-                if (!stackMessage.IsNullOrEmpty())
-                {
-                    Highlighter.Traces(par, stackMessage);
-                }
-                else
-                {
-                    Highlighter.Traces(par, message);
-                }
-
-                par.LineHeight = 0.1;
+                par = GetHighLiteTrace(dateLog, message, stackMessage);
                 LogTextBox.Document.Blocks.Add(par);
+                
             });
+
+            return par;
+        }
+
+        static Paragraph GetHighLiteTrace(DateTime dateLog, string message, string stackMessage = null)
+        {
+            Paragraph par = new Paragraph();
+            par.Inlines.Add(new Bold(new Run(string.Format("[{0:G}]:", dateLog)))
+            {
+                Foreground = Brushes.Aqua,
+                Background = Brushes.Black
+            });
+
+            if (!stackMessage.IsNullOrEmpty())
+            {
+                Highlighter.Traces(par, stackMessage);
+            }
+            else
+            {
+                Highlighter.Traces(par, message);
+            }
+
+            par.LineHeight = 0.1;
+
+            return par;
         }
 
         #endregion
@@ -527,6 +683,8 @@ namespace TFSAssist
 
                 ButtonStart.Content = STR_START;
             });
+
+            InitiatorIsUpdater(true);
         }
 
         private double _isPbBlured = 35;

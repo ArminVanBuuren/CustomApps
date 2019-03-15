@@ -6,6 +6,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.Expression.Encoder.Live;
 using Utils;
 using Utils.AppUpdater.Updater;
 
@@ -17,18 +18,18 @@ namespace TFSAssist
         public static string FileUpdatesPath = $"{ASSEMBLY.ApplicationFilePath}.update";
         public IUpdater Updater { get; }
         public WindowState WindowState { get; }
+        public bool ShowInTaskbar { get; }
         public bool TfsInProgress { get; }
 
-        public TFSAssistUpdater(IUpdater updater, MainWindow window)
+        public TFSAssistUpdater(IUpdater updater, WindowState windowState, bool showInTaskbar, bool tfsInProgress)
         {
             if (updater == null)
                 throw new ArgumentNullException("updater");
-            if (window == null)
-                throw new ArgumentNullException("window");
 
             Updater = updater;
-            WindowState = window.WindowState;
-            TfsInProgress = window.TfsControl.InProgress;
+            WindowState = windowState;
+            ShowInTaskbar = showInTaskbar;
+            TfsInProgress = tfsInProgress;
         }
 
         public static TFSAssistUpdater Deserialize()

@@ -58,6 +58,7 @@ namespace Utils.AppUpdater
                 File.Delete(Path.Combine(destinationDirPath, prevPack.Name));
             }
         }
+
         public void Serialize(string fileVersionsPath)
         {
             if (File.Exists(fileVersionsPath))

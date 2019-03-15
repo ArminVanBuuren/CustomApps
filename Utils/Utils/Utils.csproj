@@ -87,6 +87,7 @@
     <Compile Include="STRING.cs" />
     <Compile Include="AppUpdater\FileBuildInfo.cs" />
     <Compile Include="AppUpdater\ApplicationUpdater.cs" />
+    <Compile Include="UtilsVersion.cs" />
     <Compile Include="WEB.cs" />
     <Compile Include="Handles\WebDownload.cs">
       <SubType>Component</SubType>

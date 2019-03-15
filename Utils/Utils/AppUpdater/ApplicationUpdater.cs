@@ -9,28 +9,28 @@ using Utils.AppUpdater.Updater;
 
 namespace Utils.AppUpdater
 {
-    [Serializable]
-    public delegate void UploadBuildHandler(object sender, ApplicationUpdaterProcessingArgs args);
-
-    [Serializable]
-    public delegate void BuildUpdaterHandler(object sender, ApplicationUpdaterArgs buildPack);
-
     public enum AutoUpdaterStatus
     {
         Stopped = 0,
         Working = 1
     }
 
+    [Serializable]
+    public delegate void UploadBuildHandler(object sender, ApplicationUpdaterProcessingArgs args);
+
+    [Serializable]
+    public delegate void BuildUpdaterHandler(object sender, ApplicationUpdaterArgs buildPack);
+
     public class ApplicationUpdater
     {
+        public event BuildUpdaterHandler OnFetch;
         public event BuildUpdaterHandler OnUpdate;
         public event UploadBuildHandler OnProcessingError;
         private readonly Timer _stopWatch;
-        private bool _waitSelfUpdate = false;
-        object _lock = new object();
+        object sync = new object();
 
         public Assembly RunningApp { get; }
-        public string Project { get; }
+        public string ProjectName { get; }
         public string PrevPackName { get; }
         public Uri ProjectUri { get; }
         public int CheckUpdatesEachMSec { get; }
@@ -47,7 +47,7 @@ namespace Utils.AppUpdater
         public ApplicationUpdater(Assembly runningApp, string projectName, string prevPackName, int checkUpdatesIntervalSec = 300, string uriProject = null)
         {
             RunningApp = runningApp;
-            Project = projectName;
+            ProjectName = projectName;
             PrevPackName = prevPackName;
             ProjectUri = new Uri(uriProject == null ? BuildsInfo.DEFAULT_PROJECT_RAW : uriProject.TrimEnd('/'));
             CheckUpdatesEachMSec = checkUpdatesIntervalSec * 1000;
@@ -60,98 +60,98 @@ namespace Utils.AppUpdater
 
         private void TimerCheckVersions(object sender, ElapsedEventArgs e)
         {
-            lock (_lock)
+            try
             {
-                try
+                Uri versionsInfo = new Uri($"{ProjectUri}/{BuildsInfo.FILE_NAME}");
+                string contextStr = WEB.WebHttpStringData(versionsInfo, out HttpStatusCode resHttp, HttpRequestCacheLevel.NoCacheNoStore);
+                if (resHttp == HttpStatusCode.OK)
                 {
-                    if(_waitSelfUpdate)
-                        return;
+                    BuildsInfo remoteBuilds = BuildsInfo.Deserialize(contextStr);
+                    BuildUpdaterCollection control = new BuildUpdaterCollection(RunningApp, ProjectUri, ProjectName, remoteBuilds);
 
-                    if (OnUpdate == null)
+                    if (control.Count > 0 && control.ProjectBuildPack.Name != PrevPackName)
                     {
-                        EnableTimer();
-                        return;
-                    }
-
-                    Uri versionsInfo = new Uri($"{ProjectUri}/{BuildsInfo.FILE_NAME}");
-                    string contextStr = WEB.WebHttpStringData(versionsInfo, out HttpStatusCode resHttp, HttpRequestCacheLevel.NoCacheNoStore);
-                    if (resHttp == HttpStatusCode.OK)
-                    {
-                        BuildsInfo remoteBuilds = BuildsInfo.Deserialize(contextStr);
-
-                        BuildUpdaterCollection projectRemoteBuilds = new BuildUpdaterCollection(this, remoteBuilds);
-                        if (projectRemoteBuilds.Count > 0 && projectRemoteBuilds.ProjectBuildPack.Name != PrevPackName)
+                        ApplicationUpdaterArgs responce = GetResponseFromControlObject(OnFetch, control);
+                        if (responce == null || responce.Result == UpdateBuildResult.Update)
                         {
-                            projectRemoteBuilds.OnFetchComplete += DeltaList_OnFetchComplete;
-                            projectRemoteBuilds.Fetch();
-                        }
-                    }
-                    else
-                    {
-                        throw new Exception($"Catched exception when get status from server. HttpStatus=[{resHttp:G}] Uri=[{versionsInfo.AbsoluteUri}]");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs(ex));
-                }
-
-                EnableTimer();
-            }
-        }
-
-
-        private void DeltaList_OnFetchComplete(object sender, ApplicationUpdaterProcessingArgs e)
-        {
-            lock (_lock)
-            {
-                try
-                {
-                    if (e.Error != null || e.Control.Status != UploaderStatus.Fetched)
-                    {
-                        OnProcessingError?.Invoke(this, e.Error == null ? new ApplicationUpdaterProcessingArgs("Error fetching build pack!", e.Control) : e);
-                        e.Control.Dispose();
-                        EnableTimer();
-                        return;
-                    }
-
-                    var eventListeners = OnUpdate?.GetInvocationList();
-                    if (eventListeners == null || !eventListeners.Any())
-                    {
-                        e.Control.Dispose();
-                        EnableTimer();
-                        return;
-                    }
-
-                    ApplicationUpdaterArgs buildArgs = new ApplicationUpdaterArgs(e.Control);
-                    foreach (BuildUpdaterHandler del in eventListeners)
-                    {
-                        del.Invoke(this, buildArgs);
-                        if (buildArgs.Result == UpdateBuildResult.Cancel)
-                        {
-                            e.Control.Dispose();
-                            EnableTimer();
+                            control.OnFetchComplete += DeltaList_OnFetchComplete;
+                            control.Fetch();
                             return;
                         }
                     }
 
-                    if (buildArgs.Result == UpdateBuildResult.SelfUpdate)
+                    control.Dispose();
+                }
+                else
+                {
+                    throw new Exception($"Catched exception when get status from server. HttpStatus=[{resHttp:G}] Uri=[{versionsInfo.AbsoluteUri}]");
+                }
+            }
+            catch (Exception ex)
+            {
+                OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs(ex));
+            }
+
+            EnableTimer();
+        }
+
+        private void DeltaList_OnFetchComplete(object sender, ApplicationUpdaterProcessingArgs e)
+        {
+            if (sender == null || !(sender is BuildUpdaterCollection))
+            {
+                OnProcessingError?.Invoke(sender, new ApplicationUpdaterProcessingArgs($"Internal error. Input object is not [{nameof(BuildUpdaterCollection)}]"));
+                EnableTimer();
+                return;
+            }
+
+            BuildUpdaterCollection control = (BuildUpdaterCollection) sender;
+
+            try
+            {
+                if (e.Error != null || control.Status != UploaderStatus.Fetched)
+                {
+                    OnProcessingError?.Invoke(sender, e.Error == null ? new ApplicationUpdaterProcessingArgs("Error when fetching pack of builds!") : e);
+                    control.Dispose();
+                }
+                else
+                {
+                    ApplicationUpdaterArgs responce = GetResponseFromControlObject(OnUpdate, control);
+                    if (responce == null || responce.Result == UpdateBuildResult.Update)
                     {
-                        _waitSelfUpdate = true;
+                        control.CommitAndPull();
                         return;
                     }
-
-                    ((BuildUpdaterCollection)e.Control).CommitAndPull();
-                    return;
                 }
-                catch (Exception ex)
-                {
-                    OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs(ex, e.Control));
-                    e.Control.Dispose();
-                }
-
-                EnableTimer();
             }
+            catch (Exception ex)
+            {
+                OnProcessingError?.Invoke(sender, new ApplicationUpdaterProcessingArgs(ex));
+                control.Dispose();
+            }
+
+            //диспоузить control нельзя т.к. его будут потом использовать в качестве обновления вручную
+            EnableTimer();
+        }
+
+        static ApplicationUpdaterArgs GetResponseFromControlObject(BuildUpdaterHandler eventReference, IUpdater updater)
+        {
+            var eventListeners = eventReference?.GetInvocationList();
+            if (eventListeners == null || !eventListeners.Any())
+            {
+                return null;
+            }
+
+            ApplicationUpdaterArgs buildArgs = new ApplicationUpdaterArgs();
+            foreach (BuildUpdaterHandler del in eventListeners)
+            {
+                del.Invoke(updater, buildArgs);
+                if (buildArgs.Result == UpdateBuildResult.Cancel)
+                {
+                    return buildArgs;
+                }
+            }
+
+            return buildArgs;
         }
 
         /// <summary>
@@ -159,17 +159,21 @@ namespace Utils.AppUpdater
         /// </summary>
         public void Start()
         {
-            lock (_lock)
-            {
+            lock (sync)
                 Status = AutoUpdaterStatus.Working;
-                EnableTimer();
-            }
+            EnableTimer();
         }
 
         void EnableTimer()
         {
-            if (Status == AutoUpdaterStatus.Working)
-                _stopWatch.Enabled = true;
+            lock (sync)
+            {
+                if (Status == AutoUpdaterStatus.Working)
+                {
+                    _stopWatch.Interval = CheckUpdatesEachMSec;
+                    _stopWatch.Enabled = true;
+                }
+            }
         }
 
         /// <summary>
@@ -177,7 +181,7 @@ namespace Utils.AppUpdater
         /// </summary>
         public void Stop()
         {
-            lock (_lock)
+            lock (sync)
             {
                 Status = AutoUpdaterStatus.Stopped;
                 _stopWatch.Stop();
@@ -189,7 +193,7 @@ namespace Utils.AppUpdater
         /// </summary>
         public void Check()
         {
-            lock (_lock)
+            lock (sync)
             {
                 if (Status == AutoUpdaterStatus.Working)
                 {
@@ -206,7 +210,7 @@ namespace Utils.AppUpdater
         /// <summary>
         /// Если при вызове эвента OnUpdate, был выбран статус - UpdateBuildResult.SelfUpdate, то контрольный процесс обязуется выполнить апдейт самостоятельно, при завершении своих внутренних процессов. При это проверка на наличия обновлений останавливается.
         /// </summary>
-        public void Update(IUpdater control, bool onUpdate = true)
+        public bool DoUpdate(IUpdater control)
         {
             if (control == null)
                 throw new ArgumentNullException("control");
@@ -214,34 +218,11 @@ namespace Utils.AppUpdater
             if (control.Count == 0)
                 throw new ArgumentException("No builds found for update.");
 
-            if(!(control is BuildUpdaterCollection))
+            if (!(control is BuildUpdaterCollection))
                 throw new ArgumentException("control is incorrect.");
 
-            lock (_lock)
-            {
-                try
-                {
-                    if (!_waitSelfUpdate)
-                        return;
 
-                    _waitSelfUpdate = false;
-                    if (onUpdate)
-                    {
-                        ((BuildUpdaterCollection)control).CommitAndPull();
-                    }
-                    else
-                    {
-                        control.Dispose();
-                        EnableTimer();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs(ex, control));
-                    control.Dispose();
-                    EnableTimer();
-                }
-            }
+            return ((BuildUpdaterCollection)control).CommitAndPull();
         }
     }
 }

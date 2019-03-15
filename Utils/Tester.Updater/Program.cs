@@ -39,21 +39,30 @@ namespace Tester.Updater
 
         public static void Update()
         {
-            ApplicationUpdater up = new ApplicationUpdater(Assembly.GetExecutingAssembly(), @"Tester.Updater", string.Empty, 1);
-            up.OnUpdate += Up_FindedNewVersions;
+            ApplicationUpdater up = new ApplicationUpdater(Assembly.GetExecutingAssembly(), "Tester.Updater", "QJedWja49u4vlnS.zip", 1);
+            up.OnFetch += Up_OnFetch;
+            up.OnUpdate += Up_OnUpdate;
             up.OnProcessingError += Up_OnProcessingError;
             up.Start();
             System.Console.WriteLine($"{nameof(ApplicationUpdater)} created!");
         }
 
-        private static void Up_FindedNewVersions(object sender, ApplicationUpdaterArgs buildPack)
+        private static void Up_OnFetch(object sender, ApplicationUpdaterArgs buildPack)
         {
+            Console.WriteLine($"Start fetching... Object=[{sender}]");
+            Thread.Sleep(2000);
+        }
+
+        private static void Up_OnUpdate(object sender, ApplicationUpdaterArgs buildPack)
+        {
+            Console.WriteLine($"Start update... Object=[{sender}]");
+            Thread.Sleep(2000);
             buildPack.Result = UpdateBuildResult.Update;
         }
 
         private static void Up_OnProcessingError(object sender, ApplicationUpdaterProcessingArgs args)
         {
-            Console.WriteLine($"Error=[{args.Error}] InnerErrorCount=[{args.InnerException.Count}]");
+            Console.WriteLine($"Object=[{sender}] Error=[{args.Error}] InnerErrorCount=[{args.InnerException.Count}]");
         }
 
 
@@ -64,15 +73,21 @@ namespace Tester.Updater
             Repository repo = null;
             try
             {   
-                System.Console.WriteLine(@"Enter builds directory path. Like - C:\!MyRepos\CustomApp\Utils\Tester.Updater\bin\Uploader\test1\OnServer");
-                string sourcePath = System.Console.ReadLine();
-                System.Console.WriteLine($"Enter project name. Like - TFSAssist");
+                //System.Console.WriteLine(@"Enter builds directory path. Like - C:\!MyRepos\CustomApp\Utils\Tester.Updater\bin\Uploader\test1\OnServer");
+                string sourcePath = @"C:\!Builds\Builds";
+                string destPath = @"C:\!Builds\Git";
+                System.Console.WriteLine($"Enter project name. Like - TFSAssist; Tester.Updater");
                 string projectStr = System.Console.ReadLine();
-                string destPath = @"C:\!Builds";
 
                 if (!Directory.Exists(sourcePath))
                 {
-                    System.Console.WriteLine("Incorrect path!");
+                    System.Console.WriteLine($"Incorrect path '{sourcePath}'");
+                    goto start;
+                }
+
+                if (Directory.GetFiles(sourcePath, "*.*", SearchOption.AllDirectories).Length == 0)
+                {
+                    System.Console.WriteLine($"No files was found in '{sourcePath}'");
                     goto start;
                 }
 

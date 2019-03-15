@@ -80,6 +80,10 @@
       <Project>{e4433085-2226-40e5-80e9-1af136e70f5b}</Project>
       <Name>Utils.WinForm</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Utils\Utils.csproj">
+      <Project>{A734B4E4-A5BF-4566-AC89-FC58D02B2D5F}</Project>
+      <Name>Utils</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

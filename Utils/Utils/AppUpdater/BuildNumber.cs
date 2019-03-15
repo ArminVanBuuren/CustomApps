@@ -47,10 +47,11 @@ namespace Utils.AppUpdater
             }
             else
             {
-                if (!BuildNumber.TryParse(fileVersion.FileVersion, out BuildNumber getVers))
+                if (!BuildNumber.TryParse(fileVersion, out BuildNumber getVers))
                 {
                     BuildNumber.TryParse("1.0.0.0", out getVers);
                 }
+
                 return getVers;
             }
         }
@@ -69,6 +70,31 @@ namespace Utils.AppUpdater
             }
         }
 
+        public static bool TryParse(FileVersionInfo input, out BuildNumber buildNumber)
+        {
+            try
+            {
+                buildNumber = Parse(input);
+                return true;
+            }
+            catch
+            {
+                buildNumber = null;
+                return false;
+            }
+        }
+
+        public static BuildNumber Parse(FileVersionInfo fileVersion)
+        {
+            return new BuildNumber
+            {
+                Major = fileVersion.FileMajorPart,
+                Minor = fileVersion.FileMinorPart,
+                Build = fileVersion.FileBuildPart,
+                Revision = fileVersion.FilePrivatePart
+            };
+        }
+
         /// <summary>
         /// Parses a build number string into a BuildNumber class
         /// </summary>
@@ -85,7 +111,7 @@ namespace Utils.AppUpdater
             if (buildNumber == null)
                 throw new ArgumentNullException("buildNumber");
 
-            if(DateTime.TryParse(buildNumber, out DateTime dateTime))
+            if (DateTime.TryParse(buildNumber, out DateTime dateTime))
                 return new BuildNumber(dateTime);
 
             var versions = buildNumber.Split(new[] {'.'}, StringSplitOptions.RemoveEmptyEntries).Select(v => v.Trim()).ToList();
