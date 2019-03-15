@@ -152,6 +152,58 @@ namespace TFSAssist
             }
         }
 
+        void MainWindow_Activated(object sender, EventArgs e)
+        {
+            LastDeactivationDate = null;
+            BottomNotification?.Clear();
+
+            if (!ShowInTaskbar)
+                ShowInTaskbar = true;
+        }
+
+        void MainWindow_Deactivated(object sender, EventArgs e)
+        {
+            LastDeactivationDate = DateTime.Now;
+            BottomNotification?.Clear();
+
+            Dispatcher?.Invoke(() =>
+            {
+                if (WindowState == WindowState.Minimized)
+                    ShowInTaskbar = false;
+            });
+        }
+
+        /// <summary>
+        /// удаляем все экземпляры
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MainWindow_Unloaded(object sender, RoutedEventArgs e)
+        {
+            _thisIsLoaded = false;
+            //удаляем таймер
+            if (_timerOnActivateUnUsingWindow != null)
+            {
+                _timerOnActivateUnUsingWindow.Enabled = false;
+                _timerOnActivateUnUsingWindow.Stop();
+                _timerOnActivateUnUsingWindow.Dispose();
+            }
+
+            if (_timerOnGC != null)
+            {
+                _timerOnGC.Enabled = false;
+                _timerOnGC.Stop();
+                _timerOnGC.Dispose();
+            }
+
+            //Обязательно диспоузить, а то в окошке так и будет висеть
+            BottomNotification?.Dispose();
+            //обязательно диспоузить т.к. нужно результат сериализовать и остановить асинронный процесс
+            TfsControl?.Dispose();
+        }
+
+        #region Initialize form and main components for TFSAssist
+
         void InitializeForm()
         {
             //================Notification Bar==============================
@@ -223,6 +275,33 @@ namespace TFSAssist
             ButtonStart.IsEnabled = true;
         }
 
+
+        /// <summary>
+        /// Биндим все необходимые свойства с параметрами в Windows форме. Чтобы значения синхронизировались, если изменить свойство в INotifyPropertyChanged
+        /// или изменить свойство DependencyProperty в объекте Window формы. 
+        /// Это тоже самое как сделать два эвента с измененными свойствами на примере: MailPassword_OnPasswordChanged, MailPassword_PropertyChanged
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="dp"></param>
+        /// <param name="notify"></param>
+        public void DefaultBinding(DependencyObject target, DependencyProperty dp, INotifyPropertyChanged notify)
+        {
+            ToolTipService.SetInitialShowDelay(target, timeoutMSECToShowToolTip);
+            Binding myBinding = new Binding
+            {
+                Source = notify,
+                // Value свойства класса SettingsValue<T>
+                Path = new PropertyPath("Value"),
+                Mode = BindingMode.TwoWay,
+                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+            };
+            BindingOperations.SetBinding(target, dp, myBinding);
+        }
+
+        #endregion
+
+        #region Initialize and processing Updater
+
         void InitializeUpdater()
         {
             TFSAssistUpdater lastUpdate = TFSAssistUpdater.Deserialize();
@@ -260,7 +339,7 @@ namespace TFSAssist
                 return;
             }
 
-            IUpdater updater = (IUpdater) sender;
+            IUpdater updater = (IUpdater)sender;
             updater.DownloadProgressChanged += Updater_DownloadProgressChanged;
             _dateTraceUpdater = DateTime.Now;
             Paragraph par = WriteLog(WarnSeverity.Normal, _dateTraceUpdater, "Downloaded update " + updater.GetProgressString());
@@ -283,7 +362,7 @@ namespace TFSAssist
 
                 Dispatcher?.Invoke(() =>
                 {
-                    Paragraph parNew = GetHighLiteTrace(_dateTraceUpdater, "Downloaded update " + ((IUpdater) sender).GetProgressString());
+                    Paragraph parNew = GetHighLiteTrace(_dateTraceUpdater, "Downloaded update " + ((IUpdater)sender).GetProgressString());
                     foreach (var inline in parNew.Inlines)
                     {
                         if (inline is Run)
@@ -303,8 +382,8 @@ namespace TFSAssist
             if (!(sender is IUpdater))
                 return;
 
-            _updaterControl = (IUpdater) sender;
-            
+            _updaterControl = (IUpdater)sender;
+
             if (TfsControl.InProgress)
             {
                 ButtonStart_OnClick(this, null);
@@ -378,6 +457,10 @@ namespace TFSAssist
             WriteLog(WarnSeverity.Error, DateTime.Now, args.Error.Message, $"Error in processing updater. Inner exceptions:[{args.InnerException.Count}]");
         }
 
+        #endregion
+
+        #region Initalize and processing Timers for checking unused main window and timer for garbage callect
+
         void InitializeTimers()
         {
             _timerOnActivateUnUsingWindow = new Timer
@@ -395,82 +478,6 @@ namespace TFSAssist
             _timerOnGC.Elapsed += GarbageCollect;
             _timerOnGC.Start();
         }
-
-
-
-        /// <summary>
-        /// Биндим все необходимые свойства с параметрами в Windows форме. Чтобы значения синхронизировались, если изменить свойство в INotifyPropertyChanged
-        /// или изменить свойство DependencyProperty в объекте Window формы. 
-        /// Это тоже самое как сделать два эвента с измененными свойствами на примере: MailPassword_OnPasswordChanged, MailPassword_PropertyChanged
-        /// </summary>
-        /// <param name="target"></param>
-        /// <param name="dp"></param>
-        /// <param name="notify"></param>
-        public void DefaultBinding(DependencyObject target, DependencyProperty dp, INotifyPropertyChanged notify)
-        {
-            ToolTipService.SetInitialShowDelay(target, timeoutMSECToShowToolTip);
-            Binding myBinding = new Binding
-            {
-                Source = notify,
-                // Value свойства класса SettingsValue<T>
-                Path = new PropertyPath("Value"),
-                Mode = BindingMode.TwoWay,
-                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
-            };
-            BindingOperations.SetBinding(target, dp, myBinding);
-        }
-
-        void MainWindow_Activated(object sender, EventArgs e)
-        {
-            LastDeactivationDate = null;
-            BottomNotification?.Clear();
-
-            if (!ShowInTaskbar)
-                ShowInTaskbar = true;
-        }
-
-        void MainWindow_Deactivated(object sender, EventArgs e)
-        {
-            LastDeactivationDate = DateTime.Now;
-            BottomNotification?.Clear();
-
-            Dispatcher?.Invoke(() =>
-            {
-                if (WindowState == WindowState.Minimized)
-                    ShowInTaskbar = false;
-            });
-        }
-
-        /// <summary>
-        /// удаляем все экземпляры
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void MainWindow_Unloaded(object sender, RoutedEventArgs e)
-        {
-            _thisIsLoaded = false;
-            //удаляем таймер
-            if (_timerOnActivateUnUsingWindow != null)
-            {
-                _timerOnActivateUnUsingWindow.Enabled = false;
-                _timerOnActivateUnUsingWindow.Stop();
-                _timerOnActivateUnUsingWindow.Dispose();
-            }
-
-            if (_timerOnGC != null)
-            {
-                _timerOnGC.Enabled = false;
-                _timerOnGC.Stop();
-                _timerOnGC.Dispose();
-            }
-
-            //Обязательно диспоузить, а то в окошке так и будет висеть
-            BottomNotification?.Dispose();
-            //обязательно диспоузить т.к. нужно результат сериализовать и остановить асинронный процесс
-            TfsControl?.Dispose();
-        }
-
-        #region Timers for checking unused main window and timer for garbage callect
 
         /// <summary>
         /// Проверяет если долгое время не запущен то будет происходить постоянная активация окна приложения. Т.к. возможно возникла фатальная ошибка.
