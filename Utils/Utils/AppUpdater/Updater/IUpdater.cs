@@ -40,10 +40,12 @@ namespace Utils.AppUpdater.Updater
         /// Количество скачанных байт
         /// </summary>
         long UploadedBytes { get; }
+        string UploadedString { get; }
         /// <summary>
         /// Размер файлов на сервере
         /// </summary>
         long TotalBytes { get; }
+        string TotalString { get; }
         /// <summary>
         /// Прогресс в процентах скачиванных файлов с сервера
         /// </summary>

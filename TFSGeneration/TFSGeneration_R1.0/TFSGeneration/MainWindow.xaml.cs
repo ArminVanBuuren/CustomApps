@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -22,6 +23,7 @@ using UIControls.MainControl;
 using Utils;
 using Utils.AppUpdater;
 using Utils.AppUpdater.Updater;
+using Utils.CollectionHelper;
 using Utils.Handles;
 using Timer = System.Timers.Timer;
 
@@ -66,6 +68,7 @@ namespace TFSAssist
         public TFSControl TfsControl { get; private set; }
         public BottomNotification BottomNotification { get; private set; }
         public ApplicationUpdater Updater { get; private set; }
+        public List<TraceHighlighter> Traces { get; private set; } = new List<TraceHighlighter>();
 
         public string CurrentPackUpdaterName
         {
@@ -139,6 +142,9 @@ namespace TFSAssist
                 InitializeForm();
                 InitializeUpdater();
                 InitializeTimers();
+
+                //================ Activate button Start if all correct ==============================
+                ButtonStart.IsEnabled = true;
             }
             catch (Exception ex)
             {
@@ -269,10 +275,6 @@ namespace TFSAssist
             GetDublicateTFS.Document.Blocks.Add(par);
             GetDublicateTFS.TextChanged += GetDublicateTFS_OnTextChanged;
             ToolTipService.SetInitialShowDelay(GetDublicateTFS, timeoutToShowToolTip);
-
-
-            //================Activate button Start and create Updater with Timers==============================
-            ButtonStart.IsEnabled = true;
         }
 
 
@@ -307,13 +309,31 @@ namespace TFSAssist
             TFSAssistUpdater lastUpdate = TFSAssistUpdater.Deserialize();
             if (lastUpdate != null)
             {
-                WindowState = lastUpdate.WindowState;
-                ShowInTaskbar = lastUpdate.ShowInTaskbar;
-                if (lastUpdate.TfsInProgress)
+                using (lastUpdate)
                 {
-                    ButtonStart_OnClick(this, null);
+                    try
+                    {
+                        CurrentPackUpdaterName = lastUpdate.PackName;
+                        WindowState = lastUpdate.WindowState;
+                        ShowInTaskbar = lastUpdate.ShowInTaskbar;
+                        Traces = lastUpdate.Traces;
+                        foreach (TraceHighlighter trace in Traces)
+                        {
+                            trace.Refresh();
+                            LogTextBox.Document.Blocks.Add(trace.GetParagraph());
+                        }
+                        WriteLog(WarnSeverity.Normal, DateTime.Now, $"Update successfully installed. Installed pack=[{lastUpdate.PackName}]");
+
+                        if (lastUpdate.TfsInProgress)
+                        {
+                            ButtonStartStop_OnClick(this, null);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Informing(WarnSeverity.Error, DateTime.Now, ex.Message, $"{ex.Message}\r\n{ex.StackTrace}", true);
+                    }
                 }
-                lastUpdate.Dispose();
             }
 
             Updater = new ApplicationUpdater(Assembly.GetExecutingAssembly(), nameof(TFSAssist), CurrentPackUpdaterName, 5);
@@ -323,122 +343,92 @@ namespace TFSAssist
             Updater.Start();
         }
 
-        private int _onFetch = 0;
-        private int _onUpdate = 0;
-        private int _onProgress = 0;
+
+        private string _updateTraceFormat = "Downloaded update [{0}] of [{1}]";
         private DateTime _dateTraceUpdater;
-        private Run _runInfo;
+        private TraceHighlighter _traceHighUpdateStatus;
         private IUpdater _updaterControl;
         object sync = new object();
+
         private void Updater_OnFetch(object sender, ApplicationUpdaterArgs buildPack)
         {
-            _onFetch++;
-            if (!(sender is IUpdater))
+            Dispatcher?.Invoke(() =>
             {
-                buildPack.Result = UpdateBuildResult.Cancel;
-                return;
-            }
-
-            IUpdater updater = (IUpdater)sender;
-            updater.DownloadProgressChanged += Updater_DownloadProgressChanged;
-            _dateTraceUpdater = DateTime.Now;
-            Paragraph par = WriteLog(WarnSeverity.Normal, _dateTraceUpdater, "Downloaded update " + updater.GetProgressString());
-            foreach (var inline in par.Inlines)
-            {
-                if (inline is Run)
-                {
-                    _runInfo = (Run)inline;
-                }
-            }
+                IUpdater updater = (IUpdater) sender;
+                updater.DownloadProgressChanged += Updater_DownloadProgressChanged;
+                _dateTraceUpdater = DateTime.Now;
+                _traceHighUpdateStatus = WriteLog(WarnSeverity.Normal, _dateTraceUpdater, string.Format(_updateTraceFormat, updater.UploadedString, updater.TotalString));
+                //_runsTraceUpdate = parControl.Inlines.Where(x => x is Run && !x.Name.IsNullOrEmptyTrim()).ToDictionary(p => p.Name, r => (Run) r);
+            });
         }
 
         private void Updater_DownloadProgressChanged(object sender, EventArgs empty)
         {
-            lock (sync)
-            {
-                _onProgress++;
-                if (!(sender is IUpdater) || _dateTraceUpdater == null || _runInfo == null)
-                    return;
+            if (_traceHighUpdateStatus == null)
+                return;
 
-                Dispatcher?.Invoke(() =>
-                {
-                    Paragraph parNew = GetHighLiteTrace(_dateTraceUpdater, "Downloaded update " + ((IUpdater)sender).GetProgressString());
-                    foreach (var inline in parNew.Inlines)
-                    {
-                        if (inline is Run)
-                        {
-                            _runInfo.Text = ((Run)inline).Text;
-                        }
-                    }
-                });
-            }
+            Dispatcher?.Invoke(() =>
+            {
+                IUpdater updater = (IUpdater) sender;
+                _traceHighUpdateStatus.Refresh(string.Format(_updateTraceFormat, updater.UploadedString, updater.TotalString));
+            });
         }
 
         private void Updater_OnUpdate(object sender, ApplicationUpdaterArgs buildPack)
         {
-            _onUpdate++;
-            buildPack.Result = UpdateBuildResult.Cancel;
             Updater.Stop();
-            if (!(sender is IUpdater))
-                return;
-
-            _updaterControl = (IUpdater)sender;
+            buildPack.Result = UpdateBuildResult.Cancel;
+            _updaterControl = (IUpdater) sender;
 
             if (TfsControl.InProgress)
             {
-                ButtonStart_OnClick(this, null);
+                ButtonStartStop_OnClick(this, null);
             }
             else
             {
-                InitiatorIsUpdater(false);
+                UpdateApplication(false);
             }
         }
 
-        void InitiatorIsUpdater(bool wasInProgress)
+        void UpdateApplication(bool wasInProgress)
         {
             if (_updaterControl == null)
                 return;
-
 
             Dispatcher?.Invoke(() =>
             {
                 try
                 {
-                    // TODO: добавить сюда всю информацию о предыдущем логировании
-                    TFSAssistUpdater newUpdate = new TFSAssistUpdater(_updaterControl, WindowState, ShowInTaskbar, wasInProgress);
+                    TFSAssistUpdater newUpdate = new TFSAssistUpdater(_updaterControl, WindowState, ShowInTaskbar, Traces, wasInProgress);
                     newUpdate.Serialize();
                 }
                 catch (Exception ex)
                 {
-                    ErrorWhenUpdate($"Error when starting update. Message=[{ex.Message}]", ex, false, wasInProgress);
+                    ErrorWhenUpdateAndRollback($"Error when starting update. Message=[{ex.Message}]", ex, false, wasInProgress);
                     return;
                 }
 
                 TfsControl.Dispose();
                 BottomNotification?.Dispose();
-                string prevPackUpdaterName = CurrentPackUpdaterName;
-                CurrentPackUpdaterName = _updaterControl.ProjectBuildPack.Name;
                 try
                 {
                     if (!Updater.DoUpdate(_updaterControl))
                     {
-                        ErrorWhenUpdate($"Update cancelled. {nameof(IUpdater)}=[{_updaterControl}]", null, true, wasInProgress);
-                        CurrentPackUpdaterName = prevPackUpdaterName;
+                        ErrorWhenUpdateAndRollback($"Update cancelled. {nameof(IUpdater)}=[{_updaterControl}]", null, true, wasInProgress);
                     }
                 }
                 catch (Exception ex)
                 {
-                    ErrorWhenUpdate($"Error when starting update. {nameof(IUpdater)}=[{_updaterControl}] Message=[{ex.Message}]", ex, true, wasInProgress);
-                    CurrentPackUpdaterName = prevPackUpdaterName;
+                    ErrorWhenUpdateAndRollback($"Error when starting update. {nameof(IUpdater)}=[{_updaterControl}] Message=[{ex.Message}]", ex, true, wasInProgress);
                 }
             });
         }
 
-        void ErrorWhenUpdate(string errorMessage, Exception ex, bool isDisposed, bool wasInProgress)
+        void ErrorWhenUpdateAndRollback(string errorMessage, Exception ex, bool isDisposed, bool wasInProgress)
         {
-            WriteLog(WarnSeverity.Error, DateTime.Now, errorMessage, ex?.StackTrace);
+            WriteLog(WarnSeverity.Error, DateTime.Now, errorMessage, ex != null ? $"{errorMessage} Message=[{ex.Message}]\r\n{ex.StackTrace}" : null);
             _updaterControl = null;
-            _runInfo = null;
+            _traceHighUpdateStatus = null;
             _dateTraceUpdater = DateTime.MinValue;
 
             if (isDisposed)
@@ -448,7 +438,7 @@ namespace TFSAssist
 
             if (wasInProgress)
             {
-                ButtonStart_OnClick(this, null);
+                ButtonStartStop_OnClick(this, null);
             }
             Updater.Start();
         }
@@ -548,7 +538,7 @@ namespace TFSAssist
             });
         }
 
-        private void Informing(WarnSeverity severity, DateTime dateLog, string message, string stackMessage, bool lockProcess)
+        private void Informing(WarnSeverity severity, DateTime dateLog, string message, string detailMessage, bool lockProcess)
         {
             if (!_thisIsLoaded)
                 return;
@@ -557,7 +547,7 @@ namespace TFSAssist
             {
                 case WarnSeverity.Status:
                     Dispatcher?.BeginInvoke(DispatcherPriority.Normal, new Action(() => StatusBarInfo.Text = message));
-                    WriteLog(WarnSeverity.Normal, dateLog, message, stackMessage);
+                    WriteLog(WarnSeverity.Normal, dateLog, message, detailMessage);
                     break;
                 case WarnSeverity.StatusRegular:
                     Dispatcher?.BeginInvoke(DispatcherPriority.Normal, new Action(() => StatusBarInfo.Text = message));
@@ -590,11 +580,11 @@ namespace TFSAssist
                             warnWindow.Show();
                     });
 
-                    WriteLog(severity, dateLog, message, stackMessage);
+                    WriteLog(severity, dateLog, message, detailMessage);
                     break;
 
                 default:
-                    WriteLog(severity, dateLog, message, stackMessage);
+                    WriteLog(severity, dateLog, message, detailMessage);
                     break;
             }
         }
@@ -608,52 +598,31 @@ namespace TFSAssist
         /// записать лог в отдельном окне
         /// </summary>
         /// <param name="stackTrace"></param>
-        Paragraph WriteLog(WarnSeverity severity, DateTime dateLog, string message, string stackMessage = null)
+        TraceHighlighter WriteLog(WarnSeverity severity, DateTime dateLog, string message, string detailMessage = null)
         {
-            if (message.IsNullOrEmpty() && stackMessage.IsNullOrEmpty())
+            if (message.IsNullOrEmpty() && detailMessage.IsNullOrEmpty())
                 return null;
 
-            Paragraph par = null;
+            TraceHighlighter trace = null;
 
             Dispatcher?.Invoke(() =>
             {
                 if (!(SetDebugLogging?.IsChecked == true && severity == WarnSeverity.Debug || severity == WarnSeverity.Normal || severity == WarnSeverity.Error || severity == WarnSeverity.Status))
                     return;
 
-                par = GetHighLiteTrace(dateLog, message, stackMessage);
-                LogTextBox.Document.Blocks.Add(par);
-                
+                trace = new TraceHighlighter(dateLog, detailMessage.IsNullOrEmptyTrim() ? message : detailMessage);
+                LogTextBox.Document.Blocks.Add(trace.GetParagraph());
+                Traces.Add(trace);
             });
 
-            return par;
+            return trace;
         }
 
-        static Paragraph GetHighLiteTrace(DateTime dateLog, string message, string stackMessage = null)
-        {
-            Paragraph par = new Paragraph();
-            par.Inlines.Add(new Bold(new Run(string.Format("[{0:G}]:", dateLog)))
-            {
-                Foreground = Brushes.Aqua,
-                Background = Brushes.Black
-            });
-
-            if (!stackMessage.IsNullOrEmpty())
-            {
-                Highlighter.Traces(par, stackMessage);
-            }
-            else
-            {
-                Highlighter.Traces(par, message);
-            }
-
-            par.LineHeight = 0.1;
-
-            return par;
-        }
+        
 
         #endregion
 
-        private void ButtonStart_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonStartStop_OnClick(object sender, RoutedEventArgs e)
         {
             if (!TfsControl.InProgress)
             {
@@ -692,7 +661,7 @@ namespace TFSAssist
                 ButtonStart.Content = STR_START;
             });
 
-            InitiatorIsUpdater(true);
+            UpdateApplication(true);
         }
 
         private double _isPbBlured = 35;

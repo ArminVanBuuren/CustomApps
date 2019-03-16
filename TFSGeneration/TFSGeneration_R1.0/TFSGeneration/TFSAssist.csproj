@@ -107,7 +107,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BottomNotification.cs" />
-    <Compile Include="Highlighter.cs" />
+    <Compile Include="TraceHighlighter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

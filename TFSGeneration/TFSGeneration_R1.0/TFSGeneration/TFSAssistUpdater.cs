@@ -9,6 +9,7 @@ using System.Windows;
 using Microsoft.Expression.Encoder.Live;
 using Utils;
 using Utils.AppUpdater.Updater;
+using System.Windows.Documents;
 
 namespace TFSAssist
 {
@@ -20,8 +21,10 @@ namespace TFSAssist
         public WindowState WindowState { get; }
         public bool ShowInTaskbar { get; }
         public bool TfsInProgress { get; }
+        public List<TraceHighlighter> Traces { get; }
+        public string PackName => Updater.ProjectBuildPack.Name;
 
-        public TFSAssistUpdater(IUpdater updater, WindowState windowState, bool showInTaskbar, bool tfsInProgress)
+        public TFSAssistUpdater(IUpdater updater, WindowState windowState, bool showInTaskbar, List<TraceHighlighter> traces, bool tfsInProgress)
         {
             if (updater == null)
                 throw new ArgumentNullException("updater");
@@ -29,6 +32,7 @@ namespace TFSAssist
             Updater = updater;
             WindowState = windowState;
             ShowInTaskbar = showInTaskbar;
+            Traces = traces;
             TfsInProgress = tfsInProgress;
         }
 
@@ -46,8 +50,9 @@ namespace TFSAssist
 
                     return updater;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    DeleteFileUpdates();
                 }
             }
             return null;
@@ -66,9 +71,10 @@ namespace TFSAssist
 
                 File.SetAttributes(FileUpdatesPath, File.GetAttributes(FileUpdatesPath) | FileAttributes.Hidden);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-
+                DeleteFileUpdates();
+                throw ex;
             }
         }
 
@@ -80,7 +86,7 @@ namespace TFSAssist
                 DeleteFileUpdates();
                 Updater.Dispose();
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
         }

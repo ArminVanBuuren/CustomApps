@@ -7,7 +7,10 @@ namespace Utils.AppUpdater.Updater
     public abstract class UploadProgress
     {
         public virtual long UploadedBytes { get; protected set; } = 0;
+        public string UploadedString => FormatBytes(UploadedBytes, out double result);
+
         public virtual long TotalBytes { get; protected set; } = 0;
+        public string TotalString => FormatBytes(TotalBytes, out double result);
 
         public virtual int ProgressPercent
         {
@@ -23,7 +26,7 @@ namespace Utils.AppUpdater.Updater
 
         public virtual string GetProgressString()
         {
-            return $"{FormatBytes(UploadedBytes, out double result)} of {FormatBytes(TotalBytes, out double result2)}";
+            return $"{UploadedString} of {TotalString}";
         }
 
         /// <summary>

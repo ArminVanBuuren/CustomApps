@@ -235,7 +235,7 @@
             </Grid>
             <CheckBox FontSize="{DynamicResource TextFontSize}" Grid.Column="1" Name="CreateBoot" Margin="5" VerticalAlignment="Center" ToolTip="Enable instant upload" HorizontalAlignment="Left">BootRun</CheckBox>
             <CheckBox FontSize="{DynamicResource TextFontSize}" Grid.Column="2" Name="SetDebugLogging" Margin="2" VerticalAlignment="Center" HorizontalContentAlignment="Left" ToolTip="Enable debug logging" HorizontalAlignment="Left">Debug Log</CheckBox>
-            <Button Grid.Column="3" Name="ButtonStart" Height="30" IsEnabled="False" Margin="5 0" MaxWidth="120" HorizontalAlignment="Right" Width="120" Content="{StaticResource STR_START}" FontSize="20" IsDefault="True" Click="ButtonStart_OnClick" FontFamily="Stencil"/>
+            <Button Grid.Column="3" Name="ButtonStart" Height="30" IsEnabled="False" Margin="5 0" MaxWidth="120" HorizontalAlignment="Right" Width="120" Content="{StaticResource STR_START}" FontSize="20" IsDefault="True" Click="ButtonStartStop_OnClick" FontFamily="Stencil"/>
         </Grid>
 
         <!--
