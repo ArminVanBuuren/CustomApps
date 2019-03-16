@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -45,12 +39,12 @@ namespace Utils.AppUpdater
 
             try
             {
-                Serialize(Path.Combine(destinationDirPath, BuildsInfo.FILE_NAME));
+                Serialize(Path.Combine(destinationDirPath, FILE_NAME));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 File.Delete(Path.Combine(destinationDirPath, pack.Name));
-                throw ex;
+                throw;
             }
 
             foreach (BuildPackInfo prevPack in prevPacks)

@@ -67,7 +67,7 @@ namespace TFSAssist
 
         public TFSControl TfsControl { get; private set; }
         public BottomNotification BottomNotification { get; private set; }
-        public ApplicationUpdater Updater { get; private set; }
+        public ApplicationUpdater AppUpdater { get; private set; }
         public List<TraceHighlighter> Traces { get; private set; } = new List<TraceHighlighter>();
 
         public string CurrentPackUpdaterName
@@ -154,7 +154,7 @@ namespace TFSAssist
             finally
             {
                 System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Default;
-                ShowMyForm(this, EventArgs.Empty);
+                //ShowMyForm(this, EventArgs.Empty);
             }
         }
 
@@ -326,7 +326,7 @@ namespace TFSAssist
 
                         if (lastUpdate.TfsInProgress)
                         {
-                            ButtonStartStop_OnClick(this, null);
+                            StartStopTfsControl(false);
                         }
                     }
                     catch (Exception ex)
@@ -336,16 +336,15 @@ namespace TFSAssist
                 }
             }
 
-            Updater = new ApplicationUpdater(Assembly.GetExecutingAssembly(), nameof(TFSAssist), CurrentPackUpdaterName, 5);
-            Updater.OnFetch += Updater_OnFetch;
-            Updater.OnUpdate += Updater_OnUpdate;
-            Updater.OnProcessingError += Updater_OnProcessingError;
-            Updater.Start();
+            AppUpdater = new ApplicationUpdater(Assembly.GetExecutingAssembly(), CurrentPackUpdaterName, 6);
+            AppUpdater.OnFetch += Updater_OnFetch;
+            AppUpdater.OnUpdate += Updater_OnUpdate;
+            AppUpdater.OnProcessingError += Updater_OnProcessingError;
+            AppUpdater.Start();
         }
 
 
         private string _updateTraceFormat = "Downloaded update [{0}] of [{1}]";
-        private DateTime _dateTraceUpdater;
         private TraceHighlighter _traceHighUpdateStatus;
         private IUpdater _updaterControl;
         object sync = new object();
@@ -356,8 +355,7 @@ namespace TFSAssist
             {
                 IUpdater updater = (IUpdater) sender;
                 updater.DownloadProgressChanged += Updater_DownloadProgressChanged;
-                _dateTraceUpdater = DateTime.Now;
-                _traceHighUpdateStatus = WriteLog(WarnSeverity.Normal, _dateTraceUpdater, string.Format(_updateTraceFormat, updater.UploadedString, updater.TotalString));
+                _traceHighUpdateStatus = WriteLog(WarnSeverity.Normal, DateTime.Now, string.Format(_updateTraceFormat, updater.UploadedString, updater.TotalString));
                 //_runsTraceUpdate = parControl.Inlines.Where(x => x is Run && !x.Name.IsNullOrEmptyTrim()).ToDictionary(p => p.Name, r => (Run) r);
             });
         }
@@ -369,24 +367,30 @@ namespace TFSAssist
 
             Dispatcher?.Invoke(() =>
             {
-                IUpdater updater = (IUpdater) sender;
-                _traceHighUpdateStatus.Refresh(string.Format(_updateTraceFormat, updater.UploadedString, updater.TotalString));
+                try
+                {
+                    IUpdater updater = (IUpdater)sender;
+                    _traceHighUpdateStatus.Refresh(string.Format(_updateTraceFormat, updater.UploadedString, updater.TotalString));
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
             });
         }
 
         private void Updater_OnUpdate(object sender, ApplicationUpdaterArgs buildPack)
         {
-            Updater.Stop();
             buildPack.Result = UpdateBuildResult.Cancel;
             _updaterControl = (IUpdater) sender;
 
             if (TfsControl.InProgress)
             {
-                ButtonStartStop_OnClick(this, null);
+                Dispatcher?.Invoke(() => StartStopTfsControl());
             }
             else
             {
-                UpdateApplication(false);
+                Dispatcher.BeginInvoke(new Action(() => UpdateApplication(false)));
             }
         }
 
@@ -395,41 +399,38 @@ namespace TFSAssist
             if (_updaterControl == null)
                 return;
 
-            Dispatcher?.Invoke(() =>
+            TFSAssistUpdater newUpdate = null;
+            try
             {
-                try
-                {
-                    TFSAssistUpdater newUpdate = new TFSAssistUpdater(_updaterControl, WindowState, ShowInTaskbar, Traces, wasInProgress);
-                    newUpdate.Serialize();
-                }
-                catch (Exception ex)
-                {
-                    ErrorWhenUpdateAndRollback($"Error when starting update. Message=[{ex.Message}]", ex, false, wasInProgress);
-                    return;
-                }
+                newUpdate = new TFSAssistUpdater(_updaterControl, WindowState, ShowInTaskbar, Traces, wasInProgress);
+                newUpdate.Serialize();
+            }
+            catch (Exception ex)
+            {
+                ErrorWhenUpdateAndRollback($"Error when starting update. Message=[{ex.Message}]", ex, false, newUpdate, wasInProgress);
+                return;
+            }
 
-                TfsControl.Dispose();
-                BottomNotification?.Dispose();
-                try
+            TfsControl.Dispose();
+            BottomNotification?.Dispose();
+            try
+            {
+                if (!AppUpdater.DoUpdate(_updaterControl))
                 {
-                    if (!Updater.DoUpdate(_updaterControl))
-                    {
-                        ErrorWhenUpdateAndRollback($"Update cancelled. {nameof(IUpdater)}=[{_updaterControl}]", null, true, wasInProgress);
-                    }
+                    ErrorWhenUpdateAndRollback($"Update cancelled. {nameof(IUpdater)}{_updaterControl}", null, true, newUpdate, wasInProgress);
                 }
-                catch (Exception ex)
-                {
-                    ErrorWhenUpdateAndRollback($"Error when starting update. {nameof(IUpdater)}=[{_updaterControl}] Message=[{ex.Message}]", ex, true, wasInProgress);
-                }
-            });
+            }
+            catch (Exception ex)
+            {
+                ErrorWhenUpdateAndRollback($"Error when starting update. {nameof(IUpdater)}{_updaterControl} Message=[{ex.Message}]", ex, true, newUpdate, wasInProgress);
+            }
         }
 
-        void ErrorWhenUpdateAndRollback(string errorMessage, Exception ex, bool isDisposed, bool wasInProgress)
+        void ErrorWhenUpdateAndRollback(string errorMessage, Exception ex, bool isDisposed, IDisposable newUpdate, bool wasInProgress)
         {
-            WriteLog(WarnSeverity.Error, DateTime.Now, errorMessage, ex != null ? $"{errorMessage} Message=[{ex.Message}]\r\n{ex.StackTrace}" : null);
+            WriteLog(WarnSeverity.Error, DateTime.Now, errorMessage, ex != null ? $"{errorMessage}\r\n{ex.StackTrace}" : null);
             _updaterControl = null;
             _traceHighUpdateStatus = null;
-            _dateTraceUpdater = DateTime.MinValue;
 
             if (isDisposed)
             {
@@ -438,9 +439,11 @@ namespace TFSAssist
 
             if (wasInProgress)
             {
-                ButtonStartStop_OnClick(this, null);
+                StartStopTfsControl(false);
             }
-            Updater.Start();
+
+            newUpdate?.Dispose();
+            AppUpdater.Refresh();
         }
 
         private void Updater_OnProcessingError(object sender, ApplicationUpdaterProcessingArgs args)
@@ -624,11 +627,17 @@ namespace TFSAssist
 
         private void ButtonStartStop_OnClick(object sender, RoutedEventArgs e)
         {
+            StartStopTfsControl();
+        }
+
+        void StartStopTfsControl(bool clearLog = true)
+        {
             if (!TfsControl.InProgress)
             {
                 TfsControl.Start();
                 DisableWindow();
-                ButtonClearLog_OnClick(this, null);
+                if (clearLog)
+                    ButtonClearLog_OnClick(this, null);
                 StatusBarInfo.Text = string.Empty;
 
                 MyProgeressBar.IsIndeterminate = true;
@@ -659,9 +668,9 @@ namespace TFSAssist
                 ProgressBarBlurEffect(MyProgeressBar, true);
 
                 ButtonStart.Content = STR_START;
-            });
 
-            UpdateApplication(true);
+                UpdateApplication(true);
+            });
         }
 
         private double _isPbBlured = 35;

@@ -47,9 +47,9 @@ namespace Utils.AppUpdater
             }
             else
             {
-                if (!BuildNumber.TryParse(fileVersion, out BuildNumber getVers))
+                if (!TryParse(fileVersion, out BuildNumber getVers))
                 {
-                    BuildNumber.TryParse("1.0.0.0", out getVers);
+                    TryParse("1.0.0.0", out getVers);
                 }
 
                 return getVers;
@@ -109,7 +109,7 @@ namespace Utils.AppUpdater
         public static BuildNumber Parse(string buildNumber)
         {
             if (buildNumber == null)
-                throw new ArgumentNullException("buildNumber");
+                throw new ArgumentNullException(nameof(buildNumber));
 
             if (DateTime.TryParse(buildNumber, out DateTime dateTime))
                 return new BuildNumber(dateTime);
@@ -133,13 +133,11 @@ namespace Utils.AppUpdater
 
         private static int ParseVersion(string input)
         {
-            int version;
-
-            if (!int.TryParse(input, out version))
+            if (!int.TryParse(input, out var version))
                 throw new FormatException("buildNumber string was not in a correct format");
 
             if (version < 0)
-                throw new ArgumentOutOfRangeException("buildNumber", "Versions must be greater than or equal to zero");
+                throw new ArgumentOutOfRangeException(nameof(input), "Versions must be greater than or equal to zero");
 
             return version;
         }
@@ -216,7 +214,7 @@ namespace Utils.AppUpdater
 
         public override string ToString()
         {
-            return string.Format("{0}.{1}{2}{3}", Major, Minor, Build < 0 ? "" : "." + Build, Revision < 0 ? "" : "." + Revision);
+            return $"{Major}.{Minor}{(Build < 0 ? "" : "." + Build)}{(Revision < 0 ? "" : "." + Revision)}";
         }
     }
 }

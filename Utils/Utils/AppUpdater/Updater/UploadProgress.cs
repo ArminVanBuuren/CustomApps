@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Globalization;
 
 namespace Utils.AppUpdater.Updater
 {
@@ -7,10 +7,10 @@ namespace Utils.AppUpdater.Updater
     public abstract class UploadProgress
     {
         public virtual long UploadedBytes { get; protected set; } = 0;
-        public string UploadedString => FormatBytes(UploadedBytes, out double result);
+        public string UploadedString => FormatBytes(UploadedBytes, out _);
 
         public virtual long TotalBytes { get; protected set; } = 0;
-        public string TotalString => FormatBytes(TotalBytes, out double result);
+        public string TotalString => FormatBytes(TotalBytes, out _);
 
         public virtual int ProgressPercent
         {
@@ -20,7 +20,7 @@ namespace Utils.AppUpdater.Updater
                 FormatBytes(TotalBytes, out double total);
                 if (total == 0)
                     return 0;
-                return int.Parse(((upload / total) * 100).ToString());
+                return int.Parse(((upload / total) * 100).ToString(CultureInfo.InvariantCulture));
             }
         }
 
@@ -33,6 +33,7 @@ namespace Utils.AppUpdater.Updater
         /// Formats the byte count to closest byte type
         /// </summary>
         /// <param name="bytes">The amount of bytes</param>
+        /// <param name="newBytes"></param>
         /// <param name="decimalPlaces">How many decimal places to show</param>
         /// <param name="showByteType">Add the byte type on the end of the string</param>
         /// <returns>The bytes formatted as specified</returns>

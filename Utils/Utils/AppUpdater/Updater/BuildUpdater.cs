@@ -1,11 +1,6 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.IO;
-using System.Net;
-using System.Reflection;
-using System.Security.Policy;
 
 namespace Utils.AppUpdater.Updater
 {
@@ -49,7 +44,7 @@ namespace Utils.AppUpdater.Updater
 
         internal void Commit()
         {
-            string argument_complete = "";
+            string argument_complete;
 
             switch (ServerFile.Type)
             {

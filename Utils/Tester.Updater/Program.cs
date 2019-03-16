@@ -11,6 +11,7 @@ using LibGit2Sharp.Handlers;
 using Utils;
 using Utils.AppUpdater;
 using System.Diagnostics;
+using Utils.AppUpdater.Updater;
 
 namespace Tester.Updater
 {
@@ -37,32 +38,31 @@ namespace Tester.Updater
             System.Console.ReadLine();
         }
 
+        private static ApplicationUpdater up;
         public static void Update()
         {
-            ApplicationUpdater up = new ApplicationUpdater(Assembly.GetExecutingAssembly(), "Tester.Updater", "QJedWja49u4vlnS.zip", 1);
+            up = new ApplicationUpdater(Assembly.GetExecutingAssembly(), "QJedWja49u4vlnS.zip1", 5);
             up.OnFetch += Up_OnFetch;
             up.OnUpdate += Up_OnUpdate;
             up.OnProcessingError += Up_OnProcessingError;
-            up.Start();
+            //up.Start();
             System.Console.WriteLine($"{nameof(ApplicationUpdater)} created!");
         }
 
         private static void Up_OnFetch(object sender, ApplicationUpdaterArgs buildPack)
         {
-            Console.WriteLine($"Start fetching... Object=[{sender}]");
-            Thread.Sleep(2000);
+            Console.WriteLine($"Program.Up_OnFetch. ThreadId=[{Thread.CurrentThread.ManagedThreadId}] Action=[{buildPack.Result:G}] Status=[{up.Status}] IUpdater{sender}");
+
         }
 
         private static void Up_OnUpdate(object sender, ApplicationUpdaterArgs buildPack)
         {
-            Console.WriteLine($"Start update... Object=[{sender}]");
-            Thread.Sleep(2000);
-            buildPack.Result = UpdateBuildResult.Update;
+            Console.WriteLine($"Program.Up_OnUpdate. ThreadId=[{Thread.CurrentThread.ManagedThreadId}] Action=[{buildPack.Result:G}] Status=[{up.Status}] IUpdater{sender}");
         }
 
         private static void Up_OnProcessingError(object sender, ApplicationUpdaterProcessingArgs args)
         {
-            Console.WriteLine($"Object=[{sender}] Error=[{args.Error}] InnerErrorCount=[{args.InnerException.Count}]");
+            Console.WriteLine($"{sender} Error=[{args.Error}] InnerErrorCount=[{args.InnerException.Count}]");
         }
 
 

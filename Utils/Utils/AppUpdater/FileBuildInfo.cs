@@ -1,8 +1,5 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
 using System.Xml.Serialization;
-using Utils.CollectionHelper;
 
 namespace Utils.AppUpdater
 {
@@ -101,7 +98,7 @@ namespace Utils.AppUpdater
 
         public override string ToString()
         {
-            return $"Location=[{Location}] Version=[{Version.ToString()}] Type=[{Type:G}]";
+            return $"Location=[{Location}] Version=[{Version}] Type=[{Type:G}]";
         }
     }
 }

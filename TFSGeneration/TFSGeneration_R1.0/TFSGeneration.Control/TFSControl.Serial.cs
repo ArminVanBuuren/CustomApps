@@ -335,12 +335,18 @@ namespace TFSAssist.Control
         /// <summary>
         /// сериализация приватных данных, паролей и логинов
         /// </summary>
-        /// <param name="mainControl"></param>
-        static void SerializePrivateDatas(TFSControl mainControl)
+        void SerializePrivateDatas()
         {
-            using (FileStream stream = new FileStream(AccountStorePath, FileMode.Create, FileAccess.ReadWrite))
+            try
             {
-                new BinaryFormatter().Serialize(stream, mainControl);
+                using (FileStream stream = new FileStream(AccountStorePath, FileMode.Create, FileAccess.ReadWrite))
+                {
+                    new BinaryFormatter().Serialize(stream, this);
+                }
+            }
+            catch (Exception ex)
+            {
+                _log.OnWriteLog(WarnSeverity.Attention, string.Format(NotifyDeSerializetionFailor, AccountStorePath), ex, true);
             }
         }
 
@@ -355,6 +361,7 @@ namespace TFSAssist.Control
                 return;
 
             SerializeSettings();
+            SerializePrivateDatas();
             _asyncThread = new Thread(new ThreadStart(StartPerforming));
             _asyncThread.Start();
         }
@@ -384,7 +391,7 @@ namespace TFSAssist.Control
 
             SerializeSettings();
             SerializeDatas();
-            SerializePrivateDatas(this);
+            SerializePrivateDatas();
             //сериализация приватных данных, паролей и логинов
             //using (FileStream stream = new FileStream(AccountStorePath, FileMode.Create, FileAccess.ReadWrite))
             //{

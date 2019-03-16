@@ -111,6 +111,7 @@ namespace TFSAssist.Control
                 {
                     InProgress = false;
                     IsCompleted?.Invoke(this, EventArgs.Empty);
+                    SerializeSettings();
                     SerializeDatas();
                 }
             }

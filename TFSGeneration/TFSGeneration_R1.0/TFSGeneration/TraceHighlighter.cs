@@ -82,13 +82,15 @@ namespace TFSAssist
         [NonSerialized]
         private Paragraph _paragraph;
 
+        public DateTime DateOfTrace { get; }
         public TraceBit TraceBitDate { get; }
         public List<TraceBit> TraceBitCollection { get; private set; }
 
         public TraceHighlighter(DateTime dateLog, string message)
         {
             _paragraph = new Paragraph();
-            TraceBitDate = new TraceBit(string.Format("[{0:G}]:", dateLog), TraceBitType.DateTrace);
+            DateOfTrace = dateLog;
+            TraceBitDate = new TraceBit($"[{dateLog:G}]:", TraceBitType.DateTrace);
             AddParagraphRun(message);
             _paragraph.LineHeight = 0.1;
         }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Utils.AppUpdater.Updater
+﻿namespace Utils.AppUpdater.Updater
 {
     public interface IBuildUpdater
     {

@@ -4,8 +4,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -51,11 +49,11 @@ namespace Utils.AppUpdater
 
                 MD5 = Hasher.HashFile(packFileDestinationPath, HashType.MD5);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 File.Delete(packFileTempPath);
                 File.Delete(packFileDestinationPath);
-                throw e;
+                throw;
             }
         }
 
@@ -80,7 +78,7 @@ namespace Utils.AppUpdater
         void SerializeAndDeserialize(BuildsInfo versions)
         {
             XmlSerializer xsSubmit = new XmlSerializer(typeof(BuildsInfo));
-            var xml = "";
+            string xml;
             using (var sww = new StringWriter())
             {
                 using (XmlWriter writer = XmlWriter.Create(sww))
