@@ -24,30 +24,23 @@ namespace Utils
             try
             {
                 resultHttp = response.StatusCode;
-                if (resultHttp == HttpStatusCode.OK)
-                {
-                    //List<string> ddd = new List<string>();
-                    //WebHeaderCollection dd = response.Headers;
-                    //foreach (string s in dd)
-                    //{
-                    //    ddd.Add(response.GetResponseHeader(s));
-                    //}
+                if (resultHttp != HttpStatusCode.OK)
+                    return null;
 
+                Stream receiveStream = response.GetResponseStream();
+                if (receiveStream == null)
+                    return null;
 
-                    Stream receiveStream = response.GetResponseStream();
-                    StreamReader readStream;
-
-                    if (response.CharacterSet == null)
-                        readStream = new StreamReader(receiveStream);
-                    else
-                        readStream = new StreamReader(receiveStream, Encoding.GetEncoding(response.CharacterSet));
-
-                    string resultStr = readStream.ReadToEnd();
-                    readStream.Close();
-                    return resultStr;
-                }
-
-                return null;
+                if (response.CharacterSet == null)
+                    using (StreamReader readStream = new StreamReader(receiveStream))
+                    {
+                        return readStream.ReadToEnd();
+                    }
+                else
+                    using (StreamReader readStream = new StreamReader(receiveStream, Encoding.GetEncoding(response.CharacterSet)))
+                    {
+                        return readStream.ReadToEnd();
+                    }
             }
             catch (Exception e)
             {

@@ -13,7 +13,7 @@ namespace Tester.Console
     {
         static void Main(string[] args)
         {
-            
+            //TimeSpan span = DateTime.Now.Subtract(DateTime.Parse("07.02.2018 00:00:00"));
         }
 
 

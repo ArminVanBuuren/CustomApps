@@ -46,17 +46,20 @@ namespace TFSAssist
         private const string STR_START = "START";
         private const string STR_STOP = "STOP";
         private readonly string ERR_SECOND_PROC = $"{nameof(TFSAssist)} already started. Please check your notification area. To run second process, you can rename the executable file.";
-        private const int timeoutMSECToShowToolTip = 2000;
-        private const int timeoutToShowToolTip = 2000;
 
-        private const int _intervalForActivateUnUsedWindow = 600 * 1000;
+        private const int _intervalCheckUpdatesSec = 3600;
+        private const int _timeoutMSECToShowToolTip = 2000;
+        private const int _timeoutToShowToolTip = 2000;
+        private const double _intervalForActivateUnUsedWindow = 900 * 1000;
+        private const double _intervalGCCollectAndClearTraces = 3600 * 1000;
+        private const int _daysToSaveLogs = 10;
+
         private int _openedWarningWindowCount = 0;
         private Timer _timerOnActivateUnUsingWindow;
         private Timer _timerOnGC;
         private WindowWarning warnWindow;
         private bool _thisIsLoaded = false; // фиксит ошибку при закрытии окна остановку таймера
-        private DateTime? LastDeactivationDate = null;
-        
+        private DateTime? _lastDeactivationDate = null;
 
         public TFSControl TfsControl { get; private set; }
         public BottomNotification BottomNotification { get; private set; }
@@ -160,17 +163,17 @@ namespace TFSAssist
                 MailPassword.Password = TfsControl.Settings.MailOption.Password.Value; // по дефолту нельзя биндить классы паролей, т.к. его свойства защищенные
                 MailPassword.PasswordChanged += MailPassword_OnPasswordChanged;
                 TfsControl.Settings.MailOption.Password.PropertyChanged += MailPassword_PropertyChanged;
-                ToolTipService.SetInitialShowDelay(MailPassword, timeoutToShowToolTip);
+                ToolTipService.SetInitialShowDelay(MailPassword, _timeoutToShowToolTip);
 
                 TFSUserPassword.Password = TfsControl.Settings.TFSOption.TFSUserPassword.Value;
                 TFSUserPassword.PasswordChanged += TFSUserPassword_PasswordChanged;
                 TfsControl.Settings.TFSOption.TFSUserPassword.PropertyChanged += TFSUserPassword_PropertyChanged;
-                ToolTipService.SetInitialShowDelay(TFSUserPassword, timeoutToShowToolTip);
+                ToolTipService.SetInitialShowDelay(TFSUserPassword, _timeoutToShowToolTip);
 
                 FilterStartDate.Text = TfsControl.Settings.MailOption.StartDate.Value; // при изменении все равно вырезается время, остается только дата, по этому тоже биндим по особеному
                 FilterStartDate.SelectedDateChanged += FilterStartDate_OnSelectedDateChanged;
                 TfsControl.Settings.MailOption.StartDate.PropertyChanged += StartDate_PropertyChanged;
-                ToolTipService.SetInitialShowDelay(FilterStartDate, timeoutToShowToolTip);
+                ToolTipService.SetInitialShowDelay(FilterStartDate, _timeoutToShowToolTip);
 
                 //================Option Mail====================================
                 DefaultBinding(MailExchangeUri, TextBox.TextProperty, TfsControl.Settings.MailOption.ExchangeUri);
@@ -179,12 +182,12 @@ namespace TFSAssist
                 LableParceSubject.Content = $"Regex pattern for parsing subject of mail ({nameof(TfsControl.Settings.MailOption.ParceSubject)}__*):";
                 RegexSubjectParce.Text = TfsControl.Settings.MailOption.ParceSubject[0].Value;
                 RegexSubjectParce.TextChanged += RegexSubjectParce_OnTextChanged;
-                ToolTipService.SetInitialShowDelay(RegexSubjectParce, timeoutToShowToolTip);
+                ToolTipService.SetInitialShowDelay(RegexSubjectParce, _timeoutToShowToolTip);
 
                 LableParceBody.Content = $"Regex pattern for parsing body of mail ({nameof(TfsControl.Settings.MailOption.ParceBody)}__*):";
                 RegexBodyParce.Text = TfsControl.Settings.MailOption.ParceBody[0].Value;
                 RegexBodyParce.TextChanged += RegexBodyParce_OnTextChanged;
-                ToolTipService.SetInitialShowDelay(RegexBodyParce, timeoutToShowToolTip);
+                ToolTipService.SetInitialShowDelay(RegexBodyParce, _timeoutToShowToolTip);
 
                 //================Options TFS===================================
                 DefaultBinding(TFSUri, TextBox.TextProperty, TfsControl.Settings.TFSOption.TFSUri);
@@ -196,7 +199,7 @@ namespace TFSAssist
                 GetDublicateTFS.Document.Blocks.Clear();
                 GetDublicateTFS.Document.Blocks.Add(par);
                 GetDublicateTFS.TextChanged += GetDublicateTFS_OnTextChanged;
-                ToolTipService.SetInitialShowDelay(GetDublicateTFS, timeoutToShowToolTip);
+                ToolTipService.SetInitialShowDelay(GetDublicateTFS, _timeoutToShowToolTip);
 
 
                 InitializeUpdater();
@@ -219,18 +222,20 @@ namespace TFSAssist
 
         //void TestLogging()
         //{
-        //    new Action(TestLogging).BeginInvoke( null, null);
+        //    new Action(TestLogging).BeginInvoke(null, null);
         //    uint index = 0;
         //    while (true)
         //    {
         //        WriteLog(WarnSeverity.Normal, DateTime.Now, $"Trace=[{index++}]");
-        //        System.Threading.Thread.Sleep(10);
+        //        System.Threading.Thread.Sleep(1);
+        //        if(index > 1000)
+        //            System.Threading.Thread.Sleep(5000);
         //    }
         //}
 
         void MainWindow_Activated(object sender, EventArgs e)
         {
-            LastDeactivationDate = null;
+            _lastDeactivationDate = null;
             BottomNotification?.Clear();
 
             if (!ShowInTaskbar)
@@ -239,7 +244,7 @@ namespace TFSAssist
 
         void MainWindow_Deactivated(object sender, EventArgs e)
         {
-            LastDeactivationDate = DateTime.Now;
+            _lastDeactivationDate = DateTime.Now;
             BottomNotification?.Clear();
 
             Dispatcher?.Invoke(() =>
@@ -278,8 +283,6 @@ namespace TFSAssist
             TfsControl?.Dispose();
         }
 
-        #region Initialize form and main components for TFSAssist
-
         /// <summary>
         /// Биндим все необходимые свойства с параметрами в Windows форме. Чтобы значения синхронизировались, если изменить свойство в INotifyPropertyChanged
         /// или изменить свойство DependencyProperty в объекте Window формы. 
@@ -290,7 +293,7 @@ namespace TFSAssist
         /// <param name="notify"></param>
         public void DefaultBinding(DependencyObject target, DependencyProperty dp, INotifyPropertyChanged notify)
         {
-            ToolTipService.SetInitialShowDelay(target, timeoutMSECToShowToolTip);
+            ToolTipService.SetInitialShowDelay(target, _timeoutMSECToShowToolTip);
             Binding myBinding = new Binding
             {
                 Source = notify,
@@ -301,8 +304,6 @@ namespace TFSAssist
             };
             BindingOperations.SetBinding(target, dp, myBinding);
         }
-
-        #endregion
 
         #region Initialize and processing Updater
 
@@ -344,7 +345,7 @@ namespace TFSAssist
                 }
             }
 
-            AppUpdater = new ApplicationUpdater(Assembly.GetExecutingAssembly(), CurrentPackUpdaterName, 600);
+            AppUpdater = new ApplicationUpdater(Assembly.GetExecutingAssembly(), CurrentPackUpdaterName, _intervalCheckUpdatesSec);
             AppUpdater.OnFetch += AppUpdater_OnFetch;
             AppUpdater.OnUpdate += AppUpdater_OnUpdate;
             AppUpdater.OnProcessingError += AppUpdater_OnProcessingError;
@@ -394,7 +395,7 @@ namespace TFSAssist
 
             if (TfsControl != null && TfsControl.InProgress)
             {
-                Dispatcher?.Invoke(() => StartStopTfsControl());
+                TfsControl.Stop();
             }
             else
             {
@@ -441,9 +442,7 @@ namespace TFSAssist
             _traceHighUpdateStatus = null;
 
             if (wasInProgress)
-            {
                 StartStopTfsControl(false);
-            }
 
             if(BottomNotification.isDisposed)
                 BottomNotification = new BottomNotification(this, TFSControl.ApplicationName);
@@ -474,7 +473,7 @@ namespace TFSAssist
 
             _timerOnGC = new Timer
             {
-                Interval = 900 * 1000
+                Interval = _intervalGCCollectAndClearTraces
             };
             _timerOnGC.Elapsed += GarbageCollect;
             _timerOnGC.Start();
@@ -490,9 +489,9 @@ namespace TFSAssist
             if (!_thisIsLoaded)
                 return;
 
-            if (((TfsControl != null && !TfsControl.InProgress) || _openedWarningWindowCount > 0) && LastDeactivationDate != null)
+            if (((TfsControl != null && !TfsControl.InProgress) || _openedWarningWindowCount > 0) && _lastDeactivationDate != null)
             {
-                TimeSpan timeSpan = DateTime.Now - (DateTime) LastDeactivationDate;
+                TimeSpan timeSpan = DateTime.Now - (DateTime) _lastDeactivationDate;
                 if (timeSpan.Days > 0 || (timeSpan.Days == 0 && timeSpan.TotalMilliseconds >= _intervalForActivateUnUsedWindow))
                 {
                     ShowMyForm(this, EventArgs.Empty);
@@ -528,7 +527,7 @@ namespace TFSAssist
                 lock (syncTraces)
                 {
                     // удаляем логи если прошло больше 10 дней
-                    List<TraceHighlighter> oldTraces = Traces.Where(p => DateTime.Now.Subtract(p.DateOfTrace).Days > 10).ToList();
+                    List<TraceHighlighter> oldTraces = Traces.Where(p => DateTime.Now.Subtract(p.DateOfTrace).Days > _daysToSaveLogs).ToList();
                     foreach (TraceHighlighter trace in oldTraces)
                     {
                         Traces.Remove(trace);
