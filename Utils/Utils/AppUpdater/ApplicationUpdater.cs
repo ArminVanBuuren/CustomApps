@@ -73,7 +73,7 @@ namespace Utils.AppUpdater
         /// <param name="prevPackName">Предыдущее имя пакета обновлений</param>
         /// <param name="checkUpdatesIntervalSec">Интервал проверка наличия новых билдов каждые (5 минут - дефолтное)</param>
         /// <param name="uriProject">URI пути к удаленному серверу для выкачивания обновления</param>
-        public ApplicationUpdater(Assembly runningApp, string prevPackName, int checkUpdatesIntervalSec = 300, string uriProject = null)
+        public ApplicationUpdater(Assembly runningApp, string prevPackName, int checkUpdatesIntervalSec = 600, string uriProject = null)
         {
             if(runningApp == null)
                 throw new ArgumentNullException(nameof(runningApp));

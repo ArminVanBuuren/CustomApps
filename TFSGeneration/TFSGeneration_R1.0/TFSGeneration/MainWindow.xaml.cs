@@ -62,6 +62,7 @@ namespace TFSAssist
         public BottomNotification BottomNotification { get; private set; }
         public ApplicationUpdater AppUpdater { get; private set; }
         public List<TraceHighlighter> Traces { get; private set; } = new List<TraceHighlighter>();
+        object syncTraces = new object();
 
         public string CurrentPackUpdaterName
         {
@@ -216,6 +217,17 @@ namespace TFSAssist
             }
         }
 
+        //void TestLogging()
+        //{
+        //    new Action(TestLogging).BeginInvoke( null, null);
+        //    uint index = 0;
+        //    while (true)
+        //    {
+        //        WriteLog(WarnSeverity.Normal, DateTime.Now, $"Trace=[{index++}]");
+        //        System.Threading.Thread.Sleep(10);
+        //    }
+        //}
+
         void MainWindow_Activated(object sender, EventArgs e)
         {
             LastDeactivationDate = null;
@@ -306,12 +318,18 @@ namespace TFSAssist
                         CurrentPackUpdaterName = lastUpdate.PackName;
                         WindowState = lastUpdate.WindowState;
                         ShowInTaskbar = lastUpdate.ShowInTaskbar;
-                        Traces = lastUpdate.Traces;
-                        foreach (TraceHighlighter trace in Traces)
+
+                        lock (syncTraces)
                         {
-                            trace.Refresh();
-                            LogTextBox.Document.Blocks.Add(trace.GetParagraph());
+                            Traces = lastUpdate.Traces;
+
+                            foreach (TraceHighlighter trace in Traces)
+                            {
+                                trace.Refresh();
+                                LogTextBox.Document.Blocks.Add(trace.GetParagraph());
+                            }
                         }
+
                         WriteLog(WarnSeverity.Normal, DateTime.Now, $"Update successfully installed. Updates pack=[{lastUpdate.PackName}]");
 
                         if (lastUpdate.TfsInProgress)
@@ -326,7 +344,7 @@ namespace TFSAssist
                 }
             }
 
-            AppUpdater = new ApplicationUpdater(Assembly.GetExecutingAssembly(), CurrentPackUpdaterName, 5);
+            AppUpdater = new ApplicationUpdater(Assembly.GetExecutingAssembly(), CurrentPackUpdaterName, 600);
             AppUpdater.OnFetch += AppUpdater_OnFetch;
             AppUpdater.OnUpdate += AppUpdater_OnUpdate;
             AppUpdater.OnProcessingError += AppUpdater_OnProcessingError;
@@ -494,6 +512,7 @@ namespace TFSAssist
                 _timerOnActivateUnUsingWindow.Enabled = true;
         }
 
+
         /// <summary>
         /// Удаляем не используемые объекты из памяти
         /// </summary>
@@ -504,7 +523,25 @@ namespace TFSAssist
             if (!_thisIsLoaded)
                 return;
 
-            GC.Collect();
+            try
+            {
+                lock (syncTraces)
+                {
+                    // удаляем логи если прошло больше 10 дней
+                    List<TraceHighlighter> oldTraces = Traces.Where(p => DateTime.Now.Subtract(p.DateOfTrace).Days > 10).ToList();
+                    foreach (TraceHighlighter trace in oldTraces)
+                    {
+                        Traces.Remove(trace);
+                        Dispatcher?.BeginInvoke(DispatcherPriority.Normal, new Action(() => LogTextBox.Document.Blocks.Remove(trace.GetParagraph())));
+                    }
+                }
+
+                GC.Collect();
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
         }
 
         #endregion
@@ -583,7 +620,11 @@ namespace TFSAssist
 
         private void ButtonClearLog_OnClick(object sender, RoutedEventArgs e)
         {
-            LogTextBox.Document.Blocks.Clear();
+            lock (syncTraces)
+            {
+                Traces.Clear();
+                LogTextBox.Document.Blocks.Clear();
+            }
         }
 
         /// <summary>
@@ -591,7 +632,7 @@ namespace TFSAssist
         /// </summary>
         TraceHighlighter WriteLog(WarnSeverity severity, DateTime dateLog, string message, string detailMessage = null)
         {
-            if (message.IsNullOrEmpty() && detailMessage.IsNullOrEmpty())
+            if (!_thisIsLoaded || (message.IsNullOrEmpty() && detailMessage.IsNullOrEmpty()))
                 return null;
 
             TraceHighlighter trace = null;
@@ -602,8 +643,12 @@ namespace TFSAssist
                     return;
 
                 trace = new TraceHighlighter(dateLog, detailMessage.IsNullOrEmptyTrim() ? message : detailMessage);
-                LogTextBox.Document.Blocks.Add(trace.GetParagraph());
-                Traces.Add(trace);
+                
+                lock (syncTraces)
+                {
+                    Traces.Add(trace);
+                    LogTextBox.Document.Blocks.Add(trace.GetParagraph());
+                }
             });
 
             return trace;
