@@ -26,6 +26,8 @@ namespace TFSAssist
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value == null)
+                return (double) 0;
             if ((double) value < 2000)
                 return 2000;
             return (double) value - 25;
