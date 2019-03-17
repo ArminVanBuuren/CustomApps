@@ -49,11 +49,15 @@ namespace TFSAssist
         private const string STR_STOP = "STOP";
         private readonly string ERR_SECOND_PROC = $"{nameof(TFSAssist)} already started. Please check your notification area. To run second process, you can rename the executable file.";
 
+        // 15 минут на проверку обновлений. Потому что если долго не будет интернета, в логах будут одни ошибки.
         private const int _intervalCheckUpdatesSec = 900;
         private const int _timeoutMSECToShowToolTip = 2000;
         private const int _timeoutToShowToolTip = 2000;
+        // каждые 15 минут проверять работает ли приложение, если нет то сообщать это пользователю, т.к. может быть ошибка которую он не знает.
         private const double _intervalForActivateUnUsedWindow = 900 * 1000;
+        // каждый час очистка памяти и очиста логов
         private const double _intervalGCCollectAndClearTraces = 3600 * 1000;
+        // количество дней на хранение логов
         private const int _daysToSaveLogs = 10;
 
         private int _openedWarningWindowCount = 0;
