@@ -71,14 +71,14 @@ namespace Tester.Updater
 
         private static void Up_OnFetch(object sender, ApplicationUpdaterProcessingArgs args)
         {
-            Console.WriteLine($"[{DateTime.Now:hh:mm:ss}] [{Thread.CurrentThread.ManagedThreadId}] Fetch. ID=[{up.NumberForAccess}] Status=[{up.Status:G}]");
+            Console.WriteLine($"[{DateTime.Now:hh:mm:ss}] [{Thread.CurrentThread.ManagedThreadId}] Fetch. Status=[{up.Status:G}]");
             //Console.WriteLine($"Up_OnFetch. ThreadId=[{Thread.CurrentThread.ManagedThreadId}] Action=[{args.Result:G}] Status=[{up.Status}] IUpdater{args.Control}");
 
         }
 
         private static void Up_OnUpdate(object sender, ApplicationUpdaterProcessingArgs args)
         {
-            Console.WriteLine($"[{DateTime.Now:hh:mm:ss}] [{Thread.CurrentThread.ManagedThreadId}] Update. ID=[{up.NumberForAccess}] Status=[{up.Status:G}]");
+            Console.WriteLine($"[{DateTime.Now:hh:mm:ss}] [{Thread.CurrentThread.ManagedThreadId}] Update. Status=[{up.Status:G}]");
             args.Result = UpdateBuildResult.Cancel;
             args.Control.Dispose();
             up.Refresh();
