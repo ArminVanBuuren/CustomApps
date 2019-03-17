@@ -125,7 +125,7 @@
     </Compile>
     <Compile Include="Trash\Trash.cs" />
     <Compile Include="Trash\Temp1.cs" />
-    <Compile Include="TFSAssistUpdater.cs" />
+    <Compile Include="WindowSaver.cs" />
     <Compile Include="WebCam\WebcamControl.cs" />
     <Compile Include="WindowWarning.xaml.cs">
       <DependentUpon>WindowWarning.xaml</DependentUpon>
