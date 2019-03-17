@@ -14,7 +14,8 @@ namespace TFSAssist
         private MainWindow _mainWindow;
         uint _countNotWatchedNotifications = 0;
         private string _header;
-        
+        public bool isDisposed { get; private set; } = false;
+
         public BottomNotification(MainWindow window, string header)
         {
             _mainWindow = window;
@@ -56,6 +57,7 @@ namespace TFSAssist
         public void Dispose()
         {
             notification.Dispose();
+            isDisposed = true;
         }
     }
 }

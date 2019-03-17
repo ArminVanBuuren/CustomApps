@@ -1,27 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
+using Utils.AppUpdater.Updater;
 
 namespace Utils.AppUpdater
 {
     [Serializable]
+    public enum UpdateBuildResult
+    {
+        Cancel = 0,
+        Update = 1
+    }
+
+    [Serializable]
     public class ApplicationUpdaterProcessingArgs
     {
-        internal ApplicationUpdaterProcessingArgs(string exception)
+        internal ApplicationUpdaterProcessingArgs(IUpdater control)
         {
-            Error = new Exception(exception);
+            Result = UpdateBuildResult.Update;
+            Control = control;
         }
 
-        internal ApplicationUpdaterProcessingArgs(Exception error = null)
+        internal ApplicationUpdaterProcessingArgs(IUpdater control, Exception exception, string message = null)
         {
-            Error = error;
+            Result = UpdateBuildResult.Cancel;
+            Control = control;
+            Error = message.IsNullOrEmptyTrim() ? exception : new Exception(message, exception);
         }
 
-        internal ApplicationUpdaterProcessingArgs()
-        {
-
-        }
-
-        public Exception Error { get; internal set; }
-        public List<Exception> InnerException { get; } = new List<Exception>();
+        public IUpdater Control { get; }
+        public UpdateBuildResult Result { get; set; }
+        public Exception Error { get; }
     }
 }

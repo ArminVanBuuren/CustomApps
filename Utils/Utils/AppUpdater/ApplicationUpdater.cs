@@ -16,16 +16,16 @@ namespace Utils.AppUpdater
     }
 
     [Serializable]
-    public delegate void UploadBuildHandler(object sender, ApplicationUpdaterProcessingArgs args);
+    public delegate void AppUpdaterHandler(object sender, ApplicationUpdaterProcessingArgs args);
 
     [Serializable]
-    public delegate void BuildUpdaterHandler(object sender, ApplicationUpdaterArgs buildPack);
+    public delegate void AppUpdaterErrorHandler(object sender, ApplicationUpdaterProcessingArgs args);
 
     public class ApplicationUpdater
     {
-        public event BuildUpdaterHandler OnFetch;
-        public event BuildUpdaterHandler OnUpdate;
-        public event UploadBuildHandler OnProcessingError;
+        public event AppUpdaterHandler OnFetch;
+        public event AppUpdaterHandler OnUpdate;
+        public event AppUpdaterErrorHandler OnProcessingError;
         private readonly Timer _watcher;
         object sync = new object();
         private AutoUpdaterStatus _satus = AutoUpdaterStatus.Stopped;
@@ -34,7 +34,7 @@ namespace Utils.AppUpdater
         public string ProjectName { get; }
         public string PrevPackName { get; }
         public Uri ProjectUri { get; }
-        public int CheckUpdatesEachSec { get; }
+        public int CheckUpdatesIntervalSec { get; }
 
         public AutoUpdaterStatus Status
         {
@@ -55,7 +55,7 @@ namespace Utils.AppUpdater
                                 _watcher.Stop();
                             break;
                         case AutoUpdaterStatus.Checking:
-                            _watcher.Interval = CheckUpdatesEachSec * 1000;
+                            _watcher.Interval = CheckUpdatesIntervalSec * 1000;
                             if (!_watcher.Enabled)
                                 _watcher.Enabled = true;
                             break;
@@ -84,11 +84,11 @@ namespace Utils.AppUpdater
             ProjectName = RunningApp.GetName().Name;
             PrevPackName = prevPackName;
             ProjectUri = new Uri(uriProject == null ? BuildsInfo.DEFAULT_PROJECT_RAW : uriProject.TrimEnd('/'));
-            CheckUpdatesEachSec = checkUpdatesIntervalSec;
+            CheckUpdatesIntervalSec = checkUpdatesIntervalSec;
 
             _watcher = new Timer();
             _watcher.Elapsed += CheckUpdates;
-            _watcher.Interval = CheckUpdatesEachSec * 1000;
+            _watcher.Interval = CheckUpdatesIntervalSec * 1000;
             _watcher.AutoReset = false;
         }
 
@@ -108,8 +108,8 @@ namespace Utils.AppUpdater
                         BuildUpdaterCollection control = new BuildUpdaterCollection(RunningApp, ProjectUri, projectBuildPack);
                         if (control.Count > 0)
                         {
-                            ApplicationUpdaterArgs responce = GetResponseFromControlObject(OnFetch, control);
-                            if (responce == null || responce.Result == UpdateBuildResult.Update)
+                            ApplicationUpdaterProcessingArgs responce = GetResponseFromControlObject(OnFetch, new ApplicationUpdaterProcessingArgs(control));
+                            if (responce.Result == UpdateBuildResult.Update)
                             {
                                 ProcessingStatus();
                                 control.OnFetchComplete += FetchingCompleted;
@@ -123,18 +123,18 @@ namespace Utils.AppUpdater
                 }
                 else
                 {
-                    throw new Exception($"Catched exception when get status from server. HttpStatus=[{resHttp:G}] Uri=[{versionsInfo.AbsoluteUri}]");
+                    throw new Exception($"Exception when get status from server. HttpStatus=[{resHttp:G}] Uri=[{versionsInfo.AbsoluteUri}]");
                 }
             }
             catch (Exception ex)
             {
-                OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs(ex));
+                OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs(null, ex));
             }
 
             ReinitStatusToChecking();
         }
 
-        private void FetchingCompleted(object sender, ApplicationUpdaterProcessingArgs e)
+        private void FetchingCompleted(object sender, BuildUpdaterProcessingArgs e)
         {
             BuildUpdaterCollection control = null;
             try
@@ -142,14 +142,14 @@ namespace Utils.AppUpdater
                 control = (BuildUpdaterCollection)sender;
                 if (e.Error != null || control.Status != UploaderStatus.Fetched)
                 {
-                    OnProcessingError?.Invoke(sender, e.Error == null ? new ApplicationUpdaterProcessingArgs("Error when fetching pack of builds!") : e);
+                    OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs(control, e.Error, "Error when fetching pack of builds!"));
                     control.Dispose();
                     ReturnBackStatus();
                 }
                 else
                 {
-                    ApplicationUpdaterArgs responce = GetResponseFromControlObject(OnUpdate, control);
-                    if (responce == null || responce.Result == UpdateBuildResult.Update)
+                    ApplicationUpdaterProcessingArgs responce = GetResponseFromControlObject(OnUpdate, new ApplicationUpdaterProcessingArgs(control));
+                    if (responce.Result == UpdateBuildResult.Update)
                     {
                         control.CommitAndPull();
                     }
@@ -157,31 +157,30 @@ namespace Utils.AppUpdater
             }
             catch (Exception ex)
             {
-                OnProcessingError?.Invoke(sender, new ApplicationUpdaterProcessingArgs(ex));
+                OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs(control, ex, "Error when trying commit and pull!"));
                 control?.Dispose();
                 ReturnBackStatus();
             }
         }
 
-        static ApplicationUpdaterArgs GetResponseFromControlObject(BuildUpdaterHandler eventReference, IUpdater updater)
+        ApplicationUpdaterProcessingArgs GetResponseFromControlObject(AppUpdaterHandler eventReference, ApplicationUpdaterProcessingArgs args)
         {
             var eventListeners = eventReference?.GetInvocationList();
             if (eventListeners == null || !eventListeners.Any())
             {
-                return null;
+                return args;
             }
 
-            ApplicationUpdaterArgs buildArgs = new ApplicationUpdaterArgs();
-            foreach (BuildUpdaterHandler del in eventListeners)
+            foreach (AppUpdaterHandler del in eventListeners)
             {
-                del.Invoke(updater, buildArgs);
-                if (buildArgs.Result == UpdateBuildResult.Cancel)
+                del.Invoke(this, args);
+                if (args.Result == UpdateBuildResult.Cancel)
                 {
-                    return buildArgs;
+                    return args;
                 }
             }
 
-            return buildArgs;
+            return args;
         }
 
 
@@ -195,8 +194,8 @@ namespace Utils.AppUpdater
 
             // если был в стопе или в чеке, то принудительно переводим в проверку
             Status = AutoUpdaterStatus.Checking;
-            // если таймер на полуяение обновлений больше 10 секунд, то выполняем проверку на наличие обновлений сразу
-            if (CheckUpdatesEachSec > 10)
+            // если таймер на полуяение обновлений больше 20 секунд, то выполняем проверку на наличие обновлений сразу
+            if (CheckUpdatesIntervalSec > 20)
                 new Action<object, ElapsedEventArgs>(CheckUpdates).BeginInvoke(this, null, null, null);
             return true;
         }
@@ -211,8 +210,8 @@ namespace Utils.AppUpdater
 
             // если был в стопе то не меняем статус, а если в проверке то реинитем
             ReinitStatusToChecking();
-            // если таймер на полуяение обновлений больше 10 секунд, то выполняем проверку на наличие обновлений сразу
-            if (CheckUpdatesEachSec > 10)
+            // если таймер на полуяение обновлений больше 20 секунд, то выполняем проверку на наличие обновлений сразу
+            if (CheckUpdatesIntervalSec > 20)
                 new Action<object, ElapsedEventArgs>(CheckUpdates).BeginInvoke(this, null, null, null);
             return true;
         }
@@ -269,7 +268,7 @@ namespace Utils.AppUpdater
         /// <summary>
         /// Статус обязательно должен быть Processing иначе он не ожидает обновление
         /// </summary>
-        public bool DoUpdate(IUpdater control)
+        public void DoUpdate(IUpdater control)
         {
             if (control == null)
                 throw new ArgumentNullException(nameof(control));
@@ -280,17 +279,19 @@ namespace Utils.AppUpdater
             if (!(control is BuildUpdaterCollection))
                 throw new ArgumentException($"Incoming control '{nameof(IUpdater)}' is incorrect.");
 
-            if(Status != AutoUpdaterStatus.Processing)
+            if(Status != AutoUpdaterStatus.Processing || control.Status != UploaderStatus.Fetched)
                 throw new Exception($"{nameof(ApplicationUpdater)} does not expect an update.");
+
 
             try
             {
-                return ((BuildUpdaterCollection)control).CommitAndPull();
+                ((BuildUpdaterCollection)control).CommitAndPull();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs(control, ex, "Error when trying commit and pull!"));
+                control?.Dispose();
                 ReturnBackStatus();
-                throw;
             }
         }
 

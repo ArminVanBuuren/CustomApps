@@ -7,9 +7,13 @@ using System.IO;
 using System.IO.Compression;
 using System.Net;
 using System.Reflection;
+using System.Threading;
 
 namespace Utils.AppUpdater.Updater
 {
+    [Serializable]
+    internal delegate void BuildUpdaterErrorHandler(object sender, BuildUpdaterProcessingArgs args);
+
     [Serializable]
     public delegate void UpdaterDownloadProgressChangedHandler(object sender, EventArgs empty);
 
@@ -20,11 +24,11 @@ namespace Utils.AppUpdater.Updater
         /// Когда новые версии билдов скачались на локальный диск в темповую папку. Либо загрузка завершилась неудачей
         /// </summary>
         [field: NonSerialized]
-        internal event UploadBuildHandler OnFetchComplete;
+        internal event BuildUpdaterErrorHandler OnFetchComplete;
 
         private int index = -1;
         private readonly List<IBuildUpdater> _collection;
-        private ApplicationUpdaterProcessingArgs _fetchArgs;
+        private BuildUpdaterProcessingArgs _fetchArgs;
         [NonSerialized]
         private readonly WebClient _webClient;
 
@@ -87,27 +91,21 @@ namespace Utils.AppUpdater.Updater
         /// <summary>
         /// Download file
         /// </summary>
-        internal bool Fetch()
+        internal void Fetch()
         {
-            if (Status != UploaderStatus.None && Status != UploaderStatus.Init)
-                return false;
-
-            _fetchArgs = new ApplicationUpdaterProcessingArgs();
+            _fetchArgs = new BuildUpdaterProcessingArgs();
 
             try
             {
                 FileTempPath = Path.GetTempFileName();
                 _webClient.DownloadFileAsync(new Uri($"{ProjectUri}/{ProjectBuildPack.Name}"), FileTempPath);
                 Status = UploaderStatus.Init;
-                return true;
             }
             catch (Exception ex)
             {
                 _fetchArgs.Error = ex;
                 OnFetchComplete.BeginInvoke(this, _fetchArgs, null, null);
             }
-
-            return false;
         }
 
 
@@ -124,10 +122,9 @@ namespace Utils.AppUpdater.Updater
 
         private void WebClient_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
-            Console.WriteLine($"BuildUpdater.WebClient_DownloadFileCompleted. ThreadId=[{System.Threading.Thread.CurrentThread.ManagedThreadId}]");
             if (e.Error != null || e.Cancelled)
             {
-                _fetchArgs.Error = e.Error ?? new Exception($"Upload pack of {ProjectBuildPack} from [{ProjectUri}] cancelled!");
+                _fetchArgs.Error = e.Error ?? new Exception($"Upload pack '{ProjectBuildPack}' from [{ProjectUri}] cancelled!");
             }
             else
             {
@@ -156,11 +153,8 @@ namespace Utils.AppUpdater.Updater
             OnFetchComplete?.BeginInvoke(this, _fetchArgs, null, null);
         }
 
-        internal bool CommitAndPull()
+        internal void CommitAndPull()
         {
-            if (Status != UploaderStatus.Fetched)
-                return false;
-
             BuildUpdater runningApp = null;
             foreach (BuildUpdater build in _collection)
             {
@@ -183,8 +177,6 @@ namespace Utils.AppUpdater.Updater
             Status = UploaderStatus.Pulled;
 
             Process.GetCurrentProcess().Kill();
-
-            return true;
         }
 
         //void ChangeStatus(UploaderStatus status)

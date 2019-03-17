@@ -41,30 +41,31 @@ namespace Tester.Updater
         private static ApplicationUpdater up;
         public static void Update()
         {
-            up = new ApplicationUpdater(Assembly.GetExecutingAssembly(), "QJedWja49u4vlnS.zip1", 5);
+            up = new ApplicationUpdater(Assembly.GetExecutingAssembly(), "QJedWja49u4vlnS.zip1", 25);
             up.OnFetch += Up_OnFetch;
             up.OnUpdate += Up_OnUpdate;
             up.OnProcessingError += Up_OnProcessingError;
-            //up.Start();
-            System.Console.WriteLine($"{nameof(ApplicationUpdater)} created!");
+            up.Start();
+            System.Console.WriteLine($"{nameof(ApplicationUpdater)} created! ThreadId=[{Thread.CurrentThread.ManagedThreadId}]");
         }
 
-        private static void Up_OnFetch(object sender, ApplicationUpdaterArgs buildPack)
+        private static void Up_OnFetch(object sender, ApplicationUpdaterProcessingArgs args)
         {
-            Console.WriteLine($"Program.Up_OnFetch. ThreadId=[{Thread.CurrentThread.ManagedThreadId}] Action=[{buildPack.Result:G}] Status=[{up.Status}] IUpdater{sender}");
+            Console.WriteLine($"Up_OnFetch. ThreadId=[{Thread.CurrentThread.ManagedThreadId}] Action=[{args.Result:G}] Status=[{up.Status}] IUpdater{args.Control}");
 
         }
 
-        private static void Up_OnUpdate(object sender, ApplicationUpdaterArgs buildPack)
+        private static void Up_OnUpdate(object sender, ApplicationUpdaterProcessingArgs args)
         {
-            Console.WriteLine($"Program.Up_OnUpdate. ThreadId=[{Thread.CurrentThread.ManagedThreadId}] Action=[{buildPack.Result:G}] Status=[{up.Status}] IUpdater{sender}");
+            args.Result = UpdateBuildResult.Cancel;
+            Console.WriteLine($"Up_OnUpdate. ThreadId=[{Thread.CurrentThread.ManagedThreadId}] Action=[{args.Result:G}] Status=[{up.Status}] IUpdater{args.Control}");
+            up.DoUpdate(args.Control);
         }
 
         private static void Up_OnProcessingError(object sender, ApplicationUpdaterProcessingArgs args)
         {
-            Console.WriteLine($"{sender} Error=[{args.Error}] InnerErrorCount=[{args.InnerException.Count}]");
+            Console.WriteLine($"Up_OnProcessingError. ThreadId=[{Thread.CurrentThread.ManagedThreadId}] IUpdater{(args.Control == null ? "=[null]" : args.Control.ToString())} Error=[{args.Error}]");
         }
-
 
         public static void Upload()
         {

@@ -18,9 +18,9 @@ namespace TFSAssist.Control.DataBase.Settings
 		[XmlElement("TFSUri")]
 		public SettingValue<string> TFSUri
 		{
-			get { return _tFSUri; }
-			set { _tFSUri = value ?? _tFSUri; }
-		}
+			get => _tFSUri;
+            set => _tFSUri = value ?? _tFSUri;
+        }
 
 	    [XmlIgnore]
         public SettingValue<string> TFSUserName { get; set; } = new SettingValue<string>();
@@ -32,11 +32,7 @@ namespace TFSAssist.Control.DataBase.Settings
         [XmlElement("GetDublicateTFS")]
 		public XmlNode[] GetDublicateTFS
 		{
-            get
-            {
-                return _cdataGetDublicateTFS; 
-                
-            }
+            get => _cdataGetDublicateTFS;
             set
             {
                 if (value != null && value.Length > 0 && value[0] == null)

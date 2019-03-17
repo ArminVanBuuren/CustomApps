@@ -111,8 +111,7 @@ namespace TFSAssist.Control
                 {
                     InProgress = false;
                     IsCompleted?.Invoke(this, EventArgs.Empty);
-                    SerializeSettings();
-                    SerializeDatas();
+                    SaveProcessigDatas();
                 }
             }
         }
@@ -491,7 +490,7 @@ namespace TFSAssist.Control
 
 
             if (countOfProcessing > 0) //обновляем файл с обработанными данными
-                SerializeDatas();
+                SaveProcessigDatas();
         }
 
         List<DataMail> ParceBodyAndSubject(string subject, string body)

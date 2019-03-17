@@ -258,22 +258,23 @@ namespace TFSAssist.Control
 
         #region (Serialize - Deserialize) settings and datas
 
-        /// <summary>
-        /// Сериализуем (обновляем) обработанные данные
-        /// </summary>
-        public void SerializeDatas()
+        SettingsCollection DeserializeSettings(string settPath)
         {
+            if (!File.Exists(settPath))
+                return null;
+
             try
             {
-                using (FileStream stream = new FileStream(DataBasePath, FileMode.Create, FileAccess.ReadWrite))
+                using (FileStream stream = new FileStream(settPath, FileMode.Open, FileAccess.Read))
                 {
-                    new XmlSerializer(typeof(DataCollection)).Serialize(stream, Datas);
+                    return new XmlSerializer(typeof(SettingsCollection)).Deserialize(stream) as SettingsCollection;
                 }
             }
-            catch (Exception exSer)
+            catch (Exception ex)
             {
-                _log.OnWriteLog(WarnSeverity.Error, $"Unable to save '{nameof(DataCollection)}' to specified path=[{DataBasePath}]", exSer);
+                _log.OnWriteLog(WarnSeverity.Attention, string.Format(NotifyDeSerializetionFailor, settPath), ex, true);
             }
+            return null;
         }
 
         DataCollection DeserializeDatas(string datasPath)
@@ -298,7 +299,7 @@ namespace TFSAssist.Control
         /// <summary>
         /// Сериализуем (обновляем) конфигурацию с настройками
         /// </summary>
-        public void SerializeSettings()
+        void SerializeSettings()
         {
             try
             {
@@ -313,29 +314,10 @@ namespace TFSAssist.Control
             }
         }
 
-        SettingsCollection DeserializeSettings(string settPath)
-        {
-            if (!File.Exists(settPath))
-                return null;
-
-            try
-            {
-                using (FileStream stream = new FileStream(settPath, FileMode.Open, FileAccess.Read))
-                {
-                    return new XmlSerializer(typeof(SettingsCollection)).Deserialize(stream) as SettingsCollection;
-                }
-            }
-            catch (Exception ex)
-            {
-                _log.OnWriteLog(WarnSeverity.Attention, string.Format(NotifyDeSerializetionFailor, settPath), ex, true);
-            }
-            return null;
-        }
-
         /// <summary>
         /// сериализация приватных данных, паролей и логинов
         /// </summary>
-        void SerializePrivateDatas()
+        void SerializePrivateSettings()
         {
             try
             {
@@ -350,6 +332,24 @@ namespace TFSAssist.Control
             }
         }
 
+        /// <summary>
+        /// Сериализуем (обновляем) обработанные данные
+        /// </summary>
+        void SerializeDatas()
+        {
+            try
+            {
+                using (FileStream stream = new FileStream(DataBasePath, FileMode.Create, FileAccess.ReadWrite))
+                {
+                    new XmlSerializer(typeof(DataCollection)).Serialize(stream, Datas);
+                }
+            }
+            catch (Exception exSer)
+            {
+                _log.OnWriteLog(WarnSeverity.Error, $"Unable to save '{nameof(DataCollection)}' to specified path=[{DataBasePath}]", exSer);
+            }
+        }
+
         #endregion
 
         /// <summary>
@@ -360,8 +360,6 @@ namespace TFSAssist.Control
             if (InProgress)
                 return;
 
-            SerializeSettings();
-            SerializePrivateDatas();
             _asyncThread = new Thread(new ThreadStart(StartPerforming));
             _asyncThread.Start();
         }
@@ -377,28 +375,26 @@ namespace TFSAssist.Control
             _asyncThread?.Abort();
         }
 
+        public void SaveSettings()
+        {
+            SerializeSettings();
+            SerializePrivateSettings();
+        }
+
+        void SaveProcessigDatas()
+        {
+            SerializeSettings();
+            SerializeDatas();
+        }
 
         public void Dispose()
         {
             //обязательно удалять асинхронный поток
             _asyncThread?.Abort();
 
-
-            // Возникает эксепшн если закрыть всплювающие окна на автоизацию к TFS серверу
-            //_tfsService?.Disconnect();
-            //_tfsService?.Dispose();
-
-
             SerializeSettings();
+            SerializePrivateSettings();
             SerializeDatas();
-            SerializePrivateDatas();
-            //сериализация приватных данных, паролей и логинов
-            //using (FileStream stream = new FileStream(AccountStorePath, FileMode.Create, FileAccess.ReadWrite))
-            //{
-            //    new BinaryFormatter().Serialize(stream, this);
-            //}
         }
-
-
     }
 }

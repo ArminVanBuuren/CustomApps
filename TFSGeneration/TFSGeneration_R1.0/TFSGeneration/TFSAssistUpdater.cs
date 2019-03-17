@@ -27,7 +27,7 @@ namespace TFSAssist
         public TFSAssistUpdater(IUpdater updater, WindowState windowState, bool showInTaskbar, List<TraceHighlighter> traces, bool tfsInProgress)
         {
             if (updater == null)
-                throw new ArgumentNullException("updater");
+                throw new ArgumentNullException(nameof(updater));
 
             Updater = updater;
             WindowState = windowState;
