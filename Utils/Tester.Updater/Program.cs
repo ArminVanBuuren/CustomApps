@@ -38,28 +38,52 @@ namespace Tester.Updater
             System.Console.ReadLine();
         }
 
+        
         private static ApplicationUpdater up;
         public static void Update()
         {
-            up = new ApplicationUpdater(Assembly.GetExecutingAssembly(), "QJedWja49u4vlnS.zip1", 25);
+            up = new ApplicationUpdater(Assembly.GetExecutingAssembly(), "QJedWja49u4vlnS.zip1", 1);
             up.OnFetch += Up_OnFetch;
             up.OnUpdate += Up_OnUpdate;
             up.OnProcessingError += Up_OnProcessingError;
             up.Start();
-            System.Console.WriteLine($"{nameof(ApplicationUpdater)} created! ThreadId=[{Thread.CurrentThread.ManagedThreadId}]");
+            System.Console.WriteLine($"[{Thread.CurrentThread.ManagedThreadId}] {nameof(ApplicationUpdater)} created!");
         }
+
+        //private static bool infinityChecking = true;
+        //static void IsSelfChekker()
+        //{
+        //    new Action(IsSelfChekker).BeginInvoke(null, null);
+        //    Console.ReadKey();
+        //    infinityChecking = false;
+        //    Console.ReadKey();
+        //    infinityChecking = true;
+        //    Console.ReadKey();
+        //    infinityChecking = false;
+        //    while (true)
+        //    {
+        //        if (infinityChecking)
+        //            up.CheckUpdates();
+        //        //Console.WriteLine($"[{DateTime.Now:hh:mm:ss}] [{Thread.CurrentThread.ManagedThreadId}] ChekkerReslt=[{result}]");
+        //        Thread.Sleep(1000);
+        //    }
+        //}
 
         private static void Up_OnFetch(object sender, ApplicationUpdaterProcessingArgs args)
         {
-            Console.WriteLine($"Up_OnFetch. ThreadId=[{Thread.CurrentThread.ManagedThreadId}] Action=[{args.Result:G}] Status=[{up.Status}] IUpdater{args.Control}");
+            Console.WriteLine($"[{DateTime.Now:hh:mm:ss}] [{Thread.CurrentThread.ManagedThreadId}] Fetch. ID=[{up.NumberForAccess}] Status=[{up.Status:G}]");
+            //Console.WriteLine($"Up_OnFetch. ThreadId=[{Thread.CurrentThread.ManagedThreadId}] Action=[{args.Result:G}] Status=[{up.Status}] IUpdater{args.Control}");
 
         }
 
         private static void Up_OnUpdate(object sender, ApplicationUpdaterProcessingArgs args)
         {
+            Console.WriteLine($"[{DateTime.Now:hh:mm:ss}] [{Thread.CurrentThread.ManagedThreadId}] Update. ID=[{up.NumberForAccess}] Status=[{up.Status:G}]");
             args.Result = UpdateBuildResult.Cancel;
-            Console.WriteLine($"Up_OnUpdate. ThreadId=[{Thread.CurrentThread.ManagedThreadId}] Action=[{args.Result:G}] Status=[{up.Status}] IUpdater{args.Control}");
-            up.DoUpdate(args.Control);
+            args.Control.Dispose();
+            up.Refresh();
+            //Console.WriteLine($"Up_OnUpdate. ThreadId=[{Thread.CurrentThread.ManagedThreadId}] Action=[{args.Result:G}] Status=[{up.Status}] IUpdater{args.Control}");
+            //up.DoUpdate(args.Control);
         }
 
         private static void Up_OnProcessingError(object sender, ApplicationUpdaterProcessingArgs args)

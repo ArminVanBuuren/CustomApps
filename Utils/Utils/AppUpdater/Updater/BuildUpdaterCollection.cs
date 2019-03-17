@@ -41,7 +41,6 @@ namespace Utils.AppUpdater.Updater
         public string FileTempPath { get; private set; }
         public string DiretoryTempPath { get; private set; }
 
-
         internal BuildUpdaterCollection(Assembly runningApp, Uri projectUri, BuildPackInfo projectBuildPack)
         {
             if (runningApp == null)

@@ -14,7 +14,7 @@ using System.Windows.Documents;
 namespace TFSAssist
 {
     [Serializable]
-    public class TFSAssistUpdater : IDisposable
+    public class WindowSaver : IDisposable
     {
         public static string FileUpdatesPath = $"{ASSEMBLY.ApplicationFilePath}.update";
         public IUpdater Updater { get; }
@@ -24,7 +24,7 @@ namespace TFSAssist
         public List<TraceHighlighter> Traces { get; }
         public string PackName => Updater.ProjectBuildPack.Name;
 
-        public TFSAssistUpdater(IUpdater updater, WindowState windowState, bool showInTaskbar, List<TraceHighlighter> traces, bool tfsInProgress)
+        public WindowSaver(IUpdater updater, WindowState windowState, bool showInTaskbar, List<TraceHighlighter> traces, bool tfsInProgress)
         {
             if (updater == null)
                 throw new ArgumentNullException(nameof(updater));
@@ -36,16 +36,16 @@ namespace TFSAssist
             TfsInProgress = tfsInProgress;
         }
 
-        public static TFSAssistUpdater Deserialize()
+        public static WindowSaver Deserialize()
         {
             if (File.Exists(FileUpdatesPath))
             {
                 try
                 {
-                    TFSAssistUpdater updater;
+                    WindowSaver updater;
                     using (Stream stream = new FileStream(FileUpdatesPath, FileMode.Open, FileAccess.Read))
                     {
-                        updater = new BinaryFormatter().Deserialize(stream) as TFSAssistUpdater;
+                        updater = new BinaryFormatter().Deserialize(stream) as WindowSaver;
                     }
 
                     return updater;

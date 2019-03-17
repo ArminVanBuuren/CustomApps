@@ -49,7 +49,7 @@ namespace TFSAssist
         private const string STR_STOP = "STOP";
         private readonly string ERR_SECOND_PROC = $"{nameof(TFSAssist)} already started. Please check your notification area. To run second process, you can rename the executable file.";
 
-        private const int _intervalCheckUpdatesSec = 3600;
+        private const int _intervalCheckUpdatesSec = 900;
         private const int _timeoutMSECToShowToolTip = 2000;
         private const int _timeoutToShowToolTip = 2000;
         private const double _intervalForActivateUnUsedWindow = 900 * 1000;
@@ -311,7 +311,7 @@ namespace TFSAssist
 
         void InitializeUpdater()
         {
-            TFSAssistUpdater lastUpdate = TFSAssistUpdater.Deserialize();
+            WindowSaver lastUpdate = WindowSaver.Deserialize();
             if (lastUpdate != null)
             {
                 using (lastUpdate)
@@ -352,6 +352,7 @@ namespace TFSAssist
             AppUpdater.OnUpdate += AppUpdater_OnUpdate;
             AppUpdater.OnProcessingError += AppUpdater_OnProcessingError;
             AppUpdater.Start();
+            AppUpdater.CheckUpdates();
         }
 
 
@@ -411,15 +412,15 @@ namespace TFSAssist
                 return;
 
             WriteLog(WarnSeverity.Normal, DateTime.Now, "Start updating...");
-            TFSAssistUpdater newUpdate = null;
+            WindowSaver saver = null;
             try
             {
-                newUpdate = new TFSAssistUpdater(_updater, WindowState, ShowInTaskbar, Traces, wasInProgress);
-                newUpdate.Serialize();
+                saver = new WindowSaver(_updater, WindowState, ShowInTaskbar, Traces, wasInProgress);
+                saver.Serialize();
             }
             catch (Exception ex)
             {
-                ErrorWhenUpdateAndRollback($"Error when starting update.\r\n{ex}", newUpdate, wasInProgress);
+                ErrorWhenUpdateAndRollback($"Error when starting update.\r\n{ex}", saver, wasInProgress);
                 return;
             }
 
@@ -433,13 +434,15 @@ namespace TFSAssist
             }
             catch (Exception ex)
             {
-                ErrorWhenUpdateAndRollback($"Error when starting update. {nameof(IUpdater)}{_updater}\r\n{ex}", newUpdate, wasInProgress);
+                ErrorWhenUpdateAndRollback($"Error when starting update. {nameof(IUpdater)}{_updater}\r\n{ex}", saver, wasInProgress);
             }
         }
 
-        void ErrorWhenUpdateAndRollback(string errorMessage, IDisposable newUpdate, bool wasInProgress)
+        void ErrorWhenUpdateAndRollback(string errorMessage, IDisposable saver, bool wasInProgress)
         {
             WriteLog(WarnSeverity.Error, DateTime.Now, errorMessage);
+            if(_updater != null && _updater.Status != UploaderStatus.Disposed)
+                _updater.Dispose();
             _updater = null;
             _traceHighUpdateStatus = null;
 
@@ -449,7 +452,7 @@ namespace TFSAssist
             if(BottomNotification.isDisposed)
                 BottomNotification = new BottomNotification(this, TFSControl.ApplicationName);
 
-            newUpdate?.Dispose();
+            saver?.Dispose();
             AppUpdater.Refresh();
         }
 

@@ -27,7 +27,8 @@ namespace Utils.AppUpdater
         public event AppUpdaterHandler OnUpdate;
         public event AppUpdaterErrorHandler OnProcessingError;
         private readonly Timer _watcher;
-        object sync = new object();
+        object syncStatus = new object();
+        object syncChecking = new object();
         private AutoUpdaterStatus _satus = AutoUpdaterStatus.Stopped;
 
         public Assembly RunningApp { get; }
@@ -40,12 +41,12 @@ namespace Utils.AppUpdater
         {
             get
             {
-                lock (sync)
+                lock (syncStatus)
                     return _satus;
             }
             private set
             {
-                lock (sync)
+                lock (syncStatus)
                 {
                     switch (value)
                     {
@@ -96,34 +97,40 @@ namespace Utils.AppUpdater
         {
             try
             {
-                Uri versionsInfo = new Uri($"{ProjectUri}/{BuildsInfo.FILE_NAME}");
-                string contextStr = WEB.WebHttpStringData(versionsInfo, out HttpStatusCode resHttp, HttpRequestCacheLevel.NoCacheNoStore);
-                if (resHttp == HttpStatusCode.OK)
+                lock (syncChecking)
                 {
-                    BuildsInfo remoteBuilds = BuildsInfo.Deserialize(contextStr);
-                    BuildPackInfo projectBuildPack = remoteBuilds.Packs.FirstOrDefault(p => p.Project == ProjectName);
-                    //Dictionary<string, FileBuildInfo> serverVersions = ProjectBuildPack.ToDictionary(x => x.Location, x => x);
-                    if (projectBuildPack?.Name != PrevPackName && projectBuildPack?.Builds.Count > 0)
-                    {
-                        BuildUpdaterCollection control = new BuildUpdaterCollection(RunningApp, ProjectUri, projectBuildPack);
-                        if (control.Count > 0)
-                        {
-                            ApplicationUpdaterProcessingArgs responce = GetResponseFromControlObject(OnFetch, new ApplicationUpdaterProcessingArgs(control));
-                            if (responce.Result == UpdateBuildResult.Update)
-                            {
-                                ProcessingStatus();
-                                control.OnFetchComplete += FetchingCompleted;
-                                control.Fetch();
-                                return;
-                            }
-                        }
+                    if (Status == AutoUpdaterStatus.Processing)
+                        return;
 
-                        control.Dispose();
+                    Uri versionsInfo = new Uri($"{ProjectUri}/{BuildsInfo.FILE_NAME}");
+                    string contextStr = WEB.WebHttpStringData(versionsInfo, out HttpStatusCode resHttp, HttpRequestCacheLevel.NoCacheNoStore);
+                    if (resHttp == HttpStatusCode.OK)
+                    {
+                        BuildsInfo remoteBuilds = BuildsInfo.Deserialize(contextStr);
+                        BuildPackInfo projectBuildPack = remoteBuilds.Packs.FirstOrDefault(p => p.Project == ProjectName);
+                        //Dictionary<string, FileBuildInfo> serverVersions = ProjectBuildPack.ToDictionary(x => x.Location, x => x);
+                        if (projectBuildPack?.Name != PrevPackName && projectBuildPack?.Builds.Count > 0)
+                        {
+                            BuildUpdaterCollection control = new BuildUpdaterCollection(RunningApp, ProjectUri, projectBuildPack);
+                            if (control.Count > 0)
+                            {
+                                ApplicationUpdaterProcessingArgs responce = GetResponseFromControlObject(OnFetch, new ApplicationUpdaterProcessingArgs(control));
+                                if (responce.Result == UpdateBuildResult.Update)
+                                {
+                                    ProcessingStatus();
+                                    control.OnFetchComplete += FetchingCompleted;
+                                    control.Fetch();
+                                    return;
+                                }
+                            }
+
+                            control.Dispose();
+                        }
                     }
-                }
-                else
-                {
-                    throw new Exception($"Exception when get status from server. HttpStatus=[{resHttp:G}] Uri=[{versionsInfo.AbsoluteUri}]");
+                    else
+                    {
+                        throw new Exception($"Exception when get status from server. HttpStatus=[{resHttp:G}] Uri=[{versionsInfo.AbsoluteUri}]");
+                    }
                 }
             }
             catch (Exception ex)
@@ -194,9 +201,6 @@ namespace Utils.AppUpdater
 
             // если был в стопе или в чеке, то принудительно переводим в проверку
             Status = AutoUpdaterStatus.Checking;
-            // если таймер на полуяение обновлений больше 20 секунд, то выполняем проверку на наличие обновлений сразу
-            if (CheckUpdatesIntervalSec > 20)
-                new Action<object, ElapsedEventArgs>(CheckUpdates).BeginInvoke(this, null, null, null);
             return true;
         }
 
@@ -210,9 +214,8 @@ namespace Utils.AppUpdater
 
             // если был в стопе то не меняем статус, а если в проверке то реинитем
             ReinitStatusToChecking();
-            // если таймер на полуяение обновлений больше 20 секунд, то выполняем проверку на наличие обновлений сразу
-            if (CheckUpdatesIntervalSec > 20)
-                new Action<object, ElapsedEventArgs>(CheckUpdates).BeginInvoke(this, null, null, null);
+            new Action<object, ElapsedEventArgs>(CheckUpdates).BeginInvoke(null, null, null, null);
+
             return true;
         }
 
@@ -239,7 +242,7 @@ namespace Utils.AppUpdater
         /// </summary>
         void ProcessingStatus()
         {
-            lock (sync)
+            lock (syncStatus)
             {
                 if (Status == AutoUpdaterStatus.Processing)
                     return;
@@ -253,7 +256,7 @@ namespace Utils.AppUpdater
         /// </summary>
         void ReturnBackStatus()
         {
-            lock (sync)
+            lock (syncStatus)
             {
                 Status = _prevStatusUpdate;
             }
