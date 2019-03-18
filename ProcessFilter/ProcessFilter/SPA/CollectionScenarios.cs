@@ -4,9 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using Utils;
-using Utils.IOExploitation;
 using Utils.WinForm.DataGridViewHelper;
-using Utils.XmlHelper;
 
 namespace SPAFilter.SPA
 {
@@ -101,7 +99,7 @@ namespace SPAFilter.SPA
             if (scenarioPath.IsNullOrEmpty())
                 return null;
 
-            XmlDocument document = XmlHelper.LoadXml(scenarioPath, true);
+            XmlDocument document = XML.LoadXml(scenarioPath, true);
             if (document == null)
                 return null;
 

@@ -3,8 +3,8 @@ using System.Data;
 using System.IO;
 using System.Text;
 using System.Xml;
+using Utils;
 using Utils.WinForm.CustomProgressBar;
-using Utils.XmlHelper;
 using Utils.XmlRtfStyle;
 
 namespace SPAFilter.SPA.SC
@@ -26,7 +26,7 @@ namespace SPAFilter.SPA.SC
                     if (!File.Exists(neOP.FilePath))
                         continue;
 
-                    XmlDocument document = XmlHelper.LoadXml(neOP.FilePath);
+                    XmlDocument document = XML.LoadXml(neOP.FilePath);
                     cfsList.Add(neOP.Name, document, neOP.NetworkElement);
                 }
             }

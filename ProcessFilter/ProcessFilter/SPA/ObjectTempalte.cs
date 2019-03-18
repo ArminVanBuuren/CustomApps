@@ -1,4 +1,4 @@
-﻿using Utils.IOExploitation;
+﻿using static Utils.IO;
 using Utils.WinForm.DataGridViewHelper;
 
 namespace SPAFilter.SPA

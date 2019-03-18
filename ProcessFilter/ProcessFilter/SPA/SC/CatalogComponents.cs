@@ -5,7 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using Utils.XmlRtfStyle;
-using Utils.XPathHelper;
+using Utils;
+using static Utils.XPATH;
 
 namespace SPAFilter.SPA.SC
 {
@@ -42,12 +43,12 @@ namespace SPAFilter.SPA.SC
             HostOperation hostOp = new HostOperation(operationName, hostType, RtfFromXml.GetXmlString(document.OuterXml), bindSrv);
             Dictionary<string, XPathResult> getServices = new Dictionary<string, XPathResult>();
 
-            if (GetServices(getServices, XPathHelper.Execute(document.CreateNavigator(), "//ProvisionList/*")))
+            if (GetServices(getServices, Execute(document.CreateNavigator(), "//ProvisionList/*")))
             {
                 if (!IsExistSameHostOperation(hostOp, getServices, HostOperation.LinkType.Add))
                     LoadNewService(hostOp, getServices, bindSrv, HostOperation.LinkType.Add);
             }
-            else if (GetServices(getServices, XPathHelper.Execute(document.CreateNavigator(), "//WithdrawalList/*")))
+            else if (GetServices(getServices, Execute(document.CreateNavigator(), "//WithdrawalList/*")))
             {
                 if (!IsExistSameHostOperation(hostOp, getServices, HostOperation.LinkType.Remove))
                     LoadNewService(hostOp, getServices, bindSrv, HostOperation.LinkType.Remove);

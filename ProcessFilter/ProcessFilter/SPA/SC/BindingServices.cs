@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using System.Xml.XPath;
-using Utils.XPathHelper;
+using Utils;
+using static Utils.XPATH;
 
 namespace SPAFilter.SPA.SC
 {
@@ -17,9 +18,9 @@ namespace SPAFilter.SPA.SC
         protected internal BindingServices(XmlDocument document)
         {
             XPathNavigator navigator = document.CreateNavigator();
-            XPathResultCollection getServices = XPathHelper.Execute(document.CreateNavigator(), "//RegisteredList/*");
-            XPathResultCollection getHaltMode = XPathHelper.Execute(document.CreateNavigator(), "//RegisteredList/@HaltMode");
-            XPathResultCollection getType = XPathHelper.Execute(document.CreateNavigator(), "//RegisteredList/@Type");
+            XPathResultCollection getServices = Execute(document.CreateNavigator(), "//RegisteredList/*");
+            XPathResultCollection getHaltMode = Execute(document.CreateNavigator(), "//RegisteredList/@HaltMode");
+            XPathResultCollection getType = Execute(document.CreateNavigator(), "//RegisteredList/@Type");
             bool isDependency = getHaltMode != null && getHaltMode.Count > 0 && (getHaltMode.First().Value.Equals("CancelOperation", StringComparison.CurrentCultureIgnoreCase));
             bool isAny = getType != null && getType.Count > 0 && getType.First().Value.Equals("AnyOfListed", StringComparison.CurrentCultureIgnoreCase);
 

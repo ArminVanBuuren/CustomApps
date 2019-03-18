@@ -16,9 +16,8 @@ using SPAFilter.SPA.SC;
 using Utils;
 using Utils.WinForm.DataGridViewHelper;
 using Utils.WinForm.Notepad;
-using XmlHelper = Utils.XmlHelper.XmlHelper;
 using Utils.WinForm.CustomProgressBar;
-using Utils.AssemblyHelper;
+using static Utils.ASSEMBLY;
 
 namespace SPAFilter
 {
@@ -26,7 +25,7 @@ namespace SPAFilter
     public partial class SPAFilterForm : Form, ISerializable
     {
         private string lastPath = string.Empty;
-        public static string SerializationDataPath => $"{Customs.ApplicationFilePath}.bin";
+        public static string SerializationDataPath => $"{ApplicationFilePath}.bin";
         private XmlNotepad notepad;
         public CollectionBusinessProcess Processes { get; private set; }
         public CollectionNetworkElements NetElements { get; private set; }
@@ -263,7 +262,7 @@ namespace SPAFilter
                 int endOfBpCollection = _filteredProcessCollection.Count;
                 for (int i = 0; i < endOfBpCollection; i++)
                 {
-                    XmlDocument document = XmlHelper.LoadXml(_filteredProcessCollection[i].FilePath, true);
+                    XmlDocument document = XML.LoadXml(_filteredProcessCollection[i].FilePath, true);
                     if (document != null)
                     {
                         _filteredProcessCollection[i].AddBodyOperations(document);
