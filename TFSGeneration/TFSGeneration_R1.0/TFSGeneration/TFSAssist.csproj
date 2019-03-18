@@ -82,12 +82,12 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="UIControls">
-      <HintPath>..\..\..\UIControls\UIControls\UIControls\bin\Debug\UIControls.dll</HintPath>
-    </Reference>
     <Reference Include="Utils, Version=1.0.7015.30133, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Utils\Utils\bin\Release\Utils.dll</HintPath>
+    </Reference>
+    <Reference Include="Utils.UIControls">
+      <HintPath>..\..\..\Utils\Utils.UIControls\bin\Release\Utils.UIControls.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
