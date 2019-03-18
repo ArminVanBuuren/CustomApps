@@ -8,7 +8,7 @@
         Title=""
         
         
-        xmlns:mainControl="clr-namespace:UIControls.MainControl;assembly=UIControls"
+        xmlns:mainControl="clr-namespace:Utils.UIControls.Main;assembly=Utils.UIControls"
         ResizeMode="NoResize"
         Width="200"
         MaxWidth="525" 

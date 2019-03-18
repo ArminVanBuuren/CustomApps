@@ -5,7 +5,7 @@ using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Threading;
-using UIControls.MainControl;
+using Utils.UIControls.Main;
 using WCFChat.Client.BasicControl;
 using WCFChat.Client.ServiceReference1;
 using WCFChat.Service;

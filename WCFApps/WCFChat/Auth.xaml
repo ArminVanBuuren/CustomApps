@@ -4,7 +4,7 @@
                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                       xmlns:local="clr-namespace:WCFChat.Client"
-                      xmlns:mainControl="clr-namespace:UIControls.MainControl;assembly=UIControls"
+                      xmlns:mainControl="clr-namespace:Utils.UIControls.Main;assembly=Utils.UIControls"
                       mc:Ignorable="d"
                       Style="{DynamicResource VSUIWindowStyle1}"
                       MinWidth="250"

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WCFChat.Service;
 using System.Timers;
-using UIControls.MainControl;
+using Utils.UIControls.Main;
 using WCFChat.Client.BasicControl;
 using Message = WCFChat.Service.Message;
 

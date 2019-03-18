@@ -5,7 +5,7 @@
                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                       xmlns:local="clr-namespace:WCFChat.Client"
                       mc:Ignorable="d"
-                      xmlns:mainControl="clr-namespace:UIControls.MainControl;assembly=UIControls"
+                      xmlns:mainControl="clr-namespace:Utils.UIControls.Main;assembly=Utils.UIControls"
                       Style="{DynamicResource VSUIWindowStyle1}"
                       ResizeMode="NoResize"
                       MinWidth="250"

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using UIControls.Utils;
+using Utils.UIControls.Tools;
 using Utils;
 using WCFChat.Service;
 

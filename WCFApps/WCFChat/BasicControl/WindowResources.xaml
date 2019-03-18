@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="WindowControl" 
         Style="{DynamicResource VSUIWindowStyle1}"
-        xmlns:mainControl="clr-namespace:UIControls.MainControl;assembly=UIControls">
+        xmlns:mainControl="clr-namespace:Utils.UIControls.Main;assembly=Utils.UIControls">
     <Window.Resources>
 
 

@@ -13,8 +13,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.XPath;
-using Utils.IOExploitation;
-using Utils.XmlHelper;
+using Utils;
 using Utils.XmlRtfStyle;
 
 namespace XPathEvaluator
@@ -265,7 +264,7 @@ namespace XPathEvaluator
                 ClearResultTap();
                 _xmlBodyChanged = true;
 
-                bool isXml = XmlHelper.IsXml(fctb.Text, out XmlDocument document);
+                bool isXml = XML.IsXml(fctb.Text, out XmlDocument document);
 
                 if (isXml)
                 {
