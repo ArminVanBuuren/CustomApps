@@ -88,6 +88,14 @@ namespace Utils
             else return input;
         }
 
+        public static bool StringEquals(this string param1, string param2, bool ignoreCase)
+        {
+            if (ignoreCase)
+                return param1.Like(param2);
+            else
+                return param1.Equals(param2);
+        }
+
         public static bool Like(this string input, string value)
         {
             if (value == null)

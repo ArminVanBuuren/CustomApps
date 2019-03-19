@@ -985,6 +985,7 @@
     <Compile Include="Telegram\TeleSharp.TL\TL\Upload\TLWebFile.cs" />
     <Compile Include="Telegram\TeleSharp.TL\TL\Users\TLRequestGetFullUser.cs" />
     <Compile Include="Telegram\TeleSharp.TL\TL\Users\TLRequestGetUsers.cs" />
+    <Compile Include="Telegram\TLControl.cs" />
     <Compile Include="Telegram\TLSharp.Core\Auth\Authenticator.cs" />
     <Compile Include="Telegram\TLSharp.Core\Auth\Step1_PQRequest.cs" />
     <Compile Include="Telegram\TLSharp.Core\Auth\Step2_DHExchange.cs" />
