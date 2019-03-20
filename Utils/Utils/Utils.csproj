@@ -94,6 +94,7 @@
     <Compile Include="Telegram\BigMath\Utils\Crc32.cs" />
     <Compile Include="Telegram\BigMath\Utils\ExtendedBitConverter.cs" />
     <Compile Include="Telegram\BigMath\Utils\MathUtils.cs" />
+    <Compile Include="Telegram\Exceptions.cs" />
     <Compile Include="Telegram\Ionic.Zlib\CRC32.cs" />
     <Compile Include="Telegram\Ionic.Zlib\Deflate.cs" />
     <Compile Include="Telegram\Ionic.Zlib\DeflateStream.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="Telegram\Ionic.Zlib\ZlibCodec.cs" />
     <Compile Include="Telegram\Ionic.Zlib\ZlibConstants.cs" />
     <Compile Include="Telegram\Ionic.Zlib\ZlibStream.cs" />
+    <Compile Include="Telegram\TLControlSessionStore.cs" />
     <Compile Include="Telegram\TeleSharp.TL\ObjectDeserializer.cs" />
     <Compile Include="Telegram\TeleSharp.TL\TLContext.cs" />
     <Compile Include="Telegram\TeleSharp.TL\TLMethod.cs" />
@@ -986,6 +988,8 @@
     <Compile Include="Telegram\TeleSharp.TL\TL\Users\TLRequestGetFullUser.cs" />
     <Compile Include="Telegram\TeleSharp.TL\TL\Users\TLRequestGetUsers.cs" />
     <Compile Include="Telegram\TLControl.cs" />
+    <Compile Include="Telegram\TLControlEventArgs.cs" />
+    <Compile Include="Telegram\TLControlItem.cs" />
     <Compile Include="Telegram\TLSharp.Core\Auth\Authenticator.cs" />
     <Compile Include="Telegram\TLSharp.Core\Auth\Step1_PQRequest.cs" />
     <Compile Include="Telegram\TLSharp.Core\Auth\Step2_DHExchange.cs" />
@@ -1010,7 +1014,6 @@
     <Compile Include="Telegram\TLSharp.Core\TelegramClient.cs" />
     <Compile Include="Telegram\TLSharp.Core\Utils\Helpers.cs" />
     <Compile Include="Telegram\TLSharp.Core\Utils\UploadHelper.cs" />
-    <Compile Include="UtilsVersion.cs" />
     <Compile Include="WEB.cs" />
     <Compile Include="Handles\WebDownload.cs">
       <SubType>Component</SubType>

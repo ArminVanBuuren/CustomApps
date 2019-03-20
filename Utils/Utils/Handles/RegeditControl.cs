@@ -48,19 +48,17 @@ namespace Utils.Handles
         //    return result;
         //}
 
-        public string this[string propertyName]
+        public object this[string propertyName, RegistryValueKind type = RegistryValueKind.String]
         {
             get
             {
-                string result = (string)myProject.GetValue(propertyName);
-                return result;
+                return myProject.GetValue(propertyName);
             }
             set
             {
-                myProject.SetValue(propertyName, value);
+                myProject.SetValue(propertyName, value, type);
             }
         }
-
 
         public static bool EnabledBootRun(string applicationName)
         {
