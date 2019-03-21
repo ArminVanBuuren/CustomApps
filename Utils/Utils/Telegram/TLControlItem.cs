@@ -17,63 +17,36 @@ namespace Utils.Telegram
     public class TLControlUser : ITLControlItem
     {
         public TLUser User { get; }
-        public TLAbsInputPeer Destination { get; set; }
+        public TLAbsInputPeer Destination { get; }
 
         internal TLControlUser(TLUser user)
         {
             User = user;
             Destination = new TLInputPeerUser() { UserId = User.Id };
         }
+    }
 
-        public static async Task<TLUser> GetUserAsync(TelegramClient client, string destinationNumber)
+    public class TLControlChannel : ITLControlItem
+    {
+        public TLChannel Channel { get; }
+        public TLAbsInputPeer Destination { get; }
+
+        internal TLControlChannel(TLChannel chat)
         {
-            var normalizedDestNumber = NormalizeContactNumber(destinationNumber);
-            var contacts = await client.GetContactsAsync();
-
-            var user = contacts.Users
-                .OfType<TLUser>()
-                .FirstOrDefault(x => x.Phone == normalizedDestNumber);
-
-            if (user == null)
-            {
-                throw new System.Exception($"Number was not found in Contacts List of user=[{destinationNumber}]");
-            }
-
-            return user;
-        }
-
-        static string NormalizeContactNumber(string number)
-        {
-            return number.StartsWith("+") ?
-                number.Substring(1, number.Length - 1) :
-                number;
+            Channel = chat;
+            Destination = new TLInputPeerChannel() { ChannelId = chat.Id, AccessHash = chat.AccessHash.Value };
         }
     }
 
     public class TLControlChat : ITLControlItem
     {
-        public TLChannel Chat { get; }
-        public TLAbsInputPeer Destination { get; set; }
+        public TLChat Chat { get; }
+        public TLAbsInputPeer Destination { get; }
 
-        internal TLControlChat(TLChannel chat)
+        internal TLControlChat(TLChat chat)
         {
             Chat = chat;
-            Destination = new TLInputPeerChannel() { ChannelId = Chat.Id, AccessHash = Chat.AccessHash.Value };
-        }
-
-        public static async Task<TLChannel> GetUserDialogAsync(TelegramClient client, string titleName, bool ignoreCase)
-        {
-            var dialogs = (TLDialogs)await client.GetUserDialogsAsync();
-
-            var chat = dialogs.Chats
-                .OfType<TLChannel>()
-                .FirstOrDefault(c => c.Title.StringEquals(titleName, ignoreCase));
-
-            if (chat == null)
-            {
-                throw new System.Exception($"Chat=[{titleName}] was not found in Contacts List of current user.");
-            }
-            return chat;
+            Destination = new TLInputPeerChat() { ChatId = chat.Id };
         }
     }
 }

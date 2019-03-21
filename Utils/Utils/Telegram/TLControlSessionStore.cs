@@ -9,7 +9,7 @@ using Utils.Handles;
 
 namespace Utils.Telegram
 {
-    public class TLControlSessionStore : ISessionStore
+    internal class TLControlSessionStore : ISessionStore
     {
         public Session Load(string sessionUserId)
         {
@@ -18,7 +18,8 @@ namespace Utils.Telegram
                 if (regedit[sessionUserId] != null)
                 {
                     var buffer = new byte[2048];
-                    Array.Copy((byte[])regedit[sessionUserId, RegistryValueKind.Binary], buffer, 2048);
+                    byte[] source = (byte[]) regedit[sessionUserId, RegistryValueKind.Binary];
+                    Array.Copy(source, buffer, source.Length);
                     return Session.FromBytes(buffer, this, sessionUserId);
                 }
             }

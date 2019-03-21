@@ -29,6 +29,8 @@ namespace TLSharp.Core
         private List<TLDcOption> dcOptions;
         private TcpClientConnectionHandler _handler;
 
+        internal TLUser CurrentUser => _session.TLUser;
+
         public TelegramClient(int apiId, string apiHash,
             ISessionStore store = null, string sessionUserId = "session", TcpClientConnectionHandler handler = null)
         {

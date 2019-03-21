@@ -66,12 +66,14 @@ namespace Utils
 
         public static bool IsNullOrEmptyTrim(this string value)
         {
-            return string.IsNullOrEmpty(value) || string.IsNullOrEmpty(value.Trim());
+            return string.IsNullOrWhiteSpace(value);
         }
 
         public static string ToStringIsNullOrEmptyTrim(this string value)
         {
-            return string.IsNullOrEmpty(value) || string.IsNullOrEmpty(value.Trim()) ? "Null" : value;
+            if (value == null)
+                return "Null";
+            return string.IsNullOrWhiteSpace(value) ? "Empty" : value;
         }
 
         public static bool IsNumber(this string value)
