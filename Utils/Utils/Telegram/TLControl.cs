@@ -343,30 +343,33 @@ namespace Utils.Telegram
 
         public async Task<bool> GetDifference(TLAbsInputPeer item, DateTime dateFrom)
         {
-            //Int32 unixTimestamp = (Int32)(DateTime.UtcNow.Subtract(mdt)).TotalSeconds;
-
-
             DateTime utfStartDate = dateFrom.ToUniversalTime();
             int start = (int) utfStartDate.Subtract(mdt).TotalSeconds;
 
-
             var state = await Client.SendRequestAsync<TLState>(new TLRequestGetState());
-
-            DateTime now = DateTime.Now;
-            TimeSpan span = now.Subtract(dateFrom);
-
-            var req1 = new TLRequestGetDifference() {Date = state.Date, Pts = state.Pts, Qts = state.Qts};
-            var req2 = new TLRequestGetDifference() {Date = start, Pts = state.Pts, Qts = state.Qts};
-            var diff1 = await Client.SendRequestAsync<TLAbsDifference>(req1) as TLDifference;
-            var diff2 = await Client.SendRequestAsync<TLAbsDifference>(req2) as TLDifference;
-
+            var req = new TLRequestGetDifference() {Date = state.Date, Pts = state.Pts - 25, Qts = state.Qts};
+            var res = await Client.SendRequestAsync<TLAbsDifference>(req);
 
             DateTime newDt0 = mdt.AddSeconds(start);
             DateTime newDt1 = mdt.AddSeconds(state.Date);
 
-            Console.Write("1");
-            if (diff1 == null || diff2 == nulll)
+            if (!(res is TLDifference))
                 return false;
+
+            var diff = res as TLDifference;
+            var users = diff.Users.OfType<TLUser>().ToDictionary(x => new int?(x.Id), x => x);
+            var chats = diff.Chats.OfType<TLChat>().ToDictionary(x => new int?(x.Id), x => x);
+            foreach (var message in diff.NewMessages.OfType<TLMessage>())
+            {
+                if (users.TryGetValue(message.FromId, out var us))
+                {
+
+                }
+                //if (chats.TryGetValue(message.ToId, out var us))
+                {
+
+                }
+            }
 
             foreach (var user in diff.Users)
             {

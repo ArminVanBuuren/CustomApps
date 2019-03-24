@@ -24,7 +24,7 @@ namespace Tester.Console
             //    stream.Read(buffer, 0, 2048);
             //    using (RegeditControl regedit = new RegeditControl(ASSEMBLY.ApplicationName))
             //    {
-            //        regedit[nameof(TLControl)+ "Session", RegistryValueKind.Binary] = buffer;
+            //        regedit[nameof(TLControl) + "Session", RegistryValueKind.Binary] = buffer;
             //    }
             //}
 
@@ -74,7 +74,8 @@ namespace Tester.Console
             
             //DateTime lastDate = DateTime.ParseExact("19.03.2019 00:00:00", "dd.MM.yyyy HH:mm:ss", CultureInfo.CurrentCulture);
             
-            DateTime lastDate = DateTime.ParseExact("18.03.2019 20:17:00", "dd.MM.yyyy HH:mm:ss", CultureInfo.CurrentCulture);
+            //!!!!!!!!!!!DateTime lastDate = DateTime.ParseExact("18.03.2019 20:17:00", "dd.MM.yyyy HH:mm:ss", CultureInfo.CurrentCulture);
+            DateTime lastDate = DateTime.ParseExact("15.03.2019 00:00:00", "dd.MM.yyyy HH:mm:ss", CultureInfo.CurrentCulture);
             while (true)
             {
                 //DateTime currentDate = DateTime.Now;
