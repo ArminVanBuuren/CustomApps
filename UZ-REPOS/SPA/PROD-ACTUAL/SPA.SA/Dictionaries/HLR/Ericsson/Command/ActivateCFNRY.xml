@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ActivateCFNRY" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Активания услуги 'Переадресация вызова (по не ответу)'</Description>
+	<Author Name="Vladimir Khovanskiy" Date="2010-03-16+15:00"/>
+	<Request Template='HGSSI:MSISDN={0},SS=CFNRY,FNUM=00{1},TIME={2},BSG=TS10;^M'>
+		<Item Name="msisdn" Type="Wellknown"/>
+		<Item Name="ForwardingToAddress" Type="LocalParameter"/>
+		<Item Name="NoReplyTimer" Type="LocalParameter"/>
+	</Request>
+	<ParametersList>
+		<Parameter Name="ForwardingToAddress">
+			<Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//CFNRY/ForwardingToAddress"/>
+			<PossibleValues StringToKeyTable="false"/>
+		</Parameter>
+		<Parameter Name="NoReplyTimer">
+			<Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//CFNRY/NoReplyTimer"/>
+			<PossibleValues StringToKeyTable="false"/>
+		</Parameter>
+	</ParametersList>
+	<ErrorsList CodePage="windows-1251" />
+</Command>

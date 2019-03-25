@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="AddRoamingSchemePS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Добавление управляющей схемы для роуминга по PS части</Description>
+	<Author Name="Timur Khamzin" Date="2019-01-29+15:00"/>
+	<Request Template='Mod BscEx:MSISDN={0},PSROAMSCH=STEERING;^M'>
+		<Item Name="msisdn" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="windows-1251" >
+		  
+	</ErrorsList>
+</Command>

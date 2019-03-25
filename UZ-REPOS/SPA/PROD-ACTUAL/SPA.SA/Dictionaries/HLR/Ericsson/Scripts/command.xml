@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Script Name="Command">
+	<write data="{0}"/>
+	<waitregexp data="(USERCODE:|&lt;|CP NOT OBTAINABLE)" regexpOptions="1010" timeout="10000" addToLog="true"/>
+	<if data="USERCODE:" type="contain">
+		<write data="foris^M"/>
+		<wait data="PASSWORD:" timeout="10000" addToLog="true"/>
+		<write data="foris123^M"/>
+		<wait data="DOMAIN:" timeout="10000" addToLog="true"/>
+		<write data="^M"/>
+		<wait data="&lt;" timeout="10000" addToLog="true"/>
+		<write data="{0}"/>
+		<wait data="&lt;" timeout="10000" addToLog="true"/>
+                <write data="EXIT;^M"/>
+		<wait data="LOGGED OFF" timeout="1000"/>
+	</if>
+	<if data="CP NOT OBTAINABLE" type="contain">
+		<write data="^C"/>
+		<write data="EXIT;^M"/>
+		<wait data="LOGGED OFF" timeout="1000"/>
+	</if>
+</Script>

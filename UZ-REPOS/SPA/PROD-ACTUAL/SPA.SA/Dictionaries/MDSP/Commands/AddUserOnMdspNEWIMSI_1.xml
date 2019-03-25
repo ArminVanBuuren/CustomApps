@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="AddUserOnMdspNEWIMSI_1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Добавление абонента на платформу MDSP'</Description>
+	<Author Name="Vladimir Khovanskiy" Date="2010-03-16+15:00"/>
+	<Request Template='&lt;SOAP-ENV:Envelope xmlns:SOAP-ENV=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:SOAP-ENC=&quot;http://schemas.xmlsoap.org/soap/encoding/&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:m0=&quot;http://soap.bossagent.mdsp.huawei.com/types&quot; xmlns:m1=&quot;http://imuse.huawei.com/portal/engine/types&quot;&gt;
+	&lt;SOAP-ENV:Body&gt;
+		&lt;m:SyncUserData xmlns:m=&quot;http://soap.bossagent.mdsp.huawei.com/&quot; SOAP-ENV:encodingStyle=&quot;http://schemas.xmlsoap.org/soap/encoding/&quot;&gt;
+			&lt;Version xsi:type=&quot;xsd:string&quot;&gt;1.00&lt;/Version&gt;
+			&lt;TransactionID xsi:type=&quot;xsd:string&quot;&gt;{0}&lt;/TransactionID&gt;
+			&lt;MSISDN xsi:type=&quot;xsd:string&quot;&gt;{1}&lt;/MSISDN&gt;
+			&lt;UpdateType xsi:type=&quot;xsd:string&quot;&gt;Add&lt;/UpdateType&gt;
+			&lt;NamedParameterList xsi:type=&quot;m0:NamedParameterList&quot;&gt;
+				&lt;Num xsi:type=&quot;xsd:short&quot;&gt;8&lt;/Num&gt;
+				&lt;NamedParameter xsi:type=&quot;m1:NamedParameter&quot;&gt;
+					&lt;Name xsi:type=&quot;xsd:string&quot;&gt;IMSI&lt;/Name&gt;
+					&lt;Value xsi:type=&quot;xsd:string&quot;&gt;{2}&lt;/Value&gt;
+				&lt;/NamedParameter&gt;
+				&lt;NamedParameter xsi:type=&quot;m1:NamedParameter&quot;&gt;
+					&lt;Name xsi:type=&quot;xsd:string&quot;&gt;Password&lt;/Name&gt;
+					&lt;Value xsi:type=&quot;xsd:string&quot;&gt;0000&lt;/Value&gt;
+				&lt;/NamedParameter&gt;
+				&lt;NamedParameter xsi:type=&quot;m1:NamedParameter&quot;&gt;
+					&lt;Name xsi:type=&quot;xsd:string&quot;&gt;UserType&lt;/Name&gt;
+					&lt;Value xsi:type=&quot;xsd:string&quot;&gt;0&lt;/Value&gt;
+				&lt;/NamedParameter&gt;
+				&lt;NamedParameter xsi:type=&quot;m1:NamedParameter&quot;&gt;
+					&lt;Name xsi:type=&quot;xsd:string&quot;&gt;UserNetType&lt;/Name&gt;
+					&lt;Value xsi:type=&quot;xsd:string&quot;&gt;0&lt;/Value&gt;
+				&lt;/NamedParameter&gt;
+				&lt;NamedParameter xsi:type=&quot;m1:NamedParameter&quot;&gt;
+					&lt;Name xsi:type=&quot;xsd:string&quot;&gt;PayType&lt;/Name&gt;
+					&lt;Value xsi:type=&quot;xsd:string&quot;&gt;0&lt;/Value&gt;
+				&lt;/NamedParameter&gt;
+				&lt;NamedParameter xsi:type=&quot;m1:NamedParameter&quot;&gt;
+					&lt;Name xsi:type=&quot;xsd:string&quot;&gt;USERBRAND&lt;/Name&gt;
+					&lt;Value xsi:type=&quot;xsd:string&quot;&gt;-1&lt;/Value&gt;
+				&lt;/NamedParameter&gt;
+				&lt;NamedParameter xsi:type=&quot;m1:NamedParameter&quot;&gt;
+					&lt;Name xsi:type=&quot;xsd:string&quot;&gt;UserState&lt;/Name&gt;
+					&lt;Value xsi:type=&quot;xsd:string&quot;&gt;0&lt;/Value&gt;
+				&lt;/NamedParameter&gt;
+				&lt;NamedParameter xsi:type=&quot;m1:NamedParameter&quot;&gt;
+					&lt;Name xsi:type=&quot;xsd:string&quot;&gt;ChargeDate&lt;/Name&gt;
+					&lt;Value xsi:type=&quot;xsd:string&quot;&gt;1&lt;/Value&gt;
+				&lt;/NamedParameter&gt;
+			&lt;/NamedParameterList&gt;
+			&lt;UpdateDescription xsi:type=&quot;xsd:string&quot;&gt;47777&lt;/UpdateDescription&gt;
+		&lt;/m:SyncUserData&gt;
+	&lt;/SOAP-ENV:Body&gt;
+&lt;/SOAP-ENV:Envelope&gt;'>
+		<Item Name="TransactionID" Type="Parameter"/>
+		<Item Name="msisdn"        Type="Wellknown"/>
+		<Item Name="NewIMSI"       Type="Parameter"/>
+	</Request>
+	<ErrorsList CodePage="ASCII"/>
+</Command>

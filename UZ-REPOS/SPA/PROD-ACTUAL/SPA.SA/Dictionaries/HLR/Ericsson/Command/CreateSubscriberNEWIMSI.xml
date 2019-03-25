@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="CreateSubscriberNEWIMSI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Создание абонента с новым IMSI</Description>
+	<Author Name="Vladimir Khovanskiy" Date="2005-10-19+15:00"/>
+	<Request Template='HGSUI:MSISDN={0},IMSI={1},PROFILE={2};^M'>
+	    <Item Name="msisdn"      Type="Wellknown"/>
+	    <Item Name="NewIMSI"     Type="Parameter"/>
+	    <!--Item Name="HLR_Profile" Type="Parameter"/-->
+	    <Item Name="HLR_Profile" Type="LogicalGroupParameter"/>
+	</Request>
+	<ErrorsList CodePage="windows-1251">
+		<Error Name="MSISDN ALREADY DEFINED" Value="SUCCESS"/>
+	</ErrorsList>
+</Command>

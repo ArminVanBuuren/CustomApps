@@ -10,11 +10,11 @@
     <Add Key="Requests.MaxQueuedPerHost" Value="150"/>
     <Add Key="Requests.PollPeriod" Value="2"/>
     <Add Key="Requests.PollIdlePeriod" Value="2"/>
-    <Add Key="Responses.WritersCount" Value="1"/>
+    <Add Key="Responses.WritersCount" Value="10"/>
     <Add Key="CloseSessionOnCommandTimeOut" Value="true"/>
     <Add Key="AsyncScenario" Value="true"/>
     <Add Key="AsyncResponseTTL" Value="86400"/>
-    <Add Key="AsyncResponseTTL.CheckPeriod" Value="10"/>
+    <Add Key="AsyncResponseTTL.CheckPeriod" Value="5"/>
     <Add Key="InfiniteLoopWarningThreshold" Value="1000" />
     <Add Key="InfiniteLoopInterruptThreshold" Value="10000" />
   </Settings>

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="AddMOBITEL_Service" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Добавление услуги MOBITEL</Description>
+	<Author Name="Timur Khamzin" Date="2015-11-27+15:00"/>
+	<Request Template="passwd=umF840CV1we2ZsD&amp;msisdn={0}&amp;command=add&amp;short_number={2}&amp;keyword={1}"> 
+	<!--Request Template="passwd=umF840CV1we2ZsD&amp;msisdn={0}&amp;command=off"-->
+		<Item Name="msisdn" Type="Wellknown"/>
+                <Item Name="service_add" Type="Parameter"/>
+                <Item Name="short_number_add" Type="Parameter"/>
+	</Request>                                                                                            
+	<ErrorsList CodePage="ASCII"/>
+</Command>

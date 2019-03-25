@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="DeleteReduceSpeed" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Удаление ограничения скорости GPRS до 128кбс</Description>
+	<Author Name="Timur Khamzin" Date="2015-05-27+15:00"/>
+	<Request Template='HGPDC:MSISDN={0},EQOSID=10,PDPID=2;^M'>
+
+       		<Item Name="msisdn" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="windows-1251" >
+          <Error Name="FAULT CODE 437" Value="SUCCESS"/>
+		  <Error Name="MSISDN NOT DEFINED" Value="SUCCESS"/>
+	</ErrorsList>
+</Command>

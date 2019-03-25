@@ -251,6 +251,8 @@
     <Command Path="AddBlockCallsInc.xml"/>
     <Command Path="AddBlockCallsOut.xml"/>
     <Command Path="AddBlockOnGPRS.xml"/>
+    <Command Path="AddBOIC.xml"/>
+    <Command Path="AddBOIC_Act.xml"/>
     <Command Path="AddBPOS.xml"/>
     <Command Path="AddBS20BS30.xml"/>
     <Command Path="AddBusinessRoaming.xml"/>
@@ -284,7 +286,9 @@
     <Command Path="AddLTE_3.xml"/>
     <Command Path="AddNumberIdentifier.xml"/>
     <Command Path="AddReduceSpeed.xml"/>
-    <Command Path="AddReduceSpeedLTE.xml"/>
+    <Command Path="AddReduceSpeedLTE.xml"/>        
+    <Command Path="AddRoamingSchemeCS.xml"/>
+    <Command Path="AddRoamingSchemePS.xml"/>
     <Command Path="AddSMSInc.xml"/>
     <Command Path="AddSMSOut.xml"/>
     <Command Path="AddTeleService.xml"/>
@@ -345,6 +349,8 @@
     <Command Path="DeleteNumberIdentifier.xml"/>
     <Command Path="DeleteReduceSpeed.xml"/>
     <Command Path="DeleteReduceSpeedLTE.xml"/>
+    <Command Path="DeleteRoamingSchemeCS.xml"/>
+    <Command Path="DeleteRoamingSchemePS.xml"/>
     <Command Path="DeleteSMSInc.xml"/>
     <Command Path="DeleteSMSOut.xml"/>
     <Command Path="DeleteSubscriber.xml"/>

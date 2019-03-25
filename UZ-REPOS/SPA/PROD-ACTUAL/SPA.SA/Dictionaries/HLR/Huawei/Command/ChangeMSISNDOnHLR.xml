@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ChangeMSISNDOnHLR" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Смена номера MSISDN</Description>
+	<Author Name="Vladimir Khovanskiy" Date="2010-03-16+15:00"/>
+	<Request Template='MOD ISDN:ISDN="{0}",NEWISDN="{1}";^M'>
+        <Item Name="msisdn" Type="Wellknown"/>
+		<Item Name="NewMsisdn" Type="Parameter"/>
+	</Request>
+	<ErrorsList CodePage="windows-1251" >
+        <Error Name="ERR3001" Value="NoSuchObjectInstance"/>
+	</ErrorsList>
+</Command>

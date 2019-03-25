@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="DeleteMsisdnFromCampaign">
+	<objectList>
+		<object name="BySubscirbersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+	</objectList>
+	<automat>
+		<node name="BySubscirbersSplitter" object="BySubscirbersSplitter">
+			<resultlist>
+				<result value="0" node="SingleSubscirverRequestDequeuer"/>
+			</resultlist>
+		</node>
+		<node name="SingleSubscirverRequestDequeuer" object="Dequeuer">
+			<resultlist>
+				<result value="0" node="TerminateMsisdn-Node"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node  name="TerminateMsisdn-Node" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler" />
+			</resultlist>
+			<parameterslist>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="TerminateMsisdn"/>
+			</parameterslist>
+		</node>
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="SingleSubscirverRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

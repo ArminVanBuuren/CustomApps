@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ActivateCFU" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Активания услуги 'Переадресация вызова (безусловная)'</Description>
+	<Author Name="Vladimir Khovanskiy" Date="2010-03-16+15:00"/>
+	<Request Template='HGSSI:MSISDN={0},SS=CFU,FNUM=00{1},BSG=TS10;^M'>
+		<Item Name="msisdn" Type="Wellknown"/>
+		<Item Name="ForwardingToAddress" Type="LocalParameter"/>
+	</Request>
+	<ParametersList>
+		<Parameter Name="ForwardingToAddress">
+			<Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//CFU/ForwardingToAddress"/>
+			<PossibleValues StringToKeyTable="false"/>
+		</Parameter>
+	</ParametersList>
+	<ErrorsList CodePage="windows-1251" />
+</Command>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Script Name="NoSleep">
+	<write data="^M" addToLog="true"/>
+	<waitregexp data="(USERCODE:|&lt;)" regexpOptions="1010" timeout="50000" addToLog="true"/>
+	<if data="USERCODE:" type="contain">
+		<write data="foris^M"/>
+		<wait data="PASSWORD:" timeout="100000" addToLog="true"/>
+		<write data="foris123^M"/>
+		<wait data="DOMAIN:" timeout="100000" addToLog="true"/>
+		<write data="^M"/>
+		<wait data="&lt;" timeout="100000" addToLog="true"/>
+	</if>
+</Script>

@@ -40,6 +40,7 @@
       <PossibleValues StringToKeyTable="false">
         <Item Key="MS" StringValue="1"/>
         <Item Key="05" StringValue="0"/>
+        <Item Key="TEST" StringValue="112"/>
       </PossibleValues>
     </Parameter>
     <Parameter Name="NewSCP_Profile">

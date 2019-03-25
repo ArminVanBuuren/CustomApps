@@ -1,0 +1,20 @@
+<Decoder Name="CallForwardingInfo" Type="FORIS.ServiceProvisioning.MmlProcessing.Dictionary.NestedIdentifiersDecoder, FORIS.SPA.MmlProcessing">
+	<Attribute Key="BasicService" RegexpPattern="BSG\s=\s(?&lt;parameter&gt;.*)" RegexpOptions="Multiline, ExplicitCapture">
+		<PossibleValues StringToKeyTable="false">
+			<Item Key="TS 1x" StringValue="TeleService"/>
+			<Item Key="TS 1X" StringValue="TeleService"/>
+			<Item Key="TS 6x" StringValue="TeleService"/>
+			<Item Key="TS 6X" StringValue="TeleService"/>
+			<Item Key="All BS" StringValue="TeleService"/>
+			<Item Key="ALL BS" StringValue="TeleService"/>
+		</PossibleValues>
+	</Attribute>
+	<Attribute Key="AdditionalInfo/Number" RegexpPattern="FTN\s=\s(?&lt;parameter&gt;\d+)" RegexpOptions="Multiline, ExplicitCapture"/>
+	<Attribute Key="GeneralInfo/NoReplyTimer" RegexpPattern="NotReplyTime\s=\s(?&lt;parameter&gt;\d+)" RegexpOptions="Multiline, ExplicitCapture"/>
+	<Attribute Key="ActivationStatus" RegexpPattern="STATUS\s=\s(?&lt;parameter&gt;((PROV \| REG)|(PROV)))" RegexpOptions="Multiline, ExplicitCapture">
+		<PossibleValues StringToKeyTable="false">
+			<Item Key="PROV | REG" StringValue="Activated"/>
+			<Item Key="PROV" StringValue="Provisioned"/>
+		</PossibleValues>
+	</Attribute>
+</Decoder>

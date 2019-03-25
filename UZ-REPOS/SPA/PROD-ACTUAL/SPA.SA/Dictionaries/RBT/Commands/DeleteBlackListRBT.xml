@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="DeleteBlackListRBT" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Добавление услуги GOODOK</Description>
+  <Author Name="Vladimir Khovanskiy" Date="2010-03-16+15:00"/>
+  <Request Template="cisrrd/cdr?operatoraccount=billing&amp;operatorpwd=charge&amp;operator=9&amp;phonenumber={0}{1}&amp;flag=2">
+    <Item Name="msisdn.ndc" Type="Wellknown"/>
+    <Item Name="msisdn.sn" Type="Wellknown"/>
+  </Request>
+  <ErrorsList CodePage="windows-1251"/>
+</Command>

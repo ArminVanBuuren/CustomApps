@@ -217,8 +217,13 @@
     <Command Path="AddInternationalCall.xml"/>
     <Command Path="AddInterRoaming.xml"/>
     <Command Path="AddLightRoaming.xml"/>
+    <Command Path="AddLTE.xml"/>
+    <Command Path="AddLTE_2.xml"/>
+    <Command Path="AddLTE_3.xml"/>
     <Command Path="AddNumberIdentifier.xml"/>
     <Command Path="AddReduceSpeed.xml"/>
+    <Command Path="AddRoamingSchemeCS.xml"/>
+    <Command Path="AddRoamingSchemePS.xml"/>
     <Command Path="AddSMSInc.xml"/>
     <Command Path="AddSMSOut.xml"/>
     <Command Path="AddUSSD.xml"/>
@@ -259,7 +264,11 @@
     <Command Path="DeleteInternationalCall.xml"/>
     <Command Path="DeleteInterRoaming.xml"/>
     <Command Path="DeleteLightRoaming.xml"/>
+    <Command Path="DeleteLTE.xml"/>
+    <Command Path="DeleteLTE_2.xml"/>
     <Command Path="DeleteNumberIdentifier.xml"/>
+    <Command Path="DeleteRoamingSchemeCS.xml"/>
+    <Command Path="DeleteRoamingSchemePS.xml"/>
     <Command Path="DeleteReduceSpeed.xml"/>
     <Command Path="DeleteSMSInc.xml"/>
     <Command Path="DeleteSMSOut.xml"/>

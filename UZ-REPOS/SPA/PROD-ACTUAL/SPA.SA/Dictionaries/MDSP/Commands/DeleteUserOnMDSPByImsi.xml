@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="DeleteUserOnMDSPByImsi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Удаление абонента с платформы MDSP'</Description>
+	<Author Name="Vladimir Khovanskiy" Date="2010-03-16+15:00"/>
+	<Request Template='&lt;SOAP-ENV:Envelope xmlns:SOAP-ENV=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:SOAP-ENC=&quot;http://schemas.xmlsoap.org/soap/encoding/&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:m0=&quot;http://soap.bossagent.mdsp.huawei.com/types&quot; xmlns:m1=&quot;http://imuse.huawei.com/portal/engine/types&quot;&gt;
+	&lt;SOAP-ENV:Body&gt;
+		&lt;m:SyncUserData xmlns:m=&quot;http://soap.bossagent.mdsp.huawei.com/&quot; SOAP-ENV:encodingStyle=&quot;http://schemas.xmlsoap.org/soap/encoding/&quot;&gt;
+			&lt;Version xsi:type=&quot;xsd:string&quot;&gt;1.00&lt;/Version&gt;
+			&lt;TransactionID xsi:type=&quot;xsd:string&quot;&gt;{0}&lt;/TransactionID&gt;
+			&lt;IMSI xsi:type=&quot;xsd:string&quot;&gt;{1}&lt;/IMSI&gt;
+			&lt;UpdateType xsi:type=&quot;xsd:string&quot;&gt;Remove&lt;/UpdateType&gt;
+			&lt;NamedParameterList xsi:type=&quot;m0:NamedParameterList&quot;&gt;
+				&lt;Num xsi:type=&quot;xsd:short&quot;&gt;0&lt;/Num&gt;
+				&lt;NamedParameter xsi:type=&quot;m1:NamedParameter&quot;&gt;
+					&lt;Name xsi:type=&quot;xsd:string&quot;&gt;&lt;/Name&gt;
+					&lt;Value xsi:type=&quot;xsd:string&quot;&gt;&lt;/Value&gt;
+				&lt;/NamedParameter&gt;
+			&lt;/NamedParameterList&gt;
+			&lt;UpdateDescription xsi:type=&quot;xsd:string&quot;&gt;47777&lt;/UpdateDescription&gt;
+		&lt;/m:SyncUserData&gt;
+	&lt;/SOAP-ENV:Body&gt;
+&lt;/SOAP-ENV:Envelope&gt;'>
+		<Item Name="TransactionID" Type="Parameter"/>
+		<Item Name="imsi" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="ASCII"/>
+</Command>

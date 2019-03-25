@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="Temp">
+	<objectList>
+		<object name="BySubscirbersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>	
+		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="HostDataProcessor" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.HostDataProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>		
+		<object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>	
+		<object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>	
+		<object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll"/>
+	</objectList>
+	<automat>
+		<node name="BySubscirbersSplitter" object="BySubscirbersSplitter">
+			<resultlist>
+				<result value="0" node="SingleSubscirverRequestDequeuer"/>
+			</resultlist>
+		</node>
+		<node name="SingleSubscirverRequestDequeuer" object="Dequeuer">
+			<resultlist>
+				<result value="0" node="DummyResponderErrNode"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="DummyResponderErrNode" object="DummyResponder"> 
+			<resultlist> 
+				<result value="" node="ResponseAssembler" /> 
+			</resultlist>
+			<parameterslist>
+				<param name="OverallResult" value="ErrorDeleteDefaultAPN"/>
+				<param name="DetailedResult" value="FAILURE"/>
+				<param name="DetailedResultDescription" value="Error Delete Default APN"/>
+				<param name="Delay" value="0" /> 
+			</parameterslist>
+		</node> 
+
+		<node name="ChangeAPN_1" object="Commander">
+			<resultlist>
+				<result value="" node="ChangeAPN_2"/>
+			</resultlist>
+			<parameterslist>                                       
+				<param name="CommandSource" value="Implicit"/>
+				<param name="Command" value='MOD GPRS:ISDN="{0}",PROV=FALSE,CNTXID=2;^M'/>
+				<param name="Identifier:0" value="msisdn"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>			
+		</node>
+		<node name="ChangeAPN_2" object="Commander">
+			<resultlist>
+				<result value="" node="ChangeAPN_3"/>
+			</resultlist>
+			<parameterslist>                                       
+				<param name="CommandSource" value="Implicit"/>
+				<param name="Command" value='MOD GPRS:ISDN="{0}",PROV=TRUE,CNTXID=2,PDPTYPE=IPV4,ADDIND=DYNAMIC,RELCLS=ACKRLCPRODT,DELAYCLS=DELAY2,PRECLS=NORMAL,PEAKTHR=256000 OCT,MEANTHR=BEST_EFFORT,ARPRIORITY=NORMAL,ERRSDU=NODETECT,DELIVERY=NO,TRAFFICCLS=CONVER,MAXSDUSIZE=150 OCT,MAXBRUPL=17280K,MAXBRDWL=17280K,RESBER=0.0001,SDUERR=0.0001,TRANSFERDEL=10MS,TRAFFICPRI=PRIORITY2,APN="NET.UMS.UZ",VPLMN=FALSE,CHARGE=NORMAL;'/>
+				<param name="Identifier:0" value="msisdn"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>			
+		</node>
+		<node name="ChangeAPN_3" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>                                       
+				<param name="CommandSource" value="Implicit"/>
+				<param name="Command" value='MOD GPRS:ISDN="{0}",PROV=TRUE,CNTXID=2,PDPTYPE=IPV4,ADDIND=DYNAMIC,RELCLS=ACKRLCPRODT,DELAYCLS=DELAY2,PRECLS=NORMAL,PEAKTHR=256000 OCT,MEANTHR=BEST_EFFORT,ARPRIORITY=NORMAL,ERRSDU=NODETECT,DELIVERY=NO,TRAFFICCLS=CONVER,MAXSDUSIZE=150 OCT,MAXBRUPL=8640K,MAXBRDWL=8640K,RESBER=0.0001,SDUERR=0.0001,TRANSFERDEL=10MS,TRAFFICPRI=PRIORITY2,APN="NET.UMS.UZ",VPLMN=FALSE,CHARGE=NORMAL;'/>
+				<param name="Identifier:0" value="msisdn"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>			
+		</node>
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="SingleSubscirverRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

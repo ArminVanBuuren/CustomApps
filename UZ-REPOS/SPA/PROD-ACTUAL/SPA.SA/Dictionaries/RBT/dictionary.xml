@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Dictionary>
+  <WellknownsList>
+    <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
+    <Wellknown Name="msisdn.cc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,0,3)"/>
+    <Wellknown Name="msisdn.ndc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,3,2)"/>
+    <Wellknown Name="msisdn.sn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,5)"/>
+    <Wellknown Name="msisdn.fn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,3)"/>
+    <Wellknown Name="imsi" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;)"/>
+    <Wellknown Name="imsi.mcc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,0,3)"/>
+    <Wellknown Name="imsi.mnc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,3,2)"/>
+    <Wellknown Name="imsi.msin" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,5)"/>
+  </WellknownsList>
+  <ErrorsList CodePage="ASCII">
+    <Error Name="0;" Expression="$(Error)" Value="SUCCESS"/>
+    <Error Name="5;" Expression="$(Error)" Value="SUCCESS"/>
+    <Error Name="4;" Expression="$(Error)" Value="SUCCESS"/>
+    <Error Name="3;" Expression="$(Error)" Value="SUCCESS"/>
+    <Error Name="2;" Expression="$(Error)" Value="FAILURE"/>
+    <Error Name="10;" Expression="$(Error)" Value="ClassInstanceConflict"/>
+    <Error Name="0" Value="SUCCESS"/>
+    <Error Name="5" Value="SUCCESS"/>
+    <Error Name="4" Value="SUCCESS"/>
+    <Error Name="3" Value="SUCCESS"/>
+    <Error Name="2" Value="FAILURE"/>
+    <Error Name="10" Value="ClassInstanceConflict"/>
+  </ErrorsList>
+  <RegexpsList>
+    <Regexp Name="Error" Value="JSESSIONID\s\=\s.{32}.*?(?&lt;ERROR&gt;\d{1,2}$)"/>
+  </RegexpsList>
+  <ParametersList>
+    <Parameter Name="NewMsisdn">
+      <Source Path="ExtendedRequestMessage/AdditionalData//NewMSISDN"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="SCP_Profile">
+      <Source Path="//AdditionalData/BalanceStorage/HostCode"/>
+      <PossibleValues StringToKeyTable="false">
+        <Item Key="MS" StringValue="1001"/>
+        <Item Key="05" StringValue="0"/>
+      </PossibleValues>
+    </Parameter>
+    <Parameter Name="NewSCP_Profile">
+      <Source Path="//AdditionalData/ProvisionList/ChangeTP/NewPlatform/HostCode"/>
+      <PossibleValues StringToKeyTable="false">
+        <Item Key="MS" StringValue="1001"/>
+        <Item Key="05" StringValue="0"/>
+      </PossibleValues>
+    </Parameter>
+  </ParametersList>
+  <DynamicParametersList/>
+  <CommandsList Root="C:\FORIS\SPA\Configuration\SPA.SA\Dictionaries\RBT\Commands">
+    <Command Path="AddBlackListRBT.xml"/>
+    <Command Path="DeleteBlackListRBT.xml"/>
+    <Command Path="AddFRCRBT.xml"/>                                       
+    <Command Path="DeleteFRCRBT.xml"/>
+    <Command Path="ChangeMSISDNOnRBT.xml"/>
+    <Command Path="ChangeProfileOnRBT.xml"/>
+  </CommandsList>
+  <!--DecodersList Root="C:\FORIS\SPA\Configuration\SPA.SA\Dictionaries\RBT\Decoders">
+		<Decoder Path="RbtDecoder.xml"/>
+	</DecodersList-->
+</Dictionary>

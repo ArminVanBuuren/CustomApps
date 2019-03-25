@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="DeleteBlackListRBT">
+	<objectList>
+		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll"/>
+	</objectList>
+	<automat>
+		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
+			<resultlist>
+				<result value="0" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+			<resultlist>
+				<result value="0" node="CheckTechBlk"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="CheckTechBlk" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="DeleteFRCRBT"/>
+				<result value="1" node="DeleteBlackListRBT"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData/WithdrawalList/FRTECHBLK"/>
+			</parameterslist>
+		</node>
+		<node name="DeleteFRCRBT" object="Commander">
+			<resultlist>
+				<result value="0" node="AddFRCRBT"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="DeleteFRCRBT"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByRegexp"/>
+			</parameterslist>
+		</node>	
+		<node name="AddFRCRBT" object="Commander">
+			<resultlist>			
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Command" value="AddFRCRBT"/>		
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByRegexp"/>
+				<param name="CommandSource" value="Dictionary"/>			   
+			</parameterslist>
+		</node>
+		<node name="DeleteBlackListRBT" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="DeleteBlackListRBT"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByRegexp"/>
+				<param name="DynamicObject" value="(empty)"/>		
+			</parameterslist>
+		</node>	
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

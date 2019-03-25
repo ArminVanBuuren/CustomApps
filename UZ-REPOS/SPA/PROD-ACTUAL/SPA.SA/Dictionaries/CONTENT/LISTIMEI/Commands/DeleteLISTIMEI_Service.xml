@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="DeleteLISTIMEI_Service" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Удаление услуги LISTIMEI</Description>
+	<Author Name="Timur Khamzin" Date="2016-11-27+15:00"/>
+	<Request Template="msisdn={0}&amp;command=dell&amp;service=123">
+		<Item Name="msisdn" Type="Wellknown"/>
+                <Item Name="service_delete" Type="Parameter"/>
+                <Item Name="short_number_delete" Type="Parameter"/>
+	</Request>
+	<ErrorsList CodePage="ASCII"/>
+</Command>

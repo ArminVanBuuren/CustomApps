@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="GetODBData" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Запрос состояния ODB</Description>
+	<Author Name="Tair Sharipov" Date="2008-06-03+15:00"/>
+	<Request Template='LST ODBDAT: ISDN="{0}";'>
+		<Item Name="msisdn" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="windows-1251"/>
+</Command>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="AddLightRoaming" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>'Добавление услуги 'Международный Лайт Роуминг'</Description>
+	<Author Name="Timur Khamzin" Date="2015-05-26+15:00"/>
+	<Request Template='MOD ODBOC:ISDN="{0}",ODBOC=BOICEXHC;^M'>
+        	<Item Name="msisdn" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="windows-1251" >
+          <Error Name="ERR3027" Value="SUCCESS"/>
+          <Error Name="ERR3001" Value="SUCCESS"/>		  
+	</ErrorsList>
+</Command>

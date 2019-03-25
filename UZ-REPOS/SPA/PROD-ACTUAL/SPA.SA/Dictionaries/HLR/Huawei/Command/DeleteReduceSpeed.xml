@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="DeleteReduceSpeed" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Удаление ограничения скорости GPRS до 128кбс</Description>
+	<Author Name="Timur Khamzin" Date="2015-05-27+15:00"/>
+	<Request Template='MOD GPRS:ISDN="{0}",PROV=TRUE,CNTXID=2,MAXBRUPL=8640K,MAXEXTBRDWL=NOExtend,MAXBRDWL=8640K;^M'>
+
+       		<Item Name="msisdn" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="windows-1251"/>
+</Command>

@@ -1,0 +1,6 @@
+<Script Name="Login">
+	<sleep timeout="100" addToLog="true"/>
+	<write data='LGI:OPNAME="foris", PWD="12345678";^M'/>
+	<wait data="END" timeout="20000"/>
+        <!--wait data="SUCCESS0001" timeout="30000"/-->
+</Script>

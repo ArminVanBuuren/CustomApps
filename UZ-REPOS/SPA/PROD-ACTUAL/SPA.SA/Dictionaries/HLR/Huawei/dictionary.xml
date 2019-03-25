@@ -1,0 +1,407 @@
+<?xml version="1.0"?>
+<Dictionary>
+  <WellknownsList>
+    <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
+    <Wellknown Name="msisdn.cc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,0,3)"/>
+    <Wellknown Name="msisdn.ndc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,3,2)"/>
+    <Wellknown Name="msisdn.sn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,5)"/>
+    <Wellknown Name="msisdn.fn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,3)"/>
+    <Wellknown Name="imsi" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;)"/>
+    <Wellknown Name="imsi.mcc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,0,3)"/>
+    <Wellknown Name="imsi.mnc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,3,2)"/>
+    <Wellknown Name="imsi.msin" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,5)"/>
+  </WellknownsList>
+  <ErrorsList CodePage="windows-1251">
+    <Error Name="SUCCESS0001" Value="SUCCESS"/>
+    <Error Name="SUCCESS0002" Value="SUCCESS"/>
+    <Error Name="ERR3001" Value="SUCCESS"/>
+    <Error Name="ERR3007" Value="DuplicateManagedObjectInstance"/>
+    <Error Name="ERR3050" Value="ImsiAssinedToAnotherSubscriber"/>
+    <Error Name="ERR3051" Value="MsisdnAlreadyDefined"/>
+    <Error Name="ERR3048" Value="ImsiIsNotRegisteredInAC"/>
+    <Error Name="ERR3028" Value="AccessDenied"/>
+    <Error Name="ERR1001" Value="NotSupportedCommandOrAction"/>
+    <Error Name="ERR1016" Value="FAILURE"/>
+    <Error Name="ERR1004" Value="InvalidParameterValue"/>
+    <Error Name="ERR3020" Value="FAILURE"/>
+    <Error Name="ERR3049" Value="SUCCESS"/>
+    <Error Name="ERR3002" Value="SUCCESS"/>
+    <Error Name="ERR3100" Value="ResourceLimitation"/>
+    <Error Name="ERR5002" Value="ResourceLimitation"/>
+    <Error Name="ERR1033" Value="FAILURE"/>
+    <Error Name="ERR3015" Value="NoServices"/>
+    <Error Name="ERR3027" Value="NoServices"/>
+    <Error Name="ERR3006" Value="SUCCESS"/>
+  </ErrorsList>
+  <RegexpsList>
+    <Regexp Name="Executed" Value="(?&lt;ERROR&gt;SUCCESS\d{4})"/>
+    <Regexp Name="Error" Value="\n(?&lt;ERROR&gt;ERR\d{4})"/>
+  </RegexpsList>
+  <ConstantsList/>
+  <ParametersList>
+    <Parameter Name="xCSI_ID">
+      <Source Path="//BalanceStorage/HostCode"/>
+      <PossibleValues StringToKeyTable="false">
+        <Item Key="MS4" StringValue="2"/>
+        <Item Key="MS5" StringValue="2"/>
+        <Item Key="MS3" StringValue="3"/>
+        <Item Key="MS6" StringValue="3"/>
+      </PossibleValues>
+    </Parameter>
+    <Parameter Name="NewIMSI">
+      <Source Path="ExtendedRequestMessage/AdditionalData//NewIMSI"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="NewMsisdn">
+      <Source Path="ExtendedRequestMessage/AdditionalData//NewMSISDN"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="IP">
+      <Source Path="ExtendedRequestMessage/AdditionalData/IP"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+  </ParametersList>
+  <DynamicParametersList/>
+<!--
+               51           GSM_VC                   - postpaid - SIM
+               55           TAS_SCP1                 - prepaid - SIM
+               10           ASKUE                    - AIISKUE - SIM 
+               20           Diller APN               - Diller APN Profile 
+               56           POST_USIM                - postpaid - USIM    
+               57           TAS_SCP1_USIM            - prepaid - USIM
+-->
+  <LogicalGroupParametersList>
+    <LogicalGroupParameter Name="HLR_Profile" AbsenceValue="">
+      <SourcesList PresenceValue="55">
+        <Source Type="IfNotXmlPath:0" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407013')]"/>
+        <Source Type="IfNotXmlPath:1" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407014')]"/>
+        <Source Type="IfNotXmlPath:2" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407023')]"/>
+        <Source Type="IfNotXmlPath:3" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407033')]"/>
+        <Source Type="IfNotXmlPath:4" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407053')]"/>
+        <Source Type="IfNotXmlPath:5" Path="//AdditionalData/RegisteredList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:6" Path="//AdditionalData/ProvisionList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:7" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
+        <Source Type="IfNotXmlPath:8" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
+	<Source Type="IfXmlPath:0" Path="//AdditionalData/BalanceStorage/HostCode[text()='MS']"/>
+      </SourcesList>
+      <SourcesList PresenceValue="51">
+        <Source Type="IfNotXmlPath:0" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407013')]"/>
+        <Source Type="IfNotXmlPath:1" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407014')]"/>
+        <Source Type="IfNotXmlPath:2" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407023')]"/>
+        <Source Type="IfNotXmlPath:3" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407033')]"/>
+        <Source Type="IfNotXmlPath:4" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407053')]"/>
+        <Source Type="IfNotXmlPath:5" Path="//AdditionalData/RegisteredList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:6" Path="//AdditionalData/ProvisionList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:7" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
+        <Source Type="IfNotXmlPath:8" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
+	<Source Type="IfXmlPath:0" Path="//AdditionalData/BalanceStorage/HostCode[text()='05']"/>
+      </SourcesList>
+      <SourcesList PresenceValue="10">
+        <Source Type="OrXmlPath:0" Path="//AdditionalData/RegisteredList/FRASKUE"/>
+        <Source Type="OrXmlPath:1" Path="//AdditionalData/ProvisionList/FRASKUE"/>
+      </SourcesList>
+      <SourcesList PresenceValue="20">
+        <Source Type="IfNotXmlPath:0" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407013')]"/>
+        <Source Type="IfNotXmlPath:1" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407014')]"/>
+        <Source Type="IfNotXmlPath:2" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407023')]"/>
+        <Source Type="IfNotXmlPath:3" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407033')]"/>
+        <Source Type="IfNotXmlPath:4" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407053')]"/>
+        <Source Type="OrXmlPath:0" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
+        <Source Type="OrXmlPath:1" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
+      </SourcesList>
+      <SourcesList PresenceValue="21">
+        <Source Type="OrXmlPath:0" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407013')]"/>
+        <Source Type="OrXmlPath:1" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407014')]"/>
+        <Source Type="OrXmlPath:2" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407023')]"/>
+        <Source Type="OrXmlPath:3" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407033')]"/>
+        <Source Type="OrXmlPath:4" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407053')]"/>
+        <Source Type="IfXmlPath:0" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
+      </SourcesList>
+      <SourcesList PresenceValue="57">
+        <Source Type="OrXmlPath:0" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407013')]"/>
+        <Source Type="OrXmlPath:1" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407014')]"/>
+        <Source Type="OrXmlPath:2" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407023')]"/>
+        <Source Type="OrXmlPath:3" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407033')]"/>
+        <Source Type="OrXmlPath:4" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407053')]"/>
+        <Source Type="IfNotXmlPath:0" Path="//AdditionalData/RegisteredList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:1" Path="//AdditionalData/ProvisionList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:2" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
+        <Source Type="IfNotXmlPath:3" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
+        <Source Type="IfXmlPath:0" Path="//AdditionalData/BalanceStorage/HostCode[text()='MS']"/>
+      </SourcesList>
+      <SourcesList PresenceValue="56">
+        <Source Type="OrXmlPath:0" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407013')]"/>
+        <Source Type="OrXmlPath:1" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407014')]"/>
+        <Source Type="OrXmlPath:2" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407023')]"/>
+        <Source Type="OrXmlPath:3" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407033')]"/>
+        <Source Type="OrXmlPath:4" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407053')]"/>
+        <Source Type="IfNotXmlPath:0" Path="//AdditionalData/RegisteredList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:1" Path="//AdditionalData/ProvisionList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:2" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
+        <Source Type="IfNotXmlPath:3" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
+        <Source Type="IfXmlPath:0" Path="//AdditionalData/BalanceStorage/HostCode[text()='05']"/>
+      </SourcesList>
+    </LogicalGroupParameter>
+    <LogicalGroupParameter Name="NewHLR_Profile" AbsenceValue="">
+      <SourcesList PresenceValue="55">
+        <Source Type="IfNotXmlPath:0" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407013')]"/>
+        <Source Type="IfNotXmlPath:1" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407014')]"/>
+        <Source Type="IfNotXmlPath:2" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407023')]"/>
+        <Source Type="IfNotXmlPath:3" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407033')]"/>
+        <Source Type="IfNotXmlPath:4" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407053')]"/>
+        <Source Type="IfNotXmlPath:5" Path="//AdditionalData/RegisteredList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:6" Path="//AdditionalData/ProvisionList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:7" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
+        <Source Type="IfNotXmlPath:8" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
+	<Source Type="IfXmlPath:0" Path="//AdditionalData/ProvisionList/ChangeTP/NewPlatform/HostCode[text()='MS']"/>
+      </SourcesList>
+      <SourcesList PresenceValue="51">
+        <Source Type="IfNotXmlPath:0" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407013')]"/>
+        <Source Type="IfNotXmlPath:1" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407014')]"/>
+        <Source Type="IfNotXmlPath:2" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407023')]"/>
+        <Source Type="IfNotXmlPath:3" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407033')]"/>
+        <Source Type="IfNotXmlPath:4" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407053')]"/>
+        <Source Type="IfNotXmlPath:5" Path="//AdditionalData/RegisteredList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:6" Path="//AdditionalData/ProvisionList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:7" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
+        <Source Type="IfNotXmlPath:8" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
+	<Source Type="IfXmlPath:0" Path="//AdditionalData/ProvisionList/ChangeTP/NewPlatform/HostCode[text()='05']"/>
+      </SourcesList>
+      <SourcesList PresenceValue="10">
+        <Source Type="OrXmlPath:0" Path="//AdditionalData/RegisteredList/FRASKUE"/>
+        <Source Type="OrXmlPath:1" Path="//AdditionalData/ProvisionList/FRASKUE"/>
+      </SourcesList>
+      <SourcesList PresenceValue="20">
+        <Source Type="IfNotXmlPath:0" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407013')]"/>
+        <Source Type="IfNotXmlPath:1" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407014')]"/>
+        <Source Type="IfNotXmlPath:2" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407023')]"/>
+        <Source Type="IfNotXmlPath:3" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407033')]"/>
+        <Source Type="IfNotXmlPath:4" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407053')]"/>
+        <Source Type="OrXmlPath:0" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
+        <Source Type="OrXmlPath:1" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
+      </SourcesList>
+      <SourcesList PresenceValue="21">
+        <Source Type="OrXmlPath:0" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407013')]"/>
+        <Source Type="OrXmlPath:1" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407014')]"/>
+        <Source Type="OrXmlPath:2" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407023')]"/>
+        <Source Type="OrXmlPath:3" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407033')]"/>
+        <Source Type="OrXmlPath:4" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407053')]"/>
+        <Source Type="IfXmlPath:0" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
+      </SourcesList>
+      <SourcesList PresenceValue="57">
+        <Source Type="OrXmlPath:0" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407013')]"/>
+        <Source Type="OrXmlPath:1" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407014')]"/>
+        <Source Type="OrXmlPath:2" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407023')]"/>
+        <Source Type="OrXmlPath:3" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407033')]"/>
+        <Source Type="OrXmlPath:4" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407053')]"/>
+        <Source Type="IfNotXmlPath:0" Path="//AdditionalData/RegisteredList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:1" Path="//AdditionalData/ProvisionList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:2" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
+        <Source Type="IfNotXmlPath:3" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
+        <Source Type="IfXmlPath:0" Path="//AdditionalData/ProvisionList/ChangeTP/NewPlatform/HostCode[text()='MS']"/>
+      </SourcesList>
+      <SourcesList PresenceValue="56">
+        <Source Type="OrXmlPath:0" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407013')]"/>
+        <Source Type="OrXmlPath:1" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407014')]"/>
+        <Source Type="OrXmlPath:2" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407023')]"/>
+        <Source Type="OrXmlPath:3" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407033')]"/>
+        <Source Type="OrXmlPath:4" Path="//IdentifiersList/Identifier/IMSI[contains(text(),'43407053')]"/>
+        <Source Type="IfNotXmlPath:0" Path="//AdditionalData/RegisteredList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:1" Path="//AdditionalData/ProvisionList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:2" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
+        <Source Type="IfNotXmlPath:3" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
+        <Source Type="IfXmlPath:0" Path="//AdditionalData/ProvisionList/ChangeTP/NewPlatform/HostCode[text()='05']"/>
+      </SourcesList>
+    </LogicalGroupParameter>
+    <LogicalGroupParameter Name="HLR_IMSI_Profile" AbsenceValue="">
+      <SourcesList PresenceValue="55">
+        <Source Type="IfNotXmlPath:0" Path="//AdditionalData//NewIMSI[contains(text(),'43407013')]"/>
+        <Source Type="IfNotXmlPath:1" Path="//AdditionalData//NewIMSI[contains(text(),'43407014')]"/>
+        <Source Type="IfNotXmlPath:2" Path="//AdditionalData//NewIMSI[contains(text(),'43407023')]"/>
+        <Source Type="IfNotXmlPath:3" Path="//AdditionalData//NewIMSI[contains(text(),'43407033')]"/>
+        <Source Type="IfNotXmlPath:4" Path="//AdditionalData//NewIMSI[contains(text(),'43407053')]"/>
+        <Source Type="IfNotXmlPath:5" Path="//AdditionalData/RegisteredList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:6" Path="//AdditionalData/ProvisionList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:7" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
+        <Source Type="IfNotXmlPath:8" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
+	<Source Type="IfXmlPath:0" Path="//AdditionalData/BalanceStorage/HostCode[text()='MS']"/>
+      </SourcesList>
+      <SourcesList PresenceValue="51">
+        <Source Type="IfNotXmlPath:0" Path="//AdditionalData//NewIMSI[contains(text(),'43407013')]"/>
+        <Source Type="IfNotXmlPath:1" Path="//AdditionalData//NewIMSI[contains(text(),'43407014')]"/>
+        <Source Type="IfNotXmlPath:2" Path="//AdditionalData//NewIMSI[contains(text(),'43407023')]"/>
+        <Source Type="IfNotXmlPath:3" Path="//AdditionalData//NewIMSI[contains(text(),'43407033')]"/>
+        <Source Type="IfNotXmlPath:4" Path="//AdditionalData//NewIMSI[contains(text(),'43407053')]"/>
+        <Source Type="IfNotXmlPath:5" Path="//AdditionalData/RegisteredList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:6" Path="//AdditionalData/ProvisionList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:7" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
+        <Source Type="IfNotXmlPath:8" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
+	<Source Type="IfXmlPath:0" Path="//AdditionalData/BalanceStorage/HostCode[text()='05']"/>
+      </SourcesList>
+      <SourcesList PresenceValue="10">
+        <Source Type="OrXmlPath:0" Path="//AdditionalData/RegisteredList/FRASKUE"/>
+        <Source Type="OrXmlPath:1" Path="//AdditionalData/ProvisionList/FRASKUE"/>
+      </SourcesList>
+      <SourcesList PresenceValue="20">
+        <Source Type="IfNotXmlPath:0" Path="//AdditionalData//NewIMSI[contains(text(),'43407013')]"/>
+        <Source Type="IfNotXmlPath:1" Path="//AdditionalData//NewIMSI[contains(text(),'43407014')]"/>
+        <Source Type="IfNotXmlPath:2" Path="//AdditionalData//NewIMSI[contains(text(),'43407023')]"/>
+        <Source Type="IfNotXmlPath:3" Path="//AdditionalData//NewIMSI[contains(text(),'43407033')]"/>
+        <Source Type="IfNotXmlPath:4" Path="//AdditionalData//NewIMSI[contains(text(),'43407053')]"/>
+        <Source Type="OrXmlPath:0" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
+        <Source Type="OrXmlPath:1" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
+      </SourcesList>
+      <SourcesList PresenceValue="21">
+        <Source Type="OrXmlPath:0" Path="//AdditionalData//NewIMSI[contains(text(),'43407013')]"/>
+        <Source Type="OrXmlPath:1" Path="//AdditionalData//NewIMSI[contains(text(),'43407014')]"/>
+        <Source Type="OrXmlPath:2" Path="//AdditionalData//NewIMSI[contains(text(),'43407023')]"/>
+        <Source Type="OrXmlPath:3" Path="//AdditionalData//NewIMSI[contains(text(),'43407033')]"/>
+        <Source Type="OrXmlPath:4" Path="//AdditionalData//NewIMSI[contains(text(),'43407053')]"/>
+        <Source Type="IfXmlPath:0" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
+      </SourcesList>
+      <SourcesList PresenceValue="57">
+        <Source Type="OrXmlPath:0" Path="//AdditionalData//NewIMSI[contains(text(),'43407013')]"/>
+        <Source Type="OrXmlPath:1" Path="//AdditionalData//NewIMSI[contains(text(),'43407014')]"/>
+        <Source Type="OrXmlPath:2" Path="//AdditionalData//NewIMSI[contains(text(),'43407023')]"/>
+        <Source Type="OrXmlPath:3" Path="//AdditionalData//NewIMSI[contains(text(),'43407033')]"/>
+        <Source Type="OrXmlPath:4" Path="//AdditionalData//NewIMSI[contains(text(),'43407053')]"/>
+        <Source Type="IfNotXmlPath:0" Path="//AdditionalData/RegisteredList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:1" Path="//AdditionalData/ProvisionList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:2" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
+        <Source Type="IfNotXmlPath:3" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
+        <Source Type="IfXmlPath:0" Path="//AdditionalData/BalanceStorage/HostCode[text()='MS']"/>
+      </SourcesList>
+      <SourcesList PresenceValue="56">
+        <Source Type="OrXmlPath:0" Path="//AdditionalData//NewIMSI[contains(text(),'43407013')]"/>
+        <Source Type="OrXmlPath:1" Path="//AdditionalData//NewIMSI[contains(text(),'43407014')]"/>
+        <Source Type="OrXmlPath:2" Path="//AdditionalData//NewIMSI[contains(text(),'43407023')]"/>
+        <Source Type="OrXmlPath:3" Path="//AdditionalData//NewIMSI[contains(text(),'43407033')]"/>
+        <Source Type="OrXmlPath:4" Path="//AdditionalData//NewIMSI[contains(text(),'43407053')]"/>
+        <Source Type="IfNotXmlPath:0" Path="//AdditionalData/RegisteredList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:1" Path="//AdditionalData/ProvisionList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:2" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
+        <Source Type="IfNotXmlPath:3" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
+        <Source Type="IfXmlPath:0" Path="//AdditionalData/BalanceStorage/HostCode[text()='05']"/>
+      </SourcesList>
+    </LogicalGroupParameter>
+  </LogicalGroupParametersList>
+  <CommandsList Root="C:\FORIS\SPA\Configuration\SPA.SA\Dictionaries\HLR\Huawei\Command">
+    <Command Path="ActivateCFB.xml"/>
+    <Command Path="AddFRMGDOSTUP.xml"/>
+    <Command Path="DeleteFRMGDOSTUP.xml"/>
+    <Command Path="ActivateCFNRC.xml"/>
+    <Command Path="ActivateCFNRY.xml"/>
+    <Command Path="ActivateCFU.xml"/>
+    <Command Path="AddAPN_SDP10.xml"/>
+    <Command Path="AddCallHold.xml"/>
+    <Command Path="AddConferenceCall.xml"/>
+    <Command Path="AddInternationalCall.xml"/>
+    <Command Path="ChangeMSISNDOnHLR.xml"/>
+    <Command Path="AddInterRoaming_1.xml"/>
+    <Command Path="AddInterRoaming_2.xml"/>
+    <Command Path="AddInterRoaming_3.xml"/>
+    <Command Path="AddInterRoaming_4.xml"/>
+    <Command Path="AddNumberIdentifier.xml"/>
+    <Command Path="AddSMSInc.xml"/>
+    <Command Path="AddSMSOut.xml"/>
+    <Command Path="AddBasicGPRS_1.xml"/>
+    <Command Path="AddBasicGPRS_2.xml"/>
+    <Command Path="AddCallForwardingCFU.xml"/>
+    <Command Path="AddCallForwardingCFNRY.xml"/>
+    <Command Path="AddCallForwardingCFNRC.xml"/>
+    <Command Path="AddCallForwardingCFB.xml"/>
+    <Command Path="AddFRANTIOP.xml"/>
+    <Command Path="ChangeIMSIOnHLR_1.xml"/>
+    <Command Path="ChangeIMSIOnHLR_2.xml"/>
+    <Command Path="AddMobileOffice_1.xml"/>
+    <Command Path="AddMobileOffice_2.xml"/>
+    <Command Path="AddMobileOffice_3.xml"/>
+    <Command Path="AddCallWaiting_1.xml"/>
+    <Command Path="AddCallWaiting_2.xml"/>
+    <Command Path="AddFRCRBT.xml"/>
+    <Command Path="AddFRMCA_1.xml"/>
+    <Command Path="DeactivateCFB.xml"/>
+    <Command Path="DeactivateCFNRC.xml"/>
+    <Command Path="DeactivateCFNRY.xml"/>
+    <Command Path="DeactivateCFU.xml"/>
+    <Command Path="DeleteBAIC.xml"/>
+    <Command Path="DeleteBAOC.xml"/>
+    <Command Path="DeleteConferenceCall.xml"/>
+    <Command Path="DeleteInternationalCall.xml"/>
+    <Command Path="DeleteInterRoaming.xml"/>
+    <Command Path="DeleteNumberIdentifier.xml"/>
+    <Command Path="DeleteSMSInc.xml"/>
+    <Command Path="DeleteSMSOut.xml"/>
+    <Command Path="DeleteBasicGPRS_1.xml"/>
+    <Command Path="DeleteBasicGPRS_2.xml"/>
+    <Command Path="DeleteCallForwardingCFU.xml"/>
+    <Command Path="DeleteCallForwardingCFNRY.xml"/>
+    <Command Path="DeleteCallForwardingCFNRC.xml"/>
+    <Command Path="DeleteCallForwardingCFB.xml"/>
+    <Command Path="DeleteFRANTIOP.xml"/>
+    <Command Path="DeleteMobileOffice_1.xml"/>
+    <Command Path="DeleteMobileOffice_2.xml"/>
+    <Command Path="DeleteMobileOffice_3.xml"/>
+    <Command Path="DeleteCallWaiting_1.xml"/>
+    <Command Path="DeleteCallHold.xml"/>
+    <Command Path="DeleteFRCRBT.xml"/>
+    <Command Path="DeleteFRMCA_1.xml"/>
+    <Command Path="DeleteFRMCA_2.xml"/>
+    <Command Path="DeleteFRMCA_3.xml"/>
+    <Command Path="DeleteSubscriber1.xml"/>
+    <Command Path="DeleteSubscriber2.xml"/>
+    <Command Path="DeleteSubscriber1IMSI.xml"/>
+    <Command Path="DeleteSubscriber2IMSI.xml"/>
+    <Command Path="GetCBDataByIMSI.xml"/>
+    <Command Path="GetCBDataByMsisdn.xml"/>
+    <Command Path="GetCFData.xml"/>
+    <Command Path="GetIMSIbyMSISDN.xml"/>
+    <Command Path="GetMSISDNbyIMSI.xml"/>
+    <Command Path="GetODBData.xml"/>
+    <Command Path="GetSubscriberByIMSI.xml"/>
+    <Command Path="GetSubscriberDynamicDataByMsisdn.xml"/>
+    <Command Path="GetSubscribersByMSISDN.xml"/>
+    <Command Path="GetSubscriberStaticDataByMsisdn.xml"/>
+    <Command Path="AddAPN_DIL_1.xml"/>
+    <Command Path="AddAPN_DIL_2.xml"/>
+    <Command Path="AddBlockCallsInc.xml"/>
+    <Command Path="AddBlockCallsOut.xml"/>
+    <Command Path="AddBlockOnGPRS.xml"/>
+    <Command Path="DeleteBlockOnGPRS.xml"/>
+    <Command Path="DeleteBlockCallsInc.xml"/>
+    <Command Path="DeleteBlockCallsOut.xml"/>
+    <Command Path="AddAPN_DL.xml"/>
+    <Command Path="AddFRVIDCALL.xml"/>
+    <Command Path="DeleteBarrIncCalls.xml"/>
+    <Command Path="DeleteBarrOutCalls.xml"/>
+    <Command Path="DeleteFRVIDCALL.xml"/>
+    <Command Path="SET_OCSI.xml"/>
+    <Command Path="SET_TCSI.xml"/>
+    <Command Path="SET_UCSI.xml"/>
+    <Command Path="CreateSubscriber.xml"/>                          
+    <Command Path="CreateSubscriberNEWIMSI.xml"/>
+    <Command Path="CreateSubscriberNEWMSISDN.xml"/>
+    <Command Path="CreateSubscriberNEWPROFILE.xml"/>
+    <Command Path="AddBearerSrv.xml"/>
+    <Command Path="AddUSSD.xml"/>
+    <Command Path="DeleteUSSD.xml"/>
+    <Command Path="AddFRIP.xml"/>
+    <Command Path="AddFRIP_DEALER.xml"/>
+    <Command Path="DeleteFRIP.xml"/>
+    <Command Path="DeleteFRIP_DEALER.xml"/>
+    <Command Path="AddBusinessRoaming.xml"/>
+    <Command Path="DeleteBusinessRoaming.xml"/>
+    <Command Path="AddLightRoaming.xml"/>
+    <Command Path="DeleteLightRoaming.xml"/>
+    <Command Path="AddReduceSpeed.xml"/>
+    <Command Path="DeleteReduceSpeed.xml"/>
+    <Command Path="AddHSPA.xml"/>
+  </CommandsList>
+  <DecodersList Root="C:\FORIS\SPA\Configuration\SPA.SA\Dictionaries\HLR\Huawei\Decoders">
+    <Decoder Path="MML.Huawei.CallForwardingInfoDecoder.xml"/>
+    <Decoder Path="MML.Huawei.CallForwardingServicesDecoder.xml"/>
+    <Decoder Path="MML.Huawei.AttributesDecoder.xml"/>
+    <Decoder Path="MML.Huawei.GprServicesDecoder.xml"/>
+    <Decoder Path="MML.Huawei.SupplementaryServicesDecoder.xml"/>
+  </DecodersList>
+</Dictionary>

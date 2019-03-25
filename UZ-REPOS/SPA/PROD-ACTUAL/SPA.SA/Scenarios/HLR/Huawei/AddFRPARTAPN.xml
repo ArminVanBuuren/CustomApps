@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="AddFRPARTAPN">
+	<objectList>
+		<object name="BySubscirbersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>	
+		<object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll"/>
+                <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>	
+	</objectList>
+	<automat>  
+		<node name="BySubscirbersSplitter" object="BySubscirbersSplitter">
+			<resultlist>
+				<result value="0" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+		<node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+			<resultlist>
+				<result value="0" node="DeleteSubscriber1"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>	
+		<node name="DeleteSubscriber1" object="Commander">
+			<resultlist>
+				<result value="0" node="DeleteSubscriber2"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="DeleteSubscriber1"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Script" value="Command"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>
+		<node name="DeleteSubscriber2" object="Commander">
+			<resultlist>
+				<result value="0" node="DeleteSubscriber1IMSI"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="DeleteSubscriber2"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Script" value="Command"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>		
+                <node name="DeleteSubscriber1IMSI" object="Commander">
+			<resultlist>
+				<result value="0" node="DeleteSubscriber2IMSI"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="DeleteSubscriber1IMSI"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Script" value="Command"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>
+		<node name="DeleteSubscriber2IMSI" object="Commander">
+			<resultlist>
+				<result value="0" node="CreateSubscriber"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="DeleteSubscriber2IMSI"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Script" value="Command"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>			
+		<node name="CreateSubscriber" object="Commander">
+			<resultlist>
+				<result value="0" node="CheckFRPARTAPN"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="CreateSubscriber"/>
+				<param name="Script" value="Command"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>
+		<node name="CheckFRPARTAPN" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="" node="dummySUCCESS"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="//RegisteredList/FRPARTAPN"/>
+				<param name="OrXmlPath:1" value="//ProvisionList/FRPARTAPN"/>
+			</parameterslist>
+		</node>
+		<node name="dummySUCCESS" object="DummyResponder">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OverallResult" value="SUCCESS"/>
+				<param name="DetailedResult" value="SUCCESS"/>
+				<param name="Delay" value="0"/>
+			</parameterslist>
+		</node>		
+
+			<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="AddNumberIdentifier" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Добавление услуги 'Определитель номера'</Description>
+	<Author Name="Vladimir Khovanskiy" Date="2010-03-16+15:00"/>
+	<!--Request Template='MOD CLIP:ISDN="{0}",PROV=TRUE,OVERRIDE=TRUE;^M'-->
+	<Request Template='MOD CLIP:ISDN="{0}",PROV=TRUE,OVERRIDE=FALSE;^M'>
+		<Item Name="msisdn" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="windows-1251" >
+        <Error Name="ERR3001" Value="SUCCESS"/>
+	</ErrorsList>
+</Command>

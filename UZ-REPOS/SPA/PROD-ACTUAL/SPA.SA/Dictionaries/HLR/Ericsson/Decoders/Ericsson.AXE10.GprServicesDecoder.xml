@@ -1,0 +1,16 @@
+<Decoder Name="GprServicesList" RegexpPattern="(?&lt;item&gt;\n\s+\d+\s+\d+\s+\w+\s+\w+\s+\d+)" RegexpOptions="Multiline" ItemName="Service" Type="FORIS.ServiceProvisioning.MmlProcessing.Dictionary.SequencesDecoder, FORIS.SPA.MmlProcessing">
+	<Attribute Key="PdpRecord" RegexpPattern="\s\d+\s+\d+\s+\w+\s+\w+\s+(?&lt;parameter&gt;\d+)" RegexpOptions="Singleline"/>
+	<Attribute Key="PdpType" RegexpPattern="\s\d+\s+\d+\s+\w+\s+(?&lt;parameter&gt;\w+)\s+\d+" RegexpOptions="Singleline">
+		<PossibleValues StringToKeyTable="true">
+			<Item Key="IPv4" StringValue="IPV4"/>
+		</PossibleValues>
+	</Attribute>
+	<Attribute Key="QoS" RegexpPattern="\s\d+\s+(?&lt;parameter&gt;\d+)\s+\w+\s+\w+\s+\d+" RegexpOptions="Singleline"/>
+	<Attribute Key="AccessPointName" RegexpPattern="\s(?&lt;parameter&gt;\d+)\s+\d+\s+\w+\s+\w+\s+\d+" RegexpOptions="Singleline">
+		<PossibleValues StringToKeyTable="true">
+			<Item Key="WAP.MTS.RU" StringValue="0"/>
+			<Item Key="INTERNET.MTS.RU" StringValue="1"/>
+			<Item Key="MMS.MTS.RU" StringValue="8"/>
+		</PossibleValues>
+	</Attribute>
+</Decoder>

@@ -14,7 +14,7 @@ xmlns:sch="http://schema.ib.sdp.huawei.com"&gt;
          &lt;req:subInfoList&gt;
             &lt;bas:item&gt;               
                &lt;sch:payType&gt;0&lt;/sch:payType&gt;
-               &lt;sch:productID&gt;90001&lt;/sch:productID&gt;
+               &lt;sch:productID&gt;{1}&lt;/sch:productID&gt;
                &lt;sch:subType&gt;0&lt;/sch:subType&gt;
             &lt;/bas:item&gt;
          &lt;/req:subInfoList&gt;

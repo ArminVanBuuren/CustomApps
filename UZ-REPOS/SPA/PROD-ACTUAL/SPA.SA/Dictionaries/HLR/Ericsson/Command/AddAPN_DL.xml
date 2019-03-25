@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="AddAPN_DL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>ADD APN</Description>
+	<Author Name="Vladimir Khovanskiy" Date="2010-03-16+15:00"/>
+	<Request Template='Hgpdi:MSISDN={0},EQOSID=3,apnid=88,pdpid=8;^M'>
+		<Item Name="msisdn" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="windows-1251" />
+</Command>

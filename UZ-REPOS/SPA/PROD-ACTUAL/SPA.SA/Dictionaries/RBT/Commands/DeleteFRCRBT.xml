@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="DeleteFRCRBT" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Удаление услуги GOODOK</Description>
+  <Author Name="Vladimir Khovanskiy" Date="2010-03-16+15:00"/>
+  <Request Template="interfaces/batchdeleteuser.do?operatoraccount=flag&amp;operatorpwd=flag&amp;phonenumber={0}{1}&amp;operatetype=0&amp;usertype=1&amp;operator=9">
+    <Item Name="msisdn.ndc" Type="Wellknown"/>
+    <Item Name="msisdn.sn" Type="Wellknown"/>
+  </Request>
+  <ErrorsList CodePage="windows-1251">
+    <Error Name="4" Value="SUCCESS"/>
+    <Error Name="9" Value="SUCCESS"/>
+  </ErrorsList>
+</Command>

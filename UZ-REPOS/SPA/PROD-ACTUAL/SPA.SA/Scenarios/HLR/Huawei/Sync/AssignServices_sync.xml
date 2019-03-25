@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="AssignServices_sync">
+	<objectList>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>	
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>	
+	</objectList>
+	<automat>
+		<node name="AddCB10363Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="AddCB10363Node2"/>
+				<result value="1538" node="AddCB10363Node2"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="//AdditionalData//CB10363"/>
+				<param name="OrXmlPath:1" value="//AdditionalData//CB9831"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddCallHold"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>
+		<node name="AddCB10363Node2" object="IfCommander">
+			<resultlist>
+				<result value="0" node="AddCB123Node0"/>
+				<result value="1538" node="AddCB123Node0"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData//CB10363"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddConferenceCall"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>
+		<node name="AddCB123Node0" object="IfCommander">
+			<resultlist>
+				<result value="0" node="AddCB123Node1"/>
+				<result value="1538" node="AddCB123Node1"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData//CB123"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddInterRoaming_1"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="AddCB123Node1" object="IfCommander">
+			<resultlist>
+				<result value="0" node="AddCB123Node2"/>
+				<result value="1538" node="AddCB123Node2"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData//CB123"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddInterRoaming_2"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="AddCB123Node2" object="IfCommander">
+			<resultlist>
+				<result value="0" node="AddCB123Node3"/>
+				<result value="1538" node="AddCB123Node3"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData//CB123"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddInterRoaming_3"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="AddCB123Node3" object="IfCommander">
+			<resultlist>
+				<result value="0" node="AddCB264Node"/>
+				<result value="1538" node="AddCB264Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData//CB123"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddInterRoaming_4"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="AddCB264Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="AddCB266Node1"/>
+				<result value="1538" node="AddCB266Node1"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData//CB264"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddNumberIdentifier"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="AddCB266Node1" object="IfCommander">
+			<resultlist>
+				<result value="0" node="AddCB266Node2"/>
+				<result value="1538" node="AddCB266Node2"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData//CB266"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddSMSInc"/>
+				<param name="Script" value="Command"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>
+		<node name="AddCB266Node2" object="IfCommander">
+			<resultlist>
+				<result value="0" node="AddCB532Node1"/>
+				<result value="1538" node="AddCB532Node1"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData//CB266"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddSMSOut"/>
+				<param name="Script" value="Command"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>		
+		<node name="AddCB532Node1" object="IfCommander">
+			<resultlist>
+				<result value="0" node="AddCB532Node2"/>
+				<result value="1538" node="AddCB532Node2"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="//AdditionalData//CB532"/>
+				<param name="OrXmlPath:1" value="//AdditionalData//CB6311"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddCallForwardingCFNRY"/>
+				<param name="Script" value="Command"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>
+		<node name="AddCB532Node2" object="IfCommander">
+			<resultlist>
+				<result value="0" node="AddCB532Node3"/>
+				<result value="1538" node="AddCB532Node3"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="//AdditionalData//CB532"/>
+				<param name="OrXmlPath:1" value="//AdditionalData//CB6311"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddCallForwardingCFNRC"/>
+				<param name="Script" value="Command"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>
+		<node name="AddCB532Node3" object="IfCommander">
+			<resultlist>
+				<result value="0" node="AddCB532Node4"/>
+				<result value="1538" node="AddCB532Node4"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="//AdditionalData//CB532"/>
+				<param name="OrXmlPath:1" value="//AdditionalData//CB6311"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddCallForwardingCFB"/>
+				<param name="Script" value="Command"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>
+		<node name="AddCB532Node4" object="IfCommander">
+			<resultlist>
+				<result value="0" node="AddFRANTIOPNode"/>
+				<result value="1538" node="AddFRANTIOPNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData//CB532"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddCallForwardingCFU"/>
+				<param name="Script" value="Command"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>		
+		<node name="AddFRANTIOPNode" object="IfCommander">
+			<resultlist>
+				<result value="0" node="AddCB573Node1"/>
+				<result value="1538" node="AddCB573Node1"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="//AdditionalData//FRANTIOP"/>
+				<param name="OrXmlPath:1" value="//AdditionalData//CB534"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddFRANTIOP"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>	
+		<node name="AddCB573Node1" object="IfCommander">
+			<resultlist>
+				<result value="0" node="AddCB573Node2"/>
+				<result value="1538" node="AddCB573Node2"/>
+				<result value="" node="ResponseAssembler"/>					
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="//AdditionalData//CB573"/>
+				<param name="OrXmlPath:1" value="//AdditionalData//CB6376"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddMobileOffice_1"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>	
+		<node name="AddCB573Node2" object="IfCommander">
+			<resultlist>
+				<result value="0" node="AddCB573Node3"/>
+				<result value="1538" node="AddCB573Node3"/>
+				<result value="" node="ResponseAssembler"/>	
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData//CB573"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddMobileOffice_2"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>			
+		<node name="AddCB573Node3" object="IfCommander">
+			<resultlist>
+				<result value="0" node="AddFRCRBT"/>
+				<result value="1538" node="AddFRCRBT"/>
+				<result value="" node="ResponseAssembler"/>	
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData//CB573"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddMobileOffice_3"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>			
+		<node name="AddFRCRBT" object="IfCommander">
+			<resultlist>
+				<result value="0" node="AddFRMCA1"/>
+				<result value="1538" node="AddFRMCA1"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData//FRCRBT"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddFRCRBT"/>
+				<param name="Script" value="Command"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>	
+		<node name="AddFRMCA1" object="IfCommander">
+			<resultlist>
+				<result value="0" node="AddFRMGDOSTUP"/>
+				<result value="1538" node="AddFRMGDOSTUP"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData//FRMCA"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddFRMCA_1"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>
+		<node name="AddFRMGDOSTUP" object="IfCommander">
+			<resultlist>
+				<result value="0" node="AddFRVIDCALL"/>
+				<result value="1538" node="AddFRVIDCALL"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData//FRMGDOSTUP"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddFRMGDOSTUP"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>
+		<node name="AddFRVIDCALL" object="Commander">
+			<resultlist>
+				<result value="0" node="AddCB9831Node1"/>
+				<result value="1538" node="AddCB9831Node1"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddFRVIDCALL"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>			
+		<node name="AddCB9831Node1" object="IfCommander">
+			<resultlist>
+				<result value="0" node="AddCB9831Node2"/>
+				<result value="1538" node="AddCB9831Node2"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData//CB9831"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddCallWaiting_1"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>
+		<node name="AddCB9831Node2" object="IfCommander">
+			<resultlist>
+                                <result value="0" node="AddBSNSSRMNGNode0"/>
+				<result value="1538" node="AddBSNSSRMNGNode0"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData//CB9831"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddCallWaiting_2"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>
+                <node name="AddBSNSSRMNGNode0" object="IfCommander">
+			<resultlist>
+                                <result value="0" node="CheckLGHTRMNG"/>
+				<result value="1538" node="CheckLGHTRMNG"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+                                <param name="IfXmlPath" value="//AdditionalData//BSNSSRMNG"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddBusinessRoaming"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+                <node name="CheckLGHTRMNG" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="AddBSNSSRMNGNode1"/>
+				<result value="1" node="AddCB108Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData//LGHTRMNG"/>
+			</parameterslist>	
+        	</node>
+                <node name="AddBSNSSRMNGNode1" object="Commander">
+			<resultlist>
+                                <result value="0" node="AddLGHTRMNGNode0"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddBusinessRoaming"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+                <node name="AddLGHTRMNGNode0" object="Commander">
+			<resultlist>
+				<result value="" node="AddCB108Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddLightRoaming"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+                <node name="AddCB108Node" object="IfCommander">
+			<resultlist>
+                               <result value="0" node="ResponseAssembler"/>
+			       <result value="" node="dummySUCCESS"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData//CB108"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddInternationalCall"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>
+		<node name="dummySUCCESS" object="DummyResponder">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OverallResult" value="SUCCESS"/>
+				<param name="DetailedResult" value="SUCCESS"/>
+				<param name="Delay" value="0"/>
+			</parameterslist>
+		</node>		
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node=""/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

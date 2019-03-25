@@ -23,11 +23,39 @@
 		</node>
 		<node name="AddBSNSSRMNGNode1" object="Commander">
 			<resultlist>
-				<result value="" node="ResponseAssembler"/>
+				<result value="" node="AddRoamingSchemeCS"/>
 			</resultlist>
 			<parameterslist>
 				<param name="CommandSource" value="Dictionary"/>
 				<param name="Command" value="AddBusinessRoaming"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>
+		<node name="AddRoamingSchemeCS" object="Commander">
+			<resultlist>
+				<result value="" node="AddRoamingSchemePS"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddRoamingSchemeCS"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>
+		<node name="AddRoamingSchemePS" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddRoamingSchemePS"/>
 				<param name="Script" value="Command"/>
 				<param name="AppendSubscribersData" value="false"/>
 				<param name="ErrorDecodingType" value="ByString"/>

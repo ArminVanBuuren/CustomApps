@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="AddBarringService_Sync">
+	<objectList>
+		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>	
+		<object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll"/>
+	</objectList>
+	<automat>
+		<node name="CheckFRZAPRETGS" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="AddBlockCallsInc"/>
+				<result value="1" node="CheckCustomerBlocks"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath:0" value="//AdditionalData//FRZAPRETGS"/>
+			</parameterslist>
+		</node>
+		<node name="AddBlockCallsInc" object="Commander">
+			<resultlist>
+				<result value="0" node="AddBlockCallsOut"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddBlockCallsInc"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="AddBlockCallsOut" object="Commander">
+			<resultlist>
+				<result value="0" node="CheckCustomerBlocks"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddBlockCallsOut"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>		
+		<node name="CheckCustomerBlocks" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="AddBlockCallsAll_node2"/>
+				<result value="1538" node="IfFRPARTBL"/>
+				<result value="" node="IfFRPARTBL"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="//AdditionalData//FRBLKFIN"/>
+				<param name="OrXmlPath:1" value="//AdditionalData//CBBLKLOST"/>
+				<param name="OrXmlPath:2" value="//AdditionalData//FRBLKCHK"/>
+				<param name="OrXmlPath:3" value="//AdditionalData//FRBLKTIME"/>
+				<param name="OrXmlPath:4" value="//AdditionalData//FRBLKUSER"/>
+				<param name="OrXmlPath:5" value="//AdditionalData//FRBLAPP"/>
+				<param name="OrXmlPath:6" value="//AdditionalData//BLTDLIM"/>
+				<param name="OrXmlPath:7" value="//AdditionalData//FRBLKPAY"/>
+				<param name="OrXmlPath:8" value="//AdditionalData//FRTECHBLK"/>
+                                <param name="OrXmlPath:9" value="//AdditionalData//FRBLKOUT"/>
+			</parameterslist>
+		</node>		
+		<node name="AddBlockCallsAll_node2" object="Commander">
+			<resultlist>
+				<result value="0" node="DeleteUSSD"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddBlockCallsAll"/>
+				<param name="Script" value="Command"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>
+                <node name="DeleteUSSD" object="IfCommander">
+			<resultlist>
+                                <result value="0" node="AddBlockOnGPRS"/>
+                                <result value="1538" node="AddBlockOnGPRS"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+                                <param name="IfXmlPath" value="//AdditionalData//FRTECHBLK"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="DeleteUSSD"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>
+		<node name="IfFRPARTBL" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="DeleteSMSOut"/>
+				<result value="1538" node="dummySUCCESS"/>
+				<result value="" node="dummySUCCESS"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="//AdditionalData//FRPARTBL"/>
+				<param name="OrXmlPath:1" value="//AdditionalData//BLTDLIM"/>
+			</parameterslist>
+		</node>		
+		<node name="DeleteSMSOut" object="Commander">
+			<resultlist>
+				<result value="0" node="AddBlockOnGPRS"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="DeleteSMSOut"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="AddBlockOnGPRS" object="IfCommander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData//CB406278"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddBlockOnGPRS"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="dummySUCCESS" object="DummyResponder">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OverallResult" value="SUCCESS"/>
+				<param name="DetailedResult" value="SUCCESS"/>
+				<param name="Delay" value="0"/>
+			</parameterslist>
+		</node>		
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node=""/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

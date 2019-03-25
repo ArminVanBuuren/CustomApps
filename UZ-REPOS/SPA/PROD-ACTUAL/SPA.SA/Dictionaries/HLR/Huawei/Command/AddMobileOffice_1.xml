@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="AddMobileOffice_1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>test</Description>
+	<Author Name="Yevgeny Tomenko" Date="2005-11-08+13:55"/>
+	<Request Template='MOD BS26:ISDN="{0}",PROV=TRUE;'>
+		<Item Name="msisdn" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="windows-1251"/>
+</Command>

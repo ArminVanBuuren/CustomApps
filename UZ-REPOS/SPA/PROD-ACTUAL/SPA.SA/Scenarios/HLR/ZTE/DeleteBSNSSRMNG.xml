@@ -23,7 +23,7 @@
 		</node>
 		<node name="DeleteBSNSSRMNGNode1" object="Commander">
 			<resultlist>
-				<result value="" node="ResponseAssembler"/>
+				<result value="" node="DeleteRoamingSchemeCS"/>
 			</resultlist>
 			<parameterslist>
 				<param name="CommandSource" value="Dictionary"/>
@@ -34,6 +34,34 @@
 				<param name="DynamicObject" value="(empty)"/>
 			</parameterslist>
 		</node>
+		<node name="DeleteRoamingSchemeCS" object="Commander">
+			<resultlist>
+				<result value="" node="DeleteRoamingSchemePS"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="DeleteRoamingSchemeCS"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>
+		<node name="DeleteRoamingSchemePS" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="DeleteRoamingSchemePS"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>		
 		<node name="ResponseAssembler" object="ResponseAssembler">
 			<resultlist>
 				<result value="" node="SingleSubscriberRequestDequeuer"/>

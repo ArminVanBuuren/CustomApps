@@ -163,7 +163,7 @@
 		<node name="CheckFRPARTAPN" object="IfMultipleXmlConditionsResolver">
 			<resultlist>
 				<result value="0" node="AddCommandList"/>
-				<result value="1" node="AddCallForwardingOriginating_Sub"/>
+				<result value="1" node="CheckDGU"/>
 			</resultlist>
 			<parameterslist>
 				<param name="OrXmlPath:0" value="//RegisteredList/FRPARTAPN"/>
@@ -172,13 +172,27 @@
 		</node>
 		<node name="CheckDGU" object="IfMultipleXmlConditionsResolver">
 			<resultlist>
-				<result value="" node="AddCommandList"/>
+				<result value="0" node="AddBOIC_Act"/>
+				<result value="1" node="AddCallForwardingOriginating_Sub"/>
 			</resultlist>
 			<parameterslist>
 				<param name="OrXmlPath:0" value="//RegisteredList/FRDGU"/>
 				<param name="OrXmlPath:1" value="//ProvisionList/FRDGU"/>
 			</parameterslist>
 		</node>		
+		<node name="AddBOIC_Act" object="Commander">
+			<resultlist>
+				<result value="" node="AddCommandList"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddBOIC_Act"/>
+				<param name="Script" value="Command"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>	
 		<node  name="AddCallForwardingOriginating_Sub" object="ScenarioProcessor">
 			<resultlist>
 				<result value="0" node="SetLanguage" />

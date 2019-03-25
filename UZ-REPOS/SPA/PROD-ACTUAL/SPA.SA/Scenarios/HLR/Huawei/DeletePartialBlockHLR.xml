@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="DeletePartialBlockHLR">
+        <include>
+		<scenario name="Sub\AddFRIP_Sub" />
+	</include>
+	<objectList>
+		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
+                <object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll"/>
+                <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll"/>	
+                <object name="ScenarioProcessor" class="FORIS.ScenarioProcessing.Base.SPF.SubscenarioProcessingUnit" assembly="FORIS.SPA.SPF.dll" />
+	</objectList>
+	<automat>
+		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
+			<resultlist>
+				<result value="0" node="SingleSubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+		<node name="SingleSubscriberRequestDequeuer" object="Dequeuer">
+			<resultlist>
+				<result value="0" node="CheckFRBLKOUT"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>	
+                <node name="CheckFRBLKOUT" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="dummyFRBLKOUT"/>
+				<result value="" node="AddSMSOut"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData/RegisteredList/FRBLKOUT"/>
+			</parameterslist>
+		</node>
+		<node name="AddSMSOut" object="IfCommander">
+			<resultlist>
+				<result value="0" node="AddCallsOut"/>
+				<result value="1538" node="AddCallsOut"/>
+				<result value="" node="ResponseAssembler"/>				
+			</resultlist>
+			<parameterslist>
+                                <param name="IfXmlPath" value="//AdditionalData/RegisteredList/CB266"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddSMSOut"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="AddCallsOut" object="Commander">
+			<resultlist>
+				<result value="0" node="DeleteBlockOnGPRS"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="DeleteBlockCallsOut"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>		
+		<node name="DeleteBlockOnGPRS" object="IfCommander">
+			<resultlist>
+				<result value="0" node="DeleteBlockOnGPRS2"/>
+				<result value="1538" node="DeleteBlockOnGPRS2"/>
+				<result value="" node="ResponseAssembler"/>				
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData/RegisteredList/CB406278"/>
+				<param name="Command" value="DeleteBlockOnGPRS"/>
+				<param name="Script" value="Command"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+                <node name="DeleteBlockOnGPRS2" object="IfCommander">
+			<resultlist>
+				<result value="0" node="AddReduceSpeed"/>
+				<result value="1538" node="AddReduceSpeed"/>
+				<result value="" node="ResponseAssembler"/>	
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData/RegisteredList/CB406278"/>
+				<param name="Command" value="AddBasicGPRS_2"/>
+				<param name="Script" value="Command"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>	
+                <node name="AddReduceSpeed" object="IfCommander">
+			<resultlist>
+                                <result value="0" node="CheckFRZAPRETGSOUT"/>
+                                <result value="1538" node="CheckFRZAPRETGSOUT"/>
+				<result value="" node="ResponseAssembler"/>					
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData/RegisteredList/LIMITSPEED"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddReduceSpeed"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+                <node name="CheckFRZAPRETGSOUT" object="IfCommander">
+			<resultlist>
+                                <result value="0" node="CheckFRZAPRETGSIN"/>
+                                <result value="1538" node="CheckFRZAPRETGSIN"/>
+                                <result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData/RegisteredList/FRZAPRETGS"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddBlockCallsOut"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>	
+                <node name="CheckFRZAPRETGSIN" object="IfCommander">
+			<resultlist>
+                                <result value="0" node="CheckFRIP"/>
+                                <result value="1538" node="CheckFRIP"/>
+                                <result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData/RegisteredList/FRZAPRETGS"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddBlockCallsInc"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>	
+                <node name="CheckFRIP" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="AddFRIP"/>
+				<result value="1" node="AddCB108"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData/RegisteredList/FRIP"/>
+			</parameterslist>
+		</node>
+                <node  name="AddFRIP" object="ScenarioProcessor">
+			<resultlist>
+				<result value="" node="dummySUCCESS" />
+			</resultlist>
+			<parameterslist>
+				<param name="Scenario" value="Sub\AddFRIP_sub" />
+			</parameterslist>
+		</node>	
+                <node name="dummySUCCESS" object="DummyResponder">
+			<resultlist>
+				<result value="" node="AddCB108"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OverallResult" value="SUCCESS"/>
+				<param name="DetailedResult" value="SUCCESS"/>
+				<param name="Delay" value="0"/>
+			</parameterslist>
+		</node>	
+                <node name="AddCB108" object="IfCommander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData/RegisteredList/CB108"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddInternationalCall"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>
+                <node name="dummyFRBLKOUT" object="DummyResponder">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OverallResult" value="SUCCESS"/>
+				<param name="DetailedResult" value="SUCCESS"/>
+				<param name="Delay" value="0"/>
+			</parameterslist>
+		</node>				
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="SingleSubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

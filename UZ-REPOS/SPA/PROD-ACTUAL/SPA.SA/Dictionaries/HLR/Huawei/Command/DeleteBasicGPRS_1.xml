@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="DeleteBasicGPRS_1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Удаление услуги 'GPRS' 1</Description>
+	<Author Name="Vladimir Khovanskiy" Date="2010-03-16+15:00"/>
+	<!--Request Template='MOD TPLGPRS:IMSI="984519856312345",PROV=TRUE,TPLID=123;'-->
+	<!--Request Template='MOD GPRSCSI:ISDN="987654321",PROV=TRUE,TPLID=2;'-->
+	<Request Template='MOD TPLGPRS: ISDN="{0}",PROV=FALSE;'>
+		<Item Name="msisdn" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="windows-1251" >
+          <Error Name="ERR3027" Value="SUCCESS"/>
+          <Error Name="ERR3015" Value="SUCCESS"/>
+	</ErrorsList>
+</Command>

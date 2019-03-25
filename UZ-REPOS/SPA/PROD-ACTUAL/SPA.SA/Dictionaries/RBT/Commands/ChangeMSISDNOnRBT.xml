@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ChangeMSISDNOnRBT" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Добавление услуги GOODOK</Description>
+  <Author Name="Vladimir Khovanskiy" Date="2010-03-16+15:00"/>
+  <Request Template="interfaces/batchadduser.do?operatoraccount=flag&amp;operatorpwd=flag&amp;phonenumber=substr({0},3,9)&amp;operatetype=0&amp;usertype=1&amp;scpid={1}&amp;operator=9">
+    <Item Name="NewMsisdn" Type="Parameter"/>
+    <Item Name="SCP_Profile" Type="Parameter"/>
+  </Request>
+  <ErrorsList CodePage="windows-1251"/>
+</Command>

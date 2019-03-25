@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+  <serviceInstances>
+    <serviceInstance hardwareID="RT:CRBT">
+      <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
+        <fileScenarioSource dir="C:\FORIS\SPA\Configuration\SPA.SA\Scenarios\RBT"/>
+      </scenarioSource>
+      <socketList poolSize="16" maxConnections="8" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="600" periodDuration="10" autoconnect="0" reconfigurationTimeout="0">
+        <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
+          <config autoconnect="1" workingmode="wmGeneral">
+            <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
+              <config>
+                <ParametersList>
+                  <Parameter Key="Host" Value="10.160.32.140"/>
+                  <Parameter Key="Port" Value="8080"/>
+                  <Parameter Key="Url" Value=""/>
+                  <Parameter Key="MethodName" Value="GET"/>
+                  <Parameter Key="Method" Value="GET"/>
+                  <Parameter Key="UserName" Value=""/>
+                  <Parameter Key="UserPwd" Value=""/>
+                  <Parameter Key="ContentType" Value="application/x-www-form-urlencoded"/>
+                  <Parameter Key="Header.key1" Value="value1"/>
+                  <Parameter Key="Header.key2" Value="value2"/>
+                </ParametersList>
+              </config>
+            </socket>
+            <Emulation Success="C:\FORIS\SPA\Configuration\SPA.SA\Emulation\RBT\printout.success.txt" Failure="C:\FORIS\SPA\Configuration\SPA.SA\Emulation\RBT\printout.failure.txt" RandomizePrintout="false" OverwriteCommandPrintout="true"  Lifetime="00:00:00.00"/>
+            <Timers IdleTimeout="10"/>
+            <PredefinedScripts Login="Login" Command="Command" Idle="" Logoff=""/>
+            <ScriptsList>
+              <Script Name="Login" Path="C:\FORIS\SPA\Configuration\SPA.SA\Dictionaries\RBT\Scripts\Login.xml"/>
+              <Script Name="Logoff" Path="C:\FORIS\SPA\Configuration\SPA.SA\Dictionaries\RBT\Scripts\Logoff.xml"/>
+              <Script Name="Command" Path="C:\FORIS\SPA\Configuration\SPA.SA\Dictionaries\RBT\Scripts\Command.xml"/>
+              <Script Name="NoSleep" Path="C:\FORIS\SPA\Configuration\SPA.SA\Dictionaries\RBT\Scripts\Nosleep.xml"/>
+            </ScriptsList>
+          </config>
+        </socket>
+      </socketList>
+      <context>
+        <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
+          <config path="C:\FORIS\SPA\Configuration\SPA.SA\Dictionaries\RBT" xml="Dictionary.xml" lifetime="00:01:30"/>
+        </object>
+        <object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
+          <fileTableSource path="C:\FORIS\SPA\Configuration\SPA.SA\Misc" xml="RepetitionTable.xml"/>
+        </object>
+      </context>
+    </serviceInstance>
+  </serviceInstances>
+</Configuration>

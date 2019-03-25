@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ApplyModification" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>ApplyModification</Description>
+	<Author Name="Vladimir Khovanskiy" Date="2010-03-16+15:00"/>
+	<Request Template=';^M'>
+	</Request>
+	<ErrorsList CodePage="windows-1251" >
+		  <Error Name="MSISDN NOT DEFINED" Value="NoSuchObjectInstance"/>
+	</ErrorsList>
+</Command>

@@ -7,13 +7,13 @@
     <Add Key="CreatePerformanceCounters" Value="false"/>
     <Add Key="PermanentEmulation.DefaultResultType" Value="SUCCESS"/>
     <Add Key="PermanentEmulation.RandomizeResultTypes" Value="false"/>
-    <Add Key="Requests.MaxQueuedPerHost" Value="600"/>
-    <Add Key="Requests.PollPeriod" Value="2"/>
-    <Add Key="Requests.PollIdlePeriod" Value="2"/>
-    <Add Key="Responses.WritersCount" Value="50"/>
+    <Add Key="Requests.MaxQueuedPerHost" Value="600"/>  <!--600-->
+    <Add Key="Requests.PollPeriod" Value="2"/> <!--2-->
+    <Add Key="Requests.PollIdlePeriod" Value="2"/> <!--2-->
+    <Add Key="Responses.WritersCount" Value="50"/> <!--10-->
     <Add Key="CloseSessionOnCommandTimeOut" Value="true"/>
-    <Add Key="InfiniteLoopWarningThreshold" Value="1000" />
-    <Add Key="InfiniteLoopInterruptThreshold" Value="10000" />
+    <Add Key="InfiniteLoopWarningThreshold" Value="1000" />   <!--1000-->
+    <Add Key="InfiniteLoopInterruptThreshold" Value="10000" />   <!--10000-->
   </Settings>
   <DatabaseObjects Remotable="false">
     <Add Name="FORIS.SPA.CBP" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.CBP"/>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="ChangeSubscriberProfileRBT">
+	<objectList>
+		<object name="BySubscirbersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+	</objectList>
+	<automat>
+		<node name="BySubscirbersSplitter" object="BySubscirbersSplitter">
+			<resultlist>
+				<result value="0" node="SingleSubscirverRequestDequeuer"/>
+			</resultlist>
+		</node>
+		<node name="SingleSubscirverRequestDequeuer" object="Dequeuer">
+			<resultlist>
+				<result value="0" node="DeleteFRCRBT"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="DeleteFRCRBT" object="Commander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNOnRBT"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="DeleteFRCRBT"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByRegexp"/>
+			</parameterslist>
+		</node>
+		<node name="ChangeMSISDNOnRBT" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Command" value="ChangeProfileOnRBT"/>
+				<param name="CommandSource" value="Dictionary"/>				
+				<param name="Script" value="Command"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByRegexp"/>				
+			</parameterslist>
+		</node>	
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="SingleSubscirverRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="AddLISTIMEI">
+	<objectList>
+		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+                <object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll"/>
+                <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll"/>
+	</objectList>
+	<automat>
+		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
+			<resultlist>
+				<result value="0" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+			<resultlist>
+				<result value="0" node="DataBaseProcessorGetLang"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+                <node name="DataBaseProcessorGetLang" object="DataBaseProcessor">
+			<resultlist>
+				<result value="" node="ExtractCode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="DataBaseName" value="FORIS.SPA.MG"/>
+				<param name="FunctionName" value="SELECT t.lang_name as LANG
+                                                                  FROM content_provider_lang t
+                                                                  WHERE t.msisdn = '{0}'"/>
+				<param name="FunctionType" value="customQuery"/>
+				<param name="OutXml" value="db_unit_result"/>
+				<param name="DbParameterName:0" value="p_msisdn"/>
+				<param name="DbParameterDirection:0" value="Input"/>
+				<param name="DbParameterType:0" value="Varchar2"/>
+				<param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN" />
+			</parameterslist>
+		</node>
+                <node name="ExtractCode" object="XmlNodesCopier">
+			<resultlist>
+				<result value="" node="AddLISTIMEI"/>
+			</resultlist>
+			<parameterslist>
+				<param name="SrcXml" value="db_unit_result"/>
+				<param name="DstMessage" value="xmlrequest"/>
+				<param name="CopyContentType" value="InnerText"/>
+				<param name="SrcXmlPath:0" value="root/return/record/column[@name='LANG']"/>
+				<param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/ContentLang"/>
+                	</parameterslist>
+		</node>
+		<node name="AddLISTIMEI" object="Commander">
+			<resultlist>
+				<result value="0" node="DataBaseProcessorDropLang"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Command" value="AddLISTIMEI_Service"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByRegexp"/>
+				<param name="CommandSource" value="Dictionary"/>
+			</parameterslist>
+		</node>
+                <node name="DataBaseProcessorDropLang" object="DataBaseProcessor">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="DataBaseName" value="FORIS.SPA.MG"/>
+				<param name="FunctionName" value="OTHER_SPIKES.GET_CONTENT_LANGUAGE"/>
+				<param name="FunctionType" value="function"/>
+				<param name="OutXml" value="db_unit_result"/>
+				<param name="DbParameterName:0" value="p_msisdn"/>
+				<param name="DbParameterDirection:0" value="Input"/>
+				<param name="DbParameterType:0" value="Varchar2"/>
+				<param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN" />
+				<param name="DbParameterName:1" value="p_action"/>
+				<param name="DbParameterDirection:1" value="Input"/>
+				<param name="DbParameterType:1" value="Varchar2"/>
+                                <param name="DbParameterValue:1" value="2"/>
+				<param name="DbParameterName:2" value="p_content_action"/>
+				<param name="DbParameterDirection:2" value="Input"/>
+				<param name="DbParameterType:2" value="Varchar2"/>
+                                <param name="DbParameterValue:2" value="0"/>
+				<param name="DbParameterName:3" value="p_result"/>
+				<param name="DbParameterDirection:3" value="ReturnValue"/>
+				<param name="DbParameterType:3" value="Varchar2"/>
+                                <param name="DbParameterValue:3" value=""/>
+			</parameterslist>
+		</node>
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

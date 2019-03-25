@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ADD_MAPSERVER_OSC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Добавление абонента на платформу SCG'</Description>
+	<Author Name="Vladimir Khovanskiy" Date="2009-04-26+11:09"/>
+	<Request Template='&lt;soapenv:Envelope 
+xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
+xmlns:bas="http://basicservices.scg.huawei.com" 
+xmlns:com="http://com.huawei.scg.basicservices.request" 
+xmlns:com1="http://com.huawei.scg.schema"&gt;
+   &lt;soapenv:Header&gt;
+      &lt;bas:timeStamp&gt;20110602101750&lt;/bas:timeStamp&gt;
+      &lt;bas:version&gt;v1&lt;/bas:version&gt;
+   &lt;/soapenv:Header&gt;
+   &lt;soapenv:Body&gt;
+      &lt;bas:synchronizeOCSInfoRequest&gt;
+         &lt;!--Zero or more repetitions:--&gt;
+         &lt;bas:ocsMappingInfo&gt;
+            &lt;com:userID&gt;
+               &lt;com1:ID&gt;{0}&lt;/com1:ID&gt;
+               &lt;com1:type&gt;{2}&lt;/com1:type&gt;
+            &lt;/com:userID&gt;
+            &lt;com:ocsInfo&gt;
+               &lt;com1:ID&gt;{2}&lt;/com1:ID&gt;
+               &lt;com1:Host&gt;10.160.21.25&lt;/com1:Host&gt;
+               &lt;com1:Port&gt;3868&lt;/com1:Port&gt;
+            &lt;/com:ocsInfo&gt;
+            &lt;com:updateFlag&gt;0&lt;/com:updateFlag&gt;
+         &lt;/bas:ocsMappingInfo&gt;
+      &lt;/bas:synchronizeOCSInfoRequest&gt;
+   &lt;/soapenv:Body&gt;
+&lt;/soapenv:Envelope&gt;'>
+		<Item Name="msisdn" Type="Wellknown"/>	
+		<Item Name="ID" Type="Parameter"/>
+		<Item Name="SCP_Profile" Type="Parameter"/>	
+	</Request>
+	<ErrorsList CodePage="windows-1251" />
+</Command>

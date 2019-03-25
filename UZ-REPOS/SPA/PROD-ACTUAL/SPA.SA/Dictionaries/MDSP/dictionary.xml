@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Dictionary xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <WellknownsList>
+    <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
+    <Wellknown Name="msisdn.cc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,0,3)"/>
+    <Wellknown Name="msisdn.ndc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,3,2)"/>
+    <Wellknown Name="msisdn.sn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,5)"/>
+    <Wellknown Name="msisdn.fn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,3)"/>
+    <Wellknown Name="imsi" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;)"/>
+    <Wellknown Name="imsi.mcc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,0,3)"/>
+    <Wellknown Name="imsi.mnc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,3,2)"/>
+    <Wellknown Name="imsi.msin" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,5)"/>
+  </WellknownsList>
+  <ErrorsList CodePage="ASCII">
+    <Error Name="0;" Expression="$(Error)" Value="SUCCESS"/>
+    <Error Name="102;" Expression="$(Error)" Value="SUCCESS"/>
+    <Error Name="101;" Expression="$(Error)" Value="FAILURE"/>
+    <Error Name="103;" Expression="$(Error)" Value="FAILURE"/>
+    <Error Name="1001;" Expression="$(Error)" Value="SUCCESS"/>
+    <Error Name="151;" Expression="$(Error)" Value="FAILURE"/>
+    <Error Name="7999;" Expression="$(Error)" Value="SUCCESS"/>
+    <Error Name="0" Value="SUCCESS"/>
+    <Error Name="102" Value="SUCCESS"/>
+    <Error Name="101" Value="FAILURE"/>
+    <Error Name="103" Value="FAILURE"/>
+    <Error Name="1001" Value="SUCCESS"/>
+    <Error Name="151" Value="FAILURE"/>
+    <Error Name="7999" Value="SUCCESS"/>
+  </ErrorsList>
+  <RegexpsList>
+    <Regexp Name="Error" Value="return xsi:type=.xsd:int.&gt;(?&lt;ERROR&gt;[0-9]{1,4})&lt;.*$"/>
+  </RegexpsList>
+  <ConstantsList/>
+  <ParametersList>
+    <Parameter Name="TransactionID">
+      <Source Path="ExtendedRequestMessage/ID"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="NewIMSI">
+      <Source Path="ExtendedRequestMessage/AdditionalData//NewIMSI"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="NewMsisdn">
+      <Source Path="ExtendedRequestMessage/AdditionalData//NewMSISDN"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+  </ParametersList>
+  <DynamicParametersList/>
+  <CommandsList Root="C:\FORIS\SPA\Configuration\SPA.SA\Dictionaries\MDSP\Commands">
+    <Command Path="AddUserOnMdsp_1.xml"/>
+    <Command Path="AddUserOnMdsp_2.xml"/>
+    <Command Path="AddUserOnMdspNEWIMSI_1.xml"/>
+    <Command Path="AddUserOnMdspNEWIMSI_2.xml"/>
+    <Command Path="AddUserOnMdspNEWMSISDN_1.xml"/>
+    <Command Path="AddUserOnMdspNEWMSISDN_2.xml"/>
+    <Command Path="DeleteUserOnMDSPByImsi.xml"/>
+    <Command Path="DeleteUserOnMDSPByMsisdn.xml"/>
+  </CommandsList>
+  <!--SubscribersDataDecodersList>
+		<Decoder Type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, SPA.Communication">
+			<Config Path=".\Dictionaries\MDSP\Decoders\" Xml="RbtDecoder.xml"/>
+		</Decoder>
+	</SubscribersDataDecodersList-->
+</Dictionary>

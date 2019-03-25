@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="AddFRANTIOP" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Вкл. запрет АОН</Description>
+	<Author Name="Yevgeny Tomenko" Date="2005-11-08+13:55"/>
+	<!--Request Template='MOD CLIR:ISDN="{0}",PROV=TRUE,MODE=PERMANENT;'-->
+	<Request Template='MOD CLIR:ISDN="{0}",PROV=TRUE,MODE=TEMPRESTRICTED;'>
+		<Item Name="msisdn" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="windows-1251" >
+        <Error Name="ERR3001" Value="SUCCESS"/>
+	</ErrorsList>	
+</Command>

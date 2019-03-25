@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="DeletePartialBlockHLR">
+        <include>
+		<scenario name="Sub\AddFRIP_sub" />
+	</include>
+	<objectList>
+		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
+                <object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll"/>
+                <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll"/>	
+                <object name="ScenarioProcessor" class="FORIS.ScenarioProcessing.Base.SPF.SubscenarioProcessingUnit" assembly="FORIS.SPA.SPF.dll" />
+	</objectList>
+	<automat>
+		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
+			<resultlist>
+				<result value="0" node="SingleSubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+		<node name="SingleSubscriberRequestDequeuer" object="Dequeuer">
+			<resultlist>
+				<result value="0" node="CheckFRBLKOUT"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+                <node name="CheckFRBLKOUT" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="dummySUCCESS"/>
+				<result value="" node="AddSMSOut"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData/RegisteredList/FRBLKOUT"/>
+			</parameterslist>
+		</node>
+		<node name="AddSMSOut" object="IfCommander">
+			<resultlist>
+				<result value="0" node="DeleteBlockCallsOut"/>
+				<result value="1538" node="DeleteBlockCallsOut"/>
+				<result value="" node="ResponseAssembler"/>				
+			</resultlist>
+			<parameterslist>
+                                <param name="IfXmlPath" value="//AdditionalData/RegisteredList/CB266"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddSMSOut"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="DeleteBlockCallsOut" object="Commander">
+			<resultlist>
+				<result value="0" node="AddBasicGPRS"/>
+				<result value="" node="ResponseAssembler"/>					
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="DeleteBlockCallsOut"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>	
+    		<node name="AddBasicGPRS" object="IfCommander">
+			<resultlist>
+                                <result value="0" node="AddAPN_1"/>
+                                <result value="1538" node="AddAPN_1"/>
+                                <result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData/RegisteredList/CB406278"/>
+				<param name="Command" value="AddBasicGPRS"/>
+				<param name="Script" value="Command"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+   		<node name="AddAPN_1" object="Commander">
+			<resultlist>
+				<result value="0" node="AddAPN_2"/>
+                                <result value="1538" node="AddAPN_2"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddAPN_1"/>
+				<param name="Script" value="Command"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>	
+		<node name="AddAPN_2" object="Commander">
+			<resultlist>
+				<result value="0" node="AddAPN_3"/>
+                                <result value="1538" node="AddAPN_3"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddAPN_2"/>
+				<param name="Script" value="Command"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>	
+		<node name="AddAPN_3" object="Commander">
+			<resultlist>
+                                <result value="0" node="AddReduceSpeed"/>
+                                <result value="1538" node="AddReduceSpeed"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddAPN_3"/>
+				<param name="Script" value="Command"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>
+                <node name="AddReduceSpeed" object="IfCommander">
+			<resultlist>
+                                <result value="0" node="AddCB108"/>
+                                <result value="1538" node="AddCB108"/>
+				<result value="" node="ResponseAssembler"/>					
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData/RegisteredList/LIMITSPEED"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddReduceSpeed"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+                <node name="AddCB108" object="IfCommander">
+			<resultlist>
+                                <result value="0" node="CheckFRZAPRETGSOUT"/>
+                                <result value="1538" node="CheckFRZAPRETGSOUT"/>
+                                <result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData/RegisteredList/CB108"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddInternationalCall"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>	
+                <node name="CheckFRZAPRETGSOUT" object="IfCommander">
+			<resultlist>
+                                <result value="0" node="CheckFRZAPRETGSIN"/>
+                                <result value="1538" node="CheckFRZAPRETGSIN"/>
+                                <result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData/RegisteredList/FRZAPRETGS"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddBlockCallsOut"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>	
+                <node name="CheckFRZAPRETGSIN" object="IfCommander">
+			<resultlist>
+                                <result value="0" node="CheckCORP"/>
+                                <result value="1538" node="CheckCORP"/>
+                                <result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData/RegisteredList/FRZAPRETGS"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddBlockCallsInc"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>	
+                <node name="CheckCORP" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="AddAPN_CORP"/>
+				<result value="" node="CheckFRIP"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="//IdentifiersList//MSISDN[text()='998974344342']"/>
+                                <param name="OrXmlPath:1" value="//IdentifiersList//MSISDN[text()='998973330647']"/>
+                                <param name="OrXmlPath:2" value="//IdentifiersList//MSISDN[text()='998977323273']"/>
+                                <param name="OrXmlPath:3" value="//IdentifiersList//MSISDN[text()='998977020307']"/>
+                                <param name="OrXmlPath:4" value="//IdentifiersList//MSISDN[text()='998977773248']"/>
+                                <param name="OrXmlPath:5" value="//IdentifiersList//MSISDN[text()='998977000911']"/>
+                                <param name="OrXmlPath:6" value="//IdentifiersList//MSISDN[text()='998977770422']"/>
+                                <param name="OrXmlPath:7" value="//IdentifiersList//MSISDN[text()='998977775119']"/>
+                                <param name="OrXmlPath:8" value="//IdentifiersList//MSISDN[text()='998971301512']"/>
+                                <param name="OrXmlPath:9" value="//IdentifiersList//MSISDN[text()='998977040094']"/>
+                                <param name="OrXmlPath:10" value="//IdentifiersList//MSISDN[text()='998973331686']"/>
+                                <param name="OrXmlPath:11" value="//IdentifiersList//MSISDN[text()='998974242944']"/>
+                                <param name="OrXmlPath:12" value="//IdentifiersList//MSISDN[text()='998973330084']"/>
+                                <param name="OrXmlPath:13" value="//IdentifiersList//MSISDN[text()='998977774408']"/>
+                                <param name="OrXmlPath:14" value="//IdentifiersList//MSISDN[text()='998977007440']"/>
+                                <param name="OrXmlPath:15" value="//IdentifiersList//MSISDN[text()='998977093340']"/>
+                                <param name="OrXmlPath:16" value="//IdentifiersList//MSISDN[text()='998977353505']"/>
+                                <param name="OrXmlPath:17" value="//IdentifiersList//MSISDN[text()='998977321990']"/>
+                                <param name="OrXmlPath:18" value="//IdentifiersList//MSISDN[text()='998977390901']"/>
+                                <param name="OrXmlPath:19" value="//IdentifiersList//MSISDN[text()='998974501957']"/>
+                                <param name="OrXmlPath:20" value="//IdentifiersList//MSISDN[text()='998977071099']"/>
+                                <param name="OrXmlPath:21" value="//IdentifiersList//MSISDN[text()='998977770833']"/>
+                                <param name="OrXmlPath:22" value="//IdentifiersList//MSISDN[text()='998973309906']"/>
+                                <param name="OrXmlPath:23" value="//IdentifiersList//MSISDN[text()='998974221199']"/>
+                                <param name="OrXmlPath:24" value="//IdentifiersList//MSISDN[text()='998977509744']"/>
+			</parameterslist>
+		</node>		
+                <node name="AddAPN_CORP" object="Commander">
+			<resultlist>
+				<result value="" node="CheckFRIP"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddAPN_CORP"/>
+				<param name="Script" value="Command"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>
+                <node name="CheckFRIP" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="AddFRIP"/>
+				<result value="1" node="dummySUCCESS"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData/RegisteredList/FRIP"/>
+			</parameterslist>
+		</node>
+                <node  name="AddFRIP" object="ScenarioProcessor">
+			<resultlist>
+				<result value="" node="dummySUCCESS" />
+			</resultlist>
+			<parameterslist>
+				<param name="Scenario" value="Sub\AddFRIP_sub" />
+			</parameterslist>
+		</node>	
+                <node name="dummySUCCESS" object="DummyResponder">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OverallResult" value="SUCCESS"/>
+				<param name="DetailedResult" value="SUCCESS"/>
+				<param name="Delay" value="0"/>
+			</parameterslist>
+		</node>	
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="SingleSubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

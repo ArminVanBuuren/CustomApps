@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="DeleteSubscriber1IMSI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Удаление абонента 1 по ИМСИ</Description>
+	<Author Name="Timur Khamzin" Date="2014-12-23+15:00"/>
+	<Request Template='SND CANCELC: IMSI="{0}";'>
+		<Item Name="imsi" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="windows-1251">
+		<Error Name="ERR3007" Value="SUCCESS"/>
+		<Error Name="ERR3001" Value="SUCCESS"/>
+		<Error Name="ERR1033" Value="SUCCESS"/>
+	</ErrorsList>
+</Command>

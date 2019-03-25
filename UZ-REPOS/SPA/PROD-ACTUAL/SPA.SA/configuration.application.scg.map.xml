@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+  <serviceInstances>
+    <serviceInstance hardwareID="G3:SCGMAP">
+      <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
+        <fileScenarioSource dir="C:\FORIS\SPA\Configuration\SPA.SA\Scenarios\SCG\SCG.MAP"/>
+      </scenarioSource>
+      <socketList poolSize="20" autoconnect="1" maxConnections="10" minConnections="10" averageTime="200" deltaAverageTime="400" maxCommandsPerPeriod="500" periodDuration="10" reconfigurationTimeout="0">
+        <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
+          <config workingmode="wmGeneral">
+            <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
+              <config>
+                <ParametersList>
+                  <Parameter Key="Host" Value="10.160.36.45"/>
+                  <Parameter Key="Port" Value="8666"/>
+                  <Parameter Key="Url" Value="services/OCSMappingService"/>
+                  <Parameter Key="MethodName" Value="POST"/>
+                  <Parameter Key="Method" Value="POST"/>
+                  <Parameter Key="UserName" Value=""/>
+                  <Parameter Key="UserPwd" Value=""/>
+                  <Parameter Key="ContentType" Value="text/xml"/>
+                  <Parameter Key="Header.SOAPAction" Value=""/>
+                </ParametersList>
+              </config>
+            </socket>
+            <Emulation Success="C:\FORIS\SPA\Configuration\SPA.SA\Emulation\SCG\printout.success.txt" Failure="C:\FORIS\SPA\Configuration\SPA.SA\Emulation\SCG\printout.failure.txt" RandomizePrintout="false" OverwriteCommandPrintout="true"  Lifetime="00:00:00.00"/>
+            <Timers IdleTimeout="5"/>
+            <PredefinedScripts Login="Login" Command="Command" Idle="" Logoff=""/>
+            <ScriptsList>
+              <Script Name="Login" Path="C:\FORIS\SPA\Configuration\SPA.SA\Dictionaries\SCG\SCG.MAP\Scripts\Login.xml"/>
+              <Script Name="Logoff" Path="C:\FORIS\SPA\Configuration\SPA.SA\Dictionaries\SCG\SCG.MAP\Scripts\Logoff.xml"/>
+              <Script Name="Command" Path="C:\FORIS\SPA\Configuration\SPA.SA\Dictionaries\SCG\SCG.MAP\Scripts\Command.xml"/>
+              <Script Name="NoSleep" Path="C:\FORIS\SPA\Configuration\SPA.SA\Dictionaries\SCG\SCG.MAP\Scripts\Nosleep.xml"/>
+            </ScriptsList>
+          </config>
+        </socket>
+      </socketList>
+      <context>
+        <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
+          <config path="C:\FORIS\SPA\Configuration\SPA.SA\Dictionaries\SCG\SCG.MAP" xml="Dictionary.xml" lifetime="00:01:30"/>
+        </object>
+        <object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
+          <fileTableSource path="C:\FORIS\SPA\Configuration\SPA.SA\Misc" xml="RepetitionTable.xml"/>
+        </object>
+      </context>
+    </serviceInstance>
+  </serviceInstances>
+</Configuration>
