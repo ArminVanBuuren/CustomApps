@@ -62,6 +62,7 @@
       <DependentUpon>Core.xaml</DependentUpon>
     </Compile>
     <Compile Include="HANDLES.cs" />
+    <Compile Include="Tools\ScreenCapture.cs" />
     <Compile Include="Tools\UIControls32.cs" />
     <Compile Include="Tools\UIPropertyBinding.cs" />
     <Compile Include="Tools\WOSComponents.cs" />

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 using TeleSharp.TL.Channels;
 using TeleSharp.TL.Contacts;
+using TeleSharp.TL.Interfaces;
 using TeleSharp.TL.Messages;
 using TeleSharp.TL.Photos;
 using TeleSharp.TL.Updates;
@@ -18,7 +19,8 @@ namespace Utils.Telegram
 {
     public abstract class TLControl
     {
-        readonly DateTime mdt = new DateTime(1970, 1, 1, 0, 0, 0);
+        public static string SessionName => $"{nameof(TLControl)}Session";
+        static readonly DateTime mdt = new DateTime(1970, 1, 1, 0, 0, 0);
         //public event TLControlhandler OnProcessingError;
         protected virtual int ApiId { get; }
         protected virtual string ApiHash { get; }
@@ -29,17 +31,17 @@ namespace Utils.Telegram
 
         public TLControlUser CurrentUser { get; private set; }
 
-        public TLControl(int appiId, string apiHash, string numberToAthenticate = null, string passwordToAuthenticate = null)
+        protected TLControl(int appiId, string apiHash, string numberToAthenticate = null, string passwordToAuthenticate = null)
         {
             if (apiHash == null)
-                throw new ArgumentNullException("apiHash");
+                throw new ArgumentNullException(nameof(apiHash));
 
             ApiId = appiId;
             ApiHash = apiHash;
             NumberToAuthenticate = numberToAthenticate;
             PasswordToAuthenticate = passwordToAuthenticate;
             Session = new TLControlSessionStore();
-            Client = new TelegramClient(ApiId, ApiHash, Session, $"{nameof(TLControl)}Session");
+            Client = new TelegramClient(ApiId, ApiHash, Session, SessionName);
             //Task task = Client.ConnectAsync();
             //task.RunSynchronously();
         }
@@ -341,46 +343,52 @@ namespace Utils.Telegram
         }
 
 
-        public async Task<bool> GetDifference(TLAbsInputPeer item, DateTime dateFrom)
+        public async Task<List<TLMessage>> GetDifference(TLUser sender, TLAbsInputPeer where, DateTime dateFrom, int lastPts = 32)
         {
-            DateTime utfStartDate = dateFrom.ToUniversalTime();
-            int start = (int) utfStartDate.Subtract(mdt).TotalSeconds;
-
             var state = await Client.SendRequestAsync<TLState>(new TLRequestGetState());
-            var req = new TLRequestGetDifference() {Date = state.Date, Pts = state.Pts - 25, Qts = state.Qts};
+            var req = new TLRequestGetDifference() {Date = state.Date, Pts = state.Pts - lastPts, Qts = state.Qts};
             var res = await Client.SendRequestAsync<TLAbsDifference>(req);
 
-            DateTime newDt0 = mdt.AddSeconds(start);
-            DateTime newDt1 = mdt.AddSeconds(state.Date);
+            //DateTime newDt0 = mdt.AddSeconds(startDate);
+            //DateTime newDt1 = mdt.AddSeconds(state.Date);
 
             if (!(res is TLDifference))
-                return false;
+                return null;
+
+            List<TLMessage> messages = new List<TLMessage>();
+
+            int startDate = ToIntDate(dateFrom);
+
+            Func<object, bool> funkLocation = null;
+            switch (where)
+            {
+                case TLInputPeerUser locUser:
+                    funkLocation = (input) => input is TLPeerUser user && user.UserId == locUser.UserId;
+                    break;
+                case TLInputPeerChat locChat:
+                    funkLocation = (input) => input is TLPeerChat chat && chat.ChatId == locChat.ChatId;
+                    break;
+                case TLInputPeerChannel locChannel:
+                    funkLocation = (input) => input is TLPeerChannel channel && channel.ChannelId == locChannel.ChannelId;
+                    break;
+            }
 
             var diff = res as TLDifference;
-            var users = diff.Users.OfType<TLUser>().ToDictionary(x => new int?(x.Id), x => x);
-            var chats = diff.Chats.OfType<TLChat>().ToDictionary(x => new int?(x.Id), x => x);
+            //var users = diff.Users.OfType<TLUser>().ToDictionary(x => new int?(x.Id), x => x);
+            //var chats = diff.Chats.OfType<IChatChannel>().ToDictionary(x => new int?(x.Id), x => x);
+
             foreach (var message in diff.NewMessages.OfType<TLMessage>())
             {
-                if (users.TryGetValue(message.FromId, out var us))
+                if (message.FromId == sender.Id && !message.Message.IsNullOrEmptyTrim() && message.Date > startDate && funkLocation(message.ToId))
                 {
-
-                }
-                //if (chats.TryGetValue(message.ToId, out var us))
-                {
-
+                    messages.Add(message);
                 }
             }
 
-            foreach (var user in diff.Users)
-            {
-                if (user is TLUser && ((TLInputPeerUser) item).UserId == ((TLUser) user).Id)
-                    return true;
-            }
-
-            return false;
+            return messages;
         }
 
-        public async Task<List<TLMessage>> GetMessagesAsync(TLAbsInputPeer item, DateTime dateFrom, DateTime? dateTo = null, int limitsPerReq = 100)
+        public async Task<List<TLMessage>> GetAllMessagesByDateAsync(TLAbsInputPeer item, DateTime dateFrom, DateTime? dateTo = null, int limitsPerReq = 100)
         {
             int floodExceptionNum = 0;
             int offset = 0;
@@ -449,7 +457,7 @@ namespace Utils.Telegram
             return messageColelction;
         }
 
-        public async Task<TLVector<TLAbsMessage>> GetMessagesAsync(TLAbsInputPeer item)
+        public async Task<TLVector<TLAbsMessage>> GetMessagesTestAsync(TLAbsInputPeer item)
         {
             //var res1 = await Client.SendRequestAsync<TLMessagesSlice>(new TLRequestGetHistory() { Peer = item.Destination });
 
@@ -469,61 +477,7 @@ namespace Utils.Telegram
                 //    ChannelId = channel.Id, AccessHash = (long) channel.AccessHash
                 //};
             }
-
-
-
             
-
-
-            //TLMessage
-            var mdt = new DateTime(1970, 1, 1, 0, 0, 0);
-            DateTime d1 = DateTime.ParseExact("22.03.2019 12:00:00", "dd.MM.yyyy HH:mm:ss", CultureInfo.CurrentCulture).ToUniversalTime();
-            DateTime d2 = DateTime.ParseExact("20.03.2019 21:34:00", "dd.MM.yyyy HH:mm:ss", CultureInfo.CurrentCulture).ToUniversalTime();
-            int start = (int)d1.Subtract(mdt).TotalSeconds;
-            int end = (int)d2.Subtract(mdt).TotalSeconds;
-
-            //DateTime newDt2 = mdt.AddSeconds(1553246486).ToLocalTime();
-
-
-            var state = await Client.SendRequestAsync<TLState>(new TLRequestGetState());
-            var req = new TLRequestGetDifference() { Date = start, Pts = state.Pts, Qts = state.Qts };
-            var diff = await Client.SendRequestAsync<TLAbsDifference>(req) as TLDifference;
-            foreach (var user in diff.Users)
-            {
-                if (user is TLUser && ((TLInputPeerUser) item).UserId == ((TLUser) user).Id)
-                {
-
-                }
-            }
-
-            foreach (var upd in diff.OtherUpdates.OfType<TLUpdateNewChannelMessage>())
-            {
-                string res = ((upd.Message as TLMessage).Message);
-            }
-
-            foreach (var ch in diff.Chats.OfType<TLChannel>().Where(x => !x.Left))
-            {
-                //var ich = new TLInputChannel() { ChannelId = ch.Id, AccessHash = (long)ch.AccessHash };
-                //var readed = new TeleSharp.TL.Channels.TLRequestReadHistory() { Channel = ich, MaxId = -1 };
-                //await Client.SendRequestAsync<bool>(readed);
-            }
-
-            var getByDate = new TeleSharp.TL.Messages.TLRequestSearch()
-            {
-                Peer = item,
-                MaxDate = start,
-                MinDate = end,
-                Q = "s",
-                Filter = new TLInputMessagesFilterEmpty(),
-                Limit = 100,
-                Offset = 0
-            };
-
-            
-
-            //TLChannelMessages search = await Client.SendRequestAsync<TLChannelMessages>(getByDate);
-            TLMessages search = await Client.SendRequestAsync<TLMessages>(getByDate);
-
             //while (true)
             {
                 TLMessagesSlice res1 = await Client.SendRequestAsync<TLMessagesSlice>
@@ -550,19 +504,33 @@ namespace Utils.Telegram
             }
         }
 
-        public async Task SeachByWord(TLAbsInputPeer item, string searchWord)
+        public async Task<TLChannelMessages> SeachByWord(TLAbsInputPeer item, string searchWord)
         {
-            //TLChannelMessages search = await Client.SendRequestAsync<TLChannelMessages>
-            //(new TeleSharp.TL.Messages.TLRequestSearch()
-            //{
-            //    Peer = item,
-            //    MaxDate = maxdate,
-            //    MinDate = mindate,
-            //    Q = searchWord,
-            //    Filter = new TLInputMessagesFilterEmpty(),
-            //    Limit = 100,
-            //    Offset = 0
-            //});
+            TLChannelMessages search = await Client.SendRequestAsync<TLChannelMessages>
+            (new TeleSharp.TL.Messages.TLRequestSearch()
+            {
+                Peer = item,
+                //MaxDate = maxdate,
+                //MinDate = mindate,
+                Q = searchWord,
+                Filter = new TLInputMessagesFilterEmpty(),
+                Limit = 100,
+                Offset = 0
+            });
+            return search;
+        }
+
+        public static int ToIntDate(DateTime date)
+        {
+            DateTime utfStartDate = date.ToUniversalTime();
+            int intDate = (int)utfStartDate.Subtract(mdt).TotalSeconds;
+            return intDate;
+        }
+
+        public static DateTime ToDate(int date)
+        {
+            DateTime dateTime = mdt.AddSeconds(date).ToLocalTime();
+            return dateTime;
         }
 
         static string NormalizeContactNumber(string number)

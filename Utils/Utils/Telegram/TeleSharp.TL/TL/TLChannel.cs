@@ -5,10 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TeleSharp.TL;
+using TeleSharp.TL.Interfaces;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1588737454)]
-    public class TLChannel : TLAbsChat
+    public class TLChannel : TLAbsChat, IChatChannel
     {
         public override int Constructor
         {

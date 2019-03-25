@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using TeleSharp.TL;
 using Utils;
 using Utils.Crypto;
 using Utils.Handles;
@@ -79,13 +80,17 @@ namespace Tester.Console
             while (true)
             {
                 //DateTime currentDate = DateTime.Now;
-                bool isChanged = await control.GetDifference(control.CurrentUser.Destination, lastDate);
+                List<TLMessage> newMessages = await control.GetDifference(control.CurrentUser.User, control.CurrentUser.Destination, lastDate);
+                
+                TLMessage message = newMessages?.LastOrDefault();
+                if (message != null)
+                    lastDate = TLControl.ToDate(message.Date);
                 //if (isChanged)
                 //{
                 //    var res = await control.GetMessagesAsync(control.CurrentUser.Destination, lastDate, null, 50);
                 //    lastDate = currentDate;
                 //}
-                //await Task.Delay(1000);
+                await Task.Delay(1000);
             }
 
 
