@@ -22,26 +22,18 @@ namespace Utils.Telegram
         public static string SessionName => $"{nameof(TLControl)}Session";
         static readonly DateTime mdt = new DateTime(1970, 1, 1, 0, 0, 0);
         //public event TLControlhandler OnProcessingError;
-        protected virtual int ApiId { get; }
-        protected virtual string ApiHash { get; }
-        protected virtual string NumberToAuthenticate { get; set; }
-        protected virtual string PasswordToAuthenticate { get; set; }
         protected TelegramClient Client { get; private set; }
         internal TLControlSessionStore Session { get; }
 
         public TLControlUser CurrentUser { get; private set; }
 
-        protected TLControl(int appiId, string apiHash, string numberToAthenticate = null, string passwordToAuthenticate = null)
+        protected TLControl(int appiId, string apiHash)
         {
             if (apiHash == null)
                 throw new ArgumentNullException(nameof(apiHash));
 
-            ApiId = appiId;
-            ApiHash = apiHash;
-            NumberToAuthenticate = numberToAthenticate;
-            PasswordToAuthenticate = passwordToAuthenticate;
             Session = new TLControlSessionStore();
-            Client = new TelegramClient(ApiId, ApiHash, Session, SessionName);
+            Client = new TelegramClient(appiId, apiHash, Session, SessionName);
             //Task task = Client.ConnectAsync();
             //task.RunSynchronously();
         }
@@ -52,30 +44,30 @@ namespace Utils.Telegram
             CurrentUser = new TLControlUser(Client.CurrentUser);
         }
 
-        public async Task<TLUser> AuthUserAsync(Task<string> getCodeToAuthenticate)
+        public async Task<TLUser> AuthUserAsync(Task<string> getCodeToAuthenticate, string numberAuth, string password)
         {
             if (getCodeToAuthenticate == null)
                 throw new ArgumentNullException(nameof(getCodeToAuthenticate));
 
-            if (NumberToAuthenticate == null)
+            if (numberAuth.IsNullOrEmptyTrim())
                 throw new AuthenticateException("TLControl need your number to authenticate.");
 
-            var hash = await Client.SendCodeRequestAsync(NumberToAuthenticate);
+            var hash = await Client.SendCodeRequestAsync(numberAuth);
             var code = await getCodeToAuthenticate;
 
             TLUser user = null;
             try
             {
-                user = await Client.MakeAuthAsync(NumberToAuthenticate, hash, code);
+                user = await Client.MakeAuthAsync(numberAuth, hash, code);
             }
             catch (CloudPasswordNeededException ex)
             {
-                if(PasswordToAuthenticate == null)
-                    throw new AuthenticateException("TLControl need your password.");
+                if(password.IsNullOrEmptyTrim())
+                    throw ex;
 
-                var password = await Client.GetPasswordSetting();
+                var tlPassword = await Client.GetPasswordSetting();
 
-                user = await Client.MakeAuthWithPasswordAsync(password, PasswordToAuthenticate);
+                user = await Client.MakeAuthWithPasswordAsync(tlPassword, password);
             }
             catch (InvalidPhoneCodeException ex)
             {
@@ -379,7 +371,8 @@ namespace Utils.Telegram
 
             foreach (var message in diff.NewMessages.OfType<TLMessage>())
             {
-                if (message.FromId == sender.Id && !message.Message.IsNullOrEmptyTrim() && message.Date > startDate && funkLocation(message.ToId))
+                //!message.Message.IsNullOrEmptyTrim() &&
+                if (message.FromId == sender.Id && message.Date > startDate && funkLocation(message.ToId))
                 {
                     messages.Add(message);
                 }

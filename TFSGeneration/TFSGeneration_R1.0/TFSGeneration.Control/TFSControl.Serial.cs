@@ -43,7 +43,7 @@ namespace TFSAssist.Control
                     regControl["Description"] = description;
                 }
 
-                RegeditKey = regControl["Key"].ToString();
+                RegeditKey = regControl["Key"]?.ToString();
                 if (RegeditKey.IsNullOrEmptyTrim())
                 {
                     RegeditKey = Guid.NewGuid().ToString("D");

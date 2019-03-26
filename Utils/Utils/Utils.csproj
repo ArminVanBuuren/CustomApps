@@ -74,6 +74,7 @@
     <Compile Include="ConditionEx\Utils\Types.cs" />
     <Compile Include="Crypto\AES.cs" />
     <Compile Include="Crypto\DH.cs" />
+    <Compile Include="ASYNC.cs" />
     <Compile Include="Handles\GitControl.cs" />
     <Compile Include="INT.cs" />
     <Compile Include="IO.cs" />

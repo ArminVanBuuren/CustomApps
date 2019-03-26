@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
+using System.Threading.Tasks;
 
 namespace Utils.UIControls.Tools
 {
@@ -36,7 +37,24 @@ namespace Utils.UIControls.Tools
             }
         }
 
-        public static void CaptureCurrent(Form form, string destinationPath, ImageFormat format)
+        public static Task CaptureAsync(string destinationPath, ImageFormat format)
+        {
+            return Task.Run(() =>
+            {
+                Rectangle bounds = Screen.GetBounds(Point.Empty);
+                using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height))
+                {
+                    using (Graphics g = Graphics.FromImage(bitmap))
+                    {
+                        g.CopyFromScreen(Point.Empty, Point.Empty, bounds.Size);
+                    }
+
+                    bitmap.Save(destinationPath, format);
+                }
+            });
+        }
+
+        public static void Capture(Form form, string destinationPath, ImageFormat format)
         {
             Rectangle bounds = form.Bounds;
             using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height))

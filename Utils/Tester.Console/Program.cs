@@ -56,7 +56,7 @@ namespace Tester.Console
 
             
             //TimeSpan span = DateTime.Now.Subtract(DateTime.Parse("07.02.2018 00:00:00"));
-            TLControlNew control = new TLControlNew(770122, "8bf0b952100c9b22fd92499fc329c27e", "+375333866536");
+            TLControlNew control = new TLControlNew(770122, "8bf0b952100c9b22fd92499fc329c27e");
             Process(control);
 
 
@@ -99,7 +99,7 @@ namespace Tester.Console
 
     public class TLControlNew : TLControl
     {
-        public TLControlNew(int appiId, string apiHash, string numberToAthenticate = null, string passwordToAuthenticate = null):base(appiId, apiHash, numberToAthenticate, passwordToAuthenticate)
+        public TLControlNew(int appiId, string apiHash):base(appiId, apiHash)
         {
 
         }

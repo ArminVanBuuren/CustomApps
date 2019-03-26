@@ -9,6 +9,7 @@ using System.Text;
 using System.Diagnostics;
 using System.Management;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace Utils
 {
@@ -172,6 +173,26 @@ namespace Utils
                 fileInfo.Delete();
             }
             Directory.Delete(directory);
+        }
+
+        public static Task DeleteReadOnlyDirectoryAsync(string directory)
+        {
+            return Task.Run(() =>
+            {
+                foreach (var subdirectory in Directory.EnumerateDirectories(directory))
+                {
+                    DeleteReadOnlyDirectory(subdirectory);
+                }
+
+                foreach (var fileName in Directory.EnumerateFiles(directory))
+                {
+                    var fileInfo = new FileInfo(fileName);
+                    fileInfo.Attributes = FileAttributes.Normal;
+                    fileInfo.Delete();
+                }
+
+                Directory.Delete(directory);
+            });
         }
 
         public static string GetTemporaryDirectory()
