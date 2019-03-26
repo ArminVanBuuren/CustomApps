@@ -129,7 +129,7 @@ namespace Utils.Telegram
             if (mimT.IsNullOrEmptyTrim())
                 mimT = fileName;
 
-            var fileResult = (TLInputFileBig)await Client.UploadFile(fileName, new StreamReader(filePath));
+            var fileResult = await Client.UploadFile(fileName, new StreamReader(filePath));
 
             await Client.SendUploadedDocument(
                 destination,

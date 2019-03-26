@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +14,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Utils;
+using Utils.UIControls.Tools;
 
 namespace Tester.UIControls
 {
@@ -25,7 +29,29 @@ namespace Tester.UIControls
             InitializeComponent();
             //Closed += MainWindow_Closed;
             //text.TextChanged += Text_TextChanged;
+
+            //Directory.CreateDirectory("temp");
+            //CreateImage(ImageFormat.Gif);
+            //CreateImage(ImageFormat.Bmp);
+            //CreateImage(ImageFormat.Emf);
+            //CreateImage(ImageFormat.Exif);
+            //CreateImage(ImageFormat.Icon);
+            //CreateImage(ImageFormat.Jpeg);
+            //CreateImage(ImageFormat.MemoryBmp);
+            //CreateImage(ImageFormat.Png);
+            //CreateImage(ImageFormat.Tiff);
+            //CreateImage(ImageFormat.Wmf);
+            //CreateImage(ImageFormat.Wmf);
+
+
         }
+
+        void CreateImage(ImageFormat imageFormat)
+        {
+            string imagePath5 = System.IO.Path.Combine("temp", $"{STRING.RandomString(15)}.{imageFormat}");
+            ScreenCapture.Capture(imagePath5, imageFormat);
+        }
+
         private void Text_TextChanged(object sender, TextChangedEventArgs e)
         {
             MessageBox.Show("1111");

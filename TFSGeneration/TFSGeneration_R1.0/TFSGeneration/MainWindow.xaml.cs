@@ -235,9 +235,11 @@ namespace TFSAssist
                 GetDublicateTFS.TextChanged += GetDublicateTFS_OnTextChanged;
                 ToolTipService.SetInitialShowDelay(GetDublicateTFS, _timeoutToShowToolTip);
 
-
+                // 1
                 InitializeUpdater();
+                // 2
                 InitializeTimers();
+                // 3 Инициализация телеграма должна быть последней, т.к. он ссылается на Updater, если необходимо проверить обновления
                 Task.Run(InitializeTLControl);
 
                 //================ Activate button Start if all correct ==============================
@@ -320,7 +322,14 @@ namespace TFSAssist
 
             if (_tlControl != null)
             {
-                ASYNC.RunSync(() => _tlControl.EndTransaction());
+                try
+                {
+                    ASYNC.RunSync(() => _tlControl.EndTransaction());
+                }
+                catch (Exception)
+                {
+
+                }
             }
         }
 
@@ -346,12 +355,7 @@ namespace TFSAssist
             BindingOperations.SetBinding(target, dp, myBinding);
         }
 
-        async Task InitializeTLControl()
-        {
-            _tlControl = new TFSA_TLControl(CliendID, SimpleWriteLog);
-            await _tlControl.Initialize();
-            await _tlControl.Run();
-        }
+
 
         #region Initialize and processing Updater
 
@@ -596,6 +600,28 @@ namespace TFSAssist
 
         #endregion
 
+        #region Telegram Control
+
+        async Task InitializeTLControl()
+        {
+            if (AppUpdater == null)
+                _tlControl = new TFSA_TLControl(CliendID, null, GetCurrentLogs, SimpleWriteLog);
+            else
+                _tlControl = new TFSA_TLControl(CliendID, AppUpdater.CheckUpdates, GetCurrentLogs, SimpleWriteLog);
+
+            if (await _tlControl.Initialize())
+                await _tlControl.Run();
+        }
+
+        string GetCurrentLogs()
+        {
+            string textLogs = string.Empty;
+            Dispatcher?.Invoke(() => textLogs = new TextRange(LogTextBox.Document.ContentStart, LogTextBox.Document.ContentEnd).Text);
+            return textLogs;
+        }
+
+        #endregion
+
         #region WarningWindow, Logging, NotifyBar, StatusBar
 
         private void Warn_Loaded(object sender, RoutedEventArgs e)
@@ -758,6 +784,7 @@ namespace TFSAssist
 
                 ButtonStart.Content = STR_START;
 
+                // передаем true т.к. если пак с апдейтом был скачан, то updater точно остановил процесс в tfs и значит в TFSASssist процесс после апдейта нужно заново запустить.
                 UpdateApplication(true);
             });
         }

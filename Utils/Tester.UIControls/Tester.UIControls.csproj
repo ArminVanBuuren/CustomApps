@@ -100,6 +100,10 @@
       <Project>{afd02531-44b0-44d7-9d97-e5d4872b836b}</Project>
       <Name>Utils.UIControls</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Utils\Utils.csproj">
+      <Project>{a734b4e4-a5bf-4566-ac89-fc58d02b2d5f}</Project>
+      <Name>Utils</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\overwolf.ico" />

