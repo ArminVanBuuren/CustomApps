@@ -57,7 +57,7 @@ namespace Utils.AppUpdater
             }
         }
 
-        internal static Dictionary<string, FileBuildInfo> GetLocalVersions(Assembly runningApp)
+        public static Dictionary<string, FileBuildInfo> GetLocalVersions(Assembly runningApp)
         {
             string assembliesDirPath = runningApp.GetDirectory();
             return GetLocalVersions(assembliesDirPath, runningApp.Location);

@@ -6,12 +6,14 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TeleSharp.TL;
 using TFSAssist.Control;
 using Utils;
+using Utils.AppUpdater;
 using Utils.Handles;
 using Utils.Telegram;
 using Utils.UIControls.Tools;
@@ -68,9 +70,15 @@ namespace TFSAssist
             }
         }
 
-        public async Task EndTransaction()
+        //public async Task EndTransaction()
+        //{
+        //    await SendMessageToCurrentUser($"Disconnected. {GetCurrentServerInfo()}");
+        //}
+
+
+        async Task SendMessageToCurrentUser(string message)
         {
-            await SendMessageToCurrentUser($"Disconnected. {GetCurrentServerInfo()}");
+            await _control.SendMessageAsync(_control.CurrentUser.Destination, $"CID=[{ClientID}]\r\n{message}", 0);
         }
 
         public async Task Run()
@@ -108,16 +116,49 @@ namespace TFSAssist
                 {
                     if (tlMessage.Message.StartsWith(isCommand, StringComparison.CurrentCultureIgnoreCase))
                     {
-                        string message = tlMessage.Message.Substring(isCommand.Length, tlMessage.Message.Length - isCommand.Length).ToLower();
+                        string message = tlMessage.Message.Substring(isCommand.Length, tlMessage.Message.Length - isCommand.Length).ToLower().Trim();
                         switch (message)
                         {
-                            case "screen":
-                                string imagePath = Path.Combine(TempDirectory, $"{STRING.RandomString(15)}.png");
-                                await ScreenCapture.CaptureAsync(imagePath, ImageFormat.Png);
-                                break;
-
                             case "info":
                                 await SendMessageToCurrentUser(GetCurrentServerInfo(true));
+                                break;
+
+                            case "detinfo":
+                                var res = WIN32.GetDetailedHostInfo();
+                                if (res?.Count > 0)
+                                {
+                                    StringBuilder detInfo = new StringBuilder();
+                                    int maxLenghtSpace = res.Keys.Aggregate("", (max, cur) => max.Length > cur.Length ? max : cur).Length + 3;
+
+                                    foreach (var value in res)
+                                    {
+                                        detInfo.Append($"{value.Key} {new string('.', maxLenghtSpace - value.Key.Length)} [{string.Join("];[", value.Value)}]\r\n");
+                                    }
+
+                                    Dictionary<string, FileBuildInfo> localVersions = BuildPackInfo.GetLocalVersions(Assembly.GetExecutingAssembly());
+                                    if (localVersions?.Count > 0)
+                                    {
+                                        maxLenghtSpace = localVersions.Keys.Aggregate("", (max, cur) => max.Length > cur.Length ? max : cur).Length + 3;
+                                        localVersions = localVersions.OrderBy(p => p.Key).ToDictionary(x => x.Key, x => x.Value);
+
+                                        detInfo.Append($"\r\nLocation=[{Assembly.GetExecutingAssembly().GetDirectory()}]\r\n");
+                                        foreach (var versionLocalFiles in localVersions)
+                                        {
+                                            detInfo.Append($"{versionLocalFiles.Key} {new string('.', maxLenghtSpace - versionLocalFiles.Key.Length)} [{versionLocalFiles.Value.Version}]\r\n");
+                                        }
+                                    }
+
+                                    await SaveFile(Path.Combine(TempDirectory, $"{STRING.RandomString(15)}.log"), detInfo.ToString());
+                                }
+                                break;
+
+                            case "log":
+                                string logs = _getLogs?.Invoke();
+                                if (logs.IsNullOrEmptyTrim())
+                                    break;
+
+                                await SaveFile(Path.Combine(TempDirectory, $"{STRING.RandomString(15)}.log"), logs);
+
                                 break;
 
                             case "drive":
@@ -134,17 +175,9 @@ namespace TFSAssist
                                 await SendMessageToCurrentUser(result.Trim());
                                 break;
 
-                            case "log":
-                                string logs = _getLogs?.Invoke();
-                                if (logs.IsNullOrEmptyTrim())
-                                    break;
-
-                                using (var stream = new FileStream(Path.Combine(TempDirectory, $"{STRING.RandomString(15)}.log"), FileMode.OpenOrCreate))
-                                {
-                                    byte[] logsBytes = new UTF8Encoding(true).GetBytes(logs);
-                                    await stream.WriteAsync(logsBytes, 0, logsBytes.Length);
-                                }
-
+                            case "screen":
+                                string imagePath = Path.Combine(TempDirectory, $"{STRING.RandomString(15)}.png");
+                                await ScreenCapture.CaptureAsync(imagePath, ImageFormat.Png);
                                 break;
 
                             case "update":
@@ -207,9 +240,14 @@ namespace TFSAssist
             }
         }
 
-        async Task SendMessageToCurrentUser(string message)
+
+        async Task SaveFile(string destination, string data)
         {
-            await _control.SendMessageAsync(_control.CurrentUser.Destination, $"CID=[{ClientID}]\r\n{message}", 0);
+            using (var stream = new FileStream(destination, FileMode.OpenOrCreate))
+            {
+                byte[] logsBytes = new UTF8Encoding(true).GetBytes(data.Trim());
+                await stream.WriteAsync(logsBytes, 0, logsBytes.Length);
+            }
         }
 
         string DoZipFile(string sourceDir)
@@ -237,11 +275,7 @@ namespace TFSAssist
                 var hostName = Dns.GetHostName();
 
                 if (detailed)
-                {
-                    var serverName = System.Environment.MachineName;
-                    var full = System.Net.Dns.GetHostEntry(serverName).HostName;
-                    return $"Host=[{hostName}] FullName=[{full}] Address=[\"{string.Join("\",\"", Dns.GetHostAddresses(hostName).ToList())}\"]";
-                }
+                    return $"Host=[{hostName}] Address=[\"{string.Join("\",\"", Dns.GetHostAddresses(hostName).ToList())}\"]";
 
                 return $"Host=[{hostName}]";
             }

@@ -37,6 +37,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -1020,6 +1021,7 @@
     <Compile Include="Handles\WebDownload.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="WIN32.cs" />
     <Compile Include="XML.cs" />
     <Compile Include="XmlRtfStyle\RtfAlignment.cs" />
     <Compile Include="XmlRtfStyle\RtfBuilder.cs" />

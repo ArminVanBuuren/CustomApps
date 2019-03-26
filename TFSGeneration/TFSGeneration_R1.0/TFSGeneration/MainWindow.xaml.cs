@@ -320,17 +320,18 @@ namespace TFSAssist
                 _timerOnGC.Dispose();
             }
 
-            if (_tlControl != null)
-            {
-                try
-                {
-                    ASYNC.RunSync(() => _tlControl.EndTransaction());
-                }
-                catch (Exception)
-                {
+            //if (_tlControl != null)
+            //{
+            //    try
+            //    {
+            //        Task task = _tlControl.EndTransaction();
+            //        task.Wait();
+            //    }
+            //    catch (Exception)
+            //    {
 
-                }
-            }
+            //    }
+            //}
         }
 
         /// <summary>

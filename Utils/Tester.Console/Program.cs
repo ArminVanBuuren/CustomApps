@@ -19,6 +19,15 @@ namespace Tester.Console
     {
         static void Main(string[] args)
         {
+
+            WIN32.GetDetailedHostInfo();
+
+            System.Console.ReadLine();
+        }
+
+
+        static void TelegramTester()
+        {
             //using (var stream = new FileStream(@"C:\!MyRepos\CustomApp\Utils\Tester.Console\bin\Debug\session.dat", FileMode.Open))
             //{
             //    var buffer = new byte[2048];
@@ -43,9 +52,9 @@ namespace Tester.Console
             DateTime newDt2 = mdt.AddSeconds(1553106864).ToLocalTime();
 
             var ddddd = DateTime.Now;
-            var ddddd1  = DateTime.Now.ToUniversalTime();
+            var ddddd1 = DateTime.Now.ToUniversalTime();
 
-            
+
             DateTime newd1 = DateTime.ParseExact("20.03.2019 15:28:32", "dd.MM.yyyy HH:mm:ss", CultureInfo.CurrentCulture);
             DateTime newd2 = DateTime.ParseExact("20.03.2019 21:34:24", "dd.MM.yyyy HH:mm:ss", CultureInfo.CurrentCulture);
             newd1 = newd1.ToUniversalTime();
@@ -54,13 +63,10 @@ namespace Tester.Console
             double end = newd2.Subtract(mdt).TotalSeconds;
 
 
-            
+
             //TimeSpan span = DateTime.Now.Subtract(DateTime.Parse("07.02.2018 00:00:00"));
             TLControlNew control = new TLControlNew(770122, "8bf0b952100c9b22fd92499fc329c27e");
             Process(control);
-
-
-            System.Console.ReadLine();
         }
 
         static async void Process(TLControlNew control)
