@@ -17,7 +17,7 @@ using TLSharp.Core.Utils;
 
 namespace Utils.Telegram
 {
-    public abstract class TLControl
+    public abstract class TLControl : IDisposable
     {
         public static string SessionName => $"{nameof(TLControl)}Session";
         static readonly DateTime mdt = new DateTime(1970, 1, 1, 0, 0, 0);
@@ -531,6 +531,11 @@ namespace Utils.Telegram
             return number.StartsWith("+") ?
                 number.Substring(1, number.Length - 1) :
                 number;
+        }
+
+        public void Dispose()
+        {
+            Client?.Dispose();
         }
     }
 }

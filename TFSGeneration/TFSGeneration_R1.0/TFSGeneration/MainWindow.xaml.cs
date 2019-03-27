@@ -72,7 +72,7 @@ namespace TFSAssist
         // количество дней на хранение логов
         private const int _daysToSaveLogs = 10;
         object syncTraces = new object();
-        private TFSA_TLControl _tlControl;
+        
 
         private int _openedWarningWindowCount = 0;
         private Timer _timerOnActivateUnUsingWindow;
@@ -85,9 +85,8 @@ namespace TFSAssist
         public BottomNotification BottomNotification { get; private set; }
         public ApplicationUpdater AppUpdater { get; private set; }
         public List<TraceHighlighter> Traces { get; private set; } = new List<TraceHighlighter>();
+        public TFSA_TLControl TLControl { get; private set; }
         public string CliendID { get; private set; }
-
-
 
         public string CurrentPackUpdaterName
         {
@@ -124,7 +123,7 @@ namespace TFSAssist
         }
 
         public MainWindow()
-        {   
+        {
             // Проверить запущен ли уже экземпляр приложения, если запущен то не запускать новый
             List<Process> processExists = Process.GetProcesses().Where(p => p.ProcessName == nameof(TFSAssist)).ToList();
             if (processExists.Count > 1)
@@ -304,6 +303,8 @@ namespace TFSAssist
             BottomNotification?.Dispose();
             //обязательно диспоузить т.к. нужно результат сериализовать и остановить асинронный процесс
             TfsControl?.Dispose();
+            //обязательно очистить все временные файлы и дисконнектимся от телеграма
+            TLControl?.Dispose();
 
             //удаляем таймер
             if (_timerOnActivateUnUsingWindow != null)
@@ -605,13 +606,15 @@ namespace TFSAssist
 
         async Task InitializeTLControl()
         {
-            if (AppUpdater == null)
-                _tlControl = new TFSA_TLControl(CliendID, null, GetCurrentLogs, SimpleWriteLog);
-            else
-                _tlControl = new TFSA_TLControl(CliendID, AppUpdater.CheckUpdates, GetCurrentLogs, SimpleWriteLog);
+            TLControl = new TFSA_TLControl(CliendID, CheckUpdates, GetCurrentLogs, SimpleWriteLog);
+            if (await TLControl.Initialize())
+                await TLControl.Run();
+        }
 
-            if (await _tlControl.Initialize())
-                await _tlControl.Run();
+        void CheckUpdates()
+        {
+            if (AppUpdater != null)
+                AppUpdater.CheckUpdates();
         }
 
         string GetCurrentLogs()
