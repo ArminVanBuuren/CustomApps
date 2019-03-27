@@ -7,7 +7,7 @@ namespace TFSAssist.Control
     public class TraceListener : ITraceListener
     {
         public static Regex regReplace = new Regex(@"<.?Trace.*?>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        private Action<string, bool> _writeLog;
+        private readonly Action<string, bool> _writeLog;
 
         public TraceListener(Action<string, bool> writeLog)
         {
@@ -16,7 +16,7 @@ namespace TFSAssist.Control
 
         public void Trace(string traceType, string traceMessage)
         {
-            _writeLog?.Invoke(string.Format("{0} - {1}", traceType, regReplace.Replace(traceMessage, "").Trim()), true);
+            _writeLog?.Invoke($"{traceType} - {regReplace.Replace(traceMessage, "").Trim()}", true);
         }
     }
 }

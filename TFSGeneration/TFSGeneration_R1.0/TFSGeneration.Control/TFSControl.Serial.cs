@@ -56,12 +56,12 @@ namespace TFSAssist.Control
         /// Получить TFSControl
         /// </summary>
         /// <returns></returns>
-        public static TFSAssist.Control.TFSControl GetControl(LogPerformer log)
+        public static TFSControl GetControl(LogPerformer log)
         {
             if (log == null)
                 throw new ArgumentException(nameof(_log));
 
-            TFSAssist.Control.TFSControl tfsControl = null;
+            TFSControl tfsControl = null;
 
             //десериализация необходимых свойств класса TFSControl
             if (File.Exists(AccountStorePath))
@@ -70,7 +70,7 @@ namespace TFSAssist.Control
                 {
                     using (Stream stream = new FileStream(AccountStorePath, FileMode.Open, FileAccess.Read))
                     {
-                        tfsControl = new BinaryFormatter().Deserialize(stream) as TFSAssist.Control.TFSControl;
+                        tfsControl = new BinaryFormatter().Deserialize(stream) as TFSControl;
                     }
                 }
                 catch (Exception ex)
@@ -80,7 +80,7 @@ namespace TFSAssist.Control
             }
 
             if (tfsControl == null)
-                tfsControl = new TFSAssist.Control.TFSControl();
+                tfsControl = new TFSControl();
 
             tfsControl._log = log;
 

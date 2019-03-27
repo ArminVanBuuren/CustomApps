@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using Utils;
 using Utils.AppUpdater.Updater;
-using System.Windows.Documents;
 
 namespace TFSAssist
 {
@@ -70,10 +66,10 @@ namespace TFSAssist
 
                 File.SetAttributes(FileUpdatesPath, File.GetAttributes(FileUpdatesPath) | FileAttributes.Hidden);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 DeleteFileUpdates();
-                throw ex;
+                throw;
             }
         }
 
@@ -87,6 +83,7 @@ namespace TFSAssist
             }
             catch (Exception)
             {
+                // ignored
             }
         }
 
@@ -102,6 +99,7 @@ namespace TFSAssist
             }
             catch (Exception)
             {
+                // ignored
             }
         }
     }

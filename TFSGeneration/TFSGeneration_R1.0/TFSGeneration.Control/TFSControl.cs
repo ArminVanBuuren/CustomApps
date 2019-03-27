@@ -60,7 +60,7 @@ namespace TFSAssist.Control
 
                     string mailFilterFrom = Settings.MailOption.FilterMailFrom.Value.Trim();
                     string mailFilterSubject = Settings.MailOption.FilterSubject.Value.Trim();
-                    string logFilterRules = string.Empty;
+                    string logFilterRules;
 
                     if (!string.IsNullOrEmpty(mailFilterFrom) && !string.IsNullOrEmpty(mailFilterSubject))
                     {

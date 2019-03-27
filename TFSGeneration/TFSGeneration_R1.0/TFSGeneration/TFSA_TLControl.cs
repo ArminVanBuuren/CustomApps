@@ -542,7 +542,7 @@ namespace TFSAssist
             }
             catch (Exception)
             {
-             
+                // ignored
             }
         }
     }

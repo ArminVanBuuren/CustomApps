@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using System.Security.AccessControl;
-using System.Security.Principal;
-using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
 using Microsoft.Exchange.WebServices.Data;
-using Microsoft.Win32;
 
 namespace TFSAssist.Control
 {

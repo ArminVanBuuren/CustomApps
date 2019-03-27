@@ -1,9 +1,5 @@
 ﻿using Microsoft.TeamFoundation.Common;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TFSAssist.Control
 {
@@ -28,6 +24,7 @@ namespace TFSAssist.Control
         /// Уведомление пользователя по статусу работы приложения (нижняя строка приложения)
         /// </summary>
         /// <param name="status"></param>
+        /// <param name="severity"></param>
         internal void OnStatusChanged(string status, WarnSeverity severity = WarnSeverity.Status)
         {
             OnWriteLog(severity, status);

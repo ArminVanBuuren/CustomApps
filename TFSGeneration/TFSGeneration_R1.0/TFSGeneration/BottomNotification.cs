@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using Utils;
 
 namespace TFSAssist
 {
     public class BottomNotification : IDisposable
     {
-        private System.Windows.Forms.NotifyIcon notification;
-        private MainWindow _mainWindow;
+        private readonly System.Windows.Forms.NotifyIcon notification;
+        private readonly MainWindow _mainWindow;
         uint _countNotWatchedNotifications = 0;
-        private string _header;
+        private readonly string _header;
         public bool isDisposed { get; private set; } = false;
 
         public BottomNotification(MainWindow window, string header)
