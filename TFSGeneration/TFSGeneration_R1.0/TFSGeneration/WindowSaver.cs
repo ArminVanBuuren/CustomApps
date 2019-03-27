@@ -6,7 +6,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using Microsoft.Expression.Encoder.Live;
 using Utils;
 using Utils.AppUpdater.Updater;
 using System.Windows.Documents;
@@ -50,7 +49,7 @@ namespace TFSAssist
 
                     return updater;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     DeleteFileUpdates();
                 }
@@ -101,7 +100,7 @@ namespace TFSAssist
                     File.Delete(FileUpdatesPath);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
         }

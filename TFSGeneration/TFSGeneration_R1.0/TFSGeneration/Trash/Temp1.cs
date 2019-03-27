@@ -11,11 +11,11 @@ namespace TFSAssist.Trash
 			//var style = StartDate.Style;
 
 			//var _textDate = StartDate.Template.TargetType.CustomAttributes.Select(s => s.NamedArguments).ToList(); //.FindName("PART_Root", StartDate);
-			int i = 0;
+			//int i = 0;
 
 			//TextBox menu = FindVisualParent<TextBox>(StartDate);
 			//List<TextBox> textBoxes = GetVisualChildCollection<TextBox>(StartDate.Template.TargetType);
-			object tt;
+			//object tt;
 			//foreach (CustomAttributeData attr in StartDate.Template.TargetType.CustomAttributes)
 			//{
 			//	foreach (CustomAttributeNamedArgument arg in attr.NamedArguments)

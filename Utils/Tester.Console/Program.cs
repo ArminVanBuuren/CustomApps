@@ -19,12 +19,82 @@ namespace Tester.Console
     {
         static void Main(string[] args)
         {
+            string isCommand = "30609:";
+            //string tlMessage = "30609:cam ";
+            string tlMessage = "30609:cam ( par1 =d '1111,=(2222)' , par2 =q '5555,=(6666)' ) ";
 
-            WIN32.GetDetailedHostInfo();
+            string command = tlMessage.Substring(isCommand.Length, tlMessage.Length - isCommand.Length);
+            Dictionary<string, string> options = null;
+            int optStart = command.IndexOf('(');
+            int optEnd = command.IndexOf(')');
+            if (optStart != -1 && optEnd != -1 && optEnd > optStart)
+            {
+                string strOptions = command.Substring(optStart, command.Length - optStart);
+                options = ReadOptionParams(strOptions);
+                command = command.Substring(0, optStart);
+            }
+
+            command = command.ToLower().Trim();
 
             System.Console.ReadLine();
         }
 
+        static Dictionary<string, string> ReadOptionParams(string options)
+        {
+            Dictionary<string, string> optParams = new Dictionary<string, string>();
+            StringBuilder builderParam = new StringBuilder();
+            StringBuilder builderValue = new StringBuilder();
+            int findParams = 0;
+            int findValue = 0;
+
+            foreach (char ch in options)
+            {
+                if (ch == '(' && findParams == 0)
+                {
+                    findParams++;
+                    continue;
+                }
+
+                if (ch == ')' && (findValue == 0 || findValue == 3) && findParams > 0)
+                {
+                    findParams--;
+                    continue;
+                }
+
+                if (findParams <= 0)
+                    continue;
+
+                if ((ch == '=' && findValue == 0) || (ch == '\'' && findValue >= 1))
+                {
+                    findValue++;
+                    continue;
+                }
+
+                if (ch == ',' && findValue == 3)
+                {
+                    findValue = 0;
+                    optParams.Add(builderParam.ToString(), builderValue.ToString());
+                    builderParam.Clear();
+                    builderValue.Clear();
+                    continue;
+                }
+
+                if (findValue == 2)
+                {
+                    builderValue.Append(ch);
+                    continue;
+                }
+
+                if (!char.IsWhiteSpace(ch) && findValue == 0)
+                    builderParam.Append(ch);
+            }
+
+            optParams.Add(builderParam.ToString(), builderValue.ToString());
+            builderParam.Clear();
+            builderValue.Clear();
+
+            return optParams;
+        }
 
         static void TelegramTester()
         {

@@ -42,8 +42,16 @@ namespace Tester.UIControls
             //CreateImage(ImageFormat.Tiff);
             //CreateImage(ImageFormat.Wmf);
             //CreateImage(ImageFormat.Wmf);
+            Process();
 
 
+        }
+
+        async void Process()
+        {
+            CamCapture camp = new CamCapture();
+
+            await camp.StartRec(@"C:\VideoClips\temp.1", 10);
         }
 
         void CreateImage(ImageFormat imageFormat)

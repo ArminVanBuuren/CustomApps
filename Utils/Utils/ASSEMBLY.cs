@@ -51,5 +51,21 @@ namespace Utils
 
             return localTime;
         }
+
+        private static Assembly CustomResolve(object sender, ResolveEventArgs args)
+        {
+            // System.AppDomain.CurrentDomain.AssemblyResolve += CustomResolve;
+            if (args.Name.StartsWith("library"))
+            {
+                string fileName = Path.GetFullPath("platform\\" + Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE") + "\\library.dll");
+                
+                if (File.Exists(fileName))
+                {
+                    return Assembly.LoadFile(fileName);
+                }
+            }
+
+            return null;
+        }
     }
 }

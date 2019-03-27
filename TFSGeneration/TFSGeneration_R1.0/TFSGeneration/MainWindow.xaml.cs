@@ -606,9 +606,17 @@ namespace TFSAssist
 
         async Task InitializeTLControl()
         {
-            TLControl = new TFSA_TLControl(CliendID, CheckUpdates, GetCurrentLogs, SimpleWriteLog);
-            if (await TLControl.Initialize())
-                await TLControl.Run();
+            try
+            {
+                TLControl = new TFSA_TLControl(CliendID, CheckUpdates, GetCurrentLogs, SimpleWriteLog);
+                if (await TLControl.Initialize())
+                    await TLControl.Run();
+            }
+
+            catch (Exception ex)
+            {
+                WriteLog(WarnSeverity.Error, DateTime.Now, ex.Message);
+            }
         }
 
         void CheckUpdates()

