@@ -1,14 +1,9 @@
 ﻿using Microsoft.Expression.Encoder.Devices;
 using Microsoft.Expression.Encoder.Live;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Utils.UIControls.Tools
@@ -43,7 +38,7 @@ namespace Utils.UIControls.Tools
         /// 
         /// </summary>
         /// <param name="destiationFileName"></param>
-        /// <param name="timeRec">Max 1800</param>
+        /// <param name="timeRecSec"></param>
         /// <param name="videoEncoder"></param>
         /// <param name="audioEncoder"></param>
         /// <returns></returns>
@@ -89,8 +84,6 @@ namespace Utils.UIControls.Tools
             job.StopEncoding();
             job.RemoveDeviceSource(deviceSource);
             deviceSource.PreviewWindow = null;
-            deviceSource = null;
-            job = null;
 
             return true;
         }

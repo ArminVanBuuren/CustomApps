@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using TeleSharp.TL;
-using TeleSharp.TL.Channels;
-using TeleSharp.TL.Contacts;
-using TeleSharp.TL.Interfaces;
 using TeleSharp.TL.Messages;
-using TeleSharp.TL.Photos;
 using TeleSharp.TL.Updates;
 using TLSharp.Core;
 using TLSharp.Core.Utils;
@@ -55,7 +49,7 @@ namespace Utils.Telegram
             var hash = await Client.SendCodeRequestAsync(numberAuth);
             var code = await getCodeToAuthenticate;
 
-            TLUser user = null;
+            TLUser user;
             try
             {
                 user = await Client.MakeAuthAsync(numberAuth, hash, code);
@@ -63,7 +57,7 @@ namespace Utils.Telegram
             catch (CloudPasswordNeededException ex)
             {
                 if(password.IsNullOrEmptyTrim())
-                    throw ex;
+                    throw;
 
                 var tlPassword = await Client.GetPasswordSetting();
 
@@ -82,7 +76,7 @@ namespace Utils.Telegram
             var hash = await Client.SendCodeRequestAsync(notRegisteredNumber);
             var code = await getCodeToAuthenticate;
 
-            var registeredUser = await Client.SignUpAsync(notRegisteredNumber, hash, code, firstName, lastName);
+            //var registeredUser = await Client.SignUpAsync(notRegisteredNumber, hash, code, firstName, lastName);
 
             var loggedInUser = await Client.MakeAuthAsync(notRegisteredNumber, hash, code);
 
@@ -401,7 +395,7 @@ namespace Utils.Telegram
             List<TLMessage> messageColelction = new List<TLMessage>();
 
             getMessages:
-            TLMessagesSlice messages = null;
+            TLMessagesSlice messages;
             try
             {
                 var req = new TLRequestGetHistory()
@@ -482,7 +476,6 @@ namespace Utils.Telegram
                     OffsetId = 0
                 });
 
-                var offset = 0;
                 TLMessagesSlice res2 = await Client.SendRequestAsync<TLMessagesSlice>
                 (new TLRequestGetHistory()
                 {

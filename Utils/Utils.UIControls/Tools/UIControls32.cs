@@ -31,8 +31,6 @@ namespace Utils.UIControls.Tools
                         handled = true;
                     }
                     break;
-                default:
-                    break;
             }
             return IntPtr.Zero;
         }
