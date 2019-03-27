@@ -87,11 +87,11 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Utils, Version=1.0.7025.37683, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="Utils, Version=1.0.7025.41009, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Utils\Utils\bin\x86\Release\Utils.dll</HintPath>
     </Reference>
-    <Reference Include="Utils.UIControls, Version=1.0.7025.37679, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="Utils.UIControls, Version=1.0.7025.41011, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Utils\Utils.UIControls\bin\x86\Release\Utils.UIControls.dll</HintPath>
     </Reference>
