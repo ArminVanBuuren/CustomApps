@@ -31,18 +31,18 @@ namespace TFSAssist
 
     public class TFSA_TLControl : IDisposable
     {
-        private string ClientID = string.Empty;
+        private readonly string ClientID;
         private TTLControl _control;
 
         private CamCapture _camCapture;
 
-        private GeoCoordinateWatcher _watcher;
+        private readonly GeoCoordinateWatcher _watcher;
         private string _locationResult = string.Empty;
         private bool _tryGetLocation = false;
 
-        private Action _checkUpdates;
-        private Func<string> _getLogs;
-        private Action<WarnSeverity, string> _writeLog;
+        private readonly Action _checkUpdates;
+        private readonly Func<string> _getLogs;
+        private readonly Action<WarnSeverity, string> _writeLog;
 
         public string TempDirectory { get; }
         public bool IsEnabled { get; private set; } = false;
@@ -63,7 +63,7 @@ namespace TFSAssist
             }
             catch (Exception)
             {
-
+                // ignored
             }
         }
 
@@ -244,7 +244,7 @@ namespace TFSAssist
                                 {
                                     if (drive.IsReady)
                                     {
-                                        result += $"Drive=[{drive.Name}] FreeSize=[{IO.FormatBytes(drive.TotalFreeSpace, out var newBytes)}]\r\n";
+                                        result += $"Drive=[{drive.Name}] FreeSize=[{IO.FormatBytes(drive.TotalFreeSpace, out _)}]\r\n";
                                     }
                                 }
 
@@ -326,7 +326,7 @@ namespace TFSAssist
             finally
             {
                 var tempFiles = Directory.EnumerateFiles(TempDirectory);
-                if (tempFiles.Count() > 0)
+                if (tempFiles.Any())
                 {
                     try
                     {

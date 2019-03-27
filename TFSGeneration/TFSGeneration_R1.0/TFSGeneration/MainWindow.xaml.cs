@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing.Imaging;
 using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,19 +11,14 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Forms;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Threading;
-using Microsoft.Win32;
-using TeleSharp.TL;
 using TFSAssist.Control;
 using Utils;
 using Utils.AppUpdater;
 using Utils.AppUpdater.Updater;
 using Utils.Handles;
-using Utils.Telegram;
-using Utils.UIControls.Tools;
 using Binding = System.Windows.Data.Binding;
 using ProgressBar = System.Windows.Controls.ProgressBar;
 using TextBox = System.Windows.Controls.TextBox;
@@ -51,7 +43,6 @@ namespace TFSAssist
         }
     }
 
-    /// <inheritdoc cref="" />
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
@@ -621,14 +612,16 @@ namespace TFSAssist
 
         void CheckUpdates()
         {
-            if (AppUpdater != null)
-                AppUpdater.CheckUpdates();
+            AppUpdater?.CheckUpdates();
         }
 
         string GetCurrentLogs()
         {
             string textLogs = string.Empty;
-            Dispatcher?.Invoke(() => textLogs = new TextRange(LogTextBox.Document.ContentStart, LogTextBox.Document.ContentEnd).Text);
+            lock (syncTraces)
+            {
+                Dispatcher?.Invoke(() => textLogs = new TextRange(LogTextBox.Document.ContentStart, LogTextBox.Document.ContentEnd).Text);
+            }
             return textLogs;
         }
 
@@ -678,7 +671,7 @@ namespace TFSAssist
                         // показывает уведомление при любых уведомлениях, если окно не активно или уже было одно уведомление
                         BottomNotification.DisplayNotify(severity.ToString("G"), message);
 
-                        if (_openedWarningWindowCount >= 1 || !this.IsLoaded)
+                        if (_openedWarningWindowCount >= 1 || !IsLoaded)
                             return;
 
                         // Cразу активировать окно только при критических ошибках. При остальных уведомлениях появляется статус бар или по таймеру активируется окно если _openedWarningWindowCount > 0
@@ -806,7 +799,9 @@ namespace TFSAssist
         void ProgressBarBlurEffect(UIElement element, bool isBlur)
         {
             BlurEffect effect = element.Effect as BlurEffect;
-            
+            if(effect == null)
+                return;
+
             if (isBlur)
             {
                 effect.Changed += Effect_Changed;
