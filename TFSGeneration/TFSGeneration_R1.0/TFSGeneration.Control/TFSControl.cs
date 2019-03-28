@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Security;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Microsoft.Exchange.WebServices.Data;
@@ -365,7 +366,7 @@ namespace TFSAssist.Control
             DateTime lastProcessingDate = DateTime.Parse(Settings.MailOption.StartDate.Value);
 
             _log.OnStatusChanged(StatusString.Processing, WarnSeverity.StatusRegular);
-            string logProcessing = string.Empty;
+            
             int countExeptions = 0;
             int numberOfAttempts = 0;
 
@@ -446,7 +447,7 @@ namespace TFSAssist.Control
 
                     Datas.Add(task);
                 }
-                catch (TFSFieldsException ex1)
+                catch (TFSFieldsException ex)
                 {
                     //Если в настройках что то было неверно заполненно
                     task.Status = ProcessingStatus.Failure;
@@ -454,20 +455,21 @@ namespace TFSAssist.Control
 
                     countExeptions++;
 
-                    logProcessing += $"Processing Error!\r\nReceivedDate=[{item.ReceivedDate}] Subject=[{item.Subject}]\r\n";
-                    Exception ex2 = ex1;
+                    string logProcessing = $"Processing Error!\r\n";
+                    Exception detailedEx = ex;
                     while (true)
                     {
-                        logProcessing += $"\r\n{ex2.Message}\r\n{ex2.StackTrace}\r\n";
+                        logProcessing += $"{detailedEx.Message}\r\n";
 
-                        if (ex2.InnerException != null)
+                        if (detailedEx.InnerException != null)
                         {
-                            ex2 = ex2.InnerException;
+                            detailedEx = detailedEx.InnerException;
                             continue;
                         }
                         break;
                     }
-                    logProcessing += new string('=', 47) + Environment.NewLine;
+
+                    _log.OnWriteLog(logProcessing);
                 }
                 catch (Exception)
                 {
@@ -487,7 +489,7 @@ namespace TFSAssist.Control
             {
                 //отправляем список ошибок которые возможно связанны с настроками конфига
                 _log.OnStatusChanged(StatusString.ProcessingError);
-                _log.OnWriteLog(WarnSeverity.Warning, $"Catched [{countExeptions}] processing exceptions.", logProcessing.Trim());
+                _log.OnWriteLog(WarnSeverity.Warning, $"Catched {countExeptions} processing exceptions.");
                 Thread.Sleep(10 * 1000);
             }
 
@@ -609,6 +611,7 @@ namespace TFSAssist.Control
                     WorkItemType workItemType = teamProject.WorkItemTypes[workItem.Value];
                     string displayForm = workItemType.DisplayForm;
                     WorkItem tfsWorkItem = new WorkItem(workItemType);
+                    string failedFieldsStr = string.Empty;
 
                     try
                     {
@@ -651,18 +654,29 @@ namespace TFSAssist.Control
                             tfsWorkItem.Fields[field.Name].Value = getFrmFieldValue;
                         }
 
-                        tfsWorkItem.Save();
+                        try
+                        {
+                            tfsWorkItem.Save();
+                        }
+                        catch (Exception)
+                        {
+                            var failedFields = tfsWorkItem.Validate();
+                            foreach (Field failFld in failedFields)
+                            {
+                                failedFieldsStr += $"Name=[{failFld.Name}] Value=[{failFld.Value}] Status=[{failFld.Status:G}] ReferenceName=[{failFld.ReferenceName}] Description=[{failFld.FieldDefinition.HelpText}]\r\n";
+                            }
+                            throw;
+                        }
+                        
                         createdTfsId += tfsWorkItem.Id + ";";
-                        _log.OnWriteLog($"Created TFS=[{createdTfsId}]", true);
+                        _log.OnWriteLog($"Successfully created {workItem.Value}=[{createdTfsId}] in TeamProject=[{teamProj.Value}]", true);
                     }
-                    catch (ValidationException ex) // ошибка если не все обязательные поля были заполнены
+                    catch (ValidationException ex) // ошибка если не все обязательные поля были заполнены или были указаны неверные значения
                     {
                         //получаем все обязательные поля для заполнения, чтобы в случае эксепшена знать какие поля необходимо заполнить
-                        string reqFields = tfsWorkItem.Fields.Cast<Field>().Where(field => field.IsRequired)
-                                                      .Aggregate(string.Empty, (current, field) => current + (field.ReferenceName + Environment.NewLine)).Trim();
-
-                        throw new TFSFieldsException("Error in creating TFS item! Please check workitem's fields in config.",
-                                                     new TFSFieldsException($"Error in {teamProj.Value}=[{teamProj.Condition}] \\ {workItem.Value}=[{workItem.Condition}]\r\nAll required fields:\r\n{reqFields}", ex));
+                        StringBuilder reqFieldsStr = tfsWorkItem.Fields.OfType<Field>().Where(field => field.IsRequired).Aggregate(new StringBuilder(), (current, field) => AddParams(current, field));
+                        string res = reqFieldsStr.ToString();
+                        throw new TFSFieldsException($"Error when create [{workItem.Value}] in TFS [{teamProj.Value}]! Please check Fields => TeamProject Condition=[{teamProj.Condition}] => WorkItem Condition=[{workItem.Condition}] in your config.\r\nFailed Fields:\r\n{failedFieldsStr}{new string('=', 50)}\r\nAll Required Fields:\r\n{res}{new string('=', 50)}", ex);
                     }
                     catch (Exception)
                     {
@@ -674,6 +688,24 @@ namespace TFSAssist.Control
             }
 
             return !createdTfsId.IsNullOrEmpty();
+        }
+
+        StringBuilder AddParams(StringBuilder builder, Field field)
+        {
+            builder.Append($"Name=[{field.Name}] Value=[{field.Value}] Descritpion=[{field.FieldDefinition?.HelpText}]\r\n");
+            //builder.Append(FormatParam("Value", field.Value == null ? "Null" : field.Value.ToString(), 37));
+            //builder.Append(FormatParam("ReferenceName", field.ReferenceName, 35));
+            //builder.Append($"Descritpion=[{field.FieldDefinition?.HelpText}]\r\n");
+            return builder;
+        }
+
+        string FormatParam(string paramName, string paramValue, int maxSpaces = 15)
+        {
+            string spaces = " ";
+            if (maxSpaces - paramValue?.Length > 0)
+                spaces = new string(' ', maxSpaces - paramValue.Length);
+
+            return $"{paramName}=[{paramValue}]{spaces}";
         }
     }
 }

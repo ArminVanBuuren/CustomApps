@@ -26,7 +26,7 @@ AND [System.Title] Contains '%ParceBody_ITHD%']]>
         <WorkItem Condition="#{if('%ParceBody_REQTYPE%'^='Запрос на изменение')}" Value="Task">
           <Field Name="Control.AssignedTo" Value="Костюченко Ольга Вячеславовна" />
           <Field Name="System.Title" Value="[%ParceBody_ITHD%] %ParceBody_TITLE%" />
-          <Field Name="Sitronics.RND.StsProject" Value="B13003_MTSMinsk_TS_FORIS_in_2018" />
+          <Field Name="Sitronics.RND.StsProject" Value="B13006_MTSMinsk_TS_FORIS_in_2019" />
           <Field Name="Sitronics.RND.Support.ServiceDeskCode" Value="%ParceBody_ITHD%" />
           <Field Name="Sitronics.RND.Region" Value="MTS.Bel" />
           <Field Name="Description" Value="&lt;p&gt;TFS Assist&lt;/p&gt;&lt;a href=&quot;%ParceBody_URL%&quot;&gt;%ParceBody_URL%&lt;/a&gt;" />
@@ -36,7 +36,7 @@ AND [System.Title] Contains '%ParceBody_ITHD%']]>
             <Map Case="(MessagingGateway)|(Gateway)|(dispatcher)|(connector)|(система мечта)" Value="Support\Resource Management Domain\MessagingGateway" />
             <Map Case="(rating)|(bms)|(umrs)|(sups)|(smbp)|(guiding)" Value="Support\Rating Domain" />
             <Map Case="(scp)|(sdp)|(medio)" Value="Support\Medio" />
-            <Map Case="(crm)|(sales)|(okat)|(pam)|(марти)|(marti)|(кэо)|(gui)|(фигня)" Value="Support\CRM Domain" />
+            <Map Case="(crm)|(sales)|(okat)|(pam)|(марти)|(marti)|(кэо)|(gui)" Value="Support\CRM Domain" />
           </Field>
           <Field Name="System.IterationPath" Value="Support\Release 4.7.1" />
           <Field Name="Microsoft.VSTS.Scheduling.StartDate" Value="%now%" />
@@ -54,7 +54,7 @@ AND [System.Title] Contains '%ParceBody_ITHD%']]>
         <WorkItem Condition="#{if('%ParceBody_REQTYPE%'^='Вопрос')}" Value="Task">
           <Field Name="Control.AssignedTo" Value="Костюченко Ольга Вячеславовна" />
           <Field Name="System.Title" Value="[%ParceBody_ITHD%] %ParceBody_TITLE%" />
-          <Field Name="Sitronics.RND.StsProject" Value="B13003_MTSMinsk_TS_FORIS_in_2018" />
+          <Field Name="Sitronics.RND.StsProject" Value="B13006_MTSMinsk_TS_FORIS_in_2019" />
           <Field Name="Sitronics.RND.Support.ServiceDeskCode" Value="%ParceBody_ITHD%" />
           <Field Name="Sitronics.RND.Region" Value="MTS.Bel" />
           <Field Name="Description" Value="&lt;p&gt;TFS Assist&lt;/p&gt;&lt;a href=&quot;%ParceBody_URL%&quot;&gt;%ParceBody_URL%&lt;/a&gt;" />
@@ -64,7 +64,7 @@ AND [System.Title] Contains '%ParceBody_ITHD%']]>
             <Map Case="(MessagingGateway)|(Gateway)|(dispatcher)|(connector)|(система мечта)" Value="Support\Resource Management Domain\MessagingGateway" />
             <Map Case="(rating)|(bms)|(umrs)|(sups)|(smbp)|(guiding)" Value="Support\Rating Domain" />
             <Map Case="(scp)|(sdp)|(medio)" Value="Support\Medio" />
-            <Map Case="(crm)|(sales)|(okat)|(pam)|(марти)|(marti)|(кэо)|(gui)|(фигня)" Value="Support\CRM Domain" />
+            <Map Case="(crm)|(sales)|(okat)|(pam)|(марти)|(marti)|(кэо)|(gui)" Value="Support\CRM Domain" />
           </Field>
           <Field Name="System.IterationPath" Value="Support\Release 4.7.1" />
           <Field Name="Microsoft.VSTS.Scheduling.StartDate" Value="%now%" />
@@ -76,7 +76,7 @@ AND [System.Title] Contains '%ParceBody_ITHD%']]>
         <WorkItem Condition="#{if('%ParceBody_REQTYPE%'^='ошибка')}" Value="Issue">
           <Field Name="Control.AssignedTo" Value="Костюченко Ольга Вячеславовна" />
           <Field Name="System.Title" Value="[%ParceBody_ITHD%] %ParceBody_TITLE%" />
-          <Field Name="Sitronics.RND.StsProject" Value="B13003_MTSMinsk_TS_FORIS_in_2018" />
+          <Field Name="Sitronics.RND.StsProject" Value="B13006_MTSMinsk_TS_FORIS_in_2019" />
           <Field Name="Sitronics.RND.Support.ServiceDeskCode" Value="%ParceBody_ITHD%" />
           <Field Name="Sitronics.RND.Region" Value="MTS.Bel" />
           <Field Name="Description" Value="&lt;p&gt;TFS Assist&lt;/p&gt;&lt;a href=&quot;%ParceBody_URL%&quot;&gt;%ParceBody_URL%&lt;/a&gt;" />
@@ -86,7 +86,7 @@ AND [System.Title] Contains '%ParceBody_ITHD%']]>
             <Map Case="(MessagingGateway)|(Gateway)|(dispatcher)|(connector)|(система мечта)" Value="Support\Resource Management Domain\MessagingGateway" />
             <Map Case="(rating)|(bms)|(umrs)|(sups)|(smbp)|(guiding)" Value="Support\Rating Domain" />
             <Map Case="(scp)|(sdp)|(medio)" Value="Support\Medio" />
-            <Map Case="(crm)|(sales)|(okat)|(pam)|(марти)|(marti)|(кэо)|(gui)|(фигня)" Value="Support\CRM Domain" />
+            <Map Case="(crm)|(sales)|(okat)|(pam)|(марти)|(marti)|(кэо)|(gui)" Value="Support\CRM Domain" />
           </Field>
           <Field Name="System.IterationPath" Value="Support\Release 4.7.1" />
           <Field Name="Microsoft.VSTS.Scheduling.StartDate" Value="%now%" />
@@ -135,7 +135,7 @@ AND [System.Title] Contains '%ParceBody_ITHD%']]>
             <Map Case="(MessagingGateway)|(Gateway)|(dispatcher)|(connector)|(система мечта)" Value="FORIS_Mobile\Resource Management Domain\MessagingGateway" />
             <Map Case="(rating)|(bms)|(umrs)|(sups)|(smbp)|(guiding)" Value="FORIS_Mobile\Rating Domain" />
             <Map Case="(scp)|(sdp)|(medio)" Value="FORIS_Mobile\MEDIO" />
-            <Map Case="(crm)|(sales)|(okat)|(pam)|(марти)|(marti)|(кэо)|(gui)|(фигня)" Value="FORIS_Mobile\CRM Domain" />
+            <Map Case="(crm)|(sales)|(okat)|(pam)|(марти)|(marti)|(кэо)|(gui)" Value="FORIS_Mobile\CRM Domain" />
           </Field>
           <Field Name="System.IterationPath" Value="FORIS_Mobile\Release 4.7.1\Minsk-Ukraine (Branch R1)" />
           <Field Name="Severity" Value="Critical" />
