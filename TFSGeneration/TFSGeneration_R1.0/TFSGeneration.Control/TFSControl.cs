@@ -645,7 +645,7 @@ namespace TFSAssist.Control
                                     }
                                     else
                                     {
-                                        throw new TFSFieldsException($"Incorrect Value=[{link}] from {field.Name}");
+                                        throw new TFSFieldsException($"Incorrect Value=[{link}] from Filed=[{field.Name}]. Please check Fields => TeamProject Condition=[{teamProj.Condition}] => WorkItem Condition=[{workItem.Condition}] in your config.");
                                     }
                                 }
                                 continue;
