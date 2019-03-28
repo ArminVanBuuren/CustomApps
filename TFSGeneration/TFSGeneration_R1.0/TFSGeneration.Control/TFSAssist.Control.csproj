@@ -170,7 +170,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Utils, Version=1.0.7025.40201, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="Utils, Version=1.0.7025.38080, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Utils\Utils\bin\x86\Release\Utils.dll</HintPath>
     </Reference>
