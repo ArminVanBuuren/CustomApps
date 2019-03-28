@@ -21,6 +21,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,6 +32,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -40,6 +42,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -50,21 +53,21 @@
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <PlatformTarget>x86</PlatformTarget>
     <OutputPath>bin\x86\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <PlatformTarget>x86</PlatformTarget>
     <OutputPath>bin\x86\Release\</OutputPath>
     <Optimize>true</Optimize>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FastColoredTextBox">
-      <HintPath>..\..\FastColoredTextBox\FastColoredTextBox\bin\Release\FastColoredTextBox.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Design" />
@@ -78,6 +81,341 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AForge\Controls\Chart.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AForge\Controls\ColorSlider.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AForge\Controls\Histogram.cs" />
+    <Compile Include="AForge\Controls\HuePicker.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AForge\Controls\Joystick.cs" />
+    <Compile Include="AForge\Controls\JoystickAPI.cs" />
+    <Compile Include="AForge\Controls\ManipulatorControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AForge\Controls\ManipulatorControl.designer.cs">
+      <DependentUpon>ManipulatorControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AForge\Controls\PictureBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AForge\Controls\SliderControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AForge\Controls\SliderControl.designer.cs">
+      <DependentUpon>SliderControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AForge\Controls\VideoSourcePlayer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AForge\Controls\VideoSourcePlayer.designer.cs">
+      <DependentUpon>VideoSourcePlayer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AForge\Core\Delegates.cs" />
+    <Compile Include="AForge\Core\DoublePoint.cs" />
+    <Compile Include="AForge\Core\DoubleRange.cs" />
+    <Compile Include="AForge\Core\EventArgs.cs" />
+    <Compile Include="AForge\Core\Exceptions.cs" />
+    <Compile Include="AForge\Core\IntPoint.cs" />
+    <Compile Include="AForge\Core\IntRange.cs" />
+    <Compile Include="AForge\Core\Parallel.cs" />
+    <Compile Include="AForge\Core\Point.cs" />
+    <Compile Include="AForge\Core\PolishExpression.cs" />
+    <Compile Include="AForge\Core\Range.cs" />
+    <Compile Include="AForge\Core\SystemTools.cs" />
+    <Compile Include="AForge\Core\ThreadSafeRandom.cs" />
+    <Compile Include="AForge\Imaging\Blob.cs" />
+    <Compile Include="AForge\Imaging\BlobCounter.cs" />
+    <Compile Include="AForge\Imaging\BlobCounterBase.cs" />
+    <Compile Include="AForge\Imaging\BlockMatch.cs" />
+    <Compile Include="AForge\Imaging\Color Reduction\BurkesColorDithering.cs" />
+    <Compile Include="AForge\Imaging\Color Reduction\ColorErrorDiffusionToAdjacentNeighbors.cs" />
+    <Compile Include="AForge\Imaging\Color Reduction\ColorImageQuantizer.cs" />
+    <Compile Include="AForge\Imaging\Color Reduction\ErrorDiffusionColorDithering.cs" />
+    <Compile Include="AForge\Imaging\Color Reduction\FloydSteinbergColorDithering.cs" />
+    <Compile Include="AForge\Imaging\Color Reduction\IColorQuantizer.cs" />
+    <Compile Include="AForge\Imaging\Color Reduction\JarvisJudiceNinkeColorDithering.cs" />
+    <Compile Include="AForge\Imaging\Color Reduction\MedianCutCube.cs" />
+    <Compile Include="AForge\Imaging\Color Reduction\MedianCutQuantizer.cs" />
+    <Compile Include="AForge\Imaging\Color Reduction\OrderedColorDithering.cs" />
+    <Compile Include="AForge\Imaging\Color Reduction\SierraColorDithering.cs" />
+    <Compile Include="AForge\Imaging\Color Reduction\StuckiColorDithering.cs" />
+    <Compile Include="AForge\Imaging\ColorConverter.cs" />
+    <Compile Include="AForge\Imaging\Complex Filters\FrequencyFilter.cs" />
+    <Compile Include="AForge\Imaging\Complex Filters\IComplexFilter.cs" />
+    <Compile Include="AForge\Imaging\ComplexImage.cs" />
+    <Compile Include="AForge\Imaging\DocumentSkewChecker.cs" />
+    <Compile Include="AForge\Imaging\Drawing.cs" />
+    <Compile Include="AForge\Imaging\Exceptions.cs" />
+    <Compile Include="AForge\Imaging\ExhaustiveBlockMatching.cs" />
+    <Compile Include="AForge\Imaging\ExhaustiveTemplateMatching.cs" />
+    <Compile Include="AForge\Imaging\Filters\2 Source filters\Add.cs" />
+    <Compile Include="AForge\Imaging\Filters\2 Source filters\Difference.cs" />
+    <Compile Include="AForge\Imaging\Filters\2 Source filters\Intersect.cs" />
+    <Compile Include="AForge\Imaging\Filters\2 Source filters\Merge.cs" />
+    <Compile Include="AForge\Imaging\Filters\2 Source filters\Morph.cs" />
+    <Compile Include="AForge\Imaging\Filters\2 Source filters\MoveTowards.cs" />
+    <Compile Include="AForge\Imaging\Filters\2 Source filters\StereoAnaglyph.cs" />
+    <Compile Include="AForge\Imaging\Filters\2 Source filters\Subtract.cs" />
+    <Compile Include="AForge\Imaging\Filters\2 Source filters\ThresholdedDifference.cs" />
+    <Compile Include="AForge\Imaging\Filters\2 Source filters\ThresholdedEuclideanDifference.cs" />
+    <Compile Include="AForge\Imaging\Filters\Adaptive Binarization\BradleyLocalThresholding.cs" />
+    <Compile Include="AForge\Imaging\Filters\Adaptive Binarization\IterativeThreshold.cs" />
+    <Compile Include="AForge\Imaging\Filters\Adaptive Binarization\OtsuThreshold.cs" />
+    <Compile Include="AForge\Imaging\Filters\Adaptive Binarization\SISThreshold.cs" />
+    <Compile Include="AForge\Imaging\Filters\Base classes\BaseFilter.cs" />
+    <Compile Include="AForge\Imaging\Filters\Base classes\BaseFilter2.cs" />
+    <Compile Include="AForge\Imaging\Filters\Base classes\BaseInPlaceFilter.cs" />
+    <Compile Include="AForge\Imaging\Filters\Base classes\BaseInPlaceFilter2.cs" />
+    <Compile Include="AForge\Imaging\Filters\Base classes\BaseInPlacePartialFilter.cs" />
+    <Compile Include="AForge\Imaging\Filters\Base classes\BaseResizeFilter.cs" />
+    <Compile Include="AForge\Imaging\Filters\Base classes\BaseRotateFilter.cs" />
+    <Compile Include="AForge\Imaging\Filters\Base classes\BaseTransformationFilter.cs" />
+    <Compile Include="AForge\Imaging\Filters\Base classes\BaseUsingCopyPartialFilter.cs" />
+    <Compile Include="AForge\Imaging\Filters\Binarization\BayerDithering.cs" />
+    <Compile Include="AForge\Imaging\Filters\Binarization\BurkesDithering.cs" />
+    <Compile Include="AForge\Imaging\Filters\Binarization\ErrorDiffusionDithering.cs" />
+    <Compile Include="AForge\Imaging\Filters\Binarization\ErrorDiffusionToAdjacentNeighbors.cs" />
+    <Compile Include="AForge\Imaging\Filters\Binarization\FloydSteinbergDithering.cs" />
+    <Compile Include="AForge\Imaging\Filters\Binarization\JarvisJudiceNinkeDithering.cs" />
+    <Compile Include="AForge\Imaging\Filters\Binarization\OrderedDithering.cs" />
+    <Compile Include="AForge\Imaging\Filters\Binarization\SierraDithering.cs" />
+    <Compile Include="AForge\Imaging\Filters\Binarization\StuckiDithering.cs" />
+    <Compile Include="AForge\Imaging\Filters\Binarization\Threshold.cs" />
+    <Compile Include="AForge\Imaging\Filters\Binarization\ThresholdWithCarry.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\BayerFilter.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\BayerFilterOptimized.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\BrightnessCorrection.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\ChannelFiltering.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\ColorFiltering.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\ColorRemapping.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\ContrastCorrection.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\ContrastStretch.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\EuclideanColorFiltering.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\ExtractChannel.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\GammaCorrection.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\Grayscale.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\GrayscaleBT709.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\GrayscaleRMY.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\GrayscaleToRGB.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\GrayscaleY.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\HistogramEqualization.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\Invert.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\LevelsLinear.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\LevelsLinear16bpp.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\ReplaceChannel.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\RotateChannels.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\Sepia.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Segmentation\SimplePosterization.cs" />
+    <Compile Include="AForge\Imaging\Filters\Convolution\Blur.cs" />
+    <Compile Include="AForge\Imaging\Filters\Convolution\Convolution.cs" />
+    <Compile Include="AForge\Imaging\Filters\Convolution\Edges.cs" />
+    <Compile Include="AForge\Imaging\Filters\Convolution\GaussianBlur.cs" />
+    <Compile Include="AForge\Imaging\Filters\Convolution\Mean.cs" />
+    <Compile Include="AForge\Imaging\Filters\Convolution\Sharpen.cs" />
+    <Compile Include="AForge\Imaging\Filters\Convolution\SharpenEx.cs" />
+    <Compile Include="AForge\Imaging\Filters\Edge Detectors\CannyEdgeDetector.cs" />
+    <Compile Include="AForge\Imaging\Filters\Edge Detectors\DifferenceEdgeDetector.cs" />
+    <Compile Include="AForge\Imaging\Filters\Edge Detectors\HomogenityEdgeDetector.cs" />
+    <Compile Include="AForge\Imaging\Filters\Edge Detectors\SobelEdgeDetector.cs" />
+    <Compile Include="AForge\Imaging\Filters\FilterIterator.cs" />
+    <Compile Include="AForge\Imaging\Filters\FiltersSequence.cs" />
+    <Compile Include="AForge\Imaging\Filters\Flood Fillers\PointedColorFloodFill.cs" />
+    <Compile Include="AForge\Imaging\Filters\Flood Fillers\PointedMeanFloodFill.cs" />
+    <Compile Include="AForge\Imaging\Filters\HSL Filters\HSLFiltering.cs" />
+    <Compile Include="AForge\Imaging\Filters\HSL Filters\HSLLinear.cs" />
+    <Compile Include="AForge\Imaging\Filters\HSL Filters\HueModifier.cs" />
+    <Compile Include="AForge\Imaging\Filters\HSL Filters\SaturationCorrection.cs" />
+    <Compile Include="AForge\Imaging\Filters\IFilter.cs" />
+    <Compile Include="AForge\Imaging\Filters\IFilterInformation.cs" />
+    <Compile Include="AForge\Imaging\Filters\IInPlaceFilter.cs" />
+    <Compile Include="AForge\Imaging\Filters\IInPlacePartialFilter.cs" />
+    <Compile Include="AForge\Imaging\Filters\IlluminationCorrection\FlatFieldCorrection.cs" />
+    <Compile Include="AForge\Imaging\Filters\Morphology\BottomHat.cs" />
+    <Compile Include="AForge\Imaging\Filters\Morphology\Closing.cs" />
+    <Compile Include="AForge\Imaging\Filters\Morphology\Dilatation.cs" />
+    <Compile Include="AForge\Imaging\Filters\Morphology\Erosion.cs" />
+    <Compile Include="AForge\Imaging\Filters\Morphology\HitAndMiss.cs" />
+    <Compile Include="AForge\Imaging\Filters\Morphology\Opening.cs" />
+    <Compile Include="AForge\Imaging\Filters\Morphology\Specific Optimizations\BinaryDilatation3x3.cs" />
+    <Compile Include="AForge\Imaging\Filters\Morphology\Specific Optimizations\BinaryErosion3x3.cs" />
+    <Compile Include="AForge\Imaging\Filters\Morphology\Specific Optimizations\Dilatation3x3.cs" />
+    <Compile Include="AForge\Imaging\Filters\Morphology\Specific Optimizations\Erosion3.x3.cs" />
+    <Compile Include="AForge\Imaging\Filters\Morphology\TopHat.cs" />
+    <Compile Include="AForge\Imaging\Filters\Noise generation\AdditiveNoise.cs" />
+    <Compile Include="AForge\Imaging\Filters\Noise generation\SaltAndPepperNoise.cs" />
+    <Compile Include="AForge\Imaging\Filters\Normalized RGB\ExtractNormalizedRGBChannel.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\ApplyMask.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\BlobsFiltering.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\CanvasCrop.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\CanvasFill.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\CanvasMove.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\ConnectedComponentsLabeling.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\CornersMarker.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\ExtractBiggestBlob.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\FillHoles.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\HorizontalRunLengthSmoothing.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\ImageWarp.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\Jitter.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\MaskedFilter.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\Mirror.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\OilPainting.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\Pixellate.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\SimpleSkeletonization.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\TexturedFilter.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\TexturedMerge.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\Texturer.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\VerticalRunLengthSmoothing.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\WaterWave.cs" />
+    <Compile Include="AForge\Imaging\Filters\Smooting\AdaptiveSmooth.cs" />
+    <Compile Include="AForge\Imaging\Filters\Smooting\BilateralSmoothing.cs" />
+    <Compile Include="AForge\Imaging\Filters\Smooting\ConservativeSmoothing.cs" />
+    <Compile Include="AForge\Imaging\Filters\Smooting\Median.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\BackwardQuadrilateralTransformation.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\Crop.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\Quad.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\QuadrilateralTransformation.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\QuadrilateralTransformationBilinear.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\QuadrilateralTransformationNearestNeighbor.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\ResizeBicubic.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\ResizeBilinear.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\ResizeNearestNeighbor.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\RotateBicubic.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\RotateBilinear.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\RotateNearestNeighbor.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\Shrink.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\SimpleQuadrilateralTransformation.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\TransformFromPolar.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\TransformToPolar.cs" />
+    <Compile Include="AForge\Imaging\Filters\YCbCr Filters\YCbCrExtractChannel.cs" />
+    <Compile Include="AForge\Imaging\Filters\YCbCr Filters\YCbCrFiltering.cs" />
+    <Compile Include="AForge\Imaging\Filters\YCbCr Filters\YCbCrLinear.cs" />
+    <Compile Include="AForge\Imaging\Filters\YCbCr Filters\YCbCrReplaceChannel.cs" />
+    <Compile Include="AForge\Imaging\HorizontalIntensityStatistics.cs" />
+    <Compile Include="AForge\Imaging\HoughCircleTransformation.cs" />
+    <Compile Include="AForge\Imaging\HoughLineTransformation.cs" />
+    <Compile Include="AForge\Imaging\IBlobsFilter.cs" />
+    <Compile Include="AForge\Imaging\IBlockMatching.cs" />
+    <Compile Include="AForge\Imaging\ICornersDetector.cs" />
+    <Compile Include="AForge\Imaging\Image.cs" />
+    <Compile Include="AForge\Imaging\ImageStatistics.cs" />
+    <Compile Include="AForge\Imaging\ImageStatisticsHSL.cs" />
+    <Compile Include="AForge\Imaging\ImageStatisticsYCbCr.cs" />
+    <Compile Include="AForge\Imaging\IntegralImage.cs" />
+    <Compile Include="AForge\Imaging\Interpolation.cs" />
+    <Compile Include="AForge\Imaging\ITemplateMatching.cs" />
+    <Compile Include="AForge\Imaging\MemoryManager.cs" />
+    <Compile Include="AForge\Imaging\MoravecCornersDetector.cs" />
+    <Compile Include="AForge\Imaging\QuadrilateralFinder.cs" />
+    <Compile Include="AForge\Imaging\RecursiveBlobCounter.cs" />
+    <Compile Include="AForge\Imaging\SusanCornersDetector.cs" />
+    <Compile Include="AForge\Imaging\TemplateMatch.cs" />
+    <Compile Include="AForge\Imaging\Textures\CloudsTexture.cs" />
+    <Compile Include="AForge\Imaging\Textures\ITextureGenerator.cs" />
+    <Compile Include="AForge\Imaging\Textures\LabyrinthTexture.cs" />
+    <Compile Include="AForge\Imaging\Textures\MarbleTexture.cs" />
+    <Compile Include="AForge\Imaging\Textures\TextileTexture.cs" />
+    <Compile Include="AForge\Imaging\Textures\Texture.cs" />
+    <Compile Include="AForge\Imaging\Textures\WoodTexture.cs" />
+    <Compile Include="AForge\Imaging\UnmanagedImage.cs" />
+    <Compile Include="AForge\Imaging\VerticalIntensityStatistics.cs" />
+    <Compile Include="AForge\Math\Complex.cs" />
+    <Compile Include="AForge\Math\ContinuousHistogram.cs" />
+    <Compile Include="AForge\Math\FourierTransform.cs" />
+    <Compile Include="AForge\Math\Gaussian.cs" />
+    <Compile Include="AForge\Math\Geometry\ClosePointsMergingOptimizer.cs" />
+    <Compile Include="AForge\Math\Geometry\CoplanarPosit.cs" />
+    <Compile Include="AForge\Math\Geometry\FlatAnglesOptimizer.cs" />
+    <Compile Include="AForge\Math\Geometry\GeometryTools.cs" />
+    <Compile Include="AForge\Math\Geometry\GrahamConvexHull.cs" />
+    <Compile Include="AForge\Math\Geometry\IConvexHullAlgorithm.cs" />
+    <Compile Include="AForge\Math\Geometry\IShapeOptimizer.cs" />
+    <Compile Include="AForge\Math\Geometry\Line.cs" />
+    <Compile Include="AForge\Math\Geometry\LineSegment.cs" />
+    <Compile Include="AForge\Math\Geometry\LineStraighteningOptimizer.cs" />
+    <Compile Include="AForge\Math\Geometry\PointsCloud.cs" />
+    <Compile Include="AForge\Math\Geometry\POSIT.cs" />
+    <Compile Include="AForge\Math\Geometry\ShapeType.cs" />
+    <Compile Include="AForge\Math\Geometry\SimpleShapeChecker.cs" />
+    <Compile Include="AForge\Math\Histogram.cs" />
+    <Compile Include="AForge\Math\Matrix3x3.cs" />
+    <Compile Include="AForge\Math\Matrix4x4.cs" />
+    <Compile Include="AForge\Math\Metrics\CosineDistance.cs" />
+    <Compile Include="AForge\Math\Metrics\CosineSimilarity.cs" />
+    <Compile Include="AForge\Math\Metrics\EuclideanDistance.cs" />
+    <Compile Include="AForge\Math\Metrics\EuclideanSimilarity.cs" />
+    <Compile Include="AForge\Math\Metrics\HammingDistance.cs" />
+    <Compile Include="AForge\Math\Metrics\IDistance.cs" />
+    <Compile Include="AForge\Math\Metrics\ISimilarity.cs" />
+    <Compile Include="AForge\Math\Metrics\JaccardDistance.cs" />
+    <Compile Include="AForge\Math\Metrics\ManhattanDistance.cs" />
+    <Compile Include="AForge\Math\Metrics\PearsonCorrelation.cs" />
+    <Compile Include="AForge\Math\PerlinNoise.cs" />
+    <Compile Include="AForge\Math\Random\ExponentialGenerator.cs" />
+    <Compile Include="AForge\Math\Random\GaussianGenerator.cs" />
+    <Compile Include="AForge\Math\Random\IRandomNumberGenerator.cs" />
+    <Compile Include="AForge\Math\Random\StandardGenerator.cs" />
+    <Compile Include="AForge\Math\Random\UniformGenerator.cs" />
+    <Compile Include="AForge\Math\Random\UniformOneGenerator.cs" />
+    <Compile Include="AForge\Math\Statistics.cs" />
+    <Compile Include="AForge\Math\SVD.cs" />
+    <Compile Include="AForge\Math\Tools.cs" />
+    <Compile Include="AForge\Math\Vector3.cs" />
+    <Compile Include="AForge\Math\Vector4.cs" />
+    <Compile Include="AForge\Video.DirectShow\CameraControlProperty.cs" />
+    <Compile Include="AForge\Video.DirectShow\FileVideoSource.cs" />
+    <Compile Include="AForge\Video.DirectShow\FilterInfo.cs" />
+    <Compile Include="AForge\Video.DirectShow\FilterInfoCollection.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IAMCameraControl.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IAMCrossbar.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IAMStreamConfig.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IAMVideoControl.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IBaseFilter.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\ICaptureGraphBuilder2.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\ICreateDevEnum.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IEnumFilters.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IEnumPins.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IFileSourceFilter.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IFilterGraph.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IFilterGraph2.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IGraphBuilder.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IMediaControl.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IMediaEventEx.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IMediaFilter.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IPersist.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IPin.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IPropertyBag.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IReferenceClock.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\ISampleGrabber.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\ISampleGrabberCB.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\ISpecifyPropertyPages.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IVideoWindow.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\Structures.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\Tools.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\Uuids.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\Win32.cs" />
+    <Compile Include="AForge\Video.DirectShow\PhysicalConnectorType.cs" />
+    <Compile Include="AForge\Video.DirectShow\Uuids.cs" />
+    <Compile Include="AForge\Video.DirectShow\VideoCapabilities.cs" />
+    <Compile Include="AForge\Video.DirectShow\VideoCaptureDevice.cs" />
+    <Compile Include="AForge\Video.DirectShow\VideoCaptureDeviceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AForge\Video.DirectShow\VideoCaptureDeviceForm.designer.cs">
+      <DependentUpon>VideoCaptureDeviceForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AForge\Video.DirectShow\VideoInput.cs" />
+    <Compile Include="AForge\Video\AsyncVideoSource.cs" />
+    <Compile Include="AForge\Video\ByteArrayUtils.cs" />
+    <Compile Include="AForge\Video\Exceptions.cs" />
+    <Compile Include="AForge\Video\IVideoSource.cs" />
+    <Compile Include="AForge\Video\JPEGStream.cs" />
+    <Compile Include="AForge\Video\MJPEGStream.cs" />
+    <Compile Include="AForge\Video\ScreenCaptureStream.cs" />
+    <Compile Include="AForge\Video\VideoEvents.cs" />
     <Compile Include="AsyncHelper\AbortableBackgroundWorker.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -87,6 +425,72 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DataGridViewHelper\DGVEnhancer.cs" />
+    <Compile Include="FastColoredTextBox\AutocompleteItem.cs" />
+    <Compile Include="FastColoredTextBox\AutocompleteMenu.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="FastColoredTextBox\Bookmarks.cs" />
+    <Compile Include="FastColoredTextBox\Char.cs" />
+    <Compile Include="FastColoredTextBox\CommandManager.cs" />
+    <Compile Include="FastColoredTextBox\Commands.cs" />
+    <Compile Include="FastColoredTextBox\DocumentMap.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="FastColoredTextBox\EncodingDetector.cs" />
+    <Compile Include="FastColoredTextBox\ExportToHTML.cs" />
+    <Compile Include="FastColoredTextBox\ExportToRTF.cs" />
+    <Compile Include="FastColoredTextBox\FastColoredTextBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FastColoredTextBox\FileTextSource.cs" />
+    <Compile Include="FastColoredTextBox\FindForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FastColoredTextBox\FindForm.designer.cs">
+      <DependentUpon>FindForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FastColoredTextBox\GoToForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FastColoredTextBox\GoToForm.designer.cs">
+      <DependentUpon>GoToForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FastColoredTextBox\Hints.cs" />
+    <Compile Include="FastColoredTextBox\Hotkeys.cs" />
+    <Compile Include="FastColoredTextBox\HotkeysEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FastColoredTextBox\HotkeysEditorForm.designer.cs">
+      <DependentUpon>HotkeysEditorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FastColoredTextBox\LimitedStack.cs" />
+    <Compile Include="FastColoredTextBox\Line.cs" />
+    <Compile Include="FastColoredTextBox\LinesAccessor.cs" />
+    <Compile Include="FastColoredTextBox\MacrosManager.cs" />
+    <Compile Include="FastColoredTextBox\Place.cs" />
+    <Compile Include="FastColoredTextBox\PlatformType.cs" />
+    <Compile Include="FastColoredTextBox\Range.cs" />
+    <Compile Include="FastColoredTextBox\ReplaceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FastColoredTextBox\ReplaceForm.designer.cs">
+      <DependentUpon>ReplaceForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FastColoredTextBox\Ruler.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FastColoredTextBox\Ruler.designer.cs">
+      <DependentUpon>Ruler.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FastColoredTextBox\Style.cs" />
+    <Compile Include="FastColoredTextBox\SyntaxDescriptor.cs" />
+    <Compile Include="FastColoredTextBox\SyntaxHighlighter.cs" />
+    <Compile Include="FastColoredTextBox\TextSource.cs" />
+    <Compile Include="FastColoredTextBox\TypeDescriptor.cs" />
+    <Compile Include="FastColoredTextBox\UnfocusablePanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FastColoredTextBox\VisualMarker.cs" />
     <Compile Include="Notepad\XmlEditor.cs" />
     <Compile Include="Notepad\XmlNotepad.cs">
       <SubType>Form</SubType>
@@ -102,6 +506,45 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AForge\Controls\Chart.resx">
+      <DependentUpon>Chart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AForge\Controls\ColorSlider.resx">
+      <DependentUpon>ColorSlider.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AForge\Controls\Histogram.resx">
+      <DependentUpon>Histogram.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AForge\Controls\HuePicker.resx">
+      <DependentUpon>HuePicker.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AForge\Controls\ManipulatorControl.resx">
+      <DependentUpon>ManipulatorControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AForge\Controls\SliderControl.resx">
+      <DependentUpon>SliderControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AForge\Controls\VideoSourcePlayer.resx">
+      <DependentUpon>VideoSourcePlayer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AForge\Video.DirectShow\VideoCaptureDeviceForm.resx">
+      <DependentUpon>VideoCaptureDeviceForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FastColoredTextBox\FastColoredTextBox.resx">
+      <DependentUpon>FastColoredTextBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FastColoredTextBox\FindForm.resx">
+      <DependentUpon>FindForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FastColoredTextBox\GoToForm.resx">
+      <DependentUpon>GoToForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FastColoredTextBox\HotkeysEditorForm.resx">
+      <DependentUpon>HotkeysEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FastColoredTextBox\ReplaceForm.resx">
+      <DependentUpon>ReplaceForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Notepad\XmlNotepad.resx">
       <DependentUpon>XmlNotepad.cs</DependentUpon>
     </EmbeddedResource>
@@ -117,6 +560,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AForge\Controls\Resources\arrow.bmp" />
+    <Content Include="AForge\Video.DirectShow\Icons\camera.png" />
     <Content Include="Notepad\Resources\Add.png" />
     <Content Include="Notepad\Resources\Close.png" />
     <Content Include="Notepad\Resources\icons8-xml-48.ico" />
