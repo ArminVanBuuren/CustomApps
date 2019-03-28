@@ -48,12 +48,12 @@ namespace TFSAssist.Control.DataBase.Settings
                 IfTarget target = ifCond.ExpressionEx(value);
                 bool result = target.ResultCondition;
 
-                log.OnWriteLog($"Source value of {nameof(Condition)}=[{Condition}]; Final value of {nameof(Condition)}=[{value}]. Result=[{result}]", true);
+                log.OnWriteLog($"{nameof(Condition)}=[{Condition}]; Final{nameof(Condition)}=[{value}]. Result=[{result}]", true);
                 return result;
             }
             catch (Exception ex)
             {
-                throw new TFSFieldsException($"Final {nameof(Condition)}=[{value}] is incorrect! Source {nameof(Condition)}=[{Condition}];\r\n{ex.Message}", ex);
+                throw new TFSFieldsException($"Final{nameof(Condition)}=[{value}] is incorrect! {nameof(Condition)}=[{Condition}];\r\n{ex.Message}", ex);
             }
         }
 
@@ -130,13 +130,13 @@ namespace TFSAssist.Control.DataBase.Settings
             get
             {
                 if (_value == null)
-                    throw new TFSFieldsException($"Field {nameof(Name)}=[{Name}] is incorrect! Attribute '{nameof(Value)}' must be declared.");
+                    throw new TFSFieldsException($"Field=[{Name}] is incorrect! Attribute '{nameof(Value)}' must be declared.");
                 return _value;
             }
             set
             {
                 if (value == null)
-                    throw new TFSFieldsException($"Field {nameof(Name)}=[{Name}] is incorrect! Attribute '{nameof(Value)}' must be declared.");
+                    throw new TFSFieldsException($"Field=[{Name}] is incorrect! Attribute '{nameof(Value)}' must be declared.");
                 _value = value;
             }
         }
@@ -209,10 +209,10 @@ namespace TFSAssist.Control.DataBase.Settings
         {
             if (Switch != null)
             {
-                return $"Field {nameof(Name)}:[{Name}]; {nameof(Switch)}=[{Switch}]; MapItems=[{Items.Count}]; Default {nameof(Value)}=[{Value}]; ";
+                return $"Field=[{Name}]; {nameof(Switch)}=[{Switch}]; MapItems=[{Items.Count}]; Default{nameof(Value)}=[{Value}]; ";
             }
 
-            return $"Field {nameof(Name)}:[{Name}]; {nameof(Value)}=[{Value}]";
+            return $"Field=[{Name}]; {nameof(Value)}=[{Value}]";
         }
     }
 
@@ -245,20 +245,20 @@ namespace TFSAssist.Control.DataBase.Settings
             get
             {
                 if (_value == null)
-                    throw new TFSFieldsException($"Map {nameof(Case)}=[{Case}] is incorrect! Attribute '{nameof(Value)}' must be declared.");
+                    throw new TFSFieldsException($"Map{nameof(Case)}=[{Case}] is incorrect! Attribute '{nameof(Value)}' must be declared.");
                 return _value;
             }
             set
             {
                 if (value == null)
-                    throw new TFSFieldsException($"Map {nameof(Case)}=[{Case}] is incorrect! Attribute '{nameof(Value)}' must be declared.");
+                    throw new TFSFieldsException($"Map{nameof(Case)}=[{Case}] is incorrect! Attribute '{nameof(Value)}' must be declared.");
                 _value = value;
             }
         }
 
         public override string ToString()
         {
-            return $"{nameof(Case)}:[{Case}]; Value=[{Value}]";
+            return $"{nameof(Case)}=[{Case}]; Value=[{Value}]";
         }
     }
 }

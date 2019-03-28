@@ -14,6 +14,10 @@ using Utils;
 
 namespace TFSAssist.Control
 {
+    // Необходимо подложить библиотеки Microsoft.WITDataStore32.dll и Microsoft.WITDataStore64.dll в bin для AnyCpu платформы
+    // Необходимо подложить библиотеку Microsoft.WITDataStore32.dll в bin для x86 платформы
+    // Необходимо подложить библиотеку Microsoft.WITDataStore64.dll в bin для x64 платформы
+
     struct StatusString
     {
         public const string Initialization = "Initialization...";
@@ -440,7 +444,6 @@ namespace TFSAssist.Control
                         task.Status = ProcessingStatus.Skipped;
                     }
 
-                    _log.OnWriteLog($"{task.Status:G}", true);
                     Datas.Add(task);
                 }
                 catch (TFSFieldsException ex1)
@@ -498,7 +501,7 @@ namespace TFSAssist.Control
             List<DataMail> parced = new List<DataMail>();
 
             GroupCollection fromSubject = ParceSubject.Match(subject).Groups;
-            _log.OnWriteLog($"Subject content=[{subject}]", true);
+            _log.OnWriteLog($"Start parsing content of Subject=[{subject}].", true);
 
             foreach (string match in ParceSubject.GetGroupNames())
             {
@@ -507,7 +510,7 @@ namespace TFSAssist.Control
                     DataMail dm = new DataMail
                     {
                         Name = $"{nameof(OptionMail.ParceSubject)}_{match}",
-                        Value = fromSubject[match].Value
+                        Value = fromSubject[match].Value.Trim()
                     };
                     parced.Add(dm);
 
@@ -517,7 +520,7 @@ namespace TFSAssist.Control
 
 
             GroupCollection fromBody = ParceBody.Match(body).Groups;
-            _log.OnWriteLog($"Body content=[{body}]", true);
+            _log.OnWriteLog($"Start parsing content of Body=[{body}]", true);
 
             foreach (string match in ParceBody.GetGroupNames())
             {
@@ -526,7 +529,7 @@ namespace TFSAssist.Control
                     DataMail dm = new DataMail
                     {
                         Name = $"{nameof(OptionMail.ParceBody)}_{match}",
-                        Value = fromBody[match].Value
+                        Value = fromBody[match].Value.Trim()
                     };
                     parced.Add(dm);
 
@@ -544,7 +547,7 @@ namespace TFSAssist.Control
             string query = itemExec.ReplaceParcedValues(Settings.TFSOption.GetDublicateTFS[0].Value);
             if (!query.IsNullOrEmptyTrim())
             {
-                _log.OnWriteLog($"Running \"{nameof(Settings.TFSOption.GetDublicateTFS)}\" query=[{query}]", true);
+                _log.OnWriteLog($"Check duplicates. Query=[{query}]", true);
                 WorkItemCollection workQuery = _workItemStore.Query(query);
 
                 if (workQuery.Count > 0)
@@ -554,19 +557,20 @@ namespace TFSAssist.Control
                         createdTfsId += queryResult.Id + ";";
                     }
 
-                    _log.OnWriteLog($"Query result: [{createdTfsId}]", true);
+                    _log.OnWriteLog($"Query result: [{createdTfsId}]. Processing skipped.", true);
                     return false;
                 }
             }
             else
             {
-                _log.OnWriteLog($"Query \"{nameof(Settings.TFSOption.GetDublicateTFS)}\" ignored", true);
+                _log.OnWriteLog("Query of check dublicates is null. Processing continues.", true);
             }
             return CreateTFSItem(itemExec, ref createdTfsId);
         }
 
         bool CreateTFSItem(ItemExecuted itemExec, ref string createdTfsId)
         {
+            _log.OnWriteLog("Start searching TeamProject...", true);
             foreach (TeamProjectCondition teamProj in Settings.TFSOption.TFSCreate.TeamProjects)
             {
                 //проверяем условие в аттрибуте Condition, но сначала выполняется функция getParcedValue для замены необходимых спарсенных данных
@@ -582,7 +586,7 @@ namespace TFSAssist.Control
                     continue;
                 }
 
-                _log.OnWriteLog($"Start processing TeamProject=[{teamProj.Value}]", true);
+                _log.OnWriteLog($"Found TeamProject=[{teamProj.Value}]. Start searching WorkItems...", true);
                 Project teamProject = _workItemStore.Projects[teamProj.Value];
 
                 foreach (WorkItemCondition workItem in teamProj.WorkItems)
@@ -600,7 +604,7 @@ namespace TFSAssist.Control
                         continue;
                     }
 
-                    _log.OnWriteLog($"Start processing WorkItem=[{workItem.Value}]", true);
+                    _log.OnWriteLog($"Found WorkItem=[{workItem.Value}]. Start reading Fields...", true);
 
                     WorkItemType workItemType = teamProject.WorkItemTypes[workItem.Value];
                     string displayForm = workItemType.DisplayForm;
@@ -612,7 +616,7 @@ namespace TFSAssist.Control
                         foreach (FieldCondition field in workItem.Fields)
                         {
                             string getFrmFieldValue = field.GetSwitchValue(itemExec.ReplaceParcedValues, _log.OnWriteLog);
-                            _log.OnWriteLog($"{field.ToString()} Final Value=[{getFrmFieldValue}]", true);
+                            _log.OnWriteLog($"{field.ToString()} FinalValue=[{getFrmFieldValue}]", true);
 
                             //кастомный аттрибуты Control.XXX
                             if (field.Name.Equals("Control.AssignedTo", StringComparison.CurrentCultureIgnoreCase))

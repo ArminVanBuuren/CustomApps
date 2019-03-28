@@ -64,7 +64,7 @@ namespace TFSAssist.Control.DataBase.Datas
 
         public override string ToString ()
         {
-            return string.Format("[{0}]={1}", Name, Value);
+            return $"Param=[{Name}] Value=[{Value}]";
         }
     }
 }
