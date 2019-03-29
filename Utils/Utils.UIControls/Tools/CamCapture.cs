@@ -107,6 +107,7 @@ namespace Utils.UIControls.Tools
 
         //private void Broadcast_Click(object sender, EventArgs e)
         //{
+        //     <MediaElement Name="VideoControl" Source="http://localhost:8080" />
         //    EncoderDevice video = null;
         //    EncoderDevice audio = null;
 
