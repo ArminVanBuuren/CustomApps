@@ -19,6 +19,13 @@ namespace Tester.Console
     {
         static void Main(string[] args)
         {
+
+
+            System.Console.ReadLine();
+        }
+
+        static void ParceOptions()
+        {
             string isCommand = "30609:";
             //string tlMessage = "30609:cam ";
             string tlMessage = "30609:cam ( par1 =d '1111,=(2222)' , par2 =q '5555,=(6666)' ) ";
@@ -35,8 +42,6 @@ namespace Tester.Console
             }
 
             command = command.ToLower().Trim();
-
-            System.Console.ReadLine();
         }
 
         static Dictionary<string, string> ReadOptionParams(string options)

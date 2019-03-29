@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-using Utils.WinForm.Notepad;
+//using Utils.WinForm.Notepad;
 
 namespace Tester.WinForm
 {
@@ -14,16 +14,17 @@ namespace Tester.WinForm
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new Form1());
 
-            try
-            {
-                Application.Run(new XmlNotepad(@"C:\Users\vhovanskij\Desktop\2018.09.06\ROBP\Processes\test.xml"));
-                //Application.Run(new XmlNotepad(@"C:\@MyRepos\FORIS_WORK\UZ-REPOS\SPA\PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\ChangeMSISDNOnHLR.xml"));
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
+            //try
+            //{
+            //    Application.Run(new XmlNotepad(@"C:\Users\vhovanskij\Desktop\2018.09.06\ROBP\Processes\test.xml"));
+            //    //Application.Run(new XmlNotepad(@"C:\@MyRepos\FORIS_WORK\UZ-REPOS\SPA\PROD-2018.09.06\SPA.SA\Scenarios\HLR\ZTE\ChangeMSISDNOnHLR.xml"));
+            //}
+            //catch (Exception e)
+            //{
+            //    MessageBox.Show(e.Message);
+            //}
             
         }
     }

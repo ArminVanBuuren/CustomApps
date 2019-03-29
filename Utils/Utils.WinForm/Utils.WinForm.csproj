@@ -408,6 +408,25 @@
       <DependentUpon>VideoCaptureDeviceForm.cs</DependentUpon>
     </Compile>
     <Compile Include="AForge\Video.DirectShow\VideoInput.cs" />
+    <Compile Include="AForge\Video.Kinect\Kinect.cs" />
+    <Compile Include="AForge\Video.Kinect\KinectDepthCamera.cs" />
+    <Compile Include="AForge\Video.Kinect\KinectNative.cs" />
+    <Compile Include="AForge\Video.Kinect\KinectVideoCamera.cs" />
+    <Compile Include="AForge\Video.VFW\AVIFileVideoSource.cs" />
+    <Compile Include="AForge\Video.VFW\AVIReader.cs" />
+    <Compile Include="AForge\Video.VFW\AVIWriter.cs" />
+    <Compile Include="AForge\Video.VFW\Win32.cs" />
+    <Compile Include="AForge\Video.Ximea\CameraParameter.cs" />
+    <Compile Include="AForge\Video.Ximea\GpiMode.cs" />
+    <Compile Include="AForge\Video.Ximea\GpoMode.cs" />
+    <Compile Include="AForge\Video.Ximea\ImageFormat.cs" />
+    <Compile Include="AForge\Video.Ximea\Internal\ParameterType.cs" />
+    <Compile Include="AForge\Video.Ximea\Internal\XimeaAPI.cs" />
+    <Compile Include="AForge\Video.Ximea\Internal\XimeaImage.cs" />
+    <Compile Include="AForge\Video.Ximea\LedMode.cs" />
+    <Compile Include="AForge\Video.Ximea\TriggerSource.cs" />
+    <Compile Include="AForge\Video.Ximea\XimeaCamera.cs" />
+    <Compile Include="AForge\Video.Ximea\XimeaVideoSource.cs" />
     <Compile Include="AForge\Video\AsyncVideoSource.cs" />
     <Compile Include="AForge\Video\ByteArrayUtils.cs" />
     <Compile Include="AForge\Video\Exceptions.cs" />
