@@ -524,7 +524,8 @@ namespace TFSAssist
                 Interval = _intervalGCCollectAndClearTraces
             };
             _timerOnGC.Elapsed += GarbageCollect;
-            _timerOnGC.Start();
+            _timerOnGC.AutoReset = false;
+            _timerOnGC.Enabled = true;
         }
 
         /// <summary>
@@ -555,7 +556,7 @@ namespace TFSAssist
                 _timerOnActivateUnUsingWindow.Interval = _intervalForActivateUnUsedWindow;
             }
 
-            if (_timerOnActivateUnUsingWindow != null)
+            if (_timerOnActivateUnUsingWindow != null && !_timerOnActivateUnUsingWindow.Enabled)
                 _timerOnActivateUnUsingWindow.Enabled = true;
         }
 
@@ -588,6 +589,11 @@ namespace TFSAssist
             catch (Exception)
             {
                 // ignored
+            }
+            finally
+            {
+                if (_timerOnGC != null && !_timerOnGC.Enabled)
+                    _timerOnGC.Enabled = true;
             }
         }
 

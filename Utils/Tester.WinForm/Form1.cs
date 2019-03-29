@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-//using Utils.WinForm.Notepad;
 using AForge.Video;
 using AForge.Video.DirectShow;
 using AForge.Video.FFMPEG;
@@ -117,6 +116,7 @@ namespace Tester.WinForm
             return destImage;
         }
 
+        private System.Timers.Timer _timer;
         private void button2_Click(object sender, EventArgs e)
         {
             saveAvi = new SaveFileDialog();
@@ -156,7 +156,21 @@ namespace Tester.WinForm
                 FinalVideo = VideoDevice;
                 FinalVideo.NewFrame += new NewFrameEventHandler(FinalVideo_NewFrame);
                 FinalVideo.Start();
+
+                _timer = new System.Timers.Timer
+                {
+                    Interval = 2000
+                };
+                _timer.Elapsed += Timer_Elapsed;
+                _timer.AutoReset = false;
+                _timer.Enabled = true;
             }
+        }
+
+        private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            GC.Collect();
+            _timer.Enabled = true;
         }
 
         private void butStop_Click(object sender, EventArgs e)
@@ -165,7 +179,10 @@ namespace Tester.WinForm
             {
                 butStop.Text = "Stop";
                 if (FinalVideo == null)
-                { return; }
+                {
+                    return;
+                }
+
                 if (FinalVideo.IsRunning)
                 {
                     this.FinalVideo.Stop();
@@ -180,6 +197,12 @@ namespace Tester.WinForm
                 FileWriter.Close();
                 //this.AVIwriter.Close();
                 pictureBox1.Image = null;
+            }
+
+            if (_timer != null)
+            {
+                _timer.Enabled = false;
+                GC.Collect();
             }
         }
 
