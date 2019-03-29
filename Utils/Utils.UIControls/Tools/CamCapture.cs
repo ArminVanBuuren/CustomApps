@@ -88,6 +88,58 @@ namespace Utils.UIControls.Tools
             return true;
         }
 
+        //private void GrabImage(string destiationFileName)
+        //{
+        //    // Create a Bitmap of the same dimension of panelVideoPreview (Width x Height)
+        //    using (Bitmap bitmap = new Bitmap(panelVideoPreview.Width, panelVideoPreview.Height))
+        //    {
+        //        using (Graphics g = Graphics.FromImage(bitmap))
+        //        {
+        //            // Get the paramters to call g.CopyFromScreen and get the image
+        //            Rectangle rectanglePanelVideoPreview = panelVideoPreview.Bounds;
+        //            Point sourcePoints = panelVideoPreview.PointToScreen(new Point(panelVideoPreview.ClientRectangle.X, panelVideoPreview.ClientRectangle.Y));
+        //            g.CopyFromScreen(sourcePoints, Point.Empty, rectanglePanelVideoPreview.Size);
+        //        }
+
+        //        bitmap.Save(destiationFileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+        //    }
+        //}
+
+        //private void Broadcast_Click(object sender, EventArgs e)
+        //{
+        //    EncoderDevice video = null;
+        //    EncoderDevice audio = null;
+
+        //    GetSelectedVideoAndAudioDevices(out video, out audio);
+        //    StopJob();
+
+        //    if (video == null)
+        //    {
+        //        return;
+        //    }
+
+        //    _job = new LiveJob();
+
+        //    _deviceSource = _job.AddDeviceSource(video, audio);
+        //    _job.ActivateSource(_deviceSource);
+
+        //    // Finds and applys a smooth streaming preset        
+        //    _job.ApplyPreset(LivePresets.VC1256kDSL16x9);
+
+        //    // Creates the publishing format for the job
+        //    PullBroadcastPublishFormat format = new PullBroadcastPublishFormat();
+        //    format.BroadcastPort = 8080;
+        //    format.MaximumNumberOfConnections = 2;
+
+        //    // Adds the publishing format to the job
+        //    _job.PublishFormats.Add(format);
+
+        //    // Starts encoding
+        //    _job.StartEncoding();
+
+        //    toolStripStatusLabel1.Text = "Broadcast started on localhost at port 8080, run WpfShowBroadcast.exe now to see it";
+        //}
+
         EncoderDevice GetEncoder(Dictionary<string, EncoderDevice> encoders, string encoderName)
         {
             if (string.IsNullOrEmpty(encoderName))
