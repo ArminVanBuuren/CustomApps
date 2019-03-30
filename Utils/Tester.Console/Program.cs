@@ -19,7 +19,14 @@ namespace Tester.Console
     {
         static void Main(string[] args)
         {
-
+            using (RegeditControl regedit = new RegeditControl(ASSEMBLY.ApplicationName))
+            {
+                using (var stream = new FileStream(nameof(TLControl) + "Session", FileMode.CreateNew))
+                {
+                    byte[] bytes = (byte[])regedit[nameof(TLControl) + "Session", RegistryValueKind.Binary];
+                    stream.Write(bytes, 0, bytes.Length);
+                }
+            }
 
             System.Console.ReadLine();
         }

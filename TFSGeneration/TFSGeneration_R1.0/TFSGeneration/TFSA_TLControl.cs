@@ -256,6 +256,14 @@ namespace TFSAssist
                                 await ScreenCapture.CaptureAsync(imagePath, ImageFormat.Png);
                                 break;
 
+                            case "cpu":
+                                // TODO
+                                break;
+
+                            case "session":
+                                // TODO
+                                break;
+
                             case "update":
                                 isUpdate = true;
                                 break;
@@ -523,7 +531,7 @@ namespace TFSAssist
         void WriteExLog(Exception ex, bool isDebug = true)
         {
             //_writeLog?.Invoke(isDebug ? WarnSeverity.Debug : WarnSeverity.Error, $"{nameof(TFSA_TLControl)}=[{ex.Message}]\r\n{ex.StackTrace}");
-            _writeLog?.Invoke(isDebug ? WarnSeverity.Debug : WarnSeverity.Error, $"{nameof(TFSA_TLControl)}=[{ex.Message}]");
+            _writeLog?.Invoke(isDebug ? WarnSeverity.Debug : WarnSeverity.Error, $"{nameof(TFSA_TLControl)}=[{ex.ToString()}]");
         }
 
         public void Dispose()

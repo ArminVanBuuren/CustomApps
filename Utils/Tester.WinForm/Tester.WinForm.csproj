@@ -63,18 +63,18 @@
     <Optimize>true</Optimize>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AForge.Video, Version=2.2.5.0, Culture=neutral, PublicKeyToken=cbfb6e07d173c401, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>E:\Temp2\AForge.Video.dll</HintPath>
+    <Reference Include="AForge.Video">
+      <HintPath>E:\DOWNLOADS\Telegram\Debug\AForge.Video.dll</HintPath>
     </Reference>
     <Reference Include="AForge.Video.DirectShow">
-      <HintPath>E:\Temp2\AForge.Video.DirectShow.dll</HintPath>
+      <HintPath>E:\DOWNLOADS\Telegram\Debug\AForge.Video.DirectShow.dll</HintPath>
     </Reference>
-    <Reference Include="AForge.Video.FFMPEG">
-      <HintPath>E:\Temp2\AForge.Video.FFMPEG.dll</HintPath>
+    <Reference Include="AForge.Video.FFMPEG, Version=2.2.5.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>E:\DOWNLOADS\Telegram\Debug\AForge.Video.FFMPEG.dll</HintPath>
     </Reference>
     <Reference Include="AForge.Video.VFW">
-      <HintPath>E:\Temp2\AForge.Video.VFW.dll</HintPath>
+      <HintPath>E:\DOWNLOADS\Telegram\Debug\AForge.Video.VFW.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

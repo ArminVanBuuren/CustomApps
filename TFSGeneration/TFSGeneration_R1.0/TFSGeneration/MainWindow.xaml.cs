@@ -608,11 +608,12 @@ namespace TFSAssist
                 TLControl = new TFSA_TLControl(CliendID, CheckUpdates, GetCurrentLogs, SimpleWriteLog);
                 if (await TLControl.Initialize())
                     await TLControl.Run();
+                WriteLog(WarnSeverity.Error, DateTime.Now, $"{nameof(TFSA_TLControl)} IsEnabled=[{TLControl.IsEnabled}]");
             }
 
             catch (Exception ex)
             {
-                WriteLog(WarnSeverity.Error, DateTime.Now, ex.Message);
+                WriteLog(WarnSeverity.Error, DateTime.Now, ex.ToString());
             }
         }
 
