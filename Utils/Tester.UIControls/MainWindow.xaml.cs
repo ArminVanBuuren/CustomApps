@@ -49,9 +49,16 @@ namespace Tester.UIControls
 
         async void Process()
         {
-            CamCapture camp = new CamCapture();
+            try
+            {
+                CamCapture camp = new CamCapture();
 
-            await camp.StartRec(@"C:\VideoClips\temp.1", 10);
+                await camp.StartRec(@"C:\VideoClips", 10);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
         }
 
         void CreateImage(ImageFormat imageFormat)

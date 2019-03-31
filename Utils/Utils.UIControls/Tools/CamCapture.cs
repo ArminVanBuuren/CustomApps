@@ -91,7 +91,7 @@ namespace Utils.UIControls.Tools
         //private void GrabImage(string destiationFileName)
         //{
         //    // Create a Bitmap of the same dimension of panelVideoPreview (Width x Height)
-        //    using (Bitmap bitmap = new Bitmap(panelVideoPreview.Width, panelVideoPreview.Height))
+        //    using (Bitmap bitmap = new Bitmap(640, 480))
         //    {
         //        using (Graphics g = Graphics.FromImage(bitmap))
         //        {
@@ -101,7 +101,7 @@ namespace Utils.UIControls.Tools
         //            g.CopyFromScreen(sourcePoints, Point.Empty, rectanglePanelVideoPreview.Size);
         //        }
 
-        //        bitmap.Save(destiationFileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+        //        bitmap.Save(destiationFileName, System.Drawing.Imaging.ImageFormat.Png);
         //    }
         //}
 
@@ -141,7 +141,7 @@ namespace Utils.UIControls.Tools
         //    toolStripStatusLabel1.Text = "Broadcast started on localhost at port 8080, run WpfShowBroadcast.exe now to see it";
         //}
 
-        EncoderDevice GetEncoder(Dictionary<string, EncoderDevice> encoders, string encoderName)
+        static EncoderDevice GetEncoder(Dictionary<string, EncoderDevice> encoders, string encoderName)
         {
             if (string.IsNullOrEmpty(encoderName))
                 return encoders.FirstOrDefault().Value;

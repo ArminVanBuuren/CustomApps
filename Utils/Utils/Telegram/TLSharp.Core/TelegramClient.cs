@@ -181,7 +181,7 @@ namespace TLSharp.Core
             await RequestWithDcMigration(request);
 
             OnUserAuthenticated(((TLUser)request.Response.User));
-
+            
             return ((TLUser)request.Response.User);
         }
         

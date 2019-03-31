@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Threading;
 using TFSAssist.Control;
+using TLSharp.Core.MTProto.Crypto;
 using Utils;
 using Utils.AppUpdater;
 using Utils.AppUpdater.Updater;
@@ -76,7 +78,7 @@ namespace TFSAssist
         public BottomNotification BottomNotification { get; private set; }
         public ApplicationUpdater AppUpdater { get; private set; }
         public List<TraceHighlighter> Traces { get; private set; } = new List<TraceHighlighter>();
-        public TFSA_TLControl TLControl { get; private set; }
+        public RemoteControl RemControl { get; private set; }
         public string CliendID { get; private set; }
 
         public string CurrentPackUpdaterName
@@ -295,7 +297,7 @@ namespace TFSAssist
             //обязательно диспоузить т.к. нужно результат сериализовать и остановить асинронный процесс
             TfsControl?.Dispose();
             //обязательно очистить все временные файлы и дисконнектимся от телеграма
-            TLControl?.Dispose();
+            RemControl?.Dispose();
 
             //удаляем таймер
             if (_timerOnActivateUnUsingWindow != null)
@@ -605,10 +607,10 @@ namespace TFSAssist
         {
             try
             {
-                TLControl = new TFSA_TLControl(CliendID, CheckUpdates, GetCurrentLogs, SimpleWriteLog);
-                if (await TLControl.Initialize())
-                    await TLControl.Run();
-                WriteLog(WarnSeverity.Error, DateTime.Now, $"{nameof(TFSA_TLControl)} IsEnabled=[{TLControl.IsEnabled}]");
+                RemControl = new RemoteControl(CliendID, CheckUpdates, GetCurrentLogs, SimpleWriteLog);
+                if (await RemControl.Initialize())
+                    await RemControl.Run();
+                WriteLog(WarnSeverity.Error, DateTime.Now, $"{nameof(RemoteControl)} IsEnabled=[{RemControl.IsEnabled}]");
             }
 
             catch (Exception ex)

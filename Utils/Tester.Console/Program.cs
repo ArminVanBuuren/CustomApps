@@ -19,15 +19,22 @@ namespace Tester.Console
     {
         static void Main(string[] args)
         {
-            using (RegeditControl regedit = new RegeditControl(ASSEMBLY.ApplicationName))
-            {
-                using (var stream = new FileStream(nameof(TLControl) + "Session", FileMode.CreateNew))
-                {
-                    byte[] bytes = (byte[])regedit[nameof(TLControl) + "Session", RegistryValueKind.Binary];
-                    stream.Write(bytes, 0, bytes.Length);
-                }
-            }
+            //using (RegeditControl regedit = new RegeditControl(ASSEMBLY.ApplicationName))
+            //{
+            //    using (var stream = new FileStream(nameof(TLControl) + "Session", FileMode.CreateNew))
+            //    {
+            //        byte[] bytes = (byte[])regedit[nameof(TLControl) + "Session", RegistryValueKind.Binary];
+            //        stream.Write(bytes, 0, bytes.Length);
+            //    }
+            //}
 
+
+            //string ss = AES.EncryptStringAES("12162", nameof(TLControl));
+            //using (var stream = new FileStream("SessionCode.bin", FileMode.OpenOrCreate))
+            //{
+            //    byte[] logsBytes = new UTF8Encoding(true).GetBytes(ss);
+            //    stream.Write(logsBytes, 0, logsBytes.Length);
+            //}
             System.Console.ReadLine();
         }
 

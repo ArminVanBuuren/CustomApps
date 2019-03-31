@@ -21,6 +21,8 @@ namespace Utils.Telegram
 
         public TLControlUser CurrentUser { get; private set; }
 
+        public bool IsAuthorized => Client.IsUserAuthorized();
+
         protected TLControl(int appiId, string apiHash)
         {
             if (apiHash == null)
@@ -35,10 +37,14 @@ namespace Utils.Telegram
         public async Task ConnectAsync(bool reconnect = false)
         {
             await Client.ConnectAsync(reconnect);
+
+            if (!IsAuthorized)
+                throw new AuthorizeException("Authorize user first!");
+            
             CurrentUser = new TLControlUser(Client.CurrentUser);
         }
 
-        public async Task<TLUser> AuthUserAsync(Task<string> getCodeToAuthenticate, string numberAuth, string password)
+        public async Task<TLUser> AuthUserAsync(Func<Task<string>> getCodeToAuthenticate, string numberAuth, string password = null)
         {
             if (getCodeToAuthenticate == null)
                 throw new ArgumentNullException(nameof(getCodeToAuthenticate));
@@ -47,7 +53,7 @@ namespace Utils.Telegram
                 throw new AuthenticateException("TLControl need your number to authenticate.");
 
             var hash = await Client.SendCodeRequestAsync(numberAuth);
-            var code = await getCodeToAuthenticate;
+            var code = await getCodeToAuthenticate.Invoke();
 
             TLUser user;
             try
