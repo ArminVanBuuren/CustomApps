@@ -9,13 +9,17 @@ namespace Utils.WinForm.AForge
     public delegate void AForgeEventHandler(object sender, AForgeEventArgs args);
     public class AForgeEventArgs : EventArgs
     {
-        public bool Result { get; }
+        public string DestinationFile { get; }
         public Exception Error { get; }
 
-        internal AForgeEventArgs(Exception ex, bool result = false)
+        internal AForgeEventArgs(Exception ex)
         {
             Error = ex;
-            Result = result;
+        }
+
+        internal AForgeEventArgs(string file)
+        {
+            DestinationFile = file;
         }
     }
 }

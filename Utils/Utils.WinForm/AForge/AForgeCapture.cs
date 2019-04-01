@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Design;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
@@ -17,7 +18,6 @@ namespace Utils.WinForm.AForge
 {
     public class AForgeCapture
     {
-        private readonly System.Timers.Timer _clearMemory;
         private readonly Action<Bitmap, bool> _updatePicFrame;
         private VideoCaptureDevice _finalVideo = null;
         private readonly AVIWriter _aviWriter;
@@ -28,8 +28,8 @@ namespace Utils.WinForm.AForge
         // http://sundar1984.blogspot.com/2007_08_01_archive.html
 
 
-        public event EventHandler RecordingCompleted;
-        public event AForgeEventHandler ProcessingError;
+        public event AForgeEventHandler OnRecordingCompleted;
+        public event AForgeEventHandler OnUnexpectedError;
         public AForgeCaptureMode Mode { get; private set; } = AForgeCaptureMode.None;
         public List<VideoDevice> VideoCapabilites { get; } = new List<VideoDevice>();
         public VideoDevice CurrentDevice { get; private set; }
@@ -54,29 +54,32 @@ namespace Utils.WinForm.AForge
                 }
             }
 
-            if(CurrentDevice == null)
-                throw new Exception("No devices founded.");
+            if (CurrentDevice == null)
+                throw new Exception("No device found.");
 
             _aviWriter = new AVIWriter("MSVC");
+
             if (pictureBox != null)
             {
-                _updatePicFrame = (frame, isResizable) => { pictureBox.Image = isResizable ? (Bitmap)frame.Clone() : ((Bitmap)frame.Clone()).ResizeImage(CurrentDevice.Width, CurrentDevice.Height); };
+                _updatePicFrame = (frame, isResizable) =>
+                {
+                    pictureBox.Image = isResizable ? (Bitmap) frame.Clone() : ((Bitmap) frame.Clone()).ResizeImage(CurrentDevice.Width, CurrentDevice.Height);
+                };
             }
 
-            _clearMemory = new System.Timers.Timer
+            System.Timers.Timer clearMemory = new System.Timers.Timer
             {
                 Interval = 2000
             };
-            _clearMemory.Elapsed += ClearMemory;
-            _clearMemory.AutoReset = false;
-            _clearMemory.Enabled = true;
-        }
+            clearMemory.Elapsed += (sender, args) =>
+            {
+                if (Mode != AForgeCaptureMode.None)
+                    GC.Collect();
 
-        private void ClearMemory(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            if (Mode != AForgeCaptureMode.None)
-                GC.Collect();
-            _clearMemory.Enabled = true;
+                clearMemory.Enabled = true;
+            };
+            clearMemory.AutoReset = false;
+            clearMemory.Enabled = true;
         }
 
         public bool StartPreview()
@@ -92,24 +95,19 @@ namespace Utils.WinForm.AForge
             return true;
         }
 
-        public void StopPreview()
-        {
-            StopCapturing();
-        }
-
         public bool StartRecording(string destinationFile, int timeRecSec = 60)
         {
-            if (Mode == AForgeCaptureMode.Recording || RecordingCompleted == null)
+            if (Mode == AForgeCaptureMode.Recording || OnRecordingCompleted == null)
                 return false;
 
             _aviWriter.Open(destinationFile, CurrentDevice.Width, CurrentDevice.Height);
 
-            var asyncRec = new Func<string, int, Task>(DoRecordingAsync);
+            var asyncRec = new Func<string, int, Task<AForgeEventArgs>>(DoRecordingAsync);
             asyncRec.BeginInvoke(destinationFile, timeRecSec, DoRecordingAsyncCompleted, asyncRec);
             return true;
         }
 
-        async Task DoRecordingAsync(string destinationFile, int timeRecSec)
+        async Task<AForgeEventArgs> DoRecordingAsync(string destinationFile, int timeRecSec)
         {
             try
             {
@@ -121,28 +119,29 @@ namespace Utils.WinForm.AForge
                 Mode = AForgeCaptureMode.Recording;
 
                 await Task.Delay(timeRecSec * 1000);
+
+                return new AForgeEventArgs(destinationFile);
             }
             catch (Exception ex)
             {
-                ProcessingError?.Invoke(this, new AForgeEventArgs(ex));
+                return new AForgeEventArgs(ex);
             }
-            finally
-            {
-                StopCapturing();
-            }
-        }
-
-        public void StopAnyProcess()
-        {
-            StopCapturing();
         }
 
         void DoRecordingAsyncCompleted(IAsyncResult asyncResult)
         {
-            //AsyncResult ar = asyncResult as AsyncResult;
-            //var caller = (Func<string, int, Task>)ar.AsyncDelegate;
-            //Task result = caller.EndInvoke(asyncResult);
-            RecordingCompleted?.Invoke(this, EventArgs.Empty);
+            try
+            {
+                StopCapturing();
+                AsyncResult ar = asyncResult as AsyncResult;
+                var caller = (Func<string, int, Task<AForgeEventArgs>>)ar.AsyncDelegate;
+                Task<AForgeEventArgs> taskResult = caller.EndInvoke(asyncResult);
+                OnRecordingCompleted?.Invoke(this, taskResult.Result);
+            }
+            catch (Exception ex)
+            {
+                OnRecordingCompleted?.Invoke(this, new AForgeEventArgs(ex));
+            }
         }
 
         public async Task<Bitmap> GetPicture()
@@ -153,6 +152,8 @@ namespace Utils.WinForm.AForge
             Bitmap result = null;
             var getImage = CurrentDevice.Device;
 
+            Exception catched1 = null;
+            Exception catched2 = null;
             try
             {
                 getImage.NewFrame += (sender, args) =>
@@ -164,7 +165,7 @@ namespace Utils.WinForm.AForge
                     }
                     catch (Exception ex)
                     {
-                        ProcessingError?.Invoke(this, new AForgeEventArgs(ex));
+                        OnUnexpectedError?.Invoke(this, new AForgeEventArgs(ex));
                     }
                 };
                 getImage.Start();
@@ -178,7 +179,7 @@ namespace Utils.WinForm.AForge
             }
             catch (Exception ex1)
             {
-                ProcessingError?.Invoke(this, new AForgeEventArgs(ex1));
+                catched1 = ex1;
             }
             finally
             {
@@ -190,9 +191,12 @@ namespace Utils.WinForm.AForge
                 }
                 catch (Exception ex2)
                 {
-                    ProcessingError?.Invoke(this, new AForgeEventArgs(ex2));
+                    catched2 = ex2;
                 }
             }
+
+            if(catched1 != null || catched2 != null)
+                throw new Exception($"Exception when get image. ImageStart=[{catched1?.Message}] ImageStop=[{catched2?.Message}]");
 
             return result;
         }
@@ -207,8 +211,15 @@ namespace Utils.WinForm.AForge
             _finalVideo.Start();
         }
 
+        public void StopAnyProcess()
+        {
+            StopCapturing();
+        }
+
         void StopCapturing()
         {
+            Exception catched1 = null;
+            Exception catched2 = null;
             try
             {
                 //if (FinalVideo != null && FinalVideo.IsRunning)
@@ -217,7 +228,7 @@ namespace Utils.WinForm.AForge
             }
             catch (Exception ex)
             {
-                ProcessingError?.Invoke(this, new AForgeEventArgs(ex));
+                catched1 = ex;
             }
 
             try
@@ -227,11 +238,16 @@ namespace Utils.WinForm.AForge
             }
             catch (Exception ex)
             {
-                ProcessingError?.Invoke(this, new AForgeEventArgs(ex));
+                catched2 = ex;
             }
 
             GC.Collect();
             Mode = AForgeCaptureMode.None;
+
+            if (catched1 != null || catched2 != null)
+            {
+                throw new Exception($"Error when stopping process. CaptureStop=[{catched1?.Message}] WriterClose=[{catched2?.Message}]");
+            }
         }
 
         void FinalVideo_NewFrame(object sender, NewFrameEventArgs args)
@@ -260,7 +276,7 @@ namespace Utils.WinForm.AForge
             }
             catch (Exception ex)
             {
-                ProcessingError?.Invoke(this, new AForgeEventArgs(ex));
+                OnUnexpectedError?.Invoke(this, new AForgeEventArgs(ex));
             }
         }
     }

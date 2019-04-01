@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
 using Microsoft.Expression.Encoder;
 using Microsoft.Expression.Encoder.Devices;
@@ -17,8 +18,7 @@ namespace Utils.UIControls.Tools.CamCapture
         private readonly Dictionary<string, EncoderDevice> _videoEncoders;
         private readonly Dictionary<string, EncoderDevice> _audioEncoders;
 
-        public event EventHandler RecordingCompleted;
-        public event CamCaptureEventHandler ProcessingError;
+        public event CamCaptureEventHandler OnRecordingCompleted;
         public List<string> VideoEncoders { get; } = new List<string>();
         public List<string> AudioEncoders { get; } = new List<string>();
         public CamCaptureMode Mode { get; private set; } = CamCaptureMode.None;
@@ -54,8 +54,6 @@ namespace Utils.UIControls.Tools.CamCapture
             if (Mode != CamCaptureMode.None)
                 return false;
 
-            StopJob();
-
             EncoderDevice videoEnc = GetEncoder(_videoEncoders, videoEncoder);
             EncoderDevice audioEnc = GetEncoder(_audioEncoders, audioEncoder);
 
@@ -86,13 +84,13 @@ namespace Utils.UIControls.Tools.CamCapture
 
 
             Mode = CamCaptureMode.Recording;
-            var asyncRec = new Func<string, int, Task>(DoRecordingAsync);
+            var asyncRec = new Func<string, int, Task<CamCaptureEventArgs>>(DoRecordingAsync);
             asyncRec.BeginInvoke(destinationFile, timeRecSec, DoRecordingAsyncCompleted, asyncRec);
             
             return true;
         }
 
-        async Task DoRecordingAsync(string destinationFile, int timeRecSec)
+        async Task<CamCaptureEventArgs> DoRecordingAsync(string destinationFile, int timeRecSec)
         {
             try
             {
@@ -104,24 +102,29 @@ namespace Utils.UIControls.Tools.CamCapture
                 _job.StartEncoding();
 
                 await Task.Delay(timeRecSec * 1000);
+
+                return new CamCaptureEventArgs(destinationFile);
             }
             catch (Exception ex)
             {
-                ProcessingError?.Invoke(this, new CamCaptureEventArgs(ex));
-            }
-            finally
-            {
-                StopJob();
+                return new CamCaptureEventArgs(ex);
             }
         }
 
         void DoRecordingAsyncCompleted(IAsyncResult asyncResult)
         {
-            //AsyncResult ar = asyncResult as AsyncResult;
-            //var caller = (Func<string, int, Task>)ar.AsyncDelegate;
-            //Task result = caller.EndInvoke(asyncResult);
-
-            RecordingCompleted?.Invoke(this, EventArgs.Empty);
+            try
+            {
+                StopJob();
+                AsyncResult ar = asyncResult as AsyncResult;
+                var caller = (Func<string, int, Task<CamCaptureEventArgs>>)ar.AsyncDelegate;
+                Task<CamCaptureEventArgs> taskResult = caller.EndInvoke(asyncResult);
+                OnRecordingCompleted?.Invoke(this, taskResult.Result);
+            }
+            catch (Exception ex)
+            {
+                OnRecordingCompleted?.Invoke(this, new CamCaptureEventArgs(ex));
+            }
         }
 
         //private void GrabImage(string destiationFileName)
@@ -147,8 +150,6 @@ namespace Utils.UIControls.Tools.CamCapture
 
             if (Mode != CamCaptureMode.None)
                 return false;
-
-            StopJob();
 
             EncoderDevice videoEnc = GetEncoder(_videoEncoders, videoEncoder);
             EncoderDevice audioEnc = GetEncoder(_audioEncoders, audioEncoder);
@@ -197,9 +198,9 @@ namespace Utils.UIControls.Tools.CamCapture
                 if (_deviceSource != null)
                     _deviceSource.PreviewWindow = null;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ProcessingError?.Invoke(this, new CamCaptureEventArgs(ex));
+                throw;
             }
             finally
             {

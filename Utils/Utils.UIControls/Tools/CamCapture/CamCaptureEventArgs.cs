@@ -9,13 +9,17 @@ namespace Utils.UIControls.Tools.CamCapture
     public delegate void CamCaptureEventHandler(object sender, CamCaptureEventArgs args);
     public class CamCaptureEventArgs : EventArgs
     {
-        public bool Result { get; }
+        public string DestinationFile { get; }
         public Exception Error { get; }
 
-        internal CamCaptureEventArgs(Exception ex, bool result = false)
+        internal CamCaptureEventArgs(Exception ex)
         {
             Error = ex;
-            Result = result;
+        }
+
+        internal CamCaptureEventArgs(string file)
+        {
+            DestinationFile = file;
         }
     }
 }
