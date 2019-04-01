@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using AForge.Video;
 using AForge.Video.DirectShow;
-using AForge.Video.FFMPEG;
+//using AForge.Video.FFMPEG;
 using AForge.Video.VFW;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -23,8 +23,8 @@ namespace Tester.WinForm
         private VideoCaptureDevice FinalVideo = null;
         private VideoCaptureDeviceForm captureDevice;
         private Bitmap video;
-        //private AVIWriter AVIwriter;
-        private VideoFileWriter FileWriter = new VideoFileWriter();
+        private AVIWriter AVIwriter;
+        //private VideoFileWriter FileWriter = new VideoFileWriter();
         private SaveFileDialog saveAvi;
 
         // MSVC - с компрессией; wmv3 - с компрессией но нужен кодек
@@ -34,7 +34,7 @@ namespace Tester.WinForm
         public Form1()
         {
             InitializeComponent();
-            //AVIwriter = new AVIWriter("MSVC");
+            AVIwriter = new AVIWriter("MSVC");
             this.Load += Form1_Load;
             this.FormClosing += Form1_FormClosing;
         }
@@ -62,9 +62,9 @@ namespace Tester.WinForm
                 video = (Bitmap)eventArgs.Frame.Clone();
                 video = ResizeImage(video, 320, 240);
                 //pictureBox1.Image = (Bitmap)eventArgs.Frame.Clone();
-                //AVIwriter.Quality = 0;
-                FileWriter.WriteVideoFrame(video);
-                //AVIwriter.AddFrame(video);
+                AVIwriter.Quality = 0;
+                //FileWriter.WriteVideoFrame(video);
+                AVIwriter.AddFrame(video);
             }
             else
             {
@@ -149,9 +149,9 @@ namespace Tester.WinForm
 
                 int h = caps.FrameSize.Height;
                 int w = caps.FrameSize.Width;
-                FileWriter.Open(saveAvi.FileName, w, h, 25, VideoCodec.Default, 5000000);
+                //FileWriter.Open(saveAvi.FileName, w, h, 25, VideoCodec.Default, 5000000);
 
-                //AVIwriter.Open(saveAvi.FileName, w, h);
+                AVIwriter.Open(saveAvi.FileName, w, h);
                 butStop.Text = "Stop Record";
                 FinalVideo = VideoDevice;
                 FinalVideo.NewFrame += new NewFrameEventHandler(FinalVideo_NewFrame);
@@ -186,16 +186,16 @@ namespace Tester.WinForm
                 if (FinalVideo.IsRunning)
                 {
                     this.FinalVideo.Stop();
-                    FileWriter.Close();
-                    //this.AVIwriter.Close();
+                    //FileWriter.Close();
+                    this.AVIwriter.Close();
                     pictureBox1.Image = null;
                 }
             }
             else
             {
                 this.FinalVideo.Stop();
-                FileWriter.Close();
-                //this.AVIwriter.Close();
+                //FileWriter.Close();
+                this.AVIwriter.Close();
                 pictureBox1.Image = null;
             }
 
@@ -223,8 +223,8 @@ namespace Tester.WinForm
             if (FinalVideo.IsRunning)
             {
                 this.FinalVideo.Stop();
-                FileWriter.Close();
-                //this.AVIwriter.Close();
+                //FileWriter.Close();
+                this.AVIwriter.Close();
             }
         }
     }

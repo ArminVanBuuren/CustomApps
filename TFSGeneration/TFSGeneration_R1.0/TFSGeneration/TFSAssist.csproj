@@ -92,13 +92,14 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Utils, Version=1.0.7028.40131, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Utils">
       <HintPath>..\..\..\Utils\Utils\bin\x86\Debug\Utils.dll</HintPath>
     </Reference>
-    <Reference Include="Utils.UIControls, Version=1.0.7025.38082, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Utils\Utils.UIControls\bin\x86\Release\Utils.UIControls.dll</HintPath>
+    <Reference Include="Utils.UIControls">
+      <HintPath>..\..\..\Utils\Utils.UIControls\bin\x86\Debug\Utils.UIControls.dll</HintPath>
+    </Reference>
+    <Reference Include="Utils.WinForm">
+      <HintPath>..\..\..\Utils\Utils.WinForm\bin\x86\Debug\Utils.WinForm.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
