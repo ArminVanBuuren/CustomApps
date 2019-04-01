@@ -90,8 +90,9 @@ namespace Utils.WinForm.AForge
             if(Mode == AForgeCaptureMode.Previewing || Mode == AForgeCaptureMode.Recording)
                 return true;
 
-            StartCapturing();
             Mode = AForgeCaptureMode.Previewing;
+            StartCapturing();
+            
             return true;
         }
 
@@ -111,12 +112,16 @@ namespace Utils.WinForm.AForge
         {
             try
             {
-                if (Mode == AForgeCaptureMode.None)
+                switch (Mode)
                 {
-                    StartCapturing();
+                    case AForgeCaptureMode.None:
+                        Mode = AForgeCaptureMode.Recording;
+                        StartCapturing();
+                        break;
+                    case AForgeCaptureMode.Previewing:
+                        Mode = AForgeCaptureMode.Recording;
+                        break;
                 }
-
-                Mode = AForgeCaptureMode.Recording;
 
                 await Task.Delay(timeRecSec * 1000);
 
