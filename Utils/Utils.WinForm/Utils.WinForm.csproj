@@ -81,6 +81,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AForge\AForgeCapture.cs" />
+    <Compile Include="AForge\CaptureMode.cs" />
     <Compile Include="AForge\Controls\Chart.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -427,6 +429,7 @@
     <Compile Include="AForge\Video.Ximea\TriggerSource.cs" />
     <Compile Include="AForge\Video.Ximea\XimeaCamera.cs" />
     <Compile Include="AForge\Video.Ximea\XimeaVideoSource.cs" />
+    <Compile Include="AForge\VideoDevice.cs" />
     <Compile Include="AForge\Video\AsyncVideoSource.cs" />
     <Compile Include="AForge\Video\ByteArrayUtils.cs" />
     <Compile Include="AForge\Video\Exceptions.cs" />
@@ -444,6 +447,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DataGridViewHelper\DGVEnhancer.cs" />
+    <Compile Include="DRAWING.cs" />
     <Compile Include="FastColoredTextBox\AutocompleteItem.cs" />
     <Compile Include="FastColoredTextBox\AutocompleteMenu.cs">
       <SubType>Component</SubType>
