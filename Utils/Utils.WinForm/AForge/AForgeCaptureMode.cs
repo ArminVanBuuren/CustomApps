@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Utils.WinForm.AForge
 {
-    public enum CaptureMode
+    public enum AForgeCaptureMode
     {
         None = 0,
         Previewing = 1,

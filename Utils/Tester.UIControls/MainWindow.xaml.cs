@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Utils;
 using Utils.UIControls.Tools;
+using Utils.UIControls.Tools.CamCapture;
 
 namespace Tester.UIControls
 {
@@ -47,13 +48,13 @@ namespace Tester.UIControls
 
         }
 
-        async void Process()
+        void Process()
         {
             try
             {
                 CamCapture camp = new CamCapture();
 
-                await camp.StartRec(@"C:\VideoClips", 10);
+                camp.StartRecording(@"C:\VideoClips", 10);
             }
             catch (Exception ex)
             {

@@ -82,7 +82,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AForge\AForgeCapture.cs" />
-    <Compile Include="AForge\CaptureMode.cs" />
+    <Compile Include="AForge\AForgeCaptureMode.cs" />
+    <Compile Include="AForge\AForgeEventArgs.cs" />
     <Compile Include="AForge\Controls\Chart.cs">
       <SubType>Component</SubType>
     </Compile>

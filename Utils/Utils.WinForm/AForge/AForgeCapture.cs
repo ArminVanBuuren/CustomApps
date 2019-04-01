@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -18,8 +19,8 @@ namespace Utils.WinForm.AForge
     {
         private readonly System.Timers.Timer _clearMemory;
         private readonly Action<Bitmap, bool> _updatePicFrame;
-        private VideoCaptureDevice FinalVideo = null;
-        private readonly AVIWriter AVIwriter;
+        private VideoCaptureDevice _finalVideo = null;
+        private readonly AVIWriter _aviWriter;
         //private VideoFileWriter FileWriter = new VideoFileWriter();
 
         // MSVC - с компрессией; wmv3 - с компрессией но нужен кодек
@@ -27,8 +28,9 @@ namespace Utils.WinForm.AForge
         // http://sundar1984.blogspot.com/2007_08_01_archive.html
 
 
-        
-        public CaptureMode Mode { get; private set; } = CaptureMode.None;
+        public event EventHandler RecordingCompleted;
+        public event AForgeEventHandler ProcessingError;
+        public AForgeCaptureMode Mode { get; private set; } = AForgeCaptureMode.None;
         public List<VideoDevice> VideoCapabilites { get; } = new List<VideoDevice>();
         public VideoDevice CurrentDevice { get; private set; }
 
@@ -55,7 +57,7 @@ namespace Utils.WinForm.AForge
             if(CurrentDevice == null)
                 throw new Exception("No devices founded.");
 
-            AVIwriter = new AVIWriter("MSVC");
+            _aviWriter = new AVIWriter("MSVC");
             if (pictureBox != null)
             {
                 _updatePicFrame = (frame, isResizable) => { pictureBox.Image = isResizable ? (Bitmap)frame.Clone() : ((Bitmap)frame.Clone()).ResizeImage(CurrentDevice.Width, CurrentDevice.Height); };
@@ -72,7 +74,7 @@ namespace Utils.WinForm.AForge
 
         private void ClearMemory(object sender, System.Timers.ElapsedEventArgs e)
         {
-            if (Mode != CaptureMode.None)
+            if (Mode != AForgeCaptureMode.None)
                 GC.Collect();
             _clearMemory.Enabled = true;
         }
@@ -82,11 +84,11 @@ namespace Utils.WinForm.AForge
             if (_updatePicFrame == null)
                 return false;
 
-            if(Mode == CaptureMode.Previewing || Mode == CaptureMode.Recording)
+            if(Mode == AForgeCaptureMode.Previewing || Mode == AForgeCaptureMode.Recording)
                 return true;
 
             StartCapturing();
-            Mode = CaptureMode.Previewing;
+            Mode = AForgeCaptureMode.Previewing;
             return true;
         }
 
@@ -95,28 +97,57 @@ namespace Utils.WinForm.AForge
             StopCapturing();
         }
 
-        public async Task StartRecording(string destinationFile, int timeRecSec = 60)
+        public bool StartRecording(string destinationFile, int timeRecSec = 60)
         {
-            if (Mode == CaptureMode.Recording)
-                return;
+            if (Mode == AForgeCaptureMode.Recording || RecordingCompleted == null)
+                return false;
 
-            AVIwriter.Open(destinationFile, CurrentDevice.Width, CurrentDevice.Height);
+            _aviWriter.Open(destinationFile, CurrentDevice.Width, CurrentDevice.Height);
 
-            if (Mode == CaptureMode.None)
+            var asyncRec = new Func<string, int, Task>(DoRecordingAsync);
+            asyncRec.BeginInvoke(destinationFile, timeRecSec, DoRecordingAsyncCompleted, asyncRec);
+            return true;
+        }
+
+        async Task DoRecordingAsync(string destinationFile, int timeRecSec)
+        {
+            try
             {
-                StartCapturing();
+                if (Mode == AForgeCaptureMode.None)
+                {
+                    StartCapturing();
+                }
+
+                Mode = AForgeCaptureMode.Recording;
+
+                await Task.Delay(timeRecSec * 1000);
             }
+            catch (Exception ex)
+            {
+                ProcessingError?.Invoke(this, new AForgeEventArgs(ex));
+            }
+            finally
+            {
+                StopCapturing();
+            }
+        }
 
-            Mode = CaptureMode.Recording;
-
-            await Task.Delay(timeRecSec * 1000);
-
+        public void StopAnyProcess()
+        {
             StopCapturing();
+        }
+
+        void DoRecordingAsyncCompleted(IAsyncResult asyncResult)
+        {
+            //AsyncResult ar = asyncResult as AsyncResult;
+            //var caller = (Func<string, int, Task>)ar.AsyncDelegate;
+            //Task result = caller.EndInvoke(asyncResult);
+            RecordingCompleted?.Invoke(this, EventArgs.Empty);
         }
 
         public async Task<Bitmap> GetPicture()
         {
-            if (Mode != CaptureMode.None)
+            if (Mode != AForgeCaptureMode.None)
                 return null;
 
             Bitmap result = null;
@@ -131,9 +162,9 @@ namespace Utils.WinForm.AForge
                         result = (Bitmap) args.Frame.Clone();
                         getImage.Stop();
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-                        //null
+                        ProcessingError?.Invoke(this, new AForgeEventArgs(ex));
                     }
                 };
                 getImage.Start();
@@ -145,65 +176,91 @@ namespace Utils.WinForm.AForge
                     timeOut++;
                 }
             }
-            catch (Exception)
+            catch (Exception ex1)
             {
-                throw;
+                ProcessingError?.Invoke(this, new AForgeEventArgs(ex1));
             }
             finally
             {
-                if (getImage.IsRunning)
+                try
+                {
+                    //if (getImage.IsRunning)
                     getImage.Stop();
-                GC.Collect();
+                    GC.Collect();
+                }
+                catch (Exception ex2)
+                {
+                    ProcessingError?.Invoke(this, new AForgeEventArgs(ex2));
+                }
             }
 
             return result;
         }
 
-
         void StartCapturing()
         {
-            FinalVideo = CurrentDevice.Device;
-            FinalVideo.NewFrame += new NewFrameEventHandler(FinalVideo_NewFrame);
-            FinalVideo.Start();
+            if (_finalVideo != null)
+                StopCapturing();
+
+            _finalVideo = CurrentDevice.Device;
+            _finalVideo.NewFrame += new NewFrameEventHandler(FinalVideo_NewFrame);
+            _finalVideo.Start();
         }
 
         void StopCapturing()
         {
             try
             {
-                if (FinalVideo != null && FinalVideo.IsRunning)
-                    FinalVideo.Stop();
+                //if (FinalVideo != null && FinalVideo.IsRunning)
+                _finalVideo.Stop();
+                _finalVideo = null;
+            }
+            catch (Exception ex)
+            {
+                ProcessingError?.Invoke(this, new AForgeEventArgs(ex));
+            }
+
+            try
+            {
                 //FileWriter.Close();
-                AVIwriter.Close();
+                _aviWriter.Close();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                ProcessingError?.Invoke(this, new AForgeEventArgs(ex));
             }
-            finally
-            {
-                GC.Collect();
-                Mode = CaptureMode.None;
-            }
+
+            GC.Collect();
+            Mode = AForgeCaptureMode.None;
         }
 
         void FinalVideo_NewFrame(object sender, NewFrameEventArgs args)
         {
-            switch (Mode)
+            try
             {
-                case CaptureMode.Recording:
+                switch (Mode)
                 {
-                    var video = ((Bitmap)args.Frame.Clone()).ResizeImage(CurrentDevice.Width, CurrentDevice.Height);
-                    _updatePicFrame?.Invoke(video, true);
+                    case AForgeCaptureMode.Recording:
+                    {
+                        var video = ((Bitmap)args.Frame.Clone()).ResizeImage(CurrentDevice.Width, CurrentDevice.Height);
+                        _updatePicFrame?.Invoke(video, true);
 
-                    AVIwriter.Quality = 0;
-                    //FileWriter.WriteVideoFrame(video);
-                    AVIwriter.AddFrame(video);
-                    break;
+                        _aviWriter.Quality = 0;
+                        //FileWriter.WriteVideoFrame(video);
+                        _aviWriter.AddFrame(video);
+                        break;
+                    }
+                    case AForgeCaptureMode.Previewing:
+                        _updatePicFrame?.Invoke(args.Frame, false);
+                        break;
+                    case AForgeCaptureMode.None:
+                        StopCapturing();
+                        break;
                 }
-                case CaptureMode.Previewing:
-                    _updatePicFrame?.Invoke(args.Frame, false);
-                    break;
+            }
+            catch (Exception ex)
+            {
+                ProcessingError?.Invoke(this, new AForgeEventArgs(ex));
             }
         }
     }
