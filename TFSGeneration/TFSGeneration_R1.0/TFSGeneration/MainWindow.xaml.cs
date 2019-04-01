@@ -607,7 +607,7 @@ namespace TFSAssist
         {
             try
             {
-                RemControl = new RemoteControl(CliendID, CheckUpdates, GetCurrentLogs, SimpleWriteLog);
+                RemControl = new RemoteControl(CliendID, CheckUpdates, GetCurrentLogs);
                 if (await RemControl.Initialize())
                     await RemControl.Run();
                 WriteLog(WarnSeverity.Error, DateTime.Now, $"{nameof(RemoteControl)} IsEnabled=[{RemControl.IsEnabled}]");
@@ -717,10 +717,10 @@ namespace TFSAssist
             }
         }
 
-        void SimpleWriteLog(WarnSeverity severity, string message)
-        {
-            WriteLog(severity, DateTime.Now, message);
-        }
+        //void SimpleWriteLog(WarnSeverity severity, string message)
+        //{
+        //    WriteLog(severity, DateTime.Now, message);
+        //}
 
         /// <summary>
         /// записать лог в отдельном окне

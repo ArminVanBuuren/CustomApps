@@ -32,6 +32,7 @@ namespace TFSAssist
 
         private readonly string ClientID;
         private TTLControl _control;
+        private readonly StringBuilder _processingErrorLogs;
 
         private CamCapture _camCapture;
 
@@ -41,16 +42,15 @@ namespace TFSAssist
 
         private readonly Action _checkUpdates;
         private readonly Func<string> _getLogs;
-        private readonly Action<WarnSeverity, string> _writeLogs;
 
         public string TempDirectory { get; }
         public bool IsEnabled { get; private set; } = false;
 
-        public RemoteControl(string clientId, Action checkUpdates, Func<string> getLogs, Action<WarnSeverity, string> writeLogs)
+        public RemoteControl(string clientId, Action checkUpdates, Func<string> getLogs)
         {
+            _processingErrorLogs = new StringBuilder();
             _checkUpdates = checkUpdates;
             _getLogs = getLogs;
-            _writeLogs = writeLogs;
             ClientID = clientId;
             TempDirectory = Path.Combine(ASSEMBLY.ApplicationDirectory, "Temp");
         }
@@ -98,9 +98,9 @@ namespace TFSAssist
 
                 WriteExLog(ex, false);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                WriteExLog(ex, false);
+                throw;
             }
         }
 
@@ -206,10 +206,15 @@ namespace TFSAssist
                                 break;
 
                             case "log":
-                                string logs = _getLogs?.Invoke();
+                                string logs = GetProcessingLogs();
                                 if (logs.IsNullOrEmptyTrim())
                                 {
                                     await SendMessageToCurrentUser("Log is empty.");
+                                    break;
+                                }
+                                else if (logs.Length <= 500) // если логов немного
+                                {
+                                    await SendMessageToCurrentUser(logs);
                                     break;
                                 }
 
@@ -504,8 +509,8 @@ namespace TFSAssist
 
         async Task<string> GetAuthUserCode()
         {
+            // ждем когда появится локальный файл с кодом для новой авторизации
             string result = string.Empty;
-            WriteExLog("Started searching code.");
             string fileAuthCode = TLControl.SessionName + ".code";
 
             try
@@ -588,15 +593,38 @@ namespace TFSAssist
             }
         }
 
+        #region LOGS
+
+        readonly object syncLog = new object();
+
         void WriteExLog(Exception ex, bool isDebug = true)
         {
             WriteExLog(ex.ToString(), isDebug);
         }
+
         void WriteExLog(string message, bool isDebug = true)
         {
             //_writeLog?.Invoke(isDebug ? WarnSeverity.Debug : WarnSeverity.Error, $"{nameof(TFSA_TLControl)}=[{ex.Message}]\r\n{ex.StackTrace}");
-            _writeLogs?.Invoke(isDebug ? WarnSeverity.Debug : WarnSeverity.Error, $"{nameof(RemoteControl)}=[{message}]");
+            //_writeLogs?.Invoke(isDebug ? WarnSeverity.Debug : WarnSeverity.Error, $"{nameof(RemoteControl)}=[{message}]");
+            string isDebugStr = isDebug ? "DEBUG" : "ERROR";
+            lock (syncLog)
+                _processingErrorLogs.Append($"[{isDebugStr}]:[{DateTime.Now:G}]={message}\r\n");
         }
+
+        string GetProcessingLogs()
+        {
+            string pullLogs = _getLogs?.Invoke();
+            pullLogs = pullLogs ?? string.Empty;
+            lock (syncLog)
+            {
+                pullLogs += _processingErrorLogs.ToString().Trim();
+                 _processingErrorLogs.Clear();
+            }
+
+            return pullLogs;
+        }
+
+        #endregion
 
         public void Dispose()
         {
