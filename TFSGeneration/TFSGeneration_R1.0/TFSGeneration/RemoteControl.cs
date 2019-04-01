@@ -172,11 +172,11 @@ namespace TFSAssist
 
                         switch (command)
                         {
-                            case "info":
+                            case "ping":
                                 await SendMessageToCurrentUser(GetCurrentServerInfo(true));
                                 break;
 
-                            case "detinfo":
+                            case "info":
                                 var res = WIN32.GetDetailedHostInfo();
                                 if (res?.Count > 0)
                                 {
@@ -240,11 +240,11 @@ namespace TFSAssist
                                 break;
 
                             case "cpu":
-                                // TODO
+                                // TODO current process cpu
                                 break;
 
-                            case "session":
-                                // TODO
+                            case "restart":
+                                // TODO restart current app
                                 break;
 
                             case "update":
@@ -300,7 +300,7 @@ namespace TFSAssist
                                 break;
                         }
                     }
-                    else if (tlMessage.Message.Like("info"))
+                    else if (tlMessage.Message.Like("ping"))
                     {
                         await SendMessageToCurrentUser(GetCurrentServerInfo());
                     }
