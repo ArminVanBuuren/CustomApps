@@ -53,13 +53,18 @@ namespace Tester.UIControls
             try
             {
                 CamCapture camp = new CamCapture();
-
-                camp.StartRecording(@"C:\VideoClips", 10);
+                camp.OnRecordingCompleted += Camp_OnRecordingCompleted;
+                camp.StartRecording(@"C:\VideoClips\test.wmv", 10);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
             }
+        }
+
+        private void Camp_OnRecordingCompleted(object sender, CamCaptureEventArgs args)
+        {
+            MessageBox.Show($"Competed - {args?.DestinationFile}");
         }
 
         void CreateImage(ImageFormat imageFormat)

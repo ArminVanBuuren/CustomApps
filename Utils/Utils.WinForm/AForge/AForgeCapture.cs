@@ -144,10 +144,12 @@ namespace Utils.WinForm.AForge
         {
             try
             {
-                StopCapturing();
                 AsyncResult ar = asyncResult as AsyncResult;
                 var caller = (Func<string, int, Task<AForgeEventArgs>>)ar.AsyncDelegate;
                 Task<AForgeEventArgs> taskResult = caller.EndInvoke(asyncResult);
+
+                StopCapturing();
+
                 OnRecordingCompleted?.Invoke(this, taskResult.Result);
             }
             catch (Exception ex)
