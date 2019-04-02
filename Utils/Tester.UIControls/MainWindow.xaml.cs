@@ -54,7 +54,7 @@ namespace Tester.UIControls
             {
                 CamCapture camp = new CamCapture();
                 camp.OnRecordingCompleted += Camp_OnRecordingCompleted;
-                camp.StartRecording(@"C:\VideoClips\test.wmv", 10);
+                camp.StartRecording(@"C:\VideoClips\test.wmv", 30);
             }
             catch (Exception ex)
             {

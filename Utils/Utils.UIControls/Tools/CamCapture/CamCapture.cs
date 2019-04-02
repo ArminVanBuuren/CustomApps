@@ -102,11 +102,11 @@ namespace Utils.UIControls.Tools.CamCapture
             }
 
             Mode = CamCaptureMode.Recording;
-            var asyncRec = new Func<CoverRecord, CamCaptureEventArgs>(DoRecordingAsync);
+            var asyncRec = new Func<CoverRecord, Task<CamCaptureEventArgs>>(DoRecordingAsync);
             asyncRec.BeginInvoke(new CoverRecord(destinationFile, timeRec, videoEnc, audioEnc), DoRecordingAsyncCompleted, asyncRec);
         }
 
-        CamCaptureEventArgs DoRecordingAsync(CoverRecord cover)
+        async Task<CamCaptureEventArgs> DoRecordingAsync(CoverRecord cover)
         {
             try
             {
@@ -136,8 +136,7 @@ namespace Utils.UIControls.Tools.CamCapture
                 _job.PublishFormats.Add(fileOut);
                 _job.StartEncoding();
 
-                //await Task.Delay(cover.TimeRec * 1000);
-                System.Threading.Thread.Sleep(cover.TimeRec * 1000);
+                await Task.Delay(cover.TimeRec * 1000);
 
                 return new CamCaptureEventArgs(cover.DestinationFile);
             }
@@ -167,11 +166,11 @@ namespace Utils.UIControls.Tools.CamCapture
                 File.Delete(destinationFile);
 
             Mode = CamCaptureMode.Recording;
-            var asyncRec = new Func<CoverRecord, CamCaptureEventArgs>(DoScreenRecordingAsync);
+            var asyncRec = new Func<CoverRecord, Task<CamCaptureEventArgs>>(DoScreenRecordingAsync);
             asyncRec.BeginInvoke(new CoverRecord(destinationFile, timeRec, null, audioEnc), DoRecordingAsyncCompleted, asyncRec);
         }
 
-        CamCaptureEventArgs DoScreenRecordingAsync(CoverRecord cover)
+        async Task<CamCaptureEventArgs> DoScreenRecordingAsync(CoverRecord cover)
         {
             try
             {
@@ -191,8 +190,7 @@ namespace Utils.UIControls.Tools.CamCapture
                 _jobScreen.OutputScreenCaptureFileName = cover.DestinationFile;
                 _jobScreen.Start();
 
-                System.Threading.Thread.Sleep(cover.TimeRec * 1000);
-                //await Task.Delay(cover.TimeRec * 1000);
+                await Task.Delay(cover.TimeRec * 1000);
 
                 return new CamCaptureEventArgs(cover.DestinationFile);
             }
@@ -202,17 +200,18 @@ namespace Utils.UIControls.Tools.CamCapture
             }
         }
 
-        void DoRecordingAsyncCompleted(IAsyncResult asyncResult)
+        async void DoRecordingAsyncCompleted(IAsyncResult asyncResult)
         {
             try
             {
                 AsyncResult ar = asyncResult as AsyncResult;
-                var caller = (Func<CoverRecord, CamCaptureEventArgs>)ar.AsyncDelegate;
-                CamCaptureEventArgs result = caller.EndInvoke(asyncResult);
+                var caller = (Func<CoverRecord, Task<CamCaptureEventArgs>>)ar.AsyncDelegate;
+                Task<CamCaptureEventArgs> taskResult = caller.EndInvoke(asyncResult);
+                await taskResult;
 
                 StopJob();
 
-                OnRecordingCompleted?.Invoke(this, result);
+                OnRecordingCompleted?.Invoke(this, taskResult.Result);
             }
             catch (Exception ex)
             {
