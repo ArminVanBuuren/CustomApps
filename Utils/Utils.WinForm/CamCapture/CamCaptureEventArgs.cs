@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Utils.UIControls.Tools.CamCapture
+namespace Utils.WinForm.CamCapture
 {
     public delegate void CamCaptureEventHandler(object sender, CamCaptureEventArgs args);
     public class CamCaptureEventArgs : EventArgs
     {
         public string DestinationFile { get; }
-        public Exception Error { get; }
+        public Exception Error { get; internal set; }
 
         internal CamCaptureEventArgs(Exception ex)
         {

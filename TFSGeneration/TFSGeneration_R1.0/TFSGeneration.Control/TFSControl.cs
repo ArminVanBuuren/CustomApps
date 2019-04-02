@@ -57,7 +57,6 @@ namespace TFSAssist.Control
                 try
                 {
                     //=========================================================
-                    InProgress = true;
                     _tempLastMailItem = null;
                     _log.LogItemId = 0;
                     _log.OnStatusChanged(StatusString.Initialization);
@@ -104,8 +103,8 @@ namespace TFSAssist.Control
                 }
                 catch (ThreadAbortException)
                 {
-                    //Thread.ResetAbort();
-                    _log.OnStatusChanged(StatusString.Aborted);
+                    //Thread.ResetAbort(); - отменить аборт
+                    InProgress = false;
                 }
                 catch (Exception fatal)
                 {
@@ -114,7 +113,14 @@ namespace TFSAssist.Control
                 }
                 finally
                 {
-                    InProgress = false;
+                    if (!InProgress)
+                    {
+                        _log.OnStatusChanged(StatusString.Aborted);
+                    }
+                    else
+                    {
+                        InProgress = false;
+                    }
                     IsCompleted?.Invoke(this, EventArgs.Empty);
                     SaveProcessigDatas();
                 }
@@ -292,7 +298,7 @@ namespace TFSAssist.Control
         /// </summary>
         void StartProcess()
         {
-            while (true)
+            while (InProgress)
             {
                 Processing();
                 _log.OnStatusChanged(StatusString.Sleeping, WarnSeverity.StatusRegular);

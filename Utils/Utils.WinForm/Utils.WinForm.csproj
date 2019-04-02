@@ -68,6 +68,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Expression.Encoder, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=x86">
+      <HintPath>..\packages\Microsoft.Expression.Encoder.4.0.4276.3\lib\net45\Microsoft.Expression.Encoder.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Design" />
@@ -81,9 +84,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AForge\AForgeCapture.cs" />
-    <Compile Include="AForge\AForgeCaptureMode.cs" />
-    <Compile Include="AForge\AForgeEventArgs.cs" />
+    <Compile Include="CamCapture\AForgeCapture.cs" />
+    <Compile Include="CamCapture\AForgeCaptureMode.cs" />
+    <Compile Include="CamCapture\AForgeEventArgs.cs" />
     <Compile Include="AForge\Controls\Chart.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -430,7 +433,7 @@
     <Compile Include="AForge\Video.Ximea\TriggerSource.cs" />
     <Compile Include="AForge\Video.Ximea\XimeaCamera.cs" />
     <Compile Include="AForge\Video.Ximea\XimeaVideoSource.cs" />
-    <Compile Include="AForge\VideoDevice.cs" />
+    <Compile Include="CamCapture\AForgeVideoDevice.cs" />
     <Compile Include="AForge\Video\AsyncVideoSource.cs" />
     <Compile Include="AForge\Video\ByteArrayUtils.cs" />
     <Compile Include="AForge\Video\Exceptions.cs" />
@@ -442,6 +445,9 @@
     <Compile Include="AsyncHelper\AbortableBackgroundWorker.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="CamCapture\CamCapture.cs" />
+    <Compile Include="CamCapture\CamCaptureEventArgs.cs" />
+    <Compile Include="CamCapture\CamCaptureMode.cs" />
     <Compile Include="CustomProgressBar\ProgressBarCompetition.cs" />
     <Compile Include="CustomProgressBar\ProgressBarUtils.cs" />
     <Compile Include="CustomProgressBar\ProgressBarWithPercent.cs">
@@ -589,6 +595,7 @@
     <Content Include="Notepad\Resources\Add.png" />
     <Content Include="Notepad\Resources\Close.png" />
     <Content Include="Notepad\Resources\icons8-xml-48.ico" />
+    <None Include="packages.config" />
     <None Include="Resources\icons8-xml-48.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AForge.Video.DirectShow;
+﻿using AForge.Video.DirectShow;
 
-namespace Utils.WinForm.AForge
+namespace Utils.WinForm.CamCapture
 {
-    public class VideoDevice
+    public class AForgeVideoDevice
     {
-        public VideoDevice(string name, VideoCaptureDevice device, VideoCapabilities videoCapabilities)
+        public AForgeVideoDevice(string name, VideoCaptureDevice device, VideoCapabilities videoCapabilities)
         {
             DeviceName = name;
             Device = device;

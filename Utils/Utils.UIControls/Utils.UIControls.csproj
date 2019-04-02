@@ -63,9 +63,6 @@
     <Optimize>true</Optimize>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Expression.Encoder, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=x86">
-      <HintPath>..\packages\Microsoft.Expression.Encoder.4.0.4276.3\lib\net45\Microsoft.Expression.Encoder.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -97,12 +94,9 @@
       <DependentUpon>Core.xaml</DependentUpon>
     </Compile>
     <Compile Include="HANDLES.cs" />
-    <Compile Include="Tools\CamCapture\CamCaptureEventArgs.cs" />
-    <Compile Include="Tools\CamCapture\CamCaptureMode.cs" />
     <Compile Include="Tools\ScreenCapture.cs" />
     <Compile Include="Tools\UIControls32.cs" />
     <Compile Include="Tools\UIPropertyBinding.cs" />
-    <Compile Include="Tools\CamCapture\CamCapture.cs" />
     <Compile Include="Tools\WOSComponents.cs" />
     <Compile Include="Tools\WOSVersion.cs" />
   </ItemGroup>
@@ -133,9 +127,6 @@
     <Folder Include="Styles\Simple\" />
     <Folder Include="Themes\DarkBlue\" />
     <Folder Include="Themes\DarkOrange\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

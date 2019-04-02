@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Design;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AForge.Video;
 using AForge.Video.DirectShow;
-//using AForge.Video.FFMPEG;
 using AForge.Video.VFW;
-using Utils.CollectionHelper;
-using Timer = System.Timers.Timer;
 
-namespace Utils.WinForm.AForge
+//using AForge.Video.FFMPEG;
+
+namespace Utils.WinForm.CamCapture
 {
     public class AForgeCapture
     {
@@ -32,8 +29,8 @@ namespace Utils.WinForm.AForge
         public event AForgeEventHandler OnRecordingCompleted;
         public event AForgeEventHandler OnUnexpectedError;
         public AForgeCaptureMode Mode { get; private set; } = AForgeCaptureMode.None;
-        public List<VideoDevice> VideoDevices { get; } = new List<VideoDevice>();
-        public VideoDevice CurrentDevice { get; private set; }
+        public List<AForgeVideoDevice> VideoDevices { get; } = new List<AForgeVideoDevice>();
+        public AForgeVideoDevice CurrentDevice { get; private set; }
 
         public AForgeCapture()
         {
@@ -45,7 +42,7 @@ namespace Utils.WinForm.AForge
 
                 foreach (var capabilty in videoCapabilities)
                 {
-                    VideoDevices.Add(new VideoDevice(device.Name, videoideoDevice, capabilty));
+                    VideoDevices.Add(new AForgeVideoDevice(device.Name, videoideoDevice, capabilty));
                 }
 
                 if (CurrentDevice == null && VideoDevices.Count > 0)
@@ -75,7 +72,7 @@ namespace Utils.WinForm.AForge
             clearMemory.Enabled = true;
         }
 
-        public void ChangeDevice(VideoDevice videoDevice)
+        public void ChangeDevice(AForgeVideoDevice videoDevice)
         {
             if (Mode != AForgeCaptureMode.None)
                 throw new AForgeRunningException("You must stop the previous process first!");

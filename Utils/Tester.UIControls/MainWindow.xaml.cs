@@ -16,7 +16,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Utils;
 using Utils.UIControls.Tools;
-using Utils.UIControls.Tools.CamCapture;
 
 namespace Tester.UIControls
 {
@@ -43,28 +42,6 @@ namespace Tester.UIControls
             //CreateImage(ImageFormat.Tiff);
             //CreateImage(ImageFormat.Wmf);
             //CreateImage(ImageFormat.Wmf);
-            Process();
-
-
-        }
-
-        void Process()
-        {
-            try
-            {
-                CamCapture camp = new CamCapture();
-                camp.OnRecordingCompleted += Camp_OnRecordingCompleted;
-                camp.StartRecording(@"C:\VideoClips\test.wmv", 30);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-        }
-
-        private void Camp_OnRecordingCompleted(object sender, CamCaptureEventArgs args)
-        {
-            MessageBox.Show($"Competed - {args?.DestinationFile}");
         }
 
         void CreateImage(ImageFormat imageFormat)
