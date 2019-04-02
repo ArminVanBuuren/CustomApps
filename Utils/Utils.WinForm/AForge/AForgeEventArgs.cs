@@ -22,4 +22,13 @@ namespace Utils.WinForm.AForge
             DestinationFile = file;
         }
     }
+
+    public class AForgeRunningException : Exception
+    {
+        public AForgeRunningException(string message) : base(message)
+        {
+
+        }
+    }
+
 }

@@ -18,7 +18,8 @@ namespace Utils.WinForm.AForge
 {
     public class AForgeCapture
     {
-        private readonly Action<Bitmap, bool> _updatePicFrame;
+        private Action<Bitmap, bool> _updatePicFrame;
+
         private VideoCaptureDevice _finalVideo = null;
         private readonly AVIWriter _aviWriter;
         //private VideoFileWriter FileWriter = new VideoFileWriter();
@@ -31,10 +32,10 @@ namespace Utils.WinForm.AForge
         public event AForgeEventHandler OnRecordingCompleted;
         public event AForgeEventHandler OnUnexpectedError;
         public AForgeCaptureMode Mode { get; private set; } = AForgeCaptureMode.None;
-        public List<VideoDevice> VideoCapabilites { get; } = new List<VideoDevice>();
+        public List<VideoDevice> VideoDevices { get; } = new List<VideoDevice>();
         public VideoDevice CurrentDevice { get; private set; }
 
-        public AForgeCapture(PictureBox pictureBox = null)
+        public AForgeCapture()
         {
             FilterInfoCollection videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
             foreach (FilterInfo device in videoDevices)
@@ -44,12 +45,12 @@ namespace Utils.WinForm.AForge
 
                 foreach (var capabilty in videoCapabilities)
                 {
-                    VideoCapabilites.Add(new VideoDevice(device.Name, videoideoDevice, capabilty));
+                    VideoDevices.Add(new VideoDevice(device.Name, videoideoDevice, capabilty));
                 }
 
-                if (CurrentDevice == null && VideoCapabilites.Count > 0)
+                if (CurrentDevice == null && VideoDevices.Count > 0)
                 {
-                    var res = VideoCapabilites.OrderBy(p => p.Height).ThenByDescending(p => p.Width);
+                    var res = VideoDevices.OrderBy(p => p.Height).ThenByDescending(p => p.Width);
                     CurrentDevice = res.FirstOrDefault();
                 }
             }
@@ -58,14 +59,6 @@ namespace Utils.WinForm.AForge
                 throw new Exception("No device found.");
 
             _aviWriter = new AVIWriter("MSVC");
-
-            if (pictureBox != null)
-            {
-                _updatePicFrame = (frame, isResizable) =>
-                {
-                    pictureBox.Image = isResizable ? (Bitmap) frame.Clone() : ((Bitmap) frame.Clone()).ResizeImage(CurrentDevice.Width, CurrentDevice.Height);
-                };
-            }
 
             System.Timers.Timer clearMemory = new System.Timers.Timer
             {
@@ -82,24 +75,38 @@ namespace Utils.WinForm.AForge
             clearMemory.Enabled = true;
         }
 
-        public bool StartPreview()
+        public void ChangeDevice(VideoDevice videoDevice)
         {
-            if (_updatePicFrame == null)
-                return false;
+            if (Mode != AForgeCaptureMode.None)
+                throw new AForgeRunningException("You must stop the previous process first!");
 
-            if(Mode == AForgeCaptureMode.Previewing || Mode == AForgeCaptureMode.Recording)
-                return true;
+            if (VideoDevices.FirstOrDefault(p => p == videoDevice) == null)
+                throw new ArgumentException(nameof(videoDevice));
+
+            CurrentDevice = videoDevice;
+        }
+
+        public void StartPreview(PictureBox pictureBox)
+        {
+            if (Mode == AForgeCaptureMode.Previewing || Mode == AForgeCaptureMode.Recording)
+                throw new AForgeRunningException("You must stop the previous process first!");
+
+            if (pictureBox == null)
+                throw new ArgumentNullException(nameof(pictureBox));
+
+            _updatePicFrame = (frame, isResizable) => { pictureBox.Image = isResizable ? (Bitmap) frame.Clone() : ((Bitmap) frame.Clone()).ResizeImage(CurrentDevice.Width, CurrentDevice.Height); };
 
             Mode = AForgeCaptureMode.Previewing;
             StartCapturing();
-            
-            return true;
         }
 
         public bool StartRecording(string destinationFile, int timeRecSec = 60)
         {
-            if (Mode == AForgeCaptureMode.Recording || OnRecordingCompleted == null)
-                return false;
+            if (Mode == AForgeCaptureMode.Recording)
+                throw new AForgeRunningException("You must stop the previous process first!");
+
+            if(OnRecordingCompleted == null)
+                throw new Exception("You must initialize callback event first.");
 
             _aviWriter.Open(destinationFile, CurrentDevice.Width, CurrentDevice.Height);
 
@@ -151,9 +158,6 @@ namespace Utils.WinForm.AForge
 
         public async Task<Bitmap> GetPicture()
         {
-            if (Mode != AForgeCaptureMode.None)
-                return null;
-
             Bitmap result = null;
             var getImage = CurrentDevice.Device;
 
@@ -228,7 +232,7 @@ namespace Utils.WinForm.AForge
             try
             {
                 //if (FinalVideo != null && FinalVideo.IsRunning)
-                _finalVideo.Stop();
+                _finalVideo?.Stop();
                 _finalVideo = null;
             }
             catch (Exception ex)

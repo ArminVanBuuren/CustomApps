@@ -15,29 +15,29 @@ namespace Utils.UIControls.Tools.CamCapture
     {
         private LiveJob _job;
         private LiveDeviceSource _deviceSource;
-        private readonly Dictionary<string, EncoderDevice> _videoEncoders;
-        private readonly Dictionary<string, EncoderDevice> _audioEncoders;
+        private readonly Dictionary<string, EncoderDevice> _videoDevices;
+        private readonly Dictionary<string, EncoderDevice> _audioDevices;
 
         public event CamCaptureEventHandler OnRecordingCompleted;
-        public List<string> VideoEncoders { get; } = new List<string>();
-        public List<string> AudioEncoders { get; } = new List<string>();
+        public List<string> VideoDevices { get; } = new List<string>();
+        public List<string> AudioDevices { get; } = new List<string>();
         public CamCaptureMode Mode { get; private set; } = CamCaptureMode.None;
 
         public CamCapture()
         {
-            _videoEncoders = new Dictionary<string, EncoderDevice>();
-            _audioEncoders = new Dictionary<string, EncoderDevice>();
+            _videoDevices = new Dictionary<string, EncoderDevice>();
+            _audioDevices = new Dictionary<string, EncoderDevice>();
 
             foreach (EncoderDevice edv in EncoderDevices.FindDevices(EncoderDeviceType.Video))
             {
-                _videoEncoders.Add(edv.Name, edv);
-                VideoEncoders.Add(edv.Name);
+                _videoDevices.Add(edv.Name, edv);
+                VideoDevices.Add(edv.Name);
             }
 
             foreach (EncoderDevice eda in EncoderDevices.FindDevices(EncoderDeviceType.Audio))
             {
-                _audioEncoders.Add(eda.Name, eda);
-                AudioEncoders.Add(eda.Name);
+                _audioDevices.Add(eda.Name, eda);
+                AudioDevices.Add(eda.Name);
             }
         }
 
@@ -46,22 +46,34 @@ namespace Utils.UIControls.Tools.CamCapture
         /// </summary>
         /// <param name="destinationFile"></param>
         /// <param name="timeRecSec"></param>
-        /// <param name="videoEncoder"></param>
-        /// <param name="audioEncoder"></param>
+        /// <param name="videoDevice"></param>
+        /// <param name="audioDevice"></param>
         /// <returns></returns>
-        public bool StartRecording(string destinationFile, int timeRecSec = 60, string videoEncoder = null, string audioEncoder = null)
+        public void StartRecording(string destinationFile, int timeRecSec = 60, string videoDevice = null, string audioDevice = null)
         {
             if (Mode != CamCaptureMode.None)
-                return false;
+                throw new CamCaptureRunningException("You must stop the previous process first!");
 
-            EncoderDevice videoEnc = GetEncoder(_videoEncoders, videoEncoder);
-            EncoderDevice audioEnc = GetEncoder(_audioEncoders, audioEncoder);
+            if (OnRecordingCompleted == null)
+                throw new Exception("You must initialize callback event first.");
 
-            if (videoEnc == null || audioEnc == null || timeRecSec > 1800)
-                return false;
+            EncoderDevice videoEnc = GetEncoderDevice(_videoDevices, videoDevice);
+            EncoderDevice audioEnc = GetEncoderDevice(_audioDevices, audioDevice);
+            
+            if (videoEnc == null || audioEnc == null)
+                throw new ArgumentException("Video or Audio device is incorrect!");
 
-            if (File.Exists(destinationFile) || !Directory.Exists(Path.GetDirectoryName(destinationFile)))
-                return false;
+            if (timeRecSec > 1800)
+                timeRecSec = 1800;
+
+            if (File.Exists(destinationFile))
+                throw new IOException($"File '{destinationFile}' already exist!");
+
+            var dirDest = Path.GetDirectoryName(destinationFile);
+            if (!string.IsNullOrWhiteSpace(dirDest) && !Directory.Exists(dirDest))
+            {
+                Directory.CreateDirectory(dirDest);
+            }
 
             _job = new LiveJob();
             _deviceSource = _job.AddDeviceSource(videoEnc, audioEnc);
@@ -86,8 +98,6 @@ namespace Utils.UIControls.Tools.CamCapture
             Mode = CamCaptureMode.Recording;
             var asyncRec = new Func<string, int, Task<CamCaptureEventArgs>>(DoRecordingAsync);
             asyncRec.BeginInvoke(destinationFile, timeRecSec, DoRecordingAsyncCompleted, asyncRec);
-            
-            return true;
         }
 
         async Task<CamCaptureEventArgs> DoRecordingAsync(string destinationFile, int timeRecSec)
@@ -144,18 +154,18 @@ namespace Utils.UIControls.Tools.CamCapture
         //    }
         //}
 
-        private bool StartBroadcast(int port = 8080, string videoEncoder = null, string audioEncoder = null)
+        private void StartBroadcast(int port = 8080, string videoDevice = null, string audioDevice = null)
         {
             // <MediaElement Name = "VideoControl" Source = "http://localhost:8080" />
 
             if (Mode != CamCaptureMode.None)
-                return false;
+                throw new CamCaptureRunningException("You must stop the previous process first!");
 
-            EncoderDevice videoEnc = GetEncoder(_videoEncoders, videoEncoder);
-            EncoderDevice audioEnc = GetEncoder(_audioEncoders, audioEncoder);
+            EncoderDevice videoEnc = GetEncoderDevice(_videoDevices, videoDevice);
+            EncoderDevice audioEnc = GetEncoderDevice(_audioDevices, audioDevice);
 
             if (videoEnc == null || audioEnc == null)
-                return false;
+                throw new ArgumentException("Video or Audio device is incorrect!");
 
             _job = new LiveJob();
 
@@ -181,7 +191,6 @@ namespace Utils.UIControls.Tools.CamCapture
             Mode = CamCaptureMode.Broadcast;
 
             //toolStripStatusLabel1.Text = "Broadcast started on localhost at port 8080, run WpfShowBroadcast.exe now to see it";
-            return true;
         }
 
         public void StopAnyProcess()
@@ -208,7 +217,7 @@ namespace Utils.UIControls.Tools.CamCapture
             }
         }
 
-        static EncoderDevice GetEncoder(Dictionary<string, EncoderDevice> encoders, string encoderName)
+        static EncoderDevice GetEncoderDevice(Dictionary<string, EncoderDevice> encoders, string encoderName)
         {
             if (string.IsNullOrEmpty(encoderName))
                 return encoders.FirstOrDefault().Value;

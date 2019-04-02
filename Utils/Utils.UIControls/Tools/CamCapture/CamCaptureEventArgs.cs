@@ -22,4 +22,12 @@ namespace Utils.UIControls.Tools.CamCapture
             DestinationFile = file;
         }
     }
+
+    public class CamCaptureRunningException : Exception
+    {
+        public CamCaptureRunningException(string message) : base(message)
+        {
+
+        }
+    }
 }
