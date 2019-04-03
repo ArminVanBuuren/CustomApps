@@ -13,7 +13,7 @@ using AForge.Video.VFW;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
-using Utils.WinForm.CamCapture;
+using Utils.WinForm.MediaCapture;
 
 namespace Tester.WinForm
 {
@@ -31,9 +31,12 @@ namespace Tester.WinForm
         {
             try
             {
-                camp = new CamCapture();
+                var aforgeDevices = new AForgeMediaDevices();
+                var camDevices = new CamMediaDevices();
+
+                camp = new CamCapture(aforgeDevices, camDevices, @"C:\VideoClips", 20);
                 camp.OnRecordingCompleted += Camp_OnRecordingCompleted;
-                camp.StartRecording(@"C:\VideoClips\test.wmv", 30);
+                camp.StartCamRecording();
             }
             catch (Exception ex)
             {
@@ -41,12 +44,12 @@ namespace Tester.WinForm
             }
         }
 
-        private void Camp_OnRecordingCompleted(object sender, CamCaptureEventArgs args)
+        private void Camp_OnRecordingCompleted(object sender, MediaCaptureEventArgs args)
         {
             if (args.Error != null)
             {
                 MessageBox.Show(args.Error.Message);
-                camp?.StartRecording(@"C:\VideoClips\test.wmv", 30);
+                camp?.StartCamRecording();
             }
             else
                 MessageBox.Show($"Competed - {args?.DestinationFile}");
