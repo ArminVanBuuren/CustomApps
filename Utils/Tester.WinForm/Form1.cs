@@ -13,6 +13,8 @@ using AForge.Video.VFW;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Threading.Tasks;
+using Utils;
 using Utils.WinForm.MediaCapture;
 
 namespace Tester.WinForm
@@ -23,18 +25,44 @@ namespace Tester.WinForm
         public Form1()
         {
             InitializeComponent();
-            Process();
+            
+            var aforgeDevices = new AForgeMediaDevices();
+            var camDevices = new CamMediaDevices();
+
+            //CamCaptureProcess(aforgeDevices, camDevices);
+            AForgeCaptureProcess(aforgeDevices, camDevices);
+        }
+
+        private AForgeCapture aforge;
+        async void AForgeCaptureProcess(AForgeMediaDevices a, CamMediaDevices c)
+        {
+            aforge = new AForgeCapture(a, c, @"C:\VideoClips", 20);
+            aforge.OnRecordingCompleted += Aforge_OnRecordingCompleted;
+
+            DateTime startCapture = DateTime.Now;
+            while (DateTime.Now.Subtract(startCapture).TotalSeconds < 10)
+            //while (true)
+            {
+                var pic = await aforge.GetPicture();
+                pic?.Save(Path.Combine(aforge.DestinationDir, STRING.RandomString(15) + ".png"), ImageFormat.Png);
+                await Task.Delay(100);
+            }
+
+            MessageBox.Show("OK");
+        }
+
+        private void Aforge_OnRecordingCompleted(object sender, MediaCaptureEventArgs args)
+        {
+            if (args.Error != null)
+                MessageBox.Show(args.Error.ToString());
         }
 
         private CamCapture camp;
-        void Process()
+        void CamCaptureProcess(AForgeMediaDevices a, CamMediaDevices c)
         {
             try
             {
-                var aforgeDevices = new AForgeMediaDevices();
-                var camDevices = new CamMediaDevices();
-
-                camp = new CamCapture(aforgeDevices, camDevices, @"C:\VideoClips", 20);
+                camp = new CamCapture(a, c, @"C:\VideoClips", 20);
                 camp.OnRecordingCompleted += Camp_OnRecordingCompleted;
                 camp.StartCamRecording();
             }

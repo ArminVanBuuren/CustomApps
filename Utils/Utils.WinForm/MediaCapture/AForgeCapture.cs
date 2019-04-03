@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -157,27 +158,32 @@ namespace Utils.WinForm.MediaCapture
 
             Exception catched1 = null;
             Exception catched2 = null;
+
+            int count = 0;
+            void GetFrame(object sender, NewFrameEventArgs args)
+            {
+                count++;
+                try
+                {
+                    result = (Bitmap) args.Frame.Clone();
+                    getImage.SignalToStop();
+                }
+                catch (Exception ex)
+                {
+                    OnUnexpectedError?.Invoke(this, new MediaCaptureEventArgs(ex));
+                }
+            }
+
             try
             {
-                getImage.NewFrame += (sender, args) =>
-                {
-                    try
-                    {
-                        result = (Bitmap) args.Frame.Clone();
-                        getImage.Stop();
-                    }
-                    catch (Exception ex)
-                    {
-                        OnUnexpectedError?.Invoke(this, new MediaCaptureEventArgs(ex));
-                    }
-                };
+                getImage.NewFrame += GetFrame;
                 getImage.Start();
 
-                int timeOut = 0;
-                while (result == null || timeOut <= 10)
+
+                DateTime startCapture = DateTime.Now;
+                while (result == null && DateTime.Now.Subtract(startCapture).TotalSeconds < 10)
                 {
-                    await Task.Delay(1000);
-                    timeOut++;
+                    await Task.Delay(100);
                 }
             }
             catch (Exception ex1)
@@ -188,13 +194,18 @@ namespace Utils.WinForm.MediaCapture
             {
                 try
                 {
+                    getImage.NewFrame -= GetFrame;
+                    getImage = null;
+                    //getImage.Stop();
                     //if (getImage.IsRunning)
-                    getImage.Stop();
-                    GC.Collect();
                 }
                 catch (Exception ex2)
                 {
                     catched2 = ex2;
+                }
+                finally
+                {
+                    GC.Collect();
                 }
             }
 

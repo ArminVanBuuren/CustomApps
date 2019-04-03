@@ -1044,7 +1044,9 @@ namespace AForge.Video.DirectShow
                 // get video control interface of the device
                 try
                 {
-                    videoControl = (IAMVideoControl) sourceObject;
+                    //!!!!! ОЧЕНЬ СТРАННЫЙ КАСТ. Переменная videoControl до TRY не присваивается ни разу и в этом блоке пытается приветси к типу IAMVideoControl. Даже дальше GOTO нет чтобы вернуться к этому коду.
+                    //ДИЧЬ.
+                    //videoControl = (IAMVideoControl) sourceObject;
                 }
                 catch
                 {
