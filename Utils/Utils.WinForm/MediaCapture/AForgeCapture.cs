@@ -158,13 +158,17 @@ namespace Utils.WinForm.MediaCapture
             Exception catched2 = null;
 
             var getImage = VideoDevice.Device;
-
+            int count = 0;
             void GetFrame(object sender, NewFrameEventArgs args)
             {
                 try
                 {
-                    result = (Bitmap) args.Frame.Clone();
+                    count++;
+                    if (args?.Frame == null)
+                        return;
+
                     getImage.SignalToStop();
+                    result = (Bitmap) args.Frame.Clone();
                 }
                 catch (Exception ex)
                 {
@@ -181,6 +185,8 @@ namespace Utils.WinForm.MediaCapture
                 while (result == null && DateTime.Now.Subtract(startCapture).TotalSeconds < 10)
                 {
                     await Task.Delay(100);
+                    if(count > 100)
+                        break;
                 }
             }
             catch (Exception ex1)

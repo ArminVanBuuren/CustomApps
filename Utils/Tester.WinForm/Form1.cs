@@ -40,7 +40,7 @@ namespace Tester.WinForm
             aforge.OnRecordingCompleted += Aforge_OnRecordingCompleted;
 
             DateTime startCapture = DateTime.Now;
-            while (DateTime.Now.Subtract(startCapture).TotalSeconds < 10)
+            while (DateTime.Now.Subtract(startCapture).TotalSeconds < 60)
             //while (true)
             {
                 var pic = await aforge.GetPicture();
