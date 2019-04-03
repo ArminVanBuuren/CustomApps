@@ -29,8 +29,8 @@ namespace Tester.WinForm
             var aforgeDevices = new AForgeMediaDevices();
             var camDevices = new CamMediaDevices();
 
-            //CamCaptureProcess(aforgeDevices, camDevices);
-            AForgeCaptureProcess(aforgeDevices, camDevices);
+            CamCaptureProcess(aforgeDevices, camDevices);
+            //AForgeCaptureProcess(aforgeDevices, camDevices);
         }
 
         private AForgeCapture aforge;
@@ -62,7 +62,7 @@ namespace Tester.WinForm
         {
             try
             {
-                camp = new CamCapture(a, c, @"C:\VideoClips", 20);
+                camp = new CamCapture(a, c, @"C:\VideoClips", 60);
                 camp.OnRecordingCompleted += Camp_OnRecordingCompleted;
                 camp.StartCamRecording();
             }
