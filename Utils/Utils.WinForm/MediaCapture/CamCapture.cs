@@ -16,9 +16,9 @@ namespace Utils.WinForm.MediaCapture
     public class CamCapture : MediaCapture, IDisposable
     {
         readonly object sync = new object();
-        List<CamCaptureProcessThread> _allProcesses = new List<CamCaptureProcessThread>();
         private System.Threading.Thread _asyncRecordingThread;
-        
+
+        private List<CamCaptureProcessThread> AllProcesses { get; } = new List<CamCaptureProcessThread>();
 
         public Thread MainThread { get; }
         public bool IsInitiating { get; private set; } = false;
@@ -64,7 +64,7 @@ namespace Utils.WinForm.MediaCapture
 
         void TimeoutMonitoringTask()
         {
-            System.Timers.Timer timeoutInitProcess = new System.Timers.Timer
+            var timeoutInitProcess = new System.Timers.Timer
             {
                 Interval = 5000
             };
@@ -108,10 +108,6 @@ namespace Utils.WinForm.MediaCapture
             _asyncRecordingThread = new Thread(new ThreadStart(DoRecordingThread));
             _asyncRecordingThread.IsBackground = true; // обязательно true!! а то при завершении основной программы поток будет продолжать работать 
             _asyncRecordingThread.Start();
-
-
-            //var asyncRec = new Func<CoverRecord, Task<CamCaptureEventArgs>>(DoRecordingAsync);
-            //asyncRec.BeginInvoke(new CoverRecord(destinationFile, timeRec, videoEnc, audioEnc), DoRecordingAsyncCompleted, asyncRec);
         }
 
         void DoRecordingThread()
@@ -130,7 +126,7 @@ namespace Utils.WinForm.MediaCapture
                     procThread = new CamCaptureProcessThread(Thread.CurrentThread, job);
                     lock (sync)
                     {
-                        _allProcesses.Add(procThread);
+                        AllProcesses.Add(procThread);
                     }
 
                     var deviceSource = job.AddDeviceSource(VideoEncoderDevice, AudioEncoderDevice);
@@ -205,66 +201,7 @@ namespace Utils.WinForm.MediaCapture
             Mode = MediaCaptureMode.None;
             RecordCompleted(result, true);
         }
-
-        //void Test()
-        //{
-        //    var state = Thread.CurrentThread.GetApartmentState();
-        //    if (state == ApartmentState.STA && !Thread.CurrentThread.IsBackground && !Thread.CurrentThread.IsThreadPoolThread && Thread.CurrentThread.IsAlive)
-        //    {
-        //        MethodInfo correctEntryMethod = Assembly.GetEntryAssembly().EntryPoint;
-        //        StackTrace trace = new StackTrace();
-        //        StackFrame[] frames = trace.GetFrames();
-        //        for (int i = frames.Length - 1; i >= 0; i--)
-        //        {
-        //            MethodBase method = frames[i].GetMethod();
-        //            if (correctEntryMethod == method)
-        //            {
-        //                return;
-        //            }
-        //        }
-        //    }
-        //}
-
-        //async Task<CamCaptureEventArgs> DoRecordingAsync(CoverRecord cover)
-        //{
-        //    try
-        //    {
-        //        _job = new LiveJob();
-        //        _deviceSource = _job.AddDeviceSource(cover.VideoDevice, cover.AudioDevice);
-
-        //        // Setup the video resolution and frame rate of the video device
-        //        // NOTE: Of course, the resolution and frame rate you specify must be supported by the device!
-        //        // NOTE2: May be not all video devices support this call, and so it just doesn't work, as if you don't call it (no error is raised)
-        //        // NOTE3: As a workaround, if the .PickBestVideoFormat method doesn't work, you could force the resolution in the 
-        //        //        following instructions (called few lines belows): 'panelVideoPreview.Size=' and '_job.OutputFormat.VideoProfile.Size=' 
-        //        //        to be the one you choosed (640, 480).
-        //        _deviceSource.PickBestVideoFormat(new Size(640, 480), 25);
-
-        //        // Get the properties of the device video
-        //        SourceProperties sp = _deviceSource.SourcePropertiesSnapshot();
-
-        //        // Setup the output video resolution file as the preview
-        //        _job.OutputFormat.VideoProfile.Size = new Size(sp.Size.Width, sp.Size.Height);
-
-        //        _job.ActivateSource(_deviceSource);
-
-        //        FileArchivePublishFormat fileOut = new FileArchivePublishFormat
-        //        {
-        //            OutputFileName = cover.DestinationFile
-        //        };
-        //        _job.PublishFormats.Add(fileOut);
-        //        _job.StartEncoding();
-
-        //        await Task.Delay(cover.TimeRec * 1000);
-
-        //        return new CamCaptureEventArgs(cover.DestinationFile);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new CamCaptureEventArgs(ex);
-        //    }
-        //}
-
+        
         public override void StartScreenRecording()
         {
             if (Mode != MediaCaptureMode.None || (_asyncRecordingThread != null && _asyncRecordingThread.IsAlive))
@@ -297,7 +234,7 @@ namespace Utils.WinForm.MediaCapture
                     procThread = new CamCaptureProcessThread(Thread.CurrentThread, jobScreen);
                     lock (sync)
                     {
-                        _allProcesses.Add(procThread);
+                        AllProcesses.Add(procThread);
                     }
 
 
@@ -355,73 +292,7 @@ namespace Utils.WinForm.MediaCapture
             Mode = MediaCaptureMode.None;
             RecordCompleted(result, true);
         }
-
-        //async Task<CamCaptureEventArgs> DoScreenRecordingAsync(CoverRecord cover)
-        //{
-        //    try
-        //    {
-        //        string pcName = System.Environment.MachineName;
-        //        _jobScreen = new ScreenCaptureJob();
-        //        _jobScreen.ScreenCaptureVideoProfile.FrameRate = 5;
-        //        _jobScreen.AddAudioDeviceSource(cover.AudioDevice);
-        //        _jobScreen.ScreenCaptureAudioProfile.Channels = 1;
-        //        _jobScreen.ScreenCaptureAudioProfile.SamplesPerSecond = 32000;
-        //        _jobScreen.ScreenCaptureAudioProfile.BitsPerSample = 16;
-        //        _jobScreen.ScreenCaptureAudioProfile.Bitrate = new Microsoft.Expression.Encoder.Profiles.ConstantBitrate(20);
-
-        //        //Rectangle capRect = new Rectangle(388, 222, 1056, 608);
-        //        Rectangle capRect = new Rectangle(10, 10, 640, 480);
-        //        _jobScreen.CaptureRectangle = capRect;
-
-        //        _jobScreen.OutputScreenCaptureFileName = cover.DestinationFile;
-        //        _jobScreen.Start();
-
-        //        await Task.Delay(cover.TimeRec * 1000);
-
-        //        return new CamCaptureEventArgs(cover.DestinationFile);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new CamCaptureEventArgs(ex);
-        //    }
-        //}
-
-        //async void DoRecordingAsyncCompleted(IAsyncResult asyncResult)
-        //{
-        //    try
-        //    {
-        //        AsyncResult ar = asyncResult as AsyncResult;
-        //        var caller = (Func<CoverRecord, Task<CamCaptureEventArgs>>)ar.AsyncDelegate;
-        //        Task<CamCaptureEventArgs> taskResult = caller.EndInvoke(asyncResult);
-        //        await taskResult;
-
-        //        StopJob();
-
-        //        OnRecordingCompleted?.Invoke(this, taskResult.Result);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        OnRecordingCompleted?.Invoke(this, new CamCaptureEventArgs(ex));
-        //    }
-        //}
-
-        //private void GrabImage(string destiationFileName)
-        //{
-        //    // Create a Bitmap of the same dimension of panelVideoPreview (Width x Height)
-        //    using (Bitmap bitmap = new Bitmap(640, 480))
-        //    {
-        //        using (Graphics g = Graphics.FromImage(bitmap))
-        //        {
-        //            // Get the paramters to call g.CopyFromScreen and get the image
-        //            Rectangle rectanglePanelVideoPreview = panelVideoPreview.Bounds;
-        //            Point sourcePoints = panelVideoPreview.PointToScreen(new Point(panelVideoPreview.ClientRectangle.X, panelVideoPreview.ClientRectangle.Y));
-        //            g.CopyFromScreen(sourcePoints, Point.Empty, rectanglePanelVideoPreview.Size);
-        //        }
-
-        //        bitmap.Save(destiationFileName, System.Drawing.Imaging.ImageFormat.Png);
-        //    }
-        //}
-
+        
         public override void StartBroadcast(int port = 8080)
         {
             // <MediaElement Name = "VideoControl" Source = "http://localhost:8080" />
@@ -451,7 +322,7 @@ namespace Utils.WinForm.MediaCapture
                     var procThread = new CamCaptureProcessThread(Thread.CurrentThread, job);
                     lock (sync)
                     {
-                        _allProcesses.Add(procThread);
+                        AllProcesses.Add(procThread);
                     }
 
                     var deviceSource = job.AddDeviceSource(VideoEncoderDevice, AudioEncoderDevice);
@@ -508,7 +379,7 @@ namespace Utils.WinForm.MediaCapture
                 List<CamCaptureProcessThread> currentRecThread = null;
                 lock (sync)
                 {
-                    currentRecThread = _allProcesses.Where(p => p.ThreadProc.ManagedThreadId == _asyncRecordingThread.ManagedThreadId).ToList();
+                    currentRecThread = AllProcesses.Where(p => p.ThreadProc.ManagedThreadId == _asyncRecordingThread.ManagedThreadId).ToList();
                 }
 
 
@@ -529,9 +400,10 @@ namespace Utils.WinForm.MediaCapture
                 }
 
 
-                if (isStopped)
-                    _asyncRecordingThread = null;
+                if (!isStopped)
+                    return;
 
+                _asyncRecordingThread = null;
                 IsInitiating = false;
                 Mode = MediaCaptureMode.None;
             }
@@ -545,7 +417,7 @@ namespace Utils.WinForm.MediaCapture
         {
             lock (sync)
             {
-                foreach (var camProc in _allProcesses)
+                foreach (var camProc in AllProcesses)
                 {
                     try
                     {
@@ -562,6 +434,7 @@ namespace Utils.WinForm.MediaCapture
                 }
             }
 
+            _asyncRecordingThread = null;
             IsInitiating = false;
             Mode = MediaCaptureMode.None;
         }

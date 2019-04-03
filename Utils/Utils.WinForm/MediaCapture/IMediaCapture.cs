@@ -11,19 +11,65 @@ namespace Utils.WinForm.MediaCapture
 {
     public interface IMediaCapture
     {
+        /// <summary>
+        /// При завершении процесса записи файла видео или ошибка процессинга
+        /// </summary>
         event MediaCaptureEventHandler OnRecordingCompleted;
+        /// <summary>
+        /// Все видео устройства полученные через библиотеку AForge
+        /// </summary>
         AForgeMediaDevices AForgeDevices { get; }
+        /// <summary>
+        /// Все видео и аудио устройства полученные через библиотеку Expression.Encoder
+        /// </summary>
         CamMediaDevices CamDevices { get; }
+        /// <summary>
+        /// Папка для записи файлв результата
+        /// </summary>
         string DestinationDir { get; set; }
+        /// <summary>
+        /// Время записи видео в секундах
+        /// </summary>
         int RecDurationSec { get; set; }
+        /// <summary>
+        /// Время старта процесса
+        /// </summary>
         DateTime? TimeOfStart { get; }
+        /// <summary>
+        /// Режим работы процесса
+        /// </summary>
         MediaCaptureMode Mode { get; }
+        /// <summary>
+        /// Изменить видео устройство для захвата видео
+        /// </summary>
+        /// <param name="name"></param>
         void ChangeVideoDevice(string name);
+        /// <summary>
+        /// Начать захват видео с камеры
+        /// </summary>
+        /// <param name="pictureBox"></param>
         void StartCamPreview(PictureBox pictureBox);
+        /// <summary>
+        /// Начать запись видео с камеры
+        /// </summary>
         void StartCamRecording();
+        /// <summary>
+        /// Начать запись видео с экрана монитора
+        /// </summary>
         void StartScreenRecording();
+        /// <summary>
+        /// Включить трансляцию видео
+        /// </summary>
+        /// <param name="port"></param>
         void StartBroadcast(int port = 8080);
+        /// <summary>
+        /// Остановить все процессы
+        /// </summary>
         void Stop();
+        /// <summary>
+        /// Получить картинку с камеры
+        /// </summary>
+        /// <returns></returns>
         Task<Bitmap> GetPicture();
     }
 
