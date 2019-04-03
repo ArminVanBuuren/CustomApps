@@ -42,7 +42,7 @@ namespace Utils.WinForm.MediaCapture
 
         void ClearMemoryTask()
         {
-            System.Timers.Timer clearMemory = new System.Timers.Timer
+            var clearMemory = new System.Timers.Timer
             {
                 Interval = 2000
             };
@@ -93,7 +93,7 @@ namespace Utils.WinForm.MediaCapture
             asyncRec.BeginInvoke(destinationFilePath, DoRecordingAsyncCompleted, asyncRec);
         }
 
-        async Task<MediaCaptureEventArgs> DoRecordingAsync(string destinationFile)
+        async Task<MediaCaptureEventArgs> DoRecordingAsync(string destinationFilePath)
         {
             try
             {
@@ -108,12 +108,25 @@ namespace Utils.WinForm.MediaCapture
                         break;
                 }
 
-                await Task.Delay(RecDurationSec * 1000);
+                DateTime startCapture = DateTime.Now;
+                while (DateTime.Now.Subtract(startCapture).TotalSeconds < RecDurationSec)
+                {
+                    await Task.Delay(RecDurationSec * 1000);
+                }
 
-                return new MediaCaptureEventArgs(destinationFile);
+                return new MediaCaptureEventArgs(destinationFilePath);
             }
             catch (Exception ex)
             {
+                try
+                {
+                    File.Delete(destinationFilePath);
+                }
+                catch (Exception)
+                {
+                    // null
+                }
+
                 return new MediaCaptureEventArgs(ex);
             }
         }

@@ -61,7 +61,7 @@ namespace Utils.WinForm.MediaCapture
         /// Включить трансляцию видео
         /// </summary>
         /// <param name="port"></param>
-        void StartBroadcast(int port = 8080);
+        void StartBroadcast(int port);
         /// <summary>
         /// Остановить все процессы
         /// </summary>

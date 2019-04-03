@@ -38,7 +38,7 @@ namespace Utils.WinForm.MediaCapture
             VideoEncoderDevice = CamDevices.GetVideoDevice();
             AudioEncoderDevice = CamDevices.GetAudioDevice();
 
-            TimeoutMonitoringTask();
+            TimeoutInitiatingTask();
         }
 
         public override void ChangeVideoDevice(string name)
@@ -62,7 +62,7 @@ namespace Utils.WinForm.MediaCapture
         }
 
 
-        void TimeoutMonitoringTask()
+        void TimeoutInitiatingTask()
         {
             var timeoutInitProcess = new System.Timers.Timer
             {
@@ -74,8 +74,8 @@ namespace Utils.WinForm.MediaCapture
                 {
                     var timeInit = DateTime.Now.Subtract(TimeOfStart.Value);
 
-                    // если процесс запущен и инициализация висит больше 60 секунд. Потому что бывает процесс висисит на методе AddDeviceSource или PickBestVideoFormat
-                    if (timeInit.TotalSeconds > 20)
+                    // если процесс запущен и инициализация висит больше 120 секунд. Потому что бывает процесс висисит на методе AddDeviceSource или PickBestVideoFormat
+                    if (timeInit.TotalSeconds > 120)
                     {
                         try
                         {
@@ -194,6 +194,15 @@ namespace Utils.WinForm.MediaCapture
             }
             catch (Exception ex)
             {
+                try
+                {
+                    File.Delete(destinationFilePath);
+                }
+                catch (Exception)
+                {
+                    // null
+                }
+
                 result = new MediaCaptureEventArgs(ex);
             }
 
@@ -282,9 +291,18 @@ namespace Utils.WinForm.MediaCapture
             {
                 result = new MediaCaptureEventArgs(destinationFilePath);
             }
-            catch (Exception ex1)
+            catch (Exception ex)
             {
-                result = new MediaCaptureEventArgs(ex1);
+                try
+                {
+                    File.Delete(destinationFilePath);
+                }
+                catch (Exception)
+                {
+                    // null
+                }
+
+                result = new MediaCaptureEventArgs(ex);
             }
 
             
