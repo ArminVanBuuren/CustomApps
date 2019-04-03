@@ -154,15 +154,13 @@ namespace Utils.WinForm.MediaCapture
         public override async Task<Bitmap> GetPicture()
         {
             Bitmap result = null;
-            var getImage = VideoDevice.Device;
-
             Exception catched1 = null;
             Exception catched2 = null;
 
-            int count = 0;
+            var getImage = VideoDevice.Device;
+
             void GetFrame(object sender, NewFrameEventArgs args)
             {
-                count++;
                 try
                 {
                     result = (Bitmap) args.Frame.Clone();
@@ -178,7 +176,6 @@ namespace Utils.WinForm.MediaCapture
             {
                 getImage.NewFrame += GetFrame;
                 getImage.Start();
-
 
                 DateTime startCapture = DateTime.Now;
                 while (result == null && DateTime.Now.Subtract(startCapture).TotalSeconds < 10)
@@ -196,8 +193,6 @@ namespace Utils.WinForm.MediaCapture
                 {
                     getImage.NewFrame -= GetFrame;
                     getImage = null;
-                    //getImage.Stop();
-                    //if (getImage.IsRunning)
                 }
                 catch (Exception ex2)
                 {
@@ -221,7 +216,7 @@ namespace Utils.WinForm.MediaCapture
                 Terminate();
 
             _finalVideo = VideoDevice.Device;
-            _finalVideo.NewFrame += new NewFrameEventHandler(FinalVideo_NewFrame);
+            _finalVideo.NewFrame += FinalVideo_NewFrame;
             _finalVideo.Start();
         }
 
@@ -277,9 +272,12 @@ namespace Utils.WinForm.MediaCapture
             Exception catched2 = null;
             try
             {
-                //if (FinalVideo != null && FinalVideo.IsRunning)
-                _finalVideo?.Stop();
-                _finalVideo = null;
+                if (_finalVideo != null)
+                {
+                    _finalVideo.SignalToStop();
+                    _finalVideo.NewFrame -= FinalVideo_NewFrame;
+                    _finalVideo = null;
+                }
             }
             catch (Exception ex)
             {
