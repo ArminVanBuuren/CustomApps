@@ -32,8 +32,8 @@ namespace Tester.WinForm
             var aforgeDevices = new AForgeMediaDevices();
             var camDevices = new EncoderMediaDevices();
 
-            //EncoderCaptureProcess(aforgeDevices, camDevices);
-            AForgeCaptureProcess(aforgeDevices, camDevices);
+            EncoderCaptureProcess(aforgeDevices, camDevices);
+            //AForgeCaptureProcess(aforgeDevices, camDevices);
 
            
         }
