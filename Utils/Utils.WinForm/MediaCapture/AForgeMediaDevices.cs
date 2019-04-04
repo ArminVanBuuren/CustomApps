@@ -71,7 +71,7 @@ namespace Utils.WinForm.MediaCapture
         public VideoCaptureDevice Device { get; }
         public VideoCapabilities VideoCapabilities { get; }
         public int Width => VideoCapabilities.FrameSize.Width;
-        public int Height => VideoCapabilities.FrameSize.Width;
+        public int Height => VideoCapabilities.FrameSize.Height;
 
         public override string ToString()
         {

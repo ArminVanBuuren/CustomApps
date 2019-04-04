@@ -7,10 +7,20 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using AForge.Video.DirectShow;
+using AForge.Video.VFW;
 
 namespace Utils.WinForm.MediaCapture
 {
-    internal class EncoderProcessingThread
+    internal interface IProcessingThread
+    {
+        Thread ThreadProc { get; set; }
+        string DestinationFilePath { get; }
+        bool IsCanceled { get; set; }
+        Task Stop(bool dispose = false);
+    }
+
+    internal class EncoderProcessingThread : IProcessingThread
     {
         public Thread ThreadProc { get; set; }
         public LiveJob Job { get; set; }
@@ -18,7 +28,7 @@ namespace Utils.WinForm.MediaCapture
         public LiveDeviceSource Device { get; set; }
         public int BroadcastPort { get; }
         public string DestinationFilePath { get; }
-        public bool IsCanceled { get; private set; } = false;
+        public bool IsCanceled { get; set; } = false;
 
         public EncoderProcessingThread(string destinationFilePath)
         {
@@ -44,7 +54,7 @@ namespace Utils.WinForm.MediaCapture
         //    return true;
         //}
 
-        public Task Stop(bool dispose = false)
+        public Task Stop(bool thenDispose = false)
         {
             return Task.Run(() =>
             {
@@ -55,7 +65,7 @@ namespace Utils.WinForm.MediaCapture
                         Job.StopEncoding();
                         if (Device != null)
                             Job.RemoveDeviceSource(Device);
-                        if (dispose)
+                        if (thenDispose)
                             Job?.Dispose();
                     }
                 }
@@ -67,7 +77,7 @@ namespace Utils.WinForm.MediaCapture
                 try
                 {
                     ScreenJob?.Stop();
-                    if (dispose)
+                    if (thenDispose)
                         ScreenJob?.Dispose();
                 }
                 catch (Exception)
@@ -81,7 +91,7 @@ namespace Utils.WinForm.MediaCapture
                         return;
 
                     Device.PreviewWindow = null;
-                    if (dispose)
+                    if (thenDispose)
                         Device.Dispose();
                 }
                 catch (Exception)
@@ -91,60 +101,56 @@ namespace Utils.WinForm.MediaCapture
             });
         }
 
+        public Task Dispose()
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    Job?.Dispose();
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
 
-        //public Task Terminate()
-        //{
-        //    IsCanceled = true;
+                try
+                {
+                    ScreenJob?.Dispose();
+                }
+                catch (Exception)
+                {
+                    //null;
+                }
 
-        //    return Task.Run(() =>
-        //    {
-        //        try
-        //        {
-        //            Job?.Dispose();
-        //        }
-        //        catch (Exception)
-        //        {
-        //            //null;
-        //        }
+                try
+                {
+                    Device.Dispose();
+                }
+                catch (Exception)
+                {
+                    //null;
+                }
+            });
+        }
 
-        //        try
-        //        {
-        //            ScreenJob?.Dispose();
-        //        }
-        //        catch (Exception)
-        //        {
-        //            //null;
-        //        }
+        public void DeleteFile(bool whileAccessing = false)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(DestinationFilePath) || !File.Exists(DestinationFilePath))
+                    return;
 
-        //        try
-        //        {
-        //            Device?.Dispose();
-        //        }
-        //        catch (Exception)
-        //        {
-        //            //null;
-        //        }
-
-        //        try
-        //        {
-        //            ThreadProc?.Abort();
-        //        }
-        //        catch (Exception)
-        //        {
-        //            // null
-        //        }
-
-        //        try
-        //        {
-        //            if (!string.IsNullOrWhiteSpace(DestinationFilePath))
-        //                File.Delete(DestinationFilePath);
-        //        }
-        //        catch (Exception)
-        //        {
-        //            // null
-        //        }
-        //    });
-        //}
+                if (whileAccessing)
+                    IO.DeleteFileAfterAccessClose(DestinationFilePath);
+                else
+                    File.Delete(DestinationFilePath);
+            }
+            catch (Exception)
+            {
+                // null
+            }
+        }
 
         public override string ToString()
         {

@@ -116,7 +116,7 @@ namespace Tester.WinForm
         }
 
         private System.Timers.Timer _timer;
-        private void button2_Click(object sender, EventArgs e)
+        public void button2_Click(object sender, EventArgs e)
         {
             saveAvi = new SaveFileDialog();
             saveAvi.Filter = "Avi Files (*.avi)|*.avi";

@@ -23,7 +23,6 @@ namespace Utils.WinForm.MediaCapture
         readonly object syncPT = new object();
         private List<EncoderProcessingThread> ProcessingThreads { get; } = new List<EncoderProcessingThread>();
 
-        public Thread MainThread { get; }
         public EncoderDevice VideoEncoderDevice { get; private set; }
         public EncoderDevice AudioEncoderDevice { get; private set; }
         
@@ -33,8 +32,6 @@ namespace Utils.WinForm.MediaCapture
         /// </summary>
         public EncoderCapture(AForgeMediaDevices aDevices, EncoderMediaDevices cDevices, string destinationDir, int durationRecSec = 60):base(aDevices, cDevices, destinationDir, durationRecSec)
         {
-            MainThread = Thread.CurrentThread;
-
             VideoEncoderDevice = CamDevices.GetVideoDevice();
             AudioEncoderDevice = CamDevices.GetAudioDevice();
         }
@@ -69,7 +66,7 @@ namespace Utils.WinForm.MediaCapture
 
 
             EncoderProcessingThread procThread = new EncoderProcessingThread(GetNewVideoFilePath(fileName));
-            if (await Initialization(procThread, DoCamInitialize) != null)
+            if (await Initialization(procThread, DoCamInitializeAsync))
             {
                 Recording(procThread);
             }
@@ -84,7 +81,7 @@ namespace Utils.WinForm.MediaCapture
                 throw new ArgumentException("Audio device is incorrect!");
 
             EncoderProcessingThread procThread = new EncoderProcessingThread(GetNewVideoFilePath(fileName));
-            if (await Initialization(procThread, DoScreenInitialize) != null)
+            if (await Initialization(procThread, DoScreenInitializeAsync))
             {
                 Recording(procThread);
             }
@@ -101,10 +98,10 @@ namespace Utils.WinForm.MediaCapture
                 throw new ArgumentException("Video or Audio device is incorrect!");
 
             EncoderProcessingThread procThread = new EncoderProcessingThread(port);
-            return await Initialization(procThread, DoBroadcastInitialize) != null;
+            return await Initialization(procThread, DoBroadcastInitializeAsync);
         }
 
-        async Task<EncoderProcessingThread> Initialization(EncoderProcessingThread procThread, Func<EncoderProcessingThread, Task<EncoderProcessingThread>> initializeMethod)
+        async Task<bool> Initialization(EncoderProcessingThread procThread, Func<EncoderProcessingThread, Task<bool>> initializeMethod)
         {
             Mode = MediaCaptureMode.Initialization;
 
@@ -113,8 +110,9 @@ namespace Utils.WinForm.MediaCapture
                 ProcessingThreads.Add(procThread);
             }
 
-            if (await ASYNC.ExecuteWithTimeoutAsync(initializeMethod.Invoke(procThread), TIMEOUT_INITIALIZE) == null)
+            if (!await ASYNC.ExecuteWithTimeoutAsync(initializeMethod.Invoke(procThread), TIMEOUT_INITIALIZE))
             {
+                procThread.IsCanceled = true;
                 await ASYNC.ExecuteWithTimeoutAsync(procThread.Stop(), TIMEOUT_STOP);
                 Mode = MediaCaptureMode.None;
                 throw new DeviceInitializationTimeoutException("Initialization timeout");
@@ -124,13 +122,13 @@ namespace Utils.WinForm.MediaCapture
             if (Mode == MediaCaptureMode.None)
             {
                 await ASYNC.ExecuteWithTimeoutAsync(procThread.Stop(), TIMEOUT_STOP);
-                return null;
+                return false;
             }
 
-            return procThread;
+            return true;
         }
 
-        Task<EncoderProcessingThread> DoCamInitialize(EncoderProcessingThread procThread)
+        Task<bool> DoCamInitializeAsync(EncoderProcessingThread procThread)
         {
             return Task.Run(() =>
             {
@@ -139,7 +137,7 @@ namespace Utils.WinForm.MediaCapture
                     procThread.Job = new LiveJob();
                     procThread.Device = procThread.Job.AddDeviceSource(VideoEncoderDevice, AudioEncoderDevice);
 
-                    if (procThread.IsCanceled) return null;
+                    if (procThread.IsCanceled) return false;
 
                     // Setup the video resolution and frame rate of the video device
                     // NOTE: Of course, the resolution and frame rate you specify must be supported by the device!
@@ -159,7 +157,7 @@ namespace Utils.WinForm.MediaCapture
                     procThread.Job.OutputFormat.VideoProfile.Size = findedDevice == null ? new Size(defaultSize.Width, defaultSize.Height) : new Size(findedDevice.Width, findedDevice.Height);
                     procThread.Job.ActivateSource(procThread.Device);
 
-                    if (procThread.IsCanceled) return null;
+                    if (procThread.IsCanceled) return false;
 
                     var fileOut = new FileArchivePublishFormat
                     {
@@ -167,27 +165,27 @@ namespace Utils.WinForm.MediaCapture
                     };
                     procThread.Job.PublishFormats.Add(fileOut);
 
-                    if (procThread.IsCanceled) return null;
+                    if (procThread.IsCanceled) return false;
 
                     procThread.Job.StartEncoding();
 
                     if (procThread.IsCanceled)
                     {
                         procThread.Stop();
-                        return null;
+                        return false;
                     }
 
-                    return procThread;
+                    return true;
                 }
                 catch (Exception ex)
                 {
                     RecordCompleted(new MediaCaptureEventArgs(ex), true);
-                    return null;
+                    return false;
                 }
             });
         }
 
-        Task<EncoderProcessingThread> DoScreenInitialize(EncoderProcessingThread procThread)
+        Task<bool> DoScreenInitializeAsync(EncoderProcessingThread procThread)
         {
             return Task.Run(() =>
             {
@@ -198,7 +196,7 @@ namespace Utils.WinForm.MediaCapture
                     procThread.ScreenJob.ScreenCaptureVideoProfile.FrameRate = 5;
                     procThread.ScreenJob.AddAudioDeviceSource(AudioEncoderDevice);
 
-                    if (procThread.IsCanceled) return null;
+                    if (procThread.IsCanceled) return false;
 
                     procThread.ScreenJob.ScreenCaptureAudioProfile.Channels = 1;
                     procThread.ScreenJob.ScreenCaptureAudioProfile.SamplesPerSecond = 32000;
@@ -215,20 +213,20 @@ namespace Utils.WinForm.MediaCapture
                     if (procThread.IsCanceled)
                     {
                         procThread.Stop();
-                        return null;
+                        return false;
                     }
 
-                    return procThread;
+                    return true;
                 }
                 catch (Exception ex)
                 {
                     RecordCompleted(new MediaCaptureEventArgs(ex), true);
-                    return null;
+                    return false;
                 }
             });
         }
 
-        Task<EncoderProcessingThread> DoBroadcastInitialize(EncoderProcessingThread procThread)
+        Task<bool> DoBroadcastInitializeAsync(EncoderProcessingThread procThread)
         {
             return Task.Run(() =>
             {
@@ -237,16 +235,16 @@ namespace Utils.WinForm.MediaCapture
                     procThread.Job = new LiveJob();
                     procThread.Device = procThread.Job.AddDeviceSource(VideoEncoderDevice, AudioEncoderDevice);
 
-                    if (procThread.IsCanceled) return null;
+                    if (procThread.IsCanceled) return false;
 
                     procThread.Job.ActivateSource(procThread.Device);
 
-                    if (procThread.IsCanceled) return null;
+                    if (procThread.IsCanceled) return false;
 
                     // Finds and applys a smooth streaming preset        
                     procThread.Job.ApplyPreset(LivePresets.VC1256kDSL16x9);
 
-                    if (procThread.IsCanceled) return null;
+                    if (procThread.IsCanceled) return false;
 
                     // Creates the publishing format for the job
                     PullBroadcastPublishFormat format = new PullBroadcastPublishFormat
@@ -258,7 +256,7 @@ namespace Utils.WinForm.MediaCapture
                     // Adds the publishing format to the job
                     procThread.Job.PublishFormats.Add(format);
 
-                    if (procThread.IsCanceled) return null;
+                    if (procThread.IsCanceled) return false;
 
                     // Starts encoding
                     procThread.Job.StartEncoding();
@@ -266,15 +264,15 @@ namespace Utils.WinForm.MediaCapture
                     if (procThread.IsCanceled)
                     {
                         procThread.Stop();
-                        return null;
+                        return false;
                     }
 
-                    return procThread;
+                    return true;
                 }
                 catch (Exception ex)
                 {
                     RecordCompleted(new MediaCaptureEventArgs(ex), true);
-                    return null;
+                    return false;
                 }
             });
         }
@@ -311,7 +309,8 @@ namespace Utils.WinForm.MediaCapture
                 {
                     if (!MainThread.IsAlive)
                     {
-                        await processingThread.Stop();
+                        processingThread.DeleteFile(true);
+                        await processingThread.Dispose();
                         Mode = MediaCaptureMode.None;
                         return;
                     }
@@ -319,7 +318,7 @@ namespace Utils.WinForm.MediaCapture
                     if (Mode == MediaCaptureMode.None)
                         break;
 
-                    await Task.Delay(1000);
+                    await Task.Delay(100);
                 }
             }
             catch (ThreadAbortException ex)
@@ -345,6 +344,9 @@ namespace Utils.WinForm.MediaCapture
                 if (_asyncRecordingThread != null && processingThread.ThreadProc != null && _asyncRecordingThread.ManagedThreadId == processingThread.ThreadProc.ManagedThreadId)
                     _asyncRecordingThread = null;
             }
+
+            if(result?.Error != null)
+                processingThread?.DeleteFile();
 
             Mode = MediaCaptureMode.None;
             RecordCompleted(result, true);

@@ -41,15 +41,22 @@ namespace Utils.UIControls.Tools
         {
             return Task.Run(() =>
             {
-                Rectangle bounds = Screen.GetBounds(Point.Empty);
-                using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height))
+                try
                 {
-                    using (Graphics g = Graphics.FromImage(bitmap))
+                    Rectangle bounds = Screen.GetBounds(Point.Empty);
+                    using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height))
                     {
-                        g.CopyFromScreen(Point.Empty, Point.Empty, bounds.Size);
-                    }
+                        using (Graphics g = Graphics.FromImage(bitmap))
+                        {
+                            g.CopyFromScreen(Point.Empty, Point.Empty, bounds.Size);
+                        }
 
-                    bitmap.Save(destinationPath, format);
+                        bitmap.Save(destinationPath, format);
+                    }
+                }
+                catch (Exception e)
+                {
+                    // null
                 }
             });
         }

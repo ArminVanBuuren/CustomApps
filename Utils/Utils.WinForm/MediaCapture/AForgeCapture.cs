@@ -87,15 +87,17 @@ namespace Utils.WinForm.MediaCapture
             if (Mode == MediaCaptureMode.Recording)
                 throw new MediaCaptureRunningException("You must stop the previous process first!");
 
-            string destinationFilePath = GetNewVideoFilePath(fileName);
+            string destinationFilePath = GetNewVideoFilePath(fileName, ".avi");
             _aviWriter.Open(destinationFilePath, VideoDevice.Width, VideoDevice.Height);
 
-            var asyncRec = new Func<string, Task<MediaCaptureEventArgs>>(DoRecordingAsync);
-            asyncRec.BeginInvoke(destinationFilePath, DoRecordingAsyncCompleted, asyncRec);
+            var asyncRec = new Action<string>(DoRecordingAsync);
+            //asyncRec.BeginInvoke(destinationFilePath, DoRecordingAsyncCompleted, asyncRec);
+            asyncRec.BeginInvoke(destinationFilePath, null, null);
         }
 
-        async Task<MediaCaptureEventArgs> DoRecordingAsync(string destinationFilePath)
+        async void DoRecordingAsync(string destinationFilePath)
         {
+            MediaCaptureEventArgs result = null;
             try
             {
                 switch (Mode)
@@ -112,55 +114,75 @@ namespace Utils.WinForm.MediaCapture
                 DateTime startCapture = DateTime.Now;
                 while (DateTime.Now.Subtract(startCapture).TotalSeconds < SecondsRecordDuration)
                 {
+                    if (!MainThread.IsAlive)
+                    {
+                        DeleteRecordedFile(destinationFilePath, true); // первым должно быть удалениме, т.к после Stop() процесс сразу срубается
+                        Stop();
+                        return;
+                    }
+
                     if (Mode == MediaCaptureMode.None)
                         break;
 
-                    await Task.Delay(SecondsRecordDuration * 1000);
+                    await Task.Delay(100);
                 }
 
-                return new MediaCaptureEventArgs(destinationFilePath);
+                result = new MediaCaptureEventArgs(destinationFilePath);
             }
             catch (Exception ex)
             {
-                try
-                {
-                    File.Delete(destinationFilePath);
-                }
-                catch (Exception)
-                {
-                    // null
-                }
-
-                return new MediaCaptureEventArgs(ex);
+                result = new MediaCaptureEventArgs(ex);
             }
+
+
+            Stop();
+
+            if(result?.Error != null)
+                DeleteRecordedFile(destinationFilePath);
+
+            RecordCompleted(result);
         }
 
-        async void DoRecordingAsyncCompleted(IAsyncResult asyncResult)
+        static void DeleteRecordedFile(string destinationFilePath, bool whileAccessing = false)
         {
             try
             {
-                AsyncResult ar = asyncResult as AsyncResult;
-                var caller = (Func<string, int, Task<MediaCaptureEventArgs>>)ar.AsyncDelegate;
-                Task<MediaCaptureEventArgs> taskResult = caller.EndInvoke(asyncResult);
-                await taskResult;
+                if (string.IsNullOrWhiteSpace(destinationFilePath) || !File.Exists(destinationFilePath))
+                    return;
 
-                StopCapturing();
-
-                RecordCompleted(taskResult.Result);
+                if (whileAccessing)
+                    IO.DeleteFileAfterAccessClose(destinationFilePath);
+                else
+                    File.Delete(destinationFilePath);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                RecordCompleted(new MediaCaptureEventArgs(ex));
+                // null
             }
         }
 
-        public override Task<Bitmap> GetPicture()
+        //async void DoRecordingAsyncCompleted(IAsyncResult asyncResult)
+        //{
+        //    try
+        //    {
+        //        AsyncResult ar = asyncResult as AsyncResult;
+        //        var caller = (Func<string, Task<MediaCaptureEventArgs>>)ar.AsyncDelegate;
+        //        Task<MediaCaptureEventArgs> taskResult = caller.EndInvoke(asyncResult);
+        //        await taskResult;
+        //        RecordCompleted(taskResult.Result);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        RecordCompleted(new MediaCaptureEventArgs(ex));
+        //    }
+        //}
+
+        public override Task<Bitmap> GetPictureAsync()
         {
             return Task.Run(() =>
             {
                 Bitmap result = null;
-                Exception catched1 = null;
-                Exception catched2 = null;
+
 
                 var getImage = VideoDevice.Device;
                 var count = 0;
@@ -197,7 +219,7 @@ namespace Utils.WinForm.MediaCapture
                 }
                 catch (Exception ex1)
                 {
-                    catched1 = ex1;
+                    // null
                 }
                 finally
                 {
@@ -208,16 +230,13 @@ namespace Utils.WinForm.MediaCapture
                     }
                     catch (Exception ex2)
                     {
-                        catched2 = ex2;
+                        // null
                     }
                     finally
                     {
                         GC.Collect();
                     }
                 }
-
-                if (catched1 != null || catched2 != null)
-                    throw new Exception($"Exception when get image. ImageStart=[{catched1?.Message}] ImageStop=[{catched2?.Message}]");
 
                 return result;
             });
@@ -226,7 +245,7 @@ namespace Utils.WinForm.MediaCapture
         void StartCapturing()
         {
             if (_finalVideo != null)
-                Terminate();
+                Stop();
 
             _finalVideo = VideoDevice.Device;
             _finalVideo.NewFrame += FinalVideo_NewFrame;
@@ -253,7 +272,7 @@ namespace Utils.WinForm.MediaCapture
                         _updatePicFrame?.Invoke(args.Frame, false);
                         break;
                     case MediaCaptureMode.None:
-                        StopCapturing();
+                        Stop();
                         break;
                 }
             }
@@ -265,24 +284,6 @@ namespace Utils.WinForm.MediaCapture
 
         public override void Stop()
         {
-            StopCapturing();
-        }
-
-        void StopCapturing()
-        {
-            Exception ex = Terminate();
-
-            GC.Collect();
-            Mode = MediaCaptureMode.None;
-
-            if (ex != null)
-                throw ex;
-        }
-
-        Exception Terminate()
-        {
-            Exception catched1 = null;
-            Exception catched2 = null;
             try
             {
                 if (_finalVideo != null)
@@ -292,9 +293,9 @@ namespace Utils.WinForm.MediaCapture
                     _finalVideo = null;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                catched1 = ex;
+                // null
             }
 
             try
@@ -302,19 +303,18 @@ namespace Utils.WinForm.MediaCapture
                 //FileWriter.Close();
                 _aviWriter.Close();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                catched2 = ex;
+                // null
             }
 
-            if(catched1 != null || catched2 != null)
-                return new Exception($"Terminate exception. Device=[{catched1?.Message}] Writer=[{catched2?.Message}]");
-            return null;
+            GC.Collect();
+            Mode = MediaCaptureMode.None;
         }
 
         public void Dispose()
         {
-            Terminate();
+            Stop();
         }
     }
 }

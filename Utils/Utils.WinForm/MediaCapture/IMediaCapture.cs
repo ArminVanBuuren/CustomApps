@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -11,6 +12,7 @@ namespace Utils.WinForm.MediaCapture
 {
     public interface IMediaCapture
     {
+        Thread MainThread { get; }
         /// <summary>
         /// При завершении процесса записи файла видео или ошибка процессинга
         /// </summary>
@@ -70,13 +72,17 @@ namespace Utils.WinForm.MediaCapture
         /// Получить картинку с камеры
         /// </summary>
         /// <returns></returns>
-        Task<Bitmap> GetPicture();
+        Task<Bitmap> GetPictureAsync();
     }
 
     public abstract class MediaCapture : IMediaCapture
     {
+        
+
         private string _destinationDir = string.Empty;
         MediaCaptureMode _mode = MediaCaptureMode.None;
+
+        public Thread MainThread { get; private set; }
 
         public event MediaCaptureEventHandler OnRecordingCompleted;
 
@@ -118,6 +124,8 @@ namespace Utils.WinForm.MediaCapture
 
         protected MediaCapture(AForgeMediaDevices aDevices, EncoderMediaDevices cDevices, string destinationDir, int durationRecSec)
         {
+            MainThread = Thread.CurrentThread;
+            
             AForgeDevices = aDevices;
             CamDevices = cDevices;
 
@@ -136,7 +144,7 @@ namespace Utils.WinForm.MediaCapture
             throw new NotSupportedException("Not supported.");
         }
 
-        public virtual Task<Bitmap> GetPicture()
+        public virtual Task<Bitmap> GetPictureAsync()
         {
             throw new NotSupportedException("Not supported.");
         }
@@ -166,19 +174,26 @@ namespace Utils.WinForm.MediaCapture
             throw new NotSupportedException("Not supported.");
         }
 
-        protected string GetNewVideoFilePath(string fileName)
+        protected string GetNewVideoFilePath(string fileName, string extension = ".wmv")
         {
             if (string.IsNullOrWhiteSpace(fileName))
-                return Path.Combine(DestinationDir, STRING.RandomString(15) + ".wmv");
+                return Path.Combine(DestinationDir, STRING.RandomString(15) + extension);
             return Path.Combine(DestinationDir, fileName);
         }
 
         protected void RecordCompleted(MediaCaptureEventArgs args, bool isAsync = false)
         {
-            if(isAsync)
-                OnRecordingCompleted?.BeginInvoke(this, args, null,null);
-            else
-                OnRecordingCompleted?.Invoke(this, args);
+            try
+            {
+                if (isAsync)
+                    OnRecordingCompleted?.BeginInvoke(this, args, null, null);
+                else
+                    OnRecordingCompleted?.Invoke(this, args);
+            }
+            catch (Exception)
+            {
+                // null
+            }
         }
     }
 }

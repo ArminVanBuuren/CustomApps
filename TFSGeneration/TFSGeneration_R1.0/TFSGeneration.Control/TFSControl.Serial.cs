@@ -374,8 +374,15 @@ namespace TFSAssist.Control
             if (!InProgress)
                 return;
 
-            InProgress = false;
-            _asyncThread?.Abort();
+            try
+            {
+                InProgress = false;
+                _asyncThread?.Abort();
+            }
+            catch (Exception)
+            {
+                //null   
+            }
         }
 
         public void SaveSettings()
@@ -393,7 +400,15 @@ namespace TFSAssist.Control
         public void Dispose()
         {
             //обязательно удалять асинхронный поток
-            _asyncThread?.Abort();
+            try
+            {
+                InProgress = false;
+                _asyncThread?.Abort();
+            }
+            catch (Exception)
+            {
+                //null   
+            }
 
             SerializeSettings();
             SerializePrivateSettings();
