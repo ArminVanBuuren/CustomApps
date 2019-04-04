@@ -57,43 +57,6 @@ namespace Utils.WinForm.MediaCapture
             AudioEncoderDevice = res ?? throw new Exception($"Audio device [{name}] not found.");
         }
 
-
-        //public bool IsInitiating { get; private set; } = false;
-        //void TimeoutInitiatingTask()
-        //{
-        //    TimeoutInitiatingTask();
-        //
-        //    var timeoutInitProcess = new System.Timers.Timer
-        //    {
-        //        Interval = 5000
-        //    };
-        //    timeoutInitProcess.Elapsed += (sender, args) =>
-        //    {
-        //        if (TimeOfStart != null && _asyncRecordingThread != null && _asyncRecordingThread.IsAlive && IsInitiating)
-        //        {
-        //            var timeInit = DateTime.Now.Subtract(TimeOfStart.Value);
-
-        //            // если процесс запущен и инициализация висит больше 120 секунд. Потому что бывает процесс висисит на методе AddDeviceSource или PickBestVideoFormat
-        //            if (timeInit.TotalSeconds > 120)
-        //            {
-        //                try
-        //                {
-        //                    Terminate();
-        //                    RecordCompleted(new MediaCaptureEventArgs(new Exception("Hanging up. Timeout initialization.")), true);
-        //                }
-        //                catch (Exception)
-        //                {
-        //                    // null;
-        //                }
-        //            }
-        //        }
-
-        //        timeoutInitProcess.Enabled = true;
-        //    };
-        //    timeoutInitProcess.AutoReset = false;
-        //    timeoutInitProcess.Enabled = true;
-        //}
-
         public override async void StartCamRecording(string fileName)
         {
             if (Mode != MediaCaptureMode.None || (_asyncRecordingThread != null && _asyncRecordingThread.IsAlive))
