@@ -32,17 +32,25 @@ namespace Utils.WinForm.MediaCapture
             }
         }
 
-        public EncoderDevice GetVideoDevice(string name = null)
+        public EncoderDevice GetDefaultVideoDevice(string name = null)
         {
-            return GetEncoderDevice(VideoDevices, name);
+            if (VideoDevices.Count == 0)
+                return null;
+
+            var res = GetDefaultEncoderDevice(VideoDevices, name);
+            return res ?? AudioDevices.FirstOrDefault().Value;
         }
 
-        public EncoderDevice GetAudioDevice(string name = null)
+        public EncoderDevice GetDefaultAudioDevice(string name = null)
         {
-            return GetEncoderDevice(AudioDevices, name);
+            if (AudioDevices.Count == 0)
+                return null;
+
+            var res = GetDefaultEncoderDevice(AudioDevices, name);
+            return res ?? AudioDevices.FirstOrDefault().Value;
         }
 
-        static EncoderDevice GetEncoderDevice(Dictionary<string, EncoderDevice> encoders, string encoderName)
+        static EncoderDevice GetDefaultEncoderDevice(Dictionary<string, EncoderDevice> encoders, string encoderName)
         {
             if (string.IsNullOrEmpty(encoderName))
                 return encoders.FirstOrDefault().Value;

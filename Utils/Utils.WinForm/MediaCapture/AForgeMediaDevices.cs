@@ -26,33 +26,37 @@ namespace Utils.WinForm.MediaCapture
             }
         }
 
-        public List<AForgeDevice> GetVideoDevice(string name = null)
+        public AForgeDevice GetDefaultVideoDevice(string name = null)
         {
-            var result = new List<AForgeDevice>();
-
-            if (VideoDevices.Count == 0)
-                return result;
-
             if (string.IsNullOrWhiteSpace(name))
             {
-                var resMin = VideoDevices.Values.OrderBy(p => p.Height).ThenByDescending(p => p.Width);
-                result.Add(resMin.FirstOrDefault());
-                return result;
+                var orderByBestQuolity = VideoDevices.Values.OrderByDescending(p => p.Height).ThenByDescending(p => p.Width);
+                return GetNormal(orderByBestQuolity);
             }
 
             if (VideoDevices.TryGetValue(name, out var res))
             {
-                result.Add(res);
-                return result;
+                return res;
             }
 
             var find = VideoDevices.Values.Where(p => p.DeviceName == name || p.MonikerString == name);
             if (find.Any())
             {
-                result.AddRange(find);
+                var orderByBestQuolity = find.OrderByDescending(p => p.Height).ToList();
+                return GetNormal(orderByBestQuolity);
             }
 
-            return result;
+            return null;
+        }
+
+        static AForgeDevice GetNormal(IEnumerable<AForgeDevice> all)
+        {
+            var normal = all.Where(p => p.Width < 700);
+
+            if (normal.Any())
+                return normal.FirstOrDefault();
+
+            return all.FirstOrDefault();
         }
     }
 

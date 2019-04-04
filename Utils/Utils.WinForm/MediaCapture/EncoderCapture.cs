@@ -32,8 +32,8 @@ namespace Utils.WinForm.MediaCapture
         /// </summary>
         public EncoderCapture(AForgeMediaDevices aDevices, EncoderMediaDevices cDevices, string destinationDir, int durationRecSec = 60):base(aDevices, cDevices, destinationDir, durationRecSec)
         {
-            VideoEncoderDevice = CamDevices.GetVideoDevice();
-            AudioEncoderDevice = CamDevices.GetAudioDevice();
+            VideoEncoderDevice = CamDevices.GetDefaultVideoDevice();
+            AudioEncoderDevice = CamDevices.GetDefaultAudioDevice();
         }
 
         public override void ChangeVideoDevice(string name)
@@ -41,7 +41,7 @@ namespace Utils.WinForm.MediaCapture
             if(name.IsNullOrEmptyTrim())
                 throw new ArgumentNullException();
 
-            var res = CamDevices.GetVideoDevice(name);
+            var res = CamDevices.GetDefaultVideoDevice(name);
 
             VideoEncoderDevice = res ?? throw new Exception($"Video device [{name}] not found.");
         }
@@ -51,7 +51,7 @@ namespace Utils.WinForm.MediaCapture
             if (name.IsNullOrEmptyTrim())
                 throw new ArgumentNullException();
 
-            var res = CamDevices.GetAudioDevice(name);
+            var res = CamDevices.GetDefaultAudioDevice(name);
 
             AudioEncoderDevice = res ?? throw new Exception($"Audio device [{name}] not found.");
         }
@@ -151,8 +151,7 @@ namespace Utils.WinForm.MediaCapture
                     // SourceProperties sp = _deviceSource.SourcePropertiesSnapshot();
 
                     var defaultSize = new Size(640, 480);
-                    var aforgeSearch = AForgeDevices.GetVideoDevice(VideoEncoderDevice.Name);
-                    var findedDevice = aforgeSearch.FirstOrDefault();
+                    var findedDevice = AForgeDevices.GetDefaultVideoDevice(VideoEncoderDevice.Name);
 
                     procThread.Job.OutputFormat.VideoProfile.Size = findedDevice == null ? new Size(defaultSize.Width, defaultSize.Height) : new Size(findedDevice.Width, findedDevice.Height);
                     procThread.Job.ActivateSource(procThread.Device);

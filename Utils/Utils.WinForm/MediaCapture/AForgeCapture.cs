@@ -31,7 +31,7 @@ namespace Utils.WinForm.MediaCapture
 
         public AForgeCapture(AForgeMediaDevices aDevices, EncoderMediaDevices cDevices, string destinationDir, int durationRecSec = 60) : base(aDevices, cDevices, destinationDir, durationRecSec)
         {
-            VideoDevice = aDevices.GetVideoDevice().FirstOrDefault();
+            VideoDevice = aDevices.GetDefaultVideoDevice();
 
             if (VideoDevice == null)
                 throw new Exception("No video device found.");
@@ -63,7 +63,7 @@ namespace Utils.WinForm.MediaCapture
             if (Mode != MediaCaptureMode.None)
                 throw new MediaCaptureRunningException("You must stop the previous process first!");
 
-            var res = AForgeDevices.GetVideoDevice(name).FirstOrDefault();
+            var res = AForgeDevices.GetDefaultVideoDevice(name);
 
             VideoDevice = res ?? throw new Exception($"Video device [{name}] not found.");
         }
@@ -229,7 +229,7 @@ namespace Utils.WinForm.MediaCapture
         {
             if (_finalVideo != null)
                 Stop();
-
+            
             _finalVideo = VideoDevice.Device;
             _finalVideo.NewFrame += FinalVideo_NewFrame;
             _finalVideo.Start();
