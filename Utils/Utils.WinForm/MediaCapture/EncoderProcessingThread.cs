@@ -44,7 +44,7 @@ namespace Utils.WinForm.MediaCapture
         //    return true;
         //}
 
-        public Task Stop()
+        public Task Stop(bool dispose = false)
         {
             return Task.Run(() =>
             {
@@ -55,6 +55,8 @@ namespace Utils.WinForm.MediaCapture
                         Job.StopEncoding();
                         if (Device != null)
                             Job.RemoveDeviceSource(Device);
+                        if (dispose)
+                            Job?.Dispose();
                     }
                 }
                 catch (Exception)
@@ -65,6 +67,8 @@ namespace Utils.WinForm.MediaCapture
                 try
                 {
                     ScreenJob?.Stop();
+                    if (dispose)
+                        ScreenJob?.Dispose();
                 }
                 catch (Exception)
                 {
@@ -77,7 +81,8 @@ namespace Utils.WinForm.MediaCapture
                         return;
 
                     Device.PreviewWindow = null;
-                    Device.Dispose();
+                    if (dispose)
+                        Device.Dispose();
                 }
                 catch (Exception)
                 {
@@ -87,59 +92,59 @@ namespace Utils.WinForm.MediaCapture
         }
 
 
-        public Task Terminate()
-        {
-            IsCanceled = true;
+        //public Task Terminate()
+        //{
+        //    IsCanceled = true;
 
-            return Task.Run(() =>
-            {
-                try
-                {
-                    Job?.Dispose();
-                }
-                catch (Exception)
-                {
-                    //null;
-                }
+        //    return Task.Run(() =>
+        //    {
+        //        try
+        //        {
+        //            Job?.Dispose();
+        //        }
+        //        catch (Exception)
+        //        {
+        //            //null;
+        //        }
 
-                try
-                {
-                    ScreenJob?.Dispose();
-                }
-                catch (Exception)
-                {
-                    //null;
-                }
+        //        try
+        //        {
+        //            ScreenJob?.Dispose();
+        //        }
+        //        catch (Exception)
+        //        {
+        //            //null;
+        //        }
 
-                try
-                {
-                    Device?.Dispose();
-                }
-                catch (Exception)
-                {
-                    //null;
-                }
+        //        try
+        //        {
+        //            Device?.Dispose();
+        //        }
+        //        catch (Exception)
+        //        {
+        //            //null;
+        //        }
 
-                try
-                {
-                    ThreadProc?.Abort();
-                }
-                catch (Exception)
-                {
-                    // null
-                }
+        //        try
+        //        {
+        //            ThreadProc?.Abort();
+        //        }
+        //        catch (Exception)
+        //        {
+        //            // null
+        //        }
 
-                try
-                {
-                    if (!string.IsNullOrWhiteSpace(DestinationFilePath))
-                        File.Delete(DestinationFilePath);
-                }
-                catch (Exception)
-                {
-                    // null
-                }
-            });
-        }
+        //        try
+        //        {
+        //            if (!string.IsNullOrWhiteSpace(DestinationFilePath))
+        //                File.Delete(DestinationFilePath);
+        //        }
+        //        catch (Exception)
+        //        {
+        //            // null
+        //        }
+        //    });
+        //}
 
         public override string ToString()
         {

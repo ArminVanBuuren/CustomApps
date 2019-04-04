@@ -29,8 +29,8 @@ namespace Tester.WinForm
             var aforgeDevices = new AForgeMediaDevices();
             var camDevices = new EncoderMediaDevices();
 
-            //CamCaptureProcess(aforgeDevices, camDevices);
-            AForgeCaptureProcess(aforgeDevices, camDevices);
+            CamCaptureProcess(aforgeDevices, camDevices);
+            //AForgeCaptureProcess(aforgeDevices, camDevices);
         }
 
         private AForgeCapture aforge;
@@ -70,13 +70,17 @@ namespace Tester.WinForm
         }
 
         private EncoderCapture camp;
-        void CamCaptureProcess(AForgeMediaDevices a, EncoderMediaDevices c)
+        async void CamCaptureProcess(AForgeMediaDevices a, EncoderMediaDevices c)
         {
             try
             {
-                camp = new EncoderCapture(a, c, @"C:\VideoClips", 60);
+                camp = new EncoderCapture(a, c, @"C:\VideoClips", 30);
                 camp.OnRecordingCompleted += Camp_OnRecordingCompleted;
                 camp.StartCamRecording();
+
+                //await Task.Delay(5000);
+
+                //camp.Stop();
             }
             catch (Exception ex)
             {

@@ -146,12 +146,12 @@ namespace Utils.WinForm.MediaCapture
             throw new NotSupportedException("Not supported.");
         }
 
-        public virtual void StartCamRecording(string fileName)
+        public virtual void StartCamRecording(string fileName = null)
         {
             throw new NotSupportedException("Not supported.");
         }
 
-        public virtual void StartScreenRecording(string fileName)
+        public virtual void StartScreenRecording(string fileName = null)
         {
             throw new NotSupportedException("Not supported.");
         }
