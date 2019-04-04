@@ -158,7 +158,7 @@ namespace Utils.WinForm.MediaCapture
             Exception catched2 = null;
 
             var getImage = VideoDevice.Device;
-            int count = 0;
+            var count = 0;
             void GetFrame(object sender, NewFrameEventArgs args)
             {
                 try
@@ -226,22 +226,6 @@ namespace Utils.WinForm.MediaCapture
             _finalVideo.Start();
         }
 
-        public void StopAnyProcess()
-        {
-            StopCapturing();
-        }
-
-        void StopCapturing()
-        {
-            Exception ex = Terminate();
-
-            GC.Collect();
-            Mode = MediaCaptureMode.None;
-
-            if (ex != null)
-                throw ex;
-        }
-
         void FinalVideo_NewFrame(object sender, NewFrameEventArgs args)
         {
             try
@@ -270,6 +254,22 @@ namespace Utils.WinForm.MediaCapture
             {
                 OnUnexpectedError?.Invoke(this, new MediaCaptureEventArgs(ex));
             }
+        }
+
+        public override void Stop()
+        {
+            StopCapturing();
+        }
+
+        void StopCapturing()
+        {
+            Exception ex = Terminate();
+
+            GC.Collect();
+            Mode = MediaCaptureMode.None;
+
+            if (ex != null)
+                throw ex;
         }
 
         Exception Terminate()
