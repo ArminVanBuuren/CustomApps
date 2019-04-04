@@ -38,46 +38,40 @@ namespace Tester.WinForm
            
         }
 
+        //private int count = 0;
         private AForgeCapture aforge;
         async void AForgeCaptureProcess(AForgeMediaDevices a, EncoderMediaDevices c)
         {
-            aforge = new AForgeCapture(a, c, @"C:\VideoClips", 20);
+            aforge = new AForgeCapture(a, c, @"C:\VideoClips", 10);
             aforge.OnRecordingCompleted += Aforge_OnRecordingCompleted;
-            //aforge.StartCamRecording();
+            aforge.StartCamRecording();
 
 
-            DateTime startCapture = DateTime.Now;
-            while (DateTime.Now.Subtract(startCapture).TotalSeconds < 10)
-            //while (true)
-            {
-                Bitmap pic = await ASYNC.ExecuteWithTimeoutAsync(aforge.GetPictureAsync(), 300); // 300 - самое оптимальное
+            //DateTime startCapture = DateTime.Now;
+            //while (DateTime.Now.Subtract(startCapture).TotalSeconds < 10)
+            ////while (true)
+            //{
+            //    Bitmap pic = await ASYNC.ExecuteWithTimeoutAsync(aforge.GetPictureAsync(), 300); // 300 - самое оптимальное
                 
-                if (pic == null)
-                {
-                    count++;
-                    //MessageBox.Show(@"Timeout");
-                }
-                else
-                {
-                    pic.Save(Path.Combine(aforge.DestinationDir, STRING.RandomString(15) + ".png"), ImageFormat.Png);
-                }
-            }
+            //    if (pic == null)
+            //    {
+            //        count++;
+            //        //MessageBox.Show(@"Timeout");
+            //    }
+            //    else
+            //    {
+            //        pic.Save(Path.Combine(aforge.DestinationDir, STRING.RandomString(15) + ".png"), ImageFormat.Png);
+            //    }
+            //}
 
-            MessageBox.Show($"OK - {count}");
+            //MessageBox.Show($"OK - {count}");
         }
-
-        async Task Test()
+        
+        private async void Aforge_OnRecordingCompleted(object sender, MediaCaptureEventArgs args)
         {
-            await Task.Delay(1000);
-        }
-
-        private int count = 0;
-        private void Aforge_OnRecordingCompleted(object sender, MediaCaptureEventArgs args)
-        {
-            if (args.Error != null)
-            {
-                MessageBox.Show(args.Error.ToString());
-            }
+            MessageBox.Show(args?.Error == null ? args?.DestinationFile : args?.Error.ToString());
+            Bitmap pic = await ASYNC.ExecuteWithTimeoutAsync(aforge.GetPictureAsync(), 1000);
+            pic?.Save(Path.Combine(aforge.DestinationDir, STRING.RandomString(15) + ".png"), ImageFormat.Png);
         }
 
         private EncoderCapture camp;
@@ -101,13 +95,7 @@ namespace Tester.WinForm
 
         private void EncoderCaptureOnRecordingCompleted(object sender, MediaCaptureEventArgs args)
         {
-            if (args.Error != null)
-            {
-                MessageBox.Show(args.Error.Message);
-                camp?.StartCamRecording();
-            }
-            else
-                MessageBox.Show($"Competed - {args?.DestinationFile}");
+            MessageBox.Show(args?.Error == null ? args?.DestinationFile : args?.Error.ToString());
         }
 
     }
