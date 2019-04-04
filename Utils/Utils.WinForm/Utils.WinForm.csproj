@@ -431,8 +431,8 @@
     <Compile Include="AForge\Video.Ximea\TriggerSource.cs" />
     <Compile Include="AForge\Video.Ximea\XimeaCamera.cs" />
     <Compile Include="AForge\Video.Ximea\XimeaVideoSource.cs" />
-    <Compile Include="MediaCapture\CamCaptureProcessThread.cs" />
-    <Compile Include="MediaCapture\CamMediaDevices.cs" />
+    <Compile Include="MediaCapture\EncoderProcessingThread.cs" />
+    <Compile Include="MediaCapture\EncoderMediaDevices.cs" />
     <Compile Include="MediaCapture\Exceptions.cs" />
     <Compile Include="MediaCapture\IMediaCapture.cs" />
     <Compile Include="MediaCapture\AForgeMediaDevices.cs" />
@@ -447,7 +447,7 @@
     <Compile Include="AsyncHelper\AbortableBackgroundWorker.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="MediaCapture\CamCapture.cs" />
+    <Compile Include="MediaCapture\EncoderCapture.cs" />
     <Compile Include="MediaCapture\MediaCaptureEventArgs.cs" />
     <Compile Include="MediaCapture\MediaCaptureMode.cs" />
     <Compile Include="CustomProgressBar\ProgressBarCompetition.cs" />

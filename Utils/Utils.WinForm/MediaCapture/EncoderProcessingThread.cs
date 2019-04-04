@@ -2,6 +2,7 @@
 using Microsoft.Expression.Encoder.ScreenCapture;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -9,37 +10,39 @@ using System.Threading.Tasks;
 
 namespace Utils.WinForm.MediaCapture
 {
-    internal class CamCaptureProcessThread
+    internal class EncoderProcessingThread
     {
-        public Thread ThreadProc { get; }
-        public LiveJob Job { get; }
-        public ScreenCaptureJob ScreenJob { get; }
+        public Thread ThreadProc { get; set; }
+        public LiveJob Job { get; set; }
+        public ScreenCaptureJob ScreenJob { get; set; }
         public LiveDeviceSource Device { get; set; }
+        public int BroadcastPort { get; }
+        public string DestinationFilePath { get; }
+        public bool IsCanceled { get; private set; } = false;
 
-        public CamCaptureProcessThread(Thread thread, LiveJob job)
+        public EncoderProcessingThread(string destinationFilePath)
         {
-            ThreadProc = thread;
-            Job = job;
-        }
-        public CamCaptureProcessThread(Thread thread, ScreenCaptureJob screenJob)
-        {
-            ThreadProc = thread;
-            ScreenJob = screenJob;
+            DestinationFilePath = destinationFilePath;
         }
 
-        /// <summary>
-        /// добавление девайсов почему то зависает, поэтому по таймеру срубается процесс Thread. И поэтому если вдруг обработка в этом методе пойдет дальше, нужно ее принудительно срубать
-        /// </summary>
-        /// <param name="externalThread">текущий рабочий поток</param>
-        /// <returns></returns>
-        public bool IfItAbortedThenEndProcess(Thread externalThread)
+        public EncoderProcessingThread(int port)
         {
-            if (externalThread != null && externalThread.ManagedThreadId == Thread.CurrentThread.ManagedThreadId)
-                return false;
-
-            Terminate();
-            return true;
+            BroadcastPort = port;
         }
+
+        ///// <summary>
+        ///// добавление девайсов почему то зависает, поэтому по таймеру срубается процесс Thread. И поэтому если вдруг обработка в этом методе пойдет дальше, нужно ее принудительно срубать
+        ///// </summary>
+        ///// <param name="externalThread">текущий рабочий поток</param>
+        ///// <returns></returns>
+        //public bool IfItAbortedThenEndProcess(Thread externalThread)
+        //{
+        //    if (externalThread != null && externalThread.ManagedThreadId == Thread.CurrentThread.ManagedThreadId)
+        //        return false;
+
+        //    Terminate();
+        //    return true;
+        //}
 
         public Task Stop()
         {
@@ -86,6 +89,8 @@ namespace Utils.WinForm.MediaCapture
 
         public Task Terminate()
         {
+            IsCanceled = true;
+
             return Task.Run(() =>
             {
                 try
@@ -119,7 +124,17 @@ namespace Utils.WinForm.MediaCapture
                 {
                     ThreadProc?.Abort();
                 }
-                catch (Exception e)
+                catch (Exception)
+                {
+                    // null
+                }
+
+                try
+                {
+                    if (!string.IsNullOrWhiteSpace(DestinationFilePath))
+                        File.Delete(DestinationFilePath);
+                }
+                catch (Exception)
                 {
                     // null
                 }
@@ -128,7 +143,7 @@ namespace Utils.WinForm.MediaCapture
 
         public override string ToString()
         {
-            return $"ID=[{ThreadProc?.ManagedThreadId}] IsAlive=[{ThreadProc?.IsAlive}]";
+            return $"ID=[{ThreadProc?.ManagedThreadId}] IsAlive=[{ThreadProc?.IsAlive}] IsCanceled=[{IsCanceled}]";
         }
     }
 }

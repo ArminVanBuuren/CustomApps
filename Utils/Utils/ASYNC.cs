@@ -72,6 +72,29 @@ namespace Utils
             return ret;
         }
 
+        public static async Task<T> ExecuteWithTimeoutAsync<T>(Task<T> task, int millisecondsTimeout = 1000)
+        {
+            if (await Task.WhenAny(task, Task.Delay(millisecondsTimeout)) == task)
+            {
+                // task completed within timeout
+                return task.Result;
+            }
+
+            // timeout logic
+            return default(T);
+        }
+
+        public static async Task ExecuteWithTimeoutAsync(Task task, int millisecondsTimeout = 1000)
+        {
+            if (await Task.WhenAny(task, Task.Delay(millisecondsTimeout)) == task)
+            {
+                // task completed within timeout
+                return;
+            }
+
+            // timeout logic
+        }
+
         private class ExclusiveSynchronizationContext : SynchronizationContext
         {
             private bool done;

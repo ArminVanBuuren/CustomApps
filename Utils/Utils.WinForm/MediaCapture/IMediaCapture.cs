@@ -22,7 +22,7 @@ namespace Utils.WinForm.MediaCapture
         /// <summary>
         /// Все видео и аудио устройства полученные через библиотеку Expression.Encoder
         /// </summary>
-        CamMediaDevices CamDevices { get; }
+        EncoderMediaDevices CamDevices { get; }
         /// <summary>
         /// Папка для записи файлв результата
         /// </summary>
@@ -52,16 +52,16 @@ namespace Utils.WinForm.MediaCapture
         /// <summary>
         /// Начать запись видео с камеры
         /// </summary>
-        void StartCamRecording();
+        void StartCamRecording(string fileName);
         /// <summary>
         /// Начать запись видео с экрана монитора
         /// </summary>
-        void StartScreenRecording();
+        void StartScreenRecording(string fileName);
         /// <summary>
         /// Включить трансляцию видео
         /// </summary>
         /// <param name="port"></param>
-        void StartBroadcast(int port);
+        Task<bool> StartBroadcast(int port);
         /// <summary>
         /// Остановить все процессы
         /// </summary>
@@ -82,7 +82,7 @@ namespace Utils.WinForm.MediaCapture
 
         public AForgeMediaDevices AForgeDevices { get; }
 
-        public CamMediaDevices CamDevices { get; }
+        public EncoderMediaDevices CamDevices { get; }
 
         public string DestinationDir
         {
@@ -116,7 +116,7 @@ namespace Utils.WinForm.MediaCapture
         public DateTime? TimeOfStart { get; private set; }
 
 
-        protected MediaCapture(AForgeMediaDevices aDevices, CamMediaDevices cDevices, string destinationDir, int durationRecSec)
+        protected MediaCapture(AForgeMediaDevices aDevices, EncoderMediaDevices cDevices, string destinationDir, int durationRecSec)
         {
             AForgeDevices = aDevices;
             CamDevices = cDevices;
@@ -141,22 +141,22 @@ namespace Utils.WinForm.MediaCapture
             throw new NotSupportedException("Not supported.");
         }
 
-        public virtual void StartBroadcast(int port = 8080)
-        {
-            throw new NotSupportedException("Not supported.");
-        }
-
         public virtual void StartCamPreview(PictureBox pictureBox)
         {
             throw new NotSupportedException("Not supported.");
         }
 
-        public virtual void StartCamRecording()
+        public virtual void StartCamRecording(string fileName)
         {
             throw new NotSupportedException("Not supported.");
         }
 
-        public virtual void StartScreenRecording()
+        public virtual void StartScreenRecording(string fileName)
+        {
+            throw new NotSupportedException("Not supported.");
+        }
+
+        public virtual Task<bool> StartBroadcast(int port = 8080)
         {
             throw new NotSupportedException("Not supported.");
         }
@@ -166,9 +166,11 @@ namespace Utils.WinForm.MediaCapture
             throw new NotSupportedException("Not supported.");
         }
 
-        protected string GetNewVideoFilePath()
+        protected string GetNewVideoFilePath(string fileName)
         {
-            return Path.Combine(DestinationDir, STRING.RandomString(15) + ".wmv");
+            if (string.IsNullOrWhiteSpace(fileName))
+                return Path.Combine(DestinationDir, STRING.RandomString(15) + ".wmv");
+            return Path.Combine(DestinationDir, fileName);
         }
 
         protected void RecordCompleted(MediaCaptureEventArgs args, bool isAsync = false)

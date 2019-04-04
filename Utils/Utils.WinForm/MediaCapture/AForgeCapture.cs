@@ -29,7 +29,7 @@ namespace Utils.WinForm.MediaCapture
         public event MediaCaptureEventHandler OnUnexpectedError;
         public AForgeDevice VideoDevice { get; private set; }
 
-        public AForgeCapture(AForgeMediaDevices aDevices, CamMediaDevices cDevices, string destinationDir, int durationRecSec = 60) : base(aDevices, cDevices, destinationDir, durationRecSec)
+        public AForgeCapture(AForgeMediaDevices aDevices, EncoderMediaDevices cDevices, string destinationDir, int durationRecSec = 60) : base(aDevices, cDevices, destinationDir, durationRecSec)
         {
             VideoDevice = aDevices.GetVideoDevice().FirstOrDefault();
 
@@ -82,12 +82,12 @@ namespace Utils.WinForm.MediaCapture
             StartCapturing();
         }
 
-        public override void StartCamRecording()
+        public override void StartCamRecording(string fileName)
         {
             if (Mode == MediaCaptureMode.Recording)
                 throw new MediaCaptureRunningException("You must stop the previous process first!");
 
-            string destinationFilePath = GetNewVideoFilePath();
+            string destinationFilePath = GetNewVideoFilePath(fileName);
             _aviWriter.Open(destinationFilePath, VideoDevice.Width, VideoDevice.Height);
 
             var asyncRec = new Func<string, Task<MediaCaptureEventArgs>>(DoRecordingAsync);
@@ -151,69 +151,73 @@ namespace Utils.WinForm.MediaCapture
             }
         }
 
-        public override async Task<Bitmap> GetPicture()
+        public override Task<Bitmap> GetPicture()
         {
-            Bitmap result = null;
-            Exception catched1 = null;
-            Exception catched2 = null;
-
-            var getImage = VideoDevice.Device;
-            var count = 0;
-            void GetFrame(object sender, NewFrameEventArgs args)
+            return Task.Run(() =>
             {
+                Bitmap result = null;
+                Exception catched1 = null;
+                Exception catched2 = null;
+
+                var getImage = VideoDevice.Device;
+                var count = 0;
+
+                void GetFrame(object sender, NewFrameEventArgs args)
+                {
+                    try
+                    {
+                        count++;
+                        if (args?.Frame == null)
+                            return;
+
+                        getImage.SignalToStop();
+                        result = (Bitmap) args.Frame.Clone();
+                    }
+                    catch (Exception ex)
+                    {
+                        OnUnexpectedError?.Invoke(this, new MediaCaptureEventArgs(ex));
+                    }
+                }
+
                 try
                 {
-                    count++;
-                    if (args?.Frame == null)
-                        return;
+                    getImage.NewFrame += GetFrame;
+                    getImage.Start();
 
-                    getImage.SignalToStop();
-                    result = (Bitmap) args.Frame.Clone();
+                    DateTime startCapture = DateTime.Now;
+                    while (result == null && DateTime.Now.Subtract(startCapture).TotalSeconds < 10)
+                    {
+                        Task.Delay(100);
+                        if (count > 100)
+                            break;
+                    }
                 }
-                catch (Exception ex)
+                catch (Exception ex1)
                 {
-                    OnUnexpectedError?.Invoke(this, new MediaCaptureEventArgs(ex));
-                }
-            }
-
-            try
-            {
-                getImage.NewFrame += GetFrame;
-                getImage.Start();
-
-                DateTime startCapture = DateTime.Now;
-                while (result == null && DateTime.Now.Subtract(startCapture).TotalSeconds < 10)
-                {
-                    await Task.Delay(100);
-                    if(count > 100)
-                        break;
-                }
-            }
-            catch (Exception ex1)
-            {
-                catched1 = ex1;
-            }
-            finally
-            {
-                try
-                {
-                    getImage.NewFrame -= GetFrame;
-                    getImage = null;
-                }
-                catch (Exception ex2)
-                {
-                    catched2 = ex2;
+                    catched1 = ex1;
                 }
                 finally
                 {
-                    GC.Collect();
+                    try
+                    {
+                        getImage.NewFrame -= GetFrame;
+                        getImage = null;
+                    }
+                    catch (Exception ex2)
+                    {
+                        catched2 = ex2;
+                    }
+                    finally
+                    {
+                        GC.Collect();
+                    }
                 }
-            }
 
-            if(catched1 != null || catched2 != null)
-                throw new Exception($"Exception when get image. ImageStart=[{catched1?.Message}] ImageStop=[{catched2?.Message}]");
+                if (catched1 != null || catched2 != null)
+                    throw new Exception($"Exception when get image. ImageStart=[{catched1?.Message}] ImageStop=[{catched2?.Message}]");
 
-            return result;
+                return result;
+            });
         }
 
         void StartCapturing()

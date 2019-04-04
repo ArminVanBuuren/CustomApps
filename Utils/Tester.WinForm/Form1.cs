@@ -27,14 +27,14 @@ namespace Tester.WinForm
             InitializeComponent();
             
             var aforgeDevices = new AForgeMediaDevices();
-            var camDevices = new CamMediaDevices();
+            var camDevices = new EncoderMediaDevices();
 
-            CamCaptureProcess(aforgeDevices, camDevices);
-            //AForgeCaptureProcess(aforgeDevices, camDevices);
+            //CamCaptureProcess(aforgeDevices, camDevices);
+            AForgeCaptureProcess(aforgeDevices, camDevices);
         }
 
         private AForgeCapture aforge;
-        async void AForgeCaptureProcess(AForgeMediaDevices a, CamMediaDevices c)
+        async void AForgeCaptureProcess(AForgeMediaDevices a, EncoderMediaDevices c)
         {
             aforge = new AForgeCapture(a, c, @"C:\VideoClips", 20);
             aforge.OnRecordingCompleted += Aforge_OnRecordingCompleted;
@@ -43,12 +43,24 @@ namespace Tester.WinForm
             while (DateTime.Now.Subtract(startCapture).TotalSeconds < 60)
             //while (true)
             {
-                var pic = await aforge.GetPicture();
-                pic?.Save(Path.Combine(aforge.DestinationDir, STRING.RandomString(15) + ".png"), ImageFormat.Png);
-                await Task.Delay(100);
+                var pic = await ASYNC.ExecuteWithTimeoutAsync(aforge.GetPicture(), 10000);
+                
+                if (pic == null)
+                {
+                    MessageBox.Show(@"Timeout");
+                }
+                else
+                {
+                    pic.Save(Path.Combine(aforge.DestinationDir, STRING.RandomString(15) + ".png"), ImageFormat.Png);
+                }
             }
 
-            MessageBox.Show("OK");
+            MessageBox.Show(@"OK");
+        }
+
+        async Task Test()
+        {
+            await Task.Delay(1000);
         }
 
         private void Aforge_OnRecordingCompleted(object sender, MediaCaptureEventArgs args)
@@ -57,12 +69,12 @@ namespace Tester.WinForm
                 MessageBox.Show(args.Error.ToString());
         }
 
-        private CamCapture camp;
-        void CamCaptureProcess(AForgeMediaDevices a, CamMediaDevices c)
+        private EncoderCapture camp;
+        void CamCaptureProcess(AForgeMediaDevices a, EncoderMediaDevices c)
         {
             try
             {
-                camp = new CamCapture(a, c, @"C:\VideoClips", 60);
+                camp = new EncoderCapture(a, c, @"C:\VideoClips", 60);
                 camp.OnRecordingCompleted += Camp_OnRecordingCompleted;
                 camp.StartCamRecording();
             }

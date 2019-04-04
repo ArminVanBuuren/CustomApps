@@ -361,7 +361,7 @@ namespace TFSAssist.Control
                 return;
 
             InProgress = true;
-            _asyncThread = new Thread(new ThreadStart(StartPerforming));
+            _asyncThread = new Thread(new ParameterizedThreadStart(StartPerforming));
             _asyncThread.IsBackground = true; // обязательно true!! а то при завершении основной программы поток будет продолжать работать 
             _asyncThread.Start();
         }

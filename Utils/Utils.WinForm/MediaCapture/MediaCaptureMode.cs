@@ -3,8 +3,9 @@
     public enum MediaCaptureMode
     {
         None = 0,
-        Previewing = 1,
-        Recording = 2,
-        Broadcast = 4
+        Initialization = 1,
+        Previewing = 2,
+        Recording = 4,
+        Broadcast = 8
     }
 }

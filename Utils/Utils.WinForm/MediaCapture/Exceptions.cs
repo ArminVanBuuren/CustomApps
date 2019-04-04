@@ -13,4 +13,12 @@ namespace Utils.WinForm.MediaCapture
 
         }
     }
+
+    public class DeviceInitializationTimeoutException : Exception
+    {
+        public DeviceInitializationTimeoutException(string message) : base(message)
+        {
+
+        }
+    }
 }

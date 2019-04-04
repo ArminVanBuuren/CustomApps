@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace Utils.WinForm.MediaCapture
 {
-    public class CamMediaDevices
+    public class EncoderMediaDevices
     {
         public Dictionary<string, EncoderDevice> VideoDevices { get; } = new Dictionary<string, EncoderDevice>();
         public Dictionary<string, EncoderDevice> AudioDevices { get; } = new Dictionary<string, EncoderDevice>();
 
-        public CamMediaDevices()
+        public EncoderMediaDevices()
         {
             try
             {
