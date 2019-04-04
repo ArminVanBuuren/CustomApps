@@ -91,7 +91,6 @@ namespace Utils.WinForm.MediaCapture
             _aviWriter.Open(destinationFilePath, VideoDevice.Width, VideoDevice.Height);
 
             var asyncRec = new Action<string>(DoRecordingAsync);
-            //asyncRec.BeginInvoke(destinationFilePath, DoRecordingAsyncCompleted, asyncRec);
             asyncRec.BeginInvoke(destinationFilePath, null, null);
         }
 
@@ -160,22 +159,6 @@ namespace Utils.WinForm.MediaCapture
                 // null
             }
         }
-
-        //async void DoRecordingAsyncCompleted(IAsyncResult asyncResult)
-        //{
-        //    try
-        //    {
-        //        AsyncResult ar = asyncResult as AsyncResult;
-        //        var caller = (Func<string, Task<MediaCaptureEventArgs>>)ar.AsyncDelegate;
-        //        Task<MediaCaptureEventArgs> taskResult = caller.EndInvoke(asyncResult);
-        //        await taskResult;
-        //        RecordCompleted(taskResult.Result);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        RecordCompleted(new MediaCaptureEventArgs(ex));
-        //    }
-        //}
 
         public override Task<Bitmap> GetPictureAsync()
         {

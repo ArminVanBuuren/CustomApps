@@ -40,20 +40,6 @@ namespace Utils.WinForm.MediaCapture
             BroadcastPort = port;
         }
 
-        ///// <summary>
-        ///// добавление девайсов почему то зависает, поэтому по таймеру срубается процесс Thread. И поэтому если вдруг обработка в этом методе пойдет дальше, нужно ее принудительно срубать
-        ///// </summary>
-        ///// <param name="externalThread">текущий рабочий поток</param>
-        ///// <returns></returns>
-        //public bool IfItAbortedThenEndProcess(Thread externalThread)
-        //{
-        //    if (externalThread != null && externalThread.ManagedThreadId == Thread.CurrentThread.ManagedThreadId)
-        //        return false;
-
-        //    Terminate();
-        //    return true;
-        //}
-
         public Task Stop(bool thenDispose = false)
         {
             return Task.Run(() =>
