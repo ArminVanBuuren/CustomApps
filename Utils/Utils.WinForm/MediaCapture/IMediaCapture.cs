@@ -30,7 +30,7 @@ namespace Utils.WinForm.MediaCapture
         /// <summary>
         /// Время записи видео в секундах
         /// </summary>
-        int RecDurationSec { get; set; }
+        int SecondsRecordDuration { get; set; }
         /// <summary>
         /// Время старта процесса
         /// </summary>
@@ -97,7 +97,7 @@ namespace Utils.WinForm.MediaCapture
                     Directory.CreateDirectory(_destinationDir);
             }
         }
-        public int RecDurationSec { get; set; }
+        public int SecondsRecordDuration { get; set; }
 
         public MediaCaptureMode Mode
         {
@@ -128,7 +128,7 @@ namespace Utils.WinForm.MediaCapture
                 duration = 1800;
             else if (duration < 1)
                 duration = 1;
-            RecDurationSec = duration;
+            SecondsRecordDuration = duration;
         }
 
         public virtual void ChangeVideoDevice(string name)

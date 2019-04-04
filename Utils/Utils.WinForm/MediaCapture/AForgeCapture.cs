@@ -82,7 +82,7 @@ namespace Utils.WinForm.MediaCapture
             StartCapturing();
         }
 
-        public override void StartCamRecording(string fileName)
+        public override void StartCamRecording(string fileName = null)
         {
             if (Mode == MediaCaptureMode.Recording)
                 throw new MediaCaptureRunningException("You must stop the previous process first!");
@@ -110,9 +110,12 @@ namespace Utils.WinForm.MediaCapture
                 }
 
                 DateTime startCapture = DateTime.Now;
-                while (DateTime.Now.Subtract(startCapture).TotalSeconds < RecDurationSec)
+                while (DateTime.Now.Subtract(startCapture).TotalSeconds < SecondsRecordDuration)
                 {
-                    await Task.Delay(RecDurationSec * 1000);
+                    if (Mode == MediaCaptureMode.None)
+                        break;
+
+                    await Task.Delay(SecondsRecordDuration * 1000);
                 }
 
                 return new MediaCaptureEventArgs(destinationFilePath);

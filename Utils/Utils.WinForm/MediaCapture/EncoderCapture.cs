@@ -307,7 +307,7 @@ namespace Utils.WinForm.MediaCapture
                 result = new MediaCaptureEventArgs(processingThread.DestinationFilePath);
 
                 var startCapture = DateTime.Now;
-                while (DateTime.Now.Subtract(startCapture).TotalSeconds < RecDurationSec)
+                while (DateTime.Now.Subtract(startCapture).TotalSeconds < SecondsRecordDuration)
                 {
                     if (!MainThread.IsAlive)
                     {
