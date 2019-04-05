@@ -147,7 +147,7 @@ namespace Utils.WinForm.MediaCapture
         public DateTime? TimeOfStart { get; private set; }
 
 
-        protected MediaCapture(AForgeMediaDevices aDevices, EncoderMediaDevices cDevices, string destinationDir, int durationRecSec)
+        protected MediaCapture(AForgeMediaDevices aDevices, EncoderMediaDevices cDevices, string destinationDir, int secondsRecDuration)
         {
             MainThread = Thread.CurrentThread;
             
@@ -156,7 +156,7 @@ namespace Utils.WinForm.MediaCapture
 
             DestinationDir = destinationDir.IsNullOrEmptyTrim() ? ASSEMBLY.ApplicationDirectory : destinationDir;
 
-            int duration = durationRecSec;
+            int duration = secondsRecDuration;
             if (duration > 1800)
                 duration = 1800;
             else if (duration < 1)

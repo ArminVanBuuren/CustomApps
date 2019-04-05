@@ -17,6 +17,7 @@ using Utils.AppUpdater;
 using Utils.Handles;
 using Utils.Telegram;
 using Utils.UIControls.Tools;
+using Utils.WinForm.MediaCapture;
 
 namespace TFSAssist
 {
@@ -34,7 +35,8 @@ namespace TFSAssist
         private TTLControl _control;
         private readonly StringBuilder _processingErrorLogs;
 
-        private CamCapture _camCapture;
+        private AForgeCapture _aforgeCapture;
+        private EncoderCapture _encoderCapture;
 
         private GeoCoordinateWatcher _watcher;
         private string _locationResult = string.Empty;
@@ -58,9 +60,11 @@ namespace TFSAssist
         public async Task<bool> Initialize()
         {
             InitGeoWatcher();
-            InitCamCapture();
             await InitTempSession();
             await InitTempDirectory();
+
+            InitCamCapture(); // только после InitTempDirectory
+
             await Connect(GetAuthUserCode);
             return IsEnabled;
         }
@@ -359,7 +363,6 @@ namespace TFSAssist
             }
         }
 
-
         static Dictionary<string, string> ReadOptionParams(string options)
         {
             Dictionary<string, string> optParams = new Dictionary<string, string>(StringComparer.CurrentCultureIgnoreCase);
@@ -494,18 +497,7 @@ namespace TFSAssist
             }
         }
 
-        void InitCamCapture()
-        {
-            try
-            {
-                // сделаем отдельную проверку на создании CamCapture, т.к. все зависит от IIS если она поддерживает ту платформу на которой была сбилдена прога, то будет работать, иначе нет. Но все остальное должно проинититься, в случае чего можно будет сделать исправление посмотрев логи
-                _camCapture = new CamCapture();
-            }
-            catch (Exception ex)
-            {
-                WriteExLog(ex, false);
-            }
-        }
+        
 
         async Task<string> GetAuthUserCode()
         {
@@ -590,6 +582,48 @@ namespace TFSAssist
                 tryes++;
                 if (tryes < 5)
                     goto lableTrys;
+            }
+        }
+
+
+        void InitCamCapture()
+        {
+            AForgeMediaDevices aforgeDevices = null;
+            EncoderMediaDevices encDevices = null;
+            try
+            {
+                aforgeDevices = new AForgeMediaDevices();
+            }
+            catch (Exception ex)
+            {
+                WriteExLog(ex);
+            }
+
+            try
+            {
+                encDevices = new EncoderMediaDevices();
+            }
+            catch (Exception ex)
+            {
+                WriteExLog(ex);
+            }
+
+            try
+            {
+                _aforgeCapture = new AForgeCapture(aforgeDevices, encDevices, TempDirectory, 60);
+            }
+            catch (Exception ex)
+            {
+                WriteExLog(ex);
+            }
+
+            try
+            {
+                _encoderCapture = new EncoderCapture(aforgeDevices, encDevices, TempDirectory, 60);
+            }
+            catch (Exception ex)
+            {
+                WriteExLog(ex);
             }
         }
 

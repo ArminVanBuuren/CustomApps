@@ -29,7 +29,7 @@ namespace Utils.WinForm.MediaCapture
         public event MediaCaptureEventHandler OnUnexpectedError;
         public AForgeDevice VideoDevice { get; private set; }
 
-        public AForgeCapture(AForgeMediaDevices aDevices, EncoderMediaDevices cDevices, string destinationDir, int durationRecSec = 60) : base(aDevices, cDevices, destinationDir, durationRecSec)
+        public AForgeCapture(AForgeMediaDevices aDevices, EncoderMediaDevices cDevices, string destinationDir, int secondsRecDuration = 60) : base(aDevices, cDevices, destinationDir, secondsRecDuration)
         {
             VideoDevice = aDevices.GetDefaultVideoDevice();
 
