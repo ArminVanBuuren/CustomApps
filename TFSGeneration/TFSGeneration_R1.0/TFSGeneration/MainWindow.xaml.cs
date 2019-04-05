@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -65,8 +66,8 @@ namespace TFSAssist
         // количество дней на хранение логов
         private const int _daysToSaveLogs = 10;
         object syncTraces = new object();
-        
 
+        public Thread MainThread { get; private set; }
         private int _openedWarningWindowCount = 0;
         private Timer _timerOnActivateUnUsingWindow;
         private Timer _timerOnGC;
@@ -149,6 +150,8 @@ namespace TFSAssist
         {
             try
             {
+                MainThread = Thread.CurrentThread;
+
                 using (RegeditControl regControl = new RegeditControl(ASSEMBLY.ApplicationName))
                 {
                     string clinetID = regControl["CliendID"]?.ToString();
@@ -607,7 +610,7 @@ namespace TFSAssist
         {
             try
             {
-                RemControl = new RemoteControl(CliendID, CheckUpdates, GetCurrentLogs);
+                RemControl = new RemoteControl(MainThread, CliendID, CheckUpdates, GetCurrentLogs);
                 if (await RemControl.Initialize())
                     await RemControl.Run();
                 WriteLog(WarnSeverity.Error, DateTime.Now, $"{nameof(RemoteControl)} IsEnabled=[{RemControl.IsEnabled}]");

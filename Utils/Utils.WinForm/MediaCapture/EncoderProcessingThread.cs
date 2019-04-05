@@ -12,7 +12,7 @@ using AForge.Video.VFW;
 
 namespace Utils.WinForm.MediaCapture
 {
-    internal class EncoderProcessingThread : IDisposable
+    internal class EncoderProcessingThread //: IDisposable
     {
         public Thread ThreadProc { get; set; }
         public LiveJob Job { get; set; }

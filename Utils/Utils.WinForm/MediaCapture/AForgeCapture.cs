@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Messaging;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AForge.Video;
@@ -29,7 +30,7 @@ namespace Utils.WinForm.MediaCapture
         public event MediaCaptureEventHandler OnUnexpectedError;
         public AForgeDevice VideoDevice { get; private set; }
 
-        public AForgeCapture(AForgeMediaDevices aDevices, EncoderMediaDevices cDevices, string destinationDir, int secondsRecDuration = 60) : base(aDevices, cDevices, destinationDir, secondsRecDuration)
+        public AForgeCapture(Thread thread, AForgeMediaDevices aDevices, EncoderMediaDevices cDevices, string destinationDir, int secondsRecDuration = 60) : base(thread, aDevices, cDevices, destinationDir, secondsRecDuration)
         {
             VideoDevice = aDevices.GetDefaultVideoDevice();
 

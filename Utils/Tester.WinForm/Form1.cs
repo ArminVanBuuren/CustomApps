@@ -13,6 +13,7 @@ using AForge.Video.VFW;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Utils;
 using Utils.WinForm.MediaCapture;
@@ -42,7 +43,7 @@ namespace Tester.WinForm
         private AForgeCapture aforge;
         async void AForgeCaptureProcess(AForgeMediaDevices a, EncoderMediaDevices c)
         {
-            aforge = new AForgeCapture(a, c, @"C:\VideoClips", 10);
+            aforge = new AForgeCapture(Thread.CurrentThread, a, c, @"C:\VideoClips", 10);
             aforge.OnRecordingCompleted += Aforge_OnRecordingCompleted;
             aforge.StartCamRecording();
 
@@ -79,7 +80,7 @@ namespace Tester.WinForm
         {
             try
             {
-                camp = new EncoderCapture(a, c, @"C:\VideoClips", 30);
+                camp = new EncoderCapture(Thread.CurrentThread, a, c, @"C:\VideoClips", 30);
                 camp.OnRecordingCompleted += EncoderCaptureOnRecordingCompleted;
 
                 labl1:

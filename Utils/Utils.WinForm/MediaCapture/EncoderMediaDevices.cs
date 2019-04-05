@@ -54,8 +54,14 @@ namespace Utils.WinForm.MediaCapture
         {
             if (string.IsNullOrEmpty(encoderName))
                 return encoders.FirstOrDefault().Value;
-            else if (encoders.TryGetValue(encoderName, out var encDev))
+
+            if (encoders.TryGetValue(encoderName, out var encDev))
                 return encDev;
+
+            var result = encoders.Where(p => encoderName.StartsWith(p.Key));
+            if (result.Any())
+                return result.FirstOrDefault().Value;
+
             return null;
         }
 

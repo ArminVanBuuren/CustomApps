@@ -31,7 +31,7 @@ namespace Utils.WinForm.MediaCapture
         /// <summary>
         /// Невозможно развернуть приложение, использующее EE4 SDK, без установки всего приложения на целевой машине. Даже если вы попытаетесь "скопировать локальные" DLL файлы в ваше местоположение приложения, для этого необходимо установить 25-мегабайтное EE4-приложение. Поэтому перед использованием сначала установите Microsoft Expression Encoder 4 (Encoder_en.exe)
         /// </summary>
-        public EncoderCapture(AForgeMediaDevices aDevices, EncoderMediaDevices cDevices, string destinationDir, int secondsRecDuration = 60):base(aDevices, cDevices, destinationDir, secondsRecDuration)
+        public EncoderCapture(Thread thread, AForgeMediaDevices aDevices, EncoderMediaDevices cDevices, string destinationDir, int secondsRecDuration = 60):base(thread, aDevices, cDevices, destinationDir, secondsRecDuration)
         {
             VideoEncoderDevice = CamDevices.GetDefaultVideoDevice();
             AudioEncoderDevice = CamDevices.GetDefaultAudioDevice();

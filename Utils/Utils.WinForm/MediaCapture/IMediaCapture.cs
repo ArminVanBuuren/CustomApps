@@ -147,9 +147,9 @@ namespace Utils.WinForm.MediaCapture
         public DateTime? TimeOfStart { get; private set; }
 
 
-        protected MediaCapture(AForgeMediaDevices aDevices, EncoderMediaDevices cDevices, string destinationDir, int secondsRecDuration)
+        protected MediaCapture(Thread mainThread, AForgeMediaDevices aDevices, EncoderMediaDevices cDevices, string destinationDir, int secondsRecDuration)
         {
-            MainThread = Thread.CurrentThread;
+            MainThread = mainThread;
             
             AForgeDevices = aDevices;
             CamDevices = cDevices;
