@@ -58,5 +58,15 @@ namespace Utils.WinForm.MediaCapture
                 return encDev;
             return null;
         }
+
+        public override string ToString()
+        {
+            if (VideoDevices.Count == 0 && AudioDevices.Count == 0)
+                return string.Empty;
+
+            var resultVideo = "EncoderVideo:\r\n" + string.Join("\r\n", VideoDevices.Keys);
+            var resultAudio = "EncoderAudio:\r\n" + string.Join("\r\n", AudioDevices.Keys);
+            return (resultVideo + "\r\n" + resultAudio).Trim();
+        }
     }
 }

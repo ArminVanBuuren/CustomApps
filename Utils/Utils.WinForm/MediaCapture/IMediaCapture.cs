@@ -169,8 +169,6 @@ namespace Utils.WinForm.MediaCapture
             throw new NotSupportedException("Not supported.");
         }
 
-
-
         public virtual void StartCamPreview(PictureBox pictureBox)
         {
             throw new NotSupportedException("Not supported.");
@@ -247,13 +245,6 @@ namespace Utils.WinForm.MediaCapture
                 // null
             }
         }
-
-
-
-
-
-
-
 
     }
 }

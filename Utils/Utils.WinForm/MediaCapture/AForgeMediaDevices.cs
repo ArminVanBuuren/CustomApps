@@ -58,6 +58,15 @@ namespace Utils.WinForm.MediaCapture
 
             return all.FirstOrDefault();
         }
+
+        public override string ToString()
+        {
+            if (VideoDevices.Count == 0)
+                return string.Empty;
+
+            var result = ("AForgeVideo:\r\n" + string.Join("\r\n", VideoDevices.Keys)).Trim();
+            return result;
+        }
     }
 
     public class AForgeDevice
