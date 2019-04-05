@@ -38,7 +38,7 @@ namespace Utils.WinForm.MediaCapture
                 return null;
 
             var res = GetDefaultEncoderDevice(VideoDevices, name);
-            return res ?? AudioDevices.FirstOrDefault().Value;
+            return res ?? VideoDevices.FirstOrDefault().Value;
         }
 
         public EncoderDevice GetDefaultAudioDevice(string name = null)
