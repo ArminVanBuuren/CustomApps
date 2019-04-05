@@ -232,7 +232,7 @@ namespace Utils.WinForm.MediaCapture
                 Stop();
             
             _finalVideo = VideoDevice.Device;
-            _finalVideo.NewFrame += FinalVideo_NewFrame;
+            _finalVideo.NewFrame += new NewFrameEventHandler(FinalVideo_NewFrame);
             _finalVideo.Start();
         }
 
@@ -244,7 +244,7 @@ namespace Utils.WinForm.MediaCapture
                 {
                     case MediaCaptureMode.Recording:
                     {
-                        var video = ((Bitmap)args.Frame.Clone()).ResizeImage(VideoDevice.Width, VideoDevice.Height);
+                        var video = ((Bitmap) args.Frame.Clone()).ResizeImage(VideoDevice.Width, VideoDevice.Height);
                         _updatePicFrame?.Invoke(video, true);
 
                         _aviWriter.Quality = 0;

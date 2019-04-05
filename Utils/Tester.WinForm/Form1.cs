@@ -32,8 +32,8 @@ namespace Tester.WinForm
             var aforgeDevices = new AForgeMediaDevices();
             var camDevices = new EncoderMediaDevices();
 
-            EncoderCaptureProcess(aforgeDevices, camDevices);
-            //AForgeCaptureProcess(aforgeDevices, camDevices);
+            //EncoderCaptureProcess(aforgeDevices, camDevices);
+            AForgeCaptureProcess(aforgeDevices, camDevices);
 
            
         }
@@ -69,7 +69,7 @@ namespace Tester.WinForm
         
         private async void Aforge_OnRecordingCompleted(object sender, MediaCaptureEventArgs args)
         {
-            MessageBox.Show(args?.Error == null ? args?.DestinationFile : args?.Error.ToString());
+            MessageBox.Show((args?.Error == null ? args?.DestinationFile : args?.Error.ToString()));
             Bitmap pic = await ASYNC.ExecuteWithTimeoutAsync(aforge.GetPictureAsync(), 1000);
             pic?.Save(Path.Combine(aforge.DestinationDir, STRING.RandomString(15) + ".png"), ImageFormat.Png);
         }
