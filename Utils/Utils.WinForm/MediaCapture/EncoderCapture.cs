@@ -564,7 +564,7 @@ namespace Utils.WinForm.MediaCapture
             Mode = MediaCaptureMode.None;
         }
 
-        public async void StopAsync()
+        public override async Task StopAsync()
         {
             if (_asyncRecordingThread != null)
             {

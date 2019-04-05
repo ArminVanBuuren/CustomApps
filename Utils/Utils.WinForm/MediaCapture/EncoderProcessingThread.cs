@@ -12,7 +12,7 @@ using AForge.Video.VFW;
 
 namespace Utils.WinForm.MediaCapture
 {
-    internal class EncoderProcessingThread
+    internal class EncoderProcessingThread : IDisposable
     {
         public Thread ThreadProc { get; set; }
         public LiveJob Job { get; set; }
@@ -63,7 +63,7 @@ namespace Utils.WinForm.MediaCapture
             }
             catch (Exception)
             {
-                //null;
+                //ignored;
             }
 
             try
@@ -77,7 +77,7 @@ namespace Utils.WinForm.MediaCapture
             }
             catch (Exception)
             {
-                //null;
+                //ignored;
             }
         }
 
@@ -103,16 +103,26 @@ namespace Utils.WinForm.MediaCapture
             }
             catch (Exception)
             {
-                //null;
+                // ignored;
             }
 
             try
             {
-                Device.Dispose();
+                Device?.Dispose();
             }
             catch (Exception)
             {
-                //null;
+                // ignored;
+            }
+
+            try
+            {
+                if (ThreadProc.IsAlive)
+                    ThreadProc.Abort();
+            }
+            catch (Exception)
+            {
+                // ignored
             }
         }
 
