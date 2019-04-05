@@ -41,6 +41,8 @@ namespace Utils.WinForm.MediaCapture
         /// Режим работы процесса
         /// </summary>
         MediaCaptureMode Mode { get; }
+
+
         /// <summary>
         /// Изменить видео устройство для захвата видео
         /// </summary>
@@ -51,23 +53,46 @@ namespace Utils.WinForm.MediaCapture
         /// </summary>
         /// <param name="pictureBox"></param>
         void StartCamPreview(PictureBox pictureBox);
+
         /// <summary>
         /// Начать запись видео с камеры
         /// </summary>
         void StartCamRecording(string fileName);
         /// <summary>
+        /// Начать запись видео с камеры
+        /// </summary>
+        Task StartCamRecordingAsync(string fileName);
+        /// <summary>
         /// Начать запись видео с экрана монитора
         /// </summary>
         void StartScreenRecording(string fileName);
         /// <summary>
+        /// Начать запись видео с экрана монитора
+        /// </summary>
+        Task StartScreenRecordingAsync(string fileName);
+        /// <summary>
         /// Включить трансляцию видео
         /// </summary>
         /// <param name="port"></param>
-        Task<bool> StartBroadcast(int port);
+        bool StartBroadcast(int port);
+        /// <summary>
+        /// Включить трансляцию видео
+        /// </summary>
+        /// <param name="port"></param>
+        Task<bool> StartBroadcastAsync(int port);
         /// <summary>
         /// Остановить все процессы
         /// </summary>
         void Stop();
+        /// <summary>
+        /// Остановить все процессы
+        /// </summary>
+        Task StopAsync();
+        /// <summary>
+        /// Получить картинку с камеры
+        /// </summary>
+        /// <returns></returns>
+        Bitmap GetPicture();
         /// <summary>
         /// Получить картинку с камеры
         /// </summary>
@@ -144,10 +169,7 @@ namespace Utils.WinForm.MediaCapture
             throw new NotSupportedException("Not supported.");
         }
 
-        public virtual Task<Bitmap> GetPictureAsync()
-        {
-            throw new NotSupportedException("Not supported.");
-        }
+
 
         public virtual void StartCamPreview(PictureBox pictureBox)
         {
@@ -159,17 +181,47 @@ namespace Utils.WinForm.MediaCapture
             throw new NotSupportedException("Not supported.");
         }
 
+        public virtual Task StartCamRecordingAsync(string fileName = null)
+        {
+            throw new NotSupportedException("Not supported.");
+        }
+
         public virtual void StartScreenRecording(string fileName = null)
         {
             throw new NotSupportedException("Not supported.");
         }
 
-        public virtual Task<bool> StartBroadcast(int port = 8080)
+        public virtual Task StartScreenRecordingAsync(string fileName = null)
+        {
+            throw new NotSupportedException("Not supported.");
+        }
+
+        public virtual bool StartBroadcast(int port = 8080)
+        {
+            throw new NotSupportedException("Not supported.");
+        }
+
+        public virtual Task<bool> StartBroadcastAsync(int port = 8080)
         {
             throw new NotSupportedException("Not supported.");
         }
 
         public virtual void Stop()
+        {
+            throw new NotSupportedException("Not supported.");
+        }
+
+        public virtual Task StopAsync()
+        {
+            throw new NotSupportedException("Not supported.");
+        }
+
+        public virtual Bitmap GetPicture()
+        {
+            throw new NotSupportedException("Not supported.");
+        }
+
+        public virtual Task<Bitmap> GetPictureAsync()
         {
             throw new NotSupportedException("Not supported.");
         }
@@ -195,5 +247,13 @@ namespace Utils.WinForm.MediaCapture
                 // null
             }
         }
+
+
+
+
+
+
+
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,10 +10,10 @@ namespace Utils
 {
     public static class ASYNC
     {
-        /// <summary>
-        /// Execute an async Task<T> method which has a void return value synchronously
+        /// <summary T="method which has a void return value synchronously">
+        /// Execute an async Task
         /// </summary>
-        /// <param name="task">Task<T> method to execute</param>
+        /// <param name="task" T="method to execute">Task</param>
         public static void RunSync(Func<Task> task)
         {
             var oldContext = SynchronizationContext.Current;
@@ -153,6 +154,40 @@ namespace Utils
             {
                 return this;
             }
+        }
+
+
+
+        public static T Run<T>(TimeSpan timeout, Func<T> operation)
+        {
+            Exception error = null;
+            T result = default(T);
+
+            ManualResetEvent mre = new ManualResetEvent(false);
+            System.Threading.ThreadPool.QueueUserWorkItem(
+                delegate(object ignore)
+                {
+                    try
+                    {
+                        result = operation();
+                    }
+                    catch (Exception e)
+                    {
+                        error = e;
+                    }
+                    finally
+                    {
+                        mre.Set();
+                    }
+                }
+            );
+
+            if (!mre.WaitOne(timeout, true))
+                throw new TimeoutException();
+            if (error != null)
+                throw new TargetInvocationException(error);
+
+            return result;
         }
     }
 }

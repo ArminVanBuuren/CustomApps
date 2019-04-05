@@ -81,7 +81,18 @@ namespace Tester.WinForm
             {
                 camp = new EncoderCapture(a, c, @"C:\VideoClips", 30);
                 camp.OnRecordingCompleted += EncoderCaptureOnRecordingCompleted;
-                camp.StartCamRecording();
+
+                labl1:
+                try
+                {
+                    await camp.StartCamRecordingAsync();
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.ToString());
+                    goto labl1;
+                }
+                
 
                 //await Task.Delay(5000);
 

@@ -162,67 +162,68 @@ namespace Utils.WinForm.MediaCapture
 
         public override Task<Bitmap> GetPictureAsync()
         {
-            return Task.Run(() =>
+            return Task.Run(() => GetPicture() );
+        }
+
+        public override Bitmap GetPicture()
+        {
+            Bitmap result = null;
+
+            var getImage = VideoDevice.Device;
+            var count = 0;
+
+            void GetPictureFrame(object sender, NewFrameEventArgs args)
             {
-                Bitmap result = null;
-
-
-                var getImage = VideoDevice.Device;
-                var count = 0;
-
-                void GetFrame(object sender, NewFrameEventArgs args)
-                {
-                    try
-                    {
-                        count++;
-                        if (args?.Frame == null)
-                            return;
-
-                        getImage.SignalToStop();
-                        result = (Bitmap) args.Frame.Clone();
-                    }
-                    catch (Exception ex)
-                    {
-                        OnUnexpectedError?.Invoke(this, new MediaCaptureEventArgs(ex));
-                    }
-                }
-
                 try
                 {
-                    getImage.NewFrame += GetFrame;
-                    getImage.Start();
+                    count++;
+                    if (args?.Frame == null)
+                        return;
 
-                    DateTime startCapture = DateTime.Now;
-                    while (result == null && DateTime.Now.Subtract(startCapture).TotalSeconds < 10)
-                    {
-                        Task.Delay(100);
-                        if (count > 100)
-                            break;
-                    }
+                    getImage.SignalToStop();
+                    result = (Bitmap)args.Frame.Clone();
                 }
-                catch (Exception ex1)
+                catch (Exception ex)
+                {
+                    OnUnexpectedError?.Invoke(this, new MediaCaptureEventArgs(ex));
+                }
+            }
+
+            try
+            {
+                getImage.NewFrame += GetPictureFrame;
+                getImage.Start();
+
+                DateTime startCapture = DateTime.Now;
+                while (result == null && DateTime.Now.Subtract(startCapture).TotalSeconds < 10)
+                {
+                    Task.Delay(100);
+                    if (count > 100)
+                        break;
+                }
+            }
+            catch (Exception ex1)
+            {
+                // null
+            }
+            finally
+            {
+                try
+                {
+                    getImage.NewFrame -= GetPictureFrame;
+                    getImage = null;
+                }
+                catch (Exception ex2)
                 {
                     // null
                 }
                 finally
                 {
-                    try
-                    {
-                        getImage.NewFrame -= GetFrame;
-                        getImage = null;
-                    }
-                    catch (Exception ex2)
-                    {
-                        // null
-                    }
-                    finally
-                    {
-                        GC.Collect();
-                    }
+                    GC.Collect();
                 }
+            }
 
-                return result;
-            });
+            return result;
         }
 
         void StartCapturing()

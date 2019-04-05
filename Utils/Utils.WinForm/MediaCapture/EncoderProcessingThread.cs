@@ -12,15 +12,7 @@ using AForge.Video.VFW;
 
 namespace Utils.WinForm.MediaCapture
 {
-    internal interface IProcessingThread
-    {
-        Thread ThreadProc { get; set; }
-        string DestinationFilePath { get; }
-        bool IsCanceled { get; set; }
-        Task Stop(bool dispose = false);
-    }
-
-    internal class EncoderProcessingThread : IProcessingThread
+    internal class EncoderProcessingThread
     {
         public Thread ThreadProc { get; set; }
         public LiveJob Job { get; set; }
@@ -40,84 +32,88 @@ namespace Utils.WinForm.MediaCapture
             BroadcastPort = port;
         }
 
-        public Task Stop(bool thenDispose = false)
+        public Task StopAsync(bool thenDispose = false)
         {
-            return Task.Run(() =>
-            {
-                try
-                {
-                    if (Job != null)
-                    {
-                        Job.StopEncoding();
-                        if (Device != null)
-                            Job.RemoveDeviceSource(Device);
-                        if (thenDispose)
-                            Job?.Dispose();
-                    }
-                }
-                catch (Exception)
-                {
-                    // ignored
-                }
-
-                try
-                {
-                    ScreenJob?.Stop();
-                    if (thenDispose)
-                        ScreenJob?.Dispose();
-                }
-                catch (Exception)
-                {
-                    //null;
-                }
-
-                try
-                {
-                    if (Device == null)
-                        return;
-
-                    Device.PreviewWindow = null;
-                    if (thenDispose)
-                        Device.Dispose();
-                }
-                catch (Exception)
-                {
-                    //null;
-                }
-            });
+            return Task.Run(() => Stop(thenDispose));
         }
 
-        public Task Dispose()
+        public void Stop(bool thenDispose = false)
         {
-            return Task.Run(() =>
+            try
             {
-                try
+                if (Job != null)
                 {
-                    Job?.Dispose();
+                    Job.StopEncoding();
+                    if (Device != null)
+                        Job.RemoveDeviceSource(Device);
+                    if (thenDispose)
+                        Job?.Dispose();
                 }
-                catch (Exception)
-                {
-                    // ignored
-                }
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
 
-                try
-                {
+            try
+            {
+                ScreenJob?.Stop();
+                if (thenDispose)
                     ScreenJob?.Dispose();
-                }
-                catch (Exception)
-                {
-                    //null;
-                }
+            }
+            catch (Exception)
+            {
+                //null;
+            }
 
-                try
-                {
+            try
+            {
+                if (Device == null)
+                    return;
+
+                Device.PreviewWindow = null;
+                if (thenDispose)
                     Device.Dispose();
-                }
-                catch (Exception)
-                {
-                    //null;
-                }
-            });
+            }
+            catch (Exception)
+            {
+                //null;
+            }
+        }
+
+        public Task DisposeAsync()
+        {
+            return Task.Run(() => Dispose() );
+        }
+
+        public void Dispose()
+        {
+            try
+            {
+                Job?.Dispose();
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            try
+            {
+                ScreenJob?.Dispose();
+            }
+            catch (Exception)
+            {
+                //null;
+            }
+
+            try
+            {
+                Device.Dispose();
+            }
+            catch (Exception)
+            {
+                //null;
+            }
         }
 
         public void DeleteFile(bool whileAccessing = false)
