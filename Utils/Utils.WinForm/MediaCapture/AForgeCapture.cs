@@ -209,6 +209,9 @@ namespace Utils.WinForm.MediaCapture
                 try
                 {
                     getImage.NewFrame -= GetPictureFrame;
+                    if (count == 0)
+                        getImage.SignalToStop();
+
                     getImage = null;
                 }
                 catch (Exception ex2)
@@ -270,8 +273,8 @@ namespace Utils.WinForm.MediaCapture
             {
                 if (_finalVideo != null)
                 {
-                    _finalVideo.SignalToStop();
                     _finalVideo.NewFrame -= FinalVideo_NewFrame;
+                    _finalVideo.SignalToStop();
                     _finalVideo = null;
                 }
             }
@@ -300,7 +303,7 @@ namespace Utils.WinForm.MediaCapture
         }
         public override string ToString()
         {
-            return $"Video=[{VideoDevice.ToString()}]";
+            return $"Video=[{VideoDevice.ToString()}]\r\nDurationSec=[{SecondsRecordDuration}]";
         }
     }
 }

