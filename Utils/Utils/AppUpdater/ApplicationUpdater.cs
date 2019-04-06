@@ -154,7 +154,7 @@ namespace Utils.AppUpdater
                 return args;
             }
 
-            foreach (AppUpdatingHandler del in eventListeners)
+            foreach (AppFetchingHandler del in eventListeners)
             {
                 del.Invoke(this, args);
                 if (args.Result == UpdateBuildResult.Cancel)
