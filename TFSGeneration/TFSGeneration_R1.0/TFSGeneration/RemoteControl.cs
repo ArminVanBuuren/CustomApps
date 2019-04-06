@@ -596,7 +596,7 @@ namespace TFSAssist
 
         void SendPreparedFiles(string projectDirPath)
         {
-            var tempFiles = Directory.EnumerateFiles(projectDirPath);
+            var tempFiles = Directory.EnumerateFiles(projectDirPath, "*", SearchOption.AllDirectories);
 
             if (tempFiles.Any())
             {
@@ -686,6 +686,11 @@ namespace TFSAssist
         {
             try
             {
+                DirectoryInfo d = new DirectoryInfo(sourceDir);
+                FileInfo[] Files = d.GetFiles("*", SearchOption.AllDirectories);
+                if (!Files.Any())
+                    return null;
+
                 string destinationZip = Path.Combine(sourceDir, STRING.RandomStringNumbers(15) + ".zip");
                 string packFileTempPath = Path.GetTempFileName();
                 File.Delete(packFileTempPath);
@@ -695,8 +700,6 @@ namespace TFSAssist
                 {
                     using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Create))
                     {
-                        DirectoryInfo d = new DirectoryInfo(sourceDir);
-                        FileInfo[] Files = d.GetFiles("*", SearchOption.AllDirectories);
                         foreach (FileInfo file in Files)
                         {
                             if (IO.IsFileReady(file.FullName))
@@ -865,7 +868,7 @@ namespace TFSAssist
         {
             try
             {
-                var tempFiles = Directory.EnumerateFiles(dirPath);
+                var tempFiles = Directory.EnumerateFiles(dirPath, "*", SearchOption.AllDirectories);
                 foreach (var fileName in tempFiles)
                 {
                     if (!IO.IsFileReady(fileName))
@@ -876,6 +879,11 @@ namespace TFSAssist
                         Attributes = FileAttributes.Normal
                     };
                     fileInfo.Delete();
+                }
+
+                foreach (DirectoryInfo dir in new DirectoryInfo(dirPath).GetDirectories())
+                {
+                    dir.Delete(true);
                 }
             }
             catch (Exception ex)

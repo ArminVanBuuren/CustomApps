@@ -647,7 +647,7 @@ namespace Utils.WinForm.MediaCapture
 
         public override string ToString()
         {
-            return $"Video=[{VideoEncoderDevice.Name}]\r\nAudio=[{AudioEncoderDevice.Name}]\r\nDurationSec=[{SecondsRecordDuration}]";
+            return $"Video=[{VideoEncoderDevice.Name}]\r\nAudio=[{AudioEncoderDevice.Name}]\r\nSeconds=[{SecondsRecordDuration}]";
         }
     }
 }

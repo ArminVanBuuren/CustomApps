@@ -303,7 +303,7 @@ namespace Utils.WinForm.MediaCapture
         }
         public override string ToString()
         {
-            return $"Video=[{VideoDevice.ToString()}]\r\nDurationSec=[{SecondsRecordDuration}]";
+            return $"Video=[{VideoDevice.ToString()}]\r\nSeconds=[{SecondsRecordDuration}]";
         }
     }
 }
