@@ -24,6 +24,7 @@ namespace Utils.WinForm.MediaCapture
         readonly object syncPT = new object();
         private List<EncoderProcessingThread> ProcessingThreads { get; } = new List<EncoderProcessingThread>();
 
+        public AForgeDevice AForgeVideoDevice { get; private set; }
         public EncoderDevice VideoEncoderDevice { get; private set; }
         public EncoderDevice AudioEncoderDevice { get; private set; }
         
@@ -33,26 +34,25 @@ namespace Utils.WinForm.MediaCapture
         /// </summary>
         public EncoderCapture(Thread thread, AForgeMediaDevices aDevices, EncoderMediaDevices cDevices, string destinationDir, int secondsRecDuration = 60):base(thread, aDevices, cDevices, destinationDir, secondsRecDuration)
         {
-            VideoEncoderDevice = CamDevices.GetDefaultVideoDevice();
-            AudioEncoderDevice = CamDevices.GetDefaultAudioDevice();
+            AForgeVideoDevice = aDevices?.GetDefaultVideoDevice();
+            VideoEncoderDevice = EncoderDevices.GetDefaultVideoDevice();
+            AudioEncoderDevice = EncoderDevices.GetDefaultAudioDevice();
         }
 
         public override void ChangeVideoDevice(string name)
         {
-            if(name.IsNullOrEmptyTrim())
-                throw new ArgumentNullException();
+            var resEncoderVideo = EncoderDevices.GetDefaultVideoDevice(name);
 
-            var res = CamDevices.GetDefaultVideoDevice(name);
+            VideoEncoderDevice = resEncoderVideo ?? throw new Exception($"Video device [{name}] not found.");
 
-            VideoEncoderDevice = res ?? throw new Exception($"Video device [{name}] not found.");
+            var resAForgeVideoDevice = AForgeDevices?.GetDefaultVideoDevice(name);
+            if (resAForgeVideoDevice != null)
+                AForgeVideoDevice = resAForgeVideoDevice;
         }
 
         public void ChangeAudioDevice(string name)
         {
-            if (name.IsNullOrEmptyTrim())
-                throw new ArgumentNullException();
-
-            var res = CamDevices.GetDefaultAudioDevice(name);
+            var res = EncoderDevices.GetDefaultAudioDevice(name);
 
             AudioEncoderDevice = res ?? throw new Exception($"Audio device [{name}] not found.");
         }
@@ -292,9 +292,9 @@ namespace Utils.WinForm.MediaCapture
                 // SourceProperties sp = _deviceSource.SourcePropertiesSnapshot();
 
                 var defaultSize = new Size(640, 480);
-                var findedDevice = AForgeDevices.GetDefaultVideoDevice(VideoEncoderDevice.Name);
+                var aforgeDevice = AForgeVideoDevice;
 
-                procThread.Job.OutputFormat.VideoProfile.Size = findedDevice == null ? new Size(defaultSize.Width, defaultSize.Height) : new Size(findedDevice.Width, findedDevice.Height);
+                procThread.Job.OutputFormat.VideoProfile.Size = aforgeDevice == null ? new Size(defaultSize.Width, defaultSize.Height) : new Size(aforgeDevice.Width, aforgeDevice.Height);
                 procThread.Job.ActivateSource(procThread.Device);
 
                 if (procThread.IsCanceled) return false;
@@ -643,6 +643,11 @@ namespace Utils.WinForm.MediaCapture
             {
                 // null;
             }
+        }
+
+        public override string ToString()
+        {
+            return $"Video=[{VideoEncoderDevice.Name}]\r\nAudio=[{AudioEncoderDevice.Name}]";
         }
     }
 }

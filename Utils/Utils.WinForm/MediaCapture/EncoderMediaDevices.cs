@@ -70,8 +70,8 @@ namespace Utils.WinForm.MediaCapture
             if (VideoDevices.Count == 0 && AudioDevices.Count == 0)
                 return string.Empty;
 
-            var resultVideo = "EncoderVideo:\r\n" + string.Join("\r\n", VideoDevices.Keys);
-            var resultAudio = "EncoderAudio:\r\n" + string.Join("\r\n", AudioDevices.Keys);
+            var resultVideo = "Encoder all video devices:\r\n" + string.Join("\r\n", VideoDevices.Keys);
+            var resultAudio = "Encoder all audio devices:\r\n" + string.Join("\r\n", AudioDevices.Keys);
             return (resultVideo + "\r\n" + resultAudio).Trim();
         }
     }

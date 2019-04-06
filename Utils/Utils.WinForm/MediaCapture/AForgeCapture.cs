@@ -61,9 +61,6 @@ namespace Utils.WinForm.MediaCapture
 
         public override void ChangeVideoDevice(string name)
         {
-            if (Mode != MediaCaptureMode.None)
-                throw new MediaCaptureRunningException("You must stop the previous process first!");
-
             var res = AForgeDevices.GetDefaultVideoDevice(name);
 
             VideoDevice = res ?? throw new Exception($"Video device [{name}] not found.");
@@ -300,6 +297,10 @@ namespace Utils.WinForm.MediaCapture
         public void Dispose()
         {
             Stop();
+        }
+        public override string ToString()
+        {
+            return $"Video=[{VideoDevice.ToString()}]";
         }
     }
 }

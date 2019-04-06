@@ -175,7 +175,7 @@ namespace Tester.Console
             while (true)
             {
                 //DateTime currentDate = DateTime.Now;
-                List<TLMessage> newMessages = await control.GetDifference(control.CurrentUser.User, control.CurrentUser.Destination, lastDate);
+                List<TLMessage> newMessages = await control.GetDifference(control.UserHost.User, control.UserHost.Destination, lastDate);
                 
                 TLMessage message = newMessages?.LastOrDefault();
                 if (message != null)

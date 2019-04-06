@@ -28,6 +28,9 @@ namespace Utils.WinForm.MediaCapture
 
         public AForgeDevice GetDefaultVideoDevice(string name = null)
         {
+            if (VideoDevices.Values.Count == 0)
+                return null;
+
             if (string.IsNullOrWhiteSpace(name))
             {
                 var orderByBestQuolity = VideoDevices.Values.OrderByDescending(p => p.Height).ThenByDescending(p => p.Width);
@@ -64,7 +67,7 @@ namespace Utils.WinForm.MediaCapture
             if (VideoDevices.Count == 0)
                 return string.Empty;
 
-            var result = ("AForgeVideo:\r\n" + string.Join("\r\n", VideoDevices.Keys)).Trim();
+            var result = ("AForge all video devices:\r\n" + string.Join("\r\n", VideoDevices.Keys)).Trim();
             return result;
         }
     }

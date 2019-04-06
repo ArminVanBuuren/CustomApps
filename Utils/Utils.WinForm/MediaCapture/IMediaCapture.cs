@@ -24,7 +24,7 @@ namespace Utils.WinForm.MediaCapture
         /// <summary>
         /// Все видео и аудио устройства полученные через библиотеку Expression.Encoder
         /// </summary>
-        EncoderMediaDevices CamDevices { get; }
+        EncoderMediaDevices EncoderDevices { get; }
         /// <summary>
         /// Папка для записи файлв результата
         /// </summary>
@@ -113,7 +113,7 @@ namespace Utils.WinForm.MediaCapture
 
         public AForgeMediaDevices AForgeDevices { get; }
 
-        public EncoderMediaDevices CamDevices { get; }
+        public EncoderMediaDevices EncoderDevices { get; }
 
         public string DestinationDir
         {
@@ -152,7 +152,7 @@ namespace Utils.WinForm.MediaCapture
             MainThread = mainThread;
             
             AForgeDevices = aDevices;
-            CamDevices = cDevices;
+            EncoderDevices = cDevices;
 
             DestinationDir = destinationDir.IsNullOrEmptyTrim() ? ASSEMBLY.ApplicationDirectory : destinationDir;
 

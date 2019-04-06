@@ -2,9 +2,9 @@
 
 namespace Utils.Telegram
 {
-    public class AuthorizeException : Exception
+    public class AuthorizationException : Exception
     {
-        internal AuthorizeException(string msg) : base(msg) { }
+        internal AuthorizationException(string msg) : base(msg) { }
     }
 
     public class AuthenticateException : Exception
