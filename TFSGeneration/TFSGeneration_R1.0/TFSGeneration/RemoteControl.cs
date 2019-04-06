@@ -71,6 +71,7 @@ namespace TFSAssist
         private bool _tryGetLocation = false;
 
         private readonly Action _checkUpdates;
+        private readonly Action _restartApplication;
         private readonly Func<string> _getLogs;
 
         private string _tempDir = string.Empty;
@@ -90,11 +91,12 @@ namespace TFSAssist
 
         private Dictionary<string, RemoteControlCommands> AllCommands { get; } = new Dictionary<string, RemoteControlCommands>(StringComparer.CurrentCultureIgnoreCase);
 
-        public RemoteControl(Thread mainThread, string clientId, Action checkUpdates, Func<string> getLogs)
+        public RemoteControl(Thread mainThread, string clientId, Action checkUpdates, Action restartApplication, Func<string> getLogs)
         {
             MainThread = mainThread;
             _processingErrorLogs = new StringBuilder();
             _checkUpdates = checkUpdates;
+            _restartApplication = restartApplication;
             _getLogs = getLogs;
             ClientID = clientId;
             TempDirectory = Path.Combine(ASSEMBLY.ApplicationDirectory, "Temp");
@@ -408,8 +410,8 @@ namespace TFSAssist
                                 break;
 
                             case RemoteControlCommands.RESTART:
-                                
-                                // TODO restart current app
+
+                                _restartApplication?.Invoke();
                                 break;
 
                             case RemoteControlCommands.UPDATE:

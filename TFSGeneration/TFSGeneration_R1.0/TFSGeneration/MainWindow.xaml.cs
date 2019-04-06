@@ -426,6 +426,7 @@ namespace TFSAssist
 
                 if (_restartApplication)
                 {
+                    WriteLog(WarnSeverity.Normal, DateTime.Now, REMOTE_ON_RESTART);
                     saver = PrepareToApplicationRestart(wasInProgress);
                     CMD.StartApplication(ASSEMBLY.ApplicationPath, 5);
                     Process.GetCurrentProcess().Kill();
@@ -464,11 +465,14 @@ namespace TFSAssist
 
         WindowSaver PrepareToApplicationRestart(bool wasInProgress, IUpdater readyEntity = null)
         {
-            WindowSaver saver;
-            if (readyEntity != null)
-                saver = new WindowSaver(readyEntity, WindowState, ShowInTaskbar, Traces, wasInProgress);
-            else
-                saver = new WindowSaver(WindowState, ShowInTaskbar, Traces, wasInProgress);
+            WindowSaver saver = null;
+            Dispatcher?.Invoke(() =>
+            {
+                if (readyEntity != null)
+                    saver = new WindowSaver(readyEntity, WindowState, ShowInTaskbar, Traces, wasInProgress);
+                else
+                    saver = new WindowSaver(WindowState, ShowInTaskbar, Traces, wasInProgress);
+            });
 
             saver.Serialize();
 
@@ -530,6 +534,7 @@ namespace TFSAssist
             if (_traceHighUpdateStatus == null)
                 return;
 
+            // нужно в диспатчере т.к. мы обновляем трейс TraceHighlighter, в котором контрольные объекты UI
             Dispatcher?.Invoke(() =>
             {
                 try
@@ -684,13 +689,14 @@ namespace TFSAssist
         #region Telegram Control
 
 
-        bool _restartApplication = false;
+        const string REMOTE_ON_RESTART = "Restart application";
+        bool _restartApplication = false; // всегда должно быть false, а то приложение будет все время перегружаться при остановки процесса TFScontrol
 
         async Task InitializeRemControl()
         {
             try
             {
-                RemControl = new RemoteControl(MainThread, CliendID, CheckUpdates, GetCurrentLogs);
+                RemControl = new RemoteControl(MainThread, CliendID, CheckUpdates, RestartApplication, GetCurrentLogs);
                 if (await RemControl.Initialize())
                     await RemControl.Run();
                 WriteLog(WarnSeverity.Error, DateTime.Now, $"{nameof(RemoteControl)} IsEnabled=[{RemControl.IsEnabled}]");

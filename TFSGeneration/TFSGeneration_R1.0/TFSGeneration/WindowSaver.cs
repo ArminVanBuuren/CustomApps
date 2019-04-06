@@ -22,7 +22,7 @@ namespace TFSAssist
 
         public WindowSaver(IUpdater updater, WindowState windowState, bool showInTaskbar, List<TraceHighlighter> traces, bool tfsInProgress):this(windowState, showInTaskbar, traces, tfsInProgress)
         {
-
+            Updater = updater;
         }
 
         public WindowSaver(WindowState windowState, bool showInTaskbar, List<TraceHighlighter> traces, bool tfsInProgress)
