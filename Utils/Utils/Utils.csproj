@@ -125,6 +125,7 @@
     <Compile Include="Handles\RegeditControl.cs" />
     <Compile Include="SERIALIZATION.cs" />
     <Compile Include="SerializationHelper\SerialHelper.cs" />
+    <Compile Include="SERVER.cs" />
     <Compile Include="STRING.cs" />
     <Compile Include="AppUpdater\FileBuildInfo.cs" />
     <Compile Include="AppUpdater\ApplicationUpdater.cs" />
