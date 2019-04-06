@@ -535,27 +535,5 @@ namespace Utils
         }
 
         #endregion
-
-        const string argument_update = "/C choice /C Y /N /D Y /T 4 & Del /F /Q \"{0}\" & choice /C Y /N /D Y /T 2 & Move /Y \"{1}\" \"{2}\"";
-        const string argument_add = "/C choice /C Y /N /D Y /T 4 & Move /Y \"{0}\" \"{1}\"";
-        const string argument_remove = "/C choice /C Y /N /D Y /T 4 & Del /F /Q \"{0}\"";
-        public static void DeleteFileAfterAccessClose(string file)
-        {
-            string argument_complete = string.Format(argument_remove, file);
-            StartProcess(argument_complete);
-        }
-
-        static void StartProcess(string arguments)
-        {
-            ProcessStartInfo cmd = new ProcessStartInfo
-            {
-                Arguments = arguments,
-                WindowStyle = ProcessWindowStyle.Hidden,
-                CreateNoWindow = true,
-                FileName = "cmd.exe"
-            };
-
-            Process.Start(cmd);
-        }
     }
 }

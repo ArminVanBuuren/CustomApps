@@ -138,19 +138,5 @@ namespace Utils
             // The future is now!
             return default(double);
         }
-
-        //public static int GetAvalMemoryUsageMb()
-        //{
-        //    PerformanceCounter totalMemCounter = new PerformanceCounter("Memory", "Available MBytes", true);
-        //    int.TryParse(totalMemCounter.NextValue().ToString(), out var resultTotal);
-        //    return resultTotal;
-        //}
-
-        //public static int GetFreeMemoryUsageMb()
-        //{
-        //    PerformanceCounter totalMemCounter = new PerformanceCounter("Memory", "Available MBytes", true);
-        //    int.TryParse(totalMemCounter.NextValue().ToString(), out var resultTotal);
-        //    return resultTotal;
-        //}
     }
 }

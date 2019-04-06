@@ -7,8 +7,8 @@ namespace Utils
     public static class ASSEMBLY
     {
         //ApplicationName = Assembly.GetCallingAssembly().GetName().Name;
-        public static string ApplicationName = Assembly.GetEntryAssembly().GetName().Name;
-        public static string ApplicationPath = Assembly.GetEntryAssembly().Location;
+        public static string ApplicationName => Assembly.GetEntryAssembly().GetName().Name;
+        public static string ApplicationPath => Assembly.GetEntryAssembly().Location;
         //public static string ApplicationDirectory => Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), Assembly.GetEntryAssembly().GetName().Name);
         public static string ApplicationDirectory => Path.GetDirectoryName(ApplicationPath);
         public static string ApplicationFilePath => System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;

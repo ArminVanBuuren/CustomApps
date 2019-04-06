@@ -12,14 +12,29 @@ namespace Utils.AppUpdater
     [Serializable, XmlRoot("Pack")]
     public class BuildPackInfo
     {
+        /// <summary>
+        /// Проект к которому предназначено обновление
+        /// </summary>
         [XmlAttribute]
         public string Project { get; set; }
 
+        /// <summary>
+        /// Название пакета с обновлениями
+        /// </summary>
         [XmlAttribute]
         public string Name { get; set; }
 
+        /// <summary>
+        /// Хэш файла
+        /// </summary>
         [XmlAttribute]
         public string MD5 { get; set; }
+
+        /// <summary>
+        /// Необходимо ли перезагрузить приложеие после апдейта
+        /// </summary>
+        [XmlAttribute]
+        public bool NeedRestartApplication { get; set; }
 
         [XmlElement("Build")]
         public List<FileBuildInfo> Builds { get; set; } = new List<FileBuildInfo>();
@@ -29,6 +44,13 @@ namespace Utils.AppUpdater
 
         }
 
+
+        /// <summary>
+        /// ПОдготовка пакета обновлений
+        /// </summary>
+        /// <param name="project"></param>
+        /// <param name="assembliesDirPath"></param>
+        /// <param name="destinationDirPath"></param>
         public BuildPackInfo(string project, string assembliesDirPath, string destinationDirPath)
         {
             Project = project;
@@ -48,6 +70,9 @@ namespace Utils.AppUpdater
                 File.Delete(packFileTempPath);
 
                 MD5 = Hasher.HashFile(packFileDestinationPath, HashType.MD5);
+
+                // по дефолту всегда надо перегружать приложение после обновления
+                NeedRestartApplication = true;
             }
             catch (Exception)
             {

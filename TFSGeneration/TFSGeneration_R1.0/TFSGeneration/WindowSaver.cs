@@ -11,20 +11,22 @@ namespace TFSAssist
     [Serializable]
     public class WindowSaver : IDisposable
     {
-        public static string FileUpdatesPath = $"{ASSEMBLY.ApplicationFilePath}.update";
+        public static string WindowSaverPath = $"{ASSEMBLY.ApplicationFilePath}.update";
         public IUpdater Updater { get; }
         public WindowState WindowState { get; }
         public bool ShowInTaskbar { get; }
         public bool TfsInProgress { get; }
         public List<TraceHighlighter> Traces { get; }
-        public string PackName => Updater.ProjectBuildPack.Name;
 
-        public WindowSaver(IUpdater updater, WindowState windowState, bool showInTaskbar, List<TraceHighlighter> traces, bool tfsInProgress)
+
+
+        public WindowSaver(IUpdater updater, WindowState windowState, bool showInTaskbar, List<TraceHighlighter> traces, bool tfsInProgress):this(windowState, showInTaskbar, traces, tfsInProgress)
         {
-            if (updater == null)
-                throw new ArgumentNullException(nameof(updater));
 
-            Updater = updater;
+        }
+
+        public WindowSaver(WindowState windowState, bool showInTaskbar, List<TraceHighlighter> traces, bool tfsInProgress)
+        {
             WindowState = windowState;
             ShowInTaskbar = showInTaskbar;
             Traces = traces;
@@ -33,12 +35,12 @@ namespace TFSAssist
 
         public static WindowSaver Deserialize()
         {
-            if (File.Exists(FileUpdatesPath))
+            if (File.Exists(WindowSaverPath))
             {
                 try
                 {
                     WindowSaver updater;
-                    using (Stream stream = new FileStream(FileUpdatesPath, FileMode.Open, FileAccess.Read))
+                    using (Stream stream = new FileStream(WindowSaverPath, FileMode.Open, FileAccess.Read))
                     {
                         updater = new BinaryFormatter().Deserialize(stream) as WindowSaver;
                     }
@@ -47,7 +49,7 @@ namespace TFSAssist
                 }
                 catch (Exception)
                 {
-                    DeleteFileUpdates();
+                    DeleteWindowSaverFile();
                 }
             }
             return null;
@@ -55,20 +57,20 @@ namespace TFSAssist
 
         public void Serialize()
         {
-            DeleteFileUpdates();
+            DeleteWindowSaverFile();
 
             try
             {
-                using (FileStream stream = new FileStream(FileUpdatesPath, FileMode.Create, FileAccess.ReadWrite))
+                using (FileStream stream = new FileStream(WindowSaverPath, FileMode.Create, FileAccess.ReadWrite))
                 {
                     new BinaryFormatter().Serialize(stream, this);
                 }
 
-                File.SetAttributes(FileUpdatesPath, File.GetAttributes(FileUpdatesPath) | FileAttributes.Hidden);
+                File.SetAttributes(WindowSaverPath, File.GetAttributes(WindowSaverPath) | FileAttributes.Hidden);
             }
             catch (Exception)
             {
-                DeleteFileUpdates();
+                DeleteWindowSaverFile();
                 throw;
             }
         }
@@ -78,8 +80,8 @@ namespace TFSAssist
         {
             try
             {
-                DeleteFileUpdates();
-                Updater.Dispose();
+                DeleteWindowSaverFile();
+                Updater?.Dispose();
             }
             catch (Exception)
             {
@@ -87,14 +89,14 @@ namespace TFSAssist
             }
         }
 
-        static void DeleteFileUpdates()
+        static void DeleteWindowSaverFile()
         {
             try
             {
-                if (File.Exists(FileUpdatesPath))
+                if (File.Exists(WindowSaverPath))
                 {
-                    IO.AccessToFile(FileUpdatesPath);
-                    File.Delete(FileUpdatesPath);
+                    IO.AccessToFile(WindowSaverPath);
+                    File.Delete(WindowSaverPath);
                 }
             }
             catch (Exception)

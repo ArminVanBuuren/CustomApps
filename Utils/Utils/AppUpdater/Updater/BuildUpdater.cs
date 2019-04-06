@@ -7,13 +7,7 @@ namespace Utils.AppUpdater.Updater
     [Serializable]
     internal class BuildUpdater : IBuildUpdater
     {
-        // & timeout /t 10 /nobreak - таймаут 10 секунд перед запуском приложения
         private readonly BuildUpdaterCollection _parent;
-        const string argument_start = "/C choice /C Y /N /D Y /T 4 & timeout /t 10 /nobreak & Start \"\" /D \"{0}\" \"{1}\"";
-        const string argument_update = "/C choice /C Y /N /D Y /T 4 & Del /F /Q \"{0}\" & choice /C Y /N /D Y /T 2 & Move /Y \"{1}\" \"{2}\"";
-        const string argument_update_start = argument_update + "& timeout /t 10 /nobreak & Start \"\" /D \"{3}\" \"{4}\" {5}";
-        const string argument_add = "/C choice /C Y /N /D Y /T 4 & Move /Y \"{0}\" \"{1}\"";
-        const string argument_remove = "/C choice /C Y /N /D Y /T 4 & Del /F /Q \"{0}\"";
 
         public string FileSource => Path.Combine(_parent.DiretoryTempPath, ServerFile.Location);
         public string FileDestination { get; }
@@ -44,8 +38,6 @@ namespace Utils.AppUpdater.Updater
 
         internal void Commit()
         {
-            string argument_complete;
-
             switch (ServerFile.Type)
             {
                 case BuldPerformerType.CreateOrUpdate:
@@ -53,53 +45,39 @@ namespace Utils.AppUpdater.Updater
                     if (LocalFile == null)
                     {
                         string destinationDir = Path.GetDirectoryName(FileDestination);
-                        if (!Directory.Exists(destinationDir))
+                        if (!string.IsNullOrWhiteSpace(destinationDir) && !Directory.Exists(destinationDir))
                             Directory.CreateDirectory(destinationDir);
-                        argument_complete = string.Format(argument_add, FileSource, FileDestination);
+                        
+                        CMD.CopyFile(FileSource, FileDestination); // задержка не нужна
                     }
                     else
                     {
-                        argument_complete = string.Format(argument_update, FileDestination, FileSource, FileDestination);
+                        CMD.OverwriteFile(FileSource, FileDestination); // задержка не нужна
                     }
                     break;
+
                 case BuldPerformerType.RollBack:
                 case BuldPerformerType.Update:
-                    argument_complete = string.Format(argument_update, FileDestination, FileSource, FileDestination);
+                    CMD.OverwriteFile(FileSource, FileDestination); // задержка не нужна
                     break;
+
                 case BuldPerformerType.Remove:
-                    argument_complete = string.Format(argument_remove, FileDestination);
+                    CMD.DeleteFile(FileDestination); // задержка не нужна
                     break;
+
                 default:
                     return;
             }
-
-            StartProcess(argument_complete);
         }
 
         internal void Pull()
         {
-            string argument_complete = string.Format(argument_update_start, FileDestination, FileSource, FileDestination, Path.GetDirectoryName(FileDestination), Path.GetFileName(FileDestination), string.Empty);
-
-            StartProcess(argument_complete);
+            CMD.OverwriteAndStartApplication(FileSource, FileDestination, 10);
         }
 
         internal static void Pull(string runningAppLocation)
         {
-            string argument_complete = string.Format(argument_start, Path.GetDirectoryName(runningAppLocation), Path.GetFileName(runningAppLocation));
-            StartProcess(argument_complete);
-        }
-
-        internal static void StartProcess(string arguments)
-        {
-            ProcessStartInfo cmd = new ProcessStartInfo
-            {
-                Arguments = arguments,
-                WindowStyle = ProcessWindowStyle.Hidden,
-                CreateNoWindow = true,
-                FileName = "cmd.exe"
-            };
-
-            Process.Start(cmd);
+            CMD.StartApplication(runningAppLocation, 10);
         }
 
         public override string ToString()

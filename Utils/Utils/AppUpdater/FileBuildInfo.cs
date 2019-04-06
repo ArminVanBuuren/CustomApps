@@ -84,7 +84,7 @@ namespace Utils.AppUpdater
             set
             {
                 if (value.IsNullOrEmptyTrim())
-                    throw new ArgumentNullException("Location of file is null");
+                    throw new ArgumentNullException($"Location of file is null");
 
                 _location = value;
             }

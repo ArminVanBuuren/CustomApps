@@ -231,11 +231,13 @@ namespace TFSAssist
                 ToolTipService.SetInitialShowDelay(GetDublicateTFS, _timeoutToShowToolTip);
 
                 // 1
-                InitializeUpdater();
+                PullWindowSaver();
                 // 2
+                InitializeAppUpdater();
+                // 3
                 InitializeTimers();
-                // 3 Инициализация телеграма должна быть последней, т.к. он ссылается на Updater, если необходимо проверить обновления
-                Task.Run(InitializeTLControl);
+                // 4 Инициализация телеграма должна быть последней, т.к. он ссылается на Updater, если необходимо проверить обновления
+                Task.Run(InitializeRemControl);
 
                 //================ Activate button Start if all correct ==============================
                 ButtonStart.IsEnabled = true;
@@ -353,23 +355,23 @@ namespace TFSAssist
             BindingOperations.SetBinding(target, dp, myBinding);
         }
 
+        #region Pull previous saver data of WindowSaver or restart application
 
-
-        #region Initialize and processing Updater
-
-        void InitializeUpdater()
+        void PullWindowSaver()
         {
             WindowSaver lastUpdate = WindowSaver.Deserialize();
-            if (lastUpdate != null)
-            {
-                using (lastUpdate)
-                {
-                    try
-                    {
-                        CurrentPackUpdaterName = lastUpdate.PackName;
-                        WindowState = lastUpdate.WindowState;
-                        ShowInTaskbar = lastUpdate.ShowInTaskbar;
+            if (lastUpdate == null)
+                return;
 
+            using (lastUpdate)
+            {
+                try
+                {
+                    WindowState = lastUpdate.WindowState;
+                    ShowInTaskbar = lastUpdate.ShowInTaskbar;
+
+                    if (lastUpdate.Traces != null)
+                    {
                         lock (syncTraces)
                         {
                             Traces = lastUpdate.Traces;
@@ -380,21 +382,121 @@ namespace TFSAssist
                                 LogTextBox.Document.Blocks.Add(trace.GetParagraph());
                             }
                         }
-
-                        WriteLog(WarnSeverity.Normal, DateTime.Now, $"Update successfully installed. Updates pack=[{lastUpdate.PackName}]");
-
-                        if (lastUpdate.TfsInProgress)
-                        {
-                            StartStopTfsControl(false);
-                        }
                     }
-                    catch (Exception ex)
+
+                    if (lastUpdate.Updater != null)
                     {
-                        Informing(WarnSeverity.Error, DateTime.Now, ex.Message, $"{ex.Message}\r\n{ex.StackTrace}", true);
+                        string updatePackName = lastUpdate.Updater.ProjectBuildPack.Name;
+                        CurrentPackUpdaterName = updatePackName;
+                        WriteLog(WarnSeverity.Normal, DateTime.Now, string.Format(UPDATE_ON_COMPLETE, updatePackName));
+                    }
+
+                    if (lastUpdate.TfsInProgress)
+                    {
+                        StartStopTfsControl(false);
                     }
                 }
+                catch (Exception ex)
+                {
+                    Informing(WarnSeverity.Error, DateTime.Now, ex.Message, $"{ex.Message}\r\n{ex.StackTrace}", true);
+                }
+            }
+        }
+
+        void DoRestartApplication(bool wasInProgress = false)
+        {
+            // сначала останавливаем рабочий процесс
+            if (TfsControl != null && TfsControl.InProgress)
+            {
+                // после полной остановки wasInProgress будет true
+                TfsControl.Stop();
+                return;
             }
 
+            WindowSaver saver = null;
+            try
+            {
+                if (_readyUpdateEntity != null)
+                {
+                    WriteLog(WarnSeverity.Normal, DateTime.Now, UPDATE_ON_START);
+                    saver = PrepareToApplicationRestart(wasInProgress, _readyUpdateEntity);
+                    AppUpdater.DoUpdate(_readyUpdateEntity); // метод DoUpdate сам убъет текущий процесс, т.к. приложение на этой стадии должно быть перезагружено
+                    return;
+                }
+
+                if (_restartApplication)
+                {
+                    saver = PrepareToApplicationRestart(wasInProgress);
+                    CMD.StartApplication(ASSEMBLY.ApplicationPath, 5);
+                    Process.GetCurrentProcess().Kill();
+                }
+            }
+            catch (Exception ex)
+            {
+                if (_readyUpdateEntity != null)
+                {
+                    WriteLog(WarnSeverity.Error, DateTime.Now, string.Format(UPDATE_ON_EXCEPTION, _readyUpdateEntity?.ProjectBuildPack?.Name, ex.ToString()));
+
+                    if (_readyUpdateEntity.Status != UploaderStatus.Disposed)
+                        _readyUpdateEntity.Dispose();
+
+                    _readyUpdateEntity = null;
+                    _traceHighUpdateStatus = null;
+
+                    AppUpdater.Refresh();
+                }
+
+                _restartApplication = false;
+
+                saver?.Dispose();
+
+                if (BottomNotification.isDisposed)
+                    BottomNotification = new BottomNotification(this, TFSControl.ApplicationName);
+
+                if (wasInProgress)
+                    StartStopTfsControl(false);
+
+                if (RemControl == null || !RemControl.IsEnabled)
+                    Task.Run(InitializeRemControl);
+            }
+        }
+
+
+        WindowSaver PrepareToApplicationRestart(bool wasInProgress, IUpdater readyEntity = null)
+        {
+            WindowSaver saver;
+            if (readyEntity != null)
+                saver = new WindowSaver(readyEntity, WindowState, ShowInTaskbar, Traces, wasInProgress);
+            else
+                saver = new WindowSaver(WindowState, ShowInTaskbar, Traces, wasInProgress);
+
+            saver.Serialize();
+
+            BottomNotification?.Dispose();
+
+            if (!wasInProgress)
+                TfsControl?.SaveSettings();
+
+            RemControl?.Dispose();
+
+            return saver;
+        }
+
+        #endregion
+
+        #region Initialize and processing Updater
+
+
+        const string UPDATE_TRACE_FORMAT = "Downloaded updates [{0}] of [{1}]";
+        const string UPDATE_ON_START = "Update processing begins";
+        const string UPDATE_ON_COMPLETE = "Update successfully installed. Package=[{0}]";
+        const string UPDATE_ON_EXCEPTION = "Update error. Package=[{0}]\r\n{1}";
+        private TraceHighlighter _traceHighUpdateStatus;
+        private IUpdater _readyUpdateEntity;
+        object sync = new object();
+
+        void InitializeAppUpdater()
+        {
             AppUpdater = new ApplicationUpdater(Assembly.GetExecutingAssembly(), CurrentPackUpdaterName, _intervalCheckUpdatesSec);
             AppUpdater.OnFetch += AppUpdater_OnFetch;
             AppUpdater.OnUpdate += AppUpdater_OnUpdate;
@@ -403,19 +505,22 @@ namespace TFSAssist
             AppUpdater.CheckUpdates();
         }
 
-
-        private string _updateTraceFormat = "Downloaded update [{0}] of [{1}]";
-        private TraceHighlighter _traceHighUpdateStatus;
-        private IUpdater _updater;
-        object sync = new object();
-
-        private void AppUpdater_OnFetch(object sender, ApplicationUpdaterProcessingArgs args)
+        private void AppUpdater_OnFetch(object sender, ApplicationFetchingArgs args)
         {
+            if (args == null)
+                return;
+
+            if (args.Control == null)
+            {
+                args.Result = UpdateBuildResult.Cancel;
+                return;
+            }
+
             Dispatcher?.Invoke(() =>
             {
                 IUpdater updater = args.Control;
                 updater.DownloadProgressChanged += Updater_DownloadProgressChanged;
-                _traceHighUpdateStatus = WriteLog(WarnSeverity.Normal, DateTime.Now, string.Format(_updateTraceFormat, updater.UploadedString, updater.TotalString));
+                _traceHighUpdateStatus = WriteLog(WarnSeverity.Normal, DateTime.Now, string.Format(UPDATE_TRACE_FORMAT, updater.UploadedString, updater.TotalString));
                 //_runsTraceUpdate = parControl.Inlines.Where(x => x is Run && !x.Name.IsNullOrEmptyTrim()).ToDictionary(p => p.Name, r => (Run) r);
             });
         }
@@ -430,7 +535,7 @@ namespace TFSAssist
                 try
                 {
                     IUpdater updater = (IUpdater)sender;
-                    _traceHighUpdateStatus.Refresh(string.Format(_updateTraceFormat, updater.UploadedString, updater.TotalString));
+                    _traceHighUpdateStatus.Refresh(string.Format(UPDATE_TRACE_FORMAT, updater.UploadedString, updater.TotalString));
                 }
                 catch (Exception)
                 {
@@ -439,74 +544,46 @@ namespace TFSAssist
             });
         }
 
-        private void AppUpdater_OnUpdate(object sender, ApplicationUpdaterProcessingArgs args)
+        private void AppUpdater_OnUpdate(object sender, ApplicationUpdatingArgs args)
         {
-            _updater = args.Control;
-            args.Result = UpdateBuildResult.Cancel;
-
-            if (TfsControl != null && TfsControl.InProgress)
+            if (args?.Control == null)
             {
-                TfsControl.Stop();
-            }
-            else
-            {
-                Dispatcher.BeginInvoke(new Action(() => UpdateApplication(false)));
-            }
-        }
-
-        void UpdateApplication(bool wasInProgress)
-        {
-            if (_updater == null)
-                return;
-
-            WriteLog(WarnSeverity.Normal, DateTime.Now, "Start updating...");
-            WindowSaver saver = null;
-            try
-            {
-                saver = new WindowSaver(_updater, WindowState, ShowInTaskbar, Traces, wasInProgress);
-                saver.Serialize();
-            }
-            catch (Exception ex)
-            {
-                ErrorWhenUpdateAndRollback($"Error when starting update.\r\n{ex}", saver, wasInProgress);
+                AppUpdater.Refresh();
                 return;
             }
 
-            if (!wasInProgress)
-                TfsControl?.SaveSettings();
+            if (args.Control.ProjectBuildPack == null)
+            {
+                AppUpdater.Refresh();
+                return;
+            }
 
             try
             {
-                BottomNotification?.Dispose();
-                AppUpdater.DoUpdate(_updater);
+                if (args.Control.ProjectBuildPack.NeedRestartApplication)
+                {
+                    _readyUpdateEntity = args.Control;
+                    DoRestartApplication();
+                }
+                else
+                {
+                    string updatePackName = args.Control.ProjectBuildPack.Name;
+                    CurrentPackUpdaterName = updatePackName;
+
+                    WriteLog(WarnSeverity.Normal, DateTime.Now, UPDATE_ON_START);
+                    AppUpdater.DoUpdate(args.Control);
+                    WriteLog(WarnSeverity.Normal, DateTime.Now, string.Format(UPDATE_ON_COMPLETE, updatePackName));
+                }
             }
             catch (Exception ex)
             {
-                ErrorWhenUpdateAndRollback($"Error when starting update. {nameof(IUpdater)}{_updater}\r\n{ex}", saver, wasInProgress);
+                WriteLog(WarnSeverity.Error, DateTime.Now, string.Format(UPDATE_ON_EXCEPTION, args.Control?.ProjectBuildPack?.Name, ex.ToString()));
             }
         }
 
-        void ErrorWhenUpdateAndRollback(string errorMessage, IDisposable saver, bool wasInProgress)
+        private void AppUpdater_OnProcessingError(object sender, ApplicationUpdatingArgs args)
         {
-            WriteLog(WarnSeverity.Error, DateTime.Now, errorMessage);
-            if(_updater != null && _updater.Status != UploaderStatus.Disposed)
-                _updater.Dispose();
-            _updater = null;
-            _traceHighUpdateStatus = null;
-
-            if (wasInProgress)
-                StartStopTfsControl(false);
-
-            if(BottomNotification.isDisposed)
-                BottomNotification = new BottomNotification(this, TFSControl.ApplicationName);
-
-            saver?.Dispose();
-            AppUpdater.Refresh();
-        }
-
-        private void AppUpdater_OnProcessingError(object sender, ApplicationUpdaterProcessingArgs args)
-        {
-            if (args.Error != null)
+            if (args?.Error != null)
                 WriteLog(WarnSeverity.Error, DateTime.Now, args.Error.ToString());
         }
 
@@ -606,7 +683,10 @@ namespace TFSAssist
 
         #region Telegram Control
 
-        async Task InitializeTLControl()
+
+        bool _restartApplication = false;
+
+        async Task InitializeRemControl()
         {
             try
             {
@@ -625,6 +705,12 @@ namespace TFSAssist
         void CheckUpdates()
         {
             AppUpdater?.CheckUpdates();
+        }
+
+        void RestartApplication()
+        {
+            _restartApplication = true;
+            DoRestartApplication();
         }
 
         string GetCurrentLogs()
@@ -763,6 +849,9 @@ namespace TFSAssist
 
         void StartStopTfsControl(bool clearLog = true)
         {
+            if (TfsControl == null)
+                return;
+
             if (!TfsControl.InProgress)
             {
                 TfsControl.SaveSettings();
@@ -802,7 +891,8 @@ namespace TFSAssist
                 ButtonStart.Content = STR_START;
 
                 // передаем true т.к. если пак с апдейтом был скачан, то updater точно остановил процесс в tfs и значит в TFSASssist процесс после апдейта нужно заново запустить.
-                UpdateApplication(true);
+                // либо из вне пришла команда на рестарт приложения
+                DoRestartApplication(true);
             });
         }
 

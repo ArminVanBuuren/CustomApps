@@ -148,7 +148,7 @@ namespace Utils.WinForm.MediaCapture
                     return;
 
                 if (whileAccessing)
-                    IO.DeleteFileAfterAccessClose(destinationFilePath);
+                    CMD.DeleteFile(destinationFilePath);
                 else
                     File.Delete(destinationFilePath);
             }

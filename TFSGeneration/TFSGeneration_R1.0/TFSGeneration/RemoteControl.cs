@@ -260,13 +260,15 @@ namespace TFSAssist
                         File.Delete(destinationZip);
                     }
                 }
-
-                // очищаем память, т.к. отправляем большой файл
-                GC.Collect();
             }
             catch (Exception ex)
             {
                 WriteExLog(ex);
+            }
+            finally
+            {
+                // очищаем память, т.к. отправили большой файл
+                GC.Collect();
             }
         }
 
@@ -300,7 +302,7 @@ namespace TFSAssist
                         {
                             case RemoteControlCommands.PING:
 
-                                SendMessageToUserHost(GetCurrentServerInfo(true));
+                                SendMessageToUserHost("PONG. " + GetCurrentServerInfo());
                                 break;
 
                             case RemoteControlCommands.COMMANDS:
@@ -310,13 +312,23 @@ namespace TFSAssist
 
                             case RemoteControlCommands.INFO:
 
-                                var res = WIN32.GetDetailedHostInfo();
-                                if (res?.Count > 0)
-                                {
-                                    StringBuilder detInfo = new StringBuilder();
-                                    int maxLenghtSpace = res.Keys.Aggregate("", (max, cur) => max.Length > cur.Length ? max : cur).Length + 3;
+                                StringBuilder detInfo = new StringBuilder();
 
-                                    foreach (var value in res)
+                                var hostIps = HOST.GetIPAddresses();
+                                int maxLenghtSpace = hostIps.Aggregate("", (max, cur) => max.Length > cur.Interface.Name.Length ? max : cur.Interface.Name).Length + 3;
+
+                                foreach (var address in hostIps)
+                                {
+                                    detInfo.Append($"{address.Interface.Name} {new string('.', maxLenghtSpace - address.Interface.Name.Length)} [{address.IPAddress.Address.ToString()}] ({address.Interface.Description})\r\n");
+                                }
+
+                                var det = HOST.GetDetailedHostInfo();
+                                if (det?.Count > 0)
+                                {
+                                    detInfo.Append($"\r\nDetailed:\r\n");
+                                    maxLenghtSpace = det.Keys.Aggregate("", (max, cur) => max.Length > cur.Length ? max : cur).Length + 3;
+
+                                    foreach (var value in det)
                                     {
                                         detInfo.Append($"{value.Key} {new string('.', maxLenghtSpace - value.Key.Length)} [{string.Join("];[", value.Value)}]\r\n");
                                     }
@@ -565,7 +577,7 @@ namespace TFSAssist
                         switch (command)
                         {
                             case RemoteControlCommands.PING:
-                                SendMessageToUserHost(GetCurrentServerInfo());
+                                SendMessageToUserHost("PONG. " + GetCurrentServerInfo());
                                 break;
                             case RemoteControlCommands.UPDATE:
                                 isUpdate = true;
@@ -731,16 +743,11 @@ namespace TFSAssist
             }
         }
 
-        string GetCurrentServerInfo(bool detailed = false)
+        string GetCurrentServerInfo()
         {
             try
             {
-                var hostName = Dns.GetHostName();
-
-                if (detailed)
-                    return $"Host=[{hostName}] Thread=[{(MainThread.IsAlive ? MainThread.ManagedThreadId.ToString() : "Aborted")}] Address=[\"{string.Join("\",\"", Dns.GetHostAddresses(hostName).ToList())}\"]";
-
-                return $"Host=[{hostName}] Thread=[{(MainThread.IsAlive ? MainThread.ManagedThreadId.ToString() : "Aborted")}]";
+                return $"Host=[{Dns.GetHostName()}] Thread=[{(MainThread.IsAlive ? MainThread.ManagedThreadId.ToString() : "Aborted")}]";
             }
             catch (Exception)
             {

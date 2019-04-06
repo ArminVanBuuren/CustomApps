@@ -4,31 +4,55 @@ using Utils.AppUpdater.Updater;
 
 namespace Utils.AppUpdater
 {
+
+    [Serializable]
+    public delegate void AppUpdatingHandler(object sender, ApplicationUpdatingArgs args);
+
+    [Serializable]
+    public delegate void AppFetchingHandler(object sender, ApplicationFetchingArgs args);
+
+    [Serializable]
+    public delegate void AppUpdaterErrorHandler(object sender, ApplicationUpdatingArgs args);
+
+
     [Serializable]
     public enum UpdateBuildResult
     {
         Cancel = 0,
-        Update = 1
+        Fetch = 1
     }
 
     [Serializable]
-    public class ApplicationUpdaterProcessingArgs
+    public class ApplicationUpdatingArgs
     {
-        internal ApplicationUpdaterProcessingArgs(IUpdater control)
+        internal ApplicationUpdatingArgs(IUpdater control)
         {
-            Result = UpdateBuildResult.Update;
             Control = control;
         }
 
-        internal ApplicationUpdaterProcessingArgs(IUpdater control, Exception exception, string message = null)
+        internal ApplicationUpdatingArgs(IUpdater control, Exception exception, string message = null)
         {
-            Result = UpdateBuildResult.Cancel;
             Control = control;
             Error = message.IsNullOrEmptyTrim() ? exception : new Exception(message, exception);
         }
 
         public IUpdater Control { get; }
-        public UpdateBuildResult Result { get; set; }
         public Exception Error { get; }
+    }
+
+    [Serializable]
+    public class ApplicationFetchingArgs : ApplicationUpdatingArgs
+    {
+        internal ApplicationFetchingArgs(IUpdater control):base(control)
+        {
+            Result = UpdateBuildResult.Fetch;
+        }
+
+        internal ApplicationFetchingArgs(IUpdater control, Exception exception, string message = null) : base(control, exception, message)
+        {
+            Result = UpdateBuildResult.Cancel;
+        }
+
+        public UpdateBuildResult Result { get; set; }
     }
 }

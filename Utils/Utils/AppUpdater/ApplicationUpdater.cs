@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Cache;
 using System.Reflection;
+using System.Runtime.Remoting.Messaging;
 using System.Timers;
 using Utils.AppUpdater.Updater;
 
@@ -10,26 +11,30 @@ namespace Utils.AppUpdater
 {
     public enum AutoUpdaterStatus
     {
+        /// <summary>
+        /// пользователь сам может проверить наличе обновления без автоматической проверки
+        /// </summary>
         Stopped = 0,
+        /// <summary>
+        /// автоматическая проверка обновлений
+        /// </summary>
         Checking = 1,
+        /// <summary>
+        /// Началась закачка пакета обновлений или выполняется обновление
+        /// </summary>
         Processing = 2
     }
 
-    [Serializable]
-    public delegate void AppUpdaterHandler(object sender, ApplicationUpdaterProcessingArgs args);
-
-    [Serializable]
-    public delegate void AppUpdaterErrorHandler(object sender, ApplicationUpdaterProcessingArgs args);
-
     public class ApplicationUpdater
     {
-        public event AppUpdaterHandler OnFetch;
-        public event AppUpdaterHandler OnUpdate;
-        public event AppUpdaterErrorHandler OnProcessingError;
         private readonly Timer _watcher;
         object syncStatus = new object();
         object syncChecking = new object();
         private AutoUpdaterStatus _satus = AutoUpdaterStatus.Stopped;
+
+        public event AppFetchingHandler OnFetch;
+        public event AppUpdatingHandler OnUpdate;
+        public event AppUpdaterErrorHandler OnProcessingError;
 
         public Assembly RunningApp { get; }
         public string ProjectName { get; }
@@ -114,8 +119,8 @@ namespace Utils.AppUpdater
                             BuildUpdaterCollection control = new BuildUpdaterCollection(RunningApp, ProjectUri, projectBuildPack);
                             if (control.Count > 0)
                             {
-                                ApplicationUpdaterProcessingArgs responce = GetResponseFromControlObject(OnFetch, new ApplicationUpdaterProcessingArgs(control));
-                                if (responce.Result == UpdateBuildResult.Update)
+                                ApplicationFetchingArgs responce = GetResponseFromControlObject(OnFetch, new ApplicationFetchingArgs(control));
+                                if (responce.Result == UpdateBuildResult.Fetch)
                                 {
                                     ProcessingStatus();
                                     control.OnFetchComplete += FetchingCompleted;
@@ -135,42 +140,13 @@ namespace Utils.AppUpdater
             }
             catch (Exception ex)
             {
-                OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs(null, ex));
+                OnProcessingError?.Invoke(this, new ApplicationUpdatingArgs(null, ex));
             }
 
             ReinitStatusToChecking();
         }
 
-        private void FetchingCompleted(object sender, BuildUpdaterProcessingArgs e)
-        {
-            BuildUpdaterCollection control = null;
-            try
-            {
-                control = (BuildUpdaterCollection)sender;
-                if (e.Error != null || control.Status != UploaderStatus.Fetched)
-                {
-                    OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs(control, e.Error, "Error when fetching pack of builds!"));
-                    control.Dispose();
-                    ReturnBackStatus();
-                }
-                else
-                {
-                    ApplicationUpdaterProcessingArgs responce = GetResponseFromControlObject(OnUpdate, new ApplicationUpdaterProcessingArgs(control));
-                    if (responce.Result == UpdateBuildResult.Update)
-                    {
-                        control.CommitAndPull();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs(control, ex, "Error when trying commit and pull!"));
-                control?.Dispose();
-                ReturnBackStatus();
-            }
-        }
-
-        ApplicationUpdaterProcessingArgs GetResponseFromControlObject(AppUpdaterHandler eventReference, ApplicationUpdaterProcessingArgs args)
+        ApplicationFetchingArgs GetResponseFromControlObject(AppFetchingHandler eventReference, ApplicationFetchingArgs args)
         {
             var eventListeners = eventReference?.GetInvocationList();
             if (eventListeners == null || !eventListeners.Any())
@@ -178,7 +154,7 @@ namespace Utils.AppUpdater
                 return args;
             }
 
-            foreach (AppUpdaterHandler del in eventListeners)
+            foreach (AppUpdatingHandler del in eventListeners)
             {
                 del.Invoke(this, args);
                 if (args.Result == UpdateBuildResult.Cancel)
@@ -190,6 +166,36 @@ namespace Utils.AppUpdater
             return args;
         }
 
+        private void FetchingCompleted(object sender, BuildUpdaterProcessingArgs e)
+        {
+            BuildUpdaterCollection control = null;
+            try
+            {
+                control = (BuildUpdaterCollection) sender;
+                if (e.Error != null || control.Status != UploaderStatus.Fetched)
+                {
+                    OnProcessingError?.Invoke(this, new ApplicationUpdatingArgs(control, e.Error, "Error when fetching pack of builds!"));
+                    control.Dispose();
+                    ReturnBackStatus(); // если возникли какие то ошибки при скачивании пакета с обновлениями
+                }
+                else
+                {
+                    OnUpdate?.BeginInvoke(this, new ApplicationUpdatingArgs(control), null, null);
+                    //ApplicationUpdaterProcessingArgs responce = GetResponseFromControlObject(OnUpdate, new ApplicationUpdatingArgs(control));
+                    //if (responce.Result == UpdateBuildResult.Update)
+                    //{
+                    //    control.CommitAndPull();
+                    //    ReturnBackStatus(); // если произошло обновление без рестарта приложения то возвращаем статус обратно
+                    //}
+                }
+            }
+            catch (Exception ex)
+            {
+                OnProcessingError?.Invoke(this, new ApplicationUpdatingArgs(control, ex, "Error when trying commit and pull!"));
+                control?.Dispose();
+                ReturnBackStatus();
+            }
+        }
 
         /// <summary>
         /// Запустить автопроверку наличия обновления
@@ -285,14 +291,14 @@ namespace Utils.AppUpdater
             if(Status != AutoUpdaterStatus.Processing || control.Status != UploaderStatus.Fetched)
                 throw new Exception($"{nameof(ApplicationUpdater)} does not expect an update.");
 
-
             try
             {
                 ((BuildUpdaterCollection)control).CommitAndPull();
+                ReturnBackStatus(); // если произошло обновление без рестарта приложения то возвращаем статус обратно
             }
             catch (Exception ex)
             {
-                OnProcessingError?.Invoke(this, new ApplicationUpdaterProcessingArgs(control, ex, "Error when trying commit and pull!"));
+                OnProcessingError?.Invoke(this, new ApplicationUpdatingArgs(control, ex, "Error when trying commit and pull!"));
                 control?.Dispose();
                 ReturnBackStatus();
             }
@@ -300,7 +306,7 @@ namespace Utils.AppUpdater
 
         public override string ToString()
         {
-            return $"{nameof(ApplicationUpdater)} ProjectName=[{ProjectName}] Status=[{Status:G}] Version=[{RunningApp.GetName().Version}]";
+            return $"{nameof(ApplicationUpdater)} ProjectName=[{ProjectName}] Status=[{Status:G}]";
         }
     }
 }

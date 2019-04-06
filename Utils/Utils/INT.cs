@@ -15,7 +15,7 @@ namespace Utils
 {
 	public static class INT
 	{
-		static Regex getNotNumber = new Regex(@"[^0-9]", RegexOptions.Compiled);
+		static readonly Regex getNotNumber = new Regex(@"[^0-9]", RegexOptions.Compiled);
 		/// <summary>
 		/// Обработчик который корректно провыеряет поле TextBox из окна приложения чтобы ввод был строго чисел, также вставляется позиция корретки
 		/// </summary>

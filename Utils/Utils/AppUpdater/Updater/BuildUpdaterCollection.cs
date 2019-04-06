@@ -38,8 +38,10 @@ namespace Utils.AppUpdater.Updater
         public string LocationApp { get; }
         public Uri ProjectUri { get; }
         public BuildPackInfo ProjectBuildPack { get; }
+
         public string FileTempPath { get; private set; }
         public string DiretoryTempPath { get; private set; }
+        
 
         internal BuildUpdaterCollection(Assembly runningApp, Uri projectUri, BuildPackInfo projectBuildPack)
         {
@@ -169,13 +171,17 @@ namespace Utils.AppUpdater.Updater
             Status = UploaderStatus.Commited;
 
             if (runningApp != null)
+            {
                 runningApp.Pull();
-            else
+                Status = UploaderStatus.Pulled;
+            }
+            else if (ProjectBuildPack.NeedRestartApplication)
+            {
                 BuildUpdater.Pull(LocationApp);
+                Status = UploaderStatus.Pulled;
 
-            Status = UploaderStatus.Pulled;
-
-            Process.GetCurrentProcess().Kill();
+                Process.GetCurrentProcess().Kill();
+            }
         }
 
         //void ChangeStatus(UploaderStatus status)
@@ -184,15 +190,7 @@ namespace Utils.AppUpdater.Updater
         //        Status = status;
         //}
 
-        public int Count
-        {
-            get
-            {
-                if (_collection == null)
-                    return 0;
-                return _collection.Count;
-            }
-        }
+        public int Count => _collection?.Count ?? 0;
 
         object IEnumerator.Current
         {
@@ -287,7 +285,7 @@ namespace Utils.AppUpdater.Updater
 
         public override string ToString()
         {
-            return $"Status=[{Status:G}] Count=[{Count}]";
+            return $"Status=[{Status:G}] BuildsCount=[{Count}]";
         }
     }
 }
