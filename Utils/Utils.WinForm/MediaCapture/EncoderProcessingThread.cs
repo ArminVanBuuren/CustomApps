@@ -117,7 +117,7 @@ namespace Utils.WinForm.MediaCapture
 
             try
             {
-                if (ThreadProc.IsAlive)
+                if (ThreadProc != null && ThreadProc.IsAlive)
                     ThreadProc.Abort();
             }
             catch (Exception)

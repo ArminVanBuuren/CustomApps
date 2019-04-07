@@ -411,7 +411,7 @@ namespace Utils.WinForm.MediaCapture
                     return false;
                 }
 
-                //procThread.ThreadProc = Thread.CurrentThread;
+                //procThread.ThreadProc = Thread.CurrentThread;  данный поток является базовым, если его срубить то убъется весь процесс который его зпускал, т.к. он данный метод запускается не в отдельном потоке а через BeginInvoke
                 Mode = MediaCaptureMode.Broadcast;
                 return true;
             }
