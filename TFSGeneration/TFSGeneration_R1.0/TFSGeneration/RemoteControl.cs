@@ -527,8 +527,6 @@ namespace TFSAssist
 
                                     if(exceptionCount > 0)
                                         SendMessageToUserHost($"Errors=[{exceptionCount}]");
-                                    else
-                                        SendMessageToUserHost($"SUCCESS");
                                 }
 
                                 break;
