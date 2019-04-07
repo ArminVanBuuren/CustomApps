@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Management;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Utils.CollectionHelper;
 
@@ -13,6 +15,8 @@ namespace Utils
 {
     public static class HOST
     {
+        static readonly Regex ParceIpAddress = new Regex(@"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}", RegexOptions.Compiled);
+
         public static string GetLocalIPAddress()
         {
             var host = Dns.GetHostEntry(Dns.GetHostName());
@@ -73,6 +77,32 @@ namespace Utils
             }
 
             return ipAddresses;
+        }
+
+        public static string GetExternalIPAddress()
+        {
+            string checkip = GetExternalIPAddress("http://checkip.dyndns.org/");
+            return !string.IsNullOrWhiteSpace(checkip) ? checkip : GetExternalIPAddress("https://www.whatismyip.com/");
+        }
+
+        static string GetExternalIPAddress(string externalWebAddress)
+        {
+            string responceBody = WEB.WebHttpStringData(externalWebAddress , out HttpStatusCode resHttp1);
+            if (resHttp1 != HttpStatusCode.OK)
+                return string.Empty;
+
+            var result = ParceIpAddress.Matches(responceBody);
+
+            if (result.Count <= 0)
+                return string.Empty;
+
+            StringBuilder stringResult = new StringBuilder();
+            foreach (Match match in result)
+            {
+                stringResult.Append(match.Value + "\r\n");
+            }
+
+            return stringResult.ToString().Trim();
         }
 
         public static DuplicateDictionary<string, string> GetDetailedHostInfo()

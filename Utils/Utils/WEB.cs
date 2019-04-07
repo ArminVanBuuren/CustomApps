@@ -1,16 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Cache;
+using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Utils
 {
-    public class WEB
+    public static class WEB
     {
+        static string[] RestrictedHeaders = new string[] {
+            "Accept",
+            "Connection",
+            "Content-Length",
+            "Content-Type",
+            "Date",
+            "Expect",
+            "Host",
+            "If-Modified-Since",
+            "Keep-Alive",
+            "Proxy-Connection",
+            "Range",
+            "Referer",
+            "Transfer-Encoding",
+            "User-Agent"
+        };
+
+        static readonly Dictionary<string, PropertyInfo> HeaderProperties = new Dictionary<string, PropertyInfo>(StringComparer.OrdinalIgnoreCase);
+
+        static WEB()
+        {
+            Type type = typeof(HttpWebRequest);
+            foreach (string header in RestrictedHeaders)
+            {
+                string propertyName = header.Replace("-", "");
+                PropertyInfo headerProperty = type.GetProperty(propertyName);
+                HeaderProperties[header] = headerProperty;
+            }
+        }
+
+        public static void SetRawHeader(this WebRequest request, string name, string value)
+        {
+            if (HeaderProperties.ContainsKey(name))
+            {
+                PropertyInfo property = HeaderProperties[name];
+                if (property.PropertyType == typeof(DateTime))
+                    property.SetValue(request, DateTime.Parse(value), null);
+                else if (property.PropertyType == typeof(bool))
+                    property.SetValue(request, Boolean.Parse(value), null);
+                else if (property.PropertyType == typeof(long))
+                    property.SetValue(request, Int64.Parse(value), null);
+                else
+                    property.SetValue(request, value, null);
+            }
+            else
+            {
+                request.Headers[name] = value;
+            }
+        }
+
         public static string WebHttpStringData(string uri, out HttpStatusCode resultHttp, HttpRequestCacheLevel cashLevel = HttpRequestCacheLevel.Default)
         {
             return WebHttpStringData(new Uri(uri), out resultHttp, cashLevel);
@@ -20,9 +69,12 @@ namespace Utils
         {
             resultHttp = HttpStatusCode.BadRequest;
             SetDefaultPolicy(true, cashLevel);
-            HttpWebResponse response = (HttpWebResponse)GetWebResponse(uri, cashLevel);
-            try
+
+            using (HttpWebResponse response = (HttpWebResponse) GetWebResponse(uri, cashLevel))
             {
+                if (response == null)
+                    return null;
+
                 resultHttp = response.StatusCode;
                 if (resultHttp != HttpStatusCode.OK)
                     return null;
@@ -32,24 +84,19 @@ namespace Utils
                     return null;
 
                 if (response.CharacterSet == null)
+                {
                     using (StreamReader readStream = new StreamReader(receiveStream))
                     {
                         return readStream.ReadToEnd();
                     }
+                }
                 else
+                {
                     using (StreamReader readStream = new StreamReader(receiveStream, Encoding.GetEncoding(response.CharacterSet)))
                     {
                         return readStream.ReadToEnd();
                     }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-            finally
-            {
-                response.Close();
+                }
             }
         }
 
@@ -67,11 +114,13 @@ namespace Utils
 
         static HttpWebResponse GetHttpWebResponse(HttpWebRequest request, NetworkCredential autorization, HttpRequestCacheLevel reqLevel)
         {
+            request.SetRawHeader("User-Agent", "Mozilla/5.0");
             request.Headers.Add("AUTHORIZATION", "Basic YTph");
             request.ContentType = "text/html";
             request.Credentials = autorization;
             request.PreAuthenticate = true;
             request.Method = "GET";
+
             HttpRequestCachePolicy cachePolicy = new HttpRequestCachePolicy(reqLevel); // Define a cache policy for this request only. 
             request.CachePolicy = cachePolicy;
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -92,6 +141,7 @@ namespace Utils
 
         static WebResponse GetWebResponse(WebRequest request, HttpRequestCacheLevel reqLevel)
         {
+            request.SetRawHeader("User-Agent", "Mozilla/5.0");
             HttpRequestCachePolicy cachePolicy = new HttpRequestCachePolicy(reqLevel); // Define a cache policy for this request only. 
             request.CachePolicy = cachePolicy;
             WebResponse response = request.GetResponse();
@@ -101,6 +151,7 @@ namespace Utils
         /// <summary>
         /// Set a default policy level for the "http:" and "https" schemes.
         /// </summary>
+        /// <param name="defaultCertificateValidation"></param>
         /// <param name="defaultLevel"></param>
         public static void SetDefaultPolicy(bool defaultCertificateValidation = true, HttpRequestCacheLevel defaultLevel = HttpRequestCacheLevel.Default)
         {
@@ -135,11 +186,9 @@ namespace Utils
                 {
                     foreach (System.Security.Cryptography.X509Certificates.X509ChainStatus status in chain.ChainStatus)
                     {
-                        if ((certificate.Subject == certificate.Issuer) &&
-                            (status.Status == System.Security.Cryptography.X509Certificates.X509ChainStatusFlags.UntrustedRoot))
+                        if ((certificate.Subject == certificate.Issuer) && (status.Status == System.Security.Cryptography.X509Certificates.X509ChainStatusFlags.UntrustedRoot))
                         {
                             // Self-signed certificates with an untrusted root are valid. 
-                            continue;
                         }
                         else
                         {

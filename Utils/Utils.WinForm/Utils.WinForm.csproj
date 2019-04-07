@@ -431,6 +431,7 @@
     <Compile Include="AForge\Video.Ximea\TriggerSource.cs" />
     <Compile Include="AForge\Video.Ximea\XimeaCamera.cs" />
     <Compile Include="AForge\Video.Ximea\XimeaVideoSource.cs" />
+    <Compile Include="MediaCapture\AudioCapture.cs" />
     <Compile Include="MediaCapture\EncoderProcessingThread.cs" />
     <Compile Include="MediaCapture\EncoderMediaDevices.cs" />
     <Compile Include="MediaCapture\Exceptions.cs" />

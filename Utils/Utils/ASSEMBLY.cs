@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
@@ -66,6 +67,21 @@ namespace Utils
             }
 
             return null;
+        }
+
+
+        public static Dictionary<string, string> GetPropertiesString(object @object, BindingFlags flags)
+        {
+            Dictionary<string, string> properties = new Dictionary<string, string>();
+            PropertyInfo[] props = @object.GetType().GetProperties(flags);
+
+            foreach (PropertyInfo prop in props)
+            {
+                if (!properties.ContainsKey(prop.Name))
+                    properties.Add(prop.Name, prop.GetValue(@object)?.ToString());
+            }
+
+            return properties;
         }
     }
 }

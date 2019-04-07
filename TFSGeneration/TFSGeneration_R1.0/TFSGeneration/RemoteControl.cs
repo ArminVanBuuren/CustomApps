@@ -331,6 +331,13 @@ namespace TFSAssist
                                     detInfo.Append($"{address.Interface.Name} {new string('.', maxLenghtSpace - address.Interface.Name.Length)} [{address.IPAddress.Address.ToString()}] ({address.Interface.Description})\r\n");
                                 }
 
+                                string whiteSpace = "=";
+                                if (maxLenghtSpace > 10)
+                                    whiteSpace = " " + new string('.', maxLenghtSpace - 10) + " ";
+
+                                detInfo.Append($"ExternalIP{whiteSpace}[{HOST.GetExternalIPAddress()}]\r\n");
+                                
+
                                 var det = HOST.GetDetailedHostInfo();
                                 if (det?.Count > 0)
                                 {

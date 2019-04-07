@@ -439,9 +439,8 @@ namespace TFSAssist.Control
                         task.Executed = new ItemExecuted {
                                                              MailParcedItems = parced
                                                          };
-                        string tfsId;
                         //создаем ТФС
-                        bool resultCreateTFS = CheckAndCreateTFSItem(task.Executed, out tfsId);
+                        bool resultCreateTFS = CheckAndCreateTFSItem(task.Executed, out var tfsId);
                         task.Executed.TFSID = tfsId;
                         //Если уже TFS создавался то пропускаем обработку, и записываем ранее созданный TFSID
                         task.Status = resultCreateTFS ? ProcessingStatus.Created : ProcessingStatus.Skipped;
