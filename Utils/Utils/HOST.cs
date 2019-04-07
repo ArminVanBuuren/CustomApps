@@ -87,8 +87,8 @@ namespace Utils
 
         static string GetExternalIPAddress(string externalWebAddress)
         {
-            string responceBody = WEB.WebHttpStringData(externalWebAddress , out HttpStatusCode resHttp1);
-            if (resHttp1 != HttpStatusCode.OK)
+            string responceBody = WEB.WebHttpStringData(externalWebAddress , out var webResponce);
+            if (webResponce != null && webResponce.StatusCode != HttpStatusCode.OK)
                 return string.Empty;
 
             var result = ParceIpAddress.Matches(responceBody);

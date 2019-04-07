@@ -108,8 +108,8 @@ namespace Utils.AppUpdater
                         return;
 
                     Uri versionsInfo = new Uri($"{ProjectUri}/{BuildsInfo.FILE_NAME}");
-                    string contextStr = WEB.WebHttpStringData(versionsInfo, out HttpStatusCode resHttp, HttpRequestCacheLevel.NoCacheNoStore);
-                    if (resHttp == HttpStatusCode.OK)
+                    string contextStr = WEB.WebHttpStringData(versionsInfo, out HttpWebResponse httpWebResponce, HttpRequestCacheLevel.NoCacheNoStore);
+                    if (httpWebResponce != null && httpWebResponce.StatusCode == HttpStatusCode.OK)
                     {
                         BuildsInfo remoteBuilds = BuildsInfo.Deserialize(contextStr);
                         BuildPackInfo projectBuildPack = remoteBuilds.Packs.FirstOrDefault(p => p.Project == ProjectName);
@@ -134,7 +134,7 @@ namespace Utils.AppUpdater
                     }
                     else
                     {
-                        throw new Exception($"Exception when get status from server. HttpStatus=[{resHttp:G}] Uri=[{versionsInfo.AbsoluteUri}]");
+                        throw new Exception($"Exception when get status from server. HttpStatus=[{httpWebResponce?.StatusCode:G}] Uri=[{versionsInfo.AbsoluteUri}]");
                     }
                 }
             }

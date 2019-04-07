@@ -537,6 +537,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="WEB.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AForge\Controls\Chart.resx">

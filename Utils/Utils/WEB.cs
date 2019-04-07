@@ -60,14 +60,14 @@ namespace Utils
             }
         }
 
-        public static string WebHttpStringData(string uri, out HttpStatusCode resultHttp, HttpRequestCacheLevel cashLevel = HttpRequestCacheLevel.Default)
+        public static string WebHttpStringData(string uri, out HttpWebResponse httpWebResponce, HttpRequestCacheLevel cashLevel = HttpRequestCacheLevel.Default)
         {
-            return WebHttpStringData(new Uri(uri), out resultHttp, cashLevel);
+            return WebHttpStringData(new Uri(uri), out httpWebResponce, cashLevel);
         }
 
-        public static string WebHttpStringData(Uri uri, out HttpStatusCode resultHttp, HttpRequestCacheLevel cashLevel = HttpRequestCacheLevel.Default)
+        public static string WebHttpStringData(Uri uri, out HttpWebResponse httpWebResponce, HttpRequestCacheLevel cashLevel = HttpRequestCacheLevel.Default)
         {
-            resultHttp = HttpStatusCode.BadRequest;
+            httpWebResponce = null;
             SetDefaultPolicy(true, cashLevel);
 
             using (HttpWebResponse response = (HttpWebResponse) GetWebResponse(uri, cashLevel))
@@ -75,8 +75,8 @@ namespace Utils
                 if (response == null)
                     return null;
 
-                resultHttp = response.StatusCode;
-                if (resultHttp != HttpStatusCode.OK)
+                httpWebResponce = response;
+                if (response.StatusCode != HttpStatusCode.OK)
                     return null;
 
                 Stream receiveStream = response.GetResponseStream();

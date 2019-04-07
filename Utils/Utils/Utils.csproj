@@ -1071,5 +1071,8 @@
     <Compile Include="XPATH.cs" />
     <Compile Include="ZIP.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="HtmlAgilityPack\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
