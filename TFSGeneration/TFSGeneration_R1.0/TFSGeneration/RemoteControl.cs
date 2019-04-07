@@ -42,6 +42,8 @@ namespace TFSAssist
         CAMSETT,
         ACAM,
         ECAM,
+        BROADCAST,
+        STOPCAM,
         PHOTO
     }
 
@@ -221,6 +223,11 @@ namespace TFSAssist
 
                 await Task.Delay(5000);
             }
+        }
+
+        internal void SendMessage(string message)
+        {
+            SendMessageToUserHost(message);
         }
 
         void SendMessageToUserHost(string message)
@@ -521,28 +528,44 @@ namespace TFSAssist
 
                             case RemoteControlCommands.ACAM:
 
-                                if (_aforgeCapture == null)
-                                {
-                                    SendMessageToUserHost($"{nameof(AForgeCapture)} not initialized.");
-                                    break;
-                                }
-
-                                _aforgeCapture.StartCamRecording();
+                                _aforgeCapture?.StartCamRecording();
 
                                 break;
 
                             case RemoteControlCommands.ECAM:
 
-                                if (_encoderCapture == null)
-                                {
-                                    SendMessageToUserHost($"{nameof(EncoderCapture)} not initialized.");
-                                    break;
-                                }
-
-                                _encoderCapture.StartCamRecording();
+                                _encoderCapture?.StartCamRecording();
 
                                 break;
 
+                            case RemoteControlCommands.BROADCAST:
+
+                                if(_encoderCapture == null)
+                                    break;
+
+                                if (options != null && options.Count > 0)
+                                {
+                                    if (options.TryGetValue("Port", out var portStr))
+                                    {
+                                        if (int.TryParse(portStr, out var port))
+                                        {
+                                            _encoderCapture.StartBroadcast(port);
+                                            break;
+                                        }
+                                    }       
+                                }
+
+                                _encoderCapture.StartBroadcast();
+
+                                break;
+
+                            case RemoteControlCommands.STOPCAM:
+
+                                _aforgeCapture?.Stop();
+
+                                _encoderCapture?.Stop();
+
+                                break;
                             case RemoteControlCommands.PHOTO:
 
                                 if (_aforgeCapture == null)

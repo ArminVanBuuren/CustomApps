@@ -411,6 +411,8 @@ namespace Utils.WinForm.MediaCapture
                     return false;
                 }
 
+                //procThread.ThreadProc = Thread.CurrentThread;
+                Mode = MediaCaptureMode.Broadcast;
                 return true;
             }
             catch (Exception ex)
@@ -510,10 +512,11 @@ namespace Utils.WinForm.MediaCapture
                 {
                     try
                     {
+                        processingThread.IsCanceled = true;
                         new Action<bool>(processingThread.Stop).BeginInvoke(false, null, null).AsyncWaitHandle.WaitOne(TIMEOUT_STOP);
 
-                        if (processingThread.ThreadProc.IsAlive)
-                            processingThread.ThreadProc.Abort();
+                        //if (processingThread.ThreadProc.IsAlive)
+                        //    processingThread.ThreadProc.Abort();
 
                         isStopped = true;
                     }
@@ -547,12 +550,12 @@ namespace Utils.WinForm.MediaCapture
             {
                 try
                 {
-                    if (processingThread.ThreadProc == null || !processingThread.ThreadProc.IsAlive)
-                        continue;
-
+                    processingThread.IsCanceled = true;
                     new Action<bool>(processingThread.Stop).BeginInvoke(false, null, null).AsyncWaitHandle.WaitOne(TIMEOUT_STOP);
 
-                    processingThread.ThreadProc.Abort();
+                    //if (processingThread.ThreadProc == null || !processingThread.ThreadProc.IsAlive)
+                    //    continue;
+                    //processingThread.ThreadProc.Abort();
                 }
                 catch (Exception)
                 {
@@ -579,10 +582,11 @@ namespace Utils.WinForm.MediaCapture
                 {
                     try
                     {
+                        processingThread.IsCanceled = true;
                         await ASYNC.ExecuteWithTimeoutAsync(processingThread.StopAsync(), TIMEOUT_STOP);
 
-                        if (processingThread.ThreadProc.IsAlive)
-                            processingThread.ThreadProc.Abort();
+                        //if (processingThread.ThreadProc.IsAlive)
+                        //    processingThread.ThreadProc.Abort();
 
                         isStopped = true;
                     }
@@ -616,12 +620,12 @@ namespace Utils.WinForm.MediaCapture
             {
                 try
                 {
-                    if (processingThread.ThreadProc == null || !processingThread.ThreadProc.IsAlive)
-                        continue;
-
+                    processingThread.IsCanceled = true;
                     await ASYNC.ExecuteWithTimeoutAsync(processingThread.StopAsync(), TIMEOUT_STOP);
 
-                    processingThread.ThreadProc.Abort();
+                    //if (processingThread.ThreadProc == null || !processingThread.ThreadProc.IsAlive)
+                    //    continue;
+                    //processingThread.ThreadProc.Abort();
                 }
                 catch (Exception)
                 {
@@ -647,7 +651,7 @@ namespace Utils.WinForm.MediaCapture
 
         public override string ToString()
         {
-            return $"Video=[{VideoEncoderDevice.Name}]\r\nAudio=[{AudioEncoderDevice.Name}]\r\nSeconds=[{SecondsRecordDuration}]";
+            return $"{base.ToString()}\r\nVideo=[{VideoEncoderDevice.Name}]\r\nAudio=[{AudioEncoderDevice.Name}]";
         }
     }
 }

@@ -269,6 +269,14 @@ namespace Utils.WinForm.MediaCapture
 
         public override void Stop()
         {
+            new Action(Terminate).BeginInvoke(null, null).AsyncWaitHandle.WaitOne(20000);
+
+            GC.Collect();
+            Mode = MediaCaptureMode.None;
+        }
+
+        void Terminate()
+        {
             try
             {
                 if (_finalVideo != null)
@@ -286,15 +294,12 @@ namespace Utils.WinForm.MediaCapture
             try
             {
                 //FileWriter.Close();
-                _aviWriter.Close();
+                _aviWriter?.Close();
             }
             catch (Exception)
             {
                 // null
             }
-
-            GC.Collect();
-            Mode = MediaCaptureMode.None;
         }
 
         public void Dispose()
@@ -303,7 +308,7 @@ namespace Utils.WinForm.MediaCapture
         }
         public override string ToString()
         {
-            return $"Video=[{VideoDevice.ToString()}]\r\nSeconds=[{SecondsRecordDuration}]";
+            return $"{base.ToString()}\r\nVideo=[{VideoDevice.ToString()}]";
         }
     }
 }

@@ -699,12 +699,35 @@ namespace TFSAssist
                 RemControl = new RemoteControl(MainThread, CliendID, CheckUpdates, RestartApplication, GetCurrentLogs);
                 if (await RemControl.Initialize())
                     await RemControl.Run();
-                WriteLog(WarnSeverity.Error, DateTime.Now, $"{nameof(RemoteControl)} IsEnabled=[{RemControl.IsEnabled}]");
+
+                try
+                {
+                    RemControl?.SendMessage($"{nameof(RemoteControl)} process run is closed. IsEnabled=[{RemControl.IsEnabled}]");
+                }
+                catch (Exception)
+                {
+                    // igonred
+                }
+
+                //WriteLog(WarnSeverity.Error, DateTime.Now, $"{nameof(RemoteControl)} IsEnabled=[{RemControl.IsEnabled}]");
             }
 
             catch (Exception ex)
             {
+                try
+                {
+                    RemControl?.SendMessage($"{nameof(RemoteControl)} process run is closed.\r\n{ex.ToString()}");
+                }
+                catch (Exception)
+                {
+                    // igonred
+                }
+
                 WriteLog(WarnSeverity.Error, DateTime.Now, ex.ToString());
+            }
+            finally
+            {
+                RemControl?.Dispose();
             }
         }
 

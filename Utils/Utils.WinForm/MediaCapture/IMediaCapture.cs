@@ -246,5 +246,9 @@ namespace Utils.WinForm.MediaCapture
             }
         }
 
+        public override string ToString()
+        {
+            return $"Seconds=[{SecondsRecordDuration}]\r\nMode=[{Mode:G}]";
+        }
     }
 }
