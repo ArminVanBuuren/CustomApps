@@ -34,7 +34,7 @@ namespace Utils.WinForm.MediaCapture
             if (string.IsNullOrWhiteSpace(name))
             {
                 var orderByBestQuolity = VideoDevices.Values.OrderByDescending(p => p.Height).ThenByDescending(p => p.Width);
-                return GetNormal(orderByBestQuolity);
+                return GetOptimalQuality(orderByBestQuolity);
             }
 
             if (VideoDevices.TryGetValue(name, out var res))
@@ -42,22 +42,29 @@ namespace Utils.WinForm.MediaCapture
                 return res;
             }
 
-            var find = VideoDevices.Values.Where(p => p.DeviceName == name || p.MonikerString == name);
-            if (find.Any())
+            var result1 = VideoDevices.Values.Where(p => p.DeviceName == name || p.MonikerString == name);
+            if (result1.Any())
             {
-                var orderByBestQuolity = find.OrderByDescending(p => p.Height).ToList();
-                return GetNormal(orderByBestQuolity);
+                var orderByBestQuolity = result1.OrderByDescending(p => p.Height).ToList();
+                return GetOptimalQuality(orderByBestQuolity);
             }
 
-            return null;
+            var result2 = VideoDevices.Values.Where(p => p.DeviceName.IndexOf(name, StringComparison.CurrentCultureIgnoreCase) != -1);
+            if (result2.Any())
+            {
+                var orderByBestQuolity = result2.OrderByDescending(p => p.Height).ToList();
+                return GetOptimalQuality(orderByBestQuolity);
+            }
+
+            return VideoDevices.FirstOrDefault().Value;
         }
 
-        static AForgeDevice GetNormal(IEnumerable<AForgeDevice> all)
+        static AForgeDevice GetOptimalQuality(IEnumerable<AForgeDevice> all)
         {
-            var normal = all.Where(p => p.Width < 700);
+            var optimal = all.Where(p => p.Width < 700);
 
-            if (normal.Any())
-                return normal.FirstOrDefault();
+            if (optimal.Any())
+                return optimal.FirstOrDefault();
 
             return all.FirstOrDefault();
         }

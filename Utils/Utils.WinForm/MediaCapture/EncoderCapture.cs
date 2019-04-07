@@ -36,7 +36,7 @@ namespace Utils.WinForm.MediaCapture
         {
             AForgeVideoDevice = aDevices?.GetDefaultVideoDevice();
             VideoEncoderDevice = EncoderDevices.GetDefaultVideoDevice();
-            AudioEncoderDevice = EncoderDevices.GetDefaultAudioDevice();
+            AudioEncoderDevice = EncoderDevices.GetDefaultAudioDevice("Microphone");
         }
 
         public override void ChangeVideoDevice(string name)

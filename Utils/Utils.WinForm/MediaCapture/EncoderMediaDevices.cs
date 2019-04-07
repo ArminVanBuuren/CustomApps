@@ -37,8 +37,7 @@ namespace Utils.WinForm.MediaCapture
             if (VideoDevices.Count == 0)
                 return null;
 
-            var res = GetDefaultEncoderDevice(VideoDevices, name);
-            return res ?? VideoDevices.FirstOrDefault().Value;
+            return GetDefaultEncoderDevice(VideoDevices, name);
         }
 
         public EncoderDevice GetDefaultAudioDevice(string name = null)
@@ -46,8 +45,7 @@ namespace Utils.WinForm.MediaCapture
             if (AudioDevices.Count == 0)
                 return null;
 
-            var res = GetDefaultEncoderDevice(AudioDevices, name);
-            return res ?? AudioDevices.FirstOrDefault().Value;
+            return GetDefaultEncoderDevice(AudioDevices, name);
         }
 
         static EncoderDevice GetDefaultEncoderDevice(Dictionary<string, EncoderDevice> encoders, string encoderName)
@@ -58,11 +56,15 @@ namespace Utils.WinForm.MediaCapture
             if (encoders.TryGetValue(encoderName, out var encDev))
                 return encDev;
 
-            var result = encoders.Where(p => encoderName.StartsWith(p.Key));
-            if (result.Any())
-                return result.FirstOrDefault().Value;
+            var result1 = encoders.Where(p => encoderName.StartsWith(p.Key));
+            if (result1.Any())
+                return result1.FirstOrDefault().Value;
 
-            return null;
+            var result2 = encoders.Where(p => p.Key.IndexOf(encoderName, StringComparison.CurrentCultureIgnoreCase) != -1);
+            if (result2.Any())
+                return result2.FirstOrDefault().Value;
+
+            return encoders.FirstOrDefault().Value;
         }
 
         public override string ToString()

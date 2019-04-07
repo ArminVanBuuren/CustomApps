@@ -33,8 +33,8 @@ namespace Tester.WinForm
             var aforgeDevices = new AForgeMediaDevices();
             var camDevices = new EncoderMediaDevices();
 
-            //EncoderCaptureProcess(aforgeDevices, camDevices);
-            AForgeCaptureProcess(aforgeDevices, camDevices);
+            EncoderCaptureProcess(aforgeDevices, camDevices);
+            //AForgeCaptureProcess(aforgeDevices, camDevices);
 
            
         }
@@ -44,8 +44,10 @@ namespace Tester.WinForm
         async void AForgeCaptureProcess(AForgeMediaDevices a, EncoderMediaDevices c)
         {
             aforge = new AForgeCapture(Thread.CurrentThread, a, c, @"C:\VideoClips", 10);
-            aforge.OnRecordingCompleted += Aforge_OnRecordingCompleted;
-            aforge.StartCamRecording();
+            //aforge.ChangeVideoDevice("test");
+
+            //aforge.OnRecordingCompleted += Aforge_OnRecordingCompleted;
+            //aforge.StartCamRecording();
 
 
             //DateTime startCapture = DateTime.Now;
@@ -53,7 +55,7 @@ namespace Tester.WinForm
             ////while (true)
             //{
             //    Bitmap pic = await ASYNC.ExecuteWithTimeoutAsync(aforge.GetPictureAsync(), 300); // 300 - самое оптимальное
-                
+
             //    if (pic == null)
             //    {
             //        count++;
@@ -81,19 +83,24 @@ namespace Tester.WinForm
             try
             {
                 camp = new EncoderCapture(Thread.CurrentThread, a, c, @"C:\VideoClips", 30);
-                camp.OnRecordingCompleted += EncoderCaptureOnRecordingCompleted;
-
-                labl1:
-                try
-                {
-                    await camp.StartCamRecordingAsync();
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.ToString());
-                    goto labl1;
-                }
+                //camp.ChangeVideoDevice("test");
+                //camp.ChangeAudioDevice("test");
                 
+
+
+                //camp.OnRecordingCompleted += EncoderCaptureOnRecordingCompleted;
+
+                //labl1:
+                //try
+                //{
+                //    await camp.StartCamRecordingAsync();
+                //}
+                //catch (Exception e)
+                //{
+                //    MessageBox.Show(e.ToString());
+                //    goto labl1;
+                //}
+
 
                 //await Task.Delay(5000);
 
