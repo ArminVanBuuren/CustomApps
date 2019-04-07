@@ -114,7 +114,7 @@ namespace Utils
 
         static HttpWebResponse GetHttpWebResponse(HttpWebRequest request, NetworkCredential autorization, HttpRequestCacheLevel reqLevel)
         {
-            request.SetRawHeader("User-Agent", "Mozilla/5.0");
+            request.SetRawHeader("User-Agent", "Mozilla/5.0"); // некоторые сайты не дают к себе доступ если клиент использует неизвестный браузер
             request.Headers.Add("AUTHORIZATION", "Basic YTph");
             request.ContentType = "text/html";
             request.Credentials = autorization;
@@ -141,7 +141,7 @@ namespace Utils
 
         static WebResponse GetWebResponse(WebRequest request, HttpRequestCacheLevel reqLevel)
         {
-            request.SetRawHeader("User-Agent", "Mozilla/5.0");
+            request.SetRawHeader("User-Agent", "Mozilla/5.0"); // некоторые сайты не дают к себе доступ если клиент использует неизвестный браузер
             HttpRequestCachePolicy cachePolicy = new HttpRequestCachePolicy(reqLevel); // Define a cache policy for this request only. 
             request.CachePolicy = cachePolicy;
             WebResponse response = request.GetResponse();
