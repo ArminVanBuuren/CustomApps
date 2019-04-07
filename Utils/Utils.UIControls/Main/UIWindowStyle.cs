@@ -169,6 +169,9 @@ namespace Utils.UIControls.Main
 		void IconMouseUp(object sender, MouseButtonEventArgs e)
 		{
 			var element = sender as FrameworkElement;
+            if(element == null)
+                return;
+
 			var point = element.PointToScreen(new Point(element.ActualWidth / 2, element.ActualHeight));
 			sender.ForWindowFromTemplate(w => SystemCommands.ShowSystemMenu(w, point));
 		}
@@ -192,11 +195,7 @@ namespace Utils.UIControls.Main
 
         void MinButtonClick(object sender, RoutedEventArgs e)
         {
-            sender.ForWindowFromTemplate(w =>
-                                         {
-                                             SystemCommands.MinimizeWindow(w);
-                                             //MinWindowImage(w);
-                                         });
+            sender.ForWindowFromTemplate(SystemCommands.MinimizeWindow);
         }
 
 
@@ -210,20 +209,19 @@ namespace Utils.UIControls.Main
 
         private void Information_OnClick(object sender, RoutedEventArgs e)
         {
-            UIWindow mainWindow = Application.Current.MainWindow as UIWindow;
             //if(!(sender is UIWindow mainWindow))
             //    return;
             //if (sender is DependencyObject)
             //Window parentWindow = Window.GetWindow((DependencyObject) sender);
-            if (mainWindow != null)
+            if (Application.Current.MainWindow is UIWindow mainWindow)
             {
                 Presenter vkhovanskiy = new Presenter(mainWindow.PresenterTitleContent, false, false);
                 vkhovanskiy.Owner = mainWindow;
                 vkhovanskiy.Loaded += WindowInfo_Loaded;
-                mainWindow.IsBlured = true;
+                mainWindow.Blur();
                 vkhovanskiy.ShowDialog();
                 vkhovanskiy.Loaded -= WindowInfo_Loaded;
-                mainWindow.IsBlured = false;
+                mainWindow.UnBlur();
             }
         }
 
@@ -330,7 +328,7 @@ namespace Utils.UIControls.Main
             return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(source.GetHbitmap(),
                                                                                 IntPtr.Zero,
                                                                                 Int32Rect.Empty,
-                                                                                System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
+                                                                                BitmapSizeOptions.FromEmptyOptions());
         }
 	}
 }

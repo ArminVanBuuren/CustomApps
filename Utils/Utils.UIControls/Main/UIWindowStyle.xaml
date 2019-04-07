@@ -73,14 +73,25 @@
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type Window}">
 					<ControlTemplate.Resources>
-						<Storyboard x:Key="IsDisabled">
+                        <Storyboard x:Key="IsDisabledFiveMSec">
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Radius" Storyboard.TargetName="MyBlurEffect" >
+                                <LinearDoubleKeyFrame Value="20" KeyTime="0:0:0.5"></LinearDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Key="IsEnabledFiveMsec">
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Radius" Storyboard.TargetName="MyBlurEffect" >
+                                <LinearDoubleKeyFrame Value="0" KeyTime="0:0:0.5"></LinearDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+
+                        <Storyboard x:Key="IsDisabled">
 							<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Radius" Storyboard.TargetName="MyBlurEffect" >
-								<LinearDoubleKeyFrame Value="20" KeyTime="0:0:0.5"></LinearDoubleKeyFrame>
+								<LinearDoubleKeyFrame Value="20" KeyTime="0:0:0.3"></LinearDoubleKeyFrame>
 							</DoubleAnimationUsingKeyFrames>
 						</Storyboard>
 						<Storyboard x:Key="IsEnabled">
 							<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Radius" Storyboard.TargetName="MyBlurEffect" >
-								<LinearDoubleKeyFrame Value="0" KeyTime="0:0:0.5"></LinearDoubleKeyFrame>
+								<LinearDoubleKeyFrame Value="0" KeyTime="0:0:0.3"></LinearDoubleKeyFrame>
 							</DoubleAnimationUsingKeyFrames>
 						</Storyboard>
 						<Storyboard x:Key="HoverOn">

@@ -95,7 +95,8 @@
     <Reference Include="Utils">
       <HintPath>..\..\..\Utils\Utils\bin\x86\Debug\Utils.dll</HintPath>
     </Reference>
-    <Reference Include="Utils.UIControls">
+    <Reference Include="Utils.UIControls, Version=1.0.7036.37836, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Utils\Utils.UIControls\bin\x86\Debug\Utils.UIControls.dll</HintPath>
     </Reference>
     <Reference Include="Utils.WinForm">

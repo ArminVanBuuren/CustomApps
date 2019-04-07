@@ -95,7 +95,7 @@ namespace Utils.UIControls.Main
 
             CanDragMove = canDragMove;
             PanelItemsIsVisible = panelItemIsVisible;
-            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
             Loaded += UIWindowLoaded;
             Activated += UIWindowActivated;
             Closing += UIWindowClosing;
@@ -121,9 +121,9 @@ namespace Utils.UIControls.Main
 
         protected override void OnStateChanged(EventArgs e)
         {
-            if (WindowState == System.Windows.WindowState.Maximized)
+            if (WindowState == WindowState.Maximized)
                 MaxWindowImage(this);
-            else if (WindowState == System.Windows.WindowState.Minimized || WindowState == System.Windows.WindowState.Normal)
+            else if (WindowState == WindowState.Minimized || WindowState == WindowState.Normal)
                 MinWindowImage(this);
             base.OnStateChanged(e);
         }
@@ -177,7 +177,7 @@ namespace Utils.UIControls.Main
 
         void UIWindowLoaded(object sender, RoutedEventArgs e)
         {
-            UIWindow mainWindow = (UIWindow)this;
+            UIWindow mainWindow = this;
 
             CheckTitle(Title);
 
@@ -196,7 +196,7 @@ namespace Utils.UIControls.Main
                 minButtom.Visibility = Visibility.Collapsed;
                 maxButtom.Visibility = Visibility.Collapsed;
 
-                if (this.ResizeMode == ResizeMode.NoResize)
+                if (ResizeMode == ResizeMode.NoResize)
                 {
                     DisableResizeMode(mainWindow.Template.FindName("Left", mainWindow));
                     DisableResizeMode(mainWindow.Template.FindName("Right", mainWindow));
@@ -226,22 +226,22 @@ namespace Utils.UIControls.Main
             //после завершения эффекта закрывает окно
             anim.Completed += (s, _) =>
                               {
-                                  mainWindow.Close();
+                                  mainWindow.Close(); // после завершения анимации закрываем приложение
                               };
-            mainWindow.BeginAnimation(UIElement.OpacityProperty, anim);
+            mainWindow.BeginAnimation(UIElement.OpacityProperty, anim); // приводим Opacity к 0, т.е. к полной прозрачности, а затем закрываем 
         }
 
         static void OpacityActivate(UIWindow mainWindow)
         {
             //эффект перехода из прозрачного в нормальный режим и из размытого в четкий
-            Storyboard sb = mainWindow.FindResource("HoverOn") as Storyboard;
-            if (sb == null)
+            if (!(mainWindow.FindResource("HoverOn") is Storyboard sb))
                 return;
+
             Border containerBorder = (Border)mainWindow.Template.FindName("PART_Container", mainWindow);
             BlurEffect containerBorder2 = (BlurEffect)mainWindow.Template.FindName("MyBlurEffect", mainWindow);
             containerBorder.Opacity = 0;
-            containerBorder2.Radius = 15;
-            sb.Begin(containerBorder);
+            containerBorder2.Radius = 15; // блурим
+            sb.Begin(containerBorder); // выводит из блура в нормальный вид
         }
 
         void OpacityDeactivate()
@@ -312,44 +312,74 @@ namespace Utils.UIControls.Main
         //	mainWindow.Close();
         //}
 
-        public bool IsBlured
+        public void Blur()
         {
-            get
-            {
-                return _isBlured;
-            }
-            set
-            {
-                if (Style == null)
-                    return;
-
-                _isBlured = value;
-
-                if (Style == null)
-                    return;
-
-                if (_isBlured)
-                {
-                    Storyboard sb = this.FindResource("IsDisabled") as Storyboard;
-                    Border containerBorder = (Border)Template.FindName("PART_Container", this);
-                    sb?.Begin(containerBorder);
-                }
-                else
-                {
-                    Storyboard sb = this.FindResource("IsEnabled") as Storyboard;
-                    Border containerBorder = (Border)Template.FindName("PART_Container", this);
-                    sb?.Begin(containerBorder);
-                }
-            }
+            Blur("IsDisabled");
         }
 
-        public bool IsBlured2
+        internal void Blur(string storyBoardKey)
         {
-            get
-            {
-                return _isBlured2;
-            }
-            internal set
+            if (Style == null)
+                return;
+
+            Storyboard sb = this.FindResource(storyBoardKey) as Storyboard;
+            if(sb == null)
+                return;
+
+            Border containerBorder = (Border)Template.FindName("PART_Container", this);
+            sb?.Begin(containerBorder);
+        }
+
+        public void UnBlur()
+        {
+            UnBlur("IsEnabled");
+        }
+
+        internal void UnBlur(string storyBoardKey)
+        {
+            if (Style == null)
+                return;
+
+            Storyboard sb = this.FindResource(storyBoardKey) as Storyboard;
+            if (sb == null)
+                return;
+
+            Border containerBorder = (Border)Template.FindName("PART_Container", this);
+            sb?.Begin(containerBorder);
+        }
+
+        //public bool IsBlured
+        //{
+        //    get
+        //    {
+        //        return _isBlured;
+        //    }
+        //    set
+        //    {
+        //        if (Style == null)
+        //            return;
+
+        //        _isBlured = value;
+
+        //        if (_isBlured)
+        //        {
+        //            Storyboard sb = this.FindResource("IsDisabled") as Storyboard;
+        //            Border containerBorder = (Border)Template.FindName("PART_Container", this);
+        //            sb?.Begin(containerBorder);
+        //        }
+        //        else
+        //        {
+        //            Storyboard sb = this.FindResource("IsEnabled") as Storyboard;
+        //            Border containerBorder = (Border)Template.FindName("PART_Container", this);
+        //            sb?.Begin(containerBorder);
+        //        }
+        //    }
+        //}
+
+        internal bool IsBlured2
+        {
+            get => _isBlured2;
+            set
             {
                 _isBlured2 = value;
                 if (_isBlured2)

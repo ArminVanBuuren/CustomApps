@@ -79,6 +79,11 @@ namespace Utils
             return ipAddresses;
         }
 
+        /// <summary>
+        /// Для определения используются два сайта http://checkip.dyndns.org и https://www.whatismyip.com/
+        /// Есть еще https://ipdata.co/ (но он не используется)
+        /// </summary>
+        /// <returns></returns>
         public static string GetExternalIPAddress()
         {
             string checkip = GetExternalIPAddress("http://checkip.dyndns.org/");

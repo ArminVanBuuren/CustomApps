@@ -761,7 +761,7 @@ namespace TFSAssist
             Dispatcher?.Invoke(() =>
             {
                 _openedWarningWindowCount++;
-                IsBlured = true;
+                this.Blur();
             });
         }
 
@@ -771,7 +771,7 @@ namespace TFSAssist
             {
                 _openedWarningWindowCount--;
                 ShowMyForm(this, EventArgs.Empty);
-                IsBlured = false;
+                this.UnBlur();
             });
         }
 
