@@ -122,7 +122,8 @@ namespace Utils.AppUpdater
                                 ApplicationFetchingArgs responce = GetResponseFromControlObject(OnFetch, new ApplicationFetchingArgs(control));
                                 if (responce.Result == UpdateBuildResult.Fetch)
                                 {
-                                    ProcessingStatus();
+                                    ProcessingStatus(); // устанавливаем Status = AutoUpdaterStatus.Processing, т.к. следующим шагом начнется процесс скачивания и обновления
+
                                     control.OnFetchComplete += FetchingCompleted;
                                     control.Fetch();
                                     return;
@@ -172,6 +173,8 @@ namespace Utils.AppUpdater
             try
             {
                 control = (BuildUpdaterCollection) sender;
+                control.OnFetchComplete -= FetchingCompleted;
+
                 if (e.Error != null || control.Status != UploaderStatus.Fetched)
                 {
                     OnProcessingError?.Invoke(this, new ApplicationUpdatingArgs(control, e.Error, "Error when fetching pack of builds!"));

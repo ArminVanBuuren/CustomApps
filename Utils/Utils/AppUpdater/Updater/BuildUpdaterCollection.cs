@@ -41,7 +41,7 @@ namespace Utils.AppUpdater.Updater
 
         public string FileTempPath { get; private set; }
         public string DiretoryTempPath { get; private set; }
-        
+        public bool NeedToFetchPack { get; }
 
         internal BuildUpdaterCollection(Assembly runningApp, Uri projectUri, BuildPackInfo projectBuildPack)
         {
@@ -59,22 +59,35 @@ namespace Utils.AppUpdater.Updater
             _collection = new List<IBuildUpdater>();
             Dictionary<string, FileBuildInfo> localVersions = BuildPackInfo.GetLocalVersions(runningApp);
 
+            int needToFetchPack = 0;
+
             foreach (FileBuildInfo serverFile in ProjectBuildPack.Builds)
             {
                 if (localVersions.TryGetValue(serverFile.Location, out FileBuildInfo localFile))
                 {
                     if ((serverFile.Type == BuldPerformerType.Update || serverFile.Type == BuldPerformerType.CreateOrUpdate) && serverFile.Version > localFile.Version)
+                    {
                         Add(localFile, serverFile);
+                        needToFetchPack++;
+                    }
                     else if ((serverFile.Type == BuldPerformerType.RollBack || serverFile.Type == BuldPerformerType.CreateOrRollBack) && serverFile.Version < localFile.Version)
+                    {
                         Add(localFile, serverFile);
+                        needToFetchPack++;
+                    }
                     else if (serverFile.Type == BuldPerformerType.Remove)
+                    {
                         Add(localFile, serverFile);
+                    }
                 }
                 else if (serverFile.Type == BuldPerformerType.CreateOrUpdate || serverFile.Type == BuldPerformerType.CreateOrRollBack)
                 {
                     Add(null, serverFile);
+                    needToFetchPack++;
                 }
             }
+
+            NeedToFetchPack = needToFetchPack > 0;
 
             if (Count > 0)
             {
@@ -98,14 +111,22 @@ namespace Utils.AppUpdater.Updater
 
             try
             {
-                FileTempPath = Path.GetTempFileName();
-                _webClient.DownloadFileAsync(new Uri($"{ProjectUri}/{ProjectBuildPack.Name}"), FileTempPath);
-                Status = UploaderStatus.Init;
+                if (NeedToFetchPack)
+                {
+                    FileTempPath = Path.GetTempFileName();
+                    _webClient.DownloadFileAsync(new Uri($"{ProjectUri}/{ProjectBuildPack.Name}"), FileTempPath);
+                    Status = UploaderStatus.Init;
+                }
+                else
+                {
+                    Status = UploaderStatus.Fetched;
+                    OnFetchComplete?.BeginInvoke(this, _fetchArgs, null, null);
+                }
             }
             catch (Exception ex)
             {
                 _fetchArgs.Error = ex;
-                OnFetchComplete.BeginInvoke(this, _fetchArgs, null, null);
+                OnFetchComplete?.BeginInvoke(this, _fetchArgs, null, null);
             }
         }
 
@@ -170,12 +191,15 @@ namespace Utils.AppUpdater.Updater
 
             Status = UploaderStatus.Commited;
 
+            // рестарт приложения, если обновляется исполняемый exe файл, даже если указано NeedRestartApplication = false
             if (runningApp != null)
             {
                 runningApp.Pull();
                 Status = UploaderStatus.Pulled;
+
+                Process.GetCurrentProcess().Kill();
             }
-            else if (ProjectBuildPack.NeedRestartApplication)
+            else if (ProjectBuildPack.NeedRestartApplication) // рестарт приложения, если указана метка в пакете с обновлениями, иначе рестарта не будет
             {
                 BuildUpdater.Pull(LocationApp);
                 Status = UploaderStatus.Pulled;

@@ -34,6 +34,10 @@ namespace Utils.AppUpdater.Updater
         /// </summary>
         BuildPackInfo ProjectBuildPack { get; }
         /// <summary>
+        /// Указывает на необходимость выкачивания файла с пакетом обновлений из сервера на локальный компютер
+        /// </summary>
+        bool NeedToFetchPack { get; }
+        /// <summary>
         /// Количество скачанных байт
         /// </summary>
         long UploadedBytes { get; }
