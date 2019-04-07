@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Cache;
 using System.Reflection;
 using System.Text;
+using HtmlAgilityPack;
 
 namespace Utils
 {
@@ -60,22 +61,21 @@ namespace Utils
             }
         }
 
-        public static string WebHttpStringData(string uri, out HttpWebResponse httpWebResponce, HttpRequestCacheLevel cashLevel = HttpRequestCacheLevel.Default)
+        public static string WebHttpStringData(string uri, out HttpStatusCode httpResponceCode, HttpRequestCacheLevel cashLevel = HttpRequestCacheLevel.Default)
         {
-            return WebHttpStringData(new Uri(uri), out httpWebResponce, cashLevel);
+            return WebHttpStringData(new Uri(uri), out httpResponceCode, cashLevel);
         }
 
-        public static string WebHttpStringData(Uri uri, out HttpWebResponse httpWebResponce, HttpRequestCacheLevel cashLevel = HttpRequestCacheLevel.Default)
+        public static string WebHttpStringData(Uri uri, out HttpStatusCode httpResponceCode, HttpRequestCacheLevel cashLevel = HttpRequestCacheLevel.Default)
         {
-            httpWebResponce = null;
-            SetDefaultPolicy(true, cashLevel);
+            httpResponceCode = HttpStatusCode.BadRequest;
 
             using (HttpWebResponse response = (HttpWebResponse) GetWebResponse(uri, cashLevel))
             {
                 if (response == null)
                     return null;
 
-                httpWebResponce = response;
+                httpResponceCode = response.StatusCode;
                 if (response.StatusCode != HttpStatusCode.OK)
                     return null;
 
@@ -100,52 +100,92 @@ namespace Utils
             }
         }
 
-        public static HttpWebResponse GetHttpWebResponse(string uri, NetworkCredential autorization, HttpRequestCacheLevel reqLevel = HttpRequestCacheLevel.Default)
+        /// <summary>
+        /// Обязательно нужно будет закрывать HttpWebResponse методом Close или использовать using
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="autorization"></param>
+        /// <param name="cashLevel"></param>
+        /// <returns></returns>
+        public static HttpWebResponse GetHttpWebResponse(string uri, NetworkCredential autorization = null, HttpRequestCacheLevel cashLevel = HttpRequestCacheLevel.Default)
         {
+            SetDefaultPolicy(true, cashLevel);
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
-            return GetHttpWebResponse(request, autorization, reqLevel);
+            return GetHttpWebResponse(request, autorization, cashLevel);
         }
 
-        public static HttpWebResponse GetHttpWebResponse(Uri uri, NetworkCredential autorization, HttpRequestCacheLevel reqLevel = HttpRequestCacheLevel.Default)
+        /// <summary>
+        /// Обязательно нужно будет закрывать HttpWebResponse методом Close или использовать using
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="autorization"></param>
+        /// <param name="cashLevel"></param>
+        /// <returns></returns>
+        public static HttpWebResponse GetHttpWebResponse(Uri uri, NetworkCredential autorization = null, HttpRequestCacheLevel cashLevel = HttpRequestCacheLevel.Default)
         {
+            SetDefaultPolicy(true, cashLevel);
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
-            return GetHttpWebResponse(request, autorization, reqLevel);
+            return GetHttpWebResponse(request, autorization, cashLevel);
         }
 
-        static HttpWebResponse GetHttpWebResponse(HttpWebRequest request, NetworkCredential autorization, HttpRequestCacheLevel reqLevel)
+        static HttpWebResponse GetHttpWebResponse(HttpWebRequest request, NetworkCredential autorization, HttpRequestCacheLevel cashLevel)
         {
             request.SetRawHeader("User-Agent", "Mozilla/5.0"); // некоторые сайты не дают к себе доступ если клиент использует неизвестный браузер
-            request.Headers.Add("AUTHORIZATION", "Basic YTph");
-            request.ContentType = "text/html";
-            request.Credentials = autorization;
-            request.PreAuthenticate = true;
-            request.Method = "GET";
+            if (autorization != null)
+            {
+                request.Headers.Add("AUTHORIZATION", "Basic YTph");
+                request.ContentType = "text/html";
+                request.Credentials = autorization;
+                request.PreAuthenticate = true;
+                request.Method = "GET";
+            }
 
-            HttpRequestCachePolicy cachePolicy = new HttpRequestCachePolicy(reqLevel); // Define a cache policy for this request only. 
+            HttpRequestCachePolicy cachePolicy = new HttpRequestCachePolicy(cashLevel); // Define a cache policy for this request only. 
             request.CachePolicy = cachePolicy;
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             return response;
         }
 
-        public static WebResponse GetWebResponse(string uri, HttpRequestCacheLevel reqLevel = HttpRequestCacheLevel.Default)
+        /// <summary>
+        /// Обязательно нужно будет закрывать HttpWebResponse методом Close или использовать using
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="cashLevel"></param>
+        /// <returns></returns>
+        public static WebResponse GetWebResponse(string uri, HttpRequestCacheLevel cashLevel = HttpRequestCacheLevel.Default)
         {
+            SetDefaultPolicy(true, cashLevel);
             WebRequest request = WebRequest.Create(uri);
-            return GetWebResponse(request, reqLevel);
+            return GetWebResponse(request, cashLevel);
         }
 
-        public static WebResponse GetWebResponse(Uri uri, HttpRequestCacheLevel reqLevel = HttpRequestCacheLevel.Default)
+        /// <summary>
+        /// Обязательно нужно будет закрывать HttpWebResponse методом Close или использовать using
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="cashLevel"></param>
+        /// <returns></returns>
+        public static WebResponse GetWebResponse(Uri uri, HttpRequestCacheLevel cashLevel = HttpRequestCacheLevel.Default)
         {
+            SetDefaultPolicy(true, cashLevel);
             WebRequest request = WebRequest.Create(uri);
-            return GetWebResponse(request, reqLevel);
+            return GetWebResponse(request, cashLevel);
         }
 
-        static WebResponse GetWebResponse(WebRequest request, HttpRequestCacheLevel reqLevel)
+        static WebResponse GetWebResponse(WebRequest request, HttpRequestCacheLevel cashLevel)
         {
             request.SetRawHeader("User-Agent", "Mozilla/5.0"); // некоторые сайты не дают к себе доступ если клиент использует неизвестный браузер
-            HttpRequestCachePolicy cachePolicy = new HttpRequestCachePolicy(reqLevel); // Define a cache policy for this request only. 
+            HttpRequestCachePolicy cachePolicy = new HttpRequestCachePolicy(cashLevel); // Define a cache policy for this request only. 
             request.CachePolicy = cachePolicy;
             WebResponse response = request.GetResponse();
             return response;
+        }
+
+        public static HtmlDocument GetHtmlDocument(this WebResponse webResponce)
+        {
+            HtmlDocument htmlDoc = new HtmlDocument();
+            htmlDoc.Load(webResponce.GetResponseStream());
+            return htmlDoc;
         }
 
         /// <summary>

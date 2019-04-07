@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,16 @@ namespace Tester.Console
     {
         static void Main(string[] args)
         {
+            using (var responceBody = WEB.GetHttpWebResponse("https://www.whatismyip.com/ip-address-lookup/"))
+            //{
+            //    if (responceBody != null && responceBody.StatusCode == HttpStatusCode.OK)
+            //    {
+            //        var httpDoc = responceBody.GetHtmlDocument();
+            //    }
+            //}
+
+
+
             //using (RegeditControl regedit = new RegeditControl(ASSEMBLY.ApplicationName))
             //{
             //    using (var stream = new FileStream(nameof(TLControl) + "Session", FileMode.CreateNew))
@@ -29,12 +40,12 @@ namespace Tester.Console
             //}
 
 
-            string ss = AES.EncryptStringAES("56193", nameof(TLControl));
-            using (var stream = new FileStream(TLControl.SessionName + ".code", FileMode.OpenOrCreate))
-            {
-                byte[] logsBytes = new UTF8Encoding(true).GetBytes(ss);
-                stream.Write(logsBytes, 0, logsBytes.Length);
-            }
+            //string ss = AES.EncryptStringAES("56193", nameof(TLControl));
+            //using (var stream = new FileStream(TLControl.SessionName + ".code", FileMode.OpenOrCreate))
+            //{
+            //    byte[] logsBytes = new UTF8Encoding(true).GetBytes(ss);
+            //    stream.Write(logsBytes, 0, logsBytes.Length);
+            //}
             System.Console.ReadLine();
         }
 

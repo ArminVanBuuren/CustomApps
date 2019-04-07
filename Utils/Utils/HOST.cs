@@ -87,8 +87,8 @@ namespace Utils
 
         static string GetExternalIPAddress(string externalWebAddress)
         {
-            string responceBody = WEB.WebHttpStringData(externalWebAddress , out var webResponce);
-            if (webResponce != null && webResponce.StatusCode != HttpStatusCode.OK)
+            string responceBody = WEB.WebHttpStringData(externalWebAddress , out var httpRespCode);
+            if (httpRespCode != HttpStatusCode.OK)
                 return string.Empty;
 
             var result = ParceIpAddress.Matches(responceBody);
@@ -99,7 +99,11 @@ namespace Utils
             StringBuilder stringResult = new StringBuilder();
             foreach (Match match in result)
             {
-                stringResult.Append(match.Value + "\r\n");
+                if(match.Value.Like("75.123.253.255")) // пример ip на сайте https://www.whatismyip.com/
+                    continue;
+
+                stringResult.Append(match.Value);
+                stringResult.Append("; ");
             }
 
             return stringResult.ToString().Trim();
