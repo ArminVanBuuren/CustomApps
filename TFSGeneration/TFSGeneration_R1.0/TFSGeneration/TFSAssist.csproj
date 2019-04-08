@@ -75,6 +75,18 @@
     <Optimize>true</Optimize>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Expression.Encoder, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Utils\Utils.WinForm\bin\x86\Release\Microsoft.Expression.Encoder.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Expression.Encoder.Types, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Utils\Utils.WinForm\bin\x86\Release\Microsoft.Expression.Encoder.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Expression.Encoder.Utilities, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Utils\Utils.WinForm\bin\x86\Release\Microsoft.Expression.Encoder.Utilities.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -92,15 +104,17 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Utils">
-      <HintPath>..\..\..\Utils\Utils\bin\x86\Debug\Utils.dll</HintPath>
-    </Reference>
-    <Reference Include="Utils.UIControls, Version=1.0.7036.37836, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="Utils, Version=1.0.7036.35168, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Utils\Utils.UIControls\bin\x86\Debug\Utils.UIControls.dll</HintPath>
+      <HintPath>..\..\..\Utils\Utils\bin\x86\Release\Utils.dll</HintPath>
     </Reference>
-    <Reference Include="Utils.WinForm">
-      <HintPath>..\..\..\Utils\Utils.WinForm\bin\x86\Debug\Utils.WinForm.dll</HintPath>
+    <Reference Include="Utils.UIControls, Version=1.0.7036.35170, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Utils\Utils.UIControls\bin\x86\Release\Utils.UIControls.dll</HintPath>
+    </Reference>
+    <Reference Include="Utils.WinForm, Version=1.0.7036.35169, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Utils\Utils.WinForm\bin\x86\Release\Utils.WinForm.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
