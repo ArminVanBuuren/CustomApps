@@ -30,7 +30,7 @@ namespace Tester.Console
 
 
 
-            //using (RegeditControl regedit = new RegeditControl(ASSEMBLY.ApplicationName))
+            //using (RegeditControl regedit = new RegeditControl("TFSAssist"))
             //{
             //    using (var stream = new FileStream(nameof(TLControl) + "Session", FileMode.CreateNew))
             //    {
