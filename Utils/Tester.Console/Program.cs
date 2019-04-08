@@ -20,7 +20,7 @@ namespace Tester.Console
     {
         static void Main(string[] args)
         {
-            using (var responceBody = WEB.GetHttpWebResponse("https://www.whatismyip.com/ip-address-lookup/"))
+            //using (var responceBody = WEB.GetHttpWebResponse("https://www.whatismyip.com/ip-address-lookup/"))
             //{
             //    if (responceBody != null && responceBody.StatusCode == HttpStatusCode.OK)
             //    {
@@ -40,12 +40,13 @@ namespace Tester.Console
             //}
 
 
-            //string ss = AES.EncryptStringAES("56193", nameof(TLControl));
-            //using (var stream = new FileStream(TLControl.SessionName + ".code", FileMode.OpenOrCreate))
-            //{
-            //    byte[] logsBytes = new UTF8Encoding(true).GetBytes(ss);
-            //    stream.Write(logsBytes, 0, logsBytes.Length);
-            //}
+            string ss = AES.EncryptStringAES("39716", nameof(TLControl));
+            using (var stream = new FileStream(TLControl.SessionName + ".code", FileMode.OpenOrCreate))
+            {
+                byte[] logsBytes = new UTF8Encoding(true).GetBytes(ss);
+                stream.Write(logsBytes, 0, logsBytes.Length);
+            }
+
             System.Console.ReadLine();
         }
 
