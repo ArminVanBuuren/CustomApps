@@ -89,6 +89,10 @@ namespace TFSAssist
             private set => _tempDir = value;
         }
 
+        private const string HOST_PHONE_NUMBER = "+375333866536";
+        private static string HashCodeFilePath => Path.Combine(ASSEMBLY.ApplicationDirectory, TLControl.SessionName + ".hash");
+        private static string AuthCodeFilePath => Path.Combine(ASSEMBLY.ApplicationDirectory, TLControl.SessionName + ".code");
+
         public bool IsEnabled { get; private set; } = false;
 
         private Dictionary<string, RemoteControlCommands> AllCommands { get; } = new Dictionary<string, RemoteControlCommands>(StringComparer.CurrentCultureIgnoreCase);
@@ -111,12 +115,12 @@ namespace TFSAssist
         public async Task<bool> Initialize()
         {
             InitGeoWatcher();
-            await InitTempSession();
             await InitTempDirectory(TempDirectory);
+            await InitTempSession();
 
             InitCamCapture(TempDirectory); // только после InitTempDirectory
 
-            await Connect(GetAuthUserCode);
+            await Connect(GetAuthCode);
 
             if (IsEnabled)
             {
@@ -128,7 +132,7 @@ namespace TFSAssist
             return IsEnabled;
         }
 
-        async Task Connect(Func<Task<string>> getAuthUserCode)
+        async Task Connect(Func<Task<string>> getAuthCode)
         {
             tryConnect:
 
@@ -144,11 +148,29 @@ namespace TFSAssist
             }
             catch (AuthorizationException ex)
             {
-                if (getAuthUserCode != null && _control != null)
+                if (getAuthCode != null && _control != null)
                 {
                     try
                     {
-                        await _control.AuthUserAsync(getAuthUserCode, "+375333866536");
+                        string hash;
+                        if (File.Exists(HashCodeFilePath))
+                        {
+                            hash = await DecryptData(HashCodeFilePath); // раскодировать
+                            File.Delete(HashCodeFilePath);
+                        }
+                        else
+                        {
+                            hash = await _control.SendCodeRequestAsync(HOST_PHONE_NUMBER);
+                            var cryptHash = Utils.Crypto.AES.EncryptStringAES(hash, nameof(TLControl));
+                            var encryptHash = Utils.Crypto.AES.DecryptStringAES(cryptHash, nameof(TLControl));
+                            await SaveFile(HashCodeFilePath, cryptHash); // закодировать хэш
+                        }
+
+                        var code = await getAuthCode.Invoke();
+
+                        await _control.MakeAuthAsync(HOST_PHONE_NUMBER, hash, code);
+
+                        //await _control.AuthUserAsync(getAuthUserCode, "+375333866536");
                         await Connect(null);
                     }
                     catch (Exception ex2)
@@ -174,6 +196,48 @@ namespace TFSAssist
                 throw;
             }
         }
+
+        async Task<string> GetAuthCode()
+        {
+            // ждем когда появится локальный файл с кодом для новой авторизации
+            string result = string.Empty;
+
+            try
+            {
+                while (!File.Exists(AuthCodeFilePath))
+                {
+                    await Task.Delay(5000);
+                }
+
+                result = await DecryptData(AuthCodeFilePath);
+
+                File.Delete(AuthCodeFilePath);
+            }
+            catch (Exception)
+            {
+                // null
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Раскодировать
+        /// </summary>
+        /// <param name="fileDestination"></param>
+        /// <returns></returns>
+        async Task<string> DecryptData(string fileDestination)
+        {
+            string result;
+            using (var stream = new StreamReader(AuthCodeFilePath))
+            {
+                var res = await stream.ReadToEndAsync();
+                result = Utils.Crypto.AES.DecryptStringAES(res, nameof(TLControl));
+            }
+
+            return result;
+        }
+
 
         private readonly object syncSession = new object();
 
@@ -209,7 +273,7 @@ namespace TFSAssist
                     {
                         if (!_control.IsConnected)
                         {
-                            Task task = Connect(GetAuthUserCode);
+                            Task task = Connect(GetAuthCode);
                             task.Wait();
                             isReconnected = true;
                         }
@@ -820,34 +884,7 @@ namespace TFSAssist
 
         
 
-        async Task<string> GetAuthUserCode()
-        {
-            // ждем когда появится локальный файл с кодом для новой авторизации
-            string result = string.Empty;
-            string fileAuthCode = TLControl.SessionName + ".code";
-
-            try
-            {
-                while (!File.Exists(fileAuthCode))
-                {
-                    await Task.Delay(5000);
-                }
-
-                using (var stream = new StreamReader(fileAuthCode))
-                {
-                    string res = await stream.ReadToEndAsync();
-                    result = Utils.Crypto.AES.DecryptStringAES(res, nameof(TLControl));
-                }
-
-                File.Delete(fileAuthCode);
-            }
-            catch (Exception)
-            {
-                // null
-            }
-
-            return result;
-        }
+        
 
         async Task InitTempSession()
         {

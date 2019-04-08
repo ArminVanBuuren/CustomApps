@@ -11,7 +11,7 @@ namespace Utils
 {
     public static class WEB
     {
-        static string[] RestrictedHeaders = new string[] {
+        static readonly string[] RestrictedHeaders = new string[] {
             "Accept",
             "Connection",
             "Content-Length",

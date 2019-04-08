@@ -81,7 +81,8 @@ namespace Utils
 
         /// <summary>
         /// Для определения используются два сайта http://checkip.dyndns.org и https://www.whatismyip.com/
-        /// Есть еще https://ipdata.co/ (но он не используется)
+        /// Есть еще https://ipdata.co/ (но он не используется) https://www.iplocation.net/find-ip-address
+        /// https://www.iplocation.net/ - получить локацию по PublicIP и https://www.latlong.net/Show-Latitude-Longitude.html  (но все равно не то определяет)
         /// </summary>
         /// <returns></returns>
         public static string GetExternalIPAddress()

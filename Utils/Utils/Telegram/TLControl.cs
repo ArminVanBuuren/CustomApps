@@ -51,11 +51,25 @@ namespace Utils.Telegram
             if (getCodeToAuthenticate == null)
                 throw new ArgumentNullException(nameof(getCodeToAuthenticate));
 
+            var hash = await SendCodeRequestAsync(phoneNumber);
+            var code = await getCodeToAuthenticate.Invoke();
+
+            return await MakeAuthAsync(phoneNumber, hash, code, password);
+        }
+
+
+        public async Task<string> SendCodeRequestAsync(string phoneNumber)
+        {
             if (phoneNumber.IsNullOrEmptyTrim())
                 throw new ArgumentException($"Argument '{nameof(phoneNumber)}' is empty. TLControl need your number to authenticate.");
 
-            var hash = await Client.SendCodeRequestAsync(phoneNumber);
-            var code = await getCodeToAuthenticate.Invoke();
+            return await Client.SendCodeRequestAsync(phoneNumber);
+        }
+
+        public async Task<TLUser> MakeAuthAsync(string phoneNumber, string hash, string code, string password = null)
+        {
+            if (phoneNumber.IsNullOrEmptyTrim())
+                throw new ArgumentException($"Argument '{nameof(phoneNumber)}' is empty. TLControl need your number to authenticate.");
 
             TLUser user;
             try
@@ -64,7 +78,7 @@ namespace Utils.Telegram
             }
             catch (CloudPasswordNeededException)
             {
-                if(password.IsNullOrEmptyTrim())
+                if (password.IsNullOrEmptyTrim())
                     throw;
 
                 var tlPassword = await Client.GetPasswordSetting();
@@ -81,7 +95,7 @@ namespace Utils.Telegram
 
         public async Task<TLUser> SignUpNewUserAsync(Task<string> getCodeToAuthenticate, string notRegisteredNumber, string firstName, string lastName)
         {
-            var hash = await Client.SendCodeRequestAsync(notRegisteredNumber);
+            var hash = await SendCodeRequestAsync(notRegisteredNumber);
             var code = await getCodeToAuthenticate;
 
             //var registeredUser = await Client.SignUpAsync(notRegisteredNumber, hash, code, firstName, lastName);

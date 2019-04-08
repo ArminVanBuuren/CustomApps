@@ -39,8 +39,11 @@ namespace Tester.Console
             //    }
             //}
 
+            string dd = TLControl.SessionName + ".code";
+            if(File.Exists(dd))
+                File.Delete(dd);
 
-            string ss = AES.EncryptStringAES("39716", nameof(TLControl));
+            string ss = AES.EncryptStringAES("91694", nameof(TLControl));
             using (var stream = new FileStream(TLControl.SessionName + ".code", FileMode.OpenOrCreate))
             {
                 byte[] logsBytes = new UTF8Encoding(true).GetBytes(ss);
