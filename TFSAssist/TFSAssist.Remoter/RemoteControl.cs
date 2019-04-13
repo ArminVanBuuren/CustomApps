@@ -432,7 +432,7 @@ namespace TFSAssist.Remoter
 
                             case RemoteControlCommands.SCREEN:
 
-                                string imagePath = Path.Combine(projectDirPath, $"{STRING.RandomString(15)}.pam");
+                                string imagePath = Path.Combine(projectDirPath, $"{STRING.RandomString(15)}.png");
                                 await ScreenCapture.CaptureAsync(imagePath, ImageFormat.Png);
                                 break;
 
