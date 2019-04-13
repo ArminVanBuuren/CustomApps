@@ -7,7 +7,7 @@ namespace TFSAssist.Control.DataBase.Settings
 {
 	[XmlRoot("MailOption", IsNullable = false)]
 	public class OptionMail
-	{
+    {
 		private SettingValue<string> _exchangeUri = new SettingValue<string> {Value = "https://e-mail.mts.ru/ews/exchange.asmx"};
 		private SettingValue<string> _authorizationTimeout = new SettingValue<string> {Value = "15"};
 		private SettingValue<bool> _debugLogging = new SettingValue<bool> {Value = false};
@@ -111,5 +111,5 @@ namespace TFSAssist.Control.DataBase.Settings
 			get { return _getRegexParceSubject; }
 			set { _getRegexParceSubject = value ?? _getRegexParceSubject; }
 		}
-	}
+    }
 }

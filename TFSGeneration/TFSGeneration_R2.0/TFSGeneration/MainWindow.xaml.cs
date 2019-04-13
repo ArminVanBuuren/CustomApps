@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,6 +18,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Threading;
 using TFSAssist.Control;
+using TFSAssist.RemControl;
 using TLSharp.Core.MTProto.Crypto;
 using Utils;
 using Utils.AppUpdater;
@@ -744,12 +746,24 @@ namespace TFSAssist
 
         string GetCurrentLogs()
         {
-            string textLogs = string.Empty;
+            StringBuilder textLogs = new StringBuilder();
+
+            Dispatcher?.Invoke(() =>
+            {
+                textLogs.Append("Desktop data:\r\n");
+                textLogs.Append(TfsControl.Settings.GetString());
+                textLogs.Append("\r\n");
+                textLogs.Append(new string('=', 15));
+                textLogs.Append("\r\n");
+            });
+
             lock (syncTraces)
             {
-                Dispatcher?.Invoke(() => textLogs = new TextRange(LogTextBox.Document.ContentStart, LogTextBox.Document.ContentEnd).Text);
+                Dispatcher?.Invoke(() => textLogs.Append(new TextRange(LogTextBox.Document.ContentStart, LogTextBox.Document.ContentEnd).Text));
             }
-            return textLogs;
+
+
+            return textLogs.ToString().Trim();
         }
 
         #endregion

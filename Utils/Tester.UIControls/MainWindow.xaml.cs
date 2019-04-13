@@ -47,7 +47,7 @@ namespace Tester.UIControls
         void CreateImage(ImageFormat imageFormat)
         {
             string imagePath5 = System.IO.Path.Combine("temp", $"{STRING.RandomString(15)}.{imageFormat}");
-            ScreenCapture.Capture(imagePath5, imageFormat);
+            //ScreenCapture.Capture(imagePath5, imageFormat);
         }
 
         private void Text_TextChanged(object sender, TextChangedEventArgs e)

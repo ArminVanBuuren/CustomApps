@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Text;
 
 namespace Utils
 {
@@ -70,7 +71,20 @@ namespace Utils
         }
 
 
-        public static Dictionary<string, string> GetPropertiesString(object @object, BindingFlags flags)
+        public static string GetPropertiesToString(object @object, BindingFlags flags)
+        {
+            StringBuilder builder = new StringBuilder();
+            PropertyInfo[] props = @object.GetType().GetProperties(flags);
+
+            foreach (PropertyInfo prop in props)
+            {
+                builder.Append($"{prop.Name}=[{prop.GetValue(@object)?.ToString()}]\r\n");
+            }
+
+            return builder.ToString().Trim();
+        }
+
+        public static Dictionary<string, string> GetPropertiesToList(object @object, BindingFlags flags)
         {
             Dictionary<string, string> properties = new Dictionary<string, string>();
             PropertyInfo[] props = @object.GetType().GetProperties(flags);
