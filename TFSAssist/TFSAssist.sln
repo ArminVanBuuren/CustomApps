@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFSAssist", "TFSGeneration\TFSAssist.csproj", "{ADF7358B-625F-432B-B2DD-FC82D8CEADA6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFSAssist", "TFSAssist\TFSAssist.csproj", "{ADF7358B-625F-432B-B2DD-FC82D8CEADA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFSAssist.Control", "TFSGeneration.Control\TFSAssist.Control.csproj", "{E53CB879-B60B-4679-82D8-EFCCA6F0520A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFSAssist.Control", "TFSAssist.Control\TFSAssist.Control.csproj", "{E53CB879-B60B-4679-82D8-EFCCA6F0520A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

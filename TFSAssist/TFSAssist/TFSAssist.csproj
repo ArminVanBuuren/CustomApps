@@ -186,7 +186,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TFSGeneration.Control\TFSAssist.Control.csproj">
+    <ProjectReference Include="..\TFSAssist.Control\TFSAssist.Control.csproj">
       <Project>{e53cb879-b60b-4679-82d8-efcca6f0520a}</Project>
       <Name>TFSAssist.Control</Name>
     </ProjectReference>
