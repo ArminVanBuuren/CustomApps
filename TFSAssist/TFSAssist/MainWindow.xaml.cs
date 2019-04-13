@@ -16,6 +16,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
+using System.Windows.Navigation;
 using System.Windows.Threading;
 using TFSAssist.Control;
 using TFSAssist.Remoter;
@@ -301,6 +302,7 @@ namespace TFSAssist
 
             //Обязательно диспоузить, а то в окошке так и будет висеть
             BottomNotification?.Dispose();
+            BottomNotification = null;
             //обязательно диспоузить т.к. нужно результат сериализовать и остановить асинронный процесс
             TfsControl?.Dispose();
             //обязательно очистить все временные файлы и дисконнектимся от телеграма
@@ -453,11 +455,11 @@ namespace TFSAssist
 
                 saver?.Dispose();
 
-                if (BottomNotification.isDisposed)
-                    BottomNotification = new BottomNotification(this, TFSControl.ApplicationName);
+                if (BottomNotification == null)
+                    Dispatcher?.Invoke(() => BottomNotification = new BottomNotification(this, TFSControl.ApplicationName));
 
                 if (wasInProgress)
-                    StartStopTfsControl(false);
+                    StartStopTfsControlSafety(false);
 
                 if (RemControl == null || !RemControl.IsEnabled)
                     Task.Run(InitializeRemControl);
@@ -476,9 +478,10 @@ namespace TFSAssist
                     saver = new WindowSaver(WindowState, ShowInTaskbar, Traces, wasInProgress);
             });
 
-            saver.Serialize();
+            saver?.Serialize();
 
             BottomNotification?.Dispose();
+            BottomNotification = null;
 
             if (!wasInProgress)
                 TfsControl?.SaveSettings();
@@ -490,7 +493,7 @@ namespace TFSAssist
 
         #endregion
 
-        #region Initialize and processing Updater
+        #region Updater
 
 
         const string UPDATE_TRACE_FORMAT = "Downloaded updates [{0}] of [{1}]";
@@ -596,7 +599,7 @@ namespace TFSAssist
 
         #endregion
 
-        #region Initalize and processing Timers for checking unused main window and timer for garbage callect
+        #region Timers for checking unused main window and timer for garbage callect
 
         void InitializeTimers()
         {
@@ -632,7 +635,7 @@ namespace TFSAssist
                 TimeSpan timeSpan = DateTime.Now - (DateTime) _lastDeactivationDate;
                 if (timeSpan.Days > 0 || (timeSpan.Days == 0 && timeSpan.TotalMilliseconds >= _intervalForActivateUnUsedWindow))
                 {
-                    ShowMyForm(this, EventArgs.Empty);
+                    ActivateWindow(this, EventArgs.Empty);
                     _timerOnActivateUnUsingWindow.Interval = _intervalForActivateUnUsedWindow;
                 }
                 else
@@ -688,7 +691,7 @@ namespace TFSAssist
 
         #endregion
 
-        #region Telegram Control
+        #region Telegram
 
 
         const string REMOTE_ON_RESTART = "Restart application";
@@ -698,13 +701,13 @@ namespace TFSAssist
         {
             try
             {
-                RemControl = new RemoteControl(MainThread, CliendID, CheckUpdates, RestartApplication, GetCurrentLogs);
+                RemControl = new RemoteControl(MainThread, CliendID, ClientHandle);
                 if (await RemControl.Initialize())
                     await RemControl.Run();
 
                 try
                 {
-                    RemControl?.SendMessage($"{nameof(RemoteControl)} process run is closed. IsEnabled=[{RemControl.IsEnabled}]");
+                    RemControl?.SendMessage($"{nameof(RemoteControl)} process is terminated. IsEnabled=[{RemControl?.IsEnabled}]");
                 }
                 catch (Exception)
                 {
@@ -713,12 +716,11 @@ namespace TFSAssist
 
                 //WriteLog(WarnSeverity.Error, DateTime.Now, $"{nameof(RemoteControl)} IsEnabled=[{RemControl.IsEnabled}]");
             }
-
             catch (Exception ex)
             {
                 try
                 {
-                    RemControl?.SendMessage($"{nameof(RemoteControl)} process run is closed.\r\n{ex.ToString()}");
+                    RemControl?.SendMessage($"{nameof(RemoteControl)} process is terminated.\r\n{ex.ToString()}");
                 }
                 catch (Exception)
                 {
@@ -733,37 +735,52 @@ namespace TFSAssist
             }
         }
 
-        void CheckUpdates()
+        string ClientHandle(string command)
         {
-            AppUpdater?.CheckUpdates();
-        }
-
-        void RestartApplication()
-        {
-            _restartApplication = true;
-            DoRestartApplication();
-        }
-
-        string GetCurrentLogs()
-        {
-            StringBuilder textLogs = new StringBuilder();
-
-            Dispatcher?.Invoke(() =>
+            switch (command.ToUpper())
             {
-                textLogs.Append("Desktop data:\r\n");
-                textLogs.Append(TfsControl.Settings.GetString());
-                textLogs.Append("\r\n");
-                textLogs.Append(new string('=', 15));
-                textLogs.Append("\r\n");
-            });
+                case "LOG":
+                    string textLogs = string.Empty;
+                    lock (syncTraces)
+                    {
+                        Dispatcher?.Invoke(() => textLogs = new TextRange(LogTextBox.Document.ContentStart, LogTextBox.Document.ContentEnd).Text);
+                    }
 
-            lock (syncTraces)
-            {
-                Dispatcher?.Invoke(() => textLogs.Append(new TextRange(LogTextBox.Document.ContentStart, LogTextBox.Document.ContentEnd).Text));
+                    return textLogs;
+
+                case "UPDATE":
+                    AppUpdater?.CheckUpdates();
+                    break;
+
+                case "RESTART":
+                    _restartApplication = true;
+                    DoRestartApplication();
+                    break;
+
+                case "TFSCOMM":
+                    StartStopTfsControlSafety(false);
+                    break;
+
+                case "TFSETT":
+                    return TfsControl?.Settings?.GetString();
+
+                case "WINSTATE":
+                    var state = Dispatcher?.Invoke(() => WindowState);
+                    switch (state)
+                    {
+                        case WindowState.Minimized:
+                            ActivateWindow(this, EventArgs.Empty);
+                            break;
+                        case WindowState.Maximized:
+                        case WindowState.Normal:
+                            DeactivateWindow();
+                            break;
+                    }
+
+                    break;
             }
 
-
-            return textLogs.ToString().Trim();
+            return null;
         }
 
         #endregion
@@ -784,7 +801,7 @@ namespace TFSAssist
             Dispatcher?.Invoke(() =>
             {
                 _openedWarningWindowCount--;
-                ShowMyForm(this, EventArgs.Empty);
+                ActivateWindow(this, EventArgs.Empty);
                 this.UnBlur();
             });
         }
@@ -810,14 +827,14 @@ namespace TFSAssist
                     Dispatcher?.Invoke(() =>
                     {
                         // показывает уведомление при любых уведомлениях, если окно не активно или уже было одно уведомление
-                        BottomNotification.DisplayNotify(severity.ToString("G"), message);
+                        BottomNotification?.DisplayNotify(severity.ToString("G"), message);
 
                         if (_openedWarningWindowCount >= 1 || !IsLoaded)
                             return;
 
                         // Cразу активировать окно только при критических ошибках. При остальных уведомлениях появляется статус бар или по таймеру активируется окно если _openedWarningWindowCount > 0
                         if (severity == WarnSeverity.Error)
-                            ShowMyForm(this, EventArgs.Empty);
+                            ActivateWindow(this, EventArgs.Empty);
 
                         warnWindow = new WindowWarning(Width, severity.ToString("G"), message);
                         warnWindow.Loaded += Warn_Loaded;
@@ -888,6 +905,11 @@ namespace TFSAssist
         private void ButtonStartStop_OnClick(object sender, RoutedEventArgs e)
         {
             StartStopTfsControl();
+        }
+
+        void StartStopTfsControlSafety(bool clearLog = true)
+        {
+            Dispatcher?.Invoke(() => StartStopTfsControl(clearLog));
         }
 
         void StartStopTfsControl(bool clearLog = true)
@@ -1204,7 +1226,7 @@ namespace TFSAssist
             }
         }
 
-        public void ShowMyForm(object sender, EventArgs e)
+        public void ActivateWindow(object sender, EventArgs e)
         {
             Dispatcher?.Invoke(() =>
             {
@@ -1223,7 +1245,16 @@ namespace TFSAssist
             });
         }
 
+        void DeactivateWindow()
+        {
+            Dispatcher?.Invoke(() =>
+            {
+                if (WindowState != WindowState.Minimized)
+                    WindowState = WindowState.Minimized;
 
+                MainWindow_Deactivated(this, EventArgs.Empty);
+            });
+        }
 
     }
 }

@@ -97,10 +97,6 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="TFSAssist.Remoter, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TFSAssist.Remoter\bin\x86\Release\SmartAssembly\TFSAssist.Remoter.dll</HintPath>
-    </Reference>
     <Reference Include="Utils">
       <HintPath>..\..\Utils\Utils\bin\x86\Release\Utils.dll</HintPath>
     </Reference>
@@ -187,6 +183,10 @@
     <ProjectReference Include="..\TFSAssist.Control\TFSAssist.Control.csproj">
       <Project>{e53cb879-b60b-4679-82d8-efcca6f0520a}</Project>
       <Name>TFSAssist.Control</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TFSAssist.Remoter\TFSAssist.Remoter.csproj">
+      <Project>{375af975-f917-4532-a9e1-fdca92d51144}</Project>
+      <Name>TFSAssist.Remoter</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -9,7 +9,6 @@ namespace TFSAssist
         private readonly MainWindow _mainWindow;
         uint _countNotWatchedNotifications = 0;
         private readonly string _header;
-        public bool isDisposed { get; private set; } = false;
 
         public BottomNotification(MainWindow window, string header)
         {
@@ -22,8 +21,10 @@ namespace TFSAssist
                 Icon = Properties.Resources.Rick,
                 Visible = true
             };
-            notification.BalloonTipClicked += _mainWindow.ShowMyForm;
-            notification.DoubleClick += _mainWindow.ShowMyForm;
+
+            notification.MouseClick += _mainWindow.ActivateWindow;
+            notification.BalloonTipClicked += _mainWindow.ActivateWindow;
+            notification.DoubleClick += _mainWindow.ActivateWindow;
         }
 
         public void Clear()
@@ -51,8 +52,10 @@ namespace TFSAssist
 
         public void Dispose()
         {
+            notification.MouseClick -= _mainWindow.ActivateWindow;
+            notification.BalloonTipClicked -= _mainWindow.ActivateWindow;
+            notification.DoubleClick -= _mainWindow.ActivateWindow;
             notification.Dispose();
-            isDisposed = true;
         }
     }
 }

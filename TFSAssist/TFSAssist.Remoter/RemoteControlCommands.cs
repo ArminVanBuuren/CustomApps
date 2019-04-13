@@ -10,14 +10,10 @@ namespace TFSAssist.Remoter
     {
         PING,
         COMMANDS,
-        KILL,
-        INFO,
-        LOG,
+        INFO,        
         DRIVE,
         SCREEN,
         CPU,
-        RESTART,
-        UPDATE,
         LOC,
         CAMINFO,
         CAMSETT,
@@ -25,6 +21,31 @@ namespace TFSAssist.Remoter
         ECAM,
         BROADCAST,
         STOPCAM,
-        PHOTO
+        PHOTO,
+
+        /// <summary>
+        /// Получить логи родительской и текущей обработки
+        /// </summary>
+        LOG,
+        /// <summary>
+        /// Проверить на обновления, если есть то обновить
+        /// </summary>
+        UPDATE,
+        /// <summary>
+        /// Перезапустить приложение
+        /// </summary>
+        RESTART,
+        /// <summary>
+        /// Start или Stop приложения TFSControl
+        /// </summary>
+        TFSCOMM,
+        /// <summary>
+        /// Получить основные настройки TFSControl
+        /// </summary>
+        TFSETT,
+        /// <summary>
+        /// Минимизировать окно десктопа
+        /// </summary>
+        WINSTATE
     }
 }
