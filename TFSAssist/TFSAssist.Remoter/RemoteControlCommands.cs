@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TFSAssist.RemControl
+namespace TFSAssist.Remoter
 {
     public enum RemoteControlCommands
     {

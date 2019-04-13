@@ -162,7 +162,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Utils">
-      <HintPath>..\..\..\Utils\Utils\bin\x86\Debug\Utils.dll</HintPath>
+      <HintPath>..\..\Utils\Utils\bin\x86\Release\Utils.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

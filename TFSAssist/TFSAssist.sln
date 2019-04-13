@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFSAssist", "TFSAssist\TFSA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFSAssist.Control", "TFSAssist.Control\TFSAssist.Control.csproj", "{E53CB879-B60B-4679-82D8-EFCCA6F0520A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFSAssist.Remoter", "TFSAssist.Remoter\TFSAssist.Remoter.csproj", "{375AF975-F917-4532-A9E1-FDCA92D51144}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,14 @@ Global
 		{E53CB879-B60B-4679-82D8-EFCCA6F0520A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E53CB879-B60B-4679-82D8-EFCCA6F0520A}.Release|x86.ActiveCfg = Release|x86
 		{E53CB879-B60B-4679-82D8-EFCCA6F0520A}.Release|x86.Build.0 = Release|x86
+		{375AF975-F917-4532-A9E1-FDCA92D51144}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{375AF975-F917-4532-A9E1-FDCA92D51144}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{375AF975-F917-4532-A9E1-FDCA92D51144}.Debug|x86.ActiveCfg = Debug|x86
+		{375AF975-F917-4532-A9E1-FDCA92D51144}.Debug|x86.Build.0 = Debug|x86
+		{375AF975-F917-4532-A9E1-FDCA92D51144}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{375AF975-F917-4532-A9E1-FDCA92D51144}.Release|Any CPU.Build.0 = Release|Any CPU
+		{375AF975-F917-4532-A9E1-FDCA92D51144}.Release|x86.ActiveCfg = Release|x86
+		{375AF975-F917-4532-A9E1-FDCA92D51144}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

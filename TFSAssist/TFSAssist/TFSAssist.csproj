@@ -97,6 +97,9 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="TFSAssist.Remoter">
+      <HintPath>..\TFSAssist.Remoter\bin\x86\Release\SmartAssembly\TFSAssist.Remoter.dll</HintPath>
+    </Reference>
     <Reference Include="Utils">
       <HintPath>..\..\Utils\Utils\bin\x86\Release\Utils.dll</HintPath>
     </Reference>
@@ -122,9 +125,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BottomNotification.cs" />
-    <Compile Include="RemControl\RemoteControl.cs" />
-    <Compile Include="RemControl\RemoteControlCommands.cs" />
-    <Compile Include="RemControl\TTLControl.cs" />
     <Compile Include="TraceHighlighter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

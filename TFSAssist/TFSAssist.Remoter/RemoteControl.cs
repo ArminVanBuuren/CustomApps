@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Device.Location;
 using System.Diagnostics;
@@ -14,6 +13,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Win32;
 using TeleSharp.TL;
 using Utils;
 using Utils.AppUpdater;
@@ -21,7 +21,7 @@ using Utils.Handles;
 using Utils.Telegram;
 using Utils.WinForm.MediaCapture;
 
-namespace TFSAssist.RemControl
+namespace TFSAssist.Remoter
 {
     public class RemoteControl : IDisposable
     {

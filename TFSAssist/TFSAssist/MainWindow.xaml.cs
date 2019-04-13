@@ -18,7 +18,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Threading;
 using TFSAssist.Control;
-using TFSAssist.RemControl;
+using TFSAssist.Remoter;
 using TLSharp.Core.MTProto.Crypto;
 using Utils;
 using Utils.AppUpdater;

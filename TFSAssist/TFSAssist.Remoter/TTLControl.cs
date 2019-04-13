@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Utils.Telegram;
 
-namespace TFSAssist.RemControl
+namespace TFSAssist.Remoter
 {
     class TTLControl : TLControl
     {
