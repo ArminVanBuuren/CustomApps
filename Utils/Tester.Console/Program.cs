@@ -46,14 +46,14 @@ namespace Tester.Console
             //if(File.Exists(dd))
             //    File.Delete(dd);
 
-            string ss = AES.EncryptStringAES("8bf0b952100c9b22fd92499fc329c27e", nameof(TLControl));
+            string ss = AES.EncryptStringAES("36171", nameof(TLControl));
             using (var stream = new FileStream(TLControl.SessionName + ".code", FileMode.OpenOrCreate))
             {
                 byte[] logsBytes = new UTF8Encoding(true).GetBytes(ss);
                 stream.Write(logsBytes, 0, logsBytes.Length);
             }
 
-            DisplayData();
+            //DisplayData();
 
             System.Console.WriteLine(@"Complete");
             System.Console.ReadLine();
