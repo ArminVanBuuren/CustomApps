@@ -693,7 +693,7 @@ namespace TFSAssist
 
         #region Telegram
 
-        // Обязательно добавить Unmanaged (т.е. библиотеки которые нельзя добавить в проект Visual Studio.) библиотеки в проект.
+        // Обязательно добавить Unmanaged (неуправляемый код, компоненты которые нельзя добавить в проект Visual Studio.) библиотеки в проект.
         // При запуске приложения, он их создаст в папке:
         // C:\Users\User\Local Settings\Temp\Costura\Temp\XXXXX\32\Microsoft.WITDataStore32.dll и C:\Users\User\Local Settings\Temp\Costura\Temp\XXXXX\64\Microsoft.WITDataStore64.dll
         // 
