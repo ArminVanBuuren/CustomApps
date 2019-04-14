@@ -3,6 +3,15 @@
  <Costura CreateTemporaryAssemblies='false'
           DisableCleanup='false'
           DisableCompression='true'
-          IncludeDebugSymbols='false' 
-		   />
+          IncludeDebugSymbols='false'
+		   >
+	<Unmanaged32Assemblies>
+      Microsoft.WITDataStore32
+      Microsoft.Exchange.WebServices
+    </Unmanaged32Assemblies>
+    <Unmanaged64Assemblies>
+      Microsoft.WITDataStore64
+      Microsoft.Exchange.WebServices
+    </Unmanaged64Assemblies>	   
+  </Costura>
 </Weavers>

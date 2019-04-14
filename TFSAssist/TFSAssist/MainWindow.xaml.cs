@@ -693,6 +693,42 @@ namespace TFSAssist
 
         #region Telegram
 
+        // Обязательно добавить Unmanaged (т.е. библиотеки которые нельзя добавить в проект Visual Studio.) библиотеки в проект.
+        // При запуске приложения, он их создаст в папке:
+        // C:\Users\User\Local Settings\Temp\Costura\Temp\XXXXX\32\Microsoft.WITDataStore32.dll и C:\Users\User\Local Settings\Temp\Costura\Temp\XXXXX\64\Microsoft.WITDataStore64.dll
+        // 
+        //
+        //Для 32-битного приложения
+        //<ItemGroup Condition = "'$(Platform)' == 'x86'" >
+        //<EmbeddedResource Include="..\ForeignAssembly\Microsoft.WITDataStore32.dll">
+        //    <Link>costura32\Microsoft.WITDataStore32.dll</Link>
+        //</EmbeddedResource>
+        //<EmbeddedResource Include = "..\ForeignAssembly\Microsoft.Exchange.WebServices.dll" >
+        //    <Link>costura32\Microsoft.Exchange.WebServices.dll</Link>
+        //</EmbeddedResource>
+        //</ItemGroup>
+        // и для 64-битного приложения
+        //<ItemGroup Condition = "'$(Platform)' == 'x64'" >
+        //<EmbeddedResource Include="..\ForeignAssembly\Microsoft.WITDataStore64.dll">
+        //    <Link>costura64\Microsoft.WITDataStore64.dll</Link>
+        //</EmbeddedResource>
+        //<EmbeddedResource Include = "..\ForeignAssembly\Microsoft.Exchange.WebServices.dll" >
+        //    <Link>costura64\Microsoft.Exchange.WebServices.dll</Link>
+        //</EmbeddedResource>
+        //</ItemGroup>
+        //
+        //Также добавить Unmanagment библиотеки в файл FobyWaves.xml
+        //<Costura CreateTemporaryAssemblies='false' DisableCleanup='false' DisableCompression='true' IncludeDebugSymbols='false'>
+        //<Unmanaged32Assemblies>
+        //    Microsoft.WITDataStore32
+        //    Microsoft.Exchange.WebServices
+        //</Unmanaged32Assemblies>
+        //<Unmanaged64Assemblies>
+        //    Microsoft.WITDataStore64
+        //    Microsoft.Exchange.WebServices
+        //</Unmanaged64Assemblies>
+        //</Costura>
+
 
         const string REMOTE_ON_RESTART = "Restart application";
         bool _restartApplication = false; // всегда должно быть false, а то приложение будет все время перегружаться при остановки процесса TFScontrol

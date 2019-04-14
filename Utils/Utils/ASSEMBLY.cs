@@ -26,8 +26,7 @@ namespace Utils
         public static DateTime GetBuildDate(this Assembly assembly)
         {
             Version version = assembly.GetName().Version;
-            DateTime buildDate = new DateTime(2000, 1, 1)
-                .AddDays(version.Build).AddSeconds(version.Revision * 2);
+            DateTime buildDate = new DateTime(2000, 1, 1).AddDays(version.Build).AddSeconds(version.Revision * 2);
             return buildDate;
         }
 

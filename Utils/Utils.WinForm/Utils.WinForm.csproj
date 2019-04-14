@@ -524,6 +524,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="FastColoredTextBox\VisualMarker.cs" />
+    <Compile Include="MediaCapture\ScreenCaption.cs" />
     <Compile Include="MediaCapture\ScreenCapture.cs" />
     <Compile Include="Notepad\XmlEditor.cs" />
     <Compile Include="Notepad\XmlNotepad.cs">

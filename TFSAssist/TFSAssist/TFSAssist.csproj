@@ -188,6 +188,23 @@
       <Name>TFSAssist.Control</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup Condition="'$(Platform)' == 'x86'">
+    <EmbeddedResource Include="..\ForeignAssembly\Microsoft.WITDataStore32.dll">
+      <Link>costura32\Microsoft.WITDataStore32.dll</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\ForeignAssembly\Microsoft.Exchange.WebServices.dll">
+      <Link>costura32\Microsoft.Exchange.WebServices.dll</Link>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup Condition="'$(Platform)' == 'x64'">
+    <EmbeddedResource Include="..\ForeignAssembly\Microsoft.WITDataStore64.dll">
+      <Link>costura64\Microsoft.WITDataStore64.dll</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\ForeignAssembly\Microsoft.Exchange.WebServices.dll">
+      <Link>costura64\Microsoft.Exchange.WebServices.dll</Link>
+    </EmbeddedResource>
+  </ItemGroup>
+
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.4.2.1\build\Fody.targets" Condition="Exists('..\packages\Fody.4.2.1\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

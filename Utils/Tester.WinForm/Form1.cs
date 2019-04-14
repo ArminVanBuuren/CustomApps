@@ -33,21 +33,22 @@ namespace Tester.WinForm
             var aforgeDevices = new AForgeMediaDevices();
             var camDevices = new EncoderMediaDevices();
 
-            EncoderCaptureProcess(aforgeDevices, camDevices);
+            //EncoderCaptureProcess(aforgeDevices, camDevices);
             //AForgeCaptureProcess(aforgeDevices, camDevices);
+            ScreenCapture();
 
-           
+
         }
 
         //private int count = 0;
         private AForgeCapture aforge;
         async void AForgeCaptureProcess(AForgeMediaDevices a, EncoderMediaDevices c)
         {
-            aforge = new AForgeCapture(Thread.CurrentThread, a, c, @"C:\VideoClips", 10);
+            aforge = new AForgeCapture(Thread.CurrentThread, a, c, @"E:\VideoClips", 30);
             //aforge.ChangeVideoDevice("test");
 
-            //aforge.OnRecordingCompleted += Aforge_OnRecordingCompleted;
-            //aforge.StartCamRecording();
+            aforge.OnRecordingCompleted += Aforge_OnRecordingCompleted;
+            aforge.StartCamRecording();
 
 
             //DateTime startCapture = DateTime.Now;
@@ -82,7 +83,7 @@ namespace Tester.WinForm
         {
             try
             {
-                camp = new EncoderCapture(Thread.CurrentThread, a, c, @"C:\VideoClips", 30);
+                camp = new EncoderCapture(Thread.CurrentThread, a, c, @"E:\VideoClips", 30);
                 //camp.ChangeVideoDevice("test");
                 //camp.ChangeAudioDevice("test");
                 
@@ -117,5 +118,17 @@ namespace Tester.WinForm
             MessageBox.Show(args?.Error == null ? args?.DestinationFile : args?.Error.ToString());
         }
 
+        private ScreenCapture screen;
+        void ScreenCapture()
+        {
+            screen = new ScreenCapture(Thread.CurrentThread, @"E:\VideoClips", 30);
+            screen.OnRecordingCompleted += Screen_OnRecordingCompleted;
+            screen.StartCamRecording();
+        }
+
+        private void Screen_OnRecordingCompleted(object sender, MediaCaptureEventArgs args)
+        {
+            MessageBox.Show(args?.Error == null ? args?.DestinationFile : args?.Error.ToString());
+        }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -25,7 +27,7 @@ namespace Utils.WinForm.MediaCapture
         // MRLE
         // http://sundar1984.blogspot.com/2007_08_01_archive.html
 
-        private Action<Bitmap, bool> _updatePicFrame;
+        private Action<Bitmap, bool> _updatePreviewingPic;
 
         public event MediaCaptureEventHandler OnUnexpectedError;
         public AForgeDevice VideoDevice { get; private set; }
@@ -74,7 +76,7 @@ namespace Utils.WinForm.MediaCapture
             if (pictureBox == null)
                 throw new ArgumentNullException(nameof(pictureBox));
 
-            _updatePicFrame = (frame, isResizable) => { pictureBox.Image = isResizable ? (Bitmap) frame.Clone() : ((Bitmap) frame.Clone()).ResizeImage(VideoDevice.Width, VideoDevice.Height); };
+            _updatePreviewingPic = (frame, isResizable) => { pictureBox.Image = isResizable ? (Bitmap) frame.Clone() : ((Bitmap) frame.Clone()).ResizeImage(VideoDevice.Width, VideoDevice.Height); };
 
             Mode = MediaCaptureMode.Previewing;
             StartCapturing();
@@ -87,6 +89,7 @@ namespace Utils.WinForm.MediaCapture
 
             string destinationFilePath = GetNewVideoFilePath(fileName, ".avi");
             _aviWriter.Open(destinationFilePath, VideoDevice.Width, VideoDevice.Height);
+            _aviWriter.Quality = 0;
 
             var asyncRec = new Action<string>(DoRecordingAsync);
             asyncRec.BeginInvoke(destinationFilePath, null, null);
@@ -140,24 +143,6 @@ namespace Utils.WinForm.MediaCapture
             RecordCompleted(result);
         }
 
-        static void DeleteRecordedFile(string destinationFilePath, bool whileAccessing = false)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(destinationFilePath) || !File.Exists(destinationFilePath))
-                    return;
-
-                if (whileAccessing)
-                    CMD.DeleteFile(destinationFilePath);
-                else
-                    File.Delete(destinationFilePath);
-            }
-            catch (Exception)
-            {
-                // null
-            }
-        }
-
         public override Task<Bitmap> GetPictureAsync()
         {
             return Task.Run(() => GetPicture() );
@@ -180,6 +165,7 @@ namespace Utils.WinForm.MediaCapture
 
                     getImage.SignalToStop();
                     result = (Bitmap)args.Frame.Clone();
+                    args.Frame.Dispose();
                 }
                 catch (Exception ex)
                 {
@@ -246,15 +232,19 @@ namespace Utils.WinForm.MediaCapture
                     case MediaCaptureMode.Recording:
                     {
                         var video = ((Bitmap) args.Frame.Clone()).ResizeImage(VideoDevice.Width, VideoDevice.Height);
-                        _updatePicFrame?.Invoke(video, true);
 
-                        _aviWriter.Quality = 0;
                         //FileWriter.WriteVideoFrame(video);
                         _aviWriter.AddFrame(video);
+
+                        if(_updatePreviewingPic != null)
+                            _updatePreviewingPic.Invoke(video, true);
+                        else
+                            video.Dispose();
+
                         break;
                     }
                     case MediaCaptureMode.Previewing:
-                        _updatePicFrame?.Invoke(args.Frame, false);
+                        _updatePreviewingPic?.Invoke((Bitmap)args.Frame.Clone(), false);
                         break;
                     case MediaCaptureMode.None:
                         Stop();
@@ -264,6 +254,10 @@ namespace Utils.WinForm.MediaCapture
             catch (Exception ex)
             {
                 OnUnexpectedError?.Invoke(this, new MediaCaptureEventArgs(ex));
+            }
+            finally
+            {
+                args.Frame.Dispose();
             }
         }
 
@@ -306,6 +300,7 @@ namespace Utils.WinForm.MediaCapture
         {
             Stop();
         }
+
         public override string ToString()
         {
             return $"{base.ToString()}\r\nVideo=[{VideoDevice.ToString()}]";

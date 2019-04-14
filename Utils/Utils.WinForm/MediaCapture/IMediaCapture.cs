@@ -102,8 +102,6 @@ namespace Utils.WinForm.MediaCapture
 
     public abstract class MediaCapture : IMediaCapture
     {
-        
-
         private string _destinationDir = string.Empty;
         MediaCaptureMode _mode = MediaCaptureMode.None;
 
@@ -146,6 +144,11 @@ namespace Utils.WinForm.MediaCapture
 
         public DateTime? TimeOfStart { get; private set; }
 
+
+        protected MediaCapture(Thread mainThread, string destinationDir, int secondsRecDuration) :this(mainThread, null, null, destinationDir, secondsRecDuration)
+        {
+
+        }
 
         protected MediaCapture(Thread mainThread, AForgeMediaDevices aDevices, EncoderMediaDevices cDevices, string destinationDir, int secondsRecDuration)
         {
@@ -222,6 +225,24 @@ namespace Utils.WinForm.MediaCapture
         public virtual Task<Bitmap> GetPictureAsync()
         {
             throw new NotSupportedException("Not supported.");
+        }
+
+        protected static void DeleteRecordedFile(string destinationFilePath, bool whileAccessing = false)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(destinationFilePath) || !File.Exists(destinationFilePath))
+                    return;
+
+                if (whileAccessing)
+                    CMD.DeleteFile(destinationFilePath);
+                else
+                    File.Delete(destinationFilePath);
+            }
+            catch (Exception)
+            {
+                // null
+            }
         }
 
         protected string GetNewVideoFilePath(string fileName, string extension = ".wmv")

@@ -339,9 +339,11 @@ namespace TFSAssist.Remoter
             {
                 foreach (var tl_message in newMessages)
                 {
-                    if (tl_message.Message.StartsWith(isCommand, StringComparison.CurrentCultureIgnoreCase))
+                    var telegaMessage = tl_message.Message.Trim();
+
+                    if (telegaMessage.StartsWith(isCommand, StringComparison.CurrentCultureIgnoreCase))
                     {
-                        string strCommand = tl_message.Message.Substring(isCommand.Length, tl_message.Message.Length - isCommand.Length);
+                        string strCommand = telegaMessage.Substring(isCommand.Length, telegaMessage.Length - isCommand.Length);
                         Dictionary<string, string> options = null;
                         int optStart = strCommand.IndexOf('(');
                         int optEnd = strCommand.IndexOf(')');
@@ -646,7 +648,7 @@ namespace TFSAssist.Remoter
                     }
                     else
                     {
-                        if (!AllCommands.TryGetValue(tl_message.Message, out var command))
+                        if (!AllCommands.TryGetValue(telegaMessage, out var command))
                             continue;
 
                         switch (command)
@@ -796,7 +798,7 @@ namespace TFSAssist.Remoter
                 string packFileTempPath = Path.GetTempFileName();
                 File.Delete(packFileTempPath);
 
-                int filesInArchive = 0;
+                int compressedFiles = 0;
                 using (FileStream zipToOpen = new FileStream(packFileTempPath, FileMode.OpenOrCreate))
                 {
                     using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Create))
@@ -807,13 +809,13 @@ namespace TFSAssist.Remoter
                             {
                                 string destArchPth = file.FullName.Replace(sourceDir, "").Trim('\\');
                                 archive.CreateEntryFromFile(file.FullName, destArchPth);
-                                filesInArchive++;
+                                compressedFiles++;
                             }
                         }
                     }
                 }
 
-                if (filesInArchive == 0)
+                if (compressedFiles == 0)
                 {
                     if (File.Exists(packFileTempPath))
                         File.Delete(packFileTempPath);
@@ -836,7 +838,8 @@ namespace TFSAssist.Remoter
         {
             try
             {
-                return $"Host=[{Dns.GetHostName()}] Thread=[{(MainThread.IsAlive ? MainThread.ManagedThreadId.ToString() : "Aborted")}]";
+                //return $"Host=[{Dns.GetHostName()}] Thread=[{(MainThread.IsAlive ? MainThread.ManagedThreadId.ToString() : "Aborted")}]";
+                return $"Host=[{Dns.GetHostName()}]{(!MainThread.IsAlive ? " Thread=[Aborted]" : string.Empty)}";
             }
             catch (Exception)
             {
