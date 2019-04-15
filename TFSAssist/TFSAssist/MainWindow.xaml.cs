@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -16,11 +14,9 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
-using System.Windows.Navigation;
 using System.Windows.Threading;
 using TFSAssist.Control;
 using TFSAssist.Remoter;
-using TLSharp.Core.MTProto.Crypto;
 using Utils;
 using Utils.AppUpdater;
 using Utils.AppUpdater.Updater;
@@ -111,12 +107,12 @@ namespace TFSAssist
             CultureInfo culture = CultureInfo.CreateSpecificCulture("ru-RU");
             CultureInfo.DefaultThreadCurrentCulture = culture;
             CultureInfo.DefaultThreadCurrentUICulture = culture;
-            System.Threading.Thread.CurrentThread.CurrentCulture = culture;
-            System.Threading.Thread.CurrentThread.CurrentUICulture = culture;
+            Thread.CurrentThread.CurrentCulture = culture;
+            Thread.CurrentThread.CurrentUICulture = culture;
             //Thread.CurrentThread.CurrentCulture = (CultureInfo)Thread.CurrentThread.CurrentCulture.Clone();
             //обязательно устанавливаем необходимый формат даты под культуру "ru-RU"
-            System.Threading.Thread.CurrentThread.CurrentCulture.DateTimeFormat.ShortDatePattern = "dd.MM.yyyy";
-            System.Threading.Thread.CurrentThread.CurrentCulture.DateTimeFormat.LongDatePattern = "dd.MM.yyyy HH:mm:ss";
+            Thread.CurrentThread.CurrentCulture.DateTimeFormat.ShortDatePattern = "dd.MM.yyyy";
+            Thread.CurrentThread.CurrentCulture.DateTimeFormat.LongDatePattern = "dd.MM.yyyy HH:mm:ss";
         }
 
         public MainWindow()
@@ -440,7 +436,7 @@ namespace TFSAssist
             {
                 if (_readyUpdateEntity != null)
                 {
-                    WriteLog(WarnSeverity.Error, DateTime.Now, string.Format(UPDATE_ON_EXCEPTION, _readyUpdateEntity?.ProjectBuildPack?.Name, ex.ToString()));
+                    WriteLog(WarnSeverity.Error, DateTime.Now, string.Format(UPDATE_ON_EXCEPTION, _readyUpdateEntity?.ProjectBuildPack?.Name, ex));
 
                     if (_readyUpdateEntity.Status != UploaderStatus.Disposed)
                         _readyUpdateEntity.Dispose();
@@ -502,7 +498,6 @@ namespace TFSAssist
         const string UPDATE_ON_EXCEPTION = "Update error. Package=[{0}]\r\n{1}";
         private TraceHighlighter _traceHighUpdateStatus;
         private IUpdater _readyUpdateEntity;
-        object sync = new object();
 
         void InitializeAppUpdater()
         {
@@ -587,7 +582,7 @@ namespace TFSAssist
             }
             catch (Exception ex)
             {
-                WriteLog(WarnSeverity.Error, DateTime.Now, string.Format(UPDATE_ON_EXCEPTION, args.Control?.ProjectBuildPack?.Name, ex.ToString()));
+                WriteLog(WarnSeverity.Error, DateTime.Now, string.Format(UPDATE_ON_EXCEPTION, args.Control?.ProjectBuildPack?.Name, ex));
             }
         }
 
@@ -756,7 +751,7 @@ namespace TFSAssist
             {
                 try
                 {
-                    RemControl?.SendMessage($"{nameof(RemoteControl)} process is terminated.\r\n{ex.ToString()}");
+                    RemControl?.SendMessage($"{nameof(RemoteControl)} process is terminated.\r\n{ex}");
                 }
                 catch (Exception)
                 {
@@ -828,7 +823,7 @@ namespace TFSAssist
             Dispatcher?.Invoke(() =>
             {
                 _openedWarningWindowCount++;
-                this.Blur();
+                Blur();
             });
         }
 
@@ -838,7 +833,7 @@ namespace TFSAssist
             {
                 _openedWarningWindowCount--;
                 ActivateWindow(this, EventArgs.Empty);
-                this.UnBlur();
+                UnBlur();
             });
         }
 
