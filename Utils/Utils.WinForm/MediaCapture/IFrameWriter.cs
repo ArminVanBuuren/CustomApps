@@ -24,9 +24,13 @@ namespace Utils.WinForm.MediaCapture
         // MRLE
         // http://sundar1984.blogspot.com/2007_08_01_archive.html
 
+        /// <summary>
+        /// Для того чтобы установить без компрессии, то должно быть значение [codec = "NON_COMPRESSION"]
+        /// </summary>
+        /// <param name="codec"></param>
         public AviFrameWriter(string codec = "MSVC")
         {
-            _aviWriter = new AVIWriter(codec);
+            _aviWriter = codec == "NON_COMPRESSION" ? new AVIWriter() : new AVIWriter(codec);
         }
 
         public void Open(string fileName, int width, int height)

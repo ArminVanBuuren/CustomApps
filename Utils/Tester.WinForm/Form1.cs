@@ -37,8 +37,8 @@ namespace Tester.WinForm
             var camDevices = new EncoderMediaDevices();
 
 
-            EncoderCaptureProcess(aforgeDevices, camDevices);
-            //AForgeCaptureProcess(aforgeDevices);
+            //EncoderCaptureProcess(aforgeDevices, camDevices);
+            AForgeCaptureProcess(aforgeDevices);
             //ScreenCapture();
 
 
@@ -48,7 +48,7 @@ namespace Tester.WinForm
         private AForgeCapture aforge;
         async void AForgeCaptureProcess(AForgeMediaDevices a)
         {
-            aforge = new AForgeCapture(Thread.CurrentThread, a, @"E:\VideoClips", 30);
+            aforge = new AForgeCapture(Thread.CurrentThread, a, @"E:\VideoClips", 20);
             //aforge.ChangeVideoDevice("test");
 
             aforge.OnRecordingCompleted += Aforge_OnRecordingCompleted;
