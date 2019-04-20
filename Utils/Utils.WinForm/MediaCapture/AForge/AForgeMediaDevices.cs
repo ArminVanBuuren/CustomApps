@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using AForge.Video.DirectShow;
-using Microsoft.Expression.Encoder.Devices;
 
-namespace Utils.WinForm.MediaCapture
+namespace Utils.WinForm.MediaCapture.AForge
 {
     public class AForgeMediaDevices
     {

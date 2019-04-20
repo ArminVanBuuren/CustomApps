@@ -1,45 +1,53 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Runtime.Remoting.Channels;
-using System.Runtime.Remoting.Messaging;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AForge.Video;
 using AForge.Video.DirectShow;
 using AForge.Video.VFW;
+using TeleSharp.TL;
 
 //using AForge.Video.FFMPEG;
 
-namespace Utils.WinForm.MediaCapture
+namespace Utils.WinForm.MediaCapture.AForge
 {
     public class AForgeCapture : MediaCapture, IDisposable
     {
-        private VideoCaptureDevice _finalVideo = null;
-        private readonly AVIWriter _aviWriter;
-        //private VideoFileWriter FileWriter = new VideoFileWriter();
+        Thread MainThread { get; }
 
-        // MSVC - с компрессией; wmv3 - с компрессией но нужен кодек
-        // MRLE
-        // http://sundar1984.blogspot.com/2007_08_01_archive.html
+        private VideoCaptureDevice _finalVideo = null;
+        private readonly IFrameWriter _frameWriter;
+
+        //private VideoFileWriter FileWriter = new VideoFileWriter();
 
         private Action<Bitmap, bool> _updatePreviewingPic;
 
         public event MediaCaptureEventHandler OnUnexpectedError;
         public AForgeDevice VideoDevice { get; private set; }
 
-        public AForgeCapture(Thread thread, AForgeMediaDevices aDevices, EncoderMediaDevices cDevices, string destinationDir, int secondsRecDuration = 60) : base(thread, aDevices, cDevices, destinationDir, secondsRecDuration)
-        {
-            VideoDevice = aDevices.GetDefaultVideoDevice();
+        /// <summary>
+        /// Все видео устройства полученные через библиотеку AForge
+        /// </summary>
+        protected AForgeMediaDevices AForgeDevices { get; }
 
+
+        public AForgeCapture(Thread mainThread, AForgeMediaDevices aDevices, string destinationDir, int secondsRecDuration = 60) : this(mainThread, aDevices, new AviFrameWriter(), destinationDir, secondsRecDuration)
+        {
+
+        }
+
+        public AForgeCapture(Thread mainThread, AForgeMediaDevices aDevices, IFrameWriter frameWriter, string destinationDir, int secondsRecDuration = 60) : base(destinationDir, secondsRecDuration)
+        {
+            MainThread = mainThread;
+            AForgeDevices = aDevices;
+
+
+            VideoDevice = AForgeDevices.GetDefaultVideoDevice();
             if (VideoDevice == null)
                 throw new Exception("No video device found.");
 
-            _aviWriter = new AVIWriter("MSVC");
+            _frameWriter = frameWriter;
 
             ClearMemoryTask();
         }
@@ -88,8 +96,7 @@ namespace Utils.WinForm.MediaCapture
                 throw new MediaCaptureRunningException("You must stop the previous process first!");
 
             string destinationFilePath = GetNewVideoFilePath(fileName, ".avi");
-            _aviWriter.Open(destinationFilePath, VideoDevice.Width, VideoDevice.Height);
-            _aviWriter.Quality = 0;
+            _frameWriter.Open(destinationFilePath, VideoDevice.Width, VideoDevice.Height);
 
             var asyncRec = new Action<string>(DoRecordingAsync);
             asyncRec.BeginInvoke(destinationFilePath, null, null);
@@ -234,9 +241,9 @@ namespace Utils.WinForm.MediaCapture
                         var video = ((Bitmap) args.Frame.Clone()).ResizeImage(VideoDevice.Width, VideoDevice.Height);
 
                         //FileWriter.WriteVideoFrame(video);
-                        _aviWriter.AddFrame(video);
+                        _frameWriter.AddFrame(video);
 
-                        if(_updatePreviewingPic != null)
+                        if (_updatePreviewingPic != null)
                             _updatePreviewingPic.Invoke(video, true);
                         else
                             video.Dispose();
@@ -244,7 +251,7 @@ namespace Utils.WinForm.MediaCapture
                         break;
                     }
                     case MediaCaptureMode.Previewing:
-                        _updatePreviewingPic?.Invoke((Bitmap)args.Frame.Clone(), false);
+                        _updatePreviewingPic?.Invoke((Bitmap) args.Frame.Clone(), false);
                         break;
                     case MediaCaptureMode.None:
                         Stop();
@@ -288,7 +295,7 @@ namespace Utils.WinForm.MediaCapture
             try
             {
                 //FileWriter.Close();
-                _aviWriter?.Close();
+                _frameWriter?.Close();
             }
             catch (Exception)
             {

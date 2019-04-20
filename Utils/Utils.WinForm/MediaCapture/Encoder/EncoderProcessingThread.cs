@@ -1,16 +1,11 @@
-﻿using Microsoft.Expression.Encoder.Live;
-using Microsoft.Expression.Encoder.ScreenCapture;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using AForge.Video.DirectShow;
-using AForge.Video.VFW;
+using Microsoft.Expression.Encoder.Live;
+using Microsoft.Expression.Encoder.ScreenCapture;
 
-namespace Utils.WinForm.MediaCapture
+namespace Utils.WinForm.MediaCapture.Encoder
 {
     internal class EncoderProcessingThread //: IDisposable
     {

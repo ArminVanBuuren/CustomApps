@@ -2,25 +2,28 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AForge.Video.VFW;
 
-namespace Utils.WinForm.MediaCapture
+namespace Utils.WinForm.MediaCapture.Screen
 {
     public class ScreenCapture : MediaCapture, IDisposable
     {
-        Rectangle bounds = Screen.GetBounds(Point.Empty);
+        readonly Rectangle bounds = System.Windows.Forms.Screen.GetBounds(Point.Empty);
         //Rectangle bounds = new Rectangle(0, 0, 720, 480);
 
-        private readonly AVIWriter _aviWriter;
+        private readonly IFrameWriter _frameWriter;
 
-        public ScreenCapture(Thread mainThread, string destinationDir, int secondsRecDuration) : base(mainThread, destinationDir, secondsRecDuration)
+        public ScreenCapture(string destinationDir, int secondsRecDuration = 60) : this(new AviFrameWriter(), destinationDir, secondsRecDuration)
         {
-            _aviWriter = new AVIWriter("MSVC");
+            
+        }
+
+        public ScreenCapture(IFrameWriter frameWriter, string destinationDir, int secondsRecDuration = 60) : base(destinationDir, secondsRecDuration)
+        {
+            _frameWriter = frameWriter;
         }
 
         public override void StartCamRecording(string fileName = null)
@@ -30,8 +33,7 @@ namespace Utils.WinForm.MediaCapture
 
             
             string destinationFilePath = GetNewVideoFilePath(fileName, ".avi");
-            _aviWriter.Open(destinationFilePath, bounds.Width, bounds.Height);
-            _aviWriter.Quality = 0;
+            _frameWriter.Open(destinationFilePath, bounds.Width, bounds.Height);
 
             var asyncRec = new Action<string>(DoRecordingAsync);
             asyncRec.BeginInvoke(destinationFilePath, null, null);
@@ -49,16 +51,6 @@ namespace Utils.WinForm.MediaCapture
                 
                 while (DateTime.Now.Subtract(startCapture).TotalSeconds < SecondsRecordDuration)
                 {
-                    
-                    
-
-                    if (!MainThread.IsAlive)
-                    {
-                        DeleteRecordedFile(destinationFilePath, true);
-                        Stop();
-                        return;
-                    }
-
                     if (Mode == MediaCaptureMode.None)
                         break;
 
@@ -80,8 +72,8 @@ namespace Utils.WinForm.MediaCapture
                             //}
                             //wather.Stop();
 
-                            
-                            _aviWriter.AddFrame(bitmap);
+
+                            _frameWriter.AddFrame(bitmap);
                             count++;
 
 
@@ -100,7 +92,7 @@ namespace Utils.WinForm.MediaCapture
                                     watcherInternal.Start();
 
                                     var clone = (Bitmap)bitmap.Clone();
-                                    _aviWriter.AddFrame(clone);
+                                    _frameWriter.AddFrame(clone);
                                     clone.Dispose();
                                     count++;
 
@@ -142,7 +134,7 @@ namespace Utils.WinForm.MediaCapture
         {
             try
             {
-                _aviWriter?.Close();
+                _frameWriter?.Close();
             }
             catch (Exception)
             {
@@ -169,7 +161,7 @@ namespace Utils.WinForm.MediaCapture
 
         public static void Capture(string destinationPath, ImageFormat format)
         {
-            Rectangle bounds = Screen.GetBounds(Point.Empty);
+            Rectangle bounds = System.Windows.Forms.Screen.GetBounds(Point.Empty);
             using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height))
             {
                 using (Graphics g = Graphics.FromImage(bitmap))

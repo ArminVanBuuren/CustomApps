@@ -1,11 +1,9 @@
-﻿using Microsoft.Expression.Encoder.Devices;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Expression.Encoder.Devices;
 
-namespace Utils.WinForm.MediaCapture
+namespace Utils.WinForm.MediaCapture.Encoder
 {
     public class EncoderMediaDevices
     {
@@ -60,9 +58,13 @@ namespace Utils.WinForm.MediaCapture
             if (result1.Any())
                 return result1.FirstOrDefault().Value;
 
-            var result2 = encoders.Where(p => p.Key.IndexOf(encoderName, StringComparison.CurrentCultureIgnoreCase) != -1);
-            if (result2.Any())
-                return result2.FirstOrDefault().Value;
+            var severalNames = encoderName.Split('|');
+            foreach (var encName in severalNames)
+            {
+                var result2 = encoders.Where(p => p.Key.IndexOf(encName, StringComparison.CurrentCultureIgnoreCase) != -1);
+                if (result2.Any())
+                    return result2.FirstOrDefault().Value;
+            }
 
             return encoders.FirstOrDefault().Value;
         }

@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using Microsoft.Expression.Encoder;
 using Microsoft.Expression.Encoder.Devices;
 using Microsoft.Expression.Encoder.Live;
 using Microsoft.Expression.Encoder.ScreenCapture;
+using Utils.WinForm.MediaCapture.AForge;
 
-namespace Utils.WinForm.MediaCapture
+namespace Utils.WinForm.MediaCapture.Encoder
 {
     public class EncoderCapture : MediaCapture, IDisposable
     {
+        Thread MainThread { get; }
+
         private const int TIMEOUT_INITIALIZE = 60000;
         private const int TIMEOUT_STOP = 5000;
         //private const int TIMEOUT_TERMINATE = 5000;
@@ -23,6 +24,16 @@ namespace Utils.WinForm.MediaCapture
         private Thread _asyncRecordingThread;
         readonly object syncPT = new object();
         private List<EncoderProcessingThread> ProcessingThreads { get; } = new List<EncoderProcessingThread>();
+
+        /// <summary>
+        /// Все видео устройства полученные через библиотеку AForge
+        /// </summary>
+        protected AForgeMediaDevices AForgeDevices { get; }
+
+        /// <summary>
+        /// Все видео и аудио устройства полученные через библиотеку Expression.Encoder
+        /// </summary>
+        protected EncoderMediaDevices EncoderDevices { get; }
 
         public AForgeDevice AForgeVideoDevice { get; private set; }
         public EncoderDevice VideoEncoderDevice { get; private set; }
@@ -32,11 +43,15 @@ namespace Utils.WinForm.MediaCapture
         /// <summary>
         /// Невозможно развернуть приложение, использующее EE4 SDK, без установки всего приложения на целевой машине. Даже если вы попытаетесь "скопировать локальные" DLL файлы в ваше местоположение приложения, для этого необходимо установить 25-мегабайтное EE4-приложение. Поэтому перед использованием сначала установите Microsoft Expression Encoder 4 (Encoder_en.exe)
         /// </summary>
-        public EncoderCapture(Thread thread, AForgeMediaDevices aDevices, EncoderMediaDevices cDevices, string destinationDir, int secondsRecDuration = 60):base(thread, aDevices, cDevices, destinationDir, secondsRecDuration)
+        public EncoderCapture(Thread mainThread, AForgeMediaDevices aDevices, EncoderMediaDevices cDevices, string destinationDir, int secondsRecDuration = 60):base(destinationDir, secondsRecDuration)
         {
-            AForgeVideoDevice = aDevices?.GetDefaultVideoDevice();
+            MainThread = mainThread;
+            AForgeDevices = aDevices;
+            EncoderDevices = cDevices;
+
+            AForgeVideoDevice = AForgeDevices?.GetDefaultVideoDevice();
             VideoEncoderDevice = EncoderDevices.GetDefaultVideoDevice();
-            AudioEncoderDevice = EncoderDevices.GetDefaultAudioDevice("Microphone");
+            AudioEncoderDevice = EncoderDevices.GetDefaultAudioDevice("Microph|Микроф");
         }
 
         public override void ChangeVideoDevice(string name)

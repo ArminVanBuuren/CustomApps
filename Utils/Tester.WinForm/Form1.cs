@@ -17,6 +17,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Utils;
 using Utils.WinForm.MediaCapture;
+using Utils.WinForm.MediaCapture.AForge;
+using Utils.WinForm.MediaCapture.Encoder;
+using Utils.WinForm.MediaCapture.Screen;
 
 namespace Tester.WinForm
 {
@@ -33,18 +36,19 @@ namespace Tester.WinForm
             var aforgeDevices = new AForgeMediaDevices();
             var camDevices = new EncoderMediaDevices();
 
-            //EncoderCaptureProcess(aforgeDevices, camDevices);
-            //AForgeCaptureProcess(aforgeDevices, camDevices);
-            ScreenCapture();
+
+            EncoderCaptureProcess(aforgeDevices, camDevices);
+            //AForgeCaptureProcess(aforgeDevices);
+            //ScreenCapture();
 
 
         }
 
         //private int count = 0;
         private AForgeCapture aforge;
-        async void AForgeCaptureProcess(AForgeMediaDevices a, EncoderMediaDevices c)
+        async void AForgeCaptureProcess(AForgeMediaDevices a)
         {
-            aforge = new AForgeCapture(Thread.CurrentThread, a, c, @"E:\VideoClips", 30);
+            aforge = new AForgeCapture(Thread.CurrentThread, a, @"E:\VideoClips", 30);
             //aforge.ChangeVideoDevice("test");
 
             aforge.OnRecordingCompleted += Aforge_OnRecordingCompleted;
@@ -86,21 +90,19 @@ namespace Tester.WinForm
                 camp = new EncoderCapture(Thread.CurrentThread, a, c, @"E:\VideoClips", 30);
                 //camp.ChangeVideoDevice("test");
                 //camp.ChangeAudioDevice("test");
-                
 
+                camp.OnRecordingCompleted += EncoderCaptureOnRecordingCompleted;
 
-                //camp.OnRecordingCompleted += EncoderCaptureOnRecordingCompleted;
-
-                //labl1:
-                //try
-                //{
-                //    await camp.StartCamRecordingAsync();
-                //}
-                //catch (Exception e)
-                //{
-                //    MessageBox.Show(e.ToString());
-                //    goto labl1;
-                //}
+                labl1:
+                try
+                {
+                    await camp.StartCamRecordingAsync();
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.ToString());
+                    goto labl1;
+                }
 
 
                 //await Task.Delay(5000);
@@ -121,7 +123,7 @@ namespace Tester.WinForm
         private ScreenCapture screen;
         void ScreenCapture()
         {
-            screen = new ScreenCapture(Thread.CurrentThread, @"E:\VideoClips", 30);
+            //screen = new ScreenCapture(Thread.CurrentThread, @"E:\VideoClips", 30);
             screen.OnRecordingCompleted += Screen_OnRecordingCompleted;
             screen.StartCamRecording();
         }

@@ -84,7 +84,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MediaCapture\AForgeCapture.cs" />
+    <Compile Include="MediaCapture\AForge\AForgeCapture.cs" />
     <Compile Include="AForge\Controls\Chart.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -431,12 +431,14 @@
     <Compile Include="AForge\Video.Ximea\TriggerSource.cs" />
     <Compile Include="AForge\Video.Ximea\XimeaCamera.cs" />
     <Compile Include="AForge\Video.Ximea\XimeaVideoSource.cs" />
-    <Compile Include="MediaCapture\AudioCapture.cs" />
-    <Compile Include="MediaCapture\EncoderProcessingThread.cs" />
-    <Compile Include="MediaCapture\EncoderMediaDevices.cs" />
+    <Compile Include="MediaCapture\IFrameWriter.cs" />
+    <Compile Include="MediaCapture\MediaCapture.cs" />
+    <Compile Include="MediaCapture\NAudio\NAudioCapture.cs" />
+    <Compile Include="MediaCapture\Encoder\EncoderProcessingThread.cs" />
+    <Compile Include="MediaCapture\Encoder\EncoderMediaDevices.cs" />
     <Compile Include="MediaCapture\Exceptions.cs" />
     <Compile Include="MediaCapture\IMediaCapture.cs" />
-    <Compile Include="MediaCapture\AForgeMediaDevices.cs" />
+    <Compile Include="MediaCapture\AForge\AForgeMediaDevices.cs" />
     <Compile Include="AForge\Video\AsyncVideoSource.cs" />
     <Compile Include="AForge\Video\ByteArrayUtils.cs" />
     <Compile Include="AForge\Video\Exceptions.cs" />
@@ -448,7 +450,7 @@
     <Compile Include="AsyncHelper\AbortableBackgroundWorker.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="MediaCapture\EncoderCapture.cs" />
+    <Compile Include="MediaCapture\Encoder\EncoderCapture.cs" />
     <Compile Include="MediaCapture\MediaCaptureEventArgs.cs" />
     <Compile Include="MediaCapture\MediaCaptureMode.cs" />
     <Compile Include="CustomProgressBar\ProgressBarCompetition.cs" />
@@ -525,7 +527,7 @@
     </Compile>
     <Compile Include="FastColoredTextBox\VisualMarker.cs" />
     <Compile Include="MediaCapture\ScreenCaption.cs" />
-    <Compile Include="MediaCapture\ScreenCapture.cs" />
+    <Compile Include="MediaCapture\Screen\ScreenCapture.cs" />
     <Compile Include="Notepad\XmlEditor.cs" />
     <Compile Include="Notepad\XmlNotepad.cs">
       <SubType>Form</SubType>

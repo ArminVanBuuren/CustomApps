@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Utils.WinForm.MediaCapture
+﻿namespace Utils.WinForm.MediaCapture.NAudio
 {
     //NAudio library
-    public class AudioCapture
+    public class NAudioCapture
     {
         //WaveIn sourceStream;
         //WaveFileWriter waveWriter;
