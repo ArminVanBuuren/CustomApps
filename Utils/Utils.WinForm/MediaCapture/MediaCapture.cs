@@ -151,7 +151,7 @@ namespace Utils.WinForm.MediaCapture
         protected string GetNewVideoFilePath(string fileName, string extension = ".wmv")
         {
             if (string.IsNullOrWhiteSpace(fileName))
-                return Path.Combine(DestinationDir, STRING.RandomString(15) + extension);
+                return Path.Combine(DestinationDir, $"{DateTime.Now:ddHHmmss}_{STRING.RandomString(15)}{extension}");
             return Path.Combine(DestinationDir, fileName);
         }
 

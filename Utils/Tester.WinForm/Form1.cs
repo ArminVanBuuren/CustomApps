@@ -25,7 +25,7 @@ namespace Tester.WinForm
 {
     public partial class Form1 : Form
     {
-
+        private int completed = 0;
         public Form1()
         {
             //TestAForge test = new TestAForge();
@@ -36,19 +36,27 @@ namespace Tester.WinForm
             var aforgeDevices = new AForgeMediaDevices();
             var camDevices = new EncoderMediaDevices();
 
+            //while (true)
+            //{
+            //    completed = 0;
+            //    //AForgeCaptureProcess(aforgeDevices);
+            //    EncoderCaptureProcess(aforgeDevices, camDevices);
+            //    ScreenCapture();
+            //    while (completed < 2)
+            //    {
+            //        Thread.Sleep(1000);
+            //    }
+            //    Thread.Sleep(5000);
+            //}
 
-            //EncoderCaptureProcess(aforgeDevices, camDevices);
-            AForgeCaptureProcess(aforgeDevices);
-            //ScreenCapture();
-
-
+            ScreenCapture();
         }
 
         //private int count = 0;
         private AForgeCapture aforge;
         async void AForgeCaptureProcess(AForgeMediaDevices a)
         {
-            aforge = new AForgeCapture(Thread.CurrentThread, a, @"E:\VideoClips", 20);
+            aforge = new AForgeCapture(Thread.CurrentThread, a, new MpegWriter(15), @"E:\VideoClips", 30);
             //aforge.ChangeVideoDevice("test");
 
             aforge.OnRecordingCompleted += Aforge_OnRecordingCompleted;
@@ -77,13 +85,15 @@ namespace Tester.WinForm
         
         private async void Aforge_OnRecordingCompleted(object sender, MediaCaptureEventArgs args)
         {
-            MessageBox.Show((args?.Error == null ? args?.DestinationFile : args?.Error.ToString()));
-            Bitmap pic = await ASYNC.ExecuteWithTimeoutAsync(aforge.GetPictureAsync(), 1000);
-            pic?.Save(Path.Combine(aforge.DestinationDir, STRING.RandomString(15) + ".png"), ImageFormat.Png);
+            completed++;
+
+            //MessageBox.Show((args?.Error == null ? args?.DestinationFile : args?.Error.ToString()));
+            //Bitmap pic = await ASYNC.ExecuteWithTimeoutAsync(aforge.GetPictureAsync(), 1000);
+            //pic?.Save(Path.Combine(aforge.DestinationDir, STRING.RandomString(15) + ".png"), ImageFormat.Png);
         }
 
         private EncoderCapture camp;
-        async void EncoderCaptureProcess(AForgeMediaDevices a, EncoderMediaDevices c)
+        void EncoderCaptureProcess(AForgeMediaDevices a, EncoderMediaDevices c)
         {
             try
             {
@@ -92,18 +102,7 @@ namespace Tester.WinForm
                 //camp.ChangeAudioDevice("test");
 
                 camp.OnRecordingCompleted += EncoderCaptureOnRecordingCompleted;
-
-                labl1:
-                try
-                {
-                    await camp.StartCamRecordingAsync();
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.ToString());
-                    goto labl1;
-                }
-
+                camp.StartCamRecording();
 
                 //await Task.Delay(5000);
 
@@ -117,20 +116,25 @@ namespace Tester.WinForm
 
         private void EncoderCaptureOnRecordingCompleted(object sender, MediaCaptureEventArgs args)
         {
-            MessageBox.Show(args?.Error == null ? args?.DestinationFile : args?.Error.ToString());
+            completed++;
+            //MessageBox.Show(args?.Error == null ? args?.DestinationFile : args?.Error.ToString());
         }
 
         private ScreenCapture screen;
         void ScreenCapture()
         {
-            //screen = new ScreenCapture(Thread.CurrentThread, @"E:\VideoClips", 30);
+            //var frameWriter = new AviFrameWriter(9);
+            var frameWriter = new MpegWriter(15);
+            screen = new ScreenCapture(frameWriter, @"E:\VideoClips", 300);
             screen.OnRecordingCompleted += Screen_OnRecordingCompleted;
             screen.StartCamRecording();
         }
 
         private void Screen_OnRecordingCompleted(object sender, MediaCaptureEventArgs args)
         {
-            MessageBox.Show(args?.Error == null ? args?.DestinationFile : args?.Error.ToString());
+            completed++;
+
+            //MessageBox.Show(args?.Error == null ? args?.DestinationFile : args?.Error.ToString());
         }
     }
 }

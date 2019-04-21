@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -11,8 +13,8 @@ namespace Utils.WinForm.MediaCapture.Screen
 {
     public class ScreenCapture : MediaCapture, IDisposable
     {
-        readonly Rectangle bounds = System.Windows.Forms.Screen.GetBounds(Point.Empty);
-        //Rectangle bounds = new Rectangle(0, 0, 720, 480);
+        readonly Rectangle screenBounds = System.Windows.Forms.Screen.GetBounds(Point.Empty);
+        //readonly Rectangle outputBounds = new Rectangle(0, 0, 384, 216);
 
         private readonly IFrameWriter _frameWriter;
 
@@ -31,91 +33,54 @@ namespace Utils.WinForm.MediaCapture.Screen
             if (Mode == MediaCaptureMode.Recording)
                 throw new MediaCaptureRunningException("You must stop the previous process first!");
 
-            
-            string destinationFilePath = GetNewVideoFilePath(fileName, ".avi");
-            _frameWriter.Open(destinationFilePath, bounds.Width, bounds.Height);
+            string destinationFilePath = GetNewVideoFilePath(fileName, _frameWriter.VideoExtension);
+            _frameWriter.Open(destinationFilePath, screenBounds.Width, screenBounds.Height);
 
             var asyncRec = new Action<string>(DoRecordingAsync);
             asyncRec.BeginInvoke(destinationFilePath, null, null);
         }
 
-        void DoRecordingAsync(string destinationFilePath)
+        async void DoRecordingAsync(string destinationFilePath)
         {
             Mode = MediaCaptureMode.Recording;
             MediaCaptureEventArgs result = null;
-            int count = 0;
+            FramesInfo framesInfo = new FramesInfo(_frameWriter.FrameRate);
+
             try
             {
-                DateTime startCapture = DateTime.Now;
-                Stopwatch watcher = new Stopwatch();
-                
-                while (DateTime.Now.Subtract(startCapture).TotalSeconds < SecondsRecordDuration)
+                using (framesInfo)
                 {
-                    if (Mode == MediaCaptureMode.None)
-                        break;
-
-
-                    try
+                    DateTime startCapture = DateTime.Now;
+                    while (DateTime.Now.Subtract(startCapture).TotalSeconds < SecondsRecordDuration)
                     {
-                        watcher.Start();
+                        if (Mode == MediaCaptureMode.None)
+                            break;
 
-                        Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height);
-                        Capture(ref bitmap, bounds);
+                        framesInfo.InhibitStart();
 
-                        using (bitmap)
+                        using (Bitmap bitmap = new Bitmap(screenBounds.Width, screenBounds.Height))
                         {
-                            //wather.Start();
-                            //while (wather.ElapsedMilliseconds < 40)
-                            //{
-                            //    _aviWriter.Quality = 0;
-                            //    _aviWriter.AddFrame(bitmap);
-                            //}
-                            //wather.Stop();
+                            using (Graphics g = Graphics.FromImage(bitmap))
+                            {
+                                g.CopyFromScreen(Point.Empty, Point.Empty, screenBounds.Size);
+                            }
 
+                            // очень долго - нет смысла делатьй ресайз
+                            //using (Bitmap resizedBitmap = bitmap.ResizeImage(outputBounds.Width, outputBounds.Height))
+                            //{
+                            //    _frameWriter.AddFrame(resizedBitmap);
+                            //}
 
                             _frameWriter.AddFrame(bitmap);
-                            count++;
-
-
-                            watcher.Stop();
-
-                            if (watcher.ElapsedMilliseconds < 33)
-                            {
-                                Thread.Sleep(33 - (int) watcher.ElapsedMilliseconds);
-                            }
-                            else if (watcher.ElapsedMilliseconds > 33)
-                            {
-                                Stopwatch watcherInternal = new Stopwatch();
-                                var brakes = watcher.ElapsedMilliseconds - 33;
-                                while (brakes > 16)
-                                {
-                                    watcherInternal.Start();
-
-                                    var clone = (Bitmap)bitmap.Clone();
-                                    _frameWriter.AddFrame(clone);
-                                    clone.Dispose();
-                                    count++;
-
-                                    watcherInternal.Stop();
-
-                                    brakes = brakes - watcherInternal.ElapsedMilliseconds - 33;
-
-                                    watcherInternal.Reset();
-                                }
-                            }
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        watcher.Stop();
-                    }
-                    finally
-                    {
-                        watcher.Reset();
-                    }
-                }
 
-                result = new MediaCaptureEventArgs(destinationFilePath);
+                        framesInfo.PlusFrame();
+
+                        framesInfo.InhibitStop();
+                    }
+
+                    result = new MediaCaptureEventArgs(destinationFilePath);
+                }
             }
             catch (Exception ex)
             {
@@ -184,14 +149,6 @@ namespace Utils.WinForm.MediaCapture.Screen
                 }
 
                 bitmap.Save(destinationPath, format);
-            }
-        }
-
-        public static void Capture(ref Bitmap result, Rectangle bounds)
-        {
-            using (Graphics g = Graphics.FromImage(result))
-            {
-                g.CopyFromScreen(Point.Empty, Point.Empty, bounds.Size);
             }
         }
 

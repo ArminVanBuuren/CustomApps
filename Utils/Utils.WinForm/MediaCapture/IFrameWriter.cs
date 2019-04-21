@@ -11,14 +11,20 @@ namespace Utils.WinForm.MediaCapture
 {
     public interface IFrameWriter
     {
+        int FrameRate { get; }
+        string VideoExtension { get; }
         void Open(string fileName, int width, int height);
         void AddFrame(Bitmap frameImage);
         void Close();
     }
 
-    public class AviFrameWriter : IFrameWriter
+    public class AviFrameWriter : IFrameWriter, IDisposable
     {
         private readonly AVIWriter _aviWriter;
+
+        public int FrameRate => _aviWriter.FrameRate;
+
+        public string VideoExtension { get; } = ".avi";
 
         // MSVC - с компрессией; wmv3 - с компрессией но нужен кодек
         // MRLE
@@ -28,9 +34,11 @@ namespace Utils.WinForm.MediaCapture
         /// Для того чтобы установить без компрессии, то должно быть значение [codec = "NON_COMPRESSION"]
         /// </summary>
         /// <param name="codec"></param>
-        public AviFrameWriter(string codec = "MSVC")
+        /// <param name="frameRate"></param>
+        public AviFrameWriter(int frameRate = 25, string codec = "MSVC")
         {
             _aviWriter = codec == "NON_COMPRESSION" ? new AVIWriter() : new AVIWriter(codec);
+            _aviWriter.FrameRate = frameRate;
         }
 
         public void Open(string fileName, int width, int height)
@@ -47,6 +55,12 @@ namespace Utils.WinForm.MediaCapture
         public void Close()
         {
             _aviWriter.Close();
+        }
+
+        public void Dispose()
+        {
+            Close();
+            _aviWriter.Dispose();
         }
     }
 }

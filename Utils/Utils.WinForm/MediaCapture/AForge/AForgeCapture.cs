@@ -8,18 +8,16 @@ using AForge.Video.DirectShow;
 using AForge.Video.VFW;
 using TeleSharp.TL;
 
-//using AForge.Video.FFMPEG;
-
 namespace Utils.WinForm.MediaCapture.AForge
 {
     public class AForgeCapture : MediaCapture, IDisposable
     {
+        private readonly object sync = new object();
+
         Thread MainThread { get; }
 
         private VideoCaptureDevice _finalVideo = null;
         private readonly IFrameWriter _frameWriter;
-
-        //private VideoFileWriter FileWriter = new VideoFileWriter();
 
         private Action<Bitmap, bool> _updatePreviewingPic;
 
@@ -95,7 +93,7 @@ namespace Utils.WinForm.MediaCapture.AForge
             if (Mode == MediaCaptureMode.Recording)
                 throw new MediaCaptureRunningException("You must stop the previous process first!");
 
-            string destinationFilePath = GetNewVideoFilePath(fileName, ".avi");
+            string destinationFilePath = GetNewVideoFilePath(fileName, _frameWriter.VideoExtension);
             _frameWriter.Open(destinationFilePath, VideoDevice.Width, VideoDevice.Height);
 
             var asyncRec = new Action<string>(DoRecordingAsync);
@@ -222,40 +220,48 @@ namespace Utils.WinForm.MediaCapture.AForge
 
         void StartCapturing()
         {
-            if (_finalVideo != null)
-                Stop();
-            
-            _finalVideo = VideoDevice.Device;
-            _finalVideo.NewFrame += new NewFrameEventHandler(FinalVideo_NewFrame);
-            _finalVideo.Start();
+            lock (sync)
+            {
+                if (_finalVideo != null)
+                    Stop();
+
+                _finalVideo = VideoDevice.Device;
+                _finalVideo.NewFrame += new NewFrameEventHandler(FinalVideo_NewFrame);
+                _finalVideo.Start();
+            }
         }
 
         void FinalVideo_NewFrame(object sender, NewFrameEventArgs args)
         {
+            if (args?.Frame == null)
+                return;
+
             try
             {
-                switch (Mode)
+                lock (sync)
                 {
-                    case MediaCaptureMode.Recording:
+                    switch (Mode)
                     {
-                        var video = ((Bitmap) args.Frame.Clone()).ResizeImage(VideoDevice.Width, VideoDevice.Height);
+                        case MediaCaptureMode.Recording:
+                        {
+                            var video = ((Bitmap) args.Frame.Clone()).ResizeImage(VideoDevice.Width, VideoDevice.Height);
 
-                        //FileWriter.WriteVideoFrame(video);
-                        _frameWriter.AddFrame(video);
+                            _frameWriter.AddFrame(video);
 
-                        if (_updatePreviewingPic != null)
-                            _updatePreviewingPic.Invoke(video, true);
-                        else
-                            video.Dispose();
+                            if (_updatePreviewingPic != null)
+                                _updatePreviewingPic.Invoke(video, true);
+                            else
+                                video.Dispose();
 
-                        break;
+                            break;
+                        }
+                        case MediaCaptureMode.Previewing:
+                            _updatePreviewingPic?.Invoke((Bitmap) args.Frame.Clone(), false);
+                            break;
+                        case MediaCaptureMode.None:
+                            Stop();
+                            break;
                     }
-                    case MediaCaptureMode.Previewing:
-                        _updatePreviewingPic?.Invoke((Bitmap) args.Frame.Clone(), false);
-                        break;
-                    case MediaCaptureMode.None:
-                        Stop();
-                        break;
                 }
             }
             catch (Exception ex)
@@ -270,10 +276,13 @@ namespace Utils.WinForm.MediaCapture.AForge
 
         public override void Stop()
         {
-            new Action(Terminate).BeginInvoke(null, null).AsyncWaitHandle.WaitOne(20000);
+            lock (sync)
+            {
+                new Action(Terminate).BeginInvoke(null, null).AsyncWaitHandle.WaitOne(20000);
 
-            GC.Collect();
-            Mode = MediaCaptureMode.None;
+                GC.Collect();
+                Mode = MediaCaptureMode.None;
+            }
         }
 
         void Terminate()
@@ -294,7 +303,6 @@ namespace Utils.WinForm.MediaCapture.AForge
 
             try
             {
-                //FileWriter.Close();
                 _frameWriter?.Close();
             }
             catch (Exception)
