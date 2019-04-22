@@ -10,7 +10,8 @@ namespace Utils.WinForm.MediaCapture.Screen
 {
     public class FramesInfo : IDisposable
     {
-        private readonly object sync = new object();
+        private readonly object sync1 = new object();
+        private readonly object sync2 = new object();
         private int _framesPerSec = 0;
 
         private readonly Stopwatch _secondsMonitor;
@@ -25,8 +26,10 @@ namespace Utils.WinForm.MediaCapture.Screen
         public FramesInfo(int frameRate)
         {
             FrameMSec = frameRate == 0 ? 1000 : 1000 / frameRate;
+            _faultMSecPerSec = 1000 - FrameMSec * frameRate;
 
             FramesPerSec = new Dictionary<DateTime, KeyValuePair<long, int>>();
+
             _secondsMonitor = new Stopwatch();
             _inhibitMonitor = new Stopwatch();
 
@@ -39,60 +42,78 @@ namespace Utils.WinForm.MediaCapture.Screen
             _inhibitMonitor.Start();
         }
 
-        public async void InhibitStop()
+        public int _faultMSec = 0;
+        public int _faultMSecPerSec = 0;
+
+        public void InhibitStop()
         {
-            _inhibitMonitor.Stop();
-
-            if (_inhibitMonitor.ElapsedMilliseconds < FrameMSec)
+            try
             {
-                int diffMSec = FrameMSec - (int)_inhibitMonitor.ElapsedMilliseconds;
-                if (diffMSec > 10)
-                    await Task.Delay(diffMSec - 10);
-            }
+                _inhibitMonitor.Stop();
 
-            _inhibitMonitor.Reset();
+                if (_inhibitMonitor.ElapsedMilliseconds < FrameMSec)
+                {
+                    var diffMSec = FrameMSec - (int) _inhibitMonitor.ElapsedMilliseconds;
+
+                    lock (sync2)
+                    {
+                        if (_faultMSec > diffMSec)
+                        {
+                            _faultMSec = _faultMSec - diffMSec;
+                            return;
+                        }
+                        else
+                        {
+                            diffMSec = diffMSec - _faultMSec;
+                            _faultMSec = 0;
+                        }
+                    }
+
+                    //await Task.Delay(TimeSpan.FromMilliseconds(diffMSec)); - работает некорректно, иногда в меньшую иногда в большую сторону, все потому что await пытается получить доуступ к выделенному процессу
+                    if (diffMSec > 3) // 3 милисекунды на примерную поргешность вычислений после _inhibitMonitor.Stop()
+                        Thread.Sleep(TimeSpan.FromMilliseconds(diffMSec - 3));
+                }
+                else if (_inhibitMonitor.ElapsedMilliseconds > FrameMSec)
+                {
+                    lock (sync2)
+                    {
+                        _faultMSec = ((int) _inhibitMonitor.ElapsedMilliseconds) - FrameMSec;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+            finally
+            {
+                _inhibitMonitor.Reset();
+            }
         }
 
         void ResetPerSec(object ignored)
         {
-            lock (sync)
+            lock (sync1)
             {
                 if (_framesPerSec == 0)
                     return;
 
                 FramesPerSec.Add(DateTime.Now, new KeyValuePair<long, int>(_secondsMonitor.ElapsedMilliseconds, _framesPerSec));
                 _framesPerSec = 0;
+
+                lock (sync2)
+                {
+                    _faultMSec += _faultMSecPerSec;
+                }
+
                 _secondsMonitor.Reset();
                 _secondsMonitor.Start();
             }
         }
 
-        //public static FramesInfo operator ++(FramesInfo @class)
-        //{
-        //    AddFrame(@class);
-        //    return @class;
-        //}
-
-        //static void AddFrame(FramesInfo @class)
-        //{
-        //    lock (@class.sync)
-        //    {
-        //        @class._framesPerSec++;
-        //        @class.TotalFrames++;
-        //    }
-
-        //    //if (@class._watcher.ElapsedMilliseconds > 1000)
-        //    //{
-        //    //    @class.FramesPerSec.Add(DateTime.Now, new KeyValuePair<long, int>(@class._watcher.ElapsedMilliseconds, @class._framesPerSec));
-        //    //    @class._framesPerSec = 0;
-        //    //    @class._watcher.Reset();
-        //    //    @class._watcher.Start();
-        //    //}
-        //}
-
         public void PlusFrame()
         {
-            lock (sync)
+            lock (sync1)
             {
                 _framesPerSec++;
                 TotalFrames++;
@@ -106,7 +127,7 @@ namespace Utils.WinForm.MediaCapture.Screen
             _inhibitMonitor.Stop();
             _timer.Dispose();
 
-            lock (sync)
+            lock (sync1)
             {
                 _framesPerSec = 0;
                 _secondsMonitor.Stop();

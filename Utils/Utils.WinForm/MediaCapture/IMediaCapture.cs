@@ -44,24 +44,17 @@ namespace Utils.WinForm.MediaCapture
         /// Начать захват видео с камеры
         /// </summary>
         /// <param name="pictureBox"></param>
-        void StartCamPreview(PictureBox pictureBox);
+        void StartPreview(PictureBox pictureBox);
 
         /// <summary>
         /// Начать запись видео с камеры
         /// </summary>
-        void StartCamRecording(string fileName);
+        void StartRecording(string fileName);
         /// <summary>
         /// Начать запись видео с камеры
         /// </summary>
-        Task StartCamRecordingAsync(string fileName);
-        /// <summary>
-        /// Начать запись видео с экрана монитора
-        /// </summary>
-        void StartScreenRecording(string fileName);
-        /// <summary>
-        /// Начать запись видео с экрана монитора
-        /// </summary>
-        Task StartScreenRecordingAsync(string fileName);
+        Task StartRecordingAsync(string fileName);
+
         /// <summary>
         /// Включить трансляцию видео
         /// </summary>
@@ -72,6 +65,7 @@ namespace Utils.WinForm.MediaCapture
         /// </summary>
         /// <param name="port"></param>
         Task<bool> StartBroadcastAsync(int port);
+
         /// <summary>
         /// Остановить все процессы
         /// </summary>
@@ -80,6 +74,7 @@ namespace Utils.WinForm.MediaCapture
         /// Остановить все процессы
         /// </summary>
         Task StopAsync();
+
         /// <summary>
         /// Получить картинку с камеры
         /// </summary>

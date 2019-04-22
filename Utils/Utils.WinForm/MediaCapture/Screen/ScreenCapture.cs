@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
@@ -28,7 +29,7 @@ namespace Utils.WinForm.MediaCapture.Screen
             _frameWriter = frameWriter;
         }
 
-        public override void StartCamRecording(string fileName = null)
+        public override void StartRecording(string fileName = null)
         {
             if (Mode == MediaCaptureMode.Recording)
                 throw new MediaCaptureRunningException("You must stop the previous process first!");
@@ -36,27 +37,29 @@ namespace Utils.WinForm.MediaCapture.Screen
             string destinationFilePath = GetNewVideoFilePath(fileName, _frameWriter.VideoExtension);
             _frameWriter.Open(destinationFilePath, screenBounds.Width, screenBounds.Height);
 
-            var asyncRec = new Action<string>(DoRecordingAsync);
-            asyncRec.BeginInvoke(destinationFilePath, null, null);
+            var asyncRec = new Action<string>(DoRecordingAsync).BeginInvoke(destinationFilePath,null, null);
         }
 
-        async void DoRecordingAsync(string destinationFilePath)
+        void DoRecordingAsync(string destinationFilePath)
         {
             Mode = MediaCaptureMode.Recording;
             MediaCaptureEventArgs result = null;
             FramesInfo framesInfo = new FramesInfo(_frameWriter.FrameRate);
+            //Queue queue = new Queue();
 
             try
             {
                 using (framesInfo)
                 {
                     DateTime startCapture = DateTime.Now;
-                    while (DateTime.Now.Subtract(startCapture).TotalSeconds < SecondsRecordDuration)
+                    bool isContinue = true;
+
+                    while (isContinue)
                     {
+                        framesInfo.InhibitStart();
+
                         if (Mode == MediaCaptureMode.None)
                             break;
-
-                        framesInfo.InhibitStart();
 
                         using (Bitmap bitmap = new Bitmap(screenBounds.Width, screenBounds.Height))
                         {
@@ -72,9 +75,10 @@ namespace Utils.WinForm.MediaCapture.Screen
                             //}
 
                             _frameWriter.AddFrame(bitmap);
+                            framesInfo.PlusFrame();
                         }
 
-                        framesInfo.PlusFrame();
+                        isContinue = DateTime.Now.Subtract(startCapture).TotalSeconds < SecondsRecordDuration;
 
                         framesInfo.InhibitStop();
                     }
@@ -104,6 +108,10 @@ namespace Utils.WinForm.MediaCapture.Screen
             catch (Exception)
             {
                 // null
+            }
+            finally
+            {
+                Mode = MediaCaptureMode.None;
             }
         }
 

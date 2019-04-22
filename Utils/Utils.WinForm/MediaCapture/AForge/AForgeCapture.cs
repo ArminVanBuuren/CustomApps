@@ -74,7 +74,7 @@ namespace Utils.WinForm.MediaCapture.AForge
             VideoDevice = res ?? throw new Exception($"Video device [{name}] not found.");
         }
 
-        public override void StartCamPreview(PictureBox pictureBox)
+        public override void StartPreview(PictureBox pictureBox)
         {
             if (Mode == MediaCaptureMode.Previewing || Mode == MediaCaptureMode.Recording)
                 throw new MediaCaptureRunningException("You must stop the previous process first!");
@@ -88,7 +88,7 @@ namespace Utils.WinForm.MediaCapture.AForge
             StartCapturing();
         }
 
-        public override void StartCamRecording(string fileName = null)
+        public override void StartRecording(string fileName = null)
         {
             if (Mode == MediaCaptureMode.Recording)
                 throw new MediaCaptureRunningException("You must stop the previous process first!");
@@ -100,7 +100,7 @@ namespace Utils.WinForm.MediaCapture.AForge
             asyncRec.BeginInvoke(destinationFilePath, null, null);
         }
 
-        async void DoRecordingAsync(string destinationFilePath)
+        void DoRecordingAsync(string destinationFilePath)
         {
             MediaCaptureEventArgs result = null;
             try
@@ -129,7 +129,7 @@ namespace Utils.WinForm.MediaCapture.AForge
                     if (Mode == MediaCaptureMode.None)
                         break;
 
-                    await Task.Delay(100);
+                    Thread.Sleep(100);
                 }
 
                 result = new MediaCaptureEventArgs(destinationFilePath);

@@ -72,7 +72,7 @@ namespace Utils.WinForm.MediaCapture.Encoder
             AudioEncoderDevice = res ?? throw new Exception($"Audio device [{name}] not found.");
         }
 
-        public override void StartCamRecording(string fileName = null)
+        public override void StartRecording(string fileName = null)
         {
             if (Mode != MediaCaptureMode.None || (_asyncRecordingThread != null && _asyncRecordingThread.IsAlive))
                 throw new MediaCaptureRunningException("You must stop the previous process first!");
@@ -115,7 +115,7 @@ namespace Utils.WinForm.MediaCapture.Encoder
         //    }
         //}
 
-        public override void StartScreenRecording(string fileName = null)
+        public void StartScreenRecording(string fileName = null)
         {
             if (Mode != MediaCaptureMode.None || (_asyncRecordingThread != null && _asyncRecordingThread.IsAlive))
                 throw new MediaCaptureRunningException("You must stop the previous process first!");
@@ -478,7 +478,7 @@ namespace Utils.WinForm.MediaCapture.Encoder
                     if (Mode == MediaCaptureMode.None)
                         break;
 
-                    await Task.Delay(100);
+                    Thread.Sleep(100);
                 }
             }
             catch (ThreadAbortException ex)
@@ -500,7 +500,7 @@ namespace Utils.WinForm.MediaCapture.Encoder
 
             if (processingThread != null)
             {
-                await ASYNC.ExecuteWithTimeoutAsync(processingThread.StopAsync(), TIMEOUT_STOP);
+                Stop();
                 if (_asyncRecordingThread != null && processingThread.ThreadProc != null && _asyncRecordingThread.ManagedThreadId == processingThread.ThreadProc.ManagedThreadId)
                     _asyncRecordingThread = null;
             }

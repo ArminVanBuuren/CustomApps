@@ -1,63 +1,125 @@
-﻿namespace Utils.WinForm.MediaCapture.NAudio
+﻿using System;
+using System.Threading;
+using NAudio.Wave;
+
+namespace Utils.WinForm.MediaCapture.NAudio
 {
     //NAudio library
-    public class NAudioCapture
+    public class NAudioCapture : MediaCapture
     {
-        //WaveIn sourceStream;
-        //WaveFileWriter waveWriter;
-        //readonly string FilePath;
-        //readonly string FileName;
-        //readonly int InputDeviceIndex;
+        object sync = new object();
+        public WaveIn _waveSource = null;
+        public WaveFileWriter _waveFileWriter = null;
 
-        //public AudioCapture(int inputDeviceIndex, string filePath, string fileName)
-        //{
-        //    this.InputDeviceIndex = inputDeviceIndex;
-        //    this.FileName = fileName;
-        //    this.FilePath = filePath;
-        //}
 
-        //public void StartRecording(object sender, EventArgs e)
-        //{
-        //    sourceStream = new WaveIn
-        //    {
-        //        DeviceNumber = this.InputDeviceIndex,
-        //        WaveFormat =
-        //            new WaveFormat(44100, WaveIn.GetCapabilities(this.InputDeviceIndex).Channels)
-        //    };
+        public NAudioCapture(string destinationDir, int secondsRecDuration = 60) :base(destinationDir, secondsRecDuration)
+        {
 
-        //    sourceStream.DataAvailable += this.SourceStreamDataAvailable;
+        }
 
-        //    if (!Directory.Exists(FilePath))
-        //    {
-        //        Directory.CreateDirectory(FilePath);
-        //    }
+        public override void StartRecording(string fileName = null)
+        {
+            if (Mode == MediaCaptureMode.Recording)
+                throw new MediaCaptureRunningException("You must stop the previous process first!");
 
-        //    waveWriter = new WaveFileWriter(FilePath + FileName, sourceStream.WaveFormat);
-        //    sourceStream.StartRecording();
-        //}
+            _waveSource = new WaveIn
+            {
+                WaveFormat = new WaveFormat(44100, 1)
+            };
+            _waveSource.DataAvailable += WaveSource_DataAvailable;
+            _waveSource.RecordingStopped += WaveSource_RecordingStopped;
 
-        //void SourceStreamDataAvailable(object sender, WaveInEventArgs e)
-        //{
-        //    if (waveWriter == null) return;
-        //    waveWriter.Write(e.Buffer, 0, e.BytesRecorded);
-        //    waveWriter.Flush();
-        //}
+            string destinationFilePath = GetNewVideoFilePath(fileName, ".wav");
+            lock (sync)
+            {
+                _waveFileWriter = new WaveFileWriter(destinationFilePath, _waveSource.WaveFormat);
+            }
 
-        //private void RecordEnd(object sender, EventArgs e)
-        //{
-        //    if (sourceStream != null)
-        //    {
-        //        sourceStream.StopRecording();
-        //        sourceStream.Dispose();
-        //        sourceStream = null;
-        //    }
-        //    if (this.waveWriter == null)
-        //    {
-        //        return;
-        //    }
-        //    this.waveWriter.Dispose();
-        //    this.waveWriter = null;
-        //    recordEndButton.Enabled = false;
-        //}
+            _waveSource.StartRecording();
+
+            var asyncRec = new Action<string>(DoRecordingAsync).BeginInvoke(destinationFilePath, null, null);
+        }
+
+        void DoRecordingAsync(string destinationFilePath)
+        {
+            Mode = MediaCaptureMode.Recording;
+
+            DateTime startCapture = DateTime.Now;
+            while (DateTime.Now.Subtract(startCapture).TotalSeconds < SecondsRecordDuration)
+            {
+                Thread.Sleep(100);
+            }
+
+            Stop();
+            RecordCompleted(new MediaCaptureEventArgs(destinationFilePath));
+        }
+
+        public override void Stop()
+        {
+            try
+            {
+                if (_waveSource != null)
+                    _waveSource.StopRecording();
+                else
+                {
+                    StopWriter();
+                    Mode = MediaCaptureMode.None;
+                }
+            }
+            catch (Exception)
+            {
+                // null
+            }
+        }
+
+        void WaveSource_DataAvailable(object sender, WaveInEventArgs e)
+        {
+            lock (sync)
+            {
+                if (_waveFileWriter == null)
+                    return;
+
+                _waveFileWriter.Write(e.Buffer, 0, e.BytesRecorded);
+                _waveFileWriter.Flush();
+            }
+        }
+
+        void WaveSource_RecordingStopped(object sender, StoppedEventArgs e)
+        {
+            try
+            {
+                if (_waveSource != null)
+                {
+                    _waveSource.DataAvailable -= WaveSource_DataAvailable;
+                    _waveSource.RecordingStopped -= WaveSource_RecordingStopped;
+                    _waveSource.Dispose();
+                    _waveSource = null;
+                }
+
+                StopWriter();
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+                throw;
+            }
+            finally
+            {
+                Mode = MediaCaptureMode.None;
+            }
+        }
+
+        void StopWriter()
+        {
+            lock (sync)
+            {
+                if (_waveFileWriter != null)
+                {
+                    _waveFileWriter.Close();
+                    _waveFileWriter.Dispose();
+                    _waveFileWriter = null;
+                }
+            }
+        }
     }
 }

@@ -75,27 +75,17 @@ namespace Utils.WinForm.MediaCapture
             throw new NotSupportedException("Not supported.");
         }
 
-        public virtual void StartCamPreview(PictureBox pictureBox)
+        public virtual void StartPreview(PictureBox pictureBox)
         {
             throw new NotSupportedException("Not supported.");
         }
 
-        public virtual void StartCamRecording(string fileName = null)
+        public virtual void StartRecording(string fileName = null)
         {
             throw new NotSupportedException("Not supported.");
         }
 
-        public virtual Task StartCamRecordingAsync(string fileName = null)
-        {
-            throw new NotSupportedException("Not supported.");
-        }
-
-        public virtual void StartScreenRecording(string fileName = null)
-        {
-            throw new NotSupportedException("Not supported.");
-        }
-
-        public virtual Task StartScreenRecordingAsync(string fileName = null)
+        public virtual Task StartRecordingAsync(string fileName = null)
         {
             throw new NotSupportedException("Not supported.");
         }

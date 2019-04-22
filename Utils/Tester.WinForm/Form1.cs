@@ -19,6 +19,7 @@ using Utils;
 using Utils.WinForm.MediaCapture;
 using Utils.WinForm.MediaCapture.AForge;
 using Utils.WinForm.MediaCapture.Encoder;
+using Utils.WinForm.MediaCapture.NAudio;
 using Utils.WinForm.MediaCapture.Screen;
 
 namespace Tester.WinForm
@@ -49,7 +50,9 @@ namespace Tester.WinForm
             //    Thread.Sleep(5000);
             //}
 
-            ScreenCapture();
+            //ScreenCapture();
+
+            NAudioCapture();
         }
 
         //private int count = 0;
@@ -60,7 +63,7 @@ namespace Tester.WinForm
             //aforge.ChangeVideoDevice("test");
 
             aforge.OnRecordingCompleted += Aforge_OnRecordingCompleted;
-            aforge.StartCamRecording();
+            aforge.StartRecording();
 
 
             //DateTime startCapture = DateTime.Now;
@@ -102,7 +105,7 @@ namespace Tester.WinForm
                 //camp.ChangeAudioDevice("test");
 
                 camp.OnRecordingCompleted += EncoderCaptureOnRecordingCompleted;
-                camp.StartCamRecording();
+                camp.StartRecording();
 
                 //await Task.Delay(5000);
 
@@ -123,18 +126,32 @@ namespace Tester.WinForm
         private ScreenCapture screen;
         void ScreenCapture()
         {
-            //var frameWriter = new AviFrameWriter(9);
-            var frameWriter = new MpegWriter(15);
-            screen = new ScreenCapture(frameWriter, @"E:\VideoClips", 300);
+            //var frameWriter = new AviFrameWriter(7);
+            //var frameWriter = new MpegWriter(13);
+            var frameWriter = new MpegWriter(7);
+            screen = new ScreenCapture(frameWriter, @"E:\VideoClips", 1200);
             screen.OnRecordingCompleted += Screen_OnRecordingCompleted;
-            screen.StartCamRecording();
+            screen.StartRecording();
         }
 
         private void Screen_OnRecordingCompleted(object sender, MediaCaptureEventArgs args)
         {
             completed++;
 
-            //MessageBox.Show(args?.Error == null ? args?.DestinationFile : args?.Error.ToString());
+            MessageBox.Show(args?.Error == null ? args?.DestinationFile : args?.Error.ToString());
+        }
+
+        private NAudioCapture naudio;
+        void NAudioCapture()
+        {
+            naudio = new NAudioCapture(@"E:\VideoClips", 10);
+            naudio.OnRecordingCompleted += Naudio_OnRecordingCompleted;
+            naudio.StartRecording();
+        }
+
+        private void Naudio_OnRecordingCompleted(object sender, MediaCaptureEventArgs args)
+        {
+            MessageBox.Show(args?.Error == null ? args?.DestinationFile : args?.Error.ToString());
         }
     }
 }
