@@ -13,7 +13,7 @@ namespace Tester.WinForm
     {
         private readonly VideoFileWriter _fileWriter;
 
-        public int FrameRate { get; }
+        public int FrameRate { get; set; }
         public string VideoExtension { get; } = ".avi";
 
         public MpegWriter(int frameRate = 25)

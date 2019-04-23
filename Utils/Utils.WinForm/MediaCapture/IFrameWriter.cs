@@ -11,7 +11,7 @@ namespace Utils.WinForm.MediaCapture
 {
     public interface IFrameWriter
     {
-        int FrameRate { get; }
+        int FrameRate { get; set; }
         string VideoExtension { get; }
         void Open(string fileName, int width, int height);
         void AddFrame(Bitmap frameImage);
@@ -22,7 +22,11 @@ namespace Utils.WinForm.MediaCapture
     {
         private readonly AVIWriter _aviWriter;
 
-        public int FrameRate => _aviWriter.FrameRate;
+        public int FrameRate
+        {
+            get => _aviWriter.FrameRate;
+            set => _aviWriter.FrameRate = value;
+        }
 
         public string VideoExtension { get; } = ".avi";
 

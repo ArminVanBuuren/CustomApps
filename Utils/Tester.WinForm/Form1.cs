@@ -52,14 +52,18 @@ namespace Tester.WinForm
 
             //ScreenCapture();
 
-            NAudioCapture();
+            //NAudioCapture();
+
+            AForgeCaptureProcess(aforgeDevices);
         }
 
         //private int count = 0;
         private AForgeCapture aforge;
         async void AForgeCaptureProcess(AForgeMediaDevices a)
         {
-            aforge = new AForgeCapture(Thread.CurrentThread, a, new MpegWriter(15), @"E:\VideoClips", 30);
+            var frameWriter = new AviFrameWriter();
+            //var frameWriter = new MpegWriter();
+            aforge = new AForgeCapture(Thread.CurrentThread, a, frameWriter, @"E:\VideoClips", 10);
             //aforge.ChangeVideoDevice("test");
 
             aforge.OnRecordingCompleted += Aforge_OnRecordingCompleted;

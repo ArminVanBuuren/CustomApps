@@ -164,7 +164,12 @@ namespace Utils.WinForm.MediaCapture.Screen
 
         public void Dispose()
         {
+            Stop();
+        }
 
+        public override string ToString()
+        {
+            return $"{base.ToString()}\r\nFrame=[{_frameWriter?.FrameRate}]";
         }
     }
 }

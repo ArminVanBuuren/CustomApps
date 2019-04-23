@@ -12,17 +12,26 @@ namespace TFSAssist.Remoter
         COMMANDS,
         INFO,        
         DRIVE,
-        SCREEN,
         CPU,
         LOC,
-        CAMINFO,
-        CAMSETT,
+
+
+        MEDIA,
+        RECSETT,
         ACAM,
         ECAM,
         BROADCAST,
-        STOPCAM,
+        SCAM,
+        NCAM,
+        RECSTOP,
+
+
+        SCREEN,
         PHOTO,
 
+
+
+        //!!!!!!!!!!!!!!!!!!!!!!!! Данные команды относятся к MainWindow !!!!!!!!!!!!!!!!!!!!!!!!
         /// <summary>
         /// Получить логи родительской и текущей обработки
         /// </summary>
@@ -35,6 +44,8 @@ namespace TFSAssist.Remoter
         /// Перезапустить приложение
         /// </summary>
         RESTART,
+
+
         /// <summary>
         /// Start или Stop приложения TFSControl
         /// </summary>

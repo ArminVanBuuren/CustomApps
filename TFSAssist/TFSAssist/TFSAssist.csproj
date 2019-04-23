@@ -195,13 +195,43 @@
     <EmbeddedResource Include="..\ForeignAssembly\Microsoft.Exchange.WebServices.dll">
       <Link>costura32\Microsoft.Exchange.WebServices.dll</Link>
     </EmbeddedResource>
+	
+	
+    <EmbeddedResource Include="..\ForeignAssembly\INTERNAL\AForge.Video.dll">
+      <Link>costura32\AForge.Video.dll</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\ForeignAssembly\INTERNAL\AForge.Video.FFMPEG.dll">
+      <Link>costura32\AForge.Video.FFMPEG.dll</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\ForeignAssembly\INTERNAL\avcodec-53.dll">
+      <Link>costura32\avcodec-53.dll</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\ForeignAssembly\INTERNAL\avdevice-53.dll">
+      <Link>costura32\avdevice-53.dll</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\ForeignAssembly\INTERNAL\avfilter-2.dll">
+      <Link>costura32\avfilter-2.dll</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\ForeignAssembly\INTERNAL\avformat-53.dll">
+      <Link>costura32\avformat-53.dll</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\ForeignAssembly\INTERNAL\avutil-51.dll">
+      <Link>costura32\avutil-51.dll</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\ForeignAssembly\INTERNAL\postproc-52.dll">
+      <Link>costura32\postproc-52.dll</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\ForeignAssembly\INTERNAL\swresample-0.dll">
+      <Link>costura32\swresample-0.dll</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\ForeignAssembly\INTERNAL\swscale-2.dll">
+      <Link>costura32\swscale-2.dll</Link>
+    </EmbeddedResource>
+	
   </ItemGroup>
   <ItemGroup Condition="'$(Platform)' == 'x64'">
     <EmbeddedResource Include="..\ForeignAssembly\Microsoft.WITDataStore64.dll">
       <Link>costura64\Microsoft.WITDataStore64.dll</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\ForeignAssembly\Microsoft.Exchange.WebServices.dll">
-      <Link>costura64\Microsoft.Exchange.WebServices.dll</Link>
     </EmbeddedResource>
   </ItemGroup>
 

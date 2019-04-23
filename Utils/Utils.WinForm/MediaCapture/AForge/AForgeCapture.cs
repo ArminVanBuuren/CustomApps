@@ -39,13 +39,9 @@ namespace Utils.WinForm.MediaCapture.AForge
         {
             MainThread = mainThread;
             AForgeDevices = aDevices;
-
-
-            VideoDevice = AForgeDevices.GetDefaultVideoDevice();
-            if (VideoDevice == null)
-                throw new Exception("No video device found.");
-
             _frameWriter = frameWriter;
+
+            ChangeVideoDevice(null);
 
             ClearMemoryTask();
         }
@@ -67,11 +63,13 @@ namespace Utils.WinForm.MediaCapture.AForge
             clearMemory.Enabled = true;
         }
 
-        public override void ChangeVideoDevice(string name)
+        public sealed override void ChangeVideoDevice(string name)
         {
             var res = AForgeDevices.GetDefaultVideoDevice(name);
 
             VideoDevice = res ?? throw new Exception($"Video device [{name}] not found.");
+
+            _frameWriter.FrameRate = VideoDevice.VideoCapabilities.AverageFrameRate;
         }
 
         public override void StartPreview(PictureBox pictureBox)
@@ -93,6 +91,7 @@ namespace Utils.WinForm.MediaCapture.AForge
             if (Mode == MediaCaptureMode.Recording)
                 throw new MediaCaptureRunningException("You must stop the previous process first!");
 
+            fake_frames_Count = 0;
             string destinationFilePath = GetNewVideoFilePath(fileName, _frameWriter.VideoExtension);
             _frameWriter.Open(destinationFilePath, VideoDevice.Width, VideoDevice.Height);
 
@@ -231,6 +230,7 @@ namespace Utils.WinForm.MediaCapture.AForge
             }
         }
 
+        public int fake_frames_Count = 0;
         void FinalVideo_NewFrame(object sender, NewFrameEventArgs args)
         {
             if (args?.Frame == null)
@@ -244,6 +244,7 @@ namespace Utils.WinForm.MediaCapture.AForge
                     {
                         case MediaCaptureMode.Recording:
                         {
+                            fake_frames_Count++;
                             var video = ((Bitmap) args.Frame.Clone()).ResizeImage(VideoDevice.Width, VideoDevice.Height);
 
                             _frameWriter.AddFrame(video);
@@ -318,7 +319,7 @@ namespace Utils.WinForm.MediaCapture.AForge
 
         public override string ToString()
         {
-            return $"{base.ToString()}\r\nVideo=[{VideoDevice.ToString()}]";
+            return $"{base.ToString()}\r\nVideo=[{VideoDevice.ToString()}]\r\nFrame=[{_frameWriter?.FrameRate}]";
         }
     }
 }

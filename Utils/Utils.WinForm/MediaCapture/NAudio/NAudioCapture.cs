@@ -5,10 +5,10 @@ using NAudio.Wave;
 namespace Utils.WinForm.MediaCapture.NAudio
 {
     //NAudio library
-    public class NAudioCapture : MediaCapture
+    public class NAudioCapture : MediaCapture, IDisposable
     {
-        object sync = new object();
-        public WaveIn _waveSource = null;
+        readonly object sync = new object();
+        public WaveInEvent _waveSource = null;
         public WaveFileWriter _waveFileWriter = null;
 
 
@@ -22,7 +22,7 @@ namespace Utils.WinForm.MediaCapture.NAudio
             if (Mode == MediaCaptureMode.Recording)
                 throw new MediaCaptureRunningException("You must stop the previous process first!");
 
-            _waveSource = new WaveIn
+            _waveSource = new WaveInEvent
             {
                 WaveFormat = new WaveFormat(44100, 1)
             };
@@ -120,6 +120,11 @@ namespace Utils.WinForm.MediaCapture.NAudio
                     _waveFileWriter = null;
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            Stop();
         }
     }
 }
