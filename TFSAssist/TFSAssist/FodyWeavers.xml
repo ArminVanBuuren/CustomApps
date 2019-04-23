@@ -8,10 +8,32 @@
 	<Unmanaged32Assemblies>
       Microsoft.WITDataStore32
       Microsoft.Exchange.WebServices
+	  AForge
+	  AForge.Video
+	  AForge.Video.FFMPEG
+	  avcodec-53
+	  avdevice-53
+	  avfilter-2
+	  avformat-53
+	  avutil-51
+	  postproc-52
+	  swresample-0
+	  swscale-2
     </Unmanaged32Assemblies>
     <Unmanaged64Assemblies>
       Microsoft.WITDataStore64
       Microsoft.Exchange.WebServices
+	  AForge
+	  AForge.Video
+	  AForge.Video.FFMPEG
+	  avcodec-53
+	  avdevice-53
+	  avfilter-2
+	  avformat-53
+	  avutil-51
+	  postproc-52
+	  swresample-0
+	  swscale-2
     </Unmanaged64Assemblies>	   
   </Costura>
 </Weavers>
