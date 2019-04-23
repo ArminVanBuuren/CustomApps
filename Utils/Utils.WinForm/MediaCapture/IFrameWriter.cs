@@ -61,6 +61,11 @@ namespace Utils.WinForm.MediaCapture
             _aviWriter.Close();
         }
 
+        public override string ToString()
+        {
+            return $"AviFrameRate=[{FrameRate}]";
+        }
+
         public void Dispose()
         {
             Close();

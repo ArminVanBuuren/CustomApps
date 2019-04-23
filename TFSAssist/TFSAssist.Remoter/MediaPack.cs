@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -13,27 +14,27 @@ using Utils.WinForm.MediaCapture.Screen;
 
 namespace TFSAssist.Remoter
 {
-    delegate void MediaPackCompleteHandler(object sender, string destinationFile);
-    delegate void MediaPackErrorHandler(string log);
-    class MediaPack
+    delegate void ProcessingCompleteHandler(object sender, string[] fileDestinations);
+    delegate void ProcessingErrorHandler(string log);
+    class MediaPack : IDisposable
     {
         private readonly Thread _mainThread;
         private readonly string _projectDirPath;
 
         private AForgeMediaDevices _aforgeDevices;
         private AForgeCapture _aforgeCapture;
-        private FFMPEGWriter _aforgeWriter;
+        private IFrameWriter _aforgeWriter;
 
         private EncoderMediaDevices _encDevices;
         private EncoderCapture _encoderCapture;
 
         private ScreenCapture _screenCapture;
-        private FFMPEGWriter _screenWriter;
+        private IFrameWriter _screenWriter;
 
         private NAudioCapture _naudioCapture;
 
-        public event MediaPackCompleteHandler OnCompleted;
-        public event MediaPackErrorHandler ProcessingExceptions;
+        public event ProcessingCompleteHandler OnCompleted;
+        public event ProcessingErrorHandler OnProcessingExceptions;
 
         public MediaPack(Thread mainThread, string projectDirPath)
         {
@@ -45,8 +46,17 @@ namespace TFSAssist.Remoter
         {
             try
             {
+                try
+                {
+                    _aforgeWriter = new FFMPEGWriter();
+                }
+                catch (Exception ex)
+                {
+                    WriteExLog(ex);
+                    _aforgeWriter = new AviFrameWriter();
+                }
+
                 _aforgeDevices = new AForgeMediaDevices();
-                _aforgeWriter = new FFMPEGWriter();
                 _aforgeCapture = new AForgeCapture(_mainThread, _aforgeDevices, _aforgeWriter, _projectDirPath, 60);
                 _aforgeCapture.OnRecordingCompleted += OnRecordingCompleted;
                 _aforgeCapture.OnUnexpectedError += OnUnexpectedError;
@@ -69,13 +79,36 @@ namespace TFSAssist.Remoter
             }
 
 
-            _screenWriter = new FFMPEGWriter(13);
-            _screenCapture = new ScreenCapture(_screenWriter, _projectDirPath, 60);
-            _screenCapture.OnRecordingCompleted += OnRecordingCompleted;
+            try
+            {
+                try
+                {
+                    _screenWriter = new FFMPEGWriter(13);
+                }
+                catch (Exception ex)
+                {
+                    WriteExLog(ex);
+                    _screenWriter = new AviFrameWriter(7);
+                }
+
+                _screenCapture = new ScreenCapture(_screenWriter, _projectDirPath, 60);
+                _screenCapture.OnRecordingCompleted += OnRecordingCompleted;
+            }
+            catch (Exception ex)
+            {
+                WriteExLog(ex);
+            }
 
 
-            _naudioCapture = new NAudioCapture(_projectDirPath, 60);
-            _naudioCapture.OnRecordingCompleted += OnRecordingCompleted;
+            try
+            {
+                _naudioCapture = new NAudioCapture(_projectDirPath, 60);
+                _naudioCapture.OnRecordingCompleted += OnRecordingCompleted;
+            }
+            catch (Exception ex)
+            {
+                WriteExLog(ex);
+            }
         }
 
         public void StartAForge()
@@ -83,10 +116,6 @@ namespace TFSAssist.Remoter
             if (_aforgeCapture != null && _aforgeCapture.Mode == MediaCaptureMode.None && (_encoderCapture == null || _encoderCapture.Mode == MediaCaptureMode.None))
             {
                 _aforgeCapture.StartRecording();
-                if (_naudioCapture.Mode == MediaCaptureMode.None)
-                {
-                    _naudioCapture.StartRecording();
-                }
             }
         }
 
@@ -111,10 +140,6 @@ namespace TFSAssist.Remoter
             if (_screenCapture != null && _screenCapture.Mode == MediaCaptureMode.None)
             {
                 _screenCapture.StartRecording();
-                if (_naudioCapture.Mode == MediaCaptureMode.None)
-                {
-                    _naudioCapture.StartRecording();
-                }
             }
         }
 
@@ -142,27 +167,11 @@ namespace TFSAssist.Remoter
             if (args.Error != null)
                 WriteExLog(args.Error);
 
-            if (string.IsNullOrWhiteSpace(args.DestinationFile) || !File.Exists(args.DestinationFile))
+            if (args.FilesDestinations == null || args.FilesDestinations.Length == 0)
                 return;
 
-            int tryCount = 0;
-            while (!IO.IsFileReady(args.DestinationFile))
-            {
-                if (tryCount >= 5)
-                    return;
 
-                Thread.Sleep(1000);
-                tryCount++;
-            }
-
-            if (sender is IMediaCapture mediaCapture)
-            {
-                OnCompleted?.Invoke(this, _projectDirPath);
-            }
-            else
-            {
-                WriteExLog(new Exception("UNEXPECTED! Sender is not IMediaCapture"));
-            }
+            OnCompleted?.Invoke(this, args.FilesDestinations);
         }
 
         private void OnUnexpectedError(object sender, MediaCaptureEventArgs args)
@@ -222,13 +231,13 @@ namespace TFSAssist.Remoter
             _screenWriter.FrameRate = framesRate;
         }
 
-        public void GetScreen()
+        public bool GetScreen(string imagePath)
         {
-            string imagePath = Path.Combine(_projectDirPath, $"{STRING.RandomString(15)}.png");
             ScreenCapture.Capture(imagePath, ImageFormat.Png);
+            return true;
         }
 
-        public bool GetPhoto()
+        public bool GetPhoto(string imagePath)
         {
             if (_aforgeCapture == null || _aforgeCapture.Mode != MediaCaptureMode.None)
                 return false;
@@ -237,11 +246,7 @@ namespace TFSAssist.Remoter
             if (task.Wait(20000))
             {
                 var photo = task.Result;
-                if (photo != null)
-                {
-                    string photoPath = Path.Combine(_projectDirPath, $"{STRING.RandomString(15)}.png");
-                    photo.Save(photoPath, ImageFormat.Png);
-                }
+                photo?.Save(imagePath, ImageFormat.Png);
             }
 
             return true;
@@ -249,12 +254,12 @@ namespace TFSAssist.Remoter
 
         void WriteExLog(string log)
         {
-            ProcessingExceptions?.Invoke(log.ToString());
+            OnProcessingExceptions?.Invoke(log.ToString());
         }
 
         void WriteExLog(Exception log)
         {
-            ProcessingExceptions?.Invoke(log.ToString());
+            OnProcessingExceptions?.Invoke(log.ToString());
         }
 
         public override string ToString()
@@ -292,6 +297,11 @@ namespace TFSAssist.Remoter
             resultCamInfo = resultCamInfo.Trim();
 
             return resultCamInfo;
+        }
+
+        public void Dispose()
+        {
+            Stop();
         }
     }
 }

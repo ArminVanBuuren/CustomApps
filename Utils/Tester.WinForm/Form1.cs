@@ -142,7 +142,7 @@ namespace Tester.WinForm
         {
             completed++;
 
-            MessageBox.Show(args?.Error == null ? args?.DestinationFile : args?.Error.ToString());
+            //MessageBox.Show(args?.Error == null ? args?.FilesDestinations : args?.Error.ToString());
         }
 
         private NAudioCapture naudio;
@@ -155,7 +155,7 @@ namespace Tester.WinForm
 
         private void Naudio_OnRecordingCompleted(object sender, MediaCaptureEventArgs args)
         {
-            MessageBox.Show(args?.Error == null ? args?.DestinationFile : args?.Error.ToString());
+            //MessageBox.Show(args?.Error == null ? args?.FilesDestinations : args?.Error.ToString());
         }
     }
 }

@@ -99,6 +99,7 @@
     <Compile Include="CMD.cs" />
     <Compile Include="CollectionHelper\CollectionHelper.cs" />
     <Compile Include="CollectionHelper\DuplicateDictionary.cs" />
+    <Compile Include="COLLECTIONS.cs" />
     <Compile Include="ConditionEx\Base\Arguments.cs" />
     <Compile Include="ConditionEx\Base\Condition.cs" />
     <Compile Include="ConditionEx\Base\ConditionParameter.cs" />

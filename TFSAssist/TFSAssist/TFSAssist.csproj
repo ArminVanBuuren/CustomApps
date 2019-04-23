@@ -97,9 +97,6 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="TFSAssist.Remoter">
-      <HintPath>..\TFSAssist.Remoter\bin\x86\Release\SmartAssembly\TFSAssist.Remoter.dll</HintPath>
-    </Reference>
     <Reference Include="Utils">
       <HintPath>..\..\Utils\Utils\bin\x86\Release\Utils.dll</HintPath>
     </Reference>
@@ -187,6 +184,10 @@
       <Project>{e53cb879-b60b-4679-82d8-efcca6f0520a}</Project>
       <Name>TFSAssist.Control</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TFSAssist.Remoter\TFSAssist.Remoter.csproj">
+      <Project>{375af975-f917-4532-a9e1-fdca92d51144}</Project>
+      <Name>TFSAssist.Remoter</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup Condition="'$(Platform)' == 'x86'">
     <EmbeddedResource Include="..\ForeignAssembly\Microsoft.WITDataStore32.dll">
@@ -195,8 +196,6 @@
     <EmbeddedResource Include="..\ForeignAssembly\Microsoft.Exchange.WebServices.dll">
       <Link>costura32\Microsoft.Exchange.WebServices.dll</Link>
     </EmbeddedResource>
-	
-	
     <EmbeddedResource Include="..\ForeignAssembly\INTERNAL\AForge.Video.dll">
       <Link>costura32\AForge.Video.dll</Link>
     </EmbeddedResource>
@@ -227,14 +226,12 @@
     <EmbeddedResource Include="..\ForeignAssembly\INTERNAL\swscale-2.dll">
       <Link>costura32\swscale-2.dll</Link>
     </EmbeddedResource>
-	
   </ItemGroup>
   <ItemGroup Condition="'$(Platform)' == 'x64'">
     <EmbeddedResource Include="..\ForeignAssembly\Microsoft.WITDataStore64.dll">
       <Link>costura64\Microsoft.WITDataStore64.dll</Link>
     </EmbeddedResource>
   </ItemGroup>
-
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.4.2.1\build\Fody.targets" Condition="Exists('..\packages\Fody.4.2.1\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

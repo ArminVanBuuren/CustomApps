@@ -11,7 +11,6 @@ namespace Utils.WinForm.MediaCapture.NAudio
         public WaveInEvent _waveSource = null;
         public WaveFileWriter _waveFileWriter = null;
 
-
         public NAudioCapture(string destinationDir, int secondsRecDuration = 60) :base(destinationDir, secondsRecDuration)
         {
 
@@ -51,7 +50,7 @@ namespace Utils.WinForm.MediaCapture.NAudio
             }
 
             Stop();
-            RecordCompleted(new MediaCaptureEventArgs(destinationFilePath));
+            RecordCompleted(new MediaCaptureEventArgs(new [] {destinationFilePath}));
         }
 
         public override void Stop()
@@ -98,10 +97,9 @@ namespace Utils.WinForm.MediaCapture.NAudio
 
                 StopWriter();
             }
-            catch (Exception exception)
+            catch (Exception)
             {
-                Console.WriteLine(exception);
-                throw;
+                // ignored
             }
             finally
             {

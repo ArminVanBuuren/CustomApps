@@ -355,6 +355,21 @@ namespace Utils
             return string.Format(formatString, newBytes);
         }
 
+        public static int ToKilobytes(this long bytes)
+        {
+            return ((int)bytes) / 1024;
+        }
+
+        public static int ToMegabytes(this long bytes)
+        {
+            return ((int)bytes) / 1048576;
+        }
+
+        public static int ToGigabytes(this long bytes)
+        {
+            return ((int)bytes) / 1073741824;
+        }
+
 
         /// <summary>
         /// Return a string describing the value as a file size.

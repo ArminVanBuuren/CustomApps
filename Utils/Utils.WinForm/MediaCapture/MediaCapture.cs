@@ -120,17 +120,29 @@ namespace Utils.WinForm.MediaCapture
             throw new NotSupportedException("Not supported.");
         }
 
-        protected static void DeleteRecordedFile(string destinationFilePath, bool whileAccessing = false)
+        protected static void DeleteRecordedFile(string[] filesDestinations, bool whileAccessing = false)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(destinationFilePath) || !File.Exists(destinationFilePath))
+                if (filesDestinations == null || filesDestinations.Length == 0)
                     return;
 
                 if (whileAccessing)
-                    CMD.DeleteFile(destinationFilePath);
+                {
+                    foreach (var file in filesDestinations)
+                    {
+                        if (!string.IsNullOrWhiteSpace(file) && File.Exists(file))
+                            CMD.DeleteFile(file);
+                    }
+                }
                 else
-                    File.Delete(destinationFilePath);
+                {
+                    foreach (var file in filesDestinations)
+                    {
+                        if (!string.IsNullOrWhiteSpace(file) && File.Exists(file))
+                            File.Delete(file);
+                    }
+                }
             }
             catch (Exception)
             {

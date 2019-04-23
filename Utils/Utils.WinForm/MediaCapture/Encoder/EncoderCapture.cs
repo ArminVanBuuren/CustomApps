@@ -309,7 +309,8 @@ namespace Utils.WinForm.MediaCapture.Encoder
                 var defaultSize = new Size(640, 480);
                 var aforgeDevice = AForgeVideoDevice;
 
-                procThread.Job.OutputFormat.VideoProfile.Size = aforgeDevice == null ? new Size(defaultSize.Width, defaultSize.Height) : new Size(aforgeDevice.Width, aforgeDevice.Height);
+                procThread.Job.OutputFormat.VideoProfile.Size =
+                    aforgeDevice == null ? new Size(defaultSize.Width, defaultSize.Height) : new Size(aforgeDevice.Width, aforgeDevice.Height);
                 procThread.Job.ActivateSource(procThread.Device);
 
                 if (procThread.IsCanceled) return false;
@@ -334,7 +335,7 @@ namespace Utils.WinForm.MediaCapture.Encoder
             }
             catch (Exception ex)
             {
-                RecordCompleted(new MediaCaptureEventArgs(ex), true);
+                RecordCompleted(new MediaCaptureEventArgs(new[] {procThread.DestinationFilePath}, ex), true);
                 return false;
             }
         }
@@ -377,7 +378,7 @@ namespace Utils.WinForm.MediaCapture.Encoder
             }
             catch (Exception ex)
             {
-                RecordCompleted(new MediaCaptureEventArgs(ex), true);
+                RecordCompleted(new MediaCaptureEventArgs(new [] {procThread.DestinationFilePath}, ex), true);
                 return false;
             }
         }
@@ -432,7 +433,7 @@ namespace Utils.WinForm.MediaCapture.Encoder
             }
             catch (Exception ex)
             {
-                RecordCompleted(new MediaCaptureEventArgs(ex), true);
+                RecordCompleted(new MediaCaptureEventArgs(new [] {procThread.DestinationFilePath}, ex), true);
                 return false;
             }
         }
@@ -451,52 +452,49 @@ namespace Utils.WinForm.MediaCapture.Encoder
 
         async void DoRecordingAsync(object procThread)
         {
-            EncoderProcessingThread processingThread = null;
             MediaCaptureEventArgs result = null;
+            EncoderProcessingThread processingThread = null;
 
-            try
+            if (procThread is EncoderProcessingThread inputProcThread)
             {
-                processingThread = ((EncoderProcessingThread) procThread);
-                if (processingThread == null)
-                    throw new Exception($"{nameof(EncoderProcessingThread)} not initialized.");
-
-                processingThread.ThreadProc = Thread.CurrentThread;
-
-                result = new MediaCaptureEventArgs(processingThread.DestinationFilePath);
-
-                var startCapture = DateTime.Now;
-                while (DateTime.Now.Subtract(startCapture).TotalSeconds < SecondsRecordDuration)
+                try
                 {
-                    if (!MainThread.IsAlive)
+                    processingThread = inputProcThread;
+                    processingThread.ThreadProc = Thread.CurrentThread;
+
+                    result = new MediaCaptureEventArgs(new[] {processingThread.DestinationFilePath});
+
+                    var startCapture = DateTime.Now;
+                    while (DateTime.Now.Subtract(startCapture).TotalSeconds < SecondsRecordDuration)
                     {
-                        processingThread.DeleteFile(true);
-                        await processingThread.DisposeAsync();
-                        Mode = MediaCaptureMode.None;
-                        return;
+                        if (!MainThread.IsAlive)
+                        {
+                            processingThread.DeleteFile(true);
+                            await processingThread.DisposeAsync();
+                            Mode = MediaCaptureMode.None;
+                            return;
+                        }
+
+                        if (Mode == MediaCaptureMode.None)
+                            break;
+
+                        Thread.Sleep(100);
                     }
-
-                    if (Mode == MediaCaptureMode.None)
-                        break;
-
-                    Thread.Sleep(100);
                 }
-            }
-            catch (ThreadAbortException ex)
-            {
-                switch (result)
+                catch (ThreadAbortException ex)
                 {
-                    case null when processingThread != null:
-                        result = new MediaCaptureEventArgs(processingThread.DestinationFilePath);
-                        break;
-                    case null:
-                        result = new MediaCaptureEventArgs(ex);
-                        break;
+                    result = new MediaCaptureEventArgs(new[] {inputProcThread.DestinationFilePath}, ex);
+                }
+                catch (Exception ex)
+                {
+                    result = new MediaCaptureEventArgs(new[] {inputProcThread.DestinationFilePath}, ex);
                 }
             }
-            catch (Exception ex)
+            else
             {
-                result = new MediaCaptureEventArgs(ex);
+                result = new MediaCaptureEventArgs(null, new Exception($"{nameof(EncoderProcessingThread)} not initialized."));
             }
+
 
             if (processingThread != null)
             {

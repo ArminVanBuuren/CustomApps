@@ -35,6 +35,11 @@ namespace TFSAssist.Remoter
             _fileWriter.Close();
         }
 
+        public override string ToString()
+        {
+            return $"FFMPEGFrameRate=[{FrameRate}]";
+        }
+
         public void Dispose()
         {
             Close();

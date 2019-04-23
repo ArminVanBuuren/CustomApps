@@ -5,19 +5,25 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AForge.Video.VFW;
+using NAudio.Wave;
 
 namespace Utils.WinForm.MediaCapture.Screen
 {
     public class ScreenCapture : MediaCapture, IDisposable
     {
+        private readonly object syncAudio = new object();
         readonly Rectangle screenBounds = System.Windows.Forms.Screen.GetBounds(Point.Empty);
         //readonly Rectangle outputBounds = new Rectangle(0, 0, 384, 216);
 
         private readonly IFrameWriter _frameWriter;
+
+        public WaveInEvent _waveSource = null;
+        public WaveFileWriter _waveFileWriter = null;
 
         public ScreenCapture(string destinationDir, int secondsRecDuration = 60) : this(new AviFrameWriter(), destinationDir, secondsRecDuration)
         {
@@ -34,13 +40,38 @@ namespace Utils.WinForm.MediaCapture.Screen
             if (Mode == MediaCaptureMode.Recording)
                 throw new MediaCaptureRunningException("You must stop the previous process first!");
 
-            string destinationFilePath = GetNewVideoFilePath(fileName, _frameWriter.VideoExtension);
-            _frameWriter.Open(destinationFilePath, screenBounds.Width, screenBounds.Height);
+            string commonDestination = Path.Combine(DestinationDir, $"{DateTime.Now:ddHHmmss}_{STRING.RandomString(15)}");
 
-            var asyncRec = new Action<string>(DoRecordingAsync).BeginInvoke(destinationFilePath,null, null);
+            // video
+            string destinationVideoPath = commonDestination + _frameWriter.VideoExtension;
+            _frameWriter.Open(destinationVideoPath, screenBounds.Width, screenBounds.Height);
+
+            // audio
+            string destinationAudioPath = commonDestination + ".wav";
+            try
+            {
+                _waveSource = new WaveInEvent
+                {
+                    WaveFormat = new WaveFormat(44100, 1)
+                };
+                _waveSource.DataAvailable += WaveSource_DataAvailable;
+                _waveSource.RecordingStopped += WaveSource_RecordingStopped;
+
+
+                lock (syncAudio)
+                {
+                    _waveFileWriter = new WaveFileWriter(destinationAudioPath, _waveSource.WaveFormat);
+                }
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            var asyncRec = new Action<string, string>(DoRecordingAsync).BeginInvoke(destinationVideoPath, destinationAudioPath, null, null);
         }
 
-        void DoRecordingAsync(string destinationFilePath)
+        void DoRecordingAsync(string destinationVideo, string destinationAudio)
         {
             Mode = MediaCaptureMode.Recording;
             MediaCaptureEventArgs result = null;
@@ -49,6 +80,8 @@ namespace Utils.WinForm.MediaCapture.Screen
 
             try
             {
+                _waveSource?.StartRecording();
+
                 using (framesInfo)
                 {
                     DateTime startCapture = DateTime.Now;
@@ -83,24 +116,48 @@ namespace Utils.WinForm.MediaCapture.Screen
                         framesInfo.InhibitStop();
                     }
 
-                    result = new MediaCaptureEventArgs(destinationFilePath);
+                    result = new MediaCaptureEventArgs(new []{ destinationVideo, destinationAudio });
                 }
             }
             catch (Exception ex)
             {
-                result = new MediaCaptureEventArgs(ex);
+                result = new MediaCaptureEventArgs(new[] { destinationVideo, destinationAudio }, ex);
             }
 
             Stop();
 
             if (result?.Error != null)
-                DeleteRecordedFile(destinationFilePath);
+                DeleteRecordedFile(new[] { destinationVideo, destinationAudio });
 
             RecordCompleted(result);
         }
 
+        void WaveSource_DataAvailable(object sender, WaveInEventArgs e)
+        {
+            lock (syncAudio)
+            {
+                if (_waveFileWriter == null)
+                    return;
+
+                _waveFileWriter.Write(e.Buffer, 0, e.BytesRecorded);
+                _waveFileWriter.Flush();
+            }
+        }
+
         public override void Stop()
         {
+            try
+            {
+                if (_waveSource != null)
+                    _waveSource.StopRecording();
+                else
+                    StopAudioWriter();
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
             try
             {
                 _frameWriter?.Close();
@@ -112,6 +169,39 @@ namespace Utils.WinForm.MediaCapture.Screen
             finally
             {
                 Mode = MediaCaptureMode.None;
+            }
+        }
+
+        void WaveSource_RecordingStopped(object sender, StoppedEventArgs e)
+        {
+            try
+            {
+                if (_waveSource != null)
+                {
+                    _waveSource.DataAvailable -= WaveSource_DataAvailable;
+                    _waveSource.RecordingStopped -= WaveSource_RecordingStopped;
+                    _waveSource.Dispose();
+                    _waveSource = null;
+                }
+
+                StopAudioWriter();
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+        }
+
+        void StopAudioWriter()
+        {
+            lock (syncAudio)
+            {
+                if (_waveFileWriter == null)
+                    return;
+
+                _waveFileWriter.Close();
+                _waveFileWriter.Dispose();
+                _waveFileWriter = null;
             }
         }
 
@@ -169,7 +259,7 @@ namespace Utils.WinForm.MediaCapture.Screen
 
         public override string ToString()
         {
-            return $"{base.ToString()}\r\nFrame=[{_frameWriter?.FrameRate}]";
+            return $"{base.ToString()}\r\n{_frameWriter?.ToString()}".Trim();
         }
     }
 }

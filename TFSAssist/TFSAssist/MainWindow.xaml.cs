@@ -788,6 +788,18 @@ namespace TFSAssist
                     DoRestartApplication();
                     break;
 
+                case "CLEARLOG":
+                    lock (syncTraces)
+                    {
+                        for (int i = Traces.Count - 1; i >= 0; i--)
+                        {
+                            var trace = Traces[i];
+                            Traces.Remove(trace);
+                            Dispatcher?.Invoke(DispatcherPriority.Normal, new Action(() => LogTextBox.Document.Blocks.Remove(trace.GetParagraph())));
+                        }
+                    }
+                    break;
+
                 case "TFSCOMM":
                     StartStopTfsControlSafety(false);
                     break;

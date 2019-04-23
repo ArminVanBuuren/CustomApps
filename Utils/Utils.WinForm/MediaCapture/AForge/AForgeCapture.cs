@@ -1,23 +1,29 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AForge.Video;
 using AForge.Video.DirectShow;
 using AForge.Video.VFW;
+using NAudio.Wave;
 using TeleSharp.TL;
 
 namespace Utils.WinForm.MediaCapture.AForge
 {
     public class AForgeCapture : MediaCapture, IDisposable
     {
-        private readonly object sync = new object();
+        private readonly object syncVideo = new object();
+        private readonly object syncAudio = new object();
 
         Thread MainThread { get; }
 
         private VideoCaptureDevice _finalVideo = null;
         private readonly IFrameWriter _frameWriter;
+
+        public WaveInEvent _waveSource = null;
+        public WaveFileWriter _waveFileWriter = null;
 
         private Action<Bitmap, bool> _updatePreviewingPic;
 
@@ -65,6 +71,9 @@ namespace Utils.WinForm.MediaCapture.AForge
 
         public sealed override void ChangeVideoDevice(string name)
         {
+            if (Mode != MediaCaptureMode.None)
+                throw new MediaCaptureRunningException("You must stop the previous process first!");
+
             var res = AForgeDevices.GetDefaultVideoDevice(name);
 
             VideoDevice = res ?? throw new Exception($"Video device [{name}] not found.");
@@ -74,7 +83,7 @@ namespace Utils.WinForm.MediaCapture.AForge
 
         public override void StartPreview(PictureBox pictureBox)
         {
-            if (Mode == MediaCaptureMode.Previewing || Mode == MediaCaptureMode.Recording)
+            if (Mode != MediaCaptureMode.None)
                 throw new MediaCaptureRunningException("You must stop the previous process first!");
 
             if (pictureBox == null)
@@ -83,7 +92,7 @@ namespace Utils.WinForm.MediaCapture.AForge
             _updatePreviewingPic = (frame, isResizable) => { pictureBox.Image = isResizable ? (Bitmap) frame.Clone() : ((Bitmap) frame.Clone()).ResizeImage(VideoDevice.Width, VideoDevice.Height); };
 
             Mode = MediaCaptureMode.Previewing;
-            StartCapturing();
+            StartVideoGrab();
         }
 
         public override void StartRecording(string fileName = null)
@@ -92,14 +101,42 @@ namespace Utils.WinForm.MediaCapture.AForge
                 throw new MediaCaptureRunningException("You must stop the previous process first!");
 
             fake_frames_Count = 0;
-            string destinationFilePath = GetNewVideoFilePath(fileName, _frameWriter.VideoExtension);
-            _frameWriter.Open(destinationFilePath, VideoDevice.Width, VideoDevice.Height);
+            string commonDestination = Path.Combine(DestinationDir, $"{DateTime.Now:ddHHmmss}_{STRING.RandomString(15)}");
 
-            var asyncRec = new Action<string>(DoRecordingAsync);
-            asyncRec.BeginInvoke(destinationFilePath, null, null);
+
+            // aforge
+            string destinationVideoPath = commonDestination + _frameWriter.VideoExtension;
+            _frameWriter.Open(destinationVideoPath, VideoDevice.Width, VideoDevice.Height);
+
+
+            // audio
+            string destinationAudioPath = commonDestination + ".wav";
+            try
+            {
+                _waveSource = new WaveInEvent
+                {
+                    WaveFormat = new WaveFormat(44100, 1)
+                };
+                _waveSource.DataAvailable += WaveSource_DataAvailable;
+                _waveSource.RecordingStopped += WaveSource_RecordingStopped;
+
+                
+                lock (syncAudio)
+                {
+                    _waveFileWriter = new WaveFileWriter(destinationAudioPath, _waveSource.WaveFormat);
+                }
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            // timer
+            var asyncRec = new Action<string, string>(DoRecordingAsync);
+            asyncRec.BeginInvoke(destinationVideoPath, destinationAudioPath, null, null);
         }
 
-        void DoRecordingAsync(string destinationFilePath)
+        void DoRecordingAsync(string destinationVideo, string destinationAudio)
         {
             MediaCaptureEventArgs result = null;
             try
@@ -108,19 +145,22 @@ namespace Utils.WinForm.MediaCapture.AForge
                 {
                     case MediaCaptureMode.None:
                         Mode = MediaCaptureMode.Recording;
-                        StartCapturing();
+                        StartVideoGrab();
                         break;
                     case MediaCaptureMode.Previewing:
                         Mode = MediaCaptureMode.Recording;
                         break;
                 }
 
+                _waveSource?.StartRecording();
+
                 DateTime startCapture = DateTime.Now;
                 while (DateTime.Now.Subtract(startCapture).TotalSeconds < SecondsRecordDuration)
                 {
                     if (!MainThread.IsAlive)
                     {
-                        DeleteRecordedFile(destinationFilePath, true); // первым должно быть удалениме, т.к после Stop() процесс сразу срубается
+                        // первым должно быть удалениме, т.к после Stop() процесс сразу срубается
+                        DeleteRecordedFile(new [] { destinationVideo , destinationAudio }, true);
                         Stop();
                         return;
                     }
@@ -131,18 +171,18 @@ namespace Utils.WinForm.MediaCapture.AForge
                     Thread.Sleep(100);
                 }
 
-                result = new MediaCaptureEventArgs(destinationFilePath);
+                result = new MediaCaptureEventArgs(new[] { destinationVideo, destinationAudio });
             }
             catch (Exception ex)
             {
-                result = new MediaCaptureEventArgs(ex);
+                result = new MediaCaptureEventArgs(new[] { destinationVideo, destinationAudio }, ex);
             }
 
 
             Stop();
 
             if(result?.Error != null)
-                DeleteRecordedFile(destinationFilePath);
+                DeleteRecordedFile(new[] { destinationVideo, destinationAudio });
 
             RecordCompleted(result);
         }
@@ -173,7 +213,7 @@ namespace Utils.WinForm.MediaCapture.AForge
                 }
                 catch (Exception ex)
                 {
-                    OnUnexpectedError?.Invoke(this, new MediaCaptureEventArgs(ex));
+                    OnUnexpectedError?.Invoke(this, new MediaCaptureEventArgs(null, ex));
                 }
             }
 
@@ -217,13 +257,10 @@ namespace Utils.WinForm.MediaCapture.AForge
             return result;
         }
 
-        void StartCapturing()
+        void StartVideoGrab()
         {
-            lock (sync)
+            lock (syncVideo)
             {
-                if (_finalVideo != null)
-                    Stop();
-
                 _finalVideo = VideoDevice.Device;
                 _finalVideo.NewFrame += new NewFrameEventHandler(FinalVideo_NewFrame);
                 _finalVideo.Start();
@@ -231,6 +268,7 @@ namespace Utils.WinForm.MediaCapture.AForge
         }
 
         public int fake_frames_Count = 0;
+
         void FinalVideo_NewFrame(object sender, NewFrameEventArgs args)
         {
             if (args?.Frame == null)
@@ -238,7 +276,7 @@ namespace Utils.WinForm.MediaCapture.AForge
 
             try
             {
-                lock (sync)
+                lock (syncVideo)
                 {
                     switch (Mode)
                     {
@@ -259,15 +297,16 @@ namespace Utils.WinForm.MediaCapture.AForge
                         case MediaCaptureMode.Previewing:
                             _updatePreviewingPic?.Invoke((Bitmap) args.Frame.Clone(), false);
                             break;
-                        case MediaCaptureMode.None:
-                            Stop();
-                            break;
                     }
                 }
+
+                if (Mode == MediaCaptureMode.None)
+                    Stop();
+
             }
             catch (Exception ex)
             {
-                OnUnexpectedError?.Invoke(this, new MediaCaptureEventArgs(ex));
+                OnUnexpectedError?.Invoke(this, new MediaCaptureEventArgs(null, ex));
             }
             finally
             {
@@ -275,12 +314,23 @@ namespace Utils.WinForm.MediaCapture.AForge
             }
         }
 
+        void WaveSource_DataAvailable(object sender, WaveInEventArgs e)
+        {
+            lock (syncAudio)
+            {
+                if (_waveFileWriter == null)
+                    return;
+
+                _waveFileWriter.Write(e.Buffer, 0, e.BytesRecorded);
+                _waveFileWriter.Flush();
+            }
+        }
+
         public override void Stop()
         {
-            lock (sync)
+            lock (syncVideo)
             {
                 new Action(Terminate).BeginInvoke(null, null).AsyncWaitHandle.WaitOne(20000);
-
                 GC.Collect();
                 Mode = MediaCaptureMode.None;
             }
@@ -288,6 +338,18 @@ namespace Utils.WinForm.MediaCapture.AForge
 
         void Terminate()
         {
+            try
+            {
+                if (_waveSource != null)
+                    _waveSource.StopRecording();
+                else
+                    StopAudioWriter();
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
             try
             {
                 if (_finalVideo != null)
@@ -312,6 +374,39 @@ namespace Utils.WinForm.MediaCapture.AForge
             }
         }
 
+        void WaveSource_RecordingStopped(object sender, StoppedEventArgs e)
+        {
+            try
+            {
+                if (_waveSource != null)
+                {
+                    _waveSource.DataAvailable -= WaveSource_DataAvailable;
+                    _waveSource.RecordingStopped -= WaveSource_RecordingStopped;
+                    _waveSource.Dispose();
+                    _waveSource = null;
+                }
+
+                StopAudioWriter();
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+        }
+
+        void StopAudioWriter()
+        {
+            lock (syncAudio)
+            {
+                if (_waveFileWriter == null)
+                    return;
+
+                _waveFileWriter.Close();
+                _waveFileWriter.Dispose();
+                _waveFileWriter = null;
+            }
+        }
+
         public void Dispose()
         {
             Stop();
@@ -319,7 +414,7 @@ namespace Utils.WinForm.MediaCapture.AForge
 
         public override string ToString()
         {
-            return $"{base.ToString()}\r\nVideo=[{VideoDevice.ToString()}]\r\nFrame=[{_frameWriter?.FrameRate}]";
+            return $"{base.ToString()}\r\nVideo=[{VideoDevice.ToString()}]\r\n{_frameWriter?.ToString()}".Trim();
         }
     }
 }

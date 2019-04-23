@@ -8,12 +8,14 @@ namespace TFSAssist.Remoter
 {
     public enum RemoteControlCommands
     {
-        PING,
         COMMANDS,
+
+        PING,
         INFO,        
         DRIVE,
         CPU,
         LOC,
+        CLEAR,
 
 
         MEDIA,
@@ -45,7 +47,10 @@ namespace TFSAssist.Remoter
         /// </summary>
         RESTART,
 
-
+        /// <summary>
+        /// Очистить логи
+        /// </summary>
+        CLEARLOG,
         /// <summary>
         /// Start или Stop приложения TFSControl
         /// </summary>

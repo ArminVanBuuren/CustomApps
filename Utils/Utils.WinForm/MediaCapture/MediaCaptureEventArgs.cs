@@ -1,21 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Utils.WinForm.MediaCapture
 {
     public delegate void MediaCaptureEventHandler(object sender, MediaCaptureEventArgs args);
     public class MediaCaptureEventArgs : EventArgs
     {
-        public string DestinationFile { get; }
+        public string[] FilesDestinations { get; }
         public Exception Error { get; internal set; }
 
-        internal MediaCaptureEventArgs(Exception ex)
+        internal MediaCaptureEventArgs(string[] files, Exception ex)
         {
+            FilesDestinations = files;
             Error = ex;
         }
 
-        internal MediaCaptureEventArgs(string file)
+        internal MediaCaptureEventArgs(string[] files)
         {
-            DestinationFile = file;
+            FilesDestinations = files;
         }
     }
 }
