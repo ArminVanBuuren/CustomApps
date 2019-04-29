@@ -105,6 +105,7 @@ namespace Utils.WinForm.MediaCapture.AForge
 
 
             // aforge
+            _frameWriter.Refresh();
             string destinationVideoPath = commonDestination + _frameWriter.VideoExtension;
             _frameWriter.Open(destinationVideoPath, VideoDevice.Width, VideoDevice.Height);
 
@@ -152,7 +153,14 @@ namespace Utils.WinForm.MediaCapture.AForge
                         break;
                 }
 
-                _waveSource?.StartRecording();
+                try
+                {
+                    _waveSource?.StartRecording();
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
 
                 DateTime startCapture = DateTime.Now;
                 while (DateTime.Now.Subtract(startCapture).TotalSeconds < SecondsRecordDuration)
@@ -177,7 +185,6 @@ namespace Utils.WinForm.MediaCapture.AForge
             {
                 result = new MediaCaptureEventArgs(new[] { destinationVideo, destinationAudio }, ex);
             }
-
 
             Stop();
 
@@ -340,10 +347,17 @@ namespace Utils.WinForm.MediaCapture.AForge
         {
             try
             {
-                if (_waveSource != null)
-                    _waveSource.StopRecording();
-                else
-                    StopAudioWriter();
+                _waveSource?.StopRecording();
+
+                lock (syncAudio)
+                {
+                    if (_waveFileWriter == null)
+                        return;
+
+                    _waveFileWriter.Close();
+                    _waveFileWriter.Dispose();
+                    _waveFileWriter = null;
+                }
             }
             catch (Exception)
             {
@@ -385,25 +399,10 @@ namespace Utils.WinForm.MediaCapture.AForge
                     _waveSource.Dispose();
                     _waveSource = null;
                 }
-
-                StopAudioWriter();
             }
             catch (Exception)
             {
                 // ignored
-            }
-        }
-
-        void StopAudioWriter()
-        {
-            lock (syncAudio)
-            {
-                if (_waveFileWriter == null)
-                    return;
-
-                _waveFileWriter.Close();
-                _waveFileWriter.Dispose();
-                _waveFileWriter = null;
             }
         }
 

@@ -50,11 +50,11 @@ namespace Tester.WinForm
             //    Thread.Sleep(5000);
             //}
 
-            //ScreenCapture();
+            ScreenCapture();
 
             //NAudioCapture();
 
-            AForgeCaptureProcess(aforgeDevices);
+            //AForgeCaptureProcess(aforgeDevices);
         }
 
         //private int count = 0;
@@ -90,9 +90,12 @@ namespace Tester.WinForm
             //MessageBox.Show($"OK - {count}");
         }
         
-        private async void Aforge_OnRecordingCompleted(object sender, MediaCaptureEventArgs args)
+        private void Aforge_OnRecordingCompleted(object sender, MediaCaptureEventArgs args)
         {
             completed++;
+
+            if (args != null)
+                MessageBox.Show(args.Error == null ? string.Join("\r\n ", args.FilesDestinations) : args.Error.ToString());
 
             //MessageBox.Show((args?.Error == null ? args?.DestinationFile : args?.Error.ToString()));
             //Bitmap pic = await ASYNC.ExecuteWithTimeoutAsync(aforge.GetPictureAsync(), 1000);
@@ -124,7 +127,9 @@ namespace Tester.WinForm
         private void EncoderCaptureOnRecordingCompleted(object sender, MediaCaptureEventArgs args)
         {
             completed++;
-            //MessageBox.Show(args?.Error == null ? args?.DestinationFile : args?.Error.ToString());
+
+            if (args != null)
+                MessageBox.Show(args.Error == null ? string.Join("\r\n ", args.FilesDestinations) : args.Error.ToString());
         }
 
         private ScreenCapture screen;
@@ -133,6 +138,7 @@ namespace Tester.WinForm
             //var frameWriter = new AviFrameWriter(7);
             //var frameWriter = new MpegWriter(13);
             var frameWriter = new MpegWriter(7);
+
             screen = new ScreenCapture(frameWriter, @"E:\VideoClips", 1200);
             screen.OnRecordingCompleted += Screen_OnRecordingCompleted;
             screen.StartRecording();
@@ -142,7 +148,8 @@ namespace Tester.WinForm
         {
             completed++;
 
-            //MessageBox.Show(args?.Error == null ? args?.FilesDestinations : args?.Error.ToString());
+            if (args != null)
+                MessageBox.Show(args.Error == null ? string.Join("\r\n ", args.FilesDestinations) : args.Error.ToString());
         }
 
         private NAudioCapture naudio;
@@ -155,7 +162,8 @@ namespace Tester.WinForm
 
         private void Naudio_OnRecordingCompleted(object sender, MediaCaptureEventArgs args)
         {
-            //MessageBox.Show(args?.Error == null ? args?.FilesDestinations : args?.Error.ToString());
+            if (args != null)
+                MessageBox.Show(args.Error == null ? string.Join("\r\n ", args.FilesDestinations) : args.Error.ToString());
         }
     }
 }

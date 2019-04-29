@@ -42,7 +42,7 @@ namespace Tester.Updater
         private static ApplicationUpdater up;
         public static void Update()
         {
-            up = new ApplicationUpdater(Assembly.GetExecutingAssembly(), "QJedWja49u4vlnS.zip1", 1);
+            up = new ApplicationUpdater(Assembly.GetExecutingAssembly(), "QJedWja49u4vlnS.zip", 1);
             up.OnFetch += Up_OnFetch;
             up.OnUpdate += Up_OnUpdate;
             up.OnProcessingError += Up_OnProcessingError;

@@ -43,6 +43,7 @@ namespace Utils.WinForm.MediaCapture.Screen
             string commonDestination = Path.Combine(DestinationDir, $"{DateTime.Now:ddHHmmss}_{STRING.RandomString(15)}");
 
             // video
+            _frameWriter.Refresh();
             string destinationVideoPath = commonDestination + _frameWriter.VideoExtension;
             _frameWriter.Open(destinationVideoPath, screenBounds.Width, screenBounds.Height);
 
@@ -73,16 +74,21 @@ namespace Utils.WinForm.MediaCapture.Screen
 
         void DoRecordingAsync(string destinationVideo, string destinationAudio)
         {
-            Mode = MediaCaptureMode.Recording;
             MediaCaptureEventArgs result = null;
-            FramesInfo framesInfo = new FramesInfo(_frameWriter.FrameRate);
-            //Queue queue = new Queue();
+            Mode = MediaCaptureMode.Recording;
 
             try
             {
-                _waveSource?.StartRecording();
+                try
+                {
+                    _waveSource?.StartRecording();
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
 
-                using (framesInfo)
+                using (FramesInfo framesInfo = new FramesInfo(_frameWriter.FrameRate))
                 {
                     DateTime startCapture = DateTime.Now;
                     bool isContinue = true;
@@ -148,10 +154,17 @@ namespace Utils.WinForm.MediaCapture.Screen
         {
             try
             {
-                if (_waveSource != null)
-                    _waveSource.StopRecording();
-                else
-                    StopAudioWriter();
+                _waveSource?.StopRecording();
+
+                lock (syncAudio)
+                {
+                    if (_waveFileWriter == null)
+                        return;
+
+                    _waveFileWriter.Close();
+                    _waveFileWriter.Dispose();
+                    _waveFileWriter = null;
+                }
             }
             catch (Exception)
             {
@@ -176,32 +189,17 @@ namespace Utils.WinForm.MediaCapture.Screen
         {
             try
             {
-                if (_waveSource != null)
-                {
-                    _waveSource.DataAvailable -= WaveSource_DataAvailable;
-                    _waveSource.RecordingStopped -= WaveSource_RecordingStopped;
-                    _waveSource.Dispose();
-                    _waveSource = null;
-                }
+                if (_waveSource == null)
+                    return;
 
-                StopAudioWriter();
+                _waveSource.DataAvailable -= WaveSource_DataAvailable;
+                _waveSource.RecordingStopped -= WaveSource_RecordingStopped;
+                _waveSource.Dispose();
+                _waveSource = null;
             }
             catch (Exception)
             {
                 // ignored
-            }
-        }
-
-        void StopAudioWriter()
-        {
-            lock (syncAudio)
-            {
-                if (_waveFileWriter == null)
-                    return;
-
-                _waveFileWriter.Close();
-                _waveFileWriter.Dispose();
-                _waveFileWriter = null;
             }
         }
 

@@ -11,7 +11,7 @@ namespace Tester.WinForm
 {
     public class MpegWriter : IFrameWriter, IDisposable
     {
-        private readonly VideoFileWriter _fileWriter;
+        private VideoFileWriter _fileWriter;
 
         public int FrameRate { get; set; }
         public string VideoExtension { get; } = ".avi";
@@ -32,6 +32,12 @@ namespace Tester.WinForm
         {
             if (_fileWriter.IsOpen)
                 _fileWriter.WriteVideoFrame(frameImage);
+        }
+
+        public void Refresh()
+        {
+            Close();
+            _fileWriter = new VideoFileWriter();
         }
 
         public void Close()

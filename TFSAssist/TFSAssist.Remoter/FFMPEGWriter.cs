@@ -7,7 +7,7 @@ namespace TFSAssist.Remoter
 {
     class FFMPEGWriter : IFrameWriter, IDisposable
     {
-        private readonly VideoFileWriter _fileWriter;
+        private VideoFileWriter _fileWriter;
 
         public int FrameRate { get; set; }
         public string VideoExtension { get; } = ".avi";
@@ -30,6 +30,12 @@ namespace TFSAssist.Remoter
                 _fileWriter.WriteVideoFrame(frameImage);
         }
 
+        public void Refresh()
+        {
+            Close();
+            _fileWriter = new VideoFileWriter();
+        }
+
         public void Close()
         {
             _fileWriter.Close();
@@ -37,7 +43,7 @@ namespace TFSAssist.Remoter
 
         public override string ToString()
         {
-            return $"FFMPEGFrameRate=[{FrameRate}]";
+            return $"FFMPEG-FrameRate=[{FrameRate}]";
         }
 
         public void Dispose()

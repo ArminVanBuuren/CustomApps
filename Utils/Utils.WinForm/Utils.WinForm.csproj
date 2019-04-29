@@ -431,6 +431,7 @@
     <Compile Include="AForge\Video.Ximea\TriggerSource.cs" />
     <Compile Include="AForge\Video.Ximea\XimeaCamera.cs" />
     <Compile Include="AForge\Video.Ximea\XimeaVideoSource.cs" />
+    <Compile Include="MediaCapture\AviFrameWriter.cs" />
     <Compile Include="MediaCapture\IFrameWriter.cs" />
     <Compile Include="MediaCapture\MediaCapture.cs" />
     <Compile Include="MediaCapture\NAudio\NAudioCapture.cs" />
