@@ -6,12 +6,12 @@ namespace TFSAssist.Control.DataBase
 	public static class Utils
 	{
 		//string _example = "---% now %---% now ( + 8 : hour ) %---% now ( + 1 : day ) %---% now ( + 1 : workday ) %---% now ( + 1 : month ) %---% now ( + 1 : year ) %---";
-		static Regex GetSimpleFunc = new Regex(@"%\s*(?<Func>[A-z]+?)\s*%", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-		static Regex GetNowWithOpt = new Regex(@"%\s*(?<Func>.+?)\s*\(\s*(?<Operator>\+|\-)\s*(?<Num>\d+)\s*\:\s*(?<Operation>.+?)\)\s*%", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+		static readonly Regex GetSimpleFunc = new Regex(@"%\s*(?<Func>[A-z]+?)\s*%", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+		static readonly Regex GetNowWithOpt = new Regex(@"%\s*(?<Func>.+?)\s*\(\s*(?<Operator>\+|\-)\s*(?<Num>\d+)\s*\:\s*(?<Operation>.+?)\)\s*%", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
 		public static string GetCustomFuncResult(string source)
 		{
-			string _source = source;
+			var _source = source;
 
 			MatchEvaluator evaluatorOtherwise = GetCustomFunc;
 			_source = GetSimpleFunc.Replace(_source, evaluatorOtherwise);
@@ -24,7 +24,7 @@ namespace TFSAssist.Control.DataBase
 
 		static string GetCustomFunc(Match match)
 		{
-			GroupCollection groups = match.Groups;
+			var groups = match.Groups;
 		    if (groups["Func"].Success)
 		    {
 		        if (groups["Func"].Value.Trim().Equals("now", StringComparison.CurrentCultureIgnoreCase))
@@ -40,18 +40,18 @@ namespace TFSAssist.Control.DataBase
 			GroupCollection groups = match.Groups;
 			if (groups["Func"].Success && groups["Func"].Value.Trim().Equals("now", StringComparison.CurrentCultureIgnoreCase) && groups.Count > 4)
 			{
-				DateTime now = DateTime.Now;
+				var now = DateTime.Now;
 
 				int numberOf = int.Parse(match.Groups["Num"].Value.Trim());
 				if (numberOf == 0)
 					return now.ToString("G");
 
 
-				string @operator = match.Groups["Operator"].Value.Trim();
+				var @operator = match.Groups["Operator"].Value.Trim();
 				if (@operator == "-")
 					numberOf = -numberOf;
 
-				string operation = match.Groups["Operation"].Value.Trim().ToLower();
+				var operation = match.Groups["Operation"].Value.Trim().ToLower();
 				switch (operation)
 				{
 					case "workday": return now.AddWorkdays(numberOf).ToString("G");
@@ -71,7 +71,7 @@ namespace TFSAssist.Control.DataBase
 
 		public static DateTime AddWorkdays(this DateTime originalDate, int workDays)
 		{
-			DateTime tmpDate = originalDate;
+			var tmpDate = originalDate;
 			if (workDays > 0)
 			{
 				while (workDays > 0)

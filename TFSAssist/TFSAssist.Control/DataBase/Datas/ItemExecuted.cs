@@ -36,7 +36,7 @@ namespace TFSAssist.Control.DataBase.Datas
             // реплейсим динамические параметры на спарсенные параметры из запроса, по ситаксису %ParceBody_TITLE%
             foreach (DataMail mailParceItem in MailParcedItems)
             {
-                _result = new Regex(string.Format(@"%\s*{0}\s*%", mailParceItem.Name), RegexOptions.IgnoreCase).Replace(_result, mailParceItem.Value);
+                _result = new Regex($@"%\s*{mailParceItem.Name}\s*%", RegexOptions.IgnoreCase).Replace(_result, mailParceItem.Value);
             }
 
             // реплейсим динамические параметры на результат функций, по ситаксису %now%

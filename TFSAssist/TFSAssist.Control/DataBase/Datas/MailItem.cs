@@ -11,9 +11,9 @@ namespace TFSAssist.Control.DataBase.Datas
 		public string Subject;
 		public string Body;
 
-        public override bool Equals(object ob)
+        public override bool Equals(object obj)
         {
-            if (ob is MailItem input)
+            if (obj is MailItem input)
             {
                 return input.ReceivedDate == ReceivedDate && input.From == From && input.Subject == Subject && input.Body == Body;
             }

@@ -40,55 +40,50 @@ namespace TFSAssist.Control.DataBase.Settings
         [XmlElement("ExchangeUri")]
 	    public SettingValue<string> ExchangeUri
 	    {
-	        get { return _exchangeUri; }
-	        set { _exchangeUri = value ?? _exchangeUri; }
-	    }
+	        get => _exchangeUri;
+            set => _exchangeUri = value ?? _exchangeUri;
+        }
 
 	    [XmlElement("AuthorizationTimeout")]
 	    public SettingValue<string> AuthorizationTimeout
         {
-	        get { return _authorizationTimeout; }
-	        set { _authorizationTimeout = value ?? _authorizationTimeout; }
-	    }
+	        get => _authorizationTimeout;
+            set => _authorizationTimeout = value ?? _authorizationTimeout;
+        }
 
         [XmlElement("StartDate")]
 	    public SettingValue<string> StartDate
 	    {
-	        get
-	        {
-	            return _startDate;
-	        }
-	        set
-	        {
-	            _startDate = value == null || value.Value.IsNullOrEmpty()
-	                ? _startDate
-	                : new SettingValue<string>
-	                {
-	                    Value = DateTime.Parse(value.Value).ToString("G")
-	                };
-	        }
-	    }
+	        get => _startDate;
+            set =>
+                _startDate = value == null || value.Value.IsNullOrEmpty()
+                    ? _startDate
+                    : new SettingValue<string>
+                    {
+                        Value = DateTime.Parse(value.Value).ToString("G")
+                    };
+        }
 
 	    [XmlElement("SourceFolder")]
 	    public SettingValue<string> SourceFolder
 	    {
-	        get { return _sourceFolder; }
-	        set { _sourceFolder = value ?? _sourceFolder; }
-	    }
+	        get => _sourceFolder;
+            set => _sourceFolder = value ?? _sourceFolder;
+        }
 
 	    [XmlElement("FilterMailFrom")]
 	    public SettingValue<string> FilterMailFrom
 	    {
-	        get { return _filterMailFrom; }
-	        set { _filterMailFrom = value ?? _filterMailFrom; }
-	    }
+	        get => _filterMailFrom;
+            set => _filterMailFrom = value ?? _filterMailFrom;
+        }
 
 	    [XmlElement("FilterSubject")]
 	    public SettingValue<string> FilterSubject
 	    {
-	        get { return _filterSubject; }
-	        set { _filterSubject = value ?? _filterSubject; }
-	    }
+	        get => _filterSubject;
+            set => _filterSubject = value ?? _filterSubject;
+        }
 
 
 	    //[XmlElement("DebugLogging")]
@@ -101,15 +96,15 @@ namespace TFSAssist.Control.DataBase.Settings
         [XmlElement]
 		public XmlNode[] ParceBody
 		{
-			get { return _getRegexParceBody; }
-			set { _getRegexParceBody = value ?? _getRegexParceBody; }
-		}
+			get => _getRegexParceBody;
+            set => _getRegexParceBody = value ?? _getRegexParceBody;
+        }
 
 		[XmlElement]
 		public XmlNode[] ParceSubject
 		{
-			get { return _getRegexParceSubject; }
-			set { _getRegexParceSubject = value ?? _getRegexParceSubject; }
-		}
+			get => _getRegexParceSubject;
+            set => _getRegexParceSubject = value ?? _getRegexParceSubject;
+        }
     }
 }

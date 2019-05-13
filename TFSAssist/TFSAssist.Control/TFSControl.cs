@@ -44,10 +44,10 @@ namespace TFSAssist.Control
         private ExchangeService _exchangeService;
         private FolderId _exchangeFolder;
 
-        private object _objectLock = new object();
+        private readonly object _objectLock = new object();
         Regex ParceSubject { get; set; }
         Regex ParceBody { get; set; }
-        static Regex _checkEmailAddress = new Regex(@"^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,64}$", RegexOptions.Compiled);
+        static readonly Regex _checkEmailAddress = new Regex(@"^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,64}$", RegexOptions.Compiled);
         private MailItem? _tempLastMailItem;
 
         void StartPerforming()
@@ -134,31 +134,37 @@ namespace TFSAssist.Control
         {
             _log.OnStatusChanged(StatusString.ConnectingMail);
 
-            _exchangeService = new ExchangeService(ExchangeVersion.Exchange2013_SP1);
-            _exchangeService.TraceListener = new TraceListener(_log.OnWriteLog);
-            _exchangeService.TraceFlags = TraceFlags.All;
-            _exchangeService.TraceEnabled = true;
-            _exchangeService.KeepAlive = true;
-            _exchangeService.Timeout = int.Parse(Settings.MailOption.AuthorizationTimeout.Value) * 1000;
+            _exchangeService = new ExchangeService(ExchangeVersion.Exchange2013_SP1)
+            {
+                TraceListener = new TraceListener(_log.OnWriteLog),
+                TraceFlags = TraceFlags.All,
+                TraceEnabled = true,
+                KeepAlive = true,
+                Timeout = int.Parse(Settings.MailOption.AuthorizationTimeout.Value) * 1000
+            };
 
-            SecureString _mailPassword = new SecureString();
+            var _mailPassword = new SecureString();
             if (Settings.MailOption.Password.Value != null)
                 foreach (char ch in Settings.MailOption.Password.Value)
                     _mailPassword.AppendChar(ch);
 
-            _log.OnWriteLog($"Address=[{Settings.MailOption.Address.Value}] Domain\\Username=[{Settings.MailOption.UserName.Value}] Exchange URI=[{Settings.MailOption.ExchangeUri.Value}]");
+            if(_mailPassword.Length == 0)
+                throw new ArgumentException($"You must enter password.");
 
-            if (!Settings.MailOption.ExchangeUri.Value.IsNullOrEmptyTrim() && !Settings.MailOption.UserName.Value.IsNullOrEmptyTrim() && _mailPassword.Length > 0)
+            _log.OnWriteLog($"Address=[{Settings.MailOption.Address.Value}] UserName=[{Settings.MailOption.UserName.Value}] Exchange URI=[{Settings.MailOption.ExchangeUri.Value}]");
+
+            if (!Settings.MailOption.ExchangeUri.Value.IsNullOrEmptyTrim() && !Settings.MailOption.UserName.Value.IsNullOrEmptyTrim())
             {
-                string[] domain_username = Settings.MailOption.UserName.Value.Split('\\');
-                if (domain_username.Length != 2 || domain_username[0].IsNullOrEmpty() || domain_username[1].IsNullOrEmpty())
-                    throw new ArgumentException("You must add domain and username like - \"Domain\\Username\"");
+                var domain_username = Settings.MailOption.UserName.Value.Split('\\');
+                if (domain_username.Length == 2)
+                    _exchangeService.Credentials = new NetworkCredential(domain_username[1].Trim(), _mailPassword, domain_username[0].Trim());
+                else
+                    _exchangeService.Credentials = new NetworkCredential(Settings.MailOption.UserName.Value, _mailPassword);
 
-                _exchangeService.Credentials = new NetworkCredential(domain_username[1].Trim(), _mailPassword, domain_username[0].Trim());
                 _exchangeService.Url = new Uri(Settings.MailOption.ExchangeUri.Value);
                 //AlternateIdBase response = _exchangeService.ConvertId(new AlternateId(IdFormat.EwsId, "Placeholder", domain_username[1].Trim()), IdFormat.EwsId);
             }
-            else if (!Settings.MailOption.Address.Value.IsNullOrEmptyTrim() && _checkEmailAddress.IsMatch(Settings.MailOption.Address.Value) && _mailPassword.Length > 0) // Необходим только Email Address и пароль, т.к. вызывается другой способ подключения
+            else if (!Settings.MailOption.Address.Value.IsNullOrEmptyTrim() && _checkEmailAddress.IsMatch(Settings.MailOption.Address.Value)) // Необходим только Email Address и пароль, т.к. вызывается другой способ подключения
             {
                 _exchangeService.Credentials = new NetworkCredential(Settings.MailOption.Address.Value, _mailPassword);
                 _exchangeService.AutodiscoverUrl(Settings.MailOption.Address.Value, RedirectionUrlValidationCallback);
@@ -170,7 +176,7 @@ namespace TFSAssist.Control
             }
             else
             {
-                throw new ArgumentException($"Authorization data is incorrect! Please check fields.");
+                throw new ArgumentException($"Authorization data is incorrect! Please check mail's authorization fields.");
             }
 
             // проверяем коннект к почтовому серверу через считывание папки Входящие
@@ -191,11 +197,11 @@ namespace TFSAssist.Control
 
 
             // если указан фильтр по папке, то найти папку на почте и обрабатывать письмо только из этой папки
-            string folderName = Settings.MailOption.SourceFolder.Value.Trim();
+            var folderName = Settings.MailOption.SourceFolder.Value.Trim();
             Folder folderFilter = null;
             if (!folderName.IsNullOrEmpty())
             {
-                FindFoldersResults inboxFolders = _exchangeService.FindFolders(WellKnownFolderName.MsgFolderRoot, new FolderView(int.MaxValue)
+                var inboxFolders = _exchangeService.FindFolders(WellKnownFolderName.MsgFolderRoot, new FolderView(int.MaxValue)
                 {
                     Traversal = FolderTraversal.Deep
                 });
@@ -243,7 +249,7 @@ namespace TFSAssist.Control
                 if (tfs_domain_username.Length != 2 || tfs_domain_username[0].IsNullOrEmpty() || tfs_domain_username[1].IsNullOrEmpty())
                     throw new ArgumentException("You must add Domain and UserName for TFS-server like: \"Domain\\Username\"");
 
-                SecureString _tfsUserPassword = new SecureString();
+                var _tfsUserPassword = new SecureString();
                 if (Settings.TFSOption.TFSUserPassword.Value != null)
                     foreach (char ch in Settings.TFSOption.TFSUserPassword.Value)
                         _tfsUserPassword.AppendChar(ch);
