@@ -20,7 +20,7 @@ namespace TFSAssist.Control.DataBase.Datas
         [XmlAttribute("Status")]
         public string StatusAsString
         {
-            get { return Status.ToString("G"); }
+            get => Status.ToString("G");
             set
             {
                 if (string.IsNullOrEmpty(value))
@@ -31,9 +31,9 @@ namespace TFSAssist.Control.DataBase.Datas
 
                 foreach (ProcessingStatus stat in Enum.GetValues(typeof(ProcessingStatus)))
                 {
-                    string ss1 = value.Trim();
-                    string ss2 = stat.ToString("G");
-                    string ss3 = stat.ToString("D");
+                    var ss1 = value.Trim();
+                    var ss2 = stat.ToString("G");
+                    var ss3 = stat.ToString("D");
                     if (ss1.Equals(ss2, StringComparison.CurrentCultureIgnoreCase) || ss1.Equals(ss3, StringComparison.CurrentCultureIgnoreCase))
                     {
                         Status = stat;
@@ -58,7 +58,7 @@ namespace TFSAssist.Control.DataBase.Datas
 
         public override string ToString ()
         {
-            return string.Format("From=[{0}]; ReceivedData=[{1}];", From, ReceivedDate);
+            return $"From=[{From}]; ReceivedData=[{ReceivedDate}];";
         }
     }
 }

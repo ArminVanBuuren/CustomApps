@@ -17,29 +17,27 @@ namespace Utils.Handles
 
     public class GitControl
     {
-        private Uri _remoteRepos;
-        private string _gitDirectoryPath;
-        private string _transactionId;
-        string gitCommand = "git";
-        string gitPwdArgument = "pwd";
-        string gitCdArgument = string.Empty;
-        string gitCloneArgument = string.Empty;
-        string gitInitArgument = $"init";
-        string gitRemoteAddArgument = string.Empty;
+        private readonly string _gitDirectoryPath;
+
+        readonly string gitCommand = "git";
+        //string gitPwdArgument = "pwd";
+        string gitCdArgument;
+        string gitCloneArgument;
+        readonly string gitInitArgument = $"init";
+        readonly string gitRemoteAddArgument;
         string gitPullArgument = @"pull origin master";
         string gitAddArgument = @"add .";
-        string gitCommitArgument = string.Empty;
+        readonly string gitCommitArgument;
         string gitPushArgument = @"push -u origin master";
         public GitControl(Uri remoteRepos, string gitDirectoryPath, string transactionId)
         {
-            _remoteRepos = remoteRepos;
+            var remoteRepos1 = remoteRepos;
             _gitDirectoryPath = gitDirectoryPath;
-            _transactionId = transactionId;
 
             gitCdArgument = $"cd -P -- \"{_gitDirectoryPath}\"";
-            gitCloneArgument = $"clone {_remoteRepos.AbsoluteUri}";
-            gitRemoteAddArgument = $"remote add origin {_remoteRepos.AbsoluteUri}";
-            gitCommitArgument = $"commit -m \"Add build {_transactionId}\"";
+            gitCloneArgument = $"clone {remoteRepos1.AbsoluteUri}";
+            gitRemoteAddArgument = $"remote add origin {remoteRepos1.AbsoluteUri}";
+            gitCommitArgument = $"commit -m \"Add build {transactionId}\"";
 
             if (!Directory.Exists(gitDirectoryPath))
                 Directory.CreateDirectory(gitDirectoryPath);

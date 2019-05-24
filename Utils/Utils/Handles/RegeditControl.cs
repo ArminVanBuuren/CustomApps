@@ -9,8 +9,8 @@ namespace Utils.Handles
 {
     public class RegeditControl : IDisposable
     {
-        private RegistryKey software;
-        private RegistryKey myProject;
+        private readonly RegistryKey software;
+        private readonly RegistryKey myProject;
         public RegeditControl(string applicationName)
         {
             software = Registry.CurrentUser.OpenSubKey("SOFTWARE", true);
@@ -28,10 +28,6 @@ namespace Utils.Handles
         ///// <returns></returns>
         //public static string GetOrSetRegedit(string applicationName, string description)
         //{
-
-
-            
-
         //    string currentDesc = (string) myProject.GetValue("Description") ?? string.Empty;
         //    if (!currentDesc.Equals(description))
         //        myProject.SetValue("Description", description);
@@ -50,14 +46,8 @@ namespace Utils.Handles
 
         public object this[string propertyName, RegistryValueKind type = RegistryValueKind.String]
         {
-            get
-            {
-                return myProject.GetValue(propertyName);
-            }
-            set
-            {
-                myProject.SetValue(propertyName, value, type);
-            }
+            get => myProject.GetValue(propertyName);
+            set => myProject.SetValue(propertyName, value, type);
         }
 
         public static bool EnabledBootRun(string applicationName)
@@ -78,7 +68,7 @@ namespace Utils.Handles
                 applicatinItemValue = applicatinItemValue.Trim();
 
 
-            string setValue = string.Format("\"{0}\" /autostart", applicationPath);
+            string setValue = $"\"{applicationPath}\" /autostart";
             if (addToStartup && setValue.Equals(applicatinItemValue))
                 return true;
 

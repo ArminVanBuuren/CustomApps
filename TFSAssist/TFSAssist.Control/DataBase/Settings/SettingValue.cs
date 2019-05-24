@@ -14,10 +14,7 @@ namespace TFSAssist.Control.DataBase.Settings
         {
             PropertyChangedEventHandler handler = PropertyChanged;
 
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private T _value;
@@ -25,8 +22,8 @@ namespace TFSAssist.Control.DataBase.Settings
 	    [XmlAttribute]
 	    public virtual T Value
 	    {
-	        get { return _value; }
-	        set
+	        get => _value;
+            set
 	        {
 	            if (_value != null && _value.Equals(value))
 	                return;
@@ -47,10 +44,7 @@ namespace TFSAssist.Control.DataBase.Settings
         [XmlAttribute]
         public override bool Value
         {
-            get
-            {
-                return RegeditControl.EnabledBootRun(TFSAssist.Control.TFSControl.ApplicationName);
-            }
+            get => RegeditControl.EnabledBootRun(TFSAssist.Control.TFSControl.ApplicationName);
             set
             {
                 RegeditControl.SetBootStartup(TFSAssist.Control.TFSControl.ApplicationName, TFSAssist.Control.TFSControl.ApplicationPath, value);

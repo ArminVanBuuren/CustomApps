@@ -16,18 +16,15 @@ namespace TFSAssist.Control.DataBase.Settings
         [XmlElement("Interval")]
 		public SettingValue<int> Interval
 		{
-			get { return _interval; }
-			set { _interval = value == null || value.Value < 1 ? _interval : value; }
-		}
+			get => _interval;
+            set => _interval = value == null || value.Value < 1 ? _interval : value;
+        }
 
 		[XmlElement("BootRun")]
 		public SettingBootRun BootRun
 		{
-		    get
-		    {
-                return _bootRun;		        
-		    }
-		    set
+		    get => _bootRun;
+            set
 		    {
 		        if (value == null)
 		        {

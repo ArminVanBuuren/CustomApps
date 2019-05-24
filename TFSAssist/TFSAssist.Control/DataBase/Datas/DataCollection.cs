@@ -28,7 +28,7 @@ namespace TFSAssist.Control.DataBase.Datas
 
 		public override string ToString()
 		{
-			return string.Format("Datas=[{0}]", Items.Count);
+			return $"Datas=[{Items.Count}]";
 		}
 	}
 }

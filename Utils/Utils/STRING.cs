@@ -90,6 +90,22 @@ namespace Utils
             else return input;
         }
 
+        /// <summary>
+        /// Если объекты примерно равны. Либо значение первого есть во втором, либо значение второго есть в первом. Регистр игнорируется.
+        /// </summary>
+        /// <param name="param1"></param>
+        /// <param name="param2"></param>
+        /// <returns></returns>
+        public static bool IsObjectsSimilar(string param1, string param2)
+        {
+            return param1.IndexOf(param2, StringComparison.CurrentCultureIgnoreCase) != -1 || param2.IndexOf(param1, StringComparison.CurrentCultureIgnoreCase) != -1;
+        }
+
+        public static string TrimString(this string input)
+        {
+            return input.Trim('\r', '\n', '\t', ' ');
+        }
+
         public static bool StringEquals(this string param1, string param2, bool ignoreCase)
         {
             if (ignoreCase)

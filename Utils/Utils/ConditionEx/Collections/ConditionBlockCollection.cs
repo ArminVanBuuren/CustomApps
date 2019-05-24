@@ -2,6 +2,7 @@
 
 namespace Utils.ConditionEx.Collections
 {
+    /// <inheritdoc />
     /// <summary>
     /// колличество условных блоков в связке and или or
     /// </summary>
@@ -12,6 +13,7 @@ namespace Utils.ConditionEx.Collections
         {
             _parent = bc;
         }
+
         public void AddChild(ConditionBlock c)
         {
             if (c == null)
@@ -19,17 +21,17 @@ namespace Utils.ConditionEx.Collections
             c.Parent = _parent;
             Insert(Count, c);
         }
+
         public bool GetResultCondition()
         {
-            foreach (ConditionBlock c in this)
+            foreach (var conditionBlock in this)
             {
-                if (!c.ResultCondition)
+                if (!conditionBlock.ResultCondition)
                 {
                     return false;
                 }
             }
             return true;
         }
-
     }
 }

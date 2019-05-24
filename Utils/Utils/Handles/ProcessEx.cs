@@ -4,10 +4,40 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Utils
+namespace Utils.Handles
 {
-    public static partial class ProcessEx
+    public sealed class ProcessResults : IDisposable
     {
+        public ProcessResults(Process process, DateTime processStartTime, string[] standardOutput, string[] standardError)
+        {
+            Process = process;
+            ExitCode = process.ExitCode;
+            RunTime = process.ExitTime - processStartTime;
+            StandardOutput = standardOutput;
+            StandardError = standardError;
+        }
+
+        public Process Process { get; }
+        public int ExitCode { get; }
+        public TimeSpan RunTime { get; }
+        public string[] StandardOutput { get; }
+        public string[] StandardError { get; }
+        public void Dispose() { Process.Dispose(); }
+    }
+
+    // these overloads match the ones in Process.Start to make it a simpler transition for callers
+    // see http://msdn.microsoft.com/en-us/library/system.diagnostics.process.start.aspx
+    public static class ProcessEx
+    {
+        public static Task<ProcessResults> RunAsync(string fileName) => RunAsync(new ProcessStartInfo(fileName));
+
+        public static Task<ProcessResults> RunAsync(string fileName, string arguments) => RunAsync(new ProcessStartInfo(fileName, arguments));
+
+        public static Task<ProcessResults> RunAsync(ProcessStartInfo processStartInfo) => RunAsync(processStartInfo, CancellationToken.None);
+
+        public static Task<ProcessResults> RunAsync(ProcessStartInfo processStartInfo, CancellationToken cancellationToken) =>
+            RunAsync(processStartInfo, new List<string>(), new List<string>(), cancellationToken);
+
         public static async Task<ProcessResults> RunAsync(ProcessStartInfo processStartInfo, List<string> standardOutput, List<string> standardError, CancellationToken cancellationToken)
         {
             // force some settings in the start info so we can capture the output

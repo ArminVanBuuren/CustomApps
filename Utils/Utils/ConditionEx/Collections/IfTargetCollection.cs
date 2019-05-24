@@ -9,25 +9,28 @@ namespace Utils.ConditionEx.Collections
         {
             _parent = bc;
         }
+
         public void AddChild(IfTarget bc)
         {
-            if (bc != null)
-            {
-                bc.Parent = _parent;
-                Insert(Count, bc);
-            }
+            if (bc == null)
+                return;
+
+            bc.Parent = _parent;
+            Insert(Count, bc);
         }
+
         public bool GetResultCondition()
         {
-            foreach (IfTarget bc in this)
+            foreach (var ifTarget in this)
             {
-                if (!bc.ResultCondition)
+                if (!ifTarget.ResultCondition)
                 {
                     return false;
                 }
             }
             return true;
         }
+
         public void RemoveChild(IfTarget bc)
         {
             Remove(bc);

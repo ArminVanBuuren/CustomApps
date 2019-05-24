@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Utils.ConditionEx.Base;
-using Utils.ConditionEx.Utils;
+using static Utils.TYPES;
 
 namespace Utils.ConditionEx.Collections
 {
@@ -26,9 +26,9 @@ namespace Utils.ConditionEx.Collections
         {
             get
             {
-                foreach (Condition p in this)
+                foreach (var condition in this)
                 {
-                    if (!p.ResultCondition)
+                    if (!condition.ResultCondition)
                         return false;
                 }
                 return true;
@@ -41,48 +41,27 @@ namespace Utils.ConditionEx.Collections
             {
                 string result = string.Empty;
                 int i = 0;
-                foreach (Condition p in this)
+                foreach (var condition in this)
                 {
-                    if (p.Operator == ConditionOperator.Unknown)
+                    if (condition.Operator == ConditionOperator.Unknown)
                     {
                         continue;
                     }
-                    Parameter pRes1 = p.ParamFirst.DynamicParam;
-                    Parameter pRes2 = p.ParamSecond.DynamicParam;
+                    var first = condition.ParamFirst.DynamicParam;
+                    var second = condition.ParamSecond.DynamicParam;
 
                     i++;
                     if (i > 1)
                     {
-                        result = result + string.Format(@"{0}{1}[{2}]",
-                            ComponentCondition.GetOperator(p.Operator),
-                            GetTypeString(pRes2),
-                            pRes2.Value);
+                        result = result + $@"{ComponentCondition.GetOperator(condition.Operator)}{second.Type:G}[{second.Value}]";
                         continue;
                     }
-                    result = result + string.Format(@"{0}[{1}]{2}{3}[{4}]",
-                        GetTypeString(pRes1),
-                        pRes1.Value,
-                        ComponentCondition.GetOperator(p.Operator),
-                        GetTypeString(pRes2),
-                        pRes2.Value);
+
+                    result = result + $@"{first.Type:G}[{first.Value}]{ComponentCondition.GetOperator(condition.Operator)}{second.Type:G}[{second.Value}]";
                 }
                 return result;
             }
         }
-
-        string GetTypeString(Parameter pt)
-        {
-            switch (pt.Type)
-             {
-                 case TypeParam.Number: return "Num";
-                 case TypeParam.Bool: return "Bool";
-                 case TypeParam.String: return "String";
-                 case TypeParam.MathEx: return "MathEx";
-                 default: return "Null";
-             }
-        }
-
-
 
     }
 }

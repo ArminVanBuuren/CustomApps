@@ -28,8 +28,8 @@ namespace Utils.AppUpdater
     public class ApplicationUpdater
     {
         private readonly Timer _watcher;
-        object syncStatus = new object();
-        object syncChecking = new object();
+        readonly object syncStatus = new object();
+        readonly object syncChecking = new object();
         private AutoUpdaterStatus _satus = AutoUpdaterStatus.Stopped;
 
         public event AppFetchingHandler OnFetch;

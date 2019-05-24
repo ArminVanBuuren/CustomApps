@@ -1,6 +1,6 @@
 ﻿using System;
 using Utils.ConditionEx.Collections;
-using Utils.ConditionEx.Utils;
+using static Utils.TYPES;
 
 namespace Utils.ConditionEx.Base
 {
@@ -10,13 +10,6 @@ namespace Utils.ConditionEx.Base
         /// Родительское выражение
         /// </summary>
         internal ConditionBlock Parent { get; }
-        public Condition(ConditionBlock parent, string firstParam, string secondParam, ConditionOperator _operator)
-        {
-            Parent = parent;
-            ParamFirst = new ConditionParameter(firstParam);
-            ParamSecond = new ConditionParameter(secondParam);
-            Operator = _operator;
-        }
 
         /// <summary>
         /// Условие выражения
@@ -38,103 +31,82 @@ namespace Utils.ConditionEx.Base
         /// </summary>
         public bool ResultCondition => EvaluateCurrentParams();
 
+
+        public Condition(ConditionBlock parent, string firstParam, string secondParam, ConditionOperator @operator)
+        {
+            Parent = parent;
+            ParamFirst = new ConditionParameter(firstParam);
+            ParamSecond = new ConditionParameter(secondParam);
+            Operator = @operator;
+        }
+
         /// <summary>
         /// Определяем результат выражения текущих параметров
         /// </summary>
         bool EvaluateCurrentParams()
         {
-            Parameter pRes1 = ParamFirst.DynamicParam;
-            Parameter pRes2 = ParamSecond.DynamicParam;
-            string pStr1 = pRes1.Value;
-            string pStr2 = pRes2.Value;
-            TypeParam pType1 = pRes1.Type;
-            TypeParam pType2 = pRes2.Type;
-            //проверяем если параметры типа number
-            if (pType1 == TypeParam.Number && pType2 == TypeParam.Number && Operator != ConditionOperator.Like && Operator != ConditionOperator.NotLike)
+            var firstValue = ParamFirst.DynamicParam.Value;
+            var secondValue = ParamSecond.DynamicParam.Value;
+            var firstType = ParamFirst.DynamicParam.Type;
+            var secondType = ParamSecond.DynamicParam.Type;
+
+            switch (firstType & secondType)
             {
-                ConditionOperator temp = EqualsNumbers(pStr1, pStr2);
-                if (Operator == ConditionOperator.EqualOrGreaterThan && (temp == ConditionOperator.Equal || temp == ConditionOperator.GreaterThan))
-                {
+                // если какой то из параметров или оба являются null
+                case TypeParam.Null when firstType == secondType && (Operator == ConditionOperator.Equal || Operator == ConditionOperator.Like):
+                case TypeParam.Null when firstType != secondType && (Operator == ConditionOperator.NotEqual || Operator == ConditionOperator.NotLike):
                     return true;
-                }
-                if (Operator == ConditionOperator.EqualOrLessThan && (temp == ConditionOperator.Equal || temp == ConditionOperator.LessThan))
-                {
-                    return true;
-                }
-                if (Operator == ConditionOperator.NotEqual)
-                {
-                    if (temp != ConditionOperator.Equal)
-                    {
-                        return true;
-                    }
+                case TypeParam.Null:
                     return false;
-                }
-                if (Operator == temp)
+                //проверяем если оба параметра числовые
+                case TypeParam.Number when Operator != ConditionOperator.Like && Operator != ConditionOperator.NotLike:
                 {
-                    return true;
-                }
-                return false;
-            }
+                    var temp = EqualsNumbers(firstValue, secondValue);
 
-            //проверяем если параметры типа string или bool
-            if (Operator == ConditionOperator.Equal)
-            {
-                if (pStr1 == pStr2 && pType1 == pType2)
-                {
-                    return true;
+                    switch (Operator)
+                    {
+                        case ConditionOperator.EqualOrGreaterThan when (temp == ConditionOperator.Equal || temp == ConditionOperator.GreaterThan):
+                        case ConditionOperator.EqualOrLessThan when (temp == ConditionOperator.Equal || temp == ConditionOperator.LessThan):
+                        case ConditionOperator.NotEqual when temp != ConditionOperator.Equal:
+                            return true;
+                        case ConditionOperator.NotEqual:
+                            return false;
+                    }
+
+                    return Operator == temp;
                 }
+                default:
+                    // проверяем остальные типы
+                    switch (Operator)
+                    {
+                        case ConditionOperator.Equal when firstValue == secondValue && firstType == secondType:
+                        case ConditionOperator.NotEqual when firstValue != secondValue || firstType != secondType:
+                            return true;
+                        case ConditionOperator.Like:
+                            return STRING.IsObjectsSimilar(firstValue, secondValue);
+                        case ConditionOperator.NotLike:
+                            return !STRING.IsObjectsSimilar(firstValue, secondValue);
+                        default:
+                            return false;
+                    }
             }
-            if (Operator == ConditionOperator.NotEqual)
-            {
-                if (pStr1 != pStr2 || pType1 != pType2)
-                {
-                    return true;
-                }
-            }
-            if (!ParamsIsNotNull(pType1, pType2) || !ParamsIsNotNull(pType2, pType1))
-            {
-                return false;
-            }
-            if (Operator == ConditionOperator.Like)
-            {
-                return IsLikesParams(pStr1, pStr2);
-            }
-            if (Operator == ConditionOperator.NotLike)
-            {
-                return !IsLikesParams(pStr1, pStr2);
-            }
-            return false;
         }
 
-	    static bool IsLikesParams(string param1, string param2)
-        {
-            return StaffFunk.IsObjectsSimilar(param1, param2);
-        }
-
-	    static bool ParamsIsNotNull(TypeParam pType1, TypeParam pType2)
-        {
-            if (pType1 == TypeParam.Null && pType2 != TypeParam.Null) return false;
-            return true;
-        }
         /// <summary>
-        /// Выполняем вырежение если оба параметра типа int
+        /// Выполняем вырежение если оба параметра числовые
         /// </summary>
         static ConditionOperator EqualsNumbers(string param1, string param2)
         {
-            ConditionOperator sResult = ConditionOperator.NotEqual;
-            double firstp = double.Parse(param1);
-            double secondp = double.Parse(param2);
+            var sResult = ConditionOperator.NotEqual;
+            var firstp = double.Parse(param1);
+            var secondp = double.Parse(param2);
 
             if (Math.Abs(firstp - secondp) > 0)
             {
                 if (firstp > secondp)
-                {
                     sResult = ConditionOperator.GreaterThan;
-                }
                 else if (firstp < secondp)
-                {
                     sResult = ConditionOperator.LessThan;
-                }
             }
             else
             {
@@ -142,6 +114,5 @@ namespace Utils.ConditionEx.Base
             }
             return sResult;
         }
-
     }
 }

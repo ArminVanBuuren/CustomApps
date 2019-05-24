@@ -37,5 +37,19 @@ namespace Utils
 			caretIndex = newCoretIndex < 0 ? 0 : newCoretIndex > correctValue.Length ? correctValue.Length : newCoretIndex;
 			oldValue = correctValue;
 		}
+
+        /// <summary>
+        /// Четное или нечетно число
+        /// </summary>
+        public static bool IsParity(this int dbl)
+        {
+            int a = dbl;
+            int b;
+            b = a / 2;
+            int c = b * 2;
+            if (c == a)
+                return true;
+            return false;
+        }
     }
 }
