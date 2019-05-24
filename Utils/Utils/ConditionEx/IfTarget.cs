@@ -54,7 +54,7 @@ namespace Utils.ConditionEx
                         result = result + block.StringConstructor;
                         break;
                     }
-                    result = string.Format("{0}{1} AND ", result, block.StringConstructor);
+                    result = $"{result}{block.StringConstructor} AND ";
                 }
                 return result;
             }

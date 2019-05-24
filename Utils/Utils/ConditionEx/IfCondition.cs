@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text;
-using Utils.ConditionEx.Utils;
 
 namespace Utils.ConditionEx
 {
@@ -55,9 +54,8 @@ namespace Utils.ConditionEx
                 pac.CheckSymbol(temp.ToString());
                 temp.Remove(0, temp.Length);
             }
-            //проверяем на синтаксис
-            bool isParty = StaffFunk.IsParity(_waitSymol);
-            if (isParty && _closeCommand == 0 && _waitSymol >= 4)
+            
+            if (_waitSymol.IsParity() && _closeCommand == 0 && _waitSymol >= 4)
             {
                 IfTarget bc = pac.ToBlock();
                 //bool bb = bc.ResultCondition;

@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TeleSharp.TL;
 using Utils;
+using Utils.ConditionEx;
 using Utils.Crypto;
 using Utils.Handles;
 using Utils.Telegram;
@@ -21,6 +22,9 @@ namespace Tester.Console
     {
         static void Main(string[] args)
         {
+            IfCondition condition = new IfCondition();
+            var res1 = condition.ExpressionEx(@"'1'='1' and ('5'>'4' or '7'='8')");
+
             //using (var responceBody = WEB.GetHttpWebResponse("https://www.whatismyip.com/ip-address-lookup/"))
             //{
             //    if (responceBody != null && responceBody.StatusCode == HttpStatusCode.OK)

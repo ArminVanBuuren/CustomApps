@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Schema;
 using Utils.CollectionHelper;
 
 namespace Utils
@@ -21,9 +24,6 @@ namespace Utils
 
         public static string GetTextLike(this XmlNode node, string nodeName)
         {
-            if (node.ChildNodes == null)
-                return string.Empty;
-
             foreach (XmlNode child in node.ChildNodes)
             {
                 if (child.Name.Like(nodeName))
@@ -37,9 +37,7 @@ namespace Utils
 
         public static DuplicateDictionary<string, string> GetChildNodes(this XmlNode node, StringComparer type = null)
         {
-            DuplicateDictionary<string, string> dictionary = new DuplicateDictionary<string, string>(type == null ? StringComparer.CurrentCulture : type);
-            if (node.ChildNodes == null)
-                return dictionary;
+            var dictionary = new DuplicateDictionary<string, string>(type ?? StringComparer.CurrentCulture);
 
             foreach (XmlNode child in node.ChildNodes)
             {
@@ -56,11 +54,11 @@ namespace Utils
             {
                 try
                 {
-                    XmlDocument xmlSetting = new XmlDocument();
+                    var xmlSetting = new XmlDocument();
                     xmlSetting.LoadXml(context);
                     return xmlSetting;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     //null
                 }
@@ -91,12 +89,113 @@ namespace Utils
                     xmldoc.LoadXml(source);
                     return true;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     //null
                 }
             }
             return false;
+        }
+
+        public static bool ValidateXmlDocument(string docPath)
+        {
+            XmlSchemaSet schemas = new XmlSchemaSet();
+            XDocument doc = XDocument.Load(docPath);
+            string msg = "";
+            doc.Validate(schemas, (o, e) =>
+            {
+                msg += e.Message + Environment.NewLine;
+            });
+            return (msg == string.Empty);
+        }
+
+        public static string NormalizeXmlValue(string xmlStingValue, XMLValueEncoder type = XMLValueEncoder.Decode)
+        {
+            var regex = type == XMLValueEncoder.Decode ? new Regex(@"\&(.+?)\;", RegexOptions.IgnoreCase) : new Regex(@"(.+?)", RegexOptions.IgnoreCase);
+            var xf = new XmlEntityNames(type);
+
+            MatchEvaluator evaluator = (xf.Replace);
+            string strOut = regex.Replace(xmlStingValue, evaluator);
+            return strOut;
+        }
+
+        public enum XMLValueEncoder
+        {
+            /// <summary>
+            /// из имени объекта превращает в символ
+            /// </summary>
+            Decode = 0,
+
+            /// <summary>
+            /// из символа превращает в имя объекта
+            /// </summary>
+            Encode = 1
+        }
+
+        class XmlEntityNames
+        {
+            static readonly Dictionary<string, string> NAME_CHAR = new Dictionary<string, string>
+            {
+                { "amp","&"},
+                { "quot","\""},
+                { "lt","<"},
+                { "gt",">"},
+                { "apos","'"},
+                { "circ","ˆ"},
+                { "tilde","˜"},
+                { "ndash","–"},
+                { "mdash","—"},
+                { "lsquo","‘"},
+                { "rsquo","’"},
+                { "lsaquo","‹"},
+                { "rsaquo","›"}
+            };
+            static readonly Dictionary<string, string> CHAR_NAME = new Dictionary<string, string>
+            {
+                { "&", "&amp;"},
+                { "\"", "&quot;"},
+                { "<", "&lt;"},
+                { ">", "&gt;"},
+                { "'", "&apos;"},
+                { "ˆ", "&circ;"},
+                { "˜", "&tilde;"},
+                { "–", "&ndash;"},
+                { "—", "&mdash;"},
+                { "‘", "&lsquo;"},
+                { "’", "&rsquo;"},
+                { "‹", "&lsaquo;"},
+                { "›", "&rsaquo;"}
+            };
+
+            private XMLValueEncoder Type { get; }
+
+            public XmlEntityNames(XMLValueEncoder type)
+            {
+                Type = type;
+            }
+
+            public string Replace(Match m)
+            {
+                var find = m.Groups[1].ToString();
+
+                switch (Type)
+                {
+                    case XMLValueEncoder.Decode:
+                        {
+                            if (NAME_CHAR.TryGetValue(find, out var result))
+                                return result;
+                            break;
+                        }
+                    case XMLValueEncoder.Encode:
+                        {
+                            if (CHAR_NAME.TryGetValue(find, out var result))
+                                return result;
+                            break;
+                        }
+                }
+
+                return find;
+            }
         }
     }
 }

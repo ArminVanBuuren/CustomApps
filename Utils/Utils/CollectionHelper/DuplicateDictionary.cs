@@ -11,7 +11,7 @@ namespace Utils.CollectionHelper
     [Serializable]
     public class DuplicateDictionary<TKey, TValue> : IDictionary<TKey, List<TValue>>, IDictionary, ISerializable, IDisposable
     {
-        Dictionary<TKey, List<TValue>> _values;
+        readonly Dictionary<TKey, List<TValue>> _values;
 
         public DuplicateDictionary(IEqualityComparer<TKey> comparer = null)
         {

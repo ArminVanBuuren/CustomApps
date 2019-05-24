@@ -1,12 +1,10 @@
-﻿using Utils.ConditionEx.Utils;
-
-namespace Utils.ConditionEx.Base
+﻿namespace Utils.ConditionEx.Base
 {
     internal class ComponentCondition
     {
         public static ConditionOperator GetOperator(string str)
         {
-            switch (StaffFunk.ReplaceXmlSpecSymbls(str, 0))
+            switch (XML.NormalizeXmlValue(str))
             {
                 case ">=": return ConditionOperator.EqualOrGreaterThan;
                 case "<=": return ConditionOperator.EqualOrLessThan;
@@ -49,14 +47,14 @@ namespace Utils.ConditionEx.Base
 
         public static LogicalGroup GetLogicalGroup(string str)
         {
-            switch (StaffFunk.ReplaceXmlSpecSymbls(str.ToLower(), 0))
+            switch (XML.NormalizeXmlValue(str.ToLower()))
             {
                 case "&&":
                 case "and": return LogicalGroup.And;
                 case "||":
                 case "or": return LogicalGroup.Or;
-                case "(": return LogicalGroup.OpenBkt;
-                case ")": return LogicalGroup.CloseBkt;
+                case "(": return LogicalGroup.BracketIsOpen;
+                case ")": return LogicalGroup.BracketIsClose;
             }
             return LogicalGroup.NaN;
         }
@@ -79,12 +77,13 @@ namespace Utils.ConditionEx.Base
         /// <summary>
         /// начало групповово условия (скобка открыта)
         /// </summary>
-        OpenBkt = 3,
+        BracketIsOpen = 3,
         /// <summary>
         /// конец групповово условия (скобка закрыта)
         /// </summary>
-        CloseBkt = 4
+        BracketIsClose = 4
     }
+
     /// <summary>
     /// Значение условий
     /// </summary>

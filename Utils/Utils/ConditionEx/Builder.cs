@@ -10,12 +10,12 @@ namespace Utils.ConditionEx
         int _parameretId = 0;
         public Builder()
         {
-            IfTarget Base = new IfTarget()
+            var @base = new IfTarget()
             {
                 LogicalGroup = LogicalGroup.And
             };
             _parent = new IfTarget();
-            Base.ChildGroups.AddChild(_parent);
+            @base.ChildGroups.AddChild(_parent);
             CreateNewCondition();
         }
 
@@ -26,12 +26,12 @@ namespace Utils.ConditionEx
         public IfTarget ToBlock()
         {
             IsCreateNewCondition();
-            IfTarget blk = _parent;
+            var block = _parent;
             int countBlocks = 1;
-            while (GetBaseBlock(blk) != null)
+            while (GetBaseBlock(block) != null)
             {
                 countBlocks++;
-                blk = GetBaseBlock(blk);
+                block = GetBaseBlock(block);
                 if (countBlocks > 1000)
                 {
                     break;
@@ -41,7 +41,7 @@ namespace Utils.ConditionEx
             {
                 throw new System.ArgumentException("Not write conditionEx! Check your condition or this is Bug");
             }
-            return blk;
+            return block;
         }
         /// <summary>
         /// Получаем только родительские блоки
@@ -65,7 +65,7 @@ namespace Utils.ConditionEx
                 //и в новый уже добавляем обработанное условие
                 if (_parent.LogicalGroup == LogicalGroup.And)
                 {
-                    IfTarget newChildBlock = new IfTarget();
+                    var newChildBlock = new IfTarget();
                     _parent.ChildGroups.AddChild(newChildBlock);
                     _parent = newChildBlock;
                 }
@@ -95,7 +95,7 @@ namespace Utils.ConditionEx
                 if (_parent.Parent.LogicalGroup == LogicalGroup.Or || _parent.Parent.ChildGroups.Count == 1)
                 {
                     CreateNewCondition();
-                    IfTarget newParentBlock = _parent.Parent;
+                    var newParentBlock = _parent.Parent;
                     newParentBlock.LogicalGroup = LogicalGroup.Or;
                     _parent = new IfTarget();
                     newParentBlock.ChildGroups.AddChild(_parent);
@@ -113,9 +113,12 @@ namespace Utils.ConditionEx
         {
             CreateNewCondition();
             //создаем новый родительский блок
-            IfTarget newParentBlock = new IfTarget();
-            //ставим метку что обрабатывается оператор OR
-            newParentBlock.LogicalGroup = LogicalGroup.Or;
+            var newParentBlock = new IfTarget
+            {
+                //ставим метку что обрабатывается оператор OR
+                LogicalGroup = LogicalGroup.Or
+            };
+
             if (_parent.Parent != null)
             {
                 //если у данного блока есть родитель, то присваиваем этого родителя к создавшемуся блоку
@@ -135,7 +138,7 @@ namespace Utils.ConditionEx
         {
             CreateNewCondition();
             //создаем новую коллекцию блоков в новом родительском блоке с оператором AND
-            IfTarget newParentBlock = new IfTarget()
+            var newParentBlock = new IfTarget()
             {
                 LogicalGroup = LogicalGroup.And
             };
@@ -146,10 +149,10 @@ namespace Utils.ConditionEx
                 newParentBlock.Parent.ChildGroups.RemoveChild(_parent);
             }
             newParentBlock.ChildGroups.AddChild(_parent);
-            if (_parent.StringConstructor != string.Empty)
+            if (!_parent.StringConstructor.IsNullOrEmpty())
             {
                 //создаем новый блок который будет обрабатывать операции внутри наших скобок
-                IfTarget newAndChild = new IfTarget();
+                var newAndChild = new IfTarget();
                 newParentBlock.ChildGroups.AddChild(newAndChild);
                 _parent = newAndChild;
             }
@@ -187,7 +190,7 @@ namespace Utils.ConditionEx
             if (_conditionBlock != null)
             {
                 //если параметры не заполнены то не доабвляем условие в текущий блок
-                if (_conditionBlock.StringConstructor != string.Empty)
+                if (!_conditionBlock.StringConstructor.IsNullOrEmpty())
                 {
                     AddNewCondition(_parent);
                 }
@@ -253,10 +256,10 @@ namespace Utils.ConditionEx
                                 LogicalGroupOr();
                             i++;
                             break;
-                        case LogicalGroup.OpenBkt:
+                        case LogicalGroup.BracketIsOpen:
                             LogicalGroupIfOpenBkt();
                             break;
-                        case LogicalGroup.CloseBkt:
+                        case LogicalGroup.BracketIsClose:
                             LogicalGroupIfCloseBkt();
                             break;
                         default: break;
@@ -273,25 +276,6 @@ namespace Utils.ConditionEx
                     return;
                 }
             }
-        }
-
-        public LogicalCondition CheckLogicalCondition(string str)
-        {
-            LogicalCondition logCond = LogicalCondition.Unknown;
-            foreach (string sCheck in str.Split(' '))
-            {
-                ConditionOperator cbo = ComponentCondition.GetOperator(sCheck);
-                if (cbo == ConditionOperator.Unknown)
-                {
-                    if (ComponentCondition.GetLogicalGroup(sCheck) != LogicalGroup.NaN)
-                        return LogicalCondition.Group;
-                }
-                else
-                {
-                    return LogicalCondition.Operator;
-                }
-            }
-            return logCond;
         }
     }
     internal enum LogicalCondition
