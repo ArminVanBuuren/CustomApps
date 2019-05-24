@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -11,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TeleSharp.TL;
 using Utils;
+using Utils.ConditionEx;
 using Utils.Crypto;
 using Utils.Handles;
 using Utils.Telegram;
@@ -21,6 +23,18 @@ namespace Tester.Console
     {
         static void Main(string[] args)
         {
+            Stopwatch stw = new Stopwatch();
+            while (true)
+            {
+                stw.Start();
+                IfCondition condition = new IfCondition();
+                var res1 = condition.ExpressionEx(
+                    @"('1'='1' and ('5'>'4' or '7'='8')) and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60')");
+                stw.Stop();
+                stw.Reset();
+            }
+
+            double dd = 855555;
             //using (var responceBody = WEB.GetHttpWebResponse("https://www.whatismyip.com/ip-address-lookup/"))
             //{
             //    if (responceBody != null && responceBody.StatusCode == HttpStatusCode.OK)
