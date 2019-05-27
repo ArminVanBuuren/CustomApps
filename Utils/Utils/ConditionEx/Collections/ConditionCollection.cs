@@ -69,5 +69,10 @@ namespace Utils.ConditionEx.Collections
             condition.Parent = Parent;
             Insert(Count, condition);
         }
+
+        public override string ToString()
+        {
+            return StringResult;
+        }
     }
 }

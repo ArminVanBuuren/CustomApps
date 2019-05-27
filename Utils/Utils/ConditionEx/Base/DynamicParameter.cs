@@ -63,5 +63,10 @@ namespace Utils.ConditionEx.Base
             _lastRequest = DateTime.MinValue;
             _dynamicValue = Parameter.NaN;
         }
+
+        public override string ToString()
+        {
+            return Source;
+        }
     }
 }

@@ -148,6 +148,11 @@ namespace Utils.ConditionEx
             conditionBlock.AddChild(firstParam, parameter, @operator, this);
         }
 
+        public override string ToString()
+        {
+            return StringResult;
+        }
+
         public void Dispose()
         {
             DynamicObject.ObjectChanged -= DynamicObject_ObjectChanged;

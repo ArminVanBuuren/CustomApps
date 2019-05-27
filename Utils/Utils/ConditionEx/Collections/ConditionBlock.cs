@@ -72,5 +72,10 @@ namespace Utils.ConditionEx.Collections
             else
                 Add(new Condition(this, this[Count - 1].SecondParam.Source, secondParam, _operator, @base));
         }
+
+        public override string ToString()
+        {
+            return StringResult;
+        }
     }
 }

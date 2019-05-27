@@ -169,5 +169,10 @@ namespace Utils.ConditionEx.Base
             }
             return sResult;
         }
+
+        public override string ToString()
+        {
+            return StringResult;
+        }
     }
 }
