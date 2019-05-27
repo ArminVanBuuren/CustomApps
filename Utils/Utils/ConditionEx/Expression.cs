@@ -155,8 +155,11 @@ namespace Utils.ConditionEx
 
         public void Dispose()
         {
-            DynamicObject.ObjectChanged -= DynamicObject_ObjectChanged;
-            DynamicObject = null;
+            if (DynamicObject != null)
+            {
+                DynamicObject.ObjectChanged -= DynamicObject_ObjectChanged;
+                DynamicObject = null;
+            }
         }
     }
 }
