@@ -76,7 +76,7 @@ namespace Utils.ConditionEx
                         if (ExpressionList.Count == 1)
                             return ExpressionList.First().StringResult;
 
-                        foreach (Expression conditionEx in ExpressionList)
+                        foreach (ICondition conditionEx in ExpressionList)
                         {
                             i++;
                             result = string.Format("{0}( {1} ){2}", result, conditionEx.StringResult, (i < ExpressionList.Count) ? $" {LogicalGroup:G} " : string.Empty);
