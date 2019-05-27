@@ -9,7 +9,7 @@ namespace Utils.ConditionEx.Base
 {
     public struct DynamicParameter
     {
-        const int MILLISECONDS_DELAY = 20;
+        const int MILLISECONDS_DELAY = 10;
 
         DateTime _lastRequest;
         private Parameter _dynamicValue;

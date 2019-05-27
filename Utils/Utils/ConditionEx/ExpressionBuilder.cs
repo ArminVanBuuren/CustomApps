@@ -5,22 +5,6 @@ using Utils.ConditionEx.Collections;
 
 namespace Utils.ConditionEx
 {
-    public class DynamicObject
-    {
-        internal event EventHandler ObjectChanged;
-        public Func<string, string> GetValue { get; }
-
-        public DynamicObject(Func<string, string> function)
-        {
-            GetValue = function;
-        }
-
-        public void Elapsed()
-        {
-            ObjectChanged?.Invoke(this, EventArgs.Empty);
-        }
-    }
-
     public class ExpressionBuilder
     {
         ConditionBlock _conditionBlock;

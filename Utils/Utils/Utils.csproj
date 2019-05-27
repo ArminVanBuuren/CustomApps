@@ -102,6 +102,7 @@
     <Compile Include="ConditionEx\Base\Condition.cs" />
     <Compile Include="ConditionEx\ConditionOperatorType.cs" />
     <Compile Include="ConditionEx\Base\DynamicParameter.cs" />
+    <Compile Include="ConditionEx\DynamicObject.cs" />
     <Compile Include="ConditionEx\ExpressionBuilder.cs" />
     <Compile Include="ConditionEx\Collections\ConditionBlock.cs" />
     <Compile Include="ConditionEx\Collections\ConditionCollection.cs" />
