@@ -50,12 +50,12 @@ namespace Tester.Console
             //if(File.Exists(dd))
             //    File.Delete(dd);
 
-            string ss = AES.EncryptStringAES("InCommon-2.0", nameof(TLControl));
-            using (var stream = new FileStream(TLControl.SessionName + ".code", FileMode.OpenOrCreate))
-            {
-                byte[] logsBytes = new UTF8Encoding(true).GetBytes(ss);
-                stream.Write(logsBytes, 0, logsBytes.Length);
-            }
+            //string ss = AES.EncryptStringAES("InCommon-2.0", nameof(TLControl));
+            //using (var stream = new FileStream(TLControl.SessionName + ".code", FileMode.OpenOrCreate))
+            //{
+            //    byte[] logsBytes = new UTF8Encoding(true).GetBytes(ss);
+            //    stream.Write(logsBytes, 0, logsBytes.Length);
+            //}
 
             //DisplayData();
 
