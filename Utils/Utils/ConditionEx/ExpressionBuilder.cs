@@ -1,29 +1,170 @@
-﻿using Utils.ConditionEx.Base;
+﻿using System;
+using System.Text;
+using Utils.ConditionEx.Base;
 using Utils.ConditionEx.Collections;
 
 namespace Utils.ConditionEx
 {
-    internal class Builder
+    public class DynamicObject
     {
-        IfTarget _parent;
+        internal event EventHandler ObjectChanged;
+        public Func<string, string> GetValue { get; }
+
+        public DynamicObject(Func<string, string> function)
+        {
+            GetValue = function;
+        }
+
+        public void Elapsed()
+        {
+            ObjectChanged?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    public class ExpressionBuilder
+    {
         ConditionBlock _conditionBlock;
         int _parameretId = 0;
-        public Builder()
+        Expression _base;
+        Expression _parent;
+
+        internal ExpressionBuilder(DynamicObject dynamicObj)
         {
-            var @base = new IfTarget()
+            if (dynamicObj != null)
             {
-                LogicalGroup = LogicalGroup.And
-            };
-            _parent = new IfTarget();
-            @base.ChildGroups.AddChild(_parent);
+                _base = new Expression(dynamicObj)
+                {
+                    LogicalGroup = LogicalGroupType.And
+                };
+            }
+            else
+            {
+                _base = new Expression()
+                {
+                    LogicalGroup = LogicalGroupType.And
+                };
+            }
+
+            _parent = new Expression();
+            _base.ExpressionList.AddChild(_parent);
             CreateNewCondition();
         }
+
+        public static Expression Calculate(string expression, DynamicObject dynamicFunction = null)
+        {
+            int waitSymol = 0;
+            int closeCommand = 0;
+            if (string.IsNullOrEmpty(expression))
+                return new Expression();
+
+            ExpressionBuilder builder = new ExpressionBuilder(dynamicFunction);
+            StringBuilder temp = new StringBuilder();
+            int state = 0;
+            foreach (char ch in expression)
+            {
+                switch (state)
+                {
+                    case 0:
+                    {
+                        state = WaitStartOfParam(builder, temp, state, ch, ref waitSymol);
+                        continue;
+                    }
+                    case 1:
+                    {
+                        state = WaitEndOfParam(builder, temp, state, ch, ref waitSymol);
+                        continue;
+                    }
+
+                    case 2:
+                    {
+                        state = WaitResources(temp, state, ch, ref closeCommand);
+                        continue;
+                    }
+                    default:
+                    {
+                        continue;
+                    }
+                }
+            }
+
+            if (temp.Length > 0)
+            {
+                builder.CheckSymbol(temp.ToString());
+                temp.Remove(0, temp.Length);
+            }
+
+            if (waitSymol.IsParity() && closeCommand == 0 && waitSymol >= 4)
+            {
+                Expression conditionEx = builder.ToBlock();
+                if (conditionEx.IsValid && !conditionEx.ToString().IsNullOrEmpty())
+                    return conditionEx;
+            }
+
+            throw new ExpressionBuilderException($"Syntax of expression '{expression}' is incorrect.");
+        }
+
+        static int WaitStartOfParam(ExpressionBuilder pac, StringBuilder temp, int state, char c, ref int waitSymol)
+        {
+            if (c == '\'')
+            {
+                waitSymol++;
+                if (temp.Length > 0)
+                {
+                    pac.CheckSymbol(temp.ToString());
+                    temp.Remove(0, temp.Length);
+                }
+                return 1;
+            }
+            temp.Append(c);
+            return state;
+        }
+
+        static int WaitEndOfParam(ExpressionBuilder pac, StringBuilder temp, int state, char c, ref int waitSymol)
+        {
+            if (c == '{')
+            {
+                temp.Append(c);
+                return 2;
+            }
+
+            if (c == '\'')
+            {
+                waitSymol++;
+                pac.AddConditionParameter(temp.ToString());
+                temp.Remove(0, temp.Length);
+                return 0;
+            }
+            temp.Append(c);
+            return state;
+        }
+
+        static int WaitResources(StringBuilder temp, int state, char c, ref int closeCommand)
+        {
+            if (c == '{')
+            {
+                if (closeCommand == 0)
+                    closeCommand++;
+                closeCommand++;
+            }
+            else if (c == '}')
+            {
+                if (closeCommand > 0)
+                    closeCommand--;
+                temp.Append(c);
+                if (closeCommand == 0)
+                    return 1;
+                return 2;
+            }
+            temp.Append(c);
+            return state;
+        }
+
 
         /// <summary>
         /// Получаем сформированный блок документ из всех condition
         /// </summary>
         /// <returns></returns>
-        public IfTarget ToBlock()
+        Expression ToBlock()
         {
             IsCreateNewCondition();
             var block = _parent;
@@ -39,15 +180,16 @@ namespace Utils.ConditionEx
             }
             if (countBlocks > 1000)
             {
-                throw new System.ArgumentException("Not write conditionEx! Check your condition or this is Bug");
+                throw new Exception("Please check your expression!");
             }
             return block;
         }
+
         /// <summary>
         /// Получаем только родительские блоки
         /// </summary>
         /// <returns></returns>
-        IfTarget GetBaseBlock(IfTarget blk)
+        Expression GetBaseBlock(Expression blk)
         {
             return blk.Parent;
         }
@@ -58,18 +200,18 @@ namespace Utils.ConditionEx
         void LogicalGroupAnd()
         {
             //если в текущем блоке есть подблоки выражений
-            if (_parent.ChildGroups.Count > 0)
+            if (_parent.ExpressionList.Count > 0)
             {
                 //если текущий Parent блок реализует группировку в виде скобок () то создаем новый блок 
                 //и добавляем его в текущий Parent, потом пересоздаем новый блок в текущий блок Parent
                 //и в новый уже добавляем обработанное условие
-                if (_parent.LogicalGroup == LogicalGroup.And)
+                if (_parent.LogicalGroup == LogicalGroupType.And)
                 {
-                    var newChildBlock = new IfTarget();
-                    _parent.ChildGroups.AddChild(newChildBlock);
+                    var newChildBlock = new Expression();
+                    _parent.ExpressionList.AddChild(newChildBlock);
                     _parent = newChildBlock;
                 }
-                else if (_parent.LogicalGroup == LogicalGroup.Or)
+                else if (_parent.LogicalGroup == LogicalGroupType.Or)
                 {
                     //Если оператор AND, а в текущем блоке обрабатывается операция OR, то создаем новый блок с операцией AND
                     //и туда запихиваем в подблоки уже текущие обработанные операции с OR
@@ -84,7 +226,7 @@ namespace Utils.ConditionEx
         /// <summary>
         /// Если нашелся оператор OR
         /// </summary>
-        private void LogicalGroupOr()
+        void LogicalGroupOr()
         {
             if (_parent.Parent != null)
             {
@@ -92,13 +234,13 @@ namespace Utils.ConditionEx
                 //и делаем новый блок текущим - Parent
                 //или если блоков всего один и стоит оператор AND он стоит как безусловные если открылась скобка
                 //то переприсваемваем оператор на OR
-                if (_parent.Parent.LogicalGroup == LogicalGroup.Or || _parent.Parent.ChildGroups.Count == 1)
+                if (_parent.Parent.LogicalGroup == LogicalGroupType.Or || _parent.Parent.ExpressionList.Count == 1)
                 {
                     CreateNewCondition();
                     var newParentBlock = _parent.Parent;
-                    newParentBlock.LogicalGroup = LogicalGroup.Or;
-                    _parent = new IfTarget();
-                    newParentBlock.ChildGroups.AddChild(_parent);
+                    newParentBlock.LogicalGroup = LogicalGroupType.Or;
+                    _parent = new Expression();
+                    newParentBlock.ExpressionList.AddChild(_parent);
                     return;
                 }
             }
@@ -113,47 +255,47 @@ namespace Utils.ConditionEx
         {
             CreateNewCondition();
             //создаем новый родительский блок
-            var newParentBlock = new IfTarget
+            var newParentBlock = new Expression
             {
                 //ставим метку что обрабатывается оператор OR
-                LogicalGroup = LogicalGroup.Or
+                LogicalGroup = LogicalGroupType.Or
             };
 
             if (_parent.Parent != null)
             {
                 //если у данного блока есть родитель, то присваиваем этого родителя к создавшемуся блоку
-                _parent.Parent.ChildGroups.AddChild(newParentBlock);
-                newParentBlock.Parent.ChildGroups.RemoveChild(_parent);
+                _parent.Parent.ExpressionList.AddChild(newParentBlock);
+                newParentBlock.Parent.ExpressionList.RemoveChild(_parent);
             }
             //добавляем в подблок нового родителя, блок который уже сформировался
-            newParentBlock.ChildGroups.AddChild(_parent);
+            newParentBlock.ExpressionList.AddChild(_parent);
             //создаем новый текущий блок и и добавляем его в новый создавшеся родительский
             //т.е это означает что первый параметр сравнивается с другим только через оператор OR
             //P1 (уже обработанный и добавленный в новый родительский) OR P2 (новый создавшеся блок который становится текущим Parent)
-            _parent = new IfTarget();
-            newParentBlock.ChildGroups.AddChild(_parent);
+            _parent = new Expression();
+            newParentBlock.ExpressionList.AddChild(_parent);
         }
 
         void LogicalGroupIfOpenBkt()
         {
             CreateNewCondition();
             //создаем новую коллекцию блоков в новом родительском блоке с оператором AND
-            var newParentBlock = new IfTarget()
+            var newParentBlock = new Expression()
             {
-                LogicalGroup = LogicalGroup.And
+                LogicalGroup = LogicalGroupType.And
             };
             if (_parent.Parent != null)
             {
                 //переприсваеваем родительский блок
-                _parent.Parent.ChildGroups.AddChild(newParentBlock);
-                newParentBlock.Parent.ChildGroups.RemoveChild(_parent);
+                _parent.Parent.ExpressionList.AddChild(newParentBlock);
+                newParentBlock.Parent.ExpressionList.RemoveChild(_parent);
             }
-            newParentBlock.ChildGroups.AddChild(_parent);
-            if (!_parent.StringConstructor.IsNullOrEmpty())
+            newParentBlock.ExpressionList.AddChild(_parent);
+            if (!_parent.StringResult.IsNullOrEmpty())
             {
                 //создаем новый блок который будет обрабатывать операции внутри наших скобок
-                var newAndChild = new IfTarget();
-                newParentBlock.ChildGroups.AddChild(newAndChild);
+                var newAndChild = new Expression();
+                newParentBlock.ExpressionList.AddChild(newAndChild);
                 _parent = newAndChild;
             }
         }
@@ -169,11 +311,11 @@ namespace Utils.ConditionEx
             }
             else
             {
-                throw new System.ArgumentException("Not write position symbol \")\" in conditionEx!");
+                throw new System.ArgumentException("Incorrect position of symbol \")\" in your expression!");
             }
         }
 
-        private void CreateNewCondition()
+        void CreateNewCondition()
         {
             //если данное условие еще не заполнилось параметрами то не создаем новый 
             if (!IsCreateNewCondition())
@@ -190,7 +332,7 @@ namespace Utils.ConditionEx
             if (_conditionBlock != null)
             {
                 //если параметры не заполнены то не доабвляем условие в текущий блок
-                if (!_conditionBlock.StringConstructor.IsNullOrEmpty())
+                if (!_conditionBlock.StringResult.IsNullOrEmpty())
                 {
                     AddNewCondition(_parent);
                 }
@@ -204,9 +346,9 @@ namespace Utils.ConditionEx
         }
 
         //добавляем условие в текущий блок
-        private void AddNewCondition(IfTarget bc)
+        void AddNewCondition(Expression bc)
         {
-            bc.BlockConditions.AddChild(_conditionBlock);
+            bc.ConditionList.AddChild(_conditionBlock);
         }
 
         void CreateNewParameters()
@@ -215,18 +357,18 @@ namespace Utils.ConditionEx
         }
 
         string _firstParam = string.Empty;
-        ConditionOperator _operator = ConditionOperator.Unknown;
+        ConditionOperatorType _operator = ConditionOperatorType.Unknown;
         /// <summary>
         /// Обрабатываем condition, подставляем первый и второй параметер
         /// </summary>
-        internal void AddConditionParameter(string parameter)
+        void AddConditionParameter(string parameter)
         {
             _parameretId++;
             if (_parameretId == 1)
                 _firstParam = parameter;
             else
             {
-                _conditionBlock.AddChild(_firstParam, parameter, _operator);
+                _base.AddCondition(_conditionBlock, _firstParam, parameter, _operator);
                 _parameretId = 0;
             }
         }
@@ -235,31 +377,31 @@ namespace Utils.ConditionEx
         /// Обрабатываем знак или операторы между параметрами это может быть знак равно, больше меньше
         /// или AND, OR или скобки означающаю группировку выражения
         /// </summary>
-        public void CheckSymbol(string str)
+        void CheckSymbol(string str)
         {
             int i = 0;
             foreach (string sCheck in str.Split(' '))
             {
                 if (string.IsNullOrEmpty(sCheck)) continue;
-                ConditionOperator cbo = ComponentCondition.GetOperator(sCheck);
-                if (cbo == ConditionOperator.Unknown)
+                ConditionOperatorType cbo = Condition.GetOperator(sCheck);
+                if (cbo == ConditionOperatorType.Unknown)
                 {
-                    switch (ComponentCondition.GetLogicalGroup(sCheck))
+                    switch (Expression.GetLogicalGroup(sCheck))
                     {
-                        case LogicalGroup.And:
+                        case LogicalGroupType.And:
                             if (i == 0)
                                 LogicalGroupAnd();
                             i++;
                             break;
-                        case LogicalGroup.Or:
+                        case LogicalGroupType.Or:
                             if (i == 0)
                                 LogicalGroupOr();
                             i++;
                             break;
-                        case LogicalGroup.BracketIsOpen:
+                        case LogicalGroupType.BracketIsOpen:
                             LogicalGroupIfOpenBkt();
                             break;
-                        case LogicalGroup.BracketIsClose:
+                        case LogicalGroupType.BracketIsClose:
                             LogicalGroupIfCloseBkt();
                             break;
                         default: break;
@@ -278,6 +420,7 @@ namespace Utils.ConditionEx
             }
         }
     }
+
     internal enum LogicalCondition
     {
         Operator = 0,

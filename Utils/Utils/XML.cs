@@ -119,6 +119,86 @@ namespace Utils
             return strOut;
         }
 
+        public static string NormalizeXmlValueFast(string xmlStingValue, XMLValueEncoder type = XMLValueEncoder.Decode)
+        {
+            StringBuilder builder = new StringBuilder();
+            StringBuilder charName = new StringBuilder();
+            if (type == XMLValueEncoder.Decode)
+            {
+                int isOpen = 0;
+                for (var index = 0; index < xmlStingValue.Length; index++)
+                {
+                    char ch = xmlStingValue[index];
+
+                    if (ch == '&')
+                    {
+                        if (isOpen == 0)
+                        {
+                            isOpen++;
+                            continue;
+                        }
+                        else
+                        {
+                            builder.Append("&");
+                            builder.Append(charName.ToString());
+                            charName.Clear();
+                            continue;
+                        }
+                    }
+
+                    if (isOpen > 0 && ch == ';')
+                    {
+                        isOpen--;
+                        if (XmlEntityNames.NAME_CHAR.TryGetValue(charName.ToString(), out var res))
+                        {
+                            charName.Clear();
+                            if (res == "&")
+                                isOpen++;
+                            else
+                                builder.Append(res);
+
+                            continue;
+                        }
+                        else
+                        {
+                            builder.Append("&");
+                            builder.Append(charName.ToString());
+                            charName.Clear();
+                        }
+                    }
+
+                    if (isOpen > 0 && charName.Length >= 6)
+                    {
+                        isOpen--;
+                        builder.Append("&");
+                        builder.Append(charName.ToString());
+                        charName.Clear();
+                    }
+
+                    if (isOpen > 0)
+                    {
+                        charName.Append(ch);
+                        continue;
+                    }
+
+                    builder.Append(ch);
+                }
+
+                if (isOpen > 0)
+                {
+                    builder.Append("&");
+                    builder.Append(charName.ToString());
+                }
+                
+            }
+            else
+            {
+                
+            }
+
+            return builder.ToString();
+        }
+
         public enum XMLValueEncoder
         {
             /// <summary>
@@ -134,7 +214,7 @@ namespace Utils
 
         class XmlEntityNames
         {
-            static readonly Dictionary<string, string> NAME_CHAR = new Dictionary<string, string>
+            public static readonly Dictionary<string, string> NAME_CHAR = new Dictionary<string, string>
             {
                 { "amp","&"},
                 { "quot","\""},
@@ -150,7 +230,7 @@ namespace Utils
                 { "lsaquo","‹"},
                 { "rsaquo","›"}
             };
-            static readonly Dictionary<string, string> CHAR_NAME = new Dictionary<string, string>
+            public static readonly Dictionary<string, string> CHAR_NAME = new Dictionary<string, string>
             {
                 { "&", "&amp;"},
                 { "\"", "&quot;"},

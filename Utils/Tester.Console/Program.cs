@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TeleSharp.TL;
 using Utils;
@@ -23,54 +24,73 @@ namespace Tester.Console
     {
         static void Main(string[] args)
         {
+            try
+            {
+
+            //  string ss = XML.NormalizeXmlValueFast("&amp;&quot;&amp;&lt;&gt; &lt;=  &gt;=");
+
+
+            List<long> temp = new List<long>();
             Stopwatch stw = new Stopwatch();
-            while (true)
+            int i = 0;
+            while (i < 200)
             {
                 stw.Start();
-                IfCondition condition = new IfCondition();
-                var res1 = condition.ExpressionEx(
+                
+                //var res1 = condition.ExpressionEx("'1'='1' and '5'='5'");
+                var res1 = ExpressionBuilder.Calculate(
                     @"('1'='1' and ('5'>'4' or '7'='8')) and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60') and ('55122'>'43234' or '753223'='855555') and ('AAAA'='AAAA' or 'fffff'='ggggg') and (''='1' or ''='') and ('AAA'^='zAAAz' or 'FFF'>'FFFS') and ('123'!='ffff' or '56'<'60')");
+
+                
                 stw.Stop();
+                temp.Add(stw.ElapsedMilliseconds);
                 stw.Reset();
+
+                Thread.Sleep(1);
+                i++;
             }
 
-            double dd = 855555;
-            //using (var responceBody = WEB.GetHttpWebResponse("https://www.whatismyip.com/ip-address-lookup/"))
-            //{
-            //    if (responceBody != null && responceBody.StatusCode == HttpStatusCode.OK)
-            //    {
-            //        var httpDoc = responceBody.GetHtmlDocument();
-            //    }
-            //}
+            //double dd = 855555;
+                //using (var responceBody = WEB.GetHttpWebResponse("https://www.whatismyip.com/ip-address-lookup/"))
+                //{
+                //    if (responceBody != null && responceBody.StatusCode == HttpStatusCode.OK)
+                //    {
+                //        var httpDoc = responceBody.GetHtmlDocument();
+                //    }
+                //}
 
 
 
-            //using (RegeditControl regedit = new RegeditControl("TFSAssist"))
-            //{
-            //    using (var stream = new FileStream(nameof(TLControl) + "Session", FileMode.CreateNew))
-            //    {
-            //        byte[] bytes = (byte[])regedit[nameof(TLControl) + "Session", RegistryValueKind.Binary];
-            //        stream.Write(bytes, 0, bytes.Length);
-            //    }
-            //}
+                //using (RegeditControl regedit = new RegeditControl("TFSAssist"))
+                //{
+                //    using (var stream = new FileStream(nameof(TLControl) + "Session", FileMode.CreateNew))
+                //    {
+                //        byte[] bytes = (byte[])regedit[nameof(TLControl) + "Session", RegistryValueKind.Binary];
+                //        stream.Write(bytes, 0, bytes.Length);
+                //    }
+                //}
 
 
-            //!!!!!!
-            //string dd = TLControl.SessionName + ".code";
-            //if(File.Exists(dd))
-            //    File.Delete(dd);
+                //!!!!!!
+                //string dd = TLControl.SessionName + ".code";
+                //if(File.Exists(dd))
+                //    File.Delete(dd);
 
-            //string ss = AES.EncryptStringAES("InCommon-2.0", nameof(TLControl));
-            //using (var stream = new FileStream(TLControl.SessionName + ".code", FileMode.OpenOrCreate))
-            //{
-            //    byte[] logsBytes = new UTF8Encoding(true).GetBytes(ss);
-            //    stream.Write(logsBytes, 0, logsBytes.Length);
-            //}
+                //string ss = AES.EncryptStringAES("InCommon-2.0", nameof(TLControl));
+                //using (var stream = new FileStream(TLControl.SessionName + ".code", FileMode.OpenOrCreate))
+                //{
+                //    byte[] logsBytes = new UTF8Encoding(true).GetBytes(ss);
+                //    stream.Write(logsBytes, 0, logsBytes.Length);
+                //}
 
-            //DisplayData();
-
-            System.Console.WriteLine(@"Complete");
-            System.Console.ReadLine();
+                //DisplayData();
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine(e);
+            }
+            //System.Console.WriteLine(@"Complete");
+            //System.Console.ReadLine();
         }
 
         static void DisplayData()

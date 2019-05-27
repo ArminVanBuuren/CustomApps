@@ -1,19 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Utils.ConditionEx.Base;
 using static Utils.TYPES;
 
 namespace Utils.ConditionEx.Collections
 {
-    internal class ConditionBlock : List<Condition>
+    public class ConditionBlock : List<Condition>, IExpression, ICondition
     {
-        internal IfTarget Parent { get; set; }
+        public Expression Parent { get; internal set; }
 
-        public void AddChild(string firstParam, string secondParam, ConditionOperator _operator)
+        public bool IsValid
         {
-            if (Count == 0)
-                Add(new Condition(this, firstParam, secondParam, _operator));
-            else
-                Add(new Condition(this, this[Count - 1].ParamSecond.SourceParam, secondParam, _operator));
+            get
+            {
+                foreach (Condition condition in this)
+                    if (condition.Operator == ConditionOperatorType.Unknown)
+                        return false;
+
+                return true;
+            }
         }
 
         /// <summary>
@@ -22,46 +27,50 @@ namespace Utils.ConditionEx.Collections
         /// каждый из блоков должен быть true
         /// </summary>
         /// <returns></returns>
-        public bool ResultCondition
+        public bool ConditionResult
         {
             get
             {
-                foreach (var condition in this)
+                foreach (ICondition condition in this)
                 {
-                    if (!condition.ResultCondition)
+                    if (!condition.ConditionResult)
                         return false;
                 }
                 return true;
             }
         }
 
-        public string StringConstructor
+        public string StringResult
         {
             get
             {
                 string result = string.Empty;
                 int i = 0;
-                foreach (var condition in this)
+                foreach (Condition condition in this)
                 {
-                    if (condition.Operator == ConditionOperator.Unknown)
-                    {
+                    if (condition.Operator == ConditionOperatorType.Unknown)
                         continue;
-                    }
-                    var first = condition.ParamFirst.DynamicParam;
-                    var second = condition.ParamSecond.DynamicParam;
 
                     i++;
                     if (i > 1)
                     {
-                        result = result + $@"{ComponentCondition.GetOperator(condition.Operator)}{second.Type:G}[{second.Value}]";
+                        var second = condition.SecondParam.Result;
+                        result = result + $@"{Condition.GetStringOperator(condition.Operator)}{second.Type:G}[{second.Value}]";
                         continue;
                     }
 
-                    result = result + $@"{first.Type:G}[{first.Value}]{ComponentCondition.GetOperator(condition.Operator)}{second.Type:G}[{second.Value}]";
+                    result = result + condition.StringResult;
                 }
                 return result;
             }
         }
 
+        internal void AddChild(string firstParam, string secondParam, ConditionOperatorType _operator, Expression @base)
+        {
+            if (Count == 0)
+                Add(new Condition(this, firstParam, secondParam, _operator, @base));
+            else
+                Add(new Condition(this, this[Count - 1].SecondParam.Source, secondParam, _operator, @base));
+        }
     }
 }

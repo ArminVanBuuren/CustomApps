@@ -2,15 +2,15 @@
 
 namespace Utils.ConditionEx.Collections
 {
-    internal class IfTargetCollection : List<IfTarget>
+    public class ExpressionCollection : List<Expression>
     {
-        private readonly IfTarget _parent;
-        public IfTargetCollection(IfTarget bc)
+        private readonly Expression _parent;
+        internal ExpressionCollection(Expression bc)
         {
             _parent = bc;
         }
 
-        public void AddChild(IfTarget bc)
+        internal void AddChild(Expression bc)
         {
             if (bc == null)
                 return;
@@ -23,7 +23,7 @@ namespace Utils.ConditionEx.Collections
         {
             foreach (var ifTarget in this)
             {
-                if (!ifTarget.ResultCondition)
+                if (!ifTarget.ConditionResult)
                 {
                     return false;
                 }
@@ -31,7 +31,7 @@ namespace Utils.ConditionEx.Collections
             return true;
         }
 
-        public void RemoveChild(IfTarget bc)
+        internal void RemoveChild(Expression bc)
         {
             Remove(bc);
             bc.Parent = null;

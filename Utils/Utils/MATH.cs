@@ -26,9 +26,7 @@ namespace Utils
             try
             {
                 if (pType != TypeParam.MathEx)
-                {
                     return double.NaN;
-                }
 
                 string exp = expression.Replace(",", ".");
                 var table = new DataTable();

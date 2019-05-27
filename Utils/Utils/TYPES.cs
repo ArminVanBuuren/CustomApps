@@ -13,12 +13,13 @@ namespace Utils
         [Flags]
         public enum TypeParam
         {
-            Null = 0,
-            Number = 1,
-            String = 2,
-            Bool = 4,
-            MathEx = 8,
-            //FArray = 16
+            NaN = 0,
+            Null = 1,
+            Number = 2,
+            String = 4,
+            Bool = 8,
+            MathEx = 16,
+            //FArray = 32
         }
 
         public static TypeParam GetType(string input)
@@ -68,14 +69,12 @@ namespace Utils
             }
             return true;
         }
+
         public static bool IsBool(string input)
         {
             if (string.IsNullOrEmpty(input))
                 return false;
-            if (string.Equals(input.Trim(), "true", StringComparison.CurrentCultureIgnoreCase)
-                || string.Equals(input.Trim(), "false", StringComparison.CurrentCultureIgnoreCase))
-                return true;
-            return false;
+            return string.Equals(input.Trim(), "true", StringComparison.CurrentCultureIgnoreCase) || string.Equals(input.Trim(), "false", StringComparison.CurrentCultureIgnoreCase);
         }
 
         public static bool IsFArray(string input)
