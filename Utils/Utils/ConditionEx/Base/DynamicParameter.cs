@@ -13,7 +13,7 @@ namespace Utils.ConditionEx.Base
 
         DateTime _lastRequest;
         private Parameter _dynamicValue;
-        private Expression _base;
+        private readonly Expression _base;
 
         public string Source { get; }
         public Parameter Result
