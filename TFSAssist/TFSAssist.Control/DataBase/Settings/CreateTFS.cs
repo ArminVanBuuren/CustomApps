@@ -44,9 +44,8 @@ namespace TFSAssist.Control.DataBase.Settings
 
             try
             {
-                IfCondition ifCond = new IfCondition();
-                IfTarget target = ifCond.ExpressionEx(value);
-                bool result = target.ResultCondition;
+                var exResult = ExpressionBuilder.Calculate(value);
+                bool result = exResult.ConditionResult;
 
                 log.OnWriteLog($"{nameof(Condition)}=[{Condition}]; Final{nameof(Condition)}=[{value}]. Result=[{result}]", true);
                 return result;
