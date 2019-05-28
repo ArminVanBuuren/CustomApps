@@ -38,13 +38,15 @@ namespace Utils.ConditionEx
         {
             int waitSymol = 0;
             int closeCommand = 0;
-            if (string.IsNullOrEmpty(expression))
-                return new Expression();
+            if (expression.IsNullOrEmptyTrim())
+                throw new Exception("Expression is epmty!");
+
+            string normalizeExpression = XML.NormalizeXmlValueFast(expression);
 
             ExpressionBuilder builder = new ExpressionBuilder(dynamicFunction);
             StringBuilder temp = new StringBuilder();
             int state = 0;
-            foreach (char ch in expression)
+            foreach (char ch in normalizeExpression)
             {
                 switch (state)
                 {
@@ -80,8 +82,7 @@ namespace Utils.ConditionEx
             if (waitSymol.IsParity() && closeCommand == 0 && waitSymol >= 4)
             {
                 Expression conditionEx = builder.ToBlock();
-                if (conditionEx.IsValid && !conditionEx.ToString().IsNullOrEmpty())
-                    return conditionEx;
+                return conditionEx;
             }
 
             throw new ExpressionBuilderException($"Syntax of expression '{expression}' is incorrect.");
@@ -275,7 +276,8 @@ namespace Utils.ConditionEx
                 newParentBlock.Parent.ExpressionList.RemoveChild(_parent);
             }
             newParentBlock.ExpressionList.AddChild(_parent);
-            if (!_parent.StringResult.IsNullOrEmpty())
+
+            if ((_parent.ExpressionList.Count > 0 && (_parent.LogicalGroup == LogicalGroupType.And || _parent.LogicalGroup == LogicalGroupType.Or)) || _parent.ConditionList.Count > 0)
             {
                 //создаем новый блок который будет обрабатывать операции внутри наших скобок
                 var newAndChild = new Expression();
@@ -316,7 +318,7 @@ namespace Utils.ConditionEx
             if (_conditionBlock != null)
             {
                 //если параметры не заполнены то не доабвляем условие в текущий блок
-                if (!_conditionBlock.StringResult.IsNullOrEmpty())
+                if (_conditionBlock.Count > 0)
                 {
                     AddNewCondition(_parent);
                 }
@@ -366,7 +368,9 @@ namespace Utils.ConditionEx
             int i = 0;
             foreach (string sCheck in str.Split(' '))
             {
-                if (string.IsNullOrEmpty(sCheck)) continue;
+                if (string.IsNullOrEmpty(sCheck))
+                    continue;
+
                 ConditionOperatorType cbo = Condition.GetOperator(sCheck);
                 if (cbo == ConditionOperatorType.Unknown)
                 {
@@ -388,7 +392,9 @@ namespace Utils.ConditionEx
                         case LogicalGroupType.BracketIsClose:
                             LogicalGroupIfCloseBkt();
                             break;
-                        default: break;
+                        default:
+                            _operator = ConditionOperatorType.Unknown;
+                            break;
                     }
                 }
                 else

@@ -106,7 +106,7 @@ namespace Utils.ConditionEx.Base
 
         internal static ConditionOperatorType GetOperator(string @operator)
         {
-            switch (XML.NormalizeXmlValueFast(@operator))
+            switch (@operator)
             {
                 case ">=": return ConditionOperatorType.EqualOrGreaterThan;
                 case "<=": return ConditionOperatorType.EqualOrLessThan;

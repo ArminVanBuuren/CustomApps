@@ -27,7 +27,8 @@ namespace Tester.Console
             try
             {
 
-            //  string ss = XML.NormalizeXmlValueFast("&amp;&quot;&amp;&lt;&gt; &lt;=  &gt;=");
+            //string ss1 = XML.NormalizeXmlValueFast("&amp;&quot;&amp;&lt;&gt; &lt;=  &gt;=");
+            //string ss2 = XML.NormalizeXmlValueFast("&&quot; fefe &quot; & 111");
 
 
             List<long> temp = new List<long>();
@@ -37,8 +38,8 @@ namespace Tester.Console
             {
                 stw.Start();
                 
-                //var res1 = condition.ExpressionEx("'1'='1' and '5'='5'");
-                var res1 = ExpressionBuilder.Calculate(@"'1'='5' or '5'='7' or ('2'='2' and '7'='7')");
+                //var res1 = ExpressionBuilder.Calculate("'3'=('2'>'1'>'0' aNd '1'='1') oR ('2'='2')");
+                var res1 = ExpressionBuilder.Calculate(@"(&quot;'1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7'))");
 
                 
                 stw.Stop();
@@ -88,8 +89,8 @@ namespace Tester.Console
             {
                 System.Console.WriteLine(e);
             }
-            //System.Console.WriteLine(@"Complete");
-            //System.Console.ReadLine();
+            System.Console.WriteLine(@"Complete");
+            System.Console.ReadLine();
         }
 
         static void DisplayData()

@@ -23,10 +23,10 @@ namespace Utils.ConditionEx
         /// <summary>
         /// начало групповово условия (скобка открыта)
         /// </summary>
-        BracketIsOpen = 3,
+        BracketIsOpen = 4,
         /// <summary>
         /// конец групповово условия (скобка закрыта)
         /// </summary>
-        BracketIsClose = 4
+        BracketIsClose = 8
     }
 }

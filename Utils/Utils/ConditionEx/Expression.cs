@@ -17,7 +17,7 @@ namespace Utils.ConditionEx
         {
             get
             {
-                if (ExpressionList.Count > 0 && (ConditionList.Count > 0 || LogicalGroup == LogicalGroupType.NaN))
+                if ((ExpressionList.Count > 0 && (ConditionList.Count > 0 || LogicalGroup == LogicalGroupType.NaN)) || (ExpressionList.Count == 0 && ConditionList.Count == 0))
                     return false;
 
                 foreach (Expression bc in ExpressionList)
@@ -91,15 +91,14 @@ namespace Utils.ConditionEx
         public LogicalGroupType LogicalGroup { get; set; } = LogicalGroupType.NaN;
 
         /// <summary>
-        /// Группы выражений, дочерние IfTarget то что в выражении были в скобочках
+        /// Группы выражений, где дочерние в выражении были в скобочках
         /// например в данном примере будут 3 группы (('2'>'1'>'0' and '1'='1') or '2'='2')
-        /// 1='2'>'1'>'0' and '1'='1'       2='2'='2'       3=('2'>'1'>'0' and '1'='1') or ('2'='2')
+        /// '1='2'>'1'>'0' and '1'='1'       '2='2'='2'       ('2'>'1'>'0' and '1'='1') or ('2'='2')
         /// </summary>
         public ExpressionCollection ExpressionList { get; internal set; }
 
         /// <summary>
-        /// Заполнена релизация данной группы если не заполненны подгруппы
-        /// то в данной группе выполняется реализация операции AND
+        /// Заполнена релизация данной группы если не заполненны подгруппы то в данной группе выполняется реализация операции AND
         /// </summary>
         public ConditionCollection ConditionList { get; internal set; }
 
@@ -131,15 +130,19 @@ namespace Utils.ConditionEx
 
         internal static LogicalGroupType GetLogicalGroup(string str)
         {
-            switch (XML.NormalizeXmlValueFast(str.ToLower()))
+            switch (str)
             {
-                case "&&":
-                case "and": return LogicalGroupType.And;
-                case "||":
-                case "or": return LogicalGroupType.Or;
+                case "&&": return LogicalGroupType.And;
+                case "||": return LogicalGroupType.Or;
                 case "(": return LogicalGroupType.BracketIsOpen;
                 case ")": return LogicalGroupType.BracketIsClose;
             }
+
+            if(str.Equals("and", StringComparison.CurrentCultureIgnoreCase))
+                return LogicalGroupType.And;
+            else if(str.Equals("or", StringComparison.CurrentCultureIgnoreCase))
+                return LogicalGroupType.Or;
+
             return LogicalGroupType.NaN;
         }
 
