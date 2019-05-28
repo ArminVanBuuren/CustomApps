@@ -8,7 +8,7 @@ namespace Utils.ConditionEx
 {
     public class ExpressionBuilderException : Exception
     {
-        public ExpressionBuilderException(string message) : base(message)
+        internal ExpressionBuilderException(string message) : base(message)
         {
 
         }
