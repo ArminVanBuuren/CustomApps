@@ -527,9 +527,12 @@ namespace Utils.XmlRtfStyle
         static bool GetPositionInNode(XmlNode findNode, XmlNode nodeBrothers, ref int position, int rankNewLine)
         {
             int getPosAttr = 0;
+            if (nodeBrothers.Attributes == null)
+                return false;
+
             foreach (XmlAttribute attribute in nodeBrothers.Attributes)
             {
-                getPosAttr = getPosAttr + string.Format(" {0}=\"{1}\"", attribute.Name, attribute.InnerXml).Length;
+                getPosAttr = getPosAttr + $" {attribute.Name}=\"{attribute.InnerXml}\"".Length;
                 if (attribute.Equals(findNode))
                 {
                     position = position + getPosAttr + nodeBrothers.Name.Length + 1 + rankNewLine * 3;

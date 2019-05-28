@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
-using TeleSharp.TL.Messages;
-using TLSharp.Core;
+﻿using TeleSharp.TL;
 
 namespace Utils.Telegram
 {

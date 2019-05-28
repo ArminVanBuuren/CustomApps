@@ -13,9 +13,6 @@ namespace Utils.Telegram
 {
     public abstract class TLControl : IDisposable
     {
-        private int _appiId;
-        private string _apiHash;
-
         public static string SessionName => $"{nameof(TLControl)}Session";
         static readonly DateTime mdt = new DateTime(1970, 1, 1, 0, 0, 0);
         //public event TLControlhandler OnProcessingError;
@@ -28,12 +25,8 @@ namespace Utils.Telegram
 
         protected TLControl(int appiId, string apiHash)
         {
-            _appiId = appiId;
-            _apiHash = apiHash;
-
             Session = new TLControlSessionStore();
-
-            Client = new TelegramClient(_appiId, _apiHash, Session, SessionName);
+            Client = new TelegramClient(appiId, apiHash, Session, SessionName);
         }
 
         public async Task ConnectAsync(bool reconnect = false)
@@ -388,7 +381,7 @@ namespace Utils.Telegram
             foreach (var message in diff.NewMessages.OfType<TLMessage>())
             {
                 //!message.Message.IsNullOrEmptyTrim() &&
-                if (message.FromId == sender.Id && message.Date > startDate && funkLocation(message.ToId))
+                if (message.FromId == sender.Id && message.Date > startDate && funkLocation != null && funkLocation(message.ToId))
                 {
                     messages.Add(message);
                 }
@@ -407,8 +400,8 @@ namespace Utils.Telegram
 
             if (dateTo != null)
             {
-                DateTime? utfEndDate = dateTo?.ToUniversalTime();
-                end = (int)utfEndDate?.Subtract(mdt).TotalSeconds;
+                DateTime utfEndDate = dateTo.Value.ToUniversalTime();
+                end = (int)utfEndDate.Subtract(mdt).TotalSeconds;
 
                 if (start > end)
                     throw new Exception($"{nameof(dateFrom)} must be less than {nameof(dateTo)}");
@@ -515,7 +508,7 @@ namespace Utils.Telegram
         public async Task<TLChannelMessages> SeachByWord(TLAbsInputPeer item, string searchWord)
         {
             TLChannelMessages search = await Client.SendRequestAsync<TLChannelMessages>
-            (new TeleSharp.TL.Messages.TLRequestSearch()
+            (new TLRequestSearch()
             {
                 Peer = item,
                 //MaxDate = maxdate,

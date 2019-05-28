@@ -30,6 +30,8 @@ namespace Tester.Console
             //string ss1 = XML.NormalizeXmlValueFast("&amp;&quot;&amp;&lt;&gt; &lt;=  &gt;=");
             //string ss2 = XML.NormalizeXmlValueFast("&&quot; fefe &quot; & 111");
 
+            var dd1 = 197.IsParity();
+            var dd2 = 266.IsParity();
 
             List<long> temp = new List<long>();
             Stopwatch stw = new Stopwatch();
@@ -38,8 +40,8 @@ namespace Tester.Console
             {
                 stw.Start();
                 
-                //var res1 = ExpressionBuilder.Calculate("'3'=('2'>'1'>'0' aNd '1'='1') oR ('2'='2')");
-                var res1 = ExpressionBuilder.Calculate(@"(&quot;'1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7')) and ('1'='5' or '5'='7' or ('2'='2' and '7'='7'))");
+                var res1 = ExpressionBuilder.Calculate("'3'=('2'>'1'>'0' aNd '1'='1') oR ('2'='2')");
+                
 
                 
                 stw.Stop();
