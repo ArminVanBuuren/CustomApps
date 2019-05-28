@@ -109,13 +109,13 @@ namespace Utils
             return (msg == string.Empty);
         }
 
-        public static string NormalizeXmlValue(string xmlStingValue, XMLValueEncoder type = XMLValueEncoder.Decode)
+        public static string NormalizeXmlValue(string xmlStringValue, XMLValueEncoder type = XMLValueEncoder.Decode)
         {
-            var regex = type == XMLValueEncoder.Decode ? new Regex(@"\&(.+?)\;", RegexOptions.IgnoreCase) : new Regex(@"(.+?)", RegexOptions.IgnoreCase);
+            var regex = type == XMLValueEncoder.Decode ? new Regex(@"\&(.+?)\;") : new Regex(@"(.+?)");
             var xf = new XmlEntityNames(type);
 
             MatchEvaluator evaluator = (xf.Replace);
-            string strOut = regex.Replace(xmlStingValue, evaluator);
+            string strOut = regex.Replace(xmlStringValue, evaluator);
             return strOut;
         }
 
