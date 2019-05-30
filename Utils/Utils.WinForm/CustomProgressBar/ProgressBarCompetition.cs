@@ -26,13 +26,14 @@ namespace Utils.WinForm.CustomProgressBar
             _someMethodForComplete = someMethodForComplete;
         }
 
-        public async void StartProgress(Func<ProgressBarCompetition<T>, T> method)
+        public void StartProgress(Func<ProgressBarCompetition<T>, T> method)
         {
             ProgressValue = 0;
             _progressBar.Visible = true;
             ProgressCompleted = false;
 
-            await ProgressAsync();
+            var precentCalculate = new Action(ProgressAsync);
+            precentCalculate.BeginInvoke(null, null);
 
             _datafilter = new Func<ProgressBarCompetition<T>, T>(method);
             _asyncResult = _datafilter.BeginInvoke(this, IsCompleted, _datafilter);
@@ -68,40 +69,37 @@ namespace Utils.WinForm.CustomProgressBar
             }));
         }
 
-        Task ProgressAsync()
+        void ProgressAsync()
         {
-            return Task.Run((Action)(() =>
+            try
             {
-                try
+                int _prevValue = -1;
+                while (!ProgressCompleted)
                 {
-                    int _prevValue = -1;
-                    while (!ProgressCompleted)
+                    if (ProgressValue == 0 || TotalProgress == 0)
                     {
-                        if (ProgressValue == 0 || TotalProgress == 0)
-                        {
-                            Thread.Sleep(1);
-                            continue;
-                        }
-
-                        double calc = (double)ProgressValue / TotalProgress;
-                        int progr = ((int)(calc * 100)) >= 100 ? 100 : ((int)(calc * 100));
-
-                        if (_prevValue == progr)
-                            continue;
-                        _prevValue = progr;
-
-                        _progressBar.Invoke(new MethodInvoker(delegate
-                        {
-                            _progressBar.Value = progr;
-                            _progressBar.SetProgressNoAnimation(progr);
-                        }));
+                        Thread.Sleep(1);
+                        continue;
                     }
+
+                    double calc = (double)ProgressValue / TotalProgress;
+                    int progr = ((int)(calc * 100)) >= 100 ? 100 : ((int)(calc * 100));
+
+                    if (_prevValue == progr)
+                        continue;
+                    _prevValue = progr;
+
+                    _progressBar.Invoke(new MethodInvoker(delegate
+                    {
+                        _progressBar.Value = progr;
+                        _progressBar.SetProgressNoAnimation(progr);
+                    }));
                 }
-                catch (Exception)
-                {
-                    // null
-                }
-            }));
+            }
+            catch (Exception)
+            {
+                // null
+            }
         }
     }
 }
