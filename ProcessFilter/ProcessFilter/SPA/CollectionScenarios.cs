@@ -49,7 +49,7 @@ namespace SPAFilter.SPA
         }
     }
 
-    public class Scenario : ObjectTempalte
+    public class Scenario : ObjectTemplate
     {
         internal List<string> Commands { get; private set; } = new List<string>();
         internal CollectionScenarios SubScenarios { get; private set; } = new CollectionScenarios();

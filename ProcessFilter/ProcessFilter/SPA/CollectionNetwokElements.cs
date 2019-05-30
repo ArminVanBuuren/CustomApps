@@ -67,7 +67,7 @@ namespace SPAFilter.SPA
 
     
 
-    public class NetworkElement : ObjectTempalte
+    public class NetworkElement : ObjectTemplate
     {
         public List<NetworkElementOpartion> Operations { get; private set; } = new List<NetworkElementOpartion>();
 
@@ -98,7 +98,7 @@ namespace SPAFilter.SPA
         }
     }
 
-    public class NetworkElementOpartion : ObjectTempalte
+    public class NetworkElementOpartion : ObjectTemplate
     {
         private NetworkElement parent;
 

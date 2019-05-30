@@ -34,7 +34,7 @@ namespace SPAFilter.SPA
         }
     }
 
-    public sealed class BusinessProcess : ObjectTempalte
+    public sealed class BusinessProcess : ObjectTemplate
     {
         internal List<string> Operations { get; } = new List<string>();
 

@@ -31,7 +31,7 @@ namespace SPAFilter.SPA
         }
     }
 
-    public class Command : ObjectTempalte
+    public class Command : ObjectTemplate
     {
         public Command(string path, int id):base(path, id)
         {

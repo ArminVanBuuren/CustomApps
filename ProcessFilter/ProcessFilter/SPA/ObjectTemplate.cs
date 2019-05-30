@@ -4,9 +4,9 @@ using Utils.WinForm.DataGridViewHelper;
 namespace SPAFilter.SPA
 {
 
-    public class ObjectTempalte
+    public class ObjectTemplate
     {
-        public ObjectTempalte(string path, int id)
+        public ObjectTemplate(string path, int id)
         {
             ID = id;
             Name = path.GetLastNameInPath(true);
