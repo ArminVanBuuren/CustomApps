@@ -84,6 +84,11 @@ namespace Utils
             StartProcess(argument_complete);
         }
 
+        /// <summary>
+        /// Максимальное значение 3600 секунд и значение не должно быть отрицательным или равным 0
+        /// </summary>
+        /// <param name="secondsDelay"></param>
+        /// <returns></returns>
         static string GetCommandTimeout(int secondsDelay)
         {
             int currectSeconds = secondsDelay;

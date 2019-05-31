@@ -64,7 +64,7 @@ namespace TFSAssist
         private const double _intervalGCCollectAndClearTraces = 3600 * 1000;
         // количество дней на хранение логов
         private const int _daysToSaveLogs = 10;
-        object syncTraces = new object();
+        readonly object syncTraces = new object();
 
         public Thread MainThread { get; private set; }
         private int _openedWarningWindowCount = 0;

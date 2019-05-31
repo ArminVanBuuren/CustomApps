@@ -39,17 +39,11 @@ namespace Utils
 		}
 
         /// <summary>
-        /// Четное или нечетно число
+        /// Проверка на четность числа
         /// </summary>
         public static bool IsParity(this int dbl)
         {
-            int a = dbl;
-            int b;
-            b = a / 2;
-            int c = b * 2;
-            if (c == a)
-                return true;
-            return false;
+            return dbl % 2 == 0 ? true : false;
         }
     }
 }

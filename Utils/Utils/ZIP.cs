@@ -108,7 +108,8 @@ namespace Utils
             using (FileStream inFile = new FileStream(sCompressedFile, FileMode.Open, FileAccess.Read, FileShare.None))
             using (GZipStream zipStream = new GZipStream(inFile, CompressionMode.Decompress, true))
                 while (DecompressFile(sDir, zipStream, progress))
-                    ;
+                {
+                }
         }
 
         internal static int Test(string[] argv)

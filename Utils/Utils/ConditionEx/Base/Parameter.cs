@@ -1,32 +1,61 @@
-﻿namespace Utils.ConditionEx.Base
+﻿using System;
+using System.Globalization;
+using static Utils.TYPES;
+
+namespace Utils.ConditionEx.Base
 {
-	public struct Parameter
-	{
-        public string Source { get; }
+    public struct Parameter : IComparable
+    {
+        public static Parameter NaN = new Parameter(double.NaN.ToString(), TypeParam.NaN);
+
+        public Parameter(string value, TypeParam type)
+        {
+            Value = value;
+            Type = type;
+        }
         public string Value { get; }
-        public TYPES.TypeParam Type { get; }
+        public TypeParam Type { get; }
 
-        public Parameter(string input)
-		{
-			Source = input;
+        public int CompareTo(object obj)
+        {
+            if (!(obj is Parameter))
+                return 1;
 
-            Type = TYPES.GetType(Source);
-            switch (Type)
+            Parameter input = (Parameter) obj;
+            if (input.Value == Value && input.Type == Type)
+                return 0;
+
+            return 1;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+                return false;
+            return obj is Parameter other && Equals(other);
+        }
+
+        public bool Equals(Parameter other)
+        {
+            return string.Equals(Value, other.Value) && Type == other.Type;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
             {
-                case TYPES.TypeParam.MathEx:
-                {
-                    double strNum = MATH.Evaluate(input, Type);
-                    Value = strNum.ToString();
-                    Type = TYPES.TypeParam.Number;
-                    break;
-                }
-                case TYPES.TypeParam.Bool:
-                    Value = input.Trim();
-                    break;
-                default:
-                    Value = input;
-                    break;
+                return ((Value != null ? Value.GetHashCode() : 0) * 397) ^ (int)Type;
             }
-		}
-	}
+        }
+
+        public static bool operator ==(Parameter first, Parameter second)
+        {
+            return first.Value == second.Value && first.Type == second.Type;
+        }
+
+        public static bool operator !=(Parameter first, Parameter second)
+        {
+            return !(first == second);
+        }
+    }
 }

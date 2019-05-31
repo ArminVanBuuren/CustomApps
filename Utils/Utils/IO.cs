@@ -270,7 +270,7 @@ namespace Utils
                         int j = 0;
                         for (j = 0; j <= modules.Count - 1; j++)
                         {
-                            if ((modules[j].FileName.ToLower().CompareTo(strFile.ToLower()) == 0))
+                            if (modules[j].FileName.Equals(strFile, StringComparison.CurrentCultureIgnoreCase))
                             {
                                 myProcessArray.Add(myProcess);
                                 break;

@@ -5,10 +5,10 @@ namespace Utils.XmlRtfStyle
 {
     public class RtfBuilder
     {
-        private StringBuilder _body = new StringBuilder();
-        private List<string> _fontTable = new List<string>();
+        private readonly StringBuilder _body = new StringBuilder();
+        private readonly List<string> _fontTable = new List<string>();
+        private readonly List<string> _palette = new List<string>();
         private bool _lastKeyword;
-        private List<string> _palette = new List<string>();
 
         public RtfBuilder()
         {
@@ -21,7 +21,7 @@ namespace Utils.XmlRtfStyle
             {
                 return 0;
             }
-            string item = string.Format(@"\red{0}\green{1}\blue{2};", r, g, b);
+            string item = $@"\red{r}\green{g}\blue{b};";
             if (!_palette.Contains(item))
             {
                 _palette.Add(item);
@@ -134,11 +134,7 @@ namespace Utils.XmlRtfStyle
 
         private string ReplaceSpecialSymbols(string str)
         {
-            bool flag = false;
-            if (str.EndsWith("\n"))
-            {
-                flag = true;
-            }
+            bool flag = str.EndsWith("\n");
             str = str.Replace(@"\", @"\\");
             str = str.Replace("{", @"\{");
             str = str.Replace("}", @"\}");
@@ -212,7 +208,7 @@ namespace Utils.XmlRtfStyle
             builder.Append(@"{\fonttbl");
             for (int i = 0; i < _fontTable.Count; i++)
             {
-                builder.Append(string.Format(@"{{\f{0}\fswiss\fcharset204 {1};}}", i, _fontTable[i]));
+                builder.Append($@"{{\f{i}\fswiss\fcharset204 {_fontTable[i]};}}");
             }
             builder.Append("}");
             if (_palette.Count > 0)

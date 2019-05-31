@@ -8,7 +8,7 @@ namespace Utils
 {
     public static class STRING
     {
-        private static Random random = new Random();
+        private static readonly Random random = new Random();
         const string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         const string nums = "1234567890";
         const string numsWithLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
@@ -101,7 +101,7 @@ namespace Utils
             return param1.IndexOf(param2, StringComparison.CurrentCultureIgnoreCase) != -1 || param2.IndexOf(param1, StringComparison.CurrentCultureIgnoreCase) != -1;
         }
 
-        public static string TrimString(this string input)
+        public static string TrimWhiteSpaces(this string input)
         {
             return input.Trim('\r', '\n', '\t', ' ');
         }
