@@ -29,7 +29,7 @@ namespace Tester.Console
 
             //string ss1 = XML.NormalizeXmlValueFast("&amp;quot;&amp;lt;&amp;gt; &lt;=  &gt;=");
             //string ss2 = XML.NormalizeXmlValueFast("&&quot; fefe &quot;&apos; & 111");
-            string ss3 = XML.NormalizeXmlValueFast("& fefe \"' 111", XML.XMLValueEncoder.Encode);
+            //string ss3 = XML.NormalizeXmlValueFast("& fefe \"' 111", XML.XMLValueEncoder.Encode);
 
             var dd1 = 197.IsParity();
             var dd2 = 266.IsParity();
