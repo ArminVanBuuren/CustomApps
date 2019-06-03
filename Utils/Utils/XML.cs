@@ -122,14 +122,14 @@ namespace Utils
         public static string NormalizeXmlValueFast(string xmlStingValue, XMLValueEncoder type = XMLValueEncoder.Decode)
         {
             StringBuilder builder = new StringBuilder();
-            StringBuilder charName = new StringBuilder();
+            
             if (type == XMLValueEncoder.Decode)
             {
                 int isOpen = 0;
-                for (var index = 0; index < xmlStingValue.Length; index++)
+                StringBuilder charName = new StringBuilder();
+                
+                foreach (var ch in xmlStingValue)
                 {
-                    char ch = xmlStingValue[index];
-
                     if (ch == '&')
                     {
                         if (isOpen == 0)
@@ -152,7 +152,7 @@ namespace Utils
                         if (XmlEntityNames.NAME_CHAR.TryGetValue(charName.ToString(), out var res))
                         {
                             charName.Clear();
-                            if (res == "&")
+                            if (res == '&')
                                 isOpen++;
                             else
                                 builder.Append(res);
@@ -188,12 +188,20 @@ namespace Utils
                 {
                     builder.Append("&");
                     builder.Append(charName.ToString());
+                    charName.Clear();
                 }
-                
             }
             else
             {
-                
+                foreach (var ch in xmlStingValue)
+                {
+                    if (XmlEntityNames.CHAR_NAME.TryGetValue(ch, out var res))
+                    {
+                        builder.Append(res);
+                        continue;
+                    }
+                    builder.Append(ch);
+                }
             }
 
             return builder.ToString();
@@ -214,37 +222,37 @@ namespace Utils
 
         class XmlEntityNames
         {
-            public static readonly Dictionary<string, string> NAME_CHAR = new Dictionary<string, string>
+            public static readonly Dictionary<string, char> NAME_CHAR = new Dictionary<string, char>
             {
-                { "amp","&"},
-                { "quot","\""},
-                { "lt","<"},
-                { "gt",">"},
-                { "apos","'"},
-                { "circ","ˆ"},
-                { "tilde","˜"},
-                { "ndash","–"},
-                { "mdash","—"},
-                { "lsquo","‘"},
-                { "rsquo","’"},
-                { "lsaquo","‹"},
-                { "rsaquo","›"}
+                { "amp",'&'},
+                { "quot",'\"'},
+                { "lt",'<'},
+                { "gt",'>'},
+                { "apos",'\''},
+                { "circ",'ˆ'},
+                { "tilde",'˜'},
+                { "ndash",'–'},
+                { "mdash",'—'},
+                { "lsquo",'‘'},
+                { "rsquo",'’'},
+                { "lsaquo",'‹'},
+                { "rsaquo",'›'}
             };
-            public static readonly Dictionary<string, string> CHAR_NAME = new Dictionary<string, string>
+            public static readonly Dictionary<char, string> CHAR_NAME = new Dictionary<char, string>
             {
-                { "&", "&amp;"},
-                { "\"", "&quot;"},
-                { "<", "&lt;"},
-                { ">", "&gt;"},
-                { "'", "&apos;"},
-                { "ˆ", "&circ;"},
-                { "˜", "&tilde;"},
-                { "–", "&ndash;"},
-                { "—", "&mdash;"},
-                { "‘", "&lsquo;"},
-                { "’", "&rsquo;"},
-                { "‹", "&lsaquo;"},
-                { "›", "&rsaquo;"}
+                { '&', "&amp;"},
+                { '\"', "&quot;"},
+                { '<', "&lt;"},
+                { '>', "&gt;"},
+                { '\'', "&apos;"},
+                { 'ˆ', "&circ;"},
+                { '˜', "&tilde;"},
+                { '–', "&ndash;"},
+                { '—', "&mdash;"},
+                { '‘', "&lsquo;"},
+                { '’', "&rsquo;"},
+                { '‹', "&lsaquo;"},
+                { '›', "&rsaquo;"}
             };
 
             private XMLValueEncoder Type { get; }
@@ -263,12 +271,12 @@ namespace Utils
                     case XMLValueEncoder.Decode:
                         {
                             if (NAME_CHAR.TryGetValue(find, out var result))
-                                return result;
+                                return result.ToString();
                             break;
                         }
                     case XMLValueEncoder.Encode:
                         {
-                            if (CHAR_NAME.TryGetValue(find, out var result))
+                            if (CHAR_NAME.TryGetValue(find[0], out var result))
                                 return result;
                             break;
                         }
