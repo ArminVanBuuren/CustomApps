@@ -139,7 +139,7 @@ namespace Utils
                         }
                         else
                         {
-                            builder.Append("&");
+                            builder.Append('&');
                             builder.Append(charName.ToString());
                             charName.Clear();
                             continue;
@@ -161,7 +161,7 @@ namespace Utils
                         }
                         else
                         {
-                            builder.Append("&");
+                            builder.Append('&');
                             builder.Append(charName.ToString());
                             charName.Clear();
                         }
@@ -170,7 +170,7 @@ namespace Utils
                     if (isOpen > 0 && charName.Length >= 6)
                     {
                         isOpen--;
-                        builder.Append("&");
+                        builder.Append('&');
                         builder.Append(charName.ToString());
                         charName.Clear();
                     }
@@ -186,7 +186,7 @@ namespace Utils
 
                 if (isOpen > 0)
                 {
-                    builder.Append("&");
+                    builder.Append('&');
                     builder.Append(charName.ToString());
                     charName.Clear();
                 }
