@@ -378,7 +378,7 @@ namespace TFSAssist.Control
             {
                 InProgress = false;
                 _asyncThread?.Abort();
-                _asyncThread?.Join();
+                //_asyncThread?.Join(); - Join не нужен иначе все зависает. Окно который использует первичный поток замерзает, если шаг на авторизации или чтении. Плохо абортится поток. Не использовать!
             }
             catch (Exception)
             {
