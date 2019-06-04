@@ -172,7 +172,9 @@ namespace Utils
                         isOpen--;
                         builder.Append('&');
                         builder.Append(charName.ToString());
+                        builder.Append(ch);
                         charName.Clear();
+                        continue;
                     }
 
                     if (isOpen > 0)
