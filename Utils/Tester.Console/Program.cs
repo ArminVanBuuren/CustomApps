@@ -28,7 +28,7 @@ namespace Tester.Console
             {
 
             //string ss1 = XML.NormalizeXmlValueFast("&amp;quot;&amp;lt;&amp;gt; &lt;=  &gt;=");
-            //string ss2 = XML.NormalizeXmlValueFast("&&quot; fefe &quot;&apos; & 111");
+            //string ss2 = XML.NormalizeXmlValueFast("&&&quot; fefe &quot;&apos; & 111&quot");
             //string ss3 = XML.NormalizeXmlValueFast("& fefe \"' 111", XML.XMLValueEncoder.Encode);
 
             var dd1 = 197.IsParity();
@@ -41,8 +41,7 @@ namespace Tester.Console
             {
                 stw.Start();
                 
-                var res1 = ExpressionBuilder.Calculate("'3'=('2'>'1'>'0' aNd '1'='1') oR ('2'='2')");
-                
+                var res1 = ExpressionBuilder.Calculate("('1'='1' and '2'>'1' and '5'>='4' and 'fff'='fff' and 'sasDDDddd'^='DDD' and 'rrrrr'!='aaaaa')");
 
                 
                 stw.Stop();
