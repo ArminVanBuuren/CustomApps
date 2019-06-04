@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TeleSharp.TL;
+using TLSharp.Core;
 using Utils;
 using Utils.CollectionHelper;
 using Utils.ConditionEx;
@@ -105,6 +106,7 @@ namespace Tester.Console
                 //}
 
                 //DisplayData();
+
             }
             catch (Exception e)
             {
@@ -143,82 +145,25 @@ namespace Tester.Console
             reader.Close();
         }
 
-        static void ParceOptions()
-        {
-            string isCommand = "30609:";
-            //string tlMessage = "30609:cam ";
-            string tlMessage = "30609:cam ( par1 =d '1111,=(2222)' , par2 =q '5555,=(6666)' ) ";
+        //static void ParceOptions()
+        //{
+        //    string isCommand = "30609:";
+        //    //string tlMessage = "30609:cam ";
+        //    string tlMessage = "30609:cam ( par1 =d '1111,=(2222)' , par2 =q '5555,=(6666)' ) ";
 
-            string command = tlMessage.Substring(isCommand.Length, tlMessage.Length - isCommand.Length);
-            Dictionary<string, string> options = null;
-            int optStart = command.IndexOf('(');
-            int optEnd = command.IndexOf(')');
-            if (optStart != -1 && optEnd != -1 && optEnd > optStart)
-            {
-                string strOptions = command.Substring(optStart, command.Length - optStart);
-                options = ReadOptionParams(strOptions);
-                command = command.Substring(0, optStart);
-            }
+        //    string command = tlMessage.Substring(isCommand.Length, tlMessage.Length - isCommand.Length);
+        //    Dictionary<string, string> options = null;
+        //    int optStart = command.IndexOf('(');
+        //    int optEnd = command.IndexOf(')');
+        //    if (optStart != -1 && optEnd != -1 && optEnd > optStart)
+        //    {
+        //        string strOptions = command.Substring(optStart, command.Length - optStart);
+        //        options = ReadOptionParams(strOptions);
+        //        command = command.Substring(0, optStart);
+        //    }
 
-            command = command.ToLower().Trim();
-        }
-
-        static Dictionary<string, string> ReadOptionParams(string options)
-        {
-            Dictionary<string, string> optParams = new Dictionary<string, string>();
-            StringBuilder builderParam = new StringBuilder();
-            StringBuilder builderValue = new StringBuilder();
-            int findParams = 0;
-            int findValue = 0;
-
-            foreach (char ch in options)
-            {
-                if (ch == '(' && findParams == 0)
-                {
-                    findParams++;
-                    continue;
-                }
-
-                if (ch == ')' && (findValue == 0 || findValue == 3) && findParams > 0)
-                {
-                    findParams--;
-                    continue;
-                }
-
-                if (findParams <= 0)
-                    continue;
-
-                if ((ch == '=' && findValue == 0) || (ch == '\'' && findValue >= 1))
-                {
-                    findValue++;
-                    continue;
-                }
-
-                if (ch == ',' && findValue == 3)
-                {
-                    findValue = 0;
-                    optParams.Add(builderParam.ToString(), builderValue.ToString());
-                    builderParam.Clear();
-                    builderValue.Clear();
-                    continue;
-                }
-
-                if (findValue == 2)
-                {
-                    builderValue.Append(ch);
-                    continue;
-                }
-
-                if (!char.IsWhiteSpace(ch) && findValue == 0)
-                    builderParam.Append(ch);
-            }
-
-            optParams.Add(builderParam.ToString(), builderValue.ToString());
-            builderParam.Clear();
-            builderValue.Clear();
-
-            return optParams;
-        }
+        //    command = command.ToLower().Trim();
+        //}
 
         static void TelegramTester()
         {
@@ -257,15 +202,14 @@ namespace Tester.Console
             double end = newd2.Subtract(mdt).TotalSeconds;
 
 
-
             //TimeSpan span = DateTime.Now.Subtract(DateTime.Parse("07.02.2018 00:00:00"));
-            TLControlNew control = new TLControlNew(770122, "8bf0b952100c9b22fd92499fc329c27e");
+            TLControl control = new TLControl(770122, "8bf0b952100c9b22fd92499fc329c27e");
             Process(control);
         }
 
-        static async void Process(TLControlNew control)
+        static async void Process(TLControl control)
         {
-            await control.ConnectAsync();
+           // await control.ConnectAsync();
             //var user1 = await control.GetUserAsync("+79113573202");
             //var user2 = await control.GetUserByUserNameAsync("MexicanCactus");
             //var chat1 = await control.GetChatAsync("Ацацоц");
@@ -293,14 +237,6 @@ namespace Tester.Console
                 await Task.Delay(1000);
             }
 
-
-        }
-    }
-
-    public class TLControlNew : TLControl
-    {
-        public TLControlNew(int appiId, string apiHash):base(appiId, apiHash)
-        {
 
         }
     }

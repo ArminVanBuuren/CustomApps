@@ -11,7 +11,7 @@ using TLSharp.Core.Utils;
 
 namespace Utils.Telegram
 {
-    public abstract class TLControl : IDisposable
+    public class TLControl : IDisposable
     {
         public static string SessionName => $"{nameof(TLControl)}Session";
         static readonly DateTime mdt = new DateTime(1970, 1, 1, 0, 0, 0);
@@ -23,7 +23,7 @@ namespace Utils.Telegram
         public bool IsAuthorized => Client.IsUserAuthorized();
         public bool IsConnected => Client != null && Client.IsConnected;
 
-        protected TLControl(int appiId, string apiHash)
+        public TLControl(int appiId, string apiHash)
         {
             Session = new TLControlSessionStore();
             Client = new TelegramClient(appiId, apiHash, Session, SessionName);
@@ -599,7 +599,6 @@ namespace Utils.Telegram
             {"fif", "application/fractals"},
             {"flr", "x-world/x-vrml"},
             {"gif", "image/gif"},
-            {"GIF", "image/gif"},
             {"gtar", "application/x-gtar"},
             {"gz", "application/x-gzip"},
             {"h", "text/plain"},
