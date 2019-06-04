@@ -13,6 +13,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using TeleSharp.TL;
 using Utils;
+using Utils.CollectionHelper;
 using Utils.ConditionEx;
 using Utils.Crypto;
 using Utils.Handles;
@@ -34,25 +35,41 @@ namespace Tester.Console
             var dd1 = 197.IsParity();
             var dd2 = 266.IsParity();
 
-            List<long> temp = new List<long>();
-            Stopwatch stw = new Stopwatch();
-            int i = 0;
-            while (i < 200)
-            {
-                stw.Start();
-                
-                var res1 = ExpressionBuilder.Calculate("('1'='1' and '2'>'1' and '5'>='4' and 'fff'='fff' and 'sasDDDddd'^='DDD' and 'rrrrr'!='aaaaa')");
-                
+                List<long> temp = new List<long>();
+                Stopwatch stw = new Stopwatch();
+                int i = 0;
+                //while (i < 200)
+                //{
+                //    stw.Start();
 
-                stw.Stop();
-                temp.Add(stw.ElapsedMilliseconds);
-                stw.Reset();
 
-                
-                i++;
-            }
 
-            //double dd = 855555;
+
+                //    stw.Stop();
+                //    temp.Add(stw.ElapsedMilliseconds);
+                //    stw.Reset();
+
+
+                //    i++;
+                //}
+
+                DynamicObject dynObj = new DynamicObject(GetResult);
+                DuplicateDictionary<string, bool> res = new DuplicateDictionary<string, bool>();
+                var res1 = ExpressionBuilder.Calculate("('1'='1' and '2'>'${random}' and '5'>='4' and 'fff'='fff' and 'sasDDDddd'^='DDD' and 'rrrrr'!='aaaaa')", dynObj);
+                while (i < 200)
+                {
+                    stw.Start();
+
+                    res.Add(res1.StringResult, res1.ConditionResult);
+                    dynObj.Elapsed();
+
+                    stw.Stop();
+                    temp.Add(stw.ElapsedMilliseconds);
+                    stw.Reset();
+
+                    i++;
+                }
+                //double dd = 855555;
                 //using (var responceBody = WEB.GetHttpWebResponse("https://www.whatismyip.com/ip-address-lookup/"))
                 //{
                 //    if (responceBody != null && responceBody.StatusCode == HttpStatusCode.OK)
@@ -93,6 +110,15 @@ namespace Tester.Console
             }
             System.Console.WriteLine(@"Complete");
             System.Console.ReadLine();
+        }
+
+        static string GetResult(string input)
+        {
+            if (input.IndexOf("${random}", StringComparison.CurrentCultureIgnoreCase) == -1)
+                return input;
+
+            var res = new Random().Next(0, 9);
+            return input.Replace("${random}", res.ToString());
         }
 
         static void DisplayData()
