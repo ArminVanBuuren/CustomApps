@@ -10,6 +10,15 @@ namespace Utils
 {
     public static class SERVER
     {
+        /// <summary>
+        /// Привязывать поток к отдельному процессору, но не к ядрам
+        /// </summary>
+        /// <param name="hThread"></param>
+        /// <param name="dwThreadAffinityMask"></param>
+        /// <returns></returns>
+        [DllImport("kernel32.dll")]
+        static extern UIntPtr SetThreadAffinityMask(IntPtr hThread, UIntPtr dwThreadAffinityMask);
+
         [DllImport("psapi.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool GetPerformanceInfo([Out] out PerformanceInformation PerformanceInformation, [In] int Size);
@@ -90,14 +99,14 @@ namespace Utils
         private static ProcessInfo ProcessInfoByID(int ID)
         {
             // gets the process info by it's id
-            if (ProcessList == null) return PROCESS_INFO_NOT_FOUND;
+            if (ProcessList == null || ProcessList.Length == 0)
+                return PROCESS_INFO_NOT_FOUND;
 
-            for (int i = 0; i < ProcessList.Length; i++)
-                if (ProcessList[i] != PROCESS_INFO_NOT_FOUND && ProcessList[i].ID == ID)
-                    return ProcessList[i];
+            foreach (var process in ProcessList)
+                if (process != PROCESS_INFO_NOT_FOUND && process.ID == ID)
+                    return process;
 
             return PROCESS_INFO_NOT_FOUND;
-
         }
 
         public class ProcessInfo

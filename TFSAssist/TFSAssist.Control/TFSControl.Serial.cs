@@ -378,6 +378,7 @@ namespace TFSAssist.Control
             {
                 InProgress = false;
                 _asyncThread?.Abort();
+                _asyncThread?.Join();
             }
             catch (Exception)
             {

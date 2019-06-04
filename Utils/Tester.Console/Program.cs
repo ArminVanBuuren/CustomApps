@@ -28,12 +28,12 @@ namespace Tester.Console
             try
             {
 
-            //string ss1 = XML.NormalizeXmlValueFast("&amp;quot;&amp;lt;&amp;gt; &lt;=  &gt;=");
-            //string ss2 = XML.NormalizeXmlValueFast("&&&quot; fefe &quot;&apos; & 111&quot");
-            //string ss3 = XML.NormalizeXmlValueFast("& fefe \"' 111", XML.XMLValueEncoder.Encode);
+                //string ss1 = XML.NormalizeXmlValueFast("&amp;quot;&amp;lt;&amp;gt; &lt;=  &gt;=");
+                //string ss2 = XML.NormalizeXmlValueFast("&&&quot; fefe &quot;&apos; & 111&quot");
+                //string ss3 = XML.NormalizeXmlValueFast("& fefe \"' 111", XML.XMLValueEncoder.Encode);
 
-            var dd1 = 197.IsParity();
-            var dd2 = 266.IsParity();
+                var dd1 = 197.IsParity();
+                var dd2 = 266.IsParity();
 
                 List<long> temp = new List<long>();
                 Stopwatch stw = new Stopwatch();
@@ -53,22 +53,24 @@ namespace Tester.Console
                 //    i++;
                 //}
 
-                DynamicObject dynObj = new DynamicObject(GetResult);
-                DuplicateDictionary<string, bool> res = new DuplicateDictionary<string, bool>();
-                var res1 = ExpressionBuilder.Calculate("('1'='1' and '2'>'${random}' and '5'>='4' and 'fff'='fff' and 'sasDDDddd'^='DDD' and 'rrrrr'!='aaaaa')", dynObj);
-                while (i < 200)
-                {
-                    stw.Start();
+                //DynamicObject dynObj = new DynamicObject(GetResult);
+                //DuplicateDictionary<string, bool> res = new DuplicateDictionary<string, bool>();
+                //var res1 = ExpressionBuilder.Calculate("('1'='1' and '2'>'${random}' and '5'>='4' and 'fff'='fff' and 'sasDDDddd'^='DDD' and 'rrrrr'!='aaaaa')", dynObj);
+                //while (i < 200)
+                //{
+                //    stw.Start();
 
-                    res.Add(res1.StringResult, res1.ConditionResult);
-                    dynObj.Elapsed();
+                //    res.Add(res1.StringResult, res1.ConditionResult);
+                //    dynObj.Elapsed();
 
-                    stw.Stop();
-                    temp.Add(stw.ElapsedMilliseconds);
-                    stw.Reset();
+                //    stw.Stop();
+                //    temp.Add(stw.ElapsedMilliseconds);
+                //    stw.Reset();
 
-                    i++;
-                }
+                //    i++;
+                //}
+
+
                 //double dd = 855555;
                 //using (var responceBody = WEB.GetHttpWebResponse("https://www.whatismyip.com/ip-address-lookup/"))
                 //{
@@ -108,6 +110,7 @@ namespace Tester.Console
             {
                 System.Console.WriteLine(e);
             }
+
             System.Console.WriteLine(@"Complete");
             System.Console.ReadLine();
         }
