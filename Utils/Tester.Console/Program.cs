@@ -42,8 +42,8 @@ namespace Tester.Console
                 stw.Start();
                 
                 var res1 = ExpressionBuilder.Calculate("('1'='1' and '2'>'1' and '5'>='4' and 'fff'='fff' and 'sasDDDddd'^='DDD' and 'rrrrr'!='aaaaa')");
-
                 
+
                 stw.Stop();
                 temp.Add(stw.ElapsedMilliseconds);
                 stw.Reset();
