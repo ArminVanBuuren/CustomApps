@@ -649,8 +649,7 @@ namespace TFSAssist.Control
                                     if(link.Trim().IsNullOrEmpty())
                                         continue;
 
-                                    int linkTfsId;
-                                    if (int.TryParse(link, out linkTfsId))
+                                    if (int.TryParse(link, out var linkTfsId))
                                     {
                                         tfsWorkItem.Links.Add(new RelatedLink(linkTfsId));
                                     }
@@ -685,7 +684,7 @@ namespace TFSAssist.Control
                     catch (ValidationException ex) // ошибка если не все обязательные поля были заполнены или были указаны неверные значения
                     {
                         //получаем все обязательные поля для заполнения, чтобы в случае эксепшена знать какие поля необходимо заполнить
-                        StringBuilder reqFieldsStr = tfsWorkItem.Fields.OfType<Field>().Where(field => field.IsRequired).Aggregate(new StringBuilder(), (current, field) => AddParams(current, field));
+                        StringBuilder reqFieldsStr = tfsWorkItem.Fields.OfType<Field>().Where(field => field.IsRequired).Aggregate(new StringBuilder(), AddParams);
                         string res = reqFieldsStr.ToString();
                         throw new TFSFieldsException($"Error when create [{workItem.Value}] in TFS [{teamProj.Value}]! Please check Fields => TeamProject Condition=[{teamProj.Condition}] => WorkItem Condition=[{workItem.Condition}] in your config.\r\nFailed Fields:\r\n{failedFieldsStr}{new string('=', 50)}\r\nAll Required Fields:\r\n{res}{new string('=', 50)}", ex);
                     }
