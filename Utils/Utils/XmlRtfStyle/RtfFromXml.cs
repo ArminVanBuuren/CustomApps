@@ -364,26 +364,26 @@ namespace Utils.XmlRtfStyle
         {
             string source = string.Empty;
             string findedStr = string.Empty;
-            XMlType type = ProcessXmlGetPosition(xml.DocumentElement, ref source, ref findedStr, 0, find);
+            XMlType type = XMlType.Unknown;
 
-            //int position = 0;
-            //int rankNewLine = -1;
-            //XmlNode findNew = find;
-            //while (findNew.ParentNode != null)
-            //{
-            //    findNew = findNew.ParentNode;
-            //    rankNewLine++;
-            //}
-            //GetPosition(find, ref position, rankNewLine, true);
+            foreach (XmlNode child in xml.ChildNodes)
+            {
+                var resType = ProcessXmlGetPosition(child, ref source, ref findedStr, 0, find);
+
+                if (resType != XMlType.Unknown)
+                    type = resType;
+            }
 
             if (type != XMlType.Unknown)
+            {
                 return new XmlObjectIndex
                 {
                     FillText = source,
                     FindedObject = findedStr,
                     Type = type
                 };
-            //return source.Replace("\n", "").Length;
+            }
+
             return null;
         }
 

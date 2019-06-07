@@ -156,7 +156,7 @@ namespace XPathEvaluator
                 XmlObjectIndex xmlObject = RtfFromXml.GetPositionByXmlNode(_currentXmlBody, node);
                 if (xmlObject != null)
                 {
-                    bool isCorrect = GetCorrectXmlNodeStart(xmlObject);
+                    bool isCorrect = GetCorrectXmlNodeStart(xmlObject, fctb.Text);
                     if (!isCorrect)
                         return;
 
@@ -175,8 +175,9 @@ namespace XPathEvaluator
         /// Тут проблема в том что XmlDocument обрезает лишние пробелы, а в исходном тексте чтобы выделить ноду нужно правильно подобрать позиции, поэтому нужно считать все пропуски в исходном тексте, тот что на экране и найти правильную позицию учитывая. Единственное отлчичие XmlDocument от исходного текста так это пропуски, их мы и вычленяем в данном методе.
         /// </summary>
         /// <param name="findedObj"></param>
+        /// <param name="source"></param>
         /// <returns></returns>
-        bool GetCorrectXmlNodeStart(XmlObjectIndex findedObj)
+        static bool GetCorrectXmlNodeStart(XmlObjectIndex findedObj, string source)
         {
             bool finished = false;
             int i = -1;
@@ -194,7 +195,8 @@ namespace XPathEvaluator
 
                 if (j > findedObj.FillText.Length - 1)
                     break;
-                while (findedObj.FillText[j] == ' ' || findedObj.FillText[j] == '\t' || findedObj.FillText[j] == '\r' || findedObj.FillText[j] == '\n')
+                //while (findedObj.FillText[j] == ' ' || findedObj.FillText[j] == '\t' || findedObj.FillText[j] == '\r' || findedObj.FillText[j] == '\n')
+                while (char.IsWhiteSpace(findedObj.FillText[j]))
                 {
                     j++;
                     if (j > findedObj.FillText.Length - 1)
@@ -204,15 +206,16 @@ namespace XPathEvaluator
                     }
                 }
 
-                if (i > fctb.Text.Length - 1)
+                if (i > source.Length - 1)
                 {
                     i = -1;
                     break;
                 }
-                while (fctb.Text[i] == ' ' || fctb.Text[i] == '\t' || fctb.Text[i] == '\r' || fctb.Text[i] == '\n')
+                //while (source[i] == ' ' || source[i] == '\t' || source[i] == '\r' || source[i] == '\n')
+                while (char.IsWhiteSpace(source[i]))
                 {
                     i++;
-                    if (i > fctb.Text.Length - 1)
+                    if (i > source.Length - 1)
                     {
                         i = -1;
                         break;
@@ -225,8 +228,8 @@ namespace XPathEvaluator
 
             if (i == -1 || correctfindedIndexStart == -1)
                 return false;
-            findedObj.FillText = fctb.Text.Substring(0, i);
-            findedObj.FindedObject = fctb.Text.Substring(correctfindedIndexStart, i - correctfindedIndexStart);
+            findedObj.FillText = source.Substring(0, i);
+            findedObj.FindedObject = source.Substring(correctfindedIndexStart, i - correctfindedIndexStart);
             return true;
 
         }
