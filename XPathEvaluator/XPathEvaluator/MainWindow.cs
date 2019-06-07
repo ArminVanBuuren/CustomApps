@@ -150,8 +150,8 @@ namespace XPathEvaluator
             DataGridView data = (DataGridView)sender;
             if (data.CurrentRow?.Cells.Count < 5)
                 return;
-            XmlNode node = data.CurrentRow?.Cells[4].Value as XmlNode;
-            if (node != null && _currentXmlBody != null)
+
+            if (data.CurrentRow?.Cells[4].Value is XmlNode node && _currentXmlBody != null)
             {
                 XmlNodeResult xmlObject = RtfFromXml.GetPositionByXmlNode(fctb.Text, _currentXmlBody, node);
                 if (xmlObject != null)
