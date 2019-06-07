@@ -1,15 +1,10 @@
 ﻿using FastColoredTextBoxNS;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.XPath;
@@ -20,8 +15,8 @@ namespace XPathEvaluator
 {
     public partial class MainWindow : Form
     {
-        private SolidBrush solidRed = new SolidBrush(Color.PaleVioletRed);
-        private SolidBrush solidTransparent = new SolidBrush(Color.Transparent);
+        private readonly SolidBrush solidRed = new SolidBrush(Color.PaleVioletRed);
+        private readonly SolidBrush solidTransparent = new SolidBrush(Color.Transparent);
 
         bool _xmlBodyChanged = false;
         XmlDocument _currentXmlBody;
@@ -38,8 +33,8 @@ namespace XPathEvaluator
             //xpathResultDataGrid.DoubleClick += XpathResultDataGrid_DoubleClick;
             xpathResultDataGrid.ColumnHeaderMouseClick += XpathResultDataGrid_ColumnHeaderMouseClick;
 
-            this.tabMain.DrawMode = TabDrawMode.OwnerDrawFixed;
-            this.tabMain.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tabControl1_DrawItem);
+            tabMain.DrawMode = TabDrawMode.OwnerDrawFixed;
+            tabMain.DrawItem += tabControl1_DrawItem;
 
 
             KeyPreview = true;
@@ -80,7 +75,7 @@ namespace XPathEvaluator
             }           
         }
 
-        private object sync = new object();
+        private readonly object sync = new object();
         private bool isInsert = false;
         [DllImport("user32.dll")]
         private static extern short GetAsyncKeyState(Keys vKey);
@@ -141,7 +136,7 @@ namespace XPathEvaluator
             }
             catch (Exception ex)
             {
-
+                // ignored
             }
         }
 
@@ -188,7 +183,7 @@ namespace XPathEvaluator
             }
         }
 
-        MarkerStyle SameWordsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(40, Color.Gray)));
+        readonly MarkerStyle SameWordsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(40, Color.Gray)));
         void XmlBodyRichTextBoxOnTextChanged(object sender, EventArgs eventArgs)
         {
             try
