@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Xml;
+using System.Xml.Resolvers;
 
 namespace Utils.XmlRtfStyle
 {
@@ -71,8 +72,10 @@ namespace Utils.XmlRtfStyle
             {
                 return null;
             }
+
             return xml;
         }
+
         public static string Convert(string source)
         {
             RtfFromXml settings = new RtfFromXml();
@@ -90,6 +93,7 @@ namespace Utils.XmlRtfStyle
             {
                 throw new ArgumentNullException(nameof(source));
             }
+
             XmlDocument xml = new XmlDocument();
             xml.LoadXml(source);
             return Convert(xml, settings);
@@ -102,10 +106,12 @@ namespace Utils.XmlRtfStyle
             {
                 throw new ArgumentNullException(nameof(xml));
             }
+
             if (settings == null)
             {
                 throw new ArgumentNullException(nameof(settings));
             }
+
             StringBuilder source = new StringBuilder();
             ProcessXmlInnerText(xml.DocumentElement, ref source, 0);
             return GetRtfString(source.ToString(), settings);
@@ -134,6 +140,7 @@ namespace Utils.XmlRtfStyle
             {
                 str = str + " ";
             }
+
             StringBuilder str2 = new StringBuilder();
             if (node.Attributes == null)
             {
@@ -156,6 +163,7 @@ namespace Utils.XmlRtfStyle
                     {
                         innerText = node.InnerText.Remove(innerText.LastIndexOf("\n", StringComparison.Ordinal));
                     }
+
                     source.Append(innerText);
                 }
             }
@@ -165,6 +173,7 @@ namespace Utils.XmlRtfStyle
                 {
                     str2.Append($" {attribute.Name}=\"{attribute.InnerXml.Replace("\"", "&quot;").Replace("<", "&lt;").Replace(">", "&gt;")}\"");
                 }
+
                 string str4 = (nested != 0) ? Environment.NewLine : string.Empty;
                 if ((node.ChildNodes.Count <= 0) && string.IsNullOrEmpty(node.InnerText))
                 {
@@ -187,11 +196,13 @@ namespace Utils.XmlRtfStyle
                     {
                         source.Append(string.Format("{3}{0}<{1}{2}>", str, node.Name, str2, str4));
                     }
+
                     nested += 3;
                     foreach (XmlNode node2 in node.ChildNodes)
                     {
                         ProcessXmlInnerText(node2, ref source, nested);
                     }
+
                     if (((node.FirstChild != null) && (node.ChildNodes.Count == 1)) && string.Equals(node.FirstChild.Name, "#text"))
                     {
                         source.Append($"</{node.Name}>");
@@ -215,15 +226,16 @@ namespace Utils.XmlRtfStyle
                 switch (state)
                 {
                     case 0:
-                        {
-                            state = WaitTag(settings, rtf, temp, 1, 12, state, ch);
-                            continue;
-                        }
+                    {
+                        state = WaitTag(settings, rtf, temp, 1, 12, state, ch);
+                        continue;
+                    }
                     case 1:
                         if (((ch != ' ') && (ch != '\r')) && ((ch != '\n') && (ch != '\t')))
                         {
                             break;
                         }
+
                         rtf.SetForeColor(settings.TagColor);
                         rtf.AddText(temp.ToString(), settings.TagStyle);
                         temp.Remove(0, temp.Length);
@@ -231,15 +243,16 @@ namespace Utils.XmlRtfStyle
                         goto Label_01BC;
 
                     case 2:
-                        {
-                            state = WaitAttrOrEndOfTag(settings, rtf, temp, 0, 3, state, ch);
-                            continue;
-                        }
+                    {
+                        state = WaitAttrOrEndOfTag(settings, rtf, temp, 0, 3, state, ch);
+                        continue;
+                    }
                     case 3:
                         if (((ch != ' ') && (ch != '\r')) && ((ch != '\n') && (ch != '\t')))
                         {
                             goto Label_02AE;
                         }
+
                         rtf.SetForeColor(settings.AttrColor);
                         rtf.AddText(temp.ToString(), settings.AttrStyle);
                         temp.Remove(0, temp.Length);
@@ -247,85 +260,88 @@ namespace Utils.XmlRtfStyle
                         goto Label_0306;
 
                     case 4:
-                        {
-                            state = WaitEqSymbol(settings, rtf, temp, 5, state, ch);
-                            continue;
-                        }
+                    {
+                        state = WaitEqSymbol(settings, rtf, temp, 5, state, ch);
+                        continue;
+                    }
                     case 5:
-                        {
-                            state = WaitValue(settings, rtf, temp, 6, 7, state, ch);
-                            continue;
-                        }
+                    {
+                        state = WaitValue(settings, rtf, temp, 6, 7, state, ch);
+                        continue;
+                    }
                     case 6:
-                        {
-                            state = ReadValueSQ(settings, rtf, temp, 2, 10, state, ch);
-                            continue;
-                        }
+                    {
+                        state = ReadValueSQ(settings, rtf, temp, 2, 10, state, ch);
+                        continue;
+                    }
                     case 7:
-                        {
-                            state = ReadValueDQ(settings, rtf, temp, 2, 11, state, ch);
-                            continue;
-                        }
+                    {
+                        state = ReadValueDQ(settings, rtf, temp, 2, 11, state, ch);
+                        continue;
+                    }
                     case 8:
-                        {
-                            state = ReadComments(settings, rtf, temp, 0, state, ch);
-                            continue;
-                        }
+                    {
+                        state = ReadComments(settings, rtf, temp, 0, state, ch);
+                        continue;
+                    }
                     case 9:
-                        {
-                            state = ReadCdata(settings, rtf, temp, 0, state, ch);
-                            continue;
-                        }
+                    {
+                        state = ReadCdata(settings, rtf, temp, 0, state, ch);
+                        continue;
+                    }
                     case 10:
+                    {
+                        temp.Append(ch);
+                        if (ch == ';')
                         {
-                            temp.Append(ch);
-                            if (ch == ';')
-                            {
-                                rtf.SetForeColor(settings.SpecSymbolColor);
-                                rtf.AddText(temp.ToString(), settings.SpecSymbolStyle);
-                                temp.Remove(0, temp.Length);
-                                state = 6;
-                            }
-                            continue;
+                            rtf.SetForeColor(settings.SpecSymbolColor);
+                            rtf.AddText(temp.ToString(), settings.SpecSymbolStyle);
+                            temp.Remove(0, temp.Length);
+                            state = 6;
                         }
+
+                        continue;
+                    }
                     case 11:
-                        {
-                            state = ReadSpecInValueDQ(settings, rtf, temp, 7, state, ch);
-                            continue;
-                        }
+                    {
+                        state = ReadSpecInValueDQ(settings, rtf, temp, 7, state, ch);
+                        continue;
+                    }
                     case 12:
-                        {
-                            state = ReadSpecInText(settings, rtf, temp, 0, state, ch);
-                            continue;
-                        }
+                    {
+                        state = ReadSpecInText(settings, rtf, temp, 0, state, ch);
+                        continue;
+                    }
                     default:
-                        {
-                            continue;
-                        }
+                    {
+                        continue;
+                    }
                 }
+
                 switch (ch)
                 {
                     case '/':
                     case '?':
-                        {
-                            rtf.SetForeColor(settings.TagColor);
-                            rtf.AddText(temp.ToString(), settings.TagStyle);
-                            temp.Remove(0, temp.Length);
-                            rtf.SetForeColor(settings.SymbolColor);
-                            rtf.AddText(ch.ToString(), settings.SymbolStyle);
-                            continue;
-                        }
+                    {
+                        rtf.SetForeColor(settings.TagColor);
+                        rtf.AddText(temp.ToString(), settings.TagStyle);
+                        temp.Remove(0, temp.Length);
+                        rtf.SetForeColor(settings.SymbolColor);
+                        rtf.AddText(ch.ToString(), settings.SymbolStyle);
+                        continue;
+                    }
                     case '>':
-                        {
-                            rtf.SetForeColor(settings.TagColor);
-                            rtf.AddText(temp.ToString(), settings.TagStyle);
-                            temp.Remove(0, temp.Length);
-                            rtf.SetForeColor(settings.SymbolColor);
-                            rtf.AddText(ch.ToString(), settings.SymbolStyle);
-                            state = 0;
-                            continue;
-                        }
+                    {
+                        rtf.SetForeColor(settings.TagColor);
+                        rtf.AddText(temp.ToString(), settings.TagStyle);
+                        temp.Remove(0, temp.Length);
+                        rtf.SetForeColor(settings.SymbolColor);
+                        rtf.AddText(ch.ToString(), settings.SymbolStyle);
+                        state = 0;
+                        continue;
+                    }
                 }
+
                 Label_01BC:
                 temp.Append(ch);
                 if (temp.ToString() == "!--")
@@ -342,6 +358,7 @@ namespace Utils.XmlRtfStyle
                     temp.Remove(0, temp.Length);
                     state = 9;
                 }
+
                 continue;
                 Label_02AE:
                 if (ch == '=')
@@ -354,9 +371,11 @@ namespace Utils.XmlRtfStyle
                     state = 5;
                     continue;
                 }
+
                 Label_0306:
                 temp.Append(ch);
             }
+
             return rtf.ToString();
         }
 
@@ -364,32 +383,198 @@ namespace Utils.XmlRtfStyle
 
         public static XmlNodeResult GetPositionByXmlNode(string sourceText, XmlDocument xmlDocument, XmlNode toFind)
         {
-            string formattedXML = string.Empty;
+            StringBuilder formattedXML = new StringBuilder();
             string findedStr = string.Empty;
             XMlType type = XMlType.Unknown;
 
             foreach (XmlNode child in xmlDocument.ChildNodes)
             {
-                var resType = ProcessXmlGetPosition(child, ref formattedXML, ref findedStr, 0, toFind);
+                var resType = ProcessXmlGetPosition(child, formattedXML, ref findedStr, 0, toFind);
 
                 if (resType != XMlType.Unknown)
+                {
                     type = resType;
+                    break;
+                }
             }
 
             if (type != XMlType.Unknown)
             {
                 var findedObj = new XmlNodeResult
                 {
-                    InnerText = formattedXML,
+                    InnerText = formattedXML.ToString(),
                     FindedText = findedStr,
                     Type = type
                 };
 
-                if (IsCorrectXmlNodeIndex(findedObj, sourceText))
+                if (IsCorrectXmlNodeIndex2(findedObj, sourceText))
                     return findedObj;
             }
 
             return null;
+        }
+
+        static XMlType ProcessXmlGetPosition(XmlNode node, StringBuilder source, ref string finded, int nested, XmlNode findNode)
+        {
+            string inputSource = source.ToString();
+            string str = string.Empty;
+            for (int i = 0; i < nested; i++)
+            {
+                str = str + " ";
+            }
+
+            string str2 = string.Empty;
+            if (node.Attributes == null)
+            {
+                source.Append(node.OuterXml);
+            }
+            else
+            {
+                string str4 = (nested != 0) ? Environment.NewLine : string.Empty;
+                if ((node.ChildNodes.Count <= 0) && string.IsNullOrEmpty(node.InnerText))
+                {
+                    source.Append(XML.NormalizeXmlValueFast(node.OuterXml));
+                }
+                else
+                {
+                    foreach (XmlAttribute attribute in node.Attributes)
+                    {
+                        str2 = str2 + $" {attribute.Name}=\"{XML.NormalizeXmlValueFast(attribute.InnerXml)}\"";
+                        if (attribute.Equals(findNode))
+                        {
+                            source.Append(string.Format("{3}{0}<{1}{2}", str, node.Name, str2, str4));
+                            finded = $"{attribute.Name}=\"{XML.NormalizeXmlValueFast(attribute.InnerXml)}\"";
+                            return XMlType.Attribute;
+                        }
+                    }
+
+                    if (string.IsNullOrEmpty(str2))
+                    {
+                        source.Append(string.Format("{2}{0}<{1}>", str, node.Name, str4));
+                    }
+                    else
+                    {
+                        source.Append(string.Format("{3}{0}<{1}{2}>", str, node.Name, str2, str4));
+                    }
+
+                    nested += 3;
+                    foreach (XmlNode node2 in node.ChildNodes)
+                    {
+                        XMlType type = ProcessXmlGetPosition(node2, source, ref finded, nested, findNode);
+                        if (type != XMlType.Unknown)
+                            return type;
+                    }
+
+                    if (((node.FirstChild != null) && (node.ChildNodes.Count == 1)) && string.Equals(node.FirstChild.Name, "#text"))
+                    {
+                        source.Append($"</{node.Name}>");
+                    }
+                    else
+                    {
+                        source.Append(string.Format("{2}{0}</{1}>", str, node.Name, Environment.NewLine));
+                    }
+                }
+            }
+
+            if (node.Equals(findNode))
+            {
+                finded = source.ToString().Substring(inputSource.Length, source.Length - inputSource.Length);
+                return XMlType.Node;
+            }
+
+            return XMlType.Unknown;
+        }
+
+        /// <summary>
+        /// Тоже колхоз немного, но работает точно корректно. Учитывает отступы по спецсимволам.
+        /// </summary>
+        /// <param name="findedObj"></param>
+        /// <param name="sourceText"></param>
+        /// <returns></returns>
+        static bool IsCorrectXmlNodeIndex2(XmlNodeResult findedObj, string sourceText)
+        {
+            int indexStartEscapeWhiteSpace = -1;
+            int indexEndEscapeWhiteSpace = -1;
+
+            int docIndex = findedObj.InnerText.Length - findedObj.FindedText.TrimStart().Length;
+            int findedRange = findedObj.InnerText.Length;
+
+            int j = 0;
+            for (int i = 0; i < findedObj.InnerText.Length; i++)
+            {
+                if (i == docIndex)
+                    indexStartEscapeWhiteSpace = j;
+
+                char ch = findedObj.InnerText[i];
+                if (char.IsWhiteSpace(ch))
+                    continue;
+
+                j++;
+            }
+
+
+            indexEndEscapeWhiteSpace = j;
+            if (indexStartEscapeWhiteSpace == -1 || indexEndEscapeWhiteSpace == -1 || (indexStartEscapeWhiteSpace > indexEndEscapeWhiteSpace))
+                return false;
+
+            j = 0;
+            int indexStart = -1;
+            int indexEnd = -1;
+
+            int isOpen = 0;
+            int symbolsIdents = 0;
+            int charName = 0;
+            for (int i = 0; i < sourceText.Length; i++)
+            {
+                char ch = sourceText[i];
+
+                if (isOpen > 0 && ch == ';')
+                {
+                    isOpen--;
+                    symbolsIdents += charName + 1;
+                    charName = 0;
+                }
+                else if (isOpen > 0 && (charName >= 6 || char.IsWhiteSpace(ch)))
+                {
+                    isOpen--;
+                    charName = 0;
+                }
+                else if (isOpen > 0)
+                {
+                    charName++;
+                }
+                else if (ch == '&')
+                {
+                    if (isOpen == 0)
+                        isOpen++;
+                    else
+                        charName = 0;
+                }
+
+
+                if (j == indexEndEscapeWhiteSpace + symbolsIdents && indexEnd == -1)
+                {
+                    indexEnd = i;
+                    break;
+                }
+
+                if (char.IsWhiteSpace(ch))
+                    continue;
+
+                if (j == indexStartEscapeWhiteSpace + symbolsIdents && indexStart == -1)
+                {
+                    indexStart = i;
+                }
+
+                j++;
+            }
+
+            if (indexStart == -1 || indexEnd == -1 || (indexStart > indexEnd))
+                return false;
+
+            findedObj.InnerText = sourceText.Substring(0, indexEnd);
+            findedObj.FindedText = sourceText.Substring(indexStart, indexEnd - indexStart);
+            return true;
         }
 
         /// <summary>
@@ -417,7 +602,7 @@ namespace Utils.XmlRtfStyle
 
                 if (j > findedObj.InnerText.Length - 1)
                     break;
-                //while (findedObj.FillText[j] == ' ' || findedObj.FillText[j] == '\t' || findedObj.FillText[j] == '\r' || findedObj.FillText[j] == '\n')
+
                 while (char.IsWhiteSpace(findedObj.InnerText[j]))
                 {
                     j++;
@@ -433,7 +618,7 @@ namespace Utils.XmlRtfStyle
                     i = -1;
                     break;
                 }
-                //while (source[i] == ' ' || source[i] == '\t' || source[i] == '\r' || source[i] == '\n')
+
                 while (char.IsWhiteSpace(sourceText[i]))
                 {
                     i++;
@@ -456,98 +641,6 @@ namespace Utils.XmlRtfStyle
 
         }
 
-        static XMlType ProcessXmlGetPosition(XmlNode node, ref string source, ref string finded, int nested, XmlNode findNode)
-        {
-            string inputSource = source;
-            string str = string.Empty;
-            for (int i = 0; i < nested; i++)
-            {
-                str = str + " ";
-            }
-            string str2 = string.Empty;
-            if (node.Attributes == null)
-            {
-                if (string.Equals(node.Name, "#text"))
-                {
-                    source = source + node.OuterXml.Trim();
-                }
-                else if (string.Equals(node.Name, "#comment"))
-                {
-                    source = source + string.Format("{1}{2}{0}", node.OuterXml.Trim(), Environment.NewLine, str);
-                }
-                else if (string.Equals(node.Name, "#cdata-section"))
-                {
-                    source = source + string.Format("{1}{2}{0}", node.OuterXml.Trim(), Environment.NewLine, str);
-                }
-                else
-                {
-                    string innerText = node.InnerText;
-                    if (innerText.LastIndexOf("\n", StringComparison.Ordinal) > (innerText.Trim().Length - 1))
-                    {
-                        innerText = node.InnerText.Remove(innerText.LastIndexOf("\n", StringComparison.Ordinal));
-                    }
-                    source = source + string.Format("{0}", innerText);
-                }
-            }
-            else
-            {
-                string str4 = (nested != 0) ? Environment.NewLine : string.Empty;
-                foreach (XmlAttribute attribute in node.Attributes)
-                {
-                    str2 = str2 + string.Format(" {0}=\"{1}\"", attribute.Name, attribute.InnerXml);
-                    if (attribute.Equals(findNode))
-                    {
-                        source = source + string.Format("{3}{0}<{1}{2}", str, node.Name, str2, str4);
-                        finded = string.Format("{0}=\"{1}\"", attribute.Name, attribute.InnerXml);
-                        return XMlType.Attribute;
-                    }
-                }
-                if ((node.ChildNodes.Count <= 0) && string.IsNullOrEmpty(node.InnerText))
-                {
-                    if (string.IsNullOrEmpty(str2))
-                    {
-                        source = source + string.Format("{2}{0}<{1} />", str, node.Name, str4);
-                    }
-                    else
-                    {
-                        source = source + string.Format("{3}{0}<{1}{2} />", str, node.Name, str2, str4);
-                    }
-                }
-                else
-                {
-                    if (string.IsNullOrEmpty(str2))
-                    {
-                        source = source + string.Format("{2}{0}<{1}>", str, node.Name, str4);
-                    }
-                    else
-                    {
-                        source = source + string.Format("{3}{0}<{1}{2}>", str, node.Name, str2, str4);
-                    }
-                    nested += 3;
-                    foreach (XmlNode node2 in node.ChildNodes)
-                    {
-                        XMlType type = ProcessXmlGetPosition(node2, ref source, ref finded, nested, findNode);
-                        if (type != XMlType.Unknown)
-                            return type;
-                    }
-                    if (((node.FirstChild != null) && (node.ChildNodes.Count == 1)) && string.Equals(node.FirstChild.Name, "#text"))
-                    {
-                        source = source + string.Format("</{0}>", node.Name);
-                    }
-                    else
-                    {
-                        source = source + string.Format("{2}{0}</{1}>", str, node.Name, Environment.NewLine);
-                    }
-                }
-            }
-            if (node.Equals(findNode))
-            {
-                finded = source.Substring(inputSource.Length, source.Length - inputSource.Length);
-                return XMlType.Node;
-            }
-            return XMlType.Unknown;
-        }
-
 
 
         static void GetPosition(XmlNode findNode, ref int position, int rankNewLine, bool isPrimary)
@@ -557,6 +650,7 @@ namespace Utils.XmlRtfStyle
                 position = position + findNode.Name.Length * 2 + 5;
                 return;
             }
+
             foreach (XmlNode nodeBrothers in findNode.ParentNode.ChildNodes)
             {
                 if (nodeBrothers.Equals(findNode))
@@ -565,6 +659,7 @@ namespace Utils.XmlRtfStyle
                     GetPosition(findNode.ParentNode, ref position, rankNewLine, false);
                     break;
                 }
+
                 if (isPrimary && nodeBrothers.Attributes != null)
                 {
                     if (GetPositionInNode(findNode, nodeBrothers, ref position, rankNewLine))
@@ -573,6 +668,7 @@ namespace Utils.XmlRtfStyle
                         GetPosition(findNode.ParentNode, ref position, rankNewLine, false);
                         break;
                     }
+
                     AppendPossAndSpaces(nodeBrothers, ref position, rankNewLine);
                 }
                 else
@@ -585,6 +681,7 @@ namespace Utils.XmlRtfStyle
             position = position + nodeBrothers.OuterXml.Length + rankNewLine * 3;
             AppendSpaces(nodeBrothers, ref position, rankNewLine);
         }
+
         static void AppendSpaces(XmlNode nodeBrothers, ref int position, int rankNewLine)
         {
             foreach (XmlNode childNode in nodeBrothers.ChildNodes)
@@ -593,6 +690,7 @@ namespace Utils.XmlRtfStyle
                 AppendSpaces(childNode, ref position, rankNewLine + 1);
             }
         }
+
         static bool GetPositionInNode(XmlNode findNode, XmlNode nodeBrothers, ref int position, int rankNewLine)
         {
             int getPosAttr = 0;
@@ -608,10 +706,11 @@ namespace Utils.XmlRtfStyle
                     return true;
                 }
             }
+
             return false;
         }
 
-        
+
 
         static int ReadCdata(RtfFromXml settings, RtfBuilder rtf, StringBuilder temp, int waitTag, int state, char c)
         {
@@ -626,6 +725,7 @@ namespace Utils.XmlRtfStyle
                 state = waitTag;
                 return state;
             }
+
             temp.Append(c);
             return state;
         }
@@ -643,6 +743,7 @@ namespace Utils.XmlRtfStyle
                 state = waitTag;
                 return state;
             }
+
             temp.Append(c);
             return state;
         }
@@ -657,6 +758,7 @@ namespace Utils.XmlRtfStyle
                 temp.Remove(0, temp.Length);
                 state = waitTag;
             }
+
             return state;
         }
 
@@ -674,9 +776,11 @@ namespace Utils.XmlRtfStyle
                     rtf.SetForeColor(settings.SpecSymbolColor);
                     rtf.AddText(temp.ToString(), settings.SpecSymbolStyle);
                 }
+
                 temp.Remove(0, temp.Length);
                 state = readValueDQ;
             }
+
             return state;
         }
 
@@ -692,6 +796,7 @@ namespace Utils.XmlRtfStyle
                 state = waitAttrOrEndOfTag;
                 return state;
             }
+
             if (c == '&')
             {
                 rtf.SetForeColor(settings.ValueColor);
@@ -701,6 +806,7 @@ namespace Utils.XmlRtfStyle
                 state = readSpecInValueDQ;
                 return state;
             }
+
             temp.Append(c);
             return state;
         }
@@ -717,6 +823,7 @@ namespace Utils.XmlRtfStyle
                 state = waitAttrOrEndOfTag;
                 return state;
             }
+
             if (c == '&')
             {
                 rtf.SetForeColor(settings.ValueColor);
@@ -726,6 +833,7 @@ namespace Utils.XmlRtfStyle
                 state = readSpecInValueSQ;
                 return state;
             }
+
             temp.Append(c);
             return state;
         }
@@ -737,6 +845,7 @@ namespace Utils.XmlRtfStyle
                 temp.Append(c);
                 return state;
             }
+
             rtf.SetForeColor(0, 0, 0);
             rtf.AddText(temp.ToString());
             temp.Remove(0, temp.Length);
@@ -747,12 +856,14 @@ namespace Utils.XmlRtfStyle
                 state = waitTag;
                 return state;
             }
+
             if ((c == '/') || (c == '?'))
             {
                 rtf.SetForeColor(settings.SymbolColor);
                 rtf.AddText(c.ToString(), settings.SymbolStyle);
                 return state;
             }
+
             temp.Append(c);
             state = readAttr;
             return state;
@@ -770,6 +881,7 @@ namespace Utils.XmlRtfStyle
                 state = waitValue;
                 return state;
             }
+
             temp.Append(c);
             return state;
         }
@@ -786,6 +898,7 @@ namespace Utils.XmlRtfStyle
                 state = readTag;
                 return state;
             }
+
             if (c == '&')
             {
                 rtf.SetForeColor(settings.TextColor);
@@ -795,6 +908,7 @@ namespace Utils.XmlRtfStyle
                 state = readSpecInText;
                 return state;
             }
+
             temp.Append(c);
             return state;
         }
@@ -811,6 +925,7 @@ namespace Utils.XmlRtfStyle
                 state = readValueSQ;
                 return state;
             }
+
             if (c == '"')
             {
                 rtf.SetForeColor(0, 0, 0);
@@ -821,6 +936,7 @@ namespace Utils.XmlRtfStyle
                 state = readValueDQ;
                 return state;
             }
+
             temp.Append(c);
             return state;
         }

@@ -167,7 +167,7 @@ namespace Utils
                         }
                     }
 
-                    if (isOpen > 0 && charName.Length >= 6)
+                    if (isOpen > 0 && (charName.Length >= 6 || char.IsWhiteSpace(ch)))
                     {
                         isOpen--;
                         builder.Append('&');
@@ -238,7 +238,9 @@ namespace Utils
                 { "lsquo",'‘'},
                 { "rsquo",'’'},
                 { "lsaquo",'‹'},
-                { "rsaquo",'›'}
+                { "rsaquo",'›'},
+                { "#xD",'\r'},
+                { "#xA",'\n'}
             };
             public static readonly Dictionary<char, string> CHAR_NAME = new Dictionary<char, string>
             {
@@ -254,7 +256,9 @@ namespace Utils
                 { '‘', "&lsquo;"},
                 { '’', "&rsquo;"},
                 { '‹', "&lsaquo;"},
-                { '›', "&rsaquo;"}
+                { '›', "&rsaquo;"},
+                { '\r', "#xD"},
+                { '\n', "#xA"}
             };
 
             private XMLValueEncoder Type { get; }
