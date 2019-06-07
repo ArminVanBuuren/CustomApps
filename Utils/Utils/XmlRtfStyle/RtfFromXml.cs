@@ -10,12 +10,14 @@ namespace Utils.XmlRtfStyle
         Attribute = 1,
         Node = 2
     }
-    public class XmlObjectIndex
+
+    public class XmlNodeResult
     {
-        public string FillText { get; set; }
-        public string FindedObject { get; set; }
+        public string InnerText { get; set; }
+        public string FindedText { get; set; }
         public XMlType Type { get; set; }
     }
+
     public class RtfFromXml
     {
         public uint AttrColor { get; set; } = 0xff0000;
@@ -360,15 +362,15 @@ namespace Utils.XmlRtfStyle
 
 
 
-        public static XmlObjectIndex GetPositionByXmlNode(XmlDocument xml, XmlNode find)
+        public static XmlNodeResult GetPositionByXmlNode(string sourceText, XmlDocument xmlDocument, XmlNode toFind)
         {
-            string source = string.Empty;
+            string formattedXML = string.Empty;
             string findedStr = string.Empty;
             XMlType type = XMlType.Unknown;
 
-            foreach (XmlNode child in xml.ChildNodes)
+            foreach (XmlNode child in xmlDocument.ChildNodes)
             {
-                var resType = ProcessXmlGetPosition(child, ref source, ref findedStr, 0, find);
+                var resType = ProcessXmlGetPosition(child, ref formattedXML, ref findedStr, 0, toFind);
 
                 if (resType != XMlType.Unknown)
                     type = resType;
@@ -376,15 +378,82 @@ namespace Utils.XmlRtfStyle
 
             if (type != XMlType.Unknown)
             {
-                return new XmlObjectIndex
+                var findedObj = new XmlNodeResult
                 {
-                    FillText = source,
-                    FindedObject = findedStr,
+                    InnerText = formattedXML,
+                    FindedText = findedStr,
                     Type = type
                 };
+
+                if (IsCorrectXmlNodeIndex(findedObj, sourceText))
+                    return findedObj;
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Колхозно, но зато работает корректно.
+        /// Тут проблема в том что XmlDocument обрезает лишние пробелы, а в исходном тексте чтобы выделить ноду нужно правильно подобрать позиции, поэтому нужно считать все пропуски в исходном тексте, тот что на экране и найти правильную позицию учитывая. Единственное отлчичие XmlDocument от исходного текста так это пропуски, их мы и вычленяем в данном методе.
+        /// </summary>
+        /// <param name="findedObj"></param>
+        /// <param name="sourceText"></param>
+        /// <returns></returns>
+        static bool IsCorrectXmlNodeIndex(XmlNodeResult findedObj, string sourceText)
+        {
+            bool finished = false;
+            int i = -1;
+            int j = -1;
+            int findedIndexStart = findedObj.InnerText.Length - findedObj.FindedText.TrimStart().Length;
+            int correctfindedIndexStart = -1;
+
+            while (true)
+            {
+                i++;
+                j++;
+
+                if (j >= findedIndexStart && correctfindedIndexStart == -1)
+                    correctfindedIndexStart = i - 1;
+
+                if (j > findedObj.InnerText.Length - 1)
+                    break;
+                //while (findedObj.FillText[j] == ' ' || findedObj.FillText[j] == '\t' || findedObj.FillText[j] == '\r' || findedObj.FillText[j] == '\n')
+                while (char.IsWhiteSpace(findedObj.InnerText[j]))
+                {
+                    j++;
+                    if (j > findedObj.InnerText.Length - 1)
+                    {
+                        finished = true;
+                        break;
+                    }
+                }
+
+                if (i > sourceText.Length - 1)
+                {
+                    i = -1;
+                    break;
+                }
+                //while (source[i] == ' ' || source[i] == '\t' || source[i] == '\r' || source[i] == '\n')
+                while (char.IsWhiteSpace(sourceText[i]))
+                {
+                    i++;
+                    if (i > sourceText.Length - 1)
+                    {
+                        i = -1;
+                        break;
+                    }
+                }
+
+                if (finished)
+                    break;
+            }
+
+            if (i == -1 || correctfindedIndexStart == -1)
+                return false;
+            findedObj.InnerText = sourceText.Substring(0, i);
+            findedObj.FindedText = sourceText.Substring(correctfindedIndexStart, i - correctfindedIndexStart);
+            return true;
+
         }
 
         static XMlType ProcessXmlGetPosition(XmlNode node, ref string source, ref string finded, int nested, XmlNode findNode)

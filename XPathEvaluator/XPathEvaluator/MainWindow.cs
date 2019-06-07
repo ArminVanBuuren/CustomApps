@@ -153,15 +153,11 @@ namespace XPathEvaluator
             XmlNode node = data.CurrentRow?.Cells[4].Value as XmlNode;
             if (node != null && _currentXmlBody != null)
             {
-                XmlObjectIndex xmlObject = RtfFromXml.GetPositionByXmlNode(_currentXmlBody, node);
+                XmlNodeResult xmlObject = RtfFromXml.GetPositionByXmlNode(fctb.Text, _currentXmlBody, node);
                 if (xmlObject != null)
                 {
-                    bool isCorrect = GetCorrectXmlNodeStart(xmlObject, fctb.Text);
-                    if (!isCorrect)
-                        return;
-
                     tabMain.SelectTab(tabXmlBody);
-                    Range range = fctb.GetRange(xmlObject.FillText.Length - xmlObject.FindedObject.Length, xmlObject.FillText.Length);
+                    Range range = fctb.GetRange(xmlObject.InnerText.Length - xmlObject.FindedText.Length, xmlObject.InnerText.Length);
 
                     fctb.Selection = range;
                     fctb.DoSelectionVisible();
@@ -169,71 +165,6 @@ namespace XPathEvaluator
                 }
             }
         }
-
-        /// <summary>
-        /// Колхозно, но зато работает корректно.
-        /// Тут проблема в том что XmlDocument обрезает лишние пробелы, а в исходном тексте чтобы выделить ноду нужно правильно подобрать позиции, поэтому нужно считать все пропуски в исходном тексте, тот что на экране и найти правильную позицию учитывая. Единственное отлчичие XmlDocument от исходного текста так это пропуски, их мы и вычленяем в данном методе.
-        /// </summary>
-        /// <param name="findedObj"></param>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        static bool GetCorrectXmlNodeStart(XmlObjectIndex findedObj, string source)
-        {
-            bool finished = false;
-            int i = -1;
-            int j = -1;
-            int findedIndexStart = findedObj.FillText.Length - findedObj.FindedObject.TrimStart().Length;
-            int correctfindedIndexStart = -1;
-
-            while (true)
-            {
-                i++;
-                j++;
-
-                if (j >= findedIndexStart && correctfindedIndexStart == -1)
-                    correctfindedIndexStart = i - 1;
-
-                if (j > findedObj.FillText.Length - 1)
-                    break;
-                //while (findedObj.FillText[j] == ' ' || findedObj.FillText[j] == '\t' || findedObj.FillText[j] == '\r' || findedObj.FillText[j] == '\n')
-                while (char.IsWhiteSpace(findedObj.FillText[j]))
-                {
-                    j++;
-                    if (j > findedObj.FillText.Length - 1)
-                    {
-                        finished = true;
-                        break;
-                    }
-                }
-
-                if (i > source.Length - 1)
-                {
-                    i = -1;
-                    break;
-                }
-                //while (source[i] == ' ' || source[i] == '\t' || source[i] == '\r' || source[i] == '\n')
-                while (char.IsWhiteSpace(source[i]))
-                {
-                    i++;
-                    if (i > source.Length - 1)
-                    {
-                        i = -1;
-                        break;
-                    }
-                }
-
-                if (finished)
-                    break;
-            }
-
-            if (i == -1 || correctfindedIndexStart == -1)
-                return false;
-            findedObj.FillText = source.Substring(0, i);
-            findedObj.FindedObject = source.Substring(correctfindedIndexStart, i - correctfindedIndexStart);
-            return true;
-
-        }
-
 
         private Brush _mainTabBrush = new SolidBrush(Color.Transparent);
         private Brush MainTabBrush
