@@ -316,11 +316,11 @@ namespace Utils
         }
 
         /// <summary>
-        /// 
+        /// Получить точно позицию ноды в неотформатированном тексте XML
         /// </summary>
-        /// <param name="sourceXmlText"></param>
+        /// <param name="sourceXmlText">Неотформатированный текст XML</param>
         /// <param name="xmlDocument"></param>
-        /// <param name="find"></param>
+        /// <param name="find">ноду которую необходимо найти</param>
         /// <returns></returns>
         public static XmlNodeResult GetPositionByXmlNode(string sourceXmlText, XmlDocument xmlDocument, XmlNode find)
         {
@@ -427,7 +427,7 @@ namespace Utils
 
 
         /// <summary>
-        /// Тоже колхоз немного, но работает точно корректно. Учитывает отступы по спецсимволам.
+        /// Немного колхоз, но работает точно корректно. Также учитывает отступы по спецсимволам.
         /// </summary>
         static XmlNodeResult GetPositionInSourceText(string innerText, string targetText, XMlType type, string sourceText)
         {
@@ -529,68 +529,5 @@ namespace Utils
 
             return new XmlNodeResult(indexStart, indexEnd, indexEnd - indexStart, type);
         }
-
-        ///// <summary>
-        ///// Колхозно, но зато работает корректно.
-        ///// Тут проблема в том что XmlDocument обрезает лишние пробелы, а в исходном тексте чтобы выделить ноду нужно правильно подобрать позиции, поэтому нужно считать все пропуски в исходном тексте, тот что на экране и найти правильную позицию учитывая. Единственное отлчичие XmlDocument от исходного текста так это пропуски, их мы и вычленяем в данном методе.
-        ///// </summary>
-        ///// <param name="findedObj"></param>
-        ///// <param name="sourceText"></param>
-        ///// <returns></returns>
-        //static bool IsCorrectXmlNodeIndex2(XmlNodeResult findedObj, string sourceText)
-        //{
-        //    bool finished = false;
-        //    int i = -1;
-        //    int j = -1;
-        //    int findedIndexStart = findedObj.InnerText.Length - findedObj.FindedText.TrimStart().Length;
-        //    int correctfindedIndexStart = -1;
-
-        //    while (true)
-        //    {
-        //        i++;
-        //        j++;
-
-        //        if (j >= findedIndexStart && correctfindedIndexStart == -1)
-        //            correctfindedIndexStart = i - 1;
-
-        //        if (j > findedObj.InnerText.Length - 1)
-        //            break;
-
-        //        while (char.IsWhiteSpace(findedObj.InnerText[j]))
-        //        {
-        //            j++;
-        //            if (j > findedObj.InnerText.Length - 1)
-        //            {
-        //                finished = true;
-        //                break;
-        //            }
-        //        }
-
-        //        if (i > sourceText.Length - 1)
-        //        {
-        //            i = -1;
-        //            break;
-        //        }
-
-        //        while (char.IsWhiteSpace(sourceText[i]))
-        //        {
-        //            i++;
-        //            if (i > sourceText.Length - 1)
-        //            {
-        //                i = -1;
-        //                break;
-        //            }
-        //        }
-
-        //        if (finished)
-        //            break;
-        //    }
-
-        //    if (i == -1 || correctfindedIndexStart == -1)
-        //        return false;
-        //    findedObj.InnerText = sourceText.Substring(0, i);
-        //    findedObj.FindedText = sourceText.Substring(correctfindedIndexStart, i - correctfindedIndexStart);
-        //    return true;
-        //}
     }
 }
