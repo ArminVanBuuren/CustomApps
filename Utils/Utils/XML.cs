@@ -465,32 +465,39 @@ namespace Utils
 
             int isOpen = 0;
             int symbolsIdents = 0;
-            int charName = 0;
+            StringBuilder charName = new StringBuilder();
             for (int i = 0; i < sourceText.Length; i++)
             {
                 char ch = sourceText[i];
 
-                if (isOpen > 0 && ch == ';')
+                if (isOpen > 0)
                 {
-                    isOpen--;
-                    symbolsIdents += charName + 1;
-                    charName = 0;
-                }
-                else if (isOpen > 0 && (charName >= 6 || char.IsWhiteSpace(ch)))
-                {
-                    isOpen--;
-                    charName = 0;
-                }
-                else if (isOpen > 0)
-                {
-                    charName++;
+                    if (ch == ';')
+                    {
+                        isOpen--;
+                        if (XmlEntityNames.NAME_CHAR.TryGetValue(charName.ToString(), out var res))
+                        {
+                            symbolsIdents += charName.Length + 1 + (char.IsWhiteSpace(res) ? 1 : 0);
+                        }
+                        charName.Clear();
+                    }
+                    else if (ch == '&')
+                    {
+                        charName.Clear();
+                    }
+                    else if (charName.Length >= 6 || char.IsWhiteSpace(ch))
+                    {
+                        isOpen--;
+                        charName.Clear();
+                    }
+                    else
+                    {
+                        charName.Append(ch);
+                    }
                 }
                 else if (ch == '&')
                 {
-                    if (isOpen == 0)
-                        isOpen++;
-                    else
-                        charName = 0;
+                    isOpen++;
                 }
 
 
