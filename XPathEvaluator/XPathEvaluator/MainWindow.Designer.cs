@@ -159,7 +159,7 @@ namespace XPathEvaluator
             this.exceptionMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.exceptionMessage.AutoSize = true;
             this.exceptionMessage.ForeColor = System.Drawing.Color.Red;
-            this.exceptionMessage.Location = new System.Drawing.Point(61, 473);
+            this.exceptionMessage.Location = new System.Drawing.Point(67, 622);
             this.exceptionMessage.Name = "exceptionMessage";
             this.exceptionMessage.Size = new System.Drawing.Size(0, 13);
             this.exceptionMessage.TabIndex = 4;

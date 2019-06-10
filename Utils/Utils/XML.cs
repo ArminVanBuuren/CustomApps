@@ -500,13 +500,6 @@ namespace Utils
                     isOpen++;
                 }
 
-
-                if (j == indexEndEscapeWhiteSpace + symbolsIdents && indexEnd == -1)
-                {
-                    indexEnd = i;
-                    break;
-                }
-
                 if (char.IsWhiteSpace(ch))
                     continue;
 
@@ -516,11 +509,20 @@ namespace Utils
                 }
 
                 j++;
+
+                if (j == indexEndEscapeWhiteSpace + symbolsIdents && indexEnd == -1)
+                {
+                    indexEnd = i;
+                    break;
+                }
+
                 //sourceTextBld.Append(ch);
             }
 
             if (indexStart == -1 || indexEnd == -1 || (indexStart > indexEnd))
                 return null;
+
+            indexEnd++;
 
             //string res1 = xmlTextBld.ToString();
             //string res2 = sourceTextBld.ToString();
