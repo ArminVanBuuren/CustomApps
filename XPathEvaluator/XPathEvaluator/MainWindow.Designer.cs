@@ -128,7 +128,6 @@ namespace XPathEvaluator
             this.fctb.CharWidth = 8;
             this.fctb.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctb.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.fctb.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.fctb.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.fctb.IsReplaceMode = false;
             this.fctb.Location = new System.Drawing.Point(-4, 0);
@@ -159,10 +158,11 @@ namespace XPathEvaluator
             this.exceptionMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.exceptionMessage.AutoSize = true;
             this.exceptionMessage.ForeColor = System.Drawing.Color.Red;
-            this.exceptionMessage.Location = new System.Drawing.Point(67, 622);
+            this.exceptionMessage.Location = new System.Drawing.Point(60, 622);
             this.exceptionMessage.Name = "exceptionMessage";
-            this.exceptionMessage.Size = new System.Drawing.Size(0, 13);
+            this.exceptionMessage.Size = new System.Drawing.Size(83, 10);
             this.exceptionMessage.TabIndex = 4;
+            this.exceptionMessage.Text = "";
             // 
             // xpathResultDataGrid
             // 
