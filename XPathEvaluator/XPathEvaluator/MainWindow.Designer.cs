@@ -128,6 +128,7 @@ namespace XPathEvaluator
             this.fctb.CharWidth = 8;
             this.fctb.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctb.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.fctb.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.fctb.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.fctb.IsReplaceMode = false;
             this.fctb.Location = new System.Drawing.Point(-4, 0);
@@ -148,7 +149,7 @@ namespace XPathEvaluator
             this.tabXPathResult.Location = new System.Drawing.Point(4, 22);
             this.tabXPathResult.Name = "tabXPathResult";
             this.tabXPathResult.Padding = new System.Windows.Forms.Padding(3);
-            this.tabXPathResult.Size = new System.Drawing.Size(855, 491);
+            this.tabXPathResult.Size = new System.Drawing.Size(1317, 640);
             this.tabXPathResult.TabIndex = 1;
             this.tabXPathResult.Text = "XPath Result";
             this.tabXPathResult.UseVisualStyleBackColor = true;
@@ -184,15 +185,15 @@ namespace XPathEvaluator
             this.xpathResultDataGrid.Name = "xpathResultDataGrid";
             this.xpathResultDataGrid.ReadOnly = true;
             this.xpathResultDataGrid.RowHeadersVisible = false;
-            this.xpathResultDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.xpathResultDataGrid.Size = new System.Drawing.Size(849, 467);
+            this.xpathResultDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.xpathResultDataGrid.Size = new System.Drawing.Size(1311, 616);
             this.xpathResultDataGrid.TabIndex = 3;
             // 
             // exceptionLabel
             // 
             this.exceptionLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.exceptionLabel.AutoSize = true;
-            this.exceptionLabel.Location = new System.Drawing.Point(6, 473);
+            this.exceptionLabel.Location = new System.Drawing.Point(4, 622);
             this.exceptionLabel.Name = "exceptionLabel";
             this.exceptionLabel.Size = new System.Drawing.Size(57, 13);
             this.exceptionLabel.TabIndex = 1;
