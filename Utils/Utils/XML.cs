@@ -330,7 +330,7 @@ namespace Utils
 
             foreach (XmlNode child in xmlDocument.ChildNodes)
             {
-                var resType = GetXmlPosition(child, formattedXML, ref targetText, 0, find);
+                var resType = GetXmlPosition(child, formattedXML, ref targetText,  find);
 
                 if (resType != XMlType.Unknown)
                 {
@@ -342,10 +342,9 @@ namespace Utils
             return type != XMlType.Unknown ? GetPositionInSourceText(formattedXML.ToString(), targetText, type, sourceXmlText) : null;
         }
 
-        static XMlType GetXmlPosition(XmlNode node, StringBuilder source, ref string targetText, int nested, XmlNode findNode)
+        static XMlType GetXmlPosition(XmlNode node, StringBuilder source, ref string targetText, XmlNode findNode)
         {
             var inputSourceLength = source.Length;
-            string whiteSpaces = new string(' ', nested);
 
             if (node.Attributes == null)
             {
@@ -353,8 +352,6 @@ namespace Utils
             }
             else
             {
-                string newLine = (nested != 0) ? Environment.NewLine : string.Empty;
-
                 if ((node.ChildNodes.Count <= 0) && string.IsNullOrEmpty(node.InnerText))
                 {
                     if (node.Attributes.Count > 0)
@@ -365,7 +362,9 @@ namespace Utils
                             attributes = attributes + $" {attribute.Name}=\"{XML.NormalizeXmlValueFast(attribute.InnerXml)}\"";
                             if (attribute.Equals(findNode))
                             {
-                                source.Append(string.Format("{3}{0}<{1}{2}", whiteSpaces, node.Name, attributes, newLine));
+                                source.Append('<');
+                                source.Append(node.Name);
+                                source.Append(attributes);
                                 targetText = $"{attribute.Name}=\"{XML.NormalizeXmlValueFast(attribute.InnerXml)}\"";
                                 return XMlType.Attribute;
                             }
@@ -384,35 +383,36 @@ namespace Utils
                             attributes = attributes + $" {attribute.Name}=\"{XML.NormalizeXmlValueFast(attribute.InnerXml)}\"";
                             if (attribute.Equals(findNode))
                             {
-                                source.Append(string.Format("{3}{0}<{1}{2}", whiteSpaces, node.Name, attributes, newLine));
+                                source.Append('<');
+                                source.Append(node.Name);
+                                source.Append(attributes);
                                 targetText = $"{attribute.Name}=\"{XML.NormalizeXmlValueFast(attribute.InnerXml)}\"";
                                 return XMlType.Attribute;
                             }
                         }
 
-                        source.Append(string.Format("{3}{0}<{1}{2}>", whiteSpaces, node.Name, attributes, newLine));
+                        source.Append('<');
+                        source.Append(node.Name);
+                        source.Append(attributes);
+                        source.Append('>');
                     }
                     else
                     {
-                        source.Append(string.Format("{2}{0}<{1}>", whiteSpaces, node.Name, newLine));
+                        source.Append('<');
+                        source.Append(node.Name);
+                        source.Append('>');
                     }
 
-                    nested += 3;
                     foreach (XmlNode node2 in node.ChildNodes)
                     {
-                        XMlType type = GetXmlPosition(node2, source, ref targetText, nested, findNode);
+                        XMlType type = GetXmlPosition(node2, source, ref targetText, findNode);
                         if (type != XMlType.Unknown)
                             return type;
                     }
 
-                    if (((node.FirstChild != null) && (node.ChildNodes.Count == 1)) && string.Equals(node.FirstChild.Name, "#text"))
-                    {
-                        source.Append($"</{node.Name}>");
-                    }
-                    else
-                    {
-                        source.Append(string.Format("{2}{0}</{1}>", whiteSpaces, node.Name, Environment.NewLine));
-                    }
+                    source.Append("</");
+                    source.Append(node.Name);
+                    source.Append('>');
                 }
             }
 

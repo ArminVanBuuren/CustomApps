@@ -28,6 +28,32 @@ namespace Tester.Console
         {
             try
             {
+                Stopwatch stw = new Stopwatch();
+                //while (true)
+                //{
+                //    stw.Start();
+                //    string concat = string.Empty;
+                //    for (int j = 0; j < 5; j++)
+                //    {
+                //        concat += STRING.RandomString(1);
+                //    }
+                //    stw.Stop();
+                //    System.Console.WriteLine($"Concat=[{concat}]. Miliseconds={stw.ElapsedMilliseconds} Ticks={stw.ElapsedTicks}");
+                //    stw.Reset();
+
+                //    stw.Start();
+                //    StringBuilder builder = new StringBuilder();
+                //    for (int j = 0; j < 5; j++)
+                //    {
+                //        builder.Append(STRING.RandomString(1));
+                //    }
+                //    stw.Stop();
+                //    System.Console.WriteLine($"Builder=[{builder.ToString()}]. Miliseconds={stw.ElapsedMilliseconds} Ticks={stw.ElapsedTicks}");
+                //    stw.Reset();
+
+                //    System.Console.WriteLine(new string('=',20));
+                //    Thread.Sleep(1000);
+                //}
 
                 //string ss1 = XML.NormalizeXmlValueFast("&amp;quot;&amp;lt;&amp;gt; &lt;=  &gt;=");
                 //string ss2 = XML.NormalizeXmlValueFast("&&&quot; fefe &quot;&apos; & 111&quot");
@@ -37,7 +63,7 @@ namespace Tester.Console
                 var dd2 = 266.IsParity();
 
                 List<long> temp = new List<long>();
-                Stopwatch stw = new Stopwatch();
+                
                 int i = 0;
                 //while (i < 200)
                 //{
