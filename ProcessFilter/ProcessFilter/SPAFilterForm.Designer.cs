@@ -588,7 +588,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(823, 400);
             this.Name = "SPAFilterForm";
-            this.Text = "Process Filter";
+            this.Text = "SPA Filter";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridProcessesResults)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
