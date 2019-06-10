@@ -1,4 +1,4 @@
-﻿namespace ASOTCutter
+﻿namespace DjSetCutter
 {
     partial class Form1
     {
@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.textBoxDirPath = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.ButtonDirPath = new System.Windows.Forms.Button();
@@ -197,9 +198,10 @@
             this.Controls.Add(this.ButtonDirPath);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBoxDirPath);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(390, 214);
             this.Name = "Form1";
-            this.Text = "ASOT Cutter";
+            this.Text = "Dj Set Cutter";
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);

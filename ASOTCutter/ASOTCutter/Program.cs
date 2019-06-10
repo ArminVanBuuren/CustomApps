@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ASOTCutter
+namespace DjSetCutter
 {
     static class Program
     {
@@ -24,7 +20,5 @@ namespace ASOTCutter
         {
             return string.IsNullOrEmpty(data);
         }
-
-
     }
 }

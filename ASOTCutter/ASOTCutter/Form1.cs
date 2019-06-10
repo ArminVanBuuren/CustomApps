@@ -1,20 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using NAudio.Lame;
-using NAudio.MediaFoundation;
 using NAudio.Wave;
 
-namespace ASOTCutter
+namespace DjSetCutter
 {
     public partial class Form1 : Form
     {
