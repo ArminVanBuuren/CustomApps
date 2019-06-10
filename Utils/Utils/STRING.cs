@@ -120,7 +120,5 @@ namespace Utils
                 return false;
             return input.Equals(value, StringComparison.CurrentCultureIgnoreCase);
         }
-
-        
     }
 }

@@ -58,7 +58,7 @@ namespace XPathEvaluator
             | System.Windows.Forms.AnchorStyles.Right)));
             this.XPathText.Location = new System.Drawing.Point(99, 12);
             this.XPathText.Name = "XPathText";
-            this.XPathText.Size = new System.Drawing.Size(590, 20);
+            this.XPathText.Size = new System.Drawing.Size(1052, 20);
             this.XPathText.TabIndex = 0;
             // 
             // label1
@@ -73,7 +73,7 @@ namespace XPathEvaluator
             // buttonFind
             // 
             this.buttonFind.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonFind.Location = new System.Drawing.Point(695, 11);
+            this.buttonFind.Location = new System.Drawing.Point(1157, 11);
             this.buttonFind.Name = "buttonFind";
             this.buttonFind.Size = new System.Drawing.Size(75, 21);
             this.buttonFind.TabIndex = 2;
@@ -91,7 +91,7 @@ namespace XPathEvaluator
             this.tabMain.Location = new System.Drawing.Point(0, 38);
             this.tabMain.Name = "tabMain";
             this.tabMain.SelectedIndex = 0;
-            this.tabMain.Size = new System.Drawing.Size(863, 517);
+            this.tabMain.Size = new System.Drawing.Size(1325, 666);
             this.tabMain.TabIndex = 6;
             // 
             // tabXmlBody
@@ -100,7 +100,7 @@ namespace XPathEvaluator
             this.tabXmlBody.Location = new System.Drawing.Point(4, 22);
             this.tabXmlBody.Name = "tabXmlBody";
             this.tabXmlBody.Padding = new System.Windows.Forms.Padding(3);
-            this.tabXmlBody.Size = new System.Drawing.Size(855, 491);
+            this.tabXmlBody.Size = new System.Drawing.Size(1317, 640);
             this.tabXmlBody.TabIndex = 0;
             this.tabXmlBody.Text = "XmlBody";
             this.tabXmlBody.UseVisualStyleBackColor = true;
@@ -135,7 +135,7 @@ namespace XPathEvaluator
             this.fctb.Paddings = new System.Windows.Forms.Padding(0);
             this.fctb.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.fctb.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fctb.ServiceColors")));
-            this.fctb.Size = new System.Drawing.Size(859, 491);
+            this.fctb.Size = new System.Drawing.Size(1321, 640);
             this.fctb.TabIndex = 0;
             this.fctb.WordWrap = true;
             this.fctb.Zoom = 100;
@@ -160,12 +160,13 @@ namespace XPathEvaluator
             this.exceptionMessage.ForeColor = System.Drawing.Color.Red;
             this.exceptionMessage.Location = new System.Drawing.Point(61, 473);
             this.exceptionMessage.Name = "exceptionMessage";
-            this.exceptionMessage.Size = new System.Drawing.Size(31, 13);
+            this.exceptionMessage.Size = new System.Drawing.Size(0, 13);
             this.exceptionMessage.TabIndex = 4;
             // 
             // xpathResultDataGrid
             // 
             this.xpathResultDataGrid.AllowDrop = true;
+            this.xpathResultDataGrid.AllowUserToAddRows = false;
             this.xpathResultDataGrid.AllowUserToDeleteRows = false;
             this.xpathResultDataGrid.AllowUserToOrderColumns = true;
             this.xpathResultDataGrid.AllowUserToResizeRows = false;
@@ -183,6 +184,7 @@ namespace XPathEvaluator
             this.xpathResultDataGrid.Name = "xpathResultDataGrid";
             this.xpathResultDataGrid.ReadOnly = true;
             this.xpathResultDataGrid.RowHeadersVisible = false;
+            this.xpathResultDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.xpathResultDataGrid.Size = new System.Drawing.Size(849, 467);
             this.xpathResultDataGrid.TabIndex = 3;
             // 
@@ -211,7 +213,7 @@ namespace XPathEvaluator
             // buttonPrettyPrint
             // 
             this.buttonPrettyPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonPrettyPrint.Location = new System.Drawing.Point(776, 11);
+            this.buttonPrettyPrint.Location = new System.Drawing.Point(1238, 11);
             this.buttonPrettyPrint.Name = "buttonPrettyPrint";
             this.buttonPrettyPrint.Size = new System.Drawing.Size(75, 21);
             this.buttonPrettyPrint.TabIndex = 7;
@@ -223,7 +225,7 @@ namespace XPathEvaluator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(863, 555);
+            this.ClientSize = new System.Drawing.Size(1325, 704);
             this.Controls.Add(this.buttonPrettyPrint);
             this.Controls.Add(this.tabMain);
             this.Controls.Add(this.buttonFind);

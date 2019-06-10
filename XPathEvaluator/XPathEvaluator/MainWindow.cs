@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.XPath;
@@ -17,20 +18,49 @@ namespace XPathEvaluator
     {
         private readonly SolidBrush solidRed = new SolidBrush(Color.PaleVioletRed);
         private readonly SolidBrush solidTransparent = new SolidBrush(Color.Transparent);
+        private readonly object sync = new object();
 
         bool _xmlBodyChanged = false;
-        XmlDocument _currentXmlBody;
-        XpathCollection strLines;
-        int prevSortedColun = -1;
+        
+        XpathCollection _strLines;
+        int _prevSortedColumn = -1;
+
+        private Brush _resultTabBrush = new SolidBrush(Color.Transparent);
+        private Brush _mainTabBrush = new SolidBrush(Color.Transparent);
+
+        readonly MarkerStyle SameWordsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(40, Color.Gray)));
+
+
+        public XmlDocument XmlBody { get; private set; }
+        public bool IsInserted { get; private set; } = false;
+        
+        private Brush MainTabBrush
+        {
+            get => _mainTabBrush;
+            set
+            {
+                _mainTabBrush = value;
+                tabMain.Invalidate();
+            }
+        }
+
+        
+        private Brush ResultTabBrush
+        {
+            get => _resultTabBrush;
+            set
+            {
+                _resultTabBrush = value;
+                tabMain.Invalidate();
+            }
+        }
+
 
         public MainWindow()
         {
             InitializeComponent();
             fctb.TextChanged += XmlBodyRichTextBoxOnTextChanged;
-            //xpathResultDataGrid.CellDoubleClick += XpathResultDataGrid_CellDoubleClick;
-
             xpathResultDataGrid.CellMouseDoubleClick += XpathResultDataGrid_CellMouseDoubleClick;
-            //xpathResultDataGrid.DoubleClick += XpathResultDataGrid_DoubleClick;
             xpathResultDataGrid.ColumnHeaderMouseClick += XpathResultDataGrid_ColumnHeaderMouseClick;
 
             tabMain.DrawMode = TabDrawMode.OwnerDrawFixed;
@@ -58,6 +88,7 @@ namespace XPathEvaluator
             string text = fragment.Text;
             if (text.Length == 0)
                 return;
+
             //highlight same words
             var ranges = fctb.VisibleRange.GetRanges("\\b" + text + "\\b").ToArray();
             if (ranges.Length > 1)
@@ -75,10 +106,7 @@ namespace XPathEvaluator
             }           
         }
 
-        private readonly object sync = new object();
-        private bool isInsert = false;
-        [DllImport("user32.dll")]
-        private static extern short GetAsyncKeyState(Keys vKey);
+        
         private void XmlBodyRichTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             // флаг то что текст был проинсертин в окно CNTR+V, чтобы можно было сразу корреткно отформатировать
@@ -86,16 +114,17 @@ namespace XPathEvaluator
             {
                 lock (sync)
                 {
-                    isInsert = true;
+                    IsInserted = true;
                 }
             }
         }
 
-        private bool KeyIsDown(Keys key)
+        [DllImport("user32.dll")]
+        private static extern short GetAsyncKeyState(Keys vKey);
+        private static bool KeyIsDown(Keys key)
         {
             return (GetAsyncKeyState(key) < 0);
         }
-
 
         void XpathResultDataGrid_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
@@ -103,29 +132,29 @@ namespace XPathEvaluator
             {
                 //xpathResultDataGrid.Sort(xpathResultDataGrid.Columns[e.ColumnIndex], ListSortDirection.Ascending);
                 IEnumerable<XPathResults> OrderedItems = null;
-                if (prevSortedColun != e.ColumnIndex)
+                if (_prevSortedColumn != e.ColumnIndex)
                 {
                     if (e.ColumnIndex == 0)
-                        OrderedItems = from p in strLines.AsEnumerable() orderby p.ID descending select p;
+                        OrderedItems = from p in _strLines.AsEnumerable() orderby p.ID descending select p;
                     else if (e.ColumnIndex == 1)
-                        OrderedItems = from p in strLines.AsEnumerable() orderby p.NodeType descending select p;
+                        OrderedItems = from p in _strLines.AsEnumerable() orderby p.NodeType descending select p;
                     else if (e.ColumnIndex == 2)
-                        OrderedItems = from p in strLines.AsEnumerable() orderby p.NodeName descending select p;
+                        OrderedItems = from p in _strLines.AsEnumerable() orderby p.NodeName descending select p;
                     else if (e.ColumnIndex == 3)
-                        OrderedItems = from p in strLines.AsEnumerable() orderby p.Value descending select p;
-                    prevSortedColun = e.ColumnIndex;
+                        OrderedItems = from p in _strLines.AsEnumerable() orderby p.Value descending select p;
+                    _prevSortedColumn = e.ColumnIndex;
                 }
                 else
                 {
                     if (e.ColumnIndex == 0)
-                        OrderedItems = from p in strLines.AsEnumerable() orderby p.ID select p;
+                        OrderedItems = from p in _strLines.AsEnumerable() orderby p.ID select p;
                     else if (e.ColumnIndex == 1)
-                        OrderedItems = from p in strLines.AsEnumerable() orderby p.NodeType select p;
+                        OrderedItems = from p in _strLines.AsEnumerable() orderby p.NodeType select p;
                     else if (e.ColumnIndex == 2)
-                        OrderedItems = from p in strLines.AsEnumerable() orderby p.NodeName select p;
+                        OrderedItems = from p in _strLines.AsEnumerable() orderby p.NodeName select p;
                     else if (e.ColumnIndex == 3)
-                        OrderedItems = from p in strLines.AsEnumerable() orderby p.Value select p;
-                    prevSortedColun = -1;
+                        OrderedItems = from p in _strLines.AsEnumerable() orderby p.Value select p;
+                    _prevSortedColumn = -1;
                 }
                 if (OrderedItems != null)
                 {
@@ -136,60 +165,58 @@ namespace XPathEvaluator
             }
             catch (Exception ex)
             {
-                // ignored
+                AddMessageException(ex.Message);
             }
         }
 
-        private void XpathResultDataGrid_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        private async void XpathResultDataGrid_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            DataGridView data = (DataGridView)sender;
+            if (!(sender is DataGridView data))
+                return;
+
             if (data.CurrentRow?.Cells.Count < 5)
                 return;
 
-            if (data.CurrentRow?.Cells[4].Value is XmlNode node && _currentXmlBody != null)
+            if (data.CurrentRow?.Cells[4].Value is XmlNode node && XmlBody != null)
             {
-                XmlNodeResult xmlObject = RtfFromXml.GetPositionByXmlNode(fctb.Text, _currentXmlBody, node);
-                if (xmlObject != null)
+                try
                 {
-                    tabMain.SelectTab(tabXmlBody);
-                    Range range = fctb.GetRange(xmlObject.InnerText.Length - xmlObject.FindedText.Length, xmlObject.InnerText.Length);
+                    fctb.TextChanged -= XmlBodyRichTextBoxOnTextChanged;
+                    xpathResultDataGrid.CellMouseDoubleClick -= XpathResultDataGrid_CellMouseDoubleClick;
+                    xpathResultDataGrid.ColumnHeaderMouseClick -= XpathResultDataGrid_ColumnHeaderMouseClick;
 
-                    fctb.Selection = range;
-                    fctb.DoSelectionVisible();
-                    fctb.Invalidate();
+                    XmlNodeResult xmlObject = await Task<XmlNodeResult>.Factory.StartNew(() => XML.GetPositionByXmlNode(fctb.Text, XmlBody, node));
+
+                    if (xmlObject != null)
+                    {
+                        tabMain.SelectTab(tabXmlBody);
+                        Range range = fctb.GetRange(xmlObject.IndexStart, xmlObject.IndexEnd);
+
+                        fctb.Selection = range;
+                        fctb.DoSelectionVisible();
+                        fctb.Invalidate();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    AddMessageException(ex.Message);
+                }
+                finally
+                {
+                    fctb.TextChanged += XmlBodyRichTextBoxOnTextChanged;
+                    xpathResultDataGrid.CellMouseDoubleClick += XpathResultDataGrid_CellMouseDoubleClick;
+                    xpathResultDataGrid.ColumnHeaderMouseClick += XpathResultDataGrid_ColumnHeaderMouseClick;
                 }
             }
         }
 
-        private Brush _mainTabBrush = new SolidBrush(Color.Transparent);
-        private Brush MainTabBrush
-        {
-            get => _mainTabBrush;
-            set
-            {
-                _mainTabBrush = value;
-                tabMain.Invalidate();
-            }
-        }
-
-        private Brush _resultTabBrush = new SolidBrush(Color.Transparent);
-        private Brush ResultTabBrush
-        {
-            get => _resultTabBrush;
-            set
-            {
-                _resultTabBrush = value;
-                tabMain.Invalidate();
-            }
-        }
-
-        readonly MarkerStyle SameWordsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(40, Color.Gray)));
         void XmlBodyRichTextBoxOnTextChanged(object sender, EventArgs eventArgs)
         {
             try
             {
                 if (_xmlBodyChanged)
                     return;
+
                 ClearResultTap();
                 _xmlBodyChanged = true;
 
@@ -197,25 +224,14 @@ namespace XPathEvaluator
 
                 if (isXml)
                 {
-                    //lock (sync)
-                    //{
-                    //    if (isInsert)
-                    //    {
-                    //        string formatting = RtfFromXml.GetXmlString(document);
-                    //        fctb.Text = formatting;
-                    //        isInsert = false;
-                    //    }
-                    //}
-
-                    _currentXmlBody = document;
-                    
+                    XmlBody = document;
                     MainTabBrush = solidTransparent;
                 }
                 else
                 {
-                    _currentXmlBody = null;
+                    XmlBody = null;
                     MainTabBrush = solidRed;
-                    isInsert = false;
+                    IsInserted = false;
                 }
 
                 fctb.Language = Language.XML;
@@ -223,21 +239,6 @@ namespace XPathEvaluator
                 fctb.Range.ClearStyle(StyleIndex.All);
                 fctb.AddStyle(SameWordsStyle);
                 fctb.OnSyntaxHighlight(new TextChangedEventArgs(fctb.Range));
-
-
-                //fctb.SyntaxHighlighter.InitStyleSchema(Language.XML);
-                //fctb.SyntaxHighlighter.XMLSyntaxHighlight(fctb.Range);
-                //fctb.Range.ClearFoldingMarkers();
-                
-
-                
-                //if (_currentXmlBody != null)
-                //{
-                //    int oldSelectionStart = xmlBodyRichTextBox.SelectionStart;
-                //    xmlBodyRichTextBox.Rtf = RtfFromXml.Convert(_currentXmlBody);
-                //    xmlBodyRichTextBox.SelectionStart = oldSelectionStart;
-                //    xmlBodyRichTextBox.HideSelection = false;
-                //}
             }
             catch (Exception ex)
             {
@@ -251,16 +252,13 @@ namespace XPathEvaluator
 
         private void buttonPrettyPrint_Click(object sender, EventArgs e)
         {
-            if (_currentXmlBody == null)
+            if (XmlBody == null)
                 return;
 
-
-            string formatting = RtfFromXml.GetXmlString(_currentXmlBody);
+            string formatting = RtfFromXml.GetXmlString(XmlBody);
             fctb.Text = formatting;
 
         }
-
-
 
         private void tabControl1_DrawItem(object sender, DrawItemEventArgs e)
         {
@@ -281,27 +279,30 @@ namespace XPathEvaluator
         void buttonFind_Click(object sender, EventArgs e)
         {
             ClearResultTap();
-            if (_currentXmlBody == null)
+
+            if (XmlBody == null)
             {
-                AddMessageException(@"Incorrect XML Body");
+                AddMessageException(@"Incorrect XML-body!");
                 return;
             }
+
             if (string.IsNullOrEmpty(XPathText.Text))
             {
-                AddMessageException(@"XPath Expression Is Empty");
+                AddMessageException(@"XPath expression is empty!");
                 return;
             }
+
             try
             {
 
                 string getNodeNamesValue = Regex.Replace(XPathText.Text, @"^\s*(name|local-name)\s*\((.+?)\)$", "$2", RegexOptions.IgnoreCase);
                 if (XPathText.Text.Length > getNodeNamesValue.Length)
                 {
-                    XpathCollection temp = XmlExpression(_currentXmlBody.CreateNavigator(), getNodeNamesValue);
-                    strLines = new XpathCollection();
+                    XpathCollection temp = XmlExpression(XmlBody.CreateNavigator(), getNodeNamesValue);
+                    _strLines = new XpathCollection();
                     foreach (XPathResults resultItem in temp)
                     {
-                        strLines.Add(new XPathResults
+                        _strLines.Add(new XPathResults
                         {
                             ID = resultItem.ID,
                             Node = resultItem.Node,
@@ -313,13 +314,13 @@ namespace XPathEvaluator
                     temp.Clear();
                 }
                 else
-                    strLines = XmlExpression(_currentXmlBody.CreateNavigator(), XPathText.Text);
+                    _strLines = XmlExpression(XmlBody.CreateNavigator(), XPathText.Text);
 
 
-                if (strLines == null || strLines.Count == 0)
+                if (_strLines == null || _strLines.Count == 0)
                     return;
                 tabMain.SelectTab(tabXPathResult);
-                UpdateResultDataGrid(strLines);
+                UpdateResultDataGrid(_strLines);
             }
             catch (Exception ex)
             {
@@ -341,7 +342,7 @@ namespace XPathEvaluator
         {
             AddMessageException(string.Empty);
             xpathResultDataGrid.DataSource = null;
-            prevSortedColun = -1;
+            _prevSortedColumn = -1;
         }
 
         void AddMessageException(string strEx)
@@ -388,8 +389,7 @@ namespace XPathEvaluator
                                 NodeName = current.Name,
                                 Value = current.Value
                             };
-                            IHasXmlNode node = current as IHasXmlNode;
-                            if (node != null)
+                            if (current is IHasXmlNode node)
                                 res.Node = node.GetNode();
                             strOut.Add(res);
                             i++;
@@ -411,8 +411,7 @@ namespace XPathEvaluator
                                 Value = o.ToString()
                             }
                         };
-                        IHasXmlNode node = o as IHasXmlNode;
-                        if (node != null)
+                        if (o is IHasXmlNode node)
                         {
                             res[0].Node = node.GetNode();
                             res[0].NodeName = res[0].Node.NodeType.ToString();
@@ -422,7 +421,5 @@ namespace XPathEvaluator
                     return null;
             }
         }
-
-
     }
 }

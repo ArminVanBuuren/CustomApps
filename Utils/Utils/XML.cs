@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
@@ -12,6 +9,32 @@ using Utils.CollectionHelper;
 
 namespace Utils
 {
+    public enum XMlType
+    {
+        Unknown = 0,
+        Attribute = 1,
+        Node = 2
+    }
+
+    public class XmlNodeResult
+    {
+        //public string InnerText { get; set; }
+        //public string FindedText { get; set; }
+
+        public int IndexStart { get; }
+        public int IndexEnd { get; }
+        public int Length { get; }
+        public XMlType Type { get; }
+
+        public XmlNodeResult(int start, int end, int length, XMlType type)
+        {
+            IndexStart = start;
+            IndexEnd = end;
+            Length = length;
+            Type = type;
+        }
+    }
+
     public static class XML
     {
         public static string GetText(this XmlNode node, string nodeName)
@@ -94,6 +117,7 @@ namespace Utils
                     //null
                 }
             }
+
             return false;
         }
 
@@ -102,10 +126,7 @@ namespace Utils
             XmlSchemaSet schemas = new XmlSchemaSet();
             XDocument doc = XDocument.Load(docPath);
             string msg = "";
-            doc.Validate(schemas, (o, e) =>
-            {
-                msg += e.Message + Environment.NewLine;
-            });
+            doc.Validate(schemas, (o, e) => { msg += e.Message + Environment.NewLine; });
             return (msg == string.Empty);
         }
 
@@ -122,12 +143,12 @@ namespace Utils
         public static string NormalizeXmlValueFast(string xmlStingValue, XMLValueEncoder type = XMLValueEncoder.Decode)
         {
             StringBuilder builder = new StringBuilder();
-            
+
             if (type == XMLValueEncoder.Decode)
             {
                 int isOpen = 0;
                 StringBuilder charName = new StringBuilder();
-                
+
                 foreach (var ch in xmlStingValue)
                 {
                     if (ch == '&')
@@ -202,6 +223,7 @@ namespace Utils
                         builder.Append(res);
                         continue;
                     }
+
                     builder.Append(ch);
                 }
             }
@@ -226,39 +248,40 @@ namespace Utils
         {
             public static readonly Dictionary<string, char> NAME_CHAR = new Dictionary<string, char>
             {
-                { "amp",'&'},
-                { "quot",'\"'},
-                { "lt",'<'},
-                { "gt",'>'},
-                { "apos",'\''},
-                { "circ",'ˆ'},
-                { "tilde",'˜'},
-                { "ndash",'–'},
-                { "mdash",'—'},
-                { "lsquo",'‘'},
-                { "rsquo",'’'},
-                { "lsaquo",'‹'},
-                { "rsaquo",'›'},
-                { "#xD",'\r'},
-                { "#xA",'\n'}
+                {"amp", '&'},
+                {"quot", '\"'},
+                {"lt", '<'},
+                {"gt", '>'},
+                {"apos", '\''},
+                {"circ", 'ˆ'},
+                {"tilde", '˜'},
+                {"ndash", '–'},
+                {"mdash", '—'},
+                {"lsquo", '‘'},
+                {"rsquo", '’'},
+                {"lsaquo", '‹'},
+                {"rsaquo", '›'},
+                {"#xD", '\r'},
+                {"#xA", '\n'}
             };
+
             public static readonly Dictionary<char, string> CHAR_NAME = new Dictionary<char, string>
             {
-                { '&', "&amp;"},
-                { '\"', "&quot;"},
-                { '<', "&lt;"},
-                { '>', "&gt;"},
-                { '\'', "&apos;"},
-                { 'ˆ', "&circ;"},
-                { '˜', "&tilde;"},
-                { '–', "&ndash;"},
-                { '—', "&mdash;"},
-                { '‘', "&lsquo;"},
-                { '’', "&rsquo;"},
-                { '‹', "&lsaquo;"},
-                { '›', "&rsaquo;"},
-                { '\r', "#xD"},
-                { '\n', "#xA"}
+                {'&', "&amp;"},
+                {'\"', "&quot;"},
+                {'<', "&lt;"},
+                {'>', "&gt;"},
+                {'\'', "&apos;"},
+                {'ˆ', "&circ;"},
+                {'˜', "&tilde;"},
+                {'–', "&ndash;"},
+                {'—', "&mdash;"},
+                {'‘', "&lsquo;"},
+                {'’', "&rsquo;"},
+                {'‹', "&lsaquo;"},
+                {'›', "&rsaquo;"},
+                {'\r', "#xD"},
+                {'\n', "#xA"}
             };
 
             private XMLValueEncoder Type { get; }
@@ -275,21 +298,274 @@ namespace Utils
                 switch (Type)
                 {
                     case XMLValueEncoder.Decode:
-                        {
-                            if (NAME_CHAR.TryGetValue(find, out var result))
-                                return result.ToString();
-                            break;
-                        }
+                    {
+                        if (NAME_CHAR.TryGetValue(find, out var result))
+                            return result.ToString();
+                        break;
+                    }
                     case XMLValueEncoder.Encode:
-                        {
-                            if (CHAR_NAME.TryGetValue(find[0], out var result))
-                                return result;
-                            break;
-                        }
+                    {
+                        if (CHAR_NAME.TryGetValue(find[0], out var result))
+                            return result;
+                        break;
+                    }
                 }
 
                 return find;
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sourceXmlText"></param>
+        /// <param name="xmlDocument"></param>
+        /// <param name="find"></param>
+        /// <returns></returns>
+        public static XmlNodeResult GetPositionByXmlNode(string sourceXmlText, XmlDocument xmlDocument, XmlNode find)
+        {
+            var formattedXML = new StringBuilder();
+            var targetText = string.Empty;
+            var type = XMlType.Unknown;
+
+            foreach (XmlNode child in xmlDocument.ChildNodes)
+            {
+                var resType = GetXmlPosition(child, formattedXML, ref targetText, 0, find);
+
+                if (resType != XMlType.Unknown)
+                {
+                    type = resType;
+                    break;
+                }
+            }
+
+            return type != XMlType.Unknown ? GetPositionInSourceText(formattedXML.ToString(), targetText, type, sourceXmlText) : null;
+        }
+
+        static XMlType GetXmlPosition(XmlNode node, StringBuilder source, ref string targetText, int nested, XmlNode findNode)
+        {
+            var inputSourceLength = source.Length;
+
+            if (node.Attributes == null)
+            {
+                source.Append(XML.NormalizeXmlValueFast(node.OuterXml));
+            }
+            else
+            {
+                string str4 = (nested != 0) ? Environment.NewLine : string.Empty;
+                if ((node.ChildNodes.Count <= 0) && string.IsNullOrEmpty(node.InnerText))
+                {
+                    source.Append(XML.NormalizeXmlValueFast(node.OuterXml));
+                }
+                else
+                {
+                    string whiteSpaces = new string(' ', nested);
+
+                    if (node.Attributes.Count > 0)
+                    {
+                        string attributes = string.Empty;
+                        foreach (XmlAttribute attribute in node.Attributes)
+                        {
+                            attributes = attributes + $" {attribute.Name}=\"{XML.NormalizeXmlValueFast(attribute.InnerXml)}\"";
+                            if (attribute.Equals(findNode))
+                            {
+                                source.Append(string.Format("{3}{0}<{1}{2}", whiteSpaces, node.Name, attributes, str4));
+                                targetText = $"{attribute.Name}=\"{XML.NormalizeXmlValueFast(attribute.InnerXml)}\"";
+                                return XMlType.Attribute;
+                            }
+                        }
+
+                        source.Append(string.Format("{3}{0}<{1}{2}>", whiteSpaces, node.Name, attributes, str4));
+                    }
+                    else
+                    {
+                        source.Append(string.Format("{2}{0}<{1}>", whiteSpaces, node.Name, str4));
+                    }
+
+                    nested += 3;
+                    foreach (XmlNode node2 in node.ChildNodes)
+                    {
+                        XMlType type = GetXmlPosition(node2, source, ref targetText, nested, findNode);
+                        if (type != XMlType.Unknown)
+                            return type;
+                    }
+
+                    if (((node.FirstChild != null) && (node.ChildNodes.Count == 1)) && string.Equals(node.FirstChild.Name, "#text"))
+                    {
+                        source.Append($"</{node.Name}>");
+                    }
+                    else
+                    {
+                        source.Append(string.Format("{2}{0}</{1}>", whiteSpaces, node.Name, Environment.NewLine));
+                    }
+                }
+            }
+
+            if (node.Equals(findNode))
+            {
+                targetText = source.ToString(inputSourceLength, source.Length - inputSourceLength);
+                return XMlType.Node;
+            }
+
+            return XMlType.Unknown;
+        }
+
+        /// <summary>
+        /// Тоже колхоз немного, но работает точно корректно. Учитывает отступы по спецсимволам.
+        /// </summary>
+        static XmlNodeResult GetPositionInSourceText(string innerText, string targetText, XMlType type, string sourceText)
+        {
+            //StringBuilder xmlTextBld = new StringBuilder();
+            //StringBuilder sourceTextBld = new StringBuilder();
+
+            int indexStartEscapeWhiteSpace = -1;
+            int indexEndEscapeWhiteSpace = -1;
+
+            int docIndex = innerText.Length - targetText.TrimStart().Length;
+            int findedRange = innerText.Length;
+
+            int j = 0;
+            for (int i = 0; i < innerText.Length; i++)
+            {
+                if (i == docIndex)
+                    indexStartEscapeWhiteSpace = j;
+
+                char ch = innerText[i];
+                if (char.IsWhiteSpace(ch))
+                    continue;
+
+                j++;
+                //xmlTextBld.Append(ch);
+            }
+
+
+            indexEndEscapeWhiteSpace = j;
+            if (indexStartEscapeWhiteSpace == -1 || indexEndEscapeWhiteSpace == -1 || (indexStartEscapeWhiteSpace > indexEndEscapeWhiteSpace))
+                return null;
+
+            j = 0;
+            int indexStart = -1;
+            int indexEnd = -1;
+
+            int isOpen = 0;
+            int symbolsIdents = 0;
+            int charName = 0;
+            for (int i = 0; i < sourceText.Length; i++)
+            {
+                char ch = sourceText[i];
+
+                if (isOpen > 0 && ch == ';')
+                {
+                    isOpen--;
+                    symbolsIdents += charName + 1;
+                    charName = 0;
+                }
+                else if (isOpen > 0 && (charName >= 6 || char.IsWhiteSpace(ch)))
+                {
+                    isOpen--;
+                    charName = 0;
+                }
+                else if (isOpen > 0)
+                {
+                    charName++;
+                }
+                else if (ch == '&')
+                {
+                    if (isOpen == 0)
+                        isOpen++;
+                    else
+                        charName = 0;
+                }
+
+
+                if (j == indexEndEscapeWhiteSpace + symbolsIdents && indexEnd == -1)
+                {
+                    indexEnd = i;
+                    break;
+                }
+
+                if (char.IsWhiteSpace(ch))
+                    continue;
+
+                if (j == indexStartEscapeWhiteSpace + symbolsIdents && indexStart == -1)
+                {
+                    indexStart = i;
+                }
+
+                j++;
+                //sourceTextBld.Append(ch);
+            }
+
+            if (indexStart == -1 || indexEnd == -1 || (indexStart > indexEnd))
+                return null;
+
+            //string res1 = xmlTextBld.ToString();
+            //string res2 = sourceTextBld.ToString();
+
+            return new XmlNodeResult(indexStart, indexEnd, indexEnd - indexStart, type);
+        }
+
+        ///// <summary>
+        ///// Колхозно, но зато работает корректно.
+        ///// Тут проблема в том что XmlDocument обрезает лишние пробелы, а в исходном тексте чтобы выделить ноду нужно правильно подобрать позиции, поэтому нужно считать все пропуски в исходном тексте, тот что на экране и найти правильную позицию учитывая. Единственное отлчичие XmlDocument от исходного текста так это пропуски, их мы и вычленяем в данном методе.
+        ///// </summary>
+        ///// <param name="findedObj"></param>
+        ///// <param name="sourceText"></param>
+        ///// <returns></returns>
+        //static bool IsCorrectXmlNodeIndex2(XmlNodeResult findedObj, string sourceText)
+        //{
+        //    bool finished = false;
+        //    int i = -1;
+        //    int j = -1;
+        //    int findedIndexStart = findedObj.InnerText.Length - findedObj.FindedText.TrimStart().Length;
+        //    int correctfindedIndexStart = -1;
+
+        //    while (true)
+        //    {
+        //        i++;
+        //        j++;
+
+        //        if (j >= findedIndexStart && correctfindedIndexStart == -1)
+        //            correctfindedIndexStart = i - 1;
+
+        //        if (j > findedObj.InnerText.Length - 1)
+        //            break;
+
+        //        while (char.IsWhiteSpace(findedObj.InnerText[j]))
+        //        {
+        //            j++;
+        //            if (j > findedObj.InnerText.Length - 1)
+        //            {
+        //                finished = true;
+        //                break;
+        //            }
+        //        }
+
+        //        if (i > sourceText.Length - 1)
+        //        {
+        //            i = -1;
+        //            break;
+        //        }
+
+        //        while (char.IsWhiteSpace(sourceText[i]))
+        //        {
+        //            i++;
+        //            if (i > sourceText.Length - 1)
+        //            {
+        //                i = -1;
+        //                break;
+        //            }
+        //        }
+
+        //        if (finished)
+        //            break;
+        //    }
+
+        //    if (i == -1 || correctfindedIndexStart == -1)
+        //        return false;
+        //    findedObj.InnerText = sourceText.Substring(0, i);
+        //    findedObj.FindedText = sourceText.Substring(correctfindedIndexStart, i - correctfindedIndexStart);
+        //    return true;
+        //}
     }
 }

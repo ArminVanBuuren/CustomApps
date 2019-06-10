@@ -53,8 +53,7 @@ namespace Utils
                                 NodeName = current.Name,
                                 Value = current.Value
                             };
-                            IHasXmlNode node = current as IHasXmlNode;
-                            if (node != null)
+                            if (current is IHasXmlNode node)
                                 res.Node = node.GetNode();
                             strOut.Add(res);
                             i++;
@@ -76,8 +75,7 @@ namespace Utils
                                 Value = o.ToString()
                             }
                         };
-                        IHasXmlNode node = o as IHasXmlNode;
-                        if (node != null)
+                        if (o is IHasXmlNode node)
                         {
                             res[0].Node = node.GetNode();
                             res[0].NodeName = res[0].Node.NodeType.ToString();
