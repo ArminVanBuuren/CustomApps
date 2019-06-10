@@ -7,8 +7,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{1E6D3446-094B-4451-AFF1-4D3C0F82C90B}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>XPathEvaluator</RootNamespace>
-    <AssemblyName>XPathEvaluator</AssemblyName>
+    <RootNamespace>XPathTester</RootNamespace>
+    <AssemblyName>XPathTester</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
