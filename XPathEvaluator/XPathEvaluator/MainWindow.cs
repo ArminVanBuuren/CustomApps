@@ -1,5 +1,4 @@
-﻿using FastColoredTextBoxNS;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -9,10 +8,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.XPath;
+using FastColoredTextBoxNS;
 using Utils;
 using Utils.XmlRtfStyle;
 
-namespace XPathEvaluator
+namespace XPathTester
 {
     public partial class MainWindow : Form
     {

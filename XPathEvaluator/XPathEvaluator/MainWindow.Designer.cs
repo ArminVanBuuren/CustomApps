@@ -1,6 +1,6 @@
 ﻿
 
-namespace XPathEvaluator
+namespace XPathTester
 {
     partial class MainWindow
     {
