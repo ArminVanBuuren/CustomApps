@@ -99,7 +99,7 @@ namespace Utils.XmlRtfStyle
             }
 
             StringBuilder source = new StringBuilder();
-            ProcessXmlInnerText(xml.DocumentElement, ref source, 0);
+            ProcessXmlInnerText(xml.DocumentElement, source, 0);
             return GetRtfString(source.ToString(), settings);
         }
 
@@ -108,97 +108,106 @@ namespace Utils.XmlRtfStyle
             XmlDocument xml = new XmlDocument();
             xml.LoadXml(xmlString);
             StringBuilder source = new StringBuilder();
-            ProcessXmlInnerText(xml.DocumentElement, ref source, 0);
+            ProcessXmlInnerText(xml.DocumentElement, source, 0);
             return source.ToString();
         }
 
         public static string GetXmlString(XmlDocument xml)
         {
             StringBuilder source = new StringBuilder();
-            ProcessXmlInnerText(xml.DocumentElement, ref source, 0);
+            ProcessXmlInnerText(xml.DocumentElement, source, 0);
             return source.ToString();
         }
 
-        static void ProcessXmlInnerText(XmlNode node, ref StringBuilder source, int nested)
+        static void ProcessXmlInnerText(XmlNode node, StringBuilder source, int nested)
         {
-            string str = string.Empty;
-            for (int i = 0; i < nested; i++)
-            {
-                str = str + " ";
-            }
+            var whiteSpaces = new string(' ', nested);
 
-            StringBuilder str2 = new StringBuilder();
             if (node.Attributes == null)
             {
-                if (string.Equals(node.Name, "#text"))
+                source.Append(Environment.NewLine);
+                switch (node.Name)
                 {
-                    source.Append(node.OuterXml.Trim());
-                }
-                else if (string.Equals(node.Name, "#comment"))
-                {
-                    source.Append(string.Format("{1}{2}{0}", node.OuterXml.Trim(), Environment.NewLine, str));
-                }
-                else if (string.Equals(node.Name, "#cdata-section"))
-                {
-                    source.Append(string.Format("{1}{2}{0}", node.OuterXml.Trim(), Environment.NewLine, str));
-                }
-                else
-                {
-                    string innerText = node.InnerText;
-                    if (innerText.LastIndexOf("\n", StringComparison.Ordinal) > (innerText.Trim().Length - 1))
-                    {
-                        innerText = node.InnerText.Remove(innerText.LastIndexOf("\n", StringComparison.Ordinal));
-                    }
-
-                    source.Append(innerText);
+                    case "#text": source.Append(AddSpacesByLine(node.OuterXml, whiteSpaces)); break;
+                    case "#comment":
+                    case "#cdata-section":
+                        source.Append(whiteSpaces);
+                        source.Append(node.OuterXml.Trim()); break;
+                    default:
+                        source.Append(whiteSpaces);
+                        source.Append(node.InnerText.TrimEnd()); break;
                 }
             }
             else
             {
+                var newLine = (nested != 0) ? Environment.NewLine : string.Empty;
+                var xmlAttributes = new StringBuilder();
+
                 foreach (XmlAttribute attribute in node.Attributes)
                 {
-                    str2.Append($" {attribute.Name}=\"{attribute.InnerXml.Replace("\"", "&quot;").Replace("<", "&lt;").Replace(">", "&gt;")}\"");
+                    xmlAttributes.Append(' ');
+                    xmlAttributes.Append(attribute.Name);
+                    xmlAttributes.Append('=');
+                    xmlAttributes.Append('"');
+                    xmlAttributes.Append(XML.NormalizeXmlValueFast(attribute.InnerXml, XMLValueEncoder.EncodeAttribute));
+                    xmlAttributes.Append('"');
                 }
 
-                string str4 = (nested != 0) ? Environment.NewLine : string.Empty;
-                if ((node.ChildNodes.Count <= 0) && string.IsNullOrEmpty(node.InnerText))
-                {
-                    if (string.IsNullOrEmpty(str2.ToString()))
-                    {
-                        source.Append(string.Format("{2}{0}<{1} />", str, node.Name, str4));
-                    }
-                    else
-                    {
-                        source.Append(string.Format("{3}{0}<{1}{2} />", str, node.Name, str2, str4));
-                    }
-                }
+                source.Append(newLine);
+                source.Append(whiteSpaces);
+                source.Append('<');
+                source.Append(node.Name);
+
+                if (xmlAttributes.Length >= 0)
+                    source.Append(xmlAttributes);
+
+                if (node.ChildNodes.Count <= 0 && node.InnerText.IsNullOrEmpty())
+                    source.Append(" />");
                 else
                 {
-                    if (string.IsNullOrEmpty(str2.ToString()))
-                    {
-                        source.Append(string.Format("{2}{0}<{1}>", str, node.Name, str4));
-                    }
-                    else
-                    {
-                        source.Append(string.Format("{3}{0}<{1}{2}>", str, node.Name, str2, str4));
-                    }
+                    source.Append('>');
 
                     nested += 3;
                     foreach (XmlNode node2 in node.ChildNodes)
                     {
-                        ProcessXmlInnerText(node2, ref source, nested);
+                        ProcessXmlInnerText(node2, source, nested);
                     }
 
                     if (((node.FirstChild != null) && (node.ChildNodes.Count == 1)) && string.Equals(node.FirstChild.Name, "#text"))
                     {
-                        source.Append($"</{node.Name}>");
+                        source.Append("</");
+                        source.Append(node.Name);
+                        source.Append('>');
                     }
                     else
                     {
-                        source.Append(string.Format("{2}{0}</{1}>", str, node.Name, Environment.NewLine));
+                        source.Append(Environment.NewLine);
+                        source.Append(whiteSpaces);
+                        source.Append("</");
+                        source.Append(node.Name);
+                        source.Append('>');
                     }
                 }
             }
+        }
+
+        static string AddSpacesByLine(string source, string spaces)
+        {
+            int lines = 0;
+            StringBuilder builder = new StringBuilder();
+            foreach (var line in source.Split('\r', '\n'))
+            {
+                if (!string.IsNullOrWhiteSpace(line))
+                {
+                    if (lines > 0)
+                        builder.Append(Environment.NewLine);
+                    builder.Append(spaces);
+                    builder.Append(line.Trim());
+                    lines++;
+                }
+            }
+
+            return builder.ToString();
         }
 
         static string GetRtfString(string source, RtfFromXml settings)

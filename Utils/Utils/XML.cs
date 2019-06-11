@@ -16,6 +16,24 @@ namespace Utils
         Node = 2
     }
 
+    public enum XMLValueEncoder
+    {
+        /// <summary>
+        /// из имени объекта превращает в символ
+        /// </summary>
+        Decode = 0,
+
+        /// <summary>
+        /// из символа превращает в имя объекта
+        /// </summary>
+        Encode = 1,
+
+        /// <summary>
+        /// из символа превращает в имя объекта для аттрибутов
+        /// </summary>
+        EncodeAttribute = 2
+    }
+
     public class XmlNodeResult
     {
         //public string InnerText { get; set; }
@@ -127,7 +145,7 @@ namespace Utils
             XDocument doc = XDocument.Load(docPath);
             string msg = "";
             doc.Validate(schemas, (o, e) => { msg += e.Message + Environment.NewLine; });
-            return (msg == string.Empty);
+            return msg.IsNullOrEmpty();
         }
 
         public static string NormalizeXmlValue(string xmlStringValue, XMLValueEncoder type = XMLValueEncoder.Decode)
@@ -144,105 +162,114 @@ namespace Utils
         {
             StringBuilder builder = new StringBuilder();
 
-            if (type == XMLValueEncoder.Decode)
+            switch (type)
             {
-                int isOpen = 0;
-                StringBuilder charName = new StringBuilder();
+                case XMLValueEncoder.Decode:
+                    int isOpen = 0;
+                    StringBuilder charName = new StringBuilder();
 
-                foreach (var ch in xmlStingValue)
-                {
-                    if (ch == '&')
+                    foreach (var ch in xmlStingValue)
                     {
-                        if (isOpen == 0)
+                        if (ch == '&')
                         {
-                            isOpen++;
-                            continue;
-                        }
-                        else
-                        {
-                            builder.Append('&');
-                            builder.Append(charName.ToString());
-                            charName.Clear();
-                            continue;
-                        }
-                    }
-
-                    if (isOpen > 0 && ch == ';')
-                    {
-                        isOpen--;
-                        if (XmlEntityNames.NAME_CHAR.TryGetValue(charName.ToString(), out var res))
-                        {
-                            charName.Clear();
-                            if (res == '&')
+                            if (isOpen == 0)
+                            {
                                 isOpen++;
+                                continue;
+                            }
                             else
-                                builder.Append(res);
-
-                            continue;
+                            {
+                                builder.Append('&');
+                                builder.Append(charName.ToString());
+                                charName.Clear();
+                                continue;
+                            }
                         }
-                        else
+
+                        if (isOpen > 0 && ch == ';')
                         {
+                            isOpen--;
+                            if (XmlEntityNames.NAME_CHAR.TryGetValue(charName.ToString(), out var res))
+                            {
+                                charName.Clear();
+                                if (res == '&')
+                                    isOpen++;
+                                else
+                                    builder.Append(res);
+
+                                continue;
+                            }
+                            else
+                            {
+                                builder.Append('&');
+                                builder.Append(charName.ToString());
+                                charName.Clear();
+                            }
+                        }
+
+                        if (isOpen > 0 && (charName.Length >= 6 || char.IsWhiteSpace(ch)))
+                        {
+                            isOpen--;
                             builder.Append('&');
                             builder.Append(charName.ToString());
+                            builder.Append(ch);
                             charName.Clear();
+                            continue;
                         }
-                    }
 
-                    if (isOpen > 0 && (charName.Length >= 6 || char.IsWhiteSpace(ch)))
-                    {
-                        isOpen--;
-                        builder.Append('&');
-                        builder.Append(charName.ToString());
+                        if (isOpen > 0)
+                        {
+                            charName.Append(ch);
+                            continue;
+                        }
+
                         builder.Append(ch);
-                        charName.Clear();
-                        continue;
                     }
 
                     if (isOpen > 0)
                     {
-                        charName.Append(ch);
-                        continue;
+                        builder.Append('&');
+                        builder.Append(charName.ToString());
+                        charName.Clear();
                     }
+                    break;
 
-                    builder.Append(ch);
-                }
-
-                if (isOpen > 0)
-                {
-                    builder.Append('&');
-                    builder.Append(charName.ToString());
-                    charName.Clear();
-                }
-            }
-            else
-            {
-                foreach (var ch in xmlStingValue)
-                {
-                    if (XmlEntityNames.CHAR_NAME.TryGetValue(ch, out var res))
+                case XMLValueEncoder.Encode:
+                    foreach (var ch in xmlStingValue)
                     {
-                        builder.Append(res);
-                        continue;
-                    }
+                        if (XmlEntityNames.CHAR_NAME.TryGetValue(ch, out var res))
+                        {
+                            builder.Append(res);
+                            continue;
+                        }
 
-                    builder.Append(ch);
-                }
+                        builder.Append(ch);
+                    }
+                    break;
+
+                case XMLValueEncoder.EncodeAttribute:
+                    foreach (var ch in xmlStingValue)
+                    {
+                        switch (ch)
+                        {
+                            case '"':
+                                builder.Append("&quot;");
+                                break;
+                            case '<':
+                                builder.Append("&lt;");
+                                break;
+                            default:
+                                builder.Append(ch);
+                                break;
+                        }
+                    }
+                    break;
             }
 
             return builder.ToString();
         }
 
-        public enum XMLValueEncoder
-        {
-            /// <summary>
-            /// из имени объекта превращает в символ
-            /// </summary>
-            Decode = 0,
 
-            /// <summary>
-            /// из символа превращает в имя объекта
-            /// </summary>
-            Encode = 1
-        }
 
         class XmlEntityNames
         {
@@ -356,18 +383,13 @@ namespace Utils
                 {
                     if (node.Attributes.Count > 0)
                     {
-                        string attributes = string.Empty;
-                        foreach (XmlAttribute attribute in node.Attributes)
+                        StringBuilder attrBuilder = new StringBuilder();
+                        if (IsXmlAttribute(node.Attributes, attrBuilder, ref targetText, findNode))
                         {
-                            attributes = attributes + $" {attribute.Name}=\"{XML.NormalizeXmlValueFast(attribute.InnerXml)}\"";
-                            if (attribute.Equals(findNode))
-                            {
-                                source.Append('<');
-                                source.Append(node.Name);
-                                source.Append(attributes);
-                                targetText = $"{attribute.Name}=\"{XML.NormalizeXmlValueFast(attribute.InnerXml)}\"";
-                                return XMlType.Attribute;
-                            }
+                            source.Append('<');
+                            source.Append(node.Name);
+                            source.Append(attrBuilder.ToString());
+                            return XMlType.Attribute;
                         }
                     }
 
@@ -377,23 +399,12 @@ namespace Utils
                 {
                     if (node.Attributes.Count > 0)
                     {
-                        string attributes = string.Empty;
-                        foreach (XmlAttribute attribute in node.Attributes)
-                        {
-                            attributes = attributes + $" {attribute.Name}=\"{XML.NormalizeXmlValueFast(attribute.InnerXml)}\"";
-                            if (attribute.Equals(findNode))
-                            {
-                                source.Append('<');
-                                source.Append(node.Name);
-                                source.Append(attributes);
-                                targetText = $"{attribute.Name}=\"{XML.NormalizeXmlValueFast(attribute.InnerXml)}\"";
-                                return XMlType.Attribute;
-                            }
-                        }
-
                         source.Append('<');
                         source.Append(node.Name);
-                        source.Append(attributes);
+
+                        if(IsXmlAttribute(node.Attributes, source, ref targetText, findNode))
+                            return XMlType.Attribute;
+
                         source.Append('>');
                     }
                     else
@@ -423,6 +434,27 @@ namespace Utils
             }
 
             return XMlType.Unknown;
+        }
+
+        static bool IsXmlAttribute(XmlAttributeCollection attributes, StringBuilder source, ref string targetText, XmlNode findNode)
+        {
+            foreach (XmlAttribute attribute in attributes)
+            {
+                var prevIndexStart = source.Length;
+                source.Append(' ');
+                source.Append(attribute.Name);
+                source.Append('=');
+                source.Append('"');
+                source.Append(XML.NormalizeXmlValueFast(attribute.InnerXml));
+                source.Append('"');
+                if (attribute.Equals(findNode))
+                {
+                    targetText = source.ToString(prevIndexStart + 1, source.Length - prevIndexStart - 1);
+                    return true;
+                }
+            }
+
+            return false;
         }
 
 
@@ -526,6 +558,7 @@ namespace Utils
 
             //string res1 = xmlTextBld.ToString();
             //string res2 = sourceTextBld.ToString();
+            //string res3 = sourceText.Substring(indexStart, indexEnd - indexStart);
 
             return new XmlNodeResult(indexStart, indexEnd, indexEnd - indexStart, type);
         }

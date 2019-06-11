@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -256,8 +257,8 @@ namespace XPathTester
                 return;
 
             string formatting = RtfFromXml.GetXmlString(XmlBody);
-            fctb.Text = formatting;
 
+            fctb.Text = formatting;
         }
 
         private void tabControl1_DrawItem(object sender, DrawItemEventArgs e)
