@@ -7,11 +7,11 @@ using System.Windows;
 // Управление общими сведениями о сборке осуществляется с помощью 
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
-[assembly: AssemblyTitle("TFSAssist")]
+[assembly: AssemblyTitle("TFS Assist")]
 [assembly: AssemblyDescription("Приложение для считывания писем и формирования TFS")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Khovanskiy Vladimir")]
-[assembly: AssemblyProduct("vkhovanskiy")]
+[assembly: AssemblyProduct("TFS Assist")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
