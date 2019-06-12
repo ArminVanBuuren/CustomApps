@@ -108,7 +108,6 @@ namespace XPathTester
 
         private void XPathWindow_KeyDown(object sender, KeyEventArgs e)
         {
-            //if (e.Control && e.KeyCode == Keys.S)       // Ctrl-S Save
             if (e.KeyCode == Keys.F5)
             {
                 buttonFind_Click(this, EventArgs.Empty);
@@ -247,6 +246,7 @@ namespace XPathTester
                     XmlBody = null;
                     MainTabBrush = solidRed;
                     IsInserted = false;
+                    AddMessageException(@"XML-Body is incorrect!");
                 }
 
                 //fctb.Language = Language.XML;
@@ -297,7 +297,7 @@ namespace XPathTester
 
             if (XmlBody == null)
             {
-                AddMessageException(@"Incorrect XML-body!");
+                AddMessageException(@"XML-Body is incorrect!");
                 return;
             }
 
