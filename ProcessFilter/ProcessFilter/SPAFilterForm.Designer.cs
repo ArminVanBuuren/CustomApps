@@ -226,7 +226,7 @@
             this.buttonFilter.Name = "buttonFilter";
             this.buttonFilter.Size = new System.Drawing.Size(75, 23);
             this.buttonFilter.TabIndex = 13;
-            this.buttonFilter.Text = "Get";
+            this.buttonFilter.Text = "Get [F5]";
             this.buttonFilter.UseVisualStyleBackColor = true;
             this.buttonFilter.Click += new System.EventHandler(this.buttonFilterClick);
             // 
