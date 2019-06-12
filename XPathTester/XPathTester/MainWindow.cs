@@ -41,7 +41,7 @@ namespace XPathTester
             set
             {
                 _mainTabBrush = value;
-                tabMain.Invalidate();
+                //tabMain.Invalidate();
             }
         }
 
@@ -52,7 +52,7 @@ namespace XPathTester
             set
             {
                 _resultTabBrush = value;
-                tabMain.Invalidate();
+                //tabMain.Invalidate();
             }
         }
 
@@ -64,18 +64,27 @@ namespace XPathTester
             xpathResultDataGrid.CellMouseDoubleClick += XpathResultDataGrid_CellMouseDoubleClick;
             xpathResultDataGrid.ColumnHeaderMouseClick += XpathResultDataGrid_ColumnHeaderMouseClick;
 
-            tabMain.DrawMode = TabDrawMode.OwnerDrawFixed;
-            tabMain.DrawItem += tabControl1_DrawItem;
+            //tabMain.DrawMode = TabDrawMode.OwnerDrawFixed;
+            //tabMain.DrawItem += tabControl1_DrawItem;
 
 
             KeyPreview = true;
             KeyDown += XPathWindow_KeyDown;
             fctb.KeyDown += XmlBodyRichTextBox_KeyDown;
 
-            fctb.ClearStylesBuffer();
-            fctb.Range.ClearStyle(StyleIndex.All);
+            //fctb.ClearStylesBuffer();
+            //fctb.Range.ClearStyle(StyleIndex.All);
             fctb.Language = Language.XML;
+            /////////////////////fctb.DescriptionFile = "htmlDesc.xml";
             fctb.SelectionChangedDelayed += fctb_SelectionChangedDelayed;
+
+            IsWordWrap.Checked = fctb.WordWrap;
+            IsWordWrap.CheckStateChanged += (s, e) => fctb.WordWrap = IsWordWrap.Checked;
+
+            //var wordWrapStat = new CheckBox {BackColor = Color.Transparent, Text = @"Wrap ", Checked = fctb.WordWrap, Padding = new Padding(0, 3, 0, 0)};
+            //wordWrapStat.CheckStateChanged += (s, e) => fctb.WordWrap = wordWrapStat.Checked;
+            //var wordWrapStatHost = new ToolStripControlHost(wordWrapStat);
+            //toolStrip1.Items.Add(wordWrapStatHost);
         }
 
         private void fctb_SelectionChangedDelayed(object sender, EventArgs e)
@@ -104,7 +113,12 @@ namespace XPathTester
             {
                 buttonFind_Click(this, EventArgs.Empty);
                 e.SuppressKeyPress = true;  // Stops other controls on the form receiving event.
-            }           
+            }
+            else if (e.KeyCode == Keys.F10)
+            {
+                buttonPrettyPrint_Click(this, EventArgs.Empty);
+                e.SuppressKeyPress = true;
+            }
         }
 
         
@@ -190,7 +204,7 @@ namespace XPathTester
 
                     if (xmlObject != null)
                     {
-                        tabMain.SelectTab(tabXmlBody);
+                        //tabMain.SelectTab(tabXmlBody);
                         Range range = fctb.GetRange(xmlObject.IndexStart, xmlObject.IndexEnd);
 
                         fctb.Selection = range;
@@ -235,11 +249,11 @@ namespace XPathTester
                     IsInserted = false;
                 }
 
-                fctb.Language = Language.XML;
-                fctb.ClearStylesBuffer();
-                fctb.Range.ClearStyle(StyleIndex.All);
-                fctb.AddStyle(SameWordsStyle);
-                fctb.OnSyntaxHighlight(new TextChangedEventArgs(fctb.Range));
+                //fctb.Language = Language.XML;
+                //fctb.ClearStylesBuffer();
+                //fctb.Range.ClearStyle(StyleIndex.All);
+                //fctb.AddStyle(SameWordsStyle);
+                //fctb.OnSyntaxHighlight(new TextChangedEventArgs(fctb.Range));
             }
             catch (Exception ex)
             {
@@ -261,20 +275,20 @@ namespace XPathTester
             fctb.Text = formatting;
         }
 
-        private void tabControl1_DrawItem(object sender, DrawItemEventArgs e)
-        {
-            Brush setBrush = e.Index == 0 ? MainTabBrush : ResultTabBrush;
+        //private void tabControl1_DrawItem(object sender, DrawItemEventArgs e)
+        //{
+        //    Brush setBrush = e.Index == 0 ? MainTabBrush : ResultTabBrush;
 
-            e.Graphics.FillRectangle(setBrush, e.Bounds);
-            SizeF sz = e.Graphics.MeasureString(tabMain.TabPages[e.Index].Text, e.Font);
-            e.Graphics.DrawString(tabMain.TabPages[e.Index].Text, e.Font, Brushes.Black, e.Bounds.Left + (e.Bounds.Width - sz.Width) / 2, e.Bounds.Top + (e.Bounds.Height - sz.Height) / 2 + 1);
+        //    e.Graphics.FillRectangle(setBrush, e.Bounds);
+        //    SizeF sz = e.Graphics.MeasureString(tabMain.TabPages[e.Index].Text, e.Font);
+        //    e.Graphics.DrawString(tabMain.TabPages[e.Index].Text, e.Font, Brushes.Black, e.Bounds.Left + (e.Bounds.Width - sz.Width) / 2, e.Bounds.Top + (e.Bounds.Height - sz.Height) / 2 + 1);
 
-            Rectangle rect = e.Bounds;
-            rect.Offset(0, 1);
-            rect.Inflate(0, -1);
-            e.Graphics.DrawRectangle(Pens.DarkGray, rect);
-            e.DrawFocusRectangle();
-        }
+        //    Rectangle rect = e.Bounds;
+        //    rect.Offset(0, 1);
+        //    rect.Inflate(0, -1);
+        //    e.Graphics.DrawRectangle(Pens.DarkGray, rect);
+        //    e.DrawFocusRectangle();
+        //}
 
 
         void buttonFind_Click(object sender, EventArgs e)
@@ -319,8 +333,12 @@ namespace XPathTester
 
 
                 if (_strLines == null || _strLines.Count == 0)
+                {
+                    AddMessageException("No data found", false);
                     return;
-                tabMain.SelectTab(tabXPathResult);
+                }
+
+                //tabMain.SelectTab(tabXPathResult);
                 UpdateResultDataGrid(_strLines);
             }
             catch (Exception ex)
@@ -346,13 +364,14 @@ namespace XPathTester
             _prevSortedColumn = -1;
         }
 
-        void AddMessageException(string strEx)
+        void AddMessageException(string strEx, bool isException = true)
         {
+            exceptionMessage.ForeColor = isException ? Color.Red : Color.Black;
             exceptionMessage.Text = strEx;
             if (!string.IsNullOrEmpty(strEx))
             {
                 ResultTabBrush = solidRed;
-                tabMain.SelectTab(tabXPathResult);
+                //tabMain.SelectTab(tabXPathResult);
             }
             else
             {
