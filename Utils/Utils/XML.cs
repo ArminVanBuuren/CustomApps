@@ -275,7 +275,7 @@ namespace Utils
         {
             public static bool GetCharByName(string charName, out char result)
             {
-                result = char.MaxValue;
+                result = char.MinValue;
                 switch (charName)
                 {
                     case "amp": result = '&'; break;
