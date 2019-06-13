@@ -189,7 +189,7 @@ namespace Utils
                         if (isOpen > 0 && ch == ';')
                         {
                             isOpen--;
-                            if (XmlEntityNames.NAME_CHAR.TryGetValue(charName.ToString(), out var res))
+                            if (XmlEntityNames.GetCharByName(charName.ToString(), out var res))
                             {
                                 charName.Clear();
                                 if (res == '&')
@@ -237,7 +237,7 @@ namespace Utils
                 case XMLValueEncoder.Encode:
                     foreach (var ch in xmlStingValue)
                     {
-                        if (XmlEntityNames.CHAR_NAME.TryGetValue(ch, out var res))
+                        if (XmlEntityNames.GetNameByChar(ch, out var res))
                         {
                             builder.Append(res);
                             continue;
@@ -273,43 +273,57 @@ namespace Utils
 
         class XmlEntityNames
         {
-            public static readonly Dictionary<string, char> NAME_CHAR = new Dictionary<string, char>
+            public static bool GetCharByName(string charName, out char result)
             {
-                {"amp", '&'},
-                {"quot", '\"'},
-                {"lt", '<'},
-                {"gt", '>'},
-                {"apos", '\''},
-                {"circ", 'ˆ'},
-                {"tilde", '˜'},
-                {"ndash", '–'},
-                {"mdash", '—'},
-                {"lsquo", '‘'},
-                {"rsquo", '’'},
-                {"lsaquo", '‹'},
-                {"rsaquo", '›'},
-                {"#xD", '\r'},
-                {"#xA", '\n'}
-            };
+                result = char.MaxValue;
+                switch (charName)
+                {
+                    case "amp": result = '&'; break;
+                    case "quot": result = '\"'; break;
+                    case "lt": result = '<'; break;
+                    case "gt": result = '>'; break;
+                    case "apos": result = '\''; break;
+                    case "circ": result = 'ˆ'; break;
+                    case "tilde": result = '˜'; break;
+                    case "ndash": result = '–'; break;
+                    case "mdash": result = '—'; break;
+                    case "lsquo": result = '‘'; break;
+                    case "rsquo": result = '’'; break;
+                    case "lsaquo": result = '‹'; break;
+                    case "rsaquo": result = '›'; break;
+                    case "#xD": result = '\r'; break;
+                    case "#xA": result = '\n'; break;
+                    default: return false;
+                }
 
-            public static readonly Dictionary<char, string> CHAR_NAME = new Dictionary<char, string>
+                return true;
+            }
+
+            public static bool GetNameByChar(char symbol, out string result)
             {
-                {'&', "&amp;"},
-                {'\"', "&quot;"},
-                {'<', "&lt;"},
-                {'>', "&gt;"},
-                {'\'', "&apos;"},
-                {'ˆ', "&circ;"},
-                {'˜', "&tilde;"},
-                {'–', "&ndash;"},
-                {'—', "&mdash;"},
-                {'‘', "&lsquo;"},
-                {'’', "&rsquo;"},
-                {'‹', "&lsaquo;"},
-                {'›', "&rsaquo;"},
-                {'\r', "#xD"},
-                {'\n', "#xA"}
-            };
+                result = null;
+                switch (symbol)
+                {
+                    case '&': result = "&amp;"; break;
+                    case '\"': result = "&quot;"; break;
+                    case '<': result = "&lt;"; break;
+                    case '>': result = "&gt;"; break;
+                    case '\'': result = "&apos;"; break;
+                    case 'ˆ': result = "&circ;"; break;
+                    case '˜': result = "&tilde;"; break;
+                    case '–': result = "&ndash;"; break;
+                    case '—': result = "&mdash;"; break;
+                    case '‘': result = "&lsquo;"; break;
+                    case '’': result = "&rsquo;"; break;
+                    case '‹': result = "&lsaquo;"; break;
+                    case '›': result = "&rsaquo;"; break;
+                    case '\r': result = "#xD"; break;
+                    case '\n': result = "#xA"; break;
+                    default: return false;
+                }
+
+                return true;
+            }
 
             private XMLValueEncoder Type { get; }
 
@@ -326,13 +340,13 @@ namespace Utils
                 {
                     case XMLValueEncoder.Decode:
                     {
-                        if (NAME_CHAR.TryGetValue(find, out var result))
+                        if (GetCharByName(find, out var result))
                             return result.ToString();
                         break;
                     }
                     case XMLValueEncoder.Encode:
                     {
-                        if (CHAR_NAME.TryGetValue(find[0], out var result))
+                        if (GetNameByChar(find[0], out var result))
                             return result;
                         break;
                     }
@@ -507,7 +521,7 @@ namespace Utils
                     if (ch == ';')
                     {
                         isOpen--;
-                        if (XmlEntityNames.NAME_CHAR.TryGetValue(charName.ToString(), out var res))
+                        if (XmlEntityNames.GetCharByName(charName.ToString(), out var res))
                         {
                             symbolsIdents += charName.Length + 1 + (char.IsWhiteSpace(res) ? 1 : 0);
                         }

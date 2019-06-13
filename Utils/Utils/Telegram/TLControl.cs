@@ -136,7 +136,7 @@ namespace Utils.Telegram
 
             string mimT = mimeType;
             if (mimT.IsNullOrEmptyTrim())
-                mimT = GetMimeType(fileName);
+                mimT = GetMimeTypeByFile(fileName);
 
             var fileResult = await Client.UploadFile(fileName, new StreamReader(filePath));
 
@@ -541,217 +541,212 @@ namespace Utils.Telegram
                 number;
         }
 
-        static string GetMimeType(string file)
+        public static string GetMimeTypeByFile(string file)
         {
-            string extension = Path.GetExtension(file)?.Trim('.');
+            var extension = Path.GetExtension(file)?.Trim('.');
 
-            if (extension == null || extension.IsNullOrEmpty())
-                return "text/plain";
+            switch (extension)
+            {
+                case "acx": return "application/internet-property-stream";
+                case "aif":
+                case "aifc":
+                case "aiff": return "audio/x-aiff";
+                case "asf":
+                case "asr":
+                case "asx": return "video/x-ms-asf";
+                case "au":
+                case "snd": return "audio/basic";
+                case "wmv":
+                case "avi": return "video/x-msvideo";
+                case "axs": return "application/olescript";
+                case "bcpio": return "application/x-bcpio";
+                case "bin":
+                case "class":
+                case "dms":
+                case "exe":
+                case "lha":
+                case "lzh": return "application/octet-stream";
+                case "bmp": return "image/bmp";
+                case "cat": return "application/vnd.ms-pkiseccat";
+                case "cdf": return "application/x-cdf";
+                case "cer":
+                case "crt":
+                case "der": return "application/x-x509-ca-cert";
+                case "clp": return "application/x-msclip";
+                case "cmx": return "image/x-cmx";
+                case "cod": return "image/cis-cod";
+                case "cpio": return "application/x-cpio";
+                case "crd": return "application/x-mscardfile";
+                case "crl": return "application/pkix-crl";
+                case "csh": return "application/x-csh";
+                case "css": return "text/css";
+                case "dcr": 
+                case "dir": 
+                case "dxr": return "application/x-director";
+                case "dll": return "application/x-msdownload";
+                case "doc":
+                case "dot": return "application/msword";
+                case "dvi": return "application/x-dvi";
+                case "ai": 
+                case "eps":
+                case "ps": return "application/postscript";
+                case "etx": return "text/x-setext";
+                case "evy": return "application/envoy";
+                case "fif": return "application/fractals";
+                case "gif": return "image/gif";
+                case "gtar": return "application/x-gtar";
+                case "gz": return "application/x-gzip";
+                case "hdf": return "application/x-hdf";
+                case "hlp": return "application/winhlp";
+                case "hqx": return "application/mac-binhex40";
+                case "hta": return "application/hta";
+                case "htc": return "text/x-component";
+                case "htm": 
+                case "html":
+                case "stm": return "text/html";
+                case "htt": return "text/webviewhtml";
+                case "ico": return "image/x-icon";
+                case "ief": return "image/ief";
+                case "iii": return "application/x-iphone";
+                case "ins": 
+                case "isp": return "application/x-internet-signup";
+                case "jfif": return "image/pipeg";
+                case "jpe":
+                case "jpeg": 
+                case "jpg": return "image/jpeg";
+                case "png": return "image/png";
+                case "js": return "application/x-javascript";
+                case "latex": return "application/x-latex";
+                case "lsf":
+                case "lsx": return "video/x-la-asf";
+                case "m13":
+                case "m14":
+                case "mvb": return "application/x-msmediaview";
+                case "m3u": return "audio/x-mpegurl";
+                case "man": return "application/x-troff-man";
+                case "mdb": return "application/x-msaccess";
+                case "me": return "application/x-troff-me";
+                case "mht":
+                case "mhtml":
+                case "nws": return "message/rfc822";
+                case "mid": 
+                case "rmi": return "audio/mid";
+                case "mny": return "application/x-msmoney";
+                case "mov":
+                case "qt": return "video/quicktime";
+                case "movie": return "video/x-sgi-movie";
+                case "mp2": 
+                case "mpa": 
+                case "mpe":
+                case "mpeg":
+                case "mpg": 
+                case "mpv2": return "video/mpeg";
+                case "mp3":
+                case "m4a": return "audio/mpeg";
+                case "mpp": return "application/vnd.ms-project";
+                case "ms": return "application/x-troff-ms";
+                case "msg": return "application/vnd.ms-outlook";
+                case "nc": return "application/x-netcdf";
+                case "oda": return "application/oda";
+                case "p10": return "application/pkcs10";
+                case "p12":
+                case "pfx": return "application/x-pkcs12";
+                case "p7b": 
+                case "spc": return "application/x-pkcs7-certificates";
+                case "p7c": 
+                case "p7m": return "application/x-pkcs7-mime";
+                case "p7r": return "application/x-pkcs7-certreqresp";
+                case "p7s": return "application/x-pkcs7-signature";
+                case "pbm": return "image/x-portable-bitmap";
+                case "pdf": return "application/pdf";
+                case "pgm": return "image/x-portable-graymap";
+                case "pko": return "application/ynd.ms-pkipko";
+                case "pma": 
+                case "pmc": 
+                case "pml": 
+                case "pmr": 
+                case "pmw": return "application/x-perfmon";
+                case "pnm": return "image/x-portable-anymap";
+                case "pot":
+                case "pps":
+                case "ppt": return "application/vnd.ms-powerpoint";
+                case "ppm": return "image/x-portable-pixmap";
+                case "prf": return "application/pics-rules";
+                case "pub": return "application/x-mspublisher";
+                case "ra": 
+                case "ram": return "audio/x-pn-realaudio";
+                case "ras": return "image/x-cmu-raster";
+                case "rgb": return "image/x-rgb";
+                case "roff": 
+                case "t": 
+                case "tr": return "application/x-troff";
+                case "rtf": return "application/rtf";
+                case "rtx": return "text/richtext";
+                case "scd": return "application/x-msschedule";
+                case "sct": return "text/scriptlet";
+                case "setpay": return "application/set-payment-initiation";
+                case "setreg": return "application/set-registration-initiation";
+                case "sh": return "application/x-sh";
+                case "shar": return "application/x-shar";
+                case "sit": return "application/x-stuffit";
+                case "spl": return "application/futuresplash";
+                case "src": return "application/x-wais-source";
+                case "sst": return "application/vnd.ms-pkicertstore";
+                case "stl": return "application/vnd.ms-pkistl";
+                case "sv4cpio": return "application/x-sv4cpio";
+                case "sv4crc": return "application/x-sv4crc";
+                case "svg": return "image/svg+xml";
+                case "swf": return "application/x-shockwave-flash";
+                case "tar": return "application/x-tar";
+                case "tcl": return "application/x-tcl";
+                case "tex": return "application/x-tex";
+                case "texi": 
+                case "texinfo": return "application/x-texinfo";
+                case "tgz": return "application/x-compressed";
+                case "tif": 
+                case "tiff": return "image/tiff";
+                case "trm": return "application/x-msterminal";
+                case "tsv": return "text/tab-separated-values";
+                case "bas":
+                case "c":
+                case "h":
+                case "txt": return "text/plain";
+                case "uls": return "text/iuls";
+                case "ustar": return "application/x-ustar";
+                case "vcf": return "text/x-vcard";
+                case "wav": return "audio/x-wav";
+                case "wcm": 
+                case "wdb": 
+                case "wks": 
+                case "wps": return "application/vnd.ms-works";
+                case "wmf": return "application/x-msmetafile";
+                case "wri": return "application/x-mswrite";
+                case "flr":
+                case "vrml":
+                case "wrl":
+                case "wrz":
+                case "xaf":
+                case "xof": return "x-world/x-vrml";
+                case "xbm": return "image/x-xbitmap";
+                case "xla":
+                case "xlc":
+                case "xlm":
+                case "xls":
+                case "xlt":
+                case "xlw": return "application/vnd.ms-excel";
+                case "xpm": return "image/x-xpixmap";
+                case "xwd": return "image/x-xwindowdump";
+                case "z": return "application/x-compress";
+                case "xml": return "text/xml";
+                case "webp": return "image/webp";
+                case "zip":
+                case "7z":
+                case "dmg": return "application/zip";
+                case "mp4": return "video/mp4";
+            }
 
-            return EXTENSION_LIST.TryGetValue(extension, out var result) ? result : "text/plain";
+            return "text/plain";
         }
-
-        public static readonly Dictionary<string, string> EXTENSION_LIST = new Dictionary<string, string>(StringComparer.CurrentCultureIgnoreCase)
-        {
-            {"acx", "application/internet-property-stream"},
-            {"ai", "application/postscript"},
-            {"aif", "audio/x-aiff"},
-            {"aifc", "audio/x-aiff"},
-            {"aiff", "audio/x-aiff"},
-            {"asf", "video/x-ms-asf"},
-            {"asr", "video/x-ms-asf"},
-            {"asx", "video/x-ms-asf"},
-            {"au", "audio/basic"},
-            {"wmv", "video/x-msvideo"},
-            {"avi", "video/x-msvideo"},
-            {"axs", "application/olescript"},
-            {"bas", "text/plain"},
-            {"bcpio", "application/x-bcpio"},
-            {"bin", "application/octet-stream"},
-            {"bmp", "image/bmp"},
-            {"c", "text/plain"},
-            {"cat", "application/vnd.ms-pkiseccat"},
-            {"cdf", "application/x-cdf"},
-            {"cer", "application/x-x509-ca-cert"},
-            {"class", "application/octet-stream"},
-            {"clp", "application/x-msclip"},
-            {"cmx", "image/x-cmx"},
-            {"cod", "image/cis-cod"},
-            {"cpio", "application/x-cpio"},
-            {"crd", "application/x-mscardfile"},
-            {"crl", "application/pkix-crl"},
-            {"crt", "application/x-x509-ca-cert"},
-            {"csh", "application/x-csh"},
-            {"css", "text/css"},
-            {"dcr", "application/x-director"},
-            {"der", "application/x-x509-ca-cert"},
-            {"dir", "application/x-director"},
-            {"dll", "application/x-msdownload"},
-            {"dms", "application/octet-stream"},
-            {"doc", "application/msword"},
-            {"dot", "application/msword"},
-            {"dvi", "application/x-dvi"},
-            {"dxr", "application/x-director"},
-            {"eps", "application/postscript"},
-            {"etx", "text/x-setext"},
-            {"evy", "application/envoy"},
-            {"exe", "application/octet-stream"},
-            {"fif", "application/fractals"},
-            {"flr", "x-world/x-vrml"},
-            {"gif", "image/gif"},
-            {"gtar", "application/x-gtar"},
-            {"gz", "application/x-gzip"},
-            {"h", "text/plain"},
-            {"hdf", "application/x-hdf"},
-            {"hlp", "application/winhlp"},
-            {"hqx", "application/mac-binhex40"},
-            {"hta", "application/hta"},
-            {"htc", "text/x-component"},
-            {"htm", "text/html"},
-            {"html", "text/html"},
-            {"htt", "text/webviewhtml"},
-            {"ico", "image/x-icon"},
-            {"ief", "image/ief"},
-            {"iii", "application/x-iphone"},
-            {"ins", "application/x-internet-signup"},
-            {"isp", "application/x-internet-signup"},
-            {"jfif", "image/pipeg"},
-            {"jpe", "image/jpeg"},
-            {"jpeg", "image/jpeg"},
-            {"jpg", "image/jpeg"},
-            {"png", "image/png"},
-            {"js", "application/x-javascript"},
-            {"latex", "application/x-latex"},
-            {"lha", "application/octet-stream"},
-            {"lsf", "video/x-la-asf"},
-            {"lsx", "video/x-la-asf"},
-            {"lzh", "application/octet-stream"},
-            {"m13", "application/x-msmediaview"},
-            {"m14", "application/x-msmediaview"},
-            {"m3u", "audio/x-mpegurl"},
-            {"man", "application/x-troff-man"},
-            {"mdb", "application/x-msaccess"},
-            {"me", "application/x-troff-me"},
-            {"mht", "message/rfc822"},
-            {"mhtml", "message/rfc822"},
-            {"mid", "audio/mid"},
-            {"mny", "application/x-msmoney"},
-            {"mov", "video/quicktime"},
-            {"movie", "video/x-sgi-movie"},
-            {"mp2", "video/mpeg"},
-            {"mp3", "audio/mpeg"},
-            {"m4a", "audio/mpeg"},
-            {"mpa", "video/mpeg"},
-            {"mpe", "video/mpeg"},
-            {"mpeg", "video/mpeg"},
-            {"mpg", "video/mpeg"},
-            {"mpp", "application/vnd.ms-project"},
-            {"mpv2", "video/mpeg"},
-            {"ms", "application/x-troff-ms"},
-            {"msg", "application/vnd.ms-outlook"},
-            {"mvb", "application/x-msmediaview"},
-            {"nc", "application/x-netcdf"},
-            {"nws", "message/rfc822"},
-            {"oda", "application/oda"},
-            {"p10", "application/pkcs10"},
-            {"p12", "application/x-pkcs12"},
-            {"p7b", "application/x-pkcs7-certificates"},
-            {"p7c", "application/x-pkcs7-mime"},
-            {"p7m", "application/x-pkcs7-mime"},
-            {"p7r", "application/x-pkcs7-certreqresp"},
-            {"p7s", "application/x-pkcs7-signature"},
-            {"pbm", "image/x-portable-bitmap"},
-            {"pdf", "application/pdf"},
-            {"pfx", "application/x-pkcs12"},
-            {"pgm", "image/x-portable-graymap"},
-            {"pko", "application/ynd.ms-pkipko"},
-            {"pma", "application/x-perfmon"},
-            {"pmc", "application/x-perfmon"},
-            {"pml", "application/x-perfmon"},
-            {"pmr", "application/x-perfmon"},
-            {"pmw", "application/x-perfmon"},
-            {"pnm", "image/x-portable-anymap"},
-            {"pot", "application/vnd.ms-powerpoint"},
-            {"ppm", "image/x-portable-pixmap"},
-            {"pps", "application/vnd.ms-powerpoint"},
-            {"ppt", "application/vnd.ms-powerpoint"},
-            {"prf", "application/pics-rules"},
-            {"ps", "application/postscript"},
-            {"pub", "application/x-mspublisher"},
-            {"qt", "video/quicktime"},
-            {"ra", "audio/x-pn-realaudio"},
-            {"ram", "audio/x-pn-realaudio"},
-            {"ras", "image/x-cmu-raster"},
-            {"rgb", "image/x-rgb"},
-            {"rmi", "audio/mid"},
-            {"roff", "application/x-troff"},
-            {"rtf", "application/rtf"},
-            {"rtx", "text/richtext"},
-            {"scd", "application/x-msschedule"},
-            {"sct", "text/scriptlet"},
-            {"setpay", "application/set-payment-initiation"},
-            {"setreg", "application/set-registration-initiation"},
-            {"sh", "application/x-sh"},
-            {"shar", "application/x-shar"},
-            {"sit", "application/x-stuffit"},
-            {"snd", "audio/basic"},
-            {"spc", "application/x-pkcs7-certificates"},
-            {"spl", "application/futuresplash"},
-            {"src", "application/x-wais-source"},
-            {"sst", "application/vnd.ms-pkicertstore"},
-            {"stl", "application/vnd.ms-pkistl"},
-            {"stm", "text/html"},
-            {"sv4cpio", "application/x-sv4cpio"},
-            {"sv4crc", "application/x-sv4crc"},
-            {"svg", "image/svg+xml"},
-            {"swf", "application/x-shockwave-flash"},
-            {"t", "application/x-troff"},
-            {"tar", "application/x-tar"},
-            {"tcl", "application/x-tcl"},
-            {"tex", "application/x-tex"},
-            {"texi", "application/x-texinfo"},
-            {"texinfo", "application/x-texinfo"},
-            {"tgz", "application/x-compressed"},
-            {"tif", "image/tiff"},
-            {"tiff", "image/tiff"},
-            {"tr", "application/x-troff"},
-            {"trm", "application/x-msterminal"},
-            {"tsv", "text/tab-separated-values"},
-            {"txt", "text/plain"},
-            {"uls", "text/iuls"},
-            {"ustar", "application/x-ustar"},
-            {"vcf", "text/x-vcard"},
-            {"vrml", "x-world/x-vrml"},
-            {"wav", "audio/x-wav"},
-            {"wcm", "application/vnd.ms-works"},
-            {"wdb", "application/vnd.ms-works"},
-            {"wks", "application/vnd.ms-works"},
-            {"wmf", "application/x-msmetafile"},
-            {"wps", "application/vnd.ms-works"},
-            {"wri", "application/x-mswrite"},
-            {"wrl", "x-world/x-vrml"},
-            {"wrz", "x-world/x-vrml"},
-            {"xaf", "x-world/x-vrml"},
-            {"xbm", "image/x-xbitmap"},
-            {"xla", "application/vnd.ms-excel"},
-            {"xlc", "application/vnd.ms-excel"},
-            {"xlm", "application/vnd.ms-excel"},
-            {"xls", "application/vnd.ms-excel"},
-            {"xlt", "application/vnd.ms-excel"},
-            {"xlw", "application/vnd.ms-excel"},
-            {"xof", "x-world/x-vrml"},
-            {"xpm", "image/x-xpixmap"},
-            {"xwd", "image/x-xwindowdump"},
-            {"z", "application/x-compress"},
-            {"xml", "text/xml"},
-            {"webp", "image/webp"},
-            {"zip", "application/zip"},
-            {"7z", "application/zip"},
-            {"dmg", "application/zip"},
-            {"mp4", "video/mp4"}
-        };
-
-
 
         public void Dispose()
         {
