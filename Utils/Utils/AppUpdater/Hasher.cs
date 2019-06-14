@@ -9,6 +9,9 @@ namespace Utils.AppUpdater
     /// </summary>
     public enum HashType
     {
+        /// <summary>
+        /// Возвращает хэш для указанной строки. Это необратимый алгоритм, получить исходную информацию невозможно.
+        /// </summary>
         MD5,
         SHA1,
         SHA512
