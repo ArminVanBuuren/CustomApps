@@ -108,7 +108,6 @@ namespace XPathTester
             this.fctb.CharWidth = 8;
             this.fctb.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctb.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.fctb.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.fctb.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.fctb.IsReplaceMode = false;
             this.fctb.Location = new System.Drawing.Point(0, 0);
@@ -236,9 +235,9 @@ namespace XPathTester
             this.Controls.Add(this.label1);
             this.Controls.Add(this.XPathText);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(257, 135);
+            this.MinimumSize = new System.Drawing.Size(300, 150);
             this.Name = "MainWindow";
-            this.Text = "XPath Tester [F10]";
+            this.Text = "XPath Tester";
             ((System.ComponentModel.ISupportInitialize)(this.fctb)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.xpathResultDataGrid)).EndInit();
             this.statusStrip1.ResumeLayout(false);
