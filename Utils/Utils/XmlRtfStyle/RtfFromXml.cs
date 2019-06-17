@@ -119,21 +119,36 @@ namespace Utils.XmlRtfStyle
             return source.ToString();
         }
 
-        static void ProcessXmlInnerText(XmlNode node, StringBuilder source, int nested)
+        static bool ProcessXmlInnerText(XmlNode node, StringBuilder source, int nested)
         {
             var whiteSpaces = new string(' ', nested);
 
             if (node.Attributes == null)
             {
-                source.Append(Environment.NewLine);
                 switch (node.Name)
                 {
-                    case "#text": source.Append(AddSpacesByLine(node.OuterXml, whiteSpaces)); break;
+                    case "#text":
+                        var trimStr = node.OuterXml.Trim('\r', '\n');
+                        var strLines = trimStr.Split('\r', '\n');
+
+                        if (strLines.Length == 1)
+                        {
+                            source.Append(trimStr);
+                            return false;
+                        }
+                        else
+                        {
+                            source.Append(AddSpacesByLine(strLines, whiteSpaces));
+                            return true;
+                        }
+                        
                     case "#comment":
                     case "#cdata-section":
+                        source.Append(Environment.NewLine);
                         source.Append(whiteSpaces);
                         source.Append(node.OuterXml.Trim()); break;
                     default:
+                        source.Append(Environment.NewLine);
                         source.Append(whiteSpaces);
                         source.Append(node.InnerText.TrimEnd()); break;
                 }
@@ -168,12 +183,13 @@ namespace Utils.XmlRtfStyle
                     source.Append('>');
 
                     nested += 3;
+                    bool addNewLine = true;
                     foreach (XmlNode node2 in node.ChildNodes)
                     {
-                        ProcessXmlInnerText(node2, source, nested);
+                        addNewLine = ProcessXmlInnerText(node2, source, nested);
                     }
 
-                    if (((node.FirstChild != null) && (node.ChildNodes.Count == 1)) && string.Equals(node.FirstChild.Name, "#text"))
+                    if (node.ChildNodes.Count == 1 && !addNewLine)
                     {
                         source.Append("</");
                         source.Append(node.Name);
@@ -189,22 +205,22 @@ namespace Utils.XmlRtfStyle
                     }
                 }
             }
+
+            return true;
         }
 
-        static string AddSpacesByLine(string source, string spaces)
+        static string AddSpacesByLine(string[] strLines, string spaces)
         {
-            int lines = 0;
-            StringBuilder builder = new StringBuilder();
-            foreach (var line in source.Split('\r', '\n'))
+            var builder = new StringBuilder();
+
+            foreach (var line in strLines)
             {
-                if (!string.IsNullOrWhiteSpace(line))
-                {
-                    if (lines > 0)
-                        builder.Append(Environment.NewLine);
-                    builder.Append(spaces);
-                    builder.Append(line.Trim());
-                    lines++;
-                }
+                if (string.IsNullOrWhiteSpace(line))
+                    continue;
+
+                builder.Append(Environment.NewLine);
+                builder.Append(spaces);
+                builder.Append(line.Trim());
             }
 
             return builder.ToString();
