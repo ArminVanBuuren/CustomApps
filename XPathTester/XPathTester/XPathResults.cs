@@ -20,14 +20,32 @@ namespace XPathTester
                 return null;
 
             var result = new XPathCollection();
-
             result.AddRange(args);
-            result.CalcColumnsName();
 
             return result;
         }
 
-        public void CalcColumnsName()
+        public new void Add(XPathResult item)
+        {
+            if (item.ID.ToString().Length > MaxWidthId.Length)
+                MaxWidthId = item.ID.ToString();
+
+            if (item.NodeType.Length > MaxWidthNodeType.Length)
+                MaxWidthNodeType = item.NodeType;
+
+            if (item.NodeName.Length > MaxWidthNodeName.Length)
+                MaxWidthNodeName = item.NodeName;
+
+            base.Add(item);
+        }
+
+        public new void AddRange(IEnumerable<XPathResult> items)
+        {
+            base.AddRange(items);
+            CalcColumnsName();
+        }
+
+        void CalcColumnsName()
         {
             foreach (var xpathResult in this)
             {

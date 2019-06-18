@@ -170,11 +170,11 @@ namespace XPathTester
                         OrderedItems = from p in _strLines.AsEnumerable() orderby p.Value select p;
                     _prevSortedColumn = -1;
                 }
+
                 if (OrderedItems != null)
                 {
-                    XPathCollection ordered = new XPathCollection();
+                    var ordered = new XPathCollection();
                     ordered.AddRange(OrderedItems);
-                    ordered.CalcColumnsName();
                     UpdateResultDataGrid(ordered);
                 }
             }
