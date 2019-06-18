@@ -108,6 +108,7 @@ namespace XPathTester
             this.fctb.CharWidth = 8;
             this.fctb.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctb.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.fctb.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.fctb.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.fctb.IsReplaceMode = false;
             this.fctb.Location = new System.Drawing.Point(0, 0);
@@ -163,7 +164,7 @@ namespace XPathTester
             this.buttonPrettyPrint.Name = "buttonPrettyPrint";
             this.buttonPrettyPrint.Size = new System.Drawing.Size(93, 21);
             this.buttonPrettyPrint.TabIndex = 7;
-            this.buttonPrettyPrint.Text = "XML Print [F10]";
+            this.buttonPrettyPrint.Text = "XML Print [F6]";
             this.buttonPrettyPrint.UseVisualStyleBackColor = true;
             this.buttonPrettyPrint.Click += new System.EventHandler(this.buttonPrettyPrint_Click);
             // 

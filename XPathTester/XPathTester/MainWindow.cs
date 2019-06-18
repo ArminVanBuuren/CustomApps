@@ -61,8 +61,10 @@ namespace XPathTester
         {
             InitializeComponent();
             fctb.TextChanged += XmlBodyRichTextBoxOnTextChanged;
+            xpathResultDataGrid.KeyDown += XpathResultDataGrid_KeyDown;
             xpathResultDataGrid.CellMouseDoubleClick += XpathResultDataGrid_CellMouseDoubleClick;
             xpathResultDataGrid.ColumnHeaderMouseClick += XpathResultDataGrid_ColumnHeaderMouseClick;
+            
 
             //tabMain.DrawMode = TabDrawMode.OwnerDrawFixed;
             //tabMain.DrawItem += tabControl1_DrawItem;
@@ -87,6 +89,7 @@ namespace XPathTester
             //toolStrip1.Items.Add(wordWrapStatHost);
         }
 
+
         private void fctb_SelectionChangedDelayed(object sender, EventArgs e)
         {
             fctb.VisibleRange.ClearStyle(SameWordsStyle);
@@ -106,6 +109,28 @@ namespace XPathTester
                     r.SetStyle(SameWordsStyle);
         }
 
+        private void XpathResultDataGrid_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (!(sender is DataGridView data) || data.SelectedCells.Count == 0)
+                    return;
+
+                XpathResultDataGrid_CellMouseDoubleClick(sender, null);
+                // Останавливает все последующие эвенты, нужен true для того чтобы выделенная строка не переносилось на следующую строку
+                e.SuppressKeyPress = true;
+
+                //if (data.SelectedCells.Count > 0)
+                //{
+                //    e.SuppressKeyPress = true;
+                //    int iColumn = data.CurrentCell.ColumnIndex;
+                //    int iRow = data.CurrentCell.RowIndex;
+                //    if (iRow >= 0)
+                //        data.CurrentCell = data[iColumn, iRow];
+                //}
+            }
+        }
+
         private void XPathWindow_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.F5)
@@ -113,7 +138,7 @@ namespace XPathTester
                 buttonFind_Click(this, EventArgs.Empty);
                 e.SuppressKeyPress = true;  // Stops other controls on the form receiving event.
             }
-            else if (e.KeyCode == Keys.F10)
+            else if (e.KeyCode == Keys.F6)
             {
                 buttonPrettyPrint_Click(this, EventArgs.Empty);
                 e.SuppressKeyPress = true;
@@ -197,6 +222,7 @@ namespace XPathTester
                 try
                 {
                     fctb.TextChanged -= XmlBodyRichTextBoxOnTextChanged;
+                    xpathResultDataGrid.KeyDown -= XpathResultDataGrid_KeyDown;
                     xpathResultDataGrid.CellMouseDoubleClick -= XpathResultDataGrid_CellMouseDoubleClick;
                     xpathResultDataGrid.ColumnHeaderMouseClick -= XpathResultDataGrid_ColumnHeaderMouseClick;
 
@@ -219,6 +245,7 @@ namespace XPathTester
                 finally
                 {
                     fctb.TextChanged += XmlBodyRichTextBoxOnTextChanged;
+                    xpathResultDataGrid.KeyDown += XpathResultDataGrid_KeyDown;
                     xpathResultDataGrid.CellMouseDoubleClick += XpathResultDataGrid_CellMouseDoubleClick;
                     xpathResultDataGrid.ColumnHeaderMouseClick += XpathResultDataGrid_ColumnHeaderMouseClick;
                 }
