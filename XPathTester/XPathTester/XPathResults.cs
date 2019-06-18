@@ -60,8 +60,10 @@ namespace XPathTester
             }
         }
 
-        public void ChangeNodeType()
+        public void ModifyValueToNodeName()
         {
+            MaxWidthNodeType = "NodeType";
+
             foreach (var xpathResult in this)
             {
                 xpathResult.Value = xpathResult.NodeName;

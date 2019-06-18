@@ -341,7 +341,7 @@ namespace XPathTester
                 string getNodeNamesValue = Regex.Replace(XPathText.Text, @"^\s*(name|local-name)\s*\((.+?)\)$", "$2", RegexOptions.IgnoreCase);
                 _strLines = (XPathCollection)XPATH.Execute(XmlBody.CreateNavigator(), getNodeNamesValue);
                 if (XPathText.Text.Length > getNodeNamesValue.Length)
-                    _strLines.ChangeNodeType();
+                    _strLines.ModifyValueToNodeName();
 
 
                 if (_strLines == null || _strLines.Count == 0)
@@ -363,9 +363,9 @@ namespace XPathTester
         {
             xpathResultDataGrid.DataSource = null;
             xpathResultDataGrid.DataSource = items;
-            xpathResultDataGrid.Columns[0].Width = TextRenderer.MeasureText(items.MaxWidthId, xpathResultDataGrid.Columns[0].DefaultCellStyle.Font).Width + 10;
-            xpathResultDataGrid.Columns[1].Width = TextRenderer.MeasureText(items.MaxWidthNodeType, xpathResultDataGrid.Columns[1].DefaultCellStyle.Font).Width + 10;
-            xpathResultDataGrid.Columns[2].Width = TextRenderer.MeasureText(items.MaxWidthNodeName, xpathResultDataGrid.Columns[2].DefaultCellStyle.Font).Width + 10;
+            xpathResultDataGrid.Columns[0].Width = TextRenderer.MeasureText(items.MaxWidthId, xpathResultDataGrid.Columns[0].DefaultCellStyle.Font).Width;
+            xpathResultDataGrid.Columns[1].Width = TextRenderer.MeasureText(items.MaxWidthNodeType, xpathResultDataGrid.Columns[1].DefaultCellStyle.Font).Width;
+            xpathResultDataGrid.Columns[2].Width = TextRenderer.MeasureText(items.MaxWidthNodeName, xpathResultDataGrid.Columns[2].DefaultCellStyle.Font).Width;
             xpathResultDataGrid.Columns[4].Visible = false;
         }
 
