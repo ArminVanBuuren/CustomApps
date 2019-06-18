@@ -64,13 +64,13 @@ namespace XPathTester
         {
             foreach (var xpathResult in this)
             {
+                xpathResult.Value = xpathResult.NodeName;
+
                 xpathResult.NodeName = "Empty";
 
                 xpathResult.NodeType = xpathResult.NodeName.GetType().Name;
                 if (xpathResult.NodeType.Length > MaxWidthNodeType.Length)
                     MaxWidthNodeType = xpathResult.NodeType;
-
-                xpathResult.Value = xpathResult.NodeName;
             }
         }
 
