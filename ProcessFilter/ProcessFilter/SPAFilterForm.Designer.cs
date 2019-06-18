@@ -65,7 +65,7 @@
             this.CommnadsButtonOpen = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.CommandsTextBox = new System.Windows.Forms.TextBox();
-            this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.progressBar = new CustomProgressBar();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.BPCount = new System.Windows.Forms.ToolStripStatusLabel();
@@ -73,6 +73,7 @@
             this.OperationsCount = new System.Windows.Forms.ToolStripStatusLabel();
             this.ScenariosCount = new System.Windows.Forms.ToolStripStatusLabel();
             this.CommandsCount = new System.Windows.Forms.ToolStripStatusLabel();
+            this.buttonPrintXML = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridProcessesResults)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -506,6 +507,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.buttonPrintXML);
             this.groupBox1.Controls.Add(this.OperationComboBox);
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.label6);
@@ -564,6 +566,17 @@
             this.CommandsCount.Size = new System.Drawing.Size(72, 17);
             this.CommandsCount.Text = "Commands:";
             // 
+            // buttonPrintXML
+            // 
+            this.buttonPrintXML.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonPrintXML.Location = new System.Drawing.Point(606, 58);
+            this.buttonPrintXML.Name = "buttonPrintXML";
+            this.buttonPrintXML.Size = new System.Drawing.Size(89, 23);
+            this.buttonPrintXML.TabIndex = 14;
+            this.buttonPrintXML.Text = "Print XML [F6]";
+            this.buttonPrintXML.UseVisualStyleBackColor = true;
+            this.buttonPrintXML.Click += new System.EventHandler(this.buttonPrintXML_Click);
+            // 
             // SPAFilterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -585,7 +598,9 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.OperationTextBox);
             this.Controls.Add(this.ProcessesTextBox);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            
+            
+            this.Icon = (System.Drawing.Icon)SPAFilter.Properties.Resources.icons8;
             this.MinimumSize = new System.Drawing.Size(823, 400);
             this.Name = "SPAFilterForm";
             this.Text = "SPA Filter";
@@ -638,7 +653,7 @@
         private System.Windows.Forms.Button CommnadsButtonOpen;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox CommandsTextBox;
-        private System.Windows.Forms.ProgressBar progressBar;
+        private CustomProgressBar progressBar;
         private System.Windows.Forms.Button ButtonGenerateSC;
         private System.Windows.Forms.TabPage GenerateSC;
         private System.Windows.Forms.Button OpenSevExelButton;
@@ -654,6 +669,7 @@
         private System.Windows.Forms.ToolStripStatusLabel ScenariosCount;
         private System.Windows.Forms.ToolStripStatusLabel CommandsCount;
         private System.Windows.Forms.ToolStripStatusLabel NEElementsCount;
+        private System.Windows.Forms.Button buttonPrintXML;
     }
 }
 

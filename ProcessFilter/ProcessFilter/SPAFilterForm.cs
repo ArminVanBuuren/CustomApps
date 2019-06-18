@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using OfficeOpenXml;
@@ -18,20 +19,61 @@ using Utils.WinForm.DataGridViewHelper;
 using Utils.WinForm.Notepad;
 using Utils.WinForm.CustomProgressBar;
 using static Utils.ASSEMBLY;
+using System.Threading.Tasks;
+using Utils.XmlRtfStyle;
 
 namespace SPAFilter
 {
     [Serializable]
+    public class CustomProgressBar : ProgressBar, IProgressBar
+    {
+
+    }
+    
+    [Serializable]
     public partial class SPAFilterForm : Form, ISerializable
     {
-        private string lastPath = string.Empty;
+        private bool _isInProgress = false;
+        private string _lastPath = string.Empty;
+        private readonly object sync = new object();
+        private readonly object sync2 = new object();
+
+
+        private bool IsInProgress
+        {
+            get => _isInProgress;
+            set
+            {
+                lock (sync2)
+                {
+                    _isInProgress = value;
+                    buttonFilter.Enabled = !_isInProgress;
+                    buttonPrintXML.Enabled = !_isInProgress;
+                    ProcessesTextBox.Enabled = !_isInProgress;
+                    OperationTextBox.Enabled = !_isInProgress;
+                    ScenariosTextBox.Enabled = !_isInProgress;
+                    CommandsTextBox.Enabled = !_isInProgress;
+                    ProcessesButtonOpen.Enabled = !_isInProgress;
+                    OperationButtonOpen.Enabled = !_isInProgress;
+                    ScenariosButtonOpen.Enabled = !_isInProgress;
+                    CommnadsButtonOpen.Enabled = !_isInProgress;
+
+                    tabControl1.Enabled = !_isInProgress; // Дисейблится весь TabControl, чтобы юзерок не мог менять файлы.
+                    //GenerateSC.Enabled = !_isInProgress;
+
+                    ProcessesComboBox.Enabled = !_isInProgress;
+                    NetSettComboBox.Enabled = !_isInProgress;
+                    OperationComboBox.Enabled = !_isInProgress;
+                }
+            }
+        }
+
         public static string SerializationDataPath => $"{ApplicationFilePath}.bin";
         private XmlNotepad notepad;
         public CollectionBusinessProcess Processes { get; private set; }
         public CollectionNetworkElements NetElements { get; private set; }
         public CollectionScenarios Scenarios { get; private set; }
         public CollectionCommands Commands { get; private set; }
-        private object sync = new object();
         private bool IsInitialization { get; } = true;
 
         public SPAFilterForm()
@@ -128,14 +170,111 @@ namespace SPAFilter
 
         private void ProcessFilterForm_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.F5)
+            switch (e.KeyCode)
             {
-                buttonFilterClick(this, EventArgs.Empty);
+                case Keys.F5:
+                    buttonFilterClick(this, EventArgs.Empty);
+                    break;
+                case Keys.F6:
+                    buttonPrintXML_Click(this, EventArgs.Empty);
+                    break;
             }
         }
 
-        private void buttonFilterClick(object sender, EventArgs e)
+        private async void buttonPrintXML_Click(object sender, EventArgs e)
         {
+            try
+            {
+                if (IsInProgress)
+                    return;
+
+                int filesNumber = (_filteredProcessCollection?.Count ?? 0) + 
+                                  (_filteredNetElemCollection?.AllOperations?.Count ?? 0) + 
+                                  (_filteredScenarioCollection?.Count ?? 0) +
+                                  (_filteredCMMCollection?.Count ?? 0);
+
+                if (filesNumber <= 0)
+                {
+                    MessageBox.Show(@"You must filter files first.");
+                    return;
+                }
+
+
+                IsInProgress = true;
+                StringBuilder exceptionsMessage = new StringBuilder();
+
+                using (var progrAsync = new ProgressCalculaterAsync(progressBar, filesNumber))
+                {
+                    await Task.Factory.StartNew(() =>
+                    {
+                        GetFiles(_filteredProcessCollection, exceptionsMessage, progrAsync);
+                        if (_filteredNetElemCollection != null)
+                            GetFiles(_filteredNetElemCollection.AllOperations, exceptionsMessage, progrAsync);
+                        GetFiles(_filteredScenarioCollection, exceptionsMessage, progrAsync);
+                        GetFiles(_filteredCMMCollection, exceptionsMessage, progrAsync);
+                    });
+                }
+
+                if (exceptionsMessage.Length > 0)
+                {
+                    MessageBox.Show($"Catched some exceptions:{exceptionsMessage.ToString(0, exceptionsMessage.Length > 200 ? 200 : exceptionsMessage.Length)}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+            finally
+            {
+                IsInProgress = false;
+            }
+        }
+
+        void GetFiles(IEnumerable<ObjectTemplate> fileObj, StringBuilder stringException, ProgressCalculaterAsync progressCalc)
+        {
+            if (fileObj == null || !fileObj.Any())
+                return;
+
+            foreach (var file in fileObj)
+            {
+                FormattingXML(file.FilePath, stringException);
+                progressCalc++;
+            }
+        }
+
+        void FormattingXML(string path, StringBuilder stringException)
+        {
+            try
+            {
+                string fileString = IO.SafeReadFile(path);
+                if (XML.IsXml(fileString, out XmlDocument document))
+                {
+                    string formatting = RtfFromXml.GetXmlString(document);
+
+                    int attempts = 0;
+                    while (!IO.IsFileReady(path))
+                    {
+                        System.Threading.Thread.Sleep(500);
+                        attempts++;
+                        if (attempts > 3)
+                            return;
+                    }
+
+                    IO.WriteFile(path, formatting);
+                }
+            }
+            catch (Exception e)
+            {
+                stringException.AppendLine($"Message=[{e.Message}] File=[{path}]");
+            }
+        }
+
+       
+        private async void buttonFilterClick(object sender, EventArgs e)
+        {
+            if (IsInProgress)
+                return;
+
             if (Processes == null || NetElements == null)
             {
                 dataGridProcessesResults.DataSource = null;
@@ -145,6 +284,7 @@ namespace SPAFilter
 
             try
             {
+                IsInProgress = true;
                 dataGridProcessesResults.DataSource = null;
                 dataGridOperationsResult.DataSource = null;
                 dataGridScenariosResult.DataSource = null;
@@ -154,13 +294,18 @@ namespace SPAFilter
                 dataGridScenariosResult.Refresh();
                 dataGridCommandsResult.Refresh();
 
-                ProgressBarCompetition<bool> progress = new ProgressBarCompetition<bool>(progressBar, 10);
-                progress.StartProgress(DataFilter);
-                
+                using (var progrAsync = new ProgressCalculaterAsync(progressBar, 10))
+                {
+                    await Task.Factory.StartNew(() => DataFilter(progrAsync));
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                IsInProgress = false;
             }
         }
 
@@ -171,7 +316,7 @@ namespace SPAFilter
         CollectionCommands _filteredCMMCollection = new CollectionCommands();
         
 
-        bool DataFilter(ProgressBarCompetition<bool> progressComp)
+        bool DataFilter(ProgressCalculaterAsync progressCalc)
         {
             try
             {
@@ -186,7 +331,7 @@ namespace SPAFilter
                                                          netElemFilter = NetSettComboBox.Text;
                                                          operFilter = OperationComboBox.Text;
                                                      }));
-                progressComp.ProgressValue = 1;
+                progressCalc++;
 
                 if (!processFilter.IsNullOrEmpty())
                 {
@@ -205,7 +350,7 @@ namespace SPAFilter
                 }
 
 
-                progressComp.ProgressValue = 2;
+                progressCalc++;
 
                 if (!netElemFilter.IsNullOrEmpty())
                 {
@@ -257,7 +402,7 @@ namespace SPAFilter
                 }
 
 
-                progressComp.ProgressValue = 3;
+                progressCalc++;
 
                 int endOfBpCollection = _filteredProcessCollection.Count;
                 for (int i = 0; i < endOfBpCollection; i++)
@@ -285,7 +430,7 @@ namespace SPAFilter
                 }
 
 
-                progressComp.ProgressValue = 4;
+                progressCalc++;
 
                 Action<NetworkElementOpartion> getScenario = null;
                 if (Scenarios != null)
@@ -306,7 +451,7 @@ namespace SPAFilter
                 }
 
 
-                progressComp.ProgressValue = 5;
+                progressCalc++;
 
                 foreach (var netElem in _filteredNetElemCollection)
                 {
@@ -327,7 +472,7 @@ namespace SPAFilter
                     }
                 }
 
-                progressComp.ProgressValue = 6;
+                progressCalc++;
 
                 if (Commands != null && _filteredScenarioCollection.Count > 0)
                 {
@@ -342,7 +487,7 @@ namespace SPAFilter
                 }
 
 
-                progressComp.ProgressValue = 7;
+                progressCalc++;
 
                 _filteredSubScenarios = _filteredSubScenarios.Distinct(new ItemEqualityComparer()).ToList();
                 _filteredScenarioCollection.AddRange(_filteredSubScenarios);
@@ -350,7 +495,8 @@ namespace SPAFilter
 
                 progressBar.Invoke(new MethodInvoker(delegate
                                                      {
-                                                         progressComp.ProgressValue = 8;
+                                                         progressCalc++;
+
                                                          dataGridProcessesResults.AssignListToDataGrid(_filteredProcessCollection, new Padding(0, 0, 15, 0));
                                                          ProcessStatRefresh(_filteredProcessCollection);
 
@@ -358,13 +504,15 @@ namespace SPAFilter
                                                          NEStatRefresh(_filteredNetElemCollection);
                                                          OperationsStatRefresh(_filteredNetElemCollection);
 
-                                                         progressComp.ProgressValue = 9;
+                                                         progressCalc++;
+
                                                          dataGridScenariosResult.AssignListToDataGrid(_filteredScenarioCollection, new Padding(0, 0, 15, 0));
                                                          ScenariosStatRefresh(_filteredScenarioCollection);
 
                                                          dataGridCommandsResult.AssignListToDataGrid(_filteredCMMCollection, new Padding(0, 0, 15, 0));
                                                          CommandsStatRefresh(_filteredCMMCollection);
-                                                         progressComp.ProgressValue = 10;
+
+                                                         progressCalc++;
                                                      }));
                 return true;
             }
@@ -432,6 +580,7 @@ namespace SPAFilter
             {
                 bool altIsDown = (Control.ModifierKeys & Keys.Alt) != 0;
                 bool f4IsDown = KeyIsDown(Keys.F4);
+
                 if (altIsDown && f4IsDown)
                 {
                     Close();
@@ -475,11 +624,13 @@ namespace SPAFilter
             return (GetAsyncKeyState(key) < 0);
         }
 
-        bool GetFilePathCurrentRow(DataGridView grid, out string filePath)
+        static bool GetFilePathCurrentRow(DataGridView grid, out string filePath)
         {
             filePath = null;
             if (grid.SelectedRows.Count > 0)
+            {
                 filePath = grid.SelectedRows[0].Cells[grid.ColumnCount - 1].Value.ToString();
+            }
             else
             {
                 MessageBox.Show(@"Please select a row!");
@@ -813,15 +964,15 @@ namespace SPAFilter
         void UpdateLastPath(string path)
         {
             if (!path.IsNullOrEmpty())
-                lastPath = path;
+                _lastPath = path;
         }
 
         string OpenFolder()
         {
             using (var fbd = new FolderBrowserDialog())
             {
-                if (!lastPath.IsNullOrEmpty())
-                    fbd.SelectedPath = lastPath;
+                if (!_lastPath.IsNullOrEmpty())
+                    fbd.SelectedPath = _lastPath;
                 DialogResult result = fbd.ShowDialog();
 
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
