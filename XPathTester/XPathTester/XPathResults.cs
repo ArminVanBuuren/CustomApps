@@ -1,69 +1,65 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Xml;
+using Utils;
 
 namespace XPathTester
 {
-    class XPathResults
+    class XPathCollection : List<XPathResult>
     {
-        public int ID { get; set; }
-        public string NodeType { get; set; }
-        public string NodeName { get; set; }
-        public string Value { get; set; }
-        public XmlNode Node { get; set; }
-    }
-    class XpathCollection : List<XPathResults>
-    {
+        public XPathCollection()
+        {
+            MaxWidthId = "ID";
+            MaxWidthNodeType = "NodeType";
+            MaxWidthNodeName = "NodeName";
+        }
 
-        public string MaxWidthId
+        public static explicit operator XPathCollection(XPathResultCollection args)
         {
-            get
+            if (args == null)
+                return null;
+
+            var result = new XPathCollection();
+
+            result.AddRange(args);
+            result.CalcColumnsName();
+
+            return result;
+        }
+
+        public void CalcColumnsName()
+        {
+            foreach (var xpathResult in this)
             {
-                string word = "ID";
-                int maxLength = word.Length;
-                foreach (XPathResults res in this)
-                {
-                    if (res.ID.ToString().Length > maxLength)
-                    {
-                        word = res.ID.ToString();
-                        maxLength = word.Length;
-                    }
-                }
-                return word;
+                if (xpathResult.ID.ToString().Length > MaxWidthId.Length)
+                    MaxWidthId = xpathResult.ID.ToString();
+
+                if (xpathResult.NodeType.Length > MaxWidthNodeType.Length)
+                    MaxWidthNodeType = xpathResult.NodeType;
+
+                if (xpathResult.NodeName.Length > MaxWidthNodeName.Length)
+                    MaxWidthNodeName = xpathResult.NodeName;
             }
         }
-        public string MaxWidthNodeType
+
+        public void ChangeNodeType()
         {
-            get
+            foreach (var xpathResult in this)
             {
-                string word = "NodeType";
-                int maxLength = word.Length;
-                foreach (XPathResults res in this)
-                {
-                    if (res.NodeType.Length > maxLength)
-                    {
-                        word = res.NodeType;
-                        maxLength = word.Length;
-                    }
-                }
-                return word;
+                xpathResult.NodeName = "Empty";
+
+                xpathResult.NodeType = xpathResult.NodeName.GetType().Name;
+                if (xpathResult.NodeType.Length > MaxWidthNodeType.Length)
+                    MaxWidthNodeType = xpathResult.NodeType;
+
+                xpathResult.Value = xpathResult.NodeName;
             }
         }
-        public string MaxWidthNodeName
-        {
-            get
-            {
-                string word = "NodeName";
-                int maxLength = word.Length;
-                foreach (XPathResults res in this)
-                {
-                    if (res.NodeName.Length > maxLength)
-                    {
-                        word = res.NodeName;
-                        maxLength = word.Length;
-                    }
-                }
-                return word;
-            }
-        }
+
+        public string MaxWidthId { get; private set; }
+
+        public string MaxWidthNodeType { get; private set; }
+
+        public string MaxWidthNodeName { get; private set; }
     }
 }

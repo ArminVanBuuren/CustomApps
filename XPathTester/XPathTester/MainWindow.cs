@@ -23,7 +23,7 @@ namespace XPathTester
 
         bool _xmlBodyChanged = false;
         
-        XpathCollection _strLines;
+        XPathCollection _strLines;
         int _prevSortedColumn = -1;
 
         private Brush _resultTabBrush = new SolidBrush(Color.Transparent);
@@ -145,7 +145,7 @@ namespace XPathTester
             try
             {
                 //xpathResultDataGrid.Sort(xpathResultDataGrid.Columns[e.ColumnIndex], ListSortDirection.Ascending);
-                IEnumerable<XPathResults> OrderedItems = null;
+                IEnumerable<XPathResult> OrderedItems = null;
                 if (_prevSortedColumn != e.ColumnIndex)
                 {
                     if (e.ColumnIndex == 0)
@@ -172,8 +172,9 @@ namespace XPathTester
                 }
                 if (OrderedItems != null)
                 {
-                    XpathCollection ordered = new XpathCollection();
+                    XPathCollection ordered = new XPathCollection();
                     ordered.AddRange(OrderedItems);
+                    ordered.CalcColumnsName();
                     UpdateResultDataGrid(ordered);
                 }
             }
@@ -311,25 +312,9 @@ namespace XPathTester
             {
 
                 string getNodeNamesValue = Regex.Replace(XPathText.Text, @"^\s*(name|local-name)\s*\((.+?)\)$", "$2", RegexOptions.IgnoreCase);
+                _strLines = (XPathCollection)XPATH.Execute(XmlBody.CreateNavigator(), getNodeNamesValue);
                 if (XPathText.Text.Length > getNodeNamesValue.Length)
-                {
-                    XpathCollection temp = XmlExpression(XmlBody.CreateNavigator(), getNodeNamesValue);
-                    _strLines = new XpathCollection();
-                    foreach (XPathResults resultItem in temp)
-                    {
-                        _strLines.Add(new XPathResults
-                        {
-                            ID = resultItem.ID,
-                            Node = resultItem.Node,
-                            NodeName = "Empty",
-                            NodeType = resultItem.NodeName.GetType().Name,
-                            Value = resultItem.NodeName
-                        });
-                    }
-                    temp.Clear();
-                }
-                else
-                    _strLines = XmlExpression(XmlBody.CreateNavigator(), XPathText.Text);
+                    _strLines.ChangeNodeType();
 
 
                 if (_strLines == null || _strLines.Count == 0)
@@ -347,7 +332,7 @@ namespace XPathTester
             }
         }
 
-        void UpdateResultDataGrid(XpathCollection items)
+        void UpdateResultDataGrid(XPathCollection items)
         {
             xpathResultDataGrid.DataSource = null;
             xpathResultDataGrid.DataSource = items;
@@ -378,68 +363,6 @@ namespace XPathTester
                 ResultTabBrush = solidTransparent;
             }
         }
-
-        XpathCollection XmlExpression(XPathNavigator navigator, string xpath)
-        {
-
-            if (navigator == null)
-                return null;
-            XPathExpression expression = XPathExpression.Compile(xpath);
-            XmlNamespaceManager manager = new XmlNamespaceManager(navigator.NameTable);
-            //manager.AddNamespace("bk", "http://www.contoso.com/books");
-            manager.AddNamespace(string.Empty, "urn:samples");
-            expression.SetContext(manager);
-            switch (expression.ReturnType)
-            {
-                case XPathResultType.NodeSet:
-                    XPathNodeIterator nodes = navigator.Select(expression);
-                    if (nodes.Count > 0)
-                    {
-                        XpathCollection strOut = new XpathCollection();
-                        int i = 0;
-                        while (nodes.MoveNext())
-                        {
-                            XPathNavigator current = nodes.Current;
-                            if (current == null)
-                                continue;
-                            XPathResults res = new XPathResults
-                            {
-                                ID = i + 1,
-                                NodeType = current.NodeType.ToString(),
-                                NodeName = current.Name,
-                                Value = current.Value
-                            };
-                            if (current is IHasXmlNode node)
-                                res.Node = node.GetNode();
-                            strOut.Add(res);
-                            i++;
-                        }
-                        return strOut;
-                    }
-                    return null;
-                default:
-                    object o = navigator.Evaluate(expression);
-                    if (o != null)
-                    {
-                        XpathCollection res = new XpathCollection
-                        {
-                            new XPathResults
-                            {
-                                ID = 0,
-                                NodeType = expression.ReturnType.ToString(),
-                                NodeName = "Empty",
-                                Value = o.ToString()
-                            }
-                        };
-                        if (o is IHasXmlNode node)
-                        {
-                            res[0].Node = node.GetNode();
-                            res[0].NodeName = res[0].Node.NodeType.ToString();
-                        }
-                        return res;
-                    }
-                    return null;
-            }
-        }
+        
     }
 }
