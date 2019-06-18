@@ -11,14 +11,15 @@ namespace Utils.WinForm.CustomProgressBar
 {
     public class ProgressBarCompetition<T>
     {
+        private readonly Action<T> _someMethodForComplete;
         private IAsyncResult _asyncResult;
         private Func<ProgressBarCompetition<T>, T> _datafilter;
-        private ProgressBar _progressBar;
+        private readonly ProgressBar _progressBar;
 
         public bool ProgressCompleted { get; private set; } = false;
         public int ProgressValue { get; set; } = 0;
         public int TotalProgress { get; }
-        private Action<T> _someMethodForComplete;
+        
         public ProgressBarCompetition(ProgressBar progressBar, int totalProgress, Action<T> someMethodForComplete = null)
         {
             _progressBar = progressBar;
