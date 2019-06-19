@@ -8,6 +8,26 @@ using System.Windows.Forms;
 
 namespace Utils.WinForm.DataGridViewHelper
 {
+    public enum ColumnPosition
+    {
+        First = 0,
+        After = 1,
+        Before = 2,
+        Last = 3
+    }
+
+    public class DGVColumnAttribute : Attribute
+    {
+        public DGVColumnAttribute(ColumnPosition pos, string name)
+        {
+            Position = pos;
+            Name = name;
+        }
+
+        public ColumnPosition Position { get; }
+        public string Name { get; }
+    }
+
     public static class DGVEnhancer
     {
         [DllImport("user32.dll")]
@@ -49,37 +69,14 @@ namespace Utils.WinForm.DataGridViewHelper
             ((ISupportInitialize) dgv).EndInit();
         }
 
-        public enum ColumnPosition
-        {
-            First = 0,
-            After = 1,
-            Before = 2,
-            Last = 3
-        }
-
-        public class DGVColumnAttribute : Attribute
-        {
-            public DGVColumnAttribute(ColumnPosition pos, string name)
-            {
-                Position = pos;
-                Name = name;
-            }
-
-
-            public ColumnPosition Position { get; }
-            public string Name { get; }
-        }
-
         class DGVColumn
         {
-            
             public DGVColumn(string propName, DGVColumnAttribute gridColumnattr, Type propType)
             {
                 Attribute = gridColumnattr;
                 PropertyName = propName;
                 PropertyType = propType;
             }
-
 
             public DGVColumnAttribute Attribute { get; }
             public string PropertyName { get; }
@@ -101,13 +98,13 @@ namespace Utils.WinForm.DataGridViewHelper
             grid.Columns.Clear();
             grid.Rows.Clear();
 
-            DataTable table = new DataTable();
-            Type typeParameterType = typeof(T);
-            BindingFlags propertyFlags = BindingFlags.Instance | BindingFlags.Public;
-            PropertyInfo[] props = typeParameterType.GetProperties(propertyFlags);
+            var table = new DataTable();
+            var typeParameterType = typeof(T);
+            var propertyFlags = BindingFlags.Instance | BindingFlags.Public;
+            var props = typeParameterType.GetProperties(propertyFlags);
 
 
-            LinkedList<DGVColumn> sortedColumns = new LinkedList<DGVColumn>();
+            var sortedColumns = new LinkedList<DGVColumn>();
             LinkedListNode<DGVColumn> last = null;
             foreach (PropertyInfo prop in props)
             {
@@ -116,14 +113,14 @@ namespace Utils.WinForm.DataGridViewHelper
                 {
                     if (attr is DGVColumnAttribute columnAttr)
                     {
-                        LinkedListNode<DGVColumn> current = new LinkedListNode<DGVColumn>(new DGVColumn(prop.Name, columnAttr, prop.PropertyType));
+                        var current = new LinkedListNode<DGVColumn>(new DGVColumn(prop.Name, columnAttr, prop.PropertyType));
                         SwitchPosition(sortedColumns, columnAttr.Position, current, ref last);
                     }
                 }
             }
 
             int i = 0;
-            Dictionary<string, KeyValuePair<int, DGVColumn>> positionOfColumn = new Dictionary<string, KeyValuePair<int, DGVColumn>>(StringComparer.CurrentCultureIgnoreCase);
+            var positionOfColumn = new Dictionary<string, KeyValuePair<int, DGVColumn>>(StringComparer.CurrentCultureIgnoreCase);
             foreach (DGVColumn column in sortedColumns)
             {
                 table.Columns.Add(column.ColumnName, column.PropertyType);
@@ -134,10 +131,9 @@ namespace Utils.WinForm.DataGridViewHelper
             int columnsCount = positionOfColumn.Count;
             foreach (T instance in data)
             {
-
-                Type tp = instance.GetType();
-                PropertyInfo[] props2 = tp.GetProperties(propertyFlags);
-                object[] objs = new object[columnsCount];
+                var tp = instance.GetType();
+                var props2 = tp.GetProperties(propertyFlags);
+                var objs = new object[columnsCount];
 
                 foreach (PropertyInfo prop in props2)
                 {
@@ -152,6 +148,9 @@ namespace Utils.WinForm.DataGridViewHelper
                 table.Rows.Add(objs);
                 j++;
             }
+
+            //dtCommunication.Select("Type='Business'", "LastModifiedDate DESC");
+            //table.DefaultView.Sort = "Preferance ASC";
 
             grid.BeginInit();
             grid.DataSource = table;
