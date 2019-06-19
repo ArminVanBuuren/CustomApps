@@ -4,7 +4,6 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Xml;
-using Utils.XmlRtfStyle;
 using Utils;
 using static Utils.XPATH;
 
@@ -12,15 +11,15 @@ namespace SPAFilter.SPA.SC
 {
     public class CatalogComponents
     {
-        private List<HostOperation> _hostOperations = new List<HostOperation>();
+        private readonly List<HostOperation> _hostOperations = new List<HostOperation>();
         public Dictionary<string, CFS> CollectionCFS { get; } = new Dictionary<string, CFS>();
         public Dictionary<string, RFS> CollectionRFS { get; } = new Dictionary<string, RFS>();
         public Dictionary<string, Resource> CollectionResource { get; } = new Dictionary<string, Resource>();
         public Dictionary<string, RFSGroup> CollectionRFSGroup { get; } = new Dictionary<string, RFSGroup>();
         public CFSGroups CollectionMutexCFSGroup { get; } = new CFSGroups();
 
-        private DataTable _serviceTable;
-        private Func<string, string> _getDescription;
+        private readonly DataTable _serviceTable;
+        private readonly Func<string, string> _getDescription;
 
         public CatalogComponents(DataTable serviceTable)
         {
@@ -39,19 +38,19 @@ namespace SPAFilter.SPA.SC
 
             operationName = operationName.Replace(" ", "");
 
-            BindingServices bindSrv = new BindingServices(document);
-            HostOperation hostOp = new HostOperation(operationName, hostType, RtfFromXml.GetXmlString(document.OuterXml), bindSrv);
-            Dictionary<string, XPathResult> getServices = new Dictionary<string, XPathResult>();
+            var bindSrv = new BindingServices(document);
+            var hostOp = new HostOperation(operationName, hostType, bindSrv);
+            var getServices = new Dictionary<string, XPathResult>();
 
             if (GetServices(getServices, Execute(document.CreateNavigator(), "//ProvisionList/*")))
             {
                 if (!IsExistSameHostOperation(hostOp, getServices, HostOperation.LinkType.Add))
-                    LoadNewService(hostOp, getServices, bindSrv, HostOperation.LinkType.Add);
+                    LoadNewService(hostOp, getServices, HostOperation.LinkType.Add); //bindSrv
             }
             else if (GetServices(getServices, Execute(document.CreateNavigator(), "//WithdrawalList/*")))
             {
                 if (!IsExistSameHostOperation(hostOp, getServices, HostOperation.LinkType.Remove))
-                    LoadNewService(hostOp, getServices, bindSrv, HostOperation.LinkType.Remove);
+                    LoadNewService(hostOp, getServices, HostOperation.LinkType.Remove); //bindSrv
             }
         }
 
@@ -133,9 +132,9 @@ namespace SPAFilter.SPA.SC
             return newServices.Count == 0;
         }
 
-        void LoadNewService(HostOperation hostOp, Dictionary<string, XPathResult> srvCodeList, BindingServices bindSrv, HostOperation.LinkType link)
+        void LoadNewService(HostOperation hostOp, Dictionary<string, XPathResult> srvCodeList, HostOperation.LinkType link) //BindingServices bindSrv
         {
-            Dictionary<HostOperation, List<RFS>> resHostOp = new Dictionary<HostOperation, List<RFS>>();
+            //var resHostOp = new Dictionary<HostOperation, List<RFS>>();
             foreach (XPathResult srvCode in srvCodeList.Values)
             {
                 AddCFS(srvCode, hostOp, link);
@@ -183,10 +182,10 @@ namespace SPAFilter.SPA.SC
 
         public string ToXml()
         {
-            StringBuilder cfsXmlList = new StringBuilder();
-            StringBuilder rfsXmlList = new StringBuilder();
-            StringBuilder resourceXmlList = new StringBuilder();
-            StringBuilder rfsGroupXmlList = new StringBuilder();
+            var cfsXmlList = new StringBuilder();
+            var rfsXmlList = new StringBuilder();
+            var resourceXmlList = new StringBuilder();
+            var rfsGroupXmlList = new StringBuilder();
 
             foreach (CFS cfs in CollectionCFS.Values)
             {
@@ -215,11 +214,11 @@ namespace SPAFilter.SPA.SC
                 rfsGroupXmlList.Append(rfsGroup.ToXml());
             }
 
-            string result = "<ResourceList>" + resourceXmlList.ToString() + "</ResourceList>"
-                          + "<RFSList>" + rfsXmlList.ToString() + "</RFSList>"
-                          + "<CFSList>" + cfsXmlList.ToString() + "</CFSList>"
+            string result = "<ResourceList>" + resourceXmlList + "</ResourceList>"
+                          + "<RFSList>" + rfsXmlList + "</RFSList>"
+                          + "<CFSList>" + cfsXmlList + "</CFSList>"
                           + "<CFSGroupList>" + CollectionMutexCFSGroup.ToXml() + "</CFSGroupList>"
-                          + "<RFSGroup>" + rfsGroupXmlList.ToString() + "</RFSGroup>";
+                          + "<RFSGroup>" + rfsGroupXmlList + "</RFSGroup>";
 
             return result;
         }

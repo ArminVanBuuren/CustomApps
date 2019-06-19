@@ -5,7 +5,7 @@ namespace SPAFilter.SPA.SC
 {
     public class RFS : SComponentBase
     {
-        private int _index;
+        private readonly int _index;
         public override string Name
         {
             get
@@ -34,7 +34,7 @@ namespace SPAFilter.SPA.SC
         {
             if (MainHostOperation.BindServices.DependenceServices.Count > 0)
             {
-                Dictionary<HostOperation, HashSet<string>> RFSDeps = new Dictionary<HostOperation, HashSet<string>>();
+                var RFSDeps = new Dictionary<HostOperation, HashSet<string>>();
                 foreach (string depSrv in MainHostOperation.BindServices.DependenceServices)
                 {
                     if (!allCFSs.TryGetValue(depSrv, out CFS getDepCFS))
@@ -57,7 +57,7 @@ namespace SPAFilter.SPA.SC
 
                 if (RFSDeps.Count > 0)
                 {
-                    HashSet<string> RFSDepsFiltered = new HashSet<string>();
+                    var RFSDepsFiltered = new HashSet<string>();
                     foreach (KeyValuePair<HostOperation, HashSet<string>> finded in RFSDeps)
                     {
                         AllServiceIsBaseRFS(finded, out HashSet<string> res);

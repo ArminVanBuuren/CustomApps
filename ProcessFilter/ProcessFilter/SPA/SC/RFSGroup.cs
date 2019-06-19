@@ -34,7 +34,7 @@ namespace SPAFilter.SPA.SC
                 rfsList.Append($"<RFS name=\"{rfsName}\" linkType=\"Add\" />");
             }
 
-            return header + rfsList.ToString() + "</RFSGroup>";
+            return header + rfsList + "</RFSGroup>";
         }
 
         public override string ToString()

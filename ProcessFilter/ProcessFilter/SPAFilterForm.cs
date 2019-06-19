@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -11,6 +12,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
+using System.Threading.Tasks;
 using OfficeOpenXml;
 using SPAFilter.SPA;
 using SPAFilter.SPA.SC;
@@ -19,8 +21,6 @@ using Utils.WinForm.DataGridViewHelper;
 using Utils.WinForm.Notepad;
 using Utils.WinForm.CustomProgressBar;
 using static Utils.ASSEMBLY;
-using System.Threading.Tasks;
-using Utils.XmlRtfStyle;
 
 namespace SPAFilter
 {
@@ -47,6 +47,10 @@ namespace SPAFilter
                 lock (sync2)
                 {
                     _isInProgress = value;
+
+                    if(_isInProgress && notepad != null && !notepad.WindowIsClosed)
+                        notepad.Close();
+
                     buttonFilter.Enabled = !_isInProgress;
                     buttonPrintXML.Enabled = !_isInProgress;
                     ProcessesTextBox.Enabled = !_isInProgress;
@@ -94,7 +98,7 @@ namespace SPAFilter
 
             lock (sync)
             {
-                using (FileStream stream = new FileStream(SerializationDataPath, FileMode.Create, FileAccess.ReadWrite))
+                using (var stream = new FileStream(SerializationDataPath, FileMode.Create, FileAccess.ReadWrite))
                 {
                     new BinaryFormatter().Serialize(stream, this);
                 }
@@ -115,6 +119,7 @@ namespace SPAFilter
             }
             catch (Exception)
             {
+                // ignored
             }
             finally
             {
@@ -161,10 +166,10 @@ namespace SPAFilter
             ScenariosButtonOpen.KeyDown += ProcessFilterForm_KeyDown;
             CommnadsButtonOpen.KeyDown += ProcessFilterForm_KeyDown;
             buttonFilter.KeyDown += ProcessFilterForm_KeyDown;
-            this.KeyDown += ProcessFilterForm_KeyDown;
+            KeyDown += ProcessFilterForm_KeyDown;
 
             dataGridScenariosResult.CellFormatting += DataGridScenariosResult_CellFormatting;
-            this.Closing += ProcessFilterForm_Closing;
+            Closing += ProcessFilterForm_Closing;
         }
 
 
@@ -173,56 +178,57 @@ namespace SPAFilter
             switch (e.KeyCode)
             {
                 case Keys.F5:
-                    buttonFilterClick(this, EventArgs.Empty);
+                    ButtonFilterClick(this, EventArgs.Empty);
                     break;
-                case Keys.F6:
-                    buttonPrintXML_Click(this, EventArgs.Empty);
-                    break;
+                //case Keys.F6:
+                //    buttonPrintXML_Click(this, EventArgs.Empty);
+                //    break;
             }
         }
 
         private async void buttonPrintXML_Click(object sender, EventArgs e)
         {
+            int filesNumber = (_filteredProcessCollection?.Count ?? 0) +
+                              (_filteredNetElemCollection?.AllOperations?.Count ?? 0) +
+                              (_filteredScenarioCollection?.Count ?? 0) +
+                              (_filteredCMMCollection?.Count ?? 0);
+
+            if (filesNumber <= 0)
+            {
+                MessageBox.Show(@"You must filter files first.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+
+            if (IsInProgress)
+                return;
+
             try
             {
-                if (IsInProgress)
-                    return;
-
-                int filesNumber = (_filteredProcessCollection?.Count ?? 0) + 
-                                  (_filteredNetElemCollection?.AllOperations?.Count ?? 0) + 
-                                  (_filteredScenarioCollection?.Count ?? 0) +
-                                  (_filteredCMMCollection?.Count ?? 0);
-
-                if (filesNumber <= 0)
-                {
-                    MessageBox.Show(@"You must filter files first.");
-                    return;
-                }
-
-
                 IsInProgress = true;
-                StringBuilder exceptionsMessage = new StringBuilder();
+
+                var stringErrors = new StringBuilder();
 
                 using (var progrAsync = new ProgressCalculaterAsync(progressBar, filesNumber))
                 {
                     await Task.Factory.StartNew(() =>
                     {
-                        GetFiles(_filteredProcessCollection, exceptionsMessage, progrAsync);
+                        GetFiles(_filteredProcessCollection, stringErrors, progrAsync);
                         if (_filteredNetElemCollection != null)
-                            GetFiles(_filteredNetElemCollection.AllOperations, exceptionsMessage, progrAsync);
-                        GetFiles(_filteredScenarioCollection, exceptionsMessage, progrAsync);
-                        GetFiles(_filteredCMMCollection, exceptionsMessage, progrAsync);
+                            GetFiles(_filteredNetElemCollection.AllOperations, stringErrors, progrAsync);
+                        GetFiles(_filteredScenarioCollection, stringErrors, progrAsync);
+                        GetFiles(_filteredCMMCollection, stringErrors, progrAsync);
                     });
                 }
 
-                if (exceptionsMessage.Length > 0)
+                if (stringErrors.Length > 0)
                 {
-                    MessageBox.Show($"Catched some exceptions:{exceptionsMessage.ToString(0, exceptionsMessage.Length > 200 ? 200 : exceptionsMessage.Length)}");
+                    MessageBox.Show($"Several errors found:{stringErrors.ToString(0, stringErrors.Length > 200 ? 200 : stringErrors.Length)}", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
@@ -230,26 +236,26 @@ namespace SPAFilter
             }
         }
 
-        void GetFiles(IEnumerable<ObjectTemplate> fileObj, StringBuilder stringException, ProgressCalculaterAsync progressCalc)
+        void GetFiles(IEnumerable<ObjectTemplate> fileObj, StringBuilder stringErrors, ProgressCalculaterAsync progressCalc)
         {
             if (fileObj == null || !fileObj.Any())
                 return;
 
             foreach (var file in fileObj)
             {
-                FormattingXML(file.FilePath, stringException);
+                FormattingXML(file.FilePath, stringErrors);
                 progressCalc++;
             }
         }
 
-        void FormattingXML(string path, StringBuilder stringException)
+        static void FormattingXML(string path, StringBuilder stringErrors)
         {
             try
             {
                 string fileString = IO.SafeReadFile(path);
                 if (XML.IsXml(fileString, out XmlDocument document))
                 {
-                    string formatting = RtfFromXml.GetXmlString(document);
+                    string formatting = document.PrintXml();
 
                     int attempts = 0;
                     while (!IO.IsFileReady(path))
@@ -265,12 +271,12 @@ namespace SPAFilter
             }
             catch (Exception e)
             {
-                stringException.AppendLine($"Message=[{e.Message}] File=[{path}]");
+                stringErrors.AppendLine($"Message=[{e.Message}] File=[{path}]");
             }
         }
 
        
-        private async void buttonFilterClick(object sender, EventArgs e)
+        private async void ButtonFilterClick(object sender, EventArgs e)
         {
             if (IsInProgress)
                 return;
@@ -301,7 +307,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
@@ -370,7 +376,7 @@ namespace SPAFilter
 
                 if (!operFilter.IsNullOrEmpty() && _filteredNetElemCollection != null)
                 {
-                    NetworkElementCollection netElemCollection2 = new NetworkElementCollection();
+                    var netElemCollection2 = new NetworkElementCollection();
                     foreach (NetworkElement nec in _filteredNetElemCollection)
                     {
                         List<NetworkElementOpartion> ops = new List<NetworkElementOpartion>();
@@ -407,7 +413,7 @@ namespace SPAFilter
                 int endOfBpCollection = _filteredProcessCollection.Count;
                 for (int i = 0; i < endOfBpCollection; i++)
                 {
-                    XmlDocument document = XML.LoadXml(_filteredProcessCollection[i].FilePath, true);
+                    var document = XML.LoadXml(_filteredProcessCollection[i].FilePath, true);
                     if (document != null)
                     {
                         _filteredProcessCollection[i].AddBodyOperations(document);
@@ -437,7 +443,7 @@ namespace SPAFilter
                 {
                     getScenario = operation =>
                                   {
-                                      List<Scenario> scenarios = Scenarios.Where(p => p.Name.Equals(operation.Name, StringComparison.CurrentCultureIgnoreCase)).ToList();
+                                      var scenarios = Scenarios.Where(p => p.Name.Equals(operation.Name, StringComparison.CurrentCultureIgnoreCase)).ToList();
 
                                       foreach (Scenario scenario in scenarios)
                                       {
@@ -453,22 +459,25 @@ namespace SPAFilter
 
                 progressCalc++;
 
-                foreach (var netElem in _filteredNetElemCollection)
+                if (_filteredNetElemCollection != null)
                 {
-                    int endOfOpCollection = netElem.Operations.Count;
-                    for (int i = 0; i < endOfOpCollection; i++)
+                    foreach (var netElem in _filteredNetElemCollection)
                     {
-                        bool hasMatch = _filteredProcessCollection.Any(x => x.Operations.Any(y => netElem.Operations[i].Name.Equals(y, StringComparison.CurrentCultureIgnoreCase)));
-
-                        if (hasMatch)
+                        int endOfOpCollection = netElem.Operations.Count;
+                        for (int i = 0; i < endOfOpCollection; i++)
                         {
-                            getScenario?.Invoke(netElem.Operations[i]);
-                            continue;
-                        }
+                            bool hasMatch = _filteredProcessCollection.Any(x => x.Operations.Any(y => netElem.Operations[i].Name.Equals(y, StringComparison.CurrentCultureIgnoreCase)));
 
-                        netElem.Operations.Remove(netElem.Operations[i]);
-                        i--;
-                        endOfOpCollection--;
+                            if (hasMatch)
+                            {
+                                getScenario?.Invoke(netElem.Operations[i]);
+                                continue;
+                            }
+
+                            netElem.Operations.Remove(netElem.Operations[i]);
+                            i--;
+                            endOfOpCollection--;
+                        }
                     }
                 }
 
@@ -518,7 +527,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
@@ -603,7 +612,7 @@ namespace SPAFilter
                             }
                             catch (Exception ex)
                             {
-                                MessageBox.Show(ex.Message);
+                                MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
                         }
                     }
@@ -633,7 +642,7 @@ namespace SPAFilter
             }
             else
             {
-                MessageBox.Show(@"Please select a row!");
+                MessageBox.Show(@"You must select a row!", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
             return true;
@@ -645,16 +654,18 @@ namespace SPAFilter
             CheckOperationsPath(OperationTextBox.Text, true);
             CheckScenariosPath(ScenariosTextBox.Text);
             CheckCommandsPath(CommandsTextBox.Text);
-            buttonFilterClick(this, EventArgs.Empty);
+            ButtonFilterClick(this, EventArgs.Empty);
         }
 
         void OpenEditor(string path)
         {
             if (notepad == null || notepad.WindowIsClosed)
             {
-                notepad = new XmlNotepad(path);
-                notepad.Location = this.Location;
-                notepad.WindowState = FormWindowState.Maximized;
+                notepad = new XmlNotepad(path)
+                {
+                    Location = Location,
+                    WindowState = FormWindowState.Maximized
+                };
                 //notepad.StartPosition = FormStartPosition.CenterScreen;
                 //notepad.TopMost = true;
                 //notepad.Show(this);
@@ -868,98 +879,164 @@ namespace SPAFilter
             }
         }
 
-        private void ButtonGenerateSC_Click(object sender, EventArgs e)
+        private async void ButtonGenerateSC_Click(object sender, EventArgs e)
         {
-            if (!Directory.Exists(ExportSCPath.Text))
+            if (IsInProgress)
+                return;
+
+            NetworkElementCollection collectionElements = null;
+
+            if (_filteredNetElemCollection != null && _filteredNetElemCollection.Count > 0)
+                collectionElements = _filteredNetElemCollection;
+            else if (NetElements?.Elements != null && NetElements?.Elements.Count > 0)
+                collectionElements = NetElements.Elements;
+
+
+            int totalProgressIterator = (collectionElements == null || collectionElements.Count == 0) ? 0 : collectionElements.Sum(x => x.Operations.Count);
+
+            if (totalProgressIterator == 0)
             {
-                Directory.CreateDirectory(ExportSCPath.Text);
+                MessageBox.Show($"Not found any operations.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
 
-            GenerateSC.Enabled = false;
-
-            ProgressBarCompetition<string> progress = new ProgressBarCompetition<string>(progressBar, 6, EnableGenerateSCForm);
-            progress.StartProgress(GenerateSCMethod);
-        }
-        void EnableGenerateSCForm(string result)
-        {
-            GenerateSC.Enabled = true;
-            if (!result.IsNullOrEmpty() && File.Exists(result))
-            {
-                OpenEditor(result);
-            }
-        }
-
-        string GenerateSCMethod(ProgressBarCompetition<string> progressComp)
-        {
             try
             {
-                ServiceCatalog sc = null;
-                progressComp.ProgressValue = 1;
-                DataTable serviceTable = GetServiceXslx();
-                progressComp.ProgressValue = 2;
+                IsInProgress = true;
 
-                if (_filteredNetElemCollection != null && _filteredNetElemCollection.Count > 0)
-                    sc = new ServiceCatalog(_filteredNetElemCollection, progressComp, serviceTable);
-                else if (NetElements?.Elements != null && NetElements?.Elements.Count > 0)
-                    sc = new ServiceCatalog(NetElements.Elements, progressComp, serviceTable);
+                if (!Directory.Exists(ExportSCPath.Text))
+                    Directory.CreateDirectory(ExportSCPath.Text);
 
-                return sc?.Save(ExportSCPath.Text);
+                string fileResult = null;
+
+                if (!OpenSCXlsx.Text.IsNullOrEmptyTrim() && File.Exists(OpenSCXlsx.Text))
+                {
+                    DataTable rdServices = null;
+
+                    int maxIterarorReadRdServiceFile = (70 * totalProgressIterator) / 30;
+                    totalProgressIterator += maxIterarorReadRdServiceFile;
+
+                    using (var progrAsync = new ProgressCalculaterAsync(progressBar, totalProgressIterator))
+                    {
+                        rdServices = await Task<DataTable>.Factory.StartNew(() => GetRDServicesFromXslx(OpenSCXlsx.Text, progrAsync, maxIterarorReadRdServiceFile));
+
+                        fileResult = await Task.Factory.StartNew(() => GetServiceCatalog(collectionElements, rdServices, ExportSCPath.Text, progrAsync));
+                    }
+                }
+                else
+                {
+                    using (var progrAsync = new ProgressCalculaterAsync(progressBar, totalProgressIterator))
+                    {
+                        fileResult = await Task.Factory.StartNew(() => GetServiceCatalog(collectionElements, null, ExportSCPath.Text, progrAsync));
+                    }
+                }
+
+                if (!fileResult.IsNullOrEmpty() && File.Exists(fileResult))
+                {
+                    OpenEditor(fileResult);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
-                return null;
+                MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                IsInProgress = false;
             }
         }
 
-        private string[] mandatoryXslxColumns = new string[] { "#", "SPA_SERVICE_CODE", "GLOBAL_SERVICE_CODE", "SERVICE_NAME", "SERVICE_FULL_NAME", "SERVICE_FULL_NAME2", "DESCRIPTION", "SERVICE_CODE", "SERVICE_NAME2", "EXTERNAL_CODE", "EXTERNAL_CODE2" };
+        private readonly string[] mandatoryXslxColumns = new string[] { "#", "SPA_SERVICE_CODE", "GLOBAL_SERVICE_CODE", "SERVICE_NAME", "SERVICE_FULL_NAME", "SERVICE_FULL_NAME2", "DESCRIPTION", "SERVICE_CODE", "SERVICE_NAME2", "EXTERNAL_CODE", "EXTERNAL_CODE2" };
 
-        DataTable GetServiceXslx()
+        DataTable GetRDServicesFromXslx(string filePath, ProgressCalculaterAsync progressCalc, int maxIterator)
         {
-            DataTable serviceTable = null;
-            if (!OpenSCXlsx.Text.IsNullOrEmptyTrim() && File.Exists(OpenSCXlsx.Text))
+            var serviceTable = new DataTable();
+
+            int openFileIterator = maxIterator / 7;
+            int loadFileIterator = maxIterator - (openFileIterator * 2);
+            int readLinesIterator = maxIterator - loadFileIterator - openFileIterator;
+
+            using (var xslPackage = new ExcelPackage(new FileInfo(filePath)))
             {
-                using (ExcelPackage xlPackage = new ExcelPackage(new FileInfo(OpenSCXlsx.Text)))
+                progressCalc.CurrentProgressInterator += openFileIterator;
+
+                var myWorksheet = xslPackage.Workbook.Worksheets.First(); //sheet
+                var totalRows = myWorksheet.Dimension.End.Row;
+                var totalColumns = mandatoryXslxColumns.Length;
+
+                progressCalc.CurrentProgressInterator += loadFileIterator;
+
+                var columnsNames = myWorksheet.Cells[1, 1, 1, totalColumns].Select(c => c.Value == null ? string.Empty : c.Value.ToString());
+
+                if (!columnsNames.Any())
+                    return null;
+
+                int i = 0;
+                foreach (var columnName in columnsNames)
                 {
-                    serviceTable = new DataTable();
-
-                    var myWorksheet = xlPackage.Workbook.Worksheets.First(); //sheet
-                    var totalRows = myWorksheet.Dimension.End.Row;
-                    var totalColumns = mandatoryXslxColumns.Length;
-
-                    var columnsNames = myWorksheet.Cells[1, 1, 1, totalColumns].Select(c => c.Value == null ? string.Empty : c.Value.ToString());
-
-                    if (!columnsNames.Any())
-                        return null;
-
-                    int i = 0;
-                    foreach (var columnName in columnsNames)
+                    string columnNameUp = columnName.ToUpper();
+                    if (mandatoryXslxColumns[i++] != columnNameUp)
                     {
-                        string columnNameUp = columnName.ToUpper();
-                        if (mandatoryXslxColumns[i++] != columnNameUp)
-                            throw new Exception($"Wrong column name before \'{columnNameUp}\' from file '{OpenSCXlsx.Text}'.\r\nColumns names should be like:\r\n'{string.Join("','", mandatoryXslxColumns)}'");
-                        serviceTable.Columns.Add(columnNameUp, typeof(string));
-                        if (i == mandatoryXslxColumns.Length)
-                            break;
+                        throw new Exception($"Wrong column name before \'{columnNameUp}\' from file '{OpenSCXlsx.Text}'.\r\n\r\nColumns names and orders must be like:\r\n'{string.Join("','", mandatoryXslxColumns)}'");
                     }
 
-                    if(i != mandatoryXslxColumns.Length)
-                        throw new Exception($"Wrong file '{OpenSCXlsx.Text}'. Missing some required columns. \r\nColumns names should be like:\r\n'{string.Join("','", mandatoryXslxColumns)}'");
+                    serviceTable.Columns.Add(columnNameUp, typeof(string));
+                    if (i == mandatoryXslxColumns.Length)
+                        break;
+                }
 
+                if (i != mandatoryXslxColumns.Length)
+                    throw new Exception($"Wrong file '{OpenSCXlsx.Text}'. Missing some required columns. \r\nColumns names should be like:\r\n'{string.Join("','", mandatoryXslxColumns)}'");
+
+
+                int lineIterNumber = 0;
+                var lineIterator = totalRows / readLinesIterator;
+                if (lineIterator > 1)
+                {
                     for (int rowNum = 2; rowNum <= totalRows; rowNum++)
                     {
-                        //var row = myWorksheet.Cells[rowNum, 1, rowNum, totalColumns].Select(c => c.Value == null ? string.Empty : c.Value.ToString());
                         var row = myWorksheet.Cells[rowNum, 1, rowNum, totalColumns].Select(c => c.Value == null ? string.Empty : c.Value.ToString()).Take(totalColumns);
-                        //IEnumerable<string> ff = row.Take(totalColumns);
-                        
                         serviceTable.Rows.Add(values: row.ToArray());
 
+                        lineIterNumber++;
+                        if (lineIterNumber >= lineIterator)
+                        {
+                            progressCalc++;
+                            lineIterNumber = 0;
+                        }
                     }
+                }
+                else
+                {
+                    for (int rowNum = 2; rowNum <= totalRows; rowNum++)
+                    {
+                        var row = myWorksheet.Cells[rowNum, 1, rowNum, totalColumns].Select(c => c.Value == null ? string.Empty : c.Value.ToString()).Take(totalColumns);
+                        serviceTable.Rows.Add(values: row.ToArray());
+                    }
+
+                    progressCalc.CurrentProgressInterator += readLinesIterator;
                 }
             }
 
             return serviceTable;
         }
+
+        static string GetServiceCatalog(NetworkElementCollection elements, DataTable rdServices, string exportFilePath, ProgressCalculaterAsync progressCalc)
+        {
+            try
+            {
+                var sc = new ServiceCatalog(elements, rdServices, progressCalc);
+                progressCalc.CurrentProgressInterator = progressCalc.TotalProgressInterator;
+                return sc?.Save(exportFilePath);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
+            }
+        }
+
+        
 
         void UpdateLastPath(string path)
         {
@@ -973,7 +1050,8 @@ namespace SPAFilter
             {
                 if (!_lastPath.IsNullOrEmpty())
                     fbd.SelectedPath = _lastPath;
-                DialogResult result = fbd.ShowDialog();
+
+                var result = fbd.ShowDialog();
 
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
                 {
@@ -982,7 +1060,5 @@ namespace SPAFilter
             }
             return null;
         }
-
-
     }
 }

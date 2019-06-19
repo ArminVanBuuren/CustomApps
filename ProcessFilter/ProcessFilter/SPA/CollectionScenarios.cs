@@ -40,6 +40,11 @@ namespace SPAFilter.SPA
     {
         public bool Equals(Scenario x, Scenario y)
         {
+            if (x == null && y == null)
+                return true;
+            if (x == null || y == null)
+                return false;
+
             return x.Name.Trim().Equals(y.Name.Trim(), StringComparison.CurrentCultureIgnoreCase);
         }
 

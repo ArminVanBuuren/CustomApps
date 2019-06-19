@@ -229,7 +229,7 @@
             this.buttonFilter.TabIndex = 13;
             this.buttonFilter.Text = "Get [F5]";
             this.buttonFilter.UseVisualStyleBackColor = true;
-            this.buttonFilter.Click += new System.EventHandler(this.buttonFilterClick);
+            this.buttonFilter.Click += new System.EventHandler(this.ButtonFilterClick);
             // 
             // tabControl1
             // 
@@ -362,9 +362,9 @@
             // RootSCExportPathButton
             // 
             this.RootSCExportPathButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.RootSCExportPathButton.Location = new System.Drawing.Point(717, 12);
+            this.RootSCExportPathButton.Location = new System.Drawing.Point(711, 12);
             this.RootSCExportPathButton.Name = "RootSCExportPathButton";
-            this.RootSCExportPathButton.Size = new System.Drawing.Size(73, 23);
+            this.RootSCExportPathButton.Size = new System.Drawing.Size(80, 23);
             this.RootSCExportPathButton.TabIndex = 30;
             this.RootSCExportPathButton.Text = "Root";
             this.RootSCExportPathButton.UseVisualStyleBackColor = true;
@@ -382,20 +382,19 @@
             // 
             // ExportSCPath
             // 
-            this.ExportSCPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ExportSCPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.ExportSCPath.Location = new System.Drawing.Point(82, 14);
             this.ExportSCPath.Name = "ExportSCPath";
-            this.ExportSCPath.Size = new System.Drawing.Size(627, 20);
+            this.ExportSCPath.Size = new System.Drawing.Size(627, 23);
             this.ExportSCPath.TabIndex = 28;
             this.ExportSCPath.TextChanged += new System.EventHandler(this.ExportSCPath_TextChanged);
             // 
             // OpenSevExelButton
             // 
             this.OpenSevExelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.OpenSevExelButton.Location = new System.Drawing.Point(717, 41);
+            this.OpenSevExelButton.Location = new System.Drawing.Point(711, 41);
             this.OpenSevExelButton.Name = "OpenSevExelButton";
-            this.OpenSevExelButton.Size = new System.Drawing.Size(73, 23);
+            this.OpenSevExelButton.Size = new System.Drawing.Size(80, 23);
             this.OpenSevExelButton.TabIndex = 27;
             this.OpenSevExelButton.Text = "Open xlsx";
             this.OpenSevExelButton.UseVisualStyleBackColor = true;
@@ -413,11 +412,11 @@
             // 
             // ButtonGenerateSC
             // 
-            this.ButtonGenerateSC.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.ButtonGenerateSC.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.ButtonGenerateSC.Enabled = false;
-            this.ButtonGenerateSC.Location = new System.Drawing.Point(711, 217);
+            this.ButtonGenerateSC.Location = new System.Drawing.Point(711, 68);
             this.ButtonGenerateSC.Name = "ButtonGenerateSC";
-            this.ButtonGenerateSC.Size = new System.Drawing.Size(79, 23);
+            this.ButtonGenerateSC.Size = new System.Drawing.Size(80, 23);
             this.ButtonGenerateSC.TabIndex = 26;
             this.ButtonGenerateSC.Text = "Generate SC";
             this.ButtonGenerateSC.UseVisualStyleBackColor = true;
@@ -573,7 +572,7 @@
             this.buttonPrintXML.Name = "buttonPrintXML";
             this.buttonPrintXML.Size = new System.Drawing.Size(89, 23);
             this.buttonPrintXML.TabIndex = 14;
-            this.buttonPrintXML.Text = "Print XML [F6]";
+            this.buttonPrintXML.Text = "Print XML";
             this.buttonPrintXML.UseVisualStyleBackColor = true;
             this.buttonPrintXML.Click += new System.EventHandler(this.buttonPrintXML_Click);
             // 

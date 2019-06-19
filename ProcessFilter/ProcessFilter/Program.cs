@@ -26,7 +26,7 @@ namespace SPAFilter
                         mainControl = new BinaryFormatter().Deserialize(stream) as SPAFilterForm;
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     File.Delete(SPAFilterForm.SerializationDataPath);
                 }

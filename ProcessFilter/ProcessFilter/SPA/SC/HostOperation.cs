@@ -42,7 +42,7 @@ namespace SPAFilter.SPA.SC
         protected internal Dictionary<string, CFS_RFS> ChildCFS { get; } = new Dictionary<string, CFS_RFS>();
         protected internal BindingServices BindServices { get; }
 
-        public HostOperation(string opName, string hostType, string xmlBody, BindingServices bindServ)
+        public HostOperation(string opName, string hostType, BindingServices bindServ) //,string xmlBody
         {
             OperationName = opName;
             HostType = hostType;
@@ -66,7 +66,7 @@ namespace SPAFilter.SPA.SC
         {
             if (ChildCFS.Count > 1)
             {
-                Resource resource = new Resource(this);
+                var resource = new Resource(this);
                 int index = 0;
                 foreach (CFS_RFS cfsRfs in ChildCFS.Values)
                 {

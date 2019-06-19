@@ -22,7 +22,7 @@ namespace SPAFilter.SPA.SC
 
         public override string ToXml()
         {
-            StringBuilder cfsGroupsStr = new StringBuilder();
+            var cfsGroupsStr = new StringBuilder();
             CFSGroupCollection = Calculate(_tempCFSGroupCollection);
 
             foreach (KeyValuePair<string, IEnumerable<string>> cfsGroup in CFSGroupCollection)
@@ -35,21 +35,21 @@ namespace SPAFilter.SPA.SC
 
         static string GetCFSGroupString(string name, IEnumerable<string> cfsList)
         {
-            StringBuilder cfsGroupStr = new StringBuilder();
-            string header = $"<CFSGroup name=\"{name}\" type=\"Mutex\" description=\"Группа взаимоисключающих услуг\">";
+            var cfsGroupStr = new StringBuilder();
+            var header = $"<CFSGroup name=\"{name}\" type=\"Mutex\" description=\"Группа взаимоисключающих услуг\">";
             
             foreach (string cfsName in cfsList)
             {
                 cfsGroupStr.Append($"<CFS name=\"{cfsName}\" />");
             }
 
-            return header + cfsGroupStr.ToString() + "</CFSGroup>";
+            return header + cfsGroupStr + "</CFSGroup>";
         }
 
 
         Dictionary<string, IEnumerable<string>> Calculate(Dictionary<string, List<string>> allList)
         {
-            Dictionary<string, Dictionary<string, bool>> filtered = new Dictionary<string, Dictionary<string, bool>>();
+            var filtered = new Dictionary<string, Dictionary<string, bool>>();
             foreach (List<string> cfsRestrList in allList.Values)
             {
                 foreach (string cfsName in cfsRestrList)
@@ -67,7 +67,7 @@ namespace SPAFilter.SPA.SC
                 }
             }
 
-            Dictionary<string, List<string>> filtered2 = new Dictionary<string, List<string>>();
+            var filtered2 = new Dictionary<string, List<string>>();
             foreach (KeyValuePair<string, Dictionary<string, bool>> filt1 in filtered)
             {
                 foreach (KeyValuePair<string, Dictionary<string, bool>> filt2 in filtered)
@@ -84,7 +84,7 @@ namespace SPAFilter.SPA.SC
                 }
             }
 
-            Dictionary<string, IEnumerable<string>> filtered3 = new Dictionary<string, IEnumerable<string>>();
+            var filtered3 = new Dictionary<string, IEnumerable<string>>();
             foreach (KeyValuePair<string, List<string>> filt1 in filtered2)
             {
                 foreach (KeyValuePair<string, List<string>> filt2 in filtered2)
@@ -95,7 +95,7 @@ namespace SPAFilter.SPA.SC
                         string getKey = string.Join(":", intersectCFS);
                         if (intersectCFS.Count() == 1 && !filtered3.ContainsKey(filt1.Key))
                         {
-                            filtered3.Add(filt1.Key, (IEnumerable<string>)filt1.Value);
+                            filtered3.Add(filt1.Key, filt1.Value);
                         }
                         else if (!filtered3.ContainsKey(getKey) && intersectCFS.Count() > 1)
                         {
@@ -107,7 +107,7 @@ namespace SPAFilter.SPA.SC
 
             int i = 0;
             filtered3 = filtered3.OrderByDescending(x => x.Key.Length).ToDictionary(x => x.Key, x => x.Value);
-            Dictionary<string, IEnumerable<string>> filtered4 = new Dictionary<string, IEnumerable<string>>();
+            var filtered4 = new Dictionary<string, IEnumerable<string>>();
             foreach (KeyValuePair<string, IEnumerable<string>> dd in filtered3)
             {
                 bool isExist = false;
@@ -129,7 +129,7 @@ namespace SPAFilter.SPA.SC
 
         static List<string> Calculate(string name, Dictionary<string, List<string>> allList)
         {
-            List<string> refreshList = new List<string>();
+            var refreshList = new List<string>();
             foreach (List<string> cfsRestrList in allList.Values)
             {
                 foreach (string cfsName in cfsRestrList)

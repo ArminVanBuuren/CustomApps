@@ -4,7 +4,7 @@ namespace SPAFilter.SPA.SC
 {
     public sealed class CFS : SComponentBase
     {
-        Dictionary<string, List<HostOperation>> hostOperations = new Dictionary<string, List<HostOperation>>();
+        readonly Dictionary<string, List<HostOperation>> hostOperations = new Dictionary<string, List<HostOperation>>();
         public List<RFS> RFSList { get; } = new List<RFS>();
 
         internal CFS(string serviceCode, string description, [NotNull] HostOperation hostOp, HostOperation.LinkType linkType)
@@ -34,15 +34,15 @@ namespace SPAFilter.SPA.SC
 
         public string ToXml(CatalogComponents allCompontens)
         {
-            string xmlStrStart = $"<CFS name=\"{Name}\" description=\"{Description}\">";
-            string xmlStrMiddle = string.Empty;
+            var xmlStrStart = $"<CFS name=\"{Name}\" description=\"{Description}\">";
+            var xmlStrMiddle = string.Empty;
 
             foreach (RFS rfs in RFSList)
             {
                 xmlStrMiddle += rfs.ToXmlCFSChild(allCompontens.CollectionCFS, allCompontens.CollectionRFSGroup);
             }
 
-            HashSet<string> servicesRestrictionInAllHosts = new HashSet<string>();
+            var servicesRestrictionInAllHosts = new HashSet<string>();
             foreach (List<HostOperation> aaa in hostOperations.Values)
             {
                 foreach (HostOperation bbb in aaa)

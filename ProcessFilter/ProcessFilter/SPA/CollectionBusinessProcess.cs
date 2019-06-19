@@ -72,6 +72,4 @@ namespace SPAFilter.SPA
             }
         }
     }
-
-
 }

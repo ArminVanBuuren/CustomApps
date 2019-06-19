@@ -31,7 +31,7 @@ namespace SPAFilter.SPA
         {
             get
             {
-                List<string> allOps = new List<string>();
+                var allOps = new List<string>();
                 foreach (NetworkElement netEl in this)
                 {
                     allOps.AddRange(netEl.Operations.Select(p => p.Name));
@@ -44,7 +44,7 @@ namespace SPAFilter.SPA
         {
             get
             {
-                List<NetworkElementOpartion> allOps = new List<NetworkElementOpartion>();
+                var allOps = new List<NetworkElementOpartion>();
                 foreach (NetworkElement netEl in this)
                 {
                     allOps.AddRange(netEl.Operations);
