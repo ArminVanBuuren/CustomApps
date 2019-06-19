@@ -286,7 +286,7 @@ namespace Utils.WinForm.Notepad
             bool isXml = XML.IsXml(FCTextBox.Text, out XmlDocument document);
             if (isXml)
             {
-                string formatting = RtfFromXml.GetXmlString(document);
+                string formatting = document.PrintXml();
                 FCTextBox.Text = formatting;
             }
         }

@@ -356,6 +356,122 @@ namespace Utils
             }
         }
 
+        public static string PrintXml(string xmlString)
+        {
+            XmlDocument xml = new XmlDocument();
+            xml.LoadXml(xmlString);
+            return xml.PrintXml();
+        }
+
+        public static string PrintXml(this XmlDocument xml)
+        {
+            StringBuilder source = new StringBuilder();
+            ProcessXmlInnerText(xml.DocumentElement, source, 0);
+            return source.ToString();
+        }
+
+        static bool ProcessXmlInnerText(XmlNode node, StringBuilder source, int nested)
+        {
+            var whiteSpaces = new string(' ', nested);
+
+            if (node.Attributes == null)
+            {
+                switch (node.Name)
+                {
+                    case "#text":
+                        var trimStr = node.OuterXml.Trim('\r', '\n');
+                        var strLines = trimStr.Split('\r', '\n');
+
+                        if (strLines.Length == 1)
+                        {
+                            source.Append(trimStr);
+                            return false;
+                        }
+                        else
+                        {
+                            var builder = new StringBuilder();
+
+                            foreach (var line in strLines)
+                            {
+                                if (string.IsNullOrWhiteSpace(line))
+                                    continue;
+
+                                builder.Append(Environment.NewLine);
+                                builder.Append(whiteSpaces);
+                                builder.Append(line.Trim());
+                            }
+
+                            source.Append(builder.ToString());
+                            return true;
+                        }
+
+                    case "#comment":
+                    case "#cdata-section":
+                        source.Append(Environment.NewLine);
+                        source.Append(whiteSpaces);
+                        source.Append(node.OuterXml.Trim()); break;
+                    default:
+                        source.Append(Environment.NewLine);
+                        source.Append(whiteSpaces);
+                        source.Append(node.InnerText.TrimEnd()); break;
+                }
+            }
+            else
+            {
+                var newLine = (nested != 0) ? Environment.NewLine : string.Empty;
+                var xmlAttributes = new StringBuilder();
+
+                foreach (XmlAttribute attribute in node.Attributes)
+                {
+                    xmlAttributes.Append(' ');
+                    xmlAttributes.Append(attribute.Name);
+                    xmlAttributes.Append('=');
+                    xmlAttributes.Append('"');
+                    xmlAttributes.Append(XML.NormalizeXmlValueFast(attribute.InnerXml, XMLValueEncoder.EncodeAttribute));
+                    xmlAttributes.Append('"');
+                }
+
+                source.Append(newLine);
+                source.Append(whiteSpaces);
+                source.Append('<');
+                source.Append(node.Name);
+
+                if (xmlAttributes.Length >= 0)
+                    source.Append(xmlAttributes);
+
+                if (node.ChildNodes.Count <= 0 && node.InnerText.IsNullOrEmpty())
+                    source.Append(" />");
+                else
+                {
+                    source.Append('>');
+
+                    nested += 3;
+                    bool addNewLine = true;
+                    foreach (XmlNode node2 in node.ChildNodes)
+                    {
+                        addNewLine = ProcessXmlInnerText(node2, source, nested);
+                    }
+
+                    if (node.ChildNodes.Count == 1 && !addNewLine)
+                    {
+                        source.Append("</");
+                        source.Append(node.Name);
+                        source.Append('>');
+                    }
+                    else
+                    {
+                        source.Append(Environment.NewLine);
+                        source.Append(whiteSpaces);
+                        source.Append("</");
+                        source.Append(node.Name);
+                        source.Append('>');
+                    }
+                }
+            }
+
+            return true;
+        }
+
         /// <summary>
         /// Получить точно позицию ноды в неотформатированном тексте XML
         /// </summary>

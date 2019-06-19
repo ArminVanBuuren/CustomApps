@@ -16,13 +16,26 @@ namespace Utils.WinForm.CustomProgressBar
 
     public class ProgressCalculaterAsync : IDisposable
     {
+        private int _currentProgressIterator = 0;
         private readonly SynchronizationContext _syncContext;
-        private readonly IAsyncResult _result;
-        private readonly Action _processChecking;
+
+        private IAsyncResult _result;
+        private Action _processChecking;
 
         public bool ProgressCompleted { get; private set; } = false;
         public IProgressBar ProgressBar { get; }
-        public int CurrentProgressInterator { get; set; } = 0;
+
+        public int CurrentProgressInterator
+        {
+            get => _currentProgressIterator;
+            set
+            {
+                if (_currentProgressIterator >= value)
+                    return;
+                _currentProgressIterator = value >= TotalProgressInterator ? TotalProgressInterator : value;
+            }
+        }
+
         public int TotalProgressInterator { get; private set; }
 
         public int PercentComplete { get; private set; }
@@ -36,10 +49,19 @@ namespace Utils.WinForm.CustomProgressBar
             ProgressBar = progressBar ?? throw new ArgumentNullException(nameof(progressBar));
             TotalProgressInterator = totalProgressIterator;
 
+            Reset();
+        }
+
+        public void Reset()
+        {
+            Stop();
+
             CurrentProgressInterator = 0;
             ProgressCompleted = false;
 
+            ProgressBar.Value = 0;
             ProgressBar.Visible = true;
+
             _processChecking = new Action(ProgressChecking);
             _result = _processChecking.BeginInvoke(null, null);
         }
@@ -47,7 +69,11 @@ namespace Utils.WinForm.CustomProgressBar
         void Stop()
         {
             ProgressCompleted = true;
+
             _processChecking?.EndInvoke(_result);
+            _processChecking = null;
+            _result = null;
+
             ProgressBar.Visible = false;
         }
 
@@ -70,8 +96,8 @@ namespace Utils.WinForm.CustomProgressBar
                         continue;
                     }
 
-                    double calc = (double)CurrentProgressInterator / TotalProgressInterator;
-                    PercentComplete = ((int)(calc * 100)) >= 100 ? 100 : ((int)(calc * 100));
+                    double calc = (double) CurrentProgressInterator / TotalProgressInterator;
+                    PercentComplete = ((int) (calc * 100)) >= 100 ? 100 : ((int) (calc * 100));
 
                     if (_prevValue == PercentComplete)
                         continue;

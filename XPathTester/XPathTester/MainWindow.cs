@@ -298,9 +298,7 @@ namespace XPathTester
             if (XmlBody == null)
                 return;
 
-            string formatting = RtfFromXml.GetXmlString(XmlBody);
-
-            fctb.Text = formatting;
+            fctb.Text = XmlBody.PrintXml();
         }
 
         //private void tabControl1_DrawItem(object sender, DrawItemEventArgs e)

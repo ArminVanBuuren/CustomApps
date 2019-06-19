@@ -99,138 +99,15 @@ namespace Utils.XmlRtfStyle
             }
 
             StringBuilder source = new StringBuilder();
-            ProcessXmlInnerText(xml.DocumentElement, source, 0);
-            return GetRtfString(source.ToString(), settings);
-        }
-
-        public static string GetXmlString(string xmlString)
-        {
-            XmlDocument xml = new XmlDocument();
-            xml.LoadXml(xmlString);
-            StringBuilder source = new StringBuilder();
-            ProcessXmlInnerText(xml.DocumentElement, source, 0);
-            return source.ToString();
-        }
-
-        public static string GetXmlString(XmlDocument xml)
-        {
-            StringBuilder source = new StringBuilder();
-            ProcessXmlInnerText(xml.DocumentElement, source, 0);
-            return source.ToString();
-        }
-
-        static bool ProcessXmlInnerText(XmlNode node, StringBuilder source, int nested)
-        {
-            var whiteSpaces = new string(' ', nested);
-
-            if (node.Attributes == null)
-            {
-                switch (node.Name)
-                {
-                    case "#text":
-                        var trimStr = node.OuterXml.Trim('\r', '\n');
-                        var strLines = trimStr.Split('\r', '\n');
-
-                        if (strLines.Length == 1)
-                        {
-                            source.Append(trimStr);
-                            return false;
-                        }
-                        else
-                        {
-                            source.Append(AddSpacesByLine(strLines, whiteSpaces));
-                            return true;
-                        }
-                        
-                    case "#comment":
-                    case "#cdata-section":
-                        source.Append(Environment.NewLine);
-                        source.Append(whiteSpaces);
-                        source.Append(node.OuterXml.Trim()); break;
-                    default:
-                        source.Append(Environment.NewLine);
-                        source.Append(whiteSpaces);
-                        source.Append(node.InnerText.TrimEnd()); break;
-                }
-            }
-            else
-            {
-                var newLine = (nested != 0) ? Environment.NewLine : string.Empty;
-                var xmlAttributes = new StringBuilder();
-
-                foreach (XmlAttribute attribute in node.Attributes)
-                {
-                    xmlAttributes.Append(' ');
-                    xmlAttributes.Append(attribute.Name);
-                    xmlAttributes.Append('=');
-                    xmlAttributes.Append('"');
-                    xmlAttributes.Append(XML.NormalizeXmlValueFast(attribute.InnerXml, XMLValueEncoder.EncodeAttribute));
-                    xmlAttributes.Append('"');
-                }
-
-                source.Append(newLine);
-                source.Append(whiteSpaces);
-                source.Append('<');
-                source.Append(node.Name);
-
-                if (xmlAttributes.Length >= 0)
-                    source.Append(xmlAttributes);
-
-                if (node.ChildNodes.Count <= 0 && node.InnerText.IsNullOrEmpty())
-                    source.Append(" />");
-                else
-                {
-                    source.Append('>');
-
-                    nested += 3;
-                    bool addNewLine = true;
-                    foreach (XmlNode node2 in node.ChildNodes)
-                    {
-                        addNewLine = ProcessXmlInnerText(node2, source, nested);
-                    }
-
-                    if (node.ChildNodes.Count == 1 && !addNewLine)
-                    {
-                        source.Append("</");
-                        source.Append(node.Name);
-                        source.Append('>');
-                    }
-                    else
-                    {
-                        source.Append(Environment.NewLine);
-                        source.Append(whiteSpaces);
-                        source.Append("</");
-                        source.Append(node.Name);
-                        source.Append('>');
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        static string AddSpacesByLine(string[] strLines, string spaces)
-        {
-            var builder = new StringBuilder();
-
-            foreach (var line in strLines)
-            {
-                if (string.IsNullOrWhiteSpace(line))
-                    continue;
-
-                builder.Append(Environment.NewLine);
-                builder.Append(spaces);
-                builder.Append(line.Trim());
-            }
-
-            return builder.ToString();
+            return GetRtfString(xml.OuterXml, settings);
         }
 
         static string GetRtfString(string source, RtfFromXml settings)
         {
-            RtfBuilder rtf = new RtfBuilder();
-            StringBuilder temp = new StringBuilder();
+            var rtf = new RtfBuilder();
+            var temp = new StringBuilder();
             rtf.SetFont(settings.FontName, settings.FontSize);
+
             int state = 0;
             foreach (char ch in source)
             {
@@ -389,72 +266,6 @@ namespace Utils.XmlRtfStyle
 
             return rtf.ToString();
         }
-
-        //static void GetPosition(XmlNode findNode, ref int position, int rankNewLine, bool isPrimary)
-        //{
-        //    if (findNode.ParentNode == null)
-        //    {
-        //        position = position + findNode.Name.Length * 2 + 5;
-        //        return;
-        //    }
-
-        //    foreach (XmlNode nodeBrothers in findNode.ParentNode.ChildNodes)
-        //    {
-        //        if (nodeBrothers.Equals(findNode))
-        //        {
-        //            rankNewLine = rankNewLine - 1;
-        //            GetPosition(findNode.ParentNode, ref position, rankNewLine, false);
-        //            break;
-        //        }
-
-        //        if (isPrimary && nodeBrothers.Attributes != null)
-        //        {
-        //            if (GetPositionInNode(findNode, nodeBrothers, ref position, rankNewLine))
-        //            {
-        //                rankNewLine = rankNewLine - 1;
-        //                GetPosition(findNode.ParentNode, ref position, rankNewLine, false);
-        //                break;
-        //            }
-
-        //            AppendPossAndSpaces(nodeBrothers, ref position, rankNewLine);
-        //        }
-        //        else
-        //            AppendPossAndSpaces(nodeBrothers, ref position, rankNewLine);
-        //    }
-        //}
-
-        //static void AppendPossAndSpaces(XmlNode nodeBrothers, ref int position, int rankNewLine)
-        //{
-        //    position = position + nodeBrothers.OuterXml.Length + rankNewLine * 3;
-        //    AppendSpaces(nodeBrothers, ref position, rankNewLine);
-        //}
-
-        //static void AppendSpaces(XmlNode nodeBrothers, ref int position, int rankNewLine)
-        //{
-        //    foreach (XmlNode childNode in nodeBrothers.ChildNodes)
-        //    {
-        //        position = position + rankNewLine * 3 + 1;
-        //        AppendSpaces(childNode, ref position, rankNewLine + 1);
-        //    }
-        //}
-        //static bool GetPositionInNode(XmlNode findNode, XmlNode nodeBrothers, ref int position, int rankNewLine)
-        //{
-        //    int getPosAttr = 0;
-        //    if (nodeBrothers.Attributes == null)
-        //        return false;
-
-        //    foreach (XmlAttribute attribute in nodeBrothers.Attributes)
-        //    {
-        //        getPosAttr = getPosAttr + $" {attribute.Name}=\"{attribute.InnerXml}\"".Length;
-        //        if (attribute.Equals(findNode))
-        //        {
-        //            position = position + getPosAttr + nodeBrothers.Name.Length + 1 + rankNewLine * 3;
-        //            return true;
-        //        }
-        //    }
-
-        //    return false;
-        //}
 
         static int ReadCdata(RtfFromXml settings, RtfBuilder rtf, StringBuilder temp, int waitTag, int state, char c)
         {
