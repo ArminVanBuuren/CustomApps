@@ -1,30 +1,62 @@
-﻿using static Utils.IO;
+﻿using System;
+using System.IO;
+using System.Text.RegularExpressions;
 using Utils.WinForm.DataGridViewHelper;
+using Utils;
 
 namespace SPAFilter.SPA
 {
-
-    public class ObjectTemplate
+    public abstract class ObjectTemplate
     {
-        public ObjectTemplate(string path, int id)
+        private readonly FileInfo _fileInfo;
+
+        protected ObjectTemplate(string path, int id)
         {
             ID = id;
             Name = path.GetLastNameInPath(true);
             FilePath = path;
+            _fileInfo = new FileInfo(path);
         }
 
-        [DGVEnhancer.DGVColumnAttribute(DGVEnhancer.ColumnPosition.First, "ID")]
+        [DGVColumn(ColumnPosition.First, "ID")]
         public int ID { get; protected set; }
 
-        [DGVEnhancer.DGVColumnAttribute(DGVEnhancer.ColumnPosition.After, "Name")]
+        [DGVColumn(ColumnPosition.After, "Name")]
         public virtual string Name { get; protected set; }
 
-        [DGVEnhancer.DGVColumnAttribute(DGVEnhancer.ColumnPosition.Last, "File Path")]
+        [DGVColumn(ColumnPosition.Last, "Size [Kb]")]
+        public double FileSize
+        {
+            get
+            {
+                if (_fileInfo.Exists)
+                    return Math.Round(((double)_fileInfo.Length / 1024), 2);
+
+                return -1;
+            }
+        }
+
+        [DGVColumn(ColumnPosition.Last, "File Path")]
         public virtual string FilePath { get; }
 
         public override string ToString()
         {
             return Name;
+        }
+
+        internal static bool GetNameWithId(string fileName, out string newFileName, out int newId)
+        {
+            Match match = Regex.Match(fileName, @"(.+)\.\(\s*(\d+)\s*\)");
+            if (match.Success && int.TryParse(match.Groups[2].Value, out int res))
+            {
+                newFileName = match.Groups[1].Value;
+                newId = res;
+                return true;
+            }
+
+            newFileName = fileName;
+            newId = -1;
+            return false;
         }
     }
 }

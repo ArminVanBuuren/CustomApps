@@ -2,6 +2,7 @@
 using System.Data;
 using System.IO;
 using System.Text;
+using SPAFilter.SPA.Collection;
 using Utils;
 using Utils.WinForm.CustomProgressBar;
 
@@ -11,9 +12,9 @@ namespace SPAFilter.SPA.SC
     {
         readonly CatalogComponents cfsList;
 
-        private NetworkElementCollection NetworkElements { get; }
+        private CollectionNetworkElement NetworkElements { get; }
 
-        public ServiceCatalog(NetworkElementCollection networkElements, DataTable servicesRD, ProgressCalculaterAsync progressCalc)
+        public ServiceCatalog(CollectionNetworkElement networkElements, DataTable servicesRD, ProgressCalculaterAsync progressCalc)
         {
             NetworkElements = networkElements;
 

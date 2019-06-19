@@ -15,6 +15,8 @@ using System.Xml;
 using System.Threading.Tasks;
 using OfficeOpenXml;
 using SPAFilter.SPA;
+using SPAFilter.SPA.Collection;
+using SPAFilter.SPA.Components;
 using SPAFilter.SPA.SC;
 using Utils;
 using Utils.WinForm.DataGridViewHelper;
@@ -62,8 +64,11 @@ namespace SPAFilter
                     ScenariosButtonOpen.Enabled = !_isInProgress;
                     CommnadsButtonOpen.Enabled = !_isInProgress;
 
-                    tabControl1.Enabled = !_isInProgress; // Дисейблится весь TabControl, чтобы юзерок не мог менять файлы.
-                    //GenerateSC.Enabled = !_isInProgress;
+                    dataGridProcesses.Visible = !_isInProgress;
+                    dataGridOperations.Visible = !_isInProgress;
+                    dataGridScenarios.Visible = !_isInProgress;
+                    dataGridCommands.Visible = !_isInProgress;
+                    GenerateSC.Enabled = !_isInProgress;
 
                     ProcessesComboBox.Enabled = !_isInProgress;
                     NetSettComboBox.Enabled = !_isInProgress;
@@ -75,7 +80,7 @@ namespace SPAFilter
         public static string SerializationDataPath => $"{ApplicationFilePath}.bin";
         private XmlNotepad notepad;
         public CollectionBusinessProcess Processes { get; private set; }
-        public CollectionNetworkElements NetElements { get; private set; }
+        public NetworkElementCollection NetElements { get; private set; }
         public CollectionScenarios Scenarios { get; private set; }
         public CollectionCommands Commands { get; private set; }
         private bool IsInitialization { get; } = true;
@@ -144,10 +149,10 @@ namespace SPAFilter
             //progressBar.Visible = true;
             //progressBar.Value = 100;
 
-            dataGridProcessesResults.KeyDown += DataGridProcessesResults_KeyDown;
-            dataGridOperationsResult.KeyDown += DataGridOperationsResult_KeyDown;
-            dataGridScenariosResult.KeyDown += DataGridScenariosResult_KeyDown;
-            dataGridCommandsResult.KeyDown += DataGridCommandsResult_KeyDown;
+            dataGridProcesses.KeyDown += DataGridProcessesResults_KeyDown;
+            dataGridOperations.KeyDown += DataGridOperationsResult_KeyDown;
+            dataGridScenarios.KeyDown += DataGridScenariosResult_KeyDown;
+            dataGridCommands.KeyDown += DataGridCommandsResult_KeyDown;
 
             tabControl1.KeyDown += ProcessFilterForm_KeyDown;
             ProcessesTextBox.KeyDown += ProcessFilterForm_KeyDown;
@@ -157,10 +162,10 @@ namespace SPAFilter
             ProcessesComboBox.KeyDown += ProcessFilterForm_KeyDown;
             NetSettComboBox.KeyDown += ProcessFilterForm_KeyDown;
             OperationComboBox.KeyDown += ProcessFilterForm_KeyDown;
-            dataGridProcessesResults.KeyDown += ProcessFilterForm_KeyDown;
-            dataGridOperationsResult.KeyDown += ProcessFilterForm_KeyDown;
-            dataGridScenariosResult.KeyDown += ProcessFilterForm_KeyDown;
-            dataGridCommandsResult.KeyDown += ProcessFilterForm_KeyDown;
+            dataGridProcesses.KeyDown += ProcessFilterForm_KeyDown;
+            dataGridOperations.KeyDown += ProcessFilterForm_KeyDown;
+            dataGridScenarios.KeyDown += ProcessFilterForm_KeyDown;
+            dataGridCommands.KeyDown += ProcessFilterForm_KeyDown;
             ProcessesButtonOpen.KeyDown += ProcessFilterForm_KeyDown;
             OperationButtonOpen.KeyDown += ProcessFilterForm_KeyDown;
             ScenariosButtonOpen.KeyDown += ProcessFilterForm_KeyDown;
@@ -168,7 +173,7 @@ namespace SPAFilter
             buttonFilter.KeyDown += ProcessFilterForm_KeyDown;
             KeyDown += ProcessFilterForm_KeyDown;
 
-            dataGridScenariosResult.CellFormatting += DataGridScenariosResult_CellFormatting;
+            dataGridScenarios.CellFormatting += DataGridScenariosResult_CellFormatting;
             Closing += ProcessFilterForm_Closing;
         }
 
@@ -186,10 +191,10 @@ namespace SPAFilter
             }
         }
 
-        private async void buttonPrintXML_Click(object sender, EventArgs e)
+        private async void ButtonPrintXML_Click(object sender, EventArgs e)
         {
             int filesNumber = (_filteredProcessCollection?.Count ?? 0) +
-                              (_filteredNetElemCollection?.AllOperations?.Count ?? 0) +
+                              ((_filteredNetElemCollection == null || _filteredNetElemCollection.Count == 0) ? 0 : _filteredNetElemCollection.Sum(x => x.Operations.Count)) +
                               (_filteredScenarioCollection?.Count ?? 0) +
                               (_filteredCMMCollection?.Count ?? 0);
 
@@ -224,6 +229,10 @@ namespace SPAFilter
                 if (stringErrors.Length > 0)
                 {
                     MessageBox.Show($"Several errors found:{stringErrors.ToString(0, stringErrors.Length > 200 ? 200 : stringErrors.Length)}", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                else
+                {
+                    MessageBox.Show($"Successfully completed.", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
@@ -266,7 +275,7 @@ namespace SPAFilter
                             return;
                     }
 
-                    IO.WriteFile(path, formatting);
+                    IO.WriteFile(path, formatting, Encoding.UTF8);
                 }
             }
             catch (Exception e)
@@ -283,26 +292,30 @@ namespace SPAFilter
 
             if (Processes == null || NetElements == null)
             {
-                dataGridProcessesResults.DataSource = null;
-                dataGridOperationsResult.DataSource = null;
+                dataGridProcesses.DataSource = null;
+                dataGridOperations.DataSource = null;
                 return;
             }
 
             try
             {
                 IsInProgress = true;
-                dataGridProcessesResults.DataSource = null;
-                dataGridOperationsResult.DataSource = null;
-                dataGridScenariosResult.DataSource = null;
-                dataGridCommandsResult.DataSource = null;
-                dataGridProcessesResults.Refresh();
-                dataGridOperationsResult.Refresh();
-                dataGridScenariosResult.Refresh();
-                dataGridCommandsResult.Refresh();
+                dataGridProcesses.DataSource = null;
+                dataGridOperations.DataSource = null;
+                dataGridScenarios.DataSource = null;
+                dataGridCommands.DataSource = null;
+                dataGridProcesses.Refresh();
+                dataGridOperations.Refresh();
+                dataGridScenarios.Refresh();
+                dataGridCommands.Refresh();
 
-                using (var progrAsync = new ProgressCalculaterAsync(progressBar, 10))
+                using (var progressCalc = new ProgressCalculaterAsync(progressBar, 20))
                 {
-                    await Task.Factory.StartNew(() => DataFilter(progrAsync));
+                    var filterProcess = ProcessesComboBox.Text;
+                    var filterNE = NetSettComboBox.Text;
+                    var filterOp = OperationComboBox.Text;
+
+                    await Task.Factory.StartNew(() => DataFilter(filterProcess, filterNE, filterOp, progressCalc));
                 }
             }
             catch (Exception ex)
@@ -316,13 +329,13 @@ namespace SPAFilter
         }
 
         CollectionBusinessProcess _filteredProcessCollection;
-        NetworkElementCollection _filteredNetElemCollection;
+        CollectionNetworkElement _filteredNetElemCollection;
         CollectionScenarios _filteredScenarioCollection = new CollectionScenarios();
         List<Scenario> _filteredSubScenarios = new List<Scenario>();
         CollectionCommands _filteredCMMCollection = new CollectionCommands();
         
 
-        bool DataFilter(ProgressCalculaterAsync progressCalc)
+        void DataFilter(string filterProcess, string filterNE, string filterOp, ProgressCalculaterAsync progressCalc)
         {
             try
             {
@@ -330,23 +343,14 @@ namespace SPAFilter
                 _filteredCMMCollection = new CollectionCommands();
                 _filteredSubScenarios = new List<Scenario>();
 
-                string processFilter = null, netElemFilter = null, operFilter = null;
-                progressBar.Invoke(new MethodInvoker(delegate
-                                                     {
-                                                         processFilter = ProcessesComboBox.Text;
-                                                         netElemFilter = NetSettComboBox.Text;
-                                                         operFilter = OperationComboBox.Text;
-                                                     }));
-                progressCalc++;
-
-                if (!processFilter.IsNullOrEmpty())
+                if (!filterProcess.IsNullOrEmpty())
                 {
                     _filteredProcessCollection = new CollectionBusinessProcess();
                     IEnumerable<BusinessProcess> getCollection;
-                    if (processFilter[0] == '%' || processFilter[processFilter.Length - 1] == '%')
-                        getCollection = Processes.Where(p => p.Name.IndexOf(processFilter.Replace("%", ""), StringComparison.CurrentCultureIgnoreCase) != -1);
+                    if (filterProcess[0] == '%' || filterProcess[filterProcess.Length - 1] == '%')
+                        getCollection = Processes.Where(p => p.Name.IndexOf(filterProcess.Replace("%", ""), StringComparison.CurrentCultureIgnoreCase) != -1);
                     else
-                        getCollection = Processes.Where(p => p.Name.Equals(processFilter, StringComparison.CurrentCultureIgnoreCase));
+                        getCollection = Processes.Where(p => p.Name.Equals(filterProcess, StringComparison.CurrentCultureIgnoreCase));
 
                     _filteredProcessCollection.AddRange(getCollection);
                 }
@@ -355,17 +359,16 @@ namespace SPAFilter
                     _filteredProcessCollection = Processes.Clone();
                 }
 
+                _filteredProcessCollection.Sort((x, y) => x.ID - y.ID);
 
-                progressCalc++;
-
-                if (!netElemFilter.IsNullOrEmpty())
+                if (!filterNE.IsNullOrEmpty())
                 {
-                    _filteredNetElemCollection = new NetworkElementCollection();
+                    _filteredNetElemCollection = new CollectionNetworkElement();
                     IEnumerable<NetworkElement> getCollection;
-                    if (netElemFilter[0] == '%' || netElemFilter[netElemFilter.Length - 1] == '%')
-                        getCollection = NetElements.Elements.Where(p => p.Name.IndexOf(netElemFilter.Replace("%", ""), StringComparison.CurrentCultureIgnoreCase) != -1);
+                    if (filterNE[0] == '%' || filterNE[filterNE.Length - 1] == '%')
+                        getCollection = NetElements.Elements.Where(p => p.Name.IndexOf(filterNE.Replace("%", ""), StringComparison.CurrentCultureIgnoreCase) != -1);
                     else
-                        getCollection = NetElements.Elements.Where(p => p.Name.Equals(netElemFilter, StringComparison.CurrentCultureIgnoreCase));
+                        getCollection = NetElements.Elements.Where(p => p.Name.Equals(filterNE, StringComparison.CurrentCultureIgnoreCase));
 
                     _filteredNetElemCollection.AddRange(getCollection.Select(netElem => netElem.Clone()));
                 }
@@ -374,24 +377,24 @@ namespace SPAFilter
                     _filteredNetElemCollection = NetElements.Elements.Clone();
                 }
 
-                if (!operFilter.IsNullOrEmpty() && _filteredNetElemCollection != null)
+                if (!filterOp.IsNullOrEmpty() && _filteredNetElemCollection != null)
                 {
-                    var netElemCollection2 = new NetworkElementCollection();
+                    var netElemCollection2 = new CollectionNetworkElement();
                     foreach (NetworkElement nec in _filteredNetElemCollection)
                     {
-                        List<NetworkElementOpartion> ops = new List<NetworkElementOpartion>();
-                        foreach (NetworkElementOpartion neo in nec.Operations)
+                        List<Operation> ops = new List<Operation>();
+                        foreach (Operation neo in nec.Operations)
                         {
-                            if (operFilter[0] == '%' || operFilter[operFilter.Length - 1] == '%')
+                            if (filterOp[0] == '%' || filterOp[filterOp.Length - 1] == '%')
                             {
-                                if (neo.Name.IndexOf(operFilter.Replace("%", ""), StringComparison.CurrentCultureIgnoreCase) != -1)
+                                if (neo.Name.IndexOf(filterOp.Replace("%", ""), StringComparison.CurrentCultureIgnoreCase) != -1)
                                 {
                                     ops.Add(neo);
                                 }
                             }
                             else
                             {
-                                if (neo.Name.Equals(operFilter, StringComparison.CurrentCultureIgnoreCase))
+                                if (neo.Name.Equals(filterOp, StringComparison.CurrentCultureIgnoreCase))
                                 {
                                     ops.Add(neo);
                                 }
@@ -406,9 +409,6 @@ namespace SPAFilter
                     }
                     _filteredNetElemCollection = netElemCollection2;
                 }
-
-
-                progressCalc++;
 
                 int endOfBpCollection = _filteredProcessCollection.Count;
                 for (int i = 0; i < endOfBpCollection; i++)
@@ -435,10 +435,9 @@ namespace SPAFilter
                     }
                 }
 
+                progressCalc.CurrentProgressInterator += 2;
 
-                progressCalc++;
-
-                Action<NetworkElementOpartion> getScenario = null;
+                Action<Operation> getScenario = null;
                 if (Scenarios != null)
                 {
                     getScenario = operation =>
@@ -456,11 +455,34 @@ namespace SPAFilter
                                   };
                 }
 
-
-                progressCalc++;
-
-                if (_filteredNetElemCollection != null)
+                int maxForCurrentIterator = progressCalc.TotalProgressInterator / 2;
+                if (_filteredNetElemCollection != null && _filteredNetElemCollection.Count > 0)
                 {
+                    int progressIterator = 0;
+
+                    Action calcProgress = null;
+                    if (_filteredNetElemCollection.Count > maxForCurrentIterator)
+                    {
+                        int numberOfIter = 0;
+                        progressIterator = _filteredNetElemCollection.Count / maxForCurrentIterator;
+                        calcProgress = () =>
+                        {
+                            numberOfIter++;
+                            if (numberOfIter < progressIterator)
+                                return;
+                            progressCalc++;
+                            numberOfIter = 0;
+                        };
+                    }
+                    else
+                    {
+                        progressIterator = maxForCurrentIterator / _filteredNetElemCollection.Count;
+                        calcProgress = () =>
+                        {
+                            progressCalc.CurrentProgressInterator += progressIterator;
+                        };
+                    }
+
                     foreach (var netElem in _filteredNetElemCollection)
                     {
                         int endOfOpCollection = netElem.Operations.Count;
@@ -478,10 +500,16 @@ namespace SPAFilter
                             i--;
                             endOfOpCollection--;
                         }
+
+                        calcProgress.Invoke();
                     }
                 }
+                else
+                {
+                    progressCalc.CurrentProgressInterator += maxForCurrentIterator;
+                }
 
-                progressCalc++;
+
 
                 if (Commands != null && _filteredScenarioCollection.Count > 0)
                 {
@@ -496,46 +524,45 @@ namespace SPAFilter
                 }
 
 
-                progressCalc++;
+                progressCalc.CurrentProgressInterator += 2;
 
-                _filteredSubScenarios = _filteredSubScenarios.Distinct(new ItemEqualityComparer()).ToList();
+                _filteredSubScenarios = _filteredSubScenarios.Distinct(new ItemEqualityComparer<Scenario>()).ToList();
                 _filteredScenarioCollection.AddRange(_filteredSubScenarios);
 
 
                 progressBar.Invoke(new MethodInvoker(delegate
                                                      {
-                                                         progressCalc++;
-
-                                                         dataGridProcessesResults.AssignListToDataGrid(_filteredProcessCollection, new Padding(0, 0, 15, 0));
+                                                         dataGridProcesses.AssignListToDataGrid(_filteredProcessCollection, new Padding(0, 0, 15, 0));
                                                          ProcessStatRefresh(_filteredProcessCollection);
 
-                                                         dataGridOperationsResult.AssignListToDataGrid(_filteredNetElemCollection.AllOperations, new Padding(0, 0, 15, 0));
+                                                         progressCalc.CurrentProgressInterator += 2;
+
+                                                         dataGridOperations.AssignListToDataGrid(_filteredNetElemCollection.AllOperations, new Padding(0, 0, 15, 0));
                                                          NEStatRefresh(_filteredNetElemCollection);
                                                          OperationsStatRefresh(_filteredNetElemCollection);
 
-                                                         progressCalc++;
+                                                         progressCalc.CurrentProgressInterator += 2;
 
-                                                         dataGridScenariosResult.AssignListToDataGrid(_filteredScenarioCollection, new Padding(0, 0, 15, 0));
+                                                         dataGridScenarios.AssignListToDataGrid(_filteredScenarioCollection, new Padding(0, 0, 15, 0));
                                                          ScenariosStatRefresh(_filteredScenarioCollection);
 
-                                                         dataGridCommandsResult.AssignListToDataGrid(_filteredCMMCollection, new Padding(0, 0, 15, 0));
+                                                         dataGridCommands.AssignListToDataGrid(_filteredCMMCollection, new Padding(0, 0, 15, 0));
                                                          CommandsStatRefresh(_filteredCMMCollection);
 
-                                                         progressCalc++;
+                                                         progressCalc.CurrentProgressInterator += 2;
                                                      }));
-                return true;
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
             }
         }
 
 
         private void DataGridScenariosResult_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            DataGridViewRow row = dataGridScenariosResult.Rows[e.RowIndex];
+            DataGridViewRow row = dataGridScenarios.Rows[e.RowIndex];
             if (row.Cells[0].Value.ToString() == "-1")
             {
                 row.DefaultCellStyle.BackColor = Color.Yellow;
@@ -548,39 +575,39 @@ namespace SPAFilter
 
         private void dataGridProcessesResults_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            CallAndCheckDataGridKey(dataGridProcessesResults);
+            CallAndCheckDataGridKey(dataGridProcesses);
         }
         private void DataGridProcessesResults_KeyDown(object sender, KeyEventArgs e)
         {
-            CallAndCheckDataGridKey(dataGridProcessesResults, e);
+            CallAndCheckDataGridKey(dataGridProcesses, e);
         }
 
         private void dataGridOperationsResult_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            CallAndCheckDataGridKey(dataGridOperationsResult);
+            CallAndCheckDataGridKey(dataGridOperations);
         }
         private void DataGridOperationsResult_KeyDown(object sender, KeyEventArgs e)
         {
-            CallAndCheckDataGridKey(dataGridOperationsResult, e);
+            CallAndCheckDataGridKey(dataGridOperations, e);
         }
 
         private void dataGridScenariosResult_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            CallAndCheckDataGridKey(dataGridScenariosResult);
+            CallAndCheckDataGridKey(dataGridScenarios);
         }
         private void DataGridScenariosResult_KeyDown(object sender, KeyEventArgs e)
         {
-            CallAndCheckDataGridKey(dataGridScenariosResult, e);
+            CallAndCheckDataGridKey(dataGridScenarios, e);
         }
 
         private void dataGridCommandsResult_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            CallAndCheckDataGridKey(dataGridCommandsResult);
+            CallAndCheckDataGridKey(dataGridCommands);
         }
 
         private void DataGridCommandsResult_KeyDown(object sender, KeyEventArgs e)
         {
-            CallAndCheckDataGridKey(dataGridCommandsResult, e);
+            CallAndCheckDataGridKey(dataGridCommands, e);
         }
 
         void CallAndCheckDataGridKey(DataGridView grid, KeyEventArgs e = null)
@@ -740,7 +767,7 @@ namespace SPAFilter
             if (Directory.Exists(opPath.Trim(' ')))
             {   
                 UpdateLastPath(opPath.Trim(' '));
-                NetElements = new CollectionNetworkElements(opPath.Trim(' '));
+                NetElements = new NetworkElementCollection(opPath.Trim(' '));
                 NetSettComboBox.DataSource = NetElements.Elements.AllNetworkElements;
                 OperationComboBox.DataSource = NetElements.Elements.AllOperationsName;
                 NEStatRefresh(NetElements.Elements);
@@ -764,12 +791,12 @@ namespace SPAFilter
             //OperationComboBox.ValueMember = lastSettOper;
         }
 
-        void NEStatRefresh(NetworkElementCollection netElems)
+        void NEStatRefresh(CollectionNetworkElement netElems)
         {
             NEElementsCount.Text = $"NEs: {(netElems == null ? string.Empty : netElems.AllNetworkElements.Count.ToString())}";
         }
 
-        void OperationsStatRefresh(NetworkElementCollection netElems)
+        void OperationsStatRefresh(CollectionNetworkElement netElems)
         {
             OperationsCount.Text = $"Operations: {(netElems == null ? string.Empty : netElems.AllOperationsName.Count.ToString())}";
         }
@@ -884,7 +911,7 @@ namespace SPAFilter
             if (IsInProgress)
                 return;
 
-            NetworkElementCollection collectionElements = null;
+            CollectionNetworkElement collectionElements = null;
 
             if (_filteredNetElemCollection != null && _filteredNetElemCollection.Count > 0)
                 collectionElements = _filteredNetElemCollection;
@@ -913,7 +940,7 @@ namespace SPAFilter
                 {
                     DataTable rdServices = null;
 
-                    int maxIterarorReadRdServiceFile = (70 * totalProgressIterator) / 30;
+                    int maxIterarorReadRdServiceFile = (60 * totalProgressIterator) / 40;
                     totalProgressIterator += maxIterarorReadRdServiceFile;
 
                     using (var progrAsync = new ProgressCalculaterAsync(progressBar, totalProgressIterator))
@@ -1021,7 +1048,7 @@ namespace SPAFilter
             return serviceTable;
         }
 
-        static string GetServiceCatalog(NetworkElementCollection elements, DataTable rdServices, string exportFilePath, ProgressCalculaterAsync progressCalc)
+        static string GetServiceCatalog(CollectionNetworkElement elements, DataTable rdServices, string exportFilePath, ProgressCalculaterAsync progressCalc)
         {
             try
             {

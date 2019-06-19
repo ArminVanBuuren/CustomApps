@@ -1,71 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
+using SPAFilter.SPA.Collection;
 using Utils;
 using Utils.WinForm.DataGridViewHelper;
 
-namespace SPAFilter.SPA
+namespace SPAFilter.SPA.Components
 {
-    public class CollectionScenarios : List<Scenario>
-    {
-        internal CollectionScenarios()
-        {
-            
-        }
-
-        public CollectionScenarios(string path)
-        {
-            //List<string> files = Directory.GetFiles(path, "*.xml", SearchOption.AllDirectories).OrderBy(c => c).ToList();
-            List<string> files = Directory.GetFiles(path, "*.xml", SearchOption.TopDirectoryOnly).ToList();
-            files.Sort(StringComparer.CurrentCulture);
-
-            int i = 0;
-            foreach (string bpPath in files)
-            {
-                Add(new Scenario(bpPath, ++i));
-            }
-        }
-
-        public CollectionScenarios Clone()
-        {
-            CollectionScenarios clone = new CollectionScenarios();
-            clone.AddRange(this);
-            return clone;
-        }
-    }
-
-    class ItemEqualityComparer : IEqualityComparer<Scenario>
-    {
-        public bool Equals(Scenario x, Scenario y)
-        {
-            if (x == null && y == null)
-                return true;
-            if (x == null || y == null)
-                return false;
-
-            return x.Name.Trim().Equals(y.Name.Trim(), StringComparison.CurrentCultureIgnoreCase);
-        }
-
-        public int GetHashCode(Scenario obj)
-        {
-            return obj.Name.ToLower().GetHashCode();
-        }
-    }
-
     public class Scenario : ObjectTemplate
     {
         internal List<string> Commands { get; private set; } = new List<string>();
         internal CollectionScenarios SubScenarios { get; private set; } = new CollectionScenarios();
 
-        [DGVEnhancer.DGVColumnAttribute(DGVEnhancer.ColumnPosition.Before, "Scenario")]
+        [DGVColumn(ColumnPosition.Before, "Scenario")]
         public override string Name { get; protected set; }
 
-        [DGVEnhancer.DGVColumnAttribute(DGVEnhancer.ColumnPosition.After, "SubScenario Count")]
+        [DGVColumn(ColumnPosition.After, "SubScenario Count")]
         public int ExistSubScenarios => SubScenarios.Count;
 
-        
 
         public Scenario(string path, int id) : base(path, id)
         {
@@ -90,7 +43,7 @@ namespace SPAFilter.SPA
             return true;
         }
 
-        
+
 
         class ParceScenario
         {
@@ -104,13 +57,15 @@ namespace SPAFilter.SPA
             if (scenarioPath.IsNullOrEmpty())
                 return null;
 
-            XmlDocument document = XML.LoadXml(scenarioPath, true);
+            var document = XML.LoadXml(scenarioPath, true);
             if (document == null)
                 return null;
 
-            ParceScenario prsCs = new ParceScenario();
-            prsCs.Commands = EvaluateXPath(document, @"//parameterslist/param[@name='command']/@value");
-            prsCs.SubScenarios = EvaluateXPath(document, @"//parameterslist/param[@name='scenario']/@value");
+            var prsCs = new ParceScenario
+            {
+                Commands = EvaluateXPath(document, @"//parameterslist/param[@name='command']/@value"),
+                SubScenarios = EvaluateXPath(document, @"//parameterslist/param[@name='scenario']/@value")
+            };
 
             int i = -1;
             string getParentDirectory = FilePath.GetParentDirectoryInPath();
@@ -136,7 +91,7 @@ namespace SPAFilter.SPA
                     }
                 }
 
-                ParceScenario getSub = ParceXmlScenario(subScenarioPath);
+                var getSub = ParceXmlScenario(subScenarioPath);
                 if (getSub == null)
                     continue;
 
@@ -148,8 +103,8 @@ namespace SPAFilter.SPA
 
         public static List<string> EvaluateXPath(XmlDocument document, string xpath)
         {
-            List<string> collection = new List<string>();
-            XmlNodeList listByXpath = document.SelectNodes(xpath);
+            var collection = new List<string>();
+            var listByXpath = document.SelectNodes(xpath);
             if (listByXpath == null)
                 return collection;
 
@@ -160,7 +115,5 @@ namespace SPAFilter.SPA
             }
             return collection;
         }
-
-        
     }
 }

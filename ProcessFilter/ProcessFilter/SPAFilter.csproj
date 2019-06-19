@@ -64,19 +64,27 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SPA\CollectionCommands.cs" />
+    <Compile Include="SPA\Components\BusinessProcess.cs" />
+    <Compile Include="SPA\Collection\CollectionCommands.cs" />
+    <Compile Include="SPA\Components\Command.cs" />
+    <Compile Include="SPA\Components\NetworkElement.cs" />
+    <Compile Include="SPA\Collection\CollectionNetworkElement.cs" />
+    <Compile Include="SPA\Components\Operation.cs" />
+    <Compile Include="SPA\ItemEqualityComparer.cs" />
+    <Compile Include="SPA\ObjectCollection.cs" />
     <Compile Include="SPA\ObjectTemplate.cs" />
-    <Compile Include="SPA\CollectionScenarios.cs" />
+    <Compile Include="SPA\Collection\CollectionScenarios.cs" />
     <Compile Include="SPAFilterForm.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="SPAFilterForm.Designer.cs">
       <DependentUpon>SPAFilterForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SPA\CollectionNetwokElements.cs" />
-    <Compile Include="SPA\CollectionBusinessProcess.cs" />
+    <Compile Include="SPA\Collection\NetworkElementCollection.cs" />
+    <Compile Include="SPA\Collection\CollectionBusinessProcess.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SPA\Components\Scenario.cs" />
     <Compile Include="SPA\SC\BindingServices.cs" />
     <Compile Include="SPA\SC\CatalogComponents.cs" />
     <Compile Include="SPA\SC\CFS.cs" />

@@ -1,4 +1,6 @@
-﻿namespace SPAFilter
+﻿using System.Drawing;
+
+namespace SPAFilter
 {
     partial class SPAFilterForm
     {
@@ -35,7 +37,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.OperationButtonOpen = new System.Windows.Forms.Button();
             this.ProcessesButtonOpen = new System.Windows.Forms.Button();
-            this.dataGridProcessesResults = new System.Windows.Forms.DataGridView();
+            this.dataGridProcesses = new System.Windows.Forms.DataGridView();
             this.OperationComboBox = new System.Windows.Forms.ComboBox();
             this.NetSettComboBox = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -46,11 +48,11 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.dataGridOperationsResult = new System.Windows.Forms.DataGridView();
+            this.dataGridOperations = new System.Windows.Forms.DataGridView();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.dataGridScenariosResult = new System.Windows.Forms.DataGridView();
+            this.dataGridScenarios = new System.Windows.Forms.DataGridView();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.dataGridCommandsResult = new System.Windows.Forms.DataGridView();
+            this.dataGridCommands = new System.Windows.Forms.DataGridView();
             this.GenerateSC = new System.Windows.Forms.TabPage();
             this.RootSCExportPathButton = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
@@ -74,15 +76,15 @@
             this.ScenariosCount = new System.Windows.Forms.ToolStripStatusLabel();
             this.CommandsCount = new System.Windows.Forms.ToolStripStatusLabel();
             this.buttonPrintXML = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridProcessesResults)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridProcesses)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridOperationsResult)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridOperations)).BeginInit();
             this.tabPage3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridScenariosResult)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridScenarios)).BeginInit();
             this.tabPage4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridCommandsResult)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridCommands)).BeginInit();
             this.GenerateSC.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -151,21 +153,21 @@
             // 
             // dataGridProcessesResults
             // 
-            this.dataGridProcessesResults.AllowUserToAddRows = false;
-            this.dataGridProcessesResults.AllowUserToDeleteRows = false;
-            this.dataGridProcessesResults.AllowUserToOrderColumns = true;
-            this.dataGridProcessesResults.AllowUserToResizeRows = false;
-            this.dataGridProcessesResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.dataGridProcesses.AllowUserToAddRows = false;
+            this.dataGridProcesses.AllowUserToDeleteRows = false;
+            this.dataGridProcesses.AllowUserToOrderColumns = true;
+            this.dataGridProcesses.AllowUserToResizeRows = false;
+            this.dataGridProcesses.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridProcessesResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridProcessesResults.Location = new System.Drawing.Point(0, 0);
-            this.dataGridProcessesResults.Name = "dataGridProcessesResults";
-            this.dataGridProcessesResults.ReadOnly = true;
-            this.dataGridProcessesResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridProcessesResults.Size = new System.Drawing.Size(794, 245);
-            this.dataGridProcessesResults.TabIndex = 4;
-            this.dataGridProcessesResults.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridProcessesResults_CellMouseDoubleClick);
+            this.dataGridProcesses.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridProcesses.Location = new System.Drawing.Point(0, 0);
+            this.dataGridProcesses.Name = "dataGridProcessesResults";
+            this.dataGridProcesses.ReadOnly = true;
+            this.dataGridProcesses.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridProcesses.Size = new System.Drawing.Size(794, 245);
+            this.dataGridProcesses.TabIndex = 4;
+            this.dataGridProcesses.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridProcessesResults_CellMouseDoubleClick);
             // 
             // OperationComboBox
             // 
@@ -249,7 +251,7 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.dataGridProcessesResults);
+            this.tabPage1.Controls.Add(this.dataGridProcesses);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -257,10 +259,11 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Processes";
             this.tabPage1.UseVisualStyleBackColor = true;
+            this.tabPage1.BackColor = Color.DarkGray;
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.dataGridOperationsResult);
+            this.tabPage2.Controls.Add(this.dataGridOperations);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -268,80 +271,83 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Operations";
             this.tabPage2.UseVisualStyleBackColor = true;
+            this.tabPage2.BackColor = Color.DarkGray;
             // 
             // dataGridOperationsResult
             // 
-            this.dataGridOperationsResult.AllowUserToAddRows = false;
-            this.dataGridOperationsResult.AllowUserToDeleteRows = false;
-            this.dataGridOperationsResult.AllowUserToOrderColumns = true;
-            this.dataGridOperationsResult.AllowUserToResizeRows = false;
-            this.dataGridOperationsResult.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.dataGridOperations.AllowUserToAddRows = false;
+            this.dataGridOperations.AllowUserToDeleteRows = false;
+            this.dataGridOperations.AllowUserToOrderColumns = true;
+            this.dataGridOperations.AllowUserToResizeRows = false;
+            this.dataGridOperations.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridOperationsResult.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridOperationsResult.Location = new System.Drawing.Point(0, 0);
-            this.dataGridOperationsResult.Name = "dataGridOperationsResult";
-            this.dataGridOperationsResult.ReadOnly = true;
-            this.dataGridOperationsResult.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridOperationsResult.Size = new System.Drawing.Size(794, 245);
-            this.dataGridOperationsResult.TabIndex = 0;
-            this.dataGridOperationsResult.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridOperationsResult_CellDoubleClick);
+            this.dataGridOperations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridOperations.Location = new System.Drawing.Point(0, 0);
+            this.dataGridOperations.Name = "dataGridOperationsResult";
+            this.dataGridOperations.ReadOnly = true;
+            this.dataGridOperations.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridOperations.Size = new System.Drawing.Size(794, 245);
+            this.dataGridOperations.TabIndex = 0;
+            this.dataGridOperations.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridOperationsResult_CellDoubleClick);
             // 
             // tabPage3
             // 
-            this.tabPage3.Controls.Add(this.dataGridScenariosResult);
+            this.tabPage3.Controls.Add(this.dataGridScenarios);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(794, 245);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Scenarios";
             this.tabPage3.UseVisualStyleBackColor = true;
+            this.tabPage3.BackColor = Color.DarkGray;
             // 
             // dataGridScenariosResult
             // 
-            this.dataGridScenariosResult.AllowUserToAddRows = false;
-            this.dataGridScenariosResult.AllowUserToDeleteRows = false;
-            this.dataGridScenariosResult.AllowUserToOrderColumns = true;
-            this.dataGridScenariosResult.AllowUserToResizeRows = false;
-            this.dataGridScenariosResult.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.dataGridScenarios.AllowUserToAddRows = false;
+            this.dataGridScenarios.AllowUserToDeleteRows = false;
+            this.dataGridScenarios.AllowUserToOrderColumns = true;
+            this.dataGridScenarios.AllowUserToResizeRows = false;
+            this.dataGridScenarios.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridScenariosResult.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridScenariosResult.Location = new System.Drawing.Point(0, 0);
-            this.dataGridScenariosResult.Name = "dataGridScenariosResult";
-            this.dataGridScenariosResult.ReadOnly = true;
-            this.dataGridScenariosResult.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridScenariosResult.Size = new System.Drawing.Size(794, 245);
-            this.dataGridScenariosResult.TabIndex = 5;
-            this.dataGridScenariosResult.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridScenariosResult_CellDoubleClick);
+            this.dataGridScenarios.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridScenarios.Location = new System.Drawing.Point(0, 0);
+            this.dataGridScenarios.Name = "dataGridScenariosResult";
+            this.dataGridScenarios.ReadOnly = true;
+            this.dataGridScenarios.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridScenarios.Size = new System.Drawing.Size(794, 245);
+            this.dataGridScenarios.TabIndex = 5;
+            this.dataGridScenarios.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridScenariosResult_CellDoubleClick);
             // 
             // tabPage4
             // 
-            this.tabPage4.Controls.Add(this.dataGridCommandsResult);
+            this.tabPage4.Controls.Add(this.dataGridCommands);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Size = new System.Drawing.Size(794, 245);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Commands";
             this.tabPage4.UseVisualStyleBackColor = true;
+            this.tabPage4.BackColor = Color.DarkGray;
             // 
             // dataGridCommandsResult
             // 
-            this.dataGridCommandsResult.AllowUserToAddRows = false;
-            this.dataGridCommandsResult.AllowUserToDeleteRows = false;
-            this.dataGridCommandsResult.AllowUserToOrderColumns = true;
-            this.dataGridCommandsResult.AllowUserToResizeRows = false;
-            this.dataGridCommandsResult.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.dataGridCommands.AllowUserToAddRows = false;
+            this.dataGridCommands.AllowUserToDeleteRows = false;
+            this.dataGridCommands.AllowUserToOrderColumns = true;
+            this.dataGridCommands.AllowUserToResizeRows = false;
+            this.dataGridCommands.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridCommandsResult.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridCommandsResult.Location = new System.Drawing.Point(0, 0);
-            this.dataGridCommandsResult.Name = "dataGridCommandsResult";
-            this.dataGridCommandsResult.ReadOnly = true;
-            this.dataGridCommandsResult.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridCommandsResult.Size = new System.Drawing.Size(794, 245);
-            this.dataGridCommandsResult.TabIndex = 1;
-            this.dataGridCommandsResult.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridCommandsResult_CellMouseDoubleClick);
+            this.dataGridCommands.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridCommands.Location = new System.Drawing.Point(0, 0);
+            this.dataGridCommands.Name = "dataGridCommandsResult";
+            this.dataGridCommands.ReadOnly = true;
+            this.dataGridCommands.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridCommands.Size = new System.Drawing.Size(794, 245);
+            this.dataGridCommands.TabIndex = 1;
+            this.dataGridCommands.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridCommandsResult_CellMouseDoubleClick);
             // 
             // GenerateSC
             // 
@@ -358,6 +364,7 @@
             this.GenerateSC.Size = new System.Drawing.Size(794, 245);
             this.GenerateSC.TabIndex = 4;
             this.GenerateSC.Text = "Generate SC";
+            this.GenerateSC.BackColor = Color.DarkGray;
             // 
             // RootSCExportPathButton
             // 
@@ -574,7 +581,7 @@
             this.buttonPrintXML.TabIndex = 14;
             this.buttonPrintXML.Text = "Print XML";
             this.buttonPrintXML.UseVisualStyleBackColor = true;
-            this.buttonPrintXML.Click += new System.EventHandler(this.buttonPrintXML_Click);
+            this.buttonPrintXML.Click += new System.EventHandler(this.ButtonPrintXML_Click);
             // 
             // SPAFilterForm
             // 
@@ -603,15 +610,15 @@
             this.MinimumSize = new System.Drawing.Size(823, 400);
             this.Name = "SPAFilterForm";
             this.Text = "SPA Filter";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridProcessesResults)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridProcesses)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridOperationsResult)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridOperations)).EndInit();
             this.tabPage3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridScenariosResult)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridScenarios)).EndInit();
             this.tabPage4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridCommandsResult)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridCommands)).EndInit();
             this.GenerateSC.ResumeLayout(false);
             this.GenerateSC.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -630,7 +637,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button OperationButtonOpen;
         private System.Windows.Forms.Button ProcessesButtonOpen;
-        private System.Windows.Forms.DataGridView dataGridProcessesResults;
+        private System.Windows.Forms.DataGridView dataGridProcesses;
         private System.Windows.Forms.ComboBox OperationComboBox;
         private System.Windows.Forms.ComboBox NetSettComboBox;
         private System.Windows.Forms.Label label6;
@@ -641,11 +648,11 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.DataGridView dataGridOperationsResult;
+        private System.Windows.Forms.DataGridView dataGridOperations;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TabPage tabPage4;
-        private System.Windows.Forms.DataGridView dataGridScenariosResult;
-        private System.Windows.Forms.DataGridView dataGridCommandsResult;
+        private System.Windows.Forms.DataGridView dataGridScenarios;
+        private System.Windows.Forms.DataGridView dataGridCommands;
         private System.Windows.Forms.TextBox ScenariosTextBox;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button ScenariosButtonOpen;
