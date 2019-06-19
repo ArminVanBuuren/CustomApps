@@ -68,9 +68,9 @@ namespace Utils
             return context;
         }
 
-        public static bool WriteFile(string path, string content)
+        public static bool WriteFile(string path, string content, Encoding encoding = null)
         {
-            File.WriteAllText(path, content, GetEncoding(path));
+            File.WriteAllText(path, content, encoding ?? GetEncoding(path));
 
             //using (StreamWriter writetext = new StreamWriter(path, false, GetEncoding(path)))
             //{
