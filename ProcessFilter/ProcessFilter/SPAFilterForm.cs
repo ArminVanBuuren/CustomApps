@@ -938,6 +938,18 @@ namespace SPAFilter
 
                     int maxIterarorReadRdServiceFile = 0;
 
+                    // ------------------------------------------
+                    // По примерным подсчетам считывание 4Kb файла xslx равен обработки одной операции для SC.
+                    // Например:
+                    // 1280 файлов операций = 40% всей работы; 3200 файлов = 100%
+                    // 7800 Kb файла xslx   = 60% всей работы; 13000 Kb    = 100%
+                    // Отношение файла к операциям ~ 4  (точно = 4.06)
+                    // ------------------------------------------
+                    // 1280 + (7800 / 4) = 3230 (100%)
+                    // 1280 * 100 / 3230 = 39.6%
+                    // (7800 / 4) * 100 / 3230 = 60.3%
+                    // ------------------------------------------
+
                     var file = new FileInfo(OpenSCXlsx.Text);
                     int fileKb = (int) (file.Length / 1024);
                     if (fileKb > 100)
@@ -992,9 +1004,9 @@ namespace SPAFilter
 
             //START ########################### ProgressCalc  ###########################
             int filecalc = (int) (file.Length / 1250);
-            int openFileIterator = maxIterator / 7;
-            int loadFileIterator = maxIterator - (openFileIterator * 2);
-            int readLinesIterator = maxIterator - loadFileIterator - openFileIterator;
+            int openFileIterator = maxIterator / 7; // обработку файлов делим на 7 частей. 1/7 часть занимает открытие файла
+            int loadFileIterator = maxIterator - (openFileIterator * 2); // 5/7 занимает считывание данных
+            int readLinesIterator = maxIterator - loadFileIterator - openFileIterator; // 1/7 часть считывание всех строк
 
             Action offlineCalcWhenStartOpen = null;
             Action offlineCalcWhenStopOpen = null;
