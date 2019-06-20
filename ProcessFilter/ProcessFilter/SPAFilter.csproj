@@ -64,6 +64,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomProgressBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CustomStringBuilder.cs" />
     <Compile Include="SPA\Components\BusinessProcess.cs" />
     <Compile Include="SPA\Collection\CollectionCommands.cs" />
     <Compile Include="SPA\Components\Command.cs" />
@@ -75,7 +79,7 @@
     <Compile Include="SPA\ObjectTemplate.cs" />
     <Compile Include="SPA\Collection\CollectionScenarios.cs" />
     <Compile Include="SPAFilterForm.cs">
-      <SubType>Component</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SPAFilterForm.Designer.cs">
       <DependentUpon>SPAFilterForm.cs</DependentUpon>

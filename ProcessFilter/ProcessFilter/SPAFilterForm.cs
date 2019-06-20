@@ -27,12 +27,6 @@ using static Utils.ASSEMBLY;
 namespace SPAFilter
 {
     [Serializable]
-    public class CustomProgressBar : ProgressBar, IProgressBar
-    {
-
-    }
-    
-    [Serializable]
     public partial class SPAFilterForm : Form, ISerializable
     {
         private bool _isInProgress = false;
@@ -212,27 +206,28 @@ namespace SPAFilter
             {
                 IsInProgress = true;
 
-                var stringErrors = new StringBuilder();
-
-                using (var progrAsync = new ProgressCalculaterAsync(progressBar, filesNumber))
+                using (var stringErrors = new CustomStringBuilder())
                 {
-                    await Task.Factory.StartNew(() =>
+                    using (var progrAsync = new ProgressCalculaterAsync(progressBar, filesNumber))
                     {
-                        GetFiles(_filteredProcessCollection, stringErrors, progrAsync);
-                        if (_filteredNetElemCollection != null)
-                            GetFiles(_filteredNetElemCollection.AllOperations, stringErrors, progrAsync);
-                        GetFiles(_filteredScenarioCollection, stringErrors, progrAsync);
-                        GetFiles(_filteredCMMCollection, stringErrors, progrAsync);
-                    });
-                }
+                        await Task.Factory.StartNew(() =>
+                        {
+                            GetFiles(_filteredProcessCollection, stringErrors, progrAsync);
+                            if (_filteredNetElemCollection != null)
+                                GetFiles(_filteredNetElemCollection.AllOperations, stringErrors, progrAsync);
+                            GetFiles(_filteredScenarioCollection, stringErrors, progrAsync);
+                            GetFiles(_filteredCMMCollection, stringErrors, progrAsync);
+                        });
+                    }
 
-                if (stringErrors.Length > 0)
-                {
-                    MessageBox.Show($"Several errors found:{stringErrors.ToString(0, stringErrors.Length > 200 ? 200 : stringErrors.Length)}", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-                else
-                {
-                    MessageBox.Show($"Successfully completed.", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (stringErrors.Length > 0)
+                    {
+                        MessageBox.Show($"Several ({stringErrors.Lines}) errors found:\r\n\r\n{stringErrors.ToString(2)}", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Successfully completed.", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
                 }
             }
             catch (Exception ex)
@@ -245,7 +240,7 @@ namespace SPAFilter
             }
         }
 
-        void GetFiles(IEnumerable<ObjectTemplate> fileObj, StringBuilder stringErrors, ProgressCalculaterAsync progressCalc)
+        static void GetFiles(IEnumerable<ObjectTemplate> fileObj, CustomStringBuilder stringErrors, ProgressCalculaterAsync progressCalc)
         {
             if (fileObj == null || !fileObj.Any())
                 return;
@@ -257,17 +252,17 @@ namespace SPAFilter
             }
         }
 
-        static void FormattingXML(string path, StringBuilder stringErrors)
+        static void FormattingXML(string filePath, CustomStringBuilder stringErrors)
         {
             try
             {
-                string fileString = IO.SafeReadFile(path);
+                string fileString = IO.SafeReadFile(filePath);
                 if (XML.IsXml(fileString, out XmlDocument document))
                 {
                     string formatting = document.PrintXml();
 
                     int attempts = 0;
-                    while (!IO.IsFileReady(path))
+                    while (!IO.IsFileReady(filePath))
                     {
                         System.Threading.Thread.Sleep(500);
                         attempts++;
@@ -275,12 +270,12 @@ namespace SPAFilter
                             return;
                     }
 
-                    IO.WriteFile(path, formatting, Encoding.UTF8);
+                    IO.WriteFile(filePath, formatting, Encoding.UTF8);
                 }
             }
             catch (Exception e)
             {
-                stringErrors.AppendLine($"Message=[{e.Message}] File=[{path}]");
+                stringErrors.AppendLine($"Message=\"{e.Message}\" File=\"{filePath}]\"");
             }
         }
 
