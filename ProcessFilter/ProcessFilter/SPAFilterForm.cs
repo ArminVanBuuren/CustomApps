@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
 using System.Threading.Tasks;
@@ -935,12 +936,26 @@ namespace SPAFilter
                 {
                     DataTable rdServices = null;
 
-                    int maxIterarorReadRdServiceFile = (60 * totalProgressIterator) / 40;
+                    int maxIterarorReadRdServiceFile = 0;
+
+                    var file = new FileInfo(OpenSCXlsx.Text);
+                    int fileKb = (int) (file.Length / 1024);
+                    if (fileKb > 100)
+                    {
+                        int temp = fileKb / 4;
+                        int hundredPercent = totalProgressIterator + temp;
+                        maxIterarorReadRdServiceFile = (((temp * 100) / hundredPercent) * totalProgressIterator) / ((totalProgressIterator * 100) / hundredPercent);
+                    }
+                    else
+                    {
+                        maxIterarorReadRdServiceFile = (15 * totalProgressIterator) / 85;
+                    }
+                    
                     totalProgressIterator += maxIterarorReadRdServiceFile;
 
                     using (var progrAsync = new ProgressCalculaterAsync(progressBar, totalProgressIterator))
                     {
-                        rdServices = await Task<DataTable>.Factory.StartNew(() => GetRDServicesFromXslx(OpenSCXlsx.Text, progrAsync, maxIterarorReadRdServiceFile));
+                        rdServices = await Task<DataTable>.Factory.StartNew(() => GetRDServicesFromXslx(file, progrAsync, maxIterarorReadRdServiceFile));
 
                         fileResult = await Task.Factory.StartNew(() => GetServiceCatalog(collectionElements, rdServices, ExportSCPath.Text, progrAsync));
                     }
@@ -970,23 +985,93 @@ namespace SPAFilter
 
         private readonly string[] mandatoryXslxColumns = new string[] { "#", "SPA_SERVICE_CODE", "GLOBAL_SERVICE_CODE", "SERVICE_NAME", "SERVICE_FULL_NAME", "SERVICE_FULL_NAME2", "DESCRIPTION", "SERVICE_CODE", "SERVICE_NAME2", "EXTERNAL_CODE", "EXTERNAL_CODE2" };
 
-        DataTable GetRDServicesFromXslx(string filePath, ProgressCalculaterAsync progressCalc, int maxIterator)
+        DataTable GetRDServicesFromXslx(FileInfo file, ProgressCalculaterAsync progressCalc, int maxIterator)
         {
             var serviceTable = new DataTable();
 
+
+            //START ########################### ProgressCalc  ###########################
+            int filecalc = (int) (file.Length / 1250);
             int openFileIterator = maxIterator / 7;
             int loadFileIterator = maxIterator - (openFileIterator * 2);
             int readLinesIterator = maxIterator - loadFileIterator - openFileIterator;
 
-            using (var xslPackage = new ExcelPackage(new FileInfo(filePath)))
+            Action offlineCalcWhenStartOpen = null;
+            Action offlineCalcWhenStopOpen = null;
+            Action offlineCalcWhenStartRead = null;
+            Action offlineCalcWhenStopRead = null;
+            if (filecalc >= 100)
             {
-                progressCalc.CurrentProgressInterator += openFileIterator;
+                int mSecEachPart = filecalc / 7;
+                bool cancel = false;
+
+                var processChecking = new Func<int, int, int>((int iterations, int sleepMSec) =>
+                {
+                    if (sleepMSec == 0)
+                        return 0;
+
+                    cancel = false;
+                    int i = 0;
+                    while (i <= iterations)
+                    {
+                        progressCalc++;
+                        i++;
+                        if (cancel)
+                            return i;
+                        Thread.Sleep(sleepMSec);
+                    }
+
+                    return i;
+                });
+                IAsyncResult result = null;
+
+                offlineCalcWhenStartOpen = () =>
+                {
+                    result = processChecking.BeginInvoke(openFileIterator, mSecEachPart / openFileIterator, null, null); 
+                };
+
+                offlineCalcWhenStopOpen = () =>
+                {
+                    cancel = true;
+                    int openRes = processChecking.EndInvoke(result);
+                    if (openRes < openFileIterator)
+                        progressCalc.CurrentProgressInterator += openFileIterator - openRes;
+                };
+
+                offlineCalcWhenStartRead = () =>
+                {
+                    result = processChecking.BeginInvoke(loadFileIterator, (mSecEachPart * 5) / loadFileIterator, null, null); 
+                };
+
+                offlineCalcWhenStopRead = () =>
+                {
+                    cancel = true;
+                    int loadRes = processChecking.EndInvoke(result);
+                    if (loadRes < loadFileIterator)
+                        progressCalc.CurrentProgressInterator += loadFileIterator - loadRes;
+                };
+            }
+            else
+            {
+                offlineCalcWhenStopOpen = () => { progressCalc.CurrentProgressInterator += openFileIterator; };
+                offlineCalcWhenStopRead = () => { progressCalc.CurrentProgressInterator += loadFileIterator; };
+            }
+            //END ########################### ProgressCalc  ###########################
+
+
+
+
+            offlineCalcWhenStartOpen?.Invoke();
+            using (var xslPackage = new ExcelPackage(file))
+            {
+                offlineCalcWhenStopOpen?.Invoke();
+                offlineCalcWhenStartRead?.Invoke();
 
                 var myWorksheet = xslPackage.Workbook.Worksheets.First(); //sheet
                 var totalRows = myWorksheet.Dimension.End.Row;
                 var totalColumns = mandatoryXslxColumns.Length;
 
-                progressCalc.CurrentProgressInterator += loadFileIterator;
+                offlineCalcWhenStopRead?.Invoke();
 
                 var columnsNames = myWorksheet.Cells[1, 1, 1, totalColumns].Select(c => c.Value == null ? string.Empty : c.Value.ToString());
 
