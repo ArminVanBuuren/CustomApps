@@ -1003,7 +1003,7 @@ namespace SPAFilter
 
 
             //START ########################### ProgressCalc  ###########################
-            int filecalc = (int) (file.Length / 1250);
+            int filecalc = (int) (file.Length / 1900);
             int openFileIterator = maxIterator / 7; // обработку файлов делим на 7 частей. 1/7 часть занимает открытие файла
             int loadFileIterator = maxIterator - (openFileIterator * 2); // 5/7 занимает считывание данных
             int readLinesIterator = maxIterator - loadFileIterator - openFileIterator; // 1/7 часть считывание всех строк
