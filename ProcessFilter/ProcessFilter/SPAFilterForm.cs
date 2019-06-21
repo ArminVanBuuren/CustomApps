@@ -956,7 +956,11 @@ namespace SPAFilter
                     {
                         int temp = fileKb / 4;
                         int hundredPercent = totalProgressIterator + temp;
-                        maxIterarorReadRdServiceFile = (((temp * 100) / hundredPercent) * totalProgressIterator) / ((totalProgressIterator * 100) / hundredPercent);
+                        int generateSCPercent = (totalProgressIterator * 100) / hundredPercent;
+                        if (generateSCPercent > 0)
+                            maxIterarorReadRdServiceFile = (((temp * 100) / hundredPercent) * totalProgressIterator) / generateSCPercent;
+                        else
+                            maxIterarorReadRdServiceFile = (85 * totalProgressIterator) / 15;
                     }
                     else
                     {
