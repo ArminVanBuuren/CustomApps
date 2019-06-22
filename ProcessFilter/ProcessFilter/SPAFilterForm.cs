@@ -431,7 +431,7 @@ namespace SPAFilter
                     }
                 }
 
-                progressCalc.CurrentProgressInterator += 2;
+                progressCalc.Append(2);
 
                 Action<Operation> getScenario = null;
                 if (Scenarios != null)
@@ -475,7 +475,7 @@ namespace SPAFilter
                         progressIterator = maxForCurrentIterator / _filteredNetElemCollection.Count;
                         calcProgress = () =>
                         {
-                            progressCalc.CurrentProgressInterator += progressIterator;
+                            progressCalc.Append(progressIterator);
                         };
                     }
 
@@ -502,7 +502,7 @@ namespace SPAFilter
                 }
                 else
                 {
-                    progressCalc.CurrentProgressInterator += maxForCurrentIterator;
+                    progressCalc.Append(maxForCurrentIterator);
                 }
 
 
@@ -520,7 +520,7 @@ namespace SPAFilter
                 }
 
 
-                progressCalc.CurrentProgressInterator += 2;
+                progressCalc.Append(2);
 
                 _filteredSubScenarios = _filteredSubScenarios.Distinct(new ItemEqualityComparer<Scenario>()).ToList();
                 _filteredScenarioCollection.AddRange(_filteredSubScenarios);
@@ -531,13 +531,13 @@ namespace SPAFilter
                                                          dataGridProcesses.AssignListToDataGrid(_filteredProcessCollection, new Padding(0, 0, 15, 0));
                                                          ProcessStatRefresh(_filteredProcessCollection);
 
-                                                         progressCalc.CurrentProgressInterator += 2;
+                                                         progressCalc.Append(2);
 
                                                          dataGridOperations.AssignListToDataGrid(_filteredNetElemCollection.AllOperations, new Padding(0, 0, 15, 0));
                                                          NEStatRefresh(_filteredNetElemCollection);
                                                          OperationsStatRefresh(_filteredNetElemCollection);
 
-                                                         progressCalc.CurrentProgressInterator += 2;
+                                                         progressCalc.Append(2);
 
                                                          dataGridScenarios.AssignListToDataGrid(_filteredScenarioCollection, new Padding(0, 0, 15, 0));
                                                          ScenariosStatRefresh(_filteredScenarioCollection);
@@ -545,7 +545,7 @@ namespace SPAFilter
                                                          dataGridCommands.AssignListToDataGrid(_filteredCMMCollection, new Padding(0, 0, 15, 0));
                                                          CommandsStatRefresh(_filteredCMMCollection);
 
-                                                         progressCalc.CurrentProgressInterator += 2;
+                                                         progressCalc.Append(2);
                                                      }));
 
             }
@@ -915,9 +915,9 @@ namespace SPAFilter
                 collectionElements = NetElements.Elements;
 
 
-            int totalProgressIterator = (collectionElements == null || collectionElements.Count == 0) ? 0 : collectionElements.Sum(x => x.Operations.Count);
+            int generateSCIterators = (collectionElements == null || collectionElements.Count == 0) ? 0 : collectionElements.Sum(x => x.Operations.Count);
 
-            if (totalProgressIterator == 0)
+            if (generateSCIterators == 0)
             {
                 MessageBox.Show($"Not found any operations.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -935,50 +935,18 @@ namespace SPAFilter
                 if (!OpenSCXlsx.Text.IsNullOrEmptyTrim() && File.Exists(OpenSCXlsx.Text))
                 {
                     DataTable rdServices = null;
-
-                    int maxIterarorReadRdServiceFile = 0;
-
-                    // ------------------------------------------
-                    // По примерным подсчетам считывание 4Kb файла xslx равен обработки одной операции для SC.
-                    // Например:
-                    // 1280 файлов операций = 40% всей работы; 3200 файлов = 100%
-                    // 7800 Kb файла xslx   = 60% всей работы; 13000 Kb    = 100%
-                    // Отношение файла к операциям ~ 4  (точно = 4.06)
-                    // ------------------------------------------
-                    // 1280 + (7800 / 4) = 3230 (100%)
-                    // 1280 * 100 / 3230 = 39.6%
-                    // (7800 / 4) * 100 / 3230 = 60.3%
-                    // ------------------------------------------
-
                     var file = new FileInfo(OpenSCXlsx.Text);
-                    int fileKb = (int) (file.Length / 1024);
-                    if (fileKb > 100)
-                    {
-                        int temp = fileKb / 4;
-                        int hundredPercent = totalProgressIterator + temp;
-                        int generateSCPercent = (totalProgressIterator * 100) / hundredPercent;
-                        if (generateSCPercent > 0)
-                            maxIterarorReadRdServiceFile = (((temp * 100) / hundredPercent) * totalProgressIterator) / generateSCPercent;
-                        else
-                            maxIterarorReadRdServiceFile = (85 * totalProgressIterator) / 15;
-                    }
-                    else
-                    {
-                        maxIterarorReadRdServiceFile = (15 * totalProgressIterator) / 85;
-                    }
                     
-                    totalProgressIterator += maxIterarorReadRdServiceFile;
-
-                    using (var progrAsync = new ProgressCalculaterAsync(progressBar, totalProgressIterator))
+                    using (var progrAsync = new CustomProgressCalculation(progressBar, generateSCIterators, file))
                     {
-                        rdServices = await Task<DataTable>.Factory.StartNew(() => GetRDServicesFromXslx(file, progrAsync, maxIterarorReadRdServiceFile));
+                        rdServices = await Task<DataTable>.Factory.StartNew(() => GetRDServicesFromXslx(file, progrAsync));
 
                         fileResult = await Task.Factory.StartNew(() => GetServiceCatalog(collectionElements, rdServices, ExportSCPath.Text, progrAsync));
                     }
                 }
                 else
                 {
-                    using (var progrAsync = new ProgressCalculaterAsync(progressBar, totalProgressIterator))
+                    using (var progrAsync = new CustomProgressCalculation(progressBar, generateSCIterators))
                     {
                         fileResult = await Task.Factory.StartNew(() => GetServiceCatalog(collectionElements, null, ExportSCPath.Text, progrAsync));
                     }
@@ -1001,93 +969,21 @@ namespace SPAFilter
 
         private readonly string[] mandatoryXslxColumns = new string[] { "#", "SPA_SERVICE_CODE", "GLOBAL_SERVICE_CODE", "SERVICE_NAME", "SERVICE_FULL_NAME", "SERVICE_FULL_NAME2", "DESCRIPTION", "SERVICE_CODE", "SERVICE_NAME2", "EXTERNAL_CODE", "EXTERNAL_CODE2" };
 
-        DataTable GetRDServicesFromXslx(FileInfo file, ProgressCalculaterAsync progressCalc, int maxIterator)
+        DataTable GetRDServicesFromXslx(FileInfo file, CustomProgressCalculation progressCalc)
         {
             var serviceTable = new DataTable();
 
+            progressCalc.BeginOpenXslxFile();
 
-            //START ########################### ProgressCalc  ###########################
-            int filecalc = (int) (file.Length / 1900);
-            int openFileIterator = maxIterator / 7; // обработку файлов делим на 7 частей. 1/7 часть занимает открытие файла
-            int loadFileIterator = maxIterator - (openFileIterator * 2); // 5/7 занимает считывание данных
-            int readLinesIterator = maxIterator - loadFileIterator - openFileIterator; // 1/7 часть считывание всех строк
-
-            Action offlineCalcWhenStartOpen = null;
-            Action offlineCalcWhenStopOpen = null;
-            Action offlineCalcWhenStartRead = null;
-            Action offlineCalcWhenStopRead = null;
-            if (filecalc >= 100)
-            {
-                int mSecEachPart = filecalc / 7;
-                bool cancel = false;
-
-                var processChecking = new Func<int, int, int>((int iterations, int sleepMSec) =>
-                {
-                    if (sleepMSec == 0)
-                        return 0;
-
-                    cancel = false;
-                    int i = 0;
-                    while (i <= iterations)
-                    {
-                        progressCalc++;
-                        i++;
-                        if (cancel)
-                            return i;
-                        Thread.Sleep(sleepMSec);
-                    }
-
-                    return i;
-                });
-                IAsyncResult result = null;
-
-                offlineCalcWhenStartOpen = () =>
-                {
-                    result = processChecking.BeginInvoke(openFileIterator, mSecEachPart / openFileIterator, null, null); 
-                };
-
-                offlineCalcWhenStopOpen = () =>
-                {
-                    cancel = true;
-                    int openRes = processChecking.EndInvoke(result);
-                    if (openRes < openFileIterator)
-                        progressCalc.CurrentProgressInterator += openFileIterator - openRes;
-                };
-
-                offlineCalcWhenStartRead = () =>
-                {
-                    result = processChecking.BeginInvoke(loadFileIterator, (mSecEachPart * 5) / loadFileIterator, null, null); 
-                };
-
-                offlineCalcWhenStopRead = () =>
-                {
-                    cancel = true;
-                    int loadRes = processChecking.EndInvoke(result);
-                    if (loadRes < loadFileIterator)
-                        progressCalc.CurrentProgressInterator += loadFileIterator - loadRes;
-                };
-            }
-            else
-            {
-                offlineCalcWhenStopOpen = () => { progressCalc.CurrentProgressInterator += openFileIterator; };
-                offlineCalcWhenStopRead = () => { progressCalc.CurrentProgressInterator += loadFileIterator; };
-            }
-            //END ########################### ProgressCalc  ###########################
-
-
-
-
-            offlineCalcWhenStartOpen?.Invoke();
             using (var xslPackage = new ExcelPackage(file))
             {
-                offlineCalcWhenStopOpen?.Invoke();
-                offlineCalcWhenStartRead?.Invoke();
+                progressCalc.BeginReadXslxFile();
 
                 var myWorksheet = xslPackage.Workbook.Worksheets.First(); //sheet
                 var totalRows = myWorksheet.Dimension.End.Row;
                 var totalColumns = mandatoryXslxColumns.Length;
 
-                offlineCalcWhenStopRead?.Invoke();
+                progressCalc.EndReadXslxFile(totalRows);
 
                 var columnsNames = myWorksheet.Cells[1, 1, 1, totalColumns].Select(c => c.Value == null ? string.Empty : c.Value.ToString());
 
@@ -1111,45 +1007,26 @@ namespace SPAFilter
                 if (i != mandatoryXslxColumns.Length)
                     throw new Exception($"Wrong file '{OpenSCXlsx.Text}'. Missing some required columns. \r\nColumns names should be like:\r\n'{string.Join("','", mandatoryXslxColumns)}'");
 
-
-                int lineIterNumber = 0;
-                var lineIterator = totalRows / readLinesIterator;
-                if (lineIterator > 1)
+                for (int rowNum = 2; rowNum <= totalRows; rowNum++)
                 {
-                    for (int rowNum = 2; rowNum <= totalRows; rowNum++)
-                    {
-                        var row = myWorksheet.Cells[rowNum, 1, rowNum, totalColumns].Select(c => c.Value == null ? string.Empty : c.Value.ToString()).Take(totalColumns);
-                        serviceTable.Rows.Add(values: row.ToArray());
-
-                        lineIterNumber++;
-                        if (lineIterNumber >= lineIterator)
-                        {
-                            progressCalc++;
-                            lineIterNumber = 0;
-                        }
-                    }
-                }
-                else
-                {
-                    for (int rowNum = 2; rowNum <= totalRows; rowNum++)
-                    {
-                        var row = myWorksheet.Cells[rowNum, 1, rowNum, totalColumns].Select(c => c.Value == null ? string.Empty : c.Value.ToString()).Take(totalColumns);
-                        serviceTable.Rows.Add(values: row.ToArray());
-                    }
-
-                    progressCalc.CurrentProgressInterator += readLinesIterator;
+                    var row = myWorksheet.Cells[rowNum, 1, rowNum, totalColumns].Select(c => c.Value == null ? string.Empty : c.Value.ToString()).Take(totalColumns);
+                    serviceTable.Rows.Add(values: row.ToArray());
+                    progressCalc.ReadXslxFileLine();
                 }
             }
+
+            progressCalc.EndOpenXslxFile();
 
             return serviceTable;
         }
 
-        static string GetServiceCatalog(CollectionNetworkElement elements, DataTable rdServices, string exportFilePath, ProgressCalculaterAsync progressCalc)
+        static string GetServiceCatalog(CollectionNetworkElement elements, DataTable rdServices, string exportFilePath, CustomProgressCalculation progressCalc)
         {
             try
             {
                 var sc = new ServiceCatalog(elements, rdServices, progressCalc);
-                progressCalc.CurrentProgressInterator = progressCalc.TotalProgressInterator;
+                if (progressCalc.CurrentProgressInterator < progressCalc.TotalProgressInterator)
+                    progressCalc.Append(progressCalc.TotalProgressInterator - progressCalc.CurrentProgressInterator);
                 return sc?.Save(exportFilePath);
             }
             catch (Exception ex)

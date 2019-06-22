@@ -14,7 +14,7 @@ namespace SPAFilter.SPA.SC
 
         private CollectionNetworkElement NetworkElements { get; }
 
-        public ServiceCatalog(CollectionNetworkElement networkElements, DataTable servicesRD, ProgressCalculaterAsync progressCalc)
+        public ServiceCatalog(CollectionNetworkElement networkElements, DataTable servicesRD, CustomProgressCalculation progressCalc)
         {
             NetworkElements = networkElements;
 
@@ -29,7 +29,7 @@ namespace SPAFilter.SPA.SC
                     var document = XML.LoadXml(neOP.FilePath);
                     cfsList.Add(neOP.Name, document, neOP.NetworkElement);
 
-                    progressCalc++;
+                    progressCalc.Append();
                 }
             }
 
