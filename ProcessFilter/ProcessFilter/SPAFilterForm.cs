@@ -207,7 +207,7 @@ namespace SPAFilter
 
                 using (var stringErrors = new CustomStringBuilder())
                 {
-                    using (var progrAsync = new ProgressCalculaterAsync(progressBar, filesNumber))
+                    using (var progrAsync = new ProgressCalculationAsync(progressBar, filesNumber))
                     {
                         await Task.Factory.StartNew(() =>
                         {
@@ -239,7 +239,7 @@ namespace SPAFilter
             }
         }
 
-        static void GetFiles(IEnumerable<ObjectTemplate> fileObj, CustomStringBuilder stringErrors, ProgressCalculaterAsync progressCalc)
+        static void GetFiles(IEnumerable<ObjectTemplate> fileObj, CustomStringBuilder stringErrors, ProgressCalculationAsync progressCalc)
         {
             if (fileObj == null || !fileObj.Any())
                 return;
@@ -303,7 +303,7 @@ namespace SPAFilter
                 dataGridScenarios.Refresh();
                 dataGridCommands.Refresh();
 
-                using (var progressCalc = new ProgressCalculaterAsync(progressBar, 20))
+                using (var progressCalc = new ProgressCalculationAsync(progressBar, 20))
                 {
                     var filterProcess = ProcessesComboBox.Text;
                     var filterNE = NetSettComboBox.Text;
@@ -329,7 +329,7 @@ namespace SPAFilter
         CollectionCommands _filteredCMMCollection = new CollectionCommands();
         
 
-        void DataFilter(string filterProcess, string filterNE, string filterOp, ProgressCalculaterAsync progressCalc)
+        void DataFilter(string filterProcess, string filterNE, string filterOp, ProgressCalculationAsync progressCalc)
         {
             try
             {
@@ -449,7 +449,7 @@ namespace SPAFilter
                                   };
                 }
 
-                int maxForCurrentIterator = progressCalc.TotalProgressInterator / 2;
+                int maxForCurrentIterator = progressCalc.TotalProgressIterator / 2;
                 if (_filteredNetElemCollection != null && _filteredNetElemCollection.Count > 0)
                 {
                     int progressIterator = 0;
@@ -1023,8 +1023,8 @@ namespace SPAFilter
             try
             {
                 var sc = new ServiceCatalog(elements, rdServices, progressCalc);
-                if (progressCalc.CurrentProgressInterator < progressCalc.TotalProgressInterator)
-                    progressCalc.Append(progressCalc.TotalProgressInterator - progressCalc.CurrentProgressInterator);
+                if (progressCalc.CurrentProgressIterator < progressCalc.TotalProgressIterator)
+                    progressCalc.Append(progressCalc.TotalProgressIterator - progressCalc.CurrentProgressIterator);
                 return sc?.Save(exportFilePath);
             }
             catch (Exception ex)

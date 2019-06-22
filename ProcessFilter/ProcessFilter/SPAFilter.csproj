@@ -67,7 +67,7 @@
     <Compile Include="CustomProgressBar.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="CustomProgressCalculater.cs" />
+    <Compile Include="CustomProgressCalculation.cs" />
     <Compile Include="CustomStringBuilder.cs" />
     <Compile Include="SPA\Components\BusinessProcess.cs" />
     <Compile Include="SPA\Collection\CollectionCommands.cs" />

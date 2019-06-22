@@ -18,7 +18,7 @@ namespace SPAFilter
         Action _offlineCalcWhenStopRead = null;
         Action calcReadLine = null;
 
-        private ProgressCalculaterAsync _progressCalc;
+        private ProgressCalculationAsync _progressCalc;
         
         private int _openFileIterator = 0;
         private int _loadFileIterator = 0;
@@ -31,14 +31,14 @@ namespace SPAFilter
         public int XslxServicesPercentIntended { get; } = 0;
         
 
-        public int CurrentProgressInterator => _progressCalc?.CurrentProgressInterator ?? 0;
-        public int TotalProgressInterator => _progressCalc?.TotalProgressInterator ?? 0;
+        public int CurrentProgressIterator => _progressCalc?.CurrentProgressIterator ?? 0;
+        public int TotalProgressIterator => _progressCalc?.TotalProgressIterator ?? 0;
 
         public CustomProgressCalculation(IProgressBar progressBar, int generateSCIterators)
         {
             SCIteratorsIntended = generateSCIterators;
 
-            _progressCalc = new ProgressCalculaterAsync(progressBar, SCIteratorsIntended);
+            _progressCalc = new ProgressCalculationAsync(progressBar, SCIteratorsIntended);
         }
 
         public CustomProgressCalculation(IProgressBar progressBar, int generateSCIterators, FileInfo xslxRdService)
@@ -87,7 +87,7 @@ namespace SPAFilter
 
             int totalProgressIterator = SCIteratorsIntended + XslxServicesIteratorsIntended;
 
-            _progressCalc = new ProgressCalculaterAsync(progressBar, totalProgressIterator);
+            _progressCalc = new ProgressCalculationAsync(progressBar, totalProgressIterator);
         }
 
         void GetXslxPartsIterators()
@@ -185,9 +185,9 @@ namespace SPAFilter
 
         public void EndOpenXslxFile()
         {
-            if (_progressCalc.CurrentProgressInterator < XslxServicesIteratorsIntended)
+            if (_progressCalc.CurrentProgressIterator < XslxServicesIteratorsIntended)
             {
-                _progressCalc.Append(XslxServicesIteratorsIntended - _progressCalc.CurrentProgressInterator);
+                _progressCalc.Append(XslxServicesIteratorsIntended - _progressCalc.CurrentProgressIterator);
             }
         }
 
