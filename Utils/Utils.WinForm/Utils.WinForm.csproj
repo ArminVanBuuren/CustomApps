@@ -84,7 +84,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomProgressBar\ProgressCalculaterAsync.cs" />
+    <Compile Include="CustomProgressBar\ProgressCalculationAsync.cs" />
     <Compile Include="MediaCapture\AForge\AForgeCapture.cs" />
     <Compile Include="AForge\Controls\Chart.cs">
       <SubType>Component</SubType>

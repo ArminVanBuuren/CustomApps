@@ -14,7 +14,7 @@ namespace Utils.WinForm.CustomProgressBar
         int Value { get; set; }
     }
 
-    public class ProgressCalculaterAsync : IDisposable
+    public class ProgressCalculationAsync : IDisposable
     {
         private int _currentProgressIterator = 0;
         private readonly SynchronizationContext _syncContext;
@@ -25,29 +25,29 @@ namespace Utils.WinForm.CustomProgressBar
         public bool ProgressCompleted { get; private set; } = false;
         public IProgressBar ProgressBar { get; }
 
-        public int CurrentProgressInterator
+        public int CurrentProgressIterator
         {
             get => _currentProgressIterator;
             private set
             {
                 if (_currentProgressIterator >= value)
                     return;
-                _currentProgressIterator = value >= TotalProgressInterator ? TotalProgressInterator : value;
+                _currentProgressIterator = value >= TotalProgressIterator ? TotalProgressIterator : value;
             }
         }
 
-        public int TotalProgressInterator { get; private set; }
+        public int TotalProgressIterator { get; private set; }
 
         public int PercentComplete { get; private set; }
 
-        public ProgressCalculaterAsync(IProgressBar progressBar, int totalProgressIterator = 10)
+        public ProgressCalculationAsync(IProgressBar progressBar, int totalProgressIterator = 10)
         {
             if (totalProgressIterator <= 0)
                 throw new ArgumentException($"Parameter {nameof(totalProgressIterator)} must be more then zero");
 
             _syncContext = SynchronizationContext.Current;
             ProgressBar = progressBar ?? throw new ArgumentNullException(nameof(progressBar));
-            TotalProgressInterator = totalProgressIterator;
+            TotalProgressIterator = totalProgressIterator;
 
             Reset();
         }
@@ -56,7 +56,7 @@ namespace Utils.WinForm.CustomProgressBar
         {
             Stop();
 
-            CurrentProgressInterator = 0;
+            CurrentProgressIterator = 0;
             ProgressCompleted = false;
 
             ProgressBar.Value = 0;
@@ -78,20 +78,20 @@ namespace Utils.WinForm.CustomProgressBar
                 ProgressBar.Visible = false;
         }
 
-        public static ProgressCalculaterAsync operator ++(ProgressCalculaterAsync first)
+        public static ProgressCalculationAsync operator ++(ProgressCalculationAsync first)
         {
-            first.CurrentProgressInterator++;
+            first.CurrentProgressIterator++;
             return first;
         }
 
         public void Append()
         {
-            CurrentProgressInterator++;
+            CurrentProgressIterator++;
         }
 
         public void Append(int value)
         {
-            CurrentProgressInterator += value;
+            CurrentProgressIterator += value;
         }
 
         void ProgressChecking()
@@ -101,13 +101,13 @@ namespace Utils.WinForm.CustomProgressBar
                 int _prevValue = -1;
                 while (!ProgressCompleted)
                 {
-                    if (CurrentProgressInterator == 0 || TotalProgressInterator == 0)
+                    if (CurrentProgressIterator == 0 || TotalProgressIterator == 0)
                     {
                         Thread.Sleep(1);
                         continue;
                     }
 
-                    double calc = (double) CurrentProgressInterator / TotalProgressInterator;
+                    double calc = (double) CurrentProgressIterator / TotalProgressIterator;
                     PercentComplete = ((int) (calc * 100)) >= 100 ? 100 : ((int) (calc * 100));
 
                     if (_prevValue == PercentComplete)
@@ -134,7 +134,7 @@ namespace Utils.WinForm.CustomProgressBar
 
         public override string ToString()
         {
-            return $"[{PercentComplete}%] Current=[{CurrentProgressInterator}] Total=[{TotalProgressInterator}]";
+            return $"Complete={PercentComplete}%";
         }
     }
 }
