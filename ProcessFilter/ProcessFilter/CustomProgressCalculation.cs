@@ -16,7 +16,7 @@ namespace SPAFilter
         Action _offlineCalcWhenStopOpen = null;
         Action _offlineCalcWhenStartRead = null;
         Action _offlineCalcWhenStopRead = null;
-        Action calcReadLine = null;
+        Action _calcReadLine = null;
 
         private ProgressCalculationAsync _progressCalc;
         
@@ -162,11 +162,14 @@ namespace SPAFilter
         {
             _offlineCalcWhenStopRead?.Invoke();
 
+            if (_readLinesIterator <= 0)
+                return;
+
             int lineIterNumber = 0;
             int lineIterator = totalRows / _readLinesIterator;
             if (lineIterator > 1)
             {
-                calcReadLine = () =>
+                _calcReadLine = () =>
                 {
                     lineIterNumber++;
                     if (lineIterNumber < lineIterator)
@@ -180,7 +183,7 @@ namespace SPAFilter
 
         public void ReadXslxFileLine()
         {
-            calcReadLine?.Invoke();
+            _calcReadLine?.Invoke();
         }
 
         public void EndOpenXslxFile()
