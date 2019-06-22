@@ -28,7 +28,7 @@ namespace Utils.WinForm.CustomProgressBar
         public int CurrentProgressInterator
         {
             get => _currentProgressIterator;
-            set
+            private set
             {
                 if (_currentProgressIterator >= value)
                     return;
@@ -66,7 +66,7 @@ namespace Utils.WinForm.CustomProgressBar
             _result = _processChecking.BeginInvoke(null, null);
         }
 
-        void Stop()
+        public void Stop()
         {
             ProgressCompleted = true;
 
@@ -74,13 +74,24 @@ namespace Utils.WinForm.CustomProgressBar
             _processChecking = null;
             _result = null;
 
-            ProgressBar.Visible = false;
+            if (ProgressBar.Visible)
+                ProgressBar.Visible = false;
         }
 
         public static ProgressCalculaterAsync operator ++(ProgressCalculaterAsync first)
         {
             first.CurrentProgressInterator++;
             return first;
+        }
+
+        public void Append()
+        {
+            CurrentProgressInterator++;
+        }
+
+        public void Append(int value)
+        {
+            CurrentProgressInterator += value;
         }
 
         void ProgressChecking()
