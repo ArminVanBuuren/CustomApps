@@ -32,6 +32,7 @@ namespace Utils.WinForm.CustomProgressBar
             {
                 if (_currentProgressIterator >= value)
                     return;
+
                 _currentProgressIterator = value >= TotalProgressIterator ? TotalProgressIterator : value;
             }
         }
@@ -94,6 +95,14 @@ namespace Utils.WinForm.CustomProgressBar
             CurrentProgressIterator += value;
         }
 
+        public void AddBootPercent(int percent)
+        {
+            if (percent <= 0)
+                throw new ArgumentException(nameof(percent));
+
+            TotalProgressIterator += (percent * TotalProgressIterator) / 100;
+        }
+
         void ProgressChecking()
         {
             try
@@ -108,11 +117,14 @@ namespace Utils.WinForm.CustomProgressBar
                     }
 
                     double calc = (double) CurrentProgressIterator / TotalProgressIterator;
-                    PercentComplete = ((int) (calc * 100)) >= 100 ? 100 : ((int) (calc * 100));
+                    int percent = ((int) (calc * 100)) >= 100 ? 100 : ((int) (calc * 100));
 
-                    if (_prevValue == PercentComplete)
+                    if (_prevValue >= percent)
                         continue;
-                    _prevValue = PercentComplete;
+
+                    PercentComplete = percent;
+                    _prevValue = percent;
+
 
                     _syncContext.Post(delegate
                     {
