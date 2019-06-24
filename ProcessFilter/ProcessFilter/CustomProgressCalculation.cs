@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using TeleSharp.TL;
 using Utils.WinForm.CustomProgressBar;
 
 namespace SPAFilter
@@ -24,11 +19,11 @@ namespace SPAFilter
         private int _loadFileIterator = 0;
         private int _readLinesIterator = 0;
 
-        public int SCIteratorsIntended { get; } = 0;
-        public int SCPercentIntended { get; } = 0;
+        public int SCIterators { get; } = 0;
+        public int XslxServicesIterators { get; } = 0;
 
-        public int XslxServicesIteratorsIntended { get; } = 0;
-        public int XslxServicesPercentIntended { get; } = 0;
+        public double SCPercent { get; } = 0;
+        public double XslxServicesPercent { get; } = 0;
         
 
         public int CurrentProgressIterator => _progressCalc?.CurrentProgressIterator ?? 0;
@@ -36,18 +31,28 @@ namespace SPAFilter
 
         public CustomProgressCalculation(IProgressBar progressBar, int generateSCIterators)
         {
-            SCIteratorsIntended = generateSCIterators;
+            SCIterators = generateSCIterators;
 
-            _progressCalc = new ProgressCalculationAsync(progressBar, SCIteratorsIntended);
+            _progressCalc = new ProgressCalculationAsync(progressBar, SCIterators);
         }
 
         public CustomProgressCalculation(IProgressBar progressBar, int generateSCIterators, FileInfo xslxRdService)
         {
-            SCIteratorsIntended = generateSCIterators;
+            if(generateSCIterators <= 0)
+                throw new ArgumentException($"{nameof(generateSCIterators)} cannot be less than or equal to zero.");
+
+            SCIterators = generateSCIterators;
 
             int fileKb = (int)(xslxRdService.Length / 1024);
+
+            int xslxRdServiceIterators = fileKb / 4;
+            double hundredPercentIterators = SCIterators + xslxRdServiceIterators;
+
+            SCPercent = (SCIterators * 100) / hundredPercentIterators;
+            XslxServicesPercent = (xslxRdServiceIterators * 100) / hundredPercentIterators;
+
             if (fileKb > 200)
-            {            
+            {
                 // ------------------------------------------
                 // По примерным подсчетам считывание 4Kb файла xslx равен обработки одной операции для SC.
                 // Например:
@@ -60,16 +65,10 @@ namespace SPAFilter
                 // (7800 / 4) * 100 / 3230 = 60.3%
                 // ------------------------------------------
 
-                int xslxRdServiceIterators = fileKb / 4;
-                int hundredPercentIterators = SCIteratorsIntended + xslxRdServiceIterators;
-
-                SCPercentIntended = (SCIteratorsIntended * 100) / hundredPercentIterators;
-                XslxServicesPercentIntended = (xslxRdServiceIterators * 100) / hundredPercentIterators;
-
-                if (SCPercentIntended > 0)
-                    XslxServicesIteratorsIntended = (XslxServicesPercentIntended * SCIteratorsIntended) / SCPercentIntended;
+                if (SCPercent > 1)
+                    XslxServicesIterators = (int)((XslxServicesPercent * SCIterators) / SCPercent);
                 else
-                    XslxServicesIteratorsIntended = (85 * SCIteratorsIntended) / 15;
+                    XslxServicesIterators = (90 * SCIterators) / 10;
 
                 GetXslxPartsIterators();
 
@@ -77,7 +76,7 @@ namespace SPAFilter
             }
             else
             {
-                XslxServicesIteratorsIntended = (15 * SCIteratorsIntended) / 85;
+                XslxServicesIterators = (10 * SCIterators) / 90;
 
                 GetXslxPartsIterators();
 
@@ -85,21 +84,21 @@ namespace SPAFilter
                 _offlineCalcWhenStopRead = () => { _progressCalc.Append(_loadFileIterator); };
             }
 
-            int totalProgressIterator = SCIteratorsIntended + XslxServicesIteratorsIntended;
+            int totalProgressIterator = SCIterators + XslxServicesIterators;
 
             _progressCalc = new ProgressCalculationAsync(progressBar, totalProgressIterator);
         }
 
         void GetXslxPartsIterators()
         {
-            _openFileIterator = XslxServicesIteratorsIntended / 7;                                    // обработку файлов делим на 7 частей. 1/7 часть занимает открытие файла
-            _loadFileIterator = XslxServicesIteratorsIntended - (_openFileIterator * 2);               // 5/7 занимает считывание данных
-            _readLinesIterator = XslxServicesIteratorsIntended - _loadFileIterator - _openFileIterator; // 1/7 часть считывание всех строк
+            _openFileIterator = XslxServicesIterators / 7;                                    // обработку файлов делим на 7 частей. 1/7 часть занимает открытие файла
+            _loadFileIterator = XslxServicesIterators - (_openFileIterator * 2);               // 5/7 занимает считывание данных
+            _readLinesIterator = XslxServicesIterators - _loadFileIterator - _openFileIterator; // 1/7 часть считывание всех строк
         }
 
         void InitXslxRdServiceProgressCalculation(FileInfo xslxRdService)
         {
-            if (XslxServicesIteratorsIntended < 7)
+            if (XslxServicesIterators < 7)
                 return;
 
             bool cancel = false;
@@ -188,9 +187,9 @@ namespace SPAFilter
 
         public void EndOpenXslxFile()
         {
-            if (_progressCalc.CurrentProgressIterator < XslxServicesIteratorsIntended)
+            if (_progressCalc.CurrentProgressIterator < XslxServicesIterators)
             {
-                _progressCalc.Append(XslxServicesIteratorsIntended - _progressCalc.CurrentProgressIterator);
+                _progressCalc.Append(XslxServicesIterators - _progressCalc.CurrentProgressIterator);
             }
         }
 
