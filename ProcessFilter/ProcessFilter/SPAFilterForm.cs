@@ -1023,9 +1023,7 @@ namespace SPAFilter
             try
             {
                 var sc = new ServiceCatalog(elements, rdServices, progressCalc);
-                if (progressCalc.CurrentProgressIterator < progressCalc.TotalProgressIterator)
-                    progressCalc.Append(progressCalc.TotalProgressIterator - progressCalc.CurrentProgressIterator);
-                return sc?.Save(exportFilePath);
+                return sc.Save(exportFilePath);
             }
             catch (Exception ex)
             {

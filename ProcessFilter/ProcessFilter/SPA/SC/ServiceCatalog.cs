@@ -8,17 +8,16 @@ using Utils.WinForm.CustomProgressBar;
 
 namespace SPAFilter.SPA.SC
 {
-    public class ServiceCatalog
+    public struct ServiceCatalog
     {
-        readonly CatalogComponents cfsList;
-
-        private CollectionNetworkElement NetworkElements { get; }
+        public string Configuration { get; }
 
         public ServiceCatalog(CollectionNetworkElement networkElements, DataTable servicesRD, CustomProgressCalculation progressCalc)
         {
-            NetworkElements = networkElements;
+            progressCalc.AddBootPercent(3);
 
-            cfsList = new CatalogComponents(servicesRD);
+            var cfsList = new CatalogComponents(servicesRD);
+
             foreach (var netElement in networkElements)
             {
                 foreach (var neOP in netElement.Operations)
@@ -34,29 +33,35 @@ namespace SPAFilter.SPA.SC
             }
 
             cfsList.GenerateRFS();
+
+            var scConfig = new StringBuilder();
+            scConfig.Append("<Configuration markers=\"*\" scenarioPrefix=\"SC.\" mainIdentities=\"MSISDN,PersonalAccountNumber,ContractNumber\" SICreation=\"\" formatVersion=\"1\">");
+            scConfig.Append("<HostTypeList>");
+            foreach (var netElem in networkElements.AllNetworkElements)
+            {
+                scConfig.Append("<HostType name=\"");
+                scConfig.Append(netElem);
+                scConfig.Append("\" nriType=\"RI\" allowTerminalDeviceType=\"mobile\" description=\"-\" />");
+            }
+            scConfig.Append("</HostTypeList>");
+            scConfig.Append(cfsList.ToXml());
+            scConfig.Append("</Configuration>");
+
+            Configuration = XML.PrintXml(scConfig.ToString());
+
+            if (progressCalc.CurrentProgressIterator < progressCalc.TotalProgressIterator)
+                progressCalc.Append(progressCalc.TotalProgressIterator - progressCalc.CurrentProgressIterator);
         }
 
-        public string Save(string exportFilePath)
+        public string Save(string exportDirectory)
         {
-            var hostsList = new StringBuilder();
+            if (!Directory.Exists(exportDirectory))
+                Directory.CreateDirectory(exportDirectory);
 
-            foreach (var netElem in NetworkElements.AllNetworkElements)
-            {
-                hostsList.Append("<HostType name=\"");
-                hostsList.Append(netElem);
-                hostsList.Append("\" nriType=\"RI\" allowTerminalDeviceType=\"mobile\" description=\"-\" />");
-            }
-
-            var res = "<Configuration markers=\"*\" scenarioPrefix=\"SC.\" mainIdentities=\"MSISDN,PersonalAccountNumber,ContractNumber\" SICreation=\"\" formatVersion=\"1\">"
-                         + "<HostTypeList>" + hostsList + "</HostTypeList>" + cfsList.ToXml() +
-                       "</Configuration>";
-
-            res = XML.PrintXml(res);
-
-            var destinationPath = Path.Combine(exportFilePath, $"SC_{DateTime.Now:yyyyMMdd-HHmmss}.xml");
+            var destinationPath = Path.Combine(exportDirectory, $"SC_{DateTime.Now:yyyyMMdd-HHmmss}.xml");
             using (var writer = new StreamWriter(destinationPath))
             {
-                writer.Write(res);
+                writer.Write(Configuration);
                 writer.Flush();
             }
 

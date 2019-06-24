@@ -203,6 +203,11 @@ namespace SPAFilter
             _progressCalc.Append(value);
         }
 
+        public void AddBootPercent(int percent)
+        {
+            _progressCalc.AddBootPercent(percent);
+        }
+
         public override string ToString() => _progressCalc?.ToString() ?? "";
 
         public void Dispose()
