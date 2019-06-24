@@ -9,7 +9,7 @@ namespace SPAFilter.SPA.Components
         [DGVColumn(ColumnPosition.After, "Operation")]
         public sealed override string Name { get; protected set; }
 
-        [DGVColumn(ColumnPosition.Before, "Network Element")]
+        [DGVColumn(ColumnPosition.Before, "NE")]
         public string NetworkElement => parent.Name;
 
         public Operation(string path, int id, NetworkElement parentElement) : base(path, id)

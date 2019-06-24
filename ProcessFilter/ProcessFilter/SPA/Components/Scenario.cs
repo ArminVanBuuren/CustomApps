@@ -16,7 +16,7 @@ namespace SPAFilter.SPA.Components
         [DGVColumn(ColumnPosition.Before, "Scenario")]
         public override string Name { get; protected set; }
 
-        [DGVColumn(ColumnPosition.After, "SubScenario Count")]
+        [DGVColumn(ColumnPosition.After, "SubScenarios")]
         public int ExistSubScenarios => SubScenarios.Count;
 
 
@@ -35,7 +35,7 @@ namespace SPAFilter.SPA.Components
                 return false;
 
             Commands = allfinded.Commands.Distinct().ToList();
-            foreach (string subScenarioPath in allfinded.SubScenarios.Distinct().ToList())
+            foreach (string subScenarioPath in allfinded.SubScenarios.Distinct())
             {
                 SubScenarios.Add(new Scenario(subScenarioPath, -1));
             }
