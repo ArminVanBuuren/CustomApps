@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -11,10 +12,12 @@ namespace Utils.WinForm.Notepad
 {
     public partial class XmlNotepad : Form
     {
-        public bool WindowIsClosed { get; private set; } = false;
-        List<XmlEditor> listOfXmlFiles = new List<XmlEditor>();
+        readonly List<XmlEditor> _listOfXmlFiles = new List<XmlEditor>();
 
-        public XmlNotepad(string path)
+        public bool WindowIsClosed { get; private set; } = false;
+        
+
+        public XmlNotepad(string filePath)
         {
             InitializeComponent();
 
@@ -34,17 +37,54 @@ namespace Utils.WinForm.Notepad
             this.TabControlObj.HandleCreated += tabControl1_HandleCreated;
             TabControlObj.BackColor = Color.White;
 
-            
+            AddDocument(filePath);
+        }
 
-            if (!AddNewDocument(path))
+        public void AddDocument(string filePath)
+        {
+            if (filePath.IsNullOrEmptyTrim())
+                throw new ArgumentNullException(nameof(filePath));
+
+            if (!File.Exists(filePath))
+                throw new ArgumentException($"File \"{filePath}\" not found!");
+
+            var editor = new XmlEditor();
+            if (!editor.Load(filePath))
+                throw new ArgumentException($"File \"{filePath}\" is incorrect!");
+
+            Text = filePath;
+            _listOfXmlFiles.Add(editor);
+
+            int lastIndex;
+            if (TabControlObj.TabCount == 0)
             {
-                Close();
+                TabPage page1 = new TabPage();
+                TabControlObj.Controls.Add(page1);
+                lastIndex = 0;
             }
+            else
+            {
+                lastIndex = TabControlObj.TabCount;
+            }
+
+            TabControlObj.TabPages.Insert(lastIndex, editor.Name);
+            TabControlObj.SelectedIndex = lastIndex;
+
+            TabPage page = TabControlObj.TabPages[lastIndex];
+            page.UseVisualStyleBackColor = true;
+            page.Text = editor.Name;
+            page.ForeColor = Color.Green;
+            page.Controls.Add(editor.FCTextBox);
+            page.Margin = new Padding(0);
+            page.Padding = new Padding(0);
+
+            editor.FCTextBox.TextChanged += (sender, args) => { ChangePageColor(page, editor); };
+            editor.OnSomethingChanged += (sender, args) => { ChangePageColor(page, editor); };
         }
 
         private void XmlNotepad_Closed(object sender, EventArgs e)
         {
-            foreach (XmlEditor editor in listOfXmlFiles)
+            foreach (XmlEditor editor in _listOfXmlFiles)
             {
                 editor.Dispose();
             }
@@ -110,55 +150,7 @@ namespace Utils.WinForm.Notepad
             TextRenderer.DrawText(e.Graphics, tabPage.Text, tabPage.Font, tabRect, tabPage.ForeColor, tabPage.BackColor, TextFormatFlags.VerticalCenter);
         }
 
-        public bool AddNewDocument(string path)
-        {
-            XmlEditor editor = new XmlEditor();
-            if (editor.Load(path))
-            {
-                Text = path;
-                listOfXmlFiles.Add(editor);
 
-                int lastIndex;
-                if (TabControlObj.TabCount == 0)
-                {
-                    TabPage page1 = new TabPage();
-                    TabControlObj.Controls.Add(page1);
-                    lastIndex = 0;
-                }
-                else
-                {
-                    lastIndex = TabControlObj.TabCount;
-                }
-
-                TabControlObj.TabPages.Insert(lastIndex, editor.Name);
-                TabControlObj.SelectedIndex = lastIndex;
-
-                TabPage page = TabControlObj.TabPages[lastIndex];
-                page.UseVisualStyleBackColor = true;
-                page.Text = editor.Name;
-                page.ForeColor = Color.Green;
-                page.Controls.Add(editor.FCTextBox);
-                page.Margin = new Padding(0);
-                page.Padding = new Padding(0);
-
-                editor.FCTextBox.TextChanged += (sender, args) =>
-                {
-                    ChangePageColor(page, editor);
-                };
-                editor.OnSomethingChanged += (sender, args) =>
-                {
-                    ChangePageColor(page, editor);
-                };
-
-
-
-                return true;
-            }
-
-            MessageBox.Show($"File \"{path}\" is incorrect or not found!");
-            return false;
-
-        }
 
         void ChangePageColor(TabPage page, XmlEditor editor)
         {
@@ -184,7 +176,7 @@ namespace Utils.WinForm.Notepad
 
         bool GetCurrentEditor(out XmlEditor editor)
         {
-            editor = listOfXmlFiles.First(p => p.FCTextBox == TabControlObj.SelectedTab.Controls[0]);
+            editor = _listOfXmlFiles.First(p => p.FCTextBox == TabControlObj.SelectedTab.Controls[0]);
             return editor != null;
         }
     }
