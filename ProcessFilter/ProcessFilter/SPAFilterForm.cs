@@ -680,23 +680,30 @@ namespace SPAFilter
 
         void OpenEditor(string path)
         {
-            if (notepad == null || notepad.WindowIsClosed)
+            try
             {
-                notepad = new XmlNotepad(path)
+                if (notepad == null || notepad.WindowIsClosed)
                 {
-                    Location = Location,
-                    WindowState = FormWindowState.Maximized
-                };
-                //notepad.StartPosition = FormStartPosition.CenterScreen;
-                //notepad.TopMost = true;
-                //notepad.Show(this);
-                notepad.Show();
+                    notepad = new XmlNotepad(path)
+                    {
+                        Location = Location,
+                        WindowState = FormWindowState.Maximized
+                    };
+                    //notepad.StartPosition = FormStartPosition.CenterScreen;
+                    //notepad.TopMost = true;
+                    //notepad.Show(this);
+                    notepad.Show();
+                }
+                else
+                {
+                    notepad.AddDocument(path);
+                    notepad.Focus();
+                    notepad.Activate();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                notepad.AddNewDocument(path);
-                notepad.Focus();
-                notepad.Activate();
+                MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

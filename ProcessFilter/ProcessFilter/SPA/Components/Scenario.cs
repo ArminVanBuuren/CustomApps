@@ -76,7 +76,7 @@ namespace SPAFilter.SPA.Components
                 string subScenarioPath = subScenario + ".xml";
                 if (File.Exists(subScenario))
                 {
-                    prsCs.SubScenarios[i] = subScenarioPath;
+                    prsCs.SubScenarios[i] = subScenario;
                 }
                 else
                 {
