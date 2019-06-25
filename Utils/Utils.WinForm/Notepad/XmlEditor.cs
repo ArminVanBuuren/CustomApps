@@ -36,9 +36,7 @@ namespace Utils.WinForm.Notepad
             ((ISupportInitialize) (FCTB)).BeginInit();
             FCTB.ClearStylesBuffer();
             FCTB.Range.ClearStyle(StyleIndex.All);
-            FCTB.Language = Language.XML;
             FCTB.Anchor = ((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right;
-            FCTB.Text = Source;
             FCTB.AutoCompleteBracketsList = new[] {'(', ')', '{', '}', '[', ']', '\"', '\"', '\'', '\''};
             FCTB.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);";
             FCTB.AutoScrollMinSize = new Size(0, 14);
@@ -52,15 +50,18 @@ namespace Utils.WinForm.Notepad
             FCTB.Name = "fctb";
             FCTB.Paddings = new Padding(0);
             FCTB.SelectionColor = Color.FromArgb(60, 0, 0, 255);
-            FCTB.ServiceColors = null;
             FCTB.TabIndex = 0;
             FCTB.WordWrap = true;
             FCTB.Zoom = 100;
             FCTB.Dock = DockStyle.Fill;
+            ((ISupportInitialize) (FCTB)).EndInit();
+
+            FCTB.Language = Language.XML;
+            FCTB.Text = Source;
             FCTB.TextChanged += Fctb_TextChanged;
             FCTB.KeyDown += UserTriedToSaveDocument;
             FCTB.SelectionChangedDelayed += Fctb_SelectionChangedDelayed;
-            ((ISupportInitialize) (FCTB)).EndInit();
+            
 
 
             _watcher = new FileSystemWatcher();
@@ -189,10 +190,6 @@ namespace Utils.WinForm.Notepad
 
         private void Fctb_TextChanged(object sender, TextChangedEventArgs e)
         {
-            var fctbInput = (FastColoredTextBox) sender;
-            fctbInput.SyntaxHighlighter.InitStyleSchema(Language.XML);
-            fctbInput.SyntaxHighlighter.XMLSyntaxHighlight(fctbInput.Range);
-            fctbInput.Range.ClearFoldingMarkers();
             OnSomethingChanged?.Invoke(this, null);
         }
 
