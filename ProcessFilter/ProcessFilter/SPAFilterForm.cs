@@ -405,6 +405,7 @@ namespace SPAFilter
                 }
 
                 int endOfBpCollection = _filteredProcessCollection.Count;
+                var allOperations = _filteredNetElemCollection.AllOperationsName;
                 for (int i = 0; i < endOfBpCollection; i++)
                 {
                     var document = XML.LoadXml(_filteredProcessCollection[i].FilePath, true);
@@ -412,7 +413,7 @@ namespace SPAFilter
                     {
                         _filteredProcessCollection[i].AddBodyOperations(document);
                         //bool hasMatch = bpCollection[i].Operations.Any(x => netElemCollection.AllOperationsName.Any(y => x.IndexOf(y, StringComparison.CurrentCultureIgnoreCase) != -1));
-                        bool hasMatch = _filteredProcessCollection[i].Operations.Any(x => _filteredNetElemCollection.AllOperationsName.Any(y => x.Equals(y, StringComparison.CurrentCultureIgnoreCase)));
+                        bool hasMatch = _filteredProcessCollection[i].Operations.Any(x => allOperations.Any(y => x.Equals(y, StringComparison.CurrentCultureIgnoreCase)));
 
                         if (!hasMatch)
                         {
