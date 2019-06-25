@@ -5,297 +5,209 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using System.Xml;
 using FastColoredTextBoxNS;
-using Utils.XmlRtfStyle;
 
 namespace Utils.WinForm.Notepad
 {
     public class XmlEditor : IDisposable
     {
+        readonly MarkerStyle _sameWordsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(40, Color.Gray)));
+        static object syncFileChange { get; } = new object();
+        bool _isDisposed = false;
+        FileSystemWatcher _watcher;
+
+        public event EventHandler OnSomethingChanged;
         public string Name { get; private set; }
         public string Path { get; private set; }
         public string Source { get; private set; }
-        public FastColoredTextBox FCTextBox { get; private set; }
-        public event EventHandler OnSomethingChanged;
-        private FileSystemWatcher watcher;
-        public bool IsContentChanged { get; private set; } = false;
-        static object Sync { get; } = new object();
-        private bool isDisposed = false;
+        public FastColoredTextBox FCTB { get; private set; }
+        public bool IsContentChanged => !FCTB.Text.Equals(Source);
 
-        public XmlEditor()
+        internal XmlEditor(string filePath)
         {
+            if (!XML.IsXml(filePath, out _, out var source))
+                throw new ArgumentException($"File \"{filePath}\" is incorrect!");
 
-        }
-
-        public bool Load(string path)
-        {
-            if (!XML.IsXml(path, out XmlDocument document, out string source))
-                return false;
-
-            Path = path;
-            Name = path.GetLastNameInPath(true);
+            Path = filePath;
+            Name = filePath.GetLastNameInPath(true);
             Source = source;
-            FCTextBox = InitTextBox(Source);
+
+            FCTB = new FastColoredTextBox();
+            ((ISupportInitialize) (FCTB)).BeginInit();
+            FCTB.ClearStylesBuffer();
+            FCTB.Range.ClearStyle(StyleIndex.All);
+            FCTB.Language = Language.XML;
+            FCTB.Anchor = ((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right;
+            FCTB.Text = Source;
+            FCTB.AutoCompleteBracketsList = new[] {'(', ')', '{', '}', '[', ']', '\"', '\"', '\'', '\''};
+            FCTB.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);";
+            FCTB.AutoScrollMinSize = new Size(0, 14);
+            FCTB.BackBrush = null;
+            FCTB.CharHeight = 14;
+            FCTB.CharWidth = 8;
+            FCTB.Cursor = Cursors.IBeam;
+            FCTB.DisabledColor = Color.FromArgb(100, 180, 180, 180);
+            FCTB.ImeMode = ImeMode.Off;
+            FCTB.IsReplaceMode = false;
+            FCTB.Name = "fctb";
+            FCTB.Paddings = new Padding(0);
+            FCTB.SelectionColor = Color.FromArgb(60, 0, 0, 255);
+            FCTB.ServiceColors = null;
+            FCTB.TabIndex = 0;
+            FCTB.WordWrap = true;
+            FCTB.Zoom = 100;
+            FCTB.Dock = DockStyle.Fill;
+            FCTB.TextChanged += Fctb_TextChanged;
+            FCTB.KeyDown += UserTriedToSaveDocument;
+            FCTB.SelectionChangedDelayed += Fctb_SelectionChangedDelayed;
+            ((ISupportInitialize) (FCTB)).EndInit();
 
 
-            DisposeWatcher();
-            watcher = new FileSystemWatcher();
-            string[] paths = path.Split('\\');
-            watcher.Path = string.Join("\\", paths.Take(paths.Length - 1));
-            watcher.Filter = paths[paths.Length - 1];
-            watcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
-            watcher.Changed += new FileSystemEventHandler(OnChanged);
-            watcher.Created += new FileSystemEventHandler(OnChanged);
-            watcher.Deleted += new FileSystemEventHandler(OnChanged);
-            watcher.Renamed += new RenamedEventHandler(OnRenamed);
-            watcher.EnableRaisingEvents = true;
-
-            return true;
+            _watcher = new FileSystemWatcher();
+            var paths = filePath.Split('\\');
+            _watcher.Path = string.Join("\\", paths.Take(paths.Length - 1));
+            _watcher.Filter = paths[paths.Length - 1];
+            _watcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
+            _watcher.Changed += OnForeignFileChanged;
+            _watcher.Created += OnForeignFileChanged;
+            _watcher.Deleted += OnForeignFileChanged;
+            _watcher.Renamed += OnFileRenamed;
+            _watcher.EnableRaisingEvents = true;
         }
 
-        void DisposeWatcher()
+        private void OnForeignFileChanged(object source, FileSystemEventArgs e)
         {
-            if (watcher == null)
-                return;
-            watcher.EnableRaisingEvents = false;
-            watcher.Dispose();
-            watcher = null;
-        }
-
-        private void OnChanged(object source, FileSystemEventArgs e)
-        {
-            lock (Sync)
+            switch (e.ChangeType)
             {
-                if (e.ChangeType == WatcherChangeTypes.Deleted)
-                {
+                case WatcherChangeTypes.Deleted:
+                    MessageBox.Show($"File \"{Path}\" was deleted.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     Source = string.Empty;
-                }
-                else if (e.ChangeType == WatcherChangeTypes.Created || e.ChangeType == WatcherChangeTypes.Changed)
-                {
-                    if (WaitForFile(Path, out string result))
-                        Source = result;
-                    else
-                        MessageBox.Show($"Can't access to file: {Path}");
-                }
-
-                if (isDisposed)
+                    OnSomethingChanged?.Invoke(this, null);
                     return;
+                case WatcherChangeTypes.Created:
+                case WatcherChangeTypes.Changed:
+                {
+                    int tryCount = 0;
 
-                IsContentChanged = !FCTextBox.Text.Equals(Source);
-                OnSomethingChanged?.Invoke(this, null);
+                    lock (syncFileChange)
+                    {
+                        while (!IO.IsFileReady(Path))
+                        {
+                            if (tryCount >= 5)
+                            {
+                                MessageBox.Show($"File \"{Path}\" was changed. {nameof(XmlEditor)} сannot access file.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                return;
+                            }
+
+                            if (_isDisposed)
+                                return;
+
+                            System.Threading.Thread.Sleep(500);
+                            tryCount++;
+                        }
+
+                        if (_isDisposed)
+                            return;
+
+                        Source = File.ReadAllText(Path);
+                    }
+
+                    OnSomethingChanged?.Invoke(this, null);
+
+                    break;
+                }
             }
         }
 
-        public bool WaitForFile(string path, out string result)
-        {
-            int tryCount = 0;
-            result = null;
-            while (!IO.IsFileReady(path))
-            {
-                if (tryCount >= 5)
-                    return false;
 
-
-                if (isDisposed)
-                    return false;
-
-
-                System.Threading.Thread.Sleep(500);
-                tryCount++;
-            }
-            result = File.ReadAllText(path);
-            return true;
-        }
-
-        private void OnRenamed(object source, RenamedEventArgs e)
+        private void OnFileRenamed(object source, RenamedEventArgs e)
         {
             Path = e.FullPath;
-            OnSomethingChanged?.Invoke(this, null);
-            //Console.WriteLine("File: {0} renamed to {1}", e.OldFullPath, e.FullPath);
+            OnSomethingChanged?.Invoke(this, null); //  e.OldFullPath, e.FullPath
         }
 
-        FastColoredTextBox InitTextBox(string source)
+        private void Fctb_SelectionChangedDelayed(object sender, EventArgs e)
         {
-            FastColoredTextBox fctb = new FastColoredTextBox();
-            ((ISupportInitialize)(fctb)).BeginInit();
-            //fctb.Anchor = ((AnchorStyles)((((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right)));
-            //fctb.AutoScrollMinSize = new Size(0, 14);
-            //fctb.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);";
-            //fctb.ImeMode = System.Windows.Forms.ImeMode.Off;
-            //fctb.BackBrush = null;
-            //fctb.CharHeight = 14;
-            //fctb.CharWidth = 8;
-            //fctb.Cursor = Cursors.IBeam;
-            //fctb.DisabledColor = Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            //fctb.IsReplaceMode = false;
-            //!!!!!fctb.LeftBracket = '(';
-            //fctb.Name = "fctb";
-            //fctb.Paddings = new Padding(0);
-            //!!!!!fctb.RightBracket = ')';
-            //fctb.SelectionColor = Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-            //fctb.ServiceColors = null;
-            //fctb.TabIndex = 4;
-            //fctb.WordWrap = true;
-            //fctb.Zoom = 100;
-            //fctb.Text = source;
-
-
-            //fctb.SyntaxHighlighter.InitStyleSchema(Language.XML);
-            //fctb.SyntaxHighlighter.XMLSyntaxHighlight(fctb.Range);
-            //fctb.Range.ClearFoldingMarkers();
-            //fctb.Dock = DockStyle.Fill;
-
-            //fctb.TextChanged += Fctb_TextChanged;
-            //fctb.KeyDown += Fctb_KeyDownSaveDocument;
-
-            //fctb.ClearStylesBuffer();
-            //fctb.Range.ClearStyle(StyleIndex.All);
-            //fctb.Language = Language.XML;
-            //fctb.SelectionChangedDelayed += fctb_SelectionChangedDelayed;
-
-            fctb.ClearStylesBuffer();
-            fctb.Range.ClearStyle(StyleIndex.All);
-            fctb.Language = Language.XML;
-            fctb.Anchor = ((AnchorStyles)((((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right)));
-            fctb.Text = source;
-            fctb.AutoCompleteBracketsList = new char[] {'(',')','{','}','[',']','\"','\"','\'','\''};
-            fctb.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);";
-            fctb.AutoScrollMinSize = new System.Drawing.Size(0, 14);
-            fctb.BackBrush = null;
-            fctb.CharHeight = 14;
-            fctb.CharWidth = 8;
-            fctb.Cursor = Cursors.IBeam;
-            fctb.DisabledColor = Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            fctb.ImeMode = ImeMode.Off;
-            fctb.IsReplaceMode = false;
-            fctb.Name = "fctb";
-            fctb.Paddings = new Padding(0);
-            fctb.SelectionColor = Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-            fctb.ServiceColors = null;
-            fctb.TabIndex = 0;
-            fctb.WordWrap = true;
-            fctb.Zoom = 100;
-            fctb.Dock = DockStyle.Fill;
-
-            fctb.TextChanged += Fctb_TextChanged;
-            fctb.KeyDown += Fctb_KeyDownSaveDocument;
-            fctb.SelectionChangedDelayed += fctb_SelectionChangedDelayed;
-
-            ((ISupportInitialize)(fctb)).EndInit();
-
-
-
-            //fctb.Location = new Point(0, 0);
-            //fctb.Size = new System.Drawing.Size(1047, 695);
-
-
-
-
-            return fctb;
-        }
-
-        MarkerStyle SameWordsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(40, Color.Gray)));
-        private void fctb_SelectionChangedDelayed(object sender, EventArgs e)
-        {
-            FCTextBox.VisibleRange.ClearStyle(SameWordsStyle);
-            if (!FCTextBox.Selection.IsEmpty)
-                return;//user selected diapason
+            FCTB.VisibleRange.ClearStyle(_sameWordsStyle);
+            if (!FCTB.Selection.IsEmpty)
+                return; //user selected diapason
 
             //get fragment around caret
-            var fragment = FCTextBox.Selection.GetFragment(@"\w");
+            var fragment = FCTB.Selection.GetFragment(@"\w");
             string text = fragment.Text;
             if (text.Length == 0)
                 return;
+
             //highlight same words
-            var ranges = FCTextBox.VisibleRange.GetRanges("\\b" + text + "\\b").ToArray();
+            var ranges = FCTB.VisibleRange.GetRanges("\\b" + text + "\\b").ToArray();
             if (ranges.Length > 1)
                 foreach (var r in ranges)
-                    r.SetStyle(SameWordsStyle);
+                    r.SetStyle(_sameWordsStyle);
         }
 
 
         [DllImport("user32.dll")]
         private static extern short GetAsyncKeyState(Keys vKey);
 
-        private void Fctb_KeyDownSaveDocument(object sender, KeyEventArgs e)
-        {
-            SaveOrFormatDocument(e);
-        }
-
-        public void SaveOrFormatDocument(KeyEventArgs e)
-        {
-            lock (Sync)
-            {
-                if (e.Control && KeyIsDown(Keys.ControlKey) && KeyIsDown(Keys.S))
-                {
-                    try
-                    {
-                        if (!IsContentChanged)
-                            return;
-
-                        if (XML.IsXml(FCTextBox.Text, out XmlDocument document))
-                        {
-                            IO.WriteFile(Path, FCTextBox.Text);
-                        }
-                        else
-                        {
-                            MessageBox.Show(@"XML-File is incorrect! Please correсt and then save.");
-                            return;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
-                    finally
-                    {
-                        OnSomethingChanged?.Invoke(this, null);
-                    }
-                }
-                else if (e.KeyCode == Keys.F5)
-                {
-                    XMLPrint();
-                }
-            }
-        }
-
-        private bool KeyIsDown(Keys key)
+        private static bool KeyIsDown(Keys key)
         {
             return (GetAsyncKeyState(key) < 0);
         }
 
+        public void UserTriedToSaveDocument(object sender, KeyEventArgs e)
+        {
+            if ((e.Control && KeyIsDown(Keys.ControlKey) && KeyIsDown(Keys.S)) || e.KeyCode == Keys.F2)
+            {
+                if (!IsContentChanged)
+                    return;
+
+                if (XML.IsXml(FCTB.Text, out _))
+                {
+                    try
+                    {
+                        lock (syncFileChange)
+                        {
+                            IO.WriteFile(Path, FCTB.Text);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(@"XML-File is incorrect! File not saved.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else if (e.KeyCode == Keys.F5 && XML.IsXml(FCTB.Text, out var document))
+            {
+                FCTB.Text = document.PrintXml();
+                OnSomethingChanged?.Invoke(this, null);
+            }
+        }
+
         private void Fctb_TextChanged(object sender, TextChangedEventArgs e)
         {
-            FastColoredTextBox fctbInput = (FastColoredTextBox)sender;
+            var fctbInput = (FastColoredTextBox) sender;
             fctbInput.SyntaxHighlighter.InitStyleSchema(Language.XML);
             fctbInput.SyntaxHighlighter.XMLSyntaxHighlight(fctbInput.Range);
             fctbInput.Range.ClearFoldingMarkers();
-
-            //fctbInput.Language = Language.XML;
-            //fctbInput.ClearStylesBuffer();
-            //fctbInput.Range.ClearStyle(StyleIndex.All);
-            //fctbInput.AddStyle(SameWordsStyle);
-            //fctbInput.OnSyntaxHighlight(new TextChangedEventArgs(fctbInput.Range));
-
-            IsContentChanged = !fctbInput.Text.Equals(Source);
-        }
-
-        void XMLPrint()
-        {
-            bool isXml = XML.IsXml(FCTextBox.Text, out XmlDocument document);
-            if (isXml)
-            {
-                string formatting = document.PrintXml();
-                FCTextBox.Text = formatting;
-            }
+            OnSomethingChanged?.Invoke(this, null);
         }
 
         public void Dispose()
         {
-            isDisposed = true;
-            FCTextBox.Dispose();
-            DisposeWatcher();
+            _isDisposed = true;
+
+            if (_watcher != null)
+            {
+                _watcher.EnableRaisingEvents = false;
+                _watcher.Dispose();
+                _watcher = null;
+            }
+
+            FCTB.Dispose();
         }
     }
 }

@@ -5,8 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using System.Xml;
-using Utils.XmlRtfStyle;
 
 namespace Utils.WinForm.Notepad
 {
@@ -23,18 +21,18 @@ namespace Utils.WinForm.Notepad
 
             Closed += XmlNotepad_Closed;
 
-            this.TabControlObj.Padding = new Point(12, 4);
-            this.TabControlObj.DrawMode = TabDrawMode.OwnerDrawFixed;
-            this.TabControlObj.DrawItem += tabControl1_DrawItem;
+            TabControlObj.Padding = new Point(12, 4);
+            TabControlObj.DrawMode = TabDrawMode.OwnerDrawFixed;
+            TabControlObj.DrawItem += TabControl1_DrawItem;
 
-            this.TabControlObj.MouseDown += tabControl1_MouseDown;
+            TabControlObj.MouseDown += TabControl1_MouseDown;
 
             //button1.KeyDown += XmlNotepad_KeyDown;
             TabControlObj.KeyDown += XmlNotepad_KeyDown;
-            this.KeyDown += XmlNotepad_KeyDown;
+            KeyDown += XmlNotepad_KeyDown;
 
-            this.TabControlObj.Selecting += tabControl1_Selecting;
-            this.TabControlObj.HandleCreated += tabControl1_HandleCreated;
+            TabControlObj.Selecting += TabControl1_Selecting;
+            TabControlObj.HandleCreated += tabControl1_HandleCreated;
             TabControlObj.BackColor = Color.White;
 
             AddDocument(filePath);
@@ -48,9 +46,7 @@ namespace Utils.WinForm.Notepad
             if (!File.Exists(filePath))
                 throw new ArgumentException($"File \"{filePath}\" not found!");
 
-            var editor = new XmlEditor();
-            if (!editor.Load(filePath))
-                throw new ArgumentException($"File \"{filePath}\" is incorrect!");
+            var editor = new XmlEditor(filePath);
 
             Text = filePath;
             _listOfXmlFiles.Add(editor);
@@ -74,12 +70,19 @@ namespace Utils.WinForm.Notepad
             page.UseVisualStyleBackColor = true;
             page.Text = editor.Name;
             page.ForeColor = Color.Green;
-            page.Controls.Add(editor.FCTextBox);
+            page.Controls.Add(editor.FCTB);
             page.Margin = new Padding(0);
             page.Padding = new Padding(0);
 
-            editor.FCTextBox.TextChanged += (sender, args) => { ChangePageColor(page, editor); };
-            editor.OnSomethingChanged += (sender, args) => { ChangePageColor(page, editor); };
+            editor.OnSomethingChanged += (sender, args) =>
+            {
+                Invoke(new MethodInvoker(delegate
+                {
+                    page.ForeColor = editor.IsContentChanged ? Color.Red : Color.Green;
+                    page.Text = editor.Name;
+                    TabControl1_Selecting(null, null);
+                }));
+            };
         }
 
         private void XmlNotepad_Closed(object sender, EventArgs e)
@@ -98,10 +101,10 @@ namespace Utils.WinForm.Notepad
 
         private void tabControl1_HandleCreated(object sender, EventArgs e)
         {
-            SendMessage(this.TabControlObj.Handle, TCM_SETMINTABWIDTH, IntPtr.Zero, (IntPtr) 16);
+            SendMessage(TabControlObj.Handle, TCM_SETMINTABWIDTH, IntPtr.Zero, (IntPtr) 16);
         }
 
-        private void tabControl1_Selecting(object sender, TabControlCancelEventArgs e)
+        private void TabControl1_Selecting(object sender, TabControlCancelEventArgs e)
         {
             if (TabControlObj.TabPages.Count == 0)
             {
@@ -116,56 +119,48 @@ namespace Utils.WinForm.Notepad
                 Text = editor.Path;
         }
 
-        private void tabControl1_MouseDown(object sender, MouseEventArgs e)
+        private void TabControl1_MouseDown(object sender, MouseEventArgs e)
         {
-            for (var i = 0; i < this.TabControlObj.TabPages.Count; i++)
+            for (var i = 0; i < TabControlObj.TabPages.Count; i++)
             {
-                var tabRect = this.TabControlObj.GetTabRect(i);
+                var tabRect = TabControlObj.GetTabRect(i);
                 tabRect.Inflate(-2, -2);
-                var closeImage = Utils.WinForm.Properties.Resources.Close;
+                var closeImage = Properties.Resources.Close;
                 var imageRect = new Rectangle(
                     (tabRect.Right - closeImage.Width),
                     tabRect.Top + (tabRect.Height - closeImage.Height) / 2,
                     closeImage.Width,
                     closeImage.Height);
+
                 if (e != null && imageRect.Contains(e.Location))
                 {
                     //this.TabControlObj.TabPages.RemoveAt(i);
-                    this.TabControlObj.TabPages.Remove(TabControlObj.TabPages[i]);
-                    if (this.TabControlObj.TabPages.Count > 0)
-                        this.TabControlObj.SelectedIndex = i == 0 ? 0 : i - 1;
+                    TabControlObj.TabPages.Remove(TabControlObj.TabPages[i]);
+                    if (TabControlObj.TabPages.Count > 0)
+                        TabControlObj.SelectedIndex = i == 0 ? 0 : i - 1;
                     break;
                 }
             }
         }
 
-        private void tabControl1_DrawItem(object sender, DrawItemEventArgs e)
+        private void TabControl1_DrawItem(object sender, DrawItemEventArgs e)
         {
-            var tabPage = this.TabControlObj.TabPages[e.Index];
-            var tabRect = this.TabControlObj.GetTabRect(e.Index);
+            var tabPage = TabControlObj.TabPages[e.Index];
+            var tabRect = TabControlObj.GetTabRect(e.Index);
             tabRect.Inflate(-2, -2);
 
-            var closeImage = Utils.WinForm.Properties.Resources.Close;
+            var closeImage = Properties.Resources.Close;
             e.Graphics.DrawImage(closeImage, (tabRect.Right - closeImage.Width), (tabRect.Top + (tabRect.Height - closeImage.Height) / 2) + 2);
             TextRenderer.DrawText(e.Graphics, tabPage.Text, tabPage.Font, tabRect, tabPage.ForeColor, tabPage.BackColor, TextFormatFlags.VerticalCenter);
         }
 
 
 
-        void ChangePageColor(TabPage page, XmlEditor editor)
-        {
-            Invoke(new MethodInvoker(delegate
-            {
-                page.ForeColor = editor.IsContentChanged ? Color.Red : Color.Green;
-                page.Text = editor.Name;
-                tabControl1_Selecting(null, null);
-            }));
-        }
 
         private void XmlNotepad_KeyDown(object sender, KeyEventArgs e)
         {
             if (GetCurrentEditor(out var editor))
-                editor.SaveOrFormatDocument(e);
+                editor.UserTriedToSaveDocument(sender, e);
         }
 
         //private void button1_Click(object sender, EventArgs e)
@@ -176,7 +171,7 @@ namespace Utils.WinForm.Notepad
 
         bool GetCurrentEditor(out XmlEditor editor)
         {
-            editor = _listOfXmlFiles.First(p => p.FCTextBox == TabControlObj.SelectedTab.Controls[0]);
+            editor = _listOfXmlFiles.First(p => p.FCTB == TabControlObj.SelectedTab.Controls[0]);
             return editor != null;
         }
     }

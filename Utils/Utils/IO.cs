@@ -86,7 +86,7 @@ namespace Utils
             // is no longer locked by another process.
             try
             {
-                using (FileStream inputStream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.None))
+                using (var inputStream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.None))
                     return inputStream.Length > 0;
             }
             catch (Exception)
