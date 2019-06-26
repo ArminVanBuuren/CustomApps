@@ -81,22 +81,36 @@ namespace Tester.Console
                 //    i++;
                 //}
 
-                //DynamicObject dynObj = new DynamicObject(GetResult);
+                DynamicObject dynObj = new DynamicObject(GetResult);
                 //DuplicateDictionary<string, bool> res = new DuplicateDictionary<string, bool>();
-                //var res1 = ExpressionBuilder.Calculate("('1'='1' and '2'>'${random}' and '5'>='4' and 'fff'='fff' and 'sasDDDddd'^='DDD' and 'rrrrr'!='aaaaa')", dynObj);
-                //while (i < 200)
-                //{
-                //    stw.Start();
+                
+                while (true)
+                {
+                    stw.Start();
 
-                //    res.Add(res1.StringResult, res1.ConditionResult);
-                //    dynObj.Elapsed();
+                    bool res = false;
+                    var res1 = ExpressionBuilder.Calculate("('1'='1' and '2'>'${random}' and '5'>='4' and 'fff'='fff' and 'sasDDDddd'^='DDD' and 'rrrrr'!='aaaaa' and '((1.2+2+3)*12)/12'>'6')", dynObj);
+                    //if (1 == 1 && "2" == GetResult("${random}") && 5>=4 && "fff"=="fff" && "sasDDDddd".Like("DDD") && "rrrrr"!= "aaaaa" && MATH.Calculate("((1.2+2+3)*12)/12")>6)
+                    //{
+                    //    res = true;
+                    //}
 
-                //    stw.Stop();
-                //    temp.Add(stw.ElapsedMilliseconds);
-                //    stw.Reset();
+                    //res.Add(res1.StringResult, res1.ConditionResult);
+                    //dynObj.Elapsed();
 
-                //    i++;
-                //}
+                    stw.Stop();
+                    temp.Add(stw.ElapsedMilliseconds);
+
+                    System.Console.WriteLine($"[M:{stw.ElapsedMilliseconds} T:{stw.ElapsedTicks}] [{res1.StringResult}] {res1.ConditionResult}");
+                    //System.Console.WriteLine($"[M:{stw.ElapsedMilliseconds} T:{stw.ElapsedTicks}] [{res}]");
+                    stw.Reset();
+
+                    i++;
+                    if (System.Console.ReadKey().Key == ConsoleKey.Escape)
+                    {
+                        break;
+                    }
+                }
 
 
                 //double dd = 855555;

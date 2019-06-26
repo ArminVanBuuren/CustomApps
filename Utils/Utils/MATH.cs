@@ -19,6 +19,7 @@ namespace Utils
             var temp = new StringBuilder();
             var charIn = input.ToCharArray(0, input.Length);
             var nextIsNum = 0;
+            var bkt = 0;
 
             foreach (var ch in charIn)
             {
@@ -32,17 +33,25 @@ namespace Utils
                     temp.Remove(0, temp.Length);
                     nextIsNum++;
                 }
-                else
+                else switch (ch)
                 {
-                    temp.Append(ch);
-                    nextIsNum = 0;
+                    case '(':
+                        bkt++;
+                        break;
+                    case ')':
+                        bkt--;
+                        break;
+                    default:
+                        temp.Append(ch);
+                        nextIsNum = 0;
+                        break;
                 }
             }
 
-            return NUMBER.IsNumber(temp.ToString());
+            return NUMBER.IsNumber(temp.ToString()) && bkt == 0;
         }
 
-        internal static double Calculate(string expression)
+        public static double Calculate(string expression)
         {
             try
             {

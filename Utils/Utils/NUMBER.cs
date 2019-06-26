@@ -55,8 +55,13 @@ namespace Utils
                 {
                     if ((ch == '.' || ch == ',') && i == 0)
                         i++;
-                    else if (ch != '-' && j > 0)
-                        return false;
+                    else switch (ch)
+                    {
+                        case '-' when j == 0:
+                            break;
+                        default:
+                            return false;
+                    }
                 }
 
                 j++;
