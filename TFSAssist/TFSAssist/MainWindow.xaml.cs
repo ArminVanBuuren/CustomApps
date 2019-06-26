@@ -1227,7 +1227,7 @@ namespace TFSAssist
             int caretIndex = AnyIntervalTextBox.CaretIndex;
             string oldValue = AnyIntervalTextBox.Text;
 
-            INT.GetOnlyNumberWithCaret(ref oldValue, ref caretIndex, 4);
+            NUMBER.GetOnlyNumberWithCaret(ref oldValue, ref caretIndex, 4);
 
             AnyIntervalTextBox.Text = oldValue;
             AnyIntervalTextBox.CaretIndex = caretIndex;
