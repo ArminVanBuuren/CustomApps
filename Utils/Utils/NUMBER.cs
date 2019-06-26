@@ -13,11 +13,12 @@ using System.Xml.Serialization;
 
 namespace Utils
 {
-	public static class INT
+	public static class NUMBER
 	{
 		static readonly Regex getNotNumber = new Regex(@"[^0-9]", RegexOptions.Compiled);
+
 		/// <summary>
-		/// Обработчик который корректно провыеряет поле TextBox из окна приложения чтобы ввод был строго чисел, также вставляется позиция корретки
+		/// Обработчик который корректно провыеряет поле, чтобы ввод был строго числовой. Также вставляется позиция корретки
 		/// </summary>
 		/// <param name="oldValue"></param>
 		/// <param name="caretIndex"></param>
@@ -37,6 +38,31 @@ namespace Utils
 			caretIndex = newCoretIndex < 0 ? 0 : newCoretIndex > correctValue.Length ? correctValue.Length : newCoretIndex;
 			oldValue = correctValue;
 		}
+
+        public static bool IsNumber(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return false;
+
+            var charIn = input.ToCharArray(0, input.Length);
+            int i = 0, j = 0;
+            foreach (var ch in charIn)
+            {
+                if (char.IsWhiteSpace(ch))
+                    continue;
+
+                if (!char.IsNumber(ch))
+                {
+                    if ((ch == '.' || ch == ',') && i == 0)
+                        i++;
+                    else if (ch != '-' && j > 0)
+                        return false;
+                }
+
+                j++;
+            }
+            return true;
+        }
 
         /// <summary>
         /// Проверка на четность числа

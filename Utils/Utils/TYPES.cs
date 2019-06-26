@@ -8,33 +8,28 @@ using System.Threading.Tasks;
 
 namespace Utils
 {
+    [Flags]
+    public enum TypeParam
+    {
+        NaN = 0,
+        Null = 1,
+        Number = 2,
+        String = 4,
+        Bool = 8,
+        MathEx = 16
+    }
+
     public static class TYPES
     {
-        [Flags]
-        public enum TypeParam
-        {
-            NaN = 0,
-            Null = 1,
-            Number = 2,
-            String = 4,
-            Bool = 8,
-            MathEx = 16,
-            //FArray = 32
-        }
-
-        public static TypeParam GetType(string input)
+        public static TypeParam GetTypeParam(string input)
         {
             if (string.IsNullOrEmpty(input))
                 return TypeParam.Null;
             if (IsBool(input))
                 return TypeParam.Bool;
-            if (IsNumber(input))
+            if (NUMBER.IsNumber(input))
                 return TypeParam.Number;
-            if (IsMathExpression(input))
-                return TypeParam.MathEx;
-            //if (FBundle.IsFArray(str)) 
-            //return ParamType.FArray;
-            return TypeParam.String;
+            return MATH.IsMathExpression(input) ? TypeParam.MathEx : TypeParam.String;
         }
 
         static readonly Regex _isTime = new Regex(@"^(([0-1]|)[0-9]|2[0-3])\:[0-5][0-9]((\:[0-5][0-9])|)$", RegexOptions.Compiled);
@@ -43,85 +38,13 @@ namespace Utils
             return _isTime.IsMatch(input);
         }
 
-        public static bool IsNumber(string input)
-        {
-            if (string.IsNullOrEmpty(input))
-                return false;
-
-            char[] charIn = input.ToCharArray(0, input.Length);
-            int i = 0, j = 0;
-            foreach (char ch in charIn)
-            {
-                if (ch == ' ')
-                    continue;
-                if (!char.IsNumber(ch))
-                {
-                    if ((ch == '.' || ch == ',') && i == 0)
-                        i++;
-                    else if (ch == '-' && j == 0)
-                    {
-                        //пропуск
-                    }
-                    else
-                        return false;
-                }
-                j++;
-            }
-            return true;
-        }
-
         public static bool IsBool(string input)
         {
             if (string.IsNullOrEmpty(input))
                 return false;
-            return string.Equals(input.Trim(), "true", StringComparison.CurrentCultureIgnoreCase) || string.Equals(input.Trim(), "false", StringComparison.CurrentCultureIgnoreCase);
+            var trimVal = input.Trim();
+            return trimVal.Like("true") || trimVal.Like("false");
         }
-
-        public static bool IsFArray(string input)
-        {
-            string[] sArr = input.Split('\n');
-            if (sArr.Length == 0) return false;
-            foreach (string st in sArr)
-            {
-                string[] sArrInLine = st.Split('|');
-                if (sArrInLine.Length == 3)
-                {
-                    if (!IsNumber(sArrInLine[0]))
-                        return false;
-                }
-                else
-                    return false;
-            }
-            return true;
-        }
-
-        public static bool IsMathExpression(string input)
-        {
-            if (string.IsNullOrEmpty(input))
-                return false;
-            StringBuilder temp = new StringBuilder();
-            char[] charIn = input.ToCharArray(0, input.Length);
-            int nextIsNum = 0;
-            foreach (char ch in charIn)
-            {
-                if (ch == ' ')
-                    continue;
-                if ((ch == '+' || ch == '-' || ch == '*' || ch == '/') && nextIsNum == 0)
-                {
-                    if (!IsNumber(temp.ToString()))
-                        return false;
-                    temp.Remove(0, temp.Length);
-                    nextIsNum++;
-                }
-                else
-                {
-                    temp.Append(ch);
-                    nextIsNum = 0;
-                }
-            }
-            return IsNumber(temp.ToString());
-        }
-
 
         class ParamsList
         {

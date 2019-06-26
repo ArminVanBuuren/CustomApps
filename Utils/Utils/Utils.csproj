@@ -161,7 +161,7 @@
     <Compile Include="HtmlAgilityPack\Trace.cs" />
     <Compile Include="HtmlAgilityPack\Trace.FullFramework.cs" />
     <Compile Include="HtmlAgilityPack\Utilities.cs" />
-    <Compile Include="INT.cs" />
+    <Compile Include="NUMBER.cs" />
     <Compile Include="IO.cs" />
     <Compile Include="Handles\ProcessEx.cs" />
     <Compile Include="MATH.cs" />

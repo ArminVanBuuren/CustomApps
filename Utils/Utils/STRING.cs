@@ -116,9 +116,7 @@ namespace Utils
 
         public static bool Like(this string input, string value)
         {
-            if (value == null)
-                return false;
-            return input.Equals(value, StringComparison.CurrentCultureIgnoreCase);
+            return value != null && input.Equals(value, StringComparison.CurrentCultureIgnoreCase);
         }
     }
 }

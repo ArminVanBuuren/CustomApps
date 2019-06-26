@@ -11,30 +11,47 @@ namespace Utils
 {
     public static class MATH
     {
-        /// <summary>
-        /// Выполняет операции складивания, деление и т.д.
-        /// </summary>
-        public static double Evaluate(string expression)
+        public static bool IsMathExpression(string input)
         {
-            if (IsMathExpression(expression))
-                return Evaluate(expression, TypeParam.MathEx);
-            return double.NaN;
+            if (string.IsNullOrEmpty(input))
+                return false;
+
+            var temp = new StringBuilder();
+            var charIn = input.ToCharArray(0, input.Length);
+            var nextIsNum = 0;
+
+            foreach (var ch in charIn)
+            {
+                if (ch == ' ')
+                    continue;
+
+                if ((ch == '+' || ch == '-' || ch == '*' || ch == '/') && nextIsNum == 0)
+                {
+                    if (!NUMBER.IsNumber(temp.ToString()))
+                        return false;
+                    temp.Remove(0, temp.Length);
+                    nextIsNum++;
+                }
+                else
+                {
+                    temp.Append(ch);
+                    nextIsNum = 0;
+                }
+            }
+
+            return NUMBER.IsNumber(temp.ToString());
         }
 
-        public static double Evaluate(string expression, TypeParam pType)
+        internal static double Calculate(string expression)
         {
             try
             {
-                if (pType != TypeParam.MathEx)
-                    return double.NaN;
-
-                string exp = expression.Replace(",", ".");
+                var exp = expression.Replace(",", ".");
                 var table = new DataTable();
                 table.Columns.Add("expression", typeof(string), exp);
-                DataRow row = table.NewRow();
+                var row = table.NewRow();
                 table.Rows.Add(row);
-                double result = double.Parse((string)row["expression"]);
-                return result;
+                return double.Parse((string)row["expression"]);
             }
             catch
             {

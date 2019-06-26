@@ -25,13 +25,13 @@ namespace Utils.ConditionEx.Base
                     return _dynamicValue;
 
                 var input = _base?.DynamicObject != null ? _base.DynamicObject.GetValue.Invoke(Source) : Source;
-                var type = TYPES.GetType(input);
+                var type = TYPES.GetTypeParam(input);
 
                 switch (type)
                 {
                     case TypeParam.MathEx:
                     {
-                        double doubleResult = MATH.Evaluate(input, type);
+                        double doubleResult = MATH.Calculate(input);
                         if (double.IsNaN(doubleResult))
                         {
                             type = TypeParam.String;
