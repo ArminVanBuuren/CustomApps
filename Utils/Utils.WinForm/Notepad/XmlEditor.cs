@@ -4,12 +4,13 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
 
 namespace Utils.WinForm.Notepad
 {
-    public class XmlEditor : IDisposable
+    internal class XmlEditor : IDisposable
     {
         readonly MarkerStyle _sameWordsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(40, Color.Gray)));
         static object syncFileChange { get; } = new object();
@@ -22,8 +23,9 @@ namespace Utils.WinForm.Notepad
         public string Source { get; private set; }
         public FastColoredTextBox FCTB { get; private set; }
         public bool IsContentChanged => !FCTB.Text.Equals(Source);
+        public Encoding Encoding => IO.GetEncoding(Path);
 
-        internal XmlEditor(string filePath)
+        internal XmlEditor(string filePath, bool wordWrap)
         {
             if (!XML.IsXml(filePath, out _, out var source))
                 throw new ArgumentException($"File \"{filePath}\" is incorrect!");
@@ -51,7 +53,7 @@ namespace Utils.WinForm.Notepad
             FCTB.Paddings = new Padding(0);
             FCTB.SelectionColor = Color.FromArgb(60, 0, 0, 255);
             FCTB.TabIndex = 0;
-            FCTB.WordWrap = true;
+            FCTB.WordWrap = wordWrap;
             FCTB.Zoom = 100;
             FCTB.Dock = DockStyle.Fill;
             ((ISupportInitialize) (FCTB)).EndInit();
@@ -61,8 +63,6 @@ namespace Utils.WinForm.Notepad
             FCTB.TextChanged += Fctb_TextChanged;
             FCTB.KeyDown += UserTriedToSaveDocument;
             FCTB.SelectionChangedDelayed += Fctb_SelectionChangedDelayed;
-            
-
 
             _watcher = new FileSystemWatcher();
             var paths = filePath.Split('\\');

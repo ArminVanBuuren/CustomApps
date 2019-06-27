@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(XmlNotepad));
             this.TabControlObj = new System.Windows.Forms.TabControl();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.SuspendLayout();
             // 
             // TabControlObj
@@ -43,8 +44,16 @@
             this.TabControlObj.Location = new System.Drawing.Point(0, 0);
             this.TabControlObj.Name = "TabControlObj";
             this.TabControlObj.SelectedIndex = 0;
-            this.TabControlObj.Size = new System.Drawing.Size(1035, 645);
+            this.TabControlObj.Size = new System.Drawing.Size(1035, 628);
             this.TabControlObj.TabIndex = 0;
+            // 
+            // statusStrip
+            // 
+            this.statusStrip.Location = new System.Drawing.Point(0, 626);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(1035, 22);
+            this.statusStrip.TabIndex = 1;
+            this.statusStrip.Text = "statusStrip1";
             // 
             // XmlNotepad
             // 
@@ -52,16 +61,19 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1035, 648);
+            this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.TabControlObj);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "XmlNotepad";
             this.Text = "Xml Editor";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
         private System.Windows.Forms.TabControl TabControlObj;
+        private System.Windows.Forms.StatusStrip statusStrip;
     }
 }

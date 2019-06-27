@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Utils;
 using Utils.UIControls.Tools;
+using Utils.WinForm.Notepad;
 
 namespace Tester.UIControls
 {
@@ -42,6 +43,10 @@ namespace Tester.UIControls
             //CreateImage(ImageFormat.Tiff);
             //CreateImage(ImageFormat.Wmf);
             //CreateImage(ImageFormat.Wmf);
+
+            var notepad = new XmlNotepad(@"C:\!Builds\Git\versions.xml");
+            notepad.ShowDialog();
+            Close();
         }
 
         void CreateImage(ImageFormat imageFormat)

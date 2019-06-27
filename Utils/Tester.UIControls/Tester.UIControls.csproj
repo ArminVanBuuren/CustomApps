@@ -70,6 +70,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -131,6 +132,10 @@
     <ProjectReference Include="..\Utils.UIControls\Utils.UIControls.csproj">
       <Project>{afd02531-44b0-44d7-9d97-e5d4872b836b}</Project>
       <Name>Utils.UIControls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utils.WinForm\Utils.WinForm.csproj">
+      <Project>{e4433085-2226-40e5-80e9-1af136e70f5b}</Project>
+      <Name>Utils.WinForm</Name>
     </ProjectReference>
     <ProjectReference Include="..\Utils\Utils.csproj">
       <Project>{a734b4e4-a5bf-4566-ac89-fc58d02b2d5f}</Project>
