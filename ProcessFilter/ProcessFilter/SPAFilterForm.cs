@@ -690,9 +690,6 @@ namespace SPAFilter
                         Location = Location,
                         WindowState = FormWindowState.Maximized
                     };
-                    //notepad.StartPosition = FormStartPosition.CenterScreen;
-                    //notepad.TopMost = true;
-                    //notepad.Show(this);
                     notepad.Show();
                 }
                 else
