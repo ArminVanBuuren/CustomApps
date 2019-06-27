@@ -44,8 +44,16 @@ namespace Tester.UIControls
             //CreateImage(ImageFormat.Wmf);
             //CreateImage(ImageFormat.Wmf);
 
-            var notepad = new XmlNotepad(@"C:\!Builds\Git\versions.xml");
-            notepad.ShowDialog();
+            //while (true)
+            {
+                var notepad = new XmlNotepad(@"C:\!Builds\Git\versions.xml");
+                notepad.AddDocument(@"C:\!Builds\Git\1\versions.xml");
+                notepad.AddDocument(@"C:\!Builds\Git\1\111.xml");
+                notepad.AddDocument(@"C:\!Builds\Git\1\222.xml");
+                notepad.AddDocument(@"C:\!Builds\Git\1\333.xml");
+                notepad.ShowDialog();
+            }
+
             Close();
         }
 

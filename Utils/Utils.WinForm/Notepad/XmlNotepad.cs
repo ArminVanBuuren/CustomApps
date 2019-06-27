@@ -11,15 +11,17 @@ namespace Utils.WinForm.Notepad
 {
     public partial class XmlNotepad : Form
     {
-        private readonly ToolStripLabel _contentLengthInfo;
-        private readonly ToolStripLabel _contentLinesInfo;
-        private readonly ToolStripLabel _currentLineInfo;
-        private readonly ToolStripLabel _currentPosition;
-        private readonly ToolStripLabel _selectedInfo;
-        private readonly ToolStripLabel _encodingInfo;
-
-        private XmlEditor _activatedEditor = null;
+        readonly ToolStripLabel _contentLengthInfo;
+        readonly ToolStripLabel _contentLinesInfo;
+        readonly ToolStripLabel _currentLineInfo;
+        readonly ToolStripLabel _currentPosition;
+        readonly ToolStripLabel _selectedInfo;
+        readonly ToolStripLabel _encodingInfo;
         readonly CheckBox _wordWrapping;
+
+        private XmlEditor _currentEditor = null;
+        private int _lastSelectedPage = 0;
+        
 
         Dictionary<TabPage, XmlEditor> ListOfXmlEditors { get; } = new Dictionary<TabPage, XmlEditor>();
 
@@ -42,8 +44,9 @@ namespace Utils.WinForm.Notepad
             TabControlObj.MouseDown += TabControl1_MouseDown;
             TabControlObj.KeyDown += XmlNotepad_KeyDown;
             KeyDown += XmlNotepad_KeyDown;
-            TabControlObj.Selecting += TabControl1_Selecting;
-            TabControlObj.HandleCreated += tabControl1_HandleCreated;
+            TabControlObj.Deselected += TabControlObj_Deselected;
+            TabControlObj.Selecting += TabControlObj_Selecting;
+            TabControlObj.HandleCreated += TabControlObj_HandleCreated;
             TabControlObj.BackColor = Color.White;
 
 
@@ -58,8 +61,6 @@ namespace Utils.WinForm.Notepad
             var wordWrapStatHost = new ToolStripControlHost(_wordWrapping);
             statusStrip.Items.Add(wordWrapStatHost);
             statusStrip.Items.Add(new ToolStripSeparator());
-
-            AddDocument(filePath);
 
             _encodingInfo = GetStripLabel("");
             statusStrip.Items.Add(_encodingInfo);
@@ -81,7 +82,7 @@ namespace Utils.WinForm.Notepad
             _selectedInfo = GetStripLabel("");
             statusStrip.Items.Add(_selectedInfo);
 
-            RefreshStatus();
+            AddDocument(filePath);
         }
 
         static ToolStripLabel GetStripLabel(string text, int leftPadding = 0, int rightPadding = 0)
@@ -89,34 +90,10 @@ namespace Utils.WinForm.Notepad
             return new ToolStripLabel(text)
             {
                 BackColor = Color.Transparent
-                //Padding = new Padding(leftPadding, 0, rightPadding, 0)
-                //Margin = new Padding(leftPadding, 0, rightPadding, 0)
             };
-
-            //var dd = new ToolStripLabel();
-            //dd.
         }
 
-        void RefreshStatus()
-        {
-            if (_activatedEditor == null)
-            {
-                _contentLengthInfo.Text = "0";
-                _contentLinesInfo.Text = "0";
-                _currentLineInfo.Text = "0";
-                _currentPosition.Text =  "0";
-                _selectedInfo.Text = "0|0";
-                _encodingInfo.Text = "";
-                return;
-            }
 
-            _contentLengthInfo.Text = _activatedEditor.FCTB.TextLength.ToString();
-            _contentLinesInfo.Text = _activatedEditor.FCTB.LinesCount.ToString();
-            _currentLineInfo.Text = (_activatedEditor.FCTB.Selection.FromLine + 1).ToString();
-            _currentPosition.Text = (_activatedEditor.FCTB.Selection.FromX + 1).ToString();
-            _selectedInfo.Text = $"{_activatedEditor.FCTB.SelectedText.Length}|{(!_activatedEditor.FCTB.SelectedText.IsNullOrEmpty() ? _activatedEditor.FCTB.SelectedText.Split('\n').Length : 0)}";
-            _encodingInfo.Text = _activatedEditor.Encoding.EncodingName;
-        }
 
         public void AddDocument(string filePath)
         {
@@ -129,34 +106,43 @@ namespace Utils.WinForm.Notepad
             var editor = new XmlEditor(filePath, WordWrap);
             Text = filePath;
 
-            int lastIndex;
-            if (TabControlObj.TabCount == 0)
+            var page = new TabPage
             {
-                var page1 = new TabPage();
-                TabControlObj.Controls.Add(page1);
-                lastIndex = 0;
-            }
-            else
-            {
-                lastIndex = TabControlObj.TabCount;
-            }
-
-            TabControlObj.TabPages.Insert(lastIndex, editor.Name);
-            TabControlObj.SelectedIndex = lastIndex;
-
-            TabPage page = TabControlObj.TabPages[lastIndex];
-            page.UseVisualStyleBackColor = true;
-            page.Text = editor.Name;
-            page.ForeColor = Color.Green;
+                UseVisualStyleBackColor = true,
+                Text = editor.Name,
+                ForeColor = Color.Green
+            };
             page.Controls.Add(editor.FCTB);
             page.Margin = new Padding(0);
             page.Padding = new Padding(0);
+            page.Text = page.Text + new string(' ', 1);
+
+            int index = TabControlObj.TabPages.Count;
+            TabControlObj.TabPages.Add(page);
+            if(TabControlObj.TabPages.Count == index)
+                TabControlObj.TabPages.Insert(index, editor.Name);
+            TabControlObj.SelectedIndex = index;
 
             editor.FCTB.SelectionChanged += FCTB_SelectionChanged;
             editor.OnSomethingChanged += EditorOnSomethingChanged;
 
             ListOfXmlEditors.Add(page, editor);
-            _activatedEditor = editor;
+            _currentEditor = editor;
+            RefreshStatus();
+        }
+
+        void EditorOnSomethingChanged(object sender, EventArgs args)
+        {
+            if (!(sender is XmlEditor editor))
+                return;
+
+            Invoke(new MethodInvoker(delegate
+            {
+                var page = TabControlObj.SelectedTab;
+                page.ForeColor = editor.IsContentChanged ? Color.Red : Color.Green;
+                page.Text = editor.Name;
+                TabControlObj_Selecting(null, null);
+            }));
         }
 
         private void FCTB_SelectionChanged(object sender, EventArgs e)
@@ -164,17 +150,45 @@ namespace Utils.WinForm.Notepad
             RefreshStatus();
         }
 
+        void RefreshStatus()
+        {
+            if (_currentEditor == null)
+            {
+                _contentLengthInfo.Text = "0";
+                _contentLinesInfo.Text = "0";
+                _currentLineInfo.Text = "0";
+                _currentPosition.Text = "0";
+                _selectedInfo.Text = "0|0";
+                _encodingInfo.Text = "";
+                return;
+            }
+
+            _contentLengthInfo.Text = _currentEditor.FCTB.TextLength.ToString();
+            _contentLinesInfo.Text = _currentEditor.FCTB.LinesCount.ToString();
+            _currentLineInfo.Text = (_currentEditor.FCTB.Selection.FromLine + 1).ToString();
+            _currentPosition.Text = (_currentEditor.FCTB.Selection.FromX + 1).ToString();
+            _selectedInfo.Text = $"{_currentEditor.FCTB.SelectedText.Length}|{(!_currentEditor.FCTB.SelectedText.IsNullOrEmpty() ? _currentEditor.FCTB.SelectedText.Split('\n').Length : 0)}";
+            _encodingInfo.Text = _currentEditor.Encoding.EncodingName;
+        }
+
+
         [DllImport("user32.dll")]
         private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wp, IntPtr lp);
 
         private const int TCM_SETMINTABWIDTH = 0x1300 + 49;
 
-        private void tabControl1_HandleCreated(object sender, EventArgs e)
+        private void TabControlObj_HandleCreated(object sender, EventArgs e)
         {
             SendMessage(TabControlObj.Handle, TCM_SETMINTABWIDTH, IntPtr.Zero, (IntPtr) 16);
         }
 
-        private void TabControl1_Selecting(object sender, TabControlCancelEventArgs e)
+        private void TabControlObj_Deselected(object sender, TabControlEventArgs e)
+        {
+            if(e.TabPageIndex != -1 )
+                _lastSelectedPage = e.TabPageIndex;
+        }
+
+        private void TabControlObj_Selecting(object sender, TabControlCancelEventArgs e)
         {
             if (TabControlObj.TabPages.Count == 0)
             {
@@ -182,14 +196,18 @@ namespace Utils.WinForm.Notepad
                 return;
             }
 
+            if (TabControlObj.SelectedTab == null)
+                TabControlObj.SelectedIndex = _lastSelectedPage;
+
             if (TabControlObj.SelectedTab.Controls.Count == 0)
                 return;
 
             if (!ListOfXmlEditors.TryGetValue(TabControlObj.SelectedTab, out var editor))
                 return;
 
-            _activatedEditor = editor;
+            _currentEditor = editor;
             Text = editor.Path;
+            RefreshStatus();
         }
 
         private void TabControl1_MouseDown(object sender, MouseEventArgs e)
@@ -219,11 +237,35 @@ namespace Utils.WinForm.Notepad
                             editor.FCTB.SelectionChanged -= FCTB_SelectionChanged;
                             editor.Dispose();
                         }
+
+                        int prevSelectedIndex = TabControlObj.SelectedIndex;
                         TabControlObj.TabPages.Remove(page);
+
+                        if (TabControlObj.TabPages.Count > 0)
+                        {
+                            if (prevSelectedIndex == i && _lastSelectedPage > i)
+                            {
+                                TabControlObj.SelectedIndex = _lastSelectedPage - 1;
+                            }
+                            else if (prevSelectedIndex == i && _lastSelectedPage < i)
+                            {
+                                TabControlObj.SelectedIndex = _lastSelectedPage;
+                            }
+                            else if (prevSelectedIndex > i)
+                            {
+                                TabControlObj.SelectedIndex = prevSelectedIndex - 1;
+                            }
+                            else if (prevSelectedIndex < i)
+                            {
+                                TabControlObj.SelectedIndex = prevSelectedIndex ;
+                            }
+                            else if(i  > 0)
+                            {
+                                TabControlObj.SelectedIndex = i - 1;
+                            }
+                        }
                     }
 
-                    if (TabControlObj.TabPages.Count > 0)
-                        TabControlObj.SelectedIndex = i == 0 ? 0 : i - 1;
                     break;
                 }
             }
@@ -236,7 +278,7 @@ namespace Utils.WinForm.Notepad
             tabRect.Inflate(-2, -2);
 
             var closeImage = Properties.Resources.Close;
-            e.Graphics.DrawImage(closeImage, (tabRect.Right - closeImage.Width), (tabRect.Top + (tabRect.Height - closeImage.Height) / 2) + 2);
+            e.Graphics.DrawImage(closeImage, (tabRect.Right - closeImage.Width)  , (tabRect.Top + (tabRect.Height - closeImage.Height) / 2) + 1);
             TextRenderer.DrawText(e.Graphics, tabPage.Text, tabPage.Font, tabRect, tabPage.ForeColor, tabPage.BackColor, TextFormatFlags.VerticalCenter);
         }
 
@@ -246,19 +288,7 @@ namespace Utils.WinForm.Notepad
                 editor.UserTriedToSaveDocument(sender, e);
         }
 
-        void EditorOnSomethingChanged(object sender, EventArgs args)
-        {
-            if(!(sender is XmlEditor editor))
-                return;
 
-            Invoke(new MethodInvoker(delegate
-            {
-                var page = TabControlObj.SelectedTab;
-                page.ForeColor = editor.IsContentChanged ? Color.Red : Color.Green;
-                page.Text = editor.Name;
-                TabControl1_Selecting(null, null);
-            }));
-        }
 
         private void XmlNotepad_Closed(object sender, EventArgs e)
         {
