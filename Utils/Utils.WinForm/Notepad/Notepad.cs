@@ -9,7 +9,7 @@ using FastColoredTextBoxNS;
 
 namespace Utils.WinForm.Notepad
 {
-    public partial class XmlNotepad : Form
+    public partial class Notepad : Form
     {
         readonly ToolStripLabel _contentLengthInfo;
         readonly ToolStripLabel _contentLinesInfo;
@@ -17,13 +17,15 @@ namespace Utils.WinForm.Notepad
         readonly ToolStripLabel _currentPosition;
         readonly ToolStripLabel _selectedInfo;
         readonly ToolStripLabel _encodingInfo;
+        private readonly ToolStripComboBox _listOfLanguages;
         readonly CheckBox _wordWrapping;
+        
 
-        private XmlEditor _currentEditor = null;
+        private Editor _currentEditor = null;
         private int _lastSelectedPage = 0;
         
 
-        Dictionary<TabPage, XmlEditor> ListOfXmlEditors { get; } = new Dictionary<TabPage, XmlEditor>();
+        Dictionary<TabPage, Editor> ListOfXmlEditors { get; } = new Dictionary<TabPage, Editor>();
 
         public bool WindowIsClosed { get; private set; } = false;
 
@@ -33,7 +35,7 @@ namespace Utils.WinForm.Notepad
             set => _wordWrapping.Checked = value;
         }
 
-        public XmlNotepad(string filePath, bool wordWrap = true)
+        public Notepad(string filePath, bool wordWrap = true)
         {
             InitializeComponent();
 
@@ -49,6 +51,14 @@ namespace Utils.WinForm.Notepad
             TabControlObj.HandleCreated += TabControlObj_HandleCreated;
             TabControlObj.BackColor = Color.White;
 
+
+            _listOfLanguages = new ToolStripComboBox {BackColor = SystemColors.Control};
+            foreach (Language lang in Enum.GetValues(typeof(Language)))
+            {
+                _listOfLanguages.Items.Add(lang);
+            }
+            statusStrip.Items.Add(_listOfLanguages);
+            statusStrip.Items.Add(new ToolStripSeparator());
 
             _wordWrapping = new CheckBox {BackColor = Color.Transparent, Text = @"Wrap", Checked = wordWrap, Padding = new Padding(10, 0, 0, 0)};
             _wordWrapping.CheckStateChanged += (s, e) =>
@@ -82,7 +92,17 @@ namespace Utils.WinForm.Notepad
             _selectedInfo = GetStripLabel("");
             statusStrip.Items.Add(_selectedInfo);
 
-            AddDocument(filePath);
+            var editor2 = AddDocumentAndGetEditor(filePath);
+            _listOfLanguages.Text = editor2.FCTB.Language.ToString();
+            _listOfLanguages.SelectedIndexChanged += ComboBox_SelectedIndexChanged;
+        }
+
+        private void ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (sender is ToolStripComboBox comboBoxLanguages && comboBoxLanguages.SelectedItem is Language lang && _currentEditor != null && _currentEditor.FCTB.Language != lang)
+            {
+                _currentEditor.ChangeLanguage(lang);
+            }
         }
 
         static ToolStripLabel GetStripLabel(string text, int leftPadding = 0, int rightPadding = 0)
@@ -93,29 +113,29 @@ namespace Utils.WinForm.Notepad
             };
         }
 
-
-
         public void AddDocument(string filePath)
+        {
+            AddDocumentAndGetEditor(filePath);
+        }
+
+        Editor AddDocumentAndGetEditor(string filePath)
         {
             if (filePath.IsNullOrEmptyTrim())
                 throw new ArgumentNullException(nameof(filePath));
 
-            if (!File.Exists(filePath))
-                throw new ArgumentException($"File \"{filePath}\" not found!");
-
-            var editor = new XmlEditor(filePath, WordWrap);
+            var editor = new Editor(filePath, WordWrap);
             Text = filePath;
 
             var page = new TabPage
             {
                 UseVisualStyleBackColor = true,
                 Text = editor.Name,
-                ForeColor = Color.Green
+                ForeColor = Color.Black
             };
             page.Controls.Add(editor.FCTB);
             page.Margin = new Padding(0);
             page.Padding = new Padding(0);
-            page.Text = page.Text + new string(' ', 1);
+            page.Text = page.Text + new string(' ', 2);
 
             int index = TabControlObj.TabPages.Count;
             TabControlObj.TabPages.Add(page);
@@ -128,12 +148,14 @@ namespace Utils.WinForm.Notepad
 
             ListOfXmlEditors.Add(page, editor);
             _currentEditor = editor;
-            RefreshStatus();
+
+            FCTB_SelectionChanged(this, null);
+            return editor;
         }
 
         void EditorOnSomethingChanged(object sender, EventArgs args)
         {
-            if (!(sender is XmlEditor editor))
+            if (!(sender is Editor editor))
                 return;
 
             Invoke(new MethodInvoker(delegate
@@ -147,18 +169,13 @@ namespace Utils.WinForm.Notepad
 
         private void FCTB_SelectionChanged(object sender, EventArgs e)
         {
-            RefreshStatus();
-        }
-
-        void RefreshStatus()
-        {
             if (_currentEditor == null)
             {
-                _contentLengthInfo.Text = "0";
-                _contentLinesInfo.Text = "0";
-                _currentLineInfo.Text = "0";
-                _currentPosition.Text = "0";
-                _selectedInfo.Text = "0|0";
+                _contentLengthInfo.Text = @"0";
+                _contentLinesInfo.Text = @"0";
+                _currentLineInfo.Text = @"0";
+                _currentPosition.Text = @"0";
+                _selectedInfo.Text = @"0|0";
                 _encodingInfo.Text = "";
                 return;
             }
@@ -167,8 +184,12 @@ namespace Utils.WinForm.Notepad
             _contentLinesInfo.Text = _currentEditor.FCTB.LinesCount.ToString();
             _currentLineInfo.Text = (_currentEditor.FCTB.Selection.FromLine + 1).ToString();
             _currentPosition.Text = (_currentEditor.FCTB.Selection.FromX + 1).ToString();
-            _selectedInfo.Text = $"{_currentEditor.FCTB.SelectedText.Length}|{(!_currentEditor.FCTB.SelectedText.IsNullOrEmpty() ? _currentEditor.FCTB.SelectedText.Split('\n').Length : 0)}";
+            _selectedInfo.Text = $"{_currentEditor.FCTB.SelectedText.Length}|{(_currentEditor.FCTB.SelectedText.Length > 0 ? _currentEditor.FCTB.SelectedText.Split('\n').Length : 0)}";
             _encodingInfo.Text = _currentEditor.Encoding.EncodingName;
+
+            //_listOfLanguages.SelectedIndexChanged -= ComboBox_SelectedIndexChanged;
+            _listOfLanguages.Text = _currentEditor.FCTB.Language.ToString();
+            //_listOfLanguages.SelectedIndexChanged += ComboBox_SelectedIndexChanged;
         }
 
 
@@ -206,8 +227,9 @@ namespace Utils.WinForm.Notepad
                 return;
 
             _currentEditor = editor;
-            Text = editor.Path;
-            RefreshStatus();
+            Text = editor.FilePath;
+
+            FCTB_SelectionChanged(this, null);
         }
 
         private void TabControl1_MouseDown(object sender, MouseEventArgs e)
@@ -278,7 +300,7 @@ namespace Utils.WinForm.Notepad
             tabRect.Inflate(-2, -2);
 
             var closeImage = Properties.Resources.Close;
-            e.Graphics.DrawImage(closeImage, (tabRect.Right - closeImage.Width)  , (tabRect.Top + (tabRect.Height - closeImage.Height) / 2) + 1);
+            e.Graphics.DrawImage(closeImage, (tabRect.Right - closeImage.Width) -1 , (tabRect.Top + (tabRect.Height - closeImage.Height) / 2) +1);
             TextRenderer.DrawText(e.Graphics, tabPage.Text, tabPage.Font, tabRect, tabPage.ForeColor, tabPage.BackColor, TextFormatFlags.VerticalCenter);
         }
 
@@ -288,8 +310,6 @@ namespace Utils.WinForm.Notepad
                 editor.UserTriedToSaveDocument(sender, e);
         }
 
-
-
         private void XmlNotepad_Closed(object sender, EventArgs e)
         {
             foreach (var editor in ListOfXmlEditors.Values)
@@ -297,6 +317,21 @@ namespace Utils.WinForm.Notepad
                 editor.Dispose();
             }
             WindowIsClosed = true;
+        }
+
+        private void toolStripDropDownButton1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toolStripSplitButton1_ButtonClick(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toolStripDropDownButton1_Click_1(object sender, EventArgs e)
+        {
+
         }
     }
 }

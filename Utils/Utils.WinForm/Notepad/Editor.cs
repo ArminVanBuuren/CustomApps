@@ -10,29 +10,34 @@ using FastColoredTextBoxNS;
 
 namespace Utils.WinForm.Notepad
 {
-    internal class XmlEditor : IDisposable
+    internal class Editor : IDisposable
     {
         readonly MarkerStyle _sameWordsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(40, Color.Gray)));
-        static object syncFileChange { get; } = new object();
+        static object syncWhenFileChanged { get; } = new object();
         bool _isDisposed = false;
         FileSystemWatcher _watcher;
 
         public event EventHandler OnSomethingChanged;
         public string Name { get; private set; }
-        public string Path { get; private set; }
+        public string FilePath { get; private set; }
         public string Source { get; private set; }
         public FastColoredTextBox FCTB { get; private set; }
         public bool IsContentChanged => !FCTB.Text.Equals(Source);
-        public Encoding Encoding => IO.GetEncoding(Path);
+        public Encoding Encoding => IO.GetEncoding(FilePath);
 
-        internal XmlEditor(string filePath, bool wordWrap)
+        internal Editor(string filePath, bool wordWrap)
         {
-            if (!XML.IsXml(filePath, out _, out var source))
-                throw new ArgumentException($"File \"{filePath}\" is incorrect!");
+            if (!File.Exists(filePath))
+                throw new ArgumentException($"File \"{filePath}\" not found!");
 
-            Path = filePath;
+            var langByExtension = GetLanguage(filePath);
+
+            FilePath = filePath;
             Name = filePath.GetLastNameInPath(true);
-            Source = source;
+            Source = IO.SafeReadFile(filePath);
+
+            if (langByExtension == Language.XML && !XML.IsXml(Source, out _))
+                MessageBox.Show($"Xml file \"{filePath}\" is incorrect!", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
             FCTB = new FastColoredTextBox();
             ((ISupportInitialize) (FCTB)).BeginInit();
@@ -58,7 +63,7 @@ namespace Utils.WinForm.Notepad
             FCTB.Dock = DockStyle.Fill;
             ((ISupportInitialize) (FCTB)).EndInit();
 
-            FCTB.Language = Language.XML;
+            FCTB.Language = langByExtension;
             FCTB.Text = Source;
             FCTB.TextChanged += Fctb_TextChanged;
             FCTB.KeyDown += UserTriedToSaveDocument;
@@ -76,27 +81,55 @@ namespace Utils.WinForm.Notepad
             _watcher.EnableRaisingEvents = true;
         }
 
+        public void ChangeLanguage(Language lang)
+        {
+            if (lang == FCTB.Language)
+                return;
+
+            FCTB.ClearStylesBuffer();
+            FCTB.Range.ClearStyle(StyleIndex.All);
+            FCTB.Language = lang;
+            FCTB.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.Range));
+        }
+
+        static Language GetLanguage(string filePath)
+        {
+            var extension = Path.GetExtension(filePath)?.ToLower();
+            switch (extension)
+            {
+                case ".xml": return Language.XML;
+                case ".cs": return Language.CSharp;
+                case ".html": return Language.HTML;
+                case ".js": return Language.JS;
+                case ".lua": return Language.Lua;
+                case ".php": return Language.PHP;
+                case ".sql": return Language.SQL;
+                case ".vb": return Language.VB;
+                default: return Language.Custom;
+            }
+        }
+
         private void OnForeignFileChanged(object source, FileSystemEventArgs e)
         {
             switch (e.ChangeType)
             {
                 case WatcherChangeTypes.Deleted:
-                    MessageBox.Show($"File \"{Path}\" was deleted.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show($"File \"{FilePath}\" was deleted.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     Source = string.Empty;
                     OnSomethingChanged?.Invoke(this, null);
                     return;
                 case WatcherChangeTypes.Created:
                 case WatcherChangeTypes.Changed:
                 {
-                    int tryCount = 0;
-
-                    lock (syncFileChange)
+                    lock (syncWhenFileChanged)
                     {
-                        while (!IO.IsFileReady(Path))
+                        int tryCount = 0;
+
+                        while (!IO.IsFileReady(FilePath))
                         {
                             if (tryCount >= 5)
                             {
-                                MessageBox.Show($"File \"{Path}\" was changed. {nameof(XmlEditor)} сannot access file.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                MessageBox.Show($"File \"{FilePath}\" was changed. Current process сannot access to file.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 return;
                             }
 
@@ -110,7 +143,7 @@ namespace Utils.WinForm.Notepad
                         if (_isDisposed)
                             return;
 
-                        Source = File.ReadAllText(Path);
+                        Source = File.ReadAllText(FilePath);
                     }
 
                     OnSomethingChanged?.Invoke(this, null);
@@ -123,12 +156,15 @@ namespace Utils.WinForm.Notepad
 
         private void OnFileRenamed(object source, RenamedEventArgs e)
         {
-            Path = e.FullPath;
+            FilePath = e.FullPath;
             OnSomethingChanged?.Invoke(this, null); //  e.OldFullPath, e.FullPath
         }
 
         private void Fctb_SelectionChangedDelayed(object sender, EventArgs e)
         {
+            if(FCTB.Language != Language.XML)
+                return;
+
             FCTB.VisibleRange.ClearStyle(_sameWordsStyle);
             if (!FCTB.Selection.IsEmpty)
                 return; //user selected diapason
@@ -162,26 +198,26 @@ namespace Utils.WinForm.Notepad
                 if (!IsContentChanged)
                     return;
 
-                if (XML.IsXml(FCTB.Text, out _))
+                if (FCTB.Language == Language.XML && !XML.IsXml(FCTB.Text, out _))
                 {
-                    try
+                    var saveFailedXmlFile = MessageBox.Show(@"XML-File is incorrect! Save anyway?", "Error!", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                    if (saveFailedXmlFile == DialogResult.Cancel)
+                        return;
+                }
+
+                try
+                {
+                    lock (syncWhenFileChanged)
                     {
-                        lock (syncFileChange)
-                        {
-                            IO.WriteFile(Path, FCTB.Text);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        IO.WriteFile(FilePath, FCTB.Text);
                     }
                 }
-                else
+                catch (Exception ex)
                 {
-                    MessageBox.Show(@"XML-File is incorrect! File not saved.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            else if (e.KeyCode == Keys.F5 && XML.IsXml(FCTB.Text, out var document))
+            else if (e.KeyCode == Keys.F5 && FCTB.Language == Language.XML && XML.IsXml(FCTB.Text, out var document))
             {
                 FCTB.Text = document.PrintXml();
                 OnSomethingChanged?.Invoke(this, null);

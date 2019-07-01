@@ -1,6 +1,6 @@
 ﻿namespace Utils.WinForm.Notepad
 {
-    partial class XmlNotepad
+    partial class Notepad
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(XmlNotepad));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Notepad));
             this.TabControlObj = new System.Windows.Forms.TabControl();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.SuspendLayout();
@@ -55,7 +55,7 @@
             this.statusStrip.TabIndex = 1;
             this.statusStrip.Text = "statusStrip1";
             // 
-            // XmlNotepad
+            // Notepad
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -64,8 +64,8 @@
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.TabControlObj);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "XmlNotepad";
-            this.Text = "Xml Editor";
+            this.Name = "Notepad";
+            this.Text = "Notepad";
             this.ResumeLayout(false);
             this.PerformLayout();
 
