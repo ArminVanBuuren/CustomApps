@@ -87,7 +87,9 @@ namespace Utils
             try
             {
                 using (var inputStream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.None))
+                {
                     return inputStream.Length > 0;
+                }
             }
             catch (Exception)
             {

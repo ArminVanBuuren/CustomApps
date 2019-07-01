@@ -23,7 +23,21 @@ namespace Utils.WinForm.Notepad
         public string Source { get; private set; }
         public FastColoredTextBox FCTB { get; private set; }
         public bool IsContentChanged => !FCTB.Text.Equals(Source);
-        public Encoding Encoding => IO.GetEncoding(FilePath);
+
+        public Encoding Encoding
+        {
+            get
+            {
+                try
+                {
+                    return IO.GetEncoding(FilePath);
+                }
+                catch (Exception)
+                {
+                    return Encoding.Default;
+                }
+            }
+        }
 
         internal Editor(string filePath, bool wordWrap)
         {
@@ -112,45 +126,52 @@ namespace Utils.WinForm.Notepad
 
         private void OnForeignFileChanged(object source, FileSystemEventArgs e)
         {
-            switch (e.ChangeType)
+            try
             {
-                case WatcherChangeTypes.Deleted:
-                    MessageBox.Show($"File \"{FilePath}\" was deleted.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    Source = string.Empty;
-                    OnSomethingChanged?.Invoke(this, null);
-                    return;
-                case WatcherChangeTypes.Created:
-                case WatcherChangeTypes.Changed:
+                switch (e.ChangeType)
                 {
-                    lock (syncWhenFileChanged)
+                    case WatcherChangeTypes.Deleted:
+                        MessageBox.Show($"File \"{FilePath}\" was deleted.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        Source = string.Empty;
+                        OnSomethingChanged?.Invoke(this, null);
+                        return;
+                    case WatcherChangeTypes.Created:
+                    case WatcherChangeTypes.Changed:
                     {
-                        int tryCount = 0;
-
-                        while (!IO.IsFileReady(FilePath))
+                        lock (syncWhenFileChanged)
                         {
-                            if (tryCount >= 5)
+                            int tryCount = 0;
+
+                            while (!IO.IsFileReady(FilePath))
                             {
-                                MessageBox.Show($"File \"{FilePath}\" was changed. Current process сannot access to file.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                return;
+                                if (tryCount >= 5)
+                                {
+                                    MessageBox.Show($"File \"{FilePath}\" was changed. The process cannot access the file because it is being used by another process.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    return;
+                                }
+
+                                if (_isDisposed)
+                                    return;
+
+                                System.Threading.Thread.Sleep(500);
+                                tryCount++;
                             }
 
                             if (_isDisposed)
                                 return;
 
-                            System.Threading.Thread.Sleep(500);
-                            tryCount++;
+                            Source = File.ReadAllText(FilePath);
                         }
 
-                        if (_isDisposed)
-                            return;
+                        OnSomethingChanged?.Invoke(this, null);
 
-                        Source = File.ReadAllText(FilePath);
+                        break;
                     }
-
-                    OnSomethingChanged?.Invoke(this, null);
-
-                    break;
                 }
+            }
+            catch (Exception)
+            {
+                // null
             }
         }
 
@@ -194,34 +215,34 @@ namespace Utils.WinForm.Notepad
 
         public void UserTriedToSaveDocument(object sender, KeyEventArgs e)
         {
-            if ((e.Control && KeyIsDown(Keys.ControlKey) && KeyIsDown(Keys.S)) || e.KeyCode == Keys.F2)
+            try
             {
-                if (!IsContentChanged)
-                    return;
-
-                if (FCTB.Language == Language.XML && !XML.IsXml(FCTB.Text, out _))
+                if ((e.Control && KeyIsDown(Keys.ControlKey) && KeyIsDown(Keys.S)) || e.KeyCode == Keys.F2)
                 {
-                    var saveFailedXmlFile = MessageBox.Show(@"XML-File is incorrect! Save anyway?", "Error!", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
-                    if (saveFailedXmlFile == DialogResult.Cancel)
+                    if (!IsContentChanged)
                         return;
-                }
 
-                try
-                {
+                    if (FCTB.Language == Language.XML && !XML.IsXml(FCTB.Text, out _))
+                    {
+                        var saveFailedXmlFile = MessageBox.Show(@"XML-File is incorrect! Save anyway?", @"Error", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                        if (saveFailedXmlFile == DialogResult.Cancel)
+                            return;
+                    }
+
                     lock (syncWhenFileChanged)
                     {
                         IO.WriteFile(FilePath, FCTB.Text);
                     }
                 }
-                catch (Exception ex)
+                else if (e.KeyCode == Keys.F5 && FCTB.Language == Language.XML && XML.IsXml(FCTB.Text, out var document))
                 {
-                    MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    FCTB.Text = document.PrintXml();
+                    OnSomethingChanged?.Invoke(this, null);
                 }
             }
-            else if (e.KeyCode == Keys.F5 && FCTB.Language == Language.XML && XML.IsXml(FCTB.Text, out var document))
+            catch (Exception ex)
             {
-                FCTB.Text = document.PrintXml();
-                OnSomethingChanged?.Invoke(this, null);
+                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

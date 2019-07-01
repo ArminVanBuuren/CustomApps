@@ -17,7 +17,7 @@ namespace Utils.WinForm.Notepad
         readonly ToolStripLabel _currentPosition;
         readonly ToolStripLabel _selectedInfo;
         readonly ToolStripLabel _encodingInfo;
-        private readonly ToolStripComboBox _listOfLanguages;
+        readonly ToolStripComboBox _listOfLanguages;
         readonly CheckBox _wordWrapping;
         
 
@@ -160,10 +160,16 @@ namespace Utils.WinForm.Notepad
 
             Invoke(new MethodInvoker(delegate
             {
-                var page = TabControlObj.SelectedTab;
-                page.ForeColor = editor.IsContentChanged ? Color.Red : Color.Green;
-                page.Text = editor.Name;
-                TabControlObj_Selecting(null, null);
+                foreach (var edpg in ListOfXmlEditors)
+                {
+                    if (edpg.Value != editor)
+                        continue;
+
+                    edpg.Key.ForeColor = editor.IsContentChanged ? Color.Red : Color.Green;
+                    edpg.Key.Text = editor.Name;
+                    TabControlObj_Selecting(null, null);
+                    return;
+                }
             }));
         }
 
