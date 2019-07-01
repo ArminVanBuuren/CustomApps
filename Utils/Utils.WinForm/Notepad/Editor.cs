@@ -61,6 +61,7 @@ namespace Utils.WinForm.Notepad
             FCTB.WordWrap = wordWrap;
             FCTB.Zoom = 100;
             FCTB.Dock = DockStyle.Fill;
+            FCTB.ForeColor = Color.Black;
             ((ISupportInitialize) (FCTB)).EndInit();
 
             FCTB.Language = langByExtension;

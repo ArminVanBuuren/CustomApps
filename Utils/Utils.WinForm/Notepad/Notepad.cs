@@ -130,7 +130,7 @@ namespace Utils.WinForm.Notepad
             {
                 UseVisualStyleBackColor = true,
                 Text = editor.Name,
-                ForeColor = Color.Black
+                ForeColor = Color.Green
             };
             page.Controls.Add(editor.FCTB);
             page.Margin = new Padding(0);
