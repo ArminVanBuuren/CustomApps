@@ -57,6 +57,8 @@ namespace Utils.WinForm.Notepad
             {
                 _listOfLanguages.Items.Add(lang);
             }
+            _listOfLanguages.Size = new Size(100, statusStrip.Height - 5);
+            _listOfLanguages.DropDownStyle = ComboBoxStyle.DropDownList;
             statusStrip.Items.Add(_listOfLanguages);
             statusStrip.Items.Add(new ToolStripSeparator());
 
