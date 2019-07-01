@@ -32,7 +32,7 @@ namespace SPAFilter
         private string _lastPath = string.Empty;
         private readonly object sync = new object();
         private readonly object sync2 = new object();
-
+        private Notepad _notepad;
 
         private bool IsInProgress
         {
@@ -43,8 +43,8 @@ namespace SPAFilter
                 {
                     _isInProgress = value;
 
-                    if(_isInProgress && notepad != null && !notepad.WindowIsClosed)
-                        notepad.Close();
+                    if(_isInProgress && _notepad != null && !_notepad.WindowIsClosed)
+                        _notepad.Close();
 
                     buttonFilter.Enabled = !_isInProgress;
                     buttonPrintXML.Enabled = !_isInProgress;
@@ -71,7 +71,6 @@ namespace SPAFilter
         }
 
         public static string SerializationDataPath => $"{ApplicationFilePath}.bin";
-        private XmlNotepad notepad;
         public CollectionBusinessProcess Processes { get; private set; }
         public NetworkElementCollection NetElements { get; private set; }
         public CollectionScenarios Scenarios { get; private set; }
@@ -683,20 +682,20 @@ namespace SPAFilter
         {
             try
             {
-                if (notepad == null || notepad.WindowIsClosed)
+                if (_notepad == null || _notepad.WindowIsClosed)
                 {
-                    notepad = new XmlNotepad(path)
+                    _notepad = new Notepad(path)
                     {
                         Location = Location,
                         WindowState = FormWindowState.Maximized
                     };
-                    notepad.Show();
+                    _notepad.Show();
                 }
                 else
                 {
-                    notepad.AddDocument(path);
-                    notepad.Focus();
-                    notepad.Activate();
+                    _notepad.AddDocument(path);
+                    _notepad.Focus();
+                    _notepad.Activate();
                 }
             }
             catch (Exception ex)
