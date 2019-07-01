@@ -18,6 +18,7 @@ using SPAFilter.SPA.Collection;
 using SPAFilter.SPA.Components;
 using SPAFilter.SPA.SC;
 using Utils;
+using Utils.WinForm;
 using Utils.WinForm.DataGridViewHelper;
 using Utils.WinForm.Notepad;
 using Utils.WinForm.CustomProgressBar;
@@ -33,6 +34,10 @@ namespace SPAFilter
         private readonly object sync = new object();
         private readonly object sync2 = new object();
         private Notepad _notepad;
+        private bool _notepadWordWrap = true;
+        private Point? _notepadLocation = null;
+        //private Screen _notepadScreen = null;
+        private FormWindowState _notepadWindowsState = FormWindowState.Maximized;
 
         private bool IsInProgress
         {
@@ -113,6 +118,9 @@ namespace SPAFilter
                 CommandsTextBox.Text = propertyBag.GetString("WWWERT");
                 ExportSCPath.Text = propertyBag.GetString("FFFGHJ");
                 OpenSCXlsx.Text = propertyBag.GetString("GGHHRR");
+                _notepadWordWrap = propertyBag.GetBoolean("DDCCVV");
+                _notepadLocation = (Point)propertyBag.GetValue("RRTTDD", typeof(Point));
+                _notepadWindowsState = (FormWindowState)propertyBag.GetValue("SSEEFF", typeof(FormWindowState));
             }
             catch (Exception)
             {
@@ -132,6 +140,9 @@ namespace SPAFilter
             propertyBag.AddValue("WWWERT", CommandsTextBox.Text);
             propertyBag.AddValue("FFFGHJ", ExportSCPath.Text);
             propertyBag.AddValue("GGHHRR", OpenSCXlsx.Text);
+            propertyBag.AddValue("DDCCVV", _notepadWordWrap);
+            propertyBag.AddValue("RRTTDD", _notepadLocation);
+            propertyBag.AddValue("SSEEFF", _notepadWindowsState);
         }
 
         void MainInit()
@@ -230,7 +241,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
@@ -313,7 +324,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
@@ -549,7 +560,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -633,7 +644,7 @@ namespace SPAFilter
                             }
                             catch (Exception ex)
                             {
-                                MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
                         }
                     }
@@ -684,11 +695,16 @@ namespace SPAFilter
             {
                 if (_notepad == null || _notepad.WindowIsClosed)
                 {
+                    if (_notepadLocation == null || _notepadLocation == Point.Empty)
+                        _notepadLocation = Location;
+
                     _notepad = new Notepad(path)
                     {
-                        Location = Location,
-                        WindowState = FormWindowState.Maximized
+                        Location = _notepadLocation.Value,
+                        WindowState = _notepadWindowsState,
+                        WordWrap = _notepadWordWrap
                     };
+                    _notepad.Closed += _notepad_Closed;
                     _notepad.Show();
                 }
                 else
@@ -700,7 +716,31 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void _notepad_Closed(object sender, EventArgs e)
+        {
+            if (!(sender is Notepad notepad))
+                return;
+
+            try
+            {
+                //foreach (var screen in Screen.AllScreens)
+                //{
+                //    if (screen.Bounds.Contains(notepad.Location))
+                //    {
+                //        _notepadScreen = screen;
+                //    }
+                //}
+                _notepadLocation = notepad.Location;
+                _notepadWordWrap = notepad.WordWrap;
+                _notepadWindowsState = notepad.WindowState;
+            }
+            catch (Exception)
+            {
+                // null
             }
         }
 
@@ -961,7 +1001,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
@@ -1031,7 +1071,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return null;
             }
         }
