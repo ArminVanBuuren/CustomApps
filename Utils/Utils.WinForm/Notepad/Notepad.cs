@@ -318,20 +318,5 @@ namespace Utils.WinForm.Notepad
             }
             WindowIsClosed = true;
         }
-
-        private void toolStripDropDownButton1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void toolStripSplitButton1_ButtonClick(object sender, EventArgs e)
-        {
-
-        }
-
-        private void toolStripDropDownButton1_Click_1(object sender, EventArgs e)
-        {
-
-        }
     }
 }
