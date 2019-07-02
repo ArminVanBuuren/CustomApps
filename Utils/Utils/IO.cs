@@ -147,6 +147,20 @@ namespace Utils
             dInfo.SetAccessControl(dSecurity);
         }
 
+        public static bool CheckFolderPermission(string folderPath)
+        {
+            var dirInfo = new DirectoryInfo(folderPath);
+            try
+            {
+                var dirAC = dirInfo.GetAccessControl(AccessControlSections.All);
+                return true;
+            }
+            catch (PrivilegeNotHeldException)
+            {
+                return false;
+            }
+        }
+
         public static void SetFullControlPermissionsToEveryone(string dirPath)
         {
             const FileSystemRights rights = FileSystemRights.FullControl;
