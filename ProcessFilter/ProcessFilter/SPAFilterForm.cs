@@ -604,33 +604,52 @@ namespace SPAFilter
                 }
                 else if (e.KeyCode == Keys.Enter || (!altIsDown && f4IsDown))
                 {
-                    if (GetFilePathCurrentRow(grid, out var filePath1))
-                        OpenEditor(filePath1);
+                    if (!GetFilePathCurrentRow(grid, out var filePath1))
+                        return;
+
+                    foreach (var filePath in filePath1)
+                    {
+                        OpenEditor(filePath);
+                    }
                 }
                 else if (e.KeyCode == Keys.Delete)
                 {
-                    if (GetFilePathCurrentRow(grid, out var filePath2))
+                    if (!GetFilePathCurrentRow(grid, out var filesPath))
+                        return;
+                    if(filesPath.Count == 0)
+                        return;
+                    
+                    var userResult = MessageBox.Show($"Do you really want to delete {(filesPath.Count == 1 ? $"the file" : $"{filesPath.Count} files")} ?", @"Question", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+
+                    if (userResult != DialogResult.OK)
+                        return;
+
+                    try
                     {
-                        if (File.Exists(filePath2))
+                        foreach (var filePath in filesPath)
                         {
-                            try
-                            {
-                                File.Delete(filePath2);
-                                UpdateFilteredData();
-                            }
-                            catch (Exception ex)
-                            {
-                                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            }
+                            if (File.Exists(filePath))
+                                File.Delete(filePath);
                         }
+
+                        UpdateFilteredData();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 
             }
             else
             {
-                if (GetFilePathCurrentRow(grid, out var path))
-                    OpenEditor(path);
+                if (!GetFilePathCurrentRow(grid, out var filesPath))
+                    return;
+
+                foreach (var filePath in filesPath)
+                {
+                    OpenEditor(filePath);
+                }
             }
         }
 
@@ -641,16 +660,21 @@ namespace SPAFilter
             return (GetAsyncKeyState(key) < 0);
         }
 
-        static bool GetFilePathCurrentRow(DataGridView grid, out string filePath)
+        static bool GetFilePathCurrentRow(DataGridView grid, out List<string> filesPath)
         {
-            filePath = null;
+            filesPath = new List<string>();
             if (grid.SelectedRows.Count > 0)
             {
-                filePath = grid.SelectedRows[0].Cells[grid.ColumnCount - 1].Value.ToString();
+                foreach (DataGridViewRow row in grid.SelectedRows)
+                {
+                    filesPath.Add(row.Cells[grid.ColumnCount - 1].Value.ToString());
+                }
+
+                //filePath = grid.SelectedRows[0].Cells[grid.ColumnCount - 1].Value.ToString();
             }
             else
             {
-                MessageBox.Show(@"You must select a row!", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(@"You must select a row.", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
             return true;
