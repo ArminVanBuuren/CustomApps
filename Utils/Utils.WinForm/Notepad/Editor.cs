@@ -98,9 +98,6 @@ namespace Utils.WinForm.Notepad
 
         public void ChangeLanguage(Language lang)
         {
-            if (lang == FCTB.Language)
-                return;
-
             FCTB.ClearStylesBuffer();
             FCTB.Range.ClearStyle(StyleIndex.All);
             FCTB.Language = lang;
