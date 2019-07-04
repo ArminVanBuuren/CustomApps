@@ -1,11 +1,8 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="DeleteSubscriberIMSI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description>Удаление абонента IMSI</Description>
-	<Author Name="Timur Khamzin" Date="2015-11-16+15:00"/>
-	<Request Template='Del User: IMSI={0};^M'>
-		<Item Name="imsi" Type="Wellknown"/>
-	</Request>
-	<ErrorsList CodePage="windows-1251">
-
-       	</ErrorsList>
+﻿<Command Name="DeleteSubscriberIMSI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+   <Description>Удаление абонента IMSI</Description>
+   <Author Name="Timur Khamzin" Date="2015-11-16+15:00" />
+   <Request Template="Del User: IMSI={0};^M">
+      <Item Name="imsi" Type="Wellknown" />
+   </Request>
+   <ErrorsList CodePage="windows-1251" />
 </Command>

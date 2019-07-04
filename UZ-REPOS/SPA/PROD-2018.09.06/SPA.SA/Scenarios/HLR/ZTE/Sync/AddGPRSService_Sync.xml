@@ -1,4 +1,4 @@
-<scenario name="AddGPRSService_Sync">
+﻿<scenario name="AddGPRSService_Sync">
    <objectList>
       <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
       <object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll" />

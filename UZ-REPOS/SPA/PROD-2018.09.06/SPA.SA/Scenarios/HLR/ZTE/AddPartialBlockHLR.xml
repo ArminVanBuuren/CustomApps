@@ -1,4 +1,4 @@
-<scenario name="AddPartialBlockHLR">
+﻿<scenario name="AddPartialBlockHLR">
    <include>
       <scenario name="Sub\DeleteM2MAPN_Sub" />
       <scenario name="Sub\DeleteFreeAPN_Sub" />

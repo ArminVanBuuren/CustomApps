@@ -1,4 +1,4 @@
-<scenario name="SynchronizeOnHLRM2M">
+﻿<scenario name="SynchronizeOnHLRM2M">
    <include>
       <scenario name="Sync\AddServices_sync" />
       <scenario name="Sync\AddGPRSService_Sync" />

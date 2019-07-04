@@ -1,4 +1,4 @@
-<scenario name="SynchronizeOnHLR">
+﻿<scenario name="SynchronizeOnHLR">
    <include>
       <scenario name="Sync\AddServices_sync" />
       <scenario name="Sync\AddGPRSService_Sync" />

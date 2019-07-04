@@ -1,9 +1,8 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="AddSMSOut" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description>Добавление услуги 'Служба коротких сообщений'Исходящие</Description>
-	<Author Name="Timur Khamzin" Date="2015-11-16+15:00"/>
-	<Request Template='MOD TELE: MSISDN={0},SMMO=1;^M'>
-		<Item Name="msisdn" Type="Wellknown"/>
-	</Request>
-	<ErrorsList CodePage="windows-1251"/>
+﻿<Command Name="AddSMSOut" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+   <Description>Добавление услуги 'Служба коротких сообщений'Исходящие</Description>
+   <Author Name="Timur Khamzin" Date="2015-11-16+15:00" />
+   <Request Template="MOD TELE: MSISDN={0},SMMO=1;^M">
+      <Item Name="msisdn" Type="Wellknown" />
+   </Request>
+   <ErrorsList CodePage="windows-1251" />
 </Command>

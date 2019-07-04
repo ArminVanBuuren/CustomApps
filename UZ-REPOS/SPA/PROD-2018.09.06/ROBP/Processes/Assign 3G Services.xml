@@ -1,35 +1,35 @@
-<BusinessProcessData name="Assign 3G Services">
-  <businessprocess>
-    <scenario>
-      <objectlist>
-        <object name="OperationOnSA" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
-      </objectlist>
-      <automat>
-        <node name="AddCB406278" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="AddCB406278" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="AddFRVIDCALL" />
-          </resultlist>
-        </node>
-        <node name="AddFRVIDCALL" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="AddFRVIDCALL" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="AddProvisionOnSCG" />
-          </resultlist>
-        </node>
-        <node name="AddProvisionOnSCG" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="AddProvisionOnSCG" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="" />
-          </resultlist>
-        </node>
-      </automat>
-    </scenario>
-  </businessprocess>
+﻿<BusinessProcessData name="Assign 3G Services">
+   <businessprocess>
+      <scenario>
+         <objectlist>
+            <object name="OperationOnSA" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+         </objectlist>
+         <automat>
+            <node name="AddCB406278" object="OperationOnSA">
+               <parameterslist>
+                  <param name="operation" value="AddCB406278" />
+               </parameterslist>
+               <resultlist>
+                  <result value="" node="AddFRVIDCALL" />
+               </resultlist>
+            </node>
+            <node name="AddFRVIDCALL" object="OperationOnSA">
+               <parameterslist>
+                  <param name="operation" value="AddFRVIDCALL" />
+               </parameterslist>
+               <resultlist>
+                  <result value="" node="AddProvisionOnSCG" />
+               </resultlist>
+            </node>
+            <node name="AddProvisionOnSCG" object="OperationOnSA">
+               <parameterslist>
+                  <param name="operation" value="AddProvisionOnSCG" />
+               </parameterslist>
+               <resultlist>
+                  <result value="" node="" />
+               </resultlist>
+            </node>
+         </automat>
+      </scenario>
+   </businessprocess>
 </BusinessProcessData>

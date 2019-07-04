@@ -1,4 +1,4 @@
-<scenario name="DeleteFRASKUE">
+﻿<scenario name="DeleteFRASKUE">
    <include>
       <scenario name="Sub\AddCallForwardingOriginating_Sub" />
       <scenario name="Sub\AddM2MAPN_Sub" />

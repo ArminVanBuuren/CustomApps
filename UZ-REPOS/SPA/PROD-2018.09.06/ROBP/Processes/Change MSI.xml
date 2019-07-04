@@ -1,67 +1,67 @@
-<BusinessProcessData name="Change MSI">
-  <businessprocess>
-    <scenario>
-      <objectlist>
-        <object name="OperationOnSA" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
-      </objectlist>
-      <automat>
-        <node name="ChangeIMSIOnHLR" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="ChangeIMSIOnHLR" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="ChangeMSISDNOnHLR" />
-          </resultlist>
-        </node>
-        <node name="ChangeMSISDNOnHLR" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="ChangeMSISDNOnHLR" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="ChangeIMSIOnSMSC" />
-          </resultlist>
-        </node>
-        <node name="ChangeIMSIOnSMSC" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="ChangeIMSIOnSMSC" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="ChangeMSISDNOnSMSC" />
-          </resultlist>
-        </node>
-        <node name="ChangeMSISDNOnSMSC" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="ChangeMSISDNOnSMSC" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="ChangeMSISDNOnSCG" />
-          </resultlist>
-        </node>
-        <node name="ChangeMSISDNOnSCG" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="ChangeMSISDNOnSCG" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="ChangeMSISDNOnMCA" />
-          </resultlist>
-        </node>
-        <node name="ChangeMSISDNOnMCA" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="ChangeMSISDNOnMCA" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="ChangeMSISDNOnSYN" />
-          </resultlist>
-        </node>
-        <node name="ChangeMSISDNOnSYN" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="ChangeMSISDNOnSYN" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="" />
-          </resultlist>
-        </node>
-      </automat>
-    </scenario>
-  </businessprocess>
+﻿<BusinessProcessData name="Change MSI">
+   <businessprocess>
+      <scenario>
+         <objectlist>
+            <object name="OperationOnSA" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+         </objectlist>
+         <automat>
+            <node name="ChangeIMSIOnHLR" object="OperationOnSA">
+               <parameterslist>
+                  <param name="operation" value="ChangeIMSIOnHLR" />
+               </parameterslist>
+               <resultlist>
+                  <result value="" node="ChangeMSISDNOnHLR" />
+               </resultlist>
+            </node>
+            <node name="ChangeMSISDNOnHLR" object="OperationOnSA">
+               <parameterslist>
+                  <param name="operation" value="ChangeMSISDNOnHLR" />
+               </parameterslist>
+               <resultlist>
+                  <result value="" node="ChangeIMSIOnSMSC" />
+               </resultlist>
+            </node>
+            <node name="ChangeIMSIOnSMSC" object="OperationOnSA">
+               <parameterslist>
+                  <param name="operation" value="ChangeIMSIOnSMSC" />
+               </parameterslist>
+               <resultlist>
+                  <result value="" node="ChangeMSISDNOnSMSC" />
+               </resultlist>
+            </node>
+            <node name="ChangeMSISDNOnSMSC" object="OperationOnSA">
+               <parameterslist>
+                  <param name="operation" value="ChangeMSISDNOnSMSC" />
+               </parameterslist>
+               <resultlist>
+                  <result value="" node="ChangeMSISDNOnSCG" />
+               </resultlist>
+            </node>
+            <node name="ChangeMSISDNOnSCG" object="OperationOnSA">
+               <parameterslist>
+                  <param name="operation" value="ChangeMSISDNOnSCG" />
+               </parameterslist>
+               <resultlist>
+                  <result value="" node="ChangeMSISDNOnMCA" />
+               </resultlist>
+            </node>
+            <node name="ChangeMSISDNOnMCA" object="OperationOnSA">
+               <parameterslist>
+                  <param name="operation" value="ChangeMSISDNOnMCA" />
+               </parameterslist>
+               <resultlist>
+                  <result value="" node="ChangeMSISDNOnSYN" />
+               </resultlist>
+            </node>
+            <node name="ChangeMSISDNOnSYN" object="OperationOnSA">
+               <parameterslist>
+                  <param name="operation" value="ChangeMSISDNOnSYN" />
+               </parameterslist>
+               <resultlist>
+                  <result value="" node="" />
+               </resultlist>
+            </node>
+         </automat>
+      </scenario>
+   </businessprocess>
 </BusinessProcessData>

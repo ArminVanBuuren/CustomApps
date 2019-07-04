@@ -1,9 +1,8 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="DeactivateCFB" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description>Деактивация услуги 'Переадресация вызова (по занятости)'</Description>
-	<Author Name="Timur Khamzin" Date="2015-11-16+15:00"/>
-	<Request Template='Reg FN :MSISDN={0},SS=CFB,Bsg=0,Register=0,Active=0;^M'>
-		<Item Name="msisdn" Type="Wellknown"/>
-	</Request>
-	<ErrorsList CodePage="windows-1251" />
+﻿<Command Name="DeactivateCFB" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+   <Description>Деактивация услуги 'Переадресация вызова (по занятости)'</Description>
+   <Author Name="Timur Khamzin" Date="2015-11-16+15:00" />
+   <Request Template="Reg FN :MSISDN={0},SS=CFB,Bsg=0,Register=0,Active=0;^M">
+      <Item Name="msisdn" Type="Wellknown" />
+   </Request>
+   <ErrorsList CodePage="windows-1251" />
 </Command>

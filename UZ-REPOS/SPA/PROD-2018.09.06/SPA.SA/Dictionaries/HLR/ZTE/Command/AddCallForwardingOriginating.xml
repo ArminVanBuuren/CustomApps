@@ -1,12 +1,9 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="AddCallForwardingOriginating" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description>Добавление региона для Переадресации</Description>
-	<Author Name="Timur Khamzin" Date="2015-11-16+15:00"/>
-	<Request Template='Mod BscEx:MSISDN={0},ORIGINFAID={1};^M'>
-	    <Item Name="msisdn"      Type="Wellknown"/>
-	    <Item Name="Originating" Type="Parameter"/>
-	</Request>
-	<ErrorsList CodePage="windows-1251" >
-
-	</ErrorsList>
+﻿<Command Name="AddCallForwardingOriginating" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+   <Description>Добавление региона для Переадресации</Description>
+   <Author Name="Timur Khamzin" Date="2015-11-16+15:00" />
+   <Request Template="Mod BscEx:MSISDN={0},ORIGINFAID={1};^M">
+      <Item Name="msisdn" Type="Wellknown" />
+      <Item Name="Originating" Type="Parameter" />
+   </Request>
+   <ErrorsList CodePage="windows-1251" />
 </Command>

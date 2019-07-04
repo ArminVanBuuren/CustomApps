@@ -1,43 +1,43 @@
-<BusinessProcessData name="Synchronize Subscriber Data">
-  <businessprocess>
-    <scenario>
-      <objectlist>
-        <object name="OperationOnSA" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
-      </objectlist>
-      <automat>
-        <node name="SynchronizeOnHLR" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="SynchronizeOnHLR" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="SynchronizeOnMCA" />
-          </resultlist>
-        </node>
-        <node name="SynchronizeOnMCA" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="SynchronizeOnMCA" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="SynchronizeOnSCG" />
-          </resultlist>
-        </node>
-        <node name="SynchronizeOnSCG" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="SynchronizeOnSCG" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="SynchronizeOnSMSC" />
-          </resultlist>
-        </node>
-        <node name="SynchronizeOnSMSC" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="SynchronizeOnSMSC" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="" />
-          </resultlist>
-        </node>
-      </automat>
-    </scenario>
-  </businessprocess>
+﻿<BusinessProcessData name="Synchronize Subscriber Data">
+   <businessprocess>
+      <scenario>
+         <objectlist>
+            <object name="OperationOnSA" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+         </objectlist>
+         <automat>
+            <node name="SynchronizeOnHLR" object="OperationOnSA">
+               <parameterslist>
+                  <param name="operation" value="SynchronizeOnHLR" />
+               </parameterslist>
+               <resultlist>
+                  <result value="" node="SynchronizeOnMCA" />
+               </resultlist>
+            </node>
+            <node name="SynchronizeOnMCA" object="OperationOnSA">
+               <parameterslist>
+                  <param name="operation" value="SynchronizeOnMCA" />
+               </parameterslist>
+               <resultlist>
+                  <result value="" node="SynchronizeOnSCG" />
+               </resultlist>
+            </node>
+            <node name="SynchronizeOnSCG" object="OperationOnSA">
+               <parameterslist>
+                  <param name="operation" value="SynchronizeOnSCG" />
+               </parameterslist>
+               <resultlist>
+                  <result value="" node="SynchronizeOnSMSC" />
+               </resultlist>
+            </node>
+            <node name="SynchronizeOnSMSC" object="OperationOnSA">
+               <parameterslist>
+                  <param name="operation" value="SynchronizeOnSMSC" />
+               </parameterslist>
+               <resultlist>
+                  <result value="" node="" />
+               </resultlist>
+            </node>
+         </automat>
+      </scenario>
+   </businessprocess>
 </BusinessProcessData>
