@@ -100,22 +100,22 @@ namespace SPAFilter.SPA.Collection
                 }
             }
 
-            Dictionary<string, string> test = new Dictionary<string, string>();
-            try
-            {
+            //Dictionary<string, string> test = new Dictionary<string, string>();
+            //try
+            //{
                 
-                foreach (var rfs in allRfs.Values)
-                {
-                    foreach (var VARIABLE in rfs)
-                    {
-                        test.Add(VARIABLE.Name, VARIABLE.Body);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
+            //    foreach (var rfs in allRfs.Values)
+            //    {
+            //        foreach (var VARIABLE in rfs)
+            //        {
+            //            test.Add(VARIABLE.Name, VARIABLE.Body);
+            //        }
+            //    }
+            //}
+            //catch (Exception e)
+            //{
                 
-            }
+            //}
            
             //var dsd = allRfs.Values.First().First().Body;
             var scenarioList = XPATH.Execute(navigator, @"/Configuration/ScenarioList/Scenario");
