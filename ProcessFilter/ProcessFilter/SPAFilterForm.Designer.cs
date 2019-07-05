@@ -30,7 +30,6 @@ namespace SPAFilter
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SPAFilterForm));
             this.ProcessesTextBox = new System.Windows.Forms.TextBox();
             this.OperationTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -44,7 +43,7 @@ namespace SPAFilter
             this.label7 = new System.Windows.Forms.Label();
             this.ProcessesComboBox = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.buttonFilter = new System.Windows.Forms.Button();
+            this.FilterButton = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
@@ -61,39 +60,44 @@ namespace SPAFilter
             this.label5 = new System.Windows.Forms.Label();
             this.ButtonGenerateSC = new System.Windows.Forms.Button();
             this.OpenSCXlsx = new System.Windows.Forms.TextBox();
-            this.ScenariosTextBox = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.ScenariosButtonOpen = new System.Windows.Forms.Button();
-            this.CommnadsButtonOpen = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
-            this.CommandsTextBox = new System.Windows.Forms.TextBox();
-            this.progressBar = new CustomProgressBar();
+            this.progressBar = new SPAFilter.CustomProgressBar();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.PrintXMLButton = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.BPCount = new System.Windows.Forms.ToolStripStatusLabel();
             this.NEElementsCount = new System.Windows.Forms.ToolStripStatusLabel();
             this.OperationsCount = new System.Windows.Forms.ToolStripStatusLabel();
             this.ScenariosCount = new System.Windows.Forms.ToolStripStatusLabel();
             this.CommandsCount = new System.Windows.Forms.ToolStripStatusLabel();
-            this.buttonPrintXML = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridProcesses)).BeginInit();
+            this.ActivatorList = new System.Windows.Forms.ListBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.AddActivatorButton = new System.Windows.Forms.Button();
+            this.RemoveActivatorButton = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.ServiceCatalogTextBox = new System.Windows.Forms.TextBox();
+            this.ServiceCatalogOpenButton = new System.Windows.Forms.Button();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.dataGridSCOperations = new System.Windows.Forms.DataGridView();
+            ((System.ComponentModel.ISupportInitialize) (this.dataGridProcesses)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridOperations)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.dataGridOperations)).BeginInit();
             this.tabPage3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridScenarios)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.dataGridScenarios)).BeginInit();
             this.tabPage4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridCommands)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.dataGridCommands)).BeginInit();
             this.GenerateSC.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.tabPage5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize) (this.dataGridSCOperations)).BeginInit();
             this.SuspendLayout();
             // 
             // ProcessesTextBox
             // 
-            this.ProcessesTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ProcessesTextBox.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                                                                                  | System.Windows.Forms.AnchorStyles.Right)));
             this.ProcessesTextBox.Location = new System.Drawing.Point(77, 12);
             this.ProcessesTextBox.Name = "ProcessesTextBox";
             this.ProcessesTextBox.Size = new System.Drawing.Size(639, 20);
@@ -102,8 +106,8 @@ namespace SPAFilter
             // 
             // OperationTextBox
             // 
-            this.OperationTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.OperationTextBox.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                                                                                  | System.Windows.Forms.AnchorStyles.Right)));
             this.OperationTextBox.Location = new System.Drawing.Point(77, 38);
             this.OperationTextBox.Name = "OperationTextBox";
             this.OperationTextBox.Size = new System.Drawing.Size(639, 20);
@@ -131,7 +135,7 @@ namespace SPAFilter
             // 
             // OperationButtonOpen
             // 
-            this.OperationButtonOpen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.OperationButtonOpen.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.OperationButtonOpen.Location = new System.Drawing.Point(722, 36);
             this.OperationButtonOpen.Name = "OperationButtonOpen";
             this.OperationButtonOpen.Size = new System.Drawing.Size(75, 23);
@@ -142,7 +146,7 @@ namespace SPAFilter
             // 
             // ProcessesButtonOpen
             // 
-            this.ProcessesButtonOpen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ProcessesButtonOpen.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.ProcessesButtonOpen.Location = new System.Drawing.Point(722, 10);
             this.ProcessesButtonOpen.Name = "ProcessesButtonOpen";
             this.ProcessesButtonOpen.Size = new System.Drawing.Size(75, 23);
@@ -151,28 +155,28 @@ namespace SPAFilter
             this.ProcessesButtonOpen.UseVisualStyleBackColor = true;
             this.ProcessesButtonOpen.Click += new System.EventHandler(this.ProcessesButtonOpen_Click);
             // 
-            // dataGridProcessesResults
+            // dataGridProcesses
             // 
             this.dataGridProcesses.AllowUserToAddRows = false;
             this.dataGridProcesses.AllowUserToDeleteRows = false;
             this.dataGridProcesses.AllowUserToOrderColumns = true;
             this.dataGridProcesses.AllowUserToResizeRows = false;
-            this.dataGridProcesses.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridProcesses.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                                                                                    | System.Windows.Forms.AnchorStyles.Left)
+                                                                                   | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridProcesses.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridProcesses.Location = new System.Drawing.Point(0, 0);
-            this.dataGridProcesses.Name = "dataGridProcessesResults";
+            this.dataGridProcesses.Name = "dataGridProcesses";
             this.dataGridProcesses.ReadOnly = true;
             this.dataGridProcesses.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridProcesses.Size = new System.Drawing.Size(794, 245);
+            this.dataGridProcesses.Size = new System.Drawing.Size(794, 310);
             this.dataGridProcesses.TabIndex = 4;
             this.dataGridProcesses.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridProcessesResults_CellMouseDoubleClick);
             // 
             // OperationComboBox
             // 
-            this.OperationComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.OperationComboBox.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                                                                                   | System.Windows.Forms.AnchorStyles.Right)));
             this.OperationComboBox.FormattingEnabled = true;
             this.OperationComboBox.Location = new System.Drawing.Point(456, 19);
             this.OperationComboBox.Name = "OperationComboBox";
@@ -224,130 +228,127 @@ namespace SPAFilter
             // 
             // buttonFilter
             // 
-            this.buttonFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonFilter.Location = new System.Drawing.Point(701, 58);
-            this.buttonFilter.Name = "buttonFilter";
-            this.buttonFilter.Size = new System.Drawing.Size(75, 23);
-            this.buttonFilter.TabIndex = 13;
-            this.buttonFilter.Text = "Get [F5]";
-            this.buttonFilter.UseVisualStyleBackColor = true;
-            this.buttonFilter.Click += new System.EventHandler(this.ButtonFilterClick);
+            this.FilterButton.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.FilterButton.Location = new System.Drawing.Point(701, 58);
+            this.FilterButton.Name = "buttonFilter";
+            this.FilterButton.Size = new System.Drawing.Size(75, 23);
+            this.FilterButton.TabIndex = 13;
+            this.FilterButton.Text = "Get [F5]";
+            this.FilterButton.UseVisualStyleBackColor = true;
+            this.FilterButton.Click += new System.EventHandler(this.FilterButton_Click);
             // 
             // tabControl1
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                                                                              | System.Windows.Forms.AnchorStyles.Left)
+                                                                             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.GenerateSC);
-            this.tabControl1.Location = new System.Drawing.Point(3, 211);
+            this.tabControl1.Location = new System.Drawing.Point(3, 312);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(802, 271);
+            this.tabControl1.Size = new System.Drawing.Size(802, 336);
             this.tabControl1.TabIndex = 14;
             // 
             // tabPage1
             // 
+            this.tabPage1.BackColor = System.Drawing.Color.DarkGray;
             this.tabPage1.Controls.Add(this.dataGridProcesses);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(794, 245);
+            this.tabPage1.Size = new System.Drawing.Size(794, 310);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Processes";
-            this.tabPage1.UseVisualStyleBackColor = true;
-            this.tabPage1.BackColor = Color.DarkGray;
             // 
             // tabPage2
             // 
+            this.tabPage2.BackColor = System.Drawing.Color.DarkGray;
             this.tabPage2.Controls.Add(this.dataGridOperations);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(794, 245);
+            this.tabPage2.Size = new System.Drawing.Size(794, 310);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Operations";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            this.tabPage2.BackColor = Color.DarkGray;
             // 
-            // dataGridOperationsResult
+            // dataGridOperations
             // 
             this.dataGridOperations.AllowUserToAddRows = false;
             this.dataGridOperations.AllowUserToDeleteRows = false;
             this.dataGridOperations.AllowUserToOrderColumns = true;
             this.dataGridOperations.AllowUserToResizeRows = false;
-            this.dataGridOperations.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridOperations.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                                                                                     | System.Windows.Forms.AnchorStyles.Left)
+                                                                                    | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridOperations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridOperations.Location = new System.Drawing.Point(0, 0);
-            this.dataGridOperations.Name = "dataGridOperationsResult";
+            this.dataGridOperations.Name = "dataGridOperations";
             this.dataGridOperations.ReadOnly = true;
             this.dataGridOperations.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridOperations.Size = new System.Drawing.Size(794, 245);
+            this.dataGridOperations.Size = new System.Drawing.Size(794, 310);
             this.dataGridOperations.TabIndex = 0;
-            this.dataGridOperations.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridOperationsResult_CellDoubleClick);
+            this.dataGridOperations.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridOperationsResult_CellDoubleClick);
             // 
             // tabPage3
             // 
+            this.tabPage3.BackColor = System.Drawing.Color.DarkGray;
             this.tabPage3.Controls.Add(this.dataGridScenarios);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(794, 245);
+            this.tabPage3.Size = new System.Drawing.Size(794, 310);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Scenarios";
-            this.tabPage3.UseVisualStyleBackColor = true;
-            this.tabPage3.BackColor = Color.DarkGray;
             // 
-            // dataGridScenariosResult
+            // dataGridScenarios
             // 
             this.dataGridScenarios.AllowUserToAddRows = false;
             this.dataGridScenarios.AllowUserToDeleteRows = false;
             this.dataGridScenarios.AllowUserToOrderColumns = true;
             this.dataGridScenarios.AllowUserToResizeRows = false;
-            this.dataGridScenarios.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridScenarios.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                                                                                    | System.Windows.Forms.AnchorStyles.Left)
+                                                                                   | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridScenarios.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridScenarios.Location = new System.Drawing.Point(0, 0);
-            this.dataGridScenarios.Name = "dataGridScenariosResult";
+            this.dataGridScenarios.Name = "dataGridScenarios";
             this.dataGridScenarios.ReadOnly = true;
             this.dataGridScenarios.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridScenarios.Size = new System.Drawing.Size(794, 245);
+            this.dataGridScenarios.Size = new System.Drawing.Size(794, 310);
             this.dataGridScenarios.TabIndex = 5;
-            this.dataGridScenarios.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridScenariosResult_CellDoubleClick);
+            this.dataGridScenarios.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridScenariosResult_CellDoubleClick);
             // 
             // tabPage4
             // 
+            this.tabPage4.BackColor = System.Drawing.Color.DarkGray;
             this.tabPage4.Controls.Add(this.dataGridCommands);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(794, 245);
+            this.tabPage4.Size = new System.Drawing.Size(794, 310);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Commands";
-            this.tabPage4.UseVisualStyleBackColor = true;
-            this.tabPage4.BackColor = Color.DarkGray;
             // 
-            // dataGridCommandsResult
+            // dataGridCommands
             // 
             this.dataGridCommands.AllowUserToAddRows = false;
             this.dataGridCommands.AllowUserToDeleteRows = false;
             this.dataGridCommands.AllowUserToOrderColumns = true;
             this.dataGridCommands.AllowUserToResizeRows = false;
-            this.dataGridCommands.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridCommands.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                                                                                   | System.Windows.Forms.AnchorStyles.Left)
+                                                                                  | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridCommands.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridCommands.Location = new System.Drawing.Point(0, 0);
-            this.dataGridCommands.Name = "dataGridCommandsResult";
+            this.dataGridCommands.Name = "dataGridCommands";
             this.dataGridCommands.ReadOnly = true;
             this.dataGridCommands.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridCommands.Size = new System.Drawing.Size(794, 245);
+            this.dataGridCommands.Size = new System.Drawing.Size(794, 310);
             this.dataGridCommands.TabIndex = 1;
-            this.dataGridCommands.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridCommandsResult_CellMouseDoubleClick);
+            this.dataGridCommands.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridCommandsResult_CellMouseDoubleClick);
             // 
             // GenerateSC
             // 
@@ -361,14 +362,13 @@ namespace SPAFilter
             this.GenerateSC.Controls.Add(this.OpenSCXlsx);
             this.GenerateSC.Location = new System.Drawing.Point(4, 22);
             this.GenerateSC.Name = "GenerateSC";
-            this.GenerateSC.Size = new System.Drawing.Size(794, 245);
+            this.GenerateSC.Size = new System.Drawing.Size(794, 310);
             this.GenerateSC.TabIndex = 4;
             this.GenerateSC.Text = "Generate SC";
-            this.GenerateSC.BackColor = Color.DarkGray;
             // 
             // RootSCExportPathButton
             // 
-            this.RootSCExportPathButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.RootSCExportPathButton.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.RootSCExportPathButton.Location = new System.Drawing.Point(711, 12);
             this.RootSCExportPathButton.Name = "RootSCExportPathButton";
             this.RootSCExportPathButton.Size = new System.Drawing.Size(80, 23);
@@ -389,23 +389,24 @@ namespace SPAFilter
             // 
             // ExportSCPath
             // 
-            this.ExportSCPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+            this.ExportSCPath.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                                                                              | System.Windows.Forms.AnchorStyles.Right)));
             this.ExportSCPath.Location = new System.Drawing.Point(82, 14);
             this.ExportSCPath.Name = "ExportSCPath";
-            this.ExportSCPath.Size = new System.Drawing.Size(627, 23);
+            this.ExportSCPath.Size = new System.Drawing.Size(627, 20);
             this.ExportSCPath.TabIndex = 28;
             this.ExportSCPath.TextChanged += new System.EventHandler(this.ExportSCPath_TextChanged);
             // 
             // OpenSevExelButton
             // 
-            this.OpenSevExelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.OpenSevExelButton.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.OpenSevExelButton.Location = new System.Drawing.Point(711, 41);
             this.OpenSevExelButton.Name = "OpenSevExelButton";
             this.OpenSevExelButton.Size = new System.Drawing.Size(80, 23);
             this.OpenSevExelButton.TabIndex = 27;
             this.OpenSevExelButton.Text = "Open xlsx";
             this.OpenSevExelButton.UseVisualStyleBackColor = true;
-            this.OpenSevExelButton.Click += new System.EventHandler(this.OpenSevExelButton_Click);
+            this.OpenSevExelButton.Click += new System.EventHandler(this.OpenRDServiceExelButton_Click);
             // 
             // label5
             // 
@@ -419,7 +420,7 @@ namespace SPAFilter
             // 
             // ButtonGenerateSC
             // 
-            this.ButtonGenerateSC.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ButtonGenerateSC.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.ButtonGenerateSC.Enabled = false;
             this.ButtonGenerateSC.Location = new System.Drawing.Point(711, 68);
             this.ButtonGenerateSC.Name = "ButtonGenerateSC";
@@ -431,81 +432,19 @@ namespace SPAFilter
             // 
             // OpenSCXlsx
             // 
-            this.OpenSCXlsx.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.OpenSCXlsx.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                                                                            | System.Windows.Forms.AnchorStyles.Right)));
             this.OpenSCXlsx.Location = new System.Drawing.Point(82, 43);
             this.OpenSCXlsx.Name = "OpenSCXlsx";
             this.OpenSCXlsx.Size = new System.Drawing.Size(627, 20);
             this.OpenSCXlsx.TabIndex = 0;
             this.OpenSCXlsx.TextChanged += new System.EventHandler(this.OpenSCXlsx_TextChanged);
             // 
-            // ScenariosTextBox
-            // 
-            this.ScenariosTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ScenariosTextBox.Location = new System.Drawing.Point(77, 63);
-            this.ScenariosTextBox.Name = "ScenariosTextBox";
-            this.ScenariosTextBox.Size = new System.Drawing.Size(639, 20);
-            this.ScenariosTextBox.TabIndex = 15;
-            this.ScenariosTextBox.TextChanged += new System.EventHandler(this.ScenariosTextBox_TextChanged);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 66);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(57, 13);
-            this.label4.TabIndex = 17;
-            this.label4.Text = "Scenarios:";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // ScenariosButtonOpen
-            // 
-            this.ScenariosButtonOpen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.ScenariosButtonOpen.Location = new System.Drawing.Point(722, 61);
-            this.ScenariosButtonOpen.Name = "ScenariosButtonOpen";
-            this.ScenariosButtonOpen.Size = new System.Drawing.Size(75, 23);
-            this.ScenariosButtonOpen.TabIndex = 19;
-            this.ScenariosButtonOpen.Text = "Open";
-            this.ScenariosButtonOpen.UseVisualStyleBackColor = true;
-            this.ScenariosButtonOpen.Click += new System.EventHandler(this.ScenariosButtonOpen_Click);
-            // 
-            // CommnadsButtonOpen
-            // 
-            this.CommnadsButtonOpen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.CommnadsButtonOpen.Location = new System.Drawing.Point(722, 89);
-            this.CommnadsButtonOpen.Name = "CommnadsButtonOpen";
-            this.CommnadsButtonOpen.Size = new System.Drawing.Size(75, 23);
-            this.CommnadsButtonOpen.TabIndex = 22;
-            this.CommnadsButtonOpen.Text = "Open";
-            this.CommnadsButtonOpen.UseVisualStyleBackColor = true;
-            this.CommnadsButtonOpen.Click += new System.EventHandler(this.CommnadsButtonOpen_Click);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 92);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(62, 13);
-            this.label3.TabIndex = 21;
-            this.label3.Text = "Commands:";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // CommandsTextBox
-            // 
-            this.CommandsTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.CommandsTextBox.Location = new System.Drawing.Point(77, 89);
-            this.CommandsTextBox.Name = "CommandsTextBox";
-            this.CommandsTextBox.Size = new System.Drawing.Size(639, 20);
-            this.CommandsTextBox.TabIndex = 20;
-            this.CommandsTextBox.TextChanged += new System.EventHandler(this.CommandsTextBox_TextChanged);
-            // 
             // progressBar
             // 
-            this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar.Location = new System.Drawing.Point(7, 468);
+            this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                                                                             | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBar.Location = new System.Drawing.Point(7, 634);
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(794, 10);
             this.progressBar.TabIndex = 23;
@@ -513,30 +452,43 @@ namespace SPAFilter
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.buttonPrintXML);
+            this.groupBox1.Controls.Add(this.PrintXMLButton);
             this.groupBox1.Controls.Add(this.OperationComboBox);
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.NetSettComboBox);
             this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.ProcessesComboBox);
-            this.groupBox1.Controls.Add(this.buttonFilter);
-            this.groupBox1.Location = new System.Drawing.Point(15, 118);
+            this.groupBox1.Controls.Add(this.FilterButton);
+            this.groupBox1.Location = new System.Drawing.Point(15, 219);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(782, 87);
             this.groupBox1.TabIndex = 26;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Filter Settings";
             // 
+            // buttonPrintXML
+            // 
+            this.PrintXMLButton.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.PrintXMLButton.Location = new System.Drawing.Point(606, 58);
+            this.PrintXMLButton.Name = "buttonPrintXML";
+            this.PrintXMLButton.Size = new System.Drawing.Size(89, 23);
+            this.PrintXMLButton.TabIndex = 14;
+            this.PrintXMLButton.Text = "Print XML";
+            this.PrintXMLButton.UseVisualStyleBackColor = true;
+            this.PrintXMLButton.Click += new System.EventHandler(this.PrintXMLButton_Click);
+            // 
             // statusStrip1
             // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.BPCount,
-            this.NEElementsCount,
-            this.OperationsCount,
-            this.ScenariosCount,
-            this.CommandsCount});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 485);
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
+            {
+                this.BPCount,
+                this.NEElementsCount,
+                this.OperationsCount,
+                this.ScenariosCount,
+                this.CommandsCount
+            });
+            this.statusStrip1.Location = new System.Drawing.Point(0, 651);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(807, 22);
             this.statusStrip1.TabIndex = 27;
@@ -572,31 +524,121 @@ namespace SPAFilter
             this.CommandsCount.Size = new System.Drawing.Size(72, 17);
             this.CommandsCount.Text = "Commands:";
             // 
-            // buttonPrintXML
+            // ActivatorList
             // 
-            this.buttonPrintXML.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonPrintXML.Location = new System.Drawing.Point(606, 58);
-            this.buttonPrintXML.Name = "buttonPrintXML";
-            this.buttonPrintXML.Size = new System.Drawing.Size(89, 23);
-            this.buttonPrintXML.TabIndex = 14;
-            this.buttonPrintXML.Text = "Print XML";
-            this.buttonPrintXML.UseVisualStyleBackColor = true;
-            this.buttonPrintXML.Click += new System.EventHandler(this.ButtonPrintXML_Click);
+            this.ActivatorList.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                                                                               | System.Windows.Forms.AnchorStyles.Right)));
+            this.ActivatorList.FormattingEnabled = true;
+            this.ActivatorList.Location = new System.Drawing.Point(15, 109);
+            this.ActivatorList.Name = "ActivatorList";
+            this.ActivatorList.Size = new System.Drawing.Size(701, 95);
+            this.ActivatorList.TabIndex = 28;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(12, 91);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(181, 13);
+            this.label10.TabIndex = 29;
+            this.label10.Text = "Activators (configuration.application):";
+            this.label10.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // buttonAddActivator
+            // 
+            this.AddActivatorButton.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.AddActivatorButton.Location = new System.Drawing.Point(720, 109);
+            this.AddActivatorButton.Name = "buttonAddActivator";
+            this.AddActivatorButton.Size = new System.Drawing.Size(75, 23);
+            this.AddActivatorButton.TabIndex = 30;
+            this.AddActivatorButton.Text = "Add";
+            this.AddActivatorButton.UseVisualStyleBackColor = true;
+            this.AddActivatorButton.Click += new System.EventHandler(this.AddActivatorButton_Click);
+            // 
+            // buttonRemoveActivator
+            // 
+            this.RemoveActivatorButton.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.RemoveActivatorButton.Location = new System.Drawing.Point(720, 138);
+            this.RemoveActivatorButton.Name = "buttonRemoveActivator";
+            this.RemoveActivatorButton.Size = new System.Drawing.Size(75, 23);
+            this.RemoveActivatorButton.TabIndex = 31;
+            this.RemoveActivatorButton.Text = "Remove";
+            this.RemoveActivatorButton.UseVisualStyleBackColor = true;
+            this.RemoveActivatorButton.Click += new System.EventHandler(this.RemoveActivatorButton_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(12, 67);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(85, 13);
+            this.label3.TabIndex = 32;
+            this.label3.Text = "Service Catalog:";
+            // 
+            // textBoxServiceCatalogPath
+            // 
+            this.ServiceCatalogTextBox.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                                                                                       | System.Windows.Forms.AnchorStyles.Right)));
+            this.ServiceCatalogTextBox.Location = new System.Drawing.Point(103, 64);
+            this.ServiceCatalogTextBox.Name = "textBoxServiceCatalogPath";
+            this.ServiceCatalogTextBox.Size = new System.Drawing.Size(613, 20);
+            this.ServiceCatalogTextBox.TabIndex = 33;
+            ServiceCatalogTextBox.LostFocus += ServiceCatalogTextBox_LostFocus;
+            this.ServiceCatalogTextBox.TextChanged += new System.EventHandler(this.ServiceCatalogTextBox_TextChanged);
+            // 
+            // buttonOpenSC
+            // 
+            this.ServiceCatalogOpenButton.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ServiceCatalogOpenButton.Location = new System.Drawing.Point(722, 62);
+            this.ServiceCatalogOpenButton.Name = "buttonOpenSC";
+            this.ServiceCatalogOpenButton.Size = new System.Drawing.Size(75, 23);
+            this.ServiceCatalogOpenButton.TabIndex = 34;
+            this.ServiceCatalogOpenButton.Text = "Open";
+            this.ServiceCatalogOpenButton.UseVisualStyleBackColor = true;
+            this.ServiceCatalogOpenButton.Click += new System.EventHandler(this.ServiceCatalogOpenButton_Click);
+            // 
+            // tabPage5
+            // 
+            this.tabPage5.BackColor = System.Drawing.Color.DarkGray;
+            this.tabPage5.Controls.Add(this.dataGridSCOperations);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Size = new System.Drawing.Size(794, 310);
+            this.tabPage5.TabIndex = 5;
+            this.tabPage5.Text = "SC Operations";
+            // 
+            // dataGridSCOperations
+            // 
+            this.dataGridSCOperations.AllowUserToAddRows = false;
+            this.dataGridSCOperations.AllowUserToDeleteRows = false;
+            this.dataGridSCOperations.AllowUserToOrderColumns = true;
+            this.dataGridSCOperations.AllowUserToResizeRows = false;
+            this.dataGridSCOperations.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                                                                                       | System.Windows.Forms.AnchorStyles.Left)
+                                                                                      | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridSCOperations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridSCOperations.Location = new System.Drawing.Point(0, 0);
+            this.dataGridSCOperations.Name = "dataGridSCOperations";
+            this.dataGridSCOperations.ReadOnly = true;
+            this.dataGridSCOperations.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridSCOperations.Size = new System.Drawing.Size(794, 310);
+            this.dataGridSCOperations.TabIndex = 1;
             // 
             // SPAFilterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(807, 507);
+            this.ClientSize = new System.Drawing.Size(807, 673);
+            this.Controls.Add(this.ServiceCatalogOpenButton);
+            this.Controls.Add(this.ServiceCatalogTextBox);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.RemoveActivatorButton);
+            this.Controls.Add(this.AddActivatorButton);
+            this.Controls.Add(this.label10);
+            this.Controls.Add(this.ActivatorList);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.progressBar);
-            this.Controls.Add(this.CommnadsButtonOpen);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.CommandsTextBox);
-            this.Controls.Add(this.ScenariosButtonOpen);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.ScenariosTextBox);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.OperationButtonOpen);
             this.Controls.Add(this.ProcessesButtonOpen);
@@ -604,27 +646,27 @@ namespace SPAFilter
             this.Controls.Add(this.label1);
             this.Controls.Add(this.OperationTextBox);
             this.Controls.Add(this.ProcessesTextBox);
-            
-            
-            this.Icon = (System.Drawing.Icon)SPAFilter.Properties.Resources.icons8;
-            this.MinimumSize = new System.Drawing.Size(823, 400);
+            this.Icon = global::SPAFilter.Properties.Resources.icons8;
+            this.MinimumSize = new System.Drawing.Size(823, 500);
             this.Name = "SPAFilterForm";
             this.Text = "SPA Filter";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridProcesses)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.dataGridProcesses)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridOperations)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.dataGridOperations)).EndInit();
             this.tabPage3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridScenarios)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.dataGridScenarios)).EndInit();
             this.tabPage4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridCommands)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.dataGridCommands)).EndInit();
             this.GenerateSC.ResumeLayout(false);
             this.GenerateSC.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.tabPage5.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize) (this.dataGridSCOperations)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -644,7 +686,7 @@ namespace SPAFilter
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ComboBox ProcessesComboBox;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Button buttonFilter;
+        private System.Windows.Forms.Button FilterButton;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
@@ -653,12 +695,6 @@ namespace SPAFilter
         private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.DataGridView dataGridScenarios;
         private System.Windows.Forms.DataGridView dataGridCommands;
-        private System.Windows.Forms.TextBox ScenariosTextBox;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Button ScenariosButtonOpen;
-        private System.Windows.Forms.Button CommnadsButtonOpen;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox CommandsTextBox;
         private CustomProgressBar progressBar;
         private System.Windows.Forms.Button ButtonGenerateSC;
         private System.Windows.Forms.TabPage GenerateSC;
@@ -675,7 +711,16 @@ namespace SPAFilter
         private System.Windows.Forms.ToolStripStatusLabel ScenariosCount;
         private System.Windows.Forms.ToolStripStatusLabel CommandsCount;
         private System.Windows.Forms.ToolStripStatusLabel NEElementsCount;
-        private System.Windows.Forms.Button buttonPrintXML;
+        private System.Windows.Forms.Button PrintXMLButton;
+        private System.Windows.Forms.ListBox ActivatorList;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Button AddActivatorButton;
+        private System.Windows.Forms.Button RemoveActivatorButton;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox ServiceCatalogTextBox;
+        private System.Windows.Forms.Button ServiceCatalogOpenButton;
+        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.DataGridView dataGridSCOperations;
     }
 }
 

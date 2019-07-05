@@ -1,30 +1,48 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+using Utils;
 
 namespace SPAFilter.SPA.Components
 {
     public sealed class BusinessProcess : ObjectTemplate
     {
-        internal List<string> Operations { get; } = new List<string>();
+        internal List<string> Operations { get; }
 
-        public BusinessProcess(string path, int id) : base(path, id)
+        BusinessProcess(string filePath, int id, List<string> operations) : base(filePath, id)
         {
-            if (GetNameWithId(Name, out string newName, out int newId))
+            if (GetNameWithId(Name, out var newName, out var newId))
             {
                 Name = newName;
                 ID = newId;
             }
+
+            Operations = operations;
         }
 
-        public void AddBodyOperations(XmlDocument document)
+        public static bool IsBusinessProcess(string filePath, int id, out BusinessProcess bpResult)
         {
-            Operations.Clear();
-            foreach (XmlNode xm in document.SelectNodes(@"//param[@name='operation']/@value"))
+            bpResult = null;
+            var document = XML.LoadXml(filePath, true);
+            if (document == null || document.SelectNodes(@"/businessprocessdata")?.Count == 0)
+                return false;
+
+            var operations = new List<string>();
+            var getOperations = document.SelectNodes(@"//param[@name='operation']/@value");
+            if (getOperations != null)
             {
-                if (!Operations.Any(p => p.Equals(xm.InnerText)))
-                    Operations.Add(xm.InnerText);
+                foreach (XmlNode xm in getOperations)
+                {
+                    if (!operations.Any(p => p.Equals(xm.InnerText)))
+                        operations.Add(xm.InnerText);
+                }
             }
+
+            if (operations.Count <= 0)
+                return false;
+
+            bpResult = new BusinessProcess(filePath, id, operations);
+            return true;
         }
     }
 }

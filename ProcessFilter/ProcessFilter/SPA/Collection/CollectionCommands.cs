@@ -1,23 +1,13 @@
-﻿using SPAFilter.SPA.Components;
+﻿using System.Collections.Generic;
+using SPAFilter.SPA.Components;
 
 namespace SPAFilter.SPA.Collection
 {
-    public class CollectionCommands : ObjectCollection<Command>
+    public class CollectionCommands : List<Command>
     {
         internal CollectionCommands()
         {
 
-        }
-
-        public CollectionCommands(string dirPath)
-        {
-            var files = GetConfigFiles(dirPath);
-
-            int i = 0;
-            foreach (string command in files)
-            {
-                Add(new Command(command, ++i));
-            }
         }
 
         public CollectionCommands Clone()

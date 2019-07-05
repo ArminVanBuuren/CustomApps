@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SPAFilter
 {
-    class CustomStringBuilder : IDisposable
+    public class CustomStringBuilder : IDisposable
     {
         private readonly List<string> _strLines = new List<string>();
         public int Lines => _strLines.Count;

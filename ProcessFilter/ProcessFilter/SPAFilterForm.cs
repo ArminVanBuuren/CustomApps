@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
@@ -8,14 +7,10 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 using System.Windows.Forms;
 using System.Threading.Tasks;
-using OfficeOpenXml;
 using SPAFilter.SPA;
 using SPAFilter.SPA.Collection;
-using SPAFilter.SPA.Components;
-using SPAFilter.SPA.SC;
 using Utils;
 using Utils.WinForm.DataGridViewHelper;
 using Utils.WinForm.Notepad;
@@ -29,13 +24,18 @@ namespace SPAFilter
     public partial class SPAFilterForm : Form, ISerializable
     {
         private bool _isInProgress = false;
-        private string _lastPath = string.Empty;
+        private string _lastDirPath = string.Empty;
         private readonly object sync = new object();
         private readonly object sync2 = new object();
         private Notepad _notepad;
         private bool _notepadWordWrap = true;
         private FormLocation _notepadLocation = FormLocation.Default;
         private FormWindowState _notepadWindowsState = FormWindowState.Maximized;
+        private SPAProcessFilter _spaFilter;
+
+
+        public static string SerializationDataPath => $"{ApplicationFilePath}.bin";
+        private bool IsInitialization { get; } = true;
 
         private bool IsInProgress
         {
@@ -49,16 +49,17 @@ namespace SPAFilter
                     if(_isInProgress && _notepad != null && !_notepad.WindowIsClosed)
                         _notepad.Close();
 
-                    buttonFilter.Enabled = !_isInProgress;
-                    buttonPrintXML.Enabled = !_isInProgress;
+                    FilterButton.Enabled = !_isInProgress;
+                    PrintXMLButton.Enabled = !_isInProgress;
                     ProcessesTextBox.Enabled = !_isInProgress;
                     OperationTextBox.Enabled = !_isInProgress;
-                    ScenariosTextBox.Enabled = !_isInProgress;
-                    CommandsTextBox.Enabled = !_isInProgress;
+                    ServiceCatalogTextBox.Enabled = !_isInProgress;
+                    ActivatorList.Enabled = !_isInProgress;
                     ProcessesButtonOpen.Enabled = !_isInProgress;
                     OperationButtonOpen.Enabled = !_isInProgress;
-                    ScenariosButtonOpen.Enabled = !_isInProgress;
-                    CommnadsButtonOpen.Enabled = !_isInProgress;
+                    ServiceCatalogOpenButton.Enabled = !_isInProgress;
+                    AddActivatorButton.Enabled = !_isInProgress;
+                    RemoveActivatorButton.Enabled = !_isInProgress;
 
                     dataGridProcesses.Visible = !_isInProgress;
                     dataGridOperations.Visible = !_isInProgress;
@@ -73,12 +74,6 @@ namespace SPAFilter
             }
         }
 
-        public static string SerializationDataPath => $"{ApplicationFilePath}.bin";
-        public CollectionBusinessProcess Processes { get; private set; }
-        public NetworkElementCollection NetElements { get; private set; }
-        public CollectionScenarios Scenarios { get; private set; }
-        public CollectionCommands Commands { get; private set; }
-        private bool IsInitialization { get; } = true;
 
         public SPAFilterForm()
         {
@@ -86,24 +81,7 @@ namespace SPAFilter
             MainInit();
         }
 
-        private void ProcessFilterForm_Closing(object sender, CancelEventArgs e)
-        {
-            SaveFile();
-        }
 
-        void SaveFile()
-        {
-            if (IsInitialization)
-                return;
-
-            lock (sync)
-            {
-                using (var stream = new FileStream(SerializationDataPath, FileMode.Create, FileAccess.ReadWrite))
-                {
-                    new BinaryFormatter().Serialize(stream, this);
-                }
-            }
-        }
 
         SPAFilterForm(SerializationInfo propertyBag, StreamingContext context)
         {
@@ -112,8 +90,8 @@ namespace SPAFilter
             {
                 ProcessesTextBox.Text = propertyBag.GetString("ADWFFW");
                 OperationTextBox.Text = propertyBag.GetString("AAEERF");
-                ScenariosTextBox.Text = propertyBag.GetString("DFWDRT");
-                CommandsTextBox.Text = propertyBag.GetString("WWWERT");
+                ServiceCatalogTextBox.Text = propertyBag.GetString("DFWDRT");
+                ActivatorList.Text = propertyBag.GetString("WWWERT");
                 ExportSCPath.Text = propertyBag.GetString("FFFGHJ");
                 OpenSCXlsx.Text = propertyBag.GetString("GGHHRR");
                 _notepadWordWrap = propertyBag.GetBoolean("DDCCVV");
@@ -134,8 +112,8 @@ namespace SPAFilter
         {
             propertyBag.AddValue("ADWFFW", ProcessesTextBox.Text);
             propertyBag.AddValue("AAEERF", OperationTextBox.Text);
-            propertyBag.AddValue("DFWDRT", ScenariosTextBox.Text);
-            propertyBag.AddValue("WWWERT", CommandsTextBox.Text);
+            propertyBag.AddValue("DFWDRT", ServiceCatalogTextBox.Text);
+            propertyBag.AddValue("WWWERT", ActivatorList.Text);
             propertyBag.AddValue("FFFGHJ", ExportSCPath.Text);
             propertyBag.AddValue("GGHHRR", OpenSCXlsx.Text);
             propertyBag.AddValue("DDCCVV", _notepadWordWrap);
@@ -145,6 +123,8 @@ namespace SPAFilter
 
         void MainInit()
         {
+            ServiceCatalog sc = new ServiceCatalog(@"E:\test.xml");
+
             InitializeComponent();
 
             dataGridProcesses.KeyDown += DataGridProcessesResults_KeyDown;
@@ -155,8 +135,8 @@ namespace SPAFilter
             tabControl1.KeyDown += ProcessFilterForm_KeyDown;
             ProcessesTextBox.KeyDown += ProcessFilterForm_KeyDown;
             OperationTextBox.KeyDown += ProcessFilterForm_KeyDown;
-            ScenariosTextBox.KeyDown += ProcessFilterForm_KeyDown;
-            CommandsTextBox.KeyDown += ProcessFilterForm_KeyDown;
+            //ScenariosTextBox.KeyDown += ProcessFilterForm_KeyDown;
+            //CommandsTextBox.KeyDown += ProcessFilterForm_KeyDown;
             ProcessesComboBox.KeyDown += ProcessFilterForm_KeyDown;
             NetSettComboBox.KeyDown += ProcessFilterForm_KeyDown;
             OperationComboBox.KeyDown += ProcessFilterForm_KeyDown;
@@ -166,385 +146,15 @@ namespace SPAFilter
             dataGridCommands.KeyDown += ProcessFilterForm_KeyDown;
             ProcessesButtonOpen.KeyDown += ProcessFilterForm_KeyDown;
             OperationButtonOpen.KeyDown += ProcessFilterForm_KeyDown;
-            ScenariosButtonOpen.KeyDown += ProcessFilterForm_KeyDown;
-            CommnadsButtonOpen.KeyDown += ProcessFilterForm_KeyDown;
-            buttonFilter.KeyDown += ProcessFilterForm_KeyDown;
+            //ScenariosButtonOpen.KeyDown += ProcessFilterForm_KeyDown;
+            //CommnadsButtonOpen.KeyDown += ProcessFilterForm_KeyDown;
+            FilterButton.KeyDown += ProcessFilterForm_KeyDown;
             KeyDown += ProcessFilterForm_KeyDown;
 
             dataGridScenarios.CellFormatting += DataGridScenariosResult_CellFormatting;
-            Closing += ProcessFilterForm_Closing;
-        }
+            Closing += (s, e) => SaveSerializationFile();
 
-
-        private void ProcessFilterForm_KeyDown(object sender, KeyEventArgs e)
-        {
-            switch (e.KeyCode)
-            {
-                case Keys.F5:
-                    ButtonFilterClick(this, EventArgs.Empty);
-                    break;
-                //case Keys.F6:
-                //    buttonPrintXML_Click(this, EventArgs.Empty);
-                //    break;
-            }
-        }
-
-        private async void ButtonPrintXML_Click(object sender, EventArgs e)
-        {
-            var filesNumber = CheckButtons();
-
-            if (filesNumber <= 0)
-            {
-                MessageBox.Show(@"You must filter files.", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-
-            if (IsInProgress)
-                return;
-
-            try
-            {
-                IsInProgress = true;
-
-                using (var stringErrors = new CustomStringBuilder())
-                {
-                    using (var progrAsync = new ProgressCalculationAsync(progressBar, filesNumber))
-                    {
-                        await Task.Factory.StartNew(() =>
-                        {
-                            GetFiles(_filteredProcessCollection, stringErrors, progrAsync);
-                            if (_filteredNetElemCollection != null)
-                                GetFiles(_filteredNetElemCollection.AllOperations, stringErrors, progrAsync);
-                            GetFiles(_filteredScenarioCollection, stringErrors, progrAsync);
-                            GetFiles(_filteredCMMCollection, stringErrors, progrAsync);
-                        });
-                    }
-
-                    if (stringErrors.Length > 0)
-                    {
-                        MessageBox.Show($"Several ({stringErrors.Lines}) errors found:\r\n\r\n{stringErrors.ToString(2)}", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
-                    else
-                    {
-                        MessageBox.Show(@"Successfully completed.", @"OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                IsInProgress = false;
-            }
-        }
-
-        static void GetFiles(IEnumerable<ObjectTemplate> fileObj, CustomStringBuilder stringErrors, ProgressCalculationAsync progressCalc)
-        {
-            if (fileObj == null || !fileObj.Any())
-                return;
-
-            foreach (var file in fileObj)
-            {
-                FormattingXML(file.FilePath, stringErrors);
-                progressCalc++;
-            }
-        }
-
-        static void FormattingXML(string filePath, CustomStringBuilder stringErrors)
-        {
-            try
-            {
-                var fileString = IO.SafeReadFile(filePath);
-                if (!XML.IsXml(fileString, out var document))
-                    return;
-
-                var formatting = document.PrintXml();
-
-                int attempts = 0;
-                while (!IO.IsFileReady(filePath))
-                {
-                    System.Threading.Thread.Sleep(500);
-                    attempts++;
-                    if (attempts > 3)
-                        return;
-                }
-
-                IO.WriteFile(filePath, formatting, Encoding.UTF8);
-            }
-            catch (Exception e)
-            {
-                stringErrors.AppendLine($"Message=\"{e.Message}\" File=\"{filePath}]\"");
-            }
-        }
-
-       
-        private async void ButtonFilterClick(object sender, EventArgs e)
-        {
-            if (IsInProgress)
-                return;
-
-            try
-            {
-                IsInProgress = true;
-                dataGridProcesses.DataSource = null;
-                dataGridOperations.DataSource = null;
-                dataGridScenarios.DataSource = null;
-                dataGridCommands.DataSource = null;
-                dataGridProcesses.Refresh();
-                dataGridOperations.Refresh();
-                dataGridScenarios.Refresh();
-                dataGridCommands.Refresh();
-
-                using (var progressCalc = new ProgressCalculationAsync(progressBar, 20))
-                {
-                    var filterProcess = ProcessesComboBox.Text;
-                    var filterNE = NetSettComboBox.Text;
-                    var filterOp = OperationComboBox.Text;
-
-                    await Task.Factory.StartNew(() => DataFilter(filterProcess, filterNE, filterOp, progressCalc));
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                IsInProgress = false;
-            }
-        }
-
-        CollectionBusinessProcess _filteredProcessCollection;
-        CollectionNetworkElement _filteredNetElemCollection;
-        CollectionScenarios _filteredScenarioCollection = new CollectionScenarios();
-        List<Scenario> _filteredSubScenarios = new List<Scenario>();
-        CollectionCommands _filteredCMMCollection = new CollectionCommands();
-        
-
-        void DataFilter(string filterProcess, string filterNE, string filterOp, ProgressCalculationAsync progressCalc)
-        {
-            try
-            {
-                _filteredScenarioCollection = new CollectionScenarios();
-                _filteredCMMCollection = new CollectionCommands();
-                _filteredSubScenarios = new List<Scenario>();
-
-                if (!filterProcess.IsNullOrEmpty())
-                {
-                    _filteredProcessCollection = new CollectionBusinessProcess();
-                    IEnumerable<BusinessProcess> getCollection;
-                    if (filterProcess[0] == '%' || filterProcess[filterProcess.Length - 1] == '%')
-                        getCollection = Processes.Where(p => p.Name.IndexOf(filterProcess.Replace("%", ""), StringComparison.CurrentCultureIgnoreCase) != -1);
-                    else
-                        getCollection = Processes.Where(p => p.Name.Equals(filterProcess, StringComparison.CurrentCultureIgnoreCase));
-
-                    _filteredProcessCollection.AddRange(getCollection);
-                }
-                else
-                {
-                    _filteredProcessCollection = Processes.Clone();
-                }
-
-                _filteredProcessCollection.Sort((x, y) => x.ID - y.ID);
-
-                if (!filterNE.IsNullOrEmpty())
-                {
-                    _filteredNetElemCollection = new CollectionNetworkElement();
-                    IEnumerable<NetworkElement> getCollection;
-                    if (filterNE[0] == '%' || filterNE[filterNE.Length - 1] == '%')
-                        getCollection = NetElements.Elements.Where(p => p.Name.IndexOf(filterNE.Replace("%", ""), StringComparison.CurrentCultureIgnoreCase) != -1);
-                    else
-                        getCollection = NetElements.Elements.Where(p => p.Name.Equals(filterNE, StringComparison.CurrentCultureIgnoreCase));
-
-                    _filteredNetElemCollection.AddRange(getCollection.Select(netElem => netElem.Clone()));
-                }
-                else
-                {
-                    _filteredNetElemCollection = NetElements.Elements.Clone();
-                }
-
-                if (!filterOp.IsNullOrEmpty() && _filteredNetElemCollection != null)
-                {
-                    var netElemCollection2 = new CollectionNetworkElement();
-                    foreach (NetworkElement nec in _filteredNetElemCollection)
-                    {
-                        List<Operation> ops = new List<Operation>();
-                        foreach (Operation neo in nec.Operations)
-                        {
-                            if (filterOp[0] == '%' || filterOp[filterOp.Length - 1] == '%')
-                            {
-                                if (neo.Name.IndexOf(filterOp.Replace("%", ""), StringComparison.CurrentCultureIgnoreCase) != -1)
-                                {
-                                    ops.Add(neo);
-                                }
-                            }
-                            else
-                            {
-                                if (neo.Name.Equals(filterOp, StringComparison.CurrentCultureIgnoreCase))
-                                {
-                                    ops.Add(neo);
-                                }
-                            }
-                        }
-
-                        if (ops.Count > 0)
-                        {
-                            NetworkElement fileteredElementAndOps = new NetworkElement(nec.FilePath, nec.ID, ops);
-                            netElemCollection2.Add(fileteredElementAndOps);
-                        }
-                    }
-                    _filteredNetElemCollection = netElemCollection2;
-                }
-
-                int endOfBpCollection = _filteredProcessCollection.Count;
-                var allOperations = _filteredNetElemCollection.AllOperationsName;
-                for (int i = 0; i < endOfBpCollection; i++)
-                {
-                    var document = XML.LoadXml(_filteredProcessCollection[i].FilePath, true);
-                    if (document != null)
-                    {
-                        _filteredProcessCollection[i].AddBodyOperations(document);
-                        //bool hasMatch = bpCollection[i].Operations.Any(x => netElemCollection.AllOperationsName.Any(y => x.IndexOf(y, StringComparison.CurrentCultureIgnoreCase) != -1));
-                        bool hasMatch = _filteredProcessCollection[i].Operations.Any(x => allOperations.Any(y => x.Equals(y, StringComparison.CurrentCultureIgnoreCase)));
-
-                        if (!hasMatch)
-                        {
-                            _filteredProcessCollection.Remove(_filteredProcessCollection[i]);
-                            i--;
-                            endOfBpCollection--;
-                        }
-                    }
-                    else
-                    {
-                        _filteredProcessCollection.Remove(_filteredProcessCollection[i]);
-                        i--;
-                        endOfBpCollection--;
-                    }
-                }
-
-                progressCalc.Append(2);
-
-                Action<Operation> getScenario = null;
-                if (Scenarios != null)
-                {
-                    getScenario = operation =>
-                                  {
-                                      var scenarios = Scenarios.Where(p => p.Name.Equals(operation.Name, StringComparison.CurrentCultureIgnoreCase)).ToList();
-
-                                      foreach (Scenario scenario in scenarios)
-                                      {
-                                          if (scenario.AddBodyCommands())
-                                          {
-                                              _filteredScenarioCollection.Add(scenario);
-                                              _filteredSubScenarios.AddRange(scenario.SubScenarios);
-                                          }
-                                      }
-                                  };
-                }
-
-                int maxForCurrentIterator = progressCalc.TotalProgressIterator / 2;
-                if (_filteredNetElemCollection != null && _filteredNetElemCollection.Count > 0)
-                {
-                    int progressIterator;
-
-                    Action calcProgress;
-                    if (_filteredNetElemCollection.Count > maxForCurrentIterator)
-                    {
-                        int numberOfIter = 0;
-                        progressIterator = _filteredNetElemCollection.Count / maxForCurrentIterator;
-                        calcProgress = () =>
-                        {
-                            numberOfIter++;
-                            if (numberOfIter < progressIterator)
-                                return;
-                            progressCalc++;
-                            numberOfIter = 0;
-                        };
-                    }
-                    else
-                    {
-                        progressIterator = maxForCurrentIterator / _filteredNetElemCollection.Count;
-                        calcProgress = () => progressCalc.Append(progressIterator);
-                    }
-
-                    foreach (var netElem in _filteredNetElemCollection)
-                    {
-                        int endOfOpCollection = netElem.Operations.Count;
-                        for (int i = 0; i < endOfOpCollection; i++)
-                        {
-                            bool hasMatch = _filteredProcessCollection.Any(x => x.Operations.Any(y => netElem.Operations[i].Name.Equals(y, StringComparison.CurrentCultureIgnoreCase)));
-
-                            if (hasMatch)
-                            {
-                                getScenario?.Invoke(netElem.Operations[i]);
-                                continue;
-                            }
-
-                            netElem.Operations.Remove(netElem.Operations[i]);
-                            i--;
-                            endOfOpCollection--;
-                        }
-
-                        calcProgress.Invoke();
-                    }
-                }
-                else
-                {
-                    progressCalc.Append(maxForCurrentIterator);
-                }
-
-
-
-                if (Commands != null && _filteredScenarioCollection.Count > 0)
-                {
-                    foreach (Command command in Commands)
-                    {
-                        bool hasValue = _filteredScenarioCollection.Any(x => x.Commands.Any(y => y.Equals(command.Name, StringComparison.CurrentCultureIgnoreCase)));
-                        if (hasValue)
-                        {
-                            _filteredCMMCollection.Add(command);
-                        }
-                    }
-                }
-
-
-                progressCalc.Append(2);
-
-                _filteredSubScenarios = _filteredSubScenarios.Distinct(new ItemEqualityComparer<Scenario>()).ToList();
-                _filteredScenarioCollection.AddRange(_filteredSubScenarios);
-
-
-                progressBar.Invoke(new MethodInvoker(delegate
-                                                     {
-                                                         dataGridProcesses.AssignListToDataGrid(_filteredProcessCollection, new Padding(0, 0, 15, 0));
-                                                         ProcessStatRefresh(_filteredProcessCollection);
-
-                                                         progressCalc.Append(2);
-
-                                                         dataGridOperations.AssignListToDataGrid(_filteredNetElemCollection.AllOperations, new Padding(0, 0, 15, 0));
-                                                         NEStatRefresh(_filteredNetElemCollection);
-                                                         OperationsStatRefresh(_filteredNetElemCollection);
-
-                                                         progressCalc.Append(2);
-
-                                                         dataGridScenarios.AssignListToDataGrid(_filteredScenarioCollection, new Padding(0, 0, 15, 0));
-                                                         ScenariosStatRefresh(_filteredScenarioCollection);
-
-                                                         dataGridCommands.AssignListToDataGrid(_filteredCMMCollection, new Padding(0, 0, 15, 0));
-                                                         CommandsStatRefresh(_filteredCMMCollection);
-
-                                                         CheckButtons();
-                                                         progressCalc.Append(2);
-                                                     }));
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            _spaFilter = new SPAProcessFilter();
         }
 
 
@@ -563,7 +173,7 @@ namespace SPAFilter
             CallAndCheckDataGridKey(dataGridProcesses, e);
         }
 
-        private void dataGridOperationsResult_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void DataGridOperationsResult_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             CallAndCheckDataGridKey(dataGridOperations);
         }
@@ -572,7 +182,7 @@ namespace SPAFilter
             CallAndCheckDataGridKey(dataGridOperations, e);
         }
 
-        private void dataGridScenariosResult_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void DataGridScenariosResult_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             CallAndCheckDataGridKey(dataGridScenarios);
         }
@@ -581,7 +191,7 @@ namespace SPAFilter
             CallAndCheckDataGridKey(dataGridScenarios, e);
         }
 
-        private void dataGridCommandsResult_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        private void DataGridCommandsResult_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             CallAndCheckDataGridKey(dataGridCommands);
         }
@@ -632,7 +242,8 @@ namespace SPAFilter
                                 File.Delete(filePath);
                         }
 
-                        UpdateFilteredData();
+                        StatusRefresh();
+                        FilterButton_Click(this, EventArgs.Empty);
                     }
                     catch (Exception ex)
                     {
@@ -669,8 +280,6 @@ namespace SPAFilter
                 {
                     filesPath.Add(row.Cells[grid.ColumnCount - 1].Value.ToString());
                 }
-
-                //filePath = grid.SelectedRows[0].Cells[grid.ColumnCount - 1].Value.ToString();
             }
             else
             {
@@ -680,14 +289,332 @@ namespace SPAFilter
             return true;
         }
 
-        void UpdateFilteredData()
+
+        private void ProcessesButtonOpen_Click(object sender, EventArgs e)
         {
-            CheckProcessesPath(ProcessesTextBox.Text, true);
-            CheckOperationsPath(OperationTextBox.Text, true);
-            CheckScenariosPath(ScenariosTextBox.Text);
-            CheckCommandsPath(CommandsTextBox.Text);
-            ButtonFilterClick(this, EventArgs.Empty);
+            ProcessesTextBox.Text = OpenFolder(_lastDirPath) ?? ProcessesTextBox.Text;
+            //AssignProcesses(ProcessesTextBox.Text);
         }
+
+        private void ProcessesTextBox_TextChanged(object sender, EventArgs e)
+        {
+            AssignProcesses(ProcessesTextBox.Text);
+            SaveSerializationFile();
+        }
+
+        void AssignProcesses(string dirPath, bool saveLastSett = false)
+        {
+            try
+            {
+                var lastSettProcess = saveLastSett ? ProcessesComboBox.Text : null;
+
+                if (_spaFilter.Assign(dirPath, SPAProcessFilterType.Processes))
+                {
+                    UpdateLastPath(dirPath);
+                    ProcessesComboBox.DataSource = _spaFilter.Processes.Select(p => p.Name).ToList();
+                    ProcessesComboBox.Text = lastSettProcess;
+                    ProcessesComboBox.DisplayMember = lastSettProcess;
+                }
+                else
+                {
+                    dataGridProcesses.DataSource = null;
+                    dataGridProcesses.Refresh();
+                    dataGridOperations.DataSource = null;
+                    dataGridOperations.Refresh();
+                    dataGridSCOperations.DataSource = null;
+                    dataGridSCOperations.Refresh();
+                    dataGridScenarios.DataSource = null;
+                    dataGridScenarios.Refresh();
+                    dataGridCommands.DataSource = null;
+                    dataGridCommands.Refresh();
+
+                    ProcessesComboBox.DataSource = null;
+                    ProcessesComboBox.Text = null;
+                    ProcessesComboBox.DisplayMember = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                StatusRefresh();
+            }
+        }
+
+        private void OperationButtonOpen_Click(object sender, EventArgs e)
+        {
+            OperationTextBox.Text = OpenFolder(_lastDirPath) ?? OperationTextBox.Text;
+            //AssignOperations(OperationTextBox.Text);
+        }
+        private void OperationTextBox_TextChanged(object sender, EventArgs e)
+        {
+            AssignOperations(OperationTextBox.Text, SPAProcessFilterType.NetElements);
+            SaveSerializationFile();
+        }
+
+        private bool _serviceCatalogTextBoxChanged = false;
+        private void ServiceCatalogOpenButton_Click(object sender, EventArgs e)
+        {
+            ServiceCatalogTextBox.Text = OpenFile(@"(*.xml) | *.xml") ?? ServiceCatalogTextBox.Text;
+            AssignOperations(ServiceCatalogTextBox.Text, SPAProcessFilterType.ServiceCatalogOperations);
+            _serviceCatalogTextBoxChanged = false;
+        }
+
+        private void ServiceCatalogTextBox_LostFocus(object sender, System.EventArgs e)
+        {
+            if (!_serviceCatalogTextBoxChanged)
+                return;
+
+            AssignOperations(ServiceCatalogTextBox.Text, SPAProcessFilterType.ServiceCatalogOperations);
+            SaveSerializationFile();
+        }
+
+        private void ServiceCatalogTextBox_TextChanged(object sender, EventArgs e)
+        {
+            _serviceCatalogTextBoxChanged = true;
+        }
+
+        void AssignOperations(string dirPath, SPAProcessFilterType type, bool saveLastSett = false)
+        {
+            try
+            {
+                var lastSettNetSett = saveLastSett ? NetSettComboBox.Text : null;
+                var lastSettOper = saveLastSett ? OperationComboBox.Text : null;
+
+                if (_spaFilter.Assign(dirPath, type))
+                {
+                    UpdateLastPath(dirPath);
+                    NetSettComboBox.DataSource = _spaFilter.NetElements.AllNetworkElements;
+                    NetSettComboBox.Text = lastSettNetSett;
+                    NetSettComboBox.DisplayMember = lastSettNetSett;
+                    OperationComboBox.DataSource = _spaFilter.NetElements.AllOperationsName;
+                    OperationComboBox.Text = lastSettOper;
+                    OperationComboBox.DisplayMember = lastSettOper;
+                }
+                else
+                {
+                    dataGridOperations.DataSource = null;
+                    dataGridOperations.Refresh();
+                    dataGridScenarios.DataSource = null;
+                    dataGridScenarios.Refresh();
+                    dataGridCommands.DataSource = null;
+                    dataGridCommands.Refresh();
+
+                    NetSettComboBox.Text = null;
+                    NetSettComboBox.DisplayMember = null;
+                    NetSettComboBox.DataSource = null;
+                    OperationComboBox.DataSource = null;
+                    OperationComboBox.DisplayMember = null;
+                    OperationComboBox.Text = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                StatusRefresh();
+            }
+        }
+
+
+        private void AddActivatorButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void RemoveActivatorButton_Click(object sender, EventArgs e)
+        {
+
+        }
+        
+        private void ProcessFilterForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.F5:
+                    FilterButton_Click(this, EventArgs.Empty);
+                    break;
+            }
+        }
+
+        private async void PrintXMLButton_Click(object sender, EventArgs e)
+        {
+            var filesNumber = _spaFilter.WholeItemsCount;
+
+            if (filesNumber <= 0)
+            {
+                MessageBox.Show(@"You must filter files.", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+
+            if (IsInProgress)
+                return;
+
+            try
+            {
+                IsInProgress = true;
+
+                using (var stringErrors = new CustomStringBuilder())
+                {
+                    using (var progrAsync = new ProgressCalculationAsync(progressBar, filesNumber))
+                    {
+                        await Task.Factory.StartNew(() => _spaFilter.PrintXML(stringErrors, progrAsync));
+                    }
+
+                    if (stringErrors.Length > 0)
+                    {
+                        MessageBox.Show($"Several ({stringErrors.Lines}) errors found:\r\n\r\n{stringErrors.ToString(2)}", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                    else
+                    {
+                        MessageBox.Show(@"Successfully completed.", @"OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                IsInProgress = false;
+            }
+        }
+
+        private async void FilterButton_Click(object sender, EventArgs e)
+        {
+            if (IsInProgress)
+                return;
+
+            try
+            {
+                IsInProgress = true;
+
+                dataGridProcesses.DataSource = null;
+                dataGridOperations.DataSource = null;
+                dataGridScenarios.DataSource = null;
+                dataGridCommands.DataSource = null;
+                dataGridProcesses.Refresh();
+                dataGridOperations.Refresh();
+                dataGridScenarios.Refresh();
+                dataGridCommands.Refresh();
+
+                using (var progressCalc = new ProgressCalculationAsync(progressBar, 20))
+                {
+                    var filterProcess = ProcessesComboBox.Text;
+                    var filterNE = NetSettComboBox.Text;
+                    var filterOp = OperationComboBox.Text;
+
+                    await Task.Factory.StartNew(() => _spaFilter.DataFilter(filterProcess, filterNE, filterOp, progressCalc));
+
+                    await Task.Factory.StartNew(() =>
+                    {
+                        progressBar.Invoke(new MethodInvoker(delegate
+                        {
+                            dataGridProcesses.AssignListToDataGrid(_spaFilter.Processes, new Padding(0, 0, 15, 0));
+                            progressCalc.Append(2);
+
+                            dataGridOperations.AssignListToDataGrid(_spaFilter.NetElements, new Padding(0, 0, 15, 0));
+                            progressCalc.Append(2);
+
+                            dataGridScenarios.AssignListToDataGrid(_spaFilter.Scenarios, new Padding(0, 0, 15, 0));
+                            dataGridCommands.AssignListToDataGrid(_spaFilter.Commands, new Padding(0, 0, 15, 0));
+                            progressCalc.Append(2);
+                        }));
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                IsInProgress = false;
+                StatusRefresh();
+            }
+        }
+
+        private void ExportSCPath_TextChanged(object sender, EventArgs e)
+        {
+            StatusRefresh();
+            SaveSerializationFile();
+        }
+
+        private void OpenSCXlsx_TextChanged(object sender, EventArgs e)
+        {
+            SaveSerializationFile();
+        }
+
+        private void RootSCExportPathButton_Click(object sender, EventArgs e)
+        {
+            ExportSCPath.Text = OpenFolder(_lastDirPath) ?? ExportSCPath.Text;
+        }
+
+        private void OpenRDServiceExelButton_Click(object sender, EventArgs e)
+        {
+            OpenSCXlsx.Text = OpenFile(@"(*.xlsx) | *.xlsx") ?? OpenSCXlsx.Text;
+        }
+
+        private async void ButtonGenerateSC_Click(object sender, EventArgs e)
+        {
+            if (IsInProgress)
+                return;
+
+            if (_spaFilter.NetElements.Count == 0)
+            {
+                MessageBox.Show(@"Not found any operations.", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                IsInProgress = true;
+
+                if (!Directory.Exists(ExportSCPath.Text))
+                    Directory.CreateDirectory(ExportSCPath.Text);
+
+                string fileResult;
+
+                if (!OpenSCXlsx.Text.IsNullOrEmptyTrim() && File.Exists(OpenSCXlsx.Text))
+                {
+                    var file = new FileInfo(OpenSCXlsx.Text);
+                    
+                    using (var progrAsync = new CustomProgressCalculation(progressBar, _spaFilter.NetElements.Count, file))
+                    {
+                        var rdServices = await Task<DataTable>.Factory.StartNew(() => _spaFilter.GetRDServicesFromXslx(file, progrAsync));
+
+                        fileResult = await Task.Factory.StartNew(() => _spaFilter.GetServiceCatalog(rdServices, ExportSCPath.Text, progrAsync));
+                    }
+                }
+                else
+                {
+                    using (var progrAsync = new CustomProgressCalculation(progressBar, _spaFilter.NetElements.Count))
+                    {
+                        fileResult = await Task.Factory.StartNew(() => _spaFilter.GetServiceCatalog( null, ExportSCPath.Text, progrAsync));
+                    }
+                }
+
+                if (!fileResult.IsNullOrEmpty() && File.Exists(fileResult))
+                {
+                    OpenEditor(fileResult);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                IsInProgress = false;
+            }
+        }
+
 
         void OpenEditor(string path)
         {
@@ -737,422 +664,73 @@ namespace SPAFilter
             }
         }
 
-        private void ProcessesButtonOpen_Click(object sender, EventArgs e)
+        void StatusRefresh()
         {
-            ProcessesTextBox.Text = OpenFolder() ?? ProcessesTextBox.Text;
-            CheckProcessesPath(ProcessesTextBox.Text);
+            BPCount.Text = $"Processes: {(_spaFilter.Processes == null ? 0 : _spaFilter.Processes.Count).ToString()}";
+            NEElementsCount.Text = $"NEs: {(_spaFilter.NetElements == null ? 0 : _spaFilter.NetElements.AllNetworkElements.Count).ToString()}";
+            OperationsCount.Text = $"Operations: {(_spaFilter.NetElements == null ? 0 : _spaFilter.NetElements.AllOperationsName.Count).ToString()}";
+            ScenariosCount.Text = $"Scenarios: {(_spaFilter.Scenarios == null ? 0 : _spaFilter.Scenarios.Count).ToString()}";
+            CommandsCount.Text = $"Commands: {(_spaFilter.Commands == null ? 0 : _spaFilter.Commands.Count).ToString()}";
+
+            FilterButton.Enabled = _spaFilter.IsEnabledFilter;
+            ButtonGenerateSC.Enabled = _spaFilter.CanGenerateSC && !ExportSCPath.Text.IsNullOrEmpty() && ExportSCPath.Text.Length > 3;
+            PrintXMLButton.Enabled = _spaFilter.WholeItemsCount > 0;
         }
 
-        private void ProcessesTextBox_TextChanged(object sender, EventArgs e)
+        void UpdateLastPath(string path)
         {
-            CheckProcessesPath(ProcessesTextBox.Text);
-            SaveFile();
+            if (!path.IsNullOrEmpty())
+                _lastDirPath = path;
         }
 
-        void CheckProcessesPath(string prcsPath, bool saveLastSett = false)
+        void SaveSerializationFile()
         {
-            try
-            {
-                var lastSettProcess = saveLastSett ? ProcessesComboBox.Text : null;
-                Processes?.Clear();
-                _filteredProcessCollection?.Clear();
-
-                if (Directory.Exists(prcsPath.Trim(' ')))
-                {
-                    UpdateLastPath(prcsPath.Trim(' '));
-                    Processes = new CollectionBusinessProcess(prcsPath.Trim(' '));
-                    ProcessesComboBox.DataSource = Processes.Select(p => p.Name).ToList();
-                    ProcessStatRefresh(Processes);
-                }
-                else
-                {
-                    dataGridProcesses.DataSource = null;
-                    dataGridProcesses.Refresh();
-                    dataGridOperations.DataSource = null;
-                    dataGridOperations.Refresh();
-                    dataGridScenarios.DataSource = null;
-                    dataGridScenarios.Refresh();
-                    dataGridCommands.DataSource = null;
-                    dataGridCommands.Refresh();
-                    ProcessesComboBox.DataSource = null;
-                    ProcessStatRefresh(null);
-                }
-                ProcessesComboBox.Text = lastSettProcess;
-                ProcessesComboBox.DisplayMember = lastSettProcess;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        void ProcessStatRefresh(CollectionBusinessProcess processes)
-        {
-            BPCount.Text = $"Processes: {(processes == null ? 0 : processes.Count).ToString()}";
-            CheckButtons();
-        }
-
-        private void OperationButtonOpen_Click(object sender, EventArgs e)
-        {
-            OperationTextBox.Text = OpenFolder() ?? OperationTextBox.Text;
-            CheckOperationsPath(OperationTextBox.Text);
-        }
-        private void OperationTextBox_TextChanged(object sender, EventArgs e)
-        {
-            CheckOperationsPath(OperationTextBox.Text);
-            SaveFile();
-        }
-
-        void CheckOperationsPath(string opPath, bool saveLastSett = false)
-        {
-            try
-            {
-                var lastSettNetSett = saveLastSett ? NetSettComboBox.Text : null;
-                var lastSettOper = saveLastSett ? OperationComboBox.Text : null;
-                NetElements?.Elements?.Clear();
-                _filteredNetElemCollection?.Clear();
-
-                if (Directory.Exists(opPath.Trim(' ')))
-                {
-                    UpdateLastPath(opPath.Trim(' '));
-                    NetElements = new NetworkElementCollection(opPath.Trim(' '));
-                    NetSettComboBox.DataSource = NetElements.Elements.AllNetworkElements;
-                    OperationComboBox.DataSource = NetElements.Elements.AllOperationsName;
-                    NEStatRefresh(NetElements.Elements);
-                    OperationsStatRefresh(NetElements.Elements);
-                }
-                else
-                {
-                    dataGridOperations.DataSource = null;
-                    dataGridOperations.Refresh();
-                    dataGridScenarios.DataSource = null;
-                    dataGridScenarios.Refresh();
-                    dataGridCommands.DataSource = null;
-                    dataGridCommands.Refresh();
-                    NetSettComboBox.DataSource = null;
-                    OperationComboBox.DataSource = null;
-                    NEStatRefresh(null);
-                    OperationsStatRefresh(null);
-                }
-
-                CheckButtonGenerateSC();
-
-                NetSettComboBox.Text = lastSettNetSett;
-                NetSettComboBox.DisplayMember = lastSettNetSett;
-                OperationComboBox.Text = lastSettOper;
-                OperationComboBox.DisplayMember = lastSettOper;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        void NEStatRefresh(CollectionNetworkElement netElems)
-        {
-            NEElementsCount.Text = $"NEs: {(netElems == null ? 0 : netElems.AllNetworkElements.Count).ToString()}";
-            CheckButtons();
-        }
-
-        void OperationsStatRefresh(CollectionNetworkElement netElems)
-        {
-            OperationsCount.Text = $"Operations: {(netElems == null ? 0 : netElems.AllOperationsName.Count).ToString()}";
-            CheckButtons();
-        }
-
-        private void ScenariosButtonOpen_Click(object sender, EventArgs e)
-        {
-            ScenariosTextBox.Text = OpenFolder() ?? ScenariosTextBox.Text;
-            CheckScenariosPath(ScenariosTextBox.Text);
-        }
-        private void ScenariosTextBox_TextChanged(object sender, EventArgs e)
-        {
-            CheckScenariosPath(ScenariosTextBox.Text);
-            SaveFile();
-        }
-        void CheckScenariosPath(string scoPath)
-        {
-            try
-            {
-                Scenarios?.Clear();
-                _filteredScenarioCollection?.Clear();
-                _filteredSubScenarios?.Clear();
-
-                if (Directory.Exists(scoPath.Trim(' ')))
-                {
-                    UpdateLastPath(scoPath.Trim(' '));
-                    Scenarios = new CollectionScenarios(scoPath.Trim(' '));
-                    ScenariosStatRefresh(Scenarios);
-                }
-                else
-                {
-                    dataGridScenarios.DataSource = null;
-                    dataGridScenarios.Refresh();
-                    dataGridCommands.DataSource = null;
-                    dataGridCommands.Refresh();
-                    ScenariosStatRefresh(null);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        void ScenariosStatRefresh(CollectionScenarios scenarios)
-        {
-            ScenariosCount.Text = $"Scenarios: {(scenarios == null ? 0 : scenarios.Count).ToString()}";
-            CheckButtons();
-        }
-
-        private void CommnadsButtonOpen_Click(object sender, EventArgs e)
-        {
-            CommandsTextBox.Text = OpenFolder() ?? CommandsTextBox.Text;
-            CheckCommandsPath(CommandsTextBox.Text);
-        }
-        private void CommandsTextBox_TextChanged(object sender, EventArgs e)
-        {
-            CheckCommandsPath(CommandsTextBox.Text);
-            SaveFile();
-        }
-        void CheckCommandsPath(string cmmPath)
-        {
-            try
-            {
-                Commands?.Clear();
-                _filteredCMMCollection?.Clear();
-
-                if (Directory.Exists(cmmPath.Trim(' ')))
-                {
-                    UpdateLastPath(cmmPath.Trim(' '));
-                    Commands = new CollectionCommands(cmmPath.Trim(' '));
-                    CommandsStatRefresh(Commands);
-                }
-                else
-                {
-                    dataGridCommands.DataSource = null;
-                    dataGridCommands.Refresh();
-                    CommandsStatRefresh(null);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        void CommandsStatRefresh(CollectionCommands commands)
-        {
-            CommandsCount.Text = $"Commands: {(commands == null ? 0 : commands.Count).ToString()}";
-        }
-
-        private void ExportSCPath_TextChanged(object sender, EventArgs e)
-        {
-            CheckButtonGenerateSC();
-            SaveFile();
-        }
-        void CheckButtonGenerateSC()
-        {
-            if (NetElements?.Elements != null && NetElements?.Elements.Count > 0 && !ExportSCPath.Text.IsNullOrEmpty() && ExportSCPath.Text.Length > 3)
-            {
-                ButtonGenerateSC.Enabled = true;
-                return;
-            }
-
-            ButtonGenerateSC.Enabled = false;
-        }
-
-        int CheckButtons()
-        {
-            buttonFilter.Enabled = Processes != null && Processes.Count > 0  && NetElements != null && NetElements.Elements.Count > 0;
-
-            var processes = _filteredProcessCollection?.Count ?? 0;
-            var operations = (_filteredNetElemCollection == null || _filteredNetElemCollection.Count == 0) ? 0 : _filteredNetElemCollection.Sum(x => x.Operations.Count);
-            var scenarios = _filteredScenarioCollection?.Count ?? 0;
-            var commands = _filteredCMMCollection?.Count ?? 0;
-
-            var res = dataGridProcesses.RowCount == processes && dataGridOperations.RowCount == operations && dataGridScenarios.RowCount == scenarios && dataGridCommands.RowCount == commands;
-
-            var filesNumber = processes + operations + scenarios + commands;
-
-            buttonPrintXML.Enabled = filesNumber > 0 && res;
-            return filesNumber;
-        }
-
-        private void OpenSCXlsx_TextChanged(object sender, EventArgs e)
-        {
-            SaveFile();
-        }
-
-        private void RootSCExportPathButton_Click(object sender, EventArgs e)
-        {
-            ExportSCPath.Text = OpenFolder() ?? ExportSCPath.Text;
-        }
-
-        private void OpenSevExelButton_Click(object sender, EventArgs e)
-        {
-            using (var fbd = new OpenFileDialog())
-            {
-                fbd.Filter = @"(*.xlsx) | *.xlsx";
-                DialogResult result = fbd.ShowDialog();
-                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.FileName))
-                {
-                    OpenSCXlsx.Text = fbd.FileName;
-                }
-            }
-        }
-
-        private async void ButtonGenerateSC_Click(object sender, EventArgs e)
-        {
-            if (IsInProgress)
+            if (IsInitialization)
                 return;
 
-            CollectionNetworkElement collectionElements = null;
-
-            if (_filteredNetElemCollection != null && _filteredNetElemCollection.Count > 0)
-                collectionElements = _filteredNetElemCollection;
-            else if (NetElements?.Elements != null && NetElements?.Elements.Count > 0)
-                collectionElements = NetElements.Elements;
-
-
-            int generateSCIterators = (collectionElements == null || collectionElements.Count == 0) ? 0 : collectionElements.Sum(x => x.Operations.Count);
-
-            if (generateSCIterators == 0)
+            lock (sync)
             {
-                MessageBox.Show(@"Not found any operations.", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            try
-            {
-                IsInProgress = true;
-
-                if (!Directory.Exists(ExportSCPath.Text))
-                    Directory.CreateDirectory(ExportSCPath.Text);
-
-                string fileResult;
-
-                if (!OpenSCXlsx.Text.IsNullOrEmptyTrim() && File.Exists(OpenSCXlsx.Text))
+                using (var stream = new FileStream(SerializationDataPath, FileMode.Create, FileAccess.ReadWrite))
                 {
-                    var file = new FileInfo(OpenSCXlsx.Text);
-                    
-                    using (var progrAsync = new CustomProgressCalculation(progressBar, generateSCIterators, file))
-                    {
-                        var rdServices = await Task<DataTable>.Factory.StartNew(() => GetRDServicesFromXslx(file, progrAsync));
-
-                        fileResult = await Task.Factory.StartNew(() => GetServiceCatalog(collectionElements, rdServices, ExportSCPath.Text, progrAsync));
-                    }
+                    new BinaryFormatter().Serialize(stream, this);
                 }
-                else
-                {
-                    using (var progrAsync = new CustomProgressCalculation(progressBar, generateSCIterators))
-                    {
-                        fileResult = await Task.Factory.StartNew(() => GetServiceCatalog(collectionElements, null, ExportSCPath.Text, progrAsync));
-                    }
-                }
-
-                if (!fileResult.IsNullOrEmpty() && File.Exists(fileResult))
-                {
-                    OpenEditor(fileResult);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                IsInProgress = false;
             }
         }
 
-        private readonly string[] mandatoryXslxColumns = new string[] { "#", "SPA_SERVICE_CODE", "GLOBAL_SERVICE_CODE", "SERVICE_NAME", "SERVICE_FULL_NAME", "SERVICE_FULL_NAME2", "DESCRIPTION", "SERVICE_CODE", "SERVICE_NAME2", "EXTERNAL_CODE", "EXTERNAL_CODE2" };
-
-        DataTable GetRDServicesFromXslx(FileInfo file, CustomProgressCalculation progressCalc)
-        {
-            var serviceTable = new DataTable();
-
-            progressCalc.BeginOpenXslxFile();
-
-            using (var xslPackage = new ExcelPackage(file))
-            {
-                progressCalc.BeginReadXslxFile();
-
-                var myWorksheet = xslPackage.Workbook.Worksheets.First(); //sheet
-                var totalRows = myWorksheet.Dimension.End.Row;
-                var totalColumns = mandatoryXslxColumns.Length;
-
-                progressCalc.EndReadXslxFile(totalRows);
-
-                var columnsNames = myWorksheet.Cells[1, 1, 1, totalColumns].Select(c => c.Value == null ? string.Empty : c.Value.ToString());
-
-                if (!columnsNames.Any())
-                    return null;
-
-                var i = 0;
-                foreach (var columnName in columnsNames)
-                {
-                    var columnNameUp = columnName.ToUpper();
-                    if (mandatoryXslxColumns[i++] != columnNameUp)
-                    {
-                        throw new Exception($"Wrong column name before \'{columnNameUp}\' from file '{OpenSCXlsx.Text}'.\r\n\r\nColumns names and orders must be like:\r\n'{string.Join("','", mandatoryXslxColumns)}'");
-                    }
-
-                    serviceTable.Columns.Add(columnNameUp, typeof(string));
-                    if (i == mandatoryXslxColumns.Length)
-                        break;
-                }
-
-                if (i != mandatoryXslxColumns.Length)
-                    throw new Exception($"Wrong file '{OpenSCXlsx.Text}'. Missing some required columns. \r\nColumns names should be like:\r\n'{string.Join("','", mandatoryXslxColumns)}'");
-
-                for (int rowNum = 2; rowNum <= totalRows; rowNum++)
-                {
-                    var row = myWorksheet.Cells[rowNum, 1, rowNum, totalColumns].Select(c => c.Value == null ? string.Empty : c.Value.ToString()).Take(totalColumns);
-                    serviceTable.Rows.Add(values: row.ToArray());
-                    progressCalc.ReadXslxFileLine();
-                }
-            }
-
-            progressCalc.EndOpenXslxFile();
-
-            return serviceTable;
-        }
-
-        static string GetServiceCatalog(CollectionNetworkElement elements, DataTable rdServices, string exportFilePath, CustomProgressCalculation progressCalc)
+        static string OpenFile(string extension)
         {
             try
             {
-                var sc = new ServiceCatalog(elements, rdServices, progressCalc);
-                return sc.Save(exportFilePath);
+                using (var fbd = new OpenFileDialog())
+                {
+                    fbd.Filter = extension;
+                    var result = fbd.ShowDialog();
+                    if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.FileName) && File.Exists(fbd.FileName))
+                    {
+                        return fbd.FileName;
+                    }
+                }
+                return null;
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return null;
             }
         }
 
-        
-
-        void UpdateLastPath(string path)
-        {
-            if (!path.IsNullOrEmpty())
-                _lastPath = path;
-        }
-
-        string OpenFolder()
+        static string OpenFolder(string lastDir)
         {
             try
             {
                 using (var fbd = new FolderBrowserDialog())
                 {
-                    if (!_lastPath.IsNullOrEmpty())
-                        fbd.SelectedPath = _lastPath;
+                    if (!lastDir.IsNullOrEmpty())
+                        fbd.SelectedPath = lastDir;
 
                     var result = fbd.ShowDialog();
 
-                    if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                    if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath) && Directory.Exists(fbd.SelectedPath))
                     {
                         return fbd.SelectedPath;
                     }

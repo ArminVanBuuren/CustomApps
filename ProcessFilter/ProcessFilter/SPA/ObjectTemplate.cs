@@ -10,14 +10,6 @@ namespace SPAFilter.SPA
     {
         private readonly FileInfo _fileInfo;
 
-        protected ObjectTemplate(string path, int id)
-        {
-            ID = id;
-            Name = path.GetLastNameInPath(true);
-            FilePath = path;
-            _fileInfo = new FileInfo(path);
-        }
-
         [DGVColumn(ColumnPosition.First, "ID")]
         public int ID { get; protected set; }
 
@@ -25,7 +17,7 @@ namespace SPAFilter.SPA
         public virtual string Name { get; protected set; }
 
         [DGVColumn(ColumnPosition.Last, "Size [Kb]")]
-        public double FileSize
+        public virtual double FileSize
         {
             get
             {
@@ -38,6 +30,19 @@ namespace SPAFilter.SPA
 
         [DGVColumn(ColumnPosition.Last, "File Path")]
         public virtual string FilePath { get; }
+
+        protected ObjectTemplate(string path, int id)
+        {
+            ID = id;
+            Name = path.GetLastNameInPath(true);
+            FilePath = path;
+            _fileInfo = new FileInfo(path);
+        }
+
+        protected ObjectTemplate(int id)
+        {
+            ID = id;
+        }
 
         public override string ToString()
         {

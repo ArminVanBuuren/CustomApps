@@ -1,23 +1,13 @@
-﻿using SPAFilter.SPA.Components;
+﻿using System.Collections.Generic;
+using SPAFilter.SPA.Components;
 
 namespace SPAFilter.SPA.Collection
 {
-    public class CollectionBusinessProcess : ObjectCollection<BusinessProcess>
+    public class CollectionBusinessProcess : List<BusinessProcess>
     {
         internal CollectionBusinessProcess()
         {
             
-        }
-
-        public CollectionBusinessProcess(string dirPath)
-        {
-            var files = GetConfigFiles(dirPath);
-
-            int i = 0;
-            foreach (string businessProcess in files)
-            {
-                Add(new BusinessProcess(businessProcess, ++i));
-            }
         }
 
         public CollectionBusinessProcess Clone()

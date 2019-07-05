@@ -8,11 +8,11 @@ using Utils.WinForm.CustomProgressBar;
 
 namespace SPAFilter.SPA.SC
 {
-    public struct ServiceCatalog
+    public struct ServiceCatalogBuilder
     {
         public string Configuration { get; }
 
-        public ServiceCatalog(CollectionNetworkElement networkElements, DataTable servicesRD, CustomProgressCalculation progressCalc)
+        public ServiceCatalogBuilder(CollectionNetworkElement networkElements, DataTable servicesRD, CustomProgressCalculation progressCalc)
         {
             progressCalc.AddBootPercent(3);
 

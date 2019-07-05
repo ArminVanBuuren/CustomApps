@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SPA Filter")]
-[assembly: AssemblyDescription("SPA process filter")]
+[assembly: AssemblyDescription("SPA Filter")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Vladimir Khovanskiy")]
 [assembly: AssemblyProduct("SPA Filter")]
-[assembly: AssemblyCopyright("Copyright ©  2019")]
+[assembly: AssemblyCopyright("Copyright © 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

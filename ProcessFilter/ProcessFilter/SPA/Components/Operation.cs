@@ -4,7 +4,7 @@ namespace SPAFilter.SPA.Components
 {
     public class Operation : ObjectTemplate
     {
-        private readonly NetworkElement parent;
+        private readonly ObjectTemplate parent;
 
         [DGVColumn(ColumnPosition.After, "Operation")]
         public sealed override string Name { get; protected set; }
@@ -12,7 +12,7 @@ namespace SPAFilter.SPA.Components
         [DGVColumn(ColumnPosition.Before, "NE")]
         public string NetworkElement => parent.Name;
 
-        public Operation(string path, int id, NetworkElement parentElement) : base(path, id)
+        public Operation(string path, int id, ObjectTemplate parentElement) : base(path, id)
         {
             parent = parentElement;
 

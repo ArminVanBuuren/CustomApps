@@ -4,7 +4,7 @@ using SPAFilter.SPA.Components;
 
 namespace SPAFilter.SPA.Collection
 {
-    public class CollectionNetworkElement : ObjectCollection<NetworkElement>
+    public class CollectionNetworkElement : List<NetworkElement>
     {
         public List<string> AllNetworkElements => this.Where(x => x.Operations.Count > 0).Select(p => p.Name).ToList();
 
@@ -33,6 +33,19 @@ namespace SPAFilter.SPA.Collection
                 return allOps;
             }
         }
+
+        //public void RefreshOperationsIDs()
+        //{
+        //    var i = 0;
+        //    foreach (var ne in this)
+        //    {
+        //        foreach (var op in ne.Operations)
+        //        {
+        //            i++;
+        //            op.ID = i;
+        //        }
+        //    }
+        //}
 
         public CollectionNetworkElement Clone()
         {
