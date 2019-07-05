@@ -39,8 +39,6 @@ namespace SPAFilter.SPA.Collection
             var neId = 0;
             foreach (var rfs in rfsList)
             {
-                rfsId++;
-
                 if(rfs.Node.Attributes == null)
                     throw new Exception("RFS must have attributes!");
 
@@ -74,40 +72,57 @@ namespace SPAFilter.SPA.Collection
                     Add(hostType, netElement);
                 }
 
-                var currentType = CatalogOperationType.Add | CatalogOperationType.Remove;
                 if (!isBase.IsNullOrEmptyTrim())
                 {
                     if (allRfs.TryGetValue(isBase, out var result))
-                        allRfs.Remove(isBase);
-
-                    if (!baseRfsList.ContainsKey(isBase))
                     {
-                        if (result == null)
+                        if (result.All(x => x.Action != "Modify"))
                         {
-                            baseRfsList.Add(isBase, new CatalogOperation(rfsId, isBase, "", netElement, this));
-                        }
-                        else
-                        {
-                            var baseRfs = result.First();
-                            baseRfs.Action = string.Empty;
-                            baseRfsList.Add(isBase, baseRfs);
+                            allRfs.Add(isBase, new CatalogOperation(rfsId, isBase, "Modify", document, netElement, this));
                         }
                     }
-
-                    currentType = currentType | CatalogOperationType.Modify;
+                    else
+                    {
+                        foreach (var flag in new[] { "Add", "Remove", "Modify" })
+                        {
+                            rfsId++;
+                            allRfs.Add(isBase, new CatalogOperation(rfsId, isBase, flag, document, netElement, this));
+                        }
+                    }
+                        
+                    continue;
                 }
 
-                foreach (var flag in currentType.GetFlags())
+                foreach (var flag in new[]{ "Add", "Remove" })
                 {
-                    allRfs.Add(rfsName, new CatalogOperation(rfsId, rfsName, flag.ToString(), netElement, this));
+                    rfsId++;
+                    allRfs.Add(rfsName, new CatalogOperation(rfsId, rfsName, flag, document, netElement, this));
                 }
             }
 
-
-            
-            
+            Dictionary<string, string> test = new Dictionary<string, string>();
+            try
+            {
+                
+                foreach (var rfs in allRfs.Values)
+                {
+                    foreach (var VARIABLE in rfs)
+                    {
+                        test.Add(VARIABLE.Name, VARIABLE.Body);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                
+            }
+           
+            //var dsd = allRfs.Values.First().First().Body;
             var scenarioList = XPATH.Execute(navigator, @"/Configuration/ScenarioList/Scenario");
+            foreach (var rfs in scenarioList)
+            {
 
+            }
         }
     }
 }
