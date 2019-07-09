@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -58,9 +58,7 @@ namespace Utils
         public static string GetText(this XmlNode node, string nodeName)
         {
             XmlNode getNode = node[nodeName];
-            if (getNode != null)
-                return getNode.InnerText;
-            return string.Empty;
+            return getNode != null ? getNode.InnerText : string.Empty;
         }
 
         public static string GetTextLike(this XmlNode node, string nodeName)
@@ -88,62 +86,45 @@ namespace Utils
             return dictionary;
         }
 
+        public static bool IsFileXml(string filePath, out XmlDocument xmldoc)
+        {
+            return IsXml(IO.SafeReadFile(filePath), out xmldoc);
+        }
+
+        public static bool IsXml(this string xmlSource, out XmlDocument xmldoc)
+        {
+            xmldoc = LoadXmlCommon(xmlSource);
+            return xmldoc != null;
+        }
+
         public static XmlDocument LoadXml(string path, bool convertToLower = false)
         {
-            string context = IO.SafeReadFile(path, convertToLower);
-            if (!string.IsNullOrEmpty(context) && context.TrimStart().StartsWith("<"))
-            {
-                try
-                {
-                    var xmlSetting = new XmlDocument();
-                    xmlSetting.LoadXml(context);
-                    return xmlSetting;
-                }
-                catch (Exception)
-                {
-                    //null
-                }
-            }
-
-            return null;
+            var contextSource = IO.SafeReadFile(path, convertToLower);
+            return LoadXmlCommon(contextSource);
         }
 
-        public static bool IsXml(string path, out XmlDocument xmldoc, out string source)
+        static XmlDocument LoadXmlCommon(string contextSource)
         {
-            xmldoc = null;
-            source = IO.SafeReadFile(path);
+            if (string.IsNullOrEmpty(contextSource) || !contextSource.TrimStart().StartsWith("<"))
+                return null;
 
-            if (!IsXml(source, out xmldoc))
-                return false;
-
-            return true;
-        }
-
-        public static bool IsXml(string source, out XmlDocument xmldoc)
-        {
-            xmldoc = null;
-            if (!string.IsNullOrEmpty(source) && source.TrimStart().StartsWith("<"))
+            try
             {
-                try
-                {
-                    xmldoc = new XmlDocument();
-                    xmldoc.LoadXml(source);
-                    return true;
-                }
-                catch (Exception)
-                {
-                    //null
-                }
+                var xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(contextSource);
+                return xmlDoc;
             }
-
-            return false;
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public static bool ValidateXmlDocument(string docPath)
         {
-            XmlSchemaSet schemas = new XmlSchemaSet();
-            XDocument doc = XDocument.Load(docPath);
-            string msg = "";
+            var schemas = new XmlSchemaSet();
+            var doc = XDocument.Load(docPath);
+            var msg = "";
             doc.Validate(schemas, (o, e) => { msg += e.Message + Environment.NewLine; });
             return msg.IsNullOrEmpty();
         }
@@ -154,19 +135,19 @@ namespace Utils
             var xf = new XmlEntityNames(type);
 
             MatchEvaluator evaluator = (xf.Replace);
-            string strOut = regex.Replace(xmlStringValue, evaluator);
+            var strOut = regex.Replace(xmlStringValue, evaluator);
             return strOut;
         }
 
         public static string NormalizeXmlValueFast(string xmlStingValue, XMLValueEncoder type = XMLValueEncoder.Decode)
         {
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
 
             switch (type)
             {
                 case XMLValueEncoder.Decode:
-                    int isOpen = 0;
-                    StringBuilder charName = new StringBuilder();
+                    var isOpen = 0;
+                    var charName = new StringBuilder();
 
                     foreach (var ch in xmlStingValue)
                     {
@@ -180,7 +161,7 @@ namespace Utils
                             else
                             {
                                 builder.Append('&');
-                                builder.Append(charName.ToString());
+                                builder.Append(charName);
                                 charName.Clear();
                                 continue;
                             }
@@ -202,7 +183,7 @@ namespace Utils
                             else
                             {
                                 builder.Append('&');
-                                builder.Append(charName.ToString());
+                                builder.Append(charName);
                                 charName.Clear();
                             }
                         }
@@ -211,7 +192,7 @@ namespace Utils
                         {
                             isOpen--;
                             builder.Append('&');
-                            builder.Append(charName.ToString());
+                            builder.Append(charName);
                             builder.Append(ch);
                             charName.Clear();
                             continue;
@@ -229,7 +210,7 @@ namespace Utils
                     if (isOpen > 0)
                     {
                         builder.Append('&');
-                        builder.Append(charName.ToString());
+                        builder.Append(charName);
                         charName.Clear();
                     }
                     break;
@@ -358,14 +339,14 @@ namespace Utils
 
         public static string PrintXml(string xmlString)
         {
-            XmlDocument xml = new XmlDocument();
+            var xml = new XmlDocument();
             xml.LoadXml(xmlString);
             return xml.PrintXml();
         }
 
         public static string PrintXml(this XmlDocument xml)
         {
-            StringBuilder source = new StringBuilder();
+            var source = new StringBuilder();
             ProcessXmlInnerText(xml.DocumentElement, source, 0);
             return source.ToString();
         }
@@ -401,7 +382,7 @@ namespace Utils
                                 builder.Append(line.Trim());
                             }
 
-                            source.Append(builder.ToString());
+                            source.Append(builder);
                             return true;
                         }
 
@@ -427,7 +408,7 @@ namespace Utils
                     xmlAttributes.Append(attribute.Name);
                     xmlAttributes.Append('=');
                     xmlAttributes.Append('"');
-                    xmlAttributes.Append(XML.NormalizeXmlValueFast(attribute.InnerXml, XMLValueEncoder.EncodeAttribute));
+                    xmlAttributes.Append(NormalizeXmlValueFast(attribute.InnerXml, XMLValueEncoder.EncodeAttribute));
                     xmlAttributes.Append('"');
                 }
 
@@ -505,7 +486,7 @@ namespace Utils
 
             if (node.Attributes == null)
             {
-                source.Append(XML.NormalizeXmlValueFast(node.OuterXml));
+                source.Append(NormalizeXmlValueFast(node.OuterXml));
             }
             else
             {
@@ -513,17 +494,17 @@ namespace Utils
                 {
                     if (node.Attributes.Count > 0)
                     {
-                        StringBuilder attrBuilder = new StringBuilder();
+                        var attrBuilder = new StringBuilder();
                         if (IsXmlAttribute(node.Attributes, attrBuilder, ref targetText, findNode))
                         {
                             source.Append('<');
                             source.Append(node.Name);
-                            source.Append(attrBuilder.ToString());
+                            source.Append(attrBuilder);
                             return XMlType.Attribute;
                         }
                     }
 
-                    source.Append(XML.NormalizeXmlValueFast(node.OuterXml));
+                    source.Append(NormalizeXmlValueFast(node.OuterXml));
                 }
                 else
                 {
@@ -546,7 +527,7 @@ namespace Utils
 
                     foreach (XmlNode node2 in node.ChildNodes)
                     {
-                        XMlType type = GetXmlPosition(node2, source, ref targetText, findNode);
+                        var type = GetXmlPosition(node2, source, ref targetText, findNode);
                         if (type != XMlType.Unknown)
                             return type;
                     }
@@ -575,7 +556,7 @@ namespace Utils
                 source.Append(attribute.Name);
                 source.Append('=');
                 source.Append('"');
-                source.Append(XML.NormalizeXmlValueFast(attribute.InnerXml));
+                source.Append(NormalizeXmlValueFast(attribute.InnerXml));
                 source.Append('"');
                 if (attribute.Equals(findNode))
                 {
@@ -622,12 +603,12 @@ namespace Utils
                 return null;
 
             j = 0;
-            int indexStart = -1;
-            int indexEnd = -1;
+            var indexStart = -1;
+            var indexEnd = -1;
 
-            int isOpen = 0;
-            int symbolsIdents = 0;
-            StringBuilder charName = new StringBuilder();
+            var isOpen = 0;
+            var symbolsIdents = 0;
+            var charName = new StringBuilder();
             for (int i = 0; i < sourceText.Length; i++)
             {
                 char ch = sourceText[i];
@@ -691,6 +672,111 @@ namespace Utils
             //string res3 = sourceText.Substring(indexStart, indexEnd - indexStart);
 
             return new XmlNodeResult(indexStart, indexEnd, indexEnd - indexStart, type);
+        }
+
+
+        /// <summary>
+        /// Creates validated XmlDocument object using given schema for validation.
+        /// </summary>
+        /// <param name="schemaStream"> The stream to read xml schema from. </param>
+        /// <param name="source"> The stream to read xml data from. </param>
+        /// <returns>The validated XML document</returns>
+        public static XmlDocument ReadAndValidateXML(Stream schemaStream, XmlReader source)
+        {
+            var veh = new ValidationEventHandler(OnValidationEventHandler);
+            var schema = XmlSchema.Read(schemaStream, veh);
+            var settings = new XmlReaderSettings();
+            settings.Schemas.Add(schema);
+
+            var resolver = new XmlUrlResolver
+            {
+                Credentials = System.Net.CredentialCache.DefaultCredentials
+            };
+
+            settings.XmlResolver = resolver;
+            settings.ValidationType = ValidationType.Schema;
+            settings.ValidationEventHandler += OnValidationEventHandler;
+
+            var doc = new XmlDocument();
+            doc.Load(XmlReader.Create(source, settings));
+
+            return doc;
+        }
+
+        /// <summary>
+        /// Creates validated XmlDocument object using given schema for validation.
+        /// </summary>
+        /// <param name="schemaStream"> The stream to read xml schema from. </param>
+        /// <param name="xmlString"> The XML document string representation. </param>
+        /// <returns>The validated XML document</returns>
+        public static XmlDocument ReadAndValidateXML(Stream schemaStream, String xmlString)
+        {
+            var veh = new ValidationEventHandler(OnValidationEventHandler);
+            var schema = XmlSchema.Read(schemaStream, veh);
+            var settings = new XmlReaderSettings();
+            settings.Schemas.Add(schema);
+
+            var resolver = new XmlUrlResolver
+            {
+                Credentials = System.Net.CredentialCache.DefaultCredentials
+            };
+
+            settings.XmlResolver = resolver;
+            settings.ValidationType = ValidationType.Schema;
+            settings.ValidationEventHandler += OnValidationEventHandler;
+
+            var reader = XmlReader.Create(new StringReader(xmlString), settings);
+            var doc = new XmlDocument();
+            doc.Load(reader);
+
+            return doc;
+        }
+
+        /// <summary>
+        /// Creates validated XmlDocument object using given schema for validation.
+        /// </summary>
+        /// <param name="xsdString"> The XML schema string representation. </param>
+        /// <param name="xmlString"> The XML document string representation. </param>
+        /// <returns>The validated XML document</returns>
+        public static XmlDocument ReadAndValidateXML(String xsdString, String xmlString)
+        {
+            var veh = new ValidationEventHandler(OnValidationEventHandler);
+            var schemaReader = new XmlTextReader(new StringReader(xsdString));
+            var schema = XmlSchema.Read(schemaReader, veh);
+            var settings = new XmlReaderSettings();
+            settings.Schemas.Add(schema);
+
+            var resolver = new XmlUrlResolver
+            {
+                Credentials = System.Net.CredentialCache.DefaultCredentials
+            };
+
+            settings.XmlResolver = resolver;
+            settings.ValidationType = ValidationType.Schema;
+            settings.ValidationEventHandler += OnValidationEventHandler;
+
+            var reader = XmlReader.Create(new StringReader(xmlString), settings);
+            var doc = new XmlDocument();
+            doc.Load(reader);
+
+            return doc;
+        }
+
+        /// <summary>
+        /// Validates XML node name candidate
+        /// </summary>
+        /// <param name="nodeName">Node name</param>
+        public static void ValidateXMLNodeName(String nodeName)
+        {
+            new XmlDocument().LoadXml($"<{nodeName} />");
+        }
+
+        private static void OnValidationEventHandler(object sender, ValidationEventArgs args)
+        {
+            if (args.Severity == XmlSeverityType.Error)
+            {
+                throw args.Exception;
+            }
         }
     }
 }

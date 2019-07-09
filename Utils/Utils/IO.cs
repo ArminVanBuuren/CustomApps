@@ -7,7 +7,6 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Text;
 using System.Diagnostics;
-using System.Management;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
@@ -51,7 +50,7 @@ namespace Utils
             if (!File.Exists(path))
                 return null;
 
-            int attempts = 0;
+            var attempts = 0;
             while (!IsFileReady(path))
             {
                 attempts++;
@@ -61,7 +60,7 @@ namespace Utils
             }
 
             string context;
-            using (StreamReader sr = new StreamReader(path))
+            using (var sr = new StreamReader(path))
             {
                 context = convertToLower ? sr.ReadToEnd().ToLower() : sr.ReadToEnd();
             }
@@ -72,7 +71,7 @@ namespace Utils
         {
             File.WriteAllText(path, content, encoding ?? GetEncoding(path));
 
-            //using (StreamWriter writetext = new StreamWriter(path, false, GetEncoding(path)))
+            //using (var writetext = new StreamWriter(path, false, GetEncoding(path)))
             //{
             //    writetext.Write(content);
             //}
@@ -80,10 +79,14 @@ namespace Utils
             return true;
         }
 
+        /// <summary>
+        /// If the file can be opened for exclusive access it means that the file
+        /// is no longer locked by another process.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
         public static bool IsFileReady(string filename)
         {
-            // If the file can be opened for exclusive access it means that the file
-            // is no longer locked by another process.
             try
             {
                 using (var inputStream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.None))
@@ -97,38 +100,37 @@ namespace Utils
             }
         }
 
-        public static string GetLastNameInPath(this string path, bool trimFormat = false)
+        /// <summary>
+        /// Get last name file or directory
+        /// </summary>
+        /// <param name="fileOrDirectoryPath"></param>
+        /// <param name="excludeExtension"></param>
+        /// <returns></returns>
+        public static string GetLastNameInPath(string fileOrDirectoryPath, bool excludeExtension = false)
         {
-            string[] spltStr = path.Split('\\');
-            string fileName = spltStr[spltStr.Length - 1];
-            if (!trimFormat)
-                return fileName;
+            var splitStr = fileOrDirectoryPath.Split('\\');
+            var lastName = splitStr[splitStr.Length - 1];
+
+            if (!excludeExtension)
+            {
+                return lastName;
+            }
             else
             {
-                string[] spltFile = fileName.Split('.');
-                return spltFile.Length <= 1 ? fileName : string.Join(".", spltFile.Take(spltFile.Length - 1));
+                var splitFile = lastName.Split('.');
+                return splitFile.Length <= 1 ? lastName : string.Join(".", splitFile.Take(splitFile.Length - 1));
             }
-        }
-
-        public static string GetParentDirectoryInPath(this string path)
-        {
-            string[] spltStr = path.Split('\\');
-            if (spltStr.Length <= 1)
-                return path;
-            IEnumerable<string> parentDir = spltStr.Take(spltStr.Length - 1);
-            return string.Join("\\", parentDir);
         }
 
         /// <summary>
         /// Add all access permissions to file
         /// </summary>
         /// <param name="filePath"></param>
-        public static void AccessToFile(string filePath)
+        public static void GetAccessToFile(string filePath)
         {
-            AccessToDirectory(filePath);
-
-            FileSecurity access = File.GetAccessControl(filePath);
-            SecurityIdentifier everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+            GetAccessToDirectory(filePath);
+            var access = File.GetAccessControl(filePath);
+            var everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
             access.AddAccessRule(new FileSystemAccessRule(everyone, FileSystemRights.ReadAndExecute, AccessControlType.Allow));
             //access.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), FileSystemRights.FullControl, InheritanceFlags.ObjectInherit | InheritanceFlags.ContainerInherit, PropagationFlags.NoPropagateInherit, AccessControlType.Allow));
             File.SetAccessControl(filePath, access);
@@ -138,10 +140,10 @@ namespace Utils
         /// Add all access permissions to directory
         /// </summary>
         /// <param name="dirPath"></param>
-        public static void AccessToDirectory(string dirPath)
+        public static void GetAccessToDirectory(string dirPath)
         {
-            DirectoryInfo dInfo = new DirectoryInfo(dirPath);
-            DirectorySecurity dSecurity = dInfo.GetAccessControl();
+            var dInfo = new DirectoryInfo(dirPath);
+            var dSecurity = dInfo.GetAccessControl();
             dSecurity.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), FileSystemRights.FullControl,
                 InheritanceFlags.ObjectInherit | InheritanceFlags.ContainerInherit, PropagationFlags.NoPropagateInherit, AccessControlType.Allow));
             dInfo.SetAccessControl(dSecurity);
@@ -152,13 +154,107 @@ namespace Utils
             var dirInfo = new DirectoryInfo(folderPath);
             try
             {
-                var dirAC = dirInfo.GetAccessControl(AccessControlSections.All);
+                dirInfo.GetAccessControl(AccessControlSections.All);
                 return true;
             }
             catch (PrivilegeNotHeldException)
             {
                 return false;
             }
+        }
+
+        public static string EvaluateRelativePath(string mainDirPath, string absoluteFilePath)
+        {
+            if (mainDirPath == null)
+                throw new ArgumentNullException(nameof(mainDirPath));
+            if (absoluteFilePath == null)
+                throw new ArgumentNullException(nameof(absoluteFilePath));
+
+            var firstPathParts = mainDirPath.Trim(Path.DirectorySeparatorChar).Split(Path.DirectorySeparatorChar);
+            var secondPathParts = absoluteFilePath.Trim(Path.DirectorySeparatorChar).Split(Path.DirectorySeparatorChar);
+            var sameCounter = 0;
+            for (var i = 0; i < Math.Min(firstPathParts.Length, secondPathParts.Length); i++)
+            {
+                if (!firstPathParts[i].ToLower().Equals(secondPathParts[i].ToLower()))
+                {
+                    break;
+                }
+                sameCounter++;
+            }
+
+            if (sameCounter == 0)
+            {
+                return absoluteFilePath;
+            }
+
+            var newPath = String.Empty;
+            for (var i = sameCounter; i < firstPathParts.Length; i++)
+            {
+                if (i > sameCounter)
+                {
+                    newPath += Path.DirectorySeparatorChar;
+                }
+                newPath += "..";
+            }
+            if (newPath.Length == 0)
+            {
+                newPath = ".";
+            }
+            for (var i = sameCounter; i < secondPathParts.Length; i++)
+            {
+                newPath += Path.DirectorySeparatorChar;
+                newPath += secondPathParts[i];
+            }
+
+            return newPath;
+        }
+
+        public static string MakeRelativeName(string basePath, string name)
+        {
+            if (basePath == null)
+                throw new ArgumentNullException(nameof(basePath));
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+            if (Path.IsPathRooted(basePath) == false)
+                throw new ArgumentException("Base path must be rooted", nameof(basePath));
+            if (name.EndsWith(@"\"))
+                throw new ArgumentException("File name can't be directory path", nameof(name));
+
+            if (!Path.IsPathRooted(name))
+                return name;
+
+            if (basePath.EndsWith(@"\") == false) basePath += @"\";
+            var newUri = new Uri(name);
+            var baseUri = new Uri(basePath);
+            name = baseUri.MakeRelativeUri(newUri).ToString().Replace(@"/", @"\");
+
+            return name;
+        }
+
+        public static string MakeRelativePath(string basePath, string path)
+        {
+            if (basePath == null)
+                throw new ArgumentNullException(nameof(basePath));
+            if (path == null)
+                throw new ArgumentNullException(nameof(path));
+            if (Path.IsPathRooted(basePath) == false)
+                throw new ArgumentException("Base path must be rooted", nameof(basePath));
+
+            if (Path.IsPathRooted(path))
+            {
+                if (basePath.EndsWith(@"\") == false) basePath += @"\";
+                if (path.EndsWith(@"\") == false) path += @"\";
+                var newUri = new Uri(path);
+                var baseUri = new Uri(basePath);
+                path = baseUri.MakeRelativeUri(newUri).ToString().Replace(@"/", @"\");
+            }
+
+            if (path.IsNullOrEmpty())
+                path = @".\";
+            else if (path.EndsWith(@"\") == false)
+                path += @"\";
+
+            return path;
         }
 
         public static void SetFullControlPermissionsToEveryone(string dirPath)
@@ -197,7 +293,7 @@ namespace Utils
 
             if (!inheritedResult)
             {
-                throw new InvalidOperationException("Failed to give full-control permission inheritance to all users for " + dirPath);
+                throw new InvalidOperationException($"Failed to give full-control permission inheritance to all users for \"{dirPath}\"");
             }
 
             info.SetAccessControl(security);
@@ -206,12 +302,21 @@ namespace Utils
         public static void CopyDirectory(string sourcePath, string destinationPath)
         {
             //Now Create all of the directories
-            foreach (string dirPath in Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories))
+            foreach (var dirPath in Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories))
                 Directory.CreateDirectory(dirPath.Replace(sourcePath, destinationPath));
 
             //Copy all the files & Replaces any files with the same name
-            foreach (string newPath in Directory.GetFiles(sourcePath, "*.*", SearchOption.AllDirectories))
+            foreach (var newPath in Directory.GetFiles(sourcePath, "*.*", SearchOption.AllDirectories))
                 File.Copy(newPath, newPath.Replace(sourcePath, destinationPath), true);
+        }
+
+        /// <summary>
+        /// Recursively deletes a directory as well as any subdirectories and files. If the files are read-only, they are flagged as normal and then deleted.
+        /// </summary>
+        /// <param name="directory">The name of the directory to remove.</param>
+        public static async Task DeleteReadOnlyDirectoryAsync(string directory)
+        {
+            await Task.Factory.StartNew(() => DeleteReadOnlyDirectory(directory));
         }
 
         /// <summary>
@@ -220,84 +325,59 @@ namespace Utils
         /// <param name="directory">The name of the directory to remove.</param>
         public static void DeleteReadOnlyDirectory(string directory)
         {
-            foreach (var subdirectory in Directory.EnumerateDirectories(directory))
+            foreach (var subDirectory in Directory.EnumerateDirectories(directory))
             {
-                DeleteReadOnlyDirectory(subdirectory);
+                DeleteReadOnlyDirectory(subDirectory);
             }
+
             foreach (var fileName in Directory.EnumerateFiles(directory))
             {
-                var fileInfo = new FileInfo(fileName);
-                fileInfo.Attributes = FileAttributes.Normal;
+                var fileInfo = new FileInfo(fileName)
+                {
+                    Attributes = FileAttributes.Normal
+                };
                 fileInfo.Delete();
             }
+
             Directory.Delete(directory);
-        }
-
-        public static Task DeleteReadOnlyDirectoryAsync(string directory)
-        {
-            return Task.Run(() =>
-            {
-                try
-                {
-                    foreach (var subdirectory in Directory.EnumerateDirectories(directory))
-                    {
-                        DeleteReadOnlyDirectory(subdirectory);
-                    }
-
-                    foreach (var fileName in Directory.EnumerateFiles(directory))
-                    {
-                        var fileInfo = new FileInfo(fileName);
-                        fileInfo.Attributes = FileAttributes.Normal;
-                        fileInfo.Delete();
-                    }
-
-                    Directory.Delete(directory);
-                }
-                catch(Exception)
-                {
-                    //null
-                }
-            });
         }
 
         public static string GetTemporaryDirectory()
         {
-            string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            var tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             Directory.CreateDirectory(tempDirectory);
             return tempDirectory;
         }
 
-        static ArrayList tempGetFileProcesses(string strFile)
+        static ArrayList TempGetFileProcesses(string strFile)
         {
-            ArrayList myProcessArray = new ArrayList();
-            Process myProcess;
-
-            Process[] processes = Process.GetProcesses();
-            int i = 0;
+            var myProcessArray = new ArrayList();
+            var processes = Process.GetProcesses();
+            var i = 0;
             for (i = 0; i <= processes.GetUpperBound(0) - 1; i++)
             {
-                myProcess = processes[i];
-                //if (!myProcess.HasExited) //This will cause an "Access is denied" error
-                if (myProcess.Threads.Count > 0)
+                try
                 {
-                    try
+                    var myProcess = processes[i];
+                    //if (!myProcess.HasExited) //This will cause an "Access is denied" error
+                    if (myProcess.Threads.Count <= 0)
+                        continue;
+
+                    var modules = myProcess.Modules;
+                    var j = 0;
+                    for (j = 0; j <= modules.Count - 1; j++)
                     {
-                        ProcessModuleCollection modules = myProcess.Modules;
-                        int j = 0;
-                        for (j = 0; j <= modules.Count - 1; j++)
+                        if (modules[j].FileName.Equals(strFile, StringComparison.CurrentCultureIgnoreCase))
                         {
-                            if (modules[j].FileName.Equals(strFile, StringComparison.CurrentCultureIgnoreCase))
-                            {
-                                myProcessArray.Add(myProcess);
-                                break;
-                                // TODO: might not be correct. Was : Exit For
-                            }
+                            myProcessArray.Add(myProcess);
+                            break;
+                            // TODO: might not be correct. Was : Exit For
                         }
                     }
-                    catch (Exception exception)
-                    {
-                        //MsgBox(("Error : " & exception.Message)) 
-                    }
+                }
+                catch (Exception ex)
+                {
+                    //MsgBox(("Error : " & exception.Message)) 
                 }
             }
 
@@ -306,7 +386,7 @@ namespace Utils
 
         public static long GetTotalFreeSpace(string driveName)
         {
-            foreach (DriveInfo drive in DriveInfo.GetDrives())
+            foreach (var drive in DriveInfo.GetDrives())
             {
                 if (drive.IsReady && drive.Name == driveName)
                 {
@@ -328,8 +408,8 @@ namespace Utils
         public static string FormatBytes(long bytes, out double newBytes, int decimalPlaces = 1, bool showByteType = true)
         {
             newBytes = bytes;
-            string formatString = "{0";
-            string byteType = "B";
+            var formatString = "{0";
+            var byteType = "B";
 
             if (newBytes <= 1024)
             {
@@ -404,8 +484,7 @@ namespace Utils
                 }
             }
 
-            return ThreeNonZeroDigits(value / Math.Pow(1024, suffixes.Length - 1)) +
-                   " " + suffixes[suffixes.Length - 1];
+            return ThreeNonZeroDigits(value / Math.Pow(1024, suffixes.Length - 1)) + " " + suffixes[suffixes.Length - 1];
         }
 
         private static string ThreeNonZeroDigits(double value)
@@ -502,23 +581,21 @@ namespace Utils
         /// http://wyupdate.googlecode.com/svn-history/r401/trunk/frmFilesInUse.cs (no copyright in code at time of viewing)
         /// 
         /// </remarks>
-        static public List<Process> WhoIsLocking(string path)
+        public static List<Process> WhoIsLocking(string path)
         {
-            uint handle;
-            string key = Guid.NewGuid().ToString();
-            List<Process> processes = new List<Process>();
-
-            int res = RmStartSession(out handle, 0, key);
-            if (res != 0) throw new Exception("Could not begin restart session.  Unable to determine file locker.");
+            var key = Guid.NewGuid().ToString();
+            var processes = new List<Process>();
+            var res = RmStartSession(out var handle, 0, key);
+            if (res != 0)
+                throw new Exception("Could not begin restart session.  Unable to determine file locker.");
 
             try
             {
                 const int ERROR_MORE_DATA = 234;
-                uint pnProcInfoNeeded = 0,
-                     pnProcInfo = 0,
+                uint pnProcInfo = 0,
                      lpdwRebootReasons = RmRebootReasonNone;
 
-                string[] resources = new string[] { path }; // Just checking on one resource.
+                var resources = new[] { path }; // Just checking on one resource.
 
                 res = RmRegisterResources(handle, (uint)resources.Length, resources, 0, null, 0, null);
 
@@ -527,12 +604,12 @@ namespace Utils
                 //Note: there's a race condition here -- the first call to RmGetList() returns
                 //      the total number of process. However, when we call RmGetList() again to get
                 //      the actual processes this number may have increased.
-                res = RmGetList(handle, out pnProcInfoNeeded, ref pnProcInfo, null, ref lpdwRebootReasons);
+                res = RmGetList(handle, out var pnProcInfoNeeded, ref pnProcInfo, null, ref lpdwRebootReasons);
 
                 if (res == ERROR_MORE_DATA)
                 {
                     // Create an array to store the process results
-                    RM_PROCESS_INFO[] processInfo = new RM_PROCESS_INFO[pnProcInfoNeeded];
+                    var processInfo = new RM_PROCESS_INFO[pnProcInfoNeeded];
                     pnProcInfo = pnProcInfoNeeded;
 
                     // Get the list

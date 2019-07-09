@@ -117,7 +117,7 @@ namespace Tester.Updater
 
                 if (Directory.Exists(destPath))
                 {
-                    IO.AccessToDirectory(destPath);
+                    IO.GetAccessToDirectory(destPath);
                     IO.DeleteReadOnlyDirectory(destPath);
                 }
 

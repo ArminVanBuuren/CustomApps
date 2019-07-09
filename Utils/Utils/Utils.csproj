@@ -98,6 +98,8 @@
     <Compile Include="AppUpdater\Updater\UploadProgress.cs" />
     <Compile Include="CMD.cs" />
     <Compile Include="CollectionHelper\DuplicateDictionary.cs" />
+    <Compile Include="CollectionHelper\HashtableComparer.cs" />
+    <Compile Include="CollectionHelper\PriorityQueue.cs" />
     <Compile Include="COLLECTIONS.cs" />
     <Compile Include="ConditionEx\Base\Condition.cs" />
     <Compile Include="ConditionEx\ConditionOperatorType.cs" />
@@ -116,8 +118,10 @@
     <Compile Include="Crypto\AES.cs" />
     <Compile Include="Crypto\DH.cs" />
     <Compile Include="ASYNC.cs" />
+    <Compile Include="Handles\Address.cs" />
     <Compile Include="Handles\CollectionSizes.cs" />
     <Compile Include="Handles\GitControl.cs" />
+    <Compile Include="Handles\MathProgression.cs" />
     <Compile Include="Handles\MemStatus.cs" />
     <Compile Include="Handles\PathProperty.cs" />
     <Compile Include="HOST.cs" />

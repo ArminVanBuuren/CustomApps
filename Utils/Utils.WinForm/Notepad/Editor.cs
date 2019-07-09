@@ -47,7 +47,7 @@ namespace Utils.WinForm.Notepad
             var langByExtension = GetLanguage(filePath);
 
             FilePath = filePath;
-            Name = filePath.GetLastNameInPath(true);
+            Name = IO.GetLastNameInPath(filePath, true);
             Source = IO.SafeReadFile(filePath);
 
             if (langByExtension == Language.XML && !XML.IsXml(Source, out _))

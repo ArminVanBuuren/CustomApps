@@ -297,7 +297,7 @@ namespace Utils.AppUpdater.Updater
             {
                 if (!FileTempPath.IsNullOrEmptyTrim() && File.Exists(FileTempPath))
                 {
-                    IO.AccessToFile(FileTempPath);
+                    IO.GetAccessToFile(FileTempPath);
                     File.Delete(FileTempPath);
                 }
             }
