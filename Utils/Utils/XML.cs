@@ -709,7 +709,7 @@ namespace Utils
         /// <param name="schemaStream"> The stream to read xml schema from. </param>
         /// <param name="xmlString"> The XML document string representation. </param>
         /// <returns>The validated XML document</returns>
-        public static XmlDocument ReadAndValidateXML(Stream schemaStream, String xmlString)
+        public static XmlDocument ReadAndValidateXML(Stream schemaStream, string xmlString)
         {
             var veh = new ValidationEventHandler(OnValidationEventHandler);
             var schema = XmlSchema.Read(schemaStream, veh);
@@ -738,7 +738,7 @@ namespace Utils
         /// <param name="xsdString"> The XML schema string representation. </param>
         /// <param name="xmlString"> The XML document string representation. </param>
         /// <returns>The validated XML document</returns>
-        public static XmlDocument ReadAndValidateXML(String xsdString, String xmlString)
+        public static XmlDocument ReadAndValidateXML(string xsdString, string xmlString)
         {
             var veh = new ValidationEventHandler(OnValidationEventHandler);
             var schemaReader = new XmlTextReader(new StringReader(xsdString));
@@ -766,7 +766,7 @@ namespace Utils
         /// Validates XML node name candidate
         /// </summary>
         /// <param name="nodeName">Node name</param>
-        public static void ValidateXMLNodeName(String nodeName)
+        public static void ValidateXMLNodeName(string nodeName)
         {
             new XmlDocument().LoadXml($"<{nodeName} />");
         }
@@ -776,6 +776,26 @@ namespace Utils
             if (args.Severity == XmlSeverityType.Error)
             {
                 throw args.Exception;
+            }
+        }
+
+        public static string FormatXmlString(string xml, bool exceptional = true)
+        {
+            if (string.IsNullOrEmpty(xml))
+            {
+                if (!exceptional) return string.Empty;
+                throw new ArgumentException("Can not be null or empty", nameof(xml));
+            }
+
+            try
+            {
+                return XDocument.Parse(xml).ToString().Replace("&#xD;&#xA;", Environment.NewLine).Replace("&#xA;", Environment.NewLine);
+            }
+            catch (Exception)
+            {
+                if (!exceptional)
+                    return xml;
+                throw;
             }
         }
     }

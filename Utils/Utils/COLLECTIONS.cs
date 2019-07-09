@@ -47,5 +47,32 @@ namespace Utils
                 if (input.HasFlag(value))
                     yield return value;
         }
+
+        /// <summary>
+        /// Distinct by property.
+        /// Example:
+        /// var query = people.DistinctBy(p => p.Id);
+        /// var query = people.DistinctBy(p => new { p.Id, p.Name });
+        ///
+        /// Other options:
+        /// List<Person> distinctPeople = allPeople.GroupBy(p => p.PersonId).Select(g => g.First()).ToList();
+        /// List<Person> distinctPeople = allPeople.GroupBy(p => new {p.PersonId, p.FavoriteColor} ).Select(g => g.First()).ToList();
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <typeparam name="TKey"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="keySelector"></param>
+        /// <returns></returns>
+        public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            var seenKeys = new HashSet<TKey>();
+            foreach (TSource element in source)
+            {
+                if (seenKeys.Add(keySelector(element)))
+                {
+                    yield return element;
+                }
+            }
+        }
     }
 }

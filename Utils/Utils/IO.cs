@@ -187,7 +187,7 @@ namespace Utils
                 return absoluteFilePath;
             }
 
-            var newPath = String.Empty;
+            var newPath = string.Empty;
             for (var i = sameCounter; i < firstPathParts.Length; i++)
             {
                 if (i > sameCounter)
@@ -223,7 +223,9 @@ namespace Utils
             if (!Path.IsPathRooted(name))
                 return name;
 
-            if (basePath.EndsWith(@"\") == false) basePath += @"\";
+            if (basePath.EndsWith(@"\") == false)
+                basePath += @"\";
+
             var newUri = new Uri(name);
             var baseUri = new Uri(basePath);
             name = baseUri.MakeRelativeUri(newUri).ToString().Replace(@"/", @"\");
@@ -242,8 +244,10 @@ namespace Utils
 
             if (Path.IsPathRooted(path))
             {
-                if (basePath.EndsWith(@"\") == false) basePath += @"\";
-                if (path.EndsWith(@"\") == false) path += @"\";
+                if (basePath.EndsWith(@"\") == false)
+                    basePath += @"\";
+                if (path.EndsWith(@"\") == false)
+                    path += @"\";
                 var newUri = new Uri(path);
                 var baseUri = new Uri(basePath);
                 path = baseUri.MakeRelativeUri(newUri).ToString().Replace(@"/", @"\");

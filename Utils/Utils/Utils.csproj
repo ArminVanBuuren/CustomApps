@@ -120,6 +120,8 @@
     <Compile Include="ASYNC.cs" />
     <Compile Include="Handles\Address.cs" />
     <Compile Include="Handles\CollectionSizes.cs" />
+    <Compile Include="Handles\ResourceHelper.cs" />
+    <Compile Include="Handles\CommonRes.cs" />
     <Compile Include="Handles\GitControl.cs" />
     <Compile Include="Handles\MathProgression.cs" />
     <Compile Include="Handles\MemStatus.cs" />
