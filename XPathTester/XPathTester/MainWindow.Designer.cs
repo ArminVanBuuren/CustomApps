@@ -83,7 +83,7 @@ namespace XPathTester
             this.buttonFind.TabIndex = 2;
             this.buttonFind.Text = "Find [F5]";
             this.buttonFind.UseVisualStyleBackColor = true;
-            this.buttonFind.Click += new System.EventHandler(this.buttonFind_Click);
+            this.buttonFind.Click += new System.EventHandler(this.ButtonFind_Click);
             // 
             // fctb
             // 
@@ -166,7 +166,7 @@ namespace XPathTester
             this.buttonPrettyPrint.TabIndex = 7;
             this.buttonPrettyPrint.Text = "XML Print [F6]";
             this.buttonPrettyPrint.UseVisualStyleBackColor = true;
-            this.buttonPrettyPrint.Click += new System.EventHandler(this.buttonPrettyPrint_Click);
+            this.buttonPrettyPrint.Click += new System.EventHandler(this.ButtonPrettyPrint_Click);
             // 
             // statusStrip1
             // 

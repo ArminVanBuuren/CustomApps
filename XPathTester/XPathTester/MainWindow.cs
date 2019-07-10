@@ -26,35 +26,16 @@ namespace XPathTester
         XPathCollection _strLines;
         int _prevSortedColumn = -1;
 
-        private Brush _resultTabBrush = new SolidBrush(Color.Transparent);
-        private Brush _mainTabBrush = new SolidBrush(Color.Transparent);
-
         readonly MarkerStyle SameWordsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(40, Color.Gray)));
 
 
         public XmlDocument XmlBody { get; private set; }
         public bool IsInserted { get; private set; } = false;
         
-        private Brush MainTabBrush
-        {
-            get => _mainTabBrush;
-            set
-            {
-                _mainTabBrush = value;
-                //tabMain.Invalidate();
-            }
-        }
+        private Brush MainTabBrush { get; set; } = new SolidBrush(Color.Transparent);
 
-        
-        private Brush ResultTabBrush
-        {
-            get => _resultTabBrush;
-            set
-            {
-                _resultTabBrush = value;
-                //tabMain.Invalidate();
-            }
-        }
+
+        private Brush ResultTabBrush { get; set; } = new SolidBrush(Color.Transparent);
 
 
         public MainWindow()
@@ -64,33 +45,20 @@ namespace XPathTester
             xpathResultDataGrid.KeyDown += XpathResultDataGrid_KeyDown;
             xpathResultDataGrid.CellMouseDoubleClick += XpathResultDataGrid_CellMouseDoubleClick;
             xpathResultDataGrid.ColumnHeaderMouseClick += XpathResultDataGrid_ColumnHeaderMouseClick;
-            
-
-            //tabMain.DrawMode = TabDrawMode.OwnerDrawFixed;
-            //tabMain.DrawItem += tabControl1_DrawItem;
-
 
             KeyPreview = true;
             KeyDown += XPathWindow_KeyDown;
             fctb.KeyDown += XmlBodyRichTextBox_KeyDown;
-
-            //fctb.ClearStylesBuffer();
-            //fctb.Range.ClearStyle(StyleIndex.All);
             fctb.Language = Language.XML;
             /////////////////////fctb.DescriptionFile = "htmlDesc.xml";
-            fctb.SelectionChangedDelayed += fctb_SelectionChangedDelayed;
+            fctb.SelectionChangedDelayed += Fctb_SelectionChangedDelayed;
 
             IsWordWrap.Checked = fctb.WordWrap;
             IsWordWrap.CheckStateChanged += (s, e) => fctb.WordWrap = IsWordWrap.Checked;
-
-            //var wordWrapStat = new CheckBox {BackColor = Color.Transparent, Text = @"Wrap ", Checked = fctb.WordWrap, Padding = new Padding(0, 3, 0, 0)};
-            //wordWrapStat.CheckStateChanged += (s, e) => fctb.WordWrap = wordWrapStat.Checked;
-            //var wordWrapStatHost = new ToolStripControlHost(wordWrapStat);
-            //toolStrip1.Items.Add(wordWrapStatHost);
         }
 
 
-        private void fctb_SelectionChangedDelayed(object sender, EventArgs e)
+        private void Fctb_SelectionChangedDelayed(object sender, EventArgs e)
         {
             fctb.VisibleRange.ClearStyle(SameWordsStyle);
             if (!fctb.Selection.IsEmpty)
@@ -98,7 +66,7 @@ namespace XPathTester
 
             //get fragment around caret
             var fragment = fctb.Selection.GetFragment(@"\w");
-            string text = fragment.Text;
+            var text = fragment.Text;
             if (text.Length == 0)
                 return;
 
@@ -111,37 +79,28 @@ namespace XPathTester
 
         private void XpathResultDataGrid_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
-            {
-                if (!(sender is DataGridView data) || data.SelectedCells.Count == 0)
-                    return;
+            if (e.KeyCode != Keys.Enter)
+                return;
+            if (!(sender is DataGridView data) || data.SelectedCells.Count == 0)
+                return;
 
-                XpathResultDataGrid_CellMouseDoubleClick(sender, null);
-                // Останавливает все последующие эвенты, нужен true для того чтобы выделенная строка не переносилось на следующую строку
-                e.SuppressKeyPress = true;
-
-                //if (data.SelectedCells.Count > 0)
-                //{
-                //    e.SuppressKeyPress = true;
-                //    int iColumn = data.CurrentCell.ColumnIndex;
-                //    int iRow = data.CurrentCell.RowIndex;
-                //    if (iRow >= 0)
-                //        data.CurrentCell = data[iColumn, iRow];
-                //}
-            }
+            XpathResultDataGrid_CellMouseDoubleClick(sender, null);
+            // Останавливает все последующие эвенты, нужен true для того чтобы выделенная строка не переносилось на следующую строку
+            e.SuppressKeyPress = true;
         }
 
         private void XPathWindow_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.F5)
+            switch (e.KeyCode)
             {
-                buttonFind_Click(this, EventArgs.Empty);
-                e.SuppressKeyPress = true;  // Stops other controls on the form receiving event.
-            }
-            else if (e.KeyCode == Keys.F6)
-            {
-                buttonPrettyPrint_Click(this, EventArgs.Empty);
-                e.SuppressKeyPress = true;
+                case Keys.F5:
+                    ButtonFind_Click(this, EventArgs.Empty);
+                    e.SuppressKeyPress = true;  // Stops other controls on the form receiving event.
+                    break;
+                case Keys.F6:
+                    ButtonPrettyPrint_Click(this, EventArgs.Empty);
+                    e.SuppressKeyPress = true;
+                    break;
             }
         }
 
@@ -169,30 +128,45 @@ namespace XPathTester
         {
             try
             {
-                //xpathResultDataGrid.Sort(xpathResultDataGrid.Columns[e.ColumnIndex], ListSortDirection.Ascending);
                 IEnumerable<XPathResult> OrderedItems = null;
                 if (_prevSortedColumn != e.ColumnIndex)
                 {
-                    if (e.ColumnIndex == 0)
-                        OrderedItems = from p in _strLines.AsEnumerable() orderby p.ID descending select p;
-                    else if (e.ColumnIndex == 1)
-                        OrderedItems = from p in _strLines.AsEnumerable() orderby p.NodeType descending select p;
-                    else if (e.ColumnIndex == 2)
-                        OrderedItems = from p in _strLines.AsEnumerable() orderby p.NodeName descending select p;
-                    else if (e.ColumnIndex == 3)
-                        OrderedItems = from p in _strLines.AsEnumerable() orderby p.Value descending select p;
+                    switch (e.ColumnIndex)
+                    {
+                        case 0:
+                            OrderedItems = from p in _strLines.AsEnumerable() orderby p.ID descending select p;
+                            break;
+                        case 1:
+                            OrderedItems = from p in _strLines.AsEnumerable() orderby p.NodeType descending select p;
+                            break;
+                        case 2:
+                            OrderedItems = from p in _strLines.AsEnumerable() orderby p.NodeName descending select p;
+                            break;
+                        case 3:
+                            OrderedItems = from p in _strLines.AsEnumerable() orderby p.Value descending select p;
+                            break;
+                    }
+
                     _prevSortedColumn = e.ColumnIndex;
                 }
                 else
                 {
-                    if (e.ColumnIndex == 0)
-                        OrderedItems = from p in _strLines.AsEnumerable() orderby p.ID select p;
-                    else if (e.ColumnIndex == 1)
-                        OrderedItems = from p in _strLines.AsEnumerable() orderby p.NodeType select p;
-                    else if (e.ColumnIndex == 2)
-                        OrderedItems = from p in _strLines.AsEnumerable() orderby p.NodeName select p;
-                    else if (e.ColumnIndex == 3)
-                        OrderedItems = from p in _strLines.AsEnumerable() orderby p.Value select p;
+                    switch (e.ColumnIndex)
+                    {
+                        case 0:
+                            OrderedItems = from p in _strLines.AsEnumerable() orderby p.ID select p;
+                            break;
+                        case 1:
+                            OrderedItems = from p in _strLines.AsEnumerable() orderby p.NodeType select p;
+                            break;
+                        case 2:
+                            OrderedItems = from p in _strLines.AsEnumerable() orderby p.NodeName select p;
+                            break;
+                        case 3:
+                            OrderedItems = from p in _strLines.AsEnumerable() orderby p.Value select p;
+                            break;
+                    }
+
                     _prevSortedColumn = -1;
                 }
 
@@ -226,17 +200,15 @@ namespace XPathTester
                     xpathResultDataGrid.CellMouseDoubleClick -= XpathResultDataGrid_CellMouseDoubleClick;
                     xpathResultDataGrid.ColumnHeaderMouseClick -= XpathResultDataGrid_ColumnHeaderMouseClick;
 
-                    XmlNodeResult xmlObject = await Task<XmlNodeResult>.Factory.StartNew(() => XML.GetPositionByXmlNode(fctb.Text, XmlBody, node));
+                    var xmlObject = await Task<XmlNodeResult>.Factory.StartNew(() => XML.GetPositionByXmlNode(fctb.Text, XmlBody, node));
+                    if (xmlObject == null)
+                        return;
 
-                    if (xmlObject != null)
-                    {
-                        //tabMain.SelectTab(tabXmlBody);
-                        Range range = fctb.GetRange(xmlObject.IndexStart, xmlObject.IndexEnd);
+                    var range = fctb.GetRange(xmlObject.IndexStart, xmlObject.IndexEnd);
 
-                        fctb.Selection = range;
-                        fctb.DoSelectionVisible();
-                        fctb.Invalidate();
-                    }
+                    fctb.Selection = range;
+                    fctb.DoSelectionVisible();
+                    fctb.Invalidate();
                 }
                 catch (Exception ex)
                 {
@@ -262,9 +234,7 @@ namespace XPathTester
                 ClearResultTap();
                 _xmlBodyChanged = true;
 
-                bool isXml = XML.IsXml(fctb.Text, out XmlDocument document);
-
-                if (isXml)
+                if (fctb.Text.IsXml(out var document))
                 {
                     XmlBody = document;
                     MainTabBrush = solidTransparent;
@@ -276,12 +246,6 @@ namespace XPathTester
                     IsInserted = false;
                     AddMessageException(@"XML-Body is incorrect!");
                 }
-
-                //fctb.Language = Language.XML;
-                //fctb.ClearStylesBuffer();
-                //fctb.Range.ClearStyle(StyleIndex.All);
-                //fctb.AddStyle(SameWordsStyle);
-                //fctb.OnSyntaxHighlight(new TextChangedEventArgs(fctb.Range));
             }
             catch (Exception ex)
             {
@@ -293,7 +257,7 @@ namespace XPathTester
             }
         }
 
-        private void buttonPrettyPrint_Click(object sender, EventArgs e)
+        private void ButtonPrettyPrint_Click(object sender, EventArgs e)
         {
             if (XmlBody == null)
                 return;
@@ -301,23 +265,8 @@ namespace XPathTester
             fctb.Text = XmlBody.PrintXml();
         }
 
-        //private void tabControl1_DrawItem(object sender, DrawItemEventArgs e)
-        //{
-        //    Brush setBrush = e.Index == 0 ? MainTabBrush : ResultTabBrush;
 
-        //    e.Graphics.FillRectangle(setBrush, e.Bounds);
-        //    SizeF sz = e.Graphics.MeasureString(tabMain.TabPages[e.Index].Text, e.Font);
-        //    e.Graphics.DrawString(tabMain.TabPages[e.Index].Text, e.Font, Brushes.Black, e.Bounds.Left + (e.Bounds.Width - sz.Width) / 2, e.Bounds.Top + (e.Bounds.Height - sz.Height) / 2 + 1);
-
-        //    Rectangle rect = e.Bounds;
-        //    rect.Offset(0, 1);
-        //    rect.Inflate(0, -1);
-        //    e.Graphics.DrawRectangle(Pens.DarkGray, rect);
-        //    e.DrawFocusRectangle();
-        //}
-
-
-        void buttonFind_Click(object sender, EventArgs e)
+        void ButtonFind_Click(object sender, EventArgs e)
         {
             ClearResultTap();
 
@@ -336,7 +285,7 @@ namespace XPathTester
             try
             {
 
-                string getNodeNamesValue = Regex.Replace(XPathText.Text, @"^\s*(name|local-name)\s*\((.+?)\)$", "$2", RegexOptions.IgnoreCase);
+                var getNodeNamesValue = Regex.Replace(XPathText.Text, @"^\s*(name|local-name)\s*\((.+?)\)$", "$2", RegexOptions.IgnoreCase);
                 _strLines = (XPathCollection)XPATH.Execute(XmlBody.CreateNavigator(), getNodeNamesValue);
                 if (XPathText.Text.Length > getNodeNamesValue.Length)
                     _strLines.ModifyValueToNodeName();
@@ -348,7 +297,6 @@ namespace XPathTester
                     return;
                 }
 
-                //tabMain.SelectTab(tabXPathResult);
                 UpdateResultDataGrid(_strLines);
             }
             catch (Exception ex)
@@ -378,15 +326,7 @@ namespace XPathTester
         {
             exceptionMessage.ForeColor = isException ? Color.Red : Color.Black;
             exceptionMessage.Text = strEx;
-            if (!string.IsNullOrEmpty(strEx))
-            {
-                ResultTabBrush = solidRed;
-                //tabMain.SelectTab(tabXPathResult);
-            }
-            else
-            {
-                ResultTabBrush = solidTransparent;
-            }
+            ResultTabBrush = !string.IsNullOrEmpty(strEx) ? solidRed : solidTransparent;
         }
         
     }
