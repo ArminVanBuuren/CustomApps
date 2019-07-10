@@ -244,9 +244,9 @@ namespace SPAFilter.SPA
             }
         }
 
-        public static List<string> GetConfigFiles(string path)
+        public static List<string> GetConfigFiles(string path, string mask = "*.xml")
         {
-            var files = Directory.GetFiles(path, "*.xml", SearchOption.TopDirectoryOnly).ToList();
+            var files = Directory.GetFiles(path, mask, SearchOption.TopDirectoryOnly).ToList();
             files.Sort(StringComparer.CurrentCulture);
             return files;
         }

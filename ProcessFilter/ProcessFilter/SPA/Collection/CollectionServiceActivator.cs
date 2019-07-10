@@ -57,8 +57,9 @@ namespace SPAFilter.SPA.Collection
         void ReInitCollection()
         {
             ServiceInstances = GetServiceInstances();
-            Scenarios = GetScenarios(GetServiceInstances(true));
-            Commands = null;
+            GetScenarios(GetServiceInstances(true), out var distinctScenarios, out var distinctCommands);
+            Scenarios = distinctScenarios;
+            Commands = distinctCommands;
         }
 
         List<ServiceInstance> GetServiceInstances(bool getValid = false)
@@ -77,15 +78,18 @@ namespace SPAFilter.SPA.Collection
             return intsances;
         }
 
-        static List<Scenario> GetScenarios(List<ServiceInstance> serviceInstances)
+        static void GetScenarios(IEnumerable<ServiceInstance> serviceInstances, out List<Scenario> distinctScenarios, out List<Command> distinctCommands)
         {
             var allScenarios = new List<Scenario>();
+            var allCommands = new List<Command>();
             foreach (var instance in serviceInstances)
             {
                 allScenarios.AddRange(instance.Scenarios);
+                allCommands.AddRange(instance.Commands);
             }
 
-            return allScenarios.DistinctBy(p => p.FilePath.ToLower()).ToList();
+            distinctScenarios = allScenarios.DistinctBy(p => p.FilePath.ToLower()).ToList();
+            distinctCommands = allCommands.DistinctBy(p => p.FilePath.ToLower()).ToList();
         }
     }
 }

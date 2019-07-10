@@ -35,7 +35,7 @@ namespace SPAFilter.SPA.Components
                 return false;
 
             Commands = allfinded.Commands.Distinct().ToList();
-            foreach (string subScenarioPath in allfinded.SubScenarios.Distinct())
+            foreach (var subScenarioPath in allfinded.SubScenarios.Distinct())
             {
                 SubScenarios.Add(new Scenario(subScenarioPath, -1));
             }

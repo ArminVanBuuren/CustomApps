@@ -42,10 +42,15 @@ namespace SPAFilter.SPA.Components
             }
 
             var scenarioConfigNode = serviceInstanceNode.SelectSingleNode("//fileScenarioSource") ?? serviceInstanceNode.SelectSingleNode("//config");
-            var scenariosPath = scenarioConfigNode?.Attributes?["dir"];
+            var scenariosPath = scenarioConfigNode?.Attributes?["dir"].Value;
             if (scenariosPath == null)
             {
                 ShowError(string.Format(NOT_FOUND_ATTRIBUTE, "dir", "\"fileScenarioSource\" node"));
+                return;
+            }
+            if (!Directory.Exists(scenariosPath))
+            {
+                ShowError(string.Format(NOT_FOUND_DIR, scenariosPath, "\"fileScenarioSource\" node"));
                 return;
             }
 
@@ -77,19 +82,36 @@ namespace SPAFilter.SPA.Components
             }
 
             var commandsRoot = dictionaryConfig.SelectSingleNode(@"/Dictionary/CommandsList/@Root")?.Value;
-            var isMask = dictionaryConfig.SelectSingleNode(@"/Dictionary/CommandsList/@Mask")?.Value;
+            var commandsMask = dictionaryConfig.SelectSingleNode(@"/Dictionary/CommandsList/@Mask")?.Value ?? "*.xml";
             if (commandsRoot == null)
             {
-                ShowError(string.Format(NOT_FOUND_ATTRIBUTE, "Root", dictionaryPath));
+                ShowError(string.Format(NOT_FOUND_ATTRIBUTE, "Root", $"dictionary=\"{dictionaryPath}\""));
                 return;
             }
             var commandsDir = GetDir(activatorDirPath, commandsRoot);
+            if (commandsDir == null)
+            {
+                ShowError(string.Format(NOT_FOUND_DIR, commandsRoot, $"dictionary=\"{dictionaryPath}\""));
+                return;
+            }
             if (commandsDir == activatorDirPath)
                 commandsDir = Path.Combine(commandsDir, commandsRoot);
             if (!Directory.Exists(commandsDir))
             {
-                ShowError(string.Format(NOT_FOUND_DIR, commandsDir, dictionaryPath));
+                ShowError(string.Format(NOT_FOUND_DIR, commandsDir, $"dictionary=\"{dictionaryPath}\""));
                 return;
+            }
+
+            int i = 0;
+            foreach (var fileScenario in SPAProcessFilter.GetConfigFiles(scenariosPath))
+            {
+                Scenarios.Add(new Scenario(fileScenario, ++i));
+            }
+
+            i = 0;
+            foreach (var fileCommand in SPAProcessFilter.GetConfigFiles(commandsDir, commandsMask))
+            {
+                Commands.Add(new Command(fileCommand, ++i));
             }
 
             IsCorrect = true;
