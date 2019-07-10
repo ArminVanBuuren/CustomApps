@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -10,126 +11,30 @@ using System.Xml;
 using OfficeOpenXml;
 using SPAFilter.SPA.Collection;
 using SPAFilter.SPA.Components;
+using SPAFilter.SPA.Components.ROBP;
 using SPAFilter.SPA.SC;
 using Utils;
 using Utils.WinForm.CustomProgressBar;
 
 namespace SPAFilter.SPA
 {
-    public enum SPAProcessFilterType
-    {
-        Processes = 0,
-        NetElements = 1,
-        ServiceCatalogOperations = 2,
-        Activators_Add = 4,
-        Activators_Remove = 8
-    }
-
-    
-
     public class SPAProcessFilter
     {
         public string ProcessPath { get; private set; }
-        public string NetElementsPath { get; private set; }
-        public XmlDocument ServiceCatalog { get; private set; }
-        public List<string> Activators { get; private set; } = new List<string>();
+        public string ROBPHostTypesPath { get; private set; }
+        public string SCPath { get; private set; }
 
-        public bool IsEnabledFilter => !ProcessPath.IsNullOrEmpty() && Directory.Exists(ProcessPath) && !NetElementsPath.IsNullOrEmpty() && Directory.Exists(NetElementsPath);
-        public bool CanGenerateSC => NetElements != null && NetElements?.Count > 0;
-        public int WholeItemsCount => Processes.Count + NetElements.Count + Scenarios.Count + Commands.Count;
+        public bool IsEnabledFilter => !ProcessPath.IsNullOrEmpty() && Directory.Exists(ProcessPath) && !ROBPHostTypesPath.IsNullOrEmpty() && Directory.Exists(ROBPHostTypesPath);
+        public bool CanGenerateSC => HostTypes != null && HostTypes?.Count > 0;
+        public int WholeItemsCount => Processes.Count + HostTypes.Count; //+ Scenarios.Count + Commands.Count;
 
         public CollectionBusinessProcess Processes { get; } = new CollectionBusinessProcess();
-        public CollectionNetworkElement NetElements { get; } = new CollectionNetworkElement();
-        public CollectionScenarios Scenarios { get; } = new CollectionScenarios();
-        public CollectionCommands Commands { get; } = new CollectionCommands();
+        public CollectionHostType HostTypes { get; } = new CollectionHostType();
+        public ServiceCatalog Catalog { get; private set; }
+        public CollectionServiceActivator ServiceActivators { get; } = new CollectionServiceActivator();
 
 
-        public bool Assign(string path, SPAProcessFilterType type)
-        {
-            var trimPath = path.Trim(' ');
-            switch (type)
-            {
-                case SPAProcessFilterType.Processes:
-                    ProcessPath = Directory.Exists(trimPath) ? trimPath : null;
-                    break;
-                case SPAProcessFilterType.NetElements:
-                    NetElementsPath = Directory.Exists(trimPath) ? trimPath : null;
-                    break;
-                case SPAProcessFilterType.ServiceCatalogOperations when File.Exists(trimPath):
-                    if (XML.IsFileXml(trimPath, out var documnet))
-                        ServiceCatalog = documnet;
-                    else
-                    {
-                        ServiceCatalog = null;
-                        
-                    }
-                    break;
-                case SPAProcessFilterType.Activators_Add when File.Exists(trimPath):
-                    Activators.Add(trimPath);
-                    break;
-                case SPAProcessFilterType.Activators_Remove:
-                    Activators.Remove(trimPath);
-                    break;
-                default: return false;
-            }
-            return true;
-        }
-
-        public static List<string> GetConfigFiles(string path)
-        {
-            var files = Directory.GetFiles(path, "*.xml", SearchOption.TopDirectoryOnly).ToList();
-            files.Sort(StringComparer.CurrentCulture);
-            return files;
-        }
-
-        public void PrintXML(CustomStringBuilder stringErrors, ProgressCalculationAsync progrAsync)
-        {
-            GetFiles(Processes, stringErrors, progrAsync);
-            GetFiles(NetElements.AllOperations, stringErrors, progrAsync);
-            GetFiles(Scenarios, stringErrors, progrAsync);
-            GetFiles(Commands, stringErrors, progrAsync);
-        }
-
-        static void GetFiles(IEnumerable<ObjectTemplate> fileObj, CustomStringBuilder stringErrors, ProgressCalculationAsync progressCalc)
-        {
-            if (fileObj == null || !fileObj.Any())
-                return;
-
-            foreach (var file in fileObj)
-            {
-                FormattingXML(file.FilePath, stringErrors);
-                progressCalc++;
-            }
-        }
-
-        static void FormattingXML(string filePath, CustomStringBuilder stringErrors)
-        {
-            try
-            {
-                var fileString = IO.SafeReadFile(filePath);
-                if (!fileString.IsXml(out var document))
-                    return;
-
-                var formatting = document.PrintXml();
-
-                var attempts = 0;
-                while (!IO.IsFileReady(filePath))
-                {
-                    System.Threading.Thread.Sleep(500);
-                    attempts++;
-                    if (attempts > 3)
-                        return;
-                }
-
-                IO.WriteFile(filePath, formatting, Encoding.UTF8);
-            }
-            catch (Exception e)
-            {
-                stringErrors.AppendLine($"Message=\"{e.Message}\" File=\"{filePath}]\"");
-            }
-        }
-
-        public void DataFilter(string filterProcess, string filterNE, string filterOp, ProgressCalculationAsync progressCalc)
+        public void DataFilter(string filterProcess, string filterHT, string filterOp, ProgressCalculationAsync progressCalc)
         {
             try
             {
@@ -137,9 +42,9 @@ namespace SPAFilter.SPA
                     throw new Exception("Filter is not enabled!");
 
                 Processes.Clear();
-                NetElements.Clear();
-                Scenarios.Clear();
-                Commands.Clear();
+                HostTypes.Clear();
+                //Scenarios.Clear();
+                //Commands.Clear();
                 var filteredSubScenarios = new List<Scenario>();
 
 
@@ -162,23 +67,23 @@ namespace SPAFilter.SPA
 
                 #endregion
 
-                AssignBP(ProcessPath, Processes, bpFilter);
+                FilterProcesses(bpFilter);
 
-                Func<NetworkElement, bool> neFilter = null;
+                Func<HostType, bool> htFilter = null;
                 Func<Operation, bool> opFilter = null;
 
-                #region filter NetworkElements and filter Operations
+                #region filter HostType and filter Operations
 
-                if (!filterNE.IsNullOrEmpty())
+                if (!filterHT.IsNullOrEmpty())
                 {
-                    if (filterNE[0] == '%' || filterNE[filterNE.Length - 1] == '%')
+                    if (filterHT[0] == '%' || filterHT[filterHT.Length - 1] == '%')
                     {
-                        var filterNELike = filterNE.Replace("%", "");
-                        neFilter = (ne) => ne.Name.IndexOf(filterNELike, StringComparison.CurrentCultureIgnoreCase) != -1;
+                        var filterNELike = filterHT.Replace("%", "");
+                        htFilter = (ht) => ht.Name.IndexOf(filterNELike, StringComparison.CurrentCultureIgnoreCase) != -1;
                     }
                     else
                     {
-                        neFilter = (ne) => ne.Name.Equals(filterNE, StringComparison.CurrentCultureIgnoreCase);
+                        htFilter = (ht) => ht.Name.Equals(filterHT, StringComparison.CurrentCultureIgnoreCase);
                     }
                 }
 
@@ -197,27 +102,21 @@ namespace SPAFilter.SPA
 
                 #endregion
 
-                AssignNE(NetElementsPath, NetElements, neFilter, opFilter);
+                FilterROBPOperations(htFilter, opFilter);
+                FilterSCOperations(htFilter, opFilter);
 
-                if (ServiceCatalog != null)
+                #region remove BusinessProcesses without exists Operations and without SCCall
+
+                var existsOperations = HostTypes.AllOperationsName;
+                foreach (var businessProcess in Processes)
                 {
-
-                }
-
-                #region remove BusinessProcesses without exists Operations
-
-                var endOfBpCollection = Processes.Count;
-                var existsOperations = NetElements.AllOperationsName;
-                for (int i = 0; i < endOfBpCollection; i++)
-                {
-                    var businessProcess = Processes[i];
-
                     bool hasMatch = businessProcess.Operations.Any(x => existsOperations.Any(y => x.Equals(y, StringComparison.CurrentCultureIgnoreCase)));
                     if (!hasMatch)
                     {
-                        Processes.Remove(businessProcess);
-                        i--;
-                        endOfBpCollection--;
+                        if (Catalog != null && Catalog.Count > 0 && businessProcess.HasCatalogCall)
+                            continue;
+
+                        businessProcess.IsFiltered = false;
                     }
                 }
 
@@ -323,56 +222,111 @@ namespace SPAFilter.SPA
         }
 
 
-        static void AssignBP(string processPath, CollectionBusinessProcess processes, Func<BusinessProcess, bool> bpFilter)
+        public async Task AssignProcessesAsync(string processPath)
         {
+            ProcessPath = processPath;
+            await Task.Factory.StartNew(() => FilterProcesses(null));
+        }
+
+        void FilterProcesses(Func<BusinessProcess, bool> bpFilter)
+        {
+            if (!Directory.Exists(ProcessPath))
+                throw new Exception($"Directory \"{ProcessPath}\" not found!");
+
+            Processes.Clear();
             var bpID = 0;
-            foreach (var file in GetConfigFiles(processPath))
+            foreach (var file in GetConfigFiles(ProcessPath))
             {
                 if (BusinessProcess.IsBusinessProcess(file, ++bpID, out var result) && (bpFilter == null || bpFilter.Invoke(result)))
-                {
-                    processes.Add(result);
-                }
+                    Processes.Add(result);
                 else
-                {
                     bpID--;
-                }
             }
         }
 
-        static void AssignNE(string netElementsPath, CollectionNetworkElement networkElements, Func<NetworkElement, bool> neFilter, Func<Operation, bool> opFilter)
+        public static List<string> GetConfigFiles(string path)
         {
-            var files = Directory.GetDirectories(netElementsPath).ToList();
+            var files = Directory.GetFiles(path, "*.xml", SearchOption.TopDirectoryOnly).ToList();
+            files.Sort(StringComparer.CurrentCulture);
+            return files;
+        }
+
+        public async Task AssignROBPOperationsAsync(string robpHostTypesPath)
+        {
+            ROBPHostTypesPath = robpHostTypesPath;
+            await Task.Factory.StartNew(() => FilterROBPOperations(null, null));
+        }
+
+        void FilterROBPOperations(Func<HostType, bool> htFilter, Func<Operation, bool> opFilter)
+        {
+            if (!Directory.Exists(ROBPHostTypesPath))
+                throw new Exception($"Directory \"{ROBPHostTypesPath}\" not found!");
+
+            HostTypes.Clear();
+            var files = Directory.GetDirectories(ROBPHostTypesPath).ToList();
             files.Sort(StringComparer.CurrentCulture);
             var neID = 0;
             foreach (var neDirPath in files)
             {
-                var ne = new NetworkElement(neDirPath, ++neID);
-                if (neFilter != null && !neFilter.Invoke(ne))
-                {
-                    neID--;
-                    continue;
-                }
-
-                if (opFilter != null)
-                {
-                    var ops = new List<Operation>();
-                    foreach (var op in ne.Operations)
-                    {
-                        if (opFilter.Invoke(op))
-                            ops.Add(op);
-                    }
-
-                    if (ops.Count <= 0)
-                    {
-                        neID--;
-                        continue;
-                    }
-
-                    ne = new NetworkElement(neDirPath, neID, ops);
-                }
-
-                networkElements.Add(ne);
+                var robpHt = new ROBPHostType(neDirPath, ++neID);
+                FilterOperations(robpHt, htFilter, opFilter);
+                HostTypes.Add(robpHt);
             }
+        }
+
+        public async Task AssignSCOperationsAsync(string filePath)
+        {
+            SCPath = filePath;
+            await Task.Factory.StartNew(() => FilterSCOperations(null, null));
+        }
+
+        void FilterSCOperations(Func<HostType, bool> neFilter, Func<Operation, bool> opFilter)
+        {
+            if (!File.Exists(SCPath))
+                throw new Exception($"File \"{SCPath}\" not found!");
+
+            Catalog = new ServiceCatalog(SCPath);
+            if (Catalog.Count == 0)
+                return;
+
+            foreach (var ht in Catalog)
+            {
+                FilterOperations(ht, neFilter, opFilter);
+            }
+        }
+
+        static void FilterOperations(HostType hostType, Func<HostType, bool> neFilter, Func<Operation, bool> opFilter)
+        {
+            if (neFilter != null && !neFilter.Invoke(hostType))
+            {
+                foreach (var op in hostType.Operations)
+                {
+                    op.IsFiltered = false;
+                }
+            }
+            else if (opFilter != null)
+            {
+                foreach (var op in hostType.Operations)
+                {
+                    if (!opFilter.Invoke(op))
+                    {
+                        op.IsFiltered = false;
+                    }
+                }
+            }
+        }
+
+        public async Task AssignActivatorAsync(string filePath)
+        {
+            if (!File.Exists(filePath))
+                throw new Exception($"File \"{filePath}\" not found!");
+
+            await Task.Factory.StartNew(() => ServiceActivators.Add(filePath));
+        }
+
+        public async Task RemoveActivatorAsync(List<string> filePath)
+        {
+            await Task.Factory.StartNew(() => ServiceActivators.Remove(filePath));
         }
 
 
@@ -433,13 +387,60 @@ namespace SPAFilter.SPA
         {
             try
             {
-                var sc = new ServiceCatalogBuilder(NetElements, rdServices, progressCalc);
+                var sc = new ServiceCatalogBuilder(HostTypes, rdServices, progressCalc);
                 return sc.Save(exportFilePath);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return null;
+            }
+        }
+
+        public void PrintXML(CustomStringBuilder stringErrors, ProgressCalculationAsync progrAsync)
+        {
+            GetFiles(Processes, stringErrors, progrAsync);
+            GetFiles(HostTypes.AllOperations, stringErrors, progrAsync);
+            //GetFiles(Scenarios, stringErrors, progrAsync);
+            //GetFiles(Commands, stringErrors, progrAsync);
+        }
+
+        static void GetFiles(IEnumerable<ObjectTemplate> fileObj, CustomStringBuilder stringErrors, ProgressCalculationAsync progressCalc)
+        {
+            if (fileObj == null || !fileObj.Any())
+                return;
+
+            foreach (var file in fileObj)
+            {
+                FormattingXML(file.FilePath, stringErrors);
+                progressCalc++;
+            }
+        }
+
+        static void FormattingXML(string filePath, CustomStringBuilder stringErrors)
+        {
+            try
+            {
+                var fileString = IO.SafeReadFile(filePath);
+                if (!fileString.IsXml(out var document))
+                    return;
+
+                var formatting = document.PrintXml();
+
+                var attempts = 0;
+                while (!IO.IsFileReady(filePath))
+                {
+                    System.Threading.Thread.Sleep(500);
+                    attempts++;
+                    if (attempts > 3)
+                        return;
+                }
+
+                IO.WriteFile(filePath, formatting, Encoding.UTF8);
+            }
+            catch (Exception e)
+            {
+                stringErrors.AppendLine($"Message=\"{e.Message}\" File=\"{filePath}]\"");
             }
         }
     }

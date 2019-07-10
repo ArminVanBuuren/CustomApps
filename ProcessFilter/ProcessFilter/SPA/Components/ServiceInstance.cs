@@ -1,0 +1,108 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Xml;
+using System.Xml.XPath;
+using SPAFilter.SPA.Collection;
+using Utils;
+using Utils.WinForm.DataGridViewHelper;
+
+namespace SPAFilter.SPA.Components
+{
+    public class ServiceInstance : ObjectTemplate
+    {
+        const string NOT_FOUND_ATTRIBUTE = "Not found attributes: \"{0}\" in {1}";
+        const string NOT_FOUND_DIR = "Not found directory in path: \"{0}\" when initialize {1}";
+        const string NOT_FOUND_FILE = "Not found file in path: \"{0}\" when initialize {1}";
+        const string INVALID_XML = "Invalid xml file \"{0}\"";
+
+        [DGVColumn(ColumnPosition.Before, "HardwareID")]
+        public string HardwareID { get; private set; }
+        public override string Name { get; protected set; }
+
+        public CollectionScenarios Scenarios { get; } = new CollectionScenarios();
+        public CollectionCommands Commands { get; } = new CollectionCommands();
+        public bool IsCorrect { get; } = false;
+
+        public ServiceInstance(string filePath, XmlNode node) :base(filePath)
+        {
+            var activatorDirPath = Path.GetDirectoryName(filePath);
+            var serviceInstanceNode = node;
+
+            HardwareID = serviceInstanceNode.Attributes?["hardwareID"]?.Value;
+            if (HardwareID == null)
+            {
+                ShowError(string.Format(NOT_FOUND_ATTRIBUTE, "hardwareID", "serviceInstance node"));
+                return;
+            }
+
+            var scenarioConfigNode = serviceInstanceNode.SelectSingleNode("//fileScenarioSource") ?? serviceInstanceNode.SelectSingleNode("//config");
+            var scenariosPath = scenarioConfigNode?.Attributes?["dir"];
+            if (scenariosPath == null)
+            {
+                ShowError(string.Format(NOT_FOUND_ATTRIBUTE, "dir", "\"fileScenarioSource\" node"));
+                return;
+            }
+
+            var dict = serviceInstanceNode.SelectSingleNode("//context/object[@name='dictionary']/config");
+            var dictionary = dict?.Attributes?["path"].Value;
+            var dictionaryXML = dict?.Attributes?["xml"].Value;
+            if (dictionary == null || dictionaryXML == null)
+            {
+                ShowError(string.Format(NOT_FOUND_ATTRIBUTE, "path or xml", "object-\"dictionary\" node"));
+                return;
+            }
+            var dictionaryPath = GetDir(activatorDirPath, dictionary);
+            if (dictionaryPath == null)
+            {
+                ShowError(string.Format(NOT_FOUND_DIR, dictionary, "object-\"dictionary\" node"));
+                return;
+            }
+            dictionaryPath = Path.Combine(dictionaryPath, dictionaryXML);
+            if (!File.Exists(dictionaryPath))
+            {
+                ShowError(string.Format(NOT_FOUND_FILE, dictionaryPath, "object-\"dictionary\" node"));
+                return;
+            }
+
+            if (!XML.IsFileXml(dictionaryPath, out var dictionaryConfig))
+            {
+                ShowError(string.Format(INVALID_XML, dictionaryPath));
+                return;
+            }
+
+            var commandsRoot = dictionaryConfig.SelectSingleNode(@"/Dictionary/CommandsList/@Root")?.Value;
+            var isMask = dictionaryConfig.SelectSingleNode(@"/Dictionary/CommandsList/@Mask")?.Value;
+            if (commandsRoot == null)
+            {
+                ShowError(string.Format(NOT_FOUND_ATTRIBUTE, "Root", dictionaryPath));
+                return;
+            }
+            var commandsDir = GetDir(activatorDirPath, commandsRoot);
+            if (commandsDir == activatorDirPath)
+                commandsDir = Path.Combine(commandsDir, commandsRoot);
+            if (!Directory.Exists(commandsDir))
+            {
+                ShowError(string.Format(NOT_FOUND_DIR, commandsDir, dictionaryPath));
+                return;
+            }
+
+            IsCorrect = true;
+        }
+
+        static string GetDir(string basePath, string rootPath)
+        {
+            return Path.IsPathRooted(rootPath) ? rootPath : IO.EvaluateRelativePath(rootPath, basePath);
+        }
+
+        static void ShowError(string message)
+        {
+            MessageBox.Show(message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    }
+}

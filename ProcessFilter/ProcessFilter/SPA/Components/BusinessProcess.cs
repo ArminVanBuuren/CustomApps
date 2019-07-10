@@ -8,8 +8,9 @@ namespace SPAFilter.SPA.Components
     public sealed class BusinessProcess : ObjectTemplate
     {
         internal List<string> Operations { get; }
+        public bool HasCatalogCall { get; }
 
-        BusinessProcess(string filePath, int id, List<string> operations) : base(filePath, id)
+        BusinessProcess(string filePath, int id, List<string> operations, bool hasCatalogCall) : base(filePath, id)
         {
             if (GetNameWithId(Name, out var newName, out var newId))
             {
@@ -41,7 +42,23 @@ namespace SPAFilter.SPA.Components
             if (operations.Count <= 0)
                 return false;
 
-            bpResult = new BusinessProcess(filePath, id, operations);
+            var navigator = document.CreateNavigator();
+            bool hasCatalogCall = false;
+            var isExistscObject = XPATH.Execute(navigator, @"/BusinessProcessData/businessprocess/scenario/objectlist/object[@class='FORIS.ServiceProvisioning.BPM.SCProcessingUnit']/@name".ToLower());
+            if (isExistscObject != null)
+            {
+                foreach (var obj in isExistscObject)
+                {
+                    var res = XPATH.Execute(navigator, $"/BusinessProcessData/businessprocess/scenario/automat/node[@object='{obj.Value}']".ToLower());
+                    if (res == null || res.Count <= 0)
+                        continue;
+
+                    hasCatalogCall = true;
+                    break;
+                }
+            }
+
+            bpResult = new BusinessProcess(filePath, id, operations, hasCatalogCall);
             return true;
         }
     }

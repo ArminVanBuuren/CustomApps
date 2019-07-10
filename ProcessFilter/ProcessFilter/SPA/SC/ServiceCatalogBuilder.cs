@@ -12,21 +12,21 @@ namespace SPAFilter.SPA.SC
     {
         public string Configuration { get; }
 
-        public ServiceCatalogBuilder(CollectionNetworkElement networkElements, DataTable servicesRD, CustomProgressCalculation progressCalc)
+        public ServiceCatalogBuilder(CollectionHostType robpHostTypes, DataTable servicesRD, CustomProgressCalculation progressCalc)
         {
             progressCalc.AddBootPercent(3);
 
             var cfsList = new CatalogComponents(servicesRD);
 
-            foreach (var netElement in networkElements)
+            foreach (var hostType in robpHostTypes)
             {
-                foreach (var neOP in netElement.Operations)
+                foreach (var neOP in hostType.Operations)
                 {
                     if (!File.Exists(neOP.FilePath))
                         continue;
 
                     var document = XML.LoadXml(neOP.FilePath);
-                    cfsList.Add(neOP.Name, document, neOP.NetworkElement);
+                    cfsList.Add(neOP.Name, document, neOP.HostTypeName);
 
                     progressCalc.Append();
                 }
@@ -37,7 +37,7 @@ namespace SPAFilter.SPA.SC
             var scConfig = new StringBuilder();
             scConfig.Append("<Configuration markers=\"*\" scenarioPrefix=\"SC.\" mainIdentities=\"MSISDN,PersonalAccountNumber,ContractNumber\" SICreation=\"\" formatVersion=\"1\">");
             scConfig.Append("<HostTypeList>");
-            foreach (var netElem in networkElements.AllNetworkElements)
+            foreach (var netElem in robpHostTypes.AllHostTypes)
             {
                 scConfig.Append("<HostType name=\"");
                 scConfig.Append(netElem);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 using Utils.WinForm.DataGridViewHelper;
 using Utils;
 
@@ -11,7 +12,7 @@ namespace SPAFilter.SPA
         private readonly FileInfo _fileInfo;
 
         [DGVColumn(ColumnPosition.First, "ID")]
-        public int ID { get; protected set; }
+        public int ID { get; set; }
 
         [DGVColumn(ColumnPosition.After, "Name")]
         public virtual string Name { get; protected set; }
@@ -31,12 +32,17 @@ namespace SPAFilter.SPA
         [DGVColumn(ColumnPosition.Last, "File Path")]
         public virtual string FilePath { get; }
 
-        protected ObjectTemplate(string path, int id)
+        /// <summary>
+        /// Если попал под фильтер, значит высвечиваем
+        /// </summary>
+        public bool IsFiltered { get; internal set; } = true;
+
+        protected ObjectTemplate(string filePath, int id = 0)
         {
             ID = id;
-            Name = path.GetLastNameInPath(true);
-            FilePath = path;
-            _fileInfo = new FileInfo(path);
+            Name = IO.GetLastNameInPath(filePath, true);
+            FilePath = filePath;
+            _fileInfo = new FileInfo(filePath);
         }
 
         protected ObjectTemplate(int id)
@@ -51,8 +57,8 @@ namespace SPAFilter.SPA
 
         internal static bool GetNameWithId(string fileName, out string newFileName, out int newId)
         {
-            Match match = Regex.Match(fileName, @"(.+)\.\(\s*(\d+)\s*\)");
-            if (match.Success && int.TryParse(match.Groups[2].Value, out int res))
+            var match = Regex.Match(fileName, @"(.+)\.\(\s*(\d+)\s*\)");
+            if (match.Success && int.TryParse(match.Groups[2].Value, out var res))
             {
                 newFileName = match.Groups[1].Value;
                 newId = res;

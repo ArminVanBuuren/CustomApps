@@ -4,16 +4,16 @@ using SPAFilter.SPA.Components;
 
 namespace SPAFilter.SPA.Collection
 {
-    public class CollectionNetworkElement : List<NetworkElement>
+    public class CollectionHostType : List<HostType>
     {
-        public List<string> AllNetworkElements => this.Where(x => x.Operations.Count > 0).Select(p => p.Name).ToList();
+        public List<string> AllHostTypes => this.Where(x => x.Operations.Count > 0).Select(p => p.Name).ToList();
 
         public List<string> AllOperationsName
         {
             get
             {
                 var allOps = new List<string>();
-                foreach (NetworkElement netEl in this)
+                foreach (HostType netEl in this)
                 {
                     allOps.AddRange(netEl.Operations.Select(p => p.Name));
                 }
@@ -26,7 +26,7 @@ namespace SPAFilter.SPA.Collection
             get
             {
                 var allOps = new List<Operation>();
-                foreach (NetworkElement netEl in this)
+                foreach (HostType netEl in this)
                 {
                     allOps.AddRange(netEl.Operations);
                 }
@@ -37,9 +37,9 @@ namespace SPAFilter.SPA.Collection
         //public void RefreshOperationsIDs()
         //{
         //    var i = 0;
-        //    foreach (var ne in this)
+        //    foreach (var ht in this)
         //    {
-        //        foreach (var op in ne.Operations)
+        //        foreach (var op in ht.Operations)
         //        {
         //            i++;
         //            op.ID = i;
@@ -47,10 +47,10 @@ namespace SPAFilter.SPA.Collection
         //    }
         //}
 
-        public CollectionNetworkElement Clone()
+        public CollectionHostType Clone()
         {
-            var currentClone = new CollectionNetworkElement();
-            foreach (NetworkElement netElement in this)
+            var currentClone = new CollectionHostType();
+            foreach (HostType netElement in this)
             {
                 currentClone.Add(netElement.Clone());
             }

@@ -30,7 +30,7 @@ namespace SPAFilter.SPA.Components
             Commands.Clear();
             SubScenarios.Clear();
 
-            ParceScenario allfinded = ParceXmlScenario(FilePath);
+            var allfinded = ParceXmlScenario(FilePath);
             if (allfinded == null)
                 return false;
 
@@ -67,8 +67,8 @@ namespace SPAFilter.SPA.Components
                 SubScenarios = EvaluateXPath(document, @"//parameterslist/param[@name='scenario']/@value")
             };
 
-            int i = -1;
-            string getParentDirectory = FilePath.GetParentDirectoryInPath();
+            var i = -1;
+            var getParentDirectory = IO.GetLastNameInPath(FilePath);
             for (var index = 0; index < prsCs.SubScenarios.Count; index++)
             {
                 string subScenario = prsCs.SubScenarios[index];
@@ -104,6 +104,7 @@ namespace SPAFilter.SPA.Components
         public static List<string> EvaluateXPath(XmlDocument document, string xpath)
         {
             var collection = new List<string>();
+
             var listByXpath = document.SelectNodes(xpath);
             if (listByXpath == null)
                 return collection;

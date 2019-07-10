@@ -69,17 +69,25 @@
     </Compile>
     <Compile Include="CustomProgressCalculation.cs" />
     <Compile Include="CustomStringBuilder.cs" />
+    <Compile Include="SPA\Collection\CollectionServiceActivator.cs" />
+    <Compile Include="SPA\Components\ServiceInstance.cs" />
     <Compile Include="SPA\Components\BusinessProcess.cs" />
     <Compile Include="SPA\Collection\CollectionCommands.cs" />
-    <Compile Include="SPA\Components\CatalogNetworkElement.cs" />
-    <Compile Include="SPA\Components\CatalogOperation.cs" />
-    <Compile Include="SPA\Components\Command.cs" />
-    <Compile Include="SPA\Components\NetworkElement.cs" />
-    <Compile Include="SPA\Collection\CollectionNetworkElement.cs" />
+    <Compile Include="SPA\Components\SC\CatalogHostType.cs" />
+    <Compile Include="SPA\Components\SC\CatalogOperation.cs" />
     <Compile Include="SPA\Components\Operation.cs" />
+    <Compile Include="SPA\Components\SC\RFSBindings.cs" />
+    <Compile Include="SPA\Components\Command.cs" />
+    <Compile Include="SPA\Components\HostType.cs" />
+    <Compile Include="SPA\Collection\CollectionHostType.cs" />
+    <Compile Include="SPA\Components\ROBP\ROBPHostType.cs" />
+    <Compile Include="SPA\Components\ROBP\ROBPOperation.cs" />
     <Compile Include="SPA\Collection\ServiceCatalog.cs" />
+    <Compile Include="SPA\Components\SC\RFSOperation.cs" />
+    <Compile Include="SPA\Components\SC\ScenarioOperation.cs" />
+    <Compile Include="SPA\Collection\DistinctList.cs" />
+    <Compile Include="SPA\Components\ServiceActivator.cs" />
     <Compile Include="SPA\ItemEqualityComparer.cs" />
-    <Compile Include="SPA\ObjectCollection.cs" />
     <Compile Include="SPA\ObjectTemplate.cs" />
     <Compile Include="SPA\Collection\CollectionScenarios.cs" />
     <Compile Include="SPAFilterForm.cs">
@@ -103,6 +111,7 @@
     <Compile Include="SPA\SC\RFSGroup.cs" />
     <Compile Include="SPA\SC\ServiceCatalogBuilder.cs" />
     <Compile Include="SPA\SPAProcessFilter.cs" />
+    <Compile Include="SPA\StoredObject.cs" />
     <EmbeddedResource Include="SPAFilterForm.resx">
       <DependentUpon>SPAFilterForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -134,6 +143,8 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="Resources\icons8-minus-20.png" />
+    <Content Include="Resources\icons8-plus-20.png" />
     <Content Include="Resources\icons8.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
