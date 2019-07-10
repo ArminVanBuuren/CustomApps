@@ -59,7 +59,7 @@ namespace SPAFilter.SPA.Collection
             ServiceInstances = GetServiceInstances();
             GetScenarios(GetServiceInstances(true), out var distinctScenarios, out var distinctCommands);
             Scenarios = distinctScenarios;
-            Commands = distinctCommands;
+            //Commands = distinctCommands; - на канает будут повторные имена комманд даже если в разных паапках
         }
 
         List<ServiceInstance> GetServiceInstances(bool getValid = false)
