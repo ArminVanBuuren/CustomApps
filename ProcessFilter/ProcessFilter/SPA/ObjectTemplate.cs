@@ -7,7 +7,7 @@ using Utils;
 
 namespace SPAFilter.SPA
 {
-    public abstract class ObjectTemplate
+    public abstract class ObjectTemplate : IComparable
     {
         private readonly FileInfo _fileInfo;
 
@@ -68,6 +68,41 @@ namespace SPAFilter.SPA
             newFileName = fileName;
             newId = -1;
             return false;
+        }
+
+        public int CompareTo(object obj)
+        {
+            if (obj == null)
+                return 1;
+
+            if (!(obj is ObjectTemplate objRes))
+                return 1;
+
+            if (ReferenceEquals(this, objRes))
+                return 0;
+
+            return Equals(objRes) ? 0 : 1;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is ObjectTemplate objRes))
+                return false;
+
+            if (objRes.FilePath != null && this.FilePath != null && objRes.FilePath.Equals(this.FilePath, StringComparison.CurrentCultureIgnoreCase))
+            {
+                return true;
+            }
+            else if (objRes.FilePath == null && this.FilePath == null)
+            {
+                
+            }
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return FilePath.ToLower().GetHashCode();
         }
     }
 }

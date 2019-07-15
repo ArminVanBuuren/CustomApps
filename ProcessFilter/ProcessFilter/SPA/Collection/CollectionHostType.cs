@@ -13,9 +13,9 @@ namespace SPAFilter.SPA.Collection
             get
             {
                 var allOps = new List<string>();
-                foreach (HostType netEl in this)
+                foreach (var hostType in this)
                 {
-                    allOps.AddRange(netEl.Operations.Select(p => p.Name));
+                    allOps.AddRange(hostType.Operations.Select(p => p.Name));
                 }
                 return allOps;
             }
@@ -26,9 +26,9 @@ namespace SPAFilter.SPA.Collection
             get
             {
                 var allOps = new List<Operation>();
-                foreach (HostType netEl in this)
+                foreach (var hostType in this)
                 {
-                    allOps.AddRange(netEl.Operations);
+                    allOps.AddRange(hostType.Operations);
                 }
                 return allOps;
             }
@@ -50,7 +50,7 @@ namespace SPAFilter.SPA.Collection
         public CollectionHostType Clone()
         {
             var currentClone = new CollectionHostType();
-            foreach (HostType netElement in this)
+            foreach (var netElement in this)
             {
                 currentClone.Add(netElement.Clone());
             }

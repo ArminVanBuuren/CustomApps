@@ -25,8 +25,8 @@ namespace SPAFilter.SPA.Components
         public string HardwareID { get; private set; }
         public override string Name { get; protected set; }
 
-        public CollectionScenarios Scenarios { get; } = new CollectionScenarios();
-        public CollectionCommands Commands { get; } = new CollectionCommands();
+        public List<Scenario> Scenarios { get; } = new List<Scenario>();
+        public Dictionary<string, Command> Commands { get; } = new Dictionary<string, Command>(StringComparer.CurrentCultureIgnoreCase);
         public bool IsCorrect { get; } = false;
 
         public ServiceInstance(string filePath, XmlNode node) :base(filePath)
@@ -103,15 +103,15 @@ namespace SPAFilter.SPA.Components
             }
 
             int i = 0;
-            foreach (var fileScenario in SPAProcessFilter.GetConfigFiles(scenariosPath))
+            foreach (var fileCommand in SPAProcessFilter.GetConfigFiles(commandsDir, commandsMask))
             {
-                Scenarios.Add(new Scenario(fileScenario, ++i));
+                Commands.Add(IO.GetLastNameInPath(fileCommand, true), new Command(fileCommand, ++i));
             }
 
             i = 0;
-            foreach (var fileCommand in SPAProcessFilter.GetConfigFiles(commandsDir, commandsMask))
+            foreach (var fileScenario in SPAProcessFilter.GetConfigFiles(scenariosPath))
             {
-                Commands.Add(new Command(fileCommand, ++i));
+                Scenarios.Add(new Scenario(fileScenario, ++i, Commands));
             }
 
             IsCorrect = true;

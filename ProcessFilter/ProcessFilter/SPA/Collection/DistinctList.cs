@@ -17,5 +17,12 @@ namespace SPAFilter.SPA.Collection
                 Add(item);
             }
         }
+
+        public DistinctList<T> Clone()
+        {
+            var clone = new DistinctList<T>();
+            clone.AddRange(this);
+            return clone;
+        }
     }
 }

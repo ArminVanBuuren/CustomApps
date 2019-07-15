@@ -48,9 +48,6 @@ namespace SPAFilter.SPA.SC
             scConfig.Append("</Configuration>");
 
             Configuration = XML.PrintXml(scConfig.ToString());
-
-            if (progressCalc.CurrentProgressIterator < progressCalc.TotalProgressIterator)
-                progressCalc.Append(progressCalc.TotalProgressIterator - progressCalc.CurrentProgressIterator);
         }
 
         public string Save(string exportDirectory)

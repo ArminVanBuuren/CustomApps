@@ -69,10 +69,9 @@
     </Compile>
     <Compile Include="CustomProgressCalculation.cs" />
     <Compile Include="CustomStringBuilder.cs" />
-    <Compile Include="SPA\Collection\CollectionServiceActivator.cs" />
+    <Compile Include="SPA\Collection\CollectionTemplate.cs" />
     <Compile Include="SPA\Components\ServiceInstance.cs" />
     <Compile Include="SPA\Components\BusinessProcess.cs" />
-    <Compile Include="SPA\Collection\CollectionCommands.cs" />
     <Compile Include="SPA\Components\SC\CatalogHostType.cs" />
     <Compile Include="SPA\Components\SC\CatalogOperation.cs" />
     <Compile Include="SPA\Components\Operation.cs" />
@@ -89,17 +88,16 @@
     <Compile Include="SPA\Components\ServiceActivator.cs" />
     <Compile Include="SPA\ItemEqualityComparer.cs" />
     <Compile Include="SPA\ObjectTemplate.cs" />
-    <Compile Include="SPA\Collection\CollectionScenarios.cs" />
     <Compile Include="SPAFilterForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SPAFilterForm.Designer.cs">
       <DependentUpon>SPAFilterForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SPA\Collection\CollectionBusinessProcess.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SPA\Components\Scenario.cs" />
+    <Compile Include="SPA\OperationsComparer.cs" />
     <Compile Include="SPA\SC\BindingServices.cs" />
     <Compile Include="SPA\SC\CatalogComponents.cs" />
     <Compile Include="SPA\SC\CFS.cs" />

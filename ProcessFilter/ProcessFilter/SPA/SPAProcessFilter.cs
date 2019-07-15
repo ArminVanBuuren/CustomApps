@@ -20,21 +20,23 @@ namespace SPAFilter.SPA
 {
     public class SPAProcessFilter
     {
+        readonly List<ServiceActivator> _activators = new List<ServiceActivator>();
+
         public string ProcessPath { get; private set; }
         public string ROBPHostTypesPath { get; private set; }
         public string SCPath { get; private set; }
 
-        public bool IsEnabledFilter => !ProcessPath.IsNullOrEmpty() && Directory.Exists(ProcessPath) && !ROBPHostTypesPath.IsNullOrEmpty() && Directory.Exists(ROBPHostTypesPath);
-        public bool CanGenerateSC => HostTypes != null && HostTypes?.Count > 0;
-        public int WholeItemsCount => Processes.Count + HostTypes.Count; //+ Scenarios.Count + Commands.Count;
+        public bool IsEnabledFilter => !ProcessPath.IsNullOrEmpty() && Directory.Exists(ProcessPath) && (Operations?.Count ?? 0) > 0;
+        public bool CanGenerateSC => Operations != null && Operations.Count > 0 && !(Operations is ServiceCatalog);
+        public int WholeItemsCount => Processes.Count + (Operations?.Count ?? 0) + (ServiceInstances?.Count ?? 0) + (Scenarios?.Count ?? 0) + (Commands?.Count ?? 0);
 
-        public CollectionBusinessProcess Processes { get; } = new CollectionBusinessProcess();
-        public CollectionHostType HostTypes { get; } = new CollectionHostType();
-        public ServiceCatalog Catalog { get; private set; }
-        public CollectionServiceActivator ServiceActivators { get; } = new CollectionServiceActivator();
+        public List<BusinessProcess> Processes { get; } = new List<BusinessProcess>();
+        public CollectionHostType Operations { get; private set; }
+        public List<ServiceInstance> ServiceInstances { get; private set; }
+        public List<Scenario> Scenarios { get; private set; }
+        public List<Command> Commands { get; private set; }
 
-
-        public void DataFilter(string filterProcess, string filterHT, string filterOp, ProgressCalculationAsync progressCalc)
+        public void DataFilter(string filterProcess, string filterHT, string filterOp, bool filterInROBP, ProgressCalculationAsync progressCalc)
         {
             try
             {
@@ -42,11 +44,6 @@ namespace SPAFilter.SPA
                     throw new Exception("Filter is not enabled!");
 
                 Processes.Clear();
-                HostTypes.Clear();
-                //Scenarios.Clear();
-                //Commands.Clear();
-                var filteredSubScenarios = new List<Scenario>();
-
 
                 Func<BusinessProcess, bool> bpFilter = null;
 
@@ -102,18 +99,21 @@ namespace SPAFilter.SPA
 
                 #endregion
 
-                FilterROBPOperations(htFilter, opFilter);
-                FilterSCOperations(htFilter, opFilter);
+                if(filterInROBP)
+                    FilterROBPOperations(htFilter, opFilter);
+                else
+                    FilterSCOperations(htFilter, opFilter);
 
                 #region remove BusinessProcesses without exists Operations and without SCCall
 
-                var existsOperations = HostTypes.AllOperationsName;
+                var isCatalog = Operations is ServiceCatalog;
+                var existsOperations = Operations.AllOperationsName;
                 foreach (var businessProcess in Processes)
                 {
                     bool hasMatch = businessProcess.Operations.Any(x => existsOperations.Any(y => x.Equals(y, StringComparison.CurrentCultureIgnoreCase)));
                     if (!hasMatch)
                     {
-                        if (Catalog != null && Catalog.Count > 0 && businessProcess.HasCatalogCall)
+                        if (isCatalog && Operations.Count > 0 && businessProcess.HasCatalogCall)
                             continue;
 
                         businessProcess.IsFiltered = false;
@@ -124,100 +124,31 @@ namespace SPAFilter.SPA
 
                 progressCalc.Append(2);
 
-                //Action<Operation> getScenario = null;
-                //if (Scenarios != null)
-                //{
-                //    getScenario = operation =>
-                //    {
-                //        var scenarios = Scenarios.Where(p => p.Name.Equals(operation.Name, StringComparison.CurrentCultureIgnoreCase)).ToList();
+                SIRefresh();
 
-                //        foreach (Scenario scenario in scenarios)
-                //        {
-                //            if (scenario.AddBodyCommands())
-                //            {
-                //                _filteredScenarioCollection.Add(scenario);
-                //                filteredSubScenarios.AddRange(scenario.SubScenarios);
-                //            }
-                //        }
-                //    };
-                //}
-
-                //int maxForCurrentIterator = progressCalc.TotalProgressIterator / 2;
-                //if (_filteredNetElemCollection != null && _filteredNetElemCollection.Count > 0)
-                //{
-                //    int progressIterator;
-
-                //    Action calcProgress;
-                //    if (_filteredNetElemCollection.Count > maxForCurrentIterator)
-                //    {
-                //        int numberOfIter = 0;
-                //        progressIterator = _filteredNetElemCollection.Count / maxForCurrentIterator;
-                //        calcProgress = () =>
-                //        {
-                //            numberOfIter++;
-                //            if (numberOfIter < progressIterator)
-                //                return;
-                //            progressCalc++;
-                //            numberOfIter = 0;
-                //        };
-                //    }
-                //    else
-                //    {
-                //        progressIterator = maxForCurrentIterator / _filteredNetElemCollection.Count;
-                //        calcProgress = () => progressCalc.Append(progressIterator);
-                //    }
-
-                //    foreach (var netElem in _filteredNetElemCollection)
-                //    {
-                //        int endOfOpCollection = netElem.Operations.Count;
-                //        for (int i = 0; i < endOfOpCollection; i++)
-                //        {
-                //            bool hasMatch = _filteredProcessCollection.Any(x => x.Operations.Any(y => netElem.Operations[i].Name.Equals(y, StringComparison.CurrentCultureIgnoreCase)));
-
-                //            if (hasMatch)
-                //            {
-                //                getScenario?.Invoke(netElem.Operations[i]);
-                //                continue;
-                //            }
-
-                //            netElem.Operations.Remove(netElem.Operations[i]);
-                //            i--;
-                //            endOfOpCollection--;
-                //        }
-
-                //        calcProgress.Invoke();
-                //    }
-                //}
-                //else
-                //{
-                //    progressCalc.Append(maxForCurrentIterator);
-                //}
-
-
-
-                //if (Commands != null && _filteredScenarioCollection.Count > 0)
-                //{
-                //    foreach (Command command in Commands)
-                //    {
-                //        bool hasValue = _filteredScenarioCollection.Any(x => x.Commands.Any(y => y.Equals(command.Name, StringComparison.CurrentCultureIgnoreCase)));
-                //        if (hasValue)
-                //        {
-                //            _filteredCMMCollection.Add(command);
-                //        }
-                //    }
-                //}
-
-
-                //progressCalc.Append(2);
-
-                //filteredSubScenarios = filteredSubScenarios.Distinct(new ItemEqualityComparer<Scenario>()).ToList();
-                //_filteredScenarioCollection.AddRange(filteredSubScenarios);
-
-
+                Scenarios = Scenarios.Intersect(Operations.AllOperations, new OperationsComparer()).Cast<Scenario>().ToList();
+                var filteredSubScenarios = new DistinctList<Scenario>();
+                var filteredCommands  = new DistinctList<Command>();
+                GetCommandsAndSubs(Scenarios, filteredSubScenarios, filteredCommands);
+                Scenarios.AddRange(filteredSubScenarios.OrderBy(p => p.FilePath));
+                Commands = filteredCommands.OrderBy(p => p.ID).ToList();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        static void GetCommandsAndSubs(IEnumerable<Scenario> scenarios, DistinctList<Scenario> subScenarios, DistinctList<Command> commandsResult)
+        {
+            foreach (var scenario in scenarios)
+            {
+                if (scenario.SubScenarios.Count > 0)
+                {
+                    subScenarios.AddRange(scenario.SubScenarios);
+                    GetCommandsAndSubs(scenario.SubScenarios, subScenarios, commandsResult);
+                }
+                commandsResult.AddRange(scenario.Commands);
             }
         }
 
@@ -262,7 +193,7 @@ namespace SPAFilter.SPA
             if (!Directory.Exists(ROBPHostTypesPath))
                 throw new Exception($"Directory \"{ROBPHostTypesPath}\" not found!");
 
-            HostTypes.Clear();
+            Operations = new CollectionHostType(); 
             var files = Directory.GetDirectories(ROBPHostTypesPath).ToList();
             files.Sort(StringComparer.CurrentCulture);
             var neID = 0;
@@ -270,7 +201,7 @@ namespace SPAFilter.SPA
             {
                 var robpHt = new ROBPHostType(neDirPath, ++neID);
                 FilterOperations(robpHt, htFilter, opFilter);
-                HostTypes.Add(robpHt);
+                Operations.Add(robpHt);
             }
         }
 
@@ -285,11 +216,11 @@ namespace SPAFilter.SPA
             if (!File.Exists(SCPath))
                 throw new Exception($"File \"{SCPath}\" not found!");
 
-            Catalog = new ServiceCatalog(SCPath);
-            if (Catalog.Count == 0)
+            Operations = new ServiceCatalog(SCPath);
+            if (Operations.Count == 0)
                 return;
 
-            foreach (var ht in Catalog)
+            foreach (var ht in Operations)
             {
                 FilterOperations(ht, neFilter, opFilter);
             }
@@ -321,14 +252,90 @@ namespace SPAFilter.SPA
             if (!File.Exists(filePath))
                 throw new Exception($"File \"{filePath}\" not found!");
 
-            await Task.Factory.StartNew(() => ServiceActivators.Add(filePath));
+            await Task.Factory.StartNew(() =>
+            {
+                if (_activators.Any(x => x.FilePath.Equals(filePath, StringComparison.CurrentCultureIgnoreCase)))
+                {
+                    MessageBox.Show($"Activator \"{filePath}\" already exist.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                _activators.Add(new ServiceActivator(filePath));
+
+                SIReinitialization();
+            });
         }
 
-        public async Task RemoveActivatorAsync(List<string> filePath)
+        public async Task RemoveActivatorAsync(List<string> filePathList)
         {
-            await Task.Factory.StartNew(() => ServiceActivators.Remove(filePath));
+            await Task.Factory.StartNew(() =>
+            {
+                foreach (var filePath in filePathList)
+                {
+                    for (var index = 0; index < _activators.Count; index++)
+                    {
+                        var activator = _activators[index];
+                        if (!activator.FilePath.Equals(filePath, StringComparison.CurrentCultureIgnoreCase))
+                            continue;
+
+                        _activators.Remove(activator);
+                        break;
+                    }
+                }
+
+                SIReinitialization();
+            });
         }
 
+        void SIRefresh()
+        {
+            foreach (var activator in _activators)
+            {
+                activator.Refresh();
+            }
+            SIReinitialization();
+        }
+
+        void SIReinitialization()
+        {
+            ServiceInstances = GetServiceInstances();
+            GetScenariosAndCommands(GetServiceInstances(true), out var allScenarios, out var allCommands);
+            Scenarios = allScenarios;
+            Commands = allCommands;
+        }
+
+        List<ServiceInstance> GetServiceInstances(bool getValid = false)
+        {
+            var intsances = new List<ServiceInstance>();
+            foreach (var activator in _activators)
+            {
+                foreach (var instance in activator.Instances)
+                {
+                    if (getValid && !instance.IsCorrect)
+                        continue;
+                    intsances.Add(instance);
+                }
+            }
+
+            return intsances;
+        }
+
+        static void GetScenariosAndCommands(IEnumerable<ServiceInstance> serviceInstances, out List<Scenario> distinctScenarios, out DistinctList<Command> distinctCommands)
+        {
+            var allScenarios = new DistinctList<Scenario>();
+            var allCommands = new DistinctList<Command>();
+            foreach (var instance in serviceInstances)
+            {
+                foreach (var scenario in instance.Scenarios)
+                {
+                    allScenarios.Add(scenario);
+                    allCommands.AddRange(scenario.Commands);
+                }
+            }
+
+            distinctScenarios = allScenarios;
+            distinctCommands = allCommands;
+        }
 
         private readonly string[] mandatoryXslxColumns = new string[] { "#", "SPA_SERVICE_CODE", "GLOBAL_SERVICE_CODE", "SERVICE_NAME", "SERVICE_FULL_NAME", "SERVICE_FULL_NAME2", "DESCRIPTION", "SERVICE_CODE", "SERVICE_NAME2", "EXTERNAL_CODE", "EXTERNAL_CODE2" };
 
@@ -387,7 +394,10 @@ namespace SPAFilter.SPA
         {
             try
             {
-                var sc = new ServiceCatalogBuilder(HostTypes, rdServices, progressCalc);
+                if (Operations is ServiceCatalog)
+                    throw new Exception("You can create Service Catalog only with ROBP operations.");
+
+                var sc = new ServiceCatalogBuilder(Operations, rdServices, progressCalc);
                 return sc.Save(exportFilePath);
             }
             catch (Exception ex)
@@ -395,14 +405,20 @@ namespace SPAFilter.SPA
                 MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return null;
             }
+            finally
+            {
+                if (progressCalc.CurrentProgressIterator < progressCalc.TotalProgressIterator)
+                    progressCalc.Append(progressCalc.TotalProgressIterator - progressCalc.CurrentProgressIterator);
+            }
         }
 
         public void PrintXML(CustomStringBuilder stringErrors, ProgressCalculationAsync progrAsync)
         {
             GetFiles(Processes, stringErrors, progrAsync);
-            GetFiles(HostTypes.AllOperations, stringErrors, progrAsync);
-            //GetFiles(Scenarios, stringErrors, progrAsync);
-            //GetFiles(Commands, stringErrors, progrAsync);
+            GetFiles(Operations.AllOperations, stringErrors, progrAsync);
+            GetFiles(ServiceInstances, stringErrors, progrAsync);
+            GetFiles(Scenarios, stringErrors, progrAsync);
+            GetFiles(Commands, stringErrors, progrAsync);
         }
 
         static void GetFiles(IEnumerable<ObjectTemplate> fileObj, CustomStringBuilder stringErrors, ProgressCalculationAsync progressCalc)

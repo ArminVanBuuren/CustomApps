@@ -19,6 +19,7 @@ namespace SPAFilter.SPA.Components
             }
 
             Operations = operations;
+            HasCatalogCall = hasCatalogCall;
         }
 
         public static bool IsBusinessProcess(string filePath, int id, out BusinessProcess bpResult)

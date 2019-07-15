@@ -161,7 +161,7 @@ namespace SPAFilter
             this.dataGridProcesses.Name = "dataGridProcesses";
             this.dataGridProcesses.ReadOnly = true;
             this.dataGridProcesses.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridProcesses.Size = new System.Drawing.Size(794, 262);
+            this.dataGridProcesses.Size = new System.Drawing.Size(794, 266);
             this.dataGridProcesses.TabIndex = 4;
             this.dataGridProcesses.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridProcessesResults_CellMouseDoubleClick);
             // 
@@ -234,9 +234,9 @@ namespace SPAFilter
             this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControl1.Controls.Add(this.ServiceInstances);
             this.tabControl1.Controls.Add(this.Processes);
             this.tabControl1.Controls.Add(this.Operations);
-            this.tabControl1.Controls.Add(this.ServiceInstances);
             this.tabControl1.Controls.Add(this.Scenarios);
             this.tabControl1.Controls.Add(this.Commands);
             this.tabControl1.Controls.Add(this.GenerateSC);
@@ -283,7 +283,7 @@ namespace SPAFilter
             this.dataGridOperations.Name = "dataGridOperations";
             this.dataGridOperations.ReadOnly = true;
             this.dataGridOperations.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridOperations.Size = new System.Drawing.Size(794, 262);
+            this.dataGridOperations.Size = new System.Drawing.Size(794, 266);
             this.dataGridOperations.TabIndex = 0;
             this.dataGridOperations.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridOperationsResult_CellDoubleClick);
             // 
@@ -375,7 +375,7 @@ namespace SPAFilter
             this.dataGridScenarios.Name = "dataGridScenarios";
             this.dataGridScenarios.ReadOnly = true;
             this.dataGridScenarios.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridScenarios.Size = new System.Drawing.Size(794, 262);
+            this.dataGridScenarios.Size = new System.Drawing.Size(794, 266);
             this.dataGridScenarios.TabIndex = 5;
             this.dataGridScenarios.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridScenariosResult_CellDoubleClick);
             // 
@@ -404,7 +404,7 @@ namespace SPAFilter
             this.dataGridCommands.Name = "dataGridCommands";
             this.dataGridCommands.ReadOnly = true;
             this.dataGridCommands.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridCommands.Size = new System.Drawing.Size(794, 438);
+            this.dataGridCommands.Size = new System.Drawing.Size(794, 266);
             this.dataGridCommands.TabIndex = 1;
             this.dataGridCommands.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridCommandsResult_CellMouseDoubleClick);
             // 
