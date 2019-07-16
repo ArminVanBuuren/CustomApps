@@ -13,31 +13,6 @@ namespace SPAFilter.SPA.Collection
 
         public List<string> OperationNames => this.SelectMany(x => x.Operations.Select(p => p.Name)).ToList();
 
-        //public List<string> OperationNames
-        //{
-        //    get
-        //    {
-        //        var allOps = new List<string>();
-        //        foreach (var hostType in this)
-        //        {
-        //            allOps.AddRange(hostType.Operations.Select(p => p.Name));
-        //        }
-        //        return allOps;
-        //    }
-        //}
-
         public CollectionTemplate<Operation> Operations => CollectionTemplate<Operation>.ToCollection(this.SelectMany(x => x.Operations).OrderBy(p => p.HostTypeName).ThenBy(p => p.Name));
-        //public List<Operation> Operations
-        //{
-        //    get
-        //    {
-        //        var allOps = new List<Operation>();
-        //        foreach (var hostType in this)
-        //        {
-        //            allOps.AddRange(hostType.Operations);
-        //        }
-        //        return allOps;
-        //    }
-        //}
     }
 }

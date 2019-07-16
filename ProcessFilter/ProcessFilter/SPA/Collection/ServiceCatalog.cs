@@ -12,14 +12,11 @@ namespace SPAFilter.SPA.Collection
     public class ServiceCatalog : CollectionHostType
     {
         public string Prefix { get; }
-        public List<RFSOperation> Operations { get; }
         public DuplicateDictionary<string, RFSOperation> AllRFS { get; }
         public List<ScenarioOperation> AllScenarios { get; }
 
         public ServiceCatalog(string filePath)
         {
-            Operations = new List<RFSOperation>();
-
             if (!XML.IsFileXml(filePath, out var document))
                 throw new Exception($"Incorrect xml file \"{filePath}\"!");
 

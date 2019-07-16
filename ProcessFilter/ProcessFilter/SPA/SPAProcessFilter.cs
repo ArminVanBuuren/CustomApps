@@ -1,5 +1,4 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -7,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml;
 using OfficeOpenXml;
 using SPAFilter.SPA.Collection;
 using SPAFilter.SPA.Components;
@@ -235,7 +233,7 @@ namespace SPAFilter.SPA
             }
         }
 
-        static void FilterOperations(HostType hostType, Func<HostType, bool> neFilter, Func<Operation, bool> opFilter, Dictionary<string, string> allBPOperations, bool AnyHasCatalogCall)
+        static void FilterOperations(HostType hostType, Func<HostType, bool> neFilter, Func<Operation, bool> opFilter, IReadOnlyDictionary<string, string> allBPOperations, bool AnyHasCatalogCall)
         {
             if (neFilter != null && !neFilter.Invoke(hostType))
             {
