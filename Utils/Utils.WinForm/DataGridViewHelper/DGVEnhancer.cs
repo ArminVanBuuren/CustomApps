@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 namespace Utils.WinForm.DataGridViewHelper
 {
+
     public enum ColumnPosition
     {
         First = 0,
@@ -18,13 +19,15 @@ namespace Utils.WinForm.DataGridViewHelper
 
     public class DGVColumnAttribute : Attribute
     {
-        public DGVColumnAttribute(ColumnPosition pos, string name)
+        public DGVColumnAttribute(ColumnPosition pos, string name, bool visible = true)
         {
             Position = pos;
             Name = name;
+            Visible = visible;
         }
 
         public ColumnPosition Position { get; }
+        public bool Visible { get; }
         public string Name { get; }
     }
 
@@ -119,7 +122,7 @@ namespace Utils.WinForm.DataGridViewHelper
                 }
             }
 
-            int i = 0;
+            var i = 0;
             var positionOfColumn = new Dictionary<string, KeyValuePair<int, DGVColumn>>(StringComparer.CurrentCultureIgnoreCase);
             foreach (DGVColumn column in sortedColumns)
             {
@@ -127,8 +130,8 @@ namespace Utils.WinForm.DataGridViewHelper
                 positionOfColumn.Add(column.PropertyName, new KeyValuePair<int, DGVColumn>(i++, column));
             }
 
-            int j = 0;
-            int columnsCount = positionOfColumn.Count;
+            var j = 0;
+            var columnsCount = positionOfColumn.Count;
             foreach (T instance in data)
             {
                 var tp = instance.GetType();
@@ -154,6 +157,15 @@ namespace Utils.WinForm.DataGridViewHelper
 
             grid.BeginInit();
             grid.DataSource = table;
+            foreach (DGVColumn column in sortedColumns)
+            {
+                if (column.Attribute.Visible)
+                    continue;
+
+                var hiddenColumn = grid.Columns[column.ColumnName];
+                if (hiddenColumn != null)
+                    hiddenColumn.Visible = false;
+            }
             grid.EndInit();
 
             if (cellPadding != null)
