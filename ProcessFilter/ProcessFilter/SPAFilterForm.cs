@@ -243,7 +243,7 @@ namespace SPAFilter
             ServiceCatalogTextBox.LostFocus += ServiceCatalogTextBox_LostFocus;
         }
 
-        private void DataGridServiceInstances_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        private static void DataGridServiceInstances_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             var row = ((DataGridView)sender).Rows[e.RowIndex];
             var cell = row.Cells["IsCorrect"];
@@ -257,15 +257,15 @@ namespace SPAFilter
             }
         }
 
-        private static void DataGrid_HideNotFiltered(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            //var row = ((DataGridView)sender).Rows[e.RowIndex];
-            //var dataRow = (row.DataBoundItem as DataRowView)?.Row;
-            //if (dataRow is ObjectTemplate template && !template.IsFiltered)
-            //{
-            //    row.Visible = false;
-            //}
-        }
+        //private static void DataGrid_HideNotFiltered(object sender, DataGridViewCellFormattingEventArgs e)
+        //{
+        //    var row = ((DataGridView)sender).Rows[e.RowIndex];
+        //    var dataRow = (row.DataBoundItem as DataRowView)?.Row;
+        //    if (dataRow is ObjectTemplate template && !template.IsFiltered)
+        //    {
+        //        row.Visible = false;
+        //    }
+        //}
 
         private void DataGridScenariosResult_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
@@ -393,7 +393,7 @@ namespace SPAFilter
 
         #endregion
 
-        private bool _ProcessesTextBoxChanged = false;
+        private bool _processesTextBoxChanged = false;
 
         private async void ProcessesButtonOpen_Click(object sender, EventArgs e)
         {
@@ -402,25 +402,25 @@ namespace SPAFilter
 
             ProcessesTextBox.Text = filePath;
             await AssignAsync(SPAProcessFilterType.Processes);
-            _ProcessesTextBoxChanged = false;
+            _processesTextBoxChanged = false;
         }
 
         private async void ProcessesTextBox_LostFocus(object sender, EventArgs e)
         {
-            if (!_ProcessesTextBoxChanged)
+            if (!_processesTextBoxChanged)
                 return;
 
             await AssignAsync(SPAProcessFilterType.Processes);
-            _ProcessesTextBoxChanged = false;
+            _processesTextBoxChanged = false;
         }
 
         private void ProcessesTextBox_TextChanged(object sender, EventArgs e)
         {
-            _ProcessesTextBoxChanged = true;
+            _processesTextBoxChanged = true;
         }
 
 
-        private bool _ROBPOperationTextBoxChanged = false;
+        private bool _robpOperationTextBoxChanged = false;
         private async void ROBPOperationButtonOpen_Click(object sender, EventArgs e)
         {
             if (!OpenFolder(_lastDirPath, out var filePath))
@@ -428,21 +428,21 @@ namespace SPAFilter
 
             ROBPOperationTextBox.Text = filePath;
             await AssignAsync(SPAProcessFilterType.ROBPOperations);
-            _ROBPOperationTextBoxChanged = false;
+            _robpOperationTextBoxChanged = false;
         }
 
         private async void ROBPOperationTextBox_LostFocus(object sender, EventArgs e)
         {
-            if (!_ROBPOperationTextBoxChanged)
+            if (!_robpOperationTextBoxChanged)
                 return;
 
             await AssignAsync(SPAProcessFilterType.ROBPOperations);
-            _ROBPOperationTextBoxChanged = false;
+            _robpOperationTextBoxChanged = false;
         }
 
         private void ROBPOperationTextBox_TextChanged(object sender, EventArgs e)
         {
-            _ROBPOperationTextBoxChanged = true;
+            _robpOperationTextBoxChanged = true;
         }
 
         private async void ROBPOperationsRadioButton_CheckedChanged(object sender, EventArgs e)
