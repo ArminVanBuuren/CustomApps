@@ -37,7 +37,7 @@ namespace SPAFilter.SPA.SC
             var scConfig = new StringBuilder();
             scConfig.Append("<Configuration markers=\"*\" scenarioPrefix=\"SC.\" mainIdentities=\"MSISDN,PersonalAccountNumber,ContractNumber\" SICreation=\"\" formatVersion=\"1\">");
             scConfig.Append("<HostTypeList>");
-            foreach (var netElem in robpHostTypes.AllHostTypes)
+            foreach (var netElem in robpHostTypes.HostTypeNames)
             {
                 scConfig.Append("<HostType name=\"");
                 scConfig.Append(netElem);

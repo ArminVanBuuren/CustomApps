@@ -2,27 +2,26 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using SPAFilter.SPA.Collection;
 
 namespace SPAFilter.SPA.Components
 {
     public class HostType : ObjectTemplate
     {
-        public List<Operation> Operations { get; private set; } = new List<Operation>();
+        public CollectionTemplate<Operation> Operations { get; private set; } = new CollectionTemplate<Operation>();
 
-        public HostType(string path, int id) : base(path, id)
-        {
+        public HostType() { }
 
-        }
-
-        public HostType(int id) : base(id)
+        public HostType(string path) : base(path)
         {
 
         }
 
         public HostType Clone()
         {
-            var cloneElement = MemberwiseClone() as HostType;
-            cloneElement.Operations = new List<Operation>();
+            if (!(MemberwiseClone() is HostType cloneElement))
+                return null;
+            cloneElement.Operations = new CollectionTemplate<Operation>();
             cloneElement.Operations.AddRange(Operations);
             return cloneElement;
         }

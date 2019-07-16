@@ -23,10 +23,15 @@ namespace SPAFilter.SPA.Components
 
         [DGVColumn(ColumnPosition.Before, "HardwareID")]
         public string HardwareID { get; private set; }
+
+        public string HostTypeName { get; }
+
         public override string Name { get; protected set; }
 
         public List<Scenario> Scenarios { get; } = new List<Scenario>();
         public Dictionary<string, Command> Commands { get; } = new Dictionary<string, Command>(StringComparer.CurrentCultureIgnoreCase);
+
+        [DGVColumn(ColumnPosition.Before, "IsCorrect", false)]
         public bool IsCorrect { get; } = false;
 
         public ServiceInstance(string filePath, XmlNode node) :base(filePath)
@@ -41,6 +46,8 @@ namespace SPAFilter.SPA.Components
                 return;
             }
 
+            HostTypeName = HardwareID.Split(':')[0];
+
             var scenarioConfigNode = serviceInstanceNode.SelectSingleNode("//fileScenarioSource") ?? serviceInstanceNode.SelectSingleNode("//config");
             var scenariosPath = scenarioConfigNode?.Attributes?["dir"].Value;
             if (scenariosPath == null)
@@ -54,7 +61,7 @@ namespace SPAFilter.SPA.Components
                 return;
             }
 
-            var dict = serviceInstanceNode.SelectSingleNode("//context/object[@name='dictionary']/config");
+            var dict = serviceInstanceNode.SelectSingleNode("//context/object[@name='dictionary']/config") ?? serviceInstanceNode.SelectSingleNode("//context/object[@name='dictionary']/fileDictionarySource");
             var dictionary = dict?.Attributes?["path"].Value;
             var dictionaryXML = dict?.Attributes?["xml"].Value;
             if (dictionary == null || dictionaryXML == null)
@@ -102,16 +109,14 @@ namespace SPAFilter.SPA.Components
                 return;
             }
 
-            int i = 0;
             foreach (var fileCommand in SPAProcessFilter.GetConfigFiles(commandsDir, commandsMask))
             {
-                Commands.Add(IO.GetLastNameInPath(fileCommand, true), new Command(fileCommand, ++i));
+                Commands.Add(IO.GetLastNameInPath(fileCommand, true), new Command(this, fileCommand));
             }
 
-            i = 0;
             foreach (var fileScenario in SPAProcessFilter.GetConfigFiles(scenariosPath))
             {
-                Scenarios.Add(new Scenario(fileScenario, ++i, Commands));
+                Scenarios.Add(new Scenario(this, fileScenario, Commands));
             }
 
             IsCorrect = true;

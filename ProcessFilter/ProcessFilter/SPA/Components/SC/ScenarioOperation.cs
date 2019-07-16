@@ -64,7 +64,7 @@ namespace SPAFilter.SPA.Components.SC
             }
         }
 
-        public ScenarioOperation(int id, XmlNode scenarioNode, XPathNavigator navigator, ServiceCatalog catalog) : base(id)
+        public ScenarioOperation(XmlNode scenarioNode, XPathNavigator navigator, ServiceCatalog catalog)
         {
             if (scenarioNode.Attributes == null || scenarioNode.Attributes.Count == 0)
                 throw new Exception("Invalid config. Scenario must have attributes.");

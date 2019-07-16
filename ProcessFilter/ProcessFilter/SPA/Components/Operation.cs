@@ -15,13 +15,9 @@ namespace SPAFilter.SPA.Components
         [DGVColumn(ColumnPosition.Before, "HostType")]
         public string HostTypeName { get; protected set; }
 
+        public Operation() { }
 
-        public Operation(string path, int id) : base(path, id)
-        {
-
-        }
-
-        public Operation(int id) : base(id)
+        public Operation(string path) : base(path)
         {
 
         }

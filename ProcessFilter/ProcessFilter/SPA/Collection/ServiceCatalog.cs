@@ -34,7 +34,6 @@ namespace SPAFilter.SPA.Collection
 
 
             var rfsList = XPATH.Execute(navigator, @"/Configuration/RFSList/RFS");
-            var rfsId = 0;
             foreach (var rfs in rfsList)
             {
                 if (rfs.Node.Attributes == null)
@@ -76,15 +75,14 @@ namespace SPAFilter.SPA.Collection
                     {
                         if (result.All(x => x.RFSAction != "Modify"))
                         {
-                            AllRFS.Add(isBase, new RFSOperation(rfsId, isBase, "Modify", hostType, navigator, this));
+                            AllRFS.Add(isBase, new RFSOperation(isBase, "Modify", hostType, navigator, this));
                         }
                     }
                     else
                     {
                         foreach (var flag in new[] { "Add", "Remove", "Modify" })
                         {
-                            rfsId++;
-                            AllRFS.Add(isBase, new RFSOperation(rfsId, isBase, flag, hostType, navigator, this));
+                            AllRFS.Add(isBase, new RFSOperation( isBase, flag, hostType, navigator, this));
                         }
                     }
 
@@ -97,8 +95,7 @@ namespace SPAFilter.SPA.Collection
                     {
                         foreach (var flag in new[] { "Add", "Remove" })
                         {
-                            rfsId++;
-                            AllRFS.Add(isParent, new RFSOperation(rfsId, isParent, flag, hostType, navigator, this));
+                            AllRFS.Add(isParent, new RFSOperation( isParent, flag, hostType, navigator, this));
                         }
                     }
 
@@ -107,8 +104,7 @@ namespace SPAFilter.SPA.Collection
 
                 foreach (var flag in new[] { "Add", "Remove" })
                 {
-                    rfsId++;
-                    AllRFS.Add(rfsName, new RFSOperation(rfsId, rfsName, flag, hostType, navigator, this));
+                    AllRFS.Add(rfsName, new RFSOperation( rfsName, flag, hostType, navigator, this));
                 }
             }
 
@@ -116,7 +112,7 @@ namespace SPAFilter.SPA.Collection
             var scenarioList = XPATH.Execute(navigator, @"/Configuration/ScenarioList/Scenario");
             foreach (var scenario in scenarioList)
             {
-                AllScenarios.Add(new ScenarioOperation(rfsId++, scenario.Node, navigator, this));
+                AllScenarios.Add(new ScenarioOperation(scenario.Node, navigator, this));
             }
 
             var filteredOperations = new List<Operation>();
@@ -132,11 +128,9 @@ namespace SPAFilter.SPA.Collection
             }
             filteredOperations.AddRange(AllScenarios);
 
-
-            var netId = 0;
             foreach (var hostTypeName in filteredOperations.Select(p => p.HostTypeName).Distinct())
             {
-                Add(new CatalogHostType(netId++, hostTypeName, filteredOperations));
+                Add(new CatalogHostType(hostTypeName, filteredOperations));
             }
         }
     }

@@ -8,7 +8,7 @@ namespace SPAFilter.SPA.Components.SC
         public override double FileSize { get; } = 0;
         public override string FilePath { get; } = null;
 
-        public CatalogHostType(int id, string name, IEnumerable<Operation> allCatalogOps) : base(id)
+        public CatalogHostType(string name, IEnumerable<Operation> allCatalogOps)
         {
             Name = name;
 

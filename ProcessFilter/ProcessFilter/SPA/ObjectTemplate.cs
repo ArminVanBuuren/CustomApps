@@ -12,7 +12,7 @@ namespace SPAFilter.SPA
         private readonly FileInfo _fileInfo;
 
         [DGVColumn(ColumnPosition.First, "ID")]
-        public int ID { get; set; }
+        public int ID { get; internal set; } = 0;
 
         [DGVColumn(ColumnPosition.After, "Name")]
         public virtual string Name { get; protected set; }
@@ -32,22 +32,13 @@ namespace SPAFilter.SPA
         [DGVColumn(ColumnPosition.Last, "File Path")]
         public virtual string FilePath { get; }
 
-        /// <summary>
-        /// Если попал под фильтер, значит высвечиваем
-        /// </summary>
-        public bool IsFiltered { get; internal set; } = true;
+        protected ObjectTemplate() { }
 
-        protected ObjectTemplate(string filePath, int id = 0)
+        protected ObjectTemplate(string filePath)
         {
-            ID = id;
             Name = IO.GetLastNameInPath(filePath, true);
             FilePath = filePath;
             _fileInfo = new FileInfo(filePath);
-        }
-
-        protected ObjectTemplate(int id)
-        {
-            ID = id;
         }
 
         public override string ToString()
@@ -92,10 +83,6 @@ namespace SPAFilter.SPA
             if (objRes.FilePath != null && this.FilePath != null && objRes.FilePath.Equals(this.FilePath, StringComparison.CurrentCultureIgnoreCase))
             {
                 return true;
-            }
-            else if (objRes.FilePath == null && this.FilePath == null)
-            {
-                
             }
             return base.Equals(obj);
         }

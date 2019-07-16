@@ -1,60 +1,43 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 using SPAFilter.SPA.Components;
 
 namespace SPAFilter.SPA.Collection
 {
-    public class CollectionHostType : List<HostType>
+    public class CollectionHostType : CollectionTemplate<HostType>
     {
-        public List<string> AllHostTypes => this.Where(x => x.Operations.Count > 0).Select(p => p.Name).ToList();
+        public List<string> HostTypeNames => this.Where(x => x.Operations.Count > 0).Select(p => p.Name).ToList();
 
-        public List<string> AllOperationsName
-        {
-            get
-            {
-                var allOps = new List<string>();
-                foreach (var hostType in this)
-                {
-                    allOps.AddRange(hostType.Operations.Select(p => p.Name));
-                }
-                return allOps;
-            }
-        }
+        public int OperationsCount => this.Sum(x => x.Operations.Count);
 
-        public List<Operation> AllOperations
-        {
-            get
-            {
-                var allOps = new List<Operation>();
-                foreach (var hostType in this)
-                {
-                    allOps.AddRange(hostType.Operations);
-                }
-                return allOps;
-            }
-        }
+        public List<string> OperationNames => this.SelectMany(x => x.Operations.Select(p => p.Name)).ToList();
 
-        //public void RefreshOperationsIDs()
+        //public List<string> OperationNames
         //{
-        //    var i = 0;
-        //    foreach (var ht in this)
+        //    get
         //    {
-        //        foreach (var op in ht.Operations)
+        //        var allOps = new List<string>();
+        //        foreach (var hostType in this)
         //        {
-        //            i++;
-        //            op.ID = i;
+        //            allOps.AddRange(hostType.Operations.Select(p => p.Name));
         //        }
+        //        return allOps;
         //    }
         //}
 
-        public CollectionHostType Clone()
-        {
-            var currentClone = new CollectionHostType();
-            foreach (var netElement in this)
-            {
-                currentClone.Add(netElement.Clone());
-            }
-            return currentClone;
-        }
+        public CollectionTemplate<Operation> Operations => CollectionTemplate<Operation>.ToCollection(this.SelectMany(x => x.Operations).OrderBy(p => p.HostTypeName).ThenBy(p => p.Name));
+        //public List<Operation> Operations
+        //{
+        //    get
+        //    {
+        //        var allOps = new List<Operation>();
+        //        foreach (var hostType in this)
+        //        {
+        //            allOps.AddRange(hostType.Operations);
+        //        }
+        //        return allOps;
+        //    }
+        //}
     }
 }

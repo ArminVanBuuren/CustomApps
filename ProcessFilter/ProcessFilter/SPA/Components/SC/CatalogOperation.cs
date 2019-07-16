@@ -13,10 +13,7 @@ namespace SPAFilter.SPA.Components.SC
         public override double FileSize { get; } = 0;
         public override string FilePath { get; } = null;
 
-        public CatalogOperation(int id) : base(id)
-        {
-
-        }
+        public CatalogOperation() { }
 
         internal static void AppendXmlNode(StringBuilder builder, string parentNodeName, IEnumerable<XmlNode> collection)
         {

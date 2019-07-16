@@ -26,15 +26,16 @@ namespace SPAFilter.SPA
         public string ROBPHostTypesPath { get; private set; }
         public string SCPath { get; private set; }
 
-        public bool IsEnabledFilter => !ProcessPath.IsNullOrEmpty() && Directory.Exists(ProcessPath) && (Operations?.Count ?? 0) > 0;
-        public bool CanGenerateSC => Operations != null && Operations.Count > 0 && !(Operations is ServiceCatalog);
-        public int WholeItemsCount => Processes.Count + (Operations?.Count ?? 0) + (ServiceInstances?.Count ?? 0) + (Scenarios?.Count ?? 0) + (Commands?.Count ?? 0);
+        public bool IsEnabledFilter => (Processes?.Count ?? 0) > 0 && (HostTypes?.OperationsCount ?? 0) > 0;
+        public bool CanGenerateSC => (HostTypes?.OperationsCount ?? 0) > 0 && !(HostTypes is ServiceCatalog);
+        public int WholeItemsCount => (Processes?.Count ?? 0) + (HostTypes?.OperationsCount ?? 0) + (ServiceInstances?.Count ?? 0) + (Scenarios?.Count ?? 0) + (Commands?.Count ?? 0);
 
-        public List<BusinessProcess> Processes { get; } = new List<BusinessProcess>();
-        public CollectionHostType Operations { get; private set; }
-        public List<ServiceInstance> ServiceInstances { get; private set; }
-        public List<Scenario> Scenarios { get; private set; }
-        public List<Command> Commands { get; private set; }
+        public CollectionTemplate<ServiceInstance> ServiceInstances { get; private set; }
+
+        public CollectionBusinessProcess Processes { get; private set; }
+        public CollectionHostType HostTypes { get; private set; }
+        public CollectionTemplate<Scenario> Scenarios { get; private set; }
+        public CollectionTemplate<Command> Commands { get; private set; }
 
         public void DataFilter(string filterProcess, string filterHT, string filterOp, bool filterInROBP, ProgressCalculationAsync progressCalc)
         {
@@ -42,8 +43,6 @@ namespace SPAFilter.SPA
             {
                 if(!IsEnabledFilter)
                     throw new Exception("Filter is not enabled!");
-
-                Processes.Clear();
 
                 Func<BusinessProcess, bool> bpFilter = null;
 
@@ -65,6 +64,8 @@ namespace SPAFilter.SPA
                 #endregion
 
                 FilterProcesses(bpFilter);
+
+                progressCalc.Append(2);
 
                 Func<HostType, bool> htFilter = null;
                 Func<Operation, bool> opFilter = null;
@@ -99,24 +100,26 @@ namespace SPAFilter.SPA
 
                 #endregion
 
-                if(filterInROBP)
+                if (filterInROBP)
                     FilterROBPOperations(htFilter, opFilter);
                 else
                     FilterSCOperations(htFilter, opFilter);
 
                 #region remove BusinessProcesses without exists Operations and without SCCall
 
-                var isCatalog = Operations is ServiceCatalog;
-                var existsOperations = Operations.AllOperationsName;
-                foreach (var businessProcess in Processes)
+                var isCatalog = HostTypes is ServiceCatalog;
+                var existsOperations = HostTypes.OperationNames;
+                for (var index = 0; index < Processes.Count; index++)
                 {
-                    bool hasMatch = businessProcess.Operations.Any(x => existsOperations.Any(y => x.Equals(y, StringComparison.CurrentCultureIgnoreCase)));
+                    var businessProcess = Processes[index];
+                    var hasMatch = businessProcess.Operations.Any(x => existsOperations.Any(y => x.Equals(y, StringComparison.CurrentCultureIgnoreCase)));
                     if (!hasMatch)
                     {
-                        if (isCatalog && Operations.Count > 0 && businessProcess.HasCatalogCall)
+                        if (isCatalog && HostTypes.Count > 0 && businessProcess.HasCatalogCall)
                             continue;
 
-                        businessProcess.IsFiltered = false;
+                        Processes.Remove(businessProcess);
+                        index--;
                     }
                 }
 
@@ -126,12 +129,18 @@ namespace SPAFilter.SPA
 
                 SIRefresh();
 
-                Scenarios = Scenarios.Intersect(Operations.AllOperations, new OperationsComparer()).Cast<Scenario>().ToList();
+                Scenarios = CollectionTemplate<Scenario>.ToCollection(Scenarios.Intersect(HostTypes.Operations, new OperationsComparer()).Cast<Scenario>().OrderBy(p => p.HostTypeName).ThenBy(p => p.Name));
+
+                progressCalc.Append(2);
+
                 var filteredSubScenarios = new DistinctList<Scenario>();
                 var filteredCommands  = new DistinctList<Command>();
                 GetCommandsAndSubs(Scenarios, filteredSubScenarios, filteredCommands);
                 Scenarios.AddRange(filteredSubScenarios.OrderBy(p => p.FilePath));
-                Commands = filteredCommands.OrderBy(p => p.ID).ToList();
+
+                Commands = CollectionTemplate<Command>.ToCollection(filteredCommands.OrderBy(p => p.HostTypeName).ThenBy(p => p.Name));
+
+                progressCalc.Append(2);
             }
             catch (Exception ex)
             {
@@ -164,15 +173,13 @@ namespace SPAFilter.SPA
             if (!Directory.Exists(ProcessPath))
                 throw new Exception($"Directory \"{ProcessPath}\" not found!");
 
-            Processes.Clear();
-            var bpID = 0;
+            Processes = new CollectionBusinessProcess();
             foreach (var file in GetConfigFiles(ProcessPath))
             {
-                if (BusinessProcess.IsBusinessProcess(file, ++bpID, out var result) && (bpFilter == null || bpFilter.Invoke(result)))
+                if (BusinessProcess.IsBusinessProcess(file, out var result) && (bpFilter == null || bpFilter.Invoke(result)))
                     Processes.Add(result);
-                else
-                    bpID--;
             }
+            Processes.InitId();
         }
 
         public static List<string> GetConfigFiles(string path, string mask = "*.xml")
@@ -193,15 +200,16 @@ namespace SPAFilter.SPA
             if (!Directory.Exists(ROBPHostTypesPath))
                 throw new Exception($"Directory \"{ROBPHostTypesPath}\" not found!");
 
-            Operations = new CollectionHostType(); 
+            HostTypes = new CollectionHostType(); 
             var files = Directory.GetDirectories(ROBPHostTypesPath).ToList();
             files.Sort(StringComparer.CurrentCulture);
-            var neID = 0;
+            var allBPOperations = Processes.AllOperationsNames;
+
             foreach (var neDirPath in files)
             {
-                var robpHt = new ROBPHostType(neDirPath, ++neID);
-                FilterOperations(robpHt, htFilter, opFilter);
-                Operations.Add(robpHt);
+                var robpHostType = new ROBPHostType(neDirPath);
+                FilterOperations(robpHostType, htFilter, opFilter, allBPOperations, false);
+                HostTypes.Add(robpHostType);
             }
         }
 
@@ -216,32 +224,53 @@ namespace SPAFilter.SPA
             if (!File.Exists(SCPath))
                 throw new Exception($"File \"{SCPath}\" not found!");
 
-            Operations = new ServiceCatalog(SCPath);
-            if (Operations.Count == 0)
+            HostTypes = new ServiceCatalog(SCPath);
+            if (HostTypes.Count == 0)
                 return;
+            var anyHasCatalogCall = Processes.AnyHasCatalogCall;
 
-            foreach (var ht in Operations)
+            foreach (var hostType in HostTypes)
             {
-                FilterOperations(ht, neFilter, opFilter);
+                FilterOperations(hostType, neFilter, opFilter, null, anyHasCatalogCall);
             }
         }
 
-        static void FilterOperations(HostType hostType, Func<HostType, bool> neFilter, Func<Operation, bool> opFilter)
+        static void FilterOperations(HostType hostType, Func<HostType, bool> neFilter, Func<Operation, bool> opFilter, Dictionary<string, string> allBPOperations, bool AnyHasCatalogCall)
         {
             if (neFilter != null && !neFilter.Invoke(hostType))
             {
-                foreach (var op in hostType.Operations)
+                hostType.Operations.Clear();
+                return;
+            }
+            else if (allBPOperations != null)
+            {
+                if (opFilter == null)
+                    opFilter = (op) => true;
+
+                for (var index = 0; index < hostType.Operations.Count; index++)
                 {
-                    op.IsFiltered = false;
+                    var operation = hostType.Operations[index];
+                    if (!allBPOperations.ContainsKey(operation.Name) || !opFilter.Invoke(operation))
+                    {
+                        hostType.Operations.Remove(operation);
+                        index--;
+                    }
                 }
+            }
+            else if (!AnyHasCatalogCall)
+            {
+                hostType.Operations.Clear();
+                return;
             }
             else if (opFilter != null)
             {
-                foreach (var op in hostType.Operations)
+                for (var index = 0; index < hostType.Operations.Count; index++)
                 {
-                    if (!opFilter.Invoke(op))
+                    var operation = hostType.Operations[index];
+                    if (!opFilter.Invoke(operation))
                     {
-                        op.IsFiltered = false;
+                        hostType.Operations.Remove(operation);
+                        index--;
                     }
                 }
             }
@@ -299,28 +328,26 @@ namespace SPAFilter.SPA
         void SIReinitialization()
         {
             ServiceInstances = GetServiceInstances();
+            ServiceInstances.InitId();
             GetScenariosAndCommands(GetServiceInstances(true), out var allScenarios, out var allCommands);
             Scenarios = allScenarios;
             Commands = allCommands;
         }
 
-        List<ServiceInstance> GetServiceInstances(bool getValid = false)
+        CollectionTemplate<ServiceInstance> GetServiceInstances(bool getValid = false)
         {
-            var intsances = new List<ServiceInstance>();
-            foreach (var activator in _activators)
+            var intsances = new CollectionTemplate<ServiceInstance>();
+            foreach (var instance in _activators.SelectMany(p => p.Instances).OrderBy(p => p.HostTypeName).ThenBy(p => p.FilePath))
             {
-                foreach (var instance in activator.Instances)
-                {
-                    if (getValid && !instance.IsCorrect)
-                        continue;
-                    intsances.Add(instance);
-                }
+                if (getValid && !instance.IsCorrect)
+                    continue;
+                intsances.Add(instance);
             }
 
             return intsances;
         }
 
-        static void GetScenariosAndCommands(IEnumerable<ServiceInstance> serviceInstances, out List<Scenario> distinctScenarios, out DistinctList<Command> distinctCommands)
+        static void GetScenariosAndCommands(IEnumerable<ServiceInstance> serviceInstances, out CollectionTemplate<Scenario> resultScenarios, out CollectionTemplate<Command> resultCommands)
         {
             var allScenarios = new DistinctList<Scenario>();
             var allCommands = new DistinctList<Command>();
@@ -333,8 +360,8 @@ namespace SPAFilter.SPA
                 }
             }
 
-            distinctScenarios = allScenarios;
-            distinctCommands = allCommands;
+            resultScenarios = CollectionTemplate<Scenario>.ToCollection(allScenarios);
+            resultCommands = CollectionTemplate<Command>.ToCollection(allCommands);
         }
 
         private readonly string[] mandatoryXslxColumns = new string[] { "#", "SPA_SERVICE_CODE", "GLOBAL_SERVICE_CODE", "SERVICE_NAME", "SERVICE_FULL_NAME", "SERVICE_FULL_NAME2", "DESCRIPTION", "SERVICE_CODE", "SERVICE_NAME2", "EXTERNAL_CODE", "EXTERNAL_CODE2" };
@@ -394,10 +421,10 @@ namespace SPAFilter.SPA
         {
             try
             {
-                if (Operations is ServiceCatalog)
+                if (HostTypes is ServiceCatalog)
                     throw new Exception("You can create Service Catalog only with ROBP operations.");
 
-                var sc = new ServiceCatalogBuilder(Operations, rdServices, progressCalc);
+                var sc = new ServiceCatalogBuilder(HostTypes, rdServices, progressCalc);
                 return sc.Save(exportFilePath);
             }
             catch (Exception ex)
@@ -415,7 +442,7 @@ namespace SPAFilter.SPA
         public void PrintXML(CustomStringBuilder stringErrors, ProgressCalculationAsync progrAsync)
         {
             GetFiles(Processes, stringErrors, progrAsync);
-            GetFiles(Operations.AllOperations, stringErrors, progrAsync);
+            GetFiles(HostTypes.Operations, stringErrors, progrAsync);
             GetFiles(ServiceInstances, stringErrors, progrAsync);
             GetFiles(Scenarios, stringErrors, progrAsync);
             GetFiles(Commands, stringErrors, progrAsync);

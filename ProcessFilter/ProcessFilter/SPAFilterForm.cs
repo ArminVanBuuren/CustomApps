@@ -4,7 +4,6 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Resources;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -12,8 +11,6 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using SPAFilter.SPA;
-using SPAFilter.SPA.Collection;
-using SPAFilter.SPA.Components;
 using Utils;
 using Utils.WinForm.DataGridViewHelper;
 using Utils.WinForm.Notepad;
@@ -35,6 +32,8 @@ namespace SPAFilter
     [Serializable]
     public partial class SPAFilterForm : Form, ISerializable
     {
+        readonly object _sync = new object();
+
         private bool _isInProgress = false;
         private string _lastDirPath = string.Empty;
         private readonly object sync = new object();
@@ -44,7 +43,6 @@ namespace SPAFilter
         private FormLocation _notepadLocation = FormLocation.Default;
         private FormWindowState _notepadWindowsState = FormWindowState.Maximized;
         private SPAProcessFilter _spaFilter;
-
 
         public static string SerializationDataPath => $"{ApplicationFilePath}.bin";
         private bool IsInitialization { get; } = true;
@@ -86,38 +84,78 @@ namespace SPAFilter
         public SPAFilterForm()
         {
             IsInitialization = false;
-            MainInit();
+            PreInit();
+            PostInit();
         }
 
         SPAFilterForm(SerializationInfo propertyBag, StreamingContext context)
         {
-            MainInit();
+            PreInit();
             try
             {
-                ProcessesTextBox.Text = propertyBag.GetString("ADWFFW") ?? string.Empty;
-                ROBPOperationTextBox.Text = propertyBag.GetString("AAEERF") ?? string.Empty;
-                ServiceCatalogTextBox.Text = propertyBag.GetString("DFWDRT") ?? string.Empty;
-                ExportSCPath.Text = propertyBag.GetString("FFFGHJ") ?? string.Empty;
-                OpenSCXlsx.Text = propertyBag.GetString("GGHHRR") ?? string.Empty;
-                _lastDirPath = propertyBag.GetString("GHDDSD") ?? string.Empty;
-                if (propertyBag.GetValue("WWWERT", typeof(List<string>)) is List<string> siConfigsList)
-                    AssignServiceInstanes(siConfigsList);
-                _notepadWordWrap = propertyBag.GetBoolean("DDCCVV");
-                _notepadLocation = (FormLocation) propertyBag.GetValue("RRTTDD", typeof(FormLocation));
-                _notepadWindowsState = (FormWindowState) propertyBag.GetValue("SSEEFF", typeof(FormWindowState));
+                var allSavedParams = new Dictionary<string, object>();
+                foreach (var entry in propertyBag)
+                {
+                    allSavedParams.Add(entry.Name, entry.Value);
+                }
+
+                ProcessesTextBox.Text = (string)TryGetSerializationValue(allSavedParams, "ADWFFW", string.Empty);
+                if (!ProcessesTextBox.Text.IsNullOrEmptyTrim())
+                {
+                    // RunSynchronously - не подходит, т.к. образуется дедлок, потому что асинхронный поток не пытается вернуться назад
+                    var task = Task.Run(() => AssignAsync(SPAProcessFilterType.Processes, false));
+                    task.Wait();
+                }
+
+                ROBPOperationsRadioButton.Checked = (bool)TryGetSerializationValue(allSavedParams, "GGHHTTDD", true);
+                ROBPOperationTextBox.Text = (string)TryGetSerializationValue(allSavedParams, "AAEERF", string.Empty);
+                ServiceCatalogTextBox.Text = (string)TryGetSerializationValue(allSavedParams, "DFWDRT", string.Empty);
+
+                if (ROBPOperationsRadioButton.Checked)
+                {
+                    if (!ROBPOperationTextBox.Text.IsNullOrEmptyTrim())
+                    {
+                        var task = Task.Run(() => AssignAsync(SPAProcessFilterType.ROBPOperations, false));
+                        task.Wait();
+                    }
+                }
+                else if(!ServiceCatalogTextBox.Text.IsNullOrEmptyTrim())
+                {
+                    var task = Task.Run(() => AssignAsync(SPAProcessFilterType.SCOperations, false));
+                    task.Wait();
+                }
+
+                ExportSCPath.Text = (string)TryGetSerializationValue(allSavedParams, "FFFGHJ", string.Empty);
+                OpenSCXlsx.Text = (string)TryGetSerializationValue(allSavedParams, "GGHHRR", string.Empty);
+                _lastDirPath = (string)TryGetSerializationValue(allSavedParams, "GHDDSD", string.Empty);
+
+                AssignServiceInstanes((List<string>)TryGetSerializationValue(allSavedParams, "WWWERT", null));
+
+                _notepadWordWrap = (bool)TryGetSerializationValue(allSavedParams, "DDCCVV", true);
+                _notepadLocation = (FormLocation)TryGetSerializationValue(allSavedParams, "RRTTDD", FormLocation.Default);
+                _notepadWindowsState = (FormWindowState)TryGetSerializationValue(allSavedParams, "SSEEFF", FormWindowState.Maximized);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // ignored
             }
             finally
             {
                 IsInitialization = false;
+                PostInit();
             }
         }
 
-        async void AssignServiceInstanes(List<string> siConfigsList)
+        static object TryGetSerializationValue(IReadOnlyDictionary<string, object> allSavedParams, string key, object defaultResult)
         {
+            return allSavedParams.TryGetValue(key, out var res) ? res : defaultResult;
+        }
+
+        async void AssignServiceInstanes(IEnumerable<string> siConfigsList)
+        {
+            if(siConfigsList == null)
+                return;
+
             foreach (var fileConfig in siConfigsList)
             {
                 await _spaFilter.AssignActivatorAsync(fileConfig);
@@ -137,9 +175,12 @@ namespace SPAFilter
             propertyBag.AddValue("FFFGHJ", ExportSCPath.Text);
             propertyBag.AddValue("GGHHRR", OpenSCXlsx.Text);
             propertyBag.AddValue("GHDDSD", _lastDirPath);
+
+            propertyBag.AddValue("GGHHTTDD", ROBPOperationsRadioButton.Checked);
+
             if (_spaFilter.ServiceInstances != null)
             {
-                List<string> filesConfigs = _spaFilter.ServiceInstances.Select(x => x.FilePath).ToList();
+                var filesConfigs = _spaFilter.ServiceInstances.Select(x => x.FilePath).ToList();
                 propertyBag.AddValue("WWWERT", filesConfigs);
             }
 
@@ -148,13 +189,17 @@ namespace SPAFilter
             propertyBag.AddValue("SSEEFF", _notepadWindowsState);
         }
 
-        void MainInit()
+        void PreInit()
         {
             InitializeComponent();
+            _spaFilter = new SPAProcessFilter();
+        }
 
+        void PostInit()
+        {
+            dataGridServiceInstances.KeyDown += DataGridServiceInstances_KeyDown;
             dataGridProcesses.KeyDown += DataGridProcessesResults_KeyDown;
             dataGridOperations.KeyDown += DataGridOperationsResult_KeyDown;
-            dataGridServiceInstances.KeyDown += DataGridServiceInstances_KeyDown;
             dataGridScenarios.KeyDown += DataGridScenariosResult_KeyDown;
             dataGridCommands.KeyDown += DataGridCommandsResult_KeyDown;
 
@@ -174,12 +219,53 @@ namespace SPAFilter
             FilterButton.KeyDown += ProcessFilterForm_KeyDown;
             KeyDown += ProcessFilterForm_KeyDown;
 
+            //dataGridServiceInstances.CellFormatting += DataGrid_HideNotFiltered;
+            //dataGridProcesses.CellFormatting += DataGrid_HideNotFiltered;
+            //dataGridOperations.CellFormatting += DataGrid_HideNotFiltered;
+            //dataGridScenarios.CellFormatting += DataGrid_HideNotFiltered;
+            //dataGridCommands.CellFormatting += DataGrid_HideNotFiltered;
+
+            dataGridServiceInstances.CellFormatting += DataGridServiceInstances_CellFormatting;
             dataGridScenarios.CellFormatting += DataGridScenariosResult_CellFormatting;
             Closing += (s, e) => SaveData();
 
-            _spaFilter = new SPAProcessFilter();
+
+            ProcessesButtonOpen.Click += ProcessesButtonOpen_Click;
+            ProcessesTextBox.TextChanged += ProcessesTextBox_TextChanged;
+            ProcessesTextBox.LostFocus += ProcessesTextBox_LostFocus;
+
+            ROBPOperationButtonOpen.Click += ROBPOperationButtonOpen_Click;
+            ROBPOperationTextBox.TextChanged += ROBPOperationTextBox_TextChanged;
+            ROBPOperationTextBox.LostFocus += ROBPOperationTextBox_LostFocus;
+
+            ServiceCatalogOpenButton.Click += ServiceCatalogOpenButton_Click;
+            ServiceCatalogTextBox.TextChanged += ServiceCatalogTextBox_TextChanged;
+            ServiceCatalogTextBox.LostFocus += ServiceCatalogTextBox_LostFocus;
         }
 
+        private void DataGridServiceInstances_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            var row = ((DataGridView)sender).Rows[e.RowIndex];
+            var cell = row.Cells["IsCorrect"];
+            if (cell != null && cell.Value is bool cellValue && !cellValue)
+            {
+                row.DefaultCellStyle.BackColor = Color.Red;
+            }
+            else
+            {
+                row.DefaultCellStyle.BackColor = Color.White;
+            }
+        }
+
+        private static void DataGrid_HideNotFiltered(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            //var row = ((DataGridView)sender).Rows[e.RowIndex];
+            //var dataRow = (row.DataBoundItem as DataRowView)?.Row;
+            //if (dataRow is ObjectTemplate template && !template.IsFiltered)
+            //{
+            //    row.Visible = false;
+            //}
+        }
 
         private void DataGridScenariosResult_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
@@ -307,63 +393,96 @@ namespace SPAFilter
 
         #endregion
 
-        private void ProcessesButtonOpen_Click(object sender, EventArgs e)
+        private bool _ProcessesTextBoxChanged = false;
+
+        private async void ProcessesButtonOpen_Click(object sender, EventArgs e)
         {
-            if (OpenFolder(_lastDirPath, out var filePath))
-                ProcessesTextBox.Text = filePath;
+            if (!OpenFolder(_lastDirPath, out var filePath))
+                return;
+
+            ProcessesTextBox.Text = filePath;
+            await AssignAsync(SPAProcessFilterType.Processes);
+            _ProcessesTextBoxChanged = false;
+        }
+
+        private async void ProcessesTextBox_LostFocus(object sender, EventArgs e)
+        {
+            if (!_ProcessesTextBoxChanged)
+                return;
+
+            await AssignAsync(SPAProcessFilterType.Processes);
+            _ProcessesTextBoxChanged = false;
         }
 
         private void ProcessesTextBox_TextChanged(object sender, EventArgs e)
         {
-            Assign(SPAProcessFilterType.Processes);
+            _ProcessesTextBoxChanged = true;
         }
 
 
-        private void ROBPOperationButtonOpen_Click(object sender, EventArgs e)
+        private bool _ROBPOperationTextBoxChanged = false;
+        private async void ROBPOperationButtonOpen_Click(object sender, EventArgs e)
         {
-            if (OpenFolder(_lastDirPath, out var filePath))
-                ROBPOperationTextBox.Text = filePath;
+            if (!OpenFolder(_lastDirPath, out var filePath))
+                return;
+
+            ROBPOperationTextBox.Text = filePath;
+            await AssignAsync(SPAProcessFilterType.ROBPOperations);
+            _ROBPOperationTextBoxChanged = false;
+        }
+
+        private async void ROBPOperationTextBox_LostFocus(object sender, EventArgs e)
+        {
+            if (!_ROBPOperationTextBoxChanged)
+                return;
+
+            await AssignAsync(SPAProcessFilterType.ROBPOperations);
+            _ROBPOperationTextBoxChanged = false;
         }
 
         private void ROBPOperationTextBox_TextChanged(object sender, EventArgs e)
         {
-            Assign(SPAProcessFilterType.ROBPOperations);
+            _ROBPOperationTextBoxChanged = true;
         }
 
-        private void ROBPOperationsRadioButton_CheckedChanged(object sender, EventArgs e)
+        private async void ROBPOperationsRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             ServiceCatalogRadioButton.Checked = !ROBPOperationsRadioButton.Checked;
             ServiceCatalogTextBox.Enabled = ServiceCatalogRadioButton.Checked;
             ServiceCatalogOpenButton.Enabled = ServiceCatalogRadioButton.Checked;
             ROBPOperationTextBox.Enabled = ROBPOperationsRadioButton.Checked;
             ROBPOperationButtonOpen.Enabled = ROBPOperationsRadioButton.Checked;
-            Assign(ROBPOperationsRadioButton.Checked ? SPAProcessFilterType.ROBPOperations : SPAProcessFilterType.SCOperations);
+            await AssignAsync(ROBPOperationsRadioButton.Checked ? SPAProcessFilterType.ROBPOperations : SPAProcessFilterType.SCOperations);
         }
 
-        private void ServiceCatalogRadioButton_CheckedChanged(object sender, EventArgs e)
+        private async void ServiceCatalogRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             ROBPOperationsRadioButton.Checked = !ServiceCatalogRadioButton.Checked;
             ROBPOperationTextBox.Enabled = ROBPOperationsRadioButton.Checked;
             ROBPOperationButtonOpen.Enabled = ROBPOperationsRadioButton.Checked;
             ServiceCatalogTextBox.Enabled = ServiceCatalogRadioButton.Checked;
             ServiceCatalogOpenButton.Enabled = ServiceCatalogRadioButton.Checked;
-            Assign(ROBPOperationsRadioButton.Checked ? SPAProcessFilterType.ROBPOperations : SPAProcessFilterType.SCOperations);
+            await AssignAsync(ROBPOperationsRadioButton.Checked ? SPAProcessFilterType.ROBPOperations : SPAProcessFilterType.SCOperations);
         }
 
         private bool _serviceCatalogTextBoxChanged = false;
-        private void ServiceCatalogOpenButton_Click(object sender, EventArgs e)
+        private async void ServiceCatalogOpenButton_Click(object sender, EventArgs e)
         {
-            ServiceCatalogTextBox.Text = OpenFile(@"(*.xml) | *.xml") ?? ServiceCatalogTextBox.Text;
-            Assign(SPAProcessFilterType.SCOperations);
+            if (!OpenFile(@"(*.xml) | *.xml", out var res))
+                return;
+
+            ServiceCatalogTextBox.Text = res;
+            await AssignAsync(SPAProcessFilterType.SCOperations);
             _serviceCatalogTextBoxChanged = false;
         }
 
-        private void ServiceCatalogTextBox_LostFocus(object sender, System.EventArgs e)
+        private async void ServiceCatalogTextBox_LostFocus(object sender, System.EventArgs e)
         {
             if (!_serviceCatalogTextBoxChanged)
                 return;
 
-            Assign(SPAProcessFilterType.SCOperations);
+            await AssignAsync(SPAProcessFilterType.SCOperations);
+            _serviceCatalogTextBoxChanged = false;
         }
 
         private void ServiceCatalogTextBox_TextChanged(object sender, EventArgs e)
@@ -371,17 +490,17 @@ namespace SPAFilter
             _serviceCatalogTextBoxChanged = true;
         }
 
-        private void AddActivatorButton_Click(object sender, EventArgs e)
+        private async void AddActivatorButton_Click(object sender, EventArgs e)
         {
-            Assign(SPAProcessFilterType.Activators_Add);
+            await AssignAsync(SPAProcessFilterType.Activators_Add);
         }
 
-        private void RemoveActivatorButton_Click_1(object sender, EventArgs e)
+        private async void RemoveActivatorButton_Click_1(object sender, EventArgs e)
         {
-            Assign(SPAProcessFilterType.Activators_Remove);
+            await AssignAsync(SPAProcessFilterType.Activators_Remove);
         }
 
-        async void Assign(SPAProcessFilterType type, bool saveLastSett = false)
+        async Task AssignAsync(SPAProcessFilterType type, bool saveSettings = true)
         {
             try
             {
@@ -391,8 +510,8 @@ namespace SPAFilter
                         await _spaFilter.AssignProcessesAsync(ProcessesTextBox.Text);
 
                         ProcessesComboBox.DataSource = _spaFilter.Processes.Select(p => p.Name).ToList();
-                        ProcessesComboBox.Text = saveLastSett ? ProcessesComboBox.Text : null;
-                        ProcessesComboBox.DisplayMember = saveLastSett ? ProcessesComboBox.Text : null;
+                        ProcessesComboBox.Text = null;
+                        ProcessesComboBox.DisplayMember = null;
 
                         UpdateLastPath(ProcessesTextBox.Text);
                         break;
@@ -410,22 +529,25 @@ namespace SPAFilter
                             UpdateLastPath(ROBPOperationTextBox.Text);
                         }
 
-                        if (_spaFilter.Operations != null)
+                        if (_spaFilter.HostTypes != null)
                         {
-                            NetSettComboBox.DataSource = _spaFilter.Operations.AllHostTypes;
-                            NetSettComboBox.Text = saveLastSett ? NetSettComboBox.Text : null;
-                            NetSettComboBox.DisplayMember = saveLastSett ? NetSettComboBox.Text : null;
-                            OperationComboBox.DataSource = _spaFilter.Operations.AllOperationsName;
-                            OperationComboBox.Text = saveLastSett ? OperationComboBox.Text : null;
-                            OperationComboBox.DisplayMember = saveLastSett ? OperationComboBox.Text : null;
+                            NetSettComboBox.DataSource = _spaFilter.HostTypes.HostTypeNames;
+                            NetSettComboBox.Text = null;
+                            NetSettComboBox.DisplayMember = null;
+                            OperationComboBox.DataSource = _spaFilter.HostTypes.OperationNames;
+                            OperationComboBox.Text = null;
+                            OperationComboBox.DisplayMember = null;
                         }
                         else
                         {
                             ClearOperationsComboBox();
                         }
+
                         break;
                     case SPAProcessFilterType.Activators_Add:
-                        var fileConfig = OpenFile(@"(configuration.application.xml) | *.xml");
+                        if (!OpenFile(@"(configuration.application.xml) | *.xml", out var fileConfig))
+                            return;
+
                         await _spaFilter.AssignActivatorAsync(fileConfig);
                         AssignActivator();
                         UpdateLastPath(fileConfig);
@@ -436,6 +558,7 @@ namespace SPAFilter
                             await _spaFilter.RemoveActivatorAsync(listFiles);
                             AssignActivator();
                         }
+
                         break;
                 }
             }
@@ -466,7 +589,8 @@ namespace SPAFilter
             finally
             {
                 RefreshStatus();
-                SaveData();
+                if (saveSettings)
+                    SaveData();
             }
         }
 
@@ -497,7 +621,7 @@ namespace SPAFilter
         {
             switch (e.KeyCode)
             {
-                case Keys.F5:
+                case Keys.F5 when _spaFilter.IsEnabledFilter:
                     FilterButton_Click(this, EventArgs.Empty);
                     break;
             }
@@ -520,24 +644,42 @@ namespace SPAFilter
 
                 ClearDataGrid();
 
-                using (var progressCalc = new ProgressCalculationAsync(progressBar, 20))
+                using (var progressCalc = new ProgressCalculationAsync(progressBar, 16))
                 {
                     await Task.Factory.StartNew(() => _spaFilter.DataFilter(filterProcess, filterNE, filterOp, filterInROBP, progressCalc));
 
                     await Task.Factory.StartNew(() => syncContext.Post(delegate
                     {
+                        AssignActivator();
+
                         dataGridProcesses.AssignListToDataGrid(_spaFilter.Processes, new Padding(0, 0, 15, 0));
                         progressCalc.Append(2);
 
-                        dataGridOperations.AssignListToDataGrid(_spaFilter.Operations.AllOperations, new Padding(0, 0, 15, 0));
+                        dataGridOperations.AssignListToDataGrid(_spaFilter.HostTypes.Operations, new Padding(0, 0, 15, 0));
                         progressCalc.Append(2);
 
-                        dataGridServiceInstances.AssignListToDataGrid(_spaFilter.ServiceInstances, new Padding(0, 0, 15, 0));
+                        if (_spaFilter.Scenarios != null)
+                        {
+                            dataGridScenarios.AssignListToDataGrid(_spaFilter.Scenarios, new Padding(0, 0, 15, 0));
+                        }
+                        else
+                        {
+                            dataGridScenarios.DataSource = null;
+                            dataGridScenarios.Refresh();
+                        }
 
-                        dataGridScenarios.AssignListToDataGrid(_spaFilter.Scenarios, new Padding(0, 0, 15, 0));
                         progressCalc.Append(2);
 
-                        dataGridCommands.AssignListToDataGrid(_spaFilter.Commands, new Padding(0, 0, 15, 0));
+                        if (_spaFilter.Commands != null)
+                        {
+                            dataGridCommands.AssignListToDataGrid(_spaFilter.Commands, new Padding(0, 0, 15, 0));
+                        }
+                        else
+                        {
+                            dataGridCommands.DataSource = null;
+                            dataGridCommands.Refresh();
+                        }
+
                         progressCalc.Append(2);
                     }, null));
 
@@ -580,7 +722,10 @@ namespace SPAFilter
 
         private void OpenRDServiceExelButton_Click(object sender, EventArgs e)
         {
-            OpenSCXlsx.Text = OpenFile(@"(*.xlsx) | *.xlsx") ?? OpenSCXlsx.Text;
+            if(!OpenFile(@"(*.xlsx) | *.xlsx", out var res))
+                return;
+
+            OpenSCXlsx.Text = res;
         }
 
         private async void ButtonGenerateSC_Click(object sender, EventArgs e)
@@ -588,7 +733,9 @@ namespace SPAFilter
             if (IsInProgress)
                 return;
 
-            if (_spaFilter.Operations.Count == 0)
+            var countOperations = _spaFilter.HostTypes.OperationsCount;
+
+            if (countOperations == 0)
             {
                 MessageBox.Show(@"Not found any operations.", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -605,7 +752,7 @@ namespace SPAFilter
                 if (!OpenSCXlsx.Text.IsNullOrEmptyTrim() && File.Exists(OpenSCXlsx.Text))
                 {
                     var file = new FileInfo(OpenSCXlsx.Text);
-                    using (var progrAsync = new CustomProgressCalculation(progressBar, _spaFilter.Operations.Count, file))
+                    using (var progrAsync = new CustomProgressCalculation(progressBar, countOperations, file))
                     {
                         var rdServices = await Task<DataTable>.Factory.StartNew(() => _spaFilter.GetRDServicesFromXslx(file, progrAsync));
                         fileResult = await Task.Factory.StartNew(() => _spaFilter.GetServiceCatalog(rdServices, ExportSCPath.Text, progrAsync));
@@ -613,7 +760,7 @@ namespace SPAFilter
                 }
                 else
                 {
-                    using (var progrAsync = new CustomProgressCalculation(progressBar, _spaFilter.Operations.Count))
+                    using (var progrAsync = new CustomProgressCalculation(progressBar, countOperations))
                     {
                         fileResult = await Task.Factory.StartNew(() => _spaFilter.GetServiceCatalog( null, ExportSCPath.Text, progrAsync));
                     }
@@ -742,15 +889,15 @@ namespace SPAFilter
 
         void RefreshStatus()
         {
-            BPCount.Text = $"Processes: {(_spaFilter.Processes == null ? 0 : _spaFilter.Processes.Count).ToString()}";
-            NEElementsCount.Text = $"HostTypes: {(_spaFilter.Operations == null ? 0 : _spaFilter.Operations.AllHostTypes.Count).ToString()}";
-            OperationsCount.Text = $"Operations: {(_spaFilter.Operations == null ? 0 : _spaFilter.Operations.AllOperationsName.Count).ToString()}";
-            ScenariosCount.Text = $"Scenarios: {(_spaFilter.Scenarios == null ? 0 : _spaFilter.Scenarios.Count).ToString()}";
-            CommandsCount.Text = $"Commands: {(_spaFilter.Commands == null ? 0 : _spaFilter.Commands.Count).ToString()}";
+            BPCount.Text = $"Processes: {(_spaFilter.Processes?.Count ?? 0 ).ToString()}";
+            NEElementsCount.Text = $"HostTypes: {(_spaFilter.HostTypes?.HostTypeNames?.Count ?? 0).ToString()}";
+            OperationsCount.Text = $"Operations: {(_spaFilter.HostTypes?.OperationsCount ?? 0).ToString()}";
+            ScenariosCount.Text = $"Scenarios: {(_spaFilter.Scenarios?.Count ?? 0).ToString()}";
+            CommandsCount.Text = $"Commands: {(_spaFilter.Commands?.Count ?? 0).ToString()}";
 
             FilterButton.Enabled = _spaFilter.IsEnabledFilter;
             PrintXMLButton.Enabled = _spaFilter.WholeItemsCount > 0;
-            ButtonGenerateSC.Enabled = _spaFilter.CanGenerateSC && !ExportSCPath.Text.IsNullOrEmpty() && ExportSCPath.Text.Length > 3 && ROBPOperationsRadioButton.Checked;
+            ButtonGenerateSC.Enabled = _spaFilter.CanGenerateSC && !ExportSCPath.Text.IsNullOrEmptyTrim() && ROBPOperationsRadioButton.Checked;
         }
 
         void UpdateLastPath(string path)
@@ -773,25 +920,27 @@ namespace SPAFilter
             }
         }
 
-        static string OpenFile(string extension)
+        static bool OpenFile(string extension, out string result)
         {
+            result = null;
             try
             {
                 using (var fbd = new OpenFileDialog())
                 {
                     fbd.Filter = extension;
-                    var result = fbd.ShowDialog();
-                    if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.FileName) && File.Exists(fbd.FileName))
+
+                    if (fbd.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.FileName) && File.Exists(fbd.FileName))
                     {
-                        return fbd.FileName;
+                        result = fbd.FileName;
+                        return true;
                     }
                 }
-                return null;
+                return false;
             }
             catch(Exception ex)
             {
                 MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return null;
+                return false;
             }
         }
 

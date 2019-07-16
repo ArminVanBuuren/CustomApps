@@ -69,6 +69,7 @@
     </Compile>
     <Compile Include="CustomProgressCalculation.cs" />
     <Compile Include="CustomStringBuilder.cs" />
+    <Compile Include="SPA\Collection\CollectionBusinessProcess.cs" />
     <Compile Include="SPA\Collection\CollectionTemplate.cs" />
     <Compile Include="SPA\Components\ServiceInstance.cs" />
     <Compile Include="SPA\Components\BusinessProcess.cs" />
@@ -109,7 +110,6 @@
     <Compile Include="SPA\SC\RFSGroup.cs" />
     <Compile Include="SPA\SC\ServiceCatalogBuilder.cs" />
     <Compile Include="SPA\SPAProcessFilter.cs" />
-    <Compile Include="SPA\StoredObject.cs" />
     <EmbeddedResource Include="SPAFilterForm.resx">
       <DependentUpon>SPAFilterForm.cs</DependentUpon>
     </EmbeddedResource>

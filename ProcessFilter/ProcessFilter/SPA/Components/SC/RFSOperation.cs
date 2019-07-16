@@ -48,7 +48,7 @@ namespace SPAFilter.SPA.Components.SC
             }
         }
 
-        public RFSOperation(int id, string name, string action, string hostTypeName, XPathNavigator navigator, ServiceCatalog catalog) : base(id)
+        public RFSOperation(string name, string action, string hostTypeName, XPathNavigator navigator, ServiceCatalog catalog)
         {
             _navigator = navigator;
             RFSName = name;

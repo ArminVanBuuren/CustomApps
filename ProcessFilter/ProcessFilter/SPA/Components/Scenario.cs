@@ -13,10 +13,15 @@ namespace SPAFilter.SPA.Components
 {
     public sealed class Scenario : ObjectTemplate
     {
+        readonly ServiceInstance _parent;
+
         internal List<Command> Commands { get; } = new List<Command>();
         internal List<Scenario> SubScenarios { get; private set; } = new List<Scenario>();
 
-        [DGVColumn(ColumnPosition.Before, "Scenario")]
+        [DGVColumn(ColumnPosition.Before, "HostType")]
+        public string HostTypeName => _parent.HostTypeName;
+
+        [DGVColumn(ColumnPosition.After, "Scenario")]
         public override string Name { get; protected set; }
 
         [DGVColumn(ColumnPosition.After, "SubScenarios")]
@@ -29,11 +34,13 @@ namespace SPAFilter.SPA.Components
             public DistinctList<string> SubScenarios { get; set; }
         }
 
-        public Scenario(string filePath, int id, IReadOnlyDictionary<string, Command> commandList, string parentFileScenario) : base(filePath, id)
+        public Scenario(ServiceInstance parent, string filePath, IReadOnlyDictionary<string, Command> commandList) : base(filePath)
         {
+            _parent = parent;
+
             var prsCs = new ParceScenario
             {
-                ParentPath = parentFileScenario,
+                ParentPath = FilePath,
                 Commands = new DistinctList<string>(),
                 SubScenarios = new DistinctList<string>()
             };
@@ -41,11 +48,15 @@ namespace SPAFilter.SPA.Components
             CheckScenario(prsCs, commandList);
         }
 
-        public Scenario(string filePath, int id, IReadOnlyDictionary<string, Command> commandList) : base(filePath, id)
+        public Scenario(ServiceInstance parent, string filePath, IReadOnlyDictionary<string, Command> commandList, string parentFileScenario) : base(filePath)
         {
+            ID = -1;
+
+            _parent = parent;
+
             var prsCs = new ParceScenario
             {
-                ParentPath = FilePath,
+                ParentPath = parentFileScenario,
                 Commands = new DistinctList<string>(),
                 SubScenarios = new DistinctList<string>()
             };
@@ -65,7 +76,8 @@ namespace SPAFilter.SPA.Components
 
             foreach (var subScenarioPath in prsCs.SubScenarios)
             {
-                SubScenarios.Add(new Scenario(subScenarioPath, -1, commandList, FilePath));
+                //Path.GetDirectoryName(FilePath)
+                SubScenarios.Add(new Scenario(_parent, subScenarioPath, commandList, FilePath));
             }
         }
 
@@ -91,7 +103,7 @@ namespace SPAFilter.SPA.Components
                 }
                 else
                 {
-                    var subScenarioPath = Path.GetFullPath($"{getParentDirectory}\\{subScenario}.xml");
+                    var subScenarioPath = Path.GetFullPath($"{getParentDirectory}\\{subScenario}");
                     if (File.Exists(subScenarioPath))
                     {
                         subScenarios[i] = subScenarioPath;
