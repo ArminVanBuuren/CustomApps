@@ -11,6 +11,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using SPAFilter.SPA;
+using SPAFilter.SPA.Components.SC;
 using Utils;
 using Utils.WinForm.DataGridViewHelper;
 using Utils.WinForm.Notepad;
@@ -115,6 +116,8 @@ namespace SPAFilter
                 }
 
                 ROBPOperationsRadioButton.Checked = (bool)TryGetSerializationValue(allSavedParams, "GGHHTTDD", true);
+                ServiceCatalogRadioButton.Checked = !ROBPOperationsRadioButton.Checked;
+
                 ROBPOperationTextBox.Text = (string)TryGetSerializationValue(allSavedParams, "AAEERF", string.Empty);
                 ServiceCatalogTextBox.Text = (string)TryGetSerializationValue(allSavedParams, "DFWDRT", string.Empty);
 
@@ -200,6 +203,9 @@ namespace SPAFilter
         {
             InitializeComponent();
             _spaFilter = new SPAProcessFilter();
+
+            ROBPOperationsRadioButton.CheckedChanged += ROBPOperationsRadioButton_CheckedChanged;
+            ServiceCatalogRadioButton.CheckedChanged += ServiceCatalogRadioButton_CheckedChanged;
         }
 
         void PostInit()
@@ -380,11 +386,31 @@ namespace SPAFilter
 
         private void DataGridOperationsResult_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            CallAndCheckDataGridKey(dataGridOperations);
+            if (ROBPOperationsRadioButton.Checked)
+                CallAndCheckDataGridKey(dataGridOperations);
+            else
+                OpenServiceCatalogOperation();
         }
+
         private void DataGridOperationsResult_KeyDown(object sender, KeyEventArgs e)
         {
-            CallAndCheckDataGridKey(dataGridOperations, e);
+            if (ROBPOperationsRadioButton.Checked)
+                CallAndCheckDataGridKey(dataGridOperations, e);
+            else
+                OpenServiceCatalogOperation();
+        }
+
+        void OpenServiceCatalogOperation()
+        {
+            if (!GetCellItemSelectedRows(dataGridOperations, out var scOperationNames, "Operation"))
+                return;
+
+            var scOperations = _spaFilter.HostTypes.Operations.Where(p => scOperationNames.Any(x => x.Equals(p.Name, StringComparison.CurrentCultureIgnoreCase)));
+            foreach (var operation in scOperations)
+            {
+                if (operation is CatalogOperation catalogOperation)
+                    OpenEditor(catalogOperation.Name, catalogOperation.Body);
+            }
         }
 
         private void DataGridServiceInstances_DoubleClick(object sender, EventArgs e)
@@ -435,7 +461,7 @@ namespace SPAFilter
                 }
                 else if (e.KeyCode == Keys.Enter || (!altIsDown && f4IsDown))
                 {
-                    if (!GetFilePathCurrentRow(grid, out var filePath1))
+                    if (!GetCellItemSelectedRows(grid, out var filePath1))
                         return;
 
                     foreach (var filePath in filePath1)
@@ -445,7 +471,7 @@ namespace SPAFilter
                 }
                 else if (e.KeyCode == Keys.Delete)
                 {
-                    if (!GetFilePathCurrentRow(grid, out var filesPath))
+                    if (!GetCellItemSelectedRows(grid, out var filesPath))
                         return;
                     if(filesPath.Count == 0)
                         return;
@@ -471,11 +497,10 @@ namespace SPAFilter
                         MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-                
             }
             else
             {
-                if (!GetFilePathCurrentRow(grid, out var filesPath))
+                if (!GetCellItemSelectedRows(grid, out var filesPath))
                     return;
 
                 foreach (var filePath in filesPath)
@@ -541,22 +566,46 @@ namespace SPAFilter
 
         private async void ROBPOperationsRadioButton_CheckedChanged(object sender, EventArgs e)
         {
+            ServiceCatalogRadioButton.CheckedChanged -= ServiceCatalogRadioButton_CheckedChanged;
+
             ServiceCatalogRadioButton.Checked = !ROBPOperationsRadioButton.Checked;
             ServiceCatalogTextBox.Enabled = ServiceCatalogRadioButton.Checked;
             ServiceCatalogOpenButton.Enabled = ServiceCatalogRadioButton.Checked;
+
             ROBPOperationTextBox.Enabled = ROBPOperationsRadioButton.Checked;
             ROBPOperationButtonOpen.Enabled = ROBPOperationsRadioButton.Checked;
-            await AssignAsync(ROBPOperationsRadioButton.Checked ? SPAProcessFilterType.ROBPOperations : SPAProcessFilterType.SCOperations);
+
+            await AssignOperations();
+
+            ServiceCatalogRadioButton.CheckedChanged += ServiceCatalogRadioButton_CheckedChanged;
         }
 
         private async void ServiceCatalogRadioButton_CheckedChanged(object sender, EventArgs e)
         {
+            ROBPOperationsRadioButton.CheckedChanged -= ROBPOperationsRadioButton_CheckedChanged;
+
             ROBPOperationsRadioButton.Checked = !ServiceCatalogRadioButton.Checked;
             ROBPOperationTextBox.Enabled = ROBPOperationsRadioButton.Checked;
             ROBPOperationButtonOpen.Enabled = ROBPOperationsRadioButton.Checked;
+
             ServiceCatalogTextBox.Enabled = ServiceCatalogRadioButton.Checked;
             ServiceCatalogOpenButton.Enabled = ServiceCatalogRadioButton.Checked;
-            await AssignAsync(ROBPOperationsRadioButton.Checked ? SPAProcessFilterType.ROBPOperations : SPAProcessFilterType.SCOperations);
+
+            await AssignOperations();
+
+            ROBPOperationsRadioButton.CheckedChanged += ROBPOperationsRadioButton_CheckedChanged;
+        }
+
+        async Task AssignOperations()
+        {
+            var type = ROBPOperationsRadioButton.Checked ? SPAProcessFilterType.ROBPOperations : SPAProcessFilterType.SCOperations;
+            switch (type)
+            {
+                case SPAProcessFilterType.ROBPOperations when !ROBPOperationTextBox.Text.IsNullOrEmptyTrim():
+                case SPAProcessFilterType.SCOperations when !ServiceCatalogTextBox.Text.IsNullOrEmptyTrim():
+                    await AssignAsync(type);
+                    break;
+            }
         }
 
         private bool _serviceCatalogTextBoxChanged = false;
@@ -612,15 +661,16 @@ namespace SPAFilter
                     case SPAProcessFilterType.SCOperations:
                     case SPAProcessFilterType.ROBPOperations:
 
-                        if (type == SPAProcessFilterType.SCOperations && !ServiceCatalogTextBox.Text.IsNullOrEmptyTrim())
+                        switch (type)
                         {
-                            await _spaFilter.AssignSCOperationsAsync(ServiceCatalogTextBox.Text);
-                            UpdateLastPath(Path.GetDirectoryName(ServiceCatalogTextBox.Text));
-                        }
-                        else if (!ROBPOperationTextBox.Text.IsNullOrEmptyTrim())
-                        {
-                            await _spaFilter.AssignROBPOperationsAsync(ROBPOperationTextBox.Text);
-                            UpdateLastPath(ROBPOperationTextBox.Text);
+                            case SPAProcessFilterType.SCOperations:
+                                await _spaFilter.AssignSCOperationsAsync(ServiceCatalogTextBox.Text);
+                                UpdateLastPath(Path.GetDirectoryName(ServiceCatalogTextBox.Text));
+                                break;
+                            case SPAProcessFilterType.ROBPOperations:
+                                await _spaFilter.AssignROBPOperationsAsync(ROBPOperationTextBox.Text);
+                                UpdateLastPath(ROBPOperationTextBox.Text);
+                                break;
                         }
 
                         if (_spaFilter.HostTypes != null)
@@ -647,7 +697,7 @@ namespace SPAFilter
                         UpdateLastPath(fileConfig);
                         break;
                     case SPAProcessFilterType.Activators_Remove:
-                        if (GetFilePathCurrentRow(dataGridServiceInstances, out var listFiles))
+                        if (GetCellItemSelectedRows(dataGridServiceInstances, out var listFiles))
                         {
                             await _spaFilter.RemoveActivatorAsync(listFiles);
                             AssignActivator();
@@ -733,14 +783,13 @@ namespace SPAFilter
                 var filterProcess = ProcessesComboBox.Text;
                 var filterNE = NetSettComboBox.Text;
                 var filterOp = OperationComboBox.Text;
-                var filterInROBP = ROBPOperationsRadioButton.Checked;
                 var syncContext = SynchronizationContext.Current;
 
                 ClearDataGrid();
 
                 using (var progressCalc = new ProgressCalculationAsync(progressBar, 12))
                 {
-                    await Task.Factory.StartNew(() => _spaFilter.DataFilter(filterProcess, filterNE, filterOp, filterInROBP, progressCalc));
+                    await Task.Factory.StartNew(() => _spaFilter.DataFilter(filterProcess, filterNE, filterOp, progressCalc));
 
                     await Task.Factory.StartNew(() => syncContext.Post(delegate
                     {
@@ -909,7 +958,7 @@ namespace SPAFilter
             }
         }
 
-        void OpenEditor(string path)
+        void OpenEditor(string source, string name = null)
         {
             try
             {
@@ -918,7 +967,7 @@ namespace SPAFilter
                     if (_notepadLocation == FormLocation.Default)
                         _notepadLocation = new FormLocation(this);
 
-                    _notepad = new Notepad(path)
+                    _notepad = new Notepad()
                     {
                         Location = _notepadLocation.Location,
                         WindowState = _notepadWindowsState,
@@ -929,10 +978,14 @@ namespace SPAFilter
                 }
                 else
                 {
-                    _notepad.AddDocument(path);
                     _notepad.Focus();
                     _notepad.Activate();
                 }
+
+                if (name == null)
+                    _notepad.AddFileDocument(source);
+                else
+                    _notepad.AddDocument(name, source);
             }
             catch (Exception ex)
             {
@@ -1052,14 +1105,16 @@ namespace SPAFilter
             }
         }
 
-        static bool GetFilePathCurrentRow(DataGridView grid, out List<string> filesPath)
+        static bool GetCellItemSelectedRows(DataGridView grid, out List<string> result, string name = "File Path")
         {
-            filesPath = new List<string>();
+            result = new List<string>();
             if (grid.SelectedRows.Count > 0)
             {
                 foreach (DataGridViewRow row in grid.SelectedRows)
                 {
-                    filesPath.Add(row.Cells[grid.ColumnCount - 1].Value.ToString());
+                    var cell = row.Cells[name]?.Value;
+                    if (cell != null)
+                        result.Add(cell.ToString());
                 }
             }
             else
@@ -1067,7 +1122,7 @@ namespace SPAFilter
                 MessageBox.Show(@"You must select a row.", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
-            return true;
+            return result.Count > 0;
         }
 
 

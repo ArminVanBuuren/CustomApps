@@ -83,10 +83,10 @@ namespace SPAFilter.SPA.Components.SC
 
             ScenarioNode = scenarioNode;
 
-            var childRFS = XPATH.Execute(navigator, $"/Configuration/ScenarioList/Scenario[@name='{ScenarioName}']/RFS");
-            if (childRFS != null && childRFS.Count > 0)
+            var scenarioRFSs = XPATH.Execute(navigator, $"/Configuration/ScenarioList/Scenario[@name='{ScenarioName}']/RFS");
+            if (scenarioRFSs != null && scenarioRFSs.Count > 0)
             {
-                foreach (var rfsNode in childRFS)
+                foreach (var rfsNode in scenarioRFSs)
                 {
                     if (rfsNode.Node.Attributes == null || rfsNode.Node.Attributes.Count == 0)
                         continue;

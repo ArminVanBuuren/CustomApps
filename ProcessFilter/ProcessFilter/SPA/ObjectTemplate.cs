@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Utils.WinForm.DataGridViewHelper;
@@ -22,7 +23,7 @@ namespace SPAFilter.SPA
         {
             get
             {
-                if (_fileInfo.Exists)
+                if (_fileInfo != null && _fileInfo.Exists)
                     return Math.Round(((double)_fileInfo.Length / 1024), 2);
 
                 return -1;
@@ -39,11 +40,6 @@ namespace SPAFilter.SPA
             Name = IO.GetLastNameInPath(filePath, true);
             FilePath = filePath;
             _fileInfo = new FileInfo(filePath);
-        }
-
-        public override string ToString()
-        {
-            return Name;
         }
 
         internal static bool GetNameWithId(string fileName, out string newFileName, out int newId)
@@ -80,16 +76,20 @@ namespace SPAFilter.SPA
             if (!(obj is ObjectTemplate objRes))
                 return false;
 
-            if (objRes.FilePath != null && this.FilePath != null && objRes.FilePath.Equals(this.FilePath, StringComparison.CurrentCultureIgnoreCase))
-            {
+            if (!objRes.FilePath.IsNullOrEmptyTrim() && !this.FilePath.IsNullOrEmptyTrim() && objRes.FilePath.Equals(this.FilePath, StringComparison.CurrentCultureIgnoreCase))
                 return true;
-            }
-            return base.Equals(obj);
+
+            return RuntimeHelpers.Equals(this, obj);
         }
 
         public override int GetHashCode()
         {
-            return FilePath.ToLower().GetHashCode();
+            return !FilePath.IsNullOrEmptyTrim() ? FilePath.ToLower().GetHashCode() : RuntimeHelpers.GetHashCode(this);
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

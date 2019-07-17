@@ -35,7 +35,7 @@ namespace SPAFilter.SPA
         public CollectionTemplate<Scenario> Scenarios { get; private set; }
         public CollectionTemplate<Command> Commands { get; private set; }
 
-        public void DataFilter(string filterProcess, string filterHT, string filterOp, bool filterInROBP, ProgressCalculationAsync progressCalc)
+        public void DataFilter(string filterProcess, string filterHT, string filterOp, ProgressCalculationAsync progressCalc)
         {
             try
             {
@@ -98,7 +98,7 @@ namespace SPAFilter.SPA
 
                 #endregion
 
-                if (filterInROBP)
+                if (ROBPHostTypesPath != null)
                     FilterROBPOperations(htFilter, opFilter);
                 else
                     FilterSCOperations(htFilter, opFilter);
@@ -113,7 +113,7 @@ namespace SPAFilter.SPA
                 {
                     // Если не установленно никаких фильтрров по операциям или хостам
                     // То помечаем бизнесспроцессы в которых файлы ROBP операций не существуют
-                    if (filterInROBP)
+                    if (ROBPHostTypesPath != null)
                     {
                         foreach (var process in Processes)
                         {
@@ -222,6 +222,8 @@ namespace SPAFilter.SPA
         public async Task AssignROBPOperationsAsync(string robpHostTypesPath)
         {
             ROBPHostTypesPath = robpHostTypesPath;
+            SCPath = null;
+            HostTypes = null;
             await Task.Factory.StartNew(() => FilterROBPOperations(null, null));
         }
 
@@ -244,6 +246,8 @@ namespace SPAFilter.SPA
         public async Task AssignSCOperationsAsync(string filePath)
         {
             SCPath = filePath;
+            ROBPHostTypesPath = null;
+            HostTypes = null;
             await Task.Factory.StartNew(() => FilterSCOperations(null, null));
         }
 

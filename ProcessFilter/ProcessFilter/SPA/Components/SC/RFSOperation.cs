@@ -25,6 +25,9 @@ namespace SPAFilter.SPA.Components.SC
             }
         }
 
+        /// <summary>
+        /// true - если текущий RFS используется как отдельная операция или false - относится к каталожному сценарию
+        /// </summary>
         public bool IsSeparated { get; internal set; } = true;
 
         public override string Body

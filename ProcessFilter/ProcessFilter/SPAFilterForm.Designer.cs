@@ -597,7 +597,7 @@ namespace SPAFilter
             this.ROBPOperationsRadioButton.TabStop = true;
             this.ROBPOperationsRadioButton.Text = "ROBP Operations:";
             this.ROBPOperationsRadioButton.UseVisualStyleBackColor = true;
-            this.ROBPOperationsRadioButton.CheckedChanged += new System.EventHandler(this.ROBPOperationsRadioButton_CheckedChanged);
+            
             // 
             // ServiceCatalogRadioButton
             // 
@@ -608,7 +608,7 @@ namespace SPAFilter
             this.ServiceCatalogRadioButton.TabIndex = 36;
             this.ServiceCatalogRadioButton.Text = "Service Catalog:";
             this.ServiceCatalogRadioButton.UseVisualStyleBackColor = true;
-            this.ServiceCatalogRadioButton.CheckedChanged += new System.EventHandler(this.ServiceCatalogRadioButton_CheckedChanged);
+            
             // 
             // progressBar
             // 
