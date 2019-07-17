@@ -35,7 +35,7 @@ namespace Utils.WinForm.Notepad
             set => _wordWrapping.Checked = value;
         }
 
-        public Notepad(string filePath, bool wordWrap = true)
+        public Notepad(string filePath = null, bool wordWrap = true)
         {
             InitializeComponent();
 
@@ -94,8 +94,12 @@ namespace Utils.WinForm.Notepad
             _selectedInfo = GetStripLabel("");
             statusStrip.Items.Add(_selectedInfo);
 
-            var editor2 = AddDocumentAndGetEditor(filePath);
-            _listOfLanguages.Text = editor2.FCTB.Language.ToString();
+            if (filePath != null)
+            {
+                var editor2 = AddDocumentAndGetEditor(filePath);
+                _listOfLanguages.Text = editor2.FCTB.Language.ToString();
+            }
+
             _listOfLanguages.SelectedIndexChanged += ComboBox_SelectedIndexChanged;
         }
 
@@ -115,7 +119,23 @@ namespace Utils.WinForm.Notepad
             };
         }
 
-        public void AddDocument(string filePath)
+        /// <summary>
+        /// Добавить текстовый контент
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="bodyText"></param>
+        public void AddDocument(string name, string bodyText)
+        {
+            var editor = new Editor(name, bodyText, WordWrap);
+            Text = name;
+            InitializePage(editor);
+        }
+
+        /// <summary>
+        /// Добавить фаловый документ
+        /// </summary>
+        /// <param name="filePath"></param>
+        public void AddFileDocument(string filePath)
         {
             AddDocumentAndGetEditor(filePath);
         }
@@ -128,6 +148,13 @@ namespace Utils.WinForm.Notepad
             var editor = new Editor(filePath, WordWrap);
             Text = filePath;
 
+            InitializePage(editor);
+
+            return editor;
+        }
+
+        void InitializePage(Editor editor)
+        {
             var page = new TabPage
             {
                 UseVisualStyleBackColor = true,
@@ -141,7 +168,7 @@ namespace Utils.WinForm.Notepad
 
             int index = TabControlObj.TabPages.Count;
             TabControlObj.TabPages.Add(page);
-            if(TabControlObj.TabPages.Count == index)
+            if (TabControlObj.TabPages.Count == index)
                 TabControlObj.TabPages.Insert(index, editor.Name);
             TabControlObj.SelectedIndex = index;
 
@@ -152,7 +179,6 @@ namespace Utils.WinForm.Notepad
             _currentEditor = editor;
 
             FCTB_SelectionChanged(this, null);
-            return editor;
         }
 
         void EditorOnSomethingChanged(object sender, EventArgs args)
@@ -193,7 +219,7 @@ namespace Utils.WinForm.Notepad
             _currentLineInfo.Text = (_currentEditor.FCTB.Selection.FromLine + 1).ToString();
             _currentPosition.Text = (_currentEditor.FCTB.Selection.FromX + 1).ToString();
             _selectedInfo.Text = $"{_currentEditor.FCTB.SelectedText.Length}|{(_currentEditor.FCTB.SelectedText.Length > 0 ? _currentEditor.FCTB.SelectedText.Split('\n').Length : 0)}";
-            _encodingInfo.Text = _currentEditor.Encoding.EncodingName;
+            _encodingInfo.Text = _currentEditor.Encoding?.EncodingName;
 
             //_listOfLanguages.SelectedIndexChanged -= ComboBox_SelectedIndexChanged;
             _listOfLanguages.Text = _currentEditor.FCTB.Language.ToString();

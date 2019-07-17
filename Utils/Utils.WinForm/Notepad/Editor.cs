@@ -12,6 +12,7 @@ namespace Utils.WinForm.Notepad
 {
     internal class Editor : IDisposable
     {
+        private readonly Encoding _defaultEncoding = Encoding.Unicode;
         readonly MarkerStyle _sameWordsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(40, Color.Gray)));
         static object syncWhenFileChanged { get; } = new object();
         bool _isDisposed = false;
@@ -19,7 +20,7 @@ namespace Utils.WinForm.Notepad
 
         public event EventHandler OnSomethingChanged;
         public string Name { get; private set; }
-        public string FilePath { get; private set; }
+        public string FilePath { get; private set; } = null;
         public string Source { get; private set; }
         public FastColoredTextBox FCTB { get; private set; }
         public bool IsContentChanged => !FCTB.Text.Equals(Source);
@@ -30,7 +31,7 @@ namespace Utils.WinForm.Notepad
             {
                 try
                 {
-                    return IO.GetEncoding(FilePath);
+                    return FilePath != null ? IO.GetEncoding(FilePath) : _defaultEncoding;
                 }
                 catch (Exception)
                 {
@@ -39,26 +40,55 @@ namespace Utils.WinForm.Notepad
             }
         }
 
+        internal Editor(string name, string bodyText, bool wordWrap)
+        {
+            Source = bodyText;
+            Name = name;
+            InitializeFCTB(Language.Custom, wordWrap);
+        }
+
         internal Editor(string filePath, bool wordWrap)
         {
             if (!File.Exists(filePath))
                 throw new ArgumentException($"File \"{filePath}\" not found!");
 
+            var langByExtension = InitializeFile(filePath);
+            InitializeFCTB(langByExtension, wordWrap);
+        }
+
+        Language InitializeFile(string filePath)
+        {
             var langByExtension = GetLanguage(filePath);
 
             FilePath = filePath;
             Name = IO.GetLastNameInPath(filePath, true);
             Source = IO.SafeReadFile(filePath);
 
-            if (langByExtension == Language.XML && !XML.IsXml(Source, out _))
+            if (langByExtension == Language.XML && !Source.IsXml(out _))
                 MessageBox.Show($"Xml file \"{filePath}\" is incorrect!", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
+            _watcher = new FileSystemWatcher();
+            var paths = filePath.Split('\\');
+            _watcher.Path = string.Join("\\", paths.Take(paths.Length - 1));
+            _watcher.Filter = paths[paths.Length - 1];
+            _watcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
+            _watcher.Changed += OnForeignFileChanged;
+            _watcher.Created += OnForeignFileChanged;
+            _watcher.Deleted += OnForeignFileChanged;
+            _watcher.Renamed += OnFileRenamed;
+            _watcher.EnableRaisingEvents = true;
+
+            return langByExtension;
+        }
+
+        void InitializeFCTB(Language language, bool wordWrap)
+        {
             FCTB = new FastColoredTextBox();
-            ((ISupportInitialize) (FCTB)).BeginInit();
+            ((ISupportInitialize)(FCTB)).BeginInit();
             FCTB.ClearStylesBuffer();
             FCTB.Range.ClearStyle(StyleIndex.All);
             FCTB.Anchor = ((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right;
-            FCTB.AutoCompleteBracketsList = new[] {'(', ')', '{', '}', '[', ']', '\"', '\"', '\'', '\''};
+            FCTB.AutoCompleteBracketsList = new[] { '(', ')', '{', '}', '[', ']', '\"', '\"', '\'', '\'' };
             FCTB.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);";
             FCTB.AutoScrollMinSize = new Size(0, 14);
             FCTB.BackBrush = null;
@@ -76,24 +106,13 @@ namespace Utils.WinForm.Notepad
             FCTB.Zoom = 100;
             FCTB.Dock = DockStyle.Fill;
             FCTB.ForeColor = Color.Black;
-            ((ISupportInitialize) (FCTB)).EndInit();
+            ((ISupportInitialize)(FCTB)).EndInit();
 
-            FCTB.Language = langByExtension;
+            FCTB.Language = language;
             FCTB.Text = Source;
             FCTB.TextChanged += Fctb_TextChanged;
             FCTB.KeyDown += UserTriedToSaveDocument;
             FCTB.SelectionChangedDelayed += Fctb_SelectionChangedDelayed;
-
-            _watcher = new FileSystemWatcher();
-            var paths = filePath.Split('\\');
-            _watcher.Path = string.Join("\\", paths.Take(paths.Length - 1));
-            _watcher.Filter = paths[paths.Length - 1];
-            _watcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
-            _watcher.Changed += OnForeignFileChanged;
-            _watcher.Created += OnForeignFileChanged;
-            _watcher.Deleted += OnForeignFileChanged;
-            _watcher.Renamed += OnFileRenamed;
-            _watcher.EnableRaisingEvents = true;
         }
 
         public void ChangeLanguage(Language lang)
@@ -219,19 +238,41 @@ namespace Utils.WinForm.Notepad
                     if (!IsContentChanged)
                         return;
 
-                    if (FCTB.Language == Language.XML && !XML.IsXml(FCTB.Text, out _))
+                    if (FCTB.Language == Language.XML && !FCTB.Text.IsXml(out _))
                     {
                         var saveFailedXmlFile = MessageBox.Show(@"XML-File is incorrect! Save anyway?", @"Error", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
                         if (saveFailedXmlFile == DialogResult.Cancel)
                             return;
                     }
 
-                    lock (syncWhenFileChanged)
+                    if (FilePath.IsNullOrEmptyTrim())
                     {
-                        IO.WriteFile(FilePath, FCTB.Text);
+                        using (var sfd = new SaveFileDialog())
+                        {
+                            sfd.Filter = @"All files(*.*)|*.*";
+                            if (sfd.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(sfd.FileName))
+                            {
+                                FilePath = sfd.FileName;
+                            }
+                        }
+
+                        lock (syncWhenFileChanged)
+                        {
+                            IO.WriteFile(FilePath, FCTB.Text, _defaultEncoding);
+                        }
+
+                        InitializeFile(FilePath);
+                        OnSomethingChanged?.Invoke(this, null);
+                    }
+                    else
+                    {
+                        lock (syncWhenFileChanged)
+                        {
+                            IO.WriteFile(FilePath, FCTB.Text);
+                        }
                     }
                 }
-                else if (e.KeyCode == Keys.F5 && FCTB.Language == Language.XML && XML.IsXml(FCTB.Text, out var document))
+                else if (e.KeyCode == Keys.F5 && FCTB.Language == Language.XML && FCTB.Text.IsXml(out var document))
                 {
                     FCTB.Text = document.PrintXml();
                     OnSomethingChanged?.Invoke(this, null);

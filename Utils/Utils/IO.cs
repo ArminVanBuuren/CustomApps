@@ -67,16 +67,19 @@ namespace Utils
             return context;
         }
 
-        public static bool WriteFile(string path, string content, Encoding encoding = null)
+        public static void WriteFile(string path, string content, Encoding encoding = null)
         {
-            File.WriteAllText(path, content, encoding ?? GetEncoding(path));
+            if (encoding == null && File.Exists(path))
+                File.WriteAllText(path, content, GetEncoding(path));
+            else if (encoding != null)
+                File.WriteAllText(path, content, encoding);
+            else
+                File.WriteAllText(path, content);
 
             //using (var writetext = new StreamWriter(path, false, GetEncoding(path)))
             //{
             //    writetext.Write(content);
             //}
-
-            return true;
         }
 
         /// <summary>
