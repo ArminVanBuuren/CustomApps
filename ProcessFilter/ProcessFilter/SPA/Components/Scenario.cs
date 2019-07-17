@@ -18,13 +18,31 @@ namespace SPAFilter.SPA.Components
         internal List<Command> Commands { get; } = new List<Command>();
         internal List<Scenario> SubScenarios { get; private set; } = new List<Scenario>();
 
-        [DGVColumn(ColumnPosition.Before, "HostType")]
-        public string HostTypeName => _parent.HostTypeName;
-
         [DGVColumn(ColumnPosition.After, "Scenario")]
         public override string Name { get; protected set; }
 
-        [DGVColumn(ColumnPosition.After, "SubScenarios")]
+        [DGVColumn(ColumnPosition.Before, "HostType")]
+        public string HostTypeName => _parent.HostTypeName;
+
+        [DGVColumn(ColumnPosition.Last, "Size [Kb]")]
+        public override double FileSize => base.FileSize;
+
+        /// <summary>
+        /// Указывает является ли текущий сценарий вложенным
+        /// </summary>
+        [DGVColumn(ColumnPosition.Last, "IsSubScenario", false)]
+        public bool IsSubScenario { get; }
+
+        /// <summary>
+        /// Проверка на существование комманд в сценарии
+        /// </summary>
+        [DGVColumn(ColumnPosition.Last, "AllCommandsExist", false)]
+        public bool AllCommandsExist { get; private set; } = true;
+
+        /// <summary>
+        /// Количество вложенных сценариев
+        /// </summary>
+        [DGVColumn(ColumnPosition.Last, "SubScenarios")]
         public int ExistSubScenarios => SubScenarios.Count;
 
         class ParceScenario
@@ -36,6 +54,7 @@ namespace SPAFilter.SPA.Components
 
         public Scenario(ServiceInstance parent, string filePath, IReadOnlyDictionary<string, Command> commandList) : base(filePath)
         {
+            IsSubScenario = false;
             _parent = parent;
 
             var prsCs = new ParceScenario
@@ -48,10 +67,9 @@ namespace SPAFilter.SPA.Components
             CheckScenario(prsCs, commandList);
         }
 
-        public Scenario(ServiceInstance parent, string filePath, IReadOnlyDictionary<string, Command> commandList, string parentFileScenario) : base(filePath)
+        Scenario(ServiceInstance parent, string filePath, IReadOnlyDictionary<string, Command> commandList, string parentFileScenario) : base(filePath)
         {
-            ID = -1;
-
+            IsSubScenario = true;
             _parent = parent;
 
             var prsCs = new ParceScenario
@@ -72,11 +90,12 @@ namespace SPAFilter.SPA.Components
             {
                 if (commandList.TryGetValue(command, out var res))
                     Commands.Add(res);
+                else
+                    AllCommandsExist = false;
             }
 
             foreach (var subScenarioPath in prsCs.SubScenarios)
             {
-                //Path.GetDirectoryName(FilePath)
                 SubScenarios.Add(new Scenario(_parent, subScenarioPath, commandList, FilePath));
             }
         }
@@ -125,7 +144,6 @@ namespace SPAFilter.SPA.Components
 
             foreach (XmlNode xm in listByXpath)
             {
-                //if (!collection.Any(p => p.Equals(xm.InnerText)))
                 collection.Add(xm.InnerText);
             }
             return collection;

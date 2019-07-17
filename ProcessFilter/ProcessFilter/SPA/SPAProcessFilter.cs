@@ -63,7 +63,7 @@ namespace SPAFilter.SPA
 
                 FilterProcesses(bpFilter);
 
-                progressCalc.Append(2);
+                progressCalc.Append(1);
 
                 Func<HostType, bool> htFilter = null;
                 Func<Operation, bool> opFilter = null;
@@ -103,42 +103,83 @@ namespace SPAFilter.SPA
                 else
                     FilterSCOperations(htFilter, opFilter);
 
-                #region remove BusinessProcesses without exists Operations and without SCCall
+                progressCalc.Append(2);
 
-                var isCatalog = HostTypes is ServiceCatalog;
-                var existsOperations = HostTypes.OperationNames;
-                for (var index = 0; index < Processes.Count; index++)
+                #region Mark or Exclude Processes
+
+                var fileteredOperations = HostTypes.Operations;
+                var operationsDictionary = fileteredOperations.ToDictionary(x => x.Name, x => x, StringComparer.CurrentCultureIgnoreCase);
+                if (htFilter == null && opFilter == null)
                 {
-                    var businessProcess = Processes[index];
-                    var hasMatch = businessProcess.Operations.Any(x => existsOperations.Any(y => x.Equals(y, StringComparison.CurrentCultureIgnoreCase)));
-                    if (!hasMatch)
+                    // Если не установленно никаких фильтрров по операциям или хостам
+                    // То помечаем бизнесспроцессы в которых файлы ROBP операций не существуют
+                    if (filterInROBP)
                     {
-                        if (isCatalog && HostTypes.Count > 0 && businessProcess.HasCatalogCall)
+                        foreach (var process in Processes)
+                        {
+                            foreach (var operation in process.Operations)
+                            {
+                                if (operationsDictionary.ContainsKey(operation))
+                                    continue;
+
+                                process.AllOperationsExist = false;
+                                break;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    // наоборот удаляем процессы, если был установлен фильтр по операциям или хостам
+                    var isCatalog = HostTypes is ServiceCatalog;
+                    for (var index = 0; index < Processes.Count; index++)
+                    {
+                        var process = Processes[index];
+                        if(isCatalog && process.HasCatalogCall)
                             continue;
 
-                        Processes.Remove(businessProcess);
+                        if (process.Operations.Any(x => operationsDictionary.ContainsKey(x)))
+                            continue;
+
+                        Processes.Remove(process);
                         index--;
                     }
                 }
 
+                Processes.InitSequence();
+
                 #endregion
 
-                progressCalc.Append(2);
+                progressCalc.Append(1);
 
-                SIRefresh();
+                #region Filter Scenarios
 
-                Scenarios = CollectionTemplate<Scenario>.ToCollection(Scenarios.Intersect(HostTypes.Operations, new OperationsComparer()).Cast<Scenario>().OrderBy(p => p.HostTypeName).ThenBy(p => p.Name));
+                ReinitializationActivators();
+                Scenarios = CollectionTemplate<Scenario>.ToCollection(Scenarios.Intersect(fileteredOperations, new OperationsComparer()).Cast<Scenario>().OrderBy(p => p.HostTypeName).ThenBy(p => p.Name), false);
 
-                progressCalc.Append(2);
+                // проверка на существование сценария для операции
+                foreach (var operation in fileteredOperations.Except(Scenarios, new OperationsComparer()).Cast<Operation>())
+                {
+                    operation.IsScenarioExist = false;
+                }
+
+                #endregion
+
+                progressCalc.Append(3);
+
+                #region Filter Commands
 
                 var filteredSubScenarios = new DistinctList<Scenario>();
                 var filteredCommands  = new DistinctList<Command>();
-                GetCommandsAndSubs(Scenarios, filteredSubScenarios, filteredCommands);
+                GetCommandsAndSubscenarios(Scenarios, filteredSubScenarios, filteredCommands);
                 Scenarios.AddRange(filteredSubScenarios.OrderBy(p => p.FilePath));
+                Scenarios.InitSequence();
 
                 Commands = CollectionTemplate<Command>.ToCollection(filteredCommands.OrderBy(p => p.HostTypeName).ThenBy(p => p.Name));
 
-                progressCalc.Append(2);
+                #endregion
+
+                progressCalc.Append(1);
             }
             catch (Exception ex)
             {
@@ -146,19 +187,18 @@ namespace SPAFilter.SPA
             }
         }
 
-        static void GetCommandsAndSubs(IEnumerable<Scenario> scenarios, DistinctList<Scenario> subScenarios, DistinctList<Command> commandsResult)
+        static void GetCommandsAndSubscenarios(IEnumerable<Scenario> scenarios, DistinctList<Scenario> subScenarios, DistinctList<Command> commandsResult)
         {
             foreach (var scenario in scenarios)
             {
                 if (scenario.SubScenarios.Count > 0)
                 {
                     subScenarios.AddRange(scenario.SubScenarios);
-                    GetCommandsAndSubs(scenario.SubScenarios, subScenarios, commandsResult);
+                    GetCommandsAndSubscenarios(scenario.SubScenarios, subScenarios, commandsResult);
                 }
                 commandsResult.AddRange(scenario.Commands);
             }
         }
-
 
         public async Task AssignProcessesAsync(string processPath)
         {
@@ -172,19 +212,11 @@ namespace SPAFilter.SPA
                 throw new Exception($"Directory \"{ProcessPath}\" not found!");
 
             Processes = new CollectionBusinessProcess();
-            foreach (var file in GetConfigFiles(ProcessPath))
+            foreach (var file in GetFiles(ProcessPath))
             {
                 if (BusinessProcess.IsBusinessProcess(file, out var result) && (bpFilter == null || bpFilter.Invoke(result)))
                     Processes.Add(result);
             }
-            Processes.InitId();
-        }
-
-        public static List<string> GetConfigFiles(string path, string mask = "*.xml")
-        {
-            var files = Directory.GetFiles(path, mask, SearchOption.TopDirectoryOnly).ToList();
-            files.Sort(StringComparer.CurrentCulture);
-            return files;
         }
 
         public async Task AssignROBPOperationsAsync(string robpHostTypesPath)
@@ -199,11 +231,9 @@ namespace SPAFilter.SPA
                 throw new Exception($"Directory \"{ROBPHostTypesPath}\" not found!");
 
             HostTypes = new CollectionHostType(); 
-            var files = Directory.GetDirectories(ROBPHostTypesPath).ToList();
-            files.Sort(StringComparer.CurrentCulture);
             var allBPOperations = Processes.AllOperationsNames;
 
-            foreach (var neDirPath in files)
+            foreach (var neDirPath in GetDirectories(ROBPHostTypesPath))
             {
                 var robpHostType = new ROBPHostType(neDirPath);
                 FilterOperations(robpHostType, htFilter, opFilter, allBPOperations, false);
@@ -233,15 +263,17 @@ namespace SPAFilter.SPA
             }
         }
 
-        static void FilterOperations(HostType hostType, Func<HostType, bool> neFilter, Func<Operation, bool> opFilter, IReadOnlyDictionary<string, string> allBPOperations, bool AnyHasCatalogCall)
+        static void FilterOperations(HostType hostType, Func<HostType, bool> neFilter, Func<Operation, bool> opFilter, IReadOnlyDictionary<string, string> allBPOperations, bool anyHasCatalogCall)
         {
             if (neFilter != null && !neFilter.Invoke(hostType))
             {
+                // если фильтруются операции по другому хосту
                 hostType.Operations.Clear();
                 return;
             }
             else if (allBPOperations != null)
             {
+                // удаляем операции которых не используются ни в одном бизнес процессе
                 if (opFilter == null)
                     opFilter = (op) => true;
 
@@ -255,13 +287,15 @@ namespace SPAFilter.SPA
                     }
                 }
             }
-            else if (!AnyHasCatalogCall)
+            else if (!anyHasCatalogCall)
             {
+                // если ни в одном бизнесс процессе нет вызова каталога, то все операции удалются
                 hostType.Operations.Clear();
                 return;
             }
             else if (opFilter != null)
             {
+                // удаляем операции которые не попали под имя указынные в фильтре операций
                 for (var index = 0; index < hostType.Operations.Count; index++)
                 {
                     var operation = hostType.Operations[index];
@@ -288,8 +322,7 @@ namespace SPAFilter.SPA
                 }
 
                 _activators.Add(new ServiceActivator(filePath));
-
-                SIReinitialization();
+                ServiceInstances = GetServiceInstances();
             });
         }
 
@@ -310,24 +343,19 @@ namespace SPAFilter.SPA
                     }
                 }
 
-                SIReinitialization();
+                ServiceInstances = GetServiceInstances();
             });
         }
 
-        void SIRefresh()
+        void ReinitializationActivators()
         {
             foreach (var activator in _activators)
             {
                 activator.Refresh();
             }
-            SIReinitialization();
-        }
 
-        void SIReinitialization()
-        {
             ServiceInstances = GetServiceInstances();
-            ServiceInstances.InitId();
-            GetScenariosAndCommands(GetServiceInstances(true), out var allScenarios, out var allCommands);
+            GetScenariosAndCommands(ServiceInstances, out var allScenarios, out var allCommands);
             Scenarios = allScenarios;
             Commands = allCommands;
         }
@@ -335,13 +363,13 @@ namespace SPAFilter.SPA
         CollectionTemplate<ServiceInstance> GetServiceInstances(bool getValid = false)
         {
             var intsances = new CollectionTemplate<ServiceInstance>();
-            foreach (var instance in _activators.SelectMany(p => p.Instances).OrderBy(p => p.HostTypeName).ThenBy(p => p.FilePath))
+            foreach (var instance in _activators.SelectMany(p => p.Instances).OrderBy(p => p.HostTypeName).ThenBy(p => p.Name))
             {
                 if (getValid && !instance.IsCorrect)
                     continue;
                 intsances.Add(instance);
             }
-
+            intsances.InitSequence();
             return intsances;
         }
 
@@ -351,6 +379,9 @@ namespace SPAFilter.SPA
             var allCommands = new DistinctList<Command>();
             foreach (var instance in serviceInstances)
             {
+                if(!instance.IsCorrect)
+                    continue;
+
                 foreach (var scenario in instance.Scenarios)
                 {
                     allScenarios.Add(scenario);
@@ -374,7 +405,7 @@ namespace SPAFilter.SPA
             {
                 progressCalc.BeginReadXslxFile();
 
-                var myWorksheet = xslPackage.Workbook.Worksheets.First(); //sheet
+                var myWorksheet = xslPackage.Workbook.Worksheets.First();
                 var totalRows = myWorksheet.Dimension.End.Row;
                 var totalColumns = mandatoryXslxColumns.Length;
 
@@ -439,26 +470,26 @@ namespace SPAFilter.SPA
 
         public void PrintXML(CustomStringBuilder stringErrors, ProgressCalculationAsync progrAsync)
         {
-            GetFiles(Processes, stringErrors, progrAsync);
-            GetFiles(HostTypes.Operations, stringErrors, progrAsync);
-            GetFiles(ServiceInstances, stringErrors, progrAsync);
-            GetFiles(Scenarios, stringErrors, progrAsync);
-            GetFiles(Commands, stringErrors, progrAsync);
+            FormattingXmlFiles(Processes, stringErrors, progrAsync);
+            FormattingXmlFiles(HostTypes.Operations, stringErrors, progrAsync);
+            FormattingXmlFiles(ServiceInstances, stringErrors, progrAsync);
+            FormattingXmlFiles(Scenarios, stringErrors, progrAsync);
+            FormattingXmlFiles(Commands, stringErrors, progrAsync);
         }
 
-        static void GetFiles(IEnumerable<ObjectTemplate> fileObj, CustomStringBuilder stringErrors, ProgressCalculationAsync progressCalc)
+        static void FormattingXmlFiles(IEnumerable<ObjectTemplate> fileObj, CustomStringBuilder stringErrors, ProgressCalculationAsync progressCalc)
         {
             if (fileObj == null || !fileObj.Any())
                 return;
 
             foreach (var file in fileObj)
             {
-                FormattingXML(file.FilePath, stringErrors);
+                FormattingXmlFile(file.FilePath, stringErrors);
                 progressCalc++;
             }
         }
 
-        static void FormattingXML(string filePath, CustomStringBuilder stringErrors)
+        static void FormattingXmlFile(string filePath, CustomStringBuilder stringErrors)
         {
             try
             {
@@ -483,6 +514,20 @@ namespace SPAFilter.SPA
             {
                 stringErrors.AppendLine($"Message=\"{e.Message}\" File=\"{filePath}]\"");
             }
+        }
+
+        public static List<string> GetDirectories(string dirPath)
+        {
+            var dirs = Directory.GetDirectories(dirPath, "*", SearchOption.TopDirectoryOnly).ToList();
+            dirs.Sort(StringComparer.CurrentCulture);
+            return dirs;
+        }
+
+        public static List<string> GetFiles(string dirPath, string mask = "*.xml")
+        {
+            var files = Directory.GetFiles(dirPath, mask, SearchOption.TopDirectoryOnly).ToList();
+            files.Sort(StringComparer.CurrentCulture);
+            return files;
         }
     }
 }

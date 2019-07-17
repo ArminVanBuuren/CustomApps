@@ -46,8 +46,8 @@ namespace SPAFilter
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.ServiceInstances = new System.Windows.Forms.TabPage();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.addServiceInstancesButton = new System.Windows.Forms.ToolStripButton();
+            this.removeServiceInstancesButton = new System.Windows.Forms.ToolStripButton();
             this.dataGridServiceInstances = new System.Windows.Forms.DataGridView();
             this.Processes = new System.Windows.Forms.TabPage();
             this.Operations = new System.Windows.Forms.TabPage();
@@ -258,8 +258,8 @@ namespace SPAFilter
             this.toolStrip1.BackColor = System.Drawing.SystemColors.Control;
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton1,
-            this.toolStripButton2});
+            this.addServiceInstancesButton,
+            this.removeServiceInstancesButton});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(794, 25);
@@ -268,23 +268,23 @@ namespace SPAFilter
             // 
             // toolStripButton1
             // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = global::SPAFilter.Properties.Resources.icons8_plus_20;
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton1.Text = "Add Activator";
-            this.toolStripButton1.Click += new System.EventHandler(this.AddActivatorButton_Click);
+            this.addServiceInstancesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.addServiceInstancesButton.Image = global::SPAFilter.Properties.Resources.icons8_plus_20;
+            this.addServiceInstancesButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.addServiceInstancesButton.Name = "toolStripButton1";
+            this.addServiceInstancesButton.Size = new System.Drawing.Size(23, 22);
+            this.addServiceInstancesButton.Text = "Add activator\'s application configuration to List";
+            this.addServiceInstancesButton.Click += new System.EventHandler(this.AddActivatorButton_Click);
             // 
             // toolStripButton2
             // 
-            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton2.Image = global::SPAFilter.Properties.Resources.icons8_minus_20;
-            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton2.Text = "Remove Activator";
-            this.toolStripButton2.Click += new System.EventHandler(this.RemoveActivatorButton_Click_1);
+            this.removeServiceInstancesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.removeServiceInstancesButton.Image = global::SPAFilter.Properties.Resources.icons8_minus_20;
+            this.removeServiceInstancesButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.removeServiceInstancesButton.Name = "toolStripButton2";
+            this.removeServiceInstancesButton.Size = new System.Drawing.Size(23, 22);
+            this.removeServiceInstancesButton.Text = "Remove activator\'s application configuration in List";
+            this.removeServiceInstancesButton.Click += new System.EventHandler(this.RemoveActivatorButton_Click_1);
             // 
             // dataGridServiceInstances
             // 
@@ -296,12 +296,12 @@ namespace SPAFilter
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridServiceInstances.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.dataGridServiceInstances.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridServiceInstances.Location = new System.Drawing.Point(0, 28);
+            this.dataGridServiceInstances.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dataGridServiceInstances.Location = new System.Drawing.Point(0, 25);
             this.dataGridServiceInstances.Name = "dataGridServiceInstances";
             this.dataGridServiceInstances.ReadOnly = true;
             this.dataGridServiceInstances.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridServiceInstances.Size = new System.Drawing.Size(792, 234);
+            this.dataGridServiceInstances.Size = new System.Drawing.Size(792, 237);
             this.dataGridServiceInstances.TabIndex = 6;
             this.dataGridServiceInstances.DoubleClick += new System.EventHandler(this.DataGridServiceInstances_DoubleClick);
             // 
@@ -713,8 +713,8 @@ namespace SPAFilter
         private System.Windows.Forms.TabPage ServiceInstances;
         private System.Windows.Forms.DataGridView dataGridServiceInstances;
         private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
-        private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private System.Windows.Forms.ToolStripButton addServiceInstancesButton;
+        private System.Windows.Forms.ToolStripButton removeServiceInstancesButton;
     }
 }
 

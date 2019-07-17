@@ -109,12 +109,12 @@ namespace SPAFilter.SPA.Components
                 return;
             }
 
-            foreach (var fileCommand in SPAProcessFilter.GetConfigFiles(commandsDir, commandsMask))
+            foreach (var fileCommand in SPAProcessFilter.GetFiles(commandsDir, commandsMask))
             {
                 Commands.Add(IO.GetLastNameInPath(fileCommand, true), new Command(this, fileCommand));
             }
 
-            foreach (var fileScenario in SPAProcessFilter.GetConfigFiles(scenariosPath))
+            foreach (var fileScenario in SPAProcessFilter.GetFiles(scenariosPath))
             {
                 Scenarios.Add(new Scenario(this, fileScenario, Commands));
             }

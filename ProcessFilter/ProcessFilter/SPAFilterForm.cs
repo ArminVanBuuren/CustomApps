@@ -68,6 +68,13 @@ namespace SPAFilter
                     ROBPOperationButtonOpen.Enabled = !_isInProgress;
                     ServiceCatalogOpenButton.Enabled = !_isInProgress;
 
+                    ROBPOperationsRadioButton.Enabled = !_isInProgress;
+                    ServiceCatalogRadioButton.Enabled = !_isInProgress;
+
+                    addServiceInstancesButton.Enabled = !_isInProgress;
+                    removeServiceInstancesButton.Enabled = !_isInProgress;
+                    dataGridServiceInstances.Enabled = !_isInProgress;
+
                     dataGridProcesses.Visible = !_isInProgress;
                     dataGridOperations.Visible = !_isInProgress;
                     dataGridScenarios.Visible = !_isInProgress;
@@ -226,9 +233,9 @@ namespace SPAFilter
             //dataGridCommands.CellFormatting += DataGrid_HideNotFiltered;
 
             dataGridServiceInstances.CellFormatting += DataGridServiceInstances_CellFormatting;
+            dataGridProcesses.CellFormatting += DataGridProcesses_CellFormatting;
+            dataGridOperations.CellFormatting += DataGridOperations_CellFormatting;
             dataGridScenarios.CellFormatting += DataGridScenariosResult_CellFormatting;
-            Closing += (s, e) => SaveData();
-
 
             ProcessesButtonOpen.Click += ProcessesButtonOpen_Click;
             ProcessesTextBox.TextChanged += ProcessesTextBox_TextChanged;
@@ -241,15 +248,116 @@ namespace SPAFilter
             ServiceCatalogOpenButton.Click += ServiceCatalogOpenButton_Click;
             ServiceCatalogTextBox.TextChanged += ServiceCatalogTextBox_TextChanged;
             ServiceCatalogTextBox.LostFocus += ServiceCatalogTextBox_LostFocus;
+
+            Closing += (s, e) => SaveData();
         }
+
+        #region Check warning rows
 
         private static void DataGridServiceInstances_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             var row = ((DataGridView)sender).Rows[e.RowIndex];
-            var cell = row.Cells["IsCorrect"];
-            if (cell != null && cell.Value is bool cellValue && !cellValue)
+            var cell = row?.Cells["IsCorrect"];
+            if (cell != null && cell.Value is bool cellValue && cellValue)
+            {
+                row.DefaultCellStyle.BackColor = Color.White;
+            }
+            else
             {
                 row.DefaultCellStyle.BackColor = Color.Red;
+                foreach (DataGridViewCell cell2 in row.Cells)
+                {
+                    cell2.ToolTipText = "Current configuration application is incorrect";
+                }
+            }
+        }
+
+        private void DataGridProcesses_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            var row = ((DataGridView)sender).Rows[e.RowIndex];
+            if (ROBPOperationsRadioButton.Checked)
+            {
+                var cell = row?.Cells["AllOperationsExist"];
+                if (cell != null && cell.Value is bool cellValue && cellValue)
+                {
+                    row.DefaultCellStyle.BackColor = Color.White;
+                }
+                else
+                {
+                    row.DefaultCellStyle.BackColor = Color.LightPink;
+                    foreach (DataGridViewCell cell2 in row.Cells)
+                    {
+                        cell2.ToolTipText = "Some operations doesn't exist";
+                    }
+                }
+            }
+            else
+            {
+                var cell = row?.Cells["HasCatalogCall"];
+                if (cell != null && cell.Value is bool cellValue && cellValue)
+                {
+                    row.DefaultCellStyle.BackColor = Color.White;
+                }
+                else
+                {
+                    row.DefaultCellStyle.BackColor = Color.LightPink;
+                    foreach (DataGridViewCell cell2 in row.Cells)
+                    {
+                        cell2.ToolTipText = "Service Catalog call doesn't exist";
+                    }
+                }
+            }
+        }
+
+
+        private static void DataGridOperations_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            var row = ((DataGridView)sender).Rows[e.RowIndex];
+            var cell = row?.Cells["IsScenarioExist"];
+            if (cell != null && cell.Value is bool cellValue && cellValue)
+            {
+                row.DefaultCellStyle.BackColor = Color.White;
+            }
+            else
+            {
+                row.DefaultCellStyle.BackColor = Color.LightPink;
+                foreach (DataGridViewCell cell2 in row.Cells)
+                {
+                    cell2.ToolTipText = "Scenario for this operation doesn't exist";
+                }
+            }
+        }
+
+        private static void DataGridScenariosResult_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            var row = ((DataGridView)sender).Rows[e.RowIndex];
+            var cellIsSubScenario = row?.Cells["IsSubScenario"];
+            var cellAllCommandsExist = row?.Cells["AllCommandsExist"];
+            var isSubScenario = cellIsSubScenario != null && cellIsSubScenario.Value is bool cellValue && cellValue;
+            var allCommandsExist = cellAllCommandsExist != null && cellAllCommandsExist.Value is bool cellValue2 && cellValue2;
+            if (isSubScenario && !allCommandsExist)
+            {
+                row.DefaultCellStyle.BackColor = Color.LightPink;
+                foreach (DataGridViewCell cell3 in row.Cells)
+                {
+                    cell3.ToolTipText = "Some commands in this Subscenario doesn't exist";
+                }
+            }
+            else if (!allCommandsExist)
+            {
+                row.DefaultCellStyle.BackColor = Color.LightPink;
+                foreach (DataGridViewCell cell3 in row.Cells)
+                {
+                    cell3.ToolTipText = "Some commands doesn't exist";
+                }
+            }
+            else if (isSubScenario)
+            {
+                row.DefaultCellStyle.BackColor = Color.Aqua;
+                foreach (DataGridViewCell cell3 in row.Cells)
+                {
+                    cell3.ToolTipText = "This is Subscenario";
+                }
             }
             else
             {
@@ -257,21 +365,7 @@ namespace SPAFilter
             }
         }
 
-        //private static void DataGrid_HideNotFiltered(object sender, DataGridViewCellFormattingEventArgs e)
-        //{
-        //    var row = ((DataGridView)sender).Rows[e.RowIndex];
-        //    var dataRow = (row.DataBoundItem as DataRowView)?.Row;
-        //    if (dataRow is ObjectTemplate template && !template.IsFiltered)
-        //    {
-        //        row.Visible = false;
-        //    }
-        //}
-
-        private void DataGridScenariosResult_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            var row = dataGridScenarios.Rows[e.RowIndex];
-            row.DefaultCellStyle.BackColor = row.Cells[0].Value.ToString() == "-1" ? Color.Yellow : Color.White;
-        }
+        #endregion
 
         #region DataGrid hot keys and Row double click
 
@@ -356,7 +450,7 @@ namespace SPAFilter
                     if(filesPath.Count == 0)
                         return;
                     
-                    var userResult = MessageBox.Show($"Do you want delete {(filesPath.Count == 1 ? $"the file" : $"{filesPath.Count} files")} ?", @"Question", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                    var userResult = MessageBox.Show($"Do you want delete selected {(filesPath.Count == 1 ? $"file" : $"{filesPath.Count} files")} ?", @"Question", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
 
                     if (userResult != DialogResult.OK)
                         return;
@@ -644,7 +738,7 @@ namespace SPAFilter
 
                 ClearDataGrid();
 
-                using (var progressCalc = new ProgressCalculationAsync(progressBar, 16))
+                using (var progressCalc = new ProgressCalculationAsync(progressBar, 12))
                 {
                     await Task.Factory.StartNew(() => _spaFilter.DataFilter(filterProcess, filterNE, filterOp, filterInROBP, progressCalc));
 
@@ -653,10 +747,10 @@ namespace SPAFilter
                         AssignActivator();
 
                         dataGridProcesses.AssignListToDataGrid(_spaFilter.Processes, new Padding(0, 0, 15, 0));
-                        progressCalc.Append(2);
+                        progressCalc.Append(1);
 
                         dataGridOperations.AssignListToDataGrid(_spaFilter.HostTypes.Operations, new Padding(0, 0, 15, 0));
-                        progressCalc.Append(2);
+                        progressCalc.Append(1);
 
                         if (_spaFilter.Scenarios != null)
                         {
@@ -668,7 +762,7 @@ namespace SPAFilter
                             dataGridScenarios.Refresh();
                         }
 
-                        progressCalc.Append(2);
+                        progressCalc.Append(1);
 
                         if (_spaFilter.Commands != null)
                         {
@@ -679,17 +773,7 @@ namespace SPAFilter
                             dataGridCommands.DataSource = null;
                             dataGridCommands.Refresh();
                         }
-
-                        progressCalc.Append(2);
                     }, null));
-
-                    //await Task.Factory.StartNew(() =>
-                    //{
-                    //    progressBar.Invoke(new MethodInvoker(delegate
-                    //    {
-                            
-                    //    }));
-                    //});
                 }
             }
             catch (Exception ex)
@@ -824,8 +908,6 @@ namespace SPAFilter
                 IsInProgress = false;
             }
         }
-
-        
 
         void OpenEditor(string path)
         {

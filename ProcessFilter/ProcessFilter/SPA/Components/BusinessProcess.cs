@@ -2,13 +2,25 @@
 using System.Linq;
 using System.Xml;
 using Utils;
+using Utils.WinForm.DataGridViewHelper;
 
 namespace SPAFilter.SPA.Components
 {
     public sealed class BusinessProcess : ObjectTemplate
     {
         internal List<string> Operations { get; }
+
+        /// <summary>
+        /// Если ли ли вызов сервис каталога
+        /// </summary>
+        [DGVColumn(ColumnPosition.Last, "HasCatalogCall", false)]
         public bool HasCatalogCall { get; }
+
+        /// <summary>
+        /// Все операции которые прописаны в бизнесспроцессе существуют
+        /// </summary>
+        [DGVColumn(ColumnPosition.Last, "AllOperationsExist", false)]
+        public bool AllOperationsExist { get; internal set; } = true;
 
         BusinessProcess(string filePath, List<string> operations, bool hasCatalogCall) : base(filePath)
         {

@@ -15,6 +15,12 @@ namespace SPAFilter.SPA.Components
         [DGVColumn(ColumnPosition.Before, "HostType")]
         public string HostTypeName { get; protected set; }
 
+        /// <summary>
+        /// Сценарий для этой операции существует
+        /// </summary>
+        [DGVColumn(ColumnPosition.Last, "IsScenarioExist", false)]
+        public bool IsScenarioExist { get; internal set; } = true;
+
         public Operation() { }
 
         public Operation(string path) : base(path)
