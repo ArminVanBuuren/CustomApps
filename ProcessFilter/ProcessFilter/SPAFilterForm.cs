@@ -202,6 +202,7 @@ namespace SPAFilter
         void PreInit()
         {
             InitializeComponent();
+            KeyPreview = true; // для того чтобы работали горячие клавиши по всей форме
             _spaFilter = new SPAProcessFilter();
 
             ROBPOperationsRadioButton.CheckedChanged += ROBPOperationsRadioButton_CheckedChanged;
@@ -216,20 +217,6 @@ namespace SPAFilter
             dataGridScenarios.KeyDown += DataGridScenariosResult_KeyDown;
             dataGridCommands.KeyDown += DataGridCommandsResult_KeyDown;
 
-            tabControl1.KeyDown += ProcessFilterForm_KeyDown;
-            ProcessesTextBox.KeyDown += ProcessFilterForm_KeyDown;
-            ROBPOperationTextBox.KeyDown += ProcessFilterForm_KeyDown;
-            ProcessesComboBox.KeyDown += ProcessFilterForm_KeyDown;
-            NetSettComboBox.KeyDown += ProcessFilterForm_KeyDown;
-            OperationComboBox.KeyDown += ProcessFilterForm_KeyDown;
-            dataGridProcesses.KeyDown += ProcessFilterForm_KeyDown;
-            dataGridOperations.KeyDown += ProcessFilterForm_KeyDown;
-            dataGridServiceInstances.KeyDown += ProcessFilterForm_KeyDown;
-            dataGridScenarios.KeyDown += ProcessFilterForm_KeyDown;
-            dataGridCommands.KeyDown += ProcessFilterForm_KeyDown;
-            ProcessesButtonOpen.KeyDown += ProcessFilterForm_KeyDown;
-            ROBPOperationButtonOpen.KeyDown += ProcessFilterForm_KeyDown;
-            FilterButton.KeyDown += ProcessFilterForm_KeyDown;
             KeyDown += ProcessFilterForm_KeyDown;
 
             //dataGridServiceInstances.CellFormatting += DataGrid_HideNotFiltered;
