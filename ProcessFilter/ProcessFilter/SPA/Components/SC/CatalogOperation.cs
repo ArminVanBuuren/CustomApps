@@ -3,18 +3,28 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using SPAFilter.SPA.Collection;
+using Utils.WinForm.DataGridViewHelper;
 
 namespace SPAFilter.SPA.Components.SC
 {
-    public class CatalogOperation : Operation
+    public abstract class CatalogOperation : ObjectTemplate, IOperation
     {
+        [DGVColumn(ColumnPosition.Before, "HostType")]
+        public string HostTypeName { get; protected set; }
+
+        /// <summary>
+        /// Сценарий для этой операции существует
+        /// </summary>
+        [DGVColumn(ColumnPosition.Last, "IsScenarioExist", false)]
+        public bool IsScenarioExist { get; set; } = true;
+
+        [DGVColumn(ColumnPosition.Last, "Operation")]
+        public override string Name { get; set; }
+
         internal virtual RFSBindings Bindings { get; } = null;
         public virtual string Body { get; } = string.Empty;
 
-        public override double FileSize { get; } = 0;
-        public override string FilePath { get; } = null;
-
-        public CatalogOperation() { }
+        protected CatalogOperation() { }
 
         internal static void AppendXmlNode(StringBuilder builder, string parentNodeName, IEnumerable<XmlNode> collection)
         {

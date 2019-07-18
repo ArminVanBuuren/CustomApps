@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using SPAFilter.SPA.Collection;
 
 namespace SPAFilter.SPA.Components.SC
 {
-    public sealed class CatalogHostType : HostType
+    public sealed class CatalogHostType : ObjectTemplate, IHostType
     {
-        public override double FileSize { get; } = 0;
-        public override string FilePath { get; } = null;
+        public CollectionTemplate<IOperation> Operations { get; private set; } = new CollectionTemplate<IOperation>();
 
-        public CatalogHostType(string name, IEnumerable<Operation> allCatalogOps)
+        public CatalogHostType(string name, IEnumerable<IOperation> allCatalogOps)
         {
             Name = name;
 

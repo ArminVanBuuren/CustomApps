@@ -6,7 +6,7 @@ using Utils.WinForm.DataGridViewHelper;
 
 namespace SPAFilter.SPA.Components
 {
-    public sealed class BusinessProcess : ObjectTemplate
+    public sealed class BusinessProcess : DriveTemplate
     {
         internal List<string> Operations { get; }
 

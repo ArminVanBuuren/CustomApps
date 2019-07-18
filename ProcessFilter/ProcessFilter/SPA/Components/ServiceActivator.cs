@@ -8,7 +8,7 @@ using Utils;
 
 namespace SPAFilter.SPA.Components
 {
-    public class ServiceActivator : ObjectTemplate
+    public class ServiceActivator : DriveTemplate
     {
         public List<ServiceInstance> Instances { get; } = new List<ServiceInstance>();
 

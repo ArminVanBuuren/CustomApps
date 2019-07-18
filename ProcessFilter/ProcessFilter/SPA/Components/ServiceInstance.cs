@@ -14,7 +14,7 @@ using Utils.WinForm.DataGridViewHelper;
 
 namespace SPAFilter.SPA.Components
 {
-    public class ServiceInstance : ObjectTemplate
+    public class ServiceInstance : DriveTemplate
     {
         const string NOT_FOUND_ATTRIBUTE = "Not found attributes: \"{0}\" in {1}";
         const string NOT_FOUND_DIR = "Not found directory in path: \"{0}\" when initialize {1}";
@@ -26,7 +26,7 @@ namespace SPAFilter.SPA.Components
 
         public string HostTypeName { get; }
 
-        public override string Name { get; protected set; }
+        public override string Name { get; set; }
 
         public List<Scenario> Scenarios { get; } = new List<Scenario>();
         public Dictionary<string, Command> Commands { get; } = new Dictionary<string, Command>(StringComparer.CurrentCultureIgnoreCase);

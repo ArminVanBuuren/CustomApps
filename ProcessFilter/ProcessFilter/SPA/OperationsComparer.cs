@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace SPAFilter.SPA
 {
-    public class OperationsComparer : IEqualityComparer<ObjectTemplate>
+    public class OperationsComparer : IEqualityComparer<IObjectTemplate>
     {
-        public bool Equals(ObjectTemplate x, ObjectTemplate y)
+        public bool Equals(IObjectTemplate x, IObjectTemplate y)
         {
             return x != null && y != null && x.Name.Equals(y.Name, StringComparison.CurrentCultureIgnoreCase);
         }
 
 
-        public int GetHashCode(ObjectTemplate obj)
+        public int GetHashCode(IObjectTemplate obj)
         {
             unchecked
             {

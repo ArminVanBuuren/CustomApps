@@ -10,7 +10,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using System.Windows.Forms;
 using System.Threading.Tasks;
+using FastColoredTextBoxNS;
 using SPAFilter.SPA;
+using SPAFilter.SPA.Components.ROBP;
 using SPAFilter.SPA.Components.SC;
 using Utils;
 using Utils.WinForm.DataGridViewHelper;
@@ -396,7 +398,7 @@ namespace SPAFilter
             foreach (var operation in scOperations)
             {
                 if (operation is CatalogOperation catalogOperation)
-                    OpenEditor(catalogOperation.Name, catalogOperation.Body);
+                    OpenEditor(catalogOperation.Body, catalogOperation.Name);
             }
         }
 
@@ -789,7 +791,11 @@ namespace SPAFilter
                         dataGridProcesses.AssignListToDataGrid(_spaFilter.Processes, new Padding(0, 0, 15, 0));
                         progressCalc.Append(1);
 
-                        dataGridOperations.AssignListToDataGrid(_spaFilter.HostTypes.Operations, new Padding(0, 0, 15, 0));
+                        if(ROBPOperationsRadioButton.Checked)
+                            dataGridOperations.AssignListToDataGrid<ROBPOperation>(_spaFilter.HostTypes.Operations.OfType<ROBPOperation>().ToList(), new Padding(0, 0, 15, 0));
+                        else
+                            dataGridOperations.AssignListToDataGrid<CatalogOperation>(_spaFilter.HostTypes.Operations.OfType<CatalogOperation>().ToList(), new Padding(0, 0, 15, 0));
+
                         progressCalc.Append(1);
 
                         if (_spaFilter.Scenarios != null)
@@ -857,9 +863,9 @@ namespace SPAFilter
             if (IsInProgress)
                 return;
 
-            var countOperations = _spaFilter.HostTypes.OperationsCount;
+            var fileOperationsCount = _spaFilter.HostTypes.DriveOperationsCount;
 
-            if (countOperations == 0)
+            if (fileOperationsCount == 0)
             {
                 MessageBox.Show(@"Not found any operations.", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -876,7 +882,7 @@ namespace SPAFilter
                 if (!OpenSCXlsx.Text.IsNullOrEmptyTrim() && File.Exists(OpenSCXlsx.Text))
                 {
                     var file = new FileInfo(OpenSCXlsx.Text);
-                    using (var progrAsync = new CustomProgressCalculation(progressBar, countOperations, file))
+                    using (var progrAsync = new CustomProgressCalculation(progressBar, fileOperationsCount, file))
                     {
                         var rdServices = await Task<DataTable>.Factory.StartNew(() => _spaFilter.GetRDServicesFromXslx(file, progrAsync));
                         fileResult = await Task.Factory.StartNew(() => _spaFilter.GetServiceCatalog(rdServices, ExportSCPath.Text, progrAsync));
@@ -884,7 +890,7 @@ namespace SPAFilter
                 }
                 else
                 {
-                    using (var progrAsync = new CustomProgressCalculation(progressBar, countOperations))
+                    using (var progrAsync = new CustomProgressCalculation(progressBar, fileOperationsCount))
                     {
                         fileResult = await Task.Factory.StartNew(() => _spaFilter.GetServiceCatalog( null, ExportSCPath.Text, progrAsync));
                     }
@@ -907,7 +913,7 @@ namespace SPAFilter
 
         private async void PrintXMLButton_Click(object sender, EventArgs e)
         {
-            var filesNumber = _spaFilter.WholeItemsCount;
+            var filesNumber = _spaFilter.WholeDriveItemsCount;
             if (filesNumber <= 0)
             {
                 MessageBox.Show(@"You must filter files.", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -976,7 +982,7 @@ namespace SPAFilter
                 if (name == null)
                     _notepad.AddFileDocument(source);
                 else
-                    _notepad.AddDocument(name, source);
+                    _notepad.AddDocument(name, source, Language.XML);
             }
             catch (Exception ex)
             {
@@ -1025,7 +1031,7 @@ namespace SPAFilter
             CommandsCount.Text = $"Commands: {(_spaFilter.Commands?.Count ?? 0).ToString()}";
 
             FilterButton.Enabled = _spaFilter.IsEnabledFilter;
-            PrintXMLButton.Enabled = _spaFilter.WholeItemsCount > 0;
+            PrintXMLButton.Enabled = _spaFilter.WholeDriveItemsCount > 0;
             ButtonGenerateSC.Enabled = _spaFilter.CanGenerateSC && !ExportSCPath.Text.IsNullOrEmptyTrim() && ROBPOperationsRadioButton.Checked;
         }
 

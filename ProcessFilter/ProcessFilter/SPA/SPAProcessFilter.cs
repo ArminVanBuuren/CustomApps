@@ -25,8 +25,8 @@ namespace SPAFilter.SPA
         public string SCPath { get; private set; }
 
         public bool IsEnabledFilter => (Processes?.Count ?? 0) > 0 && (HostTypes?.OperationsCount ?? 0) > 0;
-        public bool CanGenerateSC => (HostTypes?.OperationsCount ?? 0) > 0 && !(HostTypes is ServiceCatalog);
-        public int WholeItemsCount => (Processes?.Count ?? 0) + (HostTypes?.OperationsCount ?? 0) + (ServiceInstances?.Count ?? 0) + (Scenarios?.Count ?? 0) + (Commands?.Count ?? 0);
+        public bool CanGenerateSC => (HostTypes?.DriveOperationsCount ?? 0) > 0 && !(HostTypes is ServiceCatalog);
+        public int WholeDriveItemsCount => (Processes?.Count ?? 0) + (HostTypes?.DriveOperationsCount ?? 0) + (ServiceInstances?.Count ?? 0) + (Scenarios?.Count ?? 0) + (Commands?.Count ?? 0);
 
         public CollectionTemplate<ServiceInstance> ServiceInstances { get; private set; }
 
@@ -65,8 +65,8 @@ namespace SPAFilter.SPA
 
                 progressCalc.Append(1);
 
-                Func<HostType, bool> htFilter = null;
-                Func<Operation, bool> opFilter = null;
+                Func<IHostType, bool> htFilter = null;
+                Func<IOperation, bool> opFilter = null;
 
                 #region filter HostType and filter Operations
 
@@ -158,7 +158,7 @@ namespace SPAFilter.SPA
                 Scenarios = CollectionTemplate<Scenario>.ToCollection(Scenarios.Intersect(fileteredOperations, new OperationsComparer()).Cast<Scenario>().OrderBy(p => p.HostTypeName).ThenBy(p => p.Name), false);
 
                 // проверка на существование сценария для операции
-                foreach (var operation in fileteredOperations.Except(Scenarios, new OperationsComparer()).Cast<Operation>())
+                foreach (var operation in fileteredOperations.Except(Scenarios, new OperationsComparer()).Cast<IOperation>())
                 {
                     operation.IsScenarioExist = false;
                 }
@@ -227,7 +227,7 @@ namespace SPAFilter.SPA
             await Task.Factory.StartNew(() => FilterROBPOperations(null, null));
         }
 
-        void FilterROBPOperations(Func<HostType, bool> htFilter, Func<Operation, bool> opFilter)
+        void FilterROBPOperations(Func<IHostType, bool> htFilter, Func<IOperation, bool> opFilter)
         {
             if (!Directory.Exists(ROBPHostTypesPath))
                 throw new Exception($"Directory \"{ROBPHostTypesPath}\" not found!");
@@ -251,7 +251,7 @@ namespace SPAFilter.SPA
             await Task.Factory.StartNew(() => FilterSCOperations(null, null));
         }
 
-        void FilterSCOperations(Func<HostType, bool> neFilter, Func<Operation, bool> opFilter)
+        void FilterSCOperations(Func<IHostType, bool> neFilter, Func<IOperation, bool> opFilter)
         {
             if (!File.Exists(SCPath))
                 throw new Exception($"File \"{SCPath}\" not found!");
@@ -267,7 +267,7 @@ namespace SPAFilter.SPA
             }
         }
 
-        static void FilterOperations(HostType hostType, Func<HostType, bool> neFilter, Func<Operation, bool> opFilter, IReadOnlyDictionary<string, string> allBPOperations, bool anyHasCatalogCall)
+        static void FilterOperations(IHostType hostType, Func<IHostType, bool> neFilter, Func<IOperation, bool> opFilter, IReadOnlyDictionary<string, string> allBPOperations, bool anyHasCatalogCall)
         {
             if (neFilter != null && !neFilter.Invoke(hostType))
             {
@@ -475,13 +475,13 @@ namespace SPAFilter.SPA
         public void PrintXML(CustomStringBuilder stringErrors, ProgressCalculationAsync progrAsync)
         {
             FormattingXmlFiles(Processes, stringErrors, progrAsync);
-            FormattingXmlFiles(HostTypes.Operations, stringErrors, progrAsync);
+            FormattingXmlFiles(HostTypes.Operations.OfType<DriveTemplate>(), stringErrors, progrAsync);
             FormattingXmlFiles(ServiceInstances, stringErrors, progrAsync);
             FormattingXmlFiles(Scenarios, stringErrors, progrAsync);
             FormattingXmlFiles(Commands, stringErrors, progrAsync);
         }
 
-        static void FormattingXmlFiles(IEnumerable<ObjectTemplate> fileObj, CustomStringBuilder stringErrors, ProgressCalculationAsync progressCalc)
+        static void FormattingXmlFiles(IEnumerable<DriveTemplate> fileObj, CustomStringBuilder stringErrors, ProgressCalculationAsync progressCalc)
         {
             if (fileObj == null || !fileObj.Any())
                 return;

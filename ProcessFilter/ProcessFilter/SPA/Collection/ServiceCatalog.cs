@@ -40,6 +40,7 @@ namespace SPAFilter.SPA.Collection
                 var isBase = string.Empty;
                 var isParent = string.Empty;
                 var hostType = string.Empty;
+                var processType = string.Empty;
 
                 foreach (XmlAttribute attribute in rfs.Node.Attributes)
                 {
@@ -57,6 +58,9 @@ namespace SPAFilter.SPA.Collection
                         case "hostType":
                             hostType = attribute.Value;
                             break;
+                        case "processType":
+                            processType = attribute.Value;
+                            break;
                     }
                 }
 
@@ -65,6 +69,8 @@ namespace SPAFilter.SPA.Collection
                     throw new Exception("Service Catalog is invalid. Not found attribute \"name\" in RFS.");
                 if (hostType.IsNullOrEmptyTrim())
                     throw new Exception($"Service Catalog is invalid. Not found attribute \"hostType\" in RFS \"{rfsName}\".");
+                if(processType.Equals("CancelHostType", StringComparison.CurrentCultureIgnoreCase))
+                    continue;
 
                 if (!isBase.IsNullOrEmptyTrim())
                 {
@@ -112,7 +118,7 @@ namespace SPAFilter.SPA.Collection
                 AllScenarios.Add(new ScenarioOperation(scenario.Node, navigator, this));
             }
 
-            var filteredOperations = new List<Operation>();
+            var filteredOperations = new List<IOperation>();
             foreach (var rfsOperationList in AllRFS)
             {
                 foreach (var rfs in rfsOperationList.Value)

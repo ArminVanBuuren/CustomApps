@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Data;
 using System.IO;
+using System.Linq;
 using System.Text;
 using SPAFilter.SPA.Collection;
+using SPAFilter.SPA.Components.ROBP;
 using Utils;
 using Utils.WinForm.CustomProgressBar;
 
@@ -20,7 +22,7 @@ namespace SPAFilter.SPA.SC
 
             foreach (var hostType in robpHostTypes)
             {
-                foreach (var neOP in hostType.Operations)
+                foreach (var neOP in hostType.Operations.OfType<ROBPOperation>())
                 {
                     if (!File.Exists(neOP.FilePath))
                         continue;

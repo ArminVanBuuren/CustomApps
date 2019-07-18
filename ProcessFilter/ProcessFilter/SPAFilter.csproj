@@ -60,7 +60,7 @@
       <HintPath>..\..\..\CustomApp\Utils\Utils\bin\Debug\Utils.dll</HintPath>
     </Reference>
     <Reference Include="Utils.WinForm">
-      <HintPath>..\..\..\CustomApp\Utils\Utils.WinForm\bin\Release\Utils.WinForm.dll</HintPath>
+      <HintPath>..\..\..\CustomApp\Utils\Utils.WinForm\bin\Debug\Utils.WinForm.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -75,10 +75,10 @@
     <Compile Include="SPA\Components\BusinessProcess.cs" />
     <Compile Include="SPA\Components\SC\CatalogHostType.cs" />
     <Compile Include="SPA\Components\SC\CatalogOperation.cs" />
-    <Compile Include="SPA\Components\Operation.cs" />
+    <Compile Include="SPA\Components\IOperation.cs" />
     <Compile Include="SPA\Components\SC\RFSBindings.cs" />
     <Compile Include="SPA\Components\Command.cs" />
-    <Compile Include="SPA\Components\HostType.cs" />
+    <Compile Include="SPA\Components\IHostType.cs" />
     <Compile Include="SPA\Collection\CollectionHostType.cs" />
     <Compile Include="SPA\Components\ROBP\ROBPHostType.cs" />
     <Compile Include="SPA\Components\ROBP\ROBPOperation.cs" />
@@ -87,6 +87,8 @@
     <Compile Include="SPA\Components\SC\ScenarioOperation.cs" />
     <Compile Include="SPA\Collection\DistinctList.cs" />
     <Compile Include="SPA\Components\ServiceActivator.cs" />
+    <Compile Include="SPA\DriveTemplate.cs" />
+    <Compile Include="SPA\IObjectTemplate.cs" />
     <Compile Include="SPA\ItemEqualityComparer.cs" />
     <Compile Include="SPA\ObjectTemplate.cs" />
     <Compile Include="SPAFilterForm.cs">

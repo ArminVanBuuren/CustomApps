@@ -11,7 +11,7 @@ using Utils.WinForm.DataGridViewHelper;
 
 namespace SPAFilter.SPA.Components
 {
-    public sealed class Scenario : ObjectTemplate
+    public sealed class Scenario : DriveTemplate
     {
         readonly ServiceInstance _parent;
 
@@ -19,7 +19,7 @@ namespace SPAFilter.SPA.Components
         internal List<Scenario> SubScenarios { get; private set; } = new List<Scenario>();
 
         [DGVColumn(ColumnPosition.After, "Scenario")]
-        public override string Name { get; protected set; }
+        public override string Name { get; set; }
 
         [DGVColumn(ColumnPosition.Before, "HostType")]
         public string HostTypeName => _parent.HostTypeName;

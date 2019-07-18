@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SPAFilter.SPA
 {
-    class TemplateEqualityComparer<T> : IEqualityComparer<T> where T : ObjectTemplate
+    class TemplateEqualityComparer<T> : IEqualityComparer<T> where T : IObjectTemplate
     {
         public bool Equals(T x, T y)
         {
