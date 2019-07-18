@@ -293,7 +293,7 @@ namespace SPAFilter
                     row.DefaultCellStyle.BackColor = Color.LightPink;
                     foreach (DataGridViewCell cell2 in row.Cells)
                     {
-                        cell2.ToolTipText = "Some operations doesn't exist";
+                        cell2.ToolTipText = "Business process has operations that doesn't exist";
                     }
                 }
             }
@@ -309,7 +309,7 @@ namespace SPAFilter
                     row.DefaultCellStyle.BackColor = Color.LightPink;
                     foreach (DataGridViewCell cell2 in row.Cells)
                     {
-                        cell2.ToolTipText = "Service Catalog call doesn't exist";
+                        cell2.ToolTipText = "Business process hasn't service catalog call";
                     }
                 }
             }
@@ -346,7 +346,7 @@ namespace SPAFilter
                 row.DefaultCellStyle.BackColor = Color.LightPink;
                 foreach (DataGridViewCell cell3 in row.Cells)
                 {
-                    cell3.ToolTipText = "Some commands in this Subscenario doesn't exist";
+                    cell3.ToolTipText = "Subscenario has commands that doesn't exist";
                 }
             }
             else if (!allCommandsExist)
@@ -354,7 +354,7 @@ namespace SPAFilter
                 row.DefaultCellStyle.BackColor = Color.LightPink;
                 foreach (DataGridViewCell cell3 in row.Cells)
                 {
-                    cell3.ToolTipText = "Some commands doesn't exist";
+                    cell3.ToolTipText = "Scenario has commands that doesn't exist";
                 }
             }
             else if (isSubScenario)
@@ -362,7 +362,7 @@ namespace SPAFilter
                 row.DefaultCellStyle.BackColor = Color.Aqua;
                 foreach (DataGridViewCell cell3 in row.Cells)
                 {
-                    cell3.ToolTipText = "This is Subscenario";
+                    cell3.ToolTipText = "Subscenario";
                 }
             }
             else
@@ -657,6 +657,8 @@ namespace SPAFilter
                         ProcessesComboBox.DisplayMember = null;
 
                         UpdateLastPath(ProcessesTextBox.Text);
+                        ClearDataGrid();
+
                         break;
                     case SPAProcessFilterType.SCOperations:
                     case SPAProcessFilterType.ROBPOperations:
@@ -686,6 +688,8 @@ namespace SPAFilter
                         {
                             ClearOperationsComboBox();
                         }
+
+                        ClearDataGrid(true);
 
                         break;
                     case SPAProcessFilterType.Activators_Add:
@@ -1010,13 +1014,16 @@ namespace SPAFilter
             }
         }
 
-        void ClearDataGrid()
+        void ClearDataGrid(bool onlyOperations = false)
         {
-            dataGridProcesses.DataSource = null;
+            if (onlyOperations)
+            {
+                dataGridProcesses.DataSource = null;
+                dataGridProcesses.Refresh();
+            }
             dataGridOperations.DataSource = null;
             dataGridScenarios.DataSource = null;
             dataGridCommands.DataSource = null;
-            dataGridProcesses.Refresh();
             dataGridOperations.Refresh();
             dataGridScenarios.Refresh();
             dataGridCommands.Refresh();
