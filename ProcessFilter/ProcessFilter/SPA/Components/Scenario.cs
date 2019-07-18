@@ -24,9 +24,6 @@ namespace SPAFilter.SPA.Components
         [DGVColumn(ColumnPosition.Before, "HostType")]
         public string HostTypeName => _parent.HostTypeName;
 
-        [DGVColumn(ColumnPosition.Last, "Size [Kb]")]
-        public override double FileSize => base.FileSize;
-
         /// <summary>
         /// Указывает является ли текущий сценарий вложенным
         /// </summary>
