@@ -19,7 +19,7 @@ namespace Utils.WinForm.Notepad
         FileSystemWatcher _watcher;
 
         public event EventHandler OnSomethingChanged;
-        public string Name { get; private set; }
+        public string HeaderName { get; private set; }
         public string FilePath { get; private set; } = null;
         public string Source { get; private set; }
         public FastColoredTextBox FCTB { get; private set; }
@@ -40,11 +40,11 @@ namespace Utils.WinForm.Notepad
             }
         }
 
-        internal Editor(string name, string bodyText, bool wordWrap)
+        internal Editor(string headerName, string bodyText, bool wordWrap, Language language)
         {
             Source = bodyText;
-            Name = name;
-            InitializeFCTB(Language.Custom, wordWrap);
+            HeaderName = headerName;
+            InitializeFCTB(language, wordWrap);
         }
 
         internal Editor(string filePath, bool wordWrap)
@@ -61,7 +61,7 @@ namespace Utils.WinForm.Notepad
             var langByExtension = GetLanguage(filePath);
 
             FilePath = filePath;
-            Name = IO.GetLastNameInPath(filePath, true);
+            HeaderName = IO.GetLastNameInPath(filePath, true);
             Source = IO.SafeReadFile(filePath);
 
             if (langByExtension == Language.XML && !Source.IsXml(out _))

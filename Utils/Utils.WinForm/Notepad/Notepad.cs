@@ -122,12 +122,16 @@ namespace Utils.WinForm.Notepad
         /// <summary>
         /// Добавить текстовый контент
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="headerName"></param>
         /// <param name="bodyText"></param>
-        public void AddDocument(string name, string bodyText)
+        /// <param name="language"></param>
+        public void AddDocument(string headerName, string bodyText, Language language = Language.Custom)
         {
-            var editor = new Editor(name, bodyText, WordWrap);
-            Text = name;
+            if(headerName.Length > 70)
+                throw new Exception("Header name is too long");
+
+            var editor = new Editor(headerName, bodyText, WordWrap, language);
+            Text = headerName;
             InitializePage(editor);
         }
 
@@ -158,7 +162,7 @@ namespace Utils.WinForm.Notepad
             var page = new TabPage
             {
                 UseVisualStyleBackColor = true,
-                Text = editor.Name,
+                Text = editor.HeaderName,
                 ForeColor = Color.Green
             };
             page.Controls.Add(editor.FCTB);
@@ -169,7 +173,7 @@ namespace Utils.WinForm.Notepad
             int index = TabControlObj.TabPages.Count;
             TabControlObj.TabPages.Add(page);
             if (TabControlObj.TabPages.Count == index)
-                TabControlObj.TabPages.Insert(index, editor.Name);
+                TabControlObj.TabPages.Insert(index, editor.HeaderName);
             TabControlObj.SelectedIndex = index;
 
             editor.FCTB.SelectionChanged += FCTB_SelectionChanged;
@@ -194,7 +198,7 @@ namespace Utils.WinForm.Notepad
                         continue;
 
                     edpg.Key.ForeColor = editor.IsContentChanged ? Color.Red : Color.Green;
-                    edpg.Key.Text = editor.Name;
+                    edpg.Key.Text = editor.HeaderName;
                     TabControlObj_Selecting(null, null);
                     return;
                 }

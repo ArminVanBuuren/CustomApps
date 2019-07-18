@@ -2,35 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace Utils.WinForm.DataGridViewHelper
 {
-
-    public enum ColumnPosition
-    {
-        First = 0,
-        After = 1,
-        Before = 2,
-        Last = 3
-    }
-
-    public class DGVColumnAttribute : Attribute
-    {
-        public DGVColumnAttribute(ColumnPosition pos, string name, bool visible = true)
-        {
-            Position = pos;
-            Name = name;
-            Visible = visible;
-        }
-
-        public ColumnPosition Position { get; }
-        public bool Visible { get; }
-        public string Name { get; }
-    }
-
     public static class DGVEnhancer
     {
         [DllImport("user32.dll")]
