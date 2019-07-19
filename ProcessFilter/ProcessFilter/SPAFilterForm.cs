@@ -224,12 +224,6 @@ namespace SPAFilter
 
             KeyDown += ProcessFilterForm_KeyDown;
 
-            //dataGridServiceInstances.CellFormatting += DataGrid_HideNotFiltered;
-            //dataGridProcesses.CellFormatting += DataGrid_HideNotFiltered;
-            //dataGridOperations.CellFormatting += DataGrid_HideNotFiltered;
-            //dataGridScenarios.CellFormatting += DataGrid_HideNotFiltered;
-            //dataGridCommands.CellFormatting += DataGrid_HideNotFiltered;
-
             dataGridServiceInstances.CellFormatting += DataGridServiceInstances_CellFormatting;
             dataGridProcesses.CellFormatting += DataGridProcesses_CellFormatting;
             dataGridOperations.CellFormatting += DataGridOperations_CellFormatting;
@@ -285,7 +279,7 @@ namespace SPAFilter
                     row.DefaultCellStyle.BackColor = Color.LightPink;
                     foreach (DataGridViewCell cell2 in row.Cells)
                     {
-                        cell2.ToolTipText = "Business process has operations that doesn't exist";
+                        cell2.ToolTipText = "Business process has operations which doesn't exist";
                     }
                 }
             }
@@ -338,7 +332,7 @@ namespace SPAFilter
                 row.DefaultCellStyle.BackColor = Color.LightPink;
                 foreach (DataGridViewCell cell3 in row.Cells)
                 {
-                    cell3.ToolTipText = "Subscenario has commands that doesn't exist";
+                    cell3.ToolTipText = "Subscenario has commands which doesn't exist";
                 }
             }
             else if (!allCommandsExist)
@@ -346,7 +340,7 @@ namespace SPAFilter
                 row.DefaultCellStyle.BackColor = Color.LightPink;
                 foreach (DataGridViewCell cell3 in row.Cells)
                 {
-                    cell3.ToolTipText = "Scenario has commands that doesn't exist";
+                    cell3.ToolTipText = "Scenario has commands which doesn't exist";
                 }
             }
             else if (isSubScenario)
@@ -1045,7 +1039,7 @@ namespace SPAFilter
 
             FilterButton.Enabled = _spaFilter.IsEnabledFilter;
             PrintXMLButton.Enabled = _spaFilter.WholeDriveItemsCount > 0 && IsFiltered;
-            ButtonGenerateSC.Enabled = _spaFilter.CanGenerateSC && !ExportSCPath.Text.IsNullOrEmptyTrim() && ROBPOperationsRadioButton.Checked;
+            ButtonGenerateSC.Enabled = _spaFilter.CanGenerateSC && !ExportSCPath.Text.IsNullOrEmptyTrim() && ROBPOperationsRadioButton.Checked && IsFiltered;
         }
 
         void UpdateLastPath(string path)
