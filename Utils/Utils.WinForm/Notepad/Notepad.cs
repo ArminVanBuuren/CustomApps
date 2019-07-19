@@ -284,8 +284,6 @@ namespace Utils.WinForm.Notepad
 
                 if (e != null && imageRect.Contains(e.Location))
                 {
-                    //this.TabControlObj.TabPages.RemoveAt(i);
-
                     var page = TabControlObj.TabPages[i];
                     if (page != null )
                     {

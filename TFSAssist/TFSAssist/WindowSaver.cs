@@ -95,7 +95,7 @@ namespace TFSAssist
             {
                 if (File.Exists(WindowSaverPath))
                 {
-                    IO.AccessToFile(WindowSaverPath);
+                    IO.GetAccessToFile(WindowSaverPath);
                     File.Delete(WindowSaverPath);
                 }
             }

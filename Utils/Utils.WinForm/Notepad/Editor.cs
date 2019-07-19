@@ -140,6 +140,23 @@ namespace Utils.WinForm.Notepad
             }
         }
 
+        static string GetLanguageFilter(Language language)
+        {   
+            switch (language)
+            {
+                case Language.XML: return "xml files (*.xml)|*.xml";
+                case Language.CSharp: return "csharp files (*.cs)|*.cs";
+                case Language.HTML: return "HTML files (*.html)|*.html"; 
+                case Language.JS: return "JS files (*.js)|*.js"; 
+                case Language.Lua: return "lua files (*.lua)|*.lua"; 
+                case Language.PHP: return "php files (*.php)|*.php";
+                case Language.SQL: return "sql files (*.sql)|*.sql";
+                case Language.VB: return "vb files (*.vb)|*.vb";
+            }
+
+            return string.Empty;
+        }
+
         private void OnForeignFileChanged(object source, FileSystemEventArgs e)
         {
             try
@@ -147,7 +164,7 @@ namespace Utils.WinForm.Notepad
                 switch (e.ChangeType)
                 {
                     case WatcherChangeTypes.Deleted:
-                        MessageBox.Show($"File \"{FilePath}\" was deleted.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show($"File \"{FilePath}\" deleted.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         Source = string.Empty;
                         OnSomethingChanged?.Invoke(this, null);
                         return;
@@ -162,7 +179,7 @@ namespace Utils.WinForm.Notepad
                             {
                                 if (tryCount >= 5)
                                 {
-                                    MessageBox.Show($"File \"{FilePath}\" was changed. The process cannot access the file because it is being used by another process.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MessageBox.Show($"File \"{FilePath}\" сhanged. Current process cannot access the file because it is being used by another process", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     return;
                                 }
 
@@ -240,7 +257,7 @@ namespace Utils.WinForm.Notepad
 
                     if (FCTB.Language == Language.XML && !FCTB.Text.IsXml(out _))
                     {
-                        var saveFailedXmlFile = MessageBox.Show(@"XML-File is incorrect! Save anyway?", @"Error", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                        var saveFailedXmlFile = MessageBox.Show(@"Xml is incorrect! Save anyway?", @"Error", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
                         if (saveFailedXmlFile == DialogResult.Cancel)
                             return;
                     }
@@ -249,7 +266,8 @@ namespace Utils.WinForm.Notepad
                     {
                         using (var sfd = new SaveFileDialog())
                         {
-                            sfd.Filter = @"All files(*.*)|*.*";
+                            var fileFilter = GetLanguageFilter(FCTB.Language);
+                            sfd.Filter = fileFilter.IsNullOrEmpty() ? fileFilter + @"|All files (*.*)|*.*" : @"All files (*.*)|*.*";
                             if (sfd.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(sfd.FileName))
                             {
                                 FilePath = sfd.FileName;
