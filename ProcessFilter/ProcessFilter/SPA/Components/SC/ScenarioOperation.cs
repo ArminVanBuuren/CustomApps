@@ -48,6 +48,8 @@ namespace SPAFilter.SPA.Components.SC
                 builder.Append("<Configuration>");
 
                 AppendXmlNode(builder, "HostTypeList", Bindings.HostTypeList);
+                AppendXmlNode(builder, "ResourceList", Bindings.ResourceList);
+                AppendXmlNode(builder, "RFSParameterList", Bindings.RFSParameterList);
                 AppendXmlNode(builder, "RFSList", Bindings.RFSList);
                 AppendXmlNode(builder, "CFSList", Bindings.CFSList);
                 AppendXmlNode(builder, "CFSGroupList", Bindings.CFSGroupList);
@@ -86,6 +88,7 @@ namespace SPAFilter.SPA.Components.SC
             var scenarioRFSs = XPATH.Execute(navigator, $"/Configuration/ScenarioList/Scenario[@name='{ScenarioName}']/RFS");
             if (scenarioRFSs != null && scenarioRFSs.Count > 0)
             {
+                var rfsNamesUseTypeMandatory = XPATH.Execute(navigator, $"/Configuration/ScenarioList/Scenario[@name='{ScenarioName}']/RFS[@useType='Mandatory']/@name");
                 foreach (var rfsNode in scenarioRFSs)
                 {
                     if (rfsNode.Node.Attributes == null || rfsNode.Node.Attributes.Count == 0)
@@ -93,6 +96,7 @@ namespace SPAFilter.SPA.Components.SC
 
                     string rfsName = null;
                     string[] scenarioTypeList = null;
+
                     foreach (XmlAttribute rfsAttr in rfsNode.Node.Attributes)
                     {
                         switch (rfsAttr.Name)
@@ -109,14 +113,17 @@ namespace SPAFilter.SPA.Components.SC
                     if (rfsName.IsNullOrEmptyTrim() || scenarioTypeList == null || scenarioTypeList.Length <= 0 || !catalog.AllRFS.TryGetValue(rfsName, out var rfsOperationList))
                         continue;
 
-                    foreach (var type in scenarioTypeList)
+                    if (rfsNamesUseTypeMandatory == null || rfsNamesUseTypeMandatory.Count == 0 || rfsNamesUseTypeMandatory.Any(x => x.Value.Equals(rfsName, StringComparison.CurrentCultureIgnoreCase)))
                     {
-                        var rfs = rfsOperationList.FirstOrDefault(p => p.RFSAction.Equals(type.Trim(), StringComparison.CurrentCultureIgnoreCase));
-                        if (rfs == null)
-                            continue;
+                        foreach (var type in scenarioTypeList)
+                        {
+                            var rfs = rfsOperationList.FirstOrDefault(p => p.RFSAction.Equals(type.Trim(), StringComparison.CurrentCultureIgnoreCase));
+                            if (rfs == null)
+                                continue;
 
-                        rfs.IsSeparated = false;
-                        RFSList.Add(rfs);
+                            rfs.IsSeparated = false;
+                            RFSList.Add(rfs);
+                        }
                     }
                 }
             }

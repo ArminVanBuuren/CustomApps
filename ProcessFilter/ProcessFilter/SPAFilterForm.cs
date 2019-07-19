@@ -48,6 +48,7 @@ namespace SPAFilter
         private SPAProcessFilter _spaFilter;
 
         public static string SerializationDataPath => $"{ApplicationFilePath}.bin";
+        private bool IsFiltered { get; set; } = false;
         private bool IsInitialization { get; } = true;
 
         private bool IsInProgress
@@ -204,7 +205,9 @@ namespace SPAFilter
         void PreInit()
         {
             InitializeComponent();
-            KeyPreview = true; // для того чтобы работали горячие клавиши по всей форме
+            KeyPreview = true; // для того чтобы работали горячие клавиши по всей форме и всем контролам
+            new ToolTip().SetToolTip(PrintXMLButton, "Format all filtered xml files");
+            
             _spaFilter = new SPAProcessFilter();
 
             ROBPOperationsRadioButton.CheckedChanged += ROBPOperationsRadioButton_CheckedChanged;
@@ -385,7 +388,7 @@ namespace SPAFilter
         {
             if (ROBPOperationsRadioButton.Checked)
                 CallAndCheckDataGridKey(dataGridOperations, e);
-            else
+            else if (e.KeyCode == Keys.Enter)
                 OpenServiceCatalogOperation();
         }
 
@@ -441,49 +444,55 @@ namespace SPAFilter
         {
             if (e != null)
             {
-                var altIsDown = (ModifierKeys & Keys.Alt) != 0;
-                var f4IsDown = KeyIsDown(Keys.F4);
-
-                if (altIsDown && f4IsDown)
+                if ((ModifierKeys & Keys.Alt) != 0 && KeyIsDown(Keys.F4))
                 {
                     Close();
+                    return;
                 }
-                else if (e.KeyCode == Keys.Enter || (!altIsDown && f4IsDown))
+
+                switch (e.KeyCode)
                 {
-                    if (!GetCellItemSelectedRows(grid, out var filePath1))
-                        return;
-
-                    foreach (var filePath in filePath1)
+                    case Keys.Enter:
                     {
-                        OpenEditor(filePath);
-                    }
-                }
-                else if (e.KeyCode == Keys.Delete)
-                {
-                    if (!GetCellItemSelectedRows(grid, out var filesPath))
-                        return;
-                    if(filesPath.Count == 0)
-                        return;
-                    
-                    var userResult = MessageBox.Show($"Do you want delete selected {(filesPath.Count == 1 ? $"file" : $"{filesPath.Count} files")} ?", @"Question", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                        if (!GetCellItemSelectedRows(grid, out var filePath1))
+                            return;
 
-                    if (userResult != DialogResult.OK)
-                        return;
-
-                    try
-                    {
-                        foreach (var filePath in filesPath)
+                        foreach (var filePath in filePath1)
                         {
-                            if (File.Exists(filePath))
-                                File.Delete(filePath);
+                            OpenEditor(filePath);
                         }
 
-                        RefreshStatus();
-                        FilterButton_Click(this, EventArgs.Empty);
+                        break;
                     }
-                    catch (Exception ex)
+                    case Keys.Delete:
                     {
-                        MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        if (!GetCellItemSelectedRows(grid, out var filesPath))
+                            return;
+                        if(filesPath.Count == 0)
+                            return;
+                    
+                        var userResult = MessageBox.Show($"Do you want delete selected {(filesPath.Count == 1 ? $"file" : $"{filesPath.Count} files")} ?", @"Question", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+
+                        if (userResult != DialogResult.OK)
+                            return;
+
+                        try
+                        {
+                            foreach (var filePath in filesPath)
+                            {
+                                if (File.Exists(filePath))
+                                    File.Delete(filePath);
+                            }
+
+                            RefreshStatus();
+                            FilterButton_Click(this, EventArgs.Empty);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+
+                        break;
                     }
                 }
             }
@@ -821,6 +830,8 @@ namespace SPAFilter
                         }
                     }, null));
                 }
+
+                IsFiltered = true;
             }
             catch (Exception ex)
             {
@@ -1020,6 +1031,8 @@ namespace SPAFilter
             dataGridOperations.Refresh();
             dataGridScenarios.Refresh();
             dataGridCommands.Refresh();
+
+            IsFiltered = false;
         }
 
         void RefreshStatus()
@@ -1031,7 +1044,7 @@ namespace SPAFilter
             CommandsCount.Text = $"Commands: {(_spaFilter.Commands?.Count ?? 0).ToString()}";
 
             FilterButton.Enabled = _spaFilter.IsEnabledFilter;
-            PrintXMLButton.Enabled = _spaFilter.WholeDriveItemsCount > 0;
+            PrintXMLButton.Enabled = _spaFilter.WholeDriveItemsCount > 0 && IsFiltered;
             ButtonGenerateSC.Enabled = _spaFilter.CanGenerateSC && !ExportSCPath.Text.IsNullOrEmptyTrim() && ROBPOperationsRadioButton.Checked;
         }
 

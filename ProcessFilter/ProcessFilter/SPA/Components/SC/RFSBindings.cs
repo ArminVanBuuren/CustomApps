@@ -10,6 +10,8 @@ namespace SPAFilter.SPA.Components.SC
     internal class RFSBindings
     {
         public DistinctList<XmlNode> HostTypeList { get; } = new DistinctList<XmlNode>();
+        public DistinctList<XmlNode> ResourceList { get; } = new DistinctList<XmlNode>();
+        public DistinctList<XmlNode> RFSParameterList { get; } = new DistinctList<XmlNode>();
         public DistinctList<XmlNode> RFSList { get; } = new DistinctList<XmlNode>();
         public DistinctList<XmlNode> CFSList { get; } = new DistinctList<XmlNode>();
         public DistinctList<XmlNode> CFSGroupList { get;} = new DistinctList<XmlNode>();
@@ -59,6 +61,8 @@ namespace SPAFilter.SPA.Components.SC
         public void CombineWith(RFSBindings foreignBindings)
         {
             HostTypeList.AddRange(foreignBindings.HostTypeList);
+            ResourceList.AddRange(foreignBindings.ResourceList);
+            RFSParameterList.AddRange(foreignBindings.RFSParameterList);
             RFSList.AddRange(foreignBindings.RFSList);
             CFSList.AddRange(foreignBindings.CFSList);
             CFSGroupList.AddRange(foreignBindings.CFSGroupList);
@@ -72,11 +76,29 @@ namespace SPAFilter.SPA.Components.SC
         {
             try
             {
-                var getRFSHostType = XPATH.Execute(navigator, $"/Configuration/RFSList/RFS[@name='{rfsName}']/@hostType");
-                if(getRFSHostType == null || getRFSHostType.Count == 0)
+                var rfs = XPATH.Execute(navigator, $"/Configuration/RFSList/RFS[@name='{rfsName}']").First();
+                if(rfs?.Node == null)
+                    throw new Exception($"Not found RFS \"{rfsName}\"");
+
+                var rfsHostType = rfs.Node.Attributes?["hostType"];
+                if (rfsHostType == null)
                     throw new Exception("RFS must have attribute \"hostType\"");
 
-                AddXmlNode(XPATH.Execute(navigator, $"/Configuration/HostTypeList/HostType[@name='{getRFSHostType.First().Value}']"), HostTypeList);
+                AddXmlNode(XPATH.Execute(navigator, $"/Configuration/HostTypeList/HostType[@name='{rfsHostType.Value}']"), HostTypeList);
+
+                foreach (XmlNode rfsChild in rfs.Node.ChildNodes)
+                {
+                    var itemName = rfsChild.Attributes?["name"];
+                    switch (rfsChild.Name)
+                    {
+                        case "Resource" when itemName != null:
+                            AddXmlNode(XPATH.Execute(navigator, $"/Configuration/ResourceList/Resource[@name='{itemName.Value}']"), ResourceList);
+                            break;
+                        case "RFSParameter" when itemName != null:
+                            AddXmlNode(XPATH.Execute(navigator, $"/Configuration/RFSParameterList/RFSParameter[@name='{itemName.Value}']"), RFSParameterList);
+                            break;
+                    }
+                }
 
                 var CFSListConfig = XPATH.Execute(navigator, $"/Configuration/CFSList/CFS[RFS[@name='{rfsName}']]");
                 if (CFSListConfig != null && CFSListConfig.Count > 0)
@@ -107,6 +129,11 @@ namespace SPAFilter.SPA.Components.SC
             {
                 throw;
             }
+        }
+
+        void GetRFSComponents(string rfsName, XPathNavigator navigator)
+        {
+            
         }
 
         static void AddXmlNode(XPathResultCollection collection, DistinctList<XmlNode> catalogComponent)

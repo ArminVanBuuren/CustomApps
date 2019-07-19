@@ -474,26 +474,26 @@ namespace SPAFilter.SPA
 
         public void PrintXML(CustomStringBuilder stringErrors, ProgressCalculationAsync progrAsync)
         {
-            FormattingXmlFiles(Processes, stringErrors, progrAsync);
-            FormattingXmlFiles(HostTypes.Operations.OfType<DriveTemplate>(), stringErrors, progrAsync);
-            FormattingXmlFiles(ServiceInstances, stringErrors, progrAsync);
-            FormattingXmlFiles(Scenarios, stringErrors, progrAsync);
-            FormattingXmlFiles(Commands, stringErrors, progrAsync);
+            FormatXmlFiles(Processes, stringErrors, progrAsync);
+            FormatXmlFiles(HostTypes.Operations.OfType<DriveTemplate>(), stringErrors, progrAsync);
+            FormatXmlFiles(ServiceInstances, stringErrors, progrAsync);
+            FormatXmlFiles(Scenarios, stringErrors, progrAsync);
+            FormatXmlFiles(Commands, stringErrors, progrAsync);
         }
 
-        static void FormattingXmlFiles(IEnumerable<DriveTemplate> fileObj, CustomStringBuilder stringErrors, ProgressCalculationAsync progressCalc)
+        static void FormatXmlFiles(IEnumerable<DriveTemplate> fileObj, CustomStringBuilder stringErrors, ProgressCalculationAsync progressCalc)
         {
             if (fileObj == null || !fileObj.Any())
                 return;
 
             foreach (var file in fileObj)
             {
-                FormattingXmlFile(file.FilePath, stringErrors);
+                FormatXmlFile(file.FilePath, stringErrors);
                 progressCalc++;
             }
         }
 
-        static void FormattingXmlFile(string filePath, CustomStringBuilder stringErrors)
+        static void FormatXmlFile(string filePath, CustomStringBuilder stringErrors)
         {
             try
             {

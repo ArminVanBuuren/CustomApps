@@ -38,6 +38,8 @@ namespace SPAFilter.SPA.Components.SC
                 builder.Append("<Configuration>");
 
                 AppendXmlNode(builder, "HostTypeList", Bindings.HostTypeList);
+                AppendXmlNode(builder, "ResourceList", Bindings.ResourceList);
+                AppendXmlNode(builder, "RFSParameterList", Bindings.RFSParameterList);
                 AppendXmlNode(builder, "RFSList", Bindings.RFSList);
                 AppendXmlNode(builder, "CFSList", Bindings.CFSList);
                 AppendXmlNode(builder, "CFSGroupList", Bindings.CFSGroupList);

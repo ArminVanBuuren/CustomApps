@@ -266,22 +266,22 @@ namespace SPAFilter
             this.toolStrip1.TabIndex = 7;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // toolStripButton1
+            // addServiceInstancesButton
             // 
             this.addServiceInstancesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.addServiceInstancesButton.Image = global::SPAFilter.Properties.Resources.icons8_plus_20;
             this.addServiceInstancesButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.addServiceInstancesButton.Name = "toolStripButton1";
+            this.addServiceInstancesButton.Name = "addServiceInstancesButton";
             this.addServiceInstancesButton.Size = new System.Drawing.Size(23, 22);
             this.addServiceInstancesButton.Text = "Add activator\'s application configuration to List";
             this.addServiceInstancesButton.Click += new System.EventHandler(this.AddActivatorButton_Click);
             // 
-            // toolStripButton2
+            // removeServiceInstancesButton
             // 
             this.removeServiceInstancesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.removeServiceInstancesButton.Image = global::SPAFilter.Properties.Resources.icons8_minus_20;
             this.removeServiceInstancesButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.removeServiceInstancesButton.Name = "toolStripButton2";
+            this.removeServiceInstancesButton.Name = "removeServiceInstancesButton";
             this.removeServiceInstancesButton.Size = new System.Drawing.Size(23, 22);
             this.removeServiceInstancesButton.Text = "Remove activator\'s application configuration in List";
             this.removeServiceInstancesButton.Click += new System.EventHandler(this.RemoveActivatorButton_Click_1);
@@ -514,11 +514,11 @@ namespace SPAFilter
             // PrintXMLButton
             // 
             this.PrintXMLButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.PrintXMLButton.Location = new System.Drawing.Point(609, 58);
+            this.PrintXMLButton.Location = new System.Drawing.Point(617, 58);
             this.PrintXMLButton.Name = "PrintXMLButton";
-            this.PrintXMLButton.Size = new System.Drawing.Size(89, 23);
+            this.PrintXMLButton.Size = new System.Drawing.Size(81, 23);
             this.PrintXMLButton.TabIndex = 14;
-            this.PrintXMLButton.Text = "Print XML";
+            this.PrintXMLButton.Text = "Format Files";
             this.PrintXMLButton.UseVisualStyleBackColor = true;
             this.PrintXMLButton.Click += new System.EventHandler(this.PrintXMLButton_Click);
             // 
@@ -597,7 +597,6 @@ namespace SPAFilter
             this.ROBPOperationsRadioButton.TabStop = true;
             this.ROBPOperationsRadioButton.Text = "ROBP Operations:";
             this.ROBPOperationsRadioButton.UseVisualStyleBackColor = true;
-            
             // 
             // ServiceCatalogRadioButton
             // 
@@ -608,7 +607,6 @@ namespace SPAFilter
             this.ServiceCatalogRadioButton.TabIndex = 36;
             this.ServiceCatalogRadioButton.Text = "Service Catalog:";
             this.ServiceCatalogRadioButton.UseVisualStyleBackColor = true;
-            
             // 
             // progressBar
             // 
