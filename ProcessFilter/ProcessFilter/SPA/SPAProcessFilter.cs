@@ -61,10 +61,6 @@ namespace SPAFilter.SPA
 
                 #endregion
 
-                FilterProcesses(bpFilter);
-
-                progressCalc.Append(1);
-
                 Func<IHostType, bool> htFilter = null;
                 Func<IOperation, bool> opFilter = null;
 
@@ -98,10 +94,12 @@ namespace SPAFilter.SPA
 
                 #endregion
 
+                // Фильтруем БП и операции.
+                // В фильтре операций используется вызов повторного обновления БП, поэтому не вызываем отдельно
                 if (ROBPHostTypesPath != null)
-                    FilterROBPOperations(htFilter, opFilter);
+                    FilterROBPOperations(bpFilter, htFilter, opFilter);
                 else
-                    FilterSCOperations(htFilter, opFilter);
+                    FilterSCOperations(bpFilter, htFilter, opFilter);
 
                 progressCalc.Append(2);
 
@@ -150,7 +148,7 @@ namespace SPAFilter.SPA
 
                 #endregion
 
-                progressCalc.Append(1);
+                progressCalc.Append(2);
 
                 #region Filter Scenarios
 
@@ -224,14 +222,15 @@ namespace SPAFilter.SPA
             ROBPHostTypesPath = robpHostTypesPath;
             SCPath = null;
             HostTypes = null;
-            await Task.Factory.StartNew(() => FilterROBPOperations(null, null));
+            await Task.Factory.StartNew(() => FilterROBPOperations(null, null, null));
         }
 
-        void FilterROBPOperations(Func<IHostType, bool> htFilter, Func<IOperation, bool> opFilter)
+        void FilterROBPOperations(Func<BusinessProcess, bool> bpFilter, Func<IHostType, bool> htFilter, Func<IOperation, bool> opFilter)
         {
             if (!Directory.Exists(ROBPHostTypesPath))
                 throw new Exception($"Directory \"{ROBPHostTypesPath}\" not found!");
 
+            FilterProcesses(bpFilter);
             HostTypes = new CollectionHostType(); 
             var allBPOperations = Processes.AllOperationsNames;
 
@@ -248,14 +247,15 @@ namespace SPAFilter.SPA
             SCPath = filePath;
             ROBPHostTypesPath = null;
             HostTypes = null;
-            await Task.Factory.StartNew(() => FilterSCOperations(null, null));
+            await Task.Factory.StartNew(() => FilterSCOperations(null, null, null));
         }
 
-        void FilterSCOperations(Func<IHostType, bool> neFilter, Func<IOperation, bool> opFilter)
+        void FilterSCOperations(Func<BusinessProcess, bool> bpFilter, Func<IHostType, bool> neFilter, Func<IOperation, bool> opFilter)
         {
             if (!File.Exists(SCPath))
                 throw new Exception($"File \"{SCPath}\" not found!");
 
+            FilterProcesses(bpFilter);
             HostTypes = new ServiceCatalog(SCPath);
             if (HostTypes.Count == 0)
                 return;

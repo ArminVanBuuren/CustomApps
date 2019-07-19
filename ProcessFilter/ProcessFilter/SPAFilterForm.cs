@@ -65,15 +65,23 @@ namespace SPAFilter
 
                     FilterButton.Enabled = !_isInProgress;
                     PrintXMLButton.Enabled = !_isInProgress;
+
                     ProcessesTextBox.Enabled = !_isInProgress;
-                    ROBPOperationTextBox.Enabled = !_isInProgress;
-                    ServiceCatalogTextBox.Enabled = !_isInProgress;
                     ProcessesButtonOpen.Enabled = !_isInProgress;
-                    ROBPOperationButtonOpen.Enabled = !_isInProgress;
-                    ServiceCatalogOpenButton.Enabled = !_isInProgress;
 
                     ROBPOperationsRadioButton.Enabled = !_isInProgress;
                     ServiceCatalogRadioButton.Enabled = !_isInProgress;
+
+                    if (ROBPOperationsRadioButton.Checked)
+                    {
+                        ROBPOperationTextBox.Enabled = !_isInProgress;
+                        ROBPOperationButtonOpen.Enabled = !_isInProgress;
+                    }
+                    else
+                    {
+                        ServiceCatalogTextBox.Enabled = !_isInProgress;
+                        ServiceCatalogOpenButton.Enabled = !_isInProgress;
+                    }
 
                     addServiceInstancesButton.Enabled = !_isInProgress;
                     removeServiceInstancesButton.Enabled = !_isInProgress;
