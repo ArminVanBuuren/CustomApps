@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -78,14 +77,14 @@ namespace Utils.WinForm.Notepad
             statusStrip.Items.Add(_encodingInfo);
             statusStrip.Items.Add(new ToolStripSeparator());
             statusStrip.Items.Add(GetStripLabel("length:"));
-            _contentLengthInfo = GetStripLabel("", 0);
+            _contentLengthInfo = GetStripLabel("");
             statusStrip.Items.Add(_contentLengthInfo);
             statusStrip.Items.Add(GetStripLabel("lines:"));
-            _contentLinesInfo = GetStripLabel("", 0);
+            _contentLinesInfo = GetStripLabel("");
             statusStrip.Items.Add(_contentLinesInfo);
             statusStrip.Items.Add(new ToolStripSeparator());
             statusStrip.Items.Add(GetStripLabel("Ln:"));
-            _currentLineInfo = GetStripLabel("", 0);
+            _currentLineInfo = GetStripLabel("");
             statusStrip.Items.Add(_currentLineInfo);
             statusStrip.Items.Add(GetStripLabel("Col:"));
             _currentPosition = GetStripLabel("");
@@ -128,7 +127,7 @@ namespace Utils.WinForm.Notepad
         public void AddDocument(string headerName, string bodyText, Language language = Language.Custom)
         {
             if(headerName.Length > 70)
-                throw new Exception("Header name is too long");
+                throw new Exception("Header name is too longer");
 
             var editor = new Editor(headerName, bodyText, WordWrap, language);
             Text = headerName;
@@ -258,14 +257,14 @@ namespace Utils.WinForm.Notepad
             if (TabControlObj.SelectedTab == null)
                 TabControlObj.SelectedIndex = _lastSelectedPage;
 
-            if (TabControlObj.SelectedTab.Controls.Count == 0)
+            if (TabControlObj.SelectedTab == null || TabControlObj.SelectedTab.Controls.Count == 0)
                 return;
 
             if (!ListOfXmlEditors.TryGetValue(TabControlObj.SelectedTab, out var editor))
                 return;
 
             _currentEditor = editor;
-            Text = editor.FilePath;
+            Text = editor.FilePath ?? editor.HeaderName;
 
             FCTB_SelectionChanged(this, null);
         }

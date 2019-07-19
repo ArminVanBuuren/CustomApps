@@ -235,7 +235,7 @@ namespace Utils.WinForm.Notepad
             {
                 if ((e.Control && KeyIsDown(Keys.ControlKey) && KeyIsDown(Keys.S)) || e.KeyCode == Keys.F2)
                 {
-                    if (!IsContentChanged)
+                    if (!IsContentChanged && FilePath != null)
                         return;
 
                     if (FCTB.Language == Language.XML && !FCTB.Text.IsXml(out _))
@@ -245,7 +245,7 @@ namespace Utils.WinForm.Notepad
                             return;
                     }
 
-                    if (FilePath.IsNullOrEmptyTrim())
+                    if (FilePath == null)
                     {
                         using (var sfd = new SaveFileDialog())
                         {
@@ -261,7 +261,9 @@ namespace Utils.WinForm.Notepad
                             IO.WriteFile(FilePath, FCTB.Text, _defaultEncoding);
                         }
 
-                        InitializeFile(FilePath);
+                        var newLanguage = InitializeFile(FilePath);
+                        ChangeLanguage(newLanguage);
+
                         OnSomethingChanged?.Invoke(this, null);
                     }
                     else
