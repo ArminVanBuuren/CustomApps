@@ -144,14 +144,14 @@ namespace Utils.WinForm.Notepad
         {   
             switch (language)
             {
-                case Language.XML: return "xml files (*.xml)|*.xml";
-                case Language.CSharp: return "csharp files (*.cs)|*.cs";
+                case Language.XML: return "XML files (*.xml)|*.xml";
+                case Language.CSharp: return "CSharp files (*.cs)|*.cs";
                 case Language.HTML: return "HTML files (*.html)|*.html"; 
                 case Language.JS: return "JS files (*.js)|*.js"; 
-                case Language.Lua: return "lua files (*.lua)|*.lua"; 
-                case Language.PHP: return "php files (*.php)|*.php";
-                case Language.SQL: return "sql files (*.sql)|*.sql";
-                case Language.VB: return "vb files (*.vb)|*.vb";
+                case Language.Lua: return "Lua files (*.lua)|*.lua"; 
+                case Language.PHP: return "PHP files (*.php)|*.php";
+                case Language.SQL: return "SQL files (*.sql)|*.sql";
+                case Language.VB: return "VB files (*.vb)|*.vb";
             }
 
             return string.Empty;
