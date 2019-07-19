@@ -267,11 +267,11 @@ namespace Utils.WinForm.Notepad
                         using (var sfd = new SaveFileDialog())
                         {
                             var fileFilter = GetLanguageFilter(FCTB.Language);
-                            sfd.Filter = fileFilter.IsNullOrEmpty() ? fileFilter + @"|All files (*.*)|*.*" : @"All files (*.*)|*.*";
-                            if (sfd.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(sfd.FileName))
-                            {
-                                FilePath = sfd.FileName;
-                            }
+                            sfd.Filter = fileFilter.IsNullOrEmpty() ? @"All files (*.*)|*.*" : fileFilter + @"|All files (*.*)|*.*";
+                            if (sfd.ShowDialog() != DialogResult.OK)
+                                return;
+
+                            FilePath = sfd.FileName;
                         }
 
                         lock (syncWhenFileChanged)
