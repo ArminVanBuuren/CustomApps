@@ -264,7 +264,7 @@ namespace SPAFilter
             }
             else
             {
-                row.DefaultCellStyle.BackColor = Color.Red;
+                row.DefaultCellStyle.BackColor = Color.LightPink;
                 foreach (DataGridViewCell cell2 in row.Cells)
                 {
                     cell2.ToolTipText = "Current configuration application is incorrect";
