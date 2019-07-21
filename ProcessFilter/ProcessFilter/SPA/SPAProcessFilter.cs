@@ -312,25 +312,39 @@ namespace SPAFilter.SPA
             }
         }
 
-        public async Task AssignActivatorAsync(string filePath)
+        public async Task AssignActivatorAsync(IEnumerable<string> filePathList)
         {
-            if (!File.Exists(filePath))
-                throw new Exception($"File \"{filePath}\" not found!");
-
             await Task.Factory.StartNew(() =>
             {
-                if (_activators.Any(x => x.FilePath.Equals(filePath, StringComparison.CurrentCultureIgnoreCase)))
+                foreach (var filePath in filePathList)
                 {
-                    MessageBox.Show($"Activator \"{filePath}\" already exist.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
+                    if (!File.Exists(filePath))
+                    {
+                        MessageBox.Show($"File \"{filePath}\" not found!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        continue;
+                    }
 
-                _activators.Add(new ServiceActivator(filePath));
-                ServiceInstances = GetServiceInstances();
+                    if (_activators.Any(x => x.FilePath.Equals(filePath, StringComparison.CurrentCultureIgnoreCase)))
+                    {
+                        MessageBox.Show($"Activator \"{filePath}\" already exist.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        continue;
+                    }
+
+                    try
+                    {
+                        _activators.Add(new ServiceActivator(filePath));
+                        ServiceInstances = GetServiceInstances();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        continue;
+                    }
+                }
             });
         }
 
-        public async Task RemoveActivatorAsync(List<string> filePathList)
+        public async Task RemoveActivatorAsync(IEnumerable<string> filePathList)
         {
             await Task.Factory.StartNew(() =>
             {

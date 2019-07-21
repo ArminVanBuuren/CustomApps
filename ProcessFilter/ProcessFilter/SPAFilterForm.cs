@@ -172,15 +172,12 @@ namespace SPAFilter
             return allSavedParams.TryGetValue(key, out var res) ? res : defaultResult;
         }
 
-        async void AssignServiceInstanes(IEnumerable<string> siConfigsList)
+        async void AssignServiceInstanes(IEnumerable<string> configurationApplicationList)
         {
-            if(siConfigsList == null)
+            if(configurationApplicationList == null)
                 return;
 
-            foreach (var fileConfig in siConfigsList)
-            {
-                await _spaFilter.AssignActivatorAsync(fileConfig);
-            }
+            await _spaFilter.AssignActivatorAsync(configurationApplicationList);
 
             if (_spaFilter.ServiceInstances != null)
             {
@@ -201,7 +198,7 @@ namespace SPAFilter
 
             if (_spaFilter.ServiceInstances != null)
             {
-                var filesConfigs = _spaFilter.ServiceInstances.Select(x => x.FilePath).ToList();
+                var filesConfigs = _spaFilter.ServiceInstances.Select(x => x.FilePath).Distinct().ToList();
                 propertyBag.AddValue("WWWERT", filesConfigs);
             }
 
@@ -611,10 +608,10 @@ namespace SPAFilter
         private bool _serviceCatalogTextBoxChanged = false;
         private async void ServiceCatalogOpenButton_Click(object sender, EventArgs e)
         {
-            if (!OpenFile(@"(*.xml) | *.xml", out var res))
+            if (!OpenFile(@"(*.xml) | *.xml", false,out var res))
                 return;
 
-            ServiceCatalogTextBox.Text = res;
+            ServiceCatalogTextBox.Text = res.First();
             await AssignAsync(SPAProcessFilterType.SCOperations);
             _serviceCatalogTextBoxChanged = false;
         }
@@ -693,12 +690,12 @@ namespace SPAFilter
 
                         break;
                     case SPAProcessFilterType.Activators_Add:
-                        if (!OpenFile(@"(configuration.application.xml) | *.xml", out var fileConfig))
+                        if (!OpenFile(@"(configuration.application.xml) | *.xml", true, out var fileConfig))
                             return;
 
-                        await _spaFilter.AssignActivatorAsync(fileConfig);
+                        await _spaFilter.AssignActivatorAsync(fileConfig.ToList());
                         AssignActivator();
-                        UpdateLastPath(fileConfig);
+                        UpdateLastPath(fileConfig.Last());
                         break;
                     case SPAProcessFilterType.Activators_Remove:
                         if (GetCellItemSelectedRows(dataGridServiceInstances, out var listFiles))
@@ -865,10 +862,10 @@ namespace SPAFilter
 
         private void OpenRDServiceExelButton_Click(object sender, EventArgs e)
         {
-            if(!OpenFile(@"(*.xlsx) | *.xlsx", out var res))
+            if(!OpenFile(@"(*.xlsx) | *.xlsx", false, out var res))
                 return;
 
-            OpenSCXlsx.Text = res;
+            OpenSCXlsx.Text = res.First();
         }
 
         private async void ButtonGenerateSC_Click(object sender, EventArgs e)
@@ -1052,8 +1049,9 @@ namespace SPAFilter
 
         void UpdateLastPath(string path)
         {
-            if (!path.IsNullOrEmpty())
-                _lastDirPath = path;
+            if (path.IsNullOrEmpty())
+                return;
+            _lastDirPath = File.Exists(path) ? Path.GetDirectoryName(path) : path;
         }
 
         void SaveData()
@@ -1070,7 +1068,7 @@ namespace SPAFilter
             }
         }
 
-        static bool OpenFile(string extension, out string result)
+        static bool OpenFile(string extension, bool multipleSelect, out string[] result)
         {
             result = null;
             try
@@ -1078,10 +1076,10 @@ namespace SPAFilter
                 using (var fbd = new OpenFileDialog())
                 {
                     fbd.Filter = extension;
-
+                    fbd.Multiselect = multipleSelect;
                     if (fbd.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.FileName) && File.Exists(fbd.FileName))
                     {
-                        result = fbd.FileName;
+                        result = multipleSelect ? fbd.FileNames : new[] { fbd.FileName };
                         return true;
                     }
                 }
