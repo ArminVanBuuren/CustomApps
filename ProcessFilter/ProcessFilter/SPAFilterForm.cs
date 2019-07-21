@@ -267,7 +267,7 @@ namespace SPAFilter
                 row.DefaultCellStyle.BackColor = Color.LightPink;
                 foreach (DataGridViewCell cell2 in row.Cells)
                 {
-                    cell2.ToolTipText = "Current configuration application is incorrect";
+                    cell2.ToolTipText = "Configuration application is incorrect";
                 }
             }
         }
@@ -287,7 +287,7 @@ namespace SPAFilter
                     row.DefaultCellStyle.BackColor = Color.LightPink;
                     foreach (DataGridViewCell cell2 in row.Cells)
                     {
-                        cell2.ToolTipText = "Business process has operations which doesn't exist";
+                        cell2.ToolTipText = "Business process has operations that don't exist";
                     }
                 }
             }
@@ -303,7 +303,7 @@ namespace SPAFilter
                     row.DefaultCellStyle.BackColor = Color.LightPink;
                     foreach (DataGridViewCell cell2 in row.Cells)
                     {
-                        cell2.ToolTipText = "Business process hasn't service catalog call";
+                        cell2.ToolTipText = "Business process doesn't have service catalog call";
                     }
                 }
             }
@@ -340,7 +340,7 @@ namespace SPAFilter
                 row.DefaultCellStyle.BackColor = Color.LightPink;
                 foreach (DataGridViewCell cell3 in row.Cells)
                 {
-                    cell3.ToolTipText = "Subscenario has commands which doesn't exist";
+                    cell3.ToolTipText = "Subscenario has commands that don't exist";
                 }
             }
             else if (!allCommandsExist)
@@ -348,7 +348,7 @@ namespace SPAFilter
                 row.DefaultCellStyle.BackColor = Color.LightPink;
                 foreach (DataGridViewCell cell3 in row.Cells)
                 {
-                    cell3.ToolTipText = "Scenario has commands which doesn't exist";
+                    cell3.ToolTipText = "Scenario has commands that don't exist";
                 }
             }
             else if (isSubScenario)
