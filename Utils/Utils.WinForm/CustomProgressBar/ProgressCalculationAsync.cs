@@ -1,29 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Utils.WinForm.CustomProgressBar
 {
-    public interface IProgressBar
-    {
-        bool Visible { get; set; }
-        int Maximum { get; set; }
-        int Value { get; set; }
-    }
-
     public class ProgressCalculationAsync : IDisposable
     {
-        private int _currentProgressIterator = 0;
-        private readonly SynchronizationContext _syncContext;
+        private int _precentComplete = 0;
+        private readonly Action<int> _setValue;
 
-        private IAsyncResult _result;
-        private Action _processChecking;
+        ProgressBar _progressBar { get; }
+        XpProgressBar _xpProgressBar { get; }
+
+        private SynchronizationContext _syncContext;
+        private int _currentProgressIterator = 0;
+
+        private Thread _calculation;
+        //private IAsyncResult _result;
+        //private Action _processChecking;
 
         public bool ProgressCompleted { get; private set; } = false;
-        public IProgressBar ProgressBar { get; }
+
 
         public int CurrentProgressIterator
         {
@@ -39,15 +36,32 @@ namespace Utils.WinForm.CustomProgressBar
 
         public int TotalProgressIterator { get; private set; }
 
-        public int PercentComplete { get; private set; }
+        public int PercentComplete
+        {
+            get => _precentComplete;
+            private set => _setValue.Invoke(value);
+        }
 
-        public ProgressCalculationAsync(IProgressBar progressBar, int totalProgressIterator = 10)
+        public ProgressCalculationAsync(ProgressBar progressBar, int totalProgressIterator = 10)
+        {
+            _progressBar = progressBar ?? throw new ArgumentNullException(nameof(progressBar));
+            _setValue = SetValue;
+            Initialize(totalProgressIterator);
+        }
+
+        public ProgressCalculationAsync(XpProgressBar progressBar, int totalProgressIterator = 10)
+        {
+            _xpProgressBar = progressBar ?? throw new ArgumentNullException(nameof(progressBar));
+            _setValue = SetValueXp;
+            Initialize(totalProgressIterator);
+        }
+
+        void Initialize(int totalProgressIterator)
         {
             if (totalProgressIterator <= 0)
                 throw new ArgumentException($"Parameter {nameof(totalProgressIterator)} must be more then zero");
 
             _syncContext = SynchronizationContext.Current;
-            ProgressBar = progressBar ?? throw new ArgumentNullException(nameof(progressBar));
             TotalProgressIterator = totalProgressIterator;
 
             Reset();
@@ -60,23 +74,39 @@ namespace Utils.WinForm.CustomProgressBar
             CurrentProgressIterator = 0;
             ProgressCompleted = false;
 
-            ProgressBar.Value = 0;
-            ProgressBar.Visible = true;
+            if (_progressBar != null)
+            {
+                _progressBar.Value = 0;
+                _progressBar.Visible = true;
+            }
+            else
+            {
+                _xpProgressBar.Position = 0;
+                _xpProgressBar.Visible = true;
+            }
 
-            _processChecking = new Action(ProgressChecking);
-            _result = _processChecking.BeginInvoke(null, null);
+            _calculation = new Thread(ProgressChecking)
+            {
+                Priority = ThreadPriority.Lowest
+            };
+            _calculation.Start();
+
+            //_processChecking = ProgressChecking;
+            //_result = _processChecking.BeginInvoke(null, null);
         }
 
         public void Stop()
         {
             ProgressCompleted = true;
 
-            _processChecking?.EndInvoke(_result);
-            _processChecking = null;
-            _result = null;
+            //_processChecking?.EndInvoke(_result);
+            //_processChecking = null;
+            //_result = null;
 
-            if (ProgressBar.Visible)
-                ProgressBar.Visible = false;
+            if (_progressBar != null && _progressBar.Visible)
+                _progressBar.Visible = false;
+            else if (_xpProgressBar != null && _xpProgressBar.Visible)
+                _xpProgressBar.Visible = false;
         }
 
         public static ProgressCalculationAsync operator ++(ProgressCalculationAsync first)
@@ -107,7 +137,7 @@ namespace Utils.WinForm.CustomProgressBar
         {
             try
             {
-                int _prevValue = -1;
+                var _prevPercentage = -1;
                 while (!ProgressCompleted)
                 {
                     if (CurrentProgressIterator == 0 || TotalProgressIterator == 0)
@@ -116,27 +146,72 @@ namespace Utils.WinForm.CustomProgressBar
                         continue;
                     }
 
-                    double calc = (double) CurrentProgressIterator / TotalProgressIterator;
-                    int percent = ((int) (calc * 100)) >= 100 ? 100 : ((int) (calc * 100));
+                    var calc = (double) CurrentProgressIterator / TotalProgressIterator;
+                    var percentage = ((int) (calc * 100)) >= 100 ? 100 : ((int) (calc * 100));
 
-                    if (_prevValue >= percent)
+                    if (_prevPercentage >= percentage)
                         continue;
 
-                    PercentComplete = percent;
-                    _prevValue = percent;
-
-
-                    _syncContext.Post(delegate
-                    {
-                        ProgressBar.Value = PercentComplete;
-                        ProgressBar.SetProgressNoAnimation(PercentComplete);
-                    }, null);
+                    PercentComplete = percentage;
+                    _prevPercentage = percentage;
                 }
             }
-            catch (Exception)
+            catch (ObjectDisposedException ex)
+            {
+
+            }
+            catch (Exception ex)
             {
                 // null
             }
+        }
+
+        void SetValue(int currentValue)
+        {
+            _progressBar.SafeInvoke(() =>
+            {
+                var diff = currentValue - _progressBar.Value;
+                if (diff <= 4)
+                {
+                    _progressBar.SetProgressNoAnimation(currentValue);
+                }
+                else
+                {
+                    var iterations = diff / 4;
+
+                    for (var i = 0; i < iterations; i++)
+                    {
+                        _progressBar.SetProgressNoAnimation(_progressBar.Value + 4);
+                        Thread.Sleep(10);
+                    }
+
+                    _progressBar.SetProgressNoAnimation(currentValue);
+                }
+            }, false);
+        }
+
+        void SetValueXp(int currentValue)
+        {
+            _xpProgressBar.SafeInvoke(() =>
+            {
+                var diff = currentValue - _xpProgressBar.Position;
+                if (diff <= 4)
+                {
+                    _xpProgressBar.Position = currentValue;
+                }
+                else
+                {
+                    var iterations = diff / 4;
+
+                    for (var i = 0; i < iterations; i++)
+                    {
+                        _xpProgressBar.Position = _xpProgressBar.Position + 4;
+                        Thread.Sleep(10);
+                    }
+
+                    _xpProgressBar.Position = currentValue;
+                }
+            }, false);
         }
 
         public void Dispose()

@@ -84,7 +84,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CONTROL.cs" />
+    <Compile Include="CustomProgressBar\IProgressBar.cs" />
     <Compile Include="CustomProgressBar\ProgressCalculationAsync.cs" />
+    <Compile Include="CustomProgressBar\XpProgressBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="DataGridViewHelper\DGVColumnAttribute.cs" />
     <Compile Include="Handles\FormLocation.cs" />
     <Compile Include="MediaCapture\AForge\AForgeCapture.cs" />
@@ -457,7 +462,6 @@
     <Compile Include="MediaCapture\Encoder\EncoderCapture.cs" />
     <Compile Include="MediaCapture\MediaCaptureEventArgs.cs" />
     <Compile Include="MediaCapture\MediaCaptureMode.cs" />
-    <Compile Include="CustomProgressBar\ProgressBarCompetition.cs" />
     <Compile Include="CustomProgressBar\ProgressBarUtils.cs" />
     <Compile Include="CustomProgressBar\ProgressBarWithPercent.cs">
       <SubType>Component</SubType>
