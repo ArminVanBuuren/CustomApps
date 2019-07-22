@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -14,6 +15,7 @@ namespace Utils.WinForm.DataGridViewHelper
         [DllImport("user32.dll")]
         private static extern int SendMessage(IntPtr hWnd, Int32 wMsg, bool wParam, Int32 lParam);
 
+        const BindingFlags PropertyFlags = BindingFlags.Instance | BindingFlags.Public;
         private const int WM_SETREDRAW = 11;
 
         public static void SetRedraw(this DataGridView dgv, bool value)
@@ -32,12 +34,12 @@ namespace Utils.WinForm.DataGridViewHelper
         public static void SetDoubleBuffering(this DataGridView dgv, bool value)
         {
             // Double buffering can make DGV slow in remote desktop
-            if (!System.Windows.Forms.SystemInformation.TerminalServerSession)
-            {
-                Type dgvType = dgv.GetType();
-                PropertyInfo pi = dgvType.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
-                pi.SetValue(dgv, value, null);
-            }
+            if (SystemInformation.TerminalServerSession)
+                return;
+
+            var dgvType = dgv.GetType();
+            var pi = dgvType.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
+            pi?.SetValue(dgv, value, null);
         }
 
         public static void BeginInit(this DataGridView dgv)
@@ -69,20 +71,15 @@ namespace Utils.WinForm.DataGridViewHelper
                 return $"{PropertyName}=[{ColumnName}]";
             }
         }
-
-        public static void AssignListToDataGrid<T>(this DataGridView grid, IList<T> data, Padding? cellPadding = null)
+       
+        public static void AssignListToDataGrid<T>(this DataGridView grid, IEnumerable<T> data, Padding? cellPadding = null, bool stretchColumnsToAllCells = false)
         {
             if (data == null)
                 throw new ArgumentException(nameof(data));
 
-            grid.DataSource = null;
-            grid.Columns.Clear();
-            grid.Rows.Clear();
-
             var table = new DataTable();
             var typeParameterType = typeof(T);
-            var propertyFlags = BindingFlags.Instance | BindingFlags.Public;
-            var props = typeParameterType.GetProperties(propertyFlags);
+            var props = typeParameterType.GetProperties(PropertyFlags);
 
 
             var sortedColumns = new LinkedList<DGVColumn>();
@@ -108,12 +105,11 @@ namespace Utils.WinForm.DataGridViewHelper
                 positionOfColumn.Add(column.PropertyName, new KeyValuePair<int, DGVColumn>(i++, column));
             }
 
-            var j = 0;
             var columnsCount = positionOfColumn.Count;
             foreach (T instance in data)
             {
                 var tp = instance.GetType();
-                var props2 = tp.GetProperties(propertyFlags);
+                var props2 = tp.GetProperties(PropertyFlags);
                 var objs = new object[columnsCount];
 
                 foreach (PropertyInfo prop in props2)
@@ -125,42 +121,90 @@ namespace Utils.WinForm.DataGridViewHelper
                     }
                 }
 
-
                 table.Rows.Add(objs);
-                j++;
             }
 
-            //dtCommunication.Select("Type='Business'", "LastModifiedDate DESC");
-            //table.DefaultView.Sort = "Preferance ASC";
-
-            grid.BeginInit();
-            grid.DataSource = table;
-            foreach (DGVColumn column in sortedColumns)
+            var prevResize = grid.RowHeadersWidthSizeMode;
+            var prevVisible = grid.RowHeadersVisible;
+            try
             {
-                if (column.Attribute.Visible)
-                    continue;
+                grid.Visible = false;
+                grid.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+                grid.RowHeadersVisible = false;
 
-                var hiddenColumn = grid.Columns[column.ColumnName];
-                if (hiddenColumn != null)
-                    hiddenColumn.Visible = false;
-            }
-            grid.EndInit();
+                grid.DataSource = null;
+                grid.Columns.Clear();
+                grid.Rows.Clear();
+                grid.ClearSelection();
 
-            if (cellPadding != null)
-            {
-                foreach (DataGridViewRow row in grid.Rows)
+                grid.BeginInit();
+                grid.DataSource = table;
+                foreach (DGVColumn column in sortedColumns)
                 {
-                    row.DefaultCellStyle.Padding = cellPadding.Value;
-                }
-            }
+                    if (column.Attribute.Visible)
+                        continue;
 
+                    var hiddenColumn = grid.Columns[column.ColumnName];
+                    if (hiddenColumn != null)
+                        hiddenColumn.Visible = false;
+                }
+                grid.EndInit();
+
+                if (cellPadding != null)
+                {
+                    foreach (DataGridViewRow row in grid.Rows)
+                    {
+                        row.DefaultCellStyle.Padding = cellPadding.Value;
+                    }
+                }
+
+                if (!stretchColumnsToAllCells)
+                    return;
+
+                StretchColumnsToAllCells(grid);
+                grid.DataBindingComplete += Grid_DataBindingComplete;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            finally
+            {
+                grid.Refresh();
+                grid.RowHeadersWidthSizeMode = prevResize;
+                grid.RowHeadersVisible = prevVisible;
+                grid.Visible = true;
+            }
+        }
+
+        private static void Grid_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            if (!(sender is DataGridView grid))
+                return;
+
+            StretchColumnsToAllCells(grid);
+            grid.DataBindingComplete -= Grid_DataBindingComplete;
+        }
+
+        public static void StretchColumnsToAllCells(this DataGridView grid)
+        {
             for (var index = 0; index < grid.Columns.Count; index++)
             {
-                DataGridViewColumn column = grid.Columns[index];
+                var column = grid.Columns[index];
                 if (index < grid.Columns.Count - 1)
                     column.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                 else
                     column.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            }
+
+            if (grid.Columns.Count >= 2)
+            {
+                for (var t = 0; t <= grid.Columns.Count - 2; t++)
+                {
+                    var column = grid.Columns[t].Width;
+                    grid.Columns[t].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                    grid.Columns[t].Width = column;
+                }
             }
         }
 
