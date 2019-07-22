@@ -283,7 +283,7 @@ namespace SPAFilter
             this.removeServiceInstancesButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.removeServiceInstancesButton.Name = "removeServiceInstancesButton";
             this.removeServiceInstancesButton.Size = new System.Drawing.Size(23, 22);
-            this.removeServiceInstancesButton.Text = "Remove configuration in List";
+            this.removeServiceInstancesButton.Text = "Remove configuration from List";
             this.removeServiceInstancesButton.Click += new System.EventHandler(this.RemoveActivatorButton_Click_1);
             // 
             // dataGridServiceInstances
