@@ -23,6 +23,7 @@ namespace SPAFilter.SPA.Components.ROBP
                 Name = newName;
                 ID = newId;
             }
+
             HostTypeName = parentElement.Name;
         }
     }

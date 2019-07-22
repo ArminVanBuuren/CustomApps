@@ -173,7 +173,7 @@ namespace SPAFilter.SPA
                 Scenarios.AddRange(filteredSubScenarios.OrderBy(p => p.FilePath));
                 Scenarios.InitSequence();
 
-                Commands = CollectionTemplate<Command>.ToCollection(filteredCommands.OrderBy(p => p.HostTypeName).ThenBy(p => p.Name));
+                Commands = CollectionTemplate<Command>.ToCollection(filteredCommands.OrderBy(p => p.HostTypeName).ThenBy(p => p.FilePath));
 
                 #endregion
 
@@ -551,7 +551,7 @@ namespace SPAFilter.SPA
         {
             var files = Directory.GetFiles(dirPath, mask, SearchOption.TopDirectoryOnly).ToList();
             files.Sort(StringComparer.CurrentCulture);
-            return files;
+            return files.Where(x => x.EndsWith(mask.Trim().Trim('*'))).ToList();
         }
     }
 }

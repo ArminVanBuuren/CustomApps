@@ -37,7 +37,7 @@ namespace SPAFilter.SPA.Components
         public ServiceInstance(string filePath, XmlNode node) :base(filePath)
         {
             var activatorDirPath = Path.GetDirectoryName(filePath);
-            var serviceInstanceNode = node;
+            var serviceInstanceNode = node.Clone();
 
             HardwareID = serviceInstanceNode.Attributes?["hardwareID"]?.Value;
             if (HardwareID == null)
@@ -49,12 +49,13 @@ namespace SPAFilter.SPA.Components
             HostTypeName = HardwareID.Split(':')[0];
 
             var scenarioConfigNode = serviceInstanceNode.SelectSingleNode("//fileScenarioSource") ?? serviceInstanceNode.SelectSingleNode("//config");
-            var scenariosPath = scenarioConfigNode?.Attributes?["dir"].Value;
-            if (scenariosPath == null)
+            var scenarios = scenarioConfigNode?.Attributes?["dir"].Value;
+            if (scenarios == null)
             {
                 ShowError(string.Format(NOT_FOUND_ATTRIBUTE, "dir", "\"fileScenarioSource\" node"));
                 return;
             }
+            var scenariosPath = GetDir(activatorDirPath, scenarios);
             if (!Directory.Exists(scenariosPath))
             {
                 ShowError(string.Format(NOT_FOUND_DIR, scenariosPath, "\"fileScenarioSource\" node"));
@@ -124,7 +125,7 @@ namespace SPAFilter.SPA.Components
 
         static string GetDir(string basePath, string rootPath)
         {
-            return Path.IsPathRooted(rootPath) ? rootPath : IO.EvaluateRelativePath(rootPath, basePath);
+            return Path.IsPathRooted(rootPath) ? rootPath : IO.EvaluateFirstMatchPath(rootPath, basePath);
         }
 
         static void ShowError(string message)

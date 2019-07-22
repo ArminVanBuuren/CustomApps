@@ -126,8 +126,16 @@ namespace SPAFilter
                     task.Wait();
                 }
 
-                ROBPOperationsRadioButton.Checked = (bool)TryGetSerializationValue(allSavedParams, "GGHHTTDD", true);
-                ServiceCatalogRadioButton.Checked = !ROBPOperationsRadioButton.Checked;
+                var robpIsChecked = (bool) TryGetSerializationValue(allSavedParams, "GGHHTTDD", true);
+                if (robpIsChecked != ROBPOperationsRadioButton.Checked)
+                {
+                    ROBPOperationsRadioButton.Checked = robpIsChecked;
+                    ServiceCatalogRadioButton.Checked = !robpIsChecked;
+                }
+                else
+                {
+                    ROBPOperationsRadioButton_CheckedChanged(ServiceCatalogRadioButton, EventArgs.Empty);
+                }
 
                 ROBPOperationTextBox.Text = (string)TryGetSerializationValue(allSavedParams, "AAEERF", string.Empty);
                 ServiceCatalogTextBox.Text = (string)TryGetSerializationValue(allSavedParams, "DFWDRT", string.Empty);
@@ -785,7 +793,7 @@ namespace SPAFilter
 
                 ClearDataGrid();
 
-                using (var progressCalc = new ProgressCalculationAsync(progressBar, 12))
+                using (var progressCalc = new ProgressCalculationAsync(progressBar, 9))
                 {
                     await Task.Factory.StartNew(() => _spaFilter.DataFilter(filterProcess, filterNE, filterOp, progressCalc));
 
@@ -794,14 +802,11 @@ namespace SPAFilter
                         AssignActivator();
 
                         dataGridProcesses.AssignListToDataGrid(_spaFilter.Processes, new Padding(0, 0, 15, 0), true);
-                        progressCalc.Append(1);
 
                         if(ROBPOperationsRadioButton.Checked)
                             dataGridOperations.AssignListToDataGrid(_spaFilter.HostTypes.Operations.OfType<ROBPOperation>(), new Padding(0, 0, 15, 0), true);
                         else
                             dataGridOperations.AssignListToDataGrid(_spaFilter.HostTypes.Operations.OfType<CatalogOperation>(), new Padding(0, 0, 15, 0), true);
-
-                        progressCalc.Append(1);
 
                         if (_spaFilter.Scenarios != null)
                         {

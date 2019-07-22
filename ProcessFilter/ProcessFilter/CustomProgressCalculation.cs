@@ -29,14 +29,14 @@ namespace SPAFilter
         public int CurrentProgressIterator => _progressCalc?.CurrentProgressIterator ?? 0;
         public int TotalProgressIterator => _progressCalc?.TotalProgressIterator ?? 0;
 
-        public CustomProgressCalculation(IProgressBar progressBar, int generateSCIterators)
+        public CustomProgressCalculation(CustomProgressBar progressBar, int generateSCIterators)
         {
             SCIterators = generateSCIterators;
 
             _progressCalc = new ProgressCalculationAsync(progressBar, SCIterators);
         }
 
-        public CustomProgressCalculation(IProgressBar progressBar, int generateSCIterators, FileInfo xslxRdService)
+        public CustomProgressCalculation(CustomProgressBar progressBar, int generateSCIterators, FileInfo xslxRdService)
         {
             if(generateSCIterators <= 0)
                 throw new ArgumentException($"{nameof(generateSCIterators)} cannot be less than or equal to zero.");
