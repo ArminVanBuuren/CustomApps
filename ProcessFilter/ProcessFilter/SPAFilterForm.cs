@@ -179,10 +179,7 @@ namespace SPAFilter
 
             await _spaFilter.AssignActivatorAsync(configurationApplicationList);
 
-            if (_spaFilter.ServiceInstances != null)
-            {
-                dataGridServiceInstances.AssignListToDataGrid(_spaFilter.ServiceInstances, new Padding(0, 0, 15, 0));
-            }
+            AssignActivator();
         }
 
         void ISerializable.GetObjectData(SerializationInfo propertyBag, StreamingContext context)
@@ -743,7 +740,7 @@ namespace SPAFilter
         {
             if (_spaFilter.ServiceInstances != null)
             {
-                dataGridServiceInstances.AssignListToDataGrid(_spaFilter.ServiceInstances, new Padding(0, 0, 15, 0));
+                dataGridServiceInstances.AssignListToDataGrid(_spaFilter.ServiceInstances, new Padding(0, 0, 15, 0), true);
             }
             else
             {
@@ -796,19 +793,19 @@ namespace SPAFilter
                     {
                         AssignActivator();
 
-                        dataGridProcesses.AssignListToDataGrid(_spaFilter.Processes, new Padding(0, 0, 15, 0));
+                        dataGridProcesses.AssignListToDataGrid(_spaFilter.Processes, new Padding(0, 0, 15, 0), true);
                         progressCalc.Append(1);
 
                         if(ROBPOperationsRadioButton.Checked)
-                            dataGridOperations.AssignListToDataGrid<ROBPOperation>(_spaFilter.HostTypes.Operations.OfType<ROBPOperation>().ToList(), new Padding(0, 0, 15, 0));
+                            dataGridOperations.AssignListToDataGrid(_spaFilter.HostTypes.Operations.OfType<ROBPOperation>(), new Padding(0, 0, 15, 0), true);
                         else
-                            dataGridOperations.AssignListToDataGrid<CatalogOperation>(_spaFilter.HostTypes.Operations.OfType<CatalogOperation>().ToList(), new Padding(0, 0, 15, 0));
+                            dataGridOperations.AssignListToDataGrid(_spaFilter.HostTypes.Operations.OfType<CatalogOperation>(), new Padding(0, 0, 15, 0), true);
 
                         progressCalc.Append(1);
 
                         if (_spaFilter.Scenarios != null)
                         {
-                            dataGridScenarios.AssignListToDataGrid(_spaFilter.Scenarios, new Padding(0, 0, 15, 0));
+                            dataGridScenarios.AssignListToDataGrid(_spaFilter.Scenarios, new Padding(0, 0, 15, 0), true);
                         }
                         else
                         {
@@ -820,7 +817,7 @@ namespace SPAFilter
 
                         if (_spaFilter.Commands != null)
                         {
-                            dataGridCommands.AssignListToDataGrid(_spaFilter.Commands, new Padding(0, 0, 15, 0));
+                            dataGridCommands.AssignListToDataGrid(_spaFilter.Commands, new Padding(0, 0, 15, 0), true);
                         }
                         else
                         {
@@ -1051,7 +1048,7 @@ namespace SPAFilter
         {
             if (path.IsNullOrEmpty())
                 return;
-            _lastDirPath = File.Exists(path) ? Path.GetDirectoryName(path) : path;
+            _lastDirPath = Directory.Exists(path) ? path : File.Exists(path) ? Path.GetDirectoryName(path) : _lastDirPath;
         }
 
         void SaveData()
