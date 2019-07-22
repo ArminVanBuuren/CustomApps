@@ -177,8 +177,10 @@ namespace Utils
             for (int i = 0; i < firstPathParts.Count; i++)
             {
                 var current = firstPathParts[i];
-                if (current.Equals(".") || current.Equals(".."))
-                    firstPathParts.RemoveAt(i);
+                if (!current.Equals(".") && !current.Equals(".."))
+                    continue;
+                firstPathParts.RemoveAt(i);
+                i--;
             }
 
             var relatNew = string.Join("\\", firstPathParts);

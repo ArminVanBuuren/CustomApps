@@ -60,6 +60,8 @@ namespace Tester.Console
                 //string ss2 = XML.NormalizeXmlValueFast("&&&quot; fefe &quot;&apos; & 111&quot");
                 //string ss3 = XML.NormalizeXmlValueFast("& fefe \"' 111", XML.XMLValueEncoder.Encode);
 
+                IO.EvaluateFirstMatchPath("..\\..\\..\\123\\123", "C:\\123\\455");
+
                 var dd1 = 197.IsParity();
                 var dd2 = 266.IsParity();
 
