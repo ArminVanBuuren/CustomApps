@@ -139,7 +139,7 @@ namespace SPAFilter.SPA
                         if (process.Operations.Any(x => operationsDictionary.ContainsKey(x)))
                             continue;
 
-                        Processes.Remove(process);
+                        Processes.RemoveAt(index);
                         index--;
                     }
                 }
@@ -286,7 +286,7 @@ namespace SPAFilter.SPA
                     var operation = hostType.Operations[index];
                     if (!allBPOperations.ContainsKey(operation.Name) || !opFilter.Invoke(operation))
                     {
-                        hostType.Operations.Remove(operation);
+                        hostType.Operations.RemoveAt(index);
                         index--;
                     }
                 }
@@ -305,7 +305,7 @@ namespace SPAFilter.SPA
                     var operation = hostType.Operations[index];
                     if (!opFilter.Invoke(operation))
                     {
-                        hostType.Operations.Remove(operation);
+                        hostType.Operations.RemoveAt(index);
                         index--;
                     }
                 }
@@ -362,7 +362,7 @@ namespace SPAFilter.SPA
                         if (!activator.FilePath.Equals(filePath, StringComparison.CurrentCultureIgnoreCase))
                             continue;
 
-                        _activators.Remove(activator);
+                        _activators.RemoveAt(index);
                         break;
                     }
                 }
