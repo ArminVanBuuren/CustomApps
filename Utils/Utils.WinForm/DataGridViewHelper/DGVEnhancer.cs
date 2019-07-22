@@ -128,7 +128,6 @@ namespace Utils.WinForm.DataGridViewHelper
             var prevVisible = grid.RowHeadersVisible;
             try
             {
-                grid.Visible = false;
                 grid.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
                 grid.RowHeadersVisible = false;
 
@@ -173,7 +172,6 @@ namespace Utils.WinForm.DataGridViewHelper
                 grid.Refresh();
                 grid.RowHeadersWidthSizeMode = prevResize;
                 grid.RowHeadersVisible = prevVisible;
-                grid.Visible = true;
             }
         }
 

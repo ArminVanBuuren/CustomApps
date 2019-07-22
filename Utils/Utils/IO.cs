@@ -166,6 +166,33 @@ namespace Utils
             }
         }
 
+        public static string EvaluateFirstMatchPath(string mainDirPath, string absoluteFilePath)
+        {
+            if (Directory.Exists(mainDirPath))
+                return mainDirPath;
+
+            var firstPathParts = mainDirPath.Trim(Path.DirectorySeparatorChar).Split(Path.DirectorySeparatorChar).ToList();
+            var secondPathParts = absoluteFilePath.Trim(Path.DirectorySeparatorChar).Split(Path.DirectorySeparatorChar);
+
+            for (int i = 0; i < firstPathParts.Count; i++)
+            {
+                var current = firstPathParts[i];
+                if (current.Equals(".") || current.Equals(".."))
+                    firstPathParts.RemoveAt(i);
+            }
+
+            var relatNew = string.Join("\\", firstPathParts);
+            for (var index = 0; index < secondPathParts.Length; index++)
+            {
+                var path = string.Join("\\", secondPathParts.Take(secondPathParts.Length - index));
+                var prep = Path.Combine(path, relatNew);
+                if (Directory.Exists(prep))
+                    return prep;
+            }
+
+            return string.Empty;
+        }
+
         public static string EvaluateRelativePath(string mainDirPath, string absoluteFilePath)
         {
             if (mainDirPath == null)
@@ -176,9 +203,10 @@ namespace Utils
             var firstPathParts = mainDirPath.Trim(Path.DirectorySeparatorChar).Split(Path.DirectorySeparatorChar);
             var secondPathParts = absoluteFilePath.Trim(Path.DirectorySeparatorChar).Split(Path.DirectorySeparatorChar);
             var sameCounter = 0;
+
             for (var i = 0; i < Math.Min(firstPathParts.Length, secondPathParts.Length); i++)
             {
-                if (!firstPathParts[i].ToLower().Equals(secondPathParts[i].ToLower()))
+                if (!firstPathParts[i].Equals(secondPathParts[i], StringComparison.CurrentCultureIgnoreCase))
                 {
                     break;
                 }
