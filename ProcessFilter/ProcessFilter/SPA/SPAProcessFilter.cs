@@ -316,17 +316,18 @@ namespace SPAFilter.SPA
         {
             await Task.Factory.StartNew(() =>
             {
+                var errors = string.Empty;
                 foreach (var filePath in filePathList)
                 {
                     if (!File.Exists(filePath))
                     {
-                        MessageBox.Show($"File \"{filePath}\" not found!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        errors += $"File \"{filePath}\" not found.\r\n";
                         continue;
                     }
 
                     if (_activators.Any(x => x.FilePath.Equals(filePath, StringComparison.CurrentCultureIgnoreCase)))
                     {
-                        MessageBox.Show($"Activator \"{filePath}\" already exist.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        errors += $"Activator \"{filePath}\" already exist.\r\n";
                         continue;
                     }
 
@@ -337,9 +338,14 @@ namespace SPAFilter.SPA
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        errors += $"{ex.Message}\r\n";
                         continue;
                     }
+                }
+
+                if (!errors.IsNullOrEmptyTrim())
+                {
+                    MessageBox.Show(errors, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             });
         }
