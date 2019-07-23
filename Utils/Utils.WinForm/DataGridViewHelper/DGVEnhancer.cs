@@ -54,8 +54,11 @@ namespace Utils.WinForm.DataGridViewHelper
 
         class DGVColumn
         {
-            public DGVColumn(string propName, DGVColumnAttribute gridColumnattr, Type propType)
+            public int ID { get; }
+
+            public DGVColumn(int id, string propName, DGVColumnAttribute gridColumnattr, Type propType)
             {
+                ID = id;
                 Attribute = gridColumnattr;
                 PropertyName = propName;
                 PropertyType = propType;
@@ -63,12 +66,11 @@ namespace Utils.WinForm.DataGridViewHelper
 
             public DGVColumnAttribute Attribute { get; }
             public string PropertyName { get; }
-            public string ColumnName => Attribute.Name;
             public Type PropertyType { get; }
 
             public override string ToString()
             {
-                return $"{PropertyName}=[{ColumnName}]";
+                return $"{PropertyName}=[{Attribute.ColumnName}]";
             }
         }
        
@@ -82,8 +84,8 @@ namespace Utils.WinForm.DataGridViewHelper
             var props = typeParameterType.GetProperties(PropertyFlags);
 
 
-            var sortedColumns = new LinkedList<DGVColumn>();
-            LinkedListNode<DGVColumn> last = null;
+            var i1 = 0;
+            var columnList = new List<DGVColumn>();
             foreach (PropertyInfo prop in props)
             {
                 object[] attrs = prop.GetCustomAttributes(true);
@@ -91,18 +93,28 @@ namespace Utils.WinForm.DataGridViewHelper
                 {
                     if (attr is DGVColumnAttribute columnAttr)
                     {
-                        var current = new LinkedListNode<DGVColumn>(new DGVColumn(prop.Name, columnAttr, prop.PropertyType));
-                        SwitchPosition(sortedColumns, columnAttr.Position, current, ref last);
+                        columnList.Add(new DGVColumn(i1++, prop.Name, columnAttr, prop.PropertyType));
                     }
                 }
             }
 
-            var i = 0;
+            columnList = columnList.OrderBy(p => p.Attribute.Visible).ThenBy(p => p.Attribute.Position).ThenBy(p => p.ID).ToList();
+
+            //var sortedColumns = new LinkedList<DGVColumn>();
+            //LinkedListNode<DGVColumn> last = null;
+            //foreach (var column in columnList)
+            //{
+            //    var current = new LinkedListNode<DGVColumn>(column);
+            //    SwitchPosition(sortedColumns, column.Attribute.Position, current, ref last);
+            //}
+
+
+            var i2 = 0;
             var positionOfColumn = new Dictionary<string, KeyValuePair<int, DGVColumn>>(StringComparer.CurrentCultureIgnoreCase);
-            foreach (DGVColumn column in sortedColumns)
+            foreach (DGVColumn column in columnList)
             {
-                table.Columns.Add(column.ColumnName, column.PropertyType);
-                positionOfColumn.Add(column.PropertyName, new KeyValuePair<int, DGVColumn>(i++, column));
+                table.Columns.Add(column.Attribute.ColumnName, column.PropertyType);
+                positionOfColumn.Add(column.PropertyName, new KeyValuePair<int, DGVColumn>(i2++, column));
             }
 
             var columnsCount = positionOfColumn.Count;
@@ -138,12 +150,12 @@ namespace Utils.WinForm.DataGridViewHelper
 
                 grid.BeginInit();
                 grid.DataSource = table;
-                foreach (DGVColumn column in sortedColumns)
+                foreach (DGVColumn column in columnList)
                 {
                     if (column.Attribute.Visible)
                         continue;
 
-                    var hiddenColumn = grid.Columns[column.ColumnName];
+                    var hiddenColumn = grid.Columns[column.Attribute.ColumnName];
                     if (hiddenColumn != null)
                         hiddenColumn.Visible = false;
                 }

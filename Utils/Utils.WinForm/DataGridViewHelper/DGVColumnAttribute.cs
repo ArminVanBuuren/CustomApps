@@ -17,15 +17,15 @@ namespace Utils.WinForm.DataGridViewHelper
     [AttributeUsage(AttributeTargets.All, AllowMultiple = false, Inherited = true)]
     public class DGVColumnAttribute : Attribute
     {
-        public DGVColumnAttribute(ColumnPosition pos, string name, bool visible = true)
+        public DGVColumnAttribute(ColumnPosition pos, string columnName, bool visible = true)
         {
             Position = pos;
-            Name = name;
+            ColumnName = columnName;
             Visible = visible;
         }
 
         public ColumnPosition Position { get; }
         public bool Visible { get; }
-        public string Name { get; }
+        public string ColumnName { get; }
     }
 }
