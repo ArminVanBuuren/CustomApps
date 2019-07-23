@@ -801,16 +801,16 @@ namespace SPAFilter
                     {
                         AssignActivator();
 
-                        dataGridProcesses.AssignListToDataGrid(_spaFilter.Processes, new Padding(0, 0, 15, 0), true);
+                        dataGridProcesses.AssignListToDataGrid(_spaFilter.Processes, null, true);
 
                         if(ROBPOperationsRadioButton.Checked)
-                            dataGridOperations.AssignListToDataGrid(_spaFilter.HostTypes.Operations.OfType<ROBPOperation>(), new Padding(0, 0, 15, 0), true);
+                            dataGridOperations.AssignListToDataGrid(_spaFilter.HostTypes.Operations.OfType<ROBPOperation>(), null, true);
                         else
-                            dataGridOperations.AssignListToDataGrid(_spaFilter.HostTypes.Operations.OfType<CatalogOperation>(), new Padding(0, 0, 15, 0), true);
+                            dataGridOperations.AssignListToDataGrid(_spaFilter.HostTypes.Operations.OfType<CatalogOperation>(), null, true);
 
                         if (_spaFilter.Scenarios != null)
                         {
-                            dataGridScenarios.AssignListToDataGrid(_spaFilter.Scenarios, new Padding(0, 0, 15, 0), true);
+                            dataGridScenarios.AssignListToDataGrid(_spaFilter.Scenarios, null, true);
                         }
                         else
                         {
@@ -822,7 +822,7 @@ namespace SPAFilter
 
                         if (_spaFilter.Commands != null)
                         {
-                            dataGridCommands.AssignListToDataGrid(_spaFilter.Commands, new Padding(0, 0, 15, 0), true);
+                            dataGridCommands.AssignListToDataGrid(_spaFilter.Commands,null, true);
                         }
                         else
                         {
@@ -931,7 +931,6 @@ namespace SPAFilter
                 MessageBox.Show(@"You must filter files.", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-
 
             if (IsInProgress)
                 return;

@@ -9,17 +9,17 @@ namespace SPAFilter.SPA.Components.SC
 {
     public abstract class CatalogOperation : ObjectTemplate, IOperation
     {
-        [DGVColumn(ColumnPosition.Before, "HostType")]
+        [DGVColumn(ColumnPosition.After, "HostType")]
         public string HostTypeName { get; protected set; }
 
+        [DGVColumn(ColumnPosition.After, "Operation")]
+        public override string Name { get; set; }
+
         /// <summary>
-        /// Сценарий для этой операции существует
+        /// Если сценарий для этой операции существует
         /// </summary>
         [DGVColumn(ColumnPosition.Last, "IsScenarioExist", false)]
         public bool IsScenarioExist { get; set; } = true;
-
-        [DGVColumn(ColumnPosition.Last, "Operation")]
-        public override string Name { get; set; }
 
         internal virtual RFSBindings Bindings { get; } = null;
         public virtual string Body { get; } = string.Empty;

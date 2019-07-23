@@ -18,11 +18,17 @@ namespace SPAFilter.SPA.Components
         internal List<Command> Commands { get; } = new List<Command>();
         internal List<Scenario> SubScenarios { get; private set; } = new List<Scenario>();
 
+        [DGVColumn(ColumnPosition.After, "HostType")]
+        public string HostTypeName => _parent.HostTypeName;
+
         [DGVColumn(ColumnPosition.After, "Scenario")]
         public override string Name { get; set; }
 
-        [DGVColumn(ColumnPosition.Before, "HostType")]
-        public string HostTypeName => _parent.HostTypeName;
+        /// <summary>
+        /// Количество вложенных сценариев
+        /// </summary>
+        [DGVColumn(ColumnPosition.Last, "SubScenarios")]
+        public int ExistSubScenarios => SubScenarios.Count;
 
         /// <summary>
         /// Указывает является ли текущий сценарий вложенным
@@ -35,12 +41,6 @@ namespace SPAFilter.SPA.Components
         /// </summary>
         [DGVColumn(ColumnPosition.Last, "AllCommandsExist", false)]
         public bool AllCommandsExist { get; private set; } = true;
-
-        /// <summary>
-        /// Количество вложенных сценариев
-        /// </summary>
-        [DGVColumn(ColumnPosition.Last, "SubScenarios")]
-        public int ExistSubScenarios => SubScenarios.Count;
 
         class ParceScenario
         {

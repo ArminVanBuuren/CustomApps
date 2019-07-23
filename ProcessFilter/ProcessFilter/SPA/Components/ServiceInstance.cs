@@ -21,7 +21,7 @@ namespace SPAFilter.SPA.Components
         const string NOT_FOUND_FILE = "Not found file in path: \"{0}\" when initialize {1}";
         const string INVALID_XML = "Invalid xml file \"{0}\"";
 
-        [DGVColumn(ColumnPosition.Before, "HardwareID")]
+        [DGVColumn(ColumnPosition.After, "HardwareID")]
         public string HardwareID { get; private set; }
 
         public string HostTypeName { get; }
@@ -31,7 +31,7 @@ namespace SPAFilter.SPA.Components
         public List<Scenario> Scenarios { get; } = new List<Scenario>();
         public Dictionary<string, Command> Commands { get; } = new Dictionary<string, Command>(StringComparer.CurrentCultureIgnoreCase);
 
-        [DGVColumn(ColumnPosition.Before, "IsCorrect", false)]
+        [DGVColumn(ColumnPosition.Last, "IsCorrect", false)]
         public bool IsCorrect { get; } = false;
 
         public ServiceInstance(string filePath, XmlNode node) :base(filePath)

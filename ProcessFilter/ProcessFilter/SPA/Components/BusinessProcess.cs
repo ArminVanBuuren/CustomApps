@@ -10,6 +10,9 @@ namespace SPAFilter.SPA.Components
     {
         internal List<string> Operations { get; }
 
+        [DGVColumn(ColumnPosition.After, "Process")]
+        public override string Name { get; set; }
+
         /// <summary>
         /// Если ли ли вызов сервис каталога
         /// </summary>

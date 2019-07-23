@@ -156,6 +156,7 @@ namespace SPAFilter
             this.dataGridProcesses.Location = new System.Drawing.Point(0, 0);
             this.dataGridProcesses.Name = "dataGridProcesses";
             this.dataGridProcesses.ReadOnly = true;
+            this.dataGridProcesses.RowHeadersVisible = false;
             this.dataGridProcesses.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridProcesses.Size = new System.Drawing.Size(794, 262);
             this.dataGridProcesses.TabIndex = 4;
@@ -300,6 +301,7 @@ namespace SPAFilter
             this.dataGridServiceInstances.Location = new System.Drawing.Point(0, 25);
             this.dataGridServiceInstances.Name = "dataGridServiceInstances";
             this.dataGridServiceInstances.ReadOnly = true;
+            this.dataGridServiceInstances.RowHeadersVisible = false;
             this.dataGridServiceInstances.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridServiceInstances.Size = new System.Drawing.Size(792, 237);
             this.dataGridServiceInstances.TabIndex = 6;
@@ -341,6 +343,7 @@ namespace SPAFilter
             this.dataGridOperations.Location = new System.Drawing.Point(0, 0);
             this.dataGridOperations.Name = "dataGridOperations";
             this.dataGridOperations.ReadOnly = true;
+            this.dataGridOperations.RowHeadersVisible = false;
             this.dataGridOperations.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridOperations.Size = new System.Drawing.Size(794, 262);
             this.dataGridOperations.TabIndex = 0;
@@ -370,6 +373,7 @@ namespace SPAFilter
             this.dataGridScenarios.Location = new System.Drawing.Point(0, 0);
             this.dataGridScenarios.Name = "dataGridScenarios";
             this.dataGridScenarios.ReadOnly = true;
+            this.dataGridScenarios.RowHeadersVisible = false;
             this.dataGridScenarios.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridScenarios.Size = new System.Drawing.Size(794, 262);
             this.dataGridScenarios.TabIndex = 5;
@@ -399,6 +403,7 @@ namespace SPAFilter
             this.dataGridCommands.Location = new System.Drawing.Point(0, 0);
             this.dataGridCommands.Name = "dataGridCommands";
             this.dataGridCommands.ReadOnly = true;
+            this.dataGridCommands.RowHeadersVisible = false;
             this.dataGridCommands.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridCommands.Size = new System.Drawing.Size(794, 262);
             this.dataGridCommands.TabIndex = 1;

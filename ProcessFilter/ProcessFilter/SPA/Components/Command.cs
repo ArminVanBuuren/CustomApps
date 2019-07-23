@@ -6,11 +6,11 @@ namespace SPAFilter.SPA.Components
     {
         readonly ServiceInstance _parent;
 
+        [DGVColumn(ColumnPosition.After, "HostType")]
+        public string HostTypeName => _parent.HostTypeName;
+
         [DGVColumn(ColumnPosition.After, "Command")]
         public override string Name { get; set; }
-
-        [DGVColumn(ColumnPosition.Before, "HostType")]
-        public string HostTypeName => _parent.HostTypeName;
 
         public Command(ServiceInstance parent, string path) : base(path)
         {

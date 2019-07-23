@@ -4,7 +4,7 @@ namespace SPAFilter.SPA.Components.ROBP
 {
     public sealed class ROBPOperation : DriveTemplate, IOperation
     {
-        [DGVColumn(ColumnPosition.Before, "HostType")]
+        [DGVColumn(ColumnPosition.After, "HostType")]
         public string HostTypeName { get; }
 
         [DGVColumn(ColumnPosition.After, "Operation")]

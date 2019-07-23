@@ -15,8 +15,7 @@ namespace SPAFilter.SPA
     {
         private readonly FileInfo _fileInfo;
 
-
-        [DGVColumn(ColumnPosition.Last, "Size [Kb]")]
+        [DGVColumn(ColumnPosition.Before, "Size [Kb]")]
         public virtual double FileSize
         {
             get
