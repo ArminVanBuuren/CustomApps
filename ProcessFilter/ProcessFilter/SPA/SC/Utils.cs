@@ -18,6 +18,7 @@ namespace SPAFilter.SPA.SC
         }
     }
 
+    /// <inheritdoc />
     /// <summary>
     /// Indicates that the value of marked element could never be <c>null</c>
     /// </summary>

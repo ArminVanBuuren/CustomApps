@@ -11,10 +11,10 @@ namespace SPAFilter.SPA.SC
 
         protected internal void AddCFSGroup(string mainCFS, IEnumerable<string> listRestrictedCFS)
         {
-            foreach (string cfsRestr in listRestrictedCFS)
+            foreach (var cfsRestr in listRestrictedCFS)
             {
-                List<string> rest = new List<string> {mainCFS, cfsRestr};
-                string key = string.Join(":", rest.OrderBy(p => p));
+                var rest = new List<string> {mainCFS, cfsRestr};
+                var key = string.Join(":", rest.OrderBy(p => p));
                 if (!_tempCFSGroupCollection.ContainsKey(key))
                     _tempCFSGroupCollection.Add(key, rest);
             }
@@ -25,7 +25,7 @@ namespace SPAFilter.SPA.SC
             var cfsGroupsStr = new StringBuilder();
             CFSGroupCollection = Calculate(_tempCFSGroupCollection);
 
-            foreach (KeyValuePair<string, IEnumerable<string>> cfsGroup in CFSGroupCollection)
+            foreach (var cfsGroup in CFSGroupCollection)
             {
                 cfsGroupsStr.Append(GetCFSGroupString(cfsGroup.Key, cfsGroup.Value));
             }
@@ -38,7 +38,7 @@ namespace SPAFilter.SPA.SC
             var cfsGroupStr = new StringBuilder();
             var header = $"<CFSGroup name=\"{name}\" type=\"Mutex\" description=\"Группа взаимоисключающих услуг\">";
             
-            foreach (string cfsName in cfsList)
+            foreach (var cfsName in cfsList)
             {
                 cfsGroupStr.Append($"<CFS name=\"{cfsName}\" />");
             }
@@ -50,16 +50,16 @@ namespace SPAFilter.SPA.SC
         Dictionary<string, IEnumerable<string>> Calculate(Dictionary<string, List<string>> allList)
         {
             var filtered = new Dictionary<string, Dictionary<string, bool>>();
-            foreach (List<string> cfsRestrList in allList.Values)
+            foreach (var cfsRestrList in allList.Values)
             {
-                foreach (string cfsName in cfsRestrList)
+                foreach (var cfsName in cfsRestrList)
                 {
                     if (filtered.ContainsKey(cfsName))
                         continue;
 
-                    List<string> res = Calculate(cfsName, allList);
-                    Dictionary<string, bool> aa = new Dictionary<string, bool>();
-                    foreach (string cfs in res)
+                    var res = Calculate(cfsName, allList);
+                    var aa = new Dictionary<string, bool>();
+                    foreach (var cfs in res)
                     {
                         aa.Add(cfs, true);
                     }
@@ -68,14 +68,14 @@ namespace SPAFilter.SPA.SC
             }
 
             var filtered2 = new Dictionary<string, List<string>>();
-            foreach (KeyValuePair<string, Dictionary<string, bool>> filt1 in filtered)
+            foreach (var filt1 in filtered)
             {
-                foreach (KeyValuePair<string, Dictionary<string, bool>> filt2 in filtered)
+                foreach (var filt2 in filtered)
                 {
                     if (filt2.Value.ContainsKey(filt1.Key) && filt1.Key != filt2.Key)
                     {
-                        List<string> intersectCFS = filt1.Value.Keys.ToList().Intersect(filt2.Value.Keys.ToList()).OrderBy(p => p).ToList();
-                        string getKey = string.Join(":", intersectCFS);
+                        var intersectCFS = filt1.Value.Keys.ToList().Intersect(filt2.Value.Keys.ToList()).OrderBy(p => p).ToList();
+                        var getKey = string.Join(":", intersectCFS);
                         if (!filtered2.ContainsKey(getKey))
                         {
                             filtered2.Add(getKey, intersectCFS);
@@ -85,14 +85,14 @@ namespace SPAFilter.SPA.SC
             }
 
             var filtered3 = new Dictionary<string, IEnumerable<string>>();
-            foreach (KeyValuePair<string, List<string>> filt1 in filtered2)
+            foreach (var filt1 in filtered2)
             {
-                foreach (KeyValuePair<string, List<string>> filt2 in filtered2)
+                foreach (var filt2 in filtered2)
                 {
                     if (filt1.Key != filt2.Key)
                     {
-                        IOrderedEnumerable<string> intersectCFS = filt1.Value.Intersect(filt2.Value).OrderBy(p => p);
-                        string getKey = string.Join(":", intersectCFS);
+                        var intersectCFS = filt1.Value.Intersect(filt2.Value).OrderBy(p => p);
+                        var getKey = string.Join(":", intersectCFS);
                         if (intersectCFS.Count() == 1 && !filtered3.ContainsKey(filt1.Key))
                         {
                             filtered3.Add(filt1.Key, filt1.Value);
@@ -105,15 +105,15 @@ namespace SPAFilter.SPA.SC
                 }
             }
 
-            int i = 0;
+            var i = 0;
             filtered3 = filtered3.OrderByDescending(x => x.Key.Length).ToDictionary(x => x.Key, x => x.Value);
             var filtered4 = new Dictionary<string, IEnumerable<string>>();
-            foreach (KeyValuePair<string, IEnumerable<string>> dd in filtered3)
+            foreach (var dd in filtered3)
             {
-                bool isExist = false;
-                foreach (IEnumerable<string> cfss in filtered4.Values)
+                var isExist = false;
+                foreach (var cfss in filtered4.Values)
                 {
-                    int count = cfss.Intersect(dd.Value.ToList()).Count();
+                    var count = cfss.Intersect(dd.Value.ToList()).Count();
                     if (count == dd.Value.Count())
                     {
                         isExist = true;
@@ -127,12 +127,12 @@ namespace SPAFilter.SPA.SC
             return filtered4;
         }
 
-        static List<string> Calculate(string name, Dictionary<string, List<string>> allList)
+        static IEnumerable<string> Calculate(string name, Dictionary<string, List<string>> allList)
         {
             var refreshList = new List<string>();
-            foreach (List<string> cfsRestrList in allList.Values)
+            foreach (var cfsRestrList in allList.Values)
             {
-                foreach (string cfsName in cfsRestrList)
+                foreach (var cfsName in cfsRestrList)
                 {
                     if (cfsName == name)
                     {

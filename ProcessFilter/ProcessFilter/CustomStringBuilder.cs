@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace SPAFilter
 {
@@ -21,7 +19,7 @@ namespace SPAFilter
         public string ToString(int lines)
         {
             var builder = new StringBuilder();
-            int i = 0;
+            var i = 0;
             foreach (var line in _strLines)
             {
                 builder.AppendLine(line);

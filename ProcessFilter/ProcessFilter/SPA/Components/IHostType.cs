@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using SPAFilter.SPA.Collection;
+﻿using SPAFilter.SPA.Collection;
 
 namespace SPAFilter.SPA.Components
 {

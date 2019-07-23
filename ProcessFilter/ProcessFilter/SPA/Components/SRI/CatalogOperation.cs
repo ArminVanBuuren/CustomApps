@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using System.Xml;
-using SPAFilter.SPA.Collection;
 using Utils.WinForm.DataGridViewHelper;
 
-namespace SPAFilter.SPA.Components.SC
+namespace SPAFilter.SPA.Components.SRI
 {
     public abstract class CatalogOperation : ObjectTemplate, IOperation
     {

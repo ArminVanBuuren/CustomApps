@@ -30,8 +30,8 @@ namespace SPAFilter.SPA.SC
 
         public void Add(string fileName, XmlDocument document, string hostType)
         {
-            string operationName = fileName;
-            foreach (string prefix in new[] { "Add", "Assign", "Delete", "Del", "Remove", "FR", "CB" })
+            var operationName = fileName;
+            foreach (var prefix in new[] { "Add", "Assign", "Delete", "Del", "Remove", "FR", "CB" })
             {
                 RemovePrefix(ref operationName, prefix);
             }
@@ -44,13 +44,13 @@ namespace SPAFilter.SPA.SC
 
             if (GetServices(getServices, Execute(document.CreateNavigator(), "//ProvisionList/*")))
             {
-                if (!IsExistSameHostOperation(hostOp, getServices, HostOperation.LinkType.Add))
-                    LoadNewService(hostOp, getServices, HostOperation.LinkType.Add); //bindSrv
+                if (!IsExistSameHostOperation(hostOp, getServices, LinkType.Add))
+                    LoadNewService(hostOp, getServices, LinkType.Add); //bindSrv
             }
             else if (GetServices(getServices, Execute(document.CreateNavigator(), "//WithdrawalList/*")))
             {
-                if (!IsExistSameHostOperation(hostOp, getServices, HostOperation.LinkType.Remove))
-                    LoadNewService(hostOp, getServices, HostOperation.LinkType.Remove); //bindSrv
+                if (!IsExistSameHostOperation(hostOp, getServices, LinkType.Remove))
+                    LoadNewService(hostOp, getServices, LinkType.Remove); //bindSrv
             }
         }
 
@@ -62,12 +62,12 @@ namespace SPAFilter.SPA.SC
             }
         }
 
-        static bool GetServices(Dictionary<string, XPathResult> services, XPathResultCollection result)
+        static bool GetServices(IDictionary<string, XPathResult> services, XPathResultCollection result)
         {
             if(result == null || result.Count == 0)
                 return false;
 
-            foreach (XPathResult res in result)
+            foreach (var res in result)
             {
                 if (res.NodeName.Equals("Include", StringComparison.CurrentCultureIgnoreCase))
                     continue;
@@ -82,16 +82,16 @@ namespace SPAFilter.SPA.SC
             return result.Count > 0;
         }
 
-        bool IsExistSameHostOperation(HostOperation newHostOp, Dictionary<string, XPathResult> newServices, HostOperation.LinkType type)
+        bool IsExistSameHostOperation(HostOperation newHostOp, Dictionary<string, XPathResult> newServices, LinkType type)
         {
-            foreach (HostOperation existhostOp in _hostOperations)
+            foreach (var existhostOp in _hostOperations)
             {
                 //string xmlTEMP = string.Join("\r\n\r\n", newHostOp.XML_BODY) + "\r\n\r\n" + string.Join("\r\n\r\n", existhostOp.XML_BODY);
                 if (existhostOp.HostOperationName.Equals(newHostOp.HostOperationName, StringComparison.CurrentCultureIgnoreCase))
                 {
-                    foreach (XPathResult srvCode in newServices.Values)
+                    foreach (var srvCode in newServices.Values)
                     {
-                        if (existhostOp.ChildCFS.TryGetValue(srvCode.NodeName, out HostOperation.CFS_RFS cfs_rfs))
+                        if (existhostOp.ChildCFS.TryGetValue(srvCode.NodeName, out var cfs_rfs))
                         {
                             cfs_rfs.ChangeLinkType(type);
                         }
@@ -109,10 +109,10 @@ namespace SPAFilter.SPA.SC
                 if (!existhostOp.HostType.Equals(newHostOp.HostType, StringComparison.CurrentCultureIgnoreCase))
                     continue;
 
-                List<string> serviceForRemove = new List<string>();
-                foreach (KeyValuePair<string, XPathResult> srvCode in newServices)
+                var serviceForRemove = new List<string>();
+                foreach (var srvCode in newServices)
                 {
-                    if (existhostOp.ChildCFS.TryGetValue(srvCode.Key, out HostOperation.CFS_RFS cfs_rfs))
+                    if (existhostOp.ChildCFS.TryGetValue(srvCode.Key, out var cfs_rfs))
                     {
                         cfs_rfs.ChangeLinkType(type);
                         serviceForRemove.Add(srvCode.Key);
@@ -121,7 +121,7 @@ namespace SPAFilter.SPA.SC
 
                 if (serviceForRemove.Count > 0)
                 {
-                    foreach (string serviceCode in serviceForRemove)
+                    foreach (var serviceCode in serviceForRemove)
                     {
                         newServices.Remove(serviceCode);
                     }
@@ -132,10 +132,10 @@ namespace SPAFilter.SPA.SC
             return newServices.Count == 0;
         }
 
-        void LoadNewService(HostOperation hostOp, Dictionary<string, XPathResult> srvCodeList, HostOperation.LinkType link) //BindingServices bindSrv
+        void LoadNewService(HostOperation hostOp, Dictionary<string, XPathResult> srvCodeList, LinkType link) //BindingServices bindSrv
         {
             //var resHostOp = new Dictionary<HostOperation, List<RFS>>();
-            foreach (XPathResult srvCode in srvCodeList.Values)
+            foreach (var srvCode in srvCodeList.Values)
             {
                 AddCFS(srvCode, hostOp, link);
             }
@@ -144,14 +144,14 @@ namespace SPAFilter.SPA.SC
                 _hostOperations.Add(hostOp);
         }
 
-        void AddCFS(XPathResult srvCode, HostOperation hostOp, HostOperation.LinkType link)
+        void AddCFS(XPathResult srvCode, HostOperation hostOp, LinkType link)
         {
-            if (!CollectionCFS.TryGetValue(srvCode.NodeName, out CFS getExistCFS))
+            if (!CollectionCFS.TryGetValue(srvCode.NodeName, out var getExistCFS))
             {
-                string description = _getDescription?.Invoke(srvCode.NodeName);
+                var description = _getDescription?.Invoke(srvCode.NodeName);
                 description = string.IsNullOrEmpty(description) ? "-" : description;
 
-                CFS createNewCFS = new CFS(srvCode.NodeName, description, hostOp, link);
+                var createNewCFS = new CFS(srvCode.NodeName, description, hostOp, link);
                 CollectionCFS.Add(srvCode.NodeName, createNewCFS);
             }
             else
@@ -174,7 +174,7 @@ namespace SPAFilter.SPA.SC
 
         public void GenerateRFS()
         {
-            foreach (HostOperation hostOp in _hostOperations)
+            foreach (var hostOp in _hostOperations)
             {
                 hostOp.GenerateRFS();
             }
@@ -187,18 +187,18 @@ namespace SPAFilter.SPA.SC
             var resourceXmlList = new StringBuilder();
             var rfsGroupXmlList = new StringBuilder();
 
-            foreach (CFS cfs in CollectionCFS.Values)
+            foreach (var cfs in CollectionCFS.Values)
             {
                 cfsXmlList.Append(cfs.ToXml(this));
 
-                foreach (RFS rfs in cfs.RFSList)
+                foreach (var rfs in cfs.RFSList)
                 {
                     if (!CollectionRFS.ContainsKey(rfs.Name))
                         CollectionRFS.Add(rfs.Name, rfs);
                 }
             }
 
-            foreach (RFS rfs in CollectionRFS.Values.OrderBy(p => p.HostType).ThenBy(x => x.Name))
+            foreach (var rfs in CollectionRFS.Values.OrderBy(p => p.HostType).ThenBy(x => x.Name))
             {
                 rfsXmlList.Append(rfs.ToXml());
                 if (rfs.SC_Resource != null && !CollectionResource.ContainsKey(rfs.SC_Resource.Name))
@@ -209,16 +209,16 @@ namespace SPAFilter.SPA.SC
             }
 
             // коллекция RFSGroup должна быть в конце т.к. она формируется только после того когда все RFS созданы
-            foreach (RFSGroup rfsGroup in CollectionRFSGroup.Values)
+            foreach (var rfsGroup in CollectionRFSGroup.Values)
             {
                 rfsGroupXmlList.Append(rfsGroup.ToXml());
             }
 
-            string result = "<ResourceList>" + resourceXmlList + "</ResourceList>"
-                          + "<RFSList>" + rfsXmlList + "</RFSList>"
-                          + "<CFSList>" + cfsXmlList + "</CFSList>"
-                          + "<CFSGroupList>" + CollectionMutexCFSGroup.ToXml() + "</CFSGroupList>"
-                          + "<RFSGroup>" + rfsGroupXmlList + "</RFSGroup>";
+            var result = "<ResourceList>" + resourceXmlList + "</ResourceList>"
+                       + "<RFSList>" + rfsXmlList + "</RFSList>"
+                       + "<CFSList>" + cfsXmlList + "</CFSList>"
+                       + "<CFSGroupList>" + CollectionMutexCFSGroup.ToXml() + "</CFSGroupList>"
+                       + "<RFSGroup>" + rfsGroupXmlList + "</RFSGroup>";
 
             return result;
         }

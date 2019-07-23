@@ -1,45 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace SPAFilter.SPA.SC
 {
     public class HostOperation
     {
-        [Flags]
-        protected internal enum LinkType
-        {
-            Add = 0,
-            Remove = 1
-        }
-        protected internal class CFS_RFS
-        {
-            private HostOperation _parent;
-            protected internal CFS_RFS(CFS cfs, LinkType link, HostOperation parent)
-            {
-                ParentCFS = cfs;
-                Link = link;
-                _parent = parent;
-            }
-
-            protected internal void ChangeLinkType(LinkType link)
-            {
-                Link = Link & link;
-            }
-
-            protected internal CFS ParentCFS { get; }
-            protected internal LinkType Link { get; private set; }
-            public override string ToString()
-            {
-                return $"{ParentCFS.Name}:{Link:G}";
-            }
-        }
-
-
         public string HostType { get; }
         public string HostOperationName => $"{HostType}_{OperationName}";
         public string OperationName { get; }
+
         protected internal List<string> XML_BODY { get; } = new List<string>();
-        protected internal Dictionary<string, CFS_RFS> ChildCFS { get; } = new Dictionary<string, CFS_RFS>();
+        internal Dictionary<string, CFS_RFS> ChildCFS { get; } = new Dictionary<string, CFS_RFS>();
         protected internal BindingServices BindServices { get; }
 
         public HostOperation(string opName, string hostType, BindingServices bindServ) //,string xmlBody
@@ -56,9 +26,9 @@ namespace SPAFilter.SPA.SC
             BindServices.AddRange(hostOp.BindServices);
         }
 
-        protected internal void AddChildRFS(CFS cfs, LinkType linkType)
+        internal void AddChildRFS(CFS cfs, LinkType linkType)
         {
-            CFS_RFS cfsrfs = new CFS_RFS(cfs, linkType, this);
+            var cfsrfs = new CFS_RFS(cfs, linkType, this);
             ChildCFS.Add(cfs.Name, cfsrfs);
         }
 
@@ -67,18 +37,18 @@ namespace SPAFilter.SPA.SC
             if (ChildCFS.Count > 1)
             {
                 var resource = new Resource(this);
-                int index = 0;
-                foreach (CFS_RFS cfsRfs in ChildCFS.Values)
+                var index = 0;
+                foreach (var cfsRfs in ChildCFS.Values)
                 {
-                    RFS rfs = new RFS(cfsRfs, this, resource, ++index);
+                    var rfs = new RFS(cfsRfs, this, resource, ++index);
                     cfsRfs.ParentCFS.RFSList.Add(rfs);
                 }
             }
             else
             {
-                foreach (CFS_RFS cfsRfs in ChildCFS.Values)
+                foreach (var cfsRfs in ChildCFS.Values)
                 {
-                    RFS rfs = new RFS(cfsRfs, this);
+                    var rfs = new RFS(cfsRfs, this);
                     cfsRfs.ParentCFS.RFSList.Add(rfs);
                 }
             }

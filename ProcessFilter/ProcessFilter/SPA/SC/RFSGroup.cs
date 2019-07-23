@@ -16,7 +16,7 @@ namespace SPAFilter.SPA.SC
             Description = "Группа RFS";
             Type = type;
             DependenceRFSList = listOfRFS;
-            foreach (string rfsName in DependenceRFSList)
+            foreach (var rfsName in DependenceRFSList)
             {
                 if (rfsName.StartsWith("RFS_", StringComparison.CurrentCultureIgnoreCase))
                     Name += "_" + rfsName.Substring(4, rfsName.Length - 4);
@@ -27,9 +27,9 @@ namespace SPAFilter.SPA.SC
 
         public override string ToXml()
         {
-            string header = $"<RFSGroup name=\"{Name}\" type=\"{Type}\" description=\"{Description}\">";
-            StringBuilder rfsList = new StringBuilder();
-            foreach (string rfsName in DependenceRFSList)
+            var header = $"<RFSGroup name=\"{Name}\" type=\"{Type}\" description=\"{Description}\">";
+            var rfsList = new StringBuilder();
+            foreach (var rfsName in DependenceRFSList)
             {
                 rfsList.Append($"<RFS name=\"{rfsName}\" linkType=\"Add\" />");
             }

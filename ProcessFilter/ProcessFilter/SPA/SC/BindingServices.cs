@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+using System.Xml.XPath;
 using Utils;
 using static Utils.XPATH;
 
@@ -14,20 +15,18 @@ namespace SPAFilter.SPA.SC
         public string DependenceType { get; private set; } = "Any";
 
 
-        protected internal BindingServices(XmlDocument document)
+        protected internal BindingServices(IXPathNavigable document)
         {
             var navigator = document.CreateNavigator();
             var getServices = Execute(navigator, "//RegisteredList/*");
             var getHaltMode = Execute(navigator, "//RegisteredList/@HaltMode");
             var getType = Execute(navigator, "//RegisteredList/@Type");
-            bool isDependency = getHaltMode != null && getHaltMode.Count > 0 && (getHaltMode.First().Value.Equals("CancelOperation", StringComparison.CurrentCultureIgnoreCase));
-            bool isAny = getType != null && getType.Count > 0 && getType.First().Value.Equals("AnyOfListed", StringComparison.CurrentCultureIgnoreCase);
-
-
+            var isDependency = getHaltMode != null && getHaltMode.Count > 0 && (getHaltMode.First().Value.Equals("CancelOperation", StringComparison.CurrentCultureIgnoreCase));
+            var isAny = getType != null && getType.Count > 0 && getType.First().Value.Equals("AnyOfListed", StringComparison.CurrentCultureIgnoreCase);
 
             if (getServices != null)
             {
-                foreach (XPathResult srv in getServices)
+                foreach (var srv in getServices)
                 {
                     if (srv.NodeName.Equals("Include", StringComparison.CurrentCultureIgnoreCase))
                         continue;
@@ -76,12 +75,12 @@ namespace SPAFilter.SPA.SC
             if (DependenceType != bindServ.DependenceType && bindServ.DependenceType == "All")
                 DependenceType = "All";
 
-            foreach (string serviceCode in bindServ.DependenceServices)
+            foreach (var serviceCode in bindServ.DependenceServices)
             {
                 DependenceServices.Add(serviceCode);
             }
 
-            foreach (string serviceCode in bindServ.RestrictedServices)
+            foreach (var serviceCode in bindServ.RestrictedServices)
             {
                 RestrictedServices.Add(serviceCode);
             }

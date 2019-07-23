@@ -19,10 +19,10 @@ namespace SPAFilter.SPA.SC
         public override string Description => ParentCFS_RFS.ParentCFS.Description;
 
         public string HostType => MainHostOperation.HostType;
-        internal HostOperation.CFS_RFS ParentCFS_RFS { get; }
+        internal CFS_RFS ParentCFS_RFS { get; }
         HostOperation MainHostOperation { get; }
         public Resource SC_Resource { get; }
-        internal RFS(HostOperation.CFS_RFS parentCFS, HostOperation hostOp, Resource resource = null, int index = -1)
+        internal RFS(CFS_RFS parentCFS, HostOperation hostOp, Resource resource = null, int index = -1)
         {
             ParentCFS_RFS = parentCFS;
             MainHostOperation = hostOp;
@@ -35,16 +35,16 @@ namespace SPAFilter.SPA.SC
             if (MainHostOperation.BindServices.DependenceServices.Count > 0)
             {
                 var RFSDeps = new Dictionary<HostOperation, HashSet<string>>();
-                foreach (string depSrv in MainHostOperation.BindServices.DependenceServices)
+                foreach (var depSrv in MainHostOperation.BindServices.DependenceServices)
                 {
-                    if (!allCFSs.TryGetValue(depSrv, out CFS getDepCFS))
+                    if (!allCFSs.TryGetValue(depSrv, out var getDepCFS))
                         continue;
 
-                    RFS getExistRFS = getDepCFS.RFSList.FirstOrDefault(p => p.HostType == HostType);
+                    var getExistRFS = getDepCFS.RFSList.FirstOrDefault(p => p.HostType == HostType);
                     if (getExistRFS == null)
                         continue;
 
-                    if (RFSDeps.TryGetValue(getExistRFS.MainHostOperation, out HashSet<string> srvsOp))
+                    if (RFSDeps.TryGetValue(getExistRFS.MainHostOperation, out var srvsOp))
                     {
                         srvsOp.Add(getExistRFS.Name);
                     }
@@ -58,10 +58,10 @@ namespace SPAFilter.SPA.SC
                 if (RFSDeps.Count > 0)
                 {
                     var RFSDepsFiltered = new HashSet<string>();
-                    foreach (KeyValuePair<HostOperation, HashSet<string>> finded in RFSDeps)
+                    foreach (var finded in RFSDeps)
                     {
-                        AllServiceIsBaseRFS(finded, out HashSet<string> res);
-                        foreach (string depRFS in res)
+                        AllServiceIsBaseRFS(finded, out var res);
+                        foreach (var depRFS in res)
                         {
                             RFSDepsFiltered.Add(depRFS);
                         }
@@ -73,10 +73,10 @@ namespace SPAFilter.SPA.SC
                     }
                     else
                     {
-                        RFSGroup newRFSGroup = new RFSGroup(MainHostOperation.BindServices.DependenceType, RFSDepsFiltered);
-                        string rfsGroupID = newRFSGroup.ToString();
+                        var newRFSGroup = new RFSGroup(MainHostOperation.BindServices.DependenceType, RFSDepsFiltered);
+                        var rfsGroupID = newRFSGroup.ToString();
 
-                        if (allRfsGroup.TryGetValue(rfsGroupID, out RFSGroup ifExist))
+                        if (allRfsGroup.TryGetValue(rfsGroupID, out var ifExist))
                         {
                             return $"<RFS name=\"{Name}\" linkType=\"{ParentCFS_RFS.Link}\" dependsOn=\"{ifExist.Name}\" />";
                         }
@@ -110,7 +110,7 @@ namespace SPAFilter.SPA.SC
             //если в хосте операции несколько RFS
             if (_index > 0)
             {
-                string currentRFS = $"<RFS name=\"{Name}\" base=\"RFS_{MainHostOperation.HostOperationName}_BASE\" hostType=\"{HostType}\" description=\"{Description}\">" + SC_Resource.GetChildCFSResource(ParentCFS_RFS.ParentCFS.Name) + "</RFS>";
+                var currentRFS = $"<RFS name=\"{Name}\" base=\"RFS_{MainHostOperation.HostOperationName}_BASE\" hostType=\"{HostType}\" description=\"{Description}\">" + SC_Resource.GetChildCFSResource(ParentCFS_RFS.ParentCFS.Name) + "</RFS>";
 
                 if (_index == 1)
                 {

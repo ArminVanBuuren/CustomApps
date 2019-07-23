@@ -20,7 +20,7 @@ namespace SPAFilter.SPA.SC
 
         public string GetChildCFSResource(string serviceCode)
         {
-            string resourceValue = serviceCode;
+            var resourceValue = serviceCode;
             if (resourceValue.Substring(0, 2).Equals("CB", StringComparison.CurrentCultureIgnoreCase) || resourceValue.Substring(0, 2).Equals("FR", StringComparison.CurrentCultureIgnoreCase))
             {
                 resourceValue = resourceValue.Substring(2, resourceValue.Length - 2);

@@ -7,7 +7,7 @@ using System.Xml.XPath;
 using SPAFilter.SPA.Collection;
 using Utils;
 
-namespace SPAFilter.SPA.Components.SC
+namespace SPAFilter.SPA.Components.SRI
 {
     public sealed class ScenarioOperation : CatalogOperation
     {

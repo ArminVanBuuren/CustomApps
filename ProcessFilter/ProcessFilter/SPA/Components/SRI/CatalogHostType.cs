@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using SPAFilter.SPA.Collection;
 
-namespace SPAFilter.SPA.Components.SC
+namespace SPAFilter.SPA.Components.SRI
 {
     public sealed class CatalogHostType : ObjectTemplate, IHostType
     {

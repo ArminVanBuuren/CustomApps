@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using FastColoredTextBoxNS;
 using SPAFilter.SPA;
 using SPAFilter.SPA.Components.ROBP;
-using SPAFilter.SPA.Components.SC;
+using SPAFilter.SPA.Components.SRI;
 using Utils;
 using Utils.WinForm.DataGridViewHelper;
 using Utils.WinForm.Notepad;

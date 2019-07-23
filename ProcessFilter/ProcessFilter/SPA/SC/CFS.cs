@@ -7,18 +7,18 @@ namespace SPAFilter.SPA.SC
         readonly Dictionary<string, List<HostOperation>> hostOperations = new Dictionary<string, List<HostOperation>>();
         public List<RFS> RFSList { get; } = new List<RFS>();
 
-        internal CFS(string serviceCode, string description, [NotNull] HostOperation hostOp, HostOperation.LinkType linkType)
+        internal CFS(string serviceCode, string description, [NotNull] HostOperation hostOp, LinkType linkType)
         {
             Name = serviceCode;
             Description = description;
             IsNewHost(hostOp, linkType);
         }
 
-        internal bool IsNewHost([NotNull] HostOperation hostOp, HostOperation.LinkType linkType)
+        internal bool IsNewHost([NotNull] HostOperation hostOp, LinkType linkType)
         {
-            if (hostOperations.TryGetValue(hostOp.HostType, out List<HostOperation> hostOpList))
+            if (hostOperations.TryGetValue(hostOp.HostType, out var hostOpList))
             {
-                foreach (HostOperation existHostOp in hostOpList)
+                foreach (var existHostOp in hostOpList)
                 {
                     if (existHostOp == hostOp)
                         return false;
@@ -37,17 +37,17 @@ namespace SPAFilter.SPA.SC
             var xmlStrStart = $"<CFS name=\"{Name}\" description=\"{Description}\">";
             var xmlStrMiddle = string.Empty;
 
-            foreach (RFS rfs in RFSList)
+            foreach (var rfs in RFSList)
             {
                 xmlStrMiddle += rfs.ToXmlCFSChild(allCompontens.CollectionCFS, allCompontens.CollectionRFSGroup);
             }
 
             var servicesRestrictionInAllHosts = new HashSet<string>();
-            foreach (List<HostOperation> aaa in hostOperations.Values)
+            foreach (var aaa in hostOperations.Values)
             {
-                foreach (HostOperation bbb in aaa)
+                foreach (var bbb in aaa)
                 {
-                    foreach (string srv in bbb.BindServices.RestrictedServices)
+                    foreach (var srv in bbb.BindServices.RestrictedServices)
                     {
                         servicesRestrictionInAllHosts.Add(srv);
                     }

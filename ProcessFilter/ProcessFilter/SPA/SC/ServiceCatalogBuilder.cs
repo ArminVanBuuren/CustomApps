@@ -6,7 +6,6 @@ using System.Text;
 using SPAFilter.SPA.Collection;
 using SPAFilter.SPA.Components.ROBP;
 using Utils;
-using Utils.WinForm.CustomProgressBar;
 
 namespace SPAFilter.SPA.SC
 {

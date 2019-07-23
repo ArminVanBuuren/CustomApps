@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using SPAFilter.SPA.Components;
-using SPAFilter.SPA.Components.SC;
+using SPAFilter.SPA.Components.SRI;
 using Utils;
 using Utils.CollectionHelper;
 
