@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Device.Location;
 using System.Diagnostics;
 using System.IO;
@@ -7,8 +6,6 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Utils;
 using Utils.AppUpdater;
 
@@ -48,7 +45,7 @@ namespace TFSAssist.Remoter
             if (_watcher.Position.Location.IsUnknown)
                 return;
 
-            GeoCoordinate coordinate = _watcher.Position.Location;
+            var coordinate = _watcher.Position.Location;
             _locationResult = $"Latitude=[{coordinate.Latitude.ToString().Replace(",", ".")}] Longitude=[{coordinate.Longitude.ToString().Replace(",", ".")}]";
         }
 
@@ -63,8 +60,8 @@ namespace TFSAssist.Remoter
             if (drives.Length == 0)
                 return null;
 
-            string result = string.Empty;
-            foreach (DriveInfo drive in drives)
+            var result = string.Empty;
+            foreach (var drive in drives)
             {
                 if (drive.IsReady)
                 {
@@ -77,14 +74,14 @@ namespace TFSAssist.Remoter
 
         public string GetDiagnosticInfo()
         {
-            Process proc = Process.GetCurrentProcess();
+            var proc = Process.GetCurrentProcess();
 
             var totalCPU = (int)SERVER.GetCpuUsage();
             var totalRAM = SERVER.GetTotalMemoryInMiB();
             var avalRAM = SERVER.GetPhysicalAvailableMemoryInMiB();
 
             var appCPUUsage = (int)SERVER.GetCpuUsage(proc);
-            string appRAMUsage = SERVER.GetMemUsage(proc).ToFileSize();
+            var appRAMUsage = SERVER.GetMemUsage(proc).ToFileSize();
 
             var result = $"AppCPU=[{appCPUUsage}%]\r\nAppRAM=[{appRAMUsage}]\r\nCPU=[{totalCPU}%]\r\nRAM=[Free='{avalRAM} MB' Total='{totalRAM} MB']";
 
@@ -105,17 +102,17 @@ namespace TFSAssist.Remoter
 
         public string GetDetailedHostInfo(string[] additionalPaths = null)
         {
-            StringBuilder detInfo = new StringBuilder();
+            var detInfo = new StringBuilder();
 
             var hostIps = HOST.GetIPAddresses();
-            int maxLenghtSpace = hostIps.Aggregate("", (max, cur) => max.Length > cur.Interface.Name.Length ? max : cur.Interface.Name).Length + 3;
+            var maxLenghtSpace = hostIps.Aggregate("", (max, cur) => max.Length > cur.Interface.Name.Length ? max : cur.Interface.Name).Length + 3;
 
             foreach (var address in hostIps)
             {
                 detInfo.Append($"{address.Interface.Name} {new string('.', maxLenghtSpace - address.Interface.Name.Length)} [{address.IPAddress.Address}] ({address.Interface.Description})\r\n");
             }
 
-            string whiteSpace = "=";
+            var whiteSpace = "=";
             if (maxLenghtSpace > 10)
                 whiteSpace = " " + new string('.', maxLenghtSpace - 10) + " ";
 
@@ -134,7 +131,7 @@ namespace TFSAssist.Remoter
                 }
 
                 // должен быть именно GetEntryAssembly вместо GetExecutingAssembly. Т.к. GetExecutingAssembly смотрит исполняемую библиотеку, а не испольняемый exe файл
-                Dictionary<string, FileBuildInfo> localVersions = BuildPackInfo.GetLocalVersions(Assembly.GetEntryAssembly());
+                var localVersions = BuildPackInfo.GetLocalVersions(Assembly.GetEntryAssembly());
                 if (localVersions?.Count > 0)
                 {
                     maxLenghtSpace = localVersions.Keys.Aggregate("", (max, cur) => max.Length > cur.Length ? max : cur).Length + 3;
@@ -150,11 +147,11 @@ namespace TFSAssist.Remoter
 
             if (additionalPaths != null && additionalPaths.Length > 0)
             {
-                foreach (string path in additionalPaths)
+                foreach (var path in additionalPaths)
                 {
                     detInfo.Append($"\r\nPath=[{path}]\r\n");
-                    DirectoryInfo tempDir = new DirectoryInfo(path);
-                    FileInfo[] tempFilesCollection = tempDir.GetFiles("*", SearchOption.AllDirectories);
+                    var tempDir = new DirectoryInfo(path);
+                    var tempFilesCollection = tempDir.GetFiles("*", SearchOption.AllDirectories);
                     if (tempFilesCollection.Any())
                     {
                         maxLenghtSpace = tempFilesCollection.Aggregate("", (max, cur) => max.Length > cur.FullName.Length ? max : cur.FullName).Length + 3;

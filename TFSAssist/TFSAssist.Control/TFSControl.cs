@@ -62,8 +62,8 @@ namespace TFSAssist.Control
                     _log.OnStatusChanged(StatusString.Initialization);
                     _log.OnWriteLog($"ThreadID=[{Thread.CurrentThread.ManagedThreadId}] Priority=[{Thread.CurrentThread.Priority}]");
 
-                    string mailFilterFrom = Settings.MailOption.FilterMailFrom.Value.Trim();
-                    string mailFilterSubject = Settings.MailOption.FilterSubject.Value.Trim();
+                    var mailFilterFrom = Settings.MailOption.FilterMailFrom.Value.Trim();
+                    var mailFilterSubject = Settings.MailOption.FilterSubject.Value.Trim();
                     string logFilterRules;
 
                     if (!string.IsNullOrEmpty(mailFilterFrom) && !string.IsNullOrEmpty(mailFilterSubject))
@@ -145,7 +145,7 @@ namespace TFSAssist.Control
 
             var _mailPassword = new SecureString();
             if (Settings.MailOption.Password.Value != null)
-                foreach (char ch in Settings.MailOption.Password.Value)
+                foreach (var ch in Settings.MailOption.Password.Value)
                     _mailPassword.AppendChar(ch);
 
             if(_mailPassword.Length == 0)
@@ -212,13 +212,16 @@ namespace TFSAssist.Control
                 }
             }
 
-            _log.OnWriteLog($"Successful connected to Exchange server. Reading folder:[{(folderFilter.DisplayName.IsNullOrEmpty() ? "Inbox" : folderFilter.DisplayName)}]");
+            if(folderFilter != null)
+                _log.OnWriteLog($"Successful connected to Exchange server. Reading folder:[{(folderFilter.DisplayName.IsNullOrEmpty() ? "Inbox" : folderFilter.DisplayName)}]");
+            else
+                _log.OnWriteLog($"Successful connected to Exchange server. Reading folder:[Null]");
         }
 
         static bool GetFolderId(FindFoldersResults inboxFolders, string folderName, out Folder folderOut)
         {
             folderOut = null;
-            foreach (Folder folder in inboxFolders)
+            foreach (var folder in inboxFolders)
             {
                 if (!folder.DisplayName.Equals(folderName, StringComparison.CurrentCultureIgnoreCase))
                     continue;
@@ -240,21 +243,21 @@ namespace TFSAssist.Control
             if (Settings.TFSOption.TFSCreate.TeamProjects == null || Settings.TFSOption.TFSCreate.TeamProjects.Length == 0)
                 throw new TFSFieldsException("TeamProjects Not Found! Please check config file.");
 
-            Uri collectionUri = new Uri(Settings.TFSOption.TFSUri.Value);
+            var collectionUri = new Uri(Settings.TFSOption.TFSUri.Value);
 
             // Коннект по кастомному логину и паролю
             if (!Settings.TFSOption.TFSUserName.Value.IsNullOrEmptyTrim())
             {
-                string[] tfs_domain_username = Settings.TFSOption.TFSUserName.Value.Split('\\');
+                var tfs_domain_username = Settings.TFSOption.TFSUserName.Value.Split('\\');
                 if (tfs_domain_username.Length != 2 || tfs_domain_username[0].IsNullOrEmpty() || tfs_domain_username[1].IsNullOrEmpty())
                     throw new ArgumentException("You must add Domain and UserName for TFS-server like: \"Domain\\Username\"");
 
                 var _tfsUserPassword = new SecureString();
                 if (Settings.TFSOption.TFSUserPassword.Value != null)
-                    foreach (char ch in Settings.TFSOption.TFSUserPassword.Value)
+                    foreach (var ch in Settings.TFSOption.TFSUserPassword.Value)
                         _tfsUserPassword.AppendChar(ch);
 
-                NetworkCredential credential = new NetworkCredential(tfs_domain_username[1].Trim(), _tfsUserPassword, tfs_domain_username[0].Trim());
+                var credential = new NetworkCredential(tfs_domain_username[1].Trim(), _tfsUserPassword, tfs_domain_username[0].Trim());
                 _tfsService = new TfsTeamProjectCollection(collectionUri, credential);
 
                 _log.OnWriteLog($"TFS authorization=[{tfs_domain_username[0].Trim()}\\{tfs_domain_username[1].Trim()}]");
@@ -284,7 +287,7 @@ namespace TFSAssist.Control
         /// <returns></returns>
         internal static bool RedirectionUrlValidationCallback(string redirectionUrl)
         {
-            Uri redirectionUri = new Uri(redirectionUrl);
+            var redirectionUri = new Uri(redirectionUrl);
 
             // Validate the contents of the redirection URL. In this simple validation
             // callback, the redirection URL is considered valid if it is using HTTPS
@@ -326,17 +329,19 @@ namespace TFSAssist.Control
             {
                 numberOfAttempts++;
                 //https://stackoverflow.com/questions/36069801/ews-read-mail-plain-text-body-getting-serviceobjectpropertyexception
-                PropertySet GetItemsPropertySet = new PropertySet(BasePropertySet.FirstClassProperties, EmailMessageSchema.From, EmailMessageSchema.ToRecipients);
-                GetItemsPropertySet.RequestedBodyType = BodyType.Text;
+                var GetItemsPropertySet = new PropertySet(BasePropertySet.FirstClassProperties, EmailMessageSchema.From, EmailMessageSchema.ToRecipients)
+                {
+                    RequestedBodyType = BodyType.Text
+                };
 
-                Folder inbox = Folder.Bind(service, folderId);
-                FindItemsResults<Item> findResults = inbox.FindItems(new ItemView(numberOfMessages));
+                var inbox = Folder.Bind(service, folderId);
+                var findResults = inbox.FindItems(new ItemView(numberOfMessages));
 
-                ServiceResponseCollection<GetItemResponse> items = service.BindToItems(findResults.Select(item => item.Id), GetItemsPropertySet);
+                var items = service.BindToItems(findResults.Select(item => item.Id), GetItemsPropertySet);
 
                 return items.Select(item =>
                                     {
-                                        string[] uniqueId = item.Item.Id.UniqueId.Split('+');
+                                        var uniqueId = item.Item.Id.UniqueId.Split('+');
                                         return new MailItem {
                                                                 //ID = item.Item.Id.ChangeKey + item.Item.Id.UniqueId,
                                                                 ID = uniqueId[uniqueId.Length - 1],
@@ -375,28 +380,28 @@ namespace TFSAssist.Control
         /// </summary>
         void Processing()
         {
-            DateTime lastProcessingDate = DateTime.Parse(Settings.MailOption.StartDate.Value);
+            var lastProcessingDate = DateTime.Parse(Settings.MailOption.StartDate.Value);
 
             _log.OnStatusChanged(StatusString.Processing, WarnSeverity.StatusRegular);
             
-            int countExeptions = 0;
-            int numberOfAttempts = 0;
+            var countExeptions = 0;
+            var numberOfAttempts = 0;
 
             // получаем последнее письмо которые к нам пришло (самое свежее и проверяем дату)
-            MailItem[] items = GetUnreadMailFromInbox(_exchangeService, _exchangeFolder, 100, ref numberOfAttempts);
+            var items = GetUnreadMailFromInbox(_exchangeService, _exchangeFolder, 100, ref numberOfAttempts);
 
             // если ничего не найденно то сразу завершаем выполнение метода
             if (items.Length <= 0)
                 return;
 
             // получаем дату самого свежего письма, если дата заданного пользователем или последней обработки больше чем дата последнего письма в новой обработки то можно сразу же завершать действие, т.к. даже самое первое письмо не будет попадать под условие, остальные более тем более
-            MailItem firstMailItem = items[0];
+            var firstMailItem = items[0];
             if (lastProcessingDate > firstMailItem.ReceivedDate || _tempLastMailItem != null && _tempLastMailItem.Equals(firstMailItem))
                 return;
             _tempLastMailItem = firstMailItem;
 
-            int countOfProcessing = 0;
-            foreach (MailItem item in items)
+            var countOfProcessing = 0;
+            foreach (var item in items)
             {
                 //Если дата письма меньше чем дата начала то завершаем обработку
                 if (lastProcessingDate > item.ReceivedDate)
@@ -413,7 +418,7 @@ namespace TFSAssist.Control
                 }
 
                 //Если это письмо уже обрабатывалось, то проверяем на валидность создания TFS
-                TMData task = Datas.IsExist(item);
+                var task = Datas.IsExist(item);
                 if (task != null)
                 {
                     //Если успешно он раньше был создан то пропускаем обработку
@@ -438,7 +443,7 @@ namespace TFSAssist.Control
                 try
                 {
                     //Распарсиваем необходимые нам данные из тела и темы письма
-                    List<DataMail> parced = ParceBodyAndSubject(item.Subject, item.Body);
+                    var parced = ParceBodyAndSubject(item.Subject, item.Body);
 
                     if (parced.Count > 0)
                     {
@@ -446,7 +451,7 @@ namespace TFSAssist.Control
                                                              MailParcedItems = parced
                                                          };
                         //создаем ТФС
-                        bool resultCreateTFS = CheckAndCreateTFSItem(task.Executed, out var tfsId);
+                        var resultCreateTFS = CheckAndCreateTFSItem(task.Executed, out var tfsId);
                         task.Executed.TFSID = tfsId;
                         //Если уже TFS создавался то пропускаем обработку, и записываем ранее созданный TFSID
                         task.Status = resultCreateTFS ? ProcessingStatus.Created : ProcessingStatus.Skipped;
@@ -466,7 +471,7 @@ namespace TFSAssist.Control
 
                     countExeptions++;
 
-                    string logProcessing = $"Processing Error!\r\n";
+                    var logProcessing = $"Processing Error!\r\n";
                     Exception detailedEx = ex;
                     while (true)
                     {
@@ -511,16 +516,16 @@ namespace TFSAssist.Control
 
         List<DataMail> ParceBodyAndSubject(string subject, string body)
         {
-            List<DataMail> parced = new List<DataMail>();
+            var parced = new List<DataMail>();
 
-            GroupCollection fromSubject = ParceSubject.Match(subject).Groups;
+            var fromSubject = ParceSubject.Match(subject).Groups;
             _log.OnWriteLog($"Start parsing content of Subject=[{subject}].", true);
 
-            foreach (string match in ParceSubject.GetGroupNames())
+            foreach (var match in ParceSubject.GetGroupNames())
             {
                 if (!match.IsNumber())
                 {
-                    DataMail dm = new DataMail
+                    var dm = new DataMail
                     {
                         Name = $"{nameof(OptionMail.ParceSubject)}_{match}",
                         Value = fromSubject[match].Value.Trim()
@@ -532,14 +537,14 @@ namespace TFSAssist.Control
             }
 
 
-            GroupCollection fromBody = ParceBody.Match(body).Groups;
+            var fromBody = ParceBody.Match(body).Groups;
             _log.OnWriteLog($"Start parsing content of Body=[{body}]", true);
 
-            foreach (string match in ParceBody.GetGroupNames())
+            foreach (var match in ParceBody.GetGroupNames())
             {
                 if (!match.IsNumber())
                 {
-                    DataMail dm = new DataMail
+                    var dm = new DataMail
                     {
                         Name = $"{nameof(OptionMail.ParceBody)}_{match}",
                         Value = fromBody[match].Value.Trim()
@@ -557,11 +562,11 @@ namespace TFSAssist.Control
         {
             createdTfsId = string.Empty;
             //запускаем скрипт по поиску дублей
-            string query = itemExec.ReplaceParcedValues(Settings.TFSOption.GetDublicateTFS[0].Value);
+            var query = itemExec.ReplaceParcedValues(Settings.TFSOption.GetDublicateTFS[0].Value);
             if (!query.IsNullOrEmptyTrim())
             {
                 _log.OnWriteLog($"Check duplicates. Query=[{query}]", true);
-                WorkItemCollection workQuery = _workItemStore.Query(query);
+                var workQuery = _workItemStore.Query(query);
 
                 if (workQuery.Count > 0)
                 {
@@ -584,7 +589,7 @@ namespace TFSAssist.Control
         bool CreateTFSItem(ItemExecuted itemExec, ref string createdTfsId)
         {
             _log.OnWriteLog("Start searching TeamProject...", true);
-            foreach (TeamProjectCondition teamProj in Settings.TFSOption.TFSCreate.TeamProjects)
+            foreach (var teamProj in Settings.TFSOption.TFSCreate.TeamProjects)
             {
                 //проверяем условие в аттрибуте Condition, но сначала выполняется функция getParcedValue для замены необходимых спарсенных данных
                 if (!teamProj.GetConditionResult(itemExec.ReplaceParcedValues, _log))
@@ -600,9 +605,9 @@ namespace TFSAssist.Control
                 }
 
                 _log.OnWriteLog($"Found TeamProject=[{teamProj.Value}]. Start searching WorkItems...", true);
-                Project teamProject = _workItemStore.Projects[teamProj.Value];
+                var teamProject = _workItemStore.Projects[teamProj.Value];
 
-                foreach (WorkItemCondition workItem in teamProj.WorkItems)
+                foreach (var workItem in teamProj.WorkItems)
                 {
                     //проверяем условие в аттрибуте Condition, но сначала выполняется функция getParcedValue для замены необходимых спарсенных данных
                     if (!workItem.GetConditionResult(itemExec.ReplaceParcedValues, _log))
@@ -619,18 +624,18 @@ namespace TFSAssist.Control
 
                     _log.OnWriteLog($"Found WorkItem=[{workItem.Value}]. Start reading Fields...", true);
 
-                    WorkItemType workItemType = teamProject.WorkItemTypes[workItem.Value];
-                    string displayForm = workItemType.DisplayForm;
-                    WorkItem tfsWorkItem = new WorkItem(workItemType);
-                    string failedFieldsStr = string.Empty;
+                    var workItemType = teamProject.WorkItemTypes[workItem.Value];
+                    var displayForm = workItemType.DisplayForm;
+                    var tfsWorkItem = new WorkItem(workItemType);
+                    var failedFieldsStr = string.Empty;
 
                     try
                     {
                         //заполняем все поля которые были указаны в конфиге для обпределенного типа заявки TFS
-                        foreach (FieldCondition field in workItem.Fields)
+                        foreach (var field in workItem.Fields)
                         {
-                            string getFrmFieldValue = field.GetSwitchValue(itemExec.ReplaceParcedValues, _log.OnWriteLog);
-                            _log.OnWriteLog($"{field.ToString()} FinalValue=[{getFrmFieldValue}]", true);
+                            var getFrmFieldValue = field.GetSwitchValue(itemExec.ReplaceParcedValues, _log.OnWriteLog);
+                            _log.OnWriteLog($"{field} FinalValue=[{getFrmFieldValue}]", true);
 
                             //кастомный аттрибуты Control.XXX
                             if (field.Name.Equals("Control.AssignedTo", StringComparison.CurrentCultureIgnoreCase))
@@ -644,7 +649,7 @@ namespace TFSAssist.Control
                             if (field.Name.Equals("Control.Links", StringComparison.CurrentCultureIgnoreCase))
                             {
                                 //кастомный аттрибут "Control.Links", если он не заполнен то к этому item линкуются все возможные таски
-                                foreach (string link in getFrmFieldValue.Split(';',','))
+                                foreach (var link in getFrmFieldValue.Split(';',','))
                                 {
                                     if(link.Trim().IsNullOrEmpty())
                                         continue;
@@ -684,8 +689,8 @@ namespace TFSAssist.Control
                     catch (ValidationException ex) // ошибка если не все обязательные поля были заполнены или были указаны неверные значения
                     {
                         //получаем все обязательные поля для заполнения, чтобы в случае эксепшена знать какие поля необходимо заполнить
-                        StringBuilder reqFieldsStr = tfsWorkItem.Fields.OfType<Field>().Where(field => field.IsRequired).Aggregate(new StringBuilder(), AddParams);
-                        string res = reqFieldsStr.ToString();
+                        var reqFieldsStr = tfsWorkItem.Fields.OfType<Field>().Where(field => field.IsRequired).Aggregate(new StringBuilder(), AddParams);
+                        var res = reqFieldsStr.ToString();
                         throw new TFSFieldsException($"Error when create [{workItem.Value}] in TFS [{teamProj.Value}]! Please check Fields => TeamProject Condition=[{teamProj.Condition}] => WorkItem Condition=[{workItem.Condition}] in your config.\r\nFailed Fields:\r\n{failedFieldsStr}{new string('=', 50)}\r\nAll Required Fields:\r\n{res}{new string('=', 50)}", ex);
                     }
                     catch (Exception)
@@ -711,7 +716,7 @@ namespace TFSAssist.Control
 
         string FormatParam(string paramName, string paramValue, int maxSpaces = 15)
         {
-            string spaces = " ";
+            var spaces = " ";
             if (maxSpaces - paramValue?.Length > 0)
                 spaces = new string(' ', maxSpaces - paramValue.Length);
 

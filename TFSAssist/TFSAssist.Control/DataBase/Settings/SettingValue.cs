@@ -12,7 +12,7 @@ namespace TFSAssist.Control.DataBase.Settings
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged ([CallerMemberName] string propertyName = null)
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
+            var handler = PropertyChanged;
 
             handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -44,10 +44,10 @@ namespace TFSAssist.Control.DataBase.Settings
         [XmlAttribute]
         public override bool Value
         {
-            get => RegeditControl.EnabledBootRun(TFSAssist.Control.TFSControl.ApplicationName);
+            get => RegeditControl.EnabledBootRun(TFSControl.ApplicationName);
             set
             {
-                RegeditControl.SetBootStartup(TFSAssist.Control.TFSControl.ApplicationName, TFSAssist.Control.TFSControl.ApplicationPath, value);
+                RegeditControl.SetBootStartup(TFSControl.ApplicationName, TFSControl.ApplicationPath, value);
                 base.Value = value;
             }
         }

@@ -34,18 +34,19 @@ namespace TFSAssist.Control.DataBase.Settings
         /// Выполняется замена спец параметров на их значение и получаем результат условия.
         /// </summary>
         /// <param name="getParcedValue"></param>
+        /// <param name="log"></param>
         /// <returns></returns>
         internal bool GetConditionResult(GetParcedValue getParcedValue, LogPerformer log)
         {
             if (Condition.IsNullOrEmpty())
                 return true;
 
-            string value = getParcedValue(Condition);
+            var value = getParcedValue(Condition);
 
             try
             {
                 var exResult = ExpressionBuilder.Calculate(value);
-                bool result = exResult.ConditionResult;
+                var result = exResult.ConditionResult;
 
                 log.OnWriteLog($"Source{nameof(Condition)}=[{Condition}]; Final{nameof(Condition)}=[{value}] IsValid=[{exResult.IsValid}] ResultExpression=[{result}]", true);
                 return result;
@@ -144,6 +145,7 @@ namespace TFSAssist.Control.DataBase.Settings
         /// Если существет условие для определения значения, то проверяются все условия иначе возвращается просто Value
         /// </summary>
         /// <param name="getParcedValue"></param>
+        /// <param name="writeErrLog"></param>
         /// <returns></returns>
         internal string GetSwitchValue(GetParcedValue getParcedValue, Action<string> writeErrLog)
         {
@@ -151,7 +153,7 @@ namespace TFSAssist.Control.DataBase.Settings
                 return getParcedValue(Value);
 
 
-            string resultSwitch = GetParcedValueSwitch(getParcedValue, out var errLog);
+            var resultSwitch = GetParcedValueSwitch(getParcedValue, out var errLog);
             if (!errLog.IsNullOrEmpty())
                 writeErrLog(errLog);
 
@@ -167,10 +169,11 @@ namespace TFSAssist.Control.DataBase.Settings
         string GetParcedValueSwitch(GetParcedValue getParcedValue, out string errorLog)
         {
             errorLog = null;
-            string switchValue = getParcedValue(Switch).Trim();
-            foreach (MappingValue mapValue in Items)
+            var switchValue = getParcedValue(Switch).Trim();
+            foreach (var mapValue in Items)
             {
-                string mapCasePattern = mapValue.Case.Trim();
+                var mapCasePattern = mapValue.Case.Trim();
+
                 if(mapCasePattern.IsNullOrEmpty() && switchValue.IsNullOrEmpty())
                     return getParcedValue(mapValue.Value);
 

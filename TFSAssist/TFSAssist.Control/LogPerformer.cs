@@ -39,7 +39,7 @@ namespace TFSAssist.Control
         /// <param name="lockProcess"></param>
         internal void OnWriteLog(WarnSeverity severity, string trace, Exception ex, bool lockProcess = false)
         {
-            string stackInnerMessage = string.Empty;
+            var stackInnerMessage = string.Empty;
             if (ex.InnerException != null)
                 GetInnerException(ex.InnerException, ref stackInnerMessage);
             OnWriteLog(severity, $"{trace}\r\n{ex.Message}", $"{trace} {GetFormatException(ex)}\r\n{ex.StackTrace}\r\n{stackInnerMessage}".Trim(), lockProcess);

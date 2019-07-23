@@ -86,7 +86,7 @@ namespace TFSAssist
             get
             {
                 string _currentVal;
-                using (RegeditControl regControl = new RegeditControl(ASSEMBLY.ApplicationName))
+                using (var regControl = new RegeditControl(ASSEMBLY.ApplicationName))
                 {
                     _currentVal = regControl[nameof(BuildPackInfo)]?.ToString();
                 }
@@ -95,7 +95,7 @@ namespace TFSAssist
             }
             private set
             {
-                using (RegeditControl regControl = new RegeditControl(ASSEMBLY.ApplicationName))
+                using (var regControl = new RegeditControl(ASSEMBLY.ApplicationName))
                 {
                     regControl[nameof(BuildPackInfo)] = value;
                 }
@@ -104,7 +104,7 @@ namespace TFSAssist
 
         static MainWindow()
         {
-            CultureInfo culture = CultureInfo.CreateSpecificCulture("ru-RU");
+            var culture = CultureInfo.CreateSpecificCulture("ru-RU");
             CultureInfo.DefaultThreadCurrentCulture = culture;
             CultureInfo.DefaultThreadCurrentUICulture = culture;
             Thread.CurrentThread.CurrentCulture = culture;
@@ -118,7 +118,7 @@ namespace TFSAssist
         public MainWindow()
         {
             // Проверить запущен ли уже экземпляр приложения, если запущен то не запускать новый
-            List<Process> processExists = Process.GetProcesses().Where(p => p.ProcessName == nameof(TFSAssist)).ToList();
+            var processExists = Process.GetProcesses().Where(p => p.ProcessName == nameof(TFSAssist)).ToList();
             if (processExists.Count > 1)
             {
                 warnWindow = new WindowWarning(Width, WarnSeverity.Warning.ToString("G"), ERR_SECOND_PROC)
@@ -151,9 +151,9 @@ namespace TFSAssist
             {
                 MainThread = Thread.CurrentThread;
 
-                using (RegeditControl regControl = new RegeditControl(ASSEMBLY.ApplicationName))
+                using (var regControl = new RegeditControl(ASSEMBLY.ApplicationName))
                 {
-                    string clinetID = regControl["CliendID"]?.ToString();
+                    var clinetID = regControl["CliendID"]?.ToString();
                     if (clinetID.IsNullOrEmptyTrim())
                     {
                         clinetID = STRING.RandomNumbers(5);
@@ -167,7 +167,7 @@ namespace TFSAssist
                 //================Notification Bar==============================
                 BottomNotification = new BottomNotification(this, TFSControl.ApplicationName);
                 //===========Initialize And Set Events===========
-                LogPerformer log = new LogPerformer();
+                var log = new LogPerformer();
                 log.WriteLog += Informing;
                 TfsControl = TFSControl.GetControl(log);
                 TfsControl.IsCompleted += TfsControl_IsCompleted;
@@ -220,7 +220,7 @@ namespace TFSAssist
                 //================Options TFS===================================
                 DefaultBinding(TFSUri, TextBox.TextProperty, TfsControl.Settings.TFSOption.TFSUri);
                 DefaultBinding(TFSUserName, TextBox.TextProperty, TfsControl.Settings.TFSOption.TFSUserName);
-                Paragraph par = new Paragraph(new Run(TfsControl.Settings.TFSOption.GetDublicateTFS[0].Value))
+                var par = new Paragraph(new Run(TfsControl.Settings.TFSOption.GetDublicateTFS[0].Value))
                 {
                     LineHeight = 1
                 };
@@ -344,7 +344,7 @@ namespace TFSAssist
         public void DefaultBinding(DependencyObject target, DependencyProperty dp, INotifyPropertyChanged notify)
         {
             ToolTipService.SetInitialShowDelay(target, _timeoutMSECToShowToolTip);
-            Binding myBinding = new Binding
+            var myBinding = new Binding
             {
                 Source = notify,
                 // Value свойства класса SettingsValue<T>
@@ -359,7 +359,7 @@ namespace TFSAssist
 
         void PullWindowSaver()
         {
-            WindowSaver lastUpdate = WindowSaver.Deserialize();
+            var lastUpdate = WindowSaver.Deserialize();
             if (lastUpdate == null)
                 return;
 
@@ -376,7 +376,7 @@ namespace TFSAssist
                         {
                             Traces = lastUpdate.Traces;
 
-                            foreach (TraceHighlighter trace in Traces)
+                            foreach (var trace in Traces)
                             {
                                 trace.Refresh();
                                 LogTextBox.Document.Blocks.Add(trace.GetParagraph());
@@ -386,7 +386,7 @@ namespace TFSAssist
 
                     if (lastUpdate.Updater != null)
                     {
-                        string updatePackName = lastUpdate.Updater.ProjectBuildPack.Name;
+                        var updatePackName = lastUpdate.Updater.ProjectBuildPack.Name;
                         CurrentPackUpdaterName = updatePackName;
                         WriteLog(WarnSeverity.Normal, DateTime.Now, string.Format(UPDATE_ON_COMPLETE, updatePackName));
                     }
@@ -522,7 +522,7 @@ namespace TFSAssist
 
             Dispatcher?.Invoke(() =>
             {
-                IUpdater updater = args.Control;
+                var updater = args.Control;
                 updater.DownloadProgressChanged += Updater_DownloadProgressChanged;
                 _traceHighUpdateStatus = WriteLog(WarnSeverity.Normal, DateTime.Now, string.Format(UPDATE_TRACE_FORMAT, updater.UploadedString, updater.TotalString));
                 //_runsTraceUpdate = parControl.Inlines.Where(x => x is Run && !x.Name.IsNullOrEmptyTrim()).ToDictionary(p => p.Name, r => (Run) r);
@@ -539,7 +539,7 @@ namespace TFSAssist
             {
                 try
                 {
-                    IUpdater updater = (IUpdater)sender;
+                    var updater = (IUpdater)sender;
                     _traceHighUpdateStatus.Refresh(string.Format(UPDATE_TRACE_FORMAT, updater.UploadedString, updater.TotalString));
                 }
                 catch (Exception)
@@ -572,7 +572,7 @@ namespace TFSAssist
                 }
                 else
                 {
-                    string updatePackName = args.Control.ProjectBuildPack.Name;
+                    var updatePackName = args.Control.ProjectBuildPack.Name;
                     CurrentPackUpdaterName = updatePackName;
 
                     WriteLog(WarnSeverity.Normal, DateTime.Now, UPDATE_ON_START);
@@ -627,7 +627,7 @@ namespace TFSAssist
 
             if (((TfsControl != null && !TfsControl.InProgress) || _openedWarningWindowCount > 0) && _lastDeactivationDate != null)
             {
-                TimeSpan timeSpan = DateTime.Now - (DateTime) _lastDeactivationDate;
+                var timeSpan = DateTime.Now - (DateTime) _lastDeactivationDate;
                 if (timeSpan.Days > 0 || (timeSpan.Days == 0 && timeSpan.TotalMilliseconds >= _intervalForActivateUnUsedWindow))
                 {
                     ActivateWindow(this, EventArgs.Empty);
@@ -663,8 +663,8 @@ namespace TFSAssist
                 lock (syncTraces)
                 {
                     // удаляем логи если прошло больше 10 дней
-                    List<TraceHighlighter> oldTraces = Traces.Where(p => DateTime.Now.Subtract(p.DateOfTrace).Days > _daysToSaveLogs).ToList();
-                    foreach (TraceHighlighter trace in oldTraces)
+                    var oldTraces = Traces.Where(p => DateTime.Now.Subtract(p.DateOfTrace).Days > _daysToSaveLogs).ToList();
+                    foreach (var trace in oldTraces)
                     {
                         Traces.Remove(trace);
                         Dispatcher?.BeginInvoke(DispatcherPriority.Normal, new Action(() => LogTextBox.Document.Blocks.Remove(trace.GetParagraph())));
@@ -771,7 +771,7 @@ namespace TFSAssist
             switch (command.ToUpper())
             {
                 case "LOG":
-                    string textLogs = string.Empty;
+                    var textLogs = string.Empty;
                     lock (syncTraces)
                     {
                         Dispatcher?.Invoke(() => textLogs = new TextRange(LogTextBox.Document.ContentStart, LogTextBox.Document.ContentEnd).Text);
@@ -1008,7 +1008,7 @@ namespace TFSAssist
         private double _isPbNormal = 4;
         void ProgressBarBlurEffect(UIElement element, bool isBlur)
         {
-            BlurEffect effect = element.Effect as BlurEffect;
+            var effect = element.Effect as BlurEffect;
             if(effect == null)
                 return;
 
@@ -1222,10 +1222,10 @@ namespace TFSAssist
         /// <param name="e"></param>
         private void IntervalTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            TextBox AnyIntervalTextBox = (TextBox) sender;
+            var AnyIntervalTextBox = (TextBox) sender;
 
-            int caretIndex = AnyIntervalTextBox.CaretIndex;
-            string oldValue = AnyIntervalTextBox.Text;
+            var caretIndex = AnyIntervalTextBox.CaretIndex;
+            var oldValue = AnyIntervalTextBox.Text;
 
             NUMBER.GetOnlyNumberWithCaret(ref oldValue, ref caretIndex, 4);
 
@@ -1235,7 +1235,7 @@ namespace TFSAssist
 
         private void IntervalTextBox_OnLostFocus(object sender, RoutedEventArgs e)
         {
-            TextBox AnyIntervalTextBox = (TextBox)sender;
+            var AnyIntervalTextBox = (TextBox)sender;
 
             int interval;
             if (!int.TryParse(AnyIntervalTextBox.Text, out interval))
@@ -1264,7 +1264,7 @@ namespace TFSAssist
         {
             if (TfsControl != null)
             {
-                string richText = new TextRange(GetDublicateTFS.Document.ContentStart, GetDublicateTFS.Document.ContentEnd).Text.Trim();
+                var richText = new TextRange(GetDublicateTFS.Document.ContentStart, GetDublicateTFS.Document.ContentEnd).Text.Trim();
                 TfsControl.Settings.TFSOption.GetDublicateTFS[0].Value = richText;
             }
         }

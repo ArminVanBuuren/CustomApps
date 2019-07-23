@@ -40,7 +40,7 @@ namespace TFSAssist.Trash
 		}
 		public static T FindVisualParent<T>(UIElement element) where T : UIElement
 		{
-			UIElement parent = element;
+			var parent = element;
 			while (parent != null)
 			{
 				T correctlyTyped = parent as T;
@@ -54,16 +54,16 @@ namespace TFSAssist.Trash
 		}
 		public static List<T> GetVisualChildCollection<T>(object parent) where T : Visual
 		{
-			List<T> visualCollection = new List<T>();
+			var visualCollection = new List<T>();
 			GetVisualChildCollection(parent as DependencyObject, visualCollection);
 			return visualCollection;
 		}
 		private static void GetVisualChildCollection<T>(DependencyObject parent, List<T> visualCollection) where T : Visual
 		{
-			int count = VisualTreeHelper.GetChildrenCount(parent);
+			var count = VisualTreeHelper.GetChildrenCount(parent);
 			for (int i = 0; i < count; i++)
 			{
-				DependencyObject child = VisualTreeHelper.GetChild(parent, i);
+				var child = VisualTreeHelper.GetChild(parent, i);
 				if (child is T)
 				{
 					visualCollection.Add(child as T);

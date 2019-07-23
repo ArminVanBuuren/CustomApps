@@ -186,12 +186,12 @@ namespace Utils.AppUpdater
 
         public static bool operator ==(BuildNumber first, BuildNumber second)
         {
-            return first != null && (first.CompareTo(second) == 0);
+            return first.CompareTo(second) == 0;  // не делать проверку first != null - потому что будет бесконечный цикл!!!!!!!!!!
         }
 
         public static bool operator !=(BuildNumber first, BuildNumber second)
         {
-            return first != null && (first.CompareTo(second) != 0);
+            return first.CompareTo(second) != 0; // не делать проверку first != null - потому что будет бесконечный цикл!!!!!!!!!!
         }
 
         public override bool Equals(object obj)

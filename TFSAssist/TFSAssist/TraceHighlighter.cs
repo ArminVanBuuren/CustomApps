@@ -100,7 +100,7 @@ namespace TFSAssist
             _paragraph = new Paragraph();
             TraceBitDate.Refresh();
             _paragraph.Inlines.Add(TraceBitDate.GetRun());
-            foreach (TraceBit trace in TraceBitCollection)
+            foreach (var trace in TraceBitCollection)
             {
                 trace.Refresh();
                 _paragraph.Inlines.Add(trace.GetRun());
@@ -122,7 +122,7 @@ namespace TFSAssist
         {
             _paragraph.Inlines.Add(TraceBitDate.GetRun());
             TraceBitCollection = GetTraceBits(message.Trim());
-            foreach (TraceBit trace in TraceBitCollection)
+            foreach (var trace in TraceBitCollection)
             {
                 _paragraph.Inlines.Add(trace.GetRun());
             }
@@ -135,12 +135,14 @@ namespace TFSAssist
 
         static List<TraceBit> GetTraceBits(string message)
         {
-            List<TraceBit> traces = new List<TraceBit>();
-            int index = 0;
-            int startSmb = 0;
-            StringBuilder highlightBuilder = new StringBuilder();
-            StringBuilder notHighlighted = new StringBuilder();
-            foreach (char ch in message)
+            var traces = new List<TraceBit>();
+            var index = 0;
+            var startSmb = 0;
+
+            var highlightBuilder = new StringBuilder();
+            var notHighlighted = new StringBuilder();
+
+            foreach (var ch in message)
             {
                 if (ch == '[')
                 {
@@ -174,12 +176,12 @@ namespace TFSAssist
             return traces;
         }
 
-        static void AddToParagraph(List<TraceBit> bitCollection, StringBuilder builder, TraceBitType type, ref int index)
+        static void AddToParagraph(ICollection<TraceBit> bitCollection, StringBuilder builder, TraceBitType type, ref int index)
         {
             if (builder.Length <= 0)
                 return;
 
-            TraceBit traceBit = new TraceBit(builder.ToString(), type, index++);
+            var traceBit = new TraceBit(builder.ToString(), type, index++);
             bitCollection.Add(traceBit);
             builder.Clear();
         }

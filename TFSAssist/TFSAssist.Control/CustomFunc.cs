@@ -12,11 +12,11 @@ namespace TFSAssist.Control
 		/// <returns></returns>
 		public static List<Folder> GetAllFolders(ExchangeService service)
 		{
-			List<Folder> completeListOfFolderIds = new List<Folder>();
-			FolderView folderView = new FolderView(int.MaxValue);
+			var completeListOfFolderIds = new List<Folder>();
+			var folderView = new FolderView(int.MaxValue);
 			//FindFoldersResults findFolderResults = service.FindFolders(WellKnownFolderName.PublicFoldersRoot, folderView);
-			FindFoldersResults findFolderResults = service.FindFolders(WellKnownFolderName.MsgFolderRoot, folderView);
-			foreach (Folder folder in findFolderResults)
+			var findFolderResults = service.FindFolders(WellKnownFolderName.MsgFolderRoot, folderView);
+			foreach (var folder in findFolderResults)
 			{
 				completeListOfFolderIds.Add(folder);
 				FindAllSubFolders(service, folder.Id, completeListOfFolderIds);
@@ -27,14 +27,14 @@ namespace TFSAssist.Control
 		private static void FindAllSubFolders(ExchangeService service, FolderId parentFolderId, List<Folder> completeListOfFolderIds)
 		{
 			//search for sub folders
-			FolderView folderView = new FolderView(int.MaxValue);
-			FindFoldersResults foundFolders = service.FindFolders(parentFolderId, folderView);
+			var folderView = new FolderView(int.MaxValue);
+			var foundFolders = service.FindFolders(parentFolderId, folderView);
 
 			// Add the list to the growing complete list
 			completeListOfFolderIds.AddRange(foundFolders);
 
 			// Now recurse
-			foreach (Folder folder in foundFolders)
+			foreach (var folder in foundFolders)
 			{
 				FindAllSubFolders(service, folder.Id, completeListOfFolderIds);
 			}

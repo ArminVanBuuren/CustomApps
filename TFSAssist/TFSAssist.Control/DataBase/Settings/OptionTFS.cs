@@ -1,5 +1,4 @@
-﻿using System.Configuration;
-using System.Xml;
+﻿using System.Xml;
 using System.Xml.Serialization;
 
 namespace TFSAssist.Control.DataBase.Settings

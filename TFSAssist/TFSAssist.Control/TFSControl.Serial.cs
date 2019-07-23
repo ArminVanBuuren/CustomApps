@@ -32,11 +32,11 @@ namespace TFSAssist.Control
             AccountStorePath = $"{ApplicationFilePath}.dat";
             SettingsPath = $"{ApplicationFilePath}.xml";
             DataBasePath = $"{ApplicationFilePath}.Data.xml";
-            ApplicationName = Assembly.GetEntryAssembly().GetName().Name;
-            ApplicationPath = Assembly.GetEntryAssembly().Location;
+            ApplicationName = Assembly.GetEntryAssembly()?.GetName().Name;
+            ApplicationPath = Assembly.GetEntryAssembly()?.Location;
 
-            string description = "Application implements reading mails, and by their basis creating TFS items.";
-            using (RegeditControl regControl = new RegeditControl(ApplicationName))
+            var description = "Application implements reading mails, and by their basis creating TFS items.";
+            using (var regControl = new RegeditControl(ApplicationName))
             {
                 if(!description.Equals(regControl["Description"]))
                 {
@@ -133,21 +133,20 @@ namespace TFSAssist.Control
                     Settings.TFSOption
                 };
 
-                foreach (object tpObj in types)
+                foreach (var tpObj in types)
                 {
-                    Type tp = tpObj.GetType();
+                    var tp = tpObj.GetType();
                     //получить все свойства класса SettingsCollection, Для заполнения расшифрованными данными (логины, пароли)
-                    PropertyInfo[] props = tp.GetProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
+                    var props = tp.GetProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
 
-                    foreach (SerializationEntry result in propertyBag)
+                    foreach (var result in propertyBag)
                     {
-                        foreach (PropertyInfo prop in props)
+                        foreach (var prop in props)
                         {
                             if (result.Name.Equals(prop.Name))
                             {
                                 //SettingValue<string> settValue =  result.Value as SettingValue<string>;
-                                string settValue = result.Value as string;
-                                if (settValue == null)
+                                if (!(result.Value is string settValue))
                                     continue;
                                 prop.SetValue(tpObj, new SettingValue<string>() {
                                                                                     Value = AES.DecryptStringAES(settValue, RegeditKey)
@@ -182,24 +181,22 @@ namespace TFSAssist.Control
                 Settings.TFSOption
             };
 
-            foreach (object tpObj in types)
+            foreach (var tpObj in types)
             {
-                Type tp = tpObj.GetType();
-                PropertyInfo[] props = tp.GetProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
-                foreach (PropertyInfo prop in props)
+                var tp = tpObj.GetType();
+                var props = tp.GetProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
+                foreach (var prop in props)
                 {
                     if (prop.PropertyType != typeof(SettingValue<string>))
                         continue;
 
-                    object[] attrs = prop.GetCustomAttributes(true);
-                    foreach (object attr in attrs)
+                    var attrs = prop.GetCustomAttributes(true);
+                    foreach (var attr in attrs)
                     {
-                        XmlIgnoreAttribute identAttr = attr as XmlIgnoreAttribute;
-                        if (identAttr == null)
+                        if (!(attr is XmlIgnoreAttribute))
                             continue;
 
-
-                        SettingValue<string> fieldTextBox = (SettingValue<string>)prop.GetValue(tpObj);
+                        var fieldTextBox = (SettingValue<string>)prop.GetValue(tpObj);
                         propertyBag.AddValue(prop.Name, AES.EncryptStringAES(fieldTextBox.Value, RegeditKey));
                         break;
                     }
@@ -219,7 +216,7 @@ namespace TFSAssist.Control
 
         SettingsCollection LoadSettings(string settPath, ref uint tryLoad)
         {
-            SettingsCollection sett = DeserializeSettings(settPath);
+            var sett = DeserializeSettings(settPath);
 
             if (sett != null)
                 return sett;
@@ -227,11 +224,11 @@ namespace TFSAssist.Control
             if (tryLoad == 0)
             {
                 // создаем настройки из файла примера в ресурсах Example_Config и бэкапим неудавшуюся настройку
-                FileInfo fileInfo = new FileInfo(settPath);
+                var fileInfo = new FileInfo(settPath);
                 if (fileInfo.Exists)
                 {
-                    int index = 0;
-                    string bakFileName = $"{settPath}_incorrect.bak";
+                    var index = 0;
+                    var bakFileName = $"{settPath}_incorrect.bak";
                     while (File.Exists(bakFileName))
                     {
                         bakFileName = $"{settPath}_incorrect_{++index}.bak";
@@ -239,7 +236,7 @@ namespace TFSAssist.Control
                     File.Copy(settPath, bakFileName);
                 }
                 
-                using (StreamWriter tw = new StreamWriter(settPath, false))
+                using (var tw = new StreamWriter(settPath, false))
                 {
                     // var thisExe = System.Reflection.Assembly.GetExecutingAssembly();
                     tw.Write(Properties.Resources.Example_Config);
@@ -265,7 +262,7 @@ namespace TFSAssist.Control
 
             try
             {
-                using (FileStream stream = new FileStream(settPath, FileMode.Open, FileAccess.Read))
+                using (var stream = new FileStream(settPath, FileMode.Open, FileAccess.Read))
                 {
                     return new XmlSerializer(typeof(SettingsCollection)).Deserialize(stream) as SettingsCollection;
                 }
@@ -284,7 +281,7 @@ namespace TFSAssist.Control
 
             try
             {
-                using (FileStream stream = new FileStream(datasPath, FileMode.Open, FileAccess.Read))
+                using (var stream = new FileStream(datasPath, FileMode.Open, FileAccess.Read))
                 {
                     return new XmlSerializer(typeof(DataCollection)).Deserialize(stream) as DataCollection;
                 }
@@ -303,7 +300,7 @@ namespace TFSAssist.Control
         {
             try
             {
-                using (FileStream stream = new FileStream(SettingsPath, FileMode.Create, FileAccess.ReadWrite))
+                using (var stream = new FileStream(SettingsPath, FileMode.Create, FileAccess.ReadWrite))
                 {
                     new XmlSerializer(typeof(SettingsCollection)).Serialize(stream, Settings);
                 }
@@ -321,7 +318,7 @@ namespace TFSAssist.Control
         {
             try
             {
-                using (FileStream stream = new FileStream(AccountStorePath, FileMode.Create, FileAccess.ReadWrite))
+                using (var stream = new FileStream(AccountStorePath, FileMode.Create, FileAccess.ReadWrite))
                 {
                     new BinaryFormatter().Serialize(stream, this);
                 }
@@ -339,7 +336,7 @@ namespace TFSAssist.Control
         {
             try
             {
-                using (FileStream stream = new FileStream(DataBasePath, FileMode.Create, FileAccess.ReadWrite))
+                using (var stream = new FileStream(DataBasePath, FileMode.Create, FileAccess.ReadWrite))
                 {
                     new XmlSerializer(typeof(DataCollection)).Serialize(stream, Datas);
                 }
@@ -361,8 +358,11 @@ namespace TFSAssist.Control
                 return;
 
             InProgress = true;
-            _asyncThread = new Thread(new ThreadStart(StartPerforming));
-            _asyncThread.IsBackground = true; // обязательно true!! а то при завершении основной программы поток будет продолжать работать 
+            _asyncThread = new Thread(StartPerforming)
+            {
+                IsBackground = true // обязательно true!! а то при завершении основной программы поток будет продолжать работать 
+            };
+            
             _asyncThread.Start();
         }
 

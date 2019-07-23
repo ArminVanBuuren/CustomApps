@@ -23,7 +23,7 @@ namespace TFSAssist.Control.DataBase.Datas
         /// <returns></returns>
         internal string ReplaceParcedValues(string source)
         {
-            string _result = source;
+            var _result = source;
 
             //https://doremifaso.ca/archives/unicode/latin1.html - таблицы со спец символами html
             // реплейсим спец символы xml в обычный текст
@@ -34,7 +34,7 @@ namespace TFSAssist.Control.DataBase.Datas
             _result = _result.Replace(@"\r", "\r").Replace(@"\n", "\n").Replace(@"&lt;", @"<").Replace(@"&gt;", @">").Replace(@"&quot;", "\"").Replace(@"&apos;", @"'").Replace("&#xD;","\r").Replace("&#xA;", "\n");
 
             // реплейсим динамические параметры на спарсенные параметры из запроса, по ситаксису %ParceBody_TITLE%
-            foreach (DataMail mailParceItem in MailParcedItems)
+            foreach (var mailParceItem in MailParcedItems)
             {
                 _result = new Regex($@"%\s*{mailParceItem.Name}\s*%", RegexOptions.IgnoreCase).Replace(_result, mailParceItem.Value);
             }

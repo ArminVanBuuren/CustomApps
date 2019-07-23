@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;
 using System.Threading;
-using System.Threading.Tasks;
 using Utils;
 using Utils.Media.MediaCapture;
 using Utils.Media.MediaCapture.AForge;
@@ -242,7 +238,7 @@ namespace TFSAssist.Remoter
             if (_aforgeCapture == null || _aforgeCapture.Mode != MediaCaptureMode.None)
                 return false;
 
-            Task<Bitmap> task = _aforgeCapture.GetPictureAsync();
+            var task = _aforgeCapture.GetPictureAsync();
             if (task.Wait(20000))
             {
                 var photo = task.Result;
@@ -254,7 +250,7 @@ namespace TFSAssist.Remoter
 
         void WriteExLog(string log)
         {
-            OnProcessingExceptions?.Invoke(log.ToString());
+            OnProcessingExceptions?.Invoke(log);
         }
 
         void WriteExLog(Exception log)
@@ -264,21 +260,21 @@ namespace TFSAssist.Remoter
 
         public override string ToString()
         {
-            string currentDevices = string.Empty;
-            string resultCamInfo = string.Empty;
+            var currentDevices = string.Empty;
+            var resultCamInfo = string.Empty;
 
             if (_aforgeDevices != null)
             {
                 if (_aforgeCapture != null)
-                    currentDevices = $"AForge:\r\n{_aforgeCapture.ToString()}";
+                    currentDevices = $"AForge:\r\n{_aforgeCapture}";
                 resultCamInfo = _aforgeDevices.ToString();
             }
 
             if (_encDevices != null)
             {
                 if (_encoderCapture != null)
-                    currentDevices = currentDevices + $"\r\n\r\nEncoder:\r\n{_encoderCapture.ToString()}";
-                resultCamInfo = resultCamInfo + "\r\n\r\n" + _encDevices.ToString();
+                    currentDevices = currentDevices + $"\r\n\r\nEncoder:\r\n{_encoderCapture}";
+                resultCamInfo = resultCamInfo + "\r\n\r\n" + _encDevices;
             }
 
             if (resultCamInfo.IsNullOrEmptyTrim())
@@ -288,11 +284,11 @@ namespace TFSAssist.Remoter
 
             resultCamInfo = resultCamInfo + "\r\n===================\r\n";
 
-            resultCamInfo = resultCamInfo + "Screen:\r\n" + _screenCapture.ToString();
+            resultCamInfo = resultCamInfo + "Screen:\r\n" + _screenCapture;
 
             resultCamInfo = resultCamInfo + "\r\n===================\r\n";
 
-            resultCamInfo = resultCamInfo + "NAudio:\r\n" + _naudioCapture.ToString();
+            resultCamInfo = resultCamInfo + "NAudio:\r\n" + _naudioCapture;
 
             resultCamInfo = resultCamInfo.Trim();
 

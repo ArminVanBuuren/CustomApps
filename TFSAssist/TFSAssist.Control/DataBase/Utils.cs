@@ -37,12 +37,12 @@ namespace TFSAssist.Control.DataBase
 
 		static string SetNowOptions(Match match)
 		{
-			GroupCollection groups = match.Groups;
+			var groups = match.Groups;
 			if (groups["Func"].Success && groups["Func"].Value.Trim().Equals("now", StringComparison.CurrentCultureIgnoreCase) && groups.Count > 4)
 			{
 				var now = DateTime.Now;
 
-				int numberOf = int.Parse(match.Groups["Num"].Value.Trim());
+				var numberOf = int.Parse(match.Groups["Num"].Value.Trim());
 				if (numberOf == 0)
 					return now.ToString("G");
 

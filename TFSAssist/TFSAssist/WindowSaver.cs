@@ -61,7 +61,7 @@ namespace TFSAssist
 
             try
             {
-                using (FileStream stream = new FileStream(WindowSaverPath, FileMode.Create, FileAccess.ReadWrite))
+                using (var stream = new FileStream(WindowSaverPath, FileMode.Create, FileAccess.ReadWrite))
                 {
                     new BinaryFormatter().Serialize(stream, this);
                 }
