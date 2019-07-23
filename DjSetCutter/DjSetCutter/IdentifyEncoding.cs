@@ -18,19 +18,19 @@ namespace DjSetCutter
         {
             //Dictionary<int, Dictionary<int, string>> result = new Dictionary<int, Dictionary<int, string>>();
 
-            System.Text.EncodingInfo[] encs = System.Text.Encoding.GetEncodings();
+            var encs = Encoding.GetEncodings();
 
-            foreach (EncodingInfo encIn in encs)
+            foreach (var encIn in encs)
             {
                 //Dictionary<int, string> result2 = new Dictionary<int, string>();
 
-                System.Text.Encoding encGetBytes = System.Text.Encoding.GetEncoding(encIn.CodePage);
-                foreach (EncodingInfo encOut in encs)
+                var encGetBytes = Encoding.GetEncoding(encIn.CodePage);
+                foreach (var encOut in encs)
                 {
-                    System.Text.Encoding encGetString = System.Text.Encoding.GetEncoding(encOut.CodePage);
+                    var encGetString = Encoding.GetEncoding(encOut.CodePage);
 
-                    byte[] encoded = encGetBytes.GetBytes(sample);
-                    string corrected = encGetString.GetString(encoded);
+                    var encoded = encGetBytes.GetBytes(sample);
+                    var corrected = encGetString.GetString(encoded);
 
                     if (corrected.IndexOf(correct, StringComparison.Ordinal) != -1)
                     {
@@ -53,8 +53,8 @@ namespace DjSetCutter
             if (!IsIdentified)
                 throw new Exception("Encoding not identified!");
 
-            byte[] encoded = EncodingIn.GetBytes(sample);
-            string corrected = EncodingOut.GetString(encoded);
+            var encoded = EncodingIn.GetBytes(sample);
+            var corrected = EncodingOut.GetString(encoded);
 
             return corrected;
         }

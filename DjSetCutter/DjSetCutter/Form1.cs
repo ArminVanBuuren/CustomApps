@@ -36,7 +36,7 @@ namespace DjSetCutter
             using (var fbd = new FolderBrowserDialog())
             {
                 fbd.SelectedPath = !textBoxDirPath.Text.IsNullOrEmpty() && Directory.Exists(textBoxDirPath.Text) ? textBoxDirPath.Text : Directory.GetCurrentDirectory();
-                DialogResult result = fbd.ShowDialog();
+                var result = fbd.ShowDialog();
 
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
                 {
@@ -96,11 +96,11 @@ namespace DjSetCutter
             }
             catch (Exception ex)
             {
-                string detailException = string.Format("{0}\r\n{1}", ex.Message, ex.StackTrace);
+                var detailException = $"{ex.Message}\r\n{ex.StackTrace}";
                 ex = ex.InnerException;
                 while (ex != null)
                 {
-                    detailException = detailException + "\r\n" + string.Format("{0}\r\n{1}", ex.Message, ex.StackTrace);
+                    detailException = detailException + "\r\n" + $"{ex.Message}\r\n{ex.StackTrace}";
                     ex = ex.InnerException;
                 }
                 ReturnException(detailException);
@@ -110,7 +110,7 @@ namespace DjSetCutter
 
         void GetDirectory(string dirPath)
         {
-            string[] DirPaths = Directory.GetDirectories(dirPath, "*", SearchOption.TopDirectoryOnly);
+            var DirPaths = Directory.GetDirectories(dirPath, "*", SearchOption.TopDirectoryOnly);
             foreach (var dir in DirPaths)
             {
                 GetDirectory(dir);
@@ -165,7 +165,7 @@ namespace DjSetCutter
             //}
 
 
-            string pathResult = path;
+            var pathResult = path;
             if (!outputDirectory.Text.IsNullOrEmpty())
             {
                 pathResult = Path.Combine(path, outputDirectory.Text);
@@ -176,20 +176,20 @@ namespace DjSetCutter
             if (pathResult.Length > 250)
                 throw new Exception("Length of directory path too high. More than 250");
 
-            string[] files = Directory.GetFiles(path, "*.cue");
-            foreach (string sourceASOTCuePath in files)
+            var files = Directory.GetFiles(path, "*.cue");
+            foreach (var sourceASOTCuePath in files)
             {
-                string sourceASOTMp3Path = sourceASOTCuePath.Substring(0, sourceASOTCuePath.Length - 4) + ".mp3";
+                var sourceASOTMp3Path = sourceASOTCuePath.Substring(0, sourceASOTCuePath.Length - 4) + ".mp3";
                 if (!File.Exists(sourceASOTMp3Path))
                     continue;
 
                 File.SetAttributes(sourceASOTCuePath, FileAttributes.Normal);
                 File.SetAttributes(sourceASOTMp3Path, FileAttributes.Normal);
 
-                string dirName = Path.GetFileName(path);
-                List<CutterTrack> tracks = ReadCue(pathResult.Length, dirName, sourceASOTCuePath);
+                var dirName = Path.GetFileName(path);
+                var tracks = ReadCue(pathResult.Length, dirName, sourceASOTCuePath);
 
-                bool newDirIsCreated = false;
+                var newDirIsCreated = false;
                 if (!Directory.Exists(pathResult))
                 {
                     Directory.CreateDirectory(pathResult);
@@ -202,9 +202,9 @@ namespace DjSetCutter
                     {
                         using (var reader = new Mp3FileReader(stream))
                         {
-                            for (int i = 0; i < tracks.Count; i++)
+                            for (var i = 0; i < tracks.Count; i++)
                             {
-                                string outputTrackResult = Path.Combine(pathResult, tracks[i].TrackFileName + ".mp3");
+                                var outputTrackResult = Path.Combine(pathResult, tracks[i].TrackFileName + ".mp3");
                                 TrimMp3(reader, outputTrackResult, tracks[i].Start, i >= tracks.Count - 1 ? reader.TotalTime : tracks[i + 1].Start);
                             }
                         }
@@ -222,13 +222,13 @@ namespace DjSetCutter
                 }
                 catch (InvalidOperationException ex)
                 {
-                    ReturnException(string.Format("'{0}' was skip. Exception:{1}.", sourceASOTMp3Path, ex.Message));
+                    ReturnException($"'{sourceASOTMp3Path}' was skip. Exception:{ex.Message}.");
                     if (newDirIsCreated)
                         Directory.Delete(pathResult);
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception(string.Format("Exception \"{0}\" when read or write track {1}.", ex.GetType(), sourceASOTMp3Path), ex);
+                    throw new Exception($"Exception \"{ex.GetType()}\" when read or write track {sourceASOTMp3Path}.", ex);
                 }
             }
         }
@@ -250,32 +250,33 @@ namespace DjSetCutter
             {
                 try
                 {
-                    var collect = cueTrackPerf.Match(trackData);
+                    //var collect = cueTrackPerf.Match(trackData);
 
                     TrackFileName = sourceTemplate;
                     TrackFileName = ReplacerTrackName(TrackFileName, TRACK, cueTrackNum.Match(trackData).Groups[TRACK].Value);
                     TrackFileName = ReplacerTrackName(TrackFileName, PERFORMER, cueTrackPerf.Match(trackData).Groups[PERFORMER].Value);
                     TrackFileName = ReplacerTrackName(TrackFileName, TITLE, cueTrackTitle.Match(trackData).Groups[TITLE].Value);
-                    string indexTrack = cueTrackIndex.Match(trackData).Groups[INDEX].Value;
+
+                    var indexTrack = cueTrackIndex.Match(trackData).Groups[INDEX].Value;
                     TrackFileName = ReplacerTrackName(TrackFileName, INDEX, indexTrack);
                     TrackFileName = ReplacerTrackName(TrackFileName, DIR_NAME, regASOTNum.Match(parentDirName).Value);
                     TrackFileName = GetCorrectEncoding(TrackFileName);
 
-                    int excess = TrackFileName.Length + outDirPathLength - 254;
+                    var excess = TrackFileName.Length + outDirPathLength - 254;
                     if (excess > 0)
                         TrackFileName = TrackFileName.Substring(0, TrackFileName.Length - excess);
 
 
-                    TimeSpan spanMin = TimeSpan.FromMinutes(int.Parse(indexTrack.Split(':')[0]));
-                    TimeSpan spanSec = TimeSpan.FromSeconds(int.Parse(indexTrack.Split(':')[1]));
-                    TimeSpan spanMilisec = TimeSpan.FromMilliseconds(int.Parse(indexTrack.Split(':')[2] + "0"));
+                    var spanMin = TimeSpan.FromMinutes(int.Parse(indexTrack.Split(':')[0]));
+                    var spanSec = TimeSpan.FromSeconds(int.Parse(indexTrack.Split(':')[1]));
+                    var spanMilisec = TimeSpan.FromMilliseconds(int.Parse(indexTrack.Split(':')[2] + "0"));
                     Start = spanMin + spanSec + spanMilisec;
 
 
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception(string.Format("CUE File Is Incorrect on Directory={0}", parentDirName), ex);
+                    throw new Exception($"CUE File Is Incorrect on Directory={parentDirName}", ex);
                 }
             }
 
@@ -284,10 +285,10 @@ namespace DjSetCutter
 
             static string GetCorrectEncoding(string sample)
             {
-                byte[] encoded = System.Text.Encoding.GetEncoding(1251).GetBytes(sample);
-                string corrected = System.Text.Encoding.GetEncoding(1250).GetString(encoded);
+                var encoded = Encoding.GetEncoding(1251).GetBytes(sample);
+                var corrected = Encoding.GetEncoding(1250).GetString(encoded);
 
-                foreach (char c in invalid)
+                foreach (var c in invalid)
                 {
                     corrected = corrected.Replace(c.ToString(), "");
                 }
@@ -298,7 +299,7 @@ namespace DjSetCutter
 
             static string ReplacerTrackName(string source, string groupName, string parcedValue)
             {
-                return new Regex(string.Format(@"%\s*{0}\s*%", groupName), RegexOptions.IgnoreCase).Replace(source, parcedValue);
+                return new Regex($@"%\s*{groupName}\s*%", RegexOptions.IgnoreCase).Replace(source, parcedValue);
             }
 
             public override string ToString()
@@ -309,17 +310,17 @@ namespace DjSetCutter
 
         List<CutterTrack> ReadCue(int outDirPathLength, string parentDirName, string cuePath)
         {
-            List<CutterTrack> cutterTracks = new List<CutterTrack>();
+            var cutterTracks = new List<CutterTrack>();
 
-            using (FileStream inputStream = File.OpenRead(cuePath))
+            using (var inputStream = File.OpenRead(cuePath))
             {
-                using (StreamReader inputReader = new StreamReader(inputStream, Encoding.GetEncoding("windows-1251")))
+                using (var inputReader = new StreamReader(inputStream, Encoding.GetEncoding("windows-1251")))
                 {
-                    string cueData = inputReader.ReadToEnd();
+                    var cueData = inputReader.ReadToEnd();
 
                     foreach (Match track in cueTrackSeparator.Matches(cueData))
                     {
-                        CutterTrack newTrack = new CutterTrack(textBoxFormat.Text, track.Value, parentDirName, outDirPathLength);
+                        var newTrack = new CutterTrack(textBoxFormat.Text, track.Value, parentDirName, outDirPathLength);
                         cutterTracks.Add(newTrack);
                     }
                 }
@@ -353,17 +354,17 @@ namespace DjSetCutter
             //}
 
 
-            using (WaveFileWriter writer = new WaveFileWriter(outputPath, reader.WaveFormat))
+            using (var writer = new WaveFileWriter(outputPath, reader.WaveFormat))
             {
                 reader.Position = startPos;
-                byte[] buffer = new byte[1024];
+                var buffer = new byte[1024];
                 while (reader.Position < endPos)
                 {
-                    int bytesRequired = (int)(endPos - reader.Position);
+                    var bytesRequired = (int)(endPos - reader.Position);
                     if (bytesRequired > 0)
                     {
-                        int bytesToRead = Math.Min(bytesRequired, buffer.Length);
-                        int bytesRead = reader.Read(buffer, 0, bytesToRead);
+                        var bytesToRead = Math.Min(bytesRequired, buffer.Length);
+                        var bytesRead = reader.Read(buffer, 0, bytesToRead);
                         if (bytesRead > 0)
                         {
                             writer.WriteData(buffer, 0, bytesRead);
@@ -426,13 +427,10 @@ namespace DjSetCutter
         {
             //using (var reader = new NAudio.Wave.AudioFileReader(sourceFilename))
             using (var reader = new WaveFileReader(sourceFilename))
-            using (var writer = new NAudio.Lame.LameMP3FileWriter(targetFilename, reader.WaveFormat, NAudio.Lame.LAMEPreset.STANDARD))
+            using (var writer = new LameMP3FileWriter(targetFilename, reader.WaveFormat, NAudio.Lame.LAMEPreset.STANDARD))
             {
                 reader.CopyTo(writer);
             }
         }
-
-
-
     }
 }
