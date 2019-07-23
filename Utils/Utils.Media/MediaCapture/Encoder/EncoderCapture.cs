@@ -2,18 +2,17 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Expression.Encoder;
 using Microsoft.Expression.Encoder.Devices;
 using Microsoft.Expression.Encoder.Live;
 using Microsoft.Expression.Encoder.ScreenCapture;
-using Utils.WinForm.MediaCapture.AForge;
+using Utils.Media.MediaCapture.AForge;
 
-namespace Utils.WinForm.MediaCapture.Encoder
+namespace Utils.Media.MediaCapture.Encoder
 {
-    public class EncoderCapture : MediaCapture, IDisposable
+    public class EncoderCapture : Media.MediaCapture.MediaCapture, IDisposable
     {
         Thread MainThread { get; }
 

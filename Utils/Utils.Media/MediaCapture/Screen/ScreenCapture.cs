@@ -1,20 +1,14 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using AForge.Video.VFW;
 using NAudio.Wave;
 
-namespace Utils.WinForm.MediaCapture.Screen
+namespace Utils.Media.MediaCapture.Screen
 {
-    public class ScreenCapture : MediaCapture, IDisposable
+    public class ScreenCapture : Media.MediaCapture.MediaCapture, IDisposable
     {
         private readonly object syncAudio = new object();
         readonly Rectangle screenBounds = System.Windows.Forms.Screen.GetBounds(Point.Empty);

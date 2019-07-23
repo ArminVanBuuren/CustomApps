@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Expression.Encoder.Devices;
 
-namespace Utils.WinForm.MediaCapture.Encoder
+namespace Utils.Media.MediaCapture.Encoder
 {
     public class EncoderMediaDevices
     {

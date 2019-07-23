@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AForge.Video.DirectShow;
 
-namespace Utils.WinForm.MediaCapture.AForge
+namespace Utils.Media.MediaCapture.AForge
 {
     public class AForgeMediaDevices
     {

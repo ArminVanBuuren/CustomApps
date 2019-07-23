@@ -1,0 +1,989 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2556BACE-823C-4BDA-A118-D9E30F733CB2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Utils.Media</RootNamespace>
+    <AssemblyName>Utils.Media</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Expression.Encoder, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=x86">
+      <HintPath>..\packages\Microsoft.Expression.Encoder.4.0.4276.3\lib\net45\Microsoft.Expression.Encoder.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AForge\Controls\Chart.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AForge\Controls\ColorSlider.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AForge\Controls\Histogram.cs" />
+    <Compile Include="AForge\Controls\HuePicker.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AForge\Controls\Joystick.cs" />
+    <Compile Include="AForge\Controls\JoystickAPI.cs" />
+    <Compile Include="AForge\Controls\ManipulatorControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AForge\Controls\ManipulatorControl.designer.cs">
+      <DependentUpon>ManipulatorControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AForge\Controls\PictureBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AForge\Controls\SliderControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AForge\Controls\SliderControl.designer.cs">
+      <DependentUpon>SliderControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AForge\Controls\VideoSourcePlayer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AForge\Controls\VideoSourcePlayer.designer.cs">
+      <DependentUpon>VideoSourcePlayer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AForge\Core\Delegates.cs" />
+    <Compile Include="AForge\Core\DoublePoint.cs" />
+    <Compile Include="AForge\Core\DoubleRange.cs" />
+    <Compile Include="AForge\Core\EventArgs.cs" />
+    <Compile Include="AForge\Core\Exceptions.cs" />
+    <Compile Include="AForge\Core\IntPoint.cs" />
+    <Compile Include="AForge\Core\IntRange.cs" />
+    <Compile Include="AForge\Core\Parallel.cs" />
+    <Compile Include="AForge\Core\Point.cs" />
+    <Compile Include="AForge\Core\PolishExpression.cs" />
+    <Compile Include="AForge\Core\Range.cs" />
+    <Compile Include="AForge\Core\SystemTools.cs" />
+    <Compile Include="AForge\Core\ThreadSafeRandom.cs" />
+    <Compile Include="AForge\Imaging\Blob.cs" />
+    <Compile Include="AForge\Imaging\BlobCounter.cs" />
+    <Compile Include="AForge\Imaging\BlobCounterBase.cs" />
+    <Compile Include="AForge\Imaging\BlockMatch.cs" />
+    <Compile Include="AForge\Imaging\Color Reduction\BurkesColorDithering.cs" />
+    <Compile Include="AForge\Imaging\Color Reduction\ColorErrorDiffusionToAdjacentNeighbors.cs" />
+    <Compile Include="AForge\Imaging\Color Reduction\ColorImageQuantizer.cs" />
+    <Compile Include="AForge\Imaging\Color Reduction\ErrorDiffusionColorDithering.cs" />
+    <Compile Include="AForge\Imaging\Color Reduction\FloydSteinbergColorDithering.cs" />
+    <Compile Include="AForge\Imaging\Color Reduction\IColorQuantizer.cs" />
+    <Compile Include="AForge\Imaging\Color Reduction\JarvisJudiceNinkeColorDithering.cs" />
+    <Compile Include="AForge\Imaging\Color Reduction\MedianCutCube.cs" />
+    <Compile Include="AForge\Imaging\Color Reduction\MedianCutQuantizer.cs" />
+    <Compile Include="AForge\Imaging\Color Reduction\OrderedColorDithering.cs" />
+    <Compile Include="AForge\Imaging\Color Reduction\SierraColorDithering.cs" />
+    <Compile Include="AForge\Imaging\Color Reduction\StuckiColorDithering.cs" />
+    <Compile Include="AForge\Imaging\ColorConverter.cs" />
+    <Compile Include="AForge\Imaging\Complex Filters\FrequencyFilter.cs" />
+    <Compile Include="AForge\Imaging\Complex Filters\IComplexFilter.cs" />
+    <Compile Include="AForge\Imaging\ComplexImage.cs" />
+    <Compile Include="AForge\Imaging\DocumentSkewChecker.cs" />
+    <Compile Include="AForge\Imaging\Drawing.cs" />
+    <Compile Include="AForge\Imaging\Exceptions.cs" />
+    <Compile Include="AForge\Imaging\ExhaustiveBlockMatching.cs" />
+    <Compile Include="AForge\Imaging\ExhaustiveTemplateMatching.cs" />
+    <Compile Include="AForge\Imaging\Filters\2 Source filters\Add.cs" />
+    <Compile Include="AForge\Imaging\Filters\2 Source filters\Difference.cs" />
+    <Compile Include="AForge\Imaging\Filters\2 Source filters\Intersect.cs" />
+    <Compile Include="AForge\Imaging\Filters\2 Source filters\Merge.cs" />
+    <Compile Include="AForge\Imaging\Filters\2 Source filters\Morph.cs" />
+    <Compile Include="AForge\Imaging\Filters\2 Source filters\MoveTowards.cs" />
+    <Compile Include="AForge\Imaging\Filters\2 Source filters\StereoAnaglyph.cs" />
+    <Compile Include="AForge\Imaging\Filters\2 Source filters\Subtract.cs" />
+    <Compile Include="AForge\Imaging\Filters\2 Source filters\ThresholdedDifference.cs" />
+    <Compile Include="AForge\Imaging\Filters\2 Source filters\ThresholdedEuclideanDifference.cs" />
+    <Compile Include="AForge\Imaging\Filters\Adaptive Binarization\BradleyLocalThresholding.cs" />
+    <Compile Include="AForge\Imaging\Filters\Adaptive Binarization\IterativeThreshold.cs" />
+    <Compile Include="AForge\Imaging\Filters\Adaptive Binarization\OtsuThreshold.cs" />
+    <Compile Include="AForge\Imaging\Filters\Adaptive Binarization\SISThreshold.cs" />
+    <Compile Include="AForge\Imaging\Filters\Base classes\BaseFilter.cs" />
+    <Compile Include="AForge\Imaging\Filters\Base classes\BaseFilter2.cs" />
+    <Compile Include="AForge\Imaging\Filters\Base classes\BaseInPlaceFilter.cs" />
+    <Compile Include="AForge\Imaging\Filters\Base classes\BaseInPlaceFilter2.cs" />
+    <Compile Include="AForge\Imaging\Filters\Base classes\BaseInPlacePartialFilter.cs" />
+    <Compile Include="AForge\Imaging\Filters\Base classes\BaseResizeFilter.cs" />
+    <Compile Include="AForge\Imaging\Filters\Base classes\BaseRotateFilter.cs" />
+    <Compile Include="AForge\Imaging\Filters\Base classes\BaseTransformationFilter.cs" />
+    <Compile Include="AForge\Imaging\Filters\Base classes\BaseUsingCopyPartialFilter.cs" />
+    <Compile Include="AForge\Imaging\Filters\Binarization\BayerDithering.cs" />
+    <Compile Include="AForge\Imaging\Filters\Binarization\BurkesDithering.cs" />
+    <Compile Include="AForge\Imaging\Filters\Binarization\ErrorDiffusionDithering.cs" />
+    <Compile Include="AForge\Imaging\Filters\Binarization\ErrorDiffusionToAdjacentNeighbors.cs" />
+    <Compile Include="AForge\Imaging\Filters\Binarization\FloydSteinbergDithering.cs" />
+    <Compile Include="AForge\Imaging\Filters\Binarization\JarvisJudiceNinkeDithering.cs" />
+    <Compile Include="AForge\Imaging\Filters\Binarization\OrderedDithering.cs" />
+    <Compile Include="AForge\Imaging\Filters\Binarization\SierraDithering.cs" />
+    <Compile Include="AForge\Imaging\Filters\Binarization\StuckiDithering.cs" />
+    <Compile Include="AForge\Imaging\Filters\Binarization\Threshold.cs" />
+    <Compile Include="AForge\Imaging\Filters\Binarization\ThresholdWithCarry.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\BayerFilter.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\BayerFilterOptimized.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\BrightnessCorrection.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\ChannelFiltering.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\ColorFiltering.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\ColorRemapping.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\ContrastCorrection.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\ContrastStretch.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\EuclideanColorFiltering.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\ExtractChannel.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\GammaCorrection.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\Grayscale.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\GrayscaleBT709.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\GrayscaleRMY.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\GrayscaleToRGB.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\GrayscaleY.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\HistogramEqualization.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\Invert.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\LevelsLinear.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\LevelsLinear16bpp.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\ReplaceChannel.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\RotateChannels.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Filters\Sepia.cs" />
+    <Compile Include="AForge\Imaging\Filters\Color Segmentation\SimplePosterization.cs" />
+    <Compile Include="AForge\Imaging\Filters\Convolution\Blur.cs" />
+    <Compile Include="AForge\Imaging\Filters\Convolution\Convolution.cs" />
+    <Compile Include="AForge\Imaging\Filters\Convolution\Edges.cs" />
+    <Compile Include="AForge\Imaging\Filters\Convolution\GaussianBlur.cs" />
+    <Compile Include="AForge\Imaging\Filters\Convolution\Mean.cs" />
+    <Compile Include="AForge\Imaging\Filters\Convolution\Sharpen.cs" />
+    <Compile Include="AForge\Imaging\Filters\Convolution\SharpenEx.cs" />
+    <Compile Include="AForge\Imaging\Filters\Edge Detectors\CannyEdgeDetector.cs" />
+    <Compile Include="AForge\Imaging\Filters\Edge Detectors\DifferenceEdgeDetector.cs" />
+    <Compile Include="AForge\Imaging\Filters\Edge Detectors\HomogenityEdgeDetector.cs" />
+    <Compile Include="AForge\Imaging\Filters\Edge Detectors\SobelEdgeDetector.cs" />
+    <Compile Include="AForge\Imaging\Filters\FilterIterator.cs" />
+    <Compile Include="AForge\Imaging\Filters\FiltersSequence.cs" />
+    <Compile Include="AForge\Imaging\Filters\Flood Fillers\PointedColorFloodFill.cs" />
+    <Compile Include="AForge\Imaging\Filters\Flood Fillers\PointedMeanFloodFill.cs" />
+    <Compile Include="AForge\Imaging\Filters\HSL Filters\HSLFiltering.cs" />
+    <Compile Include="AForge\Imaging\Filters\HSL Filters\HSLLinear.cs" />
+    <Compile Include="AForge\Imaging\Filters\HSL Filters\HueModifier.cs" />
+    <Compile Include="AForge\Imaging\Filters\HSL Filters\SaturationCorrection.cs" />
+    <Compile Include="AForge\Imaging\Filters\IFilter.cs" />
+    <Compile Include="AForge\Imaging\Filters\IFilterInformation.cs" />
+    <Compile Include="AForge\Imaging\Filters\IInPlaceFilter.cs" />
+    <Compile Include="AForge\Imaging\Filters\IInPlacePartialFilter.cs" />
+    <Compile Include="AForge\Imaging\Filters\IlluminationCorrection\FlatFieldCorrection.cs" />
+    <Compile Include="AForge\Imaging\Filters\Morphology\BottomHat.cs" />
+    <Compile Include="AForge\Imaging\Filters\Morphology\Closing.cs" />
+    <Compile Include="AForge\Imaging\Filters\Morphology\Dilatation.cs" />
+    <Compile Include="AForge\Imaging\Filters\Morphology\Erosion.cs" />
+    <Compile Include="AForge\Imaging\Filters\Morphology\HitAndMiss.cs" />
+    <Compile Include="AForge\Imaging\Filters\Morphology\Opening.cs" />
+    <Compile Include="AForge\Imaging\Filters\Morphology\Specific Optimizations\BinaryDilatation3x3.cs" />
+    <Compile Include="AForge\Imaging\Filters\Morphology\Specific Optimizations\BinaryErosion3x3.cs" />
+    <Compile Include="AForge\Imaging\Filters\Morphology\Specific Optimizations\Dilatation3x3.cs" />
+    <Compile Include="AForge\Imaging\Filters\Morphology\Specific Optimizations\Erosion3.x3.cs" />
+    <Compile Include="AForge\Imaging\Filters\Morphology\TopHat.cs" />
+    <Compile Include="AForge\Imaging\Filters\Noise generation\AdditiveNoise.cs" />
+    <Compile Include="AForge\Imaging\Filters\Noise generation\SaltAndPepperNoise.cs" />
+    <Compile Include="AForge\Imaging\Filters\Normalized RGB\ExtractNormalizedRGBChannel.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\ApplyMask.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\BlobsFiltering.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\CanvasCrop.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\CanvasFill.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\CanvasMove.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\ConnectedComponentsLabeling.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\CornersMarker.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\ExtractBiggestBlob.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\FillHoles.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\HorizontalRunLengthSmoothing.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\ImageWarp.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\Jitter.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\MaskedFilter.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\Mirror.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\OilPainting.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\Pixellate.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\SimpleSkeletonization.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\TexturedFilter.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\TexturedMerge.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\Texturer.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\VerticalRunLengthSmoothing.cs" />
+    <Compile Include="AForge\Imaging\Filters\Other\WaterWave.cs" />
+    <Compile Include="AForge\Imaging\Filters\Smooting\AdaptiveSmooth.cs" />
+    <Compile Include="AForge\Imaging\Filters\Smooting\BilateralSmoothing.cs" />
+    <Compile Include="AForge\Imaging\Filters\Smooting\ConservativeSmoothing.cs" />
+    <Compile Include="AForge\Imaging\Filters\Smooting\Median.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\BackwardQuadrilateralTransformation.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\Crop.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\Quad.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\QuadrilateralTransformation.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\QuadrilateralTransformationBilinear.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\QuadrilateralTransformationNearestNeighbor.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\ResizeBicubic.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\ResizeBilinear.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\ResizeNearestNeighbor.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\RotateBicubic.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\RotateBilinear.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\RotateNearestNeighbor.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\Shrink.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\SimpleQuadrilateralTransformation.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\TransformFromPolar.cs" />
+    <Compile Include="AForge\Imaging\Filters\Transform\TransformToPolar.cs" />
+    <Compile Include="AForge\Imaging\Filters\YCbCr Filters\YCbCrExtractChannel.cs" />
+    <Compile Include="AForge\Imaging\Filters\YCbCr Filters\YCbCrFiltering.cs" />
+    <Compile Include="AForge\Imaging\Filters\YCbCr Filters\YCbCrLinear.cs" />
+    <Compile Include="AForge\Imaging\Filters\YCbCr Filters\YCbCrReplaceChannel.cs" />
+    <Compile Include="AForge\Imaging\HorizontalIntensityStatistics.cs" />
+    <Compile Include="AForge\Imaging\HoughCircleTransformation.cs" />
+    <Compile Include="AForge\Imaging\HoughLineTransformation.cs" />
+    <Compile Include="AForge\Imaging\IBlobsFilter.cs" />
+    <Compile Include="AForge\Imaging\IBlockMatching.cs" />
+    <Compile Include="AForge\Imaging\ICornersDetector.cs" />
+    <Compile Include="AForge\Imaging\Image.cs" />
+    <Compile Include="AForge\Imaging\ImageStatistics.cs" />
+    <Compile Include="AForge\Imaging\ImageStatisticsHSL.cs" />
+    <Compile Include="AForge\Imaging\ImageStatisticsYCbCr.cs" />
+    <Compile Include="AForge\Imaging\IntegralImage.cs" />
+    <Compile Include="AForge\Imaging\Interpolation.cs" />
+    <Compile Include="AForge\Imaging\ITemplateMatching.cs" />
+    <Compile Include="AForge\Imaging\MemoryManager.cs" />
+    <Compile Include="AForge\Imaging\MoravecCornersDetector.cs" />
+    <Compile Include="AForge\Imaging\QuadrilateralFinder.cs" />
+    <Compile Include="AForge\Imaging\RecursiveBlobCounter.cs" />
+    <Compile Include="AForge\Imaging\SusanCornersDetector.cs" />
+    <Compile Include="AForge\Imaging\TemplateMatch.cs" />
+    <Compile Include="AForge\Imaging\Textures\CloudsTexture.cs" />
+    <Compile Include="AForge\Imaging\Textures\ITextureGenerator.cs" />
+    <Compile Include="AForge\Imaging\Textures\LabyrinthTexture.cs" />
+    <Compile Include="AForge\Imaging\Textures\MarbleTexture.cs" />
+    <Compile Include="AForge\Imaging\Textures\TextileTexture.cs" />
+    <Compile Include="AForge\Imaging\Textures\Texture.cs" />
+    <Compile Include="AForge\Imaging\Textures\WoodTexture.cs" />
+    <Compile Include="AForge\Imaging\UnmanagedImage.cs" />
+    <Compile Include="AForge\Imaging\VerticalIntensityStatistics.cs" />
+    <Compile Include="AForge\Math\Complex.cs" />
+    <Compile Include="AForge\Math\ContinuousHistogram.cs" />
+    <Compile Include="AForge\Math\FourierTransform.cs" />
+    <Compile Include="AForge\Math\Gaussian.cs" />
+    <Compile Include="AForge\Math\Geometry\ClosePointsMergingOptimizer.cs" />
+    <Compile Include="AForge\Math\Geometry\CoplanarPosit.cs" />
+    <Compile Include="AForge\Math\Geometry\FlatAnglesOptimizer.cs" />
+    <Compile Include="AForge\Math\Geometry\GeometryTools.cs" />
+    <Compile Include="AForge\Math\Geometry\GrahamConvexHull.cs" />
+    <Compile Include="AForge\Math\Geometry\IConvexHullAlgorithm.cs" />
+    <Compile Include="AForge\Math\Geometry\IShapeOptimizer.cs" />
+    <Compile Include="AForge\Math\Geometry\Line.cs" />
+    <Compile Include="AForge\Math\Geometry\LineSegment.cs" />
+    <Compile Include="AForge\Math\Geometry\LineStraighteningOptimizer.cs" />
+    <Compile Include="AForge\Math\Geometry\PointsCloud.cs" />
+    <Compile Include="AForge\Math\Geometry\POSIT.cs" />
+    <Compile Include="AForge\Math\Geometry\ShapeType.cs" />
+    <Compile Include="AForge\Math\Geometry\SimpleShapeChecker.cs" />
+    <Compile Include="AForge\Math\Histogram.cs" />
+    <Compile Include="AForge\Math\Matrix3x3.cs" />
+    <Compile Include="AForge\Math\Matrix4x4.cs" />
+    <Compile Include="AForge\Math\Metrics\CosineDistance.cs" />
+    <Compile Include="AForge\Math\Metrics\CosineSimilarity.cs" />
+    <Compile Include="AForge\Math\Metrics\EuclideanDistance.cs" />
+    <Compile Include="AForge\Math\Metrics\EuclideanSimilarity.cs" />
+    <Compile Include="AForge\Math\Metrics\HammingDistance.cs" />
+    <Compile Include="AForge\Math\Metrics\IDistance.cs" />
+    <Compile Include="AForge\Math\Metrics\ISimilarity.cs" />
+    <Compile Include="AForge\Math\Metrics\JaccardDistance.cs" />
+    <Compile Include="AForge\Math\Metrics\ManhattanDistance.cs" />
+    <Compile Include="AForge\Math\Metrics\PearsonCorrelation.cs" />
+    <Compile Include="AForge\Math\PerlinNoise.cs" />
+    <Compile Include="AForge\Math\Random\ExponentialGenerator.cs" />
+    <Compile Include="AForge\Math\Random\GaussianGenerator.cs" />
+    <Compile Include="AForge\Math\Random\IRandomNumberGenerator.cs" />
+    <Compile Include="AForge\Math\Random\StandardGenerator.cs" />
+    <Compile Include="AForge\Math\Random\UniformGenerator.cs" />
+    <Compile Include="AForge\Math\Random\UniformOneGenerator.cs" />
+    <Compile Include="AForge\Math\Statistics.cs" />
+    <Compile Include="AForge\Math\SVD.cs" />
+    <Compile Include="AForge\Math\Tools.cs" />
+    <Compile Include="AForge\Math\Vector3.cs" />
+    <Compile Include="AForge\Math\Vector4.cs" />
+    <Compile Include="AForge\Video.DirectShow\CameraControlProperty.cs" />
+    <Compile Include="AForge\Video.DirectShow\FileVideoSource.cs" />
+    <Compile Include="AForge\Video.DirectShow\FilterInfo.cs" />
+    <Compile Include="AForge\Video.DirectShow\FilterInfoCollection.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IAMCameraControl.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IAMCrossbar.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IAMStreamConfig.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IAMVideoControl.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IBaseFilter.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\ICaptureGraphBuilder2.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\ICreateDevEnum.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IEnumFilters.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IEnumPins.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IFileSourceFilter.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IFilterGraph.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IFilterGraph2.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IGraphBuilder.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IMediaControl.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IMediaEventEx.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IMediaFilter.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IPersist.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IPin.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IPropertyBag.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IReferenceClock.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\ISampleGrabber.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\ISampleGrabberCB.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\ISpecifyPropertyPages.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IVideoWindow.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\Structures.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\Tools.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\Uuids.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\Win32.cs" />
+    <Compile Include="AForge\Video.DirectShow\PhysicalConnectorType.cs" />
+    <Compile Include="AForge\Video.DirectShow\Uuids.cs" />
+    <Compile Include="AForge\Video.DirectShow\VideoCapabilities.cs" />
+    <Compile Include="AForge\Video.DirectShow\VideoCaptureDevice.cs" />
+    <Compile Include="AForge\Video.DirectShow\VideoCaptureDeviceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AForge\Video.DirectShow\VideoCaptureDeviceForm.designer.cs">
+      <DependentUpon>VideoCaptureDeviceForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AForge\Video.DirectShow\VideoInput.cs" />
+    <Compile Include="AForge\Video.Kinect\Kinect.cs" />
+    <Compile Include="AForge\Video.Kinect\KinectDepthCamera.cs" />
+    <Compile Include="AForge\Video.Kinect\KinectNative.cs" />
+    <Compile Include="AForge\Video.Kinect\KinectVideoCamera.cs" />
+    <Compile Include="AForge\Video.VFW\AVIFileVideoSource.cs" />
+    <Compile Include="AForge\Video.VFW\AVIReader.cs" />
+    <Compile Include="AForge\Video.VFW\AVIWriter.cs" />
+    <Compile Include="AForge\Video.VFW\Win32.cs" />
+    <Compile Include="AForge\Video.Ximea\CameraParameter.cs" />
+    <Compile Include="AForge\Video.Ximea\GpiMode.cs" />
+    <Compile Include="AForge\Video.Ximea\GpoMode.cs" />
+    <Compile Include="AForge\Video.Ximea\ImageFormat.cs" />
+    <Compile Include="AForge\Video.Ximea\Internal\ParameterType.cs" />
+    <Compile Include="AForge\Video.Ximea\Internal\XimeaAPI.cs" />
+    <Compile Include="AForge\Video.Ximea\Internal\XimeaImage.cs" />
+    <Compile Include="AForge\Video.Ximea\LedMode.cs" />
+    <Compile Include="AForge\Video.Ximea\TriggerSource.cs" />
+    <Compile Include="AForge\Video.Ximea\XimeaCamera.cs" />
+    <Compile Include="AForge\Video.Ximea\XimeaVideoSource.cs" />
+    <Compile Include="AForge\Video\AsyncVideoSource.cs" />
+    <Compile Include="AForge\Video\ByteArrayUtils.cs" />
+    <Compile Include="AForge\Video\Exceptions.cs" />
+    <Compile Include="AForge\Video\IVideoSource.cs" />
+    <Compile Include="AForge\Video\JPEGStream.cs" />
+    <Compile Include="AForge\Video\MJPEGStream.cs" />
+    <Compile Include="AForge\Video\ScreenCaptureStream.cs" />
+    <Compile Include="AForge\Video\VideoEvents.cs" />
+    <Compile Include="DRAWING.cs" />
+    <Compile Include="MediaCapture\AForge\AForgeCapture.cs" />
+    <Compile Include="MediaCapture\AForge\AForgeMediaDevices.cs" />
+    <Compile Include="MediaCapture\AviFrameWriter.cs" />
+    <Compile Include="MediaCapture\Encoder\EncoderCapture.cs" />
+    <Compile Include="MediaCapture\Encoder\EncoderMediaDevices.cs" />
+    <Compile Include="MediaCapture\Encoder\EncoderProcessingThread.cs" />
+    <Compile Include="MediaCapture\Exceptions.cs" />
+    <Compile Include="MediaCapture\IFrameWriter.cs" />
+    <Compile Include="MediaCapture\IMediaCapture.cs" />
+    <Compile Include="MediaCapture\MediaCapture.cs" />
+    <Compile Include="MediaCapture\MediaCaptureEventArgs.cs" />
+    <Compile Include="MediaCapture\MediaCaptureMode.cs" />
+    <Compile Include="MediaCapture\NAudio\NAudioCapture.cs" />
+    <Compile Include="MediaCapture\ScreenCaption.cs" />
+    <Compile Include="MediaCapture\Screen\FramesInfo.cs" />
+    <Compile Include="MediaCapture\Screen\ScreenCapture.cs" />
+    <Compile Include="NAudio\Codecs\ALawDecoder.cs" />
+    <Compile Include="NAudio\Codecs\ALawEncoder.cs" />
+    <Compile Include="NAudio\Codecs\G722Codec.cs" />
+    <Compile Include="NAudio\Codecs\MuLawDecoder.cs" />
+    <Compile Include="NAudio\Codecs\MuLawEncoder.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioCaptureClient.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioClient.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioClientBufferFlags.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioClientProperties.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioClientShareMode.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioClientStreamFlags.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioClientStreamOptions.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioClockClient.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioEndpointVolume.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioEndpointVolumeCallback.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioEndpointVolumeChannel.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioEndpointVolumeChannels.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioEndpointVolumeNotificationDelegate.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioEndpointVolumeStepInformation.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioEndpointVolumeVolumeRange.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioMeterInformation.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioMeterInformationChannels.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioRenderClient.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioSessionControl.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioSessionEventsCallback.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioSessionManager.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioSessionNotification.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioStreamCategory.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioStreamVolume.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioVolumeNotificationData.cs" />
+    <Compile Include="NAudio\CoreAudioApi\DataFlow.cs" />
+    <Compile Include="NAudio\CoreAudioApi\DeviceState.cs" />
+    <Compile Include="NAudio\CoreAudioApi\EEndpointHardwareSupport.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\AudioVolumeNotificationDataStruct.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\Blob.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\ClsCtx.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\ErrorCodes.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IAudioCaptureClient.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IAudioClient.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IAudioClock2.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IAudioEndpointVolume.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IAudioEndpointVolumeCallback.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IAudioMeterInformation.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IAudioRenderClient.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IAudioSessionControl.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IAudioSessionEnumerator.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IAudioSessionEvents.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IAudioSessionEventsHandler.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IAudioSessionManager.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IAudioSessionNotification.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IAudioStreamVolume.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IMMDevice.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IMMDeviceCollection.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IMMDeviceEnumerator.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IMMEndpoint.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IMMNotificationClient.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IPropertyStore.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\ISimpleAudioVolume.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\MMDeviceEnumeratorComObject.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\StorageAccessMode.cs" />
+    <Compile Include="NAudio\CoreAudioApi\MMDevice.cs" />
+    <Compile Include="NAudio\CoreAudioApi\MMDeviceCollection.cs" />
+    <Compile Include="NAudio\CoreAudioApi\MMDeviceEnumerator.cs" />
+    <Compile Include="NAudio\CoreAudioApi\PropertyKey.cs" />
+    <Compile Include="NAudio\CoreAudioApi\PropertyKeys.cs" />
+    <Compile Include="NAudio\CoreAudioApi\PropertyStore.cs" />
+    <Compile Include="NAudio\CoreAudioApi\PropertyStoreProperty.cs" />
+    <Compile Include="NAudio\CoreAudioApi\PropVariant.cs" />
+    <Compile Include="NAudio\CoreAudioApi\PropVariantNative.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Role.cs" />
+    <Compile Include="NAudio\CoreAudioApi\SessionCollection.cs" />
+    <Compile Include="NAudio\CoreAudioApi\SimpleAudioVolume.cs" />
+    <Compile Include="NAudio\Dmo\AudioMediaSubtypes.cs" />
+    <Compile Include="NAudio\Dmo\DmoDescriptor.cs" />
+    <Compile Include="NAudio\Dmo\DmoEnumerator.cs" />
+    <Compile Include="NAudio\Dmo\DmoEnumFlags.cs" />
+    <Compile Include="NAudio\Dmo\DmoGuids.cs" />
+    <Compile Include="NAudio\Dmo\DmoHResults.cs" />
+    <Compile Include="NAudio\Dmo\DmoInPlaceProcessFlags.cs" />
+    <Compile Include="NAudio\Dmo\DmoInPlaceProcessReturn.cs" />
+    <Compile Include="NAudio\Dmo\DmoInputDataBufferFlags.cs" />
+    <Compile Include="NAudio\Dmo\DmoInputStatusFlags.cs" />
+    <Compile Include="NAudio\Dmo\DmoInterop.cs" />
+    <Compile Include="NAudio\Dmo\DmoMediaType.cs" />
+    <Compile Include="NAudio\Dmo\DmoOutputDataBuffer.cs" />
+    <Compile Include="NAudio\Dmo\DmoOutputDataBufferFlags.cs" />
+    <Compile Include="NAudio\Dmo\DmoPartialMediaType.cs" />
+    <Compile Include="NAudio\Dmo\DmoProcessOutputFlags.cs" />
+    <Compile Include="NAudio\Dmo\DmoSetTypeFlags.cs" />
+    <Compile Include="NAudio\Dmo\Effect\ChorusPhase.cs" />
+    <Compile Include="NAudio\Dmo\Effect\ChorusWaveForm.cs" />
+    <Compile Include="NAudio\Dmo\Effect\DmoChorus.cs" />
+    <Compile Include="NAudio\Dmo\Effect\DmoCompressor.cs" />
+    <Compile Include="NAudio\Dmo\Effect\DmoDistortion.cs" />
+    <Compile Include="NAudio\Dmo\Effect\DmoEcho.cs" />
+    <Compile Include="NAudio\Dmo\Effect\DmoFlanger.cs" />
+    <Compile Include="NAudio\Dmo\Effect\DmoGargle.cs" />
+    <Compile Include="NAudio\Dmo\Effect\DmoI3DL2Reverb.cs" />
+    <Compile Include="NAudio\Dmo\Effect\DmoParamEq.cs" />
+    <Compile Include="NAudio\Dmo\Effect\DmoWavesReverb.cs" />
+    <Compile Include="NAudio\Dmo\Effect\EchoPanDelay.cs" />
+    <Compile Include="NAudio\Dmo\Effect\FlangerPhase.cs" />
+    <Compile Include="NAudio\Dmo\Effect\FlangerWaveForm.cs" />
+    <Compile Include="NAudio\Dmo\Effect\GargleWaveShape.cs" />
+    <Compile Include="NAudio\Dmo\Effect\I3Dl2EnvironmentPreset.cs" />
+    <Compile Include="NAudio\Dmo\Effect\IDmoEffector.cs" />
+    <Compile Include="NAudio\Dmo\IEnumDmo.cs" />
+    <Compile Include="NAudio\Dmo\IMediaBuffer.cs" />
+    <Compile Include="NAudio\Dmo\IMediaObject.cs" />
+    <Compile Include="NAudio\Dmo\IMediaObjectInPlace.cs" />
+    <Compile Include="NAudio\Dmo\IMediaParamInfo.cs" />
+    <Compile Include="NAudio\Dmo\InputStreamInfoFlags.cs" />
+    <Compile Include="NAudio\Dmo\IWMResamplerProps.cs" />
+    <Compile Include="NAudio\Dmo\MediaBuffer.cs" />
+    <Compile Include="NAudio\Dmo\MediaObject.cs" />
+    <Compile Include="NAudio\Dmo\MediaObjectInPlace.cs" />
+    <Compile Include="NAudio\Dmo\MediaObjectSizeInfo.cs" />
+    <Compile Include="NAudio\Dmo\MediaParamInfo.cs" />
+    <Compile Include="NAudio\Dmo\MediaTypes.cs" />
+    <Compile Include="NAudio\Dmo\OutputStreamInfoFlags.cs" />
+    <Compile Include="NAudio\Dmo\ResamplerMediaObject.cs" />
+    <Compile Include="NAudio\Dmo\WindowsMediaMp3Decoder.cs" />
+    <Compile Include="NAudio\Dsp\BiQuadFilter.cs" />
+    <Compile Include="NAudio\Dsp\Complex.cs" />
+    <Compile Include="NAudio\Dsp\EnvelopeDetector.cs" />
+    <Compile Include="NAudio\Dsp\EnvelopeGenerator.cs" />
+    <Compile Include="NAudio\Dsp\FastFourierTransform.cs" />
+    <Compile Include="NAudio\Dsp\ImpulseResponseConvolution.cs" />
+    <Compile Include="NAudio\Dsp\SimpleCompressor.cs" />
+    <Compile Include="NAudio\Dsp\SimpleGate.cs" />
+    <Compile Include="NAudio\Dsp\SmbPitchShifter.cs" />
+    <Compile Include="NAudio\Dsp\WdlResampler.cs" />
+    <Compile Include="NAudio\FileFormats\Mp3\ChannelMode.cs" />
+    <Compile Include="NAudio\FileFormats\Mp3\DmoMp3FrameDecompressor.cs" />
+    <Compile Include="NAudio\FileFormats\Mp3\Id3v2Tag.cs" />
+    <Compile Include="NAudio\FileFormats\Mp3\IMp3FrameDecompressor.cs" />
+    <Compile Include="NAudio\FileFormats\Mp3\Mp3Frame.cs" />
+    <Compile Include="NAudio\FileFormats\Mp3\Mp3FrameDecompressor.cs" />
+    <Compile Include="NAudio\FileFormats\Mp3\MpegLayer.cs" />
+    <Compile Include="NAudio\FileFormats\Mp3\MpegVersion.cs" />
+    <Compile Include="NAudio\FileFormats\Mp3\XingHeader.cs" />
+    <Compile Include="NAudio\FileFormats\SoundFont\Generator.cs" />
+    <Compile Include="NAudio\FileFormats\SoundFont\GeneratorBuilder.cs" />
+    <Compile Include="NAudio\FileFormats\SoundFont\GeneratorEnum.cs" />
+    <Compile Include="NAudio\FileFormats\SoundFont\InfoChunk.cs" />
+    <Compile Include="NAudio\FileFormats\SoundFont\Instrument.cs" />
+    <Compile Include="NAudio\FileFormats\SoundFont\InstrumentBuilder.cs" />
+    <Compile Include="NAudio\FileFormats\SoundFont\Modulator.cs" />
+    <Compile Include="NAudio\FileFormats\SoundFont\ModulatorBuilder.cs" />
+    <Compile Include="NAudio\FileFormats\SoundFont\ModulatorType.cs" />
+    <Compile Include="NAudio\FileFormats\SoundFont\Preset.cs" />
+    <Compile Include="NAudio\FileFormats\SoundFont\PresetBuilder.cs" />
+    <Compile Include="NAudio\FileFormats\SoundFont\PresetsChunk.cs" />
+    <Compile Include="NAudio\FileFormats\SoundFont\RiffChunk.cs" />
+    <Compile Include="NAudio\FileFormats\SoundFont\SampleDataChunk.cs" />
+    <Compile Include="NAudio\FileFormats\SoundFont\SampleHeader.cs" />
+    <Compile Include="NAudio\FileFormats\SoundFont\SampleHeaderBuilder.cs" />
+    <Compile Include="NAudio\FileFormats\SoundFont\SampleMode.cs" />
+    <Compile Include="NAudio\FileFormats\SoundFont\SFSampleLink.cs" />
+    <Compile Include="NAudio\FileFormats\SoundFont\SFVersion.cs" />
+    <Compile Include="NAudio\FileFormats\SoundFont\SFVersionBuilder.cs" />
+    <Compile Include="NAudio\FileFormats\SoundFont\SoundFont.cs" />
+    <Compile Include="NAudio\FileFormats\SoundFont\StructureBuilder.cs" />
+    <Compile Include="NAudio\FileFormats\SoundFont\Zone.cs" />
+    <Compile Include="NAudio\FileFormats\SoundFont\ZoneBuilder.cs" />
+    <Compile Include="NAudio\FileFormats\Wav\WaveFileChunkReader.cs" />
+    <Compile Include="NAudio\Gui\Fader.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="NAudio\Gui\PanSlider.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="NAudio\Gui\Pot.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="NAudio\Gui\Pot.Designer.cs">
+      <DependentUpon>Pot.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NAudio\Gui\VolumeMeter.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="NAudio\Gui\VolumeMeter.Designer.cs">
+      <DependentUpon>VolumeMeter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NAudio\Gui\VolumeSlider.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="NAudio\Gui\WaveformPainter.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="NAudio\Gui\WaveformPainter.Designer.cs">
+      <DependentUpon>WaveformPainter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NAudio\Gui\WaveViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="NAudio\MediaFoundation\AudioSubtypes.cs" />
+    <Compile Include="NAudio\MediaFoundation\IMFActivate.cs" />
+    <Compile Include="NAudio\MediaFoundation\IMFAttributes.cs" />
+    <Compile Include="NAudio\MediaFoundation\IMFByteStream.cs" />
+    <Compile Include="NAudio\MediaFoundation\IMFCollection.cs" />
+    <Compile Include="NAudio\MediaFoundation\IMFMediaBuffer.cs" />
+    <Compile Include="NAudio\MediaFoundation\IMFMediaEvent.cs" />
+    <Compile Include="NAudio\MediaFoundation\IMFMediaType.cs" />
+    <Compile Include="NAudio\MediaFoundation\IMFReadWriteClassFactory.cs" />
+    <Compile Include="NAudio\MediaFoundation\IMFSample.cs" />
+    <Compile Include="NAudio\MediaFoundation\IMFSinkWriter.cs" />
+    <Compile Include="NAudio\MediaFoundation\IMFSourceReader.cs" />
+    <Compile Include="NAudio\MediaFoundation\IMFTransform.cs" />
+    <Compile Include="NAudio\MediaFoundation\MediaEventType.cs" />
+    <Compile Include="NAudio\MediaFoundation\MediaFoundationAttributes.cs" />
+    <Compile Include="NAudio\MediaFoundation\MediaFoundationErrors.cs" />
+    <Compile Include="NAudio\MediaFoundation\MediaFoundationHelpers.cs" />
+    <Compile Include="NAudio\MediaFoundation\MediaFoundationInterop.cs" />
+    <Compile Include="NAudio\MediaFoundation\MediaFoundationTransform.cs" />
+    <Compile Include="NAudio\MediaFoundation\MediaFoundationTransformCategories.cs" />
+    <Compile Include="NAudio\MediaFoundation\MediaType.cs" />
+    <Compile Include="NAudio\MediaFoundation\MediaTypes.cs" />
+    <Compile Include="NAudio\MediaFoundation\MFT_INPUT_STREAM_INFO.cs" />
+    <Compile Include="NAudio\MediaFoundation\MFT_MESSAGE_TYPE.cs" />
+    <Compile Include="NAudio\MediaFoundation\MFT_OUTPUT_DATA_BUFFER.cs" />
+    <Compile Include="NAudio\MediaFoundation\MFT_OUTPUT_STREAM_INFO.cs" />
+    <Compile Include="NAudio\MediaFoundation\MFT_REGISTER_TYPE_INFO.cs" />
+    <Compile Include="NAudio\MediaFoundation\MF_SINK_WRITER_STATISTICS.cs" />
+    <Compile Include="NAudio\MediaFoundation\_MFT_ENUM_FLAG.cs" />
+    <Compile Include="NAudio\MediaFoundation\_MFT_INPUT_STATUS_FLAGS.cs" />
+    <Compile Include="NAudio\MediaFoundation\_MFT_INPUT_STREAM_INFO_FLAGS.cs" />
+    <Compile Include="NAudio\MediaFoundation\_MFT_OUTPUT_DATA_BUFFER_FLAGS.cs" />
+    <Compile Include="NAudio\MediaFoundation\_MFT_OUTPUT_STATUS_FLAGS.cs" />
+    <Compile Include="NAudio\MediaFoundation\_MFT_OUTPUT_STREAM_INFO_FLAGS.cs" />
+    <Compile Include="NAudio\MediaFoundation\_MFT_PROCESS_OUTPUT_FLAGS.cs" />
+    <Compile Include="NAudio\MediaFoundation\_MFT_PROCESS_OUTPUT_STATUS.cs" />
+    <Compile Include="NAudio\MediaFoundation\_MFT_SET_TYPE_FLAGS.cs" />
+    <Compile Include="NAudio\Midi\ChannelAfterTouchEvent.cs" />
+    <Compile Include="NAudio\Midi\ControlChangeEvent.cs" />
+    <Compile Include="NAudio\Midi\KeySignatureEvent.cs" />
+    <Compile Include="NAudio\Midi\MetaEvent.cs" />
+    <Compile Include="NAudio\Midi\MetaEventType.cs" />
+    <Compile Include="NAudio\Midi\MidiCommandCode.cs" />
+    <Compile Include="NAudio\Midi\MidiController.cs" />
+    <Compile Include="NAudio\Midi\MidiEvent.cs" />
+    <Compile Include="NAudio\Midi\MidiEventCollection.cs" />
+    <Compile Include="NAudio\Midi\MidiEventComparer.cs" />
+    <Compile Include="NAudio\Midi\MidiFile.cs" />
+    <Compile Include="NAudio\Midi\MidiIn.cs" />
+    <Compile Include="NAudio\Midi\MidiInCapabilities.cs" />
+    <Compile Include="NAudio\Midi\MidiInMessageEventArgs.cs" />
+    <Compile Include="NAudio\Midi\MidiInterop.cs" />
+    <Compile Include="NAudio\Midi\MidiMessage.cs" />
+    <Compile Include="NAudio\Midi\MidiOut.cs" />
+    <Compile Include="NAudio\Midi\MidiOutCapabilities.cs" />
+    <Compile Include="NAudio\Midi\MidiOutTechnology.cs" />
+    <Compile Include="NAudio\Midi\NoteEvent.cs" />
+    <Compile Include="NAudio\Midi\NoteOnEvent.cs" />
+    <Compile Include="NAudio\Midi\PatchChangeEvent.cs" />
+    <Compile Include="NAudio\Midi\PitchWheelChangeEvent.cs" />
+    <Compile Include="NAudio\Midi\RawMetaEvent.cs" />
+    <Compile Include="NAudio\Midi\SequencerSpecificEvent.cs" />
+    <Compile Include="NAudio\Midi\SmpteOffsetEvent.cs" />
+    <Compile Include="NAudio\Midi\SysexEvent.cs" />
+    <Compile Include="NAudio\Midi\TempoEvent.cs" />
+    <Compile Include="NAudio\Midi\TextEvent.cs" />
+    <Compile Include="NAudio\Midi\TimeSignatureEvent.cs" />
+    <Compile Include="NAudio\Midi\TrackSequenceNumberEvent.cs" />
+    <Compile Include="NAudio\Mixer\BooleanMixerControl.cs" />
+    <Compile Include="NAudio\Mixer\CustomMixerControl.cs" />
+    <Compile Include="NAudio\Mixer\ListTextMixerControl.cs" />
+    <Compile Include="NAudio\Mixer\Mixer.cs" />
+    <Compile Include="NAudio\Mixer\MixerControl.cs" />
+    <Compile Include="NAudio\Mixer\MixerControlType.cs" />
+    <Compile Include="NAudio\Mixer\MixerFlags.cs" />
+    <Compile Include="NAudio\Mixer\MixerInterop.cs" />
+    <Compile Include="NAudio\Mixer\MixerLine.cs" />
+    <Compile Include="NAudio\Mixer\MixerLineComponentType.cs" />
+    <Compile Include="NAudio\Mixer\SignedMixerControl.cs" />
+    <Compile Include="NAudio\Mixer\UnsignedMixerControl.cs" />
+    <Compile Include="NAudio\Utils\BufferHelpers.cs" />
+    <Compile Include="NAudio\Utils\ByteArrayExtensions.cs" />
+    <Compile Include="NAudio\Utils\ByteEncoding.cs" />
+    <Compile Include="NAudio\Utils\ChunkIdentifier.cs" />
+    <Compile Include="NAudio\Utils\CircularBuffer.cs" />
+    <Compile Include="NAudio\Utils\Decibels.cs" />
+    <Compile Include="NAudio\Utils\FieldDescriptionAttribute.cs" />
+    <Compile Include="NAudio\Utils\FieldDescriptionHelper.cs" />
+    <Compile Include="NAudio\Utils\HResult.cs" />
+    <Compile Include="NAudio\Utils\IEEE.cs" />
+    <Compile Include="NAudio\Utils\IgnoreDisposeStream.cs" />
+    <Compile Include="NAudio\Utils\MarshalHelpers.cs" />
+    <Compile Include="NAudio\Utils\MergeSort.cs" />
+    <Compile Include="NAudio\Utils\NativeMethods.cs" />
+    <Compile Include="NAudio\Utils\ProgressLog.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="NAudio\Utils\ProgressLog.Designer.cs">
+      <DependentUpon>ProgressLog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NAudio\Utils\WavePositionExtensions.cs" />
+    <Compile Include="NAudio\Wave\Asio\Asio64Bit.cs" />
+    <Compile Include="NAudio\Wave\Asio\AsioCallbacks.cs" />
+    <Compile Include="NAudio\Wave\Asio\AsioChannelInfo.cs" />
+    <Compile Include="NAudio\Wave\Asio\ASIODriver.cs" />
+    <Compile Include="NAudio\Wave\Asio\AsioDriverCapability.cs" />
+    <Compile Include="NAudio\Wave\Asio\ASIODriverExt.cs" />
+    <Compile Include="NAudio\Wave\Asio\AsioError.cs" />
+    <Compile Include="NAudio\Wave\Asio\AsioMessageSelector.cs" />
+    <Compile Include="NAudio\Wave\Asio\ASIOSampleConvertor.cs" />
+    <Compile Include="NAudio\Wave\Asio\AsioSampleType.cs" />
+    <Compile Include="NAudio\Wave\Asio\ASIOStructures.cs" />
+    <Compile Include="NAudio\Wave\Compression\AcmDriver.cs" />
+    <Compile Include="NAudio\Wave\Compression\AcmDriverAddFlags.cs" />
+    <Compile Include="NAudio\Wave\Compression\AcmDriverDetails.cs" />
+    <Compile Include="NAudio\Wave\Compression\AcmDriverDetailsSupportFlags.cs" />
+    <Compile Include="NAudio\Wave\Compression\AcmDriverEnumFlags.cs" />
+    <Compile Include="NAudio\Wave\Compression\AcmFormat.cs" />
+    <Compile Include="NAudio\Wave\Compression\AcmFormatChoose.cs" />
+    <Compile Include="NAudio\Wave\Compression\AcmFormatChooseStyleFlags.cs" />
+    <Compile Include="NAudio\Wave\Compression\AcmFormatDetails.cs" />
+    <Compile Include="NAudio\Wave\Compression\AcmFormatEnumFlags.cs" />
+    <Compile Include="NAudio\Wave\Compression\AcmFormatSuggestFlags.cs" />
+    <Compile Include="NAudio\Wave\Compression\AcmFormatTag.cs" />
+    <Compile Include="NAudio\Wave\Compression\AcmFormatTagDetails.cs" />
+    <Compile Include="NAudio\Wave\Compression\AcmInterop.cs" />
+    <Compile Include="NAudio\Wave\Compression\AcmMetrics.cs" />
+    <Compile Include="NAudio\Wave\Compression\AcmStream.cs" />
+    <Compile Include="NAudio\Wave\Compression\AcmStreamConvertFlags.cs" />
+    <Compile Include="NAudio\Wave\Compression\AcmStreamHeader.cs" />
+    <Compile Include="NAudio\Wave\Compression\AcmStreamHeaderStatusFlags.cs" />
+    <Compile Include="NAudio\Wave\Compression\AcmStreamHeaderStruct.cs" />
+    <Compile Include="NAudio\Wave\Compression\AcmStreamOpenFlags.cs" />
+    <Compile Include="NAudio\Wave\Compression\AcmStreamSizeFlags.cs" />
+    <Compile Include="NAudio\Wave\Compression\WaveFilter.cs" />
+    <Compile Include="NAudio\Wave\MmeInterop\Manufacturers.cs" />
+    <Compile Include="NAudio\Wave\MmeInterop\MmException.cs" />
+    <Compile Include="NAudio\Wave\MmeInterop\MmResult.cs" />
+    <Compile Include="NAudio\Wave\MmeInterop\MmTime.cs" />
+    <Compile Include="NAudio\Wave\MmeInterop\WaveCallbackInfo.cs" />
+    <Compile Include="NAudio\Wave\MmeInterop\WaveCallbackStrategy.cs" />
+    <Compile Include="NAudio\Wave\MmeInterop\WaveHeader.cs" />
+    <Compile Include="NAudio\Wave\MmeInterop\WaveHeaderFlags.cs" />
+    <Compile Include="NAudio\Wave\MmeInterop\WaveInCapabilities.cs" />
+    <Compile Include="NAudio\Wave\MmeInterop\WaveInEventArgs.cs" />
+    <Compile Include="NAudio\Wave\MmeInterop\WaveInterop.cs" />
+    <Compile Include="NAudio\Wave\MmeInterop\WaveOutCapabilities.cs" />
+    <Compile Include="NAudio\Wave\MmeInterop\WaveOutSupport.cs" />
+    <Compile Include="NAudio\Wave\MmeInterop\WaveWindow.cs" />
+    <Compile Include="NAudio\Wave\SampleChunkConverters\ISampleChunkConverter.cs" />
+    <Compile Include="NAudio\Wave\SampleChunkConverters\Mono16SampleChunkConverter.cs" />
+    <Compile Include="NAudio\Wave\SampleChunkConverters\Mono24SampleChunkConverter.cs" />
+    <Compile Include="NAudio\Wave\SampleChunkConverters\Mono8SampleChunkConverter.cs" />
+    <Compile Include="NAudio\Wave\SampleChunkConverters\MonoFloatSampleChunkConverter.cs" />
+    <Compile Include="NAudio\Wave\SampleChunkConverters\Stereo16SampleChunkConverter.cs" />
+    <Compile Include="NAudio\Wave\SampleChunkConverters\Stereo24SampleChunkConverter.cs" />
+    <Compile Include="NAudio\Wave\SampleChunkConverters\Stereo8SampleChunkConverter.cs" />
+    <Compile Include="NAudio\Wave\SampleChunkConverters\StereoFloatSampleChunkConverter.cs" />
+    <Compile Include="NAudio\Wave\SampleProviders\AdsrSampleProvider.cs" />
+    <Compile Include="NAudio\Wave\SampleProviders\ConcatenatingSampleProvider.cs" />
+    <Compile Include="NAudio\Wave\SampleProviders\FadeInOutSampleProvider.cs" />
+    <Compile Include="NAudio\Wave\SampleProviders\MeteringSampleProvider.cs" />
+    <Compile Include="NAudio\Wave\SampleProviders\MixingSampleProvider.cs" />
+    <Compile Include="NAudio\Wave\SampleProviders\MonoToStereoSampleProvider.cs" />
+    <Compile Include="NAudio\Wave\SampleProviders\MultiplexingSampleProvider.cs" />
+    <Compile Include="NAudio\Wave\SampleProviders\NotifyingSampleProvider.cs" />
+    <Compile Include="NAudio\Wave\SampleProviders\OffsetSampleProvider.cs" />
+    <Compile Include="NAudio\Wave\SampleProviders\PanningSampleProvider.cs" />
+    <Compile Include="NAudio\Wave\SampleProviders\Pcm16BitToSampleProvider.cs" />
+    <Compile Include="NAudio\Wave\SampleProviders\Pcm24BitToSampleProvider.cs" />
+    <Compile Include="NAudio\Wave\SampleProviders\Pcm32BitToSampleProvider.cs" />
+    <Compile Include="NAudio\Wave\SampleProviders\Pcm8BitToSampleProvider.cs" />
+    <Compile Include="NAudio\Wave\SampleProviders\SampleChannel.cs" />
+    <Compile Include="NAudio\Wave\SampleProviders\SampleProviderConverterBase.cs" />
+    <Compile Include="NAudio\Wave\SampleProviders\SampleProviderConverters.cs" />
+    <Compile Include="NAudio\Wave\SampleProviders\SampleToWaveProvider.cs" />
+    <Compile Include="NAudio\Wave\SampleProviders\SampleToWaveProvider16.cs" />
+    <Compile Include="NAudio\Wave\SampleProviders\SampleToWaveProvider24.cs" />
+    <Compile Include="NAudio\Wave\SampleProviders\SignalGenerator.cs" />
+    <Compile Include="NAudio\Wave\SampleProviders\SMBPitchShiftingSampleProvider.cs" />
+    <Compile Include="NAudio\Wave\SampleProviders\StereoToMonoSampleProvider.cs" />
+    <Compile Include="NAudio\Wave\SampleProviders\VolumeSampleProvider.cs" />
+    <Compile Include="NAudio\Wave\SampleProviders\WaveToSampleProvider.cs" />
+    <Compile Include="NAudio\Wave\SampleProviders\WaveToSampleProvider64.cs" />
+    <Compile Include="NAudio\Wave\SampleProviders\WdlResamplingSampleProvider.cs" />
+    <Compile Include="NAudio\Wave\WaveExtensionMethods.cs" />
+    <Compile Include="NAudio\Wave\WaveFormats\AdpcmWaveFormat.cs" />
+    <Compile Include="NAudio\Wave\WaveFormats\Gsm610WaveFormat.cs" />
+    <Compile Include="NAudio\Wave\WaveFormats\ImaAdpcmWaveFormat.cs" />
+    <Compile Include="NAudio\Wave\WaveFormats\Mp3WaveFormat.cs" />
+    <Compile Include="NAudio\Wave\WaveFormats\OggWaveFormat.cs" />
+    <Compile Include="NAudio\Wave\WaveFormats\TrueSpeechWaveFormat.cs" />
+    <Compile Include="NAudio\Wave\WaveFormats\WaveFormat.cs" />
+    <Compile Include="NAudio\Wave\WaveFormats\WaveFormatCustomMarshaler.cs" />
+    <Compile Include="NAudio\Wave\WaveFormats\WaveFormatEncoding.cs" />
+    <Compile Include="NAudio\Wave\WaveFormats\WaveFormatExtensible.cs" />
+    <Compile Include="NAudio\Wave\WaveFormats\WaveFormatExtraData.cs" />
+    <Compile Include="NAudio\Wave\WaveFormats\WmaWaveFormat.cs" />
+    <Compile Include="NAudio\Wave\WaveInputs\IWaveIn.cs" />
+    <Compile Include="NAudio\Wave\WaveInputs\WasapiCapture.cs" />
+    <Compile Include="NAudio\Wave\WaveInputs\WasapiLoopbackCapture.cs" />
+    <Compile Include="NAudio\Wave\WaveInputs\WaveIn.cs" />
+    <Compile Include="NAudio\Wave\WaveInputs\WaveInEvent.cs" />
+    <Compile Include="NAudio\Wave\WaveOutputs\AiffFileWriter.cs" />
+    <Compile Include="NAudio\Wave\WaveOutputs\AsioAudioAvailableEventArgs.cs" />
+    <Compile Include="NAudio\Wave\WaveOutputs\AsioOut.cs" />
+    <Compile Include="NAudio\Wave\WaveOutputs\BextChunkInfo.cs" />
+    <Compile Include="NAudio\Wave\WaveOutputs\BwfWriter.cs" />
+    <Compile Include="NAudio\Wave\WaveOutputs\CueWaveFileWriter.cs" />
+    <Compile Include="NAudio\Wave\WaveOutputs\DirectSoundOut.cs" />
+    <Compile Include="NAudio\Wave\WaveOutputs\IWaveBuffer.cs" />
+    <Compile Include="NAudio\Wave\WaveOutputs\IWavePlayer.cs" />
+    <Compile Include="NAudio\Wave\WaveOutputs\IWaveProvider.cs" />
+    <Compile Include="NAudio\Wave\WaveOutputs\IWaveProviderFloat.cs" />
+    <Compile Include="NAudio\Wave\WaveOutputs\MediaFoundationEncoder.cs" />
+    <Compile Include="NAudio\Wave\WaveOutputs\PlaybackState.cs" />
+    <Compile Include="NAudio\Wave\WaveOutputs\StoppedEventArgs.cs" />
+    <Compile Include="NAudio\Wave\WaveOutputs\WasapiOut.cs" />
+    <Compile Include="NAudio\Wave\WaveOutputs\WaveBuffer.cs" />
+    <Compile Include="NAudio\Wave\WaveOutputs\WaveFileWriter.cs" />
+    <Compile Include="NAudio\Wave\WaveOutputs\WaveOut.cs" />
+    <Compile Include="NAudio\Wave\WaveOutputs\WaveOutEvent.cs" />
+    <Compile Include="NAudio\Wave\WaveProviders\BufferedWaveProvider.cs" />
+    <Compile Include="NAudio\Wave\WaveProviders\DmoEffectWaveProvider.cs" />
+    <Compile Include="NAudio\Wave\WaveProviders\MediaFoundationResampler.cs" />
+    <Compile Include="NAudio\Wave\WaveProviders\MixingWaveProvider32.cs" />
+    <Compile Include="NAudio\Wave\WaveProviders\MonoToStereoProvider16.cs" />
+    <Compile Include="NAudio\Wave\WaveProviders\MultiplexingWaveProvider.cs" />
+    <Compile Include="NAudio\Wave\WaveProviders\SilenceWaveProvider.cs" />
+    <Compile Include="NAudio\Wave\WaveProviders\StereoToMonoProvider16.cs" />
+    <Compile Include="NAudio\Wave\WaveProviders\VolumeWaveProvider16.cs" />
+    <Compile Include="NAudio\Wave\WaveProviders\Wave16toFloatProvider.cs" />
+    <Compile Include="NAudio\Wave\WaveProviders\WaveFloatTo16Provider.cs" />
+    <Compile Include="NAudio\Wave\WaveProviders\WaveInProvider.cs" />
+    <Compile Include="NAudio\Wave\WaveProviders\WaveProvider16.cs" />
+    <Compile Include="NAudio\Wave\WaveProviders\WaveProvider32.cs" />
+    <Compile Include="NAudio\Wave\WaveProviders\WaveRecorder.cs" />
+    <Compile Include="NAudio\Wave\WaveStreams\AiffFileReader.cs" />
+    <Compile Include="NAudio\Wave\WaveStreams\AudioFileReader.cs" />
+    <Compile Include="NAudio\Wave\WaveStreams\BlockAlignReductionStream.cs" />
+    <Compile Include="NAudio\Wave\WaveStreams\ComStream.cs" />
+    <Compile Include="NAudio\Wave\WaveStreams\CueList.cs" />
+    <Compile Include="NAudio\Wave\WaveStreams\CueWaveFileReader.cs" />
+    <Compile Include="NAudio\Wave\WaveStreams\ISampleNotifier.cs" />
+    <Compile Include="NAudio\Wave\WaveStreams\MediaFoundationReader.cs" />
+    <Compile Include="NAudio\Wave\WaveStreams\Mp3FileReader.cs" />
+    <Compile Include="NAudio\Wave\WaveStreams\RawSourceWaveStream.cs" />
+    <Compile Include="NAudio\Wave\WaveStreams\ResamplerDmoStream.cs" />
+    <Compile Include="NAudio\Wave\WaveStreams\RiffChunk.cs" />
+    <Compile Include="NAudio\Wave\WaveStreams\SimpleCompressorStream.cs" />
+    <Compile Include="NAudio\Wave\WaveStreams\StreamMediaFoundationReader.cs" />
+    <Compile Include="NAudio\Wave\WaveStreams\Wave32To16Stream.cs" />
+    <Compile Include="NAudio\Wave\WaveStreams\WaveChannel32.cs" />
+    <Compile Include="NAudio\Wave\WaveStreams\WaveFileReader.cs" />
+    <Compile Include="NAudio\Wave\WaveStreams\WaveFormatConversionProvider.cs" />
+    <Compile Include="NAudio\Wave\WaveStreams\WaveFormatConversionStream.cs" />
+    <Compile Include="NAudio\Wave\WaveStreams\WaveInBuffer.cs" />
+    <Compile Include="NAudio\Wave\WaveStreams\WaveMixerStream32.cs" />
+    <Compile Include="NAudio\Wave\WaveStreams\WaveOffsetStream.cs" />
+    <Compile Include="NAudio\Wave\WaveStreams\WaveOutBuffer.cs" />
+    <Compile Include="NAudio\Wave\WaveStreams\WaveStream.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AForge\Controls\Chart.resx">
+      <DependentUpon>Chart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AForge\Controls\ColorSlider.resx">
+      <DependentUpon>ColorSlider.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AForge\Controls\Histogram.resx">
+      <DependentUpon>Histogram.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AForge\Controls\HuePicker.resx">
+      <DependentUpon>HuePicker.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AForge\Controls\ManipulatorControl.resx">
+      <DependentUpon>ManipulatorControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AForge\Controls\SliderControl.resx">
+      <DependentUpon>SliderControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AForge\Controls\VideoSourcePlayer.resx">
+      <DependentUpon>VideoSourcePlayer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AForge\Video.DirectShow\VideoCaptureDeviceForm.resx">
+      <DependentUpon>VideoCaptureDeviceForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NAudio\Gui\Fader.resx">
+      <DependentUpon>Fader.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NAudio\Gui\PanSlider.resx">
+      <DependentUpon>PanSlider.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NAudio\Gui\Pot.resx">
+      <DependentUpon>Pot.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NAudio\Gui\VolumeSlider.resx">
+      <DependentUpon>VolumeSlider.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NAudio\Gui\WaveViewer.resx">
+      <DependentUpon>WaveViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NAudio\Utils\ProgressLog.resx">
+      <DependentUpon>ProgressLog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="AForge\Controls\Resources\arrow.bmp" />
+    <Content Include="AForge\Video.DirectShow\Icons\camera.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Utils\Utils.csproj">
+      <Project>{a734b4e4-a5bf-4566-ac89-fc58d02b2d5f}</Project>
+      <Name>Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

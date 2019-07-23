@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace Utils.WinForm.MediaCapture
+namespace Utils.Media.MediaCapture
 {
     public delegate void MediaCaptureEventHandler(object sender, MediaCaptureEventArgs args);
     public class MediaCaptureEventArgs : EventArgs

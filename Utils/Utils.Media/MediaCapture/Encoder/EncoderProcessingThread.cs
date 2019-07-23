@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Expression.Encoder.Live;
 using Microsoft.Expression.Encoder.ScreenCapture;
 
-namespace Utils.WinForm.MediaCapture.Encoder
+namespace Utils.Media.MediaCapture.Encoder
 {
     internal class EncoderProcessingThread //: IDisposable
     {

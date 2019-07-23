@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using AForge.Video;
 using AForge.Video.DirectShow;
-using AForge.Video.VFW;
 using NAudio.Wave;
-using TeleSharp.TL;
 
-namespace Utils.WinForm.MediaCapture.AForge
+namespace Utils.Media.MediaCapture.AForge
 {
-    public class AForgeCapture : MediaCapture, IDisposable
+    public class AForgeCapture : Media.MediaCapture.MediaCapture, IDisposable
     {
         private readonly object syncVideo = new object();
         private readonly object syncAudio = new object();

@@ -1,4 +1,4 @@
-﻿namespace Utils.WinForm.MediaCapture
+﻿namespace Utils.Media.MediaCapture
 {
     public enum MediaCaptureMode
     {

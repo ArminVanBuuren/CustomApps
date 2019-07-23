@@ -158,7 +158,7 @@
             // 
             // pictureBox
             // 
-            this.pictureBox.Image = global::Utils.WinForm.Properties.Resources.camera;
+            this.pictureBox.Image = global::Utils.Media.Properties.Resources.camera;
             this.pictureBox.Location = new System.Drawing.Point( 20, 28 );
             this.pictureBox.Name = "pictureBox";
             this.pictureBox.Size = new System.Drawing.Size( 64, 64 );

@@ -2,10 +2,10 @@
 using System.Threading;
 using NAudio.Wave;
 
-namespace Utils.WinForm.MediaCapture.NAudio
+namespace Utils.Media.MediaCapture.NAudio
 {
     //NAudio library
-    public class NAudioCapture : MediaCapture, IDisposable
+    public class NAudioCapture : Media.MediaCapture.MediaCapture, IDisposable
     {
         readonly object syncAudio = new object();
         public WaveInEvent _waveSource = null;
