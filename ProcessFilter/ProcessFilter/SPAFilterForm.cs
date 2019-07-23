@@ -444,7 +444,7 @@ namespace SPAFilter
             return (GetAsyncKeyState(key) < 0);
         }
 
-        void CallAndCheckDataGridKey(DataGridView grid, KeyEventArgs e = null)
+        async void CallAndCheckDataGridKey(DataGridView grid, KeyEventArgs e = null)
         {
             if (e != null)
             {
@@ -472,6 +472,7 @@ namespace SPAFilter
                     {
                         if (!GetCellItemSelectedRows(grid, out var filesPath))
                             return;
+
                         if(filesPath.Count == 0)
                             return;
                     
@@ -489,7 +490,14 @@ namespace SPAFilter
                             }
 
                             RefreshStatus();
-                            FilterButton_Click(this, EventArgs.Empty);
+
+                            if (IsFiltered)
+                                FilterButton_Click(this, EventArgs.Empty);
+                            else if (grid == dataGridServiceInstances)
+                            {
+                                await _spaFilter.ReloadActivatorsAsync();
+                                AssignActivator();
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -1130,6 +1138,8 @@ namespace SPAFilter
                     if (cell != null)
                         result.Add(cell.ToString());
                 }
+
+                result = result.Distinct().ToList();
             }
             else
             {

@@ -152,7 +152,7 @@ namespace SPAFilter.SPA
 
                 #region Filter Scenarios
 
-                ReinitializationActivators();
+                ReloadActivators();
                 Scenarios = CollectionTemplate<Scenario>.ToCollection(Scenarios.Intersect(fileteredOperations, new OperationsComparer()).Cast<Scenario>().OrderBy(p => p.HostTypeName).ThenBy(p => p.Name), false);
 
                 // проверка на существование сценария для операции
@@ -371,7 +371,13 @@ namespace SPAFilter.SPA
             });
         }
 
-        void ReinitializationActivators()
+
+        public async Task ReloadActivatorsAsync()
+        {
+            await Task.Factory.StartNew(ReloadActivators);
+        }
+
+        void ReloadActivators()
         {
             foreach (var activator in _activators)
             {
