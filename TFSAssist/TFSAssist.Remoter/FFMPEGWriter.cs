@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using AForge.Video.FFMPEG;
-using Utils.WinForm.MediaCapture;
+using Utils.Media.MediaCapture;
 
 namespace TFSAssist.Remoter
 {

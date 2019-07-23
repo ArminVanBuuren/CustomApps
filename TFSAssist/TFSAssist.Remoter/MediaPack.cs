@@ -6,11 +6,11 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Utils;
-using Utils.WinForm.MediaCapture;
-using Utils.WinForm.MediaCapture.AForge;
-using Utils.WinForm.MediaCapture.Encoder;
-using Utils.WinForm.MediaCapture.NAudio;
-using Utils.WinForm.MediaCapture.Screen;
+using Utils.Media.MediaCapture;
+using Utils.Media.MediaCapture.AForge;
+using Utils.Media.MediaCapture.Encoder;
+using Utils.Media.MediaCapture.NAudio;
+using Utils.Media.MediaCapture.Screen;
 
 namespace TFSAssist.Remoter
 {
