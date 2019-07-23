@@ -30,7 +30,7 @@ namespace Utils.AppUpdater
         /// <returns>The computed hash</returns>
         public static string HashFile(string filePath, HashType algo)
         {
-            string fileSource = filePath;
+            var fileSource = filePath;
             var res = IO.WhoIsLocking(fileSource);
             if (res.Count > 0)
             {
@@ -38,7 +38,7 @@ namespace Utils.AppUpdater
                 File.Copy(filePath, fileSource, true);
             }
 
-            using (FileStream stream = new FileStream(fileSource, FileMode.Open))
+            using (var stream = new FileStream(fileSource, FileMode.Open))
             {
                 switch (algo)
                 {
@@ -61,9 +61,9 @@ namespace Utils.AppUpdater
         /// <returns>Hash as string</returns>
         private static string MakeHashString(byte[] hash)
         {
-            StringBuilder s = new StringBuilder();
+            var s = new StringBuilder();
 
-            foreach (byte b in hash)
+            foreach (var b in hash)
                 s.Append(b.ToString("x2").ToLower());
 
             return s.ToString();

@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Utils.CollectionHelper
 {
@@ -15,7 +11,7 @@ namespace Utils.CollectionHelper
         public static int Compare(Hashtable table1, Hashtable table2)
         {
             var de = table1.GetEnumerator();
-            while (de.MoveNext() == true)
+            while (de.MoveNext())
             {
                 if (table2.ContainsKey(de.Key) == false)
                     return 1;

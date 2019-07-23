@@ -1,6 +1,6 @@
 ﻿using TeleSharp.TL;
 
-namespace Utils.Telegram
+namespace Utils.Messaging.Telegram
 {
     public delegate void TLControlhandler(object sender, TLControlEventArgs args);
 

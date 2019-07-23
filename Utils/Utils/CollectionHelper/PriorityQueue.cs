@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Utils.CollectionHelper
 {
@@ -93,7 +91,7 @@ namespace Utils.CollectionHelper
         {
             while (2 * k <= Count)
             {
-                int j = 2 * k;
+                var j = 2 * k;
 
                 if (j < Count && Less(AtIndex(j), AtIndex(j + 1)))
                     j++;
@@ -136,7 +134,7 @@ namespace Utils.CollectionHelper
 
         public IEnumerator<T> GetEnumerator()
         {
-            IList<T> result = Dump();
+            var result = Dump();
             return result.GetEnumerator();
         }
 
@@ -146,7 +144,7 @@ namespace Utils.CollectionHelper
             return result.GetEnumerator();
         }
 
-        private IList<T> Dump()
+        private IEnumerable<T> Dump()
         {
             lock (_heap)
             {

@@ -10,7 +10,7 @@ using NAudio.Wave;
 
 namespace Utils.Media.MediaCapture.AForge
 {
-    public class AForgeCapture : Media.MediaCapture.MediaCapture, IDisposable
+    public class AForgeCapture : MediaCapture, IDisposable
     {
         private readonly object syncVideo = new object();
         private readonly object syncAudio = new object();
@@ -99,17 +99,17 @@ namespace Utils.Media.MediaCapture.AForge
                 throw new MediaCaptureRunningException("You must stop the previous process first!");
 
             fake_frames_Count = 0;
-            string commonDestination = Path.Combine(DestinationDir, $"{DateTime.Now:ddHHmmss}_{STRING.RandomString(15)}");
+            var commonDestination = Path.Combine(DestinationDir, $"{DateTime.Now:ddHHmmss}_{STRING.RandomString(15)}");
 
 
             // aforge
             _frameWriter.Refresh();
-            string destinationVideoPath = commonDestination + _frameWriter.VideoExtension;
+            var destinationVideoPath = commonDestination + _frameWriter.VideoExtension;
             _frameWriter.Open(destinationVideoPath, VideoDevice.Width, VideoDevice.Height);
 
 
             // audio
-            string destinationAudioPath = commonDestination + ".wav";
+            var destinationAudioPath = commonDestination + ".wav";
             try
             {
                 _waveSource = new WaveInEvent
@@ -160,7 +160,7 @@ namespace Utils.Media.MediaCapture.AForge
                     // ignored
                 }
 
-                DateTime startCapture = DateTime.Now;
+                var startCapture = DateTime.Now;
                 while (DateTime.Now.Subtract(startCapture).TotalSeconds < SecondsRecordDuration)
                 {
                     if (!MainThread.IsAlive)
@@ -186,7 +186,7 @@ namespace Utils.Media.MediaCapture.AForge
 
             Stop();
 
-            if(result?.Error != null)
+            if(result.Error != null)
                 DeleteRecordedFile(new[] { destinationVideo, destinationAudio });
 
             RecordCompleted(result);
@@ -227,7 +227,7 @@ namespace Utils.Media.MediaCapture.AForge
                 getImage.NewFrame += GetPictureFrame;
                 getImage.Start();
 
-                DateTime startCapture = DateTime.Now;
+                var startCapture = DateTime.Now;
                 while (result == null && DateTime.Now.Subtract(startCapture).TotalSeconds < 10)
                 {
                     Task.Delay(100);
@@ -267,7 +267,7 @@ namespace Utils.Media.MediaCapture.AForge
             lock (syncVideo)
             {
                 _finalVideo = VideoDevice.Device;
-                _finalVideo.NewFrame += new NewFrameEventHandler(FinalVideo_NewFrame);
+                _finalVideo.NewFrame += FinalVideo_NewFrame;
                 _finalVideo.Start();
             }
         }
@@ -411,7 +411,7 @@ namespace Utils.Media.MediaCapture.AForge
 
         public override string ToString()
         {
-            return $"{base.ToString()}\r\nVideo=[{VideoDevice.ToString()}]\r\n{_frameWriter?.ToString()}".Trim();
+            return $"{base.ToString()}\r\nVideo=[{VideoDevice}]\r\n{_frameWriter}".Trim();
         }
     }
 }

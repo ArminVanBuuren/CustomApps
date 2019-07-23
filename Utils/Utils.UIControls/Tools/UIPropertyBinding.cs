@@ -1,19 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
 
 namespace Utils.UIControls.Tools
@@ -24,12 +15,8 @@ namespace Utils.UIControls.Tools
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
-
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            var handler = PropertyChanged;
+            handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private T _value;
@@ -37,7 +24,7 @@ namespace Utils.UIControls.Tools
         [XmlAttribute]
         public virtual T Value
         {
-            get { return _value; }
+            get => _value;
             set
             {
                 if (_value != null && _value.Equals(value))
@@ -67,7 +54,7 @@ namespace Utils.UIControls.Tools
         public static void DefaultBinding(DependencyObject target, DependencyProperty dp, INotifyPropertyChanged notify, int toolTipShowTimeout = 2000)
         {
             ToolTipService.SetInitialShowDelay(target, toolTipShowTimeout);
-            Binding myBinding = new Binding
+            var myBinding = new Binding
                                 {
                                     Source = notify,
                                     // Value свойства класса SettingsValue<T>
@@ -86,11 +73,11 @@ namespace Utils.UIControls.Tools
         /// <returns></returns>
         public static T XamlClone<T>(T source)
         {
-            string savedObject = System.Windows.Markup.XamlWriter.Save(source);
+            var savedObject = System.Windows.Markup.XamlWriter.Save(source);
 
             // Load the XamlObject
-            StringReader stringReader = new StringReader(savedObject);
-            System.Xml.XmlReader xmlReader = System.Xml.XmlReader.Create(stringReader);
+            var stringReader = new StringReader(savedObject);
+            var xmlReader = System.Xml.XmlReader.Create(stringReader);
             T target = (T)System.Windows.Markup.XamlReader.Load(xmlReader);
 
             return target;

@@ -21,7 +21,7 @@ namespace Utils.XmlRtfStyle
             {
                 return 0;
             }
-            string item = $@"\red{r}\green{g}\blue{b};";
+            var item = $@"\red{r}\green{g}\blue{b};";
             if (!_palette.Contains(item))
             {
                 _palette.Add(item);
@@ -88,8 +88,8 @@ namespace Utils.XmlRtfStyle
 
             if (str != string.Empty)
             {
-                string str2 = string.Empty;
-                string str3 = string.Empty;
+                var str2 = string.Empty;
+                var str3 = string.Empty;
                 if (str == "ActionNameAlias")
                 {
                     str2 = string.Empty;
@@ -134,7 +134,7 @@ namespace Utils.XmlRtfStyle
 
         private string ReplaceSpecialSymbols(string str)
         {
-            bool flag = str.EndsWith("\n");
+            var flag = str.EndsWith("\n");
             str = str.Replace(@"\", @"\\");
             str = str.Replace("{", @"\{");
             str = str.Replace("}", @"\}");
@@ -167,9 +167,9 @@ namespace Utils.XmlRtfStyle
 
         public void SetForeColor(uint color)
         {
-            byte r = (byte)((color & 0xff0000) >> 0x10);
-            byte g = (byte)((color & 0xff00) >> 8);
-            byte b = (byte)(color & 0xff);
+            var r = (byte)((color & 0xff0000) >> 0x10);
+            var g = (byte)((color & 0xff00) >> 8);
+            var b = (byte)(color & 0xff);
             SetForeColor(r, g, b);
         }
 
@@ -204,7 +204,7 @@ namespace Utils.XmlRtfStyle
 
         public override string ToString()
         {
-            StringBuilder builder = new StringBuilder(@"{\rtf1\unicode\ansicpg1251\deff0\deflang1033");
+            var builder = new StringBuilder(@"{\rtf1\unicode\ansicpg1251\deff0\deflang1033");
             builder.Append(@"{\fonttbl");
             for (int i = 0; i < _fontTable.Count; i++)
             {
@@ -214,7 +214,7 @@ namespace Utils.XmlRtfStyle
             if (_palette.Count > 0)
             {
                 builder.Append(@"{\colortbl ;");
-                foreach (string str in _palette)
+                foreach (var str in _palette)
                 {
                     builder.Append(str);
                 }

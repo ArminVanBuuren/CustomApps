@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Utils.ConditionEx.Base;
 using Utils.ConditionEx.Collections;
 
 namespace Utils.ConditionEx
@@ -20,7 +19,7 @@ namespace Utils.ConditionEx
                 if ((ExpressionList.Count > 0 && (ConditionList.Count > 0 || LogicalGroup == LogicalGroupType.NaN)) || (ExpressionList.Count == 0 && ConditionList.Count == 0))
                     return false;
 
-                foreach (Expression bc in ExpressionList)
+                foreach (var bc in ExpressionList)
                 {
                     if (!bc.IsValid)
                         return false;
@@ -41,9 +40,9 @@ namespace Utils.ConditionEx
                     if (LogicalGroup == LogicalGroupType.NaN)
                         return false;
 
-                    int i = 0;
-                    int iOrs = 0;
-                    foreach (Expression bc in ExpressionList)
+                    var i = 0;
+                    var iOrs = 0;
+                    foreach (var bc in ExpressionList)
                     {
                         if (!bc.ConditionResult)
                         {
@@ -66,8 +65,8 @@ namespace Utils.ConditionEx
         {
             get
             {
-                int i = 0;
-                string result = string.Empty;
+                var i = 0;
+                var result = string.Empty;
 
                 switch (LogicalGroup)
                 {
@@ -79,7 +78,7 @@ namespace Utils.ConditionEx
                         foreach (ICondition conditionEx in ExpressionList)
                         {
                             i++;
-                            result = string.Format("{0}( {1} ){2}", result, conditionEx.StringResult, (i < ExpressionList.Count) ? $" {LogicalGroup:G} " : string.Empty);
+                            result = $"{result}( {conditionEx.StringResult} ){((i < ExpressionList.Count) ? $" {LogicalGroup:G} " : string.Empty)}";
                         }
                         return result;
                 }

@@ -55,8 +55,8 @@ namespace Utils.AppUpdater
         {
             Project = project;
             Name = STRING.RandomStringNumbers(15) + ".zip";
-            string packFileDestinationPath = Path.Combine(destinationDirPath, Name);
-            string packFileTempPath = Path.GetTempFileName();
+            var packFileDestinationPath = Path.Combine(destinationDirPath, Name);
+            var packFileTempPath = Path.GetTempFileName();
 
             try
             {
@@ -84,16 +84,16 @@ namespace Utils.AppUpdater
 
         public static Dictionary<string, FileBuildInfo> GetLocalVersions(Assembly runningApp)
         {
-            string assembliesDirPath = runningApp.GetDirectory();
+            var assembliesDirPath = runningApp.GetDirectory();
             return GetLocalVersions(assembliesDirPath, runningApp.Location);
         }
 
         internal static Dictionary<string, FileBuildInfo> GetLocalVersions(string assembliesDirPath, string runningAppLocation = null)
         {
-            Dictionary<string, FileBuildInfo> localVersions = new Dictionary<string, FileBuildInfo>(StringComparer.CurrentCultureIgnoreCase);
-            foreach (string file in Directory.GetFiles(assembliesDirPath, "*.*", SearchOption.AllDirectories))
+            var localVersions = new Dictionary<string, FileBuildInfo>(StringComparer.CurrentCultureIgnoreCase);
+            foreach (var file in Directory.GetFiles(assembliesDirPath, "*.*", SearchOption.AllDirectories))
             {
-                FileBuildInfo localFileInfo = new FileBuildInfo(file, assembliesDirPath, file.Like(runningAppLocation));
+                var localFileInfo = new FileBuildInfo(file, assembliesDirPath, file.Like(runningAppLocation));
                 localVersions.Add(localFileInfo.Location, localFileInfo);
             }
 
@@ -102,11 +102,11 @@ namespace Utils.AppUpdater
 
         void SerializeAndDeserialize(BuildsInfo versions)
         {
-            XmlSerializer xsSubmit = new XmlSerializer(typeof(BuildsInfo));
+            var xsSubmit = new XmlSerializer(typeof(BuildsInfo));
             string xml;
             using (var sww = new StringWriter())
             {
-                using (XmlWriter writer = XmlWriter.Create(sww))
+                using (var writer = XmlWriter.Create(sww))
                 {
                     xsSubmit.Serialize(writer, versions);
                     xml = sww.ToString();

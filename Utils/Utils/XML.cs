@@ -427,7 +427,7 @@ namespace Utils
                     source.Append('>');
 
                     nested += 3;
-                    bool addNewLine = true;
+                    var addNewLine = true;
                     foreach (XmlNode node2 in node.ChildNodes)
                     {
                         addNewLine = ProcessXmlInnerText(node2, source, nested);
@@ -577,19 +577,19 @@ namespace Utils
             //StringBuilder xmlTextBld = new StringBuilder();
             //StringBuilder sourceTextBld = new StringBuilder();
 
-            int indexStartEscapeWhiteSpace = -1;
-            int indexEndEscapeWhiteSpace = -1;
+            var indexStartEscapeWhiteSpace = -1;
+            var indexEndEscapeWhiteSpace = -1;
 
-            int docIndex = innerText.Length - targetText.TrimStart().Length;
-            int findedRange = innerText.Length;
+            var docIndex = innerText.Length - targetText.TrimStart().Length;
+            var findedRange = innerText.Length;
 
-            int j = 0;
+            var j = 0;
             for (int i = 0; i < innerText.Length; i++)
             {
                 if (i == docIndex)
                     indexStartEscapeWhiteSpace = j;
 
-                char ch = innerText[i];
+                var ch = innerText[i];
                 if (char.IsWhiteSpace(ch))
                     continue;
 
@@ -611,7 +611,7 @@ namespace Utils
             var charName = new StringBuilder();
             for (int i = 0; i < sourceText.Length; i++)
             {
-                char ch = sourceText[i];
+                var ch = sourceText[i];
 
                 if (isOpen > 0)
                 {

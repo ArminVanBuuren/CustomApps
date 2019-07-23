@@ -7,24 +7,24 @@ namespace Utils.Handles
     /// </summary>
     public static class CommonRes
     {
-        private static global::System.Resources.ResourceManager resourceMan;
+        private static System.Resources.ResourceManager resourceMan;
 
-        [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public static System.Resources.ResourceManager ResourceManager
         {
             get
             {
-                if (object.ReferenceEquals(resourceMan, null))
+                if (ReferenceEquals(resourceMan, null))
                 {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FORIS.ServiceProvisioning.Common.Managing.CommonRes", typeof(CommonRes).Assembly);
+                    var temp = new System.Resources.ResourceManager("FORIS.ServiceProvisioning.Common.Managing.CommonRes", typeof(CommonRes).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
             }
         }
 
-        [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture { get; set; }
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public static System.Globalization.CultureInfo Culture { get; set; }
 
         /// <summary>
         ///   Looks up a localized string similar to Set additional service name.

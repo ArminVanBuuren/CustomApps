@@ -4,7 +4,7 @@
     {
         public WOSVersion()
         {
-            System.OperatingSystem osInfo = System.Environment.OSVersion;
+            var osInfo = System.Environment.OSVersion;
             switch (osInfo.Platform)
             {
                 case System.PlatformID.Win32Windows:

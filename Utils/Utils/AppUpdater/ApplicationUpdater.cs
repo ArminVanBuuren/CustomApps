@@ -3,7 +3,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Cache;
 using System.Reflection;
-using System.Runtime.Remoting.Messaging;
 using System.Timers;
 using Utils.AppUpdater.Updater;
 
@@ -107,19 +106,19 @@ namespace Utils.AppUpdater
                     if (Status == AutoUpdaterStatus.Processing)
                         return;
 
-                    Uri versionsInfo = new Uri($"{ProjectUri}/{BuildsInfo.FILE_NAME}");
-                    string contextStr = WEB.WebHttpStringData(versionsInfo, out var responceHttpCode, HttpRequestCacheLevel.NoCacheNoStore);
+                    var versionsInfo = new Uri($"{ProjectUri}/{BuildsInfo.FILE_NAME}");
+                    var contextStr = WEB.WebHttpStringData(versionsInfo, out var responceHttpCode, HttpRequestCacheLevel.NoCacheNoStore);
                     if (responceHttpCode == HttpStatusCode.OK)
                     {
-                        BuildsInfo remoteBuilds = BuildsInfo.Deserialize(contextStr);
-                        BuildPackInfo projectBuildPack = remoteBuilds.Packs.FirstOrDefault(p => p.Project == ProjectName);
+                        var remoteBuilds = BuildsInfo.Deserialize(contextStr);
+                        var projectBuildPack = remoteBuilds.Packs.FirstOrDefault(p => p.Project == ProjectName);
                         //Dictionary<string, FileBuildInfo> serverVersions = ProjectBuildPack.ToDictionary(x => x.Location, x => x);
                         if (projectBuildPack?.Name != PrevPackName && projectBuildPack?.Builds.Count > 0)
                         {
-                            BuildUpdaterCollection control = new BuildUpdaterCollection(RunningApp, ProjectUri, projectBuildPack);
+                            var control = new BuildUpdaterCollection(RunningApp, ProjectUri, projectBuildPack);
                             if (control.Count > 0)
                             {
-                                ApplicationFetchingArgs responce = GetResponseFromControlObject(OnFetch, new ApplicationFetchingArgs(control));
+                                var responce = GetResponseFromControlObject(OnFetch, new ApplicationFetchingArgs(control));
                                 if (responce.Result == UpdateBuildResult.Fetch)
                                 {
                                     ProcessingStatus(); // устанавливаем Status = AutoUpdaterStatus.Processing, т.к. следующим шагом начнется процесс скачивания и обновления
@@ -302,7 +301,7 @@ namespace Utils.AppUpdater
             catch (Exception ex)
             {
                 OnProcessingError?.Invoke(this, new ApplicationUpdatingArgs(control, ex, "Error when trying commit and pull!"));
-                control?.Dispose();
+                control.Dispose();
                 ReturnBackStatus();
             }
         }

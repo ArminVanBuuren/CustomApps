@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Utils.Handles
 {
@@ -19,7 +15,7 @@ namespace Utils.Handles
 
         public WebDownload(int timeout)
         {
-            this.Timeout = timeout;
+            Timeout = timeout;
         }
 
         protected override WebRequest GetWebRequest(Uri address)
@@ -27,7 +23,7 @@ namespace Utils.Handles
             var request = base.GetWebRequest(address);
             if (request != null)
             {
-                request.Timeout = this.Timeout;
+                request.Timeout = Timeout;
             }
             return request;
         }

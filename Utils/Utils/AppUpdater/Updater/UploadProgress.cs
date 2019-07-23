@@ -16,8 +16,8 @@ namespace Utils.AppUpdater.Updater
         {
             get
             {
-                IO.FormatBytes(UploadedBytes, out double upload);
-                IO.FormatBytes(TotalBytes, out double total);
+                IO.FormatBytes(UploadedBytes, out var upload);
+                IO.FormatBytes(TotalBytes, out var total);
                 if (total == 0)
                     return 0;
                 return int.Parse(((upload / total) * 100).ToString(CultureInfo.InvariantCulture));

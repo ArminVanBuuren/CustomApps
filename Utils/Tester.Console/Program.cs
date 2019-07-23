@@ -19,7 +19,7 @@ using Utils.CollectionHelper;
 using Utils.ConditionEx;
 using Utils.Crypto;
 using Utils.Handles;
-using Utils.Telegram;
+using Utils.Messaging.Telegram;
 
 namespace Tester.Console
 {

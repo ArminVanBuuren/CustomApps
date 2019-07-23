@@ -5,7 +5,7 @@ using NAudio.Wave;
 namespace Utils.Media.MediaCapture.NAudio
 {
     //NAudio library
-    public class NAudioCapture : Media.MediaCapture.MediaCapture, IDisposable
+    public class NAudioCapture : MediaCapture, IDisposable
     {
         readonly object syncAudio = new object();
         public WaveInEvent _waveSource = null;
@@ -28,13 +28,13 @@ namespace Utils.Media.MediaCapture.NAudio
             _waveSource.DataAvailable += WaveSource_DataAvailable;
             _waveSource.RecordingStopped += WaveSource_RecordingStopped;
 
-            string destinationFilePath = GetNewVideoFilePath(fileName, ".wav");
+            var destinationFilePath = GetNewVideoFilePath(fileName, ".wav");
             lock (syncAudio)
             {
                 _waveFileWriter = new WaveFileWriter(destinationFilePath, _waveSource.WaveFormat);
             }
 
-            var asyncRec = new Action<string>(DoRecordingAsync).BeginInvoke(destinationFilePath, null, null);
+            new Action<string>(DoRecordingAsync).BeginInvoke(destinationFilePath, null, null);
         }
 
         void DoRecordingAsync(string destinationFilePath)
@@ -46,7 +46,7 @@ namespace Utils.Media.MediaCapture.NAudio
             {
                 _waveSource?.StartRecording();
 
-                DateTime startCapture = DateTime.Now;
+                var startCapture = DateTime.Now;
                 while (DateTime.Now.Subtract(startCapture).TotalSeconds < SecondsRecordDuration)
                 {
                     Thread.Sleep(100);
@@ -61,7 +61,7 @@ namespace Utils.Media.MediaCapture.NAudio
 
             Stop();
 
-            if (result?.Error != null)
+            if (result.Error != null)
                 DeleteRecordedFile(new[] { destinationFilePath });
 
             RecordCompleted(result);

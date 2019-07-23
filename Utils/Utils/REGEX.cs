@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Utils
 {
@@ -16,14 +12,12 @@ namespace Utils
         /// <returns></returns>
         public static RegexOptions GetRegOptions(string inputStringOptions)
         {
-            RegexOptions ropt = RegexOptions.None;
-            int i = 0;
-            foreach (string opt in inputStringOptions.Split('|'))
+            var ropt = RegexOptions.None;
+            foreach (var opt in inputStringOptions.Split('|'))
             {
-                RegexOptions rpt = GetRegOptionsEnum(opt.Trim());
+                var rpt = GetRegOptionsEnum(opt.Trim());
                 if (rpt != RegexOptions.None)
                     ropt |= rpt;
-                i = 0;
             }
             return ropt;
         }

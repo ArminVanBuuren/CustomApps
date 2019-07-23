@@ -25,7 +25,7 @@ namespace Utils.ConditionEx.Collections
         {
             get
             {
-                foreach (ConditionBlock condition in this)
+                foreach (var condition in this)
                 {
                     if (!condition.ConditionResult)
                         return false;
@@ -39,8 +39,8 @@ namespace Utils.ConditionEx.Collections
         {
             get
             {
-                int i = 0;
-                string result = string.Empty;
+                var i = 0;
+                var result = string.Empty;
                 foreach (ICondition condition in this)
                 {
                     i++;

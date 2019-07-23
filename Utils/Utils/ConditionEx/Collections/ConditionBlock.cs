@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Utils.ConditionEx.Base;
-using static Utils.TYPES;
 
 namespace Utils.ConditionEx.Collections
 {
@@ -13,7 +11,7 @@ namespace Utils.ConditionEx.Collections
         {
             get
             {
-                foreach (Condition condition in this)
+                foreach (var condition in this)
                     if (condition.Operator == ConditionOperatorType.Unknown)
                         return false;
 
@@ -44,9 +42,9 @@ namespace Utils.ConditionEx.Collections
         {
             get
             {
-                string result = string.Empty;
-                int i = 0;
-                foreach (Condition condition in this)
+                var result = string.Empty;
+                var i = 0;
+                foreach (var condition in this)
                 {
                     if (condition.Operator == ConditionOperatorType.Unknown)
                         continue;

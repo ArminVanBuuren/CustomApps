@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -86,10 +85,10 @@ namespace Utils.WinForm.DataGridViewHelper
 
             var i1 = 0;
             var columnList = new List<DGVColumn>();
-            foreach (PropertyInfo prop in props)
+            foreach (var prop in props)
             {
-                object[] attrs = prop.GetCustomAttributes(true);
-                foreach (object attr in attrs)
+                var attrs = prop.GetCustomAttributes(true);
+                foreach (var attr in attrs)
                 {
                     if (attr is DGVColumnAttribute columnAttr)
                     {
@@ -111,7 +110,7 @@ namespace Utils.WinForm.DataGridViewHelper
 
             var i2 = 0;
             var positionOfColumn = new Dictionary<string, KeyValuePair<int, DGVColumn>>(StringComparer.CurrentCultureIgnoreCase);
-            foreach (DGVColumn column in columnList)
+            foreach (var column in columnList)
             {
                 table.Columns.Add(column.Attribute.ColumnName, column.PropertyType);
                 positionOfColumn.Add(column.PropertyName, new KeyValuePair<int, DGVColumn>(i2++, column));
@@ -124,11 +123,11 @@ namespace Utils.WinForm.DataGridViewHelper
                 var props2 = tp.GetProperties(PropertyFlags);
                 var objs = new object[columnsCount];
 
-                foreach (PropertyInfo prop in props2)
+                foreach (var prop in props2)
                 {
                     if (positionOfColumn.TryGetValue(prop.Name, out var pos))
                     {
-                        object result = prop.GetValue(instance, null);
+                        var result = prop.GetValue(instance, null);
                         objs[pos.Key] = result;
                     }
                 }
@@ -150,7 +149,7 @@ namespace Utils.WinForm.DataGridViewHelper
 
                 grid.BeginInit();
                 grid.DataSource = table;
-                foreach (DGVColumn column in columnList)
+                foreach (var column in columnList)
                 {
                     if (column.Attribute.Visible)
                         continue;

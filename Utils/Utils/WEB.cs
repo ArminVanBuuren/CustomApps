@@ -32,11 +32,11 @@ namespace Utils
 
         static WEB()
         {
-            Type type = typeof(HttpWebRequest);
-            foreach (string header in RestrictedHeaders)
+            var type = typeof(HttpWebRequest);
+            foreach (var header in RestrictedHeaders)
             {
-                string propertyName = header.Replace("-", "");
-                PropertyInfo headerProperty = type.GetProperty(propertyName);
+                var propertyName = header.Replace("-", "");
+                var headerProperty = type.GetProperty(propertyName);
                 HeaderProperties[header] = headerProperty;
             }
         }
@@ -45,7 +45,7 @@ namespace Utils
         {
             if (HeaderProperties.ContainsKey(name))
             {
-                PropertyInfo property = HeaderProperties[name];
+                var property = HeaderProperties[name];
                 if (property.PropertyType == typeof(DateTime))
                     property.SetValue(request, DateTime.Parse(value), null);
                 else if (property.PropertyType == typeof(bool))
@@ -70,7 +70,7 @@ namespace Utils
         {
             httpResponceCode = HttpStatusCode.BadRequest;
 
-            using (HttpWebResponse response = (HttpWebResponse) GetWebResponse(uri, cashLevel))
+            using (var response = (HttpWebResponse) GetWebResponse(uri, cashLevel))
             {
                 if (response == null)
                     return null;
@@ -79,20 +79,20 @@ namespace Utils
                 if (response.StatusCode != HttpStatusCode.OK)
                     return null;
 
-                Stream receiveStream = response.GetResponseStream();
+                var receiveStream = response.GetResponseStream();
                 if (receiveStream == null)
                     return null;
 
                 if (response.CharacterSet == null)
                 {
-                    using (StreamReader readStream = new StreamReader(receiveStream))
+                    using (var readStream = new StreamReader(receiveStream))
                     {
                         return readStream.ReadToEnd();
                     }
                 }
                 else
                 {
-                    using (StreamReader readStream = new StreamReader(receiveStream, Encoding.GetEncoding(response.CharacterSet)))
+                    using (var readStream = new StreamReader(receiveStream, Encoding.GetEncoding(response.CharacterSet)))
                     {
                         return readStream.ReadToEnd();
                     }
@@ -110,7 +110,7 @@ namespace Utils
         public static HttpWebResponse GetHttpWebResponse(string uri, NetworkCredential autorization = null, HttpRequestCacheLevel cashLevel = HttpRequestCacheLevel.Default)
         {
             SetDefaultPolicy(true, cashLevel);
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+            var request = (HttpWebRequest)WebRequest.Create(uri);
             return GetHttpWebResponse(request, autorization, cashLevel);
         }
 
@@ -124,7 +124,7 @@ namespace Utils
         public static HttpWebResponse GetHttpWebResponse(Uri uri, NetworkCredential autorization = null, HttpRequestCacheLevel cashLevel = HttpRequestCacheLevel.Default)
         {
             SetDefaultPolicy(true, cashLevel);
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+            var request = (HttpWebRequest)WebRequest.Create(uri);
             return GetHttpWebResponse(request, autorization, cashLevel);
         }
 
@@ -140,9 +140,9 @@ namespace Utils
                 request.Method = "GET";
             }
 
-            HttpRequestCachePolicy cachePolicy = new HttpRequestCachePolicy(cashLevel); // Define a cache policy for this request only. 
+            var cachePolicy = new HttpRequestCachePolicy(cashLevel); // Define a cache policy for this request only. 
             request.CachePolicy = cachePolicy;
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            var response = (HttpWebResponse)request.GetResponse();
             return response;
         }
 
@@ -155,7 +155,7 @@ namespace Utils
         public static WebResponse GetWebResponse(string uri, HttpRequestCacheLevel cashLevel = HttpRequestCacheLevel.Default)
         {
             SetDefaultPolicy(true, cashLevel);
-            WebRequest request = WebRequest.Create(uri);
+            var request = WebRequest.Create(uri);
             return GetWebResponse(request, cashLevel);
         }
 
@@ -168,22 +168,22 @@ namespace Utils
         public static WebResponse GetWebResponse(Uri uri, HttpRequestCacheLevel cashLevel = HttpRequestCacheLevel.Default)
         {
             SetDefaultPolicy(true, cashLevel);
-            WebRequest request = WebRequest.Create(uri);
+            var request = WebRequest.Create(uri);
             return GetWebResponse(request, cashLevel);
         }
 
         static WebResponse GetWebResponse(WebRequest request, HttpRequestCacheLevel cashLevel)
         {
             request.SetRawHeader("User-Agent", "Mozilla/5.0"); // некоторые сайты не дают к себе доступ если клиент использует неизвестный браузер
-            HttpRequestCachePolicy cachePolicy = new HttpRequestCachePolicy(cashLevel); // Define a cache policy for this request only. 
+            var cachePolicy = new HttpRequestCachePolicy(cashLevel); // Define a cache policy for this request only. 
             request.CachePolicy = cachePolicy;
-            WebResponse response = request.GetResponse();
+            var response = request.GetResponse();
             return response;
         }
 
         public static HtmlDocument GetHtmlDocument(this WebResponse webResponce)
         {
-            HtmlDocument htmlDoc = new HtmlDocument();
+            var htmlDoc = new HtmlDocument();
             htmlDoc.Load(webResponce.GetResponseStream());
             return htmlDoc;
         }
@@ -199,7 +199,7 @@ namespace Utils
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
             //Set a default policy level for the "http:" and "https" schemes.
-            HttpRequestCachePolicy policy = new HttpRequestCachePolicy(defaultLevel);
+            var policy = new HttpRequestCachePolicy(defaultLevel);
             HttpWebRequest.DefaultCachePolicy = policy;
 
             // Сертификат 
@@ -224,7 +224,7 @@ namespace Utils
             {
                 if (chain != null && chain.ChainStatus != null)
                 {
-                    foreach (System.Security.Cryptography.X509Certificates.X509ChainStatus status in chain.ChainStatus)
+                    foreach (var status in chain.ChainStatus)
                     {
                         if ((certificate.Subject == certificate.Issuer) && (status.Status == System.Security.Cryptography.X509Certificates.X509ChainStatusFlags.UntrustedRoot))
                         {

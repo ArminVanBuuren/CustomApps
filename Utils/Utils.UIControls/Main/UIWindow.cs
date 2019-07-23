@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics.Eventing.Reader;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
@@ -41,11 +40,11 @@ namespace Utils.UIControls.Main
 
         void CheckTitle(string value)
         {
-            var topBorderButt = this.Template.FindName("TopBorderTitButt", this);
+            var topBorderButt = Template.FindName("TopBorderTitButt", this);
             if (!(topBorderButt is Grid))
                 return;
 
-            Grid res = (Grid)topBorderButt;
+            var res = (Grid)topBorderButt;
             if (string.IsNullOrEmpty(value))
                 res.Visibility = Visibility.Collapsed;
             else
@@ -130,13 +129,13 @@ namespace Utils.UIControls.Main
 
         void MaxWindowImage(UIWindow window)
         {
-            Image imageIcon = (Image)window.Template.FindName("Icon", window);
+            var imageIcon = (Image)window.Template.FindName("Icon", window);
             imageIcon.Margin = new Thickness(4, -2, 0, 2);
         }
 
         void MinWindowImage(UIWindow window)
         {
-            Image imageIcon = (Image)window.Template.FindName("Icon", window);
+            var imageIcon = (Image)window.Template.FindName("Icon", window);
             imageIcon.Margin = new Thickness(4, -10, 0, 7);
         }
 
@@ -170,14 +169,14 @@ namespace Utils.UIControls.Main
 
         private void DisableUIWindowMoving(object sender, EventArgs e)
         {
-            WindowInteropHelper helper = new WindowInteropHelper(this);
-            HwndSource source = HwndSource.FromHwnd(helper.Handle);
+            var helper = new WindowInteropHelper(this);
+            var source = HwndSource.FromHwnd(helper.Handle);
             source?.AddHook(UIControls32.WndProc);
         }
 
         void UIWindowLoaded(object sender, RoutedEventArgs e)
         {
-            UIWindow mainWindow = this;
+            var mainWindow = this;
 
             CheckTitle(Title);
 
@@ -212,14 +211,13 @@ namespace Utils.UIControls.Main
 
         static void DisableResizeMode(object frame)
         {
-            FrameworkElement element = frame as FrameworkElement;
-            if (element != null)
+            if (frame is FrameworkElement element)
                 element.Cursor = null;
         }
 
         private void UIWindowClosing(object sender, CancelEventArgs e)
         {
-            Window mainWindow = (Window)sender;
+            var mainWindow = (Window)sender;
             mainWindow.Closing -= UIWindowClosing;
             e.Cancel = true;
             var anim = new DoubleAnimation(0, (Duration)TimeSpan.FromSeconds(0.2));
@@ -237,8 +235,8 @@ namespace Utils.UIControls.Main
             if (!(mainWindow.FindResource("HoverOn") is Storyboard sb))
                 return;
 
-            Border containerBorder = (Border)mainWindow.Template.FindName("PART_Container", mainWindow);
-            BlurEffect containerBorder2 = (BlurEffect)mainWindow.Template.FindName("MyBlurEffect", mainWindow);
+            var containerBorder = (Border)mainWindow.Template.FindName("PART_Container", mainWindow);
+            var containerBorder2 = (BlurEffect)mainWindow.Template.FindName("MyBlurEffect", mainWindow);
             containerBorder.Opacity = 0;
             containerBorder2.Radius = 15; // блурим
             sb.Begin(containerBorder); // выводит из блура в нормальный вид
@@ -322,12 +320,11 @@ namespace Utils.UIControls.Main
             if (Style == null)
                 return;
 
-            Storyboard sb = this.FindResource(storyBoardKey) as Storyboard;
-            if(sb == null)
+            if(!(FindResource(storyBoardKey) is Storyboard sb))
                 return;
 
-            Border containerBorder = (Border)Template.FindName("PART_Container", this);
-            sb?.Begin(containerBorder);
+            var containerBorder = (Border)Template.FindName("PART_Container", this);
+            sb.Begin(containerBorder);
         }
 
         public void UnBlur()
@@ -340,12 +337,12 @@ namespace Utils.UIControls.Main
             if (Style == null)
                 return;
 
-            Storyboard sb = this.FindResource(storyBoardKey) as Storyboard;
+            var sb = FindResource(storyBoardKey) as Storyboard;
             if (sb == null)
                 return;
 
-            Border containerBorder = (Border)Template.FindName("PART_Container", this);
-            sb?.Begin(containerBorder);
+            var containerBorder = (Border)Template.FindName("PART_Container", this);
+            sb.Begin(containerBorder);
         }
 
         //public bool IsBlured
@@ -385,12 +382,12 @@ namespace Utils.UIControls.Main
                 if (_isBlured2)
                 {
                     //Blur
-                    BlurEffect effect = Effect as BlurEffect;
+                    var effect = Effect as BlurEffect;
                     effect?.BeginAnimation(BlurEffect.RadiusProperty, new DoubleAnimation(20, TimeSpan.FromSeconds(0.5)));
                 }
                 else
                 {
-                    BlurEffect effect = Effect as BlurEffect;
+                    var effect = Effect as BlurEffect;
                     effect?.BeginAnimation(BlurEffect.RadiusProperty, new DoubleAnimation(0, TimeSpan.FromSeconds(0.5)));
                 }
             }

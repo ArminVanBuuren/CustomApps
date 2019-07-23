@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Utils
 {
@@ -44,7 +40,7 @@ namespace Utils
 
         public static Int64 GetPhysicalAvailableMemoryInMiB()
         {
-            PerformanceInformation pi = new PerformanceInformation();
+            var pi = new PerformanceInformation();
             if (GetPerformanceInfo(out pi, Marshal.SizeOf(pi)))
             {
                 return Convert.ToInt64((pi.PhysicalAvailable.ToInt64() * pi.PageSize.ToInt64() / 1048576));
@@ -58,7 +54,7 @@ namespace Utils
 
         public static Int64 GetTotalMemoryInMiB()
         {
-            PerformanceInformation pi = new PerformanceInformation();
+            var pi = new PerformanceInformation();
             if (GetPerformanceInfo(out pi, Marshal.SizeOf(pi)))
             {
                 return Convert.ToInt64((pi.PhysicalTotal.ToInt64() * pi.PageSize.ToInt64() / 1048576));
@@ -77,17 +73,19 @@ namespace Utils
         {
             if (process != null)
             {
-                PerformanceCounter appCPUCounter = new PerformanceCounter("Process", "% Processor Time", process.ProcessName);
+                var appCPUCounter = new PerformanceCounter("Process", "% Processor Time", process.ProcessName);
                 appCPUCounter.NextValue();
                 System.Threading.Thread.Sleep(1000);
                 double.TryParse(appCPUCounter.NextValue().ToString(), out var resultApp);
                 return resultApp;
             }
 
-            PerformanceCounter totalCPUCounter = new PerformanceCounter();
-            totalCPUCounter.CategoryName = "Processor";
-            totalCPUCounter.CounterName = "% Processor Time";
-            totalCPUCounter.InstanceName = "_Total";
+            var totalCPUCounter = new PerformanceCounter
+            {
+                CategoryName = "Processor",
+                CounterName = "% Processor Time",
+                InstanceName = "_Total"
+            };
 
             totalCPUCounter.NextValue();
             System.Threading.Thread.Sleep(1000);
@@ -130,7 +128,7 @@ namespace Utils
             else if (IntPtr.Size == 8)
             {
                 // 64-bit application
-                return ((double)process.PagedMemorySize64);
+                return process.PagedMemorySize64;
             }
 
             //var test1 = ((double) process.MinWorkingSet).ToFileSize();

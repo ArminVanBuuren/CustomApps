@@ -58,12 +58,12 @@ namespace Utils.UIControls.Main
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
-            UIWindow mainWindow = (UIWindow)sender;
+            var mainWindow = (UIWindow)sender;
 
             
             
             //чтобы можно было перемещать окно по нажатию клавиши в любой точки окна, а не только через верхнюю панель
-            Grid parentGrid = (Grid)mainWindow.Template.FindName("LayoutRoot", mainWindow);
+            var parentGrid = (Grid)mainWindow.Template.FindName("LayoutRoot", mainWindow);
 
             parentGrid.MouseLeftButtonDown += (o, args) =>
             {
@@ -215,8 +215,10 @@ namespace Utils.UIControls.Main
             //Window parentWindow = Window.GetWindow((DependencyObject) sender);
             if (Application.Current.MainWindow is UIWindow mainWindow)
             {
-                Presenter vkhovanskiy = new Presenter(mainWindow.PresenterTitleContent, false, false);
-                vkhovanskiy.Owner = mainWindow;
+                var vkhovanskiy = new Presenter(mainWindow.PresenterTitleContent, false, false)
+                {
+                    Owner = mainWindow
+                };
                 vkhovanskiy.Loaded += WindowInfo_Loaded;
                 mainWindow.Blur();
                 vkhovanskiy.ShowDialog();
@@ -227,9 +229,9 @@ namespace Utils.UIControls.Main
 
         private void WindowInfo_Loaded(object sender, RoutedEventArgs e)
         {
-            UIWindow mainWindow = (UIWindow)sender;
-            Border infButtom = (Border)mainWindow.Template.FindName("TitleBar", mainWindow);
-            TextBlock infText = (TextBlock)mainWindow.Template.FindName("Caption", mainWindow);
+            var mainWindow = (UIWindow)sender;
+            var infButtom = (Border)mainWindow.Template.FindName("TitleBar", mainWindow);
+            var infText = (TextBlock)mainWindow.Template.FindName("Caption", mainWindow);
             infButtom.Background = (Brush)mainWindow.FindResource("AuthorWindowTopBorderBrush");
             infText.Foreground = (Brush)mainWindow.FindResource("AuthorWindowTopBorderTextBrush");
             infText.Opacity = 1;

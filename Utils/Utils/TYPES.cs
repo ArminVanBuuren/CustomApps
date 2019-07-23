@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Utils
 {
@@ -57,15 +54,15 @@ namespace Utils
 
         public static object CreateInstance(Type product, List<object> constructor)
         {
-            List<ParamsList> availConstructors = new List<ParamsList>();
+            var availConstructors = new List<ParamsList>();
 
-            foreach (ConstructorInfo info in product.GetConstructors())
+            foreach (var info in product.GetConstructors())
             {
-                int cntParams = 0;
-                List<object> constructorParams = new List<object>();
+                var cntParams = 0;
+                var constructorParams = new List<object>();
 
                 //проверяем типы входных параметров конструктора
-                foreach (ParameterInfo paramInfo in info.GetParameters())
+                foreach (var paramInfo in info.GetParameters())
                 {
                     cntParams++;
 
@@ -87,7 +84,7 @@ namespace Utils
             if (availConstructors.Count == 0)
                 return Activator.CreateInstance(product);
 
-            ParamsList constr = availConstructors.OrderBy(c => c.Params.Count).ToList()[0];
+            var constr = availConstructors.OrderBy(c => c.Params.Count).ToList()[0];
             return Activator.CreateInstance(product, constr.Params);
 
 

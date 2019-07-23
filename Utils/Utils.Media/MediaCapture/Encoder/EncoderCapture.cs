@@ -12,7 +12,7 @@ using Utils.Media.MediaCapture.AForge;
 
 namespace Utils.Media.MediaCapture.Encoder
 {
-    public class EncoderCapture : Media.MediaCapture.MediaCapture, IDisposable
+    public class EncoderCapture : MediaCapture, IDisposable
     {
         Thread MainThread { get; }
 
@@ -77,10 +77,10 @@ namespace Utils.Media.MediaCapture.Encoder
                 throw new MediaCaptureRunningException("You must stop the previous process first!");
 
             if (VideoEncoderDevice == null || AudioEncoderDevice == null)
-                throw new ArgumentException($"Video=[{VideoEncoderDevice?.ToString()}] or Audio=[{AudioEncoderDevice?.ToString()}] device is incorrect!");
+                throw new ArgumentException($"Video=[{VideoEncoderDevice}] or Audio=[{AudioEncoderDevice}] device is incorrect!");
 
 
-            EncoderProcessingThread procThread = new EncoderProcessingThread(GetNewVideoFilePath(fileName));
+            var procThread = new EncoderProcessingThread(GetNewVideoFilePath(fileName));
             Initialization(procThread, DoCamInitialize);
 
             if (!procThread.IsCanceled)
@@ -122,7 +122,7 @@ namespace Utils.Media.MediaCapture.Encoder
             if (AudioEncoderDevice == null)
                 throw new ArgumentException("Audio device is incorrect!");
 
-            EncoderProcessingThread procThread = new EncoderProcessingThread(GetNewVideoFilePath(fileName));
+            var procThread = new EncoderProcessingThread(GetNewVideoFilePath(fileName));
             Initialization(procThread, DoScreenInitialize);
 
             if (!procThread.IsCanceled)
@@ -166,7 +166,7 @@ namespace Utils.Media.MediaCapture.Encoder
             if (VideoEncoderDevice == null || AudioEncoderDevice == null)
                 throw new ArgumentException("Video or Audio device is incorrect!");
 
-            EncoderProcessingThread procThread = new EncoderProcessingThread(port);
+            var procThread = new EncoderProcessingThread(port);
             Initialization(procThread, DoBroadcastInitialize);
 
             return !procThread.IsCanceled;
@@ -219,7 +219,6 @@ namespace Utils.Media.MediaCapture.Encoder
                 procThread.IsCanceled = true;
                 var stopProcess = new Action<bool>(procThread.Stop);
                 stopProcess.BeginInvoke(false, null, null).AsyncWaitHandle.WaitOne(TIMEOUT_STOP);
-                return;
             }
         }
 
@@ -262,7 +261,7 @@ namespace Utils.Media.MediaCapture.Encoder
             if (!task.Wait(TIMEOUT_INITIALIZE))
             {
                 procThread.IsCanceled = true;
-                Task taskStop = procThread.StopAsync();
+                var taskStop = procThread.StopAsync();
                 taskStop.Wait(TIMEOUT_STOP);
                 Mode = MediaCaptureMode.None;
                 throw new TimeoutException();
@@ -272,9 +271,8 @@ namespace Utils.Media.MediaCapture.Encoder
             if (Mode == MediaCaptureMode.None)
             {
                 procThread.IsCanceled = true;
-                Task taskStop = procThread.StopAsync();
+                var taskStop = procThread.StopAsync();
                 taskStop.Wait(TIMEOUT_STOP);
-                return;
             }
         }
 
@@ -361,7 +359,7 @@ namespace Utils.Media.MediaCapture.Encoder
                 procThread.ScreenJob.ScreenCaptureAudioProfile.Bitrate = new Microsoft.Expression.Encoder.Profiles.ConstantBitrate(20);
 
                 //Rectangle capRect = new Rectangle(388, 222, 1056, 608);
-                Rectangle capRect = new Rectangle(10, 10, 640, 480);
+                var capRect = new Rectangle(10, 10, 640, 480);
                 procThread.ScreenJob.CaptureRectangle = capRect;
 
                 procThread.ScreenJob.OutputScreenCaptureFileName = procThread.DestinationFilePath;
@@ -406,7 +404,7 @@ namespace Utils.Media.MediaCapture.Encoder
                 if (procThread.IsCanceled) return false;
 
                 // Creates the publishing format for the job
-                PullBroadcastPublishFormat format = new PullBroadcastPublishFormat
+                var format = new PullBroadcastPublishFormat
                 {
                     BroadcastPort = procThread.BroadcastPort,
                     MaximumNumberOfConnections = 2
@@ -502,7 +500,7 @@ namespace Utils.Media.MediaCapture.Encoder
                     _asyncRecordingThread = null;
             }
 
-            if(result?.Error != null)
+            if(result.Error != null)
                 processingThread?.DeleteFile();
 
             Mode = MediaCaptureMode.None;

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Utils.Telegram
+namespace Utils.Messaging.Telegram
 {
     public class AuthorizationException : Exception
     {

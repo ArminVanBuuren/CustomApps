@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Management;
 using System.Net;
@@ -8,7 +7,6 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Utils.CollectionHelper;
 
 namespace Utils
@@ -47,15 +45,15 @@ namespace Utils
         /// </summary> 
         public static List<HostInfo> GetIPAddresses()
         {
-            List<HostInfo> ipAddresses = new List<HostInfo>();
+            var ipAddresses = new List<HostInfo>();
 
             // Get a list of all network interfaces (usually one per network card, dialup, and VPN connection) 
-            NetworkInterface[] networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
+            var networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
 
-            foreach (NetworkInterface network in networkInterfaces)
+            foreach (var network in networkInterfaces)
             {
                 // Read the IP configuration for each network 
-                IPInterfaceProperties properties = network.GetIPProperties();
+                var properties = network.GetIPProperties();
 
                 // Each network interface may have multiple IP addresses 
                 foreach (var add in properties.UnicastAddresses)
@@ -87,13 +85,13 @@ namespace Utils
         /// <returns></returns>
         public static string GetExternalIPAddress()
         {
-            string checkip = GetExternalIPAddress("http://checkip.dyndns.org/");
+            var checkip = GetExternalIPAddress("http://checkip.dyndns.org/");
             return !string.IsNullOrWhiteSpace(checkip) ? checkip : GetExternalIPAddress("https://www.whatismyip.com/");
         }
 
         static string GetExternalIPAddress(string externalWebAddress)
         {
-            string responceBody = WEB.WebHttpStringData(externalWebAddress , out var httpRespCode);
+            var responceBody = WEB.WebHttpStringData(externalWebAddress , out var httpRespCode);
             if (httpRespCode != HttpStatusCode.OK)
                 return string.Empty;
 
@@ -102,7 +100,7 @@ namespace Utils
             if (result.Count <= 0)
                 return string.Empty;
 
-            StringBuilder stringResult = new StringBuilder();
+            var stringResult = new StringBuilder();
             foreach (Match match in result)
             {
                 if(match.Value.Like("75.123.253.255")) // пример ip на сайте https://www.whatismyip.com/
@@ -117,15 +115,15 @@ namespace Utils
 
         public static DuplicateDictionary<string, string> GetDetailedHostInfo()
         {
-            DuplicateDictionary<string, string> allDetailedData = new DuplicateDictionary<string, string>();
-            string machineName = System.Environment.MachineName;
+            var allDetailedData = new DuplicateDictionary<string, string>();
+            var machineName = Environment.MachineName;
             allDetailedData.Add("Host", machineName);
-            allDetailedData.Add("FullName", System.Net.Dns.GetHostEntry(machineName).HostName);
+            allDetailedData.Add("FullName", Dns.GetHostEntry(machineName).HostName);
 
             using (var mc = new ManagementClass("Win32_NetworkAdapterConfiguration"))
             using (var instances = mc.GetInstances())
             {
-                foreach (ManagementObject instance in instances)
+                foreach (var instance in instances.OfType<ManagementObject>())
                 {
                     if (!(bool)instance["ipEnabled"])
                     {
@@ -155,16 +153,15 @@ namespace Utils
             {
                 if (manageValue == null)
                     return;
-                if (manageValue is string[])
+                if (manageValue is string[] result)
                 {
-                    string[] result = (string[])manageValue;
-                    foreach (string strVal in result)
+                    foreach (var strVal in result)
                     {
                         collection.Add(key, strVal);
                     }
                 }
                 else
-                    collection.Add(key, manageValue?.ToString());
+                    collection.Add(key, manageValue.ToString());
             }
             catch (Exception)
             {

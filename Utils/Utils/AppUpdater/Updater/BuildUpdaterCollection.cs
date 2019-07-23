@@ -7,7 +7,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Net;
 using System.Reflection;
-using System.Threading;
 
 namespace Utils.AppUpdater.Updater
 {
@@ -57,13 +56,13 @@ namespace Utils.AppUpdater.Updater
             ProjectBuildPack = projectBuildPack;
 
             _collection = new List<IBuildUpdater>();
-            Dictionary<string, FileBuildInfo> localVersions = BuildPackInfo.GetLocalVersions(runningApp);
+            var localVersions = BuildPackInfo.GetLocalVersions(runningApp);
 
-            int needToFetchPack = 0;
+            var needToFetchPack = 0;
 
-            foreach (FileBuildInfo serverFile in ProjectBuildPack.Builds)
+            foreach (var serverFile in ProjectBuildPack.Builds)
             {
-                if (localVersions.TryGetValue(serverFile.Location, out FileBuildInfo localFile))
+                if (localVersions.TryGetValue(serverFile.Location, out var localFile))
                 {
                     if ((serverFile.Type == BuldPerformerType.Update || serverFile.Type == BuldPerformerType.CreateOrUpdate) && serverFile.Version > localFile.Version)
                     {
@@ -152,7 +151,7 @@ namespace Utils.AppUpdater.Updater
             {
                 try
                 {
-                    string downloadedMD5 = Hasher.HashFile(FileTempPath, HashType.MD5);
+                    var downloadedMD5 = Hasher.HashFile(FileTempPath, HashType.MD5);
                     if (downloadedMD5.Like(ProjectBuildPack.MD5))
                     {
                         DiretoryTempPath = Path.Combine(Path.GetTempPath(), STRING.RandomString(15));

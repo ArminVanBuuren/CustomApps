@@ -1,6 +1,6 @@
 ﻿using TeleSharp.TL;
 
-namespace Utils.Telegram
+namespace Utils.Messaging.Telegram
 {
     public interface ITLControlItem
     {

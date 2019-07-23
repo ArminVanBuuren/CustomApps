@@ -8,7 +8,7 @@ using NAudio.Wave;
 
 namespace Utils.Media.MediaCapture.Screen
 {
-    public class ScreenCapture : Media.MediaCapture.MediaCapture, IDisposable
+    public class ScreenCapture : MediaCapture, IDisposable
     {
         private readonly object syncAudio = new object();
         readonly Rectangle screenBounds = System.Windows.Forms.Screen.GetBounds(Point.Empty);
@@ -34,15 +34,15 @@ namespace Utils.Media.MediaCapture.Screen
             if (Mode == MediaCaptureMode.Recording)
                 throw new MediaCaptureRunningException("You must stop the previous process first!");
 
-            string commonDestination = Path.Combine(DestinationDir, $"{DateTime.Now:ddHHmmss}_{STRING.RandomString(15)}");
+            var commonDestination = Path.Combine(DestinationDir, $"{DateTime.Now:ddHHmmss}_{STRING.RandomString(15)}");
 
             // video
             _frameWriter.Refresh();
-            string destinationVideoPath = commonDestination + _frameWriter.VideoExtension;
+            var destinationVideoPath = commonDestination + _frameWriter.VideoExtension;
             _frameWriter.Open(destinationVideoPath, screenBounds.Width, screenBounds.Height);
 
             // audio
-            string destinationAudioPath = commonDestination + ".wav";
+            var destinationAudioPath = commonDestination + ".wav";
             try
             {
                 _waveSource = new WaveInEvent
@@ -63,7 +63,7 @@ namespace Utils.Media.MediaCapture.Screen
                 // ignored
             }
 
-            var asyncRec = new Action<string, string>(DoRecordingAsync).BeginInvoke(destinationVideoPath, destinationAudioPath, null, null);
+            new Action<string, string>(DoRecordingAsync).BeginInvoke(destinationVideoPath, destinationAudioPath, null, null);
         }
 
         void DoRecordingAsync(string destinationVideo, string destinationAudio)
@@ -82,10 +82,10 @@ namespace Utils.Media.MediaCapture.Screen
                     // ignored
                 }
 
-                using (FramesInfo framesInfo = new FramesInfo(_frameWriter.FrameRate))
+                using (var framesInfo = new FramesInfo(_frameWriter.FrameRate))
                 {
-                    DateTime startCapture = DateTime.Now;
-                    bool isContinue = true;
+                    var startCapture = DateTime.Now;
+                    var isContinue = true;
 
                     while (isContinue)
                     {
@@ -94,9 +94,9 @@ namespace Utils.Media.MediaCapture.Screen
                         if (Mode == MediaCaptureMode.None)
                             break;
 
-                        using (Bitmap bitmap = new Bitmap(screenBounds.Width, screenBounds.Height))
+                        using (var bitmap = new Bitmap(screenBounds.Width, screenBounds.Height))
                         {
-                            using (Graphics g = Graphics.FromImage(bitmap))
+                            using (var g = Graphics.FromImage(bitmap))
                             {
                                 g.CopyFromScreen(Point.Empty, Point.Empty, screenBounds.Size);
                             }
@@ -126,7 +126,7 @@ namespace Utils.Media.MediaCapture.Screen
 
             Stop();
 
-            if (result?.Error != null)
+            if (result.Error != null)
                 DeleteRecordedFile(new[] { destinationVideo, destinationAudio });
 
             RecordCompleted(result);
@@ -216,10 +216,10 @@ namespace Utils.Media.MediaCapture.Screen
 
         public static void Capture(string destinationPath, ImageFormat format)
         {
-            Rectangle bounds = System.Windows.Forms.Screen.GetBounds(Point.Empty);
-            using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height))
+            var bounds = System.Windows.Forms.Screen.GetBounds(Point.Empty);
+            using (var bitmap = new Bitmap(bounds.Width, bounds.Height))
             {
-                using (Graphics g = Graphics.FromImage(bitmap))
+                using (var g = Graphics.FromImage(bitmap))
                 {
                     g.CopyFromScreen(Point.Empty, Point.Empty, bounds.Size);
                 }
@@ -230,10 +230,10 @@ namespace Utils.Media.MediaCapture.Screen
 
         public static void Capture(Form form, string destinationPath, ImageFormat format)
         {
-            Rectangle bounds = form.Bounds;
-            using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height))
+            var bounds = form.Bounds;
+            using (var bitmap = new Bitmap(bounds.Width, bounds.Height))
             {
-                using (Graphics g = Graphics.FromImage(bitmap))
+                using (var g = Graphics.FromImage(bitmap))
                 {
                     g.CopyFromScreen(new Point(bounds.Left, bounds.Top), Point.Empty, bounds.Size);
                 }
@@ -251,7 +251,7 @@ namespace Utils.Media.MediaCapture.Screen
 
         public override string ToString()
         {
-            return $"{base.ToString()}\r\n{_frameWriter?.ToString()}".Trim();
+            return $"{base.ToString()}\r\n{_frameWriter}".Trim();
         }
     }
 }

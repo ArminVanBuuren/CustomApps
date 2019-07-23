@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Xml;
 
 namespace Utils.Handles
@@ -42,13 +39,13 @@ namespace Utils.Handles
 
             var doc = ReadConfigurationDocument(config.OuterXml);
             var str = doc.DocumentElement?.Attributes["MaxAttemptCount"].Value;
-            this._maxCounter = Convert.ToInt32(str);
+            _maxCounter = Convert.ToInt32(str);
             str = doc.DocumentElement?.Attributes["Timeout"].Value;
-            this._timeoutValue = Convert.ToDouble(str);
+            _timeoutValue = Convert.ToDouble(str);
             str = doc.DocumentElement?.Attributes["ProgressionCoefficient"].Value;
-            this._progressionCoef = Convert.ToDouble(str);
+            _progressionCoef = Convert.ToDouble(str);
             str = doc.DocumentElement?.Attributes["ProgressionType"].Value;
-            this._progressionType = (MathType)Enum.Parse(typeof(MathType), str);
+            _progressionType = (MathType)Enum.Parse(typeof(MathType), str);
         }
 
         /// <summary>
@@ -88,11 +85,13 @@ namespace Utils.Handles
             if (commonRatio == 0.0 || commonRatio == 1.0)
                 throw new ArgumentOutOfRangeException(nameof(commonRatio), commonRatio, "Common ration must not be 0 or 1");
 
-            MathProgression m = new MathProgression();
-            m._maxCounter = elementsCount;
-            m._timeoutValue = scaleFactor;
-            m._progressionCoef = commonRatio;
-            m._progressionType = MathType.Geometric;
+            var m = new MathProgression
+            {
+                _maxCounter = elementsCount,
+                _timeoutValue = scaleFactor,
+                _progressionCoef = commonRatio,
+                _progressionType = MathType.Geometric
+            };
 
             return m;
         }
@@ -143,12 +142,12 @@ namespace Utils.Handles
 
         public bool IsCounterExceeded()
         {
-            return this.CurrentCounter >= this._maxCounter;
+            return CurrentCounter >= _maxCounter;
         }
 
         public int CalculateTimeout()
         {
-            return Convert.ToInt32(this.NextValue());
+            return Convert.ToInt32(NextValue());
         }
 
         public int CalculateTimeout(int iteration)
@@ -161,19 +160,19 @@ namespace Utils.Handles
         {
             double timeout = 0;
 
-            if (this._timeoutValue > 0 && this.CurrentCounter < this._maxCounter)
+            if (_timeoutValue > 0 && CurrentCounter < _maxCounter)
             {
-                if (this.CurrentCounter == 0)
+                if (CurrentCounter == 0)
                 {
-                    timeout = this._timeoutValue;
+                    timeout = _timeoutValue;
                 }
-                else if (this._progressionType == MathType.Algebraic)
+                else if (_progressionType == MathType.Algebraic)
                 {
-                    timeout = this._timeoutValue + this._progressionCoef * (this.CurrentCounter - 1);
+                    timeout = _timeoutValue + _progressionCoef * (CurrentCounter - 1);
                 }
-                else if (this._progressionType == MathType.Geometric)
+                else if (_progressionType == MathType.Geometric)
                 {
-                    timeout = this._timeoutValue * Math.Pow(this._progressionCoef, this.CurrentCounter - 1);
+                    timeout = _timeoutValue * Math.Pow(_progressionCoef, CurrentCounter - 1);
                 }
             }
 
@@ -185,22 +184,22 @@ namespace Utils.Handles
             if (timeout > 0)
                 Thread.Sleep(timeout);
 
-            this.CurrentCounter++;
+            CurrentCounter++;
         }
 
         public void Sleep()
         {
-            var timeout = this.CalculateTimeout();
+            var timeout = CalculateTimeout();
 
             if (timeout > 0)
                 Thread.Sleep(timeout);
 
-            this.CurrentCounter++;
+            CurrentCounter++;
         }
 
         public void Reset()
         {
-            this.CurrentCounter = 0;
+            CurrentCounter = 0;
         }
 
         public int CurrentCounter { get; private set; } = 0;
@@ -209,18 +208,18 @@ namespace Utils.Handles
         {
             var sb = new StringBuilder();
 
-            sb.AppendFormat("MaxAttemptCount = {0}\r\n", this._maxCounter);
-            sb.AppendFormat("Timeout = {0}\r\n", this._timeoutValue);
-            sb.AppendFormat("ProgressionType = {0}\r\n", this._progressionType.ToString());
-            sb.AppendFormat("ProgressionCoefficient = {0}\r\n", this._progressionCoef);
+            sb.AppendFormat("MaxAttemptCount = {0}\r\n", _maxCounter);
+            sb.AppendFormat("Timeout = {0}\r\n", _timeoutValue);
+            sb.AppendFormat("ProgressionType = {0}\r\n", _progressionType.ToString());
+            sb.AppendFormat("ProgressionCoefficient = {0}\r\n", _progressionCoef);
             sb.AppendFormat("{0}\r\n", new string('*', 40));
 
-            if (this._timeoutValue > 0)
+            if (_timeoutValue > 0)
             {
-                var sum = this.CalculateSum();
+                var sum = CalculateSum();
                 sb.AppendFormat("Sum of progression = {0} ms\r\n", sum);
             }
-            sb.AppendFormat("Current index = {0}", this.CurrentCounter);
+            sb.AppendFormat("Current index = {0}", CurrentCounter);
 
             return sb.ToString();
         }
@@ -231,7 +230,7 @@ namespace Utils.Handles
 
         public double CalculateSum()
         {
-            return this.CalculateSum(this._maxCounter);
+            return CalculateSum(_maxCounter);
         }
 
         public double CalculateSum(int elementsCount)
@@ -239,16 +238,16 @@ namespace Utils.Handles
             if (elementsCount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(elementsCount), elementsCount, "Number of items must not be negative or zero");
 
-            switch (this._progressionType)
+            switch (_progressionType)
             {
                 case MathType.Algebraic:
-                    return CalculateAlgebraicSum(elementsCount, this._timeoutValue, this._progressionCoef);
+                    return CalculateAlgebraicSum(elementsCount, _timeoutValue, _progressionCoef);
                 case MathType.Geometric:
-                    return CalculateGeometricSum(elementsCount, this._timeoutValue, this._progressionCoef);
+                    return CalculateGeometricSum(elementsCount, _timeoutValue, _progressionCoef);
             }
 
             var sb = new StringBuilder();
-            sb.AppendFormat("Progression type \"{0}\" ", this._progressionType.ToString());
+            sb.AppendFormat("Progression type \"{0}\" ", _progressionType.ToString());
             sb.AppendFormat("is invalid");
             throw new Exception(sb.ToString());
         }
@@ -330,7 +329,7 @@ namespace Utils.Handles
                 var dr = dt.NewRow();
                 dr["i"] = i;
                 dr["a"] = NextAlgebraicValue(i, initialValue, commonDifference);
-                dr["sum"] = CalculateAlgebraicSum(i, initialValue, commonDifference); ;
+                dr["sum"] = CalculateAlgebraicSum(i, initialValue, commonDifference);
                 dt.Rows.Add(dr);
             }
 
@@ -339,16 +338,16 @@ namespace Utils.Handles
 
         public DataTable CalculateSeries()
         {
-            switch (this._progressionType)
+            switch (_progressionType)
             {
                 case MathType.Geometric:
-                    return this.CalculateGeometricSeries(this._maxCounter, this._timeoutValue, this._progressionCoef);
+                    return CalculateGeometricSeries(_maxCounter, _timeoutValue, _progressionCoef);
                 case MathType.Algebraic:
-                    return this.CalculateAlgebraicSeries(this._maxCounter, this._timeoutValue, this._progressionCoef);
+                    return CalculateAlgebraicSeries(_maxCounter, _timeoutValue, _progressionCoef);
             }
 
             var sb = new StringBuilder();
-            sb.AppendFormat("Progression type \"{0}\" ", this._progressionType.ToString());
+            sb.AppendFormat("Progression type \"{0}\" ", _progressionType.ToString());
             sb.AppendFormat("is invalid");
             throw new Exception(sb.ToString());
         }
@@ -359,7 +358,7 @@ namespace Utils.Handles
 
         public object Clone()
         {
-            return this.MemberwiseClone();
+            return MemberwiseClone();
         }
 
         #endregion

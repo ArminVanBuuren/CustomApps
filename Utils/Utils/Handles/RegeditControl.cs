@@ -1,9 +1,5 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Utils.Handles
 {
@@ -52,8 +48,8 @@ namespace Utils.Handles
 
         public static bool EnabledBootRun(string applicationName)
         {
-            RegistryKey software = GetBootRunKey();
-            string applicatinItemValue = (string) software.GetValue(applicationName);
+            var software = GetBootRunKey();
+            var applicatinItemValue = (string) software.GetValue(applicationName);
             if (!applicatinItemValue.IsNullOrEmpty())
                 applicatinItemValue = applicatinItemValue.Trim();
 
@@ -62,13 +58,13 @@ namespace Utils.Handles
 
         public static bool SetBootStartup(string applicationName, string applicationPath, bool addToStartup)
         {
-            RegistryKey software = GetBootRunKey(true);
-            string applicatinItemValue = (string) software.GetValue(applicationName);
+            var software = GetBootRunKey(true);
+            var applicatinItemValue = (string) software.GetValue(applicationName);
             if (!applicatinItemValue.IsNullOrEmpty())
                 applicatinItemValue = applicatinItemValue.Trim();
 
 
-            string setValue = $"\"{applicationPath}\" /autostart";
+            var setValue = $"\"{applicationPath}\" /autostart";
             if (addToStartup && setValue.Equals(applicatinItemValue))
                 return true;
 
@@ -82,7 +78,7 @@ namespace Utils.Handles
 
         static RegistryKey GetBootRunKey(bool writeble = false)
         {
-            RegistryKey software = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", writeble);
+            var software = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", writeble);
             if (software == null)
                 throw new Exception(@"Can't find HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run");
 

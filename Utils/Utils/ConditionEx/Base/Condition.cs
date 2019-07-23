@@ -1,6 +1,5 @@
 ﻿using System;
 using Utils.ConditionEx.Collections;
-using static Utils.TYPES;
 
 namespace Utils.ConditionEx.Base
 {

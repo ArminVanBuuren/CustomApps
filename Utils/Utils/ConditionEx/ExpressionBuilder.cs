@@ -36,17 +36,17 @@ namespace Utils.ConditionEx
 
         public static Expression Calculate(string expression, DynamicObject dynamicFunction = null)
         {
-            int waitSymol = 0;
-            int closeCommand = 0;
+            var waitSymol = 0;
+            var closeCommand = 0;
             if (expression.IsNullOrEmptyTrim())
                 throw new Exception("Expression is epmty!");
 
-            string normalizeExpression = XML.NormalizeXmlValueFast(expression);
+            var normalizeExpression = XML.NormalizeXmlValueFast(expression);
 
-            ExpressionBuilder builder = new ExpressionBuilder(dynamicFunction);
-            StringBuilder temp = new StringBuilder();
-            int state = 0;
-            foreach (char ch in normalizeExpression)
+            var builder = new ExpressionBuilder(dynamicFunction);
+            var temp = new StringBuilder();
+            var state = 0;
+            foreach (var ch in normalizeExpression)
             {
                 switch (state)
                 {
@@ -81,7 +81,7 @@ namespace Utils.ConditionEx
 
             if (waitSymol.IsParity() && closeCommand == 0 && waitSymol >= 4)
             {
-                Expression conditionEx = builder.ToBlock();
+                var conditionEx = builder.ToBlock();
                 return conditionEx;
             }
 
@@ -153,7 +153,7 @@ namespace Utils.ConditionEx
         {
             IsCreateNewCondition();
             var block = _parent;
-            int countBlocks = 1;
+            var countBlocks = 1;
             while (GetBaseBlock(block) != null)
             {
                 countBlocks++;
@@ -297,7 +297,7 @@ namespace Utils.ConditionEx
             }
             else
             {
-                throw new System.ArgumentException("Incorrect position of symbol \")\" in your expression!");
+                throw new ArgumentException("Incorrect position of symbol \")\" in your expression!");
             }
         }
 
@@ -365,13 +365,13 @@ namespace Utils.ConditionEx
         /// </summary>
         void CheckSymbol(string str)
         {
-            int i = 0;
-            foreach (string sCheck in str.Split(' '))
+            var i = 0;
+            foreach (var sCheck in str.Split(' '))
             {
                 if (string.IsNullOrEmpty(sCheck))
                     continue;
 
-                ConditionOperatorType cbo = Condition.GetOperator(sCheck);
+                var cbo = Condition.GetOperator(sCheck);
                 if (cbo == ConditionOperatorType.Unknown)
                 {
                     switch (Expression.GetLogicalGroup(sCheck))

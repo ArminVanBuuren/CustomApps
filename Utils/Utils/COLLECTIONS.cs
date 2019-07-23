@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Utils
 {
@@ -66,7 +64,7 @@ namespace Utils
         public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             var seenKeys = new HashSet<TKey>();
-            foreach (TSource element in source)
+            foreach (var element in source)
             {
                 if (seenKeys.Add(keySelector(element)))
                 {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Xml;
 using System.Xml.XPath;
 
@@ -28,25 +24,25 @@ namespace Utils
         {
             if (navigator == null)
                 return null;
-            XPathExpression expression = XPathExpression.Compile(xpath);
-            XmlNamespaceManager manager = new XmlNamespaceManager(navigator.NameTable);
+            var expression = XPathExpression.Compile(xpath);
+            var manager = new XmlNamespaceManager(navigator.NameTable);
             //manager.AddNamespace("bk", "http://www.contoso.com/books");
             manager.AddNamespace(string.Empty, "urn:samples");
             expression.SetContext(manager);
             switch (expression.ReturnType)
             {
                 case XPathResultType.NodeSet:
-                    XPathNodeIterator nodes = navigator.Select(expression);
+                    var nodes = navigator.Select(expression);
                     if (nodes.Count > 0)
                     {
-                        XPathResultCollection strOut = new XPathResultCollection();
-                        int i = 0;
+                        var strOut = new XPathResultCollection();
+                        var i = 0;
                         while (nodes.MoveNext())
                         {
-                            XPathNavigator current = nodes.Current;
+                            var current = nodes.Current;
                             if (current == null)
                                 continue;
-                            XPathResult res = new XPathResult
+                            var res = new XPathResult
                             {
                                 ID = i + 1,
                                 NodeType = current.NodeType.ToString(),
@@ -62,10 +58,10 @@ namespace Utils
                     }
                     return null;
                 default:
-                    object o = navigator.Evaluate(expression);
+                    var o = navigator.Evaluate(expression);
                     if (o != null)
                     {
-                        XPathResultCollection res = new XPathResultCollection
+                        var res = new XPathResultCollection
                         {
                             new XPathResult
                             {

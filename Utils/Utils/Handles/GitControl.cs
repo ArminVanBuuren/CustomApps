@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Utils.Handles
 {
@@ -69,7 +65,7 @@ namespace Utils.Handles
 
         static void Execute(string command)
         {
-            ProcessStartInfo startInfo = new ProcessStartInfo()
+            var startInfo = new ProcessStartInfo()
             {
                 FileName = "git",
                 Arguments = command,
@@ -78,19 +74,19 @@ namespace Utils.Handles
                 UseShellExecute = false
             };
 
-            Process process = Process.Start(startInfo);
+            var process = Process.Start(startInfo);
             //string result = process.StandardOutput.ReadToEnd();
         }
 
         public void ClearRepos(bool removeConfigurationGit = false)
         {
-            DirectoryInfo di = new DirectoryInfo(_gitDirectoryPath);
+            var di = new DirectoryInfo(_gitDirectoryPath);
 
-            foreach (FileInfo file in di.GetFiles())
+            foreach (var file in di.GetFiles())
             {
                 file.Delete();
             }
-            foreach (DirectoryInfo dir in di.GetDirectories())
+            foreach (var dir in di.GetDirectories())
             {
                 if (dir.Name.Like(".git"))
                 {

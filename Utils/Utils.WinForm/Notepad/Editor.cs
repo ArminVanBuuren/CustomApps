@@ -173,7 +173,7 @@ namespace Utils.WinForm.Notepad
                     {
                         lock (syncWhenFileChanged)
                         {
-                            int tryCount = 0;
+                            var tryCount = 0;
 
                             while (!IO.IsFileReady(FilePath))
                             {
@@ -226,7 +226,7 @@ namespace Utils.WinForm.Notepad
 
             //get fragment around caret
             var fragment = FCTB.Selection.GetFragment(@"\w");
-            string text = fragment.Text;
+            var text = fragment.Text;
             if (text.Length == 0)
                 return;
 

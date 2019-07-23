@@ -29,12 +29,11 @@ namespace Utils.UIControls.Styles
 	{
 		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
 		{
-			string dateTimeFormat = parameter as string;
-			DateTime? selectedDate = value as DateTime?;
+			var dateTimeFormat = parameter as string;
 
-			if (selectedDate != null)
+            if (value is DateTime selectedDate)
 			{
-				return selectedDate.Value.ToString(dateTimeFormat);
+				return selectedDate.ToString(dateTimeFormat);
 			}
 
 			return DateTime.Now.ToString(dateTimeFormat);
@@ -73,7 +72,7 @@ namespace Utils.UIControls.Styles
 
 		public void WindowLoaded(object sender, EventArgs e)
 		{
-			DatePicker temp = (DatePicker) sender;
+			var temp = (DatePicker) sender;
 			temp.CalendarOpened += Temp_CalendarOpened;
 			temp.CalendarClosed += Temp_CalendarClosed;
 
@@ -92,9 +91,9 @@ namespace Utils.UIControls.Styles
 		{
 			if (depObj != null)
 			{
-				for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+				for (var i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
 				{
-					DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+					var child = VisualTreeHelper.GetChild(depObj, i);
 					if (child != null && child is T)
 					{
 						yield return (T)child;
@@ -125,7 +124,7 @@ namespace Utils.UIControls.Styles
 
 		private void PART_TextBox_2_OnKeyUp(object sender, KeyEventArgs e)
 		{
-			TextBox textox = (TextBox) sender;
+			var textox = (TextBox) sender;
 			switch (e.Key)
 			{
 				case Key.Left:
@@ -147,21 +146,20 @@ namespace Utils.UIControls.Styles
 
 		private void PART_TextBox_2_OnIsMouseCapturedChanged(object sender, DependencyPropertyChangedEventArgs e)
 		{
-			TextBox textox = (TextBox) sender;
+			var textox = (TextBox) sender;
 			SetCorrectDateAndHighlight(textox, textox.Text);
 		}
 
 		void AddOrReduceDate(TextBox textox, int command)
 		{
-			KeyValuePair<int, int> indexSelection = SetCorrectDateAndHighlight(textox, textox.Text);
+			var indexSelection = SetCorrectDateAndHighlight(textox, textox.Text);
 			if (indexSelection.Key == -1 || indexSelection.Value == -1)
 				return;
 
-			DateTime current;
-			if (!DateTime.TryParse(textox.Text, out current))
+            if (!DateTime.TryParse(textox.Text, out var current))
 				return;
 
-			int index = 0;
+			var index = 0;
 			foreach (Group grp in _correctDateFormat.Match(textox.Text).Groups)
 			{
 				if (indexSelection.Key <= grp.Index && indexSelection.Value > grp.Index)
@@ -201,25 +199,25 @@ namespace Utils.UIControls.Styles
 
 		KeyValuePair<int, int> SetCorrectDateAndHighlight(TextBox textox, string newDateValue)
 		{
-			int _currentCaretIndex = textox.CaretIndex;
+			var _currentCaretIndex = textox.CaretIndex;
 			SetCorrectDateTime(textox, newDateValue);
 			return HighlightPartofDateCaret(textox, _currentCaretIndex);
 		}
 
 		private void PART_TextBox_2_OnLostFocus(object sender, RoutedEventArgs e)
 		{
-			TextBox textox = (TextBox) sender;
+			var textox = (TextBox) sender;
 			SetCorrectDateTime(textox, textox.Text);
 		}
 
 
 		KeyValuePair<int, int> HighlightPartofDateCaret(TextBox textox, int currentCaretIndex)
 		{
-			int start = -1;
-			int end = 0;
-			int temp = -1;
-			int i = -1;
-			foreach (char cr in textox.Text)
+			var start = -1;
+			var end = 0;
+			var temp = -1;
+			var i = -1;
+			foreach (var cr in textox.Text)
 			{
 				i++;
 				if (int.TryParse(cr.ToString(), out temp))
@@ -247,21 +245,21 @@ namespace Utils.UIControls.Styles
 
 	    void DatePickerChanged(object sender, RoutedEventArgs e)
 	    {
-	        TextBox textox = (TextBox) sender;
+	        var textox = (TextBox) sender;
 
-	        string _result = _firstParce.Matches(textox.Text).Cast<Match>().Aggregate(string.Empty, (current, stry) => current + stry.Value);
+	        var _result = _firstParce.Matches(textox.Text).Cast<Match>().Aggregate(string.Empty, (current, stry) => current + stry.Value);
 
 	        if (_lock)
 	        {
-	            DateTime? chooseDate = ((DatePicker) textox.TemplatedParent).SelectedDate;
+	            var chooseDate = ((DatePicker) textox.TemplatedParent).SelectedDate;
 	            if (chooseDate == null)
 	                return;
 
-	            DateTime getTime = DateTime.Now;
+	            var getTime = DateTime.Now;
 	            if (_hashTable.Count > 0)
 	                DateTime.TryParse(_hashTable[textox], out getTime);
 
-	            string _cooseDateTime = string.Format("{0} {1}", ((DateTime) chooseDate).ToString(GET_DATE), getTime.ToString(GET_TIME));
+	            var _cooseDateTime = $"{((DateTime) chooseDate).ToString(GET_DATE)} {getTime.ToString(GET_TIME)}";
 
 	            ((DatePicker) textox.TemplatedParent).SelectedDate = DateTime.Parse(_cooseDateTime);
 	            textox.Text = _cooseDateTime;
@@ -269,8 +267,7 @@ namespace Utils.UIControls.Styles
 	            return;
 	        }
 
-	        DateTime _temp;
-	        if (DateTime.TryParse(_result, out _temp))
+            if (DateTime.TryParse(_result, out _))
 	        {
 	            _hashTable[textox] = _result;
 	        }
@@ -289,18 +286,14 @@ namespace Utils.UIControls.Styles
 
 		bool AccessDate(TextBox textox, string _dateTimeInput)
 		{
-			DateTime _temp;
-			if (DateTime.TryParse(_dateTimeInput, out _temp))
+            if (DateTime.TryParse(_dateTimeInput, out var _temp))
 			{
-				DatePicker parent = (DatePicker) textox.TemplatedParent;
+				var parent = (DatePicker) textox.TemplatedParent;
 				parent.SelectedDate = _temp;
 				textox.Text = _dateTimeInput;
 				return true;
 			}
 			return false;
 		}
-
-
-
 	}
 }

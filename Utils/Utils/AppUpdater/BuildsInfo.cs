@@ -23,8 +23,8 @@ namespace Utils.AppUpdater
             if (!Directory.Exists(destinationDirPath))
                 throw new ArgumentException($"Destination directory=[{destinationDirPath}] doesn't exist");
 
-            BuildPackInfo pack = new BuildPackInfo(project, assembliesDirPath, destinationDirPath);
-            List<BuildPackInfo> prevPacks = new List<BuildPackInfo>();
+            var pack = new BuildPackInfo(project, assembliesDirPath, destinationDirPath);
+            var prevPacks = new List<BuildPackInfo>();
             Packs.RemoveAll(p =>
             {
                 if (p.Project == project)
@@ -47,7 +47,7 @@ namespace Utils.AppUpdater
                 throw;
             }
 
-            foreach (BuildPackInfo prevPack in prevPacks)
+            foreach (var prevPack in prevPacks)
             {
                 File.Delete(Path.Combine(destinationDirPath, prevPack.Name));
             }
@@ -58,7 +58,7 @@ namespace Utils.AppUpdater
             if (File.Exists(fileVersionsPath))
                 File.Delete(fileVersionsPath);
 
-            using (FileStream stream = new FileStream(fileVersionsPath, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None))
+            using (var stream = new FileStream(fileVersionsPath, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None))
             {
                 new XmlSerializer(typeof(BuildsInfo)).Serialize(stream, this);
             }
@@ -66,7 +66,7 @@ namespace Utils.AppUpdater
 
         public static BuildsInfo Deserialize(string contextStr)
         {
-            XmlSerializer xsSubmit = new XmlSerializer(typeof(BuildsInfo));
+            var xsSubmit = new XmlSerializer(typeof(BuildsInfo));
             BuildsInfo result;
             using (TextReader reader = new StringReader(contextStr))
             {

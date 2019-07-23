@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Globalization;
-using static Utils.TYPES;
 
 namespace Utils.ConditionEx.Base
 {
@@ -21,7 +19,7 @@ namespace Utils.ConditionEx.Base
             if (!(obj is Parameter))
                 return 1;
 
-            Parameter input = (Parameter) obj;
+            var input = (Parameter) obj;
             if (input.Value == Value && input.Type == Type)
                 return 0;
 

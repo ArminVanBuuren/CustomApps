@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Utils
 {
@@ -31,7 +26,7 @@ namespace Utils
         /// <param name="secondsDelay">запустить после оперделенного времени в секундах (ограниение 1 час)</param>
         public static void StartApplication(string fileDestination, int secondsDelay = 0)
         {
-            string argument_complete = string.Format(argument_start, GetCommandTimeout(secondsDelay), Path.GetDirectoryName(fileDestination), Path.GetFileName(fileDestination));
+            var argument_complete = string.Format(argument_start, GetCommandTimeout(secondsDelay), Path.GetDirectoryName(fileDestination), Path.GetFileName(fileDestination));
             StartProcess(argument_complete);
         }
 
@@ -43,7 +38,7 @@ namespace Utils
         /// <param name="secondsDelay">запустить после оперделенного времени в секундах (ограниение 1 час)</param>
         public static void OverwriteAndStartApplication(string fileSource, string fileDestination, int secondsDelay = 0)
         {
-            string argument_complete = string.Format(argument_update_start, GetCommandTimeout(secondsDelay), fileDestination, fileSource, fileDestination, Path.GetDirectoryName(fileDestination),
+            var argument_complete = string.Format(argument_update_start, GetCommandTimeout(secondsDelay), fileDestination, fileSource, fileDestination, Path.GetDirectoryName(fileDestination),
                 Path.GetFileName(fileDestination), string.Empty);
 
             StartProcess(argument_complete);
@@ -57,7 +52,7 @@ namespace Utils
         /// <param name="secondsDelay">перезаписать после оперделенного времени в секундах (ограниение 1 час)</param>
         public static void OverwriteFile(string fileSource, string fileDestination, int secondsDelay = 0)
         {
-            string argument_complete = string.Format(argument_update, GetCommandTimeout(secondsDelay), fileDestination, fileSource, fileDestination);
+            var argument_complete = string.Format(argument_update, GetCommandTimeout(secondsDelay), fileDestination, fileSource, fileDestination);
             StartProcess(argument_complete);
         }
 
@@ -69,7 +64,7 @@ namespace Utils
         /// <param name="secondsDelay">скопировать файл после оперделенного времени в секундах (ограниение 1 час)</param>
         public static void CopyFile(string fileSource, string fileDestination, int secondsDelay = 0)
         {
-            string argument_complete = string.Format(argument_add, GetCommandTimeout(secondsDelay), fileSource, fileDestination);
+            var argument_complete = string.Format(argument_add, GetCommandTimeout(secondsDelay), fileSource, fileDestination);
             StartProcess(argument_complete);
         }
 
@@ -80,7 +75,7 @@ namespace Utils
         /// <param name="secondsDelay">скопировать файл после оперделенного времени в секундах (ограниение 1 час)</param>
         public static void DeleteFile(string fileDestination, int secondsDelay = 0)
         {
-            string argument_complete = string.Format(argument_remove, GetCommandTimeout(secondsDelay), fileDestination);
+            var argument_complete = string.Format(argument_remove, GetCommandTimeout(secondsDelay), fileDestination);
             StartProcess(argument_complete);
         }
 
@@ -91,7 +86,7 @@ namespace Utils
         /// <returns></returns>
         static string GetCommandTimeout(int secondsDelay)
         {
-            int currectSeconds = secondsDelay;
+            var currectSeconds = secondsDelay;
             // поставим ограниение на задержку выполнение процесса на один час
             if (currectSeconds > 3600)
                 currectSeconds = 3600;
@@ -105,7 +100,7 @@ namespace Utils
 
         static void StartProcess(string arguments)
         {
-            ProcessStartInfo cmd = new ProcessStartInfo
+            var cmd = new ProcessStartInfo
             {
                 Arguments = arguments,
                 WindowStyle = ProcessWindowStyle.Hidden,

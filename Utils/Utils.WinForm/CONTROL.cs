@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Utils.WinForm
@@ -18,7 +14,7 @@ namespace Utils.WinForm
             {
                 if (forceSynchronous)
                 {
-                    uiElement.Invoke((Action)delegate { SafeInvoke(uiElement, updater, true); });
+                    uiElement.Invoke((Action)delegate { SafeInvoke(uiElement, updater); });
                 }
                 else
                 {

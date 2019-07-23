@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Utils.TYPES;
 
 namespace Utils.ConditionEx.Base
 {
@@ -31,7 +26,7 @@ namespace Utils.ConditionEx.Base
                 {
                     case TypeParam.MathEx:
                     {
-                        double doubleResult = MATH.Calculate(input);
+                        var doubleResult = MATH.Calculate(input);
                         if (double.IsNaN(doubleResult))
                         {
                             type = TypeParam.String;

@@ -24,10 +24,10 @@ namespace Utils.AppUpdater
             if (buildDateTime == null)
                 throw new ArgumentNullException(nameof(buildDateTime));
 
-            DateTime startOfDay = DateTime.ParseExact(buildDateTime.ToString("dd/MM/yyyy"), "dd/MM/yyyy", CultureInfo.CurrentCulture);
-            TimeSpan substrSec = buildDateTime.Subtract(startOfDay);
-            DateTime startOfYear = new DateTime(2000, 1, 1);
-            TimeSpan substrDay = buildDateTime.Subtract(startOfYear);
+            var startOfDay = DateTime.ParseExact(buildDateTime.ToString("dd/MM/yyyy"), "dd/MM/yyyy", CultureInfo.CurrentCulture);
+            var substrSec = buildDateTime.Subtract(startOfDay);
+            var startOfYear = new DateTime(2000, 1, 1);
+            var substrDay = buildDateTime.Subtract(startOfYear);
             Major = 1;
             Minor = 0;
             Build = (int) substrDay.TotalDays;
@@ -39,15 +39,15 @@ namespace Utils.AppUpdater
             if (!File.Exists(file))
                 throw new ArgumentException($"File [{file}] not exist!");
 
-            FileVersionInfo fileVersion = FileVersionInfo.GetVersionInfo(file);
+            var fileVersion = FileVersionInfo.GetVersionInfo(file);
             if (fileVersion.FileVersion == null)
             {
-                DateTime lastChange = File.GetLastWriteTime(file);
+                var lastChange = File.GetLastWriteTime(file);
                 return new BuildNumber(lastChange);
             }
             else
             {
-                if (!TryParse(fileVersion, out BuildNumber getVers))
+                if (!TryParse(fileVersion, out var getVers))
                 {
                     TryParse("1.0.0.0", out getVers);
                 }
@@ -111,7 +111,7 @@ namespace Utils.AppUpdater
             if (buildNumber == null)
                 throw new ArgumentNullException(nameof(buildNumber));
 
-            if (DateTime.TryParse(buildNumber, out DateTime dateTime))
+            if (DateTime.TryParse(buildNumber, out var dateTime))
                 return new BuildNumber(dateTime);
 
             var versions = buildNumber.Split(new[] {'.'}, StringSplitOptions.RemoveEmptyEntries).Select(v => v.Trim()).ToList();
@@ -186,12 +186,12 @@ namespace Utils.AppUpdater
 
         public static bool operator ==(BuildNumber first, BuildNumber second)
         {
-            return (first.CompareTo(second) == 0);
+            return first != null && (first.CompareTo(second) == 0);
         }
 
         public static bool operator !=(BuildNumber first, BuildNumber second)
         {
-            return (first.CompareTo(second) != 0);
+            return first != null && (first.CompareTo(second) != 0);
         }
 
         public override bool Equals(object obj)

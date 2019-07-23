@@ -38,7 +38,7 @@ namespace Utils.AppUpdater
             get => Version.ToString();
             set
             {
-                if (!BuildNumber.TryParse(value, out BuildNumber getVers))
+                if (!BuildNumber.TryParse(value, out var getVers))
                 {
                     BuildNumber.TryParse("1.0.0.0", out getVers);
                 }

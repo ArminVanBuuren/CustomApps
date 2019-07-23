@@ -9,7 +9,7 @@ using TeleSharp.TL.Updates;
 using TLSharp.Core;
 using TLSharp.Core.Utils;
 
-namespace Utils.Telegram
+namespace Utils.Messaging.Telegram
 {
     public class TLControl : IDisposable
     {
@@ -113,9 +113,9 @@ namespace Utils.Telegram
             if(!File.Exists(photoFilePath))
                 throw new Exception($"File=[{photoFilePath}] not found.");
 
-            string fileName = Path.GetFileName(photoFilePath);
+            var fileName = Path.GetFileName(photoFilePath);
 
-            string capt = caption;
+            var capt = caption;
             if (capt.IsNullOrEmptyTrim())
                 capt = fileName;
 
@@ -130,11 +130,11 @@ namespace Utils.Telegram
 
             var fileName = Path.GetFileName(filePath);
 
-            string capt = caption;
+            var capt = caption;
             if (capt.IsNullOrEmptyTrim())
                 capt = fileName;
 
-            string mimT = mimeType;
+            var mimT = mimeType;
             if (mimT.IsNullOrEmptyTrim())
                 mimT = GetMimeTypeByFile(fileName);
 
@@ -233,8 +233,8 @@ namespace Utils.Telegram
 
         public async Task<TLControlUser> GetUserByUserNameAsync(string userName, bool ignoreCase = true)
         {
-            string userName1 = userName[0] == '@' ? userName : "@" + userName;
-            string userName2 = userName[0] == '@' ? userName.TrimStart('@') : userName;
+            var userName1 = userName[0] == '@' ? userName : "@" + userName;
+            var userName2 = userName[0] == '@' ? userName.TrimStart('@') : userName;
 
             var result = await Client.SearchUserAsync(userName1);
 
@@ -356,9 +356,9 @@ namespace Utils.Telegram
             if (!(res is TLDifference))
                 return null;
 
-            List<TLMessage> messages = new List<TLMessage>();
+            var messages = new List<TLMessage>();
 
-            int startDate = ToIntDate(dateFrom);
+            var startDate = ToIntDate(dateFrom);
 
             Func<object, bool> funkLocation = null;
             switch (where)
@@ -392,22 +392,22 @@ namespace Utils.Telegram
 
         public async Task<List<TLMessage>> GetAllMessagesByDateAsync(TLAbsInputPeer item, DateTime dateFrom, DateTime? dateTo = null, int limitsPerReq = 100)
         {
-            int floodExceptionNum = 0;
-            int offset = 0;
-            DateTime utfStartDate = dateFrom > DateTime.Now ? DateTime.Now.ToUniversalTime() : dateFrom.ToUniversalTime();
-            int start = (int) utfStartDate.Subtract(mdt).TotalSeconds;
-            int end = -1;
+            var floodExceptionNum = 0;
+            var offset = 0;
+            var utfStartDate = dateFrom > DateTime.Now ? DateTime.Now.ToUniversalTime() : dateFrom.ToUniversalTime();
+            var start = (int) utfStartDate.Subtract(mdt).TotalSeconds;
+            var end = -1;
 
             if (dateTo != null)
             {
-                DateTime utfEndDate = dateTo.Value.ToUniversalTime();
+                var utfEndDate = dateTo.Value.ToUniversalTime();
                 end = (int)utfEndDate.Subtract(mdt).TotalSeconds;
 
                 if (start > end)
                     throw new Exception($"{nameof(dateFrom)} must be less than {nameof(dateTo)}");
             }
 
-            List<TLMessage> messageColelction = new List<TLMessage>();
+            var messageColelction = new List<TLMessage>();
 
             getMessages:
             TLMessagesSlice messages;
@@ -433,7 +433,7 @@ namespace Utils.Telegram
                 goto getMessages;
             }
 
-            bool isContinue = messages.Messages.Count > 0;
+            var isContinue = messages.Messages.Count > 0;
             foreach (var msg in messages.Messages)
             {
                 offset++;
@@ -441,7 +441,7 @@ namespace Utils.Telegram
                 if (!(msg is TLMessage))
                     continue;
 
-                TLMessage message = (TLMessage) msg;
+                var message = (TLMessage) msg;
                 if (start <= message.Date && (end == -1 || end >= message.Date))
                 {
                     messageColelction.Add(message);
@@ -482,7 +482,7 @@ namespace Utils.Telegram
             
             //while (true)
             {
-                TLMessagesSlice res1 = await Client.SendRequestAsync<TLMessagesSlice>
+                var res1 = await Client.SendRequestAsync<TLMessagesSlice>
                 (new TLRequestGetHistory()
                 {
                     Peer = item,
@@ -491,7 +491,7 @@ namespace Utils.Telegram
                     OffsetId = 0
                 });
 
-                TLMessagesSlice res2 = await Client.SendRequestAsync<TLMessagesSlice>
+                var res2 = await Client.SendRequestAsync<TLMessagesSlice>
                 (new TLRequestGetHistory()
                 {
                     Peer = item,
@@ -507,7 +507,7 @@ namespace Utils.Telegram
 
         public async Task<TLChannelMessages> SeachByWord(TLAbsInputPeer item, string searchWord)
         {
-            TLChannelMessages search = await Client.SendRequestAsync<TLChannelMessages>
+            var search = await Client.SendRequestAsync<TLChannelMessages>
             (new TLRequestSearch()
             {
                 Peer = item,
@@ -523,14 +523,14 @@ namespace Utils.Telegram
 
         public static int ToIntDate(DateTime date)
         {
-            DateTime utfStartDate = date.ToUniversalTime();
-            int intDate = (int)utfStartDate.Subtract(mdt).TotalSeconds;
+            var utfStartDate = date.ToUniversalTime();
+            var intDate = (int)utfStartDate.Subtract(mdt).TotalSeconds;
             return intDate;
         }
 
         public static DateTime ToDate(int date)
         {
-            DateTime dateTime = mdt.AddSeconds(date).ToLocalTime();
+            var dateTime = mdt.AddSeconds(date).ToLocalTime();
             return dateTime;
         }
 

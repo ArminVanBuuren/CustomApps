@@ -25,15 +25,15 @@ namespace Utils
         public static string GetDirectory(this Assembly assembly)
         {
             //string codeBase = Assembly.GetExecutingAssembly().CodeBase;
-            UriBuilder uri = new UriBuilder(assembly.CodeBase);
-            string path = Uri.UnescapeDataString(uri.Path);
+            var uri = new UriBuilder(assembly.CodeBase);
+            var path = Uri.UnescapeDataString(uri.Path);
             return Path.GetDirectoryName(path);
         }
 
         public static DateTime GetBuildDate(this Assembly assembly)
         {
-            Version version = assembly.GetName().Version;
-            DateTime buildDate = new DateTime(2000, 1, 1).AddDays(version.Build).AddSeconds(version.Revision * 2);
+            var version = assembly.GetName().Version;
+            var buildDate = new DateTime(2000, 1, 1).AddDays(version.Build).AddSeconds(version.Revision * 2);
             return buildDate;
         }
 
@@ -65,7 +65,7 @@ namespace Utils
             // System.AppDomain.CurrentDomain.AssemblyResolve += CustomResolve;
             if (args.Name.StartsWith("library"))
             {
-                string fileName = Path.GetFullPath("platform\\" + Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE") + "\\library.dll");
+                var fileName = Path.GetFullPath("platform\\" + Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE") + "\\library.dll");
                 
                 if (File.Exists(fileName))
                 {
@@ -79,12 +79,12 @@ namespace Utils
 
         public static string GetPropertiesToString(object @object, BindingFlags flags)
         {
-            StringBuilder builder = new StringBuilder();
-            PropertyInfo[] props = @object.GetType().GetProperties(flags);
+            var builder = new StringBuilder();
+            var props = @object.GetType().GetProperties(flags);
 
-            foreach (PropertyInfo prop in props)
+            foreach (var prop in props)
             {
-                builder.Append($"{prop.Name}=[{prop.GetValue(@object)?.ToString()}]\r\n");
+                builder.Append($"{prop.Name}=[{prop.GetValue(@object)}]\r\n");
             }
 
             return builder.ToString().Trim();
@@ -92,10 +92,10 @@ namespace Utils
 
         public static Dictionary<string, string> GetPropertiesToList(object @object, BindingFlags flags)
         {
-            Dictionary<string, string> properties = new Dictionary<string, string>();
-            PropertyInfo[] props = @object.GetType().GetProperties(flags);
+            var properties = new Dictionary<string, string>();
+            var props = @object.GetType().GetProperties(flags);
 
-            foreach (PropertyInfo prop in props)
+            foreach (var prop in props)
             {
                 if (!properties.ContainsKey(prop.Name))
                     properties.Add(prop.Name, prop.GetValue(@object)?.ToString());

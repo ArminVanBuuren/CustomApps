@@ -23,11 +23,8 @@ namespace Utils.WinForm.AsyncHelper
 
         public void Abort()
         {
-            if (workerThread != null)
-            {
-                workerThread.Abort();
-                //workerThread = null;
-            }
+            workerThread?.Abort();
+            //workerThread = null;
         }
     }
 }

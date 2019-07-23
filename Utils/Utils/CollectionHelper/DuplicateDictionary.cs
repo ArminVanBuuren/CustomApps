@@ -22,7 +22,7 @@ namespace Utils.CollectionHelper
         {
             get
             {
-                if (_values.TryGetValue(index, out List<TValue> tValue))
+                if (_values.TryGetValue(index, out var tValue))
                 {
                     return tValue;
                 }
@@ -31,9 +31,9 @@ namespace Utils.CollectionHelper
             }
             set
             {
-                if (_values.TryGetValue(index, out List<TValue> tValue))
+                if (_values.ContainsKey(index))
                 {
-                    tValue = value;
+                    _values[index] = value;
                 }
                 else
                 {
@@ -75,7 +75,7 @@ namespace Utils.CollectionHelper
 
         public void Add(TKey key, List<TValue> value)
         {
-            if (_values.TryGetValue(key, out List<TValue> tValue))
+            if (_values.TryGetValue(key, out var tValue))
             {
                 tValue.AddRange(value);
             }
@@ -87,7 +87,7 @@ namespace Utils.CollectionHelper
 
         public void Add(TKey key, TValue value)
         {
-            if (_values.TryGetValue(key, out List<TValue> tValue))
+            if (_values.TryGetValue(key, out var tValue))
             {
                 tValue.Add(value);
             }
@@ -142,7 +142,8 @@ namespace Utils.CollectionHelper
 
         public void Dispose()
         {
-            ((IDisposable)_values).Dispose();
+            if (_values is IDisposable disposable)
+                disposable.Dispose();
         }
 
         public IEnumerator<KeyValuePair<TKey, List<TValue>>> GetEnumerator()

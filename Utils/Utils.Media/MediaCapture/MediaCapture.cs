@@ -33,7 +33,7 @@ namespace Utils.Media.MediaCapture
             get => _secondsDuration;
             set
             {
-                int duration = value;
+                var duration = value;
                 if (duration > 1800)
                     duration = 1800;
                 else if (duration < 1)

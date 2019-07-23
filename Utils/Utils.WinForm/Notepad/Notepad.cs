@@ -169,7 +169,7 @@ namespace Utils.WinForm.Notepad
             page.Padding = new Padding(0);
             page.Text = page.Text + new string(' ', 2);
 
-            int index = TabControlObj.TabPages.Count;
+            var index = TabControlObj.TabPages.Count;
             TabControlObj.TabPages.Add(page);
             if (TabControlObj.TabPages.Count == index)
                 TabControlObj.TabPages.Insert(index, editor.HeaderName);

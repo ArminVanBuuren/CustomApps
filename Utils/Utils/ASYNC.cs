@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -163,9 +161,9 @@ namespace Utils
             Exception error = null;
             T result = default(T);
 
-            ManualResetEvent mre = new ManualResetEvent(false);
-            System.Threading.ThreadPool.QueueUserWorkItem(
-                delegate(object ignore)
+            var mre = new ManualResetEvent(false);
+            ThreadPool.QueueUserWorkItem(
+                delegate
                 {
                     try
                     {

@@ -16,7 +16,7 @@ namespace Utils.UIControls.Tools
 
         public UIControls32()
         {
-            WOSVersion wm = new WOSVersion();
+            var wm = new WOSVersion();
             _currentVersion = wm;
         }
 
@@ -25,7 +25,7 @@ namespace Utils.UIControls.Tools
             switch (msg)
             {
                 case WM_SYSCOMMAND:
-                    int command = wParam.ToInt32() & 0xfff0;
+                    var command = wParam.ToInt32() & 0xfff0;
                     if (command == SC_MOVE)
                     {
                         handled = true;
@@ -125,17 +125,16 @@ namespace Utils.UIControls.Tools
 
         public static Bitmap GetScreen(IntPtr handle)
         {
-            Bitmap bmp = new Bitmap(0, 0);
+            var bmp = new Bitmap(0, 0);
             if (SetForegroundWindow(handle))
             {
-                RECT srcRect;
-                if (GetWindowRect(handle, out srcRect))
+                if (GetWindowRect(handle, out var srcRect))
                 {
-                    int width = srcRect.Right - srcRect.Left;
-                    int height = srcRect.Bottom - srcRect.Top;
+                    var width = srcRect.Right - srcRect.Left;
+                    var height = srcRect.Bottom - srcRect.Top;
 
                     //bmp = new Bitmap(width, height);
-                    Graphics screenG = Graphics.FromImage(bmp);
+                    var screenG = Graphics.FromImage(bmp);
 
                     try
                     {
@@ -162,9 +161,9 @@ namespace Utils.UIControls.Tools
 
         public static BitmapSource Capture(Rect area)
         {
-            IntPtr screenDC = GetDC(IntPtr.Zero);
-            IntPtr memDC = CreateCompatibleDC(screenDC);
-            IntPtr hBitmap = CreateCompatibleBitmap(screenDC, (int)SystemParameters.VirtualScreenWidth, (int)SystemParameters.VirtualScreenHeight);
+            var screenDC = GetDC(IntPtr.Zero);
+            var memDC = CreateCompatibleDC(screenDC);
+            var hBitmap = CreateCompatibleBitmap(screenDC, (int)SystemParameters.VirtualScreenWidth, (int)SystemParameters.VirtualScreenHeight);
             SelectObject(memDC, hBitmap); // Select bitmap from compatible bitmap to memDC
 
             if ((area.X != 0) && (area.Y != 0))
@@ -175,7 +174,7 @@ namespace Utils.UIControls.Tools
             {
                 BitBlt(memDC, 0, 0, (int)area.Width, (int)area.Height, screenDC, (int)area.X, (int)area.Y, TernaryRasterOperations.SRCCOPY);
             }
-            BitmapSource bsource = Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+            var bsource = Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
 
             DeleteObject(hBitmap);
             //ReleaseDC(IntPtr.Zero, screenDC);
@@ -185,7 +184,7 @@ namespace Utils.UIControls.Tools
 
         public static void StartProcess(string ProgName)
         {
-            Process proc = new Process();
+            var proc = new Process();
             proc.StartInfo.FileName = ProgName;
             proc.Start();
             proc.WaitForInputIdle();
@@ -193,19 +192,19 @@ namespace Utils.UIControls.Tools
 
         static IntPtr MakeLParam(int LoWord, int HiWord)
         {
-            int i = (HiWord << 16) | (LoWord & 0xffff);
+            var i = (HiWord << 16) | (LoWord & 0xffff);
             return new IntPtr(i);
         }
 
         public static void FindByName(string ClassName, string WindowName)
         {
-            IntPtr handle = (IntPtr)FindWindow(ClassName, WindowName);
+            var handle = (IntPtr)FindWindow(ClassName, WindowName);
             SendMessage(handle, (int)UI32WM.WM_MOVE, (IntPtr)(long)0x0, MakeLParam(50, 100));
         }
 
         public static void SuspendProcess(int processId)
         {
-            IntPtr hProc = IntPtr.Zero;
+            var hProc = IntPtr.Zero;
             try
             {
                 // Gets the handle to the Process
@@ -244,7 +243,7 @@ namespace Utils.UIControls.Tools
         static bool Check(string apps)
         {
             //поиск окна по заголовку
-            int hWnd = FindWindow(null, apps);
+            var hWnd = FindWindow(null, apps);
             if (hWnd > 0) //нашли
             {
                 SetForegroundWindow(hWnd); //активировали
@@ -258,9 +257,9 @@ namespace Utils.UIControls.Tools
 
         public static void ChangeCorsorByProgrammName(string ProgrammName)
         {
-            Process[] p = Process.GetProcessesByName(ProgrammName);
+            var p = Process.GetProcessesByName(ProgrammName);
 
-            foreach (Process s in p)
+            foreach (var s in p)
             {
                 Check(s.MainWindowTitle);
             }

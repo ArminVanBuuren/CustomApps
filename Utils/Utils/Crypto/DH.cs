@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Policy;
-using System.Text;
 
 namespace Utils.Crypto
 {
@@ -17,20 +13,20 @@ namespace Utils.Crypto
         public static DHValue Crypto(string textBox1)
         {
             string str1, str2;
-            Random myrandom = new Random();
-            Int32 p = 79, g = 7, ya, yb, xa, xb, Sa, Sb, k;
+            var myrandom = new Random();
+            int p = 79, g = 7, ya, yb, xa, xb, Sa, Sb, k;
 
-            xa = (Int32) myrandom.Next(p); // A
+            xa = (int) myrandom.Next(p); // A
             ya = fun(p, g, xa);
 
-            xb = (Int32) myrandom.Next(p); //B
+            xb = myrandom.Next(p); //B
             yb = fun(p, g, xb);
 
             Sa = fun(p, yb, xa); //A
             Sb = fun(p, ya, xb); //B
 
             //шифровка A
-            DHValue result = new DHValue();
+            var result = new DHValue();
             
             str1 = textBox1;
             for (int i = 0; i < str1.Length; i++)

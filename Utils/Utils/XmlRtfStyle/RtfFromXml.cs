@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Text;
 using System.Xml;
-using System.Xml.Resolvers;
 
 namespace Utils.XmlRtfStyle
 {
@@ -49,7 +48,7 @@ namespace Utils.XmlRtfStyle
 
         public static XmlDocument GetXmlDocument(string input)
         {
-            XmlDocument xml = new XmlDocument();
+            var xml = new XmlDocument();
             try
             {
                 xml.LoadXml(input);
@@ -64,7 +63,7 @@ namespace Utils.XmlRtfStyle
 
         public static string Convert(string source)
         {
-            RtfFromXml settings = new RtfFromXml();
+            var settings = new RtfFromXml();
             return Convert(source, settings);
         }
 
@@ -80,7 +79,7 @@ namespace Utils.XmlRtfStyle
                 throw new ArgumentNullException(nameof(source));
             }
 
-            XmlDocument xml = new XmlDocument();
+            var xml = new XmlDocument();
             xml.LoadXml(source);
             return Convert(xml, settings);
         }
@@ -98,7 +97,6 @@ namespace Utils.XmlRtfStyle
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            StringBuilder source = new StringBuilder();
             return GetRtfString(xml.OuterXml, settings);
         }
 
@@ -108,8 +106,8 @@ namespace Utils.XmlRtfStyle
             var temp = new StringBuilder();
             rtf.SetFont(settings.FontName, settings.FontSize);
 
-            int state = 0;
-            foreach (char ch in source)
+            var state = 0;
+            foreach (var ch in source)
             {
                 switch (state)
                 {
