@@ -28,8 +28,9 @@ namespace SPAFilter
         Processes = 0,
         ROBPOperations = 1,
         SCOperations = 2,
-        Activators_Add = 4,
-        Activators_Remove = 8
+        AddActivators = 4,
+        RemoveActivators = 8,
+        ReloadActivators = 16
     }
 
     [Serializable]
@@ -85,6 +86,7 @@ namespace SPAFilter
 
                     addServiceInstancesButton.Enabled = !_isInProgress;
                     removeServiceInstancesButton.Enabled = !_isInProgress;
+                    refreshServiceInstancesButton.Enabled = !_isInProgress;
                     dataGridServiceInstances.Enabled = !_isInProgress;
 
                     dataGridProcesses.Visible = !_isInProgress;
@@ -185,9 +187,8 @@ namespace SPAFilter
             if(configurationApplicationList == null)
                 return;
 
-            await _spaFilter.AssignActivatorAsync(configurationApplicationList);
-
-            AssignActivator();
+            await AssignServiceInstances(_spaFilter.AssignActivatorAsync(configurationApplicationList));
+            RefreshStatus();
         }
 
         void ISerializable.GetObjectData(SerializationInfo propertyBag, StreamingContext context)
@@ -473,9 +474,9 @@ namespace SPAFilter
                         if (!GetCellItemSelectedRows(grid, out var filesPath))
                             return;
 
-                        if(filesPath.Count == 0)
+                        if (filesPath.Count == 0)
                             return;
-                    
+
                         var userResult = MessageBox.Show($"Do you want delete selected {(filesPath.Count == 1 ? $"file" : $"{filesPath.Count} files")} ?", @"Question", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
 
                         if (userResult != DialogResult.OK)
@@ -492,16 +493,18 @@ namespace SPAFilter
                             RefreshStatus();
 
                             if (IsFiltered)
+                            {
                                 FilterButton_Click(this, EventArgs.Empty);
+                            }
                             else if (grid == dataGridServiceInstances)
                             {
-                                await _spaFilter.ReloadActivatorsAsync();
-                                AssignActivator();
+                                await AssignServiceInstances(_spaFilter.ReloadActivatorsAsync());
+                                RefreshStatus();
                             }
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            ShowError(ex.Message);
                         }
 
                         break;
@@ -645,12 +648,17 @@ namespace SPAFilter
 
         private async void AddActivatorButton_Click(object sender, EventArgs e)
         {
-            await AssignAsync(SPAProcessFilterType.Activators_Add);
+            await AssignAsync(SPAProcessFilterType.AddActivators);
         }
 
-        private async void RemoveActivatorButton_Click_1(object sender, EventArgs e)
+        private async void RemoveActivatorButton_Click(object sender, EventArgs e)
         {
-            await AssignAsync(SPAProcessFilterType.Activators_Remove);
+            await AssignAsync(SPAProcessFilterType.RemoveActivators);
+        }
+
+        private async void RefreshActivatorButton_Click(object sender, EventArgs e)
+        {
+            await AssignAsync(SPAProcessFilterType.ReloadActivators);
         }
 
         async Task AssignAsync(SPAProcessFilterType type, bool saveSettings = true)
@@ -702,27 +710,22 @@ namespace SPAFilter
                         ClearDataGrid(true);
 
                         break;
-                    case SPAProcessFilterType.Activators_Add:
-                        if (!OpenFile(@"(configuration.application.xml) | *.xml", true, out var fileConfig))
-                            return;
-
-                        await _spaFilter.AssignActivatorAsync(fileConfig.ToList());
-                        AssignActivator();
+                    case SPAProcessFilterType.AddActivators when OpenFile(@"(configuration.application.xml) | *.xml", true, out var fileConfig):
+                        await AssignServiceInstances(_spaFilter.AssignActivatorAsync(fileConfig.ToList()));
                         UpdateLastPath(fileConfig.Last());
-                        break;
-                    case SPAProcessFilterType.Activators_Remove:
-                        if (GetCellItemSelectedRows(dataGridServiceInstances, out var listFiles))
-                        {
-                            await _spaFilter.RemoveActivatorAsync(listFiles);
-                            AssignActivator();
-                        }
 
+                        break;
+                    case SPAProcessFilterType.RemoveActivators when GetCellItemSelectedRows(dataGridServiceInstances, out var listFiles):
+                        await AssignServiceInstances(_spaFilter.RemoveActivatorAsync(listFiles));
+                        break;
+                    case SPAProcessFilterType.ReloadActivators:
+                        await AssignServiceInstances(_spaFilter.ReloadActivatorsAsync());
                         break;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowError(ex.Message);
 
                 ClearDataGrid();
 
@@ -752,17 +755,39 @@ namespace SPAFilter
             }
         }
 
-        void AssignActivator()
+        async Task AssignServiceInstances(Task getInstances)
         {
+            try
+            {
+                addServiceInstancesButton.Enabled = false;
+                removeServiceInstancesButton.Enabled = false;
+                refreshServiceInstancesButton.Enabled = false;
+                dataGridServiceInstances.Visible = false;
+
+                await getInstances;
+                AssignServiceInstances();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                addServiceInstancesButton.Enabled = true;
+                removeServiceInstancesButton.Enabled = true;
+                refreshServiceInstancesButton.Enabled = true;
+                dataGridServiceInstances.Visible = true;
+                ClearDataGrid(true);
+            }
+        }
+
+        void AssignServiceInstances()
+        {
+            dataGridServiceInstances.DataSource = null;
+            dataGridServiceInstances.Refresh();
+
             if (_spaFilter.ServiceInstances != null)
-            {
                 dataGridServiceInstances.AssignListToDataGrid(_spaFilter.ServiceInstances, new Padding(0, 0, 15, 0), true);
-            }
-            else
-            {
-                dataGridServiceInstances.DataSource = null;
-                dataGridServiceInstances.Refresh();
-            }
         }
 
         void ClearOperationsComboBox()
@@ -807,7 +832,7 @@ namespace SPAFilter
 
                     await Task.Factory.StartNew(() => syncContext.Post(delegate
                     {
-                        AssignActivator();
+                        AssignServiceInstances();
 
                         dataGridProcesses.AssignListToDataGrid(_spaFilter.Processes, null, true);
 
@@ -844,7 +869,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowError(ex.Message);
             }
             finally
             {
@@ -923,7 +948,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowError(ex.Message);
             }
             finally
             {
@@ -966,7 +991,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowError(ex.Message);
             }
             finally
             {
@@ -1005,7 +1030,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowError(ex.Message);
             }
         }
 
@@ -1096,7 +1121,7 @@ namespace SPAFilter
             }
             catch(Exception ex)
             {
-                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowError(ex.Message);
                 return false;
             }
         }
@@ -1122,7 +1147,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowError(ex.Message);
                 return false;
             }
         }
@@ -1147,6 +1172,11 @@ namespace SPAFilter
                 return false;
             }
             return result.Count > 0;
+        }
+
+        static void ShowError(string message, string caption = @"Error")
+        {
+            MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
 

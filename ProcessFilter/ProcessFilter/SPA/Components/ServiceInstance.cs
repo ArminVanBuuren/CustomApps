@@ -8,11 +8,11 @@ using Utils.WinForm.DataGridViewHelper;
 
 namespace SPAFilter.SPA.Components
 {
-    public class ServiceInstance : DriveTemplate
+    public sealed class ServiceInstance : DriveTemplate
     {
         const string NOT_FOUND_ATTRIBUTE = "Not found attributes: \"{0}\" in {1}";
-        const string NOT_FOUND_DIR = "Not found directory in path: \"{0}\" when initialize {1}";
-        const string NOT_FOUND_FILE = "Not found file in path: \"{0}\" when initialize {1}";
+        const string NOT_FOUND_DIR = "Not found directory \"{0}\" when initialize {1}";
+        const string NOT_FOUND_FILE = "Not found file \"{0}\" when initialize {1}";
         const string INVALID_XML = "Invalid xml file \"{0}\"";
 
         [DGVColumn(ColumnPosition.After, "HardwareID")]
@@ -36,7 +36,7 @@ namespace SPAFilter.SPA.Components
             HardwareID = serviceInstanceNode.Attributes?["hardwareID"]?.Value;
             if (HardwareID == null)
             {
-                ServiceActivator.ShowError(string.Format(NOT_FOUND_ATTRIBUTE, "hardwareID", "serviceInstance node"));
+                ShowError(string.Format(NOT_FOUND_ATTRIBUTE, "hardwareID", "serviceInstance node"));
                 return;
             }
 
@@ -46,13 +46,13 @@ namespace SPAFilter.SPA.Components
             var scenarios = scenarioConfigNode?.Attributes?["dir"].Value;
             if (scenarios == null)
             {
-                ServiceActivator.ShowError(string.Format(NOT_FOUND_ATTRIBUTE, "dir", "\"fileScenarioSource\" node"));
+                ShowError(string.Format(NOT_FOUND_ATTRIBUTE, "dir", "\"fileScenarioSource\" node"));
                 return;
             }
             var scenariosPath = GetDir(activatorDirPath, scenarios);
             if (!Directory.Exists(scenariosPath))
             {
-                ServiceActivator.ShowError(string.Format(NOT_FOUND_DIR, scenariosPath, "\"fileScenarioSource\" node"));
+                ShowError(string.Format(NOT_FOUND_DIR, scenarios, "\"fileScenarioSource\" node"));
                 return;
             }
 
@@ -61,25 +61,25 @@ namespace SPAFilter.SPA.Components
             var dictionaryXML = dict?.Attributes?["xml"].Value;
             if (dictionary == null || dictionaryXML == null)
             {
-                ServiceActivator.ShowError(string.Format(NOT_FOUND_ATTRIBUTE, "path or xml", "object-\"dictionary\" node"));
+                ShowError(string.Format(NOT_FOUND_ATTRIBUTE, "path or xml", "object-\"dictionary\" node"));
                 return;
             }
             var dictionaryPath = GetDir(activatorDirPath, dictionary);
             if (dictionaryPath == null)
             {
-                ServiceActivator.ShowError(string.Format(NOT_FOUND_DIR, dictionary, "object-\"dictionary\" node"));
+                ShowError(string.Format(NOT_FOUND_DIR, dictionary, "object-\"dictionary\" node"));
                 return;
             }
             dictionaryPath = Path.Combine(dictionaryPath, dictionaryXML);
             if (!File.Exists(dictionaryPath))
             {
-                ServiceActivator.ShowError(string.Format(NOT_FOUND_FILE, dictionaryPath, "object-\"dictionary\" node"));
+                ShowError(string.Format(NOT_FOUND_FILE, dictionaryPath, "object-\"dictionary\" node"));
                 return;
             }
 
             if (!XML.IsFileXml(dictionaryPath, out var dictionaryConfig))
             {
-                ServiceActivator.ShowError(string.Format(INVALID_XML, dictionaryPath));
+                ShowError(string.Format(INVALID_XML, dictionaryPath));
                 return;
             }
 
@@ -87,20 +87,20 @@ namespace SPAFilter.SPA.Components
             var commandsMask = dictionaryConfig.SelectSingleNode(@"/Dictionary/CommandsList/@Mask")?.Value ?? "*.xml";
             if (commandsRoot == null)
             {
-                ServiceActivator.ShowError(string.Format(NOT_FOUND_ATTRIBUTE, "Root", $"dictionary=\"{dictionaryPath}\""));
+                ShowError(string.Format(NOT_FOUND_ATTRIBUTE, "Root", $"dictionary=\"{dictionaryPath}\""));
                 return;
             }
             var commandsDir = GetDir(activatorDirPath, commandsRoot);
             if (commandsDir == null)
             {
-                ServiceActivator.ShowError(string.Format(NOT_FOUND_DIR, commandsRoot, $"dictionary=\"{dictionaryPath}\""));
+                ShowError(string.Format(NOT_FOUND_DIR, commandsRoot, $"dictionary=\"{dictionaryPath}\""));
                 return;
             }
             if (commandsDir == activatorDirPath)
                 commandsDir = Path.Combine(commandsDir, commandsRoot);
             if (!Directory.Exists(commandsDir))
             {
-                ServiceActivator.ShowError(string.Format(NOT_FOUND_DIR, commandsDir, $"dictionary=\"{dictionaryPath}\""));
+                ShowError(string.Format(NOT_FOUND_DIR, commandsDir, $"dictionary=\"{dictionaryPath}\""));
                 return;
             }
 
@@ -122,6 +122,9 @@ namespace SPAFilter.SPA.Components
             return Path.IsPathRooted(rootPath) ? rootPath : IO.EvaluateFirstMatchPath(rootPath, basePath);
         }
 
-
+        void ShowError(string message)
+        {
+            MessageBox.Show($"{(!HardwareID.IsNullOrEmpty() ? $"[{HardwareID}]={FilePath}" : FilePath)}\r\n\r\n{message}", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 }

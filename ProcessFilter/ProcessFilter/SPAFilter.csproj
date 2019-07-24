@@ -146,6 +146,7 @@
   <ItemGroup>
     <Content Include="Resources\icons8-minus-20.png" />
     <Content Include="Resources\icons8-plus-20.png" />
+    <Content Include="Resources\icons8-synchronize-20.png" />
     <Content Include="Resources\icons8.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -24,7 +24,7 @@ namespace SPAFilter.SPA
         public string ROBPHostTypesPath { get; private set; }
         public string SCPath { get; private set; }
 
-        public bool IsEnabledFilter => (Processes?.Count ?? 0) > 0 && (HostTypes?.OperationsCount ?? 0) > 0;
+        public bool IsEnabledFilter => !ProcessPath.IsNullOrEmpty() && Directory.Exists(ProcessPath) && ((!ROBPHostTypesPath.IsNullOrEmpty() && Directory.Exists(ROBPHostTypesPath)) || (!SCPath.IsNullOrEmpty() || File.Exists(SCPath)));   //(Processes?.Count ?? 0) > 0 && (HostTypes?.OperationsCount ?? 0) > 0;
         public bool CanGenerateSC => (HostTypes?.DriveOperationsCount ?? 0) > 0 && !(HostTypes is ServiceCatalog);
         public int WholeDriveItemsCount => (Processes?.Count ?? 0) + (HostTypes?.DriveOperationsCount ?? 0) + (ServiceInstances?.Count ?? 0) + (Scenarios?.Count ?? 0) + (Commands?.Count ?? 0);
 
@@ -319,12 +319,6 @@ namespace SPAFilter.SPA
                 var errors = string.Empty;
                 foreach (var filePath in filePathList)
                 {
-                    if (!File.Exists(filePath))
-                    {
-                        errors += $"File \"{filePath}\" not found.\r\n";
-                        continue;
-                    }
-
                     if (_activators.Any(x => x.FilePath.Equals(filePath, StringComparison.CurrentCultureIgnoreCase)))
                     {
                         errors += $"Activator \"{filePath}\" already exist.\r\n";
@@ -334,7 +328,6 @@ namespace SPAFilter.SPA
                     try
                     {
                         _activators.Add(new ServiceActivator(filePath));
-                        ServiceInstances = GetServiceInstances();
                     }
                     catch (Exception ex)
                     {
@@ -342,6 +335,8 @@ namespace SPAFilter.SPA
                         continue;
                     }
                 }
+
+                LoadActivators();
 
                 if (!errors.IsNullOrEmptyTrim())
                 {
@@ -367,7 +362,7 @@ namespace SPAFilter.SPA
                     }
                 }
 
-                ServiceInstances = GetServiceInstances();
+                LoadActivators();
             });
         }
 
@@ -384,6 +379,11 @@ namespace SPAFilter.SPA
                 activator.Refresh();
             }
 
+            LoadActivators();
+        }
+
+        void LoadActivators()
+        {
             ServiceInstances = GetServiceInstances();
             GetScenariosAndCommands(ServiceInstances, out var allScenarios, out var allCommands);
             Scenarios = allScenarios;

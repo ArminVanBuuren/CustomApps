@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Windows.Forms;
 using Utils;
 
@@ -35,7 +34,7 @@ namespace SPAFilter.SPA.Components
                     instance.IsCorrect = false;
                 }
 
-                ShowError(ex.Message);
+                MessageBox.Show(ex.Message, FilePath, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -61,11 +60,6 @@ namespace SPAFilter.SPA.Components
                 throw new Exception($"Incorrect activator config \"{FilePath}\"");
 
             return serviceInstances;
-        }
-
-        internal static void ShowError(string message)
-        {
-            MessageBox.Show(message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }
