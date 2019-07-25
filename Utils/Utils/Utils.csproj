@@ -97,6 +97,7 @@
     <Compile Include="AppUpdater\ApplicationUpdaterProcessingArgs.cs" />
     <Compile Include="AppUpdater\Updater\UploadProgress.cs" />
     <Compile Include="CMD.cs" />
+    <Compile Include="CollectionHelper\DistinctList.cs" />
     <Compile Include="CollectionHelper\DuplicateDictionary.cs" />
     <Compile Include="CollectionHelper\HashtableComparer.cs" />
     <Compile Include="CollectionHelper\PriorityQueue.cs" />

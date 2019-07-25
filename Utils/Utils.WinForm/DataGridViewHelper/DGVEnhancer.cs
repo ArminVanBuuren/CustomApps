@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Utils.WinForm.DataGridViewHelper
@@ -72,8 +73,19 @@ namespace Utils.WinForm.DataGridViewHelper
                 return $"{PropertyName}=[{Attribute.ColumnName}]";
             }
         }
-       
-        public static void AssignListToDataGrid<T>(this DataGridView grid, IEnumerable<T> data, Padding? cellPadding = null, bool stretchColumnsToAllCells = false)
+
+        public static async Task AssignCollectionAsync<T>(this DataGridView grid, IEnumerable<T> data, Padding? cellPadding = null, bool stretchColumnsToAllCells = false)
+        {
+            await Task.Factory.StartNew(() =>
+            {
+                grid.Invoke(new MethodInvoker(delegate
+                {
+                    AssignCollection(grid, data, cellPadding, stretchColumnsToAllCells); 
+                }));
+            });
+        }
+
+        public static void AssignCollection<T>(this DataGridView grid, IEnumerable<T> data, Padding? cellPadding = null, bool stretchColumnsToAllCells = false)
         {
             if (data == null)
                 throw new ArgumentException(nameof(data));
