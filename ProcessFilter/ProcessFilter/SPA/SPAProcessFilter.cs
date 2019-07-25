@@ -229,6 +229,8 @@ namespace SPAFilter.SPA
             ROBPHostTypesPath = robpHostTypesPath;
             SCPath = null;
             HostTypes = null;
+            Scenarios = null;
+            Commands = null;
             await Task.Factory.StartNew(() => FilterROBPOperations(null, null, null));
         }
 
@@ -254,6 +256,8 @@ namespace SPAFilter.SPA
             SCPath = filePath;
             ROBPHostTypesPath = null;
             HostTypes = null;
+            Scenarios = null;
+            Commands = null;
             await Task.Factory.StartNew(() => FilterSCOperations(null, null, null));
         }
 
