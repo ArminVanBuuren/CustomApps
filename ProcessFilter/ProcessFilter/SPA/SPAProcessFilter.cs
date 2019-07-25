@@ -12,19 +12,21 @@ using SPAFilter.SPA.Components;
 using SPAFilter.SPA.Components.ROBP;
 using SPAFilter.SPA.SC;
 using Utils;
+using Utils.CollectionHelper;
 using Utils.WinForm.CustomProgressBar;
 
 namespace SPAFilter.SPA
 {
     public class SPAProcessFilter
     {
-        readonly List<ServiceActivator> _activators = new List<ServiceActivator>();
+        readonly object _activatorsSync = new object();
+        readonly Dictionary<string, ServiceActivator> _activators = new Dictionary<string, ServiceActivator>(StringComparer.CurrentCultureIgnoreCase);
 
         public string ProcessPath { get; private set; }
         public string ROBPHostTypesPath { get; private set; }
         public string SCPath { get; private set; }
 
-        public bool IsEnabledFilter => !ProcessPath.IsNullOrEmpty() && Directory.Exists(ProcessPath) && ((!ROBPHostTypesPath.IsNullOrEmpty() && Directory.Exists(ROBPHostTypesPath)) || (!SCPath.IsNullOrEmpty() || File.Exists(SCPath)));   //(Processes?.Count ?? 0) > 0 && (HostTypes?.OperationsCount ?? 0) > 0;
+        public bool IsEnabledFilter => !ProcessPath.IsNullOrEmpty() && Directory.Exists(ProcessPath) && ((!ROBPHostTypesPath.IsNullOrEmpty() && Directory.Exists(ROBPHostTypesPath)) || (!SCPath.IsNullOrEmpty() || File.Exists(SCPath)));
         public bool CanGenerateSC => (HostTypes?.DriveOperationsCount ?? 0) > 0 && !(HostTypes is ServiceCatalog);
         public int WholeDriveItemsCount => (Processes?.Count ?? 0) + (HostTypes?.DriveOperationsCount ?? 0) + (ServiceInstances?.Count ?? 0) + (Scenarios?.Count ?? 0) + (Commands?.Count ?? 0);
 
@@ -35,7 +37,12 @@ namespace SPAFilter.SPA
         public CollectionTemplate<Scenario> Scenarios { get; private set; }
         public CollectionTemplate<Command> Commands { get; private set; }
 
-        public void DataFilter(string filterProcess, string filterHT, string filterOp, ProgressCalculationAsync progressCalc)
+        public async Task DataFilterAsync(string filterProcess, string filterHT, string filterOp, ProgressCalculationAsync progressCalc)
+        {
+            await Task.Factory.StartNew(() => DataFilter(filterProcess, filterHT, filterOp, progressCalc));
+        }
+
+        void DataFilter(string filterProcess, string filterHT, string filterOp, ProgressCalculationAsync progressCalc)
         {
             try
             {
@@ -319,20 +326,23 @@ namespace SPAFilter.SPA
                 var errors = string.Empty;
                 foreach (var filePath in filePathList)
                 {
-                    if (_activators.Any(x => x.FilePath.Equals(filePath, StringComparison.CurrentCultureIgnoreCase)))
+                    lock (_activatorsSync)
                     {
-                        errors += $"Activator \"{filePath}\" already exist.\r\n";
-                        continue;
-                    }
+                        if (_activators.ContainsKey(filePath))
+                        {
+                            errors += $"Activator \"{filePath}\" already exist.\r\n";
+                            continue;
+                        }
 
-                    try
-                    {
-                        _activators.Add(new ServiceActivator(filePath));
-                    }
-                    catch (Exception ex)
-                    {
-                        errors += $"{ex.Message}\r\n";
-                        continue;
+                        try
+                        {
+                            _activators.Add(filePath, new ServiceActivator(filePath));
+                        }
+                        catch (Exception ex)
+                        {
+                            errors += $"{ex.Message}\r\n";
+                            continue;
+                        }
                     }
                 }
 
@@ -351,14 +361,12 @@ namespace SPAFilter.SPA
             {
                 foreach (var filePath in filePathList)
                 {
-                    for (var index = 0; index < _activators.Count; index++)
+                    lock (_activatorsSync)
                     {
-                        var activator = _activators[index];
-                        if (!activator.FilePath.Equals(filePath, StringComparison.CurrentCultureIgnoreCase))
-                            continue;
-
-                        _activators.RemoveAt(index);
-                        break;
+                        if (!_activators.ContainsKey(filePath))
+                        {
+                            _activators.Remove(filePath);
+                        }
                     }
                 }
 
@@ -374,9 +382,12 @@ namespace SPAFilter.SPA
 
         void ReloadActivators()
         {
-            foreach (var activator in _activators)
+            lock (_activatorsSync)
             {
-                activator.Refresh();
+                foreach (var activator in _activators)
+                {
+                    activator.Value.Refresh();
+                }
             }
 
             LoadActivators();
@@ -393,12 +404,16 @@ namespace SPAFilter.SPA
         CollectionTemplate<ServiceInstance> GetServiceInstances(bool getValid = false)
         {
             var intsances = new CollectionTemplate<ServiceInstance>();
-            foreach (var instance in _activators.SelectMany(p => p.Instances).OrderBy(p => p.HostTypeName).ThenBy(p => p.Name))
+            lock (_activatorsSync)
             {
-                if (getValid && !instance.IsCorrect)
-                    continue;
-                intsances.Add(instance);
+                foreach (var instance in _activators.Values.SelectMany(p => p.Instances).OrderBy(p => p.HostTypeName).ThenBy(p => p.Name))
+                {
+                    if (getValid && !instance.IsCorrect)
+                        continue;
+                    intsances.Add(instance);
+                }
             }
+
             intsances.InitSequence();
             return intsances;
         }
@@ -425,7 +440,12 @@ namespace SPAFilter.SPA
 
         private readonly string[] mandatoryXslxColumns = new string[] { "#", "SPA_SERVICE_CODE", "GLOBAL_SERVICE_CODE", "SERVICE_NAME", "SERVICE_FULL_NAME", "SERVICE_FULL_NAME2", "DESCRIPTION", "SERVICE_CODE", "SERVICE_NAME2", "EXTERNAL_CODE", "EXTERNAL_CODE2" };
 
-        public DataTable GetRDServicesFromXslx(FileInfo file, CustomProgressCalculation progressCalc)
+        public async Task<DataTable> GetRDServicesFromXslxAsync(FileInfo file, CustomProgressCalculation progressCalc)
+        {
+            return await Task<DataTable>.Factory.StartNew(() => GetRDServicesFromXslx(file, progressCalc));
+        }
+
+        DataTable GetRDServicesFromXslx(FileInfo file, CustomProgressCalculation progressCalc)
         {
             var serviceTable = new DataTable();
 
@@ -476,7 +496,12 @@ namespace SPAFilter.SPA
             return serviceTable;
         }
 
-        public string GetServiceCatalog(DataTable rdServices, string exportFilePath, CustomProgressCalculation progressCalc)
+        public async Task<string> GetServiceCatalogAsync(DataTable rdServices, string exportFilePath, CustomProgressCalculation progressCalc)
+        {
+            return await Task.Factory.StartNew(() => GetServiceCatalog(rdServices, exportFilePath, progressCalc));
+        }
+
+        string GetServiceCatalog(DataTable rdServices, string exportFilePath, CustomProgressCalculation progressCalc)
         {
             try
             {

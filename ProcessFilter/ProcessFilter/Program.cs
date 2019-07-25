@@ -17,18 +17,18 @@ namespace SPAFilter
             Application.SetCompatibleTextRenderingDefault(false);
 
             SPAFilterForm mainControl = null;
-            if (File.Exists(SPAFilterForm.SerializationDataPath))
+            if (File.Exists(SPAFilterForm.SavedDataPath))
             {
                 try
                 {
-                    using (Stream stream = new FileStream(SPAFilterForm.SerializationDataPath, FileMode.Open, FileAccess.Read))
+                    using (Stream stream = new FileStream(SPAFilterForm.SavedDataPath, FileMode.Open, FileAccess.Read))
                     {
                         mainControl = new BinaryFormatter().Deserialize(stream) as SPAFilterForm;
                     }
                 }
                 catch (Exception)
                 {
-                    File.Delete(SPAFilterForm.SerializationDataPath);
+                    File.Delete(SPAFilterForm.SavedDataPath);
                 }
             }
 

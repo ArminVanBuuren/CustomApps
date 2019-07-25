@@ -38,7 +38,8 @@ namespace SPAFilter
     {
         readonly object _sync = new object();
 
-        private bool _isInProgress = false;
+        private bool _IsInProcessing = false;
+        private bool _isSiChecking = false;
         private string _lastDirPath = string.Empty;
         private readonly object sync = new object();
         private readonly object sync2 = new object();
@@ -48,63 +49,83 @@ namespace SPAFilter
         private FormWindowState _notepadWindowsState = FormWindowState.Maximized;
         private SPAProcessFilter _spaFilter;
 
-        public static string SerializationDataPath => $"{ApplicationFilePath}.bin";
-        private bool IsFiltered { get; set; } = false;
-        private bool IsInitialization { get; } = true;
+        public static string SavedDataPath => $"{ApplicationFilePath}.bin";
 
-        private bool IsInProgress
+        private bool IsInititializating { get; } = true;
+
+        private bool IsInProcessing
         {
-            get => _isInProgress;
+            get => _IsInProcessing;
             set
             {
                 lock (sync2)
                 {
-                    _isInProgress = value;
+                    _IsInProcessing = value;
 
-                    if(_isInProgress && _notepad != null && !_notepad.WindowIsClosed)
+                    if (_IsInProcessing && _notepad != null && !_notepad.WindowIsClosed)
                         _notepad.Close();
 
-                    FilterButton.Enabled = !_isInProgress;
-                    PrintXMLButton.Enabled = !_isInProgress;
+                    FilterButton.Enabled = !_IsInProcessing;
+                    PrintXMLButton.Enabled = !_IsInProcessing;
 
-                    ProcessesTextBox.Enabled = !_isInProgress;
-                    ProcessesButtonOpen.Enabled = !_isInProgress;
+                    ProcessesTextBox.Enabled = !_IsInProcessing;
+                    ProcessesButtonOpen.Enabled = !_IsInProcessing;
 
-                    ROBPOperationsRadioButton.Enabled = !_isInProgress;
-                    ServiceCatalogRadioButton.Enabled = !_isInProgress;
+                    ROBPOperationsRadioButton.Enabled = !_IsInProcessing;
+                    ServiceCatalogRadioButton.Enabled = !_IsInProcessing;
 
                     if (ROBPOperationsRadioButton.Checked)
                     {
-                        ROBPOperationTextBox.Enabled = !_isInProgress;
-                        ROBPOperationButtonOpen.Enabled = !_isInProgress;
+                        ROBPOperationTextBox.Enabled = !_IsInProcessing;
+                        ROBPOperationButtonOpen.Enabled = !_IsInProcessing;
                     }
                     else
                     {
-                        ServiceCatalogTextBox.Enabled = !_isInProgress;
-                        ServiceCatalogOpenButton.Enabled = !_isInProgress;
+                        ServiceCatalogTextBox.Enabled = !_IsInProcessing;
+                        ServiceCatalogOpenButton.Enabled = !_IsInProcessing;
                     }
 
-                    addServiceInstancesButton.Enabled = !_isInProgress;
-                    removeServiceInstancesButton.Enabled = !_isInProgress;
-                    refreshServiceInstancesButton.Enabled = !_isInProgress;
-                    dataGridServiceInstances.Enabled = !_isInProgress;
+                    addServiceInstancesButton.Enabled = !_IsInProcessing;
+                    removeServiceInstancesButton.Enabled = !_IsInProcessing;
+                    refreshServiceInstancesButton.Enabled = !_IsInProcessing;
+                    dataGridServiceInstances.Enabled = !_IsInProcessing;
 
-                    dataGridProcesses.Visible = !_isInProgress;
-                    dataGridOperations.Visible = !_isInProgress;
-                    dataGridScenarios.Visible = !_isInProgress;
-                    dataGridCommands.Visible = !_isInProgress;
-                    GenerateSC.Enabled = !_isInProgress;
+                    dataGridProcesses.Visible = !_IsInProcessing;
+                    dataGridOperations.Visible = !_IsInProcessing;
+                    dataGridScenarios.Visible = !_IsInProcessing;
+                    dataGridCommands.Visible = !_IsInProcessing;
+                    GenerateSC.Enabled = !_IsInProcessing;
 
-                    ProcessesComboBox.Enabled = !_isInProgress;
-                    NetSettComboBox.Enabled = !_isInProgress;
-                    OperationComboBox.Enabled = !_isInProgress;
+                    ProcessesComboBox.Enabled = !_IsInProcessing;
+                    NetSettComboBox.Enabled = !_IsInProcessing;
+                    OperationComboBox.Enabled = !_IsInProcessing;
+                }
+            }
+        }
+
+        private bool IsFiltered { get; set; } = false;
+
+        private bool IsServiceInstancesChecking
+        {
+            get => _isSiChecking;
+            set
+            {
+                _isSiChecking = value;
+
+                if (_isSiChecking)
+                {
+                    FilterButton.Enabled = false;
+                }
+                else if(!IsInProcessing)
+                {
+                    FilterButton.Enabled = true;
                 }
             }
         }
 
         public SPAFilterForm()
         {
-            IsInitialization = false;
+            IsInititializating = false;
             PreInit();
             PostInit();
         }
@@ -172,7 +193,7 @@ namespace SPAFilter
             }
             finally
             {
-                IsInitialization = false;
+                IsInititializating = false;
                 PostInit();
             }
         }
@@ -188,7 +209,6 @@ namespace SPAFilter
                 return;
 
             await AssignServiceInstances(_spaFilter.AssignActivatorAsync(configurationApplicationList));
-            RefreshStatus();
         }
 
         void ISerializable.GetObjectData(SerializationInfo propertyBag, StreamingContext context)
@@ -490,7 +510,6 @@ namespace SPAFilter
                                     File.Delete(filePath);
                             }
 
-                            RefreshStatus();
 
                             if (IsFiltered)
                             {
@@ -499,7 +518,6 @@ namespace SPAFilter
                             else if (grid == dataGridServiceInstances)
                             {
                                 await AssignServiceInstances(_spaFilter.ReloadActivatorsAsync());
-                                RefreshStatus();
                             }
                         }
                         catch (Exception ex)
@@ -713,7 +731,6 @@ namespace SPAFilter
                     case SPAProcessFilterType.AddActivators when OpenFile(@"(configuration.application.xml) | *.xml", true, out var fileConfig):
                         await AssignServiceInstances(_spaFilter.AssignActivatorAsync(fileConfig.ToList()));
                         UpdateLastPath(fileConfig.Last());
-
                         break;
                     case SPAProcessFilterType.RemoveActivators when GetCellItemSelectedRows(dataGridServiceInstances, out var listFiles):
                         await AssignServiceInstances(_spaFilter.RemoveActivatorAsync(listFiles));
@@ -759,13 +776,15 @@ namespace SPAFilter
         {
             try
             {
+                IsServiceInstancesChecking = true;
+
                 addServiceInstancesButton.Enabled = false;
                 removeServiceInstancesButton.Enabled = false;
                 refreshServiceInstancesButton.Enabled = false;
                 dataGridServiceInstances.Visible = false;
 
                 await getInstances;
-                AssignServiceInstances();
+                await AssignServiceInstances();
             }
             catch (Exception)
             {
@@ -773,21 +792,27 @@ namespace SPAFilter
             }
             finally
             {
+                IsServiceInstancesChecking = false;
+
                 addServiceInstancesButton.Enabled = true;
                 removeServiceInstancesButton.Enabled = true;
                 refreshServiceInstancesButton.Enabled = true;
                 dataGridServiceInstances.Visible = true;
+
                 ClearDataGrid(true);
+                RefreshStatus();
             }
         }
 
-        void AssignServiceInstances()
+        async Task AssignServiceInstances()
         {
             dataGridServiceInstances.DataSource = null;
             dataGridServiceInstances.Refresh();
 
             if (_spaFilter.ServiceInstances != null)
-                dataGridServiceInstances.AssignListToDataGrid(_spaFilter.ServiceInstances, new Padding(0, 0, 15, 0), true);
+            {
+                await dataGridServiceInstances.AssignCollectionAsync(_spaFilter.ServiceInstances, new Padding(0, 0, 15, 0), true);
+            }
         }
 
         void ClearOperationsComboBox()
@@ -804,7 +829,7 @@ namespace SPAFilter
         {
             switch (e.KeyCode)
             {
-                case Keys.F5 when _spaFilter.IsEnabledFilter:
+                case Keys.F5 when FilterButton.Enabled:
                     FilterButton_Click(this, EventArgs.Empty);
                     break;
             }
@@ -812,57 +837,53 @@ namespace SPAFilter
 
         private async void FilterButton_Click(object sender, EventArgs e)
         {
-            if (IsInProgress)
+            if (IsInProcessing)
                 return;
 
             try
             {
-                IsInProgress = true;
+                IsInProcessing = true;
 
                 var filterProcess = ProcessesComboBox.Text;
-                var filterNE = NetSettComboBox.Text;
+                var filterHT = NetSettComboBox.Text;
                 var filterOp = OperationComboBox.Text;
-                var syncContext = SynchronizationContext.Current;
 
                 ClearDataGrid();
 
                 using (var progressCalc = new ProgressCalculationAsync(progressBar, 9))
                 {
-                    await Task.Factory.StartNew(() => _spaFilter.DataFilter(filterProcess, filterNE, filterOp, progressCalc));
+                    await _spaFilter.DataFilterAsync(filterProcess, filterHT, filterOp, progressCalc);
 
-                    await Task.Factory.StartNew(() => syncContext.Post(delegate
+                    await AssignServiceInstances();
+
+                    await dataGridProcesses.AssignCollectionAsync(_spaFilter.Processes, null, true);
+
+                    if (ROBPOperationsRadioButton.Checked)
+                        await dataGridOperations.AssignCollectionAsync(_spaFilter.HostTypes.Operations.OfType<ROBPOperation>(), null, true);
+                    else
+                        await dataGridOperations.AssignCollectionAsync(_spaFilter.HostTypes.Operations.OfType<CatalogOperation>(), null, true);
+
+                    progressCalc.Append(1);
+
+                    if (_spaFilter.Scenarios != null)
                     {
-                        AssignServiceInstances();
+                        await dataGridScenarios.AssignCollectionAsync(_spaFilter.Scenarios, null, true);
+                    }
+                    else
+                    {
+                        dataGridScenarios.DataSource = null;
+                        dataGridScenarios.Refresh();
+                    }
 
-                        dataGridProcesses.AssignListToDataGrid(_spaFilter.Processes, null, true);
-
-                        if(ROBPOperationsRadioButton.Checked)
-                            dataGridOperations.AssignListToDataGrid(_spaFilter.HostTypes.Operations.OfType<ROBPOperation>(), null, true);
-                        else
-                            dataGridOperations.AssignListToDataGrid(_spaFilter.HostTypes.Operations.OfType<CatalogOperation>(), null, true);
-
-                        if (_spaFilter.Scenarios != null)
-                        {
-                            dataGridScenarios.AssignListToDataGrid(_spaFilter.Scenarios, null, true);
-                        }
-                        else
-                        {
-                            dataGridScenarios.DataSource = null;
-                            dataGridScenarios.Refresh();
-                        }
-
-                        progressCalc.Append(1);
-
-                        if (_spaFilter.Commands != null)
-                        {
-                            dataGridCommands.AssignListToDataGrid(_spaFilter.Commands,null, true);
-                        }
-                        else
-                        {
-                            dataGridCommands.DataSource = null;
-                            dataGridCommands.Refresh();
-                        }
-                    }, null));
+                    if (_spaFilter.Commands != null)
+                    {
+                        await dataGridCommands.AssignCollectionAsync(_spaFilter.Commands, null, true);
+                    }
+                    else
+                    {
+                        dataGridCommands.DataSource = null;
+                        dataGridCommands.Refresh();
+                    }
                 }
 
                 IsFiltered = true;
@@ -873,7 +894,7 @@ namespace SPAFilter
             }
             finally
             {
-                IsInProgress = false;
+                IsInProcessing = false;
                 RefreshStatus();
             }
         }
@@ -905,7 +926,7 @@ namespace SPAFilter
 
         private async void ButtonGenerateSC_Click(object sender, EventArgs e)
         {
-            if (IsInProgress)
+            if (IsInProcessing)
                 return;
 
             var fileOperationsCount = _spaFilter.HostTypes.DriveOperationsCount;
@@ -918,7 +939,7 @@ namespace SPAFilter
 
             try
             {
-                IsInProgress = true;
+                IsInProcessing = true;
 
                 if (!Directory.Exists(ExportSCPath.Text))
                     Directory.CreateDirectory(ExportSCPath.Text);
@@ -929,15 +950,15 @@ namespace SPAFilter
                     var file = new FileInfo(OpenSCXlsx.Text);
                     using (var progrAsync = new CustomProgressCalculation(progressBar, fileOperationsCount, file))
                     {
-                        var rdServices = await Task<DataTable>.Factory.StartNew(() => _spaFilter.GetRDServicesFromXslx(file, progrAsync));
-                        fileResult = await Task.Factory.StartNew(() => _spaFilter.GetServiceCatalog(rdServices, ExportSCPath.Text, progrAsync));
+                        var rdServices = await _spaFilter.GetRDServicesFromXslxAsync(file, progrAsync);
+                        fileResult = await _spaFilter.GetServiceCatalogAsync(rdServices, ExportSCPath.Text, progrAsync);
                     }
                 }
                 else
                 {
                     using (var progrAsync = new CustomProgressCalculation(progressBar, fileOperationsCount))
                     {
-                        fileResult = await Task.Factory.StartNew(() => _spaFilter.GetServiceCatalog( null, ExportSCPath.Text, progrAsync));
+                        fileResult = await _spaFilter.GetServiceCatalogAsync(null, ExportSCPath.Text, progrAsync);
                     }
                 }
 
@@ -952,7 +973,7 @@ namespace SPAFilter
             }
             finally
             {
-                IsInProgress = false;
+                IsInProcessing = false;
             }
         }
 
@@ -965,12 +986,12 @@ namespace SPAFilter
                 return;
             }
 
-            if (IsInProgress)
+            if (IsInProcessing)
                 return;
 
             try
             {
-                IsInProgress = true;
+                IsInProcessing = true;
 
                 using (var stringErrors = new CustomStringBuilder())
                 {
@@ -995,7 +1016,7 @@ namespace SPAFilter
             }
             finally
             {
-                IsInProgress = false;
+                IsInProcessing = false;
             }
         }
 
@@ -1090,12 +1111,12 @@ namespace SPAFilter
 
         void SaveData()
         {
-            if (IsInitialization)
+            if (IsInititializating)
                 return;
 
             lock (sync)
             {
-                using (var stream = new FileStream(SerializationDataPath, FileMode.Create, FileAccess.ReadWrite))
+                using (var stream = new FileStream(SavedDataPath, FileMode.Create, FileAccess.ReadWrite))
                 {
                     new BinaryFormatter().Serialize(stream, this);
                 }

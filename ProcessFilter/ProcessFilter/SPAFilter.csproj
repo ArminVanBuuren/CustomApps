@@ -85,7 +85,6 @@
     <Compile Include="SPA\Collection\ServiceCatalog.cs" />
     <Compile Include="SPA\Components\SRI\RFSOperation.cs" />
     <Compile Include="SPA\Components\SRI\ScenarioOperation.cs" />
-    <Compile Include="SPA\Collection\DistinctList.cs" />
     <Compile Include="SPA\Components\ServiceActivator.cs" />
     <Compile Include="SPA\DriveTemplate.cs" />
     <Compile Include="SPA\IObjectTemplate.cs" />
