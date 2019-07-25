@@ -78,10 +78,7 @@ namespace Utils.WinForm.DataGridViewHelper
         {
             await Task.Factory.StartNew(() =>
             {
-                grid.Invoke(new MethodInvoker(delegate
-                {
-                    AssignCollection(grid, data, cellPadding, stretchColumnsToAllCells); 
-                }));
+                grid.AssignCollection(data, cellPadding, stretchColumnsToAllCells);
             });
         }
 
@@ -147,6 +144,22 @@ namespace Utils.WinForm.DataGridViewHelper
                 table.Rows.Add(objs);
             }
 
+
+            if (grid.InvokeRequired)
+            {
+                grid.Invoke(new MethodInvoker(delegate
+                {
+                    grid.AssignToDataGridView(table, columnList, cellPadding, stretchColumnsToAllCells);
+                }));
+            }
+            else
+            {
+                grid.AssignToDataGridView(table, columnList, cellPadding, stretchColumnsToAllCells);
+            }
+        }
+
+        static void AssignToDataGridView(this DataGridView grid, DataTable table, IEnumerable<DGVColumn> columnList, Padding? cellPadding, bool stretchColumnsToAllCells)
+        {
             var prevResize = grid.RowHeadersWidthSizeMode;
             var prevVisible = grid.RowHeadersVisible;
             try
@@ -198,6 +211,7 @@ namespace Utils.WinForm.DataGridViewHelper
             }
         }
 
+
         private static void Grid_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             if (!(sender is DataGridView grid))
@@ -206,6 +220,7 @@ namespace Utils.WinForm.DataGridViewHelper
             StretchColumnsToAllCells(grid);
             grid.DataBindingComplete -= Grid_DataBindingComplete;
         }
+
 
         public static void StretchColumnsToAllCells(this DataGridView grid)
         {
