@@ -711,6 +711,8 @@ namespace SPAFilter
                                 break;
                         }
 
+                        await AssignServiceInstances(_spaFilter.ReloadActivatorsAsync());
+
                         if (_spaFilter.HostTypes != null)
                         {
                             NetSettComboBox.DataSource = _spaFilter.HostTypes.HostTypeNames;
