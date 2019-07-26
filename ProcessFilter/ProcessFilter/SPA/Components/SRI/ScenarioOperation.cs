@@ -7,6 +7,7 @@ using System.Xml.XPath;
 using SPAFilter.SPA.Collection;
 using Utils;
 using Utils.CollectionHelper;
+using Utils.WinForm.DataGridViewHelper;
 
 namespace SPAFilter.SPA.Components.SRI
 {
@@ -14,8 +15,8 @@ namespace SPAFilter.SPA.Components.SRI
     {
         private RFSBindings _bindings;
 
-        internal XmlNode ScenarioNode { get; }
-        internal string ScenarioName { get; }
+        internal XmlNode ScenarioNode { get; private set; }
+        internal string ScenarioName { get; private set; }
         internal override RFSBindings Bindings
         {
             get
@@ -38,8 +39,9 @@ namespace SPAFilter.SPA.Components.SRI
             }
         }
 
-        public DistinctList<RFSOperation> RFSList { get; } = new DistinctList<RFSOperation>();
-        public DistinctList<RFSOperation> AppendRFSList { get; } = new DistinctList<RFSOperation>();
+        private bool IsInner { get; } = false;
+        DistinctList<RFSOperation> RFSList { get; } = new DistinctList<RFSOperation>();
+        DistinctList<RFSOperation> AppendRFSList { get; } = new DistinctList<RFSOperation>();
 
         public override string Body
         {
@@ -58,39 +60,55 @@ namespace SPAFilter.SPA.Components.SRI
                 AppendXmlNode(builder, "RFSGroupList", Bindings.RFSGroupList);
                 AppendXmlNode(builder, "RestrictionList", Bindings.RestrictionList);
 
-                builder.Append("<ScenarioList>");
-                builder.Append(ScenarioNode.OuterXml);
-                builder.Append("</ScenarioList>");
+                if (!IsInner)
+                {
+                    builder.Append("<ScenarioList>");
+                    builder.Append(ScenarioNode.OuterXml);
+                    builder.Append("</ScenarioList>");
+                }
 
                 builder.Append("</Configuration>");
                 return XML.PrintXml(builder.ToString());
             }
         }
 
-        public ScenarioOperation(XmlNode scenarioNode, XPathNavigator navigator, ServiceCatalog catalog)
+        public ScenarioOperation(XmlNode scenarioNode, string rfsName, ServiceCatalog catalog)
         {
-            if (scenarioNode.Attributes == null || scenarioNode.Attributes.Count == 0)
-                throw new Exception("Invalid config. Scenario must have attributes.");
+            IsInner = true;
+            Preload(scenarioNode, catalog);
 
-            foreach (XmlAttribute scenarioAttr in scenarioNode.Attributes)
+            var type = scenarioNode.Attributes?["type"]?.Value;
+
+            if(type.IsNullOrEmpty())
+                throw new Exception($"Invalid config. Scenario \"{ScenarioName}\" must have attribute \"type\".");
+
+            if (!catalog.AllRFS.TryGetValue(rfsName, out var rfsOperationList))
+                return;
+
+            foreach (var rfs in rfsOperationList.Where(p => p.LinkType.Equals(type, StringComparison.CurrentCultureIgnoreCase)))
             {
-                if (scenarioAttr.Name != "name")
-                    continue;
-
-                ScenarioName = scenarioAttr.Value;
-                break;
+                rfs.IsSeparated = false;
+                RFSList.Add(rfs);
             }
 
-            if (ScenarioName.IsNullOrEmptyTrim())
-                throw new Exception("Invalid config. Scenario must have attribute \"name\" or value is empty");
+            PostLoad();
+        }
 
-            ScenarioNode = scenarioNode;
+        
 
-            var scenarioRFSs = XPATH.Execute(navigator, $"/Configuration/ScenarioList/Scenario[@name='{ScenarioName}']/RFS");
-            if (scenarioRFSs != null && scenarioRFSs.Count > 0)
+        public ScenarioOperation(XmlNode scenarioNode, XPathNavigator navigator, ServiceCatalog catalog)
+        {
+            Preload(scenarioNode, catalog);
+
+            var isDropped = scenarioNode.Attributes?["sendType"]?.Value;
+            if (!isDropped.IsNullOrEmpty() && isDropped.Equals("Drop", StringComparison.CurrentCultureIgnoreCase))
+                IsDropped = true;
+
+            var scenariosRFSs = XPATH.Execute(navigator, $"/Configuration/ScenarioList/Scenario[@name='{ScenarioName}']/RFS");
+            if (scenariosRFSs != null && scenariosRFSs.Count > 0)
             {
                 var rfsNamesUseTypeMandatory = XPATH.Execute(navigator, $"/Configuration/ScenarioList/Scenario[@name='{ScenarioName}']/RFS[@useType='Mandatory']/@name");
-                foreach (var rfsNode in scenarioRFSs)
+                foreach (var rfsNode in scenariosRFSs)
                 {
                     if (rfsNode.Node.Attributes == null || rfsNode.Node.Attributes.Count == 0)
                         continue;
@@ -118,7 +136,7 @@ namespace SPAFilter.SPA.Components.SRI
                     {
                         foreach (var type in scenarioTypeList)
                         {
-                            var rfs = rfsOperationList.FirstOrDefault(p => p.RFSAction.Equals(type.Trim(), StringComparison.CurrentCultureIgnoreCase));
+                            var rfs = rfsOperationList.FirstOrDefault(p => p.LinkType.Equals(type.Trim(), StringComparison.CurrentCultureIgnoreCase));
                             if (rfs == null)
                                 continue;
 
@@ -129,8 +147,7 @@ namespace SPAFilter.SPA.Components.SRI
                 }
             }
 
-
-            var appendRFS = XPATH.Execute(navigator, $"/Configuration/ScenarioList/Scenario[@name='{ScenarioName}']/RFS");
+            var appendRFS = XPATH.Execute(navigator, $"/Configuration/ScenarioList/Scenario[@name='{ScenarioName}']/Append");
             if (appendRFS != null && appendRFS.Count > 0)
             {
                 foreach (var rfsNode in appendRFS)
@@ -155,9 +172,25 @@ namespace SPAFilter.SPA.Components.SRI
                 }
             }
 
+            PostLoad();
+        }
 
+        void Preload(XmlNode scenarioNode, ServiceCatalog catalog)
+        {
+            if (scenarioNode.Attributes == null || scenarioNode.Attributes.Count == 0)
+                throw new Exception("Invalid config. Scenario must have attributes.");
+
+            ScenarioName = scenarioNode.Attributes?["name"]?.Value;
+
+            if (ScenarioName.IsNullOrEmptyTrim())
+                throw new Exception("Invalid config. Scenario must have attribute \"name\" or value is empty");
 
             Name = $"{catalog.Prefix}{ScenarioName}";
+            ScenarioNode = scenarioNode;
+        }
+
+        void PostLoad()
+        {
             var builder = new StringBuilder();
             var hostTypes = new List<string>();
             foreach (var rfsOperation in RFSList)
@@ -169,6 +202,7 @@ namespace SPAFilter.SPA.Components.SRI
                 builder.Append(rfsOperation.HostTypeName);
                 builder.Append(';');
             }
+
             HostTypeName = builder.ToString().Trim(';');
         }
     }

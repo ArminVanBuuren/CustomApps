@@ -96,12 +96,12 @@ namespace SPAFilter.SPA.Components
 
         void ParceXmlScenario(ParceScenario prsCs)
         {
-            var document = XML.LoadXml(FilePath, true);
+            var document = XML.LoadXml(FilePath);
             if (document == null)
                 return;
 
-            var commands = EvaluateXPath(document, @"//parameterslist/param[@name='command']/@value");
-            var subScenarios = EvaluateXPath(document, @"//parameterslist/param[@name='scenario']/@value");
+            var commands = EvaluateXPath(document, @"//parameterslist/param[@name='Command']/@value");
+            var subScenarios = EvaluateXPath(document, @"//parameterslist/param[@name='Scenario']/@value");
 
             var i = -1;
             var getParentDirectory = Path.GetDirectoryName(prsCs.ParentPath);

@@ -8,10 +8,12 @@ namespace SPAFilter.SPA.Components.SRI
     public abstract class CatalogOperation : ObjectTemplate, IOperation
     {
         [DGVColumn(ColumnPosition.After, "HostType")]
-        public string HostTypeName { get; protected set; }
+        public virtual string HostTypeName { get; protected set; }
 
         [DGVColumn(ColumnPosition.After, "Operation")]
         public override string Name { get; set; }
+
+        protected internal virtual bool IsDropped { get; protected set; } = false;
 
         /// <summary>
         /// Если сценарий для этой операции существует
@@ -36,6 +38,11 @@ namespace SPAFilter.SPA.Components.SRI
             builder.Append("</");
             builder.Append(parentNodeName);
             builder.Append(">");
+        }
+
+        public override string ToString()
+        {
+            return $"{HostTypeName}=[{Name}]";
         }
     }
 }

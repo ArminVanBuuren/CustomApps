@@ -40,8 +40,8 @@ namespace SPAFilter.SPA.Components
         public static bool IsBusinessProcess(string filePath, out BusinessProcess bpResult)
         {
             bpResult = null;
-            var document = XML.LoadXml(filePath, true);
-            if (document == null || document.SelectNodes(@"/businessprocessdata")?.Count == 0)
+            var document = XML.LoadXml(filePath);
+            if (document == null || document.SelectNodes(@"/BusinessProcessData")?.Count == 0)
                 return false;
 
             var operations = new List<string>();
@@ -60,12 +60,12 @@ namespace SPAFilter.SPA.Components
 
             var navigator = document.CreateNavigator();
             var hasCatalogCall = false;
-            var isExistscObject = XPATH.Execute(navigator, @"/BusinessProcessData/businessprocess/scenario/objectlist/object[@class='FORIS.ServiceProvisioning.BPM.SCProcessingUnit']/@name".ToLower());
+            var isExistscObject = XPATH.Execute(navigator, @"/BusinessProcessData/businessprocess/scenario/objectlist/object[@class='FORIS.ServiceProvisioning.BPM.SCProcessingUnit']/@name");
             if (isExistscObject != null)
             {
                 foreach (var obj in isExistscObject)
                 {
-                    var res = XPATH.Execute(navigator, $"/BusinessProcessData/businessprocess/scenario/automat/node[@object='{obj.Value}']".ToLower());
+                    var res = XPATH.Execute(navigator, $"/BusinessProcessData/businessprocess/scenario/automat/node[@object='{obj.Value}']");
                     if (res == null || res.Count <= 0)
                         continue;
 

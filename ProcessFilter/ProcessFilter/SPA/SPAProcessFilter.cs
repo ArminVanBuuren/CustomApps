@@ -367,7 +367,7 @@ namespace SPAFilter.SPA
                 {
                     lock (_activatorsSync)
                     {
-                        if (!_activators.ContainsKey(filePath))
+                        if (_activators.ContainsKey(filePath))
                         {
                             _activators.Remove(filePath);
                         }

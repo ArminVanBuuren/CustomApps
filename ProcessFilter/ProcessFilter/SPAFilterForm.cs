@@ -310,7 +310,7 @@ namespace SPAFilter
                     row.DefaultCellStyle.BackColor = Color.LightPink;
                     foreach (DataGridViewCell cell2 in row.Cells)
                     {
-                        cell2.ToolTipText = "Business process has operations that don't exist";
+                        cell2.ToolTipText = "Business process has operations which don't exist";
                     }
                 }
             }
@@ -337,6 +337,16 @@ namespace SPAFilter
         {
             var row = ((DataGridView)sender).Rows[e.RowIndex];
             var cell = row?.Cells["IsScenarioExist"];
+            //var cellIsDropped = row?.Cells["IsDropped"];
+            //if (cellIsDropped != null && cellIsDropped.Value is bool cellIsDroppedValue && cellIsDroppedValue)
+            //{
+            //    row.DefaultCellStyle.BackColor = Color.Yellow;
+            //    foreach (DataGridViewCell cell2 in row.Cells)
+            //    {
+            //        cell2.ToolTipText = "This operation will never called";
+            //    }
+            //}
+            //else 
             if (cell != null && cell.Value is bool cellValue && cellValue)
             {
                 row.DefaultCellStyle.BackColor = Color.White;
@@ -363,7 +373,7 @@ namespace SPAFilter
                 row.DefaultCellStyle.BackColor = Color.LightPink;
                 foreach (DataGridViewCell cell3 in row.Cells)
                 {
-                    cell3.ToolTipText = "Subscenario has commands that don't exist";
+                    cell3.ToolTipText = "Subscenario has commands which don't exist";
                 }
             }
             else if (!allCommandsExist)
@@ -371,7 +381,7 @@ namespace SPAFilter
                 row.DefaultCellStyle.BackColor = Color.LightPink;
                 foreach (DataGridViewCell cell3 in row.Cells)
                 {
-                    cell3.ToolTipText = "Scenario has commands that don't exist";
+                    cell3.ToolTipText = "Scenario has commands which don't exist";
                 }
             }
             else if (isSubScenario)
