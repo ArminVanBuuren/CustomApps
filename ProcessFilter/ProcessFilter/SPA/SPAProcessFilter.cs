@@ -208,6 +208,7 @@ namespace SPAFilter.SPA
         public async Task AssignProcessesAsync(string processPath)
         {
             ProcessPath = processPath;
+            Processes = null;
             await Task.Factory.StartNew(() => FilterProcesses(null));
         }
 
@@ -239,13 +240,17 @@ namespace SPAFilter.SPA
             if (!Directory.Exists(ROBPHostTypesPath))
                 throw new Exception($"Directory \"{ROBPHostTypesPath}\" not found!");
 
+            var hostTypesDir = GetDirectories(ROBPHostTypesPath);
+            if (hostTypesDir.Count == 0)
+                throw new Exception("You must select a folder with exported ROBP's host types directories.");
+
             FilterProcesses(bpFilter);
             HostTypes = new CollectionHostType(); 
             var allBPOperations = Processes.AllOperationsNames;
 
-            foreach (var neDirPath in GetDirectories(ROBPHostTypesPath))
+            foreach (var hostTypeDir in hostTypesDir)
             {
-                var robpHostType = new ROBPHostType(neDirPath);
+                var robpHostType = new ROBPHostType(hostTypeDir);
                 FilterOperations(robpHostType, htFilter, opFilter, allBPOperations, false);
                 HostTypes.Add(robpHostType);
             }

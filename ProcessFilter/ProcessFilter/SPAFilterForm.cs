@@ -576,6 +576,7 @@ namespace SPAFilter
 
         private void ProcessesTextBox_TextChanged(object sender, EventArgs e)
         {
+            ProcessesTextBox.BackColor = Color.White;
             _processesTextBoxChanged = true;
         }
 
@@ -602,6 +603,7 @@ namespace SPAFilter
 
         private void ROBPOperationTextBox_TextChanged(object sender, EventArgs e)
         {
+            ROBPOperationTextBox.BackColor = Color.White;
             _robpOperationTextBoxChanged = true;
         }
 
@@ -671,6 +673,7 @@ namespace SPAFilter
 
         private void ServiceCatalogTextBox_TextChanged(object sender, EventArgs e)
         {
+            ServiceCatalogTextBox.BackColor = Color.White;
             _serviceCatalogTextBoxChanged = true;
         }
 
@@ -759,17 +762,21 @@ namespace SPAFilter
                 switch (type)
                 {
                     case SPAProcessFilterType.Processes:
-                        ProcessesTextBox.Text = string.Empty;
+                        //ProcessesTextBox.Text = string.Empty;
+                        //ProcessesTextBox.BackColor = Color.PaleVioletRed;
+                        ProcessesTextBox.BackColor = Color.LightPink;
                         ProcessesComboBox.DataSource = null;
                         ProcessesComboBox.Text = null;
                         ProcessesComboBox.DisplayMember = null;
                         break;
                     case SPAProcessFilterType.ROBPOperations:
-                        ROBPOperationTextBox.Text = string.Empty;
+                        //ROBPOperationTextBox.Text = string.Empty;
+                        ROBPOperationTextBox.BackColor = Color.LightPink;
                         ClearOperationsComboBox();
                         break;
                     case SPAProcessFilterType.SCOperations:
-                        ServiceCatalogTextBox.Text = string.Empty;
+                        //ServiceCatalogTextBox.Text = string.Empty;
+                        ServiceCatalogTextBox.BackColor = Color.LightPink;
                         ClearOperationsComboBox();
                         break;
                 }
