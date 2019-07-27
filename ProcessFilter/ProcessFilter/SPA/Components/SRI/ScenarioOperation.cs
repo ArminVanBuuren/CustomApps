@@ -144,6 +144,17 @@ namespace SPAFilter.SPA.Components.SRI
                             RFSList.Add(rfs);
                         }
                     }
+                    //else // не отсепарировать другие RFS в сценарии, т.к. они не яыляются type=mandatory
+                    //{
+                    //    foreach (var type in scenarioTypeList)
+                    //    {
+                    //        var rfs = rfsOperationList.FirstOrDefault(p => p.LinkType.Equals(type.Trim(), StringComparison.CurrentCultureIgnoreCase));
+                    //        if (rfs == null)
+                    //            continue;
+
+                    //        RFSList.Add(rfs);
+                    //    }
+                    //}
                 }
             }
 

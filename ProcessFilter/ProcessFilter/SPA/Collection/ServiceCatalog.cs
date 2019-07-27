@@ -221,17 +221,15 @@ namespace SPAFilter.SPA.Collection
                             rfs.ChildCFS.AddRange(rfsCFSs.Value);
                         AllRFS.Add(rfsName, rfs);
                     }
+
+                    if (processType.Equals("DynamicList", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        var modifyRFS = new RFSOperation(rfsName, "Modify", hostType, navigator, this);
+                        if (rfsCFSs.Value != null)
+                            modifyRFS.ChildCFS.AddRange(rfsCFSs.Value);
+                        AllRFS.Add(rfsName, modifyRFS);
+                    }
                 }
-
-
-                if (processType.Equals("DynamicList", StringComparison.CurrentCultureIgnoreCase))
-                {
-                    var modifyRFS = new RFSOperation(rfsName, "Modify", hostType, navigator, this);
-                    if (rfsCFSs.Value != null)
-                        modifyRFS.ChildCFS.AddRange(rfsCFSs.Value);
-                    AllRFS.Add(rfsName, modifyRFS);
-                }
-
 
                 CheckRFSInnerScenarios(rfsName, rfsCFSs.Key);
             }
