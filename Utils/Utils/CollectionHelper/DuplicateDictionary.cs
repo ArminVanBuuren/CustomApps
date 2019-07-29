@@ -10,12 +10,17 @@ namespace Utils.CollectionHelper
     {
         readonly Dictionary<TKey, List<TValue>> _values;
 
-        public DuplicateDictionary(IEqualityComparer<TKey> comparer = null)
+        public DuplicateDictionary()
         {
-            if (comparer != null)
-                _values = new Dictionary<TKey, List<TValue>>(comparer);
-            else
-                _values = new Dictionary<TKey, List<TValue>>();
+            _values = new Dictionary<TKey, List<TValue>>();
+        }
+
+        public DuplicateDictionary(IEqualityComparer<TKey> comparer)
+        {
+            if (comparer == null)
+                throw new ArgumentNullException(nameof(comparer));
+
+            _values = new Dictionary<TKey, List<TValue>>(comparer);
         }
 
         public List<TValue> this[TKey index]

@@ -8,18 +8,22 @@ namespace Utils.CollectionHelper
 {
     public sealed class DistinctList<T> : IList<T>
     {
+        private readonly IEqualityComparer<T> _comparer;
         readonly Dictionary<T, bool> _items;
 
         public int Count => _items.Count;
 
         public bool IsReadOnly => false;
 
+        public DistinctList()
+        {
+            _items = new Dictionary<T, bool>();
+        }
+
         public DistinctList(IEqualityComparer<T> comparer = null)
         {
-            if (comparer != null)
-                _items = new Dictionary<T, bool>(comparer);
-            else
-                _items = new Dictionary<T, bool>();
+            _comparer = comparer ?? throw new ArgumentNullException(nameof(comparer));
+            _items = new Dictionary<T, bool>(comparer);
         }
 
         public void Add(T item)
@@ -109,7 +113,7 @@ namespace Utils.CollectionHelper
 
         public DistinctList<T> Clone()
         {
-            var clone = new DistinctList<T>();
+            var clone = _comparer == null ? new DistinctList<T>() : new DistinctList<T>(_comparer);
             clone.AddRange(this);
             return clone;
         }
