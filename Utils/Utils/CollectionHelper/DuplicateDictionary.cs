@@ -20,15 +20,7 @@ namespace Utils.CollectionHelper
 
         public List<TValue> this[TKey index]
         {
-            get
-            {
-                if (_values.TryGetValue(index, out var tValue))
-                {
-                    return tValue;
-                }
-
-                return null;
-            }
+            get => _values.TryGetValue(index, out var tValue) ? tValue : null;
             set
             {
                 if (_values.ContainsKey(index))
@@ -104,9 +96,9 @@ namespace Utils.CollectionHelper
 
         public void Add(object key, object value)
         {
-            if (key is TKey && value is TValue)
+            if (key is TKey tKey && value is TValue tValue)
             {
-                Add((TKey)key, (TValue)value);
+                Add(tKey, tValue);
             }
         }
 
