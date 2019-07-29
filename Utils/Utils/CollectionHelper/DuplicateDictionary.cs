@@ -28,9 +28,11 @@ namespace Utils.CollectionHelper
             get => _values.TryGetValue(index, out var tValue) ? tValue : null;
             set
             {
-                if (_values.ContainsKey(index))
+                if (_values.TryGetValue(index, out var result))
                 {
-                    _values[index] = value;
+                    result.AddRange(value);
+                    //_values[index].AddRange(value);
+                    //_values[index] = value;
                 }
                 else
                 {
