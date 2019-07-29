@@ -23,6 +23,11 @@ namespace Utils.CollectionHelper
             _values = new Dictionary<TKey, List<TValue>>(comparer);
         }
 
+        /// <summary>
+        /// Присваивает другую коллекцию для ключа, либо создает новую запись
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
         public List<TValue> this[TKey index]
         {
             get => _values.TryGetValue(index, out var tValue) ? tValue : null;
@@ -71,7 +76,12 @@ namespace Utils.CollectionHelper
 
         ICollection IDictionary.Values => ((IDictionary)_values).Values;
         
-
+         /// <inheritdoc />
+         /// <summary>
+         /// Добавляет значения в имеющийся ключ, любо создает новую запись
+         /// </summary>
+         /// <param name="key"></param>
+         /// <param name="value"></param>
         public void Add(TKey key, List<TValue> value)
         {
             if (_values.TryGetValue(key, out var tValue))
@@ -84,6 +94,11 @@ namespace Utils.CollectionHelper
             }
         }
 
+        /// <summary>
+        /// Добавляет значение в имеющийся ключ, любо создает новую запись
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
         public void Add(TKey key, TValue value)
         {
             if (_values.TryGetValue(key, out var tValue))
@@ -96,11 +111,22 @@ namespace Utils.CollectionHelper
             }
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Добавляет значения в имеющийся ключ, любо создает новую запись
+        /// </summary>
+        /// <param name="item"></param>
         public void Add(KeyValuePair<TKey, List<TValue>> item)
         {
             Add(item.Key, item.Value);
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Добавляет значение в имеющийся ключ, любо создает новую запись
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
         public void Add(object key, object value)
         {
             if (key is TKey tKey && value is TValue tValue)
