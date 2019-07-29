@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using System.Xml.XPath;
@@ -145,6 +146,57 @@ namespace SPAFilter.SPA.Components.SRI
             foreach (var item in collection)
             {
                 catalogComponent.Add(item.Node);
+            }
+        }
+
+        /// <summary>
+        /// Финальная обработка биндинга.
+        /// Очищаем в RFS список ненужных RFS. Если к основному сценарию или основному отсепарированному RFS отношения не имеют, то удалем ноды.
+        /// Только для сценариев и отсепарированных RFS!!!!
+        /// </summary>
+        public void Finnaly()
+        {
+            var _rfsList = new Dictionary<string, XmlNode>(StringComparer.CurrentCultureIgnoreCase);
+            var _rfsGroupList = new Dictionary<string, XmlNode>(StringComparer.CurrentCultureIgnoreCase);
+
+            AddCollectionDict(RFSList, _rfsList);
+            AddCollectionDict(RFSGroupList, _rfsGroupList);
+
+            for (var index = 0; index < CFSList.Count; index++)
+            {
+                var cfsNode = CFSList[index].Clone();
+                for (var index2 = 0; index2 < cfsNode.ChildNodes.Count; index2++)
+                {
+                    var childNode = cfsNode.ChildNodes[index2];
+                    switch (childNode.Name)
+                    {
+                        case "RFS":
+                            var rfsName = childNode.Attributes?["name"]?.Value;
+                            if (rfsName != null && _rfsList.ContainsKey(rfsName))
+                                continue;
+                            break;
+                        case "RFSGroup":
+                            var rfsGroupName = childNode.Attributes?["name"]?.Value;
+                            if (rfsGroupName != null && _rfsGroupList.ContainsKey(rfsGroupName))
+                                continue;
+                            break;
+                    }
+
+                    cfsNode.RemoveChild(childNode);
+                    index2--;
+                }
+
+                CFSList[index] = cfsNode;
+            }
+        }
+
+        void AddCollectionDict(IEnumerable<XmlNode> sourceCollection, Dictionary<string, XmlNode> assignCollection)
+        {
+            foreach (var rfs in sourceCollection)
+            {
+                var name = rfs.Attributes?["name"]?.Value;
+                if (name != null && !assignCollection.ContainsKey(name))
+                    assignCollection.Add(rfs.Attributes["name"].Value, rfs);
             }
         }
     }
