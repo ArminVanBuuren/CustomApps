@@ -30,9 +30,9 @@ namespace Utils.CollectionHelper
             {
                 if (_values.TryGetValue(index, out var result))
                 {
-                    result.AddRange(value);
+                    //result.AddRange(value);
                     //_values[index].AddRange(value);
-                    //_values[index] = value;
+                    _values[index] = value;
                 }
                 else
                 {
