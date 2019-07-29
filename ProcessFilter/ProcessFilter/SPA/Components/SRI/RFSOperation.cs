@@ -20,6 +20,7 @@ namespace SPAFilter.SPA.Components.SRI
         internal bool IsSubscription { get; set; } = false;
         protected internal override bool IsDropped => ChildRFS.Count == 0 && ChildCFS.Count == 0;
 
+        public XmlNode Node { get; }
         public DistinctList<XmlNode> ChildRFS { get; } = new DistinctList<XmlNode>();
         public DistinctList<XmlNode> ChildCFS { get; } = new DistinctList<XmlNode>();
 
@@ -63,8 +64,9 @@ namespace SPAFilter.SPA.Components.SRI
             }
         }
 
-        public RFSOperation(string name, string linkType, string hostTypeName, XPathNavigator navigator, ServiceCatalog catalog)
+        public RFSOperation(XmlNode node, string name, string linkType, string hostTypeName, XPathNavigator navigator, ServiceCatalog catalog)
         {
+            Node = node;
             _navigator = navigator;
             RFSName = name;
             LinkType = linkType;

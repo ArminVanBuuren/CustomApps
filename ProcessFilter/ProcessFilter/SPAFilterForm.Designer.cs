@@ -30,6 +30,7 @@ namespace SPAFilter
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SPAFilterForm));
             this.ProcessesTextBox = new System.Windows.Forms.TextBox();
             this.ROBPOperationTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -674,7 +675,7 @@ namespace SPAFilter
             this.Controls.Add(this.ROBPOperationTextBox);
             this.Controls.Add(this.ProcessesTextBox);
             this.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.Icon = global::SPAFilter.Properties.Resources.icons8;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(794, 400);
             this.Name = "SPAFilterForm";
             this.Padding = new System.Windows.Forms.Padding(3);

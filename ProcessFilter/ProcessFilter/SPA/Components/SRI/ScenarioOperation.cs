@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 using SPAFilter.SPA.Collection;
+using SPAFilter.SPA.SC;
 using Utils;
 using Utils.CollectionHelper;
 using Utils.WinForm.DataGridViewHelper;
@@ -72,10 +73,10 @@ namespace SPAFilter.SPA.Components.SRI
             }
         }
 
-        public ScenarioOperation(XmlNode scenarioNode, string rfsName, ServiceCatalog catalog)
+        public ScenarioOperation(XmlNode scenarioNode, string scenarioName, string rfsName, ServiceCatalog catalog)
         {
             IsInner = true;
-            Preload(scenarioNode, catalog);
+            Preload(scenarioNode, scenarioName, catalog);
 
             var type = scenarioNode.Attributes?["type"]?.Value;
 
@@ -100,18 +101,18 @@ namespace SPAFilter.SPA.Components.SRI
             public List<RFSOperation> ChildList { get; } = new List<RFSOperation>();
         }
 
-        public ScenarioOperation(XmlNode scenarioNode, XPathNavigator navigator, ServiceCatalog catalog)
+        public ScenarioOperation(XmlNode scenarioNode, string scenarioName, XPathNavigator navigator, ServiceCatalog catalog)
         {
-            Preload(scenarioNode, catalog);
+            Preload(scenarioNode, scenarioName, catalog);
 
             var isDropped = scenarioNode.Attributes?["sendType"]?.Value;
-            if (!isDropped.IsNullOrEmpty() && isDropped.Equals("Drop", StringComparison.CurrentCultureIgnoreCase))
+            if (isDropped != null && isDropped.Equals("Drop", StringComparison.CurrentCultureIgnoreCase))
                 IsDropped = true;
 
             var scenariosRFSs = XPATH.Execute(navigator, $"/Configuration/ScenarioList/Scenario[@name='{ScenarioName}']/RFS");
             if (scenariosRFSs != null && scenariosRFSs.Count > 0)
             {
-                var scenarioRFSs = LoadScenario(scenariosRFSs, catalog);
+                var scenarioRFSs = LoadScenario(scenariosRFSs, navigator, catalog);
 
                 if (scenarioRFSs.MandatoryList.Count == 0)
                 {
@@ -170,7 +171,7 @@ namespace SPAFilter.SPA.Components.SRI
             PostLoad();
         }
 
-        static ScenarioRFSList LoadScenario(XPathResultCollection scenariosRFSs, ServiceCatalog catalog)
+        static ScenarioRFSList LoadScenario(XPathResultCollection scenariosRFSs, XPathNavigator navigator, ServiceCatalog catalog)
         {
             var result = new ScenarioRFSList();
             foreach (var rfsNode in scenariosRFSs)
@@ -180,7 +181,7 @@ namespace SPAFilter.SPA.Components.SRI
 
                 string rfsName = null;
                 string useType = null;
-                string[] scenarioTypeList = null;
+                List<string> scenarioTypeList = null;
 
                 foreach (XmlAttribute rfsAttr in rfsNode.Node.Attributes)
                 {
@@ -190,7 +191,7 @@ namespace SPAFilter.SPA.Components.SRI
                             rfsName = rfsAttr.Value;
                             break;
                         case "scenarioType":
-                            scenarioTypeList = rfsAttr.Value.Split(',');
+                            scenarioTypeList = rfsAttr.Value.Split(',').Select(p => p.Trim()).ToList();
                             break;
                         case "useType":
                             useType = rfsAttr.Value;
@@ -198,48 +199,49 @@ namespace SPAFilter.SPA.Components.SRI
                     }
                 }
 
-                if (string.IsNullOrEmpty(rfsName) || scenarioTypeList == null || scenarioTypeList.Length <= 0 || !catalog.AllRFS.TryGetValue(rfsName, out var rfsOperationList))
+                if (string.IsNullOrEmpty(rfsName) || scenarioTypeList == null || scenarioTypeList.Count == 0 || !catalog.AllRFS.TryGetValue(rfsName, out var rfsOperationList))
                     continue;
 
-                foreach (var type in scenarioTypeList)
+
+                var currentScenarioRFS = rfsOperationList.Where(x => scenarioTypeList.Any(p => x.LinkType.Equals(p.Trim()))).ToList();
+                if (currentScenarioRFS.Count == 0)
                 {
-                    var rfs = rfsOperationList.FirstOrDefault(p => p.LinkType.Equals(type.Trim(), StringComparison.CurrentCultureIgnoreCase));
-                    if (rfs == null)
-                        continue;
-                    
-                    if (useType != null && useType.Equals("Mandatory", StringComparison.CurrentCultureIgnoreCase))
-                        result.MandatoryList.Add(rfs);
-                    else
-                        result.ChildList.Add(rfs);
+                    var anyExistRFS = rfsOperationList.First();
+                    foreach (var linkType in scenarioTypeList)
+                    {
+                        // это костыль, т.к. хэндлеры в текущей реализации прога не обрабатывает. А хэндлерах могут быть разные настройки где RFS может использоваться с типом modify например, поэтому просто костыльно создаем недостающие
+                        var notExistRFS = new RFSOperation(anyExistRFS.Node, rfsName, linkType, anyExistRFS.HostTypeName, navigator, catalog);
+                        notExistRFS.ChildCFS.AddRange(anyExistRFS.ChildCFS);
+                        notExistRFS.ChildRFS.AddRange(notExistRFS.ChildRFS);
+                        rfsOperationList.Add(notExistRFS);
+
+                        if (useType != null && useType.Equals("Mandatory", StringComparison.CurrentCultureIgnoreCase))
+                            result.MandatoryList.Add(notExistRFS);
+                        else
+                            result.ChildList.Add(notExistRFS);
+                    }
+                }
+                else
+                {
+                    foreach (var rfs in currentScenarioRFS)
+                    {
+                        if (useType != null && useType.Equals("Mandatory", StringComparison.CurrentCultureIgnoreCase))
+                            result.MandatoryList.Add(rfs);
+                        else
+                            result.ChildList.Add(rfs);
+                    }
                 }
             }
 
             return result;
         }
 
-        //void AssignRFSToScenario(IEnumerable<string> scenarioTypeList, List<RFSOperation> rfsOperationList)
-        //{
-        //    foreach (var type in scenarioTypeList)
-        //    {
-        //        var rfs = rfsOperationList.FirstOrDefault(p => p.LinkType.Equals(type.Trim(), StringComparison.CurrentCultureIgnoreCase));
-        //        if (rfs == null)
-        //            continue;
-
-        //        rfs.IsSeparated = false;
-        //        RFSList.Add(rfs);
-        //    }
-        //}
-
-        void Preload(XmlNode scenarioNode, ServiceCatalog catalog)
+        void Preload(XmlNode scenarioNode, string scenarioName, ServiceCatalog catalog)
         {
             if (scenarioNode.Attributes == null || scenarioNode.Attributes.Count == 0)
                 throw new Exception("Invalid config. Scenario must have attributes.");
 
-            ScenarioName = scenarioNode.Attributes?["name"]?.Value;
-
-            if (ScenarioName.IsNullOrEmptyTrim())
-                throw new Exception("Invalid config. Scenario must have attribute \"name\" or value is empty");
-
+            ScenarioName = scenarioName;
             Name = $"{catalog.Prefix}{ScenarioName}";
             ScenarioNode = scenarioNode;
         }
@@ -258,6 +260,7 @@ namespace SPAFilter.SPA.Components.SRI
                 builder.Append(';');
             }
 
+            // по идее хост должен быть один, но если каталог криво настроили то могут быть несколько хостов в одном сценарии
             HostTypeName = builder.ToString().Trim(';');
         }
     }

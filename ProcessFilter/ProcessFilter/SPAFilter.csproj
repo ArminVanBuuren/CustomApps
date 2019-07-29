@@ -34,7 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\icons8.ico</ApplicationIcon>
+    <ApplicationIcon>icons8.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Costura, Version=3.3.3.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
@@ -69,6 +69,11 @@
     </Compile>
     <Compile Include="CustomProgressCalculation.cs" />
     <Compile Include="CustomStringBuilder.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="SPA\Collection\CollectionBusinessProcess.cs" />
     <Compile Include="SPA\Collection\CollectionTemplate.cs" />
     <Compile Include="SPA\Components\ServiceInstance.cs" />
@@ -117,14 +122,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -143,10 +143,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="icons8.ico" />
     <Content Include="Resources\icons8-minus-20.png" />
     <Content Include="Resources\icons8-plus-20.png" />
     <Content Include="Resources\icons8-synchronize-20.png" />
-    <Content Include="Resources\icons8.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.4.2.1\build\Fody.targets" Condition="Exists('..\packages\Fody.4.2.1\build\Fody.targets')" />

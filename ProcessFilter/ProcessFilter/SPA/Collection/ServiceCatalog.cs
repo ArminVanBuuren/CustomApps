@@ -32,15 +32,18 @@ namespace SPAFilter.SPA.Collection
             AllRFS = new DuplicateDictionary<string, RFSOperation>();
             AllScenarios = new Dictionary<string, ScenarioOperation>();
 
+            // вытаскиевам по списку все RFS и все CFS которые включают в себя текущий RFS
             var allRFSCFSsList = XPATH.Execute(navigator, @"/Configuration/RFSList/RFS")
                 .ToDictionary(x => x.Node, x => XPATH.Execute(navigator, $"/Configuration/CFSList/CFS[RFS/@name='{x.Node.Attributes?["name"].Value}']")
                 ?.Where(t => t != null)
                 .Select(p => p.Node));
 
+            // вытаскиваем из предыдущего списка все с типом subscription
             var subscriptionRFSCFSsList = allRFSCFSsList
                 .Where(p => p.Key.Attributes != null && p.Key.Attributes["base"] == null && p.Key.Attributes["processType"] != null && p.Key.Attributes["processType"].Value.Equals("Subscription", StringComparison.CurrentCultureIgnoreCase))
                 .ToDictionary(p => p.Key, p => p.Value);
 
+            // исключаем все subscription, чтобы заново не обрабатывать
             var notBaseRFSCFSsList = allRFSCFSsList.Except(subscriptionRFSCFSsList).ToDictionary(p => p.Key, p => p.Value);
 
             GetRFS(subscriptionRFSCFSsList, navigator, true);
@@ -49,30 +52,44 @@ namespace SPAFilter.SPA.Collection
             var scenarioList = XPATH.Execute(navigator, @"/Configuration/ScenarioList/Scenario");
             foreach (var scenario in scenarioList)
             {
-                var scenarioOp = new ScenarioOperation(scenario.Node, navigator, this);
-                if(AllScenarios.ContainsKey(scenarioOp.Name))
-                    throw new Exception($"Service Catalog is invalid. {scenarioOp.Name} already exist.");
+                var scenarioName = scenario.Node.Attributes?["name"]?.Value;
+                if (string.IsNullOrEmpty(scenarioName))
+                    throw new Exception("Invalid config. Scenario must have attribute \"name\" or value is empty");
+                if (AllScenarios.ContainsKey(scenarioName))
+                    throw new Exception($"Service Catalog is invalid. {scenarioName} already exist.");
 
-                AllScenarios.Add(scenarioOp.Name, scenarioOp);
+                var scenarioOp = new ScenarioOperation(scenario.Node, scenarioName, navigator, this);
+                AllScenarios.Add(scenarioName, scenarioOp);
             }
 
-            var filteredOperations = new List<IOperation>();
+
+            // непосредственная стадия фильтрации. Исключаем дропы и те RFS которые уже есть в сценариях
+            var filteredOperations = new Dictionary<string, IOperation>();
             foreach (var rfsOperationList in AllRFS)
             {
                 foreach (var rfs in rfsOperationList.Value)
                 {
-                    if (rfs.IsSeparated && !rfs.IsDropped)
+                    CheckRFSInnerScenarios(rfsOperationList.Key, rfs.Node, navigator);
+
+                    if (rfs.IsSeparated && !rfs.IsDropped && !filteredOperations.ContainsKey(rfs.Name))
                     {
-                        filteredOperations.Add(rfs);
+                        filteredOperations.Add(rfs.Name, rfs);
                     }
                 }
             }
 
-            filteredOperations.AddRange(AllScenarios.Values.Where(p => !p.IsDropped));
-
-            foreach (var hostTypeName in filteredOperations.Select(p => p.HostTypeName).Distinct())
+            foreach (var scenario in AllScenarios)
             {
-                Add(new CatalogHostType(hostTypeName, filteredOperations));
+                if (!scenario.Value.IsDropped)
+                {
+                    filteredOperations.Add(scenario.Key, scenario.Value);
+                }
+            }
+
+            // Группируем по хостам и доавляем в каталог списки оперций
+            foreach (var hostTypeOps in filteredOperations.Values.GroupBy(p => p.HostTypeName))
+            {
+                Add(new CatalogHostType(hostTypeOps.Key, hostTypeOps));
             }
         }
 
@@ -89,7 +106,6 @@ namespace SPAFilter.SPA.Collection
                 var parentRFSName = string.Empty;
                 var hostType = string.Empty;
                 var processType = string.Empty;
-                
 
                 foreach (XmlAttribute attribute in rfsCFSs.Key.Attributes)
                 {
@@ -120,19 +136,14 @@ namespace SPAFilter.SPA.Collection
                 if(AllRFS.ContainsKey(rfsName))
                     throw new Exception($"Service Catalog is invalid. {rfsName} already exist.");
 
+                // Сначала добавляем все с типом subscription, затем уже все дочерние от базовых и остальные
                 if (isSubscriptions)
                 {
                     foreach (var linkType in defaultLinkTypes)
                     {
-                        var baseRFS = new RFSOperation(rfsName, linkType, hostType, navigator, this)
-                        {
-                            IsSubscription = true
-                        };
-                        baseRFS.ChildRFS.Add(rfsCFSs.Key);
-                        AllRFS.Add(rfsName, baseRFS);
+                        var baseRFS = AddBaseRFS(rfsCFSs.Key, rfsCFSs, rfsName, linkType, hostType, navigator);
+                        baseRFS.IsSubscription = true;
                     }
-
-                    CheckRFSInnerScenarios(rfsName, rfsCFSs.Key);
                     continue;
                 }
                 else if (!baseRFSName.IsNullOrEmptyTrim())
@@ -147,10 +158,7 @@ namespace SPAFilter.SPA.Collection
 
                         if (result.All(p => !p.IsSubscription) && result.All(p => p.LinkType != "Modify"))
                         {
-                            var baseModifyRFS = new RFSOperation(baseRFSName, "Modify", hostType, navigator, this);
-                            baseModifyRFS.ChildRFS.Add(rfsCFSs.Key);
-                            AllRFS.Add(baseRFSName, baseModifyRFS);
-
+                            var baseModifyRFS = AddBaseRFS(result.First().Node, rfsCFSs, baseRFSName, "Modify", hostType, navigator);
                             AddChildCFS(baseModifyRFS, result.First().ChildRFS);
                         }
                     }
@@ -158,11 +166,12 @@ namespace SPAFilter.SPA.Collection
                     {
                         foreach (var linkType in defaultLinkTypes)
                         {
-                            var baseRFS = new RFSOperation(baseRFSName, linkType, hostType, navigator, this);
-                            baseRFS.ChildRFS.Add(rfsCFSs.Key);
-                            AllRFS.Add(baseRFSName, baseRFS);
+                            AddBaseRFS(null, rfsCFSs, baseRFSName, linkType, hostType, navigator);
                         }
                     }
+
+                    if (AllRFS.TryGetValue(baseRFSName, out var result2))
+                        AllRFS.Add(rfsName, result2);
 
                     continue;
                 }
@@ -180,11 +189,12 @@ namespace SPAFilter.SPA.Collection
                     {
                         foreach (var linkType in defaultLinkTypes)
                         {
-                            var parentRfs = new RFSOperation(parentRFSName, linkType, hostType, navigator, this);
-                            parentRfs.ChildRFS.Add(rfsCFSs.Key);
-                            AllRFS.Add(parentRFSName, parentRfs);
+                            AddBaseRFS(null, rfsCFSs, parentRFSName, linkType, hostType, navigator);
                         }
                     }
+
+                    if (AllRFS.TryGetValue(baseRFSName, out var result2))
+                        AllRFS.Add(rfsName, result2);
 
                     continue;
                 }
@@ -208,34 +218,43 @@ namespace SPAFilter.SPA.Collection
                     }
                 }
 
+                // Если CFS который включает в себя текущий RFS с типом OneTime, то добавляем linkType тот который указан в CFS
                 if (oneTimeLinkTypes.Count > 0)
                 {
                     foreach (var linkType in oneTimeLinkTypes)
                     {
-                        var rfs = new RFSOperation(rfsName, linkType, hostType, navigator, this);
-                        AddChildCFS(rfs, rfsCFSs.Value);
-                        AllRFS.Add(rfsName, rfs);
+                        AddRFS(rfsCFSs, rfsName, linkType, hostType, navigator);
                     }
                 }
                 else
                 {
                     foreach (var linkType in defaultLinkTypes)
                     {
-                        var rfs = new RFSOperation(rfsName, linkType, hostType, navigator, this);
-                        AddChildCFS(rfs, rfsCFSs.Value);
-                        AllRFS.Add(rfsName, rfs);
+                        AddRFS(rfsCFSs, rfsName, linkType, hostType, navigator);
                     }
 
+                    // Если тип RFS как DynamicList то должен быть Modify
                     if (processType.Equals("DynamicList", StringComparison.CurrentCultureIgnoreCase))
                     {
-                        var modifyRFS = new RFSOperation(rfsName, "Modify", hostType, navigator, this);
-                        AddChildCFS(modifyRFS, rfsCFSs.Value);
-                        AllRFS.Add(rfsName, modifyRFS);
+                        AddRFS(rfsCFSs, rfsName, "Modify", hostType, navigator);
                     }
                 }
-
-                CheckRFSInnerScenarios(rfsName, rfsCFSs.Key);
             }
+        }
+
+        RFSOperation AddBaseRFS(XmlNode node, KeyValuePair<XmlNode, IEnumerable<XmlNode>> rfsCFSs, string rfsName, string linkType, string hostType, XPathNavigator navigator)
+        {
+            var baseRFS = new RFSOperation(node, rfsName, linkType, hostType, navigator, this);
+            baseRFS.ChildRFS.Add(rfsCFSs.Key);
+            AllRFS.Add(rfsName, baseRFS);
+            return baseRFS;
+        }
+
+        void AddRFS(KeyValuePair<XmlNode, IEnumerable<XmlNode>> rfsCFSs, string rfsName, string linkType, string hostType, XPathNavigator navigator)
+        {
+            var rfs = new RFSOperation(rfsCFSs.Key, rfsName, linkType, hostType, navigator, this);
+            AddChildCFS(rfs, rfsCFSs.Value);
+            AllRFS.Add(rfsName, rfs);
         }
 
         static void AddChildCFS(RFSOperation rfs, IEnumerable<XmlNode> cfsList)
@@ -244,18 +263,38 @@ namespace SPAFilter.SPA.Collection
                 rfs.ChildCFS.AddRange(cfsList);
         }
 
-        void CheckRFSInnerScenarios(string rfsName, XmlNode rfs)
+        /// <summary>
+        /// Сценарии внутри RFS
+        /// </summary>
+        /// <param name="rfsName"></param>
+        /// <param name="rfs"></param>
+        /// <param name="navigator"></param>
+        void CheckRFSInnerScenarios(string rfsName, XmlNode rfs, XPathNavigator navigator)
         {
-            foreach (XmlNode childNode in rfs.ChildNodes)
+            var rfsNode = rfs;
+            if (rfs == null)
+            {
+                var getRFS = XPATH.Execute(navigator, $"/Configuration/RFSList/RFS[@name='{rfsName}']");
+                if(getRFS == null || getRFS.Count == 0)
+                    return;
+                rfsNode = getRFS.First().Node;
+            }
+
+
+            foreach (XmlNode childNode in rfsNode.ChildNodes)
             {
                 if (!childNode.Name.Equals("Scenario"))
                     continue;
 
-                var scenarioOp = new ScenarioOperation(childNode, rfsName, this);
-                if (AllScenarios.ContainsKey(scenarioOp.Name))
-                    throw new Exception($"Service Catalog is invalid. {scenarioOp.Name} already exist.");
+                var scenarioName = childNode.Attributes?["name"]?.Value;
+                if (string.IsNullOrEmpty(scenarioName))
+                    throw new Exception("Invalid config. Scenario must have attribute \"name\" or value is empty");
 
-                AllScenarios.Add(scenarioOp.Name, scenarioOp);
+                if (!AllScenarios.ContainsKey(scenarioName))
+                {
+                    var scenarioOp = new ScenarioOperation(childNode, scenarioName, rfsName, this);
+                    AllScenarios.Add(scenarioName, scenarioOp);
+                }
             }
         }
     }

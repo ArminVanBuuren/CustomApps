@@ -11,14 +11,7 @@ namespace SPAFilter.SPA.Components.SRI
         public CatalogHostType(string name, IEnumerable<IOperation> allCatalogOps)
         {
             Name = name;
-
-            foreach (var catalogOperation in allCatalogOps)
-            {
-                if (catalogOperation.HostTypeName.Equals(name, StringComparison.CurrentCultureIgnoreCase))
-                {
-                    Operations.Add(catalogOperation);
-                }
-            }
+            Operations.AddRange(allCatalogOps);
         }
     }
 }

@@ -51,7 +51,7 @@ namespace SPAFilter
 
         public static string SavedDataPath => $"{ApplicationFilePath}.bin";
 
-        private bool IsInititializating { get; } = true;
+        private bool IsInititializating { get; set; } = true;
 
         private bool IsInProcessing
         {
@@ -132,21 +132,41 @@ namespace SPAFilter
 
         SPAFilterForm(SerializationInfo propertyBag, StreamingContext context)
         {
-            PreInit();
+            var allSavedParams = new Dictionary<string, object>();
             try
             {
-                var allSavedParams = new Dictionary<string, object>();
                 foreach (var entry in propertyBag)
                 {
                     allSavedParams.Add(entry.Name, entry.Value);
                 }
+            }
+            catch (Exception ex)
+            {
+                // ignored
+            }
+            finally
+            {
+                LoadFromFile(allSavedParams);
+            }
+        }
 
-                ProcessesTextBox.Text = (string)TryGetSerializationValue(allSavedParams, "ADWFFW", string.Empty);
+        async void LoadFromFile(IReadOnlyDictionary<string, object> allSavedParams)
+        {
+            try
+            {
+                PreInit();
+                progressBar.Visible = true;
+                progressBar.MarqueeAnimationSpeed = 10;
+                progressBar.Style = ProgressBarStyle.Marquee;
+                //progressBar
+
+                ProcessesTextBox.Text = (string) TryGetSerializationValue(allSavedParams, "ADWFFW", string.Empty);
                 if (!ProcessesTextBox.Text.IsNullOrEmptyTrim())
                 {
                     // RunSynchronously - не подходит, т.к. образуется дедлок, потому что асинхронный поток не пытается вернуться назад
-                    var task = Task.Run(() => AssignAsync(SPAProcessFilterType.Processes, false));
-                    task.Wait();
+                    //var task = Task.Run(() => AssignAsync(SPAProcessFilterType.Processes, false));
+                    //task.Wait();
+                    await AssignAsync(SPAProcessFilterType.Processes, false);
                 }
 
                 var robpIsChecked = (bool) TryGetSerializationValue(allSavedParams, "GGHHTTDD", true);
@@ -160,40 +180,45 @@ namespace SPAFilter
                     ROBPOperationsRadioButton_CheckedChanged(ServiceCatalogRadioButton, EventArgs.Empty);
                 }
 
-                ROBPOperationTextBox.Text = (string)TryGetSerializationValue(allSavedParams, "AAEERF", string.Empty);
-                ServiceCatalogTextBox.Text = (string)TryGetSerializationValue(allSavedParams, "DFWDRT", string.Empty);
+                ROBPOperationTextBox.Text = (string) TryGetSerializationValue(allSavedParams, "AAEERF", string.Empty);
+                ServiceCatalogTextBox.Text = (string) TryGetSerializationValue(allSavedParams, "DFWDRT", string.Empty);
 
                 if (ROBPOperationsRadioButton.Checked)
                 {
                     if (!ROBPOperationTextBox.Text.IsNullOrEmptyTrim())
                     {
-                        var taskROBP = Task.Run(() => AssignAsync(SPAProcessFilterType.ROBPOperations, false));
-                        taskROBP.Wait();
+                        //var taskROBP = Task.Run(() => AssignAsync(SPAProcessFilterType.ROBPOperations, false));
+                        //taskROBP.Wait();
+                        await AssignAsync(SPAProcessFilterType.ROBPOperations, false);
                     }
                 }
-                else if(!ServiceCatalogTextBox.Text.IsNullOrEmptyTrim())
+                else if (!ServiceCatalogTextBox.Text.IsNullOrEmptyTrim())
                 {
-                    var taskSC = Task.Run(() => AssignAsync(SPAProcessFilterType.SCOperations, false));
-                    taskSC.Wait();
+                    //var taskSC = Task.Run(() => AssignAsync(SPAProcessFilterType.SCOperations, false));
+                    //taskSC.Wait();
+                    await AssignAsync(SPAProcessFilterType.SCOperations, false);
                 }
 
-                ExportSCPath.Text = (string)TryGetSerializationValue(allSavedParams, "FFFGHJ", string.Empty);
-                OpenSCXlsx.Text = (string)TryGetSerializationValue(allSavedParams, "GGHHRR", string.Empty);
-                _lastDirPath = (string)TryGetSerializationValue(allSavedParams, "GHDDSD", string.Empty);
+                ExportSCPath.Text = (string) TryGetSerializationValue(allSavedParams, "FFFGHJ", string.Empty);
+                OpenSCXlsx.Text = (string) TryGetSerializationValue(allSavedParams, "GGHHRR", string.Empty);
+                _lastDirPath = (string) TryGetSerializationValue(allSavedParams, "GHDDSD", string.Empty);
 
-                var taskInstances = Task.Run(() => AssignServiceInstanes((List<string>)TryGetSerializationValue(allSavedParams, "WWWERT", null)));
-                taskInstances.Wait();
+                //var taskInstances = Task.Run(() => AssignServiceInstanes((List<string>)TryGetSerializationValue(allSavedParams, "WWWERT", null)));
+                //taskInstances.Wait();
+                await AssignServiceInstanes((List<string>) TryGetSerializationValue(allSavedParams, "WWWERT", null));
 
-                _notepadWordWrap = (bool)TryGetSerializationValue(allSavedParams, "DDCCVV", true);
-                _notepadLocation = (FormLocation)TryGetSerializationValue(allSavedParams, "RRTTDD", FormLocation.Default);
-                _notepadWindowsState = (FormWindowState)TryGetSerializationValue(allSavedParams, "SSEEFF", FormWindowState.Maximized);
+                _notepadWordWrap = (bool) TryGetSerializationValue(allSavedParams, "DDCCVV", true);
+                _notepadLocation = (FormLocation) TryGetSerializationValue(allSavedParams, "RRTTDD", FormLocation.Default);
+                _notepadWindowsState = (FormWindowState) TryGetSerializationValue(allSavedParams, "SSEEFF", FormWindowState.Maximized);
             }
             catch (Exception ex)
             {
-                // ignored
+                ShowError(ex.Message);
             }
             finally
             {
+                progressBar.Visible = false;
+                progressBar.Style = ProgressBarStyle.Blocks;
                 IsInititializating = false;
                 PostInit();
             }
