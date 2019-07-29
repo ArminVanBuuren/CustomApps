@@ -167,21 +167,22 @@ namespace SPAFilter
                 {
                     if (!ROBPOperationTextBox.Text.IsNullOrEmptyTrim())
                     {
-                        var task = Task.Run(() => AssignAsync(SPAProcessFilterType.ROBPOperations, false));
-                        task.Wait();
+                        var taskROBP = Task.Run(() => AssignAsync(SPAProcessFilterType.ROBPOperations, false));
+                        taskROBP.Wait();
                     }
                 }
                 else if(!ServiceCatalogTextBox.Text.IsNullOrEmptyTrim())
                 {
-                    var task = Task.Run(() => AssignAsync(SPAProcessFilterType.SCOperations, false));
-                    task.Wait();
+                    var taskSC = Task.Run(() => AssignAsync(SPAProcessFilterType.SCOperations, false));
+                    taskSC.Wait();
                 }
 
                 ExportSCPath.Text = (string)TryGetSerializationValue(allSavedParams, "FFFGHJ", string.Empty);
                 OpenSCXlsx.Text = (string)TryGetSerializationValue(allSavedParams, "GGHHRR", string.Empty);
                 _lastDirPath = (string)TryGetSerializationValue(allSavedParams, "GHDDSD", string.Empty);
 
-                AssignServiceInstanes((List<string>)TryGetSerializationValue(allSavedParams, "WWWERT", null));
+                var taskInstances = Task.Run(() => AssignServiceInstanes((List<string>)TryGetSerializationValue(allSavedParams, "WWWERT", null)));
+                taskInstances.Wait();
 
                 _notepadWordWrap = (bool)TryGetSerializationValue(allSavedParams, "DDCCVV", true);
                 _notepadLocation = (FormLocation)TryGetSerializationValue(allSavedParams, "RRTTDD", FormLocation.Default);
@@ -203,7 +204,7 @@ namespace SPAFilter
             return allSavedParams.TryGetValue(key, out var res) ? res : defaultResult;
         }
 
-        async void AssignServiceInstanes(IEnumerable<string> configurationApplicationList)
+        async Task AssignServiceInstanes(IEnumerable<string> configurationApplicationList)
         {
             if(configurationApplicationList == null)
                 return;

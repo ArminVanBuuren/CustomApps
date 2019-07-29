@@ -142,6 +142,7 @@ namespace SPAFilter.SPA.Collection
                         foreach (var baseRFS in result)
                         {
                             baseRFS.ChildRFS.Add(rfsCFSs.Key);
+                            AddChildCFS(baseRFS, rfsCFSs.Value);
                         }
 
                         if (result.All(p => !p.IsSubscription) && result.All(p => p.LinkType != "Modify"))
@@ -149,6 +150,8 @@ namespace SPAFilter.SPA.Collection
                             var baseModifyRFS = new RFSOperation(baseRFSName, "Modify", hostType, navigator, this);
                             baseModifyRFS.ChildRFS.Add(rfsCFSs.Key);
                             AllRFS.Add(baseRFSName, baseModifyRFS);
+
+                            AddChildCFS(baseModifyRFS, result.First().ChildRFS);
                         }
                     }
                     else
@@ -170,6 +173,7 @@ namespace SPAFilter.SPA.Collection
                         foreach (var parentRFS in result)
                         {
                             parentRFS.ChildRFS.Add(rfsCFSs.Key);
+                            AddChildCFS(parentRFS, rfsCFSs.Value);
                         }
                     }
                     else
@@ -209,7 +213,7 @@ namespace SPAFilter.SPA.Collection
                     foreach (var linkType in oneTimeLinkTypes)
                     {
                         var rfs = new RFSOperation(rfsName, linkType, hostType, navigator, this);
-                        rfs.ChildCFS.AddRange(rfsCFSs.Value);
+                        AddChildCFS(rfs, rfsCFSs.Value);
                         AllRFS.Add(rfsName, rfs);
                     }
                 }
@@ -218,22 +222,26 @@ namespace SPAFilter.SPA.Collection
                     foreach (var linkType in defaultLinkTypes)
                     {
                         var rfs = new RFSOperation(rfsName, linkType, hostType, navigator, this);
-                        if (rfsCFSs.Value != null)
-                            rfs.ChildCFS.AddRange(rfsCFSs.Value);
+                        AddChildCFS(rfs, rfsCFSs.Value);
                         AllRFS.Add(rfsName, rfs);
                     }
 
                     if (processType.Equals("DynamicList", StringComparison.CurrentCultureIgnoreCase))
                     {
                         var modifyRFS = new RFSOperation(rfsName, "Modify", hostType, navigator, this);
-                        if (rfsCFSs.Value != null)
-                            modifyRFS.ChildCFS.AddRange(rfsCFSs.Value);
+                        AddChildCFS(modifyRFS, rfsCFSs.Value);
                         AllRFS.Add(rfsName, modifyRFS);
                     }
                 }
 
                 CheckRFSInnerScenarios(rfsName, rfsCFSs.Key);
             }
+        }
+
+        static void AddChildCFS(RFSOperation rfs, IEnumerable<XmlNode> cfsList)
+        {
+            if(cfsList != null)
+                rfs.ChildCFS.AddRange(cfsList);
         }
 
         void CheckRFSInnerScenarios(string rfsName, XmlNode rfs)

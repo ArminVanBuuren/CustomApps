@@ -94,7 +94,11 @@ namespace SPAFilter.SPA.Components.SRI
             PostLoad();
         }
 
-        
+        class ScenarioRFSList
+        {
+            public List<RFSOperation> MandatoryList { get; } = new List<RFSOperation>();
+            public List<RFSOperation> ChildList { get; } = new List<RFSOperation>();
+        }
 
         public ScenarioOperation(XmlNode scenarioNode, XPathNavigator navigator, ServiceCatalog catalog)
         {
@@ -107,54 +111,34 @@ namespace SPAFilter.SPA.Components.SRI
             var scenariosRFSs = XPATH.Execute(navigator, $"/Configuration/ScenarioList/Scenario[@name='{ScenarioName}']/RFS");
             if (scenariosRFSs != null && scenariosRFSs.Count > 0)
             {
-                var rfsNamesUseTypeMandatory = XPATH.Execute(navigator, $"/Configuration/ScenarioList/Scenario[@name='{ScenarioName}']/RFS[@useType='Mandatory']/@name");
-                foreach (var rfsNode in scenariosRFSs)
+                var scenarioRFSs = LoadScenario(scenariosRFSs, catalog);
+
+                if (scenarioRFSs.MandatoryList.Count == 0)
                 {
-                    if (rfsNode.Node.Attributes == null || rfsNode.Node.Attributes.Count == 0)
-                        continue;
-
-                    string rfsName = null;
-                    string[] scenarioTypeList = null;
-
-                    foreach (XmlAttribute rfsAttr in rfsNode.Node.Attributes)
+                    foreach (var rfs in scenarioRFSs.ChildList)
                     {
-                        switch (rfsAttr.Name)
-                        {
-                            case "name":
-                                rfsName = rfsAttr.Value;
-                                break;
-                            case "scenarioType":
-                                scenarioTypeList = rfsAttr.Value.Split(',');
-                                break;
-                        }
+                        rfs.IsSeparated = false;
+                        RFSList.Add(rfs);
+                    }
+                }
+                else
+                {
+                    foreach (var mandRFS in scenarioRFSs.MandatoryList)
+                    {
+                        mandRFS.IsSeparated = false;
+                        RFSList.Add(mandRFS);
                     }
 
-                    if (rfsName.IsNullOrEmptyTrim() || scenarioTypeList == null || scenarioTypeList.Length <= 0 || !catalog.AllRFS.TryGetValue(rfsName, out var rfsOperationList))
-                        continue;
-
-                    if (rfsNamesUseTypeMandatory == null || rfsNamesUseTypeMandatory.Count == 0 || rfsNamesUseTypeMandatory.Any(x => x.Value.Equals(rfsName, StringComparison.CurrentCultureIgnoreCase)))
+                    var cfsOfMandatoryRFS = scenarioRFSs.MandatoryList.SelectMany(p => p.ChildCFS.Select(x => x.Attributes?["name"].Value)).ToList().Distinct();
+                    foreach (var childRFS in scenarioRFSs.ChildList)
                     {
-                        foreach (var type in scenarioTypeList)
+                        var nodes = childRFS.ChildCFS.Select(x => x.Attributes?["name"].Value).ToList();
+                        if (!nodes.Except(cfsOfMandatoryRFS).Any())
                         {
-                            var rfs = rfsOperationList.FirstOrDefault(p => p.LinkType.Equals(type.Trim(), StringComparison.CurrentCultureIgnoreCase));
-                            if (rfs == null)
-                                continue;
-
-                            rfs.IsSeparated = false;
-                            RFSList.Add(rfs);
+                            childRFS.IsSeparated = false;
+                            RFSList.Add(childRFS);
                         }
                     }
-                    //else // не отсепарировать другие RFS в сценарии, т.к. они не яыляются type=mandatory
-                    //{
-                    //    foreach (var type in scenarioTypeList)
-                    //    {
-                    //        var rfs = rfsOperationList.FirstOrDefault(p => p.LinkType.Equals(type.Trim(), StringComparison.CurrentCultureIgnoreCase));
-                    //        if (rfs == null)
-                    //            continue;
-
-                    //        RFSList.Add(rfs);
-                    //    }
-                    //}
                 }
             }
 
@@ -176,7 +160,7 @@ namespace SPAFilter.SPA.Components.SRI
                         break;
                     }
 
-                    if (rfsName.IsNullOrEmptyTrim() || !catalog.AllRFS.TryGetValue(rfsName, out var rfsOperationList))
+                    if (string.IsNullOrEmpty(rfsName) || !catalog.AllRFS.TryGetValue(rfsName, out var rfsOperationList))
                         continue;
 
                     AppendRFSList.Add(rfsOperationList.First());
@@ -185,6 +169,66 @@ namespace SPAFilter.SPA.Components.SRI
 
             PostLoad();
         }
+
+        static ScenarioRFSList LoadScenario(XPathResultCollection scenariosRFSs, ServiceCatalog catalog)
+        {
+            var result = new ScenarioRFSList();
+            foreach (var rfsNode in scenariosRFSs)
+            {
+                if (rfsNode.Node.Attributes == null || rfsNode.Node.Attributes.Count == 0)
+                    continue;
+
+                string rfsName = null;
+                string useType = null;
+                string[] scenarioTypeList = null;
+
+                foreach (XmlAttribute rfsAttr in rfsNode.Node.Attributes)
+                {
+                    switch (rfsAttr.Name)
+                    {
+                        case "name":
+                            rfsName = rfsAttr.Value;
+                            break;
+                        case "scenarioType":
+                            scenarioTypeList = rfsAttr.Value.Split(',');
+                            break;
+                        case "useType":
+                            useType = rfsAttr.Value;
+                            break;
+                    }
+                }
+
+                if (string.IsNullOrEmpty(rfsName) || scenarioTypeList == null || scenarioTypeList.Length <= 0 || !catalog.AllRFS.TryGetValue(rfsName, out var rfsOperationList))
+                    continue;
+
+                foreach (var type in scenarioTypeList)
+                {
+                    var rfs = rfsOperationList.FirstOrDefault(p => p.LinkType.Equals(type.Trim(), StringComparison.CurrentCultureIgnoreCase));
+                    if (rfs == null)
+                        continue;
+                    
+                    if (useType != null && useType.Equals("Mandatory", StringComparison.CurrentCultureIgnoreCase))
+                        result.MandatoryList.Add(rfs);
+                    else
+                        result.ChildList.Add(rfs);
+                }
+            }
+
+            return result;
+        }
+
+        //void AssignRFSToScenario(IEnumerable<string> scenarioTypeList, List<RFSOperation> rfsOperationList)
+        //{
+        //    foreach (var type in scenarioTypeList)
+        //    {
+        //        var rfs = rfsOperationList.FirstOrDefault(p => p.LinkType.Equals(type.Trim(), StringComparison.CurrentCultureIgnoreCase));
+        //        if (rfs == null)
+        //            continue;
+
+        //        rfs.IsSeparated = false;
+        //        RFSList.Add(rfs);
+        //    }
+        //}
 
         void Preload(XmlNode scenarioNode, ServiceCatalog catalog)
         {
