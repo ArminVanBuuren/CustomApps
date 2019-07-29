@@ -12,6 +12,7 @@ namespace SPAFilter.SPA.Collection
 {
     public class ServiceCatalog : CollectionHostType
     {
+        readonly List<string> defaultLinkTypes = new List<string> { "Add", "Remove" };
         public string Prefix { get; }
         internal DuplicateDictionary<string, RFSOperation> AllRFS { get; }
         internal Dictionary<string, ScenarioOperation> AllScenarios { get; }
@@ -88,7 +89,7 @@ namespace SPAFilter.SPA.Collection
                 var parentRFSName = string.Empty;
                 var hostType = string.Empty;
                 var processType = string.Empty;
-                var linkTypes = new List<string> { "Add", "Remove" };
+                
 
                 foreach (XmlAttribute attribute in rfsCFSs.Key.Attributes)
                 {
@@ -121,7 +122,7 @@ namespace SPAFilter.SPA.Collection
 
                 if (isSubscriptions)
                 {
-                    foreach (var linkType in linkTypes)
+                    foreach (var linkType in defaultLinkTypes)
                     {
                         var baseRFS = new RFSOperation(rfsName, linkType, hostType, navigator, this)
                         {
@@ -152,7 +153,7 @@ namespace SPAFilter.SPA.Collection
                     }
                     else
                     {
-                        foreach (var linkType in linkTypes)
+                        foreach (var linkType in defaultLinkTypes)
                         {
                             var baseRFS = new RFSOperation(baseRFSName, linkType, hostType, navigator, this);
                             baseRFS.ChildRFS.Add(rfsCFSs.Key);
@@ -173,7 +174,7 @@ namespace SPAFilter.SPA.Collection
                     }
                     else
                     {
-                        foreach (var linkType in linkTypes)
+                        foreach (var linkType in defaultLinkTypes)
                         {
                             var parentRfs = new RFSOperation(parentRFSName, linkType, hostType, navigator, this);
                             parentRfs.ChildRFS.Add(rfsCFSs.Key);
@@ -214,7 +215,7 @@ namespace SPAFilter.SPA.Collection
                 }
                 else
                 {
-                    foreach (var linkType in linkTypes)
+                    foreach (var linkType in defaultLinkTypes)
                     {
                         var rfs = new RFSOperation(rfsName, linkType, hostType, navigator, this);
                         if (rfsCFSs.Value != null)
@@ -239,14 +240,14 @@ namespace SPAFilter.SPA.Collection
         {
             foreach (XmlNode childNode in rfs.ChildNodes)
             {
-                if (childNode.Name.Equals("Scenario"))
-                {
-                    var scenarioOp = new ScenarioOperation(childNode, rfsName, this);
-                    if (AllScenarios.ContainsKey(scenarioOp.Name))
-                        throw new Exception($"Service Catalog is invalid. {scenarioOp.Name} already exist.");
+                if (!childNode.Name.Equals("Scenario"))
+                    continue;
 
-                    AllScenarios.Add(scenarioOp.Name, scenarioOp);
-                }
+                var scenarioOp = new ScenarioOperation(childNode, rfsName, this);
+                if (AllScenarios.ContainsKey(scenarioOp.Name))
+                    throw new Exception($"Service Catalog is invalid. {scenarioOp.Name} already exist.");
+
+                AllScenarios.Add(scenarioOp.Name, scenarioOp);
             }
         }
     }
