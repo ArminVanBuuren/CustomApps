@@ -43,7 +43,7 @@ namespace SPAFilter.SPA.Components
             HostTypeName = HardwareID.Split(':')[0];
 
             var scenarioConfigNode = serviceInstanceNode.SelectSingleNode("//fileScenarioSource") ?? serviceInstanceNode.SelectSingleNode("//config");
-            var scenarios = scenarioConfigNode?.Attributes?["dir"].Value;
+            var scenarios = scenarioConfigNode?.Attributes?["dir"]?.Value;
             if (scenarios == null)
             {
                 ShowError(string.Format(NOT_FOUND_ATTRIBUTE, "dir", "\"fileScenarioSource\" node"));
@@ -57,8 +57,8 @@ namespace SPAFilter.SPA.Components
             }
 
             var dict = serviceInstanceNode.SelectSingleNode("//context/object[@name='dictionary']/config") ?? serviceInstanceNode.SelectSingleNode("//context/object[@name='dictionary']/fileDictionarySource");
-            var dictionary = dict?.Attributes?["path"].Value;
-            var dictionaryXML = dict?.Attributes?["xml"].Value;
+            var dictionary = dict?.Attributes?["path"]?.Value;
+            var dictionaryXML = dict?.Attributes?["xml"]?.Value;
             if (dictionary == null || dictionaryXML == null)
             {
                 ShowError(string.Format(NOT_FOUND_ATTRIBUTE, "path or xml", "object-\"dictionary\" node"));

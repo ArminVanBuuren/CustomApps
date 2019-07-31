@@ -62,7 +62,7 @@ namespace SPAFilter.SPA.SC
             }
         }
 
-        static bool GetServices(IDictionary<string, XPathResult> services, XPathResultCollection result)
+        static bool GetServices(IDictionary<string, XPathResult> services, IReadOnlyCollection<XPathResult> result)
         {
             if(result == null || result.Count == 0)
                 return false;

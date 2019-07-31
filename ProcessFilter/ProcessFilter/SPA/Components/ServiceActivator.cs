@@ -22,7 +22,7 @@ namespace SPAFilter.SPA.Components
 
         public void Refresh()
         {
-            XPathResultCollection serviceInstances;
+            List<XPathResult> serviceInstances;
             try
             {
                 serviceInstances = LoadConfig();
@@ -46,7 +46,7 @@ namespace SPAFilter.SPA.Components
             }
         }
 
-        XPathResultCollection LoadConfig()
+        List<XPathResult> LoadConfig()
         {
             if (!File.Exists(FilePath))
                 throw new Exception($"File \"{FilePath}\" not found");

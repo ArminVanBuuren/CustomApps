@@ -16,7 +16,7 @@ namespace SPAFilter.SPA.Components.SRI
         public DistinctList<XmlNode> ResourceList { get; } = new DistinctList<XmlNode>();
         public DistinctList<XmlNode> RFSParameterList { get; } = new DistinctList<XmlNode>();
         public DistinctList<XmlNode> RFSList { get; } = new DistinctList<XmlNode>();
-        public DistinctList<XmlNode> CFSList { get; } = new DistinctList<XmlNode>(new CatalogItemEqualityComparer());
+        public DistinctList<XmlNode> CFSList { get; private set; } = new DistinctList<XmlNode>(new CatalogItemEqualityComparer());
         public DistinctList<XmlNode> CFSGroupList { get;} = new DistinctList<XmlNode>();
         public DistinctList<XmlNode> RestrictionList { get; } = new DistinctList<XmlNode>();
         public DistinctList<XmlNode> RFSGroupList { get;} = new DistinctList<XmlNode>();
@@ -38,21 +38,15 @@ namespace SPAFilter.SPA.Components.SRI
 
             foreach (var rfs in RFSList)
             {
-                if (rfs.Attributes == null)
+                var name = rfs.Attributes?["name"]?.Value;
+                if (name == null)
                     continue;
 
-                foreach (XmlAttribute cfsAttr in rfs.Attributes)
-                {
-                    if (cfsAttr.Name != "name")
-                        continue;
-
-                    Add(cfsAttr.Value, navigator);
-                    break;
-                }
+                Add(name, navigator);
             }
         }
 
-        void BuildRFSList(XPathResultCollection collection)
+        void BuildRFSList(IReadOnlyCollection<XPathResult> collection)
         {
             if (collection == null || collection.Count == 0)
                 return;
@@ -84,7 +78,7 @@ namespace SPAFilter.SPA.Components.SRI
                 if(!navigator.SelectFirst($"/Configuration/RFSList/RFS[@name='{rfsName}']", out var rfs))
                     throw new Exception($"Not found {rfsName}");
 
-                var rfsHostType = rfs.Node.Attributes?["hostType"].Value;
+                var rfsHostType = rfs.Node.Attributes?["hostType"]?.Value;
                 if (rfsHostType == null)
                     throw new Exception($"{rfsName} hasn't attribute \"hostType\"");
 
@@ -92,7 +86,7 @@ namespace SPAFilter.SPA.Components.SRI
 
                 foreach (XmlNode rfsChild in rfs.Node.ChildNodes)
                 {
-                    var itemName = rfsChild.Attributes?["name"].Value;
+                    var itemName = rfsChild.Attributes?["name"]?.Value;
                     switch (rfsChild.Name)
                     {
                         case "Resource" when itemName != null:
@@ -110,22 +104,30 @@ namespace SPAFilter.SPA.Components.SRI
                 AddXmlNode(XPATH.Select(navigator, $"/Configuration/ScenarioList/Scenario[RFS[@name='{rfsName}']]"), ScenarioList);
 
 
-                if (!navigator.Select($"/Configuration/CFSList/CFS[RFS[@name='{rfsName}']]", out var CFSListConfig))
+                if (!navigator.Select($"/Configuration/CFSList/CFS[RFS[@name='{rfsName}']]", out var cfsListConfig))
                     return;
 
-                foreach (var cfs in CFSListConfig)
+                var isMarkesCFSList = new List<string>();
+                foreach (var cfs in cfsListConfig)
                 {
-                    var cfsName = cfs.Node.Attributes?["name"].Value;
-                    if (cfsName != null)
+                    var cfsName = cfs.Node.Attributes?["name"]?.Value;
+                    var isMarker = cfs.Node.Attributes?["isMarker"]?.Value;
+
+                    if(cfsName == null)
+                        throw new Exception("Service Catalog is invalid. Not found attribute \"name\" in CFS.");
+
+                    AddXmlNode(XPATH.Select(navigator, $"/Configuration/CFSGroupList/CFSGroup[CFS[@name='{cfsName}']]"), CFSGroupList);
+
+                    if (isMarker != null && isMarker.Equals("true", StringComparison.CurrentCultureIgnoreCase))
                     {
-                        AddXmlNode(XPATH.Select(navigator, $"/Configuration/CFSGroupList/CFSGroup[CFS[@name='{cfsName}']]"), CFSGroupList);
+                        isMarkesCFSList.Add(cfsName);
                     }
 
                     var cloneCFS = cfs.Node.Clone();
                     for (var index = 0; index < cloneCFS.ChildNodes.Count; index++)
                     {
                         var childNode = cloneCFS.ChildNodes[index];
-                        var childNodeName = childNode.Attributes?["name"].Value;
+                        var childNodeName = childNode.Attributes?["name"]?.Value;
                         switch (childNode.Name)
                         {
                             case "RFS":
@@ -158,7 +160,15 @@ namespace SPAFilter.SPA.Components.SRI
                     CFSList.Add(cloneCFS);
                 }
 
+                foreach (var isMarkerCFS in isMarkesCFSList)
+                {
+                    if (navigator.Select($"/Configuration/CFSList/CFS[@copyOf='{isMarkerCFS}']", out var copiedCFS))
+                    {
+                        CFSList.AddRange(copiedCFS.Select(x => x.Node));
+                    }
+                }
 
+                //CFSList = new DistinctList<XmlNode>(CFSList.OrderBy(p => p.Attributes?["name"]?.Value), new CatalogItemEqualityComparer());
             }
             catch (Exception ex)
             {
@@ -166,7 +176,7 @@ namespace SPAFilter.SPA.Components.SRI
             }
         }
 
-        static void AddXmlNode(XPathResultCollection collection, ICollection<XmlNode> catalogComponent)
+        static void AddXmlNode(IReadOnlyCollection<XPathResult> collection, ICollection<XmlNode> catalogComponent)
         {
             if (collection == null || collection.Count <= 0)
                 return;
@@ -176,87 +186,5 @@ namespace SPAFilter.SPA.Components.SRI
                 catalogComponent.Add(item.Node);
             }
         }
-
-        ///// <summary>
-        ///// Финальная обработка биндинга.
-        ///// Очищаем в RFS список ненужных RFS. Оставляем только те которые относятся непосредственно к хосту базовой операции
-        ///// </summary>
-        //public void Finnaly()
-        //{
-        //    var rfsList = RFSList.ToDictionary(x => x.Attributes?["name"]?.Value, x => x, StringComparer.CurrentCultureIgnoreCase);
-        //    var rfsGroupList = RFSGroupList.ToDictionary(x => x.Attributes?["name"]?.Value, x => x, StringComparer.CurrentCultureIgnoreCase);
-
-        //    //var dd = CFSList.SelectMany(p => p.ChildNodes.OfType<XmlNode>().Select(t => t.Attributes?["name"].Value)).Distinct().ToDictionary(x => x, x => );
-
-
-
-        //    //foreach (var rfs in RFSList)
-        //    //{
-        //    //    var rfsName = rfs.Attributes?["name"]?.Value;
-        //    //    var hostType = rfs.Attributes?["hostType"]?.Value;
-        //    //    if (rfsName != null && hostType != null && hostType.Equals(_baseOperation.HostTypeName))
-        //    //        rfsList.Add(rfsName, rfs);
-        //    //}
-
-        //    //ExcludeRedundantRFSInCFS(rfsList, rfsGroupList);
-        //}
-
-        
-
-        ///// <summary>
-        ///// Финальная обработка биндинга.
-        ///// Очищаем в RFS список ненужных RFS. Если к основному сценарию или основному отсепарированному RFS отношения не имеют, то удалем ноды.
-        ///// Только для сценариев и отсепарированных RFS!!!!
-        ///// </summary>
-        //void FinnalyTEMP()
-        //{
-        //    var rfsList = new Dictionary<string, XmlNode>(StringComparer.CurrentCultureIgnoreCase);
-        //    var rfsGroupList = new Dictionary<string, XmlNode>(StringComparer.CurrentCultureIgnoreCase);
-
-        //    AddCollectionDict(RFSList, rfsList, "name");
-        //    AddCollectionDict(RFSGroupList, rfsGroupList, "name");
-
-        //    ExcludeRedundantRFSInCFS(rfsList, rfsGroupList);
-        //}
-
-        //void ExcludeRedundantRFSInCFS(IReadOnlyDictionary<string, XmlNode> rfsList, IReadOnlyDictionary<string, XmlNode> rfsGroupList)
-        //{
-        //    for (var index = 0; index < CFSList.Count; index++)
-        //    {
-        //        var cfsNode = CFSList[index].Clone();
-        //        for (var index2 = 0; index2 < cfsNode.ChildNodes.Count; index2++)
-        //        {
-        //            var childNode = cfsNode.ChildNodes[index2];
-        //            switch (childNode.Name)
-        //            {
-        //                case "RFS":
-        //                    var rfsName = childNode.Attributes?["name"]?.Value;
-        //                    if (rfsName != null && rfsList.ContainsKey(rfsName))
-        //                        continue;
-        //                    break;
-        //                case "RFSGroup":
-        //                    var rfsGroupName = childNode.Attributes?["name"]?.Value;
-        //                    if (rfsGroupName != null && rfsGroupList.ContainsKey(rfsGroupName))
-        //                        continue;
-        //                    break;
-        //            }
-
-        //            cfsNode.RemoveChild(childNode);
-        //            index2--;
-        //        }
-
-        //        CFSList[index] = cfsNode;
-        //    }
-        //}
-
-        //static void AddCollectionDict(IEnumerable<XmlNode> sourceCollection, Dictionary<string, XmlNode> assignCollection, string attributeName)
-        //{
-        //    foreach (var rfs in sourceCollection)
-        //    {
-        //        var attributeValue = rfs.Attributes?[attributeName]?.Value;
-        //        if (attributeValue != null && !assignCollection.ContainsKey(attributeValue))
-        //            assignCollection.Add(attributeValue, rfs);
-        //    }
-        //}
     }
 }

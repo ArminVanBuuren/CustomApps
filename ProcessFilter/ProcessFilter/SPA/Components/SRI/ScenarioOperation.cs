@@ -179,7 +179,7 @@ namespace SPAFilter.SPA.Components.SRI
             PostLoad();
         }
 
-        static ScenarioRFSList LoadScenario(XPathResultCollection scenariosRFSs, XPathNavigator navigator, ServiceCatalog catalog)
+        static ScenarioRFSList LoadScenario(IEnumerable<XPathResult> scenariosRFSs, XPathNavigator navigator, ServiceCatalog catalog)
         {
             var result = new ScenarioRFSList();
             foreach (var rfsNode in scenariosRFSs)

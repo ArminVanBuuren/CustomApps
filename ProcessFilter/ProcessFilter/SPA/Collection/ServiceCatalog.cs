@@ -34,7 +34,7 @@ namespace SPAFilter.SPA.Collection
 
             // вытаскиевам по списку все RFS и все CFS которые включают в себя текущий RFS
             var allRFSCFSsList = XPATH.Select(navigator, @"/Configuration/RFSList/RFS")
-                .ToDictionary(x => x.Node, x => XPATH.Select(navigator, $"/Configuration/CFSList/CFS[RFS/@name='{x.Node.Attributes?["name"].Value}']")
+                .ToDictionary(x => x.Node, x => XPATH.Select(navigator, $"/Configuration/CFSList/CFS[RFS/@name='{x.Node.Attributes?["name"]?.Value}']")
                 ?.Where(t => t != null)
                 .Select(p => p.Node));
 
