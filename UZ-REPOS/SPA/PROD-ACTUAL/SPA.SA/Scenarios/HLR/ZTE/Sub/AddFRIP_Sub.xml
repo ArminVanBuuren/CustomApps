@@ -57,11 +57,25 @@
                 <node name="ParameterSwitch" object="Switch">
 			<resultlist>
 				<result value="2" node="DummyResponder"/>
-				<result value="" node="AddMODGRPS"/>
+				<result value="" node="AddNAM"/>
 			</resultlist>
 			<parameterslist>
 				<param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/IP"/>
 				<param name="Value:2" value="err001"/>
+			</parameterslist>
+		</node>
+		<node name="AddNAM" object="Commander">
+			<resultlist>
+				<result value="" node="AddMODGRPS"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddBasicGPRS_NAM"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
 			</parameterslist>
 		</node>
                 <node name="AddMODGRPS" object="Commander">
@@ -159,11 +173,25 @@
                 <node name="ParameterSwitch_DEALER" object="Switch">
 			<resultlist>
 				<result value="2" node="DummyResponder"/>
-				<result value="" node="DeleteBasicGPRS_APN_DEALER"/>
+				<result value="" node="AddNAM_DEALER"/>
 			</resultlist>
 			<parameterslist>
 				<param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/IP"/>
 				<param name="Value:2" value="err001"/>
+			</parameterslist>
+		</node>
+		<node name="AddNAM_DEALER" object="Commander">
+			<resultlist>
+				<result value="" node="DeleteBasicGPRS_APN_DEALER"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddBasicGPRS_NAM"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
 			</parameterslist>
 		</node>
                 <node name="DeleteBasicGPRS_APN_DEALER" object="Commander">

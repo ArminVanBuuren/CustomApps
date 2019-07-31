@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="AddFRINSPECT" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Добавление подписки FRINSPECT'</Description>
+	<Author Name="Timur Khamzin" Date="2019-07-19+05:00"/>
+	<Request Template='ADD PSRV: USRIDENTIFIER="{1}", SRVNAME="Inspector_service", SRVUSAGESTATE=Normal, SRVROAMINGTYPE=NULL, SRVCONTACTMETHOD=None, SRVCREATESUBSCRIBER=No, PAYMENTFLAG=Yes, SRVEXATTR1=255;'>
+		<Item Name="msisdn" Type="Wellknown"/>	
+		<Item Name="imsi" Type="Wellknown"/>	
+		<Item Name="InspectID" Type="Parameter"/>	
+	</Request>
+	<ErrorsList CodePage="windows-1251" />
+</Command>

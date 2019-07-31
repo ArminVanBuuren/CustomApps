@@ -191,13 +191,30 @@
 		</node>		
 		<node  name="AddCallForwardingOriginating_Sub" object="ScenarioProcessor">
 			<resultlist>
-				<result value="0" node="SetLanguage" />
+				<result value="0" node="AddTCSI" />
 				<result value="" node="ResponseAssembler" />
 			</resultlist>
 			<parameterslist>
 				<param name="Scenario" value="Sub\AddCallForwardingOriginating_Sub" />
 			</parameterslist>
-		</node>		
+		</node>	
+                <node name="AddTCSI" object="IfCommander">
+			<resultlist>
+				<result value="0" node="SetLanguage"/>
+				<result value="1538" node="SetLanguage"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData/BalanceStorage/HostCode[text()='MS']"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddTCSI_Supres"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>	
                 <node name="SetLanguage" object="DataBaseProcessor">
 			<resultlist>
 				<result value="0" node="AddFRANTIOP" />
@@ -625,7 +642,8 @@
                                 <result value="" node="ResponseAssembler"/>
 			</resultlist>
 			<parameterslist>
-				<param name="IfXmlPath" value="//AdditionalData/ProvisionList/FRZAPRETGS"/>
+				<param name="OrXmlPath:0" value="//AdditionalData/ProvisionList/FRZAPRETGS"/>
+				<param name="OrXmlPath:1" value="//AdditionalData/ProvisionList/FRZAPRETGSTY"/>
 				<param name="CommandSource" value="Dictionary"/>
 				<param name="Command" value="DeleteTeleService"/>
 				<param name="Script" value="Command"/>

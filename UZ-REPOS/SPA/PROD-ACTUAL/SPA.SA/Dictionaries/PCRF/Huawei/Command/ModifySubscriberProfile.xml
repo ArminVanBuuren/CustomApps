@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ModifySubscriberProfile" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Изменение профиля абонента</Description>
+	<Author Name="Timur Khamzin" Date="2019-07-19+05:00"/>
+	<Request Template='MOD PSUB: USRIDENTIFIER="{1}", USRPAIDTYPE="{2}";'>
+	    <Item Name="msisdn"      Type="Wellknown"/>
+	    <Item Name="imsi"      Type="Wellknown"/>
+	    <Item Name="NewHLR_Profile" Type="LogicalGroupParameter"/>
+	</Request>
+	<ErrorsList CodePage="windows-1251">
+		<Error Name="MSISDN ALREADY DEFINED" Value="SUCCESS"/>
+	</ErrorsList>
+</Command>

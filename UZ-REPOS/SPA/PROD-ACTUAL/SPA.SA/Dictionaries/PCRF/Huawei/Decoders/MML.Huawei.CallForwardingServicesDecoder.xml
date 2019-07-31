@@ -1,0 +1,17 @@
+<Decoder Name="CallForwardingServicesList" Type="FORIS.ServiceProvisioning.MmlProcessing.Dictionary.ElementsDecoder, FORIS.SPA.MmlProcessing">
+	<Element Key="CFU" RegexpPattern="(?&lt;parameter&gt;CFU(.*\n){1,9})" RegexpOptions="Multiline">
+		<Decoder Path="MML.Huawei.CallForwardingInfoDecoder.xml"/>
+	</Element>
+	<Element Key="CFB" RegexpPattern="(?&lt;parameter&gt;CFB(.*\n){1,9})" RegexpOptions="Multiline">
+		<Decoder Path="MML.Huawei.CallForwardingInfoDecoder.xml"/>
+	</Element>
+	<Element Key="CFNRY" RegexpPattern="(?&lt;parameter&gt;CFNRY(.*\n){1,9})" RegexpOptions="Multiline">
+		<Decoder Path="MML.Huawei.CallForwardingInfoDecoder.xml"/>
+	</Element>
+	<Element Key="CFNRC" RegexpPattern="(?&lt;parameter&gt;CFNRC(.*\n){1,9})" RegexpOptions="Multiline">
+		<Decoder Path="MML.Huawei.CallForwardingInfoDecoder.xml"/>
+	</Element>
+	<Element Key="CFD" RegexpPattern="(?&lt;parameter&gt;CFD(.*\n){1,9})" RegexpOptions="Multiline">
+		<Decoder Path="MML.Huawei.CallForwardingInfoDecoder.xml"/>
+	</Element>	
+</Decoder>

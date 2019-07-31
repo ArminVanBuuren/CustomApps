@@ -41,7 +41,7 @@
 		</node>		
 		<node name="DeleteSubscriber" object="Commander">
 			<resultlist>
-				<result value="" node="ResponseAssembler"/>
+				<result value="" node="DeleteSubscriberAuC"/>
 			</resultlist>
 			<parameterslist>
 				<param name="CommandSource" value="Dictionary"/>

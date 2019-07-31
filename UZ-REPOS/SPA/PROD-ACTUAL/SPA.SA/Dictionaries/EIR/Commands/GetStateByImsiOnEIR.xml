@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="GetStateByImsiOnEIR" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Получение статуса IMEI по IMSI</Description>
+	<Author Name="Timur Khamzin" Date="2019-04-04+05:00"/>
+	<Request Template="cmd=getstate&amp;imsi={0}">
+		<Item Name="imsi" Type="Wellknown"/>
+	</Request>                                                                                            
+	<ErrorsList CodePage="ASCII"/>
+</Command>

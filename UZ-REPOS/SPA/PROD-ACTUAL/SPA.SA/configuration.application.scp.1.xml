@@ -5,7 +5,7 @@
       <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
         <fileScenarioSource dir="C:\FORIS\SPA\Configuration\SPA.SA\Scenarios\SCP"/>
       </scenarioSource>
-      <socketList poolSize="12" maxConnections="4" minConnections="1" averageTime="20" deltaAverageTime="40" maxCommandsPerPeriod="300" periodDuration="10" reconfigurationTimeout="0">
+      <socketList poolSize="12" maxConnections="3" minConnections="1" averageTime="20" deltaAverageTime="40" maxCommandsPerPeriod="300" periodDuration="10" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Integrated.ScpSocket, FORIS.SPA.Communication.Integrated">
           <config  serviceGroup="MSCP1" uri="tcp://10.160.21.38:8022/CRMOperations.uri" uriRem="tcp://10.160.21.38:8024/REMRemote.uri" queue="a14-scp1-rts1\mscp.out.queue" timeout="60" login="LREMClient" password="dncornholio" workingmode="wmGeneral" SessionRefreshTimeout="180" >
             <Emulation Success="C:\FORIS\SPA\Configuration\SPA.SA\Emulation\SCP\AsyncResult_Success.xml" Failure="C:\FORIS\SPA\Configuration\SPA.SA\Emulation\SCP\AsyncResult_Failure.xml" RandomizePrintout="false" OverwriteCommandPrintout="true"  Lifetime="00:00:00.00"/>

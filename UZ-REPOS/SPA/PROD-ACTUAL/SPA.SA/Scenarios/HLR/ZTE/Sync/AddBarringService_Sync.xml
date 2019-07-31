@@ -65,7 +65,8 @@
                                 <result value="" node="ResponseAssembler"/>
 			</resultlist>
 			<parameterslist>
-				<param name="IfXmlPath" value="//AdditionalData//FRZAPRETGS"/>
+				<param name="OrXmlPath:0" value="//AdditionalData//FRZAPRETGS"/>
+				<param name="OrXmlPath:1" value="//AdditionalData//FRZAPRETGSTY"/>
 				<param name="CommandSource" value="Dictionary"/>
 				<param name="Command" value="DeleteTeleService"/>
 				<param name="Script" value="Command"/>

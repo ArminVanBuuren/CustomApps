@@ -78,7 +78,7 @@
                 </node>	
                 <node name="CheckFRAPCORPPERF" object="XmlNodesReplacer">
                         <resultlist>
-                                <result value="" node="AddSubscription"/>
+                                <result value="" node="CheckFRAPXIZMAT1"/>
                         </resultlist>
                         <parameterslist>
                                 <param name="ObjectNameInContext" value="xmlrequest"/>
@@ -86,6 +86,42 @@
                                 <param name="DstXml" value="xmlrequest"/>
                                 <param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/ProvisionList/FRAPCORPPERF"/>       
                                 <param name="DstInnerText:0" value="FRAPCORPPERF"/>    
+                        </parameterslist>
+                </node>	
+                <node name="CheckFRAPXIZMAT1" object="XmlNodesReplacer">
+                        <resultlist>
+                                <result value="" node="CheckFRAPXIZMAT2"/>
+                        </resultlist>
+                        <parameterslist>
+                                <param name="ObjectNameInContext" value="xmlrequest"/>
+                                <param name="IfXmlPath:0" value="//AdditionalData/ProvisionList/FRAPXIZMAT1"/>
+                                <param name="DstXml" value="xmlrequest"/>
+                                <param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/ProvisionList/FRAPXIZMAT1"/>       
+                                <param name="DstInnerText:0" value="FRAPXIZMAT1"/>    
+                        </parameterslist>
+                </node>	
+                <node name="CheckFRAPXIZMAT2" object="XmlNodesReplacer">
+                        <resultlist>
+                                <result value="" node="CheckFRAPXIZMAT3"/>
+                        </resultlist>
+                        <parameterslist>
+                                <param name="ObjectNameInContext" value="xmlrequest"/>
+                                <param name="IfXmlPath:0" value="//AdditionalData/ProvisionList/FRAPXIZMAT2"/>
+                                <param name="DstXml" value="xmlrequest"/>
+                                <param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/ProvisionList/FRAPXIZMAT2"/>       
+                                <param name="DstInnerText:0" value="FRAPXIZMAT2"/>    
+                        </parameterslist>
+                </node>	
+                <node name="CheckFRAPXIZMAT3" object="XmlNodesReplacer">
+                        <resultlist>
+                                <result value="" node="AddSubscription"/>
+                        </resultlist>
+                        <parameterslist>
+                                <param name="ObjectNameInContext" value="xmlrequest"/>
+                                <param name="IfXmlPath:0" value="//AdditionalData/ProvisionList/FRAPXIZMAT3"/>
+                                <param name="DstXml" value="xmlrequest"/>
+                                <param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/ProvisionList/FRAPXIZMAT3"/>       
+                                <param name="DstInnerText:0" value="FRAPXIZMAT3"/>    
                         </parameterslist>
                 </node>	
 		<node name="DeleteSubscription" object="Commander">

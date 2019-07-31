@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Dictionary>
+  <WellknownsList>
+    <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
+    <Wellknown Name="msisdn.cc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,0,1)"/>
+    <Wellknown Name="msisdn.ndc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,1,3)"/>
+    <Wellknown Name="msisdn.sn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,4)"/>
+    <Wellknown Name="msisdn.fn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,1)"/>
+    <Wellknown Name="imsi" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;)"/>
+    <Wellknown Name="imsi.mcc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,0,3)"/>
+    <Wellknown Name="imsi.mnc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,3,2)"/>
+    <Wellknown Name="imsi.msin" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,5)"/>
+  </WellknownsList>
+  <ErrorsList CodePage="ascii">
+    <Error Name="&quot;0000&quot;"  Value="SUCCESS"  Description="Deystvie uspeshno"/>   
+    <Error Name="&quot;1000&quot;"  Value="FAILURE"  Description="Not implemented"/>  
+    <Error Name="&quot;1010&quot;"  Value="FAILURE"  Description="Unknown requested operation"/>     
+    <Error Name="&quot;1011&quot;"  Value="FAILURE"  Description="Operation request does not have request body as JSON"/>     
+    <Error Name="&quot;1012&quot;"  Value="InvalidRequest"  Description="Wrong JSON format"/>     
+    <Error Name="&quot;1013&quot;"  Value="FAILURE"  Description="Requested URI not supported"/>     
+    <Error Name="&quot;1014&quot;"  Value="FAILURE"  Description="URI is empty"/>     
+    <Error Name="&quot;1015&quot;"  Value="InvalidRequest"  Description="Wrong username or password"/>     
+    <Error Name="&quot;1016&quot;"  Value="InvalidRequest"  Description="Wrong HTTP header"/>     
+    <Error Name="&quot;1017&quot;"  Value="FAILURE"  Description="Authorization method not supported"/>     
+    <Error Name="&quot;1018&quot;"  Value="InvalidRequest"  Description="Wrong HTTP header content length mismatch"/>     
+    <Error Name="&quot;2010&quot;"  Value="InvalidRequest"  Description="Wrong fields combination"/>     
+    <Error Name="&quot;2011&quot;"  Value="FAILURE"  Description="Mandatory field imsi does not exists"/>     
+    <Error Name="&quot;2012&quot;"  Value="FAILURE"  Description="Mandatory field imei does not exists"/>     
+    <Error Name="&quot;2013&quot;"  Value="FAILURE"  Description="Requested operation should contain tags array"/>     
+    <Error Name="&quot;2015&quot;"  Value="FAILURE"  Description="Mandatory field msisdn does not exists"/>     
+    <Error Name="&quot;2020&quot;"  Value="InvalidRequest"  Description="Wrong field imsi format"/>     
+    <Error Name="&quot;2021&quot;"  Value="InvalidRequest"  Description="Wrong field imei format"/>     
+    <Error Name="&quot;3000&quot;"  Value="FAILURE"  Description="Internal server error"/>     
+    <Error Name="&quot;3010&quot;"  Value="FAILURE"  Description="Internal server error_db_not_accessible"/>     
+    <Error Name="&quot;3011&quot;"  Value="FAILURE"  Description="Request without affecting"/>     
+    <Error Name="&quot;3014&quot;"  Value="FAILURE"  Description="DB logic error while inserting into list"/>     
+    <Error Name="&quot;3015&quot;"  Value="FAILURE"  Description="DB logic error while deleting from list"/>     
+    <Error Name="&quot;4000&quot;"  Value="FAILURE"  Description="Unknown internal logic error_detailed_description"/>     
+    <Error Name="&quot;4013&quot;"  Value="FAILURE"  Description="Old imsi not found, new imsi was set forcely"/>     
+    <Error Name="&quot;4014&quot;"  Value="SUCCESS"  Description="Msisdn already exist"/>     
+    <Error Name="&quot;4015&quot;"  Value="SUCCESS"  Description="Imsi/msisdn not found"/>     
+    <Error Name="&quot;4016&quot;"  Value="SUCCESS"  Description="Imsi/msisdn is not listed anymore"/>     
+    <Error Name="&quot;4017&quot;"  Value="InvalidRequest"  Description="Wrong timestamp format"/>     
+    <Error Name="&quot;4018&quot;"  Value="SUCCESS"  Description="Imsi/msisdn already removed"/>     
+    <Error Name="&quot;4019&quot;"  Value="FAILURE"  Description="Violation of time continuum"/>     
+  </ErrorsList>
+  <RegexpsList>
+    <Regexp Name="Error" Value="&quot;(?&lt;ERROR&gt;\d{4})&quot;"/>
+  </RegexpsList>               
+  <ConstantsList/>
+  <ParametersList>
+    <Parameter Name="NewIMSI">
+      <Source Path="ExtendedRequestMessage/AdditionalData//NewIMSI"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="NewMSISDN">
+      <Source Path="ExtendedRequestMessage/AdditionalData//NewMSISDN"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="foreign">
+      <Source Path="ExtendedRequestMessage/AdditionalData/Foreign"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="pastdays">
+      <Source Path="ExtendedRequestMessage/AdditionalData/Pastdays"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+  </ParametersList>
+  <DynamicParametersList/>
+  <CommandsList Root="C:\FORIS\SPA\Configuration\SPA.SA\Dictionaries\EIR\Commands\">
+    <Command Path="ChangeIMSIOnEIR.xml"/>
+    <Command Path="ChangeMSISDNOnEIR.xml"/>
+    <Command Path="CreateSubscriberOnEIR.xml"/>
+    <Command Path="DeleteSubscriberOnEIR.xml"/>
+    <Command Path="GetHistoryOnEIR.xml"/>
+    <Command Path="GetStateByImsiOnEIR.xml"/>
+  </CommandsList>
+</Dictionary>
