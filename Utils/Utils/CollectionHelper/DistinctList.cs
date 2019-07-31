@@ -55,6 +55,10 @@ namespace Utils.CollectionHelper
             return item != null && _items.Remove(item);
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Выполняется дольше чем с обычной коллекцией
+        /// </summary>
         public T this[int index]
         {
             get => _items.Keys.ElementAt(index);
@@ -69,6 +73,10 @@ namespace Utils.CollectionHelper
             }
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Выполняется дольше чем с обычной коллекцией
+        /// </summary>
         public int IndexOf(T item)
         {
             if (item == null) 
@@ -87,6 +95,11 @@ namespace Utils.CollectionHelper
             return i;
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Выполняется дольше чем с обычной коллекцией
+        /// </summary>
+        /// <param name="index"></param>
         public void RemoveAt(int index)
         {
             var existElement = _items.ElementAt(index);
@@ -118,6 +131,12 @@ namespace Utils.CollectionHelper
             return clone;
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Не поддерживается. Т.к. коллекция индексируется по типу &lt;T&gt;
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="item"></param>
         public void Insert(int index, T item)
         {
             throw new System.NotSupportedException();
