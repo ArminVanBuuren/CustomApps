@@ -5,11 +5,6 @@ using System.Xml.XPath;
 
 namespace Utils
 {
-    public class XPathResultCollection : List<XPathResult>
-    {
-
-    }
-
     public class XPathResult
     {
         public int ID { get; set; }
@@ -44,13 +39,13 @@ namespace Utils
             return true;
         }
 
-        public static bool Select(this XPathNavigator navigator, string xpath, out XPathResultCollection result)
+        public static bool Select(this XPathNavigator navigator, string xpath, out List<XPathResult> result)
         {
             result = Select(navigator, xpath);
             return result != null;
         }
 
-        public static XPathResultCollection Select(XPathNavigator navigator, string xpath, bool getSingle = false)
+        public static List<XPathResult> Select(XPathNavigator navigator, string xpath, bool getSingle = false)
         {
             if (navigator == null)
                 return null;
@@ -68,7 +63,7 @@ namespace Utils
                     if (nodes.Count == 0)
                         return null;
 
-                    var res1 = new XPathResultCollection();
+                    var res1 = new List<XPathResult>();
                     var i = 0;
 
                     while (nodes.MoveNext())
@@ -100,7 +95,7 @@ namespace Utils
                     if (obj == null)
                         return null;
 
-                    var res2 = new XPathResultCollection
+                    var res2 = new List<XPathResult>
                     {
                         new XPathResult
                         {
