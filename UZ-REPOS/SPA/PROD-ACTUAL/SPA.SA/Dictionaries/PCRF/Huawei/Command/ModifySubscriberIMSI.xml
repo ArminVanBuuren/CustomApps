@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ModifySubscriberIMSI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Изменение IMSI абонента</Description>
+	<Author Name="Timur Khamzin" Date="2019-07-19+05:00"/>
+	<Request Template='MOD PSUB: USRIDENTIFIER="{2}", OLDUSRIDENTIFIER="{1}";'>
+	    <Item Name="msisdn"      Type="Wellknown"/>
+	    <Item Name="imsi"      Type="Wellknown"/>
+	    <Item Name="NewIMSI"     Type="Parameter"/>
+	</Request>
+	<ErrorsList CodePage="windows-1251">
+		<Error Name="MSISDN ALREADY DEFINED" Value="SUCCESS"/>
+	</ErrorsList>
+</Command>

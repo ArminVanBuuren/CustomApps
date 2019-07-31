@@ -291,6 +291,7 @@
     <Command Path="AddRoamingSchemePS.xml"/>
     <Command Path="AddSMSInc.xml"/>
     <Command Path="AddSMSOut.xml"/>
+    <Command Path="AddTCSI_Supres.xml"/>
     <Command Path="AddTeleService.xml"/>
     <Command Path="AddUSSD.xml"/>
     <Command Path="CancelLocation.xml"/>

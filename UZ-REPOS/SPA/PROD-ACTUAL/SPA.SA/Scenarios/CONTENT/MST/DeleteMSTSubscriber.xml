@@ -21,7 +21,7 @@
 		</node>
 		<node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
 			<resultlist>
-				<result value="0" node="DeleteMST"/>
+				<result value="0" node="dummySUCCESS"/>
 				<result value="1" node=""/>
 			</resultlist>
 			<parameterslist>

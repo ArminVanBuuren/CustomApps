@@ -59,6 +59,10 @@
       <Source Path="ExtendedRequestMessage/AdditionalData/IP"/>
       <PossibleValues StringToKeyTable="true"/>
     </Parameter>
+    <Parameter Name="Scheme">
+      <Source Path="ExtendedRequestMessage/AdditionalData/Scheme"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
     <Parameter Name="Originating">
       <Source Path="//AdditionalData/Originating"/>
       <PossibleValues StringToKeyTable="false">

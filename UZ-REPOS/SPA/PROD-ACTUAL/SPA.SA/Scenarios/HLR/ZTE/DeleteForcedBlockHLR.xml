@@ -32,11 +32,12 @@
 				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
 			</parameterslist>
 		</node>
-		<node name="UnblockInternet" object="Commander">
+		<node name="UnblockInternet" object="IfCommander">
 			<resultlist>
 				<result value="" node="CheckFRASKUE"/>
 			</resultlist>
 			<parameterslist>
+				<param name="IfNotXmlPath" value="//AdditionalData/RegisteredList/FRBLKOUT"/>
 				<param name="CommandSource" value="Dictionary"/>
 				<param name="Command" value="DeleteBPOS"/>
 				<param name="Script" value="Command"/>
@@ -80,8 +81,8 @@
 		</node>
                 <node name="AddUSSD" object="IfCommander">
 			<resultlist>
-				<result value="0" node="CheckInterRoaming"/>
-				<result value="1538" node="CheckInterRoaming"/>
+				<result value="0" node="CheckSMSBlocks"/>
+				<result value="1538" node="CheckSMSBlocks"/>
 				<result value="" node="ResponseAssembler"/>
 			</resultlist>
 			<parameterslist>
@@ -98,59 +99,6 @@
 				<param name="ErrorDecodingType" value="ByString"/>
 				<param name="DynamicObject" value="(empty)"/>
 				<param name="OverwriteDetailedResult" value="true"/>
-			</parameterslist>
-		</node>
-                <node name="CheckInterRoaming" object="IfMultipleXmlConditionsResolver">
-			<resultlist>
-				<result value="0" node="AddCB123Node1"/>
-				<result value="1" node="CheckSMSBlocks"/>
-			</resultlist>
-			<parameterslist>
-				<param name="OrXmlPath:0" value="//AdditionalData/RegisteredList/CB123"/>
-                                <param name="OrXmlPath:1" value="//AdditionalData/RegisteredList/BSNSSRMNG"/>
-                                <param name="OrXmlPath:2" value="//AdditionalData/RegisteredList/LGHTRMNG"/>
-			</parameterslist>
-		</node>
-		<node name="AddCB123Node1" object="Commander">
-			<resultlist>
-				<result value="" node="AddNAM"/>
-			</resultlist>
-			<parameterslist>
-				<param name="CommandSource" value="Dictionary"/>
-				<param name="Command" value="AddInterRoaming"/>
-				<param name="Script" value="Command"/>
-				<param name="AppendSubscribersData" value="false"/>
-				<param name="ErrorDecodingType" value="ByString"/>
-				<param name="DynamicObject" value="(empty)"/>
-				<param name="OverwriteDetailedResult" value="true"/>
-			</parameterslist>
-		</node>
-		<node name="AddNAM" object="Commander">
-			<resultlist>
-				<result value="" node="AddLGHTRMNGNode1"/>
-			</resultlist>
-			<parameterslist>
-				<param name="CommandSource" value="Dictionary"/>
-				<param name="Command" value="AddBasicGPRS_NAM"/>
-				<param name="Script" value="Command"/>
-				<param name="AppendSubscribersData" value="false"/>
-				<param name="ErrorDecodingType" value="ByString"/>
-				<param name="DynamicObject" value="(empty)"/>
-				<param name="OverwriteDetailedResult" value="true"/>
-			</parameterslist>
-		</node>
-                <node name="AddLGHTRMNGNode1" object="IfCommander">
-			<resultlist>
-				<result value="" node="CheckSMSBlocks"/>				
-			</resultlist>
-			<parameterslist>
-				<param name="IfXmlPath" value="//AdditionalData/RegisteredList/LGHTRMNG"/>
-				<param name="CommandSource" value="Dictionary"/>
-				<param name="Command" value="AddLightRoaming"/>
-				<param name="Script" value="Command"/>
-				<param name="AppendSubscribersData" value="false"/>
-				<param name="ErrorDecodingType" value="ByString"/>
-				<param name="DynamicObject" value="(empty)"/>
 			</parameterslist>
 		</node>
 		<node name="CheckSMSBlocks" object="IfMultipleXmlConditionsResolver">
@@ -211,8 +159,8 @@
 		</node>
 		<node name="DeleteBlockCallsOut" object="IfCommander">
 			<resultlist>
-				<result value="0" node="CheckGprsBlocks"/>
-				<result value="1538" node="CheckGprsBlocks"/>
+				<result value="0" node="CheckInterRoaming"/>
+				<result value="1538" node="CheckInterRoaming"/>
 				<result value="" node="ResponseAssembler"/>					
 			</resultlist>
 			<parameterslist>
@@ -220,6 +168,59 @@
 				<param name="OrNotXmlPath:1" value="//RegisteredList/FRBLOUTGO"/>
 				<param name="CommandSource" value="Dictionary"/>
 				<param name="Command" value="DeleteBlockCallsOut"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+                <node name="CheckInterRoaming" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="AddCB123Node1"/>
+				<result value="1" node="CheckGprsBlocks"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="//AdditionalData/RegisteredList/CB123"/>
+                                <param name="OrXmlPath:1" value="//AdditionalData/RegisteredList/BSNSSRMNG"/>
+                                <param name="OrXmlPath:2" value="//AdditionalData/RegisteredList/LGHTRMNG"/>
+			</parameterslist>
+		</node>
+		<node name="AddCB123Node1" object="Commander">
+			<resultlist>
+				<result value="" node="AddNAM"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddInterRoaming"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>
+		<node name="AddNAM" object="Commander">
+			<resultlist>
+				<result value="" node="AddLGHTRMNGNode1"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddBasicGPRS_NAM"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>
+                <node name="AddLGHTRMNGNode1" object="IfCommander">
+			<resultlist>
+				<result value="" node="CheckGprsBlocks"/>				
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData/RegisteredList/LGHTRMNG"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddLightRoaming"/>
 				<param name="Script" value="Command"/>
 				<param name="AppendSubscribersData" value="false"/>
 				<param name="ErrorDecodingType" value="ByString"/>

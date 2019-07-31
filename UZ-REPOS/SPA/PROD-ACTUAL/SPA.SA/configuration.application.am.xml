@@ -5,7 +5,7 @@
       <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
         <fileScenarioSource dir="C:\FORIS\SPA\Configuration\SPA.SA\Scenarios\AM"/>
       </scenarioSource>
-      <socketList poolSize="10" maxConnections="5" minConnections="1" averageTime="20" deltaAverageTime="40" maxCommandsPerPeriod="300" periodDuration="10" reconfigurationTimeout="0">
+      <socketList poolSize="12" maxConnections="3" minConnections="1" averageTime="20" deltaAverageTime="40" maxCommandsPerPeriod="300" periodDuration="10" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Integrated.AmSocket, FORIS.SPA.Communication.Integrated">
           <config serviceGroup="AM" uri="tcp://10.160.18.65:8023/CRMOperations.uri" queue="a14-am01\am.out.queue" timeout="60" workingmode="wmGeneral">
             <Emulation Success="C:\FORIS\SPA\Configuration\SPA.SA\Emulation\SCP\AsyncResult_Success.xml" Failure="C:\FORIS\SPA\Configuration\SPA.SA\Emulation\SCP\AsyncResult_Failure.xml" RandomizePrintout="false" OverwriteCommandPrintout="true"  Lifetime="00:00:00.00"/>

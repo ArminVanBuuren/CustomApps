@@ -21,6 +21,7 @@
 		<object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll"/>
                 <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
 		<object name="DataBaseProcessorEncoder" class="FORIS.ScenarioProcessing.OtherParty.DataBaseProcessorEncoder" assembly="FORIS.SPA.OTHERPARTY.dll"/>
+		<object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>	
 	</objectList>
 	<automat>
 		<node name="BySubscirbersSplitter" object="BySubscirbersSplitter">
@@ -181,13 +182,30 @@
 		</node>
 		<node  name="AddCallForwardingOriginating_Sub" object="ScenarioProcessor">
 			<resultlist>
-				<result value="0" node="AddServices_sync" />
+				<result value="0" node="AddTCSI" />
 				<result value="" node="ResponseAssembler" />
 			</resultlist>
 			<parameterslist>
 				<param name="Scenario" value="Sub\AddCallForwardingOriginating_Sub" />
 			</parameterslist>
 		</node>		
+                <node name="AddTCSI" object="IfCommander">
+			<resultlist>
+				<result value="0" node="AddServices_sync"/>
+				<result value="1538" node="AddServices_sync"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="//AdditionalData/BalanceStorage/HostCode[text()='MS']"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddTCSI_Supres"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>	
 		<node  name="AddServices_sync" object="ScenarioProcessor">
 			<resultlist>
 				<result value="0" node="AddGPRSService_Sync" />
@@ -208,11 +226,34 @@
 		</node>		
 		<node  name="AddBarringService_Sync" object="ScenarioProcessor">
 			<resultlist>
-				<result value="0" node="CheckM2MAPN" />
+				<result value="0" node="CheckBlocks" />
 				<result value="" node="ResponseAssembler" />
 			</resultlist>
 			<parameterslist>
 				<param name="Scenario" value="Sync\AddBarringService_Sync" />
+			</parameterslist>
+		</node>
+		<node name="CheckBlocks" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="AddCommandList"/>
+				<result value="1" node="CheckM2MAPN"/>
+			</resultlist>
+			<parameterslist>
+                                <param name="OrXmlPath:0"  value="//AdditionalData/RegisteredList/FRBLKFIN"/>
+				<param name="OrXmlPath:1"  value="//AdditionalData/RegisteredList/CBBLKLOST"/>
+				<param name="OrXmlPath:2"  value="//AdditionalData/RegisteredList/FRBLKCHK"/>
+				<param name="OrXmlPath:3"  value="//AdditionalData/RegisteredList/FRBLKTIME"/>
+				<param name="OrXmlPath:4"  value="//AdditionalData/RegisteredList/FRBLKUSER"/>
+				<param name="OrXmlPath:5"  value="//AdditionalData/RegisteredList/FRBLAPP"/>
+				<param name="OrXmlPath:6"  value="//AdditionalData/RegisteredList/BLTDLIM"/>
+				<param name="OrXmlPath:7"  value="//AdditionalData/RegisteredList/FRBLKPAY"/>
+				<param name="OrXmlPath:8"  value="//AdditionalData/RegisteredList/FRTECHBLK"/>
+                                <param name="OrXmlPath:9"  value="//AdditionalData/RegisteredList/FRBLKOUT"/>
+                                <param name="OrXmlPath:10" value="//AdditionalData/RegisteredList/FRBLKFROD"/>
+                                <param name="OrXmlPath:11" value="//AdditionalData/RegisteredList/FRPARTBL"/>
+                                <param name="OrXmlPath:12" value="//AdditionalData/RegisteredList/FRBLKDZ"/>
+                                <param name="OrXmlPath:13" value="//AdditionalData/RegisteredList/FRBLOUTGO"/>
+
 			</parameterslist>
 		</node>
 		<node name="CheckM2MAPN" object="IfMultipleXmlConditionsResolver">
