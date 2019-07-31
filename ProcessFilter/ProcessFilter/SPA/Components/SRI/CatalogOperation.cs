@@ -42,7 +42,7 @@ namespace SPAFilter.SPA.Components.SRI
 
         public override string ToString()
         {
-            return $"{HostTypeName}=[{Name}]";
+            return Name;
         }
     }
 }

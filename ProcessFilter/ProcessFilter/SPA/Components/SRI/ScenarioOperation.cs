@@ -25,7 +25,7 @@ namespace SPAFilter.SPA.Components.SRI
                 if (_bindings != null)
                     return _bindings;
 
-                _bindings = new RFSBindings();
+                _bindings = new RFSBindings(this);
                 foreach (var rfsOperation in RFSList)
                 {
                     _bindings.CombineWith(rfsOperation.Bindings);
@@ -36,7 +36,7 @@ namespace SPAFilter.SPA.Components.SRI
                     _bindings.CombineWith(rfsOperation.Bindings);
                 }
 
-                _bindings.Finnaly();
+                //_bindings.Finnaly();
 
                 return _bindings;
             }
@@ -90,7 +90,8 @@ namespace SPAFilter.SPA.Components.SRI
 
             foreach (var rfs in rfsOperationList.Where(p => p.LinkType.Equals(type, StringComparison.CurrentCultureIgnoreCase)))
             {
-                rfs.IsSeparated = false;
+                rfs.ChildCFS.Clear();
+                rfs.IncludedToScenario.Add(this);
                 RFSList.Add(rfs);
             }
 
@@ -111,7 +112,7 @@ namespace SPAFilter.SPA.Components.SRI
             if (isDropped != null && isDropped.Equals("Drop", StringComparison.CurrentCultureIgnoreCase))
                 IsDropped = true;
 
-            var scenariosRFSs = XPATH.Execute(navigator, $"/Configuration/ScenarioList/Scenario[@name='{ScenarioName}']/RFS");
+            var scenariosRFSs = XPATH.Select(navigator, $"/Configuration/ScenarioList/Scenario[@name='{ScenarioName}']/RFS");
             if (scenariosRFSs != null && scenariosRFSs.Count > 0)
             {
                 var scenarioRFSs = LoadScenario(scenariosRFSs, navigator, catalog);
@@ -120,32 +121,37 @@ namespace SPAFilter.SPA.Components.SRI
                 {
                     foreach (var rfs in scenarioRFSs.ChildList)
                     {
-                        rfs.IsSeparated = false;
+                        rfs.ChildCFS.Clear();
+                        rfs.IncludedToScenario.Add(this);
                         RFSList.Add(rfs);
                     }
                 }
                 else
                 {
+                    var cfsOfMandatoryRFS = scenarioRFSs.MandatoryList.SelectMany(p => p.ChildCFS).Distinct().ToList();
+
                     foreach (var mandRFS in scenarioRFSs.MandatoryList)
                     {
-                        mandRFS.IsSeparated = false;
+                        mandRFS.ChildCFS.Clear();
+                        mandRFS.IncludedToScenario.Add(this);
                         RFSList.Add(mandRFS);
                     }
-
-                    var cfsOfMandatoryRFS = scenarioRFSs.MandatoryList.SelectMany(p => p.ChildCFS.Select(x => x.Attributes?["name"].Value)).ToList().Distinct();
+                    
                     foreach (var childRFS in scenarioRFSs.ChildList)
                     {
-                        var nodes = childRFS.ChildCFS.Select(x => x.Attributes?["name"].Value).ToList();
-                        if (!nodes.Except(cfsOfMandatoryRFS).Any())
+                        var commonCFS = cfsOfMandatoryRFS.Intersect(childRFS.ChildCFS).ToList();
+                        foreach (var escapeCFS in commonCFS)
                         {
-                            childRFS.IsSeparated = false;
-                            RFSList.Add(childRFS);
+                            childRFS.ChildCFS.Remove(escapeCFS);
                         }
+
+                        childRFS.IncludedToScenario.Add(this);
+                        RFSList.Add(childRFS);
                     }
                 }
             }
 
-            var appendRFS = XPATH.Execute(navigator, $"/Configuration/ScenarioList/Scenario[@name='{ScenarioName}']/Append");
+            var appendRFS = XPATH.Select(navigator, $"/Configuration/ScenarioList/Scenario[@name='{ScenarioName}']/Append");
             if (appendRFS != null && appendRFS.Count > 0)
             {
                 foreach (var rfsNode in appendRFS)
@@ -250,20 +256,21 @@ namespace SPAFilter.SPA.Components.SRI
 
         void PostLoad()
         {
-            var builder = new StringBuilder();
-            var hostTypes = new List<string>();
-            foreach (var rfsOperation in RFSList)
-            {
-                if (hostTypes.Contains(rfsOperation.HostTypeName))
-                    continue;
+            var scenarioHostType = RFSList.Select(x => x.HostTypeName).Distinct().ToList();
 
-                hostTypes.Add(rfsOperation.HostTypeName);
-                builder.Append(rfsOperation.HostTypeName);
-                builder.Append(';');
-            }
+            if (scenarioHostType.Count == 0)
+                throw new Exception($"Scenario \"{ScenarioName}\" is invalid. Not found any RFS.");
 
             // по идее хост должен быть один, но если каталог криво настроили то могут быть несколько хостов в одном сценарии
-            HostTypeName = builder.ToString().Trim(';');
+            if (scenarioHostType.Count > 1)
+                throw new Exception($"Scenario \"{ScenarioName}\" has RFS with different hostTypes - \"{string.Join(",", scenarioHostType)}\"");
+
+            HostTypeName = scenarioHostType.First();
+        }
+
+        public override string ToString()
+        {
+            return $"{base.ToString()} RFSList=[{RFSList.Count}] AppendRFS=[{AppendRFSList.Count}]";
         }
     }
 }

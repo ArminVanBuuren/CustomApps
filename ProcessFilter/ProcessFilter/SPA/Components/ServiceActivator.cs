@@ -55,7 +55,7 @@ namespace SPAFilter.SPA.Components
                 throw new Exception($"Incorrect xml file \"{FilePath}\"");
 
             var activatorConfigNavigator = activatorConfig.CreateNavigator();
-            var serviceInstances = XPATH.Execute(activatorConfigNavigator, @"/Configuration/serviceInstances/serviceInstance");
+            var serviceInstances = XPATH.Select(activatorConfigNavigator, @"/Configuration/serviceInstances/serviceInstance");
             if (serviceInstances == null || serviceInstances.Count == 0)
                 throw new Exception($"Incorrect activator config \"{FilePath}\"");
 

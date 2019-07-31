@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using SPAFilter.SPA.Collection;
@@ -100,7 +101,7 @@ namespace SPAFilter.SPA.Components
             if (document == null)
                 return;
 
-            var commands = EvaluateXPath(document, @"//parameterslist/param[@name='Command']/@value");
+            var commands = EvaluateXPath(document, @"//parameterslist/param[@name='Command']/@value | //parameterslist/param[@name='ServicesCommand']/@value | //parameterslist/param[@name='ParametersCommand']/@value");
             var subScenarios = EvaluateXPath(document, @"//parameterslist/param[@name='Scenario']/@value");
 
             var i = -1;
@@ -128,9 +129,9 @@ namespace SPAFilter.SPA.Components
             prsCs.SubScenarios.AddRange(subScenarios);
         }
 
-        public static List<string> EvaluateXPath(XmlDocument document, string xpath)
+        public static DistinctList<string> EvaluateXPath(XmlDocument document, string xpath)
         {
-            var collection = new List<string>();
+            var collection = new DistinctList<string>();
 
             var listByXpath = document.SelectNodes(xpath);
             if (listByXpath == null)

@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using Utils;
-using static Utils.XPATH;
 
 namespace SPAFilter.SPA.SC
 {
@@ -30,24 +29,25 @@ namespace SPAFilter.SPA.SC
 
         public void Add(string fileName, XmlDocument document, string hostType)
         {
+            var navigator = document.CreateNavigator();
+
             var operationName = fileName;
             foreach (var prefix in new[] { "Add", "Assign", "Delete", "Del", "Remove", "FR", "CB" })
             {
                 RemovePrefix(ref operationName, prefix);
             }
-
             operationName = operationName.Replace(" ", "");
 
-            var bindSrv = new BindingServices(document);
+            var bindSrv = new BindingServices(navigator);
             var hostOp = new HostOperation(operationName, hostType, bindSrv);
             var getServices = new Dictionary<string, XPathResult>();
 
-            if (GetServices(getServices, Execute(document.CreateNavigator(), "//ProvisionList/*")))
+            if (navigator.Select("//ProvisionList/*", out var provisionList) && GetServices(getServices, provisionList))
             {
                 if (!IsExistSameHostOperation(hostOp, getServices, LinkType.Add))
                     LoadNewService(hostOp, getServices, LinkType.Add); //bindSrv
             }
-            else if (GetServices(getServices, Execute(document.CreateNavigator(), "//WithdrawalList/*")))
+            else if (navigator.Select("//WithdrawalList/*", out var withdrawalList) && GetServices(getServices, withdrawalList))
             {
                 if (!IsExistSameHostOperation(hostOp, getServices, LinkType.Remove))
                     LoadNewService(hostOp, getServices, LinkType.Remove); //bindSrv

@@ -24,7 +24,7 @@ namespace SPAFilter.SPA.Collection
 
             var navigator = document.CreateNavigator();
 
-            var prefix = XPATH.Execute(navigator, @"/Configuration/@scenarioPrefix");
+            var prefix = XPATH.Select(navigator, @"/Configuration/@scenarioPrefix");
             if (prefix == null || prefix.Count == 0)
                 throw new Exception("Service Catalog is invalid. Not found attribute \"scenarioPrefix\".");
             Prefix = prefix.First().Value;
@@ -33,8 +33,8 @@ namespace SPAFilter.SPA.Collection
             AllScenarios = new Dictionary<string, ScenarioOperation>();
 
             // вытаскиевам по списку все RFS и все CFS которые включают в себя текущий RFS
-            var allRFSCFSsList = XPATH.Execute(navigator, @"/Configuration/RFSList/RFS")
-                .ToDictionary(x => x.Node, x => XPATH.Execute(navigator, $"/Configuration/CFSList/CFS[RFS/@name='{x.Node.Attributes?["name"].Value}']")
+            var allRFSCFSsList = XPATH.Select(navigator, @"/Configuration/RFSList/RFS")
+                .ToDictionary(x => x.Node, x => XPATH.Select(navigator, $"/Configuration/CFSList/CFS[RFS/@name='{x.Node.Attributes?["name"].Value}']")
                 ?.Where(t => t != null)
                 .Select(p => p.Node));
 
@@ -49,7 +49,7 @@ namespace SPAFilter.SPA.Collection
             GetRFS(subscriptionRFSCFSsList, navigator, true);
             GetRFS(notBaseRFSCFSsList, navigator);
 
-            var scenarioList = XPATH.Execute(navigator, @"/Configuration/ScenarioList/Scenario");
+            var scenarioList = XPATH.Select(navigator, @"/Configuration/ScenarioList/Scenario");
             foreach (var scenario in scenarioList)
             {
                 var scenarioName = scenario.Node.Attributes?["name"]?.Value;
@@ -166,7 +166,8 @@ namespace SPAFilter.SPA.Collection
                     {
                         foreach (var linkType in defaultLinkTypes)
                         {
-                            AddBaseRFS(null, rfsCFSs, baseRFSName, linkType, hostType, navigator);
+                            var baseModifyRFS = AddBaseRFS(null, rfsCFSs, baseRFSName, linkType, hostType, navigator);
+                            AddChildCFS(baseModifyRFS, rfsCFSs.Value);
                         }
                     }
 
@@ -189,7 +190,8 @@ namespace SPAFilter.SPA.Collection
                     {
                         foreach (var linkType in defaultLinkTypes)
                         {
-                            AddBaseRFS(null, rfsCFSs, parentRFSName, linkType, hostType, navigator);
+                            var parentRFS = AddBaseRFS(null, rfsCFSs, parentRFSName, linkType, hostType, navigator);
+                            AddChildCFS(parentRFS, rfsCFSs.Value);
                         }
                     }
 
@@ -260,7 +262,7 @@ namespace SPAFilter.SPA.Collection
         static void AddChildCFS(RFSOperation rfs, IEnumerable<XmlNode> cfsList)
         {
             if(cfsList != null)
-                rfs.ChildCFS.AddRange(cfsList);
+                rfs.ChildCFS.AddRange(cfsList.Select(p => p.Attributes?["name"]?.Value));
         }
 
         /// <summary>
@@ -274,7 +276,7 @@ namespace SPAFilter.SPA.Collection
             var rfsNode = rfs;
             if (rfs == null)
             {
-                var getRFS = XPATH.Execute(navigator, $"/Configuration/RFSList/RFS[@name='{rfsName}']");
+                var getRFS = XPATH.Select(navigator, $"/Configuration/RFSList/RFS[@name='{rfsName}']");
                 if(getRFS == null || getRFS.Count == 0)
                     return;
                 rfsNode = getRFS.First().Node;

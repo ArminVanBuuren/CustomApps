@@ -93,7 +93,7 @@
     <Compile Include="SPA\Components\ServiceActivator.cs" />
     <Compile Include="SPA\DriveTemplate.cs" />
     <Compile Include="SPA\IObjectTemplate.cs" />
-    <Compile Include="SPA\ItemEqualityComparer.cs" />
+    <Compile Include="SPA\Components\SRI\CatalogItemEqualityComparer.cs" />
     <Compile Include="SPA\ObjectTemplate.cs" />
     <Compile Include="SPAFilterForm.cs">
       <SubType>Form</SubType>

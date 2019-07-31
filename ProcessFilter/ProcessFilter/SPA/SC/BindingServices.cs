@@ -15,12 +15,11 @@ namespace SPAFilter.SPA.SC
         public string DependenceType { get; private set; } = "Any";
 
 
-        protected internal BindingServices(IXPathNavigable document)
+        protected internal BindingServices(XPathNavigator navigator)
         {
-            var navigator = document.CreateNavigator();
-            var getServices = Execute(navigator, "//RegisteredList/*");
-            var getHaltMode = Execute(navigator, "//RegisteredList/@HaltMode");
-            var getType = Execute(navigator, "//RegisteredList/@Type");
+            navigator.Select( "//RegisteredList/*", out var getServices);
+            navigator.Select( "//RegisteredList/@HaltMode", out var getHaltMode);
+            navigator.Select( "//RegisteredList/@Type", out var getType);
             var isDependency = getHaltMode != null && getHaltMode.Count > 0 && (getHaltMode.First().Value.Equals("CancelOperation", StringComparison.CurrentCultureIgnoreCase));
             var isAny = getType != null && getType.Count > 0 && getType.First().Value.Equals("AnyOfListed", StringComparison.CurrentCultureIgnoreCase);
 

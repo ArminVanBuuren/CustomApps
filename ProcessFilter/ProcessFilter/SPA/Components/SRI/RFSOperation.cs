@@ -18,11 +18,12 @@ namespace SPAFilter.SPA.Components.SRI
         public string LinkType { get; set; }
 
         internal bool IsSubscription { get; set; } = false;
-        protected internal override bool IsDropped => ChildRFS.Count == 0 && ChildCFS.Count == 0;
+        protected internal override bool IsDropped => ChildRFS.Count == 0 && ChildCFS.Count == 0 && IncludedToScenario.Count == 0;
 
         public XmlNode Node { get; }
         public DistinctList<XmlNode> ChildRFS { get; } = new DistinctList<XmlNode>();
-        public DistinctList<XmlNode> ChildCFS { get; } = new DistinctList<XmlNode>();
+        public DistinctList<string> ChildCFS { get; } = new DistinctList<string>();
+        public List<ScenarioOperation> IncludedToScenario { get; } = new List<ScenarioOperation>();
 
         internal override RFSBindings Bindings
         {
@@ -31,10 +32,10 @@ namespace SPAFilter.SPA.Components.SRI
                 if (_bindings != null)
                     return _bindings;
 
-                _bindings = new RFSBindings(RFSName, _navigator);
+                _bindings = new RFSBindings(this, RFSName, _navigator);
 
-                if (IsSeparated)
-                    _bindings.Finnaly();
+                //if (IsSeparated)
+                //    _bindings.Finnaly();
 
                 return _bindings;
             }
@@ -43,7 +44,8 @@ namespace SPAFilter.SPA.Components.SRI
         /// <summary>
         /// true - если текущий RFS используется как отдельная операция или false - относится к каталожному сценарию
         /// </summary>
-        public bool IsSeparated { get; internal set; } = true;
+        public bool IsSeparated => !(IncludedToScenario.Count > 0 && ChildCFS.Count == 0);
+        //{ get; internal set; } = true;
 
         public override string Body
         {
@@ -77,6 +79,11 @@ namespace SPAFilter.SPA.Components.SRI
 
             HostTypeName = hostTypeName;
             Name = $"{catalog.Prefix}{LinkType}.{RFSName}";
+        }
+
+        public override string ToString()
+        {
+            return $"{base.ToString()} RFS=[{ChildRFS.Count}] CFS=[{ChildCFS.Count}] Scenario=[{IncludedToScenario.Count}]";
         }
     }
 }

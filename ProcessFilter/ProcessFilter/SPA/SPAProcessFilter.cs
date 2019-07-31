@@ -159,11 +159,13 @@ namespace SPAFilter.SPA
 
                 #region Filter Scenarios
 
+                // обновляются свойства Scenarios и Commands
                 ReloadActivators();
-                Scenarios = CollectionTemplate<Scenario>.ToCollection(Scenarios.Intersect(fileteredOperations, new OperationsComparer()).Cast<Scenario>().OrderBy(p => p.HostTypeName).ThenBy(p => p.Name), false);
+                // Получаем общие объекты по именам операций и сценариев. Т.е. фильтруем все сценарии по отфильтрованным операциям.
+                var scenarios = Scenarios.Intersect(fileteredOperations, new OperationsComparer()).Cast<Scenario>().ToDictionary(x => x.Name, x => x, StringComparer.CurrentCultureIgnoreCase);
 
-                // проверка на существование сценария для операции
-                foreach (var operation in fileteredOperations.Except(Scenarios, new OperationsComparer()).Cast<IOperation>())
+                // Проверка на существование сценария для операции. Ищем несуществующие сценарии.
+                foreach (var operation in fileteredOperations.Except(scenarios.Values, new OperationsComparer()).Cast<IOperation>())
                 {
                     operation.IsScenarioExist = false;
                 }
@@ -176,8 +178,13 @@ namespace SPAFilter.SPA
 
                 var filteredSubScenarios = new DistinctList<Scenario>();
                 var filteredCommands  = new DistinctList<Command>();
-                GetCommandsAndSubscenarios(Scenarios, filteredSubScenarios, filteredCommands);
-                Scenarios.AddRange(filteredSubScenarios.OrderBy(p => p.FilePath));
+                GetCommandsAndSubscenarios(scenarios, scenarios.Values, filteredSubScenarios, filteredCommands);
+
+                var scenarios2 = scenarios.Values.ToList();
+                scenarios2.AddRange(filteredSubScenarios);
+                scenarios2 = scenarios2.OrderBy(p => p.HostTypeName).ThenBy(p => p.Name).ToList();
+                
+                Scenarios = CollectionTemplate<Scenario>.ToCollection(scenarios2, false);
                 Scenarios.InitSequence();
 
                 Commands = CollectionTemplate<Command>.ToCollection(filteredCommands.OrderBy(p => p.HostTypeName).ThenBy(p => p.FilePath));
@@ -192,14 +199,19 @@ namespace SPAFilter.SPA
             }
         }
 
-        static void GetCommandsAndSubscenarios(IEnumerable<Scenario> scenarios, DistinctList<Scenario> subScenarios, DistinctList<Command> commandsResult)
+        static void GetCommandsAndSubscenarios(IDictionary<string, Scenario> checkExist, IEnumerable<Scenario> scenarios, DistinctList<Scenario> subScenarios, DistinctList<Command> commandsResult)
         {
             foreach (var scenario in scenarios)
             {
                 if (scenario.SubScenarios.Count > 0)
                 {
-                    subScenarios.AddRange(scenario.SubScenarios);
-                    GetCommandsAndSubscenarios(scenario.SubScenarios, subScenarios, commandsResult);
+                    foreach (var subScenario in scenario.SubScenarios)
+                    {
+                        // проверяем если обычный сценарий является также вложенным сценарием, то тогда оставляем обычный
+                        if(!checkExist.ContainsKey(subScenario.Name))
+                            subScenarios.Add(subScenario);
+                    }
+                    GetCommandsAndSubscenarios(checkExist, scenario.SubScenarios, subScenarios, commandsResult);
                 }
                 commandsResult.AddRange(scenario.Commands);
             }

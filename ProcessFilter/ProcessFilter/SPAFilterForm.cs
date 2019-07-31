@@ -455,14 +455,21 @@ namespace SPAFilter
 
         void OpenServiceCatalogOperation()
         {
-            if (!GetCellItemSelectedRows(dataGridOperations, out var scOperationNames, "Operation"))
-                return;
-
-            var scOperations = _spaFilter.HostTypes.Operations.Where(p => scOperationNames.Any(x => x.Equals(p.Name, StringComparison.CurrentCultureIgnoreCase)));
-            foreach (var operation in scOperations)
+            try
             {
-                if (operation is CatalogOperation catalogOperation)
-                    OpenEditor(catalogOperation.Body, catalogOperation.Name);
+                if (!GetCellItemSelectedRows(dataGridOperations, out var scOperationNames, "Operation"))
+                    return;
+
+                var scOperations = _spaFilter.HostTypes.Operations.Where(p => scOperationNames.Any(x => x.Equals(p.Name, StringComparison.CurrentCultureIgnoreCase)));
+                foreach (var operation in scOperations)
+                {
+                    if (operation is CatalogOperation catalogOperation)
+                        OpenEditor(catalogOperation.Body, catalogOperation.Name);
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowError(ex.Message);
             }
         }
 
@@ -503,77 +510,76 @@ namespace SPAFilter
 
         async void CallAndCheckDataGridKey(DataGridView grid, KeyEventArgs e = null)
         {
-            if (e != null)
+            try
             {
-                if ((ModifierKeys & Keys.Alt) != 0 && KeyIsDown(Keys.F4))
+                if (e != null)
                 {
-                    Close();
-                    return;
-                }
-
-                switch (e.KeyCode)
-                {
-                    case Keys.Enter:
+                    if ((ModifierKeys & Keys.Alt) != 0 && KeyIsDown(Keys.F4))
                     {
-                        if (!GetCellItemSelectedRows(grid, out var filePath1))
-                            return;
-
-                        foreach (var filePath in filePath1)
-                        {
-                            OpenEditor(filePath);
-                        }
-
-                        break;
+                        Close();
+                        return;
                     }
-                    case Keys.Delete:
+
+                    switch (e.KeyCode)
                     {
-                        if (!GetCellItemSelectedRows(grid, out var filesPath))
-                            return;
-
-                        if (filesPath.Count == 0)
-                            return;
-
-                        var userResult = MessageBox.Show($"Do you want delete selected {(filesPath.Count == 1 ? $"file" : $"{filesPath.Count} files")} ?", @"Question", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
-
-                        if (userResult != DialogResult.OK)
-                            return;
-
-                        try
-                        {
-                            foreach (var filePath in filesPath)
+                        case Keys.Enter:
                             {
-                                if (File.Exists(filePath))
-                                    File.Delete(filePath);
+                                if (!GetCellItemSelectedRows(grid, out var filePath1))
+                                    return;
+
+                                foreach (var filePath in filePath1)
+                                {
+                                    OpenEditor(filePath);
+                                }
+
+                                break;
                             }
-
-
-                            if (IsFiltered)
+                        case Keys.Delete:
                             {
-                                FilterButton_Click(this, EventArgs.Empty);
-                            }
-                            else if (grid == dataGridServiceInstances)
-                            {
-                                await AssignServiceInstances(_spaFilter.ReloadActivatorsAsync());
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            ShowError(ex.Message);
-                        }
+                                if (!GetCellItemSelectedRows(grid, out var filesPath))
+                                    return;
 
-                        break;
+                                if (filesPath.Count == 0)
+                                    return;
+
+                                var userResult = MessageBox.Show($"Do you want delete selected {(filesPath.Count == 1 ? $"file" : $"{filesPath.Count} files")} ?", @"Question", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+
+                                if (userResult != DialogResult.OK)
+                                    return;
+
+                                foreach (var filePath in filesPath)
+                                {
+                                    if (File.Exists(filePath))
+                                        File.Delete(filePath);
+                                }
+
+                                if (IsFiltered)
+                                {
+                                    FilterButton_Click(this, EventArgs.Empty);
+                                }
+                                else if (grid == dataGridServiceInstances)
+                                {
+                                    await AssignServiceInstances(_spaFilter.ReloadActivatorsAsync());
+                                }
+
+                                break;
+                            }
+                    }
+                }
+                else
+                {
+                    if (!GetCellItemSelectedRows(grid, out var filesPath))
+                        return;
+
+                    foreach (var filePath in filesPath)
+                    {
+                        OpenEditor(filePath);
                     }
                 }
             }
-            else
+            catch (Exception ex)
             {
-                if (!GetCellItemSelectedRows(grid, out var filesPath))
-                    return;
-
-                foreach (var filePath in filesPath)
-                {
-                    OpenEditor(filePath);
-                }
+                ShowError(ex.Message);
             }
         }
 

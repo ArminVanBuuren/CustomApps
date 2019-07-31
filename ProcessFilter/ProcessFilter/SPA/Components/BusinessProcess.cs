@@ -60,12 +60,12 @@ namespace SPAFilter.SPA.Components
 
             var navigator = document.CreateNavigator();
             var hasCatalogCall = false;
-            var isExistscObject = XPATH.Execute(navigator, @"/BusinessProcessData/businessprocess/scenario/objectlist/object[@class='FORIS.ServiceProvisioning.BPM.SCProcessingUnit']/@name");
+            var isExistscObject = XPATH.Select(navigator, @"/BusinessProcessData/businessprocess/scenario/objectlist/object[@class='FORIS.ServiceProvisioning.BPM.SCProcessingUnit']/@name");
             if (isExistscObject != null)
             {
                 foreach (var obj in isExistscObject)
                 {
-                    var res = XPATH.Execute(navigator, $"/BusinessProcessData/businessprocess/scenario/automat/node[@object='{obj.Value}']");
+                    var res = XPATH.Select(navigator, $"/BusinessProcessData/businessprocess/scenario/automat/node[@object='{obj.Value}']");
                     if (res == null || res.Count <= 0)
                         continue;
 
