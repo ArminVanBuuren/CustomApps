@@ -5,22 +5,12 @@ namespace XPathTester
 {
     class XPathCollection : List<XPathResult>
     {
-        public XPathCollection()
+        public XPathCollection(IEnumerable<XPathResult> source): base(source)
         {
             MaxWidthId = "ID";
             MaxWidthNodeType = "NodeType";
             MaxWidthNodeName = "NodeName";
-        }
-
-        public static explicit operator XPathCollection(XPathResultCollection args)
-        {
-            if (args == null)
-                return null;
-
-            var result = new XPathCollection();
-            result.AddRange(args);
-
-            return result;
+            CalcColumnsName();
         }
 
         public new void Add(XPathResult item)

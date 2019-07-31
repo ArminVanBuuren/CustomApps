@@ -169,8 +169,7 @@ namespace XPathTester
 
                 if (OrderedItems != null)
                 {
-                    var ordered = new XPathCollection();
-                    ordered.AddRange(OrderedItems);
+                    var ordered = new XPathCollection(OrderedItems);
                     UpdateResultDataGrid(ordered);
                 }
             }
@@ -283,7 +282,7 @@ namespace XPathTester
             {
 
                 var getNodeNamesValue = Regex.Replace(XPathText.Text, @"^\s*(name|local-name)\s*\((.+?)\)$", "$2", RegexOptions.IgnoreCase);
-                _strLines = (XPathCollection)XPATH.Execute(XmlBody.CreateNavigator(), getNodeNamesValue);
+                _strLines = new XPathCollection(XPATH.Select(XmlBody.CreateNavigator(), getNodeNamesValue));
                 if (XPathText.Text.Length > getNodeNamesValue.Length)
                     _strLines.ModifyValueToNodeName();
 
