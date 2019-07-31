@@ -20,16 +20,23 @@ namespace Utils.CollectionHelper
             _items = new Dictionary<T, bool>();
         }
 
-        public DistinctList(IEqualityComparer<T> comparer = null)
+        public DistinctList(IEqualityComparer<T> comparer)
         {
             _comparer = comparer ?? throw new ArgumentNullException(nameof(comparer));
             _items = new Dictionary<T, bool>(comparer);
         }
 
-        public void Add(T item)
+        public DistinctList(IEnumerable<T> items)
         {
-            if (item != null && !_items.ContainsKey(item))
-                _items.Add(item, true);
+            _items = new Dictionary<T, bool>();
+            AddRange(items);
+        }
+
+        public DistinctList(IEnumerable<T> items, IEqualityComparer<T> comparer)
+        {
+            _comparer = comparer ?? throw new ArgumentNullException(nameof(comparer));
+            _items = new Dictionary<T, bool>(comparer);
+            AddRange(items);
         }
 
         public void AddRange(IEnumerable<T> list)
@@ -38,6 +45,12 @@ namespace Utils.CollectionHelper
             {
                 Add(item);
             }
+        }
+
+        public void Add(T item)
+        {
+            if (item != null && !_items.ContainsKey(item))
+                _items.Add(item, true);
         }
 
         public bool Contains(T item)
@@ -116,12 +129,12 @@ namespace Utils.CollectionHelper
 
         public IEnumerator<T> GetEnumerator()
         {
-            return _items.Keys.GetEnumerator();
+            return (IEnumerator<T>)_items.Keys.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return _items.Keys.GetEnumerator();
+            return (IEnumerator)_items.Keys.GetEnumerator();
         }
 
         public DistinctList<T> Clone()

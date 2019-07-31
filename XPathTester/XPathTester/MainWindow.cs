@@ -282,18 +282,19 @@ namespace XPathTester
             {
 
                 var getNodeNamesValue = Regex.Replace(XPathText.Text, @"^\s*(name|local-name)\s*\((.+?)\)$", "$2", RegexOptions.IgnoreCase);
-                _strLines = new XPathCollection(XPATH.Select(XmlBody.CreateNavigator(), getNodeNamesValue));
-                if (XPathText.Text.Length > getNodeNamesValue.Length)
-                    _strLines.ModifyValueToNodeName();
 
+                if (XmlBody.CreateNavigator().Select(getNodeNamesValue, out var result))
+                {
+                    _strLines = new XPathCollection(result);
+                    if (XPathText.Text.Length > getNodeNamesValue.Length)
+                        _strLines.ModifyValueToNodeName();
 
-                if (_strLines == null || _strLines.Count == 0)
+                    UpdateResultDataGrid(_strLines);
+                }
+                else
                 {
                     AddMessageException("No data found", false);
-                    return;
                 }
-
-                UpdateResultDataGrid(_strLines);
             }
             catch (Exception ex)
             {
@@ -321,7 +322,7 @@ namespace XPathTester
         void AddMessageException(string strEx, bool isException = true)
         {
             exceptionMessage.ForeColor = isException ? Color.Red : Color.Black;
-            exceptionMessage.Text = strEx;
+            exceptionMessage.Text = strEx.Replace("\r", "").Replace("\n","");
             ResultTabBrush = !string.IsNullOrEmpty(strEx) ? solidRed : solidTransparent;
         }
         
