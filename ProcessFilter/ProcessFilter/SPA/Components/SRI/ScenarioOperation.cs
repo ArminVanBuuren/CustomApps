@@ -247,7 +247,7 @@ namespace SPAFilter.SPA.Components.SRI
         void Preload(XmlNode scenarioNode, string scenarioName, ServiceCatalog catalog)
         {
             if (scenarioNode.Attributes == null || scenarioNode.Attributes.Count == 0)
-                throw new Exception("Invalid config. Scenario must have attributes.");
+                throw new Exception("Invalid config. Scenario must have any attributes.");
 
             ScenarioName = scenarioName;
             Name = $"{catalog.Prefix}{ScenarioName}";

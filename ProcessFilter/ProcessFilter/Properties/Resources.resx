@@ -130,4 +130,63 @@
   <data name="icons8_synchronize_20" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\icons8-synchronize-20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Form_GridView_DeleteSelected" xml:space="preserve">
+    <value>Do you want delete selected {0} ?</value>
+  </data>
+  <data name="Form_PrintXMLFiles_Error" xml:space="preserve">
+    <value>Several ({0}) errors found:
+
+{1}</value>
+  </data>
+  <data name="Form_PrintXMLFiles_Successfully" xml:space="preserve">
+    <value>Successfully completed.</value>
+  </data>
+  <data name="Form_Status_Processes" xml:space="preserve">
+    <value>Processes: {0}</value>
+  </data>
+  <data name="Form_Status_HostTypes" xml:space="preserve">
+    <value>HostTypes: {0}</value>
+  </data>
+  <data name="Form_Status_Operations" xml:space="preserve">
+    <value>Operations: {0}</value>
+  </data>
+  <data name="Form_Status_Scenarios" xml:space="preserve">
+    <value>Scenarios: {0}</value>
+  </data>
+  <data name="Form_Status_Commands" xml:space="preserve">
+    <value>Commands: {0}</value>
+  </data>
+  <data name="Form_GenerateSC_NotFoundAnyOperations" xml:space="preserve">
+    <value>Not found any operations</value>
+  </data>
+  <data name="Form_GenerateSC_NotFileredROBPOps" xml:space="preserve">
+    <value>You must filter files</value>
+  </data>
+  <data name="Form_GridView_IncorrectConfig" xml:space="preserve">
+    <value>Configuration application is incorrect</value>
+  </data>
+  <data name="Form_GridView_IsSubScenario" xml:space="preserve">
+    <value>Subscenario</value>
+  </data>
+  <data name="Form_GridView_NotFoundServiceCatalogCall" xml:space="preserve">
+    <value>Business process doesn't have service catalog call</value>
+  </data>
+  <data name="Form_GridView_NotFoundSomeCommands" xml:space="preserve">
+    <value>Scenario has commands which don't exist</value>
+  </data>
+  <data name="Form_GridView_NotFoundSomeCommandsInSub" xml:space="preserve">
+    <value>Subscenario has commands which don't exist</value>
+  </data>
+  <data name="Form_GridView_NotFoundSomeOPs" xml:space="preserve">
+    <value>Business process has operations which don't exist</value>
+  </data>
+  <data name="Form_GridView_NotFoundSomeScenarios" xml:space="preserve">
+    <value>Scenario for this operation doesn't exist</value>
+  </data>
+  <data name="Form_GridView_NotSelectedAnyRows" xml:space="preserve">
+    <value>You must select a row</value>
+  </data>
+  <data name="Form_PrintXMLFiles_Info" xml:space="preserve">
+    <value>Format all filtered xml files</value>
+  </data>
 </root>

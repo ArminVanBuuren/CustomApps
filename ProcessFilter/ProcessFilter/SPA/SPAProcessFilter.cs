@@ -297,11 +297,11 @@ namespace SPAFilter.SPA
 
         static void FilterOperations(IHostType hostType, Func<IHostType, bool> neFilter, Func<IOperation, bool> opFilter, IReadOnlyDictionary<string, string> allBPOperations, bool anyHasCatalogCall)
         {
+            // не менять порядок проверок!
             if (neFilter != null && !neFilter.Invoke(hostType))
             {
                 // если фильтруются операции по другому хосту
                 hostType.Operations.Clear();
-                return;
             }
             else if (allBPOperations != null)
             {
@@ -323,7 +323,6 @@ namespace SPAFilter.SPA
             {
                 // если ни в одном бизнесс процессе нет вызова каталога, то все операции удалются
                 hostType.Operations.Clear();
-                return;
             }
             else if (opFilter != null)
             {
@@ -362,7 +361,6 @@ namespace SPAFilter.SPA
                         catch (Exception ex)
                         {
                             errors += $"{ex.Message}\r\n";
-                            continue;
                         }
                     }
                 }
@@ -504,7 +502,7 @@ namespace SPAFilter.SPA
                 if (i != mandatoryXslxColumns.Length)
                     throw new Exception($"Wrong file '{file.Name}'. Missing some required columns. \r\nColumns names should be like:\r\n'{string.Join("','", mandatoryXslxColumns)}'");
 
-                for (int rowNum = 2; rowNum <= totalRows; rowNum++)
+                for (var rowNum = 2; rowNum <= totalRows; rowNum++)
                 {
                     var row = myWorksheet.Cells[rowNum, 1, rowNum, totalColumns].Select(c => c.Value == null ? string.Empty : c.Value.ToString()).Take(totalColumns);
                     serviceTable.Rows.Add(values: row.ToArray());

@@ -43,9 +43,9 @@ namespace SPAFilter
 
             SCIterators = generateSCIterators;
 
-            int fileKb = (int)(xslxRdService.Length / 1024);
+            var fileKb = (int)(xslxRdService.Length / 1024);
 
-            int xslxRdServiceIterators = fileKb / 4;
+            var xslxRdServiceIterators = fileKb / 4;
             double hundredPercentIterators = SCIterators + xslxRdServiceIterators;
 
             SCPercent = (SCIterators * 100) / hundredPercentIterators;
@@ -84,7 +84,7 @@ namespace SPAFilter
                 _offlineCalcWhenStopRead = () => { _progressCalc.Append(_loadFileIterator); };
             }
 
-            int totalProgressIterator = SCIterators + XslxServicesIterators;
+            var totalProgressIterator = SCIterators + XslxServicesIterators;
 
             _progressCalc = new ProgressCalculationAsync(progressBar, totalProgressIterator);
         }
@@ -101,16 +101,16 @@ namespace SPAFilter
             if (XslxServicesIterators < 7)
                 return;
 
-            bool cancel = false;
-            int mSecEachPart = ((int) (xslxRdService.Length / 1900)) / 7; // примерное количество миллисекунд на каждый часть обработки
+            var cancel = false;
+            var mSecEachPart = ((int) (xslxRdService.Length / 1900)) / 7; // примерное количество миллисекунд на каждый часть обработки
 
-            var processChecking = new Func<int, int, int>((int iterations, int sleepMSec) =>
+            var processChecking = new Func<int, int, int>((iterations, sleepMSec) =>
             {
                 if (sleepMSec == 0)
                     return 0;
 
                 cancel = false;
-                int i = 0;
+                var i = 0;
                 while (i <= iterations)
                 {
                     _progressCalc++;
@@ -129,7 +129,7 @@ namespace SPAFilter
             _offlineCalcWhenStopOpen = () =>
             {
                 cancel = true;
-                int openRes = processChecking.EndInvoke(result);
+                var openRes = processChecking.EndInvoke(result);
                 if (openRes < _openFileIterator)
                     _progressCalc.Append(_openFileIterator - openRes);
             };
@@ -139,7 +139,7 @@ namespace SPAFilter
             _offlineCalcWhenStopRead = () =>
             {
                 cancel = true;
-                int loadRes = processChecking.EndInvoke(result);
+                var loadRes = processChecking.EndInvoke(result);
                 if (loadRes < _loadFileIterator)
                     _progressCalc.Append(_loadFileIterator - loadRes);
             };
@@ -164,8 +164,8 @@ namespace SPAFilter
             if (_readLinesIterator <= 0)
                 return;
 
-            int lineIterNumber = 0;
-            int lineIterator = totalRows / _readLinesIterator;
+            var lineIterNumber = 0;
+            var lineIterator = totalRows / _readLinesIterator;
             if (lineIterator > 1)
             {
                 _calcReadLine = () =>

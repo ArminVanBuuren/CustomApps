@@ -61,6 +61,179 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You must filter files.
+        /// </summary>
+        internal static string Form_GenerateSC_NotFileredROBPOps {
+            get {
+                return ResourceManager.GetString("Form_GenerateSC_NotFileredROBPOps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not found any operations.
+        /// </summary>
+        internal static string Form_GenerateSC_NotFoundAnyOperations {
+            get {
+                return ResourceManager.GetString("Form_GenerateSC_NotFoundAnyOperations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want delete selected {0} ?.
+        /// </summary>
+        internal static string Form_GridView_DeleteSelected {
+            get {
+                return ResourceManager.GetString("Form_GridView_DeleteSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Configuration application is incorrect.
+        /// </summary>
+        internal static string Form_GridView_IncorrectConfig {
+            get {
+                return ResourceManager.GetString("Form_GridView_IncorrectConfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subscenario.
+        /// </summary>
+        internal static string Form_GridView_IsSubScenario {
+            get {
+                return ResourceManager.GetString("Form_GridView_IsSubScenario", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Business process doesn&apos;t have service catalog call.
+        /// </summary>
+        internal static string Form_GridView_NotFoundServiceCatalogCall {
+            get {
+                return ResourceManager.GetString("Form_GridView_NotFoundServiceCatalogCall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scenario has commands which don&apos;t exist.
+        /// </summary>
+        internal static string Form_GridView_NotFoundSomeCommands {
+            get {
+                return ResourceManager.GetString("Form_GridView_NotFoundSomeCommands", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subscenario has commands which don&apos;t exist.
+        /// </summary>
+        internal static string Form_GridView_NotFoundSomeCommandsInSub {
+            get {
+                return ResourceManager.GetString("Form_GridView_NotFoundSomeCommandsInSub", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Business process has operations which don&apos;t exist.
+        /// </summary>
+        internal static string Form_GridView_NotFoundSomeOPs {
+            get {
+                return ResourceManager.GetString("Form_GridView_NotFoundSomeOPs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scenario for this operation doesn&apos;t exist.
+        /// </summary>
+        internal static string Form_GridView_NotFoundSomeScenarios {
+            get {
+                return ResourceManager.GetString("Form_GridView_NotFoundSomeScenarios", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must select a row.
+        /// </summary>
+        internal static string Form_GridView_NotSelectedAnyRows {
+            get {
+                return ResourceManager.GetString("Form_GridView_NotSelectedAnyRows", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Several ({0}) errors found:
+        ///
+        ///{1}.
+        /// </summary>
+        internal static string Form_PrintXMLFiles_Error {
+            get {
+                return ResourceManager.GetString("Form_PrintXMLFiles_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Format all filtered xml files.
+        /// </summary>
+        internal static string Form_PrintXMLFiles_Info {
+            get {
+                return ResourceManager.GetString("Form_PrintXMLFiles_Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully completed..
+        /// </summary>
+        internal static string Form_PrintXMLFiles_Successfully {
+            get {
+                return ResourceManager.GetString("Form_PrintXMLFiles_Successfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Commands: {0}.
+        /// </summary>
+        internal static string Form_Status_Commands {
+            get {
+                return ResourceManager.GetString("Form_Status_Commands", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HostTypes: {0}.
+        /// </summary>
+        internal static string Form_Status_HostTypes {
+            get {
+                return ResourceManager.GetString("Form_Status_HostTypes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Operations: {0}.
+        /// </summary>
+        internal static string Form_Status_Operations {
+            get {
+                return ResourceManager.GetString("Form_Status_Operations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processes: {0}.
+        /// </summary>
+        internal static string Form_Status_Processes {
+            get {
+                return ResourceManager.GetString("Form_Status_Processes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scenarios: {0}.
+        /// </summary>
+        internal static string Form_Status_Scenarios {
+            get {
+                return ResourceManager.GetString("Form_Status_Scenarios", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon icons8 {

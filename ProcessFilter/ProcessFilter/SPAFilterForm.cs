@@ -10,6 +10,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using FastColoredTextBoxNS;
+using SPAFilter.Properties;
 using SPAFilter.SPA;
 using SPAFilter.SPA.Components.ROBP;
 using SPAFilter.SPA.Components.SRI;
@@ -283,7 +284,7 @@ namespace SPAFilter
         {
             InitializeComponent();
             KeyPreview = true; // для того чтобы работали горячие клавиши по всей форме и всем контролам
-            new ToolTip().SetToolTip(PrintXMLButton, "Format all filtered xml files");
+            new ToolTip().SetToolTip(PrintXMLButton, Resources.Form_PrintXMLFiles_Info);
 
             _spaFilter = new SPAProcessFilter();
 
@@ -399,7 +400,7 @@ namespace SPAFilter
                 row.DefaultCellStyle.BackColor = Color.LightPink;
                 foreach (DataGridViewCell cell2 in row.Cells)
                 {
-                    cell2.ToolTipText = "Configuration application is incorrect";
+                    cell2.ToolTipText = Resources.Form_GridView_IncorrectConfig;
                 }
             }
         }
@@ -419,7 +420,7 @@ namespace SPAFilter
                     row.DefaultCellStyle.BackColor = Color.LightPink;
                     foreach (DataGridViewCell cell2 in row.Cells)
                     {
-                        cell2.ToolTipText = "Business process has operations which don't exist";
+                        cell2.ToolTipText = Resources.Form_GridView_NotFoundSomeOPs;
                     }
                 }
             }
@@ -435,7 +436,7 @@ namespace SPAFilter
                     row.DefaultCellStyle.BackColor = Color.LightPink;
                     foreach (DataGridViewCell cell2 in row.Cells)
                     {
-                        cell2.ToolTipText = "Business process doesn't have service catalog call";
+                        cell2.ToolTipText = Resources.Form_GridView_NotFoundServiceCatalogCall;
                     }
                 }
             }
@@ -446,16 +447,6 @@ namespace SPAFilter
         {
             var row = ((DataGridView)sender).Rows[e.RowIndex];
             var cell = row?.Cells["IsScenarioExist"];
-            //var cellIsDropped = row?.Cells["IsDropped"];
-            //if (cellIsDropped != null && cellIsDropped.Value is bool cellIsDroppedValue && cellIsDroppedValue)
-            //{
-            //    row.DefaultCellStyle.BackColor = Color.Yellow;
-            //    foreach (DataGridViewCell cell2 in row.Cells)
-            //    {
-            //        cell2.ToolTipText = "This operation will never called";
-            //    }
-            //}
-            //else 
             if (cell != null && cell.Value is bool cellValue && cellValue)
             {
                 row.DefaultCellStyle.BackColor = Color.White;
@@ -465,7 +456,7 @@ namespace SPAFilter
                 row.DefaultCellStyle.BackColor = Color.LightPink;
                 foreach (DataGridViewCell cell2 in row.Cells)
                 {
-                    cell2.ToolTipText = "Scenario for this operation doesn't exist";
+                    cell2.ToolTipText = Resources.Form_GridView_NotFoundSomeScenarios;
                 }
             }
         }
@@ -482,7 +473,7 @@ namespace SPAFilter
                 row.DefaultCellStyle.BackColor = Color.LightPink;
                 foreach (DataGridViewCell cell3 in row.Cells)
                 {
-                    cell3.ToolTipText = "Subscenario has commands which don't exist";
+                    cell3.ToolTipText = Resources.Form_GridView_NotFoundSomeCommandsInSub;
                 }
             }
             else if (!allCommandsExist)
@@ -490,7 +481,7 @@ namespace SPAFilter
                 row.DefaultCellStyle.BackColor = Color.LightPink;
                 foreach (DataGridViewCell cell3 in row.Cells)
                 {
-                    cell3.ToolTipText = "Scenario has commands which don't exist";
+                    cell3.ToolTipText = Resources.Form_GridView_NotFoundSomeCommands;
                 }
             }
             else if (isSubScenario)
@@ -498,7 +489,7 @@ namespace SPAFilter
                 row.DefaultCellStyle.BackColor = Color.Aqua;
                 foreach (DataGridViewCell cell3 in row.Cells)
                 {
-                    cell3.ToolTipText = "Subscenario";
+                    cell3.ToolTipText = Resources.Form_GridView_IsSubScenario;
                 }
             }
             else
@@ -625,7 +616,7 @@ namespace SPAFilter
                                 if (filesPath.Count == 0)
                                     return;
 
-                                var userResult = MessageBox.Show($"Do you want delete selected {(filesPath.Count == 1 ? $"file" : $"{filesPath.Count} files")} ?", @"Question", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                                var userResult = MessageBox.Show(string.Format(Resources.Form_GridView_DeleteSelected, (filesPath.Count == 1 ? $"file" : $"{filesPath.Count} files")), @"Question", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
 
                                 if (userResult != DialogResult.OK)
                                     return;
@@ -1065,7 +1056,7 @@ namespace SPAFilter
 
             if (fileOperationsCount == 0)
             {
-                MessageBox.Show(@"Not found any operations.", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(Resources.Form_GenerateSC_NotFoundAnyOperations, @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -1114,7 +1105,7 @@ namespace SPAFilter
             var filesNumber = _spaFilter.WholeDriveItemsCount;
             if (filesNumber <= 0)
             {
-                MessageBox.Show(@"You must filter files.", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(Resources.Form_GenerateSC_NotFileredROBPOps, @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -1134,11 +1125,11 @@ namespace SPAFilter
 
                     if (stringErrors.Length > 0)
                     {
-                        MessageBox.Show($"Several ({stringErrors.Lines}) errors found:\r\n\r\n{stringErrors.ToString(2)}", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show(string.Format(Resources.Form_PrintXMLFiles_Error, stringErrors.Lines, stringErrors.ToString(2)), @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                     else
                     {
-                        MessageBox.Show(@"Successfully completed.", @"OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(Resources.Form_PrintXMLFiles_Successfully, @"OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
             }
@@ -1223,11 +1214,11 @@ namespace SPAFilter
 
         void RefreshStatus()
         {
-            BPCount.Text = $"Processes: {(_spaFilter.Processes?.Count ?? 0 ).ToString()}";
-            NEElementsCount.Text = $"HostTypes: {(_spaFilter.HostTypes?.HostTypeNames?.Count ?? 0).ToString()}";
-            OperationsCount.Text = $"Operations: {(_spaFilter.HostTypes?.OperationsCount ?? 0).ToString()}";
-            ScenariosCount.Text = $"Scenarios: {(_spaFilter.Scenarios?.Count ?? 0).ToString()}";
-            CommandsCount.Text = $"Commands: {(_spaFilter.Commands?.Count ?? 0).ToString()}";
+            BPCount.Text = string.Format(Resources.Form_Status_Processes, (_spaFilter.Processes?.Count ?? 0 ).ToString());
+            NEElementsCount.Text = string.Format(Resources.Form_Status_HostTypes, (_spaFilter.HostTypes?.HostTypeNames?.Count ?? 0).ToString());
+            OperationsCount.Text = string.Format(Resources.Form_Status_Operations, (_spaFilter.HostTypes?.OperationsCount ?? 0).ToString());
+            ScenariosCount.Text = string.Format(Resources.Form_Status_Scenarios, (_spaFilter.Scenarios?.Count ?? 0).ToString());
+            CommandsCount.Text = string.Format(Resources.Form_Status_Commands, (_spaFilter.Commands?.Count ?? 0).ToString());
 
             FilterButton.Enabled = _spaFilter.IsEnabledFilter;
             PrintXMLButton.Enabled = _spaFilter.WholeDriveItemsCount > 0 && IsFiltered;
@@ -1321,7 +1312,7 @@ namespace SPAFilter
             }
             else
             {
-                MessageBox.Show(@"You must select a row.", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(Resources.Form_GridView_NotSelectedAnyRows, @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
             return result.Count > 0;
