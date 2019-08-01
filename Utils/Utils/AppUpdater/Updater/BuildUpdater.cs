@@ -43,7 +43,7 @@ namespace Utils.AppUpdater.Updater
                 case BuldPerformerType.CreateOrRollBack:
                     if (LocalFile == null)
                     {
-                        string destinationDir = Path.GetDirectoryName(FileDestination);
+                        var destinationDir = Path.GetDirectoryName(FileDestination);
                         if (!string.IsNullOrWhiteSpace(destinationDir) && !Directory.Exists(destinationDir))
                             Directory.CreateDirectory(destinationDir);
                         
@@ -69,14 +69,14 @@ namespace Utils.AppUpdater.Updater
             }
         }
 
-        internal void Pull()
+        internal static void Pull(string runningAppLocation, int secondsRunDelay)
         {
-            CMD.OverwriteAndStartApplication(FileSource, FileDestination, 30); // задержка на запуск 30 секунд
+            CMD.StartApplication(runningAppLocation, secondsRunDelay);  // задержка на запуск 30 секунд
         }
 
-        internal static void Pull(string runningAppLocation)
+        internal void Pull(int secondsMoveDelay, int secondsRunDelay)
         {
-            CMD.StartApplication(runningAppLocation, 30);  // задержка на запуск 30 секунд
+            CMD.OverwriteAndStartApplication(FileSource, FileDestination, secondsMoveDelay, secondsRunDelay); // задержка на запуск 30 секунд
         }
 
         public override string ToString()

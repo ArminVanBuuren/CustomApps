@@ -1,17 +1,11 @@
 ﻿using LibGit2Sharp;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using LibGit2Sharp.Handlers;
 using Utils;
 using Utils.AppUpdater;
-using System.Diagnostics;
-using Utils.AppUpdater.Updater;
 
 namespace Tester.Updater
 {
@@ -20,22 +14,21 @@ namespace Tester.Updater
         static void Main(string[] args)
         {
             Start:
-            System.Console.WriteLine("Press \"1\" for UPDATE or \"2\" for UPLOAD.");
-            string res = System.Console.ReadLine();
-            if (res == "1")
+            Console.WriteLine("Press \"1\" for UPDATE or \"2\" for UPLOAD.");
+            var res = Console.ReadLine();
+            switch (res)
             {
-                Update();
-            }
-            else if (res == "2")
-            {
-                Upload();
-            }
-            else
-            {
-                goto Start;
+                case "1":
+                    Update();
+                    break;
+                case "2":
+                    Upload();
+                    break;
+                default:
+                    goto Start;
             }
 
-            System.Console.ReadLine();
+            Console.ReadLine();
         }
 
         
@@ -47,7 +40,7 @@ namespace Tester.Updater
             up.OnUpdate += Up_OnUpdate;
             up.OnProcessingError += Up_OnProcessingError;
             up.Start();
-            System.Console.WriteLine($"[{Thread.CurrentThread.ManagedThreadId}] {nameof(ApplicationUpdater)} created!");
+            Console.WriteLine($"[{Thread.CurrentThread.ManagedThreadId}] {nameof(ApplicationUpdater)} created!");
         }
 
         //private static bool infinityChecking = true;
@@ -97,21 +90,21 @@ namespace Tester.Updater
             Repository repo = null;
             try
             {   
-                //System.Console.WriteLine(@"Enter builds directory path. Like - C:\!MyRepos\CustomApp\Utils\Tester.Updater\bin\Uploader\test1\OnServer");
-                string sourcePath = @"C:\!Builds\Builds";
-                string destPath = @"C:\!Builds\Git";
-                System.Console.WriteLine($"Enter project name. Like - TFSAssist; Tester.Updater");
-                string projectStr = System.Console.ReadLine();
+                //Console.WriteLine(@"Enter builds directory path. Like - C:\!MyRepos\CustomApp\Utils\Tester.Updater\bin\Uploader\test1\OnServer");
+                const string sourcePath = @"C:\!Builds\Builds";
+                const string destPath = @"C:\!Builds\Git";
+                Console.WriteLine($"Do not forget library git2-572e4d8.dll with correct bit-depth (x86 or x64)\r\nEnter project name. Like - TFSAssist; Tester.Updater");
+                var projectStr = Console.ReadLine();
 
                 if (!Directory.Exists(sourcePath))
                 {
-                    System.Console.WriteLine($"Incorrect path '{sourcePath}'");
+                    Console.WriteLine($"Incorrect path '{sourcePath}'");
                     goto start;
                 }
 
                 if (Directory.GetFiles(sourcePath, "*.*", SearchOption.AllDirectories).Length == 0)
                 {
-                    System.Console.WriteLine($"No files was found in '{sourcePath}'");
+                    Console.WriteLine($"No files was found in '{sourcePath}'");
                     goto start;
                 }
 
@@ -121,32 +114,32 @@ namespace Tester.Updater
                     IO.DeleteReadOnlyDirectory(destPath);
                 }
 
-                UsernamePasswordCredentials credentials = new UsernamePasswordCredentials
+                var credentials = new UsernamePasswordCredentials
                 {
                     Username = "ArminVanBuuren",
                     Password = "ArminOnly#3"
                 };
 
-                CloneOptions fetchOptions = new CloneOptions
+                var fetchOptions = new CloneOptions
                 {
                     CredentialsProvider = (_url, _user, _cred) => credentials
                 };
 
-                PushOptions pushOptions = new PushOptions
+                var pushOptions = new PushOptions
                 {
-                    CredentialsProvider = new CredentialsHandler((url, usernameFromUrl, types) => credentials)
+                    CredentialsProvider = (url, usernameFromUrl, types) => credentials
                 };
 
-                Identity identity = new Identity(credentials.Username, "vkhovanskiy@gmail.com");
-                Signature signature = new Signature(identity, DateTimeOffset.Now);
+                var identity = new Identity(credentials.Username, "vkhovanskiy@gmail.com");
+                var signature = new Signature(identity, DateTimeOffset.Now);
 
                 Console.WriteLine($"Start");
                 Directory.CreateDirectory(destPath);
-                string path = Repository.Init(destPath, false);
+                var path = Repository.Init(destPath, false);
                 using (repo = new Repository(path, new RepositoryOptions {Identity = identity}))
                 {
                     // создаем локальную ветку
-                    Remote remote = repo.Network.Remotes.Where(p => p.Name == "origin").FirstOrDefault();
+                    var remote = repo.Network.Remotes.FirstOrDefault(p => p.Name == "origin");
                     if (remote == null)
                         remote = repo.Network.Remotes.Add("origin", BuildsInfo.DEFAULT_PROJECT_GIT);
 
@@ -159,11 +152,11 @@ namespace Tester.Updater
                     repo.Merge(repo.Branches["origin/master"], signature);
 
 
-                    string fileVersionsPath = Path.Combine(destPath, BuildsInfo.FILE_NAME);
+                    var fileVersionsPath = Path.Combine(destPath, BuildsInfo.FILE_NAME);
                     BuildsInfo buildVersions = null;
                     if (File.Exists(fileVersionsPath))
                     {
-                        string currentFileVersions = File.ReadAllText(fileVersionsPath);
+                        var currentFileVersions = File.ReadAllText(fileVersionsPath);
                         buildVersions = BuildsInfo.Deserialize(currentFileVersions);
                     }
                     else
@@ -190,30 +183,29 @@ namespace Tester.Updater
                     repo.Network.Push(repo.Branches["master"], pushOptions);
                 }
 
-                System.Console.WriteLine($"Build successful assembled! Project=[{projectStr}]");
+                Console.WriteLine($"Build successful assembled! Project=[{projectStr}]");
             }
             catch (Exception e)
             {
-                System.Console.WriteLine(e);
+                Console.WriteLine(e);
             }
             finally
             {
-                if(repo != null)
-                    repo.Dispose();
-                System.Console.Write($"End");
+                repo?.Dispose();
+                Console.Write($"End");
             }
         }
 
         public static void ClearAllRepos(string directoryPath, bool deleteGit = true)
         {
-            DirectoryInfo di = new DirectoryInfo(directoryPath);
+            var di = new DirectoryInfo(directoryPath);
 
-            foreach (FileInfo file in di.GetFiles())
+            foreach (var file in di.GetFiles())
             {
                 file.Delete();
             }
 
-            foreach (DirectoryInfo dir in di.GetDirectories())
+            foreach (var dir in di.GetDirectories())
             {
                 if (dir.Name.Like(".git"))
                 {

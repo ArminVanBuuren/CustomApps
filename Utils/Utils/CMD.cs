@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace Utils
@@ -15,7 +16,7 @@ namespace Utils
 
         const string argument_start = "/C choice /C Y /N /D Y /T 4 {0} & Start \"\" /D \"{1}\" \"{2}\"";
         const string argument_update = "/C choice /C Y /N /D Y /T 4 {0} & Del /F /Q \"{1}\" & choice /C Y /N /D Y /T 2 & Move /Y \"{2}\" \"{3}\"";
-        const string argument_update_start = argument_update + " & Start \"\" /D \"{4}\" \"{5}\" {6}";
+        const string argument_update_start = argument_update + " {4} & Start \"\" /D \"{5}\" \"{6}\" {7}";
         const string argument_add = "/C choice /C Y /N /D Y /T 4 {0} & Move /Y \"{1}\" \"{2}\"";
         const string argument_remove = "/C choice /C Y /N /D Y /T 4 {0} & Del /F /Q \"{1}\"";
 
@@ -23,23 +24,40 @@ namespace Utils
         /// Запустить приложение
         /// </summary>
         /// <param name="fileDestination">запустить приложение</param>
-        /// <param name="secondsDelay">запустить после оперделенного времени в секундах (ограниение 1 час)</param>
-        public static void StartApplication(string fileDestination, int secondsDelay = 0)
+        /// <param name="secondsRunDelay">задержка в секундах перед запуском приложения  (ограниение 1 час)</param>
+        public static void StartApplication(string fileDestination, int secondsRunDelay = 0)
         {
-            var argument_complete = string.Format(argument_start, GetCommandTimeout(secondsDelay), Path.GetDirectoryName(fileDestination), Path.GetFileName(fileDestination));
+            var argument_complete = string.Format(argument_start, 
+                GetCommandTimeout(secondsRunDelay), 
+                Path.GetDirectoryName(fileDestination), 
+                Path.GetFileName(fileDestination));
+
             StartProcess(argument_complete);
         }
 
         /// <summary>
-        /// Заменить файл и запустить его на новом месте
+        /// Заменить файл и запустить его на новом месте. Время замены должно быть меньше задержки запуска.
         /// </summary>
         /// <param name="fileSource">изначальное местоположение файла</param>
         /// <param name="fileDestination">скопировать куда и запустить</param>
-        /// <param name="secondsDelay">запустить после оперделенного времени в секундах (ограниение 1 час)</param>
-        public static void OverwriteAndStartApplication(string fileSource, string fileDestination, int secondsDelay = 0)
+        /// <param name="secondsMoveDelay">задержка в секундах перед заменой файла (ограниение 1 час)</param>
+        /// <param name="secondsRunDelay">задержка в секундах перед запуском приложения (ограниение 1 час)</param>
+        public static void OverwriteAndStartApplication(string fileSource, string fileDestination, int secondsMoveDelay = 0, int secondsRunDelay = 0)
         {
-            var argument_complete = string.Format(argument_update_start, GetCommandTimeout(secondsDelay), fileDestination, fileSource, fileDestination, Path.GetDirectoryName(fileDestination),
-                Path.GetFileName(fileDestination), string.Empty);
+            if (secondsMoveDelay > secondsRunDelay)
+                throw new Exception("Seconds delay of run application must be greater than seconds delay of movement file.");
+
+            var delayDelMove = GetCommandTimeout(secondsMoveDelay);
+            var delayStart = GetCommandTimeout(secondsRunDelay);
+            var argument_complete = string.Format(argument_update_start,
+                delayDelMove,
+                fileDestination,
+                fileSource,
+                fileDestination,
+                delayStart,
+                Path.GetDirectoryName(fileDestination),
+                Path.GetFileName(fileDestination),
+                string.Empty);
 
             StartProcess(argument_complete);
         }
@@ -52,7 +70,12 @@ namespace Utils
         /// <param name="secondsDelay">перезаписать после оперделенного времени в секундах (ограниение 1 час)</param>
         public static void OverwriteFile(string fileSource, string fileDestination, int secondsDelay = 0)
         {
-            var argument_complete = string.Format(argument_update, GetCommandTimeout(secondsDelay), fileDestination, fileSource, fileDestination);
+            var argument_complete = string.Format(argument_update, 
+                GetCommandTimeout(secondsDelay), 
+                fileDestination, 
+                fileSource, 
+                fileDestination);
+
             StartProcess(argument_complete);
         }
 
@@ -64,7 +87,11 @@ namespace Utils
         /// <param name="secondsDelay">скопировать файл после оперделенного времени в секундах (ограниение 1 час)</param>
         public static void CopyFile(string fileSource, string fileDestination, int secondsDelay = 0)
         {
-            var argument_complete = string.Format(argument_add, GetCommandTimeout(secondsDelay), fileSource, fileDestination);
+            var argument_complete = string.Format(argument_add, 
+                GetCommandTimeout(secondsDelay), 
+                fileSource, 
+                fileDestination);
+
             StartProcess(argument_complete);
         }
 
@@ -75,7 +102,10 @@ namespace Utils
         /// <param name="secondsDelay">скопировать файл после оперделенного времени в секундах (ограниение 1 час)</param>
         public static void DeleteFile(string fileDestination, int secondsDelay = 0)
         {
-            var argument_complete = string.Format(argument_remove, GetCommandTimeout(secondsDelay), fileDestination);
+            var argument_complete = string.Format(argument_remove, 
+                GetCommandTimeout(secondsDelay), 
+                fileDestination);
+
             StartProcess(argument_complete);
         }
 

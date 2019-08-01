@@ -42,6 +42,9 @@ namespace Utils.AppUpdater.Updater
         public string DiretoryTempPath { get; private set; }
         public bool NeedToFetchPack { get; }
 
+        public int SecondsMoveDelay { get; set; } = 20;
+        public int SecondsRunDelay { get; set; } = 30;
+
         internal BuildUpdaterCollection(Assembly runningApp, Uri projectUri, BuildPackInfo projectBuildPack)
         {
             if (runningApp == null)
@@ -130,7 +133,7 @@ namespace Utils.AppUpdater.Updater
         }
 
 
-        private object sync = new object();
+        private readonly object sync = new object();
         private void WebClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
             lock (sync)
@@ -176,6 +179,9 @@ namespace Utils.AppUpdater.Updater
 
         internal void CommitAndPull()
         {
+            if (SecondsMoveDelay > SecondsRunDelay)
+                throw new Exception("Seconds delay of run application must be greater than seconds delay of movement file.");
+
             BuildUpdater runningApp = null;
             foreach (BuildUpdater build in _collection)
             {
@@ -193,14 +199,14 @@ namespace Utils.AppUpdater.Updater
             // рестарт приложения, если обновляется исполняемый exe файл, даже если указано NeedRestartApplication = false
             if (runningApp != null)
             {
-                runningApp.Pull();
+                runningApp.Pull(SecondsMoveDelay, SecondsRunDelay);
                 Status = UploaderStatus.Pulled;
 
                 Process.GetCurrentProcess().Kill();
             }
             else if (ProjectBuildPack.NeedRestartApplication) // рестарт приложения, если указана метка в пакете с обновлениями, иначе рестарта не будет
             {
-                BuildUpdater.Pull(LocationApp);
+                BuildUpdater.Pull(LocationApp, SecondsRunDelay);
                 Status = UploaderStatus.Pulled;
 
                 Process.GetCurrentProcess().Kill();
