@@ -169,7 +169,7 @@ namespace SPAFilter.SPA.Components.SRI
                         break;
                     }
 
-                    if (string.IsNullOrEmpty(rfsName) || !catalog.AllRFS.TryGetValue(rfsName, out var rfsOperationList))
+                    if (string.IsNullOrEmpty(rfsName) || !catalog.AllRFS.TryGetValue(rfsName, out var rfsOperationList) || rfsOperationList.Count == 0)
                         continue;
 
                     AppendRFSList.Add(rfsOperationList.First());
@@ -207,7 +207,7 @@ namespace SPAFilter.SPA.Components.SRI
                     }
                 }
 
-                if (string.IsNullOrEmpty(rfsName) || scenarioTypeList == null || scenarioTypeList.Count == 0 || !catalog.AllRFS.TryGetValue(rfsName, out var rfsOperationList))
+                if (string.IsNullOrEmpty(rfsName) || scenarioTypeList == null || scenarioTypeList.Count == 0 || !catalog.AllRFS.TryGetValue(rfsName, out var rfsOperationList) || rfsOperationList.Count == 0)
                     continue;
 
 

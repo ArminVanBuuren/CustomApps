@@ -474,6 +474,9 @@ namespace SPAFilter.SPA
             {
                 progressCalc.BeginReadXslxFile();
 
+                if(xslPackage.Workbook.Worksheets.Count == 0)
+                    throw new Exception("No worksheet found");
+
                 var myWorksheet = xslPackage.Workbook.Worksheets.First();
                 var totalRows = myWorksheet.Dimension.End.Row;
                 var totalColumns = mandatoryXslxColumns.Length;

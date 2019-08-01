@@ -169,7 +169,7 @@ namespace SPAFilter.SPA.Collection
                                 var baseModifyRFS = AddBaseRFS(result.First().Node, rfsCFSs, baseRFSName, "Modify", hostType, navigator);
                                 AddChildCFS(baseModifyRFS, result.First().ChildRFS);
                             }
-                            else if(navigator.Select($"/Configuration/HandlerList/Handler[@type='MergeRFS' and Configuration/RFS[@name='{rfsName}']]", out var res))
+                            else if (navigator.Select($"/Configuration/HandlerList/Handler[@type='MergeRFS' and Configuration/RFS[@name='{rfsName}']]", out var res))
                             {
                                 var baseModifyRFS = AddBaseRFS(result.First().Node, rfsCFSs, baseRFSName, "Modify", hostType, navigator);
                                 AddChildCFS(baseModifyRFS, result.First().ChildRFS);
@@ -282,14 +282,13 @@ namespace SPAFilter.SPA.Collection
         void CheckRFSInnerScenarios(string rfsName, XmlNode rfs, XPathNavigator navigator)
         {
             var rfsNode = rfs;
-            if (rfs == null)
+            if (rfsNode == null)
             {
-                var getRFS = XPATH.Select(navigator, $"/Configuration/RFSList/RFS[@name='{rfsName}']");
-                if(getRFS == null || getRFS.Count == 0)
+                if (!navigator.SelectFirst($"/Configuration/RFSList/RFS[@name='{rfsName}']", out var getRFS))
                     return;
-                rfsNode = getRFS.First().Node;
-            }
 
+                rfsNode = getRFS.Node;
+            }
 
             foreach (XmlNode childNode in rfsNode.ChildNodes)
             {
