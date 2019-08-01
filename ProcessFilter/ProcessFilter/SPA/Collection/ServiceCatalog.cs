@@ -156,18 +156,32 @@ namespace SPAFilter.SPA.Collection
                             AddChildCFS(baseRFS, rfsCFSs.Value);
                         }
 
-                        if (result.All(p => !p.IsSubscription) && result.All(p => p.LinkType != "Modify"))
+                        if (rfsCFSs.Value != null && result.All(p => !p.IsSubscription) && result.All(p => p.LinkType != "Modify"))
                         {
-                            var baseModifyRFS = AddBaseRFS(result.First().Node, rfsCFSs, baseRFSName, "Modify", hostType, navigator);
-                            AddChildCFS(baseModifyRFS, result.First().ChildRFS);
+                            var priorityCFSList = rfsCFSs.Value.Select(p =>
+                            {
+                                var priority = p.Attributes?["priority"]?.Value;
+                                return priority ?? "1000";
+                            }).Distinct();
+
+                            if (priorityCFSList.Count() > 1)
+                            {
+                                var baseModifyRFS = AddBaseRFS(result.First().Node, rfsCFSs, baseRFSName, "Modify", hostType, navigator);
+                                AddChildCFS(baseModifyRFS, result.First().ChildRFS);
+                            }
+                            else if(navigator.Select($"/Configuration/HandlerList/Handler[@type='MergeRFS' and Configuration/RFS[@name='{rfsName}']]", out var res))
+                            {
+                                var baseModifyRFS = AddBaseRFS(result.First().Node, rfsCFSs, baseRFSName, "Modify", hostType, navigator);
+                                AddChildCFS(baseModifyRFS, result.First().ChildRFS);
+                            }
                         }
                     }
                     else
                     {
                         foreach (var linkType in defaultLinkTypes)
                         {
-                            var baseModifyRFS = AddBaseRFS(null, rfsCFSs, baseRFSName, linkType, hostType, navigator);
-                            AddChildCFS(baseModifyRFS, rfsCFSs.Value);
+                            var baseRFS = AddBaseRFS(null, rfsCFSs, baseRFSName, linkType, hostType, navigator);
+                            AddChildCFS(baseRFS, rfsCFSs.Value);
                         }
                     }
 
@@ -233,12 +247,6 @@ namespace SPAFilter.SPA.Collection
                     foreach (var linkType in defaultLinkTypes)
                     {
                         AddRFS(rfsCFSs, rfsName, linkType, hostType, navigator);
-                    }
-
-                    // Если тип RFS как DynamicList то должен быть Modify
-                    if (processType.Equals("DynamicList", StringComparison.CurrentCultureIgnoreCase))
-                    {
-                        AddRFS(rfsCFSs, rfsName, "Modify", hostType, navigator);
                     }
                 }
             }
