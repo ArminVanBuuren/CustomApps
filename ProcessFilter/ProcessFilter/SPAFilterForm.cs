@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Threading;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using FastColoredTextBoxNS;
@@ -15,6 +14,8 @@ using SPAFilter.SPA;
 using SPAFilter.SPA.Components.ROBP;
 using SPAFilter.SPA.Components.SRI;
 using Utils;
+using Utils.AppUpdater;
+using Utils.AppUpdater.Updater;
 using Utils.WinForm.DataGridViewHelper;
 using Utils.WinForm.Notepad;
 using Utils.WinForm.CustomProgressBar;
@@ -48,6 +49,9 @@ namespace SPAFilter
         private FormLocation _notepadLocation = FormLocation.Default;
         private FormWindowState _notepadWindowsState = FormWindowState.Maximized;
         private SPAProcessFilter _spaFilter;
+
+        ApplicationUpdater AppUpdater { get; set; }
+        IUpdater Updater { get; set; }
 
         public static string SavedDataPath => $"{ApplicationFilePath}.bin";
 
@@ -210,6 +214,8 @@ namespace SPAFilter
                 _notepadWordWrap = (bool) TryGetSerializationValue(allSavedParams, "DDCCVV", true);
                 _notepadLocation = (FormLocation) TryGetSerializationValue(allSavedParams, "RRTTDD", FormLocation.Default);
                 _notepadWindowsState = (FormWindowState) TryGetSerializationValue(allSavedParams, "SSEEFF", FormWindowState.Maximized);
+
+                Updater = (IUpdater)TryGetSerializationValue(allSavedParams, "UUPPDD", null);
             }
             catch (Exception ex)
             {
@@ -239,6 +245,18 @@ namespace SPAFilter
 
         void ISerializable.GetObjectData(SerializationInfo propertyBag, StreamingContext context)
         {
+            if (InvokeRequired)
+            {
+                Invoke(new MethodInvoker(() => SerializeData(propertyBag, context)));
+            }
+            else
+            {
+                SerializeData(propertyBag, context);
+            }
+        }
+
+        void SerializeData(SerializationInfo propertyBag, StreamingContext context)
+        {
             propertyBag.AddValue("ADWFFW", ProcessesTextBox.Text);
             propertyBag.AddValue("AAEERF", ROBPOperationTextBox.Text);
             propertyBag.AddValue("DFWDRT", ServiceCatalogTextBox.Text);
@@ -257,6 +275,8 @@ namespace SPAFilter
             propertyBag.AddValue("DDCCVV", _notepadWordWrap);
             propertyBag.AddValue("RRTTDD", _notepadLocation);
             propertyBag.AddValue("SSEEFF", _notepadWindowsState);
+
+            propertyBag.AddValue("UUPPDD", Updater);
         }
 
         void PreInit()
@@ -264,7 +284,7 @@ namespace SPAFilter
             InitializeComponent();
             KeyPreview = true; // для того чтобы работали горячие клавиши по всей форме и всем контролам
             new ToolTip().SetToolTip(PrintXMLButton, "Format all filtered xml files");
-            
+
             _spaFilter = new SPAProcessFilter();
 
             ROBPOperationsRadioButton.CheckedChanged += ROBPOperationsRadioButton_CheckedChanged;
@@ -273,6 +293,22 @@ namespace SPAFilter
 
         void PostInit()
         {
+            try
+            {
+                var currentPackUpdaterName = Updater?.ProjectBuildPack.Name;
+                AppUpdater = new ApplicationUpdater(Assembly.GetExecutingAssembly(), currentPackUpdaterName, 900);
+                AppUpdater.OnFetch += AppUpdater_OnFetch;
+                AppUpdater.OnUpdate += AppUpdater_OnUpdate;
+                AppUpdater.OnProcessingError += AppUpdater_OnProcessingError;
+                AppUpdater.Start();
+                AppUpdater.CheckUpdates();
+            }
+            catch (Exception ex)
+            {
+                // ignored
+            }
+            
+
             dataGridServiceInstances.KeyDown += DataGridServiceInstances_KeyDown;
             dataGridProcesses.KeyDown += DataGridProcessesResults_KeyDown;
             dataGridOperations.KeyDown += DataGridOperationsResult_KeyDown;
@@ -299,6 +335,53 @@ namespace SPAFilter
             ServiceCatalogTextBox.LostFocus += ServiceCatalogTextBox_LostFocus;
 
             Closing += (s, e) => SaveData();
+        }
+
+        private static void AppUpdater_OnFetch(object sender, ApplicationFetchingArgs args)
+        {
+            if (args == null)
+                return;
+
+            if (args.Control == null)
+            {
+                args.Result = UpdateBuildResult.Cancel;
+                return;
+            }
+        }
+
+        private void AppUpdater_OnUpdate(object sender, ApplicationUpdatingArgs args)
+        {
+            try
+            {
+                if (args?.Control?.ProjectBuildPack == null)
+                {
+                    AppUpdater.Refresh();
+                    return;
+                }
+
+                Updater = args.Control;
+                Updater.SecondsMoveDelay = 1;
+                Updater.SecondsRunDelay = 3;
+
+                if (Updater.ProjectBuildPack.NeedRestartApplication)
+                {
+                    SaveData();
+                    AppUpdater.DoUpdate(Updater);
+                }
+                else
+                {
+                    AppUpdater.DoUpdate(Updater);
+                }
+            }
+            catch (Exception ex)
+            {
+                // ignored
+            }
+        }
+
+        private static void AppUpdater_OnProcessingError(object sender, ApplicationUpdatingArgs args)
+        {
+
         }
 
         #region Check warning rows
