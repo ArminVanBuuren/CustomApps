@@ -604,7 +604,7 @@ namespace SPAFilter.SPA
         {
             var files = Directory.GetFiles(dirPath, mask, SearchOption.TopDirectoryOnly).ToList();
             files.Sort(StringComparer.CurrentCulture);
-            return files.Where(x => x.EndsWith(mask.Trim().Trim('*'))).ToList();
+            return files.Where(x => x.EndsWith(mask.Trim().Trim('*'), StringComparison.CurrentCultureIgnoreCase)).ToList();
         }
     }
 }
