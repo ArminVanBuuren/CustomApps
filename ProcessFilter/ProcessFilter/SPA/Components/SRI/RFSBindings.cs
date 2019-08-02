@@ -99,8 +99,6 @@ namespace SPAFilter.SPA.Components.SRI
                 }
 
                 AddXmlNode(XPATH.Select(navigator, $"/Configuration/RestrictionList/Restriction[RFS[@name='{rfsName}']]"), RestrictionList);
-                AddXmlNode(XPATH.Select(navigator, $"/Configuration/RFSGroupList/RFSGroup[RFS[@name='{rfsName}']]"), RFSGroupList);
-                AddXmlNode(XPATH.Select(navigator, $"/Configuration/HandlerList/Handler[Configuration/RFS[@name='{rfsName}']]"), HandlerList);
                 AddXmlNode(XPATH.Select(navigator, $"/Configuration/ScenarioList/Scenario[RFS[@name='{rfsName}']]"), ScenarioList);
 
 
@@ -135,20 +133,26 @@ namespace SPAFilter.SPA.Components.SRI
                                     continue;
                                 break;
                             case "RFSGroup":
-                                if (navigator.Select($"/Configuration/RFSGroupList/RFSGroup[@name='{childNodeName}']/RFS/@name", out var rfsGroupList))
+                                if (navigator.SelectFirst($"/Configuration/RFSGroupList/RFSGroup[@name='{childNodeName}']", out var rfsGroupList))
                                 {
                                     var isExist = false;
-                                    foreach (var rfsInGroup in rfsGroupList)
+                                    foreach (XmlNode rfsGroupChild in rfsGroupList.Node.ChildNodes)
                                     {
-                                        if (navigator.SelectFirst($"/Configuration/RFSList/RFS[@name='{rfsInGroup.Value}']/@hostType", out var hostType2) && hostType2.Value.Equals(rfsHostType))
+                                        var childRfsName = rfsGroupChild.Attributes?["name"]?.Value;
+                                        if (!childRfsName.IsNullOrEmpty() 
+                                            && navigator.SelectFirst($"/Configuration/RFSList/RFS[@name='{childRfsName}']/@hostType", out var hostType2) 
+                                            && hostType2.Value.Equals(rfsHostType))
                                         {
                                             isExist = true;
                                             break;
                                         }
                                     }
 
-                                    if(isExist)
+                                    if (isExist)
+                                    {
+                                        RFSGroupList.Add(rfsGroupList.Node);
                                         continue;
+                                    }
                                 }
                                 break;
                         }
@@ -168,6 +172,22 @@ namespace SPAFilter.SPA.Components.SRI
                     }
                 }
 
+                foreach (var rfsGroup in RFSGroupList)
+                {
+                    foreach (XmlNode rfsGroupChild in rfsGroup.ChildNodes)
+                    {
+                        var handlerName = rfsGroupChild.Attributes?["handler"]?.Value;
+                        if (handlerName != null && navigator.SelectFirst($"/Configuration/HandlerList/Handler[@name='{handlerName}']", out var handler))
+                        {
+                            HandlerList.Add(handler.Node);
+                        }
+                    }
+                }
+                AddXmlNode(XPATH.Select(navigator, $"/Configuration/HandlerList/Handler[Configuration/RFS[@name='{rfsName}']]"), HandlerList);
+
+                
+
+                //AddXmlNode(XPATH.Select(navigator, $"/Configuration/RFSGroupList/RFSGroup[RFS[@name='{rfsName}']]"), RFSGroupList);
                 //CFSList = new DistinctList<XmlNode>(CFSList.OrderBy(p => p.Attributes?["name"]?.Value), new CatalogItemEqualityComparer());
             }
             catch (Exception ex)

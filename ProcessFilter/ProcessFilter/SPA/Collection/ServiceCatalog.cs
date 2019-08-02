@@ -156,23 +156,49 @@ namespace SPAFilter.SPA.Collection
                             AddChildCFS(baseRFS, rfsCFSs.Value);
                         }
 
+                        // Добавляем операцию Modify
+                        // 1. В случае если RFS не является подпиской
+                        // 2. Если нет уже существующей операции Modify
+                        // 3. Если в RFS есть Resource (RFSParameter не модифается)
+                        // 4. Если все связанные CFSы разного приоритета или есть хэндлер MergeRFS
                         if (rfsCFSs.Value != null && result.All(p => !p.IsSubscription) && result.All(p => p.LinkType != "Modify"))
                         {
-                            var priorityCFSList = rfsCFSs.Value.Select(p =>
+                            var isExistResource = false;
+                            foreach (var rfsNode in result.Select(x => x.Node))
                             {
-                                var priority = p.Attributes?["priority"]?.Value;
-                                return priority ?? "1000";
-                            }).Distinct();
+                                if(rfsNode == null)
+                                    continue;
+                                foreach (XmlNode rfsChild in rfsNode.ChildNodes)
+                                {
+                                    if (rfsChild.Name.Equals("Resource"))
+                                    {
+                                        isExistResource = true;
+                                        break;
+                                    }
+                                }
 
-                            if (priorityCFSList.Count() > 1)
-                            {
-                                var baseModifyRFS = AddBaseRFS(result.First().Node, rfsCFSs, baseRFSName, "Modify", hostType, navigator);
-                                AddChildCFS(baseModifyRFS, result.First().ChildRFS);
+                                if(isExistResource)
+                                    break;
                             }
-                            else if (navigator.Select($"/Configuration/HandlerList/Handler[@type='MergeRFS' and Configuration/RFS[@name='{rfsName}']]", out var res))
+
+                            if (isExistResource)
                             {
-                                var baseModifyRFS = AddBaseRFS(result.First().Node, rfsCFSs, baseRFSName, "Modify", hostType, navigator);
-                                AddChildCFS(baseModifyRFS, result.First().ChildRFS);
+                                var priorityCFSList = rfsCFSs.Value.Select(p =>
+                                {
+                                    var priority = p.Attributes?["priority"]?.Value;
+                                    return priority ?? "1000";
+                                }).Distinct();
+
+                                if (priorityCFSList.Count() > 1)
+                                {
+                                    var baseModifyRFS = AddBaseRFS(result.First().Node, rfsCFSs, baseRFSName, "Modify", hostType, navigator);
+                                    AddChildCFS(baseModifyRFS, result.First().ChildRFS);
+                                }
+                                else if (navigator.Select($"/Configuration/HandlerList/Handler[@type='MergeRFS' and Configuration/RFS[@name='{rfsName}']]", out var res))
+                                {
+                                    var baseModifyRFS = AddBaseRFS(result.First().Node, rfsCFSs, baseRFSName, "Modify", hostType, navigator);
+                                    AddChildCFS(baseModifyRFS, result.First().ChildRFS);
+                                }
                             }
                         }
                     }
@@ -281,16 +307,10 @@ namespace SPAFilter.SPA.Collection
         /// <param name="navigator"></param>
         void CheckRFSInnerScenarios(string rfsName, XmlNode rfs, XPathNavigator navigator)
         {
-            var rfsNode = rfs;
-            if (rfsNode == null)
-            {
-                if (!navigator.SelectFirst($"/Configuration/RFSList/RFS[@name='{rfsName}']", out var getRFS))
-                    return;
+            if (rfs == null)
+                return;
 
-                rfsNode = getRFS.Node;
-            }
-
-            foreach (XmlNode childNode in rfsNode.ChildNodes)
+            foreach (XmlNode childNode in rfs.ChildNodes)
             {
                 if (!childNode.Name.Equals("Scenario"))
                     continue;

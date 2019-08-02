@@ -59,8 +59,8 @@ namespace SPAFilter.SPA.Components.SRI
                 AppendXmlNode(builder, "RFSList", Bindings.RFSList);
                 AppendXmlNode(builder, "CFSList", Bindings.CFSList);
                 AppendXmlNode(builder, "CFSGroupList", Bindings.CFSGroupList);
-                AppendXmlNode(builder, "HandlerList", Bindings.HandlerList);
                 AppendXmlNode(builder, "RFSGroupList", Bindings.RFSGroupList);
+                AppendXmlNode(builder, "HandlerList", Bindings.HandlerList);
                 AppendXmlNode(builder, "RestrictionList", Bindings.RestrictionList);
 
                 if (!IsInner)

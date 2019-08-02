@@ -60,8 +60,8 @@ namespace SPAFilter.SPA.Components.SRI
                 AppendXmlNode(builder, "RFSList", Bindings.RFSList);
                 AppendXmlNode(builder, "CFSList", Bindings.CFSList);
                 AppendXmlNode(builder, "CFSGroupList", Bindings.CFSGroupList);
-                AppendXmlNode(builder, "HandlerList", Bindings.HandlerList);
                 AppendXmlNode(builder, "RFSGroupList", Bindings.RFSGroupList);
+                AppendXmlNode(builder, "HandlerList", Bindings.HandlerList);
                 AppendXmlNode(builder, "RestrictionList", Bindings.RestrictionList);
                 AppendXmlNode(builder, "ScenarioList", Bindings.ScenarioList);
 
@@ -70,11 +70,16 @@ namespace SPAFilter.SPA.Components.SRI
             }
         }
 
-        public RFSOperation(XmlNode node, string name, string linkType, string hostTypeName, XPathNavigator navigator, ServiceCatalog catalog)
+        public RFSOperation(XmlNode node, string rfsName, string linkType, string hostTypeName, XPathNavigator navigator, ServiceCatalog catalog)
         {
             Node = node;
+            if (Node == null && navigator.SelectFirst($"/Configuration/RFSList/RFS[@name='{rfsName}']", out var getRFS))
+            {
+                Node = getRFS.Node;
+            }
+
             _navigator = navigator;
-            RFSName = name;
+            RFSName = rfsName;
             LinkType = linkType;
 
             HostTypeName = hostTypeName;
