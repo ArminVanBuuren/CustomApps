@@ -13,6 +13,9 @@ namespace SPAFilter.SPA.Components.SRI
         [DGVColumn(ColumnPosition.After, "Operation")]
         public override string Name { get; set; }
 
+        /// <summary>
+        /// Если сценарий помечен как sendType="Drop"
+        /// </summary>
         protected internal virtual bool IsDropped { get; protected set; } = false;
 
         /// <summary>

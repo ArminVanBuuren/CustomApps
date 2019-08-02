@@ -10,10 +10,10 @@ namespace SPAFilter.SPA.Components
 {
     public sealed class ServiceInstance : DriveTemplate
     {
-        const string NOT_FOUND_ATTRIBUTE = "Not found attributes: \"{0}\" in {1}";
-        const string NOT_FOUND_DIR = "Not found directory \"{0}\" when initialize {1}";
-        const string NOT_FOUND_FILE = "Not found file \"{0}\" when initialize {1}";
-        const string INVALID_XML = "Invalid xml file \"{0}\"";
+        const string NOT_FOUND_ATTRIBUTE = "Attributes \"{0}\" not found in {1}";
+        const string NOT_FOUND_DIR = "Directory \"{0}\" not found when initializing {1}";
+        const string NOT_FOUND_FILE = "File \"{0}\" not found when initializing {1}";
+        const string INVALID_XML = "Xml file \"{0}\" is invalid";
 
         [DGVColumn(ColumnPosition.After, "HardwareID")]
         public string HardwareID { get; private set; }

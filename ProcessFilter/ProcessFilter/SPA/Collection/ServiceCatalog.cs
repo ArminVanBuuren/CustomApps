@@ -20,20 +20,22 @@ namespace SPAFilter.SPA.Collection
         public ServiceCatalog(string filePath)
         {
             if (!XML.IsFileXml(filePath, out var document))
-                throw new Exception($"Incorrect xml file \"{filePath}\"!");
+                throw new Exception($"Xml file \"{filePath}\" is invalid");
 
             var navigator = document.CreateNavigator();
 
-            var prefix = XPATH.Select(navigator, @"/Configuration/@scenarioPrefix");
-            if (prefix == null || prefix.Count == 0)
-                throw new Exception("Service Catalog is invalid. Not found attribute \"scenarioPrefix\".");
-            Prefix = prefix.First().Value;
+            if (!navigator.SelectFirst(@"/Configuration/@scenarioPrefix", out var prefix))
+                throw new Exception("Service Catalog is invalid. Attribute \"scenarioPrefix\" not found.");
+            Prefix = prefix.Value;
 
             AllRFS = new DuplicateDictionary<string, RFSOperation>();
             AllScenarios = new Dictionary<string, ScenarioOperation>();
 
+            if(!navigator.Select(@"/Configuration/RFSList/RFS", out var rfsList))
+                throw new Exception("Service Catalog is invalid. No RFS found.");
+
             // вытаскиевам по списку все RFS и все CFS которые включают в себя текущий RFS
-            var allRFSCFSsList = XPATH.Select(navigator, @"/Configuration/RFSList/RFS")
+            var allRFSCFSsList = rfsList
                 .ToDictionary(x => x.Node, x => XPATH.Select(navigator, $"/Configuration/CFSList/CFS[RFS/@name='{x.Node.Attributes?["name"]?.Value}']")
                 ?.Where(t => t != null)
                 .Select(p => p.Node));
@@ -49,17 +51,20 @@ namespace SPAFilter.SPA.Collection
             GetRFS(subscriptionRFSCFSsList, navigator, true);
             GetRFS(notBaseRFSCFSsList, navigator);
 
-            var scenarioList = XPATH.Select(navigator, @"/Configuration/ScenarioList/Scenario");
-            foreach (var scenario in scenarioList)
-            {
-                var scenarioName = scenario.Node.Attributes?["name"]?.Value;
-                if (string.IsNullOrEmpty(scenarioName))
-                    throw new Exception("Invalid config. Scenario must have attribute \"name\" or value is empty");
-                if (AllScenarios.ContainsKey(scenarioName))
-                    throw new Exception($"Service Catalog is invalid. {scenarioName} already exist.");
 
-                var scenarioOp = new ScenarioOperation(scenario.Node, scenarioName, navigator, this);
-                AllScenarios.Add(scenarioName, scenarioOp);
+            if (navigator.Select(@"/Configuration/ScenarioList/Scenario", out var scenarioList))
+            {
+                foreach (var scenario in scenarioList)
+                {
+                    var scenarioName = scenario.Node.Attributes?["name"]?.Value;
+                    if (string.IsNullOrEmpty(scenarioName))
+                        throw new Exception("Service Catalog is invalid. Scenario doesn't have attribute \"name\" or value is empty.");
+                    if (AllScenarios.ContainsKey(scenarioName))
+                        throw new Exception($"Service Catalog is invalid. {scenarioName} already exist.");
+
+                    var scenarioOp = new ScenarioOperation(scenario.Node, scenarioName, navigator, this);
+                    AllScenarios.Add(scenarioName, scenarioOp);
+                }
             }
 
 
@@ -99,7 +104,7 @@ namespace SPAFilter.SPA.Collection
             foreach (var rfsCFSs in collection)
             {
                 if (rfsCFSs.Key.Attributes == null)
-                    throw new Exception("Service Catalog is invalid. Not found any attributes in some RFS.");
+                    throw new Exception("Some RFS are invalid. No attributes found.");
 
                 var rfsName = string.Empty;
                 var baseRFSName = string.Empty;
@@ -130,11 +135,11 @@ namespace SPAFilter.SPA.Collection
                 }
 
                 if (hostType.IsNullOrEmptyTrim())
-                    throw new Exception($"Service Catalog is invalid. Not found attribute \"hostType\" in {rfsName}.");
+                    throw new Exception($"{rfsName} is invalid. Attribute \"hostType\" not found.");
                 if (processType.Equals("CancelHostType", StringComparison.CurrentCultureIgnoreCase))
                     continue;
                 if(AllRFS.ContainsKey(rfsName))
-                    throw new Exception($"Service Catalog is invalid. {rfsName} already exist.");
+                    throw new Exception($"{rfsName} already exist.");
 
                 // Сначала добавляем все с типом subscription, затем уже все дочерние от базовых и остальные
                 if (isSubscriptions)
@@ -317,7 +322,7 @@ namespace SPAFilter.SPA.Collection
 
                 var scenarioName = childNode.Attributes?["name"]?.Value;
                 if (string.IsNullOrEmpty(scenarioName))
-                    throw new Exception("Invalid config. Scenario must have attribute \"name\" or value is empty");
+                    throw new Exception("Service Catalog is invalid. Scenario doesn't have attribute \"name\" or value is empty.");
 
                 if (!AllScenarios.ContainsKey(scenarioName))
                 {

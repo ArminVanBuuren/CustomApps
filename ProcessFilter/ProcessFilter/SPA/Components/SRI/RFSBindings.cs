@@ -80,7 +80,7 @@ namespace SPAFilter.SPA.Components.SRI
 
                 var rfsHostType = rfs.Node.Attributes?["hostType"]?.Value;
                 if (rfsHostType == null)
-                    throw new Exception($"{rfsName} hasn't attribute \"hostType\"");
+                    throw new Exception($"{rfsName} is invalid. Attribute \"hostType\" not found.");
 
                 AddXmlNode(XPATH.Select(navigator, $"/Configuration/HostTypeList/HostType[@name='{rfsHostType}']"), HostTypeList);
 
@@ -110,7 +110,7 @@ namespace SPAFilter.SPA.Components.SRI
                         var isMarker = cfs.Node.Attributes?["isMarker"]?.Value;
 
                         if (cfsName == null)
-                            throw new Exception("Service Catalog is invalid. Not found attribute \"name\" in CFS.");
+                            throw new Exception("Some CFS are invalid. Attribute \"name\" not found.");
 
                         AddXmlNode(XPATH.Select(navigator, $"/Configuration/CFSGroupList/CFSGroup[CFS[@name='{cfsName}']]"), CFSGroupList);
 

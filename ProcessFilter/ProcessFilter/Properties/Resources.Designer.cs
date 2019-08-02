@@ -61,7 +61,7 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must filter files.
+        ///   Looks up a localized string similar to Please filter files.
         /// </summary>
         internal static string Form_GenerateSC_NotFileredROBPOps {
             get {
@@ -70,7 +70,7 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Not found any operations.
+        ///   Looks up a localized string similar to No operations found.
         /// </summary>
         internal static string Form_GenerateSC_NotFoundAnyOperations {
             get {
@@ -115,7 +115,7 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scenario has commands which don&apos;t exist.
+        ///   Looks up a localized string similar to Scenario has some commands which don&apos;t exist.
         /// </summary>
         internal static string Form_GridView_NotFoundSomeCommands {
             get {
@@ -124,7 +124,7 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Subscenario has commands which don&apos;t exist.
+        ///   Looks up a localized string similar to Subscenario has some commands which don&apos;t exist.
         /// </summary>
         internal static string Form_GridView_NotFoundSomeCommandsInSub {
             get {
@@ -133,7 +133,7 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Business process has operations which don&apos;t exist.
+        ///   Looks up a localized string similar to Business process has some operations which don&apos;t exist.
         /// </summary>
         internal static string Form_GridView_NotFoundSomeOPs {
             get {
@@ -151,7 +151,7 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must select a row.
+        ///   Looks up a localized string similar to Please select a row.
         /// </summary>
         internal static string Form_GridView_NotSelectedAnyRows {
             get {
@@ -180,7 +180,7 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Successfully completed..
+        ///   Looks up a localized string similar to Successfully completed.
         /// </summary>
         internal static string Form_PrintXMLFiles_Successfully {
             get {

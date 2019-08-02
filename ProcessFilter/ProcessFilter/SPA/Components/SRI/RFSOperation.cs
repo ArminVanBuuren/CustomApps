@@ -18,6 +18,10 @@ namespace SPAFilter.SPA.Components.SRI
         public string LinkType { get; set; }
 
         internal bool IsSubscription { get; set; } = false;
+
+        /// <summary>
+        /// Если не найден ни один CFS и дочерний RFS и не добавлен ни в один сценарий (Тут не учитываются хэндлены!)
+        /// </summary>
         protected internal override bool IsDropped => ChildRFS.Count == 0 && ChildCFS.Count == 0 && IncludedToScenario.Count == 0;
 
         public XmlNode Node { get; }

@@ -81,7 +81,7 @@ namespace SPAFilter.SPA.Components.SRI
             var type = scenarioNode.Attributes?["type"]?.Value;
 
             if(type.IsNullOrEmpty())
-                throw new Exception($"Invalid config. Scenario \"{ScenarioName}\" must have attribute \"type\".");
+                throw new Exception($"{rfsName} is invalid. Attribute \"type\" not found in scenario \"{ScenarioName}\"");
 
             if (!catalog.AllRFS.TryGetValue(rfsName, out var rfsOperationList))
                 return;
@@ -245,7 +245,7 @@ namespace SPAFilter.SPA.Components.SRI
         void Preload(XmlNode scenarioNode, string scenarioName, ServiceCatalog catalog)
         {
             if (scenarioNode.Attributes == null || scenarioNode.Attributes.Count == 0)
-                throw new Exception("Invalid config. Scenario must have any attributes.");
+                throw new Exception("Some scenarios are invalid. No attributes found.");
 
             ScenarioName = scenarioName;
             Name = $"{catalog.Prefix}{ScenarioName}";

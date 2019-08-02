@@ -139,7 +139,7 @@
 {1}</value>
   </data>
   <data name="Form_PrintXMLFiles_Successfully" xml:space="preserve">
-    <value>Successfully completed.</value>
+    <value>Successfully completed</value>
   </data>
   <data name="Form_Status_Processes" xml:space="preserve">
     <value>Processes: {0}</value>
@@ -157,10 +157,10 @@
     <value>Commands: {0}</value>
   </data>
   <data name="Form_GenerateSC_NotFoundAnyOperations" xml:space="preserve">
-    <value>Not found any operations</value>
+    <value>No operations found</value>
   </data>
   <data name="Form_GenerateSC_NotFileredROBPOps" xml:space="preserve">
-    <value>You must filter files</value>
+    <value>Please filter files</value>
   </data>
   <data name="Form_GridView_IncorrectConfig" xml:space="preserve">
     <value>Configuration application is incorrect</value>
@@ -172,19 +172,19 @@
     <value>Business process doesn't have service catalog call</value>
   </data>
   <data name="Form_GridView_NotFoundSomeCommands" xml:space="preserve">
-    <value>Scenario has commands which don't exist</value>
+    <value>Scenario has some commands which don't exist</value>
   </data>
   <data name="Form_GridView_NotFoundSomeCommandsInSub" xml:space="preserve">
-    <value>Subscenario has commands which don't exist</value>
+    <value>Subscenario has some commands which don't exist</value>
   </data>
   <data name="Form_GridView_NotFoundSomeOPs" xml:space="preserve">
-    <value>Business process has operations which don't exist</value>
+    <value>Business process has some operations which don't exist</value>
   </data>
   <data name="Form_GridView_NotFoundSomeScenarios" xml:space="preserve">
     <value>Scenario for this operation doesn't exist</value>
   </data>
   <data name="Form_GridView_NotSelectedAnyRows" xml:space="preserve">
-    <value>You must select a row</value>
+    <value>Please select a row</value>
   </data>
   <data name="Form_PrintXMLFiles_Info" xml:space="preserve">
     <value>Format all filtered xml files</value>

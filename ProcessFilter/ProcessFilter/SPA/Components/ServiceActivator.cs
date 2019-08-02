@@ -52,12 +52,12 @@ namespace SPAFilter.SPA.Components
                 throw new Exception($"File \"{FilePath}\" not found");
 
             if (!XML.IsFileXml(FilePath, out var activatorConfig))
-                throw new Exception($"Incorrect xml file \"{FilePath}\"");
+                throw new Exception($"Xml file \"{FilePath}\" is invalid");
 
             var activatorConfigNavigator = activatorConfig.CreateNavigator();
             var serviceInstances = XPATH.Select(activatorConfigNavigator, @"/Configuration/serviceInstances/serviceInstance");
             if (serviceInstances == null || serviceInstances.Count == 0)
-                throw new Exception($"Incorrect activator config \"{FilePath}\"");
+                throw new Exception($"Activator config \"{FilePath}\" is incorrect");
 
             return serviceInstances;
         }

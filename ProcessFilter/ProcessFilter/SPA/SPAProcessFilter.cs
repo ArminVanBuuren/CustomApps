@@ -281,7 +281,7 @@ namespace SPAFilter.SPA
         void FilterSCOperations(Func<BusinessProcess, bool> bpFilter, Func<IHostType, bool> neFilter, Func<IOperation, bool> opFilter)
         {
             if (!File.Exists(SCPath))
-                throw new Exception($"File \"{SCPath}\" not found!");
+                throw new Exception($"File \"{SCPath}\" not found");
 
             FilterProcesses(bpFilter);
             HostTypes = new ServiceCatalog(SCPath);
