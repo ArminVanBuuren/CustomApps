@@ -101,74 +101,86 @@ namespace SPAFilter.SPA.Components.SRI
                 AddXmlNode(XPATH.Select(navigator, $"/Configuration/RestrictionList/Restriction[RFS[@name='{rfsName}']]"), RestrictionList);
                 AddXmlNode(XPATH.Select(navigator, $"/Configuration/ScenarioList/Scenario[RFS[@name='{rfsName}']]"), ScenarioList);
 
-
-                if (!navigator.Select($"/Configuration/CFSList/CFS[RFS[@name='{rfsName}']]", out var cfsListConfig))
-                    return;
-
                 var isMarkesCFSList = new List<string>();
-                foreach (var cfs in cfsListConfig)
+                if (navigator.Select($"/Configuration/CFSList/CFS[RFS[@name='{rfsName}']]", out var cfsListConfig))
                 {
-                    var cfsName = cfs.Node.Attributes?["name"]?.Value;
-                    var isMarker = cfs.Node.Attributes?["isMarker"]?.Value;
-
-                    if(cfsName == null)
-                        throw new Exception("Service Catalog is invalid. Not found attribute \"name\" in CFS.");
-
-                    AddXmlNode(XPATH.Select(navigator, $"/Configuration/CFSGroupList/CFSGroup[CFS[@name='{cfsName}']]"), CFSGroupList);
-
-                    if (isMarker != null && isMarker.Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                    foreach (var cfs in cfsListConfig)
                     {
-                        isMarkesCFSList.Add(cfsName);
-                    }
+                        var cfsName = cfs.Node.Attributes?["name"]?.Value;
+                        var isMarker = cfs.Node.Attributes?["isMarker"]?.Value;
 
-                    var cloneCFS = cfs.Node.Clone();
-                    for (var index = 0; index < cloneCFS.ChildNodes.Count; index++)
-                    {
-                        var childNode = cloneCFS.ChildNodes[index];
-                        var childNodeName = childNode.Attributes?["name"]?.Value;
-                        switch (childNode.Name)
+                        if (cfsName == null)
+                            throw new Exception("Service Catalog is invalid. Not found attribute \"name\" in CFS.");
+
+                        AddXmlNode(XPATH.Select(navigator, $"/Configuration/CFSGroupList/CFSGroup[CFS[@name='{cfsName}']]"), CFSGroupList);
+
+                        if (isMarker != null && isMarker.Equals("true", StringComparison.CurrentCultureIgnoreCase))
                         {
-                            case "RFS":
-                                if (navigator.SelectFirst($"/Configuration/RFSList/RFS[@name='{childNodeName}']/@hostType", out var hostType1) && hostType1.Value.Equals(rfsHostType))
-                                    continue;
-                                break;
-                            case "RFSGroup":
-                                if (navigator.SelectFirst($"/Configuration/RFSGroupList/RFSGroup[@name='{childNodeName}']", out var rfsGroupList))
-                                {
-                                    var isExist = false;
-                                    foreach (XmlNode rfsGroupChild in rfsGroupList.Node.ChildNodes)
+                            isMarkesCFSList.Add(cfsName);
+                        }
+
+                        var cloneCFS = cfs.Node.Clone();
+                        for (var index = 0; index < cloneCFS.ChildNodes.Count; index++)
+                        {
+                            var childNode = cloneCFS.ChildNodes[index];
+                            var childNodeName = childNode.Attributes?["name"]?.Value;
+                            switch (childNode.Name)
+                            {
+                                case "RFS":
+                                    if (navigator.SelectFirst($"/Configuration/RFSList/RFS[@name='{childNodeName}']/@hostType", out var hostType1) && hostType1.Value.Equals(rfsHostType))
+                                        continue;
+                                    break;
+                                case "RFSGroup":
+                                    if (navigator.SelectFirst($"/Configuration/RFSGroupList/RFSGroup[@name='{childNodeName}']", out var rfsGroupList))
                                     {
-                                        var childRfsName = rfsGroupChild.Attributes?["name"]?.Value;
-                                        if (!childRfsName.IsNullOrEmpty() 
-                                            && navigator.SelectFirst($"/Configuration/RFSList/RFS[@name='{childRfsName}']/@hostType", out var hostType2) 
-                                            && hostType2.Value.Equals(rfsHostType))
+                                        var isExist = false;
+                                        foreach (XmlNode rfsGroupChild in rfsGroupList.Node.ChildNodes)
                                         {
-                                            isExist = true;
-                                            break;
+                                            var childRfsName = rfsGroupChild.Attributes?["name"]?.Value;
+                                            if (!childRfsName.IsNullOrEmpty()
+                                                && navigator.SelectFirst($"/Configuration/RFSList/RFS[@name='{childRfsName}']/@hostType", out var hostType2)
+                                                && hostType2.Value.Equals(rfsHostType))
+                                            {
+                                                isExist = true;
+                                                break;
+                                            }
+                                        }
+
+                                        if (isExist)
+                                        {
+                                            RFSGroupList.Add(rfsGroupList.Node);
+                                            continue;
                                         }
                                     }
 
-                                    if (isExist)
-                                    {
-                                        RFSGroupList.Add(rfsGroupList.Node);
-                                        continue;
-                                    }
-                                }
-                                break;
+                                    break;
+                            }
+
+                            cloneCFS.RemoveChild(childNode);
+                            index--;
                         }
 
-                        cloneCFS.RemoveChild(childNode);
-                        index--;
+                        CFSList.Add(cloneCFS);
                     }
-
-                    CFSList.Add(cloneCFS);
                 }
 
-                foreach (var isMarkerCFS in isMarkesCFSList)
+                if (isMarkesCFSList.Count > 0 && navigator.Select($"/Configuration/CFSList/CFS[@copyOf!='']", out var copiedCFSList))
                 {
-                    if (navigator.Select($"/Configuration/CFSList/CFS[@copyOf='{isMarkerCFS}']", out var copiedCFS))
+                    foreach (var copiedCFS in copiedCFSList)
                     {
-                        CFSList.AddRange(copiedCFS.Select(x => x.Node));
+                        var copyOfList = copiedCFS.Node.Attributes?["copyOf"]?.Value;
+                        if (copyOfList == null)
+                            continue;
+
+                        if (copyOfList.Split(',').Any(x => isMarkesCFSList.Any(p => p.Equals(x.Trim()))))
+                        {
+                            CFSList.Add(copiedCFS.Node);
+                            var cfsName = copiedCFS.Node.Attributes?["name"]?.Value;
+                            if (cfsName != null)
+                            {
+                                AddXmlNode(XPATH.Select(navigator, $"/Configuration/CFSGroupList/CFSGroup[CFS[@name='{cfsName}']]"), CFSGroupList);
+                            }
+                        }
                     }
                 }
 

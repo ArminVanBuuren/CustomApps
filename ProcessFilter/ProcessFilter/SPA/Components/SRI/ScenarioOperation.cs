@@ -36,8 +36,6 @@ namespace SPAFilter.SPA.Components.SRI
                     _bindings.CombineWith(rfsOperation.Bindings);
                 }
 
-                //_bindings.Finnaly();
-
                 return _bindings;
             }
         }

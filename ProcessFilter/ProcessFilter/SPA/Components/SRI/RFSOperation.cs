@@ -34,9 +34,6 @@ namespace SPAFilter.SPA.Components.SRI
 
                 _bindings = new RFSBindings(this, RFSName, _navigator);
 
-                //if (IsSeparated)
-                //    _bindings.Finnaly();
-
                 return _bindings;
             }
         }
