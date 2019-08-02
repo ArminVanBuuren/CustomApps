@@ -186,7 +186,10 @@
   <data name="Form_GridView_NotSelectedAnyRows" xml:space="preserve">
     <value>Please select a row</value>
   </data>
-  <data name="Form_PrintXMLFiles_Info" xml:space="preserve">
+  <data name="Form_PrintXMLFiles_ToolTip" xml:space="preserve">
     <value>Format all filtered xml files</value>
+  </data>
+  <data name="Form_ToolTip_SearchPattern" xml:space="preserve">
+    <value>To search for a specified pattern, you can use % symbol. Example: %Assign%</value>
   </data>
 </root>

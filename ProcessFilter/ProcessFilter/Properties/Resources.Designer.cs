@@ -171,20 +171,20 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Format all filtered xml files.
-        /// </summary>
-        internal static string Form_PrintXMLFiles_Info {
-            get {
-                return ResourceManager.GetString("Form_PrintXMLFiles_Info", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Successfully completed.
         /// </summary>
         internal static string Form_PrintXMLFiles_Successfully {
             get {
                 return ResourceManager.GetString("Form_PrintXMLFiles_Successfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Format all filtered xml files.
+        /// </summary>
+        internal static string Form_PrintXMLFiles_ToolTip {
+            get {
+                return ResourceManager.GetString("Form_PrintXMLFiles_ToolTip", resourceCulture);
             }
         }
         
@@ -230,6 +230,15 @@ namespace SPAFilter.Properties {
         internal static string Form_Status_Scenarios {
             get {
                 return ResourceManager.GetString("Form_Status_Scenarios", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To search for a specified pattern, you can use % symbol. Example: %Assign%.
+        /// </summary>
+        internal static string Form_ToolTip_SearchPattern {
+            get {
+                return ResourceManager.GetString("Form_ToolTip_SearchPattern", resourceCulture);
             }
         }
         

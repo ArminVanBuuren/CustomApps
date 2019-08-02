@@ -284,7 +284,10 @@ namespace SPAFilter
         {
             InitializeComponent();
             KeyPreview = true; // для того чтобы работали горячие клавиши по всей форме и всем контролам
-            new ToolTip().SetToolTip(PrintXMLButton, Resources.Form_PrintXMLFiles_Info);
+            new ToolTip().SetToolTip(PrintXMLButton, Resources.Form_PrintXMLFiles_ToolTip);
+            new ToolTip().SetToolTip(ProcessesComboBox, Resources.Form_ToolTip_SearchPattern);
+            new ToolTip().SetToolTip(OperationComboBox, Resources.Form_ToolTip_SearchPattern);
+            new ToolTip().SetToolTip(NetSettComboBox, Resources.Form_ToolTip_SearchPattern);
 
             _spaFilter = new SPAProcessFilter();
 
