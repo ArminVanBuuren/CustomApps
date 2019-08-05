@@ -19,7 +19,8 @@ namespace SPAFilter.SPA
 {
     public class SPAProcessFilter
     {
-        readonly object _activatorsSync = new object();
+        //readonly object BP_OP_SYNC = new object();
+        readonly object ACTIVATORS_SYNC = new object();
         readonly Dictionary<string, ServiceActivator> _activators = new Dictionary<string, ServiceActivator>(StringComparer.CurrentCultureIgnoreCase);
 
         public string ProcessPath { get; private set; }
@@ -346,7 +347,7 @@ namespace SPAFilter.SPA
                 var errors = string.Empty;
                 foreach (var filePath in filePathList)
                 {
-                    lock (_activatorsSync)
+                    lock (ACTIVATORS_SYNC)
                     {
                         if (_activators.ContainsKey(filePath))
                         {
@@ -380,7 +381,7 @@ namespace SPAFilter.SPA
             {
                 foreach (var filePath in filePathList)
                 {
-                    lock (_activatorsSync)
+                    lock (ACTIVATORS_SYNC)
                     {
                         if (_activators.ContainsKey(filePath))
                         {
@@ -401,7 +402,7 @@ namespace SPAFilter.SPA
 
         void ReloadActivators()
         {
-            lock (_activatorsSync)
+            lock (ACTIVATORS_SYNC)
             {
                 foreach (var activator in _activators)
                 {
@@ -423,7 +424,7 @@ namespace SPAFilter.SPA
         CollectionTemplate<ServiceInstance> GetServiceInstances(bool getValid = false)
         {
             var intsances = new CollectionTemplate<ServiceInstance>();
-            lock (_activatorsSync)
+            lock (ACTIVATORS_SYNC)
             {
                 foreach (var instance in _activators.Values.SelectMany(p => p.Instances).OrderBy(p => p.HostTypeName).ThenBy(p => p.Name))
                 {
@@ -527,7 +528,7 @@ namespace SPAFilter.SPA
         {
             try
             {
-                if (HostTypes is ServiceCatalog)
+                if (HostTypes == null || HostTypes is ServiceCatalog)
                     throw new Exception("You can create Service Catalog only with ROBP operations.");
 
                 var sc = new ServiceCatalogBuilder(HostTypes, rdServices, progressCalc);

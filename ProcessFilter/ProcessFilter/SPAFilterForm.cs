@@ -83,9 +83,13 @@ namespace SPAFilter
                     {
                         ROBPOperationTextBox.Enabled = !_IsInProgress;
                         ROBPOperationButtonOpen.Enabled = !_IsInProgress;
+                        ServiceCatalogTextBox.Enabled = false;
+                        ServiceCatalogOpenButton.Enabled = false;
                     }
                     else
                     {
+                        ROBPOperationTextBox.Enabled = false;
+                        ROBPOperationButtonOpen.Enabled = false;
                         ServiceCatalogTextBox.Enabled = !_IsInProgress;
                         ServiceCatalogOpenButton.Enabled = !_IsInProgress;
                     }
@@ -126,14 +130,14 @@ namespace SPAFilter
                     switch (_loadIterator)
                     {
                         case 1 when value:
-                            FilterButton.Enabled = false;
+                            IsInProgress = true;
 
                             progressBar.Visible = true;
                             progressBar.MarqueeAnimationSpeed = 10;
                             progressBar.Style = ProgressBarStyle.Marquee;
                             break;
                         case 0:
-                            FilterButton.Enabled = true;
+                            IsInProgress = false;
 
                             progressBar.Visible = false;
                             progressBar.Style = ProgressBarStyle.Blocks;
@@ -733,11 +737,14 @@ namespace SPAFilter
             ServiceCatalogRadioButton.CheckedChanged -= ServiceCatalogRadioButton_CheckedChanged;
 
             ServiceCatalogRadioButton.Checked = !ROBPOperationsRadioButton.Checked;
-            ServiceCatalogTextBox.Enabled = ServiceCatalogRadioButton.Checked;
-            ServiceCatalogOpenButton.Enabled = ServiceCatalogRadioButton.Checked;
 
-            ROBPOperationTextBox.Enabled = ROBPOperationsRadioButton.Checked;
-            ROBPOperationButtonOpen.Enabled = ROBPOperationsRadioButton.Checked;
+            if (!IsInProgress)
+            {
+                ServiceCatalogTextBox.Enabled = ServiceCatalogRadioButton.Checked;
+                ServiceCatalogOpenButton.Enabled = ServiceCatalogRadioButton.Checked;
+                ROBPOperationTextBox.Enabled = ROBPOperationsRadioButton.Checked;
+                ROBPOperationButtonOpen.Enabled = ROBPOperationsRadioButton.Checked;
+            }
 
             await AssignOperations();
 
@@ -749,11 +756,14 @@ namespace SPAFilter
             ROBPOperationsRadioButton.CheckedChanged -= ROBPOperationsRadioButton_CheckedChanged;
 
             ROBPOperationsRadioButton.Checked = !ServiceCatalogRadioButton.Checked;
-            ROBPOperationTextBox.Enabled = ROBPOperationsRadioButton.Checked;
-            ROBPOperationButtonOpen.Enabled = ROBPOperationsRadioButton.Checked;
 
-            ServiceCatalogTextBox.Enabled = ServiceCatalogRadioButton.Checked;
-            ServiceCatalogOpenButton.Enabled = ServiceCatalogRadioButton.Checked;
+            if (!IsInProgress)
+            {
+                ROBPOperationTextBox.Enabled = ROBPOperationsRadioButton.Checked;
+                ROBPOperationButtonOpen.Enabled = ROBPOperationsRadioButton.Checked;
+                ServiceCatalogTextBox.Enabled = ServiceCatalogRadioButton.Checked;
+                ServiceCatalogOpenButton.Enabled = ServiceCatalogRadioButton.Checked;
+            }
 
             await AssignOperations();
 
@@ -819,7 +829,7 @@ namespace SPAFilter
             {
                 switch (type)
                 {
-                    case SPAProcessFilterType.Processes when !ProcessesTextBox.Text.IsNullOrEmptyTrim():
+                    case SPAProcessFilterType.Processes:
                         await _spaFilter.AssignProcessesAsync(ProcessesTextBox.Text);
 
                         ProcessesComboBox.DataSource = _spaFilter.Processes.Select(p => p.Name).ToList();
@@ -827,8 +837,10 @@ namespace SPAFilter
                         ProcessesComboBox.DisplayMember = null;
 
                         UpdateLastPath(ProcessesTextBox.Text);
-                        ClearDataGrid();
+                        ProcessesTextBox.BackColor = Color.White;
 
+                        ClearDataGrid();
+                        
                         break;
                     case SPAProcessFilterType.SCOperations:
                     case SPAProcessFilterType.ROBPOperations:
@@ -841,10 +853,12 @@ namespace SPAFilter
                                 case SPAProcessFilterType.SCOperations:
                                     await _spaFilter.AssignSCOperationsAsync(ServiceCatalogTextBox.Text);
                                     UpdateLastPath(Path.GetDirectoryName(ServiceCatalogTextBox.Text));
+                                    ServiceCatalogTextBox.BackColor = Color.White;
                                     break;
                                 case SPAProcessFilterType.ROBPOperations:
                                     await _spaFilter.AssignROBPOperationsAsync(ROBPOperationTextBox.Text);
                                     UpdateLastPath(ROBPOperationTextBox.Text);
+                                    ROBPOperationTextBox.BackColor = Color.White;
                                     break;
                             }
                         }
