@@ -222,6 +222,10 @@ namespace SPAFilter.SPA
         {
             ProcessPath = processPath;
             Processes = null;
+
+            if(ProcessPath.IsNullOrEmptyTrim())
+                return;
+
             await Task.Factory.StartNew(() => FilterProcesses(null));
         }
 
@@ -245,6 +249,10 @@ namespace SPAFilter.SPA
             HostTypes = null;
             Scenarios = null;
             Commands = null;
+
+            if(ROBPHostTypesPath.IsNullOrEmptyTrim())
+                return;
+
             await Task.Factory.StartNew(() => FilterROBPOperations(null, null, null));
         }
 
@@ -269,13 +277,17 @@ namespace SPAFilter.SPA
             }
         }
 
-        public async Task AssignSCOperationsAsync(string filePath)
+        public async Task AssignSCOperationsAsync(string serviceCatalogFilePath)
         {
-            SCPath = filePath;
             ROBPHostTypesPath = null;
+            SCPath = serviceCatalogFilePath;
             HostTypes = null;
             Scenarios = null;
             Commands = null;
+
+            if(SCPath.IsNullOrEmptyTrim())
+                return;
+
             await Task.Factory.StartNew(() => FilterSCOperations(null, null, null));
         }
 

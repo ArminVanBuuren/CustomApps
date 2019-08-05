@@ -296,14 +296,14 @@ namespace SPAFilter
 
         void PreInit()
         {
+            _spaFilter = new SPAProcessFilter();
+
             InitializeComponent();
             KeyPreview = true; // для того чтобы работали горячие клавиши по всей форме и всем контролам
             new ToolTip().SetToolTip(PrintXMLButton, Resources.Form_PrintXMLFiles_ToolTip);
             new ToolTip().SetToolTip(ProcessesComboBox, Resources.Form_ToolTip_SearchPattern);
             new ToolTip().SetToolTip(OperationComboBox, Resources.Form_ToolTip_SearchPattern);
             new ToolTip().SetToolTip(NetSettComboBox, Resources.Form_ToolTip_SearchPattern);
-
-            _spaFilter = new SPAProcessFilter();
 
             ROBPOperationsRadioButton.CheckedChanged += ROBPOperationsRadioButton_CheckedChanged;
             ServiceCatalogRadioButton.CheckedChanged += ServiceCatalogRadioButton_CheckedChanged;
@@ -355,7 +355,11 @@ namespace SPAFilter
             Closing += (s, e) => SaveData();
 
             IsInititializating = false;
+
+            RefreshStatus();
         }
+
+        #region Application Update
 
         private static void AppUpdater_OnFetch(object sender, ApplicationFetchingArgs args)
         {
@@ -403,6 +407,8 @@ namespace SPAFilter
         {
 
         }
+
+        #endregion
 
         #region Check warning rows
 
@@ -775,8 +781,8 @@ namespace SPAFilter
             var type = ROBPOperationsRadioButton.Checked ? SPAProcessFilterType.ROBPOperations : SPAProcessFilterType.SCOperations;
             switch (type)
             {
-                case SPAProcessFilterType.ROBPOperations when !ROBPOperationTextBox.Text.IsNullOrEmptyTrim():
-                case SPAProcessFilterType.SCOperations when !ServiceCatalogTextBox.Text.IsNullOrEmptyTrim():
+                case SPAProcessFilterType.ROBPOperations:
+                case SPAProcessFilterType.SCOperations:
                     await AssignAsync(type);
                     break;
             }
@@ -852,7 +858,7 @@ namespace SPAFilter
                             {
                                 case SPAProcessFilterType.SCOperations:
                                     await _spaFilter.AssignSCOperationsAsync(ServiceCatalogTextBox.Text);
-                                    UpdateLastPath(Path.GetDirectoryName(ServiceCatalogTextBox.Text));
+                                    UpdateLastPath(ServiceCatalogTextBox.Text);
                                     ServiceCatalogTextBox.BackColor = Color.White;
                                     break;
                                 case SPAProcessFilterType.ROBPOperations:
