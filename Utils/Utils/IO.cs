@@ -29,20 +29,21 @@ namespace Utils
                 file.Read(bom, 0, 4);
             }
 
-            //Encoding _utf8WithoutBom = new UTF8Encoding(false);
-            //using (var reader = new StreamReader(filename, _utf8WithoutBom, true))
-            //{
-            //    reader.Peek(); // you need this!
-            //    var encoding = reader.CurrentEncoding;
-            //}
-
             // Analyze the BOM
             if (bom[0] == 0x2b && bom[1] == 0x2f && bom[2] == 0x76) return Encoding.UTF7;
             if (bom[0] == 0xef && bom[1] == 0xbb && bom[2] == 0xbf) return Encoding.UTF8;
             if (bom[0] == 0xff && bom[1] == 0xfe) return Encoding.Unicode; //UTF-16LE
             if (bom[0] == 0xfe && bom[1] == 0xff) return Encoding.BigEndianUnicode; //UTF-16BE
             if (bom[0] == 0 && bom[1] == 0 && bom[2] == 0xfe && bom[3] == 0xff) return Encoding.UTF32;
-            return Encoding.ASCII;
+            return Encoding.UTF8;
+
+            //using (var reader = new StreamReader(filename, Encoding.Default, true))
+            //{
+            //    if (reader.Peek() >= 0) // you need this!
+            //        reader.Read();
+
+            //    return reader.CurrentEncoding;
+            //}
         }
 
         public static string SafeReadFile(string path, bool convertToLower = false)
