@@ -357,9 +357,10 @@ namespace SPAFilter.SPA
             await Task.Factory.StartNew(() =>
             {
                 var errors = string.Empty;
-                foreach (var filePath in filePathList)
+                lock (ACTIVATORS_SYNC)
                 {
-                    lock (ACTIVATORS_SYNC)
+                    var taskList = new List<Task>();
+                    foreach (var filePath in filePathList)
                     {
                         if (_activators.ContainsKey(filePath))
                         {
@@ -367,15 +368,23 @@ namespace SPAFilter.SPA
                             continue;
                         }
 
-                        try
+                        var task = new Task(() =>
                         {
-                            _activators.Add(filePath, new ServiceActivator(filePath));
-                        }
-                        catch (Exception ex)
-                        {
-                            errors += $"{ex.Message}\r\n";
-                        }
+                            try
+                            {
+                                var file = filePath;
+                                _activators.Add(file, new ServiceActivator(file));
+                            }
+                            catch (Exception ex)
+                            {
+                                errors += $"{ex.Message}\r\n";
+                            }
+                        });
+                        task.Start();
+                        taskList.Add(task);
                     }
+
+                    Task.WaitAll(taskList.ToArray());
                 }
 
                 LoadActivators();
@@ -391,9 +400,9 @@ namespace SPAFilter.SPA
         {
             await Task.Factory.StartNew(() =>
             {
-                foreach (var filePath in filePathList)
+                lock (ACTIVATORS_SYNC)
                 {
-                    lock (ACTIVATORS_SYNC)
+                    foreach (var filePath in filePathList)
                     {
                         if (_activators.ContainsKey(filePath))
                         {
@@ -416,15 +425,15 @@ namespace SPAFilter.SPA
         {
             lock (ACTIVATORS_SYNC)
             {
-                foreach (var activator in _activators)
-                {
-                    activator.Value.Refresh();
-                }
+                Task.WaitAll(_activators.Values.Select(x => Task.Factory.StartNew(x.Refresh)).ToArray());
             }
 
             LoadActivators();
         }
 
+        /// <summary>
+        /// Обновить свойства ServiceInstances, Scenarios и Commands
+        /// </summary>
         void LoadActivators()
         {
             ServiceInstances = GetServiceInstances();

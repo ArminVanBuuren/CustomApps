@@ -97,7 +97,6 @@ namespace SPAFilter
                     addServiceInstancesButton.Enabled = !_IsInProgress;
                     removeServiceInstancesButton.Enabled = !_IsInProgress;
                     refreshServiceInstancesButton.Enabled = !_IsInProgress;
-                    dataGridServiceInstances.Enabled = !_IsInProgress;
 
                     dataGridProcesses.Visible = !_IsInProgress;
                     dataGridOperations.Visible = !_IsInProgress;
@@ -300,10 +299,14 @@ namespace SPAFilter
 
             InitializeComponent();
             KeyPreview = true; // для того чтобы работали горячие клавиши по всей форме и всем контролам
-            new ToolTip().SetToolTip(PrintXMLButton, Resources.Form_PrintXMLFiles_ToolTip);
-            new ToolTip().SetToolTip(ProcessesComboBox, Resources.Form_ToolTip_SearchPattern);
-            new ToolTip().SetToolTip(OperationComboBox, Resources.Form_ToolTip_SearchPattern);
-            new ToolTip().SetToolTip(NetSettComboBox, Resources.Form_ToolTip_SearchPattern);
+            var tooltipPrintXML = new ToolTip
+            {
+                InitialDelay = 50
+            };
+            tooltipPrintXML.SetToolTip(PrintXMLButton, Resources.Form_PrintXMLFiles_ToolTip);
+            tooltipPrintXML.SetToolTip(ProcessesComboBox, Resources.Form_ToolTip_SearchPattern);
+            tooltipPrintXML.SetToolTip(OperationComboBox, Resources.Form_ToolTip_SearchPattern);
+            tooltipPrintXML.SetToolTip(NetSettComboBox, Resources.Form_ToolTip_SearchPattern);
 
             ROBPOperationsRadioButton.CheckedChanged += ROBPOperationsRadioButton_CheckedChanged;
             ServiceCatalogRadioButton.CheckedChanged += ServiceCatalogRadioButton_CheckedChanged;
@@ -952,7 +955,6 @@ namespace SPAFilter
                 addServiceInstancesButton.Enabled = false;
                 removeServiceInstancesButton.Enabled = false;
                 refreshServiceInstancesButton.Enabled = false;
-                dataGridServiceInstances.Visible = false;
 
                 await getInstances;
                 await AssignServiceInstances();
@@ -968,7 +970,6 @@ namespace SPAFilter
                 addServiceInstancesButton.Enabled = true;
                 removeServiceInstancesButton.Enabled = true;
                 refreshServiceInstancesButton.Enabled = true;
-                dataGridServiceInstances.Visible = true;
 
                 ClearDataGrid(true);
                 RefreshStatus();
@@ -977,6 +978,7 @@ namespace SPAFilter
 
         async Task AssignServiceInstances()
         {
+            //dataGridServiceInstances.Enabled = !_IsInProgress; - из за ебучего Enabled дисеблился scrollbar. Не дисейблить.
             dataGridServiceInstances.DataSource = null;
             dataGridServiceInstances.Refresh();
 
