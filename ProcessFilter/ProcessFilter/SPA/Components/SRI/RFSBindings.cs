@@ -21,6 +21,7 @@ namespace SPAFilter.SPA.Components.SRI
         public DistinctList<XmlNode> RestrictionList { get; } = new DistinctList<XmlNode>();
         public DistinctList<XmlNode> RFSGroupList { get;} = new DistinctList<XmlNode>();
         public DistinctList<XmlNode> HandlerList { get; } = new DistinctList<XmlNode>();
+        public DistinctList<XmlNode> RFSDependencyList { get; } = new DistinctList<XmlNode>();
         public DistinctList<XmlNode> ScenarioList { get; } = new DistinctList<XmlNode>();
 
         internal RFSBindings(CatalogOperation baseOperation)
@@ -67,6 +68,7 @@ namespace SPAFilter.SPA.Components.SRI
             CFSGroupList.AddRange(foreignBindings.CFSGroupList);
             RestrictionList.AddRange(foreignBindings.RestrictionList);
             RFSGroupList.AddRange(foreignBindings.RFSGroupList);
+            RFSDependencyList.AddRange(foreignBindings.RFSDependencyList);
             HandlerList.AddRange(foreignBindings.HandlerList);
             ScenarioList.AddRange(foreignBindings.ScenarioList);
         }
@@ -101,8 +103,17 @@ namespace SPAFilter.SPA.Components.SRI
                 AddXmlNode(XPATH.Select(navigator, $"/Configuration/RestrictionList/Restriction[RFS[@name='{rfsName}']]"), RestrictionList);
                 AddXmlNode(XPATH.Select(navigator, $"/Configuration/ScenarioList/Scenario[RFS[@name='{rfsName}']]"), ScenarioList);
 
+                var rfsGroupsCFSXPath = string.Empty;
+                AddXmlNode(XPATH.Select(navigator, $"/Configuration/RFSGroupList/RFSGroup[RFS[@name='{rfsName}']]"), RFSGroupList);
+                foreach (var rfsGroup in RFSGroupList)
+                {
+                    var rfsGroupName = rfsGroup.Attributes?["name"]?.Value;
+                    if (!string.IsNullOrEmpty(rfsGroupName))
+                        rfsGroupsCFSXPath += $" | /Configuration/CFSList/CFS[RFSGroup[@name='{rfsGroupName}']]";
+                }
+
                 var isMarkesCFSList = new List<string>();
-                if (navigator.Select($"/Configuration/CFSList/CFS[RFS[@name='{rfsName}']]", out var cfsListConfig))
+                if (navigator.Select($"/Configuration/CFSList/CFS[RFS[@name='{rfsName}']]{rfsGroupsCFSXPath}", out var cfsListConfig))
                 {
                     foreach (var cfs in cfsListConfig)
                     {
@@ -183,6 +194,8 @@ namespace SPAFilter.SPA.Components.SRI
                         }
                     }
                 }
+
+                AddXmlNode(XPATH.Select(navigator, $"/Configuration/RFSDependencyList[RFSDependency/@parent='{rfsName}']/* | /Configuration/RFSDependencyList[RFSDependency/@child='{rfsName}']/*"), RFSDependencyList);
 
                 foreach (var rfsGroup in RFSGroupList)
                 {

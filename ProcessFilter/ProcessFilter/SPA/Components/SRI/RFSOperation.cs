@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.XPath;
@@ -19,15 +20,37 @@ namespace SPAFilter.SPA.Components.SRI
 
         internal bool IsSubscription { get; set; } = false;
 
+        /// <inheritdoc />
         /// <summary>
         /// Если не найден ни один CFS и дочерний RFS и не добавлен ни в один сценарий (Тут не учитываются хэндлены!)
         /// </summary>
-        protected internal override bool IsDropped => ChildRFS.Count == 0 && ChildCFS.Count == 0 && IncludedToScenario.Count == 0;
+        protected internal override bool IsDropped
+        {
+            get
+            {
+                if (ChildCFSList.Count > 0 || IncludedToScenarios.Count > 0 
+                   || _navigator.SelectFirst($"/Configuration/HandlerList/Handler//RFS[@name='{RFSName}'] | /Configuration/RFSGroupList/RFSGroup//RFS[@name='{RFSName}']", out var res))
+                    return false;
+
+                if (ChildRFSList.Count > 0 )
+                {
+                    foreach (var childRFS in ChildRFSList)
+                    {
+                        var childRFSName = childRFS?.Attributes?["name"]?.Value;
+                        if (!string.IsNullOrEmpty(childRFSName) 
+                              && _navigator.SelectFirst($"/Configuration/CFSList/CFS/RFS[@name='{childRFSName}'] | /Configuration/HandlerList/Handler//RFS[@name='{childRFSName}'] | /Configuration/RFSGroupList/RFSGroup//RFS[@name='{childRFSName}']", out var res2))
+                            return false;
+                    }
+                }
+
+                return true;
+            }
+        }
 
         public XmlNode Node { get; }
-        public DistinctList<XmlNode> ChildRFS { get; } = new DistinctList<XmlNode>();
-        public DistinctList<string> ChildCFS { get; } = new DistinctList<string>();
-        public List<ScenarioOperation> IncludedToScenario { get; } = new List<ScenarioOperation>();
+        public DistinctList<XmlNode> ChildRFSList { get; } = new DistinctList<XmlNode>();
+        public DistinctList<string> ChildCFSList { get; } = new DistinctList<string>();
+        public List<ScenarioOperation> IncludedToScenarios { get; } = new List<ScenarioOperation>();
 
         internal override RFSBindings Bindings
         {
@@ -45,7 +68,7 @@ namespace SPAFilter.SPA.Components.SRI
         /// <summary>
         /// true - если текущий RFS используется как отдельная операция или false - относится к каталожному сценарию
         /// </summary>
-        public bool IsSeparated => !(IncludedToScenario.Count > 0 && ChildCFS.Count == 0);
+        public bool IsSeparated => !(IncludedToScenarios.Count > 0 && ChildCFSList.Count == 0);
         //{ get; internal set; } = true;
 
         public override string Body
@@ -63,6 +86,7 @@ namespace SPAFilter.SPA.Components.SRI
                 AppendXmlNode(builder, "CFSGroupList", Bindings.CFSGroupList);
                 AppendXmlNode(builder, "RFSGroupList", Bindings.RFSGroupList);
                 AppendXmlNode(builder, "HandlerList", Bindings.HandlerList);
+                AppendXmlNode(builder, "RFSDependencyList", Bindings.RFSDependencyList);
                 AppendXmlNode(builder, "RestrictionList", Bindings.RestrictionList);
                 AppendXmlNode(builder, "ScenarioList", Bindings.ScenarioList);
 
@@ -73,23 +97,23 @@ namespace SPAFilter.SPA.Components.SRI
 
         public RFSOperation(XmlNode node, string rfsName, string linkType, string hostTypeName, XPathNavigator navigator, ServiceCatalog catalog)
         {
+            RFSName = rfsName;
+            LinkType = linkType;
+            HostTypeName = hostTypeName;
+            _navigator = navigator;
+
             Node = node;
             if (Node == null && navigator.SelectFirst($"/Configuration/RFSList/RFS[@name='{rfsName}']", out var getRFS))
             {
                 Node = getRFS.Node;
             }
-
-            _navigator = navigator;
-            RFSName = rfsName;
-            LinkType = linkType;
-
-            HostTypeName = hostTypeName;
+            
             Name = $"{catalog.Prefix}{LinkType}.{RFSName}";
         }
 
         public override string ToString()
         {
-            return $"{base.ToString()} RFS=[{ChildRFS.Count}] CFS=[{ChildCFS.Count}] Scenario=[{IncludedToScenario.Count}]";
+            return $"{base.ToString()} RFS=[{ChildRFSList.Count}] CFS=[{ChildCFSList.Count}] Scenario=[{IncludedToScenarios.Count}]";
         }
     }
 }

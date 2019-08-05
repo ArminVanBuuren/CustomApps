@@ -148,6 +148,7 @@ namespace SPAFilter.SPA.Collection
                     {
                         var baseRFS = AddBaseRFS(rfsCFSs.Key, rfsCFSs, rfsName, linkType, hostType, navigator);
                         baseRFS.IsSubscription = true;
+                        AddChildCFS(baseRFS, rfsCFSs.Value);
                     }
                     continue;
                 }
@@ -157,7 +158,7 @@ namespace SPAFilter.SPA.Collection
                     {
                         foreach (var baseRFS in result)
                         {
-                            baseRFS.ChildRFS.Add(rfsCFSs.Key);
+                            baseRFS.ChildRFSList.Add(rfsCFSs.Key);
                             AddChildCFS(baseRFS, rfsCFSs.Value);
                         }
 
@@ -197,12 +198,12 @@ namespace SPAFilter.SPA.Collection
                                 if (priorityCFSList.Count() > 1)
                                 {
                                     var baseModifyRFS = AddBaseRFS(result.First().Node, rfsCFSs, baseRFSName, "Modify", hostType, navigator);
-                                    AddChildCFS(baseModifyRFS, result.First().ChildRFS);
+                                    AddChildCFS(baseModifyRFS, result.First().ChildRFSList);
                                 }
                                 else if (navigator.Select($"/Configuration/HandlerList/Handler[@type='MergeRFS' and Configuration/RFS[@name='{rfsName}']]", out var res))
                                 {
                                     var baseModifyRFS = AddBaseRFS(result.First().Node, rfsCFSs, baseRFSName, "Modify", hostType, navigator);
-                                    AddChildCFS(baseModifyRFS, result.First().ChildRFS);
+                                    AddChildCFS(baseModifyRFS, result.First().ChildRFSList);
                                 }
                             }
                         }
@@ -227,7 +228,7 @@ namespace SPAFilter.SPA.Collection
                     {
                         foreach (var parentRFS in result)
                         {
-                            parentRFS.ChildRFS.Add(rfsCFSs.Key);
+                            parentRFS.ChildRFSList.Add(rfsCFSs.Key);
                             AddChildCFS(parentRFS, rfsCFSs.Value);
                         }
                     }
@@ -286,7 +287,7 @@ namespace SPAFilter.SPA.Collection
         RFSOperation AddBaseRFS(XmlNode node, KeyValuePair<XmlNode, IEnumerable<XmlNode>> rfsCFSs, string rfsName, string linkType, string hostType, XPathNavigator navigator)
         {
             var baseRFS = new RFSOperation(node, rfsName, linkType, hostType, navigator, this);
-            baseRFS.ChildRFS.Add(rfsCFSs.Key);
+            baseRFS.ChildRFSList.Add(rfsCFSs.Key);
             AllRFS.Add(rfsName, baseRFS);
             return baseRFS;
         }
@@ -301,7 +302,7 @@ namespace SPAFilter.SPA.Collection
         static void AddChildCFS(RFSOperation rfs, IEnumerable<XmlNode> cfsList)
         {
             if(cfsList != null)
-                rfs.ChildCFS.AddRange(cfsList.Select(p => p.Attributes?["name"]?.Value));
+                rfs.ChildCFSList.AddRange(cfsList.Select(p => p.Attributes?["name"]?.Value));
         }
 
         /// <summary>

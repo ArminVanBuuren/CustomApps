@@ -59,6 +59,7 @@ namespace SPAFilter.SPA.Components.SRI
                 AppendXmlNode(builder, "CFSGroupList", Bindings.CFSGroupList);
                 AppendXmlNode(builder, "RFSGroupList", Bindings.RFSGroupList);
                 AppendXmlNode(builder, "HandlerList", Bindings.HandlerList);
+                AppendXmlNode(builder, "RFSDependencyList", Bindings.RFSDependencyList);
                 AppendXmlNode(builder, "RestrictionList", Bindings.RestrictionList);
 
                 if (!IsInner)
@@ -88,8 +89,8 @@ namespace SPAFilter.SPA.Components.SRI
 
             foreach (var rfs in rfsOperationList.Where(p => p.LinkType.Equals(type, StringComparison.CurrentCultureIgnoreCase)))
             {
-                rfs.ChildCFS.Clear();
-                rfs.IncludedToScenario.Add(this);
+                rfs.ChildCFSList.Clear();
+                rfs.IncludedToScenarios.Add(this);
                 RFSList.Add(rfs);
             }
 
@@ -119,31 +120,31 @@ namespace SPAFilter.SPA.Components.SRI
                 {
                     foreach (var rfs in scenarioRFSs.ChildList)
                     {
-                        rfs.ChildCFS.Clear();
-                        rfs.IncludedToScenario.Add(this);
+                        rfs.ChildCFSList.Clear();
+                        rfs.IncludedToScenarios.Add(this);
                         RFSList.Add(rfs);
                     }
                 }
                 else
                 {
-                    var cfsOfMandatoryRFS = scenarioRFSs.MandatoryList.SelectMany(p => p.ChildCFS).Distinct().ToList();
+                    var cfsOfMandatoryRFS = scenarioRFSs.MandatoryList.SelectMany(p => p.ChildCFSList).Distinct().ToList();
 
                     foreach (var mandRFS in scenarioRFSs.MandatoryList)
                     {
-                        mandRFS.ChildCFS.Clear();
-                        mandRFS.IncludedToScenario.Add(this);
+                        mandRFS.ChildCFSList.Clear();
+                        mandRFS.IncludedToScenarios.Add(this);
                         RFSList.Add(mandRFS);
                     }
                     
                     foreach (var childRFS in scenarioRFSs.ChildList)
                     {
-                        var commonCFS = cfsOfMandatoryRFS.Intersect(childRFS.ChildCFS).ToList();
+                        var commonCFS = cfsOfMandatoryRFS.Intersect(childRFS.ChildCFSList).ToList();
                         foreach (var escapeCFS in commonCFS)
                         {
-                            childRFS.ChildCFS.Remove(escapeCFS);
+                            childRFS.ChildCFSList.Remove(escapeCFS);
                         }
 
-                        childRFS.IncludedToScenario.Add(this);
+                        childRFS.IncludedToScenarios.Add(this);
                         RFSList.Add(childRFS);
                     }
                 }
@@ -215,10 +216,10 @@ namespace SPAFilter.SPA.Components.SRI
                     var anyExistRFS = rfsOperationList.First();
                     foreach (var linkType in scenarioTypeList)
                     {
-                        // это костыль, т.к. хэндлеры в текущей реализации прога не обрабатывает. А хэндлерах могут быть разные настройки где RFS может использоваться с типом modify например, поэтому просто костыльно создаем недостающие
+                        // это костыль, т.к. хэндлеры не проверяются. В хэндлерах могут быть разные настройки где RFS может использоваться с типом modify и т.д., поэтому костыльно создаются недостающие
                         var notExistRFS = new RFSOperation(anyExistRFS.Node, rfsName, linkType, anyExistRFS.HostTypeName, navigator, catalog);
-                        notExistRFS.ChildCFS.AddRange(anyExistRFS.ChildCFS);
-                        notExistRFS.ChildRFS.AddRange(notExistRFS.ChildRFS);
+                        notExistRFS.ChildCFSList.AddRange(anyExistRFS.ChildCFSList);
+                        notExistRFS.ChildRFSList.AddRange(notExistRFS.ChildRFSList);
                         rfsOperationList.Add(notExistRFS);
 
                         if (useType != null && useType.Equals("Mandatory", StringComparison.CurrentCultureIgnoreCase))
