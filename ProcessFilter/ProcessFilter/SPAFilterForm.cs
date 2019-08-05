@@ -41,7 +41,6 @@ namespace SPAFilter
         readonly object _sync = new object();
 
         private bool _IsInProgress = false;
-        private bool _isLoading = false;
 
         private string _lastDirPath = string.Empty;
         private readonly object sync = new object();
@@ -111,38 +110,35 @@ namespace SPAFilter
 
         private bool IsFiltered { get; set; } = false;
 
+        private int _loadIterator = 0;
         private bool IsLoading
         {
-            get => _isLoading;
+            get => _loadIterator > 0;
             set
             {
-                if(_isLoading == value)
-                    return;
-                _isLoading = value;
+                lock (_sync)
+                {
+                    if (value)
+                        _loadIterator++;
+                    else
+                        _loadIterator--;
 
-                if (_isLoading)
-                {
-                    FilterButton.Enabled = false;
-                }
-                else if (!IsInProgress)
-                {
-                    FilterButton.Enabled = true;
-                }
+                    switch (_loadIterator)
+                    {
+                        case 1 when value:
+                            FilterButton.Enabled = false;
 
-                if (IsInProgress)
-                    return;
+                            progressBar.Visible = true;
+                            progressBar.MarqueeAnimationSpeed = 10;
+                            progressBar.Style = ProgressBarStyle.Marquee;
+                            break;
+                        case 0:
+                            FilterButton.Enabled = true;
 
-                if (_isLoading)
-                {
-                    progressBar.Visible = true;
-                    progressBar.MarqueeAnimationSpeed = 10;
-                    progressBar.Style = ProgressBarStyle.Marquee;
-                }
-                else
-                {
-                    progressBar.Visible = false;
-                    progressBar.Style = ProgressBarStyle.Blocks;
-                    IsInititializating = false;
+                            progressBar.Visible = false;
+                            progressBar.Style = ProgressBarStyle.Blocks;
+                            break;
+                    }
                 }
             }
         }
@@ -180,7 +176,6 @@ namespace SPAFilter
             {
                 PreInit();
                 IsLoading = true;
-                //progressBar
 
                 ProcessesTextBox.Text = (string) TryGetSerializationValue(allSavedParams, "ADWFFW", string.Empty);
                 if (!ProcessesTextBox.Text.IsNullOrEmptyTrim())
@@ -354,6 +349,8 @@ namespace SPAFilter
             ServiceCatalogTextBox.LostFocus += ServiceCatalogTextBox_LostFocus;
 
             Closing += (s, e) => SaveData();
+
+            IsInititializating = false;
         }
 
         private static void AppUpdater_OnFetch(object sender, ApplicationFetchingArgs args)
