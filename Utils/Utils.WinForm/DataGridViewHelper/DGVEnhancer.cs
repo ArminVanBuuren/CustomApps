@@ -164,6 +164,8 @@ namespace Utils.WinForm.DataGridViewHelper
             var prevVisible = grid.RowHeadersVisible;
             try
             {
+                grid.BeginInit();
+
                 grid.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
                 grid.RowHeadersVisible = false;
 
@@ -172,7 +174,7 @@ namespace Utils.WinForm.DataGridViewHelper
                 grid.Rows.Clear();
                 grid.ClearSelection();
 
-                grid.BeginInit();
+                
                 grid.DataSource = table;
                 foreach (var column in columnList)
                 {
@@ -183,7 +185,7 @@ namespace Utils.WinForm.DataGridViewHelper
                     if (hiddenColumn != null)
                         hiddenColumn.Visible = false;
                 }
-                grid.EndInit();
+                
 
                 if (cellPadding != null)
                 {
@@ -205,9 +207,10 @@ namespace Utils.WinForm.DataGridViewHelper
             }
             finally
             {
-                grid.Refresh();
                 grid.RowHeadersWidthSizeMode = prevResize;
                 grid.RowHeadersVisible = prevVisible;
+
+                grid.EndInit();
             }
         }
 
