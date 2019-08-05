@@ -40,8 +40,9 @@ namespace SPAFilter
     {
         readonly object _sync = new object();
 
-        private bool _IsInProcessing = false;
-        private bool _isSiChecking = false;
+        private bool _IsInProgress = false;
+        private bool _isLoading = false;
+
         private string _lastDirPath = string.Empty;
         private readonly object sync = new object();
         private readonly object sync2 = new object();
@@ -58,72 +59,90 @@ namespace SPAFilter
 
         private bool IsInititializating { get; set; } = true;
 
-        private bool IsInProcessing
+        private bool IsInProgress
         {
-            get => _IsInProcessing;
+            get => _IsInProgress;
             set
             {
                 lock (sync2)
                 {
-                    _IsInProcessing = value;
+                    _IsInProgress = value;
 
-                    if (_IsInProcessing && _notepad != null && !_notepad.WindowIsClosed)
+                    if (_IsInProgress && _notepad != null && !_notepad.WindowIsClosed)
                         _notepad.Close();
 
-                    FilterButton.Enabled = !_IsInProcessing;
-                    PrintXMLButton.Enabled = !_IsInProcessing;
+                    FilterButton.Enabled = !_IsInProgress;
+                    PrintXMLButton.Enabled = !_IsInProgress;
 
-                    ProcessesTextBox.Enabled = !_IsInProcessing;
-                    ProcessesButtonOpen.Enabled = !_IsInProcessing;
+                    ProcessesTextBox.Enabled = !_IsInProgress;
+                    ProcessesButtonOpen.Enabled = !_IsInProgress;
 
-                    ROBPOperationsRadioButton.Enabled = !_IsInProcessing;
-                    ServiceCatalogRadioButton.Enabled = !_IsInProcessing;
+                    ROBPOperationsRadioButton.Enabled = !_IsInProgress;
+                    ServiceCatalogRadioButton.Enabled = !_IsInProgress;
 
                     if (ROBPOperationsRadioButton.Checked)
                     {
-                        ROBPOperationTextBox.Enabled = !_IsInProcessing;
-                        ROBPOperationButtonOpen.Enabled = !_IsInProcessing;
+                        ROBPOperationTextBox.Enabled = !_IsInProgress;
+                        ROBPOperationButtonOpen.Enabled = !_IsInProgress;
                     }
                     else
                     {
-                        ServiceCatalogTextBox.Enabled = !_IsInProcessing;
-                        ServiceCatalogOpenButton.Enabled = !_IsInProcessing;
+                        ServiceCatalogTextBox.Enabled = !_IsInProgress;
+                        ServiceCatalogOpenButton.Enabled = !_IsInProgress;
                     }
 
-                    addServiceInstancesButton.Enabled = !_IsInProcessing;
-                    removeServiceInstancesButton.Enabled = !_IsInProcessing;
-                    refreshServiceInstancesButton.Enabled = !_IsInProcessing;
-                    dataGridServiceInstances.Enabled = !_IsInProcessing;
+                    addServiceInstancesButton.Enabled = !_IsInProgress;
+                    removeServiceInstancesButton.Enabled = !_IsInProgress;
+                    refreshServiceInstancesButton.Enabled = !_IsInProgress;
+                    dataGridServiceInstances.Enabled = !_IsInProgress;
 
-                    dataGridProcesses.Visible = !_IsInProcessing;
-                    dataGridOperations.Visible = !_IsInProcessing;
-                    dataGridScenarios.Visible = !_IsInProcessing;
-                    dataGridCommands.Visible = !_IsInProcessing;
-                    GenerateSC.Enabled = !_IsInProcessing;
+                    dataGridProcesses.Visible = !_IsInProgress;
+                    dataGridOperations.Visible = !_IsInProgress;
+                    dataGridScenarios.Visible = !_IsInProgress;
+                    dataGridCommands.Visible = !_IsInProgress;
+                    GenerateSC.Enabled = !_IsInProgress;
 
-                    ProcessesComboBox.Enabled = !_IsInProcessing;
-                    NetSettComboBox.Enabled = !_IsInProcessing;
-                    OperationComboBox.Enabled = !_IsInProcessing;
+                    ProcessesComboBox.Enabled = !_IsInProgress;
+                    NetSettComboBox.Enabled = !_IsInProgress;
+                    OperationComboBox.Enabled = !_IsInProgress;
                 }
             }
         }
 
         private bool IsFiltered { get; set; } = false;
 
-        private bool IsServiceInstancesChecking
+        private bool IsLoading
         {
-            get => _isSiChecking;
+            get => _isLoading;
             set
             {
-                _isSiChecking = value;
+                if(_isLoading == value)
+                    return;
+                _isLoading = value;
 
-                if (_isSiChecking)
+                if (_isLoading)
                 {
                     FilterButton.Enabled = false;
                 }
-                else if(!IsInProcessing)
+                else if (!IsInProgress)
                 {
                     FilterButton.Enabled = true;
+                }
+
+                if (IsInProgress)
+                    return;
+
+                if (_isLoading)
+                {
+                    progressBar.Visible = true;
+                    progressBar.MarqueeAnimationSpeed = 10;
+                    progressBar.Style = ProgressBarStyle.Marquee;
+                }
+                else
+                {
+                    progressBar.Visible = false;
+                    progressBar.Style = ProgressBarStyle.Blocks;
+                    IsInititializating = false;
                 }
             }
         }
@@ -160,9 +179,7 @@ namespace SPAFilter
             try
             {
                 PreInit();
-                progressBar.Visible = true;
-                progressBar.MarqueeAnimationSpeed = 10;
-                progressBar.Style = ProgressBarStyle.Marquee;
+                IsLoading = true;
                 //progressBar
 
                 ProcessesTextBox.Text = (string) TryGetSerializationValue(allSavedParams, "ADWFFW", string.Empty);
@@ -224,9 +241,7 @@ namespace SPAFilter
             }
             finally
             {
-                progressBar.Visible = false;
-                progressBar.Style = ProgressBarStyle.Blocks;
-                IsInititializating = false;
+                IsLoading = false;
                 PostInit();
             }
         }
@@ -248,15 +263,15 @@ namespace SPAFilter
         {
             if (InvokeRequired)
             {
-                Invoke(new MethodInvoker(() => SerializeData(propertyBag, context)));
+                Invoke(new MethodInvoker(() => SerializeData(propertyBag)));
             }
             else
             {
-                SerializeData(propertyBag, context);
+                SerializeData(propertyBag);
             }
         }
 
-        void SerializeData(SerializationInfo propertyBag, StreamingContext context)
+        void SerializeData(SerializationInfo propertyBag)
         {
             propertyBag.AddValue("ADWFFW", ProcessesTextBox.Text);
             propertyBag.AddValue("AAEERF", ROBPOperationTextBox.Text);
@@ -821,17 +836,30 @@ namespace SPAFilter
                     case SPAProcessFilterType.SCOperations:
                     case SPAProcessFilterType.ROBPOperations:
 
-                        switch (type)
+                        try
                         {
-                            case SPAProcessFilterType.SCOperations:
-                                await _spaFilter.AssignSCOperationsAsync(ServiceCatalogTextBox.Text);
-                                UpdateLastPath(Path.GetDirectoryName(ServiceCatalogTextBox.Text));
-                                break;
-                            case SPAProcessFilterType.ROBPOperations:
-                                await _spaFilter.AssignROBPOperationsAsync(ROBPOperationTextBox.Text);
-                                UpdateLastPath(ROBPOperationTextBox.Text);
-                                break;
+                            IsLoading = true;
+                            switch (type)
+                            {
+                                case SPAProcessFilterType.SCOperations:
+                                    await _spaFilter.AssignSCOperationsAsync(ServiceCatalogTextBox.Text);
+                                    UpdateLastPath(Path.GetDirectoryName(ServiceCatalogTextBox.Text));
+                                    break;
+                                case SPAProcessFilterType.ROBPOperations:
+                                    await _spaFilter.AssignROBPOperationsAsync(ROBPOperationTextBox.Text);
+                                    UpdateLastPath(ROBPOperationTextBox.Text);
+                                    break;
+                            }
                         }
+                        catch (Exception)
+                        {
+                            throw;
+                        }
+                        finally
+                        {
+                            IsLoading = false;
+                        }
+                       
 
                         if (_spaFilter.HostTypes != null)
                         {
@@ -902,7 +930,7 @@ namespace SPAFilter
         {
             try
             {
-                IsServiceInstancesChecking = true;
+                IsLoading = true;
 
                 addServiceInstancesButton.Enabled = false;
                 removeServiceInstancesButton.Enabled = false;
@@ -918,7 +946,7 @@ namespace SPAFilter
             }
             finally
             {
-                IsServiceInstancesChecking = false;
+                IsLoading = false;
 
                 addServiceInstancesButton.Enabled = true;
                 removeServiceInstancesButton.Enabled = true;
@@ -963,12 +991,12 @@ namespace SPAFilter
 
         private async void FilterButton_Click(object sender, EventArgs e)
         {
-            if (IsInProcessing)
+            if (IsInProgress)
                 return;
 
             try
             {
-                IsInProcessing = true;
+                IsInProgress = true;
 
                 var filterProcess = ProcessesComboBox.Text;
                 var filterHT = NetSettComboBox.Text;
@@ -1020,7 +1048,7 @@ namespace SPAFilter
             }
             finally
             {
-                IsInProcessing = false;
+                IsInProgress = false;
                 RefreshStatus();
             }
         }
@@ -1052,7 +1080,7 @@ namespace SPAFilter
 
         private async void ButtonGenerateSC_Click(object sender, EventArgs e)
         {
-            if (IsInProcessing)
+            if (IsInProgress)
                 return;
 
             var fileOperationsCount = _spaFilter.HostTypes.DriveOperationsCount;
@@ -1065,7 +1093,7 @@ namespace SPAFilter
 
             try
             {
-                IsInProcessing = true;
+                IsInProgress = true;
 
                 if (!Directory.Exists(ExportSCPath.Text))
                     Directory.CreateDirectory(ExportSCPath.Text);
@@ -1099,7 +1127,7 @@ namespace SPAFilter
             }
             finally
             {
-                IsInProcessing = false;
+                IsInProgress = false;
             }
         }
 
@@ -1112,12 +1140,12 @@ namespace SPAFilter
                 return;
             }
 
-            if (IsInProcessing)
+            if (IsInProgress)
                 return;
 
             try
             {
-                IsInProcessing = true;
+                IsInProgress = true;
 
                 using (var stringErrors = new CustomStringBuilder())
                 {
@@ -1142,7 +1170,7 @@ namespace SPAFilter
             }
             finally
             {
-                IsInProcessing = false;
+                IsInProgress = false;
             }
         }
 
