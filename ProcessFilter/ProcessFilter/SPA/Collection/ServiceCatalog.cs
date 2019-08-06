@@ -12,7 +12,6 @@ namespace SPAFilter.SPA.Collection
 {
     public class ServiceCatalog : CollectionHostType
     {
-        readonly List<string> defaultLinkTypes = new List<string> { "Add", "Remove" };
         public string Prefix { get; }
         internal DuplicateDictionary<string, RFSOperation> AllRFS { get; }
         internal Dictionary<string, ScenarioOperation> AllScenarios { get; }
@@ -141,6 +140,15 @@ namespace SPAFilter.SPA.Collection
                 if(AllRFS.ContainsKey(rfsName))
                     throw new Exception($"{rfsName} already exist.");
 
+                
+                var defaultLinkTypes = new List<string> { "Add", "Remove" };
+                var cfsList = new DistinctList<XmlNode>();
+                if (rfsCFSs.Value != null)
+                {
+                    cfsList.AddRange(rfsCFSs.Value);
+                }
+
+
                 // Сначала добавляем все с типом subscription, затем уже все дочерние от базовых и остальные
                 if (isSubscriptions)
                 {
@@ -148,18 +156,51 @@ namespace SPAFilter.SPA.Collection
                     {
                         var baseRFS = AddBaseRFS(rfsCFSs.Key, rfsCFSs, rfsName, linkType, hostType, navigator);
                         baseRFS.IsSubscription = true;
-                        AddChildCFS(baseRFS, rfsCFSs.Value);
+                        AddChildCFS(baseRFS, cfsList);
                     }
                     continue;
                 }
-                else if (!baseRFSName.IsNullOrEmptyTrim())
+
+                var isRFSGroupRFS = false;
+                if (cfsList.Count == 0 && navigator.Select($"/Configuration/RFSGroupList/RFSGroup[@type='Choice']/RFS[@name='{rfsName}']", out var rfsInRFSGroup))
+                {
+                    isRFSGroupRFS = true;
+                    //var countOfHandlerRFS = 0;
+                    var linkTypes = new DistinctList<string>();
+                    foreach (var rfsNode in rfsInRFSGroup.Select(x => x.Node))
+                    {
+                        var rfsLinkType = rfsNode?.Attributes?["linkType"]?.Value;
+                        //var rfsHandler = rfsNode?.Attributes?["handler"]?.Value;
+                        //var rfsHosts = rfsNode?.Attributes?["hosts"]?.Value;
+
+                        if (!string.IsNullOrEmpty(rfsLinkType))
+                            linkTypes.Add(rfsLinkType);
+
+                        //if (!string.IsNullOrEmpty(rfsHandler) && string.IsNullOrEmpty(rfsHosts))
+                        //    countOfHandlerRFS++;
+
+                        var rfsGroupName = rfsNode.ParentNode?.Attributes?["name"]?.Value;
+                        if (rfsGroupName != null && navigator.Select($"/Configuration/CFSList/CFS[RFSGroup/@name='{rfsGroupName}']", out var cfsList2))
+                        {
+                            foreach (var cfs in cfsList2)
+                            {
+                                cfsList.Add(cfs.Node);
+                            }
+                        }
+                    }
+
+                    defaultLinkTypes.Clear();
+                    defaultLinkTypes.AddRange(linkTypes);
+                }
+
+                if (!baseRFSName.IsNullOrEmptyTrim())
                 {
                     if (AllRFS.TryGetValue(baseRFSName, out var result))
                     {
                         foreach (var baseRFS in result)
                         {
                             baseRFS.ChildRFSList.Add(rfsCFSs.Key);
-                            AddChildCFS(baseRFS, rfsCFSs.Value);
+                            AddChildCFS(baseRFS, cfsList);
                         }
 
                         // Добавляем операцию Modify
@@ -167,7 +208,7 @@ namespace SPAFilter.SPA.Collection
                         // 2. Если нет уже существующей операции Modify
                         // 3. Если в RFS есть Resource (RFSParameter не модифается)
                         // 4. Если все связанные CFSы разного приоритета или есть хэндлер MergeRFS
-                        if (rfsCFSs.Value != null && result.All(p => !p.IsSubscription) && result.All(p => p.LinkType != "Modify"))
+                        if (cfsList.Count > 0 && result.All(p => !p.IsSubscription) && result.All(p => p.LinkType != "Modify"))
                         {
                             var isExistResource = false;
                             foreach (var rfsNode in result.Select(x => x.Node))
@@ -189,7 +230,7 @@ namespace SPAFilter.SPA.Collection
 
                             if (isExistResource)
                             {
-                                var priorityCFSList = rfsCFSs.Value.Select(p =>
+                                var priorityCFSList = cfsList.Select(p =>
                                 {
                                     var priority = p.Attributes?["priority"]?.Value;
                                     return priority ?? "1000";
@@ -213,7 +254,7 @@ namespace SPAFilter.SPA.Collection
                         foreach (var linkType in defaultLinkTypes)
                         {
                             var baseRFS = AddBaseRFS(null, rfsCFSs, baseRFSName, linkType, hostType, navigator);
-                            AddChildCFS(baseRFS, rfsCFSs.Value);
+                            AddChildCFS(baseRFS, cfsList);
                         }
                     }
 
@@ -229,7 +270,7 @@ namespace SPAFilter.SPA.Collection
                         foreach (var parentRFS in result)
                         {
                             parentRFS.ChildRFSList.Add(rfsCFSs.Key);
-                            AddChildCFS(parentRFS, rfsCFSs.Value);
+                            AddChildCFS(parentRFS, cfsList);
                         }
                     }
                     else
@@ -237,7 +278,7 @@ namespace SPAFilter.SPA.Collection
                         foreach (var linkType in defaultLinkTypes)
                         {
                             var parentRFS = AddBaseRFS(null, rfsCFSs, parentRFSName, linkType, hostType, navigator);
-                            AddChildCFS(parentRFS, rfsCFSs.Value);
+                            AddChildCFS(parentRFS, cfsList);
                         }
                     }
 
@@ -248,9 +289,9 @@ namespace SPAFilter.SPA.Collection
                 }
 
                 var oneTimeLinkTypes = new DistinctList<string>();
-                if (rfsCFSs.Value != null && rfsCFSs.Value.Any())
+                if (!isRFSGroupRFS && cfsList.Any())
                 {
-                    foreach (var cfs in rfsCFSs.Value)
+                    foreach (var cfs in cfsList)
                     {
                         if (cfs == null)
                             continue;
@@ -262,7 +303,9 @@ namespace SPAFilter.SPA.Collection
                             break;
                         }
 
-                        oneTimeLinkTypes.Add(cfs.Clone().SelectSingleNode($"/RFS[@name='{rfsName}']/@linkType").Value);
+                        var oneTimeLinkType = cfs.Clone().SelectSingleNode($"/RFS[@name='{rfsName}']/@linkType");
+                        if (oneTimeLinkType != null)
+                            oneTimeLinkTypes.Add(oneTimeLinkType.Value);
                     }
                 }
 

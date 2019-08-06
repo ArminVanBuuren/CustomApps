@@ -29,7 +29,7 @@ namespace SPAFilter.SPA.Components.SRI
             get
             {
                 if (ChildCFSList.Count > 0 || IncludedToScenarios.Count > 0 
-                   || _navigator.SelectFirst($"/Configuration/HandlerList/Handler//RFS[@name='{RFSName}'] | /Configuration/RFSGroupList/RFSGroup//RFS[@name='{RFSName}']", out var res))
+                   || _navigator.SelectFirst($"/Configuration/HandlerList/Handler//RFS[@name='{RFSName}'] | /Configuration/RFSGroupList/RFSGroup/RFS[@name='{RFSName}']", out var res))
                     return false;
 
                 if (ChildRFSList.Count > 0 )
@@ -38,7 +38,7 @@ namespace SPAFilter.SPA.Components.SRI
                     {
                         var childRFSName = childRFS?.Attributes?["name"]?.Value;
                         if (!string.IsNullOrEmpty(childRFSName) 
-                              && _navigator.SelectFirst($"/Configuration/CFSList/CFS/RFS[@name='{childRFSName}'] | /Configuration/HandlerList/Handler//RFS[@name='{childRFSName}'] | /Configuration/RFSGroupList/RFSGroup//RFS[@name='{childRFSName}']", out var res2))
+                              && _navigator.SelectFirst($"/Configuration/CFSList/CFS/RFS[@name='{childRFSName}'] | /Configuration/HandlerList/Handler//RFS[@name='{childRFSName}'] | /Configuration/RFSGroupList/RFSGroup/RFS[@name='{childRFSName}']", out var res2))
                             return false;
                     }
                 }
