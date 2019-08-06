@@ -161,23 +161,18 @@ namespace SPAFilter.SPA.Collection
                     continue;
                 }
 
+                // если нет ни одного CFS с текущим RFS, то проверяется RFSGroup и подставляются линки из RFSGroup
                 var isRFSGroupRFS = false;
                 if (cfsList.Count == 0 && navigator.Select($"/Configuration/RFSGroupList/RFSGroup[@type='Choice']/RFS[@name='{rfsName}']", out var rfsInRFSGroup))
                 {
                     isRFSGroupRFS = true;
-                    //var countOfHandlerRFS = 0;
                     var linkTypes = new DistinctList<string>();
                     foreach (var rfsNode in rfsInRFSGroup.Select(x => x.Node))
                     {
                         var rfsLinkType = rfsNode?.Attributes?["linkType"]?.Value;
-                        //var rfsHandler = rfsNode?.Attributes?["handler"]?.Value;
-                        //var rfsHosts = rfsNode?.Attributes?["hosts"]?.Value;
 
                         if (!string.IsNullOrEmpty(rfsLinkType))
                             linkTypes.Add(rfsLinkType);
-
-                        //if (!string.IsNullOrEmpty(rfsHandler) && string.IsNullOrEmpty(rfsHosts))
-                        //    countOfHandlerRFS++;
 
                         var rfsGroupName = rfsNode.ParentNode?.Attributes?["name"]?.Value;
                         if (rfsGroupName != null && navigator.Select($"/Configuration/CFSList/CFS[RFSGroup/@name='{rfsGroupName}']", out var cfsList2))
