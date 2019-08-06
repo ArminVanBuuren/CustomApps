@@ -9,15 +9,15 @@ using Utils.WinForm.DataGridViewHelper;
 
 namespace SPAFilter.SPA.Components
 {
-    public sealed class Scenario : DriveTemplate
+    public sealed class Scenario : DriveTemplate, ISAComponent
     {
-        readonly ServiceInstance _parent;
+        internal ServiceInstance Parent { get; }
 
         internal List<Command> Commands { get; } = new List<Command>();
         internal List<Scenario> SubScenarios { get; private set; } = new List<Scenario>();
 
         [DGVColumn(ColumnPosition.After, "HostType")]
-        public string HostTypeName => _parent.HostTypeName;
+        public string HostTypeName => Parent.HostTypeName;
 
         [DGVColumn(ColumnPosition.After, "Scenario")]
         public override string Name { get; set; }
@@ -50,7 +50,7 @@ namespace SPAFilter.SPA.Components
         public Scenario(ServiceInstance parent, string filePath, IReadOnlyDictionary<string, Command> commandList) : base(filePath)
         {
             IsSubScenario = false;
-            _parent = parent;
+            Parent = parent;
 
             var prsCs = new ParceScenario
             {
@@ -65,7 +65,7 @@ namespace SPAFilter.SPA.Components
         Scenario(ServiceInstance parent, string filePath, IReadOnlyDictionary<string, Command> commandList, string parentFileScenario) : base(filePath)
         {
             IsSubScenario = true;
-            _parent = parent;
+            Parent = parent;
 
             var prsCs = new ParceScenario
             {
@@ -91,7 +91,7 @@ namespace SPAFilter.SPA.Components
 
             foreach (var subScenarioPath in prsCs.SubScenarios)
             {
-                SubScenarios.Add(new Scenario(_parent, subScenarioPath, commandList, FilePath));
+                SubScenarios.Add(new Scenario(Parent, subScenarioPath, commandList, FilePath));
             }
         }
 

@@ -76,6 +76,7 @@
     </Compile>
     <Compile Include="SPA\Collection\CollectionBusinessProcess.cs" />
     <Compile Include="SPA\Collection\CollectionTemplate.cs" />
+    <Compile Include="SPA\Components\ISAComponent.cs" />
     <Compile Include="SPA\Components\ServiceInstance.cs" />
     <Compile Include="SPA\Components\BusinessProcess.cs" />
     <Compile Include="SPA\Components\SRI\CatalogHostType.cs" />
@@ -104,7 +105,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SPA\Components\Scenario.cs" />
-    <Compile Include="SPA\OperationsComparer.cs" />
+    <Compile Include="SPA\SAComparer.cs" />
     <Compile Include="SPA\SC\BindingServices.cs" />
     <Compile Include="SPA\SC\CatalogComponents.cs" />
     <Compile Include="SPA\SC\CFS.cs" />

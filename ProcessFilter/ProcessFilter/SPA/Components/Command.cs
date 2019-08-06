@@ -2,7 +2,7 @@
 
 namespace SPAFilter.SPA.Components
 {
-    public class Command : DriveTemplate
+    public class Command : DriveTemplate, ISAComponent
     {
         readonly ServiceInstance _parent;
 

@@ -163,10 +163,10 @@ namespace SPAFilter.SPA
                 // обновляются свойства Scenarios и Commands
                 ReloadActivators();
                 // Получаем общие объекты по именам операций и сценариев. Т.е. фильтруем все сценарии по отфильтрованным операциям.
-                var scenarios = Scenarios.Intersect(fileteredOperations, new OperationsComparer()).Cast<Scenario>().ToDictionary(x => x.Name, x => x, StringComparer.CurrentCultureIgnoreCase);
+                var scenarios = Scenarios.Intersect(fileteredOperations, new SAComparer()).Cast<Scenario>().ToDictionary(x => x.Name, x => x, StringComparer.CurrentCultureIgnoreCase);
 
                 // Проверка на существование сценария для операции. Ищем несуществующие сценарии.
-                foreach (var operation in fileteredOperations.Except(scenarios.Values, new OperationsComparer()).Cast<IOperation>())
+                foreach (var operation in fileteredOperations.Except(scenarios.Values, new SAComparer()).Cast<IOperation>())
                 {
                     operation.IsScenarioExist = false;
                 }
@@ -387,7 +387,7 @@ namespace SPAFilter.SPA
                     Task.WaitAll(taskList.ToArray());
                 }
 
-                LoadActivators();
+                ReloadActivators();
 
                 if (!errors.IsNullOrEmptyTrim())
                 {
@@ -411,7 +411,7 @@ namespace SPAFilter.SPA
                     }
                 }
 
-                LoadActivators();
+                ReloadActivators();
             });
         }
 
@@ -421,6 +421,9 @@ namespace SPAFilter.SPA
             await Task.Factory.StartNew(ReloadActivators);
         }
 
+        /// <summary>
+        /// Обновить свойства ServiceInstances, Scenarios и Commands
+        /// </summary>
         void ReloadActivators()
         {
             lock (ACTIVATORS_SYNC)
@@ -428,14 +431,6 @@ namespace SPAFilter.SPA
                 Task.WaitAll(_activators.Values.Select(x => Task.Factory.StartNew(x.Refresh)).ToArray());
             }
 
-            LoadActivators();
-        }
-
-        /// <summary>
-        /// Обновить свойства ServiceInstances, Scenarios и Commands
-        /// </summary>
-        void LoadActivators()
-        {
             ServiceInstances = GetServiceInstances();
             GetScenariosAndCommands(ServiceInstances, out var allScenarios, out var allCommands);
             Scenarios = allScenarios;
@@ -447,7 +442,34 @@ namespace SPAFilter.SPA
             var intsances = new CollectionTemplate<ServiceInstance>();
             lock (ACTIVATORS_SYNC)
             {
-                foreach (var instance in _activators.Values.SelectMany(p => p.Instances).OrderBy(p => p.HostTypeName).ThenBy(p => p.Name))
+                var allInstances = _activators.Values.SelectMany(p => p.Instances).ToList();
+
+                // Проверям инстансы на коллизии сценариев
+                // Если имеются два инстанса например: "FP:AM и FP:SCP" которые имеют разные каталоги сценариев и при этом общие названия файлов
+                // то возникает коллизия и нужно выбрать какой то один инстанс.
+                // В отличии от "FP:SCP1 и FP:SCP2" которые имеют общий каталог сценариев, тогда коллизий не будет.
+                var intersectInstancesStr = string.Empty;
+                var instancesWithSameHost = allInstances.GroupBy(x => x.HostTypeName.ToLower()).Where(p => p.Count() > 1).ToList();
+                foreach (var instance in instancesWithSameHost)
+                {
+                    var sameScenarios = instance.SelectMany(x => x.Scenarios).GroupBy(x => x.FilePath.ToLower()).SelectMany(x => x).GroupBy(p => p.Name.ToLower()).Where(t => t.Count() > 1).ToList();
+                    if (sameScenarios.Any())
+                    {
+                        var intersectInstances = sameScenarios.SelectMany(x => x).GroupBy(x => x.Parent).Select(p => p.Key).ToList();
+                        foreach (var instance2 in intersectInstances)
+                        {
+                            instance2.IsCorrect = false;
+                        }
+
+                        intersectInstancesStr += $"\"{string.Join(",", intersectInstances.Select(x => x.HardwareID))}\"; ";
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(intersectInstancesStr))
+                    MessageBox.Show($"Scenario collisions found when instances: {intersectInstancesStr.Trim().Trim(';')} were initialized.\r\nChoose only one instance or several with a common configuration.", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+
+                foreach (var instance in allInstances.OrderBy(p => p.HostTypeName).ThenBy(p => p.Name))
                 {
                     if (getValid && !instance.IsCorrect)
                         continue;

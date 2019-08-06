@@ -8,7 +8,7 @@ using Utils.WinForm.DataGridViewHelper;
 
 namespace SPAFilter.SPA.Components
 {
-    public sealed class ServiceInstance : DriveTemplate
+    public sealed class ServiceInstance : DriveTemplate, ISAComponent
     {
         const string NOT_FOUND_ATTRIBUTE = "Attributes \"{0}\" not found in {1}";
         const string NOT_FOUND_DIR = "Directory \"{0}\" not found when initializing {1}";
@@ -22,7 +22,9 @@ namespace SPAFilter.SPA.Components
 
         public override string Name { get; set; }
 
+
         public List<Scenario> Scenarios { get; } = new List<Scenario>();
+
         public Dictionary<string, Command> Commands { get; } = new Dictionary<string, Command>(StringComparer.CurrentCultureIgnoreCase);
 
         [DGVColumn(ColumnPosition.Last, "IsCorrect", false)]

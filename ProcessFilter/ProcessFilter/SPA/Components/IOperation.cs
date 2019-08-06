@@ -1,9 +1,7 @@
 ﻿namespace SPAFilter.SPA.Components
 {
-    public interface IOperation : IObjectTemplate
+    public interface IOperation : ISAComponent
     {
-        string HostTypeName { get; }
-
         bool IsScenarioExist { get; set; }
     }
 }
