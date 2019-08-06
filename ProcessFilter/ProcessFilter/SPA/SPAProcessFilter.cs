@@ -356,9 +356,13 @@ namespace SPAFilter.SPA
         {
             await Task.Factory.StartNew(() =>
             {
+                var lastActivatorList = new List<ServiceActivator>();
+
                 var errors = string.Empty;
                 lock (ACTIVATORS_SYNC)
                 {
+                    lastActivatorList.AddRange(_activators.Values);
+
                     var taskList = new List<Task>();
                     foreach (var filePath in filePathList)
                     {
@@ -387,7 +391,7 @@ namespace SPAFilter.SPA
                     Task.WaitAll(taskList.ToArray());
                 }
 
-                ReloadActivators();
+                ReloadActivators(lastActivatorList);
 
                 if (!errors.IsNullOrEmptyTrim())
                 {
@@ -422,15 +426,56 @@ namespace SPAFilter.SPA
         }
 
         /// <summary>
-        /// Обновить свойства ServiceInstances, Scenarios и Commands
+        /// Перезагрузить по списку все экземпляры активаторов, сценарии и комманды.
+        /// </summary>
+        void ReloadActivators(IEnumerable<ServiceActivator> toReload)
+        {
+            if (toReload != null && toReload.Any())
+            {
+                lock (ACTIVATORS_SYNC)
+                {
+                    Task.WaitAll(toReload.Select(x => Task.Factory.StartNew(() =>
+                    {
+                        try
+                        {
+                            x.Refresh();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    })).ToArray());
+                }
+            }
+
+            LoadActivators();
+        }
+
+        /// <summary>
+        /// Перезагрузить все экземпляры активаторов, сценарии и комманды.
         /// </summary>
         void ReloadActivators()
         {
             lock (ACTIVATORS_SYNC)
             {
-                Task.WaitAll(_activators.Values.Select(x => Task.Factory.StartNew(x.Refresh)).ToArray());
+                Task.WaitAll(_activators.Values.Select(x => Task.Factory.StartNew(() =>
+                {
+                    try
+                    {
+                        x.Refresh();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                })).ToArray());
             }
 
+            LoadActivators();
+        }
+
+        void LoadActivators()
+        {
             ServiceInstances = GetServiceInstances();
             GetScenariosAndCommands(ServiceInstances, out var allScenarios, out var allCommands);
             Scenarios = allScenarios;
