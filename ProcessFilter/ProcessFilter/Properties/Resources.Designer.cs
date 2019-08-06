@@ -79,7 +79,7 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want delete selected {0} ?.
+        ///   Looks up a localized string similar to Do you want to delete selected {0} ?.
         /// </summary>
         internal static string Form_GridView_DeleteSelected {
             get {
@@ -160,7 +160,7 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Several ({0}) errors found:
+        ///   Looks up a localized string similar to Some ({0}) errors found:
         ///
         ///{1}.
         /// </summary>

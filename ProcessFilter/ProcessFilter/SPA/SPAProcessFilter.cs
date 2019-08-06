@@ -263,7 +263,7 @@ namespace SPAFilter.SPA
 
             var hostTypesDir = GetDirectories(ROBPHostTypesPath);
             if (hostTypesDir.Count == 0)
-                throw new Exception("You must select a folder with exported ROBP's host types directories.");
+                throw new Exception("You must select a folder with exported ROBP's host type directories.");
 
             FilterProcesses(bpFilter);
             HostTypes = new CollectionHostType(); 

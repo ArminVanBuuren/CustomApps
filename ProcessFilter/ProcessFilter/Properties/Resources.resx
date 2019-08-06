@@ -131,10 +131,10 @@
     <value>..\resources\icons8-synchronize-20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Form_GridView_DeleteSelected" xml:space="preserve">
-    <value>Do you want delete selected {0} ?</value>
+    <value>Do you want to delete selected {0} ?</value>
   </data>
   <data name="Form_PrintXMLFiles_Error" xml:space="preserve">
-    <value>Several ({0}) errors found:
+    <value>Some ({0}) errors found:
 
 {1}</value>
   </data>
