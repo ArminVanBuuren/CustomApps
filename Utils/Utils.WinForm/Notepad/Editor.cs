@@ -284,7 +284,7 @@ namespace Utils.WinForm.Notepad
         {
             try
             {
-                if (!IsContentChanged && newFileDestination == null)
+                if (!IsContentChanged && newFileDestination == null && FilePath != null)
                     return;
 
                 if (FCTB.Language == Language.XML && !FCTB.Text.IsXml(out _))
