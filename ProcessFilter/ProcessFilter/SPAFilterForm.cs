@@ -331,13 +331,6 @@ namespace SPAFilter
             {
                 // ignored
             }
-            
-
-            dataGridServiceInstances.KeyDown += DataGridServiceInstances_KeyDown;
-            dataGridProcesses.KeyDown += DataGridProcessesResults_KeyDown;
-            dataGridOperations.KeyDown += DataGridOperationsResult_KeyDown;
-            dataGridScenarios.KeyDown += DataGridScenariosResult_KeyDown;
-            dataGridCommands.KeyDown += DataGridCommandsResult_KeyDown;
 
             KeyDown += ProcessFilterForm_KeyDown;
 
@@ -421,8 +414,8 @@ namespace SPAFilter
         private static void DataGridServiceInstances_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             var row = ((DataGridView)sender).Rows[e.RowIndex];
-            var cell = row?.Cells["IsCorrect"];
-            if (cell != null && cell.Value is bool cellValue && cellValue)
+            TryGetCellValue(row, "IsCorrect", out var cell);
+            if (cell != null && cell is bool cellValue && cellValue)
             {
                 row.DefaultCellStyle.BackColor = Color.White;
             }
@@ -441,8 +434,8 @@ namespace SPAFilter
             var row = ((DataGridView)sender).Rows[e.RowIndex];
             if (ROBPOperationsRadioButton.Checked)
             {
-                var cell = row?.Cells["AllOperationsExist"];
-                if (cell != null && cell.Value is bool cellValue && cellValue)
+                TryGetCellValue(row, "AllOperationsExist", out var cell);
+                if (cell != null && cell is bool cellValue && cellValue)
                 {
                     row.DefaultCellStyle.BackColor = Color.White;
                 }
@@ -457,8 +450,8 @@ namespace SPAFilter
             }
             else
             {
-                var cell = row?.Cells["HasCatalogCall"];
-                if (cell != null && cell.Value is bool cellValue && cellValue)
+                TryGetCellValue(row, "HasCatalogCall", out var cell);
+                if (cell != null && cell is bool cellValue && cellValue)
                 {
                     row.DefaultCellStyle.BackColor = Color.White;
                 }
@@ -477,8 +470,8 @@ namespace SPAFilter
         private static void DataGridOperations_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             var row = ((DataGridView)sender).Rows[e.RowIndex];
-            var cell = row?.Cells["IsScenarioExist"];
-            if (cell != null && cell.Value is bool cellValue && cellValue)
+            TryGetCellValue(row, "IsScenarioExist", out var cell);
+            if (cell != null && cell is bool cellValue && cellValue)
             {
                 row.DefaultCellStyle.BackColor = Color.White;
             }
@@ -495,10 +488,11 @@ namespace SPAFilter
         private static void DataGridScenariosResult_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             var row = ((DataGridView)sender).Rows[e.RowIndex];
-            var cellIsSubScenario = row?.Cells["IsSubScenario"];
-            var cellAllCommandsExist = row?.Cells["AllCommandsExist"];
-            var isSubScenario = cellIsSubScenario != null && cellIsSubScenario.Value is bool cellValue && cellValue;
-            var allCommandsExist = cellAllCommandsExist != null && cellAllCommandsExist.Value is bool cellValue2 && cellValue2;
+            TryGetCellValue(row, "IsSubScenario", out var cellIsSubScenario);
+            TryGetCellValue(row, "AllCommandsExist", out var cellAllCommandsExist);
+            
+            var isSubScenario = cellIsSubScenario != null && cellIsSubScenario is bool cellValue && cellValue;
+            var allCommandsExist = cellAllCommandsExist != null && cellAllCommandsExist is bool cellValue2 && cellValue2;
             if (isSubScenario && !allCommandsExist)
             {
                 row.DefaultCellStyle.BackColor = Color.LightPink;
@@ -533,43 +527,87 @@ namespace SPAFilter
 
         #region DataGrid hot keys and Row double click
 
+        private void DataGridServiceInstances_DoubleClick(object sender, EventArgs e)
+        {
+            CallAndCheckDataGridKey(dataGridServiceInstances);
+        }
+
         private void DataGridProcessesResults_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             CallAndCheckDataGridKey(dataGridProcesses);
         }
-        private void DataGridProcessesResults_KeyDown(object sender, KeyEventArgs e)
-        {
-            CallAndCheckDataGridKey(dataGridProcesses, e);
-        }
 
         private void DataGridOperationsResult_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (ROBPOperationsRadioButton.Checked)
-                CallAndCheckDataGridKey(dataGridOperations);
-            else
-                OpenServiceCatalogOperation();
+            CallAndCheckDataGridKey(dataGridOperations);
         }
 
-        private void DataGridOperationsResult_KeyDown(object sender, KeyEventArgs e)
+        private void DataGridScenariosResult_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (ROBPOperationsRadioButton.Checked)
-                CallAndCheckDataGridKey(dataGridOperations, e);
-            else if (e.KeyCode == Keys.Enter)
-                OpenServiceCatalogOperation();
+            CallAndCheckDataGridKey(dataGridScenarios);
         }
 
-        void OpenServiceCatalogOperation()
+        private void DataGridCommandsResult_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            CallAndCheckDataGridKey(dataGridCommands);
+        }
+
+        //[DllImport("user32.dll")]
+        //private static extern short GetAsyncKeyState(Keys vKey);
+        //private static bool KeyIsDown(Keys key)
+        //{
+        //    return (GetAsyncKeyState(key) < 0);
+        //}
+
+        private async void ProcessFilterForm_KeyDown(object sender, KeyEventArgs e)
         {
             try
             {
-                if (!GetCellItemSelectedRows(dataGridOperations, out var scOperationNames, "Operation"))
-                    return;
-
-                var scOperations = _spaFilter.HostTypes.Operations.Where(p => scOperationNames.Any(x => x.Equals(p.Name, StringComparison.CurrentCultureIgnoreCase)));
-                foreach (var operation in scOperations)
+                switch (e.KeyCode)
                 {
-                    if (operation is CatalogOperation catalogOperation)
-                        OpenEditor(catalogOperation.Body, catalogOperation.Name);
+                    case Keys.F5 when FilterButton.Enabled:
+                        FilterButton_Click(this, EventArgs.Empty);
+                        break;
+                    case Keys.F4 when (ModifierKeys & Keys.Alt) != 0:
+                        Close();
+                        break;
+                    case Keys.Enter:
+                    {
+                        if(!GetCurrentDataGridView(out var grid))
+                            return;
+                        CallAndCheckDataGridKey(grid);
+                        break;
+                    }
+                    case Keys.Delete:
+                    {
+                        if (!GetCurrentDataGridView(out var grid) || (grid == dataGridOperations && !ROBPOperationsRadioButton.Checked) || !GetCellItemSelectedRows(grid, out var filesPath))
+                            return;
+
+                        if (filesPath.Count == 0)
+                            return;
+
+                        var userResult = MessageBox.Show(string.Format(Resources.Form_GridView_DeleteSelected, (filesPath.Count == 1 ? $"file" : $"{filesPath.Count} files")), @"Question", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+
+                        if (userResult != DialogResult.OK)
+                            return;
+
+                        foreach (var filePath in filesPath)
+                        {
+                            if (File.Exists(filePath))
+                                File.Delete(filePath);
+                        }
+
+                        if (IsFiltered)
+                        {
+                            FilterButton_Click(this, EventArgs.Empty);
+                        }
+                        else if (grid == dataGridServiceInstances)
+                        {
+                            await AssignServiceInstances(_spaFilter.ReloadActivatorsAsync());
+                        }
+
+                        break;
+                    }
                 }
             }
             catch (Exception ex)
@@ -578,97 +616,36 @@ namespace SPAFilter
             }
         }
 
-        private void DataGridServiceInstances_DoubleClick(object sender, EventArgs e)
+        bool GetCurrentDataGridView(out DataGridView focusedGrid)
         {
-            CallAndCheckDataGridKey(dataGridServiceInstances);
-        }
-        private void DataGridServiceInstances_KeyDown(object sender, KeyEventArgs e)
-        {
-            CallAndCheckDataGridKey(dataGridServiceInstances, e);
+            focusedGrid = null;
+            if (tabControl1.SelectedTab.HasChildren)
+            {
+                focusedGrid = tabControl1.SelectedTab.Controls.OfType<DataGridView>().FirstOrDefault();
+            }
+
+            return focusedGrid != null;
         }
 
-        private void DataGridScenariosResult_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            CallAndCheckDataGridKey(dataGridScenarios);
-        }
-        private void DataGridScenariosResult_KeyDown(object sender, KeyEventArgs e)
-        {
-            CallAndCheckDataGridKey(dataGridScenarios, e);
-        }
-
-        private void DataGridCommandsResult_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            CallAndCheckDataGridKey(dataGridCommands);
-        }
-
-        private void DataGridCommandsResult_KeyDown(object sender, KeyEventArgs e)
-        {
-            CallAndCheckDataGridKey(dataGridCommands, e);
-        }
-
-        [DllImport("user32.dll")]
-        private static extern short GetAsyncKeyState(Keys vKey);
-        private static bool KeyIsDown(Keys key)
-        {
-            return (GetAsyncKeyState(key) < 0);
-        }
-
-        async void CallAndCheckDataGridKey(DataGridView grid, KeyEventArgs e = null)
+        void CallAndCheckDataGridKey(DataGridView grid)
         {
             try
             {
-                if (e != null)
+                if(grid == null)
+                    return;
+
+                if (grid == dataGridOperations && !ROBPOperationsRadioButton.Checked)
                 {
-                    if ((ModifierKeys & Keys.Alt) != 0 && KeyIsDown(Keys.F4))
-                    {
-                        Close();
+                    if (!GetCellItemSelectedRows(dataGridOperations, out var scOperationNames, "Operation"))
                         return;
-                    }
 
-                    switch (e.KeyCode)
+                    var scOperations = _spaFilter.HostTypes.Operations.Where(p => scOperationNames.Any(x => x.Equals(p.Name, StringComparison.CurrentCultureIgnoreCase)));
+                    foreach (var operation in scOperations)
                     {
-                        case Keys.Enter:
-                            {
-                                if (!GetCellItemSelectedRows(grid, out var filePath1))
-                                    return;
-
-                                foreach (var filePath in filePath1)
-                                {
-                                    OpenEditor(filePath);
-                                }
-
-                                break;
-                            }
-                        case Keys.Delete:
-                            {
-                                if (!GetCellItemSelectedRows(grid, out var filesPath))
-                                    return;
-
-                                if (filesPath.Count == 0)
-                                    return;
-
-                                var userResult = MessageBox.Show(string.Format(Resources.Form_GridView_DeleteSelected, (filesPath.Count == 1 ? $"file" : $"{filesPath.Count} files")), @"Question", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
-
-                                if (userResult != DialogResult.OK)
-                                    return;
-
-                                foreach (var filePath in filesPath)
-                                {
-                                    if (File.Exists(filePath))
-                                        File.Delete(filePath);
-                                }
-
-                                if (IsFiltered)
-                                {
-                                    FilterButton_Click(this, EventArgs.Empty);
-                                }
-                                else if (grid == dataGridServiceInstances)
-                                {
-                                    await AssignServiceInstances(_spaFilter.ReloadActivatorsAsync());
-                                }
-
-                                break;
-                            }
+                        if (operation is CatalogOperation catalogOperation)
+                        {
+                            OpenEditor(catalogOperation.Body, catalogOperation.Name);
+                        }
                     }
                 }
                 else
@@ -999,16 +976,6 @@ namespace SPAFilter
             OperationComboBox.DataSource = null;
             OperationComboBox.DisplayMember = null;
             OperationComboBox.Text = null;
-        }
-
-        private void ProcessFilterForm_KeyDown(object sender, KeyEventArgs e)
-        {
-            switch (e.KeyCode)
-            {
-                case Keys.F5 when FilterButton.Enabled:
-                    FilterButton_Click(this, EventArgs.Empty);
-                    break;
-            }
         }
 
         private async void FilterButton_Click(object sender, EventArgs e)
@@ -1358,9 +1325,8 @@ namespace SPAFilter
             {
                 foreach (DataGridViewRow row in grid.SelectedRows)
                 {
-                    var cell = row.Cells[name]?.Value;
-                    if (cell != null)
-                        result.Add(cell.ToString());
+                    if (TryGetCellValue(row, name, out var cellValue))
+                        result.Add(cellValue.ToString());
                 }
 
                 result = result.Distinct().ToList();
@@ -1371,6 +1337,25 @@ namespace SPAFilter
                 return false;
             }
             return result.Count > 0;
+        }
+
+        static bool TryGetCellValue(DataGridViewRow row, string cellName, out object result)
+        {
+            result = null;
+
+            if (row == null)
+                return false;
+
+            foreach (DataGridViewCell cell in row.Cells)
+            {
+                if (!cell.OwningColumn.Name.Equals(cellName, StringComparison.CurrentCultureIgnoreCase))
+                    continue;
+
+                result = cell.Value;
+                return true;
+            }
+
+            return false;
         }
 
         static void ShowError(string message, string caption = @"Error")
