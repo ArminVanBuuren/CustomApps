@@ -68,8 +68,8 @@ namespace SPAFilter
                 {
                     _IsInProgress = value;
 
-                    if (_IsInProgress && _notepad != null && !_notepad.WindowIsClosed)
-                        _notepad.Close();
+                    //if (_IsInProgress && _notepad != null && !_notepad.WindowIsClosed)
+                    //    _notepad.Close();
 
                     FilterButton.Enabled = !_IsInProgress;
                     PrintXMLButton.Enabled = !_IsInProgress;
