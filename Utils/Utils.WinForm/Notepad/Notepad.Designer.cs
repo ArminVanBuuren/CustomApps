@@ -34,9 +34,10 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.formatXmlF5ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -72,7 +73,7 @@
             this.MainMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.MainMenuStrip.Name = "MainMenuStrip";
             this.MainMenuStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.MainMenuStrip.Size = new System.Drawing.Size(1035, 21);
+            this.MainMenuStrip.Size = new System.Drawing.Size(1035, 23);
             this.MainMenuStrip.TabIndex = 2;
             this.MainMenuStrip.Text = "mainMenuStrip";
             // 
@@ -81,7 +82,8 @@
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newToolStripMenuItem,
             this.openToolStripMenuItem,
-            this.saveToolStripMenuItem1,
+            this.formatXmlF5ToolStripMenuItem,
+            this.saveToolStripMenuItem,
             this.saveAsToolStripMenuItem,
             this.closeToolStripMenuItem});
             this.fileToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 8F);
@@ -103,11 +105,11 @@
             this.openToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.openToolStripMenuItem.Text = "Open                   Ctrl+O";
             // 
-            // saveToolStripMenuItem1
+            // saveToolStripMenuItem
             // 
-            this.saveToolStripMenuItem1.Name = "saveToolStripMenuItem1";
-            this.saveToolStripMenuItem1.Size = new System.Drawing.Size(196, 22);
-            this.saveToolStripMenuItem1.Text = "Save                     Ctrl+S";
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.saveToolStripMenuItem.Text = "Save                     Ctrl+S";
             // 
             // saveAsToolStripMenuItem
             // 
@@ -120,6 +122,12 @@
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
             this.closeToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.closeToolStripMenuItem.Text = "Close                    Alt+F4";
+            // 
+            // formatXmlF5ToolStripMenuItem
+            // 
+            this.formatXmlF5ToolStripMenuItem.Name = "formatXmlF5ToolStripMenuItem";
+            this.formatXmlF5ToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.formatXmlF5ToolStripMenuItem.Text = "Format Xml          F5";
             // 
             // Notepad
             // 
@@ -145,10 +153,11 @@
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.MenuStrip MainMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem formatXmlF5ToolStripMenuItem;
     }
 }

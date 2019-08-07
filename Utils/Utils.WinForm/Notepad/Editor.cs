@@ -12,6 +12,8 @@ namespace Utils.WinForm.Notepad
 {
     internal class Editor : IDisposable
     {
+        private string _fileName = null;
+
         private readonly Encoding _defaultEncoding = Encoding.Unicode;
         readonly MarkerStyle _sameWordsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(40, Color.Gray)));
         static object syncWhenFileChanged { get; } = new object();
@@ -20,7 +22,17 @@ namespace Utils.WinForm.Notepad
 
         public event EventHandler OnSomethingChanged;
         public string HeaderName { get; private set; }
-        public string FilePath { get; private set; } = null;
+
+        public string FilePath
+        {
+            get => _fileName;
+            private set
+            {
+                _fileName = value;
+                HeaderName = IO.GetLastNameInPath(_fileName, true);
+            }
+        }
+
         public string Source { get; private set; }
         public FastColoredTextBox FCTB { get; private set; }
         public bool IsContentChanged => !FCTB.Text.Equals(Source);
@@ -61,22 +73,12 @@ namespace Utils.WinForm.Notepad
             var langByExtension = GetLanguage(filePath);
 
             FilePath = filePath;
-            HeaderName = IO.GetLastNameInPath(filePath, true);
             Source = IO.SafeReadFile(filePath);
 
             if (langByExtension == Language.XML && !Source.IsXml(out _))
                 MessageBox.Show($"Xml file \"{filePath}\" is incorrect!", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-            _watcher = new FileSystemWatcher();
-            var paths = filePath.Split('\\');
-            _watcher.Path = string.Join("\\", paths.Take(paths.Length - 1));
-            _watcher.Filter = paths[paths.Length - 1];
-            _watcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
-            _watcher.Changed += OnForeignFileChanged;
-            _watcher.Created += OnForeignFileChanged;
-            _watcher.Deleted += OnForeignFileChanged;
-            _watcher.Renamed += OnFileRenamed;
-            _watcher.EnableRaisingEvents = true;
+            EnableWatcher(FilePath);
 
             return langByExtension;
         }
@@ -111,7 +113,6 @@ namespace Utils.WinForm.Notepad
             FCTB.Language = language;
             FCTB.Text = Source;
             FCTB.TextChanged += Fctb_TextChanged;
-            FCTB.KeyDown += UserTriedToSaveDocument;
             FCTB.SelectionChangedDelayed += Fctb_SelectionChangedDelayed;
         }
 
@@ -140,21 +141,24 @@ namespace Utils.WinForm.Notepad
             }
         }
 
-        static string GetLanguageFilter(Language language)
-        {   
-            switch (language)
+        public string GetFileFilter()
+        {
+            var fileFilter = string.Empty;
+            switch (FCTB.Language)
             {
-                case Language.XML: return "XML files (*.xml)|*.xml";
-                case Language.CSharp: return "CSharp files (*.cs)|*.cs";
-                case Language.HTML: return "HTML files (*.html)|*.html"; 
-                case Language.JS: return "JS files (*.js)|*.js"; 
-                case Language.Lua: return "Lua files (*.lua)|*.lua"; 
-                case Language.PHP: return "PHP files (*.php)|*.php";
-                case Language.SQL: return "SQL files (*.sql)|*.sql";
-                case Language.VB: return "VB files (*.vb)|*.vb";
+                case Language.XML: fileFilter = "XML files (*.xml)|*.xml"; break;
+                case Language.CSharp: fileFilter = "CSharp files (*.cs)|*.cs"; break;
+                case Language.HTML: fileFilter = "HTML files (*.html)|*.html"; break;
+                case Language.JS: fileFilter = "JS files (*.js)|*.js"; break;
+                case Language.Lua: fileFilter = "Lua files (*.lua)|*.lua"; break;
+                case Language.PHP: fileFilter = "PHP files (*.php)|*.php"; break;
+                case Language.SQL: fileFilter = "SQL files (*.sql)|*.sql"; break;
+                case Language.VB: fileFilter = "VB files (*.vb)|*.vb"; break;
             }
 
-            return string.Empty;
+            fileFilter = fileFilter.IsNullOrEmpty() ? @"All files (*.*)|*.*" : fileFilter + @"|All files (*.*)|*.*";
+
+            return fileFilter;
         }
 
         private void OnForeignFileChanged(object source, FileSystemEventArgs e)
@@ -237,50 +241,76 @@ namespace Utils.WinForm.Notepad
                     r.SetStyle(_sameWordsStyle);
         }
 
-
-        [DllImport("user32.dll")]
-        private static extern short GetAsyncKeyState(Keys vKey);
-
-        private static bool KeyIsDown(Keys key)
-        {
-            return (GetAsyncKeyState(key) < 0);
-        }
-
-        public void UserTriedToSaveDocument(object sender, KeyEventArgs e)
+        public void PrintXml()
         {
             try
             {
-                if ((e.Control && KeyIsDown(Keys.ControlKey) && KeyIsDown(Keys.S)) || e.KeyCode == Keys.F2)
+                if (FCTB.Language == Language.XML && FCTB.Text.IsXml(out var document))
                 {
-                    if (!IsContentChanged && FilePath != null)
-                        return;
+                    FCTB.Text = document.PrintXml();
+                    OnSomethingChanged?.Invoke(this, null);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
-                    if (FCTB.Language == Language.XML && !FCTB.Text.IsXml(out _))
+        public void SaveDocumnet(string newFileDestination = null)
+        {
+            try
+            {
+                if (!IsContentChanged && newFileDestination == null)
+                    return;
+
+                if (FCTB.Language == Language.XML && !FCTB.Text.IsXml(out _))
+                {
+                    var saveFailedXmlFile = MessageBox.Show(@"Xml is incorrect! Save anyway?", @"Error", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                    if (saveFailedXmlFile == DialogResult.Cancel)
+                        return;
+                }
+
+                if (FilePath == null && newFileDestination == null)
+                {
+                    string fileDestination = null;
+                    using (var sfd = new SaveFileDialog())
                     {
-                        var saveFailedXmlFile = MessageBox.Show(@"Xml is incorrect! Save anyway?", @"Error", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
-                        if (saveFailedXmlFile == DialogResult.Cancel)
+                        sfd.Filter = GetFileFilter();
+                        if (sfd.ShowDialog() != DialogResult.OK)
                             return;
+
+                        fileDestination = sfd.FileName;
                     }
 
-                    if (FilePath == null)
+                    if(fileDestination.IsNullOrEmpty())
+                        return;
+
+                    lock (syncWhenFileChanged)
                     {
-                        using (var sfd = new SaveFileDialog())
-                        {
-                            var fileFilter = GetLanguageFilter(FCTB.Language);
-                            sfd.Filter = fileFilter.IsNullOrEmpty() ? @"All files (*.*)|*.*" : fileFilter + @"|All files (*.*)|*.*";
-                            if (sfd.ShowDialog() != DialogResult.OK)
-                                return;
+                        IO.WriteFile(fileDestination, FCTB.Text, _defaultEncoding);
+                    }
 
-                            FilePath = sfd.FileName;
-                        }
+                    var newLanguage = InitializeFile(fileDestination);
+                    ChangeLanguage(newLanguage);
 
+                    EnableWatcher(FilePath);
+
+                    OnSomethingChanged?.Invoke(this, null);
+                }
+                else
+                {
+                    if (newFileDestination != null)
+                    {
                         lock (syncWhenFileChanged)
                         {
-                            IO.WriteFile(FilePath, FCTB.Text, _defaultEncoding);
+                            IO.WriteFile(newFileDestination, FCTB.Text);
                         }
 
-                        var newLanguage = InitializeFile(FilePath);
+                        var newLanguage = InitializeFile(newFileDestination);
                         ChangeLanguage(newLanguage);
+
+                        EnableWatcher(FilePath);
 
                         OnSomethingChanged?.Invoke(this, null);
                     }
@@ -291,11 +321,6 @@ namespace Utils.WinForm.Notepad
                             IO.WriteFile(FilePath, FCTB.Text);
                         }
                     }
-                }
-                else if (e.KeyCode == Keys.F5 && FCTB.Language == Language.XML && FCTB.Text.IsXml(out var document))
-                {
-                    FCTB.Text = document.PrintXml();
-                    OnSomethingChanged?.Invoke(this, null);
                 }
             }
             catch (Exception ex)
@@ -312,15 +337,38 @@ namespace Utils.WinForm.Notepad
         public void Dispose()
         {
             _isDisposed = true;
-
-            if (_watcher != null)
-            {
-                _watcher.EnableRaisingEvents = false;
-                _watcher.Dispose();
-                _watcher = null;
-            }
-
+            DisableWatcher();
             FCTB.Dispose();
+        }
+
+        void EnableWatcher(string filePath)
+        {
+            DisableWatcher();
+
+            _watcher = new FileSystemWatcher();
+            var paths = filePath.Split('\\');
+            _watcher.Path = string.Join("\\", paths.Take(paths.Length - 1));
+            _watcher.Filter = paths[paths.Length - 1];
+            _watcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
+            _watcher.Changed += OnForeignFileChanged;
+            _watcher.Created += OnForeignFileChanged;
+            _watcher.Deleted += OnForeignFileChanged;
+            _watcher.Renamed += OnFileRenamed;
+            _watcher.EnableRaisingEvents = true;
+        }
+
+        void DisableWatcher()
+        {
+            if (_watcher == null)
+                return;
+
+            _watcher.Changed -= OnForeignFileChanged;
+            _watcher.Created -= OnForeignFileChanged;
+            _watcher.Deleted -= OnForeignFileChanged;
+            _watcher.Renamed -= OnFileRenamed;
+            _watcher.EnableRaisingEvents = false;
+            _watcher.Dispose();
+            _watcher = null;
         }
     }
 }

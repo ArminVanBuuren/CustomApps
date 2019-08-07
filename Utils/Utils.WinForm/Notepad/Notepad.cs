@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
 
@@ -22,6 +24,7 @@ namespace Utils.WinForm.Notepad
 
         private Editor _currentEditor = null;
         private int _lastSelectedPage = 0;
+        private int numberOfNewDocument = 0;
         
 
         Dictionary<TabPage, Editor> ListOfXmlEditors { get; } = new Dictionary<TabPage, Editor>();
@@ -34,17 +37,21 @@ namespace Utils.WinForm.Notepad
             set => _wordWrapping.Checked = value;
         }
 
-        public Notepad(string filePath = null, bool wordWrap = true)
+        public Notepad(string filePath = null, bool wordWrap = false)
         {
             InitializeComponent();
 
+            KeyPreview = true; // для того чтобы работали горячие клавиши по всей форме и всем контролам
+
+            fileToolStripMenuItem.DropDownItemClicked += FileToolStripMenuItem_DropDownItemClicked;
+            
             Closed += XmlNotepad_Closed;
             TabControlObj.Padding = new Point(12, 4);
             TabControlObj.DrawMode = TabDrawMode.OwnerDrawFixed;
             TabControlObj.DrawItem += TabControl1_DrawItem;
             TabControlObj.MouseDown += TabControl1_MouseDown;
-            TabControlObj.KeyDown += XmlNotepad_KeyDown;
-            KeyDown += XmlNotepad_KeyDown;
+            TabControlObj.KeyDown += Notepad_KeyDown;
+            KeyDown += Notepad_KeyDown;
             TabControlObj.Deselected += TabControlObj_Deselected;
             TabControlObj.Selecting += TabControlObj_Selecting;
             TabControlObj.HandleCreated += TabControlObj_HandleCreated;
@@ -100,6 +107,96 @@ namespace Utils.WinForm.Notepad
             }
 
             _listOfLanguages.SelectedIndexChanged += ComboBox_SelectedIndexChanged;
+        }
+
+
+        [DllImport("user32.dll")]
+        private static extern short GetAsyncKeyState(Keys vKey);
+
+        private static bool KeyIsDown(Keys key)
+        {
+            return (GetAsyncKeyState(key) < 0);
+        }
+
+        private void Notepad_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && KeyIsDown(Keys.ControlKey) && KeyIsDown(Keys.N))
+            {
+                PerformCommand(newToolStripMenuItem);
+            }
+            else if (e.Control && KeyIsDown(Keys.ControlKey) && KeyIsDown(Keys.O))
+            {
+                PerformCommand(openToolStripMenuItem);
+            }
+            else if (e.KeyCode == Keys.F5)
+            {
+                PerformCommand(formatXmlF5ToolStripMenuItem);
+            }
+            else if (e.Control && KeyIsDown(Keys.ControlKey) && KeyIsDown(Keys.S))
+            {
+                PerformCommand(saveToolStripMenuItem);
+            }
+        }
+
+        private async void FileToolStripMenuItem_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            await Task.Factory.StartNew(() =>
+                Invoke(new MethodInvoker(delegate { PerformCommand(e.ClickedItem); })));
+        }
+
+        void PerformCommand(ToolStripItem item)
+        {
+            if (item == newToolStripMenuItem)
+            {
+                AddDocument($"new {++numberOfNewDocument}", string.Empty);
+            }
+            else if (item == openToolStripMenuItem)
+            {
+                using (var fbd = new OpenFileDialog())
+                {
+                    fbd.Filter = @"All files (*.*)|*.*";
+                    fbd.Multiselect = true;
+                    if (fbd.ShowDialog() != DialogResult.OK)
+                        return;
+
+                    foreach (var file in fbd.FileNames)
+                    {
+                        if (File.Exists(file))
+                        {
+                            AddFileDocument(file);
+                        }
+                    }
+                }
+            }
+            else if (item == formatXmlF5ToolStripMenuItem && _currentEditor != null)
+            {
+                _currentEditor.PrintXml();
+            }
+            else if (item == saveToolStripMenuItem && _currentEditor != null)
+            {
+                _currentEditor.SaveDocumnet();
+            }
+            else if (item == saveAsToolStripMenuItem && _currentEditor != null)
+            {
+                string fileDestination;
+                using (var sfd = new SaveFileDialog())
+                {
+                    sfd.Filter = _currentEditor.GetFileFilter();
+                    if (sfd.ShowDialog() != DialogResult.OK)
+                        return;
+
+                    fileDestination = sfd.FileName;
+                }
+
+                if (!fileDestination.IsNullOrEmpty())
+                {
+                    _currentEditor.SaveDocumnet(fileDestination);
+                }
+            }
+            else if (item == closeToolStripMenuItem)
+            {
+                Close();
+            }
         }
 
         private void TabControlObj_MouseClick(object sender, MouseEventArgs e)
@@ -207,6 +304,13 @@ namespace Utils.WinForm.Notepad
             if (filePath.IsNullOrEmptyTrim())
                 throw new ArgumentNullException(nameof(filePath));
 
+            var existEditor = ListOfXmlEditors.FirstOrDefault(x => x.Value?.FilePath != null && x.Value.FilePath.Equals(filePath, StringComparison.CurrentCultureIgnoreCase));
+            if (existEditor.Key != null && existEditor.Value != null)
+            {
+                TabControlObj.SelectedTab = existEditor.Key;
+                return existEditor.Value;
+            }
+
             var editor = new Editor(filePath, WordWrap);
             Text = filePath;
 
@@ -226,7 +330,7 @@ namespace Utils.WinForm.Notepad
             page.Controls.Add(editor.FCTB);
             page.Margin = new Padding(0);
             page.Padding = new Padding(0);
-            page.Text = page.Text + new string(' ', 2);
+            page.Text = page.Text.Trim() + new string(' ', 2);
 
             var index = TabControlObj.TabPages.Count;
             TabControlObj.TabPages.Add(page);
@@ -256,11 +360,52 @@ namespace Utils.WinForm.Notepad
                         continue;
 
                     edpg.Key.ForeColor = editor.IsContentChanged ? Color.Red : Color.Green;
-                    edpg.Key.Text = editor.HeaderName;
+                    edpg.Key.Text = editor.HeaderName.Trim() + new string(' ', 2);
                     TabControlObj_Selecting(null, null);
                     return;
                 }
             }));
+        }
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wp, IntPtr lp);
+
+        private const int TCM_SETMINTABWIDTH = 0x1300 + 49;
+
+        private void TabControlObj_HandleCreated(object sender, EventArgs e)
+        {
+            SendMessage(TabControlObj.Handle, TCM_SETMINTABWIDTH, IntPtr.Zero, (IntPtr) 16);
+        }
+
+        private void TabControlObj_Selecting(object sender, TabControlCancelEventArgs e)
+        {
+            if (TabControlObj.TabPages.Count == 0)
+            {
+                _currentEditor = null;
+                FCTB_SelectionChanged(this, null);
+                //Close();
+                return;
+            }
+
+            if (TabControlObj.SelectedTab == null && _lastSelectedPage <= TabControlObj.TabCount - 1)
+                TabControlObj.SelectedIndex = _lastSelectedPage;
+
+            if (TabControlObj.SelectedTab == null || TabControlObj.SelectedTab.Controls.Count == 0)
+                return;
+
+            if (!ListOfXmlEditors.TryGetValue(TabControlObj.SelectedTab, out var editor))
+                return;
+
+            _currentEditor = editor;
+            Text = editor.FilePath ?? editor.HeaderName;
+
+            FCTB_SelectionChanged(this, null);
+        }
+
+        private void TabControlObj_Deselected(object sender, TabControlEventArgs e)
+        {
+            if (e.TabPageIndex != -1)
+                _lastSelectedPage = e.TabPageIndex;
         }
 
         private void FCTB_SelectionChanged(object sender, EventArgs e)
@@ -286,48 +431,6 @@ namespace Utils.WinForm.Notepad
             //_listOfLanguages.SelectedIndexChanged -= ComboBox_SelectedIndexChanged;
             _listOfLanguages.Text = _currentEditor.FCTB.Language.ToString();
             //_listOfLanguages.SelectedIndexChanged += ComboBox_SelectedIndexChanged;
-        }
-
-
-        [DllImport("user32.dll")]
-        private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wp, IntPtr lp);
-
-        private const int TCM_SETMINTABWIDTH = 0x1300 + 49;
-
-        private void TabControlObj_HandleCreated(object sender, EventArgs e)
-        {
-            SendMessage(TabControlObj.Handle, TCM_SETMINTABWIDTH, IntPtr.Zero, (IntPtr) 16);
-        }
-
-        private void TabControlObj_Deselected(object sender, TabControlEventArgs e)
-        {
-            if(e.TabPageIndex != -1 )
-                _lastSelectedPage = e.TabPageIndex;
-        }
-
-        private void TabControlObj_Selecting(object sender, TabControlCancelEventArgs e)
-        {
-            if (TabControlObj.TabPages.Count == 0)
-            {
-                _currentEditor = null;
-                FCTB_SelectionChanged(this, null);
-                //Close();
-                return;
-            }
-
-            if (TabControlObj.SelectedTab == null)
-                TabControlObj.SelectedIndex = _lastSelectedPage;
-
-            if (TabControlObj.SelectedTab == null || TabControlObj.SelectedTab.Controls.Count == 0)
-                return;
-
-            if (!ListOfXmlEditors.TryGetValue(TabControlObj.SelectedTab, out var editor))
-                return;
-
-            _currentEditor = editor;
-            Text = editor.FilePath ?? editor.HeaderName;
-
-            FCTB_SelectionChanged(this, null);
         }
 
         private void TabControl1_MouseDown(object sender, MouseEventArgs e)
@@ -407,11 +510,7 @@ namespace Utils.WinForm.Notepad
             TextRenderer.DrawText(e.Graphics, tabPage.Text, tabPage.Font, tabRect, tabPage.ForeColor, tabPage.BackColor, TextFormatFlags.VerticalCenter);
         }
 
-        private void XmlNotepad_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (ListOfXmlEditors.TryGetValue(TabControlObj.SelectedTab, out var editor))
-                editor.UserTriedToSaveDocument(sender, e);
-        }
+
 
         private void XmlNotepad_Closed(object sender, EventArgs e)
         {
