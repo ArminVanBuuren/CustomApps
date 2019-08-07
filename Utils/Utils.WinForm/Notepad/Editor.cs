@@ -137,6 +137,7 @@ namespace Utils.WinForm.Notepad
             FCTB.Language = language;
             FCTB.Text = Source;
             FCTB.TextChanged += Fctb_TextChanged;
+            FCTB.ClearUndo(); // если убрать метод то при Undo все вернется к пустоте а не к исходнику
         }
 
         public void ChangeLanguage(Language lang)
