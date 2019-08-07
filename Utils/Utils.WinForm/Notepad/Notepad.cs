@@ -54,12 +54,12 @@ namespace Utils.WinForm.Notepad
 
             TabControlObj.Padding = new Point(12, 4);
             TabControlObj.DrawMode = TabDrawMode.OwnerDrawFixed;
+            TabControlObj.BackColor = Color.White;
             TabControlObj.DrawItem += TabControl1_DrawItem;
             TabControlObj.MouseDown += TabControl1_MouseDown;
             TabControlObj.Deselected += TabControlObj_Deselected;
             TabControlObj.Selecting += TabControlObj_Selecting;
             TabControlObj.HandleCreated += TabControlObj_HandleCreated;
-            TabControlObj.BackColor = Color.White;
             TabControlObj.MouseClick += TabControlObj_MouseClick;
 
             Closed += XmlNotepad_Closed;

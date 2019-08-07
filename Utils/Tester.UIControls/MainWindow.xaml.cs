@@ -45,8 +45,9 @@ namespace Tester.UIControls
             //CreateImage(ImageFormat.Wmf);
 
             //while (true)
+            try
             {
-              var notepad = new Notepad(@"C:\!Builds\Git\1\versions.xml");
+                var notepad = new Notepad(@"C:\!Builds\Git\1\versions.xml");
                 notepad.AddFileDocument(@"C:\!Builds\Git\2\versions.xml");
                 notepad.AddFileDocument(@"C:\!Builds\Git\3\versions.xml");
                 //notepad.AddDocument(@"C:\!Builds\Git\1\111.xml");
@@ -54,8 +55,14 @@ namespace Tester.UIControls
                 //notepad.AddDocument(@"C:\!Builds\Git\1\333.xml");
                 notepad.ShowDialog();
             }
-
-            Close();
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+            finally
+            {
+                Close();
+            }
         }
 
         void CreateImage(ImageFormat imageFormat)
