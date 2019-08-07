@@ -155,6 +155,10 @@ namespace Utils.WinForm.Notepad
             {
                 PerformCommand(saveToolStripMenuItem);
             }
+            else if(e.KeyCode == Keys.F4 && (ModifierKeys & Keys.Alt) != 0)
+            {
+                Close();
+            }
 
             e.Handled = true;
         }
@@ -306,6 +310,15 @@ namespace Utils.WinForm.Notepad
             if(headerName.Length > 70)
                 throw new Exception("Header name is too longer");
 
+            var existEditor = ListOfXmlEditors.FirstOrDefault(x => x.Value?.HeaderName != null && x.Value?.Source != null && x.Value?.FilePath == null
+                                                                   && x.Value.HeaderName.Equals(headerName, StringComparison.CurrentCultureIgnoreCase)
+                                                                   && x.Value.Source.Equals(bodyText));
+            if (existEditor.Key != null && existEditor.Value != null)
+            {
+                TabControlObj.SelectedTab = existEditor.Key;
+                return;
+            }
+
             var editor = new Editor(headerName, bodyText, WordWrap, language, WordHighlights);
             Text = headerName;
             InitializePage(editor);
@@ -325,7 +338,8 @@ namespace Utils.WinForm.Notepad
             if (filePath.IsNullOrEmptyTrim())
                 throw new ArgumentNullException(nameof(filePath));
 
-            var existEditor = ListOfXmlEditors.FirstOrDefault(x => x.Value?.FilePath != null && x.Value.FilePath.Equals(filePath, StringComparison.CurrentCultureIgnoreCase));
+            var existEditor = ListOfXmlEditors.FirstOrDefault(x => x.Value?.FilePath != null 
+                                                                   && x.Value.FilePath.Equals(filePath, StringComparison.CurrentCultureIgnoreCase));
             if (existEditor.Key != null && existEditor.Value != null)
             {
                 TabControlObj.SelectedTab = existEditor.Key;
