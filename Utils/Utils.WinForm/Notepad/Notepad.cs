@@ -415,8 +415,8 @@ namespace Utils.WinForm.Notepad
             if (TabControlObj.TabPages.Count == 0)
             {
                 _currentEditor = null;
+                Text = nameof(Notepad);
                 FCTB_SelectionChanged(this, null);
-                //Close();
                 return;
             }
 
