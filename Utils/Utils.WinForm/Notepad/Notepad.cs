@@ -51,19 +51,19 @@ namespace Utils.WinForm.Notepad
             KeyPreview = true; // для того чтобы работали горячие клавиши по всей форме и всем контролам
 
             fileToolStripMenuItem.DropDownItemClicked += FileToolStripMenuItem_DropDownItemClicked;
-            
-            Closed += XmlNotepad_Closed;
+
             TabControlObj.Padding = new Point(12, 4);
             TabControlObj.DrawMode = TabDrawMode.OwnerDrawFixed;
             TabControlObj.DrawItem += TabControl1_DrawItem;
             TabControlObj.MouseDown += TabControl1_MouseDown;
-            TabControlObj.KeyDown += Notepad_KeyDown;
-            KeyDown += Notepad_KeyDown;
             TabControlObj.Deselected += TabControlObj_Deselected;
             TabControlObj.Selecting += TabControlObj_Selecting;
             TabControlObj.HandleCreated += TabControlObj_HandleCreated;
             TabControlObj.BackColor = Color.White;
             TabControlObj.MouseClick += TabControlObj_MouseClick;
+
+            Closed += XmlNotepad_Closed;
+            KeyDown += Notepad_KeyDown;
 
             _listOfLanguages = new ToolStripComboBox {BackColor = SystemColors.Control};
             foreach (Language lang in Enum.GetValues(typeof(Language)))
@@ -159,8 +159,6 @@ namespace Utils.WinForm.Notepad
             {
                 Close();
             }
-
-            e.Handled = true;
         }
 
         private async void FileToolStripMenuItem_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
