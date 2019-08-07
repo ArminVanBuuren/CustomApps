@@ -99,9 +99,9 @@ namespace SPAFilter.SPA.Components.SRI
                             break;
                     }
                 }
-
+                
                 AddXmlNode(XPATH.Select(navigator, $"/Configuration/RestrictionList/Restriction[RFS[@name='{rfsName}']]"), RestrictionList);
-                AddXmlNode(XPATH.Select(navigator, $"/Configuration/ScenarioList/Scenario[RFS[@name='{rfsName}']]"), ScenarioList);
+                AddXmlNode(XPATH.Select(navigator, $"/Configuration/ScenarioList/Scenario[RFS[@name='{rfsName}'] or Append[@name='{rfsName}']]"), ScenarioList);
 
                 var rfsGroupsCFSXPath = string.Empty;
                 AddXmlNode(XPATH.Select(navigator, $"/Configuration/RFSGroupList/RFSGroup[RFS[@name='{rfsName}']]"), RFSGroupList);
