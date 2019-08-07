@@ -20,6 +20,7 @@ namespace Utils.WinForm.Notepad
         readonly ToolStripLabel _encodingInfo;
         readonly ToolStripComboBox _listOfLanguages;
         readonly CheckBox _wordWrapping;
+        readonly CheckBox _wordHighlights;
         
 
         private Editor _currentEditor = null;
@@ -35,6 +36,12 @@ namespace Utils.WinForm.Notepad
         {
             get => _wordWrapping.Checked;
             set => _wordWrapping.Checked = value;
+        }
+
+        public bool WordHighlights
+        {
+            get => _wordHighlights.Checked;
+            set => _wordHighlights.Checked = value;
         }
 
         public Notepad(string filePath = null, bool wordWrap = false)
@@ -76,8 +83,21 @@ namespace Utils.WinForm.Notepad
                     editor.FCTB.WordWrap = WordWrap;
                 }
             };
-            var wordWrapStatHost = new ToolStripControlHost(_wordWrapping);
-            statusStrip.Items.Add(wordWrapStatHost);
+            var wordWrapToolStrip = new ToolStripControlHost(_wordWrapping);
+            statusStrip.Items.Add(wordWrapToolStrip);
+            statusStrip.Items.Add(new ToolStripSeparator());
+
+
+            _wordHighlights = new CheckBox { BackColor = Color.Transparent, Text = @"Highlights", Checked = wordWrap, Padding = new Padding(10, 0, 0, 0) };
+            _wordHighlights.CheckStateChanged += (s, e) =>
+            {
+                foreach (var editor in ListOfXmlEditors.Values.Where(p => p.WordHighlights != WordHighlights))
+                {
+                    editor.WordHighlights = WordHighlights;
+                }
+            };
+            var wordHighlightsToolStrip = new ToolStripControlHost(_wordHighlights);
+            statusStrip.Items.Add(wordHighlightsToolStrip);
             statusStrip.Items.Add(new ToolStripSeparator());
 
             _encodingInfo = GetStripLabel("");
@@ -285,7 +305,7 @@ namespace Utils.WinForm.Notepad
             if(headerName.Length > 70)
                 throw new Exception("Header name is too longer");
 
-            var editor = new Editor(headerName, bodyText, WordWrap, language);
+            var editor = new Editor(headerName, bodyText, WordWrap, language, WordHighlights);
             Text = headerName;
             InitializePage(editor);
         }
@@ -311,7 +331,7 @@ namespace Utils.WinForm.Notepad
                 return existEditor.Value;
             }
 
-            var editor = new Editor(filePath, WordWrap);
+            var editor = new Editor(filePath, WordWrap, WordHighlights);
             Text = filePath;
 
             InitializePage(editor);

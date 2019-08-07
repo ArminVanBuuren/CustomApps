@@ -12,6 +12,7 @@ namespace Utils.WinForm.Notepad
 {
     internal class Editor : IDisposable
     {
+        private bool _wordHighLisghts = false;
         private string _fileName = null;
 
         private readonly Encoding _defaultEncoding = Encoding.Unicode;
@@ -37,6 +38,27 @@ namespace Utils.WinForm.Notepad
         public FastColoredTextBox FCTB { get; private set; }
         public bool IsContentChanged => !FCTB.Text.Equals(Source);
 
+        public bool WordHighlights
+        {
+            get => _wordHighLisghts;
+            set
+            {
+                if(FCTB == null)
+                    return;
+
+                FCTB.VisibleRange.ClearStyle(_sameWordsStyle);
+                _wordHighLisghts = value;
+                if (_wordHighLisghts)
+                {
+                    FCTB.SelectionChangedDelayed += FCTB_SelectionChangedDelayed;
+                }
+                else
+                {
+                    FCTB.SelectionChangedDelayed -= FCTB_SelectionChangedDelayed;
+                }
+            }
+        }
+
         public Encoding Encoding
         {
             get
@@ -52,20 +74,22 @@ namespace Utils.WinForm.Notepad
             }
         }
 
-        internal Editor(string headerName, string bodyText, bool wordWrap, Language language)
+        internal Editor(string headerName, string bodyText, bool wordWrap, Language language, bool wordHighlights)
         {
             Source = bodyText;
             HeaderName = headerName;
             InitializeFCTB(language, wordWrap);
+            WordHighlights = wordHighlights;
         }
 
-        internal Editor(string filePath, bool wordWrap)
+        internal Editor(string filePath, bool wordWrap, bool wordHighlights)
         {
             if (!File.Exists(filePath))
                 throw new ArgumentException($"File \"{filePath}\" not found!");
 
             var langByExtension = InitializeFile(filePath);
             InitializeFCTB(langByExtension, wordWrap);
+            WordHighlights = wordHighlights;
         }
 
         Language InitializeFile(string filePath)
@@ -113,7 +137,6 @@ namespace Utils.WinForm.Notepad
             FCTB.Language = language;
             FCTB.Text = Source;
             FCTB.TextChanged += Fctb_TextChanged;
-            FCTB.SelectionChangedDelayed += Fctb_SelectionChangedDelayed;
         }
 
         public void ChangeLanguage(Language lang)
@@ -219,10 +242,10 @@ namespace Utils.WinForm.Notepad
             OnSomethingChanged?.Invoke(this, null); //  e.OldFullPath, e.FullPath
         }
 
-        private void Fctb_SelectionChangedDelayed(object sender, EventArgs e)
+        private void FCTB_SelectionChangedDelayed(object sender, EventArgs e)
         {
-            if(FCTB.Language != Language.XML)
-                return;
+            //if(FCTB.Language != Language.XML)
+            //    return;
 
             FCTB.VisibleRange.ClearStyle(_sameWordsStyle);
             if (!FCTB.Selection.IsEmpty)
