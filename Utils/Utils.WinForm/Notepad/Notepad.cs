@@ -129,22 +129,21 @@ namespace Utils.WinForm.Notepad
             _listOfLanguages.SelectedIndexChanged += ComboBox_SelectedIndexChanged;
         }
 
+        //[DllImport("user32.dll")]
+        //private static extern short GetAsyncKeyState(Keys vKey);
 
-        [DllImport("user32.dll")]
-        private static extern short GetAsyncKeyState(Keys vKey);
-
-        private static bool KeyIsDown(Keys key)
-        {
-            return (GetAsyncKeyState(key) < 0);
-        }
+        //private static bool KeyIsDown(Keys key)
+        //{
+        //    return (GetAsyncKeyState(key) < 0);
+        //}
 
         private void Notepad_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Control && KeyIsDown(Keys.ControlKey) && KeyIsDown(Keys.N))
+            if (e.Control && e.KeyCode == Keys.N)
             {
                 PerformCommand(newToolStripMenuItem);
             }
-            else if (e.Control && KeyIsDown(Keys.ControlKey) && KeyIsDown(Keys.O))
+            else if (e.Control && e.KeyCode == Keys.O) // && KeyIsDown(Keys.ControlKey) && KeyIsDown(Keys.O))
             {
                 PerformCommand(openToolStripMenuItem);
             }
@@ -152,10 +151,12 @@ namespace Utils.WinForm.Notepad
             {
                 PerformCommand(formatXmlF5ToolStripMenuItem);
             }
-            else if (e.Control && KeyIsDown(Keys.ControlKey) && KeyIsDown(Keys.S))
+            else if (e.Control && e.KeyCode == Keys.S)
             {
                 PerformCommand(saveToolStripMenuItem);
             }
+
+            e.Handled = true;
         }
 
         private async void FileToolStripMenuItem_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
