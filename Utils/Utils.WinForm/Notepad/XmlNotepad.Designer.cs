@@ -68,10 +68,11 @@
             this.MainMenuStrip.BackColor = System.Drawing.Color.WhiteSmoke;
             this.MainMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem});
+            this.MainMenuStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
             this.MainMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.MainMenuStrip.Name = "MainMenuStrip";
             this.MainMenuStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.MainMenuStrip.Size = new System.Drawing.Size(1035, 24);
+            this.MainMenuStrip.Size = new System.Drawing.Size(1035, 23);
             this.MainMenuStrip.TabIndex = 2;
             this.MainMenuStrip.Text = "mainMenuStrip";
             // 
