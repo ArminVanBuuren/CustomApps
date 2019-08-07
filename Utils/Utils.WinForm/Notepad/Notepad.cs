@@ -49,7 +49,7 @@ namespace Utils.WinForm.Notepad
             TabControlObj.Selecting += TabControlObj_Selecting;
             TabControlObj.HandleCreated += TabControlObj_HandleCreated;
             TabControlObj.BackColor = Color.White;
-
+            TabControlObj.MouseClick += TabControlObj_MouseClick;
 
             _listOfLanguages = new ToolStripComboBox {BackColor = SystemColors.Control};
             foreach (Language lang in Enum.GetValues(typeof(Language)))
@@ -101,6 +101,65 @@ namespace Utils.WinForm.Notepad
 
             _listOfLanguages.SelectedIndexChanged += ComboBox_SelectedIndexChanged;
         }
+
+        private void TabControlObj_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                try
+                {
+                    for (var i = 0; i < TabControlObj.TabCount; ++i)
+                    {
+                        if (TabControlObj.GetTabRect(i).Contains(e.Location))
+                        {
+                            TabControlObj.SelectedIndex = i;
+                        }
+                    }
+
+                    var closeMenuStrip = new ContextMenuStrip
+                    {
+                        Tag = TabControlObj.TabPages[TabControlObj.SelectedIndex]
+                    };
+                    closeMenuStrip.Items.Add("Close");
+                    closeMenuStrip.Items.Add("Close All But This");
+                    closeMenuStrip.Items.Add("Close All Documents");
+                    closeMenuStrip.ItemClicked += CloseMenuStrip_ItemClicked;
+                    closeMenuStrip.Show(TabControlObj, e.Location);
+                }
+                catch (Exception ex)
+                {
+                    // ignored
+                }
+            }
+        }
+
+        private void CloseMenuStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            switch (e.ClickedItem.Text)
+            {
+                case "Close":
+                    CloseTab(TabControlObj.SelectedIndex);
+                    break;
+                case "Close All But This":
+                    for (var i = 0; i < TabControlObj.TabCount; ++i)
+                    {
+                        if (TabControlObj.SelectedIndex == i)
+                            continue;
+
+                        CloseTab(i, false);
+                        i--;
+                    }
+                    break;
+                case "Close All Documents":
+                    for (var i = 0; i < TabControlObj.TabCount; ++i)
+                    {
+                        CloseTab(i, false);
+                        i--;
+                    }
+                    break;
+            }
+        }
+
 
         private void ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -250,7 +309,9 @@ namespace Utils.WinForm.Notepad
         {
             if (TabControlObj.TabPages.Count == 0)
             {
-                Close();
+                _currentEditor = null;
+                FCTB_SelectionChanged(this, null);
+                //Close();
                 return;
             }
 
@@ -284,46 +345,53 @@ namespace Utils.WinForm.Notepad
 
                 if (e != null && imageRect.Contains(e.Location))
                 {
-                    var page = TabControlObj.TabPages[i];
-                    if (page != null )
-                    {
-                        if (ListOfXmlEditors.TryGetValue(page, out var editor))
-                        {
-                            ListOfXmlEditors.Remove(page);
-                            editor.OnSomethingChanged -= EditorOnSomethingChanged;
-                            editor.FCTB.SelectionChanged -= FCTB_SelectionChanged;
-                            editor.Dispose();
-                        }
-
-                        int prevSelectedIndex = TabControlObj.SelectedIndex;
-                        TabControlObj.TabPages.Remove(page);
-
-                        if (TabControlObj.TabPages.Count > 0)
-                        {
-                            if (prevSelectedIndex == i && _lastSelectedPage > i)
-                            {
-                                TabControlObj.SelectedIndex = _lastSelectedPage - 1;
-                            }
-                            else if (prevSelectedIndex == i && _lastSelectedPage < i)
-                            {
-                                TabControlObj.SelectedIndex = _lastSelectedPage;
-                            }
-                            else if (prevSelectedIndex > i)
-                            {
-                                TabControlObj.SelectedIndex = prevSelectedIndex - 1;
-                            }
-                            else if (prevSelectedIndex < i)
-                            {
-                                TabControlObj.SelectedIndex = prevSelectedIndex ;
-                            }
-                            else if(i  > 0)
-                            {
-                                TabControlObj.SelectedIndex = i - 1;
-                            }
-                        }
-                    }
-
+                    CloseTab(i);
                     break;
+                }
+            }
+        }
+
+        void CloseTab(int tabIndex, bool calcSelectionTab = true)
+        {
+            var page = TabControlObj.TabPages[tabIndex];
+            if (page == null)
+                return;
+
+            if (ListOfXmlEditors.TryGetValue(page, out var editor))
+            {
+                ListOfXmlEditors.Remove(page);
+                editor.OnSomethingChanged -= EditorOnSomethingChanged;
+                editor.FCTB.SelectionChanged -= FCTB_SelectionChanged;
+                editor.Dispose();
+            }
+
+            var prevSelectedIndex = TabControlObj.SelectedIndex;
+            TabControlObj.TabPages.Remove(page);
+
+            if(!calcSelectionTab)
+                return;
+
+            if (TabControlObj.TabPages.Count > 0)
+            {
+                if (prevSelectedIndex == tabIndex && _lastSelectedPage > tabIndex)
+                {
+                    TabControlObj.SelectedIndex = _lastSelectedPage - 1;
+                }
+                else if (prevSelectedIndex == tabIndex && _lastSelectedPage < tabIndex)
+                {
+                    TabControlObj.SelectedIndex = _lastSelectedPage;
+                }
+                else if (prevSelectedIndex > tabIndex)
+                {
+                    TabControlObj.SelectedIndex = prevSelectedIndex - 1;
+                }
+                else if (prevSelectedIndex < tabIndex)
+                {
+                    TabControlObj.SelectedIndex = prevSelectedIndex;
+                }
+                else if (tabIndex > 0)
+                {
+                    TabControlObj.SelectedIndex = tabIndex - 1;
                 }
             }
         }
