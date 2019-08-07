@@ -47,6 +47,7 @@ namespace SPAFilter
         private readonly object sync2 = new object();
         private Notepad _notepad;
         private bool _notepadWordWrap = true;
+        private bool _notepadWordHighlights = true;
         private FormLocation _notepadLocation = FormLocation.Default;
         private FormWindowState _notepadWindowsState = FormWindowState.Maximized;
         private SPAProcessFilter _spaFilter;
@@ -228,6 +229,7 @@ namespace SPAFilter
                 await AssignServiceInstanes((List<string>) TryGetSerializationValue(allSavedParams, "WWWERT", null));
 
                 _notepadWordWrap = (bool) TryGetSerializationValue(allSavedParams, "DDCCVV", true);
+                _notepadWordHighlights = (bool) TryGetSerializationValue(allSavedParams, "RRTTGGBB", true);
                 _notepadLocation = (FormLocation) TryGetSerializationValue(allSavedParams, "RRTTDD", FormLocation.Default);
                 _notepadWindowsState = (FormWindowState) TryGetSerializationValue(allSavedParams, "SSEEFF", FormWindowState.Maximized);
 
@@ -287,6 +289,7 @@ namespace SPAFilter
             }
 
             propertyBag.AddValue("DDCCVV", _notepadWordWrap);
+            propertyBag.AddValue("RRTTGGBB", _notepadWordHighlights);
             propertyBag.AddValue("RRTTDD", _notepadLocation);
             propertyBag.AddValue("SSEEFF", _notepadWindowsState);
 
@@ -1206,7 +1209,8 @@ namespace SPAFilter
                     {
                         Location = _notepadLocation.Location,
                         WindowState = _notepadWindowsState,
-                        WordWrap = _notepadWordWrap
+                        WordWrap = _notepadWordWrap,
+                        WordHighlights = _notepadWordHighlights
                     };
                     _notepad.Closed += _notepad_Closed;
                     _notepad.Show();
@@ -1237,6 +1241,7 @@ namespace SPAFilter
             {
                 _notepadLocation = new FormLocation(notepad);
                 _notepadWordWrap = notepad.WordWrap;
+                _notepadWordHighlights = notepad.WordHighlights;
                 _notepadWindowsState = notepad.WindowState;
             }
             catch (Exception)
