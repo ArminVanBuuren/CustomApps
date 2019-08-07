@@ -48,10 +48,10 @@
             this.TabControlObj.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
             this.TabControlObj.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
             this.TabControlObj.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.TabControlObj.Location = new System.Drawing.Point(0, 27);
+            this.TabControlObj.Location = new System.Drawing.Point(0, 22);
             this.TabControlObj.Name = "TabControlObj";
             this.TabControlObj.SelectedIndex = 0;
-            this.TabControlObj.Size = new System.Drawing.Size(1035, 597);
+            this.TabControlObj.Size = new System.Drawing.Size(1035, 603);
             this.TabControlObj.TabIndex = 0;
             // 
             // statusStrip
@@ -65,14 +65,14 @@
             // MainMenuStrip
             // 
             this.MainMenuStrip.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
-            this.MainMenuStrip.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.MainMenuStrip.BackColor = System.Drawing.Color.White;
             this.MainMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem});
             this.MainMenuStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
             this.MainMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.MainMenuStrip.Name = "MainMenuStrip";
             this.MainMenuStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.MainMenuStrip.Size = new System.Drawing.Size(1035, 23);
+            this.MainMenuStrip.Size = new System.Drawing.Size(1035, 21);
             this.MainMenuStrip.TabIndex = 2;
             this.MainMenuStrip.Text = "mainMenuStrip";
             // 
@@ -86,7 +86,7 @@
             this.closeToolStripMenuItem});
             this.fileToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 8F);
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 17);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // newToolStripMenuItem
@@ -125,7 +125,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
+            this.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.ClientSize = new System.Drawing.Size(1035, 648);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.MainMenuStrip);
