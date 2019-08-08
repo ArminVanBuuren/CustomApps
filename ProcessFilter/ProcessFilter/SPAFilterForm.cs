@@ -850,6 +850,7 @@ namespace SPAFilter
                                     ROBPOperationTextBox.BackColor = Color.White;
                                     break;
                             }
+                            await AssignServiceInstances(_spaFilter.ReloadActivatorsAsync());
                         }
                         catch (Exception)
                         {
