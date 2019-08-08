@@ -48,7 +48,7 @@ namespace Tester.UIControls
             //while (true)
             try
             {
-                var notepad = new Notepad(@"C:\!Builds\Git\1\versions.xml");
+                var notepad = new Notepad(@"C:\FORIS\SPA\sa.configuration\HLR-NSN\Scenarios\AddCB266.xml");
                 notepad.AddFileDocument(@"C:\!Builds\Git\2\versions.xml");
                 notepad.AddFileDocument(@"C:\!Builds\Git\3\versions.xml");
                 //notepad.AddDocument(@"C:\!Builds\Git\1\111.xml");

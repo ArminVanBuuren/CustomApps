@@ -14,6 +14,7 @@ namespace Utils.WinForm.Notepad
     {
         private bool _wordHighLisghts = false;
         private string _fileName = null;
+        private string _source = null;
 
         private readonly Encoding _defaultEncoding = Encoding.Unicode;
         readonly MarkerStyle _sameWordsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(40, Color.Gray)));
@@ -22,6 +23,9 @@ namespace Utils.WinForm.Notepad
         FileSystemWatcher _watcher;
 
         public event EventHandler OnSomethingChanged;
+
+        public TabPage Page { get; private set; }
+
         public string HeaderName { get; private set; }
 
         public string FilePath
@@ -34,9 +38,25 @@ namespace Utils.WinForm.Notepad
             }
         }
 
-        public string Source { get; private set; }
+        public string Source
+        {
+            get => _source;
+            private set
+            {
+                if (!string.IsNullOrEmpty(value))
+                {
+                    //var indexOfDifference = Source.Zip(FCTB.Text, (c1, c2) => c1 == c2).TakeWhile(b => b).Count() + 1;
+                    _source = value.Replace('\u0009'.ToString(), new string(' ', 4));
+                }
+                else
+                {
+                    _source = value;
+                }
+            }
+        }
+
         public FastColoredTextBox FCTB { get; private set; }
-        public bool IsContentChanged => !FCTB.Text.Equals(Source);
+        public bool IsContentChanged => !FCTB.Text.Equals(Source, StringComparison.Ordinal);
 
         public bool WordHighlights
         {
@@ -74,22 +94,28 @@ namespace Utils.WinForm.Notepad
             }
         }
 
-        internal Editor(string headerName, string bodyText, bool wordWrap, Language language, bool wordHighlights)
+        public Editor(string headerName, string bodyText, bool wordWrap, Language language, bool wordHighlights)
         {
             Source = bodyText;
             HeaderName = headerName;
+
             InitializeFCTB(language, wordWrap);
             WordHighlights = wordHighlights;
+
+            InitializePage();
         }
 
-        internal Editor(string filePath, bool wordWrap, bool wordHighlights)
+        public Editor(string filePath, bool wordWrap, bool wordHighlights)
         {
             if (!File.Exists(filePath))
                 throw new ArgumentException($"File \"{filePath}\" not found!");
 
-            var langByExtension = InitializeFile(filePath);
-            InitializeFCTB(langByExtension, wordWrap);
+            var langByFileExtension = InitializeFile(filePath);
+
+            InitializeFCTB(langByFileExtension, wordWrap);
             WordHighlights = wordHighlights;
+
+            InitializePage();
         }
 
         Language InitializeFile(string filePath)
@@ -136,8 +162,23 @@ namespace Utils.WinForm.Notepad
 
             FCTB.Language = language;
             FCTB.Text = Source;
+
             FCTB.TextChanged += Fctb_TextChanged;
             FCTB.ClearUndo(); // если убрать метод то при Undo все вернется к пустоте а не к исходнику
+        }
+
+        void InitializePage()
+        {
+            Page = new TabPage
+            {
+                Text = HeaderName + new string(' ', 2),
+                UseVisualStyleBackColor = true,
+                ForeColor = Color.Green,
+                Margin = new Padding(0),
+                Padding = new Padding(0)
+
+            };
+            Page.Controls.Add(FCTB);
         }
 
         public void ChangeLanguage(Language lang)
@@ -194,7 +235,7 @@ namespace Utils.WinForm.Notepad
                     case WatcherChangeTypes.Deleted:
                         MessageBox.Show($"File \"{FilePath}\" deleted.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         Source = string.Empty;
-                        OnSomethingChanged?.Invoke(this, null);
+                        SomethingChanged();
                         return;
                     case WatcherChangeTypes.Created:
                     case WatcherChangeTypes.Changed:
@@ -224,7 +265,7 @@ namespace Utils.WinForm.Notepad
                             Source = File.ReadAllText(FilePath);
                         }
 
-                        OnSomethingChanged?.Invoke(this, null);
+                        SomethingChanged();
 
                         break;
                     }
@@ -240,7 +281,7 @@ namespace Utils.WinForm.Notepad
         private void OnFileRenamed(object source, RenamedEventArgs e)
         {
             FilePath = e.FullPath;
-            OnSomethingChanged?.Invoke(this, null); //  e.OldFullPath, e.FullPath
+            SomethingChanged(); //  e.OldFullPath, e.FullPath
         }
 
         private void FCTB_SelectionChangedDelayed(object sender, EventArgs e)
@@ -272,7 +313,7 @@ namespace Utils.WinForm.Notepad
                 if (FCTB.Language == Language.XML && FCTB.Text.IsXml(out var document))
                 {
                     FCTB.Text = document.PrintXml();
-                    OnSomethingChanged?.Invoke(this, null);
+                    SomethingChanged();
                 }
             }
             catch (Exception ex)
@@ -320,7 +361,7 @@ namespace Utils.WinForm.Notepad
 
                     EnableWatcher(FilePath);
 
-                    OnSomethingChanged?.Invoke(this, null);
+                    SomethingChanged();
                 }
                 else
                 {
@@ -336,7 +377,7 @@ namespace Utils.WinForm.Notepad
 
                         EnableWatcher(FilePath);
 
-                        OnSomethingChanged?.Invoke(this, null);
+                        SomethingChanged();
                     }
                     else
                     {
@@ -355,6 +396,17 @@ namespace Utils.WinForm.Notepad
 
         private void Fctb_TextChanged(object sender, TextChangedEventArgs e)
         {
+            SomethingChanged();
+        }
+
+        void SomethingChanged()
+        {
+            Page.Invoke(new MethodInvoker(delegate
+            {
+                Page.ForeColor = IsContentChanged ? Color.Red : Color.Green;
+                Page.Text = HeaderName.Trim() + new string(' ', 2);
+            }));
+
             OnSomethingChanged?.Invoke(this, null);
         }
 

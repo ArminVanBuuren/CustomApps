@@ -28,7 +28,7 @@ namespace Utils.WinForm.Notepad
         private int numberOfNewDocument = 0;
         
 
-        Dictionary<TabPage, Editor> ListOfXmlEditors { get; } = new Dictionary<TabPage, Editor>();
+        Dictionary<TabPage, Editor> ListOfEditors { get; } = new Dictionary<TabPage, Editor>();
 
         public bool WindowIsClosed { get; private set; } = false;
 
@@ -58,7 +58,7 @@ namespace Utils.WinForm.Notepad
             TabControlObj.DrawItem += TabControl1_DrawItem;
             TabControlObj.MouseDown += TabControl1_MouseDown;
             TabControlObj.Deselected += TabControlObj_Deselected;
-            TabControlObj.Selecting += TabControlObj_Selecting;
+            TabControlObj.Selecting += RefreshForm;
             TabControlObj.HandleCreated += TabControlObj_HandleCreated;
             TabControlObj.MouseClick += TabControlObj_MouseClick;
 
@@ -78,7 +78,7 @@ namespace Utils.WinForm.Notepad
             _wordWrapping = new CheckBox {BackColor = Color.Transparent, Text = @"Wrap", Checked = wordWrap, Padding = new Padding(10, 0, 0, 0)};
             _wordWrapping.CheckStateChanged += (s, e) =>
             {
-                foreach (var editor in ListOfXmlEditors.Values.Where(p => p.FCTB.WordWrap != WordWrap))
+                foreach (var editor in ListOfEditors.Values.Where(p => p.FCTB.WordWrap != WordWrap))
                 {
                     editor.FCTB.WordWrap = WordWrap;
                 }
@@ -91,7 +91,7 @@ namespace Utils.WinForm.Notepad
             _wordHighlights = new CheckBox { BackColor = Color.Transparent, Text = @"Highlights", Checked = wordWrap, Padding = new Padding(10, 0, 0, 0) };
             _wordHighlights.CheckStateChanged += (s, e) =>
             {
-                foreach (var editor in ListOfXmlEditors.Values.Where(p => p.WordHighlights != WordHighlights))
+                foreach (var editor in ListOfEditors.Values.Where(p => p.WordHighlights != WordHighlights))
                 {
                     editor.WordHighlights = WordHighlights;
                 }
@@ -308,7 +308,7 @@ namespace Utils.WinForm.Notepad
             if(headerName.Length > 70)
                 throw new Exception("Header name is too longer");
 
-            var existEditor = ListOfXmlEditors.FirstOrDefault(x => x.Value?.HeaderName != null && x.Value?.Source != null && x.Value?.FilePath == null
+            var existEditor = ListOfEditors.FirstOrDefault(x => x.Value?.HeaderName != null && x.Value?.Source != null && x.Value?.FilePath == null
                                                                    && x.Value.HeaderName.Equals(headerName, StringComparison.CurrentCultureIgnoreCase)
                                                                    && x.Value.Source.Equals(bodyText));
             if (existEditor.Key != null && existEditor.Value != null)
@@ -318,7 +318,7 @@ namespace Utils.WinForm.Notepad
             }
 
             var editor = new Editor(headerName, bodyText, WordWrap, language, WordHighlights);
-            Text = headerName;
+
             InitializePage(editor);
         }
 
@@ -336,7 +336,7 @@ namespace Utils.WinForm.Notepad
             if (filePath.IsNullOrEmptyTrim())
                 throw new ArgumentNullException(nameof(filePath));
 
-            var existEditor = ListOfXmlEditors.FirstOrDefault(x => x.Value?.FilePath != null 
+            var existEditor = ListOfEditors.FirstOrDefault(x => x.Value?.FilePath != null 
                                                                    && x.Value.FilePath.Equals(filePath, StringComparison.CurrentCultureIgnoreCase));
             if (existEditor.Key != null && existEditor.Value != null)
             {
@@ -345,7 +345,6 @@ namespace Utils.WinForm.Notepad
             }
 
             var editor = new Editor(filePath, WordWrap, WordHighlights);
-            Text = filePath;
 
             InitializePage(editor);
 
@@ -354,30 +353,19 @@ namespace Utils.WinForm.Notepad
 
         void InitializePage(Editor editor)
         {
-            var page = new TabPage
-            {
-                UseVisualStyleBackColor = true,
-                Text = editor.HeaderName,
-                ForeColor = Color.Green
-            };
-            page.Controls.Add(editor.FCTB);
-            page.Margin = new Padding(0);
-            page.Padding = new Padding(0);
-            page.Text = page.Text.Trim() + new string(' ', 2);
-
             var index = TabControlObj.TabPages.Count;
-            TabControlObj.TabPages.Add(page);
+            TabControlObj.TabPages.Add(editor.Page);
             if (TabControlObj.TabPages.Count == index)
                 TabControlObj.TabPages.Insert(index, editor.HeaderName);
             TabControlObj.SelectedIndex = index;
 
-            editor.FCTB.SelectionChanged += FCTB_SelectionChanged;
+            editor.FCTB.SelectionChanged += RefreshFormStatus;
             editor.OnSomethingChanged += EditorOnSomethingChanged;
 
-            ListOfXmlEditors.Add(page, editor);
+            ListOfEditors.Add(editor.Page, editor);
             _currentEditor = editor;
 
-            FCTB_SelectionChanged(this, null);
+            RefreshFormStatus(this, null);
         }
 
         void EditorOnSomethingChanged(object sender, EventArgs args)
@@ -385,19 +373,7 @@ namespace Utils.WinForm.Notepad
             if (!(sender is Editor editor))
                 return;
 
-            Invoke(new MethodInvoker(delegate
-            {
-                foreach (var edpg in ListOfXmlEditors)
-                {
-                    if (edpg.Value != editor)
-                        continue;
-
-                    edpg.Key.ForeColor = editor.IsContentChanged ? Color.Red : Color.Green;
-                    edpg.Key.Text = editor.HeaderName.Trim() + new string(' ', 2);
-                    TabControlObj_Selecting(null, null);
-                    return;
-                }
-            }));
+            RefreshForm(null, null);
         }
 
         [DllImport("user32.dll")]
@@ -410,13 +386,13 @@ namespace Utils.WinForm.Notepad
             SendMessage(TabControlObj.Handle, TCM_SETMINTABWIDTH, IntPtr.Zero, (IntPtr) 16);
         }
 
-        private void TabControlObj_Selecting(object sender, TabControlCancelEventArgs e)
+        private void RefreshForm(object sender, TabControlCancelEventArgs e)
         {
             if (TabControlObj.TabPages.Count == 0)
             {
                 _currentEditor = null;
                 Text = nameof(Notepad);
-                FCTB_SelectionChanged(this, null);
+                RefreshFormStatus(this, null);
                 return;
             }
 
@@ -426,13 +402,13 @@ namespace Utils.WinForm.Notepad
             if (TabControlObj.SelectedTab == null || TabControlObj.SelectedTab.Controls.Count == 0)
                 return;
 
-            if (!ListOfXmlEditors.TryGetValue(TabControlObj.SelectedTab, out var editor))
+            if (!ListOfEditors.TryGetValue(TabControlObj.SelectedTab, out var editor))
                 return;
 
             _currentEditor = editor;
             Text = editor.FilePath ?? editor.HeaderName;
 
-            FCTB_SelectionChanged(this, null);
+            RefreshFormStatus(this, null);
         }
 
         private void TabControlObj_Deselected(object sender, TabControlEventArgs e)
@@ -441,7 +417,7 @@ namespace Utils.WinForm.Notepad
                 _lastSelectedPage = e.TabPageIndex;
         }
 
-        private void FCTB_SelectionChanged(object sender, EventArgs e)
+        private void RefreshFormStatus(object sender, EventArgs e)
         {
             if (_currentEditor == null)
             {
@@ -493,11 +469,11 @@ namespace Utils.WinForm.Notepad
             if (page == null)
                 return;
 
-            if (ListOfXmlEditors.TryGetValue(page, out var editor))
+            if (ListOfEditors.TryGetValue(page, out var editor))
             {
-                ListOfXmlEditors.Remove(page);
+                ListOfEditors.Remove(page);
                 editor.OnSomethingChanged -= EditorOnSomethingChanged;
-                editor.FCTB.SelectionChanged -= FCTB_SelectionChanged;
+                editor.FCTB.SelectionChanged -= RefreshFormStatus;
                 editor.Dispose();
             }
 
@@ -547,7 +523,7 @@ namespace Utils.WinForm.Notepad
 
         private void XmlNotepad_Closed(object sender, EventArgs e)
         {
-            foreach (var editor in ListOfXmlEditors.Values)
+            foreach (var editor in ListOfEditors.Values)
             {
                 editor.Dispose();
             }
