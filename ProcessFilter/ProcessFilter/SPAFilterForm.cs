@@ -4,7 +4,6 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
@@ -190,19 +189,12 @@ namespace SPAFilter
                     await AssignAsync(SPAProcessFilterType.Processes, false);
                 }
 
-                var robpIsChecked = (bool) TryGetSerializationValue(allSavedParams, "GGHHTTDD", true);
-                if (robpIsChecked != ROBPOperationsRadioButton.Checked)
-                {
-                    ROBPOperationsRadioButton.Checked = robpIsChecked;
-                    ServiceCatalogRadioButton.Checked = !robpIsChecked;
-                }
-                else
-                {
-                    ROBPOperationsRadioButton_CheckedChanged(ServiceCatalogRadioButton, EventArgs.Empty);
-                }
+                ROBPOperationTextBox.Text = (string)TryGetSerializationValue(allSavedParams, "AAEERF", string.Empty);
+                ServiceCatalogTextBox.Text = (string)TryGetSerializationValue(allSavedParams, "DFWDRT", string.Empty);
 
-                ROBPOperationTextBox.Text = (string) TryGetSerializationValue(allSavedParams, "AAEERF", string.Empty);
-                ServiceCatalogTextBox.Text = (string) TryGetSerializationValue(allSavedParams, "DFWDRT", string.Empty);
+                var robpIsChecked = (bool) TryGetSerializationValue(allSavedParams, "GGHHTTDD", true);
+                ROBPOperationsRadioButton.Checked = robpIsChecked;
+                ServiceCatalogRadioButton.Checked = !robpIsChecked;
 
                 if (ROBPOperationsRadioButton.Checked)
                 {
@@ -310,9 +302,6 @@ namespace SPAFilter
             tooltipPrintXML.SetToolTip(ProcessesComboBox, Resources.Form_ToolTip_SearchPattern);
             tooltipPrintXML.SetToolTip(OperationComboBox, Resources.Form_ToolTip_SearchPattern);
             tooltipPrintXML.SetToolTip(NetSettComboBox, Resources.Form_ToolTip_SearchPattern);
-
-            ROBPOperationsRadioButton.CheckedChanged += ROBPOperationsRadioButton_CheckedChanged;
-            ServiceCatalogRadioButton.CheckedChanged += ServiceCatalogRadioButton_CheckedChanged;
         }
 
         void PostInit()
@@ -350,6 +339,9 @@ namespace SPAFilter
             ServiceCatalogOpenButton.Click += ServiceCatalogOpenButton_Click;
             ServiceCatalogTextBox.TextChanged += ServiceCatalogTextBox_TextChanged;
             ServiceCatalogTextBox.LostFocus += ServiceCatalogTextBox_LostFocus;
+
+            ROBPOperationsRadioButton.CheckedChanged += ROBPOperationsRadioButton_CheckedChanged;
+            ServiceCatalogRadioButton.CheckedChanged += ServiceCatalogRadioButton_CheckedChanged;
 
             Closing += (s, e) => SaveData();
 
@@ -721,60 +713,10 @@ namespace SPAFilter
             _robpOperationTextBoxChanged = true;
         }
 
-        private async void ROBPOperationsRadioButton_CheckedChanged(object sender, EventArgs e)
-        {
-            ServiceCatalogRadioButton.CheckedChanged -= ServiceCatalogRadioButton_CheckedChanged;
-
-            ServiceCatalogRadioButton.Checked = !ROBPOperationsRadioButton.Checked;
-
-            if (!IsInProgress)
-            {
-                ServiceCatalogTextBox.Enabled = ServiceCatalogRadioButton.Checked;
-                ServiceCatalogOpenButton.Enabled = ServiceCatalogRadioButton.Checked;
-                ROBPOperationTextBox.Enabled = ROBPOperationsRadioButton.Checked;
-                ROBPOperationButtonOpen.Enabled = ROBPOperationsRadioButton.Checked;
-            }
-
-            await AssignOperations();
-
-            ServiceCatalogRadioButton.CheckedChanged += ServiceCatalogRadioButton_CheckedChanged;
-        }
-
-        private async void ServiceCatalogRadioButton_CheckedChanged(object sender, EventArgs e)
-        {
-            ROBPOperationsRadioButton.CheckedChanged -= ROBPOperationsRadioButton_CheckedChanged;
-
-            ROBPOperationsRadioButton.Checked = !ServiceCatalogRadioButton.Checked;
-
-            if (!IsInProgress)
-            {
-                ROBPOperationTextBox.Enabled = ROBPOperationsRadioButton.Checked;
-                ROBPOperationButtonOpen.Enabled = ROBPOperationsRadioButton.Checked;
-                ServiceCatalogTextBox.Enabled = ServiceCatalogRadioButton.Checked;
-                ServiceCatalogOpenButton.Enabled = ServiceCatalogRadioButton.Checked;
-            }
-
-            await AssignOperations();
-
-            ROBPOperationsRadioButton.CheckedChanged += ROBPOperationsRadioButton_CheckedChanged;
-        }
-
-        async Task AssignOperations()
-        {
-            var type = ROBPOperationsRadioButton.Checked ? SPAProcessFilterType.ROBPOperations : SPAProcessFilterType.SCOperations;
-            switch (type)
-            {
-                case SPAProcessFilterType.ROBPOperations:
-                case SPAProcessFilterType.SCOperations:
-                    await AssignAsync(type);
-                    break;
-            }
-        }
-
         private bool _serviceCatalogTextBoxChanged = false;
         private async void ServiceCatalogOpenButton_Click(object sender, EventArgs e)
         {
-            if (!OpenFile(@"(*.xml) | *.xml", false,out var res))
+            if (!OpenFile(@"(*.xml) | *.xml", false, out var res))
                 return;
 
             ServiceCatalogTextBox.Text = res.First();
@@ -795,6 +737,55 @@ namespace SPAFilter
         {
             ServiceCatalogTextBox.BackColor = Color.White;
             _serviceCatalogTextBoxChanged = true;
+        }
+
+        private async void ROBPOperationsRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            ServiceCatalogRadioButton.CheckedChanged -= ServiceCatalogRadioButton_CheckedChanged;
+
+            ServiceCatalogRadioButton.Checked = !ROBPOperationsRadioButton.Checked;
+
+            ROBP_SC_Check();
+
+            await AssignOperations();
+
+            ServiceCatalogRadioButton.CheckedChanged += ServiceCatalogRadioButton_CheckedChanged;
+        }
+
+        private async void ServiceCatalogRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            ROBPOperationsRadioButton.CheckedChanged -= ROBPOperationsRadioButton_CheckedChanged;
+
+            ROBPOperationsRadioButton.Checked = !ServiceCatalogRadioButton.Checked;
+
+            ROBP_SC_Check();
+
+            await AssignOperations();
+
+            ROBPOperationsRadioButton.CheckedChanged += ROBPOperationsRadioButton_CheckedChanged;
+        }
+
+        void ROBP_SC_Check()
+        {
+            if (IsInProgress)
+                return;
+
+            ROBPOperationTextBox.Enabled = ROBPOperationsRadioButton.Checked;
+            ROBPOperationButtonOpen.Enabled = ROBPOperationsRadioButton.Checked;
+            ServiceCatalogTextBox.Enabled = ServiceCatalogRadioButton.Checked;
+            ServiceCatalogOpenButton.Enabled = ServiceCatalogRadioButton.Checked;
+        }
+
+        async Task AssignOperations()
+        {
+            var type = ROBPOperationsRadioButton.Checked ? SPAProcessFilterType.ROBPOperations : SPAProcessFilterType.SCOperations;
+            switch (type)
+            {
+                case SPAProcessFilterType.ROBPOperations:
+                case SPAProcessFilterType.SCOperations:
+                    await AssignAsync(type);
+                    break;
+            }
         }
 
         private async void AddActivatorButton_Click(object sender, EventArgs e)
