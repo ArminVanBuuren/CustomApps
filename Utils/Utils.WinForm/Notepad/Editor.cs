@@ -46,6 +46,7 @@ namespace Utils.WinForm.Notepad
                 if (!string.IsNullOrEmpty(value))
                 {
                     //var indexOfDifference = Source.Zip(FCTB.Text, (c1, c2) => c1 == c2).TakeWhile(b => b).Count() + 1;
+                    // реплейсим Tab на Spaces, потмоу что FCTB для выравнивание не поддерживает Tab. Поэтому сразу заменяем на Spaces, для корректного компаринга.
                     _source = value.Replace('\u0009'.ToString(), new string(' ', 4));
                 }
                 else
