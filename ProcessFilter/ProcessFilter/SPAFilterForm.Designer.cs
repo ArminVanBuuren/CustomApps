@@ -547,11 +547,11 @@ namespace SPAFilter
             // PrintXMLButton
             // 
             this.PrintXMLButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.PrintXMLButton.Location = new System.Drawing.Point(558, 56);
+            this.PrintXMLButton.Location = new System.Drawing.Point(563, 56);
             this.PrintXMLButton.Name = "PrintXMLButton";
-            this.PrintXMLButton.Size = new System.Drawing.Size(103, 27);
+            this.PrintXMLButton.Size = new System.Drawing.Size(100, 27);
             this.PrintXMLButton.TabIndex = 14;
-            this.PrintXMLButton.Text = "Format Files";
+            this.PrintXMLButton.Text = global::SPAFilter.Properties.Resources.Form_PrintXMLFiles_Button;
             this.PrintXMLButton.UseVisualStyleBackColor = true;
             this.PrintXMLButton.Click += new System.EventHandler(this.PrintXMLButton_Click);
             // 

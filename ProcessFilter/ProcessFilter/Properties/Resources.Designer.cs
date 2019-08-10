@@ -160,6 +160,24 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pretty print.
+        /// </summary>
+        internal static string Form_PrintXMLFiles_Button {
+            get {
+                return ResourceManager.GetString("Form_PrintXMLFiles_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        internal static string Form_PrintXMLFiles_Cancel {
+            get {
+                return ResourceManager.GetString("Form_PrintXMLFiles_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Some ({0}) errors found:
         ///
         ///{1}.
@@ -171,7 +189,16 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Successfully completed.
+        ///   Looks up a localized string similar to {0} out of {1} xml files were printed..
+        /// </summary>
+        internal static string Form_PrintXMLFiles_Result {
+            get {
+                return ResourceManager.GetString("Form_PrintXMLFiles_Result", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully completed..
         /// </summary>
         internal static string Form_PrintXMLFiles_Successfully {
             get {
@@ -180,7 +207,7 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Format all filtered xml files.
+        ///   Looks up a localized string similar to Pretty print filtered XML files.
         /// </summary>
         internal static string Form_PrintXMLFiles_ToolTip {
             get {

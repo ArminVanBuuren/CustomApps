@@ -139,7 +139,7 @@
 {1}</value>
   </data>
   <data name="Form_PrintXMLFiles_Successfully" xml:space="preserve">
-    <value>Successfully completed</value>
+    <value>Successfully completed.</value>
   </data>
   <data name="Form_Status_Processes" xml:space="preserve">
     <value>Processes: {0}</value>
@@ -187,9 +187,18 @@
     <value>Please select a row</value>
   </data>
   <data name="Form_PrintXMLFiles_ToolTip" xml:space="preserve">
-    <value>Format all filtered xml files</value>
+    <value>Pretty print filtered XML files</value>
   </data>
   <data name="Form_ToolTip_SearchPattern" xml:space="preserve">
     <value>To search for a specified pattern, you can use % symbol. Example: %Assign%</value>
+  </data>
+  <data name="Form_PrintXMLFiles_Button" xml:space="preserve">
+    <value>Pretty print</value>
+  </data>
+  <data name="Form_PrintXMLFiles_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Form_PrintXMLFiles_Result" xml:space="preserve">
+    <value>{0} out of {1} xml files were printed.</value>
   </data>
 </root>

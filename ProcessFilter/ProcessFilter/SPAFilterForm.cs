@@ -71,7 +71,8 @@ namespace SPAFilter
                     //    _notepad.Close();
 
                     FilterButton.Enabled = !_IsInProgress;
-                    PrintXMLButton.Enabled = !_IsInProgress;
+                    if(PrintXMLButton.Text != Resources.Form_PrintXMLFiles_Cancel)
+                        PrintXMLButton.Enabled = !_IsInProgress;
 
                     ProcessesTextBox.Enabled = !_IsInProgress;
                     ProcessesButtonOpen.Enabled = !_IsInProgress;
@@ -240,7 +241,7 @@ namespace SPAFilter
 
         static object TryGetSerializationValue(IReadOnlyDictionary<string, object> allSavedParams, string key, object defaultResult)
         {
-            return allSavedParams.TryGetValue(key, out var res) ? res : defaultResult;
+            return allSavedParams.TryGetValue(key, out var res) && res != null ? res : defaultResult;
         }
 
         async Task AssignServiceInstanes(IEnumerable<string> configurationApplicationList)
@@ -1126,22 +1127,27 @@ namespace SPAFilter
 
             try
             {
+                PrintXMLButton.Text = Resources.Form_PrintXMLFiles_Cancel;
+                PrintXMLButton.Click -= PrintXMLButton_Click;
+                PrintXMLButton.Click += PrintXMLButton_Click_Cancel;
                 IsInProgress = true;
 
                 using (var stringErrors = new CustomStringBuilder())
                 {
                     using (var progrAsync = new ProgressCalculationAsync(progressBar, filesNumber))
                     {
-                        await Task.Factory.StartNew(() => _spaFilter.PrintXML(stringErrors, progrAsync));
-                    }
+                        await _spaFilter.PrintXMLAsync(progrAsync, stringErrors);
 
-                    if (stringErrors.Length > 0)
-                    {
-                        MessageBox.Show(string.Format(Resources.Form_PrintXMLFiles_Error, stringErrors.Lines, stringErrors.ToString(2)), @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
-                    else
-                    {
-                        MessageBox.Show(Resources.Form_PrintXMLFiles_Successfully, @"OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        var result = string.Format(Resources.Form_PrintXMLFiles_Result, progrAsync.CurrentProgressIterator, filesNumber);
+                        if (stringErrors.Length > 0)
+                        {
+                            var warning = string.Format(Resources.Form_PrintXMLFiles_Error, stringErrors.Lines, stringErrors.ToString(2));
+                            MessageBox.Show($"{result}\r\n{warning}", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+                        else
+                        {
+                            MessageBox.Show($"{Resources.Form_PrintXMLFiles_Successfully} {result}", @"OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
                     }
                 }
             }
@@ -1151,8 +1157,16 @@ namespace SPAFilter
             }
             finally
             {
+                PrintXMLButton.Text = Resources.Form_PrintXMLFiles_Button;
+                PrintXMLButton.Click += PrintXMLButton_Click;
+                PrintXMLButton.Click -= PrintXMLButton_Click_Cancel;
                 IsInProgress = false;
             }
+        }
+
+        private void PrintXMLButton_Click_Cancel(object sender, EventArgs e)
+        {
+            _spaFilter.PrintXMLAbort();
         }
 
         void OpenEditor(string source, string name = null)

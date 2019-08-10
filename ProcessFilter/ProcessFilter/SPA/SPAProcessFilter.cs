@@ -4,6 +4,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using OfficeOpenXml;
@@ -635,24 +636,52 @@ namespace SPAFilter.SPA
             }
         }
 
-        public void PrintXML(CustomStringBuilder stringErrors, ProgressCalculationAsync progrAsync)
+        private CancellationTokenSource _cancellationPrintXML;
+        public async Task PrintXMLAsync(ProgressCalculationAsync progrAsync, CustomStringBuilder stringErrors)
         {
-            FormatXmlFiles(Processes, stringErrors, progrAsync);
-            FormatXmlFiles(HostTypes.Operations.OfType<DriveTemplate>(), stringErrors, progrAsync);
-            FormatXmlFiles(ServiceInstances, stringErrors, progrAsync);
-            FormatXmlFiles(Scenarios, stringErrors, progrAsync);
-            FormatXmlFiles(Commands, stringErrors, progrAsync);
+            _cancellationPrintXML = new CancellationTokenSource();
+            try
+            {
+                await Task.Factory.StartNew((token) => PrintXML((CancellationToken)token, progrAsync, stringErrors), _cancellationPrintXML.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                
+            }
+            finally
+            {
+                _cancellationPrintXML = null;
+            }
         }
 
-        static void FormatXmlFiles(IEnumerable<DriveTemplate> fileObj, CustomStringBuilder stringErrors, ProgressCalculationAsync progressCalc)
+        public void PrintXMLAbort()
+        {
+            _cancellationPrintXML?.Cancel();
+        }
+
+        void PrintXML(CancellationToken token, ProgressCalculationAsync progrAsync, CustomStringBuilder stringErrors)
+        {
+            FormatXmlFiles(token, Processes, progrAsync, stringErrors);
+            FormatXmlFiles(token, HostTypes.Operations.OfType<DriveTemplate>(), progrAsync, stringErrors);
+            FormatXmlFiles(token, ServiceInstances, progrAsync, stringErrors);
+            FormatXmlFiles(token, Scenarios, progrAsync, stringErrors);
+            FormatXmlFiles(token, Commands, progrAsync, stringErrors);
+        }
+
+        static void FormatXmlFiles(CancellationToken token, IEnumerable<DriveTemplate> fileObj, ProgressCalculationAsync progressCalc, CustomStringBuilder stringErrors)
         {
             if (fileObj == null || !fileObj.Any())
                 return;
 
             foreach (var file in fileObj)
             {
+                if (token.IsCancellationRequested)
+                {
+                    token.ThrowIfCancellationRequested();
+                }
+
                 FormatXmlFile(file.FilePath, stringErrors);
-                progressCalc++;
+                progressCalc.Append(1);
             }
         }
 
