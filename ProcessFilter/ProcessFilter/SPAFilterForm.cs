@@ -230,7 +230,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                ShowError(ex.Message);
+                ShowError(ex.ToString());
             }
             finally
             {
