@@ -1242,21 +1242,29 @@ namespace SPAFilter
 
         void RefreshStatus()
         {
-            BPCount.Text = string.Format(Resources.Form_Status_Processes, (_spaFilter.Processes?.Count ?? 0 ).ToString());
-            NEElementsCount.Text = string.Format(Resources.Form_Status_HostTypes, (_spaFilter.HostTypes?.HostTypeNames?.Count ?? 0).ToString());
-            OperationsCount.Text = string.Format(Resources.Form_Status_Operations, (_spaFilter.HostTypes?.OperationsCount ?? 0).ToString());
-            ScenariosCount.Text = string.Format(Resources.Form_Status_Scenarios, (_spaFilter.Scenarios?.Count ?? 0).ToString());
-            CommandsCount.Text = string.Format(Resources.Form_Status_Commands, (_spaFilter.Commands?.Count ?? 0).ToString());
+            try
+            {
+                BPCount.Text = string.Format(Resources.Form_Status_Processes, (_spaFilter.Processes?.Count ?? 0).ToString());
+                NEElementsCount.Text = string.Format(Resources.Form_Status_HostTypes, (_spaFilter.HostTypes?.HostTypeNames?.Count ?? 0).ToString());
+                OperationsCount.Text = string.Format(Resources.Form_Status_Operations, (_spaFilter.HostTypes?.OperationsCount ?? 0).ToString());
+                ScenariosCount.Text = string.Format(Resources.Form_Status_Scenarios, (_spaFilter.Scenarios?.Count ?? 0).ToString());
+                CommandsCount.Text = string.Format(Resources.Form_Status_Commands, (_spaFilter.Commands?.Count ?? 0).ToString());
 
-            FilterButton.Enabled = _spaFilter.IsEnabledFilter;
-            PrintXMLButton.Enabled = _spaFilter.WholeDriveItemsCount > 0 && IsFiltered;
-            ButtonGenerateSC.Enabled = _spaFilter.CanGenerateSC && !ExportSCPath.Text.IsNullOrEmptyTrim() && ROBPOperationsRadioButton.Checked && IsFiltered;
+                FilterButton.Enabled = _spaFilter.IsEnabledFilter;
+                PrintXMLButton.Enabled = _spaFilter.WholeDriveItemsCount > 0 && IsFiltered;
+                ButtonGenerateSC.Enabled = _spaFilter.CanGenerateSC && !ExportSCPath.Text.IsNullOrEmptyTrim() && ROBPOperationsRadioButton.Checked && IsFiltered;
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
         }
 
         void UpdateLastPath(string path)
         {
             if (path.IsNullOrEmpty())
                 return;
+
             _lastDirPath = Directory.Exists(path) ? path : File.Exists(path) ? Path.GetDirectoryName(path) : _lastDirPath;
         }
 
