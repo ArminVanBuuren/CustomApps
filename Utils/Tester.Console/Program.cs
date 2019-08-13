@@ -25,11 +25,21 @@ namespace Tester.Console
 {
     class Program
     {
+        //(int current, int previous, int dd) Fib(int i)
+        //{
+        //    if (i == 0) return (1, 0);
+        //    var (p, pp, ppp) = Fib(i - 1);
+        //    return (p + pp, p);
+        //}
+
         static void Main(string[] args)
         {
             try
             {
-                Stopwatch stw = new Stopwatch();
+                //(string s, string s2) = LookupName(6);
+                
+
+                var stw = new Stopwatch();
                 //while (true)
                 //{
                 //    stw.Start();
@@ -65,9 +75,9 @@ namespace Tester.Console
                 var dd1 = 197.IsParity();
                 var dd2 = 266.IsParity();
 
-                List<long> temp = new List<long>();
+                var temp = new List<long>();
                 
-                int i = 0;
+                var i = 0;
                 //while (i < 200)
                 //{
                 //    stw.Start();
@@ -83,14 +93,14 @@ namespace Tester.Console
                 //    i++;
                 //}
 
-                DynamicObject dynObj = new DynamicObject(GetResult);
+                var dynObj = new DynamicObject(GetResult);
                 //DuplicateDictionary<string, bool> res = new DuplicateDictionary<string, bool>();
                 
                 while (true)
                 {
                     stw.Start();
 
-                    bool res = false;
+                    var res = false;
                     var res1 = ExpressionBuilder.Calculate("('1'='1' and '2'>'${random}' and '5'>='4' and 'fff'='fff' and 'sasDDDddd'^='DDD' and 'rrrrr'!='aaaaa' and '((1.2+2+3)*12)/12'>'6')", dynObj);
                     //if (1 == 1 && "2" == GetResult("${random}") && 5>=4 && "fff"=="fff" && "sasDDDddd".Like("DDD") && "rrrrr"!= "aaaaa" && MATH.Calculate("((1.2+2+3)*12)/12")>6)
                     //{
@@ -173,7 +183,7 @@ namespace Tester.Console
         {
             var reader = OleDbEnumerator.GetRootEnumerator();
 
-            var list = new List<String>();
+            var list = new List<string>();
             while (reader.Read())
             {
                 for (var i = 0; i < reader.FieldCount; i++)
