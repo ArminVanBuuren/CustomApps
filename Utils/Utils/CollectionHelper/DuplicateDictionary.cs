@@ -210,5 +210,10 @@ namespace Utils.CollectionHelper
         {
             return ((IDictionary)_values).GetEnumerator();
         }
+
+        public override string ToString()
+        {
+            return _values != null ? _values.ToString() : base.ToString();
+        }
     }
 }

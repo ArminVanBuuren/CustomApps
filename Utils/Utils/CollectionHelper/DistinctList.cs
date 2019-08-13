@@ -144,6 +144,11 @@ namespace Utils.CollectionHelper
             return clone;
         }
 
+        public override string ToString()
+        {
+            return _items != null ? _items.Keys.ToString() : base.ToString();
+        }
+
         /// <inheritdoc />
         /// <summary>
         /// Не поддерживается. Т.к. коллекция индексируется по типу &lt;T&gt;
