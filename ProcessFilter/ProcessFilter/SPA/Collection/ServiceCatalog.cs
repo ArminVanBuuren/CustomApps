@@ -10,6 +10,93 @@ using Utils.CollectionHelper;
 
 namespace SPAFilter.SPA.Collection
 {
+    class CFS
+    {
+        public bool IsOneTime { get; } = false;
+
+        public CFS(XmlNode cfsNode)
+        {
+            var cfsName = cfsNode.Attributes?["name"]?.Value;
+            IsOneTime = cfsNode.Attributes?["IsOneTime"]?.Value.Trim().ToLower() == "true";
+        }
+    }
+
+    class RFS
+    {
+        public string BaseRFS { get; }
+        public string ParentRFS { get; }
+        public string ProcessType { get; }
+        public string HostType { get; }
+        public bool IsHasResources { get; }
+        public bool IsOnlyRFSGroup { get; }
+
+        public DistinctList<string> Links = new DistinctList<string>();
+        public DistinctList<CFS> CFSList = new DistinctList<CFS>();
+
+        public DuplicateDictionary<CFS, string> Depends {get;} = new DuplicateDictionary<CFS, string>();
+
+        public RFS(XmlNode rfsNode, IReadOnlyDictionary<string, CFS> allCFS, XPathNavigator navigator)
+        {
+            var rfsName = rfsNode.Attributes?["name"]?.Value;
+            HostType = rfsNode.Attributes?["hostType"]?.Value;
+            ProcessType = rfsNode.Attributes?["processType"]?.Value;
+            IsHasResources = rfsNode.ChildNodes.OfType<XmlNode>().Any(x => x.Name == "Resource");
+
+            BaseRFS = rfsNode.Attributes?["base"]?.Value;
+            ParentRFS = rfsNode.Attributes?["parent"]?.Value;
+
+            if (navigator.Select($"/Configuration/CFSList/CFS[RFS/@name='{rfsName}']", out var cfsList))
+            {
+                foreach (var cfs in cfsList)
+                {
+                    var cfsName = cfs.Node.Attributes?["name"]?.Value;
+                    if (cfsName == null || !allCFS.TryGetValue(cfsName, out var cfsCFS))
+                        continue;
+
+                    var childRFS = cfs.Node.ChildNodes.OfType<XmlNode>().Where(x => x.Attributes?["name"]?.Value == rfsName);
+                    var depends = childRFS.Where(x => x.Attributes?["dependsOn"]?.Value != null).Select(x => x.Attributes?["dependsOn"]?.Value);
+                    
+                    foreach (var dep in depends)
+                    {
+                        Depends.Add(cfsCFS, dep);
+                    }
+                    Links.AddRange(childRFS.Where(x => x.Attributes?["linkType"]?.Value != null).Select(x => x.Attributes?["linkType"]?.Value));
+                    CFSList.Add(cfsCFS);
+                }
+            }
+
+            IsOnlyRFSGroup = false;
+            if (cfsList.Count == 0 && navigator.Select($"/Configuration/RFSGroupList/RFSGroup[@type='Choice']/RFS[@name='{rfsName}']", out var rfsInRFSGroup))
+            {
+                IsOnlyRFSGroup = true;
+                var linkTypes = new DistinctList<string>();
+                foreach (var rfsGroupRFS in rfsInRFSGroup.Select(x => x.Node))
+                {
+                    if(rfsGroupRFS == null)
+                        continue;
+
+                    var rfsLinkType = rfsGroupRFS?.Attributes?["linkType"]?.Value;
+
+                    if (!string.IsNullOrEmpty(rfsLinkType))
+                        Links.Add(rfsLinkType);
+
+                    var rfsGroupName = rfsGroupRFS.ParentNode?.Attributes?["name"]?.Value;
+                    if (rfsGroupName != null && navigator.Select($"/Configuration/CFSList/CFS[RFSGroup/@name='{rfsGroupName}']", out var cfsList2))
+                    {
+                        foreach (var cfs in cfsList2)
+                        {
+                            var cfsName = cfs.Node.Attributes?["name"]?.Value;
+                            if (cfsName == null || !allCFS.TryGetValue(cfsName, out var cfsCFS))
+                                continue;
+
+                            CFSList.Add(cfsCFS);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public class ServiceCatalog : CollectionHostType
     {
         public string Prefix { get; }
