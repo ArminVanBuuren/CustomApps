@@ -4,13 +4,13 @@
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
   <Request>
     <RequestTemplate>
-      <![CDATA[##GenericCommand##^M]]>
+      <![CDATA[##GenericCommandParameter##^M]]>
     </RequestTemplate>
     <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="GenericCommand" Type="LocalParameter"/>
+    <Item Name="GenericCommandParameter" Type="LocalParameter"/>
   </Request>
   <ParametersList>
-    <Parameter Name="GenericCommand" IsChoice="true" AbsenceValue="">
+    <Parameter Name="GenericCommandParameter" IsChoice="true" AbsenceValue="">
       <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HL_ROAMING_TEST_BIC0]//Identifier/MSISDN" PostFormat="MOD ODB:MSISDN={0},BIC=0;" />
       <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HL_ROAMING_TEST_BIC1]//Identifier/MSISDN" PostFormat="MOD ODB:MSISDN={0},BIC=1;" />
       <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HL_ROAMING_TEST_BOC0]//Identifier/MSISDN" PostFormat="MOD ODB:MSISDN={0},BOC=0;" />
