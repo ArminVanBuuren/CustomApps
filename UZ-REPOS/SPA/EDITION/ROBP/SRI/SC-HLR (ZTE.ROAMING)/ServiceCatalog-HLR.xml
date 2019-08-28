@@ -1,27 +1,104 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Configuration markers="*" scenarioPrefix="SC." mainIdentities="MSISDN,PersonalAccountNumber,ContractNumber" SICreation="" formatVersion="1">
+<Configuration markers="*" scenarioPrefix="SC." mainIdentities="MSISDN,PersonalAccountNumber" SICreation="" hostRedirect="">
   <HostTypeList>
+    <HostType name="HL" nriType="RI" allowTerminalDeviceType="mobile" description="Home Location Register" />
   </HostTypeList>
-  <IdentityList>
-  </IdentityList>
-  <AttributeList>
-  </AttributeList>
   <ResourceList>
   </ResourceList>
   <RFSParameterList>
   </RFSParameterList>
-  <FlagList />
   <RFSList>
+    <RFS name="RFS_HL_ROAMING_TEST_BIC0" hostType="HL" description="Модификация баррингов входящей связи"/>
+    <RFS name="RFS_HL_ROAMING_TEST_BIC1" hostType="HL" description="Модификация баррингов входящей связи"/>
+    <RFS name="RFS_HL_ROAMING_TEST_BOC0" hostType="HL" description="Модификация баррингов исходящей связи"/>
+    <RFS name="RFS_HL_ROAMING_TEST_BOC1" hostType="HL" description="Модификация баррингов исходящей связи"/>
+    <RFS name="RFS_HL_ROAMING_TEST_BOC2" hostType="HL" description="Модификация баррингов исходящей связи"/>
+    <RFS name="RFS_HL_ROAMING_TEST_BOC3" hostType="HL" description="Модификация баррингов исходящей связи"/>
+    <RFS name="RFS_HL_ROAMING_TEST_BPOS0" hostType="HL" description="Изменение барринга GPRS"/>
+    <RFS name="RFS_HL_ROAMING_TEST_BPOS1" hostType="HL" description="Изменение барринга GPRS"/>
+    <RFS name="RFS_HL_ROAMING_TEST_BR0" hostType="HL" description="Международный Роуминг"/>
+    <RFS name="RFS_HL_ROAMING_TEST_BR1" hostType="HL" description="Международный Роуминг"/>
+    <RFS name="RFS_HL_ROAMING_TEST_MODLOC" hostType="HL" description="Разрыв сессии"/>
+    <RFS name="RFS_HL_ROAMING_TEST_QRYUSER" hostType="HL" description="Запрос состояния баррингов абонента"/>
+    <RFS name="RFS_HL_ROAMING_TEST_SMMO0" hostType="HL" description="Служба коротких сообщений Исходящие"/>
+    <RFS name="RFS_HL_ROAMING_TEST_SMMO1" hostType="HL" description="Служба коротких сообщений Исходящие"/>
+    <RFS name="RFS_HL_ROAMING_TEST_SMMT0" hostType="HL" description="Служба коротких сообщений Входящие"/>
+    <RFS name="RFS_HL_ROAMING_TEST_SMMT1" hostType="HL" description="Служба коротких сообщений Входящие"/>
   </RFSList>
   <CFSList>
+    <CFS name="BIC0" description="Модификация баррингов входящей связи">
+      <RFS name="RFS_HL_ROAMING_TEST_BIC0" linkType="Add" />
+    </CFS>
+    <CFS name="BIC1" description="Модификация баррингов входящей связи">
+      <RFS name="RFS_HL_ROAMING_TEST_BIC1" linkType="Add" />
+    </CFS>
+    <CFS name="BOC0" description="Модификация баррингов исходящей связи">
+      <RFS name="RFS_HL_ROAMING_TEST_BOC0" linkType="Add" />
+    </CFS>
+    <CFS name="BOC1" description="Модификация баррингов исходящей связи">
+      <RFS name="RFS_HL_ROAMING_TEST_BOC1" linkType="Add" />
+    </CFS>
+    <CFS name="AddBOC2" description="Модификация баррингов исходящей связи">
+      <RFS name="RFS_HL_ROAMING_TEST_BOC2" linkType="Add" />
+    </CFS>
+    <CFS name="BOC3" description="Модификация баррингов исходящей связи">
+      <RFS name="RFS_HL_ROAMING_TEST_BOC3" linkType="Add" />
+    </CFS>
+    <CFS name="BPOS0" description="Изменение барринга GPRS">
+      <RFS name="RFS_HL_ROAMING_TEST_BPOS0" linkType="Add" />
+    </CFS>
+    <CFS name="BPOS1" description="Изменение барринга GPRS">
+      <RFS name="RFS_HL_ROAMING_TEST_BPOS1" linkType="Add" />
+    </CFS>
+    <CFS name="BR0" description="Международный Роуминг">
+      <RFS name="RFS_HL_ROAMING_TEST_BR0" linkType="Add" />
+    </CFS>
+    <CFS name="BR1" description="Международный Роуминг">
+      <RFS name="RFS_HL_ROAMING_TEST_BR1" linkType="Add" />
+    </CFS>
+    <CFS name="MODLOC" description="Разрыв сессии">
+      <RFS name="RFS_HL_ROAMING_TEST_MODLOC" linkType="Add" />
+    </CFS>
+    <CFS name="NAM0" priority="9999" description="Интернет сервис">
+      <RFS name="RFS_HL_ROAMING_TEST_NAM0" linkType="Add" />
+    </CFS>
+    <CFS name="NAM1" priority="9998" description="Интернет сервис">
+      <RFS name="RFS_HL_ROAMING_TEST_NAM1" linkType="Add" />
+    </CFS>
+    <CFS name="QRYUSER" description="Запрос состояния баррингов абонента">
+      <RFS name="RFS_HL_ROAMING_TEST_QRYUSER" linkType="Add" />
+    </CFS>
+    <CFS name="SMMO0" description="Служба коротких сообщений Исходящие">
+      <RFS name="RFS_HL_ROAMING_TEST_SMMO0" linkType="Add" />
+    </CFS>
+    <CFS name="SMMO1" description="Служба коротких сообщений Исходящие">
+      <RFS name="RFS_HL_ROAMING_TEST_SMMO1" linkType="Add" />
+    </CFS>
+    <CFS name="AddSMMT0" description="Служба коротких сообщений Входящие">
+      <RFS name="RFS_HL_ROAMING_TEST_SMMT0" linkType="Add" />
+    </CFS>
+    <CFS name="SMMT1" description="Служба коротких сообщений Входящие">
+      <RFS name="RFS_HL_ROAMING_TEST_SMMT1" linkType="Add" />
+    </CFS>
   </CFSList>
-  <CFSGroupList>
-  </CFSGroupList>
-  <RFSGroupList />
-  <RFSDependencyList />
-  <HandlerList >
-  </HandlerList>
   <ScenarioList>
+    <Scenario name="HL.ROAMING_TEST" description="Тестирование HLR ROAMING">
+      <RFS name="RFS_HL_ROAMING_TEST_BIC0" scenarioType="Add, Remove" />
+      <RFS name="RFS_HL_ROAMING_TEST_BIC1" scenarioType="Add, Remove" />
+      <RFS name="RFS_HL_ROAMING_TEST_BOC0" scenarioType="Add, Remove" />
+      <RFS name="RFS_HL_ROAMING_TEST_BOC1" scenarioType="Add, Remove" />
+      <RFS name="RFS_HL_ROAMING_TEST_BOC2" scenarioType="Add, Remove" />
+      <RFS name="RFS_HL_ROAMING_TEST_BOC3" scenarioType="Add, Remove" />
+      <RFS name="RFS_HL_ROAMING_TEST_BPOS0" scenarioType="Add, Remove" />
+      <RFS name="RFS_HL_ROAMING_TEST_BPOS1" scenarioType="Add, Remove" />
+      <RFS name="RFS_HL_ROAMING_TEST_BR0" scenarioType="Add, Remove" />
+      <RFS name="RFS_HL_ROAMING_TEST_BR1" scenarioType="Add, Remove" />
+      <RFS name="RFS_HL_ROAMING_TEST_MODLOC" scenarioType="Add, Remove" />
+      <RFS name="RFS_HL_ROAMING_TEST_QRYUSER" scenarioType="Add, Remove" />
+      <RFS name="RFS_HL_ROAMING_TEST_SMMO0" scenarioType="Add, Remove" />
+      <RFS name="RFS_HL_ROAMING_TEST_SMMO1" scenarioType="Add, Remove" />
+      <RFS name="RFS_HL_ROAMING_TEST_SMMT0" scenarioType="Add, Remove" />
+      <RFS name="RFS_HL_ROAMING_TEST_SMMT1" scenarioType="Add, Remove" />
+    </Scenario>
   </ScenarioList>
-  <WfmScenarioList />
 </Configuration>

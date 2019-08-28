@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="SC.GenericCommand" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>Общая команда для тестирования HLR ROAMING</Description>
+  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
+  <Request>
+    <RequestTemplate>
+      <![CDATA[##GenericCommand##^M]]>
+    </RequestTemplate>
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="GenericCommand" Type="LocalParameter"/>
+  </Request>
+  <ParametersList>
+    <Parameter Name="GenericCommand" IsChoice="true" AbsenceValue="">
+      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HL_ROAMING_TEST_BIC0]//Identifier/MSISDN" PostFormat="MOD ODB:MSISDN={0},BIC=0;" />
+      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HL_ROAMING_TEST_BIC1]//Identifier/MSISDN" PostFormat="MOD ODB:MSISDN={0},BIC=1;" />
+      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HL_ROAMING_TEST_BOC0]//Identifier/MSISDN" PostFormat="MOD ODB:MSISDN={0},BOC=0;" />
+      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HL_ROAMING_TEST_BOC1]//Identifier/MSISDN" PostFormat="MOD ODB:MSISDN={0},BOC=1;" />
+      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HL_ROAMING_TEST_BOC2]//Identifier/MSISDN" PostFormat="MOD ODB:MSISDN={0},BOC=2;" />
+      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HL_ROAMING_TEST_BOC3]//Identifier/MSISDN" PostFormat="MOD ODB:MSISDN={0},BOC=3;" />
+      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HL_ROAMING_TEST_BPOS0]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},BPOS=0;" />
+      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HL_ROAMING_TEST_BPOS1]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},BPOS=1;" />
+      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HL_ROAMING_TEST_BR0]//Identifier/MSISDN" PostFormat="MOD ODB:MSISDN={0},BR=0;" />
+      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HL_ROAMING_TEST_BR1]//Identifier/MSISDN" PostFormat="MOD ODB:MSISDN={0},BR=2;" />
+      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HL_ROAMING_TEST_MODLOC]//Identifier/MSISDN" PostFormat="MOD LOC:MSISDN={0},MSCNumber=*,VLRnumber=*,SGSNNumber=*,SGSNAddr=*,EPCMMEHost=*,EPCMMERealm=*,EPCSGSNHost=*,EPCSGSNRealm=*;" />
+      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HL_ROAMING_TEST_NAM1]//Identifier/MSISDN" PostFormat="MOD NAM:MSISDN={0},NAM=1,Keep=1,KEEPEPS=1;" />
+      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HL_ROAMING_TEST_QRYUSER]//Identifier/MSISDN" PostFormat="Qry User:MSISDN={0},Item=ALL;" />
+      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HL_ROAMING_TEST_SMMO0]//Identifier/MSISDN" PostFormat="MOD TELE:MSISDN={0},SMMO=0;" />
+      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HL_ROAMING_TEST_SMMO1]//Identifier/MSISDN" PostFormat="MOD TELE:MSISDN={0},SMMO=1;" />
+      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HL_ROAMING_TEST_SMMT0]//Identifier/MSISDN" PostFormat="MOD TELE:MSISDN={0},SMMT=0;" />
+      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HL_ROAMING_TEST_SMMT1]//Identifier/MSISDN" PostFormat="MOD TELE:MSISDN={0},SMMT=1;" />
+    </Parameter>
+  </ParametersList>
+  <ErrorsList CodePage="windows-1251" />
+</Command>
