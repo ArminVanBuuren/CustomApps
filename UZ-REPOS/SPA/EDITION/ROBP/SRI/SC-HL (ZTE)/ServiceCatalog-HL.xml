@@ -311,6 +311,7 @@
     <RFS name="RFS_HL_ROAMING_TEST_BR0" hostType="HL" description="Международный Роуминг"/>
     <RFS name="RFS_HL_ROAMING_TEST_BR1" hostType="HL" description="Международный Роуминг"/>
     <RFS name="RFS_HL_ROAMING_TEST_MODLOC" hostType="HL" description="Разрыв сессии"/>
+    <RFS name="RFS_HL_ROAMING_TEST_NAM1" hostType="HL" description="Сервис доступа в интернет"/>
     <RFS name="RFS_HL_ROAMING_TEST_QRYUSER" hostType="HL" description="Запрос состояния баррингов абонента"/>
     <RFS name="RFS_HL_ROAMING_TEST_SMMO0" hostType="HL" description="Служба коротких сообщений Исходящие"/>
     <RFS name="RFS_HL_ROAMING_TEST_SMMO1" hostType="HL" description="Служба коротких сообщений Исходящие"/>
@@ -576,9 +577,8 @@
       <RFS name="RFS_HL_NET_ACCESS" linkType="Add" />
       <RFS name="RFS_HL_NET_APN_GPRS" linkType="Add" />
     </CFS>
-    <CFS name="NAM1" priority="9998" description="Интернет сервис">
-      <RFS name="RFS_HL_NET_SUSPEND" linkType="Add" />
-      <RFS name="RFS_HL_NET_APN_GPRS" linkType="Add" />
+    <CFS name="NAM1" description="Интернет сервис">
+      <RFS name="RFS_HL_ROAMING_TEST_NAM1" linkType="Add" />
     </CFS>
     <CFS name="QRYUSER" description="Запрос состояния баррингов абонента">
       <RFS name="RFS_HL_ROAMING_TEST_QRYUSER" linkType="Add" />
@@ -765,6 +765,7 @@
       <RFS name="RFS_HL_ROAMING_TEST_BR0" scenarioType="Add, Remove" />
       <RFS name="RFS_HL_ROAMING_TEST_BR1" scenarioType="Add, Remove" />
       <RFS name="RFS_HL_ROAMING_TEST_MODLOC" scenarioType="Add, Remove" />
+      <RFS name="RFS_HL_ROAMING_TEST_NAM1" scenarioType="Add, Remove" />
       <RFS name="RFS_HL_ROAMING_TEST_QRYUSER" scenarioType="Add, Remove" />
       <RFS name="RFS_HL_ROAMING_TEST_SMMO0" scenarioType="Add, Remove" />
       <RFS name="RFS_HL_ROAMING_TEST_SMMO1" scenarioType="Add, Remove" />

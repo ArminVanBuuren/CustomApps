@@ -19,6 +19,7 @@
     <RFS name="RFS_HL_ROAMING_TEST_BR0" hostType="HL" description="Международный Роуминг"/>
     <RFS name="RFS_HL_ROAMING_TEST_BR1" hostType="HL" description="Международный Роуминг"/>
     <RFS name="RFS_HL_ROAMING_TEST_MODLOC" hostType="HL" description="Разрыв сессии"/>
+    <RFS name="RFS_HL_ROAMING_TEST_NAM1" hostType="HL" description="Сервис доступа в интернет"/>
     <RFS name="RFS_HL_ROAMING_TEST_QRYUSER" hostType="HL" description="Запрос состояния баррингов абонента"/>
     <RFS name="RFS_HL_ROAMING_TEST_SMMO0" hostType="HL" description="Служба коротких сообщений Исходящие"/>
     <RFS name="RFS_HL_ROAMING_TEST_SMMO1" hostType="HL" description="Служба коротких сообщений Исходящие"/>
