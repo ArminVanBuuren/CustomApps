@@ -114,13 +114,13 @@
 		<define name="_IF_TRUE"                         value="^([Tt][Rr][Uu][Ee]|1)$" />
 		<define name="_BYCRM"                           value="[Bb][Yy][Cc][Rr][Mm]" />
 		<define name="_CURRENT_MODULE"                  value="#{if('${sModule}'!='','${sModule}','paynet')}" />
-		<define name="_SERVICE_PATH"                    value="..\..\Config\Service\SERVICE.xml"/>
-		<define name="_ALLSERVICE_PATH"                 value="..\..\Config\Service\All_SERVICE.xml"/>
-		<define name="_TARIF_PATH"                      value="..\..\Config\Tariff\TARIFF_PLANS.xml"/>
-		<define name="_COUNTERS_PATH"                   value="..\..\Config\Service\COUNTERS.xml"/>
-		<define name="_DICTIONARY_PATH"                 value="..\..\Config\GET_DBRESULT.xml"/>
-		<define name="_DEALERPORTAL_PATH"               value="..\..\Config\Portal\DealerUSSDPortal_01.xml"/>
-		<define name="_SERIES_PATH"                     value="..\..\Config\Service\SERIES.xml"/>
+    <define name="_SERVICE_PATH"                    value="..\..\Config\Service\SERVICE.xml"/>
+    <define name="_ALLSERVICE_PATH"                 value="..\..\Config\Service\All_SERVICE.xml"/>
+    <define name="_TARIF_PATH"                      value="..\..\Config\Tariff\TARIFF_PLANS.xml"/>
+    <define name="_COUNTERS_PATH"                   value="..\..\Config\Service\COUNTERS.xml"/>
+    <define name="_DICTIONARY_PATH"                 value="..\..\Config\GET_DBRESULT.xml"/>
+    <define name="_DEALERPORTAL_PATH"               value="..\..\Config\Portal\DealerUSSDPortal_01.xml"/>
+    <define name="_SERIES_PATH"                     value="..\..\Config\Service\SERIES.xml"/>
 		<define name="_CONFIRM_VALUE"                   value="confirm"/>
 		<define name="_CURRENT_INITIATOR"               value="paynet"/>
 		<!-- ==========================  SETTINGS   ========================= -->
@@ -396,6 +396,31 @@
 			<param name="storelog"/>
 		</output>
 	</template>
+        <template procedureName="FillActivatedPackage" handler="DBCON_02_01" sessionStorage="Memory" sessionLifetime="600" persistent="true" >
+       		<receiveTemplate>
+			<Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+				<Item procedureName="external_supplier.fill_activated_packages">
+                                         <Attribute name="p_msisdn" type="STRING" value="${sCustomer}"/>
+                                         <Attribute name="p_supplier" type="STRING" value="PAYNET"/>
+                                         <Attribute name="p_service" type="STRING" value="${sServiceCode}"/>
+                                         <Attribute name="p_transaction" type="STRING" value="${sTransaction}"/>
+                                         <Attribute name="p_transaction_time" type="STRING" value="${sTransactionTime}"/>
+                                         <Attribute name="result" type="out:STRING"/>
+                                 </Item>
+      			</Message>
+		</receiveTemplate>
+      		<deliveryTemplate>
+			<set item="oparam:result" value="1"/>
+			<set item="oparam:customer" value="${sCustomer}"/>
+		</deliveryTemplate>
+                <input>
+			<param name="storelog"/>
+		</input>
+		<output>		
+			<param name="customer" value=""/>
+			<param name="result"/>
+		</output>
+        </template>
 	<template procedureName="ServiceProvisioning_Block_Step6" sessionStorage="Memory" sessionLifetime="600" persistent="true">
 		<receiveTemplate>
 			<Message type="serviceorder" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
@@ -505,6 +530,7 @@
 				</Item>
 			</Message>
 		</receiveTemplate>
+                <deliveryTemplate conditionEx="#{'${sDbresult}'='success_${sActParce}'}" call="FillActivatedPackage" terminating="false"/>
 		<deliveryTemplate conditionEx="#{not(matches('${sInProgress}','_IF_TRUE')) and ('${sDbresult}'='redirect' or matches('${SlowAsync}','_IF_TRUE'))}">
 			<set conditionEx="0@{store(sInProgress,true)}" />
 			<set conditionEx="0@{store(sStartSecond,_GET_SECONDS)}" />

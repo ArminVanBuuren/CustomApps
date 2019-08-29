@@ -70,10 +70,12 @@
     <Content Include="EDITION\MG-01\Configuration\SOAPCON\SOAPTemplateProcessor_SMS.xml" />
     <Content Include="EDITION\MG-01\Configuration\SOAPCON\SOAPTemplateProcessor_SPA.xml" />
     <Content Include="EDITION\MG-01\Configuration\SOAPCON\SOAPTemplateProcessor_USSD.xml" />
+    <Content Include="EDITION\MG-01\Configuration\USSDCON\USSDCON_01_PCRF.exe.xml" />
     <Content Include="EDITION\MG-01\Configuration\USSDCON\USSDCON_01_01.exe.xml" />
     <Content Include="EDITION\MG-01\Configuration\USSDCON\USSDCON_01_02.exe.xml" />
     <Content Include="EDITION\MG-01\Configuration\USSDCON\USSDTemplateProcessor.01.xml" />
     <Content Include="EDITION\MG-01\Configuration\USSDCON\USSDTemplateProcessor.02.xml" />
+    <Content Include="EDITION\MG-01\Configuration\USSDCON\USSDTemplateProcessor.PCRF.xml" />
     <Content Include="EDITION\MG-01\Configuration\WCFHND\WCFHND_01_01.exe.xml" />
     <Content Include="EDITION\MG-01\Configuration\WEB_SERVICES\WEB_80_USSD\bin\App_Code.dll" />
     <Content Include="EDITION\MG-01\Configuration\WEB_SERVICES\WEB_80_USSD\bin\Devshock.Protocol.Smpp.dll" />
@@ -295,8 +297,10 @@
     <Content Include="PROD-ACTUAL\MG-01\Configuration\SOAPCON\SOAPTemplateProcessor_USSD.xml" />
     <Content Include="PROD-ACTUAL\MG-01\Configuration\USSDCON\USSDConnector_USSDCON_01_01.exe.xml" />
     <Content Include="PROD-ACTUAL\MG-01\Configuration\USSDCON\USSDConnector_USSDCON_01_02.exe.xml" />
+    <Content Include="PROD-ACTUAL\MG-01\Configuration\USSDCON\USSDConnector_USSDCON_01_PCRF.exe.xml" />
     <Content Include="PROD-ACTUAL\MG-01\Configuration\USSDCON\USSDTemplateProcessor.01.xml" />
     <Content Include="PROD-ACTUAL\MG-01\Configuration\USSDCON\USSDTemplateProcessor.02.xml" />
+    <Content Include="PROD-ACTUAL\MG-01\Configuration\USSDCON\USSDTemplateProcessor.PCRF.xml" />
     <Content Include="PROD-ACTUAL\MG-01\Configuration\WCFHND\WCFHandler_WCFHND_01_01.exe.xml" />
     <Content Include="PROD-ACTUAL\MG-01\Config\GET_DBRESULT.xml" />
     <Content Include="PROD-ACTUAL\MG-01\Config\Portal\DealerUSSDPortal_01.xml" />

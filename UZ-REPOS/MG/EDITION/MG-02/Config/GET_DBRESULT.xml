@@ -1,4 +1,4 @@
-<!-- 
+﻿<!-- 
 Created by Vladimir Khovanskiy  
 Реплейсы знаков: (^ - ') (\. - ,) (\^ - ^)
 -->
@@ -21,6 +21,7 @@ Created by Vladimir Khovanskiy
 
 			>
 		<code value="redirectkip"/>
+		<code value="8800"/>
 	</Item>
 	<Item
 			info_ruk="Операция выполнена."
@@ -127,15 +128,26 @@ Created by Vladimir Khovanskiy
 	</Item>
 	<Item
 			info_ruk="Usluga ne dostupna novim abonentam v techenie odnogo kalendarnogo mesyaca"
-			info_rut="Usluga ne dostupna novim abonentam v techenie odnogo kalendarnogo mesyaca"
-			info_uz="Xizmat bir oy davomida yangi abonentlar uchun mavjud emas"
-			info_en="Service is not available for new users during one calendar month"
+			info_rut="Ustanovlen zapret na podklyuchenie usligi *Obeshanniy platezh*"
+			info_uz="*Va^da qilingan to^lov* xizmatiga cheklanish o^rnatildi"
+			info_en="*Promised payment* service connection is banned"
                         info_pay="320704"
                         info_rbt="320704"
                         info_scg="320704"
 
 			>
 		<code value="320704"/>
+	</Item>
+	<Item 
+			info_ruk="Summa perevoda menshe razreshennoi" 
+			info_rut="Summa perevoda menshe razreshennoi" 
+			info_uz="Summa perevoda menshe razreshennoi" 
+			info_en="Transfer amount is lower then allowed." 
+			info_pay="320710" 
+			info_rbt="320710" 
+			info_scg="320710" 
+			> 
+		<code value="320710"/> 
 	</Item>
 	<Item
 			info_ruk="Тестовым абонентам запрещено пользоваться данной операцией."
@@ -296,6 +308,13 @@ Created by Vladimir Khovanskiy
 
 			>
 		<code value="320172"/>
+	</Item>
+	<Item
+          info_ruk="Неверный номер телефона"
+          info_rut="Nevernyy nomer telefona"
+          info_uz="Telefon raqami noto'g'ri"
+          info_en="Phone number is not valid" 
+			>
 		<code value="320341"/>
 	</Item>
 	<Item

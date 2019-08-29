@@ -112,13 +112,13 @@
 		<define name="_IF_TRUE"                         value="^([Tt][Rr][Uu][Ee]|1)$" />
 		<define name="_BYCRM"                           value="[Bb][Yy][Cc][Rr][Mm]" />
 		<define name="_CURRENT_MODULE"                  value="#{if('${sModule}'!='','${sModule}','_EXIST_MODULE')}"/>
-		<define name="_SERVICE_PATH"                    value="..\..\Config\Service\SERVICE.xml"/>
-		<define name="_ALLSERVICE_PATH"                 value="..\..\Config\Service\All_SERVICE.xml"/>
-		<define name="_TARIF_PATH"                      value="..\..\Config\Tariff\TARIFF_PLANS.xml"/>
-		<define name="_COUNTERS_PATH"                   value="..\..\Config\Service\COUNTERS.xml"/>
-		<define name="_DICTIONARY_PATH"                 value="..\..\Config\GET_DBRESULT.xml"/>
-		<define name="_DEALERPORTAL_PATH"               value="..\..\Config\Portal\DealerUSSDPortal_01.xml"/>
-		<define name="_SERIES_PATH"                     value="..\..\Config\Service\SERIES.xml"/>
+    <define name="_SERVICE_PATH"                    value="..\..\Config\Service\SERVICE.xml"/>
+    <define name="_ALLSERVICE_PATH"                 value="..\..\Config\Service\All_SERVICE.xml"/>
+    <define name="_TARIF_PATH"                      value="..\..\Config\Tariff\TARIFF_PLANS.xml"/>
+    <define name="_COUNTERS_PATH"                   value="..\..\Config\Service\COUNTERS.xml"/>
+    <define name="_DICTIONARY_PATH"                 value="..\..\Config\GET_DBRESULT.xml"/>
+    <define name="_DEALERPORTAL_PATH"               value="..\..\Config\Portal\DealerUSSDPortal_01.xml"/>
+    <define name="_SERIES_PATH"                     value="..\..\Config\Service\SERIES.xml"/>
 		<define name="_EXIST_MODULE"                    value="soapcon"/>
 		<define name="_CONFIRM_VALUE"                   value="confirm"/>
 		<define name="_CURRENT_INITIATOR"               value="ussd"/>
@@ -1017,6 +1017,7 @@
 			<set conditionEx="0@{store(sDbresult,redirect)}" />
 			<set item="iparam:content" value=""/>
 		</deliveryTemplate-->
+		<deliveryTemplate conditionEx="#{'${sTariffIvrCode}'='181'}" call="BonusTPCheck"/>
 		<deliveryTemplate call="ChangeTariffPlan_Step3"/>
 		<input>
 			<param name="customer" />
@@ -1185,6 +1186,29 @@
 			<set item="iparam:content"    conditionEx="#{'${dbresult}'='0'}"  value="@{store(sDbresult,success)}"/>
 			<set item="iparam:content"    conditionEx="#{'${dbresult}'!='0'}" value="@{store(sDbresult,${dbresult})}"/>
 		</deliveryTemplate>
+		<input>
+			<param name="storelog"/>
+		</input>
+		<output>
+			<param name="content"/>
+			<param name="storelog"/>
+		</output>
+	</template>
+	<template procedureName="BonusTPCheck" handler="_DBCON" sessionStorage="Memory" sessionLifetime="300" persistent="true" >
+		<receiveTemplate>
+			<Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+				<Item procedureName="other_spikes.bonus_pack_frmbpackmsk">
+					<Attribute name="p_msisdn" type="STRING" value="${sCustomer}"/>
+					<Attribute name="p_service" type="STRING" value="${sTariffIvrCode}"/>
+					<Attribute name="result" type="out:STRING"/>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate conditionEx="#{'${result}'='0'}" call="TariffPlanStringFormat">
+			<set conditionEx="0@{store(sDbresult,320172)}"/>
+			<set item="iparam:content" value=""/>
+		</deliveryTemplate>
+		<deliveryTemplate call="ChangeTariffPlan_Step3"/>
 		<input>
 			<param name="storelog"/>
 		</input>
@@ -2661,7 +2685,8 @@
 		<deliveryTemplate conditionEx="#{'${sCountertype}'='nightdrive'}" call="CheckCounters_GetTP"/>
 		<deliveryTemplate conditionEx="#{'${sCountertype}'='bzs' or '${sCountertype}'='vernis' or '${sCountertype}'='huawei2017' or '${sCountertype}'='comebacktosms' or '${sCountertype}'='welcometosms'
                                               or '${sCountertype}'='welcome' or '${sCountertype}'='huawei' or '${sCountertype}'='artel' or '${sCountertype}'='samsung'               
-                                              or '${sCountertype}'='bonushuawei' or '${sCountertype}'='xiaomi' or '${sCountertype}'='enrollee' or '${sCountertype}'='compliment' or '${sCountertype}'='supervoice'}" call="CheckCountersAutoinetDelayed_Step2"/>
+                                              or '${sCountertype}'='bonushuawei' or '${sCountertype}'='xiaomi' or '${sCountertype}'='enrollee' or '${sCountertype}'='compliment' or '${sCountertype}'='supervoice'
+                                              or '${sCountertype}'='welcomebonus'}" call="CheckCountersAutoinetDelayed_Step2"/>
 		<deliveryTemplate call="CheckCounters_Step2"/>
 		<input>
 			<param name="customer"/>
@@ -3984,7 +4009,7 @@
 	<template procedureName="GetMillionDetail" handler="_DBCON" sessionStorage="Memory" sessionLifetime="60" persistent="true">
 		<receiveTemplate>
 			<Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(GetMillionDetail_${customer})}">
-                                <Item procedureName="other_spikes.bill_detail">
+                                <Item procedureName="other_spikes.bill_detail_chance_id">
                                 <Attribute name="p_msisdn" type="STRING" value="${customer}"/>
                                 <Attribute name="p_lang" type="STRING" value="${lang}"/>
                                 <Attribute name="result" type="out:STRING"/></Item>
@@ -4280,6 +4305,26 @@
 		</input>
 		<output>
 			<param name="result"/>
+		</output>
+	</template>
+	<template procedureName="GetBalance" sessionStorage="Memory" sessionLifetime="20" persistent="true">
+		<receiveTemplate>
+			<Message type="retrievecustomerdata" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+				<Item customer="${customer}" subject="balance">
+					<Attribute name="unpayment" value="0"/>
+					<Attribute name="requestcountertype" value="1"/>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="oparam:result" value="${balanceintpartdotpart}"/>
+		</deliveryTemplate>
+		<input>
+			<param name="customer"/>
+		</input>
+		<output>
+			<param name="result" value=""/>
+			<param name="dbresult" value="0"/>
 		</output>
 	</template>
 </templates>

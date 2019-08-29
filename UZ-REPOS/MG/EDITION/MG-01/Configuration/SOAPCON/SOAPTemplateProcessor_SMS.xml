@@ -112,12 +112,12 @@
 		<define name="_IF_TRUE"                         value="^([Tt][Rr][Uu][Ee]|1)$" />
 		<define name="_BYCRM"                           value="[Bb][Yy][Cc][Rr][Mm]" />
 		<define name="_CURRENT_MODULE"                  value="#{if('${sModule}'!='','${sModule}','_EXIST_MODULE')}"/>
-		<define name="_EXIST_MODULE"                    value="soapcon"/>
-		<define name="_SERVICE_PATH"                    value="..\..\Config\Service\SERVICE.xml"/>
-		<define name="_ALLSERVICE_PATH"                 value="..\..\Config\Service\All_SERVICE.xml"/>
-		<define name="_TARIF_PATH"                      value="..\..\Config\Tariff\TARIFF_PLANS.xml"/>
-		<define name="_COUNTERS_PATH"                   value="..\..\Config\Service\COUNTERS.xml"/>
-		<define name="_DICTIONARY_PATH"                 value="..\..\Config\GET_DBRESULT.xml"/>
+    <define name="_EXIST_MODULE"                    value="soapcon"/>
+    <define name="_SERVICE_PATH"                    value="..\..\Config\Service\SERVICE.xml"/>
+    <define name="_ALLSERVICE_PATH"                 value="..\..\Config\Service\All_SERVICE.xml"/>
+    <define name="_TARIF_PATH"                      value="..\..\Config\Tariff\TARIFF_PLANS.xml"/>
+    <define name="_COUNTERS_PATH"                   value="..\..\Config\Service\COUNTERS.xml"/>
+    <define name="_DICTIONARY_PATH"                 value="..\..\Config\GET_DBRESULT.xml"/>
 		<define name="_CONFIRM_VALUE"                   value="confirm"/>
 		<define name="_CURRENT_INITIATOR"               value="smscon"/>
 		<!-- ==========================  SETTINGS   ========================= -->
@@ -852,6 +852,7 @@
 			<set conditionEx="0@{store(sParams,_TARIFF_NAME;#{concat(substring('_TARIFF_DATEFROM',7,2),'.',substring('_TARIFF_DATEFROM',5,2),'.',substring('_TARIFF_DATEFROM',1,4))})}" />
 			<set item="iparam:content" value=""/>
 		</deliveryTemplate>
+		<deliveryTemplate conditionEx="#{'${sTariffIvrCode}'='181'}" call="BonusTPCheck"/>
 		<deliveryTemplate call="ChangeTariffPlan_Step3"/>
 		<input>
 			<param name="customer" />
@@ -1020,6 +1021,29 @@
 			<set item="iparam:content"    conditionEx="#{'${dbresult}'='0'}"  value="@{store(sDbresult,success)}"/>
 			<set item="iparam:content"    conditionEx="#{'${dbresult}'!='0'}" value="@{store(sDbresult,${dbresult})}"/>
 		</deliveryTemplate>
+		<input>
+			<param name="storelog"/>
+		</input>
+		<output>
+			<param name="content"/>
+			<param name="storelog"/>
+		</output>
+	</template>
+	<template procedureName="BonusTPCheck" handler="_DBCON" sessionStorage="Memory" sessionLifetime="300" persistent="true" >
+		<receiveTemplate>
+			<Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+				<Item procedureName="other_spikes.bonus_pack_frmbpackmsk">
+					<Attribute name="p_msisdn" type="STRING" value="${sCustomer}"/>
+					<Attribute name="p_service" type="STRING" value="${sTariffIvrCode}"/>
+					<Attribute name="result" type="out:STRING"/>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate conditionEx="#{'${result}'='0'}" call="TariffPlanStringFormat">
+			<set conditionEx="0@{store(sDbresult,320172)}"/>
+			<set item="iparam:content" value=""/>
+		</deliveryTemplate>
+		<deliveryTemplate call="ChangeTariffPlan_Step3"/>
 		<input>
 			<param name="storelog"/>
 		</input>
@@ -2011,22 +2035,22 @@
 		</output>
 	</template>
 	<template procedureName="CheckCustomerTypeGP" handler="_DBCON" sessionStorage="Memory" sessionLifetime="30" persistent="false" >
-       	<receiveTemplate>
+		<receiveTemplate>
 			<Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
 				<Item procedureName="other_spikes.customer_type">
-                                         <Attribute name="p_msisdn" type="STRING" value="${sCustomer}"/>
-                                         <Attribute name="result" type="out:STRING"/>
-                </Item>                                                                  
-      		</Message>
+					<Attribute name="p_msisdn" type="STRING" value="${sCustomer}"/>
+					<Attribute name="result" type="out:STRING"/>
+				</Item>                                                                  
+			</Message>
 		</receiveTemplate>
-      	<deliveryTemplate conditionEx="#{'${result}'='330723' or '${result}'='330724'}" call="ALLServiceStringFormat">
+		<deliveryTemplate conditionEx="#{'${result}'='330723' or '${result}'='330724'}" call="ALLServiceStringFormat">
 			<set item="iparam:content" value="@{store(sDbresult,${result})}"/>
 		</deliveryTemplate>	
 		<deliveryTemplate conditionEx="#{'${result}'='2'}" call="ALLServiceStringFormat">
 			<set item="iparam:content" value="@{store(sDbresult,330722)}"/>
 		</deliveryTemplate>		
-      	<deliveryTemplate conditionEx="#{'${result}'='1'}" call="GuaranteedPayment_Step2"/>
-        <input>
+		<deliveryTemplate conditionEx="#{'${result}'='1'}" call="CheckActiveServiceGP"/>
+		<input>
 			<param name="content"/>
 			<param name="storelog"/>
 		</input>
@@ -2034,7 +2058,30 @@
 			<param name="content"/>
 			<param name="storelog"/>
 		</output>
-    </template>
+	</template>	
+	<template procedureName="CheckActiveServiceGP" handler="_DBCON" sessionStorage="Memory" sessionLifetime="30" persistent="false" >
+		<receiveTemplate>
+			<Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+				<Item procedureName="other_spikes.check_active_service">
+					<Attribute name="p_msisdn" type="STRING" value="${sCustomer}"/>
+					<Attribute name="p_service" type="STRING" value="FRZOBPL"/>
+					<Attribute name="result" type="out:STRING"/>
+				</Item>                                                                  
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate conditionEx="#{'${result}'='FRZOBPL'}" call="ALLServiceStringFormat">
+			<set item="iparam:content" value="@{store(sDbresult,320704)}"/>
+		</deliveryTemplate>		
+		<deliveryTemplate call="GuaranteedPayment_Step2"/>
+		<input>
+			<param name="content"/>
+			<param name="storelog"/>
+		</input>
+		<output>
+			<param name="content"/>
+			<param name="storelog"/>
+		</output>
+	</template>	
 	<template procedureName="GuaranteedPayment_Step2"  sessionStorage="Memory" sessionLifetime="300" persistent="false">
 		<receiveTemplate>
 			<Message type="serviceorder" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
@@ -2467,7 +2514,8 @@
                 <deliveryTemplate conditionEx="#{'${sCountertype}'='nightdrive'}" call="CheckCounters_GetTP"/>
                 <deliveryTemplate conditionEx="#{'${sCountertype}'='bzs' or '${sCountertype}'='vernis' or '${sCountertype}'='huawei2017'
 or '${sCountertype}'='comebacktosms' or '${sCountertype}'='welcometosms' or '${sCountertype}'='welcome' or '${sCountertype}'='huawei' or '${sCountertype}'='artel'
-or '${sCountertype}'='samsung'  or '${sCountertype}'='bonushuawei' or '${sCountertype}'='xiaomi'  or '${sCountertype}'='enrollee'}" call="CheckCountersAutoinetDelayed_Step2"/>
+or '${sCountertype}'='samsung'  or '${sCountertype}'='bonushuawei' or '${sCountertype}'='xiaomi'  or '${sCountertype}'='enrollee' or '${sCountertype}'='compliment' or '${sCountertype}'='supervoice'
+or '${sCountertype}'='welcomebonus'}" call="CheckCountersAutoinetDelayed_Step2"/>
 		<deliveryTemplate call="CheckCounters_Step2"/>
 		<input>
 			<param name="customer"/>
@@ -2719,6 +2767,10 @@ or '${sCountertype}'='samsung'  or '${sCountertype}'='bonushuawei' or '${sCounte
       		<deliveryTemplate conditionEx="#{'${sCountertype}'='welcometosms'}" call="ALLServiceStringFormat">
                         <set conditionEx="0@{store(sDbresult,welcometosms)}" />
                         <set conditionEx="0@{store(sParams,${sAutoinetname};${sCounterValue};${sAutoinetdate};${sAutoinetdelayed})}"/>
+		</deliveryTemplate>
+		<deliveryTemplate conditionEx="#{'${sCountertype}'='supervoice'}" call="ALLServiceStringFormat">
+			<set conditionEx="0@{store(sDbresult,supervoice)}"/>
+			<set conditionEx="0@{store(sParams,${sAutoinetname};${sCounterValue};${sAutoinetdate};${sAutoinetdelayed})}"/>
 		</deliveryTemplate>
                 <deliveryTemplate call="ALLServiceStringFormat">
                         <set conditionEx="0@{store(sDbresult,bzs)}" />
@@ -3441,6 +3493,26 @@ or '${sCountertype}'='samsung'  or '${sCountertype}'='bonushuawei' or '${sCounte
 		<input>
 			<param name="customer"/>
 			<param name="lang"/>
+		</input>
+		<output>
+			<param name="result" value=""/>
+			<param name="dbresult" value="0"/>
+		</output>
+	</template>
+	<template procedureName="GetBalance" sessionStorage="Memory" sessionLifetime="20" persistent="true">
+		<receiveTemplate>
+			<Message type="retrievecustomerdata" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+				<Item customer="${customer}" subject="balance">
+					<Attribute name="unpayment" value="0"/>
+					<Attribute name="requestcountertype" value="1"/>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="oparam:result" value="${balanceintpartdotpart}"/>
+		</deliveryTemplate>
+		<input>
+			<param name="customer"/>
 		</input>
 		<output>
 			<param name="result" value=""/>

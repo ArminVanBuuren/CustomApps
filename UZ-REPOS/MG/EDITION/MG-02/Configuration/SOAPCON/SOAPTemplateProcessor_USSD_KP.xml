@@ -110,14 +110,14 @@
 		<define name="_IF_TRUE"                         value="^([Tt][Rr][Uu][Ee]|1)$" />
 		<define name="_BYCRM"                           value="[Bb][Yy][Cc][Rr][Mm]" />
 		<define name="_CURRENT_MODULE"                  value="#{if('${sModule}'!='','${sModule}','_EXIST_MODULE')}"/>
-		<define name="_SERVICE_PATH"                    value="..\..\Config\Service\SERVICE.xml"/>
-		<define name="_ALLSERVICE_PATH"                 value="..\..\Config\Service\All_SERVICE.xml"/>
-		<define name="_TARIF_PATH"                      value="..\..\Config\Tariff\TARIFF_PLANS.xml"/>
-		<define name="_COUNTERS_PATH"                   value="..\..\Config\Service\COUNTERS.xml"/>
-		<define name="_DICTIONARY_PATH"                 value="..\..\Config\GET_DBRESULT.xml"/>
-		<define name="_DEALERPORTAL_PATH"               value="..\..\Config\Portal\DealerUSSDPortal_01.xml"/>
-		<define name="_SERIES_PATH"                     value="..\..\Config\Service\SERIES.xml"/>
-                <define name="_EXIST_MODULE"                    value="soapcon"/>
+    <define name="_SERVICE_PATH"                    value="..\..\Config\Service\SERVICE.xml"/>
+    <define name="_ALLSERVICE_PATH"                 value="..\..\Config\Service\All_SERVICE.xml"/>
+    <define name="_TARIF_PATH"                      value="..\..\Config\Tariff\TARIFF_PLANS.xml"/>
+    <define name="_COUNTERS_PATH"                   value="..\..\Config\Service\COUNTERS.xml"/>
+    <define name="_DICTIONARY_PATH"                 value="..\..\Config\GET_DBRESULT.xml"/>
+    <define name="_DEALERPORTAL_PATH"               value="..\..\Config\Portal\DealerUSSDPortal_01.xml"/>
+    <define name="_SERIES_PATH"                     value="..\..\Config\Service\SERIES.xml"/>
+    <define name="_EXIST_MODULE"                    value="soapcon"/>
 		<define name="_CONFIRM_VALUE"                   value="confirm"/>
 		<define name="_CURRENT_INITIATOR"               value="ussdkp"/>
 		<!-- ==========================  SETTINGS   ========================= -->
@@ -3874,4 +3874,24 @@
                         <param name="dbresult" value="0"/>
 		</output>
         </template>
+	<template procedureName="GetBalance" sessionStorage="Memory" sessionLifetime="20" persistent="true">
+		<receiveTemplate>
+			<Message type="retrievecustomerdata" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+				<Item customer="${customer}" subject="balance">
+					<Attribute name="unpayment" value="0"/>
+					<Attribute name="requestcountertype" value="1"/>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="oparam:result" value="${balanceintpartdotpart}"/>
+		</deliveryTemplate>
+		<input>
+			<param name="customer"/>
+		</input>
+		<output>
+			<param name="result" value=""/>
+			<param name="dbresult" value="0"/>
+		</output>
+	</template>
 </templates>
