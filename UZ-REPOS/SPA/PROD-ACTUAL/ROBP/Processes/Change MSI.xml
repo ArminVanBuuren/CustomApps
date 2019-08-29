@@ -34,6 +34,22 @@
             <param name="operation" value="ChangeMSISDNOnSMSC" />
           </parameterslist>
           <resultlist>
+            <result value="" node="ChangeIMSIOnEIR" />
+          </resultlist>
+        </node>
+        <node name="ChangeIMSIOnEIR" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="ChangeIMSIOnEIR" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNOnEIR" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNOnEIR" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNOnEIR" />
+          </parameterslist>
+          <resultlist>
             <result value="" node="ChangeMSISDNOnSCG" />
           </resultlist>
         </node>

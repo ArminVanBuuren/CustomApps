@@ -5,8 +5,8 @@ Created by Vladimir Khovanskiy
 <Counters>
 	<Group name="gprs"
 
-			getcounters_full_ruk="Balance [0]  Mb up to [1] *[2]*"
-			getcounters_full_rut="Ostatok [0] Mb up [1] *[2]*"
+			getcounters_full_ruk="Balance [0]  Mb do to [1] *[2]*"
+			getcounters_full_rut="Ostatok [0] Mb do [1] *[2]*"
 			getcounters_full_uz="*[2]* [0] Mb qoldig^i [1]gacha"
 			getcounters_full_en="Remainder [0] Mb up to [1] *[2]*"
 
@@ -20,8 +20,8 @@ Created by Vladimir Khovanskiy
 			getcounters_nocounters_uz="Sizda joriy internet paketlar yoq"
 			getcounters_nocounters_en="You have no active Internet packages"
 
-			getbalance_full_ruk="[0]Mb/[2] to [1]"
-			getbalance_full_rut="[0]Mb/[2] to [1]"
+			getbalance_full_ruk="[0]Mb/[2] do [1]"
+			getbalance_full_rut="[0]Mb/[2] do [1]"
 			getbalance_full_uz="[0]Mb/[2] to [1]"
 			getbalance_full_en="[0]Mb/[2] up to [1]"
 
@@ -1265,6 +1265,22 @@ Created by Vladimir Khovanskiy
 		<soapcon value="ict"/>
 
 	</Group>
+        <Group name="welcomebonus"
+
+			getcounters_nodate_ruk=" [0]"
+			getcounters_nodate_rut=" [0]"
+			getcounters_nodate_uz=" [0]" 
+			getcounters_nodate_en=" [0]"
+
+			getcounters_nocounters_ruk="У Вас нет активных пакетов"
+			getcounters_nocounters_rut="U Vas net aktivny^h paketov"
+			getcounters_nocounters_uz="Sizda joriy paketlar yoq"
+			getcounters_nocounters_en="You have no active packages"
+
+			>
+		<soapcon value="welcomebonus"/>
+
+	</Group>
 	<Counter counter_code="MB333NO" group="1"
 
 			getcounters_name_ruk="333"
@@ -1293,7 +1309,7 @@ Created by Vladimir Khovanskiy
 
 			>
 	</Counter>
-	<Counter counter_code="MB250M2M" group="1"
+	<Counter counter_code="MB50M2M" group="1"
 
 			getcounters_name_ruk="GPRS 200 MB"
 			getcounters_name_rut="GPRS 200 MB"
@@ -1304,6 +1320,34 @@ Created by Vladimir Khovanskiy
 			getbalance_name_rut="200"
 			getbalance_name_uz="200"
 			getbalance_name_en="200"
+
+			>
+	</Counter>
+	<Counter counter_code="MB100M2M" group="1"
+
+			getcounters_name_ruk="GPRS 250 MB"
+			getcounters_name_rut="GPRS 250 MB"
+			getcounters_name_uz="GPRS 250 MB"
+			getcounters_name_en="GPRS 250 MB"
+
+			getbalance_name_ruk="250"
+			getbalance_name_rut="250"
+			getbalance_name_uz="250"
+			getbalance_name_en="250"
+
+			>
+	</Counter>
+	<Counter counter_code="MB250M2M" group="1"
+
+			getcounters_name_ruk="GPRS 350 MB"
+			getcounters_name_rut="GPRS 350 MB"
+			getcounters_name_uz="GPRS 350 MB"
+			getcounters_name_en="GPRS 350 MB"
+
+			getbalance_name_ruk="350"
+			getbalance_name_rut="350"
+			getbalance_name_uz="350"
+			getbalance_name_en="350"
 
 			>
 	</Counter>
@@ -1385,20 +1429,20 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="MB1000CM" group="1"
 
-			getcounters_name_ruk="GPRS 9000 MB"
-			getcounters_name_rut="GPRS 9000 MB"
-			getcounters_name_uz="GPRS 9000 MB"
-			getcounters_name_en="GPRS 9000 MB"
+			getcounters_name_ruk="GPRS 10000 MB"
+			getcounters_name_rut="GPRS 10000 MB"
+			getcounters_name_uz="GPRS 10000 MB"
+			getcounters_name_en="GPRS 10000 MB"
 
-			getbalance_name_ruk="9000"
-			getbalance_name_rut="9000"
-			getbalance_name_uz="9000"
-			getbalance_name_en="9000"
+			getbalance_name_ruk="10000"
+			getbalance_name_rut="10000"
+			getbalance_name_uz="10000"
+			getbalance_name_en="10000"
 
-			checktpcounters_name_ruk="GPRS 1000 MB"
-			checktpcounters_name_rut="GPRS 1000 MB"
-			checktpcounters_name_uz="GPRS 1000 MB"
-			checktpcounters_name_en="GPRS 1000 MB"
+			checktpcounters_name_ruk="GPRS 10000 MB"
+			checktpcounters_name_rut="GPRS 10000 MB"
+			checktpcounters_name_uz="GPRS 10000 MB"
+			checktpcounters_name_en="GPRS 10000 MB"
 
 			>
 	</Counter>
@@ -1655,20 +1699,20 @@ Created by Vladimir Khovanskiy
 	</Counter>
         <Counter counter_code="MB300MY" group="1"
 
-			getcounters_name_ruk="Internet 300"
-			getcounters_name_rut="Internet 300"
-			getcounters_name_uz="Internet 300"
-			getcounters_name_en="Internet 300"
+			getcounters_name_ruk="Internet 500"
+			getcounters_name_rut="Internet 500"
+			getcounters_name_uz="Internet 500"
+			getcounters_name_en="Internet 500"
 
-			getbalance_name_ruk="300"
-			getbalance_name_rut="300"
-			getbalance_name_uz="300"
-			getbalance_name_en="300"
+			getbalance_name_ruk="500"
+			getbalance_name_rut="500"
+			getbalance_name_uz="500"
+			getbalance_name_en="500"
 
-			checktpcounters_name_ruk="Internet 300"
-			checktpcounters_name_rut="Internet 300"
-			checktpcounters_name_uz="Internet 300"
-			checktpcounters_name_en="Internet 300"
+			checktpcounters_name_ruk="Internet 500"
+			checktpcounters_name_rut="Internet 500"
+			checktpcounters_name_uz="Internet 500"
+			checktpcounters_name_en="Internet 500"
 
 			>
 	</Counter>
@@ -1684,20 +1728,20 @@ Created by Vladimir Khovanskiy
 	</Counter>
         <Counter counter_code="MB300P" group="1"
 
-			getcounters_name_ruk="Internet 300"
-			getcounters_name_rut="Internet 300"
-			getcounters_name_uz="Internet 300"
-			getcounters_name_en="Internet 300"
+			getcounters_name_ruk="Internet 500"
+			getcounters_name_rut="Internet 500"
+			getcounters_name_uz="Internet 500"
+			getcounters_name_en="Internet 500"
 
-			getbalance_name_ruk="300"
-			getbalance_name_rut="300"
-			getbalance_name_uz="300"
-			getbalance_name_en="300"
+			getbalance_name_ruk="500"
+			getbalance_name_rut="500"
+			getbalance_name_uz="500"
+			getbalance_name_en="500"
 
-			checktpcounters_name_ruk="Internet 300"
-			checktpcounters_name_rut="Internet 300"
-			checktpcounters_name_uz="Internet 300"
-			checktpcounters_name_en="Internet 300"
+			checktpcounters_name_ruk="Internet 500"
+			checktpcounters_name_rut="Internet 500"
+			checktpcounters_name_uz="Internet 500"
+			checktpcounters_name_en="Internet 500"
 
 			>
 	</Counter>
@@ -1989,43 +2033,43 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="MB2500CP" group="1"
 
-			getcounters_name_ruk="20000"
-			getcounters_name_rut="20000"
-			getcounters_name_uz="20000"
-			getcounters_name_en="20000"
+			getcounters_name_ruk="32000"
+			getcounters_name_rut="32000"
+			getcounters_name_uz="32000"
+			getcounters_name_en="32000"
 
-			getbalance_name_ruk="20000"
-			getbalance_name_rut="20000"
-			getbalance_name_uz="20000"
-			getbalance_name_en="20000"
+			getbalance_name_ruk="32000"
+			getbalance_name_rut="32000"
+			getbalance_name_uz="32000"
+			getbalance_name_en="32000"
 
 			>
 	</Counter>
 	<Counter counter_code="MBCOR777" group="1"
 
-			getcounters_name_ruk="4000"
-			getcounters_name_rut="4000"
-			getcounters_name_uz="4000"
-			getcounters_name_en="4000"
+			getcounters_name_ruk="5000"
+			getcounters_name_rut="5000"
+			getcounters_name_uz="5000"
+			getcounters_name_en="5000"
 
-			getbalance_name_ruk="4000"
-			getbalance_name_rut="4000"
-			getbalance_name_uz="4000"
-			getbalance_name_en="4000"
+			getbalance_name_ruk="5000"
+			getbalance_name_rut="5000"
+			getbalance_name_uz="5000"
+			getbalance_name_en="5000"
 
 			>
 	</Counter>
 	<Counter counter_code="MB2000CU" group="1"
 
-			getcounters_name_ruk="15000"
-			getcounters_name_rut="15000"
-			getcounters_name_uz="15000"
-			getcounters_name_en="15000"
+			getcounters_name_ruk="18000"
+			getcounters_name_rut="18000"
+			getcounters_name_uz="18000"
+			getcounters_name_en="18000"
 
-			getbalance_name_ruk="15000"
-			getbalance_name_rut="15000"
-			getbalance_name_uz="15000"
-			getbalance_name_en="15000"
+			getbalance_name_ruk="18000"
+			getbalance_name_rut="18000"
+			getbalance_name_uz="18000"
+			getbalance_name_en="18000"
 
 			>
 	</Counter>
@@ -2059,15 +2103,15 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="MB500M2M" group="1"
 
-			getcounters_name_ruk="500"
-			getcounters_name_rut="500"
-			getcounters_name_uz="500"
-			getcounters_name_en="500"
+			getcounters_name_ruk="600"
+			getcounters_name_rut="600"
+			getcounters_name_uz="600"
+			getcounters_name_en="600"
 
-			getbalance_name_ruk="500"
-			getbalance_name_rut="500"
-			getbalance_name_uz="500"
-			getbalance_name_en="500"
+			getbalance_name_ruk="600"
+			getbalance_name_rut="600"
+			getbalance_name_uz="600"
+			getbalance_name_en="600"
 
 			>
 	</Counter>
@@ -2352,89 +2396,19 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="MB1000OP" group="1"
 
-			getcounters_name_ruk="1000"
-			getcounters_name_rut="1000"
-			getcounters_name_uz="1000"
-			getcounters_name_en="1000"
+			getcounters_name_ruk="1500"
+			getcounters_name_rut="1500"
+			getcounters_name_uz="1500"
+			getcounters_name_en="1500"
 
-			getbalance_name_ruk="1000"
-			getbalance_name_rut="1000"
-			getbalance_name_uz="1000"
-			getbalance_name_en="1000"
+			getbalance_name_ruk="1500"
+			getbalance_name_rut="1500"
+			getbalance_name_uz="1500"
+			getbalance_name_en="1500"
 
 			>
 	</Counter>
 	<Counter counter_code="MB1600PL" group="1"
-
-			getcounters_name_ruk="1600"
-			getcounters_name_rut="1600"
-			getcounters_name_uz="1600"
-			getcounters_name_en="1600"
-
-			getbalance_name_ruk="1600"
-			getbalance_name_rut="1600"
-			getbalance_name_uz="1600"
-			getbalance_name_en="1600"
-
-			>
-	</Counter>
-	<Counter counter_code="MB100AS" group="1"
-
-			getcounters_name_ruk="100"
-			getcounters_name_rut="100"
-			getcounters_name_uz="100"
-			getcounters_name_en="100"
-
-			getbalance_name_ruk="100"
-			getbalance_name_rut="100"
-			getbalance_name_uz="100"
-			getbalance_name_en="100"
-
-			>
-	</Counter>
-	<Counter counter_code="MB400ST" group="1"
-
-			getcounters_name_ruk="400"
-			getcounters_name_rut="400"
-			getcounters_name_uz="400"
-			getcounters_name_en="400"
-
-			getbalance_name_ruk="400"
-			getbalance_name_rut="400"
-			getbalance_name_uz="400"
-			getbalance_name_en="400"
-
-			>
-	</Counter>
-	<Counter counter_code="MB1200QU" group="1"
-
-			getcounters_name_ruk="1200"
-			getcounters_name_rut="1200"
-			getcounters_name_uz="1200"
-			getcounters_name_en="1200"
-
-			getbalance_name_ruk="1200"
-			getbalance_name_rut="1200"
-			getbalance_name_uz="1200"
-			getbalance_name_en="1200"
-
-			>
-	</Counter>
-	<Counter counter_code="MB2000QP" group="1"
-
-			getcounters_name_ruk="2000"
-			getcounters_name_rut="2000"
-			getcounters_name_uz="2000"
-			getcounters_name_en="2000"
-
-			getbalance_name_ruk="2000"
-			getbalance_name_rut="2000"
-			getbalance_name_uz="2000"
-			getbalance_name_en="2000"
-
-			>
-	</Counter>
-	<Counter counter_code="MB3000P" group="1"
 
 			getcounters_name_ruk="3000"
 			getcounters_name_rut="3000"
@@ -2448,21 +2422,49 @@ Created by Vladimir Khovanskiy
 
 			>
 	</Counter>
-	<Counter counter_code="MB4000I" group="1"
+	<Counter counter_code="MB100AS" group="1"
 
-			getcounters_name_ruk="4000"
-			getcounters_name_rut="4000"
-			getcounters_name_uz="4000"
-			getcounters_name_en="4000"
+			getcounters_name_ruk="500"
+			getcounters_name_rut="500"
+			getcounters_name_uz="500"
+			getcounters_name_en="500"
 
-			getbalance_name_ruk="4000"
-			getbalance_name_rut="4000"
-			getbalance_name_uz="4000"
-			getbalance_name_en="4000"
+			getbalance_name_ruk="500"
+			getbalance_name_rut="500"
+			getbalance_name_uz="500"
+			getbalance_name_en="500"
 
 			>
 	</Counter>
-	<Counter counter_code="MB5000V" group="1"
+	<Counter counter_code="MB400ST" group="1"
+
+			getcounters_name_ruk="1000"
+			getcounters_name_rut="1000"
+			getcounters_name_uz="1000"
+			getcounters_name_en="1000"
+
+			getbalance_name_ruk="1000"
+			getbalance_name_rut="1000"
+			getbalance_name_uz="1000"
+			getbalance_name_en="1000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB1200QU" group="1"
+
+			getcounters_name_ruk="2000"
+			getcounters_name_rut="2000"
+			getcounters_name_uz="2000"
+			getcounters_name_en="2000"
+
+			getbalance_name_ruk="2000"
+			getbalance_name_rut="2000"
+			getbalance_name_uz="2000"
+			getbalance_name_en="2000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB2000QP" group="1"
 
 			getcounters_name_ruk="5000"
 			getcounters_name_rut="5000"
@@ -2473,6 +2475,48 @@ Created by Vladimir Khovanskiy
 			getbalance_name_rut="5000"
 			getbalance_name_uz="5000"
 			getbalance_name_en="5000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB3000P" group="1"
+
+			getcounters_name_ruk="7000"
+			getcounters_name_rut="7000"
+			getcounters_name_uz="7000"
+			getcounters_name_en="7000"
+
+			getbalance_name_ruk="7000"
+			getbalance_name_rut="7000"
+			getbalance_name_uz="7000"
+			getbalance_name_en="7000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB4000I" group="1"
+
+			getcounters_name_ruk="14000"
+			getcounters_name_rut="14000"
+			getcounters_name_uz="14000"
+			getcounters_name_en="14000"
+
+			getbalance_name_ruk="14000"
+			getbalance_name_rut="14000"
+			getbalance_name_uz="14000"
+			getbalance_name_en="14000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB5000V" group="1"
+
+			getcounters_name_ruk="30000"
+			getcounters_name_rut="30000"
+			getcounters_name_uz="30000"
+			getcounters_name_en="30000"
+
+			getbalance_name_ruk="30000"
+			getbalance_name_rut="30000"
+			getbalance_name_uz="30000"
+			getbalance_name_en="30000"
 
 			>
 	</Counter>
@@ -2562,43 +2606,43 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="MB4000IY" group="1"
 
-			getcounters_name_ruk="4000"
-			getcounters_name_rut="4000"
-			getcounters_name_uz="4000"
-			getcounters_name_en="4000"
+			getcounters_name_ruk="14000"
+			getcounters_name_rut="14000"
+			getcounters_name_uz="14000"
+			getcounters_name_en="14000"
 
-			getbalance_name_ruk="4000"
-			getbalance_name_rut="4000"
-			getbalance_name_uz="4000"
-			getbalance_name_en="4000"
+			getbalance_name_ruk="14000"
+			getbalance_name_rut="14000"
+			getbalance_name_uz="14000"
+			getbalance_name_en="14000"
 
 			>
 	</Counter>
 	<Counter counter_code="MB3PY" group="1"
 
-			getcounters_name_ruk="3000"
-			getcounters_name_rut="3000"
-			getcounters_name_uz="3000"
-			getcounters_name_en="3000"
+			getcounters_name_ruk="7000"
+			getcounters_name_rut="7000"
+			getcounters_name_uz="7000"
+			getcounters_name_en="7000"
 
-			getbalance_name_ruk="3000"
-			getbalance_name_rut="3000"
-			getbalance_name_uz="3000"
-			getbalance_name_en="3000"
+			getbalance_name_ruk="7000"
+			getbalance_name_rut="7000"
+			getbalance_name_uz="7000"
+			getbalance_name_en="7000"
 
 			>
 	</Counter>
 	<Counter counter_code="MB5000VY" group="1"
 
-			getcounters_name_ruk="5000"
-			getcounters_name_rut="5000"
-			getcounters_name_uz="5000"
-			getcounters_name_en="5000"
+			getcounters_name_ruk="30000"
+			getcounters_name_rut="30000"
+			getcounters_name_uz="30000"
+			getcounters_name_en="30000"
 
-			getbalance_name_ruk="5000"
-			getbalance_name_rut="5000"
-			getbalance_name_uz="5000"
-			getbalance_name_en="5000"
+			getbalance_name_ruk="30000"
+			getbalance_name_rut="30000"
+			getbalance_name_uz="30000"
+			getbalance_name_en="30000"
 
 			>
 	</Counter>
@@ -2632,20 +2676,6 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="MB1200QY" group="1"
 
-			getcounters_name_ruk="1200"
-			getcounters_name_rut="1200"
-			getcounters_name_uz="1200"
-			getcounters_name_en="1200"
-
-			getbalance_name_ruk="1200"
-			getbalance_name_rut="1200"
-			getbalance_name_uz="1200"
-			getbalance_name_en="1200"
-
-			>
-	</Counter>
-	<Counter counter_code="MB2QYP" group="1"
-
 			getcounters_name_ruk="2000"
 			getcounters_name_rut="2000"
 			getcounters_name_uz="2000"
@@ -2655,6 +2685,20 @@ Created by Vladimir Khovanskiy
 			getbalance_name_rut="2000"
 			getbalance_name_uz="2000"
 			getbalance_name_en="2000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB2QYP" group="1"
+
+			getcounters_name_ruk="5000"
+			getcounters_name_rut="5000"
+			getcounters_name_uz="5000"
+			getcounters_name_en="5000"
+
+			getbalance_name_ruk="5000"
+			getbalance_name_rut="5000"
+			getbalance_name_uz="5000"
+			getbalance_name_en="5000"
 
 			>
 	</Counter>
@@ -2938,6 +2982,300 @@ Created by Vladimir Khovanskiy
 
 			>
 	</Counter>
+	<Counter counter_code="MB15000E" group="1"
+
+			getcounters_name_ruk="15000"
+			getcounters_name_rut="15000"
+			getcounters_name_uz="15000"
+			getcounters_name_en="15000"
+
+			getbalance_name_ruk="15000"
+			getbalance_name_rut="15000"
+			getbalance_name_uz="15000"
+			getbalance_name_en="15000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB4000X1" group="1"
+
+			getcounters_name_ruk="4000"
+			getcounters_name_rut="4000"
+			getcounters_name_uz="4000"
+			getcounters_name_en="4000"
+
+			getbalance_name_ruk="4000"
+			getbalance_name_rut="4000"
+			getbalance_name_uz="4000"
+			getbalance_name_en="4000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB12X2" group="1"
+
+			getcounters_name_ruk="12000"
+			getcounters_name_rut="12000"
+			getcounters_name_uz="12000"
+			getcounters_name_en="12000"
+
+			getbalance_name_ruk="12000"
+			getbalance_name_rut="12000"
+			getbalance_name_uz="12000"
+			getbalance_name_en="12000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB40X3" group="1"
+
+			getcounters_name_ruk="40000"
+			getcounters_name_rut="40000"
+			getcounters_name_uz="40000"
+			getcounters_name_en="40000"
+
+			getbalance_name_ruk="40000"
+			getbalance_name_rut="40000"
+			getbalance_name_uz="40000"
+			getbalance_name_en="40000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB200CHL" group="1"
+
+			getcounters_name_ruk="200"
+			getcounters_name_rut="200"
+			getcounters_name_uz="200"
+			getcounters_name_en="200"
+
+			getbalance_name_ruk="200"
+			getbalance_name_rut="200"
+			getbalance_name_uz="200"
+			getbalance_name_en="200"
+
+			>
+	</Counter>
+	<Counter counter_code="MB3000A" group="1"
+
+			getcounters_name_ruk="3000"
+			getcounters_name_rut="3000"
+			getcounters_name_uz="3000"
+			getcounters_name_en="3000"
+
+			getbalance_name_ruk="3000"
+			getbalance_name_rut="3000"
+			getbalance_name_uz="3000"
+			getbalance_name_en="3000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB2300L" group="1"
+
+			getcounters_name_ruk="2300"
+			getcounters_name_rut="2300"
+			getcounters_name_uz="2300"
+			getcounters_name_en="2300"
+
+			getbalance_name_ruk="2300"
+			getbalance_name_rut="2300"
+			getbalance_name_uz="2300"
+			getbalance_name_en="2300"
+
+			>
+	</Counter>
+	<Counter counter_code="MB10Y" group="1"
+
+			getcounters_name_ruk="10000"
+			getcounters_name_rut="10000"
+			getcounters_name_uz="10000"
+			getcounters_name_en="10000"
+
+			getbalance_name_ruk="10000"
+			getbalance_name_rut="10000"
+			getbalance_name_uz="10000"
+			getbalance_name_en="10000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB100O" group="1"
+
+			getcounters_name_ruk="100"
+			getcounters_name_rut="100"
+			getcounters_name_uz="100"
+			getcounters_name_en="100"
+
+			getbalance_name_ruk="100"
+			getbalance_name_rut="100"
+			getbalance_name_uz="100"
+			getbalance_name_en="100"
+
+			>
+	</Counter>
+	<Counter counter_code="MB10YY" group="1"
+
+			getcounters_name_ruk="10000"
+			getcounters_name_rut="10000"
+			getcounters_name_uz="10000"
+			getcounters_name_en="10000"
+
+			getbalance_name_ruk="10000"
+			getbalance_name_rut="10000"
+			getbalance_name_uz="10000"
+			getbalance_name_en="10000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB6GSB" group="1"
+
+			getcounters_name_ruk="6000"
+			getcounters_name_rut="6000"
+			getcounters_name_uz="6000"
+			getcounters_name_en="6000"
+
+			getbalance_name_ruk="6000"
+			getbalance_name_rut="6000"
+			getbalance_name_uz="6000"
+			getbalance_name_en="6000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB300TY" group="1"
+
+			getcounters_name_ruk="300"
+			getcounters_name_rut="300"
+			getcounters_name_uz="300"
+			getcounters_name_en="300"
+
+			getbalance_name_ruk="300"
+			getbalance_name_rut="300"
+			getbalance_name_uz="300"
+			getbalance_name_en="300"
+
+			>
+	</Counter>
+	<Counter counter_code="MB3OQ2" group="1"
+
+			getcounters_name_ruk="3000"
+			getcounters_name_rut="3000"
+			getcounters_name_uz="3000"
+			getcounters_name_en="3000"
+
+			getbalance_name_ruk="3000"
+			getbalance_name_rut="3000"
+			getbalance_name_uz="3000"
+			getbalance_name_en="3000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB4000X4" group="1"
+
+			getcounters_name_ruk="4000"
+			getcounters_name_rut="4000"
+			getcounters_name_uz="4000"
+			getcounters_name_en="4000"
+
+			getbalance_name_ruk="4000"
+			getbalance_name_rut="4000"
+			getbalance_name_uz="4000"
+			getbalance_name_en="4000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB12X5" group="1"
+
+			getcounters_name_ruk="12000"
+			getcounters_name_rut="12000"
+			getcounters_name_uz="12000"
+			getcounters_name_en="12000"
+
+			getbalance_name_ruk="12000"
+			getbalance_name_rut="12000"
+			getbalance_name_uz="12000"
+			getbalance_name_en="12000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB5OMAD" group="1"
+
+			getcounters_name_ruk="50"
+			getcounters_name_rut="50"
+			getcounters_name_uz="50"
+			getcounters_name_en="50"
+
+			getbalance_name_ruk="50"
+			getbalance_name_rut="50"
+			getbalance_name_uz="50"
+			getbalance_name_en="50"
+
+			>
+	</Counter>
+	<Counter counter_code="MB3ULP" group="1"
+
+			getcounters_name_ruk="3000"
+			getcounters_name_rut="3000"
+			getcounters_name_uz="3000"
+			getcounters_name_en="3000"
+
+			getbalance_name_ruk="3000"
+			getbalance_name_rut="3000"
+			getbalance_name_uz="3000"
+			getbalance_name_en="3000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB8000UP" group="1"
+
+			getcounters_name_ruk="8000"
+			getcounters_name_rut="8000"
+			getcounters_name_uz="8000"
+			getcounters_name_en="8000"
+
+			getbalance_name_ruk="8000"
+			getbalance_name_rut="8000"
+			getbalance_name_uz="8000"
+			getbalance_name_en="8000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB12MOB7" group="1"
+
+			getcounters_name_ruk="12000"
+			getcounters_name_rut="12000"
+			getcounters_name_uz="12000"
+			getcounters_name_en="12000"
+
+			getbalance_name_ruk="12000"
+			getbalance_name_rut="12000"
+			getbalance_name_uz="12000"
+			getbalance_name_en="12000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB25MOB1" group="1"
+
+			getcounters_name_ruk="25000"
+			getcounters_name_rut="25000"
+			getcounters_name_uz="25000"
+			getcounters_name_en="25000"
+
+			getbalance_name_ruk="25000"
+			getbalance_name_rut="25000"
+			getbalance_name_uz="25000"
+			getbalance_name_en="25000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB50MOB" group="1"
+
+			getcounters_name_ruk="50000"
+			getcounters_name_rut="50000"
+			getcounters_name_uz="50000"
+			getcounters_name_en="50000"
+
+			getbalance_name_ruk="50000"
+			getbalance_name_rut="50000"
+			getbalance_name_uz="50000"
+			getbalance_name_en="50000"
+
+			>
+	</Counter>
         <!--Counter counter_code="MB1000OP" group="1"
 
 			getcounters_name_ruk="Nedelniy Интернет-пакет"
@@ -2963,6 +3301,20 @@ Created by Vladimir Khovanskiy
 			getbalance_name_rut="Bessrochniy Internet-Paket"
 			getbalance_name_uz="Bessrochniy Internet-Paket"
 			getbalance_name_en="Bessrochniy Internet-Paket"
+
+			>
+	</Counter>
+	<Counter counter_code="MBPACKM" group="1"
+
+			getcounters_name_ruk="Multi Internet-Paket"
+			getcounters_name_rut="Multi Internet-Paket"
+			getcounters_name_uz="Multi Internet-Paket"
+			getcounters_name_en="Multi Internet-Paket"
+
+			getbalance_name_ruk="Multi Internet-Paket"
+			getbalance_name_rut="Multi Internet-Paket"
+			getbalance_name_uz="Multi Internet-Paket"
+			getbalance_name_en="Multi Internet-Paket"
 
 			>
 	</Counter>
@@ -3124,20 +3476,20 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="MIN1000" group="2"
 
-			getcounters_name_ruk="1000 минут"
-			getcounters_name_rut="1000 minut"
-			getcounters_name_uz="1000 daqiqa"
-			getcounters_name_en="1000 minutes"
+			getcounters_name_ruk="1500 минут"
+			getcounters_name_rut="1500 minut"
+			getcounters_name_uz="1500 daqiqa"
+			getcounters_name_en="1500 minutes"
 
-			getbalance_name_ruk="1000"
-			getbalance_name_rut="1000"
-			getbalance_name_uz="1000"
-			getbalance_name_en="1000"
+			getbalance_name_ruk="1500"
+			getbalance_name_rut="1500"
+			getbalance_name_uz="1500"
+			getbalance_name_en="1500"
 
-			checktpcounters_name_ruk="1000 минут"
-			checktpcounters_name_rut="1000 minut"
-			checktpcounters_name_uz="1000 daqiqa"
-			checktpcounters_name_en="1000 minutes"
+			checktpcounters_name_ruk="1500 минут"
+			checktpcounters_name_rut="1500 minut"
+			checktpcounters_name_uz="1500 daqiqa"
+			checktpcounters_name_en="1500 minutes"
 			>
 	</Counter>
 	<Counter counter_code="MIN2000" group="2"
@@ -3628,38 +3980,38 @@ Created by Vladimir Khovanskiy
 	</Counter>
         <Counter counter_code="MIN300MY" group="2"
 
-			getcounters_name_ruk="300 минут"
-			getcounters_name_rut="300 minut"
-			getcounters_name_uz="300 daqiqa"
-			getcounters_name_en="300 minutes"
+			getcounters_name_ruk="500 минут"
+			getcounters_name_rut="500 minut"
+			getcounters_name_uz="500 daqiqa"
+			getcounters_name_en="500 minutes"
 
-			getbalance_name_ruk="300"
-			getbalance_name_rut="300"
-			getbalance_name_uz="300"
-			getbalance_name_en="300"
+			getbalance_name_ruk="500"
+			getbalance_name_rut="500"
+			getbalance_name_uz="500"
+			getbalance_name_en="500"
 
-			checktpcounters_name_ruk="300 минут"
-			checktpcounters_name_rut="300 minut"
-			checktpcounters_name_uz="300 daqiqa"
-			checktpcounters_name_en="300 minutes"
+			checktpcounters_name_ruk="500 минут"
+			checktpcounters_name_rut="500 minut"
+			checktpcounters_name_uz="500 daqiqa"
+			checktpcounters_name_en="500 minutes"
 			>
 	</Counter>
         <Counter counter_code="MIN300P" group="2"
 
-			getcounters_name_ruk="300 минут"
-			getcounters_name_rut="300 minut"
-			getcounters_name_uz="300 daqiqa"
-			getcounters_name_en="300 minutes"
+			getcounters_name_ruk="500 минут"
+			getcounters_name_rut="500 minut"
+			getcounters_name_uz="500 daqiqa"
+			getcounters_name_en="500 minutes"
 
-			getbalance_name_ruk="300"
-			getbalance_name_rut="300"
-			getbalance_name_uz="300"
-			getbalance_name_en="300"
+			getbalance_name_ruk="500"
+			getbalance_name_rut="500"
+			getbalance_name_uz="500"
+			getbalance_name_en="500"
 
-			checktpcounters_name_ruk="300 минут"
-			checktpcounters_name_rut="300 minut"
-			checktpcounters_name_uz="300 daqiqa"
-			checktpcounters_name_en="300 minutes"
+			checktpcounters_name_ruk="500 минут"
+			checktpcounters_name_rut="500 minut"
+			checktpcounters_name_uz="500 daqiqa"
+			checktpcounters_name_en="500 minutes"
 			>
 	</Counter>
         <Counter counter_code="MIN25" group="2"
@@ -4181,15 +4533,15 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="MINC777" group="2"
 
-			getcounters_name_ruk="777"
-			getcounters_name_rut="777"
-			getcounters_name_uz="777"
-			getcounters_name_en="777"
+			getcounters_name_ruk="1000"
+			getcounters_name_rut="1000"
+			getcounters_name_uz="1000"
+			getcounters_name_en="1000"
 
-			getbalance_name_ruk="777"
-			getbalance_name_rut="777"
-			getbalance_name_uz="777"
-			getbalance_name_en="777"
+			getbalance_name_ruk="1000"
+			getbalance_name_rut="1000"
+			getbalance_name_uz="1000"
+			getbalance_name_en="1000"
 
 			>
 	</Counter>
@@ -4279,29 +4631,29 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="MIN600OP" group="2"
 
-			getcounters_name_ruk="600"
-			getcounters_name_rut="600"
-			getcounters_name_uz="600"
-			getcounters_name_en="600"
+			getcounters_name_ruk="800"
+			getcounters_name_rut="800"
+			getcounters_name_uz="800"
+			getcounters_name_en="800"
 
-			getbalance_name_ruk="600"
-			getbalance_name_rut="600"
-			getbalance_name_uz="600"
-			getbalance_name_en="600"
+			getbalance_name_ruk="800"
+			getbalance_name_rut="800"
+			getbalance_name_uz="800"
+			getbalance_name_en="800"
 
 			>
 	</Counter>
 	<Counter counter_code="MIN200PL" group="2"
 
-			getcounters_name_ruk="200"
-			getcounters_name_rut="200"
-			getcounters_name_uz="200"
-			getcounters_name_en="200"
+			getcounters_name_ruk="800"
+			getcounters_name_rut="800"
+			getcounters_name_uz="800"
+			getcounters_name_en="800"
 
-			getbalance_name_ruk="200"
-			getbalance_name_rut="200"
-			getbalance_name_uz="200"
-			getbalance_name_en="200"
+			getbalance_name_ruk="800"
+			getbalance_name_rut="800"
+			getbalance_name_uz="800"
+			getbalance_name_en="800"
 
 			>
 	</Counter>
@@ -4321,47 +4673,19 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="MIN500ST" group="2"
 
-			getcounters_name_ruk="400"
-			getcounters_name_rut="400"
-			getcounters_name_uz="400"
-			getcounters_name_en="400"
+			getcounters_name_ruk="700"
+			getcounters_name_rut="700"
+			getcounters_name_uz="700"
+			getcounters_name_en="700"
 
-			getbalance_name_ruk="400"
-			getbalance_name_rut="400"
-			getbalance_name_uz="400"
-			getbalance_name_en="400"
+			getbalance_name_ruk="700"
+			getbalance_name_rut="700"
+			getbalance_name_uz="700"
+			getbalance_name_en="700"
 
 			>
 	</Counter>
 	<Counter counter_code="MIN800QU" group="2"
-
-			getcounters_name_ruk="800"
-			getcounters_name_rut="800"
-			getcounters_name_uz="800"
-			getcounters_name_en="800"
-
-			getbalance_name_ruk="800"
-			getbalance_name_rut="800"
-			getbalance_name_uz="800"
-			getbalance_name_en="800"
-
-			>
-	</Counter>
-	<Counter counter_code="MIN400QP" group="2"
-
-			getcounters_name_ruk="400"
-			getcounters_name_rut="400"
-			getcounters_name_uz="400"
-			getcounters_name_en="400"
-
-			getbalance_name_ruk="400"
-			getbalance_name_rut="400"
-			getbalance_name_uz="400"
-			getbalance_name_en="400"
-
-			>
-	</Counter>
-	<Counter counter_code="MIN1000P" group="2"
 
 			getcounters_name_ruk="1000"
 			getcounters_name_rut="1000"
@@ -4375,17 +4699,45 @@ Created by Vladimir Khovanskiy
 
 			>
 	</Counter>
+	<Counter counter_code="MIN400QP" group="2"
+
+			getcounters_name_ruk="1000"
+			getcounters_name_rut="1000"
+			getcounters_name_uz="1000"
+			getcounters_name_en="1000"
+
+			getbalance_name_ruk="1000"
+			getbalance_name_rut="1000"
+			getbalance_name_uz="1000"
+			getbalance_name_en="1000"
+
+			>
+	</Counter>
+	<Counter counter_code="MIN1000P" group="2"
+
+			getcounters_name_ruk="1500"
+			getcounters_name_rut="1500"
+			getcounters_name_uz="1500"
+			getcounters_name_en="1500"
+
+			getbalance_name_ruk="1500"
+			getbalance_name_rut="1500"
+			getbalance_name_uz="1500"
+			getbalance_name_en="1500"
+
+			>
+	</Counter>
 	<Counter counter_code="MIN2000I" group="2"
 
-			getcounters_name_ruk="2000"
-			getcounters_name_rut="2000"
-			getcounters_name_uz="2000"
-			getcounters_name_en="2000"
+			getcounters_name_ruk="3000"
+			getcounters_name_rut="3000"
+			getcounters_name_uz="3000"
+			getcounters_name_en="3000"
 
-			getbalance_name_ruk="2000"
-			getbalance_name_rut="2000"
-			getbalance_name_uz="2000"
-			getbalance_name_en="2000"
+			getbalance_name_ruk="3000"
+			getbalance_name_rut="3000"
+			getbalance_name_uz="3000"
+			getbalance_name_en="3000"
 
 			>
 	</Counter>
@@ -4447,29 +4799,29 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="MIN2KIY" group="2"
 
-			getcounters_name_ruk="2000"
-			getcounters_name_rut="2000"
-			getcounters_name_uz="2000"
-			getcounters_name_en="2000"
+			getcounters_name_ruk="3000"
+			getcounters_name_rut="3000"
+			getcounters_name_uz="3000"
+			getcounters_name_en="3000"
 			                      
-			getbalance_name_ruk="2000"
-			getbalance_name_rut="2000"
-			getbalance_name_uz="2000"
-			getbalance_name_en="2000"
+			getbalance_name_ruk="3000"
+			getbalance_name_rut="3000"
+			getbalance_name_uz="3000"
+			getbalance_name_en="3000"
 
 			>
 	</Counter>
 	<Counter counter_code="MIN1PY" group="2"
 
-			getcounters_name_ruk="1000"
-			getcounters_name_rut="1000"
-			getcounters_name_uz="1000"
-			getcounters_name_en="1000"
+			getcounters_name_ruk="1500"
+			getcounters_name_rut="1500"
+			getcounters_name_uz="1500"
+			getcounters_name_en="1500"
 			                      
-			getbalance_name_ruk="1000"
-			getbalance_name_rut="1000"
-			getbalance_name_uz="1000"
-			getbalance_name_en="1000"
+			getbalance_name_ruk="1500"
+			getbalance_name_rut="1500"
+			getbalance_name_uz="1500"
+			getbalance_name_en="1500"
 
 			>
 	</Counter>
@@ -4489,29 +4841,29 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="MIN4QYP" group="2"
 
-			getcounters_name_ruk="400"
-			getcounters_name_rut="400"
-			getcounters_name_uz="400"
-			getcounters_name_en="400"
+			getcounters_name_ruk="1000"
+			getcounters_name_rut="1000"
+			getcounters_name_uz="1000"
+			getcounters_name_en="1000"
 			                      
-			getbalance_name_ruk="400"
-			getbalance_name_rut="400"
-			getbalance_name_uz="400"
-			getbalance_name_en="400"
+			getbalance_name_ruk="1000"
+			getbalance_name_rut="1000"
+			getbalance_name_uz="1000"
+			getbalance_name_en="1000"
 
 			>
 	</Counter>
 	<Counter counter_code="MIN800QY" group="2"
 
-			getcounters_name_ruk="800"
-			getcounters_name_rut="800"
-			getcounters_name_uz="800"
-			getcounters_name_en="800"
+			getcounters_name_ruk="1000"
+			getcounters_name_rut="1000"
+			getcounters_name_uz="1000"
+			getcounters_name_en="1000"
 			                      
-			getbalance_name_ruk="800"
-			getbalance_name_rut="800"
-			getbalance_name_uz="800"
-			getbalance_name_en="800"
+			getbalance_name_ruk="1000"
+			getbalance_name_rut="1000"
+			getbalance_name_uz="1000"
+			getbalance_name_en="1000"
 
 			>
 	</Counter>
@@ -4624,6 +4976,286 @@ Created by Vladimir Khovanskiy
 			getbalance_name_rut="300"
 			getbalance_name_uz="300"
 			getbalance_name_en="300"
+
+			>
+	</Counter>
+	<Counter counter_code="MIN500X1" group="2"
+
+			getcounters_name_ruk="500"
+			getcounters_name_rut="500"
+			getcounters_name_uz="500"
+			getcounters_name_en="500"
+			                      
+			getbalance_name_ruk="500"
+			getbalance_name_rut="500"
+			getbalance_name_uz="500"
+			getbalance_name_en="500"
+
+			>
+	</Counter>
+	<Counter counter_code="MIN15X2" group="2"
+
+			getcounters_name_ruk="1500"
+			getcounters_name_rut="1500"
+			getcounters_name_uz="1500"
+			getcounters_name_en="1500"
+			                      
+			getbalance_name_ruk="1500"
+			getbalance_name_rut="1500"
+			getbalance_name_uz="1500"
+			getbalance_name_en="1500"
+
+			>
+	</Counter>
+	<Counter counter_code="MIN3KCHL" group="2"
+
+			getcounters_name_ruk="3000"
+			getcounters_name_rut="3000"
+			getcounters_name_uz="3000"
+			getcounters_name_en="3000"
+			                      
+			getbalance_name_ruk="3000"
+			getbalance_name_rut="3000"
+			getbalance_name_uz="3000"
+			getbalance_name_en="3000"
+
+			>
+	</Counter>
+	<Counter counter_code="MIN1500A" group="2"
+
+			getcounters_name_ruk="1500"
+			getcounters_name_rut="1500"
+			getcounters_name_uz="1500"
+			getcounters_name_en="1500"
+			                      
+			getbalance_name_ruk="1500"
+			getbalance_name_rut="1500"
+			getbalance_name_uz="1500"
+			getbalance_name_en="1500"
+
+			>
+	</Counter>
+	<Counter counter_code="MIN800L" group="2"
+
+			getcounters_name_ruk="800"
+			getcounters_name_rut="800"
+			getcounters_name_uz="800"
+			getcounters_name_en="800"
+			                      
+			getbalance_name_ruk="800"
+			getbalance_name_rut="800"
+			getbalance_name_uz="800"
+			getbalance_name_en="800"
+
+			>
+	</Counter>
+	<Counter counter_code="MIN1Y" group="2"
+
+			getcounters_name_ruk="1000"
+			getcounters_name_rut="1000"
+			getcounters_name_uz="1000"
+			getcounters_name_en="1000"
+			                      
+			getbalance_name_ruk="1000"
+			getbalance_name_rut="1000"
+			getbalance_name_uz="1000"
+			getbalance_name_en="1000"
+
+			>
+	</Counter>
+	<Counter counter_code="MIN100O" group="2"
+
+			getcounters_name_ruk="100"
+			getcounters_name_rut="100"
+			getcounters_name_uz="100"
+			getcounters_name_en="100"
+			                      
+			getbalance_name_ruk="100"
+			getbalance_name_rut="100"
+			getbalance_name_uz="100"
+			getbalance_name_en="100"
+
+			>
+	</Counter>
+	<Counter counter_code="MIN1YY" group="2"
+
+			getcounters_name_ruk="1000"
+			getcounters_name_rut="1000"
+			getcounters_name_uz="1000"
+			getcounters_name_en="1000"
+			                      
+			getbalance_name_ruk="1000"
+			getbalance_name_rut="1000"
+			getbalance_name_uz="1000"
+			getbalance_name_en="1000"
+
+			>
+	</Counter>
+	<Counter counter_code="MIN3GSB" group="2"
+
+			getcounters_name_ruk="3000"
+			getcounters_name_rut="3000"
+			getcounters_name_uz="3000"
+			getcounters_name_en="3000"
+			                      
+			getbalance_name_ruk="3000"
+			getbalance_name_rut="3000"
+			getbalance_name_uz="3000"
+			getbalance_name_en="3000"
+
+			>
+	</Counter>
+	<Counter counter_code="MIN1KSH" group="2"
+
+			getcounters_name_ruk="1000"
+			getcounters_name_rut="1000"
+			getcounters_name_uz="1000"
+			getcounters_name_en="1000"
+			                      
+			getbalance_name_ruk="1000"
+			getbalance_name_rut="1000"
+			getbalance_name_uz="1000"
+			getbalance_name_en="1000"
+
+			>
+	</Counter>
+	<Counter counter_code="MIN2OQ1" group="2"
+
+			getcounters_name_ruk="2000"
+			getcounters_name_rut="2000"
+			getcounters_name_uz="2000"
+			getcounters_name_en="2000"
+			                      
+			getbalance_name_ruk="2000"
+			getbalance_name_rut="2000"
+			getbalance_name_uz="2000"
+			getbalance_name_en="2000"
+
+			>
+	</Counter>
+	<Counter counter_code="MIN2OQ2" group="2"
+
+			getcounters_name_ruk="2000"
+			getcounters_name_rut="2000"
+			getcounters_name_uz="2000"
+			getcounters_name_en="2000"
+			                      
+			getbalance_name_ruk="2000"
+			getbalance_name_rut="2000"
+			getbalance_name_uz="2000"
+			getbalance_name_en="2000"
+
+			>
+	</Counter>
+	<Counter counter_code="MIN500X4" group="2"
+
+			getcounters_name_ruk="500"
+			getcounters_name_rut="500"
+			getcounters_name_uz="500"
+			getcounters_name_en="500"
+			                      
+			getbalance_name_ruk="500"
+			getbalance_name_rut="500"
+			getbalance_name_uz="500"
+			getbalance_name_en="500"
+
+			>
+	</Counter>
+	<Counter counter_code="MIN15X5" group="2"
+
+			getcounters_name_ruk="1500"
+			getcounters_name_rut="1500"
+			getcounters_name_uz="1500"
+			getcounters_name_en="1500"
+			                      
+			getbalance_name_ruk="1500"
+			getbalance_name_rut="1500"
+			getbalance_name_uz="1500"
+			getbalance_name_en="1500"
+
+			>
+	</Counter>
+	<Counter counter_code="MIN4OMAD" group="2"
+
+			getcounters_name_ruk="400"
+			getcounters_name_rut="400"
+			getcounters_name_uz="400"
+			getcounters_name_en="400"
+			                      
+			getbalance_name_ruk="400"
+			getbalance_name_rut="400"
+			getbalance_name_uz="400"
+			getbalance_name_en="400"
+
+			>
+	</Counter>
+	<Counter counter_code="MIN400UP" group="2"
+
+			getcounters_name_ruk="400"
+			getcounters_name_rut="400"
+			getcounters_name_uz="400"
+			getcounters_name_en="400"
+			                      
+			getbalance_name_ruk="400"
+			getbalance_name_rut="400"
+			getbalance_name_uz="400"
+			getbalance_name_en="400"
+
+			>
+	</Counter>
+	<Counter counter_code="MIN2ULP" group="2"
+
+			getcounters_name_ruk="200"
+			getcounters_name_rut="200"
+			getcounters_name_uz="200"
+			getcounters_name_en="200"
+			                      
+			getbalance_name_ruk="200"
+			getbalance_name_rut="200"
+			getbalance_name_uz="200"
+			getbalance_name_en="200"
+
+			>
+	</Counter>
+	<Counter counter_code="MIN3MOB7" group="2"
+
+			getcounters_name_ruk="2500"
+			getcounters_name_rut="2500"
+			getcounters_name_uz="2500"
+			getcounters_name_en="2500"
+			                      
+			getbalance_name_ruk="2500"
+			getbalance_name_rut="2500"
+			getbalance_name_uz="2500"
+			getbalance_name_en="2500"
+
+			>
+	</Counter>
+	<Counter counter_code="MIN5MOB1" group="2"
+
+			getcounters_name_ruk="5000"
+			getcounters_name_rut="5000"
+			getcounters_name_uz="5000"
+			getcounters_name_en="5000"
+			                      
+			getbalance_name_ruk="5000"
+			getbalance_name_rut="5000"
+			getbalance_name_uz="5000"
+			getbalance_name_en="5000"
+
+			>
+	</Counter>
+        <Counter counter_code="MINPACKM" group="2"
+
+			getcounters_name_ruk="Multi Пакет минут"
+			getcounters_name_rut="Multi Paket minut"
+			getcounters_name_uz="Multi Daqiqa to^plami"
+			getcounters_name_en="Multi Minutes package"
+
+			getbalance_name_ruk="Multi Пакет минут"
+			getbalance_name_rut="Multi Paket minut"
+			getbalance_name_uz="Multi Daqiqa to^plami"
+			getbalance_name_en="Multi Minutes package"
 
 			>
 	</Counter>
@@ -5064,39 +5696,39 @@ Created by Vladimir Khovanskiy
 	</Counter>
         <Counter counter_code="SMS300MY" group="3"
 
-			getcounters_name_ruk="SMS 300"
-			getcounters_name_rut="SMS 300"
-			getcounters_name_uz="SMS 300"
-			getcounters_name_en="SMS 300"
+			getcounters_name_ruk="SMS 500"
+			getcounters_name_rut="SMS 500"
+			getcounters_name_uz="SMS 500"
+			getcounters_name_en="SMS 500"
 
-			getbalance_name_ruk="300"
-			getbalance_name_rut="300"
-			getbalance_name_uz="300"
-			getbalance_name_en="300"
+			getbalance_name_ruk="500"
+			getbalance_name_rut="500"
+			getbalance_name_uz="500"
+			getbalance_name_en="500"
 
-			checktpcounters_name_ruk="SMS 300"
-			checktpcounters_name_rut="SMS 300"
-			checktpcounters_name_uz="SMS 300"
-			checktpcounters_name_en="SMS 300"
+			checktpcounters_name_ruk="SMS 500"
+			checktpcounters_name_rut="SMS 500"
+			checktpcounters_name_uz="SMS 500"
+			checktpcounters_name_en="SMS 500"
 
 			>
 	</Counter>
         <Counter counter_code="SMS300P" group="3"
 
-			getcounters_name_ruk="SMS 300"
-			getcounters_name_rut="SMS 300"
-			getcounters_name_uz="SMS 300"
-			getcounters_name_en="SMS 300"
+			getcounters_name_ruk="SMS 500"
+			getcounters_name_rut="SMS 500"
+			getcounters_name_uz="SMS 500"
+			getcounters_name_en="SMS 500"
 
-			getbalance_name_ruk="300"
-			getbalance_name_rut="300"
-			getbalance_name_uz="300"
-			getbalance_name_en="300"
+			getbalance_name_ruk="500"
+			getbalance_name_rut="500"
+			getbalance_name_uz="500"
+			getbalance_name_en="500"
 
-			checktpcounters_name_ruk="SMS 300"
-			checktpcounters_name_rut="SMS 300"
-			checktpcounters_name_uz="SMS 300"
-			checktpcounters_name_en="SMS 300"
+			checktpcounters_name_ruk="SMS 500"
+			checktpcounters_name_rut="SMS 500"
+			checktpcounters_name_uz="SMS 500"
+			checktpcounters_name_en="SMS 500"
 
 			>
 	</Counter>
@@ -5278,6 +5910,20 @@ Created by Vladimir Khovanskiy
 
 			>
 	</Counter>
+	<Counter counter_code="SMSPACKM" group="3"
+
+			getcounters_name_ruk="Multi SMS-пакет"
+			getcounters_name_rut="Multi SMS-paket"
+			getcounters_name_uz="Multi SMS-paket"
+			getcounters_name_en="Multi SMS-package"
+
+			getbalance_name_ruk="Multi SMS-пакет"
+			getbalance_name_rut="Multi SMS-paket"
+			getbalance_name_uz="Multi SMS-paket"
+			getbalance_name_en="Multi SMS-package"
+
+			>
+	</Counter>
 	<Counter counter_code="SMSPACK" group="3"
 
 			getcounters_name_ruk="SMS-пакет"
@@ -5375,75 +6021,19 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="SMS600OP" group="3"
 
-			getcounters_name_ruk="600"
-			getcounters_name_rut="600"
-			getcounters_name_uz="600"
-			getcounters_name_en="600"
+			getcounters_name_ruk="800"
+			getcounters_name_rut="800"
+			getcounters_name_uz="800"
+			getcounters_name_en="800"
 
-			getbalance_name_ruk="600"
-			getbalance_name_rut="600"
-			getbalance_name_uz="600"
-			getbalance_name_en="600"
+			getbalance_name_ruk="800"
+			getbalance_name_rut="800"
+			getbalance_name_uz="800"
+			getbalance_name_en="800"
 
 			>
 	</Counter>
 	<Counter counter_code="SMS200PL" group="3"
-
-			getcounters_name_ruk="200"
-			getcounters_name_rut="200"
-			getcounters_name_uz="200"
-			getcounters_name_en="200"
-
-			getbalance_name_ruk="200"
-			getbalance_name_rut="200"
-			getbalance_name_uz="200"
-			getbalance_name_en="200"
-
-			>
-	</Counter>
-	<Counter counter_code="SMS200AS" group="3"
-
-			getcounters_name_ruk="200"
-			getcounters_name_rut="200"
-			getcounters_name_uz="200"
-			getcounters_name_en="200"
-
-			getbalance_name_ruk="200"
-			getbalance_name_rut="200"
-			getbalance_name_uz="200"
-			getbalance_name_en="200"
-
-			>
-	</Counter>
-	<Counter counter_code="SMS400ST" group="3"
-
-			getcounters_name_ruk="400"
-			getcounters_name_rut="400"
-			getcounters_name_uz="400"
-			getcounters_name_en="400"
-
-			getbalance_name_ruk="400"
-			getbalance_name_rut="400"
-			getbalance_name_uz="400"
-			getbalance_name_en="400"
-
-			>
-	</Counter>
-	<Counter counter_code="SMS400QP" group="3"
-
-			getcounters_name_ruk="400"
-			getcounters_name_rut="400"
-			getcounters_name_uz="400"
-			getcounters_name_en="400"
-
-			getbalance_name_ruk="400"
-			getbalance_name_rut="400"
-			getbalance_name_uz="400"
-			getbalance_name_en="400"
-
-			>
-	</Counter>
-	<Counter counter_code="SMS800QU" group="3"
 
 			getcounters_name_ruk="800"
 			getcounters_name_rut="800"
@@ -5457,7 +6047,35 @@ Created by Vladimir Khovanskiy
 
 			>
 	</Counter>
-	<Counter counter_code="SMS1000P" group="3"
+	<Counter counter_code="SMS200AS" group="3"
+
+			getcounters_name_ruk="500"
+			getcounters_name_rut="500"
+			getcounters_name_uz="500"
+			getcounters_name_en="500"
+
+			getbalance_name_ruk="500"
+			getbalance_name_rut="500"
+			getbalance_name_uz="500"
+			getbalance_name_en="500"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS400ST" group="3"
+
+			getcounters_name_ruk="700"
+			getcounters_name_rut="700"
+			getcounters_name_uz="700"
+			getcounters_name_en="700"
+
+			getbalance_name_ruk="700"
+			getbalance_name_rut="700"
+			getbalance_name_uz="700"
+			getbalance_name_en="700"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS400QP" group="3"
 
 			getcounters_name_ruk="1000"
 			getcounters_name_rut="1000"
@@ -5471,31 +6089,59 @@ Created by Vladimir Khovanskiy
 
 			>
 	</Counter>
+	<Counter counter_code="SMS800QU" group="3"
+
+			getcounters_name_ruk="1000"
+			getcounters_name_rut="1000"
+			getcounters_name_uz="1000"
+			getcounters_name_en="1000"
+
+			getbalance_name_ruk="1000"
+			getbalance_name_rut="1000"
+			getbalance_name_uz="1000"
+			getbalance_name_en="1000"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS1000P" group="3"
+
+			getcounters_name_ruk="1500"
+			getcounters_name_rut="1500"
+			getcounters_name_uz="1500"
+			getcounters_name_en="1500"
+
+			getbalance_name_ruk="1500"
+			getbalance_name_rut="1500"
+			getbalance_name_uz="1500"
+			getbalance_name_en="1500"
+
+			>
+	</Counter>
 	<Counter counter_code="SMS2000I" group="3"
 
-			getcounters_name_ruk="2000"
-			getcounters_name_rut="2000"
-			getcounters_name_uz="2000"
-			getcounters_name_en="2000"
+			getcounters_name_ruk="3000"
+			getcounters_name_rut="3000"
+			getcounters_name_uz="3000"
+			getcounters_name_en="3000"
 
-			getbalance_name_ruk="2000"
-			getbalance_name_rut="2000"
-			getbalance_name_uz="2000"
-			getbalance_name_en="2000"
+			getbalance_name_ruk="3000"
+			getbalance_name_rut="3000"
+			getbalance_name_uz="3000"
+			getbalance_name_en="3000"
 
 			>
 	</Counter>
 	<Counter counter_code="SMS500V" group="3"
 
-			getcounters_name_ruk="500"
-			getcounters_name_rut="500"
-			getcounters_name_uz="500"
-			getcounters_name_en="500"
+			getcounters_name_ruk="5000"
+			getcounters_name_rut="5000"
+			getcounters_name_uz="5000"
+			getcounters_name_en="5000"
 
-			getbalance_name_ruk="500"
-			getbalance_name_rut="500"
-			getbalance_name_uz="500"
-			getbalance_name_en="500"
+			getbalance_name_ruk="5000"
+			getbalance_name_rut="5000"
+			getbalance_name_uz="5000"
+			getbalance_name_en="5000"
 
 			>
 	</Counter>
@@ -5529,19 +6175,47 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="SMS2KIY" group="3"
 
-			getcounters_name_ruk="2000"
-			getcounters_name_rut="2000"
-			getcounters_name_uz="2000"
-			getcounters_name_en="2000"
+			getcounters_name_ruk="3000"
+			getcounters_name_rut="3000"
+			getcounters_name_uz="3000"
+			getcounters_name_en="3000"
 
-			getbalance_name_ruk="2000"
-			getbalance_name_rut="2000"
-			getbalance_name_uz="2000"
-			getbalance_name_en="2000"
+			getbalance_name_ruk="3000"
+			getbalance_name_rut="3000"
+			getbalance_name_uz="3000"
+			getbalance_name_en="3000"
 
 			>
 	</Counter>
 	<Counter counter_code="SMS1PY" group="3"
+
+			getcounters_name_ruk="1500"
+			getcounters_name_rut="1500"
+			getcounters_name_uz="1500"
+			getcounters_name_en="1500"
+
+			getbalance_name_ruk="1500"
+			getbalance_name_rut="1500"
+			getbalance_name_uz="1500"
+			getbalance_name_en="1500"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS500VY" group="3"
+
+			getcounters_name_ruk="5000"
+			getcounters_name_rut="5000"
+			getcounters_name_uz="5000"
+			getcounters_name_en="5000"
+
+			getbalance_name_ruk="5000"
+			getbalance_name_rut="5000"
+			getbalance_name_uz="5000"
+			getbalance_name_en="5000"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS800QY" group="3"
 
 			getcounters_name_ruk="1000"
 			getcounters_name_rut="1000"
@@ -5555,45 +6229,17 @@ Created by Vladimir Khovanskiy
 
 			>
 	</Counter>
-	<Counter counter_code="SMS500VY" group="3"
-
-			getcounters_name_ruk="500"
-			getcounters_name_rut="500"
-			getcounters_name_uz="500"
-			getcounters_name_en="500"
-
-			getbalance_name_ruk="500"
-			getbalance_name_rut="500"
-			getbalance_name_uz="500"
-			getbalance_name_en="500"
-
-			>
-	</Counter>
-	<Counter counter_code="SMS800QY" group="3"
-
-			getcounters_name_ruk="800"
-			getcounters_name_rut="800"
-			getcounters_name_uz="800"
-			getcounters_name_en="800"
-
-			getbalance_name_ruk="800"
-			getbalance_name_rut="800"
-			getbalance_name_uz="800"
-			getbalance_name_en="800"
-
-			>
-	</Counter>
 	<Counter counter_code="SMS4QYP" group="3"
 
-			getcounters_name_ruk="400"
-			getcounters_name_rut="400"
-			getcounters_name_uz="400"
-			getcounters_name_en="400"
+			getcounters_name_ruk="1000"
+			getcounters_name_rut="1000"
+			getcounters_name_uz="1000"
+			getcounters_name_en="1000"
 
-			getbalance_name_ruk="400"
-			getbalance_name_rut="400"
-			getbalance_name_uz="400"
-			getbalance_name_en="400"
+			getbalance_name_ruk="1000"
+			getbalance_name_rut="1000"
+			getbalance_name_uz="1000"
+			getbalance_name_en="1000"
 
 			>
 	</Counter>
@@ -5650,6 +6296,328 @@ Created by Vladimir Khovanskiy
 			getbalance_name_rut="1000"
 			getbalance_name_uz="1000"
 			getbalance_name_en="1000"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS3000E" group="3"
+
+			getcounters_name_ruk="3000"
+			getcounters_name_rut="3000"
+			getcounters_name_uz="3000"
+			getcounters_name_en="3000"
+
+			getbalance_name_ruk="3000"
+			getbalance_name_rut="3000"
+			getbalance_name_uz="3000"
+			getbalance_name_en="3000"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS500X1" group="3"
+
+			getcounters_name_ruk="500"
+			getcounters_name_rut="500"
+			getcounters_name_uz="500"
+			getcounters_name_en="500"
+
+			getbalance_name_ruk="500"
+			getbalance_name_rut="500"
+			getbalance_name_uz="500"
+			getbalance_name_en="500"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS15X2" group="3"
+
+			getcounters_name_ruk="1500"
+			getcounters_name_rut="1500"
+			getcounters_name_uz="1500"
+			getcounters_name_en="1500"
+
+			getbalance_name_ruk="1500"
+			getbalance_name_rut="1500"
+			getbalance_name_uz="1500"
+			getbalance_name_en="1500"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS4X3" group="3"
+
+			getcounters_name_ruk="4000"
+			getcounters_name_rut="4000"
+			getcounters_name_uz="4000"
+			getcounters_name_en="4000"
+
+			getbalance_name_ruk="4000"
+			getbalance_name_rut="4000"
+			getbalance_name_uz="4000"
+			getbalance_name_en="4000"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS5CP" group="3"
+
+			getcounters_name_ruk="5000"
+			getcounters_name_rut="5000"
+			getcounters_name_uz="5000"
+			getcounters_name_en="5000"
+
+			getbalance_name_ruk="5000"
+			getbalance_name_rut="5000"
+			getbalance_name_uz="5000"
+			getbalance_name_en="5000"
+
+			>
+	</Counter>
+	<Counter counter_code="SMSCHL" group="3"
+
+			getcounters_name_ruk="100"
+			getcounters_name_rut="100"
+			getcounters_name_uz="100"
+			getcounters_name_en="100"
+
+			getbalance_name_ruk="100"
+			getbalance_name_rut="100"
+			getbalance_name_uz="100"
+			getbalance_name_en="100"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS300A" group="3"
+
+			getcounters_name_ruk="300"
+			getcounters_name_rut="300"
+			getcounters_name_uz="300"
+			getcounters_name_en="300"
+
+			getbalance_name_ruk="300"
+			getbalance_name_rut="300"
+			getbalance_name_uz="300"
+			getbalance_name_en="300"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS1Y" group="3"
+
+			getcounters_name_ruk="1000"
+			getcounters_name_rut="1000"
+			getcounters_name_uz="1000"
+			getcounters_name_en="1000"
+
+			getbalance_name_ruk="1000"
+			getbalance_name_rut="1000"
+			getbalance_name_uz="1000"
+			getbalance_name_en="1000"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS1YY" group="3"
+
+			getcounters_name_ruk="1000"
+			getcounters_name_rut="1000"
+			getcounters_name_uz="1000"
+			getcounters_name_en="1000"
+
+			getbalance_name_ruk="1000"
+			getbalance_name_rut="1000"
+			getbalance_name_uz="1000"
+			getbalance_name_en="1000"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS300L" group="3"
+
+			getcounters_name_ruk="300"
+			getcounters_name_rut="300"
+			getcounters_name_uz="300"
+			getcounters_name_en="300"
+
+			getbalance_name_ruk="300"
+			getbalance_name_rut="300"
+			getbalance_name_uz="300"
+			getbalance_name_en="300"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS100O" group="3"
+
+			getcounters_name_ruk="100"
+			getcounters_name_rut="100"
+			getcounters_name_uz="100"
+			getcounters_name_en="100"
+
+			getbalance_name_ruk="100"
+			getbalance_name_rut="100"
+			getbalance_name_uz="100"
+			getbalance_name_en="100"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS3GSB" group="3"
+
+			getcounters_name_ruk="3000"
+			getcounters_name_rut="3000"
+			getcounters_name_uz="3000"
+			getcounters_name_en="3000"
+
+			getbalance_name_ruk="3000"
+			getbalance_name_rut="3000"
+			getbalance_name_uz="3000"
+			getbalance_name_en="3000"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS1KSH" group="3"
+
+			getcounters_name_ruk="1000"
+			getcounters_name_rut="1000"
+			getcounters_name_uz="1000"
+			getcounters_name_en="1000"
+
+			getbalance_name_ruk="1000"
+			getbalance_name_rut="1000"
+			getbalance_name_uz="1000"
+			getbalance_name_en="1000"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS1OQ1" group="3"
+
+			getcounters_name_ruk="100"
+			getcounters_name_rut="100"
+			getcounters_name_uz="100"
+			getcounters_name_en="100"
+
+			getbalance_name_ruk="100"
+			getbalance_name_rut="100"
+			getbalance_name_uz="100"
+			getbalance_name_en="100"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS1OQ2" group="3"
+
+			getcounters_name_ruk="100"
+			getcounters_name_rut="100"
+			getcounters_name_uz="100"
+			getcounters_name_en="100"
+
+			getbalance_name_ruk="100"
+			getbalance_name_rut="100"
+			getbalance_name_uz="100"
+			getbalance_name_en="100"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS500X4" group="3"
+
+			getcounters_name_ruk="500"
+			getcounters_name_rut="500"
+			getcounters_name_uz="500"
+			getcounters_name_en="500"
+
+			getbalance_name_ruk="500"
+			getbalance_name_rut="500"
+			getbalance_name_uz="500"
+			getbalance_name_en="500"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS15X5" group="3"
+
+			getcounters_name_ruk="1500"
+			getcounters_name_rut="1500"
+			getcounters_name_uz="1500"
+			getcounters_name_en="1500"
+
+			getbalance_name_ruk="1500"
+			getbalance_name_rut="1500"
+			getbalance_name_uz="1500"
+			getbalance_name_en="1500"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS5OMAD" group="3"
+
+			getcounters_name_ruk="50"
+			getcounters_name_rut="50"
+			getcounters_name_uz="50"
+			getcounters_name_en="50"
+
+			getbalance_name_ruk="50"
+			getbalance_name_rut="50"
+			getbalance_name_uz="50"
+			getbalance_name_en="50"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS2ULP" group="3"
+
+			getcounters_name_ruk="200"
+			getcounters_name_rut="200"
+			getcounters_name_uz="200"
+			getcounters_name_en="200"
+
+			getbalance_name_ruk="200"
+			getbalance_name_rut="200"
+			getbalance_name_uz="200"
+			getbalance_name_en="200"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS400UZ" group="3"
+
+			getcounters_name_ruk="400"
+			getcounters_name_rut="400"
+			getcounters_name_uz="400"
+			getcounters_name_en="400"
+
+			getbalance_name_ruk="400"
+			getbalance_name_rut="400"
+			getbalance_name_uz="400"
+			getbalance_name_en="400"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS3MOB7" group="3"
+
+			getcounters_name_ruk="2500"
+			getcounters_name_rut="2500"
+			getcounters_name_uz="2500"
+			getcounters_name_en="2500"
+
+			getbalance_name_ruk="2500"
+			getbalance_name_rut="2500"
+			getbalance_name_uz="2500"
+			getbalance_name_en="2500"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS5MOB1" group="3"
+
+			getcounters_name_ruk="5000"
+			getcounters_name_rut="5000"
+			getcounters_name_uz="5000"
+			getcounters_name_en="5000"
+
+			getbalance_name_ruk="5000"
+			getbalance_name_rut="5000"
+			getbalance_name_uz="5000"
+			getbalance_name_en="5000"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS10MOB" group="3"
+
+			getcounters_name_ruk="10000"
+			getcounters_name_rut="10000"
+			getcounters_name_uz="10000"
+			getcounters_name_en="10000"
+
+			getbalance_name_ruk="10000"
+			getbalance_name_rut="10000"
+			getbalance_name_uz="10000"
+			getbalance_name_en="10000"
 
 			>
 	</Counter>
@@ -6049,6 +7017,9 @@ Created by Vladimir Khovanskiy
         <Counter counter_code="AMB3000" group="8"/>
         <Counter counter_code="AMB5000" group="8"/>
         <Counter counter_code="AMB10000" group="8"/>
+        <Counter counter_code="AMB20000" group="8"/>
+        <Counter counter_code="AMB30000" group="8"/>
+        <Counter counter_code="AMB50000" group="8"/>
         <Counter counter_code="AMBC300" group="8"/>
         <Counter counter_code="AMBC600" group="8"/>
         <Counter counter_code="AMBC1200" group="8"/>
@@ -6403,10 +7374,10 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="MB1000CM" group="17"
 
-			getcounters_name_ruk="9000"
-			getcounters_name_rut="9000"
-			getcounters_name_uz="9000"
-			getcounters_name_en="9000"
+			getcounters_name_ruk="10000"
+			getcounters_name_rut="10000"
+			getcounters_name_uz="10000"
+			getcounters_name_en="10000"
 
 			>
 	</Counter>
@@ -6538,10 +7509,10 @@ Created by Vladimir Khovanskiy
 	</Counter>
         <Counter counter_code="MB300MY" group="17"
 
-			getcounters_name_ruk="300"
-			getcounters_name_rut="300"
-			getcounters_name_uz="300"
-			getcounters_name_en="300"
+			getcounters_name_ruk="500"
+			getcounters_name_rut="500"
+			getcounters_name_uz="500"
+			getcounters_name_en="500"
 
 			>
 	</Counter>
@@ -6556,10 +7527,10 @@ Created by Vladimir Khovanskiy
 	</Counter>
         <Counter counter_code="MB300P" group="17"
 
-			getcounters_name_ruk="300"
-			getcounters_name_rut="300"
-			getcounters_name_uz="300"
-			getcounters_name_en="300"
+			getcounters_name_ruk="500"
+			getcounters_name_rut="500"
+			getcounters_name_uz="500"
+			getcounters_name_en="500"
 
 			>
 	</Counter>
@@ -6682,19 +7653,19 @@ Created by Vladimir Khovanskiy
 	</Counter>
         <Counter counter_code="MB2000UZ" group="17"
 
-			getcounters_name_ruk="2000"
-			getcounters_name_rut="2000"
-			getcounters_name_uz="2000"
-			getcounters_name_en="2000"
+			getcounters_name_ruk="3000"
+			getcounters_name_rut="3000"
+			getcounters_name_uz="3000"
+			getcounters_name_en="3000"
 
 			>
 	</Counter>
         <Counter counter_code="MB5000UZ" group="17"
 
-			getcounters_name_ruk="5000"
-			getcounters_name_rut="5000"
-			getcounters_name_uz="5000"
-			getcounters_name_en="5000"
+			getcounters_name_ruk="8000"
+			getcounters_name_rut="8000"
+			getcounters_name_uz="8000"
+			getcounters_name_en="8000"
 
 			>
 	</Counter>
@@ -6722,6 +7693,15 @@ Created by Vladimir Khovanskiy
 			getcounters_name_rut="MONTH"
 			getcounters_name_uz="MONTH"
 			getcounters_name_en="MONTH"
+
+			>
+	</Counter>
+	<Counter counter_code="MBPACKM" group="17"
+
+			getcounters_name_ruk="MULTI"
+			getcounters_name_rut="MULTI"
+			getcounters_name_uz="MULTI"
+			getcounters_name_en="MULTI"
 
 			>
 	</Counter>
@@ -6842,10 +7822,10 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="MB2500CP" group="17"
 
-			getcounters_name_ruk="20000"
-			getcounters_name_rut="20000"
-			getcounters_name_uz="20000"
-			getcounters_name_en="20000"
+			getcounters_name_ruk="32000"
+			getcounters_name_rut="32000"
+			getcounters_name_uz="32000"
+			getcounters_name_en="32000"
 
 			>
 	</Counter>
@@ -6876,10 +7856,10 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="MBCOR777" group="17"
 
-			getcounters_name_ruk="4000"
-			getcounters_name_rut="4000"
-			getcounters_name_uz="4000"
-			getcounters_name_en="4000"
+			getcounters_name_ruk="5000"
+			getcounters_name_rut="5000"
+			getcounters_name_uz="5000"
+			getcounters_name_en="5000"
 
 			>
 	</Counter>
@@ -6903,19 +7883,19 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="MBTER200" group="17"
 
-			getcounters_name_ruk="200"
-			getcounters_name_rut="200"
-			getcounters_name_uz="200"
-			getcounters_name_en="200"
+			getcounters_name_ruk="300"
+			getcounters_name_rut="300"
+			getcounters_name_uz="300"
+			getcounters_name_en="300"
 
 			>
 	</Counter>
 	<Counter counter_code="MB2000CU" group="17"
 
-			getcounters_name_ruk="15000"
-			getcounters_name_rut="15000"
-			getcounters_name_uz="15000"
-			getcounters_name_en="15000"
+			getcounters_name_ruk="18000"
+			getcounters_name_rut="18000"
+			getcounters_name_uz="18000"
+			getcounters_name_en="18000"
 
 			>
 	</Counter>
@@ -7128,59 +8108,14 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="MB1000OP" group="17"
 
-			getcounters_name_ruk="1000"
-			getcounters_name_rut="1000"
-			getcounters_name_uz="1000"
-			getcounters_name_en="1000"
+			getcounters_name_ruk="1500"
+			getcounters_name_rut="1500"
+			getcounters_name_uz="1500"
+			getcounters_name_en="1500"
 
 			>
 	</Counter>
 	<Counter counter_code="MB1600PL" group="17"
-
-			getcounters_name_ruk="1600"
-			getcounters_name_rut="1600"
-			getcounters_name_uz="1600"
-			getcounters_name_en="1600"
-
-			>
-	</Counter>
-	<Counter counter_code="MB100AS" group="17"
-
-			getcounters_name_ruk="100"
-			getcounters_name_rut="100"
-			getcounters_name_uz="100"
-			getcounters_name_en="100"
-
-			>
-	</Counter>
-	<Counter counter_code="MB400ST" group="17"
-
-			getcounters_name_ruk="400"
-			getcounters_name_rut="400"
-			getcounters_name_uz="400"
-			getcounters_name_en="400"
-
-			>
-	</Counter>
-	<Counter counter_code="MB1200QU" group="17"
-
-			getcounters_name_ruk="1200"
-			getcounters_name_rut="1200"
-			getcounters_name_uz="1200"
-			getcounters_name_en="1200"
-
-			>
-	</Counter>
-	<Counter counter_code="MB2000QP" group="17"
-
-			getcounters_name_ruk="2000"
-			getcounters_name_rut="2000"
-			getcounters_name_uz="2000"
-			getcounters_name_en="2000"
-
-			>
-	</Counter>
-	<Counter counter_code="MB3000P" group="17"
 
 			getcounters_name_ruk="3000"
 			getcounters_name_rut="3000"
@@ -7189,21 +8124,66 @@ Created by Vladimir Khovanskiy
 
 			>
 	</Counter>
-	<Counter counter_code="MB4000I" group="17"
+	<Counter counter_code="MB100AS" group="17"
 
-			getcounters_name_ruk="4000"
-			getcounters_name_rut="4000"
-			getcounters_name_uz="4000"
-			getcounters_name_en="4000"
+			getcounters_name_ruk="500"
+			getcounters_name_rut="500"
+			getcounters_name_uz="500"
+			getcounters_name_en="500"
 
 			>
 	</Counter>
-	<Counter counter_code="MB5000V" group="17"
+	<Counter counter_code="MB400ST" group="17"
+
+			getcounters_name_ruk="1000"
+			getcounters_name_rut="1000"
+			getcounters_name_uz="1000"
+			getcounters_name_en="1000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB1200QU" group="17"
+
+			getcounters_name_ruk="2000"
+			getcounters_name_rut="2000"
+			getcounters_name_uz="2000"
+			getcounters_name_en="2000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB2000QP" group="17"
 
 			getcounters_name_ruk="5000"
 			getcounters_name_rut="5000"
 			getcounters_name_uz="5000"
 			getcounters_name_en="5000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB3000P" group="17"
+
+			getcounters_name_ruk="7000"
+			getcounters_name_rut="7000"
+			getcounters_name_uz="7000"
+			getcounters_name_en="7000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB4000I" group="17"
+
+			getcounters_name_ruk="14000"
+			getcounters_name_rut="14000"
+			getcounters_name_uz="14000"
+			getcounters_name_en="14000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB5000V" group="17"
+
+			getcounters_name_ruk="30000"
+			getcounters_name_rut="30000"
+			getcounters_name_uz="30000"
+			getcounters_name_en="30000"
 
 			>
 	</Counter>
@@ -7263,28 +8243,28 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="MB4000IY" group="17"
 
-			getcounters_name_ruk="4000"
-			getcounters_name_rut="4000"
-			getcounters_name_uz="4000"
-			getcounters_name_en="4000"
+			getcounters_name_ruk="14000"
+			getcounters_name_rut="14000"
+			getcounters_name_uz="14000"
+			getcounters_name_en="14000"
 
 			>
 	</Counter>
 	<Counter counter_code="MB3PY" group="17"
 
-			getcounters_name_ruk="3000"
-			getcounters_name_rut="3000"
-			getcounters_name_uz="3000"
-			getcounters_name_en="3000"
+			getcounters_name_ruk="7000"
+			getcounters_name_rut="7000"
+			getcounters_name_uz="7000"
+			getcounters_name_en="7000"
 
 			>
 	</Counter>
 	<Counter counter_code="MB5000VY" group="17"
 
-			getcounters_name_ruk="5000"
-			getcounters_name_rut="5000"
-			getcounters_name_uz="5000"
-			getcounters_name_en="5000"
+			getcounters_name_ruk="30000"
+			getcounters_name_rut="30000"
+			getcounters_name_uz="30000"
+			getcounters_name_en="30000"
 
 			>
 	</Counter>
@@ -7308,19 +8288,19 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="MB2QYP" group="17"
 
-			getcounters_name_ruk="2000"
-			getcounters_name_rut="2000"
-			getcounters_name_uz="2000"
-			getcounters_name_en="2000"
+			getcounters_name_ruk="5000"
+			getcounters_name_rut="5000"
+			getcounters_name_uz="5000"
+			getcounters_name_en="5000"
 
 			>
 	</Counter>
 	<Counter counter_code="MB1200QY" group="17"
 
-			getcounters_name_ruk="1200"
-			getcounters_name_rut="1200"
-			getcounters_name_uz="1200"
-			getcounters_name_en="1200"
+			getcounters_name_ruk="2000"
+			getcounters_name_rut="2000"
+			getcounters_name_uz="2000"
+			getcounters_name_en="2000"
 
 			>
 	</Counter>
@@ -7504,6 +8484,196 @@ Created by Vladimir Khovanskiy
 
 			>
 	</Counter>
+	<Counter counter_code="MB15000E" group="17"
+
+			getcounters_name_ruk="15000"
+			getcounters_name_rut="15000"
+			getcounters_name_uz="15000"
+			getcounters_name_en="15000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB4000X1" group="17"
+
+			getcounters_name_ruk="4000"
+			getcounters_name_rut="4000"
+			getcounters_name_uz="4000"
+			getcounters_name_en="4000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB12X2" group="17"
+
+			getcounters_name_ruk="12000"
+			getcounters_name_rut="12000"
+			getcounters_name_uz="12000"
+			getcounters_name_en="12000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB40X3" group="17"
+
+			getcounters_name_ruk="40000"
+			getcounters_name_rut="40000"
+			getcounters_name_uz="40000"
+			getcounters_name_en="40000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB200CHL" group="17"
+
+			getcounters_name_ruk="200"
+			getcounters_name_rut="200"
+			getcounters_name_uz="200"
+			getcounters_name_en="200"
+
+			>
+	</Counter>
+	<Counter counter_code="MB3000A" group="17"
+
+			getcounters_name_ruk="3000"
+			getcounters_name_rut="3000"
+			getcounters_name_uz="3000"
+			getcounters_name_en="3000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB2300L" group="17"
+
+			getcounters_name_ruk="2300"
+			getcounters_name_rut="2300"
+			getcounters_name_uz="2300"
+			getcounters_name_en="2300"
+
+			>
+	</Counter>
+	<Counter counter_code="MB10Y" group="17"
+
+			getcounters_name_ruk="10000"
+			getcounters_name_rut="10000"
+			getcounters_name_uz="10000"
+			getcounters_name_en="10000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB100O" group="17"
+
+			getcounters_name_ruk="100"
+			getcounters_name_rut="100"
+			getcounters_name_uz="100"
+			getcounters_name_en="100"
+
+			>
+	</Counter>
+	<Counter counter_code="MB10YY" group="17"
+
+			getcounters_name_ruk="10000"
+			getcounters_name_rut="10000"
+			getcounters_name_uz="10000"
+			getcounters_name_en="10000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB6GSB" group="17"
+
+			getcounters_name_ruk="6000"
+			getcounters_name_rut="6000"
+			getcounters_name_uz="6000"
+			getcounters_name_en="6000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB300TY" group="17"
+
+			getcounters_name_ruk="300"
+			getcounters_name_rut="300"
+			getcounters_name_uz="300"
+			getcounters_name_en="300"
+
+			>
+	</Counter>
+	<Counter counter_code="MB3OQ2" group="17"
+
+			getcounters_name_ruk="3000"
+			getcounters_name_rut="3000"
+			getcounters_name_uz="3000"
+			getcounters_name_en="3000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB4000X4" group="17"
+
+			getcounters_name_ruk="4000"
+			getcounters_name_rut="4000"
+			getcounters_name_uz="4000"
+			getcounters_name_en="4000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB12X5" group="17"
+
+			getcounters_name_ruk="12000"
+			getcounters_name_rut="12000"
+			getcounters_name_uz="12000"
+			getcounters_name_en="12000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB5OMAD" group="17"
+
+			getcounters_name_ruk="50"
+			getcounters_name_rut="50"
+			getcounters_name_uz="50"
+			getcounters_name_en="50"
+
+			>
+	</Counter>
+	<Counter counter_code="MB8000UP" group="17"
+
+			getcounters_name_ruk="8000"
+			getcounters_name_rut="8000"
+			getcounters_name_uz="8000"
+			getcounters_name_en="8000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB3ULP" group="17"
+
+			getcounters_name_ruk="3000"
+			getcounters_name_rut="3000"
+			getcounters_name_uz="3000"
+			getcounters_name_en="3000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB12MOB7" group="17"
+
+			getcounters_name_ruk="12000"
+			getcounters_name_rut="12000"
+			getcounters_name_uz="12000"
+			getcounters_name_en="12000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB25MOB1" group="17"
+
+			getcounters_name_ruk="25000"
+			getcounters_name_rut="25000"
+			getcounters_name_uz="25000"
+			getcounters_name_en="25000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB50MOB" group="17"
+
+			getcounters_name_ruk="50000"
+			getcounters_name_rut="50000"
+			getcounters_name_uz="50000"
+			getcounters_name_en="50000"
+
+			>
+	</Counter>
+
     <Counter counter_code="AMB300" group="18"/>        
     <Counter counter_code="AMB500" group="18"/>
     <Counter counter_code="AMB1000" group="18"/>
@@ -7511,6 +8681,9 @@ Created by Vladimir Khovanskiy
     <Counter counter_code="AMB3000" group="18"/>
     <Counter counter_code="AMB5000" group="18"/>
     <Counter counter_code="AMB10000" group="18"/>
+    <Counter counter_code="AMB20000" group="18"/>
+    <Counter counter_code="AMB30000" group="18"/>
+    <Counter counter_code="AMB50000" group="18"/>
     <Counter counter_code="AMB3000H" group="18"/>
     <Counter counter_code="AMBC300" group="18"/>
     <Counter counter_code="AMBC600" group="18"/>
@@ -8314,19 +9487,19 @@ Created by Vladimir Khovanskiy
 	</Counter>
         <Counter counter_code="SMS300MY" group="38"
 
-			getcounters_name_ruk="INCLUDED_300"
-			getcounters_name_rut="INCLUDED_300"
-			getcounters_name_uz="INCLUDED_300"
-			getcounters_name_en="INCLUDED_300"
+			getcounters_name_ruk="INCLUDED_500"
+			getcounters_name_rut="INCLUDED_500"
+			getcounters_name_uz="INCLUDED_500"
+			getcounters_name_en="INCLUDED_500"
 
 			>
 	</Counter>
         <Counter counter_code="SMS300P" group="38"
 
-			getcounters_name_ruk="INCLUDED_300"
-			getcounters_name_rut="INCLUDED_300"
-			getcounters_name_uz="INCLUDED_300"
-			getcounters_name_en="INCLUDED_300"
+			getcounters_name_ruk="INCLUDED_500"
+			getcounters_name_rut="INCLUDED_500"
+			getcounters_name_uz="INCLUDED_500"
+			getcounters_name_en="INCLUDED_500"
 
 			>
 	</Counter>
@@ -8438,6 +9611,15 @@ Created by Vladimir Khovanskiy
 
 			>
 	</Counter>
+	<Counter counter_code="SMSPACKM" group="38"
+
+			getcounters_name_ruk="MULTI"
+			getcounters_name_rut="MULTI"
+			getcounters_name_uz="MULTI"
+			getcounters_name_en="MULTI"
+
+			>
+	</Counter>
 	<Counter counter_code="SMS2000C" group="38"
 
 			getcounters_name_ruk="INCLUDED_2000"
@@ -8458,10 +9640,10 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="SMS600OP" group="38"
 
-			getcounters_name_ruk="INCLUDED_600"
-			getcounters_name_rut="INCLUDED_600"
-			getcounters_name_uz="INCLUDED_600"
-			getcounters_name_en="INCLUDED_600"
+			getcounters_name_ruk="INCLUDED_800"
+			getcounters_name_rut="INCLUDED_800"
+			getcounters_name_uz="INCLUDED_800"
+			getcounters_name_en="INCLUDED_800"
 
 			>
 	</Counter>
@@ -8537,33 +9719,6 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="SMS200PL" group="38"
 
-			getcounters_name_ruk="INCLUDED_200"
-			getcounters_name_rut="INCLUDED_200"
-			getcounters_name_uz="INCLUDED_200"
-			getcounters_name_en="INCLUDED_200"
-
-			>
-	</Counter>
-	<Counter counter_code="SMS200AS" group="38"
-
-			getcounters_name_ruk="INCLUDED_200"
-			getcounters_name_rut="INCLUDED_200"
-			getcounters_name_uz="INCLUDED_200"
-			getcounters_name_en="INCLUDED_200"
-
-			>
-	</Counter>
-	<Counter counter_code="SMS400ST" group="38"
-
-			getcounters_name_ruk="INCLUDED_400"
-			getcounters_name_rut="INCLUDED_400"
-			getcounters_name_uz="INCLUDED_400"
-			getcounters_name_en="INCLUDED_400"
-
-			>
-	</Counter>
-	<Counter counter_code="SMS800QU" group="38"
-
 			getcounters_name_ruk="INCLUDED_800"
 			getcounters_name_rut="INCLUDED_800"
 			getcounters_name_uz="INCLUDED_800"
@@ -8571,16 +9726,25 @@ Created by Vladimir Khovanskiy
 
 			>
 	</Counter>
-	<Counter counter_code="SMS400QP" group="38"
+	<Counter counter_code="SMS200AS" group="38"
 
-			getcounters_name_ruk="INCLUDED_400"
-			getcounters_name_rut="INCLUDED_400"
-			getcounters_name_uz="INCLUDED_400"
-			getcounters_name_en="INCLUDED_400"
+			getcounters_name_ruk="INCLUDED_500"
+			getcounters_name_rut="INCLUDED_500"
+			getcounters_name_uz="INCLUDED_500"
+			getcounters_name_en="INCLUDED_500"
 
 			>
 	</Counter>
-	<Counter counter_code="SMS1000P" group="38"
+	<Counter counter_code="SMS400ST" group="38"
+
+			getcounters_name_ruk="INCLUDED_700"
+			getcounters_name_rut="INCLUDED_700"
+			getcounters_name_uz="INCLUDED_700"
+			getcounters_name_en="INCLUDED_700"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS800QU" group="38"
 
 			getcounters_name_ruk="INCLUDED_1000"
 			getcounters_name_rut="INCLUDED_1000"
@@ -8589,21 +9753,39 @@ Created by Vladimir Khovanskiy
 
 			>
 	</Counter>
+	<Counter counter_code="SMS400QP" group="38"
+
+			getcounters_name_ruk="INCLUDED_1000"
+			getcounters_name_rut="INCLUDED_1000"
+			getcounters_name_uz="INCLUDED_1000"
+			getcounters_name_en="INCLUDED_1000"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS1000P" group="38"
+
+			getcounters_name_ruk="INCLUDED_1500"
+			getcounters_name_rut="INCLUDED_1500"
+			getcounters_name_uz="INCLUDED_1500"
+			getcounters_name_en="INCLUDED_1500"
+
+			>
+	</Counter>
 	<Counter counter_code="SMS2000I" group="38"
 
-			getcounters_name_ruk="INCLUDED_2000"
-			getcounters_name_rut="INCLUDED_2000"
-			getcounters_name_uz="INCLUDED_2000"
-			getcounters_name_en="INCLUDED_2000"
+			getcounters_name_ruk="INCLUDED_3000"
+			getcounters_name_rut="INCLUDED_3000"
+			getcounters_name_uz="INCLUDED_3000"
+			getcounters_name_en="INCLUDED_3000"
 
 			>
 	</Counter>
 	<Counter counter_code="SMS500V" group="38"
 
-			getcounters_name_ruk="INCLUDED_500"
-			getcounters_name_rut="INCLUDED_500"
-			getcounters_name_uz="INCLUDED_500"
-			getcounters_name_en="INCLUDED_500"
+			getcounters_name_ruk="INCLUDED_5000"
+			getcounters_name_rut="INCLUDED_5000"
+			getcounters_name_uz="INCLUDED_5000"
+			getcounters_name_en="INCLUDED_5000"
 
 			>
 	</Counter>
@@ -8636,14 +9818,32 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="SMS2KIY" group="38"
 
-			getcounters_name_ruk="INCLUDED_2000"
-			getcounters_name_rut="INCLUDED_2000"
-			getcounters_name_uz="INCLUDED_2000"
-			getcounters_name_en="INCLUDED_2000"
+			getcounters_name_ruk="INCLUDED_3000"
+			getcounters_name_rut="INCLUDED_3000"
+			getcounters_name_uz="INCLUDED_3000"
+			getcounters_name_en="INCLUDED_3000"
 
 			>
 	</Counter>
 	<Counter counter_code="SMS1PY" group="38"
+
+			getcounters_name_ruk="INCLUDED_1500"
+			getcounters_name_rut="INCLUDED_1500"
+			getcounters_name_uz="INCLUDED_1500"
+			getcounters_name_en="INCLUDED_1500"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS500VY" group="38"
+
+			getcounters_name_ruk="INCLUDED_5000"
+			getcounters_name_rut="INCLUDED_5000"
+			getcounters_name_uz="INCLUDED_5000"
+			getcounters_name_en="INCLUDED_5000"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS4QYP" group="38"
 
 			getcounters_name_ruk="INCLUDED_1000"
 			getcounters_name_rut="INCLUDED_1000"
@@ -8652,30 +9852,12 @@ Created by Vladimir Khovanskiy
 
 			>
 	</Counter>
-	<Counter counter_code="SMS500VY" group="38"
-
-			getcounters_name_ruk="INCLUDED_500"
-			getcounters_name_rut="INCLUDED_500"
-			getcounters_name_uz="INCLUDED_500"
-			getcounters_name_en="INCLUDED_500"
-
-			>
-	</Counter>
-	<Counter counter_code="SMS4QYP" group="38"
-
-			getcounters_name_ruk="INCLUDED_400"
-			getcounters_name_rut="INCLUDED_400"
-			getcounters_name_uz="INCLUDED_400"
-			getcounters_name_en="INCLUDED_400"
-
-			>
-	</Counter>
 	<Counter counter_code="SMS800QY" group="38"
 
-			getcounters_name_ruk="INCLUDED_800"
-			getcounters_name_rut="INCLUDED_800"
-			getcounters_name_uz="INCLUDED_800"
-			getcounters_name_en="INCLUDED_800"
+			getcounters_name_ruk="INCLUDED_1000"
+			getcounters_name_rut="INCLUDED_1000"
+			getcounters_name_uz="INCLUDED_1000"
+			getcounters_name_en="INCLUDED_1000"
 
 			>
 	</Counter>
@@ -8712,6 +9894,231 @@ Created by Vladimir Khovanskiy
 			getcounters_name_rut="INCLUDED_1000"
 			getcounters_name_uz="INCLUDED_1000"
 			getcounters_name_en="INCLUDED_1000"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS3000E" group="38"
+
+			getcounters_name_ruk="INCLUDED_3000"
+			getcounters_name_rut="INCLUDED_3000"
+			getcounters_name_uz="INCLUDED_3000"
+			getcounters_name_en="INCLUDED_3000"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS500X1" group="38"
+
+			getcounters_name_ruk="INCLUDED_500"
+			getcounters_name_rut="INCLUDED_500"
+			getcounters_name_uz="INCLUDED_500"
+			getcounters_name_en="INCLUDED_500"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS15X2" group="38"
+
+			getcounters_name_ruk="INCLUDED_1500"
+			getcounters_name_rut="INCLUDED_1500"
+			getcounters_name_uz="INCLUDED_1500"
+			getcounters_name_en="INCLUDED_1500"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS4X3" group="38"
+
+			getcounters_name_ruk="INCLUDED_4000"
+			getcounters_name_rut="INCLUDED_4000"
+			getcounters_name_uz="INCLUDED_4000"
+			getcounters_name_en="INCLUDED_4000"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS5CP" group="38"
+
+			getcounters_name_ruk="INCLUDED_5000"
+			getcounters_name_rut="INCLUDED_5000"
+			getcounters_name_uz="INCLUDED_5000"
+			getcounters_name_en="INCLUDED_5000"
+
+			>
+	</Counter>
+	<Counter counter_code="SMSCHL" group="38"
+
+			getcounters_name_ruk="INCLUDED_100"
+			getcounters_name_rut="INCLUDED_100"
+			getcounters_name_uz="INCLUDED_100"
+			getcounters_name_en="INCLUDED_100"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS300A" group="38"
+
+			getcounters_name_ruk="INCLUDED_300"
+			getcounters_name_rut="INCLUDED_300"
+			getcounters_name_uz="INCLUDED_300"
+			getcounters_name_en="INCLUDED_300"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS300L" group="38"
+
+			getcounters_name_ruk="INCLUDED_300"
+			getcounters_name_rut="INCLUDED_300"
+			getcounters_name_uz="INCLUDED_300"
+			getcounters_name_en="INCLUDED_300"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS1Y" group="38"
+
+			getcounters_name_ruk="INCLUDED_1000"
+			getcounters_name_rut="INCLUDED_1000"
+			getcounters_name_uz="INCLUDED_1000"
+			getcounters_name_en="INCLUDED_1000"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS1YY" group="38"
+
+			getcounters_name_ruk="INCLUDED_1000"
+			getcounters_name_rut="INCLUDED_1000"
+			getcounters_name_uz="INCLUDED_1000"
+			getcounters_name_en="INCLUDED_1000"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS100O" group="38"
+
+			getcounters_name_ruk="INCLUDED_100"
+			getcounters_name_rut="INCLUDED_100"
+			getcounters_name_uz="INCLUDED_100"
+			getcounters_name_en="INCLUDED_100"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS200UL" group="38"
+
+			getcounters_name_ruk="INCLUDED_200"
+			getcounters_name_rut="INCLUDED_200"
+			getcounters_name_uz="INCLUDED_200"
+			getcounters_name_en="INCLUDED_200"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS400UP" group="38"
+
+			getcounters_name_ruk="INCLUDED_400"
+			getcounters_name_rut="INCLUDED_400"
+			getcounters_name_uz="INCLUDED_400"
+			getcounters_name_en="INCLUDED_400"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS3GSB" group="38"
+
+			getcounters_name_ruk="INCLUDED_3000"
+			getcounters_name_rut="INCLUDED_3000"
+			getcounters_name_uz="INCLUDED_3000"
+			getcounters_name_en="INCLUDED_3000"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS1KSH" group="38"
+
+			getcounters_name_ruk="INCLUDED_1000"
+			getcounters_name_rut="INCLUDED_1000"
+			getcounters_name_uz="INCLUDED_1000"
+			getcounters_name_en="INCLUDED_1000"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS1OQ1" group="38"
+
+			getcounters_name_ruk="INCLUDED_100"
+			getcounters_name_rut="INCLUDED_100"
+			getcounters_name_uz="INCLUDED_100"
+			getcounters_name_en="INCLUDED_100"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS1OQ2" group="38"
+
+			getcounters_name_ruk="INCLUDED_100"
+			getcounters_name_rut="INCLUDED_100"
+			getcounters_name_uz="INCLUDED_100"
+			getcounters_name_en="INCLUDED_100"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS500X4" group="38"
+
+			getcounters_name_ruk="INCLUDED_500"
+			getcounters_name_rut="INCLUDED_500"
+			getcounters_name_uz="INCLUDED_500"
+			getcounters_name_en="INCLUDED_500"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS15X5" group="38"
+
+			getcounters_name_ruk="INCLUDED_1500"
+			getcounters_name_rut="INCLUDED_1500"
+			getcounters_name_uz="INCLUDED_1500"
+			getcounters_name_en="INCLUDED_1500"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS5OMAD" group="38"
+
+			getcounters_name_ruk="INCLUDED_50"
+			getcounters_name_rut="INCLUDED_50"
+			getcounters_name_uz="INCLUDED_50"
+			getcounters_name_en="INCLUDED_50"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS2ULP" group="38"
+
+			getcounters_name_ruk="INCLUDED_200"
+			getcounters_name_rut="INCLUDED_200"
+			getcounters_name_uz="INCLUDED_200"
+			getcounters_name_en="INCLUDED_200"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS400UZ" group="38"
+
+			getcounters_name_ruk="INCLUDED_400"
+			getcounters_name_rut="INCLUDED_400"
+			getcounters_name_uz="INCLUDED_400"
+			getcounters_name_en="INCLUDED_400"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS3MOB7" group="38"
+
+			getcounters_name_ruk="INCLUDED_2500"
+			getcounters_name_rut="INCLUDED_2500"
+			getcounters_name_uz="INCLUDED_2500"
+			getcounters_name_en="INCLUDED_2500"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS5MOB1" group="38"
+
+			getcounters_name_ruk="INCLUDED_5000"
+			getcounters_name_rut="INCLUDED_5000"
+			getcounters_name_uz="INCLUDED_5000"
+			getcounters_name_en="INCLUDED_5000"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS10MOB" group="38"
+
+			getcounters_name_ruk="INCLUDED_10000"
+			getcounters_name_rut="INCLUDED_10000"
+			getcounters_name_uz="INCLUDED_10000"
+			getcounters_name_en="INCLUDED_10000"
 
 			>
 	</Counter>
@@ -8901,10 +10308,10 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="MIN300P" group="41"
 
-			getcounters_name_ruk="INCLUDED-ALL_300"
-			getcounters_name_rut="INCLUDED-ALL_300"
-			getcounters_name_uz="INCLUDED-ALL_300"
-			getcounters_name_en="INCLUDED-ALL_300"
+			getcounters_name_ruk="INCLUDED-ALL_500"
+			getcounters_name_rut="INCLUDED-ALL_500"
+			getcounters_name_uz="INCLUDED-ALL_500"
+			getcounters_name_en="INCLUDED-ALL_500"
 
 			>
 	</Counter>
@@ -8928,10 +10335,10 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="MIN300MY" group="41"
 
-			getcounters_name_ruk="INCLUDED-ALL_300"
-			getcounters_name_rut="INCLUDED-ALL_300"
-			getcounters_name_uz="INCLUDED-ALL_300"
-			getcounters_name_en="INCLUDED-ALL_300"
+			getcounters_name_ruk="INCLUDED-ALL_500"
+			getcounters_name_rut="INCLUDED-ALL_500"
+			getcounters_name_uz="INCLUDED-ALL_500"
+			getcounters_name_en="INCLUDED-ALL_500"
 
 			>
 	</Counter>
@@ -9018,19 +10425,19 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="MIN1000" group="41"
 
-			getcounters_name_ruk="INCLUDED-ALL_1000"
-			getcounters_name_rut="INCLUDED-ALL_1000"
-			getcounters_name_uz="INCLUDED-ALL_1000"
-			getcounters_name_en="INCLUDED-ALL_1000"
+			getcounters_name_ruk="INCLUDED-ALL_1500"
+			getcounters_name_rut="INCLUDED-ALL_1500"
+			getcounters_name_uz="INCLUDED-ALL_1500"
+			getcounters_name_en="INCLUDED-ALL_1500"
 
 			>
 	</Counter>
 	<Counter counter_code="MINC777" group="41"
 
-			getcounters_name_ruk="INCLUDED-ALL_777"
-			getcounters_name_rut="INCLUDED-ALL_777"
-			getcounters_name_uz="INCLUDED-ALL_777"
-			getcounters_name_en="INCLUDED-ALL_777"
+			getcounters_name_ruk="INCLUDED-ALL_1000"
+			getcounters_name_rut="INCLUDED-ALL_1000"
+			getcounters_name_uz="INCLUDED-ALL_1000"
+			getcounters_name_en="INCLUDED-ALL_1000"
 
 			>
 	</Counter>
@@ -9288,37 +10695,37 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="MIN50UZP" group="41"
 
-			getcounters_name_ruk="INCLUDED-ALL_50"
-			getcounters_name_rut="INCLUDED-ALL_50"
-			getcounters_name_uz="INCLUDED-ALL_50"
-			getcounters_name_en="INCLUDED-ALL_50"
+			getcounters_name_ruk="INCLUDED-ALL_200"
+			getcounters_name_rut="INCLUDED-ALL_200"
+			getcounters_name_uz="INCLUDED-ALL_200"
+			getcounters_name_en="INCLUDED-ALL_200"
 
 			>
 	</Counter>
 	<Counter counter_code="MIN100P" group="41"
 
-			getcounters_name_ruk="INCLUDED-ALL_100"
-			getcounters_name_rut="INCLUDED-ALL_100"
-			getcounters_name_uz="INCLUDED-ALL_100"
-			getcounters_name_en="INCLUDED-ALL_100"
+			getcounters_name_ruk="INCLUDED-ALL_400"
+			getcounters_name_rut="INCLUDED-ALL_400"
+			getcounters_name_uz="INCLUDED-ALL_400"
+			getcounters_name_en="INCLUDED-ALL_400"
 
 			>
 	</Counter>
 	<Counter counter_code="MIN600OP" group="41"
 
-			getcounters_name_ruk="INCLUDED-ALL_600"
-			getcounters_name_rut="INCLUDED-ALL_600"
-			getcounters_name_uz="INCLUDED-ALL_600"
-			getcounters_name_en="INCLUDED-ALL_600"
+			getcounters_name_ruk="INCLUDED-ALL_800"
+			getcounters_name_rut="INCLUDED-ALL_800"
+			getcounters_name_uz="INCLUDED-ALL_800"
+			getcounters_name_en="INCLUDED-ALL_800"
 
 			>
 	</Counter>
 	<Counter counter_code="MIN200PL" group="41"
 
-			getcounters_name_ruk="INCLUDED-ALL_200"
-			getcounters_name_rut="INCLUDED-ALL_200"
-			getcounters_name_uz="INCLUDED-ALL_200"
-			getcounters_name_en="INCLUDED-ALL_200"
+			getcounters_name_ruk="INCLUDED-ALL_800"
+			getcounters_name_rut="INCLUDED-ALL_800"
+			getcounters_name_uz="INCLUDED-ALL_800"
+			getcounters_name_en="INCLUDED-ALL_800"
 
 			>
 	</Counter>
@@ -9333,32 +10740,14 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="MIN500ST" group="41"
 
-			getcounters_name_ruk="INCLUDED-ALL_500"
-			getcounters_name_rut="INCLUDED-ALL_500"
-			getcounters_name_uz="INCLUDED-ALL_500"
-			getcounters_name_en="INCLUDED-ALL_500"
+			getcounters_name_ruk="INCLUDED-ALL_700"
+			getcounters_name_rut="INCLUDED-ALL_700"
+			getcounters_name_uz="INCLUDED-ALL_700"
+			getcounters_name_en="INCLUDED-ALL_700"
 
 			>
 	</Counter>
 	<Counter counter_code="MIN800QU" group="41"
-
-			getcounters_name_ruk="INCLUDED-ALL_800"
-			getcounters_name_rut="INCLUDED-ALL_800"
-			getcounters_name_uz="INCLUDED-ALL_800"
-			getcounters_name_en="INCLUDED-ALL_800"
-
-			>
-	</Counter>
-	<Counter counter_code="MIN400QP" group="41"
-
-			getcounters_name_ruk="INCLUDED-ALL_400"
-			getcounters_name_rut="INCLUDED-ALL_400"
-			getcounters_name_uz="INCLUDED-ALL_400"
-			getcounters_name_en="INCLUDED-ALL_400"
-
-			>
-	</Counter>
-	<Counter counter_code="MIN1000P" group="41"
 
 			getcounters_name_ruk="INCLUDED-ALL_1000"
 			getcounters_name_rut="INCLUDED-ALL_1000"
@@ -9367,12 +10756,30 @@ Created by Vladimir Khovanskiy
 
 			>
 	</Counter>
+	<Counter counter_code="MIN400QP" group="41"
+
+			getcounters_name_ruk="INCLUDED-ALL_1000"
+			getcounters_name_rut="INCLUDED-ALL_1000"
+			getcounters_name_uz="INCLUDED-ALL_1000"
+			getcounters_name_en="INCLUDED-ALL_1000"
+
+			>
+	</Counter>
+	<Counter counter_code="MIN1000P" group="41"
+
+			getcounters_name_ruk="INCLUDED-ALL_1500"
+			getcounters_name_rut="INCLUDED-ALL_1500"
+			getcounters_name_uz="INCLUDED-ALL_1500"
+			getcounters_name_en="INCLUDED-ALL_1500"
+
+			>
+	</Counter>
 	<Counter counter_code="MIN2000I" group="41"
 
-			getcounters_name_ruk="INCLUDED-ALL_2000"
-			getcounters_name_rut="INCLUDED-ALL_2000"
-			getcounters_name_uz="INCLUDED-ALL_2000"
-			getcounters_name_en="INCLUDED-ALL_2000"
+			getcounters_name_ruk="INCLUDED-ALL_3000"
+			getcounters_name_rut="INCLUDED-ALL_3000"
+			getcounters_name_uz="INCLUDED-ALL_3000"
+			getcounters_name_en="INCLUDED-ALL_3000"
 
 			>
 	</Counter>
@@ -9445,6 +10852,15 @@ Created by Vladimir Khovanskiy
 			getcounters_name_rut="MONTH"
 			getcounters_name_uz="MONTH"
 			getcounters_name_en="MONTH"
+
+			>
+	</Counter>
+	<Counter counter_code="MINPACKM" group="41"
+
+			getcounters_name_ruk="MULTI"
+			getcounters_name_rut="MULTI"
+			getcounters_name_uz="MULTI"
+			getcounters_name_en="MULTI"
 
 			>
 	</Counter>
@@ -9522,19 +10938,19 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="MIN2KIY" group="41"
 
-			getcounters_name_ruk="INCLUDED-ALL_2000"
-			getcounters_name_rut="INCLUDED-ALL_2000"
-			getcounters_name_uz="INCLUDED-ALL_2000"
-			getcounters_name_en="INCLUDED-ALL_2000"
+			getcounters_name_ruk="INCLUDED-ALL_3000"
+			getcounters_name_rut="INCLUDED-ALL_3000"
+			getcounters_name_uz="INCLUDED-ALL_3000"
+			getcounters_name_en="INCLUDED-ALL_3000"
 
 			>
 	</Counter>
 	<Counter counter_code="MIN1PY" group="41"
 
-			getcounters_name_ruk="INCLUDED-ALL_1000"
-			getcounters_name_rut="INCLUDED-ALL_1000"
-			getcounters_name_uz="INCLUDED-ALL_1000"
-			getcounters_name_en="INCLUDED-ALL_1000"
+			getcounters_name_ruk="INCLUDED-ALL_1500"
+			getcounters_name_rut="INCLUDED-ALL_1500"
+			getcounters_name_uz="INCLUDED-ALL_1500"
+			getcounters_name_en="INCLUDED-ALL_1500"
 
 			>
 	</Counter>
@@ -9549,19 +10965,19 @@ Created by Vladimir Khovanskiy
 	</Counter>
 	<Counter counter_code="MIN800QY" group="41"
 
-			getcounters_name_ruk="INCLUDED-ALL_800"
-			getcounters_name_rut="INCLUDED-ALL_800"
-			getcounters_name_uz="INCLUDED-ALL_800"
-			getcounters_name_en="INCLUDED-ALL_800"
+			getcounters_name_ruk="INCLUDED-ALL_1000"
+			getcounters_name_rut="INCLUDED-ALL_1000"
+			getcounters_name_uz="INCLUDED-ALL_1000"
+			getcounters_name_en="INCLUDED-ALL_1000"
 
 			>
 	</Counter>
 	<Counter counter_code="MIN4QYP" group="41"
 
-			getcounters_name_ruk="INCLUDED-ALL_400"
-			getcounters_name_rut="INCLUDED-ALL_400"
-			getcounters_name_uz="INCLUDED-ALL_400"
-			getcounters_name_en="INCLUDED-ALL_400"
+			getcounters_name_ruk="INCLUDED-ALL_1000"
+			getcounters_name_rut="INCLUDED-ALL_1000"
+			getcounters_name_uz="INCLUDED-ALL_1000"
+			getcounters_name_en="INCLUDED-ALL_1000"
 
 			>
 	</Counter>
@@ -9625,6 +11041,177 @@ Created by Vladimir Khovanskiy
 			getcounters_name_rut="INCLUDED-ALL_1000"
 			getcounters_name_uz="INCLUDED-ALL_1000"
 			getcounters_name_en="INCLUDED-ALL_1000"
+			                      
+			>
+	</Counter>
+	<Counter counter_code="MIN500X1" group="41"
+
+			getcounters_name_ruk="INCLUDED-ALL_500"
+			getcounters_name_rut="INCLUDED-ALL_500"
+			getcounters_name_uz="INCLUDED-ALL_500"
+			getcounters_name_en="INCLUDED-ALL_500"
+			                      
+			>
+	</Counter>
+	<Counter counter_code="MIN15X2" group="41"
+
+			getcounters_name_ruk="INCLUDED-ALL_1500"
+			getcounters_name_rut="INCLUDED-ALL_1500"
+			getcounters_name_uz="INCLUDED-ALL_1500"
+			getcounters_name_en="INCLUDED-ALL_1500"
+			                      
+			>
+	</Counter>
+	<Counter counter_code="MIN3KCHL" group="41"
+
+			getcounters_name_ruk="INCLUDED-ALL_3000"
+			getcounters_name_rut="INCLUDED-ALL_3000"
+			getcounters_name_uz="INCLUDED-ALL_3000"
+			getcounters_name_en="INCLUDED-ALL_3000"
+			                      
+			>
+	</Counter>
+	<Counter counter_code="MIN1500A" group="41"
+
+			getcounters_name_ruk="INCLUDED-ALL_1500"
+			getcounters_name_rut="INCLUDED-ALL_1500"
+			getcounters_name_uz="INCLUDED-ALL_1500"
+			getcounters_name_en="INCLUDED-ALL_1500"
+			                      
+			>
+	</Counter>
+	<Counter counter_code="MIN800L" group="41"
+
+			getcounters_name_ruk="INCLUDED-ALL_800"
+			getcounters_name_rut="INCLUDED-ALL_800"
+			getcounters_name_uz="INCLUDED-ALL_800"
+			getcounters_name_en="INCLUDED-ALL_800"
+			                      
+			>
+	</Counter>
+	<Counter counter_code="MIN1Y" group="41"
+
+			getcounters_name_ruk="INCLUDED-ALL_1000"
+			getcounters_name_rut="INCLUDED-ALL_1000"
+			getcounters_name_uz="INCLUDED-ALL_1000"
+			getcounters_name_en="INCLUDED-ALL_1000"
+			                      
+			>
+	</Counter>
+	<Counter counter_code="MIN1YY" group="41"
+
+			getcounters_name_ruk="INCLUDED-ALL_1000"
+			getcounters_name_rut="INCLUDED-ALL_1000"
+			getcounters_name_uz="INCLUDED-ALL_1000"
+			getcounters_name_en="INCLUDED-ALL_1000"
+			                      
+			>
+	</Counter>
+	<Counter counter_code="MIN100O" group="41"
+
+			getcounters_name_ruk="INCLUDED-ALL_100"
+			getcounters_name_rut="INCLUDED-ALL_100"
+			getcounters_name_uz="INCLUDED-ALL_100"
+			getcounters_name_en="INCLUDED-ALL_100"
+			                      
+			>
+	</Counter>
+	<Counter counter_code="MIN100UO" group="41"
+
+			getcounters_name_ruk="INCLUDED-UMS_100"
+			getcounters_name_rut="INCLUDED-UMS_100"
+			getcounters_name_uz="INCLUDED-UMS_100"
+			getcounters_name_en="INCLUDED-UMS_100"
+			                      
+			>
+	</Counter>
+	<Counter counter_code="MIN3GSB" group="41"
+
+			getcounters_name_ruk="INCLUDED-ALL_3000"
+			getcounters_name_rut="INCLUDED-ALL_3000"
+			getcounters_name_uz="INCLUDED-ALL_3000"
+			getcounters_name_en="INCLUDED-ALL_3000"
+			                      
+			>
+	</Counter>
+	<Counter counter_code="MIN1KSH" group="41"
+
+			getcounters_name_ruk="INCLUDED-ALL_1000"
+			getcounters_name_rut="INCLUDED-ALL_1000"
+			getcounters_name_uz="INCLUDED-ALL_1000"
+			getcounters_name_en="INCLUDED-ALL_1000"
+			                      
+			>
+	</Counter>
+	<Counter counter_code="MIN2OQ1" group="41"
+
+			getcounters_name_ruk="INCLUDED-ALL_2000"
+			getcounters_name_rut="INCLUDED-ALL_2000"
+			getcounters_name_uz="INCLUDED-ALL_2000"
+			getcounters_name_en="INCLUDED-ALL_2000"
+			                      
+			>
+	</Counter>
+	<Counter counter_code="MIN2OQ2" group="41"
+
+			getcounters_name_ruk="INCLUDED-ALL_2000"
+			getcounters_name_rut="INCLUDED-ALL_2000"
+			getcounters_name_uz="INCLUDED-ALL_2000"
+			getcounters_name_en="INCLUDED-ALL_2000"
+			                      
+			>
+	</Counter>
+	<Counter counter_code="MIN500X4" group="41"
+
+			getcounters_name_ruk="INCLUDED-ALL_500"
+			getcounters_name_rut="INCLUDED-ALL_500"
+			getcounters_name_uz="INCLUDED-ALL_500"
+			getcounters_name_en="INCLUDED-ALL_500"
+			                      
+			>
+	</Counter>
+	<Counter counter_code="MIN15X5" group="41"
+
+			getcounters_name_ruk="INCLUDED-ALL_1500"
+			getcounters_name_rut="INCLUDED-ALL_1500"
+			getcounters_name_uz="INCLUDED-ALL_1500"
+			getcounters_name_en="INCLUDED-ALL_1500"
+			                      
+			>
+	</Counter>
+	<Counter counter_code="MIN4OMAD" group="41"
+
+			getcounters_name_ruk="INCLUDED-ALL_400"
+			getcounters_name_rut="INCLUDED-ALL_400"
+			getcounters_name_uz="INCLUDED-ALL_400"
+			getcounters_name_en="INCLUDED-ALL_400"
+			                      
+			>
+	</Counter>
+	<Counter counter_code="MIN400UP" group="41"
+
+			getcounters_name_ruk="INCLUDED-ALL_400"
+			getcounters_name_rut="INCLUDED-ALL_400"
+			getcounters_name_uz="INCLUDED-ALL_400"
+			getcounters_name_en="INCLUDED-ALL_400"
+			                      
+			>
+	</Counter>
+	<Counter counter_code="MIN3MOB7" group="41"
+
+			getcounters_name_ruk="INCLUDED-ALL_2500"
+			getcounters_name_rut="INCLUDED-ALL_2500"
+			getcounters_name_uz="INCLUDED-ALL_2500"
+			getcounters_name_en="INCLUDED-ALL_2500"
+			                      
+			>
+	</Counter>
+	<Counter counter_code="MIN5MOB1" group="41"
+
+			getcounters_name_ruk="INCLUDED-ALL_5000"
+			getcounters_name_rut="INCLUDED-ALL_5000"
+			getcounters_name_uz="INCLUDED-ALL_5000"
+			getcounters_name_en="INCLUDED-ALL_5000"
 			                      
 			>
 	</Counter>
@@ -9797,6 +11384,10 @@ Created by Vladimir Khovanskiy
 
 			>
 	</Counter>
+        <Counter counter_code="MB1000W" group="53"/>
+        <Counter counter_code="MB2000W" group="53"/>
+        <Counter counter_code="MB3000W" group="53"/>
+        <Counter counter_code="MB5000W" group="53"/>
 	<GroupList>
 		<Item id="1" name="gprs"/>                        <!--*111*019#-->
 		<Item id="2" name="voice"/>                       
@@ -9850,5 +11441,6 @@ Created by Vladimir Khovanskiy
         	<Item id="50" name="compliment"/>              <!--test-->
         	<Item id="51" name="supervoice"/>              <!--test-->
         	<Item id="52" name="ict"/>              <!--test-->
+        	<Item id="53" name="welcomebonus"/>              <!--test-->
 	</GroupList>
 </Counters>

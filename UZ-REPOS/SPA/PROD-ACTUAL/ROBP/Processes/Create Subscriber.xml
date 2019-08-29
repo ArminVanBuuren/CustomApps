@@ -30,12 +30,28 @@
             <param name="operation" value="AddSubscriberOnSMSC" />
           </parameterslist>
           <resultlist>
+            <result value="" node="CreateSubscriberOnEIR" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscriberOnEIR" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriberOnEIR" />
+          </parameterslist>
+          <resultlist>
             <result value="" node="AddSubscriberOnSCG" />
           </resultlist>
         </node>
         <node name="AddSubscriberOnSCG" object="OperationOnSA">
           <parameterslist>
             <param name="operation" value="AddSubscriberOnSCG" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddSubscriberOnSCGS" />
+          </resultlist>
+        </node>
+        <node name="AddSubscriberOnSCGS" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddSubscriberOnSCGS" />
           </parameterslist>
           <resultlist>
             <result value="" node="AddSubscriberOnMCA" />

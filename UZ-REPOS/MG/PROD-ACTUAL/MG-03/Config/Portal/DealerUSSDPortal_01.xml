@@ -54,10 +54,10 @@ Created by Vladimir Khovanskiy
 	</Item>
 	<Item name="MobileHelper.Tariff" 
 
-			info_ruk="1.Gap Bor!&#xA;2.Maxi New&#xA;3.Optimalniy&#xA;4.Ultra&#xA;5.MAXI Year&#xA;6.Ultra Year&#xA;8.Terminal&#xA;11.777&#xA;12.Perfect&#xA;14.777 Year&#xA;00.Dalee&#xA;"
-			info_rut="1.Gap Bor!&#xA;2.Maxi New&#xA;3.Optimalniy&#xA;4.Ultra&#xA;5.MAXI Year&#xA;6.Ultra Year&#xA;8.Terminal&#xA;11.777&#xA;12.Perfect&#xA;14.777 Year&#xA;00.Dalee&#xA;"
-			info_uz="1.Gap Bor!&#xA;2.Maxi New&#xA;3.Optimal&#xA;4.Ultra&#xA;5.MAXI Year&#xA;6.Ultra Year&#xA;8.Terminal&#xA;11.777&#xA;12.Perfect&#xA;14.777 Year&#xA;00.Dalee&#xA;"
-			info_en="1.Gap Bor!&#xA;2.Maxi New&#xA;3.Optimalniy&#xA;4.Ultra&#xA;5.MAXI Year&#xA;6.Ultra Year&#xA;8.Terminal&#xA;11.777&#xA;12.Perfect&#xA;14.777 Year&#xA;00.Dalee&#xA;"
+			info_ruk="1.Gap Bor!&#xA;3.Optimalniy&#xA;5.MAXI Year&#xA;6.Ultra Year&#xA;8.Terminal&#xA;14.777 Year&#xA;00.Dalee&#xA;"
+			info_rut="1.Gap Bor!&#xA;3.Optimalniy&#xA;5.MAXI Year&#xA;6.Ultra Year&#xA;8.Terminal&#xA;14.777 Year&#xA;00.Dalee&#xA;"
+			info_uz="1.Gap Bor!&#xA;3.Optimal&#xA;5.MAXI Year&#xA;6.Ultra Year&#xA;8.Terminal&#xA;14.777 Year&#xA;00.Dalee&#xA;"
+			info_en="1.Gap Bor!&#xA;3.Optimalniy&#xA;5.MAXI Year&#xA;6.Ultra Year&#xA;8.Terminal&#xA;14.777 Year&#xA;00.Dalee&#xA;"
 
 			>
 		<code value="*2*1"/>

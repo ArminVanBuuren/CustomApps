@@ -146,6 +146,38 @@
             <param name="operation" value="AddBPOS0" />
           </parameterslist>
           <resultlist>
+            <result value="" node="AddLTE" />
+          </resultlist>
+        </node>
+        <node name="AddLTE" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddLTE_Test" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteLTE" />
+          </resultlist>
+        </node>
+        <node name="DeleteLTE" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteLTE_Test" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddScheme" />
+          </resultlist>
+        </node>
+        <node name="AddScheme" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddScheme" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteScheme" />
+          </resultlist>
+        </node>
+        <node name="DeleteScheme" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteScheme" />
+          </parameterslist>
+          <resultlist>
             <result value="" node="" />
           </resultlist>
         </node>

@@ -1,0 +1,33 @@
+﻿<Configuration>
+  <Settings>
+    <Add Key="CommunicatorConfig" Value="C:\FORIS\SPA\Configuration\SPA.MSMQGateway\CommunicatorConfig.xml" />
+    <Add Key="ReportTimeout" Value="300"/>
+  </Settings>
+  <DatabaseObjects Remotable="false">
+    <Add Name="FORIS.SPA.CBP" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.CBP" />
+    <Add Name="FORIS.SPA.ARCHIVE" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.ARCHIVE" />
+    <Add Name="FORIS.SPA.STATE" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.STATE" />
+    <Add Name="FORIS.SPA.ROBP" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.ROBP" />
+  </DatabaseObjects>
+  <Profiler>
+    <Configuration>
+      <SysTrace TraceMask="11111111"/>
+      <TraceSchema path="C:\FORIS\SPA\Configuration\SPA.MSMQGateway\Schemas\Debug\Schema.Application.xml"/>
+      <TraceSchema path="C:\FORIS\SPA\Configuration\SPA.MSMQGateway\Schemas\Debug\Schema.MSMQGateway.xml"/>
+      <TraceSchema path="C:\FORIS\SPA\Configuration\SPA.MSMQGateway\Schemas\Debug\Schema.Comm.xml"/>	  
+    </Configuration>
+    <LoggingActivationList>
+      <Activate Name="Permanent" Path="C:\FORISLOG\SPA\MSMQGateway\msmqgw.%DATE%_N%ID%" ChangeOn="00:30:00">
+        <TraceSchema Name="Application">
+          <TraceSchemaItem Name="Application"/>
+        </TraceSchema>
+        <TraceSchema Name="MSMQGateway">
+          <TraceSchemaItem Name="MSMQGateway"/>
+        </TraceSchema>   
+	<TraceSchema Name="Comm">
+          <TraceSchemaItem Name="CommMSMQ"/>
+        </TraceSchema>  
+      </Activate>
+    </LoggingActivationList>
+  </Profiler>
+</Configuration>

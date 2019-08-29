@@ -1,0 +1,4 @@
+<References>
+   <assembly>System.dll</assembly>
+   <assembly>FORIS.SPA.SPF.dll</assembly>
+</References>

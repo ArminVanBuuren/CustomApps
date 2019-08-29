@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ChangeTariffPlanOnFP.InitialParameterRow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>Change Tariff Plan (initial service parameters table)</Description>
+  <Author Name="Max Smirnov" Date="2013-03-20+18:00"/>
+  <Properties GenerationType="MmlXml" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[<Row 
+SERVICE_ROW_ID="{0}" 
+PARAM_CODE="xmldecodename({1})" 
+PARAM_VALUE="{2}" />]]>
+    </RequestTemplate>
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="ServiceIdentifier" Type="Wellknown"/>
+    <Item Name="ParamCode" Type="LocalParameter"/>
+    <Item Name="ParamValue" Type="LocalParameter"/>
+  </Request>
+  <ParametersList>
+    <Parameter Name="ParamCode">
+      <Source Path="ExtendedRequestMessage/AdditionalData/InitialList/ServiceList/*[1]/*[1]" SelectMode="NodeName"/>
+    </Parameter>
+    <Parameter Name="ParamValue">
+      <Source Path="ExtendedRequestMessage/AdditionalData/InitialList/ServiceList/*[1]/*[1]/Value[string-length(.) > 0]"
+              AbsenceValue="" PostFormat="{0}"/>
+    </Parameter>
+  </ParametersList>
+  <ErrorsList CodePage="ascii"/>
+</Command>

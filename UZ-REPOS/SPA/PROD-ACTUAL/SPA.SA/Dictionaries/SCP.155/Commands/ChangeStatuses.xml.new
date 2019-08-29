@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ChangeStatuses" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>Change TD and PA statuses</Description>
+  <Author Name="Oleg Safonov" Date="2012-02-11+12:35"/>
+  <Properties GenerationType="DataSetXml" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[<DataSet Name="IN_STATUSES_DATA" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Attributes>
+    <Attribute Name="Protocol" Type="System.String" Value="Remoting"/>
+    <Attribute Name="Procedure" Type="System.String" Value="ChangeLifetimeStatuses"/>
+    <Attribute Name="Interface" Type="System.String" Value="ICrmOperations"/>
+  </Attributes>
+  <DataTable Name="REQUEST_DATA">
+    <Columns>
+      <Column Name="REQUEST_ID" Type="System.String"/>
+    </Columns>
+    <Rows>
+      <Row REQUEST_ID="reversecut({0},4)-{1}"/>
+    </Rows>
+  </DataTable>
+  <DataTable Name="TD_STATUSES">
+    <Columns>
+      <Column Name="TDC_ID" Type="System.Int64"/>
+      <Column Name="TD_STATUS" Type="System.Int32"/>
+    </Columns>
+    <Rows>
+       <Row TDC_ID="{2}" TD_STATUS="{4}"/>
+    </Rows>
+  </DataTable>
+  <DataTable Name="PA_STATUSES">
+    <Columns>
+      <Column Name="PA_ID" Type="System.Int64"/>
+      <Column Name="PA_STATUS" Type="System.Int32"/>
+    </Columns>
+    <Rows>
+      <Row PA_ID="{3}" PA_STATUS="{5}"/>
+
+    </Rows>
+  </DataTable>
+</DataSet>]]>
+    </RequestTemplate>
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="org.id" Type="Wellknown"/>
+    <Item Name="uid" Type="Wellknown" />
+    <Item Name="TerminalDeviceID" Type="Wellknown"/>
+    <Item Name="PersonalAccount" Type="Wellknown" />
+    <Item Name="TdStatus" Type="LocalParameter"/>
+    <Item Name="PaStatus" Type="LocalParameter" />
+  </Request>
+  <ParametersList>
+    <Parameter Name="TdStatus">
+      <Source Path="ADD_DATA/TdStatus/Status"/>
+    </Parameter>
+    <Parameter Name="PaStatus">
+      <Source Path="ADD_DATA/PaStatus/Status" />
+    </Parameter>
+  </ParametersList>
+  <ErrorsList CodePage="ascii"/>
+</Command>

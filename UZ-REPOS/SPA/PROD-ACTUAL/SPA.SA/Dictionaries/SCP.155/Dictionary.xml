@@ -1,0 +1,294 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dictionary>
+  <WellknownsList>
+    <Wellknown Name="org.id" Value="xmlsubstr(&quot;ExtendedRequestMessage/OriginalID&quot;)"/>
+    <Wellknown Name="id" Value="xmlsubstr(&quot;ExtendedRequestMessage/ID&quot;)"/>
+    <Wellknown Name="PersonalAccount" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/PersonalAccountNumber&quot;, false)"/>
+    <Wellknown Name="cn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/ContractNumber&quot;, false)"/>
+    <Wellknown Name="TerminalDeviceID" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/TerminalDeviceId&quot;, false)"/>
+    <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;, false)"/>
+    <Wellknown Name="imsi" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;, false)"/>
+  </WellknownsList>
+  <ErrorsList CodePage="ascii">
+    <Error Name="&lt;Code&gt;0&lt;" Value="SUCCESS"/>
+    <Error Name="Code&gt;0&lt;" Value="SUCCESS"/>
+    <Error Name="Code&gt;-13000&lt;" Value="UnregisteredError"/>
+    <Error Name="Code&gt;-13001&lt;" Value="CommandTimedOut"/>
+    <Error Name="Code&gt;-13002&lt;" Value="ResourceLimitation"/>
+    <Error Name="Code&gt;-13003&lt;" Value="NotSupportedCommandOrAction"/>
+    <Error Name="Code&gt;-13004&lt;" Value="ProcessingFailure"/>
+    <Error Name="Code&gt;-13007&lt;" Value="UnregisteredLogin"/>
+    <Error Name="Code&gt;-13008&lt;" Value="NotSupportedCommandOrAction"/>
+    <Error Name="Code&gt;-13009&lt;" Value="CommandTimedOut"/>
+    <Error Name="Code&gt;-13010&lt;" Value="UnregisteredLogin"/>
+    <Error Name="Code&gt;-13011&lt;" Value="ProcessingTemporaryUnavailable"/>
+    <Error Name="Code&gt;-13012&lt;" Value="UnregisteredLogin"/>
+
+    <Error Name="Code&gt;-154017&lt;" Value="TerminalDeviceAlreadyDefined"/>
+    <Error Name="Code&gt;-154018&lt;" Value="UnregisteredTerminalDevice"/>
+    <Error Name="Code&gt;-154008&lt;" Value="PesonalAccountAlreadyDefined"/>
+
+
+    <Error Name="Code&gt;-151005&lt;" Value="InvalidTariffPlan"/>
+    <Error Name="ERROR_CODE&gt;0" Value="SUCCESS"/>
+    <Error Name="ERROR_CODE&gt;-13000" Value="UnregisteredError"/>
+    <Error Name="ERROR_CODE&gt;-13001" Value="CommandTimedOut"/>
+    <Error Name="ERROR_CODE&gt;-13002" Value="ResourceLimitation"/>
+    <Error Name="ERROR_CODE&gt;-13003" Value="NotSupportedCommandOrAction"/>
+    <Error Name="ERROR_CODE&gt;-13004" Value="ProcessingFailure"/>
+    <Error Name="ERROR_CODE&gt;-13007" Value="UnregisteredLogin"/>
+    <Error Name="ERROR_CODE&gt;-13008" Value="NotSupportedCommandOrAction"/>
+    <Error Name="ERROR_CODE&gt;-13009" Value="CommandTimedOut"/>
+    <Error Name="ERROR_CODE&gt;-13010" Value="UnregisteredLogin"/>
+    <Error Name="ERROR_CODE&gt;-13011" Value="ProcessingTemporaryUnavailable"/>
+    <Error Name="ERROR_CODE&gt;-13012" Value="UnregisteredLogin"/>
+
+    <Error Name="ERROR_CODE&gt;-154017" Value="TerminalDeviceAlreadyDefined"/>
+    <Error Name="ERROR_CODE&gt;-154018" Value="UnregisteredTerminalDevice"/>
+    <Error Name="ERROR_CODE&gt;-154008" Value="PesonalAccountAlreadyDefined"/>
+
+
+    <Error Name="ERROR_CODE&gt;-151005" Value="InvalidTariffPlan"/>
+    <Error Name="ERROR_CODE&gt;CancelledByAdministrator&lt;" Value="ProcessingCanceledByUser" />
+    <!-- Ошибки при замене номера -->
+    <Error Name="ERROR_CODE=&quot;0" Value="SUCCESS"/>
+    <Error Name="ERROR_CODE=&quot;-13000" Value="UnregisteredError"/>
+    <Error Name="ERROR_CODE=&quot;-13001" Value="CommandTimedOut"/>
+    <Error Name="ERROR_CODE=&quot;-13002" Value="ResourceLimitation"/>
+    <Error Name="ERROR_CODE=&quot;-13003" Value="NotSupportedCommandOrAction"/>
+    <Error Name="ERROR_CODE=&quot;-13004" Value="ProcessingFailure"/>
+    <Error Name="ERROR_CODE=&quot;-13007" Value="UnregisteredLogin"/>
+    <Error Name="ERROR_CODE=&quot;-13008" Value="NotSupportedCommandOrAction"/>
+    <Error Name="ERROR_CODE=&quot;-13009" Value="CommandTimedOut"/>
+    <Error Name="ERROR_CODE=&quot;-13010" Value="UnregisteredLogin"/>
+    <Error Name="ERROR_CODE=&quot;-13011" Value="ProcessingTemporaryUnavailable"/>
+    <Error Name="ERROR_CODE=&quot;-13012" Value="UnregisteredLogin"/>
+    <Error Name="ERROR_CODE=&quot;-154017" Value="TerminalDeviceAlreadyDefined"/>
+    <Error Name="ERROR_CODE=&quot;-154018" Value="UnregisteredTerminalDevice"/>
+    <Error Name="ERROR_CODE=&quot;-154008" Value="PesonalAccountAlreadyDefined"/>
+    <Error Name="ERROR_CODE=&quot;-151005" Value="InvalidTariffPlan"/>
+    <!-- Ошибки для любимых номеров -->
+    <Error Name="&lt;RESULT_CODE&gt;0" Value="SUCCESS"/>
+    <Error Name="&lt;RESULT_CODE&gt;-13000" Value="UnregisteredError"/>
+    <Error Name="&lt;RESULT_CODE&gt;-13001" Value="CommandTimedOut"/>
+    <Error Name="&lt;RESULT_CODE&gt;-13002" Value="ResourceLimitation"/>
+    <Error Name="&lt;RESULT_CODE&gt;-13003" Value="NotSupportedCommandOrAction"/>
+    <Error Name="&lt;RESULT_CODE&gt;-13004" Value="ProcessingFailure"/>
+    <Error Name="&lt;RESULT_CODE&gt;-13007" Value="UnregisteredLogin"/>
+    <Error Name="&lt;RESULT_CODE&gt;-13008" Value="NotSupportedCommandOrAction"/>
+    <Error Name="&lt;RESULT_CODE&gt;-13009" Value="CommandTimedOut"/>
+    <Error Name="&lt;RESULT_CODE&gt;-13010" Value="UnregisteredLogin"/>
+    <Error Name="&lt;RESULT_CODE&gt;-13011" Value="ProcessingTemporaryUnavailable"/>
+    <Error Name="&lt;RESULT_CODE&gt;-13012" Value="UnregisteredLogin"/>
+    <Error Name="&lt;RESULT_CODE&gt;-154017" Value="TerminalDeviceAlreadyDefined"/>
+    <Error Name="&lt;RESULT_CODE&gt;-154018" Value="UnregisteredTerminalDevice"/>
+    <Error Name="&lt;RESULT_CODE&gt;-154008" Value="PesonalAccountAlreadyDefined"/>
+
+
+    <Error Name="&lt;RESULT_CODE&gt;-151005" Value="InvalidTariffPlan"/>
+    <Error Name="&lt;RESULT_CODE&gt;CancelledByAdministrator&lt;" Value="ProcessingCanceledByUser" />
+    <Error Name="Code&gt;" Value="UnregisteredError"/>
+    <!-- rror Name="" Value="UnregisteredError"/ -->
+  </ErrorsList>
+  <RegexpsList/>
+  <ConstantsList>
+    <Constant Name="PRIVATE_USER_GROUPS" Value=""/>
+  </ConstantsList>
+  <ParametersList>
+    <Parameter Name="BALANCE">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//Balance"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="CURRENCY_CODE">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//CurrencyCode"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="PA_STATUS">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//PaStatus/Status"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="PA_BALANCE_STATUS">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//PaStatus/BalanceStatus[string-length(.) > 0]"
+              AbsenceValue="" PostFormat="PA_BALANCE_STATUS=&quot;{0}&quot;"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="SERVICE_PROVIDER_CODE">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//ExternalServiceProviderCode[string-length(.) > 0]"
+              AbsenceValue="" PostFormat="SERVICE_PROVIDER_CODE=&quot;{0}&quot;"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="BLOCK_LIMIT">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//BalanceLimits/BlockLimit"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="UNBLOCK_LIMIT">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//BalanceLimits/UnblockLimit"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="PARTIAL_BLOCK_LIMIT">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//BalanceLimits/PartialBlockLimit"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="EXPIRES">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//ExpirationDateBalance"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="EXPIRATION_DATE_MONITOR">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//IsNeedControlExpirationDateBalance"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="ADMIN_BLOCK">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//PaStatus/BlockStatus" AbsenceValue="" PostFormat="ADMIN_BLOCK=&quot;{0}&quot;"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="ADMIN_BLOCKED_DATE">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//PaStatus/AdminBlockedDate[string-length(.) > 0]" AbsenceValue="" PostFormat="ADMIN_BLOCKED_DATE=&quot;{0}&quot;"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="BLOCKED_END_DATE">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//PaStatus/BlockedEndDate[string-length(.) > 0]"  AbsenceValue="" PostFormat="BLOCKED_END_DATE=&quot;{0}&quot;"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="TAX_GROUP_ID">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//TaxGroupId"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="MAX_BLOCKED_PERIOD">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//MaxBlockedPeriod"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="AFTER_GRACE_PERIOD">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//AfterGracePeriod"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="IS_GRACE_STARTS_ON_BLOCK">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//IsGraceStartOnBlock"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="VALIDITY_PERIOD">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//ValidityPeriod"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="LIMIT_VALUE">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//BalanceLimits/NotificationLimits/NotificationLimit/Value"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="LIMIT_LEVEL">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//BalanceLimits/NotificationLimits/NotificationLimit/Level[string-length(.) > 0]" AbsenceValue="" PostFormat="LIMIT_LEVEL=&quot;{0}&quot;"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="TARIFF_PLAN_ID">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//TariffPlanId"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="BILLING_GROUP_ID">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//BillingGroupId"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="TERMINAL_DEVICE_STATE">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//TdStatus/Status"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="FIRST_CALL_END_DATE">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//ExpirationDateFirstCall[string-length(.) > 0]" AbsenceValue="" PostFormat="FIRST_CALL_END_DATE=&quot;{0}&quot;"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="MAX_INACTIVE_PERIOD">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//MaxInactivePeriod"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="LANGUAGE">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//LanguageId"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="TIME_ZONE">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//TimeZone"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="TERMINAL_DEVICE_CLASS">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//TerminalDeviceClassId"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="SMS_USSD_LANG">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//LanguageIdSmsUssd"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="FNF_POSITION">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList/FavoritNumberList//Position"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="FNF_NUMBER">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList/FavoritNumberList//FavoriteNumber"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="EXTENDED_SERVICE_CODE">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList/FavoritNumberList//FavoriteNumberTypeCode"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="CUSTOMER_TYPE_ID">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//CustomerTypeId"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+  </ParametersList>
+  <DynamicParametersList/>
+  <CommandsList Root="C:\FORIS\SPA\Configuration\SPA.SA\Dictionaries\SCP.155\Commands">
+    <Command Path="AddAutopayment.xml"/>
+    <Command Path="Assign FavoriteNumbers.xml"/>
+    <Command Path="Assign FavoriteNumbers2.xml"/>
+    <Command Path="AddCallingCircleMembers.xml"/>
+    <Command Path="AddCallingCircleMembers2.xml"/>
+    <Command Path="AssignService.xml"/>
+    <Command Path="AddTDPAOnFP.xml"/>
+    <Command Path="ChangeBillingGroupOnFP.xml"/>
+    <Command Path="ChangeCallingCircle.xml"/>
+    <Command Path="ChangeCallingCircle2.xml"/>
+    <Command Path="ChangeCB118OnFP.xml"/>
+    <Command Path="ChangeCB537OnFP.xml"/>
+    <Command Path="ChangePAStatusesOnFINPlatform.xml"/>
+	<Command Path="ChangeTariffPlanOnFP.CounterRow.xml"/>
+	<Command Path="ChangeTariffPlanOnFP.ServiceRow.xml"/>
+	<Command Path="ChangeTariffPlanOnFP.FavoriteServiceRow.xml"/>
+	<Command Path="ChangeTariffPlanOnFP.ParameterRow.xml"/>
+	<Command Path="ChangeTariffPlanOnFP.InitialServiceRow.xml"/>
+	<Command Path="ChangeTariffPlanOnFP.InitialFavoriteServiceRow.xml"/>
+	<Command Path="ChangeTariffPlanOnFP.InitialParameterRow.xml"/>
+	<Command Path="ChangeTPwithPlatforOnFINPlatform.FavoritNumberRow.xml"/>
+    <Command Path="ChangeTDPAOnFP.xml"/>
+    <Command Path="ChangeTDPAOnFP.ModifyServiceRow.xml"/>
+    <Command Path="ChangeTDStatusesOnFINPlatform.xml"/>
+    <Command Path="ChangeTPOnFINPlatform.xml"/>
+    <Command Path="ChangeTPwithPlatforOnFINPlatform.xml"/>
+    <Command Path="ChangeStatuses.xml"/>
+    <Command Path="CreatePAOnFINPlatform.xml"/>
+    <Command Path="CreateTDC.RegisteredServiceRow.xml"/>
+    <Command Path="CreateTDOnFINPlatform.xml"/>
+    <Command Path="CreateTDOnFINPlatform.FavoritNumberRow.xml"/>
+    <Command Path="CreateTDOnFINPlatform.ServiceRow.xml"/>
+    <Command Path="DeleteCallingCircle.xml"/>
+    <Command Path="DeleteCallingCircleMembers.xml"/>
+    <Command Path="DeletePAOnFINPlatform.xml"/>
+    <Command Path="DeleteTDOnFINPlatform.xml"/>
+    <Command Path="ModifyService.xml"/>
+    <Command Path="RemoveService.xml"/>
+    <Command Path="UpdateLanguageOnFP.xml"/>
+    <Command Path="UpdateTDCDataSet.xml"/>
+    <Command Path="UpdateTDCDataSet.ActivateServiceRow.xml"/>
+    <Command Path="UpdateTDCDataSet.DeactivateServiceRow.xml"/>
+    <Command Path="Modify Favorite Numbers.xml"/>
+    <Command Path="Remove Favorite Numbers.xml"/>
+    <Command Path="AddCUGWithNewMSISDN.xml"/>
+	<Command Path="CreatePAOnFINPlatform.LowBalanceLimitsRow.xml"/>
+    <Command Path="DeleteCUGByRegisteredMSISDN.xml"/>	
+	<Command Path="RemoveAutopayment.xml"/>
+  </CommandsList>
+  <DecodersList Root="C:\FORIS\SPA\Configuration\SPA.SA\Dictionaries\SCP.155\Decoders">
+    <Decoder Path="FinancialPlatformDecoder.xml"/>
+  </DecodersList>
+  <XsltItemsList Root="C:\FORIS\SPA\Configuration\SPA.SA\Dictionaries\SCP.155\Xslt">
+    <XsltItem Path="TransformToAPNStyle.xslt"/>
+  </XsltItemsList>
+  <FunctionsList Root="C:\FORIS\SPA\Configuration\SPA.SA\Dictionaries\SCP.155\Func" References="references.xml" >
+    <Function Path="ifstringformat_scp.cs"/>
+    <Function Path="convert_phone.cs"/>
+  </FunctionsList>
+</Dictionary>

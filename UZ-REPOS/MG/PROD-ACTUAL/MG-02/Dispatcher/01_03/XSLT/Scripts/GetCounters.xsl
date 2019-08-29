@@ -193,6 +193,7 @@ Created by Vladimir Khovanskiy
         <xsl:variable name="ResultCompliment" select="user:parce_accumulators($accumulator,  'compliment', $session_lang, $lang, $prefix)"/>
         <xsl:variable name="ResultSupervoice" select="user:parce_accumulators($accumulator,  'supervoice', $session_lang, $lang, $prefix)"/>
         <xsl:variable name="ResultIct" select="user:parce_accumulators($accumulator,  'ict', $session_lang, $lang, $prefix)"/>
+        <xsl:variable name="ResultWelcomebonus" select="user:parce_accumulators($accumulator,  'welcomebonus', $session_lang, $lang, $prefix)"/>
             
     <Message type="{/Message/@type}" hostname="dispatcher" id="{ext:newGuid()}" session_id="{/Message/@session_id}" >
     <xsl:attribute name="request_id">
@@ -536,6 +537,12 @@ Created by Vladimir Khovanskiy
 				<xsl:attribute name='name'>ict</xsl:attribute>
 				<xsl:attribute name='value'>
 					<xsl:value-of select='$ResultIct' />
+				</xsl:attribute>
+			</xsl:element>
+                        <xsl:element  name="Attribute">
+				<xsl:attribute name='name'>welcomebonus</xsl:attribute>
+				<xsl:attribute name='value'>
+					<xsl:value-of select='$ResultWelcomebonus' />
 				</xsl:attribute>
 			</xsl:element>
         </Item>

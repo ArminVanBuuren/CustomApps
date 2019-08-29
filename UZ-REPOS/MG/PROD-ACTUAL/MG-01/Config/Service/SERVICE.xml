@@ -586,7 +586,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="CB406278"/>
-		<ivrcon value="413000"/>
+		<ivrcon value="5378"/>
 		<ussdcon value="*001"/>
 		<ussdcon value="*0010"/>
 		<ussdcon value="*0011"/>
@@ -609,7 +609,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="MTSFamily"/>
-		<ivrcon value="413006"/>
+		<ivrcon value="11241"/>
 		<!--ussdcon value="*2*2*2*confirm"/>
 		<ussdcon value="*2*2*2*1"/>
 		<ussdcon value="*2*2*2*2"/>
@@ -656,7 +656,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="FRMCA"/>
-		<ivrcon value="413008"/>
+		<ivrcon value="7152"/>
 		<ussdcon value="*2*2*6*confirm"/>
 		<ussdcon value="*2*2*6*1"/>
 		<ussdcon value="*2*2*6*2"/>
@@ -689,7 +689,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="CB532"/>
-		<ivrcon value="413007"/>
+		<ivrcon value="230"/>
 		<ussdcon value="*2*2*8*confirm"/>
 		<ussdcon value="*2*2*8*1"/>
 		<ussdcon value="*2*2*8*2"/>
@@ -1012,7 +1012,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="NIGHTDRIVE1"/>
-                <ivrcon value="413009"/>
+                <ivrcon value="11574"/>
                 <ussdcon value="*2*2*00*00*18*confirm"/>
 		<ussdcon value="*2*2*00*00*18*1"/>
 		<ussdcon value="*2*2*00*00*18*2"/>
@@ -1037,7 +1037,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="NIGHTDRIVE7"/>
-                <ivrcon value="413010"/>
+                <ivrcon value="12334"/>
                 <ussdcon value="*2*2*00*00*19*confirm"/>
 		<ussdcon value="*2*2*00*00*19*1"/>
 		<ussdcon value="*2*2*00*00*19*2"/>
@@ -1062,7 +1062,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="NIGHTDRIVE30"/>
-                <ivrcon value="413011"/>
+                <ivrcon value="12355"/>
                 <ussdcon value="*2*2*00*00*20*confirm"/>
 		<ussdcon value="*2*2*00*00*20*1"/>
 		<ussdcon value="*2*2*00*00*20*2"/>
@@ -1390,7 +1390,7 @@ tplist               - Компонент выполняет проверки п
 
 		   	>
 		  <soapcon value="FRUNLIMLTE"/>
-		  <ivrcon value="413206"/>
+		  <ivrcon value="13934"/>
         </Service>
 	<Service service_code="FRVIGODNET" datefrom="20160406" dateto="" group="1"
 
@@ -1621,7 +1621,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="SMS100"/>
-		<ivrcon value="413003"/>
+		<ivrcon value="11340"/>
 		<dealerussd value="*018*1"/>
 		<dealerussd value="*018*1*confirm"/>
 		<dealerussd value="*018*1*1"/>
@@ -1637,7 +1637,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="SMS300"/>
-		<ivrcon value="413004"/>
+		<ivrcon value="11343"/>
 		<dealerussd value="*018*2"/>
 		<dealerussd value="*018*2*confirm"/>
 		<dealerussd value="*018*2*1"/>
@@ -1700,7 +1700,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="MB300M1"/>
-                <ivrcon value="413001"/>
+                <ivrcon value="11334"/>
 		<dealerussd value="*019*1"/>
 		<dealerussd value="*019*1*confirm"/>
 		<dealerussd value="*019*1*1"/>
@@ -1717,7 +1717,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="MB500M"/>
-                <ivrcon value="413207"/>
+                <ivrcon value="13734"/>
 		<dealerussd value="*019*7"/>
 		<dealerussd value="*019*7*confirm"/>
 		<dealerussd value="*019*7*1"/>
@@ -1734,7 +1734,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="MB1000M1"/>
-                <ivrcon value="413002"/>
+                <ivrcon value="11337"/>
 		<dealerussd value="*019*2"/>
 		<dealerussd value="*019*2*confirm"/>
 		<dealerussd value="*019*2*1"/>
@@ -1751,7 +1751,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="MB2000M1"/>
-                <ivrcon value="413105"/>
+                <ivrcon value="12454"/>
 		<dealerussd value="*019*5"/>
 		<dealerussd value="*019*5*confirm"/>
 		<dealerussd value="*019*5*1"/>
@@ -1768,7 +1768,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="MB3000M1"/>
-                <ivrcon value="413101"/>
+                <ivrcon value="18008"/>
 		<dealerussd value="*019*3"/>
 		<dealerussd value="*019*3*confirm"/>
 		<dealerussd value="*019*3*1"/>
@@ -1785,7 +1785,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="MB5000M1"/>
-                <ivrcon value="413102"/>
+                <ivrcon value="11557"/>
 		<dealerussd value="*019*4"/>
 		<dealerussd value="*019*4*confirm"/>
 		<dealerussd value="*019*4*1"/>
@@ -1802,7 +1802,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="MB10000M1"/>
-                <ivrcon value="413106"/>
+                <ivrcon value="12457"/>
 		<dealerussd value="*019*6"/>
 		<dealerussd value="*019*6*confirm"/>
 		<dealerussd value="*019*6*1"/>
@@ -1819,7 +1819,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="MB20000M1"/>
-                <ivrcon value="413108"/>
+                <ivrcon value="17866"/>
 		<dealerussd value="*019*8"/>
 		<dealerussd value="*019*8*confirm"/>
 		<dealerussd value="*019*8*1"/>
@@ -1834,7 +1834,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="MB30000M1"/>
-                <ivrcon value="413300"/>
+                <ivrcon value="18008"/>
 		<dealerussd value="*019*9"/>
 		<dealerussd value="*019*9*confirm"/>
 		<dealerussd value="*019*9*1"/>
@@ -1849,7 +1849,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="MB50000M1"/>
-                <ivrcon value="413500"/>
+                <ivrcon value="18011"/>
 		<dealerussd value="*019*10"/>
 		<dealerussd value="*019*10*confirm"/>
 		<dealerussd value="*019*10*1"/>
@@ -2071,7 +2071,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="AVTOMB300"/>
-                <ivrcon value="413200"/>
+                <ivrcon value="12054"/>
                 <dealerussd value="*202*300"/>
 		<dealerussd value="*202*300*confirm"/>
 		<dealerussd value="*202*300*1"/>
@@ -2087,7 +2087,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="AVTOMB500"/>
-                <ivrcon value="413208"/>
+                <ivrcon value="13860"/>
                 <dealerussd value="*202*500"/>
 		<dealerussd value="*202*500*confirm"/>
 		<dealerussd value="*202*500*1"/>
@@ -2103,7 +2103,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="AVTOMB1000"/>
-                <ivrcon value="413201"/>
+                <ivrcon value="12094"/>
                 <dealerussd value="*202*1000"/>
 		<dealerussd value="*202*1000*confirm"/>
 		<dealerussd value="*202*1000*1"/>
@@ -2119,7 +2119,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="AVTOMB2000"/>
-                <ivrcon value="413202"/>
+                <ivrcon value="12917"/>
                 <dealerussd value="*202*2000"/>
 		<dealerussd value="*202*2000*confirm"/>
 		<dealerussd value="*202*2000*1"/>
@@ -2135,7 +2135,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="AVTOMB3000"/>
-                <ivrcon value="413203"/>
+                <ivrcon value="12934"/>
                 <dealerussd value="*202*3000"/>
 		<dealerussd value="*202*3000*confirm"/>
 		<dealerussd value="*202*3000*1"/>
@@ -2151,7 +2151,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="AVTOMB5000"/>
-                <ivrcon value="413204"/>
+                <ivrcon value="12937"/>
                 <dealerussd value="*202*5000"/>
 		<dealerussd value="*202*5000*confirm"/>
 		<dealerussd value="*202*5000*1"/>
@@ -2167,12 +2167,54 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="AVTOMB10000"/>
-                <ivrcon value="413205"/>
+                <ivrcon value="12940"/>
                 <dealerussd value="*202*10000"/>
 		<dealerussd value="*202*10000*confirm"/>
 		<dealerussd value="*202*10000*1"/>
 		<dealerussd value="*2*2*4*00*00*21*confirm"/>
 		<dealerussd value="*2*2*4*00*00*21*1"/>
+	</Service>
+	<Service service_code="AVTOMB20000" datefrom="20131001" dateto="" group="2"
+
+			service_name_ruk="OnNet-20000"
+			service_name_rut="OnNet-20000"
+			service_name_uz="OnNet-20000"
+			service_name_en="OnNet-20000"
+
+			>
+		<soapcon value="AVTOMB20000"/>
+                <ivrcon value="19602"/>
+                <dealerussd value="*202*20000"/>
+		<dealerussd value="*202*20000*confirm"/>
+		<dealerussd value="*202*20000*1"/>
+	</Service>
+	<Service service_code="AVTOMB30000" datefrom="20131001" dateto="" group="2"
+
+			service_name_ruk="OnNet-30000"
+			service_name_rut="OnNet-30000"
+			service_name_uz="OnNet-30000"
+			service_name_en="OnNet-30000"
+
+			>
+		<soapcon value="AVTOMB30000"/>
+                <ivrcon value="19605"/>
+                <dealerussd value="*202*30000"/>
+		<dealerussd value="*202*30000*confirm"/>
+		<dealerussd value="*202*30000*1"/>
+	</Service>
+	<Service service_code="AVTOMB50000" datefrom="20131001" dateto="" group="2"
+
+			service_name_ruk="OnNet-50000"
+			service_name_rut="OnNet-50000"
+			service_name_uz="OnNet-50000"
+			service_name_en="OnNet-50000"
+
+			>
+		<soapcon value="AVTOMB50000"/>
+                <ivrcon value="19608"/>
+                <dealerussd value="*202*50000"/>
+		<dealerussd value="*202*50000*confirm"/>
+		<dealerussd value="*202*50000*1"/>
 	</Service>
         <Service service_code="FRONNETCORP300" datefrom="20131001" dateto="" group="2"
 
@@ -3006,7 +3048,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="FRGPRS100WEEK"/>
-		<ivrcon value="415001"/>
+		<ivrcon value="14334"/>
 		<dealerussd value="*105*100"/>
 		<dealerussd value="*105*100*confirm"/>
 		<dealerussd value="*105*100*1"/>
@@ -3020,7 +3062,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="FRGPRS200WEEK"/>
-		<ivrcon value="415002"/>
+		<ivrcon value="14337"/>
 		<dealerussd value="*105*200"/>
 		<dealerussd value="*105*200*confirm"/>
 		<dealerussd value="*105*200*1"/>
@@ -3034,7 +3076,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="FRGPRS300WEEK"/>
-		<ivrcon value="415003"/>
+		<ivrcon value="14340"/>
 		<dealerussd value="*105*300"/>
 		<dealerussd value="*105*300*confirm"/>
 		<dealerussd value="*105*300*1"/>
@@ -3175,7 +3217,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="FRMIN120"/>
-		<ivrcon value="407001"/>
+		<ivrcon value="15614"/>
 		<dealerussd value="*2*2*00*00*21*1*confirm"/>
 		<dealerussd value="*2*2*00*00*21*1*1"/>
 		<dealerussd value="*2*2*00*00*21*1*2"/>
@@ -3194,7 +3236,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="FRMIN180"/>
-		<ivrcon value="407002"/>
+		<ivrcon value="15617"/>
 		<dealerussd value="*2*2*00*00*21*2*confirm"/>
 		<dealerussd value="*2*2*00*00*21*2*1"/>
 		<dealerussd value="*2*2*00*00*21*2*2"/>
@@ -3213,7 +3255,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="FRMIN300"/>
-		<ivrcon value="407003"/>
+		<ivrcon value="15620"/>
 		<dealerussd value="*2*2*00*00*21*3*confirm"/>
 		<dealerussd value="*2*2*00*00*21*3*1"/>
 		<dealerussd value="*2*2*00*00*21*3*2"/>
@@ -3469,6 +3511,17 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="FRGPRS300TEST"/>
+
+	</Service>
+	<Service service_code="FRMBPACKMSK1000BONUS" datefrom="20131001" dateto="" group="2" delayed="true"
+
+			service_name_ruk="Promo internet 1000 Mb + BONUS"
+			service_name_rut="Promo internet 1000 Mb + BONUS"
+			service_name_uz="Promo internet 1000 Mb + BONUS"
+			service_name_en="Promo internet 1000 Mb + BONUS"
+
+			>
+		<soapcon value="FRMBPACKMSK1000BONUS"/>
 
 	</Service>
 	<Service service_code="FRGPRS300B" datefrom="20131001" dateto="" group="2" delayed="true"
@@ -3767,6 +3820,7 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="FRMIN2019"/>
+                <ivrcon value="18982"/>
                 <dealerussd value="*103*2019"/>        
 		<dealerussd value="*103*2019*confirm"/>
 		<dealerussd value="*103*2019*1"/>
@@ -3781,10 +3835,206 @@ tplist               - Компонент выполняет проверки п
 
 			>
 		<soapcon value="FR2019M1"/>
+                <ivrcon value="18979"/>
                 <dealerussd value="*102*2019"/>        
 		<dealerussd value="*102*2019*confirm"/>
 		<dealerussd value="*102*2019*1"/>
 
+
+	</Service>
+	<Service service_code="FRMULTIYORQIN" datefrom="20131001" dateto="" group="2"
+
+			service_name_ruk="Multi Yorqin"
+			service_name_rut="Multi Yarkiy"
+			service_name_uz="Multi Yorqin"
+			service_name_en="Multi Yorqin"
+
+			>
+		<soapcon value="FRMULTIYORQIN"/>
+                <ivrcon value=""/>
+		<dealerussd value="*301*1"/>
+		<dealerussd value="*301*1*confirm"/>
+		<dealerussd value="*301*1*1"/>
+
+	</Service>
+	<Service service_code="FRMULMINCHL" datefrom="20131001" dateto="" group="2"
+
+			service_name_ruk="Multi Chilla Lite"
+			service_name_rut="Multi Chilla Lite"
+			service_name_uz="Multi Chilla Lite"
+			service_name_en="Multi Chilla Lite"
+
+			>
+		<soapcon value="FRMULMINCHL"/>
+                <ivrcon value=""/>
+		<dealerussd value="*301*2"/>
+		<dealerussd value="*301*2*confirm"/>
+		<dealerussd value="*301*2*1"/>
+
+	</Service>
+	<Service service_code="FRMULMINCHIL" datefrom="20131001" dateto="" group="2"
+
+			service_name_ruk="Multi Chilla"
+			service_name_rut="Multi Chilla"
+			service_name_uz="Multi Chilla"
+			service_name_en="Multi Chilla"
+
+			>
+		<soapcon value="FRMULMINCHIL"/>
+                <ivrcon value=""/>
+		<dealerussd value="*301*3"/>
+		<dealerussd value="*301*3*confirm"/>
+		<dealerussd value="*301*3*1"/>
+
+	</Service>
+	<Service service_code="FRMULMINAS" datefrom="20131001" dateto="" group="2"
+
+			service_name_ruk="Multi Asosiy"
+			service_name_rut="Multi Bazoviy"
+			service_name_uz="Multi Asosiy"
+			service_name_en="Multi Asosiy"
+
+			>
+		<soapcon value="FRMULMINAS"/>
+                <ivrcon value=""/>
+		<dealerussd value="*301*4"/>
+		<dealerussd value="*301*4*confirm"/>
+		<dealerussd value="*301*4*1"/>
+
+	</Service>
+	<Service service_code="FRMULMINST" datefrom="20131001" dateto="" group="2"
+
+			service_name_ruk="Multi Standart"
+			service_name_rut="Multi Standart"
+			service_name_uz="Multi Standart"
+			service_name_en="Multi Standart"
+
+			>
+		<soapcon value="FRMULMINST"/>
+                <ivrcon value=""/>
+		<dealerussd value="*301*5"/>
+		<dealerussd value="*301*5*confirm"/>
+		<dealerussd value="*301*5*1"/>
+
+	</Service>
+	<Service service_code="FRMULMINOP" datefrom="20131001" dateto="" group="2"
+
+			service_name_ruk="Multi Optimal"
+			service_name_rut="Multi Optimal^niy"
+			service_name_uz="Multi Optimal"
+			service_name_en="Multi Optimal"
+
+			>
+		<soapcon value="FRMULMINOP"/>
+                <ivrcon value=""/>
+		<dealerussd value="*301*6"/>
+		<dealerussd value="*301*6*confirm"/>
+		<dealerussd value="*301*6*1"/>
+
+	</Service>
+	<Service service_code="FRMULMINOPPL" datefrom="20131001" dateto="" group="2"
+
+			service_name_ruk="Multi Optimal+"
+			service_name_rut="Multi Optimal^niy+"
+			service_name_uz="Multi Optimal+"
+			service_name_en="Multi Optimal+"
+
+			>
+		<soapcon value="FRMULMINOPPL"/>
+                <ivrcon value=""/>
+		<dealerussd value="*301*7"/>
+		<dealerussd value="*301*7*confirm"/>
+		<dealerussd value="*301*7*1"/>
+
+	</Service>
+	<Service service_code="FRMULMINQUL" datefrom="20131001" dateto="" group="2"
+
+			service_name_ruk="Multi Qulay"
+			service_name_rut="Multi Udobniy"
+			service_name_uz="Multi Qulay"
+			service_name_en="Multi Qulay"
+
+			>
+		<soapcon value="FRMULMINQUL"/>
+                <ivrcon value=""/>
+		<dealerussd value="*301*8"/>
+		<dealerussd value="*301*8*confirm"/>
+		<dealerussd value="*301*8*1"/>
+
+	</Service>
+	<Service service_code="FRMULMINQULPL" datefrom="20131001" dateto="" group="2"
+
+			service_name_ruk="Multi Qulay+"
+			service_name_rut="Multi Udobniy+"
+			service_name_uz="Multi Qulay+"
+			service_name_en="Multi Qulay+"
+
+			>
+		<soapcon value="FRMULMINQULPL"/>
+                <ivrcon value=""/>
+		<dealerussd value="*301*9"/>
+		<dealerussd value="*301*9*confirm"/>
+		<dealerussd value="*301*9*1"/>
+
+	</Service>
+	<Service service_code="FRMULMINPR" datefrom="20131001" dateto="" group="2"
+
+			service_name_ruk="Multi Premial"
+			service_name_rut="Multi Premial^niy"
+			service_name_uz="Multi Premial"
+			service_name_en="Multi Premial"
+
+			>
+		<soapcon value="FRMULMINPR"/>
+                <ivrcon value=""/>
+		<dealerussd value="*301*10"/>
+		<dealerussd value="*301*10*confirm"/>
+		<dealerussd value="*301*10*1"/>
+
+	</Service>
+	<Service service_code="FRMULMINIDEAL" datefrom="20131001" dateto="" group="2"
+
+			service_name_ruk="Multi Ideal"
+			service_name_rut="Multi Ideal^niy"
+			service_name_uz="Multi Ideal"
+			service_name_en="Multi Ideal"
+
+			>
+		<soapcon value="FRMULMINIDEAL"/>
+                <ivrcon value=""/>
+		<dealerussd value="*301*11"/>
+		<dealerussd value="*301*11*confirm"/>
+		<dealerussd value="*301*11*1"/>
+
+	</Service>
+	<Service service_code="FRMULMINVIP" datefrom="20131001" dateto="" group="2"
+
+			service_name_ruk="Multi VIP"
+			service_name_rut="Multi VIP"
+			service_name_uz="Multi VIP"
+			service_name_en="Multi VIP"
+
+			>
+		<soapcon value="FRMULMINVIP"/>
+                <ivrcon value=""/>
+		<dealerussd value="*301*12"/>
+		<dealerussd value="*301*12*confirm"/>
+		<dealerussd value="*301*12*1"/>
+
+	</Service>
+	<Service service_code="FRMULMINEKSKL" datefrom="20131001" dateto="" group="2"
+
+			service_name_ruk="Multi Eksklyuziv"
+			service_name_rut="Multi Eksklyuziv"
+			service_name_uz="Multi Eksklyuziv"
+			service_name_en="Multi Exclusive"
+
+			>
+		<soapcon value="FRMULMINEKSKL"/>
+                <ivrcon value=""/>
+		<dealerussd value="*301*13"/>
+		<dealerussd value="*301*13*confirm"/>
+		<dealerussd value="*301*13*1"/>
 
 	</Service>
         <Service service_code="MB300M1" datefrom="20131001" dateto="" group="5" 

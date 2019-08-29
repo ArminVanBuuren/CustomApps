@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TraceSchema Name="FORIS.SPA.WCFGateway">
+  <TraceSchemaItem Name="WCFGateway">
+    <Message Name="WCFGateway.RUN"/>
+    <Message Name="WCFGateway.ERROR"/>
+    <Message Name="WCFGateway.REPORT"/>
+    <Message Name="WCFGateway.START"/>
+    <Message Name="WCFGateway.STOP"/>
+    <!--Message Name="WCFGateway.RX_MESSAGE"/>
+    <Message Name="WCFGateway.RX_PACK"/-->
+  </TraceSchemaItem>
+</TraceSchema>
+

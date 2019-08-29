@@ -4,6 +4,7 @@
 		<InputQueue name=".\crmfilter_output_1"/>
 		<OutputQueue name=".\crmfilter_input_1" timeToBeReceived="1000" timeToReachQueue="10" recoverable="false">
 			<Override connector="IVRCON_03_02" timeToBeReceived="20" recoverable="true"/>
+			<Override connector="SMSCON_03_01" timeToBeReceived="20"/>
 		</OutputQueue>
 	</Queues>
 	<Settings>
@@ -20,5 +21,13 @@
 	</Settings>
 	<TemplateToConnector>
 		<Map template_id="InvokeRequest"              connector="IVRCON_03_01"     template_name="INER_proc"/>
+		<Map template_id="sms -2"                     connector="SMSCON_03_01"     template_name="DeliveryRequest"/>
+		<Map template_id="SMS-spam"                   connector="SMSCON_03_01"     template_name="DeliveryRequest"/>
+		<Map template_id="AutoInformationOfBalance"   connector="SMSCON_03_01"     template_name="DeliveryRequestAutoInformation"/>
+		<Map template_id="SMSAutoInformation"         connector="SMSCON_03_01"     template_name="DeliveryRequestAutoInformation"/>
+		<Map template_id="SMSMonitoring"              connector="SMSCON_03_01"     template_name="SMSMonitoring"/>
+                <Map template_id="SMSlocal"                   connector="SMSCON_03_01"     template_name="SMSlocal"/>
+		<Map template_id="AddToGroup_onClean"         connector="SMSCON_03_01"     template_name="AddToGroup_onClean_MTSGROUP" processor="SMSTemplateProcessor"/>
+       		<Map template_id="SMSNewCustomer"             connector="SMSCON_03_01"     template_name="SMSNewCustomer"/>
 	</TemplateToConnector>
 </Application>

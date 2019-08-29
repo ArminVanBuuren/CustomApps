@@ -1,0 +1,188 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="ReactivationHomeZoneOnFP">
+  <objectList>
+    <object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll" />
+    <object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll" />
+    <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ByServicesCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterByXmlNodes" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="CommandDataConstructorExt" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.CommandDataConstructorExt" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IdentifiersGenerator" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.IdentifiersGenerator" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="TransformerRequest" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.XslTransformerRequest" assembly="FORIS.SPA.MmlProcessing.dll" />
+  </objectList>
+  <automat>
+    <node name="CopyModify-Node" object="XmlNodesCopier">
+      <resultlist>
+        <result value="" node="CopyInitial-Node" />
+      </resultlist>
+      <parameterslist>
+        <param name="SrcXml" value="xmlrequest" />
+        <param name="DstMessage" value="xmlrequest" />
+        <param name="CopyContentType" value="InnerXml" />
+        <param name="SrcXmlPath:0" value="ExtendedRequestMessage/AdditionalData/ModificationList" />
+        <param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/ProvisionList/ServiceList" />
+      </parameterslist>
+    </node>
+    <node name="CopyInitial-Node" object="XmlNodesCopier">
+      <resultlist>
+        <result value="" node="CopyModifyObject-Node" />
+      </resultlist>
+      <parameterslist>
+        <param name="SrcXml" value="xmlrequest" />
+        <param name="DstMessage" value="xmlrequest" />
+        <param name="CopyContentType" value="InnerXml" />
+        <param name="SrcXmlPath:0" value="ExtendedRequestMessage/AdditionalData/InitialList" />
+        <param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/WithdrawalList/ServiceList" />
+      </parameterslist>
+    </node>
+    <node name="CopyModifyObject-Node" object="XmlNodesCopier">
+      <resultlist>
+        <result value="" node="CopyInitialObject-Node" />
+      </resultlist>
+      <parameterslist>
+        <param name="SrcXml" value="request" />
+        <param name="DstMessage" value="request" />
+        <param name="CopyContentType" value="InnerXml" />
+        <param name="SrcXmlPath:0" value="ExtendedRequestMessage/AdditionalData/ModificationList" />
+        <param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/ProvisionList/ServiceList" />
+      </parameterslist>
+    </node>
+    <node name="CopyInitialObject-Node" object="XmlNodesCopier">
+      <resultlist>
+        <result value="" node="XslTransformerRequest" />
+      </resultlist>
+      <parameterslist>
+        <param name="SrcXml" value="request" />
+        <param name="DstMessage" value="request" />
+        <param name="CopyContentType" value="InnerXml" />
+        <param name="SrcXmlPath:0" value="ExtendedRequestMessage/AdditionalData/InitialList" />
+        <param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/WithdrawalList/ServiceList" />
+      </parameterslist>
+    </node>
+    <node name="XslTransformerRequest" object="TransformerRequest">
+      <resultlist>
+        <result value="0" node="BySubscribersCutter" />
+      </resultlist>
+      <parameterslist>
+        <param name="XsltItemName:0" value="TransformToAPNStyle" />
+      </parameterslist>
+    </node>
+    <node name="BySubscribersCutter" object="BySubscribersCutter">
+      <resultlist>
+        <result value="0" node="IdentifiersGenerator-Node" />
+        <result value="1" node="" />
+      </resultlist>
+    </node>
+    <node name="DummyResponderNode" object="DummyResponder">
+      <resultlist>
+        <result value="" node="BySubscribersCutter" />
+      </resultlist>
+      <parameterslist>
+        <param name="OverallResult" value="SUCCESS" />
+        <param name="DetailedResult" value="SUCCESS" />
+      </parameterslist>
+    </node>
+    <node name="IdentifiersGenerator-Node" object="IdentifiersGenerator">
+      <parameterslist>
+        <param name="WellknownName" value="GlobalUid" />
+      </parameterslist>
+      <resultlist>
+        <result value="0" node="CommandDataConstructorDelete-Node" />
+      </resultlist>
+    </node>
+    <node name="CommandDataConstructorDelete-Node" object="CommandDataConstructorExt">
+      <resultlist>
+        <result value="" node="DeleteService" />
+      </resultlist>
+      <parameterslist>
+        <param name="DynamicObjectName:0" value="Services" />
+        <param name="DynamicObjectName:1" value="ServicesParams" />
+        <param name="Command:0" value="RemoveService.ServiceRow" />
+        <param name="Command:1" value="RemoveService.ParameterRow" />
+        <param name="XmlPath:0" value="ExtendedRequestMessage/AdditionalData/WithdrawalList/ServiceList/*" />
+        <param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/WithdrawalList/ServiceList/*/*" />
+        <param name="UseIfNotXmlPath:0" value="//DoNotProcessingInFinancialPlatform[text()='True']" />
+        <param name="UseIfNotXmlPath:1" value="//DoNotProcessingInFinancialPlatform[text()='1']" />
+        <param name="UseInnerIfXmlPath:0" value="ExtendedRequestMessage/AdditionalData/WithdrawalList/ServiceList//FinancialPlatform" />
+        <param name="ApplyIfXmlPath:0" value="ExtendedRequestMessage/AdditionalData/WithdrawalList/ServiceList/*[1]" />
+        <param name="IdentifierGenerationType" value="Unique" />
+        <param name="WellknownName" value="ServiceIdentifier" />
+      </parameterslist>
+    </node>
+    <node name="DeleteService" object="Commander">
+      <resultlist>
+        <result value="0" node="IdentifiersGenerator2-Node" />
+        <result value="1538" node="IdentifiersGenerator2-Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="ExtendedRequestMessage/AdditionalData/InitialList/*[1]" />
+        <param name="Command" value="AssignService" />
+        <param name="AppendSubscribersData" value="true" />
+        <param name="Asynchronous" value="true" />
+      </parameterslist>
+    </node>
+    <node name="IdentifiersGenerator2-Node" object="IdentifiersGenerator">
+      <parameterslist>
+        <param name="WellknownName" value="GlobalUid" />
+      </parameterslist>
+      <resultlist>
+        <result value="0" node="CommandDataConstructorAssign-Node" />
+      </resultlist>
+    </node>
+    <node name="CommandDataConstructorAssign-Node" object="CommandDataConstructorExt">
+      <resultlist>
+        <result value="" node="AssignService" />
+      </resultlist>
+      <parameterslist>
+        <param name="DynamicObjectName:0" value="Services" />
+        <param name="DynamicObjectName:1" value="ServicesParams" />
+        <param name="Command:0" value="AssignService.ServiceRow" />
+        <param name="Command:1" value="AssignService.ParameterRow" />
+        <param name="XmlPath:0" value="ExtendedRequestMessage/AdditionalData/ProvisionList/ServiceList/*" />
+        <param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/ProvisionList/ServiceList/*/*" />
+        <param name="UseIfNotXmlPath:0" value="//DoNotProcessingInFinancialPlatform[text()='True']" />
+        <param name="UseIfNotXmlPath:1" value="//DoNotProcessingInFinancialPlatform[text()='1']" />
+        <param name="UseInnerIfXmlPath:0" value="ExtendedRequestMessage/AdditionalData/ProvisionList/ServiceList//FinancialPlatform" />
+        <param name="ApplyIfXmlPath:0" value="ExtendedRequestMessage/AdditionalData/ProvisionList/ServiceList/*[1]" />
+        <param name="IdentifierGenerationType" value="Unique" />
+        <param name="WellknownName" value="ServiceIdentifier" />
+      </parameterslist>
+    </node>
+    <node name="AssignService" object="Commander">
+      <resultlist>
+        <result value="0" node="ResponseAssembler" />
+        <result value="1538" node="DummyResponderNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="ExtendedRequestMessage/AdditionalData/ModificationList/*[1]" />
+        <param name="Command" value="AssignService" />
+        <param name="AppendSubscribersData" value="true" />
+        <param name="Asynchronous" value="true" />
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="BySubscribersCutter" />
+      </resultlist>
+    </node>
+    <node name="NoDataDummyResponderNode" object="DummyResponder">
+      <resultlist>
+        <result value="" node="NoDataResponseAssemblerNode" />
+      </resultlist>
+      <parameterslist>
+        <param name="OverallResult" value="SUCCESS" />
+        <param name="DetailedResult" value="SUCCESS" />
+        <param name="DetailedResultDescription" value="Command not sending" />
+      </parameterslist>
+    </node>
+    <node name="NoDataResponseAssemblerNode" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="" />
+      </resultlist>
+    </node>
+  </automat>
+</scenario>

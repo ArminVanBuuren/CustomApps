@@ -3867,4 +3867,24 @@
                         <param name="dbresult" value="0"/>
 		</output>
         </template>
+	<template procedureName="GetBalance" sessionStorage="Memory" sessionLifetime="20" persistent="true">
+		<receiveTemplate>
+			<Message type="retrievecustomerdata" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+				<Item customer="${customer}" subject="balance">
+					<Attribute name="unpayment" value="0"/>
+					<Attribute name="requestcountertype" value="1"/>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="oparam:result" value="${balanceintpartdotpart}"/>
+		</deliveryTemplate>
+		<input>
+			<param name="customer"/>
+		</input>
+		<output>
+			<param name="result" value=""/>
+			<param name="dbresult" value="0"/>
+		</output>
+	</template>
 </templates>

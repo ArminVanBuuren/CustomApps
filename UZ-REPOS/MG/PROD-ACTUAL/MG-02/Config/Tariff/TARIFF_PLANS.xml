@@ -381,10 +381,10 @@ tplist               - Компонент выполняет проверки п
 			>
 		<soapcon value="122"/>
 		<ivrcon value="122"/>
-		<dealerussd value="*103*confirm"/>
+		<!--dealerussd value="*103*confirm"/>
 		<dealerussd value="*103*1"/>
 		<dealerussd value="*2*1*4*confirm"/>
-		<dealerussd value="*2*1*4*1"/>
+		<dealerussd value="*2*1*4*1"/-->
 	</Tariff>
         <Tariff ivrcode="124" datefrom="20131001" dateto="" group="1" 
 
@@ -414,10 +414,10 @@ tplist               - Компонент выполняет проверки п
 			>
 		<soapcon value="125"/>
 		<ivrcon value="125"/>
-		<dealerussd value="*105*confirm"/>
+		<!--dealerussd value="*105*confirm"/>
 		<dealerussd value="*105*1"/>
 		<dealerussd value="*2*1*2*confirm"/>
-		<dealerussd value="*2*1*2*1"/>
+		<dealerussd value="*2*1*2*1"/-->
 	</Tariff>
         <Tariff ivrcode="126" datefrom="20131001" dateto="" group="1"
 
@@ -610,10 +610,10 @@ tplist               - Компонент выполняет проверки п
 
   		<soapcon value="144"/>
 		<ivrcon value="144"/>
-		<dealerussd value="*777*confirm"/>
+		<!--dealerussd value="*777*confirm"/>
 		<dealerussd value="*777*1"/>
 		<dealerussd value="*2*1*11*confirm"/>
-		<dealerussd value="*2*1*11*1"/>
+		<dealerussd value="*2*1*11*1"/-->
 	</Tariff>
         <Tariff ivrcode="147" datefrom="20131001" dateto="" group="1" availbalance="35"
 			tariffname_ruk="Perfect"
@@ -626,10 +626,10 @@ tplist               - Компонент выполняет проверки п
 
   		<soapcon value="147"/>
 		<ivrcon value="147"/>
-		<dealerussd value="*111*confirm"/>
+		<!--dealerussd value="*111*confirm"/>
 		<dealerussd value="*111*1"/>
 		<dealerussd value="*2*1*12*confirm"/>
-		<dealerussd value="*2*1*12*1"/>
+		<dealerussd value="*2*1*12*1"/-->
 
 	</Tariff>
         <Tariff ivrcode="148" datefrom="20131001" dateto="" group="1" availbalance="0"
@@ -795,6 +795,34 @@ tplist               - Компонент выполняет проверки п
 
   		<soapcon value="159"/>
 		<ivrcon value="159"/>
+		<dealerussd value="*040*confirm"/>
+		<dealerussd value="*040*1"/>
+	</Tariff>
+        <Tariff ivrcode="162" datefrom="20131001" dateto="" group="1" 
+ 
+			tariffname_ruk="Uzbekistan Pass Lite"
+			tariffname_rut="Uzbekistan Pass Lite"
+			tariffname_uz="Uzbekistan Pass Lite"
+			tariffname_en="Uzbekistan Pass Lite"
+			tariffname_scg="Uzbekistan Pass Lite"
+
+			>
+
+  		<soapcon value="162"/>
+		<ivrcon value="162"/>
+	</Tariff>
+        <Tariff ivrcode="163" datefrom="20131001" dateto="" group="1"
+ 
+			tariffname_ruk="Uzbekistan Pass"
+			tariffname_rut="Uzbekistan Pass"
+			tariffname_uz="Uzbekistan Pass"
+			tariffname_en="Uzbekistan Pass"
+			tariffname_scg="Uzbekistan Pass"
+
+			>
+
+  		<soapcon value="163"/>
+		<ivrcon value="163"/>
 	</Tariff>
         <Tariff ivrcode="164" datefrom="20131001" dateto="" group="1" availbalance="7.84"
  
@@ -988,10 +1016,8 @@ tplist               - Компонент выполняет проверки п
 
   		<soapcon value="174"/>
 		<ivrcon value="174"/>
-		<!--dealerussd value="*135*confirm"/>
-		<dealerussd value="*135*1"/>
-		<dealerussd value="*2*1*00*22*confirm"/>
-		<dealerussd value="*2*1*00*22*1"/-->
+		<dealerussd value="*109*confirm"/>
+		<dealerussd value="*109*1"/>
 
 	</Tariff>
         <Tariff ivrcode="175" datefrom="20131001" dateto="" group="1" availbalance="349.13"
@@ -1098,16 +1124,326 @@ tplist               - Компонент выполняет проверки п
 		<dealerussd value="*2*1*00*19*1"/-->
 
 	</Tariff>
+        <Tariff ivrcode="181" datefrom="20131001" dateto="" group="1" availbalance="18.53"
+ 
+			tariffname_ruk="Eksklyuziv"
+			tariffname_rut="Eksklyuziv"
+			tariffname_uz="Eksklyuziv"
+			tariffname_en="Exclusive"
+			tariffname_scg="Eksklyuziv"
 
+			>
 
+  		<soapcon value="181"/>
+		<ivrcon value="181"/>
 
+	</Tariff>
+        <Tariff ivrcode="182" datefrom="20131001" dateto="" group="1"
+ 
+			tariffname_ruk="Xizmat 1"
+			tariffname_rut="Xizmat 1"
+			tariffname_uz="Xizmat 1"
+			tariffname_en="Xizmat 1"
+			tariffname_scg="Xizmat 1"
 
+			>
 
+  		<soapcon value="182"/>
+		<ivrcon value="182"/>
 
+	</Tariff>
+        <Tariff ivrcode="183" datefrom="20131001" dateto="" group="1"
+ 
+			tariffname_ruk="Xizmat 2"
+			tariffname_rut="Xizmat 2"
+			tariffname_uz="Xizmat 2"
+			tariffname_en="Xizmat 2"
+			tariffname_scg="Xizmat 2"
 
+			>
 
+  		<soapcon value="183"/>
+		<ivrcon value="183"/>
 
+	</Tariff>
+        <Tariff ivrcode="184" datefrom="20131001" dateto="" group="1"
+ 
+			tariffname_ruk="Xizmat 3"
+			tariffname_rut="Xizmat 3"
+			tariffname_uz="Xizmat 3"
+			tariffname_en="Xizmat 3"
+			tariffname_scg="Xizmat 3"
 
+			>
+
+  		<soapcon value="184"/>
+		<ivrcon value="184"/>
+
+	</Tariff>
+        <Tariff ivrcode="185" datefrom="20131001" dateto="" group="1" availbalance="4.75"
+ 
+			tariffname_ruk="Chilla Lite"
+			tariffname_rut="Chilla Lite"
+			tariffname_uz="Chilla Lite"
+			tariffname_en="Chilla Lite"
+			tariffname_scg="Chilla Lite"
+
+			>
+
+  		<soapcon value="185"/>
+		<ivrcon value="185"/>
+		<dealerussd value="*042*confirm"/>
+		<dealerussd value="*042*1"/>
+
+	</Tariff>
+        <Tariff ivrcode="186" datefrom="20131001" dateto="" group="1" availbalance="7.13"
+ 
+			tariffname_ruk="Afrosiyob"
+			tariffname_rut="Afrosiyob"
+			tariffname_uz="Afrosiyob"
+			tariffname_en="Afrosiyob"
+			tariffname_scg="Afrosiyob"
+
+			>
+
+  		<soapcon value="186"/>
+		<ivrcon value="186"/>
+		<!--dealerussd value="*042*confirm"/>
+		<dealerussd value="*042*1"/-->
+
+	</Tariff>
+        <Tariff ivrcode="187" datefrom="20131001" dateto="" group="1" availbalance="5.94"
+ 
+			tariffname_ruk="Lokomotiv"
+			tariffname_rut="Lokomotiv"
+			tariffname_uz="Lokomotiv"
+			tariffname_en="Lokomotiv"
+			tariffname_scg="Lokomotiv"
+
+			>
+
+  		<soapcon value="187"/>
+		<ivrcon value="187"/>
+		<!--dealerussd value="*042*confirm"/>
+		<dealerussd value="*042*1"/-->
+
+	</Tariff>
+        <Tariff ivrcode="188" datefrom="20131001" dateto="" group="1" availbalance="14.25"
+ 
+			tariffname_ruk="Yorqin"
+			tariffname_rut="Yorqin"
+			tariffname_uz="Yorqin"
+			tariffname_en="Yorqin"
+			tariffname_scg="Yorqin"
+
+			>
+
+  		<soapcon value="188"/>
+		<ivrcon value="188"/>
+		<dealerussd value="*113*confirm"/>
+		<dealerussd value="*113*1"/>
+
+	</Tariff>
+        <Tariff ivrcode="189" datefrom="20131001" dateto="" group="1" availbalance="2.38"
+ 
+			tariffname_ruk="Oson"
+			tariffname_rut="Oson"
+			tariffname_uz="Oson"
+			tariffname_en="Oson"
+			tariffname_scg="Oson"
+
+			>
+
+  		<soapcon value="189"/>
+		<ivrcon value="189"/>
+
+	</Tariff>
+        <Tariff ivrcode="190" datefrom="20131001" dateto="" group="1" availbalance="142.51"
+ 
+			tariffname_ruk="Yorqin Yillik"
+			tariffname_rut="Yorqin Yillik"
+			tariffname_uz="Yorqin Yillik"
+			tariffname_en="Yorqin Yillik"
+			tariffname_scg="Yorqin Yillik"
+
+			>
+
+  		<soapcon value="190"/>
+		<ivrcon value="190"/>
+	</Tariff>
+        <Tariff ivrcode="191" datefrom="20131001" dateto="" group="1" availbalance="4.75"
+ 
+			tariffname_ruk="Shodlik"
+			tariffname_rut="Shodlik"
+			tariffname_uz="Shodlik"
+			tariffname_en="Shodlik"
+			tariffname_scg="Shodlik"
+
+			>
+
+  		<soapcon value="191"/>
+		<ivrcon value="191"/>
+		<dealerussd value="*125*confirm"/>
+		<dealerussd value="*125*1"/>
+
+	</Tariff>
+        <Tariff ivrcode="192" datefrom="20131001" dateto="" group="1" availbalance="28.50"
+ 
+			tariffname_ruk="Terminal Yillik"
+			tariffname_rut="Terminal Yillik"
+			tariffname_uz="Terminal Yillik"
+			tariffname_en="Terminal Yillik"
+			tariffname_scg="Terminal Yillik"
+
+			>
+
+  		<soapcon value="192"/>
+		<ivrcon value="192"/>
+		<!--dealerussd value="*125*confirm"/>
+		<dealerussd value="*125*1"/-->
+
+	</Tariff>
+        <Tariff ivrcode="193" datefrom="20131001" dateto="" group="1" availbalance="3.8"
+ 
+			tariffname_ruk="O^qituvchi 1"
+			tariffname_rut="O^qituvchi 1"
+			tariffname_uz="O^qituvchi 1"
+			tariffname_en="O^qituvchi 1"
+			tariffname_scg="O^qituvchi 1"
+
+			>
+
+  		<soapcon value="193"/>
+		<ivrcon value="193"/>
+		<!--dealerussd value="*125*confirm"/>
+		<dealerussd value="*125*1"/-->
+
+	</Tariff>
+        <Tariff ivrcode="194" datefrom="20131001" dateto="" group="1" availbalance="7.13"
+ 
+			tariffname_ruk="O^qituvchi 2"
+			tariffname_rut="O^qituvchi 2"
+			tariffname_uz="O^qituvchi 2"
+			tariffname_en="O^qituvchi 2"
+			tariffname_scg="O^qituvchi 2"
+
+			>
+
+  		<soapcon value="194"/>
+		<ivrcon value="194"/>
+		<!--dealerussd value="*125*confirm"/>
+		<dealerussd value="*125*1"/-->
+
+	</Tariff>
+        <Tariff ivrcode="196" datefrom="20131001" dateto="" group="1"
+ 
+			tariffname_ruk="Xizmat 4"
+			tariffname_rut="Xizmat 4"
+			tariffname_uz="Xizmat 4"
+			tariffname_en="Xizmat 4"
+			tariffname_scg="Xizmat 4"
+
+			>
+
+  		<soapcon value="196"/>
+		<ivrcon value="196"/>
+
+	</Tariff>
+        <Tariff ivrcode="197" datefrom="20131001" dateto="" group="1"
+ 
+			tariffname_ruk="Xizmat 5"
+			tariffname_rut="Xizmat 5"
+			tariffname_uz="Xizmat 5"
+			tariffname_en="Xizmat 5"
+			tariffname_scg="Xizmat 5"
+
+			>
+
+  		<soapcon value="197"/>
+		<ivrcon value="197"/>
+
+	</Tariff>
+        <Tariff ivrcode="199" datefrom="20131001" dateto="" group="1" availbalance="3.85"
+ 
+			tariffname_ruk="Omad"
+			tariffname_rut="Omad"
+			tariffname_uz="Omad"
+			tariffname_en="Omad"
+			tariffname_scg="Omad"
+
+			>
+
+  		<soapcon value="199"/>
+		<ivrcon value="199"/>
+		<dealerussd value="*043*confirm"/>
+		<dealerussd value="*043*1"/>
+
+	</Tariff>
+        <Tariff ivrcode="202" datefrom="20131001" dateto="" group="1" availbalance="9.98"
+ 
+			tariffname_ruk="Uzbekistan Pass+"
+			tariffname_rut="Uzbekistan Pass+"
+			tariffname_uz="Uzbekistan Pass+"
+			tariffname_en="Uzbekistan Pass+"
+			tariffname_scg="Uzbekistan Pass+"
+
+			>
+
+  		<soapcon value="202"/>
+		<ivrcon value="202"/>
+	</Tariff>
+        <Tariff ivrcode="203" datefrom="20131001" dateto="" group="1" availbalance="4.99"
+ 
+			tariffname_ruk="Uzbekistan Pass Lite+"
+			tariffname_rut="Uzbekistan Pass Lite+"
+			tariffname_uz="Uzbekistan Pass Lite+"
+			tariffname_en="Uzbekistan Pass Lite+"
+			tariffname_scg="Uzbekistan Pass Lite+"
+
+			>
+
+  		<soapcon value="203"/>
+		<ivrcon value="203"/>
+	</Tariff>
+        <Tariff ivrcode="205" datefrom="20131001" dateto="" group="1" availbalance="16.63"
+ 
+			tariffname_ruk="MOBI 70"
+			tariffname_rut="MOBI 70"
+			tariffname_uz="MOBI 70"
+			tariffname_en="MOBI 70"
+			tariffname_scg="MOBI 70"
+
+			>
+
+  		<soapcon value="205"/>
+		<ivrcon value="205"/>
+	</Tariff>
+        <Tariff ivrcode="206" datefrom="20131001" dateto="" group="1" availbalance="26.13"
+ 
+			tariffname_ruk="MOBI 100"
+			tariffname_rut="MOBI 100"
+			tariffname_uz="MOBI 100"
+			tariffname_en="MOBI 100"
+			tariffname_scg="MOBI 100"
+
+			>
+
+  		<soapcon value="206"/>
+		<ivrcon value="206"/>
+	</Tariff>
+        <Tariff ivrcode="207" datefrom="20131001" dateto="" group="1" availbalance="35.63"
+ 
+			tariffname_ruk="MOBI 150"
+			tariffname_rut="MOBI 150"
+			tariffname_uz="MOBI 150"
+			tariffname_en="MOBI 150"
+			tariffname_scg="MOBI 150"
+
+			>
+
+  		<soapcon value="207"/>
+		<ivrcon value="207"/>
+	</Tariff>
 
 
 

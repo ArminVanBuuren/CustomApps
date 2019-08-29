@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TraceSchema Name="Comm">
+	<TraceSchemaItem Name="CommMSMQ">
+		<!--Message Name="CommMSMQ.ERROR"/>
+		<Message Name="CommMSMQ.INITIALIZATION"/>
+		<Message Name="CommMSMQ.INFORMATION"/>
+		<Message Name="CommMSMQ.RX_MESSAGE"/>
+		<Message Name="CommMSMQ.START"/>
+		<Message Name="CommMSMQ.STOP"/>
+		<Message Name="CommMSMQ.TX_ERROR"/>
+		<Message Name="CommMSMQ.TX_MESSAGE"/-->
+	</TraceSchemaItem>
+</TraceSchema>

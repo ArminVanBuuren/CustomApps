@@ -211,7 +211,7 @@ tplist               - Компонент выполняет проверки п
 			info_320702_ruk="Usluga ne dostupna organizaciyam."
 			info_320702_rut="Usluga ne dostupna organizaciyam."
 			info_320702_uz="Xizmat korxonalarga ulanmaydi."
-			info_320702_en="The service is not availbale for organisations."
+			info_320702_en="The service is not available for organisations."
 
 			info_320703_ruk="Perevod yuridicheskomu licu nevozmozhen ili u abonenta kreditnyi metod rascheta."
 			info_320703_rut="Perevod yuridicheskomu licu nevozmozhen ili u abonenta kreditnyi metod rascheta."
@@ -560,7 +560,7 @@ tplist               - Компонент выполняет проверки п
 			
 			info_330722_ruk="Услуга *Обещанный платеж* не доступна для Вас."
 			info_330722_rut="Usluga *Obeschanniy platyoj* ne dostupna dlya Vas."
-			info_330722_uz="*Obeschanniy platyoj* xizmati mavjud emas."
+			info_330722_uz="*Va^da qilingan to^lov* xizmati mavjud emas."
 			info_330722_en="*Obeschanniy platyoj* service is not available for you."
 			
 			info_330723_ruk="Неверный номер абонента."
@@ -574,9 +574,9 @@ tplist               - Компонент выполняет проверки п
 			info_330724_en="Server error, refer support service of UMS."
 
 			info_320704_ruk="Usluga ne dostupna novim abonentam v techenie odnogo kalendarnogo mesyaca"
-			info_320704_rut="Usluga ne dostupna novim abonentam v techenie odnogo kalendarnogo mesyaca"
-			info_320704_uz="Xizmat bir oy davomida yangi abonentlar uchun mavjud emas"
-			info_320704_en="Service is not available to user for one calendar month"
+      			info_320704_rut="Ustanovlen zapret na podklyuchenie usligi *Obeshanniy platezh*"
+			info_320704_uz="*Va^da qilingan to^lov* xizmatiga cheklanish o^rnatildi"
+			info_320704_en="*Promised payment* service connection is banned"
 
 			>
 		<soapcon value="_GRNTPAY"/>

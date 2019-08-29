@@ -1,0 +1,7 @@
+﻿<Configuration>
+	<MsmqProcessor>
+		<messageCommunicator commType="Msmq" syncMode="Client">
+		    <msmq type="Msmq" path=".\bpm_client_incoming"/>
+		</messageCommunicator>
+	</MsmqProcessor>
+</Configuration>

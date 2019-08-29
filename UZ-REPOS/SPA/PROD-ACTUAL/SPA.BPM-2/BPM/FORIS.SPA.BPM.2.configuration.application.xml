@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<configuration>
+	<communication>
+		<clientsCommunicator commType="OracleQueue">
+			<queue path="BPM02_02" sources="CRM.Production,CRM.Sales,CRM.OM,CRM.BL,WF,Console,FTPGateway,CRM,SPA.Monitor,CBPN" timeout="1000" idleTimeout="1000"/>
+		</clientsCommunicator>
+		<activatorsCommunicator>
+			<database readPeriod="2000" readCount="5000" messageSource="BPM02.02"/>
+		</activatorsCommunicator>
+	</communication>
+	<bpm>
+<bpmmodules>
+      <RequestMessagePreprocessor>
+        <param name="poolSize" value="20"/>
+        <param name="loggingPeriod" value="0"/>
+        <param name="threadLoggingPeriod" value="0"/>
+        <param name="pollScheduledRecsPeriod" value="2"/>
+        <param name="getScheduledRecsFromDbCount" value="1000"/>
+        <param name="checkRequestDuplicates" value="false"/>
+        <param name="checkRequestDuplicatesPeriod" value="60"/>
+      </RequestMessagePreprocessor>
+      <RequestMessageProcessor>
+        <param name="poolSize" value="20"/>
+        <param name="loggingPeriod" value="0"/>
+      </RequestMessageProcessor>
+      <RequestMessagePostprocessor>
+        <param name="loggingPeriod" value="0"/>
+        <param name="asyncDelete" value="true"/>
+        <param name="pollPeriod" value="2"/>
+        <param name="pollIdlePeriod" value="2"/>
+        <param name="getParentRowsFromDbCount" value="1000"/>
+        <param name="invalidSourceAddressTTL" value="300"/>
+        <param name="poolSize" value="20"/>
+      </RequestMessagePostprocessor>
+      <ActivatorProxy>
+        <param name="confirmation_timeout" value="300"/>
+        <param name="response_timeout" value="300"/>
+        <param name="loggingPeriod" value="0"/>
+      </ActivatorProxy>
+      <BPM>
+        <param name="postprocTimeout" value="60"/>
+        <param name="loggingPeriod" value="0"/>
+        <param name="responseType" value="Default"/>
+      </BPM>
+    </bpmmodules>
+		<hostTypesTable>
+			<hostType type="DM"                         identity="IMSI"     direct="DMS"/>
+			<hostType type="BS"                         identity="IMSI"     direct="BMS"/>
+			<hostType type="MA"                         identity="IMSI"     direct="MCA"/>
+			<hostType type="SM"                         identity="IMSI"     direct="SMS"/>
+			<hostType type="MD"                         identity="IMSI"     direct="MDSP"/>
+			<hostType type="RT"                         identity="IMSI"     direct="CRBT"/>
+			<hostType type="SN"                         identity="IMSI"     direct="SYNC"/>
+			<hostType type="GT"                         identity="IMSI"     direct="MGATE"/>
+			<hostType type="G3"                         identity="IMSI"     direct="SCGMAP"/>
+			<hostType type="G4"                         identity="IMSI"     direct="SCGPROD"/>
+			<hostType type="S1"                         identity="IMSI"     direct="SMSBlack"/>
+			<hostType type="S2"                         identity="IMSI"     direct="SMSBlack"/>
+			<hostType type="S8"                         identity="IMSI"     direct="SMSExtra"/>
+			<hostType type="CT"                         identity="IMSI"     direct="MOBITEL"/>
+			<hostType type="CT2"                        identity="IMSI"     direct="MOBILE_SOLUTIONS"/>
+			<hostType type="CT3"                        identity="IMSI"     direct="LISTIMEI"/>
+			<hostType type="CT4"                        identity="IMSI"     direct="MST"/>
+			<hostType type="CT5"                        identity="IMSI"     direct="UNIFUN"/>
+			<hostType type="CT6"                        identity="IMSI"     direct="ALLPLAY"/>
+			<hostType type="RBT"                        identity="IMSI"     direct="INTECH"/>
+			<hostType type="HLR"                        identity="IMSI"     direct="ROAMING"/>
+			<hostType type="IVR"                        identity="IMSI"     direct="CALLER"/>
+			<hostType type="IVRS"                       identity="IMSI"     direct="CALLER"/>
+			<hostType type="SCG"                        identity="IMSI"     direct="SCG"/>
+			<hostType type="SCGS"                       identity="IMSI"     direct="SCGS"/>
+			<hostType type="EI"                         identity="IMSI"     direct="EIR"/>
+			<hostType type="PF"                         identity="IMSI"     direct="HW"/>
+			<hostType type="HL"     code="TASH_HLR"     identity="IMSI"     direct="01"/>
+			<hostType type="HL"     code="GIL_HLR"      identity="IMSI"     direct="01"/>
+			<hostType type="HL"     code="JSK_HLR"      identity="IMSI"     direct="01"/>
+			<hostType type="HL"     code="CHIRCH_HLR"   identity="IMSI"     direct="01"/>
+			<hostType type="HL"     code="YANGL_HLR"    identity="IMSI"     direct="01"/>
+			<hostType type="HL"     code="AND_HLR"      identity="IMSI"     direct="01"/>
+			<hostType type="HL"     code="NMNGN_HLR"    identity="IMSI"     direct="01"/>
+			<hostType type="HL"     code="FRGN_HLR"     identity="IMSI"     direct="01"/>
+			<hostType type="HL"     code="SMRKND_HLR"   identity="IMSI"     direct="01"/>
+			<hostType type="HL"     code="BUH_HLR"      identity="IMSI"     direct="01"/>
+			<hostType type="HL"     code="KARSHI_HLR"   identity="IMSI"     direct="01"/>
+			<hostType type="HL"     code="NAVOI_HLR"    identity="IMSI"     direct="01"/>
+			<hostType type="HL"     code="TRMZ_HLR"     identity="IMSI"     direct="01"/>
+			<hostType type="HL"     code="SHAHRS_HLR"   identity="IMSI"     direct="01"/>
+			<hostType type="HL"     code="URG_HLR"      identity="IMSI"     direct="01"/>
+			<hostType type="HL"     code="NUKHUS_HLR"   identity="IMSI"     direct="01"/>
+			<hostType type="HL"     code="TEST_HLR"     identity="IMSI"     direct="01"/>
+			<hostType type="SC"     codeXPath="//BalanceStorage/HostCode" identity="IMSI"/>
+		</hostTypesTable>
+		<NoHostResultDecodingTable>
+			<hostType type="HL" result="NoHostForSubscriberHlr"/>
+			<hostType type="DM" result="NoHostForSubscriberDms"/>
+			<hostType type="DI" result="NoHostForSubscriberDms"/>
+			<hostType type="KD" result="NoHostForSubscriberDms"/>
+			<hostType type="VM" result="NoHostForSubscriberVm"/>
+			<hostType type="SP" result="NoHostForSubscriberPostOnLine"/>
+			<hostType type="RB" result="NoHostForSubscriberRbt"/>
+			<hostType type="DP" result="NoHostForSubscriberSdp"/>
+			<hostType type="MA" result="NoHostForSubscriberMca"/>
+			<hostType type="SN" result="NoHostForSubscriberSmsc"/>
+			<hostType type="NT" result="NoHostForSubscriberNet"/>
+		</NoHostResultDecodingTable>
+	</bpm>
+</configuration>
