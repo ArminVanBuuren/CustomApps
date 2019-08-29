@@ -16,6 +16,7 @@
     <Connector name="SOAP_SCG_01_01"      type="SOAPCON"  host="mg1"       port="11122" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.SCG.01.01"         config="Configuration\SOAPCON\SOAPCON_SCG_01_01.exe.xml"/>
     <Connector name="USSDCON_01_01"       type="SMSCON"   host="mg1"       port="11170" sessionHandler="false" serviceName="FORIS.MG.USSDCON.01.01"             config="Configuration\USSDCON\USSDCON_01_01.exe.xml"/>
     <Connector name="USSDCON_01_02"       type="SMSCON"   host="mg1"       port="11171" sessionHandler="false" serviceName="FORIS.MG.USSDCON.01.02"             config="Configuration\USSDCON\USSDCON_01_02.exe.xml"/>
+    <Connector name="USSDCON_01_PCRF"     type="SMSCON"   host="mg1"       port="11172" sessionHandler="false" serviceName="FORIS.MG.USSDCON.01.PCRF"           config="Configuration\USSDCON\USSDCON_01_PCRF.exe.xml"/>
 
     <Connector name="SOAP_USSDCON_02_01"  type="SOAPCON"  host="localhost" port="11150" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.USSD.02.01"        config="Configuration\SOAPCON\SOAPCON_USSD_02_01.exe.xml"/>
     <Connector name="SOAP_USSDCON_02_02"  type="SOAPCON"  host="localhost" port="11120" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.USSD.02.02"        config="Configuration\SOAPCON\SOAPCON_USSD_02_02.exe.xml"/>
