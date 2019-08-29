@@ -1,14 +1,12 @@
-<?xml version="1.0" encoding="utf-8" ?> 
-<Application>
-	 <TargetDatabase>                                                                
-		<Database forisDataKey="MG" interfacePackage="" />
-	 </TargetDatabase>
-	<Settings>
-		<Item name="ModuleType" value="DBCON" />
-		<Item name="ModuleName" value="DBCON_02_01" />
-		<Item name="CRMCacheCleanInterval" value="60" />
-		<Item name="StoringInterval" value="4" />
-		<Item name="NumOfThreads" value="4" />
-	</Settings>
-	
+﻿<Application>
+   <TargetDatabase>
+      <Database forisDataKey="MG" interfacePackage="" />
+   </TargetDatabase>
+   <Settings>
+      <Item name="ModuleType" value="DBCON" />
+      <Item name="ModuleName" value="DBCON_02_01" />
+      <Item name="CRMCacheCleanInterval" value="60" />
+      <Item name="StoringInterval" value="4" />
+      <Item name="NumOfThreads" value="4" />
+   </Settings>
 </Application>

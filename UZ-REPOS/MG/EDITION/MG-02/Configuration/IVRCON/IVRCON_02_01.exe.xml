@@ -1,28 +1,27 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Application configClass="FORIS.MessagingGateway.IVRConnector.IVRConnectorConfiguration" type="IVRCON">
-  <Settings>
-    <Item name="ModuleType" value="IVRCON" />
-    <Item name="ModuleName" value="IVRCON_02_01" />
-    <Item name="CRMCacheCleanInterval" value="10" />
-    <Item name="StoringInterval" value="20" />
-    <Item name="StoringHWM" value="200" />
-    <Item name="ThreadMultiplifier" value="1" />
-    <Item name="FetchLimit" value="150" />
-  </Settings>
-  <TemplateProcessors defaultConfig="IVRTemplateProcessor.01.xml">
-    <Processor dll="DefaultTemplates.dll" class="IVRTemplateProcessor" config="IVRTemplateProcessor.01.xml" />
-  </TemplateProcessors>
-  <IVRServers>
-    <MedioListener host="" port="9990" scp="0x0998" />
-  </IVRServers>
-  <Replace>
-    <Item ivr="941" crm="test1" />
-    <Item ivr="236" crm="test2" />
-    <Item ivr="616161" crm="320341" />
-    <Item ivr="110011" crm="1234" />
-    <Item ivr="555566" crm="56" />
-  </Replace>
-  <!--Monitors>
+﻿<Application configClass="FORIS.MessagingGateway.IVRConnector.IVRConnectorConfiguration" type="IVRCON">
+   <Settings>
+      <Item name="ModuleType" value="IVRCON" />
+      <Item name="ModuleName" value="IVRCON_02_01" />
+      <Item name="CRMCacheCleanInterval" value="10" />
+      <Item name="StoringInterval" value="20" />
+      <Item name="StoringHWM" value="200" />
+      <Item name="ThreadMultiplifier" value="1" />
+      <Item name="FetchLimit" value="150" />
+   </Settings>
+   <TemplateProcessors defaultConfig="IVRTemplateProcessor.01.xml">
+      <Processor dll="DefaultTemplates.dll" class="IVRTemplateProcessor" config="IVRTemplateProcessor.01.xml" />
+   </TemplateProcessors>
+   <IVRServers>
+      <MedioListener host="" port="9990" scp="0x0998" />
+   </IVRServers>
+   <Replace>
+      <Item ivr="941" crm="test1" />
+      <Item ivr="236" crm="test2" />
+      <Item ivr="616161" crm="320341" />
+      <Item ivr="110011" crm="1234" />
+      <Item ivr="555566" crm="56" />
+   </Replace>
+   <!--Monitors>
     <HeartBeat periodSec="10" />
     <NoActivity defaultThresholdSec="10">
       <MonitoredInterval thresholdSec="20">
