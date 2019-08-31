@@ -45,7 +45,7 @@
     </appender>
 
     <appender name="DataFileAppender" type="log4net.Appender.RollingFileAppender">
-      <file type="log4net.Util.PatternString" value="C:\FORISLOG\MG\%property{TYPE}_%property{NAME}_data.log"/>
+      <file type="log4net.Util.PatternString" value="C:\FORISLOG\MG\data\%property{TYPE}_%property{NAME}_data.log"/>
       <staticLogFileName value="false"/>
       <countDirection value="1"/>
       <maxSizeRollBackups value="-1"/>
@@ -66,7 +66,7 @@
     </appender>
 
     <appender name="ActivityFileAppender" type="log4net.Appender.RollingFileAppender">
-      <file type="log4net.Util.PatternString" value="C:\FORISLOG\MG\%property{TYPE}_%property{NAME}_activity.log"/>
+      <file type="log4net.Util.PatternString" value="C:\FORISLOG\MG\activity\%property{TYPE}_%property{NAME}_activity.log"/>
       <staticLogFileName value="false"/>
       <countDirection value="1"/>
       <maxSizeRollBackups value="-1"/>
@@ -82,7 +82,7 @@
     </appender>
 
     <appender name="ErrorFileAppender" type="log4net.Appender.RollingFileAppender">
-      <file type="log4net.Util.PatternString" value="C:\FORISLOG\MG\%property{TYPE}_%property{NAME}_error.log"/>
+      <file type="log4net.Util.PatternString" value="C:\FORISLOG\MG\error\%property{TYPE}_%property{NAME}_error.log"/>
       <staticLogFileName value="false"/>
       <countDirection value="1"/>
       <maxSizeRollBackups value="-1"/>
