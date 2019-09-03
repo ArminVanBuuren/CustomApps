@@ -490,7 +490,7 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.SMSC\Scenarios\SC.SM.DeleteSubscriber.xml" />
     <Content Include="EDITION\SRI\SC-HL %28ZTE%29\ServiceCatalog-HLR_WORKED_2018.12.09.xml" />
     <Content Include="EDITION\SRI\SC-SCG\ServiceCatalog-SCG.xml" />
-    <Content Include="EDITION\SRI\SC.xml" />
+    <Content Include="EDITION\SRI\ServiceCatalog.xml" />
     <Content Include="EDITION\SRI\WholeCatalog.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CFD_Delete.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Commands\SC.CFNRY_Delete.xml" />

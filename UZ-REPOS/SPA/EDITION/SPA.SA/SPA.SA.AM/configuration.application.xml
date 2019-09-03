@@ -7,7 +7,7 @@
       </scenarioSource>
       <socketList poolSize="10" maxConnections="5" minConnections="1" averageTime="20" deltaAverageTime="40" maxCommandsPerPeriod="300" periodDuration="10" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Integrated.AmSocket, FORIS.SPA.Communication.Integrated">
-          <config serviceGroup="AM" uri="tcp://10.160.18.65:8023/CRMOperations.uri" queue="a14-am01\am.out.queue" timeout="60" workingmode="wmPermanentEmulation">
+          <config serviceGroup="AM" uri="tcp://10.160.41.156:8023/CRMOperations.uri" queue="uz1-am01\am.out.queue" timeout="60" workingmode="wmPermanentEmulation">
             <Emulation Success="Code&gt;0&lt;" Failure="Code&gt;0&lt;" RandomizePrintout="false" OverwriteCommandPrintout="true" Lifetime="00:00:00.00"/>
           </config>
         </socket>
@@ -35,7 +35,7 @@
         </object>
       </context>
       <AsyncResponseProcessor PoolSize="1" ResponseTimeout="120000" Type="FORIS.ServiceProvisioning.ServiceActivator.Core.AmMsmqResponseProcessor, FORIS.SPA.ServiceActivator.Core">
-        <Processor QueuePath=".\am_q" RejectQueuePath=".\am_q">
+        <Processor QueuePath=".\am.responce" RejectQueuePath=".\am.responce_rejects">
           <Emulation Success="..\SPA.SA\SPA.SA.AM\asyncResult.xml" Failure="..\SPA.SA\SPA.SA.AM\asyncResult.xml" RandomizePrintout="false" OverwriteCommandPrintout="true" Lifetime="00:00:00.00"/>
         </Processor>
       </AsyncResponseProcessor>
