@@ -13,17 +13,6 @@
             <result value="" node="DeleteSubscribersInTheHLR" />
           </resultlist>
         </node>
-        <!--node name="Switch" object="Switch">
-          <parameterslist>
-            <param name="operation" value="DeleteSubscribersInTheHLR" />
-            <param name="SrcXml" value="$XmlRequest" />
-            <param name="IfNotXmlPath:0" value="//MSISDN[text()='998977090015']" />
-          </parameterslist>
-          <resultlist>
-            <result value="0" node="DeleteSubscriberMCA" />
-            <result value="1538" node="DummyResponder" />
-          </resultlist>
-        </node-->
         <node name="DeleteSubscribersInTheHLR" object="OperationOnSA">
           <parameterslist>
             <param name="operation" value="DeleteSubscribersInTheHLR" />
@@ -99,14 +88,6 @@
         <node name="ReSubscribeFRINSPECTDelete" object="OperationOnSA">
           <parameterslist>
             <param name="operation" value="ReSubscribeFRINSPECTDelete" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="" />
-          </resultlist>
-        </node>
-        <node name="DummyResponder" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="DummySuccess" />
           </parameterslist>
           <resultlist>
             <result value="" node="" />

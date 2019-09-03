@@ -25,22 +25,6 @@
             <param name="operation" value="ChangeMSISDNOnHLR" />
           </parameterslist>
           <resultlist>
-            <result value="" node="ChangeIMSIOnFP" />
-          </resultlist>
-        </node>
-        <node name="ChangeIMSIOnFP" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="ChangeIMSIOnFP" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="ChangeMSISDNOnFP" />
-          </resultlist>
-        </node>
-        <node name="ChangeMSISDNOnFP" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="ChangeMSISDNOnFP" />
-          </parameterslist>
-          <resultlist>
             <result value="" node="ChangeIMSIOnSMSC" />
           </resultlist>
         </node>
@@ -71,14 +55,6 @@
         <node name="ChangeMSISDNOnMCA" object="OperationOnSA">
           <parameterslist>
             <param name="operation" value="ChangeMSISDNOnMCA" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="ChangeMSISDNOnSYN" />
-          </resultlist>
-        </node>
-        <node name="ChangeMSISDNOnSYN" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="ChangeMSISDNOnSYN" />
           </parameterslist>
           <resultlist>
             <result value="" node="" />

@@ -2,7 +2,7 @@
    <Request Name="RequestMessage">
       <AdditionalData Executable="True">
          <ProvisionList HaltMode="CancelOperation" Type="AnyOfListed">
-            <BIC1 HaltMode="CancelOperation" Type="Optional" />
+            <BIC1  Type="Optional" />
          </ProvisionList>
       </AdditionalData>
    </Request>

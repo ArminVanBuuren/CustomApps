@@ -9,14 +9,6 @@
         <node name="SCProcessingUnit" object="SCProcessingUnit">
           <parameterslist />
           <resultlist>
-            <result value="" node="Assign Services on Financial Platform" />
-          </resultlist>
-        </node>
-        <node name="Assign Services on Financial Platform" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="DummySuccess" />
-          </parameterslist>
-          <resultlist>
             <result value="" node="" />
           </resultlist>
         </node>

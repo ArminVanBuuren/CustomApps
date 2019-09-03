@@ -8,18 +8,18 @@
   <AttributeList>
   </AttributeList>
   <ResourceList>
-    <Resource name="RES_CT4_SERVICE_ID" description="ServiceID на CT4" />
+    <Resource name="RES_CT4_SERVICE_ID" description="ServiceID на платформе CT4"/>
   </ResourceList>
   <RFSParameterList>
     <RFSParameter name="NewMSISDN" path="//ChangeMsisdn/NewMSISDN" description="Новый номер MSISDN" />
   </RFSParameterList>
   <FlagList />
   <RFSList>
-    <RFS name="RFS_CT4_SUBSCRIPTION" hostType="CT4" description="Метка абонента на платформе CT4" >
-      <Resource name="RES_CT4_SERVICE_ID" value="558" />
+    <RFS name="RFS_CT4_SUBSCRIPTION" hostType="CT4" processType="Subscription" description="Абонент на платформе CT4">
+      <Resource name="RES_CT4_SERVICE_ID" value="558"/>
     </RFS>
-    <RFS name="RFS_CT4_CHANGE_MSISDN" hostType="CT4" description="Изменение номера MSISDN на платформе CT4" >
-      <RFSParameter name="NewMSISDN" path="//ChangeMsisdn/NewMSISDN" />
+    <RFS name="RFS_CT4_CHANGE_MSISDN" hostType="CT4" description="Изменение номера MSISDN на платформе CT4">
+      <RFSParameter name="NewMSISDN" path="//ChangeMsisdn/NewMSISDN"/>
     </RFS>
   </RFSList>
   <CFSList>
@@ -37,9 +37,9 @@
   <HandlerList >
   </HandlerList>
   <ScenarioList>
-    <Scenario name="CT4.ChangeMSISDN" description="Изменение номера на CT4">
-      <RFS name="RFS_CT4_CHANGE_MSISDN" scenarioType="Add" />
-      <Append name="RFS_CT4_SUBSCRIPTION" listType="EndList" />
+    <Scenario name="CT4.ChangeMSISDN" description="Изменение номера на платформе CT4">
+      <RFS name="RFS_CT4_CHANGE_MSISDN" scenarioType="Add"/>
+      <Append name="RFS_CT4_SUBSCRIPTION" listType="EndList"/>
     </Scenario>
   </ScenarioList>
   <WfmScenarioList />

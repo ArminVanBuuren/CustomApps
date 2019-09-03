@@ -97,14 +97,6 @@
             <param name="operation" value="DeleteFRMGDOSTUP" />
           </parameterslist>
           <resultlist>
-            <result value="" node="DeleteFRSYNC" />
-          </resultlist>
-        </node>
-        <node name="DeleteFRSYNC" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="DeleteFRSYNC" />
-          </parameterslist>
-          <resultlist>
             <result value="" node="DeleteUSSD" />
           </resultlist>
         </node>
@@ -159,14 +151,6 @@
         <node name="DeleteReduceSpeed" object="OperationOnSA">
           <parameterslist>
             <param name="operation" value="DeleteReduceSpeed" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="DeleteFRPOLDOV" />
-          </resultlist>
-        </node>
-        <node name="DeleteFRPOLDOV" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="DeleteFRPOLDOV" />
           </parameterslist>
           <resultlist>
             <result value="" node="DeleteSCPBREAKSESSION" />

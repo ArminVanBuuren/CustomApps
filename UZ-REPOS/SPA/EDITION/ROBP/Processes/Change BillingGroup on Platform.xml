@@ -9,14 +9,6 @@
         <node name="SCProcessingUnit" object="SCProcessingUnit">
           <parameterslist />
           <resultlist>
-            <result value="" node="ChangeBillingGroupOnFP" />
-          </resultlist>
-        </node>
-        <node name="ChangeBillingGroupOnFP" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="ChangeBillingGroupOnFP" />
-          </parameterslist>
-          <resultlist>
             <result value="" node="" />
           </resultlist>
         </node>

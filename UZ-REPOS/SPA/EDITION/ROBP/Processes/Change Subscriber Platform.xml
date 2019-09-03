@@ -37,14 +37,6 @@
             <result value="" node="" />
           </resultlist>
         </node>
-        <node name="DummyResponder" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="DummySuccess" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="" />
-          </resultlist>
-        </node>
       </automat>
     </scenario>
   </businessprocess>

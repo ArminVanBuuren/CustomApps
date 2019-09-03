@@ -10,25 +10,6 @@
         <node name="SCProcessingUnit" object="SCProcessingUnit">
           <parameterslist />
           <resultlist>
-            <result value="" node="Switch" />
-          </resultlist>
-        </node>
-        <node name="Switch" object="Switch">
-          <parameterslist>
-            <param name="operation" value="CreateSubscriberOnFP" />
-            <param name="SrcXml" value="$XmlRequest" />
-            <param name="IfNotXmlPath:0" value="//MSISDN[text()='998977090015']" />
-          </parameterslist>
-          <resultlist>
-            <result value="0" node="CreateSubscribersOnHLR" />
-            <result value="1538" node="DummyResponder" />
-          </resultlist>
-        </node>
-        <node name="CreateSubscriberOnFP" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="CreateSubscriberOnFP" />
-          </parameterslist>
-          <resultlist>
             <result value="" node="CreateSubscribersOnHLR" />
           </resultlist>
         </node>
@@ -59,14 +40,6 @@
         <node name="CreateSubscriberOnMCA" object="OperationOnSA">
           <parameterslist>
             <param name="operation" value="CreateSubscriberOnMCA" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="" />
-          </resultlist>
-        </node>
-        <node name="DummyResponder" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="DummySuccess" />
           </parameterslist>
           <resultlist>
             <result value="" node="" />

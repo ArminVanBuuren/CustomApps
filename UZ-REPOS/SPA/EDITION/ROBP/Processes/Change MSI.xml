@@ -73,14 +73,6 @@
             <param name="operation" value="ChangeMSISDNOnMCA" />
           </parameterslist>
           <resultlist>
-            <result value="" node="ChangeMSISDNOnSYN" />
-          </resultlist>
-        </node>
-        <node name="ChangeMSISDNOnSYN" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="ChangeMSISDNOnSYN" />
-          </parameterslist>
-          <resultlist>
             <result value="" node="" />
           </resultlist>
         </node>

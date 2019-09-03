@@ -2,7 +2,7 @@
    <Request Name="RequestMessage">
       <AdditionalData Executable="True">
          <ProvisionList HaltMode="CancelOperation" Type="AnyOfListed">
-            <QRYUSER HaltMode="CancelOperation" Type="Optional" />
+            <QRYUSER  Type="Optional" />
          </ProvisionList>
       </AdditionalData>
    </Request>

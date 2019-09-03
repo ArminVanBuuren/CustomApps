@@ -69,28 +69,12 @@
             <param name="operation" value="AddSubscriberOnMCA" />
           </parameterslist>
           <resultlist>
-            <result value="" node="AddSubscriberSYNC" />
-          </resultlist>
-        </node>
-        <node name="AddSubscriberSYNC" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="AddSubscriberSYNC" />
-          </parameterslist>
-          <resultlist>
             <result value="" node="CreateSubscriberRBT_INTECH" />
           </resultlist>
         </node>
         <node name="CreateSubscriberRBT_INTECH" object="OperationOnSA">
           <parameterslist>
             <param name="operation" value="CreateSubscriberRBT_INTECH" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="" />
-          </resultlist>
-        </node>
-        <node name="DummyResponder" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="DummySuccess" />
           </parameterslist>
           <resultlist>
             <result value="" node="" />

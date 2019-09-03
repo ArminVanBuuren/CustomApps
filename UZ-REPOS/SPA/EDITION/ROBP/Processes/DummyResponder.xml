@@ -10,14 +10,6 @@
         <node name="SCProcessingUnit" object="SCProcessingUnit">
           <parameterslist />
           <resultlist>
-            <result value="" node="DummyResponder" />
-          </resultlist>
-        </node>
-        <node name="DummyResponder" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="DummySuccess" />
-          </parameterslist>
-          <resultlist>
             <result value="" node="" />
           </resultlist>
         </node>

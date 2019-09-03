@@ -97,14 +97,6 @@
             <param name="operation" value="AddFRMGDOSTUP" />
           </parameterslist>
           <resultlist>
-            <result value="" node="AddFRSYNC" />
-          </resultlist>
-        </node>
-        <node name="AddFRSYNC" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="AddFRSYNC" />
-          </parameterslist>
-          <resultlist>
             <result value="" node="AddGATEInformation" />
           </resultlist>
         </node>
@@ -175,14 +167,6 @@
         <node name="AddReduceSpeed" object="OperationOnSA">
           <parameterslist>
             <param name="operation" value="AddReduceSpeed" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="AddFRPOLDOVSCP" />
-          </resultlist>
-        </node>
-        <node name="AddFRPOLDOVSCP" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="AddFRPOLDOVSCP" />
           </parameterslist>
           <resultlist>
             <result value="" node="AddSCPBREAKSESSION" />

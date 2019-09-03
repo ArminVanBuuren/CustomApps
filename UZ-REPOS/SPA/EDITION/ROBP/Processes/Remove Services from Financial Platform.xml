@@ -9,14 +9,6 @@
         <node name="SCProcessingUnit" object="SCProcessingUnit">
           <parameterslist />
           <resultlist>
-            <result value="" node="Remove Services from Financial Platform" />
-          </resultlist>
-        </node>
-        <node name="Remove Services from Financial Platform" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="DummySuccess" />
-          </parameterslist>
-          <resultlist>
             <result value="" node="" />
           </resultlist>
         </node>
