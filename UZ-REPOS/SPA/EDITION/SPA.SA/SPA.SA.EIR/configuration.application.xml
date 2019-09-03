@@ -3,7 +3,7 @@
   <serviceInstances>
     <serviceInstance hardwareID="EI:EIR">
       <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
-        <fileScenarioSource dir="..\SPA.SA\SPA.SA.HLR.EIR\Scenarios"/>
+        <fileScenarioSource dir="..\SPA.SA\SPA.SA.EIR\Scenarios"/>
       </scenarioSource>
       <socketList poolSize="10" autoconnect="1" maxConnections="10" minConnections="10" averageTime="300" deltaAverageTime="4000" maxCommandsPerPeriod="600" periodDuration="10" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
@@ -28,17 +28,17 @@
             <Timers IdleTimeout="10"/>
             <PredefinedScripts Login="Login" Command="Command" Idle="" Logoff=""/>
             <ScriptsList>
-              <Script Name="Login" Path="..\SPA.SA\SPA.SA.HLR.EIR\Scripts\Login.xml"/>
-              <Script Name="Logoff" Path="..\SPA.SA\SPA.SA.HLR.EIR\Scripts\Logoff.xml"/>
-              <Script Name="Command" Path="..\SPA.SA\SPA.SA.HLR.EIR\Scripts\Command.xml"/>
-              <Script Name="NoSleep" Path="..\SPA.SA\SPA.SA.HLR.EIR\Scripts\Nosleep.xml"/>
+              <Script Name="Login" Path="..\SPA.SA\SPA.SA.EIR\Scripts\Login.xml"/>
+              <Script Name="Logoff" Path="..\SPA.SA\SPA.SA.EIR\Scripts\Logoff.xml"/>
+              <Script Name="Command" Path="..\SPA.SA\SPA.SA.EIR\Scripts\Command.xml"/>
+              <Script Name="NoSleep" Path="..\SPA.SA\SPA.SA.EIR\Scripts\Nosleep.xml"/>
             </ScriptsList>
           </config>
         </socket>
       </socketList>
       <context>
         <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
-          <config path="..\SPA.SA\SPA.SA.HLR.EIR" xml="Dictionary.xml" lifetime="00:01:30"/>
+          <config path="..\SPA.SA\SPA.SA.EIR" xml="Dictionary.xml" lifetime="00:01:30"/>
         </object>
         <object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
           <fileTableSource path="..\SPA.SA\Misc" xml="RepetitionTable.xml"/>
