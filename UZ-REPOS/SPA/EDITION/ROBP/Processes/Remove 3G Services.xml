@@ -1,34 +1,34 @@
-﻿<BusinessProcessData name="Remove 3G Services">
-   <businessprocess>
-      <scenario>
-         <objectlist>
-            <object name="OperationOnSA" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
-            <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
-         </objectlist>
-         <automat>
-            <node name="SCProcessingUnit" object="SCProcessingUnit">
-               <parameterslist />
-               <resultlist>
-                  <result value="" node="DeleteCB406278" />
-               </resultlist>
-            </node>
-            <node name="DeleteCB406278" object="OperationOnSA">
-               <parameterslist>
-                  <param name="operation" value="DeleteCB406278" />
-               </parameterslist>
-               <resultlist>
-                  <result value="" node="DeleteFRVIDCALL" />
-               </resultlist>
-            </node>
-            <node name="DeleteFRVIDCALL" object="OperationOnSA">
-               <parameterslist>
-                  <param name="operation" value="DeleteFRVIDCALL" />
-               </parameterslist>
-               <resultlist>
-                  <result value="" node="" />
-               </resultlist>
-            </node>
-         </automat>
-      </scenario>
-   </businessprocess>
+<BusinessProcessData name="Remove 3G Services">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="OperationOnSA" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="SCProcessingUnit" object="SCProcessingUnit">
+          <parameterslist />
+          <resultlist>
+            <result value="" node="DeleteCB406278" />
+          </resultlist>
+        </node>
+        <node name="DeleteCB406278" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteCB406278" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFRVIDCALL" />
+          </resultlist>
+        </node>
+        <node name="DeleteFRVIDCALL" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteFRVIDCALL" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
 </BusinessProcessData>

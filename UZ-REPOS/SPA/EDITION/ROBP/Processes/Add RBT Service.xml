@@ -1,34 +1,34 @@
-﻿<BusinessProcessData name="Add RBT Service">
-   <businessprocess>
-      <scenario>
-         <objectlist>
-            <object name="OperationOnSA" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
-            <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
-         </objectlist>
-         <automat>
-            <node name="SCProcessingUnit" object="SCProcessingUnit">
-               <parameterslist />
-               <resultlist>
-                  <result value="" node="AddFRCRBTHLR" />
-               </resultlist>
-            </node>
-            <node name="AddFRCRBTHLR" object="OperationOnSA">
-               <parameterslist>
-                  <param name="operation" value="AddFRCRBTHLR" />
-               </parameterslist>
-               <resultlist>
-                  <result value="" node="AddFRCRBTRBT_INTECH" />
-               </resultlist>
-            </node>
-            <node name="AddFRCRBTRBT_INTECH" object="OperationOnSA">
-               <parameterslist>
-                  <param name="operation" value="AddFRCRBTRBT_INTECH" />
-               </parameterslist>
-               <resultlist>
-                  <result value="" node="" />
-               </resultlist>
-            </node>
-         </automat>
-      </scenario>
-   </businessprocess>
+<BusinessProcessData name="Add RBT Service">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="OperationOnSA" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="SCProcessingUnit" object="SCProcessingUnit">
+          <parameterslist />
+          <resultlist>
+            <result value="" node="AddFRCRBTHLR" />
+          </resultlist>
+        </node>
+        <node name="AddFRCRBTHLR" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddFRCRBTHLR" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFRCRBTRBT_INTECH" />
+          </resultlist>
+        </node>
+        <node name="AddFRCRBTRBT_INTECH" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddFRCRBTRBT_INTECH" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
 </BusinessProcessData>

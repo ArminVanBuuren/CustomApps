@@ -1,34 +1,34 @@
-﻿<BusinessProcessData name="IVR Caller" successOnNoOperation="true">
-   <businessprocess>
-      <scenario>
-         <objectlist>
-            <object name="OperationOnSA" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
-            <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
-         </objectlist>
-         <automat>
-            <node name="SCProcessingUnit" object="SCProcessingUnit">
-               <parameterslist />
-               <resultlist>
-                  <result value="" node="ImportContacts" />
-               </resultlist>
-            </node>
-            <node name="ImportContacts" object="OperationOnSA">
-               <parameterslist>
-                  <param name="operation" value="ImportContacts" />
-               </parameterslist>
-               <resultlist>
-                  <result value="" node="ImportContactsStatistic" />
-               </resultlist>
-            </node>
-            <node name="ImportContactsStatistic" object="OperationOnSA">
-               <parameterslist>
-                  <param name="operation" value="ImportContactsStatistic" />
-               </parameterslist>
-               <resultlist>
-                  <result value="" node="" />
-               </resultlist>
-            </node>
-         </automat>
-      </scenario>
-   </businessprocess>
+<BusinessProcessData name="IVR Caller" successOnNoOperation="true">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="OperationOnSA" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="SCProcessingUnit" object="SCProcessingUnit">
+          <parameterslist />
+          <resultlist>
+            <result value="" node="ImportContacts" />
+          </resultlist>
+        </node>
+        <node name="ImportContacts" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="ImportContacts" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ImportContactsStatistic" />
+          </resultlist>
+        </node>
+        <node name="ImportContactsStatistic" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="ImportContactsStatistic" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
 </BusinessProcessData>

@@ -1,12 +1,21 @@
-<BusinessProcessData name="Remove Services SCG">
+<BusinessProcessData name="Remove Services SCG" successOnNoOperation="true">
   <businessprocess>
     <scenario>
       <objectlist>
+        <object name="OperationOnSA" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
         <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
       </objectlist>
       <automat>
         <node name="SCProcessingUnit" object="SCProcessingUnit">
           <parameterslist />
+          <resultlist>
+            <result value="" node="DeleteFRINSPECT" />
+          </resultlist>
+        </node>
+        <node name="DeleteFRINSPECT" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteFRINSPECT" />
+          </parameterslist>
           <resultlist>
             <result value="" node="" />
           </resultlist>

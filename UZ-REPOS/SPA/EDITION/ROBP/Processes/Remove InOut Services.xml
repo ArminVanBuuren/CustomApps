@@ -1,26 +1,26 @@
-﻿<BusinessProcessData name="Remove InOut Services">
-   <businessprocess>
-      <scenario>
-         <objectlist>
-            <object name="OperationOnSA" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
-            <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
-         </objectlist>
-         <automat>
-            <node name="SCProcessingUnit" object="SCProcessingUnit">
-               <parameterslist />
-               <resultlist>
-                  <result value="" node="DeleteBlockOnAllCalls" />
-               </resultlist>
-            </node>
-            <node name="DeleteBlockOnAllCalls" object="OperationOnSA">
-               <parameterslist>
-                  <param name="operation" value="DeleteBlockOnAllCalls" />
-               </parameterslist>
-               <resultlist>
-                  <result value="" node="" />
-               </resultlist>
-            </node>
-         </automat>
-      </scenario>
-   </businessprocess>
+<BusinessProcessData name="Remove InOut Services">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="OperationOnSA" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="SCProcessingUnit" object="SCProcessingUnit">
+          <parameterslist />
+          <resultlist>
+            <result value="" node="DeleteBlockOnAllCalls" />
+          </resultlist>
+        </node>
+        <node name="DeleteBlockOnAllCalls" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteBlockOnAllCalls" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
 </BusinessProcessData>

@@ -2,11 +2,112 @@
   <businessprocess>
     <scenario>
       <objectlist>
+        <object name="OperationOnSA" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="Switch" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnitConditional" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
         <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
       </objectlist>
       <automat>
         <node name="SCProcessingUnit" object="SCProcessingUnit">
           <parameterslist />
+          <resultlist>
+            <result value="" node="DeleteSubscribersInTheHLR" />
+          </resultlist>
+        </node>
+        <!--node name="Switch" object="Switch">
+          <parameterslist>
+            <param name="operation" value="DeleteSubscribersInTheHLR" />
+            <param name="SrcXml" value="$XmlRequest" />
+            <param name="IfNotXmlPath:0" value="//MSISDN[text()='998977090015']" />
+          </parameterslist>
+          <resultlist>
+            <result value="0" node="DeleteSubscriberMCA" />
+            <result value="1538" node="DummyResponder" />
+          </resultlist>
+        </node-->
+        <node name="DeleteSubscribersInTheHLR" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteSubscribersInTheHLR" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteSubscriberMCA" />
+          </resultlist>
+        </node>
+        <node name="DeleteSubscriberMCA" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteSubscriberMCA" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteSubscriberRBT_INTECH" />
+          </resultlist>
+        </node>
+        <node name="DeleteSubscriberRBT_INTECH" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteSubscriberRBT_INTECH" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteSubscriberOnSMSC" />
+          </resultlist>
+        </node>
+        <node name="DeleteSubscriberOnSMSC" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteSubscriberOnSMSC" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteSubscriberOnEIR" />
+          </resultlist>
+        </node>
+        <node name="DeleteSubscriberOnEIR" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteSubscriberOnEIR" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteSubscriberOnSCG" />
+          </resultlist>
+        </node>
+        <node name="DeleteSubscriberOnSCG" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteSubscriberOnSCG" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteSubscriberOnSCGS" />
+          </resultlist>
+        </node>
+        <node name="DeleteSubscriberOnSCGS" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteSubscriberOnSCGS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteUNIFUN" />
+          </resultlist>
+        </node>
+        <node name="DeleteUNIFUN" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteUNIFUN" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteMSTSubscriber" />
+          </resultlist>
+        </node>
+        <node name="DeleteMSTSubscriber" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteMSTSubscriber" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ReSubscribeFRINSPECTDelete" />
+          </resultlist>
+        </node>
+        <node name="ReSubscribeFRINSPECTDelete" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="ReSubscribeFRINSPECTDelete" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+        <node name="DummyResponder" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DummySuccess" />
+          </parameterslist>
           <resultlist>
             <result value="" node="" />
           </resultlist>

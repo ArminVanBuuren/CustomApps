@@ -9,6 +9,30 @@
         <node name="SCProcessingUnit" object="SCProcessingUnit">
           <parameterslist />
           <resultlist>
+            <result value="" node="DeleteMOBITEL" />
+          </resultlist>
+        </node>
+        <node name="DeleteMOBITEL" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteMOBITEL" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteLISTIMEI" />
+          </resultlist>
+        </node>
+        <node name="DeleteLISTIMEI" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteLISTIMEI" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteALLPLAY" />
+          </resultlist>
+        </node>
+        <node name="DeleteALLPLAY" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteALLPLAY" />
+          </parameterslist>
+          <resultlist>
             <result value="" node="" />
           </resultlist>
         </node>
