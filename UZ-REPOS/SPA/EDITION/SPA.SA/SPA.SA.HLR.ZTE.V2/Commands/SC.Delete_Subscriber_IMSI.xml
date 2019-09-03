@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="SC.Delete_Subscriber_IMSI">
+	<Description>Удаление абонента по IMSI</Description>
+	<Author Name="system" Date="2018-09-20+09:00"/>
+	<Request>
+		<RequestTemplate>
+			<![CDATA[Del User: IMSI=##imsi##;^M]]>
+		</RequestTemplate>
+		<Item Name="imsi" Type="Wellknown"/>
+	</Request>
+</Command>

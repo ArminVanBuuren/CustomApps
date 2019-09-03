@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scenario name="SC.Remove.RFS_CT4_SUBSCRIPTION">
   <objectList>
-    <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll"/>
-    <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
-    <object name="ScenarioProcessor" class="FORIS.ScenarioProcessing.Base.SPF.SubscenarioProcessingUnit" assembly="FORIS.SPA.SPF.dll" />
-    <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll"/>
   </objectList>
   <automat>
-    <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
+    <node name="BySubscribersCutter" object="BySubscribersCutter">
       <resultlist>
         <result value="0" node="DeleteMST"/>
         <result value="1" node=""/>
@@ -23,14 +18,11 @@
       </resultlist>
       <parameterslist>
         <param name="Command" value="DeleteMST"/>
-        <param name="Script" value="Command"/>
-        <param name="ErrorDecodingType" value="ByRegexp"/>
-        <param name="CommandSource" value="Dictionary"/>
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">
       <resultlist>
-        <result value="" node="BySubscriberRequestDequeuer"/>
+        <result value="" node="BySubscribersCutter"/>
       </resultlist>
     </node>
   </automat>

@@ -36,7 +36,7 @@
       </context>
       <AsyncResponseProcessor PoolSize="1" ResponseTimeout="120000" Type="FORIS.ServiceProvisioning.ServiceActivator.Core.AmMsmqResponseProcessor, FORIS.SPA.ServiceActivator.Core">
         <Processor QueuePath=".\am_q" RejectQueuePath=".\am_q">
-          <Emulation Success="..\SPA.SA\SPA.SA.AM\Emulation\asyncResult.xml" Failure="..\SPA.SA\SPA.SA.AM\Emulation\asyncResult.xml" RandomizePrintout="false" OverwriteCommandPrintout="true" Lifetime="00:00:00.00"/>
+          <Emulation Success="..\SPA.SA\SPA.SA.AM\asyncResult.xml" Failure="..\SPA.SA\SPA.SA.AM\asyncResult.xml" RandomizePrintout="false" OverwriteCommandPrintout="true" Lifetime="00:00:00.00"/>
         </Processor>
       </AsyncResponseProcessor>
     </serviceInstance>

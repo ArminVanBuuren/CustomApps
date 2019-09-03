@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="SC.Add.RFS_MCA_CHANGE_MSISDN">
+	<description>Изменение MSISDN на платформе "MCA (Вам звонили)"</description>
+	<objectList>
+		<object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="WellknownsReplacer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.WellknownsReplacer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+	</objectList>
+	<automat>
+		<node name="BySubscribersCutter" object="BySubscribersCutter">
+			<resultlist>
+				<result value="0" node="RemoveService" />
+				<result value="1" node="" />
+			</resultlist>
+		</node>	
+		<node name="RemoveService" object="Commander">
+			<resultlist>
+				<result value="0" node="WellknownsReplacer"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Command" value="SC.Remove_MCA_SERVICE"/>
+			</parameterslist>
+		</node>
+		<node name="WellknownsReplacer" object="WellknownsReplacer">
+			<resultlist>
+				<result value="" node="AddService_NewMsisdn"/>
+			</resultlist>
+			<parameterslist>
+				<param name="msisdn" value="xmlsubstr(&quot;//NewMSISDN/Value&quot;)" />
+			</parameterslist>
+		</node>
+		<node name="AddService_NewMsisdn" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Command" value="SC.Add_MCA_SERVICE"/>
+			</parameterslist>
+		</node>		
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="BySubscribersCutter"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

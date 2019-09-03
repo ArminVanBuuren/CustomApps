@@ -1,26 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Dictionary>
-  <WellknownsList>
-    <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
-  </WellknownsList>
-  <ErrorsList CodePage="ASCII">
-    <Error Name="000;" Expression="$(Error)" Value="SUCCESS"/>
-    <Error Name="101;" Expression="$(Error)" Value="SUCCESS"/>
-    <Error Name="100;" Expression="$(Error)" Value="FAILURE"/>
-    <Error Name="103;" Expression="$(Error)" Value="SUCCESS"/>
-    <Error Name="105;" Expression="$(Error)" Value="SUCCESS"/>
-    <Error Name="000" Value="SUCCESS"/>
-    <Error Name="101" Value="SUCCESS"/>
-    <Error Name="100" Value="FAILURE"/>
-    <Error Name="103" Value="SUCCESS"/>
-    <Error Name="105" Value="SUCCESS"/>
-  </ErrorsList>
-  <RegexpsList>
-    <Regexp Name="Error" Value="(&quot;(?&lt;ERROR&gt;\d{3})&quot;)"/>
-  </RegexpsList>                
-  <ParametersList/>
-  <DynamicParametersList/>
-  <CommandsList Root="Commands" Mask="*.xml">
-    <!-- All new commands are included by Mask=*.xml attribute -->
-  </CommandsList>
+	<WellknownsList>
+		<Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
+	</WellknownsList>
+	<ErrorsList CodePage="ASCII">
+		<Error Name="000;" Expression="$(Error)" Value="SUCCESS"/>
+		<Error Name="101;" Expression="$(Error)" Value="SUCCESS"/>
+		<Error Name="100;" Expression="$(Error)" Value="FAILURE"/>
+		<Error Name="103;" Expression="$(Error)" Value="SUCCESS"/>
+		<Error Name="105;" Expression="$(Error)" Value="SUCCESS"/>
+	</ErrorsList>
+	<RegexpsList>
+		<Regexp Name="Error" Value="&quot;(?&lt;ERROR&gt;\d{3})&quot;"/>
+	</RegexpsList>
+	<CommandsList Root="Commands" Mask="*.xml"/>
 </Dictionary>

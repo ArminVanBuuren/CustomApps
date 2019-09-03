@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="SC.Add_APN_StaticIP_LTE">
+	<Description>Добавить статический IP LTE</Description>
+	<Author Name="system" Date="2018-09-20+09:00"/>
+	<Request>
+		<RequestTemplate>
+			<![CDATA[Mod APNPROF:MSISDN=##msisdn##,OAPNCFGID=1,EPCPDNTYPE1=0,EPCPDNAddr1=##IP##;^M]]>
+		</RequestTemplate>
+		<Item Name="IP" Type="Parameter"/>
+		<Item Name="msisdn" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="windows-1251">
+		<Error Name="ERR3045" Value="FAILURE"/>
+		<Error Name="104080" Value="SUCCESS"/>
+	</ErrorsList>
+</Command>

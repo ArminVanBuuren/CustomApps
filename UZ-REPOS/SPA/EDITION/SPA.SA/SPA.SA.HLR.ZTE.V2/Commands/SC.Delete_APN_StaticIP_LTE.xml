@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="SC.Delete_APN_StaticIP_LTE">
+	<Description>Удалить статический IP LTE</Description>
+	<Author Name="system" Date="2018-09-20+09:00"/>
+	<Request>
+		<RequestTemplate>
+			<![CDATA[Mod APNPROF:MSISDN=##msisdn##,OAPNCFGID=1,EPCPDNAddr1=*;^M]]>
+		</RequestTemplate>
+		<Item Name="msisdn" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="windows-1251">
+		<Error Name="104080" Value="SUCCESS"/>
+		<!--Can not find the corresponding PDP information-->
+	</ErrorsList>
+</Command>

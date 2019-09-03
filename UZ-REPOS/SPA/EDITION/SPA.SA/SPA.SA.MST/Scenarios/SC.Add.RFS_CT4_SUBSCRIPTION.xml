@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scenario name="SC.Add.RFS_CT4_SUBSCRIPTION">
   <objectList>
-    <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
   </objectList>
   <automat>
-    <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
+    <node name="BySubscribersCutter" object="BySubscribersCutter">
       <resultlist>
         <result value="0" node="AddMST"/>
         <result value="1" node=""/>
@@ -18,14 +18,11 @@
       </resultlist>
       <parameterslist>
         <param name="Command" value="AddMST"/>
-        <param name="Script" value="Command"/>
-        <param name="ErrorDecodingType" value="ByRegexp"/>
-        <param name="CommandSource" value="Dictionary"/>
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">
       <resultlist>
-        <result value="" node="RequestCutterBySubscribers"/>
+        <result value="" node="BySubscribersCutter"/>
       </resultlist>
     </node>
   </automat>

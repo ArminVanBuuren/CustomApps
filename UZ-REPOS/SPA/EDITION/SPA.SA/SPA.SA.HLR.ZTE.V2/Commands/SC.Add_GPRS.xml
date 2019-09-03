@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="SC.Add_GPRS">
+	<Description>Добавление услуги 'GPRS'</Description>
+	<Author Name="system" Date="2018-09-20+09:00"/>
+	<Request>
+		<RequestTemplate>
+			<![CDATA[SET TPLGPRS:MSISDN=##msisdn##,GPRSTPL=51;^M]]>
+		</RequestTemplate>
+		<Item Name="msisdn" Type="Wellknown"/>
+	</Request>
+</Command>

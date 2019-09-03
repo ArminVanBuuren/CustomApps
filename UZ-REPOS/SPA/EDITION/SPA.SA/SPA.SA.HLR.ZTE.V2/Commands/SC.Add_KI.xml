@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="SC.Add_KI">
+	<Description>Добавление ключа в AuC</Description>
+	<Author Name="system" Date="2018-09-20+09:00"/>
+	<Request>
+		<RequestTemplate>
+			<![CDATA[##KI##^M]]>
+		</RequestTemplate>
+		<Item Name="KI" Type="LocalParameter"/>
+	</Request>
+	<ParametersList>
+		<Parameter Name="KI">
+			<Source Path="ExtendedRequestMessage/AdditionalData/KI"/>
+			<PossibleValues StringToKeyTable="true"/>
+		</Parameter>
+	</ParametersList>
+</Command>

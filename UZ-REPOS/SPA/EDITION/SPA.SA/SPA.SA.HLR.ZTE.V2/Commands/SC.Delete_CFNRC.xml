@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="SC.Delete_CFNRC">
+	<Description>Delete call forwarding on mobile subscriber not reachable</Description>
+	<Author Name="system" Date="2018-09-20+09:00"/>
+	<Request>
+		<RequestTemplate>
+			<![CDATA[MOD SS:MSISDN=##msisdn##,CFNRC=0;^M]]>
+		</RequestTemplate>
+		<Item Name="msisdn" Type="Wellknown"/>
+	</Request>
+</Command>

@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="SC.HLR.CreateSubscriber">
+	<objectList>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+		<object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll" />
+		<object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+		<object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll" />
+		<object name="WellknownsReplacer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.WellknownsReplacer" assembly="FORIS.SPA.MmlProcessing.dll" />
+		<object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll" />
+	</objectList>
+	<automat>
+		<node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
+			<resultlist>
+				<result value="0" node="CheckNewIMSI"/>
+				<result value="1" node=""/>
+			</resultlist>
+		</node>
+		<node name="CheckNewIMSI" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="WellknownsReplacerNewIMSI"/>
+				<result value="" node="Create_Subscriber"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath:0" value="//NewIMSI/Value[text()!='']"/>
+			</parameterslist>
+		</node>
+		<node name="WellknownsReplacerNewIMSI" object="WellknownsReplacer">
+			<resultlist>
+				<result value="" node="Create_Subscriber" />
+			</resultlist>
+			<parameterslist>
+				<param name="imsi" value="xmlsubstr(&quot;//NewIMSI&quot;)" />
+			</parameterslist>
+		</node>
+		<node name="Create_Subscriber" object="Commander">
+			<resultlist>
+				<result value="0" node="SwitchMode"/>
+				<result value="1797" node="Delete_Subscriber_MSISDN" />
+				<result value="1796" node="Delete_Subscriber_IMSI" />
+				<result value="1793" node="GetKI" />
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Command" value="SC.Create_Subscriber"/>
+			</parameterslist>
+		</node>
+		<node name="Delete_Subscriber_MSISDN" object="Commander">
+			<resultlist>
+				<result value="0" node="Create_Subscriber"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Command" value="SC.Delete_Subscriber_MSISDN"/>
+			</parameterslist>
+		</node>
+		<node name="Delete_Subscriber_IMSI" object="Commander">
+			<resultlist>
+				<result value="0" node="Create_Subscriber"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Command" value="SC.Delete_Subscriber_IMSI"/>
+			</parameterslist>
+		</node>
+		<node name="GetKI" object="DataBaseProcessor">
+			<resultlist>
+				<result value="" node="ExtractKI" />
+			</resultlist>
+			<parameterslist>
+				<param name="DataBaseName" value="FORIS.SPA.CBP" />
+				<param name="FunctionName" value="GET_KI" />
+				<param name="FunctionType" value="function" />
+				<param name="OutXml" value="db_unit_result" />
+				<param name="DbParameterName:0" value="p_imsi" />
+				<param name="DbParameterDirection:0" value="Input" />
+				<param name="DbParameterType:0" value="Varchar2" />
+				<param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/IdentifiersList/Identifier/IMSI" />
+				<param name="DbParameterName:1" value="p_result" />
+				<param name="DbParameterDirection:1" value="ReturnValue" />
+				<param name="DbParameterType:1" value="Varchar2" />
+				<param name="DbParameterValue:1" value="" />
+			</parameterslist>
+		</node>
+		<node name="ExtractKI" object="XmlNodesCopier">
+			<resultlist>
+				<result value="" node="Add_KI" />
+			</resultlist>
+			<parameterslist>
+				<param name="SrcXml" value="db_unit_result" />
+				<param name="DstMessage" value="xmlrequest" />
+				<param name="CopyContentType" value="InnerText" />
+				<param name="SrcXmlPath:0" value="root/return" />
+				<param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/KI" />
+			</parameterslist>
+		</node>
+		<node name="Add_KI" object="IfCommander">
+			<resultlist>
+				<result value="0" node="Create_Subscriber" />
+				<result value="" node="ResponseAssembler" />
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath:0" value="//ExtendedRequestMessage/AdditionalData/KI[text()!='1']"/>
+				<param name="Command" value="SC.Add_KI" />
+			</parameterslist>
+		</node>
+		<node name="SwitchMode" object="Switch">
+			<resultlist>
+				<result value="0" node="Add_Region"/>
+				<result value="1" node="Add_Region"/>
+				<result value="2" node="Modify_GPRS_Barring"/>
+				<result value="3" node="Modify_GPRS_Barring"/>
+			</resultlist>
+			<parameterslist>
+				<param name="XmlPath" value="//RES_HLR_PROFILE/Value/text()"/>
+				<param name="Value:2" value="AIISKUE"/>
+				<param name="Value:3" value="DEALERS"/>
+			</parameterslist>
+		</node>
+		<node name="Add_Region" object="IfCommander">
+			<resultlist>
+				<result value="0" node="Modify_BOC"/>
+				<result value="1538" node="Modify_BOC"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath:0" value="//RES_HLR_REGION"/>
+				<param name="Command" value="SC.Add_Region"/>
+			</parameterslist>
+		</node>
+		<node name="Modify_BOC" object="IfCommander">
+			<resultlist>
+				<result value="0" node="Modify_BIC"/>
+				<result value="1538" node="Modify_BIC"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="MultiLevelCondition" value="(NOT //RFS_HLR_ODB_OC) OR (//RFS_HLR_ODB_OC/RES_HLR_ODB_OC/Value[text()!='LocalCalls'])"/>
+				<param name="Command" value="SC.Modify_BOC"/>
+			</parameterslist>
+		</node>
+		<node name="Modify_BIC" object="IfCommander">
+			<resultlist>
+				<result value="0" node="Modify_SMSO"/>
+				<result value="1538" node="Modify_SMSO"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="MultiLevelCondition" value="(NOT //RFS_HLR_ODB_IC) OR (//RFS_HLR_ODB_IC/RES_HLR_ODB_IC/Value[text()='NoCalls'])"/>
+				<param name="Command" value="SC.Modify_BIC"/>
+			</parameterslist>
+		</node>
+		<node name="Modify_SMSO" object="IfCommander">
+			<resultlist>
+				<result value="0" node="Modify_SMST"/>
+				<result value="1538" node="Modify_SMST"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="MultiLevelCondition" value="(NOT //RFS_HLR_SMS_MO) OR (//RFS_HLR_SMS_MO/RES_HLR_SMS_MO/Value[text()='NoSMS'])"/>
+				<param name="Command" value="SC.Modify_SMSO"/>
+			</parameterslist>
+		</node>
+		<node name="Modify_SMST" object="IfCommander">
+			<resultlist>
+				<result value="0" node="Delete_CLIP"/>
+				<result value="1538" node="Delete_CLIP"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="MultiLevelCondition" value="(NOT //RFS_HLR_SMS_MT) OR (//RFS_HLR_SMS_MT/RES_HLR_SMS_MT/Value[text()='NoSMS'])"/>
+				<param name="Command" value="SC.Modify_SMST"/>
+			</parameterslist>
+		</node>
+		<node name="Delete_CLIP" object="IfCommander">
+			<resultlist>
+				<result value="0" node="Modify_CW" />
+				<result value="1538" node="Modify_CW" />
+				<result value="" node="ResponseAssembler" />
+			</resultlist>
+			<parameterslist>
+				<param name="IfNotXmlPath:0" value="//RFS_HLR_CLIP"/>
+				<param name="Command" value="SC.Delete_CLIP" />
+			</parameterslist>
+		</node>
+		<node name="Modify_CW" object="IfCommander">
+			<resultlist>
+				<result value="0" node="Modify_CH" />
+				<result value="1538" node="Modify_MPTY" />
+				<result value="" node="ResponseAssembler" />
+			</resultlist>
+			<parameterslist>
+				<param name="IfNotXmlPath:0" value="//RFS_HLR_CWCH"/>
+				<param name="Command" value="SC.Modify_CW" />
+			</parameterslist>
+		</node>
+		<node name="Modify_CH" object="Commander">
+			<resultlist>
+				<result value="0" node="Modify_MPTY" />
+				<result value="" node="ResponseAssembler" />
+			</resultlist>
+			<parameterslist>
+				<param name="Command" value="SC.Modify_CH" />
+			</parameterslist>
+		</node>
+		<node name="Modify_MPTY" object="IfCommander">
+			<resultlist>
+				<result value="0" node="Modify_DataTransfer" />
+				<result value="1538" node="Modify_DataTransfer" />
+				<result value="" node="ResponseAssembler" />
+			</resultlist>
+			<parameterslist>
+				<param name="IfNotXmlPath:0" value="//RFS_HLR_MPTY"/>
+				<param name="Command" value="SC.Modify_MPTY" />
+			</parameterslist>
+		</node>
+		<node name="Modify_DataTransfer" object="IfCommander">
+			<resultlist>
+				<result value="0" node="Modify_VideoCall"/>
+				<result value="1538" node="Modify_VideoCall"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfNotXmlPath:0" value="//RFS_HLR_DATATRANSFER"/>
+				<param name="Command" value="SC.Modify_DataTransfer"/>
+			</parameterslist>
+		</node>
+		<node name="Modify_VideoCall" object="IfCommander">
+			<resultlist>
+				<result value="0" node="Delete_CFB"/>
+				<result value="1538" node="Delete_CFB"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfNotXmlPath:0" value="//RFS_HLR_VIDEOCALL"/>
+				<param name="Command" value="SC.Modify_VideoCall"/>
+			</parameterslist>
+		</node>
+		<node name="Delete_CFB" object="IfCommander">
+			<resultlist>
+				<result value="0" node="Delete_CFU"/>
+				<result value="1538" node="Delete_CFU"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfNotXmlPath:0" value="//RFS_HLR_CFB"/>
+				<param name="Command" value="SC.Delete_CFB"/>
+			</parameterslist>
+		</node>
+		<node name="Delete_CFU" object="IfCommander">
+			<resultlist>
+				<result value="0" node="Delete_CFNRC"/>
+				<result value="1538" node="Delete_CFNRC"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfNotXmlPath:0" value="//RFS_HLR_CFU"/>
+				<param name="Command" value="SC.Delete_CFU"/>
+			</parameterslist>
+		</node>
+		<node name="Delete_CFNRC" object="IfCommander">
+			<resultlist>
+				<result value="0" node="Delete_CFNRY"/>
+				<result value="1538" node="Delete_CFNRY"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfNotXmlPath:0" value="//RFS_HLR_CFNRC"/>
+				<param name="Command" value="SC.Delete_CFNRC"/>
+			</parameterslist>
+		</node>
+		<node name="Delete_CFNRY" object="IfCommander">
+			<resultlist>
+				<result value="0" node="Delete_CFD"/>
+				<result value="1538" node="Delete_CFD"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfNotXmlPath:0" value="//RFS_HLR_CFNRY"/>
+				<param name="Command" value="SC.Delete_CFNRY"/>
+			</parameterslist>
+		</node>
+		<node name="Delete_CFD" object="IfCommander">
+			<resultlist>
+				<result value="0" node="Modify_Roaming"/>
+				<result value="1538" node="Modify_Roaming"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfNotXmlPath:0" value="//RFS_HLR_CFD"/>
+				<param name="Command" value="SC.Delete_CFD"/>
+			</parameterslist>
+		</node>
+		<node name="Modify_Roaming" object="IfCommander">
+			<resultlist>
+				<result value="0" node="Modify_GPRS_Barring"/>
+				<result value="1538" node="Modify_GPRS_Barring"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath:0" value="//RFS_HLR_ROAMING"/>
+				<param name="Command" value="SC.Modify_Roaming"/>
+			</parameterslist>
+		</node>
+		<node name="Modify_GPRS_Barring" object="Commander">
+			<resultlist>
+				<result value="0" node="Modify_NAM"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Command" value="SC.Modify_GPRS_Barring"/>
+			</parameterslist>
+		</node>
+		<node name="Modify_NAM" object="Commander">
+			<resultlist>
+				<result value="0" node="GetSubscriber"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Command" value="SC.Modify_NAM"/>
+			</parameterslist>
+		</node>
+		<node name="GetSubscriber" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Command" value="SC.GetSubscriber"/>
+			</parameterslist>
+		</node>
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="RequestCutterBySubscribers"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>
