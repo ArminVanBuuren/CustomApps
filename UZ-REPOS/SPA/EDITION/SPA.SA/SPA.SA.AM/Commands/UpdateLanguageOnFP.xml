@@ -6,7 +6,7 @@
     <RequestTemplate>
       <![CDATA[<DataSet Name="TDCLanguagesDataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Attributes>
-    <Attribute Name="Label" Type="System.String" Value="UpdateTDCLanguages;##datetime##;[SCP_MARKER]"/>
+    <Attribute Name="Label" Type="System.String" Value="UpdateTDCLanguages;##datetime##;SPA"/>
     <Attribute Name="Protocol" Type="System.String" Value="Msmq"/>
   </Attributes>
   <DataTable Name="TDCLanguagesDataTable">

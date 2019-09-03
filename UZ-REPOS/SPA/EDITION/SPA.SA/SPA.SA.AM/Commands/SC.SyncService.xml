@@ -6,7 +6,7 @@
     <RequestTemplate>
       <![CDATA[<DataSet Name="UpdateTDCDataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Attributes>
-    <Attribute Name="Label" Type="System.String" Value="UpdateTDC;##datetime##;[SCP_MARKER]"/>
+    <Attribute Name="Label" Type="System.String" Value="UpdateTDC;##datetime##;SPA"/>
     <Attribute Name="Protocol" Type="System.String" Value="Msmq"/>
   </Attributes>
   <DataTable Name="UpdateTDCDataTable">
@@ -18,7 +18,7 @@
       <Column Name="CLIENT_ID" Type="System.String"/>
     </Columns>
     <Rows>
-      <Row REQUEST_ID="##ASYNC_REQUEST_ID##" TERMINAL_DEVICE_CONTRACT_ID="##TerminalDeviceID##" PERSONAL_ACCOUNT_ID="##PersonalAccount##" MSISDN="##msisdn##" CLIENT_ID="[SCP_MARKER]"/>
+      <Row REQUEST_ID="##ASYNC_REQUEST_ID##" TERMINAL_DEVICE_CONTRACT_ID="##TerminalDeviceID##" PERSONAL_ACCOUNT_ID="##PersonalAccount##" MSISDN="##msisdn##" CLIENT_ID="SPA"/>
     </Rows>
   </DataTable>
   <DataTable Name="ServiceCodeDataTable">
@@ -40,7 +40,6 @@
       <Column Name="SERVICE_ROW_ID" Type="System.Int64"/>
       <Column Name="PARAM_CODE" Type="System.String"/>
       <Column Name="PARAM_VALUE" Type="System.String"/>
-      <Column Name="NEW_PARAM_VALUE" Type="System.String"/>
     </Columns>
     <Rows>##ServicesParams##</Rows>
   </DataTable>
@@ -68,6 +67,6 @@
     <Error Name="Not found" Value="InvalidRequest"/>
     <Error Name="parameter must be returned" Value="InvalidRequest"/>
     <Error Name="-151014" Value="SUCCESS"/>
-    <Error Name="If the service is present in expired state, it will be deactivated later internally" Value="SUCCESS"/>
+    <Error Name="-151003" Value="SUCCESS"/>
   </ErrorsList>
 </Command>

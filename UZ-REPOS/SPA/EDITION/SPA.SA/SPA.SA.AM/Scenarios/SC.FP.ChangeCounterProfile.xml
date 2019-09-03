@@ -10,24 +10,6 @@
     <object name="SmbpMappingDataConstructor" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.SmbpProcessingUnits.SmbpMappingDataConstructor" assembly="FORIS.SPA.MmlProcessing.dll" />
   </objectList>
   <automat>
-    <node name="SkipDummyResponderNode" object="DummyResponder">
-      <resultlist>
-        <result value="" node="SkipResponseAssembler" />
-        <result value="1538" node="BySubscribersSplitter" />
-      </resultlist>
-      <parameterslist>
-        <param name="IfNotXmlPath:0" value="//ProcessingOptions/IsCounterProcess" />
-        <param name="OverallResult" value="SUCCESS" />
-        <param name="DetailedResult" value="SUCCESS" />
-        <param name="DetailedResultDescription" value="Skip because of is't not Counter Reinitialization process" />
-      </parameterslist>
-    </node>
-    <node name="SkipResponseAssembler" object="ResponseAssembler">
-      <parameterslist/>
-      <resultlist>
-        <result value="" node="" />
-      </resultlist>
-    </node>
     <node name="BySubscribersSplitter" object="BySubscribersSplitter">
       <resultlist>
         <result value="0" node="SingleSubscriberRequestDequeuer"/>

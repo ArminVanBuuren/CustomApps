@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration> 
+    <Application Path="C:\Foris\SPA\SPA.SA\SPA.SA.BSP\configuration.application.xml"/>
+	<Settings>
+		<Add Key="TransactionalRxMode" Value="true"/>
+		<Add Key="ReportTimeout" Value="300"/>
+		<Add Key="DictionaryCommandsOnDisk" Value="true"/>
+		<Add Key="CreatePerformanceCounters" Value="false"/>
+		<Add Key="PermanentEmulation.DefaultResultType" Value="SUCCESS"/>
+		<Add Key="PermanentEmulation.RandomizeResultTypes" Value="false"/>
+		<Add Key="Requests.MaxQueuedPerHost" Value="250"/>
+		<Add Key="Requests.PollPeriod" Value="1"/>
+		<Add Key="Requests.PollIdlePeriod" Value="1"/>
+		<Add Key="Responses.WritersCount" Value="5"/>
+		<Add Key="ProfilerConfiguration" Value="Profiler.xml" />
+	</Settings>
+	<DatabaseObjects Remotable="false">
+	<Add Name="FORIS.SPA.CBP" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.CBP"/>
+		<Add Name="FORIS.SPA.ARCHIVE" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.ARCHIVE"/>
+		<Add Name="FORIS.SPA.ROBP" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.ROBP"/>
+		<Add Name="FORIS.SPA.STATE" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.STATE"/>
+		<Add Name="FORIS.RI" ConnectionDataType="uri" ConnectionData="MR_CENTER" />
+	</DatabaseObjects>
+</Configuration>

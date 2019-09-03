@@ -32,9 +32,7 @@
       </resultlist>
       <parameterslist>
         <param name="ServicesDynamicObject" value="RegisteredServices" />
-        <param name="ParametersDynamicObject" value="RegisteredServicesParams" />
         <param name="ServicesCommand" value="SC.CreateTDC.ServiceRow" />
-        <param name="ParametersCommand" value="SC.Service.ParameterRow" />
         <param name="XmlPath" value="//AdditionalData/EndList/RFS_FP_SERVICE_GENERAL" />
       </parameterslist>
     </node>

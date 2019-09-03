@@ -1,8 +1,10 @@
-<Decoder Name="FinancialPlatform"  Type="FORIS.ServiceProvisioning.MmlProcessing.Dictionary.IdentifiersDecoder, FORIS.SPA.MmlProcessing">
-   <Attribute Key="PlatformNumber" RegexpPattern="PLATFORM_NUMBER&gt;(?&lt;parameter&gt;.*)&lt;" RegexpOptions="Multiline, IgnoreCase">
-    <PossibleValues StringToKeyTable="false" AbsenceValue="NONE">
-      <Item Key="NONE" StringValue="NONE"/>
-    </PossibleValues>
-  </Attribute>
-  <Attribute Key="LastOperationDate" RegexpPattern="REQUEST_COMPLETION_DATE&gt;(?&lt;parameter&gt;[\x2D0-9T+:]*)." RegexpOptions="Multiline, IgnoreCase, IgnorePatternWhitespace" PostFormat="to_date({0},yyyy-MM-ddThh:mm:ss, MM/dd/yyyy hh:mm:ss)"/>
+<Decoder Name="FinancialPlatform" Type="FORIS.ServiceProvisioning.MmlProcessing.Dictionary.IdentifiersDecoder, FORIS.SPA.MmlProcessing">
+  <AttributesList>
+    <Attribute Key="PlatformNumber" RegexpPattern="PLATFORM_NUMBER&gt;(?&lt;parameter&gt;.*)&lt;" RegexpOptions="Multiline, IgnoreCase">
+      <PossibleValues StringToKeyTable="false" AbsenceValue="NONE">
+        <Item Key="NONE" StringValue="NONE" />
+      </PossibleValues>
+    </Attribute>
+    <Attribute Key="LastOperationDate" RegexpPattern="REQUEST_COMPLETION_DATE&gt;(?&lt;parameter&gt;[\x2D0-9T+:]*)." RegexpOptions="Multiline, IgnoreCase, IgnorePatternWhitespace" PostFormat="to_date({0},yyyy-MM-ddThh:mm:ss, MM/dd/yyyy hh:mm:ss)" />
+  </AttributesList>
 </Decoder>

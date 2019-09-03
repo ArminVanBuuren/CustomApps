@@ -2,14 +2,6 @@
 <Dictionary xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <WellknownsList>
     <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
-    <Wellknown Name="msisdn.cc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,0,3)"/>
-    <Wellknown Name="msisdn.ndc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,3,2)"/>
-    <Wellknown Name="msisdn.sn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,5)"/>
-    <Wellknown Name="msisdn.fn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,3)"/>
-    <Wellknown Name="imsi" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;)"/>
-    <Wellknown Name="imsi.mcc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,0,3)"/>
-    <Wellknown Name="imsi.mnc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,3,2)"/>
-    <Wellknown Name="imsi.msin" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,5)"/>
   </WellknownsList>
   <ErrorsList CodePage="windows-1251">
     <Error Name="0" Value="SUCCESS"/>

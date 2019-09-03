@@ -7,7 +7,7 @@
     <RequestTemplate>
       <![CDATA[<DataSet Name="DeleteTDCDataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Attributes>
-    <Attribute Name="Label" Type="System.String" Value="DeleteTerminalDeviceContracts;##datetime##;[SCP_MARKER]"/>
+    <Attribute Name="Label" Type="System.String" Value="DeleteTerminalDeviceContracts;##datetime##;SPA"/>
     <Attribute Name="Protocol" Type="System.String" Value="Msmq"/>
   </Attributes>
   <DataTable Name="DeleteTDCDataTable">
@@ -15,10 +15,9 @@
       <Column Name="REQUEST_ID" Type="System.String"/>
       <Column Name="PERSONAL_ACCOUNT_ID" Type="System.Int64"/>
       <Column Name="TERMINAL_DEVICE_CONTRACT_ID" Type="System.Int64"/>
-      <Column Name="KEEP_BALANCES" Type="System.Boolean"/>
     </Columns>
     <Rows>
-      <Row REQUEST_ID="##ASYNC_REQUEST_ID##" PERSONAL_ACCOUNT_ID="##PersonalAccountId##" TERMINAL_DEVICE_CONTRACT_ID="##TerminalDeviceID##" KEEP_BALANCES="##SC.KEEP_BALANCES##"/>
+      <Row REQUEST_ID="##ASYNC_REQUEST_ID##" PERSONAL_ACCOUNT_ID="##PersonalAccountId##" TERMINAL_DEVICE_CONTRACT_ID="##TerminalDeviceID##"/>
     </Rows>
   </DataTable>
 </DataSet>]]>
@@ -26,7 +25,6 @@
     <Item Name="datetime" Type="Wellknown"/>
     <Item Name="PersonalAccountId" Type="LocalParameter"/>
     <Item Name="TerminalDeviceID" Type="Wellknown"/>
-    <Item Name="SC.KEEP_BALANCES" Type="Parameter"/>
   </Request>
   <ParametersList>
     <Parameter Name="PersonalAccountId" IsChoice="true">

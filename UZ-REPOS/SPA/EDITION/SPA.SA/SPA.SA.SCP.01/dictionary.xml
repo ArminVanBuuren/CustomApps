@@ -396,7 +396,7 @@
       <Source Path="//AdditionalData/AddList//NewTerminalDeviceClassID"/>
     </Parameter>
     <Parameter Name="SERVICE_REQUEST_ID">
-      <Source Path="//CRMOriginalID/Value" PostFormat="{0}##REQUEST_ID_DIVIDER####ASYNC_REQUEST_ID##" />
+      <Source Path="//CrmInternalProductActionId/Value[string-length(.) &gt; 0] | //CRMOriginalID/Value" PostFormat="{0}##REQUEST_ID_DIVIDER####ASYNC_REQUEST_ID##" />
     </Parameter>
   </ParametersList>
   <DynamicParametersList/>

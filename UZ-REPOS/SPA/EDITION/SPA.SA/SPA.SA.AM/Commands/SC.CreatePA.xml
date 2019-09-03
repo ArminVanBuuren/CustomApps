@@ -7,7 +7,7 @@
     <RequestTemplate>
       <![CDATA[<DataSet Name="CreatePADataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Attributes>
-    <Attribute Name="Label" Type="System.String" Value="CreatePA;##datetime##;[SCP_MARKER]"/>
+    <Attribute Name="Label" Type="System.String" Value="CreatePA;##datetime##;SPA"/>
     <Attribute Name="Protocol" Type="System.String" Value="Remoting"/>
   </Attributes>
   <DataTable Name="CreatePADataTable">
@@ -38,7 +38,6 @@
       <Column Name="PA_BALANCE_STATUS_CHANGE_DATE" Type="System.DateTime"/>
       <Column Name="PSP_DAY_OF_MONTH" Type="System.Int32"/>
       <Column Name="BILLING_GROUP_ID" Type="System.Int64"/>
-      <Column Name="KEEP_BALANCES" Type="System.Boolean"/>
     </Columns>
     <Rows>
       <Row REQUEST_ID="reversecut(##org.id##,4)-##GlobalUid##" PERSONAL_ACCOUNT_ID="##PersonalAccount##" BALANCE="##SC.BALANCE##" CURRENCY_CODE="##SC.CURRENCY_CODE##" 
@@ -46,7 +45,7 @@
 PARTIAL_BLOCK_LIMIT="##SC.PARTIAL_BLOCK_LIMIT##" EXPIRES="##SC.EXPIRES##" EXPIRATION_DATE_MONITOR="##SC.EXPIRATION_DATE_MONITOR##" ##SC.ADMIN_BLOCK## 
 ##SC.ADMIN_BLOCKED_DATE## ##SC.BLOCKED_END_DATE## TAX_GROUP_ID="##TAX_GROUP_ID##" CUSTOMER_TYPE_ID="##CUSTOMER_TYPE_ID##" 
 MAX_BLOCKED_PERIOD="##SC.MAX_BLOCKED_PERIOD##" AFTER_GRACE_PERIOD="##SC.AFTER_GRACE_PERIOD##" IS_GRACE_STARTS_ON_BLOCK="##SC.IS_GRACE_STARTS_ON_BLOCK##"
-VALIDITY_PERIOD="##SC.VALIDITY_PERIOD##" ##PA_STATUS_CHANGE_DATE## ##PA_BALANCE_STATUS_CHANGE_DATE## ##PSP_DAY_OF_MONTH## BILLING_GROUP_ID="##BILLING_GROUP_ID##" KEEP_BALANCES="##SC.KEEP_BALANCES##"/>
+VALIDITY_PERIOD="##SC.VALIDITY_PERIOD##" ##PA_STATUS_CHANGE_DATE## ##PA_BALANCE_STATUS_CHANGE_DATE## ##PSP_DAY_OF_MONTH## BILLING_GROUP_ID="##BILLING_GROUP_ID##" />
     </Rows>
   </DataTable>
   <DataTable Name="LowBalanceLimitsDataTable">
@@ -95,7 +94,7 @@ VALIDITY_PERIOD="##SC.VALIDITY_PERIOD##" ##PA_STATUS_CHANGE_DATE## ##PA_BALANCE_
     <RequestTemplate>
       <![CDATA[<DataSet Name="DeletePADataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Attributes>
-    <Attribute Name="Label" Type="System.String" Value="DeletePA;##datetime##;[SCP_MARKER]"/>
+    <Attribute Name="Label" Type="System.String" Value="DeletePA;##datetime##;SPA"/>
     <Attribute Name="Protocol" Type="System.String" Value="Remoting"/>
   </Attributes>
   <DataTable Name="DeletePADataTable">

@@ -16,7 +16,7 @@
         <result value="1538" node="BySubscribersCutter" />
       </resultlist>
       <parameterslist>
-        <param name="MultiLevelCondition" value="(//ProcessingOptions/IsShareProcess) OR (//ProcessingOptions/IsCUGProcess) OR (//ProcessingOptions/IsCounterProcess) OR (NOT //AdditionalData/*/RFS_FP_SERVICE_GENERAL/SkipFP/Value[text()='0'])" />
+        <param name="MultiLevelCondition" value="(//ProcessingOptions/IsCUGProcess) OR (//ProcessingOptions/IsCounterProcess) OR (NOT //AdditionalData/*/RFS_FP_SERVICE_GENERAL/SkipFP/Value[text()='0'])" />
         <param name="OverallResult" value="SUCCESS" />
         <param name="DetailedResult" value="SUCCESS" />
         <param name="DetailedResultDescription" value="Skip because of CUG/CounterReinitialization/DoNotProcessingInFinancialPlatform" />

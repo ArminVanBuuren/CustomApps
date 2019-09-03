@@ -24,7 +24,7 @@
                 </ParametersList>
               </config>
             </socket>
-            <Emulation Success="..\SPA.SA\SPA.SA.MG\Emulation\printout.success.txt" Failure="..\SPA.SA\SPA.SA.MG\Emulation\printout.failure.txt" RandomizePrintout="false" OverwriteCommandPrintout="true"  Lifetime="00:00:00.00"/>
+            <Emulation Success="0" Failure="-1" RandomizePrintout="false" OverwriteCommandPrintout="true"  Lifetime="00:00:00.00"/>
             <Timers IdleTimeout="10"/>
             <PredefinedScripts Login="Login" Command="Command" Idle="" Logoff=""/>
             <ScriptsList/>

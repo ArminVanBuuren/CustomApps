@@ -7,7 +7,7 @@
     <RequestTemplate>
       <![CDATA[<DataSet Name="ChangeTariffPlanDataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Attributes>
-    <Attribute Name="Label" Type="System.String" Value="ChangeTariffPlanAndServices;##datetime##;[SCP_MARKER]"/>
+    <Attribute Name="Label" Type="System.String" Value="ChangeTariffPlanAndServices;##datetime##;SPA"/>
     <Attribute Name="Protocol" Type="System.String" Value="Msmq"/>
   </Attributes>
   <DataTable Name="ChangeTariffPlanDataTable">
@@ -22,7 +22,7 @@
     </Columns>
     <Rows>
       <Row REQUEST_ID="##ASYNC_REQUEST_ID##" TERMINAL_DEVICE_CONTRACT_ID="##TerminalDeviceID##" PERSONAL_ACCOUNT_ID="##PersonalAccount##" 
-           OLD_TARIFF_PLAN_ID="##OLD_TARIFF_PLAN_ID##" NEW_TARIFF_PLAN_ID="##NEW_TARIFF_PLAN_ID##" TERMINAL_DEVICE_CLASS="##SC.NEW_TERMINAL_DEVICE_CLASS##" CLIENT_ID="[SCP_MARKER]"/>
+           OLD_TARIFF_PLAN_ID="##OLD_TARIFF_PLAN_ID##" NEW_TARIFF_PLAN_ID="##NEW_TARIFF_PLAN_ID##" TERMINAL_DEVICE_CLASS="##SC.NEW_TERMINAL_DEVICE_CLASS##" CLIENT_ID="SPA"/>
     </Rows>
   </DataTable>
   <DataTable Name="ServiceCodeDataTable">

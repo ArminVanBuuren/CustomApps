@@ -21,7 +21,6 @@
 					<Column Name="CHARGING_DATE_TIME" Type="System.String"/>
 					<Column Name="CHANGE_DATE_TIME" Type="System.String"/>
 					<Column Name="SUM_TYPE" Type="System.String"/>
-					<Column Name="ADMIN_LIMIT" Type="System.String"/>
 				</Columns>
 				<Rows>
 					##Services##

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="SC.SM.ChangeTP">
+	<objectList>
+		<object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+	</objectList>
+	<automat>
+		<node name="SkipDummyResponderNode" object="DummyResponder">
+			<resultlist>
+				<result value="" node="SkipResponseAssembler" />
+				<result value="1538" node="BySubscribersCutter-Node" />
+			</resultlist>
+			<parameterslist>
+				<param name="IfNotXmlPath:0" value="//ChangeTP/NewPlatform" />
+				<param name="OverallResult" value="SUCCESS" />
+				<param name="DetailedResult" value="SUCCESS" />
+				<param name="DetailedResultDescription" value="Skip because Platform is not changed" />
+			</parameterslist>
+		</node>
+		<node name="SkipResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="" />
+			</resultlist>
+		</node>
+		<node name="BySubscribersCutter-Node" object="BySubscribersCutter">
+			<resultlist>
+				<result value="0" node="ChangeProfile" />
+				<result value="1" node="" />
+			</resultlist>
+		</node>
+		<node name="ChangeProfile" object="Commander">
+			<resultlist>
+				<result value="1837" node="AddSubscriber"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Command" value="SC.SM.ChangeProfile"/>
+			</parameterslist>
+		</node>
+		<node name="AddSubscriber" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler" />
+			</resultlist>
+			<parameterslist>
+				<param name="Command" value="SC.SM.AddSubscriber"/>
+			</parameterslist>
+		</node>
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="BySubscribersCutter-Node"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

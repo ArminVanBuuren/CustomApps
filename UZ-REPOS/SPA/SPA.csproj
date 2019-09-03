@@ -236,6 +236,38 @@
     <Content Include="EDITION\ROBP\Processes\Roaming Test Util Request.xml" />
     <Content Include="EDITION\ROBP\Processes\Synchronize Subscriber Data.xml" />
     <Content Include="EDITION\ROBP\Processes\Unblock Subscriber.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.BSP\configuration.application.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.BSP\configuration.common.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.BSP\Dictionaries\Commands\CounterReinitialization.ServiceRow.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.BSP\Dictionaries\Commands\CounterReinitialization.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.BSP\Dictionaries\dictionary.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.BSP\Scenarios\CounterReinitializationOnBSProxy.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.BSP\Scenarios\SC.BSP.ChangeCounterProfile.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.EIR\Commands\ChangeIMSIOnEIR.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.EIR\Commands\ChangeMSISDNOnEIR.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.EIR\Commands\CreateSubscriberOnEIR.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.EIR\Commands\DeleteSubscriberOnEIR.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.EIR\Commands\GetHistoryOnEIR.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.EIR\Commands\GetStateByImsiOnEIR.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.EIR\dictionary.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.EIR\Scenarios\ChangeIMSIOnEIR.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.EIR\Scenarios\ChangeMSISDNOnEIR.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.EIR\Scenarios\CreateSubscriberOnEIR.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.EIR\Scenarios\DeleteSubscriberOnEIR.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.EIR\Scenarios\GetHistoryOnEIR.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.EIR\Scenarios\GetStateByImsiOnEIR.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.EIR\Scripts\Command.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.EIR\Scripts\login.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.EIR\Scripts\logoff.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.EIR\Scripts\nosleep.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.SMSC\Commands\SC.SM.AddSubscriber.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.SMSC\Commands\SC.SM.ChangeIMSI.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.SMSC\Commands\SC.SM.ChangeProfile.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.SMSC\Commands\SC.SM.DeleteSubscriber.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.SMSC\Scenarios\SC.SM.ChangeIMSI.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.SMSC\Scenarios\SC.SM.ChangeTP.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.SMSC\Scenarios\SC.SM.CreateSubscriber.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.SMSC\Scenarios\SC.SM.DeleteSubscriber.xml" />
     <Content Include="EDITION\SRI\SC-HL %28ZTE%29\ServiceCatalog-HLR_WORKED_2018.12.09.xml" />
     <Content Include="EDITION\SRI\SC-SCG\ServiceCatalog-SCG.xml" />
     <Content Include="EDITION\SRI\WholeCatalog.xml" />
@@ -548,8 +580,6 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.ALLPLAY\configuration.common.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.ALLPLAY\dictionary.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.UNIFUN\Commands\DeleteUNIFUN.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.UNIFUN\Emulation\printout.failure.txt" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.UNIFUN\Emulation\printout.success.txt" />
     <Content Include="EDITION\SPA.SA\SPA.SA.UNIFUN\Scenarios\DeleteUNIFUN.xml" />
     <Content Include="EDITION\DOC\Заметки.txt" />
     <Content Include="PROD-2018.09.06\ROBP\Operations\CT4\AddMST.xml" />
@@ -1545,8 +1575,6 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.UNIFUN\configuration.application.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.UNIFUN\configuration.common.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.UNIFUN\dictionary.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.ALLPLAY\Emulation\printout.failure.txt" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.ALLPLAY\Emulation\printout.success.txt" />
     <Content Include="EDITION\SPA.SA\SPA.SA.ALLPLAY\Scenarios\SC.CT6.ChangeMSISDN.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.ALLPLAY\Scenarios\SC.Add.RFS_CT6_SUBSCRIPTION.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.ALLPLAY\Scenarios\SC.Remove.RFS_CT6_SUBSCRIPTION.xml" />
@@ -1643,27 +1671,19 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.IVR\configuration.application.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.IVR\configuration.common.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.IVR\dictionary.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.IVR\Emulation\printout.failure.txt" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.IVR\Emulation\printout.success.txt" />
     <Content Include="EDITION\SPA.SA\SPA.SA.IVR\Scenarios\SC.ImportContacts.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.IVR\Scenarios\SC.ImportContactsStatistic.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MCA\configuration.application.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MCA\configuration.common.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MCA\dictionary.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.MCA\Emulation\printout.failure.txt" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.MCA\Emulation\printout.success.txt" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MG\configuration.application.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MG\configuration.common.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MG\dictionary.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.MG\Emulation\printout.failure.txt" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.MG\Emulation\printout.success.txt" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MST\Commands\AddMST.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MST\Commands\DeleteMST.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MST\configuration.application.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MST\configuration.common.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MST\dictionary.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.MST\Emulation\printout.failure.txt" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.MST\Emulation\printout.success.txt" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MST\Scenarios\SC.Add.RFS_CT4_SUBSCRIPTION.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.MST\Scenarios\SC.Remove.RFS_CT4_SUBSCRIPTION.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.RBT.INTECH\configuration.application.xml" />
@@ -1760,8 +1780,6 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.SMSC\configuration.application.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SMSC\configuration.common.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.SMSC\dictionary.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SMSC\Emulation\printout.failure.txt" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.SMSC\Emulation\printout.success.txt" />
     <Content Include="PROD-ACTUAL\ROBP\Operations\CT4\AddMST.xml" />
     <Content Include="PROD-ACTUAL\ROBP\Operations\CT4\DeleteMST.xml" />
     <Content Include="PROD-ACTUAL\ROBP\Operations\CT4\DeleteMSTSubscriber.xml" />
@@ -2068,7 +2086,7 @@
     <Content Include="PROD-ACTUAL\SPA.SA\configuration.application.am.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\configuration.application.bms.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\configuration.application.crbt.xml" />
-    <Content Include="PROD-ACTUAL\SPA.SA\configuration.application.eir.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.EIR\configuration.application.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\configuration.application.ericsson.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\configuration.application.gate.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\configuration.application.huawei.and.xml" />
@@ -2092,13 +2110,14 @@
     <Content Include="PROD-ACTUAL\SPA.SA\configuration.application.smsc.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\configuration.application.sync.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\configuration.application.unifun.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\configuration.application.eir.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\configuration.application.zte.roaming.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\configuration.application.zte.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\configuration.common.allplay.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\configuration.common.am.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\configuration.common.bms.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\configuration.common.crbt.xml" />
-    <Content Include="PROD-ACTUAL\SPA.SA\configuration.common.eir.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.EIR\configuration.common.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\configuration.common.ericsson.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\configuration.common.gate.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\configuration.common.huawei.and.xml" />
@@ -2122,6 +2141,7 @@
     <Content Include="PROD-ACTUAL\SPA.SA\configuration.common.smsc.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\configuration.common.sync.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\configuration.common.unifun.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\configuration.common.eir.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\configuration.common.zte.roaming.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\configuration.common.zte.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\AM\Commands\ChangeBillingGroupOnFP.xml" />
@@ -2187,6 +2207,17 @@
     <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\CONTENT\UNIFUN\Scripts\login.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\CONTENT\UNIFUN\Scripts\logoff.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\CONTENT\UNIFUN\Scripts\nosleep.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\EIR\Commands\ChangeIMSIOnEIR.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\EIR\Commands\ChangeMSISDNOnEIR.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\EIR\Commands\CreateSubscriberOnEIR.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\EIR\Commands\DeleteSubscriberOnEIR.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\EIR\Commands\GetHistoryOnEIR.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\EIR\Commands\GetStateByImsiOnEIR.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\EIR\dictionary.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\EIR\Scripts\Command.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\EIR\Scripts\login.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\EIR\Scripts\logoff.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\EIR\Scripts\nosleep.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\GT\Commands\AddGatesm.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\GT\Commands\AddIP.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\GT\Commands\AddPRGATE.xml" />
@@ -2738,6 +2769,26 @@
     <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\MDSP\Scripts\login.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\MDSP\Scripts\logoff.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\MDSP\Scripts\nosleep.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\PCRF\Huawei\Command\AddFRINSPECT.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\PCRF\Huawei\Command\AddService.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\PCRF\Huawei\Command\CreateSubscriber.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\PCRF\Huawei\Command\DeleteFRINSPECT.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\PCRF\Huawei\Command\DeleteService.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\PCRF\Huawei\Command\DeleteSubscriber.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\PCRF\Huawei\Command\GetSubscriberByIMSI.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\PCRF\Huawei\Command\ModifySubscriberIMSI.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\PCRF\Huawei\Command\ModifySubscriberMSISDN.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\PCRF\Huawei\Command\ModifySubscriberProfile.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\PCRF\Huawei\Decoders\MML.Huawei.AttributesDecoder.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\PCRF\Huawei\Decoders\MML.Huawei.CallForwardingInfoDecoder.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\PCRF\Huawei\Decoders\MML.Huawei.CallForwardingServicesDecoder.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\PCRF\Huawei\Decoders\MML.Huawei.GprServicesDecoder.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\PCRF\Huawei\Decoders\MML.Huawei.SupplementaryServicesDecoder.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\PCRF\Huawei\dictionary.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\PCRF\Huawei\Scripts\command.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\PCRF\Huawei\Scripts\login.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\PCRF\Huawei\Scripts\logoff.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\PCRF\Huawei\Scripts\nosleep.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\RBT\Commands\AddBlackListRBT.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\RBT\Commands\AddFRCRBT.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\Dictionaries\RBT\Commands\ChangeMSISDNOnRBT.xml" />
@@ -2963,6 +3014,12 @@
     <Content Include="PROD-ACTUAL\SPA.SA\Scenarios\CONTENT\MST\DeleteMST.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\Scenarios\CONTENT\MST\DeleteMSTSubscriber.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\Scenarios\CONTENT\UNIFUN\DeleteUNIFUN.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Scenarios\EIR\ChangeIMSIOnEIR.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Scenarios\EIR\ChangeMSISDNOnEIR.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Scenarios\EIR\CreateSubscriberOnEIR.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Scenarios\EIR\DeleteSubscriberOnEIR.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Scenarios\EIR\GetHistoryOnEIR.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Scenarios\EIR\GetStateByImsiOnEIR.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\Scenarios\GT\AddGATEInformation.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\Scenarios\GT\AddIP.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\Scenarios\GT\AddService.xml" />
@@ -3291,6 +3348,10 @@
     <Content Include="PROD-ACTUAL\SPA.SA\Scenarios\MDSP\DeleteMDSP.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\Scenarios\MDSP\DeleteSubscriberMDSP.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\Scenarios\MDSP\SynchronizeOnMDSP.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Scenarios\PCRF\Huawei\AddFRINSPECT.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Scenarios\PCRF\Huawei\DeleteFRINSPECT.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Scenarios\PCRF\Huawei\ReSubscribeFRINSPECTAdd.xml" />
+    <Content Include="PROD-ACTUAL\SPA.SA\Scenarios\PCRF\Huawei\ReSubscribeFRINSPECTDelete.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\Scenarios\RBT\AddBlackListRBT.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\Scenarios\RBT\AddFRCRBTRBT.xml" />
     <Content Include="PROD-ACTUAL\SPA.SA\Scenarios\RBT\AddSubscriberOnRBT.xml" />
@@ -3937,6 +3998,16 @@
     <None Include="EDITION\DOC\SCG\Модель услуг SCG v.0.2.xlsx" />
     <None Include="EDITION\DOC\SCG\Перевод управления SCG на SC v0.2.docx" />
     <None Include="EDITION\DOC\SPA_Stat_2018.09.12.xlsx" />
+    <None Include="EDITION\SPA.SA\SPA.SA.BSP\WSDL\bs.nvg.ru.schemas.PayPerDay.152.1.wsdl" />
+    <None Include="EDITION\SPA.SA\SPA.SA.BSP\WSDL\bs.nvg.ru.schemas.PayPerDay.152.1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="EDITION\SPA.SA\SPA.SA.BSP\WSDL\schemas.microsoft.com.2003.10.Serialization.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="EDITION\SPA.SA\SPA.SA.EIR\Commands\Command.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="PROD-2018.09.06\rd_service.xlsx" />
     <None Include="PROD-2018.09.06\SPA.SA\Dictionaries\CONTENT\ALLPLAY\Commands\Command.xsd">
       <SubType>Designer</SubType>
@@ -3977,6 +4048,9 @@
     <None Include="PROD-ACTUAL\SPA.SA\Dictionaries\CONTENT\UNIFUN\Commands\Command.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="PROD-ACTUAL\SPA.SA\Dictionaries\EIR\Commands\Command.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="PROD-ACTUAL\SPA.SA\Dictionaries\HLR\Ericsson\Command\Command.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -3990,6 +4064,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="PROD-ACTUAL\SPA.SA\Dictionaries\MCA\Commands\Command.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="PROD-ACTUAL\SPA.SA\Dictionaries\PCRF\Huawei\Command\Command.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="PROD-ACTUAL\SPA.SA\Dictionaries\SCP.155\Commands\ChangeStatuses.xml.new" />
@@ -4009,8 +4086,6 @@
     <Folder Include="EDITION\ROBP\Operations\SCG\" />
     <Folder Include="EDITION\SPA.SA\SPA.SA.MG\Commands\" />
     <Folder Include="EDITION\SPA.SA\SPA.SA.MG\Scenarios\" />
-    <Folder Include="EDITION\SPA.SA\SPA.SA.SMSC\Commands\" />
-    <Folder Include="EDITION\SPA.SA\SPA.SA.SMSC\Scenarios\" />
     <Folder Include="PROD-2018.09.06\SPA.SA\Dictionaries\IVR\Caller\Decoders\" />
     <Folder Include="PROD-2018.09.06\SPA.SA\Emulation\CONTENT\ALLPLAY\" />
     <Folder Include="PROD-2018.09.06\SPA.SA\Emulation\CONTENT\MST\" />

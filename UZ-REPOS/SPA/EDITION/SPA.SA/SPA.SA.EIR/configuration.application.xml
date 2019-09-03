@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+  <serviceInstances>
+    <serviceInstance hardwareID="EI:EIR">
+      <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
+        <fileScenarioSource dir="..\SPA.SA\SPA.SA.HLR.EIR\Scenarios"/>
+      </scenarioSource>
+      <socketList poolSize="10" autoconnect="1" maxConnections="10" minConnections="10" averageTime="300" deltaAverageTime="4000" maxCommandsPerPeriod="600" periodDuration="10" reconfigurationTimeout="0">
+        <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
+          <config workingmode="wmPermanentEmulation">
+            <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
+              <config>
+                <ParametersList>
+                  <Parameter Key="Host" Value="192.168.216.6"/>
+                  <Parameter Key="Port" Value="8484"/>
+                  <Parameter Key="Url" Value="rest/api?"/>
+                  <Parameter Key="MethodName" Value="GET"/>
+                  <Parameter Key="Method" Value="GET"/>
+                  <!--Parameter Key="UseSSL" Value="true"/>
+                  <Parameter Key="UserName" Value="uzer"/>
+                  <Parameter Key="UserPwd" Value="jQ@18xi#"/-->
+                  <Parameter Key="ContentType" Value="text/plain"/>
+                  <Parameter Key="Header.Authorization" Value="Basic Base64(uzer:jQ@18xi#)" />
+                </ParametersList>
+              </config>
+            </socket>
+            <Emulation Success="&quot;0000&quot;" Failure="&quot;1000&quot;" RandomizePrintout="false" OverwriteCommandPrintout="true"  Lifetime="00:00:00.00"/>
+            <Timers IdleTimeout="10"/>
+            <PredefinedScripts Login="Login" Command="Command" Idle="" Logoff=""/>
+            <ScriptsList>
+              <Script Name="Login" Path="..\SPA.SA\SPA.SA.HLR.EIR\Scripts\Login.xml"/>
+              <Script Name="Logoff" Path="..\SPA.SA\SPA.SA.HLR.EIR\Scripts\Logoff.xml"/>
+              <Script Name="Command" Path="..\SPA.SA\SPA.SA.HLR.EIR\Scripts\Command.xml"/>
+              <Script Name="NoSleep" Path="..\SPA.SA\SPA.SA.HLR.EIR\Scripts\Nosleep.xml"/>
+            </ScriptsList>
+          </config>
+        </socket>
+      </socketList>
+      <context>
+        <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
+          <config path="..\SPA.SA\SPA.SA.HLR.EIR" xml="Dictionary.xml" lifetime="00:01:30"/>
+        </object>
+        <object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
+          <fileTableSource path="..\SPA.SA\Misc" xml="RepetitionTable.xml"/>
+        </object>
+      </context>
+    </serviceInstance>
+  </serviceInstances>
+</Configuration>

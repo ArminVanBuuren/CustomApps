@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Dictionary>
+	<WellknownsList>
+		<Wellknown Name="org.id" Value="xmlsubstr(&quot;ExtendedRequestMessage/OriginalID&quot;)"/>
+		<Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;, false)"/>
+	</WellknownsList>
+	<ErrorsList CodePage="ASCII">
+		<Error Name="ResultCode&gt;0&lt;" Value="SUCCESS"/>
+		<Error Name="ResultCode&gt;3&lt;" Value="NoSuchObjectInstance"/>
+		<Error Name="Response/&gt;" Value="SUCCESS"/>
+		<Error Name="200 OK" Value="SUCCESS"/>
+		<Error Name="faultcode&gt;" Value="FAILURE"/>
+		<Error Name="pbrf:PbrfFault&gt;" Value="FAILURE"/>
+		<Error Name="" Value="UnregisteredError"/>
+	</ErrorsList>
+	<RegexpsList/>
+	<ParametersList/>
+	<CommandsList Root="C:\Foris\SPA\SPA.SA\SPA.SA.BSP\Dictionaries\Commands" Mask="*.xml">
+		<!-- <Command Path="CounterReinitialization.xml"/>
+		<Command Path="CounterReinitialization.ServiceRow.xml"/> -->
+	</CommandsList>
+</Dictionary>

@@ -6,7 +6,7 @@
     <RequestTemplate>
       <![CDATA[<DataSet Name="CreateTDCDataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Attributes>
-    <Attribute Name="Label" Type="System.String" Value="CreateTDC;##datetime##;[SCP_MARKER]"/>
+    <Attribute Name="Label" Type="System.String" Value="CreateTDC;##datetime##;SPA"/>
     <Attribute Name="Protocol" Type="System.String" Value="Remoting"/>
   </Attributes>
   <DataTable Name="CreateTDCDataTable">
@@ -28,13 +28,12 @@
       <Column Name="PRIVATE_USER_GROUPS" Type="System.String"/>
       <Column Name="TERMINAL_DEVICE_CLASS" Type="System.Int32"/>
       <Column Name="SMS_USSD_LANG" Type="System.Int32"/>
-      <Column Name="KEEP_BALANCES" Type="System.Boolean"/>
     </Columns>
     <Rows>
       <Row REQUEST_ID="##ASYNC_REQUEST_ID##" PERSONAL_ACCOUNT_ID="##PersonalAccount##" TERMINAL_DEVICE_CONTRACT_ID="##TerminalDeviceID##" 
 TARIFF_PLAN_ID="##TARIFF_PLAN_ID##" BILLING_GROUP_ID="##BILLING_GROUP_ID##" TERMINAL_DEVICE_STATE="##SC.TERMINAL_DEVICE_STATE##" ##SC.ADMIN_BLOCK## 
 ##SC.ADMIN_BLOCKED_DATE## ##SC.FIRST_CALL_END_DATE## MAX_INACTIVE_PERIOD="##SC.MAX_INACTIVE_PERIOD##" MSISDN="##msisdn##" IMSI="##imsi##" LANGUAGE="##LANGUAGE##" 
-TIME_ZONE="##SC.TIME_ZONE##" PRIVATE_USER_GROUPS="##PRIVATE_USER_GROUPS##" TERMINAL_DEVICE_CLASS="##TERMINAL_DEVICE_CLASS##" SMS_USSD_LANG="##SC.SMS_USSD_LANG##" KEEP_BALANCES="##SC.KEEP_BALANCES##" />
+TIME_ZONE="##SC.TIME_ZONE##" PRIVATE_USER_GROUPS="##PRIVATE_USER_GROUPS##" TERMINAL_DEVICE_CLASS="##TERMINAL_DEVICE_CLASS##" SMS_USSD_LANG="##SC.SMS_USSD_LANG##" />
     </Rows>
   </DataTable>
   <DataTable Name="ServiceCodeDataTable">
@@ -81,13 +80,12 @@ TIME_ZONE="##SC.TIME_ZONE##" PRIVATE_USER_GROUPS="##PRIVATE_USER_GROUPS##" TERMI
     <Item Name="SC.SMS_USSD_LANG" Type="Parameter"/>
     <Item Name="RegisteredServices" Type="LocalDynamicParameter"/>
     <Item Name="Parameters" Type="LocalDynamicParameter"/>
-    <Item Name="SC.KEEP_BALANCES" Type="Parameter"/>
   </Request>
   <RollbackRequest>
     <RequestTemplate>
       <![CDATA[<DataSet Name="DeleteTDCDataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Attributes>
-    <Attribute Name="Label" Type="System.String" Value="DeleteTerminalDeviceContracts;##datetime##;[SCP_MARKER]"/>
+    <Attribute Name="Label" Type="System.String" Value="DeleteTerminalDeviceContracts;##datetime##;SPA"/>
     <Attribute Name="Protocol" Type="System.String" Value="Remoting"/>
   </Attributes>
   <DataTable Name="DeleteTDCDataTable">
