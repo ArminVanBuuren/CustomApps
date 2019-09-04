@@ -63,7 +63,7 @@
         <result value="" node="NAM_Modify"/>
       </resultlist>
       <parameterslist>
-        <param name="DataBaseName" value="FORIS.SPA.ARCHIVE"/>
+        <param name="DataBaseName" value="UMS.ARCHIVE"/>
         <param name="FunctionName" value="CORPORATE_APN_DELETE"/>
         <param name="FunctionType" value="procedure"/>
         <param name="OutXml" value="db_unit_result"/>

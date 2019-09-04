@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0"?>
 <plugin name="DBAdapter">
   <Connections>
-    <Handler name="mg" type="ForisDataAccess" connectionString="MG"/>
+    <Handler name="mg" type="ForisDataAccess" connectionString="UMS.MG"/>
   </Connections>
   <ThreadPooling use="true" forwarding="true" minThreads="16"/>
   <Procedures>

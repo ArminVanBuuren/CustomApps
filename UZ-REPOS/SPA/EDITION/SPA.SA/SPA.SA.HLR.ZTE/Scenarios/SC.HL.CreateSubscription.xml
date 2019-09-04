@@ -70,7 +70,7 @@
         <result value="" node="ExtractKI" />
       </resultlist>
       <parameterslist>
-        <param name="DataBaseName" value="FORIS.SPA.CBP" />
+        <param name="DataBaseName" value="UMS.CBP" />
         <param name="FunctionName" value="GET_KI" />
         <param name="FunctionType" value="function" />
         <param name="OutXml" value="db_unit_result" />
@@ -134,7 +134,7 @@
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="DataBaseName" value="FORIS.SPA.CBP" />
+        <param name="DataBaseName" value="UMS.CBP" />
         <param name="FunctionName" value="CHANGE_INPLATFORM_LANG" />
         <param name="FunctionType" value="procedure" />
         <param name="OutXml" value="db_unit_result" />

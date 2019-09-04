@@ -33,7 +33,7 @@
 				<result value="" node="ExtractForeign"/>
 			</resultlist>
 			<parameterslist>
-				<param name="DataBaseName" value="FORIS.SPA.CBP"/>
+				<param name="DataBaseName" value="UMS.CBP"/>
 				<param name="FunctionName" value="TAS_GET_FOREIGN"/>
 				<param name="FunctionType" value="function"/>
 				<param name="OutXml" value="db_unit_result"/>

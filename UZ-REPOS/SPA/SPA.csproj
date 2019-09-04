@@ -360,6 +360,7 @@
     <Content Include="EDITION\ROBP\Processes\TestInformer.xml" />
     <Content Include="EDITION\ROBP\Processes\Unblock Subscriber.xml" />
     <Content Include="EDITION\ROBP\Processes\Update Call Forwarding.xml" />
+    <Content Include="EDITION\Changes.txt" />
     <Content Include="EDITION\SPA.SA\SPA.SA.AM\asyncResult.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.BSP\configuration.application.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.BSP\configuration.common.xml" />
@@ -421,6 +422,7 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE.V2\Commands\SC.Delete_GPRS_Dealer.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE.V2\Commands\SC.Delete_Subscriber_IMSI.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE.V2\Commands\SC.Delete_Subscriber_MSISDN.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE.V2\Commands\SC.GenericCommand.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE.V2\Commands\SC.GetSubscriber.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE.V2\Commands\SC.Modify_BIC.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE.V2\Commands\SC.Modify_BOC.xml" />
@@ -578,7 +580,7 @@
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Add.RFS_HL_MYUMS_APN.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.Remove.StaticIP.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.Add.StaticIP.xml" />
-    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.HL.ROAMING_TEST.xml" />
+    <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE.V2\Scenarios\SC.HLR.ROAMING_TEST.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Remove.RFS_HL_MYUMS_APN.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Remove.RFS_HL_CALLS_SUSPEND.xml" />
     <Content Include="EDITION\SPA.SA\SPA.SA.HLR.ZTE\Scenarios\SC.Add.RFS_HL_CALLS_SUSPEND.xml" />

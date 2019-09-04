@@ -43,6 +43,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="EDITION\MG-01\Dispatcher\" />
     <Folder Include="PROD-ACTUAL\MG-01\Service Manager\en\" />
     <Folder Include="PROD-ACTUAL\MG-01\Service Manager\uk\" />
   </ItemGroup>
