@@ -909,7 +909,7 @@
     <Content Include="PROD-ACTUAL\MG-03\WebServices\WebAdapter_90\SOAP-soapui-project.xml" />
     <Content Include="PROD-ACTUAL\MG-03\WebServices\WebAdapter_95\Service.asmx" />
     <Content Include="PROD-ACTUAL\MG-03\WebServices\WebAdapter_95\SOAP-soapui-project.xml" />
-    <Content Include="Заметки.txt" />
+    <Content Include="EDITION\Changes.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="EDITION\MG-01\Configuration\WEB_SERVICES\WEB_80_USSD\bin\App_Code.compiled" />
