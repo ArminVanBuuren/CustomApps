@@ -7,7 +7,7 @@
       </scenarioSource>
       <socketList poolSize="10" maxConnections="5" minConnections="1" averageTime="20" deltaAverageTime="40" maxCommandsPerPeriod="300" periodDuration="10" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Integrated.AmSocket, FORIS.SPA.Communication.Integrated">
-          <config serviceGroup="AM" uri="tcp://10.160.41.156:8023/CRMOperations.uri" queue="uz1-am01\am.out.queue" timeout="60" workingmode="wmPermanentEmulation">
+          <config serviceGroup="AM" uri="tcp://am1:8023/CRMOperations.uri" queue="am1\am.out.queue" timeout="60" workingmode="wmGeneral">
             <Emulation Success="Code&gt;0&lt;" Failure="Code&gt;0&lt;" RandomizePrintout="false" OverwriteCommandPrintout="true" Lifetime="00:00:00.00"/>
           </config>
         </socket>
