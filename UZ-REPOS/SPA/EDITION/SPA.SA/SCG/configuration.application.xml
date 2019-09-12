@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+  <serviceInstances>
+    <serviceInstance hardwareID="SCG:SCG">
+      <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
+        <fileScenarioSource dir="..\SPA.SA\SCG\Scenarios"/>
+      </scenarioSource>
+      <socketList poolSize="1" maxConnections="1" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="1000" periodDuration="0" autoconnect="0" reconfigurationTimeout="0">
+        <socket type="FORIS.ServiceProvisioning.Communication.Script.SimpleManagedSocket, FORIS.SPA.Communication">
+          <config workingmode="wmPermanentEmulation">
+            <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
+              <config>
+                <ParametersList>
+                  <Parameter Key="Host" Value="10.160.37.106"/>
+                  <Parameter Key="Port" Value="8666"/>
+                  <Parameter Key="Url" Value="services/OCSMappingService"/>
+                  <Parameter Key="MethodName" Value="POST"/>
+                  <Parameter Key="Method" Value="POST"/>
+                  <Parameter Key="UserName" Value="datasync"/>
+                  <Parameter Key="UserPwd" Value="Huawei@123"/>
+                  <Parameter Key="ContentType" Value="text/xml"/>
+                  <Parameter Key="Header.SOAPAction" Value=""/>
+                </ParametersList>
+              </config>
+            </socket>
+            <Emulation Success="resultCode 00000000" Failure="resultCode 10009999" RandomizePrintout="false" OverwriteCommandPrintout="true"  Lifetime="00:00:00.00"/>
+          </config>
+        </socket>
+      </socketList>
+      <context>
+        <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
+          <config path="..\SPA.SA\SCG" xml="Dictionary.xml" lifetime="00:01:30"/>
+        </object>
+        <object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
+          <fileTableSource path="..\SPA.SA\SCG\Misc" xml="RepetitionTable.xml"/>
+        </object>
+      </context>
+    </serviceInstance>
+    <serviceInstance hardwareID="SCGS:SCGS">
+      <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
+        <fileScenarioSource dir="..\SPA.SA\SCG\Scenarios"/>
+      </scenarioSource>
+      <socketList poolSize="1" maxConnections="1" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="1000" periodDuration="0" autoconnect="0" reconfigurationTimeout="0">
+        <socket type="FORIS.ServiceProvisioning.Communication.Script.SimpleManagedSocket, FORIS.SPA.Communication">
+          <config workingmode="wmPermanentEmulation">
+            <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
+              <config>
+                <ParametersList>
+                  <Parameter Key="Host" Value="10.160.37.106"/>
+                  <Parameter Key="Port" Value="8666"/>
+                  <Parameter Key="Url" Value="services/BasicServices"/>
+                  <Parameter Key="MethodName" Value="POST"/>
+                  <Parameter Key="Method" Value="POST"/>
+                  <Parameter Key="UserName" Value="datasync"/>
+                  <Parameter Key="UserPwd" Value="Huawei@123"/>
+                  <Parameter Key="ContentType" Value="text/xml"/>
+                  <Parameter Key="Header.SOAPAction" Value=""/>
+                </ParametersList>
+              </config>
+            </socket>
+            <Emulation Success="resultCode 00000000" Failure="resultCode 10009999" RandomizePrintout="false" OverwriteCommandPrintout="true"  Lifetime="00:00:00.00"/>
+          </config>
+        </socket>
+      </socketList>
+      <context>
+        <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
+          <config path="..\SPA.SA\SCG" xml="Dictionary.xml" lifetime="00:01:30"/>
+        </object>
+        <object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
+          <fileTableSource path="..\SPA.SA\SCG\Misc" xml="RepetitionTable.xml"/>
+        </object>
+      </context>
+    </serviceInstance>
+  </serviceInstances>
+</Configuration>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<Application Path="..\SPA.SA\RBT.INTECH\configuration.application.xml"/>
+	<Settings>
+		<Add Key="ProfilerConfiguration" Value="Profiler.xml" />
+		<Add Key="ReportTimeout" Value="300"/>
+		<Add Key="TransactionalRxMode" Value="true"/>
+		<Add Key="DictionaryCommandsOnDisk" Value="true"/>
+		<Add Key="CreatePerformanceCounters" Value="false"/>
+		<Add Key="PermanentEmulation.DefaultResultType" Value="SUCCESS"/>
+		<Add Key="PermanentEmulation.RandomizeResultTypes" Value="false"/>
+		<Add Key="Requests.MaxQueuedPerHost" Value="600"/>
+		<Add Key="Requests.PollPeriod" Value="2"/>
+		<Add Key="Requests.PollIdlePeriod" Value="2"/>
+		<Add Key="Responses.WritersCount" Value="4"/>
+		<Add Key="CloseSessionOnCommandTimeOut" Value="true"/>
+		<Add Key="InfiniteLoopWarningThreshold" Value="1000" />
+		<Add Key="InfiniteLoopInterruptThreshold" Value="10000" />
+	</Settings>
+	<DatabaseObjects Remotable="false">
+		<Add Name="FORIS.SPA.CBP" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.CBP"/>
+		<Add Name="FORIS.SPA.ARCHIVE" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.ARCHIVE"/>
+		<Add Name="FORIS.SPA.ROBP" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.ROBP"/>
+		<Add Name="FORIS.SPA.STATE" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.STATE"/>
+		<Add Name="FORIS.RI" ConnectionDataType="uri" ConnectionData="MR_CENTER" />
+	</DatabaseObjects>
+</Configuration>
