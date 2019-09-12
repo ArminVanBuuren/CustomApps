@@ -7,7 +7,7 @@
       </scenarioSource>
       <socketList poolSize="10" maxConnections="5" minConnections="1" averageTime="20" deltaAverageTime="40" maxCommandsPerPeriod="300" periodDuration="10" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Integrated.ScpSocket, FORIS.SPA.Communication.Integrated">
-          <config serviceGroup="SCP" uri="tcp://10.160.33.27:8022/CRMOperations.uri" uriRem="tcp://10.160.33.27:8022/REMRemote.uri" queue="seeas01\input_off" timeout="60" login="" password="" workingmode="wmPermanentEmulation" SessionRefreshTimeout="180" >
+          <config serviceGroup="SCP155" uri="tcp://10.160.33.27:8022/CRMOperations.uri" uriRem="tcp://10.160.33.27:8022/REMRemote.uri" queue="seeas01\input_off" timeout="60" login="" password="" workingmode="wmPermanentEmulation" SessionRefreshTimeout="180" >
             <Emulation Success="Code&gt;0&lt;" Failure="Code&gt;-13002&lt;" RandomizePrintout="false" OverwriteCommandPrintout="true" Lifetime="00:00:00.00"/>
           </config>
         </socket>

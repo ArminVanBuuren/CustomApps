@@ -4,7 +4,7 @@
     <Wellknown Name="MSISDN" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
     <Wellknown Name="IMSI" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;)"/>
   </WellknownsList>
-  <ErrorsList CodePage="ASCII">                                                 
+  <ErrorsList CodePage="ASCII">
     <Error Name="000;" Expression="$(Error)"  Value="SUCCESS"               Description="Абонент успешно создан"/>
     <Error Name="102;" Expression="$(Error)"  Value="SUCCESS"               Description="Абонент не существует (при удалении)"/>
     <Error Name="101;" Expression="$(Error)"  Value="MsisdnAlreadyDefined"  Description="Абонент уже существует" />
