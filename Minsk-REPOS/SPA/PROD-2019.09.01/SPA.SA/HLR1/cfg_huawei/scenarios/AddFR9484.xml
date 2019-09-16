@@ -6,7 +6,8 @@
 		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
 		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
 		<object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll" />
-		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />		
+		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />	
+		<object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />				
 	</objectList>
 	<automat>
 		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
@@ -16,13 +17,22 @@
 		</node>
 		<node name="SingleSubscriberRequestDequeuer" object="Dequeuer">
 			<resultlist>
-				<result value="0" node="AddVPNNode"/>
+				<result value="0" node="IfCheckSRVNode"/>
 				<result value="1" node=""/>
 			</resultlist>
 			<parameterslist>
 				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
 			</parameterslist>
 		</node>
+		<node name="IfCheckSRVNode" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="ExitDummyResponderNode"/>
+				<result value="1" node="AddVPNNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB403864"/>
+			</parameterslist>
+		</node>	
 		<node name="AddVPNNode" object="Commander">
 			<resultlist>
 				<result value="0" node="AddVPNLTENode"/>

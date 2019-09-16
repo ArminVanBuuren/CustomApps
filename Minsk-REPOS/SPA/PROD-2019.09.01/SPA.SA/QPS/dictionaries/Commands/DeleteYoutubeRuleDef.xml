@@ -12,7 +12,7 @@
 &#60;typ:networkId&#62;{0}&#60;/typ:networkId&#62;
 &#60;typ:deletedAvp&#62;
 &#60;typ:code&#62;RULEDEF&#60;/typ:code&#62;
-&#60;typ:value&#62;youtube-unlim&#60;/typ:value&#62;
+&#60;typ:value&#62;group-youtube-unlim&#60;/typ:value&#62;
 &#60;/typ:deletedAvp&#62;
 &#60;/typ:ChangeSubscriberAvpsRequest&#62;
 &#60;/soapenv:Body&#62;

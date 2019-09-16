@@ -54,6 +54,8 @@
 				<param name="OrXmlPath:8" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKUSER"/>
 				<param name="OrXmlPath:9" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR8725"/>
 				<param name="OrXmlPath:10" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR12152"/>
+				<param name="OrXmlPath:11" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16912"/>
+				<param name="OrXmlPath:12" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16913"/>
 			</parameterslist>
 		</node>	
 		<node name="IfServiceBusinessVPNNode" object="IfMultipleXmlConditionsResolver">
@@ -70,6 +72,7 @@
 				<param name="OrXmlPath:5" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11390"/>
 				<param name="OrXmlPath:6" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11391"/>
 				<param name="OrXmlPath:7" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11392"/>
+				<param name="OrXmlPath:8" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17124"/>
 			</parameterslist>
 		</node>	
 		<node name="BlockBusinessVPNNode" object="Commander">
@@ -140,6 +143,7 @@
 				<param name="OrXmlPath:5" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11390"/>
 				<param name="OrXmlPath:6" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11391"/>
 				<param name="OrXmlPath:7" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11392"/>
+				<param name="OrXmlPath:8" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17124"/>
 			</parameterslist>
 		</node>	
 		<node name="UnBlockBusinessVPNNode" object="Commander">

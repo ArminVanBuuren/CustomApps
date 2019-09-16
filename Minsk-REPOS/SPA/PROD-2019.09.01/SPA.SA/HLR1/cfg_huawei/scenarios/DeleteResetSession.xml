@@ -16,13 +16,59 @@
 		</node>
 		<node name="SingleSubscriberRequestDequeuer" object="Dequeuer">
 			<resultlist>
-				<result value="0" node="DeleteGPRSPROFILEONLYNode"/>
+				<result value="0" node="IfServiceSMSRoamingNode"/>
 				<result value="1" node=""/>
 			</resultlist>
 			<parameterslist>
 				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
 			</parameterslist>
 		</node>
+		<node name="IfServiceSMSRoamingNode" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="AddBlockGPRSNode"/>
+				<result value="1" node="IfServiceSoftBlockNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB403864"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>			
+		<node name="AddBlockGPRSNode" object="Commander">
+			<resultlist>
+				<result value="0" node="RemoveGPRSNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="BlockGPRS"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>			
+		<node name="RemoveGPRSNode" object="Commander">
+			<resultlist>
+				<result value="0" node="ExitDummyResponderNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="RemoveGPRSall"/>
+				<param name="DynamicObject" value="(empty)"/>				
+			</parameterslist>
+		</node>		
+		<node name="IfServiceSoftBlockNode" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="ExitDummyResponderNode"/>
+				<result value="1" node="DeleteGPRSPROFILEONLYNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11307"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>			
 		<node name="DeleteGPRSPROFILEONLYNode" object="Commander">
 			<resultlist>
 				<result value="0" node="DeleteGPRSPROFILELTEONLYNode"/>

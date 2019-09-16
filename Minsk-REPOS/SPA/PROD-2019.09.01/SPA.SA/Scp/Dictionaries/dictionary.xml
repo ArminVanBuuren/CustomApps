@@ -59,6 +59,7 @@
     <Error Name="ERROR_CODE&gt;-154003" Value="InvalidRequest"/>
     <Error Name="ERROR_CODE&gt;-154032" Value="TerminalDeviceLinkedToPersonalAccount"/>
     <Error Name="ERROR_CODE&gt;-151005" Value="InvalidTariffPlan"/>
+	<Error Name="ERROR_CODE&gt;-151000" Value="CommandTemporaryRejected"/>
     <Error Name="ERROR_CODE&gt;CancelledByAdministrator&lt;" Value="ProcessingCanceledByUser" />
 	<Error Name="returns reusult: 1100 for IMSI:" Value="CommandTemporaryRejected" />
     <!-- Ошибки при замене номера -->

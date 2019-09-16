@@ -11,9 +11,9 @@
 						<socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
 							<config>
 								<ParametersList>
-									<Parameter Key="Host" Value="billing.kinomts.megogo.net"/>
-									<Parameter Key="Port" Value="80"/>
-									<Parameter Key="Url" Value="billing/callback/"/>
+									<Parameter Key="Host" Value="10.128.213.41"/>
+									<Parameter Key="Port" Value="90"/>
+									<Parameter Key="Url" Value="mts-megogo/"/>
 									<Parameter Key="MethodName" Value="GET"/>
 									<Parameter Key="Method" Value="GET"/>
 									<Parameter Key="UserName" Value=""/>

@@ -77,7 +77,7 @@
 		<node name="IfServiceHomeCinemaNode" object="IfConditionXmlResolver">
 			<resultlist>
 				<result value="0" node="DelServiceHomeCinemaNode"/>
-				<result value="1" node="DummyResponderNode"/>
+				<result value="1" node="IfServiceTVinKinoNode"/>
 			</resultlist>
 			<parameterslist>
 				<param name="ObjectNameInContext" value="request"/>
@@ -87,10 +87,58 @@
 		</node>			
 		<node name="DelServiceHomeCinemaNode" object="Commander">
 			<resultlist>
+				<result value="0" node="IfServiceTVinKinoNode"/>
 				<result value="" node="ResponseAssembler"/>
 			</resultlist>
 			<parameterslist>
 				<param name="Command" value="DelServiceHomeCinema"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>	
+		<node name="IfServiceTVinKinoNode" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="DelServiceTVinKinoNode"/>
+				<result value="1" node="IfServiceAmediatekaNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17017"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>			
+		<node name="DelServiceTVinKinoNode" object="Commander">
+			<resultlist>
+				<result value="0" node="IfServiceAmediatekaNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Command" value="DelServiceTVinKino"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>		
+		<node name="IfServiceAmediatekaNode" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="DelServiceAmediatekaNode"/>
+				<result value="1" node="DummyResponderNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16850"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>			
+		<node name="DelServiceAmediatekaNode" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Command" value="DelServiceAmediateka"/>
 				<param name="Script" value="Command"/>
 				<param name="ErrorDecodingType" value="ByString"/>
 				<param name="CommandSource" value="Dictionary"/>

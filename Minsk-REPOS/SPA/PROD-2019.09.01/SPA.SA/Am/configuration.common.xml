@@ -3,7 +3,7 @@
 	<Application Path=".\Am\configuration.application.xml"/>
 	<Settings>
 		<Add Key="ReportTimeout" Value="0"/>
-		<Add Key="Requests.MaxQueuedPerHost" Value="250"/>
+		<Add Key="Requests.MaxQueuedPerHost" Value="700"/>
 		<Add Key="Requests.PollPeriod" Value="5"/>
 		<Add Key="Requests.PollIdlePeriod" Value="2"/>
 		<Add Key="Responses.WritersCount" Value="5"/>

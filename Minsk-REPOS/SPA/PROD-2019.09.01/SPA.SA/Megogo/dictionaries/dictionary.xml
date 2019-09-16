@@ -33,6 +33,14 @@
 		<Command Path="DelServiceHomeCinema.xml"/>	
 		<Command Path="BlockHomeCinema.xml"/>	
 		<Command Path="UnBlockHomeCinema.xml"/>	
+		<Command Path="AddServiceAmediateka.xml"/>	
+		<Command Path="DelServiceAmediateka.xml"/>	
+		<Command Path="BlockAmediateka.xml"/>	
+		<Command Path="UnBlockAmediateka.xml"/>	
+		<Command Path="AddServiceTVinKino.xml"/>	
+		<Command Path="BlockTVinKino.xml"/>	
+		<Command Path="DelServiceTVinKino.xml"/>	
+		<Command Path="UnBlockTVinKino.xml"/>	
 	</CommandsList>
 	<!--DecodersList Root=".\Dictionaries\Decoders">
 		<Decoder Path="RbtDecoder.xml"/>

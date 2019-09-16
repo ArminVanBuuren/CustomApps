@@ -27,7 +27,7 @@
 		</node>
 		<node name="SwitchNDCNode" object="Switch">
 			<resultlist>
-				<result value="1" node="DummyResponderNode"/>
+				<result value="1" node="IfServiceOfficeTelefoniaNode"/>
 				<result value="2" node="IfServiceNode"/>
 			</resultlist>
 			<parameterslist>
@@ -38,7 +38,7 @@
 		<node name="IfServiceNode" object="IfMultipleXmlConditionsResolver">
 			<resultlist>
 				<result value="0" node="AddBlockNODE"/>
-				<result value="1" node="DummyResponderNode"/>
+				<result value="1" node="IfServiceOfficeTelefoniaNode"/>
 			</resultlist>
 			<parameterslist>
 				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR7450"/>
@@ -65,7 +65,30 @@
 				<param name="DynamicObject" value="(empty)"/>
 				<param name="DataBaseName" value="FORIS.SPA.BILLING" />				
 				</parameterslist>
-		</node>		
+		</node>	
+		<node name="IfServiceOfficeTelefoniaNode" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="BlockOTNODE"/>
+				<result value="1" node="DummyResponderNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16324"/>
+			</parameterslist>
+		</node>	
+		<node name="BlockOTNODE" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="BlockOfficeTelefoniaDB"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="DataBaseName" value="FORIS.SPA.BILLING" />				
+				</parameterslist>
+		</node>	
 		<node name="DummyResponderNode" object="DummyResponder">
 			<resultlist>
 				<result value="" node="ResponseAssembler"/>

@@ -57,10 +57,10 @@
 	</VariablesList>
 	<ParametersList>
 		<Parameter Name="SERVICE_CODE">
-			<Source Path="ExtendedRequestMessage/AdditionalData/WithdrawalList/ServiceList//SERVICE_CODE"/>
+			<Source Path="ExtendedRequestMessage/AdditionalData/WithdrawalList//SERVICE_CODE"/>
 		</Parameter>
 		<Parameter Name="DATE_FROM">
-			<Source Path="ExtendedRequestMessage/AdditionalData/WithdrawalList/ServiceList//DateFrom[string-length(.) > 0]" AbsenceValue="" PostFormat="DATE_FROM=&quot;{0}&quot;"/>
+			<Source Path="ExtendedRequestMessage/AdditionalData/WithdrawalList//DateFrom[string-length(.) > 0]" AbsenceValue="" PostFormat="DATE_FROM=&quot;{0}&quot;"/>
 		</Parameter>
 		<Parameter Name="COUNTER_COEFFICIENT">
 			<Source Path="ExtendedRequestMessage/AdditionalData/WithdrawalList/ServiceList//CounterCoefficient[string-length(.) > 0]" AbsenceValue="" PostFormat="COUNTER_COEFFICIENT=&quot;{0}&quot;"/>

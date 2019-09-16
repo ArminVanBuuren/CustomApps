@@ -41,5 +41,10 @@
 		<Command Path="UnBlockESETParentalControl.xml"/>
 		<Command Path="ChangeMSISDNParentalControl.xml"/>
 		<Command Path="MTSSmartInfo.xml"/>
+		<Command Path="AddServiceESETParentalControl2.xml"/>
+		<Command Path="DeleteServiceESETParentalControl2.xml"/>
+		<Command Path="BlockESETParentalControl2.xml"/>
+		<Command Path="UnBlockESETParentalControl2.xml"/>
+		<Command Path="ChangeMSISDNParentalControl2.xml"/>
 	</CommandsList>
 </Dictionary>

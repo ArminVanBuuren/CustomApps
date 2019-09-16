@@ -55,7 +55,9 @@
 					AND (NOT //RegisteredList/FRBLKP)
 					AND (NOT //RegisteredList/FRBLKTIME)
 					AND (NOT //RegisteredList/FRBLKUSER)
-					AND (NOT //RegisteredList/FR8725))
+					AND (NOT //RegisteredList/FR8725)
+					AND (NOT //RegisteredList/FR16912)
+					AND (NOT //RegisteredList/FR16913))
 					" />
 			</parameterslist>		
 		</node>			

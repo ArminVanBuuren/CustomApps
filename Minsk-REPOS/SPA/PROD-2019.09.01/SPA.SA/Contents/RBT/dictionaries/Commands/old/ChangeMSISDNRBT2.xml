@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ChangeMSISDNRBT2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Смена номера телефона</Description>
+	<Author Name="Valery Bushkarev" Date="2005-05-16+11:41"/>	
+	<Request Template="CommandCode=CH_MSISDN&amp;MSISDN={0}&amp;MacroRegion=MRGCE&amp;NewMSISDN=substr({1},1)&amp;MDateTime={2:ddMMyyyyHHmmss}">
+		<Item Name="msisdn.fn" Type="Wellknown"/>
+		<Item Name="MsisdnNew" Type="LocalParameter"/>
+		<Item Name="datetime" Type="Wellknown"/>
+	</Request>
+	<ParametersList>
+		<Parameter Name="MsisdnNew">
+			<Source Path="ExtendedRequestMessage/AdditionalData/NewMSISDN"/>
+			<PossibleValues StringToKeyTable="true"/>
+		</Parameter>
+	</ParametersList>
+	<ErrorsList CodePage="ASCII"/>
+</Command>

@@ -1,0 +1,119 @@
+<Dictionary>
+	<WellknownsList>
+		<Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
+	</WellknownsList>
+	<ErrorsList CodePage="ASCII">
+		<Error Name=" 200 OK" Value="SUCCESS"/>
+		<Error Name="Subs exist" Value="SUCCESS"/>
+		<Error Name=" 500 " Value="ExecutionError"/>		
+		<Error Name="Timeout" Value="CommandTimedOut"/>		
+	</ErrorsList>
+	<RegexpsList/>
+	<ConstantsList />
+	<ParametersList>
+		<Parameter Name="NewMSISDN">
+			<Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//NewMSISDN"/>
+			<PossibleValues StringToKeyTable="true" />
+		</Parameter>
+	</ParametersList>
+	<DynamicParametersList />
+	<CommandsList Root=".\PlatformSubscription\Dictionaries\Commands\">
+		<Command Path="DeleteServicePlayboy18.xml"/>	
+		<Command Path="BlockServicePlayboy18.xml"/>	
+		<Command Path="UnBlockServicePlayboy18.xml"/>	
+		<Command Path="ChangeMSISDNServicePlayboy18.xml"/>	
+		<Command Path="DeleteServiceVideo.xml"/>	
+		<Command Path="UnBlockServiceVideo.xml"/>	
+		<Command Path="BlockServiceVideo.xml"/>	
+		<Command Path="ChangeMSISDNServiceVideo.xml"/>	
+		<Command Path="BlockServiceSiteZnakomstv.xml"/>	
+		<Command Path="ChangeMSISDNServiceSiteZnakomstv.xml"/>	
+		<Command Path="DeleteServiceSiteZnakomstv.xml"/>	
+		<Command Path="UnBlockServiceSiteZnakomstv.xml"/>	
+		<Command Path="BlockServiceMusic.xml"/>	
+		<Command Path="ChangeMSISDNServiceMusic.xml"/>	
+		<Command Path="DeleteServiceMusic.xml"/>	
+		<Command Path="UnBlockServiceMusic.xml"/>	
+		<Command Path="BlockServiceZOJ.xml"/>	
+		<Command Path="ChangeMSISDNServiceZOJ.xml"/>	
+		<Command Path="DeleteServiceZOJ.xml"/>	
+		<Command Path="UnBlockServiceZOJ.xml"/>	
+		<Command Path="BlockServiceGame.xml"/>	
+		<Command Path="ChangeMSISDNServiceGame.xml"/>	
+		<Command Path="DeleteServiceGame.xml"/>	
+		<Command Path="UnBlockServiceGame.xml"/>	
+		<Command Path="BlockServiceMusicAudioing.xml"/>	
+		<Command Path="ChangeMSISDNServiceMusicAudioing.xml"/>	
+		<Command Path="DeleteServiceMusicAudioing.xml"/>	
+		<Command Path="UnBlockServiceMusicAudioing.xml"/>	
+		<Command Path="BlockServiceFilmMobiletuber.xml"/>	
+		<Command Path="ChangeMSISDNServiceFilmMobiletuber.xml"/>	
+		<Command Path="DeleteServiceFilmMobiletuber.xml"/>	
+		<Command Path="UnBlockServiceFilmMobiletuber.xml"/>	
+		<Command Path="BlockServiceGameGamecatalog.xml"/>	
+		<Command Path="ChangeMSISDNServiceGameGamecatalog.xml"/>	
+		<Command Path="DeleteServiceGameGamecatalog.xml"/>	
+		<Command Path="UnBlockServiceGameGamecatalog.xml"/>	
+		<Command Path="BlockServiceGameUnlimitedgamez.xml"/>	
+		<Command Path="ChangeMSISDNServiceGameUnlimitedgamez.xml"/>	
+		<Command Path="DeleteServiceGameUnlimitedgamez.xml"/>	
+		<Command Path="UnBlockServiceGameUnlimitedgamez.xml"/>	
+		<Command Path="BlockServiceGameIslandmob.xml"/>	
+		<Command Path="ChangeMSISDNServiceGameIslandmob.xml"/>	
+		<Command Path="DeleteServiceGameIslandmob.xml"/>	
+		<Command Path="UnBlockServiceGameIslandmob.xml"/>	
+		<Command Path="BlockServiceGameGamestore.xml"/>	
+		<Command Path="ChangeMSISDNServiceGameGamestore.xml"/>	
+		<Command Path="DeleteServiceGameGamestore.xml"/>	
+		<Command Path="UnBlockServiceGameGamestore.xml"/>	
+		<Command Path="BlockServiceGameMobigamer.xml"/>	
+		<Command Path="ChangeMSISDNServiceGameMobigamer.xml"/>	
+		<Command Path="DeleteServiceGameMobigamer.xml"/>	
+		<Command Path="UnBlockServiceGameMobigamer.xml"/>	
+		<Command Path="BlockServiceVideoVtrendo.xml"/>	
+		<Command Path="ChangeMSISDNServiceVideoVtrendo.xml"/>	
+		<Command Path="DeleteServiceVideoVtrendo.xml"/>	
+		<Command Path="UnBlockServiceVideoVtrendo.xml"/>	
+		<Command Path="BlockServiceVideoVideomeo.xml"/>	
+		<Command Path="ChangeMSISDNServiceVideoVideomeo.xml"/>	
+		<Command Path="UnBlockServiceVideoVideomeo.xml"/>	
+		<Command Path="DeleteServiceVideoVideomeo.xml"/>	
+		<Command Path="BlockServiceErovideo.xml"/>	
+		<Command Path="ChangeMSISDNServiceErovideo.xml"/>	
+		<Command Path="UnBlockServiceErovideo.xml"/>	
+		<Command Path="DeleteServiceErovideo.xml"/>	
+		<Command Path="BlockServiceGameAppsclub.xml"/>	
+		<Command Path="ChangeMSISDNServiceGameAppsclub.xml"/>	
+		<Command Path="DeleteServiceGameAppsclub.xml"/>	
+		<Command Path="UnBlockServiceGameAppsclub.xml"/>	
+		<Command Path="BlockServiceFitnessclub.xml"/>	
+		<Command Path="ChangeMSISDNServiceFitnessclub.xml"/>	
+		<Command Path="DeleteServiceFitnessclub.xml"/>	
+		<Command Path="UnBlockServiceFitnessclub.xml"/>	
+		<Command Path="BlockServiceKidsclub.xml"/>	
+		<Command Path="ChangeMSISDNServiceKidsclub.xml"/>	
+		<Command Path="UnBlockServiceKidsclub.xml"/>	
+		<Command Path="DeleteServiceKidsclub.xml"/>	
+		<Command Path="ChangeMSISDNServiceGameapp.xml"/>	
+		<Command Path="BlockServiceGameapp.xml"/>	
+		<Command Path="DeleteServiceGameapp.xml"/>	
+		<Command Path="UnBlockServiceGameapp.xml"/>	
+		<Command Path="AddServiceGameAppsclub.xml"/>	
+		<Command Path="AddServiceBeFriends.xml"/>	
+		<Command Path="BlockServiceBeFriends.xml"/>	
+		<Command Path="ChangeMSISDNServiceBeFriends.xml"/>	
+		<Command Path="DeleteServiceBeFriends.xml"/>	
+		<Command Path="UnBlockServiceBeFriends.xml"/>	
+		<Command Path="AddServiceFitnessclub.xml"/>	
+		<Command Path="AddServiceKidsclub.xml"/>	
+		<Command Path="AddServiceGameapp.xml"/>	
+		<Command Path="AddBlackList.xml"/>	
+		<Command Path="DeleteBlackList.xml"/>	
+		<Command Path="ChangeMSISDNBlackList.xml"/>	
+		<Command Path="AddServiceDiscountclub.xml"/>	
+		<Command Path="BlockServiceDiscountclub.xml"/>	
+		<Command Path="ChangeMSISDNServiceDiscountclub.xml"/>	
+		<Command Path="DeleteServiceDiscountclub.xml"/>	
+		<Command Path="UnBlockServiceDiscountclub.xml"/>	
+	</CommandsList>
+</Dictionary>

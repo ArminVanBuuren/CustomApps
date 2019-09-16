@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ViewRBT" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Просмотр состояния номера на сервере БД RBM</Description>
+	<Author Name="Valery Bushkarev" Date="2005-05-16+11:41"/>
+
+	<Request Template="CommandCode=VIEW&amp;MSISDN={0}&amp;MacroRegion=MRGCE&amp;NewMSISDN=&amp;MDateTime={1:ddMMyyyyHHmmss}">
+		<Item Name="msisdn.fn" Type="Wellknown"/>
+		<Item Name="datetime" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="ASCII"/>
+</Command>

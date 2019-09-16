@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="DeleteSubscriberOnPS">
+	<objectList>
+		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+		<object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="HttpCmd" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfHttpCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
+	</objectList>
+	<automat>
+		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
+			<resultlist>
+				<result value="0" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+			<resultlist>
+				<result value="0" node="DeleteServicePlayboy18Node"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="DeleteServicePlayboy18Node" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="DeleteServiceVideoNode"/>
+				<result value="1538" node="DeleteServiceVideoNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="DeleteServicePlayboy18"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16625" />
+			</parameterslist>
+		</node> 
+		<node name="DeleteServiceVideoNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="DeleteServiceSiteZnakomstvNode"/>
+				<result value="1538" node="DeleteServiceSiteZnakomstvNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="DeleteServiceVideo"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16626" />
+			</parameterslist>
+		</node> 
+		<node name="DeleteServiceSiteZnakomstvNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="DeleteServiceMusicNode"/>
+				<result value="1538" node="DeleteServiceMusicNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="DeleteServiceSiteZnakomstv"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16627" />
+			</parameterslist>
+		</node> 	
+		<node name="DeleteServiceMusicNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="DeleteServiceZOJNode"/>
+				<result value="1538" node="DeleteServiceZOJNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="DeleteServiceMusic"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16628" />
+			</parameterslist>
+		</node> 
+		<node name="DeleteServiceZOJNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="DeleteServiceGameNode"/>
+				<result value="1538" node="DeleteServiceGameNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="DeleteServiceZOJ"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16629" />
+			</parameterslist>
+		</node> 
+		<node name="DeleteServiceGameNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="DeleteServiceMusicAudioingNode"/>
+				<result value="1538" node="DeleteServiceMusicAudioingNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="DeleteServiceGame"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16630" />
+			</parameterslist>
+		</node> 
+		<node name="DeleteServiceMusicAudioingNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="DeleteServiceFilmMobiletuberNode"/>
+				<result value="1538" node="DeleteServiceFilmMobiletuberNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="DeleteServiceMusicAudioing"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16679" />
+			</parameterslist>
+		</node> 	
+		<node name="DeleteServiceFilmMobiletuberNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="DeleteServiceGameGamecatalogNode"/>
+				<result value="1538" node="DeleteServiceGameGamecatalogNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="DeleteServiceFilmMobiletuber"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16680" />
+			</parameterslist>
+		</node> 
+		<node name="DeleteServiceGameGamecatalogNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="DeleteServiceGameUnlimitedgamezNode"/>
+				<result value="1538" node="DeleteServiceGameUnlimitedgamezNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="DeleteServiceGameGamecatalog"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16681" />
+			</parameterslist>
+		</node> 
+		<node name="DeleteServiceGameUnlimitedgamezNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="DeleteServiceGameIslandmobNode"/>
+				<result value="1538" node="DeleteServiceGameIslandmobNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="DeleteServiceGameUnlimitedgamez"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16682" />
+			</parameterslist>
+		</node> 
+		<node name="DeleteServiceGameIslandmobNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="DeleteServiceGameGamestoreNode"/>
+				<result value="1538" node="DeleteServiceGameGamestoreNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="DeleteServiceGameIslandmob"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16683" />
+			</parameterslist>
+		</node> 	
+		<node name="DeleteServiceGameGamestoreNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="DeleteServiceGameMobigamerNode"/>
+				<result value="1538" node="DeleteServiceGameMobigamerNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="DeleteServiceGameGamestore"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16684" />
+			</parameterslist>
+		</node> 	
+		<node name="DeleteServiceGameMobigamerNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="DeleteServiceVideoVtrendoNode"/>
+				<result value="1538" node="DeleteServiceVideoVtrendoNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="DeleteServiceGameMobigamer"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16685" />
+			</parameterslist>
+		</node> 
+		<node name="DeleteServiceVideoVtrendoNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="DeleteServiceVideoVideomeoNode"/>
+				<result value="1538" node="DeleteServiceVideoVideomeoNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="DeleteServiceVideoVtrendo"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16686" />
+			</parameterslist>
+		</node> 
+		<node name="DeleteServiceVideoVideomeoNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="DeleteServiceErovideoNode"/>
+				<result value="1538" node="DeleteServiceErovideoNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="DeleteServiceVideoVideomeo"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16687" />
+			</parameterslist>
+		</node> 
+		<node name="DeleteServiceErovideoNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="DeleteServiceGameAppsclubNode"/>
+				<result value="1538" node="DeleteServiceGameAppsclubNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="DeleteServiceErovideo"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16688" />
+			</parameterslist>
+		</node> 
+		<node name="DeleteServiceGameAppsclubNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="DeleteServiceFitnessclubNode"/>
+				<result value="1538" node="DeleteServiceFitnessclubNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="DeleteServiceGameAppsclub"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16689" />
+			</parameterslist>
+		</node> 
+		<node name="DeleteServiceFitnessclubNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="DeleteServiceKidsclubNode"/>
+				<result value="1538" node="DeleteServiceKidsclubNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="DeleteServiceFitnessclub"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16691" />
+			</parameterslist>
+		</node> 
+		<node name="DeleteServiceKidsclubNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="DeleteServiceGameappNode"/>
+				<result value="1538" node="DeleteServiceGameappNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="DeleteServiceKidsclub"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16692" />
+			</parameterslist>
+		</node> 
+		<node name="DeleteServiceGameappNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="DeleteServiceBeFriendsNode"/>
+				<result value="1538" node="DeleteServiceBeFriendsNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="DeleteServiceGameapp"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16693" />
+			</parameterslist>
+		</node> 
+		<node name="DeleteServiceBeFriendsNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="DeleteServiceBlackListNode"/>
+				<result value="1538" node="DeleteServiceBlackListNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="DeleteServiceBeFriends"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16695" />
+			</parameterslist>
+		</node> 	
+		<node name="DeleteServiceBlackListNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="DeleteServiceDiscountclubNode"/>
+				<result value="1538" node="DeleteServiceDiscountclubNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="DeleteBlackList"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11430" />
+			</parameterslist>
+		</node> 
+		<node name="DeleteServiceDiscountclubNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="DeleteServiceDiscountclub"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17098" />
+			</parameterslist>
+		</node> 		
+		<node name="DummyResponderNode" object="DummyResponder">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+		<parameterslist>
+			<param name="OverallResult" value="SUCCESS"/>
+			<param name="DetailedResult" value="SUCCESS"/>
+			<param name="Delay" value="0"/>
+		</parameterslist>
+		</node>			
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

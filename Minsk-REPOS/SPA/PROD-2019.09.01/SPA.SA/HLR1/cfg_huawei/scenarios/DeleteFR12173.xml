@@ -26,12 +26,12 @@
 		</node>
 		<node name="IfServiceNode" object="IfMultipleXmlConditionsResolver">
 			<resultlist>
-				<result value="0" node="DummyResponderNode"/>
-				<result value="1" node="DeleteRBTNode"/>
+				<result value="0" node="DeleteRBTNode"/>
+				<result value="1" node="DummyResponderNode"/>
 			</resultlist>
 			<parameterslist>
-				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR12173"/>
-				<param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR12174"/>
+				<param name="ObjectNameInContext" value="request" />
+				<param name="MultiLevelCondition" value="((//WithdrawalList/FR12173) AND (NOT //RegisteredList/FR12174))" />
 			</parameterslist>
 		</node>			
 		<node name="DeleteRBTNode" object="Commander">

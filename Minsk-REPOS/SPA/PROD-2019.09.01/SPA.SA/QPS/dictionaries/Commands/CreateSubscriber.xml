@@ -13,6 +13,10 @@
 &#60;credential&#62;
 &#60;networkId&#62;{0}&#60;/networkId&#62;
 &#60;/credential&#62;
+&#60;service&#62;
+&#60;code&#62;FR0001&#60;/code&#62;
+&#60;enabled&#62;true&#60;/enabled&#62;
+&#60;/service&#62;
 &#60;notification&#62;
 &#60;destination&#62;{0}&#60;/destination&#62;
 &#60;enabled&#62;true&#60;/enabled&#62;

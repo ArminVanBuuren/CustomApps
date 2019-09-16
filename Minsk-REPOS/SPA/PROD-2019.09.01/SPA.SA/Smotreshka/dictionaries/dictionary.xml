@@ -32,5 +32,12 @@
 		<Command Path="CreateAddFreeTV.xml"/>	
 		<Command Path="DeleteFreeTV.xml"/>	
 		<Command Path="ChangeCreateAddFreeTV.xml"/>	
+		<Command Path="AddMTSTVplus.xml"/>	
+		<Command Path="ChangeCreateAddMTSTVplus.xml"/>	
+		<Command Path="CreateAddMTSTVplus.xml"/>	
+		<Command Path="DeleteMTSTVplus.xml"/>	
+		<Command Path="ChangeCreateStartRu.xml"/>	
+		<Command Path="CreateAddStartRu.xml"/>	
+		<Command Path="DeleteStartRu.xml"/>	
 	</CommandsList>
 </Dictionary>

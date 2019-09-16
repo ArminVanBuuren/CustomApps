@@ -31,7 +31,7 @@
 		<node name="IfFR12194Node" object="IfConditionXmlResolver">
  			<resultlist>
 				<result value="0" node="AddMTSMusicNODE" /> 
-				<result value="1" node="DummyResponderNode" /> 
+				<result value="1" node="IfFR17087Node" /> 
 			</resultlist>
  			<parameterslist>
 				<param name="ObjectNameInContext" value="request" /> 
@@ -41,6 +41,7 @@
 		</node>	 			
 		<node name="AddMTSMusicNODE" object="Commander">
 			<resultlist>
+				<result value="0" node="IfFR17087Node"/>
 				<result value="" node="ResponseAssembler"/>
 			</resultlist>
 			<parameterslist>
@@ -52,6 +53,30 @@
 				<param name="DynamicObject" value="(empty)"/>
 			</parameterslist>
 		</node>	
+		<node name="IfFR17087Node" object="IfConditionXmlResolver">
+ 			<resultlist>
+				<result value="0" node="AddMTSMusic30daysNODE" /> 
+				<result value="1" node="DummyResponderNode" /> 
+			</resultlist>
+ 			<parameterslist>
+				<param name="ObjectNameInContext" value="request" /> 
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17087" /> 
+				<param name="Value:1" value="" /> 
+			</parameterslist>
+		</node>	 			
+		<node name="AddMTSMusic30daysNODE" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddMTSMusic30days"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>				
 		<node name="DummyResponderNode" object="DummyResponder">
 			<resultlist>
 				<result value="" node="ResponseAssembler"/>

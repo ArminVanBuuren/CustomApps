@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scenario name="CreateSubscriberOnMA">
+<scenario name="CreateSubscriber_MA">
 	<objectList>
 		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
 		<object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
@@ -43,8 +43,8 @@
 		</node>			
 		<node name="AddFreeMobileTVServiceNode" object="IfHttpCommander">
 			<resultlist>
-				<result value="0" node="AddMobileTVServiceNode"/>
-				<result value="1538" node="AddMobileTVServiceNode"/>
+				<result value="0" node="AddMTSTVplusNode"/>
+				<result value="1538" node="AddMTSTVplusNode"/>
 				<result value="" node="ResponseAssembler"/>
 			</resultlist>
 			<parameterslist>
@@ -60,6 +60,27 @@
 				<param name="Connection.Method" value="POST"/>
 				<param name="Connection.ContentType" value="application/json;charset=UTF-8"/>
 				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/ProvisionList/FR16493" />
+			</parameterslist>
+		</node> 		
+		<node name="AddMTSTVplusNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="AddMobileTVServiceNode"/>
+				<result value="1538" node="AddMobileTVServiceNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="v2/accounts"/>
+				<param name="Command" value="AddMTSTVplus"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="172.18.122.75"/>
+				<param name="Connection.Port" value="80"/>
+				<param name="Connection.MethodName" value="POST"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.ContentType" value="application/json;charset=UTF-8"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/ProvisionList/FR16996" />
 			</parameterslist>
 		</node> 		
 		<node name="AddMobileTVServiceNode" object="IfHttpCommander">
@@ -85,8 +106,8 @@
 		</node> 
 		<node name="AddCinemaIVIServiceNode" object="IfHttpCommander">
 			<resultlist>
-				<result value="0" node="IfBlockNode"/>
-				<result value="1538" node="IfBlockNode"/>
+				<result value="0" node="AddStartRuNode"/>
+				<result value="1538" node="AddStartRuNode"/>
 				<result value="" node="ResponseAssembler"/>
 			</resultlist>
 			<parameterslist>
@@ -104,6 +125,27 @@
 				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/ProvisionList/FR16494" />
 			</parameterslist>
 		</node> 		
+		<node name="AddStartRuNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="IfBlockNode"/>
+				<result value="1538" node="IfBlockNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="v2/accounts"/>
+				<param name="Command" value="CreateAddStartRu"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="172.18.122.75"/>
+				<param name="Connection.Port" value="80"/>
+				<param name="Connection.MethodName" value="POST"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.ContentType" value="application/json;charset=UTF-8"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/ProvisionList/FR16638" />
+			</parameterslist>
+		</node> 			
 		<node name="IfBlockNode" object="IfMultipleXmlConditionsResolver">
 			<resultlist>
 				<result value="0" node="BlockNode"/>
@@ -118,6 +160,7 @@
 				<param name="OrXmlPath:5" value="ExtendedRequestMessage/AdditionalData/ProvisionList/FRBLKPAY"/>
 				<param name="OrXmlPath:6" value="ExtendedRequestMessage/AdditionalData/ProvisionList/FRBLKTIME"/>
 				<param name="OrXmlPath:7" value="ExtendedRequestMessage/AdditionalData/ProvisionList/FRBLKUSER"/>
+				<param name="OrXmlPath:8" value="ExtendedRequestMessage/AdditionalData/ProvisionList/FR12152"/>
 			</parameterslist>
 		</node>
 		<node name="BlockNode" object="HttpCmd">

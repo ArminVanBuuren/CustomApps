@@ -546,14 +546,25 @@
 		<node name="IfFR12660Node" object="IfConditionXmlResolver">
 			<resultlist>
 				<result value="0" node="AddSynchronizeSubscriberDataOnDBNode"/>
-				<result value="1" node="IfFR11385Node"/>
+				<result value="1" node="IfFR17124Node"/>
 			</resultlist>
 			<parameterslist>
 				<param name="ObjectNameInContext" value="request"/>
 				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR12660"/>
 				<param name="Value:1" value=""/>
 			</parameterslist>
-		</node>		
+		</node>	
+		<node name="IfFR17124Node" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="AddSynchronizeSubscriberDataOnDBNode"/>
+				<result value="1" node="IfFR11385Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17124"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>			
 		<node name="IfFR11385Node" object="IfConditionXmlResolver">
 			<resultlist>
 				<result value="0" node="AddSynchronizeSubscriberDataOnDBNode"/>

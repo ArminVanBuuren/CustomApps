@@ -54,6 +54,7 @@
 				<param name="OrXmlPath:13" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11398"/>
 				<param name="OrXmlPath:14" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11399"/>
 				<param name="OrXmlPath:15" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11400"/>				
+				<param name="OrXmlPath:16" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17124"/>				
 			</parameterslist>
 		</node>			
 		<node name="FTTX_GetRegionTypeSub_Node" object="DataBaseProcessor">

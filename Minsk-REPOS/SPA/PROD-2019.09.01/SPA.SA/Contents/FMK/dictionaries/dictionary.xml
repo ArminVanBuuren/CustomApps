@@ -5,6 +5,8 @@
 	<ErrorsList CodePage="ASCII">
 		<Error Name="&#34;status&#34;:0" Value="SUCCESS"/>
 		<Error Name="&#34;status&#34;:1" Value="FAILURE"/>
+		<Error Name="503 Service Temporarily" Value="HardwareConnectionError"/>
+		<Error Name="502 Bad Gateway" Value="HardwareConnectionError"/>
 	</ErrorsList>	
 	<RegexpsList/>
 	<ConstantsList />

@@ -3,7 +3,7 @@
 	<Application Path=".\QPS\configuration.application.xml"/>
 	<Settings>
 		<Add Key="ReportTimeout" Value="0"/>
-		<Add Key="Requests.MaxQueuedPerHost" Value="500"/>
+		<Add Key="Requests.MaxQueuedPerHost" Value="1000"/>
 		<Add Key="Requests.PollPeriod" Value="5"/>
 		<Add Key="Requests.PollIdlePeriod" Value="2"/>
 		<Add Key="Responses.WritersCount" Value="5"/>

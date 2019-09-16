@@ -44,6 +44,7 @@
 				<param name="OrXmlPath:6" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKP"/>
 				<param name="OrXmlPath:7" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKTIME"/>
 				<param name="OrXmlPath:8" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKUSER"/>
+				<param name="OrXmlPath:9" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR12152"/>
 			</parameterslist>
 		</node>		
 		<node name="BlockSubscriberClassic1Node" object="IfHttpCommander">

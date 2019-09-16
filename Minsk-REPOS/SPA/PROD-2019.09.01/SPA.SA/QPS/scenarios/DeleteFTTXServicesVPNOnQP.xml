@@ -45,6 +45,7 @@
 				<param name="OrXmlPath:5" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11390"/>
 				<param name="OrXmlPath:6" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11391"/>
 				<param name="OrXmlPath:7" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11392"/>
+				<param name="OrXmlPath:8" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17124"/>
 			</parameterslist>
 		</node>	
 		<node name="DeleteSubscriberBusinessVPNOnQPNode" object="Commander">

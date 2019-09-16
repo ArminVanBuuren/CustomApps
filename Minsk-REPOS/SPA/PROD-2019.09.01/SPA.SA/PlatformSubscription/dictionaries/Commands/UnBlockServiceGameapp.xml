@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="UnBlockServiceGameapp" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>UnBlock Service</Description>
+	<Author Name="NNM" Date="2019-01-29+15:30"/>
+	<Request Template="unblock?frcode=FR16693&amp;msisdn={0}">
+	<Item Name="msisdn" Type="Wellknown" />
+	</Request>
+	<ErrorsList CodePage="ascii" />
+</Command>

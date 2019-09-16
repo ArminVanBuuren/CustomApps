@@ -303,10 +303,31 @@
 		<Command Path="SychrFTTXStaticIPv2.xml"/> 		
 		<Command Path="Add20Gb.xml"/> 		
 		<Command Path="Delete20Gb.xml"/> 		
+		<Command Path="AddAmediateka.xml"/> 		
+		<Command Path="DeleteAmediateka.xml"/> 		
+		<Command Path="AddRoamingInternetRate.xml"/> 		
+		<Command Path="DeleteRoamingInternetRate.xml"/> 		
+		<Command Path="AddUnlim512kbps.xml"/> 		
+		<Command Path="DeleteUnlim512kbps.xml"/> 		
+		<Command Path="AddUnlim1mbps.xml"/> 		
+		<Command Path="DeleteUnlim1mbps.xml"/> 		
+		<Command Path="AddUnlim2mbps.xml"/> 		
+		<Command Path="DeleteUnlim2mbps.xml"/> 		
+		<Command Path="AddRoamUKR.xml"/> 		
+		<Command Path="DeleteRoamUKR.xml"/> 		
+		<Command Path="AddRoamDAY.xml"/> 		
+		<Command Path="DeleteRoamDAY.xml"/> 		
+		<Command Path="AddRoamMONTH.xml"/> 		
+		<Command Path="DeleteRoamMONTH.xml"/> 		
+		<Command Path="Add1GBABroad.xml"/> 		
+		<Command Path="Delete1GBABroad.xml"/> 		
+		<Command Path="AddBusinessVPN10GbitsVL.xml"/> 		
+		<Command Path="DeleteBusinessVPN10GbitsVL.xml"/> 		
 	</CommandsList>
 	<FunctionsList Root=".\QPS\Dictionaries\Func" References="references.xml">
 		<Function Path="getlastdayofmonthbefore.cs" /> 
 		<Function Path="getlastdayofmonth.cs" /> 
+		<Function Path="getyesterday.cs" /> 
 	</FunctionsList>	
 	<!--DecodersList Root=".\Dictionaries\Decoders">
 		<Decoder Path="RbtDecoder.xml"/>

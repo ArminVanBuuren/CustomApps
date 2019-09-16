@@ -113,6 +113,7 @@
 				<param name="OrXmlPath:5" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11390"/>
 				<param name="OrXmlPath:6" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11391"/>
 				<param name="OrXmlPath:7" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11392"/>
+				<param name="OrXmlPath:8" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17124"/>
 			</parameterslist>
 		</node>	
 		<node name="DeleteSUBSBusinessVPNOnQPNode" object="Commander">
@@ -740,8 +741,8 @@
 		</node>	
 		<node name="FTTXAddFR11392Node" object="IfCommander">
 			<resultlist>
-				<result value="0" node="FTTXAddFR11393Node"/>
-				<result value="1538" node="FTTXAddFR11393Node"/>
+				<result value="0" node="FTTXAddFR17124Node"/>
+				<result value="1538" node="FTTXAddFR17124Node"/>
 				<result value="" node="ResponseAssembler"/>
 			</resultlist>
 			<parameterslist>
@@ -753,6 +754,21 @@
 				<param name="ErrorDecodingType" value="ByString"/>
 			</parameterslist>
 		</node>	
+		<node name="FTTXAddFR17124Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="FTTXAddFR11393Node"/>
+				<result value="1538" node="FTTXAddFR11393Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17124"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddBusinessVPN10GbitsVL"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>			
 		<node name="FTTXAddFR11393Node" object="IfCommander">
 			<resultlist>
 				<result value="0" node="FTTXAddFR11394Node"/>
@@ -965,8 +981,8 @@
 		</node>	
 		<node name="FTTXAddFR10998Node" object="IfCommander">
 			<resultlist>
-				<result value="0" node="FTTXAddFR2040Node"/>
-				<result value="1538" node="FTTXAddFR2040Node"/>
+				<result value="0" node="FTTXAddFR16850Node"/>
+				<result value="1538" node="FTTXAddFR16850Node"/>
 				<result value="" node="ResponseAssembler"/>
 			</resultlist>
 			<parameterslist>
@@ -974,6 +990,21 @@
 				<param name="CommandSource" value="Dictionary"/>
 				<param name="AppendSubscribersData" value="false"/>
 				<param name="Command" value="AddHomeCinema"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>	
+		<node name="FTTXAddFR16850Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="FTTXAddFR2040Node"/>
+				<result value="1538" node="FTTXAddFR2040Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16850"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddAmediateka"/>
 				<param name="Script" value="Command"/>
 				<param name="ErrorDecodingType" value="ByString"/>
 			</parameterslist>
@@ -1103,6 +1134,7 @@
 				<param name="OrXmlPath:13" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11398"/>
 				<param name="OrXmlPath:14" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11399"/>
 				<param name="OrXmlPath:15" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11400"/>				
+				<param name="OrXmlPath:16" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17124"/>				
 			</parameterslist>
 		</node>				
 		<node name="FTTX_GetRegionTypeSub_Node" object="DataBaseProcessor">
@@ -1261,6 +1293,8 @@
 				<param name="OrXmlPath:8" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKUSER"/>
 				<param name="OrXmlPath:9" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR8725"/>
 				<param name="OrXmlPath:10" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR12152"/>
+				<param name="OrXmlPath:11" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16912"/>
+				<param name="OrXmlPath:12" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16913"/>				
 			</parameterslist>
 		</node>	
 		<node name="IfServiceBusinessVPNNode" object="IfMultipleXmlConditionsResolver">
@@ -1277,6 +1311,7 @@
 				<param name="OrXmlPath:5" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11390"/>
 				<param name="OrXmlPath:6" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11391"/>
 				<param name="OrXmlPath:7" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11392"/>
+				<param name="OrXmlPath:8" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17124"/>
 			</parameterslist>
 		</node>	
 		<node name="BlockBusinessVPNNode" object="Commander">

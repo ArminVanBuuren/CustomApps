@@ -39,6 +39,7 @@
 				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR12221"/>
 				<param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR14350"/>
 				<param name="OrXmlPath:2" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR14351"/>
+				<param name="OrXmlPath:3" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17100"/>
 			</parameterslist>
 		</node>			
 		<node name="DeleteServiceNode" object="HttpCmd">

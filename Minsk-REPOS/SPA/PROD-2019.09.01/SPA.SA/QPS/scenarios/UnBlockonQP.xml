@@ -55,7 +55,9 @@
 					AND (NOT //RegisteredList/FRBLKTIME)
 					AND (NOT //RegisteredList/FRBLKUSER)
 					AND (NOT //RegisteredList/FR8725)
-					AND (NOT //RegisteredList/FR12152))
+					AND (NOT //RegisteredList/FR12152)
+					AND (NOT //RegisteredList/FR16912)
+					AND (NOT //RegisteredList/FR16913))
 					
 					OR
 					
@@ -69,7 +71,9 @@
 					AND (NOT //RegisteredList/FRBLKTIME)
 					AND (NOT //RegisteredList/FRBLKUSER)
 					AND (NOT //RegisteredList/FR8725)
-					AND (NOT //RegisteredList/FR12152))
+					AND (NOT //RegisteredList/FR12152)
+					AND (NOT //RegisteredList/FR16912)
+					AND (NOT //RegisteredList/FR16913))
 					
 					OR
 					
@@ -83,7 +87,9 @@
 					AND (NOT //RegisteredList/FRBLKTIME)
 					AND (NOT //RegisteredList/FRBLKUSER)
 					AND (NOT //RegisteredList/FR8725)
-					AND (NOT //RegisteredList/FR12152))
+					AND (NOT //RegisteredList/FR12152)
+					AND (NOT //RegisteredList/FR16912)
+					AND (NOT //RegisteredList/FR16913))
 					
 					OR
 					
@@ -97,7 +103,9 @@
 					AND (NOT //RegisteredList/FRBLKTIME)
 					AND (NOT //RegisteredList/FRBLKUSER)
 					AND (NOT //RegisteredList/FR8725)
-					AND (NOT //RegisteredList/FR12152))
+					AND (NOT //RegisteredList/FR12152)
+					AND (NOT //RegisteredList/FR16912)
+					AND (NOT //RegisteredList/FR16913))
 					
 					OR
 					
@@ -111,7 +119,9 @@
 					AND (NOT //RegisteredList/FRBLKTIME)
 					AND (NOT //RegisteredList/FRBLKUSER)
 					AND (NOT //RegisteredList/FR8725)
-					AND (NOT //RegisteredList/FR12152))
+					AND (NOT //RegisteredList/FR12152)	
+					AND (NOT //RegisteredList/FR16912)
+					AND (NOT //RegisteredList/FR16913))
 					
 					OR
 					
@@ -125,7 +135,9 @@
 					AND (NOT //RegisteredList/FRBLKTIME)
 					AND (NOT //RegisteredList/FRBLKUSER)
 					AND (NOT //RegisteredList/FR8725)
-					AND (NOT //RegisteredList/FR12152))
+					AND (NOT //RegisteredList/FR12152)	
+					AND (NOT //RegisteredList/FR16912)
+					AND (NOT //RegisteredList/FR16913))
 					
 					OR
 					
@@ -139,7 +151,9 @@
 					AND (NOT //RegisteredList/FRBLKTIME)
 					AND (NOT //RegisteredList/FRBLKUSER)
 					AND (NOT //RegisteredList/FR8725)
-					AND (NOT //RegisteredList/FR12152))
+					AND (NOT //RegisteredList/FR12152)
+					AND (NOT //RegisteredList/FR16912)
+					AND (NOT //RegisteredList/FR16913))
 					
 					OR
 					
@@ -153,7 +167,9 @@
 					AND (NOT //RegisteredList/FRBLKP)
 					AND (NOT //RegisteredList/FRBLKUSER)
 					AND (NOT //RegisteredList/FR8725)
-					AND (NOT //RegisteredList/FR12152))
+					AND (NOT //RegisteredList/FR12152)
+					AND (NOT //RegisteredList/FR16912)
+					AND (NOT //RegisteredList/FR16913))
 					
 					OR
 					
@@ -167,7 +183,9 @@
 					AND (NOT //RegisteredList/FRBLKP)
 					AND (NOT //RegisteredList/FRBLKTIME)
 					AND (NOT //RegisteredList/FR8725)
-					AND (NOT //RegisteredList/FR12152))
+					AND (NOT //RegisteredList/FR12152)	
+					AND (NOT //RegisteredList/FR16912)
+					AND (NOT //RegisteredList/FR16913))
 					
 					
 					OR
@@ -182,7 +200,9 @@
 					AND (NOT //RegisteredList/FRBLKP)
 					AND (NOT //RegisteredList/FRBLKTIME)
 					AND (NOT //RegisteredList/FRBLKUSER)
-					AND (NOT //RegisteredList/FR12152))
+					AND (NOT //RegisteredList/FR12152)
+					AND (NOT //RegisteredList/FR16912)
+					AND (NOT //RegisteredList/FR16913))
 					
 					
 					OR
@@ -197,8 +217,41 @@
 					AND (NOT //RegisteredList/FRBLKP)
 					AND (NOT //RegisteredList/FRBLKTIME)
 					AND (NOT //RegisteredList/FRBLKUSER)
-					AND (NOT //RegisteredList/FR8725))
+					AND (NOT //RegisteredList/FR8725)	
+					AND (NOT //RegisteredList/FR16912)
+					AND (NOT //RegisteredList/FR16913))
+
+					OR
 					
+					((//WithdrawalList/FR16912)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER)
+					AND (NOT //RegisteredList/FR8725)	
+					AND (NOT //RegisteredList/FR12152)
+					AND (NOT //RegisteredList/FR16913))	
+
+					OR
+					
+					((//WithdrawalList/FR16913)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER)
+					AND (NOT //RegisteredList/FR8725)	
+					AND (NOT //RegisteredList/FR12152)
+					AND (NOT //RegisteredList/FR16912))						
 					" />
 			</parameterslist>
 		</node>
@@ -216,6 +269,7 @@
 				<param name="OrXmlPath:5" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11390" />
 				<param name="OrXmlPath:6" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11391" />
 				<param name="OrXmlPath:7" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11392" />
+				<param name="OrXmlPath:8" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17124" />
 			</parameterslist>
 		</node>
 		<node name="UnBlockBusinessVPNNode" object="Commander">

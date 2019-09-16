@@ -22,7 +22,7 @@
 		</node>
 		<node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
 			<resultlist>
-				<result value="0" node="UnBlockNode"/>
+				<result value="0" node="DummyResponderNode"/>
 				<result value="1" node=""/>
 			</resultlist>
 			<parameterslist>

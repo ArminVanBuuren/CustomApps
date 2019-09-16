@@ -40,5 +40,7 @@
 	<VariablesList>
 		<Variable Name="ASYNC_REQUEST_ID" Template="reversecut({0},4)-{8}"/>
 	</VariablesList>
-	<ErrorsList CodePage="ascii"/>
+  <ErrorsList CodePage="ascii">
+    <Error Name="Inserted state record already exists!" Value="SUCCESS"/>
+  </ErrorsList>
 </Command>

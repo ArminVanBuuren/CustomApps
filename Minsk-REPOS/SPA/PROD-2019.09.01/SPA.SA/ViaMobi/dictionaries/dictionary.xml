@@ -77,5 +77,11 @@
 		<Command Path="DelLessBy.xml"/>	
 		<Command Path="UnBlockLessBy.xml"/>	
 		<Command Path="DeleteSubscriberLessBy.xml"/>		
+		<Command Path="AddTrener.xml"/>		
+		<Command Path="DelTrener.xml"/>		
+		<Command Path="BlockTrener.xml"/>		
+		<Command Path="UnBlockTrener.xml"/>		
+		<Command Path="ChangeMSISDNTrener.xml"/>		
+		<Command Path="DeleteSubscriberTrener.xml"/>		
 	</CommandsList>
 </Dictionary>

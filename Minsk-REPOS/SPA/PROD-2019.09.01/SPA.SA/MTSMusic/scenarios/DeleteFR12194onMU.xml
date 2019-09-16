@@ -22,7 +22,7 @@
 		</node>
 		<node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
 			<resultlist>
-				<result value="0" node="DeleteServiceNode"/>
+				<result value="0" node="IfSourceTypeNode"/>
 				<result value="1" node=""/>
 			</resultlist>
 			<parameterslist>

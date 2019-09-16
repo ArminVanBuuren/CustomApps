@@ -34,11 +34,22 @@
     </node>
     <node name="SingleServiceRequestDequeuer" object="Dequeuer">
       <resultlist>
-        <result value="0" node="Assign FavoriteNumbers"/>
+        <result value="0" node="AssignService"/>
         <result value="" node="ResponseAssembler"/>
       </resultlist>
       <parameterslist>
         <param name="queueName" value="requestsSplittedByServicesQueue"/>
+      </parameterslist>
+    </node>
+    <node name="AssignService" object="Commander">
+      <resultlist>
+        <result value="0" node="Assign FavoriteNumbers" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="AssignService" />
+        <param name="AppendSubscribersData" value="true" />
+        <param name="Asynchronous" value="true" />
       </parameterslist>
     </node>
     <node name="Assign FavoriteNumbers" object="Commander">

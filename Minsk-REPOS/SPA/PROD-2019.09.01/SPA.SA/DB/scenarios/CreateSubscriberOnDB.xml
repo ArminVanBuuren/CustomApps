@@ -8,6 +8,7 @@
 		<object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll"/>
 		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll"/>
 		<object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
 	</objectList>
 	<automat>
 		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
@@ -400,7 +401,7 @@
 		<node name="IfFR11392Node" object="IfConditionXmlResolver">
 			<resultlist>
 				<result value="0" node="AddServiceFR11392DBNode"/>
-				<result value="1" node="IfFR11393Node"/>
+				<result value="1" node="IfFR17124Node"/>
 			</resultlist>
 			<parameterslist>
 				<param name="ObjectNameInContext" value="request"/>
@@ -410,7 +411,7 @@
 		</node>	
 		<node name="AddServiceFR11392DBNode" object="Commander">
 			<resultlist>
-				<result value="0" node="IfFR11393Node"/>
+				<result value="0" node="IfFR17124Node"/>
 				<result value="" node="ResponseAssembler"/>
 			</resultlist>
 			<parameterslist>
@@ -423,6 +424,32 @@
 				<param name="DataBaseName" value="FORIS.SPA.BILLING" />				
 				</parameterslist>
 		</node>	
+		<node name="IfFR17124Node" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="AddServiceFR17124DBNode"/>
+				<result value="1" node="IfFR11393Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17124"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>	
+		<node name="AddServiceFR17124DBNode" object="Commander">
+			<resultlist>
+				<result value="0" node="IfFR11393Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddBusinessVPN10GbitsDB"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="DataBaseName" value="FORIS.SPA.BILLING" />				
+				</parameterslist>
+		</node>			
 		<node name="IfFR11393Node" object="IfConditionXmlResolver">
 			<resultlist>
 				<result value="0" node="AddServiceFR11393DBNode"/>
@@ -2246,7 +2273,7 @@
 		<node name="IfFR14294Node" object="IfConditionXmlResolver">
 			<resultlist>
 				<result value="0" node="AddFR14294NODE"/>
-				<result value="1" node="IfFR10361Node"/>
+				<result value="1" node="IfFR17001Node"/>
 			</resultlist>
 			<parameterslist>
 				<param name="ObjectNameInContext" value="request"/>
@@ -2256,7 +2283,7 @@
 		</node>	
 		<node name="AddFR14294NODE" object="Commander">
 			<resultlist>
-				<result value="0" node="IfFR10361Node"/>
+				<result value="0" node="IfFR17001Node"/>
 				<result value="" node="ResponseAssembler"/>
 			</resultlist>
 			<parameterslist>
@@ -2268,7 +2295,33 @@
 				<param name="DynamicObject" value="(empty)"/>
 				<param name="DataBaseName" value="FORIS.SPA.BILLING" />				
 				</parameterslist>
-		</node>			
+		</node>		
+		<node name="IfFR17001Node" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="AddFR17001NODE"/>
+				<result value="1" node="IfFR10361Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17001"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>	
+		<node name="AddFR17001NODE" object="Commander">
+			<resultlist>
+				<result value="0" node="IfFR10361Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="Add1GBABroadDB"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="DataBaseName" value="FORIS.SPA.BILLING" />				
+				</parameterslist>
+		</node>				
 		<node name="IfFR10361Node" object="IfConditionXmlResolver">
 			<resultlist>
 				<result value="0" node="AddFR10361NODE"/>
@@ -2376,7 +2429,7 @@
 		<node name="IfFR12152Node" object="IfConditionXmlResolver">
 			<resultlist>
 				<result value="0" node="AddFR12152NODE"/>
-				<result value="1" node="IfFR8718Node"/>
+				<result value="1" node="IfAddFR16912Node"/>
 			</resultlist>
 			<parameterslist>
 				<param name="ObjectNameInContext" value="request"/>
@@ -2386,7 +2439,7 @@
 		</node>	
 		<node name="AddFR12152NODE" object="Commander">
 			<resultlist>
-				<result value="0" node="IfFR8718Node"/>
+				<result value="0" node="IfAddFR16912Node"/>
 				<result value="" node="ResponseAssembler"/>
 			</resultlist>
 			<parameterslist>
@@ -2398,6 +2451,36 @@
 				<param name="DynamicObject" value="(empty)"/>
 				<param name="DataBaseName" value="FORIS.SPA.BILLING" />				
 				</parameterslist>
+		</node>			
+		<node name="IfAddFR16912Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="IfAddFR16913Node"/>
+				<result value="1538" node="IfAddFR16913Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16912"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="BlockAccessInternetPause30DB"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>			
+		<node name="IfAddFR16913Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="IfFR8718Node"/>
+				<result value="1538" node="IfFR8718Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16913"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="BlockAccessInternetPause90DB"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
 		</node>			
 		<node name="IfFR8718Node" object="IfConditionXmlResolver">
 			<resultlist>
@@ -2480,7 +2563,7 @@
 		<node name="IfFR8781Node" object="IfConditionXmlResolver">
 			<resultlist>
 				<result value="0" node="AddFR8781NODE"/>
-				<result value="1" node="IfFR14113Node"/>
+				<result value="1" node="IfFR16644Node"/>
 			</resultlist>
 			<parameterslist>
 				<param name="ObjectNameInContext" value="request"/>
@@ -2490,7 +2573,7 @@
 		</node>	
 		<node name="AddFR8781NODE" object="Commander">
 			<resultlist>
-				<result value="0" node="IfFR14113Node"/>
+				<result value="0" node="IfFR16644Node"/>
 				<result value="" node="ResponseAssembler"/>
 			</resultlist>
 			<parameterslist>
@@ -2503,6 +2586,84 @@
 				<param name="DataBaseName" value="FORIS.SPA.BILLING" />				
 				</parameterslist>
 		</node>	
+		<node name="IfFR16644Node" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="AddFR16644NODE"/>
+				<result value="1" node="IfFR16645Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16644"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>	
+		<node name="AddFR16644NODE" object="Commander">
+			<resultlist>
+				<result value="0" node="IfFR16645Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="Add5GBox1DB"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="DataBaseName" value="FORIS.SPA.BILLING" />				
+				</parameterslist>
+		</node>	
+		<node name="IfFR16645Node" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="AddFR16645NODE"/>
+				<result value="1" node="IfFR16646Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16645"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>	
+		<node name="AddFR16645NODE" object="Commander">
+			<resultlist>
+				<result value="0" node="IfFR16646Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="Add5GBox2DB"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="DataBaseName" value="FORIS.SPA.BILLING" />				
+				</parameterslist>
+		</node>		
+		<node name="IfFR16646Node" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="AddFR16646NODE"/>
+				<result value="1" node="IfFR14113Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16646"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>	
+		<node name="AddFR16646NODE" object="Commander">
+			<resultlist>
+				<result value="0" node="IfFR14113Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="Add5GBox3DB"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="DataBaseName" value="FORIS.SPA.BILLING" />				
+				</parameterslist>
+		</node>			
 		<node name="IfFR14113Node" object="IfConditionXmlResolver">
 			<resultlist>
 				<result value="0" node="AddFR14113NODE"/>
@@ -2906,7 +3067,7 @@
 		<node name="IfFR11485Node" object="IfConditionXmlResolver">
 			<resultlist>
 				<result value="0" node="AddFR11485NODE"/>
-				<result value="1" node="IfFR11505Node"/>
+				<result value="1" node="IfAddFR17112Node"/>
 			</resultlist>
 			<parameterslist>
 				<param name="ObjectNameInContext" value="request"/>
@@ -2916,7 +3077,7 @@
 		</node>	
 		<node name="AddFR11485NODE" object="Commander">
 			<resultlist>
-				<result value="0" node="IfFR11505Node"/>
+				<result value="0" node="IfAddFR17112Node"/>
 				<result value="" node="ResponseAssembler"/>
 			</resultlist>
 			<parameterslist>
@@ -2929,6 +3090,126 @@
 				<param name="DataBaseName" value="FORIS.SPA.BILLING" />				
 				</parameterslist>
 		</node>	
+		<node name="IfAddFR17112Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="IfAddFR17113Node"/>
+				<result value="1538" node="IfAddFR17113Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17112"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddVPNMinskTransDB"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>		
+		<node name="IfAddFR17113Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="IfAddFR17114Node"/>
+				<result value="1538" node="IfAddFR17114Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17113"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddVPNBFTDB"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>	
+		<node name="IfAddFR17114Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="IfAddFR17115Node"/>
+				<result value="1538" node="IfAddFR17115Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17114"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddVPNBFTMVDDB"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>		
+		<node name="IfAddFR17115Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="IfAddFR17116Node"/>
+				<result value="1538" node="IfAddFR17116Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17115"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddVPNInfoCentrTaxDB"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>	
+		<node name="IfAddFR17116Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="IfAddFR17006Node"/>
+				<result value="1538" node="IfAddFR17006Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17116"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddVPNSafetyRoadRBDB"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>			
+		<node name="IfAddFR17006Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="IfAddFR17007Node"/>
+				<result value="1538" node="IfAddFR17007Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17006"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddTechComplectInternet1DB"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>		
+		<node name="IfAddFR17007Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="IfAddFR17008Node"/>
+				<result value="1538" node="IfAddFR17008Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17007"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddTechComplectInternet2DB"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>
+		<node name="IfAddFR17008Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="IfFR11505Node"/>
+				<result value="1538" node="IfFR11505Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17008"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddTechComplectInternet3DB"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>		
 		<node name="IfFR11505Node" object="IfConditionXmlResolver">
 			<resultlist>
 				<result value="0" node="AddFR11505NODE"/>
@@ -3815,7 +4096,7 @@
 		<node name="IfFR15636Node" object="IfConditionXmlResolver">
 			<resultlist>
 				<result value="0" node="AddFR15636NODE"/>
-				<result value="1" node="DummyResponderNode"/>
+				<result value="1" node="IfAddFR16910Node"/>
 			</resultlist>
 			<parameterslist>
 				<param name="ObjectNameInContext" value="request"/>
@@ -3825,6 +4106,7 @@
 		</node>	
 		<node name="AddFR15636NODE" object="Commander">
 			<resultlist>
+				<result value="0" node="IfAddFR16910Node"/>
 				<result value="" node="ResponseAssembler"/>
 			</resultlist>
 			<parameterslist>
@@ -3836,7 +4118,230 @@
 				<param name="DynamicObject" value="(empty)"/>
 				<param name="DataBaseName" value="FORIS.SPA.BILLING" />				
 				</parameterslist>
+		</node>	
+		<node name="IfAddFR16910Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="IfAddFR16871Node"/>
+				<result value="1538" node="IfAddFR16871Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16910"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddoamingInternetRateDB"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>	
+		<node name="IfAddFR16871Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="IfAddFR16872Node"/>
+				<result value="1538" node="IfAddFR16872Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16871"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddUnlim512kbpsDB"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>	
+		<node name="IfAddFR16872Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="IfAddFR16873Node"/>
+				<result value="1538" node="IfAddFR16873Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16872"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddUnlim1mbpsDB"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>		
+		<node name="IfAddFR16873Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="IfAddFR17077Node"/>
+				<result value="1538" node="IfAddFR17077Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16873"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddUnlim2mbpsDB"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>	
+		<node name="IfAddFR17077Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="IfAddFR17078Node"/>
+				<result value="1538" node="IfAddFR17078Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17077"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddTechSuper8DB"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
 		</node>			
+		<node name="IfAddFR17078Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="IfAddFR16813Node"/>
+				<result value="1538" node="IfAddFR16813Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17078"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddTechSuperMaxDB"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>			
+		<node name="IfAddFR16813Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="IfAddFR16814Node"/>
+				<result value="1538" node="IfAddFR16814Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16813"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddRoamUKR50mbDB"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>	
+		<node name="IfAddFR16814Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="IfAddFR16815Node"/>
+				<result value="1538" node="IfAddFR16815Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16814"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddRoamUKR100mbDB"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>	
+		<node name="IfAddFR16815Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="IfAddFR16816Node"/>
+				<result value="1538" node="IfAddFR16816Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16815"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddRoamUKR200mbDB"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>	
+		<node name="IfAddFR16816Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="IfAddFR16821Node"/>
+				<result value="1538" node="IfAddFR16821Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16816"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddRoamUKR500mbDB"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>		
+		<node name="IfAddFR16821Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="IfAddFR16822Node"/>
+				<result value="1538" node="IfAddFR16822Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16821"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddRoamDAY50mbDB"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>	
+		<node name="IfAddFR16822Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="IfAddFR16823Node"/>
+				<result value="1538" node="IfAddFR16823Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16822"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddRoamDAY100mbDB"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>		
+		<node name="IfAddFR16823Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="IfAddFR16824Node"/>
+				<result value="1538" node="IfAddFR16824Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16823"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddRoamDAY200mbDB"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>	
+		<node name="IfAddFR16824Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="IfAddFR17024Node"/>
+				<result value="1538" node="IfAddFR17024Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16824"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddRoamMONTH200mbDB"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>		
+		<node name="IfAddFR17024Node" object="IfCommander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17024"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddBlockMTSCardDB"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>				
 		<node name="DummyResponderNode" object="DummyResponder">
 			<resultlist>
 				<result value="" node="ResponseAssembler"/>

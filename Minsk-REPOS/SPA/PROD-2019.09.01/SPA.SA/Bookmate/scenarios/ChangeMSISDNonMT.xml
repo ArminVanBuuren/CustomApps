@@ -56,7 +56,7 @@
 				<param name="Connection.Method" value="POST"/>
 				<param name="Connection.ContentType" value="application/x-www-form-urlencoded"/>
 				<param name="Connection.UserName" value="mts" />
-				<param name="Connection.UserPwd" value="ce4d9b367da74c60f167402f23214d3c" />
+				<param name="Connection.UserPwd" value="3UB6it14917t7366b28Kr17748l54" />
 			</parameterslist>
 		</node> 
 		<node name="AddNewMSISDNServiceNode" object="HttpCmd">
@@ -76,7 +76,7 @@
 				<param name="Connection.Method" value="POST"/>
 				<param name="Connection.ContentType" value="application/x-www-form-urlencoded"/>
 				<param name="Connection.UserName" value="mts" />
-				<param name="Connection.UserPwd" value="ce4d9b367da74c60f167402f23214d3c" />
+				<param name="Connection.UserPwd" value="3UB6it14917t7366b28Kr17748l54" />
 			</parameterslist>
 		</node> 
 		<node name="IfServiceFR11095Node" object="IfConditionXmlResolver">
@@ -108,7 +108,7 @@
 				<param name="Connection.Method" value="POST"/>
 				<param name="Connection.ContentType" value="application/x-www-form-urlencoded"/>
 				<param name="Connection.UserName" value="mts" />
-				<param name="Connection.UserPwd" value="ce4d9b367da74c60f167402f23214d3c" />
+				<param name="Connection.UserPwd" value="3UB6it14917t7366b28Kr17748l54" />
 			</parameterslist>
 		</node> 
 		<node name="AddNewMSISDNServicePremiumNode" object="HttpCmd">
@@ -128,7 +128,7 @@
 				<param name="Connection.Method" value="POST"/>
 				<param name="Connection.ContentType" value="application/x-www-form-urlencoded"/>
 				<param name="Connection.UserName" value="mts" />
-				<param name="Connection.UserPwd" value="ce4d9b367da74c60f167402f23214d3c" />
+				<param name="Connection.UserPwd" value="3UB6it14917t7366b28Kr17748l54" />
 			</parameterslist>
 		</node> 		
 		<node name="DummyResponderNode" object="DummyResponder">

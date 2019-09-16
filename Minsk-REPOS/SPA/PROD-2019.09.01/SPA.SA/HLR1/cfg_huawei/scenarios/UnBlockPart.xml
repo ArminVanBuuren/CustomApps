@@ -17,13 +17,23 @@
 		</node>
 		<node name="SingleSubscriberRequestDequeuer" object="Dequeuer">
 			<resultlist>
-				<result value="0" node="IfBlockNode"/>
+				<result value="0" node="IfCheckSRVNode"/>
 				<result value="1" node=""/>
 			</resultlist>
 			<parameterslist>
 				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
 			</parameterslist>
 		</node>
+		<node name="IfCheckSRVNode" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="ExitDummyResponderNode"/>
+				<result value="1" node="IfBlockNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKEND"/>
+				<param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16324"/> 
+			</parameterslist>
+		</node>			
 		<node name="IfBlockNode" object="IfMultipleXmlConditionsResolver">
 			<resultlist>
 				<result value="0" node="IfCB108Node"/>
@@ -263,11 +273,12 @@
 				<param name="OrXmlPath:4" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR7480"/>
 				<param name="OrXmlPath:5" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR812"/>
 				<param name="OrXmlPath:6" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR9484"/>
+				<param name="OrXmlPath:7" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16863"/>
 			</parameterslist>
 		</node>	
 		<node name="IfServiceGPRS_VPN_Node" object="IfMultipleXmlConditionsResolver">
 			<resultlist>
-				<result value="0" node="UnBlockGPRSNode"/>
+				<result value="0" node="IfService_NBIoT_Node"/>
 				<result value="1" node="IfServiceGPRS_SoftBlock_Node"/>
 			</resultlist>
 			<parameterslist>
@@ -275,17 +286,27 @@
 				<param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR7480"/>
 				<param name="OrXmlPath:2" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR812"/>
 				<param name="OrXmlPath:3" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR9484"/>
+				<param name="OrXmlPath:4" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16863"/>
 			</parameterslist>
 		</node>			
 		<node name="IfServiceGPRS_SoftBlock_Node" object="IfMultipleXmlConditionsResolver">
 			<resultlist>
 				<result value="0" node="ExitDummyResponderNode"/>
-				<result value="1" node="UnBlockGPRSNode"/>
+				<result value="1" node="IfService_NBIoT_Node"/>
 			</resultlist>
 			<parameterslist>
 				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11307"/>
 			</parameterslist>
 		</node>	
+		<node name="IfService_NBIoT_Node" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="UnBlockNBIoTNode"/>
+				<result value="1" node="UnBlockGPRSNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16863"/>
+			</parameterslist>
+		</node>			
 		<node name="UnBlockGPRSNode" object="Commander">
 			<resultlist>
 				<result value="" node="ResponseAssembler"/>
@@ -294,6 +315,17 @@
 				<param name="CommandSource" value="Dictionary"/>
 				<param name="AppendSubscribersData" value="false"/>
 				<param name="Command" value="UnBlockGPRS"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>	
+		<node name="UnBlockNBIoTNode" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="UnBlockNBIoT"/>
 				<param name="DynamicObject" value="(empty)"/>
 			</parameterslist>
 		</node>			

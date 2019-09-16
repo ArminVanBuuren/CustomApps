@@ -1,0 +1,626 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="UnBlockonPS">
+	<objectList>
+		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+		<object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="HttpCmd" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfHttpCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+	</objectList>
+	<automat>
+		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
+			<resultlist>
+				<result value="0" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+			<resultlist>
+				<result value="0" node="IfBlockNode"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="IfBlockNode" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="UnBlockServicePlayboy18Node" /> 
+				<result value="1" node="DummyResponderNode" />
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request" />
+				<param name="MultiLevelCondition" value="
+					((//WithdrawalList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/CBBLKLOST)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKCHK)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKFIN)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKKEEP)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKPAY)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKP)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKTIME)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKUSER)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME))
+					
+					" />
+			</parameterslist>
+		</node>		
+		<node name="UnBlockServicePlayboy18Node" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlockServiceVideoNode"/>
+				<result value="1538" node="UnBlockServiceVideoNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="UnBlockServicePlayboy18"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16625" />
+			</parameterslist>
+		</node> 
+		<node name="UnBlockServiceVideoNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlockServiceSiteZnakomstvNode"/>
+				<result value="1538" node="UnBlockServiceSiteZnakomstvNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="UnBlockServiceVideo"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16626" />
+			</parameterslist>
+		</node> 
+		<node name="UnBlockServiceSiteZnakomstvNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlockServiceMusicNode"/>
+				<result value="1538" node="UnBlockServiceMusicNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="UnBlockServiceSiteZnakomstv"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16627" />
+			</parameterslist>
+		</node> 	
+		<node name="UnBlockServiceMusicNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlockServiceZOJNode"/>
+				<result value="1538" node="UnBlockServiceZOJNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="UnBlockServiceMusic"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16628" />
+			</parameterslist>
+		</node> 
+		<node name="UnBlockServiceZOJNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlockServiceGameNode"/>
+				<result value="1538" node="UnBlockServiceGameNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="UnBlockServiceZOJ"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16629" />
+			</parameterslist>
+		</node> 
+		<node name="UnBlockServiceGameNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlockServiceMusicAudioingNode"/>
+				<result value="1538" node="UnBlockServiceMusicAudioingNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="UnBlockServiceGame"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16630" />
+			</parameterslist>
+		</node> 
+		<node name="UnBlockServiceMusicAudioingNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlockServiceFilmMobiletuberNode"/>
+				<result value="1538" node="UnBlockServiceFilmMobiletuberNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="UnBlockServiceMusicAudioing"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16679" />
+			</parameterslist>
+		</node> 	
+		<node name="UnBlockServiceFilmMobiletuberNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlockServiceGameGamecatalogNode"/>
+				<result value="1538" node="UnBlockServiceGameGamecatalogNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="UnBlockServiceFilmMobiletuber"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16680" />
+			</parameterslist>
+		</node> 
+		<node name="UnBlockServiceGameGamecatalogNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlockServiceGameUnlimitedgamezNode"/>
+				<result value="1538" node="UnBlockServiceGameUnlimitedgamezNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="UnBlockServiceGameGamecatalog"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16681" />
+			</parameterslist>
+		</node> 
+		<node name="UnBlockServiceGameUnlimitedgamezNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlockServiceGameIslandmobNode"/>
+				<result value="1538" node="UnBlockServiceGameIslandmobNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="UnBlockServiceGameUnlimitedgamez"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16682" />
+			</parameterslist>
+		</node> 
+		<node name="UnBlockServiceGameIslandmobNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlockServiceGameGamestoreNode"/>
+				<result value="1538" node="UnBlockServiceGameGamestoreNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="UnBlockServiceGameIslandmob"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16683" />
+			</parameterslist>
+		</node> 	
+		<node name="UnBlockServiceGameGamestoreNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlockServiceGameMobigamerNode"/>
+				<result value="1538" node="UnBlockServiceGameMobigamerNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="UnBlockServiceGameGamestore"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16684" />
+			</parameterslist>
+		</node> 	
+		<node name="UnBlockServiceGameMobigamerNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlockServiceVideoVtrendoNode"/>
+				<result value="1538" node="UnBlockServiceVideoVtrendoNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="UnBlockServiceGameMobigamer"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16685" />
+			</parameterslist>
+		</node> 
+		<node name="UnBlockServiceVideoVtrendoNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlockServiceVideoVideomeoNode"/>
+				<result value="1538" node="UnBlockServiceVideoVideomeoNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="UnBlockServiceVideoVtrendo"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16686" />
+			</parameterslist>
+		</node> 
+		<node name="UnBlockServiceVideoVideomeoNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlockServiceErovideoNode"/>
+				<result value="1538" node="UnBlockServiceErovideoNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="UnBlockServiceVideoVideomeo"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16687" />
+			</parameterslist>
+		</node> 
+		<node name="UnBlockServiceErovideoNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlockServiceGameAppsclubNode"/>
+				<result value="1538" node="UnBlockServiceGameAppsclubNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="UnBlockServiceErovideo"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16688" />
+			</parameterslist>
+		</node> 
+		<node name="UnBlockServiceGameAppsclubNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlockServiceFitnessclubNode"/>
+				<result value="1538" node="UnBlockServiceFitnessclubNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="UnBlockServiceGameAppsclub"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16689" />
+			</parameterslist>
+		</node> 
+		<node name="UnBlockServiceFitnessclubNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlockServiceKidsclubNode"/>
+				<result value="1538" node="UnBlockServiceKidsclubNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="UnBlockServiceFitnessclub"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16691" />
+			</parameterslist>
+		</node> 
+		<node name="UnBlockServiceKidsclubNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlockServiceGameappNode"/>
+				<result value="1538" node="UnBlockServiceGameappNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="UnBlockServiceKidsclub"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16692" />
+			</parameterslist>
+		</node> 
+		<node name="UnBlockServiceGameappNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlockServiceBeFriendsNode"/>
+				<result value="1538" node="UnBlockServiceBeFriendsNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="UnBlockServiceGameapp"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16693" />
+			</parameterslist>
+		</node> 	
+		<node name="UnBlockServiceBeFriendsNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlockServiceDiscountclubNode"/>
+				<result value="1538" node="UnBlockServiceDiscountclubNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="UnBlockServiceBeFriends"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16695" />
+			</parameterslist>
+		</node> 		
+		<node name="UnBlockServiceDiscountclubNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="UnBlockServiceDiscountclub"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17098" />
+			</parameterslist>
+		</node> 		
+		<node name="DummyResponderNode" object="DummyResponder">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+		<parameterslist>
+			<param name="OverallResult" value="SUCCESS"/>
+			<param name="DetailedResult" value="SUCCESS"/>
+			<param name="Delay" value="0"/>
+		</parameterslist>
+		</node>			
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

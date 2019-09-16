@@ -8,6 +8,7 @@
 		<object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll" />
 		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
 		<object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+		<object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll" />
 	</objectList>
 	<automat>
 		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
@@ -26,7 +27,7 @@
 		</node>
 		<node name="AddFR562Node" object="Commander">
 			<resultlist>
-				<result value="0" node="IfServiceROAMING123Node"/>
+				<result value="0" node="GetServiceSNode"/>
 				<result value="" node="ResponseAssembler"/>
 			</resultlist>
 			<parameterslist>
@@ -36,14 +37,71 @@
 				<param name="DynamicObject" value="(empty)"/>
 			</parameterslist>
 		</node>
+		<node name="GetServiceSNode" object="DataBaseProcessor">
+			<resultlist>
+				<result value="" node="IfServiceROAMING123Node" /> 
+			</resultlist>
+			<parameterslist>
+				<param name="DataBaseName" value="FORIS.SPA.BILLING" /> 
+				<param name="FunctionName" value="select /*+ ordered use_nl(t,an,ar,rb) */ 
+														an.val as SERVICES,rb.code as OPER 
+												   from CRM.REQ_EXT_LNK t, crm.att_num an,  
+														crm.att_ref ar, crm.att_ref_book rb
+												   where t.ext_req_id='{0}' 
+														 and t.req_id=an.req_id and an.att_type_id=87
+														 and t.req_id=ar.req_id and ar.att_type_id=170
+														 and ar.att_ref_book_id=rb.att_ref_book_id" /> 
+				<param name="FunctionType" value="customQuery" /> 
+				<param name="OutXml" value="db_get_servicesdb" /> 
+				<param name="DbParameterName:0" value="i_customer" /> 
+				<param name="DbParameterDirection:0" value="Input" /> 
+				<param name="DbParameterType:0" value="Varchar2" /> 
+				<param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/OriginalID" /> 
+			</parameterslist>
+		</node>			
 		<node name="IfServiceROAMING123Node" object="IfMultipleXmlConditionsResolver">
 			<resultlist>
-				<result value="0" node="AddAccBanLTENode"/>
-				<result value="1" node="DummyResponderNode"/>
+				<result value="0" node="IfRoamingDelInREq_DB_Node"/>
+				<result value="1" node="IfRoamingWithBanGPRS_DB_Node"/>
 			</resultlist>
 			<parameterslist>
 				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB123"/>
 				<param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB403864"/>
+			</parameterslist>
+		</node>	
+		<node name="IfRoamingDelInREq_DB_Node" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="DeleteCB123Node" /> 
+				<result value="1" node="AddAccBanLTENode" /> 
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="db_get_servicesdb" /> 
+				<param name="OrXmlPath:0" value="/root/return/record[column/@name='SERVICES' and column/text()='6105' and column/@name='OPER' and column/text()='0']" /> 
+				<param name="OrXmlPath:1" value="/root/return/record[column/@name='SERVICES' and column/text()='6514' and column/@name='OPER' and column/text()='0']" /> 
+			</parameterslist>
+		</node>				
+		<node name="IfRoamingWithBanGPRS_DB_Node" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="AddAccBanLTENode" /> 
+				<result value="1" node="IfBanGPRSWithoutRoaming_DB_Node" /> 
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="db_get_servicesdb" /> 
+				<param name="OrXmlPath:0" value="/root/return/record[column/@name='SERVICES' and column/text()='6105' and column/@name='OPER' and column/text()='1']" /> 
+				<param name="OrXmlPath:1" value="/root/return/record[column/@name='SERVICES' and column/text()='6514' and column/@name='OPER' and column/text()='1']" /> 
+				<param name="IfXmlPath:0" value="/root/return/record[column/@name='SERVICES' and column/text()='8717' and column/@name='OPER' and column/text()='1']" /> 
+			</parameterslist>
+		</node>	
+		<node name="IfBanGPRSWithoutRoaming_DB_Node" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="DeleteCB123Node" /> 
+				<result value="1" node="DummyResponderNode" /> 
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="db_get_servicesdb" /> 
+				<param name="OrXmlPath:0" value="/root/return/record[column/@name='SERVICES' and column/text()='6105' and column/@name='OPER' and column/text()='0']" /> 
+				<param name="OrXmlPath:1" value="/root/return/record[column/@name='SERVICES' and column/text()='6514' and column/@name='OPER' and column/text()='0']" /> 
+				<param name="IfXmlPath:0" value="/root/return/record[column/@name='SERVICES' and column/text()='8717' and column/@name='OPER' and column/text()='1']" /> 
 			</parameterslist>
 		</node>			
 		<node name="AddAccBanLTENode" object="Commander">
@@ -57,6 +115,17 @@
 				<param name="DynamicObject" value="(empty)"/>
 			</parameterslist>
 		</node>	
+		<node name="DeleteCB123Node" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="DeleteCB123"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>		
 		<node name="DummyResponderNode" object="DummyResponder">
 			<resultlist>
 				<result value="" node="ResponseAssembler"/>

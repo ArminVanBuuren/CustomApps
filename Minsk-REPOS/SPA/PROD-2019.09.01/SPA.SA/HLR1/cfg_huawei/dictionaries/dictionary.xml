@@ -331,6 +331,13 @@
 		<Command Path="SEND_CANCELC_ALL.xml"/>		
 		<Command Path="SEND_CANCELC_ALL_IMSI.xml"/>		
 		<Command Path="SEND_CANCELC_ALL_NEWMSISDN.xml"/>		
+		<Command Path="AddProfileNBIoT.xml"/>		
+		<Command Path="BlockGPRS2G3G.xml"/>		
+		<Command Path="BlockNBIoT.xml"/>		
+		<Command Path="CreateSubscriberNBIoT.xml"/>		
+		<Command Path="DeleteProfileNBIoT.xml"/>		
+		<Command Path="Denied2G3G.xml"/>		
+		<Command Path="UnBlockNBIoT.xml"/>		
 	</CommandsList>
 	
 	<DecodersList Root="..\cfg_huawei\Dictionaries\Decoders">

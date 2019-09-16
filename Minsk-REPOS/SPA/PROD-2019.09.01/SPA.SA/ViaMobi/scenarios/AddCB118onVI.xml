@@ -226,6 +226,8 @@
 		</node> 
 		<node name="ChangeMSISDNLessByNode" object="IfHttpCommander">
 			<resultlist>
+				<result value="0" node="ChangeMSISDNTrenerNode"/>
+				<result value="1538" node="ChangeMSISDNTrenerNode"/>
 				<result value="" node="ResponseAssembler"/>
 			</resultlist>
 			<parameterslist>
@@ -244,7 +246,28 @@
 				<param name="Connection.Header.Authorization" value="Basic Base64(mtsby:CwpnCH2URncDKwXWvxRd)"/>
 				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR15002" />
 			</parameterslist>
-		</node> 		
+		</node> 	
+		<node name="ChangeMSISDNTrenerNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="viamobi/mts/"/>
+				<param name="Command" value="ChangeMSISDNTrener"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="82"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.UserName" value=""/>
+				<param name="Connection.UserPwd" value=""/>
+				<param name="Connection.ContentType" value="text/plain;charset=UTF-8"/>
+				<param name="Connection.Header.Authorization" value="Basic Base64(mtsby:CwpnCH2URncDKwXWvxRd)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16803" />
+			</parameterslist>
+		</node> 	
 		<node name="DummyResponderNode" object="DummyResponder">
 			<resultlist>
 				<result value="" node="ResponseAssembler"/>

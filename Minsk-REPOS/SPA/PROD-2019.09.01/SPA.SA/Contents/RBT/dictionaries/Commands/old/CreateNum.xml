@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="CreateNum" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Создание номера на сервере RBT</Description>
+	<Author Name="Alec Sergeyev" Date="2006-12-01+10:29"/>
+	<Request Template="COMMON-SUBSCR-SERVICE-SET-STATUS&amp;MSISDN={0}&amp;SERVICE=prc&amp;CHANNEL=WEB&amp;STATUS=1&amp;PARAM1=CNR&amp;PARAM2=1&amp;DESCRIPTION=BILLING">
+		<Item Name="msisdn" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="ASCII"/>
+</Command>

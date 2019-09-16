@@ -30,6 +30,8 @@
 		<Command Path="ChangeMSISDN.xml"/>
 		<Command Path="Block.xml"/>
 		<Command Path="UnBlock.xml"/>
+		<Command Path="AddMTSMusic30days.xml"/>
+		<Command Path="DeleteMTSMusic30days.xml"/>
 	</CommandsList>
 	<DecodersList Root=".\MTSMusic\Dictionaries\Decoders">
 		<Decoder Path="RbtDecoder.xml"/>

@@ -3,7 +3,7 @@
 	<serviceInstances>
 		<serviceInstance hardwareID="RG:1836">
 			<scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
-				<fileScenarioSource dir=".\IMMO_Services\Scenarios"/>
+				<fileScenarioSource dir=".\IMMO_Services\Pressa_Dengi\Scenarios"/>
 			</scenarioSource>
 			<socketList poolSize="10" maxConnections="10" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="500" periodDuration="20" autoconnect="1" reconfigurationTimeout="0">
 				<socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
@@ -27,22 +27,65 @@
 						<Timers IdleTimeout="6000"/>
 						<PredefinedScripts Login="Login" Command="Command" Idle="" Logoff=""/>
 						<ScriptsList> 
-							<Script Name="Login" Path=".\IMMO_Services\Dictionaries\Scripts\Login.xml"/>
-							<Script Name="Logoff" Path=".\IMMO_Services\Dictionaries\Scripts\logoff.xml"/>
-							<Script Name="Command" Path=".\IMMO_Services\Dictionaries\Scripts\Command.xml"/>
-							<Script Name="NoSleep" Path=".\IMMO_Services\Dictionaries\Scripts\nosleep.xml"/>
+							<Script Name="Login" Path=".\IMMO_Services\Pressa_Dengi\Dictionaries\Scripts\Login.xml"/>
+							<Script Name="Logoff" Path=".\IMMO_Services\Pressa_Dengi\Dictionaries\Scripts\logoff.xml"/>
+							<Script Name="Command" Path=".\IMMO_Services\Pressa_Dengi\Dictionaries\Scripts\Command.xml"/>
+							<Script Name="NoSleep" Path=".\IMMO_Services\Pressa_Dengi\Dictionaries\Scripts\nosleep.xml"/>
 						</ScriptsList> 
 					</config> 
 				</socket> 
 			</socketList>
 			<context>
 				<object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
-					<config path=".\IMMO_Services\Dictionaries" xml="Dictionary.xml"/>
+					<config path=".\IMMO_Services\Pressa_Dengi\Dictionaries" xml="Dictionary.xml"/>
 				</object>
 				<object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
-					<fileTableSource path=".\IMMO_Services\Misc" xml="RepetitionTable.xml"/>
+					<fileTableSource path=".\IMMO_Services\Pressa_Dengi\Misc" xml="RepetitionTable.xml"/>
 				</object>				
 			</context>
 		</serviceInstance>
+		<serviceInstance hardwareID="IS:1850">
+			<scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
+				<fileScenarioSource dir=".\IMMO_Services\Info_Bvk\Scenarios"/>
+			</scenarioSource>
+			<socketList poolSize="5" maxConnections="5" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="250" periodDuration="10" autoconnect="1" reconfigurationTimeout="0">
+				<socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
+					<config workingmode="wmGeneral">
+						<socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
+							<config>
+								<ParametersList>
+									<Parameter Key="Host" Value="10.128.213.41"/>  
+									<Parameter Key="Port" Value="81"/>
+									<Parameter Key="Url" Value="mtsinfo"/>
+									<Parameter Key="MethodName" Value="POST"/>
+									<Parameter Key="Method" Value="POST"/>
+									<Parameter Key="UserName" Value=""/>
+									<Parameter Key="UserPwd" Value=""/>
+									<Parameter Key="ContentType" Value="text/xml; charset=utf-8"/>
+									<!--<Parameter Key="Header.SOAPAction" Value=""/> -->
+								</ParametersList>
+							</config>
+						</socket>
+						<Emulation Success="200" Failure="500" RandomizePrintout="false" OverwriteCommandPrintout="true"  Lifetime="00:00:00.00"/>
+						<Timers IdleTimeout="6000"/>
+						<PredefinedScripts Login="Login" Command="Command" Idle="" Logoff=""/>
+						<ScriptsList> 
+							<Script Name="Login" Path=".\IMMO_Services\Info_Bvk\Dictionaries\Scripts\Login.xml"/>
+							<Script Name="Logoff" Path=".\IMMO_Services\Info_Bvk\Dictionaries\Scripts\logoff.xml"/>
+							<Script Name="Command" Path=".\IMMO_Services\Info_Bvk\Dictionaries\Scripts\Command.xml"/>
+							<Script Name="NoSleep" Path=".\IMMO_Services\Info_Bvk\Dictionaries\Scripts\nosleep.xml"/>
+						</ScriptsList> 
+					</config> 
+				</socket> 
+			</socketList>
+			<context>
+				<object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
+					<config path=".\IMMO_Services\Info_Bvk\Dictionaries" xml="Dictionary.xml"/>
+				</object>
+				<object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
+					<fileTableSource path=".\IMMO_Services\Info_Bvk\Misc" xml="RepetitionTable.xml"/>
+				</object>					
+			</context>
+		</serviceInstance>		
 	</serviceInstances>
 </Configuration>

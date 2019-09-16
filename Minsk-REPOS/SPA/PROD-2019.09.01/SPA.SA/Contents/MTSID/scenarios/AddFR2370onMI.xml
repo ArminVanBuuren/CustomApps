@@ -105,7 +105,7 @@
 		</node>
 		<node name="ExtractUNP" object="XmlNodesCopier">
 			<resultlist>
-				<result value="" node="IfBlockNode" /> 
+				<result value="" node="IFUNPNode" /> 
 			</resultlist>
 			<parameterslist>
 				<param name="SrcXml" value="db_get_unp" /> 
@@ -117,7 +117,7 @@
 		</node>
 		<node name="IFUNPNode" object="Switch">
 			<resultlist>
-				<result value="1" node="AddServiceNode"/>
+				<result value="1" node="IfBlockNode"/>
 				<result value="2" node="DummyResponderErrNode"/>
 			</resultlist>
 			<parameterslist>
