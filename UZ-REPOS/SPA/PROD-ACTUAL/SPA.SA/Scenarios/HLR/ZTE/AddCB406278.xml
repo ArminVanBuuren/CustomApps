@@ -61,7 +61,7 @@
 			</resultlist>
 			<parameterslist>
 				<param name="CommandSource" value="Dictionary"/>
-				<param name="Command" value="AddBasicGPRS_APN"/>
+				<param name="Command" value="AddGPRS_APN3333"/>
 				<param name="Script" value="Command"/>
 				<param name="AppendSubscribersData" value="false"/>
 				<param name="ErrorDecodingType" value="ByString"/>
@@ -88,7 +88,7 @@
 			<parameterslist>
 				<param name="IfXmlPath" value="//AdditionalData/RegisteredList/FRUNLIMLTE"/>
 				<param name="CommandSource" value="Dictionary"/>
-				<param name="Command" value="AddLTE"/>
+				<param name="Command" value="AddLTE_APN"/>
 				<param name="Script" value="Command"/>
 				<param name="AppendSubscribersData" value="false"/>
 				<param name="ErrorDecodingType" value="ByString"/>

@@ -169,8 +169,8 @@
 		</node>
 		<node name="AddSMSOut" object="IfCommander">
 			<resultlist>
-				<result value="0" node="AddBasicGPRS"/>
-				<result value="1538" node="AddBasicGPRS"/>
+				<result value="0" node="AddFRCRBT"/>
+				<result value="1538" node="AddFRCRBT"/>
 				<result value="" node="ResponseAssembler"/>					
 			</resultlist>
 			<parameterslist>
@@ -181,131 +181,6 @@
 				<param name="AppendSubscribersData" value="false"/>
 				<param name="ErrorDecodingType" value="ByString"/>
 				<param name="DynamicObject" value="(empty)"/>
-			</parameterslist>
-		</node>
-		<node name="AddBasicGPRS" object="IfCommander">
-			<resultlist>
-				<result value="0" node="CheckFRPARTAPN"/>
-				<result value="1538" node="CheckFRPARTAPN"/>
-				<result value="" node="ResponseAssembler"/>
-			</resultlist>
-			<parameterslist>
-				<param name="IfXmlPath" value="//AdditionalData/RegisteredList/CB406278"/>
-				<param name="CommandSource" value="Dictionary"/>
-				<param name="Command" value="AddBasicGPRS_NAM"/>
-				<param name="Script" value="Command"/>
-				<param name="AppendSubscribersData" value="false"/>
-				<param name="ErrorDecodingType" value="ByString"/>
-				<param name="DynamicObject" value="(empty)"/>
-			</parameterslist>
-		</node>
-		<node name="CheckFRPARTAPN" object="IfMultipleXmlConditionsResolver">
-			<resultlist>
-				<result value="0" node="AddAPN_DEALER"/>
-				<result value="1" node="AddAPNMyUMS"/>
-			</resultlist>
-			<parameterslist>
-				<param name="OrXmlPath:0" value="//RegisteredList/FRPARTAPN"/>
-				<param name="OrXmlPath:1" value="//ProvisionList/FRPARTAPN"/>
-			</parameterslist>
-		</node>
-                <node name="AddAPN_DEALER" object="Commander">
-			<resultlist>
-				<result value="0" node="AddFRCRBT"/>
-                                <result value="1538" node="AddFRCRBT"/>
-				<result value="" node="ResponseAssembler"/>
-			</resultlist>
-			<parameterslist>
-				<param name="CommandSource" value="Dictionary"/>
-				<param name="AppendSubscribersData" value="false"/>
-				<param name="Command" value="AddBasicGPRS_APN_DEALER"/>
-				<param name="Script" value="Command"/>
-				<param name="DynamicObject" value="(empty)"/>
-				<param name="ErrorDecodingType" value="ByString"/>
-			</parameterslist>
-		</node>	
-		<node name="AddAPNMyUMS" object="IfCommander">
-			<resultlist>
-				<result value="0" node="AddLTENode1"/>
-				<result value="1538" node="AddAPN"/>
-				<result value="" node="ResponseAssembler"/>
-			</resultlist>
-			<parameterslist>
-				<param name="IfXmlPath" value="//AdditionalData/RegisteredList/FRNEWSCG"/>
-				<param name="CommandSource" value="Dictionary"/>
-				<param name="Command" value="AddBasicGPRS_APN_MYUMS"/>
-				<param name="Script" value="Command"/>
-				<param name="AppendSubscribersData" value="false"/>
-				<param name="ErrorDecodingType" value="ByString"/>
-				<param name="DynamicObject" value="(empty)"/>
-				<param name="OverwriteDetailedResult" value="true"/>
-			</parameterslist>
-		</node>
-                <node name="AddAPN" object="IfCommander">
-			<resultlist>
-				<result value="0" node="AddLTENode1"/>
-                                <result value="1538" node="AddLTENode1"/>
-				<result value="" node="ResponseAssembler"/>
-			</resultlist>
-			<parameterslist>
-				<param name="IfXmlPath" value="//AdditionalData/RegisteredList/CB406278"/>
-				<param name="CommandSource" value="Dictionary"/>
-				<param name="AppendSubscribersData" value="false"/>
-				<param name="Command" value="AddBasicGPRS_APN"/>
-				<param name="Script" value="Command"/>
-				<param name="DynamicObject" value="(empty)"/>
-				<param name="ErrorDecodingType" value="ByString"/>
-			</parameterslist>
-		</node>	
-		<node name="AddLTENode1" object="IfCommander">
-			<resultlist>
-				<result value="0" node="AddLTENode2"/>
-				<result value="1538" node="AddLTENode2"/>
-				<result value="" node="ResponseAssembler"/>
-			</resultlist>
-			<parameterslist>
-				<param name="IfXmlPath:0" value="//AdditionalData/RegisteredList/FRUNLIMLTE"/>
-				<param name="CommandSource" value="Dictionary"/>
-				<param name="Command" value="AddLTE"/>
-				<param name="Script" value="Command"/>
-				<param name="AppendSubscribersData" value="false"/>
-				<param name="ErrorDecodingType" value="ByString"/>
-				<param name="DynamicObject" value="(empty)"/>
-				<param name="OverwriteDetailedResult" value="true"/>
-			</parameterslist>
-		</node>
-		<node name="AddLTENode2" object="IfCommander">
-			<resultlist>
-				<result value="0" node="AddLTENode3"/>
-				<result value="1538" node="AddLTENode3"/>
-				<result value="" node="ResponseAssembler"/>
-			</resultlist>
-			<parameterslist>
-				<param name="IfXmlPath:0" value="//AdditionalData/RegisteredList/FRUNLIMLTE"/>
-				<param name="CommandSource" value="Dictionary"/>
-				<param name="Command" value="AddLTE_2"/>
-				<param name="Script" value="Command"/>
-				<param name="AppendSubscribersData" value="false"/>
-				<param name="ErrorDecodingType" value="ByString"/>
-				<param name="DynamicObject" value="(empty)"/>
-				<param name="OverwriteDetailedResult" value="true"/>
-			</parameterslist>
-		</node>
-		<node name="AddLTENode3" object="IfCommander">
-			<resultlist>
-                                <result value="0" node="AddFRCRBT"/>
-                                <result value="1538" node="AddFRCRBT"/>
-				<result value="" node="ResponseAssembler"/>
-			</resultlist>
-			<parameterslist>
-				<param name="IfXmlPath:0" value="//AdditionalData/RegisteredList/FRUNLIMLTE"/>
-				<param name="CommandSource" value="Dictionary"/>
-				<param name="Command" value="AddLTE_3"/>
-				<param name="Script" value="Command"/>
-				<param name="AppendSubscribersData" value="false"/>
-				<param name="ErrorDecodingType" value="ByString"/>
-				<param name="DynamicObject" value="(empty)"/>
-				<param name="OverwriteDetailedResult" value="true"/>
 			</parameterslist>
 		</node>
 		<node name="AddFRCRBT" object="IfCommander">

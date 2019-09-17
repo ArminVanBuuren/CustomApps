@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="DeleteLTE_APN" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Удаление услуги 'LTE'APN</Description>
+	<Author Name="Timur Khamzin" Date="2019-09-04+15:00"/>
+	<Request Template='Del APNPROF:MSISDN={0},EPCAPN={1};^M'>
+		<Item Name="msisdn" Type="Wellknown"/>
+	        <Item Name="APN" Type="Parameter"/>
+	</Request>
+	<ErrorsList CodePage="windows-1251"/>
+</Command>

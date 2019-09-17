@@ -92,7 +92,7 @@
 		</node>	
 		<node name="CreateSubscriberNEWIMSI" object="Commander">
 			<resultlist>
-				<result value="0" node="CheckFRASKUE"/> 
+				<result value="0" node="DeleteNETUMSUZ"/> 
 				<result value="1793" node="GetKI"/>
 				<result value="" node="ResponseAssembler"/>
 			</resultlist>
@@ -158,6 +158,34 @@
 				<param name="DynamicObject" value="(empty)"/>
 				<param name="AppendSubscribersData" value="false"/>
 				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>
+		<node name="DeleteNETUMSUZ" object="Commander">
+			<resultlist>
+				<result value="" node="DeleteCORPUMSUZ"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="DeleteBasicGPRS_APN"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>
+		<node name="DeleteCORPUMSUZ" object="Commander">
+			<resultlist>
+				<result value="" node="CheckFRASKUE"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="DeleteBasicGPRS_APN_CORP"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
 			</parameterslist>
 		</node>
 		<node name="CheckFRASKUE" object="IfMultipleXmlConditionsResolver">

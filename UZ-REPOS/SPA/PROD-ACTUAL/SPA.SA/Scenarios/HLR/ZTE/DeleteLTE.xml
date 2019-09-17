@@ -28,7 +28,7 @@
 			</resultlist>
 			<parameterslist>
 				<param name="CommandSource" value="Dictionary"/>
-				<param name="Command" value="DeleteLTE"/>
+				<param name="Command" value="DeleteLTE_APN"/>
 				<param name="Script" value="Command"/>
 				<param name="AppendSubscribersData" value="false"/>
 				<param name="ErrorDecodingType" value="ByString"/>

@@ -14,7 +14,7 @@
 		</node>
 		<node name="SingleSubscriberRequestDequeuer" object="Dequeuer">
 			<resultlist>
-				<result value="0" node="DeleteCB406278Node"/>
+				<result value="0" node="DeleteCB406278Node2"/>
 				<result value="1" node=""/>
 			</resultlist>
 			<parameterslist>

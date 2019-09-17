@@ -47,7 +47,7 @@
 			</resultlist>
 			<parameterslist>
 				<param name="CommandSource" value="Dictionary"/>
-				<param name="Command" value="AddLTE"/>
+				<param name="Command" value="AddLTE_APN"/>
 				<param name="Script" value="Command"/>
 				<param name="AppendSubscribersData" value="false"/>
 				<param name="ErrorDecodingType" value="ByString"/>

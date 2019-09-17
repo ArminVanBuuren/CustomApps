@@ -3,6 +3,7 @@
 	<include>
 		<scenario name="Sync\AddServices_sync" />
 		<scenario name="Sync\AddGPRSService_Sync" />
+		<scenario name="Sync\AddGPRSService_Sync_NewProfile" />
 		<scenario name="Sync\AddBarringService_Sync" />
 		<scenario name="Sub\AddFRIP_Sub" />
       		<scenario name="Sub\AddCallForwardingOriginating_Sub" />
@@ -48,7 +49,7 @@
 		</node>	
 		<node name="CreateSubscriber" object="Commander">
 			<resultlist>
-				<result value="0" node="CheckFRASKUE"/> 
+				<result value="0" node="DeleteNETUMSUZ"/> 
 				<result value="" node="ResponseAssembler"/>
 			</resultlist>
 			<parameterslist>
@@ -60,6 +61,34 @@
 				<param name="ErrorDecodingType" value="ByString"/>
 			</parameterslist>
 		</node>
+		<node name="DeleteNETUMSUZ" object="Commander">
+			<resultlist>
+				<result value="" node="DeleteCORPUMSUZ"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="DeleteBasicGPRS_APN"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>
+		<node name="DeleteCORPUMSUZ" object="Commander">
+			<resultlist>
+				<result value="" node="CheckFRASKUE"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="DeleteBasicGPRS_APN_CORP"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="OverwriteDetailedResult" value="true"/>
+			</parameterslist>
+		</node>	
 		<node name="CheckFRASKUE" object="IfMultipleXmlConditionsResolver">
 			<resultlist>
 				<result value="0" node="AddCommandList"/>
@@ -121,9 +150,9 @@
 				<result value="" node="ResponseAssembler" />
 			</resultlist>
 			<parameterslist>
-				<param name="Scenario" value="Sync\AddGPRSService_Sync" />
+				<param name="Scenario" value="Sync\AddGPRSService_Sync_NewProfile" />
 			</parameterslist>
-		</node>		
+		</node>	
 		<node  name="AddBarringService_Sync" object="ScenarioProcessor">
 			<resultlist>
 				<result value="0" node="CheckFRIP" />

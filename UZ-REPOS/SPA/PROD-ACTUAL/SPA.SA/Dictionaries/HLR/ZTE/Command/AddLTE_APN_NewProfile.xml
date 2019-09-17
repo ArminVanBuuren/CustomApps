@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="AddLTE_APN_NewProfile" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Добавление услуги 'LTE'APN</Description>
+	<Author Name="Timur Khamzin" Date="2019-09-04+15:00"/>
+	<Request Template='Add APNPROF:MSISDN={0},EPCAPN={1},PDNGWATYPE=1,EPSQOSID=100,VPLMNDAA=0,PDNType=0,EPCPDNAddr1=*,EPCPDNAddr2=*,APNCHARGE=0,APNLIPAP=255,APNSIPTORAN=255,APNSIPLOCNW=255;^M'>
+		<Item Name="msisdn" Type="Wellknown"/>
+	        <Item Name="NewAPN" Type="Parameter"/>
+	</Request>
+	<ErrorsList CodePage="windows-1251"/>
+</Command>
