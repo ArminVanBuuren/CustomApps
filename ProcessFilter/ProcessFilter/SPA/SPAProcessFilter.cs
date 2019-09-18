@@ -704,7 +704,7 @@ namespace SPAFilter.SPA
                         return;
                 }
 
-                IO.WriteFile(filePath, formatting, Encoding.UTF8);
+                IO.WriteFile(filePath, formatting, new UTF8Encoding(false));
             }
             catch (Exception e)
             {
