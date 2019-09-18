@@ -1,6 +1,6 @@
 <Command Name="SC.Add_APN">
    <Description>Добавление APN</Description>
-   <Author Name="system" Date="2018-09-20+09:00" />
+   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
    <Request>
       <RequestTemplate>
          <![CDATA[Add PDP:MSISDN=##msisdn##,PDPType=0,APN=##NET_APN##,QOSID=100;^M]]>

@@ -1,6 +1,6 @@
 <Command Name="SC.Add_LTE_TPLAPNCP">
    <Description>Добавление услуги 'LTE 4G'</Description>
-   <Author Name="system" Date="2018-09-20+09:00" />
+   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
    <Request>
       <RequestTemplate>
          <![CDATA[Set TPLAPNCP:MSISDN=##msisdn##,EPCAPNCPTPL=51;^M]]>

@@ -1,6 +1,6 @@
 <Command Name="SC.Delete_GPRS">
    <Description>Удаление услуги 'GPRS'</Description>
-   <Author Name="system" Date="2018-09-20+09:00" />
+   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
    <Request>
       <RequestTemplate>
          <![CDATA[SET TPLGPRS:MSISDN=##msisdn##,GPRSTPL=0;^M]]>

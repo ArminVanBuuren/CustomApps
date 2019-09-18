@@ -1,6 +1,6 @@
 <Command Name="SC.Modify_BOC">
    <Description>Модификация баррингов исходящей связи</Description>
-   <Author Name="system" Date="2018-09-20+09:00" />
+   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
    <Request>
       <RequestTemplate>
          <![CDATA[MOD ODB:MSISDN=##msisdn##,BOC=##Barring##;^M]]>

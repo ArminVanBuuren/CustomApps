@@ -4,24 +4,23 @@
    <Request>
       <RequestTemplate>
          <![CDATA[
-            <TerminalDeviceCounterProfileChange>
-							<ServiceCounterProfileChanges>
-								<ServiceCounterProfileChange>
-									<ChangeDateTime>##ChangeDateTime##</ChangeDateTime>
-									<ChargingDateTime>##ChargingDateTime##</ChargingDateTime>
-									<CounterProfileId>##CounterProfileId##</CounterProfileId>
-									##CounterTemplateId##
-									<CounterValueCalculation>
-										##ReinitType##
-										##SumType##
-									</CounterValueCalculation>
-									<ServiceCode>##ServiceCode##</ServiceCode>
-									<TimeZone>##TimeZone##</TimeZone>
-								</ServiceCounterProfileChange>
-							</ServiceCounterProfileChanges>
-							<TerminalDeviceId>##TerminalDeviceId##</TerminalDeviceId>
-            </TerminalDeviceCounterProfileChange>
-		 ]]>
+<TerminalDeviceCounterProfileChange>
+   <ServiceCounterProfileChanges>
+      <ServiceCounterProfileChange>
+         <ChangeDateTime>##ChangeDateTime##</ChangeDateTime>
+         <ChargingDateTime>##ChargingDateTime##</ChargingDateTime>
+         <CounterProfileId>##CounterProfileId##</CounterProfileId>
+         ##CounterTemplateId##
+         <CounterValueCalculation>
+            ##ReinitType##
+            ##SumType##
+         </CounterValueCalculation>
+         <ServiceCode>##ServiceCode##</ServiceCode>
+         <TimeZone>##TimeZone##</TimeZone>
+      </ServiceCounterProfileChange>
+   </ServiceCounterProfileChanges>
+   <TerminalDeviceId>##TerminalDeviceId##</TerminalDeviceId>
+</TerminalDeviceCounterProfileChange>]]>
       </RequestTemplate>
       <Item Name="ChangeDateTime" Type="LocalParameter" />
       <Item Name="ChargingDateTime" Type="LocalParameter" />

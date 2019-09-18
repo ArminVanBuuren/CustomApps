@@ -1,6 +1,6 @@
 <Command Name="SC.Deactivate_CF">
    <Description>Деактивация услуги переадресация вызова</Description>
-   <Author Name="system" Date="2018-09-20+09:00" />
+   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
    <Request>
       <RequestTemplate>
          <![CDATA[Reg FN:MSISDN=##msisdn##,SS=##CallForwardName##,Bsg=0,Register=0,Active=0;^M]]>

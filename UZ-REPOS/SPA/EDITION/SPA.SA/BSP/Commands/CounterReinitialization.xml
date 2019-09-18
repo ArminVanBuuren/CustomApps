@@ -4,12 +4,11 @@
    <Request>
       <RequestTemplate>
          <![CDATA[ 
-				<ChangeCounterProfiles>
-					<changes>##changes##</changes>
-					<requestId>##org.id##</requestId>
-					<clientId>SPA</clientId>
-				</ChangeCounterProfiles>
-			]]>
+<ChangeCounterProfiles>
+   <changes>##changes##</changes>
+   <requestId>##org.id##</requestId>
+   <clientId>SPA</clientId>
+</ChangeCounterProfiles>]]>
       </RequestTemplate>
       <Item Name="changes" Type="LocalDynamicParameter" />
       <Item Name="org.id" Type="Wellknown" />

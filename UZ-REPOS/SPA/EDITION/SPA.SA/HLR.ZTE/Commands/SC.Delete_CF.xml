@@ -1,6 +1,6 @@
 <Command Name="SC.Delete_CF">
    <Description>Удаление услуги переадресация</Description>
-   <Author Name="system" Date="2018-09-20+09:00" />
+   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
    <Request>
       <RequestTemplate>
          <![CDATA[MOD SS:MSISDN=##msisdn##,##CallForwardName##;^M]]>

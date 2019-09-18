@@ -1,6 +1,6 @@
 <Command Name="SC.Modify_NAM">
    <Description>Изменение сервиса интернет NAM</Description>
-   <Author Name="system" Date="2018-09-20+09:00" />
+   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
    <Request>
       <RequestTemplate>
          <![CDATA[MOD NAM:MSISDN=##msisdn##,NAM=##NET_STATE##,Keep=1,KEEPEPS=1;^M]]>

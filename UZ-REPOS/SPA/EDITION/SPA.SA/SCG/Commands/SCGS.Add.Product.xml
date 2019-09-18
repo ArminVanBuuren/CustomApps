@@ -5,23 +5,23 @@
       <RequestTemplate>
          <![CDATA[
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:bas="http://basicservices.ib.sdp.huawei.com" xmlns:req="http://request.basicservices.ib.sdp.huawei.com" xmlns:sch="http://schema.ib.sdp.huawei.com">
-	<soapenv:Header/>
-	<soapenv:Body>
-		<bas:in0>
-			<req:channelID>1</req:channelID>
-			<req:subInfoList>
-				<bas:item>               
-					<sch:payType>0</sch:payType>
-					<sch:productID>##productID##</sch:productID>
-					<sch:subType>0</sch:subType>
-				</bas:item>
-			</req:subInfoList>
-			<req:userID>
-				<sch:ID>##msisdn##</sch:ID>
-				<sch:type>0</sch:type>
-			</req:userID>
-		</bas:in0>
-	</soapenv:Body>
+   <soapenv:Header />
+   <soapenv:Body>
+      <bas:in0>
+         <req:channelID>1</req:channelID>
+         <req:subInfoList>
+            <bas:item>
+               <sch:payType>0</sch:payType>
+               <sch:productID>##productID##</sch:productID>
+               <sch:subType>0</sch:subType>
+            </bas:item>
+         </req:subInfoList>
+         <req:userID>
+            <sch:ID>##msisdn##</sch:ID>
+            <sch:type>0</sch:type>
+         </req:userID>
+      </bas:in0>
+   </soapenv:Body>
 </soapenv:Envelope>]]>
       </RequestTemplate>
       <Item Name="msisdn" Type="Wellknown" />

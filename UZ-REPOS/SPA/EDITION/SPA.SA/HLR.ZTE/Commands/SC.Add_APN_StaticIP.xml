@@ -1,6 +1,6 @@
 <Command Name="SC.Add_APN_StaticIP">
    <Description>Добавить статический IP</Description>
-   <Author Name="system" Date="2018-09-20+09:00" />
+   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
    <Request>
       <RequestTemplate>
          <![CDATA[MOD PDP:MSISDN=##msisdn##,OAPN=##NET_APN##,OPDPTYPE=0,PDPAddr=##IP##;^M]]>

@@ -1,6 +1,6 @@
 <Command Name="SC.Activate_CW">
    <Description>Активация услуги 'Ожидание вызова'</Description>
-   <Author Name="system" Date="2018-09-20+09:00" />
+   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
    <Request>
       <RequestTemplate>
          <![CDATA[Act SS:MSISDN=##msisdn##,SS=CW,Bsg=0,ACTIVE=1;^M]]>

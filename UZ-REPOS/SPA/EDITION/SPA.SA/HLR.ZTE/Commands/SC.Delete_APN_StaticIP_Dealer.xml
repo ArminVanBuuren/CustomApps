@@ -1,6 +1,6 @@
 <Command Name="SC.Delete_APN_StaticIP_Dealer">
    <Description>Удалить дилерский статический IP</Description>
-   <Author Name="system" Date="2018-09-20+09:00" />
+   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
    <Request>
       <RequestTemplate>
          <![CDATA[MOD PDP:MSISDN=##msisdn##,OAPN=##DEALER_APN##,OPDPTYPE=0,OaddrOption=1,PDPAddr=0.0.0.0;^M]]>

@@ -1,6 +1,6 @@
 <Command Name="SC.Delete_APN_Corporate">
    <Description />
-   <Author Name="system" Date="2018-09-20+09:00" />
+   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
    <Request>
       <RequestTemplate>
          <![CDATA[Del PDP:MSISDN=##msisdn##,OAPN=##NET_APN##,OPDPTYPE=0,OADDROPTION=1;^M]]>

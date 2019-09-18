@@ -1,6 +1,6 @@
 <Command Name="SC.CancelLocation">
    <Description>Сброс информации о локации абонета на MSC, VLR, SGSN станциях</Description>
-   <Author Name="system" Date="2018-09-20+09:00" />
+   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
    <Request>
       <RequestTemplate>
          <![CDATA[MOD LOC: MSISDN=##msisdn##,##location##;^M]]>

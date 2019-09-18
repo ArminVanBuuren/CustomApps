@@ -1,6 +1,6 @@
 <Command Name="SC.Modify_VoiceCalls">
    <Description>Изменение голосовой связи</Description>
-   <Author Name="system" Date="2018-09-20+09:00" />
+   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
    <Request>
       <RequestTemplate>
          <![CDATA[Mod Tele:MSISDN=##msisdn##,Tele=##action##;^M]]>

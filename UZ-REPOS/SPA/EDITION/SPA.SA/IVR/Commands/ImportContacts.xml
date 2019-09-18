@@ -3,35 +3,36 @@
    <Author Name="Vladimir Khovanskiy" Date="2009-04-26+11:09" />
    <Request>
       <RequestTemplate>
-         <![CDATA[<ImportContactsParameter xmlns="http://schemas.datacontract.org/2004/07/OutboundManagement.BL.Wcf">
-	<CallList/>
-	<Contacts>
-		<ContactInfo>
-			<AgentId/>
-			<ContactGID/>
-			<FirstName>FirstName</FirstName>
-			<LastName>LastName</LastName>
-			<MiddleName/>
-			<Phones>
-				<Phone>
-					<Number>##msisdn##</Number>
-					<PhoneGID>1</PhoneGID>
-					<PhoneKindID>1</PhoneKindID>
-					<PhoneStateID>1</PhoneStateID>
-				</Phone>                                
-			</Phones>
-			<TimeZoneInfoName>West Asia Standard Time</TimeZoneInfoName>
-			<UserAttributes>
-				<UserAttribute>
-					<GID>ContactID</GID>
-					<Value>ContactID</Value>
-				</UserAttribute>
-			</UserAttributes>
-			<GroupName/>
-			<Priority>1</Priority>
-			<Type/>
-		</ContactInfo>
-	</Contacts>
+         <![CDATA[
+<ImportContactsParameter xmlns="http://schemas.datacontract.org/2004/07/OutboundManagement.BL.Wcf">
+   <CallList />
+   <Contacts>
+      <ContactInfo>
+         <AgentId />
+         <ContactGID />
+         <FirstName>FirstName</FirstName>
+         <LastName>LastName</LastName>
+         <MiddleName />
+         <Phones>
+            <Phone>
+               <Number>##msisdn##</Number>
+               <PhoneGID>1</PhoneGID>
+               <PhoneKindID>1</PhoneKindID>
+               <PhoneStateID>1</PhoneStateID>
+            </Phone>
+         </Phones>
+         <TimeZoneInfoName>West Asia Standard Time</TimeZoneInfoName>
+         <UserAttributes>
+            <UserAttribute>
+               <GID>ContactID</GID>
+               <Value>ContactID</Value>
+            </UserAttribute>
+         </UserAttributes>
+         <GroupName />
+         <Priority>1</Priority>
+         <Type />
+      </ContactInfo>
+   </Contacts>
 </ImportContactsParameter>]]>
       </RequestTemplate>
       <EmulationPrintoutTemplate>

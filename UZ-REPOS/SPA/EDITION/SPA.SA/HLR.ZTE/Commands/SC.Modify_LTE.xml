@@ -1,6 +1,6 @@
 <Command Name="SC.Modify_LTE">
    <Description>Изменение LTE</Description>
-   <Author Name="system" Date="2018-09-20+09:00" />
+   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
    <Request>
       <RequestTemplate>
          <![CDATA[Mod BscEx:MSISDN=##msisdn##,SubType=##action##;^M]]>

@@ -1,6 +1,6 @@
 <Command Name="SC.Modify_SMST">
    <Description>Изменение услуги 'Служба коротких сообщений'Входящие</Description>
-   <Author Name="system" Date="2018-09-20+09:00" />
+   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
    <Request>
       <RequestTemplate>
          <![CDATA[MOD TELE: MSISDN=##msisdn##,SMMT=##SMSBarring##;^M]]>
