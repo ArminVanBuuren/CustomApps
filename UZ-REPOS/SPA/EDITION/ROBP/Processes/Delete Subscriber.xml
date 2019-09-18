@@ -3,7 +3,6 @@
     <scenario>
       <objectlist>
         <object name="OperationOnSA" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
-        <object name="Switch" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnitConditional" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
         <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
       </objectlist>
       <automat>
@@ -16,6 +15,14 @@
         <node name="DeleteSubscriberOnEIR" object="OperationOnSA">
           <parameterslist>
             <param name="operation" value="DeleteSubscriberOnEIR" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteUNIFUN" />
+          </resultlist>
+        </node>
+        <node name="DeleteUNIFUN" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="DeleteUNIFUN" />
           </parameterslist>
           <resultlist>
             <result value="" node="" />

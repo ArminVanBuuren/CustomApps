@@ -9,14 +9,6 @@
         <node name="SCProcessingUnit" object="SCProcessingUnit">
           <parameterslist />
           <resultlist>
-            <result value="" node="DeleteMSTSubscriber" />
-          </resultlist>
-        </node>
-        <node name="DeleteMSTSubscriber" object="OperationOnSA">
-          <parameterslist>
-            <param name="operation" value="DeleteMSTSubscriber" />
-          </parameterslist>
-          <resultlist>
             <result value="" node="DeleteUNIFUN" />
           </resultlist>
         </node>
