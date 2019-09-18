@@ -16,7 +16,7 @@ namespace Utils.WinForm.Notepad
         private string _fileName = null;
         private string _source = null;
 
-        private readonly Encoding _defaultEncoding = Encoding.Unicode;
+        private readonly Encoding _defaultEncoding = new UTF8Encoding(false);
         readonly MarkerStyle _sameWordsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(40, Color.Gray)));
         static object syncWhenFileChanged { get; } = new object();
         bool _isDisposed = false;
