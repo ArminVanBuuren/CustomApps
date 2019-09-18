@@ -4248,6 +4248,7 @@
     <None Include="EDITION\SPA.SA\EIR\Commands\Command.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="EDITION\SPA.SA\HLR.ZTE\Commands\HLR.ZTE - Shortcut.lnk" />
     <None Include="PROD-2018.09.06\rd_service.xlsx" />
     <None Include="PROD-2018.09.06\SPA.SA\Dictionaries\CONTENT\ALLPLAY\Commands\Command.xsd">
       <SubType>Designer</SubType>

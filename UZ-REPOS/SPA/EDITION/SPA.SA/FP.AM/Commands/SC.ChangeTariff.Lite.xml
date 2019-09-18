@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.ChangeTariff.Lite" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Description>ChangeTPOnFINPlatform</Description>
-  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
-  <Properties GenerationType="DataSetXml" />
-  <Request>
-    <RequestTemplate>
-      <![CDATA[<DataSet Name="ChangeTariffPlanDataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <Description>ChangeTPOnFINPlatform</Description>
+   <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
+   <Properties GenerationType="DataSetXml" />
+   <Request>
+      <RequestTemplate>
+         <![CDATA[<DataSet Name="ChangeTariffPlanDataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Attributes>
     <Attribute Name="Label" Type="System.String" Value="ChangeTariffPlanAndServices;##datetime##;SPA"/>
     <Attribute Name="Protocol" Type="System.String" Value="Msmq"/>
@@ -48,34 +47,36 @@
     <Rows>##RegisteredServicesParams##</Rows>
   </DataTable>
 </DataSet>]]>
-    </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="datetime" Type="Wellknown"/>
-    <Item Name="TerminalDeviceID" Type="Wellknown"/>
-    <Item Name="PersonalAccount" Type="Wellknown"/>
-    <Item Name="OLD_TARIFF_PLAN_ID" Type="LocalParameter"/>
-    <Item Name="NEW_TARIFF_PLAN_ID" Type="LocalParameter"/>
-    <Item Name="SC.NEW_TERMINAL_DEVICE_CLASS" Type="Parameter"/>
-    <Item Name="RegisteredServices" Type="LocalDynamicParameter"/>
-    <Item Name="RegisteredServicesParams" Type="LocalDynamicParameter"/>
-  </Request>
-  <ParametersList>
-    <Parameter Name="OLD_TARIFF_PLAN_ID">
-      <Source Path="//AdditionalData//ChangeTP/PreviousTariffPlanId"/>
-    </Parameter>
-    <Parameter Name="NEW_TARIFF_PLAN_ID">
-      <Source Path="//AdditionalData//ChangeTP/NewTariffPlanId"/>
-    </Parameter>
-  </ParametersList>
-  <DynamicParametersList>
-    <DynamicParameter Name="RegisteredServices">
-      <Source Path="//string"/>
-      <DynamicObject Name="RegisteredServices" SkipMissed="True"/>
-    </DynamicParameter>
-    <DynamicParameter Name="RegisteredServicesParams">
-      <Source Path="//string"/>
-      <DynamicObject Name="RegisteredServicesParams" SkipMissed="True"/>
-    </DynamicParameter>
-  </DynamicParametersList>
-  <ErrorsList CodePage="ascii"/>
+      </RequestTemplate>
+      <EmulationPrintoutTemplate>
+         <![CDATA[]]>
+      </EmulationPrintoutTemplate>
+      <Item Name="datetime" Type="Wellknown" />
+      <Item Name="TerminalDeviceID" Type="Wellknown" />
+      <Item Name="PersonalAccount" Type="Wellknown" />
+      <Item Name="OLD_TARIFF_PLAN_ID" Type="LocalParameter" />
+      <Item Name="NEW_TARIFF_PLAN_ID" Type="LocalParameter" />
+      <Item Name="SC.NEW_TERMINAL_DEVICE_CLASS" Type="Parameter" />
+      <Item Name="RegisteredServices" Type="LocalDynamicParameter" />
+      <Item Name="RegisteredServicesParams" Type="LocalDynamicParameter" />
+   </Request>
+   <ParametersList>
+      <Parameter Name="OLD_TARIFF_PLAN_ID">
+         <Source Path="//AdditionalData//ChangeTP/PreviousTariffPlanId" />
+      </Parameter>
+      <Parameter Name="NEW_TARIFF_PLAN_ID">
+         <Source Path="//AdditionalData//ChangeTP/NewTariffPlanId" />
+      </Parameter>
+   </ParametersList>
+   <DynamicParametersList>
+      <DynamicParameter Name="RegisteredServices">
+         <Source Path="//string" />
+         <DynamicObject Name="RegisteredServices" SkipMissed="True" />
+      </DynamicParameter>
+      <DynamicParameter Name="RegisteredServicesParams">
+         <Source Path="//string" />
+         <DynamicObject Name="RegisteredServicesParams" SkipMissed="True" />
+      </DynamicParameter>
+   </DynamicParametersList>
+   <ErrorsList CodePage="ascii" />
 </Command>

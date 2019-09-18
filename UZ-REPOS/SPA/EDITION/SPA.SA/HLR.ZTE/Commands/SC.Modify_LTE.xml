@@ -1,17 +1,16 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.Modify_LTE">
-	<Description>Изменение LTE</Description>
-	<Author Name="system" Date="2018-09-20+09:00"/>
-	<Request>
-		<RequestTemplate>
-			<![CDATA[Mod BscEx:MSISDN=##msisdn##,SubType=##action##;^M]]>
-		</RequestTemplate>
-		<Item Name="msisdn" Type="Wellknown"/>
-		<Item Name="action" Type="LocalParameter"/>
-	</Request>
-	<ParametersList>
-		<Parameter Name="action">
-			<Source Path="//AddList/RFS_HLR_LTE" PresenceValue="2" AbsenceValue="1"/>
-		</Parameter>
-	</ParametersList>
+   <Description>Изменение LTE</Description>
+   <Author Name="system" Date="2018-09-20+09:00" />
+   <Request>
+      <RequestTemplate>
+         <![CDATA[Mod BscEx:MSISDN=##msisdn##,SubType=##action##;^M]]>
+      </RequestTemplate>
+      <Item Name="msisdn" Type="Wellknown" />
+      <Item Name="action" Type="LocalParameter" />
+   </Request>
+   <ParametersList>
+      <Parameter Name="action">
+         <Source Path="//AddList/RFS_HLR_LTE" PresenceValue="2" AbsenceValue="1" />
+      </Parameter>
+   </ParametersList>
 </Command>

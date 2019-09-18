@@ -1,11 +1,10 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.Add_CLIP">
-	<Description>Добавление услуги 'Определитель номера'</Description>
-	<Author Name="system" Date="2018-09-20+09:00"/>
-	<Request>
-		<RequestTemplate>
-			<![CDATA[MOD SS: MSISDN=##msisdn##,CLIP=1,CLIPOpt=1;^M]]>
-		</RequestTemplate>
-		<Item Name="msisdn" Type="Wellknown"/>
-	</Request>
+   <Description>Добавление услуги 'Определитель номера'</Description>
+   <Author Name="system" Date="2018-09-20+09:00" />
+   <Request>
+      <RequestTemplate>
+         <![CDATA[MOD SS: MSISDN=##msisdn##,CLIP=1,CLIPOpt=1;^M]]>
+      </RequestTemplate>
+      <Item Name="msisdn" Type="Wellknown" />
+   </Request>
 </Command>

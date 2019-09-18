@@ -1,29 +1,28 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <scenario name="SC.HLR.Modify.VIDEOCALL">
-	<objectList>
-		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
-		<object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
-		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
-	</objectList>
-	<automat>
-		<node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
-			<resultlist>
-				<result value="0" node="Modify_VideoCall"/>
-				<result value="1" node=""/>
-			</resultlist>
-		</node>
-		<node name="Modify_VideoCall" object="Commander">
-			<resultlist>
-				<result value="" node="ResponseAssembler"/>
-			</resultlist>
-			<parameterslist>
-				<param name="Command" value="SC.Modify_VideoCall"/>
-			</parameterslist>
-		</node>
-		<node name="ResponseAssembler" object="ResponseAssembler">
-			<resultlist>
-				<result value="" node="RequestCutterBySubscribers"/>
-			</resultlist>
-		</node>
-	</automat>
+   <objectList>
+      <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+   </objectList>
+   <automat>
+      <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
+         <resultlist>
+            <result value="0" node="Modify_VideoCall" />
+            <result value="1" node="" />
+         </resultlist>
+      </node>
+      <node name="Modify_VideoCall" object="Commander">
+         <resultlist>
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="Command" value="SC.Modify_VideoCall" />
+         </parameterslist>
+      </node>
+      <node name="ResponseAssembler" object="ResponseAssembler">
+         <resultlist>
+            <result value="" node="RequestCutterBySubscribers" />
+         </resultlist>
+      </node>
+   </automat>
 </scenario>

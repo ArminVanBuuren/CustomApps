@@ -1,13 +1,12 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.Modify_SPEEDLIMIT_LTE">
-	<Description>Изменение ограничения скорости LTE до 128кбс</Description>
-	<Author Name="system" Date="2018-09-20+09:00"/>
-	<Request>
-		<RequestTemplate>
-			<![CDATA[Mod APNPROF:MSISDN=##msisdn##,OAPNCFGID=1,NEWEPCAPN=##NET_APN##,EPSQOSID=##SPEEDLIMIT##;^M]]>
-		</RequestTemplate>
-		<Item Name="msisdn" Type="Wellknown"/>
-		<Item Name="NET_APN" Type="Parameter"/>
-		<Item Name="SPEEDLIMIT" Type="Parameter"/>
-	</Request>
+   <Description>Изменение ограничения скорости LTE до 128кбс</Description>
+   <Author Name="system" Date="2018-09-20+09:00" />
+   <Request>
+      <RequestTemplate>
+         <![CDATA[Mod APNPROF:MSISDN=##msisdn##,OAPNCFGID=1,NEWEPCAPN=##NET_APN##,EPSQOSID=##SPEEDLIMIT##;^M]]>
+      </RequestTemplate>
+      <Item Name="msisdn" Type="Wellknown" />
+      <Item Name="NET_APN" Type="Parameter" />
+      <Item Name="SPEEDLIMIT" Type="Parameter" />
+   </Request>
 </Command>

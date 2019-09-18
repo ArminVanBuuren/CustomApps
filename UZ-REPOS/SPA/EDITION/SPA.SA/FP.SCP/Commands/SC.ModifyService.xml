@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.ModifyService">
-  <Description>ModifyService</Description>
-  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
-  <Properties GenerationType="DataSetXml" />
-  <Request>
-    <RequestTemplate>
-      <![CDATA[<DataSet Name="UpdateTDCDataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <Description>ModifyService</Description>
+   <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
+   <Properties GenerationType="DataSetXml" />
+   <Request>
+      <RequestTemplate>
+         <![CDATA[<DataSet Name="UpdateTDCDataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Attributes>
     <Attribute Name="Label" Type="System.String" Value="UpdateTDC;##datetime##;[SCP_MARKER]"/>
     <Attribute Name="Protocol" Type="System.String" Value="Msmq"/>
@@ -46,34 +45,32 @@
     <Rows>##ServicesParams##</Rows>
   </DataTable>
 </DataSet>]]>
-    </RequestTemplate>
-    <Item Name="datetime" Type="Wellknown"/>
-    <Item Name="TerminalDeviceID" Type="Wellknown"/>
-    <Item Name="PersonalAccount" Type="Wellknown"/>
-    <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="Services" Type="LocalDynamicParameter"/>
-    <Item Name="ServicesParams" Type="LocalDynamicParameter"/>
-    <Item Name="NEW_PARAM_COLUMN" Type="LocalParameter"/>
-  </Request>
-    <ParametersList>
-    <Parameter Name="NEW_PARAM_COLUMN">
-      <Source Path="//AdditionalData/ModifyList/RFS_FP_SERVICE_GENERAL[1]" 
-              AbsenceValue="" PostFormat="&lt;Column Name=&quot;NEW_PARAM_VALUE&quot; Type=&quot;System.String&quot;/&gt;"/>
-    </Parameter>
-  </ParametersList>
-  <DynamicParametersList>
-    <DynamicParameter Name="Services">
-      <Source Path="//string"/>
-      <DynamicObject Name="Services" SkipMissed="True"/>
-    </DynamicParameter>
-    <DynamicParameter Name="ServicesParams">
-      <Source Path="//string"/>
-      <DynamicObject Name="ServicesParams" SkipMissed="True"/>
-    </DynamicParameter>
-  </DynamicParametersList>
-  <ErrorsList CodePage="ascii">
-    <Error Name="ACTION_RESULT_CODE&gt;-151013&lt;" Value="SUCCESS"/>
-    <Error Name="ACTION_RESULT_CODE&gt;-151014&lt;" Value="UnregisteredServiceCode"/>
-  </ErrorsList>
+      </RequestTemplate>
+      <Item Name="datetime" Type="Wellknown" />
+      <Item Name="TerminalDeviceID" Type="Wellknown" />
+      <Item Name="PersonalAccount" Type="Wellknown" />
+      <Item Name="msisdn" Type="Wellknown" />
+      <Item Name="Services" Type="LocalDynamicParameter" />
+      <Item Name="ServicesParams" Type="LocalDynamicParameter" />
+      <Item Name="NEW_PARAM_COLUMN" Type="LocalParameter" />
+   </Request>
+   <ParametersList>
+      <Parameter Name="NEW_PARAM_COLUMN">
+         <Source Path="//AdditionalData/ModifyList/RFS_FP_SERVICE_GENERAL[1]" AbsenceValue="" PostFormat="&lt;Column Name=&quot;NEW_PARAM_VALUE&quot; Type=&quot;System.String&quot;/&gt;" />
+      </Parameter>
+   </ParametersList>
+   <DynamicParametersList>
+      <DynamicParameter Name="Services">
+         <Source Path="//string" />
+         <DynamicObject Name="Services" SkipMissed="True" />
+      </DynamicParameter>
+      <DynamicParameter Name="ServicesParams">
+         <Source Path="//string" />
+         <DynamicObject Name="ServicesParams" SkipMissed="True" />
+      </DynamicParameter>
+   </DynamicParametersList>
+   <ErrorsList CodePage="ascii">
+      <Error Name="ACTION_RESULT_CODE&gt;-151013&lt;" Value="SUCCESS" />
+      <Error Name="ACTION_RESULT_CODE&gt;-151014&lt;" Value="UnregisteredServiceCode" />
+   </ErrorsList>
 </Command>
-

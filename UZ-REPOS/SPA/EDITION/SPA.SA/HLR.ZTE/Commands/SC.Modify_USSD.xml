@@ -1,19 +1,18 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.Modify_USSD">
-	<Description>Изменение USSD</Description>
-	<Author Name="system" Date="2018-09-20+09:00"/>
-	<Request>
-		<RequestTemplate>
-			<![CDATA[MOD SS: MSISDN=##msisdn##,PLSS_D=##USSD_STATE##;^M]]>
-		</RequestTemplate>
-		<Item Name="msisdn" Type="Wellknown"/>
-		<Item Name="USSD_STATE" Type="LocalParameter"/>
-	</Request>
-	<ParametersList>
-		<Parameter Name="USSD_STATE" IsChoice="true" AbsenceValue="1">
-			<Source Path="//AddList/RFS_HLR_USSD/RES_HLR_USSD/Value[text()='Allow']" PostFormat="0"/>
-			<Source Path="//ModifyList/RFS_HLR_USSD/RES_HLR_USSD/Value[text()='Allow']" PostFormat="0"/>
-			<Source Path="//RemoveList/RFS_HLR_USSD/RES_HLR_USSD/Value[text()='Deny']" PostFormat="0"/>
-		</Parameter>
-	</ParametersList>
+   <Description>Изменение USSD</Description>
+   <Author Name="system" Date="2018-09-20+09:00" />
+   <Request>
+      <RequestTemplate>
+         <![CDATA[MOD SS: MSISDN=##msisdn##,PLSS_D=##USSD_STATE##;^M]]>
+      </RequestTemplate>
+      <Item Name="msisdn" Type="Wellknown" />
+      <Item Name="USSD_STATE" Type="LocalParameter" />
+   </Request>
+   <ParametersList>
+      <Parameter Name="USSD_STATE" IsChoice="true" AbsenceValue="1">
+         <Source Path="//AddList/RFS_HLR_USSD/RES_HLR_USSD/Value[text()='Allow']" PostFormat="0" />
+         <Source Path="//ModifyList/RFS_HLR_USSD/RES_HLR_USSD/Value[text()='Allow']" PostFormat="0" />
+         <Source Path="//RemoveList/RFS_HLR_USSD/RES_HLR_USSD/Value[text()='Deny']" PostFormat="0" />
+      </Parameter>
+   </ParametersList>
 </Command>

@@ -1,22 +1,21 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.Modify_BIC">
-	<Description>Модификация баррингов входящей связи</Description>
-	<Author Name="system" Date="2018-09-20+09:00"/>
-	<Request>
-		<RequestTemplate>
-			<![CDATA[MOD ODB:MSISDN=##msisdn##,BIC=##Barring##;^M]]>
-		</RequestTemplate>
-		<Item Name="msisdn" Type="Wellknown"/>
-		<Item Name="Barring" Type="LocalParameter"/>
-	</Request>
-	<ParametersList>
-		<Parameter Name="Barring" IsChoice="true" AbsenceValue="1">
-			<Source Path="//AddList/RFS_HLR_ODB_IC/RES_HLR_ODB_IC/Value[text()='AllCalls']" PostFormat="0"/>
-			<Source Path="//ModifyList/RFS_HLR_ODB_IC/RES_HLR_ODB_IC/Value[text()='AllCalls']" PostFormat="0"/>
-		</Parameter>
-	</ParametersList>
-	<ErrorsList CodePage="windows-1251">
-		<Error Name="110109" Value="SUCCESS"/>
-		<!--Subscriber does not exist-->
-	</ErrorsList>
+   <Description>Модификация баррингов входящей связи</Description>
+   <Author Name="system" Date="2018-09-20+09:00" />
+   <Request>
+      <RequestTemplate>
+         <![CDATA[MOD ODB:MSISDN=##msisdn##,BIC=##Barring##;^M]]>
+      </RequestTemplate>
+      <Item Name="msisdn" Type="Wellknown" />
+      <Item Name="Barring" Type="LocalParameter" />
+   </Request>
+   <ParametersList>
+      <Parameter Name="Barring" IsChoice="true" AbsenceValue="1">
+         <Source Path="//AddList/RFS_HLR_ODB_IC/RES_HLR_ODB_IC/Value[text()='AllCalls']" PostFormat="0" />
+         <Source Path="//ModifyList/RFS_HLR_ODB_IC/RES_HLR_ODB_IC/Value[text()='AllCalls']" PostFormat="0" />
+      </Parameter>
+   </ParametersList>
+   <ErrorsList CodePage="windows-1251">
+      <Error Name="110109" Value="SUCCESS" />
+      <!--Subscriber does not exist-->
+   </ErrorsList>
 </Command>

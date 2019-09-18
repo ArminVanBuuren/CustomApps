@@ -1,17 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Command Name="SC.SM.ChangeProfile">
-	<Description>Изменение профиля на SMSC</Description>
-	<Author Name="Cherneckiy A." Date="2018-03-20+10:00" />
-	<Request>
-		<RequestTemplate><![CDATA[OPERATION=SUBSCRIBER-PROV-EDIT&MSISDN=##MSISDN##&IMSI=##IMSI##&NID=##Profile##]]></RequestTemplate>
-		<Item Name="MSISDN"	Type="Wellknown"/>
-		<Item Name="IMSI" Type="Wellknown"/>
-		<Item Name="Profile" Type="LocalParameter"/>
-	</Request>
-	<ParametersList>
-		<Parameter Name="Profile">
-			<Source Path="//RES_SM_PROFILE/Value[text()!='']" />
-		</Parameter>
-	</ParametersList>
-	<ErrorsList CodePage="ASCII" />
-</Command> 
+   <Description>Изменение профиля на SMSC</Description>
+   <Author Name="Cherneckiy A." Date="2018-03-20+10:00" />
+   <Request>
+      <RequestTemplate>
+         <![CDATA[OPERATION=SUBSCRIBER-PROV-EDIT&MSISDN=##MSISDN##&IMSI=##IMSI##&NID=##Profile##]]>
+      </RequestTemplate>
+      <Item Name="MSISDN" Type="Wellknown" />
+      <Item Name="IMSI" Type="Wellknown" />
+      <Item Name="Profile" Type="LocalParameter" />
+   </Request>
+   <ParametersList>
+      <Parameter Name="Profile">
+         <Source Path="//RES_SM_PROFILE/Value[text()!='']" />
+      </Parameter>
+   </ParametersList>
+   <ErrorsList CodePage="ASCII" />
+</Command>

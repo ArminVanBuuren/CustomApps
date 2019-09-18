@@ -1,11 +1,10 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.Delete_CFD">
-	<Description>Delete call forwarding (to MCA) on mobile subscriber busy</Description>
-	<Author Name="system" Date="2018-09-20+09:00"/>
-	<Request>
-		<RequestTemplate>
-			<![CDATA[MOD SS:MSISDN=##msisdn##,CFD=0;^M]]>
-		</RequestTemplate>
-		<Item Name="msisdn" Type="Wellknown"/>
-	</Request>
+   <Description>Delete call forwarding (to MCA) on mobile subscriber busy</Description>
+   <Author Name="system" Date="2018-09-20+09:00" />
+   <Request>
+      <RequestTemplate>
+         <![CDATA[MOD SS:MSISDN=##msisdn##,CFD=0;^M]]>
+      </RequestTemplate>
+      <Item Name="msisdn" Type="Wellknown" />
+   </Request>
 </Command>

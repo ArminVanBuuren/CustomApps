@@ -1,10 +1,10 @@
 <Command Name="SC.SyncFavoriteNumbers" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Description>Команда добавления/удаления любимых номеров</Description>
-  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
-  <Properties GenerationType="DataSetXml" />
-  <Request>
-    <RequestTemplate>
-      <![CDATA[<DataSet Name="ManageFnFDataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <Description>Команда добавления/удаления любимых номеров</Description>
+   <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
+   <Properties GenerationType="DataSetXml" />
+   <Request>
+      <RequestTemplate>
+         <![CDATA[<DataSet Name="ManageFnFDataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Attributes>
     <Attribute Name="Label" Type="System.String" Value="ManageFnFNumbers;##datetime##;[SCP_MARKER]"/>
     <Attribute Name="Protocol" Type="System.String" Value="Msmq"/>
@@ -23,15 +23,15 @@
     <Rows>##FnFServices##</Rows>
   </DataTable>
 </DataSet>]]>
-    </RequestTemplate>
-    <Item Name="datetime" Type="Wellknown"/>
-    <Item Name="FnFServices" Type="LocalDynamicParameter"/>
-  </Request>
-  <DynamicParametersList>
-    <DynamicParameter Name="FnFServices">
-      <Source Path="//string"/>
-      <DynamicObject Name="FnFServices" SkipMissed="True"/>
-    </DynamicParameter>
-  </DynamicParametersList>
-  <ErrorsList CodePage="ascii"/>
+      </RequestTemplate>
+      <Item Name="datetime" Type="Wellknown" />
+      <Item Name="FnFServices" Type="LocalDynamicParameter" />
+   </Request>
+   <DynamicParametersList>
+      <DynamicParameter Name="FnFServices">
+         <Source Path="//string" />
+         <DynamicObject Name="FnFServices" SkipMissed="True" />
+      </DynamicParameter>
+   </DynamicParametersList>
+   <ErrorsList CodePage="ascii" />
 </Command>

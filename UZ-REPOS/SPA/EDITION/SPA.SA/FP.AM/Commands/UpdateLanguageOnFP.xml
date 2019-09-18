@@ -1,10 +1,10 @@
 <Command Name="UpdateLanguageOnFP" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Description>UpdateLanguageOnFP</Description>
-  <Author Name="Sergey Kovalenko" Date="2012-03-15+10:30"/>
-  <Properties GenerationType="DataSetXml" />
-  <Request>
-    <RequestTemplate>
-      <![CDATA[<DataSet Name="TDCLanguagesDataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <Description>UpdateLanguageOnFP</Description>
+   <Author Name="Sergey Kovalenko" Date="2012-03-15+10:30" />
+   <Properties GenerationType="DataSetXml" />
+   <Request>
+      <RequestTemplate>
+         <![CDATA[<DataSet Name="TDCLanguagesDataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Attributes>
     <Attribute Name="Label" Type="System.String" Value="UpdateTDCLanguages;##datetime##;SPA"/>
     <Attribute Name="Protocol" Type="System.String" Value="Msmq"/>
@@ -21,15 +21,15 @@
     </Rows>
   </DataTable>
 </DataSet>]]>
-    </RequestTemplate>
-    <Item Name="TerminalDeviceID" Type="Wellknown"/>
-    <Item Name="NewLanguageCode" Type="LocalParameter"/>
-    <Item Name="datetime" Type="Wellknown"/>
-  </Request>
-  <ParametersList>
-    <Parameter Name="NewLanguageCode">
-      <Source Path="//AdditionalData//NewLanguageCode" />
-    </Parameter>
-  </ParametersList>
-  <ErrorsList CodePage="ascii"/>
+      </RequestTemplate>
+      <Item Name="TerminalDeviceID" Type="Wellknown" />
+      <Item Name="NewLanguageCode" Type="LocalParameter" />
+      <Item Name="datetime" Type="Wellknown" />
+   </Request>
+   <ParametersList>
+      <Parameter Name="NewLanguageCode">
+         <Source Path="//AdditionalData//NewLanguageCode" />
+      </Parameter>
+   </ParametersList>
+   <ErrorsList CodePage="ascii" />
 </Command>

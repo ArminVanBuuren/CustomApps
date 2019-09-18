@@ -1,11 +1,10 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.Delete_GPRS_Dealer">
-	<Description>Удаление услуги 'GPRS DEALER'</Description>
-	<Author Name="system" Date="2018-09-20+09:00"/>
-	<Request>
-		<RequestTemplate>
-			<![CDATA[SET TPLGPRS:MSISDN=##msisdn##,GPRSTPLDEL=20;^M]]>
-		</RequestTemplate>
-		<Item Name="msisdn" Type="Wellknown"/>
-	</Request>
+   <Description>Удаление услуги 'GPRS DEALER'</Description>
+   <Author Name="system" Date="2018-09-20+09:00" />
+   <Request>
+      <RequestTemplate>
+         <![CDATA[SET TPLGPRS:MSISDN=##msisdn##,GPRSTPLDEL=20;^M]]>
+      </RequestTemplate>
+      <Item Name="msisdn" Type="Wellknown" />
+   </Request>
 </Command>

@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="ChangeBillingGroupOnFP" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Description>ChangeBillingGroupOnFP</Description>
-  <Author Name="Oleg Safonov" Date="2011-02-08+12:35"/>
-  <Properties GenerationType="DataSetXml" />
-  <Request>
-    <RequestTemplate>
-      <![CDATA[<DataSet Name="ChangeBillingGroup">
+   <Description>ChangeBillingGroupOnFP</Description>
+   <Author Name="Oleg Safonov" Date="2011-02-08+12:35" />
+   <Properties GenerationType="DataSetXml" />
+   <Request>
+      <RequestTemplate>
+         <![CDATA[<DataSet Name="ChangeBillingGroup">
   <Attributes>
     <Attribute Name="Protocol" Type="System.String" Value="Wcf"/>
     <Attribute Name="Procedure" Type="System.String" Value="AccountSync.ChangeBillingGroup"/>
@@ -15,16 +14,18 @@
     <Attribute Name="ClientId" Type="System.String" Value="SPA"/>
   </Attributes>
 </DataSet>]]>
-    </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="org.id" Type="Wellknown"/>
-    <Item Name="PersonalAccount" Type="Wellknown"/>
-    <Item Name="NewBillingGroupId" Type="LocalParameter"/>
-  </Request>
-  <ParametersList>
-    <Parameter Name="NewBillingGroupId">
-      <Source Path="ExtendedRequestMessage/AdditionalData//NewBillingGroupId"/>
-    </Parameter>
-  </ParametersList>
-  <ErrorsList CodePage="ascii"/>
+      </RequestTemplate>
+      <EmulationPrintoutTemplate>
+         <![CDATA[]]>
+      </EmulationPrintoutTemplate>
+      <Item Name="org.id" Type="Wellknown" />
+      <Item Name="PersonalAccount" Type="Wellknown" />
+      <Item Name="NewBillingGroupId" Type="LocalParameter" />
+   </Request>
+   <ParametersList>
+      <Parameter Name="NewBillingGroupId">
+         <Source Path="ExtendedRequestMessage/AdditionalData//NewBillingGroupId" />
+      </Parameter>
+   </ParametersList>
+   <ErrorsList CodePage="ascii" />
 </Command>

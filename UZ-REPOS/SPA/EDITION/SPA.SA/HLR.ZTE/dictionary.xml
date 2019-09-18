@@ -1,62 +1,61 @@
-<?xml version="1.0"?>
 <Dictionary>
-	<WellknownsList>
-		<Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
-		<Wellknown Name="imsi" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;)"/>
-	</WellknownsList>
-	<ErrorsList CodePage="windows-1251">
-		<Error Name="000000;" Expression="$(Error)" Value="SUCCESS"/>
-		<Error Name="000008;" Expression="$(Error)" Value="InvalidParameterValue"/>
-		<Error Name="101040;" Expression="$(Error)" Value="FAILURE"/>
-		<Error Name="101041;" Expression="$(Error)" Value="MsisdnAlreadyDefined"/>
-		<Error Name="101063;" Expression="$(Error)" Value="ImsiIsNotRegisteredInAC"/>
-		<Error Name="110109;" Expression="$(Error)" Value="SUCCESS"/>
-		<Error Name="ERR1001;" Expression="$(Error)" Value="NotSupportedCommandOrAction"/>
-		<Error Name="ERR1004;" Expression="$(Error)" Value="InvalidParameterValue"/>
-		<Error Name="ERR1016;" Expression="$(Error)" Value="FAILURE"/>
-		<Error Name="ERR1033;" Expression="$(Error)" Value="FAILURE"/>
-		<Error Name="ERR3002;" Expression="$(Error)" Value="SUCCESS"/>
-		<Error Name="ERR3007;" Expression="$(Error)" Value="DuplicateManagedObjectInstance"/>
-		<Error Name="ERR3015;" Expression="$(Error)" Value="NoServices"/>
-		<Error Name="ERR3020;" Expression="$(Error)" Value="FAILURE"/>
-		<Error Name="ERR3027;" Expression="$(Error)" Value="NoServices"/>
-		<Error Name="ERR3028;" Expression="$(Error)" Value="AccessDenied"/>
-		<Error Name="ERR3049;" Expression="$(Error)" Value="SUCCESS"/>
-		<Error Name="ERR3050;" Expression="$(Error)" Value="ImsiAssinedToAnotherSubscriber"/>
-		<Error Name="ERR3100;" Expression="$(Error)" Value="ResourceLimitation"/>
-		<Error Name="ERR5002;" Expression="$(Error)" Value="ResourceLimitation"/>
-	</ErrorsList>
-	<RegexpsList>
-		<Regexp Name="Error" Value="RETN=(?&lt;ERROR&gt;\d{6})"/>
-	</RegexpsList>
-	<ParametersList>
-		<Parameter Name="DEALER_APN">
-			<Source Path="//RES_HLR_DEALER_APN/Value"/>
-		</Parameter>
-		<Parameter Name="IP">
-			<Source Path="ExtendedRequestMessage/AdditionalData/IP"/>
-			<PossibleValues StringToKeyTable="true"/>
-		</Parameter>
-		<Parameter Name="NET_APN">
-			<Source Path="//RES_HLR_NET_APN/Value"/>
-		</Parameter>
-		<Parameter Name="NET_STATE" IsChoice="true" AbsenceValue="1">
-			<Source Path="//AddList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Allow']" PresenceValue="0" />
-			<Source Path="//EndList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Allow']" PresenceValue="0" />
-			<Source Path="//EndList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Deny']" PresenceValue="1" />
-			<Source Path="//ModifyList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Allow']" PresenceValue="0" />
-			<Source Path="//ModifyList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Deny']" PresenceValue="1" />
-			<Source Path="//RemoveList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Allow']" PresenceValue="1" />
-		</Parameter>
-		<Parameter Name="SPEEDLIMIT" IsChoice="true">
-			<Source Path="//AddList/RFS_HLR_SPEEDLIMIT" PresenceValue="107" />
-			<Source Path="//RemoveList/RFS_HLR_SPEEDLIMIT" PresenceValue="100" />
-		</Parameter>
-	</ParametersList>
-	<CommandsList Root="Commands" Mask="*.xml" />
-	<DecodersList Root="Decoders">
-		<Decoder Path="MML.ZTE.CallForwardingInfoDecoder.xml"/>
-		<Decoder Path="MML.ZTE.CallForwardingServicesDecoder.xml"/>
-		<Decoder Path="MML.ZTE.SupplementaryServicesDecoder.xml"/>
-	</DecodersList>
+   <WellknownsList>
+      <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)" />
+      <Wellknown Name="imsi" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;)" />
+   </WellknownsList>
+   <ErrorsList CodePage="windows-1251">
+      <Error Name="000000;" Expression="$(Error)" Value="SUCCESS" />
+      <Error Name="000008;" Expression="$(Error)" Value="InvalidParameterValue" />
+      <Error Name="101040;" Expression="$(Error)" Value="FAILURE" />
+      <Error Name="101041;" Expression="$(Error)" Value="MsisdnAlreadyDefined" />
+      <Error Name="101063;" Expression="$(Error)" Value="ImsiIsNotRegisteredInAC" />
+      <Error Name="110109;" Expression="$(Error)" Value="SUCCESS" />
+      <Error Name="ERR1001;" Expression="$(Error)" Value="NotSupportedCommandOrAction" />
+      <Error Name="ERR1004;" Expression="$(Error)" Value="InvalidParameterValue" />
+      <Error Name="ERR1016;" Expression="$(Error)" Value="FAILURE" />
+      <Error Name="ERR1033;" Expression="$(Error)" Value="FAILURE" />
+      <Error Name="ERR3002;" Expression="$(Error)" Value="SUCCESS" />
+      <Error Name="ERR3007;" Expression="$(Error)" Value="DuplicateManagedObjectInstance" />
+      <Error Name="ERR3015;" Expression="$(Error)" Value="NoServices" />
+      <Error Name="ERR3020;" Expression="$(Error)" Value="FAILURE" />
+      <Error Name="ERR3027;" Expression="$(Error)" Value="NoServices" />
+      <Error Name="ERR3028;" Expression="$(Error)" Value="AccessDenied" />
+      <Error Name="ERR3049;" Expression="$(Error)" Value="SUCCESS" />
+      <Error Name="ERR3050;" Expression="$(Error)" Value="ImsiAssinedToAnotherSubscriber" />
+      <Error Name="ERR3100;" Expression="$(Error)" Value="ResourceLimitation" />
+      <Error Name="ERR5002;" Expression="$(Error)" Value="ResourceLimitation" />
+   </ErrorsList>
+   <RegexpsList>
+      <Regexp Name="Error" Value="RETN=(?&lt;ERROR&gt;\d{6})" />
+   </RegexpsList>
+   <ParametersList>
+      <Parameter Name="DEALER_APN">
+         <Source Path="//RES_HLR_DEALER_APN/Value" />
+      </Parameter>
+      <Parameter Name="IP">
+         <Source Path="ExtendedRequestMessage/AdditionalData/IP" />
+         <PossibleValues StringToKeyTable="true" />
+      </Parameter>
+      <Parameter Name="NET_APN">
+         <Source Path="//RES_HLR_NET_APN/Value" />
+      </Parameter>
+      <Parameter Name="NET_STATE" IsChoice="true" AbsenceValue="1">
+         <Source Path="//AddList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Allow']" PresenceValue="0" />
+         <Source Path="//EndList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Allow']" PresenceValue="0" />
+         <Source Path="//EndList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Deny']" PresenceValue="1" />
+         <Source Path="//ModifyList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Allow']" PresenceValue="0" />
+         <Source Path="//ModifyList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Deny']" PresenceValue="1" />
+         <Source Path="//RemoveList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Allow']" PresenceValue="1" />
+      </Parameter>
+      <Parameter Name="SPEEDLIMIT" IsChoice="true">
+         <Source Path="//AddList/RFS_HLR_SPEEDLIMIT" PresenceValue="107" />
+         <Source Path="//RemoveList/RFS_HLR_SPEEDLIMIT" PresenceValue="100" />
+      </Parameter>
+   </ParametersList>
+   <CommandsList Root="Commands" Mask="*.xml" />
+   <DecodersList Root="Decoders">
+      <Decoder Path="MML.ZTE.CallForwardingInfoDecoder.xml" />
+      <Decoder Path="MML.ZTE.CallForwardingServicesDecoder.xml" />
+      <Decoder Path="MML.ZTE.SupplementaryServicesDecoder.xml" />
+   </DecodersList>
 </Dictionary>

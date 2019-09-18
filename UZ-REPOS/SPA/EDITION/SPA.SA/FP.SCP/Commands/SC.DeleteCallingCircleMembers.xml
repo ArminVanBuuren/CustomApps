@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Command Name="SC.DeleteCallingCircleMembers" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Description>DeleteCallingCircleMembers</Description>
-  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
-  <Properties GenerationType="DataSetXml" />
-  <Request>
-    <RequestTemplate>
-      <![CDATA[<DataSet Name="SCN_CUG_MANAGE_DATA" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <Description>DeleteCallingCircleMembers</Description>
+   <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
+   <Properties GenerationType="DataSetXml" />
+   <Request>
+      <RequestTemplate>
+         <![CDATA[<DataSet Name="SCN_CUG_MANAGE_DATA" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Attributes>
     <Attribute Name="Protocol" Type="System.String" Value="Remoting"/>
     <Attribute Name="Procedure" Type="System.String" Value="SCN_CUG_MANAGE_DATA"/>
@@ -17,30 +16,31 @@
     <Attribute Name="TARGET_MSISDN" Type="System.String" Value="+##msisdn##"/>
   </Attributes>
 </DataSet>]]>
-    </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="org.id" Type="Wellknown"/>
-    <Item Name="CUG_ID" Type="LocalParameter"/>
-    <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="uid" Type="Wellknown" />
-    <Item Name="UserGroupCode" Type="LocalParameter" />
-  </Request>
-  <ParametersList>
-    <Parameter Name="CUG_ID" IsChoice="true">
-      <Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/ExternalGroupNumber/Value" />
-      <Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_VUG/ExternalGroupNumber/Value" />
-      <Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_CUG/ExternalGroupNumber/Value" />
-      <Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_VUG/ExternalGroupNumber/Value" />
-    </Parameter>
-    <Parameter Name="UserGroupCode" IsChoice="true">
-      <Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/UserGroupCode/Value" />
-      <Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_VUG/UserGroupCode/Value" />
-      <Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_CUG/UserGroupCode/Value" />
-      <Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_VUG/UserGroupCode/Value" />
-    </Parameter>
-  </ParametersList>
-  <ErrorsList CodePage="ascii">
-    <Error Name="RETURN_CODE&gt;0&lt;" Value="SUCCESS"/>
-  </ErrorsList>
+      </RequestTemplate>
+      <EmulationPrintoutTemplate>
+         <![CDATA[]]>
+      </EmulationPrintoutTemplate>
+      <Item Name="org.id" Type="Wellknown" />
+      <Item Name="CUG_ID" Type="LocalParameter" />
+      <Item Name="msisdn" Type="Wellknown" />
+      <Item Name="uid" Type="Wellknown" />
+      <Item Name="UserGroupCode" Type="LocalParameter" />
+   </Request>
+   <ParametersList>
+      <Parameter Name="CUG_ID" IsChoice="true">
+         <Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/ExternalGroupNumber/Value" />
+         <Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_VUG/ExternalGroupNumber/Value" />
+         <Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_CUG/ExternalGroupNumber/Value" />
+         <Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_VUG/ExternalGroupNumber/Value" />
+      </Parameter>
+      <Parameter Name="UserGroupCode" IsChoice="true">
+         <Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/UserGroupCode/Value" />
+         <Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_VUG/UserGroupCode/Value" />
+         <Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_CUG/UserGroupCode/Value" />
+         <Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_VUG/UserGroupCode/Value" />
+      </Parameter>
+   </ParametersList>
+   <ErrorsList CodePage="ascii">
+      <Error Name="RETURN_CODE&gt;0&lt;" Value="SUCCESS" />
+   </ErrorsList>
 </Command>
-

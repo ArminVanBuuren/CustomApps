@@ -1,52 +1,51 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <scenario name="SC.CT6.ChangeMSISDN">
-  <objectList>
-    <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="WellknownsReplacer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.WellknownsReplacer" assembly="FORIS.SPA.MmlProcessing.dll"/>
-  </objectList>
-  <automat>
-    <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
-      <resultlist>
-        <result value="0" node="DeleteALLPLAY"/>
-        <result value="1" node=""/>
-      </resultlist>
-    </node>
-    <node name="DeleteALLPLAY" object="Commander">
-      <resultlist>
-        <result value="" node="WellknownsReplacer"/>
-      </resultlist>
-      <parameterslist>
-        <param name="Command" value="DeleteALLPLAY"/>
-        <param name="Script" value="Command"/>
-        <param name="ErrorDecodingType" value="ByRegexp"/>
-        <param name="CommandSource" value="Dictionary"/>
-      </parameterslist>
-    </node>
-    <node name="WellknownsReplacer" object="WellknownsReplacer">
-      <resultlist>
-        <result value="" node="AddALLPLAY"/>
-      </resultlist>
-      <parameterslist>
-        <param name="msisdn" value="xmlsubstr(&quot;//AdditionalData//NewMSISDN&quot;)"/>
-      </parameterslist>
-    </node>
-    <node name="AddALLPLAY" object="Commander">
-      <resultlist>
-        <result value="" node="ResponseAssembler"/>
-      </resultlist>
-      <parameterslist>
-        <param name="Command" value="AddALLPLAY"/>
-        <param name="Script" value="Command"/>
-        <param name="ErrorDecodingType" value="ByRegexp"/>
-        <param name="CommandSource" value="Dictionary"/>
-      </parameterslist>
-    </node>
-    <node name="ResponseAssembler" object="ResponseAssembler">
-      <resultlist>
-        <result value="" node="RequestCutterBySubscribers"/>
-      </resultlist>
-    </node>
-  </automat>
+   <objectList>
+      <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="WellknownsReplacer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.WellknownsReplacer" assembly="FORIS.SPA.MmlProcessing.dll" />
+   </objectList>
+   <automat>
+      <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
+         <resultlist>
+            <result value="0" node="DeleteALLPLAY" />
+            <result value="1" node="" />
+         </resultlist>
+      </node>
+      <node name="DeleteALLPLAY" object="Commander">
+         <resultlist>
+            <result value="" node="WellknownsReplacer" />
+         </resultlist>
+         <parameterslist>
+            <param name="Command" value="DeleteALLPLAY" />
+            <param name="Script" value="Command" />
+            <param name="ErrorDecodingType" value="ByRegexp" />
+            <param name="CommandSource" value="Dictionary" />
+         </parameterslist>
+      </node>
+      <node name="WellknownsReplacer" object="WellknownsReplacer">
+         <resultlist>
+            <result value="" node="AddALLPLAY" />
+         </resultlist>
+         <parameterslist>
+            <param name="msisdn" value="xmlsubstr(&quot;//AdditionalData//NewMSISDN&quot;)" />
+         </parameterslist>
+      </node>
+      <node name="AddALLPLAY" object="Commander">
+         <resultlist>
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="Command" value="AddALLPLAY" />
+            <param name="Script" value="Command" />
+            <param name="ErrorDecodingType" value="ByRegexp" />
+            <param name="CommandSource" value="Dictionary" />
+         </parameterslist>
+      </node>
+      <node name="ResponseAssembler" object="ResponseAssembler">
+         <resultlist>
+            <result value="" node="RequestCutterBySubscribers" />
+         </resultlist>
+      </node>
+   </automat>
 </scenario>

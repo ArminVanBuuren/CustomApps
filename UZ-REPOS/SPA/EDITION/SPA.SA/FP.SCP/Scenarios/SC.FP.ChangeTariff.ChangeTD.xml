@@ -1,116 +1,116 @@
 <scenario name="SC.FP.ChangeTariff.ChangeTD">
-  <objectList>
-    <object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
-    <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
-    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
-    <object name="FPCommandDataConstructor" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.FPProcessingUnits.FPCommandDataConstructor" assembly="FORIS.SPA.MmlProcessing.dll" />
-    <object name="IdentifiersGenerator" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.IdentifiersGenerator" assembly="FORIS.SPA.MmlProcessing.dll" />
-  </objectList>
-  <automat>
-    <node name="BySubscribersCutter" object="BySubscribersCutter">
-      <resultlist>
-        <result value="0" node="IdentifiersGenerator" />
-        <result value="1" node="" />
-      </resultlist>
-    </node>
-    <node name="IdentifiersGenerator" object="IdentifiersGenerator">
-      <parameterslist>
-        <param name="WellknownName" value="GlobalUid" />
-      </parameterslist>
-      <resultlist>
-        <result value="0" node="CommandDataConstructorFN-Create-Node" />
-      </resultlist>
-    </node>
-    <node name="CommandDataConstructorFN-Create-Node" object="FPCommandDataConstructor">
-      <resultlist>
-        <result value="0" node="CommandDataConstructorFN-Update-Node" />
-        <result value="1538" node="CommandDataConstructorFN-Update-Node" />
-        <result value="" node="ResponseAssembler" />
-      </resultlist>
-      <parameterslist>
-        <param name="ServicesDynamicObject" value="FavoriteNumbersServices" />
-        <param name="ServicesCommand" value="SC.CreateTDC.ServiceRow" />
-        <param name="XmlPath" value="//AdditionalData/EndList/RFS_FP_SERVICE_FAVORITE_NUMBER" />
-      </parameterslist>
-    </node>
-    <node name="CommandDataConstructorFN-Update-Node" object="FPCommandDataConstructor">
-      <resultlist>
-        <result value="0" node="CommandDataConstructorExt-Create-Node" />
-        <result value="1538" node="CommandDataConstructorExt-Create-Node" />
-        <result value="" node="ResponseAssembler" />
-      </resultlist>
-      <parameterslist>
-        <param name="ServicesDynamicObject" value="FavoriteNumbersServicesToUpdate" />
-        <param name="ServicesCommand" value="SC.UpdateTDC.ServiceRow" />
-        <param name="XmlPath" value="//AdditionalData/EndList/RFS_FP_SERVICE_FAVORITE_NUMBER" />
-      </parameterslist>
-    </node>
-    <node name="CommandDataConstructorExt-Create-Node" object="FPCommandDataConstructor">
-      <resultlist>
-        <result value="0" node="CommandDataConstructorExt-Update-Node" />
-        <result value="1538" node="CommandDataConstructorExt-Update-Node" />
-        <result value="" node="ResponseAssembler" />
-      </resultlist>
-      <parameterslist>
-        <param name="ServicesDynamicObject" value="RegisteredServices" />
-        <param name="ParametersDynamicObject" value="RegisteredServicesParams" />
-        <param name="ServicesCommand" value="SC.CreateTDC.ServiceRow" />
-        <param name="ParametersCommand" value="SC.Service.ParameterRow" />
-        <param name="XmlPath" value="//AdditionalData/EndList/RFS_FP_SERVICE_GENERAL" />
-      </parameterslist>
-    </node>
-    <node name="CommandDataConstructorExt-Update-Node" object="FPCommandDataConstructor">
-      <resultlist>
-        <result value="0" node="CommandDataConstructor-Node" />
-        <result value="1538" node="CommandDataConstructor-Node" />
-        <result value="" node="ResponseAssembler" />
-      </resultlist>
-      <parameterslist>
-        <param name="ServicesDynamicObject" value="RegisteredServicesToUpdate" />
-        <param name="ParametersDynamicObject" value="RegisteredServicesParamsToUpdate" />
-        <param name="ServicesCommand" value="SC.UpdateTDC.ServiceRow" />
-        <param name="ParametersCommand" value="SC.Service.ParameterRow" />
-        <param name="XmlPath" value="//AdditionalData/EndList/RFS_FP_SERVICE_GENERAL" />
-      </parameterslist>
-    </node>
-    <node name="CommandDataConstructor-Node" object="FPCommandDataConstructor">
-      <resultlist>
-        <result value="0" node="ChangeTDClassOnFINPlatform" />
-        <result value="1538" node="ChangeTDClassOnFINPlatform" />
-        <result value="" node="ResponseAssembler" />
-      </resultlist>
-      <parameterslist>
-        <param name="ServicesDynamicObject" value="RegisteredCounters" />
-        <param name="ServicesCommand" value="SC.CounterRow" />
-        <param name="XmlPath" value="//AdditionalData/AddList//Counters/*" />
-      </parameterslist>
-    </node>
-    <node name="ChangeTDClassOnFINPlatform" object="IfCommander">
-      <resultlist>
-        <result value="" node="ResponseAssembler" />
-        <result value="1538" node="ChangeTPOnFINPlatform" />
-      </resultlist>
-      <parameterslist>
-        <param name="IfXmlPath:0" value="//ProcessingOptions/OnlyTDClass" />
-        <param name="Command" value="SC.ChangeTDClass" />
-        <param name="AppendSubscribersData" value="true" />
-        <param name="Asynchronous" value="true" />
-      </parameterslist>
-    </node>
-    <node name="ChangeTPOnFINPlatform" object="IfCommander">
-      <resultlist>
-        <result value="" node="ResponseAssembler" />
-      </resultlist>
-      <parameterslist>
-        <param name="Command" value="SC.ChangeTariff.Lite" />
-        <param name="AppendSubscribersData" value="true" />
-        <param name="Asynchronous" value="true" />
-      </parameterslist>
-    </node>
-    <node name="ResponseAssembler" object="ResponseAssembler">
-      <resultlist>
-        <result value="" node="BySubscribersCutter" />
-      </resultlist>
-    </node>
-  </automat>
+   <objectList>
+      <object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="FPCommandDataConstructor" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.FPProcessingUnits.FPCommandDataConstructor" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="IdentifiersGenerator" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.IdentifiersGenerator" assembly="FORIS.SPA.MmlProcessing.dll" />
+   </objectList>
+   <automat>
+      <node name="BySubscribersCutter" object="BySubscribersCutter">
+         <resultlist>
+            <result value="0" node="IdentifiersGenerator" />
+            <result value="1" node="" />
+         </resultlist>
+      </node>
+      <node name="IdentifiersGenerator" object="IdentifiersGenerator">
+         <parameterslist>
+            <param name="WellknownName" value="GlobalUid" />
+         </parameterslist>
+         <resultlist>
+            <result value="0" node="CommandDataConstructorFN-Create-Node" />
+         </resultlist>
+      </node>
+      <node name="CommandDataConstructorFN-Create-Node" object="FPCommandDataConstructor">
+         <resultlist>
+            <result value="0" node="CommandDataConstructorFN-Update-Node" />
+            <result value="1538" node="CommandDataConstructorFN-Update-Node" />
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="ServicesDynamicObject" value="FavoriteNumbersServices" />
+            <param name="ServicesCommand" value="SC.CreateTDC.ServiceRow" />
+            <param name="XmlPath" value="//AdditionalData/EndList/RFS_FP_SERVICE_FAVORITE_NUMBER" />
+         </parameterslist>
+      </node>
+      <node name="CommandDataConstructorFN-Update-Node" object="FPCommandDataConstructor">
+         <resultlist>
+            <result value="0" node="CommandDataConstructorExt-Create-Node" />
+            <result value="1538" node="CommandDataConstructorExt-Create-Node" />
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="ServicesDynamicObject" value="FavoriteNumbersServicesToUpdate" />
+            <param name="ServicesCommand" value="SC.UpdateTDC.ServiceRow" />
+            <param name="XmlPath" value="//AdditionalData/EndList/RFS_FP_SERVICE_FAVORITE_NUMBER" />
+         </parameterslist>
+      </node>
+      <node name="CommandDataConstructorExt-Create-Node" object="FPCommandDataConstructor">
+         <resultlist>
+            <result value="0" node="CommandDataConstructorExt-Update-Node" />
+            <result value="1538" node="CommandDataConstructorExt-Update-Node" />
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="ServicesDynamicObject" value="RegisteredServices" />
+            <param name="ParametersDynamicObject" value="RegisteredServicesParams" />
+            <param name="ServicesCommand" value="SC.CreateTDC.ServiceRow" />
+            <param name="ParametersCommand" value="SC.Service.ParameterRow" />
+            <param name="XmlPath" value="//AdditionalData/EndList/RFS_FP_SERVICE_GENERAL" />
+         </parameterslist>
+      </node>
+      <node name="CommandDataConstructorExt-Update-Node" object="FPCommandDataConstructor">
+         <resultlist>
+            <result value="0" node="CommandDataConstructor-Node" />
+            <result value="1538" node="CommandDataConstructor-Node" />
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="ServicesDynamicObject" value="RegisteredServicesToUpdate" />
+            <param name="ParametersDynamicObject" value="RegisteredServicesParamsToUpdate" />
+            <param name="ServicesCommand" value="SC.UpdateTDC.ServiceRow" />
+            <param name="ParametersCommand" value="SC.Service.ParameterRow" />
+            <param name="XmlPath" value="//AdditionalData/EndList/RFS_FP_SERVICE_GENERAL" />
+         </parameterslist>
+      </node>
+      <node name="CommandDataConstructor-Node" object="FPCommandDataConstructor">
+         <resultlist>
+            <result value="0" node="ChangeTDClassOnFINPlatform" />
+            <result value="1538" node="ChangeTDClassOnFINPlatform" />
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="ServicesDynamicObject" value="RegisteredCounters" />
+            <param name="ServicesCommand" value="SC.CounterRow" />
+            <param name="XmlPath" value="//AdditionalData/AddList//Counters/*" />
+         </parameterslist>
+      </node>
+      <node name="ChangeTDClassOnFINPlatform" object="IfCommander">
+         <resultlist>
+            <result value="" node="ResponseAssembler" />
+            <result value="1538" node="ChangeTPOnFINPlatform" />
+         </resultlist>
+         <parameterslist>
+            <param name="IfXmlPath:0" value="//ProcessingOptions/OnlyTDClass" />
+            <param name="Command" value="SC.ChangeTDClass" />
+            <param name="AppendSubscribersData" value="true" />
+            <param name="Asynchronous" value="true" />
+         </parameterslist>
+      </node>
+      <node name="ChangeTPOnFINPlatform" object="IfCommander">
+         <resultlist>
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="Command" value="SC.ChangeTariff.Lite" />
+            <param name="AppendSubscribersData" value="true" />
+            <param name="Asynchronous" value="true" />
+         </parameterslist>
+      </node>
+      <node name="ResponseAssembler" object="ResponseAssembler">
+         <resultlist>
+            <result value="" node="BySubscribersCutter" />
+         </resultlist>
+      </node>
+   </automat>
 </scenario>

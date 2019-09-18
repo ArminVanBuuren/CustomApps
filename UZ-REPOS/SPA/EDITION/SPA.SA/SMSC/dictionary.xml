@@ -1,27 +1,26 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <Dictionary xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <WellknownsList>
-    <Wellknown Name="MSISDN" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
-    <Wellknown Name="IMSI" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;)"/>
-  </WellknownsList>
-  <ErrorsList CodePage="ASCII">
-    <Error Name="000;" Expression="$(Error)"  Value="SUCCESS"               Description="Абонент успешно создан"/>
-    <Error Name="102;" Expression="$(Error)"  Value="SUCCESS"               Description="Абонент не существует (при удалении)"/>
-    <Error Name="101;" Expression="$(Error)"  Value="MsisdnAlreadyDefined"  Description="Абонент уже существует" />
-    <Error Name="103;" Expression="$(Error)"  Value="UnregisteredProfile"   Description="Абонент не существует (при внесении изменений)"/>
-    <Error Name="104;" Expression="$(Error)"  Value="InvalidProfileFormat"  Description="В списке профайлов нет указанной системы"/>
-    <Error Name="105;" Expression="$(Error)"  Value="UnregisteredError"     Description="Ошибка соединения с базой данных"/>
-    <Error Name="106;" Expression="$(Error)"  Value="SUCCESS"               Description="Ошибка выполнения запроса"/>
-    <Error Name="001;" Expression="$(Error)"  Value="InvalidRequest"        Description="Неизвестная операция"/>
-    <Error Name="002;" Expression="$(Error)"  Value="InvalidIdentifier"     Description="Недостаточно параметров (не заданы операция, msisdn, imsi..)"/>
-    <Error Name="003;" Expression="$(Error)"  Value="InvalidIdentifier"     Description="Не найден ключ поиска (одновременно указываются nmsisdn и nimsi)"/>
-    <Error Name="004;" Expression="$(Error)"  Value="InvalidIdentifier"     Description="Не найдены параметры для обновления (в запросе нет nmsisdn или nimsi или nid)"/>
-  </ErrorsList>
-  <RegexpsList>
-    <Regexp Name="Error" Value="^(?&lt;ERROR&gt;\d{1,3})$"/>
-    <!--Regexp Name="Error" Value="(Result&quot;\s{0,}value=&quot;(?&lt;ERROR&gt;^\d{1,3}$)&quot;)"/-->
-  </RegexpsList>
- <CommandsList Root="Commands" Mask="*.xml">
-    <!-- All new commands are included by Mask=*.xml attribute -->
-  </CommandsList>
+   <WellknownsList>
+      <Wellknown Name="MSISDN" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)" />
+      <Wellknown Name="IMSI" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;)" />
+   </WellknownsList>
+   <ErrorsList CodePage="ASCII">
+      <Error Name="000;" Expression="$(Error)" Value="SUCCESS" Description="Абонент успешно создан" />
+      <Error Name="102;" Expression="$(Error)" Value="SUCCESS" Description="Абонент не существует (при удалении)" />
+      <Error Name="101;" Expression="$(Error)" Value="MsisdnAlreadyDefined" Description="Абонент уже существует" />
+      <Error Name="103;" Expression="$(Error)" Value="UnregisteredProfile" Description="Абонент не существует (при внесении изменений)" />
+      <Error Name="104;" Expression="$(Error)" Value="InvalidProfileFormat" Description="В списке профайлов нет указанной системы" />
+      <Error Name="105;" Expression="$(Error)" Value="UnregisteredError" Description="Ошибка соединения с базой данных" />
+      <Error Name="106;" Expression="$(Error)" Value="SUCCESS" Description="Ошибка выполнения запроса" />
+      <Error Name="001;" Expression="$(Error)" Value="InvalidRequest" Description="Неизвестная операция" />
+      <Error Name="002;" Expression="$(Error)" Value="InvalidIdentifier" Description="Недостаточно параметров (не заданы операция, msisdn, imsi..)" />
+      <Error Name="003;" Expression="$(Error)" Value="InvalidIdentifier" Description="Не найден ключ поиска (одновременно указываются nmsisdn и nimsi)" />
+      <Error Name="004;" Expression="$(Error)" Value="InvalidIdentifier" Description="Не найдены параметры для обновления (в запросе нет nmsisdn или nimsi или nid)" />
+   </ErrorsList>
+   <RegexpsList>
+      <Regexp Name="Error" Value="^(?&lt;ERROR&gt;\d{1,3})$" />
+      <!--Regexp Name="Error" Value="(Result&quot;\s{0,}value=&quot;(?&lt;ERROR&gt;^\d{1,3}$)&quot;)"/-->
+   </RegexpsList>
+   <CommandsList Root="Commands" Mask="*.xml">
+      <!-- All new commands are included by Mask=*.xml attribute -->
+   </CommandsList>
 </Dictionary>

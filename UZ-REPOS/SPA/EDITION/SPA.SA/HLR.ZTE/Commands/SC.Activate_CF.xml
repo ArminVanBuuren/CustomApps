@@ -1,33 +1,32 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.Activate_CF">
-	<Description>Активация услуги переадресация вызова</Description>
-	<Author Name="system" Date="2018-09-20+09:00"/>
-	<Request>
-		<RequestTemplate>
-			<![CDATA[Reg FN:MSISDN=##msisdn##,SS=##CallForwardName##,Bsg=0,Register=1,Active=1##ForwardedToNumber####CallForwardingTimer##;^M]]>
-		</RequestTemplate>
-		<Item Name="msisdn" Type="Wellknown"/>
-		<Item Name="CallForwardName" Type="LocalParameter"/>
-		<Item Name="ForwardedToNumber" Type="LocalParameter"/>
-		<Item Name="CallForwardingTimer" Type="LocalParameter"/>
-	</Request>
-	<ParametersList>
-		<Parameter Name="CallForwardName" IsChoice="true" AbsenceValue="">
-			<Source Path="//RFS_HLR_CFB" PostFormat="CFB"/>
-			<Source Path="//RFS_HLR_CFU" PostFormat="CFU"/>
-			<Source Path="//RFS_HLR_CFNRC" PostFormat="CFNRC"/>
-			<Source Path="//RFS_HLR_CFNRY" PostFormat="CFNRY"/>
-			<Source Path="//RFS_HLR_CFD" PostFormat="CFD"/>
-		</Parameter>
-		<Parameter Name="ForwardedToNumber" IsChoice="true" AbsenceValue="">
-			<Source Path="//RFS_HLR_CFB//ForwardedToNumber/Value" PostFormat=",FwdNum=00{0}"/>
-			<Source Path="//RFS_HLR_CFU//ForwardedToNumber/Value" PostFormat=",FwdNum=00{0}"/>
-			<Source Path="//RFS_HLR_CFNRC//ForwardedToNumber/Value" PostFormat=",FwdNum=00{0}"/>
-			<Source Path="//RFS_HLR_CFNRY//ForwardedToNumber/Value" PostFormat=",FwdNum=00{0}"/>
-			<Source Path="//RFS_HLR_CFD//ForwardedToNumber/Value" PostFormat=",CFDNRcAddr={0}"/>
-		</Parameter>
-		<Parameter Name="CallForwardingTimer" IsChoice="true" AbsenceValue="">
-			<Source Path="//CallForwardingTimer/Value" PostFormat=",Time={0}"/>
-		</Parameter>
-	</ParametersList>
+   <Description>Активация услуги переадресация вызова</Description>
+   <Author Name="system" Date="2018-09-20+09:00" />
+   <Request>
+      <RequestTemplate>
+         <![CDATA[Reg FN:MSISDN=##msisdn##,SS=##CallForwardName##,Bsg=0,Register=1,Active=1##ForwardedToNumber####CallForwardingTimer##;^M]]>
+      </RequestTemplate>
+      <Item Name="msisdn" Type="Wellknown" />
+      <Item Name="CallForwardName" Type="LocalParameter" />
+      <Item Name="ForwardedToNumber" Type="LocalParameter" />
+      <Item Name="CallForwardingTimer" Type="LocalParameter" />
+   </Request>
+   <ParametersList>
+      <Parameter Name="CallForwardName" IsChoice="true" AbsenceValue="">
+         <Source Path="//RFS_HLR_CFB" PostFormat="CFB" />
+         <Source Path="//RFS_HLR_CFU" PostFormat="CFU" />
+         <Source Path="//RFS_HLR_CFNRC" PostFormat="CFNRC" />
+         <Source Path="//RFS_HLR_CFNRY" PostFormat="CFNRY" />
+         <Source Path="//RFS_HLR_CFD" PostFormat="CFD" />
+      </Parameter>
+      <Parameter Name="ForwardedToNumber" IsChoice="true" AbsenceValue="">
+         <Source Path="//RFS_HLR_CFB//ForwardedToNumber/Value" PostFormat=",FwdNum=00{0}" />
+         <Source Path="//RFS_HLR_CFU//ForwardedToNumber/Value" PostFormat=",FwdNum=00{0}" />
+         <Source Path="//RFS_HLR_CFNRC//ForwardedToNumber/Value" PostFormat=",FwdNum=00{0}" />
+         <Source Path="//RFS_HLR_CFNRY//ForwardedToNumber/Value" PostFormat=",FwdNum=00{0}" />
+         <Source Path="//RFS_HLR_CFD//ForwardedToNumber/Value" PostFormat=",CFDNRcAddr={0}" />
+      </Parameter>
+      <Parameter Name="CallForwardingTimer" IsChoice="true" AbsenceValue="">
+         <Source Path="//CallForwardingTimer/Value" PostFormat=",Time={0}" />
+      </Parameter>
+   </ParametersList>
 </Command>

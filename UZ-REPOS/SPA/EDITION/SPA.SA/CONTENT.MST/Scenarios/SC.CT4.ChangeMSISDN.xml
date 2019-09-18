@@ -1,46 +1,45 @@
-<?xml version="1.0" encoding="utf-8"?>
 <scenario name="SC.CT4.ChangeMSISDN">
-  <objectList>
-    <object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="WellknownsReplacer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.WellknownsReplacer" assembly="FORIS.SPA.MmlProcessing.dll"/>
-  </objectList>
-  <automat>
-    <node name="BySubscribersCutter" object="BySubscribersCutter">
-      <resultlist>
-        <result value="0" node="DeleteMST"/>
-        <result value="1" node=""/>
-      </resultlist>
-    </node>
-    <node name="DeleteMST" object="Commander">
-      <resultlist>
-        <result value="" node="WellknownsReplacer"/>
-      </resultlist>
-      <parameterslist>
-        <param name="Command" value="DeleteMST"/>
-      </parameterslist>
-    </node>
-    <node name="WellknownsReplacer" object="WellknownsReplacer">
-      <resultlist>
-        <result value="" node="AddMST"/>
-      </resultlist>
-      <parameterslist>
-        <param name="msisdn" value="xmlsubstr(&quot;//AdditionalData//NewMSISDN&quot;)"/>
-      </parameterslist>
-    </node>
-    <node name="AddMST" object="Commander">
-      <resultlist>
-        <result value="" node="ResponseAssembler"/>
-      </resultlist>
-      <parameterslist>
-        <param name="Command" value="AddMST"/>
-      </parameterslist>
-    </node>
-    <node name="ResponseAssembler" object="ResponseAssembler">
-      <resultlist>
-        <result value="" node="BySubscribersCutter"/>
-      </resultlist>
-    </node>
-  </automat>
+   <objectList>
+      <object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="WellknownsReplacer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.WellknownsReplacer" assembly="FORIS.SPA.MmlProcessing.dll" />
+   </objectList>
+   <automat>
+      <node name="BySubscribersCutter" object="BySubscribersCutter">
+         <resultlist>
+            <result value="0" node="DeleteMST" />
+            <result value="1" node="" />
+         </resultlist>
+      </node>
+      <node name="DeleteMST" object="Commander">
+         <resultlist>
+            <result value="" node="WellknownsReplacer" />
+         </resultlist>
+         <parameterslist>
+            <param name="Command" value="DeleteMST" />
+         </parameterslist>
+      </node>
+      <node name="WellknownsReplacer" object="WellknownsReplacer">
+         <resultlist>
+            <result value="" node="AddMST" />
+         </resultlist>
+         <parameterslist>
+            <param name="msisdn" value="xmlsubstr(&quot;//AdditionalData//NewMSISDN&quot;)" />
+         </parameterslist>
+      </node>
+      <node name="AddMST" object="Commander">
+         <resultlist>
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="Command" value="AddMST" />
+         </parameterslist>
+      </node>
+      <node name="ResponseAssembler" object="ResponseAssembler">
+         <resultlist>
+            <result value="" node="BySubscribersCutter" />
+         </resultlist>
+      </node>
+   </automat>
 </scenario>

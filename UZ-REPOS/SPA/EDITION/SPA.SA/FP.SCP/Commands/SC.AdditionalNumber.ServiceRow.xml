@@ -1,41 +1,42 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.AdditionalNumber.ServiceRow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Description>Activate service/block</Description>
-  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
-  <Properties GenerationType="MmlXml" />
-  <Request>
-    <RequestTemplate>
-      <![CDATA[<Row 
+   <Description>Activate service/block</Description>
+   <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
+   <Properties GenerationType="MmlXml" />
+   <Request>
+      <RequestTemplate>
+         <![CDATA[<Row 
 REQUEST_ID="##ASYNC_REQUEST_ID##" 
 TERMINAL_DEVICE_CONTRACT_ID="##TerminalDeviceID##"
 IDENTITY_TYPE="##IdentityType##" 
 IDENTITY_VALUE="##AdditionalNumber##" />]]>
-    </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="TerminalDeviceID" Type="Wellknown"/>
-    <Item Name="AdditionalNumber" Type="LocalParameter"/>
-    <Item Name="IdentityType" Type="LocalParameter" />
-  </Request>
-  <ParametersList>
-    <Parameter Name="IdentityType">
-      <Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_ADDITIONAL_NUMBER/ServiceCode"/>
-      <PossibleValues StringToKeyTable="true">
-        <Item Key="1" StringValue="FRCITYN"/>
-        <Item Key="2" StringValue="OFC"/>
-        <Item Key="3" StringValue="DNFT"/>
-        <Item Key="4" StringValue="DNDT"/>
-        <Item Key="5" StringValue="EXTNUM"/>
-        <Item Key="6" StringValue="FRALFAX"/>
-      </PossibleValues>
-    </Parameter>
-    <Parameter Name="AdditionalNumber">
-      <Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_ADDITIONAL_NUMBER/ServiceCode/Value[text()='FRCITYN']/../../Parameters/MsisdnAbc/@value" AbsenceValue=""/>
-      <Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_ADDITIONAL_NUMBER/ServiceCode/Value[text()='OFC']/../../Parameters/MsisdnAbc/@value" AbsenceValue=""/>
-      <Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_ADDITIONAL_NUMBER/ServiceCode/Value[text()='DNFT']/../../Parameters/AdditionalNumber/@value" AbsenceValue=""/>
-      <Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_ADDITIONAL_NUMBER/ServiceCode/Value[text()='DNDT']/../../Parameters/AdditionalNumber/@value" AbsenceValue=""/>
-      <Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_ADDITIONAL_NUMBER/ServiceCode/Value[text()='EXTNUM']/../../Parameters/AdditionalNumber/@value" AbsenceValue=""/>
-      <Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_ADDITIONAL_NUMBER/ServiceCode/Value[text()='FRALFAX']/../../Parameters/AdditionalNumber/@value" AbsenceValue=""/>
-    </Parameter>
-  </ParametersList>
-  <ErrorsList CodePage="ascii"/>
+      </RequestTemplate>
+      <EmulationPrintoutTemplate>
+         <![CDATA[]]>
+      </EmulationPrintoutTemplate>
+      <Item Name="TerminalDeviceID" Type="Wellknown" />
+      <Item Name="AdditionalNumber" Type="LocalParameter" />
+      <Item Name="IdentityType" Type="LocalParameter" />
+   </Request>
+   <ParametersList>
+      <Parameter Name="IdentityType">
+         <Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_ADDITIONAL_NUMBER/ServiceCode" />
+         <PossibleValues StringToKeyTable="true">
+            <Item Key="1" StringValue="FRCITYN" />
+            <Item Key="2" StringValue="OFC" />
+            <Item Key="3" StringValue="DNFT" />
+            <Item Key="4" StringValue="DNDT" />
+            <Item Key="5" StringValue="EXTNUM" />
+            <Item Key="6" StringValue="FRALFAX" />
+         </PossibleValues>
+      </Parameter>
+      <Parameter Name="AdditionalNumber">
+         <Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_ADDITIONAL_NUMBER/ServiceCode/Value[text()='FRCITYN']/../../Parameters/MsisdnAbc/@value" AbsenceValue="" />
+         <Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_ADDITIONAL_NUMBER/ServiceCode/Value[text()='OFC']/../../Parameters/MsisdnAbc/@value" AbsenceValue="" />
+         <Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_ADDITIONAL_NUMBER/ServiceCode/Value[text()='DNFT']/../../Parameters/AdditionalNumber/@value" AbsenceValue="" />
+         <Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_ADDITIONAL_NUMBER/ServiceCode/Value[text()='DNDT']/../../Parameters/AdditionalNumber/@value" AbsenceValue="" />
+         <Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_ADDITIONAL_NUMBER/ServiceCode/Value[text()='EXTNUM']/../../Parameters/AdditionalNumber/@value" AbsenceValue="" />
+         <Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_ADDITIONAL_NUMBER/ServiceCode/Value[text()='FRALFAX']/../../Parameters/AdditionalNumber/@value" AbsenceValue="" />
+      </Parameter>
+   </ParametersList>
+   <ErrorsList CodePage="ascii" />
 </Command>

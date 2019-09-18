@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.ChangeTDClass">
-  <Description>ChangeTDClassOnFP</Description>
-  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
-  <Properties GenerationType="DataSetXml" />
-  <Request>
-    <RequestTemplate>
-      <![CDATA[<DataSet Name="UpdateTDCDataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <Description>ChangeTDClassOnFP</Description>
+   <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
+   <Properties GenerationType="DataSetXml" />
+   <Request>
+      <RequestTemplate>
+         <![CDATA[<DataSet Name="UpdateTDCDataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Attributes>
     <Attribute Name="Label" Type="System.String" Value="UpdateTDC;##datetime##;[SCP_MARKER]"/>
     <Attribute Name="Protocol" Type="System.String" Value="Msmq"/>
@@ -24,20 +23,22 @@
     </Rows>
   </DataTable>
 </DataSet>]]>
-    </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="datetime" Type="Wellknown"/>
-    <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="TerminalDeviceID" Type="Wellknown"/>
-    <Item Name="PersonalAccount" Type="Wellknown"/>
-    <Item Name="SC.NEW_TERMINAL_DEVICE_CLASS" Type="Parameter"/>
-    <Item Name="FavoriteNumbersServices" Type="LocalDynamicParameter"/>
-  </Request>
-  <DynamicParametersList>
-    <DynamicParameter Name="FavoriteNumbersServices">
-      <Source Path="//string"/>
-      <DynamicObject Name="FavoriteNumbersServicesToUpdate" SkipMissed="True"/>
-    </DynamicParameter>
-  </DynamicParametersList>
-  <ErrorsList CodePage="ascii"/>
+      </RequestTemplate>
+      <EmulationPrintoutTemplate>
+         <![CDATA[]]>
+      </EmulationPrintoutTemplate>
+      <Item Name="datetime" Type="Wellknown" />
+      <Item Name="msisdn" Type="Wellknown" />
+      <Item Name="TerminalDeviceID" Type="Wellknown" />
+      <Item Name="PersonalAccount" Type="Wellknown" />
+      <Item Name="SC.NEW_TERMINAL_DEVICE_CLASS" Type="Parameter" />
+      <Item Name="FavoriteNumbersServices" Type="LocalDynamicParameter" />
+   </Request>
+   <DynamicParametersList>
+      <DynamicParameter Name="FavoriteNumbersServices">
+         <Source Path="//string" />
+         <DynamicObject Name="FavoriteNumbersServicesToUpdate" SkipMissed="True" />
+      </DynamicParameter>
+   </DynamicParametersList>
+   <ErrorsList CodePage="ascii" />
 </Command>

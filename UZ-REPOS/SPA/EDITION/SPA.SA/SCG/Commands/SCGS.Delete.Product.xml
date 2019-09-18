@@ -1,10 +1,9 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SCGS.Delete.Product" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<Description>Удаление подписки услуги на платформе SCG</Description>
-	<Author Name="Vladimir Khovanskiy" Date="2018-10-01+11:09"/>
-	<Request>
-		<RequestTemplate>
-			<![CDATA[
+   <Description>Удаление подписки услуги на платформе SCG</Description>
+   <Author Name="Vladimir Khovanskiy" Date="2018-10-01+11:09" />
+   <Request>
+      <RequestTemplate>
+         <![CDATA[
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:bas="http://basicservices.ib.sdp.huawei.com" xmlns:req="http://request.basicservices.ib.sdp.huawei.com" xmlns:sch="http://schema.ib.sdp.huawei.com">
 	<soapenv:Header/>
 	<soapenv:Body>
@@ -22,9 +21,9 @@
 		</bas:in1>
 	</soapenv:Body>
 </soapenv:Envelope>]]>
-		</RequestTemplate>
-		<Item Name="msisdn" Type="Wellknown"/>
-		<Item Name="productID" Type="Parameter"/>
-	</Request>
-	<ErrorsList CodePage="windows-1251"/>
+      </RequestTemplate>
+      <Item Name="msisdn" Type="Wellknown" />
+      <Item Name="productID" Type="Parameter" />
+   </Request>
+   <ErrorsList CodePage="windows-1251" />
 </Command>

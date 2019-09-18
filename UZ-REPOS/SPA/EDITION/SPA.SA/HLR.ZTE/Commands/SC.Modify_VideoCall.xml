@@ -1,20 +1,19 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.Modify_VideoCall">
-	<Description>Изменение видео звонка</Description>
-	<Author Name="system" Date="2018-09-20+09:00"/>
-	<Request>
-		<RequestTemplate>
-			<![CDATA[MOD Bear:MSISDN=##msisdn##,GenCDS=##action##;^M]]>
-		</RequestTemplate>
-		<Item Name="msisdn" Type="Wellknown"/>
-		<Item Name="action" Type="LocalParameter"/>
-	</Request>
-	<ParametersList>
-		<Parameter Name="action">
-			<Source Path="//AddList/RFS_HLR_VIDEOCALL" PresenceValue="1" AbsenceValue="0"/>
-		</Parameter>
-	</ParametersList>
-	<ErrorsList CodePage="windows-1251">
-		<Error Name="ERR3001" Value="SUCCESS"/>
-	</ErrorsList>
+   <Description>Изменение видео звонка</Description>
+   <Author Name="system" Date="2018-09-20+09:00" />
+   <Request>
+      <RequestTemplate>
+         <![CDATA[MOD Bear:MSISDN=##msisdn##,GenCDS=##action##;^M]]>
+      </RequestTemplate>
+      <Item Name="msisdn" Type="Wellknown" />
+      <Item Name="action" Type="LocalParameter" />
+   </Request>
+   <ParametersList>
+      <Parameter Name="action">
+         <Source Path="//AddList/RFS_HLR_VIDEOCALL" PresenceValue="1" AbsenceValue="0" />
+      </Parameter>
+   </ParametersList>
+   <ErrorsList CodePage="windows-1251">
+      <Error Name="ERR3001" Value="SUCCESS" />
+   </ErrorsList>
 </Command>

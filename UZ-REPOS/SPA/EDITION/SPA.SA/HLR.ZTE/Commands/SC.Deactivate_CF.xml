@@ -1,21 +1,20 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.Deactivate_CF">
-	<Description>Деактивация услуги переадресация вызова</Description>
-	<Author Name="system" Date="2018-09-20+09:00"/>
-	<Request>
-		<RequestTemplate>
-			<![CDATA[Reg FN:MSISDN=##msisdn##,SS=##CallForwardName##,Bsg=0,Register=0,Active=0;^M]]>
-		</RequestTemplate>
-		<Item Name="CallForwardName" Type="LocalParameter"/>
-		<Item Name="msisdn" Type="Wellknown"/>
-	</Request>
-	<ParametersList>
-		<Parameter Name="CallForwardName" IsChoice="true" AbsenceValue="">
-			<Source Path="//RFS_HLR_CFB" PostFormat="CFB"/>
-			<Source Path="//RFS_HLR_CFU" PostFormat="CFU"/>
-			<Source Path="//RFS_HLR_CFNRC" PostFormat="CFNRC"/>
-			<Source Path="//RFS_HLR_CFNRY" PostFormat="CFNRY"/>
-			<Source Path="//RFS_HLR_CFD" PostFormat="CFD"/>
-		</Parameter>
-	</ParametersList>
+   <Description>Деактивация услуги переадресация вызова</Description>
+   <Author Name="system" Date="2018-09-20+09:00" />
+   <Request>
+      <RequestTemplate>
+         <![CDATA[Reg FN:MSISDN=##msisdn##,SS=##CallForwardName##,Bsg=0,Register=0,Active=0;^M]]>
+      </RequestTemplate>
+      <Item Name="CallForwardName" Type="LocalParameter" />
+      <Item Name="msisdn" Type="Wellknown" />
+   </Request>
+   <ParametersList>
+      <Parameter Name="CallForwardName" IsChoice="true" AbsenceValue="">
+         <Source Path="//RFS_HLR_CFB" PostFormat="CFB" />
+         <Source Path="//RFS_HLR_CFU" PostFormat="CFU" />
+         <Source Path="//RFS_HLR_CFNRC" PostFormat="CFNRC" />
+         <Source Path="//RFS_HLR_CFNRY" PostFormat="CFNRY" />
+         <Source Path="//RFS_HLR_CFD" PostFormat="CFD" />
+      </Parameter>
+   </ParametersList>
 </Command>

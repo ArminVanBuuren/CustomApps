@@ -1,14 +1,14 @@
 <RepetitionTable xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="RepetitionTable.xsd">
-	<param name="RepeatForResult" value="HardwareConnectionError;cnt=1;timeout=0"/>
-	<param name="RepeatForResult" value="NoPrintout;cnt=1;timeout=0"/>
-	<param name="RepeatForResult" value="ClassInstanceConflict;cnt=1;timeout=0"/>
-	<param name="RepeatForResult" value="ConnectionError;cnt=1;timeout=0"/>
-	<param name="RepeatForResult" value="FAILURE;cnt=2;timeout=0"/>
-	<param name="RepeatForResult" value="CommandTimedOut;cnt=1;timeout=0"/>
-	<param name="RepeatForResult" value="OperationCancelled;cnt=3;timeout=1000;progression=algebraic;coef=2000"/>
-	<param name="RepeatForResult" value="CommandTemporaryRejected;cnt=5;timeout=5000;progression=algebraic;coef=5000"/>
-	<param name="RepeatForResult" value="ProcessingTemporaryUnavailable;cnt=5;timeout=5000;progression=algebraic;coef=5000"/>
-	<param name="RepeatForResult" value="ResourceInventoryTimeoutExpired;cnt=5;timeout=0"/>
-	<param name="RepeatForResult" value="ResourceLimitation;cnt=5;timeout=5000;progression=algebraic;coef=5000"/>
-	<param name="RepeatForResult" value="CommandConstructionError;cnt=3;timeout=0"/>
+   <param name="RepeatForResult" value="HardwareConnectionError;cnt=1;timeout=0" />
+   <param name="RepeatForResult" value="NoPrintout;cnt=1;timeout=0" />
+   <param name="RepeatForResult" value="ClassInstanceConflict;cnt=1;timeout=0" />
+   <param name="RepeatForResult" value="ConnectionError;cnt=1;timeout=0" />
+   <param name="RepeatForResult" value="FAILURE;cnt=2;timeout=0" />
+   <param name="RepeatForResult" value="CommandTimedOut;cnt=1;timeout=0" />
+   <param name="RepeatForResult" value="OperationCancelled;cnt=3;timeout=1000;progression=algebraic;coef=2000" />
+   <param name="RepeatForResult" value="CommandTemporaryRejected;cnt=5;timeout=5000;progression=algebraic;coef=5000" />
+   <param name="RepeatForResult" value="ProcessingTemporaryUnavailable;cnt=5;timeout=5000;progression=algebraic;coef=5000" />
+   <param name="RepeatForResult" value="ResourceInventoryTimeoutExpired;cnt=5;timeout=0" />
+   <param name="RepeatForResult" value="ResourceLimitation;cnt=5;timeout=5000;progression=algebraic;coef=5000" />
+   <param name="RepeatForResult" value="CommandConstructionError;cnt=3;timeout=0" />
 </RepetitionTable>
