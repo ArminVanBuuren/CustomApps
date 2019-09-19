@@ -1,0 +1,17 @@
+﻿<OperationData>
+   <Request Name="RequestMessage">
+      <AdditionalData Executable="True">
+         <WithdrawalList HaltMode="CancelOperation" Type="AnyOfListed">
+            <FRBLKOUT HaltMode="CancelOperation" Type="Optional" />
+         </WithdrawalList>
+         <ProvisionList Type="Optional" />
+         <RegisteredList Type="Optional" />
+         <BalanceStorage HaltMode="AbortProcess" Type="Mandatory">
+            <HostTypeCode Type="Optional" />
+            <HostId Type="Optional" />
+            <HostCode HaltMode="AbortProcess" Type="Mandatory" />
+         </BalanceStorage>
+      </AdditionalData>
+   </Request>
+   <Response Name="ResponseMessage" />
+</OperationData>

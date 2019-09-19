@@ -1,0 +1,28 @@
+﻿<OperationData>
+   <Request Name="RequestMessage">
+      <AdditionalData Executable="True">
+         <ProvisionList HaltMode="CancelOperation" Type="AnyOfListed">
+            <ChangeMsisdn Type="Optional">
+               <NewMSISDN HaltMode="AbortProcess" Type="AnyOfListed" />
+               <NewIMSI HaltMode="AbortProcess" Type="AnyOfListed" />
+               <IsChangeHLR HaltMode="AbortProcess" Type="Optional" />
+               <EncryptedKi HaltMode="AbortProcess" Type="Optional" />
+               <VersionsA3A8 HaltMode="AbortProcess" Type="Optional" />
+            </ChangeMsisdn>
+            <CB118 Type="Optional">
+               <NewMSISDN HaltMode="AbortProcess" Type="Mandatory" />
+            </CB118>
+         </ProvisionList>
+         <RegisteredList HaltMode="CancelOperation" Type="AnyOfListed">
+            <CB406278 Type="Optional" />
+            <FRASKUE Type="Optional" />
+         </RegisteredList>
+         <BalanceStorage HaltMode="AbortProcess" Type="Mandatory">
+            <HostTypeCode Type="Optional" />
+            <HostId Type="Optional" />
+            <HostCode HaltMode="AbortProcess" Type="Mandatory" />
+         </BalanceStorage>
+      </AdditionalData>
+   </Request>
+   <Response Name="ResponseMessage" />
+</OperationData>

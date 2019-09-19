@@ -1,0 +1,13 @@
+﻿<OperationData>
+   <Request Name="RequestMessage">
+      <AdditionalData HaltMode="AbortProcess" Type="AnyOfListed">
+         <BalanceStorage HaltMode="AbortProcess" Type="Mandatory">
+            <HostTypeCode Type="Optional" />
+            <HostId Type="Optional" />
+            <HostCode HaltMode="AbortProcess" Type="Mandatory" />
+         </BalanceStorage>
+         <RegisteredList HaltMode="AbortProcess" Type="Optional" />
+      </AdditionalData>
+   </Request>
+   <Response Name="ResponseMessage" />
+</OperationData>

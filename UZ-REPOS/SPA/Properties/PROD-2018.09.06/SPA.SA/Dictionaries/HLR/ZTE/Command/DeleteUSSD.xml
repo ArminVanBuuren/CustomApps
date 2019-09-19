@@ -1,0 +1,8 @@
+﻿<Command Name="DeleteUSSD" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+   <Description>DeleteUSSD</Description>
+   <Author Name="Timur Khamzin" Date="2015-11-16+15:00" />
+   <Request Template="MOD SS: MSISDN={0},PLSS_D=1;^M">
+      <Item Name="msisdn" Type="Wellknown" />
+   </Request>
+   <ErrorsList CodePage="windows-1251" />
+</Command>

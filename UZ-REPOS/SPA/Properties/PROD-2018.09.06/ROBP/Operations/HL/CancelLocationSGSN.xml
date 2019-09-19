@@ -1,0 +1,11 @@
+﻿<OperationData>
+   <Request Name="RequestMessage">
+      <AdditionalData Executable="True">
+         <ProvisionList HaltMode="AbortProcess" Type="AnyOfListed">
+            <CancelLocationSGSN HaltMode="CancelOperation" Type="Mandatory" />
+         </ProvisionList>
+         <RegisteredList Type="Optional" />
+      </AdditionalData>
+   </Request>
+   <Response Name="ResponseMessage" />
+</OperationData>

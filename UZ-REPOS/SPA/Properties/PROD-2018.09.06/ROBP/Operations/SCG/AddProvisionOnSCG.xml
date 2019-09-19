@@ -1,0 +1,17 @@
+﻿<OperationData>
+   <Request Name="RequestMessage">
+      <AdditionalData Executable="True">
+         <ProvisionList HaltMode="CancelOperation" Type="AnyOfListed">
+            <CB406278 Type="Optional" />
+            <FRASKUE Type="Optional" />
+         </ProvisionList>
+         <BalanceStorage HaltMode="AbortProcess" Type="Mandatory">
+            <HostTypeCode Type="Optional" />
+            <HostId Type="Optional" />
+            <HostCode HaltMode="AbortProcess" Type="Mandatory" />
+         </BalanceStorage>
+         <RegisteredList Type="Optional" />
+      </AdditionalData>
+   </Request>
+   <Response Name="ResponseMessage" />
+</OperationData>

@@ -1,0 +1,10 @@
+﻿<OperationData>
+   <Request Name="RequestMessage">
+      <AdditionalData Executable="True">
+         <RegisteredList HaltMode="CancelOperation" Type="AnyOfListed">
+            <FRMCA Type="Optional" />
+         </RegisteredList>
+      </AdditionalData>
+   </Request>
+   <Response Name="ResponseMessage" />
+</OperationData>

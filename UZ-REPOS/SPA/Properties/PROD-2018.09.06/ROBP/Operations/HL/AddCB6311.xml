@@ -1,0 +1,9 @@
+﻿<OperationData>
+   <Request Name="RequestMessage">
+      <AdditionalData Executable="True">
+         <ProvisionList HaltMode="AbortProcess" Type="AnyOfListed" />
+         <CB6311 HaltMode="CancelOperation" Type="Mandatory" />
+      </AdditionalData>
+   </Request>
+   <Response Name="ResponseMessage" />
+</OperationData>

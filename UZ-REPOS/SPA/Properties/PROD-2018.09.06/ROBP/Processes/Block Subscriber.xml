@@ -1,0 +1,43 @@
+﻿<BusinessProcessData name="Block Subscriber">
+   <businessprocess>
+      <scenario>
+         <objectlist>
+            <object name="OperationOnSA" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+         </objectlist>
+         <automat>
+            <node name="AddForcedBlockHLR" object="OperationOnSA">
+               <parameterslist>
+                  <param name="operation" value="AddForcedBlockHLR" />
+               </parameterslist>
+               <resultlist>
+                  <result value="" node="AddPartialBlockHLR" />
+               </resultlist>
+            </node>
+            <node name="AddPartialBlockHLR" object="OperationOnSA">
+               <parameterslist>
+                  <param name="operation" value="AddPartialBlockHLR" />
+               </parameterslist>
+               <resultlist>
+                  <result value="" node="AddLoseBlockHLR" />
+               </resultlist>
+            </node>
+            <node name="AddLoseBlockHLR" object="OperationOnSA">
+               <parameterslist>
+                  <param name="operation" value="AddLoseBlockHLR" />
+               </parameterslist>
+               <resultlist>
+                  <result value="" node="" />
+               </resultlist>
+            </node>
+            <!--node name="AddBlockMOBILE_SOLUTIONS" object="OperationOnSA">
+          <parameterslist>
+            <param name="operation" value="AddBlockMOBILE_SOLUTIONS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node-->
+         </automat>
+      </scenario>
+   </businessprocess>
+</BusinessProcessData>

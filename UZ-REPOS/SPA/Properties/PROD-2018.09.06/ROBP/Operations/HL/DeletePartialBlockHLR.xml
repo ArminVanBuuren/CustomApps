@@ -1,0 +1,13 @@
+﻿<OperationData>
+   <Request Name="RequestMessage">
+      <AdditionalData Executable="True">
+         <WithdrawalList HaltMode="CancelOperation" Type="AnyOfListed">
+            <FRPARTBL HaltMode="CancelOperation" Type="Optional" />
+            <FRBLOUTGO HaltMode="CancelOperation" Type="Optional" />
+         </WithdrawalList>
+         <ProvisionList Type="Optional" />
+         <RegisteredList Type="Optional" />
+      </AdditionalData>
+   </Request>
+   <Response Name="ResponseMessage" />
+</OperationData>

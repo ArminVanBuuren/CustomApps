@@ -1,0 +1,35 @@
+﻿<OperationData>
+   <Request Name="ExtendedRequestMessage">
+      <AdditionalData>
+         <ProvisionList HaltMode="AbortProcess" Type="Mandatory">
+            <ChangeTP HaltMode="AbortProcess" Type="Mandatory">
+               <PreviousPlatform Type="Optional">
+                  <HostTypeCode Type="Mandatory" />
+                  <HostId Type="Mandatory" />
+                  <HostCode Type="Mandatory" />
+               </PreviousPlatform>
+               <NewPlatform Type="Optional">
+                  <HostTypeCode Type="Mandatory" />
+                  <HostId Type="Mandatory" />
+                  <HostCode Type="Mandatory" />
+               </NewPlatform>
+            </ChangeTP>
+         </ProvisionList>
+         <RegisteredList HaltMode="CancelOperation" Type="AnyOfListed">
+            <CB406278 Type="Optional" />
+            <FRASKUE Type="Optional" />
+         </RegisteredList>
+         <ExternalIdentifier Type="Optional" />
+         <BalanceStorage HaltMode="AbortProcess" Type="Mandatory">
+            <HostTypeCode Type="Optional" />
+            <HostId Type="Optional" />
+            <HostCode HaltMode="AbortProcess" Type="Mandatory" />
+         </BalanceStorage>
+      </AdditionalData>
+   </Request>
+   <Response Name="ResponseMessage">
+      <AdditionalData>
+         <SubscribersDataList Type="Optional" Copy="CopyAll" />
+      </AdditionalData>
+   </Response>
+</OperationData>

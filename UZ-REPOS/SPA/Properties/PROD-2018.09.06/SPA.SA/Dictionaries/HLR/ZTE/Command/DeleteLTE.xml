@@ -1,0 +1,8 @@
+﻿<Command Name="DeleteLTE" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+   <Description>Удаление услуги 'LTE 4G' 1</Description>
+   <Author Name="Timur Khamzin" Date="2016-05-31+15:00" />
+   <Request Template="Mod BscEx:MSISDN={0},SubType=1;^M">
+      <Item Name="msisdn" Type="Wellknown" />
+   </Request>
+   <ErrorsList CodePage="windows-1251" />
+</Command>

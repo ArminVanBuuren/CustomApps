@@ -1,0 +1,187 @@
+﻿<scenario name="RestoreSession">
+   <include>
+      <scenario name="Sub\AddFRIP_sub" />
+      <scenario name="Sub\AddCorporateAPN_Sub" />
+   </include>
+   <objectList>
+      <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+      <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="ScenarioProcessor" class="FORIS.ScenarioProcessing.Base.SPF.SubscenarioProcessingUnit" assembly="FORIS.SPA.SPF.dll" />
+   </objectList>
+   <automat>
+      <node name="BySubscribersSplitter" object="BySubscribersSplitter">
+         <resultlist>
+            <result value="0" node="SingleSubscriberRequestDequeuer" />
+         </resultlist>
+      </node>
+      <node name="SingleSubscriberRequestDequeuer" object="Dequeuer">
+         <resultlist>
+            <result value="0" node="UnblockInternet" />
+            <result value="1" node="" />
+         </resultlist>
+         <parameterslist>
+            <param name="queueName" value="requestsSplittedBySubscriberQueue" />
+         </parameterslist>
+      </node>
+      <node name="UnblockInternet" object="Commander">
+         <resultlist>
+            <result value="" node="CheckFRASKUE" />
+         </resultlist>
+         <parameterslist>
+            <param name="CommandSource" value="Dictionary" />
+            <param name="Command" value="DeleteBPOS" />
+            <param name="Script" value="Command" />
+            <param name="AppendSubscribersData" value="false" />
+            <param name="ErrorDecodingType" value="ByString" />
+            <param name="DynamicObject" value="(empty)" />
+            <param name="OverwriteDetailedResult" value="true" />
+         </parameterslist>
+      </node>
+      <node name="CheckFRASKUE" object="IfMultipleXmlConditionsResolver">
+         <resultlist>
+            <result value="0" node="dummySUCCESS" />
+            <result value="1" node="CheckFRPARTAPN" />
+         </resultlist>
+         <parameterslist>
+            <param name="OrXmlPath:0" value="//RegisteredList/FRASKUE" />
+            <param name="OrXmlPath:1" value="//ProvisionList/FRASKUE" />
+         </parameterslist>
+      </node>
+      <node name="CheckFRPARTAPN" object="IfMultipleXmlConditionsResolver">
+         <resultlist>
+            <result value="0" node="dummySUCCESS" />
+            <result value="1" node="CheckBlocks" />
+         </resultlist>
+         <parameterslist>
+            <param name="OrXmlPath:0" value="//RegisteredList/FRPARTAPN" />
+            <param name="OrXmlPath:1" value="//ProvisionList/FRPARTAPN" />
+         </parameterslist>
+      </node>
+      <node name="CheckBlocks" object="IfMultipleXmlConditionsResolver">
+         <resultlist>
+            <result value="0" node="dummySUCCESS" />
+            <result value="1" node="AddAPNMyUMS" />
+         </resultlist>
+         <parameterslist>
+            <param name="OrXmlPath:0" value="//AdditionalData//FRPARTBL" />
+            <param name="OrXmlPath:1" value="//AdditionalData//FRBLKFIN" />
+            <param name="OrXmlPath:2" value="//AdditionalData//CBBLKLOST" />
+            <param name="OrXmlPath:3" value="//AdditionalData//FRBLKCHK" />
+            <param name="OrXmlPath:4" value="//AdditionalData//FRBLKNAR" />
+            <param name="OrXmlPath:5" value="//AdditionalData//FRBLKUSER" />
+            <param name="OrXmlPath:6" value="//AdditionalData//FRBLKPAY" />
+            <param name="OrXmlPath:7" value="//AdditionalData//FRBLKFROD" />
+            <param name="OrXmlPath:8" value="//AdditionalData//FRBLKPAY" />
+            <param name="OrXmlPath:9" value="//AdditionalData//FRTECHBLK" />
+            <param name="OrXmlPath:10" value="//AdditionalData//FRBLKOUT" />
+            <param name="OrXmlPath:11" value="//AdditionalData//FRBLKDZ" />
+            <param name="OrXmlPath:12" value="//AdditionalData//FRBLOUTGO" />
+         </parameterslist>
+      </node>
+      <node name="AddAPNMyUMS" object="IfCommander">
+         <resultlist>
+            <result value="0" node="AddLTENode1" />
+            <result value="1538" node="RecoverySessionNODE1" />
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="IfXmlPath" value="//AdditionalData/RegisteredList/FRNEWSCG" />
+            <param name="CommandSource" value="Dictionary" />
+            <param name="Command" value="AddBasicGPRS_APN_MYUMS" />
+            <param name="Script" value="Command" />
+            <param name="AppendSubscribersData" value="false" />
+            <param name="ErrorDecodingType" value="ByString" />
+            <param name="DynamicObject" value="(empty)" />
+            <param name="OverwriteDetailedResult" value="true" />
+         </parameterslist>
+      </node>
+      <node name="RecoverySessionNODE1" object="IfCommander">
+         <resultlist>
+            <result value="0" node="AddLTENode1" />
+            <result value="1538" node="AddLTENode1" />
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="IfXmlPath" value="//AdditionalData/RegisteredList/CB406278" />
+            <param name="CommandSource" value="Dictionary" />
+            <param name="Command" value="AddBasicGPRS_APN" />
+            <param name="Script" value="Command" />
+            <param name="AppendSubscribersData" value="false" />
+            <param name="ErrorDecodingType" value="ByString" />
+            <param name="DynamicObject" value="(empty)" />
+            <param name="OverwriteDetailedResult" value="true" />
+         </parameterslist>
+      </node>
+      <node name="AddLTENode1" object="IfCommander">
+         <resultlist>
+            <result value="0" node="CheckCorporateAPN" />
+            <result value="1538" node="CheckCorporateAPN" />
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="IfXmlPath" value="//AdditionalData/RegisteredList/FRUNLIMLTE" />
+            <param name="CommandSource" value="Dictionary" />
+            <param name="Command" value="AddLTE_2" />
+            <param name="Script" value="Command" />
+            <param name="AppendSubscribersData" value="false" />
+            <param name="ErrorDecodingType" value="ByString" />
+            <param name="DynamicObject" value="(empty)" />
+            <param name="OverwriteDetailedResult" value="true" />
+         </parameterslist>
+      </node>
+      <node name="CheckCorporateAPN" object="IfMultipleXmlConditionsResolver">
+         <resultlist>
+            <result value="0" node="AddCorporateAPN" />
+            <result value="1" node="CheckFRIP" />
+         </resultlist>
+         <parameterslist>
+            <param name="OrXmlPath:0" value="//AdditionalData/RegisteredList/FRCORPAPN" />
+         </parameterslist>
+      </node>
+      <node name="AddCorporateAPN" object="ScenarioProcessor">
+         <resultlist>
+            <result value="" node="dummySUCCESS" />
+         </resultlist>
+         <parameterslist>
+            <param name="Scenario" value="Sub\AddCorporateAPN_Sub" />
+         </parameterslist>
+      </node>
+      <node name="CheckFRIP" object="IfMultipleXmlConditionsResolver">
+         <resultlist>
+            <result value="0" node="AddFRIP" />
+            <result value="1" node="dummySUCCESS" />
+         </resultlist>
+         <parameterslist>
+            <param name="IfXmlPath" value="//AdditionalData/RegisteredList/FRIP" />
+         </parameterslist>
+      </node>
+      <node name="AddFRIP" object="ScenarioProcessor">
+         <resultlist>
+            <result value="" node="dummySUCCESS" />
+         </resultlist>
+         <parameterslist>
+            <param name="Scenario" value="Sub\AddFRIP_sub" />
+         </parameterslist>
+      </node>
+      <node name="dummySUCCESS" object="DummyResponder">
+         <resultlist>
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="OverallResult" value="SUCCESS" />
+            <param name="DetailedResult" value="SUCCESS" />
+            <param name="Delay" value="0" />
+         </parameterslist>
+      </node>
+      <node name="ResponseAssembler" object="ResponseAssembler">
+         <resultlist>
+            <result value="" node="SingleSubscriberRequestDequeuer" />
+         </resultlist>
+      </node>
+   </automat>
+</scenario>

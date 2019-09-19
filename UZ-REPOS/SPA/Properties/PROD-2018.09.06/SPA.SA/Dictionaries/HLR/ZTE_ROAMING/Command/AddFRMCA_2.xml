@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="AddFRMCA_2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Добавление услуги 'Вам Звонили'2</Description>
+	<Author Name="Timur Khamzin" Date="2015-11-16+15:00"/>
+	<Request Template='Reg FN :MSISDN=998972435210,SS=CFD,Bsg=0,Register=1,Active=1,CFDNRcAddr=998970000007;^M'>
+		<Item Name="msisdn" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="windows-1251"/>
+</Command>

@@ -1,0 +1,11 @@
+﻿<OperationData>
+   <Request Name="RequestMessage">
+      <AdditionalData Executable="True">
+         <ProvisionList HaltMode="CancelOperation" Type="AnyOfListed">
+            <FRZAPRETGS HaltMode="CancelOperation" Type="Optional" />
+            <CB2986 HaltMode="CancelOperation" Type="Optional" />
+         </ProvisionList>
+      </AdditionalData>
+   </Request>
+   <Response Name="ResponseMessage" />
+</OperationData>

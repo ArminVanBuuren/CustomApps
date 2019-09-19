@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Script Name="Command">
+	<write data="{0}" addToLog="false"/>
+	<waitregexp data="(.+)" regexpOptions="1010" timeout="20000" addToLog="true"/>
+	<!--read data="" timeout="1000"/-->
+</Script>

@@ -1,0 +1,11 @@
+﻿<Command Name="AddBlockOnGPRS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+   <Description>'Блокировка GPRS'</Description>
+   <Author Name="Timur Khamzin" Date="2015-04-14+15:00" />
+   <Request Template="MOD NAM: MSISDN={0},NAM=1;^M">
+      <Item Name="msisdn" Type="Wellknown" />
+   </Request>
+   <ErrorsList CodePage="windows-1251">
+      <Error Name="110109" Value="SUCCESS" />
+      <!--Subscriber does not exist-->
+   </ErrorsList>
+</Command>

@@ -1,0 +1,15 @@
+﻿<OperationData>
+   <Request Name="RequestMessage">
+      <AdditionalData Executable="True">
+         <RegisteredList HaltMode="CancelOperation" Type="Mandatory" />
+         <SubscriberType HaltMode="AbortProcess" Type="Mandatory" />
+         <Profile HaltMode="AbortProcess" Type="Mandatory" />
+         <BalanceStorage HaltMode="AbortProcess" Type="Mandatory">
+            <HostTypeCode Type="Optional" />
+            <HostId Type="Optional" />
+            <HostCode HaltMode="AbortProcess" Type="Mandatory" />
+         </BalanceStorage>
+      </AdditionalData>
+   </Request>
+   <Response Name="ResponseMessage" />
+</OperationData>

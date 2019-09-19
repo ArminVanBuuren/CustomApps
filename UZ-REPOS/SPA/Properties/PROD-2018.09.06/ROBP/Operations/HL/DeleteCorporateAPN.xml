@@ -1,0 +1,13 @@
+﻿<OperationData>
+   <Request Name="RequestMessage">
+      <AdditionalData Executable="True">
+         <WithdrawalList HaltMode="CancelOperation" Type="AnyOfListed">
+            <FRCORPAPN HaltMode="CancelOperation" Type="Optional" />
+            <FRAPNXB HaltMode="CancelOperation" Type="Optional" />
+            <FRAPNZIYOD HaltMode="CancelOperation" Type="Optional" />
+         </WithdrawalList>
+         <RegisteredList Type="Optional" />
+      </AdditionalData>
+   </Request>
+   <Response Name="ResponseMessage" />
+</OperationData>

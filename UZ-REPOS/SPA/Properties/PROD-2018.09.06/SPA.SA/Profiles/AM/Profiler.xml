@@ -1,0 +1,693 @@
+<Profiler>
+  <Activate Name="Permanent" Path="C:\FORISLOG\SPA\SA\%APP_NAME%\Permanent\permanent.%DATE%_N%ID%" ChangeOn="00:30:00">
+    <Group Name="ScriptSocket">
+      <Message Name="ScriptSocket.ERROR"/>
+      <Message Name="ScriptSocket.WARNING"/>
+      <!--<Message Name="ScriptSocket.INFORMATION"/>-->
+      <Message Name="ScriptSocket.INITIALIZATION"/>
+      <Message Name="ScriptSocket.CONNECT"/>
+      <Message Name="ScriptSocket.DISCONNECT"/>
+      <Message Name="ScriptSocket.LOGIN"/>
+      <!--<Message Name="ScriptSocket.TX_MESSAGE"/>-->
+      <!--<Message Name="ScriptSocket.RX_MESSAGE"/>-->
+      <!--<Message Name="ScriptSocket.TRACE0"/>-->
+      <!--<Message Name="ScriptSocket.TRACE1"/>-->
+      <!--<Message Name="ScriptSocket.TRACE2"/>-->
+      <!--<Message Name="ScriptSocket.TRACE3"/>-->
+      <!--<Message Name="ScriptSocket.TRACE4"/>-->
+      <!--<Message Name="ScriptSocket.TRACE5"/>-->
+      <!--<Message Name="ScriptSocket.TRACE6"/>-->
+    </Group>
+    <Group Name="Activator">
+      <Message Name="Activator.ALARM" />
+      <!--<Message Name="Activator.DISPOSE" />-->
+      <!--<Message Name="Activator.DEQUEUE" />-->
+      <!--<Message Name="Activator.DEQUEUE_ASYNC" />-->
+      <!--<Message Name="Activator.ENQUEUE" />-->
+      <!--<Message Name="Activator.ENQUEUE_ASYNC" />-->
+      <Message Name="Activator.ERROR" />
+      <!--<Message Name="Activator.REPEAT" />-->
+      <!--<Message Name="Activator.RESTORE" />-->
+      <!--<Message Name="Activator.RX_ASYNC" />-->
+      <!--<Message Name="Activator.RX_MESSAGE" />-->
+      <!--<Message Name="Activator.STOP" />-->
+      <!--<Message Name="Activator.START" />-->
+      <!--<Message Name="Activator.TX_MESSAGE" />-->
+    </Group>
+    <Group Name="AmResponseThread">
+      <!--<Message Name="AmResponseThread.DISPOSE" />-->
+      <Message Name="AmResponseThread.ERROR" />
+      <!--<Message Name="AmResponseThread.INITIALIZATION" />-->
+      <Message Name="AmResponseThread.WARNING" />
+      <!--<Message Name="AmResponseThread.START" />-->
+      <!--<Message Name="AmResponseThread.STOP" />-->
+      <!--<Message Name="AmResponseThread.TRACE0" />-->
+      <!--<Message Name="AmResponseThread.TRACE1" />-->
+      <!--<Message Name="AmResponseThread.TRACE2" />-->
+      <!--<Message Name="AmResponseThread.TRACE3" />-->
+      <!--<Message Name="AmResponseThread.TRACE4" />-->
+      <!--<Message Name="AmResponseThread.TRACE5" />-->
+      <!--<Message Name="AmResponseThread.REJECT" />-->
+      <!--<Message Name="AmResponseThread.RX_MESSAGE" />-->
+      <!--<Message Name="AmResponseThread.TX_MESSAGE" />-->
+    </Group>
+    <Group Name="AmSocket">
+      <Message Name="AmSocket.ERROR" />
+      <Message Name="AmSocket.INITIALIZATION" />
+      <Message Name="AmSocket.WARNING" />
+      <Message Name="AmSocket.START" />
+      <Message Name="AmSocket.STOP" />
+      <!--<Message Name="AmSocket.TRACE0" />-->
+      <!--<Message Name="AmSocket.TRACE1" />-->
+      <!--<Message Name="AmSocket.TRACE2" />-->
+      <!--<Message Name="AmSocket.TRACE3" />-->
+      <!--<Message Name="AmSocket.TRACE4" />-->
+      <!--<Message Name="AmSocket.TRACE5" />-->
+      <Message Name="AmSocket.RX_MESSAGE" />
+      <Message Name="AmSocket.TX_MESSAGE" />
+      <Message Name="AmSocket.CLOSE" />
+      <!--<Message Name="AmSocket.REM_THREAD" />-->
+      <!--<Message Name="AmSocket.WCF_THREAD" />-->
+    </Group>
+    <Group Name="Application">
+      <Message Name="Application.ERROR" />
+      <!--<Message Name="Application.INITIALIZATION" />-->
+      <!--<Message Name="Application.REPORT" />-->
+      <!--<Message Name="Application.THREADS" />-->
+      <!--<Message Name="Application.START" />-->
+      <!--<Message Name="Application.STOP" />-->
+      <Message Name="Application.WARNING" />
+      <!--<Message Name="Application.ASSEMBLIES" />-->
+    </Group>
+    <Group Name="AsyncProcessor">
+      <!--<Message Name="AsyncProcessor.DISPOSE" />-->
+      <Message Name="AsyncProcessor.ERROR" />
+      <!--<Message Name="AsyncProcessor.INITIALIZATION" />-->
+      <!--<Message Name="AsyncProcessor.REPORT" />-->
+      <!--<Message Name="AsyncProcessor.START" />-->
+      <!--<Message Name="AsyncProcessor.STOP" />-->
+    </Group>
+    <Group Name="AsyncReqDispatcher">
+      <!--<Message Name="AsyncReqDispatcher.DISPOSE" />-->
+      <Message Name="AsyncReqDispatcher.ERROR" />
+      <!--<Message Name="AsyncReqDispatcher.EXPIRED" />-->
+      <!--<Message Name="AsyncReqDispatcher.RX_MESSAGE" />-->
+      <!--<Message Name="AsyncReqDispatcher.START" />-->
+      <!--<Message Name="AsyncReqDispatcher.STOP" />-->
+    </Group>
+    <Group Name="BmsSocket">
+      <Message Name="BmsSocket.ERROR" />
+      <!--<Message Name="BmsSocket.TX_MESSAGE" />-->
+      <!--<Message Name="BmsSocket.RX_MESSAGE" />-->
+      <!--<Message Name="BmsSocket.CLOSE" />-->
+      <!--<Message Name="BmsSocket.WCF_THREAD" />-->
+      <!--<Message Name="BmsSocket.CONNECTION" />-->
+    </Group>
+    <Group Name="BPM">
+      <Message Name="BPM.Error" />
+      <Message Name="BPM.Alarm" />
+      <!--<Message Name="ARCHIVE.Transaction" />-->
+    </Group>
+    <Group Name="BPMProcessingUnit">
+      <!--<Message Name="ProcUnit.NoSubscribers" />-->
+      <!--<Message Name="ProcUnit.Send" />-->
+      <!--<Message Name="ProcUnit.Receive" />-->
+      <Message Name="ProcUnit.Error" />
+      <!--<Message Name="ProcUnit.SkipOperation" />-->
+    </Group>
+    <Group Name="CallForwarding">
+      <Message Name="CallForwarding.ERROR" />
+    </Group>
+    <Group Name="CmisSocket">
+      <Message Name="CmisSocket.ERROR" />
+      <!--<Message Name="CmisSocket.CONNECT" />-->
+      <!--<Message Name="CmisSocket.TRANSMIT" />-->
+      <!--<Message Name="CmisSocket.RECEIVE" />-->
+    </Group>
+    <Group Name="CmisThread">
+      <Message Name="CmisThread.ERROR" />
+      <!--<Message Name="CmisThread.REPORT" />-->
+      <Message Name="CmisThread.RX_ERROR" />
+      <!--<Message Name="CmisThread.TX_MESSAGE" />-->
+      <!--<Message Name="CmisThread.RX_MESSAGE" />-->
+      <!--<Message Name="CmisThread.CREATE" />-->
+      <!--<Message Name="CmisThread.DELETE" />-->
+      <!--<Message Name="CmisThread.CONNECT" />-->
+      <Message Name="CmisThread.WARNING" />
+    </Group>
+    <Group Name="CommBpmSaDB">
+      <Message Name="CommBpmSaDB.ERROR" />
+      <!--<Message Name="CommBpmSaDB.RX_MESSAGE" />-->
+    </Group>
+    <Group Name="CommMSMQ">
+      <Message Name="CommMSMQ.ERROR" />
+      <!--<Message Name="CommMSMQ.INITIALIZATION" />-->
+      <!--<Message Name="CommMSMQ.INFORMATION" />-->
+      <!--<Message Name="CommMSMQ.REPORT" />-->
+      <!--<Message Name="CommMSMQ.RX_MESSAGE" />-->
+      <!--<Message Name="CommMSMQ.START" />-->
+      <!--<Message Name="CommMSMQ.STOP" />-->
+      <Message Name="CommMSMQ.TX_ERROR" />
+      <!--<Message Name="CommMSMQ.TX_MESSAGE" />-->
+      <!--<Message Name="CommMSMQ.BEGIN_TX_MESSAGE" />-->
+      <!--<Message Name="CommMSMQ.ThreadInterrupted" />-->
+    </Group>
+    <!--<Group Name="CommMSMQSwitch"><Message Name="CommMSMQSwitch.CorrectMessageCount" /><Message Name="CommMSMQSwitch.INITIALIZATION" /></Group>-->
+    <Group Name="CommOracleQueue">
+      <Message Name="CommOracleQueue.ERROR" />
+      <!--<Message Name="CommOracleQueue.INFORMATION" />-->
+      <!--<Message Name="CommOracleQueue.START" />-->
+      <!--<Message Name="CommOracleQueue.RX_MESSAGE" />-->
+      <!--<Message Name="CommOracleQueue.TX_MESSAGE" />-->
+    </Group>
+    <Group Name="CommQueueMediator">
+      <Message Name="CommQueueMediator.ERROR" />
+      <!--<Message Name="CommQueueMediator.INFORMATION" />-->
+      <!--<Message Name="CommQueueMediator.START" />-->
+      <!--<Message Name="CommQueueMediator.TX_MESSAGE" />-->
+      <!--<Message Name="CommQueueMediator.RX_MESSAGE" />-->
+    </Group>
+    <Group Name="CommRemoting">
+      <Message Name="CommRemoting.ERROR" />
+      <!--<Message Name="CommRemoting.INITIALIZATION" />-->
+      <!--<Message Name="CommRemoting.START" />-->
+      <!--<Message Name="CommRemoting.RX_MESSAGE" />-->
+      <!--<Message Name="CommRemoting.TX_MESSAGE" />-->
+    </Group>
+    <Group Name="CommTCP">
+      <Message Name="CommTCP.ERROR" />
+      <Message Name="CommTCP.WARNING" />
+      <!--<Message Name="CommTCP.INFORMATION" />-->
+      <!--<Message Name="CommTCP.CONNECT" />-->
+      <!--<Message Name="CommTCP.DISCONNECT" />-->
+      <!--<Message Name="CommTCP.RX_MESSAGE" />-->
+      <!--<Message Name="CommTCP.TX_MESSAGE" />-->
+    </Group>
+    <Group Name="CommunicatorProxyDB">
+      <Message Name="ProxyDB.Error" />
+      <Message Name="ProxyDB.InvalidMessageId" />
+      <!--<Message Name="ProxyDB.Receive" />-->
+      <!--<Message Name="ProxyDB.Send" />-->
+      <!--<Message Name="ProxyDB.TrySend" />-->
+      <Message Name="ProxyDB.UnexpectedMessageType" />
+    </Group>
+    <Group Name="CommWCF">
+      <!--<Message Name="WCF.TX_MESSAGE" />-->
+      <Message Name="WCF.ERROR" />
+    </Group>
+    <Group Name="Database">
+      <!--<Message Name="Database.DBCommunication" />-->
+      <!--<Message Name="Database.ORAInterface" />-->
+      <!--<Message Name="Database.REPORT" />-->
+      <Message Name="Warning.CBP" />
+      <Message Name="Error.CBP" />
+      <Message Name="Error.ORACLE" />
+      <!--<Message Name="CBP.Trace" />-->
+      <!--<Message Name="ROBP.Trace" />-->
+      <!--<Message Name="RI.Trace" />-->
+      <Message Name="RI.Error" />
+      <!--<Message Name="RI.TraceResult" />-->
+    </Group>
+    <Group Name="DatabaseSocket">
+      <Message Name="DatabaseSocket.ERROR" />
+      <!--<Message Name="DatabaseSocket.INITIALIZATION" />-->
+      <!--<Message Name="DatabaseSocket.RX_MESSAGE" />-->
+      <!--<Message Name="DatabaseSocket.TX_MESSAGE" />-->
+    </Group>
+    <Group Name="Dictionary">
+      <!--<Message Name="Dictionary.INITIALIZATION" />-->
+      <Message Name="Dictionary.ERROR" />
+    </Group>
+    <Group Name="EventGateway">
+      <!--<Message Name="EventGateway.RUN" />-->
+      <!--<Message Name="EventGateway.RX_MESSAGE" />-->
+      <Message Name="EventGateway.ERROR" />
+      <!--<Message Name="EventGateway.REPORT" />-->
+      <!--<Message Name="EventGateway.START" />-->
+      <!--<Message Name="EventGateway.STOP" />-->
+    </Group>
+    <Group Name="Framework">
+      <Message Name="Framework.ERROR" />
+      <!--<Message Name="Framework.INITIALIZATION" />-->
+      <!--<Message Name="Framework.START" />-->
+      <!--<Message Name="Framework.STOP" />-->
+    </Group>
+    <Group Name="Ftp">
+      <Message Name="Ftp.ERROR" />
+      <!--<Message Name="Ftp.UPLOADING" />-->
+      <!--<Message Name="Ftp.UPLOADED" />-->
+      <!--<Message Name="Ftp.DOWNLOADING" />-->
+      <!--<Message Name="Ftp.DOWNLOADED" />-->
+      <!--<Message Name="Ftp.TRACE1" />-->
+      <!--<Message Name="Ftp.TRACE2" />-->
+      <!--<Message Name="Ftp.TRACE3" />-->
+      <!--<Message Name="Ftp.TRACE4" />-->
+      <!--<Message Name="Ftp.TRACE5" />-->
+      <!--<Message Name="Ftp.RX_MESSAGE" />-->
+      <!--<Message Name="Ftp.TX_MESSAGE" />-->
+    </Group>
+    <Group Name="FTPGateway">
+      <Message Name="FTPGateway.ERROR" />
+      <!--<Message Name="FTPGateway.REPORT" />-->
+      <!--<Message Name="FTPGateway.RX_MESSAGE" />-->
+      <!--<Message Name="FTPGateway.TX_MESSAGE" />-->
+      <!--<Message Name="FTPGateway.INFORMATION" />-->
+      <!--<Message Name="FTPGateway.START" />-->
+      <!--<Message Name="FTPGateway.STOP" />-->
+    </Group>
+    <Group Name="FtpSocket">
+      <Message Name="FtpSocket.ERROR" />
+      <!--<Message Name="FtpSocket.TX_MESSAGE" />-->
+      <!--<Message Name="FtpSocket.RX_MESSAGE" />-->
+    </Group>
+    <Group Name="HttpSocket">
+      <Message Name="HttpSocket.ERROR" />
+      <!--<Message Name="HttpSocket.TRACE1" />-->
+      <!--<Message Name="HttpSocket.TRACE2" />-->
+      <!--<Message Name="HttpSocket.TRACE3" />-->
+      <!--<Message Name="HttpSocket.TRACE4" />-->
+      <!--<Message Name="HttpSocket.TX_MESSAGE" />-->
+      <!--<Message Name="HttpSocket.RX_MESSAGE" />-->
+    </Group>
+    <Group Name="InstantLink">
+      <Message Name="InstantLink.ALARM" />
+      <!--<Message Name="InstantLink.DISPOSE" />-->
+      <Message Name="InstantLink.ERROR" />
+      <!--<Message Name="InstantLink.START" />-->
+      <!--<Message Name="InstantLink.RX_MESSAGE" />-->
+      <!--<Message Name="InstantLink.TX_MESSAGE" />-->
+      <!--<Message Name="InstantLink.TIMEOUT" />-->
+      <!--<Message Name="InstantLink.LOGIN" />-->
+      <!--<Message Name="InstantLink.LOGIN_ACK" />-->
+      <!--<Message Name="InstantLink.REGISTER" />-->
+      <!--<Message Name="InstantLink.REGISTER_ACK" />-->
+      <!--<Message Name="InstantLink.LOGOUT" />-->
+      <!--<Message Name="InstantLink.LOGOUT_ACK" />-->
+      <!--<Message Name="InstantLink.CMDERROR" />-->
+      <!--<Message Name="InstantLink.RESPONSE" />-->
+      <!--<Message Name="InstantLink.RESPONSE_ACK" />-->
+      <Message Name="InstantLink.UNEXPECTED_MESSAGE" />
+    </Group>
+    <Group Name="InstantLinkSocket">
+      <Message Name="InstantLinkSocket.ERROR" />
+      <!--<Message Name="InstantLinkSocket.INITIALIZATION" />-->
+      <!--<Message Name="InstantLinkSocket.STOP" />-->
+      <!--<Message Name="InstantLinkSocket.INFORMATION" />-->
+      <!--<Message Name="InstantLinkSocket.TX_MESSAGE" />-->
+      <!--<Message Name="InstantLinkSocket.RX_MESSAGE" />-->
+      <!--<Message Name="InstantLinkSocket.TRACE5" />-->
+    </Group>
+    <Group Name="MSMQGateway">
+      <!--<Message Name="MSMQGateway.INITIALIZATION" />-->
+      <!--<Message Name="MSMQGateway.START" />-->
+      <!--<Message Name="MSMQGateway.STOP" />-->
+      <!--<Message Name="MSMQGateway.RX_MESSAGE" />-->
+      <!--<Message Name="MSMQGateway.TX_MESSAGE" />-->
+      <!--<Message Name="MSMQGateway.REPORT" />-->
+      <Message Name="MSMQGateway.ERROR" />
+    </Group>
+    <Group Name="Postprocessing">
+      <Message Name="PostProc.Error" />
+      <!--<Message Name="PostProc.Run" />-->
+      <!--<Message Name="PostProc.SendResponse" />-->
+      <!--<Message Name="PostProc.ResultProcessing" />-->
+      <!--<Message Name="PostProc.QueueFiltering" />-->
+      <!--<Message Name="PostProc.ProcessDeleted" />-->
+      <!--<Message Name="PostProc.ProcessDeleting" />-->
+      <!--<Message Name="PostProc.PoolStopping" />-->
+      <!--<Message Name="PostProc.PoolStopped" />-->
+      <!--<Message Name="PostProc.Report" />-->
+      <!--<Message Name="PostProc.SubscriberDataTrace" />-->
+      <!--<Message Name="PostProc.Receive" />-->
+    </Group>
+    <Group Name="Preprocessing">
+      <Message Name="PreProc.Error" />
+      <Message Name="PreProc.Warning" />
+      <!--<Message Name="PreProc.ReceiveRequest" />-->
+      <!--<Message Name="PreProc.RejectRequest" />-->
+      <!--<Message Name="PreProc.ProcessMessage" />-->
+      <!--<Message Name="PreProc.ThreadExec" />-->
+      <!--<Message Name="PreProc.Split" />-->
+      <!--<Message Name="PreprocDependencyQueue.RequestEnqueued" />-->
+      <!--<Message Name="PreprocDependencyQueue.RequestDequeued" />-->
+      <!--<Message Name="PreProcDisp.ReceiveRequest" />-->
+      <!--<Message Name="PreProcDisp.ProcessMessage" />-->
+      <!--<Message Name="PreProc.WaitForHostActivate" />-->
+      <!--<Message Name="WaitingForActivateQueue.AddRequest" />-->
+      <!--<Message Name="WaitingForActivateQueue.RemoveRequest" />-->
+      <!--<Message Name="PreProc.RobpBpDescription" />-->
+      <!--<Message Name="PreProc.RobpOperationsData" />-->
+      <!--<Message Name="PreProc.RobpGroupsData" />-->
+    </Group>
+    <Group Name="Processing">
+      <Message Name="Proc.Error" />
+      <Message Name="Proc.Warning" />
+      <!--<Message Name="Proc.Run" />-->
+      <!--<Message Name="Proc.Init" />-->
+      <!--<Message Name="Proc.Debug" />-->
+      <!--<Message Name="Proc.AddParentInfo" />-->
+      <!--<Message Name="Proc.RemoveParentInfo" />-->
+      <!--<Message Name="Proc.Report" />-->
+      <!--<Message Name="Proc.CalcChilds" />-->
+      <!--<Message Name="DependedQueue.Add" />-->
+      <!--<Message Name="DependedQueue.Delete" />-->
+      <!--<Message Name="DependedQueue.GetNext" />-->
+      <!--<Message Name="ProcThread.RunScenario" />-->
+      <!--<Message Name="ProcThread.ScenarioCompleted" />-->
+    </Group>
+    <Group Name="QueueMediator">
+      <!--<Message Name="QueueMediator.INFORMATION" />-->
+      <!--<Message Name="QueueMediator.RUN" />-->
+      <Message Name="QueueMediator.ERROR" />
+      <!--<Message Name="QueueMediator.REPORT" />-->
+      <!--<Message Name="QueueMediator.START" />-->
+      <!--<Message Name="QueueMediator.STOP" />-->
+      <!--<Message Name="QueueMediator.Reset" />-->
+      <!--<Message Name="QueueMediator.Commit" />-->
+      <!--<Message Name="QueueMediator.Abort" />-->
+      <!--<Message Name="QueueMediator.Dequeue" />-->
+      <!--<Message Name="QueueMediator.Enqueue" />-->
+    </Group>
+    <Group Name="ReqCoprocessor">
+      <Message Name="ReqCoprocessor.ALARM" />
+      <!--<Message Name="ReqCoprocessor.DISPOSE" />-->
+      <Message Name="ReqCoprocessor.ERROR" />
+      <!--<Message Name="ReqCoprocessor.RX_ASYNC" />-->
+      <!--<Message Name="ReqCoprocessor.RX_EXPIRED" />-->
+      <!--<Message Name="ReqCoprocessor.RX_MESSAGE" />-->
+      <!--<Message Name="ReqCoprocessor.SCENARIO" />-->
+      <!--<Message Name="ReqCoprocessor.START" />-->
+      <!--<Message Name="ReqCoprocessor.STOP" />-->
+      <!--<Message Name="ReqCoprocessor.TX_MESSAGE" />-->
+    </Group>
+    <Group Name="ReqDbDispatcher">
+      <!--<Message Name="ReqDbDispatcher.DISPOSE" />-->
+      <Message Name="ReqDbDispatcher.ERROR" />
+      <Message Name="ReqDbDispatcher.RX_MESSAGE" />
+      <!--<Message Name="ReqDbDispatcher.START" />-->
+      <!--<Message Name="ReqDbDispatcher.STOP" />-->
+      <Message Name="ReqDbDispatcher.TX_MESSAGE" />
+      <!--<Message Name="ReqDbDispatcher.NE_STATE" />-->
+    </Group>
+    <Group Name="ReqDispatcher">
+      <Message Name="ReqDispatcher.ALARM" />
+      <!--<Message Name="ReqDispatcher.DISPOSE" />-->
+      <Message Name="ReqDispatcher.ERROR" />
+      <!--<Message Name="ReqDispatcher.INITIALIZATION" />-->
+      <!--<Message Name="ReqDispatcher.RX_MESSAGE" />-->
+      <!--<Message Name="ReqDispatcher.START" />-->
+      <!--<Message Name="ReqDispatcher.STOP" />-->
+      <!--<Message Name="ReqDispatcher.TX_MESSAGE" />-->
+    </Group>
+    <Group Name="ReqProcessor">
+      <!--<Message Name="ReqProcessor.DISPOSE" />-->
+      <Message Name="ReqProcessor.ERROR" />
+      <!--<Message Name="ReqProcessor.POST" />-->
+      <!--<Message Name="ReqProcessor.REPORT" />-->
+      <!--<Message Name="ReqProcessor.RX_EXPIRED" />-->
+      <!--<Message Name="ReqProcessor.RX_MESSAGE" />-->
+      <!--<Message Name="ReqProcessor.TX_MESSAGE" />-->
+      <!--<Message Name="ReqProcessor.REPEAT" />-->
+      <!--<Message Name="ReqProcessor.START" />-->
+      <!--<Message Name="ReqProcessor.STOP" />-->
+    </Group>
+    <Group Name="ScpSocket">
+      <Message Name="ScpSocket.ERROR" />
+      <!--<Message Name="ScpSocket.INITIALIZATION" />-->
+      <!--<Message Name="ScpSocket.WARNING" />-->
+      <!--<Message Name="ScpSocket.START" />-->
+      <!--<Message Name="ScpSocket.STOP" />-->
+      <!--<Message Name="ScpSocket.TRACE0" />-->
+      <!--<Message Name="ScpSocket.TRACE1" />-->
+      <!--<Message Name="ScpSocket.TRACE2" />-->
+      <!--<Message Name="ScpSocket.TRACE3" />-->
+      <!--<Message Name="ScpSocket.TRACE4" />-->
+      <!--<Message Name="ScpSocket.TRACE5" />-->
+      <!--<Message Name="ScpSocket.RX_MESSAGE" />-->
+      <!--<Message Name="ScpSocket.TX_MESSAGE" />-->
+      <!--<Message Name="ScpSocket.CLOSE" />-->
+      <!--<Message Name="ScpSocket.REM_THREAD" />-->
+      <!--<Message Name="ScpSocket.WCF_THREAD" />-->
+      <!--<Message Name="ScpSocket.CONNECT" />-->
+      <!--<Message Name="ScpSocket.REFRESH" />-->
+    </Group>
+    <Group Name="SerialPort">
+      <Message Name="SerialPort.ERROR" />
+      <Message Name="SerialPort.WARNING" />
+      <!--<Message Name="SerialPort.INITIALIZATION" />-->
+      <!--<Message Name="SerialPort.START" />-->
+      <!--<Message Name="SerialPort.STOP" />-->
+      <!--<Message Name="SerialPort.TRANSMIT" />-->
+      <!--<Message Name="SerialPort.RECEIVE" />-->
+      <!--<Message Name="SerialPort.RECEIVE.ERROR" />-->
+      <!--<Message Name="SerialPort.PINCHANGED" />-->
+    </Group>
+    <Group Name="SmppSocket">
+      <Message Name="SmppSocket.ERROR" />
+      <!--<Message Name="SmppSocket.INITIALIZATION" />-->
+      <!--<Message Name="SmppSocket.DEAD_MESSAGE" />-->
+      <!--<Message Name="SmppSocket.TX_MESSAGE" />-->
+      <!--<Message Name="SmppSocket.RX_MESSAGE" />-->
+    </Group>
+    <Group Name="SoapSocket">
+      <!--<Message Name="SoapSocket.INITIALIZATION" />-->
+      <Message Name="SoapSocket.WARNING" />
+      <Message Name="SoapSocket.ERROR" />
+      <!--<Message Name="SoapSocket.RX_MESSAGE" />-->
+      <!--<Message Name="SoapSocket.TX_MESSAGE" />-->
+      <!--<Message Name="SoapSocket.STOP" />-->
+      <!--<Message Name="SoapSocket.INFORMATION" />-->
+      <!--<Message Name="SoapSocket.TRACE5" />-->
+    </Group>
+    <Group Name="SocketsManager">
+      <!--<Message Name="SocketsManager.DISPOSE" />-->
+      <Message Name="SocketsManager.ERROR" />
+      <!--<Message Name="SocketsManager.START" />-->
+      <!--<Message Name="SocketsManager.STOP" />-->
+      <!--<Message Name="SocketsManager.TRACE1" />-->
+      <!--<Message Name="SocketsManager.TRACE2" />-->
+      <!--<Message Name="SocketsManager.TRACE3" />-->
+      <!--<Message Name="SocketsManager.TRACE4" />-->
+      <!--<Message Name="SocketsManager.TRACE5" />-->
+    </Group>
+    <Group Name="SPF">
+      <Message Name="SPF.ERROR" />
+      <!--<Message Name="SPF.EXECUTING" />-->
+      <Message Name="SPF.EXECUTED" />
+      <!--<Message Name="SPF.START" />-->
+      <!--<Message Name="SPF.STOP" />-->
+      <!--<Message Name="SPF.GATEWAY" />-->
+      <!--<Message Name="SPF.GW_REASSIGN" />-->
+      <!--<Message Name="SPF.CLUSTER" />-->
+      <!--<Message Name="SPF.PAUSE" />-->
+      <!--<Message Name="SPF.RESUME" />-->
+      <!--<Message Name="SPF.DEBUG" />-->
+    </Group>
+    <Group Name="SPF.ProcessingUnit">
+      <Message Name="SPF.ProcUnit.ERROR" />
+      <!--<Message Name="SPF.ProcUnit.ENTER" />-->
+      <!--<Message Name="SPF.ProcUnit.LEAVE" />-->
+      <!--<Message Name="SPF.ProcUnit.TRACE1" />-->
+      <!--<Message Name="SPF.ProcUnit.TRACE2" />-->
+      <!--<Message Name="SPF.ProcUnit.TRACE3" />-->
+      <!--<Message Name="SPF.ProcUnit.TRACE4" />-->
+      <!--<Message Name="SPF.ProcUnit.TRACE5" />-->
+      <!--<Message Name="SPF.ProcUnit.TRACE6" />-->
+      <!--<Message Name="SPF.ProcUnit.TRACE7" />-->
+      <!--<Message Name="SPF.ProcUnit.TRACE8" />-->
+    </Group>
+    <Group Name="SshSocket">
+      <Message Name="SshSocket.ERROR" />
+      <!--<Message Name="SshSocket.INITIALIZATION" />-->
+      <!--<Message Name="SshSocket.STOP" />-->
+      <!--<Message Name="SshSocket.INFORMATION" />-->
+      <!--<Message Name="SshSocket.TX_MESSAGE" />-->
+      <!--<Message Name="SshSocket.RX_MESSAGE" />-->
+      <!--<Message Name="SshSocket.TRACE5" />-->
+    </Group>
+    <Group Name="TelnetSocket">
+      <Message Name="TelnetSocket.ERROR" />
+      <!--<Message Name="TelnetSocket.INITIALIZATION" />-->
+      <!--<Message Name="TelnetSocket.STOP" />-->
+      <!--<Message Name="TelnetSocket.INFORMATION" />-->
+      <!--<Message Name="TelnetSocket.TX_MESSAGE" />-->
+      <!--<Message Name="TelnetSocket.RX_MESSAGE" />-->
+      <!--<Message Name="TelnetSocket.TRACE5" />-->
+    </Group>
+    <Group Name="TimetableProcessor">
+      <!--<Message Name="TimetableProcessor.INITIALIZATION" />-->
+      <Message Name="TimetableProcessor.ERROR" />
+      <!--<Message Name="TimetableProcessor.START" />-->
+      <!--<Message Name="TimetableProcessor.STOP" />-->
+      <!--<Message Name="TimetableProcessor.BIND" />-->
+      <!--<Message Name="TimetableProcessor.UNBIND" />-->
+      <!--<Message Name="TimetableProcessor.MODIFY" />-->
+      <!--<Message Name="TimetableProcessor.PROCESSING" />-->
+      <!--<Message Name="TimetableProcessor.PREPROCESSING" />-->
+      <!--<Message Name="TimetableProcessor.POSTPROCESSING" />-->
+    </Group>
+    <!--<Group Name="Tracers"><Message Name="TRACE0" /><Message Name="TRACE1" /><Message Name="TRACE2" /><Message Name="TRACE3" /><Message Name="TRACE4" /><Message Name="TRACE5" /><Message Name="TRACE6" /><Message Name="TRACE7" /><Message Name="TRACE8" /><Message Name="TRACE9" /></Group>-->
+    <Group Name="UdpSocket">
+      <Message Name="UdpSocket.ERROR" />
+      <!--<Message Name="UdpSocket.INITIALIZATION" />-->
+      <!--<Message Name="UdpSocket.RX_MESSAGE" />-->
+      <!--<Message Name="UdpSocket.TX_MESSAGE" />-->
+      <!--<Message Name="UdpSocket.STOP" />-->
+    </Group>
+    <Group Name="WCFGateway">
+      <!--<Message Name="WCFGateway.RUN" />-->
+      <Message Name="WCFGateway.ERROR" />
+      <!--<Message Name="WCFGateway.REPORT" />-->
+      <!--<Message Name="WCFGateway.START" />-->
+      <!--<Message Name="WCFGateway.STOP" />-->
+      <!--<Message Name="WCFGateway.RX_MESSAGE" />-->
+      <!--<Message Name="WCFGateway.RX_PACK" />-->
+    </Group>
+    <Group Name="ZteAaaSocket">
+      <Message Name="ZteAaaSocket.ERROR" />
+      <!--<Message Name="ZteAaaSocket.INITIALIZATION" />-->
+      <Message Name="ZteAaaSocket.WARNING" />
+      <!--<Message Name="ZteAaaSocket.START" />-->
+      <!--<Message Name="ZteAaaSocket.STOP" />-->
+      <!--<Message Name="ZteAaaSocket.TRACE1" />-->
+      <!--<Message Name="ZteAaaSocket.TRACE1" />-->
+      <!--<Message Name="ZteAaaSocket.TRACE2" />-->
+      <!--<Message Name="ZteAaaSocket.TRACE3" />-->
+      <!--<Message Name="ZteAaaSocket.TRACE4" />-->
+      <!--<Message Name="ZteAaaSocket.TRACE5" />-->
+      <!--<Message Name="ZteAaaSocket.RX_MESSAGE" />-->
+      <!--<Message Name="ZteAaaSocket.TX_MESSAGE" />-->
+    </Group>
+    <Group Name="ZteHlrSocket">
+      <Message Name="ZteHlrSocket.ERROR" />
+      <!--<Message Name="ZteHlrSocket.INITIALIZATION" />-->
+      <Message Name="ZteHlrSocket.WARNING" />
+      <!--<Message Name="ZteHlrSocket.START" />-->
+      <!--<Message Name="ZteHlrSocket.STOP" />-->
+      <!--<Message Name="ZteHlrSocket.TRACE1" />-->
+      <!--<Message Name="ZteHlrSocket.TRACE1" />-->
+      <!--<Message Name="ZteHlrSocket.TRACE2" />-->
+      <!--<Message Name="ZteHlrSocket.TRACE3" />-->
+      <!--<Message Name="ZteHlrSocket.TRACE4" />-->
+      <!--<Message Name="ZteHlrSocket.TRACE5" />-->
+      <!--<Message Name="ZteHlrSocket.RX_MESSAGE" />-->
+      <!--<Message Name="ZteHlrSocket.TX_MESSAGE" />-->
+    </Group>
+  </Activate>
+  <Activate Name="Regular" Path="C:\FORISLOG\SPA\SA\%APP_NAME%\Regular\regular.%DATE%_N%ID%" ChangeOn="00:30:00">
+    <!--<Group Name="Activator"><Message Name="Activator.ALARM" /><Message Name="Activator.DISPOSE" /><Message Name="Activator.DEQUEUE" /><Message Name="Activator.DEQUEUE_ASYNC" /><Message Name="Activator.ENQUEUE" /><Message Name="Activator.ENQUEUE_ASYNC" /><Message Name="Activator.ERROR" /><Message Name="Activator.REPEAT" /><Message Name="Activator.RESTORE" /><Message Name="Activator.RX_ASYNC" /><Message Name="Activator.RX_MESSAGE" /><Message Name="Activator.STOP" /><Message Name="Activator.START" /><Message Name="Activator.TX_MESSAGE" /></Group>-->
+    <!--<Group Name="AmResponseThread"><Message Name="AmResponseThread.DISPOSE" /><Message Name="AmResponseThread.ERROR" /><Message Name="AmResponseThread.INITIALIZATION" /><Message Name="AmResponseThread.WARNING" /><Message Name="AmResponseThread.START" /><Message Name="AmResponseThread.STOP" /><Message Name="AmResponseThread.TRACE0" /><Message Name="AmResponseThread.TRACE1" /><Message Name="AmResponseThread.TRACE2" /><Message Name="AmResponseThread.TRACE3" /><Message Name="AmResponseThread.TRACE4" /><Message Name="AmResponseThread.TRACE5" /><Message Name="AmResponseThread.REJECT" /><Message Name="AmResponseThread.RX_MESSAGE" /><Message Name="AmResponseThread.TX_MESSAGE" /></Group>-->
+    <!--<Group Name="AmSocket"><Message Name="AmSocket.ERROR" /><Message Name="AmSocket.INITIALIZATION" /><Message Name="AmSocket.WARNING" /><Message Name="AmSocket.START" /><Message Name="AmSocket.STOP" /><Message Name="AmSocket.TRACE0" /><Message Name="AmSocket.TRACE1" /><Message Name="AmSocket.TRACE2" /><Message Name="AmSocket.TRACE3" /><Message Name="AmSocket.TRACE4" /><Message Name="AmSocket.TRACE5" /><Message Name="AmSocket.RX_MESSAGE" /><Message Name="AmSocket.TX_MESSAGE" /><Message Name="AmSocket.CLOSE" /><Message Name="AmSocket.REM_THREAD" /><Message Name="AmSocket.WCF_THREAD" /></Group>-->
+    <!--<Group Name="Application"><Message Name="Application.ERROR" /><Message Name="Application.INITIALIZATION" /><Message Name="Application.REPORT" /><Message Name="Application.THREADS" /><Message Name="Application.START" /><Message Name="Application.STOP" /><Message Name="Application.WARNING" /><Message Name="Application.ASSEMBLIES" /></Group>-->
+    <!--<Group Name="AsyncProcessor"><Message Name="AsyncProcessor.DISPOSE" /><Message Name="AsyncProcessor.ERROR" /><Message Name="AsyncProcessor.INITIALIZATION" /><Message Name="AsyncProcessor.REPORT" /><Message Name="AsyncProcessor.START" /><Message Name="AsyncProcessor.STOP" /></Group>-->
+    <!--<Group Name="AsyncReqDispatcher"><Message Name="AsyncReqDispatcher.DISPOSE" /><Message Name="AsyncReqDispatcher.ERROR" /><Message Name="AsyncReqDispatcher.EXPIRED" /><Message Name="AsyncReqDispatcher.RX_MESSAGE" /><Message Name="AsyncReqDispatcher.START" /><Message Name="AsyncReqDispatcher.STOP" /></Group>-->
+    <!--<Group Name="BmsSocket"><Message Name="BmsSocket.ERROR" /><Message Name="BmsSocket.TX_MESSAGE" /><Message Name="BmsSocket.RX_MESSAGE" /><Message Name="BmsSocket.CLOSE" /><Message Name="BmsSocket.WCF_THREAD" /><Message Name="BmsSocket.CONNECTION" /></Group>-->
+    <!--<Group Name="BPM"><Message Name="BPM.Error" /><Message Name="BPM.Alarm" /><Message Name="ARCHIVE.Transaction" /></Group>-->
+    <!--<Group Name="BPMProcessingUnit"><Message Name="ProcUnit.NoSubscribers" /><Message Name="ProcUnit.Send" /><Message Name="ProcUnit.Receive" /><Message Name="ProcUnit.Error" /><Message Name="ProcUnit.SkipOperation" /></Group>-->
+    <!--<Group Name="CallForwarding"><Message Name="CallForwarding.ERROR" /></Group>-->
+    <!--<Group Name="CmisSocket"><Message Name="CmisSocket.ERROR" /><Message Name="CmisSocket.CONNECT" /><Message Name="CmisSocket.TRANSMIT" /><Message Name="CmisSocket.RECEIVE" /></Group>-->
+    <!--<Group Name="CmisThread"><Message Name="CmisThread.ERROR" /><Message Name="CmisThread.REPORT" /><Message Name="CmisThread.RX_ERROR" /><Message Name="CmisThread.TX_MESSAGE" /><Message Name="CmisThread.RX_MESSAGE" /><Message Name="CmisThread.CREATE" /><Message Name="CmisThread.DELETE" /><Message Name="CmisThread.CONNECT" /><Message Name="CmisThread.WARNING" /></Group>-->
+    <!--<Group Name="CommBpmSaDB"><Message Name="CommBpmSaDB.ERROR" /><Message Name="CommBpmSaDB.RX_MESSAGE" /></Group>-->
+    <!--<Group Name="CommMSMQ"><Message Name="CommMSMQ.ERROR" /><Message Name="CommMSMQ.INITIALIZATION" /><Message Name="CommMSMQ.INFORMATION" /><Message Name="CommMSMQ.REPORT" /><Message Name="CommMSMQ.RX_MESSAGE" /><Message Name="CommMSMQ.START" /><Message Name="CommMSMQ.STOP" /><Message Name="CommMSMQ.TX_ERROR" /><Message Name="CommMSMQ.TX_MESSAGE" /><Message Name="CommMSMQ.BEGIN_TX_MESSAGE" /><Message Name="CommMSMQ.ThreadInterrupted" /></Group>-->
+    <!--<Group Name="CommMSMQSwitch"><Message Name="CommMSMQSwitch.CorrectMessageCount" /><Message Name="CommMSMQSwitch.INITIALIZATION" /></Group>-->
+    <!--<Group Name="CommOracleQueue"><Message Name="CommOracleQueue.ERROR" /><Message Name="CommOracleQueue.INFORMATION" /><Message Name="CommOracleQueue.START" /><Message Name="CommOracleQueue.RX_MESSAGE" /><Message Name="CommOracleQueue.TX_MESSAGE" /></Group>-->
+    <!--<Group Name="CommQueueMediator"><Message Name="CommQueueMediator.ERROR" /><Message Name="CommQueueMediator.INFORMATION" /><Message Name="CommQueueMediator.START" /><Message Name="CommQueueMediator.TX_MESSAGE" /><Message Name="CommQueueMediator.RX_MESSAGE" /></Group>-->
+    <!--<Group Name="CommRemoting"><Message Name="CommRemoting.ERROR" /><Message Name="CommRemoting.INITIALIZATION" /><Message Name="CommRemoting.START" /><Message Name="CommRemoting.RX_MESSAGE" /><Message Name="CommRemoting.TX_MESSAGE" /></Group>-->
+    <!--<Group Name="CommTCP"><Message Name="CommTCP.ERROR" /><Message Name="CommTCP.WARNING" /><Message Name="CommTCP.INFORMATION" /><Message Name="CommTCP.CONNECT" /><Message Name="CommTCP.DISCONNECT" /><Message Name="CommTCP.RX_MESSAGE" /><Message Name="CommTCP.TX_MESSAGE" /></Group>-->
+    <!--<Group Name="CommunicatorProxyDB"><Message Name="ProxyDB.Error" /><Message Name="ProxyDB.InvalidMessageId" /><Message Name="ProxyDB.Receive" /><Message Name="ProxyDB.Send" /><Message Name="ProxyDB.TrySend" /><Message Name="ProxyDB.UnexpectedMessageType" /></Group>-->
+    <!--<Group Name="CommWCF"><Message Name="WCF.TX_MESSAGE" /><Message Name="WCF.ERROR" /></Group>-->
+    <!--<Group Name="Database"><Message Name="Database.DBCommunication" /><Message Name="Database.ORAInterface" /><Message Name="Database.REPORT" /><Message Name="Warning.CBP" /><Message Name="Error.CBP" /><Message Name="Error.ORACLE" /><Message Name="CBP.Trace" /><Message Name="ROBP.Trace" /><Message Name="RI.Trace" /><Message Name="RI.Error" /><Message Name="RI.TraceResult" /></Group>-->
+    <!--<Group Name="DatabaseSocket"><Message Name="DatabaseSocket.ERROR" /><Message Name="DatabaseSocket.INITIALIZATION" /><Message Name="DatabaseSocket.RX_MESSAGE" /><Message Name="DatabaseSocket.TX_MESSAGE" /></Group>-->
+    <!--<Group Name="Dictionary"><Message Name="Dictionary.INITIALIZATION" /><Message Name="Dictionary.ERROR" /></Group>-->
+    <!--<Group Name="EventGateway"><Message Name="EventGateway.RUN" /><Message Name="EventGateway.RX_MESSAGE" /><Message Name="EventGateway.ERROR" /><Message Name="EventGateway.REPORT" /><Message Name="EventGateway.START" /><Message Name="EventGateway.STOP" /></Group>-->
+    <!--<Group Name="Framework"><Message Name="Framework.ERROR" /><Message Name="Framework.INITIALIZATION" /><Message Name="Framework.START" /><Message Name="Framework.STOP" /></Group>-->
+    <!--<Group Name="Ftp"><Message Name="Ftp.ERROR" /><Message Name="Ftp.UPLOADING" /><Message Name="Ftp.UPLOADED" /><Message Name="Ftp.DOWNLOADING" /><Message Name="Ftp.DOWNLOADED" /><Message Name="Ftp.TRACE1" /><Message Name="Ftp.TRACE2" /><Message Name="Ftp.TRACE3" /><Message Name="Ftp.TRACE4" /><Message Name="Ftp.TRACE5" /><Message Name="Ftp.RX_MESSAGE" /><Message Name="Ftp.TX_MESSAGE" /></Group>-->
+    <!--<Group Name="FTPGateway"><Message Name="FTPGateway.ERROR" /><Message Name="FTPGateway.REPORT" /><Message Name="FTPGateway.RX_MESSAGE" /><Message Name="FTPGateway.TX_MESSAGE" /><Message Name="FTPGateway.INFORMATION" /><Message Name="FTPGateway.START" /><Message Name="FTPGateway.STOP" /></Group>-->
+    <!--<Group Name="FtpSocket"><Message Name="FtpSocket.ERROR" /><Message Name="FtpSocket.TX_MESSAGE" /><Message Name="FtpSocket.RX_MESSAGE" /></Group>-->
+    <!--<Group Name="HttpSocket"><Message Name="HttpSocket.ERROR" /><Message Name="HttpSocket.TRACE1" /><Message Name="HttpSocket.TRACE2" /><Message Name="HttpSocket.TRACE3" /><Message Name="HttpSocket.TRACE4" /><Message Name="HttpSocket.TX_MESSAGE" /><Message Name="HttpSocket.RX_MESSAGE" /></Group>-->
+    <!--<Group Name="InstantLink"><Message Name="InstantLink.ALARM" /><Message Name="InstantLink.DISPOSE" /><Message Name="InstantLink.ERROR" /><Message Name="InstantLink.START" /><Message Name="InstantLink.RX_MESSAGE" /><Message Name="InstantLink.TX_MESSAGE" /><Message Name="InstantLink.TIMEOUT" /><Message Name="InstantLink.LOGIN" /><Message Name="InstantLink.LOGIN_ACK" /><Message Name="InstantLink.REGISTER" /><Message Name="InstantLink.REGISTER_ACK" /><Message Name="InstantLink.LOGOUT" /><Message Name="InstantLink.LOGOUT_ACK" /><Message Name="InstantLink.CMDERROR" /><Message Name="InstantLink.RESPONSE" /><Message Name="InstantLink.RESPONSE_ACK" /><Message Name="InstantLink.UNEXPECTED_MESSAGE" /></Group>-->
+    <!--<Group Name="InstantLinkSocket"><Message Name="InstantLinkSocket.ERROR" /><Message Name="InstantLinkSocket.INITIALIZATION" /><Message Name="InstantLinkSocket.STOP" /><Message Name="InstantLinkSocket.INFORMATION" /><Message Name="InstantLinkSocket.TX_MESSAGE" /><Message Name="InstantLinkSocket.RX_MESSAGE" /><Message Name="InstantLinkSocket.TRACE5" /></Group>-->
+    <!--<Group Name="MSMQGateway"><Message Name="MSMQGateway.INITIALIZATION" /><Message Name="MSMQGateway.START" /><Message Name="MSMQGateway.STOP" /><Message Name="MSMQGateway.RX_MESSAGE" /><Message Name="MSMQGateway.TX_MESSAGE" /><Message Name="MSMQGateway.REPORT" /><Message Name="MSMQGateway.ERROR" /></Group>-->
+    <!--<Group Name="Postprocessing"><Message Name="PostProc.Error" /><Message Name="PostProc.Run" /><Message Name="PostProc.SendResponse" /><Message Name="PostProc.ResultProcessing" /><Message Name="PostProc.QueueFiltering" /><Message Name="PostProc.ProcessDeleted" /><Message Name="PostProc.ProcessDeleting" /><Message Name="PostProc.PoolStopping" /><Message Name="PostProc.PoolStopped" /><Message Name="PostProc.Report" /><Message Name="PostProc.SubscriberDataTrace" /><Message Name="PostProc.Receive" /></Group>-->
+    <!--<Group Name="Preprocessing"><Message Name="PreProc.Error" /><Message Name="PreProc.Warning" /><Message Name="PreProc.ReceiveRequest" /><Message Name="PreProc.RejectRequest" /><Message Name="PreProc.ProcessMessage" /><Message Name="PreProc.ThreadExec" /><Message Name="PreProc.Split" /><Message Name="PreprocDependencyQueue.RequestEnqueued" /><Message Name="PreprocDependencyQueue.RequestDequeued" /><Message Name="PreProcDisp.ReceiveRequest" /><Message Name="PreProcDisp.ProcessMessage" /><Message Name="PreProc.WaitForHostActivate" /><Message Name="WaitingForActivateQueue.AddRequest" /><Message Name="WaitingForActivateQueue.RemoveRequest" /><Message Name="PreProc.RobpBpDescription" /><Message Name="PreProc.RobpOperationsData" /><Message Name="PreProc.RobpGroupsData" /></Group>-->
+    <!--<Group Name="Processing"><Message Name="Proc.Error" /><Message Name="Proc.Warning" /><Message Name="Proc.Run" /><Message Name="Proc.Init" /><Message Name="Proc.Debug" /><Message Name="Proc.AddParentInfo" /><Message Name="Proc.RemoveParentInfo" /><Message Name="Proc.Report" /><Message Name="Proc.CalcChilds" /><Message Name="DependedQueue.Add" /><Message Name="DependedQueue.Delete" /><Message Name="DependedQueue.GetNext" /><Message Name="ProcThread.RunScenario" /><Message Name="ProcThread.ScenarioCompleted" /></Group>-->
+    <!--<Group Name="QueueMediator"><Message Name="QueueMediator.INFORMATION" /><Message Name="QueueMediator.RUN" /><Message Name="QueueMediator.ERROR" /><Message Name="QueueMediator.REPORT" /><Message Name="QueueMediator.START" /><Message Name="QueueMediator.STOP" /><Message Name="QueueMediator.Reset" /><Message Name="QueueMediator.Commit" /><Message Name="QueueMediator.Abort" /><Message Name="QueueMediator.Dequeue" /><Message Name="QueueMediator.Enqueue" /></Group>-->
+    <!--<Group Name="ReqCoprocessor"><Message Name="ReqCoprocessor.ALARM" /><Message Name="ReqCoprocessor.DISPOSE" /><Message Name="ReqCoprocessor.ERROR" /><Message Name="ReqCoprocessor.RX_ASYNC" /><Message Name="ReqCoprocessor.RX_EXPIRED" /><Message Name="ReqCoprocessor.RX_MESSAGE" /><Message Name="ReqCoprocessor.SCENARIO" /><Message Name="ReqCoprocessor.START" /><Message Name="ReqCoprocessor.STOP" /><Message Name="ReqCoprocessor.TX_MESSAGE" /></Group>-->
+    <!--<Group Name="ReqDbDispatcher"><Message Name="ReqDbDispatcher.DISPOSE" /><Message Name="ReqDbDispatcher.ERROR" /><Message Name="ReqDbDispatcher.RX_MESSAGE" /><Message Name="ReqDbDispatcher.START" /><Message Name="ReqDbDispatcher.STOP" /><Message Name="ReqDbDispatcher.TX_MESSAGE" /><Message Name="ReqDbDispatcher.NE_STATE" /></Group>-->
+    <!--<Group Name="ReqDispatcher"><Message Name="ReqDispatcher.ALARM" /><Message Name="ReqDispatcher.DISPOSE" /><Message Name="ReqDispatcher.ERROR" /><Message Name="ReqDispatcher.INITIALIZATION" /><Message Name="ReqDispatcher.RX_MESSAGE" /><Message Name="ReqDispatcher.START" /><Message Name="ReqDispatcher.STOP" /><Message Name="ReqDispatcher.TX_MESSAGE" /></Group>-->
+    <!--<Group Name="ReqProcessor"><Message Name="ReqProcessor.DISPOSE" /><Message Name="ReqProcessor.ERROR" /><Message Name="ReqProcessor.POST" /><Message Name="ReqProcessor.REPORT" /><Message Name="ReqProcessor.RX_EXPIRED" /><Message Name="ReqProcessor.RX_MESSAGE" /><Message Name="ReqProcessor.TX_MESSAGE" /><Message Name="ReqProcessor.REPEAT" /><Message Name="ReqProcessor.START" /><Message Name="ReqProcessor.STOP" /></Group>-->
+    <!--<Group Name="ScpSocket"><Message Name="ScpSocket.ERROR" /><Message Name="ScpSocket.INITIALIZATION" /><Message Name="ScpSocket.WARNING" /><Message Name="ScpSocket.START" /><Message Name="ScpSocket.STOP" /><Message Name="ScpSocket.TRACE0" /><Message Name="ScpSocket.TRACE1" /><Message Name="ScpSocket.TRACE2" /><Message Name="ScpSocket.TRACE3" /><Message Name="ScpSocket.TRACE4" /><Message Name="ScpSocket.TRACE5" /><Message Name="ScpSocket.RX_MESSAGE" /><Message Name="ScpSocket.TX_MESSAGE" /><Message Name="ScpSocket.CLOSE" /><Message Name="ScpSocket.REM_THREAD" /><Message Name="ScpSocket.WCF_THREAD" /><Message Name="ScpSocket.CONNECT" /><Message Name="ScpSocket.REFRESH" /></Group>-->
+    <!--<Group Name="SerialPort"><Message Name="SerialPort.ERROR" /><Message Name="SerialPort.WARNING" /><Message Name="SerialPort.INITIALIZATION" /><Message Name="SerialPort.START" /><Message Name="SerialPort.STOP" /><Message Name="SerialPort.TRANSMIT" /><Message Name="SerialPort.RECEIVE" /><Message Name="SerialPort.RECEIVE.ERROR" /><Message Name="SerialPort.PINCHANGED" /></Group>-->
+    <!--<Group Name="SmppSocket"><Message Name="SmppSocket.ERROR" /><Message Name="SmppSocket.INITIALIZATION" /><Message Name="SmppSocket.DEAD_MESSAGE" /><Message Name="SmppSocket.TX_MESSAGE" /><Message Name="SmppSocket.RX_MESSAGE" /></Group>-->
+    <!--<Group Name="SoapSocket"><Message Name="SoapSocket.INITIALIZATION" /><Message Name="SoapSocket.WARNING" /><Message Name="SoapSocket.ERROR" /><Message Name="SoapSocket.RX_MESSAGE" /><Message Name="SoapSocket.TX_MESSAGE" /><Message Name="SoapSocket.STOP" /><Message Name="SoapSocket.INFORMATION" /><Message Name="SoapSocket.TRACE5" /></Group>-->
+    <!--<Group Name="SocketsManager"><Message Name="SocketsManager.DISPOSE" /><Message Name="SocketsManager.ERROR" /><Message Name="SocketsManager.START" /><Message Name="SocketsManager.STOP" /><Message Name="SocketsManager.TRACE1" /><Message Name="SocketsManager.TRACE2" /><Message Name="SocketsManager.TRACE3" /><Message Name="SocketsManager.TRACE4" /><Message Name="SocketsManager.TRACE5" /></Group>-->
+    <!--<Group Name="SPF"><Message Name="SPF.ERROR" /><Message Name="SPF.EXECUTING" /><Message Name="SPF.EXECUTED" /><Message Name="SPF.START" /><Message Name="SPF.STOP" /><Message Name="SPF.GATEWAY" /><Message Name="SPF.GW_REASSIGN" /><Message Name="SPF.CLUSTER" /><Message Name="SPF.PAUSE" /><Message Name="SPF.RESUME" /><Message Name="SPF.DEBUG" /></Group>-->
+    <!--<Group Name="SPF.ProcessingUnit"><Message Name="SPF.ProcUnit.ERROR" /><Message Name="SPF.ProcUnit.ENTER" /><Message Name="SPF.ProcUnit.LEAVE" /><Message Name="SPF.ProcUnit.TRACE1" /><Message Name="SPF.ProcUnit.TRACE2" /><Message Name="SPF.ProcUnit.TRACE3" /><Message Name="SPF.ProcUnit.TRACE4" /><Message Name="SPF.ProcUnit.TRACE5" /><Message Name="SPF.ProcUnit.TRACE6" /><Message Name="SPF.ProcUnit.TRACE7" /><Message Name="SPF.ProcUnit.TRACE8" /></Group>-->
+    <!--<Group Name="SshSocket"><Message Name="SshSocket.ERROR" /><Message Name="SshSocket.INITIALIZATION" /><Message Name="SshSocket.STOP" /><Message Name="SshSocket.INFORMATION" /><Message Name="SshSocket.TX_MESSAGE" /><Message Name="SshSocket.RX_MESSAGE" /><Message Name="SshSocket.TRACE5" /></Group>-->
+    <!--<Group Name="TelnetSocket"><Message Name="TelnetSocket.ERROR" /><Message Name="TelnetSocket.INITIALIZATION" /><Message Name="TelnetSocket.STOP" /><Message Name="TelnetSocket.INFORMATION" /><Message Name="TelnetSocket.TX_MESSAGE" /><Message Name="TelnetSocket.RX_MESSAGE" /><Message Name="TelnetSocket.TRACE5" /></Group>-->
+    <!--<Group Name="TimetableProcessor"><Message Name="TimetableProcessor.INITIALIZATION" /><Message Name="TimetableProcessor.ERROR" /><Message Name="TimetableProcessor.START" /><Message Name="TimetableProcessor.STOP" /><Message Name="TimetableProcessor.BIND" /><Message Name="TimetableProcessor.UNBIND" /><Message Name="TimetableProcessor.MODIFY" /><Message Name="TimetableProcessor.PROCESSING" /><Message Name="TimetableProcessor.PREPROCESSING" /><Message Name="TimetableProcessor.POSTPROCESSING" /></Group>-->
+    <!--<Group Name="Tracers"><Message Name="TRACE0" /><Message Name="TRACE1" /><Message Name="TRACE2" /><Message Name="TRACE3" /><Message Name="TRACE4" /><Message Name="TRACE5" /><Message Name="TRACE6" /><Message Name="TRACE7" /><Message Name="TRACE8" /><Message Name="TRACE9" /></Group>-->
+    <!--<Group Name="UdpSocket"><Message Name="UdpSocket.ERROR" /><Message Name="UdpSocket.INITIALIZATION" /><Message Name="UdpSocket.RX_MESSAGE" /><Message Name="UdpSocket.TX_MESSAGE" /><Message Name="UdpSocket.STOP" /></Group>-->
+    <!--<Group Name="WCFGateway"><Message Name="WCFGateway.RUN" /><Message Name="WCFGateway.ERROR" /><Message Name="WCFGateway.REPORT" /><Message Name="WCFGateway.START" /><Message Name="WCFGateway.STOP" /><Message Name="WCFGateway.RX_MESSAGE" /><Message Name="WCFGateway.RX_PACK" /></Group>-->
+    <!--<Group Name="ZteAaaSocket"><Message Name="ZteAaaSocket.ERROR" /><Message Name="ZteAaaSocket.INITIALIZATION" /><Message Name="ZteAaaSocket.WARNING" /><Message Name="ZteAaaSocket.START" /><Message Name="ZteAaaSocket.STOP" /><Message Name="ZteAaaSocket.TRACE1" /><Message Name="ZteAaaSocket.TRACE1" /><Message Name="ZteAaaSocket.TRACE2" /><Message Name="ZteAaaSocket.TRACE3" /><Message Name="ZteAaaSocket.TRACE4" /><Message Name="ZteAaaSocket.TRACE5" /><Message Name="ZteAaaSocket.RX_MESSAGE" /><Message Name="ZteAaaSocket.TX_MESSAGE" /></Group>-->
+    <!--<Group Name="ZteHlrSocket"><Message Name="ZteHlrSocket.ERROR" /><Message Name="ZteHlrSocket.INITIALIZATION" /><Message Name="ZteHlrSocket.WARNING" /><Message Name="ZteHlrSocket.START" /><Message Name="ZteHlrSocket.STOP" /><Message Name="ZteHlrSocket.TRACE1" /><Message Name="ZteHlrSocket.TRACE1" /><Message Name="ZteHlrSocket.TRACE2" /><Message Name="ZteHlrSocket.TRACE3" /><Message Name="ZteHlrSocket.TRACE4" /><Message Name="ZteHlrSocket.TRACE5" /><Message Name="ZteHlrSocket.RX_MESSAGE" /><Message Name="ZteHlrSocket.TX_MESSAGE" /></Group>-->
+  </Activate>
+  <Activate Name="System" Path="C:\FORISLOG\SPA\SA\%APP_NAME%\System\system.%DATE%_N%ID%" ChangeOn="00:30:00">
+    <!--<Group Name="Activator"><Message Name="Activator.ALARM" /><Message Name="Activator.DISPOSE" /><Message Name="Activator.DEQUEUE" /><Message Name="Activator.DEQUEUE_ASYNC" /><Message Name="Activator.ENQUEUE" /><Message Name="Activator.ENQUEUE_ASYNC" /><Message Name="Activator.ERROR" /><Message Name="Activator.REPEAT" /><Message Name="Activator.RESTORE" /><Message Name="Activator.RX_ASYNC" /><Message Name="Activator.RX_MESSAGE" /><Message Name="Activator.STOP" /><Message Name="Activator.START" /><Message Name="Activator.TX_MESSAGE" /></Group>-->
+    <!--<Group Name="AmResponseThread"><Message Name="AmResponseThread.DISPOSE" /><Message Name="AmResponseThread.ERROR" /><Message Name="AmResponseThread.INITIALIZATION" /><Message Name="AmResponseThread.WARNING" /><Message Name="AmResponseThread.START" /><Message Name="AmResponseThread.STOP" /><Message Name="AmResponseThread.TRACE0" /><Message Name="AmResponseThread.TRACE1" /><Message Name="AmResponseThread.TRACE2" /><Message Name="AmResponseThread.TRACE3" /><Message Name="AmResponseThread.TRACE4" /><Message Name="AmResponseThread.TRACE5" /><Message Name="AmResponseThread.REJECT" /><Message Name="AmResponseThread.RX_MESSAGE" /><Message Name="AmResponseThread.TX_MESSAGE" /></Group>-->
+    <!--<Group Name="AmSocket"><Message Name="AmSocket.ERROR" /><Message Name="AmSocket.INITIALIZATION" /><Message Name="AmSocket.WARNING" /><Message Name="AmSocket.START" /><Message Name="AmSocket.STOP" /><Message Name="AmSocket.TRACE0" /><Message Name="AmSocket.TRACE1" /><Message Name="AmSocket.TRACE2" /><Message Name="AmSocket.TRACE3" /><Message Name="AmSocket.TRACE4" /><Message Name="AmSocket.TRACE5" /><Message Name="AmSocket.RX_MESSAGE" /><Message Name="AmSocket.TX_MESSAGE" /><Message Name="AmSocket.CLOSE" /><Message Name="AmSocket.REM_THREAD" /><Message Name="AmSocket.WCF_THREAD" /></Group>-->
+    <!--<Group Name="Application"><Message Name="Application.ERROR" /><Message Name="Application.INITIALIZATION" /><Message Name="Application.REPORT" /><Message Name="Application.THREADS" /><Message Name="Application.START" /><Message Name="Application.STOP" /><Message Name="Application.WARNING" /><Message Name="Application.ASSEMBLIES" /></Group>-->
+    <!--<Group Name="AsyncProcessor"><Message Name="AsyncProcessor.DISPOSE" /><Message Name="AsyncProcessor.ERROR" /><Message Name="AsyncProcessor.INITIALIZATION" /><Message Name="AsyncProcessor.REPORT" /><Message Name="AsyncProcessor.START" /><Message Name="AsyncProcessor.STOP" /></Group>-->
+    <!--<Group Name="AsyncReqDispatcher"><Message Name="AsyncReqDispatcher.DISPOSE" /><Message Name="AsyncReqDispatcher.ERROR" /><Message Name="AsyncReqDispatcher.EXPIRED" /><Message Name="AsyncReqDispatcher.RX_MESSAGE" /><Message Name="AsyncReqDispatcher.START" /><Message Name="AsyncReqDispatcher.STOP" /></Group>-->
+    <!--<Group Name="BmsSocket"><Message Name="BmsSocket.ERROR" /><Message Name="BmsSocket.TX_MESSAGE" /><Message Name="BmsSocket.RX_MESSAGE" /><Message Name="BmsSocket.CLOSE" /><Message Name="BmsSocket.WCF_THREAD" /><Message Name="BmsSocket.CONNECTION" /></Group>-->
+    <!--<Group Name="BPM"><Message Name="BPM.Error" /><Message Name="BPM.Alarm" /><Message Name="ARCHIVE.Transaction" /></Group>-->
+    <!--<Group Name="BPMProcessingUnit"><Message Name="ProcUnit.NoSubscribers" /><Message Name="ProcUnit.Send" /><Message Name="ProcUnit.Receive" /><Message Name="ProcUnit.Error" /><Message Name="ProcUnit.SkipOperation" /></Group>-->
+    <!--<Group Name="CallForwarding"><Message Name="CallForwarding.ERROR" /></Group>-->
+    <!--<Group Name="CmisSocket"><Message Name="CmisSocket.ERROR" /><Message Name="CmisSocket.CONNECT" /><Message Name="CmisSocket.TRANSMIT" /><Message Name="CmisSocket.RECEIVE" /></Group>-->
+    <!--<Group Name="CmisThread"><Message Name="CmisThread.ERROR" /><Message Name="CmisThread.REPORT" /><Message Name="CmisThread.RX_ERROR" /><Message Name="CmisThread.TX_MESSAGE" /><Message Name="CmisThread.RX_MESSAGE" /><Message Name="CmisThread.CREATE" /><Message Name="CmisThread.DELETE" /><Message Name="CmisThread.CONNECT" /><Message Name="CmisThread.WARNING" /></Group>-->
+    <!--<Group Name="CommBpmSaDB"><Message Name="CommBpmSaDB.ERROR" /><Message Name="CommBpmSaDB.RX_MESSAGE" /></Group>-->
+    <!--<Group Name="CommMSMQ"><Message Name="CommMSMQ.ERROR" /><Message Name="CommMSMQ.INITIALIZATION" /><Message Name="CommMSMQ.INFORMATION" /><Message Name="CommMSMQ.REPORT" /><Message Name="CommMSMQ.RX_MESSAGE" /><Message Name="CommMSMQ.START" /><Message Name="CommMSMQ.STOP" /><Message Name="CommMSMQ.TX_ERROR" /><Message Name="CommMSMQ.TX_MESSAGE" /><Message Name="CommMSMQ.BEGIN_TX_MESSAGE" /><Message Name="CommMSMQ.ThreadInterrupted" /></Group>-->
+    <!--<Group Name="CommMSMQSwitch"><Message Name="CommMSMQSwitch.CorrectMessageCount" /><Message Name="CommMSMQSwitch.INITIALIZATION" /></Group>-->
+    <!--<Group Name="CommOracleQueue"><Message Name="CommOracleQueue.ERROR" /><Message Name="CommOracleQueue.INFORMATION" /><Message Name="CommOracleQueue.START" /><Message Name="CommOracleQueue.RX_MESSAGE" /><Message Name="CommOracleQueue.TX_MESSAGE" /></Group>-->
+    <!--<Group Name="CommQueueMediator"><Message Name="CommQueueMediator.ERROR" /><Message Name="CommQueueMediator.INFORMATION" /><Message Name="CommQueueMediator.START" /><Message Name="CommQueueMediator.TX_MESSAGE" /><Message Name="CommQueueMediator.RX_MESSAGE" /></Group>-->
+    <!--<Group Name="CommRemoting"><Message Name="CommRemoting.ERROR" /><Message Name="CommRemoting.INITIALIZATION" /><Message Name="CommRemoting.START" /><Message Name="CommRemoting.RX_MESSAGE" /><Message Name="CommRemoting.TX_MESSAGE" /></Group>-->
+    <!--<Group Name="CommTCP"><Message Name="CommTCP.ERROR" /><Message Name="CommTCP.WARNING" /><Message Name="CommTCP.INFORMATION" /><Message Name="CommTCP.CONNECT" /><Message Name="CommTCP.DISCONNECT" /><Message Name="CommTCP.RX_MESSAGE" /><Message Name="CommTCP.TX_MESSAGE" /></Group>-->
+    <!--<Group Name="CommunicatorProxyDB"><Message Name="ProxyDB.Error" /><Message Name="ProxyDB.InvalidMessageId" /><Message Name="ProxyDB.Receive" /><Message Name="ProxyDB.Send" /><Message Name="ProxyDB.TrySend" /><Message Name="ProxyDB.UnexpectedMessageType" /></Group>-->
+    <!--<Group Name="CommWCF"><Message Name="WCF.TX_MESSAGE" /><Message Name="WCF.ERROR" /></Group>-->
+    <!--<Group Name="Database"><Message Name="Database.DBCommunication" /><Message Name="Database.ORAInterface" /><Message Name="Database.REPORT" /><Message Name="Warning.CBP" /><Message Name="Error.CBP" /><Message Name="Error.ORACLE" /><Message Name="CBP.Trace" /><Message Name="ROBP.Trace" /><Message Name="RI.Trace" /><Message Name="RI.Error" /><Message Name="RI.TraceResult" /></Group>-->
+    <!--<Group Name="DatabaseSocket"><Message Name="DatabaseSocket.ERROR" /><Message Name="DatabaseSocket.INITIALIZATION" /><Message Name="DatabaseSocket.RX_MESSAGE" /><Message Name="DatabaseSocket.TX_MESSAGE" /></Group>-->
+    <!--<Group Name="Dictionary"><Message Name="Dictionary.INITIALIZATION" /><Message Name="Dictionary.ERROR" /></Group>-->
+    <!--<Group Name="EventGateway"><Message Name="EventGateway.RUN" /><Message Name="EventGateway.RX_MESSAGE" /><Message Name="EventGateway.ERROR" /><Message Name="EventGateway.REPORT" /><Message Name="EventGateway.START" /><Message Name="EventGateway.STOP" /></Group>-->
+    <!--<Group Name="Framework"><Message Name="Framework.ERROR" /><Message Name="Framework.INITIALIZATION" /><Message Name="Framework.START" /><Message Name="Framework.STOP" /></Group>-->
+    <!--<Group Name="Ftp"><Message Name="Ftp.ERROR" /><Message Name="Ftp.UPLOADING" /><Message Name="Ftp.UPLOADED" /><Message Name="Ftp.DOWNLOADING" /><Message Name="Ftp.DOWNLOADED" /><Message Name="Ftp.TRACE1" /><Message Name="Ftp.TRACE2" /><Message Name="Ftp.TRACE3" /><Message Name="Ftp.TRACE4" /><Message Name="Ftp.TRACE5" /><Message Name="Ftp.RX_MESSAGE" /><Message Name="Ftp.TX_MESSAGE" /></Group>-->
+    <!--<Group Name="FTPGateway"><Message Name="FTPGateway.ERROR" /><Message Name="FTPGateway.REPORT" /><Message Name="FTPGateway.RX_MESSAGE" /><Message Name="FTPGateway.TX_MESSAGE" /><Message Name="FTPGateway.INFORMATION" /><Message Name="FTPGateway.START" /><Message Name="FTPGateway.STOP" /></Group>-->
+    <!--<Group Name="FtpSocket"><Message Name="FtpSocket.ERROR" /><Message Name="FtpSocket.TX_MESSAGE" /><Message Name="FtpSocket.RX_MESSAGE" /></Group>-->
+    <!--<Group Name="HttpSocket"><Message Name="HttpSocket.ERROR" /><Message Name="HttpSocket.TRACE1" /><Message Name="HttpSocket.TRACE2" /><Message Name="HttpSocket.TRACE3" /><Message Name="HttpSocket.TRACE4" /><Message Name="HttpSocket.TX_MESSAGE" /><Message Name="HttpSocket.RX_MESSAGE" /></Group>-->
+    <!--<Group Name="InstantLink"><Message Name="InstantLink.ALARM" /><Message Name="InstantLink.DISPOSE" /><Message Name="InstantLink.ERROR" /><Message Name="InstantLink.START" /><Message Name="InstantLink.RX_MESSAGE" /><Message Name="InstantLink.TX_MESSAGE" /><Message Name="InstantLink.TIMEOUT" /><Message Name="InstantLink.LOGIN" /><Message Name="InstantLink.LOGIN_ACK" /><Message Name="InstantLink.REGISTER" /><Message Name="InstantLink.REGISTER_ACK" /><Message Name="InstantLink.LOGOUT" /><Message Name="InstantLink.LOGOUT_ACK" /><Message Name="InstantLink.CMDERROR" /><Message Name="InstantLink.RESPONSE" /><Message Name="InstantLink.RESPONSE_ACK" /><Message Name="InstantLink.UNEXPECTED_MESSAGE" /></Group>-->
+    <!--<Group Name="InstantLinkSocket"><Message Name="InstantLinkSocket.ERROR" /><Message Name="InstantLinkSocket.INITIALIZATION" /><Message Name="InstantLinkSocket.STOP" /><Message Name="InstantLinkSocket.INFORMATION" /><Message Name="InstantLinkSocket.TX_MESSAGE" /><Message Name="InstantLinkSocket.RX_MESSAGE" /><Message Name="InstantLinkSocket.TRACE5" /></Group>-->
+    <!--<Group Name="MSMQGateway"><Message Name="MSMQGateway.INITIALIZATION" /><Message Name="MSMQGateway.START" /><Message Name="MSMQGateway.STOP" /><Message Name="MSMQGateway.RX_MESSAGE" /><Message Name="MSMQGateway.TX_MESSAGE" /><Message Name="MSMQGateway.REPORT" /><Message Name="MSMQGateway.ERROR" /></Group>-->
+    <!--<Group Name="Postprocessing"><Message Name="PostProc.Error" /><Message Name="PostProc.Run" /><Message Name="PostProc.SendResponse" /><Message Name="PostProc.ResultProcessing" /><Message Name="PostProc.QueueFiltering" /><Message Name="PostProc.ProcessDeleted" /><Message Name="PostProc.ProcessDeleting" /><Message Name="PostProc.PoolStopping" /><Message Name="PostProc.PoolStopped" /><Message Name="PostProc.Report" /><Message Name="PostProc.SubscriberDataTrace" /><Message Name="PostProc.Receive" /></Group>-->
+    <!--<Group Name="Preprocessing"><Message Name="PreProc.Error" /><Message Name="PreProc.Warning" /><Message Name="PreProc.ReceiveRequest" /><Message Name="PreProc.RejectRequest" /><Message Name="PreProc.ProcessMessage" /><Message Name="PreProc.ThreadExec" /><Message Name="PreProc.Split" /><Message Name="PreprocDependencyQueue.RequestEnqueued" /><Message Name="PreprocDependencyQueue.RequestDequeued" /><Message Name="PreProcDisp.ReceiveRequest" /><Message Name="PreProcDisp.ProcessMessage" /><Message Name="PreProc.WaitForHostActivate" /><Message Name="WaitingForActivateQueue.AddRequest" /><Message Name="WaitingForActivateQueue.RemoveRequest" /><Message Name="PreProc.RobpBpDescription" /><Message Name="PreProc.RobpOperationsData" /><Message Name="PreProc.RobpGroupsData" /></Group>-->
+    <!--<Group Name="Processing"><Message Name="Proc.Error" /><Message Name="Proc.Warning" /><Message Name="Proc.Run" /><Message Name="Proc.Init" /><Message Name="Proc.Debug" /><Message Name="Proc.AddParentInfo" /><Message Name="Proc.RemoveParentInfo" /><Message Name="Proc.Report" /><Message Name="Proc.CalcChilds" /><Message Name="DependedQueue.Add" /><Message Name="DependedQueue.Delete" /><Message Name="DependedQueue.GetNext" /><Message Name="ProcThread.RunScenario" /><Message Name="ProcThread.ScenarioCompleted" /></Group>-->
+    <!--<Group Name="QueueMediator"><Message Name="QueueMediator.INFORMATION" /><Message Name="QueueMediator.RUN" /><Message Name="QueueMediator.ERROR" /><Message Name="QueueMediator.REPORT" /><Message Name="QueueMediator.START" /><Message Name="QueueMediator.STOP" /><Message Name="QueueMediator.Reset" /><Message Name="QueueMediator.Commit" /><Message Name="QueueMediator.Abort" /><Message Name="QueueMediator.Dequeue" /><Message Name="QueueMediator.Enqueue" /></Group>-->
+    <!--<Group Name="ReqCoprocessor"><Message Name="ReqCoprocessor.ALARM" /><Message Name="ReqCoprocessor.DISPOSE" /><Message Name="ReqCoprocessor.ERROR" /><Message Name="ReqCoprocessor.RX_ASYNC" /><Message Name="ReqCoprocessor.RX_EXPIRED" /><Message Name="ReqCoprocessor.RX_MESSAGE" /><Message Name="ReqCoprocessor.SCENARIO" /><Message Name="ReqCoprocessor.START" /><Message Name="ReqCoprocessor.STOP" /><Message Name="ReqCoprocessor.TX_MESSAGE" /></Group>-->
+    <!--<Group Name="ReqDbDispatcher"><Message Name="ReqDbDispatcher.DISPOSE" /><Message Name="ReqDbDispatcher.ERROR" /><Message Name="ReqDbDispatcher.RX_MESSAGE" /><Message Name="ReqDbDispatcher.START" /><Message Name="ReqDbDispatcher.STOP" /><Message Name="ReqDbDispatcher.TX_MESSAGE" /><Message Name="ReqDbDispatcher.NE_STATE" /></Group>-->
+    <!--<Group Name="ReqDispatcher"><Message Name="ReqDispatcher.ALARM" /><Message Name="ReqDispatcher.DISPOSE" /><Message Name="ReqDispatcher.ERROR" /><Message Name="ReqDispatcher.INITIALIZATION" /><Message Name="ReqDispatcher.RX_MESSAGE" /><Message Name="ReqDispatcher.START" /><Message Name="ReqDispatcher.STOP" /><Message Name="ReqDispatcher.TX_MESSAGE" /></Group>-->
+    <!--<Group Name="ReqProcessor"><Message Name="ReqProcessor.DISPOSE" /><Message Name="ReqProcessor.ERROR" /><Message Name="ReqProcessor.POST" /><Message Name="ReqProcessor.REPORT" /><Message Name="ReqProcessor.RX_EXPIRED" /><Message Name="ReqProcessor.RX_MESSAGE" /><Message Name="ReqProcessor.TX_MESSAGE" /><Message Name="ReqProcessor.REPEAT" /><Message Name="ReqProcessor.START" /><Message Name="ReqProcessor.STOP" /></Group>-->
+    <!--<Group Name="ScpSocket"><Message Name="ScpSocket.ERROR" /><Message Name="ScpSocket.INITIALIZATION" /><Message Name="ScpSocket.WARNING" /><Message Name="ScpSocket.START" /><Message Name="ScpSocket.STOP" /><Message Name="ScpSocket.TRACE0" /><Message Name="ScpSocket.TRACE1" /><Message Name="ScpSocket.TRACE2" /><Message Name="ScpSocket.TRACE3" /><Message Name="ScpSocket.TRACE4" /><Message Name="ScpSocket.TRACE5" /><Message Name="ScpSocket.RX_MESSAGE" /><Message Name="ScpSocket.TX_MESSAGE" /><Message Name="ScpSocket.CLOSE" /><Message Name="ScpSocket.REM_THREAD" /><Message Name="ScpSocket.WCF_THREAD" /><Message Name="ScpSocket.CONNECT" /><Message Name="ScpSocket.REFRESH" /></Group>-->
+    <!--<Group Name="SerialPort"><Message Name="SerialPort.ERROR" /><Message Name="SerialPort.WARNING" /><Message Name="SerialPort.INITIALIZATION" /><Message Name="SerialPort.START" /><Message Name="SerialPort.STOP" /><Message Name="SerialPort.TRANSMIT" /><Message Name="SerialPort.RECEIVE" /><Message Name="SerialPort.RECEIVE.ERROR" /><Message Name="SerialPort.PINCHANGED" /></Group>-->
+    <!--<Group Name="SmppSocket"><Message Name="SmppSocket.ERROR" /><Message Name="SmppSocket.INITIALIZATION" /><Message Name="SmppSocket.DEAD_MESSAGE" /><Message Name="SmppSocket.TX_MESSAGE" /><Message Name="SmppSocket.RX_MESSAGE" /></Group>-->
+    <!--<Group Name="SoapSocket"><Message Name="SoapSocket.INITIALIZATION" /><Message Name="SoapSocket.WARNING" /><Message Name="SoapSocket.ERROR" /><Message Name="SoapSocket.RX_MESSAGE" /><Message Name="SoapSocket.TX_MESSAGE" /><Message Name="SoapSocket.STOP" /><Message Name="SoapSocket.INFORMATION" /><Message Name="SoapSocket.TRACE5" /></Group>-->
+    <!--<Group Name="SocketsManager"><Message Name="SocketsManager.DISPOSE" /><Message Name="SocketsManager.ERROR" /><Message Name="SocketsManager.START" /><Message Name="SocketsManager.STOP" /><Message Name="SocketsManager.TRACE1" /><Message Name="SocketsManager.TRACE2" /><Message Name="SocketsManager.TRACE3" /><Message Name="SocketsManager.TRACE4" /><Message Name="SocketsManager.TRACE5" /></Group>-->
+    <!--<Group Name="SPF"><Message Name="SPF.ERROR" /><Message Name="SPF.EXECUTING" /><Message Name="SPF.EXECUTED" /><Message Name="SPF.START" /><Message Name="SPF.STOP" /><Message Name="SPF.GATEWAY" /><Message Name="SPF.GW_REASSIGN" /><Message Name="SPF.CLUSTER" /><Message Name="SPF.PAUSE" /><Message Name="SPF.RESUME" /><Message Name="SPF.DEBUG" /></Group>-->
+    <!--<Group Name="SPF.ProcessingUnit"><Message Name="SPF.ProcUnit.ERROR" /><Message Name="SPF.ProcUnit.ENTER" /><Message Name="SPF.ProcUnit.LEAVE" /><Message Name="SPF.ProcUnit.TRACE1" /><Message Name="SPF.ProcUnit.TRACE2" /><Message Name="SPF.ProcUnit.TRACE3" /><Message Name="SPF.ProcUnit.TRACE4" /><Message Name="SPF.ProcUnit.TRACE5" /><Message Name="SPF.ProcUnit.TRACE6" /><Message Name="SPF.ProcUnit.TRACE7" /><Message Name="SPF.ProcUnit.TRACE8" /></Group>-->
+    <!--<Group Name="SshSocket"><Message Name="SshSocket.ERROR" /><Message Name="SshSocket.INITIALIZATION" /><Message Name="SshSocket.STOP" /><Message Name="SshSocket.INFORMATION" /><Message Name="SshSocket.TX_MESSAGE" /><Message Name="SshSocket.RX_MESSAGE" /><Message Name="SshSocket.TRACE5" /></Group>-->
+    <!--<Group Name="TelnetSocket"><Message Name="TelnetSocket.ERROR" /><Message Name="TelnetSocket.INITIALIZATION" /><Message Name="TelnetSocket.STOP" /><Message Name="TelnetSocket.INFORMATION" /><Message Name="TelnetSocket.TX_MESSAGE" /><Message Name="TelnetSocket.RX_MESSAGE" /><Message Name="TelnetSocket.TRACE5" /></Group>-->
+    <!--<Group Name="TimetableProcessor"><Message Name="TimetableProcessor.INITIALIZATION" /><Message Name="TimetableProcessor.ERROR" /><Message Name="TimetableProcessor.START" /><Message Name="TimetableProcessor.STOP" /><Message Name="TimetableProcessor.BIND" /><Message Name="TimetableProcessor.UNBIND" /><Message Name="TimetableProcessor.MODIFY" /><Message Name="TimetableProcessor.PROCESSING" /><Message Name="TimetableProcessor.PREPROCESSING" /><Message Name="TimetableProcessor.POSTPROCESSING" /></Group>-->
+    <!--<Group Name="Tracers"><Message Name="TRACE0" /><Message Name="TRACE1" /><Message Name="TRACE2" /><Message Name="TRACE3" /><Message Name="TRACE4" /><Message Name="TRACE5" /><Message Name="TRACE6" /><Message Name="TRACE7" /><Message Name="TRACE8" /><Message Name="TRACE9" /></Group>-->
+    <!--<Group Name="UdpSocket"><Message Name="UdpSocket.ERROR" /><Message Name="UdpSocket.INITIALIZATION" /><Message Name="UdpSocket.RX_MESSAGE" /><Message Name="UdpSocket.TX_MESSAGE" /><Message Name="UdpSocket.STOP" /></Group>-->
+    <!--<Group Name="WCFGateway"><Message Name="WCFGateway.RUN" /><Message Name="WCFGateway.ERROR" /><Message Name="WCFGateway.REPORT" /><Message Name="WCFGateway.START" /><Message Name="WCFGateway.STOP" /><Message Name="WCFGateway.RX_MESSAGE" /><Message Name="WCFGateway.RX_PACK" /></Group>-->
+    <!--<Group Name="ZteAaaSocket"><Message Name="ZteAaaSocket.ERROR" /><Message Name="ZteAaaSocket.INITIALIZATION" /><Message Name="ZteAaaSocket.WARNING" /><Message Name="ZteAaaSocket.START" /><Message Name="ZteAaaSocket.STOP" /><Message Name="ZteAaaSocket.TRACE1" /><Message Name="ZteAaaSocket.TRACE1" /><Message Name="ZteAaaSocket.TRACE2" /><Message Name="ZteAaaSocket.TRACE3" /><Message Name="ZteAaaSocket.TRACE4" /><Message Name="ZteAaaSocket.TRACE5" /><Message Name="ZteAaaSocket.RX_MESSAGE" /><Message Name="ZteAaaSocket.TX_MESSAGE" /></Group>-->
+    <!--<Group Name="ZteHlrSocket"><Message Name="ZteHlrSocket.ERROR" /><Message Name="ZteHlrSocket.INITIALIZATION" /><Message Name="ZteHlrSocket.WARNING" /><Message Name="ZteHlrSocket.START" /><Message Name="ZteHlrSocket.STOP" /><Message Name="ZteHlrSocket.TRACE1" /><Message Name="ZteHlrSocket.TRACE1" /><Message Name="ZteHlrSocket.TRACE2" /><Message Name="ZteHlrSocket.TRACE3" /><Message Name="ZteHlrSocket.TRACE4" /><Message Name="ZteHlrSocket.TRACE5" /><Message Name="ZteHlrSocket.RX_MESSAGE" /><Message Name="ZteHlrSocket.TX_MESSAGE" /></Group>-->
+  </Activate>
+</Profiler>

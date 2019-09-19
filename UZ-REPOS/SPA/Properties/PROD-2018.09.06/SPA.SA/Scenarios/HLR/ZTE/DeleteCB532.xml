@@ -1,0 +1,84 @@
+﻿<scenario name="DeleteCB532">
+   <objectList>
+      <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+   </objectList>
+   <automat>
+      <node name="BySubscribersSplitter" object="BySubscribersSplitter">
+         <resultlist>
+            <result value="0" node="SingleSubscriberRequestDequeuer" />
+         </resultlist>
+      </node>
+      <node name="SingleSubscriberRequestDequeuer" object="Dequeuer">
+         <resultlist>
+            <result value="0" node="DeleteCB532Node" />
+            <result value="1" node="" />
+         </resultlist>
+         <parameterslist>
+            <param name="queueName" value="requestsSplittedBySubscriberQueue" />
+         </parameterslist>
+      </node>
+      <node name="DeleteCB532Node" object="Commander">
+         <resultlist>
+            <result value="0" node="DeleteCB532Node2" />
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="CommandSource" value="Dictionary" />
+            <param name="Command" value="DeleteCallForwardingCFU" />
+            <param name="Script" value="Command" />
+            <param name="AppendSubscribersData" value="false" />
+            <param name="ErrorDecodingType" value="ByString" />
+            <param name="DynamicObject" value="(empty)" />
+         </parameterslist>
+      </node>
+      <node name="DeleteCB532Node2" object="Commander">
+         <resultlist>
+            <result value="0" node="DeleteCB532Node3" />
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="CommandSource" value="Dictionary" />
+            <param name="Command" value="DeleteCallForwardingCFNRC" />
+            <param name="Script" value="Command" />
+            <param name="AppendSubscribersData" value="false" />
+            <param name="ErrorDecodingType" value="ByString" />
+            <param name="DynamicObject" value="(empty)" />
+         </parameterslist>
+      </node>
+      <node name="DeleteCB532Node3" object="Commander">
+         <resultlist>
+            <result value="0" node="DeleteCB532Node4" />
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="CommandSource" value="Dictionary" />
+            <param name="Command" value="DeleteCallForwardingCFNRY" />
+            <param name="Script" value="Command" />
+            <param name="AppendSubscribersData" value="false" />
+            <param name="ErrorDecodingType" value="ByString" />
+            <param name="DynamicObject" value="(empty)" />
+         </parameterslist>
+      </node>
+      <node name="DeleteCB532Node4" object="Commander">
+         <resultlist>
+            <result value="" node="ResponseAssembler" />
+         </resultlist>
+         <parameterslist>
+            <param name="CommandSource" value="Dictionary" />
+            <param name="Command" value="DeleteCallForwardingCFB" />
+            <param name="Script" value="Command" />
+            <param name="AppendSubscribersData" value="false" />
+            <param name="ErrorDecodingType" value="ByString" />
+            <param name="DynamicObject" value="(empty)" />
+         </parameterslist>
+      </node>
+      <node name="ResponseAssembler" object="ResponseAssembler">
+         <resultlist>
+            <result value="" node="SingleSubscriberRequestDequeuer" />
+         </resultlist>
+      </node>
+   </automat>
+</scenario>

@@ -1,0 +1,15 @@
+﻿<OperationData>
+   <Request Name="RequestMessage">
+      <AdditionalData Executable="True">
+         <WithdrawalList HaltMode="CancelOperation" Type="AnyOfListed">
+            <FRM2MAPNFMS HaltMode="CancelOperation" Type="Optional" />
+            <FRM2MAPNNGMK HaltMode="CancelOperation" Type="Optional" />
+            <FRM2MAPNBEPRO HaltMode="CancelOperation" Type="Optional" />
+            <FRM2MAPN HaltMode="CancelOperation" Type="Optional" />
+            <FRM2MAPNBANK HaltMode="CancelOperation" Type="Optional" />
+         </WithdrawalList>
+         <RegisteredList Type="Optional" />
+      </AdditionalData>
+   </Request>
+   <Response Name="ResponseMessage" />
+</OperationData>

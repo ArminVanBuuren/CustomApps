@@ -1,0 +1,11 @@
+﻿<OperationData>
+   <Request Name="RequestMessage">
+      <AdditionalData Executable="True">
+         <WithdrawalList HaltMode="AbortProcess" Type="AnyOfListed">
+            <FRDLAPN HaltMode="CancelOperation" Type="Mandatory" />
+         </WithdrawalList>
+         <RegisteredList Type="Optional" />
+      </AdditionalData>
+   </Request>
+   <Response Name="ResponseMessage" />
+</OperationData>

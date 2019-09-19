@@ -1,0 +1,8 @@
+﻿<Command Name="DeleteTeleService" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+   <Description>Удаление голосовой связи</Description>
+   <Author Name="Timur Khamzin" Date="2015-11-16+15:00" />
+   <Request Template="Mod Tele:MSISDN={0},Tele=0;^M">
+      <Item Name="msisdn" Type="Wellknown" />
+   </Request>
+   <ErrorsList CodePage="windows-1251" />
+</Command>

@@ -1,0 +1,21 @@
+﻿<OperationData>
+   <Request Name="RequestMessage">
+      <AdditionalData Executable="True">
+         <WithdrawalList Type="Optional" />
+         <ProvisionList HaltMode="CancelOperation" Type="AnyOfListed">
+            <FRM2MAPNFMS HaltMode="CancelOperation" Type="Optional" />
+            <FRM2MAPNNGMK HaltMode="CancelOperation" Type="Optional" />
+            <FRM2MAPNBEPRO HaltMode="CancelOperation" Type="Optional" />
+            <FRM2MAPN HaltMode="CancelOperation" Type="Optional" />
+            <FRM2MAPNBANK HaltMode="CancelOperation" Type="Optional" />
+         </ProvisionList>
+         <RegisteredList Type="Optional" />
+         <BalanceStorage HaltMode="AbortProcess" Type="Mandatory">
+            <HostTypeCode Type="Optional" />
+            <HostId Type="Optional" />
+            <HostCode HaltMode="AbortProcess" Type="Mandatory" />
+         </BalanceStorage>
+      </AdditionalData>
+   </Request>
+   <Response Name="ResponseMessage" />
+</OperationData>

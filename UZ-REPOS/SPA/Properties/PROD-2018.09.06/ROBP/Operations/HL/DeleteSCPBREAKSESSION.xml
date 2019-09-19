@@ -1,0 +1,12 @@
+﻿<OperationData>
+   <Request Name="RequestMessage">
+      <AdditionalData Executable="True">
+         <WithdrawalList HaltMode="AbortProcess" Type="AnyOfListed">
+            <SCPBREAKSESSION HaltMode="CancelOperation" Type="Mandatory" />
+         </WithdrawalList>
+         <ProvisionList Type="Optional" />
+         <RegisteredList Type="Optional" />
+      </AdditionalData>
+   </Request>
+   <Response Name="ResponseMessage" />
+</OperationData>

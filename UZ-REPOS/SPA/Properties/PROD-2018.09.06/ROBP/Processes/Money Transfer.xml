@@ -1,0 +1,19 @@
+﻿<BusinessProcessData name="Money Transfer" successOnNoOperation="true">
+   <businessprocess>
+      <scenario>
+         <objectlist>
+            <object name="OperationOnSA" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+         </objectlist>
+         <automat>
+            <node name="MoneyTransfer" object="OperationOnSA">
+               <parameterslist>
+                  <param name="operation" value="MoneyTransfer" />
+               </parameterslist>
+               <resultlist>
+                  <result value="" node="" />
+               </resultlist>
+            </node>
+         </automat>
+      </scenario>
+   </businessprocess>
+</BusinessProcessData>

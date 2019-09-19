@@ -1,0 +1,10 @@
+﻿<OperationData>
+   <Request Name="RequestMessage">
+      <AdditionalData Executable="True">
+         <ProvisionList Type="Optional" />
+         <RegisteredList Type="Optional" />
+         <WithdrawalList Type="Optional" />
+      </AdditionalData>
+   </Request>
+   <Response Name="ResponseMessage" />
+</OperationData>

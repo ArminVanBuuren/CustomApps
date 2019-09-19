@@ -1,0 +1,28 @@
+﻿<OperationData>
+   <Request Name="RequestMessage">
+      <AdditionalData Executable="True">
+         <WithdrawalList HaltMode="CancelOperation" Type="AnyOfListed">
+            <FRBLKFIN HaltMode="CancelOperation" Type="Optional" />
+            <CBBLKLOST HaltMode="CancelOperation" Type="Optional" />
+            <FRBLAPP HaltMode="CancelOperation" Type="Optional" />
+            <FRBLKCHK HaltMode="CancelOperation" Type="Optional" />
+            <FRBLKPAY HaltMode="CancelOperation" Type="Optional" />
+            <FRBLKUSER HaltMode="CancelOperation" Type="Optional" />
+            <FRBLKTIME HaltMode="CancelOperation" Type="Optional" />
+            <BLTDLIM HaltMode="CancelOperation" Type="Optional" />
+            <FRTECHBLK HaltMode="CancelOperation" Type="Optional" />
+            <FRBLKFROD HaltMode="CancelOperation" Type="Optional" />
+            <FRBLKNAR HaltMode="CancelOperation" Type="Optional" />
+            <FRBLKDZ HaltMode="CancelOperation" Type="Optional" />
+         </WithdrawalList>
+         <ProvisionList Type="Optional" />
+         <RegisteredList Type="Optional" />
+         <BalanceStorage HaltMode="AbortProcess" Type="Mandatory">
+            <HostTypeCode Type="Optional" />
+            <HostId Type="Optional" />
+            <HostCode HaltMode="AbortProcess" Type="Mandatory" />
+         </BalanceStorage>
+      </AdditionalData>
+   </Request>
+   <Response Name="ResponseMessage" />
+</OperationData>

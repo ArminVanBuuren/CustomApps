@@ -1,0 +1,9 @@
+﻿<Command Name="AddCorporateAPN" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+   <Description>Добавление услуги 'Корпоративный APN'</Description>
+   <Author Name="Timur Khamzin" Date="2016-04-29+15:00" />
+   <Request Template="Add PDP:MSISDN={0},PDPType=0,APN={1},QOSID=100;^M">
+      <Item Name="msisdn" Type="Wellknown" />
+      <Item Name="apn" Type="Parameter" />
+   </Request>
+   <ErrorsList CodePage="windows-1251" />
+</Command>

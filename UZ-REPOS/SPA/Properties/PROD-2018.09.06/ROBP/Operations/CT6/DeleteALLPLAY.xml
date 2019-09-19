@@ -1,0 +1,15 @@
+﻿<OperationData>
+   <Request Name="RequestMessage">
+      <AdditionalData Executable="True">
+         <WithdrawalList HaltMode="CancelOperation" Type="AnyOfListed">
+            <FRMOBTV HaltMode="CancelOperation" Type="Optional" />
+            <FRMOBTVTEST HaltMode="CancelOperation" Type="Optional" />
+            <FRMOBTV1D HaltMode="CancelOperation" Type="Optional" />
+            <FRMOBTV7D HaltMode="CancelOperation" Type="Optional" />
+         </WithdrawalList>
+         <ProvisionList Type="Optional" />
+         <RegisteredList Type="Optional" />
+      </AdditionalData>
+   </Request>
+   <Response Name="ResponseMessage" />
+</OperationData>

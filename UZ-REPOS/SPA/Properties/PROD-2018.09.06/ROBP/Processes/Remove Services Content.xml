@@ -1,0 +1,35 @@
+﻿<BusinessProcessData name="Remove Services Content">
+   <businessprocess>
+      <scenario>
+         <objectlist>
+            <object name="OperationOnSA" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+         </objectlist>
+         <automat>
+            <node name="DeleteMOBITEL" object="OperationOnSA">
+               <parameterslist>
+                  <param name="operation" value="DeleteMOBITEL" />
+               </parameterslist>
+               <resultlist>
+                  <result value="" node="DeleteLISTIMEI" />
+               </resultlist>
+            </node>
+            <node name="DeleteLISTIMEI" object="OperationOnSA">
+               <parameterslist>
+                  <param name="operation" value="DeleteLISTIMEI" />
+               </parameterslist>
+               <resultlist>
+                  <result value="" node="DeleteALLPLAY" />
+               </resultlist>
+            </node>
+            <node name="DeleteALLPLAY" object="OperationOnSA">
+               <parameterslist>
+                  <param name="operation" value="DeleteALLPLAY" />
+               </parameterslist>
+               <resultlist>
+                  <result value="" node="" />
+               </resultlist>
+            </node>
+         </automat>
+      </scenario>
+   </businessprocess>
+</BusinessProcessData>

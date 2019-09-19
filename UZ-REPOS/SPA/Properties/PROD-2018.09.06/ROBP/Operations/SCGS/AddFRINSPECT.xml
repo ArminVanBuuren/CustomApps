@@ -1,0 +1,12 @@
+﻿<OperationData>
+   <Request Name="RequestMessage">
+      <AdditionalData Executable="True">
+         <RegisteredList Type="Optional" />
+         <WithdrawalList Type="Optional" />
+         <ProvisionList HaltMode="AbortProcess" Type="AnyOfListed">
+            <FRINSPECT HaltMode="CancelOperation" Type="Mandatory" />
+         </ProvisionList>
+      </AdditionalData>
+   </Request>
+   <Response Name="ResponseMessage" />
+</OperationData>
