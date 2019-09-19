@@ -31,15 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="EDITION\SPA.SA\FP.AM\Func\ff_count_string.cs" />
     <Compile Include="EDITION\SPA.SA\FP.AM\Func\func_adjust_utcoffset.cs" />
     <Compile Include="EDITION\SPA.SA\FP.AM\Func\func_get_line_after_dot.cs" />
