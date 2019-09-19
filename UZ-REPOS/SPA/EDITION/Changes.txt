@@ -35,6 +35,8 @@ sc create FORIS.SPA.SA.BSP                binPath= "C:\Foris\SPA\SA\FORIS.SPA.Se
 
 
 
+C:\Users\vhovanskij\Desktop\httpcfg.exe set urlacl /u http://+:9149/ /a "D:(A;;GX;;;NS)"
+
 C:\Users\vhovanskij\Desktop\httpcfg.exe set urlacl /u http://+:1000/ /a "D:(A;;GX;;;NS)"
 C:\Users\vhovanskij\Desktop\httpcfg.exe set urlacl /u http://+:1001/ /a "D:(A;;GX;;;NS)"
 C:\Users\vhovanskij\Desktop\httpcfg.exe set urlacl /u http://+:1002/ /a "D:(A;;GX;;;NS)"
