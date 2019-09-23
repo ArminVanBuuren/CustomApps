@@ -580,7 +580,7 @@
     <CFS name="CancelLocationSGSN" copyOf="CancelLocation" description="Сброс информации о локации абонета на MSC, VLR, SGSN станциях" />
     <CFS name="CB0101" globalServiceCode="CB0101" copyOf="CFS_FP_SERVICE_GENERAL" description="Голосовая связь" />
     <CFS name="CB0401555" globalServiceCode="CB0401555" copyOf="CFS_FP_SERVICE_GENERAL" description="Запрет приема SMS с сайта UMS" />
-    <CFS name="CB101" priority="9998" description="Голосовая связь - базовая услуга абонента">
+    <CFS name="CB1011" priority="9998" description="Ежемесячная плата за тариф">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
       <RFS name="RFS_HLR_ODB_IC_ALL_CALLS" linkType="Add" />
       <RFS name="RFS_HLR_ODB_OC_LOCAL_CALLS" linkType="Add" />
