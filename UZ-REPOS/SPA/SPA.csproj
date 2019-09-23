@@ -707,17 +707,13 @@
     <Content Include="EDITION\SPA.SA\IVR\Scenarios\SC.ImportContacts.xml" />
     <Content Include="EDITION\SPA.SA\IVR\Scenarios\SC.ImportContactsStatistic.xml" />
     <Content Include="EDITION\SPA.SA\MCA\Commands\SC.Add_MCA_SERVICE.xml" />
-    <Content Include="EDITION\SPA.SA\MCA\Commands\SC.Add_MCA_SERVICE_NEW_MSISDN.xml" />
     <Content Include="EDITION\SPA.SA\MCA\Commands\SC.Remove_MCA_SERVICE.xml" />
     <Content Include="EDITION\SPA.SA\MCA\configuration.application.xml" />
     <Content Include="EDITION\SPA.SA\MCA\configuration.common.xml" />
     <Content Include="EDITION\SPA.SA\MCA\dictionary.xml" />
     <Content Include="EDITION\SPA.SA\MCA\Misc\RepetitionTable.xml" />
-    <Content Include="EDITION\SPA.SA\MCA\Scenarios\SC.Add.RFS_MA_CHANGE_MSISDN.xml" />
-    <Content Include="EDITION\SPA.SA\MCA\Scenarios\SC.Add.RFS_MA_SUBSCRIPTION.xml" />
     <Content Include="EDITION\SPA.SA\MCA\Scenarios\SC.Add.RFS_MCA_CHANGE_MSISDN.xml" />
     <Content Include="EDITION\SPA.SA\MCA\Scenarios\SC.Add.RFS_MCA_SUBSCRIPTION.xml" />
-    <Content Include="EDITION\SPA.SA\MCA\Scenarios\SC.Remove.RFS_MA_SUBSCRIPTION.xml" />
     <Content Include="EDITION\SPA.SA\MCA\Scenarios\SC.Remove.RFS_MCA_SUBSCRIPTION.xml" />
     <Content Include="EDITION\SPA.SA\MG\configuration.application.xml" />
     <Content Include="EDITION\SPA.SA\MG\configuration.common.xml" />
