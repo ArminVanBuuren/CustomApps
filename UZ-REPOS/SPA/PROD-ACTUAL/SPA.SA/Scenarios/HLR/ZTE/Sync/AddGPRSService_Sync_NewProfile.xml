@@ -103,7 +103,7 @@
 			<parameterslist>
 				<param name="IfXmlPath:0" value="//AdditionalData/RegisteredList/FRUNLIMLTE"/>
 				<param name="CommandSource" value="Dictionary"/>
-				<param name="Command" value="AddLTE_APN_NewProfile"/>
+				<param name="Command" value="AddLTE"/>
 				<param name="Script" value="Command"/>
 				<param name="AppendSubscribersData" value="false"/>
 				<param name="ErrorDecodingType" value="ByString"/>
@@ -120,7 +120,7 @@
 			<parameterslist>
 				<param name="IfXmlPath:0" value="//AdditionalData/RegisteredList/FRUNLIMLTE"/>
 				<param name="CommandSource" value="Dictionary"/>
-				<param name="Command" value="AddLTE_2"/>
+				<param name="Command" value="AddLTE_APN_NewProfile"/>
 				<param name="Script" value="Command"/>
 				<param name="AppendSubscribersData" value="false"/>
 				<param name="ErrorDecodingType" value="ByString"/>
