@@ -1,9 +1,13 @@
 ﻿<root>
   <assemblies>
     <assembly>System.dll</assembly>
+    <assembly>System.Xml.dll</assembly>
   </assemblies>
   <namespaces>
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
     using System.Text.RegularExpressions;
     using System.Xml.XPath;
     using System.Xml.Xsl;
@@ -116,16 +120,16 @@
 ]]>
       </code>
     </getTimeInRange>
-    <StrToLower>
+    <ToLower>
       <summary>
-        <syntax>StrToLower(string)</syntax>
+        <syntax>ToLower(string)</syntax>
         <definition>
           Created by Vladimir Khovanskiy. ISSUE - 1261689
         </definition>
       </summary>
       <code>
         <![CDATA[
-    public class StrToLowerFunction : IXsltContextFunction
+    public class ToLowerFunction : IXsltContextFunction
     {
         public int Minargs
         {
@@ -152,25 +156,24 @@
             if (args == null)
                 throw new ArgumentNullException("args");
             if (args.Length != 1)
-                throw new ArgumentException("Function StrToLower() takes only one parameter");
+                throw new ArgumentException("Function ToLower() takes only one parameter");
 
-            return ((string)args[0]).Trim().ToLower();
+            return ((string)args[0]).ToLower();
         }
     }
 ]]>
       </code>
-    </StrToLower>
-    <StrFormat>
+    </ToLower>
+    <Format>
       <summary>
-        <syntax>StrFormat(string,stringParams)</syntax>
+        <syntax>Format(string, params string[] args)</syntax>
         <definition>
           Created by Vladimir Khovanskiy. ISSUE - 1261689; Task - 1267189
-          stringParams - splitting by sign ';'
         </definition>
       </summary>
       <code>
         <![CDATA[
-    public class StrFormatFunction : IXsltContextFunction
+    public class FormatFunction : IXsltContextFunction
     {
         public int Minargs
         {
@@ -179,7 +182,7 @@
 
         public int Maxargs
         {
-            get { return 2; }
+            get { return 20; }
         }
 
         public XPathResultType ReturnType
@@ -196,14 +199,55 @@
         {
             if (args == null)
                 throw new ArgumentNullException("args");
-            if (args.Length != 2)
-                throw new ArgumentException("Function StrFormat() takes only two parameters");
+            if (args.Length < 2)
+                throw new ArgumentException("Function Format() takes two or more parameters");
 
-            return string.Format(((string)args[0]).Trim().Replace("[", "{").Replace("]", "}"), ((string)args[1]).Split(';'));
+            var input = ((string) args[0]).Replace("[", "{").Replace("]", "}");
+            var @params = args.Skip(1).Take(args.Length - 1).ToArray();
+            var matches = Regex.Matches(input, @"{(\d+).*?}");
+            var uniqueParams = matches.OfType<Match>().Select(m => m.Value).Distinct();
+            if (uniqueParams.Count() <= @params.Length)
+                return string.Format(input, @params);
+            else
+                return FormatOptional(input, string.Empty, @params);
+        }
+
+        public static string FormatOptional(string s, string optional, params object[] param)
+        {
+            var result = new StringBuilder();
+            var index = 0;
+            var opened = false;
+            var stack = new Stack<object>(param.Reverse());
+
+            foreach (var c in s)
+            {
+                if (c == '{')
+                {
+                    opened = true;
+                    index = result.Length;
+                }
+                else if (opened && c == '}')
+                {
+                    opened = false;
+                    var p = stack.Count > 0 ? stack.Pop() : optional;
+                    var lenToRem = result.Length - index;
+                    result.Remove(index, lenToRem);
+                    result.Append(p);
+                    continue;
+                }
+                else if (opened && !char.IsDigit(c))
+                {
+                    opened = false;
+                }
+
+                result.Append(c);
+            }
+
+            return result.ToString();
         }
     }
 ]]>
       </code>
-    </StrFormat>
+    </Format>
   </functions>
 </root>
