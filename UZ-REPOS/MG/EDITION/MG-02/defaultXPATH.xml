@@ -1,18 +1,15 @@
 ﻿<root>
   <assemblies>
     <assembly>System.dll</assembly>
-    <assembly>System.Xml.dll</assembly>
   </assemblies>
   <namespaces>
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
     using System.Text.RegularExpressions;
     using System.Xml.XPath;
     using System.Xml.Xsl;
     using System.IO;
     using System.Reflection;
+    using System.Text;
   </namespaces>
   <functions>
     <getTimeInRange>
@@ -148,7 +145,7 @@
 
         public XPathResultType[] ArgTypes
         {
-            get { return new XPathResultType[] { XPathResultType.String, XPathResultType.String, XPathResultType.String, XPathResultType.String }; }
+            get { return new XPathResultType[] { XPathResultType.String }; }
         }
 
         public object Invoke(XsltContext xsltContext, object[] args, XPathNavigator docContext)
@@ -166,9 +163,10 @@
     </ToLower>
     <Format>
       <summary>
-        <syntax>Format(string, params string[] args)</syntax>
+        <syntax>Format(string, string)</syntax>
         <definition>
           Created by Vladimir Khovanskiy. ISSUE - 1261689; Task - 1267189
+          params - splitting by sign ';'
         </definition>
       </summary>
       <code>
@@ -182,7 +180,7 @@
 
         public int Maxargs
         {
-            get { return 20; }
+            get { return 2; }
         }
 
         public XPathResultType ReturnType
@@ -192,58 +190,17 @@
 
         public XPathResultType[] ArgTypes
         {
-            get { return new[] { XPathResultType.String }; }
+            get { return new[] { XPathResultType.String, XPathResultType.String }; }
         }
 
         public object Invoke(XsltContext xsltContext, object[] args, XPathNavigator docContext)
         {
             if (args == null)
                 throw new ArgumentNullException("args");
-            if (args.Length < 2)
-                throw new ArgumentException("Function Format() takes two or more parameters");
+            if (args.Length != 2)
+                throw new ArgumentException("Function StrFormat() takes only two parameters");
 
-            var input = ((string) args[0]).Replace("[", "{").Replace("]", "}");
-            var @params = args.Skip(1).Take(args.Length - 1).ToArray();
-            var matches = Regex.Matches(input, @"{(\d+).*?}");
-            var uniqueParams = matches.OfType<Match>().Select(m => m.Value).Distinct();
-            if (uniqueParams.Count() <= @params.Length)
-                return string.Format(input, @params);
-            else
-                return FormatOptional(input, string.Empty, @params);
-        }
-
-        public static string FormatOptional(string s, string optional, params object[] param)
-        {
-            var result = new StringBuilder();
-            var index = 0;
-            var opened = false;
-            var stack = new Stack<object>(param.Reverse());
-
-            foreach (var c in s)
-            {
-                if (c == '{')
-                {
-                    opened = true;
-                    index = result.Length;
-                }
-                else if (opened && c == '}')
-                {
-                    opened = false;
-                    var p = stack.Count > 0 ? stack.Pop() : optional;
-                    var lenToRem = result.Length - index;
-                    result.Remove(index, lenToRem);
-                    result.Append(p);
-                    continue;
-                }
-                else if (opened && !char.IsDigit(c))
-                {
-                    opened = false;
-                }
-
-                result.Append(c);
-            }
-
-            return result.ToString();
+            return string.Format(((string)args[0]).Replace("[", "{").Replace("]", "}"), ((string)args[1]).Split(';'));
         }
     }
 ]]>
