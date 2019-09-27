@@ -1,28 +1,28 @@
 ﻿<Application configClass="FORIS.MessagingGateway.EmailConnector.EmailConnectorConfiguration" type="EMAILCON">
-   <EmailConnections>
-      <SMTP server="mail.inside.mts.ru" port="25" delay="500" advancedSmtp="true">
-         <Account from="mgservice@mts.ru" name="mgservice" password="DRWcdXtIAPiGr" />
-      </SMTP>
-   </EmailConnections>
-   <FTPConnections>
-      <FTP server="msk-foris-60" port="21" account="ftpuser" password="Passw0rd" />
-   </FTPConnections>
-   <Settings>
-      <Item name="ModuleType" value="EMAILCON" />
-      <Item name="ModuleName" value="EMAILCON_01_01" />
-      <Item name="MessagesLimit" value="20" />
-      <Item name="DefaultCharset" value="unicodefffe" />
-      <Item name="DefaultEncoding" value="unicodefffe" />
-      <Item name="FetchLimit" value="20" />
-      <Item name="CRMCacheCleanInterval" value="1200" />
-      <Item name="StoringInterval" value="10" />
-      <Item name="ThreadMultiplifier" value="8" />
-      <Item name="NumberOfWorkThreads" value="16" />
-      <Item name="TempDir" value="Temp" />
-      <Item name="ArchivatorName" value="Rar.exe" />
-      <Item name="ArchivatorLine" value="m -v{0}k -ep -m3 {1} {2}" />
-   </Settings>
-   <TemplateProcessors defaultConfig="EmailTemplateProcessor.xml">
-      <Processor dll="DefaultTemplates.dll" class="EmailTemplateProcessor" config="EmailTemplateProcessor.xml" />
-   </TemplateProcessors>
+  <EmailConnections>
+    <SMTP server="10.160.11.7" port="25" delay="500" advancedSmtp="true">
+      <Account from="no-reply@ums.uz" name="adums\no-reply" password="P@sswordqazWSX" />
+    </SMTP>
+  </EmailConnections>
+  <FTPConnections>
+    <FTP server="doc2.ad.frs.uz" port="21" account="strom" password="Qwerty12345" />
+  </FTPConnections>
+  <Settings>
+    <Item name="ModuleType" value="EMAILCON" />
+    <Item name="ModuleName" value="EMAILCON_01_01" />
+    <Item name="MessagesLimit" value="20" />
+    <Item name="DefaultCharset" value="unicodefffe" />
+    <Item name="DefaultEncoding" value="unicodefffe" />
+    <Item name="FetchLimit" value="20" />
+    <Item name="CRMCacheCleanInterval" value="1200" />
+    <Item name="StoringInterval" value="10" />
+    <Item name="ThreadMultiplifier" value="8" />
+    <Item name="NumberOfWorkThreads" value="16" />
+    <Item name="TempDir" value="Temp" />
+    <Item name="ArchivatorName" value="Rar.exe" />
+    <Item name="ArchivatorLine" value="m -v{0}k -ep -m3 {1} {2}" />
+  </Settings>
+  <TemplateProcessors defaultConfig="EmailTemplateProcessor.xml">
+    <Processor dll="DefaultTemplates.dll" class="EmailTemplateProcessor" config="EmailTemplateProcessor.xml" />
+  </TemplateProcessors>
 </Application>

@@ -200,7 +200,7 @@
             if (args.Length != 2)
                 throw new ArgumentException("Function StrFormat() takes only two parameters");
 
-            return string.Format(((string)args[0]).Replace("[", "{").Replace("]", "}"), ((string)args[1]).Split(';'));
+            return string.Format(((string)args[0]).Replace("[", "{").Replace("]", "}").Replace("*", "\"").Replace("^", "'").Replace(@"\r", "\r").Replace(@"\n", "\n"), ((string)args[1]).Split(';'));
         }
     }
 ]]>
