@@ -14,6 +14,7 @@
   <ErrorsList CodePage="windows-1251">
     <Error Name="000000" Value="SUCCESS"/>
     <Error Name="110109" Value="SUCCESS"/>  <!--Subscriber does not exist--> 
+    <Error Name="104107" Value="SUCCESS"/>  <!--The type of PDP can not be identical when one user has two same APN-->     
     <Error Name="101040" Value="FAILURE"/>
     <Error Name="ERR3007" Value="DuplicateManagedObjectInstance"/>
     <Error Name="ERR3050" Value="ImsiAssinedToAnotherSubscriber"/>
@@ -114,16 +115,18 @@
       <Source Path="//AdditionalData/BalanceStorage/HostCode"/>
       <PossibleValues StringToKeyTable="false">
         <Item Key="MS" StringValue="NET.UMS.UZ"/>
-        <Item Key="05" StringValue="CORP.UMS.UZ"/>
+        <Item Key="05" StringValue="POSTPAID.UMS.UZ"/>
         <Item Key="MS-predprod" StringValue="NET.UMS.UZ"/>
+        <Item Key="MS-155" StringValue="NET.UMS.UZ"/>
       </PossibleValues>
     </Parameter>
     <Parameter Name="NewAPN">
       <Source Path="//AdditionalData/ProvisionList/ChangeTP/NewPlatform/HostCode"/>
       <PossibleValues StringToKeyTable="false">
         <Item Key="MS" StringValue="NET.UMS.UZ"/>
-        <Item Key="05" StringValue="CORP.UMS.UZ"/>
+        <Item Key="05" StringValue="POSTPAID.UMS.UZ"/>
         <Item Key="MS-predprod" StringValue="NET.UMS.UZ"/>
+        <Item Key="MS-155" StringValue="NET.UMS.UZ"/>
       </PossibleValues>
     </Parameter>
   </ParametersList>
@@ -133,8 +136,8 @@
                55           TAS_SCP1                 - prepaid - SIM
                10           ASKUE                    - AIISKUE - SIM 
                20           Diller APN               - Diller APN Profile 
-               56           POST_USIM                - postpaid - USIM    
-               57           TAS_SCP1_USIM            - prepaid - USIM
+               56           TAS_SCP155-predprod      - prepaid - SIM    
+               57           TAS_SCP155               - prepaid - SIM
 
                AND_HLR   	Andijan       
                BUH_HLR   	Bukhara        
@@ -183,6 +186,15 @@
 		<Source Type="IfNotXmlPath:5" Path="//AdditionalData/ProvisionList/FRDGU"/>
 		<Source Type="IfXmlPath:0" Path="//AdditionalData/BalanceStorage/HostCode[text()='MS-predprod']"/>
       </SourcesList>
+      <SourcesList PresenceValue="57">
+        <Source Type="IfNotXmlPath:0" Path="//AdditionalData/RegisteredList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:1" Path="//AdditionalData/ProvisionList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:2" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
+        <Source Type="IfNotXmlPath:3" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
+		<Source Type="IfNotXmlPath:4" Path="//AdditionalData/RegisteredList/FRDGU"/>
+		<Source Type="IfNotXmlPath:5" Path="//AdditionalData/ProvisionList/FRDGU"/>
+		<Source Type="IfXmlPath:0" Path="//AdditionalData/BalanceStorage/HostCode[text()='MS-155']"/>
+      </SourcesList>
       <SourcesList PresenceValue="10">
         <Source Type="OrXmlPath:0" Path="//AdditionalData/RegisteredList/FRASKUE"/>
         <Source Type="OrXmlPath:1" Path="//AdditionalData/ProvisionList/FRASKUE"/>
@@ -224,6 +236,15 @@
 		<Source Type="IfNotXmlPath:5" Path="//AdditionalData/ProvisionList/FRDGU"/>
 		<Source Type="IfXmlPath:0" Path="//NewPlatform/HostCode[text()='MS-predprod']"/>
       </SourcesList>
+      <SourcesList PresenceValue="57">
+        <Source Type="IfNotXmlPath:0" Path="//AdditionalData/RegisteredList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:1" Path="//AdditionalData/ProvisionList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:2" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
+        <Source Type="IfNotXmlPath:3" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
+		<Source Type="IfNotXmlPath:4" Path="//AdditionalData/RegisteredList/FRDGU"/>
+		<Source Type="IfNotXmlPath:5" Path="//AdditionalData/ProvisionList/FRDGU"/>
+		<Source Type="IfXmlPath:0" Path="//NewPlatform/HostCode[text()='MS-155']"/>
+      </SourcesList>
       <SourcesList PresenceValue="10">
         <Source Type="OrXmlPath:0" Path="//AdditionalData/RegisteredList/FRASKUE"/>
         <Source Type="OrXmlPath:1" Path="//AdditionalData/ProvisionList/FRASKUE"/>
@@ -258,6 +279,13 @@
         <Source Type="IfNotXmlPath:2" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
         <Source Type="IfNotXmlPath:3" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
 	<Source Type="IfXmlPath:0" Path="//AdditionalData/BalanceStorage/HostCode[text()='MS-predprod']"/>
+      </SourcesList>
+      <SourcesList PresenceValue="56">
+        <Source Type="IfNotXmlPath:0" Path="//AdditionalData/RegisteredList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:1" Path="//AdditionalData/ProvisionList/FRASKUE"/>
+        <Source Type="IfNotXmlPath:2" Path="//AdditionalData/RegisteredList/FRPARTAPN"/>
+        <Source Type="IfNotXmlPath:3" Path="//AdditionalData/ProvisionList/FRPARTAPN"/>
+	<Source Type="IfXmlPath:0" Path="//AdditionalData/BalanceStorage/HostCode[text()='MS-155']"/>
       </SourcesList>
       <SourcesList PresenceValue="10">
         <Source Type="OrXmlPath:0" Path="//AdditionalData/RegisteredList/FRASKUE"/>
