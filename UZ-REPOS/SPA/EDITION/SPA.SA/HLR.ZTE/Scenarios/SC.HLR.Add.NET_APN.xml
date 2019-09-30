@@ -41,7 +41,7 @@
          <resultlist>
             <result value="0" node="DummyResponder" />
             <result value="1" node="DummyResponder" />
-            <result value="2" node="Add_GPRS" />
+            <result value="2" node="Add_APN" />
             <result value="3" node="Add_APN" />
             <result value="4" node="Delete_GPRS" />
             <result value="5" node="DataBaseProcessor_ADD_IP" />
@@ -52,14 +52,6 @@
             <param name="Value:3" value="M2M" />
             <param name="Value:4" value="MYUMS" />
             <param name="Value:5" value="CorpAPN" />
-         </parameterslist>
-      </node>
-      <node name="Add_GPRS" object="Commander">
-         <resultlist>
-            <result value="" node="ResponseAssembler" />
-         </resultlist>
-         <parameterslist>
-            <param name="Command" value="SC.Add_GPRS" />
          </parameterslist>
       </node>
       <node name="Delete_GPRS" object="Commander">

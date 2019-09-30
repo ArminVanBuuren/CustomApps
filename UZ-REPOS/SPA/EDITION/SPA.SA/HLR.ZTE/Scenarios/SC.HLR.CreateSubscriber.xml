@@ -120,8 +120,8 @@
       </node>
       <node name="Add_Region" object="IfCommander">
          <resultlist>
-            <result value="0" node="Modify_BOC" />
-            <result value="1538" node="Modify_BOC" />
+            <result value="0" node="Add_TCSI" />
+            <result value="1538" node="Add_TCSI" />
             <result value="" node="ResponseAssembler" />
          </resultlist>
          <parameterslist>
@@ -129,7 +129,18 @@
             <param name="Command" value="SC.Add_Region" />
          </parameterslist>
       </node>
-      <node name="Modify_BOC" object="IfCommander">
+     <node name="Add_TCSI" object="IfCommander">
+       <resultlist>
+         <result value="0" node="Modify_BOC"/>
+         <result value="1538" node="Modify_BOC"/>
+         <result value="" node="ResponseAssembler"/>
+       </resultlist>
+       <parameterslist>
+         <param name="IfNotXmlPath" value="//RES_HLR_PROFILE/Value[text()='Postpaid']"/>
+         <param name="Command" value="SC.Add_TCSI"/>
+       </parameterslist>
+     </node>
+     <node name="Modify_BOC" object="IfCommander">
          <resultlist>
             <result value="0" node="Modify_BIC" />
             <result value="1538" node="Modify_BIC" />

@@ -498,7 +498,8 @@
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Add_GPRS_Dealer.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Add_KI.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Add_LTE_EPC.xml" />
-    <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Add_LTE_TPLAPNCP.xml" />
+    <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Add_LTE_EPCAPN.xml" />
+    <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Add_TCSI.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Add_Region.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.CancelLocation.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Create_Subscriber.xml" />
@@ -4114,7 +4115,6 @@
     <None Include="EDITION\SPA.SA\EIR\Commands\Command.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="EDITION\SPA.SA\HLR.ZTE\Commands\HLR.ZTE - Shortcut.lnk" />
     <None Include="PROD-2018.09.06\rd_service.xlsx" />
     <None Include="PROD-2018.09.06\SPA.SA\Dictionaries\CONTENT\ALLPLAY\Commands\Command.xsd">
       <SubType>Designer</SubType>

@@ -282,7 +282,9 @@
       <Resource name="RES_HLR_NET_SERVICE" value="CorpAPN" />
     </RFS>
     <RFS name="RFS_HLR_NET_APN_GPRS" base="RFS_HLR_NET_APN" hostType="HL" description="Мобильный интернет GPRS">
-      <Resource name="RES_HLR_NET_APN" value="51" />
+      <Resource name="RES_HL_NET_APN" value="NET.UMS.UZ">
+        <Value hosts="FP:05" value="POSTPAID.UMS.UZ"/>
+      </Resource>
       <Resource name="RES_HLR_NET_SERVICE" value="GPRS" />
     </RFS>
     <RFS name="RFS_HLR_NET_APN_M2M_BEPRO" base="RFS_HLR_NET_APN" hostType="HL" description="M2M APN BEPRO">

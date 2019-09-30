@@ -169,7 +169,9 @@
     </RFS>
     <RFS name="RFS_HL_NET_APN_GPRS" base="RFS_HL_NET_APN" hostType="HL" description="Мобильный интернет GPRS">
       <Resource name="RES_HL_NET_SERVICE" value="GPRS" />
-      <Resource name="RES_HL_NET_APN" value="51" />
+      <Resource name="RES_HL_NET_APN" value="NET.UMS.UZ">
+        <Value hosts="FP:05" value="POSTPAID.UMS.UZ"/>
+      </Resource>
     </RFS>
     <RFS name="RFS_HL_NET_APN_CORP_BS" base="RFS_HL_NET_APN" hostType="HL" description="Корпоративный APN">
       <Resource name="RES_HL_NET_SERVICE" value="CorpAPN" />
