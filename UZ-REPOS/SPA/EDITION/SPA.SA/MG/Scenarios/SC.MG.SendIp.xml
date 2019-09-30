@@ -1,0 +1,57 @@
+<scenario name="SC.MG.SendIp">
+  <objectList>
+    <object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll"/>
+  </objectList>
+  <automat>
+    <node name="BySubscribersCutter" object="BySubscribersCutter">
+      <resultlist>
+        <result value="0" node="GetIp" />
+        <result value="1" node="" />
+      </resultlist>
+    </node>
+    <node name="GetIp" object="DataBaseProcessor">
+      <resultlist>
+        <result value="0" node="ExtractIP"/>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="DataBaseName" value="UMS.ARCHIVE"/>
+        <param name="FunctionName" value="SELECT ip FROM static_ip WHERE MSISDN = '{0}'"/>
+        <param name="FunctionType" value="customQuery"/>
+        <param name="OutXml" value="db_unit_result"/>
+        <param name="DbParameterName:0" value="p_msisdn"/>
+        <param name="DbParameterDirection:0" value="Input"/>
+        <param name="DbParameterType:0" value="Varchar2"/>
+        <param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN" />
+      </parameterslist>
+    </node>
+    <node name="ExtractIP" object="XmlNodesCopier">
+      <resultlist>
+        <result value="" node="SendIP"/>
+      </resultlist>
+      <parameterslist>
+        <param name="SrcXml" value="db_unit_result"/>
+        <param name="DstMessage" value="xmlrequest"/>
+        <param name="CopyContentType" value="InnerText"/>
+        <param name="SrcXmlPath:0" value="root/return/record/column[@name='IP']"/>
+        <param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/IP"/>
+      </parameterslist>
+    </node>
+    <node name="SendIP" object="Commander">
+      <resultlist>
+        <result value="" node="ResponseAssembler"/>
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SendIP"/>
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="BySubscribersCutter" />
+      </resultlist>
+    </node>
+  </automat>
+</scenario>

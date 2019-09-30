@@ -1,0 +1,24 @@
+<Command Name="SendIP">
+   <Description>Отправить статический Ip</Description>
+   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
+   <Request>
+      <RequestTemplate>
+         <![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <TestMethod xmlns="http://sitronicsts.com/MessagingGateway">
+      <Methodname>GetInfo</Methodname>
+      <StringOfParams>sender=111;recipient=##msisdn##;message=Your Static IP is ##IP##</StringOfParams>
+    </TestMethod>
+  </soap:Body>
+</soap:Envelope>]]>
+      </RequestTemplate>
+      <Item Name="msisdn" Type="Wellknown" />
+      <Item Name="IP" Type="LocalParameter" />
+   </Request>
+   <ParametersList>
+     <Parameter Name="IP" AbsenceValue="">
+       <Source Path="ExtendedRequestMessage/AdditionalData/IP" />
+     </Parameter>
+   </ParametersList>
+</Command>
