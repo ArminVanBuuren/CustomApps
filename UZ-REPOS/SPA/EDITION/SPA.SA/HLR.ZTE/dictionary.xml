@@ -5,22 +5,23 @@
    </WellknownsList>
    <ErrorsList CodePage="windows-1251">
       <Error Name="000000;" Expression="$(Error)" Value="SUCCESS" />
+      <Error Name="110109;" Expression="$(Error)" Value="SUCCESS"/>
+      <Error Name="104107;" Expression="$(Error)" Value="SUCCESS"/>
+      <Error Name="ERR3002;" Expression="$(Error)" Value="SUCCESS" />
+      <Error Name="ERR3049;" Expression="$(Error)" Value="SUCCESS" />
       <Error Name="000008;" Expression="$(Error)" Value="InvalidParameterValue" />
       <Error Name="101040;" Expression="$(Error)" Value="FAILURE" />
       <Error Name="101041;" Expression="$(Error)" Value="MsisdnAlreadyDefined" />
       <Error Name="101063;" Expression="$(Error)" Value="ImsiIsNotRegisteredInAC" />
-      <Error Name="110109;" Expression="$(Error)" Value="SUCCESS" />
       <Error Name="ERR1001;" Expression="$(Error)" Value="NotSupportedCommandOrAction" />
       <Error Name="ERR1004;" Expression="$(Error)" Value="InvalidParameterValue" />
       <Error Name="ERR1016;" Expression="$(Error)" Value="FAILURE" />
       <Error Name="ERR1033;" Expression="$(Error)" Value="FAILURE" />
-      <Error Name="ERR3002;" Expression="$(Error)" Value="SUCCESS" />
       <Error Name="ERR3007;" Expression="$(Error)" Value="DuplicateManagedObjectInstance" />
       <Error Name="ERR3015;" Expression="$(Error)" Value="NoServices" />
       <Error Name="ERR3020;" Expression="$(Error)" Value="FAILURE" />
       <Error Name="ERR3027;" Expression="$(Error)" Value="NoServices" />
       <Error Name="ERR3028;" Expression="$(Error)" Value="AccessDenied" />
-      <Error Name="ERR3049;" Expression="$(Error)" Value="SUCCESS" />
       <Error Name="ERR3050;" Expression="$(Error)" Value="ImsiAssinedToAnotherSubscriber" />
       <Error Name="ERR3100;" Expression="$(Error)" Value="ResourceLimitation" />
       <Error Name="ERR5002;" Expression="$(Error)" Value="ResourceLimitation" />

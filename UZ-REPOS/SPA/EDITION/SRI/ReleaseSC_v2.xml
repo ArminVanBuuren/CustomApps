@@ -253,7 +253,11 @@
     <RFS name="RFS_HLR_CLIR" hostType="HL" description="Антиопределитель номера" />
     <RFS name="RFS_HLR_CWCH" hostType="HL" description="Ожидание / Удержание вызова" />
     <RFS name="RFS_HLR_DATATRANSFER" hostType="HL" description="Мобильная передача данных" />
-    <RFS name="RFS_HLR_LTE" hostType="HL" description="Мобильный интернет LTE" />
+    <RFS name="RFS_HLR_LTE" hostType="HL" description="Мобильный интернет LTE">
+      <Resource name="RES_HLR_NET_APN" value="NET.UMS.UZ">
+        <Value hosts="FP:05" value="POSTPAID.UMS.UZ" />
+      </Resource>
+    </RFS>
     <RFS name="RFS_HLR_MODIFY_SUBSCRIBER" hostType="HL" description="Изменение или пересоздание абонента" />
     <RFS name="RFS_HLR_MPTY" hostType="HL" description="Конференц-связь вызова" />
     <RFS name="RFS_HLR_NET" hostType="HL" description="Базовый сервис интернета">
@@ -282,8 +286,8 @@
       <Resource name="RES_HLR_NET_SERVICE" value="CorpAPN" />
     </RFS>
     <RFS name="RFS_HLR_NET_APN_GPRS" base="RFS_HLR_NET_APN" hostType="HL" description="Мобильный интернет GPRS">
-      <Resource name="RES_HL_NET_APN" value="NET.UMS.UZ">
-        <Value hosts="FP:05" value="POSTPAID.UMS.UZ"/>
+      <Resource name="RES_HLR_NET_APN" value="NET.UMS.UZ">
+        <Value hosts="FP:05" value="POSTPAID.UMS.UZ" />
       </Resource>
       <Resource name="RES_HLR_NET_SERVICE" value="GPRS" />
     </RFS>

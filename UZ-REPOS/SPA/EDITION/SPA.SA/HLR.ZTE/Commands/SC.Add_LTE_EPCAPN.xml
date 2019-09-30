@@ -3,9 +3,10 @@
    <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
    <Request>
       <RequestTemplate>
-         <![CDATA[Add APNPROF:MSISDN={0},EPCAPN={1},PDNGWATYPE=1,EPSQOSID=100,VPLMNDAA=0,PDNType=0,EPCPDNAddr1=*,EPCPDNAddr2=*,APNCHARGE=0,APNLIPAP=255,APNSIPTORAN=255,APNSIPLOCNW=255;^M]]>
+         <![CDATA[Add APNPROF:MSISDN=##msisdn##,EPCAPN=##NET_APN##,PDNGWATYPE=1,EPSQOSID=100,VPLMNDAA=0,PDNType=0,EPCPDNAddr1=*,EPCPDNAddr2=*,APNCHARGE=0,APNLIPAP=255,APNSIPTORAN=255,APNSIPLOCNW=255;^M]]>
       </RequestTemplate>
       <Item Name="msisdn" Type="Wellknown" />
+      <Item Name="NET_APN" Type="Parameter" />
    </Request>
    <ErrorsList CodePage="windows-1251">
       <Error Name="222007" Value="SUCCESS" />
