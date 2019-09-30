@@ -4,6 +4,7 @@
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll"/>
+    <object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll"/>
   </objectList>
   <automat>
     <node name="BySubscribersCutter" object="BySubscribersCutter">

@@ -47,7 +47,7 @@
 		<hostTypesTable  hostTypesFP="FP">
 		  <hostType type="CT4" identity="MSISDN" direct="MST"/>
 			<hostType type="CT6" identity="MSISDN" direct="ALLPLAY"/>
-			<hostType type="GT" identity="IMSI" direct="MGATE"/>
+			<hostType type="MG" identity="IMSI" direct="MG"/>
 			<hostType type="IVR" identity="IMSI" direct="CALLER"/>
 			<hostType type="MA" identity="MSISDN" direct="MCA"/>
 			<hostType type="RBT" identity="IMSI" direct="INTECH" />

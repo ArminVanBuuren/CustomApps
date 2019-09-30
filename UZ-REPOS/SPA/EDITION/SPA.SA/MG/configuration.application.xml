@@ -1,6 +1,6 @@
 <Configuration>
    <serviceInstances>
-      <serviceInstance hardwareID="GT:MGATE">
+      <serviceInstance hardwareID="MG:MG">
          <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
             <fileScenarioSource dir="..\SPA.SA\MG\Scenarios" />
          </scenarioSource>
