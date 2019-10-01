@@ -1,13 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Configuration markers="*" scenarioPrefix="SC." mainIdentities="MSISDN,PersonalAccountNumber,ContractNumber" SICreation="" formatVersion="1">
   <HostTypeList>
     <HostType name="CT4" nriType="RI" allowTerminalDeviceType="mobile" description="Service Content MST" />
+    <HostType name="EI" nriType="RI" allowTerminalDeviceType="mobile" description="IMEI REGISTER" />
     <HostType name="FP" nriType="RI" availableSystem="FinancialPlatform" allowTerminalDeviceType="mobile,virtual" orderAdjustment="1000" description="Финансовая платформа" />
     <HostType name="HL" nriType="RI" allowTerminalDeviceType="mobile" description="HLR (Home Location Register)" />
     <HostType name="MA" nriType="RI" allowTerminalDeviceType="mobile" description="VAS-платформа MCA (Вам звонили)" />
     <HostType name="MG" nriType="RI" allowTerminalDeviceType="mobile" description="FORIS Messaging Gateway" />
     <HostType name="RBT" nriType="RI" allowTerminalDeviceType="mobile" description="VAS платформа Ring Back Tone (Гудок)" />
     <HostType name="SM" nriType="RI" allowTerminalDeviceType="mobile" description="VAS-платформа SMSC (СМС-Центр)" />
-    <HostType name="EI" nriType="RI" allowTerminalDeviceType="mobile" description="IMEI REGISTER" />
   </HostTypeList>
   <IdentityList />
   <AttributeList />
@@ -63,9 +64,11 @@
   </RFSParameterList>
   <FlagList />
   <RFSList>
-    <RFS name="RFS_EI_SUBSCRIPTION" hostType="EI" description="Абонент на EIR">
-      <Scenario name="EI.CreateSubscriber" type="Add" />
-      <Scenario name="EI.DeleteSubscriber" type="Remove" />
+    <RFS name="RFS_CT4_CHANGE_MSISDN" hostType="CT4" description="Изменение номера MSISDN на платформе CT4">
+      <RFSParameter name="NewMSISDN" path="//ChangeMsisdn/NewMSISDN" />
+    </RFS>
+    <RFS name="RFS_CT4_SUBSCRIPTION" hostType="CT4" processType="Subscription" description="Абонент на платформе CT4">
+      <Resource name="RES_CT4_SERVICE_ID" value="558" />
     </RFS>
     <RFS name="RFS_EI_CHANGE_IMSI" hostType="EI" description="Изменение номера IMSI на EIR">
       <Scenario name="EI.ChangeIMSI" type="Add" />
@@ -76,11 +79,9 @@
       <RFSParameter name="NewMSISDN" />
     </RFS>
     <RFS name="RFS_EI_RESTORE" hostType="EI" description="Восстановление на EIR" />
-    <RFS name="RFS_CT4_CHANGE_MSISDN" hostType="CT4" description="Изменение номера MSISDN на платформе CT4">
-      <RFSParameter name="NewMSISDN" path="//ChangeMsisdn/NewMSISDN" />
-    </RFS>
-    <RFS name="RFS_CT4_SUBSCRIPTION" hostType="CT4" processType="Subscription" description="Абонент на платформе CT4">
-      <Resource name="RES_CT4_SERVICE_ID" value="558" />
+    <RFS name="RFS_EI_SUBSCRIPTION" hostType="EI" description="Абонент на EIR">
+      <Scenario name="EI.CreateSubscriber" type="Add" />
+      <Scenario name="EI.DeleteSubscriber" type="Remove" />
     </RFS>
     <RFS name="RFS_FP_BLOCK" hostType="FP" processType="DynamicList" description="Признак наличия блокировки" />
     <RFS name="RFS_FP_CHANGE_BILLING_GROUP" hostType="FP" description="Изменение биллинговой группы на фин.платформе">
@@ -470,6 +471,10 @@
     <RFS name="RFS_MCA_RESTORE" hostType="MA" description="Восстановление услуги MCA" />
     <RFS name="RFS_MCA_SUBSCRIPTION" hostType="MA" processType="Subscription" description="Абонент а платформе MCA" />
     <RFS name="RFS_MG_SUBSCRIPTION" hostType="MG" processType="Subscription" description="Метка абонента на платформе MG" />
+    <RFS name="RFS_RBT_CHANGE_MSISDN" hostType="RBT" description="Изменение номера MSISDN на платформе RBT">
+      <RFSParameter name="NewMSISDN" path="//NewMSISDN" />
+    </RFS>
+    <RFS name="RFS_RBT_RESTORE" hostType="RBT" description="Восстановление услуги RBT" />
     <RFS name="RFS_RBT_SERVICE" hostType="RBT" description="Услуга на платформе RBT" />
     <RFS name="RFS_RBT_SUBSCRIPTION" hostType="RBT" processType="Subscription" description="Абонент на RBT" />
     <RFS name="RFS_SM_CHANGE_IMSI" hostType="SM" description="Изменение номера IMSI на SMSC">
@@ -708,17 +713,17 @@
       <RFS name="RFS_FP_CHANGE_CONTRACT" linkType="Add" />
     </CFS>
     <CFS name="ChangeImsi" priority="9999" type="OneTime" description="Изменение номера IMSI">
+      <RFS name="RFS_EI_CHANGE_IMSI" linkType="Add" />
       <RFS name="RFS_FP_CHANGE_MSISDN_IMSI" linkType="Add" />
       <RFS name="RFS_HLR_CHANGE_IMSI" linkType="Add" />
       <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" linkType="Add" />
       <RFS name="RFS_SM_CHANGE_IMSI" linkType="Add" />
-      <RFS name="RFS_EI_CHANGE_IMSI" linkType="Add" />
       <RFSGroup name="RFS_GROUP_HLR_RECREATE_SUBSCRIBER" />
     </CFS>
     <CFS name="ChangeMsisdn" priority="9999" type="OneTime" description="Изменение номера MSISDN">
       <RFS name="RFS_CT4_CHANGE_MSISDN" linkType="Add" dependsOn="RFS_CT4_SUBSCRIPTION" />
-      <RFS name="RFS_MCA_CHANGE_MSISDN" linkType="Add" dependsOn="RFS_MCA_SUBSCRIPTION" />
       <RFS name="RFS_EI_CHANGE_MSISDN" linkType="Add" />
+      <RFS name="RFS_MCA_CHANGE_MSISDN" linkType="Add" dependsOn="RFS_MCA_SUBSCRIPTION" />
       <RFSGroup name="RFS_GROUP_FP_CHANGE_MSISDN" />
     </CFS>
     <CFS name="ChangeTariff" priority="9999" type="OneTime" description="Удаление абонента на старой платформы при изменении тарифного плана">
@@ -1992,19 +1997,19 @@
     <CFS name="SMS500" globalServiceCode="SMS500" copyOf="CFS_FP_SERVICE_GENERAL" description="SMS-пакет 500" />
     <CFS name="STATICIP" globalServiceCode="STATICIP" copyOf="CFS_FP_SERVICE_GENERAL" description="Будет добавлена абонентам при миграции APN" />
     <CFS name="Subscriber" priority="9999" type="ManagedObject" description="Абонент">
-      <RFS name="RFS_FP_SUBSCRIBER" linkType="Add" />
-      <RFS name="RFS_RBT_SUBSCRIPTION" linkType="Add" dependsOn="RFS_RBT_SERVICE" />
-      <RFS name="RFS_SM_SUBSCRIPTION" linkType="Add" />
       <RFS name="RFS_EI_SUBSCRIPTION" linkType="Add" />
+      <RFS name="RFS_FP_SUBSCRIBER" linkType="Add" />
+      <RFS name="RFS_SM_SUBSCRIPTION" linkType="Add" />
     </CFS>
     <CFS name="SubscriberInHLR" priority="9999" type="ManagedObject" copyOf="Subscriber" description="Абонент - копия" />
     <CFS name="Synchronize" priority="1" description="Обработка кнопки Синхронизировать в СПА">
       <RFS name="RFS_HLR_MODIFY_SUBSCRIBER" linkType="Add" />
       <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" linkType="Add" />
+      <RFSGroup name="RFS_GROUP_EI_SYNCHRON_SUBSCRIBER" />
       <RFSGroup name="RFS_GROUP_HLR_RECREATE_SUBSCRIBER" />
       <RFSGroup name="RFS_GROUP_MCA_SYNCHRON_SUBSCRIBER" />
+      <RFSGroup name="RFS_GROUP_RBT_SYNCHRON_SUBSCRIBER" />
       <RFSGroup name="RFS_GROUP_SM_SYNCHRON_SUBSCRIBER" />
-      <RFSGroup name="RFS_GROUP_EI_SYNCHRON_SUBSCRIBER" />
     </CFS>
     <CFS name="TEST1" globalServiceCode="TEST1" copyOf="CFS_FP_SERVICE_GENERAL" description="Тестовая учлуга для НЕ подбалансовых счетчиков" />
     <CFS name="TESTAVTO" globalServiceCode="TESTAVTO" copyOf="CFS_FP_SERVICE_GENERAL" description="Тестовая услуга созданная скриптом" />
@@ -2069,7 +2074,7 @@
   </CFSGroupList>
   <RFSGroupList>
     <RFSGroup name="RFS_GROUP_EI_SYNCHRON_SUBSCRIBER" type="Choice" description="Группа RFS для синхронизации данных по MSISDN в EIR">
-      <RFS name="RFS_EI_RESTORE" linkType="Add" dependsOn="RFS_EI_SUBSCRIPTION" handler="EI_RecreateSubscriber" />
+      <RFS name="RFS_EI_RESTORE" linkType="Add" handler="EI_RecreateSubscriber" />
     </RFSGroup>
     <RFSGroup name="RFS_GROUP_FP_CHANGE_MSISDN" type="Choice" description="Группа RFS для изменения номера MSISDN">
       <RFS name="RFS_FP_CHANGE_MSISDN_IMSI" linkType="Add" handler="ChangeFPMSISDNHandler" />
@@ -2089,6 +2094,9 @@
     </RFSGroup>
     <RFSGroup name="RFS_GROUP_MCA_SYNCHRON_SUBSCRIBER" type="Choice" description="Группа RFS для синхронизации данных по MSISDN в MCA">
       <RFS name="RFS_MCA_RESTORE" linkType="Add" dependsOn="RFS_MCA_SUBSCRIPTION" handler="MCA_RecreateSubscriber" />
+    </RFSGroup>
+    <RFSGroup name="RFS_GROUP_RBT_SYNCHRON_SUBSCRIBER" type="Choice" description="Группа RFS для синхронизации данных по MSISDN в RBT">
+      <RFS name="RFS_RBT_RESTORE" linkType="Add" dependsOn="RFS_RBT_SERVICE" handler="RBT_RecreateSubscriber" />
     </RFSGroup>
     <RFSGroup name="RFS_GROUP_SM_SYNCHRON_SUBSCRIBER" type="Choice" description="Группа RFS для синхронизации данных по MSISDN в SMSC">
       <RFS name="RFS_SM_RESTORE" linkType="Add" handler="SM_RecreateSubscriber" />
@@ -2132,6 +2140,12 @@
         <RFS name="RFS_FP_SUBSCRIBER" order="5" />
       </Configuration>
     </Handler>
+    <Handler name="EI_RecreateSubscriber" type="RecreateSubscriber" description="Обработчик RFS для восстановления услуги EIR">
+      <Configuration>
+        <RFS name="RFS_EI_SUBSCRIPTION" action="Remove" />
+        <RFS name="RFS_EI_SUBSCRIPTION" action="Add" />
+      </Configuration>
+    </Handler>
     <Handler name="FP.CancelHandler" type="RFSFilter" description="Обработчик отмены обработки на фин.платформе. Прописан в бизнес-процессы.">
       <Configuration deny="FP" />
     </Handler>
@@ -2159,16 +2173,18 @@
         <RFS name="RFS_MCA_SUBSCRIPTION" action="Add" />
       </Configuration>
     </Handler>
+    <Handler name="RBT_RecreateSubscriber" type="RecreateSubscriber" description="Обработчик RFS для восстановления услуги RBT">
+      <Configuration>
+        <RFS name="RFS_RBT_SERVICE" action="Remove" order="-101" />
+        <RFS name="RFS_RBT_SUBSCRIPTION" action="Remove" />
+        <RFS name="RFS_RBT_SUBSCRIPTION" action="Add" />
+        <RFS name="RFS_RBT_SERVICE" action="Add" order="51" />
+      </Configuration>
+    </Handler>
     <Handler name="SM_RecreateSubscriber" type="RecreateSubscriber" description="Обработчик RFS для восстановления на SMSC">
       <Configuration>
         <RFS name="RFS_SM_SUBSCRIPTION" action="Remove" />
         <RFS name="RFS_SM_SUBSCRIPTION" action="Add" />
-      </Configuration>
-    </Handler>
-    <Handler name="EI_RecreateSubscriber" type="RecreateSubscriber" description="Обработчик RFS для восстановления услуги EIR">
-      <Configuration>
-        <RFS name="RFS_EI_SUBSCRIPTION" action="Remove" />
-        <RFS name="RFS_EI_SUBSCRIPTION" action="Add" />
       </Configuration>
     </Handler>
   </HandlerList>
