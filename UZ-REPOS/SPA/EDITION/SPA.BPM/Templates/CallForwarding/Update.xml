@@ -1,4 +1,4 @@
-﻿<ExtendedRequestMessage>
+<ExtendedRequestMessage>
   <Source>crm</Source>
   <SourceAddress>CRM</SourceAddress>
   <Destination>bpm</Destination>
@@ -14,7 +14,7 @@
       </CallForwarding>
     </ProvisionList>
     <ProcessingOptions>
-      <SynchronizationRequest/>
+      <SynchronizationRequest />
     </ProcessingOptions>
   </AdditionalData>
   <MustBeConfirmed>false</MustBeConfirmed>

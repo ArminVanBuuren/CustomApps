@@ -14,7 +14,7 @@
       </CallForwarding>
     </WithdrawalList>
     <ProcessingOptions>
-      <SynchronizationRequest/>
+      <SynchronizationRequest />
     </ProcessingOptions>
   </AdditionalData>
   <MustBeConfirmed>false</MustBeConfirmed>
