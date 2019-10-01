@@ -987,7 +987,7 @@ namespace Utils
                 {
                     source.Append('>');
 
-                    nested += 3;
+                    nested += 2;
                     var addNewLine = true;
                     foreach (XmlNode node2 in node.ChildNodes)
                     {
