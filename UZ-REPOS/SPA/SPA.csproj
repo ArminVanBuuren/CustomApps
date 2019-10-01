@@ -141,16 +141,6 @@
     <Content Include="EDITION\DOC\XMLFile1.xml" />
     <Content Include="EDITION\ROBP\Operations\BSP\CounterReinitializationOnBSProxy.xml" />
     <Content Include="EDITION\ROBP\Operations\CT5\DeleteUNIFUN.xml" />
-    <Content Include="EDITION\ROBP\Operations\EI\ChangeIMSIOnEIR.xml" />
-    <Content Include="EDITION\ROBP\Operations\EI\ChangeMSISDNOnEIR.xml" />
-    <Content Include="EDITION\ROBP\Operations\EI\CreateSubscriberOnEIR.xml" />
-    <Content Include="EDITION\ROBP\Operations\EI\DeleteSubscriberOnEIR.xml" />
-    <Content Include="EDITION\ROBP\Operations\GT\AddGATEInformation.xml" />
-    <Content Include="EDITION\ROBP\Operations\GT\AddIP.xml" />
-    <Content Include="EDITION\ROBP\Operations\GT\MoneyTransfer.xml" />
-    <Content Include="EDITION\ROBP\Operations\GT\SendSMSGate.xml" />
-    <Content Include="EDITION\ROBP\Operations\GT\TestBPMDummy.xml" />
-    <Content Include="EDITION\ROBP\Operations\GT\TestBPMInf.xml" />
     <Content Include="EDITION\ROBP\Operations\HL\GetSubscriberByIMSI.xml" />
     <Content Include="EDITION\ROBP\Operations\HL\GetSubscriberByMSISDN.xml" />
     <Content Include="EDITION\ROBP\Processes\Activate Call Forwarding Sync.xml" />
@@ -303,26 +293,22 @@
     <Content Include="EDITION\SPA.SA\CONTENT.UNIFUN\dictionary.xml" />
     <Content Include="EDITION\SPA.SA\CONTENT.UNIFUN\Misc\RepetitionTable.xml" />
     <Content Include="EDITION\SPA.SA\CONTENT.UNIFUN\Scenarios\DeleteUNIFUN.xml" />
-    <Content Include="EDITION\SPA.SA\EIR\Commands\ChangeIMSIOnEIR.xml" />
-    <Content Include="EDITION\SPA.SA\EIR\Commands\ChangeMSISDNOnEIR.xml" />
-    <Content Include="EDITION\SPA.SA\EIR\Commands\CreateSubscriberOnEIR.xml" />
-    <Content Include="EDITION\SPA.SA\EIR\Commands\DeleteSubscriberOnEIR.xml" />
-    <Content Include="EDITION\SPA.SA\EIR\Commands\GetHistoryOnEIR.xml" />
-    <Content Include="EDITION\SPA.SA\EIR\Commands\GetStateByImsiOnEIR.xml" />
+    <Content Include="EDITION\SPA.SA\EIR\Commands\SC.ChangeMSISDN.xml" />
+    <Content Include="EDITION\SPA.SA\EIR\Commands\SC.ChangeIMSI.xml" />
+    <Content Include="EDITION\SPA.SA\EIR\Commands\SC.GetStateByIMSI.xml" />
+    <Content Include="EDITION\SPA.SA\EIR\Commands\SC.GetHistory.xml" />
+    <Content Include="EDITION\SPA.SA\EIR\Commands\SC.DeleteSubscriber.xml" />
+    <Content Include="EDITION\SPA.SA\EIR\Commands\SC.CreateSubscriber.xml" />
     <Content Include="EDITION\SPA.SA\EIR\configuration.application.xml" />
     <Content Include="EDITION\SPA.SA\EIR\configuration.common.xml" />
     <Content Include="EDITION\SPA.SA\EIR\dictionary.xml" />
     <Content Include="EDITION\SPA.SA\EIR\Misc\RepetitionTable.xml" />
-    <Content Include="EDITION\SPA.SA\EIR\Scenarios\ChangeIMSIOnEIR.xml" />
-    <Content Include="EDITION\SPA.SA\EIR\Scenarios\ChangeMSISDNOnEIR.xml" />
-    <Content Include="EDITION\SPA.SA\EIR\Scenarios\CreateSubscriberOnEIR.xml" />
-    <Content Include="EDITION\SPA.SA\EIR\Scenarios\DeleteSubscriberOnEIR.xml" />
     <Content Include="EDITION\SPA.SA\EIR\Scenarios\GetHistoryOnEIR.xml" />
     <Content Include="EDITION\SPA.SA\EIR\Scenarios\GetStateByImsiOnEIR.xml" />
-    <Content Include="EDITION\SPA.SA\EIR\Scripts\Command.xml" />
-    <Content Include="EDITION\SPA.SA\EIR\Scripts\login.xml" />
-    <Content Include="EDITION\SPA.SA\EIR\Scripts\logoff.xml" />
-    <Content Include="EDITION\SPA.SA\EIR\Scripts\nosleep.xml" />
+    <Content Include="EDITION\SPA.SA\EIR\Scenarios\SC.EI.ChangeIMSI.xml" />
+    <Content Include="EDITION\SPA.SA\EIR\Scenarios\SC.EI.ChangeMSISDN.xml" />
+    <Content Include="EDITION\SPA.SA\EIR\Scenarios\SC.EI.CreateSubscriber.xml" />
+    <Content Include="EDITION\SPA.SA\EIR\Scenarios\SC.EI.DeleteSubscriber.xml" />
     <Content Include="EDITION\SPA.SA\FP.AM\asyncResult.xml" />
     <Content Include="EDITION\SPA.SA\FP.AM\Commands\ChangeBillingGroupOnFP.xml" />
     <Content Include="EDITION\SPA.SA\FP.AM\Commands\ChangeContractOwner.xml" />
@@ -642,7 +628,9 @@
     <Content Include="EDITION\SRI\SC-HL %28ZTE%29\ServiceCatalog-HLR_WORKED_2018.12.09.xml" />
     <Content Include="EDITION\SRI\SC-SCG\ServiceCatalog-SCG.xml" />
     <Content Include="EDITION\SRI\SC.xml" />
-    <Content Include="EDITION\SRI\ReleaseSC_v2.xml" />
+    <Content Include="EDITION\SRI\ReleaseSC_v2.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="EDITION\SRI\ReleaseSC_v1.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE.v1\Commands\SC.CFD_Delete.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE.v1\Commands\SC.CFNRY_Delete.xml" />
@@ -4112,9 +4100,6 @@
     <None Include="EDITION\SPA.SA\BSP\WSDL\schemas.microsoft.com.2003.10.Serialization.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="EDITION\SPA.SA\EIR\Commands\Command.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="PROD-2018.09.06\rd_service.xlsx" />
     <None Include="PROD-2018.09.06\SPA.SA\Dictionaries\CONTENT\ALLPLAY\Commands\Command.xsd">
       <SubType>Designer</SubType>
@@ -4188,16 +4173,27 @@
     <None Include="PROD-ACTUAL\SPA.SA\Scenarios\SCP\ChangeTPOnFINPlatform.xml.new" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="EDITION\ROBP\Operations\ALLPLAY\" />
+    <Folder Include="EDITION\ROBP\Operations\BSProxy\" />
+    <Folder Include="EDITION\ROBP\Operations\CALLER\" />
     <Folder Include="EDITION\ROBP\Operations\CT4\" />
     <Folder Include="EDITION\ROBP\Operations\CT6\" />
+    <Folder Include="EDITION\ROBP\Operations\EIR\" />
+    <Folder Include="EDITION\ROBP\Operations\EI\" />
+    <Folder Include="EDITION\ROBP\Operations\GT\" />
     <Folder Include="EDITION\ROBP\Operations\HLR\" />
+    <Folder Include="EDITION\ROBP\Operations\INTECH\" />
     <Folder Include="EDITION\ROBP\Operations\IVR\" />
     <Folder Include="EDITION\ROBP\Operations\MA\" />
+    <Folder Include="EDITION\ROBP\Operations\MGATE\" />
+    <Folder Include="EDITION\ROBP\Operations\Missed Call Alert\" />
+    <Folder Include="EDITION\ROBP\Operations\MST\" />
     <Folder Include="EDITION\ROBP\Operations\RBT\" />
     <Folder Include="EDITION\ROBP\Operations\SCGS\" />
     <Folder Include="EDITION\ROBP\Operations\SCG\" />
+    <Folder Include="EDITION\ROBP\Operations\SMSC\" />
     <Folder Include="EDITION\ROBP\Operations\SM\" />
-    <Folder Include="EDITION\SRI\SC-HL %28ZTE%29 V2\" />
+    <Folder Include="EDITION\ROBP\Operations\UNIFUN\" />
     <Folder Include="PROD-2018.09.06\SPA.SA\Dictionaries\IVR\Caller\Decoders\" />
     <Folder Include="PROD-2018.09.06\SPA.SA\Emulation\CONTENT\ALLPLAY\" />
     <Folder Include="PROD-2018.09.06\SPA.SA\Emulation\CONTENT\MST\" />

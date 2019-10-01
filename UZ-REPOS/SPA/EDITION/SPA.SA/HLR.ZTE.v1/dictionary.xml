@@ -1,67 +1,68 @@
-<?xml version="1.0"?>
 <Dictionary>
   <WellknownsList>
-    <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
-    <Wellknown Name="imsi" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;)"/>
+    <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)" />
+    <Wellknown Name="imsi" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;)" />
   </WellknownsList>
   <ErrorsList CodePage="windows-1251">
-    <Error Name="000000" Value="SUCCESS"/>
-    <Error Name="110109" Value="SUCCESS"/> <!--Subscriber does not exist-->
-    <Error Name="101040" Value="FAILURE"/>
-    <Error Name="ERR3007" Value="DuplicateManagedObjectInstance"/>
-    <Error Name="ERR3050" Value="ImsiAssinedToAnotherSubscriber"/>
-    <Error Name="101041"  Value="MsisdnAlreadyDefined"/>
-    <Error Name="101063" Value="ImsiIsNotRegisteredInAC"/>
-    <Error Name="ERR3028" Value="AccessDenied"/>
-    <Error Name="ERR1001" Value="NotSupportedCommandOrAction"/>
-    <Error Name="ERR1016" Value="FAILURE"/>
-    <Error Name="ERR1004" Value="InvalidParameterValue"/>
-    <Error Name="ERR3020" Value="FAILURE"/>
-    <Error Name="ERR3049" Value="SUCCESS"/>
-    <Error Name="ERR3002" Value="SUCCESS"/>
-    <Error Name="ERR3100" Value="ResourceLimitation"/>
-    <Error Name="ERR5002" Value="ResourceLimitation"/>
-    <Error Name="ERR1033" Value="FAILURE"/>
-    <Error Name="ERR3015" Value="NoServices"/>
-    <Error Name="ERR3027" Value="NoServices"/>
-    <Error Name="000008" Value="InvalidParameterValue"/> <!--Parameter[profile] is error-->
+    <Error Name="000000" Value="SUCCESS" />
+    <Error Name="110109" Value="SUCCESS" />
+    <!--Subscriber does not exist-->
+    <Error Name="101040" Value="FAILURE" />
+    <Error Name="ERR3007" Value="DuplicateManagedObjectInstance" />
+    <Error Name="ERR3050" Value="ImsiAssinedToAnotherSubscriber" />
+    <Error Name="101041" Value="MsisdnAlreadyDefined" />
+    <Error Name="101063" Value="ImsiIsNotRegisteredInAC" />
+    <Error Name="ERR3028" Value="AccessDenied" />
+    <Error Name="ERR1001" Value="NotSupportedCommandOrAction" />
+    <Error Name="ERR1016" Value="FAILURE" />
+    <Error Name="ERR1004" Value="InvalidParameterValue" />
+    <Error Name="ERR3020" Value="FAILURE" />
+    <Error Name="ERR3049" Value="SUCCESS" />
+    <Error Name="ERR3002" Value="SUCCESS" />
+    <Error Name="ERR3100" Value="ResourceLimitation" />
+    <Error Name="ERR5002" Value="ResourceLimitation" />
+    <Error Name="ERR1033" Value="FAILURE" />
+    <Error Name="ERR3015" Value="NoServices" />
+    <Error Name="ERR3027" Value="NoServices" />
+    <Error Name="000008" Value="InvalidParameterValue" />
+    <!--Parameter[profile] is error-->
   </ErrorsList>
   <RegexpsList>
-    <Regexp Name="Error" Value="RETN=(?&lt;ERROR&gt;\d{6})"/>
+    <Regexp Name="Error" Value="RETN=(?&lt;ERROR&gt;\d{6})" />
   </RegexpsList>
-  <ConstantsList/>
+  <ConstantsList />
   <ParametersList>
     <Parameter Name="NET_STATUS" IsChoice="true" AbsenceValue="1">
       <Source Path="//AddList/RFS_HL_NET/RES_HL_NET_STATUS/Value[text()='Access']" PostFormat="0" />
       <Source Path="//ModifyList/RFS_HL_NET/RES_HL_NET_STATUS/Value[text()='Access']" PostFormat="0" />
     </Parameter>
     <Parameter Name="NET_APN">
-      <Source Path="//RES_HL_NET_APN/Value"/>
+      <Source Path="//RES_HL_NET_APN/Value" />
     </Parameter>
     <Parameter Name="DEALER_APN">
-      <Source Path="//RES_HL_DEALER_APN/Value"/>
+      <Source Path="//RES_HL_DEALER_APN/Value" />
     </Parameter>
     <Parameter Name="REDUCE_SPEED_QOSID" IsChoice="true" AbsenceValue="">
       <Source Path="//AddList/RFS_HL_LIMITSPEED" PostFormat="107" />
       <Source Path="//RemoveList/RFS_HL_LIMITSPEED" PostFormat="100" />
     </Parameter>
     <Parameter Name="IP">
-      <Source Path="ExtendedRequestMessage/AdditionalData/IP"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/IP" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="KI">
-      <Source Path="ExtendedRequestMessage/AdditionalData/KI"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/KI" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
   </ParametersList>
-  <DynamicParametersList/>
-  <LogicalGroupParametersList/>
+  <DynamicParametersList />
+  <LogicalGroupParametersList />
   <CommandsList Root="Commands" Mask="*.xml">
     <!-- All new commands are included by Mask=*.xml attribute -->
   </CommandsList>
   <DecodersList Root="Decoders">
-    <Decoder Path="MML.ZTE.CallForwardingInfoDecoder.xml"/>
-    <Decoder Path="MML.ZTE.CallForwardingServicesDecoder.xml"/>
-    <Decoder Path="MML.ZTE.SupplementaryServicesDecoder.xml"/>
+    <Decoder Path="MML.ZTE.CallForwardingInfoDecoder.xml" />
+    <Decoder Path="MML.ZTE.CallForwardingServicesDecoder.xml" />
+    <Decoder Path="MML.ZTE.SupplementaryServicesDecoder.xml" />
   </DecodersList>
 </Dictionary>

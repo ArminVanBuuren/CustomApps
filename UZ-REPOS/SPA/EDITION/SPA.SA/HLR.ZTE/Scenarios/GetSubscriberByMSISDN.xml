@@ -17,7 +17,7 @@
       </resultlist>
       <parameterslist>
         <param name="Command" value="SC.GetSubscriber" />
-        <param name="AppendSubscribersData" value="True"/>
+        <param name="AppendSubscribersData" value="True" />
         <param name="ErrorDecodingType" value="ByString" />
       </parameterslist>
     </node>

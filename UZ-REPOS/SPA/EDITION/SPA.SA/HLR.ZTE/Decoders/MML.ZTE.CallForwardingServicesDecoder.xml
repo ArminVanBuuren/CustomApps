@@ -1,14 +1,14 @@
 <Decoder Name="CallForwardingServicesList" Type="FORIS.ServiceProvisioning.MmlProcessing.Dictionary.ElementsDecoder, FORIS.SPA.MmlProcessing">
-   <Element Key="CFU" RegexpPattern="(?&lt;parameter&gt;\s(CFU.*CFUNum=\d{1,15}|CFU_R=\d))" RegexpOptions="Multiline">
-      <Decoder Path="MML.ZTE.CallForwardingInfoDecoder.xml" />
-   </Element>
-   <Element Key="CFB" RegexpPattern="(?&lt;parameter&gt;\s(CFB.*CFBNum=\d{1,15}|CFB_R=\d))" RegexpOptions="Multiline">
-      <Decoder Path="MML.ZTE.CallForwardingInfoDecoder.xml" />
-   </Element>
-   <Element Key="CFNRY" RegexpPattern="(?&lt;parameter&gt;\s(CFNRY.*CFNRYNum=\d{1,15}|CFNRY_R=\d))" RegexpOptions="Multiline">
-      <Decoder Path="MML.ZTE.CallForwardingInfoDecoder.xml" />
-   </Element>
-   <Element Key="CFNRC" RegexpPattern="(?&lt;parameter&gt;\s(CFNRC.*CFNRCNum=\d{1,15}|CFNRC_R=\d))" RegexpOptions="Multiline">
-      <Decoder Path="MML.ZTE.CallForwardingInfoDecoder.xml" />
-   </Element>
+  <Element Key="CFU" RegexpPattern="(?&lt;parameter&gt;\s(CFU.*CFUNum=\d{1,15}|CFU_R=\d))" RegexpOptions="Multiline">
+    <Decoder Path="MML.ZTE.CallForwardingInfoDecoder.xml" />
+  </Element>
+  <Element Key="CFB" RegexpPattern="(?&lt;parameter&gt;\s(CFB.*CFBNum=\d{1,15}|CFB_R=\d))" RegexpOptions="Multiline">
+    <Decoder Path="MML.ZTE.CallForwardingInfoDecoder.xml" />
+  </Element>
+  <Element Key="CFNRY" RegexpPattern="(?&lt;parameter&gt;\s(CFNRY.*CFNRYNum=\d{1,15}|CFNRY_R=\d))" RegexpOptions="Multiline">
+    <Decoder Path="MML.ZTE.CallForwardingInfoDecoder.xml" />
+  </Element>
+  <Element Key="CFNRC" RegexpPattern="(?&lt;parameter&gt;\s(CFNRC.*CFNRCNum=\d{1,15}|CFNRC_R=\d))" RegexpOptions="Multiline">
+    <Decoder Path="MML.ZTE.CallForwardingInfoDecoder.xml" />
+  </Element>
 </Decoder>

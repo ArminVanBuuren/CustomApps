@@ -1,12 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <Configuration markers="*" scenarioPrefix="SC." mainIdentities="MSISDN,PersonalAccountNumber,ContractNumber" SICreation="" formatVersion="1">
   <HostTypeList>
     <HostType name="CT6" nriType="RI" allowTerminalDeviceType="mobile" description="Service Content ALLPLAY" />
   </HostTypeList>
-  <IdentityList>
-  </IdentityList>
-  <AttributeList>
-  </AttributeList>
+  <IdentityList />
+  <AttributeList />
   <ResourceList>
     <Resource name="RES_CT6_SERVICE_ID" description="ServiceID на CT6" />
   </ResourceList>
@@ -15,10 +12,10 @@
   </RFSParameterList>
   <FlagList />
   <RFSList>
-    <RFS name="RFS_CT6_SUBSCRIPTION" hostType="CT6" description="Метка абонента на платформе CT6" >
+    <RFS name="RFS_CT6_SUBSCRIPTION" hostType="CT6" description="Метка абонента на платформе CT6">
       <Resource name="RES_CT6_SERVICE_ID" value="mobtv" />
     </RFS>
-    <RFS name="RFS_CT6_CHANGE_MSISDN" hostType="CT6" description="Изменение номера MSISDN на платформе CT6" >
+    <RFS name="RFS_CT6_CHANGE_MSISDN" hostType="CT6" description="Изменение номера MSISDN на платформе CT6">
       <RFSParameter name="NewMSISDN" path="//ChangeMsisdn/NewMSISDN" />
     </RFS>
   </RFSList>
@@ -29,16 +26,14 @@
     <CFS name="FRMOBTV" isMarker="true" description="Мобильное ТВ">
       <RFS name="RFS_CT6_SUBSCRIPTION" linkType="Add" />
     </CFS>
-    <CFS name="FRMOBTVTEST" copyOf="FRMOBTV" description="Мобильное ТВ тест"/>
-    <CFS name="FRMOBTV1D" copyOf="FRMOBTV" description="Мобильное ТВ 1 день"/>
-    <CFS name="FRMOBTV7D" copyOf="FRMOBTV" description="Мобильное ТВ 7 дней"/>
+    <CFS name="FRMOBTVTEST" copyOf="FRMOBTV" description="Мобильное ТВ тест" />
+    <CFS name="FRMOBTV1D" copyOf="FRMOBTV" description="Мобильное ТВ 1 день" />
+    <CFS name="FRMOBTV7D" copyOf="FRMOBTV" description="Мобильное ТВ 7 дней" />
   </CFSList>
-  <CFSGroupList >
-  </CFSGroupList>
+  <CFSGroupList />
   <RFSGroupList />
   <RFSDependencyList />
-  <HandlerList >
-  </HandlerList>
+  <HandlerList />
   <ScenarioList>
     <Scenario name="CT6.ChangeMSISDN" description="Изменение номера на CT6">
       <RFS name="RFS_CT6_CHANGE_MSISDN" scenarioType="Add" />

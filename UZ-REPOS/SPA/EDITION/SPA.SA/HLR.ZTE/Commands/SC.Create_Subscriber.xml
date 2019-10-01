@@ -1,24 +1,24 @@
 <Command Name="SC.Create_Subscriber">
-   <Description>Создание абонента</Description>
-   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
-   <Request>
-      <RequestTemplate>
-         <![CDATA[ADD User:IMSI=##imsi##,MSISDN=##msisdn##,Profile=##HLR_PROFILE##;^M]]>
-      </RequestTemplate>
-      <Item Name="msisdn" Type="Wellknown" />
-      <Item Name="imsi" Type="Wellknown" />
-      <Item Name="HLR_PROFILE" Type="LocalParameter" />
-   </Request>
-   <ParametersList>
-      <Parameter Name="HLR_PROFILE">
-         <Source Path="//RES_HLR_PROFILE" />
-         <PossibleValues StringToKeyTable="false">
-            <Item Key="Prepaid" StringValue="55" />
-            <Item Key="Postpaid" StringValue="51" />
-            <Item Key="DEALERS" StringValue="20" />
-            <Item Key="DGU" StringValue="11" />
-            <Item Key="AIISKUE" StringValue="10" />
-         </PossibleValues>
-      </Parameter>
-   </ParametersList>
+  <Description>Создание абонента</Description>
+  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[ADD User:IMSI=##imsi##,MSISDN=##msisdn##,Profile=##HLR_PROFILE##;^M]]>
+    </RequestTemplate>
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="imsi" Type="Wellknown" />
+    <Item Name="HLR_PROFILE" Type="LocalParameter" />
+  </Request>
+  <ParametersList>
+    <Parameter Name="HLR_PROFILE">
+      <Source Path="//RES_HLR_PROFILE" />
+      <PossibleValues StringToKeyTable="false">
+        <Item Key="Prepaid" StringValue="55" />
+        <Item Key="Postpaid" StringValue="51" />
+        <Item Key="DEALERS" StringValue="20" />
+        <Item Key="DGU" StringValue="11" />
+        <Item Key="AIISKUE" StringValue="10" />
+      </PossibleValues>
+    </Parameter>
+  </ParametersList>
 </Command>

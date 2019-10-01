@@ -1,12 +1,12 @@
 <Command Name="DeleteMST" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-   <Description>Удаление абонента на MST</Description>
-   <Author Name="Timur Khamzin" Date="2016-11-27+15:00" />
-   <Request>
-      <RequestTemplate>
-         <![CDATA[msisdn=##msisdn##&command=del&service=##ServiceId##]]>
-      </RequestTemplate>
-      <Item Name="msisdn" Type="Wellknown" />
-      <Item Name="ServiceId" Type="Parameter" />
-   </Request>
-   <ErrorsList CodePage="ASCII" />
+  <Description>Удаление абонента на MST</Description>
+  <Author Name="Timur Khamzin" Date="2016-11-27+15:00" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[msisdn=##msisdn##&command=del&service=##ServiceId##]]>
+    </RequestTemplate>
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="ServiceId" Type="Parameter" />
+  </Request>
+  <ErrorsList CodePage="ASCII" />
 </Command>

@@ -1,25 +1,25 @@
 <Command Name="SC.Modify_BOC">
-   <Description>Модификация баррингов исходящей связи</Description>
-   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
-   <Request>
-      <RequestTemplate>
-         <![CDATA[MOD ODB:MSISDN=##msisdn##,BOC=##Barring##;^M]]>
-      </RequestTemplate>
-      <Item Name="msisdn" Type="Wellknown" />
-      <Item Name="Barring" Type="LocalParameter" />
-   </Request>
-   <ParametersList>
-      <Parameter Name="Barring" IsChoice="true" AbsenceValue="1">
-         <Source Path="//AddList/RFS_HLR_ODB_OC/RES_HLR_ODB_OC/Value[text()='LocalCalls']" PostFormat="3" />
-         <Source Path="//ModifyList/RFS_HLR_ODB_OC/RES_HLR_ODB_OC/Value[text()='LocalCalls']" PostFormat="3" />
-         <Source Path="//AddList/RFS_HLR_ODB_OC/RES_HLR_ODB_OC/Value[text()='IntercityCalls']" PostFormat="2" />
-         <Source Path="//ModifyList/RFS_HLR_ODB_OC/RES_HLR_ODB_OC/Value[text()='IntercityCalls']" PostFormat="2" />
-         <Source Path="//AddList/RFS_HLR_ODB_OC/RES_HLR_ODB_OC/Value[text()='InternationalCalls']" PostFormat="0" />
-         <Source Path="//ModifyList/RFS_HLR_ODB_OC/RES_HLR_ODB_OC/Value[text()='InternationalCalls']" PostFormat="0" />
-      </Parameter>
-   </ParametersList>
-   <ErrorsList CodePage="windows-1251">
-      <Error Name="110109" Value="SUCCESS" />
-      <!--Subscriber does not exist-->
-   </ErrorsList>
+  <Description>Модификация баррингов исходящей связи</Description>
+  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[MOD ODB:MSISDN=##msisdn##,BOC=##Barring##;^M]]>
+    </RequestTemplate>
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="Barring" Type="LocalParameter" />
+  </Request>
+  <ParametersList>
+    <Parameter Name="Barring" IsChoice="true" AbsenceValue="1">
+      <Source Path="//AddList/RFS_HLR_ODB_OC/RES_HLR_ODB_OC/Value[text()='LocalCalls']" PostFormat="3" />
+      <Source Path="//ModifyList/RFS_HLR_ODB_OC/RES_HLR_ODB_OC/Value[text()='LocalCalls']" PostFormat="3" />
+      <Source Path="//AddList/RFS_HLR_ODB_OC/RES_HLR_ODB_OC/Value[text()='IntercityCalls']" PostFormat="2" />
+      <Source Path="//ModifyList/RFS_HLR_ODB_OC/RES_HLR_ODB_OC/Value[text()='IntercityCalls']" PostFormat="2" />
+      <Source Path="//AddList/RFS_HLR_ODB_OC/RES_HLR_ODB_OC/Value[text()='InternationalCalls']" PostFormat="0" />
+      <Source Path="//ModifyList/RFS_HLR_ODB_OC/RES_HLR_ODB_OC/Value[text()='InternationalCalls']" PostFormat="0" />
+    </Parameter>
+  </ParametersList>
+  <ErrorsList CodePage="windows-1251">
+    <Error Name="110109" Value="SUCCESS" />
+    <!--Subscriber does not exist-->
+  </ErrorsList>
 </Command>

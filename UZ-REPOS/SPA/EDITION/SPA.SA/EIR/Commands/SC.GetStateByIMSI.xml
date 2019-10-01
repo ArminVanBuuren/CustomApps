@@ -1,0 +1,11 @@
+<Command Name="SC.GetStateByIMSI">
+  <Description>Получение статуса IMEI по IMSI</Description>
+  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[cmd=getstate&imsi=##imsi##]]>
+    </RequestTemplate>
+    <Item Name="imsi" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ascii" />
+</Command>

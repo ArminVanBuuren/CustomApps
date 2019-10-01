@@ -1,14 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <Configuration markers="*" scenarioPrefix="SC." mainIdentities="MSISDN,PersonalAccountNumber,ContractNumber" SICreation="" formatVersion="1">
   <HostTypeList>
     <HostType name="CT4" nriType="RI" allowTerminalDeviceType="mobile" description="Service Content MST" />
   </HostTypeList>
-  <IdentityList>
-  </IdentityList>
-  <AttributeList>
-  </AttributeList>
+  <IdentityList />
+  <AttributeList />
   <ResourceList>
-    <Resource name="RES_CT4_SERVICE_ID" description="ServiceID на платформе CT4"/>
+    <Resource name="RES_CT4_SERVICE_ID" description="ServiceID на платформе CT4" />
   </ResourceList>
   <RFSParameterList>
     <RFSParameter name="NewMSISDN" path="//ChangeMsisdn/NewMSISDN" description="Новый номер MSISDN" />
@@ -16,10 +13,10 @@
   <FlagList />
   <RFSList>
     <RFS name="RFS_CT4_SUBSCRIPTION" hostType="CT4" processType="Subscription" description="Абонент на платформе CT4">
-      <Resource name="RES_CT4_SERVICE_ID" value="558"/>
+      <Resource name="RES_CT4_SERVICE_ID" value="558" />
     </RFS>
     <RFS name="RFS_CT4_CHANGE_MSISDN" hostType="CT4" description="Изменение номера MSISDN на платформе CT4">
-      <RFSParameter name="NewMSISDN" path="//ChangeMsisdn/NewMSISDN"/>
+      <RFSParameter name="NewMSISDN" path="//ChangeMsisdn/NewMSISDN" />
     </RFS>
   </RFSList>
   <CFSList>
@@ -30,16 +27,14 @@
       <RFS name="RFS_CT4_SUBSCRIPTION" linkType="Add" />
     </CFS>
   </CFSList>
-  <CFSGroupList >
-  </CFSGroupList>
+  <CFSGroupList />
   <RFSGroupList />
   <RFSDependencyList />
-  <HandlerList >
-  </HandlerList>
+  <HandlerList />
   <ScenarioList>
     <Scenario name="CT4.ChangeMSISDN" description="Изменение номера на платформе CT4">
-      <RFS name="RFS_CT4_CHANGE_MSISDN" scenarioType="Add"/>
-      <Append name="RFS_CT4_SUBSCRIPTION" listType="EndList"/>
+      <RFS name="RFS_CT4_CHANGE_MSISDN" scenarioType="Add" />
+      <Append name="RFS_CT4_SUBSCRIPTION" listType="EndList" />
     </Scenario>
   </ScenarioList>
   <WfmScenarioList />

@@ -1,13 +1,14 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.CFB_Delete" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>Delete call forwarding on mobile subscriber busy</Description>
-  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
+  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
   <Request>
     <RequestTemplate>
       <![CDATA[MOD SS:MSISDN=##msisdn##,CFB=0;^M]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="msisdn" Type="Wellknown"/>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="msisdn" Type="Wellknown" />
   </Request>
   <ErrorsList CodePage="windows-1251" />
 </Command>

@@ -1,28 +1,27 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <scenario name="SC.HL.Modify.USSD">
   <objectList>
-    <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
   </objectList>
   <automat>
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
       <resultlist>
-        <result value="0" node="PLSS_D_Modify"/>
-        <result value="1" node=""/>
+        <result value="0" node="PLSS_D_Modify" />
+        <result value="1" node="" />
       </resultlist>
     </node>
     <node name="PLSS_D_Modify" object="Commander">
       <resultlist>
-        <result value="" node="ResponseAssembler"/>
+        <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SC.PLSS_D_Modify"/>
+        <param name="Command" value="SC.PLSS_D_Modify" />
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">
       <resultlist>
-        <result value="" node="RequestCutterBySubscribers"/>
+        <result value="" node="RequestCutterBySubscribers" />
       </resultlist>
     </node>
   </automat>

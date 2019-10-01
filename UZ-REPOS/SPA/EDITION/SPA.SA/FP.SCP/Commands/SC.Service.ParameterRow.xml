@@ -1,39 +1,39 @@
 <Command Name="SC.Service.ParameterRow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-   <Description>AssignService (parameters table)</Description>
-   <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
-   <Properties GenerationType="MmlXml" />
-   <Request>
-      <RequestTemplate>
-         <![CDATA[<Row 
+  <Description>AssignService (parameters table)</Description>
+  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
+  <Properties GenerationType="MmlXml" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[<Row 
 SERVICE_ROW_ID="##ServiceIdentifier##" 
 PARAM_CODE="xmldecodename(##ParamCode##)" 
 PARAM_VALUE="##ParamValue##"
 ##NewParamValue## />]]>
-      </RequestTemplate>
-      <EmulationPrintoutTemplate>
-         <![CDATA[]]>
-      </EmulationPrintoutTemplate>
-      <Item Name="ServiceIdentifier" Type="Wellknown" />
-      <Item Name="ParamCode" Type="LocalParameter" />
-      <Item Name="ParamValue" Type="LocalParameter" />
-      <Item Name="NewParamValue" Type="LocalParameter" />
-   </Request>
-   <ParametersList>
-      <Parameter Name="ParamCode">
-         <Source Path="//AdditionalData//RFS_FP_SERVICE_GENERAL/Parameters/*[1]" SelectMode="NodeName" />
-      </Parameter>
-      <Parameter Name="ParamValue" IsChoice="true">
-         <Source Path="//AdditionalData/AddList/RFS_FP_SERVICE_GENERAL/Parameters/*[1]/@value[string-length(.) &gt; 0]" />
-         <Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_GENERAL/Parameters/*[1]/@value[string-length(.) &gt; 0]" />
-         <!-- для изменения берем @oldValue -->
-         <Source Path="//AdditionalData/ModifyList/RFS_FP_SERVICE_GENERAL/Parameters/*[1]/@oldValue[string-length(.) &gt; 0]" />
-         <Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_GENERAL/Parameters/*[1]/@value[string-length(.) &gt; 0]" />
-         <Source Path="//AdditionalData/StartList/RFS_FP_SERVICE_GENERAL/Parameters/*[1]/@value[string-length(.) &gt; 0]" />
-      </Parameter>
-      <Parameter Name="NewParamValue">
-         <!-- и появляется value из @value -->
-         <Source Path="//AdditionalData/ModifyList/RFS_FP_SERVICE_GENERAL/Parameters/*[1]/@value[string-length(.) &gt; 0]" AbsenceValue="" PostFormat="NEW_PARAM_VALUE=&quot;{0}&quot;" />
-      </Parameter>
-   </ParametersList>
-   <ErrorsList CodePage="ascii" />
+    </RequestTemplate>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="ServiceIdentifier" Type="Wellknown" />
+    <Item Name="ParamCode" Type="LocalParameter" />
+    <Item Name="ParamValue" Type="LocalParameter" />
+    <Item Name="NewParamValue" Type="LocalParameter" />
+  </Request>
+  <ParametersList>
+    <Parameter Name="ParamCode">
+      <Source Path="//AdditionalData//RFS_FP_SERVICE_GENERAL/Parameters/*[1]" SelectMode="NodeName" />
+    </Parameter>
+    <Parameter Name="ParamValue" IsChoice="true">
+      <Source Path="//AdditionalData/AddList/RFS_FP_SERVICE_GENERAL/Parameters/*[1]/@value[string-length(.) &gt; 0]" />
+      <Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_GENERAL/Parameters/*[1]/@value[string-length(.) &gt; 0]" />
+      <!-- для изменения берем @oldValue -->
+      <Source Path="//AdditionalData/ModifyList/RFS_FP_SERVICE_GENERAL/Parameters/*[1]/@oldValue[string-length(.) &gt; 0]" />
+      <Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_GENERAL/Parameters/*[1]/@value[string-length(.) &gt; 0]" />
+      <Source Path="//AdditionalData/StartList/RFS_FP_SERVICE_GENERAL/Parameters/*[1]/@value[string-length(.) &gt; 0]" />
+    </Parameter>
+    <Parameter Name="NewParamValue">
+      <!-- и появляется value из @value -->
+      <Source Path="//AdditionalData/ModifyList/RFS_FP_SERVICE_GENERAL/Parameters/*[1]/@value[string-length(.) &gt; 0]" AbsenceValue="" PostFormat="NEW_PARAM_VALUE=&quot;{0}&quot;" />
+    </Parameter>
+  </ParametersList>
+  <ErrorsList CodePage="ascii" />
 </Command>

@@ -1,37 +1,36 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <scenario name="SC.Remove.RFS_HL_MYUMS_APN">
   <objectList>
-    <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
   </objectList>
   <automat>
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
       <resultlist>
-        <result value="0" node="APN_MYUMS_Delete"/>
-        <result value="1" node=""/>
+        <result value="0" node="APN_MYUMS_Delete" />
+        <result value="1" node="" />
       </resultlist>
     </node>
     <node name="APN_MYUMS_Delete" object="Commander">
       <resultlist>
-        <result value="0" node="APN_GPRS_Add"/>
-        <result value="" node="ResponseAssembler"/>
+        <result value="0" node="APN_GPRS_Add" />
+        <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SC.APN_MYUMS_Delete"/>
+        <param name="Command" value="SC.APN_MYUMS_Delete" />
       </parameterslist>
     </node>
     <node name="APN_GPRS_Add" object="Commander">
       <resultlist>
-        <result value="" node="ResponseAssembler"/>
+        <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SC.APN_GPRS_Add"/>
+        <param name="Command" value="SC.APN_GPRS_Add" />
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">
       <resultlist>
-        <result value="" node="RequestCutterBySubscribers"/>
+        <result value="" node="RequestCutterBySubscribers" />
       </resultlist>
     </node>
   </automat>

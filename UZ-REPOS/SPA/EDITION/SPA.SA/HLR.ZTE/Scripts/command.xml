@@ -1,4 +1,4 @@
 <Script Name="Command">
-   <write data="{0}" />
-   <wait data="$" timeout="20000" />
+  <write data="{0}" />
+  <wait data="$" timeout="20000" />
 </Script>

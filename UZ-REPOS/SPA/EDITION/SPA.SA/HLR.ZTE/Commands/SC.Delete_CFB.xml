@@ -1,10 +1,10 @@
 <Command Name="SC.Delete_CFB">
-   <Description>Delete call forwarding on mobile subscriber busy</Description>
-   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
-   <Request>
-      <RequestTemplate>
-         <![CDATA[MOD SS:MSISDN=##msisdn##,CFB=0;^M]]>
-      </RequestTemplate>
-      <Item Name="msisdn" Type="Wellknown" />
-   </Request>
+  <Description>Delete call forwarding on mobile subscriber busy</Description>
+  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[MOD SS:MSISDN=##msisdn##,CFB=0;^M]]>
+    </RequestTemplate>
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
 </Command>

@@ -1,30 +1,29 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <scenario name="SC.HL.Add.CallForwarding">
   <objectList>
-    <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
-    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="RequestCutterByXmlNodes" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterByXmlNodes" assembly="FORIS.SPA.MmlProcessing.dll" />
-    <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
+    <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll" />
     <object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
   </objectList>
   <automat>
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
       <resultlist>
-        <result value="0" node="RequestCutterByXmlNodes"/>
-        <result value="1" node=""/>
+        <result value="0" node="RequestCutterByXmlNodes" />
+        <result value="1" node="" />
       </resultlist>
     </node>
     <node name="RequestCutterByXmlNodes" object="RequestCutterByXmlNodes">
       <resultlist>
-        <result value="0" node="CheckCFService"/>
-        <result value="1" node="ResponseAssembler"/>
+        <result value="0" node="CheckCFService" />
+        <result value="1" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
         <param name="ObjectInContext" value="request" />
-        <param name="Queue" value="requestsSplittedByFrwdTypeQueue"/>
-        <param name="XmlPath:0" value="//AddList/*"/>
+        <param name="Queue" value="requestsSplittedByFrwdTypeQueue" />
+        <param name="XmlPath:0" value="//AddList/*" />
       </parameterslist>
     </node>
     <node name="CheckCFService" object="IfMultipleXmlConditionsResolver">
@@ -43,84 +42,84 @@
     </node>
     <node name="SwitchType" object="Switch">
       <resultlist>
-        <result value="0" node="SwitchMode"/>
-        <result value="1" node="SwitchMode"/>
-        <result value="2" node="CF_Update"/>
-        <result value="3" node="CF_Add"/>
+        <result value="0" node="SwitchMode" />
+        <result value="1" node="SwitchMode" />
+        <result value="2" node="CF_Update" />
+        <result value="3" node="CF_Add" />
       </resultlist>
       <parameterslist>
-        <param name="XmlPath" value="//CallForwardType/Value/text()"/>
-        <param name="Value:2" value="Update"/>
-        <param name="Value:3" value="Provision"/>
+        <param name="XmlPath" value="//CallForwardType/Value/text()" />
+        <param name="Value:2" value="Update" />
+        <param name="Value:3" value="Provision" />
       </parameterslist>
     </node>
     <node name="CF_Update" object="IfCommander">
       <resultlist>
-        <result value="0" node="CF_Add"/>
-        <result value="1538" node="RequestCutterByXmlNodes"/>
-        <result value="" node="ResponseAssembler"/>
+        <result value="0" node="CF_Add" />
+        <result value="1538" node="RequestCutterByXmlNodes" />
+        <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="OrXmlPath:0" value="//CallForwardMode/Value[text()='Activate']"/>
-        <param name="OrXmlPath:1" value="//CallForwardMode/Value[text()='Deactivate']"/>
-        <param name="Command" value="SC.CF_Delete"/>
+        <param name="OrXmlPath:0" value="//CallForwardMode/Value[text()='Activate']" />
+        <param name="OrXmlPath:1" value="//CallForwardMode/Value[text()='Deactivate']" />
+        <param name="Command" value="SC.CF_Delete" />
       </parameterslist>
     </node>
     <node name="CF_Add" object="Commander">
       <resultlist>
-        <result value="0" node="SwitchMode"/>
-        <result value="" node="ResponseAssembler"/>
+        <result value="0" node="SwitchMode" />
+        <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SC.CF_Add"/>
+        <param name="Command" value="SC.CF_Add" />
       </parameterslist>
     </node>
     <node name="SwitchMode" object="Switch">
       <resultlist>
-        <result value="0" node="RequestCutterByXmlNodes"/>
-        <result value="1" node="RequestCutterByXmlNodes"/>
-        <result value="2" node="CF_Activate"/>
-        <result value="3" node="CF_Deactivate"/>
+        <result value="0" node="RequestCutterByXmlNodes" />
+        <result value="1" node="RequestCutterByXmlNodes" />
+        <result value="2" node="CF_Activate" />
+        <result value="3" node="CF_Deactivate" />
       </resultlist>
       <parameterslist>
-        <param name="XmlPath" value="//CallForwardMode/Value/text()"/>
-        <param name="Value:2" value="Activate"/>
-        <param name="Value:3" value="Deactivate"/>
+        <param name="XmlPath" value="//CallForwardMode/Value/text()" />
+        <param name="Value:2" value="Activate" />
+        <param name="Value:3" value="Deactivate" />
       </parameterslist>
     </node>
     <node name="CF_Activate" object="IfCommander">
       <resultlist>
-        <result value="0" node="CF_ActivateNode2"/>
-        <result value="1538" node="CF_ActivateNode2"/>
-        <result value="" node="ResponseAssembler"/>
+        <result value="0" node="CF_ActivateNode2" />
+        <result value="1538" node="CF_ActivateNode2" />
+        <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="IfNotXmlPath:0" value="//CallForwardType/Value[text()='Update']"/>
-        <param name="IfNotXmlPath:1" value="//CallForwardType/Value[text()='Provision']"/>
-        <param name="Command" value="SC.CF_Deactivate"/>
+        <param name="IfNotXmlPath:0" value="//CallForwardType/Value[text()='Update']" />
+        <param name="IfNotXmlPath:1" value="//CallForwardType/Value[text()='Provision']" />
+        <param name="Command" value="SC.CF_Deactivate" />
       </parameterslist>
     </node>
     <node name="CF_ActivateNode2" object="Commander">
       <resultlist>
-        <result value="0" node="RequestCutterByXmlNodes"/>
-        <result value="" node="ResponseAssembler"/>
+        <result value="0" node="RequestCutterByXmlNodes" />
+        <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SC.CF_Activate"/>
+        <param name="Command" value="SC.CF_Activate" />
       </parameterslist>
     </node>
     <node name="CF_Deactivate" object="Commander">
       <resultlist>
-        <result value="0" node="RequestCutterByXmlNodes"/>
-        <result value="" node="ResponseAssembler"/>
+        <result value="0" node="RequestCutterByXmlNodes" />
+        <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SC.CF_Deactivate"/>
+        <param name="Command" value="SC.CF_Deactivate" />
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">
       <resultlist>
-        <result value="" node="RequestCutterBySubscribers"/>
+        <result value="" node="RequestCutterBySubscribers" />
       </resultlist>
     </node>
   </automat>

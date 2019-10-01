@@ -1,4 +1,4 @@
-﻿<ExtendedRequestMessage>
+<ExtendedRequestMessage>
   <Source />
   <ID>0</ID>
   <OriginalSource>TEST</OriginalSource>
@@ -7,7 +7,7 @@
   <PackSize>0</PackSize>
   <Comment />
   <Priority>0</Priority>
-  <AdditionalData  Executable="True">
+  <AdditionalData Executable="True">
     <ProvisionList>
       <FRZAPRETGS />
     </ProvisionList>

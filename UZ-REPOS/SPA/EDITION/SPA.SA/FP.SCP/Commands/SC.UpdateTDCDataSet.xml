@@ -1,10 +1,10 @@
 <Command Name="SC.UpdateTDCDataSet">
-   <Description>Update list of services and blocks</Description>
-   <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
-   <Properties GenerationType="DataSetXml" />
-   <Request>
-      <RequestTemplate>
-         <![CDATA[<DataSet Name="UpdateTDCDataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>Update list of services and blocks</Description>
+  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
+  <Properties GenerationType="DataSetXml" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[<DataSet Name="UpdateTDCDataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Attributes>
     <Attribute Name="Label" Type="System.String" Value="UpdateTDC;##datetime##;[SCP_MARKER]"/>
     <Attribute Name="Protocol" Type="System.String" Value="Msmq"/>
@@ -46,36 +46,36 @@
     <Rows>##ServicesToActivateParams####ServicesToDeactivateParams##</Rows>
   </DataTable>
 </DataSet>]]>
-      </RequestTemplate>
-      <Item Name="TerminalDeviceID" Type="Wellknown" />
-      <Item Name="PersonalAccount" Type="Wellknown" />
-      <Item Name="msisdn" Type="Wellknown" />
-      <Item Name="datetime" Type="Wellknown" />
-      <Item Name="AddServices" Type="LocalDynamicParameter" />
-      <Item Name="DelServices" Type="LocalDynamicParameter" />
-      <Item Name="ServicesToActivateParams" Type="LocalDynamicParameter" />
-      <Item Name="ServicesToDeactivateParams" Type="LocalDynamicParameter" />
-   </Request>
-   <DynamicParametersList>
-      <DynamicParameter Name="AddServices">
-         <Source Path="//string" />
-         <DynamicObject Name="ServicesToActivate" SkipMissed="True" />
-      </DynamicParameter>
-      <DynamicParameter Name="ServicesToActivateParams">
-         <Source Path="//string" />
-         <DynamicObject Name="ServicesToActivateParams" SkipMissed="True" />
-      </DynamicParameter>
-      <DynamicParameter Name="DelServices">
-         <Source Path="//string" />
-         <DynamicObject Name="ServicesToDeactivate" SkipMissed="True" />
-      </DynamicParameter>
-      <DynamicParameter Name="ServicesToDeactivateParams">
-         <Source Path="//string" />
-         <DynamicObject Name="ServicesToDeactivateParams" SkipMissed="True" />
-      </DynamicParameter>
-   </DynamicParametersList>
-   <ErrorsList CodePage="ascii">
-      <Error Name="Not found" Value="InvalidRequest" />
-      <Error Name="parameter must be returned" Value="InvalidRequest" />
-   </ErrorsList>
+    </RequestTemplate>
+    <Item Name="TerminalDeviceID" Type="Wellknown" />
+    <Item Name="PersonalAccount" Type="Wellknown" />
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="datetime" Type="Wellknown" />
+    <Item Name="AddServices" Type="LocalDynamicParameter" />
+    <Item Name="DelServices" Type="LocalDynamicParameter" />
+    <Item Name="ServicesToActivateParams" Type="LocalDynamicParameter" />
+    <Item Name="ServicesToDeactivateParams" Type="LocalDynamicParameter" />
+  </Request>
+  <DynamicParametersList>
+    <DynamicParameter Name="AddServices">
+      <Source Path="//string" />
+      <DynamicObject Name="ServicesToActivate" SkipMissed="True" />
+    </DynamicParameter>
+    <DynamicParameter Name="ServicesToActivateParams">
+      <Source Path="//string" />
+      <DynamicObject Name="ServicesToActivateParams" SkipMissed="True" />
+    </DynamicParameter>
+    <DynamicParameter Name="DelServices">
+      <Source Path="//string" />
+      <DynamicObject Name="ServicesToDeactivate" SkipMissed="True" />
+    </DynamicParameter>
+    <DynamicParameter Name="ServicesToDeactivateParams">
+      <Source Path="//string" />
+      <DynamicObject Name="ServicesToDeactivateParams" SkipMissed="True" />
+    </DynamicParameter>
+  </DynamicParametersList>
+  <ErrorsList CodePage="ascii">
+    <Error Name="Not found" Value="InvalidRequest" />
+    <Error Name="parameter must be returned" Value="InvalidRequest" />
+  </ErrorsList>
 </Command>

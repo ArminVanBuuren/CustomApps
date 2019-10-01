@@ -1,6 +1,6 @@
-﻿<ExtendedRequestMessage>
+<ExtendedRequestMessage>
   <Priority>2</Priority>
-  <AdditionalData  Executable="True">
+  <AdditionalData Executable="True">
     <ProvisionList>
       <ChangeImsi>
         <NewIMSI>11111111</NewIMSI>

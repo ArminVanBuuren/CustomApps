@@ -1,10 +1,10 @@
 <Command Name="SC.DeletePA" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-   <Description>DeletePAOnFINPlatform</Description>
-   <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
-   <Properties GenerationType="DataSetXml" />
-   <Request>
-      <RequestTemplate>
-         <![CDATA[<DataSet Name="DeletePADataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>DeletePAOnFINPlatform</Description>
+  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
+  <Properties GenerationType="DataSetXml" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[<DataSet Name="DeletePADataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Attributes>
     <Attribute Name="Label" Type="System.String" Value="DeletePA;##datetime##;SPA"/>
     <Attribute Name="Protocol" Type="System.String" Value="Msmq"/>
@@ -19,9 +19,9 @@
     </Rows>
   </DataTable>
 </DataSet>]]>
-      </RequestTemplate>
-      <Item Name="datetime" Type="Wellknown" />
-      <Item Name="PersonalAccount" Type="Wellknown" />
-   </Request>
-   <ErrorsList CodePage="ascii" />
+    </RequestTemplate>
+    <Item Name="datetime" Type="Wellknown" />
+    <Item Name="PersonalAccount" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ascii" />
 </Command>

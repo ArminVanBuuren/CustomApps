@@ -1,110 +1,110 @@
 <scenario name="SC.FP.ChangeCounterProfile">
-   <objectList>
-      <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
-      <object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll" />
-      <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
-      <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
-      <object name="RiParametersReader" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RiLinkedDataInitializer" assembly="FORIS.SPA.MmlProcessing.dll" />
-      <object name="ConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
-      <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
-      <object name="SmbpMappingDataConstructor" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.SmbpProcessingUnits.SmbpMappingDataConstructor" assembly="FORIS.SPA.MmlProcessing.dll" />
-   </objectList>
-   <automat>
-      <node name="SkipDummyResponderNode" object="DummyResponder">
-         <resultlist>
-            <result value="" node="SkipResponseAssembler" />
-            <result value="1538" node="BySubscribersSplitter" />
-         </resultlist>
-         <parameterslist>
-            <param name="IfNotXmlPath:0" value="//ProcessingOptions/IsCounterProcess" />
-            <param name="OverallResult" value="SUCCESS" />
-            <param name="DetailedResult" value="SUCCESS" />
-            <param name="DetailedResultDescription" value="Skip because of is't not Counter Reinitialization process" />
-         </parameterslist>
-      </node>
-      <node name="SkipResponseAssembler" object="ResponseAssembler">
-         <parameterslist />
-         <resultlist>
-            <result value="" node="" />
-         </resultlist>
-      </node>
-      <node name="BySubscribersSplitter" object="BySubscribersSplitter">
-         <resultlist>
-            <result value="0" node="SingleSubscriberRequestDequeuer" />
-         </resultlist>
-      </node>
-      <node name="SingleSubscriberRequestDequeuer" object="Dequeuer">
-         <resultlist>
-            <result value="0" node="RiParametersReader" />
-            <result value="" node="" />
-         </resultlist>
-         <parameterslist>
-            <param name="queueName" value="requestsSplittedBySubscriberQueue" />
-         </parameterslist>
-      </node>
-      <node name="RiParametersReader" object="RiParametersReader">
-         <resultlist>
-            <result value="0" node="CheckUseBS" />
-            <result value="" node="ResponseAssembler" />
-         </resultlist>
-         <parameterslist>
-            <param name="IdentityName" value="IMSI" />
-            <param name="ResultContextKey" value="RiParametersList" />
-            <param name="DataType" value="GetBalanceStorageByImsiList" />
-            <param name="IdentityXmlPath" value="//IdentifiersList/Identifier/IMSI" />
-         </parameterslist>
-      </node>
-      <node name="CheckUseBS" object="ConditionsResolver">
-         <resultlist>
-            <result value="" node="CheckHostTypeCode" />
-            <result value="0" node="SmbpMappingDataConstructorNode" />
-         </resultlist>
-         <parameterslist>
-            <param name="IfXmlPath:0" value="//AdditionalData/AddList//UseBS[text()='0']" />
-         </parameterslist>
-      </node>
-      <node name="CheckHostTypeCode" object="ConditionsResolver">
-         <resultlist>
-            <result value="" node="DummyResponderNode" />
-            <result value="0" node="SmbpMappingDataConstructorNode" />
-         </resultlist>
-         <parameterslist>
-            <param name="ObjectNameInContext" value="RiDataXml" />
-            <param name="IfXmlPath:1" value="*['processingFlag(dont_use_bs_contextXpathParam(RiDataXml,//Host_x0020_code))'='True']" />
-         </parameterslist>
-      </node>
-      <node name="DummyResponderNode" object="DummyResponder">
-         <resultlist>
-            <result value="" node="ResponseAssembler" />
-         </resultlist>
-         <parameterslist>
-            <param name="OverallResult" value="SUCCESS" />
-            <param name="DetailedResult" value="SUCCESS" />
-         </parameterslist>
-      </node>
-      <node name="SmbpMappingDataConstructorNode" object="SmbpMappingDataConstructor">
-         <resultlist>
-            <result value="" node="CounterReinitializationNode" />
-         </resultlist>
-         <parameterslist>
-            <param name="MappingIdentity" value="MSISDN" />
-            <param name="Command" value="SC.CounterReinitialization.ServiceRow" />
-            <param name="XmlPath" value="//AdditionalData/AddList/RFS_FP_COUNTER" />
-            <param name="DynamicObjectName" value="Services" />
-         </parameterslist>
-      </node>
-      <node name="CounterReinitializationNode" object="Commander">
-         <resultlist>
-            <result value="" node="ResponseAssembler" />
-         </resultlist>
-         <parameterslist>
-            <param name="Command" value="CounterReinitialization" />
-         </parameterslist>
-      </node>
-      <node name="ResponseAssembler" object="ResponseAssembler">
-         <resultlist>
-            <result value="" node="SingleSubscriberRequestDequeuer" />
-         </resultlist>
-      </node>
-   </automat>
+  <objectList>
+    <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="RiParametersReader" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RiLinkedDataInitializer" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+    <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="SmbpMappingDataConstructor" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.SmbpProcessingUnits.SmbpMappingDataConstructor" assembly="FORIS.SPA.MmlProcessing.dll" />
+  </objectList>
+  <automat>
+    <node name="SkipDummyResponderNode" object="DummyResponder">
+      <resultlist>
+        <result value="" node="SkipResponseAssembler" />
+        <result value="1538" node="BySubscribersSplitter" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfNotXmlPath:0" value="//ProcessingOptions/IsCounterProcess" />
+        <param name="OverallResult" value="SUCCESS" />
+        <param name="DetailedResult" value="SUCCESS" />
+        <param name="DetailedResultDescription" value="Skip because of is't not Counter Reinitialization process" />
+      </parameterslist>
+    </node>
+    <node name="SkipResponseAssembler" object="ResponseAssembler">
+      <parameterslist />
+      <resultlist>
+        <result value="" node="" />
+      </resultlist>
+    </node>
+    <node name="BySubscribersSplitter" object="BySubscribersSplitter">
+      <resultlist>
+        <result value="0" node="SingleSubscriberRequestDequeuer" />
+      </resultlist>
+    </node>
+    <node name="SingleSubscriberRequestDequeuer" object="Dequeuer">
+      <resultlist>
+        <result value="0" node="RiParametersReader" />
+        <result value="" node="" />
+      </resultlist>
+      <parameterslist>
+        <param name="queueName" value="requestsSplittedBySubscriberQueue" />
+      </parameterslist>
+    </node>
+    <node name="RiParametersReader" object="RiParametersReader">
+      <resultlist>
+        <result value="0" node="CheckUseBS" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IdentityName" value="IMSI" />
+        <param name="ResultContextKey" value="RiParametersList" />
+        <param name="DataType" value="GetBalanceStorageByImsiList" />
+        <param name="IdentityXmlPath" value="//IdentifiersList/Identifier/IMSI" />
+      </parameterslist>
+    </node>
+    <node name="CheckUseBS" object="ConditionsResolver">
+      <resultlist>
+        <result value="" node="CheckHostTypeCode" />
+        <result value="0" node="SmbpMappingDataConstructorNode" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//AdditionalData/AddList//UseBS[text()='0']" />
+      </parameterslist>
+    </node>
+    <node name="CheckHostTypeCode" object="ConditionsResolver">
+      <resultlist>
+        <result value="" node="DummyResponderNode" />
+        <result value="0" node="SmbpMappingDataConstructorNode" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="RiDataXml" />
+        <param name="IfXmlPath:1" value="*['processingFlag(dont_use_bs_contextXpathParam(RiDataXml,//Host_x0020_code))'='True']" />
+      </parameterslist>
+    </node>
+    <node name="DummyResponderNode" object="DummyResponder">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="OverallResult" value="SUCCESS" />
+        <param name="DetailedResult" value="SUCCESS" />
+      </parameterslist>
+    </node>
+    <node name="SmbpMappingDataConstructorNode" object="SmbpMappingDataConstructor">
+      <resultlist>
+        <result value="" node="CounterReinitializationNode" />
+      </resultlist>
+      <parameterslist>
+        <param name="MappingIdentity" value="MSISDN" />
+        <param name="Command" value="SC.CounterReinitialization.ServiceRow" />
+        <param name="XmlPath" value="//AdditionalData/AddList/RFS_FP_COUNTER" />
+        <param name="DynamicObjectName" value="Services" />
+      </parameterslist>
+    </node>
+    <node name="CounterReinitializationNode" object="Commander">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="CounterReinitialization" />
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="SingleSubscriberRequestDequeuer" />
+      </resultlist>
+    </node>
+  </automat>
 </scenario>

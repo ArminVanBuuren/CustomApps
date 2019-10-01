@@ -1,10 +1,10 @@
 <Command Name="SC.DeletePA" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-   <Description>DeletePAOnFINPlatform</Description>
-   <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
-   <Properties GenerationType="DataSetXml" />
-   <Request>
-      <RequestTemplate>
-         <![CDATA[<DataSet Name="DeletePADataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>DeletePAOnFINPlatform</Description>
+  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
+  <Properties GenerationType="DataSetXml" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[<DataSet Name="DeletePADataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Attributes>
     <Attribute Name="Label" Type="System.String" Value="DeletePA;##datetime##;[SCP_MARKER]"/>
     <Attribute Name="Protocol" Type="System.String" Value="Msmq"/>
@@ -20,15 +20,15 @@
     </Rows>
   </DataTable>
 </DataSet>]]>
-      </RequestTemplate>
-      <Item Name="datetime" Type="Wellknown" />
-      <Item Name="PersonalAccount" Type="Wellknown" />
-      <Item Name="KEEP_BALANCES" Type="LocalParameter" />
-   </Request>
-   <ParametersList>
-      <Parameter Name="KEEP_BALANCES">
-         <Source Path="//AdditionalData//KeepBalances[text()='true' or text()='1']" AbsenceValue="false" PresenceValue="true" />
-      </Parameter>
-   </ParametersList>
-   <ErrorsList CodePage="ascii" />
+    </RequestTemplate>
+    <Item Name="datetime" Type="Wellknown" />
+    <Item Name="PersonalAccount" Type="Wellknown" />
+    <Item Name="KEEP_BALANCES" Type="LocalParameter" />
+  </Request>
+  <ParametersList>
+    <Parameter Name="KEEP_BALANCES">
+      <Source Path="//AdditionalData//KeepBalances[text()='true' or text()='1']" AbsenceValue="false" PresenceValue="true" />
+    </Parameter>
+  </ParametersList>
+  <ErrorsList CodePage="ascii" />
 </Command>

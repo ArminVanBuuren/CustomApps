@@ -1,9 +1,9 @@
 <Command Name="ImportContacts" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-   <Description>ImportContacts</Description>
-   <Author Name="Vladimir Khovanskiy" Date="2009-04-26+11:09" />
-   <Request>
-      <RequestTemplate>
-         <![CDATA[
+  <Description>ImportContacts</Description>
+  <Author Name="Vladimir Khovanskiy" Date="2009-04-26+11:09" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[
 <ImportContactsParameter xmlns="http://schemas.datacontract.org/2004/07/OutboundManagement.BL.Wcf">
    <CallList />
    <Contacts>
@@ -34,13 +34,13 @@
       </ContactInfo>
    </Contacts>
 </ImportContactsParameter>]]>
-      </RequestTemplate>
-      <EmulationPrintoutTemplate>
-         <![CDATA[]]>
-      </EmulationPrintoutTemplate>
-      <Item Name="msisdn" Type="Wellknown" />
-   </Request>
-   <ErrorsList CodePage="windows-1251">
-      <Error Name="0" Value="SUCCESS" />
-   </ErrorsList>
+    </RequestTemplate>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="windows-1251">
+    <Error Name="0" Value="SUCCESS" />
+  </ErrorsList>
 </Command>

@@ -1,43 +1,38 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <Configuration markers="*" scenarioPrefix="SC." mainIdentities="MSISDN,PersonalAccountNumber,ContractNumber" SICreation="" formatVersion="1">
   <HostTypeList>
     <HostType name="SM" nriType="RI" allowTerminalDeviceType="mobile" description="VAS-платформа SMSC (СМС-Центр)" />
   </HostTypeList>
-  <IdentityList>
-  </IdentityList>
-  <AttributeList>
-  </AttributeList>
+  <IdentityList />
+  <AttributeList />
   <ResourceList>
     <!-- START ==== НАСТРОЙКИ ДЛЯ SM -->
-    <Resource name="RES_SM_PROFILE" description="Тип абонента"/>
+    <Resource name="RES_SM_PROFILE" description="Тип абонента" />
     <!-- END ==== НАСТРОЙКИ ДЛЯ SM -->
   </ResourceList>
-  <RFSParameterList>
-  </RFSParameterList>
+  <RFSParameterList />
   <FlagList />
   <RFSList>
-
     <!-- START ==== НАСТРОЙКИ ДЛЯ SM -->
     <RFS name="RFS_SM_CHANGE_IMSI" hostType="SM" description="Изменение номера IMSI на SMSC">
       <RFSParameter name="NewIMSI" path="//NewIMSI" />
       <Resource name="RES_SM_PROFILE" useType="Mandatory">
-        <Value hosts="FP:05" value="AM"/>
-        <Value hosts="FP:MS" value="SCP1"/>
+        <Value hosts="FP:05" value="AM" />
+        <Value hosts="FP:MS" value="SCP1" />
       </Resource>
       <Scenario name="SM.ChangeIMSI" type="Add" />
     </RFS>
     <RFS name="RFS_SM_CHANGE_TARIFF" hostType="SM" description="Изменение тарифного плана на SMSC">
       <RFSParameter name="ChangeTP" />
       <Resource name="RES_SM_PROFILE" useType="Mandatory">
-        <Value hosts="FP:05" value="AM"/>
-        <Value hosts="FP:MS" value="SCP1"/>
+        <Value hosts="FP:05" value="AM" />
+        <Value hosts="FP:MS" value="SCP1" />
       </Resource>
       <Scenario name="SM.ChangeTP" type="Add" />
     </RFS>
     <RFS name="RFS_SM_SUBSCRIPTION" hostType="SM" processType="Subscription" description="Абонент на SMSC">
       <Resource name="RES_SM_PROFILE" useType="Mandatory">
-        <Value hosts="FP:05" value="AM"/>
-        <Value hosts="FP:MS" value="SCP1"/>
+        <Value hosts="FP:05" value="AM" />
+        <Value hosts="FP:MS" value="SCP1" />
       </Resource>
       <Scenario name="SM.CreateSubscriber" type="Add" />
       <Scenario name="SM.DeleteSubscriber" type="Remove" />
@@ -53,15 +48,14 @@
       <RFS name="RFS_SM_CHANGE_TARIFF" linkType="Add" />
     </CFS>
     <CFS name="Subscriber" priority="9999" type="ManagedObject" description="Абонент">
-      <RFS name="RFS_SM_SUBSCRIPTION" linkType="Add"/>
+      <RFS name="RFS_SM_SUBSCRIPTION" linkType="Add" />
     </CFS>
     <CFS name="Synchronize" priority="1" description="Обработка кнопки Синхронизировать в СПА">
       <RFSGroup name="RFS_GROUP_SM_SYNCHRON_SUBSCRIBER" />
     </CFS>
   </CFSList>
-  <CFSGroupList>
-  </CFSGroupList>
-  <RFSGroupList >
+  <CFSGroupList />
+  <RFSGroupList>
     <!-- START ==== НАСТРОЙКИ ДЛЯ SM -->
     <RFSGroup name="RFS_GROUP_SM_SYNCHRON_SUBSCRIBER" type="Choice" description="Группа RFS для синхронизации данных по MSISDN в SMSC">
       <RFS name="RFS_SM_RESTORE" linkType="Add" handler="SM_RecreateSubscriber" />
@@ -69,7 +63,7 @@
     <!-- END ==== НАСТРОЙКИ ДЛЯ SM -->
   </RFSGroupList>
   <RFSDependencyList />
-  <HandlerList >
+  <HandlerList>
     <!-- START ==== НАСТРОЙКИ ДЛЯ SM -->
     <Handler name="SM_RecreateSubscriber" type="RecreateSubscriber" description="Обработчик RFS для восстановления на SMSC">
       <Configuration>
@@ -79,7 +73,6 @@
     </Handler>
     <!-- END ==== НАСТРОЙКИ ДЛЯ SM -->
   </HandlerList>
-  <ScenarioList>
-  </ScenarioList>
+  <ScenarioList />
   <WfmScenarioList />
 </Configuration>

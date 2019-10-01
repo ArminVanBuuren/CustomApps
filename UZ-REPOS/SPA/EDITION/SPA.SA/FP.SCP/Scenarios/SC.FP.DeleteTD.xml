@@ -1,60 +1,60 @@
 <scenario name="SC.FP.DeleteTD">
-   <objectList>
-      <object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
-      <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
-      <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
-      <object name="ConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
-      <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
-   </objectList>
-   <automat>
-      <!-- Начало Dummy проверок -->
-      <node name="CheckSingleSCPEnabled" object="ConditionsResolver">
-         <resultlist>
-            <result value="0" node="SingleSCPDummyResponder" />
-            <result value="" node="BySubscribersCutter" />
-         </resultlist>
-         <parameterslist>
-            <param name="IfXmlPath:0" value="*['processingFlag(SingleSCPEnabled)'='True']" />
-            <param name="IfXmlPath:1" value="//PreviousPlatform/HostCode" />
-            <param name="IfNotXmlPath:0" value="//PreviousPlatform/HostCode[contains('[HOST_CODE_BS]',.)]" />
-         </parameterslist>
-      </node>
-      <node name="SingleSCPDummyResponder" object="DummyResponder">
-         <resultlist>
-            <result value="" node="SkipResponseAssembler" />
-         </resultlist>
-         <parameterslist>
-            <param name="OverallResult" value="SUCCESS" />
-            <param name="DetailedResult" value="SUCCESS" />
-            <param name="DetailedResultDescription" value="Command not sending because of old destination was SCP and Single SCP is enabled" />
-         </parameterslist>
-      </node>
-      <node name="SkipResponseAssembler" object="ResponseAssembler">
-         <resultlist>
-            <result value="" node="" />
-         </resultlist>
-      </node>
-      <!-- Окончание Dummy проверок -->
-      <node name="BySubscribersCutter" object="BySubscribersCutter">
-         <resultlist>
-            <result value="0" node="DeleteTDOnFINPlatform" />
-            <result value="1" node="" />
-         </resultlist>
-      </node>
-      <node name="DeleteTDOnFINPlatform" object="Commander">
-         <resultlist>
-            <result value="" node="ResponseAssembler" />
-         </resultlist>
-         <parameterslist>
-            <param name="Command" value="SC.DeleteTD" />
-            <param name="AppendSubscribersData" value="true" />
-            <param name="Asynchronous" value="true" />
-         </parameterslist>
-      </node>
-      <node name="ResponseAssembler" object="ResponseAssembler">
-         <resultlist>
-            <result value="" node="BySubscribersCutter" />
-         </resultlist>
-      </node>
-   </automat>
+  <objectList>
+    <object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+    <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+  </objectList>
+  <automat>
+    <!-- Начало Dummy проверок -->
+    <node name="CheckSingleSCPEnabled" object="ConditionsResolver">
+      <resultlist>
+        <result value="0" node="SingleSCPDummyResponder" />
+        <result value="" node="BySubscribersCutter" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="*['processingFlag(SingleSCPEnabled)'='True']" />
+        <param name="IfXmlPath:1" value="//PreviousPlatform/HostCode" />
+        <param name="IfNotXmlPath:0" value="//PreviousPlatform/HostCode[contains('[HOST_CODE_BS]',.)]" />
+      </parameterslist>
+    </node>
+    <node name="SingleSCPDummyResponder" object="DummyResponder">
+      <resultlist>
+        <result value="" node="SkipResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="OverallResult" value="SUCCESS" />
+        <param name="DetailedResult" value="SUCCESS" />
+        <param name="DetailedResultDescription" value="Command not sending because of old destination was SCP and Single SCP is enabled" />
+      </parameterslist>
+    </node>
+    <node name="SkipResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="" />
+      </resultlist>
+    </node>
+    <!-- Окончание Dummy проверок -->
+    <node name="BySubscribersCutter" object="BySubscribersCutter">
+      <resultlist>
+        <result value="0" node="DeleteTDOnFINPlatform" />
+        <result value="1" node="" />
+      </resultlist>
+    </node>
+    <node name="DeleteTDOnFINPlatform" object="Commander">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.DeleteTD" />
+        <param name="AppendSubscribersData" value="true" />
+        <param name="Asynchronous" value="true" />
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="BySubscribersCutter" />
+      </resultlist>
+    </node>
+  </automat>
 </scenario>

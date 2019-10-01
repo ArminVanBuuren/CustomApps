@@ -1,0 +1,61 @@
+<scenario name="SC.EI.CreateSubscriber">
+  <objectList>
+    <object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll" />
+    <object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll" />
+  </objectList>
+  <automat>
+    <node name="BySubscribersCutter-Node" object="BySubscribersCutter">
+      <resultlist>
+        <result value="0" node="GetForeign" />
+        <result value="1" node="" />
+      </resultlist>
+    </node>
+    <node name="GetForeign" object="DataBaseProcessor">
+      <resultlist>
+        <result value="" node="ExtractForeign" />
+      </resultlist>
+      <parameterslist>
+        <param name="DataBaseName" value="UMS.CBP" />
+        <param name="FunctionName" value="TAS_GET_FOREIGN" />
+        <param name="FunctionType" value="function" />
+        <param name="OutXml" value="db_unit_result" />
+        <param name="DbParameterName:0" value="p_msisdn" />
+        <param name="DbParameterDirection:0" value="Input" />
+        <param name="DbParameterType:0" value="Varchar2" />
+        <param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN" />
+        <param name="DbParameterName:1" value="p_result" />
+        <param name="DbParameterDirection:1" value="ReturnValue" />
+        <param name="DbParameterType:1" value="Varchar2" />
+        <param name="DbParameterValue:1" value="" />
+      </parameterslist>
+    </node>
+    <node name="ExtractForeign" object="XmlNodesCopier">
+      <resultlist>
+        <result value="" node="CreateSubscriber" />
+      </resultlist>
+      <parameterslist>
+        <param name="SrcXml" value="db_unit_result" />
+        <param name="DstMessage" value="xmlrequest" />
+        <param name="CopyContentType" value="InnerText" />
+        <param name="SrcXmlPath:0" value="root/return" />
+        <param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/Foreign" />
+      </parameterslist>
+    </node>
+    <node name="CreateSubscriber" object="Commander">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.CreateSubscriber" />
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="BySubscribersCutter-Node" />
+      </resultlist>
+    </node>
+  </automat>
+</scenario>

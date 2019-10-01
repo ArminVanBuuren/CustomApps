@@ -1,14 +1,15 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.CF_Delete" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>Удаление услуги переадресация</Description>
-  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
+  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
   <Request>
     <RequestTemplate>
       <![CDATA[MOD SS:MSISDN=##msisdn##,##CallForwardName##;^M]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="CallForwardName" Type="LocalParameter"/>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="CallForwardName" Type="LocalParameter" />
   </Request>
   <ParametersList>
     <Parameter Name="CallForwardName" IsChoice="true" AbsenceValue="">

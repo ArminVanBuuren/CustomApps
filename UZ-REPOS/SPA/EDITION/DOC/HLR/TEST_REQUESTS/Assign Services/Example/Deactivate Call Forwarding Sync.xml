@@ -1,5 +1,5 @@
-﻿<ExtendedRequestMessage>
-  <AdditionalData  Executable="True">
+<ExtendedRequestMessage>
+  <AdditionalData Executable="True">
     <WithdrawalList>
       <CallForwarding>
         <CFB>

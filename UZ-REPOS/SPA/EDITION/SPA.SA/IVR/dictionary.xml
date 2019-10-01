@@ -1,30 +1,30 @@
 <Dictionary xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-   <WellknownsList>
-      <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)" />
-   </WellknownsList>
-   <ErrorsList CodePage="windows-1251">
-      <Error Name="0" Value="SUCCESS" />
-   </ErrorsList>
-   <RegexpsList>
-      <Regexp Name="Error" Value="&lt;ErrorCode&gt;(?&lt;ERROR&gt;(\d+))&lt;\/ErrorCode&gt;" />
-   </RegexpsList>
-   <ConstantsList />
-   <ParametersList>
-      <Parameter Name="TransactionID">
-         <Source Path="ExtendedRequestMessage/ID" />
-         <PossibleValues StringToKeyTable="true" />
-      </Parameter>
-      <Parameter Name="NewIMSI">
-         <Source Path="ExtendedRequestMessage/AdditionalData//NewIMSI" />
-         <PossibleValues StringToKeyTable="true" />
-      </Parameter>
-      <Parameter Name="NewMsisdn">
-         <Source Path="ExtendedRequestMessage/AdditionalData//NewMSISDN" />
-         <PossibleValues StringToKeyTable="true" />
-      </Parameter>
-   </ParametersList>
-   <DynamicParametersList />
-   <CommandsList Root="Commands" Mask="*.xml">
-      <!-- All new commands are included by Mask=*.xml attribute -->
-   </CommandsList>
+  <WellknownsList>
+    <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)" />
+  </WellknownsList>
+  <ErrorsList CodePage="windows-1251">
+    <Error Name="0" Value="SUCCESS" />
+  </ErrorsList>
+  <RegexpsList>
+    <Regexp Name="Error" Value="&lt;ErrorCode&gt;(?&lt;ERROR&gt;(\d+))&lt;\/ErrorCode&gt;" />
+  </RegexpsList>
+  <ConstantsList />
+  <ParametersList>
+    <Parameter Name="TransactionID">
+      <Source Path="ExtendedRequestMessage/ID" />
+      <PossibleValues StringToKeyTable="true" />
+    </Parameter>
+    <Parameter Name="NewIMSI">
+      <Source Path="ExtendedRequestMessage/AdditionalData//NewIMSI" />
+      <PossibleValues StringToKeyTable="true" />
+    </Parameter>
+    <Parameter Name="NewMsisdn">
+      <Source Path="ExtendedRequestMessage/AdditionalData//NewMSISDN" />
+      <PossibleValues StringToKeyTable="true" />
+    </Parameter>
+  </ParametersList>
+  <DynamicParametersList />
+  <CommandsList Root="Commands" Mask="*.xml">
+    <!-- All new commands are included by Mask=*.xml attribute -->
+  </CommandsList>
 </Dictionary>

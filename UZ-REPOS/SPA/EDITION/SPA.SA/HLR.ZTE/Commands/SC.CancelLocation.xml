@@ -1,21 +1,21 @@
 <Command Name="SC.CancelLocation">
-   <Description>Сброс информации о локации абонета на MSC, VLR, SGSN станциях</Description>
-   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
-   <Request>
-      <RequestTemplate>
-         <![CDATA[MOD LOC: MSISDN=##msisdn##,##location##;^M]]>
-      </RequestTemplate>
-      <Item Name="location" Type="LocalParameter" />
-      <Item Name="msisdn" Type="Wellknown" />
-   </Request>
-   <ParametersList>
-      <Parameter Name="location" IsChoice="true" AbsenceValue="MSCNumber=*,VLRnumber=*,SGSNNumber=*,SGSNAddr=*">
-         <Source Path="//RES_HLR_CANCEL_LOCATION/Value[text()='SGSN']" PostFormat="SGSNNumber=*,SGSNAddr=*" />
-         <Source Path="//RES_HLR_CANCEL_LOCATION/Value[text()='LTE']" PostFormat="EPCMMEHost=*,EPCMMERealm=*,EPCSGSNHost=*,EPCSGSNRealm=*" />
-      </Parameter>
-   </ParametersList>
-   <ErrorsList CodePage="windows-1251">
-      <Error Name="101040" Value="SUCCESS" />
-      <!--ISDN is unavailable-->
-   </ErrorsList>
+  <Description>Сброс информации о локации абонета на MSC, VLR, SGSN станциях</Description>
+  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[MOD LOC: MSISDN=##msisdn##,##location##;^M]]>
+    </RequestTemplate>
+    <Item Name="location" Type="LocalParameter" />
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
+  <ParametersList>
+    <Parameter Name="location" IsChoice="true" AbsenceValue="MSCNumber=*,VLRnumber=*,SGSNNumber=*,SGSNAddr=*">
+      <Source Path="//RES_HLR_CANCEL_LOCATION/Value[text()='SGSN']" PostFormat="SGSNNumber=*,SGSNAddr=*" />
+      <Source Path="//RES_HLR_CANCEL_LOCATION/Value[text()='LTE']" PostFormat="EPCMMEHost=*,EPCMMERealm=*,EPCSGSNHost=*,EPCSGSNRealm=*" />
+    </Parameter>
+  </ParametersList>
+  <ErrorsList CodePage="windows-1251">
+    <Error Name="101040" Value="SUCCESS" />
+    <!--ISDN is unavailable-->
+  </ErrorsList>
 </Command>

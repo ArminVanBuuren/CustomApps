@@ -1,27 +1,56 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <Configuration markers="*" scenarioPrefix="SC." mainIdentities="MSISDN,PersonalAccountNumber,ContractNumber" SICreation="" formatVersion="1">
   <HostTypeList>
+    <HostType name="EI" nriType="RI" allowTerminalDeviceType="mobile" description="IMEI REGISTER" />
   </HostTypeList>
-  <IdentityList>
-  </IdentityList>
-  <AttributeList>
-  </AttributeList>
-  <ResourceList>
-  </ResourceList>
-  <RFSParameterList>
-  </RFSParameterList>
+  <IdentityList />
+  <AttributeList />
+  <ResourceList />
+  <RFSParameterList />
   <FlagList />
   <RFSList>
+    <RFS name="RFS_EI_SUBSCRIPTION" hostType="EI" description="Абонент на EIR">
+      <Scenario name="EI.CreateSubscriber" type="Add" />
+      <Scenario name="EI.DeleteSubscriber" type="Remove" />
+    </RFS>
+    <RFS name="RFS_EI_CHANGE_IMSI" hostType="EI" description="Изменение номера IMSI на EIR">
+      <Scenario name="EI.ChangeIMSI" type="Add" />
+      <RFSParameter name="NewIMSI" />
+    </RFS>
+    <RFS name="RFS_EI_CHANGE_MSISDN" hostType="EI" description="Изменение номера MSISDN на EIR">
+      <Scenario name="EI.ChangeMSISDN" type="Add" />
+      <RFSParameter name="NewMSISDN" />
+    </RFS>
+    <RFS name="RFS_EI_RESTORE" hostType="EI" description="Восстановление на EIR" />
   </RFSList>
   <CFSList>
+    <CFS name="ChangeImsi" priority="9999" type="OneTime" description="Изменение номера IMSI">
+      <RFS name="RFS_EI_CHANGE_IMSI" linkType="Add" />
+    </CFS>
+    <CFS name="ChangeMsisdn" priority="9999" type="OneTime" description="Изменение номера MSISDN">
+      <RFS name="RFS_EI_CHANGE_MSISDN" linkType="Add" />
+    </CFS>
+    <CFS name="Subscriber" priority="9999" type="ManagedObject" description="Абонент">
+      <RFS name="RFS_EI_SUBSCRIPTION" linkType="Add" />
+    </CFS>
+    <CFS name="Synchronize" priority="1" description="Обработка кнопки Синхронизировать в СПА">
+      <RFSGroup name="RFS_GROUP_EI_SYNCHRON_SUBSCRIBER" />
+    </CFS>
   </CFSList>
   <CFSGroupList>
+    <RFSGroup name="RFS_GROUP_EI_SYNCHRON_SUBSCRIBER" type="Choice" description="Группа RFS для синхронизации данных по MSISDN в EIR">
+      <RFS name="RFS_EI_RESTORE" linkType="Add" dependsOn="RFS_EI_SUBSCRIPTION" handler="EI_RecreateSubscriber" />
+    </RFSGroup>
   </CFSGroupList>
   <RFSGroupList />
   <RFSDependencyList />
-  <HandlerList >
+  <HandlerList>
+    <Handler name="EI_RecreateSubscriber" type="RecreateSubscriber" description="Обработчик RFS для восстановления услуги EIR">
+      <Configuration>
+        <RFS name="RFS_EI_SUBSCRIPTION" action="Remove" />
+        <RFS name="RFS_EI_SUBSCRIPTION" action="Add" />
+      </Configuration>
+    </Handler>
   </HandlerList>
-  <ScenarioList>
-  </ScenarioList>
+  <ScenarioList />
   <WfmScenarioList />
 </Configuration>

@@ -1,16 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <Configuration markers="*" scenarioPrefix="SC." mainIdentities="MSISDN,PersonalAccountNumber,ContractNumber" SICreation="" formatVersion="1">
   <HostTypeList>
     <HostType name="MG" nriType="RI" allowTerminalDeviceType="mobile" description="FORIS Messaging Gateway" />
   </HostTypeList>
-  <IdentityList>
-  </IdentityList>
-  <AttributeList>
-  </AttributeList>
-  <ResourceList>
-  </ResourceList>
-  <RFSParameterList>
-  </RFSParameterList>
+  <IdentityList />
+  <AttributeList />
+  <ResourceList />
+  <RFSParameterList />
   <FlagList />
   <RFSList>
     <RFS name="RFS_MG_SUBSCRIPTION" hostType="MG" processType="Subscription" description="Метка абонента на платформе MG" />
@@ -20,12 +15,10 @@
       <RFS name="RFS_MG_SUBSCRIPTION" linkType="Add" />
     </CFS>
   </CFSList>
-  <CFSGroupList>
-  </CFSGroupList>
+  <CFSGroupList />
   <RFSGroupList />
   <RFSDependencyList />
-  <HandlerList >
-  </HandlerList>
+  <HandlerList />
   <ScenarioList>
     <Scenario name="MG.SendIp" description="Отправить статический Ip">
       <RFS name="RFS_MG_SUBSCRIPTION" scenarioType="Add" />

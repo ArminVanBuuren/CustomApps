@@ -1,10 +1,10 @@
 <Command Name="SC.DeleteTD" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-   <Description>DeleteTDOnFINPlatform</Description>
-   <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
-   <Properties GenerationType="DataSetXml" />
-   <Request>
-      <RequestTemplate>
-         <![CDATA[<DataSet Name="DeleteTDCDataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>DeleteTDOnFINPlatform</Description>
+  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
+  <Properties GenerationType="DataSetXml" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[<DataSet Name="DeleteTDCDataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Attributes>
     <Attribute Name="Label" Type="System.String" Value="DeleteTerminalDeviceContracts;##datetime##;SPA"/>
     <Attribute Name="Protocol" Type="System.String" Value="Msmq"/>
@@ -20,18 +20,18 @@
     </Rows>
   </DataTable>
 </DataSet>]]>
-      </RequestTemplate>
-      <Item Name="datetime" Type="Wellknown" />
-      <Item Name="PersonalAccountId" Type="LocalParameter" />
-      <Item Name="TerminalDeviceID" Type="Wellknown" />
-   </Request>
-   <ParametersList>
-      <Parameter Name="PersonalAccountId" IsChoice="true">
-         <Source Path="//IdentifiersList/Identifier/PersonalAccountNumber" />
-         <Source Path="//AdditionalData//TransferTD/OldPersonalAccountNumber" />
-      </Parameter>
-   </ParametersList>
-   <ErrorsList CodePage="ascii">
-      <Error Name="ERROR_CODE&gt;-154018&lt;" Value="SUCCESS" />
-   </ErrorsList>
+    </RequestTemplate>
+    <Item Name="datetime" Type="Wellknown" />
+    <Item Name="PersonalAccountId" Type="LocalParameter" />
+    <Item Name="TerminalDeviceID" Type="Wellknown" />
+  </Request>
+  <ParametersList>
+    <Parameter Name="PersonalAccountId" IsChoice="true">
+      <Source Path="//IdentifiersList/Identifier/PersonalAccountNumber" />
+      <Source Path="//AdditionalData//TransferTD/OldPersonalAccountNumber" />
+    </Parameter>
+  </ParametersList>
+  <ErrorsList CodePage="ascii">
+    <Error Name="ERROR_CODE&gt;-154018&lt;" Value="SUCCESS" />
+  </ErrorsList>
 </Command>

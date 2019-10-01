@@ -1,16 +1,17 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.CF_Activate" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>Активация услуги переадресация вызова</Description>
-  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
+  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
   <Request>
     <RequestTemplate>
       <![CDATA[Reg FN:MSISDN=##msisdn##,SS=##CallForwardName##,Bsg=0,Register=1,Active=1##ForwardedToNumber####CallForwardingTimer##;^M]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="CallForwardName" Type="LocalParameter"/>
-    <Item Name="ForwardedToNumber" Type="LocalParameter"/>
-    <Item Name="CallForwardingTimer" Type="LocalParameter"/>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="CallForwardName" Type="LocalParameter" />
+    <Item Name="ForwardedToNumber" Type="LocalParameter" />
+    <Item Name="CallForwardingTimer" Type="LocalParameter" />
   </Request>
   <ParametersList>
     <Parameter Name="CallForwardName" IsChoice="true" AbsenceValue="">

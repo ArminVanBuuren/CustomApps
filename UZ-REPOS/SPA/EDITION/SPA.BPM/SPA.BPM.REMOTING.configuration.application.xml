@@ -1,77 +1,77 @@
 <configuration>
-   <communication>
-      <clientsCommunicator commType="RemotingCallForwarding">
-         <data uri="ICallForwarding" templatePath="..\SPA.BPM\Templates\CallForwarding" maxThreads="20" responseTimeout="60000" rootXmlDataTag="SupplementaryServicesList" activationStatusPath="ActivationStatus" noReplyCondTimerPath="GeneralInfo/NoReplyTimer" bsCodePath="addInfo/bsCode" destinationPath="AdditionalInfo/Number" port="9999" appName="SPA.SA" wellKnownObjectMode="SingleCall">
-            <system.runtime.remoting>
-               <application>
-                  <channels>
-                     <channel ref="tcp" port="9999" name="SPA">
-                        <serverProviders>
-                           <formatter ref="binary" typeFilterLevel="Full" />
-                        </serverProviders>
-                     </channel>
-                  </channels>
-               </application>
-               <customErrors mode="on" />
-            </system.runtime.remoting>
-         </data>
-      </clientsCommunicator>
-      <activatorsCommunicator>
-         <database readPeriod="1000" readCount="5000" />
-      </activatorsCommunicator>
-   </communication>
-   <bpm>
-      <bpmmodules>
-         <RequestMessagePreprocessor>
-            <param name="poolSize" value="20" />
-            <param name="pollScheduledRecsPeriod" value="1" />
-            <param name="getScheduledRecsFromDbCount" value="1500" />
-            <param name="checkRequestDuplicates" value="false" />
-            <param name="checkRequestDuplicatesPeriod" value="0" />
-            <param name="threadLoggingPeriod" value="600" />
-            <param name="loggingPeriod" value="600" />
-         </RequestMessagePreprocessor>
-         <RequestMessageProcessor>
-            <param name="poolSize" value="20" />
-            <param name="loggingPeriod" value="600" />
-         </RequestMessageProcessor>
-         <RequestMessagePostprocessor>
-            <param name="poolSize" value="20" />
-            <param name="asyncDelete" value="true" />
-            <param name="pollPeriod" value="2" />
-            <param name="pollIdlePeriod" value="2" />
-            <param name="getParentRowsFromDbCount" value="1500" />
-            <param name="invalidSourceAddressTTL" value="60" />
-            <param name="loggingPeriod" value="600" />
-         </RequestMessagePostprocessor>
-         <ActivatorProxy>
-            <param name="confirmation_timeout" value="300" />
-            <param name="response_timeout" value="300" />
-            <param name="traceListen" value="true" />
-            <param name="loggingPeriod" value="600" />
-         </ActivatorProxy>
-         <BPM>
-            <param name="postprocTimeout" value="60" />
-            <param name="cacheDependencies" value="false" />
-            <param name="responseType" value="Default" />
-            <param name="loggingPeriod" value="600" />
-         </BPM>
-      </bpmmodules>
-      <hostTypesTable hostTypesFP="FP">
-         <hostType type="MA" identity="IMSI" direct="MCA" />
-         <hostType type="SM" identity="IMSI" direct="SMS" />
-         <hostType type="MG" identity="IMSI" direct="MG" />
-         <hostType type="CT5" identity="IMSI" direct="UNIFUN" />
-         <hostType type="CT6" identity="IMSI" direct="ALLPLAY" />
-         <hostType type="RBT" identity="IMSI" direct="INTECH" />
-         <hostType type="HLR" identity="IMSI" direct="ROAMING" />
-         <hostType type="SCG" identity="IMSI" direct="SCG" />
-         <hostType type="SCGS" identity="IMSI" direct="SCGS" />
-         <hostType type="EI" identity="IMSI" direct="EIR" />
-         <hostType type="HL" identity="MSISDN" direct="01" />
-      </hostTypesTable>
-      <RegisteredServicesProviders>
-         <provider for="" type="FORIS.ServiceProvisioning.Messaging.Communication.TDRegisteredServicesProvider, FORIS.SPA.Messaging.Communication" option="MergeProviderData" />
-      </RegisteredServicesProviders>
-   </bpm>
+  <communication>
+    <clientsCommunicator commType="RemotingCallForwarding">
+      <data uri="ICallForwarding" templatePath="..\SPA.BPM\Templates\CallForwarding" maxThreads="20" responseTimeout="60000" rootXmlDataTag="SupplementaryServicesList" activationStatusPath="ActivationStatus" noReplyCondTimerPath="GeneralInfo/NoReplyTimer" bsCodePath="addInfo/bsCode" destinationPath="AdditionalInfo/Number" port="9999" appName="SPA.SA" wellKnownObjectMode="SingleCall">
+        <system.runtime.remoting>
+          <application>
+            <channels>
+              <channel ref="tcp" port="9999" name="SPA">
+                <serverProviders>
+                  <formatter ref="binary" typeFilterLevel="Full" />
+                </serverProviders>
+              </channel>
+            </channels>
+          </application>
+          <customErrors mode="on" />
+        </system.runtime.remoting>
+      </data>
+    </clientsCommunicator>
+    <activatorsCommunicator>
+      <database readPeriod="1000" readCount="5000" />
+    </activatorsCommunicator>
+  </communication>
+  <bpm>
+    <bpmmodules>
+      <RequestMessagePreprocessor>
+        <param name="poolSize" value="20" />
+        <param name="pollScheduledRecsPeriod" value="1" />
+        <param name="getScheduledRecsFromDbCount" value="1500" />
+        <param name="checkRequestDuplicates" value="false" />
+        <param name="checkRequestDuplicatesPeriod" value="0" />
+        <param name="threadLoggingPeriod" value="600" />
+        <param name="loggingPeriod" value="600" />
+      </RequestMessagePreprocessor>
+      <RequestMessageProcessor>
+        <param name="poolSize" value="20" />
+        <param name="loggingPeriod" value="600" />
+      </RequestMessageProcessor>
+      <RequestMessagePostprocessor>
+        <param name="poolSize" value="20" />
+        <param name="asyncDelete" value="true" />
+        <param name="pollPeriod" value="2" />
+        <param name="pollIdlePeriod" value="2" />
+        <param name="getParentRowsFromDbCount" value="1500" />
+        <param name="invalidSourceAddressTTL" value="60" />
+        <param name="loggingPeriod" value="600" />
+      </RequestMessagePostprocessor>
+      <ActivatorProxy>
+        <param name="confirmation_timeout" value="300" />
+        <param name="response_timeout" value="300" />
+        <param name="traceListen" value="true" />
+        <param name="loggingPeriod" value="600" />
+      </ActivatorProxy>
+      <BPM>
+        <param name="postprocTimeout" value="60" />
+        <param name="cacheDependencies" value="false" />
+        <param name="responseType" value="Default" />
+        <param name="loggingPeriod" value="600" />
+      </BPM>
+    </bpmmodules>
+    <hostTypesTable hostTypesFP="FP">
+      <hostType type="MA" identity="IMSI" direct="MCA" />
+      <hostType type="SM" identity="IMSI" direct="SMS" />
+      <hostType type="MG" identity="IMSI" direct="MG" />
+      <hostType type="CT5" identity="IMSI" direct="UNIFUN" />
+      <hostType type="CT6" identity="IMSI" direct="ALLPLAY" />
+      <hostType type="RBT" identity="IMSI" direct="INTECH" />
+      <hostType type="HLR" identity="IMSI" direct="ROAMING" />
+      <hostType type="SCG" identity="IMSI" direct="SCG" />
+      <hostType type="SCGS" identity="IMSI" direct="SCGS" />
+      <hostType type="EI" identity="IMSI" direct="EIR" />
+      <hostType type="HL" identity="MSISDN" direct="01" />
+    </hostTypesTable>
+    <RegisteredServicesProviders>
+      <provider for="" type="FORIS.ServiceProvisioning.Messaging.Communication.TDRegisteredServicesProvider, FORIS.SPA.Messaging.Communication" option="MergeProviderData" />
+    </RegisteredServicesProviders>
+  </bpm>
 </configuration>

@@ -1,22 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
-	<Settings>
-		<Add Key="ApplicationConfiguration" Value="..\SPA.BPM\SPA.BPM.01.configuration.application.xml" />
-		<Add Key="ProfilerConfiguration" Value="Profiler-DEBUG.xml" />
-		<Add Key="ReportTimeout" Value="300"/>
-		<Add Key="RepeatableRequestTTL" Value="48" />
-		<Add Key="ForeignSubscriber" Value="IMSI=0"/>
-		<Add Key="Requests.PollPeriod" Value="1"/>
-		<Add Key="Requests.PollIdlePeriod" Value="3"/>
-		<Add Key="MaxSubscribersCount" Value="100"/>
-		<Add Key="ServiceCatalogConfig" Value="MAIN"/>
-	</Settings>
-	<DatabaseObjects Remotable="false">
-		<Add Name="FORIS.SPA.CBP" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.CBP"/>
-		<Add Name="FORIS.SPA.ARCHIVE" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.ARCHIVE"/>
-		<Add Name="FORIS.SPA.ROBP" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.ROBP"/>
-		<Add Name="FORIS.SPA.STATE" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.STATE"/>
-		<Add Name="FORIS.SPA.SRI" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.SRI"/>
-		<Add Name="FORIS.RI" ConnectionDataType="uri" ConnectionData="Uzb"/>
-	</DatabaseObjects>
+  <Settings>
+    <Add Key="ApplicationConfiguration" Value="..\SPA.BPM\SPA.BPM.01.configuration.application.xml" />
+    <Add Key="ProfilerConfiguration" Value="Profiler-DEBUG.xml" />
+    <Add Key="ReportTimeout" Value="300" />
+    <Add Key="RepeatableRequestTTL" Value="48" />
+    <Add Key="ForeignSubscriber" Value="IMSI=0" />
+    <Add Key="Requests.PollPeriod" Value="1" />
+    <Add Key="Requests.PollIdlePeriod" Value="3" />
+    <Add Key="MaxSubscribersCount" Value="100" />
+    <Add Key="ServiceCatalogConfig" Value="MAIN" />
+  </Settings>
+  <DatabaseObjects Remotable="false">
+    <Add Name="FORIS.SPA.CBP" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.CBP" />
+    <Add Name="FORIS.SPA.ARCHIVE" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.ARCHIVE" />
+    <Add Name="FORIS.SPA.ROBP" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.ROBP" />
+    <Add Name="FORIS.SPA.STATE" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.STATE" />
+    <Add Name="FORIS.SPA.SRI" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.SRI" />
+    <Add Name="FORIS.RI" ConnectionDataType="uri" ConnectionData="Uzb" />
+  </DatabaseObjects>
 </Configuration>

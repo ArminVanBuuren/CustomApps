@@ -1,48 +1,47 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <scenario name="SC.HL.Modify.NET">
   <objectList>
-    <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
-    <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
   </objectList>
   <automat>
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
       <resultlist>
-        <result value="0" node="BPOS_Modify"/>
-        <result value="1" node=""/>
+        <result value="0" node="BPOS_Modify" />
+        <result value="1" node="" />
       </resultlist>
     </node>
     <node name="BPOS_Modify" object="Commander">
       <resultlist>
-        <result value="0" node="NAM_Modify"/>
-        <result value="" node="ResponseAssembler"/>
+        <result value="0" node="NAM_Modify" />
+        <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SC.BPOS_Modify"/>
+        <param name="Command" value="SC.BPOS_Modify" />
       </parameterslist>
     </node>
     <node name="NAM_Modify" object="IfCommander">
       <resultlist>
-        <result value="0" node="CancelLocation"/>
-        <result value="" node="ResponseAssembler"/>
+        <result value="0" node="CancelLocation" />
+        <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="IfXmlPath:0" value="//RFS_HL_ROAMING"/>
-        <param name="Command" value="SC.NAM_Modify"/>
+        <param name="IfXmlPath:0" value="//RFS_HL_ROAMING" />
+        <param name="Command" value="SC.NAM_Modify" />
       </parameterslist>
     </node>
     <node name="CancelLocation" object="Commander">
       <resultlist>
-        <result value="" node="ResponseAssembler"/>
+        <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SC.CancelLocation"/>
+        <param name="Command" value="SC.CancelLocation" />
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">
       <resultlist>
-        <result value="" node="RequestCutterBySubscribers"/>
+        <result value="" node="RequestCutterBySubscribers" />
       </resultlist>
     </node>
   </automat>

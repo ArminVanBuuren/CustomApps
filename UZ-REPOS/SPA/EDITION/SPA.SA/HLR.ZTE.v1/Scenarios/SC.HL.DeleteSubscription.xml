@@ -1,48 +1,47 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <scenario name="SC.HL.DeleteSubscription">
   <objectList>
-    <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
-    <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
   </objectList>
   <automat>
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
       <resultlist>
-        <result value="0" node="UserMSISDN_Delete"/>
-        <result value="1" node=""/>
+        <result value="0" node="UserMSISDN_Delete" />
+        <result value="1" node="" />
       </resultlist>
     </node>
     <node name="UserMSISDN_Delete" object="Commander">
       <resultlist>
-        <result value="0" node="UserIMSI_Delete"/>
-        <result value="" node="ResponseAssembler"/>
+        <result value="0" node="UserIMSI_Delete" />
+        <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SC.UserMSISDN_Delete"/>
+        <param name="Command" value="SC.UserMSISDN_Delete" />
       </parameterslist>
     </node>
     <node name="UserIMSI_Delete" object="Commander">
       <resultlist>
-        <result value="0" node="AuthIMSI_Delete"/>
-        <result value="" node="ResponseAssembler"/>
+        <result value="0" node="AuthIMSI_Delete" />
+        <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SC.UserIMSI_Delete"/>
+        <param name="Command" value="SC.UserIMSI_Delete" />
       </parameterslist>
     </node>
     <node name="AuthIMSI_Delete" object="IfCommander">
       <resultlist>
-        <result value="" node="ResponseAssembler"/>
+        <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="IfNotXmlPath:0" value="//RFS_HL_RECREATE_SUBSCRIPTION"/>
-        <param name="Command" value="SC.AuthIMSI_Delete"/>
+        <param name="IfNotXmlPath:0" value="//RFS_HL_RECREATE_SUBSCRIPTION" />
+        <param name="Command" value="SC.AuthIMSI_Delete" />
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">
       <resultlist>
-        <result value="" node="RequestCutterBySubscribers"/>
+        <result value="" node="RequestCutterBySubscribers" />
       </resultlist>
     </node>
   </automat>

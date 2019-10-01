@@ -1,14 +1,15 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.APN_M2M_Add" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>Добавление услуги 'GPRS'APN_M2M</Description>
-  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
+  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
   <Request>
     <RequestTemplate>
       <![CDATA[Add PDP:MSISDN=##msisdn##,PDPType=0,APN=##NET_APN##,QOSID=100;^M]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="NET_APN" Type="Parameter"/>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="NET_APN" Type="Parameter" />
   </Request>
   <ErrorsList CodePage="windows-1251" />
 </Command>

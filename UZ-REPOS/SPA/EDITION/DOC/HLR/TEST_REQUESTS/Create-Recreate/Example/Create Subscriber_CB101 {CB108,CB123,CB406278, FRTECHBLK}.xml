@@ -1,9 +1,8 @@
-﻿<ExtendedRequestMessage>
+<ExtendedRequestMessage>
   <Priority>3</Priority>
-  <AdditionalData  Executable="True">
+  <AdditionalData Executable="True">
     <ProvisionList>
-      <Subscriber>
-      </Subscriber>
+      <Subscriber />
       <CB101 />
       <CB108 />
       <CB123 />

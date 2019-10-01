@@ -1,21 +1,21 @@
 <Command Name="SC.SM.ChangeIMSI">
-   <Description>Изменение IMSI на SMSC</Description>
-   <Author Name="Cherneckiy A." Date="2018-03-20+10:00" />
-   <Request>
-      <RequestTemplate>
-         <![CDATA[OPERATION=SUBSCRIBER-PROV-EDIT&MSISDN=##MSISDN##&NIMSI=##NewIMSI##&ID=##Profile##]]>
-      </RequestTemplate>
-      <Item Name="MSISDN" Type="Wellknown" />
-      <Item Name="NewIMSI" Type="LocalParameter" />
-      <Item Name="Profile" Type="LocalParameter" />
-   </Request>
-   <ParametersList>
-      <Parameter Name="Profile">
-         <Source Path="//RES_SM_PROFILE/Value[text()!='']" />
-      </Parameter>
-      <Parameter Name="NewIMSI">
-         <Source Path="//NewIMSI/Value[text()!='']" />
-      </Parameter>
-   </ParametersList>
-   <ErrorsList CodePage="ascii" />
+  <Description>Изменение IMSI на SMSC</Description>
+  <Author Name="Cherneckiy A." Date="2018-03-20+10:00" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[OPERATION=SUBSCRIBER-PROV-EDIT&MSISDN=##MSISDN##&NIMSI=##NewIMSI##&ID=##Profile##]]>
+    </RequestTemplate>
+    <Item Name="MSISDN" Type="Wellknown" />
+    <Item Name="NewIMSI" Type="LocalParameter" />
+    <Item Name="Profile" Type="LocalParameter" />
+  </Request>
+  <ParametersList>
+    <Parameter Name="Profile">
+      <Source Path="//RES_SM_PROFILE/Value[text()!='']" />
+    </Parameter>
+    <Parameter Name="NewIMSI">
+      <Source Path="//NewIMSI/Value[text()!='']" />
+    </Parameter>
+  </ParametersList>
+  <ErrorsList CodePage="ascii" />
 </Command>

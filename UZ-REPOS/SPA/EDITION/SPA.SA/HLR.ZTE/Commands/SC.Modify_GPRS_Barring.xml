@@ -1,11 +1,11 @@
 <Command Name="SC.Modify_GPRS_Barring">
-   <Description>Изменение барринга GPRS</Description>
-   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
-   <Request>
-      <RequestTemplate>
-         <![CDATA[Mod BscEx:MSISDN=##msisdn##,BPOS=##NET_STATE##;^M]]>
-      </RequestTemplate>
-      <Item Name="msisdn" Type="Wellknown" />
-      <Item Name="NET_STATE" Type="Parameter" />
-   </Request>
+  <Description>Изменение барринга GPRS</Description>
+  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[Mod BscEx:MSISDN=##msisdn##,BPOS=##NET_STATE##;^M]]>
+    </RequestTemplate>
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="NET_STATE" Type="Parameter" />
+  </Request>
 </Command>

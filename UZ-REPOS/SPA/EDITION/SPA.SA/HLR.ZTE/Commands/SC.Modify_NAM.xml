@@ -1,15 +1,15 @@
 <Command Name="SC.Modify_NAM">
-   <Description>Изменение сервиса интернет NAM</Description>
-   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
-   <Request>
-      <RequestTemplate>
-         <![CDATA[MOD NAM:MSISDN=##msisdn##,NAM=##NET_STATE##,Keep=1,KEEPEPS=1;^M]]>
-      </RequestTemplate>
-      <Item Name="msisdn" Type="Wellknown" />
-      <Item Name="NET_STATE" Type="Parameter" />
-   </Request>
-   <ErrorsList CodePage="windows-1251">
-      <Error Name="110109" Value="SUCCESS" />
-      <!--Subscriber does not exist-->
-   </ErrorsList>
+  <Description>Изменение сервиса интернет NAM</Description>
+  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[MOD NAM:MSISDN=##msisdn##,NAM=##NET_STATE##,Keep=1,KEEPEPS=1;^M]]>
+    </RequestTemplate>
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="NET_STATE" Type="Parameter" />
+  </Request>
+  <ErrorsList CodePage="windows-1251">
+    <Error Name="110109" Value="SUCCESS" />
+    <!--Subscriber does not exist-->
+  </ErrorsList>
 </Command>

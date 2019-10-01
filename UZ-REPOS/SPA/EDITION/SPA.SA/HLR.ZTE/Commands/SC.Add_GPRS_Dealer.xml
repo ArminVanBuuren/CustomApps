@@ -1,10 +1,10 @@
 <Command Name="SC.Add_GPRS_Dealer">
-   <Description>Добавление услуги 'GPRS DEALER'</Description>
-   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
-   <Request>
-      <RequestTemplate>
-         <![CDATA[SET TPLGPRS:MSISDN=##msisdn##,GPRSTPL=20;^M]]>
-      </RequestTemplate>
-      <Item Name="msisdn" Type="Wellknown" />
-   </Request>
+  <Description>Добавление услуги 'GPRS DEALER'</Description>
+  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[SET TPLGPRS:MSISDN=##msisdn##,GPRSTPL=20;^M]]>
+    </RequestTemplate>
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
 </Command>

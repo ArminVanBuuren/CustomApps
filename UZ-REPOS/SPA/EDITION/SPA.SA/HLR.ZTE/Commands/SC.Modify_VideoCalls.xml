@@ -1,19 +1,19 @@
 <Command Name="SC.Modify_VideoCalls">
-   <Description>Изменение асинхронной и синхронной видео связи</Description>
-   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
-   <Request>
-      <RequestTemplate>
-         <![CDATA[Mod BscEx:MSISDN=##msisdn##,GENCDA=##action##,GENCDS=##action##;^M]]>
-      </RequestTemplate>
-      <Item Name="msisdn" Type="Wellknown" />
-      <Item Name="action" Type="LocalParameter" />
-   </Request>
-   <ParametersList>
-      <Parameter Name="action">
-         <Source Path="//AddList/RFS_HLR_CALLS_BAN" PresenceValue="0" AbsenceValue="1" />
-      </Parameter>
-   </ParametersList>
-   <ErrorsList CodePage="windows-1251">
-      <Error Name="ERR3001" Value="NoSuchObjectInstance" />
-   </ErrorsList>
+  <Description>Изменение асинхронной и синхронной видео связи</Description>
+  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[Mod BscEx:MSISDN=##msisdn##,GENCDA=##action##,GENCDS=##action##;^M]]>
+    </RequestTemplate>
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="action" Type="LocalParameter" />
+  </Request>
+  <ParametersList>
+    <Parameter Name="action">
+      <Source Path="//AddList/RFS_HLR_CALLS_BAN" PresenceValue="0" AbsenceValue="1" />
+    </Parameter>
+  </ParametersList>
+  <ErrorsList CodePage="windows-1251">
+    <Error Name="ERR3001" Value="NoSuchObjectInstance" />
+  </ErrorsList>
 </Command>

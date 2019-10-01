@@ -1,135 +1,135 @@
 <scenario name="SC.FP.Modify.Service">
-   <objectList>
-      <object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
-      <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
-      <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
-      <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll" />
-      <object name="ByServicesCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterByXmlNodes" assembly="FORIS.SPA.MmlProcessing.dll" />
-      <object name="FPCommandDataConstructor" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.FPProcessingUnits.FPCommandDataConstructor" assembly="FORIS.SPA.MmlProcessing.dll" />
-      <object name="IdentifiersGenerator" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.IdentifiersGenerator" assembly="FORIS.SPA.MmlProcessing.dll" />
-      <object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll" />
-      <object name="XmlNodesEraser" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesEraser" assembly="FORIS.SPA.SPF.dll" />
-   </objectList>
-   <automat>
-      <node name="BySubscribersCutter" object="BySubscribersCutter">
-         <resultlist>
-            <result value="0" node="ByServicesCutter-Node" />
-            <result value="1" node="" />
-         </resultlist>
-      </node>
-      <node name="ByServicesCutter-Node" object="ByServicesCutter">
-         <resultlist>
-            <result value="0" node="IdentifiersGenerator-Node" />
-            <result value="" node="ResponseAssembler" />
-         </resultlist>
-         <parameterslist>
-            <param name="Queue" value="requestsSplittedByServicesQueue" />
-            <param name="XmlPath:0" value="//AdditionalData/ModifyList/RFS_FP_SERVICE_GENERAL" />
-            <param name="XmlPath:1" value="//AdditionalData/AddList/RFS_FP_SERVICE_GENERAL" />
-            <param name="XmlPath:2" value="//AdditionalData/RemoveList/RFS_FP_SERVICE_GENERAL" />
-            <param name="AllPaths" value="1" />
-         </parameterslist>
-      </node>
-      <node name="IdentifiersGenerator-Node" object="IdentifiersGenerator">
-         <parameterslist>
-            <param name="WellknownName" value="GlobalUid" />
-         </parameterslist>
-         <resultlist>
-            <result value="0" node="CommandDataConstructorExt-Node" />
-         </resultlist>
-      </node>
-      <node name="CommandDataConstructorExt-Node" object="FPCommandDataConstructor">
-         <resultlist>
-            <result value="0" node="ModifyService" />
-            <result value="1538" node="ModifyService" />
-            <result value="" node="ResponseAssembler" />
-         </resultlist>
-         <parameterslist>
-            <param name="ServicesDynamicObject" value="Services" />
-            <param name="ParametersDynamicObject" value="ServicesParams" />
-            <param name="ServicesCommand" value="SC.Service.ServiceRow" />
-            <param name="ParametersCommand" value="SC.Service.ParameterRowModify" />
-            <param name="XmlPath" value="//AdditionalData/*/RFS_FP_SERVICE_GENERAL" />
-         </parameterslist>
-      </node>
-      <node name="ModifyService" object="Commander">
-         <comment>Если изменение возвращает 1872(UnregisteredServiceCode), то будет делать подключение</comment>
-         <resultlist>
-            <result value="0" node="ByServicesCutter-Node" />
-            <result value="1872" node="CopyModifyList-Node" />
-            <result value="" node="ResponseAssembler" />
-         </resultlist>
-         <parameterslist>
-            <param name="CommandSource" value="Dictionary" />
-            <param name="Command" value="SC.ModifyService" />
-            <param name="Script" value="Command" />
-            <param name="AppendSubscribersData" value="true" />
-            <param name="ErrorDecodingType" value="ByString" />
-            <param name="Asynchronous" value="true" />
-         </parameterslist>
-      </node>
-      <node name="CopyModifyList-Node" object="XmlNodesCopier">
-         <resultlist>
-            <result value="" node="EraseModifyList-Node" />
-         </resultlist>
-         <parameterslist>
-            <param name="SrcXml" value="request" />
-            <param name="DstMessage" value="request" />
-            <param name="CopyContentType" value="InnerXml" />
-            <param name="SrcXmlPath:0" value="//AdditionalData/ModifyList" />
-            <param name="DstXmlPath:0" value="//AdditionalData/AddList" />
-         </parameterslist>
-      </node>
-      <node name="EraseModifyList-Node" object="XmlNodesEraser">
-         <resultlist>
-            <result value="" node="IdentifiersGeneratorSpecial-Node" />
-         </resultlist>
-         <parameterslist>
-            <param name="SrcObjectName" value="request" />
-            <param name="DstObjectName" value="request" />
-            <param name="DstXmlName" value="xmlrequest" />
-            <param name="EraseXmlPath:0" value="//AdditionalData/ModifyList/*" />
-         </parameterslist>
-      </node>
-      <node name="IdentifiersGeneratorSpecial-Node" object="IdentifiersGenerator">
-         <parameterslist>
-            <param name="WellknownName" value="GlobalUid" />
-         </parameterslist>
-         <resultlist>
-            <result value="0" node="CommandDataConstructorExtSpecial-Node" />
-         </resultlist>
-      </node>
-      <node name="CommandDataConstructorExtSpecial-Node" object="FPCommandDataConstructor">
-         <comment>Раз это вторая попытка и мы делаем просто добавление, то тут не используется колонка NewParamValue</comment>
-         <resultlist>
-            <result value="0" node="ModifyServiceSpecial-Node" />
-            <result value="1538" node="ModifyServiceSpecial-Node" />
-            <result value="" node="ResponseAssembler" />
-         </resultlist>
-         <parameterslist>
-            <param name="ServicesDynamicObject" value="Services" />
-            <param name="ParametersDynamicObject" value="ServicesParams" />
-            <param name="ServicesCommand" value="SC.Service.ServiceRow" />
-            <param name="ParametersCommand" value="SC.Service.ParameterRow" />
-            <param name="XmlPath" value="//AdditionalData/*/RFS_FP_SERVICE_GENERAL" />
-         </parameterslist>
-      </node>
-      <node name="ModifyServiceSpecial-Node" object="Commander">
-         <resultlist>
-            <result value="0" node="ByServicesCutter-Node" />
-            <result value="" node="ResponseAssembler" />
-         </resultlist>
-         <parameterslist>
-            <param name="Command" value="SC.ModifyService" />
-            <param name="Script" value="Command" />
-            <param name="AppendSubscribersData" value="true" />
-            <param name="Asynchronous" value="true" />
-         </parameterslist>
-      </node>
-      <node name="ResponseAssembler" object="ResponseAssembler">
-         <resultlist>
-            <result value="" node="BySubscribersCutter" />
-         </resultlist>
-      </node>
-   </automat>
+  <objectList>
+    <object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll" />
+    <object name="ByServicesCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterByXmlNodes" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="FPCommandDataConstructor" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.FPProcessingUnits.FPCommandDataConstructor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IdentifiersGenerator" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.IdentifiersGenerator" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll" />
+    <object name="XmlNodesEraser" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesEraser" assembly="FORIS.SPA.SPF.dll" />
+  </objectList>
+  <automat>
+    <node name="BySubscribersCutter" object="BySubscribersCutter">
+      <resultlist>
+        <result value="0" node="ByServicesCutter-Node" />
+        <result value="1" node="" />
+      </resultlist>
+    </node>
+    <node name="ByServicesCutter-Node" object="ByServicesCutter">
+      <resultlist>
+        <result value="0" node="IdentifiersGenerator-Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Queue" value="requestsSplittedByServicesQueue" />
+        <param name="XmlPath:0" value="//AdditionalData/ModifyList/RFS_FP_SERVICE_GENERAL" />
+        <param name="XmlPath:1" value="//AdditionalData/AddList/RFS_FP_SERVICE_GENERAL" />
+        <param name="XmlPath:2" value="//AdditionalData/RemoveList/RFS_FP_SERVICE_GENERAL" />
+        <param name="AllPaths" value="1" />
+      </parameterslist>
+    </node>
+    <node name="IdentifiersGenerator-Node" object="IdentifiersGenerator">
+      <parameterslist>
+        <param name="WellknownName" value="GlobalUid" />
+      </parameterslist>
+      <resultlist>
+        <result value="0" node="CommandDataConstructorExt-Node" />
+      </resultlist>
+    </node>
+    <node name="CommandDataConstructorExt-Node" object="FPCommandDataConstructor">
+      <resultlist>
+        <result value="0" node="ModifyService" />
+        <result value="1538" node="ModifyService" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="ServicesDynamicObject" value="Services" />
+        <param name="ParametersDynamicObject" value="ServicesParams" />
+        <param name="ServicesCommand" value="SC.Service.ServiceRow" />
+        <param name="ParametersCommand" value="SC.Service.ParameterRowModify" />
+        <param name="XmlPath" value="//AdditionalData/*/RFS_FP_SERVICE_GENERAL" />
+      </parameterslist>
+    </node>
+    <node name="ModifyService" object="Commander">
+      <comment>Если изменение возвращает 1872(UnregisteredServiceCode), то будет делать подключение</comment>
+      <resultlist>
+        <result value="0" node="ByServicesCutter-Node" />
+        <result value="1872" node="CopyModifyList-Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="Command" value="SC.ModifyService" />
+        <param name="Script" value="Command" />
+        <param name="AppendSubscribersData" value="true" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="Asynchronous" value="true" />
+      </parameterslist>
+    </node>
+    <node name="CopyModifyList-Node" object="XmlNodesCopier">
+      <resultlist>
+        <result value="" node="EraseModifyList-Node" />
+      </resultlist>
+      <parameterslist>
+        <param name="SrcXml" value="request" />
+        <param name="DstMessage" value="request" />
+        <param name="CopyContentType" value="InnerXml" />
+        <param name="SrcXmlPath:0" value="//AdditionalData/ModifyList" />
+        <param name="DstXmlPath:0" value="//AdditionalData/AddList" />
+      </parameterslist>
+    </node>
+    <node name="EraseModifyList-Node" object="XmlNodesEraser">
+      <resultlist>
+        <result value="" node="IdentifiersGeneratorSpecial-Node" />
+      </resultlist>
+      <parameterslist>
+        <param name="SrcObjectName" value="request" />
+        <param name="DstObjectName" value="request" />
+        <param name="DstXmlName" value="xmlrequest" />
+        <param name="EraseXmlPath:0" value="//AdditionalData/ModifyList/*" />
+      </parameterslist>
+    </node>
+    <node name="IdentifiersGeneratorSpecial-Node" object="IdentifiersGenerator">
+      <parameterslist>
+        <param name="WellknownName" value="GlobalUid" />
+      </parameterslist>
+      <resultlist>
+        <result value="0" node="CommandDataConstructorExtSpecial-Node" />
+      </resultlist>
+    </node>
+    <node name="CommandDataConstructorExtSpecial-Node" object="FPCommandDataConstructor">
+      <comment>Раз это вторая попытка и мы делаем просто добавление, то тут не используется колонка NewParamValue</comment>
+      <resultlist>
+        <result value="0" node="ModifyServiceSpecial-Node" />
+        <result value="1538" node="ModifyServiceSpecial-Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="ServicesDynamicObject" value="Services" />
+        <param name="ParametersDynamicObject" value="ServicesParams" />
+        <param name="ServicesCommand" value="SC.Service.ServiceRow" />
+        <param name="ParametersCommand" value="SC.Service.ParameterRow" />
+        <param name="XmlPath" value="//AdditionalData/*/RFS_FP_SERVICE_GENERAL" />
+      </parameterslist>
+    </node>
+    <node name="ModifyServiceSpecial-Node" object="Commander">
+      <resultlist>
+        <result value="0" node="ByServicesCutter-Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.ModifyService" />
+        <param name="Script" value="Command" />
+        <param name="AppendSubscribersData" value="true" />
+        <param name="Asynchronous" value="true" />
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="BySubscribersCutter" />
+      </resultlist>
+    </node>
+  </automat>
 </scenario>

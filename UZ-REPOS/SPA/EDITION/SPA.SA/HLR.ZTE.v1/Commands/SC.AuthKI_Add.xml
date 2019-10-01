@@ -1,18 +1,19 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.AuthKI_Add" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>Добавление ключа в AuC</Description>
-  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
+  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
   <Request>
     <RequestTemplate>
       <![CDATA[##KI##^M]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="KI" Type="LocalParameter"/>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="KI" Type="LocalParameter" />
   </Request>
   <ParametersList>
     <Parameter Name="KI">
-      <Source Path="ExtendedRequestMessage/AdditionalData/KI"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/KI" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
   </ParametersList>
   <ErrorsList CodePage="windows-1251" />

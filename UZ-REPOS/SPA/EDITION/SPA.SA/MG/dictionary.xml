@@ -1,51 +1,51 @@
 <Dictionary xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-   <WellknownsList>
-      <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)" />
-      <Wellknown Name="msisdn.cc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,0,3)" />
-      <Wellknown Name="msisdn.ndc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,3,2)" />
-      <Wellknown Name="msisdn.sn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,5)" />
-      <Wellknown Name="msisdn.fn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,3)" />
-      <Wellknown Name="imsi" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;)" />
-      <Wellknown Name="imsi.mcc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,0,3)" />
-      <Wellknown Name="imsi.mnc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,3,2)" />
-      <Wellknown Name="imsi.msin" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,5)" />
-   </WellknownsList>
-   <ErrorsList CodePage="ASCII">
-      <Error Name="dbresult=0" Value="SUCCESS" Description="Zayavka prinyata" />
-      <Error Name="0;" Expression="$(Error)" Value="SUCCESS" />
-      <Error Name="-1;" Expression="$(Error)" Value="FAILURE" />
-      <Error Name="-2;" Expression="$(Error)" Value="FAILURE" />
-      <Error Name="-3;" Expression="$(Error)" Value="SUCCESS" />
-      <Error Name="-4;" Expression="$(Error)" Value="FAILURE" />
-      <Error Name="-5;" Expression="$(Error)" Value="FAILURE" />
-      <Error Name="-100;" Expression="$(Error)" Value="FAILURE" />
-   </ErrorsList>
-   <RegexpsList>
-      <Regexp Name="Error" Value=".*&gt;result=((?&lt;ERROR&gt;\d{1,3})|(?&lt;ERROR&gt;-\d{1,3}))" />
-   </RegexpsList>
-   <ConstantsList>
-      <Constant Name="_MakroRegion" Value="2" />
-   </ConstantsList>
-   <ParametersList>
-      <Parameter Name="message">
-         <Source Path="ExtendedRequestMessage/IdentifiersList/Identifier/MESSAGE" />
-         <PossibleValues StringToKeyTable="true" />
-      </Parameter>
-      <Parameter Name="ip">
-         <Source Path="ExtendedRequestMessage/AdditionalData/IP" />
-         <PossibleValues StringToKeyTable="true" />
-      </Parameter>
-      <Parameter Name="receiver">
-         <Source Path="ExtendedRequestMessage/AdditionalData/Receiver" />
-         <PossibleValues StringToKeyTable="true" />
-      </Parameter>
-      <Parameter Name="amount">
-         <Source Path="ExtendedRequestMessage/AdditionalData/Amount" />
-         <PossibleValues StringToKeyTable="true" />
-      </Parameter>
-   </ParametersList>
-   <DynamicParametersList />
-   <CommandsList Root="Commands" Mask="*.xml">
-      <!-- All new commands are included by Mask=*.xml attribute -->
-   </CommandsList>
+  <WellknownsList>
+    <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)" />
+    <Wellknown Name="msisdn.cc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,0,3)" />
+    <Wellknown Name="msisdn.ndc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,3,2)" />
+    <Wellknown Name="msisdn.sn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,5)" />
+    <Wellknown Name="msisdn.fn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,3)" />
+    <Wellknown Name="imsi" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;)" />
+    <Wellknown Name="imsi.mcc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,0,3)" />
+    <Wellknown Name="imsi.mnc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,3,2)" />
+    <Wellknown Name="imsi.msin" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,5)" />
+  </WellknownsList>
+  <ErrorsList CodePage="ASCII">
+    <Error Name="dbresult=0" Value="SUCCESS" Description="Zayavka prinyata" />
+    <Error Name="0;" Expression="$(Error)" Value="SUCCESS" />
+    <Error Name="-1;" Expression="$(Error)" Value="FAILURE" />
+    <Error Name="-2;" Expression="$(Error)" Value="FAILURE" />
+    <Error Name="-3;" Expression="$(Error)" Value="SUCCESS" />
+    <Error Name="-4;" Expression="$(Error)" Value="FAILURE" />
+    <Error Name="-5;" Expression="$(Error)" Value="FAILURE" />
+    <Error Name="-100;" Expression="$(Error)" Value="FAILURE" />
+  </ErrorsList>
+  <RegexpsList>
+    <Regexp Name="Error" Value=".*&gt;result=((?&lt;ERROR&gt;\d{1,3})|(?&lt;ERROR&gt;-\d{1,3}))" />
+  </RegexpsList>
+  <ConstantsList>
+    <Constant Name="_MakroRegion" Value="2" />
+  </ConstantsList>
+  <ParametersList>
+    <Parameter Name="message">
+      <Source Path="ExtendedRequestMessage/IdentifiersList/Identifier/MESSAGE" />
+      <PossibleValues StringToKeyTable="true" />
+    </Parameter>
+    <Parameter Name="ip">
+      <Source Path="ExtendedRequestMessage/AdditionalData/IP" />
+      <PossibleValues StringToKeyTable="true" />
+    </Parameter>
+    <Parameter Name="receiver">
+      <Source Path="ExtendedRequestMessage/AdditionalData/Receiver" />
+      <PossibleValues StringToKeyTable="true" />
+    </Parameter>
+    <Parameter Name="amount">
+      <Source Path="ExtendedRequestMessage/AdditionalData/Amount" />
+      <PossibleValues StringToKeyTable="true" />
+    </Parameter>
+  </ParametersList>
+  <DynamicParametersList />
+  <CommandsList Root="Commands" Mask="*.xml">
+    <!-- All new commands are included by Mask=*.xml attribute -->
+  </CommandsList>
 </Dictionary>

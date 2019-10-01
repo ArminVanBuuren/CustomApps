@@ -1,16 +1,16 @@
 <Command Name="SC.Modify_Roaming">
-   <Description>Изменение международного роуминга</Description>
-   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
-   <Request>
-      <RequestTemplate>
-         <![CDATA[MOD ODB:MSISDN=##msisdn##,BR=##action##;^M]]>
-      </RequestTemplate>
-      <Item Name="msisdn" Type="Wellknown" />
-      <Item Name="action" Type="LocalParameter" />
-   </Request>
-   <ParametersList>
-      <Parameter Name="action">
-         <Source Path="//AddList/RFS_HLR_ROAMING" PresenceValue="0" AbsenceValue="2" />
-      </Parameter>
-   </ParametersList>
+  <Description>Изменение международного роуминга</Description>
+  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[MOD ODB:MSISDN=##msisdn##,BR=##action##;^M]]>
+    </RequestTemplate>
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="action" Type="LocalParameter" />
+  </Request>
+  <ParametersList>
+    <Parameter Name="action">
+      <Source Path="//AddList/RFS_HLR_ROAMING" PresenceValue="0" AbsenceValue="2" />
+    </Parameter>
+  </ParametersList>
 </Command>

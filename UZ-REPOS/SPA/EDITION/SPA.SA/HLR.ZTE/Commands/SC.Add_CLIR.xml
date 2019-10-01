@@ -1,10 +1,10 @@
 <Command Name="SC.Add_CLIR">
-   <Description>Добавить АнтиАОН</Description>
-   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
-   <Request>
-      <RequestTemplate>
-         <![CDATA[MOD SS: MSISDN=##msisdn##,CLIR=1,CLIROpt=1;^M]]>
-      </RequestTemplate>
-      <Item Name="msisdn" Type="Wellknown" />
-   </Request>
+  <Description>Добавить АнтиАОН</Description>
+  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[MOD SS: MSISDN=##msisdn##,CLIR=1,CLIROpt=1;^M]]>
+    </RequestTemplate>
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
 </Command>

@@ -1,4 +1,4 @@
-﻿<schema version="WORK" description="copied from version WORK 1.0">
+<schema version="WORK" description="copied from version WORK 1.0">
   <switch xpath="DEFAULT">
     <case value="DEFAULT">
       <address queue="BPM_01" single="False" />

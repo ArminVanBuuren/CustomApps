@@ -1,44 +1,40 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <Configuration markers="*" scenarioPrefix="SC." mainIdentities="MSISDN,PersonalAccountNumber,ContractNumber">
   <HostTypeList>
-    <HostType name="CT4" nriType="RI" allowTerminalDeviceType="mobile" description="Service Content MST"/>
+    <HostType name="CT4" nriType="RI" allowTerminalDeviceType="mobile" description="Service Content MST" />
     <HostType name="FP" nriType="RI" availableSystem="FinancialPlatform" allowTerminalDeviceType="mobile,virtual" orderAdjustment="1000" description="Финансовая платформа" />
     <HostType name="HL" nriType="RI" allowTerminalDeviceType="mobile" description="HLR (Home Location Register)" />
-    <HostType name="MA" nriType="RI" allowTerminalDeviceType="mobile" description="VAS-платформа MCA (Вам звонили)"/>
-    <HostType name="RBT" nriType="RI" allowTerminalDeviceType="mobile" description="VAS платформа Ring Back Tone (Гудок)"/>
-    <HostType name="SCG" nriType="RI" allowTerminalDeviceType="mobile" description="SCG онлайн GPRS"/>
-    <HostType name="SCGS" nriType="RI" allowTerminalDeviceType="mobile" description="SCG онлайн GPRS Service"/>
+    <HostType name="MA" nriType="RI" allowTerminalDeviceType="mobile" description="VAS-платформа MCA (Вам звонили)" />
+    <HostType name="RBT" nriType="RI" allowTerminalDeviceType="mobile" description="VAS платформа Ring Back Tone (Гудок)" />
+    <HostType name="SCG" nriType="RI" allowTerminalDeviceType="mobile" description="SCG онлайн GPRS" />
+    <HostType name="SCGS" nriType="RI" allowTerminalDeviceType="mobile" description="SCG онлайн GPRS Service" />
     <HostType name="SM" nriType="RI" allowTerminalDeviceType="mobile" description="VAS-платформа SMSC (СМС-Центр)" />
   </HostTypeList>
   <IdentityList />
   <AttributeList />
   <ResourceList>
     <!-- START ==== НАСТРОЙКИ ДЛЯ CT4 -->
-    <Resource name="RES_CT4_SERVICE_ID" description="ServiceID на платформе CT4"/>
+    <Resource name="RES_CT4_SERVICE_ID" description="ServiceID на платформе CT4" />
     <!-- END ==== НАСТРОЙКИ ДЛЯ CT4 -->
-    
     <!-- START ==== НАСТРОЙКИ ДЛЯ SM -->
-    <Resource name="RES_SM_PROFILE" description="Тип абонента"/>
+    <Resource name="RES_SM_PROFILE" description="Тип абонента" />
     <!-- END ==== НАСТРОЙКИ ДЛЯ SM -->
-    
     <!-- START ==== НАСТРОЙКИ ДЛЯ SCG -->
-    <Resource name="RES_SCG_USERTYPE" description="Тип абонента на SCG"/>
-    <Resource name="RES_SCG_PRODUCT_ID" description="Тип подписки абонента на SCG"/>
+    <Resource name="RES_SCG_USERTYPE" description="Тип абонента на SCG" />
+    <Resource name="RES_SCG_PRODUCT_ID" description="Тип подписки абонента на SCG" />
     <!-- END ==== НАСТРОЙКИ ДЛЯ SCG -->
-    
     <!-- START ==== НАСТРОЙКИ ДЛЯ HLR -->
     <Resource name="RES_HLR_CANCEL_LOCATION" description="Тип станции для сброса информации" />
-    <Resource name="RES_HLR_DEALER_APN" description="Название дилерской точки доступа (Access Point Name)"/>
-    <Resource name="RES_HLR_NET" description="Доступ к сервису интернет"/>
-    <Resource name="RES_HLR_NET_APN" description="Название точки доступа (Access Point Name)"/>
-    <Resource name="RES_HLR_NET_SERVICE" description="Услуга интернет"/>
-    <Resource name="RES_HLR_ODB_IC" description="Барринг входящей связи"/>
-    <Resource name="RES_HLR_ODB_OC" description="Барринг исходящей связи"/>
+    <Resource name="RES_HLR_DEALER_APN" description="Название дилерской точки доступа (Access Point Name)" />
+    <Resource name="RES_HLR_NET" description="Доступ к сервису интернет" />
+    <Resource name="RES_HLR_NET_APN" description="Название точки доступа (Access Point Name)" />
+    <Resource name="RES_HLR_NET_SERVICE" description="Услуга интернет" />
+    <Resource name="RES_HLR_ODB_IC" description="Барринг входящей связи" />
+    <Resource name="RES_HLR_ODB_OC" description="Барринг исходящей связи" />
     <Resource name="RES_HLR_REGION" description="Код региона для переадресации" />
-    <Resource name="RES_HLR_SMS_MO" description="Барринг на исходящей SMS"/>
-    <Resource name="RES_HLR_SMS_MT" description="Барринг на входящей SMS"/>
-    <Resource name="RES_HLR_PROFILE" description="Профиль абонента"/>
-    <Resource name="RES_HLR_USSD" description="Доступ к USSD"/>
+    <Resource name="RES_HLR_SMS_MO" description="Барринг на исходящей SMS" />
+    <Resource name="RES_HLR_SMS_MT" description="Барринг на входящей SMS" />
+    <Resource name="RES_HLR_PROFILE" description="Профиль абонента" />
+    <Resource name="RES_HLR_USSD" description="Доступ к USSD" />
     <!-- END ==== НАСТРОЙКИ ДЛЯ HLR -->
   </ResourceList>
   <RFSParameterList>
@@ -79,13 +75,12 @@
   <RFSList>
     <!-- START ==== НАСТРОЙКИ ДЛЯ CT4 -->
     <RFS name="RFS_CT4_CHANGE_MSISDN" hostType="CT4" description="Изменение номера MSISDN на платформе CT4">
-      <RFSParameter name="NewMSISDN" path="//ChangeMsisdn/NewMSISDN"/>
+      <RFSParameter name="NewMSISDN" path="//ChangeMsisdn/NewMSISDN" />
     </RFS>
     <RFS name="RFS_CT4_SUBSCRIPTION" hostType="CT4" processType="Subscription" description="Абонент на платформе CT4">
-      <Resource name="RES_CT4_SERVICE_ID" value="558"/>
+      <Resource name="RES_CT4_SERVICE_ID" value="558" />
     </RFS>
     <!-- END ==== НАСТРОЙКИ ДЛЯ CT4 -->
-
     <!-- START ==== НАСТРОЙКИ ДЛЯ FP -->
     <RFS name="RFS_FP_BLOCK" hostType="FP" processType="DynamicList" description="Признак наличия блокировки" />
     <RFS name="RFS_FP_CHANGE_BILLING_GROUP" hostType="FP" description="Изменение биллинговой группы на фин.платформе">
@@ -193,7 +188,6 @@
       <RFSParameter name="UpdateAttributes" />
     </RFS>
     <!-- END ==== НАСТРОЙКИ ДЛЯ FP -->
-
     <!-- START ==== НАСТРОЙКИ ДЛЯ HLR -->
     <RFS name="RFS_HLR_CALLS_BAN" hostType="HL" description="Запрет голосовой связи" />
     <RFS name="RFS_HLR_CANCEL_LOCATION" hostType="HL" description="Сброс информации о локации абонета на MSC, VLR, SGSN станциях">
@@ -438,108 +432,102 @@
     </RFS>
     <RFS name="RFS_HLR_VIDEOCALL" hostType="HL" description="Video Call" />
     <!-- END ==== НАСТРОЙКИ ДЛЯ HLR -->
-    
     <!-- START ==== НАСТРОЙКИ ДЛЯ MCA -->
     <RFS name="RFS_MCA_CHANGE_MSISDN" hostType="MA" description="Изменение номера MSISDN на платформе MCA">
-      <RFSParameter name="NewMSISDN" path="//NewMSISDN"/>
+      <RFSParameter name="NewMSISDN" path="//NewMSISDN" />
     </RFS>
-    <RFS name="RFS_MCA_SUBSCRIPTION" hostType="MA" processType="Subscription" description="Абонент а платформе MCA"/>
-    <RFS name="RFS_MCA_RESTORE" hostType="MA" description="Восстановление услуги MCA"/>
+    <RFS name="RFS_MCA_SUBSCRIPTION" hostType="MA" processType="Subscription" description="Абонент а платформе MCA" />
+    <RFS name="RFS_MCA_RESTORE" hostType="MA" description="Восстановление услуги MCA" />
     <!-- END ==== НАСТРОЙКИ ДЛЯ MCA -->
-    
     <!-- START ==== НАСТРОЙКИ ДЛЯ RBT -->
-    <RFS name="RFS_RBT_SERVICE" hostType="RBT" description="Услуга на платформе RBT"/>
-    <RFS name="RFS_RBT_SUBSCRIPTION" hostType="RBT" processType="Subscription" description="Абонент на RBT"/>
+    <RFS name="RFS_RBT_SERVICE" hostType="RBT" description="Услуга на платформе RBT" />
+    <RFS name="RFS_RBT_SUBSCRIPTION" hostType="RBT" processType="Subscription" description="Абонент на RBT" />
     <!-- END ==== НАСТРОЙКИ ДЛЯ RBT -->
-    
     <!-- START ==== НАСТРОЙКИ ДЛЯ SCG -->
-    <RFS name="RFS_SCG_CHANGE_PLATFORM" hostType="SCG" description="Изменение типа абонента на платформе SCG"/>
-    <RFS name="RFS_SCG_BREAKSESSION" hostType="SCG" description="Разрыв GPRS сессии на SCG"/>
+    <RFS name="RFS_SCG_CHANGE_PLATFORM" hostType="SCG" description="Изменение типа абонента на платформе SCG" />
+    <RFS name="RFS_SCG_BREAKSESSION" hostType="SCG" description="Разрыв GPRS сессии на SCG" />
     <RFS name="RFS_SCG_SUBSCRIBER" hostType="SCG" processType="Subscription" description="Абонент на платформе SCG">
       <Resource name="RES_SCG_USERTYPE" useType="Mandatory">
-        <Value hosts="FP:05" value="0"/>
-        <Value hosts="FP:MS" value="1"/>
+        <Value hosts="FP:05" value="0" />
+        <Value hosts="FP:MS" value="1" />
       </Resource>
     </RFS>
-    <RFS name="RFS_SCG_SYNCHRONIZE" hostType="SCG" description="Обработка кнопки Синхронизировать в СПА"/>
+    <RFS name="RFS_SCG_SYNCHRONIZE" hostType="SCG" description="Обработка кнопки Синхронизировать в СПА" />
     <!-- END ==== НАСТРОЙКИ ДЛЯ SCG -->
-    
     <!-- START ==== НАСТРОЙКИ ДЛЯ SCGS -->
     <RFS name="RFS_SCGS_SUBSCRIPTION" hostType="SCGS" processType="Subscription" description="Подписка абонента на продукт платформы SCG">
-      <Resource name="RES_SCG_PRODUCT_ID" useType="Mandatory"/>
+      <Resource name="RES_SCG_PRODUCT_ID" useType="Mandatory" />
     </RFS>
     <RFS name="RFS_SCGS_PRODUCT_CORPORATE777" base="RFS_SCGS_SUBSCRIPTION" hostType="SCGS" description="Продукт ТП Corporate 777">
-      <Resource name="RES_SCG_PRODUCT_ID" value="1000150"/>
+      <Resource name="RES_SCG_PRODUCT_ID" value="1000150" />
     </RFS>
     <RFS name="RFS_SCGS_PRODUCT_MAXI" base="RFS_SCGS_SUBSCRIPTION" hostType="SCGS" description="Продукт ТП Corporate MAXI">
-      <Resource name="RES_SCG_PRODUCT_ID" value="1000113"/>
+      <Resource name="RES_SCG_PRODUCT_ID" value="1000113" />
     </RFS>
     <RFS name="RFS_SCGS_PRODUCT_PERFECT_MAXI_NEWSUM" base="RFS_SCGS_SUBSCRIPTION" hostType="SCGS" description="Продукт ТП Corporate Perfect и ТП Maxi New SUM">
-      <Resource name="RES_SCG_PRODUCT_ID" value="1000148"/>
+      <Resource name="RES_SCG_PRODUCT_ID" value="1000148" />
     </RFS>
     <RFS name="RFS_SCGS_PRODUCT_ULTRA_VIP" base="RFS_SCGS_SUBSCRIPTION" hostType="SCGS" description="Продукт ТП Corporate Ultra и ТП Corporate VIP">
-      <Resource name="RES_SCG_PRODUCT_ID" value="1000155"/>
+      <Resource name="RES_SCG_PRODUCT_ID" value="1000155" />
     </RFS>
     <!-- END ==== НАСТРОЙКИ ДЛЯ SCGS -->
-    
     <!-- START ==== НАСТРОЙКИ ДЛЯ SM -->
     <RFS name="RFS_SM_CHANGE_IMSI" hostType="SM" description="Изменение номера IMSI на SMSC">
       <RFSParameter name="NewIMSI" path="//NewIMSI" />
       <Resource name="RES_SM_PROFILE" useType="Mandatory">
-        <Value hosts="FP:05" value="AM"/>
-        <Value hosts="FP:MS" value="SCP1"/>
+        <Value hosts="FP:05" value="AM" />
+        <Value hosts="FP:MS" value="SCP1" />
       </Resource>
       <Scenario name="SM.ChangeIMSI" type="Add" />
     </RFS>
     <RFS name="RFS_SM_CHANGE_TARIFF" hostType="SM" description="Изменение тарифного плана на SMSC">
       <RFSParameter name="ChangeTP" />
       <Resource name="RES_SM_PROFILE" useType="Mandatory">
-        <Value hosts="FP:05" value="AM"/>
-        <Value hosts="FP:MS" value="SCP1"/>
+        <Value hosts="FP:05" value="AM" />
+        <Value hosts="FP:MS" value="SCP1" />
       </Resource>
       <Scenario name="SM.ChangeTP" type="Add" />
     </RFS>
     <RFS name="RFS_SM_SUBSCRIPTION" hostType="SM" processType="Subscription" description="Абонент на SMSC">
       <Resource name="RES_SM_PROFILE" useType="Mandatory">
-        <Value hosts="FP:05" value="AM"/>
-        <Value hosts="FP:MS" value="SCP1"/>
+        <Value hosts="FP:05" value="AM" />
+        <Value hosts="FP:MS" value="SCP1" />
       </Resource>
       <Scenario name="SM.CreateSubscriber" type="Add" />
       <Scenario name="SM.DeleteSubscriber" type="Remove" />
     </RFS>
     <RFS name="RFS_SM_RESTORE" hostType="SM" description="Восстановление на SMSC" />
     <!-- END ==== НАСТРОЙКИ ДЛЯ SM -->
-
     <!--START ==== HLR ROAMING TEST ====-->
-    <RFS name="RFS_HLR_ROAMING_TEST_BIC0" hostType="HL" description="Модификация баррингов входящей связи"/>
-    <RFS name="RFS_HLR_ROAMING_TEST_BIC1" hostType="HL" description="Модификация баррингов входящей связи"/>
-    <RFS name="RFS_HLR_ROAMING_TEST_BOC0" hostType="HL" description="Модификация баррингов исходящей связи"/>
-    <RFS name="RFS_HLR_ROAMING_TEST_BOC1" hostType="HL" description="Модификация баррингов исходящей связи"/>
-    <RFS name="RFS_HLR_ROAMING_TEST_BOC2" hostType="HL" description="Модификация баррингов исходящей связи"/>
-    <RFS name="RFS_HLR_ROAMING_TEST_BOC3" hostType="HL" description="Модификация баррингов исходящей связи"/>
-    <RFS name="RFS_HLR_ROAMING_TEST_BPOS0" hostType="HL" description="Изменение барринга GPRS"/>
-    <RFS name="RFS_HLR_ROAMING_TEST_BPOS1" hostType="HL" description="Изменение барринга GPRS"/>
-    <RFS name="RFS_HLR_ROAMING_TEST_BR0" hostType="HL" description="Международный Роуминг"/>
-    <RFS name="RFS_HLR_ROAMING_TEST_BR1" hostType="HL" description="Международный Роуминг"/>
-    <RFS name="RFS_HLR_ROAMING_TEST_ADDLTE_1" hostType="HL" description="Добавить LTE"/>
-    <RFS name="RFS_HLR_ROAMING_TEST_ADDLTE_2" hostType="HL" description="Добавить LTE"/>
-    <RFS name="RFS_HLR_ROAMING_TEST_ADDLTE_3" hostType="HL" description="Добавить LTE"/>
-    <RFS name="RFS_HLR_ROAMING_TEST_DELLTE" hostType="HL" description="Удалить LTE"/>
-    <RFS name="RFS_HLR_ROAMING_TEST_MODLOC" hostType="HL" description="Разрыв сессии"/>
-    <RFS name="RFS_HLR_ROAMING_TEST_NAM0_1" hostType="HL" description="Добавить интернет сервис"/>
-    <RFS name="RFS_HLR_ROAMING_TEST_NAM0_2" hostType="HL" description="Добавить интернет сервис"/>
-    <RFS name="RFS_HLR_ROAMING_TEST_NAM1" hostType="HL" description="Удалить интернет сервис"/>
-    <RFS name="RFS_HLR_ROAMING_TEST_QRYUSER" hostType="HL" description="Запрос состояния баррингов абонента"/>
-    <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEACT_1" hostType="HL" description="Добавление управляющей схемы для роуминга"/>
-    <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEACT_2" hostType="HL" description="Добавление управляющей схемы для роуминга"/>
-    <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEACT_UMS_1" hostType="HL" description="Добавление управляющей схемы для роуминга"/>
-    <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEACT_UMS_2" hostType="HL" description="Добавление управляющей схемы для роуминга"/>
-    <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEDEL_1" hostType="HL" description="Удаление управляющей схемы для роуминга"/>
-    <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEDEL_2" hostType="HL" description="Удаление управляющей схемы для роуминга"/>
-    <RFS name="RFS_HLR_ROAMING_TEST_SMMO0" hostType="HL" description="Служба коротких сообщений Исходящие"/>
-    <RFS name="RFS_HLR_ROAMING_TEST_SMMO1" hostType="HL" description="Служба коротких сообщений Исходящие"/>
-    <RFS name="RFS_HLR_ROAMING_TEST_SMMT0" hostType="HL" description="Служба коротких сообщений Входящие"/>
-    <RFS name="RFS_HLR_ROAMING_TEST_SMMT1" hostType="HL" description="Служба коротких сообщений Входящие"/>
+    <RFS name="RFS_HLR_ROAMING_TEST_BIC0" hostType="HL" description="Модификация баррингов входящей связи" />
+    <RFS name="RFS_HLR_ROAMING_TEST_BIC1" hostType="HL" description="Модификация баррингов входящей связи" />
+    <RFS name="RFS_HLR_ROAMING_TEST_BOC0" hostType="HL" description="Модификация баррингов исходящей связи" />
+    <RFS name="RFS_HLR_ROAMING_TEST_BOC1" hostType="HL" description="Модификация баррингов исходящей связи" />
+    <RFS name="RFS_HLR_ROAMING_TEST_BOC2" hostType="HL" description="Модификация баррингов исходящей связи" />
+    <RFS name="RFS_HLR_ROAMING_TEST_BOC3" hostType="HL" description="Модификация баррингов исходящей связи" />
+    <RFS name="RFS_HLR_ROAMING_TEST_BPOS0" hostType="HL" description="Изменение барринга GPRS" />
+    <RFS name="RFS_HLR_ROAMING_TEST_BPOS1" hostType="HL" description="Изменение барринга GPRS" />
+    <RFS name="RFS_HLR_ROAMING_TEST_BR0" hostType="HL" description="Международный Роуминг" />
+    <RFS name="RFS_HLR_ROAMING_TEST_BR1" hostType="HL" description="Международный Роуминг" />
+    <RFS name="RFS_HLR_ROAMING_TEST_ADDLTE_1" hostType="HL" description="Добавить LTE" />
+    <RFS name="RFS_HLR_ROAMING_TEST_ADDLTE_2" hostType="HL" description="Добавить LTE" />
+    <RFS name="RFS_HLR_ROAMING_TEST_ADDLTE_3" hostType="HL" description="Добавить LTE" />
+    <RFS name="RFS_HLR_ROAMING_TEST_DELLTE" hostType="HL" description="Удалить LTE" />
+    <RFS name="RFS_HLR_ROAMING_TEST_MODLOC" hostType="HL" description="Разрыв сессии" />
+    <RFS name="RFS_HLR_ROAMING_TEST_NAM0_1" hostType="HL" description="Добавить интернет сервис" />
+    <RFS name="RFS_HLR_ROAMING_TEST_NAM0_2" hostType="HL" description="Добавить интернет сервис" />
+    <RFS name="RFS_HLR_ROAMING_TEST_NAM1" hostType="HL" description="Удалить интернет сервис" />
+    <RFS name="RFS_HLR_ROAMING_TEST_QRYUSER" hostType="HL" description="Запрос состояния баррингов абонента" />
+    <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEACT_1" hostType="HL" description="Добавление управляющей схемы для роуминга" />
+    <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEACT_2" hostType="HL" description="Добавление управляющей схемы для роуминга" />
+    <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEACT_UMS_1" hostType="HL" description="Добавление управляющей схемы для роуминга" />
+    <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEACT_UMS_2" hostType="HL" description="Добавление управляющей схемы для роуминга" />
+    <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEDEL_1" hostType="HL" description="Удаление управляющей схемы для роуминга" />
+    <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEDEL_2" hostType="HL" description="Удаление управляющей схемы для роуминга" />
+    <RFS name="RFS_HLR_ROAMING_TEST_SMMO0" hostType="HL" description="Служба коротких сообщений Исходящие" />
+    <RFS name="RFS_HLR_ROAMING_TEST_SMMO1" hostType="HL" description="Служба коротких сообщений Исходящие" />
+    <RFS name="RFS_HLR_ROAMING_TEST_SMMT0" hostType="HL" description="Служба коротких сообщений Входящие" />
+    <RFS name="RFS_HLR_ROAMING_TEST_SMMT1" hostType="HL" description="Служба коротких сообщений Входящие" />
     <!--END ==== HLR ROAMING TEST ====-->
   </RFSList>
   <CFSList>
@@ -592,7 +580,7 @@
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
       <RFS name="RFS_HLR_NET_ALLOW" linkType="Add" />
       <RFS name="RFS_HLR_NET_APN_GPRS" linkType="Add" />
-      <RFS name="RFS_SCG_SUBSCRIBER" linkType="Add"/>
+      <RFS name="RFS_SCG_SUBSCRIBER" linkType="Add" />
     </CFS>
     <CFS name="CB532" description="Переадресация вызова (периодическая)">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
@@ -676,8 +664,8 @@
     </CFS>
     <CFS name="ChangeMsisdn" priority="9999" type="OneTime" description="Изменение номера MSISDN">
       <RFSGroup name="RFS_GROUP_FP_CHANGE_MSISDN" />
-      <RFS name="RFS_CT4_CHANGE_MSISDN" linkType="Add" dependsOn="RFS_CT4_SUBSCRIPTION"/>
-      <RFS name="RFS_MCA_CHANGE_MSISDN" linkType="Add" dependsOn="RFS_MCA_SUBSCRIPTION"/>
+      <RFS name="RFS_CT4_CHANGE_MSISDN" linkType="Add" dependsOn="RFS_CT4_SUBSCRIPTION" />
+      <RFS name="RFS_MCA_CHANGE_MSISDN" linkType="Add" dependsOn="RFS_MCA_SUBSCRIPTION" />
     </CFS>
     <CFS name="ChangeTariff" priority="9999" type="OneTime" description="Удаление абонента на старой платформы при изменении тарифного плана">
       <RFSGroup name="RFS_GROUP_FP_CHANGE_TARIFF_PLAN_AND_DELETE" />
@@ -685,7 +673,7 @@
     <CFS name="ChangeTP" priority="9999" type="OneTime" description="Изменение тарифного плана">
       <RFS name="RFS_HLR_MODIFY_SUBSCRIBER" linkType="Add" />
       <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" linkType="Add" />
-      <RFS name="RFS_SCG_CHANGE_PLATFORM" linkType="Add" dependsOn="RFS_SCG_SUBSCRIBER"/>
+      <RFS name="RFS_SCG_CHANGE_PLATFORM" linkType="Add" dependsOn="RFS_SCG_SUBSCRIBER" />
       <RFS name="RFS_SM_CHANGE_TARIFF" linkType="Add" />
       <RFSGroup name="RFS_GROUP_FP_CHANGE_TARIFF_PLAN" />
       <RFSGroup name="RFS_GROUP_HLR_RECREATE_SUBSCRIBER" />
@@ -701,33 +689,33 @@
     </CFS>
     <CFS name="FRAPCORP777" description="Абонентская плата за ТП Corporate 777">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
-      <RFS name="RFS_SCGS_PRODUCT_CORPORATE777" linkType="Add"/>
+      <RFS name="RFS_SCGS_PRODUCT_CORPORATE777" linkType="Add" />
     </CFS>
     <CFS name="FRAPCORPPERF" description="Абонентская плата за ТП Corporate Perfect">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
-      <RFS name="RFS_SCGS_PRODUCT_PERFECT_MAXI_NEWSUM" linkType="Add"/>
+      <RFS name="RFS_SCGS_PRODUCT_PERFECT_MAXI_NEWSUM" linkType="Add" />
     </CFS>
     <CFS name="FRAPCORMAXI" description="Абонентская плата за ТП Corporate MAXI">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
-      <RFS name="RFS_SCGS_PRODUCT_MAXI" linkType="Add"/>
+      <RFS name="RFS_SCGS_PRODUCT_MAXI" linkType="Add" />
     </CFS>
     <CFS name="FRAPMAXINEWSUM" description="Абонентская плата за ТП Maxi New SUM">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
-      <RFS name="RFS_SCGS_PRODUCT_PERFECT_MAXI_NEWSUM" linkType="Add"/>
+      <RFS name="RFS_SCGS_PRODUCT_PERFECT_MAXI_NEWSUM" linkType="Add" />
     </CFS>
     <CFS name="FRAPCORPULTRA" description="Абонентская плата за ТП Corporate Ultra">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
-      <RFS name="RFS_SCGS_PRODUCT_ULTRA_VIP" linkType="Add"/>
+      <RFS name="RFS_SCGS_PRODUCT_ULTRA_VIP" linkType="Add" />
     </CFS>
     <CFS name="FRAPCORPVIP" description="Абонентская плата за ТП Corporate VIP">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
-      <RFS name="RFS_SCGS_PRODUCT_ULTRA_VIP" linkType="Add"/>
+      <RFS name="RFS_SCGS_PRODUCT_ULTRA_VIP" linkType="Add" />
     </CFS>
-    <CFS name="FRASKUE" priority="9997" description="Создание абонентов АИИСКУЭ (APN Profile ID - 10 ASKUE)">    
+    <CFS name="FRASKUE" priority="9997" description="Создание абонентов АИИСКУЭ (APN Profile ID - 10 ASKUE)">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
       <RFS name="RFS_HLR_NET_ALLOW" linkType="Add" />
       <RFS name="RFS_HLR_SUBSCRIBER_AIISKUE" linkType="Add" />
-      <RFS name="RFS_SCG_SUBSCRIBER" linkType="Add"/>
+      <RFS name="RFS_SCG_SUBSCRIBER" linkType="Add" />
     </CFS>
     <CFS name="FRAPNZIYOD" description="Корпоративный APN Ziyod">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
@@ -758,7 +746,7 @@
     <CFS name="FRBLOUTGO" priority="1" copyOf="FRPARTBL" description="Предварительная ФРОД блокировка" />
     <CFS name="FRCLUBUMS" description="КОНТЕНТ club ums dating">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
-      <RFS name="RFS_CT4_SUBSCRIPTION" linkType="Add"/>
+      <RFS name="RFS_CT4_SUBSCRIPTION" linkType="Add" />
     </CFS>
     <CFS name="FRCORPAPN" description="Корпоративный APN">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
@@ -768,7 +756,7 @@
     <CFS name="FRCRBT" description="GOODOK">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
       <RFS name="RFS_HLR_RBT" linkType="Add" />
-      <RFS name="RFS_RBT_SERVICE" linkType="Add"/>
+      <RFS name="RFS_RBT_SERVICE" linkType="Add" />
     </CFS>
     <CFS name="FRDGU" priority="9997" description="Услуга передачи данных ТП ДГУ">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
@@ -809,7 +797,7 @@
     <CFS name="FRMCA" description="Вам звонили / Я на связи">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
       <RFS name="RFS_HLR_CFD" linkType="Add" />
-      <RFS name="RFS_MCA_SUBSCRIPTION" linkType="Add"/>
+      <RFS name="RFS_MCA_SUBSCRIPTION" linkType="Add" />
     </CFS>
     <CFS name="FRMGDOSTUP" priority="101" description="Междугородный доступ">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
@@ -868,26 +856,26 @@
       <RFS name="RFS_FP_PERSONAL_ACCOUNT" linkType="Add" />
     </CFS>
     <CFS name="SCPBREAKSESSION" description="Разрыв GPRS сессии на SCG">
-      <RFS name="RFS_SCG_BREAKSESSION" linkType="Add" dependsOn="RFS_SCG_SUBSCRIBER"/>
+      <RFS name="RFS_SCG_BREAKSESSION" linkType="Add" dependsOn="RFS_SCG_SUBSCRIBER" />
     </CFS>
     <CFS name="Subscriber" priority="9999" type="ManagedObject" description="Абонент">
       <RFS name="RFS_FP_SUBSCRIBER" linkType="Add" />
-      <RFS name="RFS_RBT_SUBSCRIPTION" linkType="Add" dependsOn="RFS_RBT_SERVICE"/>
-      <RFS name="RFS_SM_SUBSCRIPTION" linkType="Add"/>
+      <RFS name="RFS_RBT_SUBSCRIPTION" linkType="Add" dependsOn="RFS_RBT_SERVICE" />
+      <RFS name="RFS_SM_SUBSCRIPTION" linkType="Add" />
     </CFS>
     <CFS name="SubscriberInHLR" priority="9999" type="ManagedObject" copyOf="Subscriber" description="Абонент - копия" />
-     <CFS name="TransferTD" priority="9999" type="OneTime" description="Перенос ПО">
+    <CFS name="TransferTD" priority="9999" type="OneTime" description="Перенос ПО">
       <RFSGroup name="RFS_GROUP_FP_TRANSFER_TD" />
     </CFS>
     <CFS name="Synchronize" priority="1" description="Обработка кнопки Синхронизировать в СПА">
       <RFS name="RFS_HLR_MODIFY_SUBSCRIBER" linkType="Add" />
       <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" linkType="Add" />
-      <RFS name="RFS_SCG_SYNCHRONIZE" linkType="Add" dependsOn="RFS_SCG_SUBSCRIBER"/>
+      <RFS name="RFS_SCG_SYNCHRONIZE" linkType="Add" dependsOn="RFS_SCG_SUBSCRIBER" />
       <RFSGroup name="RFS_GROUP_HLR_RECREATE_SUBSCRIBER" />
-      <RFSGroup name="RFS_GROUP_MCA_SYNCHRON_SUBSCRIBER"/>
+      <RFSGroup name="RFS_GROUP_MCA_SYNCHRON_SUBSCRIBER" />
       <RFSGroup name="RFS_GROUP_SM_SYNCHRON_SUBSCRIBER" />
     </CFS>
-     <CFS name="UpdateAttributes" priority="9999" type="OneTime" description="Изменение атрибутов ЛС">
+    <CFS name="UpdateAttributes" priority="9999" type="OneTime" description="Изменение атрибутов ЛС">
       <RFS name="RFS_FP_UPDATE_ATTIBUTES" linkType="Add" />
     </CFS>
     <CFS name="UpdateLanguage" priority="9999" type="OneTime" description="Обновление языка на фин.платформе и BMS">
@@ -898,7 +886,6 @@
       <RFS name="RFS_HLR_NET_ALLOW" linkType="Add" />
       <RFS name="RFS_HLR_NET_APN_VPN" linkType="Add" />
     </CFS>
-
     <!--START ==== HLR ROAMING TEST ====-->
     <CFS name="BIC0" description="Модификация баррингов входящей связи">
       <RFS name="RFS_HLR_ROAMING_TEST_BIC0" linkType="Add" />
@@ -963,7 +950,7 @@
       <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEDEL_1" linkType="Add" />
       <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEDEL_2" linkType="Add" />
     </CFS>
-    <CFS name="SCHEMEDEACTIVATEALLOW_GT_UMS_PS_CORE" copyOf="SCHEMEDEACTIVATESTEERING" description="Удаление управляющей схемы для роуминга"/>
+    <CFS name="SCHEMEDEACTIVATEALLOW_GT_UMS_PS_CORE" copyOf="SCHEMEDEACTIVATESTEERING" description="Удаление управляющей схемы для роуминга" />
     <CFS name="SMMO0" description="Служба коротких сообщений Исходящие">
       <RFS name="RFS_HLR_ROAMING_TEST_SMMO0" linkType="Add" />
     </CFS>
@@ -1001,15 +988,14 @@
       <CFS name="FRPARTAPN" />
     </CFSGroup>
     <!-- END ==== НАСТРОЙКИ ДЛЯ HLR -->
-    
     <!-- START ==== НАСТРОЙКИ ДЛЯ SCGS -->
     <CFSGroup name="CFS_GROUP_SCGS_TP" type="Mutex" description="Группа взаимоисключающих услуг АП">
-      <CFS name="FRAPCORMAXI"/>
-      <CFS name="FRAPCORPPERF"/>
-      <CFS name="FRAPMAXINEWSUM"/>
-      <CFS name="FRAPCORP777"/>
-      <CFS name="FRAPCORPULTRA"/>
-      <CFS name="FRAPCORPVIP"/>
+      <CFS name="FRAPCORMAXI" />
+      <CFS name="FRAPCORPPERF" />
+      <CFS name="FRAPMAXINEWSUM" />
+      <CFS name="FRAPCORP777" />
+      <CFS name="FRAPCORPULTRA" />
+      <CFS name="FRAPCORPVIP" />
     </CFSGroup>
     <!-- END ==== НАСТРОЙКИ ДЛЯ SCGS -->
   </CFSGroupList>
@@ -1029,19 +1015,16 @@
       <RFS name="RFS_FP_TRANSFER_TD" linkType="Add" handler="ChangeFPPATDLinkHandler" />
     </RFSGroup>
     <!-- END ==== НАСТРОЙКИ ДЛЯ FP -->
-    
     <!-- START ==== НАСТРОЙКИ ДЛЯ HLR -->
     <RFSGroup name="RFS_GROUP_HLR_RECREATE_SUBSCRIBER" type="Choice" description="Группа RFS для пересоздания абонента">
       <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" handler="HLR_RecreateSubscriber" />
     </RFSGroup>
     <!-- END ==== НАСТРОЙКИ ДЛЯ HLR -->
-    
     <!-- START ==== НАСТРОЙКИ ДЛЯ MCA -->
     <RFSGroup name="RFS_GROUP_MCA_SYNCHRON_SUBSCRIBER" type="Choice" description="Группа RFS для синхронизации данных по MSISDN в MCA">
-      <RFS name="RFS_MCA_RESTORE" linkType="Add" dependsOn="RFS_MCA_SUBSCRIPTION" handler="MCA_RecreateSubscriber"/>
+      <RFS name="RFS_MCA_RESTORE" linkType="Add" dependsOn="RFS_MCA_SUBSCRIPTION" handler="MCA_RecreateSubscriber" />
     </RFSGroup>
     <!-- END ==== НАСТРОЙКИ ДЛЯ MCA -->
-
     <!-- START ==== НАСТРОЙКИ ДЛЯ SM -->
     <RFSGroup name="RFS_GROUP_SM_SYNCHRON_SUBSCRIBER" type="Choice" description="Группа RFS для синхронизации данных по MSISDN в SMSC">
       <RFS name="RFS_SM_RESTORE" linkType="Add" handler="SM_RecreateSubscriber" />
@@ -1057,7 +1040,7 @@
     <!-- END ==== НАСТРОЙКИ ДЛЯ HLR -->
   </RestrictionList>
   <RFSDependencyList />
-  <HandlerList>  
+  <HandlerList>
     <!-- START ==== НАСТРОЙКИ ДЛЯ FP -->
     <Handler name="ChangeFPMSISDNHandler" type="Custom" description="Обработчик RFS для изменения номера MSISDN">
       <Configuration type="FORIS.SPA.SC.Customization.ChangeFPMSISDNHandler, FORIS.SPA.SC.Customization">
@@ -1099,13 +1082,12 @@
       </Configuration>
     </Handler>
     <Handler name="FP.CancelHandler" type="RFSFilter" description="Обработчик отмены обработки на фин.платформе. Прописан в бизнес-процессы.">
-      <Configuration deny="FP"/>
+      <Configuration deny="FP" />
     </Handler>
     <Handler name="FP.ExclusiveHandler" type="RFSFilter" description="Обработчик выделения обработки только на фин.платформе. Прописан в бизнес-процессы.">
-      <Configuration allow="FP"/>
+      <Configuration allow="FP" />
     </Handler>
     <!-- END ==== НАСТРОЙКИ ДЛЯ FP -->
-
     <!-- START ==== НАСТРОЙКИ ДЛЯ HLR -->
     <Handler name="HLR_RecreateSubscriber" type="RecreateSubscriber" description="Обработчик RFS для пересоздания абонента">
       <Configuration>
@@ -1114,16 +1096,14 @@
       </Configuration>
     </Handler>
     <!-- END ==== НАСТРОЙКИ ДЛЯ HLR -->
-    
     <!-- START ==== НАСТРОЙКИ ДЛЯ MCA -->
     <Handler name="MCA_RecreateSubscriber" type="RecreateSubscriber" description="Обработчик RFS для восстановления услуги MCA">
       <Configuration>
-        <RFS name="RFS_MCA_SUBSCRIPTION" action="Remove"/>
-        <RFS name="RFS_MCA_SUBSCRIPTION" action="Add"/>
+        <RFS name="RFS_MCA_SUBSCRIPTION" action="Remove" />
+        <RFS name="RFS_MCA_SUBSCRIPTION" action="Add" />
       </Configuration>
     </Handler>
     <!-- END ==== НАСТРОЙКИ ДЛЯ MCA -->
-
     <!-- START ==== НАСТРОЙКИ ДЛЯ SM -->
     <Handler name="SM_RecreateSubscriber" type="RecreateSubscriber" description="Обработчик RFS для восстановления на SMSC">
       <Configuration>
@@ -1136,11 +1116,10 @@
   <ScenarioList>
     <!-- START ==== НАСТРОЙКИ ДЛЯ CT4 -->
     <Scenario name="CT4.ChangeMSISDN" description="Изменение номера на платформе CT4">
-      <RFS name="RFS_CT4_CHANGE_MSISDN" scenarioType="Add"/>
-      <Append name="RFS_CT4_SUBSCRIPTION" listType="EndList"/>
+      <RFS name="RFS_CT4_CHANGE_MSISDN" scenarioType="Add" />
+      <Append name="RFS_CT4_SUBSCRIPTION" listType="EndList" />
     </Scenario>
     <!-- END ==== НАСТРОЙКИ ДЛЯ CT4 -->
-
     <!-- START ==== НАСТРОЙКИ ДЛЯ FP -->
     <Scenario name="FP.Add.AutoPayment" description="Добавление автоплатежа на FP">
       <RFS name="RFS_FP_SERVICE_AUTO_PAYMENT" scenarioType="Add" useType="Mandatory" />
@@ -1254,7 +1233,6 @@
       <Append name="RFS_FP_SERVICE_GENERAL" listType="EndList" />
     </Scenario>
     <!-- END ==== НАСТРОЙКИ ДЛЯ FP -->
-
     <!-- START ==== НАСТРОЙКИ ДЛЯ HLR -->
     <Scenario name="HLR.Add.CallForwarding" description="Добавление/активация переадресаций">
       <RFS name="RFS_HLR_CFB" scenarioType="Add" />
@@ -1361,29 +1339,26 @@
       <Append name="RFS_HLR_SUBSCRIBER" listType="EndList" />
     </Scenario>
     <!-- END ==== НАСТРОЙКИ ДЛЯ HLR -->
-    
     <!-- START ==== НАСТРОЙКИ ДЛЯ RBT -->
     <Scenario name="RBT.Modify.Subscriber" description="Создание, удаление абонента на RBT">
-      <RFS name="RFS_RBT_SERVICE" scenarioType="Add, Remove"/>
-      <RFS name="RFS_RBT_SUBSCRIPTION" scenarioType="Add, Remove"/>
+      <RFS name="RFS_RBT_SERVICE" scenarioType="Add, Remove" />
+      <RFS name="RFS_RBT_SUBSCRIPTION" scenarioType="Add, Remove" />
     </Scenario>
     <!-- END ==== НАСТРОЙКИ ДЛЯ RBT -->
-    
     <!-- START ==== НАСТРОЙКИ ДЛЯ SCG -->
     <Scenario name="SCG.CreateSubscriber" description="Создание абонента на SCG">
-      <RFS name="RFS_SCG_BREAKSESSION" scenarioType="Remove"/>
-      <RFS name="RFS_SCG_CHANGE_PLATFORM" scenarioType="Add"/>
-      <RFS name="RFS_SCG_SUBSCRIBER" scenarioType="Add"/>
-      <RFS name="RFS_SCG_SYNCHRONIZE" scenarioType="Add"/>
-      <Append name="RFS_SCG_SUBSCRIBER" listType="EndList"/>
+      <RFS name="RFS_SCG_BREAKSESSION" scenarioType="Remove" />
+      <RFS name="RFS_SCG_CHANGE_PLATFORM" scenarioType="Add" />
+      <RFS name="RFS_SCG_SUBSCRIBER" scenarioType="Add" />
+      <RFS name="RFS_SCG_SYNCHRONIZE" scenarioType="Add" />
+      <Append name="RFS_SCG_SUBSCRIBER" listType="EndList" />
     </Scenario>
     <Scenario name="SCG.DeleteSubscriber" description="Удаление абонента на SCG">
-      <RFS name="RFS_SCG_BREAKSESSION" scenarioType="Add"/>
-      <RFS name="RFS_SCG_SUBSCRIBER" scenarioType="Remove"/>
-      <Append name="RFS_SCG_SUBSCRIBER" listType="EndList"/>
+      <RFS name="RFS_SCG_BREAKSESSION" scenarioType="Add" />
+      <RFS name="RFS_SCG_SUBSCRIBER" scenarioType="Remove" />
+      <Append name="RFS_SCG_SUBSCRIBER" listType="EndList" />
     </Scenario>
     <!-- END ==== НАСТРОЙКИ ДЛЯ SCG -->
-
     <!--START ==== HLR ROAMING TEST ====-->
     <Scenario name="HLR.ROAMING_TEST" description="Тестирование HLR ROAMING">
       <RFS name="RFS_HLR_ROAMING_TEST_BIC0" scenarioType="Add, Remove" />

@@ -1,21 +1,22 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.SMMT_Modify" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>Изменение услуги 'Служба коротких сообщений'Входящие</Description>
-  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
+  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
   <Request>
     <RequestTemplate>
       <![CDATA[MOD TELE: MSISDN=##msisdn##,SMMT=##SMSBarring##;^M]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="SMSBarring" Type="LocalParameter"/>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="SMSBarring" Type="LocalParameter" />
   </Request>
   <ParametersList>
     <Parameter Name="SMSBarring">
-      <Source Path="//AddList/RFS_HL_SMS_MT/RES_HL_SMS_MT/Value | //ModifyList/RFS_HL_SMS_MT/RES_HL_SMS_MT/Value" AbsenceValue="0"/>
+      <Source Path="//AddList/RFS_HL_SMS_MT/RES_HL_SMS_MT/Value | //ModifyList/RFS_HL_SMS_MT/RES_HL_SMS_MT/Value" AbsenceValue="0" />
       <PossibleValues StringToKeyTable="true">
-        <Item Key="0" StringValue="NoSMS"/>
-        <Item Key="1" StringValue="AccessSMS"/>
+        <Item Key="0" StringValue="NoSMS" />
+        <Item Key="1" StringValue="AccessSMS" />
       </PossibleValues>
     </Parameter>
   </ParametersList>

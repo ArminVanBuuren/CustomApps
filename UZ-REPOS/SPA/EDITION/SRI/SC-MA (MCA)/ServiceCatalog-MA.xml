@@ -1,4 +1,3 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <Configuration markers="*" scenarioPrefix="SC." mainIdentities="MSISDN,PersonalAccountNumber" SICreation="CFS_FIX_B2C_INTERNET" formatVersion="1">
   <HostTypeList>
     <HostType name="MA" nriType="RI" allowTerminalDeviceType="mobile" description="VAS-платформа MCA (Вам звонили)" />
@@ -33,7 +32,7 @@
     <RFSGroup name="RFS_GROUP_MA_SYNCHRON_SUBSCRIBER" type="Choice" description="Группа RFS для синхронизации данных по MSISDN в MCA(Вам звонили)">
       <RFS name="RFS_MA_RESTORE" linkType="Add" dependsOn="RFS_MA_SUBSCRIPTION" handler="RecreateSubscriberOnMA" />
     </RFSGroup>
-  </RFSGroupList >
+  </RFSGroupList>
   <RFSDependencyList />
   <HandlerList>
     <Handler name="RecreateSubscriberOnMA" type="RecreateSubscriber" description="Обработчик RFS для восстановления услуги MCA(Вам звонили)">

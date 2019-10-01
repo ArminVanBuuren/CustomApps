@@ -1,64 +1,64 @@
 <configuration>
-	<communication>
-		<clientsCommunicator commType="QueueMediator">   
-			<queue queue="BPM_TEST" idleTimeout="1000" requestLimit="200" cacheLimit="500" />
-		</clientsCommunicator>
-		<activatorsCommunicator>
-			<database readPeriod="500" readCount="50" />
-		</activatorsCommunicator>
-	</communication>
-	<bpm>
-		<bpmmodules>
-			<RequestMessagePreprocessor>
-				<param name="poolSize" value="4"/>
-				<param name="loggingPeriod" value="100"/>
-				<param name="threadLoggingPeriod" value="0"/>
-				<param name="pollScheduledRecsPeriod" value="10"/>
-				<param name="getScheduledRecsFromDbCount" value="10"/>
-				<param name="checkRequestDuplicates" value="false"/>
-				<param name="checkRequestDuplicatesPeriod" value="60"/>
-			</RequestMessagePreprocessor>
-			<RequestMessageProcessor>
-				<param name="poolSize" value="10"/>
-				<param name="loggingPeriod" value="120"/>
-			</RequestMessageProcessor>
-			<RequestMessagePostprocessor>
-				<param name="loggingPeriod" value="0"/>
-				<param name="asyncDelete" value="true"/>
-				<param name="poolSize" value="10"/>
-				<param name="pollPeriod" value="10"/>
-				<param name="pollIdlePeriod" value="2"/>
-				<param name="invalidSourceAddressTTL" value="10"/>
-				<param name="getParentRowsFromDbCount" value="10"/>
-			</RequestMessagePostprocessor>
-			<ActivatorProxy>
-				<param name="confirmation_timeout" value="300"/>
-				<param name="response_timeout" value="300"/>
-				<param name="traceListen" value="false"/>
-				<param name="loggingPeriod" value="0"/>
-			</ActivatorProxy>
-			<BPM>
-				<param name="postprocTimeout" value="600"/>
-				<param name="loggingPeriod" value="60"/>
-				<param name="cacheDependencies" value="false"/>
-				<param name="responseType" value="Default"/>
-			</BPM>
-		</bpmmodules>	
-		<hostTypesTable  hostTypesFP="FP">
-		  <hostType type="CT4" identity="MSISDN" direct="MST"/>
-			<hostType type="CT6" identity="MSISDN" direct="ALLPLAY"/>
-			<hostType type="MG" identity="IMSI" direct="MG"/>
-			<hostType type="IVR" identity="IMSI" direct="CALLER"/>
-			<hostType type="MA" identity="MSISDN" direct="MCA"/>
-			<hostType type="RBT" identity="IMSI" direct="INTECH" />
-			<hostType type="SCG" identity="IMSI" direct="SCG" />
-			<hostType type="SM" identity="MSISDN" direct="SMS"/>
-			<hostType type="HL" identity="MSISDN" direct="01"/>
-			<hostType type="HLR" identity="MSISDN" direct="ROAMING"/>
-			<!--hostType type="FP" codeXPath="//BalanceStorage/HostCode" identity="IMSI" method="GetBalanceStorageByImsiList"/-->
-		</hostTypesTable>	
-		<RegisteredServicesProviders>
-			<provider for="" type="FORIS.ServiceProvisioning.Messaging.Communication.TDRegisteredServicesProvider, FORIS.SPA.Messaging.Communication" option="MergeProviderData"/>        
-		</RegisteredServicesProviders>
-	</bpm>
+  <communication>
+    <clientsCommunicator commType="QueueMediator">
+      <queue queue="BPM_TEST" idleTimeout="1000" requestLimit="200" cacheLimit="500" />
+    </clientsCommunicator>
+    <activatorsCommunicator>
+      <database readPeriod="500" readCount="50" />
+    </activatorsCommunicator>
+  </communication>
+  <bpm>
+    <bpmmodules>
+      <RequestMessagePreprocessor>
+        <param name="poolSize" value="4" />
+        <param name="loggingPeriod" value="100" />
+        <param name="threadLoggingPeriod" value="0" />
+        <param name="pollScheduledRecsPeriod" value="10" />
+        <param name="getScheduledRecsFromDbCount" value="10" />
+        <param name="checkRequestDuplicates" value="false" />
+        <param name="checkRequestDuplicatesPeriod" value="60" />
+      </RequestMessagePreprocessor>
+      <RequestMessageProcessor>
+        <param name="poolSize" value="10" />
+        <param name="loggingPeriod" value="120" />
+      </RequestMessageProcessor>
+      <RequestMessagePostprocessor>
+        <param name="loggingPeriod" value="0" />
+        <param name="asyncDelete" value="true" />
+        <param name="poolSize" value="10" />
+        <param name="pollPeriod" value="10" />
+        <param name="pollIdlePeriod" value="2" />
+        <param name="invalidSourceAddressTTL" value="10" />
+        <param name="getParentRowsFromDbCount" value="10" />
+      </RequestMessagePostprocessor>
+      <ActivatorProxy>
+        <param name="confirmation_timeout" value="300" />
+        <param name="response_timeout" value="300" />
+        <param name="traceListen" value="false" />
+        <param name="loggingPeriod" value="0" />
+      </ActivatorProxy>
+      <BPM>
+        <param name="postprocTimeout" value="600" />
+        <param name="loggingPeriod" value="60" />
+        <param name="cacheDependencies" value="false" />
+        <param name="responseType" value="Default" />
+      </BPM>
+    </bpmmodules>
+    <hostTypesTable hostTypesFP="FP">
+      <hostType type="CT4" identity="MSISDN" direct="MST" />
+      <hostType type="CT6" identity="MSISDN" direct="ALLPLAY" />
+      <hostType type="MG" identity="IMSI" direct="MG" />
+      <hostType type="IVR" identity="IMSI" direct="CALLER" />
+      <hostType type="MA" identity="MSISDN" direct="MCA" />
+      <hostType type="RBT" identity="IMSI" direct="INTECH" />
+      <hostType type="SCG" identity="IMSI" direct="SCG" />
+      <hostType type="SM" identity="MSISDN" direct="SMS" />
+      <hostType type="HL" identity="MSISDN" direct="01" />
+      <hostType type="HLR" identity="MSISDN" direct="ROAMING" />
+      <!--hostType type="FP" codeXPath="//BalanceStorage/HostCode" identity="IMSI" method="GetBalanceStorageByImsiList"/-->
+    </hostTypesTable>
+    <RegisteredServicesProviders>
+      <provider for="" type="FORIS.ServiceProvisioning.Messaging.Communication.TDRegisteredServicesProvider, FORIS.SPA.Messaging.Communication" option="MergeProviderData" />
+    </RegisteredServicesProviders>
+  </bpm>
 </configuration>

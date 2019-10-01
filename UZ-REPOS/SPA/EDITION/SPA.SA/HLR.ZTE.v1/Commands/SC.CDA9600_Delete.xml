@@ -1,13 +1,14 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.CDA9600_Delete" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>Удаление мобильной передачи данных</Description>
-  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00"/>
+  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
   <Request>
     <RequestTemplate>
       <![CDATA[Mod BscEx:MSISDN=##msisdn##,CDA9600=0;^M]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="msisdn" Type="Wellknown"/>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="msisdn" Type="Wellknown" />
   </Request>
   <ErrorsList CodePage="windows-1251" />
 </Command>
