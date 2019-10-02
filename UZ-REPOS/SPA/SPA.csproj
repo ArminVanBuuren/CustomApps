@@ -591,6 +591,10 @@
     <Content Include="EDITION\SPA.SA\MG\dictionary.xml" />
     <Content Include="EDITION\SPA.SA\MG\Misc\RepetitionTable.xml" />
     <Content Include="EDITION\SPA.SA\MG\Scenarios\SC.MG.SendIp.xml" />
+    <Content Include="EDITION\SPA.SA\MG\Scripts\Command.xml" />
+    <Content Include="EDITION\SPA.SA\MG\Scripts\login.xml" />
+    <Content Include="EDITION\SPA.SA\MG\Scripts\logoff.xml" />
+    <Content Include="EDITION\SPA.SA\MG\Scripts\nosleep.xml" />
     <Content Include="EDITION\SPA.SA\RBT.INTECH\Commands\SC.RBT.Modify.Subscriber.xml" />
     <Content Include="EDITION\SPA.SA\RBT.INTECH\configuration.application.xml" />
     <Content Include="EDITION\SPA.SA\RBT.INTECH\configuration.common.xml" />

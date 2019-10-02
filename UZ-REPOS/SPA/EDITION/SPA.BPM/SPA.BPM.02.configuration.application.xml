@@ -43,17 +43,14 @@
       </BPM>
     </bpmmodules>
     <hostTypesTable hostTypesFP="FP">
-      <hostType type="MA" identity="IMSI" direct="MCA" />
-      <hostType type="SM" identity="IMSI" direct="SMS" />
-      <hostType type="MG" identity="IMSI" direct="MG" />
+      <hostType type="CT4" identity="IMSI" direct="MST" />
       <hostType type="CT5" identity="IMSI" direct="UNIFUN" />
-      <hostType type="CT6" identity="IMSI" direct="ALLPLAY" />
-      <hostType type="RBT" identity="IMSI" direct="INTECH" />
-      <hostType type="HLR" identity="IMSI" direct="ROAMING" />
-      <hostType type="SCG" identity="IMSI" direct="SCG" />
-      <hostType type="SCGS" identity="IMSI" direct="SCGS" />
       <hostType type="EI" identity="IMSI" direct="EIR" />
       <hostType type="HL" identity="MSISDN" direct="01" />
+      <hostType type="MA" identity="IMSI" direct="MCA" />
+      <hostType type="MG" identity="IMSI" direct="MG" />
+      <hostType type="RBT" identity="IMSI" direct="INTECH" />
+      <hostType type="SM" identity="IMSI" direct="SMS" />
     </hostTypesTable>
     <RegisteredServicesProviders>
       <provider for="" type="FORIS.ServiceProvisioning.Messaging.Communication.TDRegisteredServicesProvider, FORIS.SPA.Messaging.Communication" option="MergeProviderData" />

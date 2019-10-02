@@ -67,6 +67,7 @@
     <RFS name="RFS_CT4_CHANGE_MSISDN" hostType="CT4" description="Изменение номера MSISDN на платформе CT4">
       <RFSParameter name="NewMSISDN" path="//ChangeMsisdn/NewMSISDN" />
     </RFS>
+    <RFS name="RFS_CT4_RESTORE" hostType="CT4" description="Восстановление на платформе CT4" />
     <RFS name="RFS_CT4_SUBSCRIPTION" hostType="CT4" processType="Subscription" description="Абонент на платформе CT4">
       <Resource name="RES_CT4_SERVICE_ID" value="558" />
     </RFS>
@@ -470,6 +471,7 @@
     </RFS>
     <RFS name="RFS_MCA_RESTORE" hostType="MA" description="Восстановление услуги MCA" />
     <RFS name="RFS_MCA_SUBSCRIPTION" hostType="MA" processType="Subscription" description="Абонент а платформе MCA" />
+    <RFS name="RFS_MG_RESTORE" hostType="MG" description="Восстановление услуги на платформе MG" />
     <RFS name="RFS_MG_SUBSCRIPTION" hostType="MG" processType="Subscription" description="Метка абонента на платформе MG" />
     <RFS name="RFS_RBT_RESTORE" hostType="RBT" description="Восстановление услуги RBT" />
     <RFS name="RFS_RBT_SERVICE" hostType="RBT" description="Услуга на платформе RBT" />
@@ -1996,13 +1998,15 @@
     <CFS name="Subscriber" priority="9999" type="ManagedObject" description="Абонент">
       <RFS name="RFS_EI_SUBSCRIPTION" linkType="Add" />
       <RFS name="RFS_FP_SUBSCRIBER" linkType="Add" />
-      <RFS name="RFS_SM_SUBSCRIPTION" linkType="Add" />
       <RFS name="RFS_RBT_SUBSCRIPTION" linkType="Add" dependsOn="RFS_RBT_SERVICE" />
+      <RFS name="RFS_SM_SUBSCRIPTION" linkType="Add" />
     </CFS>
     <CFS name="SubscriberInHLR" priority="9999" type="ManagedObject" copyOf="Subscriber" description="Абонент - копия" />
     <CFS name="Synchronize" priority="1" description="Обработка кнопки Синхронизировать в СПА">
       <RFS name="RFS_HLR_MODIFY_SUBSCRIBER" linkType="Add" />
       <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" linkType="Add" />
+      <RFS name="RFS_MG_RESTORE" linkType="Add" dependsOn="RFS_MG_SUBSCRIPTION" />
+      <RFSGroup name="RFS_GROUP_CT4_SYNCHRON_SUBSCRIBER" />
       <RFSGroup name="RFS_GROUP_EI_SYNCHRON_SUBSCRIBER" />
       <RFSGroup name="RFS_GROUP_HLR_RECREATE_SUBSCRIBER" />
       <RFSGroup name="RFS_GROUP_MCA_SYNCHRON_SUBSCRIBER" />
@@ -2071,6 +2075,9 @@
     </CFSGroup>
   </CFSGroupList>
   <RFSGroupList>
+    <RFSGroup name="RFS_GROUP_CT4_SYNCHRON_SUBSCRIBER" type="Choice" description="Группа RFS для синхронизации данных по MSISDN в CT4">
+      <RFS name="RFS_CT4_RESTORE" linkType="Add" dependsOn="RFS_CT4_SUBSCRIPTION" handler="CT4_RecreateSubscriber" />
+    </RFSGroup>
     <RFSGroup name="RFS_GROUP_EI_SYNCHRON_SUBSCRIBER" type="Choice" description="Группа RFS для синхронизации данных по MSISDN в EIR">
       <RFS name="RFS_EI_RESTORE" linkType="Add" handler="EI_RecreateSubscriber" />
     </RFSGroup>
@@ -2129,6 +2136,12 @@
         <RFS name="RFS_FP_CHANGE_TARIFF_CUG" action="Add" dependsOn="RFS_FP_SERVICE_CUG" order="-7" />
         <RFS name="RFS_FP_CHANGE_TARIFF_CUG" action="Add" dependsOn="RFS_FP_SERVICE_VUG" order="-6" />
         <RFS name="RFS_FP_CHANGE_TARIFF_AP" action="Remove" dependsOn="RFS_FP_SERVICE_AUTO_PAYMENT" order="5" />
+      </Configuration>
+    </Handler>
+    <Handler name="CT4_RecreateSubscriber" type="RecreateSubscriber" description="Обработчик RFS для восстановления услуги CT4">
+      <Configuration>
+        <RFS name="RFS_CT4_SUBSCRIPTION" action="Remove" />
+        <RFS name="RFS_CT4_SUBSCRIPTION" action="Add" />
       </Configuration>
     </Handler>
     <Handler name="DeleteFPSubscriberForChangeTariffHandler" type="Custom" description="Обработчик RFS для удаления абонента на старой платформы при изменении тарифного плана">
@@ -2436,9 +2449,11 @@
       <RFS name="RFS_HLR_ROAMING_TEST_SMMT1" scenarioType="Add, Remove" />
     </Scenario>
     <Scenario name="MG.NotSendIp" sendType="Drop" description="Фейковый сценарий MG">
+      <RFS name="RFS_MG_RESTORE" scenarioType="Modify, Remove" />
       <RFS name="RFS_MG_SUBSCRIPTION" scenarioType="Modify, Remove" />
     </Scenario>
     <Scenario name="MG.SendIp" description="Отправить статический Ip">
+      <RFS name="RFS_MG_RESTORE" scenarioType="Add" />
       <RFS name="RFS_MG_SUBSCRIPTION" scenarioType="Add" />
     </Scenario>
     <Scenario name="RBT.Modify.Subscriber" description="Создание, удаление абонента на RBT">
