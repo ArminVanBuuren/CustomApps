@@ -471,9 +471,6 @@
     <RFS name="RFS_MCA_RESTORE" hostType="MA" description="Восстановление услуги MCA" />
     <RFS name="RFS_MCA_SUBSCRIPTION" hostType="MA" processType="Subscription" description="Абонент а платформе MCA" />
     <RFS name="RFS_MG_SUBSCRIPTION" hostType="MG" processType="Subscription" description="Метка абонента на платформе MG" />
-    <RFS name="RFS_RBT_CHANGE_MSISDN" hostType="RBT" description="Изменение номера MSISDN на платформе RBT">
-      <RFSParameter name="NewMSISDN" path="//NewMSISDN" />
-    </RFS>
     <RFS name="RFS_RBT_RESTORE" hostType="RBT" description="Восстановление услуги RBT" />
     <RFS name="RFS_RBT_SERVICE" hostType="RBT" description="Услуга на платформе RBT" />
     <RFS name="RFS_RBT_SUBSCRIPTION" hostType="RBT" processType="Subscription" description="Абонент на RBT" />
@@ -2000,6 +1997,7 @@
       <RFS name="RFS_EI_SUBSCRIPTION" linkType="Add" />
       <RFS name="RFS_FP_SUBSCRIBER" linkType="Add" />
       <RFS name="RFS_SM_SUBSCRIPTION" linkType="Add" />
+      <RFS name="RFS_RBT_SUBSCRIPTION" linkType="Add" dependsOn="RFS_RBT_SERVICE" />
     </CFS>
     <CFS name="SubscriberInHLR" priority="9999" type="ManagedObject" copyOf="Subscriber" description="Абонент - копия" />
     <CFS name="Synchronize" priority="1" description="Обработка кнопки Синхронизировать в СПА">
@@ -2175,10 +2173,8 @@
     </Handler>
     <Handler name="RBT_RecreateSubscriber" type="RecreateSubscriber" description="Обработчик RFS для восстановления услуги RBT">
       <Configuration>
-        <RFS name="RFS_RBT_SERVICE" action="Remove" order="-101" />
-        <RFS name="RFS_RBT_SUBSCRIPTION" action="Remove" />
-        <RFS name="RFS_RBT_SUBSCRIPTION" action="Add" />
-        <RFS name="RFS_RBT_SERVICE" action="Add" order="51" />
+        <RFS name="RFS_RBT_SERVICE" action="Remove" />
+        <RFS name="RFS_RBT_SERVICE" action="Add" />
       </Configuration>
     </Handler>
     <Handler name="SM_RecreateSubscriber" type="RecreateSubscriber" description="Обработчик RFS для восстановления на SMSC">
