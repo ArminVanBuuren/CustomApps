@@ -2,6 +2,9 @@
 <Application configClass="FORIS.MessagingGateway.Configuration.CommonConfiguration">
   <Connections>
     <Database forisDataKey="MG" interfacePackage="API" />
+    <Handler   name="CRMCON_02_01"        type="CRMCON"   host="localhost" port="11103" sessionHandler="false" serviceName="FORIS.MG.CRMCON.02.01"              config="Configuration\CRMCON\CRMCON_02_01.exe.xml"/>
+    <Handler   name="WCFHND_01_01"        type="WCFHND"   host="mg1"       port="11190" sessionHandler="false" serviceName="FORIS.MG.WCFHND.01.01"              config="Configuration\WCFHND\WCFHND_01_01.exe.xml"/>
+
     <Connector name="DBCON_01_01"         type="DBCON"    host="mg1"       port="11341" sessionHandler="false" serviceName="FORIS.MG.DBCON.01.01"               config="Configuration\DBCON\DBCON_01_01.exe.xml"/>
     <Connector name="EMAILCON_01_01"      type="EMAILCON" host="mg1"       port="11150" sessionHandler="false" serviceName="FORIS.MG.EMAILCON.01.01"            config="Configuration\EMAILCON\EMAILCON_01_01.exe.xml"/>
     <Connector name="SMSCON_01_01"        type="SMSCON"   host="mg1"       port="11110" sessionHandler="false" serviceName="FORIS.MG.SMSCON.01.01"              config="Configuration\SMSCON\SMSCON_01_01.exe.xml"/>
@@ -35,9 +38,6 @@
     <Connector name="SMSCON_02_01"        type="SMSCON"   host="localhost" port="11310" sessionHandler="false" serviceName="FORIS.MG.SMSCON.02.01"              config="Configuration\SMSCON\SMSCON_02_01.exe.xml"/>
     <Connector name="SMSCON_02_02"        type="SMSCON"   host="localhost" port="11311" sessionHandler="false" serviceName="FORIS.MG.SMSCON.02.02.ISSA"         config="Configuration\SMSCON\SMSCON_02_02.ISSA.exe.xml"/>
 
-    <Handler   name="CRMCON_02_01"        type="CRMCON"   host="localhost" port="11103" sessionHandler="false" serviceName="FORIS.MG.CRMCON.02.01"              config="Configuration\CRMCON\CRMCON_02_01.exe.xml"/>
-    <Handler   name="WCFHND_01_01"        type="WCFHND"   host="mg1"       port="11190" sessionHandler="false" serviceName="FORIS.MG.WCFHND.01.01"              config="Configuration\WCFHND\WCFHND_01_01.exe.xml"/>
-	
   </Connections>
   <log4net>
     <appender name="BufferingDataFileAppender" type="log4net.Appender.BufferingForwardingAppender">
@@ -46,7 +46,7 @@
     </appender>
 
     <appender name="DataFileAppender" type="log4net.Appender.RollingFileAppender">
-      <file type="log4net.Util.PatternString" value="C:\FORISLOG\MG\%property{TYPE}_%property{NAME}_data.log"/>
+      <file type="log4net.Util.PatternString" value="C:\FORISLOG\MG\data\%property{TYPE}_%property{NAME}_data.log"/>
       <staticLogFileName value="false"/>
       <countDirection value="1"/>
       <maxSizeRollBackups value="-1"/>
@@ -67,7 +67,7 @@
     </appender>
 
     <appender name="ActivityFileAppender" type="log4net.Appender.RollingFileAppender">
-      <file type="log4net.Util.PatternString" value="C:\FORISLOG\MG\%property{TYPE}_%property{NAME}_activity.log"/>
+      <file type="log4net.Util.PatternString" value="C:\FORISLOG\MG\activity\%property{TYPE}_%property{NAME}_activity.log"/>
       <staticLogFileName value="false"/>
       <countDirection value="1"/>
       <maxSizeRollBackups value="-1"/>
@@ -83,7 +83,7 @@
     </appender>
 
     <appender name="ErrorFileAppender" type="log4net.Appender.RollingFileAppender">
-      <file type="log4net.Util.PatternString" value="C:\FORISLOG\MG\%property{TYPE}_%property{NAME}_error.log"/>
+      <file type="log4net.Util.PatternString" value="C:\FORISLOG\MG\error\%property{TYPE}_%property{NAME}_error.log"/>
       <staticLogFileName value="false"/>
       <countDirection value="1"/>
       <maxSizeRollBackups value="-1"/>

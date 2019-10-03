@@ -1,6 +1,6 @@
 <!-- 
 Created by Vladimir Khovanskiy  
-Реплейсы знаков: (^ - ') (\^ - ^)
+Реплейсы знаков: (^ - ') (\^ - ^) (\. - ,) (@ - ") (\@ - @) (\% - <) (\% - %)
 successful_response  - Если атрибут выставлен как "BYCRM", то ответ по успешному выполнению возвращает CRM.
 redirect             - Ответ по SMS, SOAP и т.д.
 availbalance         - Необходимый доступный баланс у абонента, для добавления сервиса. Компонент работает если параметр задан как число
@@ -20,63 +20,63 @@ tplist               - Компонент выполняет проверки п
 <TariffPlans>
   <Group name="DEFAULT" redirect="sms" availbalance="-1" check_block="true" successful_response="BYCRM" timetoprogress="600"
 
-    info_confirm_ruk="Vash tekushiy tarifniy plan: *[1]*. Dlya smeny plana obsluzhivaniya na *[0]* otprav^te 1&#xA;&#xA;?.TP Info"
-    info_confirm_rut="Vash tekushiy tarifniy plan: *[1]*. Dlya smeny plana obsluzhivaniya na *[0]* otprav^te 1&#xA;&#xA;?.TP Info"
-    info_confirm_uz="Vash tekushiy tarifniy plan: *[1]*. Dlya smeny plana obsluzhivaniya na *[0]* otprav^te 1&#xA;&#xA;?.TP Info"
-    info_confirm_en="Your current tariff plan: *[1]*. To change the service plan to *[0]* send 1&#xA;&#xA;?.TP Info"
+    info_confirm_ruk="Vash tekushiy tarifniy plan: @[1]@. Dlya smeny plana obsluzhivaniya na @[0]@ otprav^te 1&#xA;&#xA;?.TP Info"
+    info_confirm_rut="Vash tekushiy tarifniy plan: @[1]@. Dlya smeny plana obsluzhivaniya na @[0]@ otprav^te 1&#xA;&#xA;?.TP Info"
+    info_confirm_uz="Vash tekushiy tarifniy plan: @[1]@. Dlya smeny plana obsluzhivaniya na @[0]@ otprav^te 1&#xA;&#xA;?.TP Info"
+    info_confirm_en="Your current tariff plan: @[1]@. To change the service plan to @[0]@ send 1&#xA;&#xA;?.TP Info"
 
-    info_checktp_ruk="Ваш текущий тарифный план: *[0]*"
-    info_checktp_rut="Vash tekushiy tarifniy plan: *[0]*"
-    info_checktp_uz="Sizning joriy tarif rejasi*[0]*"
-    info_checktp_en="Your current tariff plan: *[0]*"
+    info_checktp_ruk="Ваш текущий тарифный план: @[0]@"
+    info_checktp_rut="Vash tekushiy tarifniy plan: @[0]@"
+    info_checktp_uz="Sizning joriy tarif rejasi@[0]@"
+    info_checktp_en="Your current tariff plan: @[0]@"
 
-    info_success_ruk="Заявка на изменение тарифного плана на *[0]* зарегистрирована."
-    info_success_rut="Zayavka na izmenenie tarifnogo plana na *[0]* zaregistrirovana."
-    info_success_uz="Tarif rejangizni *[0]* tarif rejasiga o^zgartirish uchun arizangiz ro^yxatdan o^tkazildi"
-    info_success_en="Request on changing tariff plan to *[0]* is registered"
+    info_success_ruk="Заявка на изменение тарифного плана на @[0]@ зарегистрирована."
+    info_success_rut="Zayavka na izmenenie tarifnogo plana na @[0]@ zaregistrirovana."
+    info_success_uz="Tarif rejangizni @[0]@ tarif rejasiga o^zgartirish uchun arizangiz ro^yxatdan o^tkazildi"
+    info_success_en="Request on changing tariff plan to @[0]@ is registered"
 
-    info_alreadyex_ruk="Изменение тарифного плана на *[0]* невозможно. У Вас уже установлен тарифный план *[0]*"
-    info_alreadyex_rut="Izmenenie tarifnogo plana na *[0]* nevozmozhno. U Vas uzhe ustanovlen tarifniy plan *[0]*"
-    info_alreadyex_uz="Tarif rejasini o^zgartirish *[0]* mumkin emas. Sizda avvalroq *[0]* tarif rejasi o^rnatilgan"
-    info_alreadyex_en="Change tariff plan to *[0]* is impossible. You have *[0]* already installed"
+    info_alreadyex_ruk="Изменение тарифного плана на @[0]@ невозможно. У Вас уже установлен тарифный план @[0]@"
+    info_alreadyex_rut="Izmenenie tarifnogo plana na @[0]@ nevozmozhno. U Vas uzhe ustanovlen tarifniy plan @[0]@"
+    info_alreadyex_uz="Tarif rejasini o^zgartirish @[0]@ mumkin emas. Sizda avvalroq @[0]@ tarif rejasi o^rnatilgan"
+    info_alreadyex_en="Change tariff plan to @[0]@ is impossible. You have @[0]@ already installed"
 
-    info_alrprogress_ruk="Изменение тарифного плана на *[0]* в процессе обработки. Обратитесь позже."
-    info_alrprogress_rut="Izmenenie tarifnogo plana na *[0]* v processe obrabotki. Obratites^ pozzhe."
-    info_alrprogress_uz="Tarif rejasini *[0]*ga o^zgartirish qayta ishlash jarayonida. Keyinroq murojaat qiling."
-    info_alrprogress_en="Changing of tariff plan to *[0]* is on processing stage. Refer later."
+    info_alrprogress_ruk="Изменение тарифного плана на @[0]@ в процессе обработки. Обратитесь позже."
+    info_alrprogress_rut="Izmenenie tarifnogo plana na @[0]@ v processe obrabotki. Obratites^ pozzhe."
+    info_alrprogress_uz="Tarif rejasini @[0]@ga o^zgartirish qayta ishlash jarayonida. Keyinroq murojaat qiling."
+    info_alrprogress_en="Changing of tariff plan to @[0]@ is on processing stage. Refer later."
 
-    info_inprogress_ruk="Предыдущая обработка находится в шаге изменения тарифного плана на *[0]*. Обратитесь позже."
-    info_inprogress_rut="Predydushaya obrabotka nahoditsya v shage izmeneniya tarifnogo plana na *[0]*. Obratites^ pozzhe."
-    info_inprogress_uz=" tarif rejasini *[0]* ga o^zgartirish bo^yicha avvalgi ishlov berish jarayoni yakuniga etib qoldi. Keyinroq murojaat qiling."
-    info_inprogress_en="Previous processing is at the stage of chnaging tariff plan to *[0]*. Refer later."
+    info_inprogress_ruk="Предыдущая обработка находится в шаге изменения тарифного плана на @[0]@. Обратитесь позже."
+    info_inprogress_rut="Predydushaya obrabotka nahoditsya v shage izmeneniya tarifnogo plana na @[0]@. Obratites^ pozzhe."
+    info_inprogress_uz=" tarif rejasini @[0]@ ga o^zgartirish bo^yicha avvalgi ishlov berish jarayoni yakuniga etib qoldi. Keyinroq murojaat qiling."
+    info_inprogress_en="Previous processing is at the stage of chnaging tariff plan to @[0]@. Refer later."
 
     info_notavailbalance_ruk="Недостаточно средств на балансе для проведения операции."
     info_notavailbalance_rut="Nedostatochno sredstv na balanse dlya provedeniya operacii."
     info_notavailbalance_uz="Operasiyani amalga oshirish uchun xisobingizda etarli mablag^ yo^q"
     info_notavailbalance_en="Not enough assets on balance for making of operation."
 
-    info_notavailable_ruk="Тарифный план *[0]* больше недоступен для перехода."
-    info_notavailable_rut="tarifniy plan *[0]* bol^she nedostupen dlya perehoda."
-    info_notavailable_uz="*[0]* tarif rejasini boshqa o^zgartirib bo^lmaydi."
-    info_notavailable_en="Tariff plan *[0]* is no longer available for transfer."
+    info_notavailable_ruk="Тарифный план @[0]@ больше недоступен для перехода."
+    info_notavailable_rut="tarifniy plan @[0]@ bol^she nedostupen dlya perehoda."
+    info_notavailable_uz="@[0]@ tarif rejasini boshqa o^zgartirib bo^lmaydi."
+    info_notavailable_en="Tariff plan @[0]@ is no longer available for transfer."
 
-    info_unavailable_ruk="Тарифный план *[0]* будет доступен с [1]"
-    info_unavailable_rut="tarifniy plan *[0]* budet dostupen s [1]"
-    info_unavailable_uz="*[0]* tarif rejasi[1]dan amal qiladi"
-    info_unavailable_en="Tariff plan*[0]*will be available since [1]"
+    info_unavailable_ruk="Тарифный план @[0]@ будет доступен с [1]"
+    info_unavailable_rut="tarifniy plan @[0]@ budet dostupen s [1]"
+    info_unavailable_uz="@[0]@ tarif rejasi[1]dan amal qiladi"
+    info_unavailable_en="Tariff plan@[0]@will be available since [1]"
 
-    info_320400_ruk="Смена с текущего тарифного плана на *[0]* не возможна"
-    info_320400_rut="Smena s tekushego tarifnogo plana na *[0]* ne vozmojna"
-    info_320400_uz="Tarif rejangizni *[0]* tarif rejasiga o^zgartirish imkoniyati yo^q"
-    info_320400_en="Transfer from current tariff plan to *[0]* is impossible"
+    info_320400_ruk="Смена с текущего тарифного плана на @[0]@ не возможна"
+    info_320400_rut="Smena s tekushego tarifnogo plana na @[0]@ ne vozmojna"
+    info_320400_uz="Tarif rejangizni @[0]@ tarif rejasiga o^zgartirish imkoniyati yo^q"
+    info_320400_en="Transfer from current tariff plan to @[0]@ is impossible"
 
     >
   </Group>
   <Group name="PAYNET" availbalance="-1" check_block="true" successful_response="BYCRM" timetoprogress="80"
 
-    info_confirm_pay="Vash tekushiy tarifniy plan: *[1]*. Stoimost^ smeny plana obsluzhivaniya 0 y.e. Dlya smeny plana obsluzhivaniya na *[0]* otprav^te 1&#xA;&#xA;?.TP Info"
+    info_confirm_pay="Vash tekushiy tarifniy plan: @[1]@. Stoimost^ smeny plana obsluzhivaniya 0 y.e. Dlya smeny plana obsluzhivaniya na @[0]@ otprav^te 1&#xA;&#xA;?.TP Info"
 
-    info_checktp_pay="Vash tekushiy tarifniy plan: *[0]*"
+    info_checktp_pay="Vash tekushiy tarifniy plan: @[0]@"
 
     info_success_pay="1"
     
@@ -112,10 +112,10 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="102" datefrom="20131001" dateto="" group="1" availbalance="15"
 
-    info_notavailbalance_rut="Dlya smeny tarifnogo plana na *MAXI*\. na Vashem schetu dolzhno byt^ ne men^she 15 y.e."
-    info_notavailbalance_ruk="Dlya smeny tarifnogo plana na *MAXI*\. na Vashem schetu dolzhno byt^ ne men^she 15 y.e."
-    info_notavailbalance_uz="Dlya smeny tarifnogo plana na *MAXI*\. na Vashem schetu dolzhno byt^ ne men^she 15 y.e."
-    info_notavailbalance_en="Dlya smeny tarifnogo plana na *MAXI*\. na Vashem schetu dolzhno byt^ ne men^she 15 y.e."
+    info_notavailbalance_rut="Dlya smeny tarifnogo plana na @MAXI@\. na Vashem schetu dolzhno byt^ ne men^she 15 y.e."
+    info_notavailbalance_ruk="Dlya smeny tarifnogo plana na @MAXI@\. na Vashem schetu dolzhno byt^ ne men^she 15 y.e."
+    info_notavailbalance_uz="Dlya smeny tarifnogo plana na @MAXI@\. na Vashem schetu dolzhno byt^ ne men^she 15 y.e."
+    info_notavailbalance_en="Dlya smeny tarifnogo plana na @MAXI@\. na Vashem schetu dolzhno byt^ ne men^she 15 y.e."
 
     tariffname_ruk="MAXI"
     tariffname_rut="MAXI"
@@ -153,10 +153,10 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="105" datefrom="20131001" dateto="20131001" group="1" availbalance="1"
 
-    info_confirm_ruk="Vash tekushiy tarifniy plan: *[1]*. Stoimost^ smeny plana obsluzhivaniya 1 y.e. Dlya smeny plana obsluzhivaniya na *[0]* otprav^te 1&#xA;&#xA;?.TP Info"
-    info_confirm_rut="Vash tekushiy tarifniy plan: *[1]*. Stoimost^ smeny plana obsluzhivaniya 1 y.e. Dlya smeny plana obsluzhivaniya na *[0]* otprav^te 1&#xA;&#xA;?.TP Info"
-    info_confirm_uz="Vash tekushiy tarifniy plan: *[1]*. Stoimost^ smeny plana obsluzhivaniya 1 y.e. Dlya smeny plana obsluzhivaniya na *[0]* otprav^te 1&#xA;&#xA;?.TP Info"
-    info_confirm_en="Your current tariff plan: *[1]*. The cost of changing service plan - 1 y.e. To change the service plan on *[0]* send 1&#xA;&#xA;?.TP Info"
+    info_confirm_ruk="Vash tekushiy tarifniy plan: @[1]@. Stoimost^ smeny plana obsluzhivaniya 1 y.e. Dlya smeny plana obsluzhivaniya na @[0]@ otprav^te 1&#xA;&#xA;?.TP Info"
+    info_confirm_rut="Vash tekushiy tarifniy plan: @[1]@. Stoimost^ smeny plana obsluzhivaniya 1 y.e. Dlya smeny plana obsluzhivaniya na @[0]@ otprav^te 1&#xA;&#xA;?.TP Info"
+    info_confirm_uz="Vash tekushiy tarifniy plan: @[1]@. Stoimost^ smeny plana obsluzhivaniya 1 y.e. Dlya smeny plana obsluzhivaniya na @[0]@ otprav^te 1&#xA;&#xA;?.TP Info"
+    info_confirm_en="Your current tariff plan: @[1]@. The cost of changing service plan - 1 y.e. To change the service plan on @[0]@ send 1&#xA;&#xA;?.TP Info"
 
 
     tariffname_ruk="Start"
@@ -177,10 +177,10 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*2*1*1*confirm"/>
     <dealerussd value="*2*1*1*1"/-->
     <!--tplist available="true"
-        info_notaval_rut="Smena TP s *[1]* na *[0]*, nedostupna."
-        info_notaval_ruk="Smena TP s *[1]* na *[0]*, nedostupna."
-        info_notaval_uz="Smena TP s *[1]* na *[0]*, nedostupna."
-        info_notaval_en="Smena TP s *[1]* na *[0]*, nedostupna.">
+        info_notaval_rut="Smena TP s *[1]* na *[0]* nedostupna."
+        info_notaval_ruk="Smena TP s *[1]* na *[0]* nedostupna."
+        info_notaval_uz="Smena TP s *[1]* na *[0]* nedostupna."
+        info_notaval_en="Smena TP s *[1]* na *[0]* nedostupna.">
 
         <ivrcode value="102"/>
     </tplist-->

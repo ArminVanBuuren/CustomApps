@@ -1,6 +1,6 @@
 <!-- 
 Created by Vladimir Khovanskiy  
-Реплейсы знаков: (^ - ') (\^ - ^)
+Реплейсы знаков: (^ - ') (\^ - ^) (\. - ,) (@ - ") (\@ - @) (\% - <) (\% - %)
 successful_response  - Если атрибут выставлен как "BYCRM", то ответ по успешному выполнению возвращает CRM.
 redirect             - Ответ по SMS, SOAP и т.д.
 availbalance         - Необходимый доступный баланс у абонента, для добавления сервиса. Компонент работает если параметр задан как число
@@ -20,17 +20,17 @@ tplist               - Компонент выполняет проверки п
 <ServiceList>
   <Service    name="_GETBALANCE"
 
-    info_bal_full_cntr_ruk="Баланс:$[0]([1] сум).Израсходовано:[3].План:*[4]*.Остаток [5]"
-    info_bal_full_cntr_rut="Balans:[0] y.e([1] sum).Potracheno:[3].Plan:*[4]*.Ostatok [5]"
-    info_bal_full_cntr_uz="Balans:[0] y.e([1] sum).Sarflandi:[3].Tarif:*[4]*.Qoldiq [5]"
-    info_bal_full_cntr_en="Balance:[0] units([1] sum).Spent:[3].Tariff:*[4]*.Remainder [5]"
-    info_bal_full_cntr_scg="Баланс:$[0]([1] сум).|БалансUZB:$[0]([1] сум).||Израсходовано:[3].|ИзрасходованоUZB:[3].||План:*[4]*.|ПланUZB:*[4]*.||Остаток [5]|ОстатокUZB [5]"
+    info_bal_full_cntr_ruk="Баланс:$[0]([1] сум).Израсходовано:[3].План:@[4]@.Остаток [5]"
+    info_bal_full_cntr_rut="Balans:[0] y.e([1] sum).Potracheno:[3].Plan:@[4]@.Ostatok [5]"
+    info_bal_full_cntr_uz="Balans:[0] y.e([1] sum).Sarflandi:[3].Tarif:@[4]@.Qoldiq [5]"
+    info_bal_full_cntr_en="Balance:[0] units([1] sum).Spent:[3].Tariff:@[4]@.Remainder [5]"
+    info_bal_full_cntr_scg="Баланс:$[0]([1] сум).|БалансUZB:$[0]([1] сум).||Израсходовано:[3].|ИзрасходованоUZB:[3].||План:@[4]@.|ПланUZB:@[4]@.||Остаток [5]|ОстатокUZB [5]"
 
-    info_debt_full_cntr_ruk="Баланс:$[0]([1] сум).Израсходовано:[3].План:*[4]*.Остаток [5]"
-    info_debt_full_cntr_rut="Balans:[0] y.e([1] sum).Potracheno:[3].Plan:*[4]*.Ostatok [5]"
-    info_debt_full_cntr_uz="Balans:[0] y.e([1] sum).Sarflandi:[3].Tarif:*[4]*.Qoldiq [5]"
-    info_debt_full_cntr_en="Balance:[0] units([1] sum).Spent:[3].Tariff:*[4]*.Remainder [5]"
-    info_debt_full_cntr_scg="Balans:[0] y.e([1] sum).Potracheno:[3].Plan:*[4]*.Ostatok [5]"
+    info_debt_full_cntr_ruk="Баланс:$[0]([1] сум).Израсходовано:[3].План:@[4]@.Остаток [5]"
+    info_debt_full_cntr_rut="Balans:[0] y.e([1] sum).Potracheno:[3].Plan:@[4]@.Ostatok [5]"
+    info_debt_full_cntr_uz="Balans:[0] y.e([1] sum).Sarflandi:[3].Tarif:@[4]@.Qoldiq [5]"
+    info_debt_full_cntr_en="Balance:[0] units([1] sum).Spent:[3].Tariff:@[4]@.Remainder [5]"
+    info_debt_full_cntr_scg="Balans:[0] y.e([1] sum).Potracheno:[3].Plan:@[4]@.Ostatok [5]"
 
     info_bal_bill_cntr_ruk="Баланс:$[0]([1] сум).Израсходовано:[3].Остаток [4]"
     info_bal_bill_cntr_rut="Balans:[0] y.e([1] sum).Potracheno:[3].Ostatok [4]"
@@ -44,17 +44,17 @@ tplist               - Компонент выполняет проверки п
     info_debt_bill_cntr_en="Balance:[0] units([1] sum).Spent:[3].Remainder [4]"
     info_debt_bill_cntr_scg="Balans:[0] y.e([1] sum).Potracheno:[3].Ostatok [4]"
 
-    info_bal_plan_cntr_ruk="Баланс:$[0]([1] сум).План:*[2]*.Остаток [3]"
-    info_bal_plan_cntr_rut="Balans:[0] y.e([1] sum).Plan:*[2]*.Ostatok [3]"
-    info_bal_plan_cntr_uz="Balans:[0] y.e([1] sum).Tarif:*[2]*.Qoldiq [3]"
-    info_bal_plan_cntr_en="Balance:[0] units([1] sum).Tariff:*[2]*.Remainder [3]"
-    info_bal_plan_cntr_scg="Balans:[0] y.e([1] sum).Plan:*[2]*.Ostatok [3]"
+    info_bal_plan_cntr_ruk="Баланс:$[0]([1] сум).План:@[2]@.Остаток [3]"
+    info_bal_plan_cntr_rut="Balans:[0] y.e([1] sum).Plan:@[2]@.Ostatok [3]"
+    info_bal_plan_cntr_uz="Balans:[0] y.e([1] sum).Tarif:@[2]@.Qoldiq [3]"
+    info_bal_plan_cntr_en="Balance:[0] units([1] sum).Tariff:@[2]@.Remainder [3]"
+    info_bal_plan_cntr_scg="Balans:[0] y.e([1] sum).Plan:@[2]@.Ostatok [3]"
 
-    info_debt_plan_cntr_ruk="Баланс:$[0]([1] сум).План:*[2]*.Остаток [3]"
-    info_debt_plan_cntr_rut="Balans:[0] y.e([1] sum).Plan:*[2]*.Ostatok [3]"
-    info_debt_plan_cntr_uz="Balans:[0] y.e([1] sum).Tarif:*[2]*.Qoldiq [3]"
-    info_debt_plan_cntr_en="Balance:[0] units([1] sum).Tariff:*[2]*.Remainder [3]"
-    info_debt_plan_cntr_scg="Balans:[0] y.e([1] sum).Plan:*[2]*.Ostatok [3]"
+    info_debt_plan_cntr_ruk="Баланс:$[0]([1] сум).План:@[2]@.Остаток [3]"
+    info_debt_plan_cntr_rut="Balans:[0] y.e([1] sum).Plan:@[2]@.Ostatok [3]"
+    info_debt_plan_cntr_uz="Balans:[0] y.e([1] sum).Tarif:@[2]@.Qoldiq [3]"
+    info_debt_plan_cntr_en="Balance:[0] units([1] sum).Tariff:@[2]@.Remainder [3]"
+    info_debt_plan_cntr_scg="Balans:[0] y.e([1] sum).Plan:@[2]@.Ostatok [3]"
 
     info_bal_cntr_ruk="Баланс:$[0]([1] сум).Остаток [2]"
     info_bal_cntr_rut="Balans:[0] y.e([1] sum).Ostatok [2]"
@@ -68,17 +68,17 @@ tplist               - Компонент выполняет проверки п
     info_debt_cntr_en="Balance:[0] units ([1] sum).Remainder [2]"
     info_debt_cntr_scg="Balans:[0] y.e([1] sum).Ostatok [2]"
 
-    info_bal_full_ruk="Баланс Вашего счета: [0] y.e ([1] сум). С [2] израсходовано по Вашему номеру - [3]. План: *[4]*"
-    info_bal_full_rut="Balans Vashego scheta: [0] y.e ([1] sum). S [2] izrashodovano po Vashemu nomeru - [3]. Plan: *[4]*"
-    info_bal_full_uz="Sizning hisobingizdagi balans: [0] y.e ([1] sum). Sizning raqamga [2]dan ishlatildi - [3]. Tarif reja *[4]*"
-    info_bal_full_en="Your balance is [0] units ([1] sum). From [2] you spent [3] on your phone. Tariff: *[4]*"
-    info_bal_full_scg="Balans Vashego scheta: [0] y.e ([1] sum). S [2] izrashodovano po Vashemu nomeru - [3]. Plan: *[4]*"
+    info_bal_full_ruk="Баланс Вашего счета: [0] y.e ([1] сум). С [2] израсходовано по Вашему номеру - [3]. План: @[4]@"
+    info_bal_full_rut="Balans Vashego scheta: [0] y.e ([1] sum). S [2] izrashodovano po Vashemu nomeru - [3]. Plan: @[4]@"
+    info_bal_full_uz="Sizning hisobingizdagi balans: [0] y.e ([1] sum). Sizning raqamga [2]dan ishlatildi - [3]. Tarif reja @[4]@"
+    info_bal_full_en="Your balance is [0] units ([1] sum). From [2] you spent [3] on your phone. Tariff: @[4]@"
+    info_bal_full_scg="Balans Vashego scheta: [0] y.e ([1] sum). S [2] izrashodovano po Vashemu nomeru - [3]. Plan: @[4]@"
 
-    info_debt_full_ruk="Задолженность по Вашему счету [0] y.e ([1] сум). С [2] израсходовано по Вашему номеру - [3]. План: *[4]*"
-    info_debt_full_rut="Zadolzhennost^ po Vashemu schetu [0] y.e ([1] sum). S [2] izrashodovano po Vashemu nomeru - [3]. Plan: *[4]*"
-    info_debt_full_uz="Sizning qarzingiz [0] y.e ([1] sum). Sizning raqamga [2]dan ishlatildi - [3]. Tarif reja *[4]*"
-    info_debt_full_en="Your debt is [0] units ([1] sum). From [2] you spent [3] on your phone. Tariff: *[4]*."
-    info_debt_full_scg="Zadolzhennost^ po Vashemu schetu [0] y.e ([1] sum). S [2] izrashodovano po Vashemu nomeru - [3]. Plan: *[4]*"
+    info_debt_full_ruk="Задолженность по Вашему счету [0] y.e ([1] сум). С [2] израсходовано по Вашему номеру - [3]. План: @[4]@"
+    info_debt_full_rut="Zadolzhennost^ po Vashemu schetu [0] y.e ([1] sum). S [2] izrashodovano po Vashemu nomeru - [3]. Plan: @[4]@"
+    info_debt_full_uz="Sizning qarzingiz [0] y.e ([1] sum). Sizning raqamga [2]dan ishlatildi - [3]. Tarif reja @[4]@"
+    info_debt_full_en="Your debt is [0] units ([1] sum). From [2] you spent [3] on your phone. Tariff: @[4]@."
+    info_debt_full_scg="Zadolzhennost^ po Vashemu schetu [0] y.e ([1] sum). S [2] izrashodovano po Vashemu nomeru - [3]. Plan: @[4]@"
 
     info_bal_bill_ruk="Баланс Вашего счета: [0] y.e ([1] сум). С [2] израсходовано по Вашему номеру - [3]"
     info_bal_bill_rut="Balans Vashego scheta: [0] y.e ([1] sum). S [2] izrashodovano po Vashemu nomeru - [3]"
@@ -92,17 +92,17 @@ tplist               - Компонент выполняет проверки п
     info_debt_bill_en="Your debt is [0] units ([1] sum). From [2] you spent [3] on your phone"
     info_debt_bill_scg="Zadolzhennost^ po Vashemu schetu [0] y.e ([1] sum). S [2] izrashodovano po Vashemu nomeru - [3]"
 
-    info_bal_plan_ruk="Баланс Вашего счета: [0] y.e ([1] сум). План: *[2]*"
-    info_bal_plan_rut="Balans Vashego scheta: [0] y.e ([1] sum). Plan: *[2]*"
-    info_bal_plan_uz="Sizning hisobingizdagi balans: [0] y.e ([1] sum). Tarif reja *[2]*"
-    info_bal_plan_en="Your balance is [0] units ([1] sum). Tariff: *[2]*"
-    info_bal_plan_scg="Balans Vashego scheta: [0] y.e ([1] sum). Plan: *[2]*"
+    info_bal_plan_ruk="Баланс Вашего счета: [0] y.e ([1] сум). План: @[2]@"
+    info_bal_plan_rut="Balans Vashego scheta: [0] y.e ([1] sum). Plan: @[2]@"
+    info_bal_plan_uz="Sizning hisobingizdagi balans: [0] y.e ([1] sum). Tarif reja @[2]@"
+    info_bal_plan_en="Your balance is [0] units ([1] sum). Tariff: @[2]@"
+    info_bal_plan_scg="Balans Vashego scheta: [0] y.e ([1] sum). Plan: @[2]@"
 
-    info_debt_plan_ruk="Задолженность по Вашему счету [0] y.e ([1] сум). План: *[2]*"
-    info_debt_plan_rut="Zadolzhennost^ po Vashemu schetu [0] y.e ([1] sum). Plan: *[2]*"
-    info_debt_plan_uz="Sizning qarzingiz [0] y.e ([1] sum). Tarif reja *[2]*"
-    info_debt_plan_en="Your debts is [0] units ([1] sum). Tariff: *[2]*"
-    info_debt_plan_scg="Zadolzhennost^ po Vashemu schetu [0] y.e ([1] sum). Plan: *[2]*"
+    info_debt_plan_ruk="Задолженность по Вашему счету [0] y.e ([1] сум). План: @[2]@"
+    info_debt_plan_rut="Zadolzhennost^ po Vashemu schetu [0] y.e ([1] sum). Plan: @[2]@"
+    info_debt_plan_uz="Sizning qarzingiz [0] y.e ([1] sum). Tarif reja @[2]@"
+    info_debt_plan_en="Your debts is [0] units ([1] sum). Tariff: @[2]@"
+    info_debt_plan_scg="Zadolzhennost^ po Vashemu schetu [0] y.e ([1] sum). Plan: @[2]@"
 
     info_bal_ruk="Баланс Вашего счета: [0] y.e ([1] сум)"
     info_bal_rut="Balans Vashego scheta: [0] y.e ([1] sum)"
@@ -156,10 +156,10 @@ tplist               - Компонент выполняет проверки п
     </servicebindinglist>
     <!--tplist available="false"
 
-    	info_notaval_ruk="Zapros balansa nedostupen na tarifnom plane *[0]*."
-    	info_notaval_rut="Zapros balansa nedostupen na tarifnom plane *[0]*."
-    	info_notaval_uz="Zapros balansa nedostupen na tarifnom plane *[0]*."
-    	info_notaval_en="Request on balance is not available on this tariff plan *[0]*.">
+    	info_notaval_ruk="Zapros balansa nedostupen na tarifnom plane @[0]@."
+    	info_notaval_rut="Zapros balansa nedostupen na tarifnom plane @[0]@."
+    	info_notaval_uz="Zapros balansa nedostupen na tarifnom plane @[0]@."
+    	info_notaval_en="Request on balance is not available on this tariff plan @[0]@.">
 
       <ivrcode value="100002"/>
     </tplist-->
@@ -354,10 +354,10 @@ tplist               - Компонент выполняет проверки п
     info_301010_uz="Sevimli raqamlar yoq.."
     info_301010_en="No favourite numbers."
 
-    info_320147_ruk="У Вас не установлена услуга *Любимые ближе*."
-    info_320147_rut="U Vas ne ustanovlena usluga *Lyubimye blizhe*."
-    info_320147_uz="*Yaqinlarim yonimda* xizmati sizda o^rnatilmagan."
-    info_320147_en="You do not have *Lyubimye blizhe* service installed."
+    info_320147_ruk="У Вас не установлена услуга @Любимые ближе@."
+    info_320147_rut="U Vas ne ustanovlena usluga @Lyubimye blizhe@."
+    info_320147_uz="@Yaqinlarim yonimda@ xizmati sizda o^rnatilmagan."
+    info_320147_en="You do not have @Lyubimye blizhe@ service installed."
 
     info_inprogress_ruk="Slishkom chastiy zapros."
     info_inprogress_rut="Slishkom chastiy zapros."
@@ -412,7 +412,7 @@ tplist               - Компонент выполняет проверки п
 
     info_320147_ruk="У Вас не установлена услуга Любимые ближе."
     info_320147_rut="У Вас не установлена услуга Любимые ближе."
-    info_320147_uz="Sizda *Yaqinlarim yonimda* xizmati ulanmagan."
+    info_320147_uz="Sizda @Yaqinlarim yonimda@ xizmati ulanmagan."
     info_320147_en="You do not have service Beloved closer installed."
 
     info_inprogress_ruk="Slishkom chastiy zapros."
@@ -441,10 +441,10 @@ tplist               - Компонент выполняет проверки п
     info_320193_uz="Raqam noto^g^ri terilgan."
     info_320193_en="Wrong telephone number is entered"
 
-    info_320147_ruk="У Вас не установлена услуга *Любимые ближе*."
-    info_320147_rut="U Vas ne ustanovlena usluga *Lyubimye blizhe*."
-    info_320147_uz="Sizda *Yaqinlarim yonimda* xizmati ulanmagan."
-    info_320147_en="You dont have service *Lyubimye blizhe* istalled."
+    info_320147_ruk="У Вас не установлена услуга @Любимые ближе@."
+    info_320147_rut="U Vas ne ustanovlena usluga @Lyubimye blizhe@."
+    info_320147_uz="Sizda @Yaqinlarim yonimda@ xizmati ulanmagan."
+    info_320147_en="You dont have service @Lyubimye blizhe@ istalled."
 
     info_inprogress_ruk="Slishkom chastiy zapros."
     info_inprogress_rut="Slishkom chastiy zapros."
@@ -457,10 +457,10 @@ tplist               - Компонент выполняет проверки п
 
   <Service    name="_LANGUAGE"
 
-    info_success_ruk="Язык успешно изменен на Русский(Кириллица). Теперь можете проверить запрос баланса \*100#,\*171#"
-    info_success_rut="Yazy^k uspeshno izmenen na Russkiy(Latinica). Teper^ mozhete proverit^ zapros balansa \*100#,\*171#"
-    info_success_uz="Til uzbekchaga muafaqiatli o^zgardi. Endi siz balansingizni \*100#,\*171# orqali tekshirishingiz mumkin"
-    info_success_en="Language successfully changed to English. Now you can check your balance by sending a requests \*100#,\*171#"
+    info_success_ruk="Язык успешно изменен на Русский(Кириллица). Теперь можете проверить запрос баланса *100#,*171#"
+    info_success_rut="Yazy^k uspeshno izmenen na Russkiy(Latinica). Teper^ mozhete proverit^ zapros balansa *100#,*171#"
+    info_success_uz="Til uzbekchaga muafaqiatli o^zgardi. Endi siz balansingizni *100#,*171# orqali tekshirishingiz mumkin"
+    info_success_en="Language successfully changed to English. Now you can check your balance by sending a requests *100#,*171#"
 
     info_notavailbalance_ruk="Недостаточно средств на балансе для проведения операции."
     info_notavailbalance_rut="Nedostatochno sredstv na balanse dlya provedeniya operacii."
@@ -558,10 +558,10 @@ tplist               - Компонент выполняет проверки п
     info_inprogress_uz="Slishkom chastiy zapros."
     info_inprogress_en="Too frequent request."
     
-    info_330722_ruk="Услуга *Обещанный платеж* не доступна для Вас."
-    info_330722_rut="Usluga *Obeschanniy platyoj* ne dostupna dlya Vas."
-    info_330722_uz="*Va^da qilingan to^lov* xizmati mavjud emas."
-    info_330722_en="*Obeschanniy platyoj* service is not available for you."
+    info_330722_ruk="Услуга @Обещанный платеж@ не доступна для Вас."
+    info_330722_rut="Usluga @Obeschanniy platyoj@ ne dostupna dlya Vas."
+    info_330722_uz="@Va^da qilingan to^lov@ xizmati mavjud emas."
+    info_330722_en="@Obeschanniy platyoj@ service is not available for you."
     
     info_330723_ruk="Неверный номер абонента."
     info_330723_rut="Neverniy nomer abonenta."
@@ -574,9 +574,9 @@ tplist               - Компонент выполняет проверки п
     info_330724_en="Server error, refer support service of UMS."
 
     info_320704_ruk="Usluga ne dostupna novim abonentam v techenie odnogo kalendarnogo mesyaca"
-          info_320704_rut="Ustanovlen zapret na podklyuchenie usligi *Obeshanniy platezh*"
-    info_320704_uz="*Va^da qilingan to^lov* xizmatiga cheklanish o^rnatildi"
-    info_320704_en="*Promised payment* service connection is banned"
+          info_320704_rut="Ustanovlen zapret na podklyuchenie usligi @Obeshanniy platezh@"
+    info_320704_uz="@Va^da qilingan to^lov@ xizmatiga cheklanish o^rnatildi"
+    info_320704_en="@Promised payment@ service connection is banned"
 
     >
     <soapcon value="_GRNTPAY"/>
@@ -819,7 +819,7 @@ tplist               - Компонент выполняет проверки п
       <dealerussd value="*1*1*2"/>
       <dealerussd value="*0*2"/>
     </lang>
-    <lang param="uz" text="O&apos;zbekcha" scp="3" ussd="3" encoding="ascii">
+    <lang param="uz" text="Ozbekcha" scp="3" ussd="3" encoding="ascii">
       <soapcon value="uz"/>
       <soapcon value="3"/>
       <ivrcon  value="uz"/>
