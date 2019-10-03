@@ -312,7 +312,7 @@ Created by Vladimir Khovanskiy
 	<Item
           info_ruk="Неверный номер телефона"
           info_rut="Nevernyy nomer telefona"
-          info_uz="Telefon raqami noto'g'ri"
+          info_uz="Telefon raqami noto^g^ri"
           info_en="Phone number is not valid" 
 			>
 		<code value="320341"/>
@@ -697,36 +697,36 @@ Created by Vladimir Khovanskiy
 	</Item>
         <Item
 			info_ruk="Активирована услуга *На полном доверии*. У Вас есть возможность пользоваться услугами связи по тарифному плану до -$5. Во избежание блокировки рекомендуем вам пополнить ваш баланс. Для отключения услуги наберите *164*2#"
-			info_ru="Aktivirovana usluga 'Na polnom doverii'. U Vas est' vozmojnost' polzovot'sya uslugami svyazi po tarifnomu planu do -5$. Vo izbejanie blokirovki rekomenduem Vam popolnit' Vash balans. Dlya otklyucheniya uslugi naberite *164*2#"
-			info_uz="'To'liq ishonch' xizmati faollashtirildi. Siz tarif rejasi bo'yicha qarzingiz 5$ga yetguncha aloqa xizmatlaridan foydalanish imkoniga egasiz. Raqam bandlanib qolmasligi uchun balansingizni to'ldirib qo'yishingizni tavsiya qilamiz. Xizmatni o'chirish uchun USSD-so'rov - *164*2#"
-			info_en="Service 'Na polnom doverii' is activated. You have an opportunity to use communication service with no less than -5$. To escape blocking we recommend to replenish Your balance. For service cancellation enter *164*2#"
+			info_ru="Aktivirovana usluga ^Na polnom doverii^. U Vas est^ vozmojnost^ polzovot^sya uslugami svyazi po tarifnomu planu do -5$. Vo izbejanie blokirovki rekomenduem Vam popolnit^ Vash balans. Dlya otklyucheniya uslugi naberite *164*2#"
+			info_uz="^To^liq ishonch^ xizmati faollashtirildi. Siz tarif rejasi bo^yicha qarzingiz 5$ga yetguncha aloqa xizmatlaridan foydalanish imkoniga egasiz. Raqam bandlanib qolmasligi uchun balansingizni to^ldirib qo^yishingizni tavsiya qilamiz. Xizmatni o^chirish uchun USSD-so^rov - *164*2#"
+			info_en="Service ^Na polnom doverii^ is activated. You have an opportunity to use communication service with no less than -5$. To escape blocking we recommend to replenish Your balance. For service cancellation enter *164*2#"
 
 			>
 		<code value="LimitActivated"/>
 	</Item>
         <Item
 			info_ruk="Услуга *На полном доверии* - недоступна"
-			info_ru="Usluga 'Na polnom doverii' - nedostupna"
-			info_uz="'To'liq ishonch' xizmati – imkonsiz"
-			info_en="Service 'Na polnom doverii' - not available"
+			info_ru="Usluga ^Na polnom doverii^ - nedostupna"
+			info_uz="^To^liq ishonch^ xizmati – imkonsiz"
+			info_en="Service ^Na polnom doverii^ - not available"
 
 			>
 		<code value="LimitNotAvail"/>
 	</Item>
         <Item
-			info_ruk="Услуга 'На полном доверии' - отключена"
-			info_ru="Usluga 'Na polnom doverii' - otklyuchena"
-			info_uz="'To'liq ishonch' xizmati - o'chirilgan"
-			info_en="Service 'Na polnom doverii' - is off"
+			info_ruk="Услуга ^На полном доверии^ - отключена"
+			info_ru="Usluga ^Na polnom doverii^ - otklyuchena"
+			info_uz="^To^liq ishonch^ xizmati - o^chirilgan"
+			info_en="Service ^Na polnom doverii^ - is off"
 
 			>
 		<code value="LimitDeactivated"/>
 	</Item>
         <Item
 			info_ruk="Услуга *На полном доверии* уже была активирована"
-			info_ru="Usluga 'Na polnom doverii' uje bila aktivirovana"
-			info_uz="'To'liq ishonch' xizmati avval yoqilgan"
-			info_en="Service 'Na polnom doverii' - is already activated"
+			info_ru="Usluga ^Na polnom doverii^ uje bila aktivirovana"
+			info_uz="^To^liq ishonch^ xizmati avval yoqilgan"
+			info_en="Service ^Na polnom doverii^ - is already activated"
 
 			>
 		<code value="LimitAlreadyEx"/>
