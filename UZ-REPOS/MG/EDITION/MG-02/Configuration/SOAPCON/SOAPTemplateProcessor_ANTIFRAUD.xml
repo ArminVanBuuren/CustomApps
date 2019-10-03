@@ -1,123 +1,123 @@
-﻿<templates connector="SOAP">
-   <macros />
-   <template procedureName="SetFraudBlock" handler="DBCON_02_01" sessionStorage="Memory" sessionLifetime="30" persistent="true">
-      <receiveTemplate>
-         <Message type="dummyrequest" process="dispatcher" initiator="ussd" id="@{newGuid}" session_id="@{setSessionId(SetFraudBlock_${customer})}">
-            <Item procedureName="anti_fraud.crm_block_unblock">
-               <Attribute name="p_msisdn" type="STRING" value="${customer}" />
-               <Attribute name="p_action" type="STRING" value="1" />
-               <Attribute name="result" type="out:STRING" />
-            </Item>
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate>
-         <set item="oparam:result" value="${result}" />
-      </deliveryTemplate>
-      <input>
-         <param name="customer" />
-      </input>
-      <output>
-         <param name="result" />
-      </output>
-   </template>
-   <template procedureName="CheckFraudBlock" handler="DBCON_02_01" sessionStorage="Memory" sessionLifetime="30" persistent="true">
-      <receiveTemplate>
-         <Message type="dummyrequest" process="dispatcher" initiator="ussd" id="@{newGuid}" session_id="@{setSessionId(CheckFraudBlock_${customer})}">
-            <Item procedureName="anti_fraud.crm_check_fraud_block">
-               <Attribute name="p_msisdn" type="STRING" value="${customer}" />
-               <Attribute name="result" type="out:STRING" />
-            </Item>
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate>
-         <set item="oparam:result" value="${result}" />
-      </deliveryTemplate>
-      <input>
-         <param name="customer" />
-      </input>
-      <output>
-         <param name="result" />
-      </output>
-   </template>
-   <template procedureName="SetCallForwarding" sessionStorage="Memory" sessionLifetime="30" persistent="true">
-      <receiveTemplate>
-         <Message type="getlanguage" process="dispatcher" initiator="ussd" id="@{newGuid}" session_id="@{setSessionId(SetCallForwarding_${customer})}">
-            <Item customer="${customera}" />
-            @{store(sCustomerA,${customera})}
-            @{store(sCustomerB,${customerb})}
-            @{store(sAction,${action})}
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate conditionEx="#{'${sAction}'='1'}" call="SetCallForwarding_On" />
-      <deliveryTemplate call="SetCallForwarding_Off" />
-      <input>
-         <param name="customera" />
-         <param name="customerb" />
-         <param name="action" />
-      </input>
-      <output>
-         <param name="result" />
-      </output>
-   </template>
-   <template procedureName="SetCallForwarding_On" handler="DBCON_02_01" sessionStorage="Memory" sessionLifetime="30" persistent="true">
-      <receiveTemplate>
-         <Message type="dummyrequest" process="dispatcher" initiator="ussd" id="@{newGuid}" session_id="${SessionId}">
-            <Item procedureName="anti_fraud.insert_numbers">
-               <Attribute name="p_msisdn_a" type="STRING" value="${sCustomerA}" />
-               <Attribute name="p_msisdn_b" type="STRING" value="${sCustomerB}" />
-               <Attribute name="p_action" type="STRING" value="${sAction}" />
-               <Attribute name="result" type="out:STRING" />
-            </Item>
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate>
-         <set item="oparam:result" value="${result}" />
-      </deliveryTemplate>
-      <input>
-         <param name="customer" />
-      </input>
-      <output>
-         <param name="result" />
-      </output>
-   </template>
-   <template procedureName="SetCallForwarding_Off" handler="DBCON_02_01" sessionStorage="Memory" sessionLifetime="30" persistent="true">
-      <receiveTemplate>
-         <Message type="dummyrequest" process="dispatcher" initiator="ussd" id="@{newGuid}" session_id="${SessionId}">
-            <Item procedureName="anti_fraud.insert_numbers">
-               <Attribute name="p_msisdn_a" type="STRING" value="${sCustomerA}" />
-               <Attribute name="p_msisdn_b" type="STRING" value="" />
-               <Attribute name="p_action" type="STRING" value="${sAction}" />
-               <Attribute name="result" type="out:STRING" />
-            </Item>
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate>
-         <set item="oparam:result" value="${result}" />
-      </deliveryTemplate>
-      <input>
-         <param name="customer" />
-      </input>
-      <output>
-         <param name="result" />
-      </output>
-   </template>
-   <template procedureName="NumberToCheck" handler="DBCON_02_01" sessionStorage="Memory" sessionLifetime="30" persistent="true">
-      <receiveTemplate>
-         <Message type="dummyrequest" process="dispatcher" initiator="ussd" id="@{newGuid}" session_id="@{setSessionId(NumberToCheck_${customer})}">
-            <Item procedureName="anti_fraud.insert_numbers_check">
-               <Attribute name="p_msisdn" type="STRING" value="${customer}" />
-               <Attribute name="result" type="out:STRING" />
-            </Item>
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate>
-         <set item="oparam:result" value="${result}" />
-      </deliveryTemplate>
-      <input>
-         <param name="customer" />
-      </input>
-      <output>
-         <param name="result" />
-      </output>
-   </template>
+<templates connector="SOAP">
+  <macros />
+  <template procedureName="SetFraudBlock" handler="DBCON_02_01" sessionStorage="Memory" sessionLifetime="30" persistent="true">
+    <receiveTemplate>
+      <Message type="dummyrequest" process="dispatcher" initiator="ussd" id="@{newGuid}" session_id="@{setSessionId(SetFraudBlock_${customer})}">
+        <Item procedureName="anti_fraud.crm_block_unblock">
+          <Attribute name="p_msisdn" type="STRING" value="${customer}" />
+          <Attribute name="p_action" type="STRING" value="1" />
+          <Attribute name="result" type="out:STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:result" value="${result}" />
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+    </input>
+    <output>
+      <param name="result" />
+    </output>
+  </template>
+  <template procedureName="CheckFraudBlock" handler="DBCON_02_01" sessionStorage="Memory" sessionLifetime="30" persistent="true">
+    <receiveTemplate>
+      <Message type="dummyrequest" process="dispatcher" initiator="ussd" id="@{newGuid}" session_id="@{setSessionId(CheckFraudBlock_${customer})}">
+        <Item procedureName="anti_fraud.crm_check_fraud_block">
+          <Attribute name="p_msisdn" type="STRING" value="${customer}" />
+          <Attribute name="result" type="out:STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:result" value="${result}" />
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+    </input>
+    <output>
+      <param name="result" />
+    </output>
+  </template>
+  <template procedureName="SetCallForwarding" sessionStorage="Memory" sessionLifetime="30" persistent="true">
+    <receiveTemplate>
+      <Message type="getlanguage" process="dispatcher" initiator="ussd" id="@{newGuid}" session_id="@{setSessionId(SetCallForwarding_${customer})}">
+        <Item customer="${customera}" />
+        @{store(sCustomerA,${customera})}
+        @{store(sCustomerB,${customerb})}
+        @{store(sAction,${action})}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'${sAction}'='1'}" call="SetCallForwarding_On" />
+    <deliveryTemplate call="SetCallForwarding_Off" />
+    <input>
+      <param name="customera" />
+      <param name="customerb" />
+      <param name="action" />
+    </input>
+    <output>
+      <param name="result" />
+    </output>
+  </template>
+  <template procedureName="SetCallForwarding_On" handler="DBCON_02_01" sessionStorage="Memory" sessionLifetime="30" persistent="true">
+    <receiveTemplate>
+      <Message type="dummyrequest" process="dispatcher" initiator="ussd" id="@{newGuid}" session_id="${SessionId}">
+        <Item procedureName="anti_fraud.insert_numbers">
+          <Attribute name="p_msisdn_a" type="STRING" value="${sCustomerA}" />
+          <Attribute name="p_msisdn_b" type="STRING" value="${sCustomerB}" />
+          <Attribute name="p_action" type="STRING" value="${sAction}" />
+          <Attribute name="result" type="out:STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:result" value="${result}" />
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+    </input>
+    <output>
+      <param name="result" />
+    </output>
+  </template>
+  <template procedureName="SetCallForwarding_Off" handler="DBCON_02_01" sessionStorage="Memory" sessionLifetime="30" persistent="true">
+    <receiveTemplate>
+      <Message type="dummyrequest" process="dispatcher" initiator="ussd" id="@{newGuid}" session_id="${SessionId}">
+        <Item procedureName="anti_fraud.insert_numbers">
+          <Attribute name="p_msisdn_a" type="STRING" value="${sCustomerA}" />
+          <Attribute name="p_msisdn_b" type="STRING" value="" />
+          <Attribute name="p_action" type="STRING" value="${sAction}" />
+          <Attribute name="result" type="out:STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:result" value="${result}" />
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+    </input>
+    <output>
+      <param name="result" />
+    </output>
+  </template>
+  <template procedureName="NumberToCheck" handler="DBCON_02_01" sessionStorage="Memory" sessionLifetime="30" persistent="true">
+    <receiveTemplate>
+      <Message type="dummyrequest" process="dispatcher" initiator="ussd" id="@{newGuid}" session_id="@{setSessionId(NumberToCheck_${customer})}">
+        <Item procedureName="anti_fraud.insert_numbers_check">
+          <Attribute name="p_msisdn" type="STRING" value="${customer}" />
+          <Attribute name="result" type="out:STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:result" value="${result}" />
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+    </input>
+    <output>
+      <param name="result" />
+    </output>
+  </template>
 </templates>

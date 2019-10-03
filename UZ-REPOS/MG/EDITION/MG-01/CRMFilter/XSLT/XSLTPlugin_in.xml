@@ -1,29 +1,8 @@
-<plugin name="XSLTPlugin">	
-	<transform condition="/Message[contains(@session_id,'GETBALANCE')]/@type='serviceinterrogation'" 
-			validation="1=1" 
-			successTemplate="XSLT\Scripts\DuplicateBalanceAnswer.xsl" errorTemplate=""/>
-
-	<transform condition="/Message/@type='serviceinterrogation'" 
-			validation="1=1" 
-			successTemplate="XSLT\Scripts\DuplicateAnswer.xsl" errorTemplate=""/>
-
-	<transform condition="/Message/@type='stringformat'"
-			validation="1=1" 
-			successTemplate="XSLT\Scripts\StringFormat.xsl" 
-			errorTemplate=""/>
-
-	<transform condition="/Message/@type='dummyrequest'"
-			validation="1=1" 
-			successTemplate="XSLT\Scripts\DummyRequest.xsl" 
-			errorTemplate=""/>
-
-	<transform condition="/Message/@type='convertencoding'"
-			validation="1=1" 
-			successTemplate="XSLT\Scripts\ConvertEncoding.xsl" 
-			errorTemplate=""/>
-
-	<transform condition="/Message/@type='parcecounters'"
-			validation="1=1" 
-			successTemplate="XSLT\Scripts\GetCounters.xsl" 
-			errorTemplate=""/>
+<plugin name="XSLTPlugin">
+  <transform condition="/Message[contains(@session_id,'GETBALANCE')]/@type='serviceinterrogation'" validation="1=1" successTemplate="XSLT\Scripts\DuplicateBalanceAnswer.xsl" errorTemplate="" />
+  <transform condition="/Message/@type='serviceinterrogation'" validation="1=1" successTemplate="XSLT\Scripts\DuplicateAnswer.xsl" errorTemplate="" />
+  <transform condition="/Message/@type='stringformat'" validation="1=1" successTemplate="XSLT\Scripts\StringFormat.xsl" errorTemplate="" />
+  <transform condition="/Message/@type='dummyrequest'" validation="1=1" successTemplate="XSLT\Scripts\DummyRequest.xsl" errorTemplate="" />
+  <transform condition="/Message/@type='convertencoding'" validation="1=1" successTemplate="XSLT\Scripts\ConvertEncoding.xsl" errorTemplate="" />
+  <transform condition="/Message/@type='parcecounters'" validation="1=1" successTemplate="XSLT\Scripts\GetCounters.xsl" errorTemplate="" />
 </plugin>

@@ -1,1295 +1,1295 @@
-﻿<templates connector="SOAP">
-   <macros>
-      <!-- ==========================  REDIRECT CONNECTORS   ========================= -->
-      <define name="_SMSCON_1" value="SMSCON_02_01" />
-      <define name="_SMSCON_ISSA" value="SMSCON_02_02" />
-      <define name="_USSD_1" value="USSDCON_01_01" />
-      <!-- ==========================  REDIRECT CONNECTORS   ========================= -->
-      <!-- ==========================  SOAP SPECIAL PAYNET  ========================= -->
-      <!-- ==========================  SOAP SPECIAL PAYNET  ========================= -->
-      <!-- ==========================  SOAP SPECIAL   ========================= -->
-      <define name="_GET_MOD_LANGUAGE" value="#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[_CURRENT_MODULE/@value='${lang}']/@param}" />
-      <!-- ==========================  SOAP SPECIAL   ========================= -->
-      <!-- ==========================  SERVICE PROVISIONING  ========================= -->
-      <define name="_GET_SERVICE_RESULT" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@info_${sDbresult}__GET_LANG}'='','#{if('#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@info_${sDbresult}__GET_LANG}'='','_GET_DBRESULT','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@info_${sDbresult}__GET_LANG}')}','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@info_${sDbresult}__GET_LANG}')}" />
-      <define name="_GET_CONFIRM_SERVICE_RESULT" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[@service_code='_SERVICE_CODE']/@info_${sDbresult}__GET_LANG}'='','#{if('#{document('_SERVICE_PATH')/ServiceList/Group[@name='#{document('_SERVICE_PATH')/ServiceList/GroupList/Item[@id='#{document('_SERVICE_PATH')/ServiceList/Service[@service_code='_SERVICE_CODE']/@group}']/@name}']/@info_${sDbresult}__GET_LANG}'='','_GET_DBRESULT','#{document('_SERVICE_PATH')/ServiceList/Group[@name='#{document('_SERVICE_PATH')/ServiceList/GroupList/Item[@id='#{document('_SERVICE_PATH')/ServiceList/Service[@service_code='_SERVICE_CODE']/@group}']/@name}']/@info_${sDbresult}__GET_LANG}')}','#{document('_SERVICE_PATH')/ServiceList/Service[@service_code='_SERVICE_CODE']/@info_${sDbresult}__GET_LANG}')}" />
-      <define name="_SERVICE_CONFIRM_NAME" value="#{document('_SERVICE_PATH')/ServiceList/Service[@service_code='_SERVICE_CODE']/@service_name__GET_LANG}" />
-      <define name="_SERVICE_TP_CNT" value="#{if(count(document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/tplist[1][ivrcode/@value='#{//Message/Item/@tariffplan}']/ivrcode)&gt;0,count(document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/tplist[1][ivrcode/@value='#{//Message/Item/@tariffplan}']/ivrcode),count(document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/tplist[1][ivrcode/@value='#{//Message/Item/@tariffplan}']/ivrcode))}" />
-      <define name="_SERVICE_TP_ISAVAIL" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/tplist[1]/@available}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/tplist[1]/@available}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/tplist[1]/@available}')}" />
-      <define name="_SERVICE_TP_NOTAVALINFO" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/tplist[1]/@info_notaval__GET_LANG}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/tplist[1]/@info_notaval__GET_LANG}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/tplist[1]/@info_notaval__GET_LANG}')}" />
-      <define name="_SERVICE_CUSTLST_CNT" value="#{if(count(document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/customerlist[1]/customer[@value='${customer}']/@value)&gt;0,count(document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/customerlist[1]/customer[@value='${customer}']/@value),count(document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/customerlist[1]/customer[@value='${customer}']/@value))}" />
-      <define name="_SERVICE_CUSTLST_ISAVAIL" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/customerlist[1]/@available}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/customerlist[1]/@available}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/customerlist[1]/@available}')}" />
-      <define name="_SERVICE_CUSTLST_NOTAVAILINFO" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/customerlist[1]/@info_notaval__GET_LANG}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/customerlist[1]/@info_notaval__GET_LANG}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/customerlist[1]/@info_notaval__GET_LANG}')}" />
-      <define name="_SERVICE_SRVBIND_CNT" value="#{if(count(document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service)&gt;0,count(document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service),count(document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/servicebindinglist[1]/service))}" />
-      <define name="_SERVICE_SRVBIND_SRVCODE" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@service_code}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@service_code}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/servicebindinglist[1]/service[${sCnt}]/@service_code}')}" />
-      <define name="_SERVICE_SRVBIND_SUBSR" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@subscription}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@subscription}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/servicebindinglist[1]/service[${sCnt}]/@subscription}')}" />
-      <define name="_SERVICE_SRVBIND_STORE" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@store}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@store}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/servicebindinglist[1]/service[${sCnt}]/@store}')}" />
-      <define name="_SERVICE_SRVBIND_INFO" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@info_notaval__GET_LANG}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@info_notaval__GET_LANG}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/servicebindinglist[1]/service[${sCnt}]/@info_notaval__GET_LANG}')}" />
-      <define name="_SERVICE_SUCCESSFUL_RESPONSE" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@successful_response}'='','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@successful_response}','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@successful_response}')}" />
-      <define name="_SERVICE_CHECKBLOCK" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@check_block}'='','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@check_block}','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@check_block}')}" />
-      <define name="_SERVICE_REDIRECT" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@redirect}'='','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@redirect}','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@redirect}')}" />
-      <define name="_SERVICE_AVAIL_BAL" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@availbalance}'='','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@availbalance}','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@availbalance}')}" />
-      <define name="_SERVICE_TIMETOPROGRESS" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[@service_code='#{if('${sServiceCode}'='','_SERVICE_CODE','${sServiceCode}')}']/@timetoprogress}'='','#{document('_SERVICE_PATH')/ServiceList/Group[@name='#{if('${sGroupName}'='','_SERVICE_GROUPNAME','${sGroupName}')}']/@timetoprogress}','#{document('_SERVICE_PATH')/ServiceList/Service[@service_code='#{if('${sServiceCode}'='','_SERVICE_CODE','${sServiceCode}')}']/@timetoprogress}')}" />
-      <define name="_SERVICE_DATEFROM" value="#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@datefrom}" />
-      <define name="_SERVICE_DATETO" value="#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@dateto}" />
-      <define name="_SERVICE_NAME" value="#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@service_name__GET_LANG}" />
-      <define name="_SERVICE_GROUPNAME" value="#{document('_SERVICE_PATH')/ServiceList/GroupList/Item[@id='#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@group}']/@name}" />
-      <define name="_SERVICE_COMM_ACTION" value="#{document('_SERVICE_PATH')/ServiceList/CommandList/Command[_CURRENT_MODULE/@value='${sAction}']/@action}" />
-      <define name="_SERVICE_COMM_STATUS" value="#{document('_SERVICE_PATH')/ServiceList/CommandList/Command[_CURRENT_MODULE/@value='${sAction}']/@status}" />
-      <define name="_SERVICE_COMM_CODE" value="#{document('_SERVICE_PATH')/ServiceList/CommandList/Command[_CURRENT_MODULE/@value='${sAction}']/@code}" />
-      <define name="_SERVICE_COMM_ACTPARCE" value="#{document('_SERVICE_PATH')/ServiceList/CommandList/Command[_CURRENT_MODULE/@value='${sAction}']/@parce}" />
-      <define name="_SERVICE_CRMSTATUS" value="#{document('_SERVICE_PATH')/ServiceList/CommandList/Command[@status='${subscription}']/@parce}" />
-      <define name="_SERVICE_CRMACTION_ADD" value="#{document('_SERVICE_PATH')/ServiceList/CommandList/Command[@action='2']/@parce}" />
-      <define name="_SERVICE_CRMACTION_DEL" value="#{document('_SERVICE_PATH')/ServiceList/CommandList/Command[@action='3']/@parce}" />
-      <define name="_SERVICE_CODE" value="#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@service_code}" />
-      <!-- ==========================  SERVICE PROVISIONING  ========================= -->
-      <!-- ==========================  CHANGE TP   ========================= -->
-      <define name="_GET_TARIFF_RESULT" value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@info_${sDbresult}__GET_LANG}'='','#{if('#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/@info_${sDbresult}__GET_LANG}'='','_GET_DBRESULT','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/@info_${sDbresult}__GET_LANG}')}','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@info_${sDbresult}__GET_LANG}')}" />
-      <define name="_GET_CONFIRM_TARIFF_RESULT" value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@info_${sDbresult}__GET_LANG}'='','#{if('#{document('_TARIF_PATH')/TariffPlans/Group[@name='#{document('_TARIF_PATH')/TariffPlans/GroupList/Item[@id='#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@group}']/@name}']/@info_${sDbresult}__GET_LANG}'='','_GET_DBRESULT','#{document('_TARIF_PATH')/TariffPlans/Group[@name='#{document('_TARIF_PATH')/TariffPlans/GroupList/Item[@id='#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@group}']/@name}']/@info_${sDbresult}__GET_LANG}')}','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@info_${sDbresult}__GET_LANG}')}" />
-      <define name="_TARIFF_TP_CNT" value="#{if(count(document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/tplist[1][ivrcode/@value='#{//Message/Item/@tariffplan}'])&gt;0,count(document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/tplist[1][ivrcode/@value='#{//Message/Item/@tariffplan}']),count(document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/tplist[1][ivrcode/@value='#{//Message/Item/@tariffplan}']))}" />
-      <define name="_TARIFF_TP_ISAVAIL" value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/tplist[1]/@available}'!='','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/tplist[1]/@available}','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/tplist[1]/@available}')}" />
-      <define name="_TARIFF_TP_NOTAVAILINFO" value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/tplist[1]/@info_notaval__GET_LANG}'!='','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/tplist[1]/@info_notaval__GET_LANG}','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/tplist[1]/@info_notaval__GET_LANG}')}" />
-      <define name="_TARIFF_CUSTLST_CNT" value="#{if(count(document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/customerlist[1]/customer[@value='${customer}'])&gt;0,count(document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/customerlist[1]/customer[@value='${customer}']),count(document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/customerlist[1]/customer[@value='${customer}']))}" />
-      <define name="_TARIFF_CUSTLST_ISAVAIL" value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/customerlist[1]/@available}'!='','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/customerlist[1]/@available}','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/customerlist[1]/@available}')}" />
-      <define name="_TARIFF_CUSTLST_NOTAVAILINFO" value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/customerlist[1]/@info_notaval__GET_LANG}'!='','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/customerlist[1]/@info_notaval__GET_LANG}','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/customerlist[1]/@info_notaval__GET_LANG}')}" />
-      <define name="_TARIFF_SRVBIND_CNT" value="#{if(count(document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/servicebindinglist[1]/service)&gt;0,count(document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/servicebindinglist[1]/service),count(document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/servicebindinglist[1]/service))}" />
-      <define name="_TARIFF_SRVBIND_SRVCODE" value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/servicebindinglist[1]/service[${sCnt}]/@service_code}'!='','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/servicebindinglist[1]/service[${sCnt}]/@service_code}','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/servicebindinglist[1]/service[${sCnt}]/@service_code}')}" />
-      <define name="_TARIFF_SRVBIND_SUBSR" value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/servicebindinglist[1]/service[${sCnt}]/@subscription}'!='','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/servicebindinglist[1]/service[${sCnt}]/@subscription}','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/servicebindinglist[1]/service[${sCnt}]/@subscription}')}" />
-      <define name="_TARIFF_SRVBIND_STORE" value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/servicebindinglist[1]/service[${sCnt}]/@store}'!='','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/servicebindinglist[1]/service[${sCnt}]/@store}','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/servicebindinglist[1]/service[${sCnt}]/@store}')}" />
-      <define name="_TARIFF_SRVBIND_INFO" value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/servicebindinglist[1]/service[${sCnt}]/@info_notaval__GET_LANG}'!='','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/servicebindinglist[1]/service[${sCnt}]/@info_notaval__GET_LANG}','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/servicebindinglist[1]/service[${sCnt}]/@info_notaval__GET_LANG}')}" />
-      <define name="_TARIFF_SUCCESSFUL_RESPONSE" value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@successful_response}'='','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/@successful_response}','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@successful_response}')}" />
-      <define name="_TARIFF_CHECKBLOCK" value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@check_block}'='','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/@check_block}','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@check_block}')}" />
-      <define name="_TARIFF_REDIRECT" value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@redirect}'='','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/@redirect}','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@redirect}')}" />
-      <define name="_TARIFF_TIMETOPROGRESS" value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[@ivrcode='#{if('${sTariffIvrCode}'='','_TARIFF_IVRCODE','${sTariffIvrCode}')}']/@timetoprogress}'='','#{document('_TARIF_PATH')/TariffPlans/Group[@name='#{if('${sGroupName}'='','_TARIFF_GROUPNAME','${sGroupName}')}']/@timetoprogress}','#{document('_TARIF_PATH')/TariffPlans/Tariff[@ivrcode='#{if('${sTariffIvrCode}'='','_TARIFF_IVRCODE','${sTariffIvrCode}')}']/@timetoprogress}')}" />
-      <define name="_TARIFF_AVAIL_BAL" value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@availbalance}'='','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/@availbalance}','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@availbalance}')}" />
-      <define name="_TARIFF_DATEFROM" value="#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@datefrom}" />
-      <define name="_TARIFF_DATETO" value="#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@dateto}" />
-      <define name="_TARIFF_NAME" value="#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@tariffname__GET_LANG}" />
-      <define name="_TARIFF_GROUPNAME" value="#{document('_TARIF_PATH')/TariffPlans/GroupList/Item[@id='#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@group}']/@name}" />
-      <define name="_TARIFF_CURRENT_NAME" value="#{document('_TARIF_PATH')/TariffPlans/Tariff[@ivrcode='#{//Message/Item/@tariffplan}']/@tariffname__GET_LANG}" />
-      <define name="_TARIFF_IVRCODE" value="#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@ivrcode}" />
-      <!-- ==========================  CHANGE TP  ========================= -->
-      <!-- ==========================  ALL SERVICE   ========================= -->
-      <define name="_COUNTERS_TYPE" value="#{document('_COUNTERS_PATH')/Counters/Group[_CURRENT_MODULE/@value='${sCountertype}']/@name}" />
-      <define name="_GET_ALL_SRV_RESULT" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@info_${sDbresult}__GET_LANG}" />
-      <define name="_ALLSERVICE_TP_CNT" value="count(document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/tplist[1][ivrcode/@value='#{//Message/Item/@tariffplan}'])" />
-      <define name="_ALLSERVICE_TP_ISAVAIL" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/tplist[1]/@available}" />
-      <define name="_ALLSERVICE_TP_NOTAVAILINFO" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/tplist[1]/@info_notaval__GET_LANG}" />
-      <define name="_ALLSERVICE_CUSTLST_CNT" value="count(document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/customerlist[1]/customer[@value='${customer}'])" />
-      <define name="_ALLSERVICE_CUSTLST_ISAVAIL" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/customerlist[1]/@available}" />
-      <define name="_ALLSERVICE_CUSTLST_NOTAVAILINFO" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/customerlist[1]/@info_notaval__GET_LANG}" />
-      <define name="_ALLSERVICE_SRVBIND_CNT" value="count(document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service)" />
-      <define name="_ALLSERVICE_SRVBIND_SRVCODE" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@service_code}" />
-      <define name="_ALLSERVICE_SRVBIND_SUBSR" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@subscription}" />
-      <define name="_ALLSERVICE_SRVBIND_STORE" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@store}" />
-      <define name="_ALLSERVICE_SRVBIND_INFO" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@info_notaval__GET_LANG}" />
-      <define name="_ALLSERVICE_SUCCESSFUL_RESPONSE" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@successful_response}" />
-      <define name="_ALLSERVICE_CHECKBLOCK" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@check_block}" />
-      <define name="_ALLSERVICE_REDIRECT" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@redirect}" />
-      <define name="_ALLSERVICE_TIMETOPROGRESS" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@timetoprogress}" />
-      <define name="_ALLSERVICE_AVAIL_BAL" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@availbalance}" />
-      <define name="_ALLSERVICE_NAME" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@name}" />
-      <!-- ==========================  ALL SERVICE   ========================= -->
-      <!-- ==========================  SETTINGS   ========================= -->
-      <define name="_WAIT_IFASYNC_INPROCESS" value="#{if('${sDbresult}'='redirect','#{if(not(matches('${sInProgress}','_IF_TRUE')),'true','')}','')}" />
-      <define name="_GET_TODAY" value="#{concat(substring('@{now}',7,4),substring('@{now}',4,2),substring('@{now}',1,2))}" />
-      <define name="_GET_SECONDS" value="#{(number(substring('@{now}',12,2)) * 60 * 60) + (number(substring('@{now}',15,2)) * 60) + number(substring('@{now}',18,2))}" />
-      <define name="_GET_DBRESULT" value="#{document('_DICTIONARY_PATH')/DBresults/Item[code/@value='${sDbresult}']/@info__GET_LANG}" />
-      <define name="_GET_LENGTH_DBRESULT" value="#{string-length(document('_DICTIONARY_PATH')/DBresults/Item[code/@value='${sDbresult}']/@info__GET_LANG)}" />
-      <define name="_GET_AFTER_VERIFY_DBRESULT" value="#{if('#{document('_DICTIONARY_PATH')/DBresults/Item[code/@value='${customerblocks}']/@info__GET_LANG}'!='','${customerblocks}','${dbresult}')}" />
-      <define name="_ENCODING" value="#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@param='_GET_LANG']/@encoding}" />
-      <define name="_INLANGUAGE" value="#{if('#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@scp='${inlang}' and @ussd='${smsussdlang}']/@param}'='','#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@scp='' and @ussd='']/@param}','#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@scp='${inlang}' and @ussd='${smsussdlang}']/@param}')}" />
-      <define name="_GET_LANG" value="#{if('${sLang}'='','#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@scp='' and @ussd='']/@param}','${sLang}')}" />
-      <define name="_DEFAULT_ERR" value="#{if('${dbresult}'='-1','err001','${dbresult}')}" />
-      <define name="_REDIRECT_TO_SMS" value="^[Ss][Mm][Ss]$" />
-      <define name="_REDIRECT_TO_CURRENT" value="^[Nn][Oo][Tt][Rr][Ee][Dd][Ii][Rr][Ee][Cc][Tt]$" />
-      <define name="_IF_TRUE" value="^([Tt][Rr][Uu][Ee]|1)$" />
-      <define name="_BYCRM" value="[Bb][Yy][Cc][Rr][Mm]" />
-      <define name="_CURRENT_MODULE" value="#{if('${sModule}'!='','${sModule}','paynet')}" />
-      <define name="_SERVICE_PATH" value="..\..\Config\Service\SERVICE.xml" />
-      <define name="_ALLSERVICE_PATH" value="..\..\Config\Service\All_SERVICE.xml" />
-      <define name="_TARIF_PATH" value="..\..\Config\Tariff\TARIFF_PLANS.xml" />
-      <define name="_COUNTERS_PATH" value="..\..\Config\Service\COUNTERS.xml" />
-      <define name="_DICTIONARY_PATH" value="..\..\Config\GET_DBRESULT.xml" />
-      <define name="_DEALERPORTAL_PATH" value="..\..\Config\Portal\DealerUSSDPortal_01.xml" />
-      <define name="_SERIES_PATH" value="..\..\Config\Service\SERIES.xml" />
-      <define name="_CONFIRM_VALUE" value="confirm" />
-      <define name="_CURRENT_INITIATOR" value="paynet" />
-      <!-- ==========================  SETTINGS   ========================= -->
-   </macros>
-   <template procedureName="ServiceProvisioning" sessionStorage="Memory" sessionLifetime="600" persistent="true">
-      <receiveTemplate>
-         <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(${customer}_${transaction}_${transactiontime})}">
-            <Item customer="${customer}_${service}" />
-            @{store(sCustomer,${customer})}
-            @{store(sAction,2)}
-            @{store(sService,${service})}
-            @{store(sUsername,${username})}
-            @{store(sPassword,${password})}
-            @{store(sLang,pay)}
-            @{store(sTransaction,${transaction})}
-            @{store(sTransactionTime,${transactiontime})}
-            @{store(sModule,_CURRENT_MODULE)}
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate conditionEx="#{'${sUsername}' != 'PAYNET' or '${sPassword}' != 'lz6mv5'}" call="ServiceStringFormat">
-         <set conditionEx="0@{store(sDbresult,${dbresult})}" />
-         <set item="iparam:content" value="Nevernie Login ili Parol" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="false@{store(sInProgress,#{if(number(_GET_SECONDS)-number(${sStartSecond})&lt;number(_SERVICE_TIMETOPROGRESS) and number(_GET_SECONDS)-number(${sStartSecond})&gt;0,'true','false')})}" />
-      <deliveryTemplate conditionEx="false@{store(sServiceCode,#{if(matches('${sInProgress}','_IF_TRUE'),'${sServiceCode}','_SERVICE_CODE')})}" />
-      <deliveryTemplate conditionEx="false@{store(sGroupName,#{if(matches('${sInProgress}','_IF_TRUE'),'${sGroupName}','_SERVICE_GROUPNAME')})}" />
-      <deliveryTemplate conditionEx="false@{store(sParams,_SERVICE_NAME)}" />
-      <deliveryTemplate conditionEx="#{'${dbresult}'!='0'}" call="ServiceStringFormat">
-         <set conditionEx="0@{store(sDbresult,${dbresult})}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'${sServiceCode}'='' or '${sService}'='' or '${sCustomer}'=''}" call="ServiceStringFormat">
-         <set conditionEx="0@{store(sDbresult,329990)}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'${sAction}'=''}" call="ServiceInterrogation">
-         <set item="iparam:customer" value="${sCustomer}" />
-         <set item="iparam:service" value="${sService}" />
-         <set item="iparam:lang" value="_GET_LANG" />
-         <set conditionEx="0@{freeSession}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'${sAction}'='_CONFIRM_VALUE'}" call="ServiceProvisioning_Cnfrm_Step2" />
-      <deliveryTemplate conditionEx="#{matches('${sInProgress}','_IF_TRUE') and '${sServiceCode}'='_SERVICE_CODE' and '${sActParce}'='_SERVICE_COMM_ACTPARCE' and '${sActParce}'!=''}" call="ServiceStringFormat">
-         <set item="iparam:content" value="@{store(sDbresult,alrprogress_${sActParce})}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{matches('${sInProgress}','_IF_TRUE')}" call="ServiceStringFormat">
-         <set item="iparam:content" value="@{store(sDbresult,inprogress_${sActParce})}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{((_SERVICE_CUSTLST_CNT&gt;0 and not(matches('_SERVICE_CUSTLST_ISAVAIL','_IF_TRUE'))) or (_SERVICE_CUSTLST_CNT=0 and matches('_SERVICE_CUSTLST_ISAVAIL','_IF_TRUE'))) and '_SERVICE_CUSTLST_NOTAVAILINFO'!=''}" call="ServiceStringFormat">
-         <set item="iparam:content" value="_SERVICE_CUSTLST_NOTAVAILINFO" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'_GET_TODAY' &gt; '_SERVICE_DATETO'}" call="ServiceStringFormat">
-         <set conditionEx="0@{store(sDbresult,service_notavailable)}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'_GET_TODAY' &lt; '_SERVICE_DATEFROM'}" call="ServiceStringFormat">
-         <set conditionEx="0@{store(sDbresult,service_unavailable)}" />
-         <set conditionEx="0@{store(sParams,_SERVICE_NAME;#{concat(substring('_SERVICE_DATEFROM',7,2),'.',substring('_SERVICE_DATEFROM',5,2),'.',substring('_SERVICE_DATEFROM',1,4))})}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <deliveryTemplate call="ServiceProvisioning_Inter_Step3" />
-      <input>
-         <param name="username" />
-         <param name="password" />
-         <param name="transaction" />
-         <param name="transactiontime" />
-         <param name="customer" />
-         <param name="service" />
-         <param name="action" />
-         <param name="lang" />
-      </input>
-      <output>
-         <param name="content" />
-         <param name="storelog" />
-         <param name="customer" />
-         <param name="service" />
-         <param name="lang" />
-      </output>
-   </template>
-   <template procedureName="ServiceProvisioning_Cnfrm_Step2" sessionStorage="Memory" sessionLifetime="600" persistent="true">
-      <receiveTemplate>
-         <Message type="serviceinterrogation" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-            <Item customer="${sCustomer}">
-               <Service id="_SERVICE_CODE" action="interrogation" />
-            </Item>
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate conditionEx="#{'${dbresult}'='0' and '_SERVICE_CNFR_NAME'!=''}" call="ServiceStringFormat">
-         <set conditionEx="0@{store(sDbresult,_CONFIRM_VALUE__SERVICE_CRMSTATUS)}" />
-         <set conditionEx="0@{store(sParams,_SERVICE_CNFR_NAME)}" />
-         <set item="iparam:content" value="_GET_CONFIRM_SERVICE_RESULT" />
-      </deliveryTemplate>
-      <deliveryTemplate call="ServiceStringFormat">
-         <set conditionEx="0@{store(sDbresult,${dbresult})}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <input>
-         <param name="storelog" />
-      </input>
-      <output>
-         <param name="content" />
-         <param name="storelog" />
-      </output>
-   </template>
-   <template procedureName="ServiceProvisioning_Inter_Step3" sessionStorage="Memory" sessionLifetime="600" persistent="true">
-      <receiveTemplate>
-         <Message type="serviceinterrogation" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-            <Item customer="${sCustomer}">
-               <Service id="${sServiceCode}" action="interrogation" />
-            </Item>
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate conditionEx="false@{store(sActParce,_SERVICE_COMM_ACTPARCE)}" />
-      <deliveryTemplate conditionEx="#{'${dbresult}'!='0' or '${sActParce}'='' or '_SERVICE_COMM_STATUS'='' or '_SERVICE_COMM_ACTION'=''}" call="ServiceStringFormat">
-         <set item="iparam:content" conditionEx="#{'${dbresult}'='0'}" value="@{store(sDbresult,329990)}" />
-         <set item="iparam:content" conditionEx="#{'${dbresult}'!='0'}" value="@{store(sDbresult,${dbresult})}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'_SERVICE_COMM_STATUS'='${subscription}'}" call="ServiceStringFormat">
-         <set conditionEx="0@{store(sDbresult,_SERVICE_COMM_CODE)}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{not(matches('_SERVICE_REDIRECT','_REDIRECT_TO_CURRENT'))  and '_SERVICE_REDIRECT'!=''}" call="ServiceStringFormat" terminating="false">
-         <set conditionEx="0@{store(sDbresult,redirect)}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'_SERVICE_AVAIL_BAL'!='' and not(matches('${sIsBindBalAval}','_IF_TRUE'))}" call="ServiceProvisioningChckBndBal" />
-      <deliveryTemplate conditionEx="#{_SERVICE_SRVBIND_CNT&gt;0 and not(matches('${sIsBindSrvAval}','_IF_TRUE'))}" call="ServiceProvisioningChckBndSrv" />
-      <deliveryTemplate call="ServiceProvisioning_Vrf_Step4" />
-      <input>
-         <param name="storelog" />
-      </input>
-      <output>
-         <param name="content" />
-         <param name="storelog" />
-      </output>
-   </template>
-   <template procedureName="ServiceProvisioningChckBndBal" sessionStorage="Memory" sessionLifetime="600" persistent="true">
-      <receiveTemplate>
-         <Message type="retrievecustomerdata" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-            <Item customer="${sCustomer}" subject="getbalance">
-               <Attribute name="unpayment" value="6" />
-               <Attribute name="requestcountertype" value="0" />
-               <Attribute name="rounding" value="4" />
-            </Item>
-            @{store(sIsBindBalAval,true)}
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate conditionEx="#{'${dbresult}'!='0'}" call="ServiceStringFormat">
-         <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-         <set conditionEx="0@{store(sDbresult,${dbresult})}" />
-         <set conditionEx="0@{store(sIsBindBalAval,false)}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{number(${balanceintpartdotpart} div 100) &lt; _SERVICE_AVAIL_BAL}" call="ServiceStringFormat">
-         <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-         <set conditionEx="0@{store(sDbresult,notavailbalance)}" />
-         <set conditionEx="0@{store(sIsBindBalAval,false)}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{number(${balanceintpartdotpart} div 100)&gt;_SERVICE_AVAIL_BAL and _SERVICE_SRVBIND_CNT&gt;0 and not(matches('${sIsBindSrvAval}','_IF_TRUE'))}" call="ServiceProvisioningChckBndSrv" />
-      <deliveryTemplate conditionEx="#{number(${balanceintpartdotpart} div 100)&gt;_SERVICE_AVAIL_BAL}" call="ServiceProvisioning_Vrf_Step4" />
-      <deliveryTemplate call="ServiceStringFormat">
-         <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-         <set conditionEx="0@{store(sDbresult,329990)}" />
-         <set conditionEx="0@{store(sIsBindBalAval,false)}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <input>
-         <param name="storelog" />
-      </input>
-      <output>
-         <param name="content" />
-         <param name="storelog" />
-      </output>
-   </template>
-   <template procedureName="ServiceProvisioningChckBndSrv" sessionStorage="Memory" sessionLifetime="600" persistent="true">
-      <receiveTemplate>
-         <Message type="serviceinterrogation" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-            @{store(sCnt,#{if('${sCnt}'='',1,number('${sCnt}')+1)})}
-            <Item customer="${sCustomer}">
-               <Service id="_SERVICE_SRVBIND_SRVCODE" action="interrogation" />
-            </Item>
-            @{store(sIsBindSrvAval,true)}
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate conditionEx="#{'${dbresult}'!='0'}" call="ServiceStringFormat">
-         <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-         <set conditionEx="0@{store(sDbresult,${dbresult})}" />
-         <set conditionEx="0@{store(sIsBindSrvAval,false)}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'${subscription}'='_SERVICE_SRVBIND_SUBSR' and '_SERVICE_SRVBIND_INFO'!=''}" call="ServiceStringFormat">
-         <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-         <set conditionEx="0@{store(sIsBindSrvAval,false)}" />
-         <set item="iparam:content" value="_SERVICE_SRVBIND_INFO" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{${sCnt}=_SERVICE_SRVBIND_CNT and ${subscription}=_SERVICE_SRVBIND_SUBSR}" call="ServiceProvisioning_Vrf_Step4">
-         <set conditionEx="0@{store(sRequi,#{if('${sRequi}'='','_SERVICE_SRVBIND_STORE','${sRequi};_SERVICE_SRVBIND_STORE')})}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{${sCnt}=_SERVICE_SRVBIND_CNT and ${subscription}!=_SERVICE_SRVBIND_SUBSR}" call="ServiceProvisioning_Vrf_Step4" />
-      <deliveryTemplate conditionEx="#{'${subscription}'!='_SERVICE_SRVBIND_SUBSR'}" call="ServiceProvisioningChckBndSrv" />
-      <deliveryTemplate conditionEx="#{'${subscription}'='_SERVICE_SRVBIND_SUBSR'}" call="ServiceProvisioningChckBndSrv">
-         <set conditionEx="0@{store(sRequi,#{if('${sRequi}'='','_SERVICE_SRVBIND_STORE','${sRequi};_SERVICE_SRVBIND_STORE')})}" />
-      </deliveryTemplate>
-      <deliveryTemplate call="ServiceStringFormat">
-         <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-         <set conditionEx="0@{store(sDbresult,329990)}" />
-         <set conditionEx="0@{store(sIsBindSrvAval,false)}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <input>
-         <param name="storelog" />
-      </input>
-      <output>
-         <param name="content" />
-         <param name="storelog" />
-      </output>
-   </template>
-   <template procedureName="ServiceProvisioning_Vrf_Step4" sessionStorage="Memory" sessionLifetime="600" persistent="true">
-      <receiveTemplate>
-         <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-            <Item customer="${sCustomer}">
-               <Attribute name="checkivrservice" value="0" />
-               <Attribute name="checkblocks" value="1" />
-            </Item>
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate conditionEx="#{('${customerblocks}'!='' or '${dbresult}'='320347') and matches('_SERVICE_CHECKBLOCK','_IF_TRUE')}" call="ServiceStringFormat">
-         <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-         <set conditionEx="0@{store(sDbresult,_GET_AFTER_VERIFY_DBRESULT)}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'${dbresult}'!='0' and '${dbresult}'!='320347'}" call="ServiceStringFormat">
-         <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-         <set conditionEx="0@{store(sDbresult,${dbresult})}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{((_SERVICE_TP_CNT&gt;0 and not(matches('_SERVICE_TP_ISAVAIL','_IF_TRUE'))) or (_SERVICE_TP_CNT=0 and matches('_SERVICE_TP_ISAVAIL','_IF_TRUE'))) and '_SERVICE_TP_NOTAVALINFO'!=''}" call="ServiceStringFormat">
-         <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-         <set conditionEx="0@{store(sParams,_SERVICE_NAME;_TARIFF_CURRENT_NAME)}" />
-         <set item="iparam:content" value="_SERVICE_TP_NOTAVALINFO" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'${sGroupName}'='BMS'}" call="ServiceProvisioning_BMS_Step6" />
-      <deliveryTemplate conditionEx="#{'${sGroupName}'='BLOCKS'}" call="ServiceProvisioning_Block_Step6" />
-      <deliveryTemplate call="ServiceProvisioning_Order_Step5" />
-      <input>
-         <param name="storelog" />
-      </input>
-      <output>
-         <param name="content" />
-         <param name="storelog" />
-      </output>
-   </template>
-   <template procedureName="ServiceProvisioning_Order_Step5" sessionStorage="Memory" sessionLifetime="600" persistent="true">
-      <receiveTemplate>
-         <Message type="serviceorder" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-            <Item customer="${sCustomer}">
-               <Service id="${sServiceCode}" action="_SERVICE_COMM_ACTION" class="0" />
-            </Item>
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate call="ServiceStringFormat">
-         <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-         <set item="iparam:content" conditionEx="#{'${dbresult}'='0'}" value="@{store(sDbresult,success_${sActParce})}" />
-         <set item="iparam:content" conditionEx="#{'${dbresult}'!='0'}" value="@{store(sDbresult,${dbresult})}" />
-      </deliveryTemplate>
-      <input>
-         <param name="storelog" />
-      </input>
-      <output>
-         <param name="content" />
-         <param name="storelog" />
-      </output>
-   </template>
-   <template procedureName="FillActivatedPackage" handler="DBCON_02_01" sessionStorage="Memory" sessionLifetime="600" persistent="true">
-      <receiveTemplate>
-         <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-            <Item procedureName="external_supplier.fill_activated_packages">
-               <Attribute name="p_msisdn" type="STRING" value="${sCustomer}" />
-               <Attribute name="p_supplier" type="STRING" value="PAYNET" />
-               <Attribute name="p_service" type="STRING" value="${sServiceCode}" />
-               <Attribute name="p_transaction" type="STRING" value="${sTransaction}" />
-               <Attribute name="p_transaction_time" type="STRING" value="${sTransactionTime}" />
-               <Attribute name="result" type="out:STRING" />
-            </Item>
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate>
-         <set item="oparam:result" value="1" />
-         <set item="oparam:customer" value="${sCustomer}" />
-      </deliveryTemplate>
-      <input>
-         <param name="storelog" />
-      </input>
-      <output>
-         <param name="customer" value="" />
-         <param name="result" />
-      </output>
-   </template>
-   <template procedureName="ServiceProvisioning_Block_Step6" sessionStorage="Memory" sessionLifetime="600" persistent="true">
-      <receiveTemplate>
-         <Message type="serviceorder" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-            <Item customer="${sCustomer}">
-               <Service id="blockphone" action="4">
-                  <Attribute name="state" value="_SERVICE_COMM_STATUS" />
-                  <Attribute name="start" value="#{substring('@{now}',1,10)}" />
-               </Service>
-            </Item>
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate call="ServiceStringFormat">
-         <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-         <set item="iparam:content" conditionEx="#{'${dbresult}'='0'}" value="@{store(sDbresult,success_${sActParce})}" />
-         <set item="iparam:content" conditionEx="#{'${dbresult}'!='0'}" value="@{store(sDbresult,${dbresult})}" />
-      </deliveryTemplate>
-      <input>
-         <param name="storelog" />
-      </input>
-      <output>
-         <param name="content" />
-         <param name="storelog" />
-      </output>
-   </template>
-   <template procedureName="ServiceProvisioning_BMS_Step6" sessionStorage="Memory" sessionLifetime="600" persistent="true">
-      <receiveTemplate>
-         <Message type="orderbonusgiftrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-            <Item customer="${sCustomer}">
-               <Attribute name="giftcode" value="${sServiceCode}" />
-            </Item>
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate call="ServiceStringFormat">
-         <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-         <set item="iparam:content" conditionEx="#{'${dbresult}'='0'}" value="@{store(sDbresult,success_${sActParce})}" />
-         <set item="iparam:content" conditionEx="#{'${dbresult}'!='0'}" value="@{store(sDbresult,${dbresult})}" />
-      </deliveryTemplate>
-      <input>
-         <param name="storelog" />
-      </input>
-      <output>
-         <param name="content" />
-         <param name="storelog" />
-      </output>
-   </template>
-   <template procedureName="ServiceInterrogation" sessionStorage="Memory" sessionLifetime="300">
-      <receiveTemplate>
-         <Message type="getlanguage" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(SrvInter_${customer})}">
-            <Item customer="${customer}" />
-            @{store(sCustomer,${customer})}
-            @{store(sService,${service})}
-            @{store(sServiceCode,_SERVICE_CODE)}
-            @{store(sGroupName,_SERVICE_GROUPNAME)}
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate conditionEx="false@{store(sLang,_INLANGUAGE)}" />
-      <deliveryTemplate conditionEx="false@{store(sParams,_SERVICE_NAME)}" />
-      <deliveryTemplate conditionEx="#{'${dbresult}'!='0'}" call="ServiceStringFormat">
-         <set conditionEx="0@{store(sDbresult,${dbresult})}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'${sServiceCode}'='' or '${sService}'='' or '${sCustomer}'=''}" call="ServiceStringFormat">
-         <set conditionEx="0@{store(sDbresult,329990)}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{((_SERVICE_CUSTLST_CNT&gt;0 and not(matches('_SERVICE_CUSTLST_ISAVAIL','_IF_TRUE'))) or (_SERVICE_CUSTLST_CNT=0 and matches('_SERVICE_CUSTLST_ISAVAIL','_IF_TRUE'))) and '_SERVICE_CUSTLST_NOTAVAILINFO'!=''}" call="ServiceStringFormat">
-         <set item="iparam:content" value="_SERVICE_CUSTLST_NOTAVAILINFO" />
-      </deliveryTemplate>
-      <deliveryTemplate call="ServiceInterrogation_Step2" />
-      <input>
-         <param name="customer" />
-         <param name="service" />
-         <param name="lang" />
-      </input>
-      <output>
-         <param name="content" />
-         <param name="storelog" />
-      </output>
-   </template>
-   <template procedureName="ServiceInterrogation_Step2" sessionStorage="Memory" sessionLifetime="300" persistent="false">
-      <receiveTemplate>
-         <Message type="serviceinterrogation" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-            <Item customer="${sCustomer}">
-               <Service id="${sServiceCode}" action="interrogation" />
-            </Item>
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate call="ServiceStringFormat">
-         <set item="iparam:content" conditionEx="#{'${dbresult}'='0'}" value="@{store(sDbresult,service__SERVICE_CRMSTATUS)}" />
-         <set item="iparam:content" conditionEx="#{'${dbresult}'!='0'}" value="@{store(sDbresult,${dbresult})}" />
-      </deliveryTemplate>
-      <input>
-         <param name="storelog" />
-      </input>
-      <output>
-         <param name="content" />
-         <param name="storelog" />
-      </output>
-   </template>
-   <template procedureName="ServiceStringFormat" sessionStorage="Memory" sessionLifetime="300">
-      <receiveTemplate>
-         <Message type="stringformat" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-            <Item customer="${sCustomer}">
-               <Attribute name="stringformat" value="#{if('${Content}'='','_GET_SERVICE_RESULT','${Content}')}@{store(SlowAsync,)}" />
-               <Attribute name="params" value="${sParams}" />
-               <Attribute name="split" value=";" />
-            </Item>
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate conditionEx="#{'${sDbresult}'='success_${sActParce}'}" call="FillActivatedPackage" terminating="false" />
-      <deliveryTemplate conditionEx="#{not(matches('${sInProgress}','_IF_TRUE')) and ('${sDbresult}'='redirect' or matches('${SlowAsync}','_IF_TRUE'))}">
-         <set conditionEx="0@{store(sInProgress,true)}" />
-         <set conditionEx="0@{store(sStartSecond,_GET_SECONDS)}" />
-         <set item="oparam:result" value="${no-escape:result}" />
-         <set item="oparam:customer" value="${customer}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="false@{store(sIsFreeSession,#{if(number(_SERVICE_TIMETOPROGRESS)&gt;0,'false','true')})}" />
-      <deliveryTemplate conditionEx="#{matches('${sInProgress}','_IF_TRUE') and matches('_SERVICE_REDIRECT','_REDIRECT_TO_SMS') and not(matches('${sDbresult}','inprogress_|alrprogress_|_CONFIRM_VALUE|inprogress'))}" connector="_SMSCON_1" />
-      <deliveryTemplate conditionEx="#{'${dbresult}'='0' and matches('${sDbresult}','inprogress_|alrprogress_|_CONFIRM_VALUE|inprogress')}">
-         <set item="oparam:result" value="${no-escape:result}" />
-         <set item="oparam:customer" value="${customer}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'${dbresult}'='0' and (not(matches('${sDbresult}','success')) or matches('${sIsFreeSession}','_IF_TRUE'))}">
-         <set item="oparam:result" value="${no-escape:result}" />
-         <set item="oparam:customer" value="${customer}" />
-         <set conditionEx="0@{freeSession}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'${dbresult}'='0' and not(matches('${sIsFreeSession}','_IF_TRUE'))}">
-         <set conditionEx="0@{store(sStartSecond,_GET_SECONDS)}" />
-         <set item="oparam:result" value="${no-escape:result}" />
-         <set item="oparam:customer" value="${customer}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'${customer}'!='' and matches('@{SessionExists(${session_id})}','_IF_TRUE')}">
-         <set conditionEx="0@{store(sDbresult,_DEFAULT_ERR)}" />
-         <set item="oparam:result" value="_GET_DBRESULT" />
-         <set item="oparam:customer" value="${customer}" />
-         <set conditionEx="0@{freeSession}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="true@{freeSession}" dropReply="true" />
-      <input>
-         <param name="content" />
-         <param name="customer" />
-         <param name="storelog" />
-      </input>
-      <output>
-         <param name="customer" value="" />
-         <param name="result" />
-      </output>
-   </template>
-   <template procedureName="DB_AddRemoveService" persistent="true">
-      <receiveTemplate>
-         <Message type="bundleprovision" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{newGuid}">
-            <Item customer="${customer}">
-               <Service id="${servicecode}" action="#{if('${serviceaction}'='2','add',if('${serviceaction}'='3','remove',-1))}" needtariffication="1" enddate="${enddate}" informOnImpossibility="${informOnImpossibility}" sourcetypeid="${sourcetypeid}" userid="${userid}" />
-            </Item>
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate>
-         <set item="oparam:RESULT" value="${dbresult}" />
-      </deliveryTemplate>
-      <input>
-         <param name="customer" />
-         <param name="servicecode" value="" />
-         <param name="serviceaction" value="-1" />
-         <param name="needtariffication" value="-1" />
-         <param name="enddate" value="00.00.01 01.01.2099" />
-         <param name="informOnImpossibility" value="-1" />
-         <param name="sourcetypeid" value="1" />
-         <param name="userid" value="1" />
-      </input>
-      <output>
-         <param name="RESULT" value="-1" />
-      </output>
-   </template>
-   <template procedureName="GetInfo" persistent="false">
-      <receiveTemplate>
-         <Message type="convertencoding" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(@{newGuid})}">
-            <Item customer="${customer}">
-               <Content value="${message}" />
-               <Sender value="${sender}" />
-               <Recipient value="${recipient}" />
-            </Item>
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate terminating="false">
-         <set item="oparam:result" value="0" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'#{string-length('${Sender}')}'='12'}" connector="_SMSCON_ISSA" />
-      <deliveryTemplate conditionEx="#{matches('${Sender}','[Uu][Ss][Ss][Dd]')}" connector="_USSD_1" />
-      <deliveryTemplate connector="_SMSCON_1" />
-      <input>
-         <param name="sender" />
-         <param name="recipient" />
-         <param name="message" />
-      </input>
-      <output>
-         <param name="result" />
-      </output>
-   </template>
-   <template procedureName="TestRequest" sessionStorage="Memory" sessionLifetime="20" persistent="false">
-      <receiveTemplate>
-         <Message type="getlanguage" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(@{newGuid})}">
-            <Item customer="">
-               <Content value="${message}" />
-            </Item>
-            @{store(sTest,${message})}
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate conditionEx="false@{store(sLang,_INLANGUAGE)}" />
-      <deliveryTemplate conditionEx="#{'${sTest}'='test12345'}">
-         <set item="oparam:TEST1" value="ERR_1" />
-         <set item="oparam:TEST2" value="${sTest}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'${sTest}'='test1' or '${sTest}'='test2'}">
-         <set item="oparam:TEST1" value="#{if('#{document('temp\1.xml')/Test/Item[@name='${sTest}']/@result}'!='','#{document('temp\1.xml')/Test/Item[@name='${sTest}']/@result}','ERR_2')}" />
-         <set item="oparam:TEST2" value="${sTest}" />
-      </deliveryTemplate>
-      <deliveryTemplate>
-         <set item="oparam:TEST1" value="1=#{document('temp\1.xml')/Test/Item[@name='test1']/@result} 2=#{document('temp\1.xml')/Test/Item[@name='test2']/@result}" />
-         <set item="oparam:TEST2" value="${sTest}" />
-      </deliveryTemplate>
-      <input>
-         <param name="message" />
-      </input>
-      <output>
-         <param name="TEST1" />
-         <param name="TEST2" />
-      </output>
-   </template>
-   <template procedureName="TransactionStatus" handler="DBCON_02_01" sessionStorage="Memory" sessionLifetime="300" persistent="true">
-      <receiveTemplate>
-         <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(${customer}_${transaction}_${transactiontime})}">
-            <Item procedureName="transaction_status">
-               <Attribute name="p_transaction" type="STRING" value="${transaction}" />
-               <Attribute name="p_transaction_time" type="STRING" value="${transactiontime}" />
-               <Attribute name="result" type="out:STRING" />
-            </Item>
-            @{store(sUsername,${username})}
-            @{store(sPassword,${password})}
-            @{store(sLang,pay)}
-            @{store(sModule,_CURRENT_MODULE)}
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate conditionEx="#{'${sUsername}' != 'PAYNET' or '${sPassword}' != 'lz6mv5'}" call="StringFormatTransactionStatus">
-         <set conditionEx="0@{store(sDbresult,${dbresult})}" />
-         <set item="iparam:content" value="Nevernie Login ili Parol" />
-      </deliveryTemplate>
-      <deliveryTemplate call="StringFormatTransactionStatus">
-         <set item="iparam:content" value="#{replace('${result}','RESULT:(\d{4})_MSISDN:(.+|)_DATE:(.+|)','$1')}" />
-         <set item="iparam:customer" value="#{replace('${result}','RESULT:(\d{4})_MSISDN:(.+|)_DATE:(.+|)','$2')}" />
-         <set item="iparam:datecomplete" value="#{replace('${result}','RESULT:(\d{4})_MSISDN:(.+|)_DATE:(.+|)','$3')}" />
-      </deliveryTemplate>
-      <input>
-         <param name="username" />
-         <param name="password" />
-         <param name="transaction" />
-         <param name="transactiontime" />
-         <param name="customer" />
-         <param name="service" />
-         <param name="action" />
-         <param name="lang" />
-      </input>
-      <output>
-         <param name="content" />
-         <param name="datecomplete" />
-         <param name="customer" />
-      </output>
-   </template>
-   <template procedureName="StringFormatTransactionStatus" sessionStorage="Memory" sessionLifetime="300" persistent="true">
-      <receiveTemplate>
-         <Message type="stringformat" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-            <Item customer="${customer}">
-               <Attribute name="stringformat" value="#{if('${Content}'='','_GET_SERVICE_RESULT','${Content}')}@{store(SlowAsync,)}" />
-               <Attribute name="params" value="${sParams}" />
-               <Attribute name="split" value=";" />
-            </Item>
-            @{store(sDatecomplete,${datecomplete})}
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate conditionEx="#{not(matches('${sInProgress}','_IF_TRUE')) and ('${sDbresult}'='redirect' or matches('${SlowAsync}','_IF_TRUE'))}">
-         <set conditionEx="0@{store(sInProgress,true)}" />
-         <set conditionEx="0@{store(sStartSecond,_GET_SECONDS)}" />
-         <set item="oparam:result" value="${no-escape:result}" />
-         <set item="oparam:customer" value="${customer}" />
-         <set item="oparam:datecomplete" value="${sDatecomplete}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="false@{store(sIsFreeSession,#{if(number(_SERVICE_TIMETOPROGRESS)&gt;0,'false','true')})}" />
-      <deliveryTemplate conditionEx="#{matches('${sInProgress}','_IF_TRUE') and matches('_SERVICE_REDIRECT','_REDIRECT_TO_SMS') and not(matches('${sDbresult}','inprogress_|alrprogress_|_CONFIRM_VALUE|inprogress'))}" connector="_SMSCON_1" />
-      <deliveryTemplate conditionEx="#{'${dbresult}'='0' and matches('${sDbresult}','inprogress_|alrprogress_|_CONFIRM_VALUE|inprogress')}">
-         <set item="oparam:result" value="${no-escape:result}" />
-         <set item="oparam:customer" value="${customer}" />
-         <set item="oparam:datecomplete" value="${sDatecomplete}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'${dbresult}'='0' and (not(matches('${sDbresult}','success')) or matches('${sIsFreeSession}','_IF_TRUE'))}">
-         <set item="oparam:result" value="${no-escape:result}" />
-         <set item="oparam:customer" value="${customer}" />
-         <set item="oparam:datecomplete" value="${sDatecomplete}" />
-         <set conditionEx="0@{freeSession}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'${dbresult}'='0' and not(matches('${sIsFreeSession}','_IF_TRUE'))}">
-         <set conditionEx="0@{store(sStartSecond,_GET_SECONDS)}" />
-         <set item="oparam:result" value="${no-escape:result}" />
-         <set item="oparam:customer" value="${customer}" />
-         <set item="oparam:datecomplete" value="${sDatecomplete}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'${customer}'!='' and matches('@{SessionExists(${session_id})}','_IF_TRUE')}">
-         <set conditionEx="0@{store(sDbresult,_DEFAULT_ERR)}" />
-         <set item="oparam:result" value="_GET_DBRESULT" />
-         <set item="oparam:customer" value="${customer}" />
-         <set item="oparam:datecomplete" value="${sDatecomplete}" />
-         <set conditionEx="0@{freeSession}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="true@{freeSession}" dropReply="true" />
-      <input>
-         <param name="content" />
-         <param name="customer" />
-         <param name="datecomplete" />
-      </input>
-      <output>
-         <param name="customer" />
-         <param name="result" />
-         <param name="datecomplete" />
-      </output>
-   </template>
-   <template procedureName="TransactionStatusTp" handler="DBCON_02_01" sessionStorage="Memory" sessionLifetime="300" persistent="false">
-      <receiveTemplate>
-         <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(${customer}_${transaction}_${transactiontime})}">
-            <Item procedureName="transaction_status_tp">
-               <Attribute name="p_transaction" type="STRING" value="${transaction}" />
-               <Attribute name="p_transaction_time" type="STRING" value="${transactiontime}" />
-               <Attribute name="result" type="out:STRING" />
-            </Item>
-            @{store(sUsername,${username})}
-            @{store(sPassword,${password})}
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate conditionEx="#{'${sUsername}' != 'PAYNET' or '${sPassword}' != 'lz6mv5'}" call="StringFormatTransactionStatus">
-         <set conditionEx="0@{store(sDbresult,${dbresult})}" />
-         <set item="iparam:content" value="Nevernie Login ili Parol" />
-      </deliveryTemplate>
-      <deliveryTemplate call="StringFormatTransactionStatusTp">
-         <set item="iparam:content" value="#{replace('${result}','RESULT:(\d{4})_MSISDN:(.+|)_DATE:(.+|)_CURRENTTP:(.+|)_NOTFREE:(.+|)','$1')}" />
-         <set item="iparam:customer" value="#{replace('${result}','RESULT:(\d{4})_MSISDN:(.+|)_DATE:(.+|)_CURRENTTP:(.+|)_NOTFREE:(.+|)','$2')}" />
-         <set item="iparam:datecomplete" value="#{replace('${result}','RESULT:(\d{4})_MSISDN:(.+|)_DATE:(.+|)_CURRENTTP:(.+|)_NOTFREE:(.+|)','$3')}" />
-         <set item="iparam:currenttp" value="#{replace('${result}','RESULT:(\d{4})_MSISDN:(.+|)_DATE:(.+|)_CURRENTTP:(.+|)_NOTFREE:(.+|)','$4')}" />
-         <set item="iparam:notfree" value="#{replace('${result}','RESULT:(\d{4})_MSISDN:(.+|)_DATE:(.+|)_CURRENTTP:(.+|)_NOTFREE:(.+|)','$5')}" />
-      </deliveryTemplate>
-      <input>
-         <param name="username" />
-         <param name="password" />
-         <param name="transaction" />
-         <param name="transactiontime" />
-         <param name="customer" />
-         <param name="service" />
-         <param name="action" />
-         <param name="lang" />
-      </input>
-      <output>
-         <param name="content" />
-         <param name="datecomplete" />
-         <param name="customer" />
-         <param name="currenttp" />
-         <param name="notfree" />
-      </output>
-   </template>
-   <template procedureName="StringFormatTransactionStatusTp" sessionStorage="Memory" sessionLifetime="300">
-      <receiveTemplate>
-         <Message type="stringformat" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-            <Item customer="${customer}">
-               <Attribute name="stringformat" value="#{if('${Content}'='','_GET_SERVICE_RESULT','${Content}')}@{store(SlowAsync,)}" />
-               <Attribute name="params" value="${sParams}" />
-               <Attribute name="split" value=";" />
-            </Item>
-            @{store(sDatecomplete,${datecomplete})}
-            @{store(sCurrenttp,${currenttp})}
-            @{store(sNotfree,${notfree})}
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate conditionEx="#{not(matches('${sInProgress}','_IF_TRUE')) and ('${sDbresult}'='redirect' or matches('${SlowAsync}','_IF_TRUE'))}">
-         <set conditionEx="0@{store(sInProgress,true)}" />
-         <set conditionEx="0@{store(sStartSecond,_GET_SECONDS)}" />
-         <set item="oparam:result" value="${no-escape:result}" />
-         <set item="oparam:customer" value="${customer}" />
-         <set item="oparam:datecomplete" value="${sDatecomplete}" />
-         <set item="oparam:currenttp" value="${sCurrenttp}" />
-         <set item="oparam:notfree" value="${sNotfree}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="false@{store(sIsFreeSession,#{if(number(_SERVICE_TIMETOPROGRESS)&gt;0,'false','true')})}" />
-      <deliveryTemplate conditionEx="#{matches('${sInProgress}','_IF_TRUE') and matches('_SERVICE_REDIRECT','_REDIRECT_TO_SMS') and not(matches('${sDbresult}','inprogress_|alrprogress_|_CONFIRM_VALUE|inprogress'))}" connector="_SMSCON_1" />
-      <deliveryTemplate conditionEx="#{'${dbresult}'='0' and matches('${sDbresult}','inprogress_|alrprogress_|_CONFIRM_VALUE|inprogress')}">
-         <set item="oparam:result" value="${no-escape:result}" />
-         <set item="oparam:customer" value="${customer}" />
-         <set item="oparam:datecomplete" value="${sDatecomplete}" />
-         <set item="oparam:currenttp" value="${sCurrenttp}" />
-         <set item="oparam:notfree" value="${sNotfree}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'${dbresult}'='0' and (not(matches('${sDbresult}','success')) or matches('${sIsFreeSession}','_IF_TRUE'))}">
-         <set item="oparam:result" value="${no-escape:result}" />
-         <set item="oparam:customer" value="${customer}" />
-         <set item="oparam:datecomplete" value="${sDatecomplete}" />
-         <set item="oparam:currenttp" value="${sCurrenttp}" />
-         <set item="oparam:notfree" value="${sNotfree}" />
-         <set conditionEx="0@{freeSession}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'${dbresult}'='0' and not(matches('${sIsFreeSession}','_IF_TRUE'))}">
-         <set conditionEx="0@{store(sStartSecond,_GET_SECONDS)}" />
-         <set item="oparam:result" value="${no-escape:result}" />
-         <set item="oparam:customer" value="${customer}" />
-         <set item="oparam:datecomplete" value="${sDatecomplete}" />
-         <set item="oparam:currenttp" value="${sCurrenttp}" />
-         <set item="oparam:notfree" value="${sNotfree}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'${customer}'!='' and matches('@{SessionExists(${session_id})}','_IF_TRUE')}">
-         <set conditionEx="0@{store(sDbresult,_DEFAULT_ERR)}" />
-         <set item="oparam:result" value="_GET_DBRESULT" />
-         <set item="oparam:customer" value="${customer}" />
-         <set item="oparam:datecomplete" value="${sDatecomplete}" />
-         <set item="oparam:currenttp" value="${sCurrenttp}" />
-         <set item="oparam:notfree" value="${sNotfree}" />
-         <set conditionEx="0@{freeSession}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="true@{freeSession}" dropReply="true" />
-      <input>
-         <param name="content" />
-         <param name="customer" />
-         <param name="datecomplete" />
-         <param name="currenttp" />
-         <param name="notfree" />
-      </input>
-      <output>
-         <param name="customer" />
-         <param name="result" />
-         <param name="datecomplete" />
-         <param name="currenttp" />
-         <param name="notfree" />
-      </output>
-   </template>
-   <template procedureName="TransactionPeriodicalCheck" handler="DBCON_02_01" sessionStorage="Memory" sessionLifetime="300" persistent="true">
-      <receiveTemplate>
-         <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(PeriodicalCheck_${begintime}_${endtime})}">
-            <Item procedureName="transaction_check_select">
-               <Attribute name="p_begin_time" type="STRING" value="${begintime}" />
-               <Attribute name="p_end_time" type="STRING" value="${endtime}" />
-               <Attribute name="result" type="out:STRING" />
-            </Item>
-            @{store(sUsername,${username})}
-            @{store(sPassword,${password})}
-            @{store(sLang,pay)}
-            @{store(sModule,_CURRENT_MODULE)}
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate conditionEx="#{'${sUsername}' != 'PAYNET' or '${sPassword}' != 'lz6mv5'}" call="StringFormatTransactionPeriodicalCheck">
-         <set conditionEx="0@{store(sDbresult,${dbresult})}" />
-         <set item="iparam:content" value="Nevernie Login ili Parol" />
-      </deliveryTemplate>
-      <deliveryTemplate call="StringFormatTransactionPeriodicalCheck">
-         <set item="iparam:content" value="${result}" />
-      </deliveryTemplate>
-      <input>
-         <param name="username" />
-         <param name="password" />
-         <param name="begintime" />
-         <param name="endtime" />
-      </input>
-      <output>
-         <param name="content" />
-      </output>
-   </template>
-   <template procedureName="StringFormatTransactionPeriodicalCheck" sessionStorage="Memory" sessionLifetime="300" persistent="true">
-      <receiveTemplate>
-         <Message type="stringformat" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-            <Item customer="${customer}">
-               <Attribute name="stringformat" value="#{if('${Content}'='','_GET_SERVICE_RESULT','${Content}')}@{store(SlowAsync,)}" />
-               <Attribute name="params" value="${sParams}" />
-               <Attribute name="split" value=";" />
-            </Item>
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate conditionEx="#{not(matches('${sInProgress}','_IF_TRUE')) and ('${sDbresult}'='redirect' or matches('${SlowAsync}','_IF_TRUE'))}">
-         <set conditionEx="0@{store(sInProgress,true)}" />
-         <set conditionEx="0@{store(sStartSecond,_GET_SECONDS)}" />
-         <set item="oparam:result" value="${no-escape:result}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="false@{store(sIsFreeSession,#{if(number(_SERVICE_TIMETOPROGRESS)&gt;0,'false','true')})}" />
-      <deliveryTemplate conditionEx="#{matches('${sInProgress}','_IF_TRUE') and matches('_SERVICE_REDIRECT','_REDIRECT_TO_SMS') and not(matches('${sDbresult}','inprogress_|alrprogress_|_CONFIRM_VALUE|inprogress'))}" connector="_SMSCON_1" />
-      <deliveryTemplate conditionEx="#{'${dbresult}'='0' and matches('${sDbresult}','inprogress_|alrprogress_|_CONFIRM_VALUE|inprogress')}">
-         <set item="oparam:result" value="${no-escape:result}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'${dbresult}'='0' and (not(matches('${sDbresult}','success')) or matches('${sIsFreeSession}','_IF_TRUE'))}">
-         <set item="oparam:result" value="${no-escape:result}" />
-         <set conditionEx="0@{freeSession}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'${dbresult}'='0' and not(matches('${sIsFreeSession}','_IF_TRUE'))}">
-         <set conditionEx="0@{store(sStartSecond,_GET_SECONDS)}" />
-         <set item="oparam:result" value="${no-escape:result}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'${customer}'!='' and matches('@{SessionExists(${session_id})}','_IF_TRUE')}">
-         <set conditionEx="0@{store(sDbresult,_DEFAULT_ERR)}" />
-         <set item="oparam:result" value="_GET_DBRESULT" />
-         <set conditionEx="0@{freeSession}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="true@{freeSession}" dropReply="true" />
-      <input>
-         <param name="content" />
-      </input>
-      <output>
-         <param name="result" />
-      </output>
-   </template>
-   <template procedureName="ChangeTariffPlan" sessionStorage="Memory" sessionLifetime="600" persistent="true">
-      <receiveTemplate>
-         <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(${customer}_${transaction}_${transactiontime})}">
-            <Item customer="${customer}" />
-            @{store(sCustomer,${customer})}
-            @{store(sNewTariffPlan,${service})}
-            @{store(sModule,_CURRENT_MODULE)}
-            @{store(sUsername,${username})}
-            @{store(sPassword,${password})}
-            @{store(sLang,pay)}
-            @{store(sTransaction,${transaction})}
-            @{store(sTransactionTime,${transactiontime})}
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate conditionEx="false@{store(sInProgress,#{if(number(_GET_SECONDS)-number(${sStartSecond})&lt;number(_TARIFF_TIMETOPROGRESS) and number(_GET_SECONDS)-number(${sStartSecond})&gt;0,'true','false')})}" />
-      <deliveryTemplate conditionEx="false@{store(sTariffIvrCode,#{if(matches('${sInProgress}','_IF_TRUE'),'${sTariffIvrCode}','_TARIFF_IVRCODE')})}" />
-      <deliveryTemplate conditionEx="false@{store(sGroupName,#{if(matches('${sInProgress}','_IF_TRUE'),'${sGroupName}','PAYNET')})}" />
-      <deliveryTemplate conditionEx="false@{store(sParams,_TARIFF_NAME)}" />
-      <deliveryTemplate conditionEx="#{'${dbresult}'!='0'}" call="TariffPlanStringFormat">
-         <set conditionEx="0@{store(sDbresult,${dbresult})}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'${sTariffIvrCode}'='' or '${sNewTariffPlan}'='' or '${sCustomer}'=''}" call="TariffPlanStringFormat">
-         <set conditionEx="0@{store(sDbresult,329990)}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{matches('${sNewTariffPlan}','_CONFIRM_VALUE')}" call="ChangeTariffPlan_Cnfrm_Step2" />
-      <deliveryTemplate conditionEx="#{matches('${sInProgress}','_IF_TRUE') and '${sTariffIvrCode}'='_TARIFF_IVRCODE'}" call="TariffPlanStringFormat">
-         <set item="iparam:content" value="@{store(sDbresult,alrprogress)}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{matches('${sInProgress}','_IF_TRUE')}" call="TariffPlanStringFormat">
-         <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-         <set conditionEx="0@{store(sDbresult,inprogress)}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{((_TARIFF_CUSTLST_CNT&gt;0 and not(matches('_TARIFF_CUSTLST_ISAVAIL','_IF_TRUE'))) or (_TARIFF_CUSTLST_CNT=0 and matches('_TARIFF_CUSTLST_ISAVAIL','_IF_TRUE'))) and '_TARIFF_CUSTLST_NOTAVAILINFO'!=''}" call="TariffPlanStringFormat">
-         <set item="iparam:content" value="_TARIFF_CUSTLST_NOTAVAILINFO" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'_GET_TODAY' &gt; '_TARIFF_DATETO'}" call="TariffPlanStringFormat">
-         <set conditionEx="0@{store(sDbresult,notavailable)}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'_GET_TODAY' &lt; '_TARIFF_DATEFROM'}" call="TariffPlanStringFormat">
-         <set conditionEx="0@{store(sDbresult,unavailable)}" />
-         <set conditionEx="0@{store(sParams,_TARIFF_NAME;#{concat(substring('_TARIFF_DATEFROM',7,2),'.',substring('_TARIFF_DATEFROM',5,2),'.',substring('_TARIFF_DATEFROM',1,4))})}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <deliveryTemplate call="ChangeTariffPlan_Step3" />
-      <input>
-         <param name="customer" />
-         <param name="service" />
-         <param name="lang" />
-         <param name="username" />
-         <param name="password" />
-         <param name="transaction" />
-         <param name="transactiontime" />
-      </input>
-      <output>
-         <param name="content" />
-         <param name="storelog" />
-      </output>
-   </template>
-   <template procedureName="ChangeTariffPlan_Cnfrm_Step2" sessionStorage="Memory" sessionLifetime="600" persistent="true">
-      <condition>
-         <test item="0" matches="1" />
-      </condition>
-      <receiveTemplate>
-         <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-            <Item customer="${sCustomer}">
-               <Attribute name="checkivrservice" value="1" />
-               <Attribute name="checkblocks" value="0" />
-            </Item>
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate conditionEx="#{'${sTariffIvrCode}'='#{//Message/Item/@tariffplan}'}" call="TariffPlanStringFormat">
-         <set conditionEx="0@{store(sDbresult,alreadyex)}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'${dbresult}'='0' and '_TARIFF_CURRENT_NAME'!=''}" call="TariffPlanStringFormat">
-         <set conditionEx="0@{store(sDbresult,_CONFIRM_VALUE)}" />
-         <set conditionEx="0@{store(sParams,_TARIFF_NAME;_TARIFF_CURRENT_NAME)}" />
-         <set item="iparam:content" value="_GET_CONFIRM_TARIFF_RESULT" />
-      </deliveryTemplate>
-      <deliveryTemplate call="TariffPlanStringFormat">
-         <set conditionEx="0@{store(sDbresult,${dbresult})}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-   </template>
-   <template procedureName="ChangeTariffPlan_Step3" sessionStorage="Memory" sessionLifetime="600" persistent="true">
-      <receiveTemplate>
-         <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-            <Item customer="${sCustomer}">
-               <Attribute name="checkivrservice" value="1" />
-               <Attribute name="checkblocks" value="1" />
-            </Item>
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate conditionEx="0@{store(sCurrentTariff,#{//Message/Item/@tariffplan})}" />
-      <deliveryTemplate call="CheckTPChangeAward" />
-      <input>
-         <param name="storelog" />
-      </input>
-      <output>
-         <param name="content" />
-         <param name="storelog" />
-      </output>
-   </template>
-   <template procedureName="CheckTPChangeAward" handler="DBCON_02_01" sessionStorage="Memory" sessionLifetime="600" persistent="true">
-      <receiveTemplate>
-         <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-            <Item procedureName="paynet_check_tp_award">
-               <Attribute name="p_current_tp" type="STRING" value="${sCurrentTariff}" />
-               <Attribute name="p_new_tp" type="STRING" value="${sNewTariffPlan}" />
-               <Attribute name="result" type="out:STRING" />
-            </Item>
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate conditionEx="0@{store(sNotFree,${result})}" />
-      <deliveryTemplate conditionEx="#{'${result}'='9'}" call="TariffPlanStringFormat">
-         <set conditionEx="0@{store(sDbresult,320400)}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'${sTariffIvrCode}'='${sCurrentTariff}'}" call="TariffPlanStringFormat">
-         <set conditionEx="0@{store(sDbresult,alreadyex)}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{('${customerblocks}'!='' or '${dbresult}'='320347') and matches('_TARIFF_CHECKBLOCK','_IF_TRUE')}" call="TariffPlanStringFormat">
-         <set conditionEx="0@{store(sDbresult,_GET_AFTER_VERIFY_DBRESULT)}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'${dbresult}'!='0' and '${dbresult}'!='320347'}" call="TariffPlanStringFormat">
-         <set conditionEx="0@{store(sDbresult,${dbresult})}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{((_TARIFF_TP_CNT&gt;0 and not(matches('_TARIFF_TP_ISAVAIL','_IF_TRUE'))) or (_TARIFF_TP_CNT=0 and matches('_TARIFF_TP_ISAVAIL','_IF_TRUE'))) and '_TARIFF_TP_NOTAVAILINFO'!=''}" call="TariffPlanStringFormat">
-         <set conditionEx="0@{store(sParams,_TARIFF_NAME;_TARIFF_CURRENT_NAME)}" />
-         <set item="iparam:content" value="_TARIFF_TP_NOTAVAILINFO" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{not(matches('_TARIFF_REDIRECT','_REDIRECT_TO_CURRENT')) and '_TARIFF_REDIRECT'!=''}" call="TariffPlanStringFormat" terminating="false">
-         <set conditionEx="0@{store(sDbresult,redirect)}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'_TARIFF_AVAIL_BAL'!='' and not(matches('${sIsBindBalAval}','_IF_TRUE'))}" call="ChangeTariffPlanCheckBindingBal" />
-      <deliveryTemplate conditionEx="#{_TARIFF_SRVBIND_CNT&gt;0 and not(matches('${sIsBindSrvAval}','_IF_TRUE'))}" call="ChangeTariffPlanCheckSrvBinding" />
-      <deliveryTemplate call="ChangeTariffPlan_Step4" />
-      <input>
-         <param name="storelog" />
-      </input>
-      <output>
-         <param name="content" />
-         <param name="storelog" />
-      </output>
-   </template>
-   <template procedureName="ChangeTariffPlanCheckBindingBal" sessionStorage="Memory" sessionLifetime="600" persistent="true">
-      <receiveTemplate>
-         <Message type="retrievecustomerdata" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-            <Item customer="${sCustomer}" subject="getbalance">
-               <Attribute name="unpayment" value="6" />
-               <Attribute name="requestcountertype" value="0" />
-               <Attribute name="rounding" value="4" />
-            </Item>
-            @{store(sIsBindBalAval,true)}
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate conditionEx="#{'${dbresult}'!='0'}" call="TariffPlanStringFormat">
-         <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-         <set conditionEx="0@{store(sDbresult,${dbresult})}" />
-         <set conditionEx="0@{store(sIsBindBalAval,false)}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{number(${balanceintpartdotpart} div 100) &lt; _TARIFF_AVAIL_BAL}" call="TariffPlanStringFormat">
-         <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-         <set conditionEx="0@{store(sDbresult,notavailbalance)}" />
-         <set conditionEx="0@{store(sIsBindBalAval,false)}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{number(${balanceintpartdotpart} div 100)&gt;_TARIFF_AVAIL_BAL and _TARIFF_SRVBIND_CNT&gt;0 and not(matches('${sIsBindSrvAval}','_IF_TRUE'))}" call="ChangeTariffPlanCheckSrvBinding" />
-      <deliveryTemplate conditionEx="#{number(${balanceintpartdotpart} div 100)&gt;_TARIFF_AVAIL_BAL}" call="ChangeTariffPlan_Step4">
-         <set item="iparam:customer" value="${sCurrentTariff}_${sNewTariffPlan}" />
-      </deliveryTemplate>
-      <deliveryTemplate call="TariffPlanStringFormat">
-         <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-         <set conditionEx="0@{store(sDbresult,329990)}" />
-         <set conditionEx="0@{store(sIsBindBalAval,false)}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <input>
-         <param name="storelog" />
-      </input>
-      <output>
-         <param name="content" />
-         <param name="storelog" />
-      </output>
-   </template>
-   <template procedureName="ChangeTariffPlanCheckSrvBinding" sessionStorage="Memory" sessionLifetime="600" persistent="true">
-      <receiveTemplate>
-         <Message type="serviceinterrogation" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-            @{store(sCnt,#{if('${sCnt}'='',1,number('${sCnt}')+1)})}
-            <Item customer="${sCustomer}">
-               <Service id="_TARIFF_SRVBIND_SRVCODE" action="interrogation" />
-            </Item>
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate conditionEx="#{'${dbresult}'!='0'}" call="TariffPlanStringFormat">
-         <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-         <set conditionEx="0@{store(sDbresult,${dbresult})}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'${subscription}'='_TARIFF_SRVBIND_SUBSR' and '_TARIFF_SRVBIND_INFO'!=''}" call="TariffPlanStringFormat">
-         <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-         <set item="iparam:content" value="_TARIFF_SRVBIND_INFO" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{${sCnt}=_TARIFF_SRVBIND_CNT and ${subscription}=_TARIFF_SRVBIND_SUBSR}" call="ChangeTariffPlan_Step4">
-         <set conditionEx="0@{store(sRequi,#{if('${sRequi}'='','_TARIFF_SRVBIND_STORE','${sRequi};_TARIFF_SRVBIND_STORE')})}" />
-         <set item="iparam:customer" value="${sCurrentTariff}_${sNewTariffPlan}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{${sCnt}=_TARIFF_SRVBIND_CNT and ${subscription}!=_TARIFF_SRVBIND_SUBSR}" call="ChangeTariffPlan_Step4">
-         <set item="iparam:customer" value="${sCurrentTariff}_${sNewTariffPlan}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'${subscription}'!='_TARIFF_SRVBIND_SUBSR'}" call="ChangeTariffPlanCheckSrvBinding" />
-      <deliveryTemplate conditionEx="#{'${subscription}'='_TARIFF_SRVBIND_SUBSR'}" call="ChangeTariffPlanCheckSrvBinding">
-         <set conditionEx="0@{store(sRequi,#{if('${sRequi}'='','_TARIFF_SRVBIND_STORE','${sRequi};_TARIFF_SRVBIND_STORE')})}" />
-      </deliveryTemplate>
-      <deliveryTemplate call="TariffPlanStringFormat">
-         <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-         <set conditionEx="0@{store(sDbresult,329990)}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <input>
-         <param name="storelog" />
-      </input>
-      <output>
-         <param name="content" />
-         <param name="storelog" />
-      </output>
-   </template>
-   <template procedureName="ChangeTariffPlan_Step4" sessionStorage="Memory" sessionLifetime="600" persistent="true">
-      <receiveTemplate>
-         <Message type="serviceorder" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-            <Item customer="${sCustomer}">
-               <Service id="changetariffplan" action="0" class="${sTariffIvrCode}" />
-            </Item>
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate call="TariffPlanStringFormat">
-         <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-         <set item="iparam:content" conditionEx="#{'${dbresult}'='0'}" value="@{store(sDbresult,success)}" />
-         <set item="iparam:content" conditionEx="#{'${dbresult}'!='0'}" value="@{store(sDbresult,${dbresult})}" />
-      </deliveryTemplate>
-      <input>
-         <param name="storelog" />
-      </input>
-      <output>
-         <param name="content" />
-         <param name="storelog" />
-      </output>
-   </template>
-   <template procedureName="CheckTariffPlan" sessionStorage="Memory" sessionLifetime="300">
-      <receiveTemplate>
-         <Message type="getlanguage" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(ChckTP_${customer})}">
-            <Item customer="${customer}" />
-            @{store(sCustomer,${customer})}
-            @{store(sModule,_CURRENT_MODULE)}
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate conditionEx="false@{store(sLang,_INLANGUAGE)}" />
-      <deliveryTemplate conditionEx="#{'${dbresult}'!='0'}" call="TariffPlanStringFormat">
-         <set conditionEx="0@{store(sDbresult,${dbresult})}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'${sCustomer}'=''}" call="TariffPlanStringFormat">
-         <set conditionEx="0@{store(sDbresult,329990)}" />
-         <set item="iparam:content" value="" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{((_TARIFF_CUSTLST_CNT&gt;0 and not(matches('_TARIFF_CUSTLST_ISAVAIL','_IF_TRUE'))) or (_TARIFF_CUSTLST_CNT=0 and matches('_TARIFF_CUSTLST_ISAVAIL','_IF_TRUE'))) and '_TARIFF_CUSTLST_NOTAVAILINFO'!=''}" call="TariffPlanStringFormat">
-         <set item="iparam:content" value="_TARIFF_CUSTLST_NOTAVAILINFO" />
-      </deliveryTemplate>
-      <deliveryTemplate call="CheckTariffPlan_Step2" />
-      <input>
-         <param name="customer" />
-         <param name="lang" />
-      </input>
-      <output>
-         <param name="content" />
-         <param name="storelog" />
-      </output>
-   </template>
-   <template procedureName="CheckTariffPlan_Step2" sessionStorage="Memory" sessionLifetime="300" persistent="false">
-      <receiveTemplate>
-         <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-            <Item customer="${sCustomer}">
-               <Attribute name="checkivrservice" value="0" />
-               <Attribute name="checkblocks" value="0" />
-            </Item>
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate call="TariffPlanStringFormat">
-         <set conditionEx="0@{store(sTariffIvrCode,${tariffplan})}" />
-         <set conditionEx="0@{store(sGroupName,_TARIFF_GROUPNAME)}" />
-         <set conditionEx="0@{store(sParams,_TARIFF_NAME)}" />
-         <set item="iparam:content" conditionEx="#{'${dbresult}'='0'}" value="@{store(sDbresult,checktp)}" />
-         <set item="iparam:content" conditionEx="#{'${dbresult}'!='0'}" value="@{store(sDbresult,${dbresult})}" />
-      </deliveryTemplate>
-      <input>
-         <param name="storelog" />
-      </input>
-      <output>
-         <param name="content" />
-         <param name="storelog" />
-      </output>
-   </template>
-   <template procedureName="TariffPlanStringFormat" sessionStorage="Memory" sessionLifetime="600" persistent="true">
-      <receiveTemplate>
-         <Message type="stringformat" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-            <Item customer="${sCustomer}">
-               <Attribute name="stringformat" value="#{if('${content}'='','_GET_TARIFF_RESULT','${content}')}@{store(SlowAsync,)}" />
-               <Attribute name="params" value="${sParams}" />
-               <Attribute name="split" value=";" />
-            </Item>
-         </Message>
-      </receiveTemplate>
-      <deliveryTemplate conditionEx="#{not(matches('${sInProgress}','_IF_TRUE')) and ('${sDbresult}'='redirect' or matches('${SlowAsync}','_IF_TRUE'))}">
-         <set conditionEx="0@{store(sInProgress,true)}" />
-         <set conditionEx="0@{store(sStartSecond,_GET_SECONDS)}" />
-         <set item="oparam:result" value="${no-escape:result}" />
-         <set item="oparam:customer" value="${customer}" />
-         <set item="oparam:currenttp" value="${sCurrentTariff}" />
-         <set item="oparam:notfree" value="${sNotFree}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="false@{store(sIsFreeSession,#{if(number(_TARIFF_TIMETOPROGRESS)&gt;0,'false','true')})}" />
-      <deliveryTemplate conditionEx="#{matches('${sInProgress}','_IF_TRUE') and matches('_TARIFF_REDIRECT','_REDIRECT_TO_SMS') and not(matches('${sDbresult}','inprogress|alrprogress|_CONFIRM_VALUE'))}" connector="_SMSCON_1" />
-      <deliveryTemplate conditionEx="#{'${dbresult}'='0' and matches('${sDbresult}','inprogress|alrprogress|_CONFIRM_VALUE')}">
-         <set item="oparam:result" value="${no-escape:result}" />
-         <set item="oparam:customer" value="${customer}" />
-         <set item="oparam:currenttp" value="${sCurrentTariff}" />
-         <set item="oparam:notfree" value="${sNotFree}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'${dbresult}'='0' and (not(matches('${sDbresult}','success')) or matches('${sIsFreeSession}','_IF_TRUE'))}">
-         <set item="oparam:result" value="${no-escape:result}" />
-         <set item="oparam:customer" value="${customer}" />
-         <set item="oparam:currenttp" value="${sCurrentTariff}" />
-         <set item="oparam:notfree" value="${sNotFree}" />
-         <set conditionEx="0@{freeSession}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'${dbresult}'='0' and not(matches('${sIsFreeSession}','_IF_TRUE'))}">
-         <set conditionEx="0@{store(sStartSecond,_GET_SECONDS)}" />
-         <set item="oparam:result" value="${no-escape:result}" />
-         <set item="oparam:customer" value="${customer}" />
-         <set item="oparam:currenttp" value="${sCurrentTariff}" />
-         <set item="oparam:notfree" value="${sNotFree}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="#{'${customer}'!='' and matches('@{SessionExists(${session_id})}','_IF_TRUE')}">
-         <set conditionEx="0@{store(sDbresult,_DEFAULT_ERR)}" />
-         <set item="oparam:result" value="_GET_DBRESULT" />
-         <set item="oparam:customer" value="${customer}" />
-         <set item="oparam:currenttp" value="${sCurrentTariff}" />
-         <set item="oparam:notfree" value="${sNotFree}" />
-         <set conditionEx="0@{freeSession}" />
-      </deliveryTemplate>
-      <deliveryTemplate conditionEx="true@{freeSession}" dropReply="true" />
-      <input>
-         <param name="content" />
-         <param name="storelog" />
-      </input>
-      <output>
-         <param name="customer" value="" />
-         <param name="result" />
-         <param name="currenttp" />
-         <param name="notfree" />
-      </output>
-   </template>
+<templates connector="SOAP">
+  <macros>
+    <!-- ==========================  REDIRECT CONNECTORS   ========================= -->
+    <define name="_SMSCON_1" value="SMSCON_02_01" />
+    <define name="_SMSCON_ISSA" value="SMSCON_02_02" />
+    <define name="_USSD_1" value="USSDCON_01_01" />
+    <!-- ==========================  REDIRECT CONNECTORS   ========================= -->
+    <!-- ==========================  SOAP SPECIAL PAYNET  ========================= -->
+    <!-- ==========================  SOAP SPECIAL PAYNET  ========================= -->
+    <!-- ==========================  SOAP SPECIAL   ========================= -->
+    <define name="_GET_MOD_LANGUAGE" value="#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[_CURRENT_MODULE/@value='${lang}']/@param}" />
+    <!-- ==========================  SOAP SPECIAL   ========================= -->
+    <!-- ==========================  SERVICE PROVISIONING  ========================= -->
+    <define name="_GET_SERVICE_RESULT" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@info_${sDbresult}__GET_LANG}'='','#{if('#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@info_${sDbresult}__GET_LANG}'='','_GET_DBRESULT','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@info_${sDbresult}__GET_LANG}')}','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@info_${sDbresult}__GET_LANG}')}" />
+    <define name="_GET_CONFIRM_SERVICE_RESULT" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[@service_code='_SERVICE_CODE']/@info_${sDbresult}__GET_LANG}'='','#{if('#{document('_SERVICE_PATH')/ServiceList/Group[@name='#{document('_SERVICE_PATH')/ServiceList/GroupList/Item[@id='#{document('_SERVICE_PATH')/ServiceList/Service[@service_code='_SERVICE_CODE']/@group}']/@name}']/@info_${sDbresult}__GET_LANG}'='','_GET_DBRESULT','#{document('_SERVICE_PATH')/ServiceList/Group[@name='#{document('_SERVICE_PATH')/ServiceList/GroupList/Item[@id='#{document('_SERVICE_PATH')/ServiceList/Service[@service_code='_SERVICE_CODE']/@group}']/@name}']/@info_${sDbresult}__GET_LANG}')}','#{document('_SERVICE_PATH')/ServiceList/Service[@service_code='_SERVICE_CODE']/@info_${sDbresult}__GET_LANG}')}" />
+    <define name="_SERVICE_CONFIRM_NAME" value="#{document('_SERVICE_PATH')/ServiceList/Service[@service_code='_SERVICE_CODE']/@service_name__GET_LANG}" />
+    <define name="_SERVICE_TP_CNT" value="#{if(count(document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/tplist[1][ivrcode/@value='#{//Message/Item/@tariffplan}']/ivrcode)&gt;0,count(document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/tplist[1][ivrcode/@value='#{//Message/Item/@tariffplan}']/ivrcode),count(document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/tplist[1][ivrcode/@value='#{//Message/Item/@tariffplan}']/ivrcode))}" />
+    <define name="_SERVICE_TP_ISAVAIL" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/tplist[1]/@available}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/tplist[1]/@available}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/tplist[1]/@available}')}" />
+    <define name="_SERVICE_TP_NOTAVALINFO" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/tplist[1]/@info_notaval__GET_LANG}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/tplist[1]/@info_notaval__GET_LANG}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/tplist[1]/@info_notaval__GET_LANG}')}" />
+    <define name="_SERVICE_CUSTLST_CNT" value="#{if(count(document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/customerlist[1]/customer[@value='${customer}']/@value)&gt;0,count(document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/customerlist[1]/customer[@value='${customer}']/@value),count(document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/customerlist[1]/customer[@value='${customer}']/@value))}" />
+    <define name="_SERVICE_CUSTLST_ISAVAIL" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/customerlist[1]/@available}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/customerlist[1]/@available}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/customerlist[1]/@available}')}" />
+    <define name="_SERVICE_CUSTLST_NOTAVAILINFO" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/customerlist[1]/@info_notaval__GET_LANG}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/customerlist[1]/@info_notaval__GET_LANG}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/customerlist[1]/@info_notaval__GET_LANG}')}" />
+    <define name="_SERVICE_SRVBIND_CNT" value="#{if(count(document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service)&gt;0,count(document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service),count(document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/servicebindinglist[1]/service))}" />
+    <define name="_SERVICE_SRVBIND_SRVCODE" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@service_code}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@service_code}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/servicebindinglist[1]/service[${sCnt}]/@service_code}')}" />
+    <define name="_SERVICE_SRVBIND_SUBSR" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@subscription}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@subscription}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/servicebindinglist[1]/service[${sCnt}]/@subscription}')}" />
+    <define name="_SERVICE_SRVBIND_STORE" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@store}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@store}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/servicebindinglist[1]/service[${sCnt}]/@store}')}" />
+    <define name="_SERVICE_SRVBIND_INFO" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@info_notaval__GET_LANG}'!='','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@info_notaval__GET_LANG}','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/servicebindinglist[1]/service[${sCnt}]/@info_notaval__GET_LANG}')}" />
+    <define name="_SERVICE_SUCCESSFUL_RESPONSE" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@successful_response}'='','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@successful_response}','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@successful_response}')}" />
+    <define name="_SERVICE_CHECKBLOCK" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@check_block}'='','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@check_block}','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@check_block}')}" />
+    <define name="_SERVICE_REDIRECT" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@redirect}'='','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@redirect}','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@redirect}')}" />
+    <define name="_SERVICE_AVAIL_BAL" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@availbalance}'='','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@availbalance}','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@availbalance}')}" />
+    <define name="_SERVICE_TIMETOPROGRESS" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[@service_code='#{if('${sServiceCode}'='','_SERVICE_CODE','${sServiceCode}')}']/@timetoprogress}'='','#{document('_SERVICE_PATH')/ServiceList/Group[@name='#{if('${sGroupName}'='','_SERVICE_GROUPNAME','${sGroupName}')}']/@timetoprogress}','#{document('_SERVICE_PATH')/ServiceList/Service[@service_code='#{if('${sServiceCode}'='','_SERVICE_CODE','${sServiceCode}')}']/@timetoprogress}')}" />
+    <define name="_SERVICE_DATEFROM" value="#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@datefrom}" />
+    <define name="_SERVICE_DATETO" value="#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@dateto}" />
+    <define name="_SERVICE_NAME" value="#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@service_name__GET_LANG}" />
+    <define name="_SERVICE_GROUPNAME" value="#{document('_SERVICE_PATH')/ServiceList/GroupList/Item[@id='#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@group}']/@name}" />
+    <define name="_SERVICE_COMM_ACTION" value="#{document('_SERVICE_PATH')/ServiceList/CommandList/Command[_CURRENT_MODULE/@value='${sAction}']/@action}" />
+    <define name="_SERVICE_COMM_STATUS" value="#{document('_SERVICE_PATH')/ServiceList/CommandList/Command[_CURRENT_MODULE/@value='${sAction}']/@status}" />
+    <define name="_SERVICE_COMM_CODE" value="#{document('_SERVICE_PATH')/ServiceList/CommandList/Command[_CURRENT_MODULE/@value='${sAction}']/@code}" />
+    <define name="_SERVICE_COMM_ACTPARCE" value="#{document('_SERVICE_PATH')/ServiceList/CommandList/Command[_CURRENT_MODULE/@value='${sAction}']/@parce}" />
+    <define name="_SERVICE_CRMSTATUS" value="#{document('_SERVICE_PATH')/ServiceList/CommandList/Command[@status='${subscription}']/@parce}" />
+    <define name="_SERVICE_CRMACTION_ADD" value="#{document('_SERVICE_PATH')/ServiceList/CommandList/Command[@action='2']/@parce}" />
+    <define name="_SERVICE_CRMACTION_DEL" value="#{document('_SERVICE_PATH')/ServiceList/CommandList/Command[@action='3']/@parce}" />
+    <define name="_SERVICE_CODE" value="#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@service_code}" />
+    <!-- ==========================  SERVICE PROVISIONING  ========================= -->
+    <!-- ==========================  CHANGE TP   ========================= -->
+    <define name="_GET_TARIFF_RESULT" value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@info_${sDbresult}__GET_LANG}'='','#{if('#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/@info_${sDbresult}__GET_LANG}'='','_GET_DBRESULT','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/@info_${sDbresult}__GET_LANG}')}','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@info_${sDbresult}__GET_LANG}')}" />
+    <define name="_GET_CONFIRM_TARIFF_RESULT" value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@info_${sDbresult}__GET_LANG}'='','#{if('#{document('_TARIF_PATH')/TariffPlans/Group[@name='#{document('_TARIF_PATH')/TariffPlans/GroupList/Item[@id='#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@group}']/@name}']/@info_${sDbresult}__GET_LANG}'='','_GET_DBRESULT','#{document('_TARIF_PATH')/TariffPlans/Group[@name='#{document('_TARIF_PATH')/TariffPlans/GroupList/Item[@id='#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@group}']/@name}']/@info_${sDbresult}__GET_LANG}')}','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@info_${sDbresult}__GET_LANG}')}" />
+    <define name="_TARIFF_TP_CNT" value="#{if(count(document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/tplist[1][ivrcode/@value='#{//Message/Item/@tariffplan}'])&gt;0,count(document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/tplist[1][ivrcode/@value='#{//Message/Item/@tariffplan}']),count(document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/tplist[1][ivrcode/@value='#{//Message/Item/@tariffplan}']))}" />
+    <define name="_TARIFF_TP_ISAVAIL" value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/tplist[1]/@available}'!='','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/tplist[1]/@available}','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/tplist[1]/@available}')}" />
+    <define name="_TARIFF_TP_NOTAVAILINFO" value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/tplist[1]/@info_notaval__GET_LANG}'!='','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/tplist[1]/@info_notaval__GET_LANG}','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/tplist[1]/@info_notaval__GET_LANG}')}" />
+    <define name="_TARIFF_CUSTLST_CNT" value="#{if(count(document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/customerlist[1]/customer[@value='${customer}'])&gt;0,count(document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/customerlist[1]/customer[@value='${customer}']),count(document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/customerlist[1]/customer[@value='${customer}']))}" />
+    <define name="_TARIFF_CUSTLST_ISAVAIL" value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/customerlist[1]/@available}'!='','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/customerlist[1]/@available}','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/customerlist[1]/@available}')}" />
+    <define name="_TARIFF_CUSTLST_NOTAVAILINFO" value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/customerlist[1]/@info_notaval__GET_LANG}'!='','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/customerlist[1]/@info_notaval__GET_LANG}','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/customerlist[1]/@info_notaval__GET_LANG}')}" />
+    <define name="_TARIFF_SRVBIND_CNT" value="#{if(count(document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/servicebindinglist[1]/service)&gt;0,count(document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/servicebindinglist[1]/service),count(document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/servicebindinglist[1]/service))}" />
+    <define name="_TARIFF_SRVBIND_SRVCODE" value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/servicebindinglist[1]/service[${sCnt}]/@service_code}'!='','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/servicebindinglist[1]/service[${sCnt}]/@service_code}','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/servicebindinglist[1]/service[${sCnt}]/@service_code}')}" />
+    <define name="_TARIFF_SRVBIND_SUBSR" value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/servicebindinglist[1]/service[${sCnt}]/@subscription}'!='','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/servicebindinglist[1]/service[${sCnt}]/@subscription}','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/servicebindinglist[1]/service[${sCnt}]/@subscription}')}" />
+    <define name="_TARIFF_SRVBIND_STORE" value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/servicebindinglist[1]/service[${sCnt}]/@store}'!='','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/servicebindinglist[1]/service[${sCnt}]/@store}','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/servicebindinglist[1]/service[${sCnt}]/@store}')}" />
+    <define name="_TARIFF_SRVBIND_INFO" value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/servicebindinglist[1]/service[${sCnt}]/@info_notaval__GET_LANG}'!='','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/servicebindinglist[1]/service[${sCnt}]/@info_notaval__GET_LANG}','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/servicebindinglist[1]/service[${sCnt}]/@info_notaval__GET_LANG}')}" />
+    <define name="_TARIFF_SUCCESSFUL_RESPONSE" value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@successful_response}'='','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/@successful_response}','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@successful_response}')}" />
+    <define name="_TARIFF_CHECKBLOCK" value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@check_block}'='','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/@check_block}','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@check_block}')}" />
+    <define name="_TARIFF_REDIRECT" value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@redirect}'='','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/@redirect}','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@redirect}')}" />
+    <define name="_TARIFF_TIMETOPROGRESS" value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[@ivrcode='#{if('${sTariffIvrCode}'='','_TARIFF_IVRCODE','${sTariffIvrCode}')}']/@timetoprogress}'='','#{document('_TARIF_PATH')/TariffPlans/Group[@name='#{if('${sGroupName}'='','_TARIFF_GROUPNAME','${sGroupName}')}']/@timetoprogress}','#{document('_TARIF_PATH')/TariffPlans/Tariff[@ivrcode='#{if('${sTariffIvrCode}'='','_TARIFF_IVRCODE','${sTariffIvrCode}')}']/@timetoprogress}')}" />
+    <define name="_TARIFF_AVAIL_BAL" value="#{if('#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@availbalance}'='','#{document('_TARIF_PATH')/TariffPlans/Group[@name='${sGroupName}']/@availbalance}','#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@availbalance}')}" />
+    <define name="_TARIFF_DATEFROM" value="#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@datefrom}" />
+    <define name="_TARIFF_DATETO" value="#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@dateto}" />
+    <define name="_TARIFF_NAME" value="#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@tariffname__GET_LANG}" />
+    <define name="_TARIFF_GROUPNAME" value="#{document('_TARIF_PATH')/TariffPlans/GroupList/Item[@id='#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@group}']/@name}" />
+    <define name="_TARIFF_CURRENT_NAME" value="#{document('_TARIF_PATH')/TariffPlans/Tariff[@ivrcode='#{//Message/Item/@tariffplan}']/@tariffname__GET_LANG}" />
+    <define name="_TARIFF_IVRCODE" value="#{document('_TARIF_PATH')/TariffPlans/Tariff[_CURRENT_MODULE/@value='${sNewTariffPlan}']/@ivrcode}" />
+    <!-- ==========================  CHANGE TP  ========================= -->
+    <!-- ==========================  ALL SERVICE   ========================= -->
+    <define name="_COUNTERS_TYPE" value="#{document('_COUNTERS_PATH')/Counters/Group[_CURRENT_MODULE/@value='${sCountertype}']/@name}" />
+    <define name="_GET_ALL_SRV_RESULT" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@info_${sDbresult}__GET_LANG}" />
+    <define name="_ALLSERVICE_TP_CNT" value="count(document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/tplist[1][ivrcode/@value='#{//Message/Item/@tariffplan}'])" />
+    <define name="_ALLSERVICE_TP_ISAVAIL" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/tplist[1]/@available}" />
+    <define name="_ALLSERVICE_TP_NOTAVAILINFO" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/tplist[1]/@info_notaval__GET_LANG}" />
+    <define name="_ALLSERVICE_CUSTLST_CNT" value="count(document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/customerlist[1]/customer[@value='${customer}'])" />
+    <define name="_ALLSERVICE_CUSTLST_ISAVAIL" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/customerlist[1]/@available}" />
+    <define name="_ALLSERVICE_CUSTLST_NOTAVAILINFO" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/customerlist[1]/@info_notaval__GET_LANG}" />
+    <define name="_ALLSERVICE_SRVBIND_CNT" value="count(document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service)" />
+    <define name="_ALLSERVICE_SRVBIND_SRVCODE" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@service_code}" />
+    <define name="_ALLSERVICE_SRVBIND_SUBSR" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@subscription}" />
+    <define name="_ALLSERVICE_SRVBIND_STORE" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@store}" />
+    <define name="_ALLSERVICE_SRVBIND_INFO" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/servicebindinglist[1]/service[${sCnt}]/@info_notaval__GET_LANG}" />
+    <define name="_ALLSERVICE_SUCCESSFUL_RESPONSE" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@successful_response}" />
+    <define name="_ALLSERVICE_CHECKBLOCK" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@check_block}" />
+    <define name="_ALLSERVICE_REDIRECT" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@redirect}" />
+    <define name="_ALLSERVICE_TIMETOPROGRESS" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@timetoprogress}" />
+    <define name="_ALLSERVICE_AVAIL_BAL" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@availbalance}" />
+    <define name="_ALLSERVICE_NAME" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@name}" />
+    <!-- ==========================  ALL SERVICE   ========================= -->
+    <!-- ==========================  SETTINGS   ========================= -->
+    <define name="_WAIT_IFASYNC_INPROCESS" value="#{if('${sDbresult}'='redirect','#{if(not(matches('${sInProgress}','_IF_TRUE')),'true','')}','')}" />
+    <define name="_GET_TODAY" value="#{concat(substring('@{now}',7,4),substring('@{now}',4,2),substring('@{now}',1,2))}" />
+    <define name="_GET_SECONDS" value="#{(number(substring('@{now}',12,2)) * 60 * 60) + (number(substring('@{now}',15,2)) * 60) + number(substring('@{now}',18,2))}" />
+    <define name="_GET_DBRESULT" value="#{document('_DICTIONARY_PATH')/DBresults/Item[code/@value='${sDbresult}']/@info__GET_LANG}" />
+    <define name="_GET_LENGTH_DBRESULT" value="#{string-length(document('_DICTIONARY_PATH')/DBresults/Item[code/@value='${sDbresult}']/@info__GET_LANG)}" />
+    <define name="_GET_AFTER_VERIFY_DBRESULT" value="#{if('#{document('_DICTIONARY_PATH')/DBresults/Item[code/@value='${customerblocks}']/@info__GET_LANG}'!='','${customerblocks}','${dbresult}')}" />
+    <define name="_ENCODING" value="#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@param='_GET_LANG']/@encoding}" />
+    <define name="_INLANGUAGE" value="#{if('#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@scp='${inlang}' and @ussd='${smsussdlang}']/@param}'='','#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@scp='' and @ussd='']/@param}','#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@scp='${inlang}' and @ussd='${smsussdlang}']/@param}')}" />
+    <define name="_GET_LANG" value="#{if('${sLang}'='','#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@scp='' and @ussd='']/@param}','${sLang}')}" />
+    <define name="_DEFAULT_ERR" value="#{if('${dbresult}'='-1','err001','${dbresult}')}" />
+    <define name="_REDIRECT_TO_SMS" value="^[Ss][Mm][Ss]$" />
+    <define name="_REDIRECT_TO_CURRENT" value="^[Nn][Oo][Tt][Rr][Ee][Dd][Ii][Rr][Ee][Cc][Tt]$" />
+    <define name="_IF_TRUE" value="^([Tt][Rr][Uu][Ee]|1)$" />
+    <define name="_BYCRM" value="[Bb][Yy][Cc][Rr][Mm]" />
+    <define name="_CURRENT_MODULE" value="#{if('${sModule}'!='','${sModule}','paynet')}" />
+    <define name="_SERVICE_PATH" value="..\..\Config\Service\SERVICE.xml" />
+    <define name="_ALLSERVICE_PATH" value="..\..\Config\Service\All_SERVICE.xml" />
+    <define name="_TARIF_PATH" value="..\..\Config\Tariff\TARIFF_PLANS.xml" />
+    <define name="_COUNTERS_PATH" value="..\..\Config\Service\COUNTERS.xml" />
+    <define name="_DICTIONARY_PATH" value="..\..\Config\GET_DBRESULT.xml" />
+    <define name="_DEALERPORTAL_PATH" value="..\..\Config\Portal\DealerUSSDPortal_01.xml" />
+    <define name="_SERIES_PATH" value="..\..\Config\Service\SERIES.xml" />
+    <define name="_CONFIRM_VALUE" value="confirm" />
+    <define name="_CURRENT_INITIATOR" value="paynet" />
+    <!-- ==========================  SETTINGS   ========================= -->
+  </macros>
+  <template procedureName="ServiceProvisioning" sessionStorage="Memory" sessionLifetime="600" persistent="true">
+    <receiveTemplate>
+      <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(${customer}_${transaction}_${transactiontime})}">
+        <Item customer="${customer}_${service}" />
+        @{store(sCustomer,${customer})}
+        @{store(sAction,2)}
+        @{store(sService,${service})}
+        @{store(sUsername,${username})}
+        @{store(sPassword,${password})}
+        @{store(sLang,pay)}
+        @{store(sTransaction,${transaction})}
+        @{store(sTransactionTime,${transactiontime})}
+        @{store(sModule,_CURRENT_MODULE)}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'${sUsername}' != 'PAYNET' or '${sPassword}' != 'lz6mv5'}" call="ServiceStringFormat">
+      <set conditionEx="0@{store(sDbresult,${dbresult})}" />
+      <set item="iparam:content" value="Nevernie Login ili Parol" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="false@{store(sInProgress,#{if(number(_GET_SECONDS)-number(${sStartSecond})&lt;number(_SERVICE_TIMETOPROGRESS) and number(_GET_SECONDS)-number(${sStartSecond})&gt;0,'true','false')})}" />
+    <deliveryTemplate conditionEx="false@{store(sServiceCode,#{if(matches('${sInProgress}','_IF_TRUE'),'${sServiceCode}','_SERVICE_CODE')})}" />
+    <deliveryTemplate conditionEx="false@{store(sGroupName,#{if(matches('${sInProgress}','_IF_TRUE'),'${sGroupName}','_SERVICE_GROUPNAME')})}" />
+    <deliveryTemplate conditionEx="false@{store(sParams,_SERVICE_NAME)}" />
+    <deliveryTemplate conditionEx="#{'${dbresult}'!='0'}" call="ServiceStringFormat">
+      <set conditionEx="0@{store(sDbresult,${dbresult})}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${sServiceCode}'='' or '${sService}'='' or '${sCustomer}'=''}" call="ServiceStringFormat">
+      <set conditionEx="0@{store(sDbresult,329990)}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${sAction}'=''}" call="ServiceInterrogation">
+      <set item="iparam:customer" value="${sCustomer}" />
+      <set item="iparam:service" value="${sService}" />
+      <set item="iparam:lang" value="_GET_LANG" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${sAction}'='_CONFIRM_VALUE'}" call="ServiceProvisioning_Cnfrm_Step2" />
+    <deliveryTemplate conditionEx="#{matches('${sInProgress}','_IF_TRUE') and '${sServiceCode}'='_SERVICE_CODE' and '${sActParce}'='_SERVICE_COMM_ACTPARCE' and '${sActParce}'!=''}" call="ServiceStringFormat">
+      <set item="iparam:content" value="@{store(sDbresult,alrprogress_${sActParce})}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sInProgress}','_IF_TRUE')}" call="ServiceStringFormat">
+      <set item="iparam:content" value="@{store(sDbresult,inprogress_${sActParce})}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{((_SERVICE_CUSTLST_CNT&gt;0 and not(matches('_SERVICE_CUSTLST_ISAVAIL','_IF_TRUE'))) or (_SERVICE_CUSTLST_CNT=0 and matches('_SERVICE_CUSTLST_ISAVAIL','_IF_TRUE'))) and '_SERVICE_CUSTLST_NOTAVAILINFO'!=''}" call="ServiceStringFormat">
+      <set item="iparam:content" value="_SERVICE_CUSTLST_NOTAVAILINFO" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'_GET_TODAY' &gt; '_SERVICE_DATETO'}" call="ServiceStringFormat">
+      <set conditionEx="0@{store(sDbresult,service_notavailable)}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'_GET_TODAY' &lt; '_SERVICE_DATEFROM'}" call="ServiceStringFormat">
+      <set conditionEx="0@{store(sDbresult,service_unavailable)}" />
+      <set conditionEx="0@{store(sParams,_SERVICE_NAME;#{concat(substring('_SERVICE_DATEFROM',7,2),'.',substring('_SERVICE_DATEFROM',5,2),'.',substring('_SERVICE_DATEFROM',1,4))})}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate call="ServiceProvisioning_Inter_Step3" />
+    <input>
+      <param name="username" />
+      <param name="password" />
+      <param name="transaction" />
+      <param name="transactiontime" />
+      <param name="customer" />
+      <param name="service" />
+      <param name="action" />
+      <param name="lang" />
+    </input>
+    <output>
+      <param name="content" />
+      <param name="storelog" />
+      <param name="customer" />
+      <param name="service" />
+      <param name="lang" />
+    </output>
+  </template>
+  <template procedureName="ServiceProvisioning_Cnfrm_Step2" sessionStorage="Memory" sessionLifetime="600" persistent="true">
+    <receiveTemplate>
+      <Message type="serviceinterrogation" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${sCustomer}">
+          <Service id="_SERVICE_CODE" action="interrogation" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'${dbresult}'='0' and '_SERVICE_CNFR_NAME'!=''}" call="ServiceStringFormat">
+      <set conditionEx="0@{store(sDbresult,_CONFIRM_VALUE__SERVICE_CRMSTATUS)}" />
+      <set conditionEx="0@{store(sParams,_SERVICE_CNFR_NAME)}" />
+      <set item="iparam:content" value="_GET_CONFIRM_SERVICE_RESULT" />
+    </deliveryTemplate>
+    <deliveryTemplate call="ServiceStringFormat">
+      <set conditionEx="0@{store(sDbresult,${dbresult})}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <input>
+      <param name="storelog" />
+    </input>
+    <output>
+      <param name="content" />
+      <param name="storelog" />
+    </output>
+  </template>
+  <template procedureName="ServiceProvisioning_Inter_Step3" sessionStorage="Memory" sessionLifetime="600" persistent="true">
+    <receiveTemplate>
+      <Message type="serviceinterrogation" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${sCustomer}">
+          <Service id="${sServiceCode}" action="interrogation" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="false@{store(sActParce,_SERVICE_COMM_ACTPARCE)}" />
+    <deliveryTemplate conditionEx="#{'${dbresult}'!='0' or '${sActParce}'='' or '_SERVICE_COMM_STATUS'='' or '_SERVICE_COMM_ACTION'=''}" call="ServiceStringFormat">
+      <set item="iparam:content" conditionEx="#{'${dbresult}'='0'}" value="@{store(sDbresult,329990)}" />
+      <set item="iparam:content" conditionEx="#{'${dbresult}'!='0'}" value="@{store(sDbresult,${dbresult})}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'_SERVICE_COMM_STATUS'='${subscription}'}" call="ServiceStringFormat">
+      <set conditionEx="0@{store(sDbresult,_SERVICE_COMM_CODE)}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{not(matches('_SERVICE_REDIRECT','_REDIRECT_TO_CURRENT'))  and '_SERVICE_REDIRECT'!=''}" call="ServiceStringFormat" terminating="false">
+      <set conditionEx="0@{store(sDbresult,redirect)}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'_SERVICE_AVAIL_BAL'!='' and not(matches('${sIsBindBalAval}','_IF_TRUE'))}" call="ServiceProvisioningChckBndBal" />
+    <deliveryTemplate conditionEx="#{_SERVICE_SRVBIND_CNT&gt;0 and not(matches('${sIsBindSrvAval}','_IF_TRUE'))}" call="ServiceProvisioningChckBndSrv" />
+    <deliveryTemplate call="ServiceProvisioning_Vrf_Step4" />
+    <input>
+      <param name="storelog" />
+    </input>
+    <output>
+      <param name="content" />
+      <param name="storelog" />
+    </output>
+  </template>
+  <template procedureName="ServiceProvisioningChckBndBal" sessionStorage="Memory" sessionLifetime="600" persistent="true">
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${sCustomer}" subject="getbalance">
+          <Attribute name="unpayment" value="6" />
+          <Attribute name="requestcountertype" value="0" />
+          <Attribute name="rounding" value="4" />
+        </Item>
+        @{store(sIsBindBalAval,true)}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'${dbresult}'!='0'}" call="ServiceStringFormat">
+      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
+      <set conditionEx="0@{store(sDbresult,${dbresult})}" />
+      <set conditionEx="0@{store(sIsBindBalAval,false)}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{number(${balanceintpartdotpart} div 100) &lt; _SERVICE_AVAIL_BAL}" call="ServiceStringFormat">
+      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
+      <set conditionEx="0@{store(sDbresult,notavailbalance)}" />
+      <set conditionEx="0@{store(sIsBindBalAval,false)}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{number(${balanceintpartdotpart} div 100)&gt;_SERVICE_AVAIL_BAL and _SERVICE_SRVBIND_CNT&gt;0 and not(matches('${sIsBindSrvAval}','_IF_TRUE'))}" call="ServiceProvisioningChckBndSrv" />
+    <deliveryTemplate conditionEx="#{number(${balanceintpartdotpart} div 100)&gt;_SERVICE_AVAIL_BAL}" call="ServiceProvisioning_Vrf_Step4" />
+    <deliveryTemplate call="ServiceStringFormat">
+      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
+      <set conditionEx="0@{store(sDbresult,329990)}" />
+      <set conditionEx="0@{store(sIsBindBalAval,false)}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <input>
+      <param name="storelog" />
+    </input>
+    <output>
+      <param name="content" />
+      <param name="storelog" />
+    </output>
+  </template>
+  <template procedureName="ServiceProvisioningChckBndSrv" sessionStorage="Memory" sessionLifetime="600" persistent="true">
+    <receiveTemplate>
+      <Message type="serviceinterrogation" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+        @{store(sCnt,#{if('${sCnt}'='',1,number('${sCnt}')+1)})}
+        <Item customer="${sCustomer}">
+          <Service id="_SERVICE_SRVBIND_SRVCODE" action="interrogation" />
+        </Item>
+        @{store(sIsBindSrvAval,true)}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'${dbresult}'!='0'}" call="ServiceStringFormat">
+      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
+      <set conditionEx="0@{store(sDbresult,${dbresult})}" />
+      <set conditionEx="0@{store(sIsBindSrvAval,false)}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${subscription}'='_SERVICE_SRVBIND_SUBSR' and '_SERVICE_SRVBIND_INFO'!=''}" call="ServiceStringFormat">
+      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
+      <set conditionEx="0@{store(sIsBindSrvAval,false)}" />
+      <set item="iparam:content" value="_SERVICE_SRVBIND_INFO" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${sCnt}=_SERVICE_SRVBIND_CNT and ${subscription}=_SERVICE_SRVBIND_SUBSR}" call="ServiceProvisioning_Vrf_Step4">
+      <set conditionEx="0@{store(sRequi,#{if('${sRequi}'='','_SERVICE_SRVBIND_STORE','${sRequi};_SERVICE_SRVBIND_STORE')})}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${sCnt}=_SERVICE_SRVBIND_CNT and ${subscription}!=_SERVICE_SRVBIND_SUBSR}" call="ServiceProvisioning_Vrf_Step4" />
+    <deliveryTemplate conditionEx="#{'${subscription}'!='_SERVICE_SRVBIND_SUBSR'}" call="ServiceProvisioningChckBndSrv" />
+    <deliveryTemplate conditionEx="#{'${subscription}'='_SERVICE_SRVBIND_SUBSR'}" call="ServiceProvisioningChckBndSrv">
+      <set conditionEx="0@{store(sRequi,#{if('${sRequi}'='','_SERVICE_SRVBIND_STORE','${sRequi};_SERVICE_SRVBIND_STORE')})}" />
+    </deliveryTemplate>
+    <deliveryTemplate call="ServiceStringFormat">
+      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
+      <set conditionEx="0@{store(sDbresult,329990)}" />
+      <set conditionEx="0@{store(sIsBindSrvAval,false)}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <input>
+      <param name="storelog" />
+    </input>
+    <output>
+      <param name="content" />
+      <param name="storelog" />
+    </output>
+  </template>
+  <template procedureName="ServiceProvisioning_Vrf_Step4" sessionStorage="Memory" sessionLifetime="600" persistent="true">
+    <receiveTemplate>
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${sCustomer}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="1" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{('${customerblocks}'!='' or '${dbresult}'='320347') and matches('_SERVICE_CHECKBLOCK','_IF_TRUE')}" call="ServiceStringFormat">
+      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
+      <set conditionEx="0@{store(sDbresult,_GET_AFTER_VERIFY_DBRESULT)}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${dbresult}'!='0' and '${dbresult}'!='320347'}" call="ServiceStringFormat">
+      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
+      <set conditionEx="0@{store(sDbresult,${dbresult})}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{((_SERVICE_TP_CNT&gt;0 and not(matches('_SERVICE_TP_ISAVAIL','_IF_TRUE'))) or (_SERVICE_TP_CNT=0 and matches('_SERVICE_TP_ISAVAIL','_IF_TRUE'))) and '_SERVICE_TP_NOTAVALINFO'!=''}" call="ServiceStringFormat">
+      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
+      <set conditionEx="0@{store(sParams,_SERVICE_NAME;_TARIFF_CURRENT_NAME)}" />
+      <set item="iparam:content" value="_SERVICE_TP_NOTAVALINFO" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${sGroupName}'='BMS'}" call="ServiceProvisioning_BMS_Step6" />
+    <deliveryTemplate conditionEx="#{'${sGroupName}'='BLOCKS'}" call="ServiceProvisioning_Block_Step6" />
+    <deliveryTemplate call="ServiceProvisioning_Order_Step5" />
+    <input>
+      <param name="storelog" />
+    </input>
+    <output>
+      <param name="content" />
+      <param name="storelog" />
+    </output>
+  </template>
+  <template procedureName="ServiceProvisioning_Order_Step5" sessionStorage="Memory" sessionLifetime="600" persistent="true">
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${sCustomer}">
+          <Service id="${sServiceCode}" action="_SERVICE_COMM_ACTION" class="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate call="ServiceStringFormat">
+      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
+      <set item="iparam:content" conditionEx="#{'${dbresult}'='0'}" value="@{store(sDbresult,success_${sActParce})}" />
+      <set item="iparam:content" conditionEx="#{'${dbresult}'!='0'}" value="@{store(sDbresult,${dbresult})}" />
+    </deliveryTemplate>
+    <input>
+      <param name="storelog" />
+    </input>
+    <output>
+      <param name="content" />
+      <param name="storelog" />
+    </output>
+  </template>
+  <template procedureName="FillActivatedPackage" handler="DBCON_02_01" sessionStorage="Memory" sessionLifetime="600" persistent="true">
+    <receiveTemplate>
+      <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+        <Item procedureName="external_supplier.fill_activated_packages">
+          <Attribute name="p_msisdn" type="STRING" value="${sCustomer}" />
+          <Attribute name="p_supplier" type="STRING" value="PAYNET" />
+          <Attribute name="p_service" type="STRING" value="${sServiceCode}" />
+          <Attribute name="p_transaction" type="STRING" value="${sTransaction}" />
+          <Attribute name="p_transaction_time" type="STRING" value="${sTransactionTime}" />
+          <Attribute name="result" type="out:STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:result" value="1" />
+      <set item="oparam:customer" value="${sCustomer}" />
+    </deliveryTemplate>
+    <input>
+      <param name="storelog" />
+    </input>
+    <output>
+      <param name="customer" value="" />
+      <param name="result" />
+    </output>
+  </template>
+  <template procedureName="ServiceProvisioning_Block_Step6" sessionStorage="Memory" sessionLifetime="600" persistent="true">
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${sCustomer}">
+          <Service id="blockphone" action="4">
+            <Attribute name="state" value="_SERVICE_COMM_STATUS" />
+            <Attribute name="start" value="#{substring('@{now}',1,10)}" />
+          </Service>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate call="ServiceStringFormat">
+      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
+      <set item="iparam:content" conditionEx="#{'${dbresult}'='0'}" value="@{store(sDbresult,success_${sActParce})}" />
+      <set item="iparam:content" conditionEx="#{'${dbresult}'!='0'}" value="@{store(sDbresult,${dbresult})}" />
+    </deliveryTemplate>
+    <input>
+      <param name="storelog" />
+    </input>
+    <output>
+      <param name="content" />
+      <param name="storelog" />
+    </output>
+  </template>
+  <template procedureName="ServiceProvisioning_BMS_Step6" sessionStorage="Memory" sessionLifetime="600" persistent="true">
+    <receiveTemplate>
+      <Message type="orderbonusgiftrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${sCustomer}">
+          <Attribute name="giftcode" value="${sServiceCode}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate call="ServiceStringFormat">
+      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
+      <set item="iparam:content" conditionEx="#{'${dbresult}'='0'}" value="@{store(sDbresult,success_${sActParce})}" />
+      <set item="iparam:content" conditionEx="#{'${dbresult}'!='0'}" value="@{store(sDbresult,${dbresult})}" />
+    </deliveryTemplate>
+    <input>
+      <param name="storelog" />
+    </input>
+    <output>
+      <param name="content" />
+      <param name="storelog" />
+    </output>
+  </template>
+  <template procedureName="ServiceInterrogation" sessionStorage="Memory" sessionLifetime="300">
+    <receiveTemplate>
+      <Message type="getlanguage" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(SrvInter_${customer})}">
+        <Item customer="${customer}" />
+        @{store(sCustomer,${customer})}
+        @{store(sService,${service})}
+        @{store(sServiceCode,_SERVICE_CODE)}
+        @{store(sGroupName,_SERVICE_GROUPNAME)}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="false@{store(sLang,_INLANGUAGE)}" />
+    <deliveryTemplate conditionEx="false@{store(sParams,_SERVICE_NAME)}" />
+    <deliveryTemplate conditionEx="#{'${dbresult}'!='0'}" call="ServiceStringFormat">
+      <set conditionEx="0@{store(sDbresult,${dbresult})}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${sServiceCode}'='' or '${sService}'='' or '${sCustomer}'=''}" call="ServiceStringFormat">
+      <set conditionEx="0@{store(sDbresult,329990)}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{((_SERVICE_CUSTLST_CNT&gt;0 and not(matches('_SERVICE_CUSTLST_ISAVAIL','_IF_TRUE'))) or (_SERVICE_CUSTLST_CNT=0 and matches('_SERVICE_CUSTLST_ISAVAIL','_IF_TRUE'))) and '_SERVICE_CUSTLST_NOTAVAILINFO'!=''}" call="ServiceStringFormat">
+      <set item="iparam:content" value="_SERVICE_CUSTLST_NOTAVAILINFO" />
+    </deliveryTemplate>
+    <deliveryTemplate call="ServiceInterrogation_Step2" />
+    <input>
+      <param name="customer" />
+      <param name="service" />
+      <param name="lang" />
+    </input>
+    <output>
+      <param name="content" />
+      <param name="storelog" />
+    </output>
+  </template>
+  <template procedureName="ServiceInterrogation_Step2" sessionStorage="Memory" sessionLifetime="300" persistent="false">
+    <receiveTemplate>
+      <Message type="serviceinterrogation" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${sCustomer}">
+          <Service id="${sServiceCode}" action="interrogation" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate call="ServiceStringFormat">
+      <set item="iparam:content" conditionEx="#{'${dbresult}'='0'}" value="@{store(sDbresult,service__SERVICE_CRMSTATUS)}" />
+      <set item="iparam:content" conditionEx="#{'${dbresult}'!='0'}" value="@{store(sDbresult,${dbresult})}" />
+    </deliveryTemplate>
+    <input>
+      <param name="storelog" />
+    </input>
+    <output>
+      <param name="content" />
+      <param name="storelog" />
+    </output>
+  </template>
+  <template procedureName="ServiceStringFormat" sessionStorage="Memory" sessionLifetime="300">
+    <receiveTemplate>
+      <Message type="stringformat" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${sCustomer}">
+          <Attribute name="stringformat" value="#{if('${Content}'='','_GET_SERVICE_RESULT','${Content}')}@{store(SlowAsync,)}" />
+          <Attribute name="params" value="${sParams}" />
+          <Attribute name="split" value=";" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'${sDbresult}'='success_${sActParce}'}" call="FillActivatedPackage" terminating="false" />
+    <deliveryTemplate conditionEx="#{not(matches('${sInProgress}','_IF_TRUE')) and ('${sDbresult}'='redirect' or matches('${SlowAsync}','_IF_TRUE'))}">
+      <set conditionEx="0@{store(sInProgress,true)}" />
+      <set conditionEx="0@{store(sStartSecond,_GET_SECONDS)}" />
+      <set item="oparam:result" value="${no-escape:result}" />
+      <set item="oparam:customer" value="${customer}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="false@{store(sIsFreeSession,#{if(number(_SERVICE_TIMETOPROGRESS)&gt;0,'false','true')})}" />
+    <deliveryTemplate conditionEx="#{matches('${sInProgress}','_IF_TRUE') and matches('_SERVICE_REDIRECT','_REDIRECT_TO_SMS') and not(matches('${sDbresult}','inprogress_|alrprogress_|_CONFIRM_VALUE|inprogress'))}" connector="_SMSCON_1" />
+    <deliveryTemplate conditionEx="#{'${dbresult}'='0' and matches('${sDbresult}','inprogress_|alrprogress_|_CONFIRM_VALUE|inprogress')}">
+      <set item="oparam:result" value="${no-escape:result}" />
+      <set item="oparam:customer" value="${customer}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${dbresult}'='0' and (not(matches('${sDbresult}','success')) or matches('${sIsFreeSession}','_IF_TRUE'))}">
+      <set item="oparam:result" value="${no-escape:result}" />
+      <set item="oparam:customer" value="${customer}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${dbresult}'='0' and not(matches('${sIsFreeSession}','_IF_TRUE'))}">
+      <set conditionEx="0@{store(sStartSecond,_GET_SECONDS)}" />
+      <set item="oparam:result" value="${no-escape:result}" />
+      <set item="oparam:customer" value="${customer}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${customer}'!='' and matches('@{SessionExists(${session_id})}','_IF_TRUE')}">
+      <set conditionEx="0@{store(sDbresult,_DEFAULT_ERR)}" />
+      <set item="oparam:result" value="_GET_DBRESULT" />
+      <set item="oparam:customer" value="${customer}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="true@{freeSession}" dropReply="true" />
+    <input>
+      <param name="content" />
+      <param name="customer" />
+      <param name="storelog" />
+    </input>
+    <output>
+      <param name="customer" value="" />
+      <param name="result" />
+    </output>
+  </template>
+  <template procedureName="DB_AddRemoveService" persistent="true">
+    <receiveTemplate>
+      <Message type="bundleprovision" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{newGuid}">
+        <Item customer="${customer}">
+          <Service id="${servicecode}" action="#{if('${serviceaction}'='2','add',if('${serviceaction}'='3','remove',-1))}" needtariffication="1" enddate="${enddate}" informOnImpossibility="${informOnImpossibility}" sourcetypeid="${sourcetypeid}" userid="${userid}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:RESULT" value="${dbresult}" />
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+      <param name="servicecode" value="" />
+      <param name="serviceaction" value="-1" />
+      <param name="needtariffication" value="-1" />
+      <param name="enddate" value="00.00.01 01.01.2099" />
+      <param name="informOnImpossibility" value="-1" />
+      <param name="sourcetypeid" value="1" />
+      <param name="userid" value="1" />
+    </input>
+    <output>
+      <param name="RESULT" value="-1" />
+    </output>
+  </template>
+  <template procedureName="GetInfo" persistent="false">
+    <receiveTemplate>
+      <Message type="convertencoding" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item customer="${customer}">
+          <Content value="${message}" />
+          <Sender value="${sender}" />
+          <Recipient value="${recipient}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate terminating="false">
+      <set item="oparam:result" value="0" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'#{string-length('${Sender}')}'='12'}" connector="_SMSCON_ISSA" />
+    <deliveryTemplate conditionEx="#{matches('${Sender}','[Uu][Ss][Ss][Dd]')}" connector="_USSD_1" />
+    <deliveryTemplate connector="_SMSCON_1" />
+    <input>
+      <param name="sender" />
+      <param name="recipient" />
+      <param name="message" />
+    </input>
+    <output>
+      <param name="result" />
+    </output>
+  </template>
+  <template procedureName="TestRequest" sessionStorage="Memory" sessionLifetime="20" persistent="false">
+    <receiveTemplate>
+      <Message type="getlanguage" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item customer="">
+          <Content value="${message}" />
+        </Item>
+        @{store(sTest,${message})}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="false@{store(sLang,_INLANGUAGE)}" />
+    <deliveryTemplate conditionEx="#{'${sTest}'='test12345'}">
+      <set item="oparam:TEST1" value="ERR_1" />
+      <set item="oparam:TEST2" value="${sTest}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${sTest}'='test1' or '${sTest}'='test2'}">
+      <set item="oparam:TEST1" value="#{if('#{document('temp\1.xml')/Test/Item[@name='${sTest}']/@result}'!='','#{document('temp\1.xml')/Test/Item[@name='${sTest}']/@result}','ERR_2')}" />
+      <set item="oparam:TEST2" value="${sTest}" />
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="oparam:TEST1" value="1=#{document('temp\1.xml')/Test/Item[@name='test1']/@result} 2=#{document('temp\1.xml')/Test/Item[@name='test2']/@result}" />
+      <set item="oparam:TEST2" value="${sTest}" />
+    </deliveryTemplate>
+    <input>
+      <param name="message" />
+    </input>
+    <output>
+      <param name="TEST1" />
+      <param name="TEST2" />
+    </output>
+  </template>
+  <template procedureName="TransactionStatus" handler="DBCON_02_01" sessionStorage="Memory" sessionLifetime="300" persistent="true">
+    <receiveTemplate>
+      <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(${customer}_${transaction}_${transactiontime})}">
+        <Item procedureName="transaction_status">
+          <Attribute name="p_transaction" type="STRING" value="${transaction}" />
+          <Attribute name="p_transaction_time" type="STRING" value="${transactiontime}" />
+          <Attribute name="result" type="out:STRING" />
+        </Item>
+        @{store(sUsername,${username})}
+        @{store(sPassword,${password})}
+        @{store(sLang,pay)}
+        @{store(sModule,_CURRENT_MODULE)}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'${sUsername}' != 'PAYNET' or '${sPassword}' != 'lz6mv5'}" call="StringFormatTransactionStatus">
+      <set conditionEx="0@{store(sDbresult,${dbresult})}" />
+      <set item="iparam:content" value="Nevernie Login ili Parol" />
+    </deliveryTemplate>
+    <deliveryTemplate call="StringFormatTransactionStatus">
+      <set item="iparam:content" value="#{replace('${result}','RESULT:(\d{4})_MSISDN:(.+|)_DATE:(.+|)','$1')}" />
+      <set item="iparam:customer" value="#{replace('${result}','RESULT:(\d{4})_MSISDN:(.+|)_DATE:(.+|)','$2')}" />
+      <set item="iparam:datecomplete" value="#{replace('${result}','RESULT:(\d{4})_MSISDN:(.+|)_DATE:(.+|)','$3')}" />
+    </deliveryTemplate>
+    <input>
+      <param name="username" />
+      <param name="password" />
+      <param name="transaction" />
+      <param name="transactiontime" />
+      <param name="customer" />
+      <param name="service" />
+      <param name="action" />
+      <param name="lang" />
+    </input>
+    <output>
+      <param name="content" />
+      <param name="datecomplete" />
+      <param name="customer" />
+    </output>
+  </template>
+  <template procedureName="StringFormatTransactionStatus" sessionStorage="Memory" sessionLifetime="300" persistent="true">
+    <receiveTemplate>
+      <Message type="stringformat" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${customer}">
+          <Attribute name="stringformat" value="#{if('${Content}'='','_GET_SERVICE_RESULT','${Content}')}@{store(SlowAsync,)}" />
+          <Attribute name="params" value="${sParams}" />
+          <Attribute name="split" value=";" />
+        </Item>
+        @{store(sDatecomplete,${datecomplete})}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{not(matches('${sInProgress}','_IF_TRUE')) and ('${sDbresult}'='redirect' or matches('${SlowAsync}','_IF_TRUE'))}">
+      <set conditionEx="0@{store(sInProgress,true)}" />
+      <set conditionEx="0@{store(sStartSecond,_GET_SECONDS)}" />
+      <set item="oparam:result" value="${no-escape:result}" />
+      <set item="oparam:customer" value="${customer}" />
+      <set item="oparam:datecomplete" value="${sDatecomplete}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="false@{store(sIsFreeSession,#{if(number(_SERVICE_TIMETOPROGRESS)&gt;0,'false','true')})}" />
+    <deliveryTemplate conditionEx="#{matches('${sInProgress}','_IF_TRUE') and matches('_SERVICE_REDIRECT','_REDIRECT_TO_SMS') and not(matches('${sDbresult}','inprogress_|alrprogress_|_CONFIRM_VALUE|inprogress'))}" connector="_SMSCON_1" />
+    <deliveryTemplate conditionEx="#{'${dbresult}'='0' and matches('${sDbresult}','inprogress_|alrprogress_|_CONFIRM_VALUE|inprogress')}">
+      <set item="oparam:result" value="${no-escape:result}" />
+      <set item="oparam:customer" value="${customer}" />
+      <set item="oparam:datecomplete" value="${sDatecomplete}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${dbresult}'='0' and (not(matches('${sDbresult}','success')) or matches('${sIsFreeSession}','_IF_TRUE'))}">
+      <set item="oparam:result" value="${no-escape:result}" />
+      <set item="oparam:customer" value="${customer}" />
+      <set item="oparam:datecomplete" value="${sDatecomplete}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${dbresult}'='0' and not(matches('${sIsFreeSession}','_IF_TRUE'))}">
+      <set conditionEx="0@{store(sStartSecond,_GET_SECONDS)}" />
+      <set item="oparam:result" value="${no-escape:result}" />
+      <set item="oparam:customer" value="${customer}" />
+      <set item="oparam:datecomplete" value="${sDatecomplete}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${customer}'!='' and matches('@{SessionExists(${session_id})}','_IF_TRUE')}">
+      <set conditionEx="0@{store(sDbresult,_DEFAULT_ERR)}" />
+      <set item="oparam:result" value="_GET_DBRESULT" />
+      <set item="oparam:customer" value="${customer}" />
+      <set item="oparam:datecomplete" value="${sDatecomplete}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="true@{freeSession}" dropReply="true" />
+    <input>
+      <param name="content" />
+      <param name="customer" />
+      <param name="datecomplete" />
+    </input>
+    <output>
+      <param name="customer" />
+      <param name="result" />
+      <param name="datecomplete" />
+    </output>
+  </template>
+  <template procedureName="TransactionStatusTp" handler="DBCON_02_01" sessionStorage="Memory" sessionLifetime="300" persistent="false">
+    <receiveTemplate>
+      <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(${customer}_${transaction}_${transactiontime})}">
+        <Item procedureName="transaction_status_tp">
+          <Attribute name="p_transaction" type="STRING" value="${transaction}" />
+          <Attribute name="p_transaction_time" type="STRING" value="${transactiontime}" />
+          <Attribute name="result" type="out:STRING" />
+        </Item>
+        @{store(sUsername,${username})}
+        @{store(sPassword,${password})}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'${sUsername}' != 'PAYNET' or '${sPassword}' != 'lz6mv5'}" call="StringFormatTransactionStatus">
+      <set conditionEx="0@{store(sDbresult,${dbresult})}" />
+      <set item="iparam:content" value="Nevernie Login ili Parol" />
+    </deliveryTemplate>
+    <deliveryTemplate call="StringFormatTransactionStatusTp">
+      <set item="iparam:content" value="#{replace('${result}','RESULT:(\d{4})_MSISDN:(.+|)_DATE:(.+|)_CURRENTTP:(.+|)_NOTFREE:(.+|)','$1')}" />
+      <set item="iparam:customer" value="#{replace('${result}','RESULT:(\d{4})_MSISDN:(.+|)_DATE:(.+|)_CURRENTTP:(.+|)_NOTFREE:(.+|)','$2')}" />
+      <set item="iparam:datecomplete" value="#{replace('${result}','RESULT:(\d{4})_MSISDN:(.+|)_DATE:(.+|)_CURRENTTP:(.+|)_NOTFREE:(.+|)','$3')}" />
+      <set item="iparam:currenttp" value="#{replace('${result}','RESULT:(\d{4})_MSISDN:(.+|)_DATE:(.+|)_CURRENTTP:(.+|)_NOTFREE:(.+|)','$4')}" />
+      <set item="iparam:notfree" value="#{replace('${result}','RESULT:(\d{4})_MSISDN:(.+|)_DATE:(.+|)_CURRENTTP:(.+|)_NOTFREE:(.+|)','$5')}" />
+    </deliveryTemplate>
+    <input>
+      <param name="username" />
+      <param name="password" />
+      <param name="transaction" />
+      <param name="transactiontime" />
+      <param name="customer" />
+      <param name="service" />
+      <param name="action" />
+      <param name="lang" />
+    </input>
+    <output>
+      <param name="content" />
+      <param name="datecomplete" />
+      <param name="customer" />
+      <param name="currenttp" />
+      <param name="notfree" />
+    </output>
+  </template>
+  <template procedureName="StringFormatTransactionStatusTp" sessionStorage="Memory" sessionLifetime="300">
+    <receiveTemplate>
+      <Message type="stringformat" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${customer}">
+          <Attribute name="stringformat" value="#{if('${Content}'='','_GET_SERVICE_RESULT','${Content}')}@{store(SlowAsync,)}" />
+          <Attribute name="params" value="${sParams}" />
+          <Attribute name="split" value=";" />
+        </Item>
+        @{store(sDatecomplete,${datecomplete})}
+        @{store(sCurrenttp,${currenttp})}
+        @{store(sNotfree,${notfree})}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{not(matches('${sInProgress}','_IF_TRUE')) and ('${sDbresult}'='redirect' or matches('${SlowAsync}','_IF_TRUE'))}">
+      <set conditionEx="0@{store(sInProgress,true)}" />
+      <set conditionEx="0@{store(sStartSecond,_GET_SECONDS)}" />
+      <set item="oparam:result" value="${no-escape:result}" />
+      <set item="oparam:customer" value="${customer}" />
+      <set item="oparam:datecomplete" value="${sDatecomplete}" />
+      <set item="oparam:currenttp" value="${sCurrenttp}" />
+      <set item="oparam:notfree" value="${sNotfree}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="false@{store(sIsFreeSession,#{if(number(_SERVICE_TIMETOPROGRESS)&gt;0,'false','true')})}" />
+    <deliveryTemplate conditionEx="#{matches('${sInProgress}','_IF_TRUE') and matches('_SERVICE_REDIRECT','_REDIRECT_TO_SMS') and not(matches('${sDbresult}','inprogress_|alrprogress_|_CONFIRM_VALUE|inprogress'))}" connector="_SMSCON_1" />
+    <deliveryTemplate conditionEx="#{'${dbresult}'='0' and matches('${sDbresult}','inprogress_|alrprogress_|_CONFIRM_VALUE|inprogress')}">
+      <set item="oparam:result" value="${no-escape:result}" />
+      <set item="oparam:customer" value="${customer}" />
+      <set item="oparam:datecomplete" value="${sDatecomplete}" />
+      <set item="oparam:currenttp" value="${sCurrenttp}" />
+      <set item="oparam:notfree" value="${sNotfree}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${dbresult}'='0' and (not(matches('${sDbresult}','success')) or matches('${sIsFreeSession}','_IF_TRUE'))}">
+      <set item="oparam:result" value="${no-escape:result}" />
+      <set item="oparam:customer" value="${customer}" />
+      <set item="oparam:datecomplete" value="${sDatecomplete}" />
+      <set item="oparam:currenttp" value="${sCurrenttp}" />
+      <set item="oparam:notfree" value="${sNotfree}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${dbresult}'='0' and not(matches('${sIsFreeSession}','_IF_TRUE'))}">
+      <set conditionEx="0@{store(sStartSecond,_GET_SECONDS)}" />
+      <set item="oparam:result" value="${no-escape:result}" />
+      <set item="oparam:customer" value="${customer}" />
+      <set item="oparam:datecomplete" value="${sDatecomplete}" />
+      <set item="oparam:currenttp" value="${sCurrenttp}" />
+      <set item="oparam:notfree" value="${sNotfree}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${customer}'!='' and matches('@{SessionExists(${session_id})}','_IF_TRUE')}">
+      <set conditionEx="0@{store(sDbresult,_DEFAULT_ERR)}" />
+      <set item="oparam:result" value="_GET_DBRESULT" />
+      <set item="oparam:customer" value="${customer}" />
+      <set item="oparam:datecomplete" value="${sDatecomplete}" />
+      <set item="oparam:currenttp" value="${sCurrenttp}" />
+      <set item="oparam:notfree" value="${sNotfree}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="true@{freeSession}" dropReply="true" />
+    <input>
+      <param name="content" />
+      <param name="customer" />
+      <param name="datecomplete" />
+      <param name="currenttp" />
+      <param name="notfree" />
+    </input>
+    <output>
+      <param name="customer" />
+      <param name="result" />
+      <param name="datecomplete" />
+      <param name="currenttp" />
+      <param name="notfree" />
+    </output>
+  </template>
+  <template procedureName="TransactionPeriodicalCheck" handler="DBCON_02_01" sessionStorage="Memory" sessionLifetime="300" persistent="true">
+    <receiveTemplate>
+      <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(PeriodicalCheck_${begintime}_${endtime})}">
+        <Item procedureName="transaction_check_select">
+          <Attribute name="p_begin_time" type="STRING" value="${begintime}" />
+          <Attribute name="p_end_time" type="STRING" value="${endtime}" />
+          <Attribute name="result" type="out:STRING" />
+        </Item>
+        @{store(sUsername,${username})}
+        @{store(sPassword,${password})}
+        @{store(sLang,pay)}
+        @{store(sModule,_CURRENT_MODULE)}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'${sUsername}' != 'PAYNET' or '${sPassword}' != 'lz6mv5'}" call="StringFormatTransactionPeriodicalCheck">
+      <set conditionEx="0@{store(sDbresult,${dbresult})}" />
+      <set item="iparam:content" value="Nevernie Login ili Parol" />
+    </deliveryTemplate>
+    <deliveryTemplate call="StringFormatTransactionPeriodicalCheck">
+      <set item="iparam:content" value="${result}" />
+    </deliveryTemplate>
+    <input>
+      <param name="username" />
+      <param name="password" />
+      <param name="begintime" />
+      <param name="endtime" />
+    </input>
+    <output>
+      <param name="content" />
+    </output>
+  </template>
+  <template procedureName="StringFormatTransactionPeriodicalCheck" sessionStorage="Memory" sessionLifetime="300" persistent="true">
+    <receiveTemplate>
+      <Message type="stringformat" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${customer}">
+          <Attribute name="stringformat" value="#{if('${Content}'='','_GET_SERVICE_RESULT','${Content}')}@{store(SlowAsync,)}" />
+          <Attribute name="params" value="${sParams}" />
+          <Attribute name="split" value=";" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{not(matches('${sInProgress}','_IF_TRUE')) and ('${sDbresult}'='redirect' or matches('${SlowAsync}','_IF_TRUE'))}">
+      <set conditionEx="0@{store(sInProgress,true)}" />
+      <set conditionEx="0@{store(sStartSecond,_GET_SECONDS)}" />
+      <set item="oparam:result" value="${no-escape:result}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="false@{store(sIsFreeSession,#{if(number(_SERVICE_TIMETOPROGRESS)&gt;0,'false','true')})}" />
+    <deliveryTemplate conditionEx="#{matches('${sInProgress}','_IF_TRUE') and matches('_SERVICE_REDIRECT','_REDIRECT_TO_SMS') and not(matches('${sDbresult}','inprogress_|alrprogress_|_CONFIRM_VALUE|inprogress'))}" connector="_SMSCON_1" />
+    <deliveryTemplate conditionEx="#{'${dbresult}'='0' and matches('${sDbresult}','inprogress_|alrprogress_|_CONFIRM_VALUE|inprogress')}">
+      <set item="oparam:result" value="${no-escape:result}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${dbresult}'='0' and (not(matches('${sDbresult}','success')) or matches('${sIsFreeSession}','_IF_TRUE'))}">
+      <set item="oparam:result" value="${no-escape:result}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${dbresult}'='0' and not(matches('${sIsFreeSession}','_IF_TRUE'))}">
+      <set conditionEx="0@{store(sStartSecond,_GET_SECONDS)}" />
+      <set item="oparam:result" value="${no-escape:result}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${customer}'!='' and matches('@{SessionExists(${session_id})}','_IF_TRUE')}">
+      <set conditionEx="0@{store(sDbresult,_DEFAULT_ERR)}" />
+      <set item="oparam:result" value="_GET_DBRESULT" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="true@{freeSession}" dropReply="true" />
+    <input>
+      <param name="content" />
+    </input>
+    <output>
+      <param name="result" />
+    </output>
+  </template>
+  <template procedureName="ChangeTariffPlan" sessionStorage="Memory" sessionLifetime="600" persistent="true">
+    <receiveTemplate>
+      <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(${customer}_${transaction}_${transactiontime})}">
+        <Item customer="${customer}" />
+        @{store(sCustomer,${customer})}
+        @{store(sNewTariffPlan,${service})}
+        @{store(sModule,_CURRENT_MODULE)}
+        @{store(sUsername,${username})}
+        @{store(sPassword,${password})}
+        @{store(sLang,pay)}
+        @{store(sTransaction,${transaction})}
+        @{store(sTransactionTime,${transactiontime})}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="false@{store(sInProgress,#{if(number(_GET_SECONDS)-number(${sStartSecond})&lt;number(_TARIFF_TIMETOPROGRESS) and number(_GET_SECONDS)-number(${sStartSecond})&gt;0,'true','false')})}" />
+    <deliveryTemplate conditionEx="false@{store(sTariffIvrCode,#{if(matches('${sInProgress}','_IF_TRUE'),'${sTariffIvrCode}','_TARIFF_IVRCODE')})}" />
+    <deliveryTemplate conditionEx="false@{store(sGroupName,#{if(matches('${sInProgress}','_IF_TRUE'),'${sGroupName}','PAYNET')})}" />
+    <deliveryTemplate conditionEx="false@{store(sParams,_TARIFF_NAME)}" />
+    <deliveryTemplate conditionEx="#{'${dbresult}'!='0'}" call="TariffPlanStringFormat">
+      <set conditionEx="0@{store(sDbresult,${dbresult})}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${sTariffIvrCode}'='' or '${sNewTariffPlan}'='' or '${sCustomer}'=''}" call="TariffPlanStringFormat">
+      <set conditionEx="0@{store(sDbresult,329990)}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sNewTariffPlan}','_CONFIRM_VALUE')}" call="ChangeTariffPlan_Cnfrm_Step2" />
+    <deliveryTemplate conditionEx="#{matches('${sInProgress}','_IF_TRUE') and '${sTariffIvrCode}'='_TARIFF_IVRCODE'}" call="TariffPlanStringFormat">
+      <set item="iparam:content" value="@{store(sDbresult,alrprogress)}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sInProgress}','_IF_TRUE')}" call="TariffPlanStringFormat">
+      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
+      <set conditionEx="0@{store(sDbresult,inprogress)}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{((_TARIFF_CUSTLST_CNT&gt;0 and not(matches('_TARIFF_CUSTLST_ISAVAIL','_IF_TRUE'))) or (_TARIFF_CUSTLST_CNT=0 and matches('_TARIFF_CUSTLST_ISAVAIL','_IF_TRUE'))) and '_TARIFF_CUSTLST_NOTAVAILINFO'!=''}" call="TariffPlanStringFormat">
+      <set item="iparam:content" value="_TARIFF_CUSTLST_NOTAVAILINFO" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'_GET_TODAY' &gt; '_TARIFF_DATETO'}" call="TariffPlanStringFormat">
+      <set conditionEx="0@{store(sDbresult,notavailable)}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'_GET_TODAY' &lt; '_TARIFF_DATEFROM'}" call="TariffPlanStringFormat">
+      <set conditionEx="0@{store(sDbresult,unavailable)}" />
+      <set conditionEx="0@{store(sParams,_TARIFF_NAME;#{concat(substring('_TARIFF_DATEFROM',7,2),'.',substring('_TARIFF_DATEFROM',5,2),'.',substring('_TARIFF_DATEFROM',1,4))})}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate call="ChangeTariffPlan_Step3" />
+    <input>
+      <param name="customer" />
+      <param name="service" />
+      <param name="lang" />
+      <param name="username" />
+      <param name="password" />
+      <param name="transaction" />
+      <param name="transactiontime" />
+    </input>
+    <output>
+      <param name="content" />
+      <param name="storelog" />
+    </output>
+  </template>
+  <template procedureName="ChangeTariffPlan_Cnfrm_Step2" sessionStorage="Memory" sessionLifetime="600" persistent="true">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${sCustomer}">
+          <Attribute name="checkivrservice" value="1" />
+          <Attribute name="checkblocks" value="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'${sTariffIvrCode}'='#{//Message/Item/@tariffplan}'}" call="TariffPlanStringFormat">
+      <set conditionEx="0@{store(sDbresult,alreadyex)}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${dbresult}'='0' and '_TARIFF_CURRENT_NAME'!=''}" call="TariffPlanStringFormat">
+      <set conditionEx="0@{store(sDbresult,_CONFIRM_VALUE)}" />
+      <set conditionEx="0@{store(sParams,_TARIFF_NAME;_TARIFF_CURRENT_NAME)}" />
+      <set item="iparam:content" value="_GET_CONFIRM_TARIFF_RESULT" />
+    </deliveryTemplate>
+    <deliveryTemplate call="TariffPlanStringFormat">
+      <set conditionEx="0@{store(sDbresult,${dbresult})}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="ChangeTariffPlan_Step3" sessionStorage="Memory" sessionLifetime="600" persistent="true">
+    <receiveTemplate>
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${sCustomer}">
+          <Attribute name="checkivrservice" value="1" />
+          <Attribute name="checkblocks" value="1" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="0@{store(sCurrentTariff,#{//Message/Item/@tariffplan})}" />
+    <deliveryTemplate call="CheckTPChangeAward" />
+    <input>
+      <param name="storelog" />
+    </input>
+    <output>
+      <param name="content" />
+      <param name="storelog" />
+    </output>
+  </template>
+  <template procedureName="CheckTPChangeAward" handler="DBCON_02_01" sessionStorage="Memory" sessionLifetime="600" persistent="true">
+    <receiveTemplate>
+      <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+        <Item procedureName="paynet_check_tp_award">
+          <Attribute name="p_current_tp" type="STRING" value="${sCurrentTariff}" />
+          <Attribute name="p_new_tp" type="STRING" value="${sNewTariffPlan}" />
+          <Attribute name="result" type="out:STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="0@{store(sNotFree,${result})}" />
+    <deliveryTemplate conditionEx="#{'${result}'='9'}" call="TariffPlanStringFormat">
+      <set conditionEx="0@{store(sDbresult,320400)}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${sTariffIvrCode}'='${sCurrentTariff}'}" call="TariffPlanStringFormat">
+      <set conditionEx="0@{store(sDbresult,alreadyex)}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{('${customerblocks}'!='' or '${dbresult}'='320347') and matches('_TARIFF_CHECKBLOCK','_IF_TRUE')}" call="TariffPlanStringFormat">
+      <set conditionEx="0@{store(sDbresult,_GET_AFTER_VERIFY_DBRESULT)}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${dbresult}'!='0' and '${dbresult}'!='320347'}" call="TariffPlanStringFormat">
+      <set conditionEx="0@{store(sDbresult,${dbresult})}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{((_TARIFF_TP_CNT&gt;0 and not(matches('_TARIFF_TP_ISAVAIL','_IF_TRUE'))) or (_TARIFF_TP_CNT=0 and matches('_TARIFF_TP_ISAVAIL','_IF_TRUE'))) and '_TARIFF_TP_NOTAVAILINFO'!=''}" call="TariffPlanStringFormat">
+      <set conditionEx="0@{store(sParams,_TARIFF_NAME;_TARIFF_CURRENT_NAME)}" />
+      <set item="iparam:content" value="_TARIFF_TP_NOTAVAILINFO" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{not(matches('_TARIFF_REDIRECT','_REDIRECT_TO_CURRENT')) and '_TARIFF_REDIRECT'!=''}" call="TariffPlanStringFormat" terminating="false">
+      <set conditionEx="0@{store(sDbresult,redirect)}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'_TARIFF_AVAIL_BAL'!='' and not(matches('${sIsBindBalAval}','_IF_TRUE'))}" call="ChangeTariffPlanCheckBindingBal" />
+    <deliveryTemplate conditionEx="#{_TARIFF_SRVBIND_CNT&gt;0 and not(matches('${sIsBindSrvAval}','_IF_TRUE'))}" call="ChangeTariffPlanCheckSrvBinding" />
+    <deliveryTemplate call="ChangeTariffPlan_Step4" />
+    <input>
+      <param name="storelog" />
+    </input>
+    <output>
+      <param name="content" />
+      <param name="storelog" />
+    </output>
+  </template>
+  <template procedureName="ChangeTariffPlanCheckBindingBal" sessionStorage="Memory" sessionLifetime="600" persistent="true">
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${sCustomer}" subject="getbalance">
+          <Attribute name="unpayment" value="6" />
+          <Attribute name="requestcountertype" value="0" />
+          <Attribute name="rounding" value="4" />
+        </Item>
+        @{store(sIsBindBalAval,true)}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'${dbresult}'!='0'}" call="TariffPlanStringFormat">
+      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
+      <set conditionEx="0@{store(sDbresult,${dbresult})}" />
+      <set conditionEx="0@{store(sIsBindBalAval,false)}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{number(${balanceintpartdotpart} div 100) &lt; _TARIFF_AVAIL_BAL}" call="TariffPlanStringFormat">
+      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
+      <set conditionEx="0@{store(sDbresult,notavailbalance)}" />
+      <set conditionEx="0@{store(sIsBindBalAval,false)}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{number(${balanceintpartdotpart} div 100)&gt;_TARIFF_AVAIL_BAL and _TARIFF_SRVBIND_CNT&gt;0 and not(matches('${sIsBindSrvAval}','_IF_TRUE'))}" call="ChangeTariffPlanCheckSrvBinding" />
+    <deliveryTemplate conditionEx="#{number(${balanceintpartdotpart} div 100)&gt;_TARIFF_AVAIL_BAL}" call="ChangeTariffPlan_Step4">
+      <set item="iparam:customer" value="${sCurrentTariff}_${sNewTariffPlan}" />
+    </deliveryTemplate>
+    <deliveryTemplate call="TariffPlanStringFormat">
+      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
+      <set conditionEx="0@{store(sDbresult,329990)}" />
+      <set conditionEx="0@{store(sIsBindBalAval,false)}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <input>
+      <param name="storelog" />
+    </input>
+    <output>
+      <param name="content" />
+      <param name="storelog" />
+    </output>
+  </template>
+  <template procedureName="ChangeTariffPlanCheckSrvBinding" sessionStorage="Memory" sessionLifetime="600" persistent="true">
+    <receiveTemplate>
+      <Message type="serviceinterrogation" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+        @{store(sCnt,#{if('${sCnt}'='',1,number('${sCnt}')+1)})}
+        <Item customer="${sCustomer}">
+          <Service id="_TARIFF_SRVBIND_SRVCODE" action="interrogation" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'${dbresult}'!='0'}" call="TariffPlanStringFormat">
+      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
+      <set conditionEx="0@{store(sDbresult,${dbresult})}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${subscription}'='_TARIFF_SRVBIND_SUBSR' and '_TARIFF_SRVBIND_INFO'!=''}" call="TariffPlanStringFormat">
+      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
+      <set item="iparam:content" value="_TARIFF_SRVBIND_INFO" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${sCnt}=_TARIFF_SRVBIND_CNT and ${subscription}=_TARIFF_SRVBIND_SUBSR}" call="ChangeTariffPlan_Step4">
+      <set conditionEx="0@{store(sRequi,#{if('${sRequi}'='','_TARIFF_SRVBIND_STORE','${sRequi};_TARIFF_SRVBIND_STORE')})}" />
+      <set item="iparam:customer" value="${sCurrentTariff}_${sNewTariffPlan}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${sCnt}=_TARIFF_SRVBIND_CNT and ${subscription}!=_TARIFF_SRVBIND_SUBSR}" call="ChangeTariffPlan_Step4">
+      <set item="iparam:customer" value="${sCurrentTariff}_${sNewTariffPlan}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${subscription}'!='_TARIFF_SRVBIND_SUBSR'}" call="ChangeTariffPlanCheckSrvBinding" />
+    <deliveryTemplate conditionEx="#{'${subscription}'='_TARIFF_SRVBIND_SUBSR'}" call="ChangeTariffPlanCheckSrvBinding">
+      <set conditionEx="0@{store(sRequi,#{if('${sRequi}'='','_TARIFF_SRVBIND_STORE','${sRequi};_TARIFF_SRVBIND_STORE')})}" />
+    </deliveryTemplate>
+    <deliveryTemplate call="TariffPlanStringFormat">
+      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
+      <set conditionEx="0@{store(sDbresult,329990)}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <input>
+      <param name="storelog" />
+    </input>
+    <output>
+      <param name="content" />
+      <param name="storelog" />
+    </output>
+  </template>
+  <template procedureName="ChangeTariffPlan_Step4" sessionStorage="Memory" sessionLifetime="600" persistent="true">
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${sCustomer}">
+          <Service id="changetariffplan" action="0" class="${sTariffIvrCode}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate call="TariffPlanStringFormat">
+      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
+      <set item="iparam:content" conditionEx="#{'${dbresult}'='0'}" value="@{store(sDbresult,success)}" />
+      <set item="iparam:content" conditionEx="#{'${dbresult}'!='0'}" value="@{store(sDbresult,${dbresult})}" />
+    </deliveryTemplate>
+    <input>
+      <param name="storelog" />
+    </input>
+    <output>
+      <param name="content" />
+      <param name="storelog" />
+    </output>
+  </template>
+  <template procedureName="CheckTariffPlan" sessionStorage="Memory" sessionLifetime="300">
+    <receiveTemplate>
+      <Message type="getlanguage" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(ChckTP_${customer})}">
+        <Item customer="${customer}" />
+        @{store(sCustomer,${customer})}
+        @{store(sModule,_CURRENT_MODULE)}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="false@{store(sLang,_INLANGUAGE)}" />
+    <deliveryTemplate conditionEx="#{'${dbresult}'!='0'}" call="TariffPlanStringFormat">
+      <set conditionEx="0@{store(sDbresult,${dbresult})}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${sCustomer}'=''}" call="TariffPlanStringFormat">
+      <set conditionEx="0@{store(sDbresult,329990)}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{((_TARIFF_CUSTLST_CNT&gt;0 and not(matches('_TARIFF_CUSTLST_ISAVAIL','_IF_TRUE'))) or (_TARIFF_CUSTLST_CNT=0 and matches('_TARIFF_CUSTLST_ISAVAIL','_IF_TRUE'))) and '_TARIFF_CUSTLST_NOTAVAILINFO'!=''}" call="TariffPlanStringFormat">
+      <set item="iparam:content" value="_TARIFF_CUSTLST_NOTAVAILINFO" />
+    </deliveryTemplate>
+    <deliveryTemplate call="CheckTariffPlan_Step2" />
+    <input>
+      <param name="customer" />
+      <param name="lang" />
+    </input>
+    <output>
+      <param name="content" />
+      <param name="storelog" />
+    </output>
+  </template>
+  <template procedureName="CheckTariffPlan_Step2" sessionStorage="Memory" sessionLifetime="300" persistent="false">
+    <receiveTemplate>
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${sCustomer}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate call="TariffPlanStringFormat">
+      <set conditionEx="0@{store(sTariffIvrCode,${tariffplan})}" />
+      <set conditionEx="0@{store(sGroupName,_TARIFF_GROUPNAME)}" />
+      <set conditionEx="0@{store(sParams,_TARIFF_NAME)}" />
+      <set item="iparam:content" conditionEx="#{'${dbresult}'='0'}" value="@{store(sDbresult,checktp)}" />
+      <set item="iparam:content" conditionEx="#{'${dbresult}'!='0'}" value="@{store(sDbresult,${dbresult})}" />
+    </deliveryTemplate>
+    <input>
+      <param name="storelog" />
+    </input>
+    <output>
+      <param name="content" />
+      <param name="storelog" />
+    </output>
+  </template>
+  <template procedureName="TariffPlanStringFormat" sessionStorage="Memory" sessionLifetime="600" persistent="true">
+    <receiveTemplate>
+      <Message type="stringformat" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${sCustomer}">
+          <Attribute name="stringformat" value="#{if('${content}'='','_GET_TARIFF_RESULT','${content}')}@{store(SlowAsync,)}" />
+          <Attribute name="params" value="${sParams}" />
+          <Attribute name="split" value=";" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{not(matches('${sInProgress}','_IF_TRUE')) and ('${sDbresult}'='redirect' or matches('${SlowAsync}','_IF_TRUE'))}">
+      <set conditionEx="0@{store(sInProgress,true)}" />
+      <set conditionEx="0@{store(sStartSecond,_GET_SECONDS)}" />
+      <set item="oparam:result" value="${no-escape:result}" />
+      <set item="oparam:customer" value="${customer}" />
+      <set item="oparam:currenttp" value="${sCurrentTariff}" />
+      <set item="oparam:notfree" value="${sNotFree}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="false@{store(sIsFreeSession,#{if(number(_TARIFF_TIMETOPROGRESS)&gt;0,'false','true')})}" />
+    <deliveryTemplate conditionEx="#{matches('${sInProgress}','_IF_TRUE') and matches('_TARIFF_REDIRECT','_REDIRECT_TO_SMS') and not(matches('${sDbresult}','inprogress|alrprogress|_CONFIRM_VALUE'))}" connector="_SMSCON_1" />
+    <deliveryTemplate conditionEx="#{'${dbresult}'='0' and matches('${sDbresult}','inprogress|alrprogress|_CONFIRM_VALUE')}">
+      <set item="oparam:result" value="${no-escape:result}" />
+      <set item="oparam:customer" value="${customer}" />
+      <set item="oparam:currenttp" value="${sCurrentTariff}" />
+      <set item="oparam:notfree" value="${sNotFree}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${dbresult}'='0' and (not(matches('${sDbresult}','success')) or matches('${sIsFreeSession}','_IF_TRUE'))}">
+      <set item="oparam:result" value="${no-escape:result}" />
+      <set item="oparam:customer" value="${customer}" />
+      <set item="oparam:currenttp" value="${sCurrentTariff}" />
+      <set item="oparam:notfree" value="${sNotFree}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${dbresult}'='0' and not(matches('${sIsFreeSession}','_IF_TRUE'))}">
+      <set conditionEx="0@{store(sStartSecond,_GET_SECONDS)}" />
+      <set item="oparam:result" value="${no-escape:result}" />
+      <set item="oparam:customer" value="${customer}" />
+      <set item="oparam:currenttp" value="${sCurrentTariff}" />
+      <set item="oparam:notfree" value="${sNotFree}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${customer}'!='' and matches('@{SessionExists(${session_id})}','_IF_TRUE')}">
+      <set conditionEx="0@{store(sDbresult,_DEFAULT_ERR)}" />
+      <set item="oparam:result" value="_GET_DBRESULT" />
+      <set item="oparam:customer" value="${customer}" />
+      <set item="oparam:currenttp" value="${sCurrentTariff}" />
+      <set item="oparam:notfree" value="${sNotFree}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="true@{freeSession}" dropReply="true" />
+    <input>
+      <param name="content" />
+      <param name="storelog" />
+    </input>
+    <output>
+      <param name="customer" value="" />
+      <param name="result" />
+      <param name="currenttp" />
+      <param name="notfree" />
+    </output>
+  </template>
 </templates>

@@ -1,12 +1,12 @@
-﻿<Application>
-   <TargetDatabase>
-      <Database forisDataKey="UMS.MG" interfacePackage="" />
-   </TargetDatabase>
-   <Settings>
-      <Item name="ModuleType" value="DBCON" />
-      <Item name="ModuleName" value="DBCON_01_01" />
-      <Item name="CRMCacheCleanInterval" value="60" />
-      <Item name="StoringInterval" value="4" />
-      <Item name="NumOfThreads" value="4" />
-   </Settings>
+<Application>
+  <TargetDatabase>
+    <Database forisDataKey="UMS.MG" interfacePackage="" />
+  </TargetDatabase>
+  <Settings>
+    <Item name="ModuleType" value="DBCON" />
+    <Item name="ModuleName" value="DBCON_01_01" />
+    <Item name="CRMCacheCleanInterval" value="60" />
+    <Item name="StoringInterval" value="4" />
+    <Item name="NumOfThreads" value="4" />
+  </Settings>
 </Application>

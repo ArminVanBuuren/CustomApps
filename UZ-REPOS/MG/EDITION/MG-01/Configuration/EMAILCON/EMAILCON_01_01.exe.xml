@@ -1,4 +1,4 @@
-﻿<Application configClass="FORIS.MessagingGateway.EmailConnector.EmailConnectorConfiguration" type="EMAILCON">
+<Application configClass="FORIS.MessagingGateway.EmailConnector.EmailConnectorConfiguration" type="EMAILCON">
   <EmailConnections>
     <SMTP server="10.160.11.7" port="25" delay="500" advancedSmtp="true">
       <Account from="no-reply@ums.uz" name="adums\no-reply" password="P@sswordqazWSX" />
