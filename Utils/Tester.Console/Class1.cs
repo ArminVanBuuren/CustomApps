@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Xml.XPath;
 using System.Xml.Xsl;
@@ -12,6 +13,31 @@ namespace Tester.Console
 {
     public class FormatFunction : IXsltContextFunction
     {
+        public static String get_codelist(string customer, string format, string @params, string splitSign)
+        {
+            try
+            {
+                return string.Format(format.Replace("[", "{").Replace("]", "}"), @params.Split(new char[] { splitSign.ToCharArray()[0] }))
+                    .Replace("&apos;", "'")
+                    .Replace("&quot;", "\"")
+                    .Replace("&apos", "'")
+                    .Replace("&quot", "\"")
+                    .Replace(@"\^", "##1##")
+                    .Replace("^", "'")
+                    .Replace("##1##", "^")
+                    .Replace(@"\@", "##2##")
+                    .Replace("@", "\"")
+                    .Replace("##2##", "@")
+                    .Replace(@"\%", "##3##")
+                    .Replace("%", "<")
+                    .Replace("##3##", "%");
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+            }
+        }
+
         public int Minargs
         {
             get { return 2; }

@@ -38,7 +38,7 @@ namespace Tester.Console
             {
                 var dd = new FormatFunction();
                 var dd12 = dd.Invoke(null, new[] { @"{0}-{1}-{2}\r\n", "22;33;44" }, null);
-
+                var res = FormatFunction.get_codelist("1111", @"@@ \@      =     ^^ \^", "", ";");
                 //(string s, string s2) = LookupName(6);
 
 
