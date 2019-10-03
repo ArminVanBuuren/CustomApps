@@ -1,6 +1,6 @@
 <!-- 
 Created by Vladimir Khovanskiy  
-Реплейсы знаков: (^ - ') (\^ - ^) (\. - ,) (@ - ") (\@ - @) (\% - <) (\% - %)
+Реплейсы знаков: (^ - ') (\^ - ^) (@ - ") (\@ - @) (\% - <) (\% - %)
 successful_response  - Если атрибут выставлен как "BYCRM", то ответ по успешному выполнению возвращает CRM.
 redirect             - Ответ по SMS, SOAP и т.д.
 availbalance         - Необходимый доступный баланс у абонента, для добавления сервиса. Компонент работает если параметр задан как число
@@ -112,10 +112,10 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="102" datefrom="20131001" dateto="" group="1" availbalance="15"
 
-    info_notavailbalance_rut="Dlya smeny tarifnogo plana na @MAXI@\. na Vashem schetu dolzhno byt^ ne men^she 15 y.e."
-    info_notavailbalance_ruk="Dlya smeny tarifnogo plana na @MAXI@\. na Vashem schetu dolzhno byt^ ne men^she 15 y.e."
-    info_notavailbalance_uz="Dlya smeny tarifnogo plana na @MAXI@\. na Vashem schetu dolzhno byt^ ne men^she 15 y.e."
-    info_notavailbalance_en="Dlya smeny tarifnogo plana na @MAXI@\. na Vashem schetu dolzhno byt^ ne men^she 15 y.e."
+    info_notavailbalance_rut="Dlya smeny tarifnogo plana na @MAXI@, na Vashem schetu dolzhno byt^ ne men^she 15 y.e."
+    info_notavailbalance_ruk="Dlya smeny tarifnogo plana na @MAXI@, na Vashem schetu dolzhno byt^ ne men^she 15 y.e."
+    info_notavailbalance_uz="Dlya smeny tarifnogo plana na @MAXI@, na Vashem schetu dolzhno byt^ ne men^she 15 y.e."
+    info_notavailbalance_en="Dlya smeny tarifnogo plana na @MAXI@, na Vashem schetu dolzhno byt^ ne men^she 15 y.e."
 
     tariffname_ruk="MAXI"
     tariffname_rut="MAXI"
