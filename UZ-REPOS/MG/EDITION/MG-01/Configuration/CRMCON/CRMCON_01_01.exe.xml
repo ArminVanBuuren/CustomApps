@@ -10,11 +10,8 @@
     <Item name="ModuleName" value="CRMCON_01_01" />
     <Item name="ModuleType" value="CRMCON" />
     <Item name="CRMCacheCleanInterval" value="1200" />
-    <!-- 1200 -->
     <Item name="StoringInterval" value="20" />
-    <!--20-->
     <Item name="StoringHWM" value="1200" />
-    <!--200-->
     <Item name="XmlEncoding" value="utf-16" />
     <Item name="MSMQLimit" value="4194304" />
     <Item name="ReportTemplates" value="^Delivery" />

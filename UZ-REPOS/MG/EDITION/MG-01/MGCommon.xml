@@ -20,22 +20,22 @@
     <Connector name="USSDCON_01_02"       type="SMSCON"   host="localhost" port="11171" sessionHandler="false" serviceName="FORIS.MG.USSDCON.01.02"             config="Configuration\USSDCON\USSDCON_01_02.exe.xml"/>
     <Connector name="USSDCON_01_PCRF"     type="SMSCON"   host="localhost" port="11172" sessionHandler="false" serviceName="FORIS.MG.USSDCON.01.PCRF"           config="Configuration\USSDCON\USSDCON_01_PCRF.exe.xml"/>
 
-    <Connector name="SOAP_USSDCON_02_01"  type="SOAPCON"  host="mg02"      port="11150" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.USSD.02.01"        config="Configuration\SOAPCON\SOAPCON_USSD_02_01.exe.xml"/>
-    <Connector name="SOAP_USSDCON_02_02"  type="SOAPCON"  host="mg02"      port="11120" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.USSD.02.02"        config="Configuration\SOAPCON\SOAPCON_USSD_02_02.exe.xml"/>
-    <Connector name="SOAP_USSDCON_02_KP"  type="SOAPCON"  host="mg02"      port="11123" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.USSD.02.KP"        config="Configuration\SOAPCON\SOAPCON_USSD_02_KP.exe.xml"/>
-    <Connector name="SOAP_PAYNET"         type="SOAPCON"  host="mg02"      port="11100" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.PAYNET"            config="Configuration\SOAPCON\SOAPCON_PAYNET.exe.xml"/>
-    <Connector name="SOAP_CLICK"          type="SOAPCON"  host="mg02"      port="11101" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.CLICK"             config="Configuration\SOAPCON\SOAPCON_CLICK.exe.xml"/>
-    <Connector name="SOAP_RBT"            type="SOAPCON"  host="mg02"      port="11105" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.RBT"               config="Configuration\SOAPCON\SOAPCON_RBT.exe.xml"/>
-    <Connector name="SOAP_SMSCON_02_01"   type="SOAPCON"  host="mg02"      port="11110" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.SMS.02.01"         config="Configuration\SOAPCON\SOAPCON_SMS_02_01.exe.xml"/>    
-    <Connector name="SOAP_BMS_02_01"      type="SOAPCON"  host="mg02"      port="11125" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.BMS.02.01"         config="Configuration\SOAPCON\SOAPCON_BMS_02_01.exe.xml"/>
-    <Connector name="SOAP_ANTIFRAUD"      type="SOAPCON"  host="mg02"      port="11151" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.ANTIFRAUD"         config="Configuration\SOAPCON\SOAPCON_ANTIFRAUD.exe.xml"/>
-    <Connector name="IVRCON_02_01"        type="IVRCON"   host="mg02"      port="11130" sessionHandler="false" serviceName="FORIS.MG.IVRCON.02.01"              config="Configuration\IVRCON\IVRCON_02_01.exe.xml"/>
-    <Connector name="IVRCON_02_02"        type="IVRCON"   host="mg02"      port="11131" sessionHandler="false" serviceName="FORIS.MG.IVRCON.02.02"              config="Configuration\IVRCON\IVRCON_02_02.exe.xml"/>
-    <Connector name="IVRCON_02_07"        type="IVRCON"   host="mg02"      port="11136" sessionHandler="false" serviceName="FORIS.MG.IVRCON.SCP.02.01"          config="Configuration\IVRCON\IVRCON_SCP_02_07.exe.xml"/>
-    <Connector name="IVRCON_02_08"        type="IVRCON"   host="mg02"      port="11137" sessionHandler="false" serviceName="FORIS.MG.IVRCON.SCP.02.02"          config="Configuration\IVRCON\IVRCON_SCP_02_08.exe.xml"/>
-    <Connector name="DBCON_02_01"         type="DBCON"    host="mg02"      port="11141" sessionHandler="false" serviceName="FORIS.MG.DBCON.02.01"               config="Configuration\DBCON\DBCON_02_01.exe.xml"/>
-    <Connector name="SMSCON_02_01"        type="SMSCON"   host="mg02"      port="11310" sessionHandler="false" serviceName="FORIS.MG.SMSCON.02.01"              config="Configuration\SMSCON\SMSCON_02_01.exe.xml"/>
-    <Connector name="SMSCON_02_02"        type="SMSCON"   host="mg02"      port="11311" sessionHandler="false" serviceName="FORIS.MG.SMSCON.02.02.ISSA"         config="Configuration\SMSCON\SMSCON_02_02.ISSA.exe.xml"/>
+    <Connector name="SOAP_USSDCON_02_01"  type="SOAPCON"  host="mg2"      port="11150" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.USSD.02.01"        config="Configuration\SOAPCON\SOAPCON_USSD_02_01.exe.xml"/>
+    <Connector name="SOAP_USSDCON_02_02"  type="SOAPCON"  host="mg2"      port="11120" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.USSD.02.02"        config="Configuration\SOAPCON\SOAPCON_USSD_02_02.exe.xml"/>
+    <Connector name="SOAP_USSDCON_02_KP"  type="SOAPCON"  host="mg2"      port="11123" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.USSD.02.KP"        config="Configuration\SOAPCON\SOAPCON_USSD_02_KP.exe.xml"/>
+    <Connector name="SOAP_PAYNET"         type="SOAPCON"  host="mg2"      port="11100" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.PAYNET"            config="Configuration\SOAPCON\SOAPCON_PAYNET.exe.xml"/>
+    <Connector name="SOAP_CLICK"          type="SOAPCON"  host="mg2"      port="11101" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.CLICK"             config="Configuration\SOAPCON\SOAPCON_CLICK.exe.xml"/>
+    <Connector name="SOAP_RBT"            type="SOAPCON"  host="mg2"      port="11105" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.RBT"               config="Configuration\SOAPCON\SOAPCON_RBT.exe.xml"/>
+    <Connector name="SOAP_SMSCON_02_01"   type="SOAPCON"  host="mg2"      port="11110" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.SMS.02.01"         config="Configuration\SOAPCON\SOAPCON_SMS_02_01.exe.xml"/>    
+    <Connector name="SOAP_BMS_02_01"      type="SOAPCON"  host="mg2"      port="11125" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.BMS.02.01"         config="Configuration\SOAPCON\SOAPCON_BMS_02_01.exe.xml"/>
+    <Connector name="SOAP_ANTIFRAUD"      type="SOAPCON"  host="mg2"      port="11151" sessionHandler="false" serviceName="FORIS.MG.SOAPCON.ANTIFRAUD"         config="Configuration\SOAPCON\SOAPCON_ANTIFRAUD.exe.xml"/>
+    <Connector name="IVRCON_02_01"        type="IVRCON"   host="mg2"      port="11130" sessionHandler="false" serviceName="FORIS.MG.IVRCON.02.01"              config="Configuration\IVRCON\IVRCON_02_01.exe.xml"/>
+    <Connector name="IVRCON_02_02"        type="IVRCON"   host="mg2"      port="11131" sessionHandler="false" serviceName="FORIS.MG.IVRCON.02.02"              config="Configuration\IVRCON\IVRCON_02_02.exe.xml"/>
+    <Connector name="IVRCON_02_07"        type="IVRCON"   host="mg2"      port="11136" sessionHandler="false" serviceName="FORIS.MG.IVRCON.SCP.02.01"          config="Configuration\IVRCON\IVRCON_SCP_02_07.exe.xml"/>
+    <Connector name="IVRCON_02_08"        type="IVRCON"   host="mg2"      port="11137" sessionHandler="false" serviceName="FORIS.MG.IVRCON.SCP.02.02"          config="Configuration\IVRCON\IVRCON_SCP_02_08.exe.xml"/>
+    <Connector name="DBCON_02_01"         type="DBCON"    host="mg2"      port="11141" sessionHandler="false" serviceName="FORIS.MG.DBCON.02.01"               config="Configuration\DBCON\DBCON_02_01.exe.xml"/>
+    <Connector name="SMSCON_02_01"        type="SMSCON"   host="mg2"      port="11310" sessionHandler="false" serviceName="FORIS.MG.SMSCON.02.01"              config="Configuration\SMSCON\SMSCON_02_01.exe.xml"/>
+    <Connector name="SMSCON_02_02"        type="SMSCON"   host="mg2"      port="11311" sessionHandler="false" serviceName="FORIS.MG.SMSCON.02.02.ISSA"         config="Configuration\SMSCON\SMSCON_02_02.ISSA.exe.xml"/>
 
   </Connections>
   <log4net>
