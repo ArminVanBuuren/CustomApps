@@ -432,9 +432,7 @@
     <Content Include="EDITION\SPA.SA\FP.SCP\Commands\SC.UpdateTDCDataSet.xml" />
     <Content Include="EDITION\SPA.SA\FP.SCP\Commands\UpdateLanguageOnFP.xml" />
     <Content Include="EDITION\SPA.SA\FP.SCP\Commands\UpdatePAAttributes.xml" />
-    <Content Include="EDITION\SPA.SA\FP.SCP\configuration.application.scp.01.xml" />
     <Content Include="EDITION\SPA.SA\FP.SCP\configuration.application.scp.155.xml" />
-    <Content Include="EDITION\SPA.SA\FP.SCP\configuration.common.scp.01.xml" />
     <Content Include="EDITION\SPA.SA\FP.SCP\configuration.common.scp.155.xml" />
     <Content Include="EDITION\SPA.SA\FP.SCP\Decoders\FinancialPlatformDecoder.xml" />
     <Content Include="EDITION\SPA.SA\FP.SCP\dictionary.xml" />
