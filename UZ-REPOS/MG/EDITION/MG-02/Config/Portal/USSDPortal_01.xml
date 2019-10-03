@@ -1,161 +1,162 @@
 ﻿<!-- 
-Created by Vladimir Khovanskiy  
+Created by Vladimir Khovanskiy
+Реплейсы знаков: (^ - ') (\^ - ^)
 -->
 <Portal>
-	<Item name="Main" 
+  <Item name="Main"
 
-			info_ruk="0.Language&#xA;1.Schet&#xA;2.Mobil&apos;nyi pomoshnik&#xA;3.Moy nomer"
-			info_rut="0.Language&#xA;1.Schet&#xA;2.Mobil&apos;nyi pomoshnik&#xA;3.Moy nomer"
-			info_uz="0.Language&#xA;1.Schet&#xA;2.Mobil&apos;nyi pomoshnik&#xA;3.Moy nomer"
-			info_en="0.Language&#xA;1.BILL&#xA;2.Mobile Assistant&#xA;3.My number"
+    info_ruk="0.Language&#xA;1.Schet&#xA;2.Mobil&apos;nyi pomoshnik&#xA;3.Moy nomer"
+    info_rut="0.Language&#xA;1.Schet&#xA;2.Mobil&apos;nyi pomoshnik&#xA;3.Moy nomer"
+    info_uz="0.Language&#xA;1.Schet&#xA;2.Mobil&apos;nyi pomoshnik&#xA;3.Moy nomer"
+    info_en="0.Language&#xA;1.BILL&#xA;2.Mobile Assistant&#xA;3.My number"
 
-			>
-		<code value=""/>
-	</Item>
+    >
+    <code value=""/>
+  </Item>
 
-	<Item name="Language" 
+  <Item name="Language"
 
-			info_ruk="1.O&apos;zbekcha&#xA;2.Russkiy&#xA;3.English&#xA;0.Nazad"
-			info_rut="1.O&apos;zbekcha&#xA;2.Russkiy&#xA;3.English&#xA;0.Nazad"
-			info_uz="1.O&apos;zbekcha&#xA;2.Russkiy&#xA;3.English&#xA;0.Nazad"
-			info_en="1.O&apos;zbekcha&#xA;2.Russkiy&#xA;3.English&#xA;0.Back"
+    info_ruk="1.O&apos;zbekcha&#xA;2.Russkiy&#xA;3.English&#xA;0.Nazad"
+    info_rut="1.O&apos;zbekcha&#xA;2.Russkiy&#xA;3.English&#xA;0.Nazad"
+    info_uz="1.O&apos;zbekcha&#xA;2.Russkiy&#xA;3.English&#xA;0.Nazad"
+    info_en="1.O&apos;zbekcha&#xA;2.Russkiy&#xA;3.English&#xA;0.Back"
 
-			>
-		<code value="*0"/>
-	</Item>
+    >
+    <code value="*0"/>
+  </Item>
 
-	<Item name="Bill" 
+  <Item name="Bill"
 
-			info_ruk="1.Balans&#xA;2.Poslednyaya oplata&#xA;3.Detalizaciya rashodov&#xA;4.Poslednie 5 deystviy&#xA;0.Nazad"
-			info_rut="1.Balans&#xA;2.Poslednyaya oplata&#xA;3.Detalizaciya rashodov&#xA;4.Poslednie 5 deystviy&#xA;0.Nazad"
-			info_uz="1.Balans&#xA;2.Poslednyaya oplata&#xA;3.Detalizaciya rashodov&#xA;4.Poslednie 5 deystviy&#xA;0.Nazad"
-			info_en="1.Balance&#xA;2.Last payment&#xA;3.Detailed costs&#xA;4.Last 5 Action&#xA;0.Back"
+    info_ruk="1.Balans&#xA;2.Poslednyaya oplata&#xA;3.Detalizaciya rashodov&#xA;4.Poslednie 5 deystviy&#xA;0.Nazad"
+    info_rut="1.Balans&#xA;2.Poslednyaya oplata&#xA;3.Detalizaciya rashodov&#xA;4.Poslednie 5 deystviy&#xA;0.Nazad"
+    info_uz="1.Balans&#xA;2.Poslednyaya oplata&#xA;3.Detalizaciya rashodov&#xA;4.Poslednie 5 deystviy&#xA;0.Nazad"
+    info_en="1.Balance&#xA;2.Last payment&#xA;3.Detailed costs&#xA;4.Last 5 Action&#xA;0.Back"
 
-			>
-		<code value="*1"/>
-	</Item>
-	<Item name="Bill.Balans" 
+    >
+    <code value="*1"/>
+  </Item>
+  <Item name="Bill.Balans"
 
-			info_ruk="1.O&apos;zbekcha&#xA;2.Russkiy&#xA;3.English&#xA;0.Nazad"
-			info_rut="1.O&apos;zbekcha&#xA;2.Russkiy&#xA;3.English&#xA;0.Nazad"
-			info_uz="1.O&apos;zbekcha&#xA;2.Russkiy&#xA;3.English&#xA;0.Nazad"
-			info_en="1.O&apos;zbekcha&#xA;2.Russkiy&#xA;3.English&#xA;0.Back"
+    info_ruk="1.O&apos;zbekcha&#xA;2.Russkiy&#xA;3.English&#xA;0.Nazad"
+    info_rut="1.O&apos;zbekcha&#xA;2.Russkiy&#xA;3.English&#xA;0.Nazad"
+    info_uz="1.O&apos;zbekcha&#xA;2.Russkiy&#xA;3.English&#xA;0.Nazad"
+    info_en="1.O&apos;zbekcha&#xA;2.Russkiy&#xA;3.English&#xA;0.Back"
 
-			>
-		<code value="*1*1"/>
-	</Item>
+    >
+    <code value="*1*1"/>
+  </Item>
 
-	<Item name="MobileHelper" 
+  <Item name="MobileHelper"
 
-			info_ruk="1.Smena tarifnogo plana&#xA;2.Upravlenie uslugami&#xA;3.Pryamaya peredacha&#xA;0.Nazad"
-			info_rut="1.Smena tarifnogo plana&#xA;2.Upravlenie uslugami&#xA;3.Pryamaya peredacha&#xA;0.Nazad"
-			info_uz="1.Smena tarifnogo plana&#xA;2.Upravlenie uslugami&#xA;3.Pryamaya peredacha&#xA;0.Nazad"
-			info_en="1.Tariff Plans&#xA;2.Services&#xA;3.Money Transfer&#xA;0.Back"
+    info_ruk="1.Smena tarifnogo plana&#xA;2.Upravlenie uslugami&#xA;3.Pryamaya peredacha&#xA;0.Nazad"
+    info_rut="1.Smena tarifnogo plana&#xA;2.Upravlenie uslugami&#xA;3.Pryamaya peredacha&#xA;0.Nazad"
+    info_uz="1.Smena tarifnogo plana&#xA;2.Upravlenie uslugami&#xA;3.Pryamaya peredacha&#xA;0.Nazad"
+    info_en="1.Tariff Plans&#xA;2.Services&#xA;3.Money Transfer&#xA;0.Back"
 
-			>
-		<code value="*2"/>
-	</Item>
-	<Item name="MobileHelper.Tariff" 
+    >
+    <code value="*2"/>
+  </Item>
+  <Item name="MobileHelper.Tariff"
 
-			info_ruk="1.Start&#xA;2.MAXI&#xA;3.Optima&#xA;4.Ultra&#xA;5.Plus&#xA;0.Nazad"
-			info_rut="1.Start&#xA;2.MAXI&#xA;3.Optima&#xA;4.Ultra&#xA;5.Plus&#xA;0.Nazad"
-			info_uz="1.Start&#xA;2.MAXI&#xA;3.Optima&#xA;4.Ultra&#xA;5.Plus&#xA;0.Nazad"
-			info_en="1.Start&#xA;2.MAXI&#xA;3.Optima&#xA;4.Ultra&#xA;5.Plus&#xA;0.Back"
+    info_ruk="1.Start&#xA;2.MAXI&#xA;3.Optima&#xA;4.Ultra&#xA;5.Plus&#xA;0.Nazad"
+    info_rut="1.Start&#xA;2.MAXI&#xA;3.Optima&#xA;4.Ultra&#xA;5.Plus&#xA;0.Nazad"
+    info_uz="1.Start&#xA;2.MAXI&#xA;3.Optima&#xA;4.Ultra&#xA;5.Plus&#xA;0.Nazad"
+    info_en="1.Start&#xA;2.MAXI&#xA;3.Optima&#xA;4.Ultra&#xA;5.Plus&#xA;0.Back"
 
-			>
-		<code value="*2*1"/>
-	</Item>
-	<Item name="MobileHelper.Tariff.Start.Info" 
+    >
+    <code value="*2*1"/>
+  </Item>
+  <Item name="MobileHelper.Tariff.Start.Info"
 
-			info_ruk="TP Start&#xA;Zvonki po UZB - 0,03 y.e&#xA;Ish.SMS - 0,03 y.e&#xA;MN Ish.SMS - 0,15 y.e&#xA;Abon.Plata - 0,10 y.e v den&apos;&#xA;0.Nazad"
-			info_rut="TP Start&#xA;Zvonki po UZB - 0,03 y.e&#xA;Ish.SMS - 0,03 y.e&#xA;MN Ish.SMS - 0,15 y.e&#xA;Abon.Plata - 0,10 y.e v den&apos;&#xA;0.Nazad"
-			info_uz="TP Start&#xA;Zvonki po UZB - 0,03 y.e&#xA;Ish.SMS - 0,03 y.e&#xA;MN Ish.SMS - 0,15 y.e&#xA;Abon.Plata - 0,10 y.e v den&apos;&#xA;0.Nazad"
-			info_en="TP Start&#xA;Zvonki po UZB - 0,03 y.e&#xA;Ish.SMS - 0,03 y.e&#xA;MN Ish.SMS - 0,15 y.e&#xA;Abon.Plata - 0,10 y.e v den&apos;&#xA;0.Nazad"
+    info_ruk="TP Start&#xA;Zvonki po UZB - 0,03 y.e&#xA;Ish.SMS - 0,03 y.e&#xA;MN Ish.SMS - 0,15 y.e&#xA;Abon.Plata - 0,10 y.e v den&apos;&#xA;0.Nazad"
+    info_rut="TP Start&#xA;Zvonki po UZB - 0,03 y.e&#xA;Ish.SMS - 0,03 y.e&#xA;MN Ish.SMS - 0,15 y.e&#xA;Abon.Plata - 0,10 y.e v den&apos;&#xA;0.Nazad"
+    info_uz="TP Start&#xA;Zvonki po UZB - 0,03 y.e&#xA;Ish.SMS - 0,03 y.e&#xA;MN Ish.SMS - 0,15 y.e&#xA;Abon.Plata - 0,10 y.e v den&apos;&#xA;0.Nazad"
+    info_en="TP Start&#xA;Zvonki po UZB - 0,03 y.e&#xA;Ish.SMS - 0,03 y.e&#xA;MN Ish.SMS - 0,15 y.e&#xA;Abon.Plata - 0,10 y.e v den&apos;&#xA;0.Nazad"
 
-			>
-		<code value="*2*1*1*?"/>
-		<code value="*100*?"/>
-	</Item>
-        <Item name="MobileHelper.Tariff.Ultra.Info" 
+    >
+    <code value="*2*1*1*?"/>
+    <code value="*100*?"/>
+  </Item>
+  <Item name="MobileHelper.Tariff.Ultra.Info"
 
-			info_ruk="TP Ultra&#xA;2000 minut v mesyac po UZB&#xA;1500 MB Internet Paket&#xA;Abon.Plata - 25 y.e v mesyac&#xA;Podrobnosti na sayte http://UMS.UZ&#xA;0.Nazad"
-			info_rut="TP Ultra&#xA;2000 minut v mesyac po UZB&#xA;1500 MB Internet Paket&#xA;Abon.Plata - 25 y.e v mesyac&#xA;Podrobnosti na sayte http://UMS.UZ&#xA;0.Nazad"
-			info_uz="TP Ultra&#xA;2000 minut v mesyac po UZB&#xA;1500 MB Internet Paket&#xA;Abon.Plata - 25 y.e v mesyac&#xA;Podrobnosti na sayte http://UMS.UZ&#xA;0.Nazad"
-			info_en="TP Ultra&#xA;2000 minut v mesyac po UZB&#xA;1500 MB Internet Paket&#xA;Abon.Plata - 25 y.e v mesyac&#xA;Podrobnosti na sayte http://UMS.UZ&#xA;0.Nazad"
+    info_ruk="TP Ultra&#xA;2000 minut v mesyac po UZB&#xA;1500 MB Internet Paket&#xA;Abon.Plata - 25 y.e v mesyac&#xA;Podrobnosti na sayte http://UMS.UZ&#xA;0.Nazad"
+    info_rut="TP Ultra&#xA;2000 minut v mesyac po UZB&#xA;1500 MB Internet Paket&#xA;Abon.Plata - 25 y.e v mesyac&#xA;Podrobnosti na sayte http://UMS.UZ&#xA;0.Nazad"
+    info_uz="TP Ultra&#xA;2000 minut v mesyac po UZB&#xA;1500 MB Internet Paket&#xA;Abon.Plata - 25 y.e v mesyac&#xA;Podrobnosti na sayte http://UMS.UZ&#xA;0.Nazad"
+    info_en="TP Ultra&#xA;2000 minut v mesyac po UZB&#xA;1500 MB Internet Paket&#xA;Abon.Plata - 25 y.e v mesyac&#xA;Podrobnosti na sayte http://UMS.UZ&#xA;0.Nazad"
 
-			>
-		<code value="*2*1*4*?"/>
-		<code value="*103*?"/>
-	</Item>
-	<Item name="MobileHelper.Service.1" 
+    >
+    <code value="*2*1*4*?"/>
+    <code value="*103*?"/>
+  </Item>
+  <Item name="MobileHelper.Service.1"
 
-			info_ruk="1.Mobilniy internet&#xA;2.Family&#xA;3.SMS-pakety&#xA;4.Internet-pakety&#xA;5.Zapret opredeleniya nomera&#xA;6.Vam zvonili&#xA;7.Zapret pryamoy peredachi&#xA;8.Pereadresatsiya&#xA;00.Dalee&#xA;0.Nazad"
-			info_rut="1.Mobilniy internet&#xA;2.Family&#xA;3.SMS-pakety&#xA;4.Internet-pakety&#xA;5.Zapret opredeleniya nomera&#xA;6.Vam zvonili&#xA;7.Zapret pryamoy peredachi&#xA;8.Pereadresatsiya&#xA;00.Dalee&#xA;0.Nazad"			
-			info_uz="1.Mobilniy internet&#xA;2.Family&#xA;3.SMS-pakety&#xA;4.Internet-pakety&#xA;5.Zapret opredeleniya nomera&#xA;6.Vam zvonili&#xA;7.Zapret pryamoy peredachi&#xA;8.Pereadresatsiya&#xA;00.Dalee&#xA;0.Nazad"
-			info_en="1.Mobile internet&#xA;2.Family&#xA;3.SMS-packages&#xA;4.Internet-packages&#xA;5.CLIR&#xA;6.Who Called&#xA;7.Direct transfer prohibition&#xA;8.Call Forwarding&#xA;00.Next&#xA;0.Back"
+    info_ruk="1.Mobilniy internet&#xA;2.Family&#xA;3.SMS-pakety&#xA;4.Internet-pakety&#xA;5.Zapret opredeleniya nomera&#xA;6.Vam zvonili&#xA;7.Zapret pryamoy peredachi&#xA;8.Pereadresatsiya&#xA;00.Dalee&#xA;0.Nazad"
+    info_rut="1.Mobilniy internet&#xA;2.Family&#xA;3.SMS-pakety&#xA;4.Internet-pakety&#xA;5.Zapret opredeleniya nomera&#xA;6.Vam zvonili&#xA;7.Zapret pryamoy peredachi&#xA;8.Pereadresatsiya&#xA;00.Dalee&#xA;0.Nazad"
+    info_uz="1.Mobilniy internet&#xA;2.Family&#xA;3.SMS-pakety&#xA;4.Internet-pakety&#xA;5.Zapret opredeleniya nomera&#xA;6.Vam zvonili&#xA;7.Zapret pryamoy peredachi&#xA;8.Pereadresatsiya&#xA;00.Dalee&#xA;0.Nazad"
+    info_en="1.Mobile internet&#xA;2.Family&#xA;3.SMS-packages&#xA;4.Internet-packages&#xA;5.CLIR&#xA;6.Who Called&#xA;7.Direct transfer prohibition&#xA;8.Call Forwarding&#xA;00.Next&#xA;0.Back"
 
-			>
-		<code value="*2*2"/>
-	</Item>
-	<Item name="MobileHelper.Service.SMSPack.1" 
+    >
+    <code value="*2*2"/>
+  </Item>
+  <Item name="MobileHelper.Service.SMSPack.1"
 
-			info_ruk="1.SMS-100&#xA;2.SMS-300&#xA;3.SMS-1000&#xA;0.Nazad"
-			info_rut="1.SMS-100&#xA;2.SMS-300&#xA;3.SMS-1000&#xA;0.Nazad"
-			info_uz="1.SMS-100&#xA;2.SMS-300&#xA;3.SMS-1000&#xA;0.Nazad"
-			info_en="1.SMS-100&#xA;2.SMS-300&#xA;3.SMS-1000&#xA;0.Back"
+    info_ruk="1.SMS-100&#xA;2.SMS-300&#xA;3.SMS-1000&#xA;0.Nazad"
+    info_rut="1.SMS-100&#xA;2.SMS-300&#xA;3.SMS-1000&#xA;0.Nazad"
+    info_uz="1.SMS-100&#xA;2.SMS-300&#xA;3.SMS-1000&#xA;0.Nazad"
+    info_en="1.SMS-100&#xA;2.SMS-300&#xA;3.SMS-1000&#xA;0.Back"
 
-			>
-		<code value="*2*2*3"/>
-	</Item>
-	<Item name="MobileHelper.Service.InternetPack.1" 
+    >
+    <code value="*2*2*3"/>
+  </Item>
+  <Item name="MobileHelper.Service.InternetPack.1"
 
-			info_ruk="1.Internet-300&#xA;2.Internet-1000&#xA;3.Internet-3000&#xA;4.Internet-5000&#xA;5.Internet-2000&#xA;0.Nazad"
-			info_rut="1.Internet-300&#xA;2.Internet-1000&#xA;3.Internet-3000&#xA;4.Internet-5000&#xA;5.Internet-2000&#xA;0.Nazad"
-			info_uz="1.Internet-300&#xA;2.Internet-1000&#xA;3.Internet-3000&#xA;4.Internet-5000&#xA;5.Internet-2000&#xA;0.Nazad"
-			info_en="1.Internet-300&#xA;2.Internet-1000&#xA;3.Internet-3000&#xA;4.Internet-5000&#xA;5.Internet-2000&#xA;0.Back"
+    info_ruk="1.Internet-300&#xA;2.Internet-1000&#xA;3.Internet-3000&#xA;4.Internet-5000&#xA;5.Internet-2000&#xA;0.Nazad"
+    info_rut="1.Internet-300&#xA;2.Internet-1000&#xA;3.Internet-3000&#xA;4.Internet-5000&#xA;5.Internet-2000&#xA;0.Nazad"
+    info_uz="1.Internet-300&#xA;2.Internet-1000&#xA;3.Internet-3000&#xA;4.Internet-5000&#xA;5.Internet-2000&#xA;0.Nazad"
+    info_en="1.Internet-300&#xA;2.Internet-1000&#xA;3.Internet-3000&#xA;4.Internet-5000&#xA;5.Internet-2000&#xA;0.Back"
 
-			>
-		<code value="*2*2*4"/>
-	</Item>
-	<Item name="MobileHelper.Service.2" 
+    >
+    <code value="*2*2*4"/>
+  </Item>
+  <Item name="MobileHelper.Service.2"
 
-			info_ruk="10.Konferents-svyaz&apos;&#xA;11.Zapret rassilok&#xA;12.Dostup k MN svyazi&#xA;13.Ozhydanie I uderjanie vyzova&#xA;14.MN rouming&#xA;15.Opredelitel&apos; nomera&#xA;00.Dalee&#xA;0.Nazad"
-			info_rut="10.Konferents-svyaz&apos;&#xA;11.Zapret rassilok&#xA;12.Dostup k MN svyazi&#xA;13.Ozhydanie I uderjanie vyzova&#xA;14.MN rouming&#xA;15.Opredelitel&apos; nomera&#xA;00.Dalee&#xA;0.Nazad"
-			info_uz="10.Konferents-svyaz&apos;&#xA;11.Zapret rassilok&#xA;12.Dostup k MN svyazi&#xA;13.Ozhydanie I uderjanie vyzova&#xA;14.MN rouming&#xA;15.Opredelitel&apos; nomera&#xA;00.Dalee&#xA;0.Nazad"
-			info_en="10.Conference Call&#xA;11.Ban Newsletters&#xA;12.International Call&#xA;13.Call Waiting &amp; Call Hold&#xA;14.International Roaming&#xA;15.Caller ID&#xA;00.Next&#xA;0.Back"
+    info_ruk="10.Konferents-svyaz&apos;&#xA;11.Zapret rassilok&#xA;12.Dostup k MN svyazi&#xA;13.Ozhydanie I uderjanie vyzova&#xA;14.MN rouming&#xA;15.Opredelitel&apos; nomera&#xA;00.Dalee&#xA;0.Nazad"
+    info_rut="10.Konferents-svyaz&apos;&#xA;11.Zapret rassilok&#xA;12.Dostup k MN svyazi&#xA;13.Ozhydanie I uderjanie vyzova&#xA;14.MN rouming&#xA;15.Opredelitel&apos; nomera&#xA;00.Dalee&#xA;0.Nazad"
+    info_uz="10.Konferents-svyaz&apos;&#xA;11.Zapret rassilok&#xA;12.Dostup k MN svyazi&#xA;13.Ozhydanie I uderjanie vyzova&#xA;14.MN rouming&#xA;15.Opredelitel&apos; nomera&#xA;00.Dalee&#xA;0.Nazad"
+    info_en="10.Conference Call&#xA;11.Ban Newsletters&#xA;12.International Call&#xA;13.Call Waiting &amp; Call Hold&#xA;14.International Roaming&#xA;15.Caller ID&#xA;00.Next&#xA;0.Back"
 
-			>
-		<code value="*2*2*00"/>
-	</Item>
-	<Item name="MobileHelper.Service.3" 
+    >
+    <code value="*2*2*00"/>
+  </Item>
+  <Item name="MobileHelper.Service.3"
 
-			info_ruk="16.Sohranenie nomera&#xA;17.Obeshanniy platezh&#xA;18.NIGHTDRIVE1&#xA;19.NIGHTDRIVE7&#xA;20.NIGHTDRIVE30&#xA;0.Nazad&#xA;*.V nachalo"
-			info_rut="16.Sohranenie nomera&#xA;17.Obeshanniy platezh&#xA;18.NIGHTDRIVE1&#xA;19.NIGHTDRIVE7&#xA;20.NIGHTDRIVE30&#xA;0.Nazad&#xA;*.V nachalo"
-			info_uz="16.Sohranenie nomera&#xA;17.Obeshanniy platezh&#xA;18.NIGHTDRIVE1&#xA;19.NIGHTDRIVE7&#xA;20.NIGHTDRIVE30&#xA;0.Nazad&#xA;*.V nachalo"
-			info_en="16.Save my number&#xA;17.Promised Payment&#xA;18.NIGHTDRIVE1&#xA;19.NIGHTDRIVE7&#xA;20.NIGHTDRIVE30&#xA;0.Back&#xA;*.Back To Top"
+    info_ruk="16.Sohranenie nomera&#xA;17.Obeshanniy platezh&#xA;18.NIGHTDRIVE1&#xA;19.NIGHTDRIVE7&#xA;20.NIGHTDRIVE30&#xA;0.Nazad&#xA;*.V nachalo"
+    info_rut="16.Sohranenie nomera&#xA;17.Obeshanniy platezh&#xA;18.NIGHTDRIVE1&#xA;19.NIGHTDRIVE7&#xA;20.NIGHTDRIVE30&#xA;0.Nazad&#xA;*.V nachalo"
+    info_uz="16.Sohranenie nomera&#xA;17.Obeshanniy platezh&#xA;18.NIGHTDRIVE1&#xA;19.NIGHTDRIVE7&#xA;20.NIGHTDRIVE30&#xA;0.Nazad&#xA;*.V nachalo"
+    info_en="16.Save my number&#xA;17.Promised Payment&#xA;18.NIGHTDRIVE1&#xA;19.NIGHTDRIVE7&#xA;20.NIGHTDRIVE30&#xA;0.Back&#xA;*.Back To Top"
 
-			>
-		<code value="*2*2*00*00"/>
-	</Item>
-	<Item name="MobileHelper.Service.3.17" 
+    >
+    <code value="*2*2*00*00"/>
+  </Item>
+  <Item name="MobileHelper.Service.3.17"
 
-			info_ruk="1.Proverka sostoyaniya&#xA;2.Podklyuchit&apos; Obeshanniy platezh&#xA;0.Nazad"
-			info_rut="1.Proverka sostoyaniya&#xA;2.Podklyuchit&apos; Obeshanniy platezh&#xA;0.Nazad"
-			info_uz="1.Proverka sostoyaniya&#xA;2.Podklyuchit&apos; Obeshanniy platezh&#xA;0.Nazad"
-			info_en="1.Checking the Status&#xA;2.Add Promised Payment&#xA;0.Back"
+    info_ruk="1.Proverka sostoyaniya&#xA;2.Podklyuchit&apos; Obeshanniy platezh&#xA;0.Nazad"
+    info_rut="1.Proverka sostoyaniya&#xA;2.Podklyuchit&apos; Obeshanniy platezh&#xA;0.Nazad"
+    info_uz="1.Proverka sostoyaniya&#xA;2.Podklyuchit&apos; Obeshanniy platezh&#xA;0.Nazad"
+    info_en="1.Checking the Status&#xA;2.Add Promised Payment&#xA;0.Back"
 
-			>
-		<code value="*2*2*00*00*17"/>
-		<code value="*2*2*17"/>
-	</Item>
-	<Item name="MobileHelper.MoneyTransfer" 
+    >
+    <code value="*2*2*00*00*17"/>
+    <code value="*2*2*17"/>
+  </Item>
+  <Item name="MobileHelper.MoneyTransfer"
 
-			info_ruk="1.Sdelat&apos; perevod&#xA;0.Nazad"
-			info_rut="1.Sdelat&apos; perevod&#xA;0.Nazad"
-			info_uz="1.Sdelat&apos; perevod&#xA;0.Nazad"
-			info_en="1.Make money transfer&#xA;0.Back"
+    info_ruk="1.Sdelat&apos; perevod&#xA;0.Nazad"
+    info_rut="1.Sdelat&apos; perevod&#xA;0.Nazad"
+    info_uz="1.Sdelat&apos; perevod&#xA;0.Nazad"
+    info_en="1.Make money transfer&#xA;0.Back"
 
-			>
-		<code value="*2*3"/>
-	</Item>
+    >
+    <code value="*2*3"/>
+  </Item>
 </Portal>
