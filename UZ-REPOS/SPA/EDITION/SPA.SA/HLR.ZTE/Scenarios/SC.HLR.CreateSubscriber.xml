@@ -3,36 +3,17 @@
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll" />
     <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
-    <object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
     <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll" />
-    <object name="WellknownsReplacer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.WellknownsReplacer" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll" />
   </objectList>
   <automat>
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
       <resultlist>
-        <result value="0" node="CheckNewIMSI" />
+        <result value="0" node="Create_Subscriber" />
         <result value="1" node="" />
       </resultlist>
-    </node>
-    <node name="CheckNewIMSI" object="IfMultipleXmlConditionsResolver">
-      <resultlist>
-        <result value="0" node="WellknownsReplacerNewIMSI" />
-        <result value="" node="Create_Subscriber" />
-      </resultlist>
-      <parameterslist>
-        <param name="IfXmlPath:0" value="//NewIMSI/Value[text()!='']" />
-      </parameterslist>
-    </node>
-    <node name="WellknownsReplacerNewIMSI" object="WellknownsReplacer">
-      <resultlist>
-        <result value="" node="Create_Subscriber" />
-      </resultlist>
-      <parameterslist>
-        <param name="imsi" value="xmlsubstr(&quot;//NewIMSI&quot;)" />
-      </parameterslist>
     </node>
     <node name="Create_Subscriber" object="Commander">
       <resultlist>

@@ -49,9 +49,9 @@
     <RFSParameter name="ForwardedToNumber" description="Номер переадресации" />
     <RFSParameter name="GroupMemberOperation" path="//GroupMemberOperation" description="Тип операции для группы" />
     <RFSParameter name="NewBillingGroupId" path="//NewBillingGroupId" description="Номер новой биллинговой группы" />
-    <RFSParameter name="NewIMSI" description="Новый номер IMSI" />
+    <RFSParameter name="NewIMSI" path="//NewIMSI" description="Новый номер IMSI" />
     <RFSParameter name="NewLanguageCode" path="//NewLanguageCode" description="Код языка на фин.платформе" />
-    <RFSParameter name="NewMSISDN" description="Новый номер MSISDN" />
+    <RFSParameter name="NewMSISDN" path="//NewMSISDN" description="Новый номер MSISDN" />
     <RFSParameter name="PersonalAccount" path="xml(//PersonalAccount)" description="Параметры создания абонента" />
     <RFSParameter name="PreviousPlatform" path="xml(//PreviousPlatform)" pathMode="Absolute" description="Параметры предыдущей платформы при переносе ПО" />
     <RFSParameter name="ServiceAdditionalDataTypeCode" path="//ServiceAdditionalDataTypeCode" description="Код услуги для секции AdditionalData" />
@@ -65,7 +65,7 @@
   <FlagList />
   <RFSList>
     <RFS name="RFS_CT4_CHANGE_MSISDN" hostType="CT4" description="Изменение номера MSISDN на платформе CT4">
-      <RFSParameter name="NewMSISDN" path="//ChangeMsisdn/NewMSISDN" />
+      <RFSParameter name="NewMSISDN" />
     </RFS>
     <RFS name="RFS_CT4_RESTORE" hostType="CT4" description="Восстановление на платформе CT4" />
     <RFS name="RFS_CT4_SUBSCRIPTION" hostType="CT4" processType="Subscription" description="Абонент на платформе CT4">
@@ -92,18 +92,18 @@
       <RFSParameter name="ChangeContract" />
     </RFS>
     <RFS name="RFS_FP_CHANGE_IMSI" hostType="FP" description="Изменение номера IMSI на фин.платформе">
-      <RFSParameter name="NewIMSI" path="//NewIMSI" />
-      <RFSParameter name="NewMSISDN" path="//NewMSISDN" />
+      <RFSParameter name="NewIMSI" />
+      <RFSParameter name="NewMSISDN" />
     </RFS>
     <RFS name="RFS_FP_CHANGE_MSISDN_IMSI" hostType="FP" description="Изменение номера MSISDN/IMSI на фин.платформе">
-      <RFSParameter name="NewIMSI" path="//NewIMSI" />
-      <RFSParameter name="NewMSISDN" path="//NewMSISDN" />
+      <RFSParameter name="NewIMSI" />
+      <RFSParameter name="NewMSISDN" />
     </RFS>
     <RFS name="RFS_FP_CHANGE_MSISDN_IN_CUG" hostType="FP" description="Изменение номера MSISDN в ЗГП">
-      <RFSParameter name="NewMSISDN" path="//NewMSISDN" />
+      <RFSParameter name="NewMSISDN" />
     </RFS>
     <RFS name="RFS_FP_CHANGE_MSISDN_IN_VUG" hostType="FP" description="Изменение номера MSISDN в ВГП">
-      <RFSParameter name="NewMSISDN" path="//NewMSISDN" />
+      <RFSParameter name="NewMSISDN" />
     </RFS>
     <RFS name="RFS_FP_CHANGE_TARIFF" hostType="FP" description="Изменение тарифного плана и платформы" />
     <RFS name="RFS_FP_CHANGE_TARIFF_AP" hostType="FP" description="Изменение тарифного плана и платформы - автоплатежи">
@@ -262,7 +262,7 @@
       <RFSParameter name="CallForwardType" value="Provision" />
     </RFS>
     <RFS name="RFS_HLR_CHANGE_IMSI" parent="RFS_HLR_MODIFY_SUBSCRIBER" hostType="HL" description="Изменение номера IMSI">
-      <RFSParameter name="NewIMSI" path="//NewIMSI" />
+      <RFSParameter name="NewIMSI" />
     </RFS>
     <RFS name="RFS_HLR_CLIP" hostType="HL" description="Определитель номера" />
     <RFS name="RFS_HLR_CLIR" hostType="HL" description="Антиопределитель номера" />
@@ -467,12 +467,15 @@
     </RFS>
     <RFS name="RFS_HLR_VIDEOCALL" hostType="HL" description="Video Call" />
     <RFS name="RFS_MCA_CHANGE_MSISDN" hostType="MA" description="Изменение номера MSISDN на платформе MCA">
-      <RFSParameter name="NewMSISDN" path="//NewMSISDN" />
+      <RFSParameter name="NewMSISDN" />
     </RFS>
     <RFS name="RFS_MCA_RESTORE" hostType="MA" description="Восстановление услуги MCA" />
     <RFS name="RFS_MCA_SUBSCRIPTION" hostType="MA" processType="Subscription" description="Абонент а платформе MCA" />
     <RFS name="RFS_MG_RESTORE" hostType="MG" description="Восстановление услуги на платформе MG" />
     <RFS name="RFS_MG_SUBSCRIPTION" hostType="MG" processType="Subscription" description="Метка абонента на платформе MG" />
+    <RFS name="RFS_RBT_CHANGE_MSISDN" hostType="RBT" description="Изменение номера MSISDN на платформе RBT">
+      <RFSParameter name="NewMSISDN" />
+    </RFS>
     <RFS name="RFS_RBT_RESTORE" hostType="RBT" description="Восстановление услуги RBT" />
     <RFS name="RFS_RBT_SERVICE" hostType="RBT" description="Услуга на платформе RBT" />
     <RFS name="RFS_RBT_SUBSCRIPTION" hostType="RBT" processType="Subscription" description="Абонент на RBT" />
@@ -482,7 +485,7 @@
         <Value hosts="FP:05" value="AM" />
         <Value hosts="FP:MS" value="SCP1" />
       </Resource>
-      <RFSParameter name="NewIMSI" path="//NewIMSI" />
+      <RFSParameter name="NewIMSI" />
     </RFS>
     <RFS name="RFS_SM_CHANGE_TARIFF" hostType="SM" description="Изменение тарифного плана на SMSC">
       <Scenario name="SM.ChangeTP" type="Add" />
@@ -722,8 +725,12 @@
     <CFS name="ChangeMsisdn" priority="9999" type="OneTime" description="Изменение номера MSISDN">
       <RFS name="RFS_CT4_CHANGE_MSISDN" linkType="Add" dependsOn="RFS_CT4_SUBSCRIPTION" />
       <RFS name="RFS_EI_CHANGE_MSISDN" linkType="Add" />
+      <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" linkType="Add" />
       <RFS name="RFS_MCA_CHANGE_MSISDN" linkType="Add" dependsOn="RFS_MCA_SUBSCRIPTION" />
+      <RFS name="RFS_RBT_CHANGE_MSISDN" linkType="Add" />
       <RFSGroup name="RFS_GROUP_FP_CHANGE_MSISDN" />
+      <RFSGroup name="RFS_GROUP_HLR_RECREATE_SUBSCRIBER" />
+      <RFSGroup name="RFS_GROUP_RBT_CHANGE_MSISDN" />
     </CFS>
     <CFS name="ChangeTariff" priority="9999" type="OneTime" description="Удаление абонента на старой платформы при изменении тарифного плана">
       <RFSGroup name="RFS_GROUP_FP_CHANGE_TARIFF_PLAN_AND_DELETE" />
@@ -2100,6 +2107,9 @@
     <RFSGroup name="RFS_GROUP_MCA_SYNCHRON_SUBSCRIBER" type="Choice" description="Группа RFS для синхронизации данных по MSISDN в MCA">
       <RFS name="RFS_MCA_RESTORE" linkType="Add" dependsOn="RFS_MCA_SUBSCRIPTION" handler="MCA_RecreateSubscriber" />
     </RFSGroup>
+    <RFSGroup name="RFS_GROUP_RBT_CHANGE_MSISDN" type="Choice" description="Группа RFS для изменения номера MSISDN в RBT">
+      <RFS name="RFS_RBT_RESTORE" linkType="Add" dependsOn="RFS_RBT_SERVICE" handler="RBT_RecreateSubscriber" />
+    </RFSGroup>
     <RFSGroup name="RFS_GROUP_RBT_SYNCHRON_SUBSCRIBER" type="Choice" description="Группа RFS для синхронизации данных по MSISDN в RBT">
       <RFS name="RFS_RBT_RESTORE" linkType="Add" dependsOn="RFS_RBT_SERVICE" handler="RBT_RecreateSubscriber" />
     </RFSGroup>
@@ -2457,6 +2467,7 @@
       <RFS name="RFS_MG_SUBSCRIPTION" scenarioType="Add" />
     </Scenario>
     <Scenario name="RBT.Modify.Subscriber" description="Создание, удаление абонента на RBT">
+      <RFS name="RFS_RBT_CHANGE_MSISDN" scenarioType="Add" />
       <RFS name="RFS_RBT_SERVICE" scenarioType="Add, Remove" />
       <RFS name="RFS_RBT_SUBSCRIPTION" scenarioType="Add, Remove" />
     </Scenario>
