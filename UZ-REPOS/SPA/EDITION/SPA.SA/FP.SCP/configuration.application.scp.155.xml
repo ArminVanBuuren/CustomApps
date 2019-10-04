@@ -6,7 +6,7 @@
       </scenarioSource>
       <socketList poolSize="10" maxConnections="5" minConnections="1" averageTime="20" deltaAverageTime="40" maxCommandsPerPeriod="300" periodDuration="10" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Integrated.ScpSocket, FORIS.SPA.Communication.Integrated">
-          <config serviceGroup="seeoffline01" uri="tcp://seeoffline01:8022/CRMOperations.uri" uriRem="tcp://seeoffline01:8022/REMRemote.uri" queue="seeoffline01\input_off" timeout="60" login="" password="" workingmode="wmGeneral" SessionRefreshTimeout="180">
+          <config serviceGroup="seeoffline01" uri="tcp://seeoffline01:8022/CRMOperations.uri" uriRem="tcp://seeoffline01:8022/REMRemote.uri" queue="seeas01\input_off" timeout="60" login="" password="" workingmode="wmGeneral" SessionRefreshTimeout="180">
             <Emulation Success="Code&gt;0&lt;" Failure="Code&gt;-13002&lt;" RandomizePrintout="false" OverwriteCommandPrintout="true" Lifetime="00:00:00.00" />
           </config>
         </socket>
@@ -26,7 +26,7 @@
               <Macro Name="[HOST_CODE_IN]" Value="100001" />
               <Macro Name="[HOST_CODE_AM]" Value="05" />
               <Macro Name="[HOST_CODE_BS]" Value="BS_MR_CENTER" />
-              <Macro Name="[HOST_CODE_SINGLE_SCP]" Value="MS" />
+              <Macro Name="[HOST_CODE_SINGLE_SCP]" Value="MS-155" />
             </MacroList>
           </config>
         </object>

@@ -18,8 +18,7 @@
         <result value="1" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="XmlPath:0" value="//RemoveList" />
-        <param name="XmlPath:1" value="//AddList" />
+        <param name="XmlPath:0" value="//RemoveList | //AddList" />
       </parameterslist>
     </node>
     <node name="AddService" object="Commander">
