@@ -37,8 +37,8 @@
           <config wellknown="uid" name="S_SCP_GENERATOR_ID" length="5" maxlength="9" />
         </object>
       </context>
-      <AsyncResponseProcessor PoolSize="1" ResponseTimeout="120000" Type="FORIS.ServiceProvisioning.ServiceActivator.Core.AmMsmqResponseProcessor, FORIS.SPA.ServiceActivator.Core">
-        <Processor QueuePath=".\scp.responce" RejectQueuePath=".\scp.responce_rejects" EmulationQueuePath=".\account_management_queue_mscp">
+      <AsyncResponseProcessor PoolSize="1" ResponseTimeout="300000" Type="FORIS.ServiceProvisioning.ServiceActivator.Core.AmMsmqResponseProcessor, FORIS.SPA.ServiceActivator.Core">
+        <Processor QueuePath=".\scp.responce" RejectQueuePath=".\scp.responce_rejects" >
           <Emulation Success="..\SPA.SA\FP.SCP\asyncResult.xml" Failure="..\SPA.SA\FP.SCP\asyncResult.xml" RandomizePrintout="false" OverwriteCommandPrintout="true" Lifetime="00:00:00.00" />
         </Processor>
       </AsyncResponseProcessor>

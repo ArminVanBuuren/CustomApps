@@ -33,7 +33,7 @@
           <config wellknown="uid" name="S_AM_GENERATOR_ID" length="5" maxlength="9" />
         </object>
       </context>
-      <AsyncResponseProcessor PoolSize="1" ResponseTimeout="120000" Type="FORIS.ServiceProvisioning.ServiceActivator.Core.AmMsmqResponseProcessor, FORIS.SPA.ServiceActivator.Core">
+      <AsyncResponseProcessor PoolSize="1" ResponseTimeout="300000" Type="FORIS.ServiceProvisioning.ServiceActivator.Core.AmMsmqResponseProcessor, FORIS.SPA.ServiceActivator.Core">
         <Processor QueuePath=".\foris.spa.sa.am.responce" RejectQueuePath=".\am.responce_rejects">
           <Emulation Success="..\SPA.SA\FP.AM\asyncResult.xml" Failure="..\SPA.SA\FP.AM\asyncResult.xml" RandomizePrintout="false" OverwriteCommandPrintout="true" Lifetime="00:00:00.00" />
         </Processor>
