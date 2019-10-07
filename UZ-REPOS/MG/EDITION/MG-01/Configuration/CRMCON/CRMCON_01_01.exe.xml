@@ -22,7 +22,6 @@
     <Map template_id="DirectSendEmail" connector="EMAILCON_01_01" template_name="DeliveryRequest" />
     <Map template_id="fax -3" connector="FAXCON_01_01" template_name="DeliveryRequest" />
     <Map template_id="email -2" connector="EMAILCON_01_01" template_name="DeliveryRequest" />
-    <Map template_id="InvokeRequest" connector="IVRCON_02_01" template_name="INER_proc" />
     <Map template_id="sms -2" connector="SMSCON_01_01" template_name="DeliveryRequest" />
     <Map template_id="SMS-spam" connector="SMSCON_01_01" template_name="DeliveryRequest" />
     <Map template_id="AutoInformationOfBalance" connector="SMSCON_01_01" template_name="DeliveryRequestAutoInformation" />
@@ -33,10 +32,9 @@
     <Map template_id="SMSInformRus" connector="SMSCON_01_INFORM" template_name="SMSInformRus" />
     <Map template_id="SMSlocal" connector="SMSCON_01_01" template_name="SMSlocal" />
     <Map template_id="AddToGroup_onClean" connector="SMSCON_01_01" template_name="AddToGroup_onClean_MTSGROUP" processor="SMSTemplateProcessor" />
-    <Map template_id="SMSmnformat" connector="SMSCON_01_02" template_name="SMSmnformat" />
-    <Map template_id="DirectSendSMS" connector="SMSCON_01_02" template_name="DeliveryRequestFromISSA" />
+    <Map template_id="SMSmnformat" connector="SMSCON_01_ISSA" template_name="SMSmnformat" />
+    <Map template_id="DirectSendSMS" connector="SMSCON_01_ISSA" template_name="DeliveryRequestFromISSA" />
     <Map template_id="Email_Test" connector="EMAILCON_01_01" template_name="Email_Test" />
-    <Map template_id="SMS_Email" connector="EMAILCON_03_TEST" template_name="SMS_Email" />
     <Map template_id="SMSNewCustomer" connector="SMSCON_01_01" template_name="SMSNewCustomer" />
   </TemplateToConnector>
 </Application>

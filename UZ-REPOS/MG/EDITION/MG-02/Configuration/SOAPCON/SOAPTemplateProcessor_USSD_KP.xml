@@ -2,7 +2,7 @@
   <macros>
     <!-- ==========================  REDIRECT CONNECTORS   ========================= -->
     <define name="_SMSCON_1" value="SMSCON_02_01" />
-    <define name="_SMSCON_ISSA" value="SMSCON_02_02" />
+    <define name="_SMSCON_ISSA" value="SMSCON_02_ISSA" />
     <define name="_USSD_1" value="USSDCON_01_01" />
     <!-- ==========================  REDIRECT CONNECTORS   ========================= -->
     <!-- ==========================  SOAP SPECIAL   ========================= -->
@@ -3804,7 +3804,7 @@
       <param name="storelog" />
     </output>
   </template>
-  <template procedureName="GetBMSBalance" handler="WCFHND_01_01" sessionStorage="Memory" sessionLifetime="20" persistent="true">
+  <template procedureName="GetBMSBalance" handler="WCFHND_02_01" sessionStorage="Memory" sessionLifetime="20" persistent="true">
     <receiveTemplate>
       <Message type="getcounters" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(GetBMSBalance_${customer})}">
         <Item procedureName="GetBalance">

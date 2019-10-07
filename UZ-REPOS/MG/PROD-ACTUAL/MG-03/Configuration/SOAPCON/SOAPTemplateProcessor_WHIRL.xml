@@ -1,0 +1,61 @@
+<templates connector="SOAP">
+	<template procedureName="DevelopProvision" sessionStorage="Memory" sessionLifetime="30" persistent="true">
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="ussd" id="@{newGuid}" session_id="@{setSessionId(DevelopProvision_${customer})}">
+				<Item customer="${customer}">
+					<Service id="${service}" action="${action}" class="0" sourcetypeid="11"/>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="oparam:result" value="${dbresult}"/>
+		</deliveryTemplate>
+		<input>
+			<param name="customer"/>
+			<param name="action"/>
+			<param name="service"/>
+		</input>
+		<output>
+			<param name="result"/>
+		</output>
+	</template>
+	<template procedureName="GetMsisdnByImsi" handler="_DBCON" sessionStorage="Memory" sessionLifetime="30" persistent="true">
+		<receiveTemplate>
+			<Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(GetMSISDN_${imsi})}">
+				<Item procedureName="mobile_app.getmsisdnbyimsi">
+					<Attribute name="p_imsi" type="STRING" value="${imsi}"/>
+					<Attribute name="result" type="out:STRING"/>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="oparam:result" value="${result}"/>
+		</deliveryTemplate>
+		<input>
+			<param name="imsi"/>
+		</input>
+		<output>
+			<param name="result"/>
+		</output>
+	</template>
+	<template procedureName="ServiceProvisioning" sessionStorage="Memory" sessionLifetime="30" persistent="true">
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="ussd" id="@{newGuid}" session_id="@{setSessionId(ServiceWHIRL_${customer})}">
+				<Item customer="${customer}">
+					<Service id="${service}" action="${action}" class="0"/>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="oparam:result" value="${dbresult}"/>
+		</deliveryTemplate>
+		<input>
+			<param name="customer"/>
+			<param name="action"/>
+			<param name="service"/>
+		</input>
+		<output>
+			<param name="result"/>
+		</output>
+	</template>
+</templates>

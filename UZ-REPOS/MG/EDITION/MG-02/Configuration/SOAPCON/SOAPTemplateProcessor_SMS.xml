@@ -2,7 +2,7 @@
   <macros>
     <!-- ==========================  REDIRECT CONNECTORS   ========================= -->
     <define name="_SMSCON_1" value="SMSCON_02_01" />
-    <define name="_SMSCON_ISSA" value="SMSCON_02_02" />
+    <define name="_SMSCON_ISSA" value="SMSCON_02_ISSA" />
     <define name="_SMSCON_CONTENT" value="SMSCON_01_CONTENT" />
     <define name="_USSD_1" value="USSDCON_01_01" />
     <define name="_DBCON" value="DBCON_02_01" />

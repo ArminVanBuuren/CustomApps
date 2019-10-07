@@ -3,7 +3,7 @@
   #include "Config\GPRS\sms.xml"
   <macros>
     <!-- ==========================  REDIRECT CONNECTORS   ========================= -->
-    <define name="_SMSCON_ISSA" value="SMSCON_02_02" />
+    <define name="_SMSCON_ISSA" value="SMSCON_02_ISSA" />
     <define name="_USSD_1" value="USSDCON_01_01" />
     <!-- ==========================  REDIRECT CONNECTORS   ========================= -->
     <!-- ==========================  SMSCON SPECIAL   ========================= -->

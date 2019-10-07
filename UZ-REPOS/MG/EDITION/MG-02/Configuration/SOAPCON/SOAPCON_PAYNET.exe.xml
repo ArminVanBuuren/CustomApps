@@ -1,7 +1,7 @@
 <Application>
   <Settings>
     <Item name="ModuleType" value="SOAPCON" />
-    <Item name="ModuleName" value="SOAP_PAYNET" />
+    <Item name="ModuleName" value="SOAPCON_PAYNET" />
     <Item name="ListeningPort" value="6685" />
     <!-- remoting interface listens this port -->
     <Item name="ConnectionsLimit" value="150" />

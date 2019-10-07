@@ -1,7 +1,7 @@
 <Application>
   <Settings>
     <Item name="ModuleType" value="SOAPCON" />
-    <Item name="ModuleName" value="SOAP_USSDCON_02_02" />
+    <Item name="ModuleName" value="SOAPCON_USSD_02_02" />
     <Item name="ListeningPort" value="6682" />
     <!-- remoting interface listens this port -->
     <Item name="ConnectionsLimit" value="150" />

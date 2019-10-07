@@ -19,7 +19,6 @@
     <Item name="ThreadMultiplifier" value="8" />
   </Settings>
   <TemplateToConnector>
-    <Map template_id="InvokeRequest" connector="IVRCON_02_01" template_name="INER_proc" />
     <Map template_id="sms -2" connector="SMSCON_02_01" template_name="DeliveryRequest" />
     <Map template_id="SMS-spam" connector="SMSCON_02_01" template_name="DeliveryRequest" />
     <Map template_id="AutoInformationOfBalance" connector="SMSCON_02_01" template_name="DeliveryRequestAutoInformation" />
@@ -27,8 +26,8 @@
     <Map template_id="SMSMonitoring" connector="SMSCON_02_01" template_name="SMSMonitoring" />
     <Map template_id="SMSlocal" connector="SMSCON_02_01" template_name="SMSlocal" />
     <Map template_id="AddToGroup_onClean" connector="SMSCON_02_01" template_name="AddToGroup_onClean_MTSGROUP" processor="SMSTemplateProcessor" />
-    <Map template_id="SMSmnformat" connector="SMSCON_02_02" template_name="SMSmnformat" />
-    <Map template_id="DirectSendSMS" connector="SMSCON_02_02" template_name="DeliveryRequestFromISSA" />
+    <Map template_id="SMSmnformat" connector="SMSCON_02_ISSA" template_name="SMSmnformat" />
+    <Map template_id="DirectSendSMS" connector="SMSCON_02_ISSA" template_name="DeliveryRequestFromISSA" />
     <Map template_id="SMSNewCustomer" connector="SMSCON_02_01" template_name="SMSNewCustomer" />
   </TemplateToConnector>
 </Application>

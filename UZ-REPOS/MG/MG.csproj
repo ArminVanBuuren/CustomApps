@@ -43,7 +43,7 @@
     <Content Include="EDITION\MG-01\Configuration\EMAILCON\EMAILCON_01_01.exe.xml" />
     <Content Include="EDITION\MG-01\Configuration\EMAILCON\EmailTemplateProcessor.xml" />
     <Content Include="EDITION\MG-01\Configuration\SMSCON\SMSCON_01_01.exe.xml" />
-    <Content Include="EDITION\MG-01\Configuration\SMSCON\SMSCON_01_02.ISSA.exe.xml" />
+    <Content Include="EDITION\MG-01\Configuration\SMSCON\SMSCON_01_ISSA.exe.xml" />
     <Content Include="EDITION\MG-01\Configuration\SMSCON\SMSCON_01_CONTENT.exe.xml" />
     <Content Include="EDITION\MG-01\Configuration\SMSCON\SMSCON_01_EMAIL.exe.xml" />
     <Content Include="EDITION\MG-01\Configuration\SMSCON\SMSCON_01_INFORM.exe.xml" />
@@ -145,7 +145,7 @@
     <Content Include="EDITION\MG-02\Configuration\SMSCON\Config\GPRS\sms.xml" />
     <Content Include="EDITION\MG-02\Configuration\SMSCON\Config\SMS\MTSGROUP.xml" />
     <Content Include="EDITION\MG-02\Configuration\SMSCON\SMSCON_02_01.exe.xml" />
-    <Content Include="EDITION\MG-02\Configuration\SMSCON\SMSCON_02_02.ISSA.exe.xml" />
+    <Content Include="EDITION\MG-02\Configuration\SMSCON\SMSCON_02_ISSA.exe.xml" />
     <Content Include="EDITION\MG-02\Configuration\SMSCON\SMSTemplateProcessor.01.xml" />
     <Content Include="EDITION\MG-02\Configuration\SMSCON\SMSTemplateProcessor.02.xml" />
     <Content Include="EDITION\MG-02\Configuration\SOAPCON\SOAPCON_ANTIFRAUD.exe.xml" />
@@ -165,6 +165,7 @@
     <Content Include="EDITION\MG-02\Configuration\SOAPCON\SOAPTemplateProcessor_SMS.xml" />
     <Content Include="EDITION\MG-02\Configuration\SOAPCON\SOAPTemplateProcessor_USSD.xml" />
     <Content Include="EDITION\MG-02\Configuration\SOAPCON\SOAPTemplateProcessor_USSD_KP.xml" />
+    <Content Include="EDITION\MG-02\Configuration\WCFHND\WCFHND_02_01.exe.xml" />
     <Content Include="EDITION\MG-02\Configuration\WEB_SERVICES\WEB_80_USSD\bin\App_Code.dll" />
     <Content Include="EDITION\MG-02\Configuration\WEB_SERVICES\WEB_80_USSD\bin\Devshock.Protocol.Smpp.dll" />
     <Content Include="EDITION\MG-02\Configuration\WEB_SERVICES\WEB_80_USSD\bin\FORIS.MG.Interfaces.dll" />
@@ -259,6 +260,61 @@
     <Content Include="EDITION\MG-02\CRMFilter\XSLT\XSLTPlugin_out.xml" />
     <Content Include="EDITION\MG-02\defaultXPATH.xml" />
     <Content Include="EDITION\MG-02\MGCommon.xml" />
+    <Content Include="EDITION\MG-03\Configuration\CRMCON\CRMCON_03_01.exe.xml" />
+    <Content Include="EDITION\MG-03\Configuration\DBCON\DBCON_03_01.exe.xml" />
+    <Content Include="EDITION\MG-03\Configuration\IVRCON\IVRCON_03_01.exe.xml" />
+    <Content Include="EDITION\MG-03\Configuration\IVRCON\IVRCON_03_02.exe.xml" />
+    <Content Include="EDITION\MG-03\Configuration\IVRCON\IVRCON_03_TEST.exe.xml" />
+    <Content Include="EDITION\MG-03\Configuration\IVRCON\IVRTemplateProcessor.01.xml" />
+    <Content Include="EDITION\MG-03\Configuration\IVRCON\IVRTemplateProcessor.02.xml" />
+    <Content Include="EDITION\MG-03\Configuration\SMSCON\Config\GPRS\sms.xml" />
+    <Content Include="EDITION\MG-03\Configuration\SMSCON\Config\SMS\MTSGROUP.xml" />
+    <Content Include="EDITION\MG-03\Configuration\SMSCON\SMSCON_03_01.exe.xml" />
+    <Content Include="EDITION\MG-03\Configuration\SMSCON\SMSTemplateProcessor.01.xml" />
+    <Content Include="EDITION\MG-03\Configuration\SOAPCON\SOAPCON_03_WHIRL.exe.xml" />
+    <Content Include="EDITION\MG-03\Configuration\SOAPCON\SOAPCON_USSD_03_01.exe.xml" />
+    <Content Include="EDITION\MG-03\Configuration\SOAPCON\SOAPCON_USSD_03_02.exe.xml" />
+    <Content Include="EDITION\MG-03\Configuration\SOAPCON\SOAPTemplateProcessor_APP.xml" />
+    <Content Include="EDITION\MG-03\Configuration\SOAPCON\SOAPTemplateProcessor_USSD.xml" />
+    <Content Include="EDITION\MG-03\Configuration\SOAPCON\SOAPTemplateProcessor_WHIRL.xml" />
+    <Content Include="EDITION\MG-03\Configuration\WCFHND\WCFHND_03_01.exe.xml" />
+    <Content Include="EDITION\MG-03\Configuration\WEB_SERVICES\WEB_80_USSD\Service.asmx" />
+    <Content Include="EDITION\MG-03\Configuration\WEB_SERVICES\WEB_80_USSD\SOAP-soapui-project.xml" />
+    <Content Include="EDITION\MG-03\Configuration\WEB_SERVICES\WEB_82_USSD\Service.asmx" />
+    <Content Include="EDITION\MG-03\Configuration\WEB_SERVICES\WEB_82_USSD\SOAP-soapui-project.xml" />
+    <Content Include="EDITION\MG-03\Configuration\WEB_SERVICES\WEB_90_WHIRL\Service.asmx" />
+    <Content Include="EDITION\MG-03\Configuration\WEB_SERVICES\WEB_90_WHIRL\SOAP-soapui-project.xml" />
+    <Content Include="EDITION\MG-03\Config\GET_DBRESULT.xml" />
+    <Content Include="EDITION\MG-03\Config\Portal\DealerUSSDPortal_01.xml" />
+    <Content Include="EDITION\MG-03\Config\Portal\USSDPortal_01.xml" />
+    <Content Include="EDITION\MG-03\Config\Service\All_SERVICE.xml" />
+    <Content Include="EDITION\MG-03\Config\Service\COUNTERS.xml" />
+    <Content Include="EDITION\MG-03\Config\Service\SERIES.xml" />
+    <Content Include="EDITION\MG-03\Config\Service\SERVICE.xml" />
+    <Content Include="EDITION\MG-03\Config\Tariff\TARIFF_PLANS.xml" />
+    <Content Include="EDITION\MG-03\CRMFilter\DBAdapter\DBAdapter.xml" />
+    <Content Include="EDITION\MG-03\CRMFilter\Dispatcher.xml" />
+    <Content Include="EDITION\MG-03\CRMFilter\Distinct\DistinctPlugin_1.xml" />
+    <Content Include="EDITION\MG-03\CRMFilter\Distinct\DistinctPlugin_2.xml" />
+    <Content Include="EDITION\MG-03\CRMFilter\Splitter\SplitterPlugin_1.xml" />
+    <Content Include="EDITION\MG-03\CRMFilter\Splitter\SplitterPlugin_2.xml" />
+    <Content Include="EDITION\MG-03\CRMFilter\XSLT\EPA\ConvertInputServices.xsl" />
+    <Content Include="EDITION\MG-03\CRMFilter\XSLT\EPA\ConvertText2IDServices.xsl" />
+    <Content Include="EDITION\MG-03\CRMFilter\XSLT\Scripts\ChangeDeliveryRequest.xsl" />
+    <Content Include="EDITION\MG-03\CRMFilter\XSLT\Scripts\ConvertEncoding.xsl" />
+    <Content Include="EDITION\MG-03\CRMFilter\XSLT\Scripts\DummyRequest.xsl" />
+    <Content Include="EDITION\MG-03\CRMFilter\XSLT\Scripts\DuplicateAnswer.xsl" />
+    <Content Include="EDITION\MG-03\CRMFilter\XSLT\Scripts\DuplicateBalanceAnswer.xsl" />
+    <Content Include="EDITION\MG-03\CRMFilter\XSLT\Scripts\DuplicateCounterAnswer.xsl" />
+    <Content Include="EDITION\MG-03\CRMFilter\XSLT\Scripts\GetCounters.xsl" />
+    <Content Include="EDITION\MG-03\CRMFilter\XSLT\Scripts\ReplaceCodeFromContent.xsl" />
+    <Content Include="EDITION\MG-03\CRMFilter\XSLT\Scripts\StringFormat.xsl" />
+    <Content Include="EDITION\MG-03\CRMFilter\XSLT\Scripts\TransformDeliveryReq.xsl" />
+    <Content Include="EDITION\MG-03\CRMFilter\XSLT\Scripts\TransformDeliveryReqFromISSA.xsl" />
+    <Content Include="EDITION\MG-03\CRMFilter\XSLT\XSLTPlugin_in.xml" />
+    <Content Include="EDITION\MG-03\CRMFilter\XSLT\XSLTPlugin_out.xml" />
+    <Content Include="EDITION\MG-03\defaultXPATH.xml" />
+    <Content Include="EDITION\MG-03\MGCommon.xml" />
     <Content Include="PROD-ACTUAL\MG-01\Configuration\CRMCON\CRMConnector_CRMCON_01_01.exe.xml" />
     <Content Include="PROD-ACTUAL\MG-01\Configuration\DBCON\DBConnector_DBCON_01_01.exe.xml" />
     <Content Include="PROD-ACTUAL\MG-01\Configuration\EMAILCON\EmailConnector_EMAILCON_01_01.exe.xml" />
@@ -749,8 +805,10 @@
     <Content Include="PROD-ACTUAL\MG-03\Configuration\IVRCON\IVRTemplateProcessor.02.xml" />
     <Content Include="PROD-ACTUAL\MG-03\Configuration\SOAPCON\SOAPConnector_SOAPCON_03_DEVELOP.exe.xml" />
     <Content Include="PROD-ACTUAL\MG-03\Configuration\SOAPCON\SOAPConnector_SOAPCON_03_TEST.exe.xml" />
+    <Content Include="PROD-ACTUAL\MG-03\Configuration\SOAPCON\SOAPConnector_SOAPCON_03_WHIRL.exe.xml" />
     <Content Include="PROD-ACTUAL\MG-03\Configuration\SOAPCON\SOAPTemplateProcessor_APP.xml" />
     <Content Include="PROD-ACTUAL\MG-03\Configuration\SOAPCON\SOAPTemplateProcessor_DEVELOP.xml" />
+    <Content Include="PROD-ACTUAL\MG-03\Configuration\SOAPCON\SOAPTemplateProcessor_WHIRL.xml" />
     <Content Include="PROD-ACTUAL\MG-03\Config\GET_DBRESULT.xml" />
     <Content Include="PROD-ACTUAL\MG-03\Config\Portal\DealerUSSDPortal_01.xml" />
     <Content Include="PROD-ACTUAL\MG-03\Config\Portal\USSDPortal_01.xml" />
@@ -881,8 +939,6 @@
     <Content Include="PROD-ACTUAL\MG-03\Dispatcher\03_04\XSLT\XSLTPlugin_in.xml" />
     <Content Include="PROD-ACTUAL\MG-03\Dispatcher\03_04\XSLT\XSLTPlugin_out.xml" />
     <Content Include="PROD-ACTUAL\MG-03\MGCommon.xml" />
-    <Content Include="PROD-ACTUAL\MG-03\WebAdapter\Service.asmx" />
-    <Content Include="PROD-ACTUAL\MG-03\WebAdapter\SOAP-soapui-project.xml" />
     <Content Include="PROD-ACTUAL\MG-03\WebServices\WebAdapter_80\Service.asmx" />
     <Content Include="PROD-ACTUAL\MG-03\WebServices\WebAdapter_80\SOAP-soapui-project.xml" />
     <Content Include="PROD-ACTUAL\MG-03\WebServices\WebAdapter_81\Service.asmx" />
@@ -914,7 +970,9 @@
     <None Include="EDITION\MG-01\Configuration\WEB_SERVICES\WEB_81_SMS\bin\service.asmx.cdcab7d2.compiled" />
     <None Include="EDITION\MG-01\Configuration\WEB_SERVICES\WEB_81_SMS\PrecompiledApp.config" />
     <None Include="EDITION\MG-01\Configuration\WEB_SERVICES\WEB_81_SMS\Sitronics.Foris.Mobile.snk" />
-    <None Include="EDITION\MG-01\Configuration\WEB_SERVICES\WEB_81_SMS\Web.Config" />
+    <None Include="EDITION\MG-01\Configuration\WEB_SERVICES\WEB_81_SMS\Web.Config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="EDITION\MG-01\Configuration\WEB_SERVICES\WEB_81_SMS\web.config.upgrade" />
     <None Include="EDITION\MG-01\Configuration\WEB_SERVICES\WEB_82_IVR\bin\App_Code.compiled" />
     <None Include="EDITION\MG-01\Configuration\WEB_SERVICES\WEB_82_IVR\bin\imtscommunicatoradapter.asmx.cdcab7d2.compiled" />
@@ -928,14 +986,18 @@
     <None Include="EDITION\MG-01\Configuration\WEB_SERVICES\WEB_83_SPA\bin\service.asmx.cdcab7d2.compiled" />
     <None Include="EDITION\MG-01\Configuration\WEB_SERVICES\WEB_83_SPA\PrecompiledApp.config" />
     <None Include="EDITION\MG-01\Configuration\WEB_SERVICES\WEB_83_SPA\Sitronics.Foris.Mobile.snk" />
-    <None Include="EDITION\MG-01\Configuration\WEB_SERVICES\WEB_83_SPA\Web.Config" />
+    <None Include="EDITION\MG-01\Configuration\WEB_SERVICES\WEB_83_SPA\Web.Config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="EDITION\MG-01\Configuration\WEB_SERVICES\WEB_83_SPA\web.config.upgrade" />
     <None Include="EDITION\MG-01\Configuration\WEB_SERVICES\WEB_85_SCG\bin\App_Code.compiled" />
     <None Include="EDITION\MG-01\Configuration\WEB_SERVICES\WEB_85_SCG\bin\imtscommunicatoradapter.asmx.cdcab7d2.compiled" />
     <None Include="EDITION\MG-01\Configuration\WEB_SERVICES\WEB_85_SCG\bin\service.asmx.cdcab7d2.compiled" />
     <None Include="EDITION\MG-01\Configuration\WEB_SERVICES\WEB_85_SCG\PrecompiledApp.config" />
     <None Include="EDITION\MG-01\Configuration\WEB_SERVICES\WEB_85_SCG\Sitronics.Foris.Mobile.snk" />
-    <None Include="EDITION\MG-01\Configuration\WEB_SERVICES\WEB_85_SCG\Web.Config" />
+    <None Include="EDITION\MG-01\Configuration\WEB_SERVICES\WEB_85_SCG\Web.Config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="EDITION\MG-01\Configuration\WEB_SERVICES\WEB_85_SCG\web.config.upgrade" />
     <None Include="EDITION\MG-01\CRMFilter\Dispatcher.exe.config">
       <SubType>Designer</SubType>
@@ -1004,6 +1066,25 @@
     <None Include="EDITION\MG-02\Configuration\WEB_SERVICES\WEB_90_ANTIFRAUD\Web.Config" />
     <None Include="EDITION\MG-02\Configuration\WEB_SERVICES\WEB_90_ANTIFRAUD\web.config.upgrade" />
     <None Include="EDITION\MG-02\CRMFilter\Dispatcher.exe.config" />
+    <None Include="EDITION\MG-03\Configuration\WEB_SERVICES\WEB_80_USSD\bin\App_Code.compiled" />
+    <None Include="EDITION\MG-03\Configuration\WEB_SERVICES\WEB_80_USSD\PrecompiledApp.config" />
+    <None Include="EDITION\MG-03\Configuration\WEB_SERVICES\WEB_80_USSD\Sitronics.Foris.Mobile.snk" />
+    <None Include="EDITION\MG-03\Configuration\WEB_SERVICES\WEB_80_USSD\Web.Config" />
+    <None Include="EDITION\MG-03\Configuration\WEB_SERVICES\WEB_80_USSD\web.config.upgrade" />
+    <None Include="EDITION\MG-03\Configuration\WEB_SERVICES\WEB_80_USSD\WebService.wsdl" />
+    <None Include="EDITION\MG-03\Configuration\WEB_SERVICES\WEB_82_USSD\bin\App_Code.compiled" />
+    <None Include="EDITION\MG-03\Configuration\WEB_SERVICES\WEB_82_USSD\PrecompiledApp.config" />
+    <None Include="EDITION\MG-03\Configuration\WEB_SERVICES\WEB_82_USSD\Sitronics.Foris.Mobile.snk" />
+    <None Include="EDITION\MG-03\Configuration\WEB_SERVICES\WEB_82_USSD\Web.Config" />
+    <None Include="EDITION\MG-03\Configuration\WEB_SERVICES\WEB_82_USSD\web.config.upgrade" />
+    <None Include="EDITION\MG-03\Configuration\WEB_SERVICES\WEB_82_USSD\WebService.wsdl" />
+    <None Include="EDITION\MG-03\Configuration\WEB_SERVICES\WEB_90_WHIRL\bin\App_Code.compiled" />
+    <None Include="EDITION\MG-03\Configuration\WEB_SERVICES\WEB_90_WHIRL\PrecompiledApp.config" />
+    <None Include="EDITION\MG-03\Configuration\WEB_SERVICES\WEB_90_WHIRL\Sitronics.Foris.Mobile.snk" />
+    <None Include="EDITION\MG-03\Configuration\WEB_SERVICES\WEB_90_WHIRL\Web.Config" />
+    <None Include="EDITION\MG-03\Configuration\WEB_SERVICES\WEB_90_WHIRL\web.config.upgrade" />
+    <None Include="EDITION\MG-03\Configuration\WEB_SERVICES\WEB_90_WHIRL\WebService.wsdl" />
+    <None Include="EDITION\MG-03\CRMFilter\Dispatcher.exe.config" />
     <None Include="PROD-ACTUAL\MG-01\copy_config.bat" />
     <None Include="PROD-ACTUAL\MG-01\copy_dispatcher_config.bat" />
     <None Include="PROD-ACTUAL\MG-01\Dispatcher\01_01\Dispatcher.exe.config" />
@@ -1231,11 +1312,6 @@
     <None Include="PROD-ACTUAL\MG-03\FORIS.MessagingGateway.WcfSelfcareService.dll.config.upgrade" />
     <None Include="PROD-ACTUAL\MG-03\FORIS.MessagingGateway.WcfSmarttubeService.dll.config" />
     <None Include="PROD-ACTUAL\MG-03\FORIS.MessagingGateway.WcfSmarttubeService.dll.config.upgrade" />
-    <None Include="PROD-ACTUAL\MG-03\WebAdapter\bin\App_Code.compiled" />
-    <None Include="PROD-ACTUAL\MG-03\WebAdapter\PrecompiledApp.config" />
-    <None Include="PROD-ACTUAL\MG-03\WebAdapter\Sitronics.Foris.Mobile.snk" />
-    <None Include="PROD-ACTUAL\MG-03\WebAdapter\Web.Config" />
-    <None Include="PROD-ACTUAL\MG-03\WebAdapter\web.config.upgrade" />
     <None Include="PROD-ACTUAL\MG-03\WebServices\WebAdapter_80\bin\App_Code.compiled" />
     <None Include="PROD-ACTUAL\MG-03\WebServices\WebAdapter_80\PrecompiledApp.config" />
     <None Include="PROD-ACTUAL\MG-03\WebServices\WebAdapter_80\Sitronics.Foris.Mobile.snk" />

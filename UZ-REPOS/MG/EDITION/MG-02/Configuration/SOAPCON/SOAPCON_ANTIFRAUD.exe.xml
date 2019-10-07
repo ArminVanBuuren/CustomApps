@@ -1,7 +1,7 @@
 <Application>
   <Settings>
     <Item name="ModuleType" value="SOAPCON" />
-    <Item name="ModuleName" value="SOAP_ANTIFRAUD" />
+    <Item name="ModuleName" value="SOAPCON_ANTIFRAUD" />
     <Item name="ListeningPort" value="6690" />
     <!-- remoting interface listens this port -->
     <Item name="ConnectionsLimit" value="150" />

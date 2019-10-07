@@ -3,14 +3,15 @@
   <Connections>
     <Database type="OracleClient" scheme="mg" interfacePackage="API" connectionString="Server=crm;User ID=mg;Password=mg_for_is" cmdTimeout="0"/>
 
-    <Connector name="IVRCON_03_01"        type="IVRCON"   host="a14-mg03" port="11130" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.03.01"        config="Configuration\IVRCON\IVRConnector_IVRCON_03_01.exe.xml"/>
-    <Connector name="IVRCON_03_02"        type="IVRCON"   host="a14-mg03" port="11131" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.03.02"        config="Configuration\IVRCON\IVRConnector_IVRCON_03_02.exe.xml"/>
-    <Connector name="IVRCON_03_TEST"      type="IVRCON"   host="a14-mg03" port="11132" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.03.TEST"      config="Configuration\IVRCON\IVRConnector_IVRCON_03_TEST.exe.xml"/>
-    <Connector name="DBCON_03_01"         type="DBCON"    host="a14-mg03" port="11141" sessionHandler="false" serviceName="FORIS.MessagingGateway.DBConnector.03.01"         config="Configuration\DBCON\DBConnector_DBCON_03_01.exe.xml"/>
-    <Connector name="SOAP_USSDCON_03_01"  type="SOAPCON"  host="a14-mg03" port="11150" sessionHandler="false" serviceName="FORIS.MessagingGateway.SOAP.USSDConnector.03.01"  config="Configuration\SOAPCON\SOAPConnector_SOAP_USSDCON_03_01.exe.xml"/>
-    <Connector name="SOAP_USSDCON_03_02"  type="SOAPCON"  host="a14-mg03" port="11151" sessionHandler="false" serviceName="FORIS.MessagingGateway.SOAP.USSDConnector.03.02"  config="Configuration\SOAPCON\SOAPConnector_SOAP_USSDCON_03_02.exe.xml"/>
-    <Connector name="SMSCON_03_01"        type="SMSCON"   host="a14-mg03" port="11310" sessionHandler="false" serviceName="FORIS.MessagingGateway.SMSConnector.03.01"        config="Configuration\SMSCON\SMSConnector_SMSCON_03_01.exe.xml"/>
-    <Handler   name="CRMCON_03_01"        type="CRMCON"   host="a14-mg03" port="11103" sessionHandler="false" serviceName="FORIS.MessagingGateway.CRMConnector.03.01"        config="Configuration\CRMCON\CRMConnector_CRMCON_03_01.exe.xml"/>
+    <Connector name="IVRCON_03_01"           type="IVRCON"   host="a14-mg03" port="11130" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.03.01"        config="Configuration\IVRCON\IVRConnector_IVRCON_03_01.exe.xml"/>
+    <Connector name="IVRCON_03_02"           type="IVRCON"   host="a14-mg03" port="11131" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.03.02"        config="Configuration\IVRCON\IVRConnector_IVRCON_03_02.exe.xml"/>
+    <Connector name="IVRCON_03_TEST"         type="IVRCON"   host="a14-mg03" port="11132" sessionHandler="false" serviceName="FORIS.MessagingGateway.IVRConnector.03.TEST"      config="Configuration\IVRCON\IVRConnector_IVRCON_03_TEST.exe.xml"/>
+    <Connector name="DBCON_03_01"            type="DBCON"    host="a14-mg03" port="11141" sessionHandler="false" serviceName="FORIS.MessagingGateway.DBConnector.03.01"         config="Configuration\DBCON\DBConnector_DBCON_03_01.exe.xml"/>
+    <Connector name="SOAP_USSDCON_03_01"     type="SOAPCON"  host="a14-mg03" port="11150" sessionHandler="false" serviceName="FORIS.MessagingGateway.SOAP.USSDConnector.03.01"  config="Configuration\SOAPCON\SOAPConnector_SOAP_USSDCON_03_01.exe.xml"/>
+    <Connector name="SOAP_USSDCON_03_02"     type="SOAPCON"  host="a14-mg03" port="11151" sessionHandler="false" serviceName="FORIS.MessagingGateway.SOAP.USSDConnector.03.02"  config="Configuration\SOAPCON\SOAPConnector_SOAP_USSDCON_03_02.exe.xml"/>
+    <Connector name="SOAPCON_03_WHIRL"  type="SOAPCON"  host="a14-mg03" port="11152" sessionHandler="false" serviceName="FORIS.MessagingGateway.SOAPCON.03.WHIRL"  config="Configuration\SOAPCON\SOAPConnector_SOAPCON_03_WHIRL.exe.xml"/>
+    <Connector name="SMSCON_03_01"           type="SMSCON"   host="a14-mg03" port="11310" sessionHandler="false" serviceName="FORIS.MessagingGateway.SMSConnector.03.01"        config="Configuration\SMSCON\SMSConnector_SMSCON_03_01.exe.xml"/>
+    <Handler   name="CRMCON_03_01"           type="CRMCON"   host="a14-mg03" port="11103" sessionHandler="false" serviceName="FORIS.MessagingGateway.CRMConnector.03.01"        config="Configuration\CRMCON\CRMConnector_CRMCON_03_01.exe.xml"/>
 
     <Monitor type="CRMCON" port="0" sessionHandler="false"/>
   </Connections>

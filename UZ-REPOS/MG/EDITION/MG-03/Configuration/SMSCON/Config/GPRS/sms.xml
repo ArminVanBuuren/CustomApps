@@ -1,0 +1,148 @@
+<templateGroup name="GPRSBonusPack">
+  <macros>
+    <define name="_MAXATTEMPTS" value="5" />
+    <define name="_SMS_SERVICE_NUMBER" value="100" />
+    <define name="_GPRS_RD_CODE" value="CB406278" />
+    <define name="_ENCODING" value="unicodefffe" />
+  </macros>
+  <template procedureName="Activate">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message />
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0}" call="ActivateStep2">
+      <set item="Content" value="${service_id}" />
+      <set item="Encoding" value="_ENCODING" />
+      <set item="Sender" value="${customer}" />
+      <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=320203}" call="TryAgainToActivate">
+      <set item="Content" value="${service_id}" />
+      <set item="Encoding" value="_ENCODING" />
+      <set item="Sender" value="${customer}" />
+      <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
+    </deliveryTemplate>
+    <deliveryTemplate call="ProcessError">
+      <set item="Content" value="${service_id} ${dbresult}" />
+      <set item="Encoding" value="_ENCODING" />
+      <set item="Sender" value="${customer}" />
+      <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="TryAgainToActivate" sessionStorage="Memory" sessionLifetime="300">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{setSessionId(${SessionId})}" delay="true">
+        @{store(sAttemptsCount,#{if('${sAttemptsCount}'='',2,number('${sAttemptsCount}')+1)})}
+        <Item customer="${sender}">
+          <Service id="${content}" action="2" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0}" call="ActivateStep2">
+      <set item="Content" value="${service_id}" />
+      <set item="Encoding" value="_ENCODING" />
+      <set item="Sender" value="${customer}" />
+      <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=320203 and number('${sAttemptsCount}') &gt;= _MAXATTEMPTS}" call="ProcessError">
+      <set item="Content" value="${service_id} ${dbresult}" />
+      <set item="Encoding" value="_ENCODING" />
+      <set item="Sender" value="${customer}" />
+      <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=320203}" call="TryAgainToActivate">
+      <set item="Content" value="${service_id}" />
+      <set item="Encoding" value="_ENCODING" />
+      <set item="Sender" value="${customer}" />
+      <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
+    </deliveryTemplate>
+    <deliveryTemplate call="ProcessError">
+      <set item="Content" value="${service_id} ${dbresult}" />
+      <set item="Encoding" value="_ENCODING" />
+      <set item="Sender" value="${customer}" />
+      <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="ProcessError" handler="_DBCON">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="recordbonuspackactivationfailure" initiator="smscon" id="${guid}" session_id="${SessionId}">
+        <Item procedureName="insert_failure_bonus_pack">
+          <Attribute name="customer" type="STRING" value="${sender}" />
+          <Attribute name="pack" type="STRING" value="${token0}" />
+          <Attribute name="dbresult" type="STRING" value="${token1}" />
+          <Attribute name="result_" type="STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка в обработке. Услуга будет активна только после получения подтверждающей SMS" />
+      <set item="Encoding" value="_ENCODING" />
+      <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+      <set item="Recipient" value="${customer}" />
+    </deliveryTemplate>
+    <deliveryTemplate dropReply="true" />
+  </template>
+  <template procedureName="ActivateStep2" sessionStorage="Memory" sessionLifetime="300">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceinterrogation" initiator="smscon" id="${guid}" session_id="@{setSessionId(${SessionId})}">
+        <Item customer="${sender}">
+          <Service id="_GPRS_RD_CODE" action="interrogation" />
+        </Item>
+        @{store(sActivatedService,${content})}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Вам предоставлен бесплатный пакет «#{document('XML\services.xml')/services/service[@crm_code='${sActivatedService}']/@description}»" />
+      <set item="Encoding" value="_ENCODING" />
+      <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+      <set item="Recipient" value="${customer}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0 and '${subscription}'='0'}" call="ActivateStep3">
+      <set item="Content" value="${service_id}" />
+      <set item="Encoding" value="_ENCODING" />
+      <set item="Sender" value="${customer}" />
+      <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate dropReply="true" />
+  </template>
+  <template procedureName="ActivateStep3">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="${SessionId}">
+        <Item customer="${sender}">
+          <Service id="${content}" action="2" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0}">
+      <set item="Content" value="Услуга GPRS установлена" />
+      <set item="Encoding" value="_ENCODING" />
+      <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+      <set item="Recipient" value="${customer}" />
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Произошла ошибка при добавлении услуги GPRS" />
+      <set item="Encoding" value="_ENCODING" />
+      <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+      <set item="Recipient" value="${customer}" />
+    </deliveryTemplate>
+  </template>
+</templateGroup>

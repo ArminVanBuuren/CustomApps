@@ -1,17 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <x:upgrade xmlns:x='http://sitronics.com/Deployment/UpgradeUtility'>
-	<!-- 
+  <!-- 
 ************************************************************************
 	File upgrade rules instruction on the use: 
 	https://wiki.sitels.ru/tfs/upgrade_utility
 ************************************************************************
 -->
 
-	<!-- File upgrade main settings -->
-	<!-- * overwriteVersion - Verson ranges of old intaller, in that file need be overwritten -->
-	<!-- * fileFormat - target file format. Allowed values: xml -->
-	<x:settings
-		overwriteVersion=""
-		/>	
+
+  <!-- File upgrade main settings -->
+  <!-- * overwriteVersion - Verson ranges of old intaller, in that file need be overwritten -->
+  <x:settings overwriteVersion="all"/>
+
+	<x:migration>
+		<x:migrateNodes sel="/configuration/appSettings/add" key="key"/>
+	</x:migration>
 
 </x:upgrade>

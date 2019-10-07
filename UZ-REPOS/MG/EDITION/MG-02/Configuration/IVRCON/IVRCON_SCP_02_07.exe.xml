@@ -1,7 +1,7 @@
 <Application configClass="FORIS.MessagingGateway.IVRConnector.IVRConnectorConfiguration" type="IVRCON">
   <Settings>
     <Item name="ModuleType" value="IVRCON" />
-    <Item name="ModuleName" value="IVRCON_02_07" />
+    <Item name="ModuleName" value="IVRCON_SCP_02_07" />
     <Item name="CRMCacheCleanInterval" value="10" />
     <Item name="StoringInterval" value="20" />
     <Item name="StoringHWM" value="200" />

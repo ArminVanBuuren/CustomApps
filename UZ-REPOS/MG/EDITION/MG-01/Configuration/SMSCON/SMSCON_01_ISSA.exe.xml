@@ -1,7 +1,7 @@
 <Application configClass="FORIS.MessagingGateway.SMSConnector.SMSConnectorConfiguration" type="SMSCON">
   <Settings>
     <Item name="ModuleType" value="SMSCON" />
-    <Item name="ModuleName" value="SMSCON_02_02" />
+    <Item name="ModuleName" value="SMSCON_01_ISSA" />
     <!--Item name="MessagesLimit" value="10"/-->
     <Item name="DefaultCustomerSource" value="1771" />
     <Item name="ShortMessageMaxLength" value="0" />
@@ -20,6 +20,7 @@
     <Item name="Protocol" value="smpp" />
     <Item name="EnquireLinkInterval" value="10" />
     <Item name="DefaultEncoding" value="unicodefffe" />
+    <!--Item name="SessionCleanInterval" value="3" /-->
     <Item name="SuccessResponseCodes" value="0" />
     <Item name="StatusToResend" value="20, 88" />
     <!-- resend if submit_resp status code-->

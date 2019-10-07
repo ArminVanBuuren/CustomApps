@@ -448,9 +448,8 @@
       <Resource name="RES_HLR_PROFILE" value="DEALERS" />
     </RFS>
     <RFS name="RFS_HLR_SUBSCRIBER_DEFAULT" base="RFS_HLR_SUBSCRIBER" hostType="HL" processType="Subscription" description="Создание абонента">
-      <Resource name="RES_HLR_PROFILE">
+      <Resource name="RES_HLR_PROFILE" value="Prepaid">
         <Value hosts="FP:05" value="Postpaid" />
-        <Value hosts="FP:MS" value="Prepaid" />
       </Resource>
     </RFS>
     <RFS name="RFS_HLR_SUBSCRIBER_DGU" base="RFS_HLR_SUBSCRIBER" hostType="HL" processType="Subscription" description="Создание абонента ТП ДГУ">
@@ -483,7 +482,7 @@
       <Scenario name="SM.ChangeIMSI" type="Add" />
       <Resource name="RES_SM_PROFILE" useType="Mandatory">
         <Value hosts="FP:05" value="AM" />
-        <Value hosts="FP:MS" value="SCP1" />
+        <Value hosts="FP:MS-155" value="SCP3" />
       </Resource>
       <RFSParameter name="NewIMSI" />
     </RFS>
@@ -491,7 +490,7 @@
       <Scenario name="SM.ChangeTP" type="Add" />
       <Resource name="RES_SM_PROFILE" useType="Mandatory">
         <Value hosts="FP:05" value="AM" />
-        <Value hosts="FP:MS" value="SCP1" />
+        <Value hosts="FP:MS-155" value="SCP3" />
       </Resource>
       <RFSParameter name="ChangeTP" />
     </RFS>
@@ -501,7 +500,7 @@
       <Scenario name="SM.DeleteSubscriber" type="Remove" />
       <Resource name="RES_SM_PROFILE" useType="Mandatory">
         <Value hosts="FP:05" value="AM" />
-        <Value hosts="FP:MS" value="SCP1" />
+        <Value hosts="FP:MS-155" value="SCP3" />
       </Resource>
     </RFS>
   </RFSList>
