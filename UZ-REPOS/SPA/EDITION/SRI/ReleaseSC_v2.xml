@@ -2469,7 +2469,7 @@
       <RFS name="RFS_HLR_ROAMING_TEST_SMMT0" scenarioType="Add, Remove" />
       <RFS name="RFS_HLR_ROAMING_TEST_SMMT1" scenarioType="Add, Remove" />
     </Scenario>
-    <Scenario name="MG.NotSendIp" sendType="Drop" description="Фейковый сценарий MG">
+    <Scenario name="MG.Dummy" sendType="Drop" description="Фейковый сценарий MG">
       <RFS name="RFS_MG_RESTORE" scenarioType="Modify, Remove" />
       <RFS name="RFS_MG_SUBSCRIPTION" scenarioType="Modify, Remove" />
     </Scenario>
