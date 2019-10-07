@@ -58,6 +58,7 @@
       </BPM>
     </bpmmodules>
     <hostTypesTable hostTypesFP="FP">
+      <hostType type="BSP" identity="IMSI" direct="BSProxy"/>
       <hostType type="CT4" identity="IMSI" direct="MST" />
       <hostType type="CT5" identity="IMSI" direct="UNIFUN" />
       <hostType type="EI" identity="IMSI" direct="EIR" />

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Configuration markers="*" scenarioPrefix="SC." mainIdentities="MSISDN,PersonalAccountNumber,ContractNumber" SICreation="" formatVersion="1">
   <HostTypeList>
+    <HostType name="BSP" nriType="RI" allowTerminalDeviceType="mobile" description="VAS-платформа счетчиков BSProxy" />
     <HostType name="CT4" nriType="RI" allowTerminalDeviceType="mobile" description="Service Content MST" />
     <HostType name="EI" nriType="RI" allowTerminalDeviceType="mobile" description="IMEI REGISTER" />
     <HostType name="FP" nriType="RI" availableSystem="FinancialPlatform" allowTerminalDeviceType="mobile,virtual" orderAdjustment="1000" description="Финансовая платформа" />
@@ -64,6 +65,9 @@
   </RFSParameterList>
   <FlagList />
   <RFSList>
+    <RFS name="RFS_BSPROXY_COUNTER" hostType="BSP" processType="DynamicList" description="Счетчик на BSProxy">
+      <RFSParameter name="Counter" />
+    </RFS>
     <RFS name="RFS_CT4_CHANGE_MSISDN" hostType="CT4" description="Изменение номера MSISDN на платформе CT4">
       <RFSParameter name="NewMSISDN" />
     </RFS>
@@ -669,9 +673,11 @@
       <RFS name="RFS_FP_SERVICE_ADDITIONAL_NUMBER" linkType="Add" />
     </CFS>
     <CFS name="CFS_FP_COUNTER" description="Шаблон SCP и BSProxy счетчика">
+      <RFS name="RFS_BSPROXY_COUNTER" linkType="Add" actionName="Counter Reinitialization" />
       <RFS name="RFS_FP_COUNTER" linkType="Add" actionName="Counter Reinitialization" />
     </CFS>
     <CFS name="CFS_FP_COUNTER_AND_SDP" description="Шаблон SCP + BSProxy + SDP счетчика">
+      <RFS name="RFS_BSPROXY_COUNTER" linkType="Add" actionName="Counter Reinitialization" />
       <RFS name="RFS_FP_COUNTER" linkType="Add" actionName="Counter Reinitialization" />
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" actionName="-Counter Reinitialization" />
     </CFS>
@@ -2207,6 +2213,12 @@
     </Handler>
   </HandlerList>
   <ScenarioList>
+    <Scenario name="BSP.ChangeCounterProfile" description="Переинициализация счетчиков на BSProxy">
+      <RFS name="RFS_BSPROXY_COUNTER" scenarioType="Add" />
+    </Scenario>
+    <Scenario name="BSP.Counter.Dummy" sendType="Drop" description="Фейковый сценарии для типа счетчика BSP">
+      <RFS name="RFS_BSPROXY_COUNTER" scenarioType="Modify, Remove" />
+    </Scenario>
     <Scenario name="CT4.ChangeMSISDN" description="Изменение номера на платформе CT4">
       <RFS name="RFS_CT4_CHANGE_MSISDN" scenarioType="Add" />
       <Append name="RFS_CT4_SUBSCRIPTION" listType="EndList" />
