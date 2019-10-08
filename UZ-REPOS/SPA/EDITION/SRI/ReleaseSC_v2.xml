@@ -1952,7 +1952,7 @@
     <CFS name="PPD175U8" globalServiceCode="PPD175U8" copyOf="CFS_FP_SERVICE_GENERAL" description="1.75 PayPerDay 8" />
     <CFS name="PPD175U9" globalServiceCode="PPD175U9" copyOf="CFS_FP_SERVICE_GENERAL" description="1.75 PayPerDay 9" />
     <CFS name="PPDSS1" globalServiceCode="PPDSS1" copyOf="CFS_FP_SERVICE_GENERAL" description="Услуга SS1" />
-    <CFS name="PPDSS2" globalServiceCode="PPDSS2" copyOf="CFS_FP_SERVICE_GENERAL" description="Услуга 1.75 PPD-S2" />
+    <CFS name="PPDSS2" globalServiceCode="PPDSS2" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="Услуга 1.75 PPD-S2" />
     <CFS name="PPDSS3" globalServiceCode="PPDSS3" copyOf="CFS_FP_SERVICE_GENERAL" description="Услуга SS3" />
     <CFS name="PPDSS4" globalServiceCode="PPDSS4" copyOf="CFS_FP_SERVICE_GENERAL" description="Услуга SS4" />
     <CFS name="PPDSS5" globalServiceCode="PPDSS5" copyOf="CFS_FP_SERVICE_GENERAL" description="Услуга SS5" />
