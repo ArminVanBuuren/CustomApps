@@ -12,7 +12,7 @@
   ]]>
   </msxsl:script>
 
-    <xsl:output method="xml"/>
+    <xsl:output method="xml" cdata-section-elements="Content"/>
   
     <xsl:template match="node()|@*">
         <xsl:copy>

@@ -11,31 +11,31 @@
         {
             try
             {
-                return string.Format(format.Replace("[", "{").Replace("]", "}"), @params.Split(new char[] { splitSign.ToCharArray()[0] }))
-                    .Replace("&apos;", "'")
-                    .Replace("&quot;", "\"")
-                    .Replace("&apos", "'")
-                    .Replace("&quot", "\"")
-                    .Replace(@"\^", "##1##")
-                    .Replace("^", "'")
-                    .Replace("##1##", "^")
-                    .Replace(@"\@", "##2##")
-                    .Replace("@", "\"")
-                    .Replace("##2##", "@")
-                    .Replace(@"\%", "##3##")
-                    .Replace("%", "<")
-                    .Replace("##3##", "%");
+                return string.Format(CharReplacer(format.Replace("[", "{").Replace("]", "}")), CharReplacer(@params).Split(new char[] { splitSign.ToCharArray()[0] }));
             }
             catch (Exception ex)
             {
                 return string.Empty;
             }
         }
+
+        public static String CharReplacer(string input)
+        {
+            return input
+                    .Replace("&amp;", "&")
+                    .Replace("&apos;", "'")
+                    .Replace(@"^", "'")
+                    .Replace("&quot;", "\"")
+                    .Replace("&lt;", "<")
+                    .Replace("&gt;", ">")
+                ;
+        }
   ]]>
   </msxsl:script>
+     <xsl:output method="xml" indent="no" encoding="utf-16" cdata-section-elements="Content" />
      <xsl:template match="/">
 	          <xsl:variable name="Customer"     select="/Message/Item/@customer"/>
-	          <xsl:variable name="StringFormat" select="/Message/Item/Attribute[@name='stringformat']/@value"/>
+	          <xsl:variable name="StringFormat" select="/Message/Item/Attribute[@name='stringformat']/text()"/>
                   <xsl:variable name="Params"       select="/Message/Item/Attribute[@name='params']/@value"/>
                   <xsl:variable name="Split"        select="/Message/Item/Attribute[@name='split']/@value"/>
                   <xsl:variable name="Result"       select="user:get_codelist($Customer, $StringFormat, $Params, $Split)"/>
@@ -54,11 +54,10 @@
             	        	<xsl:attribute name="length">
         	      			<xsl:value-of select="string-length($Result)"/>
 	                	</xsl:attribute>
-				<xsl:element  name="Attribute">
-					<xsl:attribute name='name'>result</xsl:attribute>
-					<xsl:attribute name='value'>
-							<xsl:value-of select='$Result' />
-					</xsl:attribute>
+				<xsl:element  name="Content">
+					<xsl:copy>
+        	      				<xsl:copy-of select="$Result"/>
+					</xsl:copy>
 				</xsl:element>
 			</Item>
 		  </Message>

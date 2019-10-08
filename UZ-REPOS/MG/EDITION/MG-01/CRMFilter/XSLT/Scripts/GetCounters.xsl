@@ -41,7 +41,7 @@ Created by Vladimir Khovanskiy
                 }
 
                 string[] strAccums = Accum.Split(';');
-                string trsf = "\\.";
+                string trsf = @"\.";
                 int i = 0;
 
 
@@ -101,7 +101,7 @@ Created by Vladimir Khovanskiy
             {
                 return string.Empty;
             }
-            return result.Replace(",", ".").Replace(".0001", "");
+            return result.Replace(@",", ".").Replace(@"\.", ",").Replace(".0001", "");
         }
         public static String Expression(System.Xml.XPath.XPathNavigator navigator, string xpath)
         {

@@ -166,7 +166,7 @@
         <syntax>Format(string, string)</syntax>
         <definition>
           Created by Vladimir Khovanskiy. ISSUE - 1261689; Task - 1267189
-          params - splitting by sign ';'
+          params - splitting by sign '|'
         </definition>
       </summary>
       <code>
@@ -200,7 +200,7 @@
             if (args.Length != 2)
                 throw new ArgumentException("Function Format() takes only two parameters");
 
-            return string.Format(((string)args[0]).Replace("[", "{").Replace("]", "}"), ((string)args[1]).Split(';'));
+            return string.Format(((string)args[0]).Replace("[", "{").Replace("]", "}"), ((string)args[1]).Split('|'));
         }
     }
 ]]>

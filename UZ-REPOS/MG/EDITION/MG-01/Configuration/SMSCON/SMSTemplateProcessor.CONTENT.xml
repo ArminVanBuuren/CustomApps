@@ -212,14 +212,14 @@
     </deliveryTemplate>
     <deliveryTemplate dropReply="true" conditionEx="#{'${dbresult}'='0' and matches('${sDbresult}','success_') and (matches('${sRequi}','_BYCRM') or matches('_SERVICE_SUCCESSFUL_RESPONSE','_BYCRM'))}" />
     <deliveryTemplate conditionEx="#{'${dbresult}'='0' and (not(matches('${sDbresult}','success_')) or matches('${sIsFreeSession}','_IF_TRUE'))}">
-      <set item="Content" value="${no-escape:result}" />
+      <set item="Content" value="${no-escape:Content}" />
       <set item="Sender" value="_SMS_NUM_1" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="_ENCODING" />
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
     <deliveryTemplate conditionEx="#{'${dbresult}'='0'}">
-      <set item="Content" value="${no-escape:result}" />
+      <set item="Content" value="${no-escape:Content}" />
       <set item="Sender" value="_SMS_NUM_1" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="_ENCODING" />
@@ -245,14 +245,14 @@
     </deliveryTemplate>
     <deliveryTemplate dropReply="true" conditionEx="#{'${dbresult}'='0' and matches('${sDbresult}','success') and (matches('${sRequi}','_BYCRM') or matches('_TARIF_SUCCESSFUL_RESPONSE','_BYCRM'))}" />
     <deliveryTemplate conditionEx="#{'${dbresult}'='0' and (not(matches('${sDbresult}','success')) or matches('${sIsFreeSession}','_IF_TRUE'))}">
-      <set item="Content" value="${no-escape:result}" />
+      <set item="Content" value="${no-escape:Content}" />
       <set item="Sender" value="_SMS_NUM_1" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="_ENCODING" />
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
     <deliveryTemplate conditionEx="#{'${dbresult}'='0'}">
-      <set item="Content" value="${no-escape:result}" />
+      <set item="Content" value="${no-escape:Content}" />
       <set item="Sender" value="_SMS_NUM_1" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="_ENCODING" />
@@ -278,14 +278,14 @@
     </deliveryTemplate>
     <deliveryTemplate dropReply="true" conditionEx="#{'${dbresult}'='0' and matches('${sDbresult}','success') and (matches('${sRequi}','_BYCRM') or matches('_ALLSERVICE_SUCCESSFUL_RESPONSE','_BYCRM'))}" />
     <deliveryTemplate conditionEx="#{'${dbresult}'='0' and (not(matches('${sDbresult}','success')) or matches('${sIsFreeSession}','_IF_TRUE'))}">
-      <set item="Content" value="${no-escape:result}" />
+      <set item="Content" value="${no-escape:Content}" />
       <set item="Sender" value="_SMS_NUM_1" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="_ENCODING" />
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
     <deliveryTemplate conditionEx="#{'${dbresult}'='0'}">
-      <set item="Content" value="${no-escape:result}" />
+      <set item="Content" value="${no-escape:Content}" />
       <set item="Sender" value="_SMS_NUM_1" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="_ENCODING" />

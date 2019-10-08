@@ -1,19 +1,19 @@
 <!-- 
 Created by Vladimir Khovanskiy
-Реплейсы знаков: (^ - ') (\^ - ^) (@ - ") (\@ - @) (\% - <) (\% - %)
+Реплейсы знаков: (^ - ')
 -->
 <Counters>
   <Group name="gprs"
 
-    getcounters_full_ruk="Balance [0]  Mb do to [1] @[2]@"
-    getcounters_full_rut="Ostatok [0] Mb do [1] @[2]@"
-    getcounters_full_uz="@[2]@ [0] Mb qoldig^i [1]gacha"
-    getcounters_full_en="Remainder [0] Mb up to [1] @[2]@"
+    getcounters_full_ruk="Balance [0]  Mb do to [1] &quot;[2]&quot;"
+    getcounters_full_rut="Ostatok [0] Mb do [1] &quot;[2]&quot;"
+    getcounters_full_uz="&quot;[2]&quot; [0] Mb qoldig^i [1]gacha"
+    getcounters_full_en="Remainder [0] Mb up to [1] &quot;[2]&quot;"
 
-    getcounters_nodate_ruk="Остаток [0] Мб @[1]@"
-    getcounters_nodate_rut="Ostatok [0] Mb @[1]@"
-    getcounters_nodate_uz="@[1]@ qoldig^i [0] Mb"
-    getcounters_nodate_en="Remainder [0] Mb @[1]@"
+    getcounters_nodate_ruk="Остаток [0] Мб &quot;[1]&quot;"
+    getcounters_nodate_rut="Ostatok [0] Mb &quot;[1]&quot;"
+    getcounters_nodate_uz="&quot;[1]&quot; qoldig^i [0] Mb"
+    getcounters_nodate_en="Remainder [0] Mb &quot;[1]&quot;"
 
     getcounters_nocounters_ruk="У Вас нет активных Интернет пакетов"
     getcounters_nocounters_rut="U Vas net aktivny^h Internet paketov"
@@ -83,22 +83,22 @@ Created by Vladimir Khovanskiy
     <soapcon value="gprs"/>
     <ivrcon value="gprs"/>
     <smscon value=""/>
-    <ussdcon value="@019"/>
+    <ussdcon value="&quot;019"/>
     <ussdcon value="102"/>
-    <dealerussd value="@019"/>
+    <dealerussd value="&quot;019"/>
     <dealerussd value="102"/>
   </Group>
   <Group name="voice"
 
-    getcounters_full_ruk="Остаток [0] Мин до [1] @[2]@"
-    getcounters_full_rut="Ostatok [0] Min do [1] @[2]@"
-    getcounters_full_uz="[1] @[2]@ gacha [0] daqiqa qoldiq"
-    getcounters_full_en="Remainder [0] Min up to [1] @[2]@"
+    getcounters_full_ruk="Остаток [0] Мин до [1] &quot;[2]&quot;"
+    getcounters_full_rut="Ostatok [0] Min do [1] &quot;[2]&quot;"
+    getcounters_full_uz="[1] &quot;[2]&quot; gacha [0] daqiqa qoldiq"
+    getcounters_full_en="Remainder [0] Min up to [1] &quot;[2]&quot;"
 
-    getcounters_nodate_ruk="Остаток [0] Мин @[1]@"
-    getcounters_nodate_rut="Ostatok [0] Min @[1]@"
-    getcounters_nodate_uz="Qoldiq [0] daqiqa @[1]@"
-    getcounters_nodate_en="Remainder [0] Min @[1]@"
+    getcounters_nodate_ruk="Остаток [0] Мин &quot;[1]&quot;"
+    getcounters_nodate_rut="Ostatok [0] Min &quot;[1]&quot;"
+    getcounters_nodate_uz="Qoldiq [0] daqiqa &quot;[1]&quot;"
+    getcounters_nodate_en="Remainder [0] Min &quot;[1]&quot;"
 
     getcounters_nocounters_ruk="У Вас нет активных Голосовых пакетов"
     getcounters_nocounters_rut="U Vas net aktivny^h Golosovyh paketov"
@@ -143,20 +143,20 @@ Created by Vladimir Khovanskiy
     <soapcon value="voice"/>
     <ivrcon value="voice"/>
     <smscon value=""/>
-    <ussdcon value="@017"/>
-    <dealerussd value="@017"/>
+    <ussdcon value="&quot;017"/>
+    <dealerussd value="&quot;017"/>
   </Group>
   <Group name="sms"
 
-    getcounters_full_ruk="Остаток [0] SMS до [1] @[2]@"
-    getcounters_full_rut="Ostatok [0] SMS do [1] @[2]@"
-    getcounters_full_uz="@[2]@ [0] sms qoldiq [1]gacha "
-    getcounters_full_en="Remainder [0] SMS up to [1] @[2]@"
+    getcounters_full_ruk="Остаток [0] SMS до [1] &quot;[2]&quot;"
+    getcounters_full_rut="Ostatok [0] SMS do [1] &quot;[2]&quot;"
+    getcounters_full_uz="&quot;[2]&quot; [0] sms qoldiq [1]gacha "
+    getcounters_full_en="Remainder [0] SMS up to [1] &quot;[2]&quot;"
 
-    getcounters_nodate_ruk="Остаток [0] SMS @[1]@"
-    getcounters_nodate_rut="Ostatok [0] SMS @[1]@"
-    getcounters_nodate_uz="Qoldiq [0] SMS @[1]@"
-    getcounters_nodate_en="Remainder [0] SMS @[1]@"
+    getcounters_nodate_ruk="Остаток [0] SMS &quot;[1]&quot;"
+    getcounters_nodate_rut="Ostatok [0] SMS &quot;[1]&quot;"
+    getcounters_nodate_uz="Qoldiq [0] SMS &quot;[1]&quot;"
+    getcounters_nodate_en="Remainder [0] SMS &quot;[1]&quot;"
 
     getcounters_nocounters_ruk="У Вас нет активных SMS пакетов"
     getcounters_nocounters_rut="U Vas net aktivny^h SMS paketov"
@@ -227,22 +227,22 @@ Created by Vladimir Khovanskiy
     <soapcon value="sms"/>
     <ivrcon value="sms"/>
     <smscon value=""/>
-    <ussdcon value="@018"/>
+    <ussdcon value="&quot;018"/>
     <ussdcon value="103"/>
-    <dealerussd value="@018"/>
+    <dealerussd value="&quot;018"/>
     <dealerussd value="103"/>
   </Group>
   <Group name="bonussms"
 
-    getcounters_full_ruk="Остаток [0] до [1] @[2]@"
-    getcounters_full_rut="Ostatok [0] do [1] @[2]@"
-    getcounters_full_uz="[1] @[2]@ gacha [0] qoldiq"
-    getcounters_full_en="Remainder [0] up to [1] @[2]@"
+    getcounters_full_ruk="Остаток [0] до [1] &quot;[2]&quot;"
+    getcounters_full_rut="Ostatok [0] do [1] &quot;[2]&quot;"
+    getcounters_full_uz="[1] &quot;[2]&quot; gacha [0] qoldiq"
+    getcounters_full_en="Remainder [0] up to [1] &quot;[2]&quot;"
 
-    getcounters_nodate_ruk="Остаток [0] @[1]@"
-    getcounters_nodate_rut="Ostatok [0] @[1]@"
-    getcounters_nodate_uz="Qoldiq [0] @[1]@"
-    getcounters_nodate_en="Remainder [0] @[1]@"
+    getcounters_nodate_ruk="Остаток [0] &quot;[1]&quot;"
+    getcounters_nodate_rut="Ostatok [0] &quot;[1]&quot;"
+    getcounters_nodate_uz="Qoldiq [0] &quot;[1]&quot;"
+    getcounters_nodate_en="Remainder [0] &quot;[1]&quot;"
 
     getcounters_nocounters_ruk="У Вас нет активных пакетов"
     getcounters_nocounters_rut="U Vas net aktivny^h paketov"
@@ -308,10 +308,10 @@ Created by Vladimir Khovanskiy
   </Group>
   <Group name="inetsms"
 
-    getcounters_full_ruk="Остаток @[2]@ [0]  до [1]"
-    getcounters_full_rut="Ostatok @[2]@ [0] do [1]"
-    getcounters_full_uz="@[2]@ning qoldiq [0] [1]gacha"
-    getcounters_full_en="Remainder @[2]@ [0] up to [1]"
+    getcounters_full_ruk="Остаток &quot;[2]&quot; [0]  до [1]"
+    getcounters_full_rut="Ostatok &quot;[2]&quot; [0] do [1]"
+    getcounters_full_uz="&quot;[2]&quot;ning qoldiq [0] [1]gacha"
+    getcounters_full_en="Remainder &quot;[2]&quot; [0] up to [1]"
 
     getcounters_nodate_ruk="Ostatok [0] [1]"
     getcounters_nodate_rut="Ostatok [0] [1]"
@@ -377,10 +377,10 @@ Created by Vladimir Khovanskiy
     <dealerussd value=""/>
   </Group>
   <Group name="night"
-    getcounters_full_ruk="Остаток @[2]@ [0]  до [1]"
-    getcounters_full_rut="Ostatok @[2]@ [0] do [1]"
-    getcounters_full_uz="@[2]@ning qoldiq [0] [1]gacha"
-    getcounters_full_en="Remainder @[2]@ [0] up to [1]"
+    getcounters_full_ruk="Остаток &quot;[2]&quot; [0]  до [1]"
+    getcounters_full_rut="Ostatok &quot;[2]&quot; [0] do [1]"
+    getcounters_full_uz="&quot;[2]&quot;ning qoldiq [0] [1]gacha"
+    getcounters_full_en="Remainder &quot;[2]&quot; [0] up to [1]"
 
     getcounters_nodate_ruk="Ostatok [0] [1]"
     getcounters_nodate_rut="Ostatok [0] [1]"
@@ -401,10 +401,10 @@ Created by Vladimir Khovanskiy
     <dealerussd value=""/>
   </Group>
   <Group name="bonus"
-    getcounters_full_ruk="Ostatok: [0] minut @[2]@ do [1]"
-    getcounters_full_rut="Ostatok: [0] minut @[2]@ do [1]"
-    getcounters_full_uz="@[2]@ [0] daqiqa qoldig^i [1]gacha "
-    getcounters_full_en="Ostatok: [0] minut @[2]@ do [1]"
+    getcounters_full_ruk="Ostatok: [0] minut &quot;[2]&quot; do [1]"
+    getcounters_full_rut="Ostatok: [0] minut &quot;[2]&quot; do [1]"
+    getcounters_full_uz="&quot;[2]&quot; [0] daqiqa qoldig^i [1]gacha "
+    getcounters_full_en="Ostatok: [0] minut &quot;[2]&quot; do [1]"
 
     getcounters_nodate_ruk="Ostatok [0] [1]"
     getcounters_nodate_rut="Ostatok [0] [1]"
@@ -449,15 +449,15 @@ Created by Vladimir Khovanskiy
     <dealerussd value=""/>
   </Group>
   <Group name="superzero30"
-    getcounters_full_ruk="Остаток [0] Мин до [1] @[2]@"
-    getcounters_full_rut="Ostatok [0] Min do [1] @[2]@"
-    getcounters_full_uz="[1] @[2]@ gacha [0] daqiqa qoldiq"
-    getcounters_full_en="Ostatok [0] Min up to [1] @[2]@"
+    getcounters_full_ruk="Остаток [0] Мин до [1] &quot;[2]&quot;"
+    getcounters_full_rut="Ostatok [0] Min do [1] &quot;[2]&quot;"
+    getcounters_full_uz="[1] &quot;[2]&quot; gacha [0] daqiqa qoldiq"
+    getcounters_full_en="Ostatok [0] Min up to [1] &quot;[2]&quot;"
 
-    getcounters_nodate_ruk="Остаток [0] Мин @[1]@"
-    getcounters_nodate_rut="Ostatok [0] Min @[1]@"
-    getcounters_nodate_uz="Qoldiq [0] daqiqa @[1]@"
-    getcounters_nodate_en="Ostatok [0] Min @[1]@"
+    getcounters_nodate_ruk="Остаток [0] Мин &quot;[1]&quot;"
+    getcounters_nodate_rut="Ostatok [0] Min &quot;[1]&quot;"
+    getcounters_nodate_uz="Qoldiq [0] daqiqa &quot;[1]&quot;"
+    getcounters_nodate_en="Ostatok [0] Min &quot;[1]&quot;"
 
     getcounters_nocounters_ruk="У Вас нет активных Голосовых пакетов"
     getcounters_nocounters_rut="U Vas net aktivny^h Golosovyh paketov"
@@ -474,15 +474,15 @@ Created by Vladimir Khovanskiy
   </Group>
   <Group name="samsungs7"
 
-    getcounters_full_ruk="Остаток [0] до [1] @[2]@"
-    getcounters_full_rut="Ostatok [0] do [1] @[2]@"
-    getcounters_full_uz="[1] @[2]@ gacha [0] qoldiq"
-    getcounters_full_en="Ostatok [0] up to [1] @[2]@"
+    getcounters_full_ruk="Остаток [0] до [1] &quot;[2]&quot;"
+    getcounters_full_rut="Ostatok [0] do [1] &quot;[2]&quot;"
+    getcounters_full_uz="[1] &quot;[2]&quot; gacha [0] qoldiq"
+    getcounters_full_en="Ostatok [0] up to [1] &quot;[2]&quot;"
 
-    getcounters_nodate_ruk="Остаток [0] @[1]@"
-    getcounters_nodate_rut="Ostatok [0] @[1]@"
-    getcounters_nodate_uz="Qoldiq [0] @[1]@"
-    getcounters_nodate_en="Ostatok [0] @[1]@"
+    getcounters_nodate_ruk="Остаток [0] &quot;[1]&quot;"
+    getcounters_nodate_rut="Ostatok [0] &quot;[1]&quot;"
+    getcounters_nodate_uz="Qoldiq [0] &quot;[1]&quot;"
+    getcounters_nodate_en="Ostatok [0] &quot;[1]&quot;"
 
     getcounters_nocounters_ruk="У Вас нет активных пакетов"
     getcounters_nocounters_rut="U Vas net aktivny^h paketov"
@@ -506,10 +506,10 @@ Created by Vladimir Khovanskiy
   </Group>
   <Group name="inetweek"
 
-    getcounters_full_ruk="Остаток @[2]@ [0] MB  до [1]"
-    getcounters_full_rut="Ostatok @[2]@ [0] MB do [1]"
-    getcounters_full_uz="@[2]@ning qoldiq [0] MB [1]gacha"
-    getcounters_full_en="Remainder @[2]@ [0] MB up to [1]"
+    getcounters_full_ruk="Остаток &quot;[2]&quot; [0] MB  до [1]"
+    getcounters_full_rut="Ostatok &quot;[2]&quot; [0] MB do [1]"
+    getcounters_full_uz="&quot;[2]&quot;ning qoldiq [0] MB [1]gacha"
+    getcounters_full_en="Remainder &quot;[2]&quot; [0] MB up to [1]"
 
     getcounters_nodate_ruk="Ostatok [0] [1]"
     getcounters_nodate_rut="Ostatok [0] [1]"
@@ -573,10 +573,10 @@ Created by Vladimir Khovanskiy
   </Group>
   <Group name="blackfriday"
 
-    getcounters_full_ruk="Остаток @[2]@ [0] MB  до [1]. Paket deystvuet s 15.06.2018"
-    getcounters_full_rut="Ostatok @[2]@ [0] MB do [1]. Paket deystvuet s 15.06.2018"
-    getcounters_full_uz="@[2]@ning qoldig^i [0] MB [1]gacha. To^plam 15.06.2018dan amal qiladi."
-    getcounters_full_en="Остаток @[2]@ [0] MB  до [1]. Paket deystvuet s 15.06.2018"
+    getcounters_full_ruk="Остаток &quot;[2]&quot; [0] MB  до [1]. Paket deystvuet s 15.06.2018"
+    getcounters_full_rut="Ostatok &quot;[2]&quot; [0] MB do [1]. Paket deystvuet s 15.06.2018"
+    getcounters_full_uz="&quot;[2]&quot;ning qoldig^i [0] MB [1]gacha. To^plam 15.06.2018dan amal qiladi."
+    getcounters_full_en="Остаток &quot;[2]&quot; [0] MB  до [1]. Paket deystvuet s 15.06.2018"
 
     getcounters_nodate_ruk="Ostatok [0] [1]"
     getcounters_nodate_rut="Ostatok [0] [1]"
@@ -642,10 +642,10 @@ Created by Vladimir Khovanskiy
   </Group>
   <Group name="mbpack"
 
-    getcounters_full_ruk="Остаток @[2]@ [0] MB  до [1]"
-    getcounters_full_rut="Ostatok @[2]@ [0] MB do [1]"
-    getcounters_full_uz="@[2]@ning qoldiq [0] MB [1]gacha"
-    getcounters_full_en="Remainder @[2]@ [0] MB up to [1]"
+    getcounters_full_ruk="Остаток &quot;[2]&quot; [0] MB  до [1]"
+    getcounters_full_rut="Ostatok &quot;[2]&quot; [0] MB do [1]"
+    getcounters_full_uz="&quot;[2]&quot;ning qoldiq [0] MB [1]gacha"
+    getcounters_full_en="Remainder &quot;[2]&quot; [0] MB up to [1]"
 
     getcounters_nodate_ruk="Ostatok [0] [1]"
     getcounters_nodate_rut="Ostatok [0] [1]"
@@ -664,10 +664,10 @@ Created by Vladimir Khovanskiy
   </Group>
   <Group name="mbpackd"
 
-    getcounters_full_ruk="Остаток @[2]@ [0] MB  до [1]"
-    getcounters_full_rut="Ostatok @[2]@ [0] MB do [1]"
-    getcounters_full_uz="@[2]@ning qoldiq [0] MB [1]gacha"
-    getcounters_full_en="Remainder @[2]@ [0] MB up to [1]"
+    getcounters_full_ruk="Остаток &quot;[2]&quot; [0] MB  до [1]"
+    getcounters_full_rut="Ostatok &quot;[2]&quot; [0] MB do [1]"
+    getcounters_full_uz="&quot;[2]&quot;ning qoldiq [0] MB [1]gacha"
+    getcounters_full_en="Remainder &quot;[2]&quot; [0] MB up to [1]"
 
     getcounters_nodate_ruk="Ostatok [0] [1]"
     getcounters_nodate_rut="Ostatok [0] [1]"
@@ -724,10 +724,10 @@ Created by Vladimir Khovanskiy
   </Group>
   <Group name="dayinet"
 
-    getcounters_full_ruk="@[2]@ [0] MB  до [1]"
-    getcounters_full_rut="@[2]@ [0] MB do [1]"
-    getcounters_full_uz="@[2]@ning [0] MB [1]gacha"
-    getcounters_full_en="@[2]@ [0] MB up to [1]"
+    getcounters_full_ruk="&quot;[2]&quot; [0] MB  до [1]"
+    getcounters_full_rut="&quot;[2]&quot; [0] MB do [1]"
+    getcounters_full_uz="&quot;[2]&quot;ning [0] MB [1]gacha"
+    getcounters_full_en="&quot;[2]&quot; [0] MB up to [1]"
 
     getcounters_nodate_ruk="Ostatok [0] [1]"
     getcounters_nodate_rut="Ostatok [0] [1]"
@@ -779,10 +779,10 @@ Created by Vladimir Khovanskiy
   </Group>
   <Group name="bit"
 
-    getcounters_full_ruk="@Bez Graniz@: potracheno [2] - [0]"
-    getcounters_full_rut="@Bez Graniz@: potracheno [2] - [0]"
-    getcounters_full_uz="@Cheksiz@: sarflangan [2] - [0]"
-    getcounters_full_en="@Bez Graniz@: potracheno [2] - [0]"
+    getcounters_full_ruk="&quot;Bez Graniz&quot;: potracheno [2] - [0]"
+    getcounters_full_rut="&quot;Bez Graniz&quot;: potracheno [2] - [0]"
+    getcounters_full_uz="&quot;Cheksiz&quot;: sarflangan [2] - [0]"
+    getcounters_full_en="&quot;Bez Graniz&quot;: potracheno [2] - [0]"
 
     getcounters_nodate_ruk="[0]"
     getcounters_nodate_rut="[0]"
@@ -800,10 +800,10 @@ Created by Vladimir Khovanskiy
   </Group>
   <Group name="fizbit"
 
-    getcounters_full_ruk="@Legkiy Internet@: potracheno [2] - [0]"
-    getcounters_full_rut="@Legkiy Internet@: potracheno [2] - [0]"
-    getcounters_full_uz="@Yengil Internet@: sarflangan [2] - [0]"
-    getcounters_full_en="Legkiy Internet@: potracheno [2] - [0]"
+    getcounters_full_ruk="&quot;Legkiy Internet&quot;: potracheno [2] - [0]"
+    getcounters_full_rut="&quot;Legkiy Internet&quot;: potracheno [2] - [0]"
+    getcounters_full_uz="&quot;Yengil Internet&quot;: sarflangan [2] - [0]"
+    getcounters_full_en="Legkiy Internet&quot;: potracheno [2] - [0]"
 
     getcounters_nodate_ruk="[0]"
     getcounters_nodate_rut="[0]"
@@ -991,15 +991,15 @@ Created by Vladimir Khovanskiy
   </Group>
   <Group name="smsbesh"
 
-    getcounters_full_ruk="Bonus TP @[2]@: [0] SMS do [1]"
-    getcounters_full_rut="Bonus TP @[2]@: [0] SMS do [1]"
-    getcounters_full_uz="TR @[2]@ bonus: [0] SMS [1]gacha"
-    getcounters_full_en="Bonus TP @[2]@: [0] SMS do [1]"
+    getcounters_full_ruk="Bonus TP &quot;[2]&quot;: [0] SMS do [1]"
+    getcounters_full_rut="Bonus TP &quot;[2]&quot;: [0] SMS do [1]"
+    getcounters_full_uz="TR &quot;[2]&quot; bonus: [0] SMS [1]gacha"
+    getcounters_full_en="Bonus TP &quot;[2]&quot;: [0] SMS do [1]"
 
-    getcounters_nodate_ruk="Bonus TP @[1]@: [0] SMS"
-    getcounters_nodate_rut="Bonus TP @[1]@: [0] SMS"
-    getcounters_nodate_uz="TR @[1]@ bonus: [0] SMS"
-    getcounters_nodate_en="Bonus TP @[1]@: [0] SMS"
+    getcounters_nodate_ruk="Bonus TP &quot;[1]&quot;: [0] SMS"
+    getcounters_nodate_rut="Bonus TP &quot;[1]&quot;: [0] SMS"
+    getcounters_nodate_uz="TR &quot;[1]&quot; bonus: [0] SMS"
+    getcounters_nodate_en="Bonus TP &quot;[1]&quot;: [0] SMS"
 
     getcounters_nocounters_ruk="У Вас нет активных пакетов"
     getcounters_nocounters_rut="U Vas net aktivny^h paketov"
@@ -1035,10 +1035,10 @@ Created by Vladimir Khovanskiy
     <soapcon value="voicetosms"/>
   </Group>
   <Group name="start"
-    getcounters_full_ruk="Bonus TP @START@ (vnutri seti): [0] min. do [1]"
-    getcounters_full_rut="Bonus TP @START@ (vnutri seti): [0] min. do [1]"
-    getcounters_full_uz="TR @START@ bonus (tarmoq ichida): [0] daq. [1]gacha"
-    getcounters_full_en="Bonus TP @START@ (vnutri seti): [0] min. do [1]"
+    getcounters_full_ruk="Bonus TP &quot;START&quot; (vnutri seti): [0] min. do [1]"
+    getcounters_full_rut="Bonus TP &quot;START&quot; (vnutri seti): [0] min. do [1]"
+    getcounters_full_uz="TR &quot;START&quot; bonus (tarmoq ichida): [0] daq. [1]gacha"
+    getcounters_full_en="Bonus TP &quot;START&quot; (vnutri seti): [0] min. do [1]"
 
     getcounters_nodate_ruk="Ostatok [0] [1]"
     getcounters_nodate_rut="Ostatok [0] [1]"
@@ -1101,15 +1101,15 @@ Created by Vladimir Khovanskiy
   </Group>
   <Group name="voicebesh"
 
-    getcounters_full_ruk="Bonus TP @[2]@: [0] Min do [1]"
-    getcounters_full_rut="Bonus TP @BESH@ (po Uzbekistanu): [0] min. do [1]"
-    getcounters_full_uz="TR @BESH@ bonus (O^zbekiston bo^yicha): [0] daq. [1]gacha"
-    getcounters_full_en="Bonus TP @[2]@: [0] Min do [1]"
+    getcounters_full_ruk="Bonus TP &quot;[2]&quot;: [0] Min do [1]"
+    getcounters_full_rut="Bonus TP &quot;BESH&quot; (po Uzbekistanu): [0] min. do [1]"
+    getcounters_full_uz="TR &quot;BESH&quot; bonus (O^zbekiston bo^yicha): [0] daq. [1]gacha"
+    getcounters_full_en="Bonus TP &quot;[2]&quot;: [0] Min do [1]"
 
-    getcounters_nodate_ruk="Bonus TP @[1]@: [0] Min"
-    getcounters_nodate_rut="Bonus TP @[1]@: [0] Min"
-    getcounters_nodate_uz="TR @[1]@ bonus: [0] daq."
-    getcounters_nodate_en="Bonus TP @[1]@: [0] Min"
+    getcounters_nodate_ruk="Bonus TP &quot;[1]&quot;: [0] Min"
+    getcounters_nodate_rut="Bonus TP &quot;[1]&quot;: [0] Min"
+    getcounters_nodate_uz="TR &quot;[1]&quot; bonus: [0] daq."
+    getcounters_nodate_en="Bonus TP &quot;[1]&quot;: [0] Min"
 
     getcounters_nocounters_ruk="У Вас нет активных пакетов"
     getcounters_nocounters_rut="U Vas net bonusnih paketov"
@@ -1169,10 +1169,10 @@ Created by Vladimir Khovanskiy
   </Group>
   <Group name="enrollee"
 
-    getcounters_full_ruk="Po aksii @Abiturient@ [0] MB do [1]"
-    getcounters_full_rut="Po aksii @Abiturient@ [0] MB do [1]"
-    getcounters_full_uz="@Abiturient@ aksiyada [0] MB qoldig^i [1]gacha "
-    getcounters_full_en="For action @Abiturient@ [0] MB to [1]"
+    getcounters_full_ruk="Po aksii &quot;Abiturient&quot; [0] MB do [1]"
+    getcounters_full_rut="Po aksii &quot;Abiturient&quot; [0] MB do [1]"
+    getcounters_full_uz="&quot;Abiturient&quot; aksiyada [0] MB qoldig^i [1]gacha "
+    getcounters_full_en="For action &quot;Abiturient&quot; [0] MB to [1]"
 
     getcounters_nodate_ruk=" [0]"
     getcounters_nodate_rut=" [0]"
@@ -1191,15 +1191,15 @@ Created by Vladimir Khovanskiy
   </Group>
   <Group name="gbon"
 
-    getcounters_full_ruk="@[2]@: [0] МБ до [1]"
-    getcounters_full_rut="@[2]@: [0] MB do [1]"
-    getcounters_full_uz="@[2]@: [0] MB [1]gacha"
+    getcounters_full_ruk="&quot;[2]&quot;: [0] МБ до [1]"
+    getcounters_full_rut="&quot;[2]&quot;: [0] MB do [1]"
+    getcounters_full_uz="&quot;[2]&quot;: [0] MB [1]gacha"
     getcounters_full_en="Remainder [0] MB up to [1]"
 
-    getcounters_nodate_ruk="Остаток [0] Мб @[1]@"
-    getcounters_nodate_rut="Ostatok [0] Mb @[1]@"
-    getcounters_nodate_uz="@[1]@ qoldig^i [0] Mb"
-    getcounters_nodate_en="Remainder [0] Mb @[1]@"
+    getcounters_nodate_ruk="Остаток [0] Мб &quot;[1]&quot;"
+    getcounters_nodate_rut="Ostatok [0] Mb &quot;[1]&quot;"
+    getcounters_nodate_uz="&quot;[1]&quot; qoldig^i [0] Mb"
+    getcounters_nodate_en="Remainder [0] Mb &quot;[1]&quot;"
 
     getcounters_nocounters_ruk="У Вас нет активных Интернет пакетов"
     getcounters_nocounters_rut="U Vas net aktivny^h Internet paketov"
@@ -1718,10 +1718,10 @@ Created by Vladimir Khovanskiy
   </Counter>
   <Counter counter_code="MB500ST" group="1"
 
-    getcounters_name_ruk="po aktsii @Student@"
-    getcounters_name_rut="po aktsii @Student@"
-    getcounters_name_uz="po aktsii @Student@"
-    getcounters_name_en="po aktsii @Student@"
+    getcounters_name_ruk="po aktsii &quot;Student&quot;"
+    getcounters_name_rut="po aktsii &quot;Student&quot;"
+    getcounters_name_uz="po aktsii &quot;Student&quot;"
+    getcounters_name_en="po aktsii &quot;Student&quot;"
 
 
     >
@@ -6766,10 +6766,10 @@ Created by Vladimir Khovanskiy
   </Counter>
   <Counter counter_code="MB500ST" group="7"
 
-    getcounters_name_ruk="po aktsii @Student@"
-    getcounters_name_rut="po aktsii @Student@"
-    getcounters_name_uz="po aktsii @Student@"
-    getcounters_name_en="po aktsii @Student@"
+    getcounters_name_ruk="po aktsii &quot;Student&quot;"
+    getcounters_name_rut="po aktsii &quot;Student&quot;"
+    getcounters_name_uz="po aktsii &quot;Student&quot;"
+    getcounters_name_en="po aktsii &quot;Student&quot;"
 
 
     >

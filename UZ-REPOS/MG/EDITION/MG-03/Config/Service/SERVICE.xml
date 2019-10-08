@@ -1,84 +1,84 @@
 <!-- 
 Created by Vladimir Khovanskiy  
-Реплейсы знаков: (^ - ') (\^ - ^) (@ - ") (\@ - @) (\% - <) (\% - %)
+Реплейсы знаков: (^ - ')
 successful_response  - Если атрибут выставлен как "BYCRM", то ответ по успешному выполнению возвращает CRM.
 redirect             - Ответ по SMS, SOAP и т.д.
 availbalance         - Необходимый доступный баланс у абонента, для добавления сервиса. Компонент работает если параметр задан как число
 check_block          - Проверка на блокировки. Компонент выполняется, если параметр задан как "true".
 timetoprogress       - Если при первом запросе сервис выполнился успешно, то следующий вызов может произойти по истечении указанного времени с момента начала первой обработки.
-         Параметр определяется в секундах. При выполнении компонента возвращается ответ из @info_inprogress_XXX.
-    servicebindinglist   - Компонент определяет проверки на необходимые услуги (обрабатывается в цикле по колличеству нод service). Компонент выполняется если присутсвует аттрибут @subscription
-         Если выполняется условие по @subscription, то возвращается ответ из @info_XXX
-         Если задан атрибут @store и выполняется условие по @subscription - сохраняется значение из @store в сессию в параметр ${sRequi}, для дальнейших проверок
+         Параметр определяется в секундах. При выполнении компонента возвращается ответ из &quot;info_inprogress_XXX.
+    servicebindinglist   - Компонент определяет проверки на необходимые услуги (обрабатывается в цикле по колличеству нод service). Компонент выполняется если присутсвует аттрибут &quot;subscription
+         Если выполняется условие по &quot;subscription, то возвращается ответ из &quot;info_XXX
+         Если задан атрибут &quot;store и выполняется условие по &quot;subscription - сохраняется значение из &quot;store в сессию в параметр ${sRequi}, для дальнейших проверок
 customerlist         - Компонент выполняет проверки по номерам абонентов.
-         Если аттрибут @available="true", то по списку номеров customer/@value разрешено пользоваться сервисом, всем остальным абонентам запрещено
-         Если аттрибут @available="false", то по списку номеров customer/@value запрещено пользоваться сервисом, всем остальным абонентам доступно
+         Если аттрибут &quot;available="true", то по списку номеров customer/&quot;value разрешено пользоваться сервисом, всем остальным абонентам запрещено
+         Если аттрибут &quot;available="false", то по списку номеров customer/&quot;value запрещено пользоваться сервисом, всем остальным абонентам доступно
 tplist               - Компонент выполняет проверки по тарифныму плану абонента.
-         Если аттрибут @available="true", то абонентам с установленным тарифным планом ivrcode/@value разрешено пользоваться сервисом, всем остальным запрещено
-         Если аттрибут @available="false", то абонентам с установленным тарифным планом ivrcode/@value запрещено пользоваться сервисом, всем остальным разрешено
+         Если аттрибут &quot;available="true", то абонентам с установленным тарифным планом ivrcode/&quot;value разрешено пользоваться сервисом, всем остальным запрещено
+         Если аттрибут &quot;available="false", то абонентам с установленным тарифным планом ivrcode/&quot;value запрещено пользоваться сервисом, всем остальным разрешено
 -->
 <ServiceList>
   <Group  name="SERVICE" redirect="sms" check_block="true" timetoprogress="80"
 
-    info_service_active_ruk="Status uslugi @[0]@ - aktivna"
-    info_service_active_rut="Status uslugi @[0]@ - aktivna"
-    info_service_active_uz="@[0]@ xizmati - yoqilgan"
-    info_service_active_en="Service @[0]@ status - active"
+    info_service_active_ruk="Status uslugi &quot;[0]&quot; - aktivna"
+    info_service_active_rut="Status uslugi &quot;[0]&quot; - aktivna"
+    info_service_active_uz="&quot;[0]&quot; xizmati - yoqilgan"
+    info_service_active_en="Service &quot;[0]&quot; status - active"
 
-    info_service_deactive_ruk="Status uslugi @[0]@ - neaktivna"
-    info_service_deactive_rut="Status uslugi @[0]@ - neaktivna"
-    info_service_deactive_uz="@[0]@ xizmati - yoqilmagan"
-    info_service_deactive_en="Service @[0]@ status - not active"
+    info_service_deactive_ruk="Status uslugi &quot;[0]&quot; - neaktivna"
+    info_service_deactive_rut="Status uslugi &quot;[0]&quot; - neaktivna"
+    info_service_deactive_uz="&quot;[0]&quot; xizmati - yoqilmagan"
+    info_service_deactive_en="Service &quot;[0]&quot; status - not active"
 
-    info_confirm_deactive_ruk="Usluga @[0]@ ne ustanovlena. Dlya activacii uslugi @[0]@ otprav^te 1"
-    info_confirm_deactive_rut="Usluga @[0]@ ne ustanovlena. Dlya activacii uslugi @[0]@ otprav^te 1"
-    info_confirm_deactive_uz="Usluga @[0]@ ne ustanovlena. Dlya activacii uslugi @[0]@ otprav^te 1"
-    info_confirm_deactive_en="Service @[0]@ is not active. To activate the service @[0]@ send 1"
+    info_confirm_deactive_ruk="Usluga &quot;[0]&quot; ne ustanovlena. Dlya activacii uslugi &quot;[0]&quot; otprav^te 1"
+    info_confirm_deactive_rut="Usluga &quot;[0]&quot; ne ustanovlena. Dlya activacii uslugi &quot;[0]&quot; otprav^te 1"
+    info_confirm_deactive_uz="Usluga &quot;[0]&quot; ne ustanovlena. Dlya activacii uslugi &quot;[0]&quot; otprav^te 1"
+    info_confirm_deactive_en="Service &quot;[0]&quot; is not active. To activate the service &quot;[0]&quot; send 1"
 
-    info_confirm_active_ruk="Usluga @[0]@ ustanovlena. Dlya deactivacii uslugi @[0]@ otprav^te 2"
-    info_confirm_active_rut="Usluga @[0]@ ustanovlena. Dlya deactivacii uslugi @[0]@ otprav^te 2"
-    info_confirm_active_uz="Usluga @[0]@ ustanovlena. Dlya deactivacii uslugi @[0]@ otprav^te 2"
-    info_confirm_active_en="Service @[0]@ is active. To deactivate the service @[0]@ send 2"
+    info_confirm_active_ruk="Usluga &quot;[0]&quot; ustanovlena. Dlya deactivacii uslugi &quot;[0]&quot; otprav^te 2"
+    info_confirm_active_rut="Usluga &quot;[0]&quot; ustanovlena. Dlya deactivacii uslugi &quot;[0]&quot; otprav^te 2"
+    info_confirm_active_uz="Usluga &quot;[0]&quot; ustanovlena. Dlya deactivacii uslugi &quot;[0]&quot; otprav^te 2"
+    info_confirm_active_en="Service &quot;[0]&quot; is active. To deactivate the service &quot;[0]&quot; send 2"
 
-    info_success_active_ruk="Заказ на подключение услуги @[0]@ принят."
-    info_success_active_rut="Zakaz na podklyuchenie uslugi @[0]@ prinyat."
-    info_success_active_uz="@[0]@ Xizmatga ulanish buyrug^i qabul qilindi."
-    info_success_active_en="Request for service connection @[0]@ is accepted."
+    info_success_active_ruk="Заказ на подключение услуги &quot;[0]&quot; принят."
+    info_success_active_rut="Zakaz na podklyuchenie uslugi &quot;[0]&quot; prinyat."
+    info_success_active_uz="&quot;[0]&quot; Xizmatga ulanish buyrug^i qabul qilindi."
+    info_success_active_en="Request for service connection &quot;[0]&quot; is accepted."
 
-    info_success_deactive_ruk="Заказ на деактивацию услуги @[0]@ принят."
-    info_success_deactive_rut="Zakaz na deaktivaciyu uslugi @[0]@ prinyat."
-    info_success_deactive_uz="@[0]@ Xizmatni o^chirish buyrug^i qabul qilindi"
-    info_success_deactive_en="Request for service deactivation @[0]@ is accepted."
+    info_success_deactive_ruk="Заказ на деактивацию услуги &quot;[0]&quot; принят."
+    info_success_deactive_rut="Zakaz na deaktivaciyu uslugi &quot;[0]&quot; prinyat."
+    info_success_deactive_uz="&quot;[0]&quot; Xizmatni o^chirish buyrug^i qabul qilindi"
+    info_success_deactive_en="Request for service deactivation &quot;[0]&quot; is accepted."
 
-    info_service_notavailable_ruk="Услуга @[0]@ больше недоступна для подключения"
-    info_service_notavailable_rut="Usluga @[0]@ bol^she nedostupna dlya podklyucheniya"
-    info_service_notavailable_uz="Xizmat @[0]@ boshqa ulanmaydi"
-    info_service_notavailable_en="Service @[0]@ is no longer available for connection"
+    info_service_notavailable_ruk="Услуга &quot;[0]&quot; больше недоступна для подключения"
+    info_service_notavailable_rut="Usluga &quot;[0]&quot; bol^she nedostupna dlya podklyucheniya"
+    info_service_notavailable_uz="Xizmat &quot;[0]&quot; boshqa ulanmaydi"
+    info_service_notavailable_en="Service &quot;[0]&quot; is no longer available for connection"
 
-    info_service_unavailable_ruk="Услуга @[0]@ будет доступна с [1]"
-    info_service_unavailable_rut="Usluga @[0]@ budet dostupna s [1]"
-    info_service_unavailable_uz="@[0]@ xizmati [1] dan ulanish mumkin"
-    info_service_unavailable_en="Service  @[0]@ will be available from [1]"
+    info_service_unavailable_ruk="Услуга &quot;[0]&quot; будет доступна с [1]"
+    info_service_unavailable_rut="Usluga &quot;[0]&quot; budet dostupna s [1]"
+    info_service_unavailable_uz="&quot;[0]&quot; xizmati [1] dan ulanish mumkin"
+    info_service_unavailable_en="Service  &quot;[0]&quot; will be available from [1]"
 
-    info_alrprogress_active_ruk="Activaciya uslugi @[0]@ nahoditsya v obrabotke. Obratites^ pozzhe."
-    info_alrprogress_active_rut="Activaciya uslugi @[0]@ nahoditsya v obrabotke. Obratites^ pozzhe."
-    info_alrprogress_active_uz="Xizmat aktivasiyasi@[0]@ ishlov berish jarayonida. Kechroq murojaat qiling."
-    info_alrprogress_active_en="Service activation @[0]@ is on process.Refer later."
+    info_alrprogress_active_ruk="Activaciya uslugi &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
+    info_alrprogress_active_rut="Activaciya uslugi &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
+    info_alrprogress_active_uz="Xizmat aktivasiyasi&quot;[0]&quot; ishlov berish jarayonida. Kechroq murojaat qiling."
+    info_alrprogress_active_en="Service activation &quot;[0]&quot; is on process.Refer later."
 
-    info_alrprogress_deactive_ruk="Udalenie uslugi @[0]@ nahoditsya v obrabotke. Obratites^ pozzhe."
-    info_alrprogress_deactive_rut="Udalenie uslugi @[0]@ nahoditsya v obrabotke. Obratites^ pozzhe."
-    info_alrprogress_deactive_uz="Xizmatni o^chirish @[0]@ ishlov berish jarayonida. Kechroq murojaat qiling."
-    info_alrprogress_deactive_en="Service deleting @[0]@is on process.Refer later."
+    info_alrprogress_deactive_ruk="Udalenie uslugi &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
+    info_alrprogress_deactive_rut="Udalenie uslugi &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
+    info_alrprogress_deactive_uz="Xizmatni o^chirish &quot;[0]&quot; ishlov berish jarayonida. Kechroq murojaat qiling."
+    info_alrprogress_deactive_en="Service deleting &quot;[0]&quot;is on process.Refer later."
 
-    info_inprogress_active_ruk="Predydushaya obrabotka nahoditsya v shage activacii uslugi @[0]@. Poprobuyte pozzhe."
-    info_inprogress_active_rut="Predydushaya obrabotka nahoditsya v shage activacii uslugi @[0]@. Poprobuyte pozzhe."
-    info_inprogress_active_uz="Xizmatni aktivasiyalashning @[0]@ avvalgi ishlov berish jarayoni yakunlanmoqda. Kechroq qayta murojaat eting."
-    info_inprogress_active_en="Previous processing is at the stage of service @[0]@ activation.Try later."
+    info_inprogress_active_ruk="Predydushaya obrabotka nahoditsya v shage activacii uslugi &quot;[0]&quot;. Poprobuyte pozzhe."
+    info_inprogress_active_rut="Predydushaya obrabotka nahoditsya v shage activacii uslugi &quot;[0]&quot;. Poprobuyte pozzhe."
+    info_inprogress_active_uz="Xizmatni aktivasiyalashning &quot;[0]&quot; avvalgi ishlov berish jarayoni yakunlanmoqda. Kechroq qayta murojaat eting."
+    info_inprogress_active_en="Previous processing is at the stage of service &quot;[0]&quot; activation.Try later."
 
-    info_inprogress_deactive_ruk="Predydushaya obrabotka nahoditsya v shage deactivacii uslugi @[0]@. Poprobuyte pozzhe."
-    info_inprogress_deactive_rut="Predydushaya obrabotka nahoditsya v shage deactivacii uslugi @[0]@. Poprobuyte pozzhe."
-    info_inprogress_deactive_uz="Xizmatni deaktivasiyalashning @[0]@ avvalgi ishlov berish jarayoni yakunlanmoqda. Kechroq qayta murojaat eting."
-    info_inprogress_deactive_en="Previous processing is at the stage of service @[0]@ activation.Try later."
+    info_inprogress_deactive_ruk="Predydushaya obrabotka nahoditsya v shage deactivacii uslugi &quot;[0]&quot;. Poprobuyte pozzhe."
+    info_inprogress_deactive_rut="Predydushaya obrabotka nahoditsya v shage deactivacii uslugi &quot;[0]&quot;. Poprobuyte pozzhe."
+    info_inprogress_deactive_uz="Xizmatni deaktivasiyalashning &quot;[0]&quot; avvalgi ishlov berish jarayoni yakunlanmoqda. Kechroq qayta murojaat eting."
+    info_inprogress_deactive_en="Previous processing is at the stage of service &quot;[0]&quot; activation.Try later."
 
     info_notavailbalance_ruk="Недостаточно средств на балансе для проведения операции."
     info_notavailbalance_rut="Nedostatochno sredstv na balanse dlya provedeniya operacii."
@@ -90,55 +90,55 @@ tplist               - Компонент выполняет проверки п
     info_inprogress_uz="Operaciya ne mozhet byt^ vypolnena, poka ne zavershitsya predydush^aya."
     info_inprogress_en="Operation can not be made,until the previous one is committed."
 
-    info_320194_ruk="Услуга @[0]@ ne predostavlyaetsya dlya Vashego tarifnogo plana"
-    info_320194_rut="Usluga @[0]@ ne predostavlyaetsya dlya Vashego tarifnogo plana"
-    info_320194_uz="@[0]@ xizmatidan foydalana olmaysiz."
-    info_320194_en="Service @[0]@ can not be perfored for Your tariff plan"
+    info_320194_ruk="Услуга &quot;[0]&quot; ne predostavlyaetsya dlya Vashego tarifnogo plana"
+    info_320194_rut="Usluga &quot;[0]&quot; ne predostavlyaetsya dlya Vashego tarifnogo plana"
+    info_320194_uz="&quot;[0]&quot; xizmatidan foydalana olmaysiz."
+    info_320194_en="Service &quot;[0]&quot; can not be perfored for Your tariff plan"
 
-    info_320204_ruk="Услуга @[0]@ не доступна для Вашего тарифного плана"
-    info_320204_rut="Usluga @[0]@ ne dostupna dlya Vashego tarifnogo plana"
-    info_320204_uz="@[0]@ xizmati sizning tarif rejangiz doirasiga kirmaydi"
-    info_320204_en="Service @[0]@ is unavailable for Your tariff plan"
+    info_320204_ruk="Услуга &quot;[0]&quot; не доступна для Вашего тарифного плана"
+    info_320204_rut="Usluga &quot;[0]&quot; ne dostupna dlya Vashego tarifnogo plana"
+    info_320204_uz="&quot;[0]&quot; xizmati sizning tarif rejangiz doirasiga kirmaydi"
+    info_320204_en="Service &quot;[0]&quot; is unavailable for Your tariff plan"
 
-    info_320205_ruk="Услуга @[0]@ уже установлена."
-    info_320205_rut="Usluga @[0]@ uzhe ustanovlena."
-    info_320205_uz="@[0]@ xizmati avval yoqilgan"
-    info_320205_en="Service @[0]@ is already activated."
+    info_320205_ruk="Услуга &quot;[0]&quot; уже установлена."
+    info_320205_rut="Usluga &quot;[0]&quot; uzhe ustanovlena."
+    info_320205_uz="&quot;[0]&quot; xizmati avval yoqilgan"
+    info_320205_en="Service &quot;[0]&quot; is already activated."
 
-    info_320206_ruk="Услуга @[0]@ не установлена."
-    info_320206_rut="Usluga @[0]@ ne ustanovlena."
-    info_320206_uz="@[0]@ xizmati yoqilmagan."
-    info_320206_en="Service @[0]@ is not active."
+    info_320206_ruk="Услуга &quot;[0]&quot; не установлена."
+    info_320206_rut="Usluga &quot;[0]&quot; ne ustanovlena."
+    info_320206_uz="&quot;[0]&quot; xizmati yoqilmagan."
+    info_320206_en="Service &quot;[0]&quot; is not active."
 
-    info_320208_ruk="Услуга @[0]@ не доступна для Вас."
-    info_320208_rut="Usluga @[0]@ ne dostupna dlya Vas."
-    info_320208_uz="@[0]@ xizmati - imkonsiz."
-    info_320208_en="Service @[0]@ is not available to You."
+    info_320208_ruk="Услуга &quot;[0]&quot; не доступна для Вас."
+    info_320208_rut="Usluga &quot;[0]&quot; ne dostupna dlya Vas."
+    info_320208_uz="&quot;[0]&quot; xizmati - imkonsiz."
+    info_320208_en="Service &quot;[0]&quot; is not available to You."
 
-    info_rassrochka_ruk="Usluga @Nomer v rassrochku@ kategorii [0] deystvuet do [1]"
-    info_rassrochka_rut="Usluga @Nomer v rassrochku@ kategorii [0] deystvuet do [1]"
-    info_rassrochka_uz="[0] toifasidagi @Raqam haqini bo^lib to^lash@ xizmati [1]gacha amal qiladi"
-    info_rassrochka_en="Service @Nomer v rassrochku@ of [0] class works till [1]"
+    info_rassrochka_ruk="Usluga &quot;Nomer v rassrochku&quot; kategorii [0] deystvuet do [1]"
+    info_rassrochka_rut="Usluga &quot;Nomer v rassrochku&quot; kategorii [0] deystvuet do [1]"
+    info_rassrochka_uz="[0] toifasidagi &quot;Raqam haqini bo^lib to^lash&quot; xizmati [1]gacha amal qiladi"
+    info_rassrochka_en="Service &quot;Nomer v rassrochku&quot; of [0] class works till [1]"
 
-    info_lastpayment_ruk="Posledniy platyoj [1], na summu @[0]@ sum"
-    info_lastpayment_rut="Posledniy platyoj [1], na summu @[0]@ sum"
-    info_lastpayment_uz="Oxirgi to^lov [1], @[0]@ so^mga to^ldirilgan"
-    info_lastpayment_en="Last payment [1], for the amount of @[0]@ sum"
+    info_lastpayment_ruk="Posledniy platyoj [1], na summu &quot;[0]&quot; sum"
+    info_lastpayment_rut="Posledniy platyoj [1], na summu &quot;[0]&quot; sum"
+    info_lastpayment_uz="Oxirgi to^lov [1], &quot;[0]&quot; so^mga to^ldirilgan"
+    info_lastpayment_en="Last payment [1], for the amount of &quot;[0]&quot; sum"
 
     info_330720_ruk="Platejey po nomeru ne bilo"
     info_330720_rut="Platejey po nomeru ne bilo"
     info_330720_uz="To^lov amalga oshirilmagan"
     info_330720_en="Payment by number has not been made"
 
-    info_330721_ruk="Услуга @Posledniy platyoj@ не доступна для Вас."
-    info_330721_rut="Usluga @Posledniy platyoj@ ne dostupna dlya Vas."
-    info_330721_uz="@Oxirgi to^lov@ xizmati mavjud emas."
-    info_330721_en="Service @Posledniy platyoj@is not available for You."
+    info_330721_ruk="Услуга &quot;Posledniy platyoj&quot; не доступна для Вас."
+    info_330721_rut="Usluga &quot;Posledniy platyoj&quot; ne dostupna dlya Vas."
+    info_330721_uz="&quot;Oxirgi to^lov&quot; xizmati mavjud emas."
+    info_330721_en="Service &quot;Posledniy platyoj&quot;is not available for You."
     
-    info_330722_ruk="Услуга @Обещанный платеж@ не доступна для Вас."
-    info_330722_rut="Usluga @Obeschaniy platyoj@ ne dostupna dlya Vas."
-    info_330722_uz="@Obeschaniy platyoj@ xizmati mavjud emas."
-    info_330722_en="Service @Obeschaniy platyoj@ is not available to You."
+    info_330722_ruk="Услуга &quot;Обещанный платеж&quot; не доступна для Вас."
+    info_330722_rut="Usluga &quot;Obeschaniy platyoj&quot; ne dostupna dlya Vas."
+    info_330722_uz="&quot;Obeschaniy platyoj&quot; xizmati mavjud emas."
+    info_330722_en="Service &quot;Obeschaniy platyoj&quot; is not available to You."
     
     info_330723_ruk="Неверный номер абонента."
     info_330723_rut="Neverniy nomer abonenta."
@@ -209,50 +209,50 @@ tplist               - Компонент выполняет проверки п
   </Group>
   <Group  name="PACKAGE" redirect="sms" check_block="true" timetoprogress="80"
 
-    info_confirm_deactive_ruk="Dlya activacii paketa @[0]@ otprav^te 1"
-    info_confirm_deactive_rut="Dlya activacii paketa @[0]@ otprav^te 1"
-    info_confirm_deactive_uz="Dlya activacii paketa @[0]@ otprav^te 1"
-    info_confirm_deactive_en="To activate the package @[0]@ send 1"
+    info_confirm_deactive_ruk="Dlya activacii paketa &quot;[0]&quot; otprav^te 1"
+    info_confirm_deactive_rut="Dlya activacii paketa &quot;[0]&quot; otprav^te 1"
+    info_confirm_deactive_uz="Dlya activacii paketa &quot;[0]&quot; otprav^te 1"
+    info_confirm_deactive_en="To activate the package &quot;[0]&quot; send 1"
 
-    info_success_active_ruk="Заказ на подключение пакета @[0]@ принят."
-    info_success_active_rut="Zakaz na podklyuchenie paketa @[0]@ prinyat."
-    info_success_active_uz="@[0]@ to^plamga ulanish buyrug^i qabul qilindi"
-    info_success_active_en="Request on package connection @[0]@ is accepted."
+    info_success_active_ruk="Заказ на подключение пакета &quot;[0]&quot; принят."
+    info_success_active_rut="Zakaz na podklyuchenie paketa &quot;[0]&quot; prinyat."
+    info_success_active_uz="&quot;[0]&quot; to^plamga ulanish buyrug^i qabul qilindi"
+    info_success_active_en="Request on package connection &quot;[0]&quot; is accepted."
 
-    info_success_deactive_ruk="Заказ на деактивацию @[0]@ принят."
-    info_success_deactive_rut="Zakaz na deaktivaciyu @[0]@ prinyat."
-    info_success_deactive_uz="Zakaz na deaktivaciyu uslugi @[0]@ prinyat."
-    info_success_deactive_en="Request on deactivation @[0]@ is accepted."
+    info_success_deactive_ruk="Заказ на деактивацию &quot;[0]&quot; принят."
+    info_success_deactive_rut="Zakaz na deaktivaciyu &quot;[0]&quot; prinyat."
+    info_success_deactive_uz="Zakaz na deaktivaciyu uslugi &quot;[0]&quot; prinyat."
+    info_success_deactive_en="Request on deactivation &quot;[0]&quot; is accepted."
 
-    info_service_notavailable_ruk="Пакет @[0]@ больше недоступен для подключения"
-    info_service_notavailable_rut="Paket @[0]@ bol^she nedostupen dlya podklyucheniya"
-    info_service_notavailable_uz="Paket @[0]@ boshqa ulanmaydi"
-    info_service_notavailable_en="Package @[0]@ is no longer available for connection"
+    info_service_notavailable_ruk="Пакет &quot;[0]&quot; больше недоступен для подключения"
+    info_service_notavailable_rut="Paket &quot;[0]&quot; bol^she nedostupen dlya podklyucheniya"
+    info_service_notavailable_uz="Paket &quot;[0]&quot; boshqa ulanmaydi"
+    info_service_notavailable_en="Package &quot;[0]&quot; is no longer available for connection"
 
-    info_service_unavailable_ruk="Пакет @[0]@ будет доступен с [1]"
-    info_service_unavailable_rut="Paket @[0]@ budet dostupen s [1]"
-    info_service_unavailable_uz="@[0]@ Paketga [1] dan ulanish mumkin"
-    info_service_unavailable_en="Package @[0]@will be available from [1]"
+    info_service_unavailable_ruk="Пакет &quot;[0]&quot; будет доступен с [1]"
+    info_service_unavailable_rut="Paket &quot;[0]&quot; budet dostupen s [1]"
+    info_service_unavailable_uz="&quot;[0]&quot; Paketga [1] dan ulanish mumkin"
+    info_service_unavailable_en="Package &quot;[0]&quot;will be available from [1]"
 
-    info_alrprogress_active_ruk="Activaciya paketa @[0]@ nahoditsya v obrabotke. Obratites^ pozzhe."
-    info_alrprogress_active_rut="Activaciya paketa @[0]@ nahoditsya v obrabotke. Obratites^ pozzhe."
-    info_alrprogress_active_uz="Paket aktivasiyasi@[0]@ ishlov berish jarayonida. Kechroq murojaat qiling."
-    info_alrprogress_active_en="Package activation @[0]@ is on process. Refer later."
+    info_alrprogress_active_ruk="Activaciya paketa &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
+    info_alrprogress_active_rut="Activaciya paketa &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
+    info_alrprogress_active_uz="Paket aktivasiyasi&quot;[0]&quot; ishlov berish jarayonida. Kechroq murojaat qiling."
+    info_alrprogress_active_en="Package activation &quot;[0]&quot; is on process. Refer later."
 
-    info_alrprogress_deactive_ruk="Udalenie paketa @[0]@ nahoditsya v obrabotke. Obratites^ pozzhe."
-    info_alrprogress_deactive_rut="Udalenie paketa @[0]@ nahoditsya v obrabotke. Obratites^ pozzhe."
-    info_alrprogress_deactive_uz="Paketni o^chirish @[0]@ ishlov berish jarayonida. Kechroq murojaat qiling."
-    info_alrprogress_deactive_en="Package  @[0]@ deleting is on process. Refer later."
+    info_alrprogress_deactive_ruk="Udalenie paketa &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
+    info_alrprogress_deactive_rut="Udalenie paketa &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
+    info_alrprogress_deactive_uz="Paketni o^chirish &quot;[0]&quot; ishlov berish jarayonida. Kechroq murojaat qiling."
+    info_alrprogress_deactive_en="Package  &quot;[0]&quot; deleting is on process. Refer later."
 
-    info_inprogress_active_ruk="Predydushaya obrabotka nahoditsya v shage activacii paketa @[0]@. Poprobuyte pozzhe."
-    info_inprogress_active_rut="Predydushaya obrabotka nahoditsya v shage activacii paketa @[0]@. Poprobuyte pozzhe."
-    info_inprogress_active_uz="Paketni aktivasiyalashning @[0]@ avvalgi ishlov berish jarayoni yakunlanmoqda. Kechroq qayta murojaat eting."
-    info_inprogress_active_en="Previous processing is at the stage of package @[0]@activation. Try later."
+    info_inprogress_active_ruk="Predydushaya obrabotka nahoditsya v shage activacii paketa &quot;[0]&quot;. Poprobuyte pozzhe."
+    info_inprogress_active_rut="Predydushaya obrabotka nahoditsya v shage activacii paketa &quot;[0]&quot;. Poprobuyte pozzhe."
+    info_inprogress_active_uz="Paketni aktivasiyalashning &quot;[0]&quot; avvalgi ishlov berish jarayoni yakunlanmoqda. Kechroq qayta murojaat eting."
+    info_inprogress_active_en="Previous processing is at the stage of package &quot;[0]&quot;activation. Try later."
 
-    info_inprogress_deactive_ruk="Predydushaya obrabotka nahoditsya v shage deactivacii paketa @[0]@. Poprobuyte pozzhe."
-    info_inprogress_deactive_rut="Predydushaya obrabotka nahoditsya v shage deactivacii paketa @[0]@. Poprobuyte pozzhe."
-    info_inprogress_deactive_uz="Paketni deaktivasiyalashning @[0]@ avvalgi ishlov berish jarayoni yakunlanmoqda. Kechroq qayta murojaat eting."
-    info_inprogress_deactive_en="Previous processing is at the stage of package @[0]@ deactivation. Try later"
+    info_inprogress_deactive_ruk="Predydushaya obrabotka nahoditsya v shage deactivacii paketa &quot;[0]&quot;. Poprobuyte pozzhe."
+    info_inprogress_deactive_rut="Predydushaya obrabotka nahoditsya v shage deactivacii paketa &quot;[0]&quot;. Poprobuyte pozzhe."
+    info_inprogress_deactive_uz="Paketni deaktivasiyalashning &quot;[0]&quot; avvalgi ishlov berish jarayoni yakunlanmoqda. Kechroq qayta murojaat eting."
+    info_inprogress_deactive_en="Previous processing is at the stage of package &quot;[0]&quot; deactivation. Try later"
 
     info_notavailbalance_ruk="Недостаточно средств на балансе для проведения операции."
     info_notavailbalance_rut="Nedostatochno sredstv na balanse dlya provedeniya operacii."
@@ -264,25 +264,25 @@ tplist               - Компонент выполняет проверки п
     info_inprogress_uz="Operaciya ne mozhet byt^ vypolnena, poka ne zavershitsya predydush^aya."
     info_inprogress_en="Operation can not be made, untill the previous one is committed."
 
-    info_320194_ruk="Пакет @[0]@ ne predostavlyaetsya dlya Vashego tarifnogo plana"
-    info_320194_rut="Paket @[0]@ ne predostavlyaetsya dlya Vashego tarifnogo plana"
-    info_320194_uz="Usluga @[0]@ ne predostavlyaetsya dlya Vashego tarifnogo plana"
-    info_320194_en="Service @[0]@ can not be provided for Your tariff plan"
+    info_320194_ruk="Пакет &quot;[0]&quot; ne predostavlyaetsya dlya Vashego tarifnogo plana"
+    info_320194_rut="Paket &quot;[0]&quot; ne predostavlyaetsya dlya Vashego tarifnogo plana"
+    info_320194_uz="Usluga &quot;[0]&quot; ne predostavlyaetsya dlya Vashego tarifnogo plana"
+    info_320194_en="Service &quot;[0]&quot; can not be provided for Your tariff plan"
 
-    info_320204_ruk="Пакет @[0]@ не доступен для Вашего тарифного плана"
-    info_320204_rut="Paket @[0]@ ne dostupen dlya Vashego tarifnogo plana"
-    info_320204_uz="@[0]@ xizmati sizning tarif rejangiz doirasiga kirmaydi"
-    info_320204_en="Package @[0]@ is unavailable for Your tariff plan"
+    info_320204_ruk="Пакет &quot;[0]&quot; не доступен для Вашего тарифного плана"
+    info_320204_rut="Paket &quot;[0]&quot; ne dostupen dlya Vashego tarifnogo plana"
+    info_320204_uz="&quot;[0]&quot; xizmati sizning tarif rejangiz doirasiga kirmaydi"
+    info_320204_en="Package &quot;[0]&quot; is unavailable for Your tariff plan"
 
-    info_320205_ruk="Пакет @[0]@ уже установлен."
-    info_320205_rut="Paket @[0]@ uzhe ustanovlen."
-    info_320205_uz="@[0]@ xizmati avval yoqilgan"
-    info_320205_en="Package @[0]@ already exists."
+    info_320205_ruk="Пакет &quot;[0]&quot; уже установлен."
+    info_320205_rut="Paket &quot;[0]&quot; uzhe ustanovlen."
+    info_320205_uz="&quot;[0]&quot; xizmati avval yoqilgan"
+    info_320205_en="Package &quot;[0]&quot; already exists."
 
-    info_320206_ruk="Пакет @[0]@ не установлен."
-    info_320206_rut="Paket @[0]@ ne ustanovlen."
-    info_320206_uz="@[0]@ Paket xizmati yoqilmagan."
-    info_320206_en="Package @[0]@ is inactive."
+    info_320206_ruk="Пакет &quot;[0]&quot; не установлен."
+    info_320206_rut="Paket &quot;[0]&quot; ne ustanovlen."
+    info_320206_uz="&quot;[0]&quot; Paket xizmati yoqilmagan."
+    info_320206_en="Package &quot;[0]&quot; is inactive."
 
     info_CODEUNAVAIL_ruk="Данный код недоступен"
     info_CODEUNAVAIL_rut="Danniy kod nedostupen"
@@ -296,65 +296,65 @@ tplist               - Компонент выполняет проверки п
   </Group>
   <Group  name="BLOCKS" redirect="sms" check_block="true" timetoprogress="80"
 
-    info_service_active_ruk="Status uslugi @[0]@ - aktivna"
-    info_service_active_rut="Status uslugi @[0]@ - aktivna"
-    info_service_active_uz="Status uslugi @[0]@ - aktivna"
-    info_service_active_en="Service @[0]@ status - active"
+    info_service_active_ruk="Status uslugi &quot;[0]&quot; - aktivna"
+    info_service_active_rut="Status uslugi &quot;[0]&quot; - aktivna"
+    info_service_active_uz="Status uslugi &quot;[0]&quot; - aktivna"
+    info_service_active_en="Service &quot;[0]&quot; status - active"
 
-    info_service_deactive_ruk="Status uslugi @[0]@ - neaktivna"
-    info_service_deactive_rut="Status uslugi @[0]@ - neaktivna"
-    info_service_deactive_uz="Status uslugi @[0]@ - neaktivna"
-    info_service_deactive_en="Service @[0]@ status - not active"
+    info_service_deactive_ruk="Status uslugi &quot;[0]&quot; - neaktivna"
+    info_service_deactive_rut="Status uslugi &quot;[0]&quot; - neaktivna"
+    info_service_deactive_uz="Status uslugi &quot;[0]&quot; - neaktivna"
+    info_service_deactive_en="Service &quot;[0]&quot; status - not active"
 
-    info_confirm_deactive_ruk="Usluga @[0]@ ne ustanovlena. Dlya activacii uslugi @[0]@ otprav^te 1"
-    info_confirm_deactive_rut="Usluga @[0]@ ne ustanovlena. Dlya activacii uslugi @[0]@ otprav^te 1"
-    info_confirm_deactive_uz="Usluga @[0]@ ne ustanovlena. Dlya activacii uslugi @[0]@ otprav^te 1"
-    info_confirm_deactive_en="Service @[0]@ is not active. To activate the service @[0]@ send 1"
+    info_confirm_deactive_ruk="Usluga &quot;[0]&quot; ne ustanovlena. Dlya activacii uslugi &quot;[0]&quot; otprav^te 1"
+    info_confirm_deactive_rut="Usluga &quot;[0]&quot; ne ustanovlena. Dlya activacii uslugi &quot;[0]&quot; otprav^te 1"
+    info_confirm_deactive_uz="Usluga &quot;[0]&quot; ne ustanovlena. Dlya activacii uslugi &quot;[0]&quot; otprav^te 1"
+    info_confirm_deactive_en="Service &quot;[0]&quot; is not active. To activate the service &quot;[0]&quot; send 1"
 
-    info_confirm_active_ruk="Usluga @[0]@ ustanovlena. Dlya deactivacii uslugi @[0]@ otprav^te 2"
-    info_confirm_active_rut="Usluga @[0]@ ustanovlena. Dlya deactivacii uslugi @[0]@ otprav^te 2"
-    info_confirm_active_uz="Usluga @[0]@ ustanovlena. Dlya deactivacii uslugi @[0]@ otprav^te 2"
-    info_confirm_active_en="Service @[0]@ is active. To deactivate the service @[0]@ send 2"
+    info_confirm_active_ruk="Usluga &quot;[0]&quot; ustanovlena. Dlya deactivacii uslugi &quot;[0]&quot; otprav^te 2"
+    info_confirm_active_rut="Usluga &quot;[0]&quot; ustanovlena. Dlya deactivacii uslugi &quot;[0]&quot; otprav^te 2"
+    info_confirm_active_uz="Usluga &quot;[0]&quot; ustanovlena. Dlya deactivacii uslugi &quot;[0]&quot; otprav^te 2"
+    info_confirm_active_en="Service &quot;[0]&quot; is active. To deactivate the service &quot;[0]&quot; send 2"
 
-    info_success_active_ruk="Заказ на подключение услуги @[0]@ принят."
-    info_success_active_rut="Zakaz na podklyuchenie uslugi @[0]@ prinyat."
-    info_success_active_uz="Xizmatga ulanish buyrug^i @[0]@ qabul qilindi"
-    info_success_active_en="Request on service connection @[0]@ is accepted."
+    info_success_active_ruk="Заказ на подключение услуги &quot;[0]&quot; принят."
+    info_success_active_rut="Zakaz na podklyuchenie uslugi &quot;[0]&quot; prinyat."
+    info_success_active_uz="Xizmatga ulanish buyrug^i &quot;[0]&quot; qabul qilindi"
+    info_success_active_en="Request on service connection &quot;[0]&quot; is accepted."
 
-    info_success_deactive_ruk="Заказ на деактивацию услуги @[0]@ принят."
-    info_success_deactive_rut="Zakaz na deaktivaciyu uslugi @[0]@ prinyat."
-    info_success_deactive_uz="Xizmatni o^chirish buyrug^i @[0]@ qabul qilindi"
-    info_success_deactive_en="Request on service deactivation @[0]@ is accepted."
+    info_success_deactive_ruk="Заказ на деактивацию услуги &quot;[0]&quot; принят."
+    info_success_deactive_rut="Zakaz na deaktivaciyu uslugi &quot;[0]&quot; prinyat."
+    info_success_deactive_uz="Xizmatni o^chirish buyrug^i &quot;[0]&quot; qabul qilindi"
+    info_success_deactive_en="Request on service deactivation &quot;[0]&quot; is accepted."
 
-    info_service_notavailable_ruk="Услуга @[0]@ больше недоступна для подключения"
-    info_service_notavailable_rut="Usluga @[0]@ bol^she nedostupna dlya podklyucheniya"
-    info_service_notavailable_uz="Xizmat @[0]@ boshqa ulanmaydi"
-    info_service_notavailable_en="Service @[0]@ is no longer available for connection"
+    info_service_notavailable_ruk="Услуга &quot;[0]&quot; больше недоступна для подключения"
+    info_service_notavailable_rut="Usluga &quot;[0]&quot; bol^she nedostupna dlya podklyucheniya"
+    info_service_notavailable_uz="Xizmat &quot;[0]&quot; boshqa ulanmaydi"
+    info_service_notavailable_en="Service &quot;[0]&quot; is no longer available for connection"
 
-    info_service_unavailable_ruk="Услуга @[0]@ будет доступна с [1]"
-    info_service_unavailable_rut="Usluga @[0]@ budet dostupna s [1]"
-    info_service_unavailable_uz="Xizmatga @[0]@ [1] dan ulanish mumkin"
-    info_service_unavailable_en="Service @[0]@ will be available from [1]"
+    info_service_unavailable_ruk="Услуга &quot;[0]&quot; будет доступна с [1]"
+    info_service_unavailable_rut="Usluga &quot;[0]&quot; budet dostupna s [1]"
+    info_service_unavailable_uz="Xizmatga &quot;[0]&quot; [1] dan ulanish mumkin"
+    info_service_unavailable_en="Service &quot;[0]&quot; will be available from [1]"
 
-    info_alrprogress_active_ruk="Activaciya uslugi @[0]@ nahoditsya v obrabotke. Obratites^ pozzhe."
-    info_alrprogress_active_rut="Activaciya uslugi @[0]@ nahoditsya v obrabotke. Obratites^ pozzhe."
-    info_alrprogress_active_uz="Activaciya uslugi @[0]@ nahoditsya v obrabotke. Obratites^ pozzhe."
-    info_alrprogress_active_en="Service activation @[0]@ is on process. Refer later."
+    info_alrprogress_active_ruk="Activaciya uslugi &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
+    info_alrprogress_active_rut="Activaciya uslugi &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
+    info_alrprogress_active_uz="Activaciya uslugi &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
+    info_alrprogress_active_en="Service activation &quot;[0]&quot; is on process. Refer later."
 
-    info_alrprogress_deactive_ruk="Udalenie uslugi @[0]@ nahoditsya v obrabotke. Obratites^ pozzhe."
-    info_alrprogress_deactive_rut="Udalenie uslugi @[0]@ nahoditsya v obrabotke. Obratites^ pozzhe."
-    info_alrprogress_deactive_uz="Udalenie uslugi @[0]@ nahoditsya v obrabotke. Obratites^ pozzhe."
-    info_alrprogress_deactive_en="Service deleting @[0]@ is on process. Refer later."
+    info_alrprogress_deactive_ruk="Udalenie uslugi &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
+    info_alrprogress_deactive_rut="Udalenie uslugi &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
+    info_alrprogress_deactive_uz="Udalenie uslugi &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
+    info_alrprogress_deactive_en="Service deleting &quot;[0]&quot; is on process. Refer later."
 
-    info_inprogress_active_ruk="Predydushaya obrabotka nahoditsya v shage activacii uslugi @[0]@. Poprobuyte pozzhe."
-    info_inprogress_active_rut="Predydushaya obrabotka nahoditsya v shage activacii uslugi @[0]@. Poprobuyte pozzhe."
-    info_inprogress_active_uz="Predydushaya obrabotka nahoditsya v shage activacii uslugi @[0]@. Poprobuyte pozzhe."
-    info_inprogress_active_en="Previous processing is at the stage of service  @[0]@ activation. Try later."
+    info_inprogress_active_ruk="Predydushaya obrabotka nahoditsya v shage activacii uslugi &quot;[0]&quot;. Poprobuyte pozzhe."
+    info_inprogress_active_rut="Predydushaya obrabotka nahoditsya v shage activacii uslugi &quot;[0]&quot;. Poprobuyte pozzhe."
+    info_inprogress_active_uz="Predydushaya obrabotka nahoditsya v shage activacii uslugi &quot;[0]&quot;. Poprobuyte pozzhe."
+    info_inprogress_active_en="Previous processing is at the stage of service  &quot;[0]&quot; activation. Try later."
 
-    info_inprogress_deactive_ruk="Predydushaya obrabotka nahoditsya v shage deactivacii uslugi @[0]@. Poprobuyte pozzhe."
-    info_inprogress_deactive_rut="Predydushaya obrabotka nahoditsya v shage deactivacii uslugi @[0]@. Poprobuyte pozzhe."
-    info_inprogress_deactive_uz="Predydushaya obrabotka nahoditsya v shage deactivacii uslugi @[0]@. Poprobuyte pozzhe."
-    info_inprogress_deactive_en="Previous processing is at the stage of service @[0]@ deactivation. Try later."
+    info_inprogress_deactive_ruk="Predydushaya obrabotka nahoditsya v shage deactivacii uslugi &quot;[0]&quot;. Poprobuyte pozzhe."
+    info_inprogress_deactive_rut="Predydushaya obrabotka nahoditsya v shage deactivacii uslugi &quot;[0]&quot;. Poprobuyte pozzhe."
+    info_inprogress_deactive_uz="Predydushaya obrabotka nahoditsya v shage deactivacii uslugi &quot;[0]&quot;. Poprobuyte pozzhe."
+    info_inprogress_deactive_en="Previous processing is at the stage of service &quot;[0]&quot; deactivation. Try later."
 
     info_notavailbalance_ruk="Недостаточно средств на балансе для проведения операции."
     info_notavailbalance_rut="Nedostatochno sredstv na balanse dlya provedeniya operacii."
@@ -366,25 +366,25 @@ tplist               - Компонент выполняет проверки п
     info_inprogress_uz="Operaciya ne mozhet byt^ vypolnena, poka nezavershitsya predydush^aya."
     info_inprogress_en="Operationn can not be made,untill the previous one is committed."
 
-    info_320194_ruk="Услуга @[0]@ ne predostavlyaetsya dlya Vashego tarifnogo plana"
-    info_320194_rut="Usluga @[0]@ ne predostavlyaetsya dlya Vashego tarifnogo plana"
-    info_320194_uz="Usluga @[0]@ ne predostavlyaetsya dlya Vashego tarifnogo plana"
-    info_320194_en="Service @[0]@ can not be performed for Your tariff plan"
+    info_320194_ruk="Услуга &quot;[0]&quot; ne predostavlyaetsya dlya Vashego tarifnogo plana"
+    info_320194_rut="Usluga &quot;[0]&quot; ne predostavlyaetsya dlya Vashego tarifnogo plana"
+    info_320194_uz="Usluga &quot;[0]&quot; ne predostavlyaetsya dlya Vashego tarifnogo plana"
+    info_320194_en="Service &quot;[0]&quot; can not be performed for Your tariff plan"
 
-    info_320204_ruk="Услуга @[0]@ не доступна для Вашего тарифного плана"
-    info_320204_rut="Usluga @[0]@ ne dostupna dlya Vashego tarifnogo plana"
-    info_320204_uz="Xizmat @[0]@ sizning tarif rejangiz doirasiga kirmaydi"
-    info_320204_en="Service@[0]@ is unavailable for Your tariff model"
+    info_320204_ruk="Услуга &quot;[0]&quot; не доступна для Вашего тарифного плана"
+    info_320204_rut="Usluga &quot;[0]&quot; ne dostupna dlya Vashego tarifnogo plana"
+    info_320204_uz="Xizmat &quot;[0]&quot; sizning tarif rejangiz doirasiga kirmaydi"
+    info_320204_en="Service&quot;[0]&quot; is unavailable for Your tariff model"
 
-    info_320205_ruk="Услуга @[0]@ уже установлена."
-    info_320205_rut="Usluga @[0]@ uzhe ustanovlena."
-    info_320205_uz="Xizmat @[0]@ avval yoqilgan"
-    info_320205_en="Service @[0]@ is already activated."
+    info_320205_ruk="Услуга &quot;[0]&quot; уже установлена."
+    info_320205_rut="Usluga &quot;[0]&quot; uzhe ustanovlena."
+    info_320205_uz="Xizmat &quot;[0]&quot; avval yoqilgan"
+    info_320205_en="Service &quot;[0]&quot; is already activated."
 
-    info_320206_ruk="Услуга @[0]@ не установлена."
-    info_320206_rut="Usluga @[0]@ ne ustanovlena."
-    info_320206_uz="Xizmat @[0]@ yoqilmagan"
-    info_320206_en="Service @[0]@ is not active."
+    info_320206_ruk="Услуга &quot;[0]&quot; не установлена."
+    info_320206_rut="Usluga &quot;[0]&quot; ne ustanovlena."
+    info_320206_uz="Xizmat &quot;[0]&quot; yoqilmagan"
+    info_320206_en="Service &quot;[0]&quot; is not active."
 
     >
     <servicebindinglist>
@@ -393,60 +393,60 @@ tplist               - Компонент выполняет проверки п
   </Group>
   <Group  name="BMS" redirect="sms" check_block="true" timetoprogress="80"
 
-    info_service_active_ruk="Status bonusnogo paketa @[0]@ - aktiven"
-    info_service_active_rut="Status bonusnogo paketa @[0]@ - aktiven"
-    info_service_active_uz="Status bonusnogo paketa @[0]@ - aktiven"
-    info_service_active_en="Bonus package status @[0]@ - active"
+    info_service_active_ruk="Status bonusnogo paketa &quot;[0]&quot; - aktiven"
+    info_service_active_rut="Status bonusnogo paketa &quot;[0]&quot; - aktiven"
+    info_service_active_uz="Status bonusnogo paketa &quot;[0]&quot; - aktiven"
+    info_service_active_en="Bonus package status &quot;[0]&quot; - active"
 
-    info_service_deactive_ruk="Status bonusnogo paketa @[0]@ - neaktiven"
-    info_service_deactive_rut="Status bonusnogo paketa @[0]@ - neaktiven"
-    info_service_deactive_uz="Status bonusnogo paketa @[0]@ - neaktiven"
-    info_service_deactive_en="Bonus package status @[0]@ - not active"
+    info_service_deactive_ruk="Status bonusnogo paketa &quot;[0]&quot; - neaktiven"
+    info_service_deactive_rut="Status bonusnogo paketa &quot;[0]&quot; - neaktiven"
+    info_service_deactive_uz="Status bonusnogo paketa &quot;[0]&quot; - neaktiven"
+    info_service_deactive_en="Bonus package status &quot;[0]&quot; - not active"
 
-    info_confirm_deactive_ruk="Dlya activacii bonusnogo paketa @[0]@ otprav^te 1"
-    info_confirm_deactive_rut="Dlya activacii bonusnogo paketa @[0]@ otprav^te 1"
-    info_confirm_deactive_uz="Dlya activacii bonusnogo paketa @[0]@ otprav^te 1"
-    info_confirm_deactive_en="To activate the bonus package @[0]@ send 1"
+    info_confirm_deactive_ruk="Dlya activacii bonusnogo paketa &quot;[0]&quot; otprav^te 1"
+    info_confirm_deactive_rut="Dlya activacii bonusnogo paketa &quot;[0]&quot; otprav^te 1"
+    info_confirm_deactive_uz="Dlya activacii bonusnogo paketa &quot;[0]&quot; otprav^te 1"
+    info_confirm_deactive_en="To activate the bonus package &quot;[0]&quot; send 1"
 
-    info_success_active_ruk="Заказ на подключение бонусного пакета @[0]@ принят."
-    info_success_active_rut="Zakaz na podklyuchenie bonusnogo paketa @[0]@ prinyat."
-    info_success_active_uz="Zakaz na podklyuchenie bonusnogo paketa @[0]@ prinyat."
-    info_success_active_en="Request on @[0]@ bonus package activation is accepted"
+    info_success_active_ruk="Заказ на подключение бонусного пакета &quot;[0]&quot; принят."
+    info_success_active_rut="Zakaz na podklyuchenie bonusnogo paketa &quot;[0]&quot; prinyat."
+    info_success_active_uz="Zakaz na podklyuchenie bonusnogo paketa &quot;[0]&quot; prinyat."
+    info_success_active_en="Request on &quot;[0]&quot; bonus package activation is accepted"
 
-    info_success_deactive_ruk="Заказ на деактивацию @[0]@ принят."
-    info_success_deactive_rut="Zakaz na deaktivaciyu @[0]@ prinyat."
-    info_success_deactive_uz="O^chirish buyrug^i @[0]@ qabul qilindi"
-    info_success_deactive_en="Request on @[0]@ is accepted."
+    info_success_deactive_ruk="Заказ на деактивацию &quot;[0]&quot; принят."
+    info_success_deactive_rut="Zakaz na deaktivaciyu &quot;[0]&quot; prinyat."
+    info_success_deactive_uz="O^chirish buyrug^i &quot;[0]&quot; qabul qilindi"
+    info_success_deactive_en="Request on &quot;[0]&quot; is accepted."
 
-    info_service_notavailable_ruk="Бонусный пакет @[0]@ больше недоступен для подключения"
-    info_service_notavailable_rut="Bonusny^y paket @[0]@ bol^she nedistupen dlya podklyucheniya"
-    info_service_notavailable_uz="Bonus paket @[0]@ boshqa ulanmaydi"
-    info_service_notavailable_en="Bonus package @[0]@ is no longer accessible for connection"
+    info_service_notavailable_ruk="Бонусный пакет &quot;[0]&quot; больше недоступен для подключения"
+    info_service_notavailable_rut="Bonusny^y paket &quot;[0]&quot; bol^she nedistupen dlya podklyucheniya"
+    info_service_notavailable_uz="Bonus paket &quot;[0]&quot; boshqa ulanmaydi"
+    info_service_notavailable_en="Bonus package &quot;[0]&quot; is no longer accessible for connection"
 
-    info_service_unavailable_ruk="Бонусный пакет @[0]@ будет доступен с [1]"
-    info_service_unavailable_rut="Bonusny^y paket @[0]@ budet dostupen s [1]"
-    info_service_unavailable_uz="Bonus paketi @[0]@ [1] dan ulanish mumkin"
-    info_service_unavailable_en="Bonus package @[0]@ will be available from [1]"
+    info_service_unavailable_ruk="Бонусный пакет &quot;[0]&quot; будет доступен с [1]"
+    info_service_unavailable_rut="Bonusny^y paket &quot;[0]&quot; budet dostupen s [1]"
+    info_service_unavailable_uz="Bonus paketi &quot;[0]&quot; [1] dan ulanish mumkin"
+    info_service_unavailable_en="Bonus package &quot;[0]&quot; will be available from [1]"
 
-    info_alrprogress_active_ruk="Activaciya bonusnogo paketa @[0]@ nahoditsya v obrabotke. Obratites^ pozzhe."
-    info_alrprogress_active_rut="Activaciya bonusnogo paketa @[0]@ nahoditsya v obrabotke. Obratites^ pozzhe."
-    info_alrprogress_active_uz="Bonus paketni aktivasiyasi@[0]@ ishlov berish jarayonida. Kechroq murojaat qiling."
-    info_alrprogress_active_en="Bonus package activation @[0]@ is on process. Refer later."
+    info_alrprogress_active_ruk="Activaciya bonusnogo paketa &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
+    info_alrprogress_active_rut="Activaciya bonusnogo paketa &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
+    info_alrprogress_active_uz="Bonus paketni aktivasiyasi&quot;[0]&quot; ishlov berish jarayonida. Kechroq murojaat qiling."
+    info_alrprogress_active_en="Bonus package activation &quot;[0]&quot; is on process. Refer later."
 
-    info_alrprogress_deactive_ruk="Udalenie bonusnogo paketa @[0]@ nahoditsya v obrabotke. Obratites^ pozzhe."
-    info_alrprogress_deactive_rut="Udalenie bonusnogo paketa @[0]@ nahoditsya v obrabotke. Obratites^ pozzhe."
-    info_alrprogress_deactive_uz="Bonus paketni o^chirish @[0]@ ishlov berish jarayonida. Kechroq murojaat qiling."
-    info_alrprogress_deactive_en="Bonus package @[0]@ cancellation is on process. Refer later."
+    info_alrprogress_deactive_ruk="Udalenie bonusnogo paketa &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
+    info_alrprogress_deactive_rut="Udalenie bonusnogo paketa &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
+    info_alrprogress_deactive_uz="Bonus paketni o^chirish &quot;[0]&quot; ishlov berish jarayonida. Kechroq murojaat qiling."
+    info_alrprogress_deactive_en="Bonus package &quot;[0]&quot; cancellation is on process. Refer later."
 
-    info_inprogress_active_ruk="Predydushaya obrabotka nahoditsya v shage activacii bonusnogo paketa @[0]@. Poprobuyte pozzhe."
-    info_inprogress_active_rut="Predydushaya obrabotka nahoditsya v shage activacii bonusnogo paketa @[0]@. Poprobuyte pozzhe."
-    info_inprogress_active_uz="Bonus paketni aktivasiyalashning @[0]@ avvalgi ishlov berish jarayoni yakunlanmoqda. Kechroq qayta murojaat eting."
-    info_inprogress_active_en="Previous processing is at the stage of activation of bonus package @[0]@. Try later."
+    info_inprogress_active_ruk="Predydushaya obrabotka nahoditsya v shage activacii bonusnogo paketa &quot;[0]&quot;. Poprobuyte pozzhe."
+    info_inprogress_active_rut="Predydushaya obrabotka nahoditsya v shage activacii bonusnogo paketa &quot;[0]&quot;. Poprobuyte pozzhe."
+    info_inprogress_active_uz="Bonus paketni aktivasiyalashning &quot;[0]&quot; avvalgi ishlov berish jarayoni yakunlanmoqda. Kechroq qayta murojaat eting."
+    info_inprogress_active_en="Previous processing is at the stage of activation of bonus package &quot;[0]&quot;. Try later."
 
-    info_inprogress_deactive_ruk="Predydushaya obrabotka nahoditsya v shage deactivacii bonusnogo paketa @[0]@. Poprobuyte pozzhe."
-    info_inprogress_deactive_rut="Predydushaya obrabotka nahoditsya v shage deactivacii bonusnogo paketa @[0]@. Poprobuyte pozzhe."
-    info_inprogress_deactive_uz="Bonus paketni deaktivasiyalashning @[0]@ avvalgi ishlov berish jarayoni yakunlanmoqda. Kechroq qayta murojaat eting."
-    info_inprogress_deactive_en="Previous processing is at the stage of deactivation of bonus package @[0]@. Try later."
+    info_inprogress_deactive_ruk="Predydushaya obrabotka nahoditsya v shage deactivacii bonusnogo paketa &quot;[0]&quot;. Poprobuyte pozzhe."
+    info_inprogress_deactive_rut="Predydushaya obrabotka nahoditsya v shage deactivacii bonusnogo paketa &quot;[0]&quot;. Poprobuyte pozzhe."
+    info_inprogress_deactive_uz="Bonus paketni deaktivasiyalashning &quot;[0]&quot; avvalgi ishlov berish jarayoni yakunlanmoqda. Kechroq qayta murojaat eting."
+    info_inprogress_deactive_en="Previous processing is at the stage of deactivation of bonus package &quot;[0]&quot;. Try later."
 
     info_notavailbalance_ruk="Недостаточно средств на балансе для проведения операции."
     info_notavailbalance_rut="Nedostatochno sredstv na balanse dlya provedeniya operacii."
@@ -458,25 +458,25 @@ tplist               - Компонент выполняет проверки п
     info_inprogress_uz="Operaciya ne mozhet byt^ vypolnena, poka nezavershitsya predydush^aya."
     info_inprogress_en="Operation can not be made,untill the previous one is committed."
 
-    info_320194_ruk="Bonusny^y paket @[0]@ ne predostavlyaetsya dlya Vashego tarifnogo plana"
-    info_320194_rut="Bonusny^y paket @[0]@ ne predostavlyaetsya dlya Vashego tarifnogo plana"
-    info_320194_uz="Bonusny^y paket @[0]@ ne predostavlyaetsya dlya Vashego tarifnogo plana"
-    info_320194_en="Bonus package @[0]@ can not be performed to Your tariff plan"
+    info_320194_ruk="Bonusny^y paket &quot;[0]&quot; ne predostavlyaetsya dlya Vashego tarifnogo plana"
+    info_320194_rut="Bonusny^y paket &quot;[0]&quot; ne predostavlyaetsya dlya Vashego tarifnogo plana"
+    info_320194_uz="Bonusny^y paket &quot;[0]&quot; ne predostavlyaetsya dlya Vashego tarifnogo plana"
+    info_320194_en="Bonus package &quot;[0]&quot; can not be performed to Your tariff plan"
 
-    info_320204_ruk="Бонусный пакет @[0]@ не доступен для Вашего тарифного плана"
-    info_320204_rut="Bonusny^y paket @[0]@ ne dostupen dlya Vashego tarifnogo plana"
-    info_320204_uz="Bonus paket xizmati @[0]@ sizning tarif rejangiz doirasiga kirmaydi"
-    info_320204_en="Package @[0]@ is unavailable for Your tariff plan"
+    info_320204_ruk="Бонусный пакет &quot;[0]&quot; не доступен для Вашего тарифного плана"
+    info_320204_rut="Bonusny^y paket &quot;[0]&quot; ne dostupen dlya Vashego tarifnogo plana"
+    info_320204_uz="Bonus paket xizmati &quot;[0]&quot; sizning tarif rejangiz doirasiga kirmaydi"
+    info_320204_en="Package &quot;[0]&quot; is unavailable for Your tariff plan"
 
-    info_320205_ruk="Бонусный пакет @[0]@ уже установлен."
-    info_320205_rut="Bonusny^y paket @[0]@ uzhe ustanovlen."
-    info_320205_uz="Bonus paket xizmati @[0]@ avval yoqilgan."
-    info_320205_en="Package @[0]@ already exists."
+    info_320205_ruk="Бонусный пакет &quot;[0]&quot; уже установлен."
+    info_320205_rut="Bonusny^y paket &quot;[0]&quot; uzhe ustanovlen."
+    info_320205_uz="Bonus paket xizmati &quot;[0]&quot; avval yoqilgan."
+    info_320205_en="Package &quot;[0]&quot; already exists."
 
-    info_320206_ruk="Бонусный пакет @[0]@ не установлен."
-    info_320206_rut="Bonusny^y paket @[0]@ ne ustanovlen."
-    info_320206_uz="Bonus paket xizmati @[0]@ yoqilmagan"
-    info_320206_en="Package @[0]@ is inactive."
+    info_320206_ruk="Бонусный пакет &quot;[0]&quot; не установлен."
+    info_320206_rut="Bonusny^y paket &quot;[0]&quot; ne ustanovlen."
+    info_320206_uz="Bonus paket xizmati &quot;[0]&quot; yoqilmagan"
+    info_320206_en="Package &quot;[0]&quot; is inactive."
 
     >
     <servicebindinglist>
@@ -485,15 +485,15 @@ tplist               - Компонент выполняет проверки п
   </Group>
   <Group  name="PAYNET" check_block="true" timetoprogress="80"
 
-    info_confirm_deactive_pay="Dlya activacii paketa @[0]@ otprav^te 1"
+    info_confirm_deactive_pay="Dlya activacii paketa &quot;[0]&quot; otprav^te 1"
     info_success_active_pay="1"
-    info_success_deactive_pay="Заказ на деактивацию @[0]@ принят."
-    info_service_notavailable_pay="Пакет @[0]@ больше недоступен для подключения"
-    info_service_unavailable_pay="Пакет @[0]@ будет доступен с [1]"
-    info_alrprogress_active_pay="Activaciya paketa @[0]@ nahoditsya v obrabotke. Obratites^ pozzhe."
-    info_alrprogress_deactive_pay="Udalenie paketa @[0]@ nahoditsya v obrabotke. Obratites^ pozzhe."
-    info_inprogress_active_pay="Predydushaya obrabotka nahoditsya v shage activacii paketa @[0]@. Poprobuyte pozzhe."
-    info_inprogress_deactive_pay="Predydushaya obrabotka nahoditsya v shage deactivacii paketa @[0]@. Poprobuyte pozzhe."
+    info_success_deactive_pay="Заказ на деактивацию &quot;[0]&quot; принят."
+    info_service_notavailable_pay="Пакет &quot;[0]&quot; больше недоступен для подключения"
+    info_service_unavailable_pay="Пакет &quot;[0]&quot; будет доступен с [1]"
+    info_alrprogress_active_pay="Activaciya paketa &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
+    info_alrprogress_deactive_pay="Udalenie paketa &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
+    info_inprogress_active_pay="Predydushaya obrabotka nahoditsya v shage activacii paketa &quot;[0]&quot;. Poprobuyte pozzhe."
+    info_inprogress_deactive_pay="Predydushaya obrabotka nahoditsya v shage deactivacii paketa &quot;[0]&quot;. Poprobuyte pozzhe."
     info_notavailbalance_pay="Недостаточно средств на балансе для проведения операции."
     info_inprogress_pay="Operaciya ne mozhet byt^ vypolnena, poka nezavershitsya predydush^aya."
     info_320194_pay="320194"
@@ -509,13 +509,13 @@ tplist               - Компонент выполняет проверки п
   </Group>
   <Group  name="RBT" check_block="true" timetoprogress="80"
 
-    info_confirm_deactive_rbt="Dlya activacii paketa @[0]@ otprav^te 1"
+    info_confirm_deactive_rbt="Dlya activacii paketa &quot;[0]&quot; otprav^te 1"
     info_service_active_rbt="111111"
     info_service_deactive_rbt="222222"
     info_success_active_rbt="1"
     info_success_deactive_rbt="1"
-    info_service_notavailable_rbt="Пакет @[0]@ больше недоступен для подключения"
-    info_service_unavailable_rbt="Пакет @[0]@ будет доступен с [1]"
+    info_service_notavailable_rbt="Пакет &quot;[0]&quot; больше недоступен для подключения"
+    info_service_unavailable_rbt="Пакет &quot;[0]&quot; будет доступен с [1]"
     info_alrprogress_active_rbt="420503"
     info_alrprogress_deactive_rbt="420504"
     info_inprogress_active_rbt="420501"
@@ -535,13 +535,13 @@ tplist               - Компонент выполняет проверки п
   </Group>
   <Group  name="SCG" check_block="true" timetoprogress="80"
 
-    info_confirm_deactive_scg="Dlya activacii paketa @[0]@ otprav^te 1"
+    info_confirm_deactive_scg="Dlya activacii paketa &quot;[0]&quot; otprav^te 1"
     info_service_active_scg="111111"
     info_service_deactive_scg="222222"
     info_success_active_scg="1"
     info_success_deactive_scg="1"
-    info_service_notavailable_scg="Пакет @[0]@ больше недоступен для подключения"
-    info_service_unavailable_scg="Пакет @[0]@ будет доступен с [1]"
+    info_service_notavailable_scg="Пакет &quot;[0]&quot; больше недоступен для подключения"
+    info_service_unavailable_scg="Пакет &quot;[0]&quot; будет доступен с [1]"
     info_alrprogress_active_scg="420503"
     info_alrprogress_deactive_scg="420504"
     info_inprogress_active_scg="420501"
@@ -2751,10 +2751,10 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS375BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 300+25%"
-    service_name_rut="Internet 300+25%"
-    service_name_uz="Internet 300+25%"
-    service_name_en="Internet 300+25%"
+    service_name_ruk="Internet 300+25&lt;"
+    service_name_rut="Internet 300+25&lt;"
+    service_name_uz="Internet 300+25&lt;"
+    service_name_en="Internet 300+25&lt;"
 
     >
     <soapcon value="FRGPRS375BONUS"/>
@@ -2767,10 +2767,10 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS625BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 500+25%"
-    service_name_rut="Internet 500+25%"
-    service_name_uz="Internet 500+25%"
-    service_name_en="Internet 500+25%"
+    service_name_ruk="Internet 500+25&lt;"
+    service_name_rut="Internet 500+25&lt;"
+    service_name_uz="Internet 500+25&lt;"
+    service_name_en="Internet 500+25&lt;"
 
     >
     <soapcon value="FRGPRS625BONUS"/>
@@ -2778,10 +2778,10 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS1250BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 1000+25%"
-    service_name_rut="Internet 1000+25%"
-    service_name_uz="Internet 1000+25%"
-    service_name_en="Internet 1000+25%"
+    service_name_ruk="Internet 1000+25&lt;"
+    service_name_rut="Internet 1000+25&lt;"
+    service_name_uz="Internet 1000+25&lt;"
+    service_name_en="Internet 1000+25&lt;"
 
     >
     <soapcon value="FRGPRS1250BONUS"/>
@@ -2789,10 +2789,10 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS2500BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 2000+25%"
-    service_name_rut="Internet 2000+25%"
-    service_name_uz="Internet 2000+25%"
-    service_name_en="Internet 2000+25%"
+    service_name_ruk="Internet 2000+25&lt;"
+    service_name_rut="Internet 2000+25&lt;"
+    service_name_uz="Internet 2000+25&lt;"
+    service_name_en="Internet 2000+25&lt;"
 
     >
     <soapcon value="FRGPRS2500BONUS"/>
@@ -2800,10 +2800,10 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS3750BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 3000+25%"
-    service_name_rut="Internet 3000+25%"
-    service_name_uz="Internet 3000+25%"
-    service_name_en="Internet 3000+25%"
+    service_name_ruk="Internet 3000+25&lt;"
+    service_name_rut="Internet 3000+25&lt;"
+    service_name_uz="Internet 3000+25&lt;"
+    service_name_en="Internet 3000+25&lt;"
 
     >
     <soapcon value="FRGPRS3750BONUS"/>
@@ -2811,10 +2811,10 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS6250BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 5000+25%"
-    service_name_rut="Internet 5000+25%"
-    service_name_uz="Internet 5000+25%"
-    service_name_en="Internet 5000+25%"
+    service_name_ruk="Internet 5000+25&lt;"
+    service_name_rut="Internet 5000+25&lt;"
+    service_name_uz="Internet 5000+25&lt;"
+    service_name_en="Internet 5000+25&lt;"
 
     >
     <soapcon value="FRGPRS6250BONUS"/>
@@ -2822,10 +2822,10 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS12500BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 10000+25%"
-    service_name_rut="Internet 10000+25%"
-    service_name_uz="Internet 10000+25%"
-    service_name_en="Internet 10000+25%"
+    service_name_ruk="Internet 10000+25&lt;"
+    service_name_rut="Internet 10000+25&lt;"
+    service_name_uz="Internet 10000+25&lt;"
+    service_name_en="Internet 10000+25&lt;"
 
     >
     <soapcon value="FRGPRS12500BONUS"/>
@@ -2833,10 +2833,10 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS25000BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 20000+25%"
-    service_name_rut="Internet 20000+25%"
-    service_name_uz="Internet 20000+25%"
-    service_name_en="Internet 20000+25%"
+    service_name_ruk="Internet 20000+25&lt;"
+    service_name_rut="Internet 20000+25&lt;"
+    service_name_uz="Internet 20000+25&lt;"
+    service_name_en="Internet 20000+25&lt;"
 
     >
     <soapcon value="FRGPRS25000BONUS"/>
@@ -2846,10 +2846,10 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS37500BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 30000+25%"
-    service_name_rut="Internet 30000+25%"
-    service_name_uz="Internet 30000+25%"
-    service_name_en="Internet 30000+25%"
+    service_name_ruk="Internet 30000+25&lt;"
+    service_name_rut="Internet 30000+25&lt;"
+    service_name_uz="Internet 30000+25&lt;"
+    service_name_en="Internet 30000+25&lt;"
 
     >
     <soapcon value="FRGPRS37500BONUS"/>
@@ -2862,10 +2862,10 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS62500BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 50000+25%"
-    service_name_rut="Internet 50000+25%"
-    service_name_uz="Internet 50000+25%"
-    service_name_en="Internet 50000+25%"
+    service_name_ruk="Internet 50000+25&lt;"
+    service_name_rut="Internet 50000+25&lt;"
+    service_name_uz="Internet 50000+25&lt;"
+    service_name_en="Internet 50000+25&lt;"
 
     >
     <soapcon value="FRGPRS62500BONUS"/>
@@ -2878,10 +2878,10 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS125000BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 100000+25%"
-    service_name_rut="Internet 100000+25%"
-    service_name_uz="Internet 100000+25%"
-    service_name_en="Internet 100000+25%"
+    service_name_ruk="Internet 100000+25&lt;"
+    service_name_rut="Internet 100000+25&lt;"
+    service_name_uz="Internet 100000+25&lt;"
+    service_name_en="Internet 100000+25&lt;"
 
     >
     <soapcon value="FRGPRS125000BONUS"/>
@@ -3138,10 +3138,10 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMINPACKF120" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Paket minut 120 + 25%"
-    service_name_rut="Paket minut 120 + 25%"
-    service_name_uz="Paket minut 120 + 25%"
-    service_name_en="Paket minut 120 + 25%"
+    service_name_ruk="Paket minut 120 + 25&lt;"
+    service_name_rut="Paket minut 120 + 25&lt;"
+    service_name_uz="Paket minut 120 + 25&lt;"
+    service_name_en="Paket minut 120 + 25&lt;"
 
     >
     <soapcon value="FRMINPACKF120"/>
@@ -3157,10 +3157,10 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMINPACKF180" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Paket minut 180 + 25%"
-    service_name_rut="Paket minut 180 + 25%"
-    service_name_uz="Paket minut 180 + 25%"
-    service_name_en="Paket minut 180 + 25%"
+    service_name_ruk="Paket minut 180 + 25&lt;"
+    service_name_rut="Paket minut 180 + 25&lt;"
+    service_name_uz="Paket minut 180 + 25&lt;"
+    service_name_en="Paket minut 180 + 25&lt;"
 
     >
     <soapcon value="FRMINPACKF180"/>
@@ -3176,10 +3176,10 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMINPACKF300" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Paket minut 300 + 25%"
-    service_name_rut="Paket minut 300 + 25%"
-    service_name_uz="Paket minut 300 + 25%"
-    service_name_en="Paket minut 300 + 25%"
+    service_name_ruk="Paket minut 300 + 25&lt;"
+    service_name_rut="Paket minut 300 + 25&lt;"
+    service_name_uz="Paket minut 300 + 25&lt;"
+    service_name_en="Paket minut 300 + 25&lt;"
 
     >
     <soapcon value="FRMINPACKF300"/>
@@ -4585,10 +4585,10 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS375BONUS" datefrom="20160406" dateto="" group="5"
 
-    service_name_ruk="Internet 300+25%"
-    service_name_rut="Internet 300+25%"
-    service_name_uz="Internet 300+25%"
-    service_name_en="Internet 300+25%"
+    service_name_ruk="Internet 300+25&lt;"
+    service_name_rut="Internet 300+25&lt;"
+    service_name_uz="Internet 300+25&lt;"
+    service_name_en="Internet 300+25&lt;"
 
     >
     <paynet value="FRGPRS375BONUS"/>
@@ -4596,10 +4596,10 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS625BONUS" datefrom="20160406" dateto="" group="5"
 
-    service_name_ruk="Internet 500+25%"
-    service_name_rut="Internet 500+25%"
-    service_name_uz="Internet 500+25%"
-    service_name_en="Internet 500+25%"
+    service_name_ruk="Internet 500+25&lt;"
+    service_name_rut="Internet 500+25&lt;"
+    service_name_uz="Internet 500+25&lt;"
+    service_name_en="Internet 500+25&lt;"
 
     >
     <paynet value="FRGPRS625BONUS"/>
@@ -4607,10 +4607,10 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS1250BONUS" datefrom="20160406" dateto="" group="5"
 
-    service_name_ruk="Internet 1000+25%"
-    service_name_rut="Internet 1000+25%"
-    service_name_uz="Internet 1000+25%"
-    service_name_en="Internet 1000+25%"
+    service_name_ruk="Internet 1000+25&lt;"
+    service_name_rut="Internet 1000+25&lt;"
+    service_name_uz="Internet 1000+25&lt;"
+    service_name_en="Internet 1000+25&lt;"
 
     >
     <paynet value="FRGPRS1250BONUS"/>
@@ -4618,10 +4618,10 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS2500BONUS" datefrom="20160406" dateto="" group="5"
 
-    service_name_ruk="Internet 2000+25%"
-    service_name_rut="Internet 2000+25%"
-    service_name_uz="Internet 2000+25%"
-    service_name_en="Internet 2000+25%"
+    service_name_ruk="Internet 2000+25&lt;"
+    service_name_rut="Internet 2000+25&lt;"
+    service_name_uz="Internet 2000+25&lt;"
+    service_name_en="Internet 2000+25&lt;"
 
     >
     <paynet value="FRGPRS2500BONUS"/>
@@ -4629,10 +4629,10 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS3750BONUS" datefrom="20160406" dateto="" group="5"
 
-    service_name_ruk="Internet 3000+25%"
-    service_name_rut="Internet 3000+25%"
-    service_name_uz="Internet 3000+25%"
-    service_name_en="Internet 3000+25%"
+    service_name_ruk="Internet 3000+25&lt;"
+    service_name_rut="Internet 3000+25&lt;"
+    service_name_uz="Internet 3000+25&lt;"
+    service_name_en="Internet 3000+25&lt;"
 
     >
     <paynet value="FRGPRS3750BONUS"/>
@@ -4640,10 +4640,10 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS6250BONUS" datefrom="20160406" dateto="" group="5"
 
-    service_name_ruk="Internet 5000+25%"
-    service_name_rut="Internet 5000+25%"
-    service_name_uz="Internet 5000+25%"
-    service_name_en="Internet 5000+25%"
+    service_name_ruk="Internet 5000+25&lt;"
+    service_name_rut="Internet 5000+25&lt;"
+    service_name_uz="Internet 5000+25&lt;"
+    service_name_en="Internet 5000+25&lt;"
 
     >
     <paynet value="FRGPRS6250BONUS"/>
@@ -4651,10 +4651,10 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS12500BONUS" datefrom="20160406" dateto="" group="5"
 
-    service_name_ruk="Internet 10000+25%"
-    service_name_rut="Internet 10000+25%"
-    service_name_uz="Internet 10000+25%"
-    service_name_en="Internet 10000+25%"
+    service_name_ruk="Internet 10000+25&lt;"
+    service_name_rut="Internet 10000+25&lt;"
+    service_name_uz="Internet 10000+25&lt;"
+    service_name_en="Internet 10000+25&lt;"
 
     >
     <paynet value="FRGPRS12500BONUS"/>
@@ -4662,10 +4662,10 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS25000BONUS" datefrom="20160406" dateto="" group="5"
 
-    service_name_ruk="Internet 20000+25%"
-    service_name_rut="Internet 20000+25%"
-    service_name_uz="Internet 20000+25%"
-    service_name_en="Internet 20000+25%"
+    service_name_ruk="Internet 20000+25&lt;"
+    service_name_rut="Internet 20000+25&lt;"
+    service_name_uz="Internet 20000+25&lt;"
+    service_name_en="Internet 20000+25&lt;"
 
     >
     <paynet value="FRGPRS25000BONUS"/>
@@ -4673,10 +4673,10 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS37500BONUS" datefrom="20160406" dateto="" group="5"
 
-    service_name_ruk="Internet 30000+25%"
-    service_name_rut="Internet 30000+25%"
-    service_name_uz="Internet 30000+25%"
-    service_name_en="Internet 30000+25%"
+    service_name_ruk="Internet 30000+25&lt;"
+    service_name_rut="Internet 30000+25&lt;"
+    service_name_uz="Internet 30000+25&lt;"
+    service_name_en="Internet 30000+25&lt;"
 
     >
     <paynet value="FRGPRS37500BONUS"/>
@@ -4684,10 +4684,10 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS62500BONUS" datefrom="20160406" dateto="" group="5"
 
-    service_name_ruk="Internet 50000+25%"
-    service_name_rut="Internet 50000+25%"
-    service_name_uz="Internet 50000+25%"
-    service_name_en="Internet 50000+25%"
+    service_name_ruk="Internet 50000+25&lt;"
+    service_name_rut="Internet 50000+25&lt;"
+    service_name_uz="Internet 50000+25&lt;"
+    service_name_en="Internet 50000+25&lt;"
 
     >
     <paynet value="FRGPRS62500BONUS"/>
@@ -4695,10 +4695,10 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS125000BONUS" datefrom="20160406" dateto="" group="5"
 
-    service_name_ruk="Internet 100000+25%"
-    service_name_rut="Internet 100000+25%"
-    service_name_uz="Internet 100000+25%"
-    service_name_en="Internet 100000+25%"
+    service_name_ruk="Internet 100000+25&lt;"
+    service_name_rut="Internet 100000+25&lt;"
+    service_name_uz="Internet 100000+25&lt;"
+    service_name_en="Internet 100000+25&lt;"
 
     >
     <paynet value="FRGPRS125000BONUS"/>

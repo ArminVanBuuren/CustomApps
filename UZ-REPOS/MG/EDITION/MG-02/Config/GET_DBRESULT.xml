@@ -1,6 +1,6 @@
 ﻿<!-- 
 Created by Vladimir Khovanskiy  
-Реплейсы знаков: (^ - ') (\^ - ^) (@ - ") (\@ - @) (\% - <) (\% - %)
+Реплейсы знаков: (^ - ')
 -->
 <DBresults>
   <Item
@@ -48,10 +48,10 @@ Created by Vladimir Khovanskiy
     <code value="320001"/>
   </Item>
   <Item
-    info_ruk="Usluga @OnNet@ не установлена."
-    info_rut="Usluga @OnNet@ ne ustanovlena."
-    info_uz="@OnNet@ xizmati yoqilmagan."
-    info_en=" @OnNet@ service is not activated."
+    info_ruk="Usluga &quot;OnNet&quot; не установлена."
+    info_rut="Usluga &quot;OnNet&quot; ne ustanovlena."
+    info_uz="&quot;OnNet&quot; xizmati yoqilmagan."
+    info_en=" &quot;OnNet&quot; service is not activated."
     >
     <code value="NOTONNET"/>
   </Item>
@@ -74,10 +74,10 @@ Created by Vladimir Khovanskiy
     <code value="NOTACTIVEPACK"/>
   </Item>
   <Item
-    info_ruk="Услуга @Super 0@ не установлена."
-    info_rut="Usluga @Super 0@ ne ustanovlena."
-    info_uz="@Super 0@ xizmati yoqilmagan."
-    info_en=" @Super 0@ service is not activated."
+    info_ruk="Услуга &quot;Super 0&quot; не установлена."
+    info_rut="Usluga &quot;Super 0&quot; ne ustanovlena."
+    info_uz="&quot;Super 0&quot; xizmati yoqilmagan."
+    info_en=" &quot;Super 0&quot; service is not activated."
     >
     <code value="NOTSUPERZERO"/>
   </Item>
@@ -128,9 +128,9 @@ Created by Vladimir Khovanskiy
   </Item>
   <Item
     info_ruk="Usluga ne dostupna novim abonentam v techenie odnogo kalendarnogo mesyaca"
-    info_rut="Ustanovlen zapret na podklyuchenie usligi @Obeshanniy platezh@"
-    info_uz="@Va^da qilingan to^lov@ xizmatiga cheklanish o^rnatildi"
-    info_en="@Promised payment@ service connection is banned"
+    info_rut="Ustanovlen zapret na podklyuchenie usligi &quot;Obeshanniy platezh&quot;"
+    info_uz="&quot;Va^da qilingan to^lov&quot; xizmatiga cheklanish o^rnatildi"
+    info_en="&quot;Promised payment&quot; service connection is banned"
     info_pay="320704"
     info_rbt="320704"
     info_scg="320704"
@@ -275,8 +275,8 @@ Created by Vladimir Khovanskiy
   <Item
     info_ruk="У Вас не установлена услуга Мобильный помощник. Пожалуйста, обратитесь в службу поддержки UMS."
     info_rut="U Vas ne ustanovlena usluga Mobil^ny^y pomoshnik. Pozhaluysta, obratites^ v sluzhbu podderzhki UMS ."
-    info_uz="Sizda @Mobil yordamchi@ xizmati o^rnatilmagan. Iltimos UMS qo^llash xizmatiga murojaat qiling"
-    info_en="You don^t have service @Mobile Assistant@. Contact your support UMS."
+    info_uz="Sizda &quot;Mobil yordamchi&quot; xizmati o^rnatilmagan. Iltimos UMS qo^llash xizmatiga murojaat qiling"
+    info_en="You don^t have service &quot;Mobile Assistant&quot;. Contact your support UMS."
     info_pay="320060"
     info_rbt="320060"
     info_scg="320060"
@@ -696,7 +696,7 @@ Created by Vladimir Khovanskiy
     <code value="345002"/>
   </Item>
   <Item
-    info_ruk="Активирована услуга @На полном доверии@. У Вас есть возможность пользоваться услугами связи по тарифному плану до -$5. Во избежание блокировки рекомендуем вам пополнить ваш баланс. Для отключения услуги наберите *164*2#"
+    info_ruk="Активирована услуга &quot;На полном доверии&quot;. У Вас есть возможность пользоваться услугами связи по тарифному плану до -$5. Во избежание блокировки рекомендуем вам пополнить ваш баланс. Для отключения услуги наберите *164*2#"
     info_ru="Aktivirovana usluga ^Na polnom doverii^. U Vas est^ vozmojnost^ polzovot^sya uslugami svyazi po tarifnomu planu do -5$. Vo izbejanie blokirovki rekomenduem Vam popolnit^ Vash balans. Dlya otklyucheniya uslugi naberite *164*2#"
     info_uz="^To^liq ishonch^ xizmati faollashtirildi. Siz tarif rejasi bo^yicha qarzingiz 5$ga yetguncha aloqa xizmatlaridan foydalanish imkoniga egasiz. Raqam bandlanib qolmasligi uchun balansingizni to^ldirib qo^yishingizni tavsiya qilamiz. Xizmatni o^chirish uchun USSD-so^rov - *164*2#"
     info_en="Service ^Na polnom doverii^ is activated. You have an opportunity to use communication service with no less than -5$. To escape blocking we recommend to replenish Your balance. For service cancellation enter *164*2#"
@@ -705,7 +705,7 @@ Created by Vladimir Khovanskiy
     <code value="LimitActivated"/>
   </Item>
   <Item
-    info_ruk="Услуга @На полном доверии@ - недоступна"
+    info_ruk="Услуга &quot;На полном доверии&quot; - недоступна"
     info_ru="Usluga ^Na polnom doverii^ - nedostupna"
     info_uz="^To^liq ishonch^ xizmati – imkonsiz"
     info_en="Service ^Na polnom doverii^ - not available"
@@ -723,7 +723,7 @@ Created by Vladimir Khovanskiy
     <code value="LimitDeactivated"/>
   </Item>
   <Item
-    info_ruk="Услуга @На полном доверии@ уже была активирована"
+    info_ruk="Услуга &quot;На полном доверии&quot; уже была активирована"
     info_ru="Usluga ^Na polnom doverii^ uje bila aktivirovana"
     info_uz="^To^liq ishonch^ xizmati avval yoqilgan"
     info_en="Service ^Na polnom doverii^ - is already activated"
@@ -750,10 +750,10 @@ Created by Vladimir Khovanskiy
     <code value="AuthorisationDealer"/>
   </Item>
   <Item
-    info_ruk="Neverny^y kod. Zapros balansa: *171*10*%1-3&gt;#. Dlya utochneniya kodov tarifov otprav^te *171*20#, uslug/paketov *171*30#"
-    info_rut="Neverny^y kod. Zapros balansa: *171*10*%1-3&gt;#. Dlya utochneniya kodov tarifov otprav^te *171*20#, uslug/paketov *171*30#"
-    info_uz="Neverny^y kod. Zapros balansa: *171*10*%1-3&gt;#. Dlya utochneniya kodov tarifov otprav^te *171*20#, uslug/paketov *171*30#"
-    info_en="Invalid code. Balance inquiry: *171*10*%1-3&gt;#. For more information about tariff codes - send *171*20#, for services or packages - send *171*30#"
+    info_ruk="Neverny^y kod. Zapros balansa: *171*10*&lt;1-3&gt;#. Dlya utochneniya kodov tarifov otprav^te *171*20#, uslug/paketov *171*30#"
+    info_rut="Neverny^y kod. Zapros balansa: *171*10*&lt;1-3&gt;#. Dlya utochneniya kodov tarifov otprav^te *171*20#, uslug/paketov *171*30#"
+    info_uz="Neverny^y kod. Zapros balansa: *171*10*&lt;1-3&gt;#. Dlya utochneniya kodov tarifov otprav^te *171*20#, uslug/paketov *171*30#"
+    info_en="Invalid code. Balance inquiry: *171*10*&lt;1-3&gt;#. For more information about tariff codes - send *171*20#, for services or packages - send *171*30#"
 
     >
     <code value="ussd_err"/>
