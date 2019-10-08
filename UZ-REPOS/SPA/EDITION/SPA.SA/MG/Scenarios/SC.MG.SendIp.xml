@@ -46,7 +46,7 @@
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SendIP" />
+        <param name="Command" value="SC.SendIP" />
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">

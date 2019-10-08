@@ -134,6 +134,7 @@
     <Content Include="EDITION\MG-01\CRMFilter\XSLT\XSLTPlugin_out.xml" />
     <Content Include="EDITION\MG-01\defaultXPATH.xml" />
     <Content Include="EDITION\MG-01\MGCommon.xml" />
+    <Content Include="EDITION\MG-01\rar.exe" />
     <Content Include="EDITION\MG-02\Configuration\CRMCON\CRMCON_02_01.exe.xml" />
     <Content Include="EDITION\MG-02\Configuration\DBCON\DBCON_02_01.exe.xml" />
     <Content Include="EDITION\MG-02\Configuration\IVRCON\IVRCON_02_01.exe.xml" />

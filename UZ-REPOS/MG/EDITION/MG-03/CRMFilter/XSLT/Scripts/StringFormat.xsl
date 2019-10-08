@@ -7,20 +7,29 @@
   >
   <msxsl:script language="C#" implements-prefix="user">
   <![CDATA[
-        public static String get_codelist(string customer, string StringFormat, string Params, string Split)
+        public static String get_codelist(string customer, string format, string @params, string splitSign)
         {
-            String result = string.Empty;
             try
             {
-                string[] strArray = Params.Split(new char[] { Split.ToCharArray()[0] });
-                result = result + string.Format(StringFormat.Replace("[", "{").Replace("]", "}"), strArray);
-                result = result.Replace("*", "\"").Replace("^", "'").Replace("\\.", ",").Replace("\\\"", "*").Replace("\\'", "^").Replace("\\r", "\r").Replace("\\n", "\n");
+                return string.Format(format.Replace("[", "{").Replace("]", "}"), @params.Split(new char[] { splitSign.ToCharArray()[0] }))
+                    .Replace("&apos;", "'")
+                    .Replace("&quot;", "\"")
+                    .Replace("&apos", "'")
+                    .Replace("&quot", "\"")
+                    .Replace(@"\^", "##1##")
+                    .Replace("^", "'")
+                    .Replace("##1##", "^")
+                    .Replace(@"\@", "##2##")
+                    .Replace("@", "\"")
+                    .Replace("##2##", "@")
+                    .Replace(@"\%", "##3##")
+                    .Replace("%", "<")
+                    .Replace("##3##", "%");
             }
             catch (Exception ex)
             {
                 return string.Empty;
             }
-            return result;
         }
   ]]>
   </msxsl:script>

@@ -583,7 +583,7 @@
     <Content Include="EDITION\SPA.SA\MCA\Scenarios\SC.Add.RFS_MCA_CHANGE_MSISDN.xml" />
     <Content Include="EDITION\SPA.SA\MCA\Scenarios\SC.Add.RFS_MCA_SUBSCRIPTION.xml" />
     <Content Include="EDITION\SPA.SA\MCA\Scenarios\SC.Remove.RFS_MCA_SUBSCRIPTION.xml" />
-    <Content Include="EDITION\SPA.SA\MG\Commands\SendIP.xml" />
+    <Content Include="EDITION\SPA.SA\MG\Commands\SC.SendIP.xml" />
     <Content Include="EDITION\SPA.SA\MG\configuration.application.xml" />
     <Content Include="EDITION\SPA.SA\MG\configuration.common.xml" />
     <Content Include="EDITION\SPA.SA\MG\dictionary.xml" />
@@ -593,7 +593,7 @@
     <Content Include="EDITION\SPA.SA\MG\Scripts\login.xml" />
     <Content Include="EDITION\SPA.SA\MG\Scripts\logoff.xml" />
     <Content Include="EDITION\SPA.SA\MG\Scripts\nosleep.xml" />
-    <Content Include="EDITION\SPA.SA\RBT.INTECH\Commands\SC.RBT.Modify.Subscriber.xml" />
+    <Content Include="EDITION\SPA.SA\RBT.INTECH\Commands\SC.Modify_Subscriber.xml" />
     <Content Include="EDITION\SPA.SA\RBT.INTECH\configuration.application.xml" />
     <Content Include="EDITION\SPA.SA\RBT.INTECH\configuration.common.xml" />
     <Content Include="EDITION\SPA.SA\RBT.INTECH\dictionary.xml" />

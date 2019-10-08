@@ -18,8 +18,8 @@
     <Item name="StoringInterval" value="10" />
     <Item name="ThreadMultiplifier" value="8" />
     <Item name="NumberOfWorkThreads" value="16" />
-    <Item name="TempDir" value="Temp" />
-    <Item name="ArchivatorName" value="Rar.exe" />
+    <Item name="TempDir" value="..\..\Temp" />
+    <Item name="ArchivatorName" value="..\..\rar.exe" />
     <Item name="ArchivatorLine" value="m -v{0}k -ep -m3 {1} {2}" />
   </Settings>
   <TemplateProcessors defaultConfig="EmailTemplateProcessor.xml">

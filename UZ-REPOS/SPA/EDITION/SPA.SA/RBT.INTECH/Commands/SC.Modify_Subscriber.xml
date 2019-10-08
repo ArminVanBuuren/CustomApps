@@ -1,4 +1,4 @@
-<Command Name="SC.RBT.Modify.Subscriber" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<Command Name="SC.Modify_Subscriber" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>Создание и удаление пользователя на платформе RBT</Description>
   <Author Name="A.Branov" Date="2018-09-25+15:00" />
   <Request>

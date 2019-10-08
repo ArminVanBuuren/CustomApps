@@ -1,4 +1,4 @@
-<Command Name="SendIP">
+<Command Name="SC.SendIP">
   <Description>Отправить статический Ip</Description>
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
   <Request>
