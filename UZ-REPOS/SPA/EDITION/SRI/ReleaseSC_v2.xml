@@ -1944,13 +1944,13 @@
     <CFS name="PPD175P2APN" globalServiceCode="PPD175P2APN" copyOf="CFS_FP_SERVICE_GENERAL" description="1.75 PayPerDay P2 - APN" />
     <CFS name="PPD175U1" globalServiceCode="PPD175U1" copyOf="CFS_FP_SERVICE_GENERAL" description="1.75 PayPerDay 1" />
     <CFS name="PPD175U2" globalServiceCode="PPD175U2" copyOf="CFS_FP_SERVICE_GENERAL" description="1.75 PayPerDay 2" />
-    <CFS name="PPD175U3" globalServiceCode="PPD175U3" copyOf="CFS_FP_SERVICE_GENERAL" description="1.75 PayPerDay 3" />
+    <CFS name="PPD175U3" globalServiceCode="PPD175U3" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="1.75 PayPerDay 3" />
     <CFS name="PPD175U4" globalServiceCode="PPD175U4" copyOf="CFS_FP_SERVICE_GENERAL" description="1.75 PayPerDay 4" />
-    <CFS name="PPD175U5" globalServiceCode="PPD175U5" copyOf="CFS_FP_SERVICE_GENERAL" description="1.75 PayPerDay 5" />
-    <CFS name="PPD175U6" globalServiceCode="PPD175U6" copyOf="CFS_FP_SERVICE_GENERAL" description="1.75 PayPerDay 6" />
+    <CFS name="PPD175U5" globalServiceCode="PPD175U5" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="1.75 PayPerDay 5" />
+    <CFS name="PPD175U6" globalServiceCode="PPD175U6" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="1.75 PayPerDay 6" />
     <CFS name="PPD175U7" globalServiceCode="PPD175U7" copyOf="CFS_FP_SERVICE_GENERAL" description="1.75 PayPerDay 7" />
     <CFS name="PPD175U8" globalServiceCode="PPD175U8" copyOf="CFS_FP_SERVICE_GENERAL" description="1.75 PayPerDay 8" />
-    <CFS name="PPD175U9" globalServiceCode="PPD175U9" copyOf="CFS_FP_SERVICE_GENERAL" description="1.75 PayPerDay 9" />
+    <CFS name="PPD175U9" globalServiceCode="PPD175U9" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="1.75 PayPerDay 9" />
     <CFS name="PPDSS1" globalServiceCode="PPDSS1" copyOf="CFS_FP_SERVICE_GENERAL" description="Услуга SS1" />
     <CFS name="PPDSS2" globalServiceCode="PPDSS2" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="Услуга 1.75 PPD-S2" />
     <CFS name="PPDSS3" globalServiceCode="PPDSS3" copyOf="CFS_FP_SERVICE_GENERAL" description="Услуга SS3" />
