@@ -36,9 +36,9 @@
      <xsl:template match="/">
 	          <xsl:variable name="Customer"     select="/Message/Item/@customer"/>
 	          <xsl:variable name="StringFormat" select="/Message/Item/Attribute[@name='stringformat']/text()"/>
-                  <xsl:variable name="Params"       select="/Message/Item/Attribute[@name='params']/@value"/>
-                  <xsl:variable name="Split"        select="/Message/Item/Attribute[@name='split']/@value"/>
-                  <xsl:variable name="Result"       select="user:get_codelist($Customer, $StringFormat, $Params, $Split)"/>
+            <xsl:variable name="Params"       select="/Message/Item/Attribute[@name='params']/text()"/>
+            <xsl:variable name="Split"        select="/Message/Item/Attribute[@name='split']/@value"/>
+            <xsl:variable name="Result"       select="user:get_codelist($Customer, $StringFormat, $Params, $Split)"/>
 		  <Message type="{/Message/@type}result" hostname="dispatcher" id="{ext:newGuid()}" request_id="{/Message/@id}" session_id="{/Message/@session_id}" >
 			<Item customer="{/Message/Item/@customer}">
             	        	<xsl:attribute name="dbresult">

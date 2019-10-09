@@ -604,7 +604,7 @@
       <Message type="stringformat" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
         <Item customer="${sCustomer}">
           <Attribute name="stringformat"><![CDATA[#{if('${Content}'='','_GET_SERVICE_RESULT','${Content}')}@{store(SlowAsync,)}]]></Attribute>
-          <Attribute name="params" value="${sParams}" />
+          <Attribute name="params"><![CDATA[${sParams}]]></Attribute>
           <Attribute name="split" value=";" />
         </Item>
       </Message>

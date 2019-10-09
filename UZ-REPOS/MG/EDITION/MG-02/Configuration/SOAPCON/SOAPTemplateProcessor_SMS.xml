@@ -750,7 +750,7 @@
       <Message type="stringformat" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
         <Item customer="${sCustomer}">
           <Attribute name="stringformat"><![CDATA[#{if('${Content}'='','_GET_SERVICE_RESULT','${Content}')}@{store(SlowAsync,)}]]></Attribute>
-          <Attribute name="params" value="${sParams}" />
+          <Attribute name="params"><![CDATA[${sParams}]]></Attribute>
           <Attribute name="split" value=";" />
         </Item>
       </Message>
@@ -1160,7 +1160,7 @@
       <Message type="stringformat" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
         <Item customer="${sCustomer}">
           <Attribute name="stringformat"><![CDATA[#{if('${content}'='','_GET_TARIFF_RESULT','${content}')}@{store(SlowAsync,)}]]></Attribute>
-          <Attribute name="params" value="${sParams}" />
+          <Attribute name="params"><![CDATA[${sParams}]]></Attribute>
           <Attribute name="split" value=";" />
         </Item>
       </Message>
@@ -3056,7 +3056,7 @@ or '${sCountertype}'='welcomebonus'}" call="CheckCountersAutoinetDelayed_Step2" 
       <Message type="stringformat" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
         <Item customer="${sCustomer}">
           <Attribute name="stringformat"><![CDATA[#{if('${Content}'='','#{if('_GET_ALL_SRV_RESULT'='','_GET_DBRESULT','_GET_ALL_SRV_RESULT')}','${Content}')}@{store(SlowAsync,)}]]></Attribute>
-          <Attribute name="params" value="${sParams}" />
+          <Attribute name="params"><![CDATA[${sParams}]]></Attribute>
           <Attribute name="split" value=";" />
         </Item>
       </Message>
