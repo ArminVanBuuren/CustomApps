@@ -17,25 +17,24 @@ namespace Tester.Console
         {
             try
             {
-                return string.Format(format.Replace("[", "{").Replace("]", "}"), @params.Split(new char[] { splitSign.ToCharArray()[0] }))
-                    .Replace("&apos;", "'")
-                    .Replace("&quot;", "\"")
-                    .Replace("&apos", "'")
-                    .Replace("&quot", "\"")
-                    .Replace(@"\^", "##1##")
-                    .Replace("^", "'")
-                    .Replace("##1##", "^")
-                    .Replace(@"\@", "##2##")
-                    .Replace("@", "\"")
-                    .Replace("##2##", "@")
-                    .Replace(@"\%", "##3##")
-                    .Replace("%", "<")
-                    .Replace("##3##", "%");
+                return string.Format(CharReplacer(format.Replace("[", "{").Replace("]", "}")), CharReplacer(@params).Split(new char[] { splitSign.ToCharArray()[0] }));
             }
             catch (Exception ex)
             {
                 return string.Empty;
             }
+        }
+
+        public static String CharReplacer(string input)
+        {
+            return input
+                    .Replace("&amp;", "&")
+                    .Replace("&apos;", "'")
+                    .Replace(@"^", "'")
+                    .Replace("&quot;", "\"")
+                    .Replace("&lt;", "<")
+                    .Replace("&gt;", ">")
+                ;
         }
 
         public int Minargs
