@@ -1,0 +1,8 @@
+<Command Name="Add_TCSI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>&gt;Добавление InPlatform</Description>
+  <Author Name="YAI" Date="2011-09-20+12:18" />
+  <Request Template="MOD TCSI: IMSI=&quot;{0}&quot;, PROV=TRUE, TPLID=101;">
+    <Item Name="imsi" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ASCII" />
+</Command>

@@ -1,0 +1,69 @@
+<scenario name="AddCB118onDB">
+  <objectList>
+    <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+  </objectList>
+  <automat>
+    <node name="BySubscribersSplitter" object="BySubscribersSplitter">
+      <resultlist>
+        <result value="0" node="SingleSubscriberRequestDequeuer" />
+      </resultlist>
+    </node>
+    <node name="SingleSubscriberRequestDequeuer" object="Dequeuer">
+      <resultlist>
+        <result value="0" node="IfServiceMultiNode" />
+        <result value="1" node="" />
+      </resultlist>
+      <parameterslist>
+        <param name="queueName" value="requestsSplittedBySubscriberQueue" />
+      </parameterslist>
+    </node>
+    <node name="IfServiceMultiNode" object="IfMultipleXmlConditionsResolver">
+      <resultlist>
+        <result value="0" node="ChangeNumNode" />
+        <result value="1" node="ChangeNum2Node" />
+      </resultlist>
+      <parameterslist>
+        <param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB411542" />
+        <param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR6844" />
+      </parameterslist>
+    </node>
+    <node name="ChangeNumNode" object="Commander">
+      <resultlist>
+        <result value="0" node="ChangeNum2Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="Command" value="ChangeMSISDN" />
+        <param name="Script" value="Command" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="DataBaseName" value="FORIS.SPA.BILLING" />
+      </parameterslist>
+    </node>
+    <node name="ChangeNum2Node" object="Commander">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="Command" value="ChangeMSISDN_TDConDB" />
+        <param name="Script" value="Command" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="DataBaseName" value="FORIS.SPA.BILLING" />
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="SingleSubscriberRequestDequeuer" />
+      </resultlist>
+    </node>
+  </automat>
+</scenario>

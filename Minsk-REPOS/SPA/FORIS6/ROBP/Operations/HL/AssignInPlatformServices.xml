@@ -1,0 +1,8 @@
+<OperationData Name="AssignInPlatformServices" NEType="HL" NEAlias="HL">
+  <Request Name="RequestMessage">
+    <AdditionalData Executable="True">
+      <BalanceStorage HaltMode="AbortProcess" Type="Mandatory" />
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage" />
+</OperationData>

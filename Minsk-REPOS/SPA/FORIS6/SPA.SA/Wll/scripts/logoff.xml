@@ -1,0 +1,4 @@
+<Script Name="Logoff">
+  <write data="LGO:;" />
+  <wait data="RETCODE = 0 Operation is successful" timeout="3000" />
+</Script>

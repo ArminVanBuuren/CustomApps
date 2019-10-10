@@ -1,0 +1,50 @@
+<BusinessProcessData name="Assign WI-FI Services">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="AddService" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="SCProcessingUnit" object="SCProcessingUnit">
+          <parameterslist />
+          <resultlist>
+            <result value="" node="AssignServiceOnFINPlatform" />
+          </resultlist>
+        </node>
+        <node name="AssignServiceOnFINPlatform" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AssignServiceOnFINPlatform" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR300onDB" />
+          </resultlist>
+        </node>
+        <node name="AddFR300onDB" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR300onDB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR300onSD" />
+          </resultlist>
+        </node>
+        <node name="AddFR300onSD" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR300onSD" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR300onSS" />
+          </resultlist>
+        </node>
+        <node name="AddFR300onSS" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR300onSS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

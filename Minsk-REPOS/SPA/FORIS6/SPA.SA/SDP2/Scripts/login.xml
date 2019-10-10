@@ -1,0 +1,9 @@
+<Script Name="Login">
+  <wait data="login:" timeout="3000" />
+  <write data="bill^M" />
+  <wait data="Password:" timeout="3000" />
+  <write data="3e2w1q^M" />
+  <wait data="# " timeout="3000" />
+  <write data="/opt/CSCOar/bin/aregcmd -C localhost -N admin -P aicuser^M" />
+  <wait data="Server 'Radius' is Running" timeout="3000" />
+</Script>

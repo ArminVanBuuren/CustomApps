@@ -1,0 +1,8 @@
+<Command Name="AddBAOCTelDataFax" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>&gt;Добавление ограничения исходящей связи, данных, факсов</Description>
+  <Author Name="YAI" Date="2011-09-21+12:18" />
+  <Request Template="MOD CB: ISDN=&quot;{0}&quot;, BAOC=TRUE;^JACT BAOC: ISDN=&quot;{0}&quot;, BSG=TS1X;^JACT BAOC: ISDN=&quot;{0}&quot;, BSG=BS2X;^JACT BAOC: ISDN=&quot;{0}&quot;, BSG=TS6X;^JMOD CBCOU: ISDN=&quot;{0}&quot;, COU=OPERATOR;">
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ASCII" />
+</Command>

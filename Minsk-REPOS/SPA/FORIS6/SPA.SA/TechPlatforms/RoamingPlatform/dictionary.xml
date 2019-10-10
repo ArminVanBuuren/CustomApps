@@ -1,0 +1,67 @@
+<Dictionary>
+  <WellknownsList>
+    <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)" />
+    <Wellknown Name="imsi" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;)" />
+  </WellknownsList>
+  <ErrorsList CodePage="ASCII">
+    <Error Name="&lt;errorCode&gt;0&lt;/errorCode&gt;" Value="SUCCESS" />
+    <Error Name="&lt;errorCode&gt;1002&lt;/errorCode&gt;" Value="SUCCESS" />
+    <Error Name="&lt;errorCode&gt;800&lt;/errorCode&gt;" Value="FAILURE" />
+    <Error Name="&lt;errorCode&gt;1004&lt;/errorCode&gt;" Value="FAILURE" />
+    <Error Name="&lt;errorCode&gt;2000&lt;/errorCode&gt;" Value="FAILURE" />
+  </ErrorsList>
+  <RegexpsList>
+    <Regexp Name="Error" Value="(Result&quot;\s{0,}value=&quot;(?&lt;ERROR&gt;\d{1,3})&quot;)" />
+  </RegexpsList>
+  <ParametersList>
+    <Parameter Name="NewMSISDN">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//NewMSISDN" />
+      <PossibleValues StringToKeyTable="true" />
+    </Parameter>
+    <Parameter Name="NewIMSI">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//NewIMSI" />
+      <PossibleValues StringToKeyTable="true" />
+    </Parameter>
+  </ParametersList>
+  <DynamicParametersList>
+    <DynamicParameter Name="IMSIX">
+      <Source Path="root/return/record/column[@name='IMSI_X']" />
+      <DynamicObject Name="db_get_imsix" />
+    </DynamicParameter>
+    <DynamicParameter Name="IMSI1">
+      <Source Path="root/return/record/column[@name='IMSI1']" />
+      <DynamicObject Name="db_get_imsixx" />
+    </DynamicParameter>
+    <DynamicParameter Name="IMSI2">
+      <Source Path="root/return/record/column[@name='IMSI2']" />
+      <DynamicObject Name="db_get_imsixx" />
+    </DynamicParameter>
+    <DynamicParameter Name="IMSI3">
+      <Source Path="root/return/record/column[@name='IMSI3']" />
+      <DynamicObject Name="db_get_imsixx" />
+    </DynamicParameter>
+    <DynamicParameter Name="IMSI4">
+      <Source Path="root/return/record/column[@name='IMSI4']" />
+      <DynamicObject Name="db_get_imsixx" />
+    </DynamicParameter>
+    <DynamicParameter Name="IMSI5">
+      <Source Path="root/return/record/column[@name='IMSI5']" />
+      <DynamicObject Name="db_get_imsixx" />
+    </DynamicParameter>
+    <DynamicParameter Name="IMSI6">
+      <Source Path="root/return/record/column[@name='IMSI6']" />
+      <DynamicObject Name="db_get_imsixx" />
+    </DynamicParameter>
+    <DynamicParameter Name="IMSI7">
+      <Source Path="root/return/record/column[@name='IMSI7']" />
+      <DynamicObject Name="db_get_imsixx" />
+    </DynamicParameter>
+    <DynamicParameter Name="IMSI8">
+      <Source Path="root/return/record/column[@name='IMSI8']" />
+      <DynamicObject Name="db_get_imsixx" />
+    </DynamicParameter>
+  </DynamicParametersList>
+  <CommandsList Root="C:\FORIS\SPA\SPA.SA\TechPlatforms\RoamingPlatform\Commands" Mask="*.xml">
+    <!-- All new commands are included by Mask=*.xml attribute -->
+  </CommandsList>
+</Dictionary>

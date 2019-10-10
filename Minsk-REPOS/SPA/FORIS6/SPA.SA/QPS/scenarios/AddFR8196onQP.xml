@@ -1,0 +1,139 @@
+<scenario name="AddFR8196onQP">
+  <objectList>
+    <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll" />
+    <object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+    <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll" />
+    <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll" />
+    <object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll" />
+    <object name="HttpCmd" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+  </objectList>
+  <automat>
+    <node name="BySubscribersSplitter" object="BySubscribersSplitter">
+      <resultlist>
+        <result value="0" node="BySubscriberRequestDequeuer" />
+      </resultlist>
+      <parameterslist>
+        <param name="queueName" value="requestsSplittedBySubscriberQueue" />
+      </parameterslist>
+    </node>
+    <node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+      <resultlist>
+        <result value="0" node="IfServiceVPNXNode" />
+        <result value="1" node="" />
+      </resultlist>
+      <parameterslist>
+        <param name="queueName" value="requestsSplittedBySubscriberQueue" />
+      </parameterslist>
+    </node>
+    <node name="IfServiceVPNXNode" object="IfMultipleXmlConditionsResolver">
+      <resultlist>
+        <result value="0" node="DummyResponderNode" />
+        <result value="1" node="FTTX_GetRegionTypeSub_Node" />
+      </resultlist>
+      <parameterslist>
+        <param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11385" />
+        <param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11386" />
+        <param name="OrXmlPath:2" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11387" />
+        <param name="OrXmlPath:3" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11388" />
+        <param name="OrXmlPath:4" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11389" />
+        <param name="OrXmlPath:5" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11390" />
+        <param name="OrXmlPath:6" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11391" />
+        <param name="OrXmlPath:7" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11392" />
+        <param name="OrXmlPath:8" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11393" />
+        <param name="OrXmlPath:9" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11394" />
+        <param name="OrXmlPath:10" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11395" />
+        <param name="OrXmlPath:11" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11396" />
+        <param name="OrXmlPath:12" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11397" />
+        <param name="OrXmlPath:13" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11398" />
+        <param name="OrXmlPath:14" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11399" />
+        <param name="OrXmlPath:15" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11400" />
+      </parameterslist>
+    </node>
+    <node name="FTTX_GetRegionTypeSub_Node" object="DataBaseProcessor">
+      <resultlist>
+        <result value="" node="FTTX_ExtractGetRegionTypeSub_Node" />
+      </resultlist>
+      <parameterslist>
+        <param name="DataBaseName" value="FORIS.SPA.OMS" />
+        <param name="FunctionName" value="select oms.spa.GetRegionName({0}) as REGSUB, billing.spa_func.FTTX_StatIPGetTypeSub@BILLING_CRM({0}) as TYPESUB from dual" />
+        <param name="FunctionType" value="customQuery" />
+        <param name="OutXml" value="db_GetRegionTypeSub" />
+        <param name="DbParameterName:0" value="i_msisdn" />
+        <param name="DbParameterDirection:0" value="Input" />
+        <param name="DbParameterType:0" value="NVarchar2" />
+        <param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN" />
+      </parameterslist>
+    </node>
+    <node name="FTTX_ExtractGetRegionTypeSub_Node" object="XmlNodesCopier">
+      <resultlist>
+        <result value="" node="FTTX_CheckData_Node" />
+      </resultlist>
+      <parameterslist>
+        <param name="SrcXml" value="db_GetRegionTypeSub" />
+        <param name="DstMessage" value="xmlrequest" />
+        <param name="CopyContentType" value="InnerXml" />
+        <param name="SrcXmlPath:0" value="root/return/record/column[@name='REGSUB']" />
+        <param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegionSubscriber" />
+        <param name="SrcXmlPath:1" value="root/return/record/column[@name='TYPESUB']" />
+        <param name="DstXmlPath:1" value="ExtendedRequestMessage/AdditionalData/TypeSubscriber" />
+      </parameterslist>
+    </node>
+    <node name="FTTX_CheckData_Node" object="IfMultipleXmlConditionsResolver">
+      <resultlist>
+        <result value="0" node="FTTX_AddStaticIPNode" />
+        <result value="1" node="DummyResponderErrNode" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="xmlrequest" />
+        <param name="MultiLevelCondition" value="((ExtendedRequestMessage//TypeSubscriber[text()!='-1']) AND (ExtendedRequestMessage//RegionSubscriber[text()!='-1']))" />
+      </parameterslist>
+    </node>
+    <node name="FTTX_AddStaticIPNode" object="HttpCmd">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="phpipam/action" />
+        <param name="Command" value="AddFTTXStaticIP8" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="172.24.247.1" />
+        <param name="Connection.Port" value="80" />
+        <param name="Connection.Method" value="POST" />
+        <param name="Connection.ContentType" value="text/xml; charset=utf-8" />
+      </parameterslist>
+    </node>
+    <node name="DummyResponderNode" object="DummyResponder">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="OverallResult" value="SUCCESS" />
+        <param name="DetailedResult" value="SUCCESS" />
+        <param name="Delay" value="0" />
+      </parameterslist>
+    </node>
+    <node name="DummyResponderErrNode" object="DummyResponder">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="OverallResult" value="FAILURE" />
+        <param name="DetailedResult" value="InvalidParameterValue" />
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="BySubscriberRequestDequeuer" />
+      </resultlist>
+    </node>
+  </automat>
+</scenario>

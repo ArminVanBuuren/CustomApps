@@ -1,0 +1,50 @@
+<BusinessProcessData name="Remove Services SDP">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="DeleteService" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="SCProcessingUnit" object="SCProcessingUnit">
+          <parameterslist />
+          <resultlist>
+            <result value="" node="RemoveServiceOnFINPlatform" />
+          </resultlist>
+        </node>
+        <node name="RemoveServiceOnFINPlatform" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="RemoveServiceOnFINPlatform" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFR15573" />
+          </resultlist>
+        </node>
+        <node name="DeleteFR15573" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteFR15573" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFR8765" />
+          </resultlist>
+        </node>
+        <node name="DeleteFR8765" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteFR8765" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ResetSession" />
+          </resultlist>
+        </node>
+        <node name="ResetSession" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteResetSession" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

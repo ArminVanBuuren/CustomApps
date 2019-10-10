@@ -1,0 +1,4 @@
+<Script Name="Logoff">
+  <write data="exit;^J" addToLog="true" />
+  <read data="Access granted." timeout="1000" addToLog="true" />
+</Script>

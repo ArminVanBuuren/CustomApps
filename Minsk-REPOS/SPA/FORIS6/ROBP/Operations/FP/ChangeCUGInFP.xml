@@ -1,0 +1,18 @@
+<OperationData Name="ChangeCUGInFP" NEType="FP" NEAlias="FP">
+  <Request Name="ExtendedRequestMessage">
+    <AdditionalData>
+      <RegisteredList HaltMode="CancelOperation" Type="AnyOfListed" Copy="CopyListed">
+        <Include groupName="CUGList" />
+      </RegisteredList>
+      <BalanceStorage HaltMode="AbortProcess" Type="Mandatory">
+        <HostTypeCode Type="Optional" />
+        <HostId Type="Optional" />
+        <HostCode HaltMode="AbortProcess" Type="Mandatory" />
+      </BalanceStorage>
+      <DeviceInfo Type="Optional">
+        <TerminalDeviceType HaltMode="CancelOperation" Type="Restricted" InnerText="virtual" />
+      </DeviceInfo>
+    </AdditionalData>
+  </Request>
+  <Response Name="ExtendedResponseMessage" />
+</OperationData>

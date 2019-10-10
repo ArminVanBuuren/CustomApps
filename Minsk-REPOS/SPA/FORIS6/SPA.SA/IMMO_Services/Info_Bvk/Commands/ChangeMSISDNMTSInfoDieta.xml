@@ -1,0 +1,9 @@
+<Command Name="ChangeMSISDNMTSInfoDieta" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>ChangeMSISDNMTSInfoDieta</Description>
+  <Author Name="NNM" Date="2019-06-17+10:50" />
+  <Request Template="api/change/?old_msisdn={0}&amp;new_msisdn={1}&amp;frcode=FR16617">
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="NewMSISDN" Type="Parameter" />
+  </Request>
+  <ErrorsList CodePage="ascii" />
+</Command>

@@ -1,0 +1,12 @@
+<OperationData Name="AddFR12176onRT" NEType="RT" NEAlias="RT">
+  <Request Name="RequestMessage">
+    <AdditionalData Executable="True">
+      <SourceType HaltMode="CancelOperation" Type="Mandatory" />
+      <ProvisionList HaltMode="AbortProcess" Type="AnyOfListed">
+        <FR12176 HaltMode="CancelOperation" Type="Mandatory" />
+      </ProvisionList>
+      <RegisteredList HaltMode="AbortProcess" Type="Mandatory" />
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage" />
+</OperationData>

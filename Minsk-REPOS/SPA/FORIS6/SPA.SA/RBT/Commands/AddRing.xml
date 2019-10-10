@@ -1,0 +1,8 @@
+<Command Name="AddRing" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Добавление мелодии на номере</Description>
+  <Author Name="Yatskovski A." Date="2009-05-22+16:45" />
+  <Request Template="PRC-SUBSCR-MELODY-ADD&amp;MSISDN={0}&amp;MELODY_ID=100000000000000000000013716&amp;CHARGED={0}&amp;CHANNEL=BS">
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ASCII" />
+</Command>

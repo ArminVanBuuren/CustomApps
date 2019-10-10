@@ -1,0 +1,8 @@
+<Command Name="DeleteBAICRestr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>&gt;Удаление ограничения входящей связи</Description>
+  <Author Name="YAI" Date="2011-09-21+12:18" />
+  <Request Template="MOD CB: ISDN=&quot;{0}&quot;, BAIC=FALSE;^JMOD CBCOU: ISDN=&quot;{0}&quot;, COU=SUBSCRIBER;">
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ASCII" />
+</Command>

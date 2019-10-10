@@ -1,0 +1,22 @@
+<Command Name="AddDBLGiftQuota100mb" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Добавление услуги</Description>
+  <Author Name="YAI" Date="2015-11-09+10:21" />
+  <Request Template="&lt;se:Envelope xmlns:se=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;&gt;
+&lt;se:Body&gt;
+&lt;AddServiceRequest xmlns=&quot;http://broadhop.com/unifiedapi/soap/types&quot;&gt;
+&lt;audit&gt;
+&lt;id&gt;SPA1&lt;/id&gt;
+&lt;comment&gt;SPA.Activator&lt;/comment&gt;
+&lt;/audit&gt;
+&lt;networkId&gt;{0}&lt;/networkId&gt;
+&lt;service&gt;
+&lt;code&gt;FR12561&lt;/code&gt;
+&lt;enabled&gt;true&lt;/enabled&gt;
+&lt;/service&gt;
+&lt;/AddServiceRequest&gt;
+&lt;/se:Body&gt;
+&lt;/se:Envelope&gt;">
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ASCII" />
+</Command>

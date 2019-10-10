@@ -1,0 +1,11 @@
+<OperationData Name="AddFR12194onMU" NEType="MU" NEAlias="MU">
+  <Request Name="RequestMessage">
+    <AdditionalData Executable="True">
+      <SourceType HaltMode="CancelOperation" Type="Mandatory" />
+      <ProvisionList HaltMode="AbortProcess" Type="AnyOfListed">
+        <FR12194 HaltMode="CancelOperation" Type="Mandatory" />
+      </ProvisionList>
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage" />
+</OperationData>

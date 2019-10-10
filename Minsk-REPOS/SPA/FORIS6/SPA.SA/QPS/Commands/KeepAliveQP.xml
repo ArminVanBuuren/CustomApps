@@ -1,0 +1,11 @@
+<Command Name="KeepAliveQP" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>KeepAliveQP</Description>
+  <Author Name="YAI" Date="2013-11-26+13:41" />
+  <Request Template="&lt;soapenv:Envelope xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:typ=&quot;http://broadhop.com/unifiedapi/soap/types&quot;&gt;
+&lt;soapenv:Header/&gt;
+&lt;soapenv:Body&gt;
+&lt;typ:KeepAliveRequest/&gt;
+&lt;/soapenv:Body&gt;
+&lt;/soapenv:Envelope&gt;" />
+  <ErrorsList CodePage="ASCII" />
+</Command>

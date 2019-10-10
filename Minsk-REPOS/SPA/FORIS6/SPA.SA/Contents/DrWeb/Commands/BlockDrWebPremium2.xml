@@ -1,0 +1,12 @@
+<Command Name="BlockDrWebPremium2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Service</Description>
+  <Author Name="YAI" Date="2016-03-10+09:50" />
+  <Request Template="&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;billing version=&quot;1.0&quot;&gt;
+&lt;customer&gt;{0}&lt;/customer&gt;
+&lt;service&gt;FR11812&lt;/service&gt;	
+&lt;/billing&gt;">
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ascii" />
+</Command>

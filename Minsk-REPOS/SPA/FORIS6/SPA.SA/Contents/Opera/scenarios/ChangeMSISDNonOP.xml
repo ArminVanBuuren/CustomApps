@@ -1,0 +1,143 @@
+<scenario name="ChangeMSISDNonOP">
+  <objectList>
+    <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll" />
+    <object name="IfHttpCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+    <object name="HttpCmd" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+  </objectList>
+  <automat>
+    <node name="BySubscribersSplitter" object="BySubscribersSplitter">
+      <resultlist>
+        <result value="0" node="BySubscriberRequestDequeuer" />
+      </resultlist>
+      <parameterslist>
+        <param name="queueName" value="requestsSplittedBySubscriberQueue" />
+      </parameterslist>
+    </node>
+    <node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+      <resultlist>
+        <result value="0" node="ChangeMSISDNAppNODE" />
+        <result value="1" node="" />
+      </resultlist>
+      <parameterslist>
+        <param name="queueName" value="requestsSplittedBySubscriberQueue" />
+      </parameterslist>
+    </node>
+    <node name="ChangeMSISDNAppNODE" object="IfCommander">
+      <resultlist>
+        <result value="0" node="ChangeMSISDNKidsNODE" />
+        <result value="1538" node="ChangeMSISDNKidsNODE" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="Command" value="ChangeMsisdn" />
+        <param name="Script" value="Command" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11647" />
+      </parameterslist>
+    </node>
+    <node name="ChangeMSISDNKidsNODE" object="IfCommander">
+      <resultlist>
+        <result value="0" node="ChangeMSISDNFitnessNODE" />
+        <result value="1538" node="ChangeMSISDNFitnessNODE" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="Command" value="ChangeMsisdnKids" />
+        <param name="Script" value="Command" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR15719" />
+      </parameterslist>
+    </node>
+    <node name="ChangeMSISDNFitnessNODE" object="IfCommander">
+      <resultlist>
+        <result value="0" node="ChangeMSISDN404Node" />
+        <result value="1538" node="ChangeMSISDN404Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="Command" value="ChangeMsisdnFitness" />
+        <param name="Script" value="Command" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16286" />
+      </parameterslist>
+    </node>
+    <node name="ChangeMSISDN404Node" object="IfMultipleXmlConditionsResolver">
+      <resultlist>
+        <result value="0" node="Delete404oldMSISDNServiceNode" />
+        <result value="1" node="DummyResponderNode" />
+      </resultlist>
+      <parameterslist>
+        <param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR12655" />
+      </parameterslist>
+    </node>
+    <node name="Delete404oldMSISDNServiceNode" object="HttpCmd">
+      <resultlist>
+        <result value="0" node="Add404newMSISDNServiceNode" />
+        <result value="1538" node="Add404newMSISDNServiceNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="mtsopera404/" />
+        <param name="Command" value="DeleteService404" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="10.128.213.41" />
+        <param name="Connection.Port" value="89" />
+        <param name="Connection.MethodName" value="GET" />
+        <param name="Connection.Method" value="GET" />
+        <param name="Connection.ContentType" value="text/html;charset=UTF-8" />
+      </parameterslist>
+    </node>
+    <node name="Add404newMSISDNServiceNode" object="HttpCmd">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="mtsopera404/" />
+        <param name="Command" value="ChangeMsisdn404" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="10.128.213.41" />
+        <param name="Connection.Port" value="89" />
+        <param name="Connection.MethodName" value="GET" />
+        <param name="Connection.Method" value="GET" />
+        <param name="Connection.ContentType" value="text/html;charset=UTF-8" />
+      </parameterslist>
+    </node>
+    <node name="DummyResponderNode" object="DummyResponder">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="OverallResult" value="SUCCESS" />
+        <param name="DetailedResult" value="SUCCESS" />
+        <param name="Delay" value="0" />
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="BySubscriberRequestDequeuer" />
+      </resultlist>
+    </node>
+  </automat>
+</scenario>

@@ -1,0 +1,8 @@
+<Command Name="AddCB265" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>&gt;Добавление Запрет Вызова</Description>
+  <Author Name="YAI" Date="2011-09-14+12:18" />
+  <Request Template="MOD CB: ISDN=&quot;{0}&quot;, BAOC=TRUE, BOIC=TRUE, BOICEXHC=TRUE, BORO=FALSE, BAIC=TRUE, BICROM=TRUE;">
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ASCII" />
+</Command>

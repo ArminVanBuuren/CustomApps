@@ -1,0 +1,8 @@
+<Command Name="AddCB108" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Добавление Международного доступа на HLR HUAWEI</Description>
+  <Author Name="YAI" Date="2011-09-07+12:18" />
+  <Request Template="MOD ODBOC: IMSI=&quot;{0}&quot;,ODBOC=NOBOC;">
+    <Item Name="imsi" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ASCII" />
+</Command>

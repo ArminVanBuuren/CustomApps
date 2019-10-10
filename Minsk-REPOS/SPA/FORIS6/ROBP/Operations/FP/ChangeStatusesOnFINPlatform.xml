@@ -1,0 +1,34 @@
+<OperationData Name="ChangeStatusesOnFINPlatform" NEType="FP" NEAlias="FP">
+  <Request Name="ExtendedRequestMessage">
+    <AdditionalData>
+      <PaStatus Type="Optional">
+        <Status HaltMode="AbortProcess" Type="Mandatory" />
+        <BalanceStatus HaltMode="AbortProcess" Type="Mandatory" />
+        <BlockStatus HaltMode="AbortProcess" Type="Mandatory" />
+        <AdminBlockedDate Type="Optional" />
+        <BlockedEndDate Type="Optional" />
+      </PaStatus>
+      <TdStatus Type="Optional">
+        <Status Type="Optional" />
+        <BlockStatus Type="Optional" />
+        <AdminBlockedDate Type="Optional" />
+      </TdStatus>
+      <ProvisionList Type="Optional" Copy="CopyAll" />
+      <RegisteredList Type="Optional" Copy="CopyAll" />
+      <WithdrawalList HaltMode="CancelOperation" Type="AnyOfListed">
+        <FRBLKINIT Type="Mandatory" />
+      </WithdrawalList>
+      <ExternalServiceProviderCode Type="Optional" />
+      <BalanceStorage Type="Optional">
+        <HostTypeCode Type="Optional" />
+        <HostId Type="Optional" />
+        <HostCode Type="Optional" />
+      </BalanceStorage>
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage">
+    <AdditionalData>
+      <SubscribersDataList Type="Optional" Copy="CopyAll" />
+    </AdditionalData>
+  </Response>
+</OperationData>

@@ -1,0 +1,14 @@
+<Command Name="DeleteServicePBS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Delete Service</Description>
+  <Author Name="YAI" Date="2017-02-20+10:50" />
+  <Request Template="login=mtsBel&amp;password=KfhToAFnrB&amp;msisdn={0}">
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ascii">
+    <Error Name="&quot;code&quot;:0" Value="SUCCESS" />
+    <Error Name="&quot;code&quot;:100" Value="FAILURE" />
+    <Error Name="&quot;code&quot;:102" Value="FAILURE" />
+    <Error Name="&quot;code&quot;:104" Value="MsisdnAlreadyDefined" />
+    <Error Name="&quot;code&quot;:105" Value="FAILURE" />
+  </ErrorsList>
+</Command>

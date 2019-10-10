@@ -1,0 +1,13 @@
+<OperationData Name="DeleteCallForwardingToVM" NEType="HL" NEAlias="HL">
+  <Request Name="RequestMessage">
+    <AdditionalData Executable="True">
+      <WithdrawalList HaltMode="CancelOperation" Type="AnyOfListed">
+        <CB21 HaltMode="CancelOperation" Type="Optional" />
+        <CB22 HaltMode="CancelOperation" Type="Optional" />
+        <CB401049 HaltMode="CancelOperation" Type="Optional" />
+      </WithdrawalList>
+      <RegisteredList Type="Optional" />
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage" />
+</OperationData>

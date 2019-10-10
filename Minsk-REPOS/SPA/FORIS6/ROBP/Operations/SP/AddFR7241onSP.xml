@@ -1,0 +1,10 @@
+<OperationData Name="AddFR7241onSP" NEType="SP" NEAlias="SP">
+  <Request Name="RequestMessage">
+    <AdditionalData Executable="True">
+      <ProvisionList HaltMode="AbortProcess" Type="AnyOfListed">
+        <FR7241 HaltMode="CancelOperation" Type="Mandatory" />
+      </ProvisionList>
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage" />
+</OperationData>

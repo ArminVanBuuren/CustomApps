@@ -1,0 +1,34 @@
+<BusinessProcessData name="Change tariff plan in All platform">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="BPMProcessingUnit" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="SCProcessingUnit" object="SCProcessingUnit">
+          <parameterslist />
+          <resultlist>
+            <result value="" node="ChangeTPOnFINPlatform" />
+          </resultlist>
+        </node>
+        <node name="ChangeTPOnFINPlatform" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="ChangeTPOnFINPlatform" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeTPOnBMSPlatform" />
+          </resultlist>
+        </node>
+        <node name="ChangeTPOnBMSPlatform" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="ChangeTPOnBMSPlatform" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

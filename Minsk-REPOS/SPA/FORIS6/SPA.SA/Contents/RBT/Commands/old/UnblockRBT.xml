@@ -1,0 +1,9 @@
+<Command Name="UnblockRBT" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Разблокирование абонента</Description>
+  <Author Name="Alexey BAdulin" Date="2006-09-27+11:41" />
+  <Request Template="CommandCode=UNBLOCK&amp;MSISDN={0}&amp;MacroRegion=MRGCE&amp;NewMSISDN=&amp;MDateTime={1:ddMMyyyyHHmmss}">
+    <Item Name="msisdn.fn" Type="Wellknown" />
+    <Item Name="datetime" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ASCII" />
+</Command>

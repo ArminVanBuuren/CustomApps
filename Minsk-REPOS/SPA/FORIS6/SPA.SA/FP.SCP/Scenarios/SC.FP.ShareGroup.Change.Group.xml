@@ -1,0 +1,142 @@
+<scenario name="SC.FP.ShareGroup.Change.Group">
+  <description>Изменение группы</description>
+  <objectList>
+    <object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="FPCommandDataConstructor" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.FPProcessingUnits.FPCommandDataConstructor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
+    <object name="ConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+    <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="XmlNodesEraser" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesEraser" assembly="FORIS.SPA.SPF.dll" />
+  </objectList>
+  <automat>
+    <node name="EraseSDPCounters" object="XmlNodesEraser">
+      <resultlist>
+        <result value="" node="BySubscribersCutter" />
+      </resultlist>
+      <parameterslist>
+        <param name="SrcObjectName" value="request" />
+        <param name="DstObjectName" value="request" />
+        <param name="DstXmlName" value="xmlrequest" />
+        <param name="EraseXmlPath:0" value="//AdditionalData//ShareGroupLimitList/*[CounterCode[.='SDP_COUNTER_DEF']]" />
+      </parameterslist>
+    </node>
+    <node name="BySubscribersCutter" object="BySubscribersCutter">
+      <resultlist>
+        <result value="0" node="CreateCondition" />
+        <result value="1" node="" />
+      </resultlist>
+    </node>
+    <node name="CreateCondition" object="ConditionsResolver">
+      <resultlist>
+        <result value="0" node="SwitchAction" />
+        <result value="" node="CommandDataConstructor-Create" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//GroupMemberOperation/Value[text()!='']" />
+      </parameterslist>
+    </node>
+    <node name="SwitchAction" object="Switch">
+      <resultlist>
+        <result value="0" node="ResponseAssembler"/>
+        <result value="1" node="ResponseAssembler"/>
+        <result value="2" node="CommandDataConstructor-Modify"/>
+        <result value="3" node="Commander-Delete"/>
+      </resultlist>
+      <parameterslist>
+        <param name="XmlPath" value="//GroupMemberOperation/Value"/>
+        <param name="Value:2" value="Modify"/>
+        <param name="Value:3" value="Remove"/>
+      </parameterslist>
+    </node>
+    <node name="CommandDataConstructor-Create" object="FPCommandDataConstructor">
+      <resultlist>
+        <result value="0" node="Commander-Create" />
+        <result value="1538" node="Commander-Create" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="ServicesDynamicObject" value="Limits" />
+        <param name="ServicesCommand" value="ShareGroup.LimitRow" />
+        <param name="XmlPath" value="//AdditionalData//ShareGroupLimitList/*" />
+      </parameterslist>
+    </node>
+    <node name="Commander-Create" object="Commander">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//AdditionalData//ShgAvailableOnFP/Value[text()='1']" />
+        <param name="Command" value="ShareGroupCreate" />
+        <param name="AppendSubscribersData" value="true" />
+      </parameterslist>
+    </node>
+
+    <node name="CommandDataConstructor-Modify" object="FPCommandDataConstructor">
+      <resultlist>
+        <result value="0" node="Commander-Modify" />
+        <result value="1538" node="Commander-Modify" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="ServicesDynamicObject" value="Limits" />
+        <param name="ServicesCommand" value="ShareGroup.LimitRow" />
+        <param name="XmlPath" value="//AdditionalData//ShareGroupLimitList/*[not(CounterOperation) or CounterOperation[.!='Remove']]" />
+      </parameterslist>
+    </node>
+    <node name="Commander-Modify" object="Commander">
+      <resultlist>
+        <result value="0" node="CommandDataConstructor-ModifyRemoveCounters" />
+        <result value="1538" node="CommandDataConstructor-ModifyRemoveCounters" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//AdditionalData//ShgAvailableOnFP/Value[text()='1']" />
+        <param name="IfXmlPath:1" value="(//AdditionalData//ShareGroupLimitList/*[not(CounterOperation) or CounterOperation[.!='Remove']])[1]" />
+        <param name="Command" value="ShareGroupModify" />
+        <param name="AppendSubscribersData" value="true" />
+      </parameterslist>
+    </node>
+
+    <node name="CommandDataConstructor-ModifyRemoveCounters" object="FPCommandDataConstructor">
+      <resultlist>
+        <result value="0" node="Commander-ModifyRemoveCounters" />
+        <result value="1538" node="Commander-ModifyRemoveCounters" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="ServicesDynamicObject" value="Limits" />
+        <param name="ServicesCommand" value="ShareGroup.LimitRow" />
+        <param name="XmlPath" value="//AdditionalData//ShareGroupLimitList/*[CounterOperation[.='Remove']]" />
+      </parameterslist>
+    </node>
+    <node name="Commander-ModifyRemoveCounters" object="Commander">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//AdditionalData//ShgAvailableOnFP/Value[text()='1']" />
+        <param name="IfXmlPath:1" value="(//AdditionalData//ShareGroupLimitList/*[CounterOperation[.='Remove']])[1]" />
+        <param name="Command" value="ShareGroupModifyRemoveCounters" />
+        <param name="AppendSubscribersData" value="true" />
+      </parameterslist>
+    </node>
+
+    <node name="Commander-Delete" object="Commander">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//AdditionalData//ShgAvailableOnFP/Value[text()='1']" />
+        <param name="Command" value="ShareGroupDelete" />
+        <param name="AppendSubscribersData" value="true" />
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="BySubscribersCutter" />
+      </resultlist>
+    </node>
+  </automat>
+</scenario>

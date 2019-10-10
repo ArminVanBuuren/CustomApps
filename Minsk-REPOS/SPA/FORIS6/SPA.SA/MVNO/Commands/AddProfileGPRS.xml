@@ -1,0 +1,10 @@
+<Command Name="AddProfileGPRS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>&gt;Добавление GPRS профиль BELTELECOM.BY</Description>
+  <Author Name="YAI" Date="2011-09-14+12:18" />
+  <Request Template="MOD OPTGPRS: IMSI=&quot;{0}&quot;, PROV=ADDPDPCNTX, APNTPLID=17, QOSTPLID=1, PDPTYPE=IPV4, ADDIND=DYNAMIC, VPLMN=FALSE, CHARGE=NORMAL;">
+    <Item Name="imsi" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ASCII">
+    <Error Name="ERR3197" Value="SUCCESS" />
+  </ErrorsList>
+</Command>

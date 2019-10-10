@@ -1,0 +1,10 @@
+<OperationData Name="DeleteFR5596onSD" NEType="SD" NEAlias="SD">
+  <Request Name="RequestMessage">
+    <AdditionalData Executable="True">
+      <WithdrawalList HaltMode="AbortProcess" Type="AnyOfListed">
+        <FR5596 HaltMode="CancelOperation" Type="Mandatory" />
+      </WithdrawalList>
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage" />
+</OperationData>

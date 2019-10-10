@@ -1,0 +1,16 @@
+<Command Name="UnBlock" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Delete Block Gudok</Description>
+  <Author Name="YAI" Date="2013-08-28+10:50" />
+  <Request Template="&lt;soapenv:Envelope xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:ns=&quot;http://172.17.105.182/&quot;&gt;
+&lt;soapenv:Header/&gt;
+&lt;soapenv:Body&gt;
+&lt;ns:setBlockState soapenv:encodingStyle=&quot;http://schemas.xmlsoap.org/soap/encoding/&quot;&gt;
+&lt;msisdn xsi:type=&quot;xsd:string&quot;&gt;{0}&lt;/msisdn&gt;
+&lt;state xsi:type=&quot;xsd:string&quot;&gt;0&lt;/state&gt;
+&lt;/ns:setBlockState&gt;
+&lt;/soapenv:Body&gt;
+&lt;/soapenv:Envelope&gt;">
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ASCII" />
+</Command>

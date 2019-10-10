@@ -1,0 +1,8 @@
+<Command Name="UnBlockFull" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>&gt;Блокировка входящей и исходящей связи c GPRS на HLR HUAWEI</Description>
+  <Author Name="YAI" Date="2011-09-07+12:18" />
+  <Request Template="MOD LCK: ISDN=&quot;{0}&quot;, IC=FALSE, OC=FALSE, GPRSLOCK=FALSE;">
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ASCII" />
+</Command>

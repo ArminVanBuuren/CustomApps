@@ -1,0 +1,47 @@
+<Configuration>
+  <serviceInstances>
+    <serviceInstance hardwareID="PS:1849">
+      <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
+        <fileScenarioSource dir="..\SPA.SA\PlatformSubscription\Scenarios" />
+      </scenarioSource>
+      <socketList poolSize="10" maxConnections="10" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="500" periodDuration="20" autoconnect="1" reconfigurationTimeout="0">
+        <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
+          <config workingmode="wmPermanentEmulation">
+            <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
+              <config>
+                <ParametersList>
+                  <Parameter Key="Host" Value="127.0.0.1" />
+                  <!--Parameter Key="Host" Value="10.128.193.238"/-->
+                  <Parameter Key="Port" Value="9107" />
+                  <Parameter Key="Url" Value="" />
+                  <Parameter Key="MethodName" Value="POST" />
+                  <Parameter Key="Method" Value="POST" />
+                  <Parameter Key="ContentType" Value="text/xml; charset=utf-8" />
+                  <Parameter Key="Authorization" Value="Basic" />
+                  <Parameter Key="ParameterName" Value="" />
+                </ParametersList>
+              </config>
+            </socket>
+            <Emulation Success=" 200 OK" Failure="500" RandomizePrintout="false" OverwriteCommandPrintout="true" Lifetime="00:00:00.00" />
+            <Timers IdleTimeout="6000" />
+            <PredefinedScripts Login="Login" Command="Command" Idle="" Logoff="" />
+            <ScriptsList>
+              <Script Name="Login" Path="..\SPA.SA\PlatformSubscription\Scripts\Login.xml" />
+              <Script Name="Logoff" Path="..\SPA.SA\PlatformSubscription\Scripts\logoff.xml" />
+              <Script Name="Command" Path="..\SPA.SA\PlatformSubscription\Scripts\Command.xml" />
+              <Script Name="NoSleep" Path="..\SPA.SA\PlatformSubscription\Scripts\nosleep.xml" />
+            </ScriptsList>
+          </config>
+        </socket>
+      </socketList>
+      <context>
+        <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
+          <config path="..\SPA.SA\PlatformSubscription" xml="Dictionary.xml" />
+        </object>
+        <object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
+          <fileTableSource path="..\SPA.SA\PlatformSubscription\Misc" xml="RepetitionTable.xml" />
+        </object>
+      </context>
+    </serviceInstance>
+  </serviceInstances>
+</Configuration>

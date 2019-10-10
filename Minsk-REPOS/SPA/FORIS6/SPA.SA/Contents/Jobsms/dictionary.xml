@@ -1,0 +1,25 @@
+<Dictionary>
+  <WellknownsList>
+    <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)" />
+  </WellknownsList>
+  <ErrorsList CodePage="ASCII">
+    <Error Name="&quot;error_code&quot;:0" Value="SUCCESS" />
+    <Error Name="&quot;error_code&quot;:12" Value="FAILURE" />
+    <Error Name="&quot;error_code&quot;:22" Value="FAILURE" />
+    <Error Name="&quot;error_code&quot;:25" Value="FAILURE" />
+    <Error Name="&quot;error_code&quot;:23" Value="FAILURE" />
+    <Error Name="&quot;error_code&quot;:24" Value="FAILURE" />
+  </ErrorsList>
+  <RegexpsList />
+  <ConstantsList />
+  <ParametersList>
+    <Parameter Name="NewMSISDN">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//NewMSISDN" />
+      <PossibleValues StringToKeyTable="true" />
+    </Parameter>
+  </ParametersList>
+  <DynamicParametersList />
+  <CommandsList Root="C:\FORIS\SPA\SPA.SA\Contents\Jobsms\Commands" Mask="*.xml">
+    <!-- All new commands are included by Mask=*.xml attribute -->
+  </CommandsList>
+</Dictionary>

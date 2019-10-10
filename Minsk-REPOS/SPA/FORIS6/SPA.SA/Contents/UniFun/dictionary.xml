@@ -1,0 +1,21 @@
+<Dictionary>
+  <WellknownsList>
+    <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)" />
+  </WellknownsList>
+  <ErrorsList CodePage="ASCII">
+    <Error Name="&lt;result&gt;1&lt;/result&gt;" Value="SUCCESS" />
+    <Error Name="&lt;result&gt;0&lt;/result&gt;" Value="FAILURE" />
+    <Error Name="&lt;result&gt;2&lt;/result&gt;" Value="UnregisteredServiceCode" />
+    <Error Name="&lt;result&gt;3&lt;/result&gt;" Value="ConnectionError" />
+  </ErrorsList>
+  <ParametersList>
+    <Parameter Name="NewMSISDN">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//NewMSISDN" />
+      <PossibleValues StringToKeyTable="true" />
+    </Parameter>
+  </ParametersList>
+  <DynamicParametersList />
+  <CommandsList Root="C:\FORIS\SPA\SPA.SA\Contents\UniFun\Commands" Mask="*.xml">
+    <!-- All new commands are included by Mask=*.xml attribute -->
+  </CommandsList>
+</Dictionary>

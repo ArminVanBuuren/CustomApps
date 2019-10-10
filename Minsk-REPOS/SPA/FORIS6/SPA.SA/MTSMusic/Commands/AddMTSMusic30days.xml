@@ -1,0 +1,8 @@
+<Command Name="AddMTSMusic30days" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Добавление МТС Музыка 30 дней</Description>
+  <Author Name="YAI" Date="2019-08-26+15:21" />
+  <Request Template="{{&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;method&quot;:&quot;activate&quot;,&quot;params&quot;:{{&quot;msisdn&quot;:&quot;{0}&quot;,&quot;serviceCode&quot;:&quot;FR17087&quot;}},&quot;description&quot;:&quot;activate&quot;}}">
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ASCII" />
+</Command>

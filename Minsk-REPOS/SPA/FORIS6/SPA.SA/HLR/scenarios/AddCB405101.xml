@@ -1,0 +1,249 @@
+<scenario name="AddCB405101">
+  <objectList>
+    <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll" />
+    <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
+  </objectList>
+  <automat>
+    <node name="BySubscribersSplitter" object="BySubscribersSplitter">
+      <resultlist>
+        <result value="0" node="BySubscriberRequestDequeuer" />
+      </resultlist>
+      <parameterslist>
+        <param name="queueName" value="requestsSplittedBySubscriberQueue" />
+      </parameterslist>
+    </node>
+    <node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+      <resultlist>
+        <result value="0" node="AddCB573Node" />
+        <result value="1" node="" />
+      </resultlist>
+      <parameterslist>
+        <param name="queueName" value="requestsSplittedBySubscriberQueue" />
+      </parameterslist>
+    </node>
+    <node name="AddCB573Node" object="Commander">
+      <resultlist>
+        <result value="0" node="Add_TS61Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="Add_BS26" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="Add_TS61Node" object="Commander">
+      <resultlist>
+        <result value="0" node="DeleteCB532Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="Add_TS61" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="DeleteCB532Node" object="Commander">
+      <resultlist>
+        <result value="0" node="IfConditionCB410153ResolverNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="DeleteCB532" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="IfConditionCB410153ResolverNode" object="IfConditionXmlResolver">
+      <resultlist>
+        <result value="0" node="UnBlockGPRSNode" />
+        <result value="1" node="Add_CB_OCNode" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="request" />
+        <param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB410153" />
+        <param name="Value:1" value="" />
+      </parameterslist>
+    </node>
+    <node name="UnBlockGPRSNode" object="Commander">
+      <resultlist>
+        <result value="0" node="AddProfileGPRSNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="UnBlockGPRS" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="AddProfileGPRSNode" object="Commander">
+      <resultlist>
+        <result value="0" node="AddProfileGPRSLTENode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="AddProfileGPRS" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="AddProfileGPRSLTENode" object="Commander">
+      <resultlist>
+        <result value="0" node="Add_CB_OCNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="AddProfileGPRSLTE" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="Add_CB_OCNode" object="Commander">
+      <resultlist>
+        <result value="0" node="CB_OC_act_ts11Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="Add_CB_OC" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="CB_OC_act_ts11Node" object="Commander">
+      <resultlist>
+        <result value="0" node="CB_OC_act_bs26Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="CB_OC_act_ts1x" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="CB_OC_act_bs26Node" object="Commander">
+      <resultlist>
+        <result value="0" node="CB_OC_act_ts61Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="CB_OC_act_bs2x" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="CB_OC_act_ts61Node" object="Commander">
+      <resultlist>
+        <result value="0" node="Add_CB_ICNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="CB_OC_act_ts6x" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="Add_CB_ICNode" object="Commander">
+      <resultlist>
+        <result value="0" node="CB_IC_act_ts11Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="Add_CB_IC" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="CB_IC_act_ts11Node" object="Commander">
+      <resultlist>
+        <result value="0" node="CB_IC_act_bs26Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="CB_IC_act_ts1x" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="CB_IC_act_bs26Node" object="Commander">
+      <resultlist>
+        <result value="0" node="CB_IC_act_ts61Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="CB_IC_act_bs2x" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="CB_IC_act_ts61Node" object="Commander">
+      <resultlist>
+        <result value="0" node="CB_ctrl_operatorNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="CB_IC_act_ts6x" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="CB_ctrl_operatorNode" object="Commander">
+      <resultlist>
+        <result value="0" node="AddCB266Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="CB_ctrl_operator" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="AddCB266Node" object="Commander">
+      <resultlist>
+        <result value="0" node="AddFR10485Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="AddCB266" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="AddFR10485Node" object="IfCommander">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR10485" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="DeleteSMSO" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="BySubscriberRequestDequeuer" />
+      </resultlist>
+    </node>
+  </automat>
+</scenario>

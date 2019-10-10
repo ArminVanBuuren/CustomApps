@@ -1,0 +1,8 @@
+<Command Name="CreateActivateCFNRC29" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>&gt;Добавление Переадресации вызова (по недоступности) на 110110</Description>
+  <Author Name="YAI" Date="2011-10-04+12:18" />
+  <Request Template="REG CFNRC: ISDN=&quot;{0}&quot;, FTN=&quot;substr({1},0,6)110110&quot;, PROPERTY=INTERNATIONAL, BSG=TS1X;">
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ASCII" />
+</Command>

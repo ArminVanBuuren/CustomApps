@@ -1,0 +1,12 @@
+<OperationData Name="DeleteCUGLG" NEType="HL" NEAlias="HL">
+  <Request Name="RequestMessage">
+    <AdditionalData Executable="True">
+      <BalanceStorage HaltMode="AbortProcess" Type="Optional" />
+      <WithdrawalList HaltMode="AbortProcess" Type="AnyOfListed">
+        <CUGLG HaltMode="CancelOperation" Type="Mandatory" />
+      </WithdrawalList>
+      <RegisteredList Type="Optional" />
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage" />
+</OperationData>

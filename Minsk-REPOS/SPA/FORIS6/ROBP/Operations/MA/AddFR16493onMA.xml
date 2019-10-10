@@ -1,0 +1,12 @@
+<OperationData Name="AddFR16493onMA" NEType="MA" NEAlias="MA">
+  <Request Name="RequestMessage">
+    <AdditionalData Executable="True">
+      <SourceType HaltMode="CancelOperation" Type="Mandatory" />
+      <ProvisionList HaltMode="AbortProcess" Type="AnyOfListed">
+        <FR16493 HaltMode="CancelOperation" Type="Mandatory" />
+      </ProvisionList>
+      <RegisteredList Type="Optional" />
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage" />
+</OperationData>

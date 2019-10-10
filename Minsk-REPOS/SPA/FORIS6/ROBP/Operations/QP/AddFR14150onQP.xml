@@ -1,0 +1,11 @@
+<OperationData Name="AddFR14150onQP" NEType="QP" NEAlias="QP">
+  <Request Name="RequestMessage">
+    <AdditionalData Executable="True">
+      <ProvisionList HaltMode="AbortProcess" Type="AnyOfListed">
+        <FR14150 HaltMode="CancelOperation" Type="Mandatory" />
+      </ProvisionList>
+      <RegisteredList Type="Optional" />
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage" />
+</OperationData>

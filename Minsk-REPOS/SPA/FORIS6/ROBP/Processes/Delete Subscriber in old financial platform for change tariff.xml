@@ -1,0 +1,40 @@
+<BusinessProcessData name="Delete Subscriber in old financial platform for change tariff" successOnNoOperation="true">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="ImplicitHostRedirectingProcessor" class="FORIS.ServiceProvisioning.BPM.ImplicitHostRedirectingProcessor" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+        <object name="DummyResponder" class="FORIS.ScenarioProcessing.CommonUnits.ConditionalDummyResultCreator" assembly="FORIS.SPA.SPF.dll" />
+      </objectlist>
+      <automat>
+        <node name="NoBalanceStorageCheck" object="IfMultipleXmlConditionsResolver">
+          <parameterslist>
+            <param name="XmlNameInContext" value="$XmlRequest" />
+            <param name="IfXmlPath:0" value="//AdditionalData/BalanceStorage" />
+          </parameterslist>
+          <resultlist>
+            <result value="0" node="SCProcessingUnit" />
+            <result value="" node="NoBalanceStorageError" />
+          </resultlist>
+        </node>
+        <node name="NoBalanceStorageError" object="DummyResponder">
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+          <parameterslist>
+            <param name="XmlNameInContext" value="$XmlRequest" />
+            <param name="DetailedResult" value="1" />
+            <param name="DetailedResultDescription" value="Тег 'BalanceStorage' обязателен в данном процессе, так как абонента нет в RI. WI: 1323395" />
+          </parameterslist>
+        </node>
+        <node name="SCProcessingUnit" object="SCProcessingUnit">
+          <parameterslist />
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

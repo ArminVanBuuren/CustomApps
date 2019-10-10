@@ -1,0 +1,112 @@
+<scenario name="ChangeMSISDNonQP">
+  <objectList>
+    <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll" />
+    <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+  </objectList>
+  <automat>
+    <node name="BySubscribersSplitter" object="BySubscribersSplitter">
+      <resultlist>
+        <result value="0" node="BySubscriberRequestDequeuer" />
+      </resultlist>
+      <parameterslist>
+        <param name="queueName" value="requestsSplittedBySubscriberQueue" />
+      </parameterslist>
+    </node>
+    <node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+      <resultlist>
+        <result value="0" node="SwitchNDCNode" />
+        <result value="1" node="" />
+      </resultlist>
+      <parameterslist>
+        <param name="queueName" value="requestsSplittedBySubscriberQueue" />
+      </parameterslist>
+    </node>
+    <node name="SwitchNDCNode" object="Switch">
+      <resultlist>
+        <result value="1" node="DummyResponderNode" />
+        <result value="2" node="ChangeMSISDNNode" />
+        <result value="3" node="ChangeMSISDNNode" />
+        <result value="4" node="ChangeMSISDNNode" />
+        <result value="5" node="ChangeMSISDNNode" />
+      </resultlist>
+      <parameterslist>
+        <param name="XmlPath" value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,0,5)" />
+        <param name="Value:2" value="37525" />
+        <param name="Value:3" value="37529" />
+        <param name="Value:4" value="37533" />
+        <param name="Value:5" value="37544" />
+      </parameterslist>
+    </node>
+    <node name="ChangeMSISDNNode" object="Commander">
+      <resultlist>
+        <result value="1797" node="DeleteNewMSISDNNode" />
+        <result value="1800" node="Change2MSISDNNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="ChangeMSISDN" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="DeleteNewMSISDNNode" object="Commander">
+      <resultlist>
+        <result value="0" node="ChangeMSISDNNode2" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="DeleteNewMSISDN" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="Change2MSISDNNode" object="Commander">
+      <resultlist>
+        <result value="0" node="ChangeMSISDNNode2" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="ChangeMSISDN2" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="ChangeMSISDNNode2" object="Commander">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="ChangeMSISDN" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="DummyResponderNode" object="DummyResponder">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="OverallResult" value="SUCCESS" />
+        <param name="DetailedResult" value="SUCCESS" />
+        <param name="Delay" value="0" />
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="BySubscriberRequestDequeuer" />
+      </resultlist>
+    </node>
+  </automat>
+</scenario>

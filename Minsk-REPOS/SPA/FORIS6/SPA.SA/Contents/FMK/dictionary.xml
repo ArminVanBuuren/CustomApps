@@ -1,0 +1,23 @@
+<Dictionary>
+  <WellknownsList>
+    <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)" />
+  </WellknownsList>
+  <ErrorsList CodePage="ASCII">
+    <Error Name="&quot;status&quot;:0" Value="SUCCESS" />
+    <Error Name="&quot;status&quot;:1" Value="FAILURE" />
+    <Error Name="503 Service Temporarily" Value="HardwareConnectionError" />
+    <Error Name="502 Bad Gateway" Value="HardwareConnectionError" />
+  </ErrorsList>
+  <RegexpsList />
+  <ConstantsList />
+  <ParametersList>
+    <Parameter Name="NewMSISDN">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//NewMSISDN" />
+      <PossibleValues StringToKeyTable="true" />
+    </Parameter>
+  </ParametersList>
+  <DynamicParametersList />
+  <CommandsList Root="C:\FORIS\SPA\SPA.SA\Contents\FMK\Commands" Mask="*.xml">
+    <!-- All new commands are included by Mask=*.xml attribute -->
+  </CommandsList>
+</Dictionary>

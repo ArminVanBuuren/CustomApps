@@ -1,0 +1,34 @@
+<Command Name="Block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Добавление блокировки </Description>
+  <Author Name="YAI" Date="2012-06-22+15:50" />
+  <Properties GenerationType="Database" />
+  <Request Template="function spa_func.f_add_request({0},{1},{2},{3}) return number">
+    <Item Name="MSISDN" Type="DatabaseParameter" />
+    <Item Name="ServiceID" Type="LocalDatabaseParameter" />
+    <Item Name="Action" Type="LocalDatabaseParameter" />
+    <Item Name="add_param" Type="DatabaseParameter" />
+  </Request>
+  <DatabaseParametersList>
+    <DatabaseParameter Name="ServiceID">
+      <Properties DatabaseArgumentName="service_id" DatabaseArgumentType="number" />
+      <Source Path="/ExtendedRequestMessage/ActionName" />
+      <PossibleValues StringToKeyTable="false">
+        <Item Key="AddBLTDLIMonDB" StringValue="12533" />
+        <Item Key="AddCBBLKLOSTonDB" StringValue="6321" />
+        <Item Key="AddFRBLKCHKonDB" StringValue="6323" />
+        <Item Key="AddFRBLKFINonDB" StringValue="6320" />
+        <Item Key="AddFRBLKKEEPonDB" StringValue="11472" />
+        <Item Key="AddFRBLKPonDB" StringValue="6649" />
+        <Item Key="AddFRBLKPAYonDB" StringValue="12211" />
+        <Item Key="AddFRBLKTIMEonDB" StringValue="6322" />
+        <Item Key="AddFRBLKUSERonDB" StringValue="6319" />
+      </PossibleValues>
+    </DatabaseParameter>
+    <DatabaseParameter Name="Action">
+      <Properties DatabaseArgumentName="event_id" DatabaseArgumentType="number" />
+      <Source Path="dummy" AbsenceValue="1" />
+      <PossibleValues StringToKeyTable="true" />
+    </DatabaseParameter>
+  </DatabaseParametersList>
+  <ErrorsList CodePage="ASCII" />
+</Command>

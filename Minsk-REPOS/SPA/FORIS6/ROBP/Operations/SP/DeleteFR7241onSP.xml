@@ -1,0 +1,10 @@
+<OperationData Name="DeleteFR7241onSP" NEType="SP" NEAlias="SP">
+  <Request Name="RequestMessage">
+    <AdditionalData Executable="True">
+      <WithdrawalList HaltMode="AbortProcess" Type="AnyOfListed">
+        <FR7241 HaltMode="CancelOperation" Type="Mandatory" />
+      </WithdrawalList>
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage" />
+</OperationData>

@@ -1,0 +1,11 @@
+<OperationData Name="DeleteMsisdnFromCampaign" NEType="BS" NEAlias="BS">
+  <Request Name="ExtendedRequestMessage">
+    <AdditionalData Executable="True">
+      <RegisteredList HaltMode="CancelOperation" Type="AnyOfListed" Copy="CopyListed">
+        <Include groupName="BMSList" />
+      </RegisteredList>
+      <DeviceInfo />
+    </AdditionalData>
+  </Request>
+  <Response Name="ExtendedResponseMessage" />
+</OperationData>

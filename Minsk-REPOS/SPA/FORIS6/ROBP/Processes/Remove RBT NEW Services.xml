@@ -1,0 +1,58 @@
+<BusinessProcessData name="Remove RBT NEW Services">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="DeleteService" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="SCProcessingUnit" object="SCProcessingUnit">
+          <parameterslist />
+          <resultlist>
+            <result value="" node="RemoveServiceOnFINPlatform" />
+          </resultlist>
+        </node>
+        <node name="RemoveServiceOnFINPlatform" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="RemoveServiceOnFINPlatform" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFR12174onRT" />
+          </resultlist>
+        </node>
+        <node name="DeleteFR12174onRT" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteFR12174onRT" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFR12174" />
+          </resultlist>
+        </node>
+        <node name="DeleteFR12174" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteFR12174" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFR12175onRT" />
+          </resultlist>
+        </node>
+        <node name="DeleteFR12175onRT" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteFR12175onRT" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFR12176onRT" />
+          </resultlist>
+        </node>
+        <node name="DeleteFR12176onRT" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteFR12176onRT" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

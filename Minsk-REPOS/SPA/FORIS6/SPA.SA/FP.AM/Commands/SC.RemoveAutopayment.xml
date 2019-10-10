@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="SC.RemoveAutopayment" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>RemoveAutopayment</Description>
+  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
+  <Properties GenerationType="DataSetXml" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[<DataSet Name="UpdateLimitsDataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Attributes>
+    <Attribute Name="Protocol" Type="System.String" Value="Remoting"/>
+    <Attribute Name="Label" Type="System.String" Value="UpdateLimits"/>
+  </Attributes>
+  <DataTable Name="AutoPaymentLimitsDataTable">
+    <Columns>
+      <Column Name="REQUEST_ID" Type="System.String"/>
+      <Column Name="PERSONAL_ACCOUNT_ID" Type="System.Int64"/>
+      <Column Name="LIMIT_VALUE" Type="System.Decimal"/>
+    </Columns>
+    <Rows>
+      <Row REQUEST_ID="reversecut(##org.id##,4)-##GlobalUid##" PERSONAL_ACCOUNT_ID="##PersonalAccount##"/>
+    </Rows>
+  </DataTable>
+</DataSet>]]>
+    </RequestTemplate>
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="org.id" Type="Wellknown"/>
+    <Item Name="GlobalUid" Type="Wellknown"/>
+    <Item Name="PersonalAccount" Type="Wellknown"/>
+  </Request>
+  <RollbackRequest>
+    <RequestTemplate>
+      <![CDATA[<DataSet Name="UpdateLimitsDataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Attributes>
+    <Attribute Name="Protocol" Type="System.String" Value="Remoting"/>
+    <Attribute Name="Label" Type="System.String" Value="UpdateLimits"/>
+  </Attributes>
+  <DataTable Name="AutoPaymentLimitsDataTable">
+    <Columns>
+      <Column Name="REQUEST_ID" Type="System.String"/>
+      <Column Name="PERSONAL_ACCOUNT_ID" Type="System.Int64"/>
+      <Column Name="LIMIT_VALUE" Type="System.Decimal"/>
+    </Columns>
+    <Rows>
+      <Row REQUEST_ID="reversecut(##org.id##,4)-##GlobalUid##" PERSONAL_ACCOUNT_ID="##PersonalAccount##" LIMIT_VALUE="replacestr('##LIMIT_VALUE##',',','.')"/>
+    </Rows>
+  </DataTable>
+</DataSet>]]>
+    </RequestTemplate>
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="org.id" Type="Wellknown"/>
+    <Item Name="GlobalUid" Type="Wellknown"/>
+    <Item Name="PersonalAccount" Type="Wellknown"/>
+    <Item Name="LIMIT_VALUE" Type="LocalParameter"/>
+  </RollbackRequest>
+  <ParametersList>
+    <Parameter Name="LIMIT_VALUE">
+      <Source Path="//AdditionalData//RFS_FP_SERVICE_AUTO_PAYMENT/AutoPaymentThreshold/Value"/>
+    </Parameter>
+  </ParametersList>
+  <ErrorsList CodePage="ascii"/>
+</Command>

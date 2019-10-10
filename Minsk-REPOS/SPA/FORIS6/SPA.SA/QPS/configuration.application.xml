@@ -1,0 +1,48 @@
+<Configuration>
+  <serviceInstances>
+    <serviceInstance hardwareID="QP:2223">
+      <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
+        <fileScenarioSource dir="..\SPA.SA\QPS\Scenarios" />
+      </scenarioSource>
+      <socketList poolSize="20" maxConnections="20" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="1000" periodDuration="20" autoconnect="1" reconfigurationTimeout="0">
+        <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
+          <config workingmode="wmPermanentEmulation">
+            <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
+              <config>
+                <ParametersList>
+                  <!--Parameter Key="Host" Value="172.24.220.65"/-->
+                  <Parameter Key="Host" Value="127.0.0.1" />
+                  <Parameter Key="Port" Value="8080" />
+                  <Parameter Key="Url" Value="ua/soap" />
+                  <Parameter Key="MethodName" Value="POST" />
+                  <Parameter Key="Method" Value="POST" />
+                  <Parameter Key="UserName" Value="" />
+                  <Parameter Key="UserPwd" Value="" />
+                  <Parameter Key="ContentType" Value="application/soap+xml; charset=utf-8" />
+                  <Parameter Key="ParameterName" Value="" />
+                </ParametersList>
+              </config>
+            </socket>
+            <Emulation Success="&lt;errorCode&gt;0&lt;/errorCode&gt;" Failure="&lt;errorCode&gt;2&lt;/errorCode&gt;" RandomizePrintout="false" OverwriteCommandPrintout="true" Lifetime="00:00:00.00" />
+            <Timers IdleTimeout="6000" />
+            <PredefinedScripts Login="Login" Command="Command" Idle="" Logoff="" />
+            <ScriptsList>
+              <Script Name="Login" Path="..\SPA.SA\QPS\Scripts\Login.xml" />
+              <Script Name="Logoff" Path="..\SPA.SA\QPS\Scripts\logoff.xml" />
+              <Script Name="Command" Path="..\SPA.SA\QPS\Scripts\Command.xml" />
+              <Script Name="NoSleep" Path="..\SPA.SA\QPS\Scripts\nosleep.xml" />
+            </ScriptsList>
+          </config>
+        </socket>
+      </socketList>
+      <context>
+        <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
+          <config path="..\SPA.SA\QPS" xml="dictionary.xml" />
+        </object>
+        <object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
+          <fileTableSource path="..\SPA.SA\QPS\Misc" xml="RepetitionTable.xml" />
+        </object>
+      </context>
+    </serviceInstance>
+  </serviceInstances>
+</Configuration>

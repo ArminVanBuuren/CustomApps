@@ -1,0 +1,29 @@
+<Dictionary>
+  <WellknownsList>
+    <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)" />
+  </WellknownsList>
+  <ErrorsList CodePage="ASCII">
+    <Error Name="&lt;ns2:errorCode&gt;0&lt;/ns2:errorCode&gt;" Value="SUCCESS" />
+    <Error Name="&lt;ns2:errorCode&gt;800&lt;/ns2:errorCode&gt;" Value="InvalidRequest" />
+    <Error Name="&lt;ns2:errorCode&gt;900&lt;/ns2:errorCode&gt;" Value="InvalidRequest" />
+    <Error Name="&lt;ns2:errorCode&gt;1001&lt;/ns2:errorCode&gt;" Value="NoSuchObjectInstance" />
+    <Error Name="&lt;ns2:errorCode&gt;1002&lt;/ns2:errorCode&gt;" Value="MsisdnAlreadyDefined" />
+    <Error Name="&lt;ns2:errorCode&gt;1003&lt;/ns2:errorCode&gt;" Value="FAILURE" />
+    <Error Name="&lt;ns2:errorCode&gt;1004&lt;/ns2:errorCode&gt;" Value="InvalidRequest" />
+    <Error Name="&lt;ns2:errorCode&gt;2000&lt;/ns2:errorCode&gt;" Value="FAILURE" />
+  </ErrorsList>
+  <RegexpsList>
+    <Regexp Name="Error" Value="(?&lt;ERROR&gt;-*\d)" />
+  </RegexpsList>
+  <ConstantsList />
+  <ParametersList>
+    <Parameter Name="NewMSISDN">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//NewMSISDN" />
+      <PossibleValues StringToKeyTable="true" />
+    </Parameter>
+  </ParametersList>
+  <DynamicParametersList />
+  <CommandsList Root="C:\FORIS\SPA\SPA.SA\Contents\2Memory\Commands" Mask="*.xml">
+    <!-- All new commands are included by Mask=*.xml attribute -->
+  </CommandsList>
+</Dictionary>

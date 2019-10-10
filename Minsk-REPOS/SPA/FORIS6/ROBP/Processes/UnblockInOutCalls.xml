@@ -1,0 +1,26 @@
+<BusinessProcessData name="UnblockInOutCalls">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="UnblockInOutCalls" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="SCProcessingUnit" object="SCProcessingUnit">
+          <parameterslist />
+          <resultlist>
+            <result value="" node="UnblockInOutCalls" />
+          </resultlist>
+        </node>
+        <node name="UnblockInOutCalls" object="UnblockInOutCalls">
+          <parameterslist>
+            <param name="operation" value="UnblockInOutCalls" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

@@ -1,0 +1,64 @@
+<scenario name="GetSubscriberByIMSI">
+  <objectList>
+    <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="XmlReplacer" class="FORIS.ScenarioProcessing.CommonUnits.XmlReplacerConditional" assembly="FORIS.SPA.SPF.dll" />
+  </objectList>
+  <automat>
+    <node name="BySubscribersSplitter" object="BySubscribersSplitter">
+      <resultlist>
+        <result value="0" node="BySubscriberRequestDequeuer" />
+      </resultlist>
+      <parameterslist>
+        <param name="queueName" value="requestsSplittedBySubscriberQueue" />
+      </parameterslist>
+    </node>
+    <node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+      <resultlist>
+        <result value="0" node="GetSubscriberByCFALLNode" />
+        <result value="1" node="" />
+      </resultlist>
+      <parameterslist>
+        <param name="queueName" value="requestsSplittedBySubscriberQueue" />
+      </parameterslist>
+    </node>
+    <node name="GetSubscriberByCFALLNode" object="Commander">
+      <resultlist>
+        <result value="" node="XmlReplacerConditional" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="GetCFAll" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="true" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="XmlReplacerConditional" object="XmlReplacer">
+      <resultlist>
+        <result value="0" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="intermediateResponse" />
+        <param name="OrXmlPath:0" value="ExtendedResponseMessage/AdditionalData/SubscribersDataList/SubscribersData/BasicServicesList/TS11" />
+        <param name="DstXml" value="intermediateResponse" />
+        <param name="DstXmlPath:0" value="ExtendedResponseMessage/AdditionalData/SubscribersDataList/SubscribersData/CallForwardingServicesList/CFU/BasicService" />
+        <param name="DstXmlPath:1" value="ExtendedResponseMessage/AdditionalData/SubscribersDataList/SubscribersData/CallForwardingServicesList/CFB/BasicService" />
+        <param name="DstXmlPath:2" value="ExtendedResponseMessage/AdditionalData/SubscribersDataList/SubscribersData/CallForwardingServicesList/CFNRC/BasicService" />
+        <param name="DstXmlPath:3" value="ExtendedResponseMessage/AdditionalData/SubscribersDataList/SubscribersData/CallForwardingServicesList/CFNRY/BasicService" />
+        <param name="DstInnerText:0" value="TeleService" />
+        <param name="DstInnerText:1" value="TeleService" />
+        <param name="DstInnerText:2" value="TeleService" />
+        <param name="DstInnerText:3" value="TeleService" />
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="BySubscriberRequestDequeuer" />
+      </resultlist>
+    </node>
+  </automat>
+</scenario>

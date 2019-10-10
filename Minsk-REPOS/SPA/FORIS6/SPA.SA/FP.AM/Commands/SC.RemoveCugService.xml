@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="SC.RemoveCugService" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>RemoveCugService</Description>
+  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
+  <Properties GenerationType="DataSetXml" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[<DataSet Name="UpdateTDCDataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Attributes>
+    <Attribute Name="Label" Type="System.String" Value="UpdateTDC;##datetime##;SPA"/>
+    <Attribute Name="Protocol" Type="System.String" Value="Msmq"/>
+  </Attributes>
+  <DataTable Name="UpdateTDCDataTable">
+    <Columns>
+      <Column Name="REQUEST_ID" Type="System.String"/>
+      <Column Name="TERMINAL_DEVICE_CONTRACT_ID" Type="System.Int64"/>
+      <Column Name="PERSONAL_ACCOUNT_ID" Type="System.Int64"/>
+      <Column Name="MSISDN" Type="System.String"/>
+      <Column Name="CLIENT_ID" Type="System.String"/>
+    </Columns>
+    <Rows>
+      <Row REQUEST_ID="##ASYNC_REQUEST_ID##" TERMINAL_DEVICE_CONTRACT_ID="##TerminalDeviceID##" PERSONAL_ACCOUNT_ID="##PersonalAccount##" MSISDN="##msisdn##" CLIENT_ID="SPA"/>
+    </Rows>
+  </DataTable>
+  <DataTable Name="ServiceCodeDataTable">
+    <Columns>
+      <Column Name="REQUEST_ID" Type="System.String"/>
+      <Column Name="TERMINAL_DEVICE_CONTRACT_ID" Type="System.Int64"/>
+      <Column Name="SERVICE_CODE" Type="System.String"/>
+      <Column Name="DATE_FROM" Type="System.DateTime"/>
+      <Column Name="SERVICE_ACTION" Type="System.String"/>
+    </Columns>
+    <Rows>
+      <Row REQUEST_ID="##ASYNC_REQUEST_ID##" TERMINAL_DEVICE_CONTRACT_ID="##TerminalDeviceID##" SERVICE_CODE="xmldecodename(##SERVICE_CODE##)" ##DATE_FROM## SERVICE_ACTION="D" />
+    </Rows>
+  </DataTable>
+</DataSet>]]>
+    </RequestTemplate>
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="TerminalDeviceID" Type="Wellknown"/>
+    <Item Name="PersonalAccount" Type="Wellknown"/>
+    <Item Name="msisdn" Type="Wellknown"/>
+    <Item Name="SERVICE_CODE" Type="LocalParameter"/>
+    <Item Name="DATE_FROM" Type="LocalParameter"/>
+    <Item Name="datetime" Type="Wellknown"/>
+  </Request>
+  <ParametersList>
+    <Parameter Name="DATE_FROM">
+      <Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/DateFrom/Value[string-length(.) > 0]" AbsenceValue="" PostFormat="DATE_FROM=&quot;{0}&quot;" />
+      <Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_VUG/DateFrom/Value[string-length(.) > 0]" AbsenceValue="" PostFormat="DATE_FROM=&quot;{0}&quot;" />
+    </Parameter>
+    <Parameter Name="SERVICE_CODE">
+      <Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/ServiceCode" AbsenceValue=""/>
+      <Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_VUG/ServiceCode" AbsenceValue=""/>
+    </Parameter>
+  </ParametersList>
+  <ErrorsList CodePage="ascii">
+    <Error Name="Not found" Value="InvalidRequest"/>
+    <Error Name="-151014" Value="SUCCESS"/>
+    <Error Name="-151003" Value="SUCCESS"/>
+  </ErrorsList>
+</Command>

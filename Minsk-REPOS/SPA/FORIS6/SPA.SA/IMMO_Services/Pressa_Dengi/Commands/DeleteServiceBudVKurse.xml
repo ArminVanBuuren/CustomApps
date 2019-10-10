@@ -1,0 +1,17 @@
+<Command Name="DeleteServiceBudVKurse" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Удаление услуги</Description>
+  <Author Name="YAI" Date="2016-11-17+20:21" />
+  <Request Template="&lt;soapenv:Envelope xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:mes=&quot;http://sitronicsts.com/MessagingGateway&quot;&gt;
+&lt;soapenv:Header/&gt;
+&lt;soapenv:Body&gt;
+&lt;mes:DeleteSubscriber&gt;
+&lt;mes:SubscriberData&gt;
+&lt;mes:msisdn&gt;{0}&lt;/mes:msisdn&gt;
+&lt;/mes:SubscriberData&gt;
+&lt;/mes:DeleteSubscriber&gt;
+&lt;/soapenv:Body&gt;
+&lt;/soapenv:Envelope&gt;">
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ASCII" />
+</Command>

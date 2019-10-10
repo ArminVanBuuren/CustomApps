@@ -1,0 +1,38 @@
+<OperationData Name="ChangeTPOnFINPlatform" NEType="FP" NEAlias="FP">
+  <Request Name="ExtendedRequestMessage">
+    <AdditionalData>
+      <ProvisionList HaltMode="AbortProcess" Type="Mandatory">
+        <ChangeTP HaltMode="AbortProcess" Type="Mandatory">
+          <PreviousTariffPlanId HaltMode="AbortProcess" Type="Mandatory" />
+          <NewTariffPlanId HaltMode="AbortProcess" Type="Mandatory" />
+          <BalanceLimits Type="Optional">
+            <BlockLimit HaltMode="CancelOperation" Type="Mandatory" />
+            <UnblockLimit HaltMode="CancelOperation" Type="Mandatory" />
+            <PartialBlockLimit HaltMode="CancelOperation" Type="Mandatory" />
+            <NotificationLimits HaltMode="CancelOperation" Type="Mandatory">
+              <NotificationLimit HaltMode="CancelOperation" Type="Mandatory">
+                <Value HaltMode="CancelOperation" Type="Mandatory" />
+                <Level HaltMode="CancelOperation" Type="Mandatory" />
+              </NotificationLimit>
+            </NotificationLimits>
+          </BalanceLimits>
+          <Counters Type="Optional" Copy="CopyAll" />
+        </ChangeTP>
+      </ProvisionList>
+      <RegisteredList Type="Optional" Copy="CopyListed">
+        <Include groupName="ServiceList" />
+        <Include groupName="FavoritNumberList" />
+      </RegisteredList>
+      <BalanceStorage Type="Optional">
+        <HostTypeCode Type="Optional" />
+        <HostId Type="Optional" />
+        <HostCode Type="Optional" />
+      </BalanceStorage>
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage">
+    <AdditionalData>
+      <SubscribersDataList Type="Optional" Copy="CopyAll" />
+    </AdditionalData>
+  </Response>
+</OperationData>

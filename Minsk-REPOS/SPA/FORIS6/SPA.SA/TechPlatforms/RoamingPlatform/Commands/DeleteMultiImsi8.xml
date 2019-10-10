@@ -1,0 +1,21 @@
+<Command Name="DeleteMultiImsi8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>IMSI8</Description>
+  <Author Name="YAI" Date="2015-07-14+13:25" />
+  <Request Template="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+	&lt;SOAP-ENV:Envelope xmlns:SOAP-ENV=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&gt;
+&lt;SOAP-ENV:Body&gt;
+&lt;DeleteSubscriber xmlns=&quot;urn:sorwsdl&quot;&gt;
+&lt;imsi&gt;{0}&lt;/imsi&gt;
+&lt;/DeleteSubscriber&gt;
+&lt;/SOAP-ENV:Body&gt;
+&lt;/SOAP-ENV:Envelope&gt;">
+    <Item Name="imsix" Type="LocalParameter" />
+  </Request>
+  <ParametersList>
+    <Parameter Name="imsix">
+      <Source Path="ExtendedRequestMessage/AdditionalData/IMSI8" />
+      <PossibleValues StringToKeyTable="true" />
+    </Parameter>
+  </ParametersList>
+  <ErrorsList CodePage="ASCII" />
+</Command>

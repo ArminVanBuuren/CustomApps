@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="SC.AdditionalNumber.ServiceRow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>Activate service/block</Description>
+  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
+  <Properties GenerationType="MmlXml" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[<Row 
+REQUEST_ID="##ASYNC_REQUEST_ID##" 
+TERMINAL_DEVICE_CONTRACT_ID="##TerminalDeviceID##"
+IDENTITY_TYPE="##IdentityType##" 
+IDENTITY_VALUE="##AdditionalNumber##" />]]>
+    </RequestTemplate>
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="TerminalDeviceID" Type="Wellknown"/>
+    <Item Name="AdditionalNumber" Type="LocalParameter"/>
+    <Item Name="IdentityType" Type="LocalParameter" />
+  </Request>
+  <ParametersList>
+    <Parameter Name="IdentityType">
+      <Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_ADDITIONAL_NUMBER/AdditionalNumberType/Value"/>
+    </Parameter>
+    <Parameter Name="AdditionalNumber" IsChoice="true">
+      <Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_ADDITIONAL_NUMBER/AdditionalNumberType/Value[text()='1' or text()='2']/../../Parameters/MsisdnAbc/@value" />
+      <Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_ADDITIONAL_NUMBER/Parameters/AdditionalNumber/@value" />
+    </Parameter>
+  </ParametersList>
+  <ErrorsList CodePage="ascii"/>
+</Command>

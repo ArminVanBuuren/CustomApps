@@ -1,0 +1,25 @@
+<Command Name="DeleteToning" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Удаление Безлимитный Тонинг.</Description>
+  <Author Name="YAI" Date="2016-07-14+10:21" />
+  <Request Template="&lt;Envelope xmlns=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;&gt;
+&lt;Body&gt;
+&lt;unsubscribe xmlns=&quot;http://billadapter.mtsby.rbt.immo.ru/&quot;&gt;
+&lt;Msisdn xmlns=&quot;&quot;&gt;{0}&lt;/Msisdn&gt;
+&lt;ServiceCode xmlns=&quot;&quot;&gt;FR12173&lt;/ServiceCode&gt;
+&lt;SourceId xmlns=&quot;&quot;&gt;{1}&lt;/SourceId&gt;
+&lt;/unsubscribe&gt;
+&lt;/Body&gt;
+&lt;/Envelope&gt;">
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="SRCID" Type="LocalParameter" />
+  </Request>
+  <ParametersList>
+    <Parameter Name="SRCID">
+      <Source Path="ExtendedRequestMessage/AdditionalData/SourceType" />
+      <PossibleValues StringToKeyTable="true" />
+    </Parameter>
+  </ParametersList>
+  <ErrorsList CodePage="ASCII">
+    <Error Name="&lt;statusCode&gt;561&lt;/statusCode&gt;" Value="SUCCESS" />
+  </ErrorsList>
+</Command>

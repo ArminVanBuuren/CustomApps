@@ -1,0 +1,9 @@
+<Command Name="ChangeMSISDNMuzPortal" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Change MSISDN</Description>
+  <Author Name="YAI" Date="2015-10-28+10:30" />
+  <Request Template="muzportalContact/?msisdn={0}&amp;status=3&amp;new_msisdn={1}&amp;src=484">
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="NewMSISDN" Type="Parameter" />
+  </Request>
+  <ErrorsList CodePage="ASCII" />
+</Command>

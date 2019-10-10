@@ -1,0 +1,11 @@
+<Command Name="DeleteRBT" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Удаление профиля абонента</Description>
+  <Author Name="Valery Bushkarev" Date="2005-05-16+11:39" />
+  <Request Template="CommandCode=DELETE&amp;MSISDN={0}&amp;MacroRegion=MRGCE&amp;NewMSISDN=&amp;MDateTime={1:ddMMyyyyHHmmss}">
+    <Item Name="msisdn.fn" Type="Wellknown" />
+    <Item Name="datetime" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ASCII">
+    <Error Name="104;" Expression="$(Error)" Value="SUCCESS" />
+  </ErrorsList>
+</Command>

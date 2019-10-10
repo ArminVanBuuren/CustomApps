@@ -1,0 +1,8 @@
+<Command Name="DeleteServiceMTSInfoEkonomiser" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>DeleteServiceMTSInfoEkonomiser</Description>
+  <Author Name="NNM" Date="2019-06-17+10:50" />
+  <Request Template="api/unsubscribe/?msisdn={0}&amp;frcode=FR16614">
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ascii" />
+</Command>

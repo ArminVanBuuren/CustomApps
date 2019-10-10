@@ -1,0 +1,20 @@
+<OperationData Name="RemoveRegisteredAutopaymentServiceOnFP" NEType="FP" NEAlias="FP">
+  <Request Name="ExtendedRequestMessage">
+    <AdditionalData>
+      <RegisteredList HaltMode="CancelOperation" Type="AnyOfListed" Copy="CopyListed">
+        <Include groupName="ServiceList" />
+      </RegisteredList>
+      <ExternalIdentifier Type="Optional" />
+      <BalanceStorage Type="Optional">
+        <HostTypeCode Type="Optional" />
+        <HostId Type="Optional" />
+        <HostCode Type="Optional" />
+      </BalanceStorage>
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage">
+    <AdditionalData>
+      <SubscribersDataList Type="Optional" Copy="CopyAll" />
+    </AdditionalData>
+  </Response>
+</OperationData>

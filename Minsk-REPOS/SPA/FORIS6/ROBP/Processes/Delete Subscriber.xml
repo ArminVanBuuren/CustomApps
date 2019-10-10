@@ -1,0 +1,62 @@
+<BusinessProcessData name="Delete Subscriber">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="ParallelDeleteSubcriber" class="FORIS.ServiceProvisioning.BPM.ParallelProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="SCProcessingUnit" object="SCProcessingUnit">
+          <parameterslist>
+            <param name="RFSFilterHandler" value="FP.ExtendedCancelHandler" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteSubscriber" />
+          </resultlist>
+        </node>
+        <node name="DeleteSubscriber" object="ParallelDeleteSubcriber">
+          <parameterslist>
+            <param name="operation" value="DeleteSubscribersInTheHLR" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnDM" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteVoiceMailSubscriber" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnRT" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteProfileOnSMSEXTRA" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnQP" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnTV" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnDB" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnBT" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnZN" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnVD" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnME" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnMT" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnMO" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnUF" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnBB" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnSL" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnM2" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnDR" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnMA" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnVI" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnMU" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnGS" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnRG" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnOP" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnSF" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnUM" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnPF" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnFK" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnVA" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnLB" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnMI" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnRP" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnPS" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="DeleteSubscriberOnKM" requiredForSuccess="SUCCESS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

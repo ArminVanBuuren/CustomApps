@@ -1,0 +1,48 @@
+<Configuration>
+  <serviceInstances>
+    <serviceInstance hardwareID="MA:1835">
+      <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
+        <fileScenarioSource dir="..\SPA.SA\Smotreshka\Scenarios" />
+      </scenarioSource>
+      <socketList poolSize="10" maxConnections="10" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="500" periodDuration="20" autoconnect="1" reconfigurationTimeout="0">
+        <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
+          <config workingmode="wmPermanentEmulation">
+            <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
+              <config>
+                <ParametersList>
+                  <!--Parameter Key="Host" Value="172.18.122.75"/-->
+                  <Parameter Key="Host" Value="127.0.0.1" />
+                  <Parameter Key="Port" Value="80" />
+                  <Parameter Key="Url" Value="api/v2/" />
+                  <Parameter Key="MethodName" Value="POST" />
+                  <Parameter Key="Method" Value="POST" />
+                  <Parameter Key="UserName" Value="" />
+                  <Parameter Key="UserPwd" Value="" />
+                  <Parameter Key="ContentType" Value="application/json" />
+                  <Parameter Key="ParameterName" Value="" />
+                </ParametersList>
+              </config>
+            </socket>
+            <Emulation Success=" 200 OK" Failure="Wrong query" RandomizePrintout="false" OverwriteCommandPrintout="true" Lifetime="00:00:00.00" />
+            <Timers IdleTimeout="6000" />
+            <PredefinedScripts Login="Login" Command="Command" Idle="" Logoff="" />
+            <ScriptsList>
+              <Script Name="Login" Path="..\SPA.SA\Smotreshka\Scripts\Login.xml" />
+              <Script Name="Logoff" Path="..\SPA.SA\Smotreshka\Scripts\logoff.xml" />
+              <Script Name="Command" Path="..\SPA.SA\Smotreshka\Scripts\Command.xml" />
+              <Script Name="NoSleep" Path="..\SPA.SA\Smotreshka\Scripts\nosleep.xml" />
+            </ScriptsList>
+          </config>
+        </socket>
+      </socketList>
+      <context>
+        <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
+          <config path="..\SPA.SA\Smotreshka" xml="Dictionary.xml" />
+        </object>
+        <object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
+          <fileTableSource path="..\SPA.SA\Smotreshka\Misc" xml="RepetitionTable.xml" />
+        </object>
+      </context>
+    </serviceInstance>
+  </serviceInstances>
+</Configuration>

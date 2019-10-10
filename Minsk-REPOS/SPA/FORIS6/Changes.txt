@@ -1,0 +1,3 @@
+﻿sc \\f6-spa-sa01 create FORIS.SA.BMS binPath= "C:\Foris\SPA\SA\FORIS.SPA.ServiceActivator.exe -cmd FORIS.SA.BMS C:\Foris\SPA\SPA.SA\BMS\configuration.application.xml" start= auto obj= "NT AUTHORITY\NetworkService" password= ""
+sc \\f6-spa-sa01 create FORIS.SA.FP.AM binPath= "C:\Foris\SPA\SA\FORIS.SPA.ServiceActivator.exe -cmd FORIS.SA.FP.AM C:\Foris\SPA\SPA.SA\FP.AM\configuration.application.xml" start= auto obj= "NT AUTHORITY\NetworkService" password= ""
+sc \\f6-spa-sa01 create FORIS.SA.FP.SCP.155 binPath= "C:\Foris\SPA\SA\FORIS.SPA.ServiceActivator.exe -cmd FORIS.SA.FP.SCP.155 C:\Foris\SPA\SPA.SA\FP.SCP\configuration.application.xml" start= auto obj= "NT AUTHORITY\NetworkService" password= ""

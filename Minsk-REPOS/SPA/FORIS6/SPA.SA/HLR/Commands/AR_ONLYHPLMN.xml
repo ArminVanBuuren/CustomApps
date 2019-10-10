@@ -1,0 +1,8 @@
+<Command Name="AR_ONLYHPLMN" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Доступ только в домашней сети</Description>
+  <Author Name="YAI" Date="2011-09-07+12:18" />
+  <Request Template="MOD RSZI: ISDN=&quot;{0}&quot;, RROPTION=ONLY_HPLMN;">
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ASCII" />
+</Command>

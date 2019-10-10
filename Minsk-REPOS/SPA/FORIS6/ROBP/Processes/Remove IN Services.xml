@@ -1,0 +1,26 @@
+<BusinessProcessData name="Remove IN Services">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="RemoveInPlatformServices" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="SCProcessingUnit" object="SCProcessingUnit">
+          <parameterslist />
+          <resultlist>
+            <result value="" node="RemoveInPlatformServices" />
+          </resultlist>
+        </node>
+        <node name="RemoveInPlatformServices" object="RemoveInPlatformServices">
+          <parameterslist>
+            <param name="operation" value="RemoveInPlatformServices" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

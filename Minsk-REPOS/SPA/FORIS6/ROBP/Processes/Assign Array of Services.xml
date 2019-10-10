@@ -1,0 +1,42 @@
+<BusinessProcessData name="Assign Array of Services">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="AddService" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="SCProcessingUnit" object="SCProcessingUnit">
+          <parameterslist />
+          <resultlist>
+            <result value="" node="AssignServiceOnFINPlatform" />
+          </resultlist>
+        </node>
+        <node name="AssignServiceOnFINPlatform" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AssignServiceOnFINPlatform" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB403864" />
+          </resultlist>
+        </node>
+        <node name="AddCB403864" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddCB403864" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB108" />
+          </resultlist>
+        </node>
+        <node name="AddCB108" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddCB108" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

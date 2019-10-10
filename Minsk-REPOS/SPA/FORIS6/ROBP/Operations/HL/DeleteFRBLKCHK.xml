@@ -1,0 +1,12 @@
+<OperationData Name="DeleteFRBLKCHK" NEType="HL" NEAlias="HL">
+  <Request Name="RequestMessage">
+    <AdditionalData Executable="True">
+      <WithdrawalList HaltMode="CancelOperation" Type="AnyOfListed">
+        <FRBLKCHK Type="Optional" />
+      </WithdrawalList>
+      <ProvisionList Type="Optional" />
+      <RegisteredList Type="Optional" />
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage" />
+</OperationData>

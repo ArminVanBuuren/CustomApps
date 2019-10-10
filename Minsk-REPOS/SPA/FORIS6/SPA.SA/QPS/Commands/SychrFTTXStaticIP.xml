@@ -1,0 +1,15 @@
+<Command Name="SychrFTTXStaticIP" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>StaticIP</Description>
+  <Author Name="YAI" Date="2018-06-28+15:21" />
+  <Request Template="&lt;soapenv:Envelope xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:imp=&quot;https://imperituroard&quot;&gt;
+&lt;soapenv:Header/&gt;
+&lt;soapenv:Body&gt;
+&lt;imp:mts_3_technical_reconnect soapenv:encodingStyle=&quot;http://schemas.xmlsoap.org/soap/encoding/&quot;&gt;
+&lt;msisdn xsi:type=&quot;xsd:string&quot;&gt;{0}&lt;/msisdn&gt;
+&lt;/imp:mts_3_technical_reconnect&gt;
+&lt;/soapenv:Body&gt;
+&lt;/soapenv:Envelope&gt;">
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ASCII" />
+</Command>

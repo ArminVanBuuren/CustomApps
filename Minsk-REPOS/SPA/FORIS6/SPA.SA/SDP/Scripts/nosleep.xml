@@ -1,0 +1,4 @@
+<Script Name="NoSleep">
+  <write data="^M" />
+  <read data="--&gt;" timeout="3000" />
+</Script>

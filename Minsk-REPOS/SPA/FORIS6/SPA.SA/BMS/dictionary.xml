@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Dictionary>
+  <WellknownsList>
+    <Wellknown Name="org.id" Value="xmlsubstr(&quot;ExtendedRequestMessage/OriginalID&quot;)"/>
+    <Wellknown Name="PersonalAccount" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/PersonalAccountNumber&quot;, false)"/>
+    <Wellknown Name="cn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/ContractNumber&quot;, false)"/>
+    <Wellknown Name="TerminalDeviceID" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/TerminalDeviceId&quot;, false)"/>
+    <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
+    <Wellknown Name="imsi" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;)"/>
+  </WellknownsList>
+  <ErrorsList CodePage="ascii">
+    <Error Name="Code&gt;0&lt;" Value="SUCCESS"/>
+    <Error Name="сode&gt;0&lt;" Value="SUCCESS"/>
+    <Error Name="Code&gt;-771001&lt;" Value="BMSInternalError" Description="Unknown database error"/>
+    <Error Name="Code&gt;-771003&lt;" Value="NoSuchObjectInstance" Description="MSISDN not found or not valid"/>
+    <Error Name="Code&gt;-771005&lt;" Value="BMSInternalError" Description="Empty input data"/>
+    <Error Name="Code&gt;-771006&lt;" Value="BMSInternalError" Description="Different number of rows in input data sets"/>
+    <Error Name="Code&gt;-771009&lt;" Value="BMSInternalError" Description="MSISDN does not have enough bonus units"/>
+    <Error Name="Code&gt;-771029&lt;" Value="BMSInternalError" Description="Can not find available gift price"/>
+    <Error Name="Code&gt;-771037&lt;" Value="ChannelNotFound" Description="Channel not found"/>
+    <Error Name="Code&gt;-771038&lt;" Value="CampaignNotFound" Description="Campaign not found!"/>
+    <Error Name="Code&gt;-771039&lt;" Value="NoSuchObjectInstance" Description="Gift not found!"/>
+    <Error Name="Code&gt;-771040&lt;" Value="BMSInternalError" Description="Quantity must be more than zero"/>
+    <Error Name="Code&gt;-771046&lt;" Value="BMSInternalError" Description="Counter component not found"/>
+    <Error Name="Code&gt;-771056&lt;" Value="RecordAlreadyExists" Description="Record already exists"/>
+    <Error Name="Code&gt;-771061&lt;" Value="BMSInternalError" Description="Campaign state not found"/>
+    <Error Name="Code&gt;-771094&lt;" Value="BMSInternalError" Description="Counter start date or end date is invalid"/>
+    <Error Name="Code&gt;-773003&lt;" Value="BMSInternalError" Description="Bonus balance can not be negative"/>
+    <Error Name="Code&gt;-773004&lt;" Value="BMSInternalError" Description="MSISDN range not found for MSISDN"/>
+    <Error Name="Code&gt;-773005&lt;" Value="BMSInternalError" Description="Cannot insert null into not null column"/>
+    <Error Name="Code&gt;-773010&lt;" Value="BMSInternalError" Description="Both campaignId and msisdn must be specified"/>
+    <Error Name="Code&gt;-773011&lt;" Value="InvalidSubscriberState" Description="MSISDN is actually suspended!"/>
+    <Error Name="Code&gt;-773012&lt;" Value="InvalidSubscriberState" Description="Amount of transferred bonus units should be positive"/>
+    <Error Name="Code&gt;-773016&lt;" Value="BMSInternalError" Description="MSISDN is not invited into invitational campaign!"/>
+    <Error Name="Code&gt;-773019&lt;" Value="BMSInternalError" Description="Recurrent counter cannot have null value in columns interval or interval_unit"/>
+    <Error Name="Code&gt;-773020&lt;" Value="InvalidMsisdnFormat" Description="MSISDN has not correct format according to system configuration"/>
+    <Error Name="Code&gt;-773021&lt;" Value="BMSInternalError" Description="Transfer bonus units amount is not greater than transfer fee"/>
+    <Error Name="Code&gt;-773034&lt;" Value="MsisdnAlreadyDefined" Description="New MSISDN already exists"/>
+    <Error Name="Code&gt;-773040&lt;" Value="CampaignNotFound" Description="Campaign type not found"/>
+    <Error Name="Code&gt;-773041&lt;" Value="NoSuchObjectInstance" Description="MSISDN not found for specified TERMINAL_DEVICE_ID"/>
+    <Error Name="Code&gt;-773103&lt;" Value="BMSInternalError" Description="Campaign has record in campaign_participator table"/>
+    <Error Name="Code&gt;-773104&lt;" Value="BMSInternalError" Description="Start date can not be greater than end date"/>
+    <Error Name="Code&gt;-773106&lt;" Value="BMSInternalError" Description="Start date of campaign can not be changed for already started campaign and it can not be changed to value before actual date"/>
+    <Error Name="Code&gt;-773113&lt;" Value="BMSInternalError" Description="Counter not found"/>
+    <Error Name="Code&gt;-773114&lt;" Value="BMSInternalError" Description="End date of campaign can not be changed for already terminated campaign and it can not be changed to value before actual date"/>
+    <Error Name="Code&gt;-773134&lt;" Value="NoSuchObjectInstance" Description="There aren't any active campaign partitipators for MSISDN"/>
+    <Error Name="Code&gt;-773144&lt;" Value="BMSInternalError" Description="It's not possible to calculate penalty, initial date is less than campaign participator's start date"/>
+    <Error Name="Code&gt;-999999&lt;" Value="BMSInternalError" Description="Earned value is less than redeemed value!"/>
+    <Error Name="Code&gt;" Value="ProcessingFailure"/>
+  </ErrorsList>
+  <RegexpsList/>
+  <ConstantsList/>
+  <ParametersList>
+    <Parameter Name="NewMSISDN">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList/ChangeMsisdn/NewMSISDN"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="AdditionalInfo">
+      <Source Path="ExtendedRequestMessage/AdditionalData/RegisteredList/BMSList//AdditionalInfo"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="CampaignId">
+      <Source Path="ExtendedRequestMessage/AdditionalData/RegisteredList/BMSList//CampaignId"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="CampaignIdD">
+      <Source Path="ExtendedRequestMessage/AdditionalData/WithdrawalList/BMSList//CampaignId"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="FirstEventDate">
+      <Source Path="ExtendedRequestMessage/AdditionalData/RegisteredList/BMSList//FirstEventDate"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="LanguageCode">
+      <Source Path="ExtendedRequestMessage/AdditionalData/RegisteredList/BMSList//LanguageCode"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="MsisdnAdditionalInfo">
+      <Source Path="ExtendedRequestMessage/AdditionalData/RegisteredList/BMSList//MsisdnAdditionalInfo"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="DateFrom">
+      <Source Path="ExtendedRequestMessage/AdditionalData/RegisteredList/BMSList//DateFrom"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="RecordId">
+      <Source Path="ExtendedRequestMessage/AdditionalData/RegisteredList/BMSList//RecordId"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="RegionTariffPlanId">
+      <Source Path="ExtendedRequestMessage/AdditionalData/RegisteredList/BMSList//RegionTariffPlanId"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="StartDate">
+      <Source Path="ExtendedRequestMessage/AdditionalData/RegisteredList/BMSList//StartDate"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="TariffPlanId">
+      <Source Path="ExtendedRequestMessage/AdditionalData/DeviceInfo/TariffPlanId"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="EndDate">
+      <Source Path="ExtendedRequestMessage/AdditionalData/RegisteredList/BMSList//EndDate"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="EndDateD">
+      <Source Path="ExtendedRequestMessage/AdditionalData/WithdrawalList/BMSList//EndDate"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="RegionCode">
+      <Source Path="ExtendedRequestMessage/AdditionalData/PaSpGlobalCode"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+  </ParametersList>
+  <DynamicParametersList/>
+  <CommandsList Root="Commands" Mask="*.xml">
+    <!-- All new commands are included by Mask=*.xml attribute -->
+  </CommandsList>
+  <!--DecodersList Root="Decoders">
+    <Decoder Path="MinorAttributesDecoder.xml"/>
+	</DecodersList-->
+</Dictionary>

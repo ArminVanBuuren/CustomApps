@@ -1,0 +1,169 @@
+<scenario name="AddCB118onMA">
+  <objectList>
+    <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll" />
+    <object name="HttpCmd" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfHttpCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll" />
+  </objectList>
+  <automat>
+    <node name="BySubscribersSplitter" object="BySubscribersSplitter">
+      <resultlist>
+        <result value="0" node="BySubscriberRequestDequeuer" />
+      </resultlist>
+      <parameterslist>
+        <param name="queueName" value="requestsSplittedBySubscriberQueue" />
+      </parameterslist>
+    </node>
+    <node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+      <resultlist>
+        <result value="0" node="DeleteSubscriberNode" />
+        <result value="1" node="" />
+      </resultlist>
+      <parameterslist>
+        <param name="queueName" value="requestsSplittedBySubscriberQueue" />
+      </parameterslist>
+    </node>
+    <node name="DeleteSubscriberNode" object="HttpCmd">
+      <resultlist>
+        <result value="0" node="AddFreeMobileTVServiceNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="v2/accounts/contextWellknown(msisdn)" />
+        <param name="Command" value="ChangeDeleteSubscriber" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="172.18.122.75" />
+        <param name="Connection.Port" value="80" />
+        <param name="Connection.MethodName" value="DELETE" />
+        <param name="Connection.Method" value="DELETE" />
+        <param name="Connection.ContentType" value="application/json;charset=UTF-8" />
+      </parameterslist>
+    </node>
+    <node name="AddFreeMobileTVServiceNode" object="IfHttpCommander">
+      <resultlist>
+        <result value="0" node="AddMTSTVplusNode" />
+        <result value="1538" node="AddMTSTVplusNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="v2/accounts" />
+        <param name="Command" value="ChangeCreateAddFreeTV" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="172.18.122.75" />
+        <param name="Connection.Port" value="80" />
+        <param name="Connection.MethodName" value="POST" />
+        <param name="Connection.Method" value="POST" />
+        <param name="Connection.ContentType" value="application/json;charset=UTF-8" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16493" />
+      </parameterslist>
+    </node>
+    <node name="AddMTSTVplusNode" object="IfHttpCommander">
+      <resultlist>
+        <result value="0" node="AddMobileTVServiceNode" />
+        <result value="1538" node="AddMobileTVServiceNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="v2/accounts" />
+        <param name="Command" value="ChangeCreateAddMTSTVplus" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="172.18.122.75" />
+        <param name="Connection.Port" value="80" />
+        <param name="Connection.MethodName" value="POST" />
+        <param name="Connection.Method" value="POST" />
+        <param name="Connection.ContentType" value="application/json;charset=UTF-8" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16996" />
+      </parameterslist>
+    </node>
+    <node name="AddMobileTVServiceNode" object="IfHttpCommander">
+      <resultlist>
+        <result value="0" node="AddCinemaIVIServiceNode" />
+        <result value="1538" node="AddCinemaIVIServiceNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="v2/accounts" />
+        <param name="Command" value="ChangeCreateAddMobileTV" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="172.18.122.75" />
+        <param name="Connection.Port" value="80" />
+        <param name="Connection.MethodName" value="POST" />
+        <param name="Connection.Method" value="POST" />
+        <param name="Connection.ContentType" value="application/json;charset=UTF-8" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11873" />
+      </parameterslist>
+    </node>
+    <node name="AddCinemaIVIServiceNode" object="IfHttpCommander">
+      <resultlist>
+        <result value="0" node="AddStartRuNode" />
+        <result value="1538" node="AddStartRuNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="v2/accounts" />
+        <param name="Command" value="ChangeCreateKinoIVI" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="172.18.122.75" />
+        <param name="Connection.Port" value="80" />
+        <param name="Connection.MethodName" value="POST" />
+        <param name="Connection.Method" value="POST" />
+        <param name="Connection.ContentType" value="application/json;charset=UTF-8" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16494" />
+      </parameterslist>
+    </node>
+    <node name="AddStartRuNode" object="IfHttpCommander">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="v2/accounts" />
+        <param name="Command" value="ChangeCreateStartRu" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="172.18.122.75" />
+        <param name="Connection.Port" value="80" />
+        <param name="Connection.MethodName" value="POST" />
+        <param name="Connection.Method" value="POST" />
+        <param name="Connection.ContentType" value="application/json;charset=UTF-8" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16638" />
+      </parameterslist>
+    </node>
+    <node name="DummyResponderNode" object="DummyResponder">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="OverallResult" value="SUCCESS" />
+        <param name="DetailedResult" value="SUCCESS" />
+        <param name="Delay" value="0" />
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="BySubscriberRequestDequeuer" />
+      </resultlist>
+    </node>
+  </automat>
+</scenario>

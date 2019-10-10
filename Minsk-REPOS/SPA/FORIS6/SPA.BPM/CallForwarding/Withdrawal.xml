@@ -1,0 +1,27 @@
+<ExtendedRequestMessage>
+  <Source>crm</Source>
+  <SourceAddress>CRM</SourceAddress>
+  <Destination>bpm</Destination>
+  <DestinationAddress>BPM</DestinationAddress>
+  <ID>#MessageId#</ID>
+  <OriginalID>#MessageId#</OriginalID>
+  <OriginalSource>CRM</OriginalSource>
+  <Priority>Idle</Priority>
+  <AdditionalData Executable="True">
+    <WithdrawalList>
+      <CallForwarding>
+        #CallForwardingParams#
+      </CallForwarding>
+    </WithdrawalList>
+  </AdditionalData>
+  <MustBeConfirmed>false</MustBeConfirmed>
+  <ActionNameAlias>Удаление услуги Переадресация вызова</ActionNameAlias>
+  <ActionName>Remove Call Forwarding Sync</ActionName>
+  <IdentifiersList>
+    <Identifier>
+      <MSISDN>#MSISDN#</MSISDN>
+      <IMSI>#IMSI#</IMSI>
+    </Identifier>
+  </IdentifiersList>
+  <ContinueByDefault>true</ContinueByDefault>
+</ExtendedRequestMessage>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="SC.CreatePA" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>CreatePAOnFINPlatform</Description>
+  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
+  <Properties GenerationType="DataSetXml" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[<DataSet Name="CreatePADataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Attributes>
+    <Attribute Name="Label" Type="System.String" Value="CreatePA;##datetime##;[SCP_MARKER]"/>
+    <Attribute Name="Protocol" Type="System.String" Value="Msmq"/>
+  </Attributes>
+  <DataTable Name="CreatePADataTable">
+    <Columns>
+      <Column Name="REQUEST_ID" Type="System.String"/>
+      <Column Name="PERSONAL_ACCOUNT_ID" Type="System.Int64"/>
+      <Column Name="BALANCE" Type="System.Decimal"/>
+      <Column Name="CURRENCY_CODE" Type="System.String"/>
+      <Column Name="PA_BALANCE_STATUS" Type="System.Int32"/>
+      <Column Name="PA_STATUS" Type="System.Int32"/>
+      <Column Name="SERVICE_PROVIDER_CODE" Type="System.Int32"/>
+      <Column Name="BLOCK_LIMIT" Type="System.Decimal"/>
+      <Column Name="UNBLOCK_LIMIT" Type="System.Decimal"/>
+      <Column Name="PARTIAL_BLOCK_LIMIT" Type="System.Decimal"/>
+      <Column Name="EXPIRES" Type="System.DateTime"/>
+      <Column Name="EXPIRATION_DATE_MONITOR" Type="System.Int32"/>
+      <Column Name="ADMIN_BLOCK" Type="System.Int32"/>
+      <Column Name="ADMIN_BLOCKED_DATE" Type="System.DateTime"/>
+      <Column Name="BLOCKED_END_DATE" Type="System.String"/>
+      <Column Name="TAX_GROUP_ID" Type="System.Int32"/>
+      <Column Name="CUSTOMER_TYPE_ID" Type="System.Int32"/>
+      <Column Name="MAX_BLOCKED_PERIOD" Type="System.Int32"/>
+      <Column Name="AFTER_GRACE_PERIOD" Type="System.Int32"/>
+      <Column Name="IS_GRACE_STARTS_ON_BLOCK" Type="System.Int32"/>
+      <Column Name="VALIDITY_PERIOD" Type="System.Int32"/>
+      <Column Name="NOTIFICATION_LIMITS" Type="System.String"/>
+      <Column Name="PA_STATUS_CHANGE_DATE" Type="System.DateTime"/>
+      <Column Name="PA_BALANCE_STATUS_CHANGE_DATE" Type="System.DateTime"/>
+      <Column Name="PSP_DAY_OF_MONTH" Type="System.Int32"/>
+      <Column Name="BILLING_GROUP_ID" Type="System.Int64"/>
+      <Column Name="KEEP_BALANCES" Type="System.Boolean"/>
+    </Columns>
+    <Rows>
+      <Row REQUEST_ID="##ASYNC_REQUEST_ID##" PERSONAL_ACCOUNT_ID="##PersonalAccount##" BALANCE="##SC.BALANCE##" CURRENCY_CODE="##SC.CURRENCY_CODE##" 
+##SC.PA_BALANCE_STATUS## PA_STATUS="##SC.PA_STATUS##" ##SC.SERVICE_PROVIDER_CODE## BLOCK_LIMIT="##SC.BLOCK_LIMIT##" UNBLOCK_LIMIT="##SC.UNBLOCK_LIMIT##" 
+PARTIAL_BLOCK_LIMIT="##SC.PARTIAL_BLOCK_LIMIT##" EXPIRES="##SC.EXPIRES##" EXPIRATION_DATE_MONITOR="##SC.EXPIRATION_DATE_MONITOR##" ##SC.ADMIN_BLOCK## 
+##SC.ADMIN_BLOCKED_DATE## ##SC.BLOCKED_END_DATE## TAX_GROUP_ID="##TAX_GROUP_ID##" CUSTOMER_TYPE_ID="##CUSTOMER_TYPE_ID##" 
+MAX_BLOCKED_PERIOD="##SC.MAX_BLOCKED_PERIOD##" AFTER_GRACE_PERIOD="##SC.AFTER_GRACE_PERIOD##" IS_GRACE_STARTS_ON_BLOCK="##SC.IS_GRACE_STARTS_ON_BLOCK##"
+VALIDITY_PERIOD="##SC.VALIDITY_PERIOD##" ##PA_STATUS_CHANGE_DATE## ##PA_BALANCE_STATUS_CHANGE_DATE## ##PSP_DAY_OF_MONTH## BILLING_GROUP_ID="##BILLING_GROUP_ID##" 
+KEEP_BALANCES="##SC.KEEP_BALANCES##"/>
+    </Rows>
+  </DataTable>
+
+  <DataTable Name="LowBalanceLimitsDataTable">
+    <Columns>
+      <Column Name="PERSONAL_ACCOUNT_ID" Type="System.Int64"/>
+      <Column Name="LIMIT_VALUE" Type="System.Decimal"/>
+      <Column Name="LIMIT_LEVEL" Type="System.Decimal"/>
+    </Columns>
+    <Rows>
+      ##Limits##
+    </Rows>
+  </DataTable>
+
+  ##ServiceTable##
+      
+  ##ServiceParametersTable##
+      
+</DataSet>]]>
+    </RequestTemplate>
+    <Item Name="PersonalAccount" Type="Wellknown"/>
+    <Item Name="SC.BALANCE" Type="Parameter"/>
+    <Item Name="SC.CURRENCY_CODE" Type="Parameter"/>
+    <Item Name="SC.PA_STATUS" Type="Parameter"/>
+    <Item Name="SC.SERVICE_PROVIDER_CODE" Type="Parameter"/>
+    <Item Name="SC.BLOCK_LIMIT" Type="Parameter"/>
+    <Item Name="SC.UNBLOCK_LIMIT" Type="Parameter"/>
+    <Item Name="SC.PARTIAL_BLOCK_LIMIT" Type="Parameter"/>
+    <Item Name="SC.EXPIRES" Type="Parameter"/>
+    <Item Name="SC.EXPIRATION_DATE_MONITOR" Type="Parameter"/>
+    <Item Name="SC.ADMIN_BLOCK" Type="Parameter"/>
+    <Item Name="SC.ADMIN_BLOCKED_DATE" Type="Parameter"/>
+    <Item Name="SC.BLOCKED_END_DATE" Type="Parameter"/>
+    <Item Name="TAX_GROUP_ID" Type="Parameter"/>
+    <Item Name="SC.MAX_BLOCKED_PERIOD" Type="Parameter"/>
+    <Item Name="SC.AFTER_GRACE_PERIOD" Type="Parameter"/>
+    <Item Name="SC.IS_GRACE_STARTS_ON_BLOCK" Type="Parameter"/>
+    <Item Name="SC.VALIDITY_PERIOD" Type="Parameter"/>
+    <Item Name="CUSTOMER_TYPE_ID" Type="Parameter"/>
+    <Item Name="datetime" Type="Wellknown"/>
+    <Item Name="SC.PA_BALANCE_STATUS" Type="Parameter"/>
+    <Item Name="PA_STATUS_CHANGE_DATE" Type="Parameter"/>
+    <Item Name="PA_BALANCE_STATUS_CHANGE_DATE" Type="Parameter"/>
+    <Item Name="PSP_DAY_OF_MONTH" Type="Parameter"/>
+    <Item Name="BILLING_GROUP_ID" Type="Parameter"/>
+    <Item Name="SC.KEEP_BALANCES" Type="Parameter"/>
+    <Item Name="Limits" Type="LocalDynamicParameter"/>
+    <Item Name="ServiceTable" Type="LocalDynamicParameter"/>
+    <Item Name="ServiceParametersTable" Type="LocalDynamicParameter"/>
+  </Request>
+  <RollbackRequest>
+    <RequestTemplate>
+      <![CDATA[<DataSet Name="DeletePADataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Attributes>
+    <Attribute Name="Label" Type="System.String" Value="DeletePA;##datetime##;[SCP_MARKER]"/>
+    <Attribute Name="Protocol" Type="System.String" Value="Msmq"/>
+  </Attributes>
+  <DataTable Name="DeletePADataTable">
+    <Columns>
+      <Column Name="REQUEST_ID" Type="System.String"/>
+      <Column Name="PERSONAL_ACCOUNT_ID" Type="System.Int64"/>
+    </Columns>
+    <Rows>
+      <Row REQUEST_ID="##ASYNC_REQUEST_ID##" PERSONAL_ACCOUNT_ID="##PersonalAccount##"/>
+    </Rows>
+  </DataTable>
+</DataSet>]]>
+    </RequestTemplate>
+    <Item Name="id" Type="Wellknown"/>
+    <Item Name="PersonalAccount" Type="Wellknown"/>
+    <Item Name="datetime" Type="Wellknown"/>
+  </RollbackRequest>
+  <DynamicParametersList>
+    <DynamicParameter Name="Limits">
+      <Source Path="//string"/>
+      <DynamicObject Name="Limits" SkipMissed="True"/>
+    </DynamicParameter>
+    <DynamicParameter Name="ServiceTable">
+      <Source Path="//string"/>
+      <DynamicObject Name="ServiceTable" SkipMissed="True"/>
+    </DynamicParameter>
+    <DynamicParameter Name="ServiceParametersTable">
+      <Source Path="//string"/>
+      <DynamicObject Name="ServiceParametersTable" SkipMissed="True"/>
+    </DynamicParameter>
+  </DynamicParametersList>
+  <ErrorsList CodePage="ascii"/>
+</Command>

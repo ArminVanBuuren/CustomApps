@@ -1,0 +1,20 @@
+<Command Name="Block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Блокировка</Description>
+  <Author Name="YAI" Date="2018-05-07+15:21" />
+  <Request Template="&lt;soap:Envelope xmlns:soap=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+&lt;soap:Body&gt;
+&lt;BlockSubcriber&gt;
+&lt;SubscriberData&gt;
+&lt;msisdn&gt;{0}&lt;/msisdn&gt;
+&lt;ucc&gt;{1}&lt;/ucc&gt;
+&lt;/SubscriberData&gt;
+&lt;/BlockSubcriber&gt;
+&lt;/soap:Body&gt;
+&lt;/soap:Envelope&gt;">
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="TdId" Type="DynamicParameter" />
+  </Request>
+  <ErrorsList CodePage="ASCII">
+    <Error Name="&lt;errorCode&gt;9&lt;/errorCode&gt;" Value="SUCCESS" />
+  </ErrorsList>
+</Command>

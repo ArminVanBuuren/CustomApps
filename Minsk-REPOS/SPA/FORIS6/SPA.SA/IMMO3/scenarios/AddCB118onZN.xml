@@ -1,0 +1,325 @@
+<scenario name="AddCB118onZN">
+  <objectList>
+    <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll" />
+    <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
+  </objectList>
+  <automat>
+    <node name="BySubscribersSplitter" object="BySubscribersSplitter">
+      <resultlist>
+        <result value="0" node="BySubscriberRequestDequeuer" />
+      </resultlist>
+      <parameterslist>
+        <param name="queueName" value="requestsSplittedBySubscriberQueue" />
+      </parameterslist>
+    </node>
+    <node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+      <resultlist>
+        <result value="0" node="IfZnakomstvaServiceNode" />
+        <result value="1" node="" />
+      </resultlist>
+      <parameterslist>
+        <param name="queueName" value="requestsSplittedBySubscriberQueue" />
+      </parameterslist>
+    </node>
+    <node name="IfZnakomstvaServiceNode" object="IfConditionXmlResolver">
+      <resultlist>
+        <result value="0" node="ChangeZnakomstvaNode" />
+        <result value="1" node="IfForumServiceNode" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="request" />
+        <param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR8885" />
+        <param name="Value:1" value="" />
+      </parameterslist>
+    </node>
+    <node name="ChangeZnakomstvaNode" object="Commander">
+      <resultlist>
+        <result value="0" node="IfForumServiceNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="ChangeMSISDN" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="IfForumServiceNode" object="IfConditionXmlResolver">
+      <resultlist>
+        <result value="0" node="ChangeForumNode" />
+        <result value="1" node="IfInternetContractNode" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="request" />
+        <param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR10249" />
+        <param name="Value:1" value="" />
+      </parameterslist>
+    </node>
+    <node name="ChangeForumNode" object="Commander">
+      <resultlist>
+        <result value="0" node="IfInternetContractNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="ChangeMSISDNForum" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="IfInternetContractNode" object="IfConditionXmlResolver">
+      <resultlist>
+        <result value="0" node="ChangeInternetContractNode" />
+        <result value="1" node="IfEroServiceNode" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="request" />
+        <param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR12448" />
+        <param name="Value:1" value="" />
+      </parameterslist>
+    </node>
+    <node name="ChangeInternetContractNode" object="Commander">
+      <resultlist>
+        <result value="0" node="IfEroServiceNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="ChangeMSISDNInternetContract" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="IfEroServiceNode" object="IfConditionXmlResolver">
+      <resultlist>
+        <result value="0" node="ChangeEroNode" />
+        <result value="1" node="IfFlirtServiceNode" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="request" />
+        <param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11422" />
+        <param name="Value:1" value="" />
+      </parameterslist>
+    </node>
+    <node name="ChangeEroNode" object="Commander">
+      <resultlist>
+        <result value="0" node="IfFlirtServiceNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="ChangeMSISDNEro" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="IfFlirtServiceNode" object="IfConditionXmlResolver">
+      <resultlist>
+        <result value="0" node="ChangeFlirtNode" />
+        <result value="1" node="IfMuzPortalServiceNode" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="request" />
+        <param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11646" />
+        <param name="Value:1" value="" />
+      </parameterslist>
+    </node>
+    <node name="ChangeFlirtNode" object="Commander">
+      <resultlist>
+        <result value="0" node="IfMuzPortalServiceNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="ChangeMSISDNFlirt" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="IfMuzPortalServiceNode" object="IfConditionXmlResolver">
+      <resultlist>
+        <result value="0" node="ChangeMuzPortalNode" />
+        <result value="1" node="IfPricolServiceNode" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="request" />
+        <param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11527" />
+        <param name="Value:1" value="" />
+      </parameterslist>
+    </node>
+    <node name="ChangeMuzPortalNode" object="Commander">
+      <resultlist>
+        <result value="0" node="IfPricolServiceNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="ChangeMSISDNMuzPortal" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="IfPricolServiceNode" object="IfConditionXmlResolver">
+      <resultlist>
+        <result value="0" node="ChangePricolNode" />
+        <result value="1" node="IfGameServiceNode" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="request" />
+        <param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11435" />
+        <param name="Value:1" value="" />
+      </parameterslist>
+    </node>
+    <node name="ChangePricolNode" object="Commander">
+      <resultlist>
+        <result value="0" node="IfGameServiceNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="ChangeMSISDNPricol" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="IfGameServiceNode" object="IfConditionXmlResolver">
+      <resultlist>
+        <result value="0" node="ChangeGameNode" />
+        <result value="1" node="Change_Game_Node" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="request" />
+        <param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR12129" />
+        <param name="Value:1" value="" />
+      </parameterslist>
+    </node>
+    <node name="ChangeGameNode" object="Commander">
+      <resultlist>
+        <result value="0" node="Change_Game_Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="ChangeMSISDNGame" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="Change_Game_Node" object="IfCommander">
+      <resultlist>
+        <result value="0" node="Change_Health_Node" />
+        <result value="1538" node="Change_Health_Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16154" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="ChangeMSISDNGame" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+      </parameterslist>
+    </node>
+    <node name="Change_Health_Node" object="IfCommander">
+      <resultlist>
+        <result value="0" node="Change_Music_Node" />
+        <result value="1538" node="Change_Music_Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16155" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="ChangeMSISDNHealth" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+      </parameterslist>
+    </node>
+    <node name="Change_Music_Node" object="IfCommander">
+      <resultlist>
+        <result value="0" node="Change_Flirt_Node" />
+        <result value="1538" node="Change_Flirt_Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16156" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="ChangeMSISDNMuzContract" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+      </parameterslist>
+    </node>
+    <node name="Change_Flirt_Node" object="IfCommander">
+      <resultlist>
+        <result value="0" node="Change_Fun_Node" />
+        <result value="1538" node="Change_Fun_Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16157" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="ChangeMSISDNFlirtContract" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+      </parameterslist>
+    </node>
+    <node name="Change_Fun_Node" object="IfCommander">
+      <resultlist>
+        <result value="0" node="Change_Ero_Node" />
+        <result value="1538" node="Change_Ero_Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16158" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="ChangeMSISDNPricol" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+      </parameterslist>
+    </node>
+    <node name="Change_Ero_Node" object="IfCommander">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16159" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="ChangeMSISDNEro" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+      </parameterslist>
+    </node>
+    <node name="DummyResponderNode" object="DummyResponder">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="OverallResult" value="SUCCESS" />
+        <param name="DetailedResult" value="SUCCESS" />
+        <param name="Delay" value="0" />
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="BySubscriberRequestDequeuer" />
+      </resultlist>
+    </node>
+  </automat>
+</scenario>

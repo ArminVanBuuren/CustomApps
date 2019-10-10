@@ -1,0 +1,97 @@
+<BusinessProcessData name="Assign CUG in All platform">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="AddService" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="SCProcessingUnit" object="SCProcessingUnit">
+          <parameterslist />
+          <resultlist>
+            <result value="" node="AddCUGInFP" />
+          </resultlist>
+        </node>
+        <node name="AddCUGInFP" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddCUGInFP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCUGPR" />
+          </resultlist>
+        </node>
+        <node name="AddCUGPR" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddCUGPR" />
+          </parameterslist>
+          <resultlist>
+            <result value="0" node="AddCUGCL" />
+            <result value="" node="" />
+          </resultlist>
+        </node>
+        <node name="AddCUGCL" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddCUGCL" />
+          </parameterslist>
+          <resultlist>
+            <result value="0" node="AddCUGLG" />
+            <result value="" node="" />
+          </resultlist>
+        </node>
+        <node name="AddCUGLG" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddCUGLG" />
+          </parameterslist>
+          <resultlist>
+            <result value="0" node="AddCUGAI" />
+            <result value="" node="" />
+          </resultlist>
+        </node>
+        <node name="AddCUGAI" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddCUGAI" />
+          </parameterslist>
+          <resultlist>
+            <result value="0" node="AddCUGOO" />
+            <result value="" node="" />
+          </resultlist>
+        </node>
+        <node name="AddCUGOO" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddCUGOO" />
+          </parameterslist>
+          <resultlist>
+            <result value="0" node="AddCUGOP" />
+            <result value="" node="" />
+          </resultlist>
+        </node>
+        <node name="AddCUGOP" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddCUGOP" />
+          </parameterslist>
+          <resultlist>
+            <result value="0" node="AddCUGAO" />
+            <result value="" node="" />
+          </resultlist>
+        </node>
+        <node name="AddCUGAO" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddCUGAO" />
+          </parameterslist>
+          <resultlist>
+            <result value="0" node="AddCUGOI" />
+            <result value="" node="" />
+          </resultlist>
+        </node>
+        <node name="AddCUGOI" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddCUGOI" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

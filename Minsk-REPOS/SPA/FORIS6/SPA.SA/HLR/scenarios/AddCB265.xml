@@ -1,0 +1,204 @@
+<scenario name="AddCB265">
+  <objectList>
+    <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll" />
+    <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+  </objectList>
+  <automat>
+    <node name="BySubscribersSplitter" object="BySubscribersSplitter">
+      <resultlist>
+        <result value="0" node="SingleSubscriberRequestDequeuer" />
+      </resultlist>
+    </node>
+    <node name="SingleSubscriberRequestDequeuer" object="Dequeuer">
+      <resultlist>
+        <result value="0" node="IfCB532IPNode" />
+        <result value="1" node="" />
+      </resultlist>
+      <parameterslist>
+        <param name="queueName" value="requestsSplittedBySubscriberQueue" />
+      </parameterslist>
+    </node>
+    <node name="IfCB532IPNode" object="IfConditionXmlResolver">
+      <resultlist>
+        <result value="0" node="DeactivateCFNRCNODE" />
+        <result value="1" node="AddCB265Node" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="request" />
+        <param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB532" />
+        <param name="Value:1" value="" />
+      </parameterslist>
+    </node>
+    <node name="DeactivateCFNRCNODE" object="Commander">
+      <resultlist>
+        <result value="0" node="DeactivateCFNRYNODE" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="DeactivateCFNRC" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="DeactivateCFNRYNODE" object="Commander">
+      <resultlist>
+        <result value="0" node="AddCB265Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="DeactivateCFNRY" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="AddCB265Node" object="Commander">
+      <resultlist>
+        <result value="0" node="CB_ctrl_subscriberNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="Command" value="AddCB265" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="CB_ctrl_subscriberNode" object="Commander">
+      <resultlist>
+        <result value="0" node="IfFR10654Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="Command" value="CB_ctrl_subscriber" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="IfFR10654Node" object="IfConditionXmlResolver">
+      <resultlist>
+        <result value="0" node="Add_CB_OC_IPNode" />
+        <result value="1" node="IfFR390Node" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="request" />
+        <param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR10654" />
+        <param name="Value:1" value="" />
+      </parameterslist>
+    </node>
+    <node name="IfFR390Node" object="IfConditionXmlResolver">
+      <resultlist>
+        <result value="0" node="Add_CB_OC_IPNode" />
+        <result value="1" node="IfFR389Node" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="request" />
+        <param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR390" />
+        <param name="Value:1" value="" />
+      </parameterslist>
+    </node>
+    <node name="Add_CB_OC_IPNode" object="Commander">
+      <resultlist>
+        <result value="0" node="CB_OC_act_ts11_IPNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="Add_CB_OC" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="CB_OC_act_ts11_IPNode" object="Commander">
+      <resultlist>
+        <result value="0" node="CB_ctrl_operator_IPNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="CB_OC_act_ts1x" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="CB_ctrl_operator_IPNode" object="Commander">
+      <resultlist>
+        <result value="0" node="IfFR389Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="CB_ctrl_operator" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="IfFR389Node" object="IfConditionXmlResolver">
+      <resultlist>
+        <result value="0" node="Add_CB_IC_389Node" />
+        <result value="1" node="ExitDummyResponderNode" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="request" />
+        <param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR389" />
+        <param name="Value:1" value="" />
+      </parameterslist>
+    </node>
+    <node name="Add_CB_IC_389Node" object="Commander">
+      <resultlist>
+        <result value="0" node="CB_IC_act_ts11_389Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="Add_CB_IC" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="CB_IC_act_ts11_389Node" object="Commander">
+      <resultlist>
+        <result value="0" node="CB_ctrl_operator_IC_389Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="CB_IC_act_ts1x" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="CB_ctrl_operator_IC_389Node" object="Commander">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="CB_ctrl_operator" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="ExitDummyResponderNode" object="DummyResponder">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="OverallResult" value="SUCCESS" />
+        <param name="DetailedResult" value="SUCCESS" />
+        <param name="Delay" value="0" />
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="SingleSubscriberRequestDequeuer" />
+      </resultlist>
+    </node>
+  </automat>
+</scenario>

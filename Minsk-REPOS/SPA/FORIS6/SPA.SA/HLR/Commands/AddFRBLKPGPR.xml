@@ -1,0 +1,8 @@
+<Command Name="AddFRBLKPGPR" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>&gt;Блокировка исходящей связи с GPRS на HLR HUAWEI</Description>
+  <Author Name="YAI" Date="2011-09-07+12:18" />
+  <Request Template="MOD ODB: ISDN=&quot;{0}&quot;,ODBOC=BAOC;^JMOD GPRSLCK: ISDN=&quot;{0}&quot;, LOCK=TRUE;">
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ASCII" />
+</Command>

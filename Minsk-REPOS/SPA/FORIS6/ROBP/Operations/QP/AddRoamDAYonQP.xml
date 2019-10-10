@@ -1,0 +1,13 @@
+<OperationData Name="AddRoamDAYonQP" NEType="QP" NEAlias="QP">
+  <Request Name="RequestMessage">
+    <AdditionalData Executable="True">
+      <ProvisionList HaltMode="CancelOperation" Type="AnyOfListed">
+        <FR16821 Type="Optional" />
+        <FR16822 Type="Optional" />
+        <FR16823 Type="Optional" />
+      </ProvisionList>
+      <RegisteredList Type="Optional" />
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage" />
+</OperationData>

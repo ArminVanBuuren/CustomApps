@@ -1,0 +1,221 @@
+<scenario name="SynchronizeSubscriberDataOnFK">
+  <objectList>
+    <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll" />
+    <object name="HttpCmd" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfHttpCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+    <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll" />
+  </objectList>
+  <automat>
+    <node name="BySubscribersSplitter" object="BySubscribersSplitter">
+      <resultlist>
+        <result value="0" node="BySubscriberRequestDequeuer" />
+      </resultlist>
+      <parameterslist>
+        <param name="queueName" value="requestsSplittedBySubscriberQueue" />
+      </parameterslist>
+    </node>
+    <node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+      <resultlist>
+        <result value="0" node="IfBlockNode" />
+        <result value="1" node="" />
+      </resultlist>
+      <parameterslist>
+        <param name="queueName" value="requestsSplittedBySubscriberQueue" />
+      </parameterslist>
+    </node>
+    <node name="IfBlockNode" object="IfMultipleXmlConditionsResolver">
+      <resultlist>
+        <result value="0" node="Block_WAP_GAMES_Node" />
+        <result value="1" node="UnBlock_WAP_GAMES_Node" />
+      </resultlist>
+      <parameterslist>
+        <param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/BLTDLIM" />
+        <param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CBBLKLOST" />
+        <param name="OrXmlPath:2" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKCHK" />
+        <param name="OrXmlPath:3" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKFIN" />
+        <param name="OrXmlPath:4" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKKEEP" />
+        <param name="OrXmlPath:5" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKPAY" />
+        <param name="OrXmlPath:6" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKP" />
+        <param name="OrXmlPath:7" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKTIME" />
+        <param name="OrXmlPath:8" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKUSER" />
+      </parameterslist>
+    </node>
+    <node name="Block_WAP_GAMES_Node" object="IfHttpCommander">
+      <resultlist>
+        <result value="0" node="Block_WAP_MUSIC_Node" />
+        <result value="1538" node="Block_WAP_MUSIC_Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="fmk-mts/" />
+        <param name="Command" value="BlockWAPGAMES" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="10.128.213.41" />
+        <param name="Connection.Port" value="88" />
+        <param name="Connection.Method" value="GET" />
+        <param name="Connection.ContentType" value="text/xml; charset=utf-8" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR14804" />
+      </parameterslist>
+    </node>
+    <node name="Block_WAP_MUSIC_Node" object="IfHttpCommander">
+      <resultlist>
+        <result value="0" node="Block_WAP_FILMS_Node" />
+        <result value="1538" node="Block_WAP_FILMS_Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="fmk-mts/" />
+        <param name="Command" value="BlockWAPMUSIC" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="10.128.213.41" />
+        <param name="Connection.Port" value="88" />
+        <param name="Connection.Method" value="GET" />
+        <param name="Connection.ContentType" value="text/xml; charset=utf-8" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR14805" />
+      </parameterslist>
+    </node>
+    <node name="Block_WAP_FILMS_Node" object="IfHttpCommander">
+      <resultlist>
+        <result value="0" node="Block_MTS_FOOTBALL_Node" />
+        <result value="1538" node="Block_MTS_FOOTBALL_Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="fmk-mts/" />
+        <param name="Command" value="BlockWAPFILMS" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="10.128.213.41" />
+        <param name="Connection.Port" value="88" />
+        <param name="Connection.Method" value="GET" />
+        <param name="Connection.ContentType" value="text/xml; charset=utf-8" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR14806" />
+      </parameterslist>
+    </node>
+    <node name="Block_MTS_FOOTBALL_Node" object="IfHttpCommander">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="fmk_footbal-mts/" />
+        <param name="Command" value="BlockMTSFOOTBALL" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="10.128.213.41" />
+        <param name="Connection.Port" value="88" />
+        <param name="Connection.Method" value="GET" />
+        <param name="Connection.ContentType" value="text/xml; charset=utf-8" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR15376" />
+      </parameterslist>
+    </node>
+    <node name="UnBlock_WAP_GAMES_Node" object="IfHttpCommander">
+      <resultlist>
+        <result value="0" node="UnBlock_WAP_MUSIC_Node" />
+        <result value="1538" node="UnBlock_WAP_MUSIC_Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="fmk-mts/" />
+        <param name="Command" value="UnBlockWAPGAMES" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="10.128.213.41" />
+        <param name="Connection.Port" value="88" />
+        <param name="Connection.Method" value="GET" />
+        <param name="Connection.ContentType" value="text/xml; charset=utf-8" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR14804" />
+      </parameterslist>
+    </node>
+    <node name="UnBlock_WAP_MUSIC_Node" object="IfHttpCommander">
+      <resultlist>
+        <result value="0" node="UnBlock_WAP_FILMS_Node" />
+        <result value="1538" node="UnBlock_WAP_FILMS_Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="fmk-mts/" />
+        <param name="Command" value="UnBlockWAPMUSIC" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="10.128.213.41" />
+        <param name="Connection.Port" value="88" />
+        <param name="Connection.Method" value="GET" />
+        <param name="Connection.ContentType" value="text/xml; charset=utf-8" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR14805" />
+      </parameterslist>
+    </node>
+    <node name="UnBlock_WAP_FILMS_Node" object="IfHttpCommander">
+      <resultlist>
+        <result value="0" node="UnBlock_MTS_FOOTBALL_Node" />
+        <result value="1538" node="UnBlock_MTS_FOOTBALL_Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="fmk-mts/" />
+        <param name="Command" value="UnBlockWAPFILMS" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="10.128.213.41" />
+        <param name="Connection.Port" value="88" />
+        <param name="Connection.Method" value="GET" />
+        <param name="Connection.ContentType" value="text/xml; charset=utf-8" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR14806" />
+      </parameterslist>
+    </node>
+    <node name="UnBlock_MTS_FOOTBALL_Node" object="IfHttpCommander">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="fmk_footbal-mts/" />
+        <param name="Command" value="UnBlockMTSFOOTBALL" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="10.128.213.41" />
+        <param name="Connection.Port" value="88" />
+        <param name="Connection.Method" value="GET" />
+        <param name="Connection.ContentType" value="text/xml; charset=utf-8" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR15376" />
+      </parameterslist>
+    </node>
+    <node name="DummyResponderNode" object="DummyResponder">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="OverallResult" value="SUCCESS" />
+        <param name="DetailedResult" value="SUCCESS" />
+        <param name="Delay" value="0" />
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="BySubscriberRequestDequeuer" />
+      </resultlist>
+    </node>
+  </automat>
+</scenario>

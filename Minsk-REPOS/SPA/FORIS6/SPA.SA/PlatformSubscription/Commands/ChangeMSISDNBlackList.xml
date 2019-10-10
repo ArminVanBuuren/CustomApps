@@ -1,0 +1,8 @@
+<Command Name="ChangeMSISDNBlackList" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Service</Description>
+  <Author Name="NNM" Date="2019-04-04+12:30" />
+  <Request Template="blacklist_add?msisdn={0}">
+    <Item Name="NewMSISDN" Type="Parameter" />
+  </Request>
+  <ErrorsList CodePage="ascii" />
+</Command>

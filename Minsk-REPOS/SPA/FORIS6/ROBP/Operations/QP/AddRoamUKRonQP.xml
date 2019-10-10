@@ -1,0 +1,14 @@
+<OperationData Name="AddRoamUKRonQP" NEType="QP" NEAlias="QP">
+  <Request Name="RequestMessage">
+    <AdditionalData Executable="True">
+      <ProvisionList HaltMode="CancelOperation" Type="AnyOfListed">
+        <FR16813 Type="Optional" />
+        <FR16814 Type="Optional" />
+        <FR16815 Type="Optional" />
+        <FR16816 Type="Optional" />
+      </ProvisionList>
+      <RegisteredList Type="Optional" />
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage" />
+</OperationData>

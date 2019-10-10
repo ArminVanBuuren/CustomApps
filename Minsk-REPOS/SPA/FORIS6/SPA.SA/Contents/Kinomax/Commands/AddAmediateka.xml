@@ -1,0 +1,8 @@
+<Command Name="AddAmediateka" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Добавление Подписка на Амедиатеку</Description>
+  <Author Name="NNM" Date="2018-11-15+14:21" />
+  <Request Template="{{&quot;action&quot;: &quot;add&quot;,&quot;external_name&quot;: &quot;FR16501&quot;}}">
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ASCII" />
+</Command>

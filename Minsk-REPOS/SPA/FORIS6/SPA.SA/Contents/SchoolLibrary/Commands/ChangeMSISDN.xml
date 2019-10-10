@@ -1,0 +1,14 @@
+<Command Name="ChangeMSISDN" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Замена номера</Description>
+  <Author Name="YAI" Date="2015-07-14+13:25" />
+  <Request Template="">
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="newsisdn" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ASCII">
+    <Error Name="&quot;err_id&quot;&quot;number_exists&quot;" Value="SUCCESS" />
+    <Error Name="&quot;err_id&quot;:&quot;exists&quot;" Value="SUCCESS" />
+    <Error Name="&quot;err_id&quot;:&quot;new_number_exists&quot;" Value="SUCCESS" />
+    <Error Name="&quot;err_id&quot;:&quot;unknown_user&quot;" Value="SUCCESS" />
+  </ErrorsList>
+</Command>

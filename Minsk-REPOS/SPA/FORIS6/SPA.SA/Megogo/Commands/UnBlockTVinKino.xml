@@ -1,0 +1,8 @@
+<Command Name="UnBlockTVinKino" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Удаление блокировки</Description>
+  <Author Name="NNM" Date="2019-07-17+16:30" />
+  <Request Template="resume.xml?msisdn={0}&amp;service_id=FR17017">
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ascii" />
+</Command>

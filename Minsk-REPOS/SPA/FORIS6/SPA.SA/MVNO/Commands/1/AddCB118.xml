@@ -1,0 +1,9 @@
+<Command Name="AddCB118" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Изменение номера MSISDN</Description>
+  <Author Name="olza" Date="2011-09-13+15:55" />
+  <Request Template="MOD ISDN: ISDN=&quot;{0}&quot;, NEWISDN=&quot;{1}&quot;;^M">
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="NewMSISDN" Type="Parameter" />
+  </Request>
+  <ErrorsList CodePage="ASCII" />
+</Command>

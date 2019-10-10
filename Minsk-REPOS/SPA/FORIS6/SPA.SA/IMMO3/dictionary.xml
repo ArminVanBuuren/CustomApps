@@ -1,0 +1,29 @@
+<Dictionary>
+  <WellknownsList>
+    <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)" />
+  </WellknownsList>
+  <ErrorsList CodePage="ASCII">
+    <Error Name="RESULT=1" Value="SUCCESS" />
+    <Error Name="RESULT=0" Value="FAILURE" />
+    <!--<Error Name="Ok" Value="SUCCESS"/> -->
+    <Error Name="Wrong query!" Value="FAILURE" />
+    <Error Name="HTTP CODE 500" Value="FAILURE" />
+  </ErrorsList>
+  <RegexpsList />
+  <!--    <Regexp Name="Error" Value="(?&lt;ERROR&gt;-*\d)"/>
+    </RegexpsList> -->
+  <ConstantsList />
+  <ParametersList>
+    <Parameter Name="NewMSISDN">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//NewMSISDN" />
+      <PossibleValues StringToKeyTable="true" />
+    </Parameter>
+  </ParametersList>
+  <DynamicParametersList />
+  <CommandsList Root="C:\FORIS\SPA\SPA.SA\IMMO3\Commands" Mask="*.xml">
+    <!-- All new commands are included by Mask=*.xml attribute -->
+  </CommandsList>
+  <!--DecodersList Root="..\SPA.SA\Dictionaries\Decoders">
+		<Decoder Path="RbtDecoder.xml"/>
+	</DecodersList-->
+</Dictionary>

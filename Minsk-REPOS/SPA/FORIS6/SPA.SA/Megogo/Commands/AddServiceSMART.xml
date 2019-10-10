@@ -1,0 +1,8 @@
+<Command Name="AddServiceSMART" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Добавление SMART КИНО</Description>
+  <Author Name="YAI" Date="2014-04-18+10:30" />
+  <Request Template="subscribe.xml?msisdn={0}&amp;service_id=FR9389">
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ascii" />
+</Command>

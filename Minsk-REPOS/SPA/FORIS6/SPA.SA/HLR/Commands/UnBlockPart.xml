@@ -1,0 +1,8 @@
+<Command Name="UnBlockPart" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Разблокировка входящей и исходящей связи без МД</Description>
+  <Author Name="YAI" Date="2011-09-07+12:18" />
+  <Request Template="MOD ODB: ISDN=&quot;{0}&quot;,ODBOC=BOIC, ODBIC=NOBIC;">
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ASCII" />
+</Command>

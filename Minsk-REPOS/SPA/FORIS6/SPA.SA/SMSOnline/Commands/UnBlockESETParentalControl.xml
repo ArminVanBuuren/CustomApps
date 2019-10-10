@@ -1,0 +1,8 @@
+<Command Name="UnBlockESETParentalControl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Удаление блокировки</Description>
+  <Author Name="YAI" Date="2017-07-12+10:21" />
+  <Request Template="v1/subscriptions/unblock?phone={0}&amp;service=FR14351">
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ASCII" />
+</Command>

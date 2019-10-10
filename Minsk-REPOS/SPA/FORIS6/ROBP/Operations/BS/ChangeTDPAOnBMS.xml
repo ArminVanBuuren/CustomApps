@@ -1,0 +1,19 @@
+<OperationData Name="ChangeTDPAOnBMS" NEType="BS" NEAlias="BS">
+  <Request Name="RequestMessage">
+    <AdditionalData Executable="True">
+      <ProvisionList HaltMode="CancelOperation" Type="AnyOfListed">
+        <TransferTD Type="Optional">
+          <NewPersonalAccountNumber HaltMode="CancelOperation" Type="Mandatory" MissedValueResult="MissedServiceParameterValue" />
+          <OldPersonalAccountNumber HaltMode="CancelOperation" Type="Mandatory" MissedValueResult="MissedServiceParameterValue" />
+        </TransferTD>
+      </ProvisionList>
+      <RegisteredList Type="Optional" />
+      <BalanceStorage Type="Optional">
+        <HostTypeCode Type="Optional" />
+        <HostId Type="Optional" />
+        <HostCode Type="Optional" />
+      </BalanceStorage>
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage" />
+</OperationData>

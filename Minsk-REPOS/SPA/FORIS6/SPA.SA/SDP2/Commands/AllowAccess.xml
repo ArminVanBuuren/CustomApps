@@ -1,0 +1,8 @@
+<Command Name="AllowAccess" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>РАзрешить интернет</Description>
+  <Author Name="yai" Date="2012-07-05+14:38" />
+  <Request Template="query-sessions /radius/sessionManagers/Eth_cache/ with-Attribute Callback-Number {0} send-COA with-Profile ETTH-Profile-Internet^M">
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ascii" />
+</Command>

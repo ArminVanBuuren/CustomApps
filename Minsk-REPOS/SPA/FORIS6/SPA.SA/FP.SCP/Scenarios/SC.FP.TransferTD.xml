@@ -1,0 +1,103 @@
+<scenario name="SC.FP.TransferTD">
+  <objectList>
+    <object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll" />
+    <object name="FPCommandDataConstructor" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.FPProcessingUnits.FPCommandDataConstructor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IdentifiersGenerator" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.IdentifiersGenerator" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+    <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+  </objectList>
+  <automat>
+    <node name="BySubscribersCutter-Node" object="BySubscribersCutter">
+      <resultlist>
+        <result value="0" node="IdentifiersGenerator-Node" />
+        <result value="1" node="" />
+      </resultlist>
+    </node>
+    <node name="IdentifiersGenerator-Node" object="IdentifiersGenerator">
+      <parameterslist>
+        <param name="WellknownName" value="GlobalUid" />
+      </parameterslist>
+      <resultlist>
+        <result value="0" node="CheckSingleSCPEnabled" />
+      </resultlist>
+    </node>
+    <!-- Если включен единый SCP и была не BS платформа -->
+    <node name="CheckSingleSCPEnabled" object="ConditionsResolver">
+      <resultlist>
+        <result value="0" node="ChangeTDPAOnFP-Node" />
+        <result value="" node="CheckPreviousPlatform-Node" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="*['processingFlag(SingleSCPEnabled)'='True']" />
+        <param name="IfXmlPath:1" value="//PreviousPlatform/HostCode" />
+        <param name="IfNotXmlPath:0" value="//PreviousPlatform/HostCode[contains('[HOST_CODE_BS]',.)]"/>
+      </parameterslist>
+    </node>
+    <!-- Проверяем ПО есть на текущей платформе -->
+    <node name="CheckPreviousPlatform-Node" object="ConditionsResolver">
+      <resultlist>
+        <result value="0" node="ChangeTDPAOnFP-Node" />
+        <result value="" node="CommandDataConstructor-Create-Node" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//PreviousPlatform/HostCode[contains(//Destination,.)]" />
+      </parameterslist>
+    </node>
+    <!-- если есть обновляем -->
+    <node name="ChangeTDPAOnFP-Node" object="Commander">
+      <resultlist>
+        <result value="" node="ResponseAssembler-Node" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.ChangeLinkTDPA" />
+        <param name="AppendSubscribersData" value="true" />
+        <param name="Asynchronous" value="true" />
+      </parameterslist>
+    </node>
+    <!-- или нет, если нет создаём -->
+    <node name="CommandDataConstructor-Create-Node" object="FPCommandDataConstructor">
+      <resultlist>
+        <result value="0" node="CommandDataConstructorCounters-Node" />
+        <result value="1538" node="CommandDataConstructorCounters-Node" />
+        <result value="" node="ResponseAssembler-Node" />
+      </resultlist>
+      <parameterslist>
+        <param name="ServicesDynamicObject" value="RegisteredServices" />
+        <param name="ParametersDynamicObject" value="RegisteredServicesParams" />
+        <param name="ServicesCommand" value="SC.CreateTDC.ServiceRow" />
+        <param name="ParametersCommand" value="SC.Service.ParameterRow" />
+        <param name="XmlPath" value="//AdditionalData/EndList/RFS_FP_SERVICE_GENERAL" />
+      </parameterslist>
+    </node>
+    <node name="CommandDataConstructorCounters-Node" object="FPCommandDataConstructor">
+      <resultlist>
+        <result value="0" node="AddTDPAOnFP-Node" />
+        <result value="1538" node="AddTDPAOnFP-Node" />
+        <result value="" node="ResponseAssembler-Node" />
+      </resultlist>
+      <parameterslist>
+        <param name="ServicesDynamicObject" value="RegisteredCounters" />
+        <param name="ServicesCommand" value="SC.CounterRow" />
+        <param name="XmlPath" value="//AdditionalData/AddList//Counters/*" />
+      </parameterslist>
+    </node>
+    <node name="AddTDPAOnFP-Node" object="Commander">
+      <resultlist>
+        <result value="" node="ResponseAssembler-Node" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.CreateLinkTDPA" />
+        <param name="AppendSubscribersData" value="true" />
+        <param name="Asynchronous" value="true" />
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler-Node" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="BySubscribersCutter-Node" />
+      </resultlist>
+    </node>
+  </automat>
+</scenario>

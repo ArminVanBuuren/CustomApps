@@ -1,0 +1,32 @@
+<Dictionary>
+  <WellknownsList>
+    <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)" />
+  </WellknownsList>
+  <ErrorsList CodePage="ASCII">
+    <Error Name="&quot;success&quot;" Value="SUCCESS" />
+    <Error Name="&quot;already signed&quot;" Value="SUCCESS" />
+    <Error Name="&quot;description&quot;:&quot;1 - OK&quot;" Value="SUCCESS" />
+    <Error Name="&quot;code&quot;: -32600" Value="FAILURE" />
+    <Error Name="&quot;code&quot;: -32700" Value="FAILURE" />
+    <Error Name="&quot;code&quot;: -32601" Value="FAILURE" />
+    <Error Name="&quot;code&quot;: -32602" Value="FAILURE" />
+    <Error Name="&quot;code&quot;: -32603" Value="FAILURE" />
+    <Error Name="503 Service Temporarily Unavailable" Value="ConnectionError" />
+    <Error Name="502 Bad Gateway" Value="ConnectionError" />
+    <Error Name="502 Proxy Error" Value="ConnectionError" />
+  </ErrorsList>
+  <RegexpsList />
+  <ParametersList>
+    <Parameter Name="NewMSISDN">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//NewMSISDN" />
+      <PossibleValues StringToKeyTable="true" />
+    </Parameter>
+  </ParametersList>
+  <DynamicParametersList />
+  <CommandsList Root="C:\FORIS\SPA\SPA.SA\MTSMusic\Commands" Mask="*.xml">
+    <!-- All new commands are included by Mask=*.xml attribute -->
+  </CommandsList>
+  <DecodersList Root="..\SPA.SA\MTSMusic\Decoders">
+    <Decoder Path="RbtDecoder.xml" />
+  </DecodersList>
+</Dictionary>

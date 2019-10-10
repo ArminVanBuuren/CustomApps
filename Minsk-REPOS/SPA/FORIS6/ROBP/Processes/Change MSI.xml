@@ -1,0 +1,296 @@
+<BusinessProcessData name="Change MSI">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="ChangeMSISDN" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="SplitForDummy" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+        <object name="DummyResult" class="FORIS.ScenarioProcessing.CommonUnits.ConditionalDummyResultCreator" assembly="FORIS.SPA.SPF.dll" />
+        <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="SCProcessingUnit" object="SCProcessingUnit">
+          <parameterslist />
+          <resultlist>
+            <result value="" node="SplitForDummy" />
+          </resultlist>
+        </node>
+        <node name="SplitForDummy" object="SplitForDummy">
+          <parameterslist>
+            <param name="XmlNameInContext" value="$XmlRequest" />
+            <param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16324" />
+          </parameterslist>
+          <resultlist>
+            <result value="0" node="DummyResult" />
+            <result value="" node="AddCB118" />
+          </resultlist>
+        </node>
+        <node name="DummyResult" object="DummyResult">
+          <parameterslist>
+            <param name="XmlNameInContext" value="$XmlRequest" />
+            <param name="DetailedResult" value="0" />
+            <param name="DetailedResultDescription" value="SUCCESS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+        <node name="AddCB118" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB118" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB537onDM" />
+          </resultlist>
+        </node>
+        <node name="AddCB537onDM" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB537onDM" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB537" />
+          </resultlist>
+        </node>
+        <node name="AddCB537" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB537" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onRT" />
+          </resultlist>
+        </node>
+        <node name="AddCB537onQP" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB537onQP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onRT" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onRT" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB118onRT" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onSE" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onSE" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB118onSE" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onQP" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onQP" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB118onQP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onVM" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onSM" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB118onSM" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onVM" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onVM" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB118onVM" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onDB" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onDB" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB118onDB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onVD" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onVD" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB118onVD" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onMO" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onMO" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB118onMO" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onMT" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onMT" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB118onMT" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onM2" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onM2" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB118onM2" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onSL" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onSL" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB118onSL" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onDR" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onDR" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB118onDR" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onMA" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onMA" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB118onMA" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onBB" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onBB" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB118onBB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onVI" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onVI" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB118onVI" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onMU" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onMU" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB118onMU" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onGS" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onGS" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB118onGS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onRG" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onRG" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB118onRG" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onSF" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onSF" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB118onSF" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onOP" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onOP" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB118onOP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onUM" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onUM" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB118onUM" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onPF" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onPF" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB118onPF" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onFK" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onFK" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB118onFK" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onVA" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onVA" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB118onVA" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onLB" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onLB" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB118onLB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onMI" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onMI" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB118onMI" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onPS" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onPS" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB118onPS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onKM" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onKM" object="ChangeMSISDN">
+          <parameterslist>
+            <param name="operation" value="AddCB118onKM" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

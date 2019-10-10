@@ -1,0 +1,10 @@
+<Command Name="AddNotifService" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Технологическая: интернет-подписка на сервисы</Description>
+  <Author Name="YAI" Date="2016-09-08+10:21" />
+  <Request Template="v1/subscriptions/add?phone={0}&amp;service=FR12221">
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ASCII">
+    <Error Name="&quot;code&quot;:&quot;SUBS_EXISTS&quot;" Value="SUCCESS" />
+  </ErrorsList>
+</Command>

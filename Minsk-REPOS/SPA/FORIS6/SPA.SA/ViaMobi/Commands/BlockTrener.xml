@@ -1,0 +1,8 @@
+<Command Name="BlockTrener" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Тренер</Description>
+  <Author Name="NNM" Date="2018-08-28+16:50" />
+  <Request Template="subsapi?action=suspend&amp;service=coach&amp;msisdn={0}">
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ascii" />
+</Command>

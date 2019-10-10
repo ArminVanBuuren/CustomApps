@@ -1,0 +1,383 @@
+<scenario name="UnBlockonIS">
+  <objectList>
+    <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll" />
+    <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="HttpCmd" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfHttpCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+    <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll" />
+  </objectList>
+  <automat>
+    <node name="BySubscribersSplitter" object="BySubscribersSplitter">
+      <resultlist>
+        <result value="0" node="BySubscriberRequestDequeuer" />
+      </resultlist>
+      <parameterslist>
+        <param name="queueName" value="requestsSplittedBySubscriberQueue" />
+      </parameterslist>
+    </node>
+    <node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+      <resultlist>
+        <result value="0" node="IfBlockNode" />
+        <result value="1" node="" />
+      </resultlist>
+      <parameterslist>
+        <param name="queueName" value="requestsSplittedBySubscriberQueue" />
+      </parameterslist>
+    </node>
+    <node name="IfBlockNode" object="IfMultipleXmlConditionsResolver">
+      <resultlist>
+        <result value="0" node="UnBlockMTSInfoPogodaNode" />
+        <result value="1" node="DummyResponderNode" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="request" />
+        <param name="MultiLevelCondition" value="
+					((//WithdrawalList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/CBBLKLOST)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKCHK)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKFIN)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKKEEP)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKPAY)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKP)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKTIME)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKUSER)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME))
+					
+					" />
+      </parameterslist>
+    </node>
+    <node name="UnBlockMTSInfoPogodaNode" object="IfHttpCommander">
+      <resultlist>
+        <result value="0" node="UnBlockMTSInfoGoroskopNode" />
+        <result value="1538" node="UnBlockMTSInfoGoroskopNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="mtsinfo/" />
+        <param name="Command" value="UnBlockMTSInfoPogoda" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="10.128.213.41" />
+        <param name="Connection.Port" value="81" />
+        <param name="Connection.Method" value="GET" />
+        <param name="Connection.ContentType" value="text/xml; charset=utf-8" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16621" />
+      </parameterslist>
+    </node>
+    <node name="UnBlockMTSInfoGoroskopNode" object="IfHttpCommander">
+      <resultlist>
+        <result value="0" node="UnBlockMTSInfoMusicNode" />
+        <result value="1538" node="UnBlockMTSInfoMusicNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="mtsinfo/" />
+        <param name="Command" value="UnBlockMTSInfoGoroskop" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="10.128.213.41" />
+        <param name="Connection.Port" value="81" />
+        <param name="Connection.Method" value="GET" />
+        <param name="Connection.ContentType" value="text/xml; charset=utf-8" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16622" />
+      </parameterslist>
+    </node>
+    <node name="UnBlockMTSInfoMusicNode" object="IfHttpCommander">
+      <resultlist>
+        <result value="0" node="UnBlockMTSInfoStatusNode" />
+        <result value="1538" node="UnBlockMTSInfoStatusNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="mtsinfo/" />
+        <param name="Command" value="UnBlockMTSInfoMusic" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="10.128.213.41" />
+        <param name="Connection.Port" value="81" />
+        <param name="Connection.Method" value="GET" />
+        <param name="Connection.ContentType" value="text/xml; charset=utf-8" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16623" />
+      </parameterslist>
+    </node>
+    <node name="UnBlockMTSInfoStatusNode" object="IfHttpCommander">
+      <resultlist>
+        <result value="0" node="UnBlockMTSInfoRichNode" />
+        <result value="1538" node="UnBlockMTSInfoRichNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="mtsinfo/" />
+        <param name="Command" value="UnBlockMTSInfoStatus" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="10.128.213.41" />
+        <param name="Connection.Port" value="81" />
+        <param name="Connection.Method" value="GET" />
+        <param name="Connection.ContentType" value="text/xml; charset=utf-8" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16615" />
+      </parameterslist>
+    </node>
+    <node name="UnBlockMTSInfoRichNode" object="IfHttpCommander">
+      <resultlist>
+        <result value="0" node="UnBlockMTSInfoDietaNode" />
+        <result value="1538" node="UnBlockMTSInfoDietaNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="mtsinfo/" />
+        <param name="Command" value="UnBlockMTSInfoRich" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="10.128.213.41" />
+        <param name="Connection.Port" value="81" />
+        <param name="Connection.Method" value="GET" />
+        <param name="Connection.ContentType" value="text/xml; charset=utf-8" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16616" />
+      </parameterslist>
+    </node>
+    <node name="UnBlockMTSInfoDietaNode" object="IfHttpCommander">
+      <resultlist>
+        <result value="0" node="UnBlockMTSInfoGamesNode" />
+        <result value="1538" node="UnBlockMTSInfoGamesNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="mtsinfo/" />
+        <param name="Command" value="UnBlockMTSInfoDieta" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="10.128.213.41" />
+        <param name="Connection.Port" value="81" />
+        <param name="Connection.Method" value="GET" />
+        <param name="Connection.ContentType" value="text/xml; charset=utf-8" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16617" />
+      </parameterslist>
+    </node>
+    <node name="UnBlockMTSInfoGamesNode" object="IfHttpCommander">
+      <resultlist>
+        <result value="0" node="UnBlockMTSInfoEkonomiserNode" />
+        <result value="1538" node="UnBlockMTSInfoEkonomiserNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="mtsinfo/" />
+        <param name="Command" value="UnBlockMTSInfoGames" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="10.128.213.41" />
+        <param name="Connection.Port" value="81" />
+        <param name="Connection.Method" value="GET" />
+        <param name="Connection.ContentType" value="text/xml; charset=utf-8" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16624" />
+      </parameterslist>
+    </node>
+    <node name="UnBlockMTSInfoEkonomiserNode" object="IfHttpCommander">
+      <resultlist>
+        <result value="0" node="UnBlockMTSInfoNastroenieNode" />
+        <result value="1538" node="UnBlockMTSInfoNastroenieNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="mtsinfo/" />
+        <param name="Command" value="UnBlockMTSInfoEkonomiser" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="10.128.213.41" />
+        <param name="Connection.Port" value="81" />
+        <param name="Connection.Method" value="GET" />
+        <param name="Connection.ContentType" value="text/xml; charset=utf-8" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16614" />
+      </parameterslist>
+    </node>
+    <node name="UnBlockMTSInfoNastroenieNode" object="IfHttpCommander">
+      <resultlist>
+        <result value="0" node="UnBlockMTSInfoKursvalNode" />
+        <result value="1538" node="UnBlockMTSInfoKursvalNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="mtsinfo/" />
+        <param name="Command" value="UnBlockMTSInfoNastroenie" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="10.128.213.41" />
+        <param name="Connection.Port" value="81" />
+        <param name="Connection.Method" value="GET" />
+        <param name="Connection.ContentType" value="text/xml; charset=utf-8" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16618" />
+      </parameterslist>
+    </node>
+    <node name="UnBlockMTSInfoKursvalNode" object="IfHttpCommander">
+      <resultlist>
+        <result value="0" node="UnBlockMTSInfoAnekdotNode" />
+        <result value="1538" node="UnBlockMTSInfoAnekdotNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="mtsinfo/" />
+        <param name="Command" value="UnBlockMTSInfoKursval" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="10.128.213.41" />
+        <param name="Connection.Port" value="81" />
+        <param name="Connection.Method" value="GET" />
+        <param name="Connection.ContentType" value="text/xml; charset=utf-8" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16619" />
+      </parameterslist>
+    </node>
+    <node name="UnBlockMTSInfoAnekdotNode" object="IfHttpCommander">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="mtsinfo/" />
+        <param name="Command" value="UnBlockMTSInfoAnekdot" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="10.128.213.41" />
+        <param name="Connection.Port" value="81" />
+        <param name="Connection.Method" value="GET" />
+        <param name="Connection.ContentType" value="text/xml; charset=utf-8" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16620" />
+      </parameterslist>
+    </node>
+    <node name="DummyResponderNode" object="DummyResponder">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="OverallResult" value="SUCCESS" />
+        <param name="DetailedResult" value="SUCCESS" />
+        <param name="Delay" value="0" />
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="BySubscriberRequestDequeuer" />
+      </resultlist>
+    </node>
+  </automat>
+</scenario>

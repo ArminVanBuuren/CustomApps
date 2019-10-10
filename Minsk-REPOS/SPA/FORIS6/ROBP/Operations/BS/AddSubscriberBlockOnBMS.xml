@@ -1,0 +1,17 @@
+<OperationData Name="AddSubscriberBlockOnBMS" NEType="BS" NEAlias="BS">
+  <Request Name="ExtendedRequestMessage">
+    <AdditionalData Executable="True">
+      <RegisteredList Type="Optional" />
+      <BalanceStorage Type="Optional">
+        <HostTypeCode Type="Optional" />
+        <HostId Type="Optional" />
+        <HostCode Type="Optional" />
+      </BalanceStorage>
+      <RegisteredList HaltMode="CancelOperation" Type="AnyOfListed">
+        <FRBLKEND HaltMode="CancelOperation" Type="Mandatory" />
+        <FR2314 HaltMode="CancelOperation" Type="Mandatory" />
+      </RegisteredList>
+    </AdditionalData>
+  </Request>
+  <Response Name="ExtendedResponseMessage" />
+</OperationData>

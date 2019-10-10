@@ -1,0 +1,19 @@
+<BusinessProcessData name="Delete Subscriber in financial platform">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="SCProcessingUnit" object="SCProcessingUnit">
+          <parameterslist>
+            <param name="RFSFilterHandler" value="FP.ExclusiveHandler" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

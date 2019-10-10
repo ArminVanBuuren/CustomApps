@@ -1,0 +1,21 @@
+<OperationData Name="ModifyServiceOnFINPlatform" NEType="FP" NEAlias="FP">
+  <Request Name="ExtendedRequestMessage">
+    <AdditionalData>
+      <ModificationList HaltMode="CancelOperation" Type="AnyOfListed" Copy="CopyListed">
+        <Include groupName="ServiceList" />
+      </ModificationList>
+      <ExternalIdentifier Type="Optional" />
+      <RegisteredList Type="Optional" Copy="CopyAll" />
+      <BalanceStorage Type="Optional">
+        <HostTypeCode Type="Optional" />
+        <HostId Type="Optional" />
+        <HostCode Type="Optional" />
+      </BalanceStorage>
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage">
+    <AdditionalData>
+      <SubscribersDataList Type="Optional" Copy="CopyAll" />
+    </AdditionalData>
+  </Response>
+</OperationData>

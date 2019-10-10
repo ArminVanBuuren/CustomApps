@@ -1,0 +1,11 @@
+<OperationData Name="AssignMsisdnToCampaign" NEType="BS" NEAlias="BS">
+  <Request Name="ExtendedRequestMessage">
+    <AdditionalData Executable="True">
+      <ProvisionList HaltMode="CancelOperation" Type="AnyOfListed" Copy="CopyListed">
+        <Include groupName="BMSList" />
+      </ProvisionList>
+      <DeviceInfo />
+    </AdditionalData>
+  </Request>
+  <Response Name="ExtendedResponseMessage" />
+</OperationData>

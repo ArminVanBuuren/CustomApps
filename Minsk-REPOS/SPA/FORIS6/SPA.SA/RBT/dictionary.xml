@@ -1,0 +1,65 @@
+<Dictionary>
+  <WellknownsList>
+    <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)" />
+    <Wellknown Name="msisdn.cc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,0,1)" />
+    <Wellknown Name="msisdn.ndc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,1,3)" />
+    <Wellknown Name="msisdn.sn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,4)" />
+    <Wellknown Name="msisdn.fn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,1)" />
+    <Wellknown Name="imsi" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;)" />
+    <Wellknown Name="imsi.mcc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,0,3)" />
+    <Wellknown Name="imsi.mnc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,3,2)" />
+    <Wellknown Name="imsi.msin" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,5)" />
+  </WellknownsList>
+  <ErrorsList CodePage="ASCII">
+    <Error Name="RETURN-CODE&gt;000" Value="SUCCESS" />
+    <Error Name="RETURN-CODE&gt;101" Value="SUCCESS" />
+    <Error Name="RETURN-CODE&gt;103" Value="FAILURE" />
+    <Error Name="RETURN-CODE&gt;100" Value="FAILURE" />
+    <Error Name="RETURN-CODE&gt;199" Value="FAILURE" />
+    <Error Name="302 Moved Temporarily" Value="ResourceLimitation" />
+    <!--<Error Name="302 Moved Temporarily" Value="CommandTemporaryRejected"/>  -->
+    <!-- Already Subscribed-->
+    <Error Name="131" Value="SUCCESS" />
+    <!-- Already C-ADMIN-->
+    <Error Name="102" Value="DuplicateManagedObjectInstance" />
+    <!-- Abnormal subscriber-->
+    <Error Name="104" Value="FAILURE" />
+    <!-- Not subscriber-->
+    <Error Name="119" Value="FAILURE" />
+    <!-- Over the limitation of subscirber-->
+    <Error Name="401" Value="FAILURE" />
+    <!-- Parameter Error-->
+    <Error Name="501" Value="FAILURE" />
+    <!-- DB Fault-->
+    <Error Name="503" Value="FAILURE" />
+    <!-- System Failure-->
+    <Error Name="508" Value="FAILURE" />
+    <!-- System Failure-->
+    <Error Name="601" Value="FAILURE" />
+    <!-- System blocking-->
+    <Error Name="602" Value="FAILURE" />
+    <!-- Subscription blocking-->
+    <Error Name="999" Value="FAILURE" />
+    <!-- Not Defined Error-->
+  </ErrorsList>
+  <RegexpsList>
+    <Regexp Name="Error" Value="(Result&quot;\s{0,}value=&quot;(?&lt;ERROR&gt;\d{1,3})&quot;)" />
+  </RegexpsList>
+  <ParametersList>
+    <Parameter Name="NewMSISDN">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//NewMSISDN" />
+      <PossibleValues StringToKeyTable="true" />
+    </Parameter>
+    <Parameter Name="NewIMSI">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//NewIMSI" />
+      <PossibleValues StringToKeyTable="true" />
+    </Parameter>
+  </ParametersList>
+  <DynamicParametersList />
+  <CommandsList Root="C:\FORIS\SPA\SPA.SA\RBT\Commands" Mask="*.xml">
+    <!-- All new commands are included by Mask=*.xml attribute -->
+  </CommandsList>
+  <DecodersList Root="..\SPA.SA\RBT\Decoders">
+    <Decoder Path="RbtDecoder.xml" />
+  </DecodersList>
+</Dictionary>

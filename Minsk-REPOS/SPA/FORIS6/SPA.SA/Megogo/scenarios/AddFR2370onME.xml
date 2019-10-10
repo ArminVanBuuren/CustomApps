@@ -1,0 +1,300 @@
+<scenario name="AddFR2370onME">
+  <objectList>
+    <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+    <object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll" />
+    <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+  </objectList>
+  <automat>
+    <node name="BySubscribersSplitter" object="BySubscribersSplitter">
+      <resultlist>
+        <result value="0" node="BySubscriberRequestDequeuer" />
+      </resultlist>
+      <parameterslist>
+        <param name="queueName" value="requestsSplittedBySubscriberQueue" />
+      </parameterslist>
+    </node>
+    <node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+      <resultlist>
+        <result value="0" node="IfBlockNode" />
+        <result value="1" node="" />
+      </resultlist>
+      <parameterslist>
+        <param name="queueName" value="requestsSplittedBySubscriberQueue" />
+      </parameterslist>
+    </node>
+    <node name="IfBlockNode" object="IfMultipleXmlConditionsResolver">
+      <resultlist>
+        <result value="0" node="BlockIfServiceMTSNode" />
+        <result value="1" node="UnBlockIfServiceMTSNode" />
+      </resultlist>
+      <parameterslist>
+        <param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/BLTDLIM" />
+        <param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CBBLKLOST" />
+        <param name="OrXmlPath:2" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKCHK" />
+        <param name="OrXmlPath:3" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKFIN" />
+        <param name="OrXmlPath:4" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKKEEP" />
+        <param name="OrXmlPath:5" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKPAY" />
+        <param name="OrXmlPath:6" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKTIME" />
+        <param name="OrXmlPath:7" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKUSER" />
+        <param name="OrXmlPath:8" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR12152" />
+      </parameterslist>
+    </node>
+    <node name="BlockIfServiceMTSNode" object="IfConditionXmlResolver">
+      <resultlist>
+        <result value="0" node="BlockMTSNode" />
+        <result value="1" node="IfServiceSMARTNode" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="request" />
+        <param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR9388" />
+        <param name="Value:1" value="" />
+      </parameterslist>
+    </node>
+    <node name="BlockMTSNode" object="Commander">
+      <resultlist>
+        <result value="0" node="IfServiceSMARTNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="BlockMTS" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="IfServiceSMARTNode" object="IfConditionXmlResolver">
+      <resultlist>
+        <result value="0" node="BlockSMARTNode" />
+        <result value="1" node="IfServiceHomeCinemaNode" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="request" />
+        <param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR9389" />
+        <param name="Value:1" value="" />
+      </parameterslist>
+    </node>
+    <node name="BlockSMARTNode" object="Commander">
+      <resultlist>
+        <result value="0" node="IfServiceHomeCinemaNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="BlockSMART" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="IfServiceHomeCinemaNode" object="IfConditionXmlResolver">
+      <resultlist>
+        <result value="0" node="BlockHomeCinemaNode" />
+        <result value="1" node="IfServiceAmediatekaNode" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="request" />
+        <param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR10998" />
+        <param name="Value:1" value="" />
+      </parameterslist>
+    </node>
+    <node name="BlockHomeCinemaNode" object="Commander">
+      <resultlist>
+        <result value="0" node="IfServiceAmediatekaNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="BlockHomeCinema" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="IfServiceAmediatekaNode" object="IfConditionXmlResolver">
+      <resultlist>
+        <result value="0" node="BlockAmediatekaNode" />
+        <result value="1" node="IfServiceTVinKinoNode" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="request" />
+        <param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16850" />
+        <param name="Value:1" value="" />
+      </parameterslist>
+    </node>
+    <node name="BlockAmediatekaNode" object="Commander">
+      <resultlist>
+        <result value="0" node="IfServiceTVinKinoNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="BlockAmediateka" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="IfServiceTVinKinoNode" object="IfConditionXmlResolver">
+      <resultlist>
+        <result value="0" node="BlockTVinKinoNode" />
+        <result value="1" node="DummyResponderNode" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="request" />
+        <param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17017" />
+        <param name="Value:1" value="" />
+      </parameterslist>
+    </node>
+    <node name="BlockTVinKinoNode" object="Commander">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="BlockTVinKino" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="UnBlockIfServiceMTSNode" object="IfConditionXmlResolver">
+      <resultlist>
+        <result value="0" node="UnBlockMTSNode" />
+        <result value="1" node="UnBlockIfServiceSMARTNode" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="request" />
+        <param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR9388" />
+        <param name="Value:1" value="" />
+      </parameterslist>
+    </node>
+    <node name="UnBlockMTSNode" object="Commander">
+      <resultlist>
+        <result value="0" node="UnBlockIfServiceSMARTNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="UnBlockMTS" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="UnBlockIfServiceSMARTNode" object="IfConditionXmlResolver">
+      <resultlist>
+        <result value="0" node="UnBlockSMARTNode" />
+        <result value="1" node="UnBlockIfServiceHomeCinemaNode" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="request" />
+        <param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR9389" />
+        <param name="Value:1" value="" />
+      </parameterslist>
+    </node>
+    <node name="UnBlockSMARTNode" object="Commander">
+      <resultlist>
+        <result value="0" node="UnBlockIfServiceHomeCinemaNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="UnBlockSMART" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="UnBlockIfServiceHomeCinemaNode" object="IfConditionXmlResolver">
+      <resultlist>
+        <result value="0" node="UnBlockHomeCinemaNode" />
+        <result value="1" node="UnBlockIfServiceAmediatekaNode" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="request" />
+        <param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR10998" />
+        <param name="Value:1" value="" />
+      </parameterslist>
+    </node>
+    <node name="UnBlockHomeCinemaNode" object="Commander">
+      <resultlist>
+        <result value="0" node="UnBlockIfServiceAmediatekaNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="UnBlockHomeCinema" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="UnBlockIfServiceAmediatekaNode" object="IfConditionXmlResolver">
+      <resultlist>
+        <result value="0" node="UnBlockAmediatekaNode" />
+        <result value="1" node="UnBlockIfServiceTVinKinoNode" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="request" />
+        <param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16850" />
+        <param name="Value:1" value="" />
+      </parameterslist>
+    </node>
+    <node name="UnBlockAmediatekaNode" object="Commander">
+      <resultlist>
+        <result value="0" node="UnBlockIfServiceTVinKinoNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="UnBlockAmediateka" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="UnBlockIfServiceTVinKinoNode" object="IfConditionXmlResolver">
+      <resultlist>
+        <result value="0" node="UnBlockTVinKinoNode" />
+        <result value="1" node="DummyResponderNode" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="request" />
+        <param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17017" />
+        <param name="Value:1" value="" />
+      </parameterslist>
+    </node>
+    <node name="UnBlockTVinKinoNode" object="Commander">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="UnBlockTVinKino" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="DummyResponderNode" object="DummyResponder">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="OverallResult" value="SUCCESS" />
+        <param name="DetailedResult" value="SUCCESS" />
+        <param name="Delay" value="0" />
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="BySubscriberRequestDequeuer" />
+      </resultlist>
+    </node>
+  </automat>
+</scenario>

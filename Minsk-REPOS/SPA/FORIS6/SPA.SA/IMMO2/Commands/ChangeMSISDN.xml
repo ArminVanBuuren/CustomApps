@@ -1,0 +1,17 @@
+<Command Name="ChangeMSISDN" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Change MSISDN</Description>
+  <Author Name="YAI" Date="2013-09-08+16:30" />
+  <Request Template="&lt;soapenv:Envelope xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:ns=&quot;http://172.17.105.182/&quot;&gt;
+&lt;soapenv:Header/&gt;
+&lt;soapenv:Body&gt;
+&lt;ns:changeMsisdn soapenv:encodingStyle=&quot;http://schemas.xmlsoap.org/soap/encoding/&quot;&gt;
+&lt;oldmsisdn xsi:type=&quot;xsd:string&quot;&gt;{0}&lt;/oldmsisdn&gt;
+&lt;newmsisdn xsi:type=&quot;xsd:string&quot;&gt;{1}&lt;/newmsisdn&gt;
+&lt;/ns:changeMsisdn&gt;
+&lt;/soapenv:Body&gt;
+&lt;/soapenv:Envelope&gt;">
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="NewMSISDN" Type="Parameter" />
+  </Request>
+  <ErrorsList CodePage="ASCII" />
+</Command>

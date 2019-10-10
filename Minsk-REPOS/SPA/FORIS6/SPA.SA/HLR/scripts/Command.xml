@@ -1,0 +1,4 @@
+<Script Name="Command">
+  <write data="{0}" addToLog="true" />
+  <wait data="" timeout="100000" />
+</Script>

@@ -1,0 +1,24 @@
+<Command Name="ActivateCFNRY" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>&gt;Активания услуги Переадресация вызова (по не ответу)</Description>
+  <Author Name="YAI" Date="2011-10-04+12:18" />
+  <Request Template="REG CFNRY: ISDN=&quot;{0}&quot;, FTN=&quot;{1}&quot;, NOREPTIME={2}, PROPERTY=INTERNATIONAL, BSG=TS1X;">
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="ForwardingToAddress" Type="LocalParameter" />
+    <Item Name="NoReplyTimer" Type="LocalParameter" />
+  </Request>
+  <ParametersList>
+    <Parameter Name="ForwardingToAddress">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//CFNRY/ForwardingToAddress" />
+      <PossibleValues StringToKeyTable="false">
+        <Item Key="voicemail" StringValue="375297321321" />
+      </PossibleValues>
+    </Parameter>
+    <Parameter Name="NoReplyTimer">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//CFNRY/NoReplyTimer" />
+      <PossibleValues StringToKeyTable="false" />
+    </Parameter>
+  </ParametersList>
+  <ErrorsList CodePage="ASCII">
+    <Error Name="ERR3006" Value="SUCCESS" />
+  </ErrorsList>
+</Command>

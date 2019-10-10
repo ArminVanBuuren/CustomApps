@@ -1,0 +1,36 @@
+<Configuration>
+  <serviceInstances>
+    <serviceInstance hardwareID="SD:1818">
+      <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
+        <fileScenarioSource dir="..\SPA.SA\SDP\Scenarios" />
+      </scenarioSource>
+      <socketList poolSize="5" maxConnections="5" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="200" periodDuration="10" autoconnect="1" reconfigurationTimeout="0">
+        <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
+          <config workingmode="wmPermanentEmulation">
+            <socket type="FORIS.ServiceProvisioning.Communication.TelnetSocket, FORIS.SPA.Communication">
+              <!--config host="172.24.189.129" port="23"/-->
+              <config host="127.0.0.1" port="23" />
+            </socket>
+            <Emulation Success="Released" Failure="Command failed" RandomizePrintout="false" OverwriteCommandPrintout="true" Lifetime="00:00:00.00" />
+            <Timers IdleTimeout="240000" />
+            <PredefinedScripts Login="Login" Command="Command" Idle="NoSleep" Logoff="Logoff" />
+            <ScriptsList>
+              <Script Name="Login" Path="..\SPA.SA\SDP\Scripts\Login.xml" />
+              <Script Name="NoSleep" Path="..\SPA.SA\SDP\Scripts\nosleep.xml" />
+              <Script Name="Logoff" Path="..\SPA.SA\SDP\Scripts\logoff.xml" />
+              <Script Name="Command" Path="..\SPA.SA\SDP\Scripts\Command.xml" />
+            </ScriptsList>
+          </config>
+        </socket>
+      </socketList>
+      <context>
+        <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
+          <config path="..\SPA.SA\SDP" xml="Dictionary.xml" />
+        </object>
+        <object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
+          <fileTableSource path="..\SPA.SA\SDP\Misc" xml="RepetitionTable.xml" />
+        </object>
+      </context>
+    </serviceInstance>
+  </serviceInstances>
+</Configuration>

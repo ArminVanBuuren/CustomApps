@@ -1,0 +1,28 @@
+<Command Name="AddUnlim3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Добавление услуги</Description>
+  <Author Name="YAI" Date="2018-10-25+10:55" />
+  <Request Template="&lt;se:Envelope xmlns:se=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;&gt;
+&lt;se:Body&gt;
+&lt;AddServiceRequest xmlns=&quot;http://broadhop.com/unifiedapi/soap/types&quot;&gt;
+&lt;audit&gt;
+&lt;id&gt;SPA&lt;/id&gt;
+&lt;comment&gt;SPA.Activator&lt;/comment&gt;
+&lt;/audit&gt;
+&lt;networkId&gt;{0}&lt;/networkId&gt;
+&lt;service&gt;
+&lt;code&gt;FR15329&lt;/code&gt;
+&lt;enabled&gt;true&lt;/enabled&gt;
+&lt;/service&gt;
+&lt;balance&gt;
+&lt;code&gt;MTS_BALANCE&lt;/code&gt;
+&lt;quotaCode&gt;FR15329_Unlim3&lt;/quotaCode&gt;
+&lt;startDate&gt;getlastdayofmonthbefore({1})T21:00:00Z&lt;/startDate&gt;
+&lt;/balance&gt;
+&lt;/AddServiceRequest&gt;
+&lt;/se:Body&gt;
+&lt;/se:Envelope&gt;">
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="datetime" Type="Wellknown" Format="{0:yyyy-MM-dd}" />
+  </Request>
+  <ErrorsList CodePage="ASCII" />
+</Command>

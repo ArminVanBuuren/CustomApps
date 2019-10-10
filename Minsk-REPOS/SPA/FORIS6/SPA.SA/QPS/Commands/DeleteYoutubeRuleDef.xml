@@ -1,0 +1,24 @@
+<Command Name="DeleteYoutubeRuleDef" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Удаление</Description>
+  <Author Name="YAI" Date="2018-09-17+10:55" />
+  <Request Template="&lt;soapenv:Envelope xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:typ=&quot;http://broadhop.com/unifiedapi/soap/types&quot;&gt;
+&lt;soapenv:Header/&gt;
+&lt;soapenv:Body&gt;
+&lt;typ:ChangeSubscriberAvpsRequest&gt;
+&lt;typ:audit&gt;
+&lt;typ:id&gt;SPA.Activator&lt;/typ:id&gt;
+&lt;/typ:audit&gt;
+&lt;typ:networkId&gt;{0}&lt;/typ:networkId&gt;
+&lt;typ:deletedAvp&gt;
+&lt;typ:code&gt;RULEDEF&lt;/typ:code&gt;
+&lt;typ:value&gt;group-youtube-unlim&lt;/typ:value&gt;
+&lt;/typ:deletedAvp&gt;
+&lt;/typ:ChangeSubscriberAvpsRequest&gt;
+&lt;/soapenv:Body&gt;
+&lt;/soapenv:Envelope&gt;">
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ASCII">
+    <Error Name="&lt;errorCode&gt;46&lt;/errorCode&gt;" Value="SUCCESS" />
+  </ErrorsList>
+</Command>

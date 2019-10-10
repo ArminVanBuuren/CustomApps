@@ -1,0 +1,38 @@
+<Command Name="CreateSubscriber" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Создание абонента</Description>
+  <Author Name="YAI" Date="2013-11-27+10:21" />
+  <Request Template="&lt;se:Envelope xmlns:se=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;&gt;
+&lt;se:Body&gt;
+&lt;CreateSubscriberRequest xmlns=&quot;http://broadhop.com/unifiedapi/soap/types&quot;&gt;
+&lt;audit&gt;
+&lt;id&gt;SPA1&lt;/id&gt;
+&lt;comment&gt;SPA.Activator&lt;/comment&gt;
+&lt;/audit&gt;
+&lt;subscriber&gt;
+&lt;credential&gt;
+&lt;networkId&gt;{0}&lt;/networkId&gt;
+&lt;/credential&gt;
+&lt;service&gt;
+&lt;code&gt;FR0001&lt;/code&gt;
+&lt;enabled&gt;true&lt;/enabled&gt;
+&lt;/service&gt;
+&lt;notification&gt;
+&lt;destination&gt;{0}&lt;/destination&gt;
+&lt;enabled&gt;true&lt;/enabled&gt;
+&lt;transport&gt;SMS&lt;/transport&gt;
+&lt;/notification&gt;
+&lt;status&gt;ACTIVE&lt;/status&gt;
+&lt;avp&gt;
+&lt;code&gt;tier&lt;/code&gt;
+&lt;value&gt;BRONZE&lt;/value&gt;
+&lt;/avp&gt;
+&lt;/subscriber&gt;
+&lt;/CreateSubscriberRequest&gt;
+&lt;/se:Body&gt;
+&lt;/se:Envelope&gt;">
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ASCII">
+    <Error Name="&lt;errorCode&gt;9&lt;/errorCode&gt;" Value="SUCCESS" />
+  </ErrorsList>
+</Command>

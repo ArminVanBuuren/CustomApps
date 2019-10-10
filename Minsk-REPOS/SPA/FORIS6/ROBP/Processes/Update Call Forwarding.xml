@@ -1,0 +1,26 @@
+<BusinessProcessData name="Update Call Forwarding">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="UpdateCallForwardingOnHLR" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="SCProcessingUnit" object="SCProcessingUnit">
+          <parameterslist />
+          <resultlist>
+            <result value="" node="UpdateCallForwardingOnHLR" />
+          </resultlist>
+        </node>
+        <node name="UpdateCallForwardingOnHLR" object="UpdateCallForwardingOnHLR">
+          <parameterslist>
+            <param name="operation" value="UpdateCallForwardingOnHLR" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

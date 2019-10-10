@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="SC.Service.UpdateTDParameterRow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Description>AssignService (parameters table)</Description>
+	<Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
+	<Properties GenerationType="MmlXml" />
+	<Request>
+		<RequestTemplate>
+			<![CDATA[<Row 
+SERVICE_ROW_ID="##ServiceIdentifier##" 
+PARAM_CODE="xmldecodename(##ParamCode##)" 
+PARAM_VALUE="##ParamValue##"
+NEW_PARAM_VALUE="##ParamValue##" />]]>
+		</RequestTemplate>
+		<EmulationPrintoutTemplate>
+			<![CDATA[]]>
+		</EmulationPrintoutTemplate>
+		<Item Name="ServiceIdentifier" Type="Wellknown"/>
+		<Item Name="ParamCode" Type="LocalParameter"/>
+		<Item Name="ParamValue" Type="LocalParameter"/>
+	</Request>
+	<ParametersList>
+		<Parameter Name="ParamCode">
+			<Source Path="//AdditionalData//RFS_FP_SERVICE_GENERAL/Parameters/*[1]" SelectMode="NodeName" />
+		</Parameter>
+		<Parameter Name="ParamValue" IsChoice="true">
+			<Source Path="//AdditionalData/AddList/RFS_FP_SERVICE_GENERAL/Parameters/*[1]/@value[string-length(.) > 0]" />
+			<Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_GENERAL/Parameters/*[1]/@value[string-length(.) > 0]" />
+			<!-- для изменения берем @oldValue. и старый параметр может быть пустым согласно 1489683 -->
+			<Source Path="//AdditionalData/ModifyList/RFS_FP_SERVICE_GENERAL/Parameters/*[1]/@oldValue" />
+			<Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_GENERAL/Parameters/*[1]/@value[string-length(.) > 0]" />
+			<Source Path="//AdditionalData/StartList/RFS_FP_SERVICE_GENERAL/Parameters/*[1]/@value[string-length(.) > 0]" />
+		</Parameter>
+	</ParametersList>
+	<ErrorsList CodePage="ascii"/>
+</Command>

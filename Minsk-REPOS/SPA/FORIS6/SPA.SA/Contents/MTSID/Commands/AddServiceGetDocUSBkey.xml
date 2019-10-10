@@ -1,0 +1,25 @@
+<Command Name="AddServiceGetDocUSBkey" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Добавление сервиса</Description>
+  <Author Name="YAI" Date="2018-05-07+15:21" />
+  <Request Template="&lt;soap:Envelope xmlns:soap=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+&lt;soap:Body&gt;
+&lt;AddService&gt;
+&lt;SubscriberData&gt;
+&lt;msisdn&gt;{0}&lt;/msisdn&gt;
+&lt;unp&gt;{2}&lt;/unp&gt;
+&lt;ucc&gt;{1}&lt;/ucc&gt;
+&lt;/SubscriberData&gt;
+&lt;Service&gt;
+&lt;servicecode&gt;FR15696&lt;/servicecode&gt;
+&lt;/Service&gt;
+&lt;/AddService&gt;
+&lt;/soap:Body&gt;
+&lt;/soap:Envelope&gt;">
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="TdId" Type="DynamicParameter" />
+    <Item Name="UNP_Id" Type="DynamicParameter" />
+  </Request>
+  <ErrorsList CodePage="ASCII">
+    <Error Name="&lt;errorCode&gt;9&lt;/errorCode&gt;" Value="SUCCESS" />
+  </ErrorsList>
+</Command>

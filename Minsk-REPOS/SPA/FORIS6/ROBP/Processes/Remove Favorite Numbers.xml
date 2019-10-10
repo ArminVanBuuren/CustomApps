@@ -1,0 +1,26 @@
+<BusinessProcessData name="Remove Favorite Numbers">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="Remove Favorite Numbers" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="SCProcessingUnit" object="SCProcessingUnit">
+          <parameterslist />
+          <resultlist>
+            <result value="" node="Remove Favorite Numbers" />
+          </resultlist>
+        </node>
+        <node name="Remove Favorite Numbers" object="Remove Favorite Numbers">
+          <parameterslist>
+            <param name="operation" value="RemoveFavoriteNumbersOnFP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>
