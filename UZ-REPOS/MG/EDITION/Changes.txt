@@ -41,3 +41,8 @@ sc create Foris.SelfCare.MGAdapter.MG3-Fast.01 binPath= "C:\Foris\TelCRM\Custome
 sc config Foris.SelfCare.MGAdapter.MG3-Fast.01 binPath= "C:\Foris\TelCRM\CustomerSelfCare\WindowsServices\MGAdapter\Foris.SelfCare.MGAdapter.exe /config:Foris.SelfCare.MGAdapter.MG3-Fast.01.exe.config"
 sc create Foris.SelfCare.MGAdapter.MG3-Slow.01 binPath= "C:\Foris\TelCRM\CustomerSelfCare\WindowsServices\MGAdapter\Foris.SelfCare.MGAdapter.exe" obj= "NT AUTHORITY\NetworkService" password= "" start= auto
 sc config Foris.SelfCare.MGAdapter.MG3-Slow.01 binPath= "C:\Foris\TelCRM\CustomerSelfCare\WindowsServices\MGAdapter\Foris.SelfCare.MGAdapter.exe /config:Foris.SelfCare.MGAdapter.MG3-Slow.01.exe.config"
+
+sc \\crm-mg4 create Foris.SelfCare.MGAdapter.MG4-Fast.01 binPath= "C:\Foris\TelCRM\CustomerSelfCare\WindowsServices\MGAdapter\Foris.SelfCare.MGAdapter.exe" obj= "NT AUTHORITY\NetworkService" password= "" start= auto
+sc \\crm-mg4 config Foris.SelfCare.MGAdapter.MG4-Fast.01 binPath= "C:\Foris\TelCRM\CustomerSelfCare\WindowsServices\MGAdapter\Foris.SelfCare.MGAdapter.exe /config:Foris.SelfCare.MGAdapter.MG4-Fast.01.exe.config"
+sc \\crm-mg4 create Foris.SelfCare.MGAdapter.MG4-Slow.01 binPath= "C:\Foris\TelCRM\CustomerSelfCare\WindowsServices\MGAdapter\Foris.SelfCare.MGAdapter.exe" obj= "NT AUTHORITY\NetworkService" password= "" start= auto
+sc \\crm-mg4 config Foris.SelfCare.MGAdapter.MG4-Slow.01 binPath= "C:\Foris\TelCRM\CustomerSelfCare\WindowsServices\MGAdapter\Foris.SelfCare.MGAdapter.exe /config:Foris.SelfCare.MGAdapter.MG4-Slow.01.exe.config"

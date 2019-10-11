@@ -1,20 +1,17 @@
 <Configuration>
   <Settings>
-    <Add Key="ApplicationConfiguration" Value="..\SPA.BPM\SPA.BPM.CF.configuration.application.xml" />
     <Add Key="ProfilerConfiguration" Value="Profiler.xml" />
-    <Add Key="ReportTimeout" Value="300" />
-    <Add Key="RepeatableRequestTTL" Value="48" />
-    <Add Key="ForeignSubscriber" Value="IMSI=0" />
     <Add Key="Requests.PollPeriod" Value="1" />
     <Add Key="Requests.PollIdlePeriod" Value="3" />
-    <Add Key="MaxSubscribersCount" Value="100" />
     <Add Key="ServiceCatalogConfig" Value="MAIN" />
+    <Add Key="FORIS.RI" Value="BEB" />
+    <Add Key="HostTypesTable" Value="..\SPA.BPM\HostTypeTable.xml" />
+    <Add Key="Preprocessor.PoolSize" Value="2" />
+    <Add Key="Postprocessor.GetParentRowsFromDbCount" Value="10" />
+    <Add Key="Postprocessor.PoolSize" Value="5" />
+    <Add Key="ActivatorsCommunicator.ReadPeriod" Value="5000" />
+    <Add Key="ActivatorsCommunicator.ReadCount" Value="100" />
+    <Add Key="ClientsCommunicator.Type" Value="RemotingCallForwarding" />
+    <Add Key="ClientsCommunicator.TemplatePath" Value="..\SPA.BPM\CallForwarding" />
   </Settings>
-  <DatabaseObjects Remotable="false">
-    <Add Name="FORIS.SPA.CBP" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.CBP" />
-    <Add Name="FORIS.SPA.ARCHIVE" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.ARCHIVE" />
-    <Add Name="FORIS.SPA.ROBP" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.ROBP" />
-    <Add Name="FORIS.SPA.STATE" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.STATE" />
-    <Add Name="FORIS.RI" ConnectionDataType="uri" ConnectionData="BEB" />
-  </DatabaseObjects>
 </Configuration>
