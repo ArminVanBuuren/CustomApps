@@ -20,7 +20,7 @@
       <PossibleValues StringToKeyTable="true" />
     </Parameter>
   </ParametersList>
-  <CommandsList Root="C:\FORIS\SPA\SPA.SA\Contents\Opera\Commands" Mask="*.xml">
+  <CommandsList Root="Commands" Mask="*.xml">
     <!-- All new commands are included by Mask=*.xml attribute -->
   </CommandsList>
 </Dictionary>

@@ -65,7 +65,7 @@
       <DynamicObject Name="db_DateService" />
     </DynamicParameter>
   </DynamicParametersList>
-  <CommandsList Root="C:\FORIS\SPA\SPA.SA\QPS\Commands" Mask="*.xml">
+  <CommandsList Root="Commands" Mask="*.xml">
     <!-- All new commands are included by Mask=*.xml attribute -->
   </CommandsList>
   <FunctionsList Root="Func" References="references.xml">

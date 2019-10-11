@@ -2119,7 +2119,6 @@
     <Content Include="FORIS6\SPA.SA\BelIMMO\Commands\AddZnakomstva.xml" />
     <Content Include="FORIS6\SPA.SA\BelIMMO\Commands\AddZnakomstvaNewMSISDN.xml" />
     <Content Include="FORIS6\SPA.SA\BelIMMO\configuration.application.xml" />
-    <Content Include="FORIS6\SPA.SA\BelIMMO\configuration.common.xml" />
     <Content Include="FORIS6\SPA.SA\BelIMMO\Decoders\RbtDecoder.xml" />
     <Content Include="FORIS6\SPA.SA\BelIMMO\dictionary.xml" />
     <Content Include="FORIS6\SPA.SA\BelIMMO\Misc\RepetitionTable.xml" />
@@ -2176,7 +2175,6 @@
     <Content Include="FORIS6\SPA.SA\Bookmate\Commands\DeleteSubscriber.xml" />
     <Content Include="FORIS6\SPA.SA\Bookmate\Commands\UnBlock.xml" />
     <Content Include="FORIS6\SPA.SA\Bookmate\configuration.application.xml" />
-    <Content Include="FORIS6\SPA.SA\Bookmate\configuration.common.xml" />
     <Content Include="FORIS6\SPA.SA\Bookmate\Decoders\AttributesDecoder.xml" />
     <Content Include="FORIS6\SPA.SA\Bookmate\Decoders\RbtDecoder.xml" />
     <Content Include="FORIS6\SPA.SA\Bookmate\dictionary.xml" />
@@ -2211,7 +2209,6 @@
     <Content Include="FORIS6\SPA.SA\BTC\Commands\DeleteSubscriber.xml" />
     <Content Include="FORIS6\SPA.SA\BTC\Commands\UnBlock.xml" />
     <Content Include="FORIS6\SPA.SA\BTC\configuration.application.xml" />
-    <Content Include="FORIS6\SPA.SA\BTC\configuration.common.xml" />
     <Content Include="FORIS6\SPA.SA\BTC\Decoders\RbtDecoder.xml" />
     <Content Include="FORIS6\SPA.SA\BTC\dictionary.xml" />
     <Content Include="FORIS6\SPA.SA\BTC\Misc\RepetitionTable.xml" />
@@ -2318,7 +2315,6 @@
     <Content Include="FORIS6\SPA.SA\Contents\BamBoo\Scripts\logoff.xml" />
     <Content Include="FORIS6\SPA.SA\Contents\BamBoo\Scripts\nosleep.xml" />
     <Content Include="FORIS6\SPA.SA\Contents\configuration.application.xml" />
-    <Content Include="FORIS6\SPA.SA\Contents\configuration.common.xml" />
     <Content Include="FORIS6\SPA.SA\Contents\DrWeb\Commands\AddDrWebClassic1.xml" />
     <Content Include="FORIS6\SPA.SA\Contents\DrWeb\Commands\AddDrWebClassic2.xml" />
     <Content Include="FORIS6\SPA.SA\Contents\DrWeb\Commands\AddDrWebClassic3.xml" />
@@ -3268,7 +3264,6 @@
     <Content Include="FORIS6\SPA.SA\DB\Commands\UnBlockDB.xml" />
     <Content Include="FORIS6\SPA.SA\DB\Commands\UnBlockOfficeTelefoniaDB.xml" />
     <Content Include="FORIS6\SPA.SA\DB\configuration.application.xml" />
-    <Content Include="FORIS6\SPA.SA\DB\configuration.common.xml" />
     <Content Include="FORIS6\SPA.SA\DB\Decoders\DbReturnValueDecoder.xml" />
     <Content Include="FORIS6\SPA.SA\DB\dictionary.xml" />
     <Content Include="FORIS6\SPA.SA\DB\Misc\RepetitionTable.xml" />
@@ -3728,7 +3723,6 @@
     <Content Include="FORIS6\SPA.SA\DMS\Commands\SendSettingsAuto.xml" />
     <Content Include="FORIS6\SPA.SA\DMS\Commands\SendSettingsInternet.xml" />
     <Content Include="FORIS6\SPA.SA\DMS\configuration.application.xml" />
-    <Content Include="FORIS6\SPA.SA\DMS\configuration.common.xml" />
     <Content Include="FORIS6\SPA.SA\DMS\dictionary.xml" />
     <Content Include="FORIS6\SPA.SA\DMS\Misc\RepetitionTable.xml" />
     <Content Include="FORIS6\SPA.SA\DMS\scenarios\AddCB410153onDM.xml" />
@@ -4125,8 +4119,6 @@
     <Content Include="FORIS6\SPA.SA\HLR\Commands\UpQoSAPN6.xml" />
     <Content Include="FORIS6\SPA.SA\HLR\configuration.application.2.xml" />
     <Content Include="FORIS6\SPA.SA\HLR\configuration.application.xml" />
-    <Content Include="FORIS6\SPA.SA\HLR\configuration.common.2.xml" />
-    <Content Include="FORIS6\SPA.SA\HLR\configuration.common.xml" />
     <Content Include="FORIS6\SPA.SA\HLR\Decoders\MML.Huawei.AttributesDecoder.xml" />
     <Content Include="FORIS6\SPA.SA\HLR\Decoders\MML.Huawei.CallForwardingInfoDecoder.xml" />
     <Content Include="FORIS6\SPA.SA\HLR\Decoders\MML.Huawei.CallForwardingServicesDecoder.xml" />
@@ -4348,7 +4340,6 @@
     <Content Include="FORIS6\SPA.SA\IMMO2\Commands\DeleteGudokOut.xml" />
     <Content Include="FORIS6\SPA.SA\IMMO2\Commands\UnBlock.xml" />
     <Content Include="FORIS6\SPA.SA\IMMO2\configuration.application.xml" />
-    <Content Include="FORIS6\SPA.SA\IMMO2\configuration.common.xml" />
     <Content Include="FORIS6\SPA.SA\IMMO2\Decoders\RbtDecoder.xml" />
     <Content Include="FORIS6\SPA.SA\IMMO2\dictionary.xml" />
     <Content Include="FORIS6\SPA.SA\IMMO2\Misc\RepetitionTable.xml" />
@@ -4445,7 +4436,6 @@
     <Content Include="FORIS6\SPA.SA\IMMO3\Commands\UnBlockPricol.xml" />
     <Content Include="FORIS6\SPA.SA\IMMO3\Commands\Unsubscription_Znakomstva.xml" />
     <Content Include="FORIS6\SPA.SA\IMMO3\configuration.application.xml" />
-    <Content Include="FORIS6\SPA.SA\IMMO3\configuration.common.xml" />
     <Content Include="FORIS6\SPA.SA\IMMO3\Decoders\RbtDecoder.xml" />
     <Content Include="FORIS6\SPA.SA\IMMO3\dictionary.xml" />
     <Content Include="FORIS6\SPA.SA\IMMO3\Misc\RepetitionTable.xml" />
@@ -4486,7 +4476,6 @@
     <Content Include="FORIS6\SPA.SA\IMMO3\scripts\logoff.xml" />
     <Content Include="FORIS6\SPA.SA\IMMO3\scripts\nosleep.xml" />
     <Content Include="FORIS6\SPA.SA\IMMO_Services\configuration.application.xml" />
-    <Content Include="FORIS6\SPA.SA\IMMO_Services\configuration.common.xml" />
     <Content Include="FORIS6\SPA.SA\IMMO_Services\Info_Bvk\Commands\AddServiceMTSInfoAnekdot.xml" />
     <Content Include="FORIS6\SPA.SA\IMMO_Services\Info_Bvk\Commands\AddServiceMTSInfoDieta.xml" />
     <Content Include="FORIS6\SPA.SA\IMMO_Services\Info_Bvk\Commands\AddServiceMTSInfoEkonomiser.xml" />
@@ -4633,7 +4622,6 @@
     <Content Include="FORIS6\SPA.SA\ITV\Commands\DeleteITV.xml" />
     <Content Include="FORIS6\SPA.SA\ITV\Commands\DeleteITVNM.xml" />
     <Content Include="FORIS6\SPA.SA\ITV\configuration.application.xml" />
-    <Content Include="FORIS6\SPA.SA\ITV\configuration.common.xml" />
     <Content Include="FORIS6\SPA.SA\ITV\Decoders\RbtDecoder.xml" />
     <Content Include="FORIS6\SPA.SA\ITV\dictionary.xml" />
     <Content Include="FORIS6\SPA.SA\ITV\Misc\RepetitionTable.xml" />
@@ -4702,7 +4690,6 @@
     <Content Include="FORIS6\SPA.SA\Megogo\Commands\UnBlockSMART.xml" />
     <Content Include="FORIS6\SPA.SA\Megogo\Commands\UnBlockTVinKino.xml" />
     <Content Include="FORIS6\SPA.SA\Megogo\configuration.application.xml" />
-    <Content Include="FORIS6\SPA.SA\Megogo\configuration.common.xml" />
     <Content Include="FORIS6\SPA.SA\Megogo\Decoders\RbtDecoder.xml" />
     <Content Include="FORIS6\SPA.SA\Megogo\dictionary.xml" />
     <Content Include="FORIS6\SPA.SA\Megogo\Misc\RepetitionTable.xml" />
@@ -4735,7 +4722,6 @@
     <Content Include="FORIS6\SPA.SA\MTSMusic\Commands\DeleteMTSMusic30days.xml" />
     <Content Include="FORIS6\SPA.SA\MTSMusic\Commands\UnBlock.xml" />
     <Content Include="FORIS6\SPA.SA\MTSMusic\configuration.application.xml" />
-    <Content Include="FORIS6\SPA.SA\MTSMusic\configuration.common.xml" />
     <Content Include="FORIS6\SPA.SA\MTSMusic\Decoders\RbtDecoder.xml" />
     <Content Include="FORIS6\SPA.SA\MTSMusic\dictionary.xml" />
     <Content Include="FORIS6\SPA.SA\MTSMusic\Misc\RepetitionTable.xml" />
@@ -4854,7 +4840,6 @@
     <Content Include="FORIS6\SPA.SA\MVNO\Commands\unblock.xml" />
     <Content Include="FORIS6\SPA.SA\MVNO\Commands\UnBlockGPRS.xml" />
     <Content Include="FORIS6\SPA.SA\MVNO\configuration.application.xml" />
-    <Content Include="FORIS6\SPA.SA\MVNO\configuration.common.xml" />
     <Content Include="FORIS6\SPA.SA\MVNO\Decoders\MML.Huawei.AttributesDecoder.xml" />
     <Content Include="FORIS6\SPA.SA\MVNO\Decoders\MML.Huawei.CallForwardingInfoDecoder.xml" />
     <Content Include="FORIS6\SPA.SA\MVNO\Decoders\MML.Huawei.CallForwardingServicesDecoder.xml" />
@@ -4996,7 +4981,6 @@
     <Content Include="FORIS6\SPA.SA\PlatformSubscription\Commands\UnBlockServiceVideoVtrendo.xml" />
     <Content Include="FORIS6\SPA.SA\PlatformSubscription\Commands\UnBlockServiceZOJ.xml" />
     <Content Include="FORIS6\SPA.SA\PlatformSubscription\configuration.application.xml" />
-    <Content Include="FORIS6\SPA.SA\PlatformSubscription\configuration.common.xml" />
     <Content Include="FORIS6\SPA.SA\PlatformSubscription\Decoders\AttributesDecoder.xml" />
     <Content Include="FORIS6\SPA.SA\PlatformSubscription\Decoders\RbtDecoder.xml" />
     <Content Include="FORIS6\SPA.SA\PlatformSubscription\dictionary.xml" />
@@ -5301,7 +5285,6 @@
     <Content Include="FORIS6\SPA.SA\QPS\Commands\WTTXAddServiceNewIMSI.xml" />
     <Content Include="FORIS6\SPA.SA\QPS\Commands\WTTXDelService.xml" />
     <Content Include="FORIS6\SPA.SA\QPS\configuration.application.xml" />
-    <Content Include="FORIS6\SPA.SA\QPS\configuration.common.xml" />
     <Content Include="FORIS6\SPA.SA\QPS\Decoders\RbtDecoder.xml" />
     <Content Include="FORIS6\SPA.SA\QPS\dictionary.xml" />
     <Content Include="FORIS6\SPA.SA\QPS\Func\references.xml" />
@@ -5594,7 +5577,6 @@
     <Content Include="FORIS6\SPA.SA\RBTStream\Commands\DeleteUnlimToning.xml" />
     <Content Include="FORIS6\SPA.SA\RBTStream\Commands\DeleteUnlimToningOffice.xml" />
     <Content Include="FORIS6\SPA.SA\RBTStream\configuration.application.xml" />
-    <Content Include="FORIS6\SPA.SA\RBTStream\configuration.common.xml" />
     <Content Include="FORIS6\SPA.SA\RBTStream\Decoders\RbtDecoder.xml" />
     <Content Include="FORIS6\SPA.SA\RBTStream\dictionary.xml" />
     <Content Include="FORIS6\SPA.SA\RBTStream\Misc\RepetitionTable.xml" />
@@ -5625,7 +5607,6 @@
     <Content Include="FORIS6\SPA.SA\RBT\Commands\DeleteToning.xml" />
     <Content Include="FORIS6\SPA.SA\RBT\Commands\UnblockNum.xml" />
     <Content Include="FORIS6\SPA.SA\RBT\configuration.application.xml" />
-    <Content Include="FORIS6\SPA.SA\RBT\configuration.common.xml" />
     <Content Include="FORIS6\SPA.SA\RBT\Decoders\RbtDecoder.xml" />
     <Content Include="FORIS6\SPA.SA\RBT\dictionary.xml" />
     <Content Include="FORIS6\SPA.SA\RBT\Misc\RepetitionTable.xml" />
@@ -5663,7 +5644,6 @@
     <Content Include="FORIS6\SPA.SA\SDP2\Commands\ReleaseSession.xml" />
     <Content Include="FORIS6\SPA.SA\SDP2\Commands\RemoveProfile.xml" />
     <Content Include="FORIS6\SPA.SA\SDP2\configuration.application.xml" />
-    <Content Include="FORIS6\SPA.SA\SDP2\configuration.common.xml" />
     <Content Include="FORIS6\SPA.SA\SDP2\dictionary.xml" />
     <Content Include="FORIS6\SPA.SA\SDP2\Misc\RepetitionTable.xml" />
     <Content Include="FORIS6\SPA.SA\SDP2\Scenarios\AddBLTDLIMonSS.xml" />
@@ -5712,7 +5692,6 @@
     <Content Include="FORIS6\SPA.SA\SDP\Commands\ReleaseSession.xml" />
     <Content Include="FORIS6\SPA.SA\SDP\Commands\RemoveProfile.xml" />
     <Content Include="FORIS6\SPA.SA\SDP\configuration.application.xml" />
-    <Content Include="FORIS6\SPA.SA\SDP\configuration.common.xml" />
     <Content Include="FORIS6\SPA.SA\SDP\dictionary.xml" />
     <Content Include="FORIS6\SPA.SA\SDP\Misc\RepetitionTable.xml" />
     <Content Include="FORIS6\SPA.SA\SDP\Scenarios\AddBLTDLIMonSD.xml" />
@@ -5775,7 +5754,6 @@
     <Content Include="FORIS6\SPA.SA\Smotreshka\Commands\DeleteSubscriber.xml" />
     <Content Include="FORIS6\SPA.SA\Smotreshka\Commands\UnBlock.xml" />
     <Content Include="FORIS6\SPA.SA\Smotreshka\configuration.application.xml" />
-    <Content Include="FORIS6\SPA.SA\Smotreshka\configuration.common.xml" />
     <Content Include="FORIS6\SPA.SA\Smotreshka\Decoders\RbtDecoder.xml" />
     <Content Include="FORIS6\SPA.SA\Smotreshka\dictionary.xml" />
     <Content Include="FORIS6\SPA.SA\Smotreshka\Misc\RepetitionTable.xml" />
@@ -5809,7 +5787,6 @@
     <Content Include="FORIS6\SPA.SA\SMSE\Commands\DeleteE2S.xml" />
     <Content Include="FORIS6\SPA.SA\SMSE\Commands\DeleteExtra.xml" />
     <Content Include="FORIS6\SPA.SA\SMSE\configuration.application.xml" />
-    <Content Include="FORIS6\SPA.SA\SMSE\configuration.common.xml" />
     <Content Include="FORIS6\SPA.SA\SMSE\Decoders\DbReturnValueDecoder.xml" />
     <Content Include="FORIS6\SPA.SA\SMSE\dictionary.xml" />
     <Content Include="FORIS6\SPA.SA\SMSE\Misc\RepetitionTable.xml" />
@@ -5848,7 +5825,6 @@
     <Content Include="FORIS6\SPA.SA\SMSOnline\Commands\UnBlockESETParentalControl.xml" />
     <Content Include="FORIS6\SPA.SA\SMSOnline\Commands\UnBlockESETParentalControl2.xml" />
     <Content Include="FORIS6\SPA.SA\SMSOnline\configuration.application.xml" />
-    <Content Include="FORIS6\SPA.SA\SMSOnline\configuration.common.xml" />
     <Content Include="FORIS6\SPA.SA\SMSOnline\Decoders\RbtDecoder.xml" />
     <Content Include="FORIS6\SPA.SA\SMSOnline\dictionary.xml" />
     <Content Include="FORIS6\SPA.SA\SMSOnline\Misc\RepetitionTable.xml" />
@@ -5876,7 +5852,6 @@
     <Content Include="FORIS6\SPA.SA\SMSOnline\Scripts\logoff.xml" />
     <Content Include="FORIS6\SPA.SA\SMSOnline\Scripts\nosleep.xml" />
     <Content Include="FORIS6\SPA.SA\TechPlatforms\configuration.application.xml" />
-    <Content Include="FORIS6\SPA.SA\TechPlatforms\configuration.common.xml" />
     <Content Include="FORIS6\SPA.SA\TechPlatforms\RoamingPlatform\Commands\AddServiceBasicImsi.xml" />
     <Content Include="FORIS6\SPA.SA\TechPlatforms\RoamingPlatform\Commands\AddServiceMultiImsi1.xml" />
     <Content Include="FORIS6\SPA.SA\TechPlatforms\RoamingPlatform\Commands\AddServiceMultiImsi2.xml" />
@@ -6035,7 +6010,6 @@
     <Content Include="FORIS6\SPA.SA\ViaMobi\Commands\UnBlockStars.xml" />
     <Content Include="FORIS6\SPA.SA\ViaMobi\Commands\UnBlockTrener.xml" />
     <Content Include="FORIS6\SPA.SA\ViaMobi\configuration.application.xml" />
-    <Content Include="FORIS6\SPA.SA\ViaMobi\configuration.common.xml" />
     <Content Include="FORIS6\SPA.SA\ViaMobi\Decoders\AttributesDecoder.xml" />
     <Content Include="FORIS6\SPA.SA\ViaMobi\Decoders\RbtDecoder.xml" />
     <Content Include="FORIS6\SPA.SA\ViaMobi\dictionary.xml" />
@@ -6078,7 +6052,6 @@
     <Content Include="FORIS6\SPA.SA\VM\Commands\DeleteSubscriberVM.xml" />
     <Content Include="FORIS6\SPA.SA\VM\Commands\DeleteVM.xml" />
     <Content Include="FORIS6\SPA.SA\VM\configuration.application.xml" />
-    <Content Include="FORIS6\SPA.SA\VM\configuration.common.xml" />
     <Content Include="FORIS6\SPA.SA\VM\Decoders\DbReturnValueDecoder.xml" />
     <Content Include="FORIS6\SPA.SA\VM\dictionary.xml" />
     <Content Include="FORIS6\SPA.SA\VM\Misc\RepetitionTable.xml" />
@@ -6179,7 +6152,6 @@
     <Content Include="FORIS6\SPA.SA\Wll\Commands\UnBlock_md.xml" />
     <Content Include="FORIS6\SPA.SA\Wll\Commands\unblock_md_gprs.xml" />
     <Content Include="FORIS6\SPA.SA\Wll\configuration.application.xml" />
-    <Content Include="FORIS6\SPA.SA\Wll\configuration.common.xml" />
     <Content Include="FORIS6\SPA.SA\Wll\Decoders\MML.Huawei.AttributesDecoder.xml" />
     <Content Include="FORIS6\SPA.SA\Wll\Decoders\MML.Huawei.CallForwardingInfoDecoder.xml" />
     <Content Include="FORIS6\SPA.SA\Wll\Decoders\MML.Huawei.CallForwardingServicesDecoder.xml" />

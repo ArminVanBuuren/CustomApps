@@ -95,7 +95,7 @@
   </ParametersList>
   <DynamicParametersList />
   <ComplexParametersList />
-  <CommandsList Root="C:\FORIS\SPA\SPA.SA\MVNO\Commands" Mask="*.xml">
+  <CommandsList Root="Commands" Mask="*.xml">
     <!-- All new commands are included by Mask=*.xml attribute -->
   </CommandsList>
   <DecodersList Root="..\SPA.SA\MVNO\Decoders\">

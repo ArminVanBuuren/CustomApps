@@ -1,9 +1,16 @@
 <Configuration>
+  <Settings>
+    <Add Key="Requests.MaxQueuedPerHost" Value="1200" />
+    <Add Key="Requests.PollPeriod" Value="5" />
+    <Add Key="Requests.PollIdlePeriod" Value="2" />
+    <Add Key="ProfilerConfiguration" Value="Profiler.xml" />
+    <Add Key="FORIS.RI" Value="BEB" />
+  </Settings>
   <serviceInstances>
     <serviceInstance hardwareID="FK:1843">
-      <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
-        <fileScenarioSource dir="..\SPA.SA\Contents\FMK\Scenarios" />
-      </scenarioSource>
+      <dictionary>..\SPA.SA\Contents\FMK\Dictionary.xml</dictionary>
+      <scenarios>..\SPA.SA\Contents\FMK\Scenarios</scenarios>
+      <repetitionTable>..\SPA.SA\Contents\FMK\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="5" maxConnections="5" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="250" periodDuration="10" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
           <config workingmode="wmPermanentEmulation">
@@ -34,19 +41,11 @@
           </config>
         </socket>
       </socketList>
-      <context>
-        <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
-          <config path="..\SPA.SA\Contents\FMK" xml="Dictionary.xml" />
-        </object>
-        <object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
-          <fileTableSource path="..\SPA.SA\Contents\FMK\Misc" xml="RepetitionTable.xml" />
-        </object>
-      </context>
     </serviceInstance>
     <serviceInstance hardwareID="MI:1845">
-      <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
-        <fileScenarioSource dir="..\SPA.SA\Contents\MTSID\Scenarios" />
-      </scenarioSource>
+      <dictionary>..\SPA.SA\Contents\MTSID\Dictionary.xml</dictionary>
+      <scenarios>..\SPA.SA\Contents\MTSID\Scenarios</scenarios>
+      <repetitionTable>..\SPA.SA\Contents\MTSID\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="20" maxConnections="20" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="500" periodDuration="20" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
           <config workingmode="wmPermanentEmulation">
@@ -77,19 +76,11 @@
           </config>
         </socket>
       </socketList>
-      <context>
-        <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
-          <config path="..\SPA.SA\Contents\MTSID" xml="Dictionary.xml" />
-        </object>
-        <object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
-          <fileTableSource path="..\SPA.SA\Contents\MTSID\Misc" xml="RepetitionTable.xml" />
-        </object>
-      </context>
     </serviceInstance>
     <serviceInstance hardwareID="DR:1833">
-      <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
-        <fileScenarioSource dir="..\SPA.SA\Contents\DrWeb\Scenarios" />
-      </scenarioSource>
+      <dictionary>..\SPA.SA\Contents\DrWeb\Dictionary.xml</dictionary>
+      <scenarios>..\SPA.SA\Contents\DrWeb\Scenarios</scenarios>
+      <repetitionTable>..\SPA.SA\Contents\DrWeb\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="10" maxConnections="10" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="500" periodDuration="20" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
           <config workingmode="wmPermanentEmulation">
@@ -122,19 +113,11 @@
           </config>
         </socket>
       </socketList>
-      <context>
-        <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
-          <config path="..\SPA.SA\Contents\DrWeb" xml="Dictionary.xml" />
-        </object>
-        <object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
-          <fileTableSource path="..\SPA.SA\Contents\DrWeb\Misc" xml="RepetitionTable.xml" />
-        </object>
-      </context>
     </serviceInstance>
     <serviceInstance hardwareID="M2:1831">
-      <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
-        <fileScenarioSource dir="..\SPA.SA\Contents\2Memory\Scenarios" />
-      </scenarioSource>
+      <dictionary>..\SPA.SA\Contents\2Memory\Dictionary.xml</dictionary>
+      <scenarios>..\SPA.SA\Contents\2Memory\Scenarios</scenarios>
+      <repetitionTable>..\SPA.SA\Contents\2Memory\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="5" maxConnections="5" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="250" periodDuration="10" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
           <config workingmode="wmPermanentEmulation">
@@ -165,19 +148,10 @@
           </config>
         </socket>
       </socketList>
-      <context>
-        <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
-          <config path="..\SPA.SA\Contents\2Memory" xml="Dictionary.xml" />
-        </object>
-        <object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
-          <fileTableSource path="..\SPA.SA\Contents\2Memory\Misc" xml="RepetitionTable.xml" />
-        </object>
-      </context>
     </serviceInstance>
     <serviceInstance hardwareID="BB:1828">
-      <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
-        <fileScenarioSource dir="..\SPA.SA\Contents\BamBoo\Scenarios" />
-      </scenarioSource>
+      <dictionary>..\SPA.SA\Contents\BamBoo\Dictionary.xml</dictionary>
+      <scenarios>..\SPA.SA\Contents\BamBoo\Scenarios</scenarios>
       <socketList poolSize="5" maxConnections="5" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="250" periodDuration="10" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
           <config workingmode="wmPermanentEmulation">
@@ -209,19 +183,11 @@
           </config>
         </socket>
       </socketList>
-      <context>
-        <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
-          <config path="..\SPA.SA\Contents\BamBoo" xml="Dictionary.xml" />
-        </object>
-        <!--<object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
-					<fileTableSource path="..\SPA.SA\BamBoo\Misc" xml="RepetitionTable.xml"/>
-				</object>					-->
-      </context>
     </serviceInstance>
     <serviceInstance hardwareID="UF:1829">
-      <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
-        <fileScenarioSource dir="..\SPA.SA\Contents\UniFun\Scenarios" />
-      </scenarioSource>
+      <dictionary>..\SPA.SA\Contents\UniFun\Dictionary.xml</dictionary>
+      <scenarios>..\SPA.SA\Contents\UniFun\Scenarios</scenarios>
+      <repetitionTable>..\SPA.SA\Contents\UniFun\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="5" maxConnections="5" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="250" periodDuration="10" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
           <config workingmode="wmPermanentEmulation">
@@ -252,19 +218,11 @@
           </config>
         </socket>
       </socketList>
-      <context>
-        <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
-          <config path="..\SPA.SA\Contents\UniFun" xml="Dictionary.xml" />
-        </object>
-        <object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
-          <fileTableSource path="..\SPA.SA\Contents\UniFun\Misc" xml="RepetitionTable.xml" />
-        </object>
-      </context>
     </serviceInstance>
     <serviceInstance hardwareID="SL:1830">
-      <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
-        <fileScenarioSource dir="..\SPA.SA\Contents\SchoolLibrary\Scenarios" />
-      </scenarioSource>
+      <dictionary>..\SPA.SA\Contents\SchoolLibrary\Dictionary.xml</dictionary>
+      <scenarios>..\SPA.SA\Contents\SchoolLibrary\Scenarios</scenarios>
+      <repetitionTable>..\SPA.SA\Contents\SchoolLibrary\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="16" maxConnections="4" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="200" periodDuration="5" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
           <config workingmode="wmPermanentEmulation">
@@ -295,19 +253,11 @@
           </config>
         </socket>
       </socketList>
-      <context>
-        <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
-          <config path="..\SPA.SA\Contents\SchoolLibrary" xml="Dictionary.xml" />
-        </object>
-        <object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
-          <fileTableSource path="..\SPA.SA\Contents\SchoolLibrary\Misc" xml="RepetitionTable.xml" />
-        </object>
-      </context>
     </serviceInstance>
     <serviceInstance hardwareID="SF:1840">
-      <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
-        <fileScenarioSource dir="..\SPA.SA\Contents\MySafety\Scenarios" />
-      </scenarioSource>
+      <dictionary>..\SPA.SA\Contents\MySafety\Dictionary.xml</dictionary>
+      <scenarios>..\SPA.SA\Contents\MySafety\Scenarios</scenarios>
+      <repetitionTable>..\SPA.SA\Contents\MySafety\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="5" maxConnections="5" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="250" periodDuration="10" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
           <config workingmode="wmPermanentEmulation">
@@ -339,19 +289,10 @@
           </config>
         </socket>
       </socketList>
-      <context>
-        <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
-          <config path="..\SPA.SA\Contents\MySafety" xml="Dictionary.xml" />
-        </object>
-        <object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
-          <fileTableSource path="..\SPA.SA\Contents\MySafety\Misc" xml="RepetitionTable.xml" />
-        </object>
-      </context>
     </serviceInstance>
     <serviceInstance hardwareID="HL:999">
-      <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
-        <fileScenarioSource dir="..\SPA.SA\Contents\VR\Scenarios" />
-      </scenarioSource>
+      <dictionary>..\SPA.SA\Contents\VR\Dictionary.xml</dictionary>
+      <scenarios>..\SPA.SA\Contents\VR\Scenarios</scenarios>
       <socketList poolSize="5" maxConnections="5" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="250" periodDuration="10" autoconnect="0" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
           <config workingmode="wmPermanentEmulation">
@@ -379,16 +320,10 @@
           </config>
         </socket>
       </socketList>
-      <context>
-        <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
-          <config path="..\SPA.SA\Contents\VR" xml="Dictionary.xml" />
-        </object>
-      </context>
     </serviceInstance>
     <serviceInstance hardwareID="HL:800">
-      <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
-        <fileScenarioSource dir="..\SPA.SA\Contents\VR\Scenarios" />
-      </scenarioSource>
+      <dictionary>..\SPA.SA\Contents\VR\Dictionary.xml</dictionary>
+      <scenarios>..\SPA.SA\Contents\VR\Scenarios</scenarios>
       <socketList poolSize="5" maxConnections="1" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="50" periodDuration="10" autoconnect="0" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
           <config workingmode="wmPermanentEmulation">
@@ -417,16 +352,10 @@
           </config>
         </socket>
       </socketList>
-      <context>
-        <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
-          <config path="..\SPA.SA\Contents\VR" xml="Dictionary.xml" />
-        </object>
-      </context>
     </serviceInstance>
     <serviceInstance hardwareID="HL:102">
-      <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
-        <fileScenarioSource dir="..\SPA.SA\Contents\VR\Scenarios" />
-      </scenarioSource>
+      <dictionary>..\SPA.SA\Contents\VR\Dictionary.xml</dictionary>
+      <scenarios>..\SPA.SA\Contents\VR\Scenarios</scenarios>
       <socketList poolSize="5" maxConnections="1" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="50" periodDuration="10" autoconnect="0" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
           <config workingmode="wmPermanentEmulation">
@@ -454,16 +383,10 @@
           </config>
         </socket>
       </socketList>
-      <context>
-        <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
-          <config path="..\SPA.SA\Contents\VR" xml="Dictionary.xml" />
-        </object>
-      </context>
     </serviceInstance>
     <serviceInstance hardwareID="HL:104">
-      <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
-        <fileScenarioSource dir="..\SPA.SA\Contents\VR\Scenarios" />
-      </scenarioSource>
+      <dictionary>..\SPA.SA\Contents\VR\Dictionary.xml</dictionary>
+      <scenarios>..\SPA.SA\Contents\VR\Scenarios</scenarios>
       <socketList poolSize="5" maxConnections="1" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="50" periodDuration="10" autoconnect="0" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
           <config workingmode="wmPermanentEmulation">
@@ -491,16 +414,11 @@
           </config>
         </socket>
       </socketList>
-      <context>
-        <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
-          <config path="..\SPA.SA\Contents\VR" xml="Dictionary.xml" />
-        </object>
-      </context>
     </serviceInstance>
     <serviceInstance hardwareID="OP:1832">
-      <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
-        <fileScenarioSource dir="..\SPA.SA\Contents\Opera\Scenarios" />
-      </scenarioSource>
+      <dictionary>..\SPA.SA\Contents\Opera\Dictionary.xml</dictionary>
+      <scenarios>..\SPA.SA\Contents\Opera\Scenarios</scenarios>
+      <repetitionTable>..\SPA.SA\Contents\Opera\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="5" maxConnections="5" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="300" periodDuration="10" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
           <config workingmode="wmPermanentEmulation">
@@ -533,19 +451,11 @@
           </config>
         </socket>
       </socketList>
-      <context>
-        <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
-          <config path="..\SPA.SA\Contents\Opera" xml="Dictionary.xml" />
-        </object>
-        <object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
-          <fileTableSource path="..\SPA.SA\Contents\Opera\Misc" xml="RepetitionTable.xml" />
-        </object>
-      </context>
     </serviceInstance>
     <serviceInstance hardwareID="LB:1846">
-      <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
-        <fileScenarioSource dir="..\SPA.SA\Contents\LineB\Scenarios" />
-      </scenarioSource>
+      <dictionary>..\SPA.SA\Contents\LineB\Dictionary.xml</dictionary>
+      <scenarios>..\SPA.SA\Contents\LineB\Scenarios</scenarios>
+      <repetitionTable>..\SPA.SA\Contents\LineB\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="10" maxConnections="10" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="500" periodDuration="20" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
           <config workingmode="wmPermanentEmulation">
@@ -579,19 +489,11 @@
           </config>
         </socket>
       </socketList>
-      <context>
-        <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
-          <config path="..\SPA.SA\Contents\LineB" xml="Dictionary.xml" />
-        </object>
-        <object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
-          <fileTableSource path="..\SPA.SA\Contents\LineB\Misc" xml="RepetitionTable.xml" />
-        </object>
-      </context>
     </serviceInstance>
     <serviceInstance hardwareID="EN:1834">
-      <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
-        <fileScenarioSource dir="..\SPA.SA\Contents\UnsubContentUnknown\Scenarios" />
-      </scenarioSource>
+      <dictionary>..\SPA.SA\Contents\UnsubContentUnknown\Dictionary.xml</dictionary>
+      <scenarios>..\SPA.SA\Contents\UnsubContentUnknown\Scenarios</scenarios>
+      <repetitionTable>..\SPA.SA\Contents\UnsubContentUnknown\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="20" maxConnections="20" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="500" periodDuration="10" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
           <config workingmode="wmPermanentEmulation">
@@ -622,19 +524,11 @@
           </config>
         </socket>
       </socketList>
-      <context>
-        <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
-          <config path="..\SPA.SA\Contents\UnsubContentUnknown" xml="Dictionary.xml" />
-        </object>
-        <object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
-          <fileTableSource path="..\SPA.SA\Contents\UnsubContentUnknown\Misc" xml="RepetitionTable.xml" />
-        </object>
-      </context>
     </serviceInstance>
     <serviceInstance hardwareID="KM:1848">
-      <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
-        <fileScenarioSource dir="..\SPA.SA\Contents\Kinomax\Scenarios" />
-      </scenarioSource>
+      <dictionary>..\SPA.SA\Contents\Kinomax\Dictionary.xml</dictionary>
+      <scenarios>..\SPA.SA\Contents\Kinomax\Scenarios</scenarios>
+      <repetitionTable>..\SPA.SA\Contents\Kinomax\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="5" maxConnections="5" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="250" periodDuration="10" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
           <config workingmode="wmPermanentEmulation">
@@ -666,19 +560,11 @@
           </config>
         </socket>
       </socketList>
-      <context>
-        <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
-          <config path="..\SPA.SA\Contents\Kinomax" xml="Dictionary.xml" />
-        </object>
-        <object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
-          <fileTableSource path="..\SPA.SA\Contents\Kinomax\Misc" xml="RepetitionTable.xml" />
-        </object>
-      </context>
     </serviceInstance>
     <serviceInstance hardwareID="RB:1616">
-      <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
-        <fileScenarioSource dir="..\SPA.SA\Contents\RBT\Scenarios" />
-      </scenarioSource>
+      <dictionary>..\SPA.SA\Contents\RBT\Dictionary.xml</dictionary>
+      <scenarios>..\SPA.SA\Contents\RBT\Scenarios</scenarios>
+      <repetitionTable>..\SPA.SA\Contents\RBT\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="4" maxConnections="2" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="5" periodDuration="5" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
           <config workingmode="wmPermanentEmulation">
@@ -710,14 +596,6 @@
           </config>
         </socket>
       </socketList>
-      <context>
-        <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
-          <config path="..\SPA.SA\Contents\RBT" xml="Dictionary.xml" />
-        </object>
-        <object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
-          <fileTableSource path="..\SPA.SA\Contents\RBT\Misc" xml="RepetitionTable.xml" />
-        </object>
-      </context>
     </serviceInstance>
   </serviceInstances>
 </Configuration>

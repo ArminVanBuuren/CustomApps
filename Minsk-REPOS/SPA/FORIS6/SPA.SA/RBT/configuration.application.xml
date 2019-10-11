@@ -1,9 +1,16 @@
 <Configuration>
+  <Settings>
+    <Add Key="ReportTimeout" Value="180" />
+    <Add Key="Requests.PollPeriod" Value="5" />
+    <Add Key="Requests.PollIdlePeriod" Value="2" />
+    <Add Key="ProfilerConfiguration" Value="Profiler.xml" />
+    <Add Key="FORIS.RI" Value="BEB" />
+  </Settings>
   <serviceInstances>
     <serviceInstance hardwareID="RB:1616">
-      <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
-        <fileScenarioSource dir="..\SPA.SA\RBT\Scenarios" />
-      </scenarioSource>
+      <dictionary>..\SPA.SA\RBT\Dictionary.xml</dictionary>
+      <scenarios>..\SPA.SA\RBT\Scenarios</scenarios>
+      <repetitionTable>..\SPA.SA\RBT\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="4" maxConnections="2" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="5" periodDuration="5" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
           <config workingmode="wmPermanentEmulation">
@@ -35,14 +42,6 @@
           </config>
         </socket>
       </socketList>
-      <context>
-        <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
-          <config path="..\SPA.SA\RBT" xml="Dictionary.xml" />
-        </object>
-        <object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
-          <fileTableSource path="..\SPA.SA\RBT\Misc" xml="RepetitionTable.xml" />
-        </object>
-      </context>
     </serviceInstance>
   </serviceInstances>
 </Configuration>

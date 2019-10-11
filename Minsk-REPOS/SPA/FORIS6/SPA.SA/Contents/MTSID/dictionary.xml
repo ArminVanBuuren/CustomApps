@@ -33,10 +33,10 @@
       <DynamicObject Name="db_get_unp" />
     </DynamicParameter>
   </DynamicParametersList>
-  <CommandsList Root="C:\FORIS\SPA\SPA.SA\Contents\MTSID\Commands" Mask="*.xml">
+  <CommandsList Root="Commands" Mask="*.xml">
     <!-- All new commands are included by Mask=*.xml attribute -->
   </CommandsList>
-  <!--DecodersList Root="C:\FORIS\SPA\SPA.SA\Contents\MTSID\Decoders">
+  <!--DecodersList Root="..\SPA.SA\Contents\MTSID\Decoders">
 		<Decoder Path="RbtDecoder.xml"/>
 	</DecodersList-->
 </Dictionary>

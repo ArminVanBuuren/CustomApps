@@ -34,7 +34,7 @@
       <DynamicObject Name="db_result_add" />
     </DynamicParameter>
   </DynamicParametersList>
-  <CommandsList Root="C:\FORIS\SPA\SPA.SA\RBTStream\Commands" Mask="*.xml">
+  <CommandsList Root="Commands" Mask="*.xml">
     <!-- All new commands are included by Mask=*.xml attribute -->
   </CommandsList>
   <DecodersList Root="..\SPA.SA\RBT\Decoders">

@@ -61,7 +61,7 @@
       <DynamicObject Name="db_get_imsixx" />
     </DynamicParameter>
   </DynamicParametersList>
-  <CommandsList Root="C:\FORIS\SPA\SPA.SA\TechPlatforms\RoamingPlatform\Commands" Mask="*.xml">
+  <CommandsList Root="Commands" Mask="*.xml">
     <!-- All new commands are included by Mask=*.xml attribute -->
   </CommandsList>
 </Dictionary>

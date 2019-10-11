@@ -36,7 +36,7 @@
       <DynamicObject Name="db_get_username" />
     </DynamicParameter>
   </DynamicParametersList>
-  <CommandsList Root="C:\FORIS\SPA\SPA.SA\BelIMMO\Commands" Mask="*.xml">
+  <CommandsList Root="Commands" Mask="*.xml">
     <!-- All new commands are included by Mask=*.xml attribute -->
   </CommandsList>
   <!--DecodersList Root="..\SPA.SA\Dictionaries\Decoders">

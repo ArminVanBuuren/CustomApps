@@ -56,10 +56,10 @@
     </Parameter>
   </ParametersList>
   <DynamicParametersList />
-  <CommandsList Root="C:\FORIS\SPA\SPA.SA\Contents\RBT\Commands" Mask="*.xml">
+  <CommandsList Root="Commands" Mask="*.xml">
     <!-- All new commands are included by Mask=*.xml attribute -->
   </CommandsList>
-  <DecodersList Root="C:\FORIS\SPA\SPA.SA\Contents\RBT\Decoders">
+  <DecodersList Root="..\SPA.SA\Contents\RBT\Decoders">
     <Decoder Path="RbtDecoder.xml" />
   </DecodersList>
 </Dictionary>

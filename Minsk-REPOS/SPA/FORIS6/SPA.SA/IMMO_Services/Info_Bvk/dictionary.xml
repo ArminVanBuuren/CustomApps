@@ -22,7 +22,7 @@
     </Parameter>
   </ParametersList>
   <DynamicParametersList />
-  <CommandsList Root="C:\FORIS\SPA\SPA.SA\IMMO_Services\Info_Bvk\Commands" Mask="*.xml">
+  <CommandsList Root="Commands" Mask="*.xml">
     <!-- All new commands are included by Mask=*.xml attribute -->
   </CommandsList>
   <!--DecodersList Root="..\SPA.SA\Dictionaries\Decoders">
