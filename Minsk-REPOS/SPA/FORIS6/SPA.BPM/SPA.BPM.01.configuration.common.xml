@@ -3,6 +3,7 @@
     <Add Key="ProfilerConfiguration" Value="Profiler_Full.xml" />
     <Add Key="Requests.PollPeriod" Value="1" />
     <Add Key="Requests.PollIdlePeriod" Value="3" />
+    <Add Key="RepeatableRequestTTL" Value="48" />
     <Add Key="ServiceCatalogConfig" Value="MAIN" />
     <Add Key="FORIS.RI" Value="BEB" />
     <Add Key="HostTypesTable" Value="..\SPA.BPM\HostTypeTable.xml" />
@@ -14,7 +15,7 @@
     <Add Key="ActivatorsCommunicator.ReadPeriod" Value="2000" />
     <Add Key="ActivatorsCommunicator.ReadCount" Value="1000" />
     <Add Key="ClientsCommunicator.Type" Value="DatabaseQueue" />
-    <Add Key="ClientsCommunicator.Queue" Value="AQ_BPM01" />
+    <Add Key="ClientsCommunicator.Queue" Value="BPM_01" />
     <Add Key="ClientsCommunicator.IdleTimeout" Value="5000" />
   </Settings>
 </Configuration>

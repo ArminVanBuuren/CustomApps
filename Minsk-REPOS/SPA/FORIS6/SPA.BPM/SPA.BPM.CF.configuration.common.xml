@@ -3,6 +3,7 @@
     <Add Key="ProfilerConfiguration" Value="Profiler.xml" />
     <Add Key="Requests.PollPeriod" Value="1" />
     <Add Key="Requests.PollIdlePeriod" Value="3" />
+    <Add Key="RepeatableRequestTTL" Value="48" />
     <Add Key="ServiceCatalogConfig" Value="MAIN" />
     <Add Key="FORIS.RI" Value="BEB" />
     <Add Key="HostTypesTable" Value="..\SPA.BPM\HostTypeTable.xml" />
