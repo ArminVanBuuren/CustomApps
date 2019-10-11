@@ -1,6 +1,6 @@
 <Command Name="DeleteBlockServiceWithPart" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>DeleteBlockServiceWithPart</Description>
-  <Author Name="Oleg Safonov" Date="2011-02-08+12:35"/>
+  <Author Name="Oleg Safonov" Date="2011-02-08+12:35" />
   <ModifiedBy Name="Victor Kosonogov" Date="2017-07-07+07:07" />
   <Request>
     <RequestTemplate>
@@ -21,8 +21,10 @@
                 </DataTable>
               </DataSet>]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="msisdn" Type="Wellknown"/>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="msisdn" Type="Wellknown" />
   </Request>
-  <ErrorsList CodePage="ascii"/>
+  <ErrorsList CodePage="ascii" />
 </Command>

@@ -1,36 +1,36 @@
 <scenario name="SC.Add.RFS_BMS_CHANGE_MSISDN">
   <objectList>
-    <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
   </objectList>
   <automat>
     <node name="BySubscribersSplitter" object="BySubscribersSplitter">
       <resultlist>
-        <result value="0" node="SingleSubscriberRequestDequeuer"/>
+        <result value="0" node="SingleSubscriberRequestDequeuer" />
       </resultlist>
     </node>
     <node name="SingleSubscriberRequestDequeuer" object="Dequeuer">
       <resultlist>
-        <result value="0" node="ChangeCB118OnBMS"/>
-        <result value="1" node=""/>
+        <result value="0" node="ChangeCB118OnBMS" />
+        <result value="1" node="" />
       </resultlist>
       <parameterslist>
-        <param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+        <param name="queueName" value="requestsSplittedBySubscriberQueue" />
       </parameterslist>
     </node>
-    <node  name="ChangeCB118OnBMS" object="Commander">
+    <node name="ChangeCB118OnBMS" object="Commander">
       <resultlist>
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="Command" value="ChangeMsisdn"/>
+        <param name="Command" value="ChangeMsisdn" />
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">
       <resultlist>
-        <result value="" node="SingleSubscriberRequestDequeuer"/>
+        <result value="" node="SingleSubscriberRequestDequeuer" />
       </resultlist>
     </node>
   </automat>

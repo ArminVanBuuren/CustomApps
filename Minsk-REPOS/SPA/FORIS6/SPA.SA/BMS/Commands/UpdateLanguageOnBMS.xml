@@ -1,6 +1,6 @@
 <Command Name="UpdateLanguageOnBMS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>UpdateLanguageOnBMS</Description>
-  <Author Name="Alexander Efimov" Date="2014-05-21+12:35"/>
+  <Author Name="Alexander Efimov" Date="2014-05-21+12:35" />
   <ModifiedBy Name="Victor Kosonogov" Date="2017-07-07+07:07" />
   <Request>
     <RequestTemplate>
@@ -12,14 +12,16 @@
   </Attributes>
 </DataSet>]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="NewLanguageCode" Type="LocalParameter"/>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="NewLanguageCode" Type="LocalParameter" />
   </Request>
   <ParametersList>
     <Parameter Name="NewLanguageCode">
-      <Source Path="//AdditionalData/AddList/RFS_BMS_LANGUAGE/NewLanguageCode"/>
+      <Source Path="//AdditionalData/AddList/RFS_BMS_LANGUAGE/NewLanguageCode" />
     </Parameter>
   </ParametersList>
-  <ErrorsList CodePage="ascii"/>
+  <ErrorsList CodePage="ascii" />
 </Command>

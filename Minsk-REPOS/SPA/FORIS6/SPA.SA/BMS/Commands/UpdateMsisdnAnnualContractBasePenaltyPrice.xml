@@ -1,6 +1,6 @@
 <Command Name="UpdateMsisdnAnnualContractBasePenaltyPrice" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>UpdateMsisdnAnnualContractBasePenaltyPrice</Description>
-  <Author Name="Oleg Safonov" Date="2011-02-08+12:35"/>
+  <Author Name="Oleg Safonov" Date="2011-02-08+12:35" />
   <ModifiedBy Name="Victor Kosonogov" Date="2017-07-07+07:07" />
   <Request>
     <RequestTemplate>
@@ -19,15 +19,15 @@
   </DataTable>
 </DataSet>]]>
     </RequestTemplate>
-    <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="datetime" Type="Wellknown"/>
-    <Item Name="Rows" Type="LocalDynamicParameter"/>
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="datetime" Type="Wellknown" />
+    <Item Name="Rows" Type="LocalDynamicParameter" />
   </Request>
   <DynamicParametersList>
     <DynamicParameter Name="Rows">
-      <Source Path="//string"/>
-      <DynamicObject Name="BasePenaltyPrices" SkipMissed="True"/>
+      <Source Path="//string" />
+      <DynamicObject Name="BasePenaltyPrices" SkipMissed="True" />
     </DynamicParameter>
   </DynamicParametersList>
-  <ErrorsList CodePage="ascii"/>
+  <ErrorsList CodePage="ascii" />
 </Command>

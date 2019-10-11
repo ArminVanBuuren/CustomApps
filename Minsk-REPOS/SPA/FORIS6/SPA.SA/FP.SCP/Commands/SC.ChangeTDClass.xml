@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.ChangeTDClass">
   <Description>ChangeTDClassOnFP</Description>
-  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
+  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
   <Properties GenerationType="DataSetXml" />
   <Request>
     <RequestTemplate>
@@ -25,19 +24,21 @@
   </DataTable>
 </DataSet>]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="datetime" Type="Wellknown"/>
-    <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="TerminalDeviceID" Type="Wellknown"/>
-    <Item Name="PersonalAccount" Type="Wellknown"/>
-    <Item Name="SC.NEW_TERMINAL_DEVICE_CLASS" Type="Parameter"/>
-    <Item Name="FavoriteNumbersServices" Type="LocalDynamicParameter"/>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="datetime" Type="Wellknown" />
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="TerminalDeviceID" Type="Wellknown" />
+    <Item Name="PersonalAccount" Type="Wellknown" />
+    <Item Name="SC.NEW_TERMINAL_DEVICE_CLASS" Type="Parameter" />
+    <Item Name="FavoriteNumbersServices" Type="LocalDynamicParameter" />
   </Request>
   <DynamicParametersList>
     <DynamicParameter Name="FavoriteNumbersServices">
-      <Source Path="//string"/>
-      <DynamicObject Name="FavoriteNumbersServicesToUpdate" SkipMissed="True"/>
+      <Source Path="//string" />
+      <DynamicObject Name="FavoriteNumbersServicesToUpdate" SkipMissed="True" />
     </DynamicParameter>
   </DynamicParametersList>
-  <ErrorsList CodePage="ascii"/>
+  <ErrorsList CodePage="ascii" />
 </Command>

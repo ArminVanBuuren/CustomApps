@@ -1,6 +1,6 @@
 <Command Name="ChangeTPOnBMSPlatform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>ChangeTPOnBMSPlatform</Description>
-  <Author Name="Max Smirnov" Date="2013-03-13+18:00"/>
+  <Author Name="Max Smirnov" Date="2013-03-13+18:00" />
   <ModifiedBy Name="Victor Kosonogov" Date="2017-07-07+07:07" />
   <Request>
     <RequestTemplate>
@@ -15,20 +15,22 @@
   </Attributes>
 </DataSet>]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="PersonalAccount" Type="Wellknown"/>
-    <Item Name="TerminalDeviceID" Type="Wellknown"/>
-    <Item Name="TariffPlanId" Type="LocalParameter"/>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="PersonalAccount" Type="Wellknown" />
+    <Item Name="TerminalDeviceID" Type="Wellknown" />
+    <Item Name="TariffPlanId" Type="LocalParameter" />
   </Request>
   <ParametersList>
     <Parameter Name="TariffPlanId">
-      <Source Path="//AdditionalData//ChangeTP/NewTariffPlanId"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="//AdditionalData//ChangeTP/NewTariffPlanId" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
-  </ParametersList>  
+  </ParametersList>
   <ErrorsList CodePage="ascii">
-    <Error Name="Code&gt;-771003&lt;" Value="SUCCESS"/>
-    <Error Name="Code&gt;-770823&lt;" Value="SUCCESS"/>
+    <Error Name="Code&gt;-771003&lt;" Value="SUCCESS" />
+    <Error Name="Code&gt;-770823&lt;" Value="SUCCESS" />
   </ErrorsList>
 </Command>

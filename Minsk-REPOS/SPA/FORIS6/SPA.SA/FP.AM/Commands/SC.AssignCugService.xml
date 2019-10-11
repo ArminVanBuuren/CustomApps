@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.AssignCugService" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>AssignCugService</Description>
-  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
+  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
   <Properties GenerationType="DataSetXml" />
   <Request>
     <RequestTemplate>
@@ -36,18 +35,20 @@
   </DataTable>
 </DataSet>]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="TerminalDeviceID" Type="Wellknown"/>
-    <Item Name="PersonalAccount" Type="Wellknown"/>
-    <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="SERVICE_CODE" Type="LocalParameter"/>
-    <Item Name="DATE_FROM" Type="LocalParameter"/>
-    <Item Name="datetime" Type="Wellknown"/>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="TerminalDeviceID" Type="Wellknown" />
+    <Item Name="PersonalAccount" Type="Wellknown" />
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="SERVICE_CODE" Type="LocalParameter" />
+    <Item Name="DATE_FROM" Type="LocalParameter" />
+    <Item Name="datetime" Type="Wellknown" />
   </Request>
   <ParametersList>
     <Parameter Name="DATE_FROM" IsChoice="true" AbsenceValue="">
-      <Source Path="//AdditionalData//RFS_FP_SERVICE_CUG/DateFrom/Value[string-length(.) > 0]" PostFormat="DATE_FROM=&quot;{0}&quot;" />
-      <Source Path="//AdditionalData//RFS_FP_SERVICE_VUG/DateFrom/Value[string-length(.) > 0]" PostFormat="DATE_FROM=&quot;{0}&quot;" />
+      <Source Path="//AdditionalData//RFS_FP_SERVICE_CUG/DateFrom/Value[string-length(.) &gt; 0]" PostFormat="DATE_FROM=&quot;{0}&quot;" />
+      <Source Path="//AdditionalData//RFS_FP_SERVICE_VUG/DateFrom/Value[string-length(.) &gt; 0]" PostFormat="DATE_FROM=&quot;{0}&quot;" />
     </Parameter>
     <Parameter Name="SERVICE_CODE" IsChoice="true">
       <Source Path="//AdditionalData//RFS_FP_SERVICE_CUG/ServiceCode" />
@@ -55,7 +56,7 @@
     </Parameter>
   </ParametersList>
   <ErrorsList CodePage="ascii">
-    <Error Name="Not found" Value="InvalidRequest"/>
-    <Error Name="-151003" Value="SUCCESS"/>
+    <Error Name="Not found" Value="InvalidRequest" />
+    <Error Name="-151003" Value="SUCCESS" />
   </ErrorsList>
 </Command>

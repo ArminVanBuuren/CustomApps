@@ -1,6 +1,6 @@
 <Command Name="DeleteBlockService" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>DeleteBlockService</Description>
-  <Author Name="Oleg Safonov" Date="2011-02-08+12:35"/>
+  <Author Name="Oleg Safonov" Date="2011-02-08+12:35" />
   <ModifiedBy Name="Victor Kosonogov" Date="2017-07-07+07:07" />
   <Request>
     <RequestTemplate>
@@ -20,15 +20,17 @@
                 </DataTable>
               </DataSet>]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="ServiceName" Type="LocalParameter"/>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="ServiceName" Type="LocalParameter" />
   </Request>
   <ParametersList>
     <Parameter Name="ServiceName" IsChoice="true">
-      <Source Path="ExtendedRequestMessage/AdditionalData/WithdrawalList/BlockBMSList/*[1]" SelectMode="NodeName"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/WithdrawalList/BlockBMSList/*[1]" SelectMode="NodeName" />
       <Source Path="//AdditionalData/RemoveList/RFS_BMS_BLOCK/ServiceCode" />
     </Parameter>
   </ParametersList>
-  <ErrorsList CodePage="ascii"/>
+  <ErrorsList CodePage="ascii" />
 </Command>

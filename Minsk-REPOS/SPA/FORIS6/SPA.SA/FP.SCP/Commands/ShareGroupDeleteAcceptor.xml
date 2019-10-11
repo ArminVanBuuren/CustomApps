@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Command Name="ShareGroupDeleteAcceptor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>ShareGroupDeleteAcceptor</Description>
-  <Author Name="Alexander Zaytsev" Date="2017-04-19+14:00"/>
+  <Author Name="Alexander Zaytsev" Date="2017-04-19+14:00" />
   <Request>
     <RequestTemplate>
       <![CDATA[<DataSet Name="ShareEverything.SEManageData" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -26,13 +25,15 @@
   </DataTable>
 </DataSet>]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="org.id" Type="Wellknown"/>
-    <Item Name="id" Type="Wellknown"/>
-    <Item Name="CUG_ID" Type="LocalParameter"/>
-    <Item Name="msisdn" Type="Wellknown"/>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="org.id" Type="Wellknown" />
+    <Item Name="id" Type="Wellknown" />
+    <Item Name="CUG_ID" Type="LocalParameter" />
+    <Item Name="msisdn" Type="Wellknown" />
     <Item Name="uid" Type="Wellknown" />
-    <Item Name="Limits" Type="LocalDynamicParameter"/>
+    <Item Name="Limits" Type="LocalDynamicParameter" />
   </Request>
   <ParametersList>
     <Parameter Name="CUG_ID">
@@ -41,17 +42,17 @@
   </ParametersList>
   <DynamicParametersList>
     <DynamicParameter Name="Limits">
-      <Source Path="//string"/>
-      <DynamicObject Name="Limits" SkipMissed="True"/>
+      <Source Path="//string" />
+      <DynamicObject Name="Limits" SkipMissed="True" />
     </DynamicParameter>
   </DynamicParametersList>
   <ErrorsList CodePage="ascii">
-    <Error Name="Code&gt;303&lt;" Value="FAILURE"/>
-    <Error Name="Code&gt;5003&lt;" Value="SUCCESS"/>
-    <Error Name="Code&gt;5008&lt;" Value="SUCCESS"/>
-    <Error Name="Code&gt;513&lt;" Value="SUCCESS"/>
-    <Error Name="Code&gt;168&lt;" Value="SUCCESS"/>
-    <Error Name="Code&gt;167&lt;" Value="SUCCESS"/>
-    <Error Name="Code&gt;101&lt;" Value="SUCCESS"/>
+    <Error Name="Code&gt;303&lt;" Value="FAILURE" />
+    <Error Name="Code&gt;5003&lt;" Value="SUCCESS" />
+    <Error Name="Code&gt;5008&lt;" Value="SUCCESS" />
+    <Error Name="Code&gt;513&lt;" Value="SUCCESS" />
+    <Error Name="Code&gt;168&lt;" Value="SUCCESS" />
+    <Error Name="Code&gt;167&lt;" Value="SUCCESS" />
+    <Error Name="Code&gt;101&lt;" Value="SUCCESS" />
   </ErrorsList>
 </Command>

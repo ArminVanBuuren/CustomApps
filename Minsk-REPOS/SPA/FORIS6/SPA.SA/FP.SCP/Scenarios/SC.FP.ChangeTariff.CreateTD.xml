@@ -7,7 +7,7 @@
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="FPCommandDataConstructor" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.FPProcessingUnits.FPCommandDataConstructor" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="IdentifiersGenerator" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.IdentifiersGenerator" assembly="FORIS.SPA.MmlProcessing.dll" />
-    <object name="RollbackUnit" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.StackRollbackUnit" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="RollbackUnit" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.StackRollbackUnit" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="ConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
   </objectList>
   <automat>
@@ -20,10 +20,9 @@
       <parameterslist>
         <param name="IfXmlPath:0" value="*['processingFlag(SingleSCPEnabled)'='True']" />
         <param name="IfXmlPath:1" value="//PreviousPlatform/HostCode" />
-        <param name="IfNotXmlPath:0" value="//PreviousPlatform/HostCode[contains('[HOST_CODE_BS]',.)]"/>
+        <param name="IfNotXmlPath:0" value="//PreviousPlatform/HostCode[contains('[HOST_CODE_BS]',.)]" />
       </parameterslist>
     </node>
-    
     <!-- ***** CREATE TD Nodes START ***** -->
     <node name="BySubscribersCutter-Create" object="BySubscribersCutter">
       <resultlist>
@@ -175,7 +174,7 @@
         <result value="" node="FinalResponseAssembler-Create" />
       </resultlist>
       <parameterslist>
-        <param name="IfXmlPath:0" value="//AdditionalData//RFS_FP_SERVICE_AUTO_PAYMENT/AutoPaymentThreshold"/>
+        <param name="IfXmlPath:0" value="//AdditionalData//RFS_FP_SERVICE_AUTO_PAYMENT/AutoPaymentThreshold" />
         <param name="Command" value="SC.SetAutopayment" />
       </parameterslist>
     </node>
@@ -189,17 +188,16 @@
         <param name="FinalStepCheck" value="true" />
       </parameterslist>
       <resultlist>
-        <result value="" node="RollbackNode-Create"/>
+        <result value="" node="RollbackNode-Create" />
       </resultlist>
     </node>
     <node name="RollbackNode-Create" object="RollbackUnit">
       <resultlist>
-        <result value="" node=""/>
+        <result value="" node="" />
       </resultlist>
-      <parameterslist/>
+      <parameterslist />
     </node>
     <!-- ***** CREATE TD Nodes END ***** -->
-
     <!-- ***** CHANGE TD Nodes START ***** -->
     <node name="BySubscribersCutter-Change" object="BySubscribersCutter">
       <resultlist>

@@ -1,6 +1,6 @@
 <Command Name="SC.SyncService">
   <Description>Команда добавления/удаления услуг</Description>
-  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
+  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
   <Properties GenerationType="DataSetXml" />
   <Request>
     <RequestTemplate>
@@ -49,16 +49,18 @@
   ##TDCIdentitiesEnd##
 </DataSet>]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="datetime" Type="Wellknown"/>
-    <Item Name="TerminalDeviceID" Type="Wellknown"/>
-    <Item Name="PersonalAccount" Type="Wellknown"/>
-    <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="Services" Type="LocalDynamicParameter"/>
-    <Item Name="ServicesParams" Type="LocalDynamicParameter"/>
-    <Item Name="TDCIdentitiesStart" Type="LocalParameter"/>
-    <Item Name="AdditionalNumbers" Type="LocalDynamicParameter"/>
-    <Item Name="TDCIdentitiesEnd" Type="LocalParameter"/>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="datetime" Type="Wellknown" />
+    <Item Name="TerminalDeviceID" Type="Wellknown" />
+    <Item Name="PersonalAccount" Type="Wellknown" />
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="Services" Type="LocalDynamicParameter" />
+    <Item Name="ServicesParams" Type="LocalDynamicParameter" />
+    <Item Name="TDCIdentitiesStart" Type="LocalParameter" />
+    <Item Name="AdditionalNumbers" Type="LocalDynamicParameter" />
+    <Item Name="TDCIdentitiesEnd" Type="LocalParameter" />
   </Request>
   <ParametersList>
     <Parameter Name="TDCIdentitiesStart">
@@ -69,31 +71,31 @@
       &lt;Column Name=&quot;IDENTITY_TYPE&quot; Type=&quot;System.Int32&quot;/&gt;
       &lt;Column Name=&quot;IDENTITY_VALUE&quot; Type=&quot;System.String&quot;/&gt;
     &lt;/Columns&gt;
-    &lt;Rows&gt;"/>
+    &lt;Rows&gt;" />
     </Parameter>
     <Parameter Name="TDCIdentitiesEnd">
       <Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_ADDITIONAL_NUMBER | //AdditionalData[count(/EndList/RFS_FP_SERVICE_ADDITIONAL_NUMBER)=0]/RemoveList/RFS_FP_SERVICE_ADDITIONAL_NUMBER" SelectMode="NodeName" AbsenceValue="" PresenceValue="&lt;/Rows&gt;
-  &lt;/DataTable&gt;"/>
+  &lt;/DataTable&gt;" />
     </Parameter>
   </ParametersList>
   <DynamicParametersList>
     <DynamicParameter Name="Services">
-      <Source Path="//string"/>
-      <DynamicObject Name="Services" SkipMissed="True"/>
+      <Source Path="//string" />
+      <DynamicObject Name="Services" SkipMissed="True" />
     </DynamicParameter>
     <DynamicParameter Name="ServicesParams">
-      <Source Path="//string"/>
-      <DynamicObject Name="ServicesParams" SkipMissed="True"/>
+      <Source Path="//string" />
+      <DynamicObject Name="ServicesParams" SkipMissed="True" />
     </DynamicParameter>
     <DynamicParameter Name="AdditionalNumbers">
-      <Source Path="//string"/>
-      <DynamicObject Name="AdditionalNumbers" SkipMissed="True"/>
+      <Source Path="//string" />
+      <DynamicObject Name="AdditionalNumbers" SkipMissed="True" />
     </DynamicParameter>
   </DynamicParametersList>
   <ErrorsList CodePage="ascii">
-    <Error Name="Not found" Value="InvalidRequest"/>
-    <Error Name="parameter must be returned" Value="InvalidRequest"/>
-    <Error Name="-151014" Value="SUCCESS"/>
-    <Error Name="If the service is present in expired state, it will be deactivated later internally" Value="SUCCESS"/>
+    <Error Name="Not found" Value="InvalidRequest" />
+    <Error Name="parameter must be returned" Value="InvalidRequest" />
+    <Error Name="-151014" Value="SUCCESS" />
+    <Error Name="If the service is present in expired state, it will be deactivated later internally" Value="SUCCESS" />
   </ErrorsList>
 </Command>

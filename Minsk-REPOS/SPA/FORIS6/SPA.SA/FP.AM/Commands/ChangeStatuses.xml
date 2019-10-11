@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="ChangeStatuses" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>Change TD and PA statuses</Description>
-  <Author Name="Oleg Safonov" Date="2012-02-11+12:35"/>
+  <Author Name="Oleg Safonov" Date="2012-02-11+12:35" />
   <Properties GenerationType="DataSetXml" />
   <Request>
     <RequestTemplate>
@@ -43,34 +42,36 @@
     </Rows>
   </DataTable>
 </DataSet>]]>
-</RequestTemplate>
-<EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-<Item Name="org.id" Type="Wellknown"/>
-<Item Name="uid" Type="Wellknown" />
-<Item Name="TerminalDeviceID" Type="Wellknown"/>
-<Item Name="PersonalAccount" Type="Wellknown" />
-<Item Name="TdStatus" Type="LocalParameter"/>
-<Item Name="PaStatus" Type="LocalParameter" />
-<Item Name="TD_BLOCK_STATUS" Type="LocalParameter" />
-<Item Name="PA_BALANCE_STATUS" Type="LocalParameter" />
-<Item Name="PA_BLOCK_STATUS" Type="LocalParameter" />
-</Request>
-<ParametersList>
-<Parameter Name="TdStatus">
-  <Source Path="//AdditionalData/TdStatus/Status"/>
-</Parameter>
-<Parameter Name="TD_BLOCK_STATUS">
-  <Source Path="//AdditionalData/TdStatus/BlockStatus" />
-</Parameter>
-<Parameter Name="PaStatus">
-  <Source Path="//AdditionalData/PaStatus/Status" />
-</Parameter>
-<Parameter Name="PA_BALANCE_STATUS">
-  <Source Path="//AdditionalData/PaStatus/BalanceStatus" />
-</Parameter>
-<Parameter Name="PA_BLOCK_STATUS">
-  <Source Path="//AdditionalData/PaStatus/BlockStatus" />
-</Parameter>
+    </RequestTemplate>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="org.id" Type="Wellknown" />
+    <Item Name="uid" Type="Wellknown" />
+    <Item Name="TerminalDeviceID" Type="Wellknown" />
+    <Item Name="PersonalAccount" Type="Wellknown" />
+    <Item Name="TdStatus" Type="LocalParameter" />
+    <Item Name="PaStatus" Type="LocalParameter" />
+    <Item Name="TD_BLOCK_STATUS" Type="LocalParameter" />
+    <Item Name="PA_BALANCE_STATUS" Type="LocalParameter" />
+    <Item Name="PA_BLOCK_STATUS" Type="LocalParameter" />
+  </Request>
+  <ParametersList>
+    <Parameter Name="TdStatus">
+      <Source Path="//AdditionalData/TdStatus/Status" />
+    </Parameter>
+    <Parameter Name="TD_BLOCK_STATUS">
+      <Source Path="//AdditionalData/TdStatus/BlockStatus" />
+    </Parameter>
+    <Parameter Name="PaStatus">
+      <Source Path="//AdditionalData/PaStatus/Status" />
+    </Parameter>
+    <Parameter Name="PA_BALANCE_STATUS">
+      <Source Path="//AdditionalData/PaStatus/BalanceStatus" />
+    </Parameter>
+    <Parameter Name="PA_BLOCK_STATUS">
+      <Source Path="//AdditionalData/PaStatus/BlockStatus" />
+    </Parameter>
   </ParametersList>
-  <ErrorsList CodePage="ascii"/>
+  <ErrorsList CodePage="ascii" />
 </Command>

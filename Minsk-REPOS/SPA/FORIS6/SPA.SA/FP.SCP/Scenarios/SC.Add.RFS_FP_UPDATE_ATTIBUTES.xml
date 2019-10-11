@@ -1,32 +1,32 @@
 <scenario name="SC.Add.RFS_FP_UPDATE_ATTIBUTES">
   <objectList>
-    <object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
-    <object name="ConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll"/>
-    <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="ConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+    <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
   </objectList>
   <automat>
     <node name="NewParametersFilter-Node" object="ConditionsResolver">
       <resultlist>
-        <result value="0" node="BySubscribersSplitter"/>
-        <result value="" node="NoFieldsDummyResponderNode"/>
+        <result value="0" node="BySubscribersSplitter" />
+        <result value="" node="NoFieldsDummyResponderNode" />
       </resultlist>
       <parameterslist>
-        <param name="IfXmlPath:0" value="*['processingFlag(send_calc_method_id)'='True']"/>
-        <param name="IfNotXmlPath:0" value="/*['[SCP_VER]'='151']"/>
+        <param name="IfXmlPath:0" value="*['processingFlag(send_calc_method_id)'='True']" />
+        <param name="IfNotXmlPath:0" value="/*['[SCP_VER]'='151']" />
       </parameterslist>
     </node>
     <node name="BySubscribersSplitter" object="BySubscribersSplitter">
       <resultlist>
-        <result value="0" node="SingleSubscriberRequestDequeuer"/>
+        <result value="0" node="SingleSubscriberRequestDequeuer" />
       </resultlist>
     </node>
     <node name="SingleSubscriberRequestDequeuer" object="Dequeuer">
       <resultlist>
         <result value="0" node="UpdatePAAttributes-Node" />
-        <result value="" node=""/>
+        <result value="" node="" />
       </resultlist>
       <parameterslist>
         <param name="queueName" value="requestsSplittedBySubscriberQueue" />

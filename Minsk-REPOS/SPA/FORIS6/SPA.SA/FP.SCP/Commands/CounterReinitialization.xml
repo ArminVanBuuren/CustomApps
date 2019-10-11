@@ -1,8 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="CounterReinitialization" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>CounterReinitialization</Description>
-  <Author Name="the evil" Date="2016-03-10+12:35"/>
-  <Properties GenerationType="DataSetXml"/>
+  <Author Name="the evil" Date="2016-03-10+12:35" />
+  <Properties GenerationType="DataSetXml" />
   <Request>
     <RequestTemplate>
       <![CDATA[<DataSet Name="AccountSync.ChangeCounterProfile" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -29,14 +28,13 @@
 			</DataTable>
 </DataSet>]]>
     </RequestTemplate>
-    <Item Name="org.id" Type="Wellknown"/>
-    <Item Name="Services" Type="LocalDynamicParameter"/>
+    <Item Name="org.id" Type="Wellknown" />
+    <Item Name="Services" Type="LocalDynamicParameter" />
   </Request>
   <DynamicParametersList>
     <DynamicParameter Name="Services">
-      <Source Path="//string"/>
+      <Source Path="//string" />
       <DynamicObject Name="Services" />
     </DynamicParameter>
-	</DynamicParametersList>
+  </DynamicParametersList>
 </Command>
-

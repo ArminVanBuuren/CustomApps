@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Command Name="ChangePAStatusesOnFINPlatform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>ChangePAStatusesOnFINPlatform</Description>
   <Author Name="Oleg Safonov" Date="2011-02-08+12:35" />
@@ -32,7 +31,9 @@
   </DataTable>
 </DataSet>]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
     <Item Name="org.id" Type="Wellknown" />
     <Item Name="PersonalAccount" Type="Wellknown" />
     <Item Name="PA_STATUS" Type="LocalParameter" />

@@ -21,7 +21,7 @@
       </parameterslist>
     </node>
     <node name="SkipResponseAssembler" object="ResponseAssembler">
-      <parameterslist/>
+      <parameterslist />
       <resultlist>
         <result value="" node="" />
       </resultlist>
@@ -67,7 +67,7 @@
         <param name="ServicesCommand" value="SC.FavoriteNumber.ServiceRow" />
         <param name="XmlPath" value="//AdditionalData/*/RFS_FP_SERVICE_FAVORITE_NUMBER" />
       </parameterslist>
-    </node>    
+    </node>
     <node name="SyncFavoriteNumbers-Node" object="Commander">
       <resultlist>
         <result value="1828" node="SkipIfNotExist" />

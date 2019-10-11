@@ -1,6 +1,6 @@
 <Command Name="AnnualResetMsisdnAnnualContractPenaltyPrice" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>AnnualResetMsisdnAnnualContractPenaltyPrice</Description>
-  <Author Name="Oleg Safonov" Date="2011-02-08+12:35"/>
+  <Author Name="Oleg Safonov" Date="2011-02-08+12:35" />
   <ModifiedBy Name="Victor Kosonogov" Date="2017-07-07+07:07" />
   <Request>
     <RequestTemplate>
@@ -15,27 +15,29 @@
   </Attributes>
 </DataSet>]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="CampaignId" Type="LocalParameter"/>
-    <Item Name="datetime" Type="Wellknown"/>
-    <Item Name="ResetPeriod" Type="LocalParameter"/>
-    <Item Name="ResetPeriodUnit" Type="LocalParameter"/>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="CampaignId" Type="LocalParameter" />
+    <Item Name="datetime" Type="Wellknown" />
+    <Item Name="ResetPeriod" Type="LocalParameter" />
+    <Item Name="ResetPeriodUnit" Type="LocalParameter" />
   </Request>
   <ParametersList>
     <Parameter Name="CampaignId" IsChoice="true">
       <Source Path="ExtendedRequestMessage/AdditionalData/ModificationList/AnnualContractList//BonusCampaignId[text()]" />
-      <Source Path="ExtendedRequestMessage/AdditionalData/ModificationList/AnnualContractList//BonusCampaignId/NewValue"/>
-      <Source Path="//AdditionalData/ModifyList/RFS_BMS_ANNUAL_CONTRACT/BonusCampaignId/Value[string-length(.) > 0]" />
+      <Source Path="ExtendedRequestMessage/AdditionalData/ModificationList/AnnualContractList//BonusCampaignId/NewValue" />
+      <Source Path="//AdditionalData/ModifyList/RFS_BMS_ANNUAL_CONTRACT/BonusCampaignId/Value[string-length(.) &gt; 0]" />
     </Parameter>
     <Parameter Name="ResetPeriod" IsChoice="true">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ModificationList/AnnualContractList//ResetPeriod"/>
-      <Source Path="//AdditionalData/ModifyList/RFS_BMS_ANNUAL_CONTRACT/ResetPeriod/Value[string-length(.) > 0]" />
+      <Source Path="ExtendedRequestMessage/AdditionalData/ModificationList/AnnualContractList//ResetPeriod" />
+      <Source Path="//AdditionalData/ModifyList/RFS_BMS_ANNUAL_CONTRACT/ResetPeriod/Value[string-length(.) &gt; 0]" />
     </Parameter>
     <Parameter Name="ResetPeriodUnit" IsChoice="true">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ModificationList/AnnualContractList//ResetPeriodUnit"/>
-      <Source Path="//AdditionalData/ModifyList/RFS_BMS_ANNUAL_CONTRACT/ResetPeriodUnit/Value[string-length(.) > 0]" />
+      <Source Path="ExtendedRequestMessage/AdditionalData/ModificationList/AnnualContractList//ResetPeriodUnit" />
+      <Source Path="//AdditionalData/ModifyList/RFS_BMS_ANNUAL_CONTRACT/ResetPeriodUnit/Value[string-length(.) &gt; 0]" />
     </Parameter>
   </ParametersList>
-  <ErrorsList CodePage="ascii"/>
+  <ErrorsList CodePage="ascii" />
 </Command>

@@ -11,8 +11,8 @@
   <automat>
     <node name="CreatePA_Condition" object="ConditionsResolver">
       <resultlist>
-        <result value="0" node="CreatePA_Scenario"/>
-        <result value="" node="CreateTD_Condition"/>
+        <result value="0" node="CreatePA_Scenario" />
+        <result value="" node="CreateTD_Condition" />
       </resultlist>
       <parameterslist>
         <param name="IfXmlPath:0" value="//AddList/RFS_FP_CHANGE_TARIFF_NEW_PA" />
@@ -20,16 +20,16 @@
     </node>
     <node name="CreatePA_Scenario" object="ScenarioProcessor">
       <resultlist>
-        <result value="" node="CreateTD_Condition"/>
+        <result value="" node="CreateTD_Condition" />
       </resultlist>
       <parameterslist>
-        <param name="Scenario" value="SC.FP.ChangeTariff.CreatePA"/>
+        <param name="Scenario" value="SC.FP.ChangeTariff.CreatePA" />
       </parameterslist>
     </node>
     <node name="CreateTD_Condition" object="ConditionsResolver">
       <resultlist>
-        <result value="0" node="CreateTD_Scenario"/>
-        <result value="" node="ChangeCug_Condition"/>
+        <result value="0" node="CreateTD_Scenario" />
+        <result value="" node="ChangeCug_Condition" />
       </resultlist>
       <parameterslist>
         <param name="IfXmlPath:0" value="//AddList/RFS_FP_CHANGE_TARIFF_NEW_TD" />
@@ -37,16 +37,16 @@
     </node>
     <node name="CreateTD_Scenario" object="ScenarioProcessor">
       <resultlist>
-        <result value="" node="ChangeCug_Condition"/>
+        <result value="" node="ChangeCug_Condition" />
       </resultlist>
       <parameterslist>
-        <param name="Scenario" value="SC.FP.ChangeTariff.CreateTD"/>
+        <param name="Scenario" value="SC.FP.ChangeTariff.CreateTD" />
       </parameterslist>
     </node>
     <node name="ChangeCug_Condition" object="ConditionsResolver">
       <resultlist>
-        <result value="0" node="ChangeCug_Scenario"/>
-        <result value="" node=""/>
+        <result value="0" node="ChangeCug_Scenario" />
+        <result value="" node="" />
       </resultlist>
       <parameterslist>
         <param name="IfXmlPath:0" value="//AddList/RFS_FP_CHANGE_TARIFF_CUG" />
@@ -54,10 +54,10 @@
     </node>
     <node name="ChangeCug_Scenario" object="ScenarioProcessor">
       <resultlist>
-        <result value="" node=""/>
+        <result value="" node="" />
       </resultlist>
       <parameterslist>
-        <param name="Scenario" value="SC.FP.ChangeTariff.ChangeCug"/>
+        <param name="Scenario" value="SC.FP.ChangeTariff.ChangeCug" />
       </parameterslist>
     </node>
   </automat>

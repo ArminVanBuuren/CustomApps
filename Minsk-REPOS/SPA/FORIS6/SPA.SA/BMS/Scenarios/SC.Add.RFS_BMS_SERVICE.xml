@@ -1,44 +1,44 @@
 <scenario name="SC.Add.RFS_BMS_SERVICE">
   <objectList>
-    <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="ByServicesSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterByXmlNodes" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ByServicesSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterByXmlNodes" assembly="FORIS.SPA.MmlProcessing.dll" />
   </objectList>
   <automat>
     <node name="BySubscribersSplitter" object="BySubscribersSplitter">
       <resultlist>
-        <result value="0" node="SingleSubscriberRequestDequeuer"/>
+        <result value="0" node="SingleSubscriberRequestDequeuer" />
       </resultlist>
     </node>
     <node name="SingleSubscriberRequestDequeuer" object="Dequeuer">
       <resultlist>
-        <result value="0" node="ByServicesSplitter-Node"/>
-        <result value="1" node=""/>
+        <result value="0" node="ByServicesSplitter-Node" />
+        <result value="1" node="" />
       </resultlist>
       <parameterslist>
-        <param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+        <param name="queueName" value="requestsSplittedBySubscriberQueue" />
       </parameterslist>
     </node>
     <node name="ByServicesSplitter-Node" object="ByServicesSplitter">
       <resultlist>
-        <result value="0" node="SingleSubscriberRequestDequeuer"/>
-        <result value="" node="SingleServiceRequestDequeuer"/>
+        <result value="0" node="SingleSubscriberRequestDequeuer" />
+        <result value="" node="SingleServiceRequestDequeuer" />
       </resultlist>
       <parameterslist>
-        <param name="Queue" value="requestsSplittedByServicesQueue"/>
-        <param name="XmlPath:0" value="//AdditionalData/AddList/RFS_BMS_SERVICE"/>
+        <param name="Queue" value="requestsSplittedByServicesQueue" />
+        <param name="XmlPath:0" value="//AdditionalData/AddList/RFS_BMS_SERVICE" />
       </parameterslist>
     </node>
     <node name="SingleServiceRequestDequeuer" object="Dequeuer">
       <resultlist>
-        <result value="0" node="RestoreMSISDN-Node"/>
-        <result value="" node="ResponseAssembler"/>
+        <result value="0" node="RestoreMSISDN-Node" />
+        <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="queueName" value="requestsSplittedByServicesQueue"/>
+        <param name="queueName" value="requestsSplittedByServicesQueue" />
       </parameterslist>
     </node>
     <node name="RestoreMSISDN-Node" object="IfCommander">
@@ -50,7 +50,7 @@
       </resultlist>
       <parameterslist>
         <param name="IfXmlPath:0" value="//ProcessingOptions/IsRestoreProcess" />
-        <param name="Command" value="DeleteBlockEndService"/>
+        <param name="Command" value="DeleteBlockEndService" />
       </parameterslist>
     </node>
     <node name="AssignMsisdnToCampaign" object="Commander">
@@ -59,12 +59,12 @@
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="Command" value="AssignMsisdnToCampaign"/>
+        <param name="Command" value="AssignMsisdnToCampaign" />
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">
       <resultlist>
-        <result value="" node="SingleSubscriberRequestDequeuer"/>
+        <result value="" node="SingleSubscriberRequestDequeuer" />
       </resultlist>
     </node>
   </automat>

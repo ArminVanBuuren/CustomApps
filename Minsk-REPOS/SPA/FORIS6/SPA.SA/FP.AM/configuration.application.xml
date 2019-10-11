@@ -14,8 +14,8 @@
       <MacroList>
         <Macro Name="[COUNTER_VER]" Value="1.5.5" />
         <Macro Name="[SCP_MARKER]" Value="SPA" />
-        <Macro Name="[HOST_CODE_AM]" Value="1414"/>
-        <Macro Name="[HOST_CODE_IN]" Value="mi155scp"/>
+        <Macro Name="[HOST_CODE_AM]" Value="1414" />
+        <Macro Name="[HOST_CODE_IN]" Value="mi155scp" />
         <Macro Name="[HOST_CODE_SCP1]" Value="mi155scp" />
         <Macro Name="[HOST_CODE_BS]" Value="BS" />
       </MacroList>

@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.UpdateTDCDataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>Update list of services and blocks</Description>
-  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
+  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
   <Properties GenerationType="DataSetXml" />
   <Request>
     <RequestTemplate>
@@ -48,31 +47,31 @@
   </DataTable>
 </DataSet>]]>
     </RequestTemplate>
-    <Item Name="TerminalDeviceID" Type="Wellknown"/>
-    <Item Name="PersonalAccount" Type="Wellknown"/>
-    <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="datetime" Type="Wellknown"/>
-    <Item Name="AddServices" Type="LocalDynamicParameter"/>
-    <Item Name="DelServices" Type="LocalDynamicParameter"/>
-    <Item Name="Parameters" Type="LocalDynamicParameter"/>
+    <Item Name="TerminalDeviceID" Type="Wellknown" />
+    <Item Name="PersonalAccount" Type="Wellknown" />
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="datetime" Type="Wellknown" />
+    <Item Name="AddServices" Type="LocalDynamicParameter" />
+    <Item Name="DelServices" Type="LocalDynamicParameter" />
+    <Item Name="Parameters" Type="LocalDynamicParameter" />
   </Request>
   <DynamicParametersList>
     <DynamicParameter Name="AddServices">
-      <Source Path="//string"/>
-      <DynamicObject Name="ServicesToActivate" SkipMissed="True"/>
+      <Source Path="//string" />
+      <DynamicObject Name="ServicesToActivate" SkipMissed="True" />
     </DynamicParameter>
     <DynamicParameter Name="DelServices">
-      <Source Path="//string"/>
-      <DynamicObject Name="ServicesToDeactivate" SkipMissed="True"/>
+      <Source Path="//string" />
+      <DynamicObject Name="ServicesToDeactivate" SkipMissed="True" />
     </DynamicParameter>
     <DynamicParameter Name="Parameters">
-      <Source Path="//string"/>
-      <DynamicObject Name="RegisteredServicesParams" SkipMissed="True"/>
+      <Source Path="//string" />
+      <DynamicObject Name="RegisteredServicesParams" SkipMissed="True" />
     </DynamicParameter>
   </DynamicParametersList>
   <ErrorsList CodePage="ascii">
-    <Error Name="Not found" Value="InvalidRequest"/>
-    <Error Name="parameter must be returned" Value="InvalidRequest"/>
-    <Error Name="ERROR_CODE&gt;-151003" Value="SUCCESS"/>
+    <Error Name="Not found" Value="InvalidRequest" />
+    <Error Name="parameter must be returned" Value="InvalidRequest" />
+    <Error Name="ERROR_CODE&gt;-151003" Value="SUCCESS" />
   </ErrorsList>
 </Command>

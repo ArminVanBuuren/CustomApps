@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.ChangeTariff.Composite">
   <Description>Смена тарифного плана одной большой командой на ФП</Description>
-  <Author Name="Daniil Lukinov" Date="2019-09-02+12:00"/>
+  <Author Name="Daniil Lukinov" Date="2019-09-02+12:00" />
   <Properties GenerationType="DataSetXml" />
   <Request>
     <RequestTemplate>
@@ -187,61 +186,63 @@
         </DataSet>
       ]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="TerminalDeviceID" Type="Wellknown"/>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="TerminalDeviceID" Type="Wellknown" />
     <Item Name="PersonalAccount" Type="Wellknown" />
-    <Item Name="InitialServices" Type="LocalDynamicParameter"/>
-    <Item Name="InitialFavoriteNumbersServices" Type="LocalDynamicParameter"/>
-    <Item Name="InitialServicesParams" Type="LocalDynamicParameter"/>
-    <Item Name="RegisteredServices" Type="LocalDynamicParameter"/>
-    <Item Name="PAServices" Type="LocalDynamicParameter"/>
-    <Item Name="RegisteredFavoriteNumbersServices" Type="LocalDynamicParameter"/>
-    <Item Name="CugServices" Type="LocalDynamicParameter"/>
-    <Item Name="RegisteredServicesParams" Type="LocalDynamicParameter"/>
-    <Item Name="PAServicesParams" Type="LocalDynamicParameter"/>
-    <Item Name="Limits" Type="LocalDynamicParameter"/>
-    <Item Name="FavoriteNumbers" Type="LocalDynamicParameter"/>
-    <Item Name="AdditionalNumbers" Type="LocalDynamicParameter"/>
-    <Item Name="SC.BALANCE" Type="Parameter"/>
-    <Item Name="SC.CURRENCY_CODE" Type="Parameter"/>
-    <Item Name="SC.PA_STATUS" Type="Parameter"/>
-    <Item Name="SC.SERVICE_PROVIDER_CODE" Type="Parameter"/>
-    <Item Name="SC.BLOCK_LIMIT" Type="Parameter"/>
-    <Item Name="SC.UNBLOCK_LIMIT" Type="Parameter"/>
-    <Item Name="SC.PARTIAL_BLOCK_LIMIT" Type="Parameter"/>
-    <Item Name="SC.EXPIRES" Type="Parameter"/>
-    <Item Name="SC.EXPIRATION_DATE_MONITOR" Type="Parameter"/>
-    <Item Name="SC.BLOCKED_END_DATE" Type="Parameter"/>
-    <Item Name="TAX_GROUP_ID" Type="Parameter"/>
-    <Item Name="SC.MAX_BLOCKED_PERIOD" Type="Parameter"/>
-    <Item Name="SC.AFTER_GRACE_PERIOD" Type="Parameter"/>
-    <Item Name="SC.IS_GRACE_STARTS_ON_BLOCK" Type="Parameter"/>
-    <Item Name="SC.VALIDITY_PERIOD" Type="Parameter"/>
-    <Item Name="CUSTOMER_TYPE_ID" Type="Parameter"/>
-    <Item Name="datetime" Type="Wellknown"/>
-    <Item Name="SC.PA_BALANCE_STATUS" Type="Parameter"/>
-    <Item Name="PA_STATUS_CHANGE_DATE" Type="Parameter"/>
-    <Item Name="PA_BALANCE_STATUS_CHANGE_DATE" Type="Parameter"/>
-    <Item Name="PSP_DAY_OF_MONTH" Type="Parameter"/>
-    <Item Name="BILLING_GROUP_ID" Type="Parameter"/>
-    <Item Name="SC.KEEP_BALANCES" Type="Parameter"/>
-    <Item Name="TARIFF_PLAN_ID" Type="Parameter"/>
-    <Item Name="SC.TERMINAL_DEVICE_STATE" Type="Parameter"/>
-    <Item Name="SC.FIRST_CALL_END_DATE" Type="Parameter"/>
-    <Item Name="SC.MAX_INACTIVE_PERIOD" Type="Parameter"/>
-    <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="imsi" Type="Wellknown"/>
-    <Item Name="LANGUAGE" Type="Parameter"/>
-    <Item Name="SC.TIME_ZONE" Type="Parameter"/>
-    <Item Name="PRIVATE_USER_GROUPS" Type="Constant"/>
-    <Item Name="TERMINAL_DEVICE_CLASS" Type="Parameter"/>
-    <Item Name="SC.SMS_USSD_LANG" Type="Parameter"/>
-    <Item Name="SC.PA.ADMIN_BLOCK" Type="LocalParameter"/>
-    <Item Name="SC.PA.ADMIN_BLOCKED_DATE" Type="LocalParameter"/>
-    <Item Name="SC.TD.ADMIN_BLOCK" Type="LocalParameter"/>
-    <Item Name="SC.TD.ADMIN_BLOCKED_DATE" Type="LocalParameter"/>
-    <Item Name="OLD_TARIFF_PLAN_ID" Type="LocalParameter"/>
-    <Item Name="NEW_TARIFF_PLAN_ID" Type="LocalParameter"/>
+    <Item Name="InitialServices" Type="LocalDynamicParameter" />
+    <Item Name="InitialFavoriteNumbersServices" Type="LocalDynamicParameter" />
+    <Item Name="InitialServicesParams" Type="LocalDynamicParameter" />
+    <Item Name="RegisteredServices" Type="LocalDynamicParameter" />
+    <Item Name="PAServices" Type="LocalDynamicParameter" />
+    <Item Name="RegisteredFavoriteNumbersServices" Type="LocalDynamicParameter" />
+    <Item Name="CugServices" Type="LocalDynamicParameter" />
+    <Item Name="RegisteredServicesParams" Type="LocalDynamicParameter" />
+    <Item Name="PAServicesParams" Type="LocalDynamicParameter" />
+    <Item Name="Limits" Type="LocalDynamicParameter" />
+    <Item Name="FavoriteNumbers" Type="LocalDynamicParameter" />
+    <Item Name="AdditionalNumbers" Type="LocalDynamicParameter" />
+    <Item Name="SC.BALANCE" Type="Parameter" />
+    <Item Name="SC.CURRENCY_CODE" Type="Parameter" />
+    <Item Name="SC.PA_STATUS" Type="Parameter" />
+    <Item Name="SC.SERVICE_PROVIDER_CODE" Type="Parameter" />
+    <Item Name="SC.BLOCK_LIMIT" Type="Parameter" />
+    <Item Name="SC.UNBLOCK_LIMIT" Type="Parameter" />
+    <Item Name="SC.PARTIAL_BLOCK_LIMIT" Type="Parameter" />
+    <Item Name="SC.EXPIRES" Type="Parameter" />
+    <Item Name="SC.EXPIRATION_DATE_MONITOR" Type="Parameter" />
+    <Item Name="SC.BLOCKED_END_DATE" Type="Parameter" />
+    <Item Name="TAX_GROUP_ID" Type="Parameter" />
+    <Item Name="SC.MAX_BLOCKED_PERIOD" Type="Parameter" />
+    <Item Name="SC.AFTER_GRACE_PERIOD" Type="Parameter" />
+    <Item Name="SC.IS_GRACE_STARTS_ON_BLOCK" Type="Parameter" />
+    <Item Name="SC.VALIDITY_PERIOD" Type="Parameter" />
+    <Item Name="CUSTOMER_TYPE_ID" Type="Parameter" />
+    <Item Name="datetime" Type="Wellknown" />
+    <Item Name="SC.PA_BALANCE_STATUS" Type="Parameter" />
+    <Item Name="PA_STATUS_CHANGE_DATE" Type="Parameter" />
+    <Item Name="PA_BALANCE_STATUS_CHANGE_DATE" Type="Parameter" />
+    <Item Name="PSP_DAY_OF_MONTH" Type="Parameter" />
+    <Item Name="BILLING_GROUP_ID" Type="Parameter" />
+    <Item Name="SC.KEEP_BALANCES" Type="Parameter" />
+    <Item Name="TARIFF_PLAN_ID" Type="Parameter" />
+    <Item Name="SC.TERMINAL_DEVICE_STATE" Type="Parameter" />
+    <Item Name="SC.FIRST_CALL_END_DATE" Type="Parameter" />
+    <Item Name="SC.MAX_INACTIVE_PERIOD" Type="Parameter" />
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="imsi" Type="Wellknown" />
+    <Item Name="LANGUAGE" Type="Parameter" />
+    <Item Name="SC.TIME_ZONE" Type="Parameter" />
+    <Item Name="PRIVATE_USER_GROUPS" Type="Constant" />
+    <Item Name="TERMINAL_DEVICE_CLASS" Type="Parameter" />
+    <Item Name="SC.SMS_USSD_LANG" Type="Parameter" />
+    <Item Name="SC.PA.ADMIN_BLOCK" Type="LocalParameter" />
+    <Item Name="SC.PA.ADMIN_BLOCKED_DATE" Type="LocalParameter" />
+    <Item Name="SC.TD.ADMIN_BLOCK" Type="LocalParameter" />
+    <Item Name="SC.TD.ADMIN_BLOCKED_DATE" Type="LocalParameter" />
+    <Item Name="OLD_TARIFF_PLAN_ID" Type="LocalParameter" />
+    <Item Name="NEW_TARIFF_PLAN_ID" Type="LocalParameter" />
   </Request>
   <ParametersList>
     <Parameter Name="SC.PA.ADMIN_BLOCK">
@@ -251,68 +252,68 @@
       <Source Path="//AdditionalData/AddList//PaStatus/AdminBlockedDate[string-length(.) &gt; 0]" AbsenceValue="" PostFormat="ADMIN_BLOCKED_DATE=&quot;{0}&quot;" />
     </Parameter>
     <Parameter Name="SC.TD.ADMIN_BLOCK">
-      <Source Path="//AdditionalData/AddList//TdStatus/BlockStatus" AbsenceValue="" PostFormat="ADMIN_BLOCK=&quot;{0}&quot;"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="//AdditionalData/AddList//TdStatus/BlockStatus" AbsenceValue="" PostFormat="ADMIN_BLOCK=&quot;{0}&quot;" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="SC.TD.ADMIN_BLOCKED_DATE">
-      <Source Path="//AdditionalData/AddList//TdStatus/AdminBlockedDate[string-length(.) > 0]" AbsenceValue="" PostFormat="ADMIN_BLOCKED_DATE=&quot;{0}&quot;"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="//AdditionalData/AddList//TdStatus/AdminBlockedDate[string-length(.) &gt; 0]" AbsenceValue="" PostFormat="ADMIN_BLOCKED_DATE=&quot;{0}&quot;" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="OLD_TARIFF_PLAN_ID">
-      <Source Path="//AdditionalData//ChangeTP/PreviousTariffPlanId"/>
+      <Source Path="//AdditionalData//ChangeTP/PreviousTariffPlanId" />
     </Parameter>
     <Parameter Name="NEW_TARIFF_PLAN_ID">
-      <Source Path="//AdditionalData//ChangeTP/NewTariffPlanId"/>
+      <Source Path="//AdditionalData//ChangeTP/NewTariffPlanId" />
     </Parameter>
   </ParametersList>
   <DynamicParametersList>
     <DynamicParameter Name="InitialServices">
-      <Source Path="//string"/>
-      <DynamicObject Name="InitialServices" SkipMissed="True"/>
+      <Source Path="//string" />
+      <DynamicObject Name="InitialServices" SkipMissed="True" />
     </DynamicParameter>
     <DynamicParameter Name="InitialFavoriteNumbersServices">
-      <Source Path="//string"/>
-      <DynamicObject Name="InitialFavoriteNumbersServices" SkipMissed="True"/>
+      <Source Path="//string" />
+      <DynamicObject Name="InitialFavoriteNumbersServices" SkipMissed="True" />
     </DynamicParameter>
     <DynamicParameter Name="InitialServicesParams">
-      <Source Path="//string"/>
-      <DynamicObject Name="InitialServicesParams" SkipMissed="True"/>
+      <Source Path="//string" />
+      <DynamicObject Name="InitialServicesParams" SkipMissed="True" />
     </DynamicParameter>
     <DynamicParameter Name="RegisteredServices">
-      <Source Path="//string"/>
-      <DynamicObject Name="RegisteredServices" SkipMissed="True"/>
+      <Source Path="//string" />
+      <DynamicObject Name="RegisteredServices" SkipMissed="True" />
     </DynamicParameter>
     <DynamicParameter Name="PAServices">
-      <Source Path="//string"/>
-      <DynamicObject Name="PAServices" SkipMissed="True"/>
+      <Source Path="//string" />
+      <DynamicObject Name="PAServices" SkipMissed="True" />
     </DynamicParameter>
     <DynamicParameter Name="RegisteredFavoriteNumbersServices">
-      <Source Path="//string"/>
-      <DynamicObject Name="RegisteredFavoriteNumbersServices" SkipMissed="True"/>
+      <Source Path="//string" />
+      <DynamicObject Name="RegisteredFavoriteNumbersServices" SkipMissed="True" />
     </DynamicParameter>
     <DynamicParameter Name="CugServices">
-      <Source Path="//string"/>
-      <DynamicObject Name="CugServices" SkipMissed="True"/>
+      <Source Path="//string" />
+      <DynamicObject Name="CugServices" SkipMissed="True" />
     </DynamicParameter>
     <DynamicParameter Name="RegisteredServicesParams">
-      <Source Path="//string"/>
-      <DynamicObject Name="RegisteredServicesParams" SkipMissed="True"/>
+      <Source Path="//string" />
+      <DynamicObject Name="RegisteredServicesParams" SkipMissed="True" />
     </DynamicParameter>
     <DynamicParameter Name="PAServicesParams">
-      <Source Path="//string"/>
-      <DynamicObject Name="PAServicesParams" SkipMissed="True"/>
+      <Source Path="//string" />
+      <DynamicObject Name="PAServicesParams" SkipMissed="True" />
     </DynamicParameter>
     <DynamicParameter Name="FavoriteNumbers">
-      <Source Path="//string"/>
-      <DynamicObject Name="FavoriteNumbers" SkipMissed="True"/>
+      <Source Path="//string" />
+      <DynamicObject Name="FavoriteNumbers" SkipMissed="True" />
     </DynamicParameter>
     <DynamicParameter Name="AdditionalNumbers">
-      <Source Path="//string"/>
-      <DynamicObject Name="AdditionalNumbers" SkipMissed="True"/>
+      <Source Path="//string" />
+      <DynamicObject Name="AdditionalNumbers" SkipMissed="True" />
     </DynamicParameter>
     <DynamicParameter Name="Limits">
-      <Source Path="//string"/>
-      <DynamicObject Name="Limits" SkipMissed="True"/>
+      <Source Path="//string" />
+      <DynamicObject Name="Limits" SkipMissed="True" />
     </DynamicParameter>
   </DynamicParametersList>
 </Command>

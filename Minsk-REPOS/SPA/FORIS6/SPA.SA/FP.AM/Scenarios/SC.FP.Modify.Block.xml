@@ -1,4 +1,4 @@
-﻿<scenario name="SC.FP.Modify.Block">
+<scenario name="SC.FP.Modify.Block">
   <objectList>
     <object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
@@ -6,7 +6,7 @@
     <object name="FPCommandDataConstructor" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.FPProcessingUnits.FPCommandDataConstructor" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="ConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
-    <object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll"/>
+    <object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll" />
   </objectList>
   <automat>
     <node name="BySubscribersCutter-Node" object="BySubscribersCutter">
@@ -47,7 +47,7 @@
         <result value="" node="ResponseAssembler-Node" />
       </resultlist>
       <parameterslist>
-        <param name="IfXmlPath:0" value="//AdditionalData/PaStatus"/>
+        <param name="IfXmlPath:0" value="//AdditionalData/PaStatus" />
         <param name="Command" value="ChangePAStatusesOnFINPlatform" />
         <param name="AppendSubscribersData" value="true" />
       </parameterslist>
@@ -95,7 +95,7 @@
     </node>
     <node name="CheckHasSubscriberData-Node" object="ConditionsResolver">
       <parameterslist>
-        <param name="ObjectNameInContext" value="intermediateResponse"/>
+        <param name="ObjectNameInContext" value="intermediateResponse" />
         <param name="IfXmlPath:0" value="//SubscribersData/FinancialPlatform/LastOperationDate" />
       </parameterslist>
       <resultlist>
@@ -123,14 +123,14 @@
     </node>
     <node name="Add-ChangeStatusesSubscriberData-Node" object="XmlNodesCopier">
       <resultlist>
-        <result value="" node="ResponseAssembler-Node"/>
+        <result value="" node="ResponseAssembler-Node" />
       </resultlist>
       <parameterslist>
-        <param name="SrcXml" value="$LastDecoderResult"/>
-        <param name="DstMessage" value="intermediateResponse"/>
-        <param name="CopyContentType" value="InnerXml"/>
-        <param name="SrcXmlPath:0" value="./CustomData"/>
-        <param name="DstXmlPath:0" value="ExtendedResponseMessage/AdditionalData"/>
+        <param name="SrcXml" value="$LastDecoderResult" />
+        <param name="DstMessage" value="intermediateResponse" />
+        <param name="CopyContentType" value="InnerXml" />
+        <param name="SrcXmlPath:0" value="./CustomData" />
+        <param name="DstXmlPath:0" value="ExtendedResponseMessage/AdditionalData" />
       </parameterslist>
     </node>
     <node name="ResponseAssembler-Node" object="ResponseAssembler">

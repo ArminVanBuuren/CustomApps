@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.UpdateTD">
   <Description>Обновление ПО на ФП</Description>
-  <Author Name="Daniil Lukinov" Date="2018-12-12+01:01"/>
+  <Author Name="Daniil Lukinov" Date="2018-12-12+01:01" />
   <Properties GenerationType="DataSetXml" />
   <Request>
     <RequestTemplate>
@@ -65,27 +64,29 @@
   </DataTable>
 </DataSet>]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="datetime" Type="Wellknown"/>
-    <Item Name="TerminalDeviceID" Type="Wellknown"/>
-    <Item Name="PersonalAccount" Type="Wellknown"/>
-    <Item Name="AdditionalNumbers" Type="LocalDynamicParameter"/>
-    <Item Name="ServicesParams" Type="LocalDynamicParameter"/>
-    <Item Name="Services" Type="LocalDynamicParameter"/>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="datetime" Type="Wellknown" />
+    <Item Name="TerminalDeviceID" Type="Wellknown" />
+    <Item Name="PersonalAccount" Type="Wellknown" />
+    <Item Name="AdditionalNumbers" Type="LocalDynamicParameter" />
+    <Item Name="ServicesParams" Type="LocalDynamicParameter" />
+    <Item Name="Services" Type="LocalDynamicParameter" />
   </Request>
   <DynamicParametersList>
     <DynamicParameter Name="AdditionalNumbers">
-      <Source Path="//string"/>
-      <DynamicObject Name="AdditionalNumbers" SkipMissed="True"/>
+      <Source Path="//string" />
+      <DynamicObject Name="AdditionalNumbers" SkipMissed="True" />
     </DynamicParameter>
     <DynamicParameter Name="ServicesParams">
-      <Source Path="//string"/>
-      <DynamicObject Name="ServicesParams" SkipMissed="True"/>
+      <Source Path="//string" />
+      <DynamicObject Name="ServicesParams" SkipMissed="True" />
     </DynamicParameter>
     <DynamicParameter Name="Services">
-      <Source Path="//string"/>
-      <DynamicObject Name="Services" SkipMissed="True"/>
+      <Source Path="//string" />
+      <DynamicObject Name="Services" SkipMissed="True" />
     </DynamicParameter>
   </DynamicParametersList>
-  <ErrorsList CodePage="ascii"/>
+  <ErrorsList CodePage="ascii" />
 </Command>

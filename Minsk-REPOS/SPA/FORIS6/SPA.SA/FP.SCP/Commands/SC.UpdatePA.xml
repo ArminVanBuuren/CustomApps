@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.UpdatePA">
   <Description>Обновление параметров ЛС на ФП</Description>
-  <Author Name="Daniil Lukinov" Date="2018-12-17+14:30"/>
+  <Author Name="Daniil Lukinov" Date="2018-12-17+14:30" />
   <Request>
     <RequestTemplate>
       <![CDATA[<DataSet Name="AccountSync.UpdatePersonalAccounts">
@@ -19,14 +18,13 @@
         </Attributes>
 </DataSet>]]>
     </RequestTemplate>
-    <Item Name="org.id" Type="Wellknown"/>
-    <Item Name="PersonalAccount" Type="Wellknown"/>
-    <Item Name="TAX_GROUP_ID" Type="Parameter"/>
-    <Item Name="SERVICE_PROVIDER_CODE" Type="Parameter"/>
-    <Item Name="PSP_DAY_OF_MONTH_VALUE" Type="Parameter"/>
-    <Item Name="CONTRACT_NUMBER" Type="Parameter"/>
-    <Item Name="CUSTOMER_TYPE_ID" Type="Parameter"/>
-    <Item Name="CALCULATION_METHOD_ID" Type="Parameter"/>
+    <Item Name="org.id" Type="Wellknown" />
+    <Item Name="PersonalAccount" Type="Wellknown" />
+    <Item Name="TAX_GROUP_ID" Type="Parameter" />
+    <Item Name="SERVICE_PROVIDER_CODE" Type="Parameter" />
+    <Item Name="PSP_DAY_OF_MONTH_VALUE" Type="Parameter" />
+    <Item Name="CONTRACT_NUMBER" Type="Parameter" />
+    <Item Name="CUSTOMER_TYPE_ID" Type="Parameter" />
+    <Item Name="CALCULATION_METHOD_ID" Type="Parameter" />
   </Request>
 </Command>
-

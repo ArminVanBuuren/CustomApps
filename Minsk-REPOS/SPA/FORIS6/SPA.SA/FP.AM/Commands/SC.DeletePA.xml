@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.DeletePA" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>DeletePAOnFINPlatform</Description>
-  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
+  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
   <Properties GenerationType="DataSetXml" />
   <Request>
     <RequestTemplate>
@@ -21,8 +20,8 @@
   </DataTable>
 </DataSet>]]>
     </RequestTemplate>
-    <Item Name="datetime" Type="Wellknown"/>
-    <Item Name="PersonalAccount" Type="Wellknown"/>
+    <Item Name="datetime" Type="Wellknown" />
+    <Item Name="PersonalAccount" Type="Wellknown" />
   </Request>
-  <ErrorsList CodePage="ascii"/>
+  <ErrorsList CodePage="ascii" />
 </Command>

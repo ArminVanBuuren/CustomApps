@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <scenario name="SC.FP.CreateSubscriber">
   <objectList>
     <object name="ByIdentityCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterByIdentity" assembly="FORIS.SPA.MmlProcessing.dll" />
@@ -9,8 +8,8 @@
     <object name="FPCommandDataConstructor" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.FPProcessingUnits.FPCommandDataConstructor" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="DummyResponderSwitch" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponderSwitch" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="IdentifiersGenerator" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.IdentifiersGenerator" assembly="FORIS.SPA.MmlProcessing.dll" />
-    <object name="ConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll"/>
-    <object name="RollbackUnit" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.StackRollbackUnit" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="ConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+    <object name="RollbackUnit" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.StackRollbackUnit" assembly="FORIS.SPA.MmlProcessing.dll" />
   </objectList>
   <automat>
     <node name="DummyResponderSwitch-Node" object="DummyResponderSwitch">
@@ -43,7 +42,7 @@
         <result value="0" node="GenerateUidForPA-Node" />
       </resultlist>
     </node>
-    <node  name="GenerateUidForPA-Node" object="IdentifiersGenerator">
+    <node name="GenerateUidForPA-Node" object="IdentifiersGenerator">
       <parameterslist>
         <param name="WellknownName" value="GlobalUid" />
       </parameterslist>
@@ -53,38 +52,38 @@
     </node>
     <node name="CommandDataConstructor-Node" object="FPCommandDataConstructor">
       <resultlist>
-        <result value="0" node="CommandDataConstructor_ServiceCode-Node"/>
-        <result value="1538" node="CommandDataConstructor_ServiceCode-Node"/>
-        <result value="" node="FinalResponseAssembler-Node"/>
+        <result value="0" node="CommandDataConstructor_ServiceCode-Node" />
+        <result value="1538" node="CommandDataConstructor_ServiceCode-Node" />
+        <result value="" node="FinalResponseAssembler-Node" />
       </resultlist>
       <parameterslist>
-        <param name="ServicesDynamicObject" value="Limits"/>
-        <param name="ServicesCommand" value="SC.CreatePA.LowBalanceLimitsRow"/>
-        <param name="XmlPath" value="//AdditionalData/AddList//BalanceLimits/NotificationLimits/*"/>
+        <param name="ServicesDynamicObject" value="Limits" />
+        <param name="ServicesCommand" value="SC.CreatePA.LowBalanceLimitsRow" />
+        <param name="XmlPath" value="//AdditionalData/AddList//BalanceLimits/NotificationLimits/*" />
       </parameterslist>
     </node>
     <node name="CommandDataConstructor_ServiceCode-Node" object="FPCommandDataConstructor">
       <resultlist>
-        <result value="" node="NewParametersFilter-Node"/>
+        <result value="" node="NewParametersFilter-Node" />
       </resultlist>
       <parameterslist>
-        <param name="ServicesDynamicObject" value="ServiceTable"/>
-        <param name="ServicesCommand" value="SC.CreatePA.ServiceTable"/>
+        <param name="ServicesDynamicObject" value="ServiceTable" />
+        <param name="ServicesCommand" value="SC.CreatePA.ServiceTable" />
         <param name="ParametersDynamicObject" value="ServiceParametersTable" />
         <param name="ParametersCommand" value="SC.CreatePA.ParameterTable" />
-        <param name="XmlPath" value="//AdditionalData/EndList/RFS_FP_SERVICE_GENERAL[./ServiceLevel/Value[text()='PersonalAccount']]"/>
+        <param name="XmlPath" value="//AdditionalData/EndList/RFS_FP_SERVICE_GENERAL[./ServiceLevel/Value[text()='PersonalAccount']]" />
         <param name="IgnoreServiceSkip" value="true" />
-        <param name="AffixesUseType" value="SkipIfEmpty"/>
+        <param name="AffixesUseType" value="SkipIfEmpty" />
       </parameterslist>
     </node>
     <node name="NewParametersFilter-Node" object="ConditionsResolver">
       <resultlist>
-        <result value="0" node="CreatePAOnFINPlatform-Node2"/>
-        <result value="" node="CreatePAOnFINPlatform-Node1"/>
+        <result value="0" node="CreatePAOnFINPlatform-Node2" />
+        <result value="" node="CreatePAOnFINPlatform-Node1" />
       </resultlist>
       <parameterslist>
-        <param name="IfXmlPath:0" value="*['processingFlag(send_calc_method_id)'='True']"/>
-        <param name="IfNotXmlPath:0" value="/*['[SCP_VER]'='151']"/>
+        <param name="IfXmlPath:0" value="*['processingFlag(send_calc_method_id)'='True']" />
+        <param name="IfNotXmlPath:0" value="/*['[SCP_VER]'='151']" />
       </parameterslist>
     </node>
     <node name="CreatePAOnFINPlatform-Node1" object="Commander">
@@ -96,8 +95,8 @@
       </parameterslist>
       <resultlist>
         <result value="0" node="BySubscribersCutter-Node" />
-        <result value="PesonalAccountAlreadyDefined" node="UpdatePA-Node"/>
-        <result value="" node="FinalResponseAssembler-Node"/>
+        <result value="PesonalAccountAlreadyDefined" node="UpdatePA-Node" />
+        <result value="" node="FinalResponseAssembler-Node" />
       </resultlist>
     </node>
     <node name="CreatePAOnFINPlatform-Node2" object="Commander">
@@ -109,14 +108,14 @@
       </parameterslist>
       <resultlist>
         <result value="0" node="BySubscribersCutter-Node" />
-        <result value="PesonalAccountAlreadyDefined" node="UpdatePA-Node"/>
-        <result value="" node="FinalResponseAssembler-Node"/>
+        <result value="PesonalAccountAlreadyDefined" node="UpdatePA-Node" />
+        <result value="" node="FinalResponseAssembler-Node" />
       </resultlist>
     </node>
     <node name="UpdatePA-Node" object="Commander">
       <resultlist>
         <result value="0" node="BySubscribersCutter-Node" />
-        <result value="" node="FinalResponseAssembler-Node"/>
+        <result value="" node="FinalResponseAssembler-Node" />
       </resultlist>
       <parameterslist>
         <param name="AppendSubscribersData" value="true" />
@@ -134,14 +133,14 @@
     <node name="ProceedToNextPA-Node" object="ConditionsResolver">
       <resultlist>
         <result value="0" node="ByIdentityCutter-Node" />
-        <result value="" node=""/>
+        <result value="" node="" />
       </resultlist>
       <parameterslist>
-        <param name="OrXmlPath:0" value="//AdditionalData/AddList//IsNeedCreatePersonalAccount[text()='True']"/>
-        <param name="OrXmlPath:1" value="//AdditionalData/AddList//IsNeedCreatePersonalAccount[text()='1']"/>
+        <param name="OrXmlPath:0" value="//AdditionalData/AddList//IsNeedCreatePersonalAccount[text()='True']" />
+        <param name="OrXmlPath:1" value="//AdditionalData/AddList//IsNeedCreatePersonalAccount[text()='1']" />
       </parameterslist>
     </node>
-    <node  name="GenerateUidForTD-Node" object="IdentifiersGenerator">
+    <node name="GenerateUidForTD-Node" object="IdentifiersGenerator">
       <parameterslist>
         <param name="WellknownName" value="GlobalUid" />
       </parameterslist>
@@ -151,15 +150,15 @@
     </node>
     <node name="CommandDataConstructorExt-Node" object="FPCommandDataConstructor">
       <resultlist>
-        <result value="0" node="CommandDataConstructor-AdditionalNumberList"/>
-        <result value="1538" node="CommandDataConstructor-AdditionalNumberList"/>
-        <result value="" node="FinalResponseAssembler-Node"/>
+        <result value="0" node="CommandDataConstructor-AdditionalNumberList" />
+        <result value="1538" node="CommandDataConstructor-AdditionalNumberList" />
+        <result value="" node="FinalResponseAssembler-Node" />
       </resultlist>
       <parameterslist>
-        <param name="ServicesDynamicObject" value="RegisteredServices"/>
-        <param name="ParametersDynamicObject" value="RegisteredServicesParams"/>
-        <param name="ServicesCommand" value="SC.CreateTDC.ServiceRow"/>
-        <param name="ParametersCommand" value="SC.Service.ParameterRow"/>
+        <param name="ServicesDynamicObject" value="RegisteredServices" />
+        <param name="ParametersDynamicObject" value="RegisteredServicesParams" />
+        <param name="ServicesCommand" value="SC.CreateTDC.ServiceRow" />
+        <param name="ParametersCommand" value="SC.Service.ParameterRow" />
         <param name="XmlPath" value="//AdditionalData/AddList/RFS_FP_SERVICE_GENERAL" />
       </parameterslist>
     </node>
@@ -167,7 +166,7 @@
       <resultlist>
         <result value="0" node="CreateTDOnFINPlatform-Node" />
         <result value="1538" node="CreateTDOnFINPlatform-Node" />
-        <result value="" node="FinalResponseAssembler-Node"/>
+        <result value="" node="FinalResponseAssembler-Node" />
       </resultlist>
       <parameterslist>
         <param name="ServicesDynamicObject" value="AdditionalNumbers" />
@@ -185,7 +184,7 @@
       <resultlist>
         <result value="0" node="ResponseAssembler-Node" />
         <result value="TerminalDeviceAlreadyDefined" node="UpdateTD-ServicesDataConstructor-Node" />
-        <result value="" node="FinalResponseAssembler-Node"/>
+        <result value="" node="FinalResponseAssembler-Node" />
       </resultlist>
     </node>
     <!-- UpdateTD start -->
@@ -212,7 +211,7 @@
       </parameterslist>
       <resultlist>
         <result value="0" node="ResponseAssembler-Node" />
-        <result value="" node="FinalResponseAssembler-Node"/>
+        <result value="" node="FinalResponseAssembler-Node" />
       </resultlist>
     </node>
     <!-- UpdateTD end -->
@@ -232,9 +231,9 @@
     </node>
     <node name="RollbackNode" object="RollbackUnit">
       <resultlist>
-        <result value="" node=""/>
+        <result value="" node="" />
       </resultlist>
-      <parameterslist/>
+      <parameterslist />
     </node>
   </automat>
 </scenario>

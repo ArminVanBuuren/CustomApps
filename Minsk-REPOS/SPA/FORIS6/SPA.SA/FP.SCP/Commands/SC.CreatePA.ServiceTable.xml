@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.CreatePA.ServiceTable">
   <Description>CreatePAOnFINPlatform (ServiceCode table)</Description>
-  <Author Name="Spirin Dmitriy" Date="2019-06-24+01:01"/>
+  <Author Name="Spirin Dmitriy" Date="2019-06-24+01:01" />
   <Properties GenerationType="MmlXml" />
   <Request>
     <RequestTemplatePrefix>
@@ -17,26 +16,26 @@
         <Rows>
       ]]>
     </RequestTemplatePrefix>
-    
     <RequestTemplate>
       <![CDATA[<Row SERVICE_ROW_ID="##ServiceIdentifier##" PERSONAL_ACCOUNT_ID="##PersonalAccount##" SERVICE_CODE="xmldecodename(##SERVICE_CODE##)" REQUEST_ID="##SERVICE_REQUEST_ID##"/>]]>
     </RequestTemplate>
-    
     <RequestTemplatePostfix>
       <![CDATA[
         </Rows>
       </DataTable>
       ]]>
     </RequestTemplatePostfix>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="SERVICE_REQUEST_ID" Type="Parameter"/>
-    <Item Name="PersonalAccount" Type="Wellknown"/>
-    <Item Name="SERVICE_CODE" Type="LocalParameter"/>
-    <Item Name="ServiceIdentifier" Type="Wellknown"/>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="SERVICE_REQUEST_ID" Type="Parameter" />
+    <Item Name="PersonalAccount" Type="Wellknown" />
+    <Item Name="SERVICE_CODE" Type="LocalParameter" />
+    <Item Name="ServiceIdentifier" Type="Wellknown" />
   </Request>
   <ParametersList>
     <Parameter Name="SERVICE_CODE">
-      <Source Path="//ServiceCode/Value"/>
+      <Source Path="//ServiceCode/Value" />
     </Parameter>
   </ParametersList>
 </Command>

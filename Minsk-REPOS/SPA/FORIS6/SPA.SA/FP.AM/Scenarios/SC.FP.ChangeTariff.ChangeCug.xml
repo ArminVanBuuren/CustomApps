@@ -1,4 +1,4 @@
-﻿<scenario name="SC.FP.ChangeTariff.ChangeCug">
+<scenario name="SC.FP.ChangeTariff.ChangeCug">
   <objectList>
     <object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />

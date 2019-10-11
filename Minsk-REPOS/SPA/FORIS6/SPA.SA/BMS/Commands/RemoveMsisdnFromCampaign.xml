@@ -1,6 +1,6 @@
 <Command Name="RemoveMsisdnFromCampaign" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>RemoveMsisdnFromCampaign</Description>
-  <Author Name="Oleg Safonov" Date="2011-02-08+12:35"/>
+  <Author Name="Oleg Safonov" Date="2011-02-08+12:35" />
   <ModifiedBy Name="Victor Kosonogov" Date="2017-07-07+07:07" />
   <Request>
     <RequestTemplate>
@@ -12,23 +12,24 @@
   </Attributes>
 </DataSet>]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="CampaignId" Type="LocalParameter"/>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="CampaignId" Type="LocalParameter" />
   </Request>
   <ParametersList>
     <Parameter Name="CampaignId" IsChoice="true">
       <Source Path="ExtendedRequestMessage/AdditionalData/WithdrawalList/AnnualContractList//BonusCampaignId[text()]" />
       <Source Path="ExtendedRequestMessage/AdditionalData/WithdrawalList/AnnualContractList//BonusCampaignId/Value" />
-      <Source Path="//AdditionalData/RemoveList/RFS_BMS_ANNUAL_CONTRACT/BonusCampaignId/Value[string-length(.) > 0]" />
-      
+      <Source Path="//AdditionalData/RemoveList/RFS_BMS_ANNUAL_CONTRACT/BonusCampaignId/Value[string-length(.) &gt; 0]" />
       <Source Path="ExtendedRequestMessage/AdditionalData/WithdrawalList/BMSList//BonusCampaignId[text()]" />
       <Source Path="ExtendedRequestMessage/AdditionalData/WithdrawalList/BMSList//BonusCampaignId/Value" />
-      <Source Path="//AdditionalData/RemoveList/RFS_BMS_SERVICE/BonusCampaignId/Value[string-length(.) > 0]" />
+      <Source Path="//AdditionalData/RemoveList/RFS_BMS_SERVICE/BonusCampaignId/Value[string-length(.) &gt; 0]" />
     </Parameter>
   </ParametersList>
   <ErrorsList CodePage="ascii">
     <Error Name="Code&gt;-771003&lt;" Value="SUCCESS" />
-    <Error Name="Code&gt;-770823&lt;" Value="SUCCESS"/>
+    <Error Name="Code&gt;-770823&lt;" Value="SUCCESS" />
   </ErrorsList>
 </Command>

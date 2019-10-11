@@ -1,6 +1,6 @@
 <Command Name="ChangeTDPAOnBMSPlatform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>ChangeTDPAOnBMSPlatform</Description>
-  <Author Name="Max Smirnov" Date="2013-03-22+18:00"/>
+  <Author Name="Max Smirnov" Date="2013-03-22+18:00" />
   <ModifiedBy Name="Victor Kosonogov" Date="2017-07-07+07:07" />
   <Request>
     <RequestTemplate>
@@ -14,17 +14,19 @@
   </Attributes>
 </DataSet>]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="PersonalAccountNumber" Type="LocalParameter"/>
-    <Item Name="TerminalDeviceID" Type="Wellknown"/>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="PersonalAccountNumber" Type="LocalParameter" />
+    <Item Name="TerminalDeviceID" Type="Wellknown" />
   </Request>
   <ParametersList>
     <Parameter Name="PersonalAccountNumber">
-      <Source Path="//AdditionalData//TransferTD/NewPersonalAccountNumber"/>
+      <Source Path="//AdditionalData//TransferTD/NewPersonalAccountNumber" />
     </Parameter>
   </ParametersList>
   <ErrorsList CodePage="ascii">
-    <Error Name="Code&gt;-770823&lt;" Value="SUCCESS"/>
+    <Error Name="Code&gt;-770823&lt;" Value="SUCCESS" />
   </ErrorsList>
 </Command>

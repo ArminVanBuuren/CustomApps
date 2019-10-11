@@ -5,7 +5,7 @@
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="FPCommandDataConstructor" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.FPProcessingUnits.FPCommandDataConstructor" assembly="FORIS.SPA.MmlProcessing.dll" />
-    <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
+    <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll" />
     <object name="ConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
     <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="XmlNodesEraser" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesEraser" assembly="FORIS.SPA.SPF.dll" />
@@ -39,15 +39,15 @@
     </node>
     <node name="SwitchAction" object="Switch">
       <resultlist>
-        <result value="0" node="ResponseAssembler"/>
-        <result value="1" node="ResponseAssembler"/>
-        <result value="2" node="CommandDataConstructor-Modify"/>
-        <result value="3" node="Commander-Delete"/>
+        <result value="0" node="ResponseAssembler" />
+        <result value="1" node="ResponseAssembler" />
+        <result value="2" node="CommandDataConstructor-Modify" />
+        <result value="3" node="Commander-Delete" />
       </resultlist>
       <parameterslist>
-        <param name="XmlPath" value="//GroupMemberOperation/Value"/>
-        <param name="Value:2" value="Modify"/>
-        <param name="Value:3" value="Remove"/>
+        <param name="XmlPath" value="//GroupMemberOperation/Value" />
+        <param name="Value:2" value="Modify" />
+        <param name="Value:3" value="Remove" />
       </parameterslist>
     </node>
     <node name="CommandDataConstructor-Create" object="FPCommandDataConstructor">
@@ -72,7 +72,6 @@
         <param name="AppendSubscribersData" value="true" />
       </parameterslist>
     </node>
-
     <node name="CommandDataConstructor-Modify" object="FPCommandDataConstructor">
       <resultlist>
         <result value="0" node="Commander-Modify" />
@@ -98,7 +97,6 @@
         <param name="AppendSubscribersData" value="true" />
       </parameterslist>
     </node>
-
     <node name="CommandDataConstructor-ModifyRemoveCounters" object="FPCommandDataConstructor">
       <resultlist>
         <result value="0" node="Commander-ModifyRemoveCounters" />
@@ -122,7 +120,6 @@
         <param name="AppendSubscribersData" value="true" />
       </parameterslist>
     </node>
-
     <node name="Commander-Delete" object="Commander">
       <resultlist>
         <result value="" node="ResponseAssembler" />

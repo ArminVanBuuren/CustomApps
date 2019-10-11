@@ -1,6 +1,6 @@
 <Command Name="DeleteBlockEndService" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>DeleteBlockEndService</Description>
-  <Author Name="Alexander Efimov" Date="2015-01-14+12:35"/>
+  <Author Name="Alexander Efimov" Date="2015-01-14+12:35" />
   <ModifiedBy Name="Victor Kosonogov" Date="2017-07-07+07:07" />
   <Request>
     <RequestTemplate>
@@ -20,11 +20,13 @@
                 </DataTable>
               </DataSet>]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="msisdn" Type="Wellknown"/>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="msisdn" Type="Wellknown" />
   </Request>
   <ErrorsList CodePage="ascii">
     <Error Name="Code&gt;-771003&lt;" Value="SUCCESS" />
-    <Error Name="Code&gt;-770823&lt;" Value="SUCCESS"/>
+    <Error Name="Code&gt;-770823&lt;" Value="SUCCESS" />
   </ErrorsList>
 </Command>

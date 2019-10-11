@@ -1,6 +1,6 @@
 <Command Name="AssignMsisdnToCampaign" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>AssignMsisdnToCampaign</Description>
-  <Author Name="Oleg Safonov" Date="2011-02-08+12:35"/>
+  <Author Name="Oleg Safonov" Date="2011-02-08+12:35" />
   <ModifiedBy Name="Victor Kosonogov" Date="2017-07-07+07:07" />
   <Request>
     <RequestTemplate>
@@ -25,47 +25,49 @@
   </Attributes>
 </DataSet>]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="TerminalDeviceID" Type="Wellknown"/>
-    <Item Name="PersonalAccount" Type="Wellknown"/>
-    <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="CampaignId" Type="LocalParameter"/>
-    <Item Name="TariffPlanId" Type="LocalParameter"/>
-    <Item Name="DateFrom" Type="LocalParameter"/>
-    <Item Name="MsisdnStartDate" Type="LocalParameter"/>
-    <Item Name="CustomerId" Type="LocalParameter"/>
-    <Item Name="RegionCode" Type="Parameter"/>
-    <Item Name="LanguageCode" Type="LocalParameter"/>
-    <Item Name="OriginalSource" Type="LocalParameter"/>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="TerminalDeviceID" Type="Wellknown" />
+    <Item Name="PersonalAccount" Type="Wellknown" />
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="CampaignId" Type="LocalParameter" />
+    <Item Name="TariffPlanId" Type="LocalParameter" />
+    <Item Name="DateFrom" Type="LocalParameter" />
+    <Item Name="MsisdnStartDate" Type="LocalParameter" />
+    <Item Name="CustomerId" Type="LocalParameter" />
+    <Item Name="RegionCode" Type="Parameter" />
+    <Item Name="LanguageCode" Type="LocalParameter" />
+    <Item Name="OriginalSource" Type="LocalParameter" />
   </Request>
   <ParametersList>
     <Parameter Name="CampaignId" IsChoice="true">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList/BMSList//BonusCampaignId[text()]"/>
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList/BMSList//BonusCampaignId/Value"/>
-      <Source Path="//AdditionalData/AddList/RFS_BMS_SERVICE/BonusCampaignId/Value[string-length(.) > 0]"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList/BMSList//BonusCampaignId[text()]" />
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList/BMSList//BonusCampaignId/Value" />
+      <Source Path="//AdditionalData/AddList/RFS_BMS_SERVICE/BonusCampaignId/Value[string-length(.) &gt; 0]" />
     </Parameter>
     <Parameter Name="DateFrom" IsChoice="true" AbsenceValue="">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList/BMSList//DateFrom"/>
-      <Source Path="//AdditionalData/AddList/RFS_BMS_SERVICE/DateFrom/Value[string-length(.) > 0]"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList/BMSList//DateFrom" />
+      <Source Path="//AdditionalData/AddList/RFS_BMS_SERVICE/DateFrom/Value[string-length(.) &gt; 0]" />
     </Parameter>
     <Parameter Name="TariffPlanId" IsChoice="true">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList/BMSList//TariffPlanId"/>
-      <Source Path="ExtendedRequestMessage/AdditionalData/DeviceInfo/TariffPlanId"/>
-      <Source Path="//AdditionalData/AddList/RFS_BMS_SERVICE/TariffPlanId/Value[string-length(.) > 0]"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList/BMSList//TariffPlanId" />
+      <Source Path="ExtendedRequestMessage/AdditionalData/DeviceInfo/TariffPlanId" />
+      <Source Path="//AdditionalData/AddList/RFS_BMS_SERVICE/TariffPlanId/Value[string-length(.) &gt; 0]" />
     </Parameter>
     <Parameter Name="MsisdnStartDate" IsChoice="true">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList/BMSList//MsisdnStartDate"/>
-      <Source Path="//AdditionalData/AddList/RFS_BMS_SERVICE/MsisdnStartDate/Value[string-length(.) > 0]"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList/BMSList//MsisdnStartDate" />
+      <Source Path="//AdditionalData/AddList/RFS_BMS_SERVICE/MsisdnStartDate/Value[string-length(.) &gt; 0]" />
     </Parameter>
     <Parameter Name="CustomerId">
-      <Source Path="ExtendedRequestMessage/IdentifiersList/Identifier/CustomerId" AbsenceValue="" PostFormat="{0}"/>
+      <Source Path="ExtendedRequestMessage/IdentifiersList/Identifier/CustomerId" AbsenceValue="" PostFormat="{0}" />
     </Parameter>
     <Parameter Name="LanguageCode">
-      <Source Path="ExtendedRequestMessage/AdditionalData/AccountInfo/LanguageId" AbsenceValue="" PostFormat="{0}"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/AccountInfo/LanguageId" AbsenceValue="" PostFormat="{0}" />
     </Parameter>
     <Parameter Name="OriginalSource">
-      <Source Path="ExtendedRequestMessage/OriginalSource"/>
+      <Source Path="ExtendedRequestMessage/OriginalSource" />
     </Parameter>
   </ParametersList>
-  <ErrorsList CodePage="ascii"/>
+  <ErrorsList CodePage="ascii" />
 </Command>

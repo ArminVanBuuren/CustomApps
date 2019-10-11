@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.RemoveService">
   <Description>RemoveService</Description>
-  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
+  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
   <Properties GenerationType="DataSetXml" />
   <Request>
     <RequestTemplate>
@@ -56,34 +55,36 @@
   </DataTable>
 </DataSet>]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="datetime" Type="Wellknown"/>
-    <Item Name="TerminalDeviceID" Type="Wellknown"/>
-    <Item Name="PersonalAccount" Type="Wellknown"/>
-    <Item Name="msisdn" Type="Wellknown"/>
-    <Item Name="Services" Type="LocalDynamicParameter"/>
-    <Item Name="ServicesParams" Type="LocalDynamicParameter"/>
-    <Item Name="AdditionalNumbers" Type="LocalDynamicParameter"/>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="datetime" Type="Wellknown" />
+    <Item Name="TerminalDeviceID" Type="Wellknown" />
+    <Item Name="PersonalAccount" Type="Wellknown" />
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="Services" Type="LocalDynamicParameter" />
+    <Item Name="ServicesParams" Type="LocalDynamicParameter" />
+    <Item Name="AdditionalNumbers" Type="LocalDynamicParameter" />
   </Request>
-  <ParametersList/>
+  <ParametersList />
   <DynamicParametersList>
     <DynamicParameter Name="Services">
-      <Source Path="//string"/>
-      <DynamicObject Name="Services" SkipMissed="True"/>
+      <Source Path="//string" />
+      <DynamicObject Name="Services" SkipMissed="True" />
     </DynamicParameter>
     <DynamicParameter Name="ServicesParams">
-      <Source Path="//string"/>
-      <DynamicObject Name="ServicesParams" SkipMissed="True"/>
+      <Source Path="//string" />
+      <DynamicObject Name="ServicesParams" SkipMissed="True" />
     </DynamicParameter>
     <DynamicParameter Name="AdditionalNumbers">
-      <Source Path="//string"/>
-      <DynamicObject Name="AdditionalNumbers" SkipMissed="True"/>
+      <Source Path="//string" />
+      <DynamicObject Name="AdditionalNumbers" SkipMissed="True" />
     </DynamicParameter>
   </DynamicParametersList>
   <ErrorsList CodePage="ascii">
-    <Error Name="Not found" Value="InvalidRequest"/>
-    <Error Name="parameter must be returned" Value="InvalidRequest"/>
-    <Error Name="-151014" Value="SUCCESS"/>
-    <Error Name="-151003" Value="SUCCESS"/>
+    <Error Name="Not found" Value="InvalidRequest" />
+    <Error Name="parameter must be returned" Value="InvalidRequest" />
+    <Error Name="-151014" Value="SUCCESS" />
+    <Error Name="-151003" Value="SUCCESS" />
   </ErrorsList>
 </Command>
