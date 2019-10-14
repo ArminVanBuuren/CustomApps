@@ -1,0 +1,5 @@
+<plugin name="DistinctPlugin_2" ifMatches="retrievecustomerdata.*GetCounters">
+  <nodes timeOut="15">
+    <node path="/Message/Item/@customer" />
+  </nodes>
+</plugin>

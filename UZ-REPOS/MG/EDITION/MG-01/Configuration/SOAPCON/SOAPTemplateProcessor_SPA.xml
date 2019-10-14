@@ -433,11 +433,10 @@
   </template>
   <template procedureName="ServiceProvisioningChckBndBal" sessionStorage="Memory" sessionLifetime="300" persistent="false">
     <receiveTemplate>
-      <Message type="retrievecustomerdata" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-        <Item customer="${sCustomer}" subject="getbalance">
+      <Message type="retrievecustomerdata" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${sCustomer}" subject="balance">
           <Attribute name="unpayment" value="6" />
           <Attribute name="requestcountertype" value="0" />
-          <Attribute name="rounding" value="4" />
         </Item>
         @{store(sIsBindBalAval,true)}
       </Message>
@@ -1060,11 +1059,10 @@
   </template>
   <template procedureName="ChangeTariffPlanCheckBindingBal" sessionStorage="Memory" sessionLifetime="300" persistent="false">
     <receiveTemplate>
-      <Message type="retrievecustomerdata" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-        <Item customer="${sCustomer}" subject="getbalance">
+      <Message type="retrievecustomerdata" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${sCustomer}" subject="balance">
           <Attribute name="unpayment" value="6" />
           <Attribute name="requestcountertype" value="0" />
-          <Attribute name="rounding" value="4" />
         </Item>
         @{store(sIsBindBalAval,true)}
       </Message>
@@ -3013,11 +3011,10 @@
   </template>
   <template procedureName="ALLServiceCheckBindingBal" sessionStorage="Memory" sessionLifetime="300" persistent="false">
     <receiveTemplate>
-      <Message type="retrievecustomerdata" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-        <Item customer="${sCustomer}" subject="getbalance">
+      <Message type="retrievecustomerdata" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${sCustomer}" subject="balance">
           <Attribute name="unpayment" value="6" />
           <Attribute name="requestcountertype" value="0" />
-          <Attribute name="rounding" value="4" />
         </Item>
         @{store(sIsBindBalAval,true)}
       </Message>
@@ -3255,11 +3252,10 @@
   </template>
   <template procedureName="ALLServiceCheckBindingBalCounters" sessionStorage="Memory" sessionLifetime="30" persistent="false">
     <receiveTemplate>
-      <Message type="retrievecustomerdata" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-        <Item customer="${sCustomer}" subject="getbalance">
+      <Message type="retrievecustomerdata" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${sCustomer}" subject="balance">
           <Attribute name="unpayment" value="6" />
           <Attribute name="requestcountertype" value="0" />
-          <Attribute name="rounding" value="4" />
         </Item>
         @{store(sIsBindBalAval,true)}
       </Message>
