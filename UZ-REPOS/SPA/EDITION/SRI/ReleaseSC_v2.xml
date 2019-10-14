@@ -400,7 +400,7 @@
     <RFS name="RFS_HLR_ROAMING_TEST_BPOS1" hostType="HL" description="Изменение барринга GPRS" />
     <RFS name="RFS_HLR_ROAMING_TEST_BR0" hostType="HL" description="Международный Роуминг" />
     <RFS name="RFS_HLR_ROAMING_TEST_BR1" hostType="HL" description="Международный Роуминг" />
-    <RFS name="RFS_HLR_ROAMING_TEST_DELLTE" hostType="HL" description="Удалить LTE" />
+    <RFS name="RFS_HLR_ROAMING_TEST_DELETE" hostType="HL" description="Удалить LTE" />
     <RFS name="RFS_HLR_ROAMING_TEST_MODLOC" hostType="HL" description="Разрыв сессии" />
     <RFS name="RFS_HLR_ROAMING_TEST_NAM0_1" hostType="HL" description="Добавить интернет сервис" />
     <RFS name="RFS_HLR_ROAMING_TEST_NAM0_2" hostType="HL" description="Добавить интернет сервис" />
@@ -748,7 +748,7 @@
       <RFSGroup name="RFS_GROUP_HLR_RECREATE_SUBSCRIBER" />
     </CFS>
     <CFS name="DeleteLTE" description="Удалить LTE">
-      <RFS name="RFS_HLR_ROAMING_TEST_DELLTE" linkType="Add" />
+      <RFS name="RFS_HLR_ROAMING_TEST_DELETE" linkType="Add" />
     </CFS>
     <CFS name="FR1000ICT" globalServiceCode="FR1000ICT" copyOf="CFS_FP_SERVICE_GENERAL" description="Promo ICT 1000 MB" />
     <CFS name="FR100ICT" globalServiceCode="FR100ICT" copyOf="CFS_FP_SERVICE_GENERAL" description="Promo ICT 100 MB" />
@@ -2453,7 +2453,7 @@
       <RFS name="RFS_HLR_ROAMING_TEST_BPOS1" scenarioType="Add, Remove" />
       <RFS name="RFS_HLR_ROAMING_TEST_BR0" scenarioType="Add, Remove" />
       <RFS name="RFS_HLR_ROAMING_TEST_BR1" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_ROAMING_TEST_DELLTE" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_ROAMING_TEST_DELETE" scenarioType="Add, Remove" />
       <RFS name="RFS_HLR_ROAMING_TEST_MODLOC" scenarioType="Add, Remove" />
       <RFS name="RFS_HLR_ROAMING_TEST_NAM0_1" scenarioType="Add, Remove" />
       <RFS name="RFS_HLR_ROAMING_TEST_NAM0_2" scenarioType="Add, Remove" />
