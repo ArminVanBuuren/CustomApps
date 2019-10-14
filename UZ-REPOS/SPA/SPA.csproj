@@ -169,6 +169,7 @@
     <Content Include="EDITION\ROBP\Processes\Block Subscriber in financial platform.xml" />
     <Content Include="EDITION\ROBP\Processes\Block Subscriber PA in financial platform.xml" />
     <Content Include="EDITION\ROBP\Processes\Block Subscriber.xml" />
+    <Content Include="EDITION\ROBP\Processes\SC Services.xml" />
     <Content Include="EDITION\ROBP\Processes\Break Session.xml" />
     <Content Include="EDITION\ROBP\Processes\CancelLocation.xml" />
     <Content Include="EDITION\ROBP\Processes\Change BillingGroup on Platform.xml" />
