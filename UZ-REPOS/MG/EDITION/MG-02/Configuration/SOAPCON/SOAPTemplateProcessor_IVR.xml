@@ -118,7 +118,11 @@
   </macros>
   <template procedureName="ServiceProvisioning" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(SrvProv_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(SrvProv_${customer})}">
+        <Item customer="${customer}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="0" />
+        </Item>
         @{store(sCustomer,${customer})}
         @{store(sAction,${action})}
         @{store(sService,${service})}
@@ -419,7 +423,11 @@
   </template>
   <template procedureName="ServiceInterrogation" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(SrvInter_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(SrvInter_${customer})}">
+        <Item customer="${customer}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="0" />
+        </Item>
         @{store(sCustomer,${customer})}
         @{store(sService,${service})}
         @{store(sServiceCode,_SERVICE_CODE)}
@@ -475,8 +483,12 @@
     <receiveTemplate>
       <Message type="stringformat" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
         <Item customer="${sCustomer}">
-          <Attribute name="stringformat"><![CDATA[#{if('${Content}'='','_GET_SERVICE_RESULT','${Content}')}@{store(SlowAsync,)}]]></Attribute>
-          <Attribute name="params"><![CDATA[${sParams}]]></Attribute>
+          <Attribute name="stringformat">
+            <![CDATA[#{if('${Content}'='','_GET_SERVICE_RESULT','${Content}')}@{store(SlowAsync,)}]]>
+          </Attribute>
+          <Attribute name="params">
+            <![CDATA[${sParams}]]>
+          </Attribute>
           <Attribute name="split" value=";" />
         </Item>
       </Message>
@@ -527,7 +539,11 @@
   </template>
   <template procedureName="ChangeTariffPlan" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(ChangeTP_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(ChangeTP_${customer})}">
+        <Item customer="${customer}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="0" />
+        </Item>
         @{store(sCustomer,${customer})}
         @{store(sNewTariffPlan,${newtariffplan})}
         @{store(sModule,_CURRENT_MODULE)}
@@ -744,7 +760,11 @@
   </template>
   <template procedureName="CheckTariffPlan" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(ChckTP_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(ChckTP_${customer})}">
+        <Item customer="${customer}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="0" />
+        </Item>
         @{store(sCustomer,${customer})}
         @{store(sModule,_CURRENT_MODULE)}
       </Message>
@@ -799,8 +819,12 @@
     <receiveTemplate>
       <Message type="stringformat" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
         <Item customer="${sCustomer}">
-          <Attribute name="stringformat"><![CDATA[#{if('${content}'='','_GET_TARIFF_RESULT','${content}')}@{store(SlowAsync,)}]]></Attribute>
-          <Attribute name="params"><![CDATA[${sParams}]]></Attribute>
+          <Attribute name="stringformat">
+            <![CDATA[#{if('${content}'='','_GET_TARIFF_RESULT','${content}')}@{store(SlowAsync,)}]]>
+          </Attribute>
+          <Attribute name="params">
+            <![CDATA[${sParams}]]>
+          </Attribute>
           <Attribute name="split" value=";" />
         </Item>
       </Message>
@@ -851,7 +875,11 @@
   </template>
   <template procedureName="PtPMoneyTransfer" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(PTP_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(PTP_${customer})}">
+        <Item customer="${customer}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="0" />
+        </Item>
         @{store(sCustomer,${customer})}
         @{store(sAmount,${amount})}
         @{store(sReceiver,${receiver})}
@@ -979,7 +1007,11 @@
   </template>
   <template procedureName="ChangePasswordISSA" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(ChngISSAPass_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(ChngISSAPass_${customer})}">
+        <Item customer="${customer}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="0" />
+        </Item>
         @{store(sCustomer,${customer})}
         @{store(sNewpassword,${newpassword})}
         @{store(sService,_ISSAPASS)}
@@ -1078,7 +1110,11 @@
   </template>
   <template procedureName="FavouriteNumberCheck" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(ChkFav_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(ChkFav_${customer})}">
+        <Item customer="${customer}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="0" />
+        </Item>
         @{store(sCustomer,${customer})}
         @{store(sService,_CHKFAVNUM)}
         @{store(sModule,_CURRENT_MODULE)}
@@ -1150,7 +1186,11 @@
   </template>
   <template procedureName="FavouriteNumberUpdate" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(UpdFav_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(UpdFav_${customer})}">
+        <Item customer="${customer}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="0" />
+        </Item>
         @{store(sCustomer,${customer})}
         @{store(sService,_UPDFAVNUM)}
         @{store(sFavNum,${favnum})}
@@ -1221,7 +1261,11 @@
   </template>
   <template procedureName="FavouriteNumberDelete" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(DelFav_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(DelFav_${customer})}">
+        <Item customer="${customer}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="0" />
+        </Item>
         @{store(sCustomer,${customer})}
         @{store(sService,_DELFAVNUM)}
         @{store(sFavNum,${favnum})}
@@ -1290,7 +1334,11 @@
   </template>
   <template procedureName="ChangeLanguageINPlatform" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(ChngINLang_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(ChngINLang_${customer})}">
+        <Item customer="${customer}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="0" />
+        </Item>
         @{store(sCustomer,${customer})}
         @{store(sLang,_GET_MOD_LANGUAGE)}
         @{store(sService,_LANGUAGE)}
@@ -1381,7 +1429,11 @@
   </template>
   <template procedureName="LatestPayments" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(LastPayment_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(LastPayment_${customer})}">
+        <Item customer="${customer}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="0" />
+        </Item>
         @{store(sCustomer,${customer})}
         @{store(sService,_GETLASTPAY)}
         @{store(sModule,_CURRENT_MODULE)}
@@ -1486,7 +1538,11 @@
   </template>
   <template procedureName="LastOutstandingPayment" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(LastOutPayment_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(LastOutPayment_${customer})}">
+        <Item customer="${customer}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="0" />
+        </Item>
         @{store(sCustomer,${customer})}
         @{store(sService,_GETOUTLASTPAY)}
         @{store(sModule,_CURRENT_MODULE)}
@@ -1591,7 +1647,11 @@
   </template>
   <template procedureName="GuaranteedPayment" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(GrntPay_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(GrntPay_${customer})}">
+        <Item customer="${customer}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="0" />
+        </Item>
         @{store(sCustomer,${customer})}
         @{store(sService,_GRNTPAY)}
         @{store(sModule,_CURRENT_MODULE)}
@@ -1680,7 +1740,11 @@
   </template>
   <template procedureName="CheckGuaranteedPayment" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(GrntPay_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(GrntPay_${customer})}">
+        <Item customer="${customer}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="0" />
+        </Item>
         @{store(sCustomer,${customer})}
         @{store(sService,_GRNTPAY)}
         @{store(sModule,_CURRENT_MODULE)}
@@ -1744,7 +1808,11 @@
   </template>
   <template procedureName="DB_BMSBalanceRetriev" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(BMSBalance_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(BMSBalance_${customer})}">
+        <Item customer="${customer}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="0" />
+        </Item>
         @{store(sCustomer,${customer})}
         @{store(sService,_GETBMSBALANCE)}
         @{store(sModule,_CURRENT_MODULE)}
@@ -2329,8 +2397,12 @@
     <receiveTemplate>
       <Message type="stringformat" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
         <Item customer="${sCustomer}">
-          <Attribute name="stringformat"><![CDATA[#{if('${Content}'='','#{if('_GET_ALL_SRV_RESULT'='','_GET_DBRESULT','_GET_ALL_SRV_RESULT')}','${Content}')}@{store(SlowAsync,)}]]></Attribute>
-          <Attribute name="params"><![CDATA[${sParams}]]></Attribute>
+          <Attribute name="stringformat">
+            <![CDATA[#{if('${Content}'='','#{if('_GET_ALL_SRV_RESULT'='','_GET_DBRESULT','_GET_ALL_SRV_RESULT')}','${Content}')}@{store(SlowAsync,)}]]>
+          </Attribute>
+          <Attribute name="params">
+            <![CDATA[${sParams}]]>
+          </Attribute>
           <Attribute name="split" value=";" />
         </Item>
       </Message>
@@ -2468,7 +2540,8 @@
   </template>
   <template procedureName="TestRequest" sessionStorage="Memory" sessionLifetime="20" persistent="false">
     <receiveTemplate>
-      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(@{newGuid})}">        <Item customer="">
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item customer="">
           <Attribute name="checkivrservice" value="0" />
           <Attribute name="checkblocks" value="0" />
         </Item>

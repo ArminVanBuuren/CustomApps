@@ -123,7 +123,11 @@
   </macros>
   <template procedureName="ServiceProvisioning" sessionStorage="Memory" sessionLifetime="20">
     <receiveTemplate>
-      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(RBTSrvProv_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(RBTSrvProv_${customer})}">
+        <Item customer="${customer}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="0" />
+        </Item>
         @{store(sCustomer,${customer})}
         @{store(sAction,${action})}
         @{store(sService,${service})}
@@ -496,7 +500,11 @@
   </template>
   <template procedureName="ServiceInterrogation" sessionStorage="Memory" sessionLifetime="20">
     <receiveTemplate>
-      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(RBTSrvInter_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(RBTSrvInter_${customer})}">
+        <Item customer="${customer}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="0" />
+        </Item>
         @{store(sCustomer,${customer})}
         @{store(sService,${service})}
         @{store(sServiceCode,_SERVICE_CODE)}
@@ -600,8 +608,12 @@
     <receiveTemplate>
       <Message type="stringformat" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
         <Item customer="${sCustomer}">
-          <Attribute name="stringformat"><![CDATA[#{if('${Content}'='','_GET_SERVICE_RESULT','${Content}')}@{store(SlowAsync,)}]]></Attribute>
-          <Attribute name="params"><![CDATA[${sParams}]]></Attribute>
+          <Attribute name="stringformat">
+            <![CDATA[#{if('${Content}'='','_GET_SERVICE_RESULT','${Content}')}@{store(SlowAsync,)}]]>
+          </Attribute>
+          <Attribute name="params">
+            <![CDATA[${sParams}]]>
+          </Attribute>
           <Attribute name="split" value=";" />
         </Item>
       </Message>
@@ -652,7 +664,11 @@
   </template>
   <template procedureName="CheckLanguage" sessionStorage="Memory" sessionLifetime="60">
     <receiveTemplate>
-      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(CheckINLang_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(CheckINLang_${customer})}">
+        <Item customer="${customer}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="0" />
+        </Item>
         @{store(sCustomer,${customer})}
         @{store(sModule,_CURRENT_MODULE)}
       </Message>
