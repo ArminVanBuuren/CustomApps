@@ -840,13 +840,13 @@ Created by Vladimir Khovanskiy
       <ussdcon value=""/>
       <dealerussd value=""/>
     </Item>
-    <Item language_id="1" param="pay" text="Paynet" encoding="ascii">
+    <Item language_id="-1" param="pay" text="Paynet" encoding="ascii">
       <paynet value="pay"/>
     </Item>
-    <Item language_id="1" param="rbt" text="RBT" encoding="ascii">
+    <Item language_id="-1" param="rbt" text="RBT" encoding="ascii">
       <rbt value="rbt"/>
     </Item>
-    <Item language_id="1" param="scg" text="SCG" encoding="ascii">
+    <Item language_id="-1" param="scg" text="SCG" encoding="ascii">
       <scg value="scg"/>
     </Item>
     <Item language_id="" param="en" text="DefaultLang" encoding="ascii" />
