@@ -95,9 +95,9 @@
     <define name="_WAIT_IFASYNC_INPROCESS" value="#{if('${sDbresult}'='redirect','#{if(not(matches('${sInProgress}','_IF_TRUE')),'true','')}','')}" />
     <define name="_GET_TODAY" value="#{concat(substring('@{now}',7,4),substring('@{now}',4,2),substring('@{now}',1,2))}" />
     <define name="_GET_SECONDS" value="#{(number(substring('@{now}',12,2)) * 60 * 60) + (number(substring('@{now}',15,2)) * 60) + number(substring('@{now}',18,2))}" />
-    <define name="_GET_DBRESULT" value="#{document('_DICTIONARY_PATH')/DBresults/Item[code/@value='${sDbresult}']/@info__GET_LANG}" />
-    <define name="_GET_LENGTH_DBRESULT" value="#{string-length(document('_DICTIONARY_PATH')/DBresults/Item[code/@value='${sDbresult}']/@info__GET_LANG)}" />
-    <define name="_GET_AFTER_VERIFY_DBRESULT" value="#{if('#{document('_DICTIONARY_PATH')/DBresults/Item[code/@value='${customerblocks}']/@info__GET_LANG}'!='','${customerblocks}','${dbresult}')}" />
+    <define name="_GET_DBRESULT" value="#{document('_DICTIONARY_PATH')/Dictionary/Item[code/@value='${sDbresult}']/@info__GET_LANG}" />
+    <define name="_GET_LENGTH_DBRESULT" value="#{string-length(document('_DICTIONARY_PATH')/Dictionary/Item[code/@value='${sDbresult}']/@info__GET_LANG)}" />
+    <define name="_GET_AFTER_VERIFY_DBRESULT" value="#{if('#{document('_DICTIONARY_PATH')/Dictionary/Item[code/@value='${customerblocks}']/@info__GET_LANG}'!='','${customerblocks}','${dbresult}')}" />
     <define name="_ENCODING" value="#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@param='_GET_LANG']/@encoding}" />
     <define name="_INLANGUAGE" value="#{if('#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@scp='${inlang}' and @ussd='${smsussdlang}']/@param}'='','#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@scp='' and @ussd='']/@param}','#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@scp='${inlang}' and @ussd='${smsussdlang}']/@param}')}" />
     <define name="_GET_LANG" value="#{if('${sLang}'='','#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@scp='' and @ussd='']/@param}','${sLang}')}" />
@@ -112,7 +112,7 @@
     <define name="_ALLSERVICE_PATH" value="..\..\Config\Service\All_SERVICE.xml" />
     <define name="_TARIF_PATH" value="..\..\Config\Tariff\TARIFF_PLANS.xml" />
     <define name="_COUNTERS_PATH" value="..\..\Config\Service\COUNTERS.xml" />
-    <define name="_DICTIONARY_PATH" value="..\..\Config\GET_DBRESULT.xml" />
+    <define name="_DICTIONARY_PATH" value="..\..\Config\DICTIONARY.xml" />
     <define name="_CONFIRM_VALUE" value="confirm" />
     <define name="_CURRENT_INITIATOR" value="smscon" />
     <!-- ==========================  SETTINGS   ========================= -->

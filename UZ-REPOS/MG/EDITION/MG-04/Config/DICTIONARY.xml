@@ -2,7 +2,7 @@
 Created by Vladimir Khovanskiy  
 Реплейсы знаков: (' - ^)
 -->
-<DBresults>
+<Dictionary>
   <Item
     info_ruk="Ваша заявка принята, ждите СМС с результатом"
     info_rut="Vasha zayavka prinyata, zhdite SMS s rezul^tatom"
@@ -795,4 +795,4 @@ Created by Vladimir Khovanskiy
     >
     <code value="sms_err1"/>
   </Item>
-</DBresults>
+</Dictionary>
