@@ -797,9 +797,11 @@ tplist               - Компонент выполняет проверки п
     <Item language_id="1" param="ru" text="Russkiy (Translit)" encoding="ascii">
       <soapcon value="ru"/>
       <soapcon value="rut"/>
+      <soapcon value="ruk"/>
       <soapcon value="1"/>
       <ivrcon  value="ru"/>
       <ivrcon  value="rut"/>
+      <ivrcon  value="ruk"/>
       <ussdcon value="*1"/>
       <ussdcon value="*1*1*2"/>
       <ussdcon value="*0*2"/>
