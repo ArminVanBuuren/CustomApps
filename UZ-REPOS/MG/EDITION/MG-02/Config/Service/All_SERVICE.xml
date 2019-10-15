@@ -20,110 +20,110 @@ tplist               - Компонент выполняет проверки п
 <ServiceList>
   <Service    name="_GETBALANCE"
 
-    info_bal_full_cntr_ruk="Баланс:$[0]([1] сум).Израсходовано:[3].План:&quot;[4]&quot;.Остаток [5]"
-    info_bal_full_cntr_rut="Balans:[0] y.e([1] sum).Potracheno:[3].Plan:&quot;[4]&quot;.Ostatok [5]"
+
+    info_bal_full_cntr_ru="Balans:[0] y.e([1] sum).Potracheno:[3].Plan:&quot;[4]&quot;.Ostatok [5]"
     info_bal_full_cntr_uz="Balans:[0] y.e([1] sum).Sarflandi:[3].Tarif:&quot;[4]&quot;.Qoldiq [5]"
     info_bal_full_cntr_en="Balance:[0] units([1] sum).Spent:[3].Tariff:&quot;[4]&quot;.Remainder [5]"
     info_bal_full_cntr_scg="Баланс:$[0]([1] сум).|БалансUZB:$[0]([1] сум).||Израсходовано:[3].|ИзрасходованоUZB:[3].||План:&quot;[4]&quot;.|ПланUZB:&quot;[4]&quot;.||Остаток [5]|ОстатокUZB [5]"
 
-    info_debt_full_cntr_ruk="Баланс:$[0]([1] сум).Израсходовано:[3].План:&quot;[4]&quot;.Остаток [5]"
-    info_debt_full_cntr_rut="Balans:[0] y.e([1] sum).Potracheno:[3].Plan:&quot;[4]&quot;.Ostatok [5]"
+
+    info_debt_full_cntr_ru="Balans:[0] y.e([1] sum).Potracheno:[3].Plan:&quot;[4]&quot;.Ostatok [5]"
     info_debt_full_cntr_uz="Balans:[0] y.e([1] sum).Sarflandi:[3].Tarif:&quot;[4]&quot;.Qoldiq [5]"
     info_debt_full_cntr_en="Balance:[0] units([1] sum).Spent:[3].Tariff:&quot;[4]&quot;.Remainder [5]"
     info_debt_full_cntr_scg="Balans:[0] y.e([1] sum).Potracheno:[3].Plan:&quot;[4]&quot;.Ostatok [5]"
 
-    info_bal_bill_cntr_ruk="Баланс:$[0]([1] сум).Израсходовано:[3].Остаток [4]"
-    info_bal_bill_cntr_rut="Balans:[0] y.e([1] sum).Potracheno:[3].Ostatok [4]"
+
+    info_bal_bill_cntr_ru="Balans:[0] y.e([1] sum).Potracheno:[3].Ostatok [4]"
     info_bal_bill_cntr_uz="Balans:[0] y.e([1] sum).Sarflandi:[3].Qoldiq [4]"
     info_bal_bill_cntr_en="Balance:[0] units([1] sum).Spent:[3].Remainder [4]"
     info_bal_bill_cntr_scg="Balans:[0] y.e([1] sum).Potracheno:[3].Ostatok [4]"
 
-    info_debt_bill_cntr_ruk="Баланс:$[0]([1] сум).Израсходовано:[3].Остаток [4]"
-    info_debt_bill_cntr_rut="Balans:[0] y.e([1] sum).Potracheno:[3].Ostatok [4]"
+
+    info_debt_bill_cntr_ru="Balans:[0] y.e([1] sum).Potracheno:[3].Ostatok [4]"
     info_debt_bill_cntr_uz="Balans:[0] y.e([1] sum).Sarflandi:[3].Qoldiq [4]"
     info_debt_bill_cntr_en="Balance:[0] units([1] sum).Spent:[3].Remainder [4]"
     info_debt_bill_cntr_scg="Balans:[0] y.e([1] sum).Potracheno:[3].Ostatok [4]"
 
-    info_bal_plan_cntr_ruk="Баланс:$[0]([1] сум).План:&quot;[2]&quot;.Остаток [3]"
-    info_bal_plan_cntr_rut="Balans:[0] y.e([1] sum).Plan:&quot;[2]&quot;.Ostatok [3]"
+
+    info_bal_plan_cntr_ru="Balans:[0] y.e([1] sum).Plan:&quot;[2]&quot;.Ostatok [3]"
     info_bal_plan_cntr_uz="Balans:[0] y.e([1] sum).Tarif:&quot;[2]&quot;.Qoldiq [3]"
     info_bal_plan_cntr_en="Balance:[0] units([1] sum).Tariff:&quot;[2]&quot;.Remainder [3]"
     info_bal_plan_cntr_scg="Balans:[0] y.e([1] sum).Plan:&quot;[2]&quot;.Ostatok [3]"
 
-    info_debt_plan_cntr_ruk="Баланс:$[0]([1] сум).План:&quot;[2]&quot;.Остаток [3]"
-    info_debt_plan_cntr_rut="Balans:[0] y.e([1] sum).Plan:&quot;[2]&quot;.Ostatok [3]"
+
+    info_debt_plan_cntr_ru="Balans:[0] y.e([1] sum).Plan:&quot;[2]&quot;.Ostatok [3]"
     info_debt_plan_cntr_uz="Balans:[0] y.e([1] sum).Tarif:&quot;[2]&quot;.Qoldiq [3]"
     info_debt_plan_cntr_en="Balance:[0] units([1] sum).Tariff:&quot;[2]&quot;.Remainder [3]"
     info_debt_plan_cntr_scg="Balans:[0] y.e([1] sum).Plan:&quot;[2]&quot;.Ostatok [3]"
 
-    info_bal_cntr_ruk="Баланс:$[0]([1] сум).Остаток [2]"
-    info_bal_cntr_rut="Balans:[0] y.e([1] sum).Ostatok [2]"
+
+    info_bal_cntr_ru="Balans:[0] y.e([1] sum).Ostatok [2]"
     info_bal_cntr_uz="Balans:[0] y.e([1] sum).Qoldiq [2]"
     info_bal_cntr_en="Balance:[0] units([1] sum).Ostatok [2]"
     info_bal_cntr_scg="Balans:[0] y.e([1] sum).Ostatok [2]"
 
-    info_debt_cntr_ruk="Баланс:$[0]([1] сум).Остаток [2]"
-    info_debt_cntr_rut="Balans:[0] y.e([1] sum).Ostatok [2]"
+
+    info_debt_cntr_ru="Balans:[0] y.e([1] sum).Ostatok [2]"
     info_debt_cntr_uz="Balans:[0] y.e([1] sum).Qoldiq [2]"
     info_debt_cntr_en="Balance:[0] units ([1] sum).Remainder [2]"
     info_debt_cntr_scg="Balans:[0] y.e([1] sum).Ostatok [2]"
 
-    info_bal_full_ruk="Баланс Вашего счета: [0] y.e ([1] сум). С [2] израсходовано по Вашему номеру - [3]. План: &quot;[4]&quot;"
-    info_bal_full_rut="Balans Vashego scheta: [0] y.e ([1] sum). S [2] izrashodovano po Vashemu nomeru - [3]. Plan: &quot;[4]&quot;"
+
+    info_bal_full_ru="Balans Vashego scheta: [0] y.e ([1] sum). S [2] izrashodovano po Vashemu nomeru - [3]. Plan: &quot;[4]&quot;"
     info_bal_full_uz="Sizning hisobingizdagi balans: [0] y.e ([1] sum). Sizning raqamga [2]dan ishlatildi - [3]. Tarif reja &quot;[4]&quot;"
     info_bal_full_en="Your balance is [0] units ([1] sum). From [2] you spent [3] on your phone. Tariff: &quot;[4]&quot;"
     info_bal_full_scg="Balans Vashego scheta: [0] y.e ([1] sum). S [2] izrashodovano po Vashemu nomeru - [3]. Plan: &quot;[4]&quot;"
 
-    info_debt_full_ruk="Задолженность по Вашему счету [0] y.e ([1] сум). С [2] израсходовано по Вашему номеру - [3]. План: &quot;[4]&quot;"
-    info_debt_full_rut="Zadolzhennost^ po Vashemu schetu [0] y.e ([1] sum). S [2] izrashodovano po Vashemu nomeru - [3]. Plan: &quot;[4]&quot;"
+
+    info_debt_full_ru="Zadolzhennost^ po Vashemu schetu [0] y.e ([1] sum). S [2] izrashodovano po Vashemu nomeru - [3]. Plan: &quot;[4]&quot;"
     info_debt_full_uz="Sizning qarzingiz [0] y.e ([1] sum). Sizning raqamga [2]dan ishlatildi - [3]. Tarif reja &quot;[4]&quot;"
     info_debt_full_en="Your debt is [0] units ([1] sum). From [2] you spent [3] on your phone. Tariff: &quot;[4]&quot;."
     info_debt_full_scg="Zadolzhennost^ po Vashemu schetu [0] y.e ([1] sum). S [2] izrashodovano po Vashemu nomeru - [3]. Plan: &quot;[4]&quot;"
 
-    info_bal_bill_ruk="Баланс Вашего счета: [0] y.e ([1] сум). С [2] израсходовано по Вашему номеру - [3]"
-    info_bal_bill_rut="Balans Vashego scheta: [0] y.e ([1] sum). S [2] izrashodovano po Vashemu nomeru - [3]"
+
+    info_bal_bill_ru="Balans Vashego scheta: [0] y.e ([1] sum). S [2] izrashodovano po Vashemu nomeru - [3]"
     info_bal_bill_uz="Sizning hisobingizdagi balans: [0] y.e ([1] sum). Sizning raqamga [2]dan ishlatildi - [3]"
     info_bal_bill_en="Your balance is [0] units ([1] sum). From [2] you spent [3] on your phone"
     info_bal_bill_scg="Balans Vashego scheta: [0] y.e ([1] sum). S [2] izrashodovano po Vashemu nomeru - [3]"
 
-    info_debt_bill_ruk="Задолженность по Вашему счету [0] y.e ([1] сум). С [2] израсходовано по Вашему номеру - [3]"
-    info_debt_bill_rut="Zadolzhennost^ po Vashemu schetu [0] y.e ([1] sum). S [2] izrashodovano po Vashemu nomeru - [3]"
+
+    info_debt_bill_ru="Zadolzhennost^ po Vashemu schetu [0] y.e ([1] sum). S [2] izrashodovano po Vashemu nomeru - [3]"
     info_debt_bill_uz="Sizning qarzingiz [0] y.e ([1] sum). Sizning raqamga [2]dan ishlatildi - [3]"
     info_debt_bill_en="Your debt is [0] units ([1] sum). From [2] you spent [3] on your phone"
     info_debt_bill_scg="Zadolzhennost^ po Vashemu schetu [0] y.e ([1] sum). S [2] izrashodovano po Vashemu nomeru - [3]"
 
-    info_bal_plan_ruk="Баланс Вашего счета: [0] y.e ([1] сум). План: &quot;[2]&quot;"
-    info_bal_plan_rut="Balans Vashego scheta: [0] y.e ([1] sum). Plan: &quot;[2]&quot;"
+
+    info_bal_plan_ru="Balans Vashego scheta: [0] y.e ([1] sum). Plan: &quot;[2]&quot;"
     info_bal_plan_uz="Sizning hisobingizdagi balans: [0] y.e ([1] sum). Tarif reja &quot;[2]&quot;"
     info_bal_plan_en="Your balance is [0] units ([1] sum). Tariff: &quot;[2]&quot;"
     info_bal_plan_scg="Balans Vashego scheta: [0] y.e ([1] sum). Plan: &quot;[2]&quot;"
 
-    info_debt_plan_ruk="Задолженность по Вашему счету [0] y.e ([1] сум). План: &quot;[2]&quot;"
-    info_debt_plan_rut="Zadolzhennost^ po Vashemu schetu [0] y.e ([1] sum). Plan: &quot;[2]&quot;"
+
+    info_debt_plan_ru="Zadolzhennost^ po Vashemu schetu [0] y.e ([1] sum). Plan: &quot;[2]&quot;"
     info_debt_plan_uz="Sizning qarzingiz [0] y.e ([1] sum). Tarif reja &quot;[2]&quot;"
     info_debt_plan_en="Your debts is [0] units ([1] sum). Tariff: &quot;[2]&quot;"
     info_debt_plan_scg="Zadolzhennost^ po Vashemu schetu [0] y.e ([1] sum). Plan: &quot;[2]&quot;"
 
-    info_bal_ruk="Баланс Вашего счета: [0] y.e ([1] сум)"
-    info_bal_rut="Balans Vashego scheta: [0] y.e ([1] sum)"
+
+    info_bal_ru="Balans Vashego scheta: [0] y.e ([1] sum)"
     info_bal_uz="Sizning hisobingizdagi balans: [0] y.e ([1] sum)"
     info_bal_en="Your balance is [0] units ([1] sum)"
     info_bal_scg="Balans Vashego scheta: [0] y.e ([1] sum)"
 
-    info_debt_ruk="Задолженность по Вашему счету [0] y.e ([1] сум)"
-    info_debt_rut="Zadolzhennost^ po Vashemu schetu [0] y.e ([1] sum)"
+
+    info_debt_ru="Zadolzhennost^ po Vashemu schetu [0] y.e ([1] sum)"
     info_debt_uz="Sizning qarzingiz [0] y.e ([1] sum)"
     info_debt_en="Your debts is [0] units ([1] sum)"
     info_debt_scg="Zadolzhennost^ po Vashemu schetu [0] y.e ([1] sum)"
 
-    info_notavailbalance_ruk="Недостаточно средств на балансе для проведения операции."
-    info_notavailbalance_rut="Nedostatochno sredstv na balanse dlya provedeniya operacii."
+
+    info_notavailbalance_ru="Nedostatochno sredstv na balanse dlya provedeniya operacii."
     info_notavailbalance_uz="Operasiyani amalga oshirish ucnun xisobingizda etarli mablag^ yo^q"
     info_notavailbalance_en="Not enough assets on balance for making an operation."
     info_notavailbalance_scg="Nedostatochno sredstv na balanse dlya provedeniya operacii."
 
-    info_inprogress_ruk="Slishkom chastiy zapros balansa."
-    info_inprogress_rut="Slishkom chastiy zapros balansa."
+
+    info_inprogress_ru="Slishkom chastiy zapros balansa."
     info_inprogress_uz="Slishkom chastiy zapros balansa."
     info_inprogress_en="Too frequent request on balance."
     info_inprogress_scg="Slishkom chastiy zapros balansa."
@@ -147,8 +147,8 @@ tplist               - Компонент выполняет проверки п
     <servicebindinglist>
       <service service_code="FRZAPRBAL" subscription="1"
 
-        info_notaval_ruk="Запрос баланса недоступен."
-        info_notaval_rut="Zapros balansa nedostupen."
+
+        info_notaval_ru="Zapros balansa nedostupen."
         info_notaval_uz="Balansni tekshirish mumkin emas"
         info_notaval_en="Request on balance is not available."
 
@@ -156,8 +156,8 @@ tplist               - Компонент выполняет проверки п
     </servicebindinglist>
     <!--tplist available="false"
 
-    	info_notaval_ruk="Zapros balansa nedostupen na tarifnom plane &quot;[0]&quot;."
-    	info_notaval_rut="Zapros balansa nedostupen na tarifnom plane &quot;[0]&quot;."
+
+    	info_notaval_ru="Zapros balansa nedostupen na tarifnom plane &quot;[0]&quot;."
     	info_notaval_uz="Zapros balansa nedostupen na tarifnom plane &quot;[0]&quot;."
     	info_notaval_en="Request on balance is not available on this tariff plan &quot;[0]&quot;.">
 
@@ -165,8 +165,8 @@ tplist               - Компонент выполняет проверки п
     </tplist-->
     <!--customerlist available="false"
 
-        info_notaval_ruk="Тестовым абонентам запрещено пользоваться данной операцией."
-        info_notaval_rut="Testovym abonentam zapresh^eno pol^zovat^sya dannoy operaciey."
+
+        info_notaval_ru="Testovym abonentam zapresh^eno pol^zovat^sya dannoy operaciey."
         info_notaval_uz="testlanvotgan abonentlaga mazkur operasiyadan foydalanish ta^qiqlangan "
         info_notaval_en="Test users are forbidden to sue this operation."
 
@@ -178,118 +178,118 @@ tplist               - Компонент выполняет проверки п
 
   <Service    name="_PTPMONEYTR" redirect="sms" check_block="true" timetoprogress="40"
 
-    info_success_ruk="Vasha zayavka na perevod [0] y.e abonentu +[1] zaregistrirovana."
-    info_success_rut="Vasha zayavka na perevod [0] y.e abonentu +[1] zaregistrirovana."
+
+    info_success_ru="Vasha zayavka na perevod [0] y.e abonentu +[1] zaregistrirovana."
     info_success_uz="Sizning +[1] abonentga[0] y.e o^tkazish arizangiz qabul qilindi"
     info_success_en="Your application for transfer [0] units to user +[1] is registered."
 
-    info_notavailbalance_ruk="Недостаточно средств на балансе для проведения операции."
-    info_notavailbalance_rut="Nedostatochno sredstv na balanse dlya provedeniya operacii."
+
+    info_notavailbalance_ru="Nedostatochno sredstv na balanse dlya provedeniya operacii."
     info_notavailbalance_uz="Operasiyani amalga oshirish ucnun xisobingizda etarli mablag^ yo^q"
     info_notavailbalance_en="Not enough assets on balance for the commitment of operation."
 
-    info_320777_ruk="Переводы между филиалами запрещены."
-    info_320777_rut="Perevody mezhdu filialami zapresh^eny."
+
+    info_320777_ru="Perevody mezhdu filialami zapresh^eny."
     info_320777_uz="Filiallar o^rtasida o^tkazmalar taqiqlanadi"
     info_320777_en="Transfers between branches are forbidden."
 
-    info_320705_ruk="Nepravilno vveden nomer poluchatelya."
-    info_320705_rut="Nepravilno vveden nomer poluchatelya."
+
+    info_320705_ru="Nepravilno vveden nomer poluchatelya."
     info_320705_uz="Oluvchining raqami noto^g^ri kiritilgan."
     info_320705_en="Receiver^s number is incorrectly entered."
 
-    info_320312_ruk="Usluga zablokirovana. Obratites v sluzhbu podderzhki."
-    info_320312_rut="Usluga zablokirovana. Obratites v sluzhbu podderzhki."
+
+    info_320312_ru="Usluga zablokirovana. Obratites v sluzhbu podderzhki."
     info_320312_uz="Xizmat taqiqlangan. Ma^lumot xizmatiga murojaat qiling."
     info_320312_en="The service is blocked. Call support-service."
 
-    info_320701_ruk="Summa bolshe dostupnoi. Sozdaite zapros snova v formate: *112*nomer telefona poluchatelya*summa#"
-    info_320701_rut="Summa bolshe dostupnoi. Sozdaite zapros snova v formate: *112*nomer telefona poluchatelya*summa#"
+
+    info_320701_ru="Summa bolshe dostupnoi. Sozdaite zapros snova v formate: *112*nomer telefona poluchatelya*summa#"
     info_320701_uz="Summa belgilangan miqdordan ko^p. So^rovni boshqatdan: *112* oluvchining telefon raqami*summa# shaklida yarating"
     info_320701_en="The amount required is more than it is available. Create request again in format: *112* number of receiver *amount#"
 
-    info_320702_ruk="Usluga ne dostupna organizaciyam."
-    info_320702_rut="Usluga ne dostupna organizaciyam."
+
+    info_320702_ru="Usluga ne dostupna organizaciyam."
     info_320702_uz="Xizmat korxonalarga ulanmaydi."
     info_320702_en="The service is not available for organisations."
 
-    info_320703_ruk="Perevod yuridicheskomu licu nevozmozhen ili u abonenta kreditnyi metod rascheta."
-    info_320703_rut="Perevod yuridicheskomu licu nevozmozhen ili u abonenta kreditnyi metod rascheta."
+
+    info_320703_ru="Perevod yuridicheskomu licu nevozmozhen ili u abonenta kreditnyi metod rascheta."
     info_320703_uz="O^tkazma yuridik shaxs uchun mumkin emas yoki abonent to^lovni kredit usulda to^laydi."
     info_320703_en="The transfer to the legal entity is impossible or abonent has credit method of clearing off."
 
-    info_320704_ruk="Predydushii perevod v shage obrabotki. Obratites pozzhe."
-    info_320704_rut="Predydushii perevod v shage obrabotki. Obratites pozzhe."
+
+    info_320704_ru="Predydushii perevod v shage obrabotki. Obratites pozzhe."
     info_320704_uz="Oldingi o^tkazma ishlov berish jarayonida. Kechroq murojat qiling."
     info_320704_en="Previous transfer is at the step of processing. Request later."
 
-    info_320711_ruk="Prevyshen limit summy na popolnenie balansa drugim abonentam za sutki dlya otpravitelya."
-    info_320711_rut="Prevyshen limit summy na popolnenie balansa drugim abonentam za sutki dlya otpravitelya."
+
+    info_320711_ru="Prevyshen limit summy na popolnenie balansa drugim abonentam za sutki dlya otpravitelya."
     info_320711_uz="Boshqa abonent tomonidan oluvchining balans xisobini kunlik to^ldirish chegirmasi tugadi."
     info_320711_en="The limit used for other user^s account replenishment is overwhelmed for today by the sender."
 
-    info_320712_ruk="Prevyshen limit summy na popolnenie balansa drugim abonentam za sutki dlya poluchatelya."
-    info_320712_rut="Prevyshen limit summy na popolnenie balansa drugim abonentam za sutki dlya poluchatelya."
+
+    info_320712_ru="Prevyshen limit summy na popolnenie balansa drugim abonentam za sutki dlya poluchatelya."
     info_320712_uz="Boshqa abonent tomonidan oluvchining balans xisobini kunlik to^ldirish chegirmasi tugadi ."
     info_320712_en="The limit used for other user^s account replenishment is overwhelmed for today by the receiver."
 
-    info_320013_ruk="Zayavka ne vypolnena. Prevyshenie razreshennoi summy perevodov za sutki dlya otpravitelya. Povtorite zapros pozzhe."
-    info_320013_rut="Zayavka ne vypolnena. Prevyshenie razreshennoi summy perevodov za sutki dlya otpravitelya. Povtorite zapros pozzhe."
+
+    info_320013_ru="Zayavka ne vypolnena. Prevyshenie razreshennoi summy perevodov za sutki dlya otpravitelya. Povtorite zapros pozzhe."
     info_320013_uz="So^rov bajarilmadi. Boshqa abonent tomonidan oluvchining balans xisobini kunlik to^ldirish belgilangan summasi tugagan. So^rovni qayta amalga oshiring."
     info_320013_en="Request is not made. Excess of allowed transfers today for sender.Repeat request later."
 
-    info_320014_ruk="Zayavka ne vypolnena. Prevyshenie razreshennoi summy perevodov za sutki dlya poluchatelya. Povtorite zapros pozzhe."
-    info_320014_rut="Zayavka ne vypolnena. Prevyshenie razreshennoi summy perevodov za sutki dlya poluchatelya. Povtorite zapros pozzhe."
+
+    info_320014_ru="Zayavka ne vypolnena. Prevyshenie razreshennoi summy perevodov za sutki dlya poluchatelya. Povtorite zapros pozzhe."
     info_320014_uz="So^rov bajarilmadi. Boshqa abonent tomonidan oluvchining balans xisobini kunlik to^ldirish belgilangan summasi tugagan. So^rovni qayta amalga oshiring."
     info_320014_en="Request is not made. Excess of allowed transfers today for receiver.Repeat request later."
 
-    info_320361_ruk="Servis zablokirovan dlya otpravitelya perevoda."
-    info_320361_rut="Servis zablokirovan dlya otpravitelya perevoda."
+
+    info_320361_ru="Servis zablokirovan dlya otpravitelya perevoda."
     info_320361_uz="O^tkazma yuboruvchiga servis xizmati ta^qiqlangan."
     info_320361_en="Service is blocked for the sender of transfer."
 
-    info_320362_ruk="Servis zablokirovan dlya poluchatelya perevoda."
-    info_320362_rut="Servis zablokirovan dlya poluchatelya perevoda."
+
+    info_320362_ru="Servis zablokirovan dlya poluchatelya perevoda."
     info_320362_uz="O^tkazma oluvchiga servis xizmati ta^qiqlangan."
     info_320362_en="Service is blocked for the receiver of transfer."
 
-    info_320714_ruk="Prevysheno maksimalnoe chislo poluchatelei perevoda."
-    info_320714_rut="Prevysheno maksimalnoe chislo poluchatelei perevoda."
+
+    info_320714_ru="Prevysheno maksimalnoe chislo poluchatelei perevoda."
     info_320714_uz="O^tkazma oluvchilarning belgilangan maksimal soni tugadi."
     info_320714_en="Excess of maximum amount of transfer^s receivers."
 
-    info_320717_ruk="Перевод средств на юридическое лицо недоступен."
-    info_320717_rut="Perevod sredstv na yuridicheskoe lico nedostupen."
+
+    info_320717_ru="Perevod sredstv na yuridicheskoe lico nedostupen."
     info_320717_uz="Perevod sredstv na yuridicheskoe lico nedostupen."
     info_320717_en="Transfer for the legal entity is unaccessible."
 
-    info_330722_ruk="Usluga ne dostupna organizaciyam."
-    info_330722_rut="Usluga ne dostupna organizaciyam."
+
+    info_330722_ru="Usluga ne dostupna organizaciyam."
     info_330722_uz="Xizmat korxonalarga ulanmaydi."
     info_330722_en="Service for organisations is not accessible."
     
-    info_330723_ruk="Неверный номер абонента."
-    info_330723_rut="Neverniy nomer abonenta."
+
+    info_330723_ru="Neverniy nomer abonenta."
     info_330723_uz="Neverniy nomer abonenta."
     info_330723_en="Wrong user^s number."
     
-    info_330724_ruk="Ошибка сервера, обратитесь в службу поддержки UMS."
-    info_330724_rut="Oshibka servera, obratites v slujbu podderjki UMS."
+
+    info_330724_ru="Oshibka servera, obratites v slujbu podderjki UMS."
     info_330724_uz="Oshibka servera, obratites v slujbu podderjki UMS."
     info_330724_en="Server error, call support-service of UMS."
 
-    info_inprogress_ruk="Операция не может быть выполнена, пока не завершится предыдущая."
-    info_inprogress_rut="Operaciya ne mozhet byt vypolnena, poka ne zavershitsya predydushaya."
+
+    info_inprogress_ru="Operaciya ne mozhet byt vypolnena, poka ne zavershitsya predydushaya."
     info_inprogress_uz="Avvalgi operasiya tugamasidan keyingisi amalga oshirilmaydi"
     info_inprogress_en="Operation can not be made,untill the previous one is committed."
 
-    info_getacceptor_ruk="Vvedite nomer abonenta v formate:&#xA;99897XXXXXXX"
-    info_getacceptor_rut="Vvedite nomer abonenta v formate:&#xA;99897XXXXXXX"
+
+    info_getacceptor_ru="Vvedite nomer abonenta v formate:&#xA;99897XXXXXXX"
     info_getacceptor_uz="Vvedite nomer abonenta v formate:&#xA;99897XXXXXXX"
     info_getacceptor_en="Enter a number in the format:&#xA;99897XXXXXXX"
 
-    info_getamount_ruk="Vvedite summu perevoda. Dostupnaya summa - ot 1 do 5 y.e."
-    info_getamount_rut="Vvedite summu perevoda. Dostupnaya summa - ot 1 do 5 y.e."
+
+    info_getamount_ru="Vvedite summu perevoda. Dostupnaya summa - ot 1 do 5 y.e."
     info_getamount_uz="Vvedite summu perevoda. Dostupnaya summa - ot 1 do 5 y.e."
     info_getamount_en="Enter the amount of the transfer. Available amount - from 1 to 5 units."
 
@@ -303,33 +303,33 @@ tplist               - Компонент выполняет проверки п
 
   <Service    name="_ISSAPASS"
 
-    info_success_ruk="Пароль для входа в Интерент-помощник успешно изменен."
-    info_success_rut="Parol^ dlya vhoda v Internet-pomoshnik uspesho izmenen."
+
+    info_success_ru="Parol^ dlya vhoda v Internet-pomoshnik uspesho izmenen."
     info_success_uz="Internet-yordamchiga kirish paroli muafaqiatli o^zgartirildi."
     info_success_en="Password for entering Internet-assistant is successfully changed."
 
-    info_notavailbalance_ruk="Недостаточно средств на балансе для проведения операции."
-    info_notavailbalance_rut="Nedostatochno sredstv na balanse dlya provedeniya operacii."
+
+    info_notavailbalance_ru="Nedostatochno sredstv na balanse dlya provedeniya operacii."
     info_notavailbalance_uz="Operasiyani amalga oshirish ucnun xisobingizda etarli mablag^ yo^q"
     info_notavailbalance_en="Not enough assets on balance for making an operation."
 
-    info_320023_ruk="Формат пароля: 4-7 цифр. Пароль задан неправильно, повторите запрос."
-    info_320023_rut="Format parolya: 4-7 cifr. Parol^ zadan nepravil^no, povtorite zapros."
+
+    info_320023_ru="Format parolya: 4-7 cifr. Parol^ zadan nepravil^no, povtorite zapros."
     info_320023_uz="Parol formati: 4-7 cifr. Parol noto^g^ri terilgan, So^rovni qayta yuboring."
     info_320023_en="Password^s format: 4-7 numbers. Password given is incorrect. Repeat request."
 
-    info_320024_ruk="Nevozmojno izmenit^ parol^"
-    info_320024_rut="Nevozmojno izmenit^ parol^"
+
+    info_320024_ru="Nevozmojno izmenit^ parol^"
     info_320024_uz="Nevozmojno izmenit^ parol^"
     info_320024_en="Impossible to change password^"
     
-    info_getpassword_ruk="Vvedite parol^. Format parolya: 4-7 cifr."
-    info_getpassword_rut="Vvedite parol^. Format parolya: 4-7 cifr."
+
+    info_getpassword_ru="Vvedite parol^. Format parolya: 4-7 cifr."
     info_getpassword_uz="Vvedite parol^. Format parolya: 4-7 cifr."
     info_getpassword_en="Enter password. Parol^s format: 4-7 numbers."
 
-    info_inprogress_ruk="Slishkom chastiy zapros."
-    info_inprogress_rut="Slishkom chastiy zapros."
+
+    info_inprogress_ru="Slishkom chastiy zapros."
     info_inprogress_uz="Slishkom chastiy zapros."
     info_inprogress_en="Too frequent request."
 
@@ -339,28 +339,28 @@ tplist               - Компонент выполняет проверки п
 
   <Service    name="_CHKFAVNUM"
 
-    info_success_ruk="Любимый номер - +[0]"
-    info_success_rut="Lyubimyy nomer - +[0]"
+
+    info_success_ru="Lyubimyy nomer - +[0]"
     info_success_uz="Sevimli raqam - +[0]"
     info_success_en="Favourite number - +[0]"
 
-    info_notavailbalance_ruk="Недостаточно средств на балансе для проведения операции."
-    info_notavailbalance_rut="Nedostatochno sredstv na balanse dlya provedeniya operacii."
+
+    info_notavailbalance_ru="Nedostatochno sredstv na balanse dlya provedeniya operacii."
     info_notavailbalance_uz="Operasiyani amalga oshirish ucnun xisobingizda etarli mablag^ yo^q"
     info_notavailbalance_en="Not enough assets on balance for making an operation."
 
-    info_301010_ruk="Нет Любимых номеров."
-    info_301010_rut="Net lyubimyh nomerov."
+
+    info_301010_ru="Net lyubimyh nomerov."
     info_301010_uz="Sevimli raqamlar yoq.."
     info_301010_en="No favourite numbers."
 
-    info_320147_ruk="У Вас не установлена услуга &quot;Любимые ближе&quot;."
-    info_320147_rut="U Vas ne ustanovlena usluga &quot;Lyubimye blizhe&quot;."
+
+    info_320147_ru="U Vas ne ustanovlena usluga &quot;Lyubimye blizhe&quot;."
     info_320147_uz="&quot;Yaqinlarim yonimda&quot; xizmati sizda o^rnatilmagan."
     info_320147_en="You do not have &quot;Lyubimye blizhe&quot; service installed."
 
-    info_inprogress_ruk="Slishkom chastiy zapros."
-    info_inprogress_rut="Slishkom chastiy zapros."
+
+    info_inprogress_ru="Slishkom chastiy zapros."
     info_inprogress_uz="Slishkom chastiy zapros."
     info_inprogress_en="Too frequent request."
 
@@ -370,53 +370,53 @@ tplist               - Компонент выполняет проверки п
 
   <Service    name="_UPDFAVNUM"
 
-    info_success_ruk="Заявка на добавление номера +[0] зарегистрирована"
-    info_success_rut="Zayavka na dobavlenie nomera +[0] zaregistrirovana"
+
+    info_success_ru="Zayavka na dobavlenie nomera +[0] zaregistrirovana"
     info_success_uz="+[0] raqamni ulashga ariza qabul qilindi."
     info_success_en="Request for adding the number +[0] is registered"
 
-    info_notavailbalance_ruk="Недостаточно средств на балансе для проведения операции."
-    info_notavailbalance_rut="Nedostatochno sredstv na balanse dlya provedeniya operacii."
+
+    info_notavailbalance_ru="Nedostatochno sredstv na balanse dlya provedeniya operacii."
     info_notavailbalance_uz="Operasiyani amalga oshirish ucnun xisobingizda etarli mablag^ yo^q"
     info_notavailbalance_en="Not enough assets on balance for making an operation."
 
-    info_320203_ruk="Dobavlenie Lyubimogo nomera v shage obrabotki"
-    info_320203_rut="Dobavlenie Lyubimogo nomera v shage obrabotki"
+
+    info_320203_ru="Dobavlenie Lyubimogo nomera v shage obrabotki"
     info_320203_uz="Sevimli raqam ulanish jarayonida"
     info_320203_en="Adding of Favourite number is at the processing stage"
 
-    info_320193_ruk="Vveden neverny^y nomer telefona"
-    info_320193_rut="Vveden neverny^y nomer telefona"
+
+    info_320193_ru="Vveden neverny^y nomer telefona"
     info_320193_uz="Raqam noto^g^ri terilgan."
     info_320193_en="The wrong telephone number entered"
 
-    info_320997_ruk="Lyubimy^y nomer uzhe ustanovlen."
-    info_320997_rut="Lyubimy^y nomer uzhe ustanovlen."
+
+    info_320997_ru="Lyubimy^y nomer uzhe ustanovlen."
     info_320997_uz="Sevimli raqam xizmati ulangan."
     info_320997_en="Favourite number is already installed."
 
-    info_320142_ruk="Nel^zya ispol^zovat^ bol^she odnogo nomera"
-    info_320142_rut="Nel^zya ispol^zovat^ bol^she odnogo nomera"
+
+    info_320142_ru="Nel^zya ispol^zovat^ bol^she odnogo nomera"
     info_320142_uz="Bitta raqamdan ortiq ishlatib bo^lmaydi."
     info_320142_en="Usage of more than one telephone numbers is forbidden"
 
-    info_320204_ruk="Usluga Lyubimye blizhe ne predostavlyaetsya dlya Vashego tarifnogo plana"
-    info_320204_rut="Usluga Lyubimye blizhe ne predostavlyaetsya dlya Vashego tarifnogo plana"
+
+    info_320204_ru="Usluga Lyubimye blizhe ne predostavlyaetsya dlya Vashego tarifnogo plana"
     info_320204_uz="Sizning tarif rejangiz uchun Yaqinlarim yonimda xizmati ulanmaydi"
     info_320204_en="Service Beloved closer can not be provided  for your tariff plan"
 
-    info_310204_ruk="Lyubimy^y nomer by^l dobavlen ranee"
-    info_310204_rut="Lyubimy^y nomer by^l dobavlen ranee"
+
+    info_310204_ru="Lyubimy^y nomer by^l dobavlen ranee"
     info_310204_uz="Sevimli raqam avval ulangan."
     info_310204_en="Favourite number has been added before"
 
-    info_320147_ruk="У Вас не установлена услуга Любимые ближе."
-    info_320147_rut="У Вас не установлена услуга Любимые ближе."
+
+    info_320147_ru="У Вас не установлена услуга Любимые ближе."
     info_320147_uz="Sizda &quot;Yaqinlarim yonimda&quot; xizmati ulanmagan."
     info_320147_en="You do not have service Beloved closer installed."
 
-    info_inprogress_ruk="Slishkom chastiy zapros."
-    info_inprogress_rut="Slishkom chastiy zapros."
+
+    info_inprogress_ru="Slishkom chastiy zapros."
     info_inprogress_uz="Slishkom chastiy zapros."
     info_inprogress_en="Too frequent request."
 
@@ -426,28 +426,28 @@ tplist               - Компонент выполняет проверки п
 
   <Service    name="_DELFAVNUM"
 
-    info_success_ruk="Заявка на удаление номера +[0] зарегистрирована"
-    info_success_rut="Zayavka na udalenie nomera +[0] zaregistrirovana"
+
+    info_success_ru="Zayavka na udalenie nomera +[0] zaregistrirovana"
     info_success_uz="+[0] raqamni o^chirishga ariza qabul qilindi."
     info_success_en="Request for deleting the number +[0] is registered"
 
-    info_notavailbalance_ruk="Недостаточно средств на балансе для проведения операции."
-    info_notavailbalance_rut="Nedostatochno sredstv na balanse dlya provedeniya operacii."
+
+    info_notavailbalance_ru="Nedostatochno sredstv na balanse dlya provedeniya operacii."
     info_notavailbalance_uz="Operasiyani amalga oshirish ucnun xisobingizda etarli mablag^ yo^q"
     info_notavailbalance_en="Not enough assets on balance for making an operation."
 
-    info_320193_ruk="Vveden neverny^y nomer telefona"
-    info_320193_rut="Vveden neverny^y nomer telefona"
+
+    info_320193_ru="Vveden neverny^y nomer telefona"
     info_320193_uz="Raqam noto^g^ri terilgan."
     info_320193_en="Wrong telephone number is entered"
 
-    info_320147_ruk="У Вас не установлена услуга &quot;Любимые ближе&quot;."
-    info_320147_rut="U Vas ne ustanovlena usluga &quot;Lyubimye blizhe&quot;."
+
+    info_320147_ru="U Vas ne ustanovlena usluga &quot;Lyubimye blizhe&quot;."
     info_320147_uz="Sizda &quot;Yaqinlarim yonimda&quot; xizmati ulanmagan."
     info_320147_en="You dont have service &quot;Lyubimye blizhe&quot; istalled."
 
-    info_inprogress_ruk="Slishkom chastiy zapros."
-    info_inprogress_rut="Slishkom chastiy zapros."
+
+    info_inprogress_ru="Slishkom chastiy zapros."
     info_inprogress_uz="Slishkom chastiy zapros."
     info_inprogress_en="Too frequent request."
 
@@ -457,13 +457,13 @@ tplist               - Компонент выполняет проверки п
 
   <Service    name="_LANGUAGE"
 
-    info_success_ruk="Язык успешно изменен на Русский(Кириллица). Теперь можете проверить запрос баланса *100#,*171#"
-    info_success_rut="Yazy^k uspeshno izmenen na Russkiy(Latinica). Teper^ mozhete proverit^ zapros balansa *100#,*171#"
+
+    info_success_ru="Yazy^k uspeshno izmenen na Russkiy(Latinica). Teper^ mozhete proverit^ zapros balansa *100#,*171#"
     info_success_uz="Til uzbekchaga muafaqiatli o^zgardi. Endi siz balansingizni *100#,*171# orqali tekshirishingiz mumkin"
     info_success_en="Language successfully changed to English. Now you can check your balance by sending a requests *100#,*171#"
 
-    info_notavailbalance_ruk="Недостаточно средств на балансе для проведения операции."
-    info_notavailbalance_rut="Nedostatochno sredstv na balanse dlya provedeniya operacii."
+
+    info_notavailbalance_ru="Nedostatochno sredstv na balanse dlya provedeniya operacii."
     info_notavailbalance_uz="Operasiyani amalga oshirish ucnun xisobingizda etarli mablag^ yo^q"
     info_notavailbalance_en="Not enough assets on balance for making an operation."
 
@@ -479,18 +479,18 @@ tplist               - Компонент выполняет проверки п
 
   <Service    name="_GETLASTPAY" redirect="sms"
 
-    info_success_ruk="Последняя оплата: [0] сум - $[1] ([2])"
-    info_success_rut="Poslednyaya oplata: [0] sum - [1] y.e ([2])"
+
+    info_success_ru="Poslednyaya oplata: [0] sum - [1] y.e ([2])"
     info_success_uz="Oxirgi to^lovingiz: [0] so^m - [1] y.e ([2])"
     info_success_en="Last payment: [0] sum - [1] units ([2])"
 
-    info_inprogress_ruk="Slishkom chastiy zapros."
-    info_inprogress_rut="Slishkom chastiy zapros."
+
+    info_inprogress_ru="Slishkom chastiy zapros."
     info_inprogress_uz="Slishkom chastiy zapros."
     info_inprogress_en="Too frequent request."
 
-    info_notavailbalance_ruk="Недостаточно средств на балансе для проведения операции."
-    info_notavailbalance_rut="Nedostatochno sredstv na balanse dlya provedeniya operacii."
+
+    info_notavailbalance_ru="Nedostatochno sredstv na balanse dlya provedeniya operacii."
     info_notavailbalance_uz="Operasiyani amalga oshirish ucnun xisobingizda etarli mablag^ yo^q"
     info_notavailbalance_en="Not enough assets on balance for making an operation."
 
@@ -500,18 +500,18 @@ tplist               - Компонент выполняет проверки п
 
   <Service    name="_GETOUTLASTPAY"
 
-    info_success_ruk="Последняя оплата: [0] сум - $[1] ([2])"
-    info_success_rut="Poslednyaya oplata: [0] sum - [1] y.e ([2])"
+
+    info_success_ru="Poslednyaya oplata: [0] sum - [1] y.e ([2])"
     info_success_uz="Oxirgi to^lovingiz: [0] so^m - [1] y.e ([2])"
     info_success_en="Last payment: [0] sum - [1] units ([2])"
 
-    info_inprogress_ruk="Slishkom chastiy zapros."
-    info_inprogress_rut="Slishkom chastiy zapros."
+
+    info_inprogress_ru="Slishkom chastiy zapros."
     info_inprogress_uz="Slishkom chastiy zapros."
     info_inprogress_en="Too frequent request."
 
-    info_notavailbalance_ruk="Недостаточно средств на балансе для проведения операции."
-    info_notavailbalance_rut="Nedostatochno sredstv na balanse dlya provedeniya operacii."
+
+    info_notavailbalance_ru="Nedostatochno sredstv na balanse dlya provedeniya operacii."
     info_notavailbalance_uz="Operasiyani amalga oshirish ucnun xisobingizda etarli mablag^ yo^q"
     info_notavailbalance_en="Not enough assets on balance for making an operation."
 
@@ -523,58 +523,58 @@ tplist               - Компонент выполняет проверки п
 
   <Service    name="_GRNTPAY" availbalance="-2"
 
-    info_success_ruk="Zayavka zaregistrirovana"
-    info_success_rut="Zayavka zaregistrirovana"
+
+    info_success_ru="Zayavka zaregistrirovana"
     info_success_uz="Zayavka zaregistrirovana"
     info_success_en="Request is registered"
 
-    info_notavailbalance_ruk="Недостаточно средств на балансе для проведения операции."
-    info_notavailbalance_rut="Nedostatochno sredstv na balanse dlya provedeniya operacii."
+
+    info_notavailbalance_ru="Nedostatochno sredstv na balanse dlya provedeniya operacii."
     info_notavailbalance_uz="Operasiyani amalga oshirish ucnun xisobingizda etarli mablag^ yo^q"
     info_notavailbalance_en="Not enough assets on balance for making an operation."
 
-    info_320203_ruk="Obeshanniy platyozh uzhe nachislen."
-    info_320203_rut="Obeshanniy platyozh uzhe nachislen."
+
+    info_320203_ru="Obeshanniy platyozh uzhe nachislen."
     info_320203_uz="Va^da qilingan to^lov o^tkazildi."
     info_320203_en="Promised payment is already in use."
 
-    info_320205_ruk="Obeshanniy platyozh uzhe nachislen."
-    info_320205_rut="Obeshanniy platyozh uzhe nachislen."
+
+    info_320205_ru="Obeshanniy platyozh uzhe nachislen."
     info_320205_uz="Va^da qilingan to^lov o^tkazildi."
     info_320205_en="Promised payment is already in use."
 
-    info_320206_ruk="U Vas net dolga za Obeshanniy platezh."
-    info_320206_rut="U Vas net dolga za Obeshanniy platezh."
+
+    info_320206_ru="U Vas net dolga za Obeshanniy platezh."
     info_320206_uz="Vada qilingan to^lov uchun qarzingiz yo^q."
     info_320206_en="You have no debt for the Promised payment."
 
-    info_330124_ruk="Usluga Obeshanniy platezh aktivna. 3,5 y.e budet avtomaticheski spisano s vashego scheta cherez 3 dnya posle aktivacii"
-    info_330124_rut="Usluga Obeshanniy platezh aktivna. 3,5 y.e budet avtomaticheski spisano s vashego scheta cherez 3 dnya posle aktivacii"
+
+    info_330124_ru="Usluga Obeshanniy platezh aktivna. 3,5 y.e budet avtomaticheski spisano s vashego scheta cherez 3 dnya posle aktivacii"
     info_330124_uz="Usluga Obeshanniy platezh aktivna. 3,5 y.e budet avtomaticheski spisano s vashego scheta cherez 3 dnya posle aktivacii"
     info_330124_en="Promised payment service is active. 3,5 units will be automatically charged-off from your account after 3 days from activation"
 
-    info_inprogress_ruk="Slishkom chastiy zapros."
-    info_inprogress_rut="Slishkom chastiy zapros."
+
+    info_inprogress_ru="Slishkom chastiy zapros."
     info_inprogress_uz="Slishkom chastiy zapros."
     info_inprogress_en="Too frequent request."
     
-    info_330722_ruk="Услуга &quot;Обещанный платеж&quot; не доступна для Вас."
-    info_330722_rut="Usluga &quot;Obeschanniy platyoj&quot; ne dostupna dlya Vas."
+
+    info_330722_ru="Usluga &quot;Obeschanniy platyoj&quot; ne dostupna dlya Vas."
     info_330722_uz="&quot;Va^da qilingan to^lov&quot; xizmati mavjud emas."
     info_330722_en="&quot;Obeschanniy platyoj&quot; service is not available for you."
     
-    info_330723_ruk="Неверный номер абонента."
-    info_330723_rut="Neverniy nomer abonenta."
+
+    info_330723_ru="Neverniy nomer abonenta."
     info_330723_uz="Neverniy nomer abonenta."
     info_330723_en="Incorrect abonent^s number."
     
-    info_330724_ruk="Ошибка сервера, обратитесь в службу поддержки UMS."
-    info_330724_rut="Oshibka servera, obratites v slujbu podderjki UMS."
+
+    info_330724_ru="Oshibka servera, obratites v slujbu podderjki UMS."
     info_330724_uz="Oshibka servera, obratites v slujbu podderjki UMS."
     info_330724_en="Server error, refer support service of UMS."
 
-    info_320704_ruk="Usluga ne dostupna novim abonentam v techenie odnogo kalendarnogo mesyaca"
-          info_320704_rut="Ustanovlen zapret na podklyuchenie usligi &quot;Obeshanniy platezh&quot;"
+
+          info_320704_ru="Ustanovlen zapret na podklyuchenie usligi &quot;Obeshanniy platezh&quot;"
     info_320704_uz="&quot;Va^da qilingan to^lov&quot; xizmatiga cheklanish o^rnatildi"
     info_320704_en="&quot;Promised payment&quot; service connection is banned"
 
@@ -589,33 +589,33 @@ tplist               - Компонент выполняет проверки п
 
   <Service    name="_GRNTPAY_CHECK"
 
-    info_notavailbalance_ruk="Недостаточно средств на балансе для проведения операции."
-    info_notavailbalance_rut="Nedostatochno sredstv na balanse dlya provedeniya operacii."
+
+    info_notavailbalance_ru="Nedostatochno sredstv na balanse dlya provedeniya operacii."
     info_notavailbalance_uz="Operasiyani amalga oshirish ucnun xisobingizda etarli mablag^ yo^q."
     info_notavailbalance_en="Not enough assets on balance for making an operation."
 
-    info_320203_ruk="Obeshannyi platyozh uzhe nachislen."
-    info_320203_rut="Obeshannyi platyozh uzhe nachislen."
+
+    info_320203_ru="Obeshannyi platyozh uzhe nachislen."
     info_320203_uz="Va^da qilingan to^lov o^tkazildi."
     info_320203_en="Promised payment has been already charged."
 
-    info_320205_ruk="Obeshannyi platyozh uzhe nachislen."
-    info_320205_rut="Obeshannyi platyozh uzhe nachislen."
+
+    info_320205_ru="Obeshannyi platyozh uzhe nachislen."
     info_320205_uz="Va^da qilingan to^lov o^tkazildi."
     info_320205_en="Promised payment has been already charged."
 
-    info_320206_ruk="U Vas net dolga za Obeshanniy platezh"
-    info_320206_rut="U Vas net dolga za Obeshanniy platezh"
+
+    info_320206_ru="U Vas net dolga za Obeshanniy platezh"
     info_320206_uz="Vada qilingan to^lov uchun qarzingiz yo^q"
     info_320206_en="You have no debt for Promised payment"
 
-    info_330124_ruk="Obeshannyi platyozh uzhe nachislen."
-    info_330124_rut="Obeshannyi platyozh uzhe nachislen."
+
+    info_330124_ru="Obeshannyi platyozh uzhe nachislen."
     info_330124_uz="Va^da qilingan to^lov o^tkazildi."
     info_330124_en="Promised payment has been already charged."
 
-    info_inprogress_ruk="Slishkom chastiy zapros."
-    info_inprogress_rut="Slishkom chastiy zapros."
+
+    info_inprogress_ru="Slishkom chastiy zapros."
     info_inprogress_uz="Slishkom chastiy zapros."
     info_inprogress_en="Too frequent request."
 
@@ -630,23 +630,23 @@ tplist               - Компонент выполняет проверки п
 
   <Service    name="_GETBMSBALANCE"
 
-    info_success_ruk="Kompaniya: [0], Za tekushii period potracheno: [1] ballov, zarabotano: [2] ballov, ostatok: [3] ballov"
-    info_success_rut="Kompaniya: [0], Za tekushii period potracheno: [1] ballov, zarabotano: [2] ballov, ostatok: [3] ballov"
+
+    info_success_ru="Kompaniya: [0], Za tekushii period potracheno: [1] ballov, zarabotano: [2] ballov, ostatok: [3] ballov"
     info_success_uz="Kompaniya: [0], Joriy davrda ishlatildi: [1] bal, ishlab topildi: [2] bal, qoldiq: [3] bal"
     info_success_en="Company: [0], For the following perios used: [1] points, earned: [2] points, remaining: [3] points"
 
-    info_notavailbalance_ruk="Недостаточно средств на балансе для проведения операции."
-    info_notavailbalance_rut="Nedostatochno sredstv na balanse dlya provedeniya operacii."
+
+    info_notavailbalance_ru="Nedostatochno sredstv na balanse dlya provedeniya operacii."
     info_notavailbalance_uz="Operasiyani amalga oshirish ucnun xisobingizda etarli mablag^ yo^q"
     info_notavailbalance_en="Not enough assets on balance for making an operation."
 
-    info_320030_ruk="Vy ne otnosites k Bonusnoi platforme"
-    info_320030_rut="Vy ne otnosites k Bonusnoi platforme"
+
+    info_320030_ru="Vy ne otnosites k Bonusnoi platforme"
     info_320030_uz="Siz bonus xizmatlari majmuasiga qo^shilmaysiz"
     info_320030_en="You do not belong to Bonus platform"
 
-    info_inprogress_ruk="Slishkom chastiy zapros."
-    info_inprogress_rut="Slishkom chastiy zapros."
+
+    info_inprogress_ru="Slishkom chastiy zapros."
     info_inprogress_uz="Slishkom chastiy zapros."
     info_inprogress_en="Too frequent request."
 
@@ -655,53 +655,53 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service    name="_GETCOUNTERS"
 
-    info_autoinet_ruk="Ostatok ^[0]^ [1]. Avtoprodlenie paketa [2] chisla."
-    info_autoinet_rut="Ostatok ^[0]^ [1]. Avtoprodlenie paketa [2] chisla."
+
+    info_autoinet_ru="Ostatok ^[0]^ [1]. Avtoprodlenie paketa [2] chisla."
     info_autoinet_uz="^[0]^ to^plamining qoldig^i [1]. To^plam har oyning [2]-kunida yangilanadi."
     info_autoinet_en="Remainder  ^[0]^ [1]. Prolongation on the [2]th of each calendar month."
 
-    info_autosms_ruk="Ostatok ^[0]^ [1]."
-    info_autosms_rut="Ostatok ^[0]^ [1]."
+
+    info_autosms_ru="Ostatok ^[0]^ [1]."
     info_autosms_uz="^[0]^ to^plamining qoldig^i [1]."
     info_autosms_en="Remainder ^[0]^ [1]."
 
-    info_autosmscorp_ruk="Ostatok ^[0]^ [1] SMS. Avtoprodlenie paketa [2] chisla."
-    info_autosmscorp_rut="Ostatok ^[0]^ [1] SMS. Avtoprodlenie paketa [2] chisla."
+
+    info_autosmscorp_ru="Ostatok ^[0]^ [1] SMS. Avtoprodlenie paketa [2] chisla."
     info_autosmscorp_uz="^[0]^ to^plamining qoldig^i [1] SMS. To^plam har oyning [2]-kunida yangilanadi."
     info_autosmscorp_en="Remainder ^[0]^ [1] SMS. Prolongation on the [2]th of each calendar month."
 
-    info_autoinettosms_ruk="ONNET_[1]_[2]_[0]"
-    info_autoinettosms_rut="ONNET_[1]_[2]_[0]"
+
+    info_autoinettosms_ru="ONNET_[1]_[2]_[0]"
     info_autoinettosms_uz="ONNET_[1]_[2]_[0]"
     info_autoinettosms_en="ONNET_[1]_[2]_[0]"
 
-    info_comebacktosms_ruk="COMEBACK_[1]_[2]_[3]_[0]"
-    info_comebacktosms_rut="COMEBACK_[1]_[2]_[3]_[0]"
+
+    info_comebacktosms_ru="COMEBACK_[1]_[2]_[3]_[0]"
     info_comebacktosms_uz="COMEBACK_[1]_[2]_[3]_[0]"
     info_comebacktosms_en="COMEBACK_[1]_[2]_[3]_[0]"
 
-    info_welcometosms_ruk="WELCOME_[1]_[2]_[3]_[0]"
-    info_welcometosms_rut="WELCOME_[1]_[2]_[3]_[0]"
+
+    info_welcometosms_ru="WELCOME_[1]_[2]_[3]_[0]"
     info_welcometosms_uz="WELCOME_[1]_[2]_[3]_[0]"
     info_welcometosms_en="WELCOME_[1]_[2]_[3]_[0]"
 
-    info_bzs_ruk="Ostatok ^[0]^ [1] MB. Avtoprodlenie paketa [2] chisla. Otklyuchenie uslugi [3]"
-    info_bzs_rut="Ostatok ^[0]^ [1] MB. Avtoprodlenie paketa [2] chisla. Otklyuchenie uslugi [3]"
+
+    info_bzs_ru="Ostatok ^[0]^ [1] MB. Avtoprodlenie paketa [2] chisla. Otklyuchenie uslugi [3]"
     info_bzs_uz="^[0]^ qoldig^i [1] MB. To^plam avtouzaytirishi [2] sanasida. Xizmat [3] gacha mavjud"
     info_bzs_en="Remainder ^[0]^ [1] MB. Prolongation on the [2]th of each calendar month. Service deactivation [3]"
 
-    info_supervoice_ruk="Ostatok ^[0]^ [1] MB. Avtoprodlenie paketa [2] chisla. Otklyuchenie uslugi [3]."
-    info_supervoice_rut="Ostatok ^[0]^ [1] MB. Avtoprodlenie paketa [2] chisla. Otklyuchenie uslugi [3]."
+
+    info_supervoice_ru="Ostatok ^[0]^ [1] MB. Avtoprodlenie paketa [2] chisla. Otklyuchenie uslugi [3]."
     info_supervoice_uz="^[0]^ qoldig^i [1] MB. To^plam avtouzaytirishi [2] sanasida. Xizmat [3] gacha mavjud"
     info_supervoice_en="Remainder ^[0]^ [1] MB. Prolongation on the [2]th of each calendar month. Service deactivation [3]."
 
-    info_vernis_ruk="Ostatok [1] Min. Avtoprodlenie paketa [2] chisla. Otklyuchenie uslugi [3]"
-    info_vernis_rut="Ostatok [1] Min. Avtoprodlenie paketa [2] chisla. Otklyuchenie uslugi [3]"
+
+    info_vernis_ru="Ostatok [1] Min. Avtoprodlenie paketa [2] chisla. Otklyuchenie uslugi [3]"
     info_vernis_uz="Qoldig^i [1] Min. To^plam avtouzaytirishi [2] sanasida. Xizmat [3] gacha mavjud"
     info_vernis_en="Remainder [1] Min. Prolongation on the [2]th of each calendar month. Service deactivation [3]"
 
-    info_superzero_ruk="Ostatok ^[0]^ [1] Min. Avtoprodlenie paketa [2] chisla."
-    info_superzero_rut="Ostatok ^[0]^ [1] Min. Avtoprodlenie paketa [2] chisla."
+
+    info_superzero_ru="Ostatok ^[0]^ [1] Min. Avtoprodlenie paketa [2] chisla."
     info_superzero_uz="^[0]^ to^plamining qoldig^i [1] Min. To^plam har oyning [2]-kunida yangilanadi."
     info_superzero_en="Remainder ^[0]^ [1] Min. Prolongation on the [2]th of each calendar month."
 
@@ -720,8 +720,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service    name="_GETNUMBERBYPASSPORT"
 
-    info_success_ruk="Na vashe imya zaregistrirovani nomera: [0] Blagodarim Vas za vibor UMS"
-    info_success_rut="Na vashe imya zaregistrirovani nomera: [0] Blagodarim Vas za vibor UMS"
+
+    info_success_ru="Na vashe imya zaregistrirovani nomera: [0] Blagodarim Vas za vibor UMS"
     info_success_uz="Sizning nomingizdagi raqamlar ro^yxati: [0] UMS tanlaganingizdan minnatdormiz"
     info_success_en="Under your name numbers registered: [0] Thank you for choosing UMS"
 
@@ -730,8 +730,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service    name="_GETMONTHDETAIL"
 
-    info_success_ruk="[0]"
-    info_success_rut="[0]"
+
+    info_success_ru="[0]"
     info_success_uz="[0]"
     info_success_en="[0]"
 
@@ -740,8 +740,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service    name="_MYNUMBER"
 	
-    info_success_ruk="Vash nomer +[0]&#xA;0.Nazad"
-    info_success_rut="Vash nomer +[0]&#xA;0.Nazad"
+
+    info_success_ru="Vash nomer +[0]&#xA;0.Nazad"
     info_success_uz="Vash nomer +[0]&#xA;0.Nazad"
     info_success_en="Your number +[0]&#xA;0.Back"
     
@@ -752,13 +752,13 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service    name="_MYSTATICIP"
 	
-    info_success_ruk="Vash Staticheskiy IP [0]&#xA;0.Nazad"
-    info_success_rut="Vash Staticheskiy IP [0]&#xA;0.Nazad"
+
+    info_success_ru="Vash Staticheskiy IP [0]&#xA;0.Nazad"
     info_success_uz="Sizning Staticheskiy IP [0]&#xA;0.Nazad"
     info_success_en="Your Static IP [0]&#xA;0.Back"
 
-    info_notavail_ruk="Staticheskiy IP ne ustanovlen&#xA;0.Nazad"
-    info_notavail_rut="Staticheskiy IP ne ustanovlen&#xA;0.Nazad"
+
+    info_notavail_ru="Staticheskiy IP ne ustanovlen&#xA;0.Nazad"
     info_notavail_uz="Staticheskiy IP yoqilmagan&#xA;0.Nazad"
     info_notavail_en="Static IP not installed&#xA;0.Back"
     
@@ -769,8 +769,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service    name="_BILLDETAIL"
 	
-    info_320767_ruk="По Вашему номеру нет расходов за текущий месяц."
-    info_320767_rut="Po Vashemu nomeru net rashodov za tekushiy mesyac."
+
+    info_320767_ru="Po Vashemu nomeru net rashodov za tekushiy mesyac."
     info_320767_uz="Po Vashemu nomeru net rashodov za tekushiy mesyac."
     info_320767_en="Your number has no cost for current month."
     
@@ -782,8 +782,8 @@ tplist               - Компонент выполняет проверки п
 
   <Service    name="_LASTDETAILSALL" redirect="sms"
 	
-    info_320478_ruk="U Vas net rashodov za poslednie 5 dney."
-    info_320478_rut="U Vas net rashodov za poslednie 5 dney."
+
+    info_320478_ru="U Vas net rashodov za poslednie 5 dney."
     info_320478_uz="U Vas net rashodov za poslednie 5 dney."
     info_320478_en="You have no expenditures for the last 5 days."
     
@@ -794,7 +794,7 @@ tplist               - Компонент выполняет проверки п
   </Service>
 
   <Language>
-    <lang param="rut" text="Russkiy (Translit)" scp="1" ussd="1" encoding="ascii">
+    <Item language_id="1" param="ru" text="Russkiy (Translit)" encoding="ascii">
       <soapcon value="ru"/>
       <soapcon value="rut"/>
       <soapcon value="1"/>
@@ -806,20 +806,8 @@ tplist               - Компонент выполняет проверки п
       <dealerussd value="*10*1"/>
       <dealerussd value="*1*1*2"/>
       <dealerussd value="*0*2"/>
-    </lang>
-    <lang param="ruk" text="Русский (Кириллица)" scp="1" ussd="1" encoding="unicodefffe">
-      <soapcon value="ruk"/>
-      <soapcon value="2"/>
-      <ivrcon  value="ruk"/>
-      <ivrcon  value="2"/>
-      <ussdcon value="*1"/>
-      <ussdcon value="*1*1*2"/>
-      <ussdcon value="*0*2"/>
-      <dealerussd value="*10*1"/>
-      <dealerussd value="*1*1*2"/>
-      <dealerussd value="*0*2"/>
-    </lang>
-    <lang param="uz" text="Ozbekcha" scp="3" ussd="3" encoding="ascii">
+    </Item>
+    <Item language_id="1" param="uz" text="Ozbekcha" encoding="ascii">
       <soapcon value="uz"/>
       <soapcon value="3"/>
       <ivrcon  value="uz"/>
@@ -830,8 +818,8 @@ tplist               - Компонент выполняет проверки п
       <dealerussd value="*10*2"/>
       <dealerussd value="*1*1*1"/>
       <dealerussd value="*0*1"/>
-    </lang>
-    <lang param="en" text="English" scp="4" ussd="4" encoding="ascii">
+    </Item>
+    <Item language_id="1" param="en" text="English" encoding="ascii">
       <soapcon value="en"/>
       <soapcon value="4"/>
       <ivrcon  value="en"/>
@@ -846,16 +834,16 @@ tplist               - Компонент выполняет проверки п
       <smscon value=""/>
       <ussdcon value=""/>
       <dealerussd value=""/>
-    </lang>
-    <lang param="pay" text="Paynet" scp="5" ussd="5" encoding="ascii">
+    </Item>
+    <Item language_id="1" param="pay" text="Paynet" encoding="ascii">
       <paynet value="pay"/>
-    </lang>
-    <lang param="rbt" text="RBT" scp="6" ussd="6" encoding="ascii">
+    </Item>
+    <Item language_id="1" param="rbt" text="RBT" encoding="ascii">
       <rbt value="rbt"/>
-    </lang>
-    <lang param="scg" text="SCG" scp="7" ussd="7" encoding="ascii">
+    </Item>
+    <Item language_id="1" param="scg" text="SCG" encoding="ascii">
       <scg value="scg"/>
-    </lang>
-    <lang param="en" text="DefaultLang" scp="" ussd="" />
+    </Item>
+    <Item language_id="" param="en" text="DefaultLang" encoding="ascii" />
   </Language>
 </ServiceList>

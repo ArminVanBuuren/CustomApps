@@ -3,7 +3,6 @@
     <Database forisDataKey="MG" interfacePackage="API" />
     <Handler name="CRMCON_02_01" type="CRMCON" host="localhost" port="11103" sessionHandler="false" serviceName="FORIS.MG.CRMCON_02_01" config="Configuration\CRMCON\CRMCON_02_01.exe.xml" />
     <Handler name="WCFHND_02_01" type="WCFHND" host="localhost" port="11190" sessionHandler="false" serviceName="FORIS.MG.WCFHND_02_01" config="Configuration\WCFHND\WCFHND_02_01.exe.xml" />
-
     <Connector name="DBCON_02_01" type="DBCON" host="localhost" port="11141" sessionHandler="false" serviceName="FORIS.MG.DBCON_02_01" config="Configuration\DBCON\DBCON_02_01.exe.xml" />
     <Connector name="IVRCON_02_01" type="IVRCON" host="localhost" port="11130" sessionHandler="false" serviceName="FORIS.MG.IVRCON_02_01" config="Configuration\IVRCON\IVRCON_02_01.exe.xml" />
     <Connector name="IVRCON_02_02" type="IVRCON" host="localhost" port="11131" sessionHandler="false" serviceName="FORIS.MG.IVRCON_02_02" config="Configuration\IVRCON\IVRCON_02_02.exe.xml" />

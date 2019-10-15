@@ -95,9 +95,9 @@
     <define name="_GET_DBRESULT" value="#{document('_DICTIONARY_PATH')/Dictionary/Item[code/@value='${sDbresult}']/@info__GET_LANG}" />
     <define name="_GET_LENGTH_DBRESULT" value="#{string-length(document('_DICTIONARY_PATH')/Dictionary/Item[code/@value='${sDbresult}']/@info__GET_LANG)}" />
     <define name="_GET_AFTER_VERIFY_DBRESULT" value="#{if('#{document('_DICTIONARY_PATH')/Dictionary/Item[code/@value='${customerblocks}']/@info__GET_LANG}'!='','${customerblocks}','${dbresult}')}" />
-    <define name="_ENCODING" value="#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@param='_GET_LANG']/@encoding}" />
-    <define name="_INLANGUAGE" value="#{if('#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@scp='${inlang}' and @ussd='${smsussdlang}']/@param}'='','#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@scp='' and @ussd='']/@param}','#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@scp='${inlang}' and @ussd='${smsussdlang}']/@param}')}" />
-    <define name="_GET_LANG" value="#{if('${sLang}'='','#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@scp='' and @ussd='']/@param}','${sLang}')}" />
+    <define name="_ENCODING" value="#{document('_ALLSERVICE_PATH')/ServiceList/Language/Item[@param='_GET_LANG']/@encoding}" />
+    <define name="_INLANGUAGE" value="#{if('#{document('_ALLSERVICE_PATH')/ServiceList/Language/Item[@language_id='${language_id}']/@param}'='','#{document('_ALLSERVICE_PATH')/ServiceList/Language/Item[@language_id='']/@param}','#{document('_ALLSERVICE_PATH')/ServiceList/Language/Item[@language_id='${language_id}']/@param}')}" />
+    <define name="_GET_LANG" value="#{if('${sLang}'='','#{document('_ALLSERVICE_PATH')/ServiceList/Language/Item[@language_id='']/@param}','${sLang}')}" />
     <define name="_DEFAULT_ERR" value="#{if('${dbresult}'='-1','err001','${dbresult}')}" />
     <define name="_REDIRECT_TO_SMS" value="^[Ss][Mm][Ss]$" />
     <define name="_REDIRECT_TO_CURRENT" value="^[Nn][Oo][Tt][Rr][Ee][Dd][Ii][Rr][Ee][Cc][Tt]$" />

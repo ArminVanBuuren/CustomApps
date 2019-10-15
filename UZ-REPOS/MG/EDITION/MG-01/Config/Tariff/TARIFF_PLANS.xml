@@ -20,53 +20,53 @@ tplist               - Компонент выполняет проверки п
 <TariffPlans>
   <Group name="DEFAULT" redirect="sms" availbalance="-1" check_block="true" successful_response="BYCRM" timetoprogress="600"
 
-    info_confirm_ruk="Vash tekushiy tarifniy plan: &quot;[1]&quot;. Dlya smeny plana obsluzhivaniya na &quot;[0]&quot; otprav^te 1&#xA;&#xA;?.TP Info"
-    info_confirm_rut="Vash tekushiy tarifniy plan: &quot;[1]&quot;. Dlya smeny plana obsluzhivaniya na &quot;[0]&quot; otprav^te 1&#xA;&#xA;?.TP Info"
+
+    info_confirm_ru="Vash tekushiy tarifniy plan: &quot;[1]&quot;. Dlya smeny plana obsluzhivaniya na &quot;[0]&quot; otprav^te 1&#xA;&#xA;?.TP Info"
     info_confirm_uz="Vash tekushiy tarifniy plan: &quot;[1]&quot;. Dlya smeny plana obsluzhivaniya na &quot;[0]&quot; otprav^te 1&#xA;&#xA;?.TP Info"
     info_confirm_en="Your current tariff plan: &quot;[1]&quot;. To change the service plan to &quot;[0]&quot; send 1&#xA;&#xA;?.TP Info"
 
-    info_checktp_ruk="Ваш текущий тарифный план: &quot;[0]&quot;"
-    info_checktp_rut="Vash tekushiy tarifniy plan: &quot;[0]&quot;"
+
+    info_checktp_ru="Vash tekushiy tarifniy plan: &quot;[0]&quot;"
     info_checktp_uz="Sizning joriy tarif rejasi&quot;[0]&quot;"
     info_checktp_en="Your current tariff plan: &quot;[0]&quot;"
 
-    info_success_ruk="Заявка на изменение тарифного плана на &quot;[0]&quot; зарегистрирована."
-    info_success_rut="Zayavka na izmenenie tarifnogo plana na &quot;[0]&quot; zaregistrirovana."
+
+    info_success_ru="Zayavka na izmenenie tarifnogo plana na &quot;[0]&quot; zaregistrirovana."
     info_success_uz="Tarif rejangizni &quot;[0]&quot; tarif rejasiga o^zgartirish uchun arizangiz ro^yxatdan o^tkazildi"
     info_success_en="Request on changing tariff plan to &quot;[0]&quot; is registered"
 
-    info_alreadyex_ruk="Изменение тарифного плана на &quot;[0]&quot; невозможно. У Вас уже установлен тарифный план &quot;[0]&quot;"
-    info_alreadyex_rut="Izmenenie tarifnogo plana na &quot;[0]&quot; nevozmozhno. U Vas uzhe ustanovlen tarifniy plan &quot;[0]&quot;"
+
+    info_alreadyex_ru="Izmenenie tarifnogo plana na &quot;[0]&quot; nevozmozhno. U Vas uzhe ustanovlen tarifniy plan &quot;[0]&quot;"
     info_alreadyex_uz="Tarif rejasini o^zgartirish &quot;[0]&quot; mumkin emas. Sizda avvalroq &quot;[0]&quot; tarif rejasi o^rnatilgan"
     info_alreadyex_en="Change tariff plan to &quot;[0]&quot; is impossible. You have &quot;[0]&quot; already installed"
 
-    info_alrprogress_ruk="Изменение тарифного плана на &quot;[0]&quot; в процессе обработки. Обратитесь позже."
-    info_alrprogress_rut="Izmenenie tarifnogo plana na &quot;[0]&quot; v processe obrabotki. Obratites^ pozzhe."
+
+    info_alrprogress_ru="Izmenenie tarifnogo plana na &quot;[0]&quot; v processe obrabotki. Obratites^ pozzhe."
     info_alrprogress_uz="Tarif rejasini &quot;[0]&quot;ga o^zgartirish qayta ishlash jarayonida. Keyinroq murojaat qiling."
     info_alrprogress_en="Changing of tariff plan to &quot;[0]&quot; is on processing stage. Refer later."
 
-    info_inprogress_ruk="Предыдущая обработка находится в шаге изменения тарифного плана на &quot;[0]&quot;. Обратитесь позже."
-    info_inprogress_rut="Predydushaya obrabotka nahoditsya v shage izmeneniya tarifnogo plana na &quot;[0]&quot;. Obratites^ pozzhe."
+
+    info_inprogress_ru="Predydushaya obrabotka nahoditsya v shage izmeneniya tarifnogo plana na &quot;[0]&quot;. Obratites^ pozzhe."
     info_inprogress_uz=" tarif rejasini &quot;[0]&quot; ga o^zgartirish bo^yicha avvalgi ishlov berish jarayoni yakuniga etib qoldi. Keyinroq murojaat qiling."
     info_inprogress_en="Previous processing is at the stage of chnaging tariff plan to &quot;[0]&quot;. Refer later."
 
-    info_notavailbalance_ruk="Недостаточно средств на балансе для проведения операции."
-    info_notavailbalance_rut="Nedostatochno sredstv na balanse dlya provedeniya operacii."
+
+    info_notavailbalance_ru="Nedostatochno sredstv na balanse dlya provedeniya operacii."
     info_notavailbalance_uz="Operasiyani amalga oshirish uchun xisobingizda etarli mablag^ yo^q"
     info_notavailbalance_en="Not enough assets on balance for making of operation."
 
-    info_notavailable_ruk="Тарифный план &quot;[0]&quot; больше недоступен для перехода."
-    info_notavailable_rut="tarifniy plan &quot;[0]&quot; bol^she nedostupen dlya perehoda."
+
+    info_notavailable_ru="tarifniy plan &quot;[0]&quot; bol^she nedostupen dlya perehoda."
     info_notavailable_uz="&quot;[0]&quot; tarif rejasini boshqa o^zgartirib bo^lmaydi."
     info_notavailable_en="Tariff plan &quot;[0]&quot; is no longer available for transfer."
 
-    info_unavailable_ruk="Тарифный план &quot;[0]&quot; будет доступен с [1]"
-    info_unavailable_rut="tarifniy plan &quot;[0]&quot; budet dostupen s [1]"
+
+    info_unavailable_ru="tarifniy plan &quot;[0]&quot; budet dostupen s [1]"
     info_unavailable_uz="&quot;[0]&quot; tarif rejasi[1]dan amal qiladi"
     info_unavailable_en="Tariff plan&quot;[0]&quot;will be available since [1]"
 
-    info_320400_ruk="Смена с текущего тарифного плана на &quot;[0]&quot; не возможна"
-    info_320400_rut="Smena s tekushego tarifnogo plana na &quot;[0]&quot; ne vozmojna"
+
+    info_320400_ru="Smena s tekushego tarifnogo plana na &quot;[0]&quot; ne vozmojna"
     info_320400_uz="Tarif rejangizni &quot;[0]&quot; tarif rejasiga o^zgartirish imkoniyati yo^q"
     info_320400_en="Transfer from current tariff plan to &quot;[0]&quot; is impossible"
 
@@ -100,8 +100,8 @@ tplist               - Компонент выполняет проверки п
   </Group>
   <Tariff ivrcode="101" datefrom="20131001" dateto="" group="1"
 
-    tariffname_ruk="Дилер"
-    tariffname_rut="Diler"
+
+    tariffname_ru="Diler"
     tariffname_uz="Diler"
     tariffname_en="Dealer"
     tariffname_scg="Diler"
@@ -112,13 +112,13 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="102" datefrom="20131001" dateto="" group="1" availbalance="15"
 
-    info_notavailbalance_rut="Dlya smeny tarifnogo plana na &quot;MAXI&quot;, na Vashem schetu dolzhno byt^ ne men^she 15 y.e."
-    info_notavailbalance_ruk="Dlya smeny tarifnogo plana na &quot;MAXI&quot;, na Vashem schetu dolzhno byt^ ne men^she 15 y.e."
+    info_notavailbalance_ru="Dlya smeny tarifnogo plana na &quot;MAXI&quot;, na Vashem schetu dolzhno byt^ ne men^she 15 y.e."
+
     info_notavailbalance_uz="Dlya smeny tarifnogo plana na &quot;MAXI&quot;, na Vashem schetu dolzhno byt^ ne men^she 15 y.e."
     info_notavailbalance_en="Dlya smeny tarifnogo plana na &quot;MAXI&quot;, na Vashem schetu dolzhno byt^ ne men^she 15 y.e."
 
-    tariffname_ruk="MAXI"
-    tariffname_rut="MAXI"
+
+    tariffname_ru="MAXI"
     tariffname_uz="MAXI"
     tariffname_en="MAXI"
     tariffname_scg="MAXI"
@@ -129,8 +129,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="103" datefrom="20131001" dateto="" group="1"
 
-    tariffname_ruk="Служебный"
-    tariffname_rut="Sluzhebniy"
+
+    tariffname_ru="Sluzhebniy"
     tariffname_uz="Xizmatga doir"
     tariffname_en="Official"
     tariffname_scg="Sluzhebniy"
@@ -141,8 +141,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="104" datefrom="20131001" dateto="" group="1"
 
-    tariffname_ruk="Служебный SCP"
-    tariffname_rut="Sluzhebniy SCP"
+
+    tariffname_ru="Sluzhebniy SCP"
     tariffname_uz="SCP xizmatga doir"
     tariffname_en="Official SCP"
     tariffname_scg="Sluzhebniy SCP"
@@ -153,14 +153,14 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="105" datefrom="20131001" dateto="20131001" group="1" availbalance="1"
 
-    info_confirm_ruk="Vash tekushiy tarifniy plan: &quot;[1]&quot;. Stoimost^ smeny plana obsluzhivaniya 1 y.e. Dlya smeny plana obsluzhivaniya na &quot;[0]&quot; otprav^te 1&#xA;&#xA;?.TP Info"
-    info_confirm_rut="Vash tekushiy tarifniy plan: &quot;[1]&quot;. Stoimost^ smeny plana obsluzhivaniya 1 y.e. Dlya smeny plana obsluzhivaniya na &quot;[0]&quot; otprav^te 1&#xA;&#xA;?.TP Info"
+
+    info_confirm_ru="Vash tekushiy tarifniy plan: &quot;[1]&quot;. Stoimost^ smeny plana obsluzhivaniya 1 y.e. Dlya smeny plana obsluzhivaniya na &quot;[0]&quot; otprav^te 1&#xA;&#xA;?.TP Info"
     info_confirm_uz="Vash tekushiy tarifniy plan: &quot;[1]&quot;. Stoimost^ smeny plana obsluzhivaniya 1 y.e. Dlya smeny plana obsluzhivaniya na &quot;[0]&quot; otprav^te 1&#xA;&#xA;?.TP Info"
     info_confirm_en="Your current tariff plan: &quot;[1]&quot;. The cost of changing service plan - 1 y.e. To change the service plan on &quot;[0]&quot; send 1&#xA;&#xA;?.TP Info"
 
 
-    tariffname_ruk="Start"
-    tariffname_rut="Start"
+
+    tariffname_ru="Start"
     tariffname_uz="Start"
     tariffname_en="Start"
     tariffname_scg="Start"
@@ -177,16 +177,16 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*2*1*1*confirm"/>
     <dealerussd value="*2*1*1*1"/-->
     <!--tplist available="true"
-        info_notaval_rut="Smena TP s *[1]* na *[0]* nedostupna."
-        info_notaval_ruk="Smena TP s *[1]* na *[0]* nedostupna."
+        info_notaval_ru="Smena TP s *[1]* na *[0]* nedostupna."
+
         info_notaval_uz="Smena TP s *[1]* na *[0]* nedostupna."
         info_notaval_en="Smena TP s *[1]* na *[0]* nedostupna.">
 
         <ivrcode value="102"/>
     </tplist-->
     <!--customerlist	available="true"
-        info_notaval_rut="Testovym abonentam zapresh^eno pol^zovat^sya dannoy operaciey."
-        info_notaval_ruk="Тестовым абонентам запрещено пользоваться данной операцией."
+        info_notaval_ru="Testovym abonentam zapresh^eno pol^zovat^sya dannoy operaciey."
+
         info_notaval_uz="testlanvotgan abonentlaga mazkur operasiyadan foydalanish ta^qiqlangan "
         info_notaval_en="Тестовым абонентам запрещено пользоваться данной операцией."
         >
@@ -196,8 +196,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="106" datefrom="20131001" dateto="" group="1"
 
-    tariffname_ruk="Тарифный план для роуминга"
-    tariffname_rut="Tarifniy plan dlya roumniga"
+
+    tariffname_ru="Tarifniy plan dlya roumniga"
     tariffname_uz="Tarifniy plan dlya roumniga"
     tariffname_en="For Rouming"
     tariffname_scg="Tarifniy plan dlya roumniga"
@@ -208,8 +208,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="108" datefrom="20131001" dateto="" group="1"
 
-    tariffname_ruk="CORP"
-    tariffname_rut="CORP"
+
+    tariffname_ru="CORP"
     tariffname_uz="CORP"
     tariffname_en="CORP"
     tariffname_scg="CORP"
@@ -220,8 +220,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="109" datefrom="20131001" dateto="" group="1"
 
-    tariffname_ruk="CORP VIP"
-    tariffname_rut="CORP VIP"
+
+    tariffname_ru="CORP VIP"
     tariffname_uz="CORP VIP"
     tariffname_en="CORP VIP"
     tariffname_scg="CORP VIP"
@@ -232,8 +232,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="110" datefrom="20131001" dateto="" group="1"
 
-    tariffname_ruk="Абсолют"
-    tariffname_rut="Absolut"
+
+    tariffname_ru="Absolut"
     tariffname_uz="Absolut"
     tariffname_en="Absolute"
     tariffname_scg="Absolute"
@@ -244,8 +244,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="111" datefrom="20131001" dateto="" group="1"
 
-    tariffname_ruk="Партнёр"
-    tariffname_rut="Partner"
+
+    tariffname_ru="Partner"
     tariffname_uz="Partner"
     tariffname_en="Partner"
     tariffname_scg="Partner"
@@ -256,8 +256,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="113" datefrom="20131001" dateto="" group="1" availbalance="0"
 
-    tariffname_ruk="Corporate MAXI"
-    tariffname_rut="Corporate MAXI"
+
+    tariffname_ru="Corporate MAXI"
     tariffname_uz="Corporate MAXI"
     tariffname_en="Corporate MAXI"
     tariffname_scg="Corporate MAXI"
@@ -268,8 +268,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="114" datefrom="20131001" dateto="20131001" group="1" availbalance="5"
 
-    tariffname_ruk="OPTIMA"
-    tariffname_rut="OPTIMA"
+
+    tariffname_ru="OPTIMA"
     tariffname_uz="OPTIMA"
     tariffname_en="OPTIMA"
     tariffname_scg="OPTIMA"
@@ -288,8 +288,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="115" datefrom="20131001" dateto="" group="1"
 
-    tariffname_ruk="Business"
-    tariffname_rut="Business"
+
+    tariffname_ru="Business"
     tariffname_uz="Business"
     tariffname_en="Business"
     tariffname_scg="Business"
@@ -300,8 +300,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="116" datefrom="20131001" dateto="" group="1"
 
-    tariffname_ruk="Veteran"
-    tariffname_rut="Veteran"
+
+    tariffname_ru="Veteran"
     tariffname_uz="Veteran"
     tariffname_en="Veteran"
     tariffname_scg="Veteran"
@@ -312,8 +312,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="117" datefrom="20131001" dateto="" group="1"
 
-    tariffname_ruk="NGMK-5"
-    tariffname_rut="NGMK-5"
+
+    tariffname_ru="NGMK-5"
     tariffname_uz="NGMK-5"
     tariffname_en="NGMK-5"
     tariffname_scg="NGMK-5"
@@ -324,8 +324,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="118" datefrom="20131001" dateto="" group="1"
 
-    tariffname_ruk="NGMK-10"
-    tariffname_rut="NGMK-10"
+
+    tariffname_ru="NGMK-10"
     tariffname_uz="NGMK-10"
     tariffname_en="NGMK-10"
     tariffname_scg="NGMK-10"
@@ -336,8 +336,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="119" datefrom="20131001" dateto="" group="1"
 
-    tariffname_ruk="ASKUE"
-    tariffname_rut="ASKUE"
+
+    tariffname_ru="ASKUE"
     tariffname_uz="ASKUE"
     tariffname_en="ASKUE"
     tariffname_scg="ASKUE"
@@ -348,8 +348,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="120" datefrom="20131001" dateto="" group="1"
 
-    tariffname_ruk="Corporate Start"
-    tariffname_rut="Corporate Start"
+
+    tariffname_ru="Corporate Start"
     tariffname_uz="Corporate Start"
     tariffname_en="Corporate Start"
     tariffname_scg="Corporate Start"
@@ -360,8 +360,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="121" datefrom="20131001" dateto="" group="1"
 
-    tariffname_ruk="Try and Buy"
-    tariffname_rut="Try and Buy"
+
+    tariffname_ru="Try and Buy"
     tariffname_uz="Try and Buy"
     tariffname_en="Try and Buy"
     tariffname_scg="Try and Buy"
@@ -372,8 +372,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="122" datefrom="20131001" dateto="" group="1" availbalance="25"
 
-    tariffname_ruk="Ultra"
-    tariffname_rut="Ultra"
+
+    tariffname_ru="Ultra"
     tariffname_uz="Ultra"
     tariffname_en="Ultra"
     tariffname_scg="Ultra"
@@ -388,13 +388,13 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="124" datefrom="20131001" dateto="" group="1"
 
-                  info_confirm_ruk="Vash tekushiy tarifniy plan: *[1]*. Stoimost^ smeny plana obsluzhivaniya 1.5 y.e. Dlya smeny plana obsluzhivaniya na *[0]* otprav^te 1&#xA;&#xA;?.TP Info"
-    info_confirm_rut="Vash tekushiy tarifniy plan: *[1]*. Stoimost^ smeny plana obsluzhivaniya 1.5 y.e. Dlya smeny plana obsluzhivaniya na *[0]* otprav^te 1&#xA;&#xA;?.TP Info"
+
+    info_confirm_ru="Vash tekushiy tarifniy plan: *[1]*. Stoimost^ smeny plana obsluzhivaniya 1.5 y.e. Dlya smeny plana obsluzhivaniya na *[0]* otprav^te 1&#xA;&#xA;?.TP Info"
     info_confirm_uz="Vash tekushiy tarifniy plan: *[1]*. Stoimost^ smeny plana obsluzhivaniya 1.5 y.e. Dlya smeny plana obsluzhivaniya na *[0]* otprav^te 1&#xA;&#xA;?.TP Info"
     info_confirm_en="Your current tariff plan: *[1]*. The cost of changing service plan - 1.5 y.e. To change the service plan on *[0]* send 1&#xA;&#xA;?.TP Info"
 
-    tariffname_ruk="Plus"
-    tariffname_rut="Plus"
+
+    tariffname_ru="Plus"
     tariffname_uz="Plus"
     tariffname_en="Plus"
     tariffname_scg="Plus"
@@ -405,8 +405,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="125" datefrom="20131001" dateto="" group="1" availbalance="15"
 
-    tariffname_ruk="Maxi New"
-    tariffname_rut="Maxi New"
+
+    tariffname_ru="Maxi New"
     tariffname_uz="Maxi New"
     tariffname_en="Maxi New"
     tariffname_scg="Maxi New"
@@ -421,8 +421,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="126" datefrom="20131001" dateto="" group="1"
 
-    tariffname_ruk="My UMS"
-    tariffname_rut="My UMS"
+
+    tariffname_ru="My UMS"
     tariffname_uz="My UMS"
     tariffname_en="My UMS"
     tariffname_scg="My UMS"
@@ -434,8 +434,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="127" datefrom="20131001" dateto="" group="1"
 
-    tariffname_ruk="Mini"
-    tariffname_rut="Mini"
+
+    tariffname_ru="Mini"
     tariffname_uz="Mini"
     tariffname_en="Mini"
     tariffname_scg="Mini"
@@ -450,8 +450,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="131" datefrom="20131001" dateto="" group="1" availbalance="150"
 
-    tariffname_ruk="Maxi Year"
-    tariffname_rut="Maxi Year"
+
+    tariffname_ru="Maxi Year"
     tariffname_uz="Maxi Year"
     tariffname_en="Maxi Year"
     tariffname_scg="Maxi Year"
@@ -466,8 +466,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="132" datefrom="20131001" dateto="" group="1" availbalance="1000"
 
-    tariffname_ruk="Абсолют Year"
-    tariffname_rut="Absolut Year"
+
+    tariffname_ru="Absolut Year"
     tariffname_uz="Absolut Year"
     tariffname_en="Absolute Year"
     tariffname_scg="Absolute Year"
@@ -478,8 +478,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="133" datefrom="20131001" dateto="" group="1" availbalance="250"
 
-    tariffname_ruk="Ultra Year"
-    tariffname_rut="Ultra Year"
+
+    tariffname_ru="Ultra Year"
     tariffname_uz="Ultra Year"
     tariffname_en="Ultra Year"
     tariffname_scg="Ultra Year"
@@ -494,8 +494,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="134" datefrom="20131001" dateto="" group="1"
  
-    tariffname_ruk="Partner APN"
-    tariffname_rut="Partner APN"
+
+    tariffname_ru="Partner APN"
     tariffname_uz="Partner APN"
     tariffname_en="Partner APN"
     tariffname_scg="Partner APN"
@@ -505,8 +505,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="135" datefrom="20131001" dateto="20131001" group="1" availbalance="8"
  
-    tariffname_ruk="Super Optima"
-    tariffname_rut="Super Optima"
+
+    tariffname_ru="Super Optima"
     tariffname_uz="Super Optima"
     tariffname_en="Super Optima"
     tariffname_scg="Super Optima"
@@ -522,8 +522,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="136" datefrom="20131001" dateto="" group="1"
  
-    tariffname_ruk="GlobUz"
-    tariffname_rut="GlobUz"
+
+    tariffname_ru="GlobUz"
     tariffname_uz="GlobUz"
     tariffname_en="GlobUz"
     tariffname_scg="GlobUz"
@@ -532,8 +532,8 @@ tplist               - Компонент выполняет проверки п
 
   </Tariff>
   <Tariff ivrcode="137" datefrom="20131001" dateto="20131001" group="1"
-    tariffname_ruk="Connect"
-    tariffname_rut="Connect "
+
+    tariffname_ru="Connect "
     tariffname_uz="Connect"
     tariffname_en="Connect"
     tariffname_scg="Connect"
@@ -549,8 +549,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="140" datefrom="20131001" dateto="" group="1"
  
-    tariffname_ruk="Universal"
-    tariffname_rut="Universal"
+
+    tariffname_ru="Universal"
     tariffname_uz="Universal"
     tariffname_en="Universal"
     tariffname_scg="Universal"
@@ -562,8 +562,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="141" datefrom="20131001" dateto="" group="1" availbalance="0"
  
-    tariffname_ruk="M2M"
-    tariffname_rut="M2M"
+
+    tariffname_ru="M2M"
     tariffname_uz="M2M"
     tariffname_en="M2M"
     tariffname_scg="M2M"
@@ -572,8 +572,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="142" datefrom="20131001" dateto="" group="1" availbalance="3.05"
  
-    tariffname_ruk="Besh"
-    tariffname_rut="Besh"
+
+    tariffname_ru="Besh"
     tariffname_uz="Besh"
     tariffname_en="Besh"
     tariffname_scg="Besh"
@@ -584,8 +584,8 @@ tplist               - Компонент выполняет проверки п
     <ivrcon value="142"/>
   </Tariff>
   <Tariff ivrcode="143" datefrom="20131001" dateto="" group="1" availbalance="3.20"
-    tariffname_ruk="Baraka"
-    tariffname_rut="Baraka "
+
+    tariffname_ru="Baraka "
     tariffname_uz="Baraka"
     tariffname_en="Baraka"
     tariffname_scg="Baraka"
@@ -600,8 +600,8 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*2*1*10*1"/-->
   </Tariff>
   <Tariff ivrcode="144" datefrom="20131001" dateto="" group="1" availbalance="10"
-    tariffname_ruk="777"
-    tariffname_rut="777 "
+
+    tariffname_ru="777 "
     tariffname_uz="777"
     tariffname_en="777"
     tariffname_scg="777"
@@ -616,8 +616,8 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*2*1*11*1"/-->
   </Tariff>
   <Tariff ivrcode="147" datefrom="20131001" dateto="" group="1" availbalance="35"
-    tariffname_ruk="Perfect"
-    tariffname_rut="Perfect "
+
+    tariffname_ru="Perfect "
     tariffname_uz="Perfect"
     tariffname_en="Perfect"
     tariffname_scg="Perfect"
@@ -633,8 +633,8 @@ tplist               - Компонент выполняет проверки п
 
   </Tariff>
   <Tariff ivrcode="148" datefrom="20131001" dateto="" group="1" availbalance="0"
-    tariffname_ruk="Corporate Perfect"
-    tariffname_rut="Corporate Perfect "
+
+    tariffname_ru="Corporate Perfect "
     tariffname_uz="Corporate Perfect"
     tariffname_en="Corporate Perfect"
     tariffname_scg="Corporate Perfect"
@@ -646,8 +646,8 @@ tplist               - Компонент выполняет проверки п
 
   </Tariff>
   <Tariff ivrcode="149" datefrom="20131001" dateto="" group="1" availbalance="0"
-    tariffname_ruk="DGU"
-    tariffname_rut="DGU "
+
+    tariffname_ru="DGU "
     tariffname_uz="DGU"
     tariffname_en="DGU"
     tariffname_scg="DGU"
@@ -659,8 +659,8 @@ tplist               - Компонент выполняет проверки п
 
   </Tariff>
   <Tariff ivrcode="150" datefrom="20131001" dateto="" group="1" availbalance="0"
-    tariffname_ruk="Corporate 777"
-    tariffname_rut="Corporate 777 "
+
+    tariffname_ru="Corporate 777 "
     tariffname_uz="Corporate 777"
     tariffname_en="Corporate 777"
     tariffname_scg="Corporate 777"
@@ -671,8 +671,8 @@ tplist               - Компонент выполняет проверки п
     <ivrcon value="150"/>
   </Tariff>
   <Tariff ivrcode="151" datefrom="20131001" dateto="" group="1" availbalance="8"
-    tariffname_ruk="555"
-    tariffname_rut="555 "
+
+    tariffname_ru="555 "
     tariffname_uz="555"
     tariffname_en="555"
     tariffname_scg="555"
@@ -688,8 +688,8 @@ tplist               - Компонент выполняет проверки п
 
   </Tariff>
   <Tariff ivrcode="153" datefrom="20131001" dateto="" group="1" availbalance="6"
-    tariffname_ruk="Optima 333"
-    tariffname_rut="Optima 333"
+
+    tariffname_ru="Optima 333"
     tariffname_uz="Optima 333"
     tariffname_en="Optima 333"
     tariffname_scg="Optima 333"
@@ -704,8 +704,8 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*2*1*7*1"/-->
   </Tariff>
   <Tariff ivrcode="154" datefrom="20131001" dateto="" group="1" availbalance="3"
-    tariffname_ruk="Terminal"
-    tariffname_rut="Terminal "
+
+    tariffname_ru="Terminal "
     tariffname_uz="Terminal"
     tariffname_en="Terminal"
     tariffname_scg="Terminal"
@@ -721,8 +721,8 @@ tplist               - Компонент выполняет проверки п
 
   </Tariff>
   <Tariff ivrcode="155" datefrom="20131001" dateto="" group="1" availbalance="0"
-    tariffname_ruk="Corporate Ultra"
-    tariffname_rut="Corporate Ultra"
+
+    tariffname_ru="Corporate Ultra"
     tariffname_uz="Corporate Ultra"
     tariffname_en="Corporate Ultra"
     tariffname_scg="Corporate Ultra"
@@ -734,8 +734,8 @@ tplist               - Компонент выполняет проверки п
 
   </Tariff>
   <Tariff ivrcode="156" datefrom="20131001" dateto="" group="1" availbalance="4"
-    tariffname_ruk="Gap Bor!"
-    tariffname_rut="Gap Bor!"
+
+    tariffname_ru="Gap Bor!"
     tariffname_uz="Gap Bor!"
     tariffname_en="Gap Bor!"
     tariffname_scg="Gap Bor!"
@@ -752,8 +752,8 @@ tplist               - Компонент выполняет проверки п
 
   </Tariff>
   <Tariff ivrcode="157" datefrom="20131001" dateto="" group="1" availbalance="100"
-    tariffname_ruk="777 Year"
-    tariffname_rut="777 Year"
+
+    tariffname_ru="777 Year"
     tariffname_uz="777 Year"
     tariffname_en="777 Year"
     tariffname_scg="777 Year"
@@ -768,8 +768,8 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*2*1*14*1"/>
   </Tariff>
   <Tariff ivrcode="158" datefrom="20131001" dateto="" group="1" availbalance="12"
-    tariffname_ruk="Connect"
-    tariffname_rut="Connect "
+
+    tariffname_ru="Connect "
     tariffname_uz="Connect"
     tariffname_en="Connect"
     tariffname_scg="Connect"
@@ -785,8 +785,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="159" datefrom="20131001" dateto="" group="1" availbalance="2.04"
  
-    tariffname_ruk="Ajoyib"
-    tariffname_rut="Ajoyib"
+
+    tariffname_ru="Ajoyib"
     tariffname_uz="Ajoyib"
     tariffname_en="Ajoyib"
     tariffname_scg="Ajoyib"
@@ -800,8 +800,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="162" datefrom="20131001" dateto="" group="1"
  
-    tariffname_ruk="Uzbekistan Pass Lite"
-    tariffname_rut="Uzbekistan Pass Lite"
+
+    tariffname_ru="Uzbekistan Pass Lite"
     tariffname_uz="Uzbekistan Pass Lite"
     tariffname_en="Uzbekistan Pass Lite"
     tariffname_scg="Uzbekistan Pass Lite"
@@ -813,8 +813,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="163" datefrom="20131001" dateto="" group="1"
  
-    tariffname_ruk="Uzbekistan Pass"
-    tariffname_rut="Uzbekistan Pass"
+
+    tariffname_ru="Uzbekistan Pass"
     tariffname_uz="Uzbekistan Pass"
     tariffname_en="Uzbekistan Pass"
     tariffname_scg="Uzbekistan Pass"
@@ -826,8 +826,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="164" datefrom="20131001" dateto="" group="1" availbalance="7.84"
  
-    tariffname_ruk="Optimalniy"
-    tariffname_rut="Optimalniy"
+
+    tariffname_ru="Optimalniy"
     tariffname_uz="Optimal"
     tariffname_en="Optimal"
     tariffname_scg="Optimal"
@@ -844,8 +844,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="165" datefrom="20131001" dateto="" group="1" availbalance="7.84"
  
-    tariffname_ruk="Optimalniy+"
-    tariffname_rut="Optimalniy+"
+
+    tariffname_ru="Optimalniy+"
     tariffname_uz="Optimal+"
     tariffname_en="Optimal+"
     tariffname_scg="Optimal+"
@@ -862,8 +862,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="166" datefrom="20131001" dateto="" group="1" availbalance="4.99"
  
-    tariffname_ruk="Bazoviy"
-    tariffname_rut="Bazoviy"
+
+    tariffname_ru="Bazoviy"
     tariffname_uz="Asosiy"
     tariffname_en="Bazoviy"
     tariffname_scg="Bazoviy"
@@ -880,8 +880,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="167" datefrom="20131001" dateto="" group="1" availbalance="5.94"
  
-    tariffname_ruk="Standartniy"
-    tariffname_rut="Standartniy"
+
+    tariffname_ru="Standartniy"
     tariffname_uz="Standart"
     tariffname_en="Standart"
     tariffname_scg="Standart"
@@ -898,8 +898,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="168" datefrom="20131001" dateto="" group="1" availbalance="9.97"
  
-    tariffname_ruk="Udobniy"
-    tariffname_rut="Udobniy"
+
+    tariffname_ru="Udobniy"
     tariffname_uz="Qulay"
     tariffname_en="Udobniy"
     tariffname_scg="Udobniy"
@@ -916,8 +916,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="169" datefrom="20131001" dateto="" group="1" availbalance="9.97"
  
-    tariffname_ruk="Udobniy+"
-    tariffname_rut="Udobniy+"
+
+    tariffname_ru="Udobniy+"
     tariffname_uz="Qulay+"
     tariffname_en="Udobniy+"
     tariffname_scg="Udobniy+"
@@ -934,8 +934,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="170" datefrom="20131001" dateto="" group="1" availbalance="14.96"
  
-    tariffname_ruk="Premialniy"
-    tariffname_rut="Premialniy"
+
+    tariffname_ru="Premialniy"
     tariffname_uz="Premial"
     tariffname_en="Premial"
     tariffname_scg="Premialniy"
@@ -952,8 +952,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="171" datefrom="20131001" dateto="" group="1" availbalance="24.94"
  
-    tariffname_ruk="Idealniy"
-    tariffname_rut="Idealniy"
+
+    tariffname_ru="Idealniy"
     tariffname_uz="Ideal"
     tariffname_en="Ideal"
     tariffname_scg="Idealniy"
@@ -970,8 +970,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="172" datefrom="20131001" dateto="" group="1" availbalance="34.91"
  
-    tariffname_ruk="VIP"
-    tariffname_rut="VIP"
+
+    tariffname_ru="VIP"
     tariffname_uz="VIP"
     tariffname_en="VIP"
     tariffname_scg="VIP"
@@ -988,8 +988,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="173" datefrom="20131001" dateto="" group="1" availbalance="149.63"
  
-    tariffname_ruk="Premialniy Godovoy"
-    tariffname_rut="Premialniy Godovoy"
+
+    tariffname_ru="Premialniy Godovoy"
     tariffname_uz="Premial Yillik"
     tariffname_en="Premial Year"
     tariffname_scg="Premialniy Godovoy"
@@ -1006,8 +1006,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="174" datefrom="20131001" dateto="" group="1" availbalance="249.38"
  
-    tariffname_ruk="Idealniy Godovoy"
-    tariffname_rut="Idealniy Godovoy"
+
+    tariffname_ru="Idealniy Godovoy"
     tariffname_uz="Ideal Yillik"
     tariffname_en="Ideal Year"
     tariffname_scg="Idealniy Godovoy"
@@ -1022,8 +1022,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="175" datefrom="20131001" dateto="" group="1" availbalance="349.13"
  
-    tariffname_ruk="VIP Godovoy"
-    tariffname_rut="VIP Godovoy"
+
+    tariffname_ru="VIP Godovoy"
     tariffname_uz="VIP Yillik"
     tariffname_en="VIP Year"
     tariffname_scg="VIP Godovoy"
@@ -1040,8 +1040,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="176" datefrom="20131001" dateto="" group="1" availbalance="99.75"
  
-    tariffname_ruk="Udobniy Godovoy"
-    tariffname_rut="Udobniy Godovoy"
+
+    tariffname_ru="Udobniy Godovoy"
     tariffname_uz="Qulay Yillik"
     tariffname_en="Udobniy Godovoy"
     tariffname_scg="Udobniy Godovoy"
@@ -1058,8 +1058,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="177" datefrom="20131001" dateto="" group="1" availbalance="99.75"
  
-    tariffname_ruk="Udobniy Godovoy+"
-    tariffname_rut="Udobniy Godovoy+"
+
+    tariffname_ru="Udobniy Godovoy+"
     tariffname_uz="Qulay Yillik+ "
     tariffname_en="Udobniy Godovoy+"
     tariffname_scg="Udobniy Godovoy+"
@@ -1076,8 +1076,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="178" datefrom="20131001" dateto="" group="1" availbalance="9.5"
  
-    tariffname_ruk="Chilla"
-    tariffname_rut="Chilla"
+
+    tariffname_ru="Chilla"
     tariffname_uz="Chilla"
     tariffname_en="Chilla"
     tariffname_scg="Chilla"
@@ -1094,8 +1094,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="179" datefrom="20131001" dateto="" group="1"
  
-    tariffname_ruk="Specsvyaz"
-    tariffname_rut="Specsvyaz"
+
+    tariffname_ru="Specsvyaz"
     tariffname_uz="Specsvyaz"
     tariffname_en="Specsvyaz"
     tariffname_scg="Specsvyaz"
@@ -1108,8 +1108,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="180" datefrom="20131001" dateto="" group="1" availbalance="2.37"
  
-    tariffname_ruk="Kontragent arenda"
-    tariffname_rut="Kontragent arenda"
+
+    tariffname_ru="Kontragent arenda"
     tariffname_uz="Kontragent arenda"
     tariffname_en="Kontragent arenda"
     tariffname_scg="Kontragent arenda"
@@ -1126,8 +1126,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="181" datefrom="20131001" dateto="" group="1" availbalance="18.53"
  
-    tariffname_ruk="Eksklyuziv"
-    tariffname_rut="Eksklyuziv"
+
+    tariffname_ru="Eksklyuziv"
     tariffname_uz="Eksklyuziv"
     tariffname_en="Exclusive"
     tariffname_scg="Eksklyuziv"
@@ -1140,8 +1140,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="182" datefrom="20131001" dateto="" group="1"
  
-    tariffname_ruk="Xizmat 1"
-    tariffname_rut="Xizmat 1"
+
+    tariffname_ru="Xizmat 1"
     tariffname_uz="Xizmat 1"
     tariffname_en="Xizmat 1"
     tariffname_scg="Xizmat 1"
@@ -1154,8 +1154,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="183" datefrom="20131001" dateto="" group="1"
  
-    tariffname_ruk="Xizmat 2"
-    tariffname_rut="Xizmat 2"
+
+    tariffname_ru="Xizmat 2"
     tariffname_uz="Xizmat 2"
     tariffname_en="Xizmat 2"
     tariffname_scg="Xizmat 2"
@@ -1168,8 +1168,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="184" datefrom="20131001" dateto="" group="1"
  
-    tariffname_ruk="Xizmat 3"
-    tariffname_rut="Xizmat 3"
+
+    tariffname_ru="Xizmat 3"
     tariffname_uz="Xizmat 3"
     tariffname_en="Xizmat 3"
     tariffname_scg="Xizmat 3"
@@ -1182,8 +1182,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="185" datefrom="20131001" dateto="" group="1" availbalance="4.75"
  
-    tariffname_ruk="Chilla Lite"
-    tariffname_rut="Chilla Lite"
+
+    tariffname_ru="Chilla Lite"
     tariffname_uz="Chilla Lite"
     tariffname_en="Chilla Lite"
     tariffname_scg="Chilla Lite"
@@ -1198,8 +1198,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="186" datefrom="20131001" dateto="" group="1" availbalance="7.13"
  
-    tariffname_ruk="Afrosiyob"
-    tariffname_rut="Afrosiyob"
+
+    tariffname_ru="Afrosiyob"
     tariffname_uz="Afrosiyob"
     tariffname_en="Afrosiyob"
     tariffname_scg="Afrosiyob"
@@ -1214,8 +1214,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="187" datefrom="20131001" dateto="" group="1" availbalance="5.94"
  
-    tariffname_ruk="Lokomotiv"
-    tariffname_rut="Lokomotiv"
+
+    tariffname_ru="Lokomotiv"
     tariffname_uz="Lokomotiv"
     tariffname_en="Lokomotiv"
     tariffname_scg="Lokomotiv"
@@ -1230,8 +1230,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="188" datefrom="20131001" dateto="" group="1" availbalance="14.25"
  
-    tariffname_ruk="Yorqin"
-    tariffname_rut="Yorqin"
+
+    tariffname_ru="Yorqin"
     tariffname_uz="Yorqin"
     tariffname_en="Yorqin"
     tariffname_scg="Yorqin"
@@ -1246,8 +1246,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="189" datefrom="20131001" dateto="" group="1" availbalance="2.38"
  
-    tariffname_ruk="Oson"
-    tariffname_rut="Oson"
+
+    tariffname_ru="Oson"
     tariffname_uz="Oson"
     tariffname_en="Oson"
     tariffname_scg="Oson"
@@ -1260,8 +1260,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="190" datefrom="20131001" dateto="" group="1" availbalance="142.51"
  
-    tariffname_ruk="Yorqin Yillik"
-    tariffname_rut="Yorqin Yillik"
+
+    tariffname_ru="Yorqin Yillik"
     tariffname_uz="Yorqin Yillik"
     tariffname_en="Yorqin Yillik"
     tariffname_scg="Yorqin Yillik"
@@ -1273,8 +1273,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="191" datefrom="20131001" dateto="" group="1" availbalance="4.75"
  
-    tariffname_ruk="Shodlik"
-    tariffname_rut="Shodlik"
+
+    tariffname_ru="Shodlik"
     tariffname_uz="Shodlik"
     tariffname_en="Shodlik"
     tariffname_scg="Shodlik"
@@ -1289,8 +1289,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="192" datefrom="20131001" dateto="" group="1" availbalance="28.50"
  
-    tariffname_ruk="Terminal Yillik"
-    tariffname_rut="Terminal Yillik"
+
+    tariffname_ru="Terminal Yillik"
     tariffname_uz="Terminal Yillik"
     tariffname_en="Terminal Yillik"
     tariffname_scg="Terminal Yillik"
@@ -1305,8 +1305,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="193" datefrom="20131001" dateto="" group="1" availbalance="3.8"
  
-    tariffname_ruk="O^qituvchi 1"
-    tariffname_rut="O^qituvchi 1"
+
+    tariffname_ru="O^qituvchi 1"
     tariffname_uz="O^qituvchi 1"
     tariffname_en="O^qituvchi 1"
     tariffname_scg="O^qituvchi 1"
@@ -1321,8 +1321,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="194" datefrom="20131001" dateto="" group="1" availbalance="7.13"
  
-    tariffname_ruk="O^qituvchi 2"
-    tariffname_rut="O^qituvchi 2"
+
+    tariffname_ru="O^qituvchi 2"
     tariffname_uz="O^qituvchi 2"
     tariffname_en="O^qituvchi 2"
     tariffname_scg="O^qituvchi 2"
@@ -1337,8 +1337,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="196" datefrom="20131001" dateto="" group="1"
  
-    tariffname_ruk="Xizmat 4"
-    tariffname_rut="Xizmat 4"
+
+    tariffname_ru="Xizmat 4"
     tariffname_uz="Xizmat 4"
     tariffname_en="Xizmat 4"
     tariffname_scg="Xizmat 4"
@@ -1351,8 +1351,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="197" datefrom="20131001" dateto="" group="1"
  
-    tariffname_ruk="Xizmat 5"
-    tariffname_rut="Xizmat 5"
+
+    tariffname_ru="Xizmat 5"
     tariffname_uz="Xizmat 5"
     tariffname_en="Xizmat 5"
     tariffname_scg="Xizmat 5"
@@ -1365,8 +1365,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="199" datefrom="20131001" dateto="" group="1" availbalance="3.85"
  
-    tariffname_ruk="Omad"
-    tariffname_rut="Omad"
+
+    tariffname_ru="Omad"
     tariffname_uz="Omad"
     tariffname_en="Omad"
     tariffname_scg="Omad"
@@ -1381,8 +1381,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="202" datefrom="20131001" dateto="" group="1" availbalance="9.98"
  
-    tariffname_ruk="Uzbekistan Pass+"
-    tariffname_rut="Uzbekistan Pass+"
+
+    tariffname_ru="Uzbekistan Pass+"
     tariffname_uz="Uzbekistan Pass+"
     tariffname_en="Uzbekistan Pass+"
     tariffname_scg="Uzbekistan Pass+"
@@ -1394,8 +1394,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="203" datefrom="20131001" dateto="" group="1" availbalance="4.99"
  
-    tariffname_ruk="Uzbekistan Pass Lite+"
-    tariffname_rut="Uzbekistan Pass Lite+"
+
+    tariffname_ru="Uzbekistan Pass Lite+"
     tariffname_uz="Uzbekistan Pass Lite+"
     tariffname_en="Uzbekistan Pass Lite+"
     tariffname_scg="Uzbekistan Pass Lite+"
@@ -1407,8 +1407,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="205" datefrom="20131001" dateto="" group="1" availbalance="16.63"
  
-    tariffname_ruk="MOBI 70"
-    tariffname_rut="MOBI 70"
+
+    tariffname_ru="MOBI 70"
     tariffname_uz="MOBI 70"
     tariffname_en="MOBI 70"
     tariffname_scg="MOBI 70"
@@ -1420,8 +1420,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="206" datefrom="20131001" dateto="" group="1" availbalance="26.13"
  
-    tariffname_ruk="MOBI 100"
-    tariffname_rut="MOBI 100"
+
+    tariffname_ru="MOBI 100"
     tariffname_uz="MOBI 100"
     tariffname_en="MOBI 100"
     tariffname_scg="MOBI 100"
@@ -1433,8 +1433,8 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="207" datefrom="20131001" dateto="" group="1" availbalance="35.63"
  
-    tariffname_ruk="MOBI 150"
-    tariffname_rut="MOBI 150"
+
+    tariffname_ru="MOBI 150"
     tariffname_uz="MOBI 150"
     tariffname_en="MOBI 150"
     tariffname_scg="MOBI 150"

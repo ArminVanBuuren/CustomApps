@@ -41,8 +41,11 @@
   </template>
   <template procedureName="SetCallForwarding" sessionStorage="Memory" sessionLifetime="30" persistent="true">
     <receiveTemplate>
-      <Message type="getlanguage" process="dispatcher" initiator="ussd" id="@{newGuid}" session_id="@{setSessionId(SetCallForwarding_${customer})}">
-        <Item customer="${customera}" />
+      <Message type="verificationrequest" initiator="ussd" id="@{newGuid}" session_id="@{setSessionId(SetCallForwarding_${customer})}">
+        <Item customer="${customera}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="0" />
+        </Item>
         @{store(sCustomerA,${customera})}
         @{store(sCustomerB,${customerb})}
         @{store(sAction,${action})}

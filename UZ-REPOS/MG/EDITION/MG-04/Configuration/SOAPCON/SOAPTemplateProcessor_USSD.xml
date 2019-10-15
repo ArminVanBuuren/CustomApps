@@ -7,7 +7,7 @@
     <define name="_DBCON" value="DBCON_04_01" />
     <!-- ==========================  REDIRECT CONNECTORS   ========================= -->
     <!-- ==========================  SOAP SPECIAL   ========================= -->
-    <define name="_GET_MOD_LANGUAGE" value="#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[_EXIST_MODULE/@value='${lang}']/@param}" />
+    <define name="_GET_MOD_LANGUAGE" value="#{document('_ALLSERVICE_PATH')/ServiceList/Language/Item[_EXIST_MODULE/@value='${lang}']/@param}" />
     <!-- ==========================  SOAP SPECIAL   ========================= -->
     <!-- ==========================  SERVICE PROVISIONING  ========================= -->
     <define name="_GET_SERVICE_RESULT" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@info_${sDbresult}__GET_LANG}'='','#{if('#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@info_${sDbresult}__GET_LANG}'='','_GET_DBRESULT','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@info_${sDbresult}__GET_LANG}')}','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@info_${sDbresult}__GET_LANG}')}" />
@@ -98,9 +98,9 @@
     <define name="_GET_DBRESULT" value="#{document('_DICTIONARY_PATH')/Dictionary/Item[code/@value='${sDbresult}']/@info__GET_LANG}" />
     <define name="_GET_LENGTH_DBRESULT" value="#{string-length(document('_DICTIONARY_PATH')/Dictionary/Item[code/@value='${sDbresult}']/@info__GET_LANG)}" />
     <define name="_GET_AFTER_VERIFY_DBRESULT" value="#{if('#{document('_DICTIONARY_PATH')/Dictionary/Item[code/@value='${customerblocks}']/@info__GET_LANG}'!='','${customerblocks}','${dbresult}')}" />
-    <define name="_ENCODING" value="#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@param='_GET_LANG']/@encoding}" />
-    <define name="_INLANGUAGE" value="#{if('#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@scp='${inlang}' and @ussd='${smsussdlang}']/@param}'='','#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@scp='' and @ussd='']/@param}','#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@scp='${inlang}' and @ussd='${smsussdlang}']/@param}')}" />
-    <define name="_GET_LANG" value="#{if('${sLang}'='','#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@scp='' and @ussd='']/@param}','${sLang}')}" />
+    <define name="_ENCODING" value="#{document('_ALLSERVICE_PATH')/ServiceList/Language/Item[@param='_GET_LANG']/@encoding}" />
+    <define name="_INLANGUAGE" value="#{if('#{document('_ALLSERVICE_PATH')/ServiceList/Language/Item[@language_id='${language_id}']/@param}'='','#{document('_ALLSERVICE_PATH')/ServiceList/Language/Item[@language_id='']/@param}','#{document('_ALLSERVICE_PATH')/ServiceList/Language/Item[@language_id='${language_id}']/@param}')}" />
+    <define name="_GET_LANG" value="#{if('${sLang}'='','#{document('_ALLSERVICE_PATH')/ServiceList/Language/Item[@language_id='']/@param}','${sLang}')}" />
     <define name="_DEFAULT_ERR" value="#{if('${dbresult}'='-1','err001','${dbresult}')}" />
     <define name="_REDIRECT_TO_SMS" value="^[Ss][Mm][Ss]$" />
     <define name="_REDIRECT_TO_CURRENT" value="^[Nn][Oo][Tt][Rr][Ee][Dd][Ii][Rr][Ee][Cc][Tt]$" />
@@ -119,8 +119,7 @@
   </macros>
   <template procedureName="ServiceProvisioning" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="getlanguage" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(USSDSrvProv_${customer})}">
-        <Item customer="${customer}" />
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(USSDSrvProv_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
         @{store(sCustomer,${customer})}
         @{store(sAction,${action})}
         @{store(sService,${service})}
@@ -207,8 +206,7 @@
   </template>
   <template procedureName="ServiceProvisioningWithCodes" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="getlanguage" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(USSDSrvProv_${customer})}">
-        <Item customer="${customer}" />
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(USSDSrvProv_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
         @{store(sCustomer,${customer})}
         @{store(sAction,${action})}
         @{store(sService,${service})}
@@ -627,8 +625,7 @@
   </template>
   <template procedureName="ServiceInterrogation" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="getlanguage" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(USSDSrvInter_${customer})}">
-        <Item customer="${customer}" />
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(USSDSrvInter_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
         @{store(sCustomer,${customer})}
         @{store(sService,${service})}
         @{store(sServiceCode,_SERVICE_CODE)}
@@ -958,8 +955,7 @@
   </template>
   <template procedureName="ChangeTariffPlan" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="getlanguage" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(USSDChangeTP_${customer})}">
-        <Item customer="${customer}" />
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(USSDChangeTP_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
         @{store(sCustomer,${customer})}
         @{store(sNewTariffPlan,${newtariffplan})}
         @{store(sModule,_CURRENT_MODULE)}
@@ -1209,8 +1205,7 @@
   </template>
   <template procedureName="CheckTariffPlan" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="getlanguage" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(USSDChckTP_${customer})}">
-        <Item customer="${customer}" />
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(USSDChckTP_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
         @{store(sCustomer,${customer})}
         @{store(sModule,_CURRENT_MODULE)}
       </Message>
@@ -1263,8 +1258,7 @@
   </template>
   <template procedureName="CheckTariffPlanCode" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="getlanguage" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(USSDChckTP_${customer})}">
-        <Item customer="${customer}" />
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(USSDChckTP_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
         @{store(sCustomer,${customer})}
         @{store(sModule,_CURRENT_MODULE)}
       </Message>
@@ -1371,8 +1365,7 @@
   </template>
   <template procedureName="PtPMoneyTransfer" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="getlanguage" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(PTP_${customer})}">
-        <Item customer="${customer}" />
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(PTP_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
         @{store(sCustomer,${customer})}
         @{store(sAmount,${amount})}
         @{store(sReceiver,${receiver})}
@@ -1529,8 +1522,7 @@
   </template>
   <template procedureName="ChangePasswordISSA" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="getlanguage" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(ChngISSAPass_${customer})}">
-        <Item customer="${customer}" />
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(ChngISSAPass_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
         @{store(sCustomer,${customer})}
         @{store(sNewpassword,${newpassword})}
         @{store(sService,_ISSAPASS)}
@@ -1633,8 +1625,7 @@
   </template>
   <template procedureName="FavouriteNumberCheck" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="getlanguage" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(ChkFav_${customer})}">
-        <Item customer="${customer}" />
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(ChkFav_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
         @{store(sCustomer,${customer})}
         @{store(sService,_CHKFAVNUM)}
         @{store(sModule,_CURRENT_MODULE)}
@@ -1706,8 +1697,7 @@
   </template>
   <template procedureName="FavouriteNumberUpdate" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="getlanguage" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(UpdFav_${customer})}">
-        <Item customer="${customer}" />
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(UpdFav_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
         @{store(sCustomer,${customer})}
         @{store(sService,_UPDFAVNUM)}
         @{store(sFavNum,${favnum})}
@@ -1778,8 +1768,7 @@
   </template>
   <template procedureName="FavouriteNumberDelete" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="getlanguage" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(DelFav_${customer})}">
-        <Item customer="${customer}" />
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(DelFav_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
         @{store(sCustomer,${customer})}
         @{store(sService,_DELFAVNUM)}
         @{store(sFavNum,${favnum})}
@@ -1848,8 +1837,7 @@
   </template>
   <template procedureName="ChangeLanguageINPlatform" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="getlanguage" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(ChngINLang_${customer})}">
-        <Item customer="${customer}" />
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(ChngINLang_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
         @{store(sCustomer,${customer})}
         @{store(sLang,_GET_MOD_LANGUAGE)}
         @{store(sService,_LANGUAGE)}
@@ -1919,8 +1907,8 @@
     <receiveTemplate>
       <Message type="setupservicerequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
         <Item customer="${sCustomer}">
-          <Attribute name="scplang" value="#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@param='_GET_LANG']/@scp}" />
-          <Attribute name="ussdlang" value="#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@param='_GET_LANG']/@ussd}" />
+          <Attribute name="scplang" value="#{document('_ALLSERVICE_PATH')/ServiceList/Language/Item[@param='_GET_LANG']/@scp}" />
+          <Attribute name="ussdlang" value="#{document('_ALLSERVICE_PATH')/ServiceList/Language/Item[@param='_GET_LANG']/@ussd}" />
           <Attribute name="inplatform" value="${sInPaltform}" />
         </Item>
       </Message>
@@ -1940,8 +1928,7 @@
   </template>
   <template procedureName="LatestPayments" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="getlanguage" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(LastPayment_${customer})}">
-        <Item customer="${customer}" />
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(LastPayment_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
         @{store(sCustomer,${customer})}
         @{store(sService,_GETLASTPAY)}
         @{store(sModule,_CURRENT_MODULE)}
@@ -2046,8 +2033,7 @@
   </template>
   <template procedureName="LastOutstandingPayment" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="getlanguage" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(LastOutPayment_${customer})}">
-        <Item customer="${customer}" />
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(LastOutPayment_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
         @{store(sCustomer,${customer})}
         @{store(sService,_GETOUTLASTPAY)}
         @{store(sModule,_CURRENT_MODULE)}
@@ -2152,8 +2138,7 @@
   </template>
   <template procedureName="GuaranteedPayment" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="getlanguage" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(GrntPay_${customer})}">
-        <Item customer="${customer}" />
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(GrntPay_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
         @{store(sCustomer,${customer})}
         @{store(sService,_GRNTPAY)}
         @{store(sModule,_CURRENT_MODULE)}
@@ -2291,8 +2276,7 @@
   </template>
   <template procedureName="CheckGuaranteedPayment" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="getlanguage" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(GrntPay_${customer})}">
-        <Item customer="${customer}" />
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(GrntPay_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
         @{store(sCustomer,${customer})}
         @{store(sService,_GRNTPAY_CHECK)}
         @{store(sModule,_CURRENT_MODULE)}
@@ -2356,8 +2340,7 @@
   </template>
   <template procedureName="DB_BMSBalanceRetriev" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="getlanguage" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(BMSBalance_${customer})}">
-        <Item customer="${customer}" />
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(BMSBalance_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
         @{store(sCustomer,${customer})}
         @{store(sService,_GETBMSBALANCE)}
         @{store(sModule,_CURRENT_MODULE)}
@@ -3663,8 +3646,7 @@
   </template>
   <template procedureName="GetCodePromoLTE" sessionStorage="Memory" sessionLifetime="20" persistent="true">
     <receiveTemplate>
-      <Message type="getlanguage" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(USSDChkSrv_${customer})}">
-        <Item customer="${customer}" />
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(USSDChkSrv_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
         @{store(sCustomer,${customer})}
         @{store(sService,_GETBALANCE)}
         @{store(sModule,_CURRENT_MODULE)}
@@ -3762,10 +3744,8 @@
   </template>
   <template procedureName="TestRequest" sessionStorage="Memory" sessionLifetime="20" persistent="false">
     <receiveTemplate>
-      <Message type="getlanguage" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(@{newGuid})}">
-        <Item customer="">
-          <Content value="${message}" />
-        </Item>
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(@{newGuid})}"><Item customer="">
+          <Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
         @{store(sTest,${message})}
         @{store(sModule,_CURRENT_MODULE)}
       </Message>
@@ -3793,8 +3773,7 @@
   </template>
   <template procedureName="ServiceProvisioningBonusCard" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="getlanguage" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(USSDSrvProvPromo_${customer})}">
-        <Item customer="${customer}" />
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(USSDSrvProvPromo_${customer})}"><Item customer="${customer}"><Attribute name="checkivrservice" value="0" /><Attribute name="checkblocks" value="0" /></Item>
         @{store(sCustomer,${customer})}
         @{store(sAction,2)}
         @{store(sService,FR300MBPR)}

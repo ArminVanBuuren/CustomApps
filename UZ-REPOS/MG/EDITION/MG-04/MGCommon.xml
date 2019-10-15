@@ -3,7 +3,6 @@
     <Database forisDataKey="MG" interfacePackage="API" />
     <Handler name="CRMCON_04_01" type="CRMCON" host="localhost" port="11100" sessionHandler="false" serviceName="FORIS.MG.CRMCON_04_01" config="Configuration\CRMCON\CRMCON_04_01.exe.xml" />
     <Handler name="WCFHND_04_01" type="WCFHND" host="localhost" port="11190" sessionHandler="false" serviceName="FORIS.MG.WCFHND_04_01" config="Configuration\WCFHND\WCFHND_04_01.exe.xml" />
-    
     <Connector name="DBCON_04_01" type="DBCON" host="localhost" port="11341" sessionHandler="false" serviceName="FORIS.MG.DBCON_04_01" config="Configuration\DBCON\DBCON_04_01.exe.xml" />
     <Connector name="SMSCON_04_01" type="SMSCON" host="localhost" port="11110" sessionHandler="false" serviceName="FORIS.MG.SMSCON_04_01" config="Configuration\SMSCON\SMSCON_04_01.exe.xml" />
     <Connector name="SOAPCON_USSD_04_01" type="SOAPCON" host="localhost" port="11120" sessionHandler="false" serviceName="FORIS.MG.SOAPCON_USSD_04_01" config="Configuration\SOAPCON\SOAPCON_USSD_04_01.exe.xml" />

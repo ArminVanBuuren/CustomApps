@@ -20,183 +20,183 @@ tplist               - Компонент выполняет проверки п
 <ServiceList>
   <Group  name="SERVICE" redirect="sms" check_block="true" timetoprogress="80"
 
-    info_service_active_ruk="Status uslugi &quot;[0]&quot; - aktivna"
-    info_service_active_rut="Status uslugi &quot;[0]&quot; - aktivna"
+
+    info_service_active_ru="Status uslugi &quot;[0]&quot; - aktivna"
     info_service_active_uz="&quot;[0]&quot; xizmati - yoqilgan"
     info_service_active_en="Service &quot;[0]&quot; status - active"
 
-    info_service_deactive_ruk="Status uslugi &quot;[0]&quot; - neaktivna"
-    info_service_deactive_rut="Status uslugi &quot;[0]&quot; - neaktivna"
+
+    info_service_deactive_ru="Status uslugi &quot;[0]&quot; - neaktivna"
     info_service_deactive_uz="&quot;[0]&quot; xizmati - yoqilmagan"
     info_service_deactive_en="Service &quot;[0]&quot; status - not active"
 
-    info_confirm_deactive_ruk="Usluga &quot;[0]&quot; ne ustanovlena. Dlya activacii uslugi &quot;[0]&quot; otprav^te 1"
-    info_confirm_deactive_rut="Usluga &quot;[0]&quot; ne ustanovlena. Dlya activacii uslugi &quot;[0]&quot; otprav^te 1"
+
+    info_confirm_deactive_ru="Usluga &quot;[0]&quot; ne ustanovlena. Dlya activacii uslugi &quot;[0]&quot; otprav^te 1"
     info_confirm_deactive_uz="Usluga &quot;[0]&quot; ne ustanovlena. Dlya activacii uslugi &quot;[0]&quot; otprav^te 1"
     info_confirm_deactive_en="Service &quot;[0]&quot; is not active. To activate the service &quot;[0]&quot; send 1"
 
-    info_confirm_active_ruk="Usluga &quot;[0]&quot; ustanovlena. Dlya deactivacii uslugi &quot;[0]&quot; otprav^te 2"
-    info_confirm_active_rut="Usluga &quot;[0]&quot; ustanovlena. Dlya deactivacii uslugi &quot;[0]&quot; otprav^te 2"
+
+    info_confirm_active_ru="Usluga &quot;[0]&quot; ustanovlena. Dlya deactivacii uslugi &quot;[0]&quot; otprav^te 2"
     info_confirm_active_uz="Usluga &quot;[0]&quot; ustanovlena. Dlya deactivacii uslugi &quot;[0]&quot; otprav^te 2"
     info_confirm_active_en="Service &quot;[0]&quot; is active. To deactivate the service &quot;[0]&quot; send 2"
 
-    info_success_active_ruk="Заказ на подключение услуги &quot;[0]&quot; принят."
-    info_success_active_rut="Zakaz na podklyuchenie uslugi &quot;[0]&quot; prinyat."
+
+    info_success_active_ru="Zakaz na podklyuchenie uslugi &quot;[0]&quot; prinyat."
     info_success_active_uz="&quot;[0]&quot; Xizmatga ulanish buyrug^i qabul qilindi."
     info_success_active_en="Request for service connection &quot;[0]&quot; is accepted."
 
-    info_success_deactive_ruk="Заказ на деактивацию услуги &quot;[0]&quot; принят."
-    info_success_deactive_rut="Zakaz na deaktivaciyu uslugi &quot;[0]&quot; prinyat."
+
+    info_success_deactive_ru="Zakaz na deaktivaciyu uslugi &quot;[0]&quot; prinyat."
     info_success_deactive_uz="&quot;[0]&quot; Xizmatni o^chirish buyrug^i qabul qilindi"
     info_success_deactive_en="Request for service deactivation &quot;[0]&quot; is accepted."
 
-    info_service_notavailable_ruk="Услуга &quot;[0]&quot; больше недоступна для подключения"
-    info_service_notavailable_rut="Usluga &quot;[0]&quot; bol^she nedostupna dlya podklyucheniya"
+
+    info_service_notavailable_ru="Usluga &quot;[0]&quot; bol^she nedostupna dlya podklyucheniya"
     info_service_notavailable_uz="Xizmat &quot;[0]&quot; boshqa ulanmaydi"
     info_service_notavailable_en="Service &quot;[0]&quot; is no longer available for connection"
 
-    info_service_unavailable_ruk="Услуга &quot;[0]&quot; будет доступна с [1]"
-    info_service_unavailable_rut="Usluga &quot;[0]&quot; budet dostupna s [1]"
+
+    info_service_unavailable_ru="Usluga &quot;[0]&quot; budet dostupna s [1]"
     info_service_unavailable_uz="&quot;[0]&quot; xizmati [1] dan ulanish mumkin"
     info_service_unavailable_en="Service  &quot;[0]&quot; will be available from [1]"
 
-    info_alrprogress_active_ruk="Activaciya uslugi &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
-    info_alrprogress_active_rut="Activaciya uslugi &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
+
+    info_alrprogress_active_ru="Activaciya uslugi &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
     info_alrprogress_active_uz="Xizmat aktivasiyasi&quot;[0]&quot; ishlov berish jarayonida. Kechroq murojaat qiling."
     info_alrprogress_active_en="Service activation &quot;[0]&quot; is on process.Refer later."
 
-    info_alrprogress_deactive_ruk="Udalenie uslugi &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
-    info_alrprogress_deactive_rut="Udalenie uslugi &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
+
+    info_alrprogress_deactive_ru="Udalenie uslugi &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
     info_alrprogress_deactive_uz="Xizmatni o^chirish &quot;[0]&quot; ishlov berish jarayonida. Kechroq murojaat qiling."
     info_alrprogress_deactive_en="Service deleting &quot;[0]&quot;is on process.Refer later."
 
-    info_inprogress_active_ruk="Predydushaya obrabotka nahoditsya v shage activacii uslugi &quot;[0]&quot;. Poprobuyte pozzhe."
-    info_inprogress_active_rut="Predydushaya obrabotka nahoditsya v shage activacii uslugi &quot;[0]&quot;. Poprobuyte pozzhe."
+
+    info_inprogress_active_ru="Predydushaya obrabotka nahoditsya v shage activacii uslugi &quot;[0]&quot;. Poprobuyte pozzhe."
     info_inprogress_active_uz="Xizmatni aktivasiyalashning &quot;[0]&quot; avvalgi ishlov berish jarayoni yakunlanmoqda. Kechroq qayta murojaat eting."
     info_inprogress_active_en="Previous processing is at the stage of service &quot;[0]&quot; activation.Try later."
 
-    info_inprogress_deactive_ruk="Predydushaya obrabotka nahoditsya v shage deactivacii uslugi &quot;[0]&quot;. Poprobuyte pozzhe."
-    info_inprogress_deactive_rut="Predydushaya obrabotka nahoditsya v shage deactivacii uslugi &quot;[0]&quot;. Poprobuyte pozzhe."
+
+    info_inprogress_deactive_ru="Predydushaya obrabotka nahoditsya v shage deactivacii uslugi &quot;[0]&quot;. Poprobuyte pozzhe."
     info_inprogress_deactive_uz="Xizmatni deaktivasiyalashning &quot;[0]&quot; avvalgi ishlov berish jarayoni yakunlanmoqda. Kechroq qayta murojaat eting."
     info_inprogress_deactive_en="Previous processing is at the stage of service &quot;[0]&quot; activation.Try later."
 
-    info_notavailbalance_ruk="Недостаточно средств на балансе для проведения операции."
-    info_notavailbalance_rut="Nedostatochno sredstv na balanse dlya provedeniya operacii."
+
+    info_notavailbalance_ru="Nedostatochno sredstv na balanse dlya provedeniya operacii."
     info_notavailbalance_uz="Operasiyani amalga oshirish ucnun xisobingizda etarli mablag^ yo^q"
     info_notavailbalance_en="Not enough assets on balance for making an operation."
 
-    info_inprogress_ruk="Operaciya ne mozhet byt^ vypolnena, poka ne zavershitsya predydush^aya."
-    info_inprogress_rut="Operaciya ne mozhet byt^ vypolnena, poka ne zavershitsya predydush^aya."
+
+    info_inprogress_ru="Operaciya ne mozhet byt^ vypolnena, poka ne zavershitsya predydush^aya."
     info_inprogress_uz="Operaciya ne mozhet byt^ vypolnena, poka ne zavershitsya predydush^aya."
     info_inprogress_en="Operation can not be made,until the previous one is committed."
 
-    info_320194_ruk="Услуга &quot;[0]&quot; ne predostavlyaetsya dlya Vashego tarifnogo plana"
-    info_320194_rut="Usluga &quot;[0]&quot; ne predostavlyaetsya dlya Vashego tarifnogo plana"
+
+    info_320194_ru="Usluga &quot;[0]&quot; ne predostavlyaetsya dlya Vashego tarifnogo plana"
     info_320194_uz="&quot;[0]&quot; xizmatidan foydalana olmaysiz."
     info_320194_en="Service &quot;[0]&quot; can not be perfored for Your tariff plan"
 
-    info_320204_ruk="Услуга &quot;[0]&quot; не доступна для Вашего тарифного плана"
-    info_320204_rut="Usluga &quot;[0]&quot; ne dostupna dlya Vashego tarifnogo plana"
+
+    info_320204_ru="Usluga &quot;[0]&quot; ne dostupna dlya Vashego tarifnogo plana"
     info_320204_uz="&quot;[0]&quot; xizmati sizning tarif rejangiz doirasiga kirmaydi"
     info_320204_en="Service &quot;[0]&quot; is unavailable for Your tariff plan"
 
-    info_320205_ruk="Услуга &quot;[0]&quot; уже установлена."
-    info_320205_rut="Usluga &quot;[0]&quot; uzhe ustanovlena."
+
+    info_320205_ru="Usluga &quot;[0]&quot; uzhe ustanovlena."
     info_320205_uz="&quot;[0]&quot; xizmati avval yoqilgan"
     info_320205_en="Service &quot;[0]&quot; is already activated."
 
-    info_320206_ruk="Услуга &quot;[0]&quot; не установлена."
-    info_320206_rut="Usluga &quot;[0]&quot; ne ustanovlena."
+
+    info_320206_ru="Usluga &quot;[0]&quot; ne ustanovlena."
     info_320206_uz="&quot;[0]&quot; xizmati yoqilmagan."
     info_320206_en="Service &quot;[0]&quot; is not active."
 
-    info_320208_ruk="Услуга &quot;[0]&quot; не доступна для Вас."
-    info_320208_rut="Usluga &quot;[0]&quot; ne dostupna dlya Vas."
+
+    info_320208_ru="Usluga &quot;[0]&quot; ne dostupna dlya Vas."
     info_320208_uz="&quot;[0]&quot; xizmati - imkonsiz."
     info_320208_en="Service &quot;[0]&quot; is not available to You."
 
-    info_rassrochka_ruk="Usluga &quot;Nomer v rassrochku&quot; kategorii [0] deystvuet do [1]"
-    info_rassrochka_rut="Usluga &quot;Nomer v rassrochku&quot; kategorii [0] deystvuet do [1]"
+
+    info_rassrochka_ru="Usluga &quot;Nomer v rassrochku&quot; kategorii [0] deystvuet do [1]"
     info_rassrochka_uz="[0] toifasidagi &quot;Raqam haqini bo^lib to^lash&quot; xizmati [1]gacha amal qiladi"
     info_rassrochka_en="Service &quot;Nomer v rassrochku&quot; of [0] class works till [1]"
 
-    info_lastpayment_ruk="Posledniy platyoj [1], na summu &quot;[0]&quot; sum"
-    info_lastpayment_rut="Posledniy platyoj [1], na summu &quot;[0]&quot; sum"
+
+    info_lastpayment_ru="Posledniy platyoj [1], na summu &quot;[0]&quot; sum"
     info_lastpayment_uz="Oxirgi to^lov [1], &quot;[0]&quot; so^mga to^ldirilgan"
     info_lastpayment_en="Last payment [1], for the amount of &quot;[0]&quot; sum"
 
-    info_330720_ruk="Platejey po nomeru ne bilo"
-    info_330720_rut="Platejey po nomeru ne bilo"
+
+    info_330720_ru="Platejey po nomeru ne bilo"
     info_330720_uz="To^lov amalga oshirilmagan"
     info_330720_en="Payment by number has not been made"
 
-    info_330721_ruk="Услуга &quot;Posledniy platyoj&quot; не доступна для Вас."
-    info_330721_rut="Usluga &quot;Posledniy platyoj&quot; ne dostupna dlya Vas."
+
+    info_330721_ru="Usluga &quot;Posledniy platyoj&quot; ne dostupna dlya Vas."
     info_330721_uz="&quot;Oxirgi to^lov&quot; xizmati mavjud emas."
     info_330721_en="Service &quot;Posledniy platyoj&quot;is not available for You."
     
-    info_330722_ruk="Услуга &quot;Обещанный платеж&quot; не доступна для Вас."
-    info_330722_rut="Usluga &quot;Obeschaniy platyoj&quot; ne dostupna dlya Vas."
+
+    info_330722_ru="Usluga &quot;Obeschaniy platyoj&quot; ne dostupna dlya Vas."
     info_330722_uz="&quot;Obeschaniy platyoj&quot; xizmati mavjud emas."
     info_330722_en="Service &quot;Obeschaniy platyoj&quot; is not available to You."
     
-    info_330723_ruk="Неверный номер абонента."
-    info_330723_rut="Neverniy nomer abonenta."
+
+    info_330723_ru="Neverniy nomer abonenta."
     info_330723_uz="Neverniy nomer abonenta."
     info_330723_en="Wrong user^s number."
     
-    info_330724_ruk="Ошибка сервера, обратитесь в службу поддержки UMS."
-    info_330724_rut="Oshibka servera, obratites v slujbu podderjki UMS."
+
+    info_330724_ru="Oshibka servera, obratites v slujbu podderjki UMS."
     info_330724_uz="Oshibka servera, obratites v slujbu podderjki UMS."
     info_330724_en="Server error, refer support service of UMS."
 
-    info_SUCCESS_ruk="Zayavka na obmen zaregistrirovana."
-    info_SUCCESS_rut="Zayavka na obmen zaregistrirovana."
+
+    info_SUCCESS_ru="Zayavka na obmen zaregistrirovana."
     info_SUCCESS_uz="Almashtirish uchun ariza qabul qilindi."
     info_SUCCESS_en="Request for exchange is registered."
 
-    info_BLOCKED_ruk="Vash nomer zablokirovan. Obmen nevozmozhen."
-    info_BLOCKED_rut="Vash nomer zablokirovan. Obmen nevozmozhen."
+
+    info_BLOCKED_ru="Vash nomer zablokirovan. Obmen nevozmozhen."
     info_BLOCKED_uz="Sizning raqamingiz bloklangan. Almashtirish amalga oshmaydi."
     info_BLOCKED_en="Your number is blocked. Exchange is impossible."
 
-    info_MOVECNTACTIVE_ruk="Obmen ne proizveden. Povtorite popytku pozzhe."
-    info_MOVECNTACTIVE_rut="Obmen ne proizveden. Povtorite popytku pozzhe."
+
+    info_MOVECNTACTIVE_ru="Obmen ne proizveden. Povtorite popytku pozzhe."
     info_MOVECNTACTIVE_uz="Almashtirish amalga oshmadi. Keyinroq urunib ko^ring."
     info_MOVECNTACTIVE_en="Exchange was unsuccessful. Please try again later."
 
-    info_CHNGTPACTIVE_ruk="Smena tarifnogo plana ne zakonchena. Povtorite popytku pozzhe."
-    info_CHNGTPACTIVE_rut="Smena tarifnogo plana ne zakonchena. Povtorite popytku pozzhe."
+
+    info_CHNGTPACTIVE_ru="Smena tarifnogo plana ne zakonchena. Povtorite popytku pozzhe."
     info_CHNGTPACTIVE_uz="Tarif rejani o^zgartirish yakuniga yetmadi. Keyinroq urunib ko^ring."
     info_CHNGTPACTIVE_en="Change of the tariff plan is not finished. Please try again later."
 
-    info_NOPACKAGE_ruk="V Vash tarifnyj plan ne vklyuchen paket. Obmen nevozmozhen."
-    info_NOPACKAGE_rut="V Vash tarifnyj plan ne vklyuchen paket. Obmen nevozmozhen."
+
+    info_NOPACKAGE_ru="V Vash tarifnyj plan ne vklyuchen paket. Obmen nevozmozhen."
     info_NOPACKAGE_uz="Tarif rejangizga to^plam kiritilmagan. Almshtirish amalga oshmaydi."
     info_NOPACKAGE_en="Package is not included in your tariff plan. Exchange is impossible."
 
-    info_LESS60MIN_ruk="Posle obmena ostanetsya menee odnoj minuty po tarifnomu planu. Obmen nevozmozhen."
-    info_LESS60MIN_rut="Posle obmena ostanetsya menee odnoj minuty po tarifnomu planu. Obmen nevozmozhen."
+
+    info_LESS60MIN_ru="Posle obmena ostanetsya menee odnoj minuty po tarifnomu planu. Obmen nevozmozhen."
     info_LESS60MIN_uz="Almashtirishdan so^ng tarif rejangiz bo^yicha 1 daqiqadan kam qoladi. Almashtirish amalga oshmaydi."
     info_LESS60MIN_en="After the exchange, there will be less than one minute for the tariff plan. Exchange is impossible."
 
-    info_TEMPUNAVAIL_ruk="Obmen nedostupen v dannyj moment. Povtorite popytku pozzhe."
-    info_TEMPUNAVAIL_rut="Obmen nedostupen v dannyj moment. Povtorite popytku pozzhe."
+
+    info_TEMPUNAVAIL_ru="Obmen nedostupen v dannyj moment. Povtorite popytku pozzhe."
     info_TEMPUNAVAIL_uz="Ushbu vaqtda almashtirish amalga oshmaydi. Keyinroq urunib ko^ring."
     info_TEMPUNAVAIL_en="The exchange is currently unavailable. Please try again later."
 
-    info_NOTPERSON_ruk="Obmen nedostupen dlya Vashego tarifnogo plana."
-    info_NOTPERSON_rut="Obmen nedostupen dlya Vashego tarifnogo plana."
+
+    info_NOTPERSON_ru="Obmen nedostupen dlya Vashego tarifnogo plana."
     info_NOTPERSON_uz="Sizning tarif rejangizda almashtirish amal qilmaydi."
     info_NOTPERSON_en="Exchange is not available for Your tariff plan."
 
-    info_REQTIMEOUT_ruk="Ulsuga Vam ne dostupna TimeOut"
-    info_REQTIMEOUT_rut="Ulsuga Vam ne dostupna TimeOut"
+
+    info_REQTIMEOUT_ru="Ulsuga Vam ne dostupna TimeOut"
     info_REQTIMEOUT_uz="Ulsuga Vam ne dostupna TimeOut"
     info_REQTIMEOUT_en="Service is not availbale for You TimeOut"
 
-    info_REQNOTFINISHED_ruk="Po Vashemu nomeru imeetsya otkrytaya zayavka. Povtorite popytku pozzhe."
-    info_REQNOTFINISHED_rut="Po Vashemu nomeru imeetsya otkrytaya zayavka. Povtorite popytku pozzhe."
+
+    info_REQNOTFINISHED_ru="Po Vashemu nomeru imeetsya otkrytaya zayavka. Povtorite popytku pozzhe."
     info_REQNOTFINISHED_uz="Sizning raqamingiz bo^yicha ochiq ariza bor. Keyinroq urunib ko^ring."
     info_REQNOTFINISHED_en="There is an open application by your number. Please try again later."
 
@@ -209,83 +209,83 @@ tplist               - Компонент выполняет проверки п
   </Group>
   <Group  name="PACKAGE" redirect="sms" check_block="true" timetoprogress="80"
 
-    info_confirm_deactive_ruk="Dlya activacii paketa &quot;[0]&quot; otprav^te 1"
-    info_confirm_deactive_rut="Dlya activacii paketa &quot;[0]&quot; otprav^te 1"
+
+    info_confirm_deactive_ru="Dlya activacii paketa &quot;[0]&quot; otprav^te 1"
     info_confirm_deactive_uz="Dlya activacii paketa &quot;[0]&quot; otprav^te 1"
     info_confirm_deactive_en="To activate the package &quot;[0]&quot; send 1"
 
-    info_success_active_ruk="Заказ на подключение пакета &quot;[0]&quot; принят."
-    info_success_active_rut="Zakaz na podklyuchenie paketa &quot;[0]&quot; prinyat."
+
+    info_success_active_ru="Zakaz na podklyuchenie paketa &quot;[0]&quot; prinyat."
     info_success_active_uz="&quot;[0]&quot; to^plamga ulanish buyrug^i qabul qilindi"
     info_success_active_en="Request on package connection &quot;[0]&quot; is accepted."
 
-    info_success_deactive_ruk="Заказ на деактивацию &quot;[0]&quot; принят."
-    info_success_deactive_rut="Zakaz na deaktivaciyu &quot;[0]&quot; prinyat."
+
+    info_success_deactive_ru="Zakaz na deaktivaciyu &quot;[0]&quot; prinyat."
     info_success_deactive_uz="Zakaz na deaktivaciyu uslugi &quot;[0]&quot; prinyat."
     info_success_deactive_en="Request on deactivation &quot;[0]&quot; is accepted."
 
-    info_service_notavailable_ruk="Пакет &quot;[0]&quot; больше недоступен для подключения"
-    info_service_notavailable_rut="Paket &quot;[0]&quot; bol^she nedostupen dlya podklyucheniya"
+
+    info_service_notavailable_ru="Paket &quot;[0]&quot; bol^she nedostupen dlya podklyucheniya"
     info_service_notavailable_uz="Paket &quot;[0]&quot; boshqa ulanmaydi"
     info_service_notavailable_en="Package &quot;[0]&quot; is no longer available for connection"
 
-    info_service_unavailable_ruk="Пакет &quot;[0]&quot; будет доступен с [1]"
-    info_service_unavailable_rut="Paket &quot;[0]&quot; budet dostupen s [1]"
+
+    info_service_unavailable_ru="Paket &quot;[0]&quot; budet dostupen s [1]"
     info_service_unavailable_uz="&quot;[0]&quot; Paketga [1] dan ulanish mumkin"
     info_service_unavailable_en="Package &quot;[0]&quot;will be available from [1]"
 
-    info_alrprogress_active_ruk="Activaciya paketa &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
-    info_alrprogress_active_rut="Activaciya paketa &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
+
+    info_alrprogress_active_ru="Activaciya paketa &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
     info_alrprogress_active_uz="Paket aktivasiyasi&quot;[0]&quot; ishlov berish jarayonida. Kechroq murojaat qiling."
     info_alrprogress_active_en="Package activation &quot;[0]&quot; is on process. Refer later."
 
-    info_alrprogress_deactive_ruk="Udalenie paketa &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
-    info_alrprogress_deactive_rut="Udalenie paketa &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
+
+    info_alrprogress_deactive_ru="Udalenie paketa &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
     info_alrprogress_deactive_uz="Paketni o^chirish &quot;[0]&quot; ishlov berish jarayonida. Kechroq murojaat qiling."
     info_alrprogress_deactive_en="Package  &quot;[0]&quot; deleting is on process. Refer later."
 
-    info_inprogress_active_ruk="Predydushaya obrabotka nahoditsya v shage activacii paketa &quot;[0]&quot;. Poprobuyte pozzhe."
-    info_inprogress_active_rut="Predydushaya obrabotka nahoditsya v shage activacii paketa &quot;[0]&quot;. Poprobuyte pozzhe."
+
+    info_inprogress_active_ru="Predydushaya obrabotka nahoditsya v shage activacii paketa &quot;[0]&quot;. Poprobuyte pozzhe."
     info_inprogress_active_uz="Paketni aktivasiyalashning &quot;[0]&quot; avvalgi ishlov berish jarayoni yakunlanmoqda. Kechroq qayta murojaat eting."
     info_inprogress_active_en="Previous processing is at the stage of package &quot;[0]&quot;activation. Try later."
 
-    info_inprogress_deactive_ruk="Predydushaya obrabotka nahoditsya v shage deactivacii paketa &quot;[0]&quot;. Poprobuyte pozzhe."
-    info_inprogress_deactive_rut="Predydushaya obrabotka nahoditsya v shage deactivacii paketa &quot;[0]&quot;. Poprobuyte pozzhe."
+
+    info_inprogress_deactive_ru="Predydushaya obrabotka nahoditsya v shage deactivacii paketa &quot;[0]&quot;. Poprobuyte pozzhe."
     info_inprogress_deactive_uz="Paketni deaktivasiyalashning &quot;[0]&quot; avvalgi ishlov berish jarayoni yakunlanmoqda. Kechroq qayta murojaat eting."
     info_inprogress_deactive_en="Previous processing is at the stage of package &quot;[0]&quot; deactivation. Try later"
 
-    info_notavailbalance_ruk="Недостаточно средств на балансе для проведения операции."
-    info_notavailbalance_rut="Nedostatochno sredstv na balanse dlya provedeniya operacii."
+
+    info_notavailbalance_ru="Nedostatochno sredstv na balanse dlya provedeniya operacii."
     info_notavailbalance_uz="Operasiyani amalga oshirish ucnun xisobingizda etarli mablag^ yo^q"
     info_notavailbalance_en="Not enough assets on balance for making an operation."
 
-    info_inprogress_ruk="Operaciya ne mozhet byt^ vypolnena, poka ne zavershitsya predydush^aya."
-    info_inprogress_rut="Operaciya ne mozhet byt^ vypolnena, poka ne zavershitsya predydush^aya."
+
+    info_inprogress_ru="Operaciya ne mozhet byt^ vypolnena, poka ne zavershitsya predydush^aya."
     info_inprogress_uz="Operaciya ne mozhet byt^ vypolnena, poka ne zavershitsya predydush^aya."
     info_inprogress_en="Operation can not be made, untill the previous one is committed."
 
-    info_320194_ruk="Пакет &quot;[0]&quot; ne predostavlyaetsya dlya Vashego tarifnogo plana"
-    info_320194_rut="Paket &quot;[0]&quot; ne predostavlyaetsya dlya Vashego tarifnogo plana"
+
+    info_320194_ru="Paket &quot;[0]&quot; ne predostavlyaetsya dlya Vashego tarifnogo plana"
     info_320194_uz="Usluga &quot;[0]&quot; ne predostavlyaetsya dlya Vashego tarifnogo plana"
     info_320194_en="Service &quot;[0]&quot; can not be provided for Your tariff plan"
 
-    info_320204_ruk="Пакет &quot;[0]&quot; не доступен для Вашего тарифного плана"
-    info_320204_rut="Paket &quot;[0]&quot; ne dostupen dlya Vashego tarifnogo plana"
+
+    info_320204_ru="Paket &quot;[0]&quot; ne dostupen dlya Vashego tarifnogo plana"
     info_320204_uz="&quot;[0]&quot; xizmati sizning tarif rejangiz doirasiga kirmaydi"
     info_320204_en="Package &quot;[0]&quot; is unavailable for Your tariff plan"
 
-    info_320205_ruk="Пакет &quot;[0]&quot; уже установлен."
-    info_320205_rut="Paket &quot;[0]&quot; uzhe ustanovlen."
+
+    info_320205_ru="Paket &quot;[0]&quot; uzhe ustanovlen."
     info_320205_uz="&quot;[0]&quot; xizmati avval yoqilgan"
     info_320205_en="Package &quot;[0]&quot; already exists."
 
-    info_320206_ruk="Пакет &quot;[0]&quot; не установлен."
-    info_320206_rut="Paket &quot;[0]&quot; ne ustanovlen."
+
+    info_320206_ru="Paket &quot;[0]&quot; ne ustanovlen."
     info_320206_uz="&quot;[0]&quot; Paket xizmati yoqilmagan."
     info_320206_en="Package &quot;[0]&quot; is inactive."
 
-    info_CODEUNAVAIL_ruk="Данный код недоступен"
-    info_CODEUNAVAIL_rut="Danniy kod nedostupen"
+
+    info_CODEUNAVAIL_ru="Danniy kod nedostupen"
     info_CODEUNAVAIL_uz="Danniy kod nedostupen"
     info_CODEUNAVAIL_en="This code is not availible"
 
@@ -296,93 +296,93 @@ tplist               - Компонент выполняет проверки п
   </Group>
   <Group  name="BLOCKS" redirect="sms" check_block="true" timetoprogress="80"
 
-    info_service_active_ruk="Status uslugi &quot;[0]&quot; - aktivna"
-    info_service_active_rut="Status uslugi &quot;[0]&quot; - aktivna"
+
+    info_service_active_ru="Status uslugi &quot;[0]&quot; - aktivna"
     info_service_active_uz="Status uslugi &quot;[0]&quot; - aktivna"
     info_service_active_en="Service &quot;[0]&quot; status - active"
 
-    info_service_deactive_ruk="Status uslugi &quot;[0]&quot; - neaktivna"
-    info_service_deactive_rut="Status uslugi &quot;[0]&quot; - neaktivna"
+
+    info_service_deactive_ru="Status uslugi &quot;[0]&quot; - neaktivna"
     info_service_deactive_uz="Status uslugi &quot;[0]&quot; - neaktivna"
     info_service_deactive_en="Service &quot;[0]&quot; status - not active"
 
-    info_confirm_deactive_ruk="Usluga &quot;[0]&quot; ne ustanovlena. Dlya activacii uslugi &quot;[0]&quot; otprav^te 1"
-    info_confirm_deactive_rut="Usluga &quot;[0]&quot; ne ustanovlena. Dlya activacii uslugi &quot;[0]&quot; otprav^te 1"
+
+    info_confirm_deactive_ru="Usluga &quot;[0]&quot; ne ustanovlena. Dlya activacii uslugi &quot;[0]&quot; otprav^te 1"
     info_confirm_deactive_uz="Usluga &quot;[0]&quot; ne ustanovlena. Dlya activacii uslugi &quot;[0]&quot; otprav^te 1"
     info_confirm_deactive_en="Service &quot;[0]&quot; is not active. To activate the service &quot;[0]&quot; send 1"
 
-    info_confirm_active_ruk="Usluga &quot;[0]&quot; ustanovlena. Dlya deactivacii uslugi &quot;[0]&quot; otprav^te 2"
-    info_confirm_active_rut="Usluga &quot;[0]&quot; ustanovlena. Dlya deactivacii uslugi &quot;[0]&quot; otprav^te 2"
+
+    info_confirm_active_ru="Usluga &quot;[0]&quot; ustanovlena. Dlya deactivacii uslugi &quot;[0]&quot; otprav^te 2"
     info_confirm_active_uz="Usluga &quot;[0]&quot; ustanovlena. Dlya deactivacii uslugi &quot;[0]&quot; otprav^te 2"
     info_confirm_active_en="Service &quot;[0]&quot; is active. To deactivate the service &quot;[0]&quot; send 2"
 
-    info_success_active_ruk="Заказ на подключение услуги &quot;[0]&quot; принят."
-    info_success_active_rut="Zakaz na podklyuchenie uslugi &quot;[0]&quot; prinyat."
+
+    info_success_active_ru="Zakaz na podklyuchenie uslugi &quot;[0]&quot; prinyat."
     info_success_active_uz="Xizmatga ulanish buyrug^i &quot;[0]&quot; qabul qilindi"
     info_success_active_en="Request on service connection &quot;[0]&quot; is accepted."
 
-    info_success_deactive_ruk="Заказ на деактивацию услуги &quot;[0]&quot; принят."
-    info_success_deactive_rut="Zakaz na deaktivaciyu uslugi &quot;[0]&quot; prinyat."
+
+    info_success_deactive_ru="Zakaz na deaktivaciyu uslugi &quot;[0]&quot; prinyat."
     info_success_deactive_uz="Xizmatni o^chirish buyrug^i &quot;[0]&quot; qabul qilindi"
     info_success_deactive_en="Request on service deactivation &quot;[0]&quot; is accepted."
 
-    info_service_notavailable_ruk="Услуга &quot;[0]&quot; больше недоступна для подключения"
-    info_service_notavailable_rut="Usluga &quot;[0]&quot; bol^she nedostupna dlya podklyucheniya"
+
+    info_service_notavailable_ru="Usluga &quot;[0]&quot; bol^she nedostupna dlya podklyucheniya"
     info_service_notavailable_uz="Xizmat &quot;[0]&quot; boshqa ulanmaydi"
     info_service_notavailable_en="Service &quot;[0]&quot; is no longer available for connection"
 
-    info_service_unavailable_ruk="Услуга &quot;[0]&quot; будет доступна с [1]"
-    info_service_unavailable_rut="Usluga &quot;[0]&quot; budet dostupna s [1]"
+
+    info_service_unavailable_ru="Usluga &quot;[0]&quot; budet dostupna s [1]"
     info_service_unavailable_uz="Xizmatga &quot;[0]&quot; [1] dan ulanish mumkin"
     info_service_unavailable_en="Service &quot;[0]&quot; will be available from [1]"
 
-    info_alrprogress_active_ruk="Activaciya uslugi &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
-    info_alrprogress_active_rut="Activaciya uslugi &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
+
+    info_alrprogress_active_ru="Activaciya uslugi &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
     info_alrprogress_active_uz="Activaciya uslugi &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
     info_alrprogress_active_en="Service activation &quot;[0]&quot; is on process. Refer later."
 
-    info_alrprogress_deactive_ruk="Udalenie uslugi &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
-    info_alrprogress_deactive_rut="Udalenie uslugi &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
+
+    info_alrprogress_deactive_ru="Udalenie uslugi &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
     info_alrprogress_deactive_uz="Udalenie uslugi &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
     info_alrprogress_deactive_en="Service deleting &quot;[0]&quot; is on process. Refer later."
 
-    info_inprogress_active_ruk="Predydushaya obrabotka nahoditsya v shage activacii uslugi &quot;[0]&quot;. Poprobuyte pozzhe."
-    info_inprogress_active_rut="Predydushaya obrabotka nahoditsya v shage activacii uslugi &quot;[0]&quot;. Poprobuyte pozzhe."
+
+    info_inprogress_active_ru="Predydushaya obrabotka nahoditsya v shage activacii uslugi &quot;[0]&quot;. Poprobuyte pozzhe."
     info_inprogress_active_uz="Predydushaya obrabotka nahoditsya v shage activacii uslugi &quot;[0]&quot;. Poprobuyte pozzhe."
     info_inprogress_active_en="Previous processing is at the stage of service  &quot;[0]&quot; activation. Try later."
 
-    info_inprogress_deactive_ruk="Predydushaya obrabotka nahoditsya v shage deactivacii uslugi &quot;[0]&quot;. Poprobuyte pozzhe."
-    info_inprogress_deactive_rut="Predydushaya obrabotka nahoditsya v shage deactivacii uslugi &quot;[0]&quot;. Poprobuyte pozzhe."
+
+    info_inprogress_deactive_ru="Predydushaya obrabotka nahoditsya v shage deactivacii uslugi &quot;[0]&quot;. Poprobuyte pozzhe."
     info_inprogress_deactive_uz="Predydushaya obrabotka nahoditsya v shage deactivacii uslugi &quot;[0]&quot;. Poprobuyte pozzhe."
     info_inprogress_deactive_en="Previous processing is at the stage of service &quot;[0]&quot; deactivation. Try later."
 
-    info_notavailbalance_ruk="Недостаточно средств на балансе для проведения операции."
-    info_notavailbalance_rut="Nedostatochno sredstv na balanse dlya provedeniya operacii."
+
+    info_notavailbalance_ru="Nedostatochno sredstv na balanse dlya provedeniya operacii."
     info_notavailbalance_uz="Operasiyani amalga oshirish ucnun xisobingizda etarli mablag^ yo^q"
     info_notavailbalance_en="Not enough assets on balance for making an operation."
 
-    info_inprogress_ruk="Operaciya ne mozhet byt^ vypolnena, poka nezavershitsya predydush^aya."
-    info_inprogress_rut="Operaciya ne mozhet byt^ vypolnena, poka nezavershitsya predydush^aya."
+
+    info_inprogress_ru="Operaciya ne mozhet byt^ vypolnena, poka nezavershitsya predydush^aya."
     info_inprogress_uz="Operaciya ne mozhet byt^ vypolnena, poka nezavershitsya predydush^aya."
     info_inprogress_en="Operationn can not be made,untill the previous one is committed."
 
-    info_320194_ruk="Услуга &quot;[0]&quot; ne predostavlyaetsya dlya Vashego tarifnogo plana"
-    info_320194_rut="Usluga &quot;[0]&quot; ne predostavlyaetsya dlya Vashego tarifnogo plana"
+
+    info_320194_ru="Usluga &quot;[0]&quot; ne predostavlyaetsya dlya Vashego tarifnogo plana"
     info_320194_uz="Usluga &quot;[0]&quot; ne predostavlyaetsya dlya Vashego tarifnogo plana"
     info_320194_en="Service &quot;[0]&quot; can not be performed for Your tariff plan"
 
-    info_320204_ruk="Услуга &quot;[0]&quot; не доступна для Вашего тарифного плана"
-    info_320204_rut="Usluga &quot;[0]&quot; ne dostupna dlya Vashego tarifnogo plana"
+
+    info_320204_ru="Usluga &quot;[0]&quot; ne dostupna dlya Vashego tarifnogo plana"
     info_320204_uz="Xizmat &quot;[0]&quot; sizning tarif rejangiz doirasiga kirmaydi"
     info_320204_en="Service&quot;[0]&quot; is unavailable for Your tariff model"
 
-    info_320205_ruk="Услуга &quot;[0]&quot; уже установлена."
-    info_320205_rut="Usluga &quot;[0]&quot; uzhe ustanovlena."
+
+    info_320205_ru="Usluga &quot;[0]&quot; uzhe ustanovlena."
     info_320205_uz="Xizmat &quot;[0]&quot; avval yoqilgan"
     info_320205_en="Service &quot;[0]&quot; is already activated."
 
-    info_320206_ruk="Услуга &quot;[0]&quot; не установлена."
-    info_320206_rut="Usluga &quot;[0]&quot; ne ustanovlena."
+
+    info_320206_ru="Usluga &quot;[0]&quot; ne ustanovlena."
     info_320206_uz="Xizmat &quot;[0]&quot; yoqilmagan"
     info_320206_en="Service &quot;[0]&quot; is not active."
 
@@ -393,88 +393,88 @@ tplist               - Компонент выполняет проверки п
   </Group>
   <Group  name="BMS" redirect="sms" check_block="true" timetoprogress="80"
 
-    info_service_active_ruk="Status bonusnogo paketa &quot;[0]&quot; - aktiven"
-    info_service_active_rut="Status bonusnogo paketa &quot;[0]&quot; - aktiven"
+
+    info_service_active_ru="Status bonusnogo paketa &quot;[0]&quot; - aktiven"
     info_service_active_uz="Status bonusnogo paketa &quot;[0]&quot; - aktiven"
     info_service_active_en="Bonus package status &quot;[0]&quot; - active"
 
-    info_service_deactive_ruk="Status bonusnogo paketa &quot;[0]&quot; - neaktiven"
-    info_service_deactive_rut="Status bonusnogo paketa &quot;[0]&quot; - neaktiven"
+
+    info_service_deactive_ru="Status bonusnogo paketa &quot;[0]&quot; - neaktiven"
     info_service_deactive_uz="Status bonusnogo paketa &quot;[0]&quot; - neaktiven"
     info_service_deactive_en="Bonus package status &quot;[0]&quot; - not active"
 
-    info_confirm_deactive_ruk="Dlya activacii bonusnogo paketa &quot;[0]&quot; otprav^te 1"
-    info_confirm_deactive_rut="Dlya activacii bonusnogo paketa &quot;[0]&quot; otprav^te 1"
+
+    info_confirm_deactive_ru="Dlya activacii bonusnogo paketa &quot;[0]&quot; otprav^te 1"
     info_confirm_deactive_uz="Dlya activacii bonusnogo paketa &quot;[0]&quot; otprav^te 1"
     info_confirm_deactive_en="To activate the bonus package &quot;[0]&quot; send 1"
 
-    info_success_active_ruk="Заказ на подключение бонусного пакета &quot;[0]&quot; принят."
-    info_success_active_rut="Zakaz na podklyuchenie bonusnogo paketa &quot;[0]&quot; prinyat."
+
+    info_success_active_ru="Zakaz na podklyuchenie bonusnogo paketa &quot;[0]&quot; prinyat."
     info_success_active_uz="Zakaz na podklyuchenie bonusnogo paketa &quot;[0]&quot; prinyat."
     info_success_active_en="Request on &quot;[0]&quot; bonus package activation is accepted"
 
-    info_success_deactive_ruk="Заказ на деактивацию &quot;[0]&quot; принят."
-    info_success_deactive_rut="Zakaz na deaktivaciyu &quot;[0]&quot; prinyat."
+
+    info_success_deactive_ru="Zakaz na deaktivaciyu &quot;[0]&quot; prinyat."
     info_success_deactive_uz="O^chirish buyrug^i &quot;[0]&quot; qabul qilindi"
     info_success_deactive_en="Request on &quot;[0]&quot; is accepted."
 
-    info_service_notavailable_ruk="Бонусный пакет &quot;[0]&quot; больше недоступен для подключения"
-    info_service_notavailable_rut="Bonusny^y paket &quot;[0]&quot; bol^she nedistupen dlya podklyucheniya"
+
+    info_service_notavailable_ru="Bonusny^y paket &quot;[0]&quot; bol^she nedistupen dlya podklyucheniya"
     info_service_notavailable_uz="Bonus paket &quot;[0]&quot; boshqa ulanmaydi"
     info_service_notavailable_en="Bonus package &quot;[0]&quot; is no longer accessible for connection"
 
-    info_service_unavailable_ruk="Бонусный пакет &quot;[0]&quot; будет доступен с [1]"
-    info_service_unavailable_rut="Bonusny^y paket &quot;[0]&quot; budet dostupen s [1]"
+
+    info_service_unavailable_ru="Bonusny^y paket &quot;[0]&quot; budet dostupen s [1]"
     info_service_unavailable_uz="Bonus paketi &quot;[0]&quot; [1] dan ulanish mumkin"
     info_service_unavailable_en="Bonus package &quot;[0]&quot; will be available from [1]"
 
-    info_alrprogress_active_ruk="Activaciya bonusnogo paketa &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
-    info_alrprogress_active_rut="Activaciya bonusnogo paketa &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
+
+    info_alrprogress_active_ru="Activaciya bonusnogo paketa &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
     info_alrprogress_active_uz="Bonus paketni aktivasiyasi&quot;[0]&quot; ishlov berish jarayonida. Kechroq murojaat qiling."
     info_alrprogress_active_en="Bonus package activation &quot;[0]&quot; is on process. Refer later."
 
-    info_alrprogress_deactive_ruk="Udalenie bonusnogo paketa &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
-    info_alrprogress_deactive_rut="Udalenie bonusnogo paketa &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
+
+    info_alrprogress_deactive_ru="Udalenie bonusnogo paketa &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
     info_alrprogress_deactive_uz="Bonus paketni o^chirish &quot;[0]&quot; ishlov berish jarayonida. Kechroq murojaat qiling."
     info_alrprogress_deactive_en="Bonus package &quot;[0]&quot; cancellation is on process. Refer later."
 
-    info_inprogress_active_ruk="Predydushaya obrabotka nahoditsya v shage activacii bonusnogo paketa &quot;[0]&quot;. Poprobuyte pozzhe."
-    info_inprogress_active_rut="Predydushaya obrabotka nahoditsya v shage activacii bonusnogo paketa &quot;[0]&quot;. Poprobuyte pozzhe."
+
+    info_inprogress_active_ru="Predydushaya obrabotka nahoditsya v shage activacii bonusnogo paketa &quot;[0]&quot;. Poprobuyte pozzhe."
     info_inprogress_active_uz="Bonus paketni aktivasiyalashning &quot;[0]&quot; avvalgi ishlov berish jarayoni yakunlanmoqda. Kechroq qayta murojaat eting."
     info_inprogress_active_en="Previous processing is at the stage of activation of bonus package &quot;[0]&quot;. Try later."
 
-    info_inprogress_deactive_ruk="Predydushaya obrabotka nahoditsya v shage deactivacii bonusnogo paketa &quot;[0]&quot;. Poprobuyte pozzhe."
-    info_inprogress_deactive_rut="Predydushaya obrabotka nahoditsya v shage deactivacii bonusnogo paketa &quot;[0]&quot;. Poprobuyte pozzhe."
+
+    info_inprogress_deactive_ru="Predydushaya obrabotka nahoditsya v shage deactivacii bonusnogo paketa &quot;[0]&quot;. Poprobuyte pozzhe."
     info_inprogress_deactive_uz="Bonus paketni deaktivasiyalashning &quot;[0]&quot; avvalgi ishlov berish jarayoni yakunlanmoqda. Kechroq qayta murojaat eting."
     info_inprogress_deactive_en="Previous processing is at the stage of deactivation of bonus package &quot;[0]&quot;. Try later."
 
-    info_notavailbalance_ruk="Недостаточно средств на балансе для проведения операции."
-    info_notavailbalance_rut="Nedostatochno sredstv na balanse dlya provedeniya operacii."
+
+    info_notavailbalance_ru="Nedostatochno sredstv na balanse dlya provedeniya operacii."
     info_notavailbalance_uz="Operasiyani amalga oshirish ucnun xisobingizda etarli mablag^ yo^q"
     info_notavailbalance_en="Not enough assets on balance for making an operation."
 
-    info_inprogress_ruk="Operaciya ne mozhet byt^ vypolnena, poka nezavershitsya predydush^aya."
-    info_inprogress_rut="Operaciya ne mozhet byt^ vypolnena, poka nezavershitsya predydush^aya."
+
+    info_inprogress_ru="Operaciya ne mozhet byt^ vypolnena, poka nezavershitsya predydush^aya."
     info_inprogress_uz="Operaciya ne mozhet byt^ vypolnena, poka nezavershitsya predydush^aya."
     info_inprogress_en="Operation can not be made,untill the previous one is committed."
 
-    info_320194_ruk="Bonusny^y paket &quot;[0]&quot; ne predostavlyaetsya dlya Vashego tarifnogo plana"
-    info_320194_rut="Bonusny^y paket &quot;[0]&quot; ne predostavlyaetsya dlya Vashego tarifnogo plana"
+
+    info_320194_ru="Bonusny^y paket &quot;[0]&quot; ne predostavlyaetsya dlya Vashego tarifnogo plana"
     info_320194_uz="Bonusny^y paket &quot;[0]&quot; ne predostavlyaetsya dlya Vashego tarifnogo plana"
     info_320194_en="Bonus package &quot;[0]&quot; can not be performed to Your tariff plan"
 
-    info_320204_ruk="Бонусный пакет &quot;[0]&quot; не доступен для Вашего тарифного плана"
-    info_320204_rut="Bonusny^y paket &quot;[0]&quot; ne dostupen dlya Vashego tarifnogo plana"
+
+    info_320204_ru="Bonusny^y paket &quot;[0]&quot; ne dostupen dlya Vashego tarifnogo plana"
     info_320204_uz="Bonus paket xizmati &quot;[0]&quot; sizning tarif rejangiz doirasiga kirmaydi"
     info_320204_en="Package &quot;[0]&quot; is unavailable for Your tariff plan"
 
-    info_320205_ruk="Бонусный пакет &quot;[0]&quot; уже установлен."
-    info_320205_rut="Bonusny^y paket &quot;[0]&quot; uzhe ustanovlen."
+
+    info_320205_ru="Bonusny^y paket &quot;[0]&quot; uzhe ustanovlen."
     info_320205_uz="Bonus paket xizmati &quot;[0]&quot; avval yoqilgan."
     info_320205_en="Package &quot;[0]&quot; already exists."
 
-    info_320206_ruk="Бонусный пакет &quot;[0]&quot; не установлен."
-    info_320206_rut="Bonusny^y paket &quot;[0]&quot; ne ustanovlen."
+
+    info_320206_ru="Bonusny^y paket &quot;[0]&quot; ne ustanovlen."
     info_320206_uz="Bonus paket xizmati &quot;[0]&quot; yoqilmagan"
     info_320206_en="Package &quot;[0]&quot; is inactive."
 
@@ -562,7 +562,7 @@ tplist               - Компонент выполняет проверки п
   <Service service_code="ERRORININPUTCODE!!!" datefrom="20131001" dateto="" group="1"
 
     service_name_ruk=""
-    service_name_rut=""
+    service_name_ru=""
     service_name_uz=""
     service_name_en=""
 
@@ -579,8 +579,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="CB406278" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Мобильный интернет"
-    service_name_rut="Mobilniy internet"
+
+    service_name_ru="Mobilniy internet"
     service_name_uz="Mobilniy internet"
     service_name_en="Mobile internet"
 
@@ -602,8 +602,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MTSFamily" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Family"
-    service_name_rut="Family"
+
+    service_name_ru="Family"
     service_name_uz="Oila"
     service_name_en="Family"
 
@@ -619,8 +619,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="CB266" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="SMS"
-    service_name_rut="SMS"
+
+    service_name_ru="SMS"
     service_name_uz="SMS"
     service_name_en="SMS"
 
@@ -630,8 +630,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRANTIOP" datefrom="20131001" dateto="" group="1" check_block="false"
 
-    service_name_ruk="Запрет определения номера"
-    service_name_rut="Zapret opredeleniya nomera"
+
+    service_name_ru="Zapret opredeleniya nomera"
     service_name_uz="AntiAON xizmati"
     service_name_en="CLIR"
 
@@ -649,8 +649,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMCA" datefrom="20131001" dateto="" group="1" check_block="false"
 
-    service_name_ruk="Вам звонили / Я на связи"
-    service_name_rut="Vam Zvonili / Ya na svyazi"
+
+    service_name_ru="Vam Zvonili / Ya na svyazi"
     service_name_uz="Sizga qo^ng^iroq qilishdi"
     service_name_en="Who Called / I am available"
 
@@ -666,8 +666,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRCLOSECF" datefrom="20131001" dateto="" group="1" check_block="false"
 
-    service_name_ruk="Запрет прямой передачи"
-    service_name_rut="Zapret pryamoy peredachi"
+
+    service_name_ru="Zapret pryamoy peredachi"
     service_name_uz="ma^lumotni to^g^ri uzatishni ta^qiqlsh"
     service_name_en="Direct transfer prohibition"
 
@@ -682,8 +682,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="CB532" datefrom="20131001" dateto="" group="1" check_block="false"
 
-    service_name_ruk="Переадресация вызова"
-    service_name_rut="Pereadresacija vyzova"
+
+    service_name_ru="Pereadresacija vyzova"
     service_name_uz="Chaqiruvni boshqa raqamga yo^naltirish"
     service_name_en="Call Forwarding"
 
@@ -699,8 +699,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="CB10363" datefrom="20131001" dateto="" group="1" check_block="false"
 
-    service_name_ruk="Конференц-связь"
-    service_name_rut="Konferenc-svjaz^"
+
+    service_name_ru="Konferenc-svjaz^"
     service_name_uz="Konferens-aloqa"
     service_name_en="Conference Call"
 
@@ -721,8 +721,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRZAPRASSIL" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Запрет рассылок"
-    service_name_rut="Zapret Rassilok"
+
+    service_name_ru="Zapret Rassilok"
     service_name_uz="Zapret Rassilok"
     service_name_en="Ban newsletters"
 
@@ -743,8 +743,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="CB108" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Международный доступ"
-    service_name_rut="Mejdunarodniy dostup"
+
+    service_name_ru="Mejdunarodniy dostup"
     service_name_uz="Xalqaro aloqa"
     service_name_en="Access to international communication"
 
@@ -765,8 +765,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="CB9831" datefrom="20131001" dateto="" group="1" check_block="false"
 
-    service_name_ruk="Ожидание/Удержание вызова"
-    service_name_rut="Ozhidanie/Uderzhanie vyzova"
+
+    service_name_ru="Ozhidanie/Uderzhanie vyzova"
     service_name_uz="Qo^ng^iroqni ushlab turish/kutish"
     service_name_en="Call Waiting and Call Hold"
 
@@ -787,8 +787,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="CB123" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Международный роуминг"
-    service_name_rut="Mejdunarodniy rouming"
+
+    service_name_ru="Mejdunarodniy rouming"
     service_name_uz="Xalqaro rouming"
     service_name_en="International roaming"
 
@@ -809,8 +809,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="BSNSSRMNG" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Бизнес роуминг"
-    service_name_rut="Business rouming"
+
+    service_name_ru="Business rouming"
     service_name_uz="Business rouming"
     service_name_en="Business roaming"
 
@@ -820,8 +820,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="LGHTRMNG" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Лайт роуминг"
-    service_name_rut="Light rouming"
+
+    service_name_ru="Light rouming"
     service_name_uz="Light rouming"
     service_name_en="Light roaming"
 
@@ -831,8 +831,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="CB264" datefrom="20131001" dateto="" group="1" check_block="false"
 
-    service_name_ruk="Определитель номера"
-    service_name_rut="Opredelitel^ nomera"
+
+    service_name_ru="Opredelitel^ nomera"
     service_name_uz="Raqamni aniqlash"
     service_name_en="Caller ID"
 
@@ -853,8 +853,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRBLKUSER" datefrom="20131001" dateto="" check_block="false" redirect="notredirect" group="3"
 
-    service_name_ruk="Сохранение номера"
-    service_name_rut="Sohranenie nomera"
+
+    service_name_ru="Sohranenie nomera"
     service_name_uz="Raqamni saqlash"
     service_name_en="Save my number"
 
@@ -875,8 +875,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRZAPRASSIL" datefrom="20131001" dateto="" group="1" check_block="false"
 
-    service_name_ruk="Запрет рассылок"
-    service_name_rut="Zapret rassylok"
+
+    service_name_ru="Zapret rassylok"
     service_name_uz="Ma^lumotlarni yuborishni taqiqlash"
     service_name_en="Zapret rassylok"
 
@@ -885,8 +885,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="CBNOCHSP" datefrom="20131001" dateto="20141001" group="1"
 
-    service_name_ruk="Ночное общение"
-    service_name_rut="Nochnoe obwenie"
+
+    service_name_ru="Nochnoe obwenie"
     service_name_uz="Tungi muloqot"
     service_name_en="Nochnoe obwenie"
 
@@ -895,8 +895,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRCRBT" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="GOOD^OK"
-    service_name_rut="GOOD^OK"
+
+    service_name_ru="GOOD^OK"
     service_name_uz="GOOD^OK"
     service_name_en="GOOD^OK"
 
@@ -905,8 +905,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRZAPOPRPERED" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Запрос прямой передачи"
-    service_name_rut="Zapros pryamoy peredachi"
+
+    service_name_ru="Zapros pryamoy peredachi"
     service_name_uz="Ma^lumotni to^g^ridan yuborish so^rovi"
     service_name_en="Zapros pryamoy peredachi"
 
@@ -915,8 +915,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="CB6376" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Передача данных"
-    service_name_rut="Peredacha dannyh"
+
+    service_name_ru="Peredacha dannyh"
     service_name_uz="Ma^lumotlar yuborish"
     service_name_en="Peredacha dannyh"
 
@@ -925,8 +925,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRVIPDAY" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="VIP день"
-    service_name_rut="VIP den^"
+
+    service_name_ru="VIP den^"
     service_name_uz="VIP kun"
     service_name_en="VIP den^"
 
@@ -935,8 +935,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRSMSEXTRA" datefrom="20131001" dateto="20131001" group="1"
 
-    service_name_ruk="SMS EXTRA"
-    service_name_rut="SMS EXTRA"
+
+    service_name_ru="SMS EXTRA"
     service_name_uz="SMS EXTRA"
     service_name_en="SMS EXTRA"
 
@@ -945,8 +945,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRVIZIT" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Визитка"
-    service_name_rut="Vizitka"
+
+    service_name_ru="Vizitka"
     service_name_uz="Vizitka"
     service_name_en="Vizitka"
 
@@ -955,8 +955,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRSYNC" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Синхронизация данных"
-    service_name_rut="Sinhronizaciya danny^h"
+
+    service_name_ru="Sinhronizaciya danny^h"
     service_name_uz="Ma^lumotlarni sinxronlashtirish"
     service_name_en="Sinhronizaciya danny^h"
 
@@ -965,8 +965,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMGDOSTUP" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Междугородный доступ"
-    service_name_rut="Mezhdugorodniy dostup"
+
+    service_name_ru="Mezhdugorodniy dostup"
     service_name_uz="Xalqaro kirish"
     service_name_en="Mezhdugorodniy dostup"
 
@@ -975,8 +975,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRVIDCALL" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Видео звонок"
-    service_name_rut="Video zvonok"
+
+    service_name_ru="Video zvonok"
     service_name_uz="Video qo^ng^iroq"
     service_name_en="Video zvonok"
 
@@ -985,8 +985,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRAKCBMS" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Участие в акции BMS"
-    service_name_rut="Uchastie v akcii BMS"
+
+    service_name_ru="Uchastie v akcii BMS"
     service_name_uz="BMS aksiyada ichtirok etish"
     service_name_en="Uchastie v akcii BMS"
 
@@ -995,8 +995,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRZAPRBAL" datefrom="20131001" dateto="20131001" group="1"
 
-    service_name_ruk="Запрет запроса баланса"
-    service_name_rut="Zapret zaprosa balansa"
+
+    service_name_ru="Zapret zaprosa balansa"
     service_name_uz="Zapret zaprosa balansa"
     service_name_en="Zapret zaprosa balansa"
 
@@ -1005,8 +1005,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="NIGHTDRIVE1" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="NIGHT DRIVE 1"
-    service_name_rut="NIGHT DRIVE 1"
+
+    service_name_ru="NIGHT DRIVE 1"
     service_name_uz="NIGHT DRIVE 1"
     service_name_en="NIGHT DRIVE 1"
 
@@ -1030,8 +1030,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="NIGHTDRIVE7" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="NIGHT DRIVE 7"
-    service_name_rut="NIGHT DRIVE 7"
+
+    service_name_ru="NIGHT DRIVE 7"
     service_name_uz="NIGHT DRIVE 7"
     service_name_en="NIGHT DRIVE 7"
 
@@ -1055,8 +1055,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="NIGHTDRIVE30" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="NIGHT DRIVE 30"
-    service_name_rut="NIGHT DRIVE 30"
+
+    service_name_ru="NIGHT DRIVE 30"
     service_name_uz="NIGHT DRIVE 30"
     service_name_en="NIGHT DRIVE 30"
 
@@ -1080,8 +1080,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRPOLDOV" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="На полном доверии"
-    service_name_rut="Na polnom doverii"
+
+    service_name_ru="Na polnom doverii"
     service_name_uz="To^liq ishonch"
     service_name_en="Na polnom doverii"
 
@@ -1090,8 +1090,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMOBITELXT" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="SMS Dobroe Utro"
-    service_name_rut="SMS Dobroe Utro"
+
+    service_name_ru="SMS Dobroe Utro"
     service_name_uz="SMS Dobroe Utro"
     service_name_en="SMS Dobroe Utro"
 
@@ -1100,8 +1100,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMOBITEL05" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Zhiznennye psihologicheskie sovety"
-    service_name_rut="Zhiznennye psihologicheskie sovety"
+
+    service_name_ru="Zhiznennye psihologicheskie sovety"
     service_name_uz="Zhiznennye psihologicheskie sovety"
     service_name_en="Zhiznennye psihologicheskie sovety"
 
@@ -1110,8 +1110,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMOBITEL05" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Originalnye komplimenty dlja parnej"
-    service_name_rut="Originalnye komplimenty dlja parnej"
+
+    service_name_ru="Originalnye komplimenty dlja parnej"
     service_name_uz="Originalnye komplimenty dlja parnej"
     service_name_en="Originalnye komplimenty dlja parnej"
 
@@ -1120,8 +1120,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMOBITEL05" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Sovety dlja postroenija schastlivoj semyi"
-    service_name_rut="Sovety dlja postroenija schastlivoj semyi"
+
+    service_name_ru="Sovety dlja postroenija schastlivoj semyi"
     service_name_uz="Sovety dlja postroenija schastlivoj semyi"
     service_name_en="Sovety dlja postroenija schastlivoj semi"
 
@@ -1130,8 +1130,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMOBITEL05" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Romanticheskie SMS"
-    service_name_rut="Romanticheskie SMS"
+
+    service_name_ru="Romanticheskie SMS"
     service_name_uz="Romanticheskie SMS"
     service_name_en="Romanticheskie SMS"
 
@@ -1140,8 +1140,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMOBITEL05" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="SMS ljubov"
-    service_name_rut="SMS ljubov"
+
+    service_name_ru="SMS ljubov"
     service_name_uz="SMS ljubov"
     service_name_en="SMS ljubov"
 
@@ -1150,8 +1150,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMOBITEL05" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Originalnye komplimenty dlja devushek"
-    service_name_rut="Originalnye komplimenty dlja devushek"
+
+    service_name_ru="Originalnye komplimenty dlja devushek"
     service_name_uz="Originalnye komplimenty dlja devushek"
     service_name_en="Originalnye komplimenty dlja devushek"
 
@@ -1160,8 +1160,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMOBITEL05" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Zhiznennye stihi"
-    service_name_rut="Zhiznennye stihi"
+
+    service_name_ru="Zhiznennye stihi"
     service_name_uz="Zhiznennye stihi"
     service_name_en="Zhiznennye stihi"
 
@@ -1170,8 +1170,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMOBITEL05" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Krasivye stihi o ljubvi"
-    service_name_rut="Krasivye stihi o ljubvi"
+
+    service_name_ru="Krasivye stihi o ljubvi"
     service_name_uz="Krasivye stihi o ljubvi"
     service_name_en="Krasivye stihi o ljubvi"
 
@@ -1180,8 +1180,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMOBITEL05" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Stihi o razluke"
-    service_name_rut="Stihi o razluke"
+
+    service_name_ru="Stihi o razluke"
     service_name_uz="Stihi o razluke"
     service_name_en="Stihi o razluke"
 
@@ -1190,8 +1190,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMOBITEL05" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Novosti mody"
-    service_name_rut="Novosti mody"
+
+    service_name_ru="Novosti mody"
     service_name_uz="Novosti mody"
     service_name_en="Novosti mody"
 
@@ -1200,8 +1200,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMOBITEL05" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Sovety dlja vljublennyh"
-    service_name_rut="Sovety dlja vljublennyh"
+
+    service_name_ru="Sovety dlja vljublennyh"
     service_name_uz="Sovety dlja vljublennyh"
     service_name_en="Sovety dlja vljublennyh"
 
@@ -1210,8 +1210,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMOBITEL05" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Sovety po psihologii otnoshenij"
-    service_name_rut="Sovety po psihologii otnoshenij"
+
+    service_name_ru="Sovety po psihologii otnoshenij"
     service_name_uz="Sovety po psihologii otnoshenij"
     service_name_en="Sovety po psihologii otnoshenij"
 
@@ -1220,8 +1220,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMOBITEL05" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Mudrye slova o schastye"
-    service_name_rut="Mudrye slova o schastye"
+
+    service_name_ru="Mudrye slova o schastye"
     service_name_uz="Mudrye slova o schastye"
     service_name_en="Mudrye slova o schastye"
 
@@ -1230,8 +1230,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMOBITEL05" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Stihi o skuke"
-    service_name_rut="Stihi o skuke"
+
+    service_name_ru="Stihi o skuke"
     service_name_uz="Stihi o skuke"
     service_name_en="Stihi o skuke"
 
@@ -1240,8 +1240,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMOBITEL05" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Stihi o ljubvi"
-    service_name_rut="Stihi o ljubvi"
+
+    service_name_ru="Stihi o ljubvi"
     service_name_uz="Stihi o ljubvi"
     service_name_en="Stihi o ljubvi"
 
@@ -1250,8 +1250,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMOBITEL05" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Mudrye slova o ljubvi"
-    service_name_rut="Mudrye slova o ljubvi"
+
+    service_name_ru="Mudrye slova o ljubvi"
     service_name_uz="Mudrye slova o ljubvi"
     service_name_en="Mudrye slova o ljubvi"
 
@@ -1260,8 +1260,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMOBITEL05" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="SMS spokojnoj nochi"
-    service_name_rut="SMS spokojnoj nochi"
+
+    service_name_ru="SMS spokojnoj nochi"
     service_name_uz="SMS spokojnoj nochi"
     service_name_en="SMS spokojnoj nochi"
 
@@ -1270,8 +1270,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMOBITEL05" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Stihi o schastye"
-    service_name_rut="Stihi o schastye"
+
+    service_name_ru="Stihi o schastye"
     service_name_uz="Stihi o schastye"
     service_name_en="Stihi o schastye"
 
@@ -1280,8 +1280,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMOBITEL05" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="SMS dobroe utro"
-    service_name_rut="SMS dobroe utro"
+
+    service_name_ru="SMS dobroe utro"
     service_name_uz="SMS dobroe utro"
     service_name_en="SMS dobroe utro"
 
@@ -1290,8 +1290,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMOBITEL08" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="SMS spokojnoj nochi i SMS dobroe utro"
-    service_name_rut="SMS spokojnoj nochi i SMS dobroe utro"
+
+    service_name_ru="SMS spokojnoj nochi i SMS dobroe utro"
     service_name_uz="SMS spokojnoj nochi i SMS dobroe utro"
     service_name_en="SMS spokojnoj nochi i SMS dobroe utro"
 
@@ -1300,8 +1300,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMOBITEL08" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Stihi o schastye i Zhiznennye stihi"
-    service_name_rut="Stihi o schastye i Zhiznennye stihi"
+
+    service_name_ru="Stihi o schastye i Zhiznennye stihi"
     service_name_uz="Stihi o schastye i Zhiznennye stihi"
     service_name_en="Stihi o schastye i Zhiznennye stihi"
 
@@ -1310,8 +1310,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMOBITEL08" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Stihi o razluke i Stihi o skuke"
-    service_name_rut="Stihi o razluke i Stihi o skuke"
+
+    service_name_ru="Stihi o razluke i Stihi o skuke"
     service_name_uz="Stihi o razluke i Stihi o skuke"
     service_name_en="Stihi o razluke i Stihi o skuke"
 
@@ -1320,8 +1320,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMOBITEL08" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Krasivye stihi o ljubvi i Stihi o ljubvi"
-    service_name_rut="Krasivye stihi o ljubvi i Stihi o ljubvi"
+
+    service_name_ru="Krasivye stihi o ljubvi i Stihi o ljubvi"
     service_name_uz="Krasivye stihi o ljubvi i Stihi o ljubvi"
     service_name_en="Krasivye stihi o ljubvi i Stihi o ljubvi"
 
@@ -1330,8 +1330,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMOBITEL08" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Originalnye komplimenty dlja parnej i Originalnye komplimenty dlja devushek"
-    service_name_rut="Originalnye komplimenty dlja parnej i Originalnye komplimenty dlja devushek"
+
+    service_name_ru="Originalnye komplimenty dlja parnej i Originalnye komplimenty dlja devushek"
     service_name_uz="Originalnye komplimenty dlja parnej i Originalnye komplimenty dlja devushek"
     service_name_en="Originalnye komplimenty dlja parnej i Originalnye komplimenty dlja devushek"
 
@@ -1340,8 +1340,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRLISTIMEI" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Forbes News"
-    service_name_rut="Forbes News"
+
+    service_name_ru="Forbes News"
     service_name_uz="Forbes News"
     service_name_en="Forbes News"
 
@@ -1350,8 +1350,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRSUPER0" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Super 0"
-    service_name_rut="Super 0"
+
+    service_name_ru="Super 0"
     service_name_uz="Super 0"
     service_name_en="Super 0"
 
@@ -1363,8 +1363,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRSUPER0NA30" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Super 0 na 30 dney"
-    service_name_rut="Super 0 na 30 dney"
+
+    service_name_ru="Super 0 na 30 dney"
     service_name_uz="Super 0 na 30 dney"
     service_name_en="Super 0 na 30 dney"
 
@@ -1373,8 +1373,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRCLUBUMS" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="UMS Club"
-    service_name_rut="UMS Club"
+
+    service_name_ru="UMS Club"
     service_name_uz="UMS Club"
     service_name_en="UMS Club"
 
@@ -1383,8 +1383,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRUNLIMLTE" datefrom="20160406" dateto="" group="1"
 
-    service_name_ruk="LTE"
-    service_name_rut="LTE"
+
+    service_name_ru="LTE"
     service_name_uz="LTE"
     service_name_en="LTE"
 
@@ -1394,8 +1394,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRVIGODNET" datefrom="20160406" dateto="" group="1"
 
-    service_name_ruk="Vigodniy Internet"
-    service_name_rut="Vigodniy Internet"
+
+    service_name_ru="Vigodniy Internet"
     service_name_uz="Vigodniy Internet"
     service_name_en="Vigodniy Internet"
 
@@ -1405,8 +1405,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRRASSROCHKA" datefrom="20160406" dateto="" group="1"
 
-    service_name_ruk="Nomer v rassrochku"
-    service_name_rut="Nomer v rassrochku"
+
+    service_name_ru="Nomer v rassrochku"
     service_name_uz="Raqam haqini bo^lib to^lash"
     service_name_en="Nomer v rassrochku"
 
@@ -1415,8 +1415,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRLASTPAY" datefrom="20160406" dateto="" group="1"
 
-    service_name_ruk="Posledniy platej"
-    service_name_rut="Posledniy platej"
+
+    service_name_ru="Posledniy platej"
     service_name_uz="Oxirgi to^lov"
     service_name_en="Posledniy platej"
 
@@ -1425,8 +1425,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRFREEOK" datefrom="20160406" dateto="" group="1"
 
-    service_name_ruk="Free OK"
-    service_name_rut="Free OK"
+
+    service_name_ru="Free OK"
     service_name_uz="Free OK"
     service_name_en="Free OK"
 
@@ -1435,8 +1435,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRBYTE" datefrom="20160406" dateto="" group="1"
 
-    service_name_ruk="Bez Graniz"
-    service_name_rut="Bez Graniz"
+
+    service_name_ru="Bez Graniz"
     service_name_uz="Cheksiz"
     service_name_en="Bez Graniz"
 
@@ -1445,8 +1445,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRFIZBYTE" datefrom="20170619" dateto="" group="1"
       
-    service_name_ruk="Legkiy Internet"
-    service_name_rut="Legkiy Internet"
+
+    service_name_ru="Legkiy Internet"
     service_name_uz="Yengil Internet"
     service_name_en="Legkiy Internet"
 
@@ -1460,8 +1460,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMINTOMB" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Minuti v MB"
-    service_name_rut="Minuti v MB"
+
+    service_name_ru="Minuti v MB"
     service_name_uz="Minuti v MB"
     service_name_en="Minuti v MB"
 
@@ -1471,8 +1471,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FREXCHANGECOR" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Minuti na MB"
-    service_name_rut="Minuti na MB"
+
+    service_name_ru="Minuti na MB"
     service_name_uz="Minuti na MB"
     service_name_en="Minuti na MB"
 
@@ -1482,8 +1482,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FREXCHANGE" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Minuti na MB"
-    service_name_rut="Minuti na MB"
+
+    service_name_ru="Minuti na MB"
     service_name_uz="Minuti na MB"
     service_name_en="Minuti na MB"
 
@@ -1493,8 +1493,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FREXCHANGE20" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="20 minut na MB"
-    service_name_rut="20 minut na MB"
+
+    service_name_ru="20 minut na MB"
     service_name_uz="20 minut na MB"
     service_name_en="20 minut na MB"
 
@@ -1504,8 +1504,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FREXCHANGECOR20" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="20 minut na MB"
-    service_name_rut="20 minut na MB"
+
+    service_name_ru="20 minut na MB"
     service_name_uz="20 minut na MB"
     service_name_en="20 minut na MB"
 
@@ -1515,8 +1515,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FREXCHANGE50" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="50 minut na MB"
-    service_name_rut="50 minut na MB"
+
+    service_name_ru="50 minut na MB"
     service_name_uz="50 minut na MB"
     service_name_en="50 minut na MB"
 
@@ -1526,8 +1526,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FREXCHANGECOR50" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="50 minut na MB"
-    service_name_rut="50 minut na MB"
+
+    service_name_ru="50 minut na MB"
     service_name_uz="50 minut na MB"
     service_name_en="50 minut na MB"
 
@@ -1537,8 +1537,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FREXCHANGE100" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="100 minut na MB"
-    service_name_rut="100 minut na MB"
+
+    service_name_ru="100 minut na MB"
     service_name_uz="100 minut na MB"
     service_name_en="100 minut na MB"
 
@@ -1548,8 +1548,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FREXCHANGECOR100" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="100 minut na MB"
-    service_name_rut="100 minut na MB"
+
+    service_name_ru="100 minut na MB"
     service_name_uz="100 minut na MB"
     service_name_en="100 minut na MB"
 
@@ -1559,8 +1559,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FREXCHANGE200" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="200 minut na MB"
-    service_name_rut="200 minut na MB"
+
+    service_name_ru="200 minut na MB"
     service_name_uz="200 minut na MB"
     service_name_en="200 minut na MB"
 
@@ -1570,8 +1570,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FREXCHANGECOR200" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="200 minut na MB"
-    service_name_rut="200 minut na MB"
+
+    service_name_ru="200 minut na MB"
     service_name_uz="200 minut na MB"
     service_name_en="200 minut na MB"
 
@@ -1581,8 +1581,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FREXCHANGE500" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="500 minut na MB"
-    service_name_rut="500 minut na MB"
+
+    service_name_ru="500 minut na MB"
     service_name_uz="500 minut na MB"
     service_name_en="500 minut na MB"
 
@@ -1592,8 +1592,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FREXCHANGECOR500" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="500 minut na MB"
-    service_name_rut="500 minut na MB"
+
+    service_name_ru="500 minut na MB"
     service_name_uz="500 minut na MB"
     service_name_en="500 minut na MB"
 
@@ -1603,8 +1603,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRSUPERVOICE" datefrom="20131001" dateto="" group="1"
 
-    service_name_ruk="Absolyutniy Bezlimit"
-    service_name_rut="Absolyutniy Bezlimit"
+
+    service_name_ru="Absolyutniy Bezlimit"
     service_name_uz="Mutlaqo Cheksiz"
     service_name_en="Absolute Unlim"
 
@@ -1614,8 +1614,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="SMS100" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="SMS-100"
-    service_name_rut="SMS-100"
+
+    service_name_ru="SMS-100"
     service_name_uz="SMS-100"
     service_name_en="SMS-100"
 
@@ -1630,8 +1630,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="SMS300" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="SMS-300"
-    service_name_rut="SMS-300"
+
+    service_name_ru="SMS-300"
     service_name_uz="SMS-300"
     service_name_en="SMS-300"
 
@@ -1646,8 +1646,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="SMS1000" datefrom="20150101" dateto="" group="2"
 
-    service_name_ruk="SMS-1000"
-    service_name_rut="SMS-1000"
+
+    service_name_ru="SMS-1000"
     service_name_uz="SMS-1000"
     service_name_en="SMS-1000"
 
@@ -1661,8 +1661,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="SMS500" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="SMS-500"
-    service_name_rut="SMS-500"
+
+    service_name_ru="SMS-500"
     service_name_uz="SMS-500"
     service_name_en="SMS-500"
 
@@ -1677,8 +1677,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="SMS1000" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="SMS-1000"
-    service_name_rut="SMS-1000"
+
+    service_name_ru="SMS-1000"
     service_name_uz="SMS-1000"
     service_name_en="SMS-1000"
 
@@ -1693,8 +1693,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB300M1" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Internet-300"
-    service_name_rut="Internet-300"
+
+    service_name_ru="Internet-300"
     service_name_uz="Internet-300"
     service_name_en="Internet-300"
 
@@ -1710,8 +1710,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB500M" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Internet-500"
-    service_name_rut="Internet-500"
+
+    service_name_ru="Internet-500"
     service_name_uz="Internet-500"
     service_name_en="Internet-500"
 
@@ -1727,8 +1727,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB1000M1" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Internet-1000"
-    service_name_rut="Internet-1000"
+
+    service_name_ru="Internet-1000"
     service_name_uz="Internet-1000"
     service_name_en="Internet-1000"
 
@@ -1744,8 +1744,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB2000M1" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Internet-2000"
-    service_name_rut="Internet-2000"
+
+    service_name_ru="Internet-2000"
     service_name_uz="Internet-2000"
     service_name_en="Internet-2000"
 
@@ -1761,8 +1761,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB3000M1" datefrom="20150105" dateto="" group="2"
 
-    service_name_ruk="Internet-3000"
-    service_name_rut="Internet-3000"
+
+    service_name_ru="Internet-3000"
     service_name_uz="Internet-3000"
     service_name_en="Internet-3000"
 
@@ -1778,8 +1778,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB5000M1" datefrom="20150105" dateto="" group="2"
 
-    service_name_ruk="Internet-5000"
-    service_name_rut="Internet-5000"
+
+    service_name_ru="Internet-5000"
     service_name_uz="Internet-5000"
     service_name_en="Internet-5000"
 
@@ -1795,8 +1795,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB10000M1" datefrom="20150105" dateto="" group="2"
 
-    service_name_ruk="Internet-10000"
-    service_name_rut="Internet-10000"
+
+    service_name_ru="Internet-10000"
     service_name_uz="Internet-10000"
     service_name_en="Internet-10000"
 
@@ -1812,8 +1812,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB20000M1" datefrom="20150105" dateto="" group="2"
 
-    service_name_ruk="Internet-20000"
-    service_name_rut="Internet-20000"
+
+    service_name_ru="Internet-20000"
     service_name_uz="Internet-20000"
     service_name_en="Internet-20000"
 
@@ -1827,8 +1827,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB30000M1" datefrom="20150105" dateto="" group="2"
 
-    service_name_ruk="Internet-30000"
-    service_name_rut="Internet-30000"
+
+    service_name_ru="Internet-30000"
     service_name_uz="Internet-30000"
     service_name_en="Internet-30000"
 
@@ -1842,8 +1842,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB50000M1" datefrom="20150105" dateto="" group="2"
 
-    service_name_ruk="Internet-50000"
-    service_name_rut="Internet-50000"
+
+    service_name_ru="Internet-50000"
     service_name_uz="Internet-50000"
     service_name_en="Internet-50000"
 
@@ -1857,8 +1857,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB1000MNIGHT" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Night Internet-1000"
-    service_name_rut="Night Internet-1000"
+
+    service_name_ru="Night Internet-1000"
     service_name_uz="Night Internet-1000"
     service_name_en="Night Internet-1000"
 
@@ -1873,8 +1873,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB2000MNIGHT" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Night Internet-2000"
-    service_name_rut="Night Internet-2000"
+
+    service_name_ru="Night Internet-2000"
     service_name_uz="Night Internet-2000"
     service_name_en="Night Internet-2000"
 
@@ -1889,8 +1889,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB3000MNIGHT" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Night Internet-3000"
-    service_name_rut="Night Internet-3000"
+
+    service_name_ru="Night Internet-3000"
     service_name_uz="Night Internet-3000"
     service_name_en="Night Internet-3000"
 
@@ -1905,8 +1905,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB5000MNIGHT" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Night Internet-5000"
-    service_name_rut="Night Internet-5000"
+
+    service_name_ru="Night Internet-5000"
     service_name_uz="Night Internet-5000"
     service_name_en="Night Internet-5000"
 
@@ -1921,8 +1921,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB10000MNIGHT" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Night Internet-10000"
-    service_name_rut="Night Internet-10000"
+
+    service_name_ru="Night Internet-10000"
     service_name_uz="Night Internet-10000"
     service_name_en="Night Internet-10000"
 
@@ -1937,8 +1937,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB20000MNIGHT" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Night Internet-20000"
-    service_name_rut="Night Internet-20000"
+
+    service_name_ru="Night Internet-20000"
     service_name_uz="Night Internet-20000"
     service_name_en="Night Internet-20000"
 
@@ -1953,8 +1953,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB50000MNIGHT" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Night Internet-50000"
-    service_name_rut="Night Internet-50000"
+
+    service_name_ru="Night Internet-50000"
     service_name_uz="Night Internet-50000"
     service_name_en="Night Internet-50000"
 
@@ -1969,8 +1969,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB12000MNIGHTB" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Night Internet 10000+20 Percents"
-    service_name_rut="Night Internet 10000+20 Percents"
+
+    service_name_ru="Night Internet 10000+20 Percents"
     service_name_uz="Night Internet 10000+20 Percents"
     service_name_en="Night Internet 10000+20 Percents"
 
@@ -1980,8 +1980,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB24000MNIGHTB" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Night Internet 20000+20 Percents"
-    service_name_rut="Night Internet 20000+20 Percents"
+
+    service_name_ru="Night Internet 20000+20 Percents"
     service_name_uz="Night Internet 20000+20 Percents"
     service_name_en="Night Internet 20000+20 Percents"
 
@@ -1991,8 +1991,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="WMAXIIVR" datefrom="20150105" dateto="" group="2" availbalance="1"
 
-    service_name_ruk="Welcome Maxi"
-    service_name_rut="Welcome Maxi"
+
+    service_name_ru="Welcome Maxi"
     service_name_uz="Welcome Maxi"
     service_name_en="Welcome Maxi"
 
@@ -2002,8 +2002,8 @@ tplist               - Компонент выполняет проверки п
 
     <tplist available="true"
 
-    info_notaval_rut="Paket ne dostupen na vashem TP"
-    info_notaval_ruk="Paket ne dostupen na vashem TP"
+    info_notaval_ru="Paket ne dostupen na vashem TP"
+
     info_notaval_uz="Paket ne dostupen na vashem TP"
     info_notaval_en="Package is not available on your Tarif">
 
@@ -2012,8 +2012,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="WOPTIMA" datefrom="20150105" dateto="" group="2"
 
-    service_name_ruk="Welcome Optima"
-    service_name_rut="Welcome Optima"
+
+    service_name_ru="Welcome Optima"
     service_name_uz="Welcome Optima"
     service_name_en="Welcome Optima"
 
@@ -2023,8 +2023,8 @@ tplist               - Компонент выполняет проверки п
 
     <tplist available="true"
 
-    info_notaval_rut="Paket ne dostupen na vashem TP"
-    info_notaval_ruk="Paket ne dostupen na vashem TP"
+    info_notaval_ru="Paket ne dostupen na vashem TP"
+
     info_notaval_uz="Paket ne dostupen na vashem TP"
     info_notaval_en="Package is not available on your Tarif">
 
@@ -2033,8 +2033,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="WOPTIMAI" datefrom="20150105" dateto="" group="2" availbalance="1"
 
-    service_name_ruk="Welcome Optima"
-    service_name_rut="Welcome Optima"
+
+    service_name_ru="Welcome Optima"
     service_name_uz="Welcome Optima"
     service_name_en="Welcome Optima"
 
@@ -2044,8 +2044,8 @@ tplist               - Компонент выполняет проверки п
 
     <tplist available="true"
 
-    info_notaval_rut="Paket ne dostupen na vashem TP"
-    info_notaval_ruk="Paket ne dostupen na vashem TP"
+    info_notaval_ru="Paket ne dostupen na vashem TP"
+
     info_notaval_uz="Paket ne dostupen na vashem TP"
     info_notaval_en="Package is not available on your Tarif">
 
@@ -2054,8 +2054,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="BMS100MIN7DAY" datefrom="20150101" dateto="" group="2"
 
-    service_name_ruk="BMS 100 MIN na 7 dney"
-    service_name_rut="BMS 100 MIN na 7 dney"
+
+    service_name_ru="BMS 100 MIN na 7 dney"
     service_name_uz="BMS 100 MIN na 7 dney"
     service_name_en="BMS 100 MIN 7 days"
 
@@ -2064,8 +2064,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="AVTOMB300" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="OnNet-300"
-    service_name_rut="OnNet-300"
+
+    service_name_ru="OnNet-300"
     service_name_uz="OnNet-300"
     service_name_en="OnNet-300"
 
@@ -2080,8 +2080,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="AVTOMB500" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="OnNet-500"
-    service_name_rut="OnNet-500"
+
+    service_name_ru="OnNet-500"
     service_name_uz="OnNet-500"
     service_name_en="OnNet-500"
 
@@ -2096,8 +2096,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="AVTOMB1000" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="OnNet-1000"
-    service_name_rut="OnNet-1000"
+
+    service_name_ru="OnNet-1000"
     service_name_uz="OnNet-1000"
     service_name_en="OnNet-1000"
 
@@ -2112,8 +2112,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="AVTOMB2000" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="OnNet-2000"
-    service_name_rut="OnNet-2000"
+
+    service_name_ru="OnNet-2000"
     service_name_uz="OnNet-2000"
     service_name_en="OnNet-2000"
 
@@ -2128,8 +2128,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="AVTOMB3000" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="OnNet-3000"
-    service_name_rut="OnNet-3000"
+
+    service_name_ru="OnNet-3000"
     service_name_uz="OnNet-3000"
     service_name_en="OnNet-3000"
 
@@ -2144,8 +2144,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="AVTOMB5000" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="OnNet-5000"
-    service_name_rut="OnNet-5000"
+
+    service_name_ru="OnNet-5000"
     service_name_uz="OnNet-5000"
     service_name_en="OnNet-5000"
 
@@ -2160,8 +2160,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="AVTOMB10000" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="OnNet-10000"
-    service_name_rut="OnNet-10000"
+
+    service_name_ru="OnNet-10000"
     service_name_uz="OnNet-10000"
     service_name_en="OnNet-10000"
 
@@ -2176,8 +2176,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="AVTOMB20000" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="OnNet-20000"
-    service_name_rut="OnNet-20000"
+
+    service_name_ru="OnNet-20000"
     service_name_uz="OnNet-20000"
     service_name_en="OnNet-20000"
 
@@ -2190,8 +2190,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="AVTOMB30000" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="OnNet-30000"
-    service_name_rut="OnNet-30000"
+
+    service_name_ru="OnNet-30000"
     service_name_uz="OnNet-30000"
     service_name_en="OnNet-30000"
 
@@ -2204,8 +2204,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="AVTOMB50000" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="OnNet-50000"
-    service_name_rut="OnNet-50000"
+
+    service_name_ru="OnNet-50000"
     service_name_uz="OnNet-50000"
     service_name_en="OnNet-50000"
 
@@ -2218,8 +2218,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRONNETCORP300" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="OnNet-300"
-    service_name_rut="OnNet-300"
+
+    service_name_ru="OnNet-300"
     service_name_uz="OnNet-300"
     service_name_en="OnNet-300"
 
@@ -2229,8 +2229,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRONNETCORP600" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="OnNet-600"
-    service_name_rut="OnNet-600"
+
+    service_name_ru="OnNet-600"
     service_name_uz="OnNet-600"
     service_name_en="OnNet-600"
 
@@ -2240,8 +2240,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRONNETCORP1200" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="OnNet-1200"
-    service_name_rut="OnNet-1200"
+
+    service_name_ru="OnNet-1200"
     service_name_uz="OnNet-1200"
     service_name_en="OnNet-1200"
 
@@ -2251,8 +2251,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRONNETCORP2400" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="OnNet-2400"
-    service_name_rut="OnNet-2400"
+
+    service_name_ru="OnNet-2400"
     service_name_uz="OnNet-2400"
     service_name_en="OnNet-2400"
 
@@ -2262,8 +2262,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRONNETCORP3600" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="OnNet-3600"
-    service_name_rut="OnNet-3600"
+
+    service_name_ru="OnNet-3600"
     service_name_uz="OnNet-3600"
     service_name_en="OnNet-3600"
 
@@ -2273,8 +2273,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRONNETCORP6000" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="OnNet-6000"
-    service_name_rut="OnNet-6000"
+
+    service_name_ru="OnNet-6000"
     service_name_uz="OnNet-6000"
     service_name_en="OnNet-6000"
 
@@ -2284,8 +2284,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRONNETCORP12000" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="OnNet-12000"
-    service_name_rut="OnNet-12000"
+
+    service_name_ru="OnNet-12000"
     service_name_uz="OnNet-12000"
     service_name_en="OnNet-12000"
 
@@ -2295,8 +2295,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="AVTOMBHW3000" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Huawei OnNet 3000 MB"
-    service_name_rut="Huawei OnNet 3000 MB"
+
+    service_name_ru="Huawei OnNet 3000 MB"
     service_name_uz="Huawei OnNet 3000 MB"
     service_name_en="Huawei OnNet 3000 MB"
 
@@ -2305,8 +2305,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRSMSONNET50" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="SMS OnNet 50"
-    service_name_rut="SMS OnNet 50"
+
+    service_name_ru="SMS OnNet 50"
     service_name_uz="SMS OnNet 50"
     service_name_en="SMS OnNet 50"
 
@@ -2318,8 +2318,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB3000HW" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Huawei 3000"
-    service_name_rut="Huawei 3000"
+
+    service_name_ru="Huawei 3000"
     service_name_uz="Huawei 3000"
     service_name_en="Huawei 3000"
 
@@ -2328,8 +2328,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMBPACKMSK" datefrom="20150105" dateto="" group="2"
 
-    service_name_ruk="Internet-1000 Promo"
-    service_name_rut="Internet-1000 Promo"
+
+    service_name_ru="Internet-1000 Promo"
     service_name_uz="Internet-1000 Promo"
     service_name_en="Internet-1000 Promo"
 
@@ -2338,8 +2338,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMBPACKMSK2" datefrom="20150105" dateto="" group="2"
 
-    service_name_ruk="Internet-500 Promo"
-    service_name_rut="Internet-500 Promo"
+
+    service_name_ru="Internet-500 Promo"
     service_name_uz="Internet-500 Promo"
     service_name_en="Internet-500 Promo"
 
@@ -2348,8 +2348,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMBPACKMSK3" datefrom="20150105" dateto="" group="2"
 
-    service_name_ruk="Internet-300 Promo"
-    service_name_rut="Internet-300 Promo"
+
+    service_name_ru="Internet-300 Promo"
     service_name_uz="Internet-300 Promo"
     service_name_en="Internet-300 Promo"
 
@@ -2358,8 +2358,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMBPACKMSKN100" datefrom="20150105" dateto="" group="2"
 
-    service_name_ruk="Internet-100 Promo"
-    service_name_rut="Internet-100 Promo"
+
+    service_name_ru="Internet-100 Promo"
     service_name_uz="Internet-100 Promo"
     service_name_en="Internet-100 Promo"
 
@@ -2368,8 +2368,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMBPACKMSKN200" datefrom="20150105" dateto="" group="2"
 
-    service_name_ruk="Internet-200 Promo"
-    service_name_rut="Internet-200 Promo"
+
+    service_name_ru="Internet-200 Promo"
     service_name_uz="Internet-200 Promo"
     service_name_en="Internet-200 Promo"
 
@@ -2378,8 +2378,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMBPACKMSK100" datefrom="20150105" dateto="" group="2"
 
-    service_name_ruk="Internet-100 Promo"
-    service_name_rut="Internet-100 Promo"
+
+    service_name_ru="Internet-100 Promo"
     service_name_uz="Internet-100 Promo"
     service_name_en="Internet-100 Promo"
 
@@ -2388,8 +2388,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMBPACKMSK60" datefrom="20150105" dateto="" group="2"
 
-    service_name_ruk="Internet-500 Promo"
-    service_name_rut="Internet-500 Promo"
+
+    service_name_ru="Internet-500 Promo"
     service_name_uz="Internet-500 Promo"
     service_name_en="Internet-500 Promo"
 
@@ -2398,8 +2398,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMBPACKMSK40" datefrom="20150105" dateto="" group="2"
 
-    service_name_ruk="Internet-1000 Promo"
-    service_name_rut="Internet-1000 Promo"
+
+    service_name_ru="Internet-1000 Promo"
     service_name_uz="Internet-1000 Promo"
     service_name_en="Internet-1000 Promo"
 
@@ -2408,8 +2408,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRSMS2000" datefrom="20150105" dateto="" group="2"
 
-    service_name_ruk="SMS-2000 Promo"
-    service_name_rut="SMS-2000 Promo"
+
+    service_name_ru="SMS-2000 Promo"
     service_name_uz="SMS-2000 Promo"
     service_name_en="SMS-2000 Promo"
 
@@ -2418,8 +2418,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRSMSUNLIM" datefrom="20150105" dateto="" group="2"
 
-    service_name_ruk="SMS Unlim"
-    service_name_rut="SMS Unlim"
+
+    service_name_ru="SMS Unlim"
     service_name_uz="SMS Unlim"
     service_name_en="SMS Unlim"
 
@@ -2428,8 +2428,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMB100P" datefrom="20150105" dateto="" group="2"
 
-    service_name_ruk="Promo 100MB"
-    service_name_rut="Promo 100MB"
+
+    service_name_ru="Promo 100MB"
     service_name_uz="Promo 100MB"
     service_name_en="Promo 100MB"
 
@@ -2438,8 +2438,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMB300P" datefrom="20150105" dateto="" group="2"
 
-    service_name_ruk="Promo 300MB"
-    service_name_rut="Promo 300MB"
+
+    service_name_ru="Promo 300MB"
     service_name_uz="Promo 300MB"
     service_name_en="Promo 300MB"
 
@@ -2448,8 +2448,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMB500P" datefrom="20150105" dateto="" group="2"
 
-    service_name_ruk="Promo 500MB"
-    service_name_rut="Promo 500MB"
+
+    service_name_ru="Promo 500MB"
     service_name_uz="Promo 500MB"
     service_name_en="Promo 500MB"
 
@@ -2458,8 +2458,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMIN100PUMS" datefrom="20150105" dateto="" group="2"
 
-    service_name_ruk="Promo 100Min"
-    service_name_rut="Promo 100Min"
+
+    service_name_ru="Promo 100Min"
     service_name_uz="Promo 100Min"
     service_name_en="Promo 100Min"
 
@@ -2468,8 +2468,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMIN300PUMS" datefrom="20150105" dateto="" group="2"
 
-    service_name_ruk="Promo 300Min"
-    service_name_rut="Promo 300Min"
+
+    service_name_ru="Promo 300Min"
     service_name_uz="Promo 300Min"
     service_name_en="Promo 300Min"
 
@@ -2478,8 +2478,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMIN500PUMS" datefrom="20150105" dateto="" group="2"
 
-    service_name_ruk="Promo 500Min"
-    service_name_rut="Promo 500Min"
+
+    service_name_ru="Promo 500Min"
     service_name_uz="Promo 500Min"
     service_name_en="Promo 500Min"
 
@@ -2488,8 +2488,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FR300MBPR" datefrom="20150105" dateto="" group="2"
 
-    service_name_ruk="Promo 300MB"
-    service_name_rut="Promo 300MB"
+
+    service_name_ru="Promo 300MB"
     service_name_uz="Promo 300MB"
     service_name_en="Promo 300MB"
 
@@ -2498,8 +2498,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMIN100" datefrom="20150105" dateto="" group="2"
 
-    service_name_ruk="Paket 100Min"
-    service_name_rut="Paket 100Min"
+
+    service_name_ru="Paket 100Min"
     service_name_uz="Paket 100Min"
     service_name_en="Paket 100Min"
 
@@ -2508,8 +2508,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMIN300" datefrom="20150105" dateto="" group="2"
 
-    service_name_ruk="Paket 300Min"
-    service_name_rut="Paket 300Min"
+
+    service_name_ru="Paket 300Min"
     service_name_uz="Paket 300Min"
     service_name_en="Paket 300Min"
 
@@ -2518,8 +2518,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS50DAY" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="1-Day 50 MB"
-    service_name_rut="1-Day 50 MB"
+
+    service_name_ru="1-Day 50 MB"
     service_name_uz="1-Day 50 MB"
     service_name_en="1-Day 50 MB"
 
@@ -2534,8 +2534,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS100DAY" datefrom="20160406" dateto="" group="2"
 
-           service_name_ruk="1-Day 100 MB"
-           service_name_rut="1-Day 100 MB"
+
+           service_name_ru="1-Day 100 MB"
            service_name_uz="1-Day 100 MB"
            service_name_en="1-Day 100 MB"
 
@@ -2550,8 +2550,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS1000DAY" datefrom="20160406" dateto="" group="2"
 
-           service_name_ruk="1-Day 1000 MB"
-           service_name_rut="1-Day 1000 MB"
+
+           service_name_ru="1-Day 1000 MB"
            service_name_uz="1-Day 1000 MB"
            service_name_en="1-Day 1000 MB"
 
@@ -2562,8 +2562,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRSB500DAY" datefrom="20160406" dateto="" group="2"
 
-           service_name_ruk="1-Day 500 MB"
-           service_name_rut="1-Day 500 MB"
+
+           service_name_ru="1-Day 500 MB"
            service_name_uz="1-Day 500 MB"
            service_name_en="1-Day 500 MB"
 
@@ -2576,8 +2576,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRSB1000DAY" datefrom="20160406" dateto="" group="2"
 
-           service_name_ruk="1-Day 1000 MB"
-           service_name_rut="1-Day 1000 MB"
+
+           service_name_ru="1-Day 1000 MB"
            service_name_uz="1-Day 1000 MB"
            service_name_en="1-Day 1000 MB"
 
@@ -2590,8 +2590,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRSB2000DAY" datefrom="20160406" dateto="" group="2"
 
-           service_name_ruk="1-Day 2000 MB"
-           service_name_rut="1-Day 2000 MB"
+
+           service_name_ru="1-Day 2000 MB"
            service_name_uz="1-Day 2000 MB"
            service_name_en="1-Day 2000 MB"
 
@@ -2604,8 +2604,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRSB3000DAY" datefrom="20160406" dateto="" group="2"
 
-           service_name_ruk="1-Day 3000 MB"
-           service_name_rut="1-Day 3000 MB"
+
+           service_name_ru="1-Day 3000 MB"
            service_name_uz="1-Day 3000 MB"
            service_name_en="1-Day 3000 MB"
 
@@ -2618,8 +2618,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRSB5000DAY" datefrom="20160406" dateto="" group="2"
 
-           service_name_ruk="1-Day 5000 MB"
-           service_name_rut="1-Day 5000 MB"
+
+           service_name_ru="1-Day 5000 MB"
            service_name_uz="1-Day 5000 MB"
            service_name_en="1-Day 5000 MB"
 
@@ -2632,8 +2632,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRSB10000DAY" datefrom="20160406" dateto="" group="2"
 
-           service_name_ruk="1-Day 10000 MB"
-           service_name_rut="1-Day 10000 MB"
+
+           service_name_ru="1-Day 10000 MB"
            service_name_uz="1-Day 10000 MB"
            service_name_en="1-Day 10000 MB"
 
@@ -2646,8 +2646,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS450BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 300+50 Percents"
-    service_name_rut="Internet 300+50 Percents"
+
+    service_name_ru="Internet 300+50 Percents"
     service_name_uz="Internet 300+50 Percents"
     service_name_en="Internet 300+50 Percents"
 
@@ -2661,8 +2661,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS750BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 500+50 Percents"
-    service_name_rut="Internet 500+50 Percents"
+
+    service_name_ru="Internet 500+50 Percents"
     service_name_uz="Internet 500+50 Percents"
     service_name_en="Internet 500+50 Percents"
 
@@ -2676,8 +2676,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS1500BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 1000+50 Percents"
-    service_name_rut="Internet 1000+50 Percents"
+
+    service_name_ru="Internet 1000+50 Percents"
     service_name_uz="Internet 1000+50 Percents"
     service_name_en="Internet 1000+50 Percents"
 
@@ -2691,8 +2691,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS3000BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 2000+50 Percents"
-    service_name_rut="Internet 2000+50 Percents"
+
+    service_name_ru="Internet 2000+50 Percents"
     service_name_uz="Internet 2000+50 Percents"
     service_name_en="Internet 2000+50 Percents"
 
@@ -2706,8 +2706,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS4500BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 3000+50 Percents"
-    service_name_rut="Internet 3000+50 Percents"
+
+    service_name_ru="Internet 3000+50 Percents"
     service_name_uz="Internet 3000+50 Percents"
     service_name_en="Internet 3000+50 Percents"
 
@@ -2721,8 +2721,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS7500BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 5000+50 Percents"
-    service_name_rut="Internet 5000+50 Percents"
+
+    service_name_ru="Internet 5000+50 Percents"
     service_name_uz="Internet 5000+50 Percents"
     service_name_en="Internet 5000+50 Percents"
 
@@ -2736,8 +2736,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS15000BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 10000+50 Percents"
-    service_name_rut="Internet 10000+50 Percents"
+
+    service_name_ru="Internet 10000+50 Percents"
     service_name_uz="Internet 10000+50 Percents"
     service_name_en="Internet 10000+50 Percents"
 
@@ -2751,8 +2751,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS375BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 300+25&lt;"
-    service_name_rut="Internet 300+25&lt;"
+
+    service_name_ru="Internet 300+25&lt;"
     service_name_uz="Internet 300+25&lt;"
     service_name_en="Internet 300+25&lt;"
 
@@ -2767,8 +2767,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS625BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 500+25&lt;"
-    service_name_rut="Internet 500+25&lt;"
+
+    service_name_ru="Internet 500+25&lt;"
     service_name_uz="Internet 500+25&lt;"
     service_name_en="Internet 500+25&lt;"
 
@@ -2778,8 +2778,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS1250BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 1000+25&lt;"
-    service_name_rut="Internet 1000+25&lt;"
+
+    service_name_ru="Internet 1000+25&lt;"
     service_name_uz="Internet 1000+25&lt;"
     service_name_en="Internet 1000+25&lt;"
 
@@ -2789,8 +2789,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS2500BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 2000+25&lt;"
-    service_name_rut="Internet 2000+25&lt;"
+
+    service_name_ru="Internet 2000+25&lt;"
     service_name_uz="Internet 2000+25&lt;"
     service_name_en="Internet 2000+25&lt;"
 
@@ -2800,8 +2800,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS3750BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 3000+25&lt;"
-    service_name_rut="Internet 3000+25&lt;"
+
+    service_name_ru="Internet 3000+25&lt;"
     service_name_uz="Internet 3000+25&lt;"
     service_name_en="Internet 3000+25&lt;"
 
@@ -2811,8 +2811,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS6250BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 5000+25&lt;"
-    service_name_rut="Internet 5000+25&lt;"
+
+    service_name_ru="Internet 5000+25&lt;"
     service_name_uz="Internet 5000+25&lt;"
     service_name_en="Internet 5000+25&lt;"
 
@@ -2822,8 +2822,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS12500BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 10000+25&lt;"
-    service_name_rut="Internet 10000+25&lt;"
+
+    service_name_ru="Internet 10000+25&lt;"
     service_name_uz="Internet 10000+25&lt;"
     service_name_en="Internet 10000+25&lt;"
 
@@ -2833,8 +2833,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS25000BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 20000+25&lt;"
-    service_name_rut="Internet 20000+25&lt;"
+
+    service_name_ru="Internet 20000+25&lt;"
     service_name_uz="Internet 20000+25&lt;"
     service_name_en="Internet 20000+25&lt;"
 
@@ -2846,8 +2846,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS37500BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 30000+25&lt;"
-    service_name_rut="Internet 30000+25&lt;"
+
+    service_name_ru="Internet 30000+25&lt;"
     service_name_uz="Internet 30000+25&lt;"
     service_name_en="Internet 30000+25&lt;"
 
@@ -2862,8 +2862,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS62500BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 50000+25&lt;"
-    service_name_rut="Internet 50000+25&lt;"
+
+    service_name_ru="Internet 50000+25&lt;"
     service_name_uz="Internet 50000+25&lt;"
     service_name_en="Internet 50000+25&lt;"
 
@@ -2878,8 +2878,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS125000BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 100000+25&lt;"
-    service_name_rut="Internet 100000+25&lt;"
+
+    service_name_ru="Internet 100000+25&lt;"
     service_name_uz="Internet 100000+25&lt;"
     service_name_en="Internet 100000+25&lt;"
 
@@ -2894,8 +2894,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRSC450BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 300+50 Percents"
-    service_name_rut="Internet 300+50 Percents"
+
+    service_name_ru="Internet 300+50 Percents"
     service_name_uz="Internet 300+50 Percents"
     service_name_en="Internet 300+50 Percents"
 
@@ -2905,8 +2905,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRSC750BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 500+50 Percents"
-    service_name_rut="Internet 500+50 Percents"
+
+    service_name_ru="Internet 500+50 Percents"
     service_name_uz="Internet 500+50 Percents"
     service_name_en="Internet 500+50 Percents"
 
@@ -2916,8 +2916,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRSC1500BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 1000+50 Percents"
-    service_name_rut="Internet 1000+50 Percents"
+
+    service_name_ru="Internet 1000+50 Percents"
     service_name_uz="Internet 1000+50 Percents"
     service_name_en="Internet 1000+50 Percents"
 
@@ -2927,8 +2927,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRSC3000BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 2000+50 Percents"
-    service_name_rut="Internet 2000+50 Percents"
+
+    service_name_ru="Internet 2000+50 Percents"
     service_name_uz="Internet 2000+50 Percents"
     service_name_en="Internet 2000+50 Percents"
 
@@ -2938,8 +2938,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRSC4500BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 3000+50 Percents"
-    service_name_rut="Internet 3000+50 Percents"
+
+    service_name_ru="Internet 3000+50 Percents"
     service_name_uz="Internet 3000+50 Percents"
     service_name_en="Internet 3000+50 Percents"
 
@@ -2949,8 +2949,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRSC7500BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 5000+50 Percents"
-    service_name_rut="Internet 5000+50 Percents"
+
+    service_name_ru="Internet 5000+50 Percents"
     service_name_uz="Internet 5000+50 Percents"
     service_name_en="Internet 5000+50 Percents"
 
@@ -2960,8 +2960,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRSC15000BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 10000+50 Percents"
-    service_name_rut="Internet 10000+50 Percents"
+
+    service_name_ru="Internet 10000+50 Percents"
     service_name_uz="Internet 10000+50 Percents"
     service_name_en="Internet 10000+50 Percents"
 
@@ -2971,8 +2971,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS300BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 300+20 Percents"
-    service_name_rut="Internet 300+20 Percents"
+
+    service_name_ru="Internet 300+20 Percents"
     service_name_uz="Internet 300+20 Percents"
     service_name_en="Internet 300+20 Percents"
 
@@ -2981,8 +2981,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS600BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 500+20 Percents"
-    service_name_rut="Internet 500+20 Percents"
+
+    service_name_ru="Internet 500+20 Percents"
     service_name_uz="Internet 500+20 Percents"
     service_name_en="Internet 500+20 Percents"
 
@@ -2991,8 +2991,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS1200BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 1000+20 Percents"
-    service_name_rut="Internet 1000+20 Percents"
+
+    service_name_ru="Internet 1000+20 Percents"
     service_name_uz="Internet 1000+20 Percents"
     service_name_en="Internet 1000+20 Percents"
 
@@ -3001,8 +3001,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS2400BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 2000+20 Percents"
-    service_name_rut="Internet 2000+20 Percents"
+
+    service_name_ru="Internet 2000+20 Percents"
     service_name_uz="Internet 2000+20 Percents"
     service_name_en="Internet 2000+20 Percents"
 
@@ -3011,8 +3011,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS3600BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 3000+20 Percents"
-    service_name_rut="Internet 3000+20 Percents"
+
+    service_name_ru="Internet 3000+20 Percents"
     service_name_uz="Internet 3000+20 Percents"
     service_name_en="Internet 3000+20 Percents"
 
@@ -3021,8 +3021,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS6000BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 5000+20 Percents"
-    service_name_rut="Internet 5000+20 Percents"
+
+    service_name_ru="Internet 5000+20 Percents"
     service_name_uz="Internet 5000+20 Percents"
     service_name_en="Internet 5000+20 Percents"
 
@@ -3031,8 +3031,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS12000BONUS" datefrom="20160406" dateto="" group="2"
 
-    service_name_ruk="Internet 10000+20 Percents"
-    service_name_rut="Internet 10000+20 Percents"
+
+    service_name_ru="Internet 10000+20 Percents"
     service_name_uz="Internet 10000+20 Percents"
     service_name_en="Internet 10000+20 Percents"
 
@@ -3041,8 +3041,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS100WEEK" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Nedelniy internet-100"
-    service_name_rut="Nedelniy internet-100"
+
+    service_name_ru="Nedelniy internet-100"
     service_name_uz="Nedelniy internet-100"
     service_name_en="Nedelniy internet-100"
 
@@ -3055,8 +3055,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS200WEEK" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Nedelniy internet-200"
-    service_name_rut="Nedelniy internet-200"
+
+    service_name_ru="Nedelniy internet-200"
     service_name_uz="Nedelniy internet-200"
     service_name_en="Nedelniy internet-200"
 
@@ -3069,8 +3069,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS300WEEK" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Nedelniy internet-300"
-    service_name_rut="Nedelniy internet-300"
+
+    service_name_ru="Nedelniy internet-300"
     service_name_uz="Nedelniy internet-300"
     service_name_en="Nedelniy internet-300"
 
@@ -3083,8 +3083,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMB5000BF" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Online Weekend 5000"
-    service_name_rut="Online Weekend 5000"
+
+    service_name_ru="Online Weekend 5000"
     service_name_uz="Online Weekend 5000"
     service_name_en="Online Weekend 5000"
 
@@ -3094,8 +3094,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMB10000BF" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Online Weekend 10000"
-    service_name_rut="Online Weekend 10000"
+
+    service_name_ru="Online Weekend 10000"
     service_name_uz="Online Weekend 10000"
     service_name_en="Online Weekend 10000"
 
@@ -3105,8 +3105,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMB3000PRON" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Prazdnik Online 3000"
-    service_name_rut="Prazdnik Online 3000"
+
+    service_name_ru="Prazdnik Online 3000"
     service_name_uz="Prazdnik Online 3000"
     service_name_en="Prazdnik Online 3000"
 
@@ -3116,8 +3116,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMB6000PRON" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Prazdnik Online 6000"
-    service_name_rut="Prazdnik Online 6000"
+
+    service_name_ru="Prazdnik Online 6000"
     service_name_uz="Prazdnik Online 6000"
     service_name_en="Prazdnik Online 6000"
 
@@ -3127,8 +3127,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMB12000PRON" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Prazdnik Online 12000"
-    service_name_rut="Prazdnik Online 12000"
+
+    service_name_ru="Prazdnik Online 12000"
     service_name_uz="Prazdnik Online 12000"
     service_name_en="Prazdnik Online 12000"
 
@@ -3138,8 +3138,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMINPACKF120" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Paket minut 120 + 25&lt;"
-    service_name_rut="Paket minut 120 + 25&lt;"
+
+    service_name_ru="Paket minut 120 + 25&lt;"
     service_name_uz="Paket minut 120 + 25&lt;"
     service_name_en="Paket minut 120 + 25&lt;"
 
@@ -3157,8 +3157,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMINPACKF180" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Paket minut 180 + 25&lt;"
-    service_name_rut="Paket minut 180 + 25&lt;"
+
+    service_name_ru="Paket minut 180 + 25&lt;"
     service_name_uz="Paket minut 180 + 25&lt;"
     service_name_en="Paket minut 180 + 25&lt;"
 
@@ -3176,8 +3176,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMINPACKF300" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Paket minut 300 + 25&lt;"
-    service_name_rut="Paket minut 300 + 25&lt;"
+
+    service_name_ru="Paket minut 300 + 25&lt;"
     service_name_uz="Paket minut 300 + 25&lt;"
     service_name_en="Paket minut 300 + 25&lt;"
 
@@ -3195,8 +3195,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMIN60" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Paket minut 60"
-    service_name_rut="Paket minut 60"
+
+    service_name_ru="Paket minut 60"
     service_name_uz="60 daqiqalik to^plam"
     service_name_en="Paket minut 60"
 
@@ -3210,8 +3210,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMIN120" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Paket minut 120"
-    service_name_rut="Paket minut 120"
+
+    service_name_ru="Paket minut 120"
     service_name_uz="120 daqiqalik to^plam"
     service_name_en="Paket minut 120"
 
@@ -3229,8 +3229,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMIN180" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Paket minut 180"
-    service_name_rut="Paket minut 180"
+
+    service_name_ru="Paket minut 180"
     service_name_uz="180 daqiqalik to^plam"
     service_name_en="Paket minut 180"
 
@@ -3248,8 +3248,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMIN300" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Paket minut 300"
-    service_name_rut="Paket minut 300"
+
+    service_name_ru="Paket minut 300"
     service_name_uz="300 daqiqalik to^plam"
     service_name_en="Paket minut 300"
 
@@ -3267,8 +3267,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMIN900" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Paket minut 900"
-    service_name_rut="Paket minut 900"
+
+    service_name_ru="Paket minut 900"
     service_name_uz="900 daqiqalik to^plam"
     service_name_en="Paket minut 900"
 
@@ -3282,8 +3282,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMIN1200" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Paket minut 1200"
-    service_name_rut="Paket minut 1200"
+
+    service_name_ru="Paket minut 1200"
     service_name_uz="1200 daqiqalik to^plam"
     service_name_en="Paket minut 1200"
 
@@ -3297,8 +3297,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMIN1800" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Paket minut 1800"
-    service_name_rut="Paket minut 1800"
+
+    service_name_ru="Paket minut 1800"
     service_name_uz="1800 daqiqalik to^plam"
     service_name_en="Paket minut 1800"
 
@@ -3312,8 +3312,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMINPACK120" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Paket minut 120"
-    service_name_rut="Paket minut 120"
+
+    service_name_ru="Paket minut 120"
     service_name_uz="Paket minut 120"
     service_name_en="Paket minut 120"
 
@@ -3323,8 +3323,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMINPACK180" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Paket minut 180"
-    service_name_rut="Paket minut 180"
+
+    service_name_ru="Paket minut 180"
     service_name_uz="Paket minut 180"
     service_name_en="Paket minut 180"
 
@@ -3334,8 +3334,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMINPACK300" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Paket minut 300"
-    service_name_rut="Paket minut 300"
+
+    service_name_ru="Paket minut 300"
     service_name_uz="Paket minut 300"
     service_name_en="Paket minut 300"
 
@@ -3345,8 +3345,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMINPACK50" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Paket minut 50"
-    service_name_rut="Paket minut 50"
+
+    service_name_ru="Paket minut 50"
     service_name_uz="Paket minut 50"
     service_name_en="Paket minut 50"
 
@@ -3356,8 +3356,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMINPACK100" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Paket minut 100"
-    service_name_rut="Paket minut 100"
+
+    service_name_ru="Paket minut 100"
     service_name_uz="Paket minut 100"
     service_name_en="Paket minut 100"
 
@@ -3367,8 +3367,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMBPACKMSKN50" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Paket internet 50"
-    service_name_rut="Paket internet 50"
+
+    service_name_ru="Paket internet 50"
     service_name_uz="Paket internet 50"
     service_name_en="Paket internet 50"
 
@@ -3378,8 +3378,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS100LTE" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Paket internet 100"
-    service_name_rut="Paket internet 100"
+
+    service_name_ru="Paket internet 100"
     service_name_uz="Paket internet 100"
     service_name_en="Paket internet 100"
 
@@ -3389,8 +3389,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMINUZB120" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Paket 120 minut"
-    service_name_rut="Paket 120 minut"
+
+    service_name_ru="Paket 120 minut"
     service_name_uz="Paket 120 minut"
     service_name_en="Paket 120 minut"
 
@@ -3400,8 +3400,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRDAYGPRS1" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Dnevnoy internet-1"
-    service_name_rut="Dnevnoy internet-1"
+
+    service_name_ru="Dnevnoy internet-1"
     service_name_uz="Dnevnoy internet-1"
     service_name_en="Dnevnoy internet-1"
 
@@ -3413,8 +3413,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRDAYGPRS7" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Dnevnoy internet-7"
-    service_name_rut="Dnevnoy internet-7"
+
+    service_name_ru="Dnevnoy internet-7"
     service_name_uz="Dnevnoy internet-7"
     service_name_en="Dnevnoy internet-7"
 
@@ -3427,8 +3427,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRDAYGPRS30" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Dnevnoy internet-30"
-    service_name_rut="Dnevnoy internet-30"
+
+    service_name_ru="Dnevnoy internet-30"
     service_name_uz="Dnevnoy internet-30"
     service_name_en="Dnevnoy internet-30"
 
@@ -3440,8 +3440,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMBPACKMSK2000" datefrom="20150105" dateto="" group="2"
 
-    service_name_ruk="Internet-2000 Promo"
-    service_name_rut="Internet-2000 Promo"
+
+    service_name_ru="Internet-2000 Promo"
     service_name_uz="Internet-2000 Promo"
     service_name_en="Internet-2000 Promo"
 
@@ -3450,8 +3450,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRWELCOME" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Welcome"
-    service_name_rut="Welcome"
+
+    service_name_ru="Welcome"
     service_name_uz="Welcome"
     service_name_en="Welcome"
 
@@ -3460,8 +3460,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMINB500" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Paket minut 500"
-    service_name_rut="Paket minut 500"
+
+    service_name_ru="Paket minut 500"
     service_name_uz="Paket minut 500"
     service_name_en="Paket minut 500"
 
@@ -3471,8 +3471,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMINB750" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Paket minut 750"
-    service_name_rut="Paket minut 750"
+
+    service_name_ru="Paket minut 750"
     service_name_uz="Paket minut 750"
     service_name_en="Paket minut 750"
 
@@ -3482,8 +3482,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMINB1250" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Paket minut 1250"
-    service_name_rut="Paket minut 1250"
+
+    service_name_ru="Paket minut 1250"
     service_name_uz="Paket minut 1250"
     service_name_en="Paket minut 1250"
 
@@ -3493,8 +3493,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMINB2000" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Paket minut 2000"
-    service_name_rut="Paket minut 2000"
+
+    service_name_ru="Paket minut 2000"
     service_name_uz="Paket minut 2000"
     service_name_en="Paket minut 2000"
 
@@ -3504,8 +3504,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS300TEST" datefrom="20131001" dateto="" group="2" delayed="true"
 
-    service_name_ruk="Testoviy 30 MB"
-    service_name_rut="Testoviy 30 MB"
+
+    service_name_ru="Testoviy 30 MB"
     service_name_uz="Testoviy 30 MB"
     service_name_en="Testoviy 30 MB"
 
@@ -3515,8 +3515,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMBPACKMSK1000BONUS" datefrom="20131001" dateto="" group="2" delayed="true"
 
-    service_name_ruk="Promo internet 1000 Mb + BONUS"
-    service_name_rut="Promo internet 1000 Mb + BONUS"
+
+    service_name_ru="Promo internet 1000 Mb + BONUS"
     service_name_uz="Promo internet 1000 Mb + BONUS"
     service_name_en="Promo internet 1000 Mb + BONUS"
 
@@ -3526,8 +3526,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS300B" datefrom="20131001" dateto="" group="2" delayed="true"
 
-    service_name_ruk="Bessrochniy 300 MB"
-    service_name_rut="Bessrochniy 300 MB"
+
+    service_name_ru="Bessrochniy 300 MB"
     service_name_uz="Bessrochniy 300 MB"
     service_name_en="Bessrochniy 300 MB"
 
@@ -3544,8 +3544,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS500B" datefrom="20131001" dateto="" group="2" delayed="true"
 
-    service_name_ruk="Bessrochniy 500 MB"
-    service_name_rut="Bessrochniy 500 MB"
+
+    service_name_ru="Bessrochniy 500 MB"
     service_name_uz="Bessrochniy 500 MB"
     service_name_en="Bessrochniy 500 MB"
 
@@ -3560,8 +3560,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS1000B" datefrom="20131001" dateto="" group="2" delayed="true"
 
-    service_name_ruk="Bessrochniy 1000 MB"
-    service_name_rut="Bessrochniy 1000 MB"
+
+    service_name_ru="Bessrochniy 1000 MB"
     service_name_uz="Bessrochniy 1000 MB"
     service_name_en="Bessrochniy 1000 MB"
 
@@ -3577,8 +3577,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS2000B" datefrom="20131001" dateto="" group="2" delayed="true"
 
-    service_name_ruk="Bessrochniy 2000 MB"
-    service_name_rut="Bessrochniy 2000 MB"
+
+    service_name_ru="Bessrochniy 2000 MB"
     service_name_uz="Bessrochniy 2000 MB"
     service_name_en="Bessrochniy 2000 MB"
 
@@ -3594,8 +3594,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS3000B" datefrom="20131001" dateto="" group="2" delayed="true"
 
-    service_name_ruk="Bessrochniy 3000 MB"
-    service_name_rut="Bessrochniy 3000 MB"
+
+    service_name_ru="Bessrochniy 3000 MB"
     service_name_uz="Bessrochniy 3000 MB"
     service_name_en="Bessrochniy 3000 MB"
 
@@ -3611,8 +3611,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS5000B" datefrom="20131001" dateto="" group="2" delayed="true"
 
-    service_name_ruk="Bessrochniy 5000 MB"
-    service_name_rut="Bessrochniy 5000 MB"
+
+    service_name_ru="Bessrochniy 5000 MB"
     service_name_uz="Bessrochniy 5000 MB"
     service_name_en="Bessrochniy 5000 MB"
 
@@ -3628,8 +3628,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS10000B" datefrom="20131001" dateto="" group="2" delayed="true"
 
-    service_name_ruk="Bessrochniy 10000 MB"
-    service_name_rut="Bessrochniy 10000 MB"
+
+    service_name_ru="Bessrochniy 10000 MB"
     service_name_uz="Bessrochniy 10000 MB"
     service_name_en="Bessrochniy 10000 MB"
 
@@ -3645,8 +3645,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRSALEGPRS" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Testoviy 30 MB Skidka"
-    service_name_rut="Testoviy 30 MB Skidka"
+
+    service_name_ru="Testoviy 30 MB Skidka"
     service_name_uz="Testoviy 30 MB Skidka"
     service_name_en="Testoviy 30 MB Skidka"
 
@@ -3656,8 +3656,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRSMIL" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Millioni ot UMS"
-    service_name_rut="Millioni ot UMS"
+
+    service_name_ru="Millioni ot UMS"
     service_name_uz="UMSdan millionlar"
     service_name_en="Millioni ot UMS"
 
@@ -3670,8 +3670,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRCOMMIN500" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Multi 500"
-    service_name_rut="Multi 500"
+
+    service_name_ru="Multi 500"
     service_name_uz="Multi 500"
     service_name_en="Multi 500"
 
@@ -3681,8 +3681,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRCOM3MB50" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Combo 3"
-    service_name_rut="Combo 3"
+
+    service_name_ru="Combo 3"
     service_name_uz="Combo 3"
     service_name_en="Combo 3"
 
@@ -3692,8 +3692,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRCOMMB20" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Combo 1"
-    service_name_rut="Combo 1"
+
+    service_name_ru="Combo 1"
     service_name_uz="Combo 1"
     service_name_en="Combo 1"
 
@@ -3703,8 +3703,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRCOMSMS250" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Combo 2"
-    service_name_rut="Combo 2"
+
+    service_name_ru="Combo 2"
     service_name_uz="Combo 2"
     service_name_en="Combo 2"
 
@@ -3714,8 +3714,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRCOMSMS500" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Combo 3"
-    service_name_rut="Combo 3"
+
+    service_name_ru="Combo 3"
     service_name_uz="Combo 3"
     service_name_en="Combo 3"
 
@@ -3725,8 +3725,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRCOMMIN100" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Multi 100"
-    service_name_rut="Multi 100"
+
+    service_name_ru="Multi 100"
     service_name_uz="Multi 100"
     service_name_en="Multi 100"
 
@@ -3736,8 +3736,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRCOMSMS100" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Combo 1"
-    service_name_rut="Combo 1"
+
+    service_name_ru="Combo 1"
     service_name_uz="Combo 1"
     service_name_en="Combo 1"
 
@@ -3747,8 +3747,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRCOMMIN250" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Multi 250"
-    service_name_rut="Multi 250"
+
+    service_name_ru="Multi 250"
     service_name_uz="Multi 250"
     service_name_en="Multi 250"
 
@@ -3758,8 +3758,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRCOMMB50" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Combo 2"
-    service_name_rut="Combo 2"
+
+    service_name_ru="Combo 2"
     service_name_uz="Combo 2"
     service_name_en="Combo 2"
 
@@ -3769,8 +3769,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRPRAZDNIK888" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Prazdnichnie 888 MB"
-    service_name_rut="Prazdnichnie 888 MB"
+
+    service_name_ru="Prazdnichnie 888 MB"
     service_name_uz="Bayramona 888 MB"
     service_name_en="Prazdnichnie 888 MB"
 
@@ -3780,8 +3780,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRABITURIENT1500" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Abiturient 1500"
-    service_name_rut="Abiturient 1500"
+
+    service_name_ru="Abiturient 1500"
     service_name_uz="Abiturient 1500"
     service_name_en="Abiturient 1500"
 
@@ -3791,8 +3791,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRABITURIENT2000" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Abiturient 2000"
-    service_name_rut="Abiturient 2000"
+
+    service_name_ru="Abiturient 2000"
     service_name_uz="Abiturient 2000"
     service_name_en="Abiturient 2000"
 
@@ -3802,8 +3802,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRABITURIENT3000" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Abiturient 3000"
-    service_name_rut="Abiturient 3000"
+
+    service_name_ru="Abiturient 3000"
     service_name_uz="Abiturient 3000"
     service_name_en="Abiturient 3000"
 
@@ -3813,8 +3813,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMIN2019" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="2019 Min"
-    service_name_rut="2019 Min"
+
+    service_name_ru="2019 Min"
     service_name_uz="2019 Min"
     service_name_en="2019 Min"
 
@@ -3828,8 +3828,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FR2019M1" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="2019 MB"
-    service_name_rut="2019 MB"
+
+    service_name_ru="2019 MB"
     service_name_uz="2019 MB"
     service_name_en="2019 MB"
 
@@ -3844,8 +3844,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMULTIYORQIN" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Multi Yorqin"
-    service_name_rut="Multi Yarkiy"
+
+    service_name_ru="Multi Yarkiy"
     service_name_uz="Multi Yorqin"
     service_name_en="Multi Yorqin"
 
@@ -3859,8 +3859,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMULMINCHL" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Multi Chilla Lite"
-    service_name_rut="Multi Chilla Lite"
+
+    service_name_ru="Multi Chilla Lite"
     service_name_uz="Multi Chilla Lite"
     service_name_en="Multi Chilla Lite"
 
@@ -3874,8 +3874,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMULMINCHIL" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Multi Chilla"
-    service_name_rut="Multi Chilla"
+
+    service_name_ru="Multi Chilla"
     service_name_uz="Multi Chilla"
     service_name_en="Multi Chilla"
 
@@ -3889,8 +3889,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMULMINAS" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Multi Asosiy"
-    service_name_rut="Multi Bazoviy"
+
+    service_name_ru="Multi Bazoviy"
     service_name_uz="Multi Asosiy"
     service_name_en="Multi Asosiy"
 
@@ -3904,8 +3904,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMULMINST" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Multi Standart"
-    service_name_rut="Multi Standart"
+
+    service_name_ru="Multi Standart"
     service_name_uz="Multi Standart"
     service_name_en="Multi Standart"
 
@@ -3919,8 +3919,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMULMINOP" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Multi Optimal"
-    service_name_rut="Multi Optimal^niy"
+
+    service_name_ru="Multi Optimal^niy"
     service_name_uz="Multi Optimal"
     service_name_en="Multi Optimal"
 
@@ -3934,8 +3934,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMULMINOPPL" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Multi Optimal+"
-    service_name_rut="Multi Optimal^niy+"
+
+    service_name_ru="Multi Optimal^niy+"
     service_name_uz="Multi Optimal+"
     service_name_en="Multi Optimal+"
 
@@ -3949,8 +3949,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMULMINQUL" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Multi Qulay"
-    service_name_rut="Multi Udobniy"
+
+    service_name_ru="Multi Udobniy"
     service_name_uz="Multi Qulay"
     service_name_en="Multi Qulay"
 
@@ -3964,8 +3964,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMULMINQULPL" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Multi Qulay+"
-    service_name_rut="Multi Udobniy+"
+
+    service_name_ru="Multi Udobniy+"
     service_name_uz="Multi Qulay+"
     service_name_en="Multi Qulay+"
 
@@ -3979,8 +3979,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMULMINPR" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Multi Premial"
-    service_name_rut="Multi Premial^niy"
+
+    service_name_ru="Multi Premial^niy"
     service_name_uz="Multi Premial"
     service_name_en="Multi Premial"
 
@@ -3994,8 +3994,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMULMINIDEAL" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Multi Ideal"
-    service_name_rut="Multi Ideal^niy"
+
+    service_name_ru="Multi Ideal^niy"
     service_name_uz="Multi Ideal"
     service_name_en="Multi Ideal"
 
@@ -4009,8 +4009,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMULMINVIP" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Multi VIP"
-    service_name_rut="Multi VIP"
+
+    service_name_ru="Multi VIP"
     service_name_uz="Multi VIP"
     service_name_en="Multi VIP"
 
@@ -4024,8 +4024,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMULMINEKSKL" datefrom="20131001" dateto="" group="2"
 
-    service_name_ruk="Multi Eksklyuziv"
-    service_name_rut="Multi Eksklyuziv"
+
+    service_name_ru="Multi Eksklyuziv"
     service_name_uz="Multi Eksklyuziv"
     service_name_en="Multi Exclusive"
 
@@ -4039,8 +4039,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB300M1" datefrom="20131001" dateto="" group="5"
 
-    service_name_ruk="Internet-300"
-    service_name_rut="Internet-300"
+
+    service_name_ru="Internet-300"
     service_name_uz="Internet-300"
     service_name_en="Internet-300"
 
@@ -4050,8 +4050,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB500M" datefrom="20131001" dateto="" group="5"
 
-    service_name_ruk="Internet-500"
-    service_name_rut="Internet-500"
+
+    service_name_ru="Internet-500"
     service_name_uz="Internet-500"
     service_name_en="Internet-500"
 
@@ -4061,8 +4061,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB1000M1" datefrom="20150105" dateto="" group="5"
 
-    service_name_ruk="Internet-1000"
-    service_name_rut="Internet-1000"
+
+    service_name_ru="Internet-1000"
     service_name_uz="Internet-1000"
     service_name_en="Internet-1000"
 
@@ -4071,8 +4071,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB2000M1" datefrom="20131001" dateto="" group="5"
 
-    service_name_ruk="Internet-2000"
-    service_name_rut="Internet-2000"
+
+    service_name_ru="Internet-2000"
     service_name_uz="Internet-2000"
     service_name_en="Internet-2000"
 
@@ -4082,8 +4082,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB3000M1" datefrom="20150105" dateto="" group="5"
 
-    service_name_ruk="Internet-3000"
-    service_name_rut="Internet-3000"
+
+    service_name_ru="Internet-3000"
     service_name_uz="Internet-3000"
     service_name_en="Internet-3000"
 
@@ -4092,8 +4092,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB5000M1" datefrom="20150105" dateto="" group="5"
 
-    service_name_ruk="Internet-5000"
-    service_name_rut="Internet-5000"
+
+    service_name_ru="Internet-5000"
     service_name_uz="Internet-5000"
     service_name_en="Internet-5000"
 
@@ -4102,8 +4102,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB10000M1" datefrom="20150105" dateto="" group="5"
 
-    service_name_ruk="Internet-10000"
-    service_name_rut="Internet-10000"
+
+    service_name_ru="Internet-10000"
     service_name_uz="Internet-10000"
     service_name_en="Internet-10000"
 
@@ -4112,8 +4112,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB20000M1" datefrom="20150105" dateto="" group="5"
 
-    service_name_ruk="Internet-20000"
-    service_name_rut="Internet-20000"
+
+    service_name_ru="Internet-20000"
     service_name_uz="Internet-20000"
     service_name_en="Internet-20000"
 
@@ -4122,8 +4122,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB30000M1" datefrom="20150105" dateto="" group="5"
 
-    service_name_ruk="Internet-30000"
-    service_name_rut="Internet-30000"
+
+    service_name_ru="Internet-30000"
     service_name_uz="Internet-30000"
     service_name_en="Internet-30000"
 
@@ -4132,8 +4132,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB50000M1" datefrom="20150105" dateto="" group="5"
 
-    service_name_ruk="Internet-50000"
-    service_name_rut="Internet-50000"
+
+    service_name_ru="Internet-50000"
     service_name_uz="Internet-50000"
     service_name_en="Internet-50000"
 
@@ -4142,8 +4142,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS450BONUS" datefrom="20131001" dateto="" group="5"
 
-    service_name_ruk="Internet-300"
-    service_name_rut="Internet-300"
+
+    service_name_ru="Internet-300"
     service_name_uz="Internet-300"
     service_name_en="Internet-300"
 
@@ -4153,8 +4153,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS750BONUS" datefrom="20131001" dateto="" group="5"
 
-    service_name_ruk="Internet-500"
-    service_name_rut="Internet-500"
+
+    service_name_ru="Internet-500"
     service_name_uz="Internet-500"
     service_name_en="Internet-500"
 
@@ -4164,8 +4164,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS1500BONUS" datefrom="20150105" dateto="" group="5"
 
-    service_name_ruk="Internet-1000"
-    service_name_rut="Internet-1000"
+
+    service_name_ru="Internet-1000"
     service_name_uz="Internet-1000"
     service_name_en="Internet-1000"
 
@@ -4174,8 +4174,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS3000BONUS" datefrom="20131001" dateto="" group="5"
 
-    service_name_ruk="Internet-2000"
-    service_name_rut="Internet-2000"
+
+    service_name_ru="Internet-2000"
     service_name_uz="Internet-2000"
     service_name_en="Internet-2000"
 
@@ -4185,8 +4185,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS4500BONUS" datefrom="20150105" dateto="" group="5"
 
-    service_name_ruk="Internet-3000"
-    service_name_rut="Internet-3000"
+
+    service_name_ru="Internet-3000"
     service_name_uz="Internet-3000"
     service_name_en="Internet-3000"
 
@@ -4195,8 +4195,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS7500BONUS" datefrom="20150105" dateto="" group="5"
 
-    service_name_ruk="Internet-5000"
-    service_name_rut="Internet-5000"
+
+    service_name_ru="Internet-5000"
     service_name_uz="Internet-5000"
     service_name_en="Internet-5000"
 
@@ -4205,8 +4205,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS15000BONUS" datefrom="20150105" dateto="" group="5"
 
-    service_name_ruk="Internet-10000"
-    service_name_rut="Internet-10000"
+
+    service_name_ru="Internet-10000"
     service_name_uz="Internet-10000"
     service_name_en="Internet-10000"
 
@@ -4215,8 +4215,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS600BONUS" datefrom="20160406" dateto="" group="5"
 
-    service_name_ruk="Internet 500+20 Percents"
-    service_name_rut="Internet 500+20 Percents"
+
+    service_name_ru="Internet 500+20 Percents"
     service_name_uz="Internet 500+20 Percents"
     service_name_en="Internet 500+20 Percents"
 
@@ -4225,8 +4225,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS1200BONUS" datefrom="20160406" dateto="" group="5"
 
-    service_name_ruk="Internet 1000+20 Percents"
-    service_name_rut="Internet 1000+20 Percents"
+
+    service_name_ru="Internet 1000+20 Percents"
     service_name_uz="Internet 1000+20 Percents"
     service_name_en="Internet 1000+20 Percents"
 
@@ -4235,8 +4235,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS2400BONUS" datefrom="20160406" dateto="" group="5"
 
-    service_name_ruk="Internet 2000+20 Percents"
-    service_name_rut="Internet 2000+20 Percents"
+
+    service_name_ru="Internet 2000+20 Percents"
     service_name_uz="Internet 2000+20 Percents"
     service_name_en="Internet 2000+20 Percents"
 
@@ -4245,8 +4245,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS3600BONUS" datefrom="20160406" dateto="" group="5"
 
-    service_name_ruk="Internet 3000+20 Percents"
-    service_name_rut="Internet 3000+20 Percents"
+
+    service_name_ru="Internet 3000+20 Percents"
     service_name_uz="Internet 3000+20 Percents"
     service_name_en="Internet 3000+20 Percents"
 
@@ -4255,8 +4255,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS6000BONUS" datefrom="20160406" dateto="" group="5"
 
-    service_name_ruk="Internet 5000+20 Percents"
-    service_name_rut="Internet 5000+20 Percents"
+
+    service_name_ru="Internet 5000+20 Percents"
     service_name_uz="Internet 5000+20 Percents"
     service_name_en="Internet 5000+20 Percents"
 
@@ -4265,8 +4265,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS12000BONUS" datefrom="20160406" dateto="" group="5"
 
-    service_name_ruk="Internet 10000+20 Percents"
-    service_name_rut="Internet 10000+20 Percents"
+
+    service_name_ru="Internet 10000+20 Percents"
     service_name_uz="Internet 10000+20 Percents"
     service_name_en="Internet 10000+20 Percents"
 
@@ -4276,8 +4276,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="NIGHTDRIVE1" datefrom="20131001" dateto="" group="5"
 
-    service_name_ruk="NightDrive1"
-    service_name_rut="NightDrive1"
+
+    service_name_ru="NightDrive1"
     service_name_uz="NightDrive1"
     service_name_en="NightDrive1"
 
@@ -4287,8 +4287,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="NIGHTDRIVE7" datefrom="20131001" dateto="" group="5"
 
-    service_name_ruk="NightDrive7"
-    service_name_rut="NightDrive7"
+
+    service_name_ru="NightDrive7"
     service_name_uz="NightDrive7"
     service_name_en="NightDrive7"
 
@@ -4298,8 +4298,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="NIGHTDRIVE30" datefrom="20131001" dateto="" group="5"
 
-    service_name_ruk="NightDrive30"
-    service_name_rut="NightDrive30"
+
+    service_name_ru="NightDrive30"
     service_name_uz="NightDrive30"
     service_name_en="NightDrive30"
 
@@ -4309,8 +4309,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB1000MNIGHT" datefrom="20131001" dateto="" group="5"
 
-    service_name_ruk="Night Internet-1000"
-    service_name_rut="Night Internet-1000"
+
+    service_name_ru="Night Internet-1000"
     service_name_uz="Night Internet-1000"
     service_name_en="Night Internet-1000"
 
@@ -4319,8 +4319,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB2000MNIGHT" datefrom="20131001" dateto="" group="5"
 
-    service_name_ruk="Night Internet-2000"
-    service_name_rut="Night Internet-2000"
+
+    service_name_ru="Night Internet-2000"
     service_name_uz="Night Internet-2000"
     service_name_en="Night Internet-2000"
 
@@ -4329,8 +4329,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB3000MNIGHT" datefrom="20131001" dateto="" group="5"
 
-    service_name_ruk="Night Internet-3000"
-    service_name_rut="Night Internet-3000"
+
+    service_name_ru="Night Internet-3000"
     service_name_uz="Night Internet-3000"
     service_name_en="Night Internet-3000"
 
@@ -4339,8 +4339,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB5000MNIGHT" datefrom="20131001" dateto="" group="5"
 
-    service_name_ruk="Night Internet-5000"
-    service_name_rut="Night Internet-5000"
+
+    service_name_ru="Night Internet-5000"
     service_name_uz="Night Internet-5000"
     service_name_en="Night Internet-5000"
 
@@ -4349,8 +4349,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB10000MNIGHT" datefrom="20131001" dateto="" group="5"
 
-    service_name_ruk="Night Internet-10000"
-    service_name_rut="Night Internet-10000"
+
+    service_name_ru="Night Internet-10000"
     service_name_uz="Night Internet-10000"
     service_name_en="Night Internet-10000"
 
@@ -4359,8 +4359,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB20000MNIGHT" datefrom="20131001" dateto="" group="5"
 
-    service_name_ruk="Night Internet-20000"
-    service_name_rut="Night Internet-20000"
+
+    service_name_ru="Night Internet-20000"
     service_name_uz="Night Internet-20000"
     service_name_en="Night Internet-20000"
 
@@ -4369,8 +4369,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB50000MNIGHT" datefrom="20131001" dateto="" group="5"
 
-    service_name_ruk="Night Internet-50000"
-    service_name_rut="Night Internet-50000"
+
+    service_name_ru="Night Internet-50000"
     service_name_uz="Night Internet-50000"
     service_name_en="Night Internet-50000"
 
@@ -4379,8 +4379,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS50DAY" datefrom="20160406" dateto="" group="5"
 
-    service_name_ruk="1-Day 50 MB"
-    service_name_rut="1-Day 50 MB"
+
+    service_name_ru="1-Day 50 MB"
     service_name_uz="1-Day 50 MB"
     service_name_en="1-Day 50 MB"
 
@@ -4389,8 +4389,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS100DAY" datefrom="20160406" dateto="" group="5"
 
-    service_name_ruk="1-Day 100 MB"
-    service_name_rut="1-Day 100 MB"
+
+    service_name_ru="1-Day 100 MB"
     service_name_uz="1-Day 100 MB"
     service_name_en="1-Day 100 MB"
 
@@ -4399,8 +4399,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB500M" datefrom="20131001" dateto="" group="5"
 
-    service_name_ruk="Internet-500"
-    service_name_rut="Internet-500"
+
+    service_name_ru="Internet-500"
     service_name_uz="Internet-500"
     service_name_en="Internet-500"
 
@@ -4409,8 +4409,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMIN60" datefrom="20131001" dateto="" group="5"
 
-    service_name_ruk="Paket minut 60"
-    service_name_rut="Paket minut 60"
+
+    service_name_ru="Paket minut 60"
     service_name_uz="Paket minut 60"
     service_name_en="Paket minut 60"
 
@@ -4420,8 +4420,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMIN120" datefrom="20131001" dateto="" group="5"
 
-    service_name_ruk="Paket minut 120"
-    service_name_rut="Paket minut 120"
+
+    service_name_ru="Paket minut 120"
     service_name_uz="Paket minut 120"
     service_name_en="Paket minut 120"
 
@@ -4431,8 +4431,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMIN180" datefrom="20131001" dateto="" group="5"
 
-    service_name_ruk="Paket minut 180"
-    service_name_rut="Paket minut 180"
+
+    service_name_ru="Paket minut 180"
     service_name_uz="Paket minut 180"
     service_name_en="Paket minut 180"
 
@@ -4442,8 +4442,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMIN300" datefrom="20131001" dateto="" group="5"
 
-    service_name_ruk="Paket minut 300"
-    service_name_rut="Paket minut 300"
+
+    service_name_ru="Paket minut 300"
     service_name_uz="Paket minut 300"
     service_name_en="Paket minut 300"
 
@@ -4453,8 +4453,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMIN900" datefrom="20131001" dateto="" group="5"
 
-    service_name_ruk="Paket minut 900"
-    service_name_rut="Paket minut 900"
+
+    service_name_ru="Paket minut 900"
     service_name_uz="Paket minut 900"
     service_name_en="Paket minut 900"
 
@@ -4464,8 +4464,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMIN1200" datefrom="20131001" dateto="" group="5"
 
-    service_name_ruk="Paket minut 1200"
-    service_name_rut="Paket minut 1200"
+
+    service_name_ru="Paket minut 1200"
     service_name_uz="Paket minut 1200"
     service_name_en="Paket minut 1200"
 
@@ -4475,8 +4475,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRMIN1800" datefrom="20131001" dateto="" group="5"
 
-    service_name_ruk="Paket minut 1800"
-    service_name_rut="Paket minut 1800"
+
+    service_name_ru="Paket minut 1800"
     service_name_uz="Paket minut 1800"
     service_name_en="Paket minut 1800"
 
@@ -4486,8 +4486,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="SMS100" datefrom="20131001" dateto="" group="5"
 
-    service_name_ruk="SMS-100"
-    service_name_rut="SMS-100"
+
+    service_name_ru="SMS-100"
     service_name_uz="SMS-100"
     service_name_en="SMS-100"
 
@@ -4497,8 +4497,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="SMS300" datefrom="20131001" dateto="" group="5"
 
-    service_name_ruk="SMS-300"
-    service_name_rut="SMS-300"
+
+    service_name_ru="SMS-300"
     service_name_uz="SMS-300"
     service_name_en="SMS-300"
 
@@ -4508,8 +4508,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRSCL300B" datefrom="20131001" dateto="" group="5" delayed="true"
 
-    service_name_ruk="Bessrochniy 300 MB"
-    service_name_rut="Bessrochniy 300 MB"
+
+    service_name_ru="Bessrochniy 300 MB"
     service_name_uz="Bessrochniy 300 MB"
     service_name_en="Bessrochniy 300 MB"
 
@@ -4519,8 +4519,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRSCL500B" datefrom="20131001" dateto="" group="5" delayed="true"
 
-    service_name_ruk="Bessrochniy 500 MB"
-    service_name_rut="Bessrochniy 500 MB"
+
+    service_name_ru="Bessrochniy 500 MB"
     service_name_uz="Bessrochniy 500 MB"
     service_name_en="Bessrochniy 500 MB"
 
@@ -4530,8 +4530,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRSCL1000B" datefrom="20131001" dateto="" group="5" delayed="true"
 
-    service_name_ruk="Bessrochniy 1000 MB"
-    service_name_rut="Bessrochniy 1000 MB"
+
+    service_name_ru="Bessrochniy 1000 MB"
     service_name_uz="Bessrochniy 1000 MB"
     service_name_en="Bessrochniy 1000 MB"
 
@@ -4541,8 +4541,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRSCL2000B" datefrom="20131001" dateto="" group="5" delayed="true"
 
-    service_name_ruk="Bessrochniy 2000 MB"
-    service_name_rut="Bessrochniy 2000 MB"
+
+    service_name_ru="Bessrochniy 2000 MB"
     service_name_uz="Bessrochniy 2000 MB"
     service_name_en="Bessrochniy 2000 MB"
 
@@ -4552,8 +4552,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRSCL3000B" datefrom="20131001" dateto="" group="5" delayed="true"
 
-    service_name_ruk="Bessrochniy 3000 MB"
-    service_name_rut="Bessrochniy 3000 MB"
+
+    service_name_ru="Bessrochniy 3000 MB"
     service_name_uz="Bessrochniy 3000 MB"
     service_name_en="Bessrochniy 3000 MB"
 
@@ -4563,8 +4563,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRSCL5000B" datefrom="20131001" dateto="" group="5" delayed="true"
 
-    service_name_ruk="Bessrochniy 5000 MB"
-    service_name_rut="Bessrochniy 5000 MB"
+
+    service_name_ru="Bessrochniy 5000 MB"
     service_name_uz="Bessrochniy 5000 MB"
     service_name_en="Bessrochniy 5000 MB"
 
@@ -4574,8 +4574,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRSCL10000B" datefrom="20131001" dateto="" group="5" delayed="true"
 
-    service_name_ruk="Bessrochniy 10000 MB"
-    service_name_rut="Bessrochniy 10000 MB"
+
+    service_name_ru="Bessrochniy 10000 MB"
     service_name_uz="Bessrochniy 10000 MB"
     service_name_en="Bessrochniy 10000 MB"
 
@@ -4585,8 +4585,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS375BONUS" datefrom="20160406" dateto="" group="5"
 
-    service_name_ruk="Internet 300+25&lt;"
-    service_name_rut="Internet 300+25&lt;"
+
+    service_name_ru="Internet 300+25&lt;"
     service_name_uz="Internet 300+25&lt;"
     service_name_en="Internet 300+25&lt;"
 
@@ -4596,8 +4596,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS625BONUS" datefrom="20160406" dateto="" group="5"
 
-    service_name_ruk="Internet 500+25&lt;"
-    service_name_rut="Internet 500+25&lt;"
+
+    service_name_ru="Internet 500+25&lt;"
     service_name_uz="Internet 500+25&lt;"
     service_name_en="Internet 500+25&lt;"
 
@@ -4607,8 +4607,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS1250BONUS" datefrom="20160406" dateto="" group="5"
 
-    service_name_ruk="Internet 1000+25&lt;"
-    service_name_rut="Internet 1000+25&lt;"
+
+    service_name_ru="Internet 1000+25&lt;"
     service_name_uz="Internet 1000+25&lt;"
     service_name_en="Internet 1000+25&lt;"
 
@@ -4618,8 +4618,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS2500BONUS" datefrom="20160406" dateto="" group="5"
 
-    service_name_ruk="Internet 2000+25&lt;"
-    service_name_rut="Internet 2000+25&lt;"
+
+    service_name_ru="Internet 2000+25&lt;"
     service_name_uz="Internet 2000+25&lt;"
     service_name_en="Internet 2000+25&lt;"
 
@@ -4629,8 +4629,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS3750BONUS" datefrom="20160406" dateto="" group="5"
 
-    service_name_ruk="Internet 3000+25&lt;"
-    service_name_rut="Internet 3000+25&lt;"
+
+    service_name_ru="Internet 3000+25&lt;"
     service_name_uz="Internet 3000+25&lt;"
     service_name_en="Internet 3000+25&lt;"
 
@@ -4640,8 +4640,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS6250BONUS" datefrom="20160406" dateto="" group="5"
 
-    service_name_ruk="Internet 5000+25&lt;"
-    service_name_rut="Internet 5000+25&lt;"
+
+    service_name_ru="Internet 5000+25&lt;"
     service_name_uz="Internet 5000+25&lt;"
     service_name_en="Internet 5000+25&lt;"
 
@@ -4651,8 +4651,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS12500BONUS" datefrom="20160406" dateto="" group="5"
 
-    service_name_ruk="Internet 10000+25&lt;"
-    service_name_rut="Internet 10000+25&lt;"
+
+    service_name_ru="Internet 10000+25&lt;"
     service_name_uz="Internet 10000+25&lt;"
     service_name_en="Internet 10000+25&lt;"
 
@@ -4662,8 +4662,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS25000BONUS" datefrom="20160406" dateto="" group="5"
 
-    service_name_ruk="Internet 20000+25&lt;"
-    service_name_rut="Internet 20000+25&lt;"
+
+    service_name_ru="Internet 20000+25&lt;"
     service_name_uz="Internet 20000+25&lt;"
     service_name_en="Internet 20000+25&lt;"
 
@@ -4673,8 +4673,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS37500BONUS" datefrom="20160406" dateto="" group="5"
 
-    service_name_ruk="Internet 30000+25&lt;"
-    service_name_rut="Internet 30000+25&lt;"
+
+    service_name_ru="Internet 30000+25&lt;"
     service_name_uz="Internet 30000+25&lt;"
     service_name_en="Internet 30000+25&lt;"
 
@@ -4684,8 +4684,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS62500BONUS" datefrom="20160406" dateto="" group="5"
 
-    service_name_ruk="Internet 50000+25&lt;"
-    service_name_rut="Internet 50000+25&lt;"
+
+    service_name_ru="Internet 50000+25&lt;"
     service_name_uz="Internet 50000+25&lt;"
     service_name_en="Internet 50000+25&lt;"
 
@@ -4695,8 +4695,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS125000BONUS" datefrom="20160406" dateto="" group="5"
 
-    service_name_ruk="Internet 100000+25&lt;"
-    service_name_rut="Internet 100000+25&lt;"
+
+    service_name_ru="Internet 100000+25&lt;"
     service_name_uz="Internet 100000+25&lt;"
     service_name_en="Internet 100000+25&lt;"
 
@@ -4706,8 +4706,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRCRBT" datefrom="20131001" dateto="" group="6"
 
-    service_name_ruk="FRCRBT"
-    service_name_rut="FRCRBT"
+
+    service_name_ru="FRCRBT"
     service_name_uz="FRCRBT"
     service_name_en="FRCRBT"
 
@@ -4717,8 +4717,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGOODOK0" datefrom="20131001" dateto="" group="6"
 
-    service_name_ruk="FRGOODOK0"
-    service_name_rut="FRGOODOK0"
+
+    service_name_ru="FRGOODOK0"
     service_name_uz="FRGOODOK0"
     service_name_en="FRGOODOK0"
 
@@ -4728,8 +4728,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGOODOK1" datefrom="20131001" dateto="" group="6"
  
-    service_name_ruk="FRGOODOK1"
-    service_name_rut="FRGOODOK1"
+
+    service_name_ru="FRGOODOK1"
     service_name_uz="FRGOODOK1"
     service_name_en="FRGOODOK1"
 
@@ -4739,8 +4739,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGOODOK2" datefrom="20131001" dateto="" group="6"
  
-    service_name_ruk="FRGOODOK2"
-    service_name_rut="FRGOODOK2"
+
+    service_name_ru="FRGOODOK2"
     service_name_uz="FRGOODOK2"
     service_name_en="FRGOODOK2"
 
@@ -4750,8 +4750,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGOODOK3" datefrom="20131001" dateto="" group="6"
 
-    service_name_ruk="FRGOODOK3"
-    service_name_rut="FRGOODOK3"
+
+    service_name_ru="FRGOODOK3"
     service_name_uz="FRGOODOK3"
     service_name_en="FRGOODOK3"
 
@@ -4761,8 +4761,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGOODOK4" datefrom="20131001" dateto="" group="6"
 
-    service_name_ruk="FRGOODOK4"
-    service_name_rut="FRGOODOK4"
+
+    service_name_ru="FRGOODOK4"
     service_name_uz="FRGOODOK4"
     service_name_en="FRGOODOK4"
 
@@ -4772,8 +4772,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGOODOK5" datefrom="20131001" dateto="" group="6"
 
-    service_name_ruk="FRGOODOK5"
-    service_name_rut="FRGOODOK5"
+
+    service_name_ru="FRGOODOK5"
     service_name_uz="FRGOODOK5"
     service_name_en="FRGOODOK5"
 
@@ -4783,8 +4783,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGOODOKPOD1" datefrom="20131001" dateto="" group="6"
  
-    service_name_ruk="FRGOODOKPOD1"
-    service_name_rut="FRGOODOKPOD1"
+
+    service_name_ru="FRGOODOKPOD1"
     service_name_uz="FRGOODOKPOD1"
     service_name_en="FRGOODOKPOD1"
 
@@ -4794,8 +4794,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGOODOKPOD2" datefrom="20131001" dateto="" group="6"
  
-    service_name_ruk="FRGOODOKPOD2"
-    service_name_rut="FRGOODOKPOD2"
+
+    service_name_ru="FRGOODOKPOD2"
     service_name_uz="FRGOODOKPOD2"
     service_name_en="FRGOODOKPOD2"
 
@@ -4805,8 +4805,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGOODOKPOD3" datefrom="20131001" dateto="" group="6"
 
-    service_name_ruk="FRGOODOKPOD3"
-    service_name_rut="FRGOODOKPOD3"
+
+    service_name_ru="FRGOODOKPOD3"
     service_name_uz="FRGOODOKPOD3"
     service_name_en="FRGOODOKPOD3"
 
@@ -4816,8 +4816,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGOODOK4" datefrom="20131001" dateto="" group="6"
 
-    service_name_ruk="FRGOODOKPOD4"
-    service_name_rut="FRGOODOKPOD4"
+
+    service_name_ru="FRGOODOKPOD4"
     service_name_uz="FRGOODOKPOD4"
     service_name_en="FRGOODOKPOD4"
 
@@ -4827,8 +4827,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGOODOKPOD5" datefrom="20131001" dateto="" group="6"
 
-    service_name_ruk="FRGOODOKPOD5"
-    service_name_rut="FRGOODOKPOD5"
+
+    service_name_ru="FRGOODOKPOD5"
     service_name_uz="FRGOODOKPOD5"
     service_name_en="FRGOODOKPOD5"
 
@@ -4838,8 +4838,8 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="MB300M1" datefrom="20131001" dateto="" group="7"
 
-    service_name_ruk="Internet-300"
-    service_name_rut="Internet-300"
+
+    service_name_ru="Internet-300"
     service_name_uz="Internet-300"
     service_name_en="Internet-300"
 

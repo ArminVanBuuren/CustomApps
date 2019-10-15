@@ -90,9 +90,9 @@
     <define name="_GET_DBRESULT" value="#{document('_DICTIONARY_PATH')/Dictionary/Item[code/@value='${sDbresult}']/@info__GET_LANG}" />
     <define name="_GET_LENGTH_DBRESULT" value="#{string-length(document('_DICTIONARY_PATH')/Dictionary/Item[code/@value='${sDbresult}']/@info__GET_LANG)}" />
     <define name="_GET_AFTER_VERIFY_DBRESULT" value="#{if('#{document('_DICTIONARY_PATH')/Dictionary/Item[code/@value='${customerblocks}']/@info__GET_LANG}'!='','${customerblocks}','${dbresult}')}" />
-    <define name="_ENCODING" value="#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@param='_GET_LANG']/@encoding}" />
-    <define name="_INLANGUAGE" value="#{if('#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@scp='${inlang}' and @ussd='${smsussdlang}']/@param}'='','#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@scp='' and @ussd='']/@param}','#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@scp='${inlang}' and @ussd='${smsussdlang}']/@param}')}" />
-    <define name="_GET_LANG" value="#{if('${sLang}'='','#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[@scp='' and @ussd='']/@param}','${sLang}')}" />
+    <define name="_ENCODING" value="#{document('_ALLSERVICE_PATH')/ServiceList/Language/Item[@param='_GET_LANG']/@encoding}" />
+    <define name="_INLANGUAGE" value="#{if('#{document('_ALLSERVICE_PATH')/ServiceList/Language/Item[@language_id='${language_id}']/@param}'='','#{document('_ALLSERVICE_PATH')/ServiceList/Language/Item[@language_id='']/@param}','#{document('_ALLSERVICE_PATH')/ServiceList/Language/Item[@language_id='${language_id}']/@param}')}" />
+    <define name="_GET_LANG" value="#{if('${sLang}'='','#{document('_ALLSERVICE_PATH')/ServiceList/Language/Item[@language_id='']/@param}','${sLang}')}" />
     <define name="_DEFAULT_ERR" value="#{if('${dbresult}'='-1','err001','${dbresult}')}" />
     <define name="_REDIRECT_TO_SMS" value="^[Ss][Mm][Ss]$" />
     <define name="_REDIRECT_TO_CURRENT" value="^[Nn][Oo][Tt][Rr][Ee][Dd][Ii][Rr][Ee][Cc][Tt]$" />
@@ -681,8 +681,11 @@
   </template>
   <template procedureName="DB_SProcessing2" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
-      <Message type="getlanguage" process="dispatcher" initiator="ivrcon" id="@{newGuid}" session_id="@{setSessionId(IVR_GrntPay_${customer})}">
-        <Item customer="${customer}" />
+      <Message type="verificationrequest" initiator="ivrcon" id="@{newGuid}" session_id="@{setSessionId(IVR_GrntPay_${customer})}">
+        <Item customer="${customer}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="0" />
+        </Item>
         @{store(sCustomer,${customer})}
         @{store(sService,_GRNTPAY)}
       </Message>
@@ -821,7 +824,7 @@
   <template procedureName="DB_BalanceRetriev2">
     <condition />
     <receiveTemplate>
-      <Message type="retrievecustomerdata" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${Customer}_GetIVRBalance_#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[_CURRENT_MODULE/@value='rut']/@param}">
+      <Message type="retrievecustomerdata" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${Customer}_GetIVRBalance_#{document('_ALLSERVICE_PATH')/ServiceList/Language/Item[_CURRENT_MODULE/@value='rut']/@param}">
         <Item customer="${Customer}" subject="balance">
           <Attribute name="unpayment" value="0" />
           <Attribute name="requestcountertype" value="1" />
@@ -849,7 +852,7 @@
   <template procedureName="DB_BalanceRetriev3">
     <condition />
     <receiveTemplate>
-      <Message type="retrievecustomerdata" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${Customer}_GetIVRBalance_#{document('_ALLSERVICE_PATH')/ServiceList/Language/lang[_CURRENT_MODULE/@value='rut']/@param}">
+      <Message type="retrievecustomerdata" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${Customer}_GetIVRBalance_#{document('_ALLSERVICE_PATH')/ServiceList/Language/Item[_CURRENT_MODULE/@value='rut']/@param}">
         <Item customer="${Customer}" subject="balance">
           <Attribute name="unpayment" value="0" />
           <Attribute name="requestcountertype" value="1" />
