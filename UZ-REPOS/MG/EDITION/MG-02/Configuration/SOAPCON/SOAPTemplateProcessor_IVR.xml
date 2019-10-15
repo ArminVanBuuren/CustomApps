@@ -6,7 +6,7 @@
     <define name="_USSD_1" value="USSDCON_01_01" />
     <!-- ==========================  REDIRECT CONNECTORS   ========================= -->
     <!-- ==========================  SOAP SPECIAL   ========================= -->
-    <define name="_GET_MOD_LANGUAGE" value="#{document('_ALLSERVICE_PATH')/ServiceList/Language/Item[_EXIST_MODULE/@value='${lang}']/@param}" />
+    <define name="_GET_MOD_LANGUAGE" value="#{document('_DICTIONARY_PATH')/Dictionary/Language/Item[_EXIST_MODULE/@value='${lang}']/@param}" />
     <!-- ==========================  SOAP SPECIAL   ========================= -->
     <!-- ==========================  SERVICE PROVISIONING  ========================= -->
     <define name="_GET_SERVICE_RESULT" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@info_${sDbresult}__GET_LANG}'='','#{if('#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@info_${sDbresult}__GET_LANG}'='','_GET_DBRESULT','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@info_${sDbresult}__GET_LANG}')}','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@info_${sDbresult}__GET_LANG}')}" />
@@ -95,9 +95,9 @@
     <define name="_GET_DBRESULT" value="#{document('_DICTIONARY_PATH')/Dictionary/Item[code/@value='${sDbresult}']/@info__GET_LANG}" />
     <define name="_GET_LENGTH_DBRESULT" value="#{string-length(document('_DICTIONARY_PATH')/Dictionary/Item[code/@value='${sDbresult}']/@info__GET_LANG)}" />
     <define name="_GET_AFTER_VERIFY_DBRESULT" value="#{if('#{document('_DICTIONARY_PATH')/Dictionary/Item[code/@value='${customerblocks}']/@info__GET_LANG}'!='','${customerblocks}','${dbresult}')}" />
-    <define name="_ENCODING" value="#{document('_ALLSERVICE_PATH')/ServiceList/Language/Item[@param='_GET_LANG']/@encoding}" />
-    <define name="_INLANGUAGE" value="#{if('#{document('_ALLSERVICE_PATH')/ServiceList/Language/Item[@language_id='${language_id}']/@param}'='','#{document('_ALLSERVICE_PATH')/ServiceList/Language/Item[@language_id='']/@param}','#{document('_ALLSERVICE_PATH')/ServiceList/Language/Item[@language_id='${language_id}']/@param}')}" />
-    <define name="_GET_LANG" value="#{if('${sLang}'='','#{document('_ALLSERVICE_PATH')/ServiceList/Language/Item[@language_id='']/@param}','${sLang}')}" />
+    <define name="_ENCODING" value="#{document('_DICTIONARY_PATH')/Dictionary/Language/Item[@param='_GET_LANG']/@encoding}" />
+    <define name="_INLANGUAGE" value="#{if('#{document('_DICTIONARY_PATH')/Dictionary/Language/Item[@language_id='${language_id}']/@param}'='','#{document('_DICTIONARY_PATH')/Dictionary/Language/Item[@language_id='']/@param}','#{document('_DICTIONARY_PATH')/Dictionary/Language/Item[@language_id='${language_id}']/@param}')}" />
+    <define name="_GET_LANG" value="#{if('${sLang}'='','#{document('_DICTIONARY_PATH')/Dictionary/Language/Item[@language_id='']/@param}','${sLang}')}" />
     <define name="_DEFAULT_ERR" value="#{if('${dbresult}'='-1','err001','${dbresult}')}" />
     <define name="_REDIRECT_TO_SMS" value="^[Ss][Mm][Ss]$" />
     <define name="_REDIRECT_TO_CURRENT" value="^[Nn][Oo][Tt][Rr][Ee][Dd][Ii][Rr][Ee][Cc][Tt]$" />
@@ -1408,8 +1408,8 @@
     <receiveTemplate>
       <Message type="setupservicerequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
         <Item customer="${sCustomer}">
-          <Attribute name="scplang" value="#{document('_ALLSERVICE_PATH')/ServiceList/Language/Item[@param='_GET_LANG']/@scp}" />
-          <Attribute name="ussdlang" value="#{document('_ALLSERVICE_PATH')/ServiceList/Language/Item[@param='_GET_LANG']/@ussd}" />
+          <Attribute name="scplang" value="#{document('_DICTIONARY_PATH')/Dictionary/Language/Item[@param='_GET_LANG']/@scp}" />
+          <Attribute name="ussdlang" value="#{document('_DICTIONARY_PATH')/Dictionary/Language/Item[@param='_GET_LANG']/@ussd}" />
           <Attribute name="inplatform" value="${sInPaltform}" />
         </Item>
       </Message>
