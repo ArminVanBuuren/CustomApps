@@ -33,6 +33,20 @@ sc create FORIS.SPA.SA.BSP                binPath= "C:\Foris\SPA\SA\FORIS.SPA.Se
 sc delete FORIS.SPA.SA.SCG
 
 
+sc \\spa-bpm1 create FORIS.SPA.BPM.TEST binPath= "C:\Foris\SPA\BPM\FORIS.SPA.BusinessProcessesManager.exe -cmd FORIS.SPA.BPM.TEST C:\Foris\SPA\SPA.BPM\SPA.BPM.TEST.configuration.common.xml" start= auto obj= "NT AUTHORITY\NetworkService" password= ""
+
+sc create FORIS.SPA.SA.TEST.BSP                binPath= "C:\Foris\SPA\SA\FORIS.SPA.ServiceActivator.exe -cmd FORIS.SPA.SA.BSP C:\Foris\SPA\SPA.SA.TEST\BSP\configuration.common.xml" start= auto obj= "NT AUTHORITY\NetworkService" password= ""
+sc create FORIS.SPA.SA.TEST.CONTENT.MST        binPath= "C:\Foris\SPA\SA\FORIS.SPA.ServiceActivator.exe -cmd FORIS.SPA.SA.CONTENT.MST C:\Foris\SPA\SPA.SA.TEST\CONTENT.MST\configuration.common.xml" start= auto obj= "NT AUTHORITY\NetworkService" password= ""
+sc create FORIS.SPA.SA.TEST.CONTENT.UNIFUN     binPath= "C:\Foris\SPA\SA\FORIS.SPA.ServiceActivator.exe -cmd FORIS.SPA.SA.CONTENT.UNIFUN C:\Foris\SPA\SPA.SA.TEST\CONTENT.UNIFUN\configuration.common.xml" start= auto obj= "NT AUTHORITY\NetworkService" password= ""
+sc create FORIS.SPA.SA.TEST.EIR                binPath= "C:\Foris\SPA\SA\FORIS.SPA.ServiceActivator.exe -cmd FORIS.SPA.SA.EIR C:\Foris\SPA\SPA.SA.TEST\EIR\configuration.common.xml" start= auto obj= "NT AUTHORITY\NetworkService" password= ""
+sc create FORIS.SPA.SA.TEST.FP.AM              binPath= "C:\Foris\SPA\SA\FORIS.SPA.ServiceActivator.exe -cmd FORIS.SPA.SA.FP.AM C:\Foris\SPA\SPA.SA.TEST\FP.AM\configuration.common.xml" start= auto obj= "NT AUTHORITY\NetworkService" password= ""
+sc create FORIS.SPA.SA.TEST.FP.SCP.155         binPath= "C:\Foris\SPA\SA\FORIS.SPA.ServiceActivator.exe -cmd FORIS.SPA.SA.FP.SCP.155 C:\Foris\SPA\SPA.SA.TEST\FP.SCP\configuration.common.scp.155.xml" start= auto obj= "NT AUTHORITY\NetworkService" password= ""
+sc create FORIS.SPA.SA.TEST.HLR.ZTE            binPath= "C:\Foris\SPA\SA\FORIS.SPA.ServiceActivator.exe -cmd FORIS.SPA.SA.HLR.ZTE C:\Foris\SPA\SPA.SA.TEST\HLR.ZTE\configuration.common.xml" start= auto obj= "NT AUTHORITY\NetworkService" password= ""
+sc create FORIS.SPA.SA.TEST.MCA                binPath= "C:\Foris\SPA\SA\FORIS.SPA.ServiceActivator.exe -cmd FORIS.SPA.SA.MCA C:\Foris\SPA\SPA.SA.TEST\MCA\configuration.common.xml" start= auto obj= "NT AUTHORITY\NetworkService" password= ""
+sc create FORIS.SPA.SA.TEST.MG                 binPath= "C:\Foris\SPA\SA\FORIS.SPA.ServiceActivator.exe -cmd FORIS.SPA.SA.MG C:\Foris\SPA\SPA.SA.TEST\MG\configuration.common.xml" start= auto obj= "NT AUTHORITY\NetworkService" password= ""
+sc create FORIS.SPA.SA.TEST.RBT.INTECH         binPath= "C:\Foris\SPA\SA\FORIS.SPA.ServiceActivator.exe -cmd FORIS.SPA.SA.RBT.INTECH C:\Foris\SPA\SPA.SA.TEST\RBT.INTECH\configuration.common.xml" start= auto obj= "NT AUTHORITY\NetworkService" password= ""
+sc create FORIS.SPA.SA.TEST.SMSC               binPath= "C:\Foris\SPA\SA\FORIS.SPA.ServiceActivator.exe -cmd FORIS.SPA.SA.SMSC C:\Foris\SPA\SPA.SA.TEST\SMSC\configuration.common.xml" start= auto obj= "NT AUTHORITY\NetworkService" password= ""
+
 
 
 BPM

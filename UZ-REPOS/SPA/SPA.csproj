@@ -270,6 +270,7 @@
     <Content Include="EDITION\SPA.SA\BSP\Misc\RepetitionTable.xml" />
     <Content Include="EDITION\SPA.SA\BSP\Scenarios\CounterReinitializationOnBSProxy.xml" />
     <Content Include="EDITION\SPA.SA\BSP\Scenarios\SC.BSP.ChangeCounterProfile.xml" />
+    <Content Include="EDITION\SPA.SA\HLR.ZTE\Emulation\zte.response.txt" />
     <Content Include="EDITION\SPA.SA\OLD.CONTENT.ALLPLAY\Commands\AddALLPLAY.xml" />
     <Content Include="EDITION\SPA.SA\OLD.CONTENT.ALLPLAY\Commands\DeleteALLPLAY.xml" />
     <Content Include="EDITION\SPA.SA\OLD.CONTENT.ALLPLAY\configuration.application.xml" />
@@ -310,7 +311,7 @@
     <Content Include="EDITION\SPA.SA\EIR\Scenarios\SC.EI.ChangeMSISDN.xml" />
     <Content Include="EDITION\SPA.SA\EIR\Scenarios\SC.EI.CreateSubscriber.xml" />
     <Content Include="EDITION\SPA.SA\EIR\Scenarios\SC.EI.DeleteSubscriber.xml" />
-    <Content Include="EDITION\SPA.SA\FP.AM\asyncResult.xml" />
+    <Content Include="EDITION\SPA.SA\FP.AM\Emulation\asyncResult.xml" />
     <Content Include="EDITION\SPA.SA\FP.AM\Commands\ChangeBillingGroupOnFP.xml" />
     <Content Include="EDITION\SPA.SA\FP.AM\Commands\ChangeContractOwner.xml" />
     <Content Include="EDITION\SPA.SA\FP.AM\Commands\ChangePAStatusesOnFINPlatform.xml" />
@@ -386,7 +387,7 @@
     <Content Include="EDITION\SPA.SA\FP.AM\Scenarios\UpdateLanguageOnFP.xml" />
     <Content Include="EDITION\SPA.SA\FP.AM\Scenarios\UpdatePAAttributesOnFP.xml" />
     <Content Include="EDITION\SPA.SA\FP.AM\Xslt\TransformToAPNStyle.xslt" />
-    <Content Include="EDITION\SPA.SA\FP.SCP\asyncResult.xml" />
+    <Content Include="EDITION\SPA.SA\FP.SCP\Emulation\asyncResult.xml" />
     <Content Include="EDITION\SPA.SA\FP.SCP\Commands\ChangeBillingGroupOnFP.xml" />
     <Content Include="EDITION\SPA.SA\FP.SCP\Commands\ChangeContractOwner.xml" />
     <Content Include="EDITION\SPA.SA\FP.SCP\Commands\ChangePAStatusesOnFINPlatform.xml" />

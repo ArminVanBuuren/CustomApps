@@ -950,7 +950,10 @@
     <CFS name="FRBEZGRANICSALE" globalServiceCode="FRBEZGRANICSALE" copyOf="CFS_FP_SERVICE_GENERAL" description="Без границ Скидка для новых подключений" />
     <CFS name="FRBLKCHK" priority="1" copyOf="FRTECHBLK" description="Блокировка проверка" />
     <CFS name="FRBLKDZ" priority="1" copyOf="FRTECHBLK" description="Блокировка при ДЗ свыше 90 дней" />
-    <CFS name="FRBLKEND" globalServiceCode="FRBLKEND" copyOf="CFS_FP_SERVICE_GENERAL" description="Заключительная блокировка" />
+    <CFS name="FRBLKEND" globalServiceCode="FRBLKEND" description="Заключительная блокировка">
+      <RFS name="RFS_FP_BLOCK" linkType="Add" />
+      <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
+    </CFS>
     <CFS name="FRBLKFIN" globalServiceCode="FRBLKFIN" priority="1" description="Принудительная блокировка">
       <RFS name="RFS_HLR_NET_DENY" linkType="Modify" />
       <RFS name="RFS_HLR_ODB_IC_NO_CALLS" linkType="Modify" />
