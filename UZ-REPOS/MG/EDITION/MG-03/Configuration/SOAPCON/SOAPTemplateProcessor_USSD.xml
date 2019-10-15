@@ -3,7 +3,7 @@
     <!-- ==========================  REDIRECT CONNECTORS   ========================= -->
     <define name="_SMSCON_1" value="SMSCON_03_01" />
     <define name="_SMSCON_ISSA" value="SMSCON_03_02" />
-    <define name="_USSD_1" value="USSDCON_01_01" />
+    <define name="_USSD_1" value="USSDCON_03_01" />
     <define name="_DBCON" value="DBCON_03_01" />
     <!-- ==========================  SOAP SPECIAL   ========================= -->
     <define name="_GET_MOD_LANGUAGE" value="#{document('_DICTIONARY_PATH')/Dictionary/Language/Item[_EXIST_MODULE/@value='${lang}']/@param}" />
