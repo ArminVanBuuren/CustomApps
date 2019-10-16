@@ -5,7 +5,7 @@
         <fileScenarioSource dir="..\SPA.SA\MG\Scenarios" />
       </scenarioSource>
       <socketList poolSize="2" maxConnections="1" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="300" periodDuration="10" autoconnect="0" reconfigurationTimeout="0">
-        <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
+        <socket type="FORIS.ServiceProvisioning.Communication.Script.SimpleManagedSocket, FORIS.SPA.Communication">
           <config workingmode="wmGeneral">
             <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
               <config>
@@ -24,13 +24,6 @@
             </socket>
             <Emulation Success="&gt;result=0" Failure="&gt;result=-1" RandomizePrintout="false" OverwriteCommandPrintout="true" Lifetime="00:00:00.00" />
             <Timers IdleTimeout="10" />
-            <PredefinedScripts Login="Login" Command="Command" Idle="" Logoff="" />
-            <ScriptsList>
-              <Script Name="Login" Path="..\SPA.SA\MG\Scripts\Login.xml"/>
-              <Script Name="Logoff" Path="..\SPA.SA\MG\Scripts\Logoff.xml"/>
-              <Script Name="Command" Path="..\SPA.SA\MG\Scripts\Command.xml"/>
-              <Script Name="NoSleep" Path="..\SPA.SA\MG\Scripts\Nosleep.xml"/>
-            </ScriptsList>
           </config>
         </socket>
       </socketList>

@@ -9,12 +9,12 @@
         <node name="SCProcessingUnit" object="SCProcessingUnit">
           <parameterslist />
           <resultlist>
-            <result value="" node="DeleteUNIFUN" />
+            <result value="" node="SC.Remove.RFS_CT5_SUBSCRIPTION" />
           </resultlist>
         </node>
-        <node name="DeleteUNIFUN" object="BPMProcessingUnit">
+        <node name="SC.Remove.RFS_CT5_SUBSCRIPTION" object="BPMProcessingUnit">
           <parameterslist>
-            <param name="operation" value="DeleteUNIFUN" />
+            <param name="operation" value="SC.Remove.RFS_CT5_SUBSCRIPTION" />
           </parameterslist>
           <resultlist>
             <result value="" node="" />

@@ -3,6 +3,7 @@
   <HostTypeList>
     <HostType name="BSP" nriType="RI" allowTerminalDeviceType="mobile" description="VAS-платформа счетчиков BSProxy" />
     <HostType name="CT4" nriType="RI" allowTerminalDeviceType="mobile" description="Service Content MST" />
+    <HostType name="CT5" nriType="RI" allowTerminalDeviceType="mobile" description="Service Content UNIFUN" />
     <HostType name="EI" nriType="RI" allowTerminalDeviceType="mobile" description="IMEI REGISTER" />
     <HostType name="FP" nriType="RI" availableSystem="FinancialPlatform" allowTerminalDeviceType="mobile,virtual" orderAdjustment="1000" description="Финансовая платформа" />
     <HostType name="HL" nriType="RI" allowTerminalDeviceType="mobile" description="HLR (Home Location Register)" />
@@ -75,6 +76,7 @@
     <RFS name="RFS_CT4_SUBSCRIPTION" hostType="CT4" processType="Subscription" description="Абонент на платформе CT4">
       <Resource name="RES_CT4_SERVICE_ID" value="558" />
     </RFS>
+    <RFS name="RFS_CT5_SUBSCRIPTION" hostType="CT5" processType="Subscription" description="Абонент на платформе CT5" />
     <RFS name="RFS_EI_CHANGE_IMSI" hostType="EI" description="Изменение номера IMSI на EIR">
       <Scenario name="EI.ChangeIMSI" type="Add" />
       <RFSParameter name="NewIMSI" />
@@ -2015,6 +2017,7 @@
       <RFS name="RFS_FP_SUBSCRIBER" linkType="Add" />
       <RFS name="RFS_RBT_SUBSCRIPTION" linkType="Add" dependsOn="RFS_RBT_SERVICE" />
       <RFS name="RFS_SM_SUBSCRIPTION" linkType="Add" />
+      <RFS name="RFS_CT5_SUBSCRIPTION" linkType="Add" />
     </CFS>
     <CFS name="SubscriberInHLR" priority="9999" type="ManagedObject" copyOf="Subscriber" description="Абонент - копия" />
     <CFS name="Synchronize" priority="1" description="Обработка кнопки Синхронизировать в СПА">
@@ -2226,6 +2229,9 @@
     <Scenario name="CT4.ChangeMSISDN" description="Изменение номера на платформе CT4">
       <RFS name="RFS_CT4_CHANGE_MSISDN" scenarioType="Add" />
       <Append name="RFS_CT4_SUBSCRIPTION" listType="EndList" />
+    </Scenario>
+    <Scenario name="CT5.Dummy" sendType="Drop" description="Фейковый сценарий CT5">
+      <RFS name="RFS_CT5_SUBSCRIPTION" scenarioType="Add, Modify" />
     </Scenario>
     <Scenario name="FP.Add.AutoPayment" description="Добавление автоплатежа на FP">
       <RFS name="RFS_FP_SERVICE_AUTO_PAYMENT" scenarioType="Add" useType="Mandatory" />

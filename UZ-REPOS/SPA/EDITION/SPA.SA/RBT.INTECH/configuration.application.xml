@@ -5,7 +5,7 @@
         <fileScenarioSource dir="..\SPA.SA\RBT.INTECH\Scenarios" />
       </scenarioSource>
       <socketList poolSize="8" maxConnections="8" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="600" periodDuration="10" autoconnect="0" reconfigurationTimeout="0">
-        <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
+        <socket type="FORIS.ServiceProvisioning.Communication.Script.SimpleManagedSocket, FORIS.SPA.Communication">
           <config autoconnect="1" workingmode="wmPermanentEmulation">
             <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
               <config>
@@ -24,8 +24,6 @@
             </socket>
             <Emulation Success="&quot;000&quot;" Failure="&quot;100&quot;" RandomizePrintout="false" OverwriteCommandPrintout="true" Lifetime="00:00:00.00" />
             <Timers IdleTimeout="10" />
-            <PredefinedScripts Login="Login" Command="Command" Idle="" Logoff="" />
-            <ScriptsList />
           </config>
         </socket>
       </socketList>

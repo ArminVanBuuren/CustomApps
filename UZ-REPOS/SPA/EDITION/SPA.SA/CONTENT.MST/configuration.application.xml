@@ -5,7 +5,7 @@
         <fileScenarioSource dir="..\SPA.SA\CONTENT.MST\Scenarios" />
       </scenarioSource>
       <socketList poolSize="12" maxConnections="12" minConnections="12" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="600" periodDuration="10" autoconnect="0" reconfigurationTimeout="0">
-        <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
+        <socket type="FORIS.ServiceProvisioning.Communication.Script.SimpleManagedSocket, FORIS.SPA.Communication">
           <config workingmode="wmPermanentEmulation">
             <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
               <config>
@@ -25,8 +25,6 @@
             </socket>
             <Emulation Success="OK 100" Failure="OK 102" RandomizePrintout="false" OverwriteCommandPrintout="true" Lifetime="00:00:00.00" />
             <Timers IdleTimeout="10" />
-            <PredefinedScripts Login="Login" Command="Command" Idle="" Logoff="" />
-            <ScriptsList />
           </config>
         </socket>
       </socketList>
