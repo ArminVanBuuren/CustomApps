@@ -662,7 +662,7 @@ Created by Vladimir Khovanskiy
   </Item>
   
   <Language>
-    <Item language_id="1" param="ru" text="Russkiy (Translit)" encoding="ascii">
+    <Item language_id="1" param="ru" text="Russkiy" encoding="ascii">
       <soapcon value="ru"/>
       <soapcon value="rut"/>
       <soapcon value="ruk"/>
@@ -677,7 +677,7 @@ Created by Vladimir Khovanskiy
       <dealerussd value="*1*1*2"/>
       <dealerussd value="*0*2"/>
     </Item>
-    <Item language_id="1" param="uz" text="Ozbekcha" encoding="ascii">
+    <Item language_id="5" param="uz" text="O^zbekcha" encoding="ascii">
       <soapcon value="uz"/>
       <soapcon value="3"/>
       <ivrcon  value="uz"/>
@@ -689,7 +689,7 @@ Created by Vladimir Khovanskiy
       <dealerussd value="*1*1*1"/>
       <dealerussd value="*0*1"/>
     </Item>
-    <Item language_id="1" param="en" text="English" encoding="ascii">
+    <Item language_id="2" param="en" text="English" encoding="ascii">
       <soapcon value="en"/>
       <soapcon value="4"/>
       <ivrcon  value="en"/>
