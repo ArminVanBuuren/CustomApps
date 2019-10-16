@@ -2013,11 +2013,11 @@
     <CFS name="SMS500" globalServiceCode="SMS500" copyOf="CFS_FP_SERVICE_GENERAL" description="SMS-пакет 500" />
     <CFS name="STATICIP" globalServiceCode="STATICIP" copyOf="CFS_FP_SERVICE_GENERAL" description="Будет добавлена абонентам при миграции APN" />
     <CFS name="Subscriber" priority="9999" type="ManagedObject" description="Абонент">
+      <RFS name="RFS_CT5_SUBSCRIPTION" linkType="Add" />
       <RFS name="RFS_EI_SUBSCRIPTION" linkType="Add" />
       <RFS name="RFS_FP_SUBSCRIBER" linkType="Add" />
       <RFS name="RFS_RBT_SUBSCRIPTION" linkType="Add" dependsOn="RFS_RBT_SERVICE" />
       <RFS name="RFS_SM_SUBSCRIPTION" linkType="Add" />
-      <RFS name="RFS_CT5_SUBSCRIPTION" linkType="Add" />
     </CFS>
     <CFS name="SubscriberInHLR" priority="9999" type="ManagedObject" copyOf="Subscriber" description="Абонент - копия" />
     <CFS name="Synchronize" priority="1" description="Обработка кнопки Синхронизировать в СПА">
