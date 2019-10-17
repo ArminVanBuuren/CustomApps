@@ -11,9 +11,7 @@
       </objectlist>
       <automat>
         <node name="SCProcessingUnit" object="SCProcessingUnit">
-          <parameterslist>
-            <param name="RFSFilterHandler" value="FP.CancelHandler" />
-          </parameterslist>
+          <parameterslist />
           <resultlist>
             <result value="" node="DeleteFullBLK" />
           </resultlist>

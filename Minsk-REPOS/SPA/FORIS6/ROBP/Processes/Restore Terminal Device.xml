@@ -1,0 +1,80 @@
+﻿<BusinessProcessData name="Restore Terminal Device">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="CreateSubscriberOnVM" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="CreateSubscribersInTheHLR" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="CreateSubscriberOnRB" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="CreateSubscriberOnDB" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="DeleteBlockOnBMS" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="RestoreSubscriber_BS" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="AssignMsisdnToCampaign" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="SCProcessingUnit" object="SCProcessingUnit">
+          <parameterslist />
+          <resultlist>
+            <result value="" node="CreateSubscriberOnVM" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscriberOnVM" object="CreateSubscriberOnVM">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriberOnVM" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="CreateSubscribersInTheHLR" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscribersInTheHLR" object="CreateSubscribersInTheHLR">
+          <parameterslist>
+            <param name="operation" value="CreateSubscribersInTheHLR" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="CreateSubscriberOnRB" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscriberOnRB" object="CreateSubscriberOnRB">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriberOnRB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="CreateSubscriberOnDB" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscriberOnDB" object="CreateSubscriberOnDB">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriberOnDB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="RestoreSubscriber_BS" />
+          </resultlist>
+        </node>
+        <node name="RestoreSubscriber_BS" object="RestoreSubscriber_BS">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriber_BS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AssignMsisdnToCampaign" />
+          </resultlist>
+        </node>
+        <node name="AssignMsisdnToCampaign" object="AssignMsisdnToCampaign">
+          <parameterslist>
+            <param name="operation" value="AssignMsisdnToCampaign" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteBlockOnBMS" />
+          </resultlist>
+        </node>
+        <node name="DeleteBlockOnBMS" object="DeleteBlockOnBMS">
+          <parameterslist>
+            <param name="operation" value="DeleteBlockOnBMS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

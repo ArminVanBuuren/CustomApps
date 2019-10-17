@@ -87,6 +87,9 @@
     <RFS name="RFS_BMS_TRANSFER_TD" hostType="BS" description="Изменение ЛС и ПО на BMS">
       <RFSParameter name="TransferTD" />
     </RFS>
+    <RFS name="RFS_FP_AUTO_PAYMENT_LIMIT" hostType="FP" description="Порог автоплатежа на фин.платформе">
+      <RFSParameter name="AutoPaymentThreshold" />
+    </RFS>
     <RFS name="RFS_FP_BLOCK" hostType="FP" processType="DynamicList" description="Признак наличия блокировки" />
     <RFS name="RFS_FP_CHANGE_BILLING_GROUP" hostType="FP" description="Изменение биллинговой группы на фин.платформе">
       <RFSParameter name="NewBillingGroupId" />
@@ -134,6 +137,7 @@
     <RFS name="RFS_FP_COUNTER" hostType="FP" processType="DynamicList" description="Счетчик на фин.платформе">
       <RFSParameter name="Counter" />
     </RFS>
+    <RFS name="RFS_FP_END_BLOCK_INFO" hostType="FP" description="Окончательная блокировка на ФП" />
     <RFS name="RFS_FP_LANGUAGE" hostType="FP" processType="DynamicList" description="Обновление языка на фин.платформе">
       <RFSParameter name="NewLanguageCode" />
     </RFS>
@@ -374,7 +378,6 @@
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
     </CFS>
     <CFS name="CBBLKLOST" globalServiceCode="BL0001" priority="11" description="Блокировка аппарат утрачен">
-      <RFS name="RFS_FP_BLOCK" linkType="Add" />
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
     </CFS>
     <CFS name="CBBLKUSER" priority="11" copyOf="FRBLKUSER" description="Добровольная блокировка" />
@@ -395,6 +398,9 @@
     </CFS>
     <CFS name="CFS_FP_CUG" isMarker="true" description="Шаблон ЗГП для FP">
       <RFS name="RFS_FP_SERVICE_CUG" linkType="Add" actionName="-Apply Services" />
+    </CFS>
+    <CFS name="CFS_FP_END_BLOCK_INFO" description="Информация о заключительной блокировке на ФП">
+      <RFS name="RFS_FP_END_BLOCK_INFO" linkType="Info" />
     </CFS>
     <CFS name="CFS_FP_FAVORITE_NUMBER" isMarker="true" description="Шаблон любимого номера для FP">
       <RFS name="RFS_FP_SERVICE_FAVORITE_NUMBER" linkType="Add" />
@@ -13655,19 +13661,16 @@
     <CFS name="FRAVN" copyOf="EXTNUM" description="Дополнительный номер для телефонии (голосовой связи)" />
     <CFS name="FRBLCNCOT" globalServiceCode="FRBLCNCOT" copyOf="CFS_FP_SERVICE_GENERAL" description="Блокировка НЦОТ" />
     <CFS name="FRBLKCHK" globalServiceCode="BL0003" priority="11" description="Блокировка 'Проверка'">
-      <RFS name="RFS_FP_BLOCK" linkType="Add" />
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
     </CFS>
     <CFS name="FRBLKCHKAN" globalServiceCode="BL0017" priority="11" copyOf="FRBLKCHK" description="Тест. Аналог блокировки ПРОВЕРКА" />
     <CFS name="FRBLKCUDATA" globalServiceCode="FRBLKCUDATA" priority="6" description="Блокировка по отсутствию персональных данных">
-      <RFS name="RFS_FP_BLOCK" linkType="Add" />
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
     </CFS>
     <CFS name="FRBLKDBT" globalServiceCode="FRBLKDBT" copyOf="CFS_FP_SERVICE_GENERAL" description="Блокировка Дебитор" />
     <CFS name="FRBLKDEBT" globalServiceCode="BL0016" priority="11" copyOf="FRBLKCHK" description="Тест ITGC 43297. Блокировка СУДЗ" />
     <CFS name="FRBLKEND" globalServiceCode="BL0006" priority="3" description="Заключительная блокировка">
       <RFS name="RFS_BMS_BLOCK" linkType="Add" />
-      <RFS name="RFS_FP_BLOCK" linkType="Add" />
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
     </CFS>
     <CFS name="FRBLKFIN" globalServiceCode="BL0009" priority="14" description="Принудительная блокировка">
@@ -13680,20 +13683,16 @@
     <CFS name="FRBLKKEEP" globalServiceCode="FRBLKKEEP" copyOf="CFS_FP_SERVICE_GENERAL" description="Блокировка комплекта" />
     <CFS name="FRBLKP" globalServiceCode="FRBLKP" copyOf="CFS_FP_SERVICE_GENERAL" description="Частичная блокировка" />
     <CFS name="FRBLKPART" priority="15" description="Блокировка по отсутствию персональных данных">
-      <RFS name="RFS_FP_BLOCK" linkType="Add" />
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
     </CFS>
     <CFS name="FRBLKPAY" globalServiceCode="BL0011" priority="14" description="Принудительная блокировка по неоплате счета">
-      <RFS name="RFS_FP_BLOCK" linkType="Add" />
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
     </CFS>
     <CFS name="FRBLKPAYSRV" globalServiceCode="BL0013" priority="14" description="Блокировка по недостаточности средств на оплату услуг">
-      <RFS name="RFS_FP_BLOCK" linkType="Add" />
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
     </CFS>
     <CFS name="FRBLKTIME" globalServiceCode="FRBLKTIME" copyOf="CFS_FP_SERVICE_GENERAL" description="Блокировка срок годности комплекта истек" />
     <CFS name="FRBLKUSER" globalServiceCode="BL0005" priority="11" description="Добровольная блокировка">
-      <RFS name="RFS_FP_BLOCK" linkType="Add" />
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
     </CFS>
     <CFS name="FRBLKUSERABS" globalServiceCode="FRBLKUSERABS" copyOf="CFS_FP_SERVICE_GENERAL" description="Добровольная блокировка (Абсолют)" />
@@ -13769,7 +13768,8 @@
     <CFS name="MNPCANCEL" globalServiceCode="MNPCANCEL" copyOf="CFS_FP_SERVICE_GENERAL" description="MNP расторжение" />
     <CFS name="MNPPORT" globalServiceCode="MNPPORT" copyOf="CFS_FP_SERVICE_GENERAL" description="MNP портация" />
     <CFS name="PersonalAccount" priority="9999" description="Лицевой счет">
-      <RFS name="RFS_FP_PERSONAL_ACCOUNT" linkType="Add" />
+      <RFS name="RFS_FP_AUTO_PAYMENT_LIMIT" linkType="Add" actionName="Assign Autopayment Limit;Remove Autopayment Limit;Modify Autopayment Limit" />
+      <RFS name="RFS_FP_PERSONAL_ACCOUNT" linkType="Add" actionName="-Assign Autopayment Limit;-Remove Autopayment Limit;-Modify Autopayment Limit" />
     </CFS>
     <CFS name="PRABSMS10" globalServiceCode="PRABSMS10" copyOf="CFS_FP_SERVICE_GENERAL" description="SMS-пакет 10 (подарок)" />
     <CFS name="PSPLA" globalServiceCode="PSPLA" copyOf="CFS_FP_SERVICE_GENERAL" description="Стимулирование платежей" />
@@ -13814,24 +13814,63 @@
   <CFSGroupList />
   <RFSGroupList>
     <RFSGroup name="RFS_GROUP_FP_CHANGE_MSISDN" type="Choice" description="Группа RFS для изменения номера MSISDN">
-      <RFS name="RFS_FP_CHANGE_MSISDN_IMSI" linkType="Add" />
+      <RFS name="RFS_FP_CHANGE_MSISDN_IMSI" linkType="Add" handler="ChangeFPMSISDNHandler" />
     </RFSGroup>
     <RFSGroup name="RFS_GROUP_FP_CHANGE_TARIFF_PLAN" type="Choice" description="Группа RFS для изменения тарифного плана, включая изменение платформы">
-      <RFS name="RFS_FP_CHANGE_TARIFF" linkType="Add" />
+      <RFS name="RFS_FP_CHANGE_TARIFF" linkType="Add" handler="ChangeFPTariffHandler" />
       <RFS name="RFS_FP_CHANGE_TARIFF_TD" linkType="Add" />
     </RFSGroup>
     <RFSGroup name="RFS_GROUP_FP_CHANGE_TARIFF_PLAN_AND_DELETE" type="Choice" description="Группа RFS для удаления абонента на старой платформы при изменении тарифного плана">
-      <RFS name="RFS_FP_CHANGE_TARIFF" linkType="Add" />
+      <RFS name="RFS_FP_CHANGE_TARIFF" linkType="Add" handler="DeleteFPSubscriberForChangeTariffHandler" />
     </RFSGroup>
     <RFSGroup name="RFS_GROUP_FP_TRANSFER_TD" type="Choice" description="Группа RFS для переноса ПО">
-      <RFS name="RFS_FP_TRANSFER_TD" linkType="Add" />
+      <RFS name="RFS_FP_TRANSFER_TD" linkType="Add" handler="ChangeFPPATDLinkHandler" />
     </RFSGroup>
   </RFSGroupList>
   <RestrictionList />
   <RFSDependencyList />
   <HandlerList>
+    <Handler name="ChangeFPMSISDNHandler" type="Custom" description="Обработчик RFS для изменения номера MSISDN">
+      <Configuration type="FORIS.SPA.SC.Customization.ChangeFPMSISDNHandler, FORIS.SPA.SC.Customization">
+        <RFS name="RFS_FP_CHANGE_MSISDN_IMSI" changeHLR="True" />
+        <RFS name="RFS_FP_CHANGE_MSISDN_IMSI" changeHLR="False" order="-9" />
+        <RFS name="RFS_FP_CHANGE_MSISDN_IN_CUG" changeHLR="False" dependsOn="RFS_FP_SERVICE_CUG" order="-8" />
+        <RFS name="RFS_FP_CHANGE_MSISDN_IN_VUG" changeHLR="False" dependsOn="RFS_FP_SERVICE_VUG" order="-7" />
+      </Configuration>
+    </Handler>
+    <Handler name="ChangeFPPATDLinkHandler" type="Custom" description="Обработчик RFS для переноса ПО">
+      <Configuration type="FORIS.SPA.SC.Customization.ChangeFPPATDLinkHandler, FORIS.SPA.SC.Customization">
+        <RFS name="RFS_FP_TRANSFER_TD" action="Add" order="-2" />
+        <RFS name="RFS_FP_TRANSFER_TD" action="Remove" order="1" />
+      </Configuration>
+    </Handler>
+    <Handler name="ChangeFPTariffHandler" type="Custom" description="Обработчик RFS для изменения тарифного плана при смене платформы">
+      <Configuration type="FORIS.SPA.SC.Customization.ChangeFPTariffHandler, FORIS.SPA.SC.Customization">
+        <RFS name="RFS_FP_CHANGE_TARIFF_NEW_PA" action="Add" order="-9" />
+        <RFS name="RFS_FP_CHANGE_TARIFF_NEW_TD" action="Add" order="-8" />
+        <RFS name="RFS_FP_CHANGE_TARIFF_CUG" action="Add" dependsOn="RFS_FP_SERVICE_CUG" order="-7" />
+        <RFS name="RFS_FP_CHANGE_TARIFF_CUG" action="Add" dependsOn="RFS_FP_SERVICE_VUG" order="-6" />
+        <RFS name="RFS_FP_CHANGE_TARIFF_AP" action="Remove" dependsOn="RFS_FP_SERVICE_AUTO_PAYMENT" order="5" />
+      </Configuration>
+    </Handler>
+    <Handler name="DeleteFPSubscriberForChangeTariffHandler" type="Custom" description="Обработчик RFS для удаления абонента на старой платформы при изменении тарифного плана">
+      <Configuration type="FORIS.SPA.SC.Customization.DeleteFPSubscriberForChangeTariffHandler, FORIS.SPA.SC.Customization">
+        <RFS name="RFS_FP_CHANGE_TARIFF_FN" dependsOn="RFS_FP_SERVICE_FAVORITE_NUMBER" order="7" />
+        <RFS name="RFS_FP_SERVICE_AUTO_PAYMENT" dependsOn="RFS_FP_SERVICE_AUTO_PAYMENT" order="6" />
+        <RFS name="RFS_FP_SUBSCRIBER" order="5" />
+      </Configuration>
+    </Handler>
     <Handler name="FP.CancelHandler" type="RFSFilter" description="Обработчик отмены обработки на фин.платформе. Прописан в бизнес-процессы.">
       <Configuration deny="FP" />
+    </Handler>
+    <Handler name="FP.DeleteSubscriber" type="DeleteSubscriber" description="Обработчик специфичного удаления абонента с FP">
+      <Configuration hostType="FP">
+        <RFS name="RFS_FP_SERVICE_CUG" />
+        <RFS name="RFS_FP_SERVICE_VUG" />
+        <RFS name="RFS_FP_SERVICE_FAVORITE_NUMBER" />
+        <RFS name="RFS_FP_SERVICE_AUTO_PAYMENT" />
+        <RFS name="RFS_FP_SUBSCRIBER" />
+      </Configuration>
     </Handler>
     <Handler name="FP.ExclusiveHandler" type="RFSFilter" description="Обработчик выделения обработки только на фин.платформе. Прописан в бизнес-процессы.">
       <Configuration allow="FP" />
@@ -13864,6 +13903,10 @@
     <Scenario name="FP.Add.Vug" sendType="Broadcast" description="Добавление ВГП на FP">
       <RFS name="RFS_FP_SERVICE_VUG" scenarioType="Add" useType="Mandatory" />
     </Scenario>
+    <Scenario name="FP.Change.AutoPaymentLimit" description="Обновление лимита автоплатежа">
+      <RFS name="RFS_FP_AUTO_PAYMENT_LIMIT" scenarioType="Add, Modify, Remove" useType="Mandatory" />
+      <RFS name="RFS_FP_PERSONAL_ACCOUNT" scenarioType="Remove" />
+    </Scenario>
     <Scenario name="FP.Change.Msisdn.Cug" sendType="Broadcast" description="Смена MSISDN абонента в ЗГП на FP">
       <RFS name="RFS_FP_CHANGE_MSISDN_IN_CUG" scenarioType="Add" useType="Mandatory" />
       <Append name="RFS_FP_SERVICE_CUG" listType="EndList" />
@@ -13893,16 +13936,6 @@
       <Append name="RFS_FP_SERVICE_FAVORITE_NUMBER" />
       <Append name="RFS_FP_SERVICE_GENERAL" />
       <Append name="RFS_FP_SERVICE_VUG" />
-    </Scenario>
-    <Scenario name="FP.ChangeTariff.Composite" description="Смена ТП со сменой платформы?">
-      <RFS name="RFS_FP_CHANGE_TARIFF_CUG" scenarioType="Add" />
-      <RFS name="RFS_FP_CHANGE_TARIFF_NEW_PA" scenarioType="Add" useType="Mandatory" />
-      <RFS name="RFS_FP_CHANGE_TARIFF_NEW_TD" scenarioType="Add" useType="Mandatory" />
-      <Append name="RFS_FP_SERVICE_ADDITIONAL_NUMBER" listType="EndList" />
-      <Append name="RFS_FP_SERVICE_CUG" listType="EndList" />
-      <Append name="RFS_FP_SERVICE_FAVORITE_NUMBER" />
-      <Append name="RFS_FP_SERVICE_GENERAL" />
-      <Append name="RFS_FP_SERVICE_VUG" listType="EndList" />
     </Scenario>
     <Scenario name="FP.ChangeTariff.CreatePA" description="Изменение тарифного плана и платформы - создание ЛС">
       <RFS name="RFS_FP_CHANGE_TARIFF_NEW_PA" scenarioType="Add" />
@@ -13954,6 +13987,7 @@
     <Scenario name="FP.Modify.BLock" description="Изменение блокировки на FP">
       <RFS name="RFS_FP_BLOCK" scenarioType="Add, Modify, Remove" useType="Mandatory" />
       <RFS name="RFS_FP_SERVICE_GENERAL" scenarioType="Add, Remove" />
+      <Append name="RFS_FP_END_BLOCK_INFO" listType="EndList" />
       <Append name="RFS_FP_SERVICE_GENERAL" listType="EndList" />
     </Scenario>
     <Scenario name="FP.Remove.AutoPayment" description="Удаление автоплатежа на FP">
@@ -13969,7 +14003,7 @@
     </Scenario>
     <Scenario name="FP.Sync.FavoriteNumbers" description="Добавление/удаление/изменение ЛН на FP">
       <RFS name="RFS_FP_SERVICE_FAVORITE_NUMBER" scenarioType="Add, Modify, Remove" useType="Mandatory" />
-      <Append name="RFS_FP_SERVICE_GENERAL" listType="EndList" />
+      <RFS name="RFS_FP_SERVICE_GENERAL" scenarioType="Add, Modify, Remove" />
     </Scenario>
     <Scenario name="FP.Sync.Services" description="Добавление/удаление/изменение услуг на FP">
       <RFS name="RFS_FP_SERVICE_ADDITIONAL_NUMBER" scenarioType="Add, Modify, Remove" />
