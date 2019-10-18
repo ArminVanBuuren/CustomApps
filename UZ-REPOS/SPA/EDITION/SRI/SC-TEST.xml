@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration markers="*" scenarioPrefix="SC." mainIdentities="MSISDN,PersonalAccountNumber,ContractNumber" SICreation="" formatVersion="1">
+  <HostTypeList>
+    <HostType name="HL" nriType="RI" allowTerminalDeviceType="mobile" description="HLR (Home Location Register)" />
+  </HostTypeList>
+  <IdentityList />
+  <AttributeList />
+  <ResourceList>
+    <Resource name="RES_HLR_CANCEL_LOCATION" description="Тип станции для сброса информации" />
+    <Resource name="RES_HLR_DEALER_APN" description="Название дилерской точки доступа (Access Point Name)" />
+    <Resource name="RES_HLR_NET" description="Доступ к сервису интернет" />
+    <Resource name="RES_HLR_NET_APN" description="Название точки доступа (Access Point Name)" />
+    <Resource name="RES_HLR_NET_SERVICE" description="Услуга интернет" />
+    <Resource name="RES_HLR_ODB_IC" description="Барринг входящей связи" />
+    <Resource name="RES_HLR_ODB_OC" description="Барринг исходящей связи" />
+    <Resource name="RES_HLR_PROFILE" description="Профиль абонента" />
+    <Resource name="RES_HLR_REGION" description="Код региона для переадресации" />
+    <Resource name="RES_HLR_SMS_MO" description="Барринг на исходящей SMS" />
+    <Resource name="RES_HLR_SMS_MT" description="Барринг на входящей SMS" />
+    <Resource name="RES_HLR_USSD" description="Доступ к USSD" />
+  </ResourceList>
+  <RFSParameterList>
+    <RFSParameter name="AutoPaymentThreshold" path="//APTHRESHOLD/Value" description="Порог автоплатежа" />
+    <RFSParameter name="CallForwardingTimer" description="Таймер переадресации" />
+    <RFSParameter name="CallForwardMode" description="Режим переадресации" />
+    <RFSParameter name="CallForwardType" description="Тип установки переадресаций" />
+    <RFSParameter name="ChangeContract" path="xml(//ChangeContract)" description="Параметры изменения контракта" />
+    <RFSParameter name="ChangeTP" path="xml(//ChangeTP)" description="Параметры смены тарифного плана" />
+    <RFSParameter name="Counter" path="xml(*[1])" description="Все XML параметры по счетчику на фин.платформе" />
+    <RFSParameter name="CreateGroup" path="bool(//IsNeedCreateGroup)" description="Флаг создания группы" />
+    <RFSParameter name="CrmInternalProductActionId" path="//CrmInternalProductActionId" description="Идентификатор обработки конкретной услуги" />
+    <RFSParameter name="CRMOriginalID" path="//CRMOriginalID" description="Идентификатор обработки конкретной услуги" />
+    <RFSParameter name="CugAvailableOnFP" path="exist(//AvailableCugHostTypes/SC)" description="ЗГП доступно на фин.платформе" />
+    <RFSParameter name="DateFrom" path="//DateFrom" description="Дата начала действия" />
+    <RFSParameter name="DeleteGroup" path="bool(//IsNeedDeleteGroup)" description="Флаг удаление группы" />
+    <RFSParameter name="ExternalGroupNumber" path="//ExternalGroupNumber" description="Номер группы" />
+    <RFSParameter name="FavoriteNumber" path="//FavoriteNumber" description="Телефонный номер любимого номера" />
+    <RFSParameter name="FavoriteNumberPosition" path="//Position" description="Позиция любимого номера" />
+    <RFSParameter name="FavoriteNumberTypeCode" path="//FavoriteNumberTypeCode" description="Код типа любимого номера" />
+    <RFSParameter name="ForwardedToNumber" description="Номер переадресации" />
+    <RFSParameter name="GroupMemberOperation" path="//GroupMemberOperation" description="Тип операции для группы" />
+    <RFSParameter name="NewBillingGroupId" path="//NewBillingGroupId" description="Номер новой биллинговой группы" />
+    <RFSParameter name="NewIMSI" path="//NewIMSI" description="Новый номер IMSI" />
+    <RFSParameter name="NewLanguageCode" path="//NewLanguageCode" description="Код языка на фин.платформе" />
+    <RFSParameter name="NewMSISDN" path="//NewMSISDN" description="Новый номер MSISDN" />
+    <RFSParameter name="PersonalAccount" path="xml(//PersonalAccount)" description="Параметры создания абонента" />
+    <RFSParameter name="PreviousPlatform" path="xml(//PreviousPlatform)" pathMode="Absolute" description="Параметры предыдущей платформы при переносе ПО" />
+    <RFSParameter name="ServiceAdditionalDataTypeCode" path="//ServiceAdditionalDataTypeCode" description="Код услуги для секции AdditionalData" />
+    <RFSParameter name="ServiceCode" path="//SERVICE_CODE" description="Код услуги" />
+    <RFSParameter name="SkipFP" path="bool(//DoNotProcessingInFinancialPlatform)" description="Флаг пропуска на фин.платформе" />
+    <RFSParameter name="Subscriber" path="xml(//Subscriber)" description="Параметры создания абонента" />
+    <RFSParameter name="TransferTD" path="xml(//TransferTD)" description="Параметры переноса ПО" />
+    <RFSParameter name="UpdateAttributes" path="xml(//UpdateAttributes)" description="Параметры изменения атрибутов" />
+    <RFSParameter name="UserGroupCode" path="//UserGroupCode" description="Код группы" />
+  </RFSParameterList>
+  <FlagList />
+  <RFSList>
+    <RFS name="RFS_HLR_CHANGE_IMSI" parent="RFS_HLR_RECREATE_SUBSCRIBER" hostType="HL" description="Изменение номера IMSI">
+      <RFSParameter name="NewIMSI" />
+    </RFS>
+    <RFS name="RFS_HLR_CHANGE_MSISDN" parent="RFS_HLR_RECREATE_SUBSCRIBER" hostType="HL" description="Изменение номера MSISDN">
+      <RFSParameter name="NewMSISDN" />
+    </RFS>
+    <RFS name="RFS_HLR_CHANGE_PROFILE" parent="RFS_HLR_RECREATE_SUBSCRIBER" hostType="HL" description="Изменение профиля абонента" />
+    <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" hostType="HL" description="Маркер который указывает что абонент пересоздается" />
+    <RFS name="RFS_HLR_SUBSCRIBER" hostType="HL" processType="Subscription" description="Создание абонента"/>
+    <RFS name="RFS_HLR_PROFILE" hostType="HL" description="Создание абонента">
+      <Resource name="RES_HLR_PROFILE" useType="Mandatory" />
+    </RFS>
+    <RFS name="RFS_HLR_PROFILE_AIISKUE" base="RFS_HLR_PROFILE" hostType="HL" description="Создание абонента ASKUE - АИИСКУЭ">
+      <Resource name="RES_HLR_PROFILE" value="AIISKUE" />
+    </RFS>
+    <RFS name="RFS_HLR_PROFILE_DEALERS" base="RFS_HLR_PROFILE" hostType="HL" description="Создание дилерского абонента">
+      <Resource name="RES_HLR_PROFILE" value="DEALERS" />
+    </RFS>
+    <RFS name="RFS_HLR_PROFILE_DEFAULT" base="RFS_HLR_PROFILE" hostType="HL" description="Создание абонента">
+      <Resource name="RES_HLR_PROFILE" value="Prepaid">
+        <Value hosts="FP:05" value="Postpaid" />
+      </Resource>
+    </RFS>
+    <RFS name="RFS_HLR_PROFILE_DGU" base="RFS_HLR_PROFILE" hostType="HL" description="Создание абонента ТП ДГУ">
+      <Resource name="RES_HLR_PROFILE" value="DGU" />
+    </RFS>
+  </RFSList>
+  <CFSList>
+    <CFS name="CB1011" priority="9998" description="Ежемесячная плата за тариф">
+      <RFS name="RFS_HLR_PROFILE_DEFAULT" linkType="Add" />
+      <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" />
+    </CFS>
+    <CFS name="ChangeTP" priority="9999" type="OneTime" description="Изменение тарифного плана">
+      <RFS name="RFS_HLR_CHANGE_PROFILE" linkType="Add" />
+    </CFS>
+    <CFS name="FRASKUE" priority="9997" description="Создание абонентов АИИСКУЭ (APN Profile ID - 10 ASKUE)">
+      <RFS name="RFS_HLR_PROFILE_AIISKUE" linkType="Add" />
+      <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" />
+    </CFS>
+    <CFS name="FRDGU" priority="9997" description="Услуга передачи данных ТП ДГУ">
+      <RFS name="RFS_HLR_PROFILE_DGU" linkType="Add" />
+      <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" />
+    </CFS>
+    <CFS name="FRPARTAPN" priority="9997" description="Создание абонентов Partner APN (APN Profile ID - 20 DEALERS.UMS.UZ)">
+      <RFS name="RFS_HLR_PROFILE_DEALERS" linkType="Add" />
+      <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" />
+    </CFS>
+  </CFSList>
+  <CFSGroupList>
+    <CFSGroup name="CFS_GROUP_HLR_SUBSCRIBER" type="Mutex" description="Группа взаимоисключающих услуг при создании абонента">
+      <CFS name="FRASKUE" />
+      <CFS name="FRDGU" />
+      <CFS name="FRPARTAPN" />
+    </CFSGroup>
+  </CFSGroupList>
+  <ScenarioList>
+    <Scenario name="HLR.ChangeProfile" description="Изменение профиля абонента">
+      <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" scenarioType="Add" />
+      <Append name="RFS_HLR_PROFILE" listType="StartList" />
+      <Append name="RFS_HLR_PROFILE" listType="EndList" />
+    </Scenario>
+  </ScenarioList>
+  <WfmScenarioList />
+</Configuration>

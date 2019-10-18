@@ -565,6 +565,7 @@
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.Remove.RFS_HLR_CLIP.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\GetSubscriberByIMSI.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.Remove.RFS_HLR_CLIR.xml" />
+    <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.HLR.ChangeProfile.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scripts\command.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scripts\login.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scripts\logoff.xml" />
@@ -625,6 +626,9 @@
     <Content Include="EDITION\OLD\SPA.SA\HLR.ZTE.v1\Scripts\login.xml" />
     <Content Include="EDITION\OLD\SPA.SA\HLR.ZTE.v1\Scripts\logoff.xml" />
     <Content Include="EDITION\OLD\SPA.SA\HLR.ZTE.v1\Scripts\nosleep.xml" />
+    <Content Include="EDITION\SRI\SC-TEST.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="EDITION\SRI\SC-HL %28ZTE%29\ServiceCatalog-HLR_WORKED_2018.12.09.xml" />
     <Content Include="EDITION\SRI\SC-SCG\ServiceCatalog-SCG.xml" />
     <Content Include="EDITION\SRI\SC.xml" />

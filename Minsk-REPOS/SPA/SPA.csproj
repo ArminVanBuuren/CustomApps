@@ -2073,6 +2073,7 @@
     <Content Include="FORIS6\ROBP\Processes\Remove VPN2 Services.xml" />
     <Content Include="FORIS6\ROBP\Processes\Remove WI-FI Services.xml" />
     <Content Include="FORIS6\ROBP\Processes\Remove WLL Services.xml" />
+    <Content Include="FORIS6\ROBP\Processes\Restore Terminal Device.xml" />
     <Content Include="FORIS6\ROBP\Processes\Send DMS settings.xml" />
     <Content Include="FORIS6\ROBP\Processes\SynchronizationBlocking.xml" />
     <Content Include="FORIS6\ROBP\Processes\Synchronize Subscriber Data.xml" />
