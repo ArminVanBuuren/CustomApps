@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration markers="*" scenarioPrefix="SC." mainIdentities="MSISDN,PersonalAccountNumber,ContractNumber" SICreation="" formatVersion="1">
+  <HostTypeList>
+    <HostType name="HL" nriType="RI" allowTerminalDeviceType="mobile" description="HLR (Home Location Register)" />
+  </HostTypeList>
+  <IdentityList />
+  <AttributeList />
+  <ResourceList>
+    <Resource name="RES_HLR_PROFILE" description="Профиль абонента" />
+  </ResourceList>
+  <RFSParameterList>
+  </RFSParameterList>
+  <FlagList />
+  <RFSList>
+    <RFS name="RFS_HLR_CHANGE_PROFILE" parent="RFS_HLR_RECREATE_SUBSCRIBER" hostType="HL" description="Изменение профиля абонента" />
+    <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" hostType="HL" description="Маркер который указывает что абонент пересоздается" />
+    <RFS name="RFS_HLR_SUBSCRIBER" hostType="HL" processType="Subscription" description="Создание абонента"/>
+    <RFS name="RFS_HLR_PROFILE" hostType="HL" description="Создание абонента">
+      <Resource name="RES_HLR_PROFILE" useType="Mandatory" />
+    </RFS>
+    <RFS name="RFS_HLR_PROFILE_AIISKUE" base="RFS_HLR_PROFILE" hostType="HL" description="Создание абонента ASKUE - АИИСКУЭ">
+      <Resource name="RES_HLR_PROFILE" value="AIISKUE" />
+    </RFS>
+    <RFS name="RFS_HLR_PROFILE_DEALERS" base="RFS_HLR_PROFILE" hostType="HL" description="Создание дилерского абонента">
+      <Resource name="RES_HLR_PROFILE" value="DEALERS" />
+    </RFS>
+    <RFS name="RFS_HLR_PROFILE_DEFAULT" base="RFS_HLR_PROFILE" hostType="HL" description="Создание абонента">
+      <Resource name="RES_HLR_PROFILE" value="Prepaid">
+        <Value hosts="FP:05" value="Postpaid" />
+      </Resource>
+    </RFS>
+    <RFS name="RFS_HLR_PROFILE_DGU" base="RFS_HLR_PROFILE" hostType="HL" description="Создание абонента ТП ДГУ">
+      <Resource name="RES_HLR_PROFILE" value="DGU" />
+    </RFS>
+  </RFSList>
+  <CFSList>
+    <CFS name="CB1011" priority="9998" description="Ежемесячная плата за тариф">
+      <RFS name="RFS_HLR_PROFILE_DEFAULT" linkType="Set" />
+      <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" />
+    </CFS>
+    <CFS name="ChangeTP" priority="9999" type="OneTime" description="Изменение тарифного плана">
+      <RFS name="RFS_HLR_CHANGE_PROFILE" linkType="Add" />
+    </CFS>
+    <CFS name="FRASKUE" priority="9997" description="Создание абонентов АИИСКУЭ (APN Profile ID - 10 ASKUE)">
+      <RFS name="RFS_HLR_PROFILE_AIISKUE" linkType="Modify" />
+      <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" />
+    </CFS>
+    <CFS name="FRDGU" priority="9997" description="Услуга передачи данных ТП ДГУ">
+      <RFS name="RFS_HLR_PROFILE_DGU" linkType="Modify" />
+      <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" />
+    </CFS>
+    <CFS name="FRPARTAPN" priority="9997" description="Создание абонентов Partner APN (APN Profile ID - 20 DEALERS.UMS.UZ)">
+      <RFS name="RFS_HLR_PROFILE_DEALERS" linkType="Modify" />
+      <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" />
+    </CFS>
+  </CFSList>
+  <CFSGroupList>
+    <CFSGroup name="CFS_GROUP_HLR_SUBSCRIBER" type="Mutex" description="Группа взаимоисключающих услуг при создании абонента">
+      <CFS name="FRASKUE" />
+      <CFS name="FRDGU" />
+      <CFS name="FRPARTAPN" />
+    </CFSGroup>
+  </CFSGroupList>
+  <ScenarioList>
+    <Scenario name="HLR.ChangeProfile" description="Изменение профиля абонента">
+      <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" scenarioType="Add" />
+      <Append name="RFS_HLR_PROFILE" listType="StartList" />
+      <Append name="RFS_HLR_PROFILE" listType="EndList" />
+    </Scenario>
+    <Scenario name="HLR.CreateSubscriber" description="Создание абонента">
+      <RFS name="RFS_HLR_SUBSCRIBER" scenarioType="Add, Modify" useType="Mandatory" />
+      <Append name="RFS_HLR_PROFILE" listType="StartList" />
+      <Append name="RFS_HLR_PROFILE" listType="EndList" />
+    </Scenario>
+    <Scenario name="HLR.DeleteSubscriber" description="Удаление абонента">
+      <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_PROFILE" scenarioType="Remove" />
+      <RFS name="RFS_HLR_SUBSCRIBER" scenarioType="Remove" useType="Mandatory" />
+    </Scenario>
+  </ScenarioList>
+  <WfmScenarioList />
+</Configuration>
