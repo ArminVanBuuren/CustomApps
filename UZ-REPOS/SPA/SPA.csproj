@@ -632,9 +632,6 @@
     <Content Include="EDITION\SRI\SC-TEST - 2.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="EDITION\SRI\SC-TEST.xml">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="EDITION\SRI\SC-HL %28ZTE%29\ServiceCatalog-HLR_WORKED_2018.12.09.xml" />
     <Content Include="EDITION\SRI\SC-SCG\ServiceCatalog-SCG.xml" />
     <Content Include="EDITION\SRI\SC.xml" />

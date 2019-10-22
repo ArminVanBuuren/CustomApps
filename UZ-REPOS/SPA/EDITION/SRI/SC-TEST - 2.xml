@@ -42,15 +42,15 @@
       <RFS name="RFS_HLR_CHANGE_PROFILE" linkType="Add" />
     </CFS>
     <CFS name="FRASKUE" priority="9997" description="Создание абонентов АИИСКУЭ (APN Profile ID - 10 ASKUE)">
-      <RFS name="RFS_HLR_PROFILE_AIISKUE" linkType="Modify" />
+      <RFS name="RFS_HLR_PROFILE_AIISKUE" linkType="Set" />
       <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" />
     </CFS>
     <CFS name="FRDGU" priority="9997" description="Услуга передачи данных ТП ДГУ">
-      <RFS name="RFS_HLR_PROFILE_DGU" linkType="Modify" />
+      <RFS name="RFS_HLR_PROFILE_DGU" linkType="Set" />
       <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" />
     </CFS>
     <CFS name="FRPARTAPN" priority="9997" description="Создание абонентов Partner APN (APN Profile ID - 20 DEALERS.UMS.UZ)">
-      <RFS name="RFS_HLR_PROFILE_DEALERS" linkType="Modify" />
+      <RFS name="RFS_HLR_PROFILE_DEALERS" linkType="Set" />
       <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" />
     </CFS>
   </CFSList>
@@ -64,13 +64,11 @@
   <ScenarioList>
     <Scenario name="HLR.ChangeProfile" description="Изменение профиля абонента">
       <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" scenarioType="Add" />
-      <Append name="RFS_HLR_PROFILE" listType="StartList" />
-      <Append name="RFS_HLR_PROFILE" listType="EndList" />
+      <Append name="RFS_HLR_PROFILE" listType="All" />
     </Scenario>
     <Scenario name="HLR.CreateSubscriber" description="Создание абонента">
       <RFS name="RFS_HLR_SUBSCRIBER" scenarioType="Add, Modify" useType="Mandatory" />
-      <Append name="RFS_HLR_PROFILE" listType="StartList" />
-      <Append name="RFS_HLR_PROFILE" listType="EndList" />
+      <Append name="RFS_HLR_PROFILE" listType="All" />
     </Scenario>
     <Scenario name="HLR.DeleteSubscriber" description="Удаление абонента">
       <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" scenarioType="Add, Remove" />

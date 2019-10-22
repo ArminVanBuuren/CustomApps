@@ -267,6 +267,12 @@
     <RFS name="RFS_HLR_CFU_PRV" base="RFS_HLR_CFU" hostType="HL" description="Provision Call forwarding unconditional">
       <RFSParameter name="CallForwardType" value="Provision" />
     </RFS>
+    <RFS name="RFS_HLR_CHANGE_IMSI" parent="RFS_HLR_RECREATE_SUBSCRIBER" hostType="HL" description="Изменение номера IMSI">
+      <RFSParameter name="NewIMSI" />
+    </RFS>
+    <RFS name="RFS_HLR_CHANGE_MSISDN" parent="RFS_HLR_RECREATE_SUBSCRIBER" hostType="HL" description="Изменение номера MSISDN">
+      <RFSParameter name="NewMSISDN" />
+    </RFS>
     <RFS name="RFS_HLR_CLIP" hostType="HL" description="Определитель номера" />
     <RFS name="RFS_HLR_CLIR" hostType="HL" description="Антиопределитель номера" />
     <RFS name="RFS_HLR_CWCH" hostType="HL" description="Ожидание / Удержание вызова" />
@@ -361,13 +367,6 @@
       <Resource name="RES_HLR_ODB_OC" value="NoCalls" />
     </RFS>
     <RFS name="RFS_HLR_RBT" hostType="HL" description="Caller Ring Back Tone. GOODOK" />
-    <RFS name="RFS_HLR_CHANGE_IMSI" parent="RFS_HLR_RECREATE_SUBSCRIBER" hostType="HL" description="Изменение номера IMSI">
-      <RFSParameter name="NewIMSI" />
-    </RFS>
-    <RFS name="RFS_HLR_CHANGE_MSISDN" parent="RFS_HLR_RECREATE_SUBSCRIBER" hostType="HL" description="Изменение номера MSISDN">
-      <RFSParameter name="NewMSISDN" />
-    </RFS>
-    <RFS name="RFS_HLR_CHANGE_PROFILE" parent="RFS_HLR_RECREATE_SUBSCRIBER" hostType="HL" description="Изменение профиля абонента" />
     <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" hostType="HL" description="Маркер который указывает что абонент пересоздается" />
     <RFS name="RFS_HLR_REGION" hostType="HL" description="Определение кода региона для переадресации">
       <Resource name="RES_HLR_REGION" useType="Mandatory">
@@ -447,22 +446,21 @@
       <Resource name="RES_HLR_DEALER_APN" value="DEALERS.UMS.UZ" useType="Mandatory" />
       <Resource name="RES_HLR_NET_APN" value="NET.UMS.UZ" useType="Mandatory" />
     </RFS>
-    <RFS name="RFS_HLR_SUBSCRIBER" hostType="HL" processType="Subscription" description="Создание абонента"/>
-    <RFS name="RFS_HLR_PROFILE" hostType="HL" description="Создание абонента">
+    <RFS name="RFS_HLR_SUBSCRIBER" hostType="HL" processType="Subscription" description="Создание абонента">
       <Resource name="RES_HLR_PROFILE" useType="Mandatory" />
     </RFS>
-    <RFS name="RFS_HLR_PROFILE_AIISKUE" base="RFS_HLR_PROFILE" hostType="HL" description="Создание абонента ASKUE - АИИСКУЭ">
+    <RFS name="RFS_HLR_SUBSCRIBER_AIISKUE" base="RFS_HLR_SUBSCRIBER" hostType="HL" processType="Subscription" description="Создание абонента ASKUE - АИИСКУЭ">
       <Resource name="RES_HLR_PROFILE" value="AIISKUE" />
     </RFS>
-    <RFS name="RFS_HLR_PROFILE_DEALERS" base="RFS_HLR_PROFILE" hostType="HL" description="Создание дилерского абонента">
+    <RFS name="RFS_HLR_SUBSCRIBER_DEALERS" base="RFS_HLR_SUBSCRIBER" hostType="HL" processType="Subscription" description="Создание дилерского абонента">
       <Resource name="RES_HLR_PROFILE" value="DEALERS" />
     </RFS>
-    <RFS name="RFS_HLR_PROFILE_DEFAULT" base="RFS_HLR_PROFILE" hostType="HL" description="Создание абонента">
+    <RFS name="RFS_HLR_SUBSCRIBER_DEFAULT" base="RFS_HLR_SUBSCRIBER" hostType="HL" processType="Subscription" description="Создание абонента">
       <Resource name="RES_HLR_PROFILE" value="Prepaid">
         <Value hosts="FP:05" value="Postpaid" />
       </Resource>
     </RFS>
-    <RFS name="RFS_HLR_PROFILE_DGU" base="RFS_HLR_PROFILE" hostType="HL" description="Создание абонента ТП ДГУ">
+    <RFS name="RFS_HLR_SUBSCRIBER_DGU" base="RFS_HLR_SUBSCRIBER" hostType="HL" processType="Subscription" description="Создание абонента ТП ДГУ">
       <Resource name="RES_HLR_PROFILE" value="DGU" />
     </RFS>
     <RFS name="RFS_HLR_USSD" hostType="HL" description="USSD сервис">
@@ -594,8 +592,7 @@
       <RFS name="RFS_HLR_ODB_IC_ALL_CALLS" linkType="Add" />
       <RFS name="RFS_HLR_ODB_OC_LOCAL_CALLS" linkType="Add" />
       <RFS name="RFS_HLR_REGION" linkType="Add" />
-      <RFS name="RFS_HLR_PROFILE_DEFAULT" linkType="Add" />
-      <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" />
+      <RFS name="RFS_HLR_SUBSCRIBER_DEFAULT" linkType="Set" />
     </CFS>
     <CFS name="CB10339" globalServiceCode="CB10339" copyOf="CFS_FP_SERVICE_GENERAL" description="Доставка счета курьером" />
     <CFS name="CB10363" description="Конференц-связь вызова">
@@ -747,9 +744,10 @@
       <RFSGroup name="RFS_GROUP_FP_CHANGE_TARIFF_PLAN_AND_DELETE" />
     </CFS>
     <CFS name="ChangeTP" priority="9999" type="OneTime" description="Изменение тарифного плана">
+      <!--<RFS name="RFS_HLR_RECREATE_SUBSCRIBER" linkType="Add" />-->
       <RFS name="RFS_SM_CHANGE_TARIFF" linkType="Add" />
-      <RFS name="RFS_HLR_CHANGE_PROFILE" linkType="Add" />
-      <RFSGroup name="RFS_GROUP_FP_CHANGE_TARIFF_PLAN" />
+      <!--<RFSGroup name="RFS_GROUP_FP_CHANGE_TARIFF_PLAN" />-->
+      <RFSGroup name="RFS_GROUP_HLR_CHANGE_PROFILE" />
     </CFS>
     <CFS name="DeleteLTE" description="Удалить LTE">
       <RFS name="RFS_HLR_ROAMING_TEST_DELETE" linkType="Add" />
@@ -926,8 +924,7 @@
     <CFS name="FRASKUE" priority="9997" description="Создание абонентов АИИСКУЭ (APN Profile ID - 10 ASKUE)">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
       <RFS name="RFS_HLR_NET_ALLOW" linkType="Add" />
-      <RFS name="RFS_HLR_PROFILE_AIISKUE" linkType="Add" />
-      <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" />
+      <RFS name="RFS_HLR_SUBSCRIBER_AIISKUE" linkType="Set" />
     </CFS>
     <CFS name="FRAVTOMB1000F" globalServiceCode="FRAVTOMB1000F" copyOf="CFS_FP_SERVICE_GENERAL" description="Услуга 20% FREE для OnNet 5000" />
     <CFS name="FRAVTOMB1000FR" globalServiceCode="FRAVTOMB1000FR" copyOf="CFS_FP_SERVICE_GENERAL" description="Услуга 50% FREE для OnNet 2000" />
@@ -1070,8 +1067,7 @@
       <RFS name="RFS_HLR_ODB_IC_ALL_CALLS" linkType="Add" />
       <RFS name="RFS_HLR_ODB_OC_LOCAL_CALLS" linkType="Add" />
       <RFS name="RFS_HLR_REGION" linkType="Add" />
-      <RFS name="RFS_HLR_PROFILE_DGU" linkType="Add" />
-      <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" />
+      <RFS name="RFS_HLR_SUBSCRIBER_DGU" linkType="Set" />
     </CFS>
     <CFS name="FRDILAPN" globalServiceCode="FRDILAPN" copyOf="CFS_FP_SERVICE_GENERAL" description="Дилерский APN" />
     <CFS name="FREP" globalServiceCode="FREP" copyOf="CFS_FP_SERVICE_GENERAL" description="Электронный помощник" />
@@ -1468,8 +1464,7 @@
     <CFS name="FRPARTAPN" priority="9997" description="Создание абонентов Partner APN (APN Profile ID - 20 DEALERS.UMS.UZ)">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
       <RFS name="RFS_HLR_NET_ALLOW" linkType="Add" />
-      <RFS name="RFS_HLR_PROFILE_DEALERS" linkType="Add" />
-      <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" />
+      <RFS name="RFS_HLR_SUBSCRIBER_DEALERS" linkType="Set" />
     </CFS>
     <CFS name="FRPARTBL" priority="1" description="Частичная блокировка">
       <RFS name="RFS_HLR_NET_DENY" linkType="Modify" />
@@ -2117,6 +2112,9 @@
     <RFSGroup name="RFS_GROUP_FP_TRANSFER_TD" type="Choice" description="Группа RFS для переноса ПО">
       <RFS name="RFS_FP_TRANSFER_TD" linkType="Add" handler="ChangeFPPATDLinkHandler" />
     </RFSGroup>
+    <RFSGroup name="RFS_GROUP_HLR_CHANGE_PROFILE" type="Choice" description="Группа RFS для пересоздания абонента">
+      <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" handler="HLR_ChangeProfile" />
+    </RFSGroup>
     <RFSGroup name="RFS_GROUP_HLR_RECREATE_SUBSCRIBER" type="Choice" description="Группа RFS для пересоздания абонента">
       <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" handler="HLR_RecreateSubscriber" />
     </RFSGroup>
@@ -2202,6 +2200,14 @@
       <Configuration>
         <RFS name="RFS_HLR_SUBSCRIBER" action="Remove" />
         <RFS name="RFS_HLR_SUBSCRIBER" action="Add" />
+      </Configuration>
+    </Handler>
+    <Handler name="HLR_ChangeProfile" type="ChangeTariffPlan" description="Обработчик RFS для изменения профиля абонента на HLR">
+      <Configuration>
+        <RFS name="RFS_HLR_SUBSCRIBER_DEFAULT"/>
+        <RFS name="RFS_HLR_SUBSCRIBER_AIISKUE"/>
+        <RFS name="RFS_HLR_SUBSCRIBER_DGU"/>
+        <RFS name="RFS_HLR_SUBSCRIBER_DEALERS"/>
       </Configuration>
     </Handler>
     <Handler name="MCA_RecreateSubscriber" type="RecreateSubscriber" description="Обработчик RFS для восстановления услуги MCA">
@@ -2362,7 +2368,7 @@
     <Scenario name="HLR.Add.StaticIP" description="Добавить статический IP адрес">
       <RFS name="RFS_HLR_STATIC_IP" scenarioType="Add" />
       <Append name="RFS_HLR_LTE" listType="EndList" />
-      <Append name="RFS_HLR_PROFILE" listType="EndList" />
+      <Append name="RFS_HLR_SUBSCRIBER" listType="EndList" />
     </Scenario>
     <Scenario name="HLR.CreateSubscriber" description="Создание абонента">
       <RFS name="RFS_HLR_CFB" scenarioType="Add" />
@@ -2381,20 +2387,13 @@
       <RFS name="RFS_HLR_ROAMING" scenarioType="Add" />
       <RFS name="RFS_HLR_SMS_MO" scenarioType="Add" />
       <RFS name="RFS_HLR_SMS_MT" scenarioType="Add" />
-      <RFS name="RFS_HLR_PROFILE" scenarioType="Add" />
-      <RFS name="RFS_HLR_SUBSCRIBER" scenarioType="Add" useType="Mandatory" />
+      <RFS name="RFS_HLR_SUBSCRIBER" scenarioType="Add, Modify" useType="Mandatory" />
       <RFS name="RFS_HLR_VIDEOCALL" scenarioType="Add" />
     </Scenario>
     <Scenario name="HLR.DeleteSubscriber" description="Удаление абонента">
-      <RFS name="RFS_HLR_REGION" scenarioType="Remove" />
       <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_PROFILE" scenarioType="Remove" />
+      <RFS name="RFS_HLR_REGION" scenarioType="Remove" />
       <RFS name="RFS_HLR_SUBSCRIBER" scenarioType="Remove" useType="Mandatory" />
-    </Scenario>
-    <Scenario name="HLR.ChangeProfile" description="Изменение профиля абонента">
-      <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" scenarioType="Add" />
-      <Append name="RFS_HLR_PROFILE" listType="StartList" />
-      <Append name="RFS_HLR_PROFILE" listType="EndList" />
     </Scenario>
     <Scenario name="HLR.Modify.CALLS_BAN" description="Изменение голосовой и видео связи">
       <RFS name="RFS_HLR_CALLS_BAN" scenarioType="Add, Remove" />
@@ -2457,7 +2456,7 @@
     <Scenario name="HLR.Remove.StaticIP" description="Удаление статический IP адрес">
       <RFS name="RFS_HLR_STATIC_IP" scenarioType="Remove" />
       <Append name="RFS_HLR_LTE" listType="EndList" />
-      <Append name="RFS_HLR_PROFILE" listType="EndList" />
+      <Append name="RFS_HLR_SUBSCRIBER" listType="EndList" />
     </Scenario>
     <Scenario name="HLR.ROAMING_TEST" description="Тестирование HLR ROAMING">
       <RFS name="RFS_HLR_ROAMING_TEST_ADDLTE_1" scenarioType="Add, Remove" />

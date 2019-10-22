@@ -43,21 +43,21 @@
       <RFSGroup name="RFS_GROUP_HLR_RECREATE_SUBSCRIBER" />
     </CFS>
     <CFS name="FRASKUE" priority="9997" description="Создание абонентов АИИСКУЭ (APN Profile ID - 10 ASKUE)">
-      <RFS name="RFS_HLR_PROFILE_AIISKUE" linkType="Modify" />
+      <RFS name="RFS_HLR_PROFILE_AIISKUE" linkType="Set" />
       <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" />
     </CFS>
     <CFS name="FRDGU" priority="9997" description="Услуга передачи данных ТП ДГУ">
-      <RFS name="RFS_HLR_PROFILE_DGU" linkType="Modify" />
+      <RFS name="RFS_HLR_PROFILE_DGU" linkType="Set" />
       <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" />
     </CFS>
     <CFS name="FRPARTAPN" priority="9997" description="Создание абонентов Partner APN (APN Profile ID - 20 DEALERS.UMS.UZ)">
-      <RFS name="RFS_HLR_PROFILE_DEALERS" linkType="Modify" />
+      <RFS name="RFS_HLR_PROFILE_DEALERS" linkType="Set" />
       <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" />
     </CFS>
   </CFSList>
   <RFSGroupList>
     <RFSGroup name="RFS_GROUP_HLR_RECREATE_SUBSCRIBER" type="Choice" description="Группа RFS для пересоздания абонента">
-      <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" handler="HLR_RecreateSubscriber" />
+      <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" handler="HLR_ChangeTariffPlanHandler" />
     </RFSGroup>
   </RFSGroupList>
   <RFSDependencyList />
@@ -66,6 +66,14 @@
       <Configuration>
         <RFS name="RFS_HLR_SUBSCRIBER" action="Remove" />
         <RFS name="RFS_HLR_SUBSCRIBER" action="Add" />
+      </Configuration>
+    </Handler>
+    <Handler name="HLR_ChangeTariffPlanHandler" type="ChangeTariffPlan" description="Обработчик RFS для изменения тарифного плана">
+      <Configuration>
+        <RFS name="RFS_HLR_PROFILE_DEFAULT"/>
+        <RFS name="RFS_HLR_PROFILE_AIISKUE"/>
+        <RFS name="RFS_HLR_PROFILE_DGU"/>
+        <RFS name="RFS_HLR_PROFILE_DEALERS"/>
       </Configuration>
     </Handler>
   </HandlerList>
@@ -79,9 +87,8 @@
   <ScenarioList>
     <Scenario name="HLR.CreateSubscriber" description="Создание абонента">
       <RFS name="RFS_HLR_PROFILE" scenarioType="Add, Modify" />
-      <RFS name="RFS_HLR_SUBSCRIBER" scenarioType="Add, Modify" useType="Mandatory" />
-      <Append name="RFS_HLR_PROFILE" listType="StartList" />
-      <Append name="RFS_HLR_PROFILE" listType="EndList" />
+      <RFS name="RFS_HLR_SUBSCRIBER" scenarioType="Add" useType="Mandatory" />
+      <Append name="RFS_HLR_PROFILE" listType="All" />
     </Scenario>
     <Scenario name="HLR.DeleteSubscriber" description="Удаление абонента">
       <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" scenarioType="Add, Remove" />
