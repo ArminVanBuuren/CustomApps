@@ -296,18 +296,6 @@
       <Resource name="RES_HLR_NET_APN" useType="Mandatory" />
       <Resource name="RES_HLR_NET_SERVICE" useType="Mandatory" />
     </RFS>
-    <RFS name="RFS_HLR_NET_APN_CORP_BS" base="RFS_HLR_NET_APN" hostType="HL" description="Корпоративный APN">
-      <Resource name="RES_HLR_NET_APN" value="TEST.LTE" />
-      <Resource name="RES_HLR_NET_SERVICE" value="CorpAPN" />
-    </RFS>
-    <RFS name="RFS_HLR_NET_APN_CORP_XB" base="RFS_HLR_NET_APN" hostType="HL" description="Корпоративный APN Халк Банк">
-      <Resource name="RES_HLR_NET_APN" value="XB.APN.UZ" />
-      <Resource name="RES_HLR_NET_SERVICE" value="CorpAPN" />
-    </RFS>
-    <RFS name="RFS_HLR_NET_APN_CORP_ZD" base="RFS_HLR_NET_APN" hostType="HL" description="Корпоративный APN Ziyod">
-      <Resource name="RES_HLR_NET_APN" value="ZIYOD.UMS.UZ" />
-      <Resource name="RES_HLR_NET_SERVICE" value="CorpAPN" />
-    </RFS>
     <RFS name="RFS_HLR_NET_APN_GPRS" base="RFS_HLR_NET_APN" hostType="HL" description="Мобильный интернет GPRS">
       <Resource name="RES_HLR_NET_APN" value="NET.UMS.UZ">
         <Value hosts="FP:05" value="POSTPAID.UMS.UZ" />
@@ -324,22 +312,6 @@
     </RFS>
     <RFS name="RFS_HLR_NET_APN_M2M_BS" base="RFS_HLR_NET_APN" hostType="HL" description="M2M APN">
       <Resource name="RES_HLR_NET_APN" value="M2M.APN" />
-      <Resource name="RES_HLR_NET_SERVICE" value="M2M" />
-    </RFS>
-    <RFS name="RFS_HLR_NET_APN_M2M_FMS" base="RFS_HLR_NET_APN" hostType="HL" description="M2M APN Fleet Managment Solutuons">
-      <Resource name="RES_HLR_NET_APN" value="FMS.APN" />
-      <Resource name="RES_HLR_NET_SERVICE" value="M2M" />
-    </RFS>
-    <RFS name="RFS_HLR_NET_APN_M2M_NGMK" base="RFS_HLR_NET_APN" hostType="HL" description="M2M APN NGMK">
-      <Resource name="RES_HLR_NET_APN" value="NGMK.APN" />
-      <Resource name="RES_HLR_NET_SERVICE" value="M2M" />
-    </RFS>
-    <RFS name="RFS_HLR_NET_APN_MYUMS" base="RFS_HLR_NET_APN" hostType="HL" description="Новый SCG. APN MYUMS">
-      <Resource name="RES_HLR_NET_APN" value="MY.UMS.UZ" />
-      <Resource name="RES_HLR_NET_SERVICE" value="MYUMS" />
-    </RFS>
-    <RFS name="RFS_HLR_NET_APN_VPN" base="RFS_HLR_NET_APN" hostType="HL" description="VPN UMS">
-      <Resource name="RES_HLR_NET_APN" value="UMS-VPN.UMS.UZ" />
       <Resource name="RES_HLR_NET_SERVICE" value="M2M" />
     </RFS>
     <RFS name="RFS_HLR_ODB_IC" hostType="HL" description="Барринг входящей связи">
@@ -444,7 +416,9 @@
     </RFS>
     <RFS name="RFS_HLR_STATIC_IP" hostType="HL" description="Статический IP адрес">
       <Resource name="RES_HLR_DEALER_APN" value="DEALERS.UMS.UZ" useType="Mandatory" />
-      <Resource name="RES_HLR_NET_APN" value="NET.UMS.UZ" useType="Mandatory" />
+      <Resource name="RES_HLR_NET_APN" value="NET.UMS.UZ" useType="Mandatory">
+        <Value hosts="FP:05" value="POSTPAID.UMS.UZ" />
+      </Resource>
     </RFS>
     <RFS name="RFS_HLR_SUBSCRIBER" hostType="HL" processType="Subscription" description="Создание абонента">
       <Resource name="RES_HLR_PROFILE" useType="Mandatory" />
@@ -863,16 +837,8 @@
     <CFS name="FRAPNEWOPT" globalServiceCode="FRAPNEWOPT" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Optima 333" />
     <CFS name="FRAPNGMK10" globalServiceCode="FRAPNGMK10" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП НГМК-10" />
     <CFS name="FRAPNGMK5" globalServiceCode="FRAPNGMK5" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП НГМК-5" />
-    <CFS name="FRAPNXB" description="Корпоративный APN Халк Банк">
-      <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
-      <RFS name="RFS_HLR_NET_ALLOW" linkType="Add" />
-      <RFS name="RFS_HLR_NET_APN_CORP_XB" linkType="Add" />
-    </CFS>
-    <CFS name="FRAPNZIYOD" description="Корпоративный APN Ziyod">
-      <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
-      <RFS name="RFS_HLR_NET_ALLOW" linkType="Add" />
-      <RFS name="RFS_HLR_NET_APN_CORP_ZD" linkType="Add" />
-    </CFS>
+    <CFS name="FRAPNXB" copyOf="CFS_FP_SERVICE_GENERAL" description="Корпоративный APN Халк Банк" />
+    <CFS name="FRAPNZIYOD" copyOf="CFS_FP_SERVICE_GENERAL" description="Корпоративный APN Ziyod"/>
     <CFS name="FRAPOMAD" globalServiceCode="FRAPOMAD" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Omad" />
     <CFS name="FRAPOPTIMA" globalServiceCode="FRAPOPTIMA" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Optima" />
     <CFS name="FRAPOPTIMAL" globalServiceCode="FRAPOPTIMAL" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Optimal" />
@@ -1047,11 +1013,7 @@
     <CFS name="FRCOMSMS100" globalServiceCode="FRCOMSMS100" copyOf="CFS_FP_SERVICE_GENERAL" description="Multi пакет 100 SMS 100" />
     <CFS name="FRCOMSMS250" globalServiceCode="FRCOMSMS250" copyOf="CFS_FP_SERVICE_GENERAL" description="Multi пакет 250 SMS 250" />
     <CFS name="FRCOMSMS500" globalServiceCode="FRCOMSMS500" copyOf="CFS_FP_SERVICE_GENERAL" description="Multi пакет 500 SMS 500" />
-    <CFS name="FRCORPAPN" description="Корпоративный APN">
-      <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
-      <RFS name="RFS_HLR_NET_ALLOW" linkType="Add" />
-      <RFS name="RFS_HLR_NET_APN_CORP_BS" linkType="Add" />
-    </CFS>
+    <CFS name="FRCORPAPN" copyOf="CFS_FP_SERVICE_GENERAL" description="Корпоративный APN" />
     <CFS name="FRCORPPERSCAB" globalServiceCode="FRCORPPERSCAB" copyOf="CFS_FP_SERVICE_GENERAL" description="КИП.Администратор" />
     <CFS name="FRCRBT" description="GOODOK">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
@@ -1267,16 +1229,8 @@
       <RFS name="RFS_HLR_NET_ALLOW" linkType="Add" />
       <RFS name="RFS_HLR_NET_APN_M2M_BEPRO" linkType="Add" />
     </CFS>
-    <CFS name="FRM2MAPNFMS" description="M2M APN Fleet Managment Solutuons">
-      <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
-      <RFS name="RFS_HLR_NET_ALLOW" linkType="Add" />
-      <RFS name="RFS_HLR_NET_APN_M2M_FMS" linkType="Add" />
-    </CFS>
-    <CFS name="FRM2MAPNNGMK" description="M2M APN NGMK">
-      <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
-      <RFS name="RFS_HLR_NET_ALLOW" linkType="Add" />
-      <RFS name="RFS_HLR_NET_APN_M2M_NGMK" linkType="Add" />
-    </CFS>
+    <CFS name="FRM2MAPNFMS" copyOf="CFS_FP_SERVICE_GENERAL" description="M2M APN Fleet Managment Solutuons" />
+    <CFS name="FRM2MAPNNGMK" copyOf="CFS_FP_SERVICE_GENERAL" description="M2M APN NGMK"/>
     <CFS name="FRM2MSMS100" globalServiceCode="FRM2MSMS100" copyOf="CFS_FP_SERVICE_GENERAL" description="OnNet 100 SMS M2M" />
     <CFS name="FRMB10000BF" globalServiceCode="FRMB10000BF" copyOf="CFS_FP_SERVICE_GENERAL" description="Online weekend Интернет-пакет 10000" />
     <CFS name="FRMB100KC" globalServiceCode="FRMB100KC" copyOf="CFS_FP_SERVICE_GENERAL" description="Промо-пакет 100 Mb КЦ" />
@@ -1426,10 +1380,7 @@
     <CFS name="FRMULSMSVIP" globalServiceCode="FRMULSMSVIP" copyOf="CFS_FP_SERVICE_GENERAL" description="Multi пакет SMS VIP" />
     <CFS name="FRMULSMSYORQIN" globalServiceCode="FRMULSMSYORQIN" copyOf="CFS_FP_SERVICE_GENERAL" description="Multi пакет SMS Yorqin" />
     <CFS name="FRMULTIYORQIN" globalServiceCode="FRMULTIYORQIN" copyOf="CFS_FP_SERVICE_GENERAL" description="Multi пакет Yorqin" />
-    <CFS name="FRNEWSCG" priority="100" description="Новый SCG">
-      <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
-      <RFS name="RFS_HLR_NET_APN_MYUMS" linkType="Add" dependsOn="RFS_HLR_NET" />
-    </CFS>
+    <CFS name="FRNEWSCG" copyOf="CFS_FP_SERVICE_GENERAL" description="Новый SCG" />
     <CFS name="FRNGDANTISK" globalServiceCode="FRNGDANTISK" copyOf="CFS_FP_SERVICE_GENERAL" description="Предновогодняя антискидка" />
     <CFS name="FRNGDANTISKNEW" globalServiceCode="FRNGDANTISKNEW" copyOf="CFS_FP_SERVICE_GENERAL" description="Предновогодняя антискидка New" />
     <CFS name="FRNKADM" globalServiceCode="FRNKADM" copyOf="CFS_FP_SERVICE_GENERAL" description="НККИССА Администратор" />
@@ -2060,11 +2011,7 @@
       <RFS name="RFS_FP_LANGUAGE" linkType="Add" />
     </CFS>
     <CFS name="VM2EMAIL" globalServiceCode="VM2EMAIL" copyOf="CFS_FP_SERVICE_GENERAL" description="Пересылка голосового сообщения на e-mail" />
-    <CFS name="VPNUMS" description="VPN UMS">
-      <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
-      <RFS name="RFS_HLR_NET_ALLOW" linkType="Add" />
-      <RFS name="RFS_HLR_NET_APN_VPN" linkType="Add" />
-    </CFS>
+    <CFS name="VPNUMS" copyOf="CFS_FP_SERVICE_GENERAL" description="VPN UMS" />
     <CFS name="WMAXI" globalServiceCode="WMAXI" copyOf="CFS_FP_SERVICE_GENERAL" description="Welcome Maxi" />
     <CFS name="WMAXIIVR" globalServiceCode="WMAXIIVR" copyOf="CFS_FP_SERVICE_GENERAL" description="Welcome Maxi IVR" />
     <CFS name="WOPTIMA" globalServiceCode="WOPTIMA" copyOf="CFS_FP_SERVICE_GENERAL" description="Welcome Optima" />
