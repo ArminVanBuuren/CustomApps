@@ -748,6 +748,7 @@
       <RFS name="RFS_SM_CHANGE_TARIFF" linkType="Add" />
       <!--<RFSGroup name="RFS_GROUP_FP_CHANGE_TARIFF_PLAN" />-->
       <RFSGroup name="RFS_GROUP_HLR_CHANGE_PROFILE" />
+      <!--<RFSGroup name="RFS_GROUP_HLR_RECREATE_SUBSCRIBER" />-->
     </CFS>
     <CFS name="DeleteLTE" description="Удалить LTE">
       <RFS name="RFS_HLR_ROAMING_TEST_DELETE" linkType="Add" />
@@ -2387,8 +2388,27 @@
       <RFS name="RFS_HLR_ROAMING" scenarioType="Add" />
       <RFS name="RFS_HLR_SMS_MO" scenarioType="Add" />
       <RFS name="RFS_HLR_SMS_MT" scenarioType="Add" />
-      <RFS name="RFS_HLR_SUBSCRIBER" scenarioType="Add, Modify" useType="Mandatory" />
+      <RFS name="RFS_HLR_SUBSCRIBER" scenarioType="Add" useType="Mandatory" />
       <RFS name="RFS_HLR_VIDEOCALL" scenarioType="Add" />
+    </Scenario>
+    <Scenario name="HLR.ChangeProfile" description="Изменение профиля абонента">
+      <RFS name="RFS_HLR_SUBSCRIBER" scenarioType="Modify" useType="Mandatory" />
+      <Append name="RFS_HLR_CFB" listType="EndList" />
+      <Append name="RFS_HLR_CFD" listType="EndList" />
+      <Append name="RFS_HLR_CFNRC" listType="EndList" />
+      <Append name="RFS_HLR_CFNRY" listType="EndList" />
+      <Append name="RFS_HLR_CFU" listType="EndList" />
+      <Append name="RFS_HLR_CLIP" listType="EndList" />
+      <Append name="RFS_HLR_CWCH" listType="EndList" />
+      <Append name="RFS_HLR_DATATRANSFER" listType="EndList" />
+      <Append name="RFS_HLR_MPTY" listType="EndList" />
+      <Append name="RFS_HLR_NET" listType="EndList" />
+      <Append name="RFS_HLR_ODB_IC" listType="EndList" />
+      <Append name="RFS_HLR_ODB_OC" listType="EndList" />
+      <Append name="RFS_HLR_REGION" listType="EndList" />
+      <Append name="RFS_HLR_ROAMING" listType="EndList" />
+      <Append name="RFS_HLR_SMS_MO" listType="EndList" />
+      <Append name="RFS_HLR_SMS_MT" listType="EndList" />
     </Scenario>
     <Scenario name="HLR.DeleteSubscriber" description="Удаление абонента">
       <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" scenarioType="Add, Remove" />

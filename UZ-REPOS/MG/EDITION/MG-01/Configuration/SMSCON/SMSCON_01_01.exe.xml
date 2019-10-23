@@ -58,7 +58,8 @@
     <!--10-->
   </Settings>
   <SMSCenters>
-    <Connection host="10.160.32.108" port="900" systemType="" systemId="Mediatel" pass="mediatel" />
+    <Connection host="10.160.32.108" port="900" systemType="" systemId="Foris_MG_0" pass="m28Fg91" />
+    <!--Connection host="10.160.32.108" port="900" systemType="" systemId="Mediatel" pass="mediatel" /-->
   </SMSCenters>
   <Anumbertransformations />
   <TemplateProcessors defaultConfig="SMSTemplateProcessor.01.xml">
