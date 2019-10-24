@@ -539,6 +539,7 @@
     <CFS name="CancelLocationSGSN" copyOf="CancelLocation" description="Сброс информации о локации абонета на MSC, VLR, SGSN станциях" />
     <CFS name="CB0101" globalServiceCode="CB0101" copyOf="CFS_FP_SERVICE_GENERAL" description="Голосовая связь" />
     <CFS name="CB0401555" globalServiceCode="CB0401555" copyOf="CFS_FP_SERVICE_GENERAL" description="Запрет приема SMS с сайта UMS" />
+    <CFS name="CB101" globalServiceCode="CB101" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Start" />
     <CFS name="CB1011" priority="9998" description="Ежемесячная плата за тариф">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
       <RFS name="RFS_HLR_ODB_IC_ALL_CALLS" linkType="Add" />
@@ -695,12 +696,12 @@
       <RFSGroup name="RFS_GROUP_FP_CHANGE_TARIFF_PLAN_AND_DELETE" />
     </CFS>
     <CFS name="ChangeTP" priority="9999" type="OneTime" description="Изменение тарифного плана">
-      <!--<RFS name="RFS_HLR_RECREATE_SUBSCRIBER" linkType="Add" />-->
+      <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" linkType="Add" />
       <RFS name="RFS_SM_CHANGE_TARIFF" linkType="Add" />
-      <!--<RFSGroup name="RFS_GROUP_FP_CHANGE_TARIFF_PLAN" />-->
-      <RFSGroup name="RFS_GROUP_HLR_CHANGE_PROFILE" />
-      <!--<RFSGroup name="RFS_GROUP_HLR_RECREATE_SUBSCRIBER" />-->
+      <RFSGroup name="RFS_GROUP_FP_CHANGE_TARIFF_PLAN" />
+      <RFSGroup name="RFS_GROUP_HLR_RECREATE_SUBSCRIBER" />
     </CFS>
+    <CFS name="CONTENTMARKER" globalServiceCode="CONTENTMARKER" copyOf="CFS_FP_SERVICE_GENERAL" description="Отдельный ЛС для контента" />
     <CFS name="DeleteLTE" description="Удалить LTE">
       <RFS name="RFS_HLR_ROAMING_TEST_DELETE" linkType="Add" />
     </CFS>
@@ -815,7 +816,7 @@
     <CFS name="FRAPNGMK10" globalServiceCode="FRAPNGMK10" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП НГМК-10" />
     <CFS name="FRAPNGMK5" globalServiceCode="FRAPNGMK5" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП НГМК-5" />
     <CFS name="FRAPNXB" copyOf="CFS_FP_SERVICE_GENERAL" description="Корпоративный APN Халк Банк" />
-    <CFS name="FRAPNZIYOD" copyOf="CFS_FP_SERVICE_GENERAL" description="Корпоративный APN Ziyod"/>
+    <CFS name="FRAPNZIYOD" copyOf="CFS_FP_SERVICE_GENERAL" description="Корпоративный APN Ziyod" />
     <CFS name="FRAPOMAD" globalServiceCode="FRAPOMAD" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Omad" />
     <CFS name="FRAPOPTIMA" globalServiceCode="FRAPOPTIMA" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Optima" />
     <CFS name="FRAPOPTIMAL" globalServiceCode="FRAPOPTIMAL" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Optimal" />
@@ -1206,7 +1207,7 @@
       <RFS name="RFS_HLR_NET_APN_M2M_BEPRO" linkType="Add" />
     </CFS>
     <CFS name="FRM2MAPNFMS" copyOf="CFS_FP_SERVICE_GENERAL" description="M2M APN Fleet Managment Solutuons" />
-    <CFS name="FRM2MAPNNGMK" copyOf="CFS_FP_SERVICE_GENERAL" description="M2M APN NGMK"/>
+    <CFS name="FRM2MAPNNGMK" copyOf="CFS_FP_SERVICE_GENERAL" description="M2M APN NGMK" />
     <CFS name="FRM2MSMS100" globalServiceCode="FRM2MSMS100" copyOf="CFS_FP_SERVICE_GENERAL" description="OnNet 100 SMS M2M" />
     <CFS name="FRMB10000BF" globalServiceCode="FRMB10000BF" copyOf="CFS_FP_SERVICE_GENERAL" description="Online weekend Интернет-пакет 10000" />
     <CFS name="FRMB100KC" globalServiceCode="FRMB100KC" copyOf="CFS_FP_SERVICE_GENERAL" description="Промо-пакет 100 Mb КЦ" />
@@ -1394,7 +1395,7 @@
       <RFS name="RFS_HLR_NET_ALLOW" linkType="Add" />
       <RFS name="RFS_HLR_SUBSCRIBER_DEALERS" linkType="Set" />
     </CFS>
-    <CFS name="FRPARTBL" priority="1" description="Частичная блокировка">
+    <CFS name="FRPARTBL" globalServiceCode="FRPARTBL" priority="1" description="Частичная блокировка">
       <RFS name="RFS_HLR_NET_DENY" linkType="Modify" />
       <RFS name="RFS_HLR_ODB_OC_NO_CALLS" linkType="Modify" />
       <RFS name="RFS_HLR_SMS_MO_DENY" linkType="Modify" />
@@ -1940,6 +1941,7 @@
     <CFS name="SMS300" globalServiceCode="SMS300" copyOf="CFS_FP_SERVICE_GENERAL" description="SMS-пакет 300" />
     <CFS name="SMS500" globalServiceCode="SMS500" copyOf="CFS_FP_SERVICE_GENERAL" description="SMS-пакет 500" />
     <CFS name="STATICIP" globalServiceCode="STATICIP" copyOf="CFS_FP_SERVICE_GENERAL" description="Будет добавлена абонентам при миграции APN" />
+    <CFS name="STEPSERV" globalServiceCode="STEPSERV" copyOf="CFS_FP_SERVICE_GENERAL" description="Услуга добавления ступенчатого аккумулятора" />
     <CFS name="Subscriber" priority="9999" type="ManagedObject" description="Абонент">
       <RFS name="RFS_CT5_SUBSCRIPTION" linkType="Add" />
       <RFS name="RFS_EI_SUBSCRIPTION" linkType="Add" />
@@ -1972,9 +1974,12 @@
     <CFS name="TESTPPDSERV" globalServiceCode="TESTPPDSERV" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="TESTPPDSERV" />
     <CFS name="TESTTUESDAY" globalServiceCode="TESTTUESDAY" copyOf="CFS_FP_SERVICE_GENERAL" description="Тестовая услуга Вторник" />
     <CFS name="TESTWEDNESDAY" globalServiceCode="TESTWEDNESDAY" copyOf="CFS_FP_SERVICE_GENERAL" description="Тестовая услуга Среда" />
+    <CFS name="TIMESW" globalServiceCode="TIMESW" copyOf="CFS_FP_SERVICE_GENERAL" description="Time Tariff Swich" />
     <CFS name="TMP000002" copyOf="CFS_FP_SERVICE_GENERAL" description="Услуга 1" />
     <CFS name="TMP000003" copyOf="CFS_FP_SERVICE_GENERAL" description="Услуга 2" />
     <CFS name="TMP000004" copyOf="CFS_FP_SERVICE_GENERAL" description="Услуга 3" />
+    <CFS name="TMP000009" globalServiceCode="TMP000009" copyOf="CFS_FP_SERVICE_GENERAL" description="Тест.У1" />
+    <CFS name="TMP000010" globalServiceCode="TMP000010" copyOf="CFS_FP_SERVICE_GENERAL" description="Тест.У2" />
     <CFS name="TMP000017" copyOf="CFS_FP_SERVICE_GENERAL" description="Тест.У3" />
     <CFS name="TPCHANGEBAN" globalServiceCode="TPCHANGEBAN" copyOf="CFS_FP_SERVICE_GENERAL" description="Блокировка смены ТП до конца месяца" />
     <CFS name="TransferTD" priority="9999" type="OneTime" description="Перенос ПО">
@@ -2120,18 +2125,18 @@
     <Handler name="FP.ExclusiveHandler" type="RFSFilter" description="Обработчик выделения обработки только на фин.платформе. Прописан в бизнес-процессы.">
       <Configuration allow="FP" />
     </Handler>
+    <Handler name="HLR_ChangeProfile" type="ChangeTariffPlan" description="Обработчик RFS для изменения профиля абонента на HLR">
+      <Configuration>
+        <RFS name="RFS_HLR_SUBSCRIBER_DEFAULT" />
+        <RFS name="RFS_HLR_SUBSCRIBER_AIISKUE" />
+        <RFS name="RFS_HLR_SUBSCRIBER_DGU" />
+        <RFS name="RFS_HLR_SUBSCRIBER_DEALERS" />
+      </Configuration>
+    </Handler>
     <Handler name="HLR_RecreateSubscriber" type="RecreateSubscriber" description="Обработчик RFS для пересоздания абонента">
       <Configuration>
         <RFS name="RFS_HLR_SUBSCRIBER" action="Remove" />
         <RFS name="RFS_HLR_SUBSCRIBER" action="Add" />
-      </Configuration>
-    </Handler>
-    <Handler name="HLR_ChangeProfile" type="ChangeTariffPlan" description="Обработчик RFS для изменения профиля абонента на HLR">
-      <Configuration>
-        <RFS name="RFS_HLR_SUBSCRIBER_DEFAULT"/>
-        <RFS name="RFS_HLR_SUBSCRIBER_AIISKUE"/>
-        <RFS name="RFS_HLR_SUBSCRIBER_DGU"/>
-        <RFS name="RFS_HLR_SUBSCRIBER_DEALERS"/>
       </Configuration>
     </Handler>
     <Handler name="MCA_RecreateSubscriber" type="RecreateSubscriber" description="Обработчик RFS для восстановления услуги MCA">
@@ -2294,6 +2299,24 @@
       <Append name="RFS_HLR_LTE" listType="EndList" />
       <Append name="RFS_HLR_SUBSCRIBER" listType="EndList" />
     </Scenario>
+    <Scenario name="HLR.ChangeProfile" description="Изменение профиля абонента">
+      <RFS name="RFS_HLR_SUBSCRIBER" scenarioType="Modify" useType="Mandatory" />
+      <Append name="RFS_HLR_CFB" listType="EndList" />
+      <Append name="RFS_HLR_CFD" listType="EndList" />
+      <Append name="RFS_HLR_CFNRC" listType="EndList" />
+      <Append name="RFS_HLR_CFNRY" listType="EndList" />
+      <Append name="RFS_HLR_CFU" listType="EndList" />
+      <Append name="RFS_HLR_CLIP" listType="EndList" />
+      <Append name="RFS_HLR_CWCH" listType="EndList" />
+      <Append name="RFS_HLR_DATATRANSFER" listType="EndList" />
+      <Append name="RFS_HLR_MPTY" listType="EndList" />
+      <Append name="RFS_HLR_NET" listType="EndList" />
+      <Append name="RFS_HLR_ODB_IC" listType="EndList" />
+      <Append name="RFS_HLR_ODB_OC" listType="EndList" />
+      <Append name="RFS_HLR_ROAMING" listType="EndList" />
+      <Append name="RFS_HLR_SMS_MO" listType="EndList" />
+      <Append name="RFS_HLR_SMS_MT" listType="EndList" />
+    </Scenario>
     <Scenario name="HLR.CreateSubscriber" description="Создание абонента">
       <RFS name="RFS_HLR_CFB" scenarioType="Add" />
       <RFS name="RFS_HLR_CFD" scenarioType="Add" />
@@ -2312,24 +2335,6 @@
       <RFS name="RFS_HLR_SMS_MT" scenarioType="Add" />
       <RFS name="RFS_HLR_SUBSCRIBER" scenarioType="Add" useType="Mandatory" />
       <RFS name="RFS_HLR_VIDEOCALL" scenarioType="Add" />
-    </Scenario>
-    <Scenario name="HLR.ChangeProfile" description="Изменение профиля абонента">
-      <RFS name="RFS_HLR_SUBSCRIBER" scenarioType="Modify" useType="Mandatory" />
-      <Append name="RFS_HLR_CFB" listType="EndList" />
-      <Append name="RFS_HLR_CFD" listType="EndList" />
-      <Append name="RFS_HLR_CFNRC" listType="EndList" />
-      <Append name="RFS_HLR_CFNRY" listType="EndList" />
-      <Append name="RFS_HLR_CFU" listType="EndList" />
-      <Append name="RFS_HLR_CLIP" listType="EndList" />
-      <Append name="RFS_HLR_CWCH" listType="EndList" />
-      <Append name="RFS_HLR_DATATRANSFER" listType="EndList" />
-      <Append name="RFS_HLR_MPTY" listType="EndList" />
-      <Append name="RFS_HLR_NET" listType="EndList" />
-      <Append name="RFS_HLR_ODB_IC" listType="EndList" />
-      <Append name="RFS_HLR_ODB_OC" listType="EndList" />
-      <Append name="RFS_HLR_ROAMING" listType="EndList" />
-      <Append name="RFS_HLR_SMS_MO" listType="EndList" />
-      <Append name="RFS_HLR_SMS_MT" listType="EndList" />
     </Scenario>
     <Scenario name="HLR.DeleteSubscriber" description="Удаление абонента">
       <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" scenarioType="Add, Remove" />
