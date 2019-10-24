@@ -340,28 +340,6 @@
     </RFS>
     <RFS name="RFS_HLR_RBT" hostType="HL" description="Caller Ring Back Tone. GOODOK" />
     <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" hostType="HL" description="Маркер который указывает что абонент пересоздается" />
-    <RFS name="RFS_HLR_REGION" hostType="HL" description="Определение кода региона для переадресации">
-      <Resource name="RES_HLR_REGION" useType="Mandatory">
-        <Value hosts="HL:01" value="1" />
-        <Value hosts="HL:AND_HLR" value="5" />
-        <Value hosts="HL:BUH_HLR" value="6" />
-        <Value hosts="HL:CHIRCH_HLR" value="2" />
-        <Value hosts="HL:FRGN_HLR" value="14" />
-        <Value hosts="HL:GIL_HLR" value="3" />
-        <Value hosts="HL:JSK_HLR" value="4" />
-        <Value hosts="HL:KARSHI_HLR" value="7" />
-        <Value hosts="HL:NAVOI_HLR" value="8" />
-        <Value hosts="HL:NMNGN_HLR" value="9" />
-        <Value hosts="HL:NUKHUS_HLR" value="10" />
-        <Value hosts="HL:SHAHRS_HLR" value="7" />
-        <Value hosts="HL:SMRKND_HLR" value="11" />
-        <Value hosts="HL:TASH_HLR" value="1" />
-        <Value hosts="HL:TEST_HLR" value="2" />
-        <Value hosts="HL:TRMZ_HLR" value="12" />
-        <Value hosts="HL:URG_HLR" value="13" />
-        <Value hosts="HL:YANGL_HLR" value="2" />
-      </Resource>
-    </RFS>
     <RFS name="RFS_HLR_ROAMING" hostType="HL" description="Международный роуминг" />
     <RFS name="RFS_HLR_ROAMING_TEST_ADDLTE_1" hostType="HL" description="Добавить LTE" />
     <RFS name="RFS_HLR_ROAMING_TEST_ADDLTE_2" hostType="HL" description="Добавить LTE" />
@@ -565,7 +543,6 @@
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
       <RFS name="RFS_HLR_ODB_IC_ALL_CALLS" linkType="Add" />
       <RFS name="RFS_HLR_ODB_OC_LOCAL_CALLS" linkType="Add" />
-      <RFS name="RFS_HLR_REGION" linkType="Add" />
       <RFS name="RFS_HLR_SUBSCRIBER_DEFAULT" linkType="Set" />
     </CFS>
     <CFS name="CB10339" globalServiceCode="CB10339" copyOf="CFS_FP_SERVICE_GENERAL" description="Доставка счета курьером" />
@@ -1029,7 +1006,6 @@
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
       <RFS name="RFS_HLR_ODB_IC_ALL_CALLS" linkType="Add" />
       <RFS name="RFS_HLR_ODB_OC_LOCAL_CALLS" linkType="Add" />
-      <RFS name="RFS_HLR_REGION" linkType="Add" />
       <RFS name="RFS_HLR_SUBSCRIBER_DGU" linkType="Set" />
     </CFS>
     <CFS name="FRDILAPN" globalServiceCode="FRDILAPN" copyOf="CFS_FP_SERVICE_GENERAL" description="Дилерский APN" />
@@ -2331,7 +2307,6 @@
       <RFS name="RFS_HLR_NET" scenarioType="Add" />
       <RFS name="RFS_HLR_ODB_IC" scenarioType="Add" />
       <RFS name="RFS_HLR_ODB_OC" scenarioType="Add" />
-      <RFS name="RFS_HLR_REGION" scenarioType="Add" />
       <RFS name="RFS_HLR_ROAMING" scenarioType="Add" />
       <RFS name="RFS_HLR_SMS_MO" scenarioType="Add" />
       <RFS name="RFS_HLR_SMS_MT" scenarioType="Add" />
@@ -2352,14 +2327,12 @@
       <Append name="RFS_HLR_NET" listType="EndList" />
       <Append name="RFS_HLR_ODB_IC" listType="EndList" />
       <Append name="RFS_HLR_ODB_OC" listType="EndList" />
-      <Append name="RFS_HLR_REGION" listType="EndList" />
       <Append name="RFS_HLR_ROAMING" listType="EndList" />
       <Append name="RFS_HLR_SMS_MO" listType="EndList" />
       <Append name="RFS_HLR_SMS_MT" listType="EndList" />
     </Scenario>
     <Scenario name="HLR.DeleteSubscriber" description="Удаление абонента">
       <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_REGION" scenarioType="Remove" />
       <RFS name="RFS_HLR_SUBSCRIBER" scenarioType="Remove" useType="Mandatory" />
     </Scenario>
     <Scenario name="HLR.Modify.CALLS_BAN" description="Изменение голосовой и видео связи">

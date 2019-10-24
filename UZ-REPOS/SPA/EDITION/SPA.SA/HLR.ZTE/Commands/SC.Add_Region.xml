@@ -3,14 +3,8 @@
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
   <Request>
     <RequestTemplate>
-      <![CDATA[Mod BscEx:MSISDN=##msisdn##,ORIGINFAID=##REGION##;^M]]>
+      <![CDATA[Mod BscEx:MSISDN=##msisdn##,ORIGINFAID=0;^M]]>
     </RequestTemplate>
     <Item Name="msisdn" Type="Wellknown" />
-    <Item Name="REGION" Type="LocalParameter" />
   </Request>
-  <ParametersList>
-    <Parameter Name="REGION" AbsenceValue="">
-      <Source Path="//RES_HLR_REGION/Value" />
-    </Parameter>
-  </ParametersList>
 </Command>

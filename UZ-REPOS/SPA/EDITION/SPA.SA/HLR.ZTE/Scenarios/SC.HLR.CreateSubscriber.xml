@@ -99,14 +99,12 @@
         <param name="Value:3" value="DEALERS" />
       </parameterslist>
     </node>
-    <node name="Add_Region" object="IfCommander">
+    <node name="Add_Region" object="Commander">
       <resultlist>
         <result value="0" node="Add_TCSI" />
-        <result value="1538" node="Add_TCSI" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="IfXmlPath:0" value="//RES_HLR_REGION" />
         <param name="Command" value="SC.Add_Region" />
       </parameterslist>
     </node>

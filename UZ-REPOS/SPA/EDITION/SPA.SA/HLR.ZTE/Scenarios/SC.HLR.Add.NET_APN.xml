@@ -1,13 +1,11 @@
 <scenario name="SC.HLR.Add.NET_APN">
   <objectList>
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
-    <object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll" />
     <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll" />
-    <object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll" />
   </objectList>
   <automat>
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
@@ -43,24 +41,11 @@
         <result value="1" node="DummyResponder" />
         <result value="2" node="Add_APN" />
         <result value="3" node="Add_APN" />
-        <result value="4" node="Delete_GPRS" />
-        <result value="5" node="DataBaseProcessor_ADD_IP" />
       </resultlist>
       <parameterslist>
         <param name="XmlPath" value="//RFS_HLR_NET_APN/RES_HLR_NET_SERVICE/Value/text()" />
         <param name="Value:2" value="GPRS" />
         <param name="Value:3" value="M2M" />
-        <param name="Value:4" value="MYUMS" />
-        <param name="Value:5" value="CorpAPN" />
-      </parameterslist>
-    </node>
-    <node name="Delete_GPRS" object="Commander">
-      <resultlist>
-        <result value="0" node="Add_APN" />
-        <result value="" node="ResponseAssembler" />
-      </resultlist>
-      <parameterslist>
-        <param name="Command" value="SC.Delete_GPRS" />
       </parameterslist>
     </node>
     <node name="Add_APN" object="Commander">
@@ -69,86 +54,6 @@
       </resultlist>
       <parameterslist>
         <param name="Command" value="SC.Add_APN" />
-      </parameterslist>
-    </node>
-    <node name="DataBaseProcessor_ADD_IP" object="DataBaseProcessor">
-      <resultlist>
-        <result value="" node="ExtractIP" />
-      </resultlist>
-      <parameterslist>
-        <param name="DataBaseName" value="UMS.ARCHIVE" />
-        <param name="FunctionName" value="CORPORATE_APN_ADD" />
-        <param name="FunctionType" value="function" />
-        <param name="OutXml" value="db_unit_result" />
-        <param name="DbParameterName:0" value="p_msisdn" />
-        <param name="DbParameterDirection:0" value="Input" />
-        <param name="DbParameterType:0" value="Varchar2" />
-        <param name="DbParameterXpathValue:0" value="//IdentifiersList/Identifier/MSISDN" />
-        <param name="DbParameterName:1" value="p_service" />
-        <param name="DbParameterDirection:1" value="Input" />
-        <param name="DbParameterType:1" value="Varchar2" />
-        <param name="DbParameterXpathValue:1" value="//RES_HLR_NET_APN/Value/text()" />
-        <param name="DbParameterName:2" value="p_result" />
-        <param name="DbParameterDirection:2" value="ReturnValue" />
-        <param name="DbParameterType:2" value="Varchar2" />
-        <param name="DbParameterValue:2" value="" />
-      </parameterslist>
-    </node>
-    <node name="ExtractIP" object="XmlNodesCopier">
-      <resultlist>
-        <result value="" node="ParameterSwitch" />
-      </resultlist>
-      <parameterslist>
-        <param name="SrcXml" value="db_unit_result" />
-        <param name="DstMessage" value="xmlrequest" />
-        <param name="CopyContentType" value="InnerText" />
-        <param name="SrcXmlPath:0" value="root/return" />
-        <param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/IP" />
-      </parameterslist>
-    </node>
-    <node name="ParameterSwitch" object="Switch">
-      <resultlist>
-        <result value="2" node="DummyResponder" />
-        <result value="" node="Add_APN_Corp" />
-      </resultlist>
-      <parameterslist>
-        <param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/IP" />
-        <param name="Value:2" value="err001" />
-      </parameterslist>
-    </node>
-    <node name="Add_APN_Corp" object="Commander">
-      <resultlist>
-        <result value="0" node="Add_APN_StaticIP" />
-        <result value="" node="ResponseAssembler" />
-      </resultlist>
-      <parameterslist>
-        <param name="Command" value="SC.Add_APN" />
-      </parameterslist>
-    </node>
-    <node name="Add_APN_StaticIP" object="IfCommander">
-      <resultlist>
-        <result value="0" node="ResponseAssembler" />
-        <result value="1538" node="ResponseAssembler" />
-        <result value="" node="DataBaseProcessor_DEL_IP" />
-      </resultlist>
-      <parameterslist>
-        <param name="IfNotXmlPath" value="ExtendedRequestMessage/AdditionalData/IP[text()='DYNAMIC']" />
-        <param name="Command" value="SC.Add_APN_StaticIP" />
-      </parameterslist>
-    </node>
-    <node name="DataBaseProcessor_DEL_IP" object="DataBaseProcessor">
-      <resultlist>
-        <result value="" node="DummyResponder" />
-      </resultlist>
-      <parameterslist>
-        <param name="DataBaseName" value="UMS.ARCHIVE" />
-        <param name="FunctionName" value="CORPORATE_APN_DELETE" />
-        <param name="FunctionType" value="procedure" />
-        <param name="OutXml" value="db_unit_result" />
-        <param name="DbParameterName:0" value="p_msisdn" />
-        <param name="DbParameterDirection:0" value="Input" />
-        <param name="DbParameterType:0" value="Varchar2" />
-        <param name="DbParameterXpathValue:0" value="//IdentifiersList/Identifier/MSISDN" />
       </parameterslist>
     </node>
     <node name="DummyResponder" object="DummyResponder">
