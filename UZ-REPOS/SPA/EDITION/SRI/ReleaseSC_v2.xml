@@ -571,6 +571,7 @@
       <RFS name="RFS_HLR_SMS_MO_ALLOW" linkType="Add" />
       <RFS name="RFS_HLR_SMS_MT_ALLOW" linkType="Add" />
     </CFS>
+    <CFS name="CB2986" copyOf="FRZAPRETGS" description="Запрет вызова" />
     <CFS name="CB2998" globalServiceCode="CB2998" copyOf="CFS_FP_SERVICE_GENERAL" description="Оповещение о задолженности звонком" />
     <CFS name="CB2999" globalServiceCode="CB2999" copyOf="CFS_FP_SERVICE_GENERAL" description="Оповещение о задолженности коротким сообщением (SMS)" />
     <CFS name="CB30071" globalServiceCode="CB30071" copyOf="CFS_FP_SERVICE_GENERAL" description="Запрет автоинформирования по E-Mail" />
@@ -614,7 +615,9 @@
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
       <RFS name="RFS_HLR_CWCH" linkType="Add" />
     </CFS>
-    <CFS name="CBBLKLOST" priority="1" description="Блокировка аппарат утрачен" >
+    <CFS name="CBBLKLOST" priority="1" description="Блокировка аппарат утрачен">
+      <RFS name="RFS_FP_BLOCK" linkType="Add" />
+      <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
       <RFS name="RFS_HLR_NET_DENY" linkType="Modify" />
       <RFS name="RFS_HLR_ODB_OC_NO_CALLS" linkType="Modify" />
       <RFS name="RFS_HLR_SMS_MO_DENY" linkType="Modify" />
@@ -1641,7 +1644,7 @@
     <CFS name="FRUSSDBAL" globalServiceCode="FRUSSDBAL" copyOf="CFS_FP_SERVICE_GENERAL" description="Запрос баланса по USSD" />
     <CFS name="FRUZPASSPL" globalServiceCode="FRUZPASSPL" copyOf="CFS_FP_SERVICE_GENERAL" description="Uzbekistan Pass Plus Путеводитель" />
     <CFS name="FRVAMZVSALE100" globalServiceCode="FRVAMZVSALE100" copyOf="CFS_FP_SERVICE_GENERAL" description="Business: Скидка 100% на Вам звонили / Я на связи" />
-    <CFS name="FRVIDCALL" description="Video Call" copyOf="CFS_FP_SERVICE_GENERAL" />
+    <CFS name="FRVIDCALL" copyOf="CFS_FP_SERVICE_GENERAL" description="Video Call" />
     <CFS name="FRVIEZDPRODAJA" globalServiceCode="FRVIEZDPRODAJA" copyOf="CFS_FP_SERVICE_GENERAL" description="Выездная продажа" />
     <CFS name="FRVIGASALE30STB12MN" globalServiceCode="FRVIGASALE30STB12MN" copyOf="CFS_FP_SERVICE_GENERAL" description="Выгодная сделка 30% 12 месяцев скидка Steel New" />
     <CFS name="FRVIGASALE30STLB12MN" globalServiceCode="FRVIGASALE30STLB12MN" copyOf="CFS_FP_SERVICE_GENERAL" description="Выгодная сделка 30% 12 месяцев скидка Steel Light New" />
@@ -1724,7 +1727,6 @@
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
       <RFS name="RFS_HLR_CALLS_BAN" linkType="Add" />
     </CFS>
-    <CFS name="CB2986" copyOf="FRZAPRETGS" description="Запрет вызова" />
     <CFS name="FRZAPRETGSTY" globalServiceCode="FRZAPRETGSTY" copyOf="CFS_FP_SERVICE_GENERAL" description="Запрет голосовой связи ТП Terminal Yillik" />
     <CFS name="FRZAPRINF" globalServiceCode="FRZAPRINF" copyOf="CFS_FP_SERVICE_GENERAL" description="Запрет информирования по SMS" />
     <CFS name="FRZOBPL" globalServiceCode="FRZOBPL" copyOf="CFS_FP_SERVICE_GENERAL" description="Запрет обещанного платежа в течение месяца" />
