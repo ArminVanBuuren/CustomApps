@@ -177,7 +177,7 @@
     <node name="Modify_CW" object="IfCommander">
       <resultlist>
         <result value="0" node="Modify_CH" />
-        <result value="1538" node="Modify_MPTY" />
+        <result value="1538" node="Activate_CW" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
@@ -194,6 +194,15 @@
         <param name="Command" value="SC.Modify_CH" />
       </parameterslist>
     </node>
+    <node name="Activate_CW" object="Commander">
+      <resultlist>
+        <result value="0" node="Modify_MPTY" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.Activate_CW" />
+      </parameterslist>
+    </node>
     <node name="Modify_MPTY" object="IfCommander">
       <resultlist>
         <result value="0" node="Modify_DataTransfer" />
@@ -207,24 +216,13 @@
     </node>
     <node name="Modify_DataTransfer" object="IfCommander">
       <resultlist>
-        <result value="0" node="Modify_VideoCall" />
-        <result value="1538" node="Modify_VideoCall" />
-        <result value="" node="ResponseAssembler" />
-      </resultlist>
-      <parameterslist>
-        <param name="IfNotXmlPath:0" value="//RFS_HLR_DATATRANSFER" />
-        <param name="Command" value="SC.Modify_DataTransfer" />
-      </parameterslist>
-    </node>
-    <node name="Modify_VideoCall" object="IfCommander">
-      <resultlist>
         <result value="0" node="Delete_CFB" />
         <result value="1538" node="Delete_CFB" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="IfNotXmlPath:0" value="//RFS_HLR_VIDEOCALL" />
-        <param name="Command" value="SC.Modify_VideoCall" />
+        <param name="IfNotXmlPath:0" value="//RFS_HLR_DATATRANSFER" />
+        <param name="Command" value="SC.Modify_DataTransfer" />
       </parameterslist>
     </node>
     <node name="Delete_CFB" object="IfCommander">

@@ -13,7 +13,7 @@
     <Parameter Name="HLR_PROFILE">
       <Source Path="//RES_HLR_PROFILE" />
       <PossibleValues StringToKeyTable="false">
-        <Item Key="Prepaid" StringValue="55" />
+        <Item Key="Prepaid" StringValue="57" />
         <Item Key="Postpaid" StringValue="51" />
         <Item Key="DEALERS" StringValue="20" />
         <Item Key="DGU" StringValue="11" />

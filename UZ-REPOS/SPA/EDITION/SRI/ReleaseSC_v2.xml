@@ -424,7 +424,6 @@
     <RFS name="RFS_HLR_USSD_DENY" base="RFS_HLR_USSD" hostType="HL" description="USSD сервис запрещен">
       <Resource name="RES_HLR_USSD" value="Deny" />
     </RFS>
-    <RFS name="RFS_HLR_VIDEOCALL" hostType="HL" description="Video Call" />
     <RFS name="RFS_MCA_CHANGE_MSISDN" hostType="MA" description="Изменение номера MSISDN на платформе MCA">
       <RFSParameter name="NewMSISDN" />
     </RFS>
@@ -572,10 +571,6 @@
       <RFS name="RFS_HLR_SMS_MO_ALLOW" linkType="Add" />
       <RFS name="RFS_HLR_SMS_MT_ALLOW" linkType="Add" />
     </CFS>
-    <CFS name="CB2986" description="Запрет вызова">
-      <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
-      <RFS name="RFS_HLR_CALLS_BAN" linkType="Add" />
-    </CFS>
     <CFS name="CB2998" globalServiceCode="CB2998" copyOf="CFS_FP_SERVICE_GENERAL" description="Оповещение о задолженности звонком" />
     <CFS name="CB2999" globalServiceCode="CB2999" copyOf="CFS_FP_SERVICE_GENERAL" description="Оповещение о задолженности коротким сообщением (SMS)" />
     <CFS name="CB30071" globalServiceCode="CB30071" copyOf="CFS_FP_SERVICE_GENERAL" description="Запрет автоинформирования по E-Mail" />
@@ -619,7 +614,12 @@
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
       <RFS name="RFS_HLR_CWCH" linkType="Add" />
     </CFS>
-    <CFS name="CBBLKLOST" priority="1" copyOf="FRTECHBLK" description="Блокировка аппарат утрачен" />
+    <CFS name="CBBLKLOST" priority="1" description="Блокировка аппарат утрачен" >
+      <RFS name="RFS_HLR_NET_DENY" linkType="Modify" />
+      <RFS name="RFS_HLR_ODB_OC_NO_CALLS" linkType="Modify" />
+      <RFS name="RFS_HLR_SMS_MO_DENY" linkType="Modify" />
+      <RFS name="RFS_HLR_USSD_DENY" linkType="Set" />
+    </CFS>
     <CFS name="CBGMTS" globalServiceCode="CBGMTS" copyOf="CFS_FP_SERVICE_GENERAL" description="Запрет информирования B номера о невозможности совершения звонка" />
     <CFS name="CBMMS" globalServiceCode="CBMMS" copyOf="CFS_FP_SERVICE_GENERAL" description="Запрет MMS" />
     <CFS name="CFB" globalServiceCode="CFB" copyOf="CFS_FP_SERVICE_GENERAL" description="Переадресация по занятости" />
@@ -919,7 +919,7 @@
       <RFS name="RFS_HLR_SMS_MT_DENY" linkType="Modify" />
     </CFS>
     <CFS name="FRBLKNAR" priority="1" copyOf="FRBLKINIT" description="Блокировка за нарушение договорных обязательств" />
-    <CFS name="FRBLKOUT" priority="1" copyOf="FRTECHBLK" description="Блокировка номера при утрате мобильного телефона" />
+    <CFS name="FRBLKOUT" priority="1" copyOf="CBBLKLOST" description="Блокировка номера при утрате мобильного телефона" />
     <CFS name="FRBLKPAY" priority="1" copyOf="FRBLKINIT" description="Принудительная блокировка по неоплате счета" />
     <CFS name="FRBLKTIME" priority="1" copyOf="FRBLKINIT" description="Блокировка срок годности комплекта истек" />
     <CFS name="FRBLKUSER" priority="1" copyOf="FRBLKINIT" description="Добровольная блокировка" />
@@ -1641,10 +1641,7 @@
     <CFS name="FRUSSDBAL" globalServiceCode="FRUSSDBAL" copyOf="CFS_FP_SERVICE_GENERAL" description="Запрос баланса по USSD" />
     <CFS name="FRUZPASSPL" globalServiceCode="FRUZPASSPL" copyOf="CFS_FP_SERVICE_GENERAL" description="Uzbekistan Pass Plus Путеводитель" />
     <CFS name="FRVAMZVSALE100" globalServiceCode="FRVAMZVSALE100" copyOf="CFS_FP_SERVICE_GENERAL" description="Business: Скидка 100% на Вам звонили / Я на связи" />
-    <CFS name="FRVIDCALL" description="Video Call">
-      <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
-      <RFS name="RFS_HLR_VIDEOCALL" linkType="Add" />
-    </CFS>
+    <CFS name="FRVIDCALL" description="Video Call" copyOf="CFS_FP_SERVICE_GENERAL" />
     <CFS name="FRVIEZDPRODAJA" globalServiceCode="FRVIEZDPRODAJA" copyOf="CFS_FP_SERVICE_GENERAL" description="Выездная продажа" />
     <CFS name="FRVIGASALE30STB12MN" globalServiceCode="FRVIGASALE30STB12MN" copyOf="CFS_FP_SERVICE_GENERAL" description="Выгодная сделка 30% 12 месяцев скидка Steel New" />
     <CFS name="FRVIGASALE30STLB12MN" globalServiceCode="FRVIGASALE30STLB12MN" copyOf="CFS_FP_SERVICE_GENERAL" description="Выгодная сделка 30% 12 месяцев скидка Steel Light New" />
@@ -1727,6 +1724,7 @@
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
       <RFS name="RFS_HLR_CALLS_BAN" linkType="Add" />
     </CFS>
+    <CFS name="CB2986" copyOf="FRZAPRETGS" description="Запрет вызова" />
     <CFS name="FRZAPRETGSTY" globalServiceCode="FRZAPRETGSTY" copyOf="CFS_FP_SERVICE_GENERAL" description="Запрет голосовой связи ТП Terminal Yillik" />
     <CFS name="FRZAPRINF" globalServiceCode="FRZAPRINF" copyOf="CFS_FP_SERVICE_GENERAL" description="Запрет информирования по SMS" />
     <CFS name="FRZOBPL" globalServiceCode="FRZOBPL" copyOf="CFS_FP_SERVICE_GENERAL" description="Запрет обещанного платежа в течение месяца" />
@@ -1953,11 +1951,8 @@
     <CFS name="Synchronize" priority="1" description="Обработка кнопки Синхронизировать в СПА">
       <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" linkType="Add" />
       <RFS name="RFS_MG_RESTORE" linkType="Add" dependsOn="RFS_MG_SUBSCRIPTION" />
-      <RFSGroup name="RFS_GROUP_CT4_RECREATE_SUBSCRIBER" />
-      <RFSGroup name="RFS_GROUP_EI_RECREATE_SUBSCRIBER" />
       <RFSGroup name="RFS_GROUP_HLR_RECREATE_SUBSCRIBER" />
       <RFSGroup name="RFS_GROUP_MCA_RECREATE_SUBSCRIBER" />
-      <RFSGroup name="RFS_GROUP_RBT_RECREATE_SUBSCRIBER" />
       <RFSGroup name="RFS_GROUP_SM_RECREATE_SUBSCRIBER" />
     </CFS>
     <CFS name="TEST1" globalServiceCode="TEST1" copyOf="CFS_FP_SERVICE_GENERAL" description="Тестовая учлуга для НЕ подбалансовых счетчиков" />
@@ -2022,12 +2017,6 @@
     </CFSGroup>
   </CFSGroupList>
   <RFSGroupList>
-    <RFSGroup name="RFS_GROUP_CT4_RECREATE_SUBSCRIBER" type="Choice" description="Группа RFS для синхронизации данных по MSISDN в CT4">
-      <RFS name="RFS_CT4_RESTORE" linkType="Add" dependsOn="RFS_CT4_SUBSCRIPTION" handler="CT4_RecreateSubscriber" />
-    </RFSGroup>
-    <RFSGroup name="RFS_GROUP_EI_RECREATE_SUBSCRIBER" type="Choice" description="Группа RFS для синхронизации данных по MSISDN в EIR">
-      <RFS name="RFS_EI_RESTORE" linkType="Add" handler="EI_RecreateSubscriber" />
-    </RFSGroup>
     <RFSGroup name="RFS_GROUP_FP_CHANGE_MSISDN" type="Choice" description="Группа RFS для изменения номера MSISDN">
       <RFS name="RFS_FP_CHANGE_MSISDN_IMSI" linkType="Add" handler="ChangeFPMSISDNHandler" />
     </RFSGroup>
@@ -2051,9 +2040,6 @@
       <RFS name="RFS_MCA_RESTORE" linkType="Add" dependsOn="RFS_MCA_SUBSCRIPTION" handler="MCA_RecreateSubscriber" />
     </RFSGroup>
     <RFSGroup name="RFS_GROUP_RBT_CHANGE_MSISDN" type="Choice" description="Группа RFS для изменения номера MSISDN в RBT">
-      <RFS name="RFS_RBT_RESTORE" linkType="Add" dependsOn="RFS_RBT_SERVICE" handler="RBT_RecreateSubscriber" />
-    </RFSGroup>
-    <RFSGroup name="RFS_GROUP_RBT_RECREATE_SUBSCRIBER" type="Choice" description="Группа RFS для синхронизации данных по MSISDN в RBT">
       <RFS name="RFS_RBT_RESTORE" linkType="Add" dependsOn="RFS_RBT_SERVICE" handler="RBT_RecreateSubscriber" />
     </RFSGroup>
     <RFSGroup name="RFS_GROUP_SM_RECREATE_SUBSCRIBER" type="Choice" description="Группа RFS для синхронизации данных по MSISDN в SMSC">
@@ -2091,23 +2077,11 @@
         <RFS name="RFS_FP_CHANGE_TARIFF_AP" action="Remove" dependsOn="RFS_FP_SERVICE_AUTO_PAYMENT" order="5" />
       </Configuration>
     </Handler>
-    <Handler name="CT4_RecreateSubscriber" type="RecreateSubscriber" description="Обработчик RFS для восстановления услуги CT4">
-      <Configuration>
-        <RFS name="RFS_CT4_SUBSCRIPTION" action="Remove" />
-        <RFS name="RFS_CT4_SUBSCRIPTION" action="Add" />
-      </Configuration>
-    </Handler>
     <Handler name="DeleteFPSubscriberForChangeTariffHandler" type="Custom" description="Обработчик RFS для удаления абонента на старой платформы при изменении тарифного плана">
       <Configuration type="FORIS.SPA.SC.Customization.DeleteFPSubscriberForChangeTariffHandler, FORIS.SPA.SC.Customization">
         <RFS name="RFS_FP_CHANGE_TARIFF_FN" dependsOn="RFS_FP_SERVICE_FAVORITE_NUMBER" order="7" />
         <RFS name="RFS_FP_SERVICE_AUTO_PAYMENT" dependsOn="RFS_FP_SERVICE_AUTO_PAYMENT" order="6" />
         <RFS name="RFS_FP_SUBSCRIBER" order="5" />
-      </Configuration>
-    </Handler>
-    <Handler name="EI_RecreateSubscriber" type="RecreateSubscriber" description="Обработчик RFS для восстановления услуги EIR">
-      <Configuration>
-        <RFS name="RFS_EI_SUBSCRIPTION" action="Remove" />
-        <RFS name="RFS_EI_SUBSCRIPTION" action="Add" />
       </Configuration>
     </Handler>
     <Handler name="FP.CancelHandler" type="RFSFilter" description="Обработчик отмены обработки на фин.платформе. Прописан в бизнес-процессы.">
@@ -2334,7 +2308,6 @@
       <RFS name="RFS_HLR_SMS_MO" scenarioType="Add" />
       <RFS name="RFS_HLR_SMS_MT" scenarioType="Add" />
       <RFS name="RFS_HLR_SUBSCRIBER" scenarioType="Add" useType="Mandatory" />
-      <RFS name="RFS_HLR_VIDEOCALL" scenarioType="Add" />
     </Scenario>
     <Scenario name="HLR.DeleteSubscriber" description="Удаление абонента">
       <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" scenarioType="Add, Remove" />
@@ -2360,7 +2333,7 @@
     </Scenario>
     <Scenario name="HLR.Modify.NET" description="Изменение сервисов интернет">
       <RFS name="RFS_HLR_NET" scenarioType="Modify" />
-      <Append name="RFS_HLR_CANCEL_LOCATION" listType="EndList" />
+      <Append name="RFS_HLR_ROAMING" listType="EndList" />
     </Scenario>
     <Scenario name="HLR.Modify.ODB" description="Управление ограничениями связи">
       <RFS name="RFS_HLR_ODB_IC" scenarioType="Add, Modify, Remove" />
@@ -2383,9 +2356,6 @@
     </Scenario>
     <Scenario name="HLR.Modify.USSD" description="Изменение сервиса USSD">
       <RFS name="RFS_HLR_USSD" scenarioType="Add, Modify, Remove" />
-    </Scenario>
-    <Scenario name="HLR.Modify.VIDEOCALL" description="Изменение сервиса видео звонок">
-      <RFS name="RFS_HLR_VIDEOCALL" scenarioType="Add, Remove" />
     </Scenario>
     <Scenario name="HLR.Remove.CallForwarding" description="Удаление/деактивация переадресаций">
       <RFS name="RFS_HLR_CFB" scenarioType="Remove" />

@@ -3,6 +3,7 @@
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
   </objectList>
   <automat>
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
@@ -20,12 +21,14 @@
         <param name="Command" value="SC.Modify_GPRS_Barring" />
       </parameterslist>
     </node>
-    <node name="Modify_NAM" object="Commander">
+    <node name="Modify_NAM" object="IfCommander">
       <resultlist>
         <result value="0" node="CancelLocation" />
+        <result value="1538" node="ResponseAssembler" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
+        <param name="IfXmlPath" value="//EndList/RFS_HLR_ROAMING" />
         <param name="Command" value="SC.Modify_NAM" />
       </parameterslist>
     </node>
