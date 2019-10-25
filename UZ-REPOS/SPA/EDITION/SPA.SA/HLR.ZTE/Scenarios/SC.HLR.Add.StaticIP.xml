@@ -144,27 +144,27 @@
     <node name="ParameterSwitch_DEALER" object="Switch">
       <resultlist>
         <result value="2" node="DummyResponder" />
-        <result value="" node="Delete_GPRS_Dealer" />
+        <result value="" node="Delete_APN" />
       </resultlist>
       <parameterslist>
         <param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/IP" />
         <param name="Value:2" value="err001" />
       </parameterslist>
     </node>
-    <node name="Delete_GPRS_Dealer" object="Commander">
+    <node name="Delete_APN" object="Commander">
       <resultlist>
-        <result value="" node="Add_GPRS_Dealer" />
+        <result value="" node="Add_APN" />
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SC.Delete_GPRS_Dealer" />
+        <param name="Command" value="SC.Delete_APN" />
       </parameterslist>
     </node>
-    <node name="Add_GPRS_Dealer" object="Commander">
+    <node name="Add_APN" object="Commander">
       <resultlist>
         <result value="" node="Add_APN_StaticIP_Dealer" />
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SC.Add_GPRS_Dealer" />
+        <param name="Command" value="SC.Add_APN" />
       </parameterslist>
     </node>
     <node name="Add_APN_StaticIP_Dealer" object="Commander">

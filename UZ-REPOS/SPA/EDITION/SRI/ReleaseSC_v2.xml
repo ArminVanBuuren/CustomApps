@@ -2329,15 +2329,15 @@
       <Append name="RFS_HLR_SMS_MT" listType="EndList" />
     </Scenario>
     <Scenario name="HLR.CreateSubscriber" description="Создание абонента">
-      <RFS name="RFS_HLR_CFB" scenarioType="Add" />
-      <RFS name="RFS_HLR_CFD" scenarioType="Add" />
-      <RFS name="RFS_HLR_CFNRC" scenarioType="Add" />
-      <RFS name="RFS_HLR_CFNRY" scenarioType="Add" />
-      <RFS name="RFS_HLR_CFU" scenarioType="Add" />
-      <RFS name="RFS_HLR_CLIP" scenarioType="Add" />
-      <RFS name="RFS_HLR_CWCH" scenarioType="Add" />
-      <RFS name="RFS_HLR_DATATRANSFER" scenarioType="Add" />
-      <RFS name="RFS_HLR_MPTY" scenarioType="Add" />
+      <RFS name="RFS_HLR_CFB" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_CFD" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_CFNRC" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_CFNRY" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_CFU" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_CLIP" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_CWCH" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_DATATRANSFER" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_MPTY" scenarioType="Add, Remove" />
       <RFS name="RFS_HLR_NET" scenarioType="Add" />
       <RFS name="RFS_HLR_ODB_IC" scenarioType="Add" />
       <RFS name="RFS_HLR_ODB_OC" scenarioType="Add" />

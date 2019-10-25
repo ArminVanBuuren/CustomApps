@@ -5,7 +5,6 @@
     <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
-    <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll" />
   </objectList>
   <automat>
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
@@ -17,7 +16,7 @@
     <node name="Modify_NAM" object="IfCommander">
       <resultlist>
         <result value="0" node="TimeOut" />
-        <result value="1538" node="SwitchType" />
+        <result value="1538" node="Add_APN" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
@@ -27,25 +26,12 @@
     </node>
     <node name="TimeOut" object="DummyResponder">
       <resultlist>
-        <result value="" node="SwitchType" />
+        <result value="" node="Add_APN" />
       </resultlist>
       <parameterslist>
         <param name="OverallResult" value="SUCCESS" />
         <param name="DetailedResult" value="SUCCESS" />
         <param name="Delay" value="500" />
-      </parameterslist>
-    </node>
-    <node name="SwitchType" object="Switch">
-      <resultlist>
-        <result value="0" node="DummyResponder" />
-        <result value="1" node="DummyResponder" />
-        <result value="2" node="Add_APN" />
-        <result value="3" node="Add_APN" />
-      </resultlist>
-      <parameterslist>
-        <param name="XmlPath" value="//RFS_HLR_NET_APN/RES_HLR_NET_SERVICE/Value/text()" />
-        <param name="Value:2" value="GPRS" />
-        <param name="Value:3" value="M2M" />
       </parameterslist>
     </node>
     <node name="Add_APN" object="Commander">
@@ -54,15 +40,6 @@
       </resultlist>
       <parameterslist>
         <param name="Command" value="SC.Add_APN" />
-      </parameterslist>
-    </node>
-    <node name="DummyResponder" object="DummyResponder">
-      <resultlist>
-        <result value="" node="ResponseAssembler" />
-      </resultlist>
-      <parameterslist>
-        <param name="OverallResult" value="FAILURE" />
-        <param name="DetailedResult" value="FAILURE" />
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">

@@ -2,44 +2,16 @@
   <objectList>
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll" />
-    <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
-    <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll" />
   </objectList>
   <automat>
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
       <resultlist>
-        <result value="0" node="SwitchType" />
+        <result value="0" node="Delete_APN" />
         <result value="1" node="" />
       </resultlist>
-    </node>
-    <node name="SwitchType" object="Switch">
-      <resultlist>
-        <result value="0" node="DummyResponder" />
-        <result value="1" node="DummyResponder" />
-        <result value="2" node="Delete_GPRS" />
-        <result value="3" node="Delete_APN" />
-        <result value="4" node="Delete_APN_MYUMS" />
-        <result value="5" node="Delete_APN_Corporate" />
-      </resultlist>
-      <parameterslist>
-        <param name="XmlPath" value="//RFS_HLR_NET_APN/RES_HLR_NET_SERVICE/Value/text()" />
-        <param name="Value:2" value="GPRS" />
-        <param name="Value:3" value="M2M" />
-        <param name="Value:4" value="MYUMS" />
-        <param name="Value:5" value="CorpAPN" />
-      </parameterslist>
-    </node>
-    <node name="Delete_GPRS" object="Commander">
-      <resultlist>
-        <result value="0" node="Modify_NAM" />
-        <result value="" node="ResponseAssembler" />
-      </resultlist>
-      <parameterslist>
-        <param name="Command" value="SC.Delete_GPRS" />
-      </parameterslist>
     </node>
     <node name="Delete_APN" object="Commander">
       <resultlist>
@@ -50,47 +22,6 @@
         <param name="Command" value="SC.Delete_APN" />
       </parameterslist>
     </node>
-    <node name="Delete_APN_MYUMS" object="Commander">
-      <resultlist>
-        <result value="0" node="Add_GPRS" />
-        <result value="" node="ResponseAssembler" />
-      </resultlist>
-      <parameterslist>
-        <param name="Command" value="SC.Delete_APN" />
-      </parameterslist>
-    </node>
-    <node name="Add_GPRS" object="Commander">
-      <resultlist>
-        <result value="" node="ResponseAssembler" />
-      </resultlist>
-      <parameterslist>
-        <param name="Command" value="SC.Add_GPRS" />
-      </parameterslist>
-    </node>
-    <node name="Delete_APN_Corporate" object="Commander">
-      <resultlist>
-        <result value="0" node="DataBaseProcessor" />
-        <result value="" node="ResponseAssembler" />
-      </resultlist>
-      <parameterslist>
-        <param name="Command" value="SC.Delete_APN_Corporate" />
-      </parameterslist>
-    </node>
-    <node name="DataBaseProcessor" object="DataBaseProcessor">
-      <resultlist>
-        <result value="" node="Modify_NAM" />
-      </resultlist>
-      <parameterslist>
-        <param name="DataBaseName" value="UMS.ARCHIVE" />
-        <param name="FunctionName" value="CORPORATE_APN_DELETE" />
-        <param name="FunctionType" value="procedure" />
-        <param name="OutXml" value="db_unit_result" />
-        <param name="DbParameterName:0" value="p_msisdn" />
-        <param name="DbParameterDirection:0" value="Input" />
-        <param name="DbParameterType:0" value="Varchar2" />
-        <param name="DbParameterXpathValue:0" value="//IdentifiersList/Identifier/MSISDN" />
-      </parameterslist>
-    </node>
     <node name="Modify_NAM" object="IfCommander">
       <resultlist>
         <result value="" node="ResponseAssembler" />
@@ -98,15 +29,6 @@
       <parameterslist>
         <param name="IfXmlPath:0" value="//RemoveList/RFS_HLR_NET" />
         <param name="Command" value="SC.Modify_NAM" />
-      </parameterslist>
-    </node>
-    <node name="DummyResponder" object="DummyResponder">
-      <resultlist>
-        <result value="" node="ResponseAssembler" />
-      </resultlist>
-      <parameterslist>
-        <param name="OverallResult" value="FAILURE" />
-        <param name="DetailedResult" value="FAILURE" />
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">

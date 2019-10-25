@@ -486,8 +486,6 @@
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Add_CF.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Add_CLIP.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Add_CLIR.xml" />
-    <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Add_GPRS.xml" />
-    <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Add_GPRS_Dealer.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Add_KI.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Add_LTE_EPC.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Add_LTE_EPCAPN.xml" />
