@@ -272,6 +272,9 @@
     <Content Include="EDITION\SPA.SA\BSP\Scenarios\CounterReinitializationOnBSProxy.xml" />
     <Content Include="EDITION\SPA.SA\BSP\Scenarios\SC.BSP.ChangeCounterProfile.xml" />
     <Content Include="EDITION\SPA.SA\CONTENT.UNIFUN\Scenarios\SC.Remove.RFS_CT5_SUBSCRIPTION.xml" />
+    <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Delete_NAM.xml" />
+    <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Add_NAM.xml" />
+    <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Modify_Subscriber.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Modify_RoamingSchemePS.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Modify_RoamingSchemeCS.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Emulation\zte.response.txt" />

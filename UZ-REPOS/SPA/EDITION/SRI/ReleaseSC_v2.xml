@@ -296,6 +296,14 @@
       <Resource name="RES_HLR_NET_APN" useType="Mandatory" />
       <Resource name="RES_HLR_NET_SERVICE" useType="Mandatory" />
     </RFS>
+    <RFS name="RFS_HLR_NET_APN_AIISKUE" base="RFS_HLR_NET_APN" hostType="HL" description="AIISKUE">
+      <Resource name="RES_HLR_NET_APN" value="ASKUE.UMS.UZ" />
+      <Resource name="RES_HLR_NET_SERVICE" value="AIISKUE" />
+    </RFS>
+    <RFS name="RFS_HLR_NET_APN_DEALERS" base="RFS_HLR_NET_APN" hostType="HL" description="DEALERS">
+      <Resource name="RES_HLR_NET_APN" value="DEALERS.UMS.UZ" />
+      <Resource name="RES_HLR_NET_SERVICE" value="DEALERS" />
+    </RFS>
     <RFS name="RFS_HLR_NET_APN_GPRS" base="RFS_HLR_NET_APN" hostType="HL" description="Мобильный интернет GPRS">
       <Resource name="RES_HLR_NET_APN" value="NET.UMS.UZ">
         <Value hosts="FP:05" value="POSTPAID.UMS.UZ" />
@@ -541,8 +549,8 @@
     <CFS name="CB101" globalServiceCode="CB101" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Start" />
     <CFS name="CB1011" priority="9998" description="Ежемесячная плата за тариф">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
-      <RFS name="RFS_HLR_ODB_IC_ALL_CALLS" linkType="Add" />
-      <RFS name="RFS_HLR_ODB_OC_LOCAL_CALLS" linkType="Add" />
+      <RFS name="RFS_HLR_ODB_IC_ALL_CALLS" linkType="Set" />
+      <RFS name="RFS_HLR_ODB_OC_LOCAL_CALLS" linkType="Set" />
       <RFS name="RFS_HLR_SUBSCRIBER_DEFAULT" linkType="Set" />
     </CFS>
     <CFS name="CB10339" globalServiceCode="CB10339" copyOf="CFS_FP_SERVICE_GENERAL" description="Доставка счета курьером" />
@@ -702,7 +710,7 @@
       <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" linkType="Add" />
       <RFS name="RFS_SM_CHANGE_TARIFF" linkType="Add" />
       <RFSGroup name="RFS_GROUP_FP_CHANGE_TARIFF_PLAN" />
-      <RFSGroup name="RFS_GROUP_HLR_RECREATE_SUBSCRIBER" />
+      <RFSGroup name="RFS_GROUP_HLR_CHANGE_PROFILE" />
     </CFS>
     <CFS name="CONTENTMARKER" globalServiceCode="CONTENTMARKER" copyOf="CFS_FP_SERVICE_GENERAL" description="Отдельный ЛС для контента" />
     <CFS name="DeleteLTE" description="Удалить LTE">
@@ -869,9 +877,22 @@
     <CFS name="FRAPYORQINY" globalServiceCode="FRAPYORQINY" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Yorqin Yillik" />
     <CFS name="FRARTEL1" globalServiceCode="FRARTEL1" copyOf="CFS_FP_SERVICE_GENERAL" description="Artel 1000 Мб" />
     <CFS name="FRARTEL2" globalServiceCode="FRARTEL2" copyOf="CFS_FP_SERVICE_GENERAL" description="Artel 2000 Мб" />
-    <CFS name="FRASKUE" priority="9997" description="Создание абонентов АИИСКУЭ (APN Profile ID - 10 ASKUE)">
+    <CFS name="FRASKUE" priority="97" description="Создание абонентов АИИСКУЭ (APN Profile ID - 10 ASKUE)">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
-      <RFS name="RFS_HLR_NET_ALLOW" linkType="Add" />
+      <RFS name="RFS_HLR_CFB_PRV" linkType="Remove" />
+      <RFS name="RFS_HLR_CFD" linkType="Remove" />
+      <RFS name="RFS_HLR_CFNRC_PRV" linkType="Remove" />
+      <RFS name="RFS_HLR_CFNRY_PRV" linkType="Remove" />
+      <RFS name="RFS_HLR_CFU_PRV" linkType="Remove" />
+      <RFS name="RFS_HLR_CWCH" linkType="Remove" />
+      <RFS name="RFS_HLR_DATATRANSFER" linkType="Remove" />
+      <RFS name="RFS_HLR_MPTY" linkType="Remove" />
+      <RFS name="RFS_HLR_NET_ALLOW" linkType="Set" />
+      <RFS name="RFS_HLR_NET_APN_AIISKUE" linkType="Set" />
+      <RFS name="RFS_HLR_ODB_IC_NO_CALLS" linkType="Set" />
+      <RFS name="RFS_HLR_ODB_OC_NO_CALLS" linkType="Set" />
+      <RFS name="RFS_HLR_SMS_MO_DENY" linkType="Modify" />
+      <RFS name="RFS_HLR_SMS_MT_DENY" linkType="Modify" />
       <RFS name="RFS_HLR_SUBSCRIBER_AIISKUE" linkType="Set" />
     </CFS>
     <CFS name="FRAVTOMB1000F" globalServiceCode="FRAVTOMB1000F" copyOf="CFS_FP_SERVICE_GENERAL" description="Услуга 20% FREE для OnNet 5000" />
@@ -1008,8 +1029,8 @@
     <CFS name="FRDAYGPRS7" globalServiceCode="FRDAYGPRS7" copyOf="CFS_FP_SERVICE_GENERAL" description="Дневной интернет-пакет 7" />
     <CFS name="FRDGU" priority="9997" description="Услуга передачи данных ТП ДГУ">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
-      <RFS name="RFS_HLR_ODB_IC_ALL_CALLS" linkType="Add" />
-      <RFS name="RFS_HLR_ODB_OC_LOCAL_CALLS" linkType="Add" />
+      <RFS name="RFS_HLR_ODB_IC_ALL_CALLS" linkType="Set" />
+      <RFS name="RFS_HLR_ODB_OC_LOCAL_CALLS" linkType="Set" />
       <RFS name="RFS_HLR_SUBSCRIBER_DGU" linkType="Set" />
     </CFS>
     <CFS name="FRDILAPN" globalServiceCode="FRDILAPN" copyOf="CFS_FP_SERVICE_GENERAL" description="Дилерский APN" />
@@ -1393,9 +1414,22 @@
     <CFS name="FRONNETCORP6000" globalServiceCode="FRONNETCORP6000" copyOf="CFS_FP_SERVICE_GENERAL" description="Corp OnNet 6000" />
     <CFS name="FRONNETSALE100" globalServiceCode="FRONNETSALE100" copyOf="CFS_FP_SERVICE_GENERAL" description="Business: Скидка 100% на OnNet 500" />
     <CFS name="FROPODKLUSL" globalServiceCode="FROPODKLUSL" copyOf="CFS_FP_SERVICE_GENERAL" description="Информирование о подключении/отключении услуг" />
-    <CFS name="FRPARTAPN" priority="9997" description="Создание абонентов Partner APN (APN Profile ID - 20 DEALERS.UMS.UZ)">
+    <CFS name="FRPARTAPN" priority="97" description="Создание абонентов Partner APN (APN Profile ID - 20 DEALERS.UMS.UZ)">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
-      <RFS name="RFS_HLR_NET_ALLOW" linkType="Add" />
+      <RFS name="RFS_HLR_CFB_PRV" linkType="Remove" />
+      <RFS name="RFS_HLR_CFD" linkType="Remove" />
+      <RFS name="RFS_HLR_CFNRC_PRV" linkType="Remove" />
+      <RFS name="RFS_HLR_CFNRY_PRV" linkType="Remove" />
+      <RFS name="RFS_HLR_CFU_PRV" linkType="Remove" />
+      <RFS name="RFS_HLR_CWCH" linkType="Remove" />
+      <RFS name="RFS_HLR_DATATRANSFER" linkType="Remove" />
+      <RFS name="RFS_HLR_MPTY" linkType="Remove" />
+      <RFS name="RFS_HLR_NET_ALLOW" linkType="Set" />
+      <RFS name="RFS_HLR_NET_APN_DEALERS" linkType="Set" />
+      <RFS name="RFS_HLR_ODB_IC_NO_CALLS" linkType="Set" />
+      <RFS name="RFS_HLR_ODB_OC_NO_CALLS" linkType="Set" />
+      <RFS name="RFS_HLR_SMS_MO_DENY" linkType="Modify" />
+      <RFS name="RFS_HLR_SMS_MT_DENY" linkType="Modify" />
       <RFS name="RFS_HLR_SUBSCRIBER_DEALERS" linkType="Set" />
     </CFS>
     <CFS name="FRPARTBL" globalServiceCode="FRPARTBL" priority="1" description="Частичная блокировка">
@@ -2287,6 +2321,7 @@
       <Append name="RFS_HLR_DATATRANSFER" listType="EndList" />
       <Append name="RFS_HLR_MPTY" listType="EndList" />
       <Append name="RFS_HLR_NET" listType="EndList" />
+      <Append name="RFS_HLR_NET_APN" listType="EndList" />
       <Append name="RFS_HLR_ODB_IC" listType="EndList" />
       <Append name="RFS_HLR_ODB_OC" listType="EndList" />
       <Append name="RFS_HLR_ROAMING" listType="EndList" />

@@ -1,0 +1,16 @@
+<Command Name="SC.Modify_Subscriber">
+  <Description>Изменение профиля абонента</Description>
+  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[Set TPLCAMEL:MSISDN=##msisdn##,##profile##;^M]]>
+    </RequestTemplate>
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="profile" Type="LocalParameter" />
+  </Request>
+  <ParametersList>
+    <Parameter Name="profile">
+      <Source Path="//ModifyList/RFS_HLR_SUBSCRIBER/RES_HLR_PROFILE/Value[text()='Prepaid']" PresenceValue="OCSITPL=4,TCSITPL=4,UCSITPL=1" AbsenceValue="OCSITPL=0,TCSITPL=0,UCSITPL=0" />
+    </Parameter>
+  </ParametersList>
+</Command>
