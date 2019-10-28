@@ -2338,12 +2338,12 @@
       <RFS name="RFS_HLR_CWCH" scenarioType="Add, Remove" />
       <RFS name="RFS_HLR_DATATRANSFER" scenarioType="Add, Remove" />
       <RFS name="RFS_HLR_MPTY" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_NET" scenarioType="Add" />
-      <RFS name="RFS_HLR_ODB_IC" scenarioType="Add" />
-      <RFS name="RFS_HLR_ODB_OC" scenarioType="Add" />
+      <RFS name="RFS_HLR_NET" scenarioType="Add, Modify" />
+      <RFS name="RFS_HLR_ODB_IC" scenarioType="Add, Modify" />
+      <RFS name="RFS_HLR_ODB_OC" scenarioType="Add, Modify" />
       <RFS name="RFS_HLR_ROAMING" scenarioType="Add" />
-      <RFS name="RFS_HLR_SMS_MO" scenarioType="Add" />
-      <RFS name="RFS_HLR_SMS_MT" scenarioType="Add" />
+      <RFS name="RFS_HLR_SMS_MO" scenarioType="Add, Modify" />
+      <RFS name="RFS_HLR_SMS_MT" scenarioType="Add, Modify" />
       <RFS name="RFS_HLR_SUBSCRIBER" scenarioType="Add" useType="Mandatory" />
     </Scenario>
     <Scenario name="HLR.DeleteSubscriber" description="Удаление абонента">

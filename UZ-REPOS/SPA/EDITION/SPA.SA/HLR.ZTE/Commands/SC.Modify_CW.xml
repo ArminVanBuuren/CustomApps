@@ -9,8 +9,9 @@
     <Item Name="action" Type="LocalParameter" />
   </Request>
   <ParametersList>
-    <Parameter Name="action">
-      <Source Path="//AddList/RFS_HLR_CWCH" PresenceValue="1" AbsenceValue="0" />
+    <Parameter Name="action" IsChoice="true" AbsenceValue="0">
+      <Source Path="//AddList/RFS_HLR_CWCH" PresenceValue="1" />
+      <Source Path="//EndList/RFS_HLR_CWCH" PresenceValue="1" />
     </Parameter>
   </ParametersList>
 </Command>

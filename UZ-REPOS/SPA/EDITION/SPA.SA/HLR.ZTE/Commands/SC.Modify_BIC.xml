@@ -12,6 +12,7 @@
     <Parameter Name="Barring" IsChoice="true" AbsenceValue="1">
       <Source Path="//AddList/RFS_HLR_ODB_IC/RES_HLR_ODB_IC/Value[text()='AllCalls']" PostFormat="0" />
       <Source Path="//ModifyList/RFS_HLR_ODB_IC/RES_HLR_ODB_IC/Value[text()='AllCalls']" PostFormat="0" />
+      <Source Path="//EndList/RFS_HLR_ODB_IC/RES_HLR_ODB_IC/Value[text()='AllCalls']" PostFormat="0" />
     </Parameter>
   </ParametersList>
   <ErrorsList CodePage="windows-1251">
