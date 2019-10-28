@@ -241,6 +241,7 @@
     <Content Include="EDITION\Changes.txt" />
     <Content Include="EDITION\ROBP\Processes\Update language.xml" />
     <Content Include="EDITION\ROBP\Processes\Update Personal Account Attributes.xml" />
+    <Content Include="EDITION\SPA.BPM\SPA.Console\Dispatching.xml" />
     <Content Include="EDITION\SPA.BPM\OLD\Dispatching.xml" />
     <Content Include="EDITION\SPA.BPM\OLD\SPA.BPM.01\configuration.application.xml" />
     <Content Include="EDITION\SPA.BPM\OLD\SPA.BPM.01\configuration.common.xml" />
@@ -257,6 +258,9 @@
     <Content Include="EDITION\SPA.BPM\SPA.BPM.GROUP.configuration.common.xml" />
     <Content Include="EDITION\SPA.BPM\SPA.BPM.REMOTING.configuration.application.xml" />
     <Content Include="EDITION\SPA.BPM\SPA.BPM.REMOTING.configuration.common.xml" />
+    <Content Include="EDITION\SPA.BPM\SPA.Console\1.png" />
+    <Content Include="EDITION\SPA.BPM\SPA.Console\2.png" />
+    <Content Include="EDITION\SPA.BPM\SPA.Console\3.png" />
     <Content Include="EDITION\SPA.BPM\Templates\CallForwarding\Activation.xml" />
     <Content Include="EDITION\SPA.BPM\Templates\CallForwarding\Deactivation.xml" />
     <Content Include="EDITION\SPA.BPM\Templates\CallForwarding\Interrogation.xml" />
