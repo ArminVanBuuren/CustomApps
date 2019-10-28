@@ -701,6 +701,7 @@
       <RFS name="RFS_RBT_CHANGE_MSISDN" linkType="Add" dependsOn="RFS_RBT_SERVICE" />
       <RFSGroup name="RFS_GROUP_FP_CHANGE_MSISDN" />
       <RFSGroup name="RFS_GROUP_HLR_RECREATE_SUBSCRIBER" />
+      <RFSGroup name="RFS_GROUP_SM_RECREATE_SUBSCRIBER" />
       <RFSGroup name="RFS_GROUP_RBT_CHANGE_MSISDN" />
     </CFS>
     <CFS name="ChangeTariff" priority="9999" type="OneTime" description="Удаление абонента на старой платформы при изменении тарифного плана">
