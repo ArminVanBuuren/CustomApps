@@ -273,7 +273,6 @@
     <Content Include="EDITION\SPA.SA\BSP\Scenarios\SC.BSP.ChangeCounterProfile.xml" />
     <Content Include="EDITION\SPA.SA\CONTENT.UNIFUN\Scenarios\SC.Remove.RFS_CT5_SUBSCRIPTION.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Delete_NAM.xml" />
-    <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Add_NAM.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Modify_Subscriber.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Modify_RoamingSchemePS.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Modify_RoamingSchemeCS.xml" />
@@ -495,7 +494,6 @@
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Create_Subscriber.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Deactivate_CF.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Delete_APN.xml" />
-    <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Delete_APN_Corporate.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Delete_APN_StaticIP.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Delete_APN_StaticIP_Dealer.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Delete_APN_StaticIP_LTE.xml" />
@@ -508,8 +506,6 @@
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Delete_CFU.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Delete_CLIP.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Delete_CLIR.xml" />
-    <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Delete_GPRS.xml" />
-    <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Delete_GPRS_Dealer.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Delete_Subscriber_IMSI.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Delete_Subscriber_MSISDN.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.GenericCommand.xml" />
@@ -530,7 +526,6 @@
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Modify_SPEEDLIMIT_GPRS.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Modify_SPEEDLIMIT_LTE.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Modify_USSD.xml" />
-    <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Modify_VideoCall.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Modify_VideoCalls.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Modify_VoiceCalls.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\configuration.application.xml" />

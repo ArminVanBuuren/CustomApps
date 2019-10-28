@@ -6,6 +6,13 @@
       <![CDATA[Mod BscEx:MSISDN=##msisdn##,BPOS=##NET_STATE##;^M]]>
     </RequestTemplate>
     <Item Name="msisdn" Type="Wellknown" />
-    <Item Name="NET_STATE" Type="Parameter" />
+    <Item Name="NET_STATE" Type="LocalParameter" />
   </Request>
+  <ParametersList>
+    <Parameter Name="NET_STATE" IsChoice="true" AbsenceValue="1">
+      <Source Path="//AddList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Allow']" PresenceValue="0" />
+      <Source Path="//EndList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Allow']" PresenceValue="0" />
+      <Source Path="//ModifyList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Allow']" PresenceValue="0" />
+    </Parameter>
+  </ParametersList>
 </Command>

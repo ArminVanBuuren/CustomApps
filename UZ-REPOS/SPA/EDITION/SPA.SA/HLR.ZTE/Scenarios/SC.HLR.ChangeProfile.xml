@@ -42,7 +42,7 @@
         <param name="OrXmlPath:0" value="//RFS_HLR_NET" />
         <param name="OrXmlPath:1" value="//ModifyList/RFS_HLR_SUBSCRIBER/RES_HLR_PROFILE/Value[text()='AIISKUE']" />
         <param name="OrXmlPath:2" value="//ModifyList/RFS_HLR_SUBSCRIBER/RES_HLR_PROFILE/Value[text()='DEALERS']" />
-        <param name="Command" value="SC.Add_NAM" />
+        <param name="Command" value="SC.Modify_NAM" />
       </parameterslist>
     </node>
     <node name="Add_APN" object="Commander">

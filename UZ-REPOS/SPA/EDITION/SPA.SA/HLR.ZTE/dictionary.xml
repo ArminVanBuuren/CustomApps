@@ -40,14 +40,6 @@
     <Parameter Name="NET_APN">
       <Source Path="//RES_HLR_NET_APN/Value" />
     </Parameter>
-    <Parameter Name="NET_STATE" IsChoice="true" AbsenceValue="1">
-      <Source Path="//AddList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Allow']" PresenceValue="0" />
-      <Source Path="//EndList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Allow']" PresenceValue="0" />
-      <Source Path="//EndList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Deny']" PresenceValue="1" />
-      <Source Path="//ModifyList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Allow']" PresenceValue="0" />
-      <Source Path="//ModifyList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Deny']" PresenceValue="1" />
-      <Source Path="//RemoveList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Allow']" PresenceValue="1" />
-    </Parameter>
     <Parameter Name="SPEEDLIMIT" IsChoice="true">
       <Source Path="//AddList/RFS_HLR_SPEEDLIMIT" PresenceValue="107" />
       <Source Path="//RemoveList/RFS_HLR_SPEEDLIMIT" PresenceValue="100" />
