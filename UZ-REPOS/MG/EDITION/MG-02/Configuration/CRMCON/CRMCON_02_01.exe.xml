@@ -17,7 +17,7 @@
     <Item name="ReportTemplates" value="^Delivery" />
     <Item name="SupportLargeMessages" value="true" />
     <Item name="ThreadMultiplifier" value="8" />
-	<Item name="ExposeMessageSendingService" value="false" /> 
+    <Item name="ExposeMessageSendingService" value="true" />
   </Settings>
   <TemplateToConnector>
     <Map template_id="sms -2" connector="SMSCON_02_01" template_name="DeliveryRequest" />
