@@ -1012,6 +1012,26 @@ Created by Vladimir Khovanskiy
     >
     <soapcon value="welcomebonus"/>
   </Group>
+  <Group name="whirl"
+
+			getcounters_full_ruk="[0] MB do [1]"
+			getcounters_full_rut="[0] MB do [1]"
+			getcounters_full_uz="[0] MB qoldig^i [1]gacha "
+			getcounters_full_en="[0] MB till [1]"
+
+			getcounters_nodate_ruk="Ostatok [0] [1]"
+			getcounters_nodate_rut="Ostatok [0] [1]"
+			getcounters_nodate_uz="Ostatok [0] [1]"
+			getcounters_nodate_en="Ostatok [0] [1]"
+
+			getcounters_nocounters_ruk="У Вас нет активных пакетов"
+			getcounters_nocounters_rut="U Vas net aktivny^h paketov"
+			getcounters_nocounters_uz="Sizda joriy paketlar yoq"
+			getcounters_nocounters_en="You have no active packages"
+
+			>
+    <soapcon value="whirl"/>
+  </Group>
   <Counter counter_code="MB333NO" group="1"
 
     getcounters_name_ru="333"
@@ -9057,6 +9077,7 @@ Created by Vladimir Khovanskiy
   <Counter counter_code="MB2000W" group="53"/>
   <Counter counter_code="MB3000W" group="53"/>
   <Counter counter_code="MB5000W" group="53"/>
+  <Counter counter_code="MBPACKDB" group="54"/>
   <GroupList>
     <Item id="1" name="gprs"/>
     <!--*111*019#-->
@@ -9160,6 +9181,8 @@ Created by Vladimir Khovanskiy
     <Item id="52" name="ict"/>
     <!--test-->
     <Item id="53" name="welcomebonus"/>
+    <!--test-->
+    <Item id="54" name="whirl"/>
     <!--test-->
   </GroupList>
 </Counters>
