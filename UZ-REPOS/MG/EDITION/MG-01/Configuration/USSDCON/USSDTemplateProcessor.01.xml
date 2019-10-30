@@ -172,127 +172,13 @@
       <set item="Encoding" value="_ENCODING" />
     </deliveryTemplate>
   </template>
-  <template procedureName="CheckNumberStatus" handler="_DBCON" sessionStorage="Memory" sessionLifetime="30" persistent="false">
-    <condition>
-      <test item="${Sender}" matches="^\d+(3307879|4344342)$" />
-      <test item="${Content}" matches="^\*_DEF_USSDNUM\*666\*99897\d{7}\#$" />
-    </condition>
-    <receiveTemplate>
-      <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(CheckNumber__USSD_CHECK_NUMBER)}">
-        <Item procedureName="check_number">
-          <Attribute name="p_msisdn" type="STRING" value="_USSD_CHECK_NUMBER" />
-          <Attribute name="result" type="out:STRING" />
-        </Item>
-        @{store(sCustomer,_USSD_CHECK_NUMBER)}
-        @{store(sModule,_CURRENT_MODULE)}
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate conditionEx="#{'_NUMBER_STATUS'='9'}">
-      <set item="Content" value="Nomer ${sCustomer} ne sushestvuet" />
-      <set item="Sender" value="${Sender}" />
-      <set item="Recipient" value="${customer}" />
-      <set item="Encoding" value="_ENCODING" />
-      <set item="UssdServiceOp" value="1" />
-      <set conditionEx="0@{freeSession}" />
-    </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{'_NUMBER_STATUS'!='0'}">
-      <set item="Content" value="Nomer ${sCustomer} zanyat" />
-      <set item="Sender" value="${Sender}" />
-      <set item="Recipient" value="${customer}" />
-      <set item="Encoding" value="_ENCODING" />
-      <set item="UssdServiceOp" value="1" />
-      <set conditionEx="0@{freeSession}" />
-    </deliveryTemplate>
-    <deliveryTemplate>
-      <set item="Content" value="Nomer ${sCustomer} kategorii _NUMBER_CATEGORY svoboden dlya regiona _NUMBER_REGION" />
-      <set item="Sender" value="${sRecipient}" />
-      <set item="Recipient" value="${customer}" />
-      <set item="Encoding" value="_ENCODING" />
-      <set item="UssdServiceOp" value="1" />
-      <set conditionEx="0@{freeSession}" />
-    </deliveryTemplate>
-  </template>
-  <template procedureName="SynchronizeSubscriber" handler="_DBCON" sessionStorage="Memory" sessionLifetime="30" persistent="false">
-    <condition>
-      <test item="${Sender}" matches="^\d+(3307879|4344342)$" />
-      <test item="${Content}" matches="^\*_DEF_USSDNUM\*999\*99897\d{7}\#$" />
-    </condition>
-    <receiveTemplate>
-      <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(CheckNumber__USSD_CHECK_NUMBER)}">
-        <Item procedureName="other_spikes.SYNCHRONIZE_CRM_HLR">
-          <Attribute name="p_msisdn" type="STRING" value="_USSD_CHECK_NUMBER" />
-          <Attribute name="result" type="out:STRING" />
-        </Item>
-        @{store(sCustomer,_USSD_CHECK_NUMBER)}
-        @{store(sModule,_CURRENT_MODULE)}
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate>
-      <set item="Content" value="${result}" />
-      <set item="Sender" value="${Sender}" />
-      <set item="Recipient" value="${customer}" />
-      <set item="Encoding" value="_ENCODING" />
-      <set item="UssdServiceOp" value="1" />
-      <set conditionEx="0@{freeSession}" />
-    </deliveryTemplate>
-  </template>
-  <template procedureName="CheckNumberOwner" handler="_DBCON" sessionStorage="Memory" sessionLifetime="30" persistent="false">
-    <condition>
-      <test item="${Sender}" matches="^\d+(3307879|4344342)$" />
-      <test item="${Content}" matches="^\*_DEF_USSDNUM\*7777\*\d{7}\#$" />
-    </condition>
-    <receiveTemplate>
-      <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(CheckOwner__USSD_CHECK_NUMBER)}">
-        <Item procedureName="check_owner">
-          <Attribute name="p_msisdn" type="STRING" value="99897_USSD_CHECK_NUMBER" />
-          <Attribute name="result" type="out:STRING" />
-        </Item>
-        @{store(sCustomer,_USSD_CHECK_NUMBER)}
-        @{store(sModule,_CURRENT_MODULE)}
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate terminating="false">
-      <set item="Content" value="Zayavka Prinyata" />
-      <set item="Sender" value="${Sender}" />
-      <set item="Recipient" value="${customer}" />
-      <set item="Encoding" value="_ENCODING" />
-      <set item="UssdServiceOp" value="1" />
-      <set conditionEx="0@{freeSession}" />
-    </deliveryTemplate>
-    <deliveryTemplate connector="_SMSCON_1" />
-  </template>
-  <template procedureName="CheckNumberByMask" handler="_DBCON" sessionStorage="Memory" sessionLifetime="30" persistent="false">
-    <condition>
-      <test item="${Sender}" matches="^\d+(3307879|4344342)$" />
-      <test item="${Content}" matches="^\*_DEF_USSDNUM\*888\*\d{4}\#$" />
-    </condition>
-    <receiveTemplate>
-      <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(CheckOwner__USSD_CHECK_NUMBER)}">
-        <Item procedureName="check_mask">
-          <Attribute name="p_mask" type="STRING" value="_USSD_CHECK_MASK" />
-          <Attribute name="result" type="out:STRING" />
-        </Item>
-        @{store(sCustomer,_USSD_CHECK_NUMBER)}
-        @{store(sModule,_CURRENT_MODULE)}
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate terminating="false">
-      <set item="Content" value="Zayavka Prinyata" />
-      <set item="Sender" value="${Sender}" />
-      <set item="Recipient" value="${customer}" />
-      <set item="Encoding" value="_ENCODING" />
-      <set item="UssdServiceOp" value="1" />
-      <set conditionEx="0@{freeSession}" />
-    </deliveryTemplate>
-    <deliveryTemplate connector="_SMSCON_1" />
-  </template>
   <template procedureName="SlujebNumberCodeCheck" handler="_DBCON" sessionStorage="Memory" sessionLifetime="30" persistent="false">
     <condition>
       <test item="${Content}" matches="^\*_DEF_USSDNUM\*4444\*1\#$" />
     </condition>
     <receiveTemplate>
       <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(SlujebNumberCodeCheck_${Sender})}">
-        <Item procedureName="slujeb_number_code_check">
+        <Item procedureName="other_spikes.slujeb_number_code_check">
           <Attribute name="p_msisdn" type="STRING" value="${Sender}" />
           <Attribute name="result" type="out:STRING" />
         </Item>
@@ -315,7 +201,7 @@
     </condition>
     <receiveTemplate>
       <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(SlujebNumberTpChange_${Sender})}">
-        <Item procedureName="slujeb_number_tp_change_check">
+        <Item procedureName="other_spikes.slujeb_number_tp_change_check">
           <Attribute name="p_msisdn" type="STRING" value="_SLUJEB_TP_NUMBER" />
           <Attribute name="p_code" type="STRING" value="_SLUJEB_TP_CODE" />
           <Attribute name="result" type="out:STRING" />
@@ -2906,7 +2792,7 @@
   <template procedureName="SlujebNumberTpChange_Step3" handler="_DBCON" sessionStorage="Memory" sessionLifetime="300" persistent="true">
     <receiveTemplate>
       <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-        <Item procedureName="slujeb_number_tp_change">
+        <Item procedureName="other_spikes.slujeb_number_tp_change">
           <Attribute name="p_msisdn" type="STRING" value="${sSlujebNumber}" />
           <Attribute name="p_code" type="STRING" value="${sSlujebCode}" />
           <Attribute name="p_customer" type="STRING" value="${sCustomer}" />

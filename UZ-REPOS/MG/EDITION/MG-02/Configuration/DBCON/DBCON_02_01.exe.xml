@@ -1,6 +1,6 @@
 <Application>
   <TargetDatabase>
-    <Database forisDataKey="UMS.MG" interfacePackage="" />
+    <Database forisDataKey="UMS.TAS_MG" interfacePackage="" />
   </TargetDatabase>
   <Settings>
     <Item name="ModuleType" value="DBCON" />
