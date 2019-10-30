@@ -63,7 +63,7 @@
       </resultlist>
       <parameterslist>
         <param name="DataBaseName" value="UMS.TAS_SPA" />
-        <param name="FunctionName" value="CORPORATE_APN_DELETE" />
+        <param name="FunctionName" value="DATA_BASE_PROCESSOR.CORPORATE_APN_DELETE" />
         <param name="FunctionType" value="procedure" />
         <param name="OutXml" value="db_unit_result" />
         <param name="DbParameterName:0" value="p_msisdn" />
