@@ -648,9 +648,9 @@ Created by Vladimir Khovanskiy
 	</Item>
 	<Item
 			info_ruk="Ошибка сервера. Пожалуйста, обратитесь в службу поддержки UMS."
-			info_rut="Oshibka Servera. Pozhaluysta, obratites^ v sluzhbu podderzhki UMS"
-			info_uz="Server xatosi. Iltimos UMS qo^llash xizmatiga murojaat qiling"
-			info_en="Server Error. Please contact support UMS."
+			info_rut="Oshibka Servera. Pozhalujsta, poprobujte pozzhe"
+			info_uz="Server xatosi. Iltimos keyinroq harakat qilib ko^ring"
+			info_en="Server Error. Please try later"
                         info_pay="320001"
                         info_rbt="320001"
                         info_scg="320001"

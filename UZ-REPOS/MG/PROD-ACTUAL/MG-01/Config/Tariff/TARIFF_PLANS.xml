@@ -1405,7 +1405,7 @@ tplist               - Компонент выполняет проверки п
   		<soapcon value="203"/>
 		<ivrcon value="203"/>
 	</Tariff>
-        <Tariff ivrcode="205" datefrom="20131001" dateto="" group="1" availbalance="16.63"
+        <Tariff ivrcode="205" datefrom="20131001" dateto="" group="1" availbalance="16.62"
  
 			tariffname_ruk="MOBI 70"
 			tariffname_rut="MOBI 70"
@@ -1418,20 +1418,23 @@ tplist               - Компонент выполняет проверки п
   		<soapcon value="205"/>
 		<ivrcon value="205"/>
 	</Tariff>
-        <Tariff ivrcode="206" datefrom="20131001" dateto="" group="1" availbalance="26.13"
+        <Tariff ivrcode="206" datefrom="20131001" dateto="" group="1" availbalance="26.12"
  
-			tariffname_ruk="MOBI 100"
-			tariffname_rut="MOBI 100"
-			tariffname_uz="MOBI 100"
-			tariffname_en="MOBI 100"
-			tariffname_scg="MOBI 100"
+			tariffname_ruk="MOBI 110"
+			tariffname_rut="MOBI 110"
+			tariffname_uz="MOBI 110"
+			tariffname_en="MOBI 110"
+			tariffname_scg="MOBI 110"
 
 			>
 
   		<soapcon value="206"/>
 		<ivrcon value="206"/>
+		<dealerussd value="*133*confirm"/>
+		<dealerussd value="*133*1"/>
+
 	</Tariff>
-        <Tariff ivrcode="207" datefrom="20131001" dateto="" group="1" availbalance="35.63"
+        <Tariff ivrcode="207" datefrom="20131001" dateto="" group="1" availbalance="35.62"
  
 			tariffname_ruk="MOBI 150"
 			tariffname_rut="MOBI 150"
@@ -1443,20 +1446,71 @@ tplist               - Компонент выполняет проверки п
 
   		<soapcon value="207"/>
 		<ivrcon value="207"/>
+		<dealerussd value="*134*confirm"/>
+		<dealerussd value="*134*1"/>
+
+	</Tariff>
+        <Tariff ivrcode="200" datefrom="20131001" dateto="" group="1" availbalance="7.12"
+ 
+			tariffname_ruk="MOBI 30"
+			tariffname_rut="MOBI 30"
+			tariffname_uz="MOBI 30"
+			tariffname_en="MOBI 30"
+			tariffname_scg="MOBI 30"
+
+			>
+
+  		<soapcon value="200"/>
+		<ivrcon value="200"/>
+		<dealerussd value="*128*confirm"/>
+		<dealerussd value="*128*1"/>
+
+	</Tariff>
+        <Tariff ivrcode="204" datefrom="20131001" dateto="" group="1" availbalance="11.87"
+ 
+			tariffname_ruk="MOBI 50"
+			tariffname_rut="MOBI 50"
+			tariffname_uz="MOBI 50"
+			tariffname_en="MOBI 50"
+			tariffname_scg="MOBI 50"
+
+			>
+
+  		<soapcon value="204"/>
+		<ivrcon value="204"/>
+		<dealerussd value="*129*confirm"/>
+		<dealerussd value="*129*1"/>
+
+	</Tariff>
+        <Tariff ivrcode="210" datefrom="20131001" dateto="" group="1" availbalance="11.87"
+ 
+			tariffname_ruk="Corporate 50"
+			tariffname_rut="Corporate 50"
+			tariffname_uz="Corporate 50"
+			tariffname_en="Corporate 50"
+			tariffname_scg="Corporate 50"
+
+			>
+  		<soapcon value="210"/>
+		<ivrcon value="210"/>
+
+	</Tariff>
+        <Tariff ivrcode="209" datefrom="20131001" dateto="" group="1" availbalance="7.12"
+ 
+			tariffname_ruk="Corporate 30"
+			tariffname_rut="Corporate 30"
+			tariffname_uz="Corporate 30"
+			tariffname_en="Corporate 30"
+			tariffname_scg="Corporate 30"
+
+			>
+  		<soapcon value="209"/>
+		<ivrcon value="209"/>
 	</Tariff>
 
 
 
-
-
-
-
-
-
-
-
-
-
+            
 
 
 
