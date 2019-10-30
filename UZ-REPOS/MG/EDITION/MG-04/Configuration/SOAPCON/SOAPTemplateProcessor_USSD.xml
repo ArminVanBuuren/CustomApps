@@ -179,7 +179,6 @@
       <set conditionEx="0@{store(sParams,_SERVICE_NAME;#{concat(substring('_SERVICE_DATEFROM',7,2),'.',substring('_SERVICE_DATEFROM',5,2),'.',substring('_SERVICE_DATEFROM',1,4))})}" />
       <set item="iparam:content" value="" />
     </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{'${sService}'='FRPOLDOV' and '${sAction}'='2'}" call="PartialBlockLimitCheck" />
     <deliveryTemplate conditionEx="#{'${sService}'='FRMBPACKMSK' and '${sAction}'='2'}" call="BonusPack1000Check" />
     <deliveryTemplate conditionEx="#{'${sService}'='FRMBPACKMSK2000' and '${sAction}'='2'}" call="BonusPack1000Check" />
     <deliveryTemplate conditionEx="#{'${sService}'='FRMBPACKMSK2' and '${sAction}'='2'}" call="BonusPack1000Check" />
@@ -265,7 +264,6 @@
       <set conditionEx="0@{store(sParams,_SERVICE_NAME;#{concat(substring('_SERVICE_DATEFROM',7,2),'.',substring('_SERVICE_DATEFROM',5,2),'.',substring('_SERVICE_DATEFROM',1,4))})}" />
       <set item="iparam:content" value="" />
     </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{'${sService}'='FRUNLIMLTE' and '${sAction}'='2'}" call="PromoLTECheck" />
     <deliveryTemplate call="ServiceProvisioning_Inter_Step3" />
     <input>
       <param name="customer" />
@@ -273,87 +271,6 @@
       <param name="action" />
       <param name="lang" />
       <param name="code" />
-    </input>
-    <output>
-      <param name="content" />
-      <param name="storelog" />
-      <param name="customer" />
-      <param name="service" />
-      <param name="lang" />
-    </output>
-  </template>
-  <template procedureName="ServiceProvisioningContent" handler="_DBCON" sessionStorage="Memory" sessionLifetime="300">
-    <receiveTemplate>
-      <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(USSDSrvProv_${customer})}">
-        <Item procedureName="other_spikes.get_content_language">
-          <Attribute name="p_msisdn" type="STRING" value="${customer}" />
-          <Attribute name="p_action" type="STRING" value="${action}" />
-          <Attribute name="p_content_action" type="STRING" value="1" />
-          <Attribute name="p_lang" type="STRING" value="${params}" />
-          <Attribute name="p_content_name" type="STRING" value="${provider_id}" />
-          <Attribute name="dbresult" type="out:STRING" />
-        </Item>
-        @{store(sCustomer,${customer})}
-        @{store(sAction,${action})}
-        @{store(sService,${service})}
-        @{store(sModule,_CURRENT_MODULE)}
-        @{store(sLang,_GET_MOD_LANGUAGE)}
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate conditionEx="false@{store(sInProgress,#{if(number(_GET_SECONDS)-number(${sStartSecond})&lt;number(_SERVICE_TIMETOPROGRESS) and number(_GET_SECONDS)-number(${sStartSecond})&gt;0,'true','false')})}" />
-    <deliveryTemplate conditionEx="false@{store(sServiceCode,#{if(matches('${sInProgress}','_IF_TRUE'),'${sServiceCode}','_SERVICE_CODE')})}" />
-    <deliveryTemplate conditionEx="false@{store(sGroupName,#{if(matches('${sInProgress}','_IF_TRUE'),'${sGroupName}','_SERVICE_GROUPNAME')})}" />
-    <deliveryTemplate conditionEx="false@{store(sParams,_SERVICE_NAME)}" />
-    <!--deliveryTemplate call="ServiceStringFormat">
-			<set conditionEx="0@{store(sDbresult,329992)}" />
-			<set item="iparam:content" value=""/>
-		</deliveryTemplate-->
-    <deliveryTemplate conditionEx="#{'${dbresult}'!='0'}" call="ServiceStringFormat">
-      <set conditionEx="0@{store(sDbresult,${dbresult})}" />
-      <set item="iparam:content" value="" />
-    </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{'${sService}'='AVTOMBOFF' and '${sAction}'='3'}" call="AutoInetCheck" />
-    <deliveryTemplate conditionEx="#{'${sServiceCode}'='' or '${sService}'='' or '${sCustomer}'=''}" call="ServiceStringFormat">
-      <set conditionEx="0@{store(sDbresult,329990)}" />
-      <set item="iparam:content" value="" />
-    </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{'${sAction}'=''}" call="ServiceInterrogation">
-      <set item="iparam:customer" value="${sCustomer}" />
-      <set item="iparam:service" value="${sService}" />
-      <set item="iparam:lang" value="_GET_LANG" />
-      <set conditionEx="0@{freeSession}" />
-    </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{'${sAction}'='_CONFIRM_VALUE'}" call="ServiceProvisioning_Cnfrm_Step2" />
-    <deliveryTemplate conditionEx="#{matches('${sInProgress}','_IF_TRUE') and '${sServiceCode}'='_SERVICE_CODE' and '${sActParce}'='_SERVICE_COMM_ACTPARCE' and '${sActParce}'!=''}" call="ServiceStringFormat">
-      <set item="iparam:content" value="@{store(sDbresult,alrprogress_${sActParce})}" />
-    </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{matches('${sInProgress}','_IF_TRUE')}" call="ServiceStringFormat">
-      <set item="iparam:content" value="@{store(sDbresult,inprogress_${sActParce})}" />
-    </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{((_SERVICE_CUSTLST_CNT&gt;0 and not(matches('_SERVICE_CUSTLST_ISAVAIL','_IF_TRUE'))) or (_SERVICE_CUSTLST_CNT=0 and matches('_SERVICE_CUSTLST_ISAVAIL','_IF_TRUE'))) and '_SERVICE_CUSTLST_NOTAVAILINFO'!=''}" call="ServiceStringFormat">
-      <set item="iparam:content" value="_SERVICE_CUSTLST_NOTAVAILINFO" />
-    </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{'_GET_TODAY' &gt; '_SERVICE_DATETO'}" call="ServiceStringFormat">
-      <set conditionEx="0@{store(sDbresult,service_notavailable)}" />
-      <set item="iparam:content" value="" />
-    </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{'_GET_TODAY' &lt; '_SERVICE_DATEFROM'}" call="ServiceStringFormat">
-      <set conditionEx="0@{store(sDbresult,service_unavailable)}" />
-      <set conditionEx="0@{store(sParams,_SERVICE_NAME;#{concat(substring('_SERVICE_DATEFROM',7,2),'.',substring('_SERVICE_DATEFROM',5,2),'.',substring('_SERVICE_DATEFROM',1,4))})}" />
-      <set item="iparam:content" value="" />
-    </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{'${sService}'='FRPOLDOV' and '${sAction}'='2'}" call="PartialBlockLimitCheck" />
-    <!--deliveryTemplate conditionEx="#{'${sService}'='FRMBPACKMSK' and '${sAction}'='2'}" call="BonusPack1000Check"/-->
-    <!--deliveryTemplate conditionEx="#{'${sService}'='FRMBPACKMSK2' and '${sAction}'='2'}" call="BonusPack1000Check"/-->
-    <!--deliveryTemplate conditionEx="#{'${sService}'='FRMBPACKMSK3' and '${sAction}'='2'}" call="BonusPack1000Check"/-->
-    <deliveryTemplate call="ServiceProvisioning_Inter_Step3" />
-    <input>
-      <param name="customer" />
-      <param name="service" />
-      <param name="action" />
-      <param name="lang" />
-      <param name="provider_id" />
-      <param name="params" />
     </input>
     <output>
       <param name="content" />
@@ -570,8 +487,6 @@
         </Item>
       </Message>
     </receiveTemplate>
-    <!--deliveryTemplate conditionEx="#{'${sService}'='FRUNLIMLTE' and '${sAction}'='2' and '${dbresult}'='0'}" call="PromoLTEActivate" terminating="false"/-->
-    <!--deliveryTemplate conditionEx="#{'${dbresult}'='0' and '_SERVICE_DELAYED'='true'}" call="SetDelayedAction" terminating="false"/-->
     <deliveryTemplate conditionEx="#{'${dbresult}'='0' and '${sIspromocard}'='true' }" call="ServiceProvisioningBonusCard_Activate" terminating="false" />
     <deliveryTemplate call="ServiceStringFormat">
       <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
@@ -746,76 +661,10 @@
       <param name="storelog" />
     </output>
   </template>
-  <template procedureName="PartialBlockLimitCheck" handler="_DBCON" sessionStorage="Memory" sessionLifetime="300" persistent="true">
-    <receiveTemplate>
-      <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-        <Item procedureName="partial_block_limit_check">
-          <Attribute name="p_msisdn" type="STRING" value="${sCustomer}" />
-          <Attribute name="result" type="out:STRING" />
-        </Item>
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate conditionEx="#{'${result}'='320208'}" call="ServiceStringFormat">
-      <set conditionEx="0@{store(sDbresult,${result})}" />
-      <set item="iparam:content" value="" />
-    </deliveryTemplate>
-    <deliveryTemplate call="ServiceProvisioning_Inter_Step3" />
-    <input>
-      <param name="storelog" />
-    </input>
-    <output>
-      <param name="content" />
-      <param name="storelog" />
-    </output>
-  </template>
-  <template procedureName="PromoLTECheck" handler="_DBCON" sessionStorage="Memory" sessionLifetime="300" persistent="true">
-    <receiveTemplate>
-      <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-        <Item procedureName="promo_lte_check">
-          <Attribute name="p_msisdn" type="STRING" value="${sCustomer}" />
-          <Attribute name="p_code" type="STRING" value="${sCode}" />
-          <Attribute name="result" type="out:STRING" />
-        </Item>
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate conditionEx="#{'${result}'='CODEUNAVAIL'}" call="ServiceStringFormat">
-      <set conditionEx="0@{store(sDbresult,${result})}" />
-      <set item="iparam:content" value="" />
-    </deliveryTemplate>
-    <deliveryTemplate call="ServiceProvisioning_Inter_Step3" />
-    <input>
-      <param name="storelog" />
-    </input>
-    <output>
-      <param name="content" />
-      <param name="storelog" />
-    </output>
-  </template>
-  <template procedureName="PromoLTEActivate" handler="_DBCON" sessionStorage="Memory" sessionLifetime="300" persistent="true">
-    <receiveTemplate>
-      <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-        <Item procedureName="promo_lte_activate">
-          <Attribute name="p_msisdn" type="STRING" value="${sCustomer}" />
-          <Attribute name="p_code" type="STRING" value="${sCode}" />
-          <Attribute name="result" type="out:STRING" />
-        </Item>
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate>
-      <set item="iparam:content" value="" />
-    </deliveryTemplate>
-    <input>
-      <param name="storelog" />
-    </input>
-    <output>
-      <param name="content" />
-      <param name="storelog" />
-    </output>
-  </template>
   <template procedureName="AutoInetCheck" handler="_DBCON" sessionStorage="Memory" sessionLifetime="300" persistent="true">
     <receiveTemplate>
       <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-        <Item procedureName="check_autoinet">
+        <Item procedureName="other_spikes.check_autoinet">
           <Attribute name="p_msisdn" type="STRING" value="${sCustomer}" />
           <Attribute name="result" type="out:STRING" />
         </Item>
@@ -879,28 +728,6 @@
       <set item="iparam:content" value="" />
     </deliveryTemplate>
     <deliveryTemplate call="ServiceProvisioning_Inter_Step3" />
-    <input>
-      <param name="storelog" />
-    </input>
-    <output>
-      <param name="content" />
-      <param name="storelog" />
-    </output>
-  </template>
-  <template procedureName="SetDelayedAction" handler="_DBCON" sessionStorage="Memory" sessionLifetime="300" persistent="true">
-    <receiveTemplate>
-      <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-        <Item procedureName="other_spikes.set_delayed_action">
-          <Attribute name="p_msisdn" type="STRING" value="${sCustomer}" />
-          <Attribute name="p_service" type="STRING" value="${sServiceCode}" />
-          <Attribute name="p_action" type="STRING" value="${sAction}" />
-          <Attribute name="result" type="out:STRING" />
-        </Item>
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate>
-      <set item="iparam:content" value="" />
-    </deliveryTemplate>
     <input>
       <param name="storelog" />
     </input>
@@ -3638,70 +3465,7 @@
       <param name="RESULT" value="-1" />
     </output>
   </template>
-  <template procedureName="PartialBlockLimit" handler="_DBCON" sessionStorage="Memory" sessionLifetime="60" persistent="true">
-    <receiveTemplate>
-      <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(PBLimit_${customer})}">
-        <Item procedureName="partial_block_limit_check">
-          <Attribute name="p_msisdn" type="STRING" value="${customer}" />
-          <Attribute name="result" type="out:STRING" />
-        </Item>
-        @{store(sCustomer,${customer})}
-        @{store(sLimit,${limit})}
-        @{store(sLang,${lang})}
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate conditionEx="#{'${sCustomer}'='' or '${sLimit}'=''}">
-      <set conditionEx="0@{store(sDbresult,_DEFAULT_ERR)}" />
-      <set item="oparam:result" value="Oshibka servera." />
-      <set item="oparam:dbresult" value="0" />
-      <set item="oparam:customer" value="${sCustomer}" />
-      <set conditionEx="0@{freeSession}" />
-    </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{'${sLimit}'!='-5'}" call="PartialBlockLimit_Step2" />
-    <deliveryTemplate conditionEx="#{'${result}'=''}">
-      <set conditionEx="0@{store(sDbresult,LimitNotAvail)}" />
-      <set item="oparam:result" value="_GET_DBRESULT" />
-      <set item="oparam:customer" value="${sCustomer}" />
-      <set conditionEx="0@{freeSession}" />
-    </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{'${result}'='${sCustomer}'}" call="PartialBlockLimit_Step2" />
-    <input>
-      <param name="customer" />
-      <param name="limit" />
-      <param name="lang" />
-    </input>
-    <output>
-      <param name="dbresult" value="0" />
-      <param name="customer" value="" />
-      <param name="result" value="" />
-    </output>
-  </template>
-  <template procedureName="PartialBlockLimit_Step2" handler="_DBCON" sessionStorage="Memory" sessionLifetime="60" persistent="true">
-    <receiveTemplate>
-      <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-        <Item procedureName="partial_block_limit_update">
-          <Attribute name="p_msisdn" type="STRING" value="${sCustomer}" />
-          <Attribute name="p_limit" type="STRING" value="${sLimit}" />
-          <Attribute name="result" type="out:STRING" />
-        </Item>
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate terminating="false">
-      <set item="oparam:result" value="Vasha zayavka prinyata. Jdite SMS s rezultatom." />
-      <set item="oparam:customer" value="${sCustomer}" />
-    </deliveryTemplate>
-    <deliveryTemplate connector="_SMSCON_1" />
-    <input>
-      <param name="customer" />
-      <param name="limit" />
-      <param name="lang" />
-    </input>
-    <output>
-      <param name="dbresult" value="0" />
-      <param name="customer" value="" />
-      <param name="result" value="" />
-    </output>
-  </template>
+
   <template procedureName="CheckService" handler="_DBCON" sessionStorage="Memory" sessionLifetime="60" persistent="true">
     <receiveTemplate>
       <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(USSDChkSrv_${customer})}">
@@ -3721,53 +3485,6 @@
     <input>
       <param name="customer" />
       <param name="lang" />
-    </input>
-    <output>
-      <param name="dbresult" value="0" />
-      <param name="customer" value="" />
-      <param name="result" value="" />
-    </output>
-  </template>
-  <template procedureName="GetCodePromoLTE" sessionStorage="Memory" sessionLifetime="20" persistent="true">
-    <receiveTemplate>
-      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(USSDChkSrv_${customer})}">
-        <Item customer="${customer}">
-          <Attribute name="checkivrservice" value="0" />
-          <Attribute name="checkblocks" value="0" />
-        </Item>
-        @{store(sCustomer,${customer})}
-        @{store(sService,_GETBALANCE)}
-        @{store(sModule,_CURRENT_MODULE)}
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate conditionEx="false@{store(sLang,_INLANGUAGE)}" />
-    <deliveryTemplate call="GetCodePromoLTE_Step2" />
-    <input>
-      <param name="customer" />
-      <param name="lang" />
-    </input>
-    <output>
-      <param name="dbresult" value="0" />
-      <param name="customer" value="" />
-      <param name="result" value="" />
-    </output>
-  </template>
-  <template procedureName="GetCodePromoLTE_Step2" handler="_DBCON" sessionStorage="Memory" sessionLifetime="20" persistent="true">
-    <receiveTemplate>
-      <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-        <Item procedureName="promo_lte_get">
-          <Attribute name="p_msisdn" type="STRING" value="${sCustomer}" />
-          <Attribute name="result" type="out:STRING" />
-        </Item>
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate call="ServiceStringFormat" terminating="false">
-      <set conditionEx="0@{store(sDbresult,redirect)}" />
-      <set item="iparam:content" value="" />
-    </deliveryTemplate>
-    <deliveryTemplate connector="_SMSCON_1" />
-    <input>
-      <param name="customer" />
     </input>
     <output>
       <param name="dbresult" value="0" />
@@ -3862,145 +3579,7 @@
       <param name="TEST2" />
     </output>
   </template>
-  <template procedureName="ServiceProvisioningBonusCard" sessionStorage="Memory" sessionLifetime="300">
-    <receiveTemplate>
-      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(USSDSrvProvPromo_${customer})}">
-        <Item customer="${customer}">
-          <Attribute name="checkivrservice" value="0" />
-          <Attribute name="checkblocks" value="0" />
-        </Item>
-        @{store(sCustomer,${customer})}
-        @{store(sAction,2)}
-        @{store(sService,FR300MBPR)}
-        @{store(sModule,_CURRENT_MODULE)}
-        @{store(sCardpin,${cardpin})}
-        @{store(sCardnumber,${cardnumber})}
-        @{store(sIspromocard,true)}
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate conditionEx="false@{store(sLang,_INLANGUAGE)}" />
-    <deliveryTemplate conditionEx="false@{store(sInProgress,#{if(number(_GET_SECONDS)-number(${sStartSecond})&lt;number(_SERVICE_TIMETOPROGRESS) and number(_GET_SECONDS)-number(${sStartSecond})&gt;0,'true','false')})}" />
-    <deliveryTemplate conditionEx="false@{store(sServiceCode,#{if(matches('${sInProgress}','_IF_TRUE'),'${sServiceCode}','_SERVICE_CODE')})}" />
-    <deliveryTemplate conditionEx="false@{store(sGroupName,#{if(matches('${sInProgress}','_IF_TRUE'),'${sGroupName}','_SERVICE_GROUPNAME')})}" />
-    <deliveryTemplate conditionEx="false@{store(sParams,_SERVICE_NAME)}" />
-    <!--deliveryTemplate call="ServiceStringFormat">
-			<set conditionEx="0@{store(sDbresult,329992)}" />
-			<set item="iparam:content" value=""/>
-		</deliveryTemplate-->
-    <deliveryTemplate conditionEx="#{'${dbresult}'!='0'}" call="ServiceStringFormat">
-      <set conditionEx="0@{store(sDbresult,${dbresult})}" />
-      <set item="iparam:content" value="" />
-    </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{'${sServiceCode}'='' or '${sService}'='' or '${sCustomer}'=''}" call="ServiceStringFormat">
-      <set conditionEx="0@{store(sDbresult,329990)}" />
-      <set item="iparam:content" value="" />
-    </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{'${sAction}'=''}" call="ServiceInterrogation">
-      <set item="iparam:customer" value="${sCustomer}" />
-      <set item="iparam:service" value="${sService}" />
-      <set item="iparam:lang" value="_GET_LANG" />
-      <set conditionEx="0@{freeSession}" />
-    </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{'${sAction}'='_CONFIRM_VALUE'}" call="ServiceProvisioning_Cnfrm_Step2" />
-    <deliveryTemplate conditionEx="#{matches('${sInProgress}','_IF_TRUE') and '${sServiceCode}'='_SERVICE_CODE' and '${sActParce}'='_SERVICE_COMM_ACTPARCE' and '${sActParce}'!=''}" call="ServiceStringFormat">
-      <set item="iparam:content" value="@{store(sDbresult,alrprogress_${sActParce})}" />
-    </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{matches('${sInProgress}','_IF_TRUE')}" call="ServiceStringFormat">
-      <set item="iparam:content" value="@{store(sDbresult,inprogress_${sActParce})}" />
-    </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{((_SERVICE_CUSTLST_CNT&gt;0 and not(matches('_SERVICE_CUSTLST_ISAVAIL','_IF_TRUE'))) or (_SERVICE_CUSTLST_CNT=0 and matches('_SERVICE_CUSTLST_ISAVAIL','_IF_TRUE'))) and '_SERVICE_CUSTLST_NOTAVAILINFO'!=''}" call="ServiceStringFormat">
-      <set item="iparam:content" value="_SERVICE_CUSTLST_NOTAVAILINFO" />
-    </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{'_GET_TODAY' &gt; '_SERVICE_DATETO'}" call="ServiceStringFormat">
-      <set conditionEx="0@{store(sDbresult,service_notavailable)}" />
-      <set item="iparam:content" value="" />
-    </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{'_GET_TODAY' &lt; '_SERVICE_DATEFROM'}" call="ServiceStringFormat">
-      <set conditionEx="0@{store(sDbresult,service_unavailable)}" />
-      <set conditionEx="0@{store(sParams,_SERVICE_NAME;#{concat(substring('_SERVICE_DATEFROM',7,2),'.',substring('_SERVICE_DATEFROM',5,2),'.',substring('_SERVICE_DATEFROM',1,4))})}" />
-      <set item="iparam:content" value="" />
-    </deliveryTemplate>
-    <deliveryTemplate call="ServiceProvisioningBonusCard_Check" />
-    <input>
-      <param name="customer" />
-      <param name="service" />
-      <param name="action" />
-      <param name="lang" />
-      <param name="cardpin" />
-      <param name="cardnumber" />
-    </input>
-    <output>
-      <param name="content" />
-      <param name="storelog" />
-      <param name="customer" />
-      <param name="service" />
-      <param name="lang" />
-    </output>
-  </template>
-  <template procedureName="ServiceProvisioningBonusCard_Check" handler="_DBCON" sessionStorage="Memory" sessionLifetime="300" persistent="true">
-    <receiveTemplate>
-      <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-        <Item procedureName="other_spikes.promo_card_check">
-          <Attribute name="p_msisdn" type="STRING" value="${sCustomer}" />
-          <Attribute name="p_card_number" type="STRING" value="${sCardnumber}" />
-          <Attribute name="p_card_pin" type="STRING" value="${sCardpin}" />
-          <Attribute name="result" type="out:STRING" />
-        </Item>
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate conditionEx="#{'${result}'!='0'}" call="ServiceStringFormat">
-      <set conditionEx="0@{store(sDbresult,720001)}" />
-      <set item="iparam:content" value="" />
-    </deliveryTemplate>
-    <deliveryTemplate call="ServiceProvisioning_Inter_Step3" />
-    <input>
-      <param name="storelog" />
-    </input>
-    <output>
-      <param name="content" />
-      <param name="storelog" />
-    </output>
-  </template>
-  <template procedureName="ServiceProvisioningBonusCard_Activate" handler="_DBCON" sessionStorage="Memory" sessionLifetime="300" persistent="true">
-    <receiveTemplate>
-      <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-        <Item procedureName="other_spikes.promo_card_activate">
-          <Attribute name="p_msisdn" type="STRING" value="${sCustomer}" />
-          <Attribute name="p_card_number" type="STRING" value="${sCardnumber}" />
-          <Attribute name="p_card_pin" type="STRING" value="${sCardpin}" />
-          <Attribute name="result" type="out:STRING" />
-        </Item>
-        @{store(sFlag,true)}
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate call="ServiceStringFormat" />
-    <input>
-      <param name="storelog" />
-    </input>
-    <output>
-      <param name="storelog" />
-    </output>
-  </template>
-  <template procedureName="ServiceProvisioningBonusCard_Uncheck" handler="_DBCON" sessionStorage="Memory" sessionLifetime="300" persistent="true">
-    <receiveTemplate>
-      <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-        <Item procedureName="other_spikes.promo_card_uncheck">
-          <Attribute name="p_msisdn" type="STRING" value="${sCustomer}" />
-          <Attribute name="p_card_number" type="STRING" value="${sCardnumber}" />
-          <Attribute name="p_card_pin" type="STRING" value="${sCardpin}" />
-          <Attribute name="result" type="out:STRING" />
-        </Item>
-        @{store(sFlag,true)}
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate call="ServiceStringFormat" />
-    <input>
-      <param name="storelog" />
-    </input>
-    <output>
-      <param name="storelog" />
-    </output>
-  </template>
+
   <template procedureName="GetBMSBalance" handler="WCFHND_01_01" sessionStorage="Memory" sessionLifetime="20" persistent="true">
     <receiveTemplate>
       <Message type="getcounters" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(GetBMSBalance_${customer})}">
@@ -4110,58 +3689,6 @@
     <deliveryTemplate call="ALLServiceStringFormat">
       <set conditionEx="0@{store(sDbresult,success)}" />
       <set conditionEx="0@{store(sParams,${no-escape:result})}" />
-    </deliveryTemplate>
-    <input>
-      <param name="customer" />
-      <param name="lang" />
-    </input>
-    <output>
-      <param name="dbresult" value="0" />
-      <param name="customer" value="" />
-      <param name="result" value="" />
-    </output>
-  </template>
-  <template procedureName="GetMillionDetail" handler="_DBCON" sessionStorage="Memory" sessionLifetime="60" persistent="true">
-    <receiveTemplate>
-      <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(GetMillionDetail_${customer})}">
-        <Item procedureName="other_spikes.bill_detail_chance_id">
-          <Attribute name="p_msisdn" type="STRING" value="${customer}" />
-          <Attribute name="p_lang" type="STRING" value="${lang}" />
-          <Attribute name="result" type="out:STRING" />
-        </Item>
-        @{store(sCustomer,${customer})}
-        @{store(sLang,_GET_MOD_LANGUAGE)}
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate>
-      <set item="oparam:result" value="${no-escape:result}" />
-      <set conditionEx="0@{freeSession}" />
-    </deliveryTemplate>
-    <input>
-      <param name="customer" />
-      <param name="lang" />
-    </input>
-    <output>
-      <param name="dbresult" value="0" />
-      <param name="customer" value="" />
-      <param name="result" value="" />
-    </output>
-  </template>
-  <template procedureName="GetMillionChance" handler="_DBCON" sessionStorage="Memory" sessionLifetime="60" persistent="true">
-    <receiveTemplate>
-      <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(GetMillionChance_${customer})}">
-        <Item procedureName="other_spikes.bill_detail_chance">
-          <Attribute name="p_msisdn" type="STRING" value="${customer}" />
-          <Attribute name="p_lang" type="STRING" value="${lang}" />
-          <Attribute name="result" type="out:STRING" />
-        </Item>
-        @{store(sCustomer,${customer})}
-        @{store(sLang,_GET_MOD_LANGUAGE)}
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate>
-      <set item="oparam:result" value="${no-escape:result}" />
-      <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
     <input>
       <param name="customer" />
