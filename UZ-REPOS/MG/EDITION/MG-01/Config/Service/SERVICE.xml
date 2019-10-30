@@ -120,9 +120,9 @@ tplist               - Компонент выполняет проверки п
     info_330723_uz="Neverniy nomer abonenta."
     info_330723_en="Wrong user^s number."
     
-    info_330724_ru="Oshibka servera, obratites v slujbu podderjki UMS."
-    info_330724_uz="Oshibka servera, obratites v slujbu podderjki UMS."
-    info_330724_en="Server error, refer support service of UMS."
+    info_330724_ru="Oshibka Servera. Pozhalujsta, poprobujte pozzhe"
+		info_330724_uz="Server xatosi. Iltimos keyinroq harakat qilib ko^ring"
+		info_330724_en="Server Error. Please try later"
 
     info_SUCCESS_ru="Zayavka na obmen zaregistrirovana."
     info_SUCCESS_uz="Almashtirish uchun ariza qabul qilindi."
@@ -2075,24 +2075,24 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS50DAY" datefrom="20160406" dateto="" group="2"
 
-    service_name_ru="1-Day 50 MB"
-    service_name_uz="1-Day 50 MB"
-    service_name_en="1-Day 50 MB"
-    >
+		   	service_name_ru="1-Day 50 MB"
+		   	service_name_uz="1-Day 50 MB"
+		   	service_name_en="1-Day 50 MB"
+		   	>
     <soapcon value="FRGPRS50DAY"/>
     <ivrcon value=""/>
-    <!--dealerussd value="*204*50"/>
-          <dealerussd value="*204*50*confirm"/>
-          <dealerussd value="*204*50*1"/-->
+    <dealerussd value="*204*50"/>
+    <dealerussd value="*204*50*confirm"/>
+    <dealerussd value="*204*50*1"/>
     <dealerussd value="*2*2*4*00*00*22*confirm"/>
     <dealerussd value="*2*2*4*00*00*22*1"/>
   </Service>
   <Service service_code="FRGPRS100DAY" datefrom="20160406" dateto="" group="2"
 
-           service_name_ru="1-Day 100 MB"
-           service_name_uz="1-Day 100 MB"
-           service_name_en="1-Day 100 MB"
-           >
+		   service_name_ru="1-Day 100 MB"
+		   service_name_uz="1-Day 100 MB"
+		   service_name_en="1-Day 100 MB"
+		   >
     <soapcon value="FRGPRS100DAY"/>
     <ivrcon value=""/>
     <dealerussd value="*204*100"/>
@@ -2101,21 +2101,34 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*2*2*4*00*00*23*confirm"/>
     <dealerussd value="*2*2*4*00*00*23*1"/>
   </Service>
-  <Service service_code="FRGPRS1000DAY" datefrom="20160406" dateto="" group="2"
+  <Service service_code="FRGPRSB200DAY" datefrom="20160406" dateto="" group="2"
 
-           service_name_ru="1-Day 1000 MB"
-           service_name_uz="1-Day 1000 MB"
-           service_name_en="1-Day 1000 MB"
-           >
-    <soapcon value="FRGPRS1000DAY"/>
-    <ivrcon value=""/>
+		   service_name_ru="1-Day 200 MB"
+		   service_name_uz="1-Day 200 MB"
+		   service_name_en="1-Day 200 MB"
+		   >
+    <soapcon value="FRGPRSB200DAY"/>
+    <dealerussd value="*204*1*200"/>
+    <dealerussd value="*204*1*200*confirm"/>
+    <dealerussd value="*204*1*200*1"/>
+  </Service>
+  <Service service_code="FRGPRSB300DAY" datefrom="20160406" dateto="" group="2"
+
+		   service_name_ru="1-Day 300 MB"
+		   service_name_uz="1-Day 300 MB"
+		   service_name_en="1-Day 300 MB"
+		   >
+    <soapcon value="FRGPRSB300DAY"/>
+    <dealerussd value="*204*1*300"/>
+    <dealerussd value="*204*1*300*confirm"/>
+    <dealerussd value="*204*1*300*1"/>
   </Service>
   <Service service_code="FRGPRSB500DAY" datefrom="20160406" dateto="" group="2"
 
-           service_name_ru="1-Day 500 MB"
-           service_name_uz="1-Day 500 MB"
-           service_name_en="1-Day 500 MB"
-           >
+		   service_name_ru="1-Day 500 MB"
+		   service_name_uz="1-Day 500 MB"
+		   service_name_en="1-Day 500 MB"
+		   >
     <soapcon value="FRGPRSB500DAY"/>
     <dealerussd value="*204*500"/>
     <dealerussd value="*204*500*confirm"/>
@@ -2123,10 +2136,10 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRSB1000DAY" datefrom="20160406" dateto="" group="2"
 
-           service_name_ru="1-Day 1000 MB"
-           service_name_uz="1-Day 1000 MB"
-           service_name_en="1-Day 1000 MB"
-           >
+		   service_name_ru="1-Day 1000 MB"
+		   service_name_uz="1-Day 1000 MB"
+		   service_name_en="1-Day 1000 MB"
+		   >
     <soapcon value="FRGPRSB1000DAY"/>
     <dealerussd value="*204*1000"/>
     <dealerussd value="*204*1000*confirm"/>
@@ -2134,10 +2147,10 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRSB2000DAY" datefrom="20160406" dateto="" group="2"
 
-           service_name_ru="1-Day 2000 MB"
-           service_name_uz="1-Day 2000 MB"
-           service_name_en="1-Day 2000 MB"
-           >
+		   service_name_ru="1-Day 2000 MB"
+		   service_name_uz="1-Day 2000 MB"
+		   service_name_en="1-Day 2000 MB"
+		   >
     <soapcon value="FRGPRSB2000DAY"/>
     <dealerussd value="*204*2000"/>
     <dealerussd value="*204*2000*confirm"/>
@@ -2145,10 +2158,10 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRSB3000DAY" datefrom="20160406" dateto="" group="2"
 
-           service_name_ru="1-Day 3000 MB"
-           service_name_uz="1-Day 3000 MB"
-           service_name_en="1-Day 3000 MB"
-           >
+		   service_name_ru="1-Day 3000 MB"
+		   service_name_uz="1-Day 3000 MB"
+		   service_name_en="1-Day 3000 MB"
+		   >
     <soapcon value="FRGPRSB3000DAY"/>
     <dealerussd value="*204*3000"/>
     <dealerussd value="*204*3000*confirm"/>
@@ -2156,10 +2169,10 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRSB5000DAY" datefrom="20160406" dateto="" group="2"
 
-           service_name_ru="1-Day 5000 MB"
-           service_name_uz="1-Day 5000 MB"
-           service_name_en="1-Day 5000 MB"
-           >
+		   service_name_ru="1-Day 5000 MB"
+		   service_name_uz="1-Day 5000 MB"
+		   service_name_en="1-Day 5000 MB"
+		   >
     <soapcon value="FRGPRSB5000DAY"/>
     <dealerussd value="*204*5000"/>
     <dealerussd value="*204*5000*confirm"/>
@@ -2167,10 +2180,10 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRSB10000DAY" datefrom="20160406" dateto="" group="2"
 
-           service_name_ru="1-Day 10000 MB"
-           service_name_uz="1-Day 10000 MB"
-           service_name_en="1-Day 10000 MB"
-           >
+		   service_name_ru="1-Day 10000 MB"
+		   service_name_uz="1-Day 10000 MB"
+		   service_name_en="1-Day 10000 MB"
+		   >
     <soapcon value="FRGPRSB10000DAY"/>
     <dealerussd value="*204*10000"/>
     <dealerussd value="*204*10000*confirm"/>
@@ -3542,19 +3555,83 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service service_code="FRGPRS50DAY" datefrom="20160406" dateto="" group="5"
 
-    service_name_ru="1-Day 50 MB"
-    service_name_uz="1-Day 50 MB"
-    service_name_en="1-Day 50 MB"
-    >
+		   	service_name_ru="1-Day 50 MB"
+		   	service_name_uz="1-Day 50 MB"
+		   	service_name_en="1-Day 50 MB"
+		   	>
     <paynet value="FRGPRS50DAY"/>
   </Service>
   <Service service_code="FRGPRS100DAY" datefrom="20160406" dateto="" group="5"
 
-    service_name_ru="1-Day 100 MB"
-    service_name_uz="1-Day 100 MB"
-    service_name_en="1-Day 100 MB"
-    >
+		   	service_name_ru="1-Day 100 MB"
+		   	service_name_uz="1-Day 100 MB"
+		   	service_name_en="1-Day 100 MB"
+		   	>
     <paynet value="FRGPRS100DAY"/>
+  </Service>
+  <Service service_code="FRGPRSB200DAY" datefrom="20160406" dateto="" group="5"
+
+		   service_name_ru="1-Day 200 MB"
+		   service_name_uz="1-Day 200 MB"
+		   service_name_en="1-Day 200 MB"
+		   >
+    <paynet value="FRGPRSB200DAY"/>
+  </Service>
+  <Service service_code="FRGPRSB300DAY" datefrom="20160406" dateto="" group="5"
+
+		   service_name_ru="1-Day 300 MB"
+		   service_name_uz="1-Day 300 MB"
+		   service_name_en="1-Day 300 MB"
+		   >
+    <paynet value="FRGPRSB300DAY"/>
+  </Service>
+  <Service service_code="FRGPRSB500DAY" datefrom="20160406" dateto="" group="5"
+
+		   service_name_ru="1-Day 500 MB"
+		   service_name_uz="1-Day 500 MB"
+		   service_name_en="1-Day 500 MB"
+		   >
+    <paynet value="FRGPRSB500DAY"/>
+  </Service>
+  <Service service_code="FRGPRSB1000DAY" datefrom="20160406" dateto="" group="5"
+
+		   service_name_ru="1-Day 1000 MB"
+		   service_name_uz="1-Day 1000 MB"
+		   service_name_en="1-Day 1000 MB"
+		   >
+    <paynet value="FRGPRSB1000DAY"/>
+  </Service>
+  <Service service_code="FRGPRSB2000DAY" datefrom="20160406" dateto="" group="5"
+
+		   service_name_ru="1-Day 2000 MB"
+		   service_name_uz="1-Day 2000 MB"
+		   service_name_en="1-Day 2000 MB"
+		   >
+    <paynet value="FRGPRSB2000DAY"/>
+  </Service>
+  <Service service_code="FRGPRSB3000DAY" datefrom="20160406" dateto="" group="5"
+
+		   service_name_ru="1-Day 3000 MB"
+		   service_name_uz="1-Day 3000 MB"
+		   service_name_en="1-Day 3000 MB"
+		   >
+    <paynet value="FRGPRSB3000DAY"/>
+  </Service>
+  <Service service_code="FRGPRSB5000DAY" datefrom="20160406" dateto="" group="5"
+
+		   service_name_ru="1-Day 5000 MB"
+		   service_name_uz="1-Day 5000 MB"
+		   service_name_en="1-Day 5000 MB"
+		   >
+    <paynet value="FRGPRSB5000DAY"/>
+  </Service>
+  <Service service_code="FRGPRSB10000DAY" datefrom="20160406" dateto="" group="5"
+
+		   service_name_ru="1-Day 10000 MB"
+		   service_name_uz="1-Day 10000 MB"
+		   service_name_en="1-Day 10000 MB"
+		   >
+    <paynet value="FRGPRSB10000DAY"/>
   </Service>
   <Service service_code="MB500M" datefrom="20131001" dateto="" group="5"
 

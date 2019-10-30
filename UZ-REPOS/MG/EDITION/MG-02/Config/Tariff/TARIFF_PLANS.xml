@@ -1137,47 +1137,69 @@ tplist               - Компонент выполняет проверки п
     <soapcon value="207"/>
     <ivrcon value="207"/>
   </Tariff>
+  <Tariff ivrcode="200" datefrom="20131001" dateto="" group="1" availbalance="7.12"
+ 
+			tariffname_ruk="MOBI 30"
+			tariffname_rut="MOBI 30"
+			tariffname_uz="MOBI 30"
+			tariffname_en="MOBI 30"
+			tariffname_scg="MOBI 30"
 
+			>
 
+    <soapcon value="200"/>
+    <ivrcon value="200"/>
+    <dealerussd value="*128*confirm"/>
+    <dealerussd value="*128*1"/>
 
-
-
-
-
-
-
-  <Tariff ivrcode="105" datefrom="20131001" dateto="" group="2"
-    tariffname_pay="Start"
-    >
-    <paynet value="105"/>
   </Tariff>
-  <Tariff ivrcode="114" datefrom="20131001" dateto="" group="2" availbalance="5"
-    tariffname_pay="Optima"
-    >
-    <paynet value="114"/>
+  <Tariff ivrcode="204" datefrom="20131001" dateto="" group="1" availbalance="11.87"
+ 
+tariffname_ruk="MOBI 50"
+tariffname_rut="MOBI 50"
+tariffname_uz="MOBI 50"
+tariffname_en="MOBI 50"
+tariffname_scg="MOBI 50"
+
+			>
+
+    <soapcon value="204"/>
+    <ivrcon value="204"/>
+    <dealerussd value="*129*confirm"/>
+    <dealerussd value="*129*1"/>
+
   </Tariff>
-  <Tariff ivrcode="125" datefrom="20131001" dateto="" group="2" availbalance="15"
-    tariffname_pay="Maxi"
-    >
-    <paynet value="125"/>
+  <Tariff ivrcode="210" datefrom="20131001" dateto="" group="1" availbalance="11.87"
+ 
+tariffname_ruk="Corporate 50"
+tariffname_rut="Corporate 50"
+tariffname_uz="Corporate 50"
+tariffname_en="Corporate 50"
+tariffname_scg="Corporate 50"
+
+			>
+    <soapcon value="210"/>
+    <ivrcon value="210"/>
+
   </Tariff>
-  <Tariff ivrcode="122" datefrom="20131001" dateto="" group="2" availbalance="25"
-    tariffname_pay="Ultra"
-    >
-    <paynet value="122"/>
+  <Tariff ivrcode="209" datefrom="20131001" dateto="" group="1" availbalance="7.12"
+ 
+tariffname_ruk="Corporate 30"
+tariffname_rut="Corporate 30"
+tariffname_uz="Corporate 30"
+tariffname_en="Corporate 30"
+tariffname_scg="Corporate 30"
+
+			>
+    <soapcon value="209"/>
+    <ivrcon value="209"/>
   </Tariff>
-  <Tariff ivrcode="124" datefrom="20131001" dateto="" group="2"
-    tariffname_pay="Plus"
-    >
-    <paynet value="124"/>
-  </Tariff>
-  <Tariff ivrcode="127" datefrom="20131001" dateto="" group="2"
-    tariffname_pay="Mini"
-    >
-    <paynet value="127"/>
-  </Tariff>
+
+
+
+
+
   <GroupList>
     <Item id="1" name="DEFAULT"/>
-    <Item id="2" name="PAYNET"/>
   </GroupList>
 </TariffPlans>

@@ -228,9 +228,9 @@ tplist               - Компонент выполняет проверки п
     info_330723_uz="Neverniy nomer abonenta."
     info_330723_en="Wrong user^s number."
     
-    info_330724_ru="Oshibka servera, obratites v slujbu podderjki UMS."
-    info_330724_uz="Oshibka servera, obratites v slujbu podderjki UMS."
-    info_330724_en="Server error, call support-service of UMS."
+ 		info_330724_ru="Oshibka Servera. Pozhalujsta, poprobujte pozzhe"
+		info_330724_uz="Server xatosi. Iltimos keyinroq harakat qilib ko^ring"
+		info_330724_en="Server Error. Please try later"
 
     info_inprogress_ru="Operaciya ne mozhet byt vypolnena, poka ne zavershitsya predydushaya."
     info_inprogress_uz="Avvalgi operasiya tugamasidan keyingisi amalga oshirilmaydi"
@@ -460,11 +460,11 @@ tplist               - Компонент выполняет проверки п
     info_330723_uz="Neverniy nomer abonenta."
     info_330723_en="Incorrect abonent^s number."
     
-    info_330724_ru="Oshibka servera, obratites v slujbu podderjki UMS."
-    info_330724_uz="Oshibka servera, obratites v slujbu podderjki UMS."
-    info_330724_en="Server error, refer support service of UMS."
+    info_330724_ru="Oshibka Servera. Pozhalujsta, poprobujte pozzhe"
+		info_330724_uz="Server xatosi. Iltimos keyinroq harakat qilib ko^ring"
+		info_330724_en="Server Error. Please try later"
 
-          info_320704_ru="Ustanovlen zapret na podklyuchenie usligi &quot;Obeshanniy platezh&quot;"
+    info_320704_ru="Ustanovlen zapret na podklyuchenie usligi &quot;Obeshanniy platezh&quot;"
     info_320704_uz="&quot;Va^da qilingan to^lov&quot; xizmatiga cheklanish o^rnatildi"
     info_320704_en="&quot;Promised payment&quot; service connection is banned"
     >
