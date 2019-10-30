@@ -1281,6 +1281,27 @@ Created by Vladimir Khovanskiy
 		<soapcon value="welcomebonus"/>
 
 	</Group>
+        <Group name="whirl"
+
+			getcounters_full_ruk="[0] MB do [1]"
+			getcounters_full_rut="[0] MB do [1]"
+			getcounters_full_uz="[0] MB qoldig^i [1]gacha "
+			getcounters_full_en="[0] MB till [1]"
+
+			getcounters_nodate_ruk="Ostatok [0] [1]"
+			getcounters_nodate_rut="Ostatok [0] [1]"
+			getcounters_nodate_uz="Ostatok [0] [1]"
+			getcounters_nodate_en="Ostatok [0] [1]"
+
+			getcounters_nocounters_ruk="У Вас нет активных пакетов"
+			getcounters_nocounters_rut="U Vas net aktivny^h paketov"
+			getcounters_nocounters_uz="Sizda joriy paketlar yoq"
+			getcounters_nocounters_en="You have no active packages"
+
+			>
+		<soapcon value="whirl"/>
+
+	</Group>
 	<Counter counter_code="MB333NO" group="1"
 
 			getcounters_name_ruk="333"
@@ -3276,6 +3297,63 @@ Created by Vladimir Khovanskiy
 
 			>
 	</Counter>
+	<Counter counter_code="MB15MOB" group="1"
+
+			getcounters_name_ruk="4000"
+			getcounters_name_rut="4000"
+			getcounters_name_uz="4000"
+			getcounters_name_en="4000"
+
+			getbalance_name_ruk="4000"
+			getbalance_name_rut="4000"
+			getbalance_name_uz="4000"
+			getbalance_name_en="4000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB6MOB5" group="1"
+
+			getcounters_name_ruk="8000"
+			getcounters_name_rut="8000"
+			getcounters_name_uz="8000"
+			getcounters_name_en="8000"
+
+			getbalance_name_ruk="8000"
+			getbalance_name_rut="8000"
+			getbalance_name_uz="8000"
+			getbalance_name_en="8000"
+
+			>
+	</Counter>
+	<Counter counter_code="MBCOR30" group="1"
+
+			getcounters_name_ruk="4000"
+			getcounters_name_rut="4000"
+			getcounters_name_uz="4000"
+			getcounters_name_en="4000"
+
+			getbalance_name_ruk="4000"
+			getbalance_name_rut="4000"
+			getbalance_name_uz="4000"
+			getbalance_name_en="4000"
+
+			>
+	</Counter>
+	<Counter counter_code="MBCOR50" group="1"
+
+			getcounters_name_ruk="8000"
+			getcounters_name_rut="8000"
+			getcounters_name_uz="8000"
+			getcounters_name_en="8000"
+
+			getbalance_name_ruk="8000"
+			getbalance_name_rut="8000"
+			getbalance_name_uz="8000"
+			getbalance_name_en="8000"
+
+			>
+	</Counter>
+
         <!--Counter counter_code="MB1000OP" group="1"
 
 			getcounters_name_ruk="Nedelniy Интернет-пакет"
@@ -5245,6 +5323,62 @@ Created by Vladimir Khovanskiy
 
 			>
 	</Counter>
+	<Counter counter_code="MIN15MOB" group="2"
+
+			getcounters_name_ruk="1000"
+			getcounters_name_rut="1000"
+			getcounters_name_uz="1000"
+			getcounters_name_en="1000"
+			                      
+			getbalance_name_ruk="1000"
+			getbalance_name_rut="1000"
+			getbalance_name_uz="1000"
+			getbalance_name_en="1000"
+
+			>
+	</Counter>
+	<Counter counter_code="MIN2MOB5" group="2"
+
+			getcounters_name_ruk="1500"
+			getcounters_name_rut="1500"
+			getcounters_name_uz="1500"
+			getcounters_name_en="1500"
+			                      
+			getbalance_name_ruk="1500"
+			getbalance_name_rut="1500"
+			getbalance_name_uz="1500"
+			getbalance_name_en="1500"
+
+			>
+	</Counter>
+	<Counter counter_code="MINCOR30" group="2"
+
+			getcounters_name_ruk="1000"
+			getcounters_name_rut="1000"
+			getcounters_name_uz="1000"
+			getcounters_name_en="1000"
+			                      
+			getbalance_name_ruk="1000"
+			getbalance_name_rut="1000"
+			getbalance_name_uz="1000"
+			getbalance_name_en="1000"
+
+			>
+	</Counter>
+	<Counter counter_code="MINCOR50" group="2"
+
+			getcounters_name_ruk="1500"
+			getcounters_name_rut="1500"
+			getcounters_name_uz="1500"
+			getcounters_name_en="1500"
+			                      
+			getbalance_name_ruk="1500"
+			getbalance_name_rut="1500"
+			getbalance_name_uz="1500"
+			getbalance_name_en="1500"
+
+			>
+	</Counter>
         <Counter counter_code="MINPACKM" group="2"
 
 			getcounters_name_ruk="Multi Пакет минут"
@@ -6618,6 +6752,62 @@ Created by Vladimir Khovanskiy
 			getbalance_name_rut="10000"
 			getbalance_name_uz="10000"
 			getbalance_name_en="10000"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS15MOB" group="3"
+
+			getcounters_name_ruk="1000"
+			getcounters_name_rut="1000"
+			getcounters_name_uz="1000"
+			getcounters_name_en="1000"
+
+			getbalance_name_ruk="1000"
+			getbalance_name_rut="1000"
+			getbalance_name_uz="1000"
+			getbalance_name_en="1000"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS2MOB5" group="3"
+
+			getcounters_name_ruk="1500"
+			getcounters_name_rut="1500"
+			getcounters_name_uz="1500"
+			getcounters_name_en="1500"
+
+			getbalance_name_ruk="1500"
+			getbalance_name_rut="1500"
+			getbalance_name_uz="1500"
+			getbalance_name_en="1500"
+
+			>
+	</Counter>
+	<Counter counter_code="SMSCOR30" group="3"
+
+			getcounters_name_ruk="1000"
+			getcounters_name_rut="1000"
+			getcounters_name_uz="1000"
+			getcounters_name_en="1000"
+
+			getbalance_name_ruk="1000"
+			getbalance_name_rut="1000"
+			getbalance_name_uz="1000"
+			getbalance_name_en="1000"
+
+			>
+	</Counter>
+	<Counter counter_code="SMSCOR50" group="3"
+
+			getcounters_name_ruk="1500"
+			getcounters_name_rut="1500"
+			getcounters_name_uz="1500"
+			getcounters_name_en="1500"
+
+			getbalance_name_ruk="1500"
+			getbalance_name_rut="1500"
+			getbalance_name_uz="1500"
+			getbalance_name_en="1500"
 
 			>
 	</Counter>
@@ -8673,6 +8863,45 @@ Created by Vladimir Khovanskiy
 
 			>
 	</Counter>
+	<Counter counter_code="MB15MOB" group="17"
+
+			getcounters_name_ruk="4000"
+			getcounters_name_rut="4000"
+			getcounters_name_uz="4000"
+			getcounters_name_en="4000"
+
+			>
+	</Counter>
+	<Counter counter_code="MB6MOB5" group="17"
+
+			getcounters_name_ruk="8000"
+			getcounters_name_rut="8000"
+			getcounters_name_uz="8000"
+			getcounters_name_en="8000"
+
+			>
+	</Counter>
+	<Counter counter_code="MBCOR30" group="17"
+
+			getcounters_name_ruk="4000"
+			getcounters_name_rut="4000"
+			getcounters_name_uz="4000"
+			getcounters_name_en="4000"
+
+			>
+	</Counter>
+	<Counter counter_code="MBCOR50" group="17"
+
+			getcounters_name_ruk="8000"
+			getcounters_name_rut="8000"
+			getcounters_name_uz="8000"
+			getcounters_name_en="8000"
+
+			>
+	</Counter>
+
+
+
 
     <Counter counter_code="AMB300" group="18"/>        
     <Counter counter_code="AMB500" group="18"/>
@@ -9201,7 +9430,7 @@ Created by Vladimir Khovanskiy
 			getcounters_name_en="minut"
 
 			>
-	</Counter>       
+	</Counter>
         <Counter counter_code="BYTEMB" group="29"
 
 			getcounters_name_ruk="MB"
@@ -9210,7 +9439,7 @@ Created by Vladimir Khovanskiy
 			getcounters_name_en="MB"
 
 			>
-	</Counter>       
+	</Counter>
         <Counter counter_code="MBFBYTE" group="30"
 
 			getcounters_name_ruk="MB"
@@ -10119,6 +10348,42 @@ Created by Vladimir Khovanskiy
 			getcounters_name_rut="INCLUDED_10000"
 			getcounters_name_uz="INCLUDED_10000"
 			getcounters_name_en="INCLUDED_10000"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS15MOB" group="38"
+
+			getcounters_name_ruk="INCLUDED_1000"
+			getcounters_name_rut="INCLUDED_1000"
+			getcounters_name_uz="INCLUDED_1000"
+			getcounters_name_en="INCLUDED_1000"
+
+			>
+	</Counter>
+	<Counter counter_code="SMS2MOB5" group="38"
+
+			getcounters_name_ruk="INCLUDED_1500"
+			getcounters_name_rut="INCLUDED_1500"
+			getcounters_name_uz="INCLUDED_1500"
+			getcounters_name_en="INCLUDED_1500"
+
+			>
+	</Counter>
+	<Counter counter_code="SMSCOR30" group="38"
+
+			getcounters_name_ruk="INCLUDED_1000"
+			getcounters_name_rut="INCLUDED_1000"
+			getcounters_name_uz="INCLUDED_1000"
+			getcounters_name_en="INCLUDED_1000"
+
+			>
+	</Counter>
+	<Counter counter_code="SMSCOR50" group="38"
+
+			getcounters_name_ruk="INCLUDED_1500"
+			getcounters_name_rut="INCLUDED_1500"
+			getcounters_name_uz="INCLUDED_1500"
+			getcounters_name_en="INCLUDED_1500"
 
 			>
 	</Counter>
@@ -11215,6 +11480,42 @@ Created by Vladimir Khovanskiy
 			                      
 			>
 	</Counter>
+	<Counter counter_code="MIN15MOB" group="41"
+
+			getcounters_name_ruk="INCLUDED-ALL_1000"
+			getcounters_name_rut="INCLUDED-ALL_1000"
+			getcounters_name_uz="INCLUDED-ALL_1000"
+			getcounters_name_en="INCLUDED-ALL_1000"
+			                      
+			>
+	</Counter>
+	<Counter counter_code="MIN2MOB5" group="41"
+
+			getcounters_name_ruk="INCLUDED-ALL_1500"
+			getcounters_name_rut="INCLUDED-ALL_1500"
+			getcounters_name_uz="INCLUDED-ALL_1500"
+			getcounters_name_en="INCLUDED-ALL_1500"
+			                      
+			>
+	</Counter>
+	<Counter counter_code="MINCOR30" group="41"
+
+			getcounters_name_ruk="INCLUDED-ALL_1000"
+			getcounters_name_rut="INCLUDED-ALL_1000"
+			getcounters_name_uz="INCLUDED-ALL_1000"
+			getcounters_name_en="INCLUDED-ALL_1000"
+			                      
+			>
+	</Counter>
+	<Counter counter_code="MINCOR50" group="41"
+
+			getcounters_name_ruk="INCLUDED-ALL_1500"
+			getcounters_name_rut="INCLUDED-ALL_1500"
+			getcounters_name_uz="INCLUDED-ALL_1500"
+			getcounters_name_en="INCLUDED-ALL_1500"
+			                      
+			>
+	</Counter>
         <Counter counter_code="MIN100D7" group="42"
 
 			getcounters_name_ruk="Пакет минут"
@@ -11388,6 +11689,7 @@ Created by Vladimir Khovanskiy
         <Counter counter_code="MB2000W" group="53"/>
         <Counter counter_code="MB3000W" group="53"/>
         <Counter counter_code="MB5000W" group="53"/>
+        <Counter counter_code="MBPACKDB" group="54"/>
 	<GroupList>
 		<Item id="1" name="gprs"/>                        <!--*111*019#-->
 		<Item id="2" name="voice"/>                       
@@ -11442,5 +11744,6 @@ Created by Vladimir Khovanskiy
         	<Item id="51" name="supervoice"/>              <!--test-->
         	<Item id="52" name="ict"/>              <!--test-->
         	<Item id="53" name="welcomebonus"/>              <!--test-->
+        	<Item id="54" name="whirl"/>              <!--test-->
 	</GroupList>
 </Counters>

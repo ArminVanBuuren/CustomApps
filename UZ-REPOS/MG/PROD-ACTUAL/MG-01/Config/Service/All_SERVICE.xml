@@ -274,9 +274,9 @@ tplist               - Компонент выполняет проверки п
 			info_330723_en="Wrong user's number."
 			
 			info_330724_ruk="Ошибка сервера, обратитесь в службу поддержки UMS."
-			info_330724_rut="Oshibka servera, obratites v slujbu podderjki UMS."
-			info_330724_uz="Oshibka servera, obratites v slujbu podderjki UMS."
-			info_330724_en="Server error, call support-service of UMS."
+       			info_330724_rut="Oshibka Servera. Pozhalujsta, poprobujte pozzhe"
+			info_330724_uz="Server xatosi. Iltimos keyinroq harakat qilib ko^ring"
+			info_330724_en="Server Error. Please try later"
 
 			info_inprogress_ruk="Операция не может быть выполнена, пока не завершится предыдущая."
 			info_inprogress_rut="Operaciya ne mozhet byt vypolnena, poka ne zavershitsya predydushaya."                             
@@ -569,22 +569,22 @@ tplist               - Компонент выполняет проверки п
 			info_330723_en="Incorrect abonent's number."
 			
 			info_330724_ruk="Ошибка сервера, обратитесь в службу поддержки UMS."
-			info_330724_rut="Oshibka servera, obratites v slujbu podderjki UMS."
-			info_330724_uz="Oshibka servera, obratites v slujbu podderjki UMS."
-			info_330724_en="Server error, refer support service of UMS."
+       			info_330724_rut="Oshibka Servera. Pozhalujsta, poprobujte pozzhe"
+			info_330724_uz="Server xatosi. Iltimos keyinroq harakat qilib ko^ring"
+			info_330724_en="Server Error. Please try later"
 
 			info_320704_ruk="Usluga ne dostupna novim abonentam v techenie odnogo kalendarnogo mesyaca"
       			info_320704_rut="Ustanovlen zapret na podklyuchenie usligi *Obeshanniy platezh*"
-			info_320704_uz="*Va^da qilingan to^lov* xizmatiga cheklanish o^rnatildi"
+			info_320704_uz="*Va^da qilingan to^lov* xizmatiga cheklanish o^rnatilgan"
 			info_320704_en="*Promised payment* service connection is banned"
 
 			>
-		<soapcon value="_GRNTPAY"/>
+		<!--soapcon value="_GRNTPAY"/>
 		<ivrcon value="_GRNTPAY"/>
 		<ussdcon value="*2*2*00*00*17*2*1"/>
 		<ussdcon value="*2*2*17*2*1"/>
 		<dealerussd value="*2*2*00*00*17*2*1"/>
-		<dealerussd value="*2*2*17*2*1"/>
+		<dealerussd value="*2*2*17*2*1"/-->
 	</Service>
 	
 	<Service    name="_GRNTPAY_CHECK" 

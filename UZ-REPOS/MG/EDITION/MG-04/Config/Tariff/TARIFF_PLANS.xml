@@ -1107,7 +1107,7 @@ tplist               - Компонент выполняет проверки п
     <soapcon value="203"/>
     <ivrcon value="203"/>
   </Tariff>
-  <Tariff ivrcode="205" datefrom="20131001" dateto="" group="1" availbalance="16.63"
+  <Tariff ivrcode="205" datefrom="20131001" dateto="" group="1" availbalance="16.62"
  
     tariffname_ru="MOBI 70"
     tariffname_uz="MOBI 70"
@@ -1117,17 +1117,23 @@ tplist               - Компонент выполняет проверки п
     <soapcon value="205"/>
     <ivrcon value="205"/>
   </Tariff>
-  <Tariff ivrcode="206" datefrom="20131001" dateto="" group="1" availbalance="26.13"
+  <Tariff ivrcode="206" datefrom="20131001" dateto="" group="1" availbalance="26.12"
  
-    tariffname_ru="MOBI 100"
-    tariffname_uz="MOBI 100"
-    tariffname_en="MOBI 100"
-    tariffname_scg="MOBI 100"
-    >
+          tariffname_ruk="MOBI 110"
+          tariffname_rut="MOBI 110"
+          tariffname_uz="MOBI 110"
+          tariffname_en="MOBI 110"
+          tariffname_scg="MOBI 110"
+
+  >
+
     <soapcon value="206"/>
     <ivrcon value="206"/>
+    <dealerussd value="*133*confirm"/>
+    <dealerussd value="*133*1"/>
+
   </Tariff>
-  <Tariff ivrcode="207" datefrom="20131001" dateto="" group="1" availbalance="35.63"
+  <Tariff ivrcode="207" datefrom="20131001" dateto="" group="1" availbalance="35.62"
  
     tariffname_ru="MOBI 150"
     tariffname_uz="MOBI 150"

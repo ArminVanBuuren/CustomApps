@@ -2514,9 +2514,9 @@ tplist               - Компонент выполняет проверки п
     >
     <soapcon value="FRGPRS100WEEK"/>
     <ivrcon value="14334"/>
-    <dealerussd value="*105*100"/>
+    <!--<dealerussd value="*105*100"/>
     <dealerussd value="*105*100*confirm"/>
-    <dealerussd value="*105*100*1"/>
+    <dealerussd value="*105*100*1"/>-->
   </Service>
   <Service service_code="FRGPRS200WEEK" datefrom="20131001" dateto="" group="2"
 
@@ -2526,9 +2526,9 @@ tplist               - Компонент выполняет проверки п
     >
     <soapcon value="FRGPRS200WEEK"/>
     <ivrcon value="14337"/>
-    <dealerussd value="*105*200"/>
+    <!--<dealerussd value="*105*200"/>
     <dealerussd value="*105*200*confirm"/>
-    <dealerussd value="*105*200*1"/>
+    <dealerussd value="*105*200*1"/>-->
   </Service>
   <Service service_code="FRGPRS300WEEK" datefrom="20131001" dateto="" group="2"
 
@@ -2538,9 +2538,9 @@ tplist               - Компонент выполняет проверки п
     >
     <soapcon value="FRGPRS300WEEK"/>
     <ivrcon value="14340"/>
-    <dealerussd value="*105*300"/>
+    <!--<dealerussd value="*105*300"/>
     <dealerussd value="*105*300*confirm"/>
-    <dealerussd value="*105*300*1"/>
+    <dealerussd value="*105*300*1"/>-->
   </Service>
   <Service service_code="FRMB5000BF" datefrom="20131001" dateto="" group="2"
 

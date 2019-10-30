@@ -1159,6 +1159,7 @@
     <None Include="EDITION\MG-04\Configuration\WEB_SERVICES\WEB_81_SMS\web.config.upgrade" />
     <None Include="EDITION\MG-04\Configuration\WEB_SERVICES\WEB_81_SMS\WebService.wsdl" />
     <None Include="EDITION\MG-04\CRMFilter\Dispatcher.exe.config" />
+    <None Include="PROD-ACTUAL\MG-01\Configuration\SOAPCON\SOAPTemplateProcessor_SCG.xml.bak" />
     <None Include="PROD-ACTUAL\MG-01\copy_config.bat" />
     <None Include="PROD-ACTUAL\MG-01\copy_dispatcher_config.bat" />
     <None Include="PROD-ACTUAL\MG-01\Dispatcher\01_01\Dispatcher.exe.config" />
