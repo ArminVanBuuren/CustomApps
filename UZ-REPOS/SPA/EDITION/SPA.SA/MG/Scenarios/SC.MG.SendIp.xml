@@ -19,7 +19,7 @@
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="DataBaseName" value="UMS.ARCHIVE" />
+        <param name="DataBaseName" value="UMS.TAS_SPA" />
         <param name="FunctionName" value="SELECT ip FROM static_ip WHERE MSISDN = '{0}'" />
         <param name="FunctionType" value="customQuery" />
         <param name="OutXml" value="db_unit_result" />

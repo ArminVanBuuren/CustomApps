@@ -73,7 +73,7 @@
         <result value="" node="ExtractIP" />
       </resultlist>
       <parameterslist>
-        <param name="DataBaseName" value="UMS.ARCHIVE" />
+        <param name="DataBaseName" value="UMS.TAS_SPA" />
         <param name="FunctionName" value="CORPORATE_APN_ADD" />
         <param name="FunctionType" value="function" />
         <param name="OutXml" value="db_unit_result" />
@@ -138,7 +138,7 @@
         <result value="" node="DummyResponderFAILURE" />
       </resultlist>
       <parameterslist>
-        <param name="DataBaseName" value="UMS.ARCHIVE" />
+        <param name="DataBaseName" value="UMS.TAS_SPA" />
         <param name="FunctionName" value="CORPORATE_APN_DELETE" />
         <param name="FunctionType" value="procedure" />
         <param name="OutXml" value="db_unit_result" />

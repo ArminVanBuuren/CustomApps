@@ -49,7 +49,7 @@
         <result value="" node="DummyResponder" />
       </resultlist>
       <parameterslist>
-        <param name="DataBaseName" value="UMS.ARCHIVE" />
+        <param name="DataBaseName" value="UMS.TAS_SPA" />
         <param name="FunctionName" value="STATIC_IP_DELETE" />
         <param name="FunctionType" value="procedure" />
         <param name="OutXml" value="db_unit_result" />
@@ -73,7 +73,7 @@
         <result value="" node="DummyResponder" />
       </resultlist>
       <parameterslist>
-        <param name="DataBaseName" value="UMS.ARCHIVE" />
+        <param name="DataBaseName" value="UMS.TAS_SPA" />
         <param name="FunctionName" value="STATIC_IP_DELETE_DEALER" />
         <param name="FunctionType" value="procedure" />
         <param name="OutXml" value="db_unit_result" />

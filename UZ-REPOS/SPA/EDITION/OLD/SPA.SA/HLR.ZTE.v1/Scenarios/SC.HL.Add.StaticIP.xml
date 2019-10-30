@@ -31,7 +31,7 @@
         <result value="" node="ExtractIP" />
       </resultlist>
       <parameterslist>
-        <param name="DataBaseName" value="UMS.ARCHIVE" />
+        <param name="DataBaseName" value="UMS.TAS_SPA" />
         <param name="FunctionName" value="STATIC_IP_ADD" />
         <param name="FunctionType" value="function" />
         <param name="OutXml" value="db_unit_result" />
@@ -92,7 +92,7 @@
         <result value="" node="APN_StaticIP_Delete" />
       </resultlist>
       <parameterslist>
-        <param name="DataBaseName" value="UMS.ARCHIVE" />
+        <param name="DataBaseName" value="UMS.TAS_SPA" />
         <param name="FunctionName" value="STATIC_IP_DELETE" />
         <param name="FunctionType" value="procedure" />
         <param name="OutXml" value="db_unit_result" />
@@ -115,7 +115,7 @@
         <result value="" node="ExtractIP_DEALER" />
       </resultlist>
       <parameterslist>
-        <param name="DataBaseName" value="UMS.ARCHIVE" />
+        <param name="DataBaseName" value="UMS.TAS_SPA" />
         <param name="FunctionName" value="STATIC_IP_ADD_DEALER" />
         <param name="FunctionType" value="function" />
         <param name="OutXml" value="db_unit_result" />
@@ -181,7 +181,7 @@
         <result value="" node="APN_StaticIPDealer_Delete" />
       </resultlist>
       <parameterslist>
-        <param name="DataBaseName" value="UMS.ARCHIVE" />
+        <param name="DataBaseName" value="UMS.TAS_SPA" />
         <param name="FunctionName" value="STATIC_IP_DELETE_DEALER" />
         <param name="FunctionType" value="procedure" />
         <param name="OutXml" value="db_unit_result" />
