@@ -349,35 +349,6 @@
     <RFS name="RFS_HLR_RBT" hostType="HL" description="Caller Ring Back Tone. GOODOK" />
     <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" hostType="HL" description="Маркер который указывает что абонент пересоздается" />
     <RFS name="RFS_HLR_ROAMING" hostType="HL" description="Международный роуминг" />
-    <RFS name="RFS_HLR_TEST_ADDLTE_1" hostType="HL" description="Добавить LTE" />
-    <RFS name="RFS_HLR_TEST_ADDLTE_2" hostType="HL" description="Добавить LTE" />
-    <RFS name="RFS_HLR_TEST_ADDLTE_3" hostType="HL" description="Добавить LTE" />
-    <RFS name="RFS_HLR_TEST_BIC0" hostType="HL" description="Модификация баррингов входящей связи" />
-    <RFS name="RFS_HLR_TEST_BIC1" hostType="HL" description="Модификация баррингов входящей связи" />
-    <RFS name="RFS_HLR_TEST_BOC0" hostType="HL" description="Модификация баррингов исходящей связи" />
-    <RFS name="RFS_HLR_TEST_BOC1" hostType="HL" description="Модификация баррингов исходящей связи" />
-    <RFS name="RFS_HLR_TEST_BOC2" hostType="HL" description="Модификация баррингов исходящей связи" />
-    <RFS name="RFS_HLR_TEST_BOC3" hostType="HL" description="Модификация баррингов исходящей связи" />
-    <RFS name="RFS_HLR_TEST_BPOS0" hostType="HL" description="Изменение барринга GPRS" />
-    <RFS name="RFS_HLR_TEST_BPOS1" hostType="HL" description="Изменение барринга GPRS" />
-    <RFS name="RFS_HLR_TEST_BR0" hostType="HL" description="Международный Роуминг" />
-    <RFS name="RFS_HLR_TEST_BR1" hostType="HL" description="Международный Роуминг" />
-    <RFS name="RFS_HLR_TEST_DELETE" hostType="HL" description="Удалить LTE" />
-    <RFS name="RFS_HLR_TEST_MODLOC" hostType="HL" description="Разрыв сессии" />
-    <RFS name="RFS_HLR_TEST_NAM0_1" hostType="HL" description="Добавить интернет сервис" />
-    <RFS name="RFS_HLR_TEST_NAM0_2" hostType="HL" description="Добавить интернет сервис" />
-    <RFS name="RFS_HLR_TEST_NAM1" hostType="HL" description="Удалить интернет сервис" />
-    <RFS name="RFS_HLR_TEST_QRYUSER" hostType="HL" description="Запрос состояния баррингов абонента" />
-    <RFS name="RFS_HLR_TEST_SCHEMEACT_1" hostType="HL" description="Добавление управляющей схемы для роуминга" />
-    <RFS name="RFS_HLR_TEST_SCHEMEACT_2" hostType="HL" description="Добавление управляющей схемы для роуминга" />
-    <RFS name="RFS_HLR_TEST_SCHEMEACT_UMS_1" hostType="HL" description="Добавление управляющей схемы для роуминга" />
-    <RFS name="RFS_HLR_TEST_SCHEMEACT_UMS_2" hostType="HL" description="Добавление управляющей схемы для роуминга" />
-    <RFS name="RFS_HLR_TEST_SCHEMEDEL_1" hostType="HL" description="Удаление управляющей схемы для роуминга" />
-    <RFS name="RFS_HLR_TEST_SCHEMEDEL_2" hostType="HL" description="Удаление управляющей схемы для роуминга" />
-    <RFS name="RFS_HLR_TEST_SMMO0" hostType="HL" description="Служба коротких сообщений Исходящие" />
-    <RFS name="RFS_HLR_TEST_SMMO1" hostType="HL" description="Служба коротких сообщений Исходящие" />
-    <RFS name="RFS_HLR_TEST_SMMT0" hostType="HL" description="Служба коротких сообщений Входящие" />
-    <RFS name="RFS_HLR_TEST_SMMT1" hostType="HL" description="Служба коротких сообщений Входящие" />
     <RFS name="RFS_HLR_SMS_MO" hostType="HL" description="Служба коротких сообщений (SMS) исходящие">
       <Resource name="RES_HLR_SMS_MO" useType="Mandatory" />
     </RFS>
@@ -423,6 +394,35 @@
     <RFS name="RFS_HLR_SUBSCRIBER_DGU" base="RFS_HLR_SUBSCRIBER" hostType="HL" processType="Subscription" description="Создание абонента ТП ДГУ">
       <Resource name="RES_HLR_PROFILE" value="DGU" />
     </RFS>
+    <RFS name="RFS_HLR_TEST_ADDLTE_1" hostType="HL" description="Добавить LTE" />
+    <RFS name="RFS_HLR_TEST_ADDLTE_2" hostType="HL" description="Добавить LTE" />
+    <RFS name="RFS_HLR_TEST_ADDLTE_3" hostType="HL" description="Добавить LTE" />
+    <RFS name="RFS_HLR_TEST_BIC0" hostType="HL" description="Модификация баррингов входящей связи" />
+    <RFS name="RFS_HLR_TEST_BIC1" hostType="HL" description="Модификация баррингов входящей связи" />
+    <RFS name="RFS_HLR_TEST_BOC0" hostType="HL" description="Модификация баррингов исходящей связи" />
+    <RFS name="RFS_HLR_TEST_BOC1" hostType="HL" description="Модификация баррингов исходящей связи" />
+    <RFS name="RFS_HLR_TEST_BOC2" hostType="HL" description="Модификация баррингов исходящей связи" />
+    <RFS name="RFS_HLR_TEST_BOC3" hostType="HL" description="Модификация баррингов исходящей связи" />
+    <RFS name="RFS_HLR_TEST_BPOS0" hostType="HL" description="Изменение барринга GPRS" />
+    <RFS name="RFS_HLR_TEST_BPOS1" hostType="HL" description="Изменение барринга GPRS" />
+    <RFS name="RFS_HLR_TEST_BR0" hostType="HL" description="Международный Роуминг" />
+    <RFS name="RFS_HLR_TEST_BR1" hostType="HL" description="Международный Роуминг" />
+    <RFS name="RFS_HLR_TEST_DELETE" hostType="HL" description="Удалить LTE" />
+    <RFS name="RFS_HLR_TEST_MODLOC" hostType="HL" description="Разрыв сессии" />
+    <RFS name="RFS_HLR_TEST_NAM0_1" hostType="HL" description="Добавить интернет сервис" />
+    <RFS name="RFS_HLR_TEST_NAM0_2" hostType="HL" description="Добавить интернет сервис" />
+    <RFS name="RFS_HLR_TEST_NAM1" hostType="HL" description="Удалить интернет сервис" />
+    <RFS name="RFS_HLR_TEST_QRYUSER" hostType="HL" description="Запрос состояния баррингов абонента" />
+    <RFS name="RFS_HLR_TEST_SCHEMEACT_1" hostType="HL" description="Добавление управляющей схемы для роуминга" />
+    <RFS name="RFS_HLR_TEST_SCHEMEACT_2" hostType="HL" description="Добавление управляющей схемы для роуминга" />
+    <RFS name="RFS_HLR_TEST_SCHEMEACT_UMS_1" hostType="HL" description="Добавление управляющей схемы для роуминга" />
+    <RFS name="RFS_HLR_TEST_SCHEMEACT_UMS_2" hostType="HL" description="Добавление управляющей схемы для роуминга" />
+    <RFS name="RFS_HLR_TEST_SCHEMEDEL_1" hostType="HL" description="Удаление управляющей схемы для роуминга" />
+    <RFS name="RFS_HLR_TEST_SCHEMEDEL_2" hostType="HL" description="Удаление управляющей схемы для роуминга" />
+    <RFS name="RFS_HLR_TEST_SMMO0" hostType="HL" description="Служба коротких сообщений Исходящие" />
+    <RFS name="RFS_HLR_TEST_SMMO1" hostType="HL" description="Служба коротких сообщений Исходящие" />
+    <RFS name="RFS_HLR_TEST_SMMT0" hostType="HL" description="Служба коротких сообщений Входящие" />
+    <RFS name="RFS_HLR_TEST_SMMT1" hostType="HL" description="Служба коротких сообщений Входящие" />
     <RFS name="RFS_HLR_USSD" hostType="HL" description="USSD сервис">
       <Resource name="RES_HLR_USSD" useType="Mandatory" />
     </RFS>
@@ -701,8 +701,8 @@
       <RFS name="RFS_RBT_CHANGE_MSISDN" linkType="Add" dependsOn="RFS_RBT_SERVICE" />
       <RFSGroup name="RFS_GROUP_FP_CHANGE_MSISDN" />
       <RFSGroup name="RFS_GROUP_HLR_RECREATE_SUBSCRIBER" />
-      <RFSGroup name="RFS_GROUP_SM_RECREATE_SUBSCRIBER" />
       <RFSGroup name="RFS_GROUP_RBT_CHANGE_MSISDN" />
+      <RFSGroup name="RFS_GROUP_SM_RECREATE_SUBSCRIBER" />
     </CFS>
     <CFS name="ChangeTariff" priority="9999" type="OneTime" description="Удаление абонента на старой платформы при изменении тарифного плана">
       <RFSGroup name="RFS_GROUP_FP_CHANGE_TARIFF_PLAN_AND_DELETE" />
@@ -2356,14 +2356,14 @@
     <Scenario name="HLR.Modify.CancelLocation" description="Сброс информации о локации абонета на MSC, VLR, SGSN станциях">
       <RFS name="RFS_HLR_CANCEL_LOCATION" scenarioType="Add, Modify, Remove" />
     </Scenario>
+    <Scenario name="HLR.Modify.CLIP" description="Изменение сервиса Определитель номера">
+      <RFS name="RFS_HLR_CLIP" scenarioType="Add, Remove" />
+    </Scenario>
     <Scenario name="HLR.Modify.CWCH" description="Изменение сервиса ожидание удержание вызова">
       <RFS name="RFS_HLR_CWCH" scenarioType="Add, Remove" />
     </Scenario>
     <Scenario name="HLR.Modify.DATATRANSFER" description="Изменение сервиса передачи данных">
       <RFS name="RFS_HLR_DATATRANSFER" scenarioType="Add, Remove" />
-    </Scenario>
-    <Scenario name="HLR.Modify.CLIP" description="Изменение сервиса Определитель номера">
-      <RFS name="RFS_HLR_CLIP" scenarioType="Add, Remove" />
     </Scenario>
     <Scenario name="HLR.Modify.LTE" description="Изменение сервиса LTE">
       <RFS name="RFS_HLR_LTE" scenarioType="Add, Remove" />
