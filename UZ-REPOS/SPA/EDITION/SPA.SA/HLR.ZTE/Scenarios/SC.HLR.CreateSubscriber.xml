@@ -7,6 +7,7 @@
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll" />
     <object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll" />
+    <object name="DataBaseProcessorEncoder" class="FORIS.ScenarioProcessing.OtherParty.DataBaseProcessorEncoder" assembly="FORIS.SPA.OTHERPARTY.dll"/>
   </objectList>
   <automat>
     <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
@@ -45,7 +46,7 @@
         <param name="Command" value="SC.Delete_Subscriber_IMSI" />
       </parameterslist>
     </node>
-    <node name="GetKI" object="DataBaseProcessor">
+    <node name="GetKI" object="DataBaseProcessorEncoder">
       <resultlist>
         <result value="" node="ExtractKI" />
       </resultlist>
