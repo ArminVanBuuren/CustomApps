@@ -217,13 +217,33 @@
     </node>
     <node name="Modify_DataTransfer" object="IfCommander">
       <resultlist>
-        <result value="0" node="Modify_CFB" />
-        <result value="1538" node="Modify_CFB" />
+        <result value="0" node="Modify_CFD" />
+        <result value="1538" node="Modify_CFD" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
         <param name="IfNotXmlPath:0" value="//RFS_HLR_DATATRANSFER" />
         <param name="Command" value="SC.Modify_DataTransfer" />
+      </parameterslist>
+    </node>
+    <node name="Modify_CFD" object="IfCommander">
+      <resultlist>
+        <result value="0" node="Modify_CFB" />
+        <result value="1538" node="Activate_CFD" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfNotXmlPath:0" value="//RFS_HLR_CFD" />
+        <param name="Command" value="SC.Modify_CFD" />
+      </parameterslist>
+    </node>
+    <node name="Activate_CFD" object="Commander">
+      <resultlist>
+        <result value="0" node="Modify_CFB" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.Activate_CFD" />
       </parameterslist>
     </node>
     <node name="Modify_CFB" object="IfCommander">
@@ -261,24 +281,13 @@
     </node>
     <node name="Modify_CFNRY" object="IfCommander">
       <resultlist>
-        <result value="0" node="Modify_CFD" />
-        <result value="1538" node="Modify_CFD" />
-        <result value="" node="ResponseAssembler" />
-      </resultlist>
-      <parameterslist>
-        <param name="IfNotXmlPath:0" value="//RFS_HLR_CFNRY" />
-        <param name="Command" value="SC.Modify_CFNRY" />
-      </parameterslist>
-    </node>
-    <node name="Modify_CFD" object="IfCommander">
-      <resultlist>
         <result value="0" node="Modify_Roaming" />
         <result value="1538" node="Modify_Roaming" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="IfNotXmlPath:0" value="//RFS_HLR_CFD" />
-        <param name="Command" value="SC.Modify_CFD" />
+        <param name="IfNotXmlPath:0" value="//RFS_HLR_CFNRY" />
+        <param name="Command" value="SC.Modify_CFNRY" />
       </parameterslist>
     </node>
     <node name="Modify_Roaming" object="IfCommander">

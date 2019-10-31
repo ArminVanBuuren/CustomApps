@@ -148,11 +148,31 @@
     </node>
     <node name="Modify_DataTransfer" object="Commander">
       <resultlist>
-        <result value="0" node="Modify_CFB" />
+        <result value="0" node="Modify_CFD" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
         <param name="Command" value="SC.Modify_DataTransfer" />
+      </parameterslist>
+    </node>
+    <node name="Modify_CFD" object="Commander">
+      <resultlist>
+        <result value="0" node="Activate_CFD" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.Modify_CFD" />
+      </parameterslist>
+    </node>
+    <node name="Activate_CFD" object="IfCommander">
+      <resultlist>
+        <result value="0" node="Modify_CFB" />
+        <result value="1538" node="Modify_CFB" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//RFS_HLR_CFD" />
+        <param name="Command" value="SC.Activate_CFD" />
       </parameterslist>
     </node>
     <node name="Modify_CFB" object="Commander">
@@ -184,19 +204,10 @@
     </node>
     <node name="Modify_CFNRY" object="Commander">
       <resultlist>
-        <result value="0" node="Modify_CFD" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
         <param name="Command" value="SC.Modify_CFNRY" />
-      </parameterslist>
-    </node>
-    <node name="Modify_CFD" object="Commander">
-      <resultlist>
-        <result value="" node="ResponseAssembler" />
-      </resultlist>
-      <parameterslist>
-        <param name="Command" value="SC.Modify_CFD" />
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">
