@@ -1,5 +1,5 @@
 <Command Name="SC.Activate_CFD">
-  <Description>Активация услуги MCA</Description>
+  <Description>Activate call forwarding (to MCA) on mobile subscriber busy</Description>
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
   <Request>
     <RequestTemplate>

@@ -564,7 +564,7 @@
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.HLR.Remove.CallForwarding.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.HLR.Remove.NET_APN.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.HLR.Remove.StaticIP.xml" />
-    <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.HLR.ROAMING_TEST.xml" />
+    <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.HLR.TEST.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\GetSubscriberByIMSI.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.Remove.RFS_HLR_CLIR.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.HLR.ChangeProfile.xml" />

@@ -1,5 +1,5 @@
 <Command Name="SC.Activate_CF">
-  <Description>Активация услуги переадресация вызова</Description>
+  <Description>Activate call forwarding</Description>
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
   <Request>
     <RequestTemplate>

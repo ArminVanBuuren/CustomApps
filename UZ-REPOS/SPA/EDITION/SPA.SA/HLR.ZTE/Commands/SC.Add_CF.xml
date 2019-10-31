@@ -1,5 +1,5 @@
 <Command Name="SC.Add_CF">
-  <Description>Добавление услуги переадресация</Description>
+  <Description>Add call forwarding</Description>
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
   <Request>
     <RequestTemplate>

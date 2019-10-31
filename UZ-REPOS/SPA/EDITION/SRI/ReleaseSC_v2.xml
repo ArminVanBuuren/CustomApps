@@ -349,35 +349,35 @@
     <RFS name="RFS_HLR_RBT" hostType="HL" description="Caller Ring Back Tone. GOODOK" />
     <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" hostType="HL" description="Маркер который указывает что абонент пересоздается" />
     <RFS name="RFS_HLR_ROAMING" hostType="HL" description="Международный роуминг" />
-    <RFS name="RFS_HLR_ROAMING_TEST_ADDLTE_1" hostType="HL" description="Добавить LTE" />
-    <RFS name="RFS_HLR_ROAMING_TEST_ADDLTE_2" hostType="HL" description="Добавить LTE" />
-    <RFS name="RFS_HLR_ROAMING_TEST_ADDLTE_3" hostType="HL" description="Добавить LTE" />
-    <RFS name="RFS_HLR_ROAMING_TEST_BIC0" hostType="HL" description="Модификация баррингов входящей связи" />
-    <RFS name="RFS_HLR_ROAMING_TEST_BIC1" hostType="HL" description="Модификация баррингов входящей связи" />
-    <RFS name="RFS_HLR_ROAMING_TEST_BOC0" hostType="HL" description="Модификация баррингов исходящей связи" />
-    <RFS name="RFS_HLR_ROAMING_TEST_BOC1" hostType="HL" description="Модификация баррингов исходящей связи" />
-    <RFS name="RFS_HLR_ROAMING_TEST_BOC2" hostType="HL" description="Модификация баррингов исходящей связи" />
-    <RFS name="RFS_HLR_ROAMING_TEST_BOC3" hostType="HL" description="Модификация баррингов исходящей связи" />
-    <RFS name="RFS_HLR_ROAMING_TEST_BPOS0" hostType="HL" description="Изменение барринга GPRS" />
-    <RFS name="RFS_HLR_ROAMING_TEST_BPOS1" hostType="HL" description="Изменение барринга GPRS" />
-    <RFS name="RFS_HLR_ROAMING_TEST_BR0" hostType="HL" description="Международный Роуминг" />
-    <RFS name="RFS_HLR_ROAMING_TEST_BR1" hostType="HL" description="Международный Роуминг" />
-    <RFS name="RFS_HLR_ROAMING_TEST_DELETE" hostType="HL" description="Удалить LTE" />
-    <RFS name="RFS_HLR_ROAMING_TEST_MODLOC" hostType="HL" description="Разрыв сессии" />
-    <RFS name="RFS_HLR_ROAMING_TEST_NAM0_1" hostType="HL" description="Добавить интернет сервис" />
-    <RFS name="RFS_HLR_ROAMING_TEST_NAM0_2" hostType="HL" description="Добавить интернет сервис" />
-    <RFS name="RFS_HLR_ROAMING_TEST_NAM1" hostType="HL" description="Удалить интернет сервис" />
-    <RFS name="RFS_HLR_ROAMING_TEST_QRYUSER" hostType="HL" description="Запрос состояния баррингов абонента" />
-    <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEACT_1" hostType="HL" description="Добавление управляющей схемы для роуминга" />
-    <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEACT_2" hostType="HL" description="Добавление управляющей схемы для роуминга" />
-    <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEACT_UMS_1" hostType="HL" description="Добавление управляющей схемы для роуминга" />
-    <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEACT_UMS_2" hostType="HL" description="Добавление управляющей схемы для роуминга" />
-    <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEDEL_1" hostType="HL" description="Удаление управляющей схемы для роуминга" />
-    <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEDEL_2" hostType="HL" description="Удаление управляющей схемы для роуминга" />
-    <RFS name="RFS_HLR_ROAMING_TEST_SMMO0" hostType="HL" description="Служба коротких сообщений Исходящие" />
-    <RFS name="RFS_HLR_ROAMING_TEST_SMMO1" hostType="HL" description="Служба коротких сообщений Исходящие" />
-    <RFS name="RFS_HLR_ROAMING_TEST_SMMT0" hostType="HL" description="Служба коротких сообщений Входящие" />
-    <RFS name="RFS_HLR_ROAMING_TEST_SMMT1" hostType="HL" description="Служба коротких сообщений Входящие" />
+    <RFS name="RFS_HLR_TEST_ADDLTE_1" hostType="HL" description="Добавить LTE" />
+    <RFS name="RFS_HLR_TEST_ADDLTE_2" hostType="HL" description="Добавить LTE" />
+    <RFS name="RFS_HLR_TEST_ADDLTE_3" hostType="HL" description="Добавить LTE" />
+    <RFS name="RFS_HLR_TEST_BIC0" hostType="HL" description="Модификация баррингов входящей связи" />
+    <RFS name="RFS_HLR_TEST_BIC1" hostType="HL" description="Модификация баррингов входящей связи" />
+    <RFS name="RFS_HLR_TEST_BOC0" hostType="HL" description="Модификация баррингов исходящей связи" />
+    <RFS name="RFS_HLR_TEST_BOC1" hostType="HL" description="Модификация баррингов исходящей связи" />
+    <RFS name="RFS_HLR_TEST_BOC2" hostType="HL" description="Модификация баррингов исходящей связи" />
+    <RFS name="RFS_HLR_TEST_BOC3" hostType="HL" description="Модификация баррингов исходящей связи" />
+    <RFS name="RFS_HLR_TEST_BPOS0" hostType="HL" description="Изменение барринга GPRS" />
+    <RFS name="RFS_HLR_TEST_BPOS1" hostType="HL" description="Изменение барринга GPRS" />
+    <RFS name="RFS_HLR_TEST_BR0" hostType="HL" description="Международный Роуминг" />
+    <RFS name="RFS_HLR_TEST_BR1" hostType="HL" description="Международный Роуминг" />
+    <RFS name="RFS_HLR_TEST_DELETE" hostType="HL" description="Удалить LTE" />
+    <RFS name="RFS_HLR_TEST_MODLOC" hostType="HL" description="Разрыв сессии" />
+    <RFS name="RFS_HLR_TEST_NAM0_1" hostType="HL" description="Добавить интернет сервис" />
+    <RFS name="RFS_HLR_TEST_NAM0_2" hostType="HL" description="Добавить интернет сервис" />
+    <RFS name="RFS_HLR_TEST_NAM1" hostType="HL" description="Удалить интернет сервис" />
+    <RFS name="RFS_HLR_TEST_QRYUSER" hostType="HL" description="Запрос состояния баррингов абонента" />
+    <RFS name="RFS_HLR_TEST_SCHEMEACT_1" hostType="HL" description="Добавление управляющей схемы для роуминга" />
+    <RFS name="RFS_HLR_TEST_SCHEMEACT_2" hostType="HL" description="Добавление управляющей схемы для роуминга" />
+    <RFS name="RFS_HLR_TEST_SCHEMEACT_UMS_1" hostType="HL" description="Добавление управляющей схемы для роуминга" />
+    <RFS name="RFS_HLR_TEST_SCHEMEACT_UMS_2" hostType="HL" description="Добавление управляющей схемы для роуминга" />
+    <RFS name="RFS_HLR_TEST_SCHEMEDEL_1" hostType="HL" description="Удаление управляющей схемы для роуминга" />
+    <RFS name="RFS_HLR_TEST_SCHEMEDEL_2" hostType="HL" description="Удаление управляющей схемы для роуминга" />
+    <RFS name="RFS_HLR_TEST_SMMO0" hostType="HL" description="Служба коротких сообщений Исходящие" />
+    <RFS name="RFS_HLR_TEST_SMMO1" hostType="HL" description="Служба коротких сообщений Исходящие" />
+    <RFS name="RFS_HLR_TEST_SMMT0" hostType="HL" description="Служба коротких сообщений Входящие" />
+    <RFS name="RFS_HLR_TEST_SMMT1" hostType="HL" description="Служба коротких сообщений Входящие" />
     <RFS name="RFS_HLR_SMS_MO" hostType="HL" description="Служба коротких сообщений (SMS) исходящие">
       <Resource name="RES_HLR_SMS_MO" useType="Mandatory" />
     </RFS>
@@ -473,15 +473,15 @@
   </RFSList>
   <CFSList>
     <CFS name="AddBOC2" description="Модификация баррингов исходящей связи">
-      <RFS name="RFS_HLR_ROAMING_TEST_BOC2" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_BOC2" linkType="Add" />
     </CFS>
     <CFS name="AddLTE" description="Добавить LTE">
-      <RFS name="RFS_HLR_ROAMING_TEST_ADDLTE_1" linkType="Add" />
-      <RFS name="RFS_HLR_ROAMING_TEST_ADDLTE_2" linkType="Add" />
-      <RFS name="RFS_HLR_ROAMING_TEST_ADDLTE_3" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_ADDLTE_1" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_ADDLTE_2" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_ADDLTE_3" linkType="Add" />
     </CFS>
     <CFS name="AddSMMT0" description="Служба коротких сообщений Входящие">
-      <RFS name="RFS_HLR_ROAMING_TEST_SMMT0" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_SMMT0" linkType="Add" />
     </CFS>
     <CFS name="AIISKUJEUNLIMMB" globalServiceCode="AIISKUJEUNLIMMB" copyOf="CFS_FP_SERVICE_GENERAL" description="Безлимитный интернет на ТП АИИСКУЭ" />
     <CFS name="AVTOMB100" globalServiceCode="AVTOMB100" copyOf="CFS_FP_SERVICE_GENERAL" description="OnNet 100" />
@@ -501,10 +501,10 @@
     <CFS name="AVTOMBHW4000" globalServiceCode="AVTOMBHW4000" copyOf="CFS_FP_SERVICE_GENERAL" description="Huawei 4000 Mb" />
     <CFS name="AVTOMBHW500" globalServiceCode="AVTOMBHW500" copyOf="CFS_FP_SERVICE_GENERAL" description="Huawei 500 Mb" />
     <CFS name="BIC0" description="Модификация баррингов входящей связи">
-      <RFS name="RFS_HLR_ROAMING_TEST_BIC0" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_BIC0" linkType="Add" />
     </CFS>
     <CFS name="BIC1" description="Модификация баррингов входящей связи">
-      <RFS name="RFS_HLR_ROAMING_TEST_BIC1" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_BIC1" linkType="Add" />
     </CFS>
     <CFS name="BLTDLIM" priority="1" copyOf="FRBLKINIT" description="Блокировка по превышению локального лимита" />
     <CFS name="BMS100MIN7DAY" globalServiceCode="BMS100MIN7DAY" copyOf="CFS_FP_SERVICE_GENERAL" description="100 минут в день звонков на UMS каждый день в течение 7 дней" />
@@ -512,25 +512,25 @@
     <CFS name="BMSAPENDM" globalServiceCode="BMSAPENDM" copyOf="CFS_FP_SERVICE_GENERAL" description="абон.плата на тарифе обнуляется до конца месяца" />
     <CFS name="BMSMB" globalServiceCode="BMSMB" copyOf="CFS_FP_SERVICE_GENERAL" description="Удвоение счетчиков" />
     <CFS name="BOC0" description="Модификация баррингов исходящей связи">
-      <RFS name="RFS_HLR_ROAMING_TEST_BOC0" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_BOC0" linkType="Add" />
     </CFS>
     <CFS name="BOC1" description="Модификация баррингов исходящей связи">
-      <RFS name="RFS_HLR_ROAMING_TEST_BOC1" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_BOC1" linkType="Add" />
     </CFS>
     <CFS name="BOC3" description="Модификация баррингов исходящей связи">
-      <RFS name="RFS_HLR_ROAMING_TEST_BOC3" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_BOC3" linkType="Add" />
     </CFS>
     <CFS name="BPOS0" description="Изменение барринга GPRS">
-      <RFS name="RFS_HLR_ROAMING_TEST_BPOS0" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_BPOS0" linkType="Add" />
     </CFS>
     <CFS name="BPOS1" description="Изменение барринга GPRS">
-      <RFS name="RFS_HLR_ROAMING_TEST_BPOS1" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_BPOS1" linkType="Add" />
     </CFS>
     <CFS name="BR0" description="Международный Роуминг">
-      <RFS name="RFS_HLR_ROAMING_TEST_BR0" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_BR0" linkType="Add" />
     </CFS>
     <CFS name="BR1" description="Международный Роуминг">
-      <RFS name="RFS_HLR_ROAMING_TEST_BR1" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_BR1" linkType="Add" />
     </CFS>
     <CFS name="BSNSSRMNG" priority="99" copyOf="CB123" description="Business Роуминг" />
     <CFS name="CallForwarding" description="Активация пользовательской переадресации вызова">
@@ -714,7 +714,7 @@
     </CFS>
     <CFS name="CONTENTMARKER" globalServiceCode="CONTENTMARKER" copyOf="CFS_FP_SERVICE_GENERAL" description="Отдельный ЛС для контента" />
     <CFS name="DeleteLTE" description="Удалить LTE">
-      <RFS name="RFS_HLR_ROAMING_TEST_DELETE" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_DELETE" linkType="Add" />
     </CFS>
     <CFS name="FR1000ICT" globalServiceCode="FR1000ICT" copyOf="CFS_FP_SERVICE_GENERAL" description="Promo ICT 1000 MB" />
     <CFS name="FR100ICT" globalServiceCode="FR100ICT" copyOf="CFS_FP_SERVICE_GENERAL" description="Promo ICT 100 MB" />
@@ -1891,15 +1891,15 @@
     <CFS name="MIN750N" globalServiceCode="MIN750N" copyOf="CFS_FP_SERVICE_GENERAL" description="Business На другие сети 750" />
     <CFS name="MIN750U" globalServiceCode="MIN750U" copyOf="CFS_FP_SERVICE_GENERAL" description="Business Внутри сети 750" />
     <CFS name="MODLOC" description="Разрыв сессии">
-      <RFS name="RFS_HLR_ROAMING_TEST_MODLOC" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_MODLOC" linkType="Add" />
     </CFS>
     <CFS name="MTSFamily" globalServiceCode="MTSFamily" copyOf="CFS_FP_SERVICE_GENERAL" description="Family" />
     <CFS name="NAM0" description="Добавить интернет сервис">
-      <RFS name="RFS_HLR_ROAMING_TEST_NAM0_1" linkType="Add" />
-      <RFS name="RFS_HLR_ROAMING_TEST_NAM0_2" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_NAM0_1" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_NAM0_2" linkType="Add" />
     </CFS>
     <CFS name="NAM1" description="Удалить интернет сервис">
-      <RFS name="RFS_HLR_ROAMING_TEST_NAM1" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_NAM1" linkType="Add" />
     </CFS>
     <CFS name="NIGHTDRIVE1" globalServiceCode="NIGHTDRIVE1" copyOf="CFS_FP_SERVICE_GENERAL" description="Ночной DRIVE 1" />
     <CFS name="NIGHTDRIVE30" globalServiceCode="NIGHTDRIVE30" copyOf="CFS_FP_SERVICE_GENERAL" description="Ночной DRIVE 30" />
@@ -1926,7 +1926,7 @@
     <CFS name="PPDSS5" globalServiceCode="PPDSS5" copyOf="CFS_FP_SERVICE_GENERAL" description="Услуга SS5" />
     <CFS name="PPDSS6" globalServiceCode="PPDSS6" copyOf="CFS_FP_SERVICE_GENERAL" description="Услуга SS6" />
     <CFS name="QRYUSER" description="Запрос состояния баррингов абонента">
-      <RFS name="RFS_HLR_ROAMING_TEST_QRYUSER" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_QRYUSER" linkType="Add" />
     </CFS>
     <CFS name="S100000A" globalServiceCode="S100000A" copyOf="CFS_FP_SERVICE_GENERAL" description="Business SMS пакеты 100000" />
     <CFS name="S10000A" globalServiceCode="S10000A" copyOf="CFS_FP_SERVICE_GENERAL" description="Business SMS пакеты 10000" />
@@ -1940,26 +1940,26 @@
     <CFS name="S50000A" globalServiceCode="S50000A" copyOf="CFS_FP_SERVICE_GENERAL" description="Business SMS пакеты 50000" />
     <CFS name="S70000A" globalServiceCode="S70000A" copyOf="CFS_FP_SERVICE_GENERAL" description="Business SMS пакеты 70000" />
     <CFS name="SCHEMEACTIVATEALLOW_GT_UMS_PS_CORE" description="Добавление управляющей схемы для роуминга">
-      <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEACT_UMS_1" linkType="Add" />
-      <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEACT_UMS_2" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_SCHEMEACT_UMS_1" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_SCHEMEACT_UMS_2" linkType="Add" />
     </CFS>
     <CFS name="SCHEMEACTIVATESTEERING" description="Добавление управляющей схемы для роуминга">
-      <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEACT_1" linkType="Add" />
-      <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEACT_2" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_SCHEMEACT_1" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_SCHEMEACT_2" linkType="Add" />
     </CFS>
     <CFS name="SCHEMEDEACTIVATEALLOW_GT_UMS_PS_CORE" copyOf="SCHEMEDEACTIVATESTEERING" description="Удаление управляющей схемы для роуминга" />
     <CFS name="SCHEMEDEACTIVATESTEERING" description="Удаление управляющей схемы для роуминга">
-      <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEDEL_1" linkType="Add" />
-      <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEDEL_2" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_SCHEMEDEL_1" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_SCHEMEDEL_2" linkType="Add" />
     </CFS>
     <CFS name="SMMO0" description="Служба коротких сообщений Исходящие">
-      <RFS name="RFS_HLR_ROAMING_TEST_SMMO0" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_SMMO0" linkType="Add" />
     </CFS>
     <CFS name="SMMO1" description="Служба коротких сообщений Исходящие">
-      <RFS name="RFS_HLR_ROAMING_TEST_SMMO1" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_SMMO1" linkType="Add" />
     </CFS>
     <CFS name="SMMT1" description="Служба коротких сообщений Входящие">
-      <RFS name="RFS_HLR_ROAMING_TEST_SMMT1" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_SMMT1" linkType="Add" />
     </CFS>
     <CFS name="SMN100" globalServiceCode="SMN100" copyOf="CFS_FP_SERVICE_GENERAL" description="Business МН SMS пакеты 100" />
     <CFS name="SMN150" globalServiceCode="SMN150" copyOf="CFS_FP_SERVICE_GENERAL" description="Business МН SMS пакеты 150" />
@@ -2413,36 +2413,36 @@
       <Append name="RFS_HLR_LTE" listType="EndList" />
       <Append name="RFS_HLR_SUBSCRIBER" listType="EndList" />
     </Scenario>
-    <Scenario name="HLR.ROAMING_TEST" description="Тестирование HLR ROAMING">
-      <RFS name="RFS_HLR_ROAMING_TEST_ADDLTE_1" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_ROAMING_TEST_ADDLTE_2" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_ROAMING_TEST_ADDLTE_3" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_ROAMING_TEST_BIC0" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_ROAMING_TEST_BIC1" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_ROAMING_TEST_BOC0" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_ROAMING_TEST_BOC1" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_ROAMING_TEST_BOC2" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_ROAMING_TEST_BOC3" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_ROAMING_TEST_BPOS0" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_ROAMING_TEST_BPOS1" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_ROAMING_TEST_BR0" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_ROAMING_TEST_BR1" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_ROAMING_TEST_DELETE" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_ROAMING_TEST_MODLOC" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_ROAMING_TEST_NAM0_1" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_ROAMING_TEST_NAM0_2" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_ROAMING_TEST_NAM1" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_ROAMING_TEST_QRYUSER" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEACT_1" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEACT_2" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEACT_UMS_1" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEACT_UMS_2" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEDEL_1" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_ROAMING_TEST_SCHEMEDEL_2" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_ROAMING_TEST_SMMO0" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_ROAMING_TEST_SMMO1" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_ROAMING_TEST_SMMT0" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_ROAMING_TEST_SMMT1" scenarioType="Add, Remove" />
+    <Scenario name="HLR.TEST" description="Тестирование HLR ROAMING">
+      <RFS name="RFS_HLR_TEST_ADDLTE_1" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_ADDLTE_2" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_ADDLTE_3" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_BIC0" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_BIC1" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_BOC0" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_BOC1" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_BOC2" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_BOC3" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_BPOS0" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_BPOS1" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_BR0" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_BR1" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_DELETE" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_MODLOC" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_NAM0_1" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_NAM0_2" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_NAM1" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_QRYUSER" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_SCHEMEACT_1" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_SCHEMEACT_2" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_SCHEMEACT_UMS_1" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_SCHEMEACT_UMS_2" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_SCHEMEDEL_1" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_SCHEMEDEL_2" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_SMMO0" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_SMMO1" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_SMMT0" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_SMMT1" scenarioType="Add, Remove" />
     </Scenario>
     <Scenario name="MG.Dummy" sendType="Drop" description="Фейковый сценарий MG">
       <RFS name="RFS_MG_RESTORE" scenarioType="Modify, Remove" />
