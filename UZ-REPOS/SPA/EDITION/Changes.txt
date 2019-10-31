@@ -58,6 +58,11 @@ C:\Users\vhovanskij\Desktop\httpcfg.exe set urlacl /u http://+:1002/ /a "D:(A;;G
 C:\Users\vhovanskij\Desktop\httpcfg.exe set urlacl /u http://+:1003/ /a "D:(A;;GX;;;NS)"
 C:\Users\vhovanskij\Desktop\httpcfg.exe set urlacl /u http://+:1004/ /a "D:(A;;GX;;;NS)"
 C:\Users\vhovanskij\Desktop\httpcfg.exe set urlacl /u http://+:1005/ /a "D:(A;;GX;;;NS)"
+C:\Users\vhovanskij\Desktop\httpcfg.exe set urlacl /u http://+:1006/ /a "D:(A;;GX;;;NS)"
+C:\Users\vhovanskij\Desktop\httpcfg.exe set urlacl /u http://+:1007/ /a "D:(A;;GX;;;NS)"
+C:\Users\vhovanskij\Desktop\httpcfg.exe set urlacl /u http://+:1008/ /a "D:(A;;GX;;;NS)"
+C:\Users\vhovanskij\Desktop\httpcfg.exe set urlacl /u http://+:1009/ /a "D:(A;;GX;;;NS)"
+C:\Users\vhovanskij\Desktop\httpcfg.exe set urlacl /u http://+:1010/ /a "D:(A;;GX;;;NS)"
 
 C:\Users\vhovanskij\Desktop\httpcfg.exe set urlacl /u http://+:2000/ /a "D:(A;;GX;;;NS)"
 C:\Users\vhovanskij\Desktop\httpcfg.exe set urlacl /u http://+:2001/ /a "D:(A;;GX;;;NS)"
