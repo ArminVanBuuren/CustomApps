@@ -2363,6 +2363,9 @@
     <Scenario name="HLR.Modify.DATATRANSFER" description="Изменение сервиса передачи данных">
       <RFS name="RFS_HLR_DATATRANSFER" scenarioType="Add, Remove" />
     </Scenario>
+    <Scenario name="HLR.Modify.CLIP" description="Изменение сервиса Определитель номера">
+      <RFS name="RFS_HLR_CLIP" scenarioType="Add, Remove" />
+    </Scenario>
     <Scenario name="HLR.Modify.LTE" description="Изменение сервиса LTE">
       <RFS name="RFS_HLR_LTE" scenarioType="Add, Remove" />
     </Scenario>

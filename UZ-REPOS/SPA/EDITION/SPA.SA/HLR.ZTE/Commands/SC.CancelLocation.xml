@@ -3,13 +3,13 @@
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
   <Request>
     <RequestTemplate>
-      <![CDATA[MOD LOC: MSISDN=##msisdn##,##location##;^M]]>
+      <![CDATA[MOD LOC: MSISDN=##msisdn##,##LOCATION##;^M]]>
     </RequestTemplate>
-    <Item Name="location" Type="LocalParameter" />
     <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="LOCATION" Type="LocalParameter" />
   </Request>
   <ParametersList>
-    <Parameter Name="location" IsChoice="true" AbsenceValue="MSCNumber=*,VLRnumber=*,SGSNNumber=*,SGSNAddr=*">
+    <Parameter Name="LOCATION" IsChoice="true" AbsenceValue="MSCNumber=*,VLRnumber=*,SGSNNumber=*,SGSNAddr=*">
       <Source Path="//RES_HLR_CANCEL_LOCATION/Value[text()='SGSN']" PostFormat="SGSNNumber=*,SGSNAddr=*" />
       <Source Path="//RES_HLR_CANCEL_LOCATION/Value[text()='LTE']" PostFormat="EPCMMEHost=*,EPCMMERealm=*,EPCSGSNHost=*,EPCSGSNRealm=*" />
     </Parameter>

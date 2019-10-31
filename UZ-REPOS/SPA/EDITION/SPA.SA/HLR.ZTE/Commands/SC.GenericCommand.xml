@@ -3,44 +3,41 @@
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
   <Request>
     <RequestTemplate>
-      <![CDATA[##GenericCommandParameter##^M]]>
+      <![CDATA[##GenericParameter##^M]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate>
-      <![CDATA[]]>
-    </EmulationPrintoutTemplate>
-    <Item Name="GenericCommandParameter" Type="LocalParameter" />
+    <Item Name="GenericParameter" Type="LocalParameter" />
   </Request>
   <ParametersList>
-    <Parameter Name="GenericCommandParameter" IsChoice="true" AbsenceValue="">
-      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HLR_ROAMING_TEST_BIC0]//Identifier/MSISDN" PostFormat="MOD ODB:MSISDN={0},BIC=0;" />
-      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HLR_ROAMING_TEST_BIC1]//Identifier/MSISDN" PostFormat="MOD ODB:MSISDN={0},BIC=1;" />
-      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HLR_ROAMING_TEST_BOC0]//Identifier/MSISDN" PostFormat="MOD ODB:MSISDN={0},BOC=0;" />
-      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HLR_ROAMING_TEST_BOC1]//Identifier/MSISDN" PostFormat="MOD ODB:MSISDN={0},BOC=1;" />
-      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HLR_ROAMING_TEST_BOC2]//Identifier/MSISDN" PostFormat="MOD ODB:MSISDN={0},BOC=2;" />
-      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HLR_ROAMING_TEST_BOC3]//Identifier/MSISDN" PostFormat="MOD ODB:MSISDN={0},BOC=3;" />
-      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HLR_ROAMING_TEST_BPOS0]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},BPOS=0;" />
-      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HLR_ROAMING_TEST_BPOS1]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},BPOS=1;" />
-      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HLR_ROAMING_TEST_BR0]//Identifier/MSISDN" PostFormat="MOD ODB:MSISDN={0},BR=0;" />
-      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HLR_ROAMING_TEST_BR1]//Identifier/MSISDN" PostFormat="MOD ODB:MSISDN={0},BR=2;" />
-      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HLR_ROAMING_TEST_ADDLTE_1]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},SubType=2;" />
-      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HLR_ROAMING_TEST_ADDLTE_2]//Identifier/MSISDN" PostFormat="Set TPLAPNCP:MSISDN={0},EPCAPNCPTPL=51;" />
-      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HLR_ROAMING_TEST_ADDLTE_3]//Identifier/MSISDN" PostFormat="Set EPCBsc:MSISDN={0},EPCCHARGCHRT=8,EPCRFSP=0,EPCSTNSR=FFFFFFFFFFFFFFF,EPCICSIND=0,EPCAMBRUP=100000000,EPCAMBRDOWN=100000000;" />
-      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HLR_ROAMING_TEST_DELETE]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},SubType=1;" />
-      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HLR_ROAMING_TEST_MODLOC]//Identifier/MSISDN" PostFormat="MOD LOC:MSISDN={0},MSCNumber=*,VLRnumber=*,SGSNNumber=*,SGSNAddr=*,EPCMMEHost=*,EPCMMERealm=*,EPCSGSNHost=*,EPCSGSNRealm=*;" />
-      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HLR_ROAMING_TEST_NAM0_1]//Identifier/MSISDN" PostFormat="MOD NAM:MSISDN={0},NAM=0,Keep=1,KEEPEPS=1;" />
-      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HLR_ROAMING_TEST_NAM0_2]//Identifier/MSISDN" PostFormat="SET TPLGPRS:MSISDN={0},GPRSTPL=51;" />
-      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HLR_ROAMING_TEST_NAM1]//Identifier/MSISDN" PostFormat="MOD NAM:MSISDN={0},NAM=1,Keep=1,KEEPEPS=1;" />
-      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HLR_ROAMING_TEST_QRYUSER]//Identifier/MSISDN" PostFormat="Qry User:MSISDN={0},Item=ALL;" />
-      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HLR_ROAMING_TEST_SCHEMEACT_1]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},ROAMSCH=STEERING;" />
-      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HLR_ROAMING_TEST_SCHEMEACT_2]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},PSROAMSCH=STEERING;" />
-      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HLR_ROAMING_TEST_SCHEMEACT_UMS_1]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},ROAMSCH=ALLOW_GT_UMS_PS_CORE;" />
-      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HLR_ROAMING_TEST_SCHEMEACT_UMS_1]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},PSROAMSCH=ALLOW_GT_UMS_PS_CORE;" />
-      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HLR_ROAMING_TEST_SCHEMEDEL_1]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},ROAMSCH=*;" />
-      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HLR_ROAMING_TEST_SCHEMEDEL_2]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},PSROAMSCH=*;" />
-      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HLR_ROAMING_TEST_SMMO0]//Identifier/MSISDN" PostFormat="MOD TELE:MSISDN={0},SMMO=0;" />
-      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HLR_ROAMING_TEST_SMMO1]//Identifier/MSISDN" PostFormat="MOD TELE:MSISDN={0},SMMO=1;" />
-      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HLR_ROAMING_TEST_SMMT0]//Identifier/MSISDN" PostFormat="MOD TELE:MSISDN={0},SMMT=0;" />
-      <Source Path="/ExtendedRequestMessage[AdditionalData//RFS_HLR_ROAMING_TEST_SMMT1]//Identifier/MSISDN" PostFormat="MOD TELE:MSISDN={0},SMMT=1;" />
+    <Parameter Name="GenericParameter" IsChoice="true" AbsenceValue="">
+      <Source Path="/*[1][AdditionalData//RFS_HLR_ROAMING_TEST_BIC0]//Identifier/MSISDN" PostFormat="MOD ODB:MSISDN={0},BIC=0;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_ROAMING_TEST_BIC1]//Identifier/MSISDN" PostFormat="MOD ODB:MSISDN={0},BIC=1;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_ROAMING_TEST_BOC0]//Identifier/MSISDN" PostFormat="MOD ODB:MSISDN={0},BOC=0;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_ROAMING_TEST_BOC1]//Identifier/MSISDN" PostFormat="MOD ODB:MSISDN={0},BOC=1;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_ROAMING_TEST_BOC2]//Identifier/MSISDN" PostFormat="MOD ODB:MSISDN={0},BOC=2;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_ROAMING_TEST_BOC3]//Identifier/MSISDN" PostFormat="MOD ODB:MSISDN={0},BOC=3;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_ROAMING_TEST_BPOS0]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},BPOS=0;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_ROAMING_TEST_BPOS1]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},BPOS=1;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_ROAMING_TEST_BR0]//Identifier/MSISDN" PostFormat="MOD ODB:MSISDN={0},BR=0;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_ROAMING_TEST_BR1]//Identifier/MSISDN" PostFormat="MOD ODB:MSISDN={0},BR=2;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_ROAMING_TEST_ADDLTE_1]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},SubType=2;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_ROAMING_TEST_ADDLTE_2]//Identifier/MSISDN" PostFormat="Set TPLAPNCP:MSISDN={0},EPCAPNCPTPL=51;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_ROAMING_TEST_ADDLTE_3]//Identifier/MSISDN" PostFormat="Set EPCBsc:MSISDN={0},EPCCHARGCHRT=8,EPCRFSP=0,EPCSTNSR=FFFFFFFFFFFFFFF,EPCICSIND=0,EPCAMBRUP=100000000,EPCAMBRDOWN=100000000;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_ROAMING_TEST_DELETE]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},SubType=1;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_ROAMING_TEST_MODLOC]//Identifier/MSISDN" PostFormat="MOD LOC:MSISDN={0},MSCNumber=*,VLRnumber=*,SGSNNumber=*,SGSNAddr=*,EPCMMEHost=*,EPCMMERealm=*,EPCSGSNHost=*,EPCSGSNRealm=*;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_ROAMING_TEST_NAM0_1]//Identifier/MSISDN" PostFormat="MOD NAM:MSISDN={0},NAM=0,Keep=1,KEEPEPS=1;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_ROAMING_TEST_NAM0_2]//Identifier/MSISDN" PostFormat="SET TPLGPRS:MSISDN={0},GPRSTPL=51;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_ROAMING_TEST_NAM1]//Identifier/MSISDN" PostFormat="MOD NAM:MSISDN={0},NAM=1,Keep=1,KEEPEPS=1;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_ROAMING_TEST_QRYUSER]//Identifier/MSISDN" PostFormat="Qry User:MSISDN={0},Item=ALL;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_ROAMING_TEST_SCHEMEACT_1]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},ROAMSCH=STEERING;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_ROAMING_TEST_SCHEMEACT_2]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},PSROAMSCH=STEERING;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_ROAMING_TEST_SCHEMEACT_UMS_1]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},ROAMSCH=ALLOW_GT_UMS_PS_CORE;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_ROAMING_TEST_SCHEMEACT_UMS_1]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},PSROAMSCH=ALLOW_GT_UMS_PS_CORE;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_ROAMING_TEST_SCHEMEDEL_1]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},ROAMSCH=*;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_ROAMING_TEST_SCHEMEDEL_2]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},PSROAMSCH=*;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_ROAMING_TEST_SMMO0]//Identifier/MSISDN" PostFormat="MOD TELE:MSISDN={0},SMMO=0;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_ROAMING_TEST_SMMO1]//Identifier/MSISDN" PostFormat="MOD TELE:MSISDN={0},SMMO=1;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_ROAMING_TEST_SMMT0]//Identifier/MSISDN" PostFormat="MOD TELE:MSISDN={0},SMMT=0;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_ROAMING_TEST_SMMT1]//Identifier/MSISDN" PostFormat="MOD TELE:MSISDN={0},SMMT=1;" />
     </Parameter>
   </ParametersList>
   <ErrorsList CodePage="windows-1251" />

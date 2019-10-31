@@ -92,22 +92,20 @@
     </node>
     <node name="Modify_SMST" object="Commander">
       <resultlist>
-        <result value="0" node="Delete_CLIP" />
+        <result value="0" node="Modify_CLIP" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
         <param name="Command" value="SC.Modify_SMST" />
       </parameterslist>
     </node>
-    <node name="Delete_CLIP" object="IfCommander">
+    <node name="Modify_CLIP" object="Commander">
       <resultlist>
         <result value="0" node="Modify_CW" />
-        <result value="1538" node="Modify_CW" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="IfNotXmlPath:0" value="//RFS_HLR_CLIP" />
-        <param name="Command" value="SC.Delete_CLIP" />
+        <param name="Command" value="SC.Modify_CLIP" />
       </parameterslist>
     </node>
     <node name="Modify_CW" object="Commander">
@@ -150,64 +148,55 @@
     </node>
     <node name="Modify_DataTransfer" object="Commander">
       <resultlist>
-        <result value="0" node="Delete_CFB" />
+        <result value="0" node="Modify_CFB" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
         <param name="Command" value="SC.Modify_DataTransfer" />
       </parameterslist>
     </node>
-    <node name="Delete_CFB" object="IfCommander">
+    <node name="Modify_CFB" object="Commander">
       <resultlist>
-        <result value="0" node="Delete_CFU" />
-        <result value="1538" node="Delete_CFU" />
+        <result value="0" node="Modify_CFU" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="IfNotXmlPath:0" value="//RFS_HLR_CFB" />
-        <param name="Command" value="SC.Delete_CFB" />
+        <param name="Command" value="SC.Modify_CFB" />
       </parameterslist>
     </node>
-    <node name="Delete_CFU" object="IfCommander">
+    <node name="Modify_CFU" object="Commander">
       <resultlist>
-        <result value="0" node="Delete_CFNRC" />
-        <result value="1538" node="Delete_CFNRC" />
+        <result value="0" node="Modify_CFNRC" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="IfNotXmlPath:0" value="//RFS_HLR_CFU" />
-        <param name="Command" value="SC.Delete_CFU" />
+        <param name="Command" value="SC.Modify_CFU" />
       </parameterslist>
     </node>
-    <node name="Delete_CFNRC" object="IfCommander">
+    <node name="Modify_CFNRC" object="Commander">
       <resultlist>
-        <result value="0" node="Delete_CFNRY" />
-        <result value="1538" node="Delete_CFNRY" />
+        <result value="0" node="Modify_CFNRY" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="IfNotXmlPath:0" value="//RFS_HLR_CFNRC" />
-        <param name="Command" value="SC.Delete_CFNRC" />
+        <param name="Command" value="SC.Modify_CFNRC" />
       </parameterslist>
     </node>
-    <node name="Delete_CFNRY" object="IfCommander">
+    <node name="Modify_CFNRY" object="Commander">
       <resultlist>
-        <result value="0" node="Delete_CFD" />
-        <result value="1538" node="Delete_CFD" />
+        <result value="0" node="Modify_CFD" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="IfNotXmlPath:0" value="//RFS_HLR_CFNRY" />
-        <param name="Command" value="SC.Delete_CFNRY" />
+        <param name="Command" value="SC.Modify_CFNRY" />
       </parameterslist>
     </node>
-    <node name="Delete_CFD" object="IfCommander">
+    <node name="Modify_CFD" object="Commander">
       <resultlist>
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="IfNotXmlPath:0" value="//RFS_HLR_CFD" />
-        <param name="Command" value="SC.Delete_CFD" />
+        <param name="Command" value="SC.Modify_CFD" />
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">

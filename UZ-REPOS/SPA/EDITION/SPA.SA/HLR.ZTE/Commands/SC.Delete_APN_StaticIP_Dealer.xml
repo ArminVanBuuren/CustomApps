@@ -5,8 +5,8 @@
     <RequestTemplate>
       <![CDATA[MOD PDP:MSISDN=##msisdn##,OAPN=##DEALER_APN##,OPDPTYPE=0,OaddrOption=1,PDPAddr=0.0.0.0;^M]]>
     </RequestTemplate>
-    <Item Name="DEALER_APN" Type="Parameter" />
     <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="DEALER_APN" Type="Parameter" />
   </Request>
   <ErrorsList CodePage="windows-1251">
     <Error Name="104080" Value="SUCCESS" />

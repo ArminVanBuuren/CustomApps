@@ -5,8 +5,8 @@
     <RequestTemplate>
       <![CDATA[Reg FN:MSISDN=##msisdn##,SS=##CallForwardName##,Bsg=0,Register=0,Active=0;^M]]>
     </RequestTemplate>
-    <Item Name="CallForwardName" Type="LocalParameter" />
     <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="CallForwardName" Type="LocalParameter" />
   </Request>
   <ParametersList>
     <Parameter Name="CallForwardName" IsChoice="true" AbsenceValue="">

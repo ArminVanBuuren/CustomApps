@@ -488,7 +488,7 @@
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Add_APN_StaticIP_Dealer.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Add_APN_StaticIP_LTE.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Add_CF.xml" />
-    <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Add_CLIP.xml" />
+    <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Modify_CLIP.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Add_CLIR.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Add_KI.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Add_LTE_EPC.xml" />
@@ -504,12 +504,11 @@
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Delete_APN_StaticIP_LTE.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Delete_AuthIMSI.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Delete_CF.xml" />
-    <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Delete_CFB.xml" />
-    <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Delete_CFD.xml" />
-    <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Delete_CFNRC.xml" />
-    <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Delete_CFNRY.xml" />
-    <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Delete_CFU.xml" />
-    <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Delete_CLIP.xml" />
+    <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Modify_CFB.xml" />
+    <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Modify_CFD.xml" />
+    <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Modify_CFNRC.xml" />
+    <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Modify_CFNRY.xml" />
+    <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Modify_CFU.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Delete_CLIR.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Delete_Subscriber_IMSI.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Delete_Subscriber_MSISDN.xml" />
@@ -541,7 +540,7 @@
     <Content Include="EDITION\SPA.SA\HLR.ZTE\dictionary.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Misc\RepetitionTable.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\GetSubscriberByMSISDN.xml" />
-    <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.Add.RFS_HLR_CLIP.xml" />
+    <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.HLR.Modify.CLIP.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.Add.RFS_HLR_CLIR.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.HLR.Add.CallForwarding.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.HLR.Add.NET_APN.xml" />
@@ -565,7 +564,6 @@
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.HLR.Remove.NET_APN.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.HLR.Remove.StaticIP.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.HLR.ROAMING_TEST.xml" />
-    <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.Remove.RFS_HLR_CLIP.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\GetSubscriberByIMSI.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.Remove.RFS_HLR_CLIR.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.HLR.ChangeProfile.xml" />
