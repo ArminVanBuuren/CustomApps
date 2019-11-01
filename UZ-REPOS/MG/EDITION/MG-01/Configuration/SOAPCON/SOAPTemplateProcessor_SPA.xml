@@ -1972,7 +1972,7 @@
       <param name="storelog" />
     </output>
   </template>
-  <template procedureName="LatestPayments_Step2" sessionStorage="Memory" sessionLifetime="300" persistent="false">
+  <template procedureName="LastOutstandingPayment_Step2" sessionStorage="Memory" sessionLifetime="300" persistent="false">
     <receiveTemplate>
       <Message type="retrievecustomerdata" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
         <Item customer="${sCustomer}" subject="payments">

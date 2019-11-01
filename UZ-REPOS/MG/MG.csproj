@@ -136,12 +136,6 @@
     <Content Include="EDITION\MG-01\rar.exe" />
     <Content Include="EDITION\MG-02\Configuration\CRMCON\CRMCON_02_01.exe.xml" />
     <Content Include="EDITION\MG-02\Configuration\DBCON\DBCON_02_01.exe.xml" />
-    <Content Include="EDITION\MG-02\Configuration\IVRCON\IVRCON_02_01.exe.xml" />
-    <Content Include="EDITION\MG-02\Configuration\IVRCON\IVRCON_02_02.exe.xml" />
-    <Content Include="EDITION\MG-02\Configuration\IVRCON\IVRCON_SCP_02_07.exe.xml" />
-    <Content Include="EDITION\MG-02\Configuration\IVRCON\IVRCON_SCP_02_08.exe.xml" />
-    <Content Include="EDITION\MG-02\Configuration\IVRCON\IVRTemplateProcessor.01.xml" />
-    <Content Include="EDITION\MG-02\Configuration\IVRCON\IVRTemplateProcessor.02.xml" />
     <Content Include="EDITION\MG-02\Configuration\SMSCON\SMSCON_02_01.exe.xml" />
     <Content Include="EDITION\MG-02\Configuration\SMSCON\SMSCON_02_ISSA.exe.xml" />
     <Content Include="EDITION\MG-02\Configuration\SMSCON\SMSTemplateProcessor.01.xml" />
@@ -269,7 +263,6 @@
     <Content Include="EDITION\MG-03\Configuration\SOAPCON\SOAPCON_03_WHIRL.exe.xml" />
     <Content Include="EDITION\MG-03\Configuration\SOAPCON\SOAPCON_USSD_03_01.exe.xml" />
     <Content Include="EDITION\MG-03\Configuration\SOAPCON\SOAPCON_USSD_03_02.exe.xml" />
-    <Content Include="EDITION\MG-03\Configuration\SOAPCON\SOAPTemplateProcessor_APP.xml" />
     <Content Include="EDITION\MG-03\Configuration\SOAPCON\SOAPTemplateProcessor_USSD.xml" />
     <Content Include="EDITION\MG-03\Configuration\SOAPCON\SOAPTemplateProcessor_WHIRL.xml" />
     <Content Include="EDITION\MG-03\Configuration\WCFHND\WCFHND_03_01.exe.xml" />
