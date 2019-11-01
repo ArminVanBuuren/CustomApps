@@ -1,9 +1,5 @@
 <templates connector="SMS">
   <macros>
-    <!-- ==========================  REDIRECT CONNECTORS   ========================= -->
-    <define name="_SMSCON_ISSA" value="SMSCON_01_ISSA" />
-    <define name="_USSD_1" value="USSDCON_01_01" />
-    <!-- ==========================  REDIRECT CONNECTORS   ========================= -->
     <!-- ==========================  SMSCON SPECIAL   ========================= -->
     <define name="_SMS_NUM_1" value="111" />
     <define name="_SMS_NUM_2" value="1771" />
@@ -113,37 +109,6 @@
     <define name="_CURRENT_INITIATOR" value="smscon" />
     <!-- ==========================  SETTINGS   ========================= -->
   </macros>
-  <template procedureName="GET_BILL_DETAIL" sessionStorage="Memory" sessionLifetime="30" persistent="false">
-    <condition>
-      <test item="${Recipient}" matches="^(_SMS_NUM_1|_SMS_NUM_2)$" />
-      <test item="${Content}" matches="^([Bb][Ii][Ll][Ll])$" />
-    </condition>
-    <receiveTemplate>
-      <Message type="retrievecustomerdata" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(@{newGuid})}">
-        <Item customer="${Sender}" subject="getcurrentcharge">
-          <Attribute name="convert" value="0" />
-          <Attribute name="index" value="5" />
-        </Item>
-        @{store(sRecipient,${Recipient})}
-        @{store(sModule,_CURRENT_MODULE)}
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate conditionEx="#{'${dbresult}'='0' or '${dbresult}'='320555'}">
-      <set item="Content" value="${no-escape:includeresult}" />
-      <set item="Sender" value="${sRecipient}" />
-      <set item="Recipient" value="${customer}" />
-      <set item="Encoding" value="unicodefffe" />
-      <set conditionEx="0@{freeSession}" />
-    </deliveryTemplate>
-    <deliveryTemplate>
-      <set item="Content" value="Dannyi zapros seichas ne mozhet byt vypolnen. Povtorite pozhaluista pozzhe." />
-      <set item="Content" condition="//Item/@dbresult=320768" value="Na Vashem nomere net rashodov za poslednie 5 dnei" />
-      <set item="Sender" value="${sRecipient}" />
-      <set item="Recipient" value="${customer}" />
-      <set item="Encoding" value="unicodefffe" />
-      <set conditionEx="0@{freeSession}" />
-    </deliveryTemplate>
-  </template>
   <template procedureName="SendPriceSMS">
     <condition>
       <test item="0" matches="1" />
@@ -329,8 +294,6 @@
         </Item>
       </Message>
     </receiveTemplate>
-    <deliveryTemplate conditionEx="#{'#{string-length('${Sender}')}'='12'}" connector="_SMSCON_ISSA" />
-    <deliveryTemplate conditionEx="#{matches('${Sender}','[Uu][Ss][Ss][Dd]')}" connector="_USSD_1" />
     <deliveryTemplate conditionEx="#{matches('${Sender}','[Ff][Ll][Aa][Ss][Hh]')}">
       <set item="Content" value="${no-escape:Content}" />
       <set item="Sender" value="_SMS_NUM_1" />

@@ -1316,28 +1316,6 @@
       <param name="storelog" />
     </output>
   </template>
-  <template procedureName="PtPMoneyTransfer_Step2" sessionStorage="Memory" sessionLifetime="300" persistent="false">
-    <receiveTemplate>
-      <Message type="serviceorder" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-        <Item customer="${sCustomer}" action="IsDifferrentRegion">
-          <Attribute name="receiver" value="${sReceiver}" />
-        </Item>
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate conditionEx="#{'${dbresult}'='0'}" call="PtPMoneyTransfer_Step3" />
-    <deliveryTemplate call="ALLServiceStringFormat">
-      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-      <set conditionEx="0@{store(sDbresult,${dbresult})}" />
-      <set item="iparam:content" value="" />
-    </deliveryTemplate>
-    <input>
-      <param name="storelog" />
-    </input>
-    <output>
-      <param name="content" />
-      <param name="storelog" />
-    </output>
-  </template>
   <template procedureName="PtPMoneyTransfer_Step3" sessionStorage="Memory" sessionLifetime="300" persistent="false">
     <receiveTemplate>
       <Message type="serviceorder" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
@@ -1764,36 +1742,9 @@
   </template>
   <template procedureName="ChangeLanguageINPlatform_Step2" sessionStorage="Memory" sessionLifetime="300" persistent="false">
     <receiveTemplate>
-      <Message type="verificationrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+      <Message type="setprofile" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}" reply="">
         <Item customer="${sCustomer}">
-          <Attribute name="checkivrservice" value="2" />
-          <Attribute name="checkblocks" value="0" />
-        </Item>
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate conditionEx="#{'${dbresult}'='0' and '${inplatform}'!=''}" call="ChangeLanguageINPlatform_Step3">
-      <set conditionEx="0@{store(sInPaltform,${inplatform})}" />
-    </deliveryTemplate>
-    <deliveryTemplate call="ALLServiceStringFormat">
-      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-      <set item="iparam:content" conditionEx="#{'${inplatform}'=''}" value="@{store(sDbresult,320990)}" />
-      <set item="iparam:content" conditionEx="#{'${inplatform}'!=''}" value="@{store(sDbresult,${dbresult})}" />
-    </deliveryTemplate>
-    <input>
-      <param name="storelog" />
-    </input>
-    <output>
-      <param name="content" />
-      <param name="storelog" />
-    </output>
-  </template>
-  <template procedureName="ChangeLanguageINPlatform_Step3" sessionStorage="Memory" sessionLifetime="300" persistent="false">
-    <receiveTemplate>
-      <Message type="setupservicerequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-        <Item customer="${sCustomer}">
-          <Attribute name="scplang" value="#{document('_DICTIONARY_PATH')/Dictionary/Language/Item[@param='_GET_LANG']/@scp}" />
-          <Attribute name="ussdlang" value="#{document('_DICTIONARY_PATH')/Dictionary/Language/Item[@param='_GET_LANG']/@ussd}" />
-          <Attribute name="inplatform" value="${sInPaltform}" />
+          <Attribute name="communicationlanguage" value="#{document('_DICTIONARY_PATH')/Dictionary/Language/Item[@param='_GET_LANG']/@language_id}" />
         </Item>
       </Message>
     </receiveTemplate>
@@ -1865,51 +1816,15 @@
         </Item>
       </Message>
     </receiveTemplate>
-    <deliveryTemplate conditionEx="#{'${dbresult}'='0' and '${intpartfracpart}'!='' and '${day}'!='' and '${currency}'!=''}" call="LatestPayments_Step3">
-      <set conditionEx="0@{store(sIntpartfracpart,${intpartfracpart})}" />
-      <set conditionEx="0@{store(sDay,${day})}" />
-      <set conditionEx="0@{store(sCurrency,${currency})}" />
-    </deliveryTemplate>
-    <deliveryTemplate call="ALLServiceStringFormat">
-      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-      <set conditionEx="0@{store(sDbresult,${dbresult})}" />
-      <set item="iparam:content" value="" />
-    </deliveryTemplate>
-    <input>
-      <param name="storelog" />
-    </input>
-    <output>
-      <param name="content" />
-      <param name="storelog" />
-    </output>
-  </template>
-  <template procedureName="LatestPayments_Step3" sessionStorage="Memory" sessionLifetime="300" persistent="false">
-    <receiveTemplate>
-      <Message type="retrievecustomerdata" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-        <Item subject="exchangerate">
-          <Attribute name="value" value="#{${sIntpartfracpart} div 100}" />
-          <Attribute name="day" value="${sDay}" />
-          <Attribute name="currecyin" value="#{if(${sCurrency}='840','840','860')}" />
-          <Attribute name="currecyto" value="#{if(${sCurrency}='840','860','840')}" />
-        </Item>
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate conditionEx="#{'${dbresult}'='0' and '${sCurrency}'='840' and '${calccurr}'!=''}" call="ALLServiceStringFormat">
+    <deliveryTemplate conditionEx="#{'${dbresult}'='0'}" call="ALLServiceStringFormat">
       <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
       <set conditionEx="0@{store(sDbresult,success)}" />
-      <set conditionEx="0@{store(sParams,#{replace('#{${calccurr} div 100}',',','.')};#{replace('#{${sIntpartfracpart} div 100}',',','.')};${sDay})}" />
-      <set item="iparam:content" value="" />
-    </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{'${dbresult}'='0' and '${sCurrency}'='860' and '${calccurr}'!=''}" call="ALLServiceStringFormat">
-      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-      <set conditionEx="0@{store(sDbresult,success)}" />
-      <set conditionEx="0@{store(sParams,#{replace('#{${calccurr} div 100}',',','.')};#{replace('#{${sIntpartfracpart} div 100}',',','.')};${sDay})}" />
+      <set conditionEx="0@{store(sParams,#{replace('${intpartfracpart} * 42.1035',',','.')};#{replace('#{${intpartfracpart} div 100}',',','.')};${day})}" />
       <set item="iparam:content" value="" />
     </deliveryTemplate>
     <deliveryTemplate call="ALLServiceStringFormat">
       <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-      <set item="iparam:content" conditionEx="#{'${dbresult}'='0'}" value="@{store(sDbresult,320990)}" />
-      <set item="iparam:content" conditionEx="#{'${dbresult}'!='0'}" value="@{store(sDbresult,${dbresult})}" />
+      <set item="iparam:content" value="@{store(sDbresult,${dbresult})}" />
     </deliveryTemplate>
     <input>
       <param name="storelog" />
@@ -1966,59 +1881,23 @@
       <param name="storelog" />
     </output>
   </template>
-  <template procedureName="LastOutstandingPayment_Step2" sessionStorage="Memory" sessionLifetime="300" persistent="false">
+  <template procedureName="LatestPayments_Step2" sessionStorage="Memory" sessionLifetime="300" persistent="false">
     <receiveTemplate>
-      <Message type="retrievecustomerdata" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-        <Item customer="${sCustomer}" subject="checkpayments">
+      <Message type="retrievecustomerdata" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${sCustomer}" subject="payments">
           <Attribute name="index" value="0" />
         </Item>
       </Message>
     </receiveTemplate>
-    <deliveryTemplate conditionEx="#{'${dbresult}'='0' and '${intpartfracpart}'!='' and '${day}'!='' and '${currency}'!=''}" call="LastOutstandingPayment_Step3">
-      <set conditionEx="0@{store(sIntpartfracpart,${intpartfracpart})}" />
-      <set conditionEx="0@{store(sDay,${day})}" />
-      <set conditionEx="0@{store(sCurrency,${currency})}" />
-    </deliveryTemplate>
-    <deliveryTemplate call="ALLServiceStringFormat">
-      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-      <set conditionEx="0@{store(sDbresult,${dbresult})}" />
-      <set item="iparam:content" value="" />
-    </deliveryTemplate>
-    <input>
-      <param name="storelog" />
-    </input>
-    <output>
-      <param name="content" />
-      <param name="storelog" />
-    </output>
-  </template>
-  <template procedureName="LastOutstandingPayment_Step3" sessionStorage="Memory" sessionLifetime="300" persistent="false">
-    <receiveTemplate>
-      <Message type="retrievecustomerdata" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-        <Item subject="exchangerate">
-          <Attribute name="value" value="#{${sIntpartfracpart} div 100}" />
-          <Attribute name="day" value="${sDay}" />
-          <Attribute name="currecyin" value="#{if(${sCurrency}='840','840','860')}" />
-          <Attribute name="currecyto" value="#{if(${sCurrency}='840','860','840')}" />
-        </Item>
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate conditionEx="#{'${dbresult}'='0' and '${sCurrency}'='840' and '${calccurr}'!=''}" call="ALLServiceStringFormat">
+    <deliveryTemplate conditionEx="#{'${dbresult}'='0'}" call="ALLServiceStringFormat">
       <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
       <set conditionEx="0@{store(sDbresult,success)}" />
-      <set conditionEx="0@{store(sParams,#{replace('#{${calccurr} div 100}',',','.')};#{replace('#{${sIntpartfracpart} div 100}',',','.')};${sDay})}" />
-      <set item="iparam:content" value="" />
-    </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{'${dbresult}'='0' and '${sCurrency}'='860' and '${calccurr}'!=''}" call="ALLServiceStringFormat">
-      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-      <set conditionEx="0@{store(sDbresult,success)}" />
-      <set conditionEx="0@{store(sParams,#{replace('#{${calccurr} div 100}',',','.')};#{replace('#{${sIntpartfracpart} div 100}',',','.')};${sDay})}" />
+      <set conditionEx="0@{store(sParams,#{replace('${intpartfracpart} * 42.1035',',','.')};#{replace('#{${intpartfracpart} div 100}',',','.')};${day})}" />
       <set item="iparam:content" value="" />
     </deliveryTemplate>
     <deliveryTemplate call="ALLServiceStringFormat">
       <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-      <set item="iparam:content" conditionEx="#{'${dbresult}'='0'}" value="@{store(sDbresult,320990)}" />
-      <set item="iparam:content" conditionEx="#{'${dbresult}'!='0'}" value="@{store(sDbresult,${dbresult})}" />
+      <set item="iparam:content" value="@{store(sDbresult,${dbresult})}" />
     </deliveryTemplate>
     <input>
       <param name="storelog" />
@@ -2237,101 +2116,6 @@
       <param name="storelog" />
     </output>
   </template>
-  <template procedureName="DB_BMSBalanceRetriev" sessionStorage="Memory" sessionLifetime="300">
-    <receiveTemplate>
-      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(BMSBalance_${customer})}">
-        <Item customer="${customer}">
-          <Attribute name="checkivrservice" value="0" />
-          <Attribute name="checkblocks" value="0" />
-        </Item>
-        @{store(sCustomer,${customer})}
-        @{store(sService,_GETBMSBALANCE)}
-        @{store(sModule,_CURRENT_MODULE)}
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate conditionEx="false@{store(sLang,_INLANGUAGE)}" />
-    <deliveryTemplate conditionEx="false@{store(sInProgress,#{if(number(_GET_SECONDS)-number(${sStartSecond})&lt;number(_ALLSERVICE_TIMETOPROGRESS) and number(_GET_SECONDS)-number(${sStartSecond})&gt;0,'true','false')})}" />
-    <deliveryTemplate conditionEx="#{'${dbresult}'!='0'}" call="ALLServiceStringFormat">
-      <set conditionEx="0@{store(sDbresult,${dbresult})}" />
-      <set item="iparam:content" value="" />
-    </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{'_ALLSERVICE_NAME'='' or '${sCustomer}'=''}" call="ALLServiceStringFormat">
-      <set conditionEx="0@{store(sDbresult,329990)}" />
-      <set item="iparam:content" value="" />
-    </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{matches('${sInProgress}','_IF_TRUE')}" call="ALLServiceStringFormat">
-      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-      <set conditionEx="0@{store(sDbresult,inprogress)}" />
-      <set item="iparam:content" value="" />
-    </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{((_ALLSERVICE_CUSTLST_CNT&gt;0 and not(matches('_ALLSERVICE_CUSTLST_ISAVAIL','_IF_TRUE'))) or (_ALLSERVICE_CUSTLST_CNT=0 and matches('_ALLSERVICE_CUSTLST_ISAVAIL','_IF_TRUE'))) and '_ALLSERVICE_CUSTLST_NOTAVAILINFO'!=''}" call="ALLServiceStringFormat">
-      <set item="iparam:content" value="_ALLSERVICE_CUSTLST_NOTAVAILINFO" />
-    </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{not(matches('_ALLSERVICE_REDIRECT','_REDIRECT_TO_CURRENT')) and '_ALLSERVICE_REDIRECT'!=''}" call="ALLServiceStringFormat" terminating="false">
-      <set conditionEx="0@{store(sDbresult,redirect)}" />
-      <set item="iparam:content" value="" />
-    </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{('_ALLSERVICE_TP_NOTAVAILINFO'!='' or matches('_ALLSERVICE_CHECKBLOCK','_IF_TRUE')) and not(matches('${sIsBindVerfAval}','_IF_TRUE'))}" call="ALLServiceCheckVerify" />
-    <deliveryTemplate conditionEx="#{'_ALLSERVICE_AVAIL_BAL'!='' and not(matches('${sIsBindBalAval}','_IF_TRUE'))}" call="ALLServiceCheckBindingBal" />
-    <deliveryTemplate conditionEx="#{_ALLSERVICE_SRVBIND_CNT&gt;0 and not(matches('${sIsBindSrvAval}','_IF_TRUE'))}" call="ALLServiceCheckBindingSrv" />
-    <deliveryTemplate call="DB_BMSBalanceRetriev_Step2" />
-    <input>
-      <param name="customer" />
-      <param name="lang" />
-    </input>
-    <output>
-      <param name="content" />
-      <param name="storelog" />
-    </output>
-  </template>
-  <template procedureName="DB_BMSBalanceRetriev_Step2" sessionStorage="Memory" sessionLifetime="300" persistent="false">
-    <receiveTemplate>
-      <Message type="getbonuscampaignparticipationsrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-        <Item customer="${sCustomer}">
-          <Attribute name="campaignid" value="2" />
-        </Item>
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate conditionEx="#{${dbresult}=0}" call="DB_BMSBalanceRetriev_Step3">
-      <set conditionEx="0@{store(sCampaignName,#{//Item/Campaign/@campaignname})}" />
-      <set conditionEx="0@{store(sStartDate,#{//Item/Campaign/@startdate})}" />
-      <set conditionEx="0@{store(sEndDate,#{//Item/Campaign/@enddate})}" />
-    </deliveryTemplate>
-    <deliveryTemplate call="ALLServiceStringFormat">
-      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-      <set conditionEx="0@{store(sDbresult,${dbresult})}" />
-      <set item="iparam:content" value="" />
-    </deliveryTemplate>
-    <input>
-      <param name="storelog" />
-    </input>
-    <output>
-      <param name="content" />
-      <param name="storelog" />
-    </output>
-  </template>
-  <template procedureName="DB_BMSBalanceRetriev_Step3" sessionStorage="Memory" sessionLifetime="300" persistent="false">
-    <receiveTemplate>
-      <Message type="getbmsplatformcountersrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-        <Item customer="${sCustomer}">
-          <Attribute name="querycounterstype" value="3" />
-          <Attribute name="targetplatform" value="7" />
-        </Item>
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate call="ALLServiceStringFormat">
-      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-      <set item="iparam:content" conditionEx="#{'${dbresult}'='0'}" value="@{store(sDbresult,success)}@{store(sParams,${sCampaignName};${curredeemedunits};${curearnedunits};${discurunits})}" />
-      <set item="iparam:content" conditionEx="#{'${dbresult}'!='0'}" value="@{store(sDbresult,${dbresult})}" />
-    </deliveryTemplate>
-    <input>
-      <param name="storelog" />
-    </input>
-    <output>
-      <param name="content" />
-      <param name="storelog" />
-    </output>
-  </template>
   <template procedureName="DB_BalanceRetriev" sessionStorage="Memory" sessionLifetime="300">
     <receiveTemplate>
       <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(${customer}_GetBalance__GET_MOD_LANGUAGE)}">
@@ -2384,54 +2168,18 @@
           <Attribute name="requestcountertype" value="1" />
         </Item>
       </Message>
-      <!--Message type="retrievecustomerdata" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-                <Item customer="${sCustomer}" subject="getbalance">
-                    <Attribute name="unpayment" value="6"/>
-                    <Attribute name="requestcountertype" value="0"/>
-                    <Attribute name="rounding" value="4"/>
-                </Item>
-            </Message-->
     </receiveTemplate>
-    <deliveryTemplate conditionEx="#{${dbresult}=0}" call="DB_BalanceRetriev_Step3">
-      <set conditionEx="0@{store(sBalance,${balanceintpartdotpart})}" />
-      <set conditionEx="0@{store(sCurrency,${currency})}" />
-      <set conditionEx="0@{store(sCounters,#{//Item/Attribute[@name='full']/@value})}" />
-    </deliveryTemplate>
-    <deliveryTemplate call="ALLServiceStringFormat">
+    <deliveryTemplate conditionEx="#{${dbresult}!=0}"  call="ALLServiceStringFormat">
       <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
       <set conditionEx="0@{store(sDbresult,${dbresult})}" />
       <set item="iparam:content" value="_GET_DBRESULT" />
     </deliveryTemplate>
-    <input>
-      <param name="storelog" />
-    </input>
-    <output>
-      <param name="content" />
-      <param name="storelog" />
-    </output>
-  </template>
-  <template procedureName="DB_BalanceRetriev_Step3" sessionStorage="Memory" sessionLifetime="300" persistent="false">
-    <receiveTemplate>
-      <Message type="retrievecustomerdata" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-        <Item subject="exchangerate">
-          <Attribute name="value" value="#{${sBalance} div 100}" />
-          <Attribute name="day" value="" />
-          <Attribute name="currecyin" value="#{if(${sCurrency}='840','840','860')}" />
-          <Attribute name="currecyto" value="#{if(${sCurrency}='840','860','840')}" />
-        </Item>
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate conditionEx="#{'${dbresult}'='0' and '${sTariffIvrCode}'=''}" call="DB_BalanceRetriev_Step4">
-      <set conditionEx="0@{store(sCalccurr,${calccurr})}" />
-    </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{'${dbresult}'='0' and '${sTariffIvrCode}'!=''}" call="DB_BalanceRetriev_Step5">
-      <set conditionEx="0@{store(sCalccurr,${calccurr})}" />
-    </deliveryTemplate>
-    <deliveryTemplate call="ALLServiceStringFormat">
-      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
-      <set item="iparam:content" conditionEx="#{'${dbresult}'='0'}" value="@{store(sDbresult,320045)}_GET_DBRESULT" />
-      <set item="iparam:content" conditionEx="#{'${dbresult}'!='0'}" value="@{store(sDbresult,${dbresult})}_GET_DBRESULT" />
-    </deliveryTemplate>
+    <deliveryTemplate conditionEx="false@{store(sBalance,${balanceintpartdotpart})}" />
+    <deliveryTemplate conditionEx="false@{store(sCalccurr,${balanceintpartdotpart} * 42.1035)}" />
+    <deliveryTemplate conditionEx="false@{store(sCurrency,${currency})}" />
+    <deliveryTemplate conditionEx="false@{store(sCounters,#{//Item/Attribute[@name='full']/@value})}" />
+    <deliveryTemplate conditionEx="#{'${dbresult}'='0' and '${sTariffIvrCode}'=''}" call="DB_BalanceRetriev_Step4" />
+    <deliveryTemplate conditionEx="#{'${dbresult}'='0' and '${sTariffIvrCode}'!=''}" call="DB_BalanceRetriev_Step5" />
     <input>
       <param name="storelog" />
     </input>
@@ -2442,9 +2190,9 @@
   </template>
   <template procedureName="DB_BalanceRetriev_Step4" sessionStorage="Memory" sessionLifetime="300" persistent="false">
     <receiveTemplate>
-      <Message type="verificationrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
         <Item customer="${sCustomer}">
-          <Attribute name="checkivrservice" value="6" />
+          <Attribute name="checkivrservice" value="1" />
           <Attribute name="checkblocks" value="0" />
         </Item>
       </Message>
@@ -2947,7 +2695,6 @@ or '${sCountertype}'='welcomebonus'}" call="CheckCountersAutoinetDelayed_Step2" 
     <deliveryTemplate conditionEx="#{'_ALLSERVICE_NAME'='_GETLASTPAY'}" call="LatestPayments_Step2" />
     <deliveryTemplate conditionEx="#{'_ALLSERVICE_NAME'='_GETOUTLASTPAY'}" call="LastOutstandingPayment_Step2" />
     <deliveryTemplate conditionEx="#{'_ALLSERVICE_NAME'='_GRNTPAY'}" call="CheckCustomerTypeGP" />
-    <deliveryTemplate conditionEx="#{'_ALLSERVICE_NAME'='_GETBMSBALANCE'}" call="DB_BMSBalanceRetriev_Step2" />
     <deliveryTemplate conditionEx="#{'_ALLSERVICE_NAME'='_GETBALANCE'}" call="DB_BalanceRetriev_Step2" />
     <deliveryTemplate conditionEx="#{'_ALLSERVICE_NAME'='_GETCOUNTERS'}" call="CheckCounters_Step2" />
     <deliveryTemplate call="ALLServiceStringFormat">
@@ -2998,7 +2745,6 @@ or '${sCountertype}'='welcomebonus'}" call="CheckCountersAutoinetDelayed_Step2" 
     <deliveryTemplate conditionEx="#{number(${balanceintpartdotpart} div 100)&gt;_ALLSERVICE_AVAIL_BAL and '_ALLSERVICE_NAME'='_GETLASTPAY'}" call="LatestPayments_Step2" />
     <deliveryTemplate conditionEx="#{number(${balanceintpartdotpart} div 100)&gt;_ALLSERVICE_AVAIL_BAL and '_ALLSERVICE_NAME'='_GETOUTLASTPAY'}" call="LastOutstandingPayment_Step2" />
     <deliveryTemplate conditionEx="#{number(${balanceintpartdotpart} div 100)&gt;_ALLSERVICE_AVAIL_BAL and '_ALLSERVICE_NAME'='_GRNTPAY'}" call="CheckCustomerTypeGP" />
-    <deliveryTemplate conditionEx="#{number(${balanceintpartdotpart} div 100)&gt;_ALLSERVICE_AVAIL_BAL and '_ALLSERVICE_NAME'='_GETBMSBALANCE'}" call="DB_BMSBalanceRetriev_Step2" />
     <deliveryTemplate conditionEx="#{number(${balanceintpartdotpart} div 100)&gt;_ALLSERVICE_AVAIL_BAL and '_ALLSERVICE_NAME'='_GETBALANCE'}" call="DB_BalanceRetriev_Step2" />
     <deliveryTemplate conditionEx="#{number(${balanceintpartdotpart} div 100)&gt;_ALLSERVICE_AVAIL_BAL and '_ALLSERVICE_NAME'='_GETCOUNTERS'}" call="CheckCounters_Step2" />
     <deliveryTemplate call="ALLServiceStringFormat">
@@ -3076,10 +2822,6 @@ or '${sCountertype}'='welcomebonus'}" call="CheckCountersAutoinetDelayed_Step2" 
       <set conditionEx="0@{store(sRequi,#{if('${sRequi}'='','_ALLSERVICE_SRVBIND_STORE','${sRequi};_ALLSERVICE_SRVBIND_STORE')})}" />
     </deliveryTemplate>
     <deliveryTemplate conditionEx="#{${sCnt}=_ALLSERVICE_SRVBIND_CNT and ${subscription}!=_ALLSERVICE_SRVBIND_SUBSR and '_ALLSERVICE_NAME'='_GRNTPAY'}" call="CheckCustomerTypeGP" />
-    <deliveryTemplate conditionEx="#{${sCnt}=_ALLSERVICE_SRVBIND_CNT and ${subscription}=_ALLSERVICE_SRVBIND_SUBSR and '_ALLSERVICE_NAME'='_GETBMSBALANCE'}" call="DB_BMSBalanceRetriev_Step2">
-      <set conditionEx="0@{store(sRequi,#{if('${sRequi}'='','_ALLSERVICE_SRVBIND_STORE','${sRequi};_ALLSERVICE_SRVBIND_STORE')})}" />
-    </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{${sCnt}=_ALLSERVICE_SRVBIND_CNT and ${subscription}!=_ALLSERVICE_SRVBIND_SUBSR and '_ALLSERVICE_NAME'='_GETBMSBALANCE'}" call="DB_BMSBalanceRetriev_Step2" />
     <deliveryTemplate conditionEx="#{${sCnt}=_ALLSERVICE_SRVBIND_CNT and ${subscription}=_ALLSERVICE_SRVBIND_SUBSR and '_ALLSERVICE_NAME'='_GETBALANCE'}" call="DB_BalanceRetriev_Step2">
       <set conditionEx="0@{store(sRequi,#{if('${sRequi}'='','_ALLSERVICE_SRVBIND_STORE','${sRequi};_ALLSERVICE_SRVBIND_STORE')})}" />
     </deliveryTemplate>

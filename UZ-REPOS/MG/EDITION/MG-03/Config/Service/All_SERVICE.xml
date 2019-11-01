@@ -508,26 +508,6 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*2*2*00*00*17*1"/>
     <dealerussd value="*2*2*17*1"/>
   </Service>
-  <Service    name="_GETBMSBALANCE"
-
-    info_success_ru="Kompaniya: [0], Za tekushii period potracheno: [1] ballov, zarabotano: [2] ballov, ostatok: [3] ballov"
-    info_success_uz="Kompaniya: [0], Joriy davrda ishlatildi: [1] bal, ishlab topildi: [2] bal, qoldiq: [3] bal"
-    info_success_en="Company: [0], For the following perios used: [1] points, earned: [2] points, remaining: [3] points"
-
-    info_notavailbalance_ru="Nedostatochno sredstv na balanse dlya provedeniya operacii."
-    info_notavailbalance_uz="Operasiyani amalga oshirish ucnun xisobingizda etarli mablag^ yo^q"
-    info_notavailbalance_en="Not enough assets on balance for making an operation."
-
-    info_320030_ru="Vy ne otnosites k Bonusnoi platforme"
-    info_320030_uz="Siz bonus xizmatlari majmuasiga qo^shilmaysiz"
-    info_320030_en="You do not belong to Bonus platform"
-
-    info_inprogress_ru="Slishkom chastiy zapros."
-    info_inprogress_uz="Slishkom chastiy zapros."
-    info_inprogress_en="Too frequent request."
-    >
-    <soapcon value="_GETBMSBALANCE"/>
-  </Service>
   <Service    name="_GETCOUNTERS"
 
     info_autoinet_ru="Ostatok ^[0]^ [1]. Avtoprodlenie paketa [2] chisla."
@@ -623,27 +603,5 @@ tplist               - Компонент выполняет проверки п
     <soapcon value="_MYSTATICIP"/>
     <ussdcon value="*4"/>
     <dealerussd value="*4"/>
-  </Service>
-  <Service    name="_BILLDETAIL"
-	
-    info_320767_ru="Po Vashemu nomeru net rashodov za tekushiy mesyac."
-    info_320767_uz="Po Vashemu nomeru net rashodov za tekushiy mesyac."
-    info_320767_en="Your number has no cost for current month."
-    
-    >
-    <soapcon value="_BILLDETAIL"/>
-    <ussdcon value="*1*3"/>
-    <dealerussd value="*1*3"/>
-  </Service>
-  <Service    name="_LASTDETAILSALL" redirect="sms"
-	
-    info_320478_ru="U Vas net rashodov za poslednie 5 dney."
-    info_320478_uz="U Vas net rashodov za poslednie 5 dney."
-    info_320478_en="You have no expenditures for the last 5 days."
-    
-    >
-    <soapcon value="_LASTDETAILSALL"/>
-    <ussdcon value="*1*4"/>
-    <dealerussd value="*1*4"/>
   </Service>
 </ServiceList>

@@ -1182,15 +1182,16 @@
   <template procedureName="DB_ExchangeRate">
     <condition />
     <receiveTemplate>
-      <Message type="retrievecustomerdata" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="IVR_ExRate_${customer}">
-        <Item subject="exchangerate">
-          <Attribute name="value" value="1" />
-          <Attribute name="day" value="#{concat(substring('@{now}',1,2),'.',substring('@{now}',4,2),'.',substring('@{now}',7,4))}" />
-          <Attribute name="currecyin" value="840" />
-          <Attribute name="currecyto" value="860" />
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="IVR_ExRate_${customer}">
+        <Item customer="${customer}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="0" />
         </Item>
       </Message>
     </receiveTemplate>
+    <deliveryTemplate>
+      <set item="param:calccurr" value="4210.35" />
+    </deliveryTemplate>
     <input>
       <param name="customer" />
     </input>

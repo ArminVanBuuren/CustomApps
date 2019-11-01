@@ -17,9 +17,9 @@ Created by Vladimir Khovanskiy
     <code value="*0"/>
   </Item>
   <Item name="Bill"
-    info_ru="1.Balans&#xA;2.Poslednyaya oplata&#xA;3.Detalizaciya rashodov&#xA;4.Poslednie 5 deystviy&#xA;0.Nazad"
-    info_uz="1.Balans&#xA;2.Poslednyaya oplata&#xA;3.Detalizaciya rashodov&#xA;4.Poslednie 5 deystviy&#xA;0.Nazad"
-    info_en="1.Balance&#xA;2.Last payment&#xA;3.Detailed costs&#xA;4.Last 5 Action&#xA;0.Back"
+    info_ru="1.Balans&#xA;2.Poslednyaya oplata&#xA;0.Nazad"
+    info_uz="1.Balans&#xA;2.Poslednyaya oplata&#xA;0.Nazad"
+    info_en="1.Balance&#xA;2.Last payment&#xA;0.Back"
     >
     <code value="*1"/>
   </Item>
