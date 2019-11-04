@@ -7,9 +7,7 @@
     <Connector name="EMAILCON_01_01" type="EMAILCON" host="localhost" port="11150" sessionHandler="false" serviceName="FORIS.MG.EMAILCON_01_01" config="Configuration\EMAILCON\EMAILCON_01_01.exe.xml" />
     <Connector name="SMSCON_01_01" type="SMSCON" host="localhost" port="11110" sessionHandler="false" serviceName="FORIS.MG.SMSCON_01_01" config="Configuration\SMSCON\SMSCON_01_01.exe.xml" />
     <Connector name="SMSCON_01_ISSA" type="SMSCON" host="localhost" port="11111" sessionHandler="false" serviceName="FORIS.MG.SMSCON_01_ISSA" config="Configuration\SMSCON\SMSCON_01_ISSA.exe.xml" />
-    <Connector name="SMSCON_01_INFORM" type="SMSCON" host="localhost" port="11115" sessionHandler="false" serviceName="FORIS.MG.SMSCON_01_INFORM" config="Configuration\SMSCON\SMSCON_01_INFORM.exe.xml" />
-    <Connector name="SMSCON_01_CONTENT" type="SMSCON" host="localhost" port="11116" sessionHandler="false" serviceName="FORIS.MG.SMSCON_01_CONTENT" config="Configuration\SMSCON\SMSCON_01_CONTENT.exe.xml" />
-    <Connector name="SMSCON_01_EMAIL" type="SMSCON" host="localhost" port="11117" sessionHandler="false" serviceName="FORIS.MG.SMSCON_01_EMAIL" config="Configuration\SMSCON\SMSCON_01_EMAIL.exe.xml" />
+    <Connector name="SMSCON_01_INFORM" type="SMSCON" host="localhost" port="11115" sessionHandler="false" serviceName="FORIS.MG.SMSCON_01_INFORM" config="Configuration\SMSCON\SMSCON_01_INFORM.exe.xml" />    
     <Connector name="SOAPCON_USSD_01_01" type="SOAPCON" host="localhost" port="11120" sessionHandler="false" serviceName="FORIS.MG.SOAPCON_USSD_01_01" config="Configuration\SOAPCON\SOAPCON_USSD_01_01.exe.xml" />
     <Connector name="SOAPCON_USSD_01_02" type="SOAPCON" host="localhost" port="11140" sessionHandler="false" serviceName="FORIS.MG.SOAPCON_USSD_01_02" config="Configuration\SOAPCON\SOAPCON_USSD_01_02.exe.xml" />
     <Connector name="SOAPCON_SMS_01_01" type="SOAPCON" host="localhost" port="11130" sessionHandler="false" serviceName="FORIS.MG.SOAPCON_SMS_01_01" config="Configuration\SOAPCON\SOAPCON_SMS_01_01.exe.xml" />
