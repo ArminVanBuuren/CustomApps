@@ -6,7 +6,7 @@
       </scenarioSource>
       <socketList poolSize="10" maxConnections="10" minConnections="10" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="1000" periodDuration="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
-          <config workingmode="wmPermanentEmulation">
+          <config workingmode="wmGeneral">
             <socket type="FORIS.ServiceProvisioning.Communication.TelnetSocket, FORIS.SPA.Communication">
               <config host="10.160.6.19" port="3003" />
             </socket>

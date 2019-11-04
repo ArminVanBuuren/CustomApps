@@ -6,7 +6,7 @@
       </scenarioSource>
       <socketList poolSize="12" maxConnections="12" minConnections="12" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="600" periodDuration="10" autoconnect="0" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.SimpleManagedSocket, FORIS.SPA.Communication">
-          <config workingmode="wmPermanentEmulation">
+          <config workingmode="wmGeneral">
             <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
               <config>
                 <ParametersList>
