@@ -1,0 +1,82 @@
+<templates connector="SMS">
+  <macros>
+    <!-- ==========================  REDIRECT CONNECTORS   ========================= -->
+    <define name="_SMSCON_1" value="SMSCON_04_01" />
+    <define name="_ENCODING" value="unicodefffe" />
+    <!-- ==========================  REDIRECT CONNECTORS   ========================= -->
+  </macros>
+  <template procedureName="DeliveryRequestFromISSA" sessionStorage="Memory" sessionLifetime="600">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <deliveryTemplate conditionEx="#{'${sender}'=''}" connector="_SMSCON_1" />
+    <deliveryTemplate call="DeliveryRequestFromISSA_Step2">
+      <set item="Content" value="${no-escape:Content}" />
+      <set item="Sender" value="${sender}" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Encoding" value="_ENCODING" />
+      <set item="ValidityPeriod" value="${validityPeriod}" />
+      <set item="ScheduleDeliveryTime" value="${scheduleTime}" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="DeliveryRequestFromISSA_Step2" sessionStorage="Memory" sessionLifetime="600" persistent="false">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="convertencoding" process="dispatcher" initiator="smscon" id="@{newGuid}" session_id="@{setSessionId(${SessionId})}">
+        <Item customer="${Recipient}">
+          <Content value="${Content}" />
+          <Sender value="${Sender}" />
+          <Recipient value="${Recipient}" />
+        </Item>
+        @{store(sValidityPeriod,${ValidityPeriod})}
+        @{store(sScheduleTime,${ScheduleDeliveryTime})}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="${no-escape:Content}" />
+      <set item="Sender" value="${Sender}" />
+      <set item="Recipient" value="${Recipient}" />
+      <set item="Encoding" value="_ENCODING" />
+      <set item="ValidityPeriod" value="#{if((substring('${sScheduleTime}',1,2)='00' or '${sScheduleTime}'='${sValidityPeriod}'),'','${sValidityPeriod}')}" />
+      <set item="ScheduleDeliveryTime" value="#{if((substring('${sScheduleTime}',1,2)='00' or '${sScheduleTime}'='${sValidityPeriod}'),'','${sScheduleTime}')}" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="SendSMS" persistent="false">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate />
+    <deliveryTemplate>
+      <set item="Content" value="${no-escape:Content}" />
+      <set item="Sender" value="${Sender}" />
+      <set item="Recipient" value="${Recipient}" />
+      <set item="Encoding" value="_ENCODING" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="SMSmnformat" persistent="false">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate />
+    <deliveryTemplate>
+      <set item="Content" value="${no-escape:Content}" />
+      <set item="Sender" value="${Sender}" />
+      <set item="Recipient" value="${Recipient}" />
+      <set item="Encoding" value="_ENCODING" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="GetInfo" persistent="false">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate />
+    <deliveryTemplate>
+      <set item="Content" value="${no-escape:Content}" />
+      <set item="Sender" value="${Sender}" />
+      <set item="Recipient" value="${Recipient}" />
+      <set item="Encoding" value="_ENCODING" />
+    </deliveryTemplate>
+  </template>
+</templates>

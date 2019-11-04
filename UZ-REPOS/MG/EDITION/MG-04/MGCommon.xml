@@ -5,6 +5,7 @@
     <Handler name="WCFHND_04_01" type="WCFHND" host="localhost" port="11190" sessionHandler="false" serviceName="FORIS.MG.WCFHND_04_01" config="Configuration\WCFHND\WCFHND_04_01.exe.xml" />
     <Connector name="DBCON_04_01" type="DBCON" host="localhost" port="11341" sessionHandler="false" serviceName="FORIS.MG.DBCON_04_01" config="Configuration\DBCON\DBCON_04_01.exe.xml" />
     <Connector name="SMSCON_04_01" type="SMSCON" host="localhost" port="11110" sessionHandler="false" serviceName="FORIS.MG.SMSCON_04_01" config="Configuration\SMSCON\SMSCON_04_01.exe.xml" />
+    <Connector name="SMSCON_04_ISSA" type="SMSCON" host="localhost" port="11311" sessionHandler="false" serviceName="FORIS.MG.SMSCON_04_ISSA" config="Configuration\SMSCON\SMSCON_04_ISSA.exe.xml" />
     <Connector name="SOAPCON_USSD_04_01" type="SOAPCON" host="localhost" port="11120" sessionHandler="false" serviceName="FORIS.MG.SOAPCON_USSD_04_01" config="Configuration\SOAPCON\SOAPCON_USSD_04_01.exe.xml" />
     <Connector name="SOAPCON_USSD_04_02" type="SOAPCON" host="localhost" port="11121" sessionHandler="false" serviceName="FORIS.MG.SOAPCON_USSD_04_02" config="Configuration\SOAPCON\SOAPCON_USSD_04_02.exe.xml" />
     <Connector name="SOAPCON_SMS_04_01" type="SOAPCON" host="localhost" port="11130" sessionHandler="false" serviceName="FORIS.MG.SOAPCON_SMS_04_01" config="Configuration\SOAPCON\SOAPCON_SMS_04_01.exe.xml" />
