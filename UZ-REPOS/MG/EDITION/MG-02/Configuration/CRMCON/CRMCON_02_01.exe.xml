@@ -20,6 +20,9 @@
     <Item name="ExposeMessageSendingService" value="true" />
   </Settings>
   <TemplateToConnector>
+    <Map template_id="DirectSendEmail" connector="EMAILCON_02_01" template_name="DeliveryRequest" />
+    <Map template_id="email -2" connector="EMAILCON_02_01" template_name="DeliveryRequest" />
+    <Map template_id="Email_Test" connector="EMAILCON_02_01" template_name="Email_Test" />
     <Map template_id="sms -2" connector="SMSCON_02_01" template_name="DeliveryRequest" />
     <Map template_id="SMS-spam" connector="SMSCON_02_01" template_name="DeliveryRequest" />
     <Map template_id="AutoInformationOfBalance" connector="SMSCON_02_01" template_name="DeliveryRequestAutoInformation" />
