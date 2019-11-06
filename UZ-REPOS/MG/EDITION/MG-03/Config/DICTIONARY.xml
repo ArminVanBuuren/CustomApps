@@ -660,7 +660,9 @@ Created by Vladimir Khovanskiy
     >
     <code value="sms_err1"/>
   </Item>
-
+  <Converter>
+    <Currency from="840" to="860" value="4210.35" />
+  </Converter>
   <Language>
     <Item language_id="1" param="ru" text="Russkiy" encoding="ascii">
       <soapcon value="ru"/>

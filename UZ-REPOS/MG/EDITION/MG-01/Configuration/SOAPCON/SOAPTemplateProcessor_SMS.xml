@@ -101,6 +101,7 @@
     <define name="_ENCODING" value="#{document('_DICTIONARY_PATH')/Dictionary/Language/Item[@param='_GET_LANG']/@encoding}" />
     <define name="_INLANGUAGE" value="#{if('#{document('_DICTIONARY_PATH')/Dictionary/Language/Item[@language_id='${language_id}']/@param}'='','#{document('_DICTIONARY_PATH')/Dictionary/Language/Item[@language_id='']/@param}','#{document('_DICTIONARY_PATH')/Dictionary/Language/Item[@language_id='${language_id}']/@param}')}" />
     <define name="_GET_LANG" value="#{if('${sLang}'='','#{document('_DICTIONARY_PATH')/Dictionary/Language/Item[@language_id='']/@param}','${sLang}')}" />
+    <define name="_GET_USD_COURCE" value="#{document('_DICTIONARY_PATH')/Dictionary/Converter/Currency[@from='840' and @to='860']/@value}" />
     <define name="_DEFAULT_ERR" value="#{if('${dbresult}'='-1','err001','${dbresult}')}" />
     <define name="_REDIRECT_TO_SMS" value="^[Ss][Mm][Ss]$" />
     <define name="_REDIRECT_TO_CURRENT" value="^[Nn][Oo][Tt][Rr][Ee][Dd][Ii][Rr][Ee][Cc][Tt]$" />
@@ -1819,8 +1820,8 @@
     <deliveryTemplate conditionEx="#{'${dbresult}'='0'}" call="ALLServiceStringFormat">
       <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
       <set conditionEx="0@{store(sDbresult,success)}" />
-      <set conditionEx="0@{store(sParams,#{replace('${intpartfracpart} * 4210.35',',','.')};#{replace('#{${intpartfracpart} div 100}',',','.')};${day})}" />
-      <set item="iparam:content" value="" />
+      <set item="iparam:content" conditionEx="#{'${currency}'='840'}" value="@{store(sParams,#{replace('#{round(#{round(${intpartfracpart} * _GET_USD_COURCE)} div 100)}',',','.')};#{replace('#{${intpartfracpart} div 100}',',','.')};${day})}"/>
+      <set item="iparam:content" conditionEx="#{'${currency}'='860'}" value="@{store(sParams,#{replace('#{round(${intpartfracpart} div 100)}',',','.')};#{replace('#{#{round(${intpartfracpart} div _GET_USD_COURCE)} div 100}',',','.')};${day})}"/>
     </deliveryTemplate>
     <deliveryTemplate call="ALLServiceStringFormat">
       <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
@@ -1892,8 +1893,8 @@
     <deliveryTemplate conditionEx="#{'${dbresult}'='0'}" call="ALLServiceStringFormat">
       <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
       <set conditionEx="0@{store(sDbresult,success)}" />
-      <set conditionEx="0@{store(sParams,#{replace('${intpartfracpart} * 4210.35',',','.')};#{replace('#{${intpartfracpart} div 100}',',','.')};${day})}" />
-      <set item="iparam:content" value="" />
+      <set item="iparam:content" conditionEx="#{'${currency}'='840'}" value="@{store(sParams,#{replace('#{round(#{round(${intpartfracpart} * _GET_USD_COURCE)} div 100)}',',','.')};#{replace('#{${intpartfracpart} div 100}',',','.')};${day})}"/>
+      <set item="iparam:content" conditionEx="#{'${currency}'='860'}" value="@{store(sParams,#{replace('#{round(${intpartfracpart} div 100)}',',','.')};#{replace('#{#{round(${intpartfracpart} div _GET_USD_COURCE)} div 100}',',','.')};${day})}"/>
     </deliveryTemplate>
     <deliveryTemplate call="ALLServiceStringFormat">
       <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
@@ -2175,7 +2176,7 @@
       <set item="iparam:content" value="_GET_DBRESULT" />
     </deliveryTemplate>
     <deliveryTemplate conditionEx="false@{store(sBalance,${balanceintpartdotpart})}" />
-    <deliveryTemplate conditionEx="false@{store(sCalccurr,${balanceintpartdotpart} * 4210.35)}" />
+    <deliveryTemplate conditionEx="false@{store(sCalccurr,${balanceintpartdotpart} * _GET_USD_COURCE)}" />
     <deliveryTemplate conditionEx="false@{store(sCurrency,${currency})}" />
     <deliveryTemplate conditionEx="false@{store(sCounters,#{//Item/Attribute[@name='full']/@value})}" />
     <deliveryTemplate conditionEx="#{'${dbresult}'='0' and '${sTariffIvrCode}'=''}" call="DB_BalanceRetriev_Step4" />
@@ -2223,35 +2224,35 @@
       <set item="iparam:content" value="_GET_DBRESULT" />
     </deliveryTemplate>
     <deliveryTemplate conditionEx="#{'${summintdotpart}'='' and '${sTariffIvrCode}'='' and '${sCounters}'=''}" call="ALLServiceStringFormat">
-      <set conditionEx="0@{store(sParams,#{replace('#{${sBalance} div 100}',',','.')};#{replace('#{${sCalccurr} div 100}',',','.')})}" />
+      <set conditionEx="0@{store(sParams,#{replace('#{${sBalance} div 100}',',','.')};#{replace('#{round(${sCalccurr} div 100)}',',','.')})}" />
       <set item="iparam:content" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@info_#{if(${sBalance}&gt;=0,'bal','debt')}__GET_LANG}" />
     </deliveryTemplate>
     <deliveryTemplate conditionEx="#{'${summintdotpart}'='' and '${sTariffIvrCode}'='' and '${sCounters}'!=''}" call="ALLServiceStringFormat">
-      <set conditionEx="0@{store(sParams,#{replace('#{${sBalance} div 100}',',','.')};#{replace('#{${sCalccurr} div 100}',',','.')};${sCounters})}" />
+      <set conditionEx="0@{store(sParams,#{replace('#{${sBalance} div 100}',',','.')};#{replace('#{round(${sCalccurr} div 100)}',',','.')};${sCounters})}" />
       <set item="iparam:content" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@info_#{if(${sBalance}&gt;=0,'bal','debt')}_cntr__GET_LANG}" />
     </deliveryTemplate>
     <deliveryTemplate conditionEx="#{'${summintdotpart}'='' and '${sTariffIvrCode}'!='' and '${sCounters}'=''}" call="ALLServiceStringFormat">
-      <set conditionEx="0@{store(sParams,#{replace('#{${sBalance} div 100}',',','.')};#{replace('#{${sCalccurr} div 100}',',','.')};_TARIFF_BALANCE_NAME)}" />
+      <set conditionEx="0@{store(sParams,#{replace('#{${sBalance} div 100}',',','.')};#{replace('#{round(${sCalccurr} div 100)}',',','.')};_TARIFF_BALANCE_NAME)}" />
       <set item="iparam:content" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@info_#{if(${sBalance}&gt;=0,'bal','debt')}_plan__GET_LANG}" />
     </deliveryTemplate>
     <deliveryTemplate conditionEx="#{'${summintdotpart}'='' and '${sTariffIvrCode}'!='' and '${sCounters}'!=''}" call="ALLServiceStringFormat">
-      <set conditionEx="0@{store(sParams,#{replace('#{${sBalance} div 100}',',','.')};#{replace('#{${sCalccurr} div 100}',',','.')};_TARIFF_BALANCE_NAME;${sCounters})}" />
+      <set conditionEx="0@{store(sParams,#{replace('#{${sBalance} div 100}',',','.')};#{replace('#{round(${sCalccurr} div 100)}',',','.')};_TARIFF_BALANCE_NAME;${sCounters})}" />
       <set item="iparam:content" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@info_#{if(${sBalance}&gt;=0,'bal','debt')}_plan_cntr__GET_LANG}" />
     </deliveryTemplate>
     <deliveryTemplate conditionEx="#{'${summintdotpart}'!='' and '${sTariffIvrCode}'='' and '${sCounters}'=''}" call="ALLServiceStringFormat">
-      <set conditionEx="0@{store(sParams,#{replace('#{${sBalance} div 100}',',','.')};#{replace('#{${sCalccurr} div 100}',',','.')};${lastminibillingdate};#{replace('#{${summintdotpart} div 100}',',','.')}#{if('${currency}'='840',' y.e',' sum')})}" />
+      <set conditionEx="0@{store(sParams,#{replace('#{${sBalance} div 100}',',','.')};#{replace('#{round(${sCalccurr} div 100)}',',','.')};${lastminibillingdate};#{replace('#{${summintdotpart} div 100}',',','.')}#{if('${currency}'='840',' y.e',' sum')})}" />
       <set item="iparam:content" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@info_#{if(${sBalance}&gt;=0,'bal','debt')}_bill__GET_LANG}" />
     </deliveryTemplate>
     <deliveryTemplate conditionEx="#{'${summintdotpart}'!='' and '${sTariffIvrCode}'='' and '${sCounters}'!=''}" call="ALLServiceStringFormat">
-      <set conditionEx="0@{store(sParams,#{replace('#{${sBalance} div 100}',',','.')};#{replace('#{${sCalccurr} div 100}',',','.')};${lastminibillingdate};#{replace('#{${summintdotpart} div 100}',',','.')}#{if('${currency}'='840',' y.e',' sum')};${sCounters})}" />
+      <set conditionEx="0@{store(sParams,#{replace('#{${sBalance} div 100}',',','.')};#{replace('#{round(${sCalccurr} div 100)}',',','.')};${lastminibillingdate};#{replace('#{${summintdotpart} div 100}',',','.')}#{if('${currency}'='840',' y.e',' sum')};${sCounters})}" />
       <set item="iparam:content" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@info_#{if(${sBalance}&gt;=0,'bal','debt')}_bill_cntr__GET_LANG}" />
     </deliveryTemplate>
     <deliveryTemplate conditionEx="#{'${summintdotpart}'!='' and '${sTariffIvrCode}'!='' and '${sCounters}'=''}" call="ALLServiceStringFormat">
-      <set conditionEx="0@{store(sParams,#{replace('#{${sBalance} div 100}',',','.')};#{replace('#{${sCalccurr} div 100}',',','.')};${lastminibillingdate};#{replace('#{${summintdotpart} div 100}',',','.')}#{if('${currency}'='840',' y.e',' sum')};_TARIFF_BALANCE_NAME)}" />
+      <set conditionEx="0@{store(sParams,#{replace('#{${sBalance} div 100}',',','.')};#{replace('#{round(${sCalccurr} div 100)}',',','.')};${lastminibillingdate};#{replace('#{${summintdotpart} div 100}',',','.')}#{if('${currency}'='840',' y.e',' sum')};_TARIFF_BALANCE_NAME)}" />
       <set item="iparam:content" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@info_#{if(${sBalance}&gt;=0,'bal','debt')}_full__GET_LANG}" />
     </deliveryTemplate>
     <deliveryTemplate conditionEx="#{'${summintdotpart}'!='' and '${sTariffIvrCode}'!='' and '${sCounters}'!=''}" call="ALLServiceStringFormat">
-      <set conditionEx="0@{store(sParams,#{replace('#{${sBalance} div 100}',',','.')};#{replace('#{${sCalccurr} div 100}',',','.')};${lastminibillingdate};#{replace('#{${summintdotpart} div 100}',',','.')}#{if('${currency}'='840',' y.e',' sum')};_TARIFF_BALANCE_NAME;${sCounters})}" />
+      <set conditionEx="0@{store(sParams,#{replace('#{${sBalance} div 100}',',','.')};#{replace('#{round(${sCalccurr} div 100)}',',','.')};${lastminibillingdate};#{replace('#{${summintdotpart} div 100}',',','.')}#{if('${currency}'='840',' y.e',' sum')};_TARIFF_BALANCE_NAME;${sCounters})}" />
       <set item="iparam:content" value="#{document('_ALLSERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@info_#{if(${sBalance}&gt;=0,'bal','debt')}_full_cntr__GET_LANG}" />
     </deliveryTemplate>
     <deliveryTemplate call="ALLServiceStringFormat">
