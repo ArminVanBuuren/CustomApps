@@ -172,7 +172,7 @@
     </input>
     <output>
       <param name="dbresult" type="3" value="0" />
-      <param name="TariffPlan" type="3" value="0" />
+      <param name="TariffPlan" type="1" value="0" />
       <param name="State" type="3" value="0" />
       <param name="Password" type="1" value="" />
       <param name="regioncode" type="3" value="0" />
