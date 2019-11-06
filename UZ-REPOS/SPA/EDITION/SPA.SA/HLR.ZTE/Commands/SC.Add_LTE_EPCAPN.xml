@@ -10,6 +10,7 @@
   </Request>
   <ErrorsList CodePage="windows-1251">
     <Error Name="222007" Value="SUCCESS" />
+    <Error Name="222002" Value="SUCCESS" />
     <!--Non-EPC users can't include the parameters only for EPC users-->
   </ErrorsList>
 </Command>
