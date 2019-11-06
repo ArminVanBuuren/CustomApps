@@ -7,7 +7,7 @@
     <Connector name="EMAILCON_01_01" type="EMAILCON" host="localhost" port="11150" sessionHandler="false" serviceName="FORIS.MG.EMAILCON_01_01" config="Configuration\EMAILCON\EMAILCON_01_01.exe.xml" />
     <Connector name="SMSCON_01_01" type="SMSCON" host="localhost" port="11110" sessionHandler="false" serviceName="FORIS.MG.SMSCON_01_01" config="Configuration\SMSCON\SMSCON_01_01.exe.xml" />
     <Connector name="SMSCON_01_ISSA" type="SMSCON" host="localhost" port="11111" sessionHandler="false" serviceName="FORIS.MG.SMSCON_01_ISSA" config="Configuration\SMSCON\SMSCON_01_ISSA.exe.xml" />
-    <Connector name="SMSCON_01_INFORM" type="SMSCON" host="localhost" port="11115" sessionHandler="false" serviceName="FORIS.MG.SMSCON_01_INFORM" config="Configuration\SMSCON\SMSCON_01_INFORM.exe.xml" />    
+    <Connector name="SMSCON_01_INFORM" type="SMSCON" host="localhost" port="11115" sessionHandler="false" serviceName="FORIS.MG.SMSCON_01_INFORM" config="Configuration\SMSCON\SMSCON_01_INFORM.exe.xml" />
     <Connector name="SOAPCON_USSD_01_01" type="SOAPCON" host="localhost" port="11120" sessionHandler="false" serviceName="FORIS.MG.SOAPCON_USSD_01_01" config="Configuration\SOAPCON\SOAPCON_USSD_01_01.exe.xml" />
     <Connector name="SOAPCON_USSD_01_02" type="SOAPCON" host="localhost" port="11140" sessionHandler="false" serviceName="FORIS.MG.SOAPCON_USSD_01_02" config="Configuration\SOAPCON\SOAPCON_USSD_01_02.exe.xml" />
     <Connector name="SOAPCON_SMS_01_01" type="SOAPCON" host="localhost" port="11130" sessionHandler="false" serviceName="FORIS.MG.SOAPCON_SMS_01_01" config="Configuration\SOAPCON\SOAPCON_SMS_01_01.exe.xml" />
@@ -17,7 +17,7 @@
     <Connector name="USSDCON_01_02" type="SMSCON" host="localhost" port="11171" sessionHandler="false" serviceName="FORIS.MG.USSDCON_01_02" config="Configuration\USSDCON\USSDCON_01_02.exe.xml" />
     <Connector name="USSDCON_01_PCRF" type="SMSCON" host="localhost" port="11172" sessionHandler="false" serviceName="FORIS.MG.USSDCON_01_PCRF" config="Configuration\USSDCON\USSDCON_01_PCRF.exe.xml" />
   </Connections>
- <log4net>
+  <log4net>
     <appender name="BufferingDataFileAppender" type="log4net.Appender.BufferingForwardingAppender">
       <bufferSize value="20" />
       <appender-ref ref="DataFileAppender" />
@@ -72,7 +72,7 @@
       </layout>
     </appender>
     <logger name="MG">
-      <level value="DEBUG" />
+      <level value="INFO" />
       <appender-ref ref="BufferingActivityFileAppender" />
       <appender-ref ref="BufferingDataFileAppender" />
       <appender-ref ref="ErrorFileAppender" />

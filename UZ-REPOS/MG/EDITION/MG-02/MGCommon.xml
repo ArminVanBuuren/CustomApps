@@ -72,7 +72,7 @@
       </layout>
     </appender>
     <logger name="MG">
-      <level value="DEBUG" />
+      <level value="INFO" />
       <appender-ref ref="BufferingActivityFileAppender" />
       <appender-ref ref="BufferingDataFileAppender" />
       <appender-ref ref="ErrorFileAppender" />
