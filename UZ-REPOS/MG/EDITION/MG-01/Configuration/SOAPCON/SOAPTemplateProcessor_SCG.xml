@@ -1991,7 +1991,7 @@
     <deliveryTemplate conditionEx="#{'${dbresult}'='0'}" call="ALLServiceStringFormat">
       <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
       <set conditionEx="0@{store(sDbresult,success)}" />
-      <set conditionEx="0@{store(sParams,#{replace('${intpartfracpart} * 42.1035',',','.')};#{replace('#{${intpartfracpart} div 100}',',','.')};${day})}" />
+      <set conditionEx="0@{store(sParams,#{replace('${intpartfracpart} * 4210.35',',','.')};#{replace('#{${intpartfracpart} div 100}',',','.')};${day})}" />
       <set item="iparam:content" value="" />
     </deliveryTemplate>
     <deliveryTemplate call="ALLServiceStringFormat">
@@ -2384,7 +2384,7 @@
       <set item="iparam:content" value="_GET_DBRESULT" />
     </deliveryTemplate>
     <deliveryTemplate conditionEx="false@{store(sBalance,${balanceintpartdotpart})}" />
-    <deliveryTemplate conditionEx="false@{store(sCalccurr,${balanceintpartdotpart} * 42.1035)}" />
+    <deliveryTemplate conditionEx="false@{store(sCalccurr,${balanceintpartdotpart} * 4210.35)}" />
     <deliveryTemplate conditionEx="false@{store(sCurrency,${currency})}" />
     <deliveryTemplate conditionEx="false@{store(sCounters,#{//Item/Attribute[@name='full']/@value})}" />
     <deliveryTemplate conditionEx="#{'${dbresult}'='0' and '${sTariffIvrCode}'=''}" call="DB_BalanceRetriev_Step4" />
