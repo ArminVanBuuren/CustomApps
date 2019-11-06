@@ -1026,7 +1026,7 @@ Created by Vladimir Khovanskiy
     getcounters_nocounters_uz="Sizda joriy paketlar yoq"
     getcounters_nocounters_en="You have no active packages"
 
-			>
+      >
     <soapcon value="whirl"/>
   </Group>
   <Counter counter_code="MB333NO" group="1"
@@ -4220,7 +4220,7 @@ Created by Vladimir Khovanskiy
     getcounters_name_ru="1000"
     getcounters_name_uz="1000"
     getcounters_name_en="1000"
-			        
+              
     getbalance_name_ru="1000"
     getbalance_name_uz="1000"
     getbalance_name_en="1000"
@@ -4232,7 +4232,7 @@ Created by Vladimir Khovanskiy
     getcounters_name_ru="1500"
     getcounters_name_uz="1500"
     getcounters_name_en="1500"
-			        
+              
     getbalance_name_ru="1500"
     getbalance_name_uz="1500"
     getbalance_name_en="1500"
@@ -4244,7 +4244,7 @@ Created by Vladimir Khovanskiy
     getcounters_name_ru="1000"
     getcounters_name_uz="1000"
     getcounters_name_en="1000"
-			        
+              
     getbalance_name_ru="1000"
     getbalance_name_uz="1000"
     getbalance_name_en="1000"
@@ -4256,7 +4256,7 @@ Created by Vladimir Khovanskiy
     getcounters_name_ru="1500"
     getcounters_name_uz="1500"
     getcounters_name_en="1500"
-			        
+              
     getbalance_name_ru="1500"
     getbalance_name_uz="1500"
     getbalance_name_en="1500"
@@ -9135,7 +9135,7 @@ Created by Vladimir Khovanskiy
     getcounters_name_ru="INCLUDED-ALL_1000"
     getcounters_name_uz="INCLUDED-ALL_1000"
     getcounters_name_en="INCLUDED-ALL_1000"
-			        
+              
   >
   </Counter>
   <Counter counter_code="MIN2MOB5" group="41"
@@ -9143,7 +9143,7 @@ Created by Vladimir Khovanskiy
     getcounters_name_ru="INCLUDED-ALL_1500"
     getcounters_name_uz="INCLUDED-ALL_1500"
     getcounters_name_en="INCLUDED-ALL_1500"
-			        
+              
   >
   </Counter>
   <Counter counter_code="MINCOR30" group="41"
@@ -9151,7 +9151,7 @@ Created by Vladimir Khovanskiy
     getcounters_name_ru="INCLUDED-ALL_1000"
     getcounters_name_uz="INCLUDED-ALL_1000"
     getcounters_name_en="INCLUDED-ALL_1000"
-			        
+              
   >
   </Counter>
   <Counter counter_code="MINCOR50" group="41"
@@ -9159,7 +9159,7 @@ Created by Vladimir Khovanskiy
     getcounters_name_ru="INCLUDED-ALL_1500"
     getcounters_name_uz="INCLUDED-ALL_1500"
     getcounters_name_en="INCLUDED-ALL_1500"
-			        
+              
   >
   </Counter>
   <Counter counter_code="MIN100D7" group="42"

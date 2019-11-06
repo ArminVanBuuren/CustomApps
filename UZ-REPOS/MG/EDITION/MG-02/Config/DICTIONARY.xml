@@ -542,9 +542,9 @@ Created by Vladimir Khovanskiy
     <code value="720001"/>
   </Item>
   <Item
-		info_ru="Oshibka Servera. Pozhalujsta, poprobujte pozzhe"
-		info_uz="Server xatosi. Iltimos keyinroq harakat qilib ko^ring"
-		info_en="Server Error. Please try later"
+    info_ru="Oshibka Servera. Pozhalujsta, poprobujte pozzhe"
+    info_uz="Server xatosi. Iltimos keyinroq harakat qilib ko^ring"
+    info_en="Server Error. Please try later"
     info_pay="320001"
     info_rbt="320001"
     info_scg="320001"

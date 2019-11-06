@@ -121,8 +121,8 @@ tplist               - Компонент выполняет проверки п
     info_330723_en="Wrong user^s number."
     
     info_330724_ru="Oshibka Servera. Pozhalujsta, poprobujte pozzhe"
-		info_330724_uz="Server xatosi. Iltimos keyinroq harakat qilib ko^ring"
-		info_330724_en="Server Error. Please try later"
+    info_330724_uz="Server xatosi. Iltimos keyinroq harakat qilib ko^ring"
+    info_330724_en="Server Error. Please try later"
 
     info_SUCCESS_ru="Zayavka na obmen zaregistrirovana."
     info_SUCCESS_uz="Almashtirish uchun ariza qabul qilindi."

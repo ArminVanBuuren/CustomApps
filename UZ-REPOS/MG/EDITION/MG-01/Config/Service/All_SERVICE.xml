@@ -135,9 +135,9 @@ tplist               - Компонент выполняет проверки п
     </servicebindinglist>
     <!--tplist available="false"
 
-    	info_notaval_ru="Zapros balansa nedostupen na tarifnom plane &quot;[0]&quot;."
-    	info_notaval_uz="Zapros balansa nedostupen na tarifnom plane &quot;[0]&quot;."
-    	info_notaval_en="Request on balance is not available on this tariff plan &quot;[0]&quot;.">
+      info_notaval_ru="Zapros balansa nedostupen na tarifnom plane &quot;[0]&quot;."
+      info_notaval_uz="Zapros balansa nedostupen na tarifnom plane &quot;[0]&quot;."
+      info_notaval_en="Request on balance is not available on this tariff plan &quot;[0]&quot;.">
       <ivrcode value="100002"/>
     </tplist-->
     <!--customerlist available="false"
@@ -145,7 +145,7 @@ tplist               - Компонент выполняет проверки п
         info_notaval_ru="Testovym abonentam zapresh^eno pol^zovat^sya dannoy operaciey."
         info_notaval_uz="testlanvotgan abonentlaga mazkur operasiyadan foydalanish ta^qiqlangan "
         info_notaval_en="Test users are forbidden to sue this operation."
-    	>
+      >
       <customer value="998979119832"/>
       <customer value="998925008492"/>
     </customerlist-->
@@ -228,9 +228,9 @@ tplist               - Компонент выполняет проверки п
     info_330723_uz="Neverniy nomer abonenta."
     info_330723_en="Wrong user^s number."
     
- 		info_330724_ru="Oshibka Servera. Pozhalujsta, poprobujte pozzhe"
-		info_330724_uz="Server xatosi. Iltimos keyinroq harakat qilib ko^ring"
-		info_330724_en="Server Error. Please try later"
+    info_330724_ru="Oshibka Servera. Pozhalujsta, poprobujte pozzhe"
+    info_330724_uz="Server xatosi. Iltimos keyinroq harakat qilib ko^ring"
+    info_330724_en="Server Error. Please try later"
 
     info_inprogress_ru="Operaciya ne mozhet byt vypolnena, poka ne zavershitsya predydushaya."
     info_inprogress_uz="Avvalgi operasiya tugamasidan keyingisi amalga oshirilmaydi"
@@ -461,8 +461,8 @@ tplist               - Компонент выполняет проверки п
     info_330723_en="Incorrect abonent^s number."
     
     info_330724_ru="Oshibka Servera. Pozhalujsta, poprobujte pozzhe"
-		info_330724_uz="Server xatosi. Iltimos keyinroq harakat qilib ko^ring"
-		info_330724_en="Server Error. Please try later"
+    info_330724_uz="Server xatosi. Iltimos keyinroq harakat qilib ko^ring"
+    info_330724_en="Server Error. Please try later"
 
     info_320704_ru="Ustanovlen zapret na podklyuchenie usligi &quot;Obeshanniy platezh&quot;"
     info_320704_uz="&quot;Va^da qilingan to^lov&quot; xizmatiga cheklanish o^rnatildi"
@@ -579,7 +579,7 @@ tplist               - Компонент выполняет проверки п
     <soapcon value="_GETMONTHDETAIL"/>
   </Service>
   <Service name="_MYNUMBER"
-	
+  
     info_success_ru="Vash nomer +[0]&#xA;0.Nazad"
     info_success_uz="Vash nomer +[0]&#xA;0.Nazad"
     info_success_en="Your number +[0]&#xA;0.Back"
@@ -590,7 +590,7 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*3"/>
   </Service>
   <Service name="_MYSTATICIP"
-	
+  
     info_success_ru="Vash Staticheskiy IP [0]&#xA;0.Nazad"
     info_success_uz="Sizning Staticheskiy IP [0]&#xA;0.Nazad"
     info_success_en="Your Static IP [0]&#xA;0.Back"

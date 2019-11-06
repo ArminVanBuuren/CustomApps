@@ -149,7 +149,7 @@ tplist               - Компонент выполняет проверки п
         info_notaval_en="Smena TP s *[1]* na *[0]* nedostupna.">
         <ivrcode value="102"/>
     </tplist-->
-    <!--customerlist	available="true"
+    <!--customerlist  available="true"
         info_notaval_ru="Testovym abonentam zapresh^eno pol^zovat^sya dannoy operaciey."
         info_notaval_uz="testlanvotgan abonentlaga mazkur operasiyadan foydalanish ta^qiqlangan "
         info_notaval_en="Тестовым абонентам запрещено пользоваться данной операцией."
