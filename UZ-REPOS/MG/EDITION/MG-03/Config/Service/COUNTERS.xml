@@ -68,9 +68,9 @@ Created by Vladimir Khovanskiy
     <soapcon value="gprs"/>
     <ivrcon value="gprs"/>
     <smscon value=""/>
-    <ussdcon value="&quot;019"/>
+    <ussdcon value="*019"/>
     <ussdcon value="102"/>
-    <dealerussd value="&quot;019"/>
+    <dealerussd value="*019"/>
     <dealerussd value="102"/>
   </Group>
   <Group name="voice"
@@ -118,8 +118,8 @@ Created by Vladimir Khovanskiy
     <soapcon value="voice"/>
     <ivrcon value="voice"/>
     <smscon value=""/>
-    <ussdcon value="&quot;017"/>
-    <dealerussd value="&quot;017"/>
+    <ussdcon value="*017"/>
+    <dealerussd value="*017"/>
   </Group>
   <Group name="sms"
 
@@ -186,9 +186,9 @@ Created by Vladimir Khovanskiy
     <soapcon value="sms"/>
     <ivrcon value="sms"/>
     <smscon value=""/>
-    <ussdcon value="&quot;018"/>
+    <ussdcon value="*018"/>
     <ussdcon value="103"/>
-    <dealerussd value="&quot;018"/>
+    <dealerussd value="*018"/>
     <dealerussd value="103"/>
   </Group>
   <Group name="bonussms"

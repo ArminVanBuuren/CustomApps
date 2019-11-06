@@ -189,7 +189,7 @@ tplist               - Компонент выполняет проверки п
 
     info_service_unavailable_ru="Paket &quot;[0]&quot; budet dostupen s [1]"
     info_service_unavailable_uz="&quot;[0]&quot; Paketga [1] dan ulanish mumkin"
-    info_service_unavailable_en="Package &quot;[0]&quot;will be available from [1]"
+    info_service_unavailable_en="Package &quot;[0]&quot; will be available from [1]"
 
     info_alrprogress_active_ru="Activaciya paketa &quot;[0]&quot; nahoditsya v obrabotke. Obratites^ pozzhe."
     info_alrprogress_active_uz="Paket aktivasiyasi&quot;[0]&quot; ishlov berish jarayonida. Kechroq murojaat qiling."
