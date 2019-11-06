@@ -1767,22 +1767,6 @@
       <set conditionEx="0@{store(sTariffIvrCode,${tariffplan})}" />
     </deliveryTemplate>
   </template>
-  <template procedureName="DB_BalanceRetriev_Step5" sessionStorage="Memory" sessionLifetime="300" persistent="false">
-    <condition>
-      <test item="0" matches="1" />
-    </condition>
-    <receiveTemplate>
-      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-        <Item customer="${sCustomer}">
-          <Attribute name="checkivrservice" value="1" />
-          <Attribute name="checkblocks" value="0" />
-        </Item>
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate call="DB_BalanceRetriev_Step6">
-      <set conditionEx="0@{store(sTariffIvrCode,${tariffplan})}" />
-    </deliveryTemplate>
-  </template>
   <template procedureName="DB_BalanceRetriev_Step6" sessionStorage="Memory" sessionLifetime="300" persistent="false">
     <condition>
       <test item="0" matches="1" />
