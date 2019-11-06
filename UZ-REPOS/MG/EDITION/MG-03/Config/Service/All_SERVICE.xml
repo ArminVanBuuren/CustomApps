@@ -18,7 +18,7 @@ tplist               - Компонент выполняет проверки п
                        Если аттрибут @available="false", то абонентам с установленным тарифным планом ivrcode/@value запрещено пользоваться сервисом, всем остальным разрешено
 -->
 <ServiceList>
-  <Service    name="_GETBALANCE"
+  <Service name="_GETBALANCE"
 
     info_bal_full_cntr_ru="Balans:[0] y.e([1] sum).Potracheno:[3].Plan:&quot;[4]&quot;.Ostatok [5]"
     info_bal_full_cntr_uz="Balans:[0] y.e([1] sum).Sarflandi:[3].Tarif:&quot;[4]&quot;.Qoldiq [5]"
@@ -150,7 +150,7 @@ tplist               - Компонент выполняет проверки п
       <customer value="998925008492"/>
     </customerlist-->
   </Service>
-  <Service    name="_PTPMONEYTR" redirect="sms" check_block="true" timetoprogress="40"
+  <Service name="_PTPMONEYTR" redirect="sms" check_block="true" timetoprogress="40"
 
     info_success_ru="Vasha zayavka na perevod [0] y.e abonentu +[1] zaregistrirovana."
     info_success_uz="Sizning +[1] abonentga[0] y.e o^tkazish arizangiz qabul qilindi"
@@ -250,7 +250,7 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*2*3*1"/>
     <dealerussd value="171"/>
   </Service>
-  <Service    name="_ISSAPASS"
+  <Service name="_ISSAPASS"
 
     info_success_ru="Parol^ dlya vhoda v Internet-pomoshnik uspesho izmenen."
     info_success_uz="Internet-yordamchiga kirish paroli muafaqiatli o^zgartirildi."
@@ -278,7 +278,7 @@ tplist               - Компонент выполняет проверки п
     >
     <soapcon value="_ISSAPASS"/>
   </Service>
-  <Service    name="_CHKFAVNUM"
+  <Service name="_CHKFAVNUM"
 
     info_success_ru="Lyubimyy nomer - +[0]"
     info_success_uz="Sevimli raqam - +[0]"
@@ -302,7 +302,7 @@ tplist               - Компонент выполняет проверки п
     >
     <soapcon value="_CHKFAVNUM"/>
   </Service>
-  <Service    name="_UPDFAVNUM"
+  <Service name="_UPDFAVNUM"
 
     info_success_ru="Zayavka na dobavlenie nomera +[0] zaregistrirovana"
     info_success_uz="+[0] raqamni ulashga ariza qabul qilindi."
@@ -346,7 +346,7 @@ tplist               - Компонент выполняет проверки п
     >
     <soapcon value="_UPDFAVNUM"/>
   </Service>
-  <Service    name="_DELFAVNUM"
+  <Service name="_DELFAVNUM"
 
     info_success_ru="Zayavka na udalenie nomera +[0] zaregistrirovana"
     info_success_uz="+[0] raqamni o^chirishga ariza qabul qilindi."
@@ -370,7 +370,7 @@ tplist               - Компонент выполняет проверки п
     >
     <soapcon value="_DELFAVNUM"/>
   </Service>
-  <Service    name="_LANGUAGE"
+  <Service name="_LANGUAGE"
 
     info_success_ru="Yazy^k uspeshno izmenen na Russkiy(Latinica). Teper^ mozhete proverit^ zapros balansa *100#,*171#"
     info_success_uz="Til uzbekchaga muafaqiatli o^zgardi. Endi siz balansingizni *100#,*171# orqali tekshirishingiz mumkin"
@@ -388,7 +388,7 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*0*2"/>
     <dealerussd value="*0*3"/>
   </Service>
-  <Service    name="_GETLASTPAY" redirect="sms"
+  <Service name="_GETLASTPAY" redirect="sms"
 
     info_success_ru="Poslednyaya oplata: [0] sum - [1] y.e ([2])"
     info_success_uz="Oxirgi to^lovingiz: [0] so^m - [1] y.e ([2])"
@@ -404,7 +404,7 @@ tplist               - Компонент выполняет проверки п
     >
     <soapcon value="_GETLASTPAY"/>
   </Service>
-  <Service    name="_GETOUTLASTPAY"
+  <Service name="_GETOUTLASTPAY"
 
     info_success_ru="Poslednyaya oplata: [0] sum - [1] y.e ([2])"
     info_success_uz="Oxirgi to^lovingiz: [0] so^m - [1] y.e ([2])"
@@ -422,7 +422,7 @@ tplist               - Компонент выполняет проверки п
     <ussdcon value="*1*2"/>
     <dealerussd value="*1*2"/>
   </Service>
-  <Service    name="_GRNTPAY" availbalance="-2"
+  <Service name="_GRNTPAY" availbalance="-2"
 
     info_success_ru="Zayavka zaregistrirovana"
     info_success_uz="Zayavka zaregistrirovana"
@@ -475,7 +475,7 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*2*2*00*00*17*2*1"/>
     <dealerussd value="*2*2*17*2*1"/>
   </Service>
-  <Service    name="_GRNTPAY_CHECK"
+  <Service name="_GRNTPAY_CHECK"
 
     info_notavailbalance_ru="Nedostatochno sredstv na balanse dlya provedeniya operacii."
     info_notavailbalance_uz="Operasiyani amalga oshirish ucnun xisobingizda etarli mablag^ yo^q."
@@ -508,7 +508,7 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*2*2*00*00*17*1"/>
     <dealerussd value="*2*2*17*1"/>
   </Service>
-  <Service    name="_GETCOUNTERS"
+  <Service name="_GETCOUNTERS"
 
     info_autoinet_ru="Ostatok ^[0]^ [1]. Avtoprodlenie paketa [2] chisla."
     info_autoinet_uz="^[0]^ to^plamining qoldig^i [1]. To^plam har oyning [2]-kunida yangilanadi."
@@ -562,7 +562,7 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="102"/>
     <dealerussd value="103"/>
   </Service>
-  <Service    name="_GETNUMBERBYPASSPORT"
+  <Service name="_GETNUMBERBYPASSPORT"
 
     info_success_ru="Na vashe imya zaregistrirovani nomera: [0] Blagodarim Vas za vibor UMS"
     info_success_uz="Sizning nomingizdagi raqamlar ro^yxati: [0] UMS tanlaganingizdan minnatdormiz"
@@ -570,7 +570,7 @@ tplist               - Компонент выполняет проверки п
     >
     <soapcon value="_GETNUMBERBYPASSPORT"/>
   </Service>
-  <Service    name="_GETMONTHDETAIL"
+  <Service name="_GETMONTHDETAIL"
 
     info_success_ru="[0]"
     info_success_uz="[0]"
@@ -578,7 +578,7 @@ tplist               - Компонент выполняет проверки п
     >
     <soapcon value="_GETMONTHDETAIL"/>
   </Service>
-  <Service    name="_MYNUMBER"
+  <Service name="_MYNUMBER"
 	
     info_success_ru="Vash nomer +[0]&#xA;0.Nazad"
     info_success_uz="Vash nomer +[0]&#xA;0.Nazad"
@@ -589,7 +589,7 @@ tplist               - Компонент выполняет проверки п
     <ussdcon value="*3"/>
     <dealerussd value="*3"/>
   </Service>
-  <Service    name="_MYSTATICIP"
+  <Service name="_MYSTATICIP"
 	
     info_success_ru="Vash Staticheskiy IP [0]&#xA;0.Nazad"
     info_success_uz="Sizning Staticheskiy IP [0]&#xA;0.Nazad"

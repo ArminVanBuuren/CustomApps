@@ -2169,7 +2169,7 @@
         </Item>
       </Message>
     </receiveTemplate>
-    <deliveryTemplate conditionEx="#{${dbresult}!=0}"  call="ALLServiceStringFormat">
+    <deliveryTemplate conditionEx="#{${dbresult}!=0}" call="ALLServiceStringFormat">
       <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
       <set conditionEx="0@{store(sDbresult,${dbresult})}" />
       <set item="iparam:content" value="_GET_DBRESULT" />
@@ -3207,7 +3207,6 @@
       <param name="RESULT" value="-1" />
     </output>
   </template>
- 
   <template procedureName="CheckService" handler="_DBCON" sessionStorage="Memory" sessionLifetime="60" persistent="true">
     <receiveTemplate>
       <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(USSDChkSrv_${customer})}">
@@ -3321,7 +3320,6 @@
       <param name="TEST2" />
     </output>
   </template>
- 
   <template procedureName="GetBMSBalance" handler="WCFHND_01_01" sessionStorage="Memory" sessionLifetime="20" persistent="true">
     <receiveTemplate>
       <Message type="getcounters" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(GetBMSBalance_${customer})}">

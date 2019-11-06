@@ -754,7 +754,8 @@
         </Item>
       </Message>
     </receiveTemplate>
-    <deliveryTemplate conditionEx="#{'${result}'!='1'}"> <!--1-->
+    <deliveryTemplate conditionEx="#{'${result}'!='1'}">
+      <!--1-->
       <set item="param:dbresult" value="320194" />
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>

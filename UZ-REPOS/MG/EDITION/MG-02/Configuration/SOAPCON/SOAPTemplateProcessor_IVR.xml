@@ -1762,7 +1762,7 @@
         </Item>
       </Message>
     </receiveTemplate>
-    <deliveryTemplate conditionEx="#{${dbresult}!=0}"  call="ALLServiceStringFormat">
+    <deliveryTemplate conditionEx="#{${dbresult}!=0}" call="ALLServiceStringFormat">
       <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
       <set conditionEx="0@{store(sDbresult,${dbresult})}" />
       <set item="iparam:content" value="_GET_DBRESULT" />

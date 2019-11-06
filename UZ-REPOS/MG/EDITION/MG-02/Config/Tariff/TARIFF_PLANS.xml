@@ -75,8 +75,8 @@ tplist               - Компонент выполняет проверки п
     
     info_unavailable_pay="320001"
     info_320400_pay="320400"
-                       
-                  info_320347_pay="320347"
+           
+    info_320347_pay="320347"
     >
   </Group>
   <Tariff ivrcode="101" datefrom="20131001" dateto="" group="1"
@@ -1119,11 +1119,10 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="206" datefrom="20131001" dateto="" group="1" availbalance="26.12"
  
-          tariffname_ruk="MOBI 110"
-          tariffname_rut="MOBI 110"
-          tariffname_uz="MOBI 110"
-          tariffname_en="MOBI 110"
-          tariffname_scg="MOBI 110"
+    tariffname_ru="MOBI 110"
+    tariffname_uz="MOBI 110"
+    tariffname_en="MOBI 110"
+    tariffname_scg="MOBI 110"
 
   >
 
@@ -1145,13 +1144,12 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="200" datefrom="20131001" dateto="" group="1" availbalance="7.12"
  
-			tariffname_ruk="MOBI 30"
-			tariffname_rut="MOBI 30"
-			tariffname_uz="MOBI 30"
-			tariffname_en="MOBI 30"
-			tariffname_scg="MOBI 30"
+    tariffname_ru="MOBI 30"
+    tariffname_uz="MOBI 30"
+    tariffname_en="MOBI 30"
+    tariffname_scg="MOBI 30"
 
-			>
+    >
 
     <soapcon value="200"/>
     <ivrcon value="200"/>
@@ -1161,13 +1159,12 @@ tplist               - Компонент выполняет проверки п
   </Tariff>
   <Tariff ivrcode="204" datefrom="20131001" dateto="" group="1" availbalance="11.87"
  
-tariffname_ruk="MOBI 50"
-tariffname_rut="MOBI 50"
-tariffname_uz="MOBI 50"
-tariffname_en="MOBI 50"
-tariffname_scg="MOBI 50"
+    tariffname_ru="MOBI 50"
+    tariffname_uz="MOBI 50"
+    tariffname_en="MOBI 50"
+    tariffname_scg="MOBI 50"
 
-			>
+    >
 
     <soapcon value="204"/>
     <ivrcon value="204"/>
@@ -1177,26 +1174,24 @@ tariffname_scg="MOBI 50"
   </Tariff>
   <Tariff ivrcode="210" datefrom="20131001" dateto="" group="1" availbalance="11.87"
  
-tariffname_ruk="Corporate 50"
-tariffname_rut="Corporate 50"
-tariffname_uz="Corporate 50"
-tariffname_en="Corporate 50"
-tariffname_scg="Corporate 50"
+    tariffname_ru="Corporate 50"
+    tariffname_uz="Corporate 50"
+    tariffname_en="Corporate 50"
+    tariffname_scg="Corporate 50"
 
-			>
+    >
     <soapcon value="210"/>
     <ivrcon value="210"/>
 
   </Tariff>
   <Tariff ivrcode="209" datefrom="20131001" dateto="" group="1" availbalance="7.12"
  
-tariffname_ruk="Corporate 30"
-tariffname_rut="Corporate 30"
-tariffname_uz="Corporate 30"
-tariffname_en="Corporate 30"
-tariffname_scg="Corporate 30"
+    tariffname_ru="Corporate 30"
+    tariffname_uz="Corporate 30"
+    tariffname_en="Corporate 30"
+    tariffname_scg="Corporate 30"
 
-			>
+    >
     <soapcon value="209"/>
     <ivrcon value="209"/>
   </Tariff>

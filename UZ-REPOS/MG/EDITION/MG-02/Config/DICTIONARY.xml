@@ -660,7 +660,7 @@ Created by Vladimir Khovanskiy
     >
     <code value="sms_err1"/>
   </Item>
-  
+
   <Language>
     <Item language_id="1" param="ru" text="Russkiy" encoding="ascii">
       <soapcon value="ru"/>
