@@ -17,7 +17,7 @@
     <Connector name="USSDCON_01_02" type="SMSCON" host="localhost" port="11171" sessionHandler="false" serviceName="FORIS.MG.USSDCON_01_02" config="Configuration\USSDCON\USSDCON_01_02.exe.xml" />
     <Connector name="USSDCON_01_PCRF" type="SMSCON" host="localhost" port="11172" sessionHandler="false" serviceName="FORIS.MG.USSDCON_01_PCRF" config="Configuration\USSDCON\USSDCON_01_PCRF.exe.xml" />
   </Connections>
-  <log4net>
+ <log4net>
     <appender name="BufferingDataFileAppender" type="log4net.Appender.BufferingForwardingAppender">
       <bufferSize value="20" />
       <appender-ref ref="DataFileAppender" />
