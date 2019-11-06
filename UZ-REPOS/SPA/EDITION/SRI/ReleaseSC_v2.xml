@@ -500,6 +500,7 @@
     <CFS name="AVTOMBHW3000" globalServiceCode="AVTOMBHW3000" copyOf="CFS_FP_SERVICE_GENERAL" description="Huawei OnNet 3000 MB" />
     <CFS name="AVTOMBHW4000" globalServiceCode="AVTOMBHW4000" copyOf="CFS_FP_SERVICE_GENERAL" description="Huawei 4000 Mb" />
     <CFS name="AVTOMBHW500" globalServiceCode="AVTOMBHW500" copyOf="CFS_FP_SERVICE_GENERAL" description="Huawei 500 Mb" />
+    <CFS name="BANEMAIL" globalServiceCode="BANEMAIL" copyOf="CFS_FP_SERVICE_GENERAL" description="Запрет автоинформирования по E-Mail" />
     <CFS name="BIC0" description="Модификация баррингов входящей связи">
       <RFS name="RFS_HLR_TEST_BIC0" linkType="Add" />
     </CFS>
@@ -717,8 +718,10 @@
       <RFS name="RFS_HLR_TEST_DELETE" linkType="Add" />
     </CFS>
     <CFS name="FR1000ICT" globalServiceCode="FR1000ICT" copyOf="CFS_FP_SERVICE_GENERAL" description="Promo ICT 1000 MB" />
+    <CFS name="FR1000ICT19" globalServiceCode="FR1000ICT19" copyOf="CFS_FP_SERVICE_GENERAL" description="ICT 1000 MB" />
     <CFS name="FR100ICT" globalServiceCode="FR100ICT" copyOf="CFS_FP_SERVICE_GENERAL" description="Promo ICT 100 MB" />
     <CFS name="FR2000ICT" globalServiceCode="FR2000ICT" copyOf="CFS_FP_SERVICE_GENERAL" description="Promo ICT 2000 MB" />
+    <CFS name="FR2000ICT19" globalServiceCode="FR2000ICT19" copyOf="CFS_FP_SERVICE_GENERAL" description="ICT 2000 MB" />
     <CFS name="FR200ICT" globalServiceCode="FR200ICT" copyOf="CFS_FP_SERVICE_GENERAL" description="Promo ICT 200 MB" />
     <CFS name="FR2019M1" globalServiceCode="FR2019M1" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-пакет 2019 Mb" />
     <CFS name="FR20NBMB" globalServiceCode="FR20NBMB" copyOf="CFS_FP_SERVICE_GENERAL" description="Новогодний бонус 20 Mb" />
@@ -731,7 +734,9 @@
     <CFS name="FR40NBMB" globalServiceCode="FR40NBMB" copyOf="CFS_FP_SERVICE_GENERAL" description="Новогодний бонус 40 Mb" />
     <CFS name="FR40NBSMS" globalServiceCode="FR40NBSMS" copyOf="CFS_FP_SERVICE_GENERAL" description="Новогодний бонус 40 SMS" />
     <CFS name="FR5000ICT" globalServiceCode="FR5000ICT" copyOf="CFS_FP_SERVICE_GENERAL" description="Promo ICT 5000 MB" />
+    <CFS name="FR5000ICT19" globalServiceCode="FR5000ICT19" copyOf="CFS_FP_SERVICE_GENERAL" description="ICT 5000 MB" />
     <CFS name="FR500ICT" globalServiceCode="FR500ICT" copyOf="CFS_FP_SERVICE_GENERAL" description="Promo ICT 500 MB" />
+    <CFS name="FR500ICT19" globalServiceCode="FR500ICT19" copyOf="CFS_FP_SERVICE_GENERAL" description="ICT 500 MB" />
     <CFS name="FR500MBCON" globalServiceCode="FR500MBCON" copyOf="CFS_FP_SERVICE_GENERAL" description="Бонус 500 mb на ТП Connect" />
     <CFS name="FR5401" globalServiceCode="FR5401" copyOf="CFS_FP_SERVICE_GENERAL" description="Настройка GPRS (EDGE)" />
     <CFS name="FR5402" globalServiceCode="FR5402" copyOf="CFS_FP_SERVICE_GENERAL" description="Настройка WAP" />
@@ -789,6 +794,8 @@
     </CFS>
     <CFS name="FRAPCORMAXISALE" globalServiceCode="FRAPCORMAXISALE" copyOf="CFS_FP_SERVICE_GENERAL" description="Скидка на абонентскую плату за ТП Corporate MAXI" />
     <CFS name="FRAPCORP" globalServiceCode="FRAPCORP" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Corporate" />
+    <CFS name="FRAPCORP30" globalServiceCode="FRAPCORP30" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Corporate 30" />
+    <CFS name="FRAPCORP50" globalServiceCode="FRAPCORP50" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Corporate 50" />
     <CFS name="FRAPCORP777" description="Абонентская плата за ТП Corporate 777">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
     </CFS>
@@ -820,8 +827,13 @@
     </CFS>
     <CFS name="FRAPMAXIYEAR" globalServiceCode="FRAPMAXIYEAR" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Maxi Year" />
     <CFS name="FRAPMINI" globalServiceCode="FRAPMINI" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Mini" />
+    <CFS name="FRAPMOBI110" globalServiceCode="FRAPMOBI110" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП MOBI 110" />
+    <CFS name="FRAPMOBI150" globalServiceCode="FRAPMOBI150" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП MOBI 150" />
     <CFS name="FRAPMOBI30" globalServiceCode="FRAPMOBI30" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП MOBI 30" />
     <CFS name="FRAPMOBI40" globalServiceCode="FRAPMOBI40" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП MOBI 40" />
+    <CFS name="FRAPMOBI50" globalServiceCode="FRAPMOBI50" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП MOBI 50" />
+    <CFS name="FRAPMOBI70" globalServiceCode="FRAPMOBI70" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП MOBI 70" />
+    <CFS name="FRAPMOBI90" globalServiceCode="FRAPMOBI90" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП MOBI 90" />
     <CFS name="FRAPMYUMS" globalServiceCode="FRAPMYUMS" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП My UMS" />
     <CFS name="FRAPNEWOPT" globalServiceCode="FRAPNEWOPT" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Optima 333" />
     <CFS name="FRAPNGMK10" globalServiceCode="FRAPNGMK10" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП НГМК-10" />
@@ -863,6 +875,8 @@
     <CFS name="FRAPUNIVERSAL" globalServiceCode="FRAPUNIVERSAL" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Universal" />
     <CFS name="FRAPUZBPASS10" globalServiceCode="FRAPUZBPASS10" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Uzbekistan Pass" />
     <CFS name="FRAPUZBPASS5" globalServiceCode="FRAPUZBPASS5" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Uzbekistan Pass Lite" />
+    <CFS name="FRAPUZBPASSLP" globalServiceCode="FRAPUZBPASSLP" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Uzbekistan Pass Lite+" />
+    <CFS name="FRAPUZBPASSPLUS" globalServiceCode="FRAPUZBPASSPLUS" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Uzbekistan Pass+" />
     <CFS name="FRAPVETERAN" globalServiceCode="FRAPVETERAN" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Veteran" />
     <CFS name="FRAPVIP" globalServiceCode="FRAPVIP" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП VIP" />
     <CFS name="FRAPVIPYILLIK" globalServiceCode="FRAPVIPYILLIK" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП VIP Yillik" />
@@ -968,24 +982,42 @@
     <CFS name="FRBMSUMSIP" globalServiceCode="FRBMSUMSIP" copyOf="CFS_FP_SERVICE_GENERAL" description="BMS.Безлимит на UMS при покупке ИП" />
     <CFS name="FRBONCORP3" globalServiceCode="FRBONCORP3" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-Corp 1000 MB 500 MIN 500 SMS" />
     <CFS name="FRBONGPRS100" globalServiceCode="FRBONGPRS100" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket 100 MB" />
+    <CFS name="FRBONGPRS1000" globalServiceCode="FRBONGPRS1000" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket Corp 1000 MB" />
     <CFS name="FRBONGPRS150" globalServiceCode="FRBONGPRS150" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket 150 MB" />
     <CFS name="FRBONGPRS200" globalServiceCode="FRBONGPRS200" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket 200 MB" />
     <CFS name="FRBONGPRS300" globalServiceCode="FRBONGPRS300" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket Corp 300 MB" />
+    <CFS name="FRBONGPRS500" globalServiceCode="FRBONGPRS500" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket Corp 500 MB" />
+    <CFS name="FRBONGPRSS1000" globalServiceCode="FRBONGPRSS1000" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket 1000 MB" />
+    <CFS name="FRBONGPRSS300" globalServiceCode="FRBONGPRSS300" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket 300 MB" />
+    <CFS name="FRBONGPRSS500" globalServiceCode="FRBONGPRSS500" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket 500 MB" />
     <CFS name="FRBONMB300" globalServiceCode="FRBONMB300" copyOf="CFS_FP_SERVICE_GENERAL" description="Бонус 300 мб" />
+    <CFS name="FRBONMB5" globalServiceCode="FRBONMB5" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus 5 MB" />
     <CFS name="FRBONMB500" globalServiceCode="FRBONMB500" copyOf="CFS_FP_SERVICE_GENERAL" description="Бонус 500 мб" />
     <CFS name="FRBONMB700" globalServiceCode="FRBONMB700" copyOf="CFS_FP_SERVICE_GENERAL" description="Бонус 700 мб" />
     <CFS name="FRBONMIN100" globalServiceCode="FRBONMIN100" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket 100 MIN" />
+    <CFS name="FRBONMIN1000" globalServiceCode="FRBONMIN1000" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket Corp 1000 MIN" />
     <CFS name="FRBONMIN150" globalServiceCode="FRBONMIN150" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket 150 MIN" />
     <CFS name="FRBONMIN200" globalServiceCode="FRBONMIN200" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket 200 MIN" />
     <CFS name="FRBONMIN300" globalServiceCode="FRBONMIN300" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket Corp 300 MIN" />
+    <CFS name="FRBONMIN500" globalServiceCode="FRBONMIN500" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket Corp 500 MIN" />
+    <CFS name="FRBONMINN1000" globalServiceCode="FRBONMINN1000" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket 1000 MIN" />
+    <CFS name="FRBONMINN300" globalServiceCode="FRBONMINN300" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket 300 MIN" />
+    <CFS name="FRBONMINN500" globalServiceCode="FRBONMINN500" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket 500 MIN" />
     <CFS name="FRBONNEW300" globalServiceCode="FRBONNEW300" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-new Corp paket 300 Mb" />
     <CFS name="FRBONSMS100" globalServiceCode="FRBONSMS100" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket 100 SMS" />
     <CFS name="FRBONSMS150" globalServiceCode="FRBONSMS150" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket 150 SMS" />
     <CFS name="FRBONSMS200" globalServiceCode="FRBONSMS200" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket 200 SMS" />
     <CFS name="FRBONSMS300" globalServiceCode="FRBONSMS300" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket Corp 300 SMS" />
+    <CFS name="FRBONSMSC1000" globalServiceCode="FRBONSMSC1000" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket Corp 1000 SMS" />
+    <CFS name="FRBONSMSC500" globalServiceCode="FRBONSMSC500" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket Corp 500 SMS" />
+    <CFS name="FRBONSMSS1000" globalServiceCode="FRBONSMSS1000" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket 1000 SMS" />
+    <CFS name="FRBONSMSS300" globalServiceCode="FRBONSMSS300" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket 300 SMS" />
+    <CFS name="FRBONSMSS500" globalServiceCode="FRBONSMSS500" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket 500 SMS" />
     <CFS name="FRBONUSALL100" globalServiceCode="FRBONUSALL100" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket All 100 MIN MB SMS" />
+    <CFS name="FRBONUSALL1000" globalServiceCode="FRBONUSALL1000" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket All 1000 MIN MB SMS" />
     <CFS name="FRBONUSALL200" globalServiceCode="FRBONUSALL200" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket All 200 MIN MB SMS" />
     <CFS name="FRBONUSALL300" globalServiceCode="FRBONUSALL300" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket All 300 MIN MB SMS" />
+    <CFS name="FRBONUSALL500" globalServiceCode="FRBONUSALL500" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket All 500 MIN MB SMS" />
     <CFS name="FRBRONZE" globalServiceCode="FRBRONZE" copyOf="CFS_FP_SERVICE_GENERAL" description="BRONZE (периодическая)" />
     <CFS name="FRBRONZE100CORPER" globalServiceCode="FRBRONZE100CORPER" copyOf="CFS_FP_SERVICE_GENERAL" description="Скидка BRONZE 100% Corporate Perfect" />
     <CFS name="FRBRONZE100PER" globalServiceCode="FRBRONZE100PER" copyOf="CFS_FP_SERVICE_GENERAL" description="Скидка BRONZE 100% Perfect" />
@@ -1120,7 +1152,9 @@
     <CFS name="FRGPRSB10000DAY" globalServiceCode="FRGPRSB10000DAY" copyOf="CFS_FP_SERVICE_GENERAL" description="Суточный интернет-пакет 10000 Mb" />
     <CFS name="FRGPRSB1000DAY" globalServiceCode="FRGPRSB1000DAY" copyOf="CFS_FP_SERVICE_GENERAL" description="Суточный интернет-пакет 1000 Mb" />
     <CFS name="FRGPRSB2000DAY" globalServiceCode="FRGPRSB2000DAY" copyOf="CFS_FP_SERVICE_GENERAL" description="Суточный интернет-пакет 2000 Mb" />
+    <CFS name="FRGPRSB200DAY" globalServiceCode="FRGPRSB200DAY" copyOf="CFS_FP_SERVICE_GENERAL" description="Суточный интернет-пакет 200 Mb" />
     <CFS name="FRGPRSB3000DAY" globalServiceCode="FRGPRSB3000DAY" copyOf="CFS_FP_SERVICE_GENERAL" description="Суточный интернет-пакет 3000 Mb" />
+    <CFS name="FRGPRSB300DAY" globalServiceCode="FRGPRSB300DAY" copyOf="CFS_FP_SERVICE_GENERAL" description="Суточный интернет-пакет 300 Mb" />
     <CFS name="FRGPRSB5000DAY" globalServiceCode="FRGPRSB5000DAY" copyOf="CFS_FP_SERVICE_GENERAL" description="Суточный интернет-пакет 5000 Mb" />
     <CFS name="FRGPRSB500DAY" globalServiceCode="FRGPRSB500DAY" copyOf="CFS_FP_SERVICE_GENERAL" description="Суточный интернет-пакет 500 Mb" />
     <CFS name="FRGPRSC15000BONUS" globalServiceCode="FRGPRSC15000BONUS" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-пакет 10000 +50% FREE Corp" />
@@ -1154,6 +1188,22 @@
       <RFS name="RFS_HLR_STATIC_IP" linkType="Add" dependsOn="RFS_HLR_NET" />
       <RFS name="RFS_MG_SUBSCRIPTION" linkType="Add" />
     </CFS>
+    <CFS name="FRITVMIKSTV10D" globalServiceCode="FRITVMIKSTV10D" copyOf="CFS_FP_SERVICE_GENERAL" description="iTV на 10 дней: Микс : ТВ+Видео клуб" />
+    <CFS name="FRITVMIKSTV1M" globalServiceCode="FRITVMIKSTV1M" copyOf="CFS_FP_SERVICE_GENERAL" description="iTV на месяц: Микс ТВ+Видео клуб" />
+    <CFS name="FRITVMIKSTV3D" globalServiceCode="FRITVMIKSTV3D" copyOf="CFS_FP_SERVICE_GENERAL" description="iTV на 3 дня: Микс: ТВ+Видео клуб" />
+    <CFS name="FRITVMIKSTV90D" globalServiceCode="FRITVMIKSTV90D" copyOf="CFS_FP_SERVICE_GENERAL" description="iTV на 90 дней: Микс: ТВ+Видео клуб" />
+    <CFS name="FRITVTELEVIDEO10D" globalServiceCode="FRITVTELEVIDEO10D" copyOf="CFS_FP_SERVICE_GENERAL" description="iTV на 10 дней: Телевидение" />
+    <CFS name="FRITVTELEVIDEO1M" globalServiceCode="FRITVTELEVIDEO1M" copyOf="CFS_FP_SERVICE_GENERAL" description="iTV на месяц: Телевидение" />
+    <CFS name="FRITVTELEVIDEO3D" globalServiceCode="FRITVTELEVIDEO3D" copyOf="CFS_FP_SERVICE_GENERAL" description="iTV на 3 дня: Телевидение" />
+    <CFS name="FRITVTELEVIDEO90D" globalServiceCode="FRITVTELEVIDEO90D" copyOf="CFS_FP_SERVICE_GENERAL" description="iTV на 90 дней: Телевидение" />
+    <CFS name="FRITVUZBVIDEOCLUB10D" globalServiceCode="FRITVUZBVIDEOCLUB10D" copyOf="CFS_FP_SERVICE_GENERAL" description="iTV на 10 дней: Узбекский видео клуб" />
+    <CFS name="FRITVUZBVIDEOCLUB1M" globalServiceCode="FRITVUZBVIDEOCLUB1M" copyOf="CFS_FP_SERVICE_GENERAL" description="iTV на месяц: Узбекский видео клуб" />
+    <CFS name="FRITVUZBVIDEOCLUB3D" globalServiceCode="FRITVUZBVIDEOCLUB3D" copyOf="CFS_FP_SERVICE_GENERAL" description="iTV на 3 дня: Узбекский видео клуб" />
+    <CFS name="FRITVUZBVIDEOCLUB90D" globalServiceCode="FRITVUZBVIDEOCLUB90D" copyOf="CFS_FP_SERVICE_GENERAL" description="iTV на 90 дней: Узбекский видео клуб" />
+    <CFS name="FRITVVIDEOCLUB10D" globalServiceCode="FRITVVIDEOCLUB10D" copyOf="CFS_FP_SERVICE_GENERAL" description="iTV на 10 дней: Видео клуб" />
+    <CFS name="FRITVVIDEOCLUB1M" globalServiceCode="FRITVVIDEOCLUB1M" copyOf="CFS_FP_SERVICE_GENERAL" description="iTV на месяц: Видео клуб" />
+    <CFS name="FRITVVIDEOCLUB3D" globalServiceCode="FRITVVIDEOCLUB3D" copyOf="CFS_FP_SERVICE_GENERAL" description="iTV на 3 дня: Видео клуб" />
+    <CFS name="FRITVVIDEOCLUB90D" globalServiceCode="FRITVVIDEOCLUB90D" copyOf="CFS_FP_SERVICE_GENERAL" description="iTV на 90 дней: Видео клуб" />
     <CFS name="FRKB" globalServiceCode="FRKB" copyOf="CFS_FP_SERVICE_GENERAL" description="Корпоративный бюджет" />
     <CFS name="FRKBPER" globalServiceCode="FRKBPER" copyOf="CFS_FP_SERVICE_GENERAL" description="КБ Переключатель" />
     <CFS name="FRKKANTIOP" globalServiceCode="FRKKANTIOP" copyOf="CFS_FP_SERVICE_GENERAL" description="КК Скидка 100% Запрет определения номера" />
@@ -1238,6 +1288,7 @@
     <CFS name="FRMB100P" globalServiceCode="FRMB100P" copyOf="CFS_FP_SERVICE_GENERAL" description="Промо-пакет 100 Mb" />
     <CFS name="FRMB100PR" globalServiceCode="FRMB100PR" copyOf="CFS_FP_SERVICE_GENERAL" description="Promo (old)" />
     <CFS name="FRMB12000PRON" globalServiceCode="FRMB12000PRON" copyOf="CFS_FP_SERVICE_GENERAL" description="Праздник Online 12000 Mb" />
+    <CFS name="FRMB200SALE" globalServiceCode="FRMB200SALE" copyOf="CFS_FP_SERVICE_GENERAL" description="Скидка 15% M2M Интернет пакеты 200 MB" />
     <CFS name="FRMB3000PRON" globalServiceCode="FRMB3000PRON" copyOf="CFS_FP_SERVICE_GENERAL" description="Праздник Online 3000 Mb" />
     <CFS name="FRMB300HV" globalServiceCode="FRMB300HV" copyOf="CFS_FP_SERVICE_GENERAL" description="Промо-пакет 300 Mb HV" />
     <CFS name="FRMB300P" globalServiceCode="FRMB300P" copyOf="CFS_FP_SERVICE_GENERAL" description="Промо-пакет 300 Mb" />
@@ -1525,6 +1576,7 @@
     <CFS name="FRSAMSUNG7000N" globalServiceCode="FRSAMSUNG7000N" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus Samsung 3500 Mb + 3500 Mb" />
     <CFS name="FRSAMSUNG8000N" globalServiceCode="FRSAMSUNG8000N" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus Samsung 4500 Mb + 4500 Mb" />
     <CFS name="FRSBRONZE" globalServiceCode="FRSBRONZE" copyOf="CFS_FP_SERVICE_GENERAL" description="Скидки на красивые номера Bronze" />
+    <CFS name="FRSBRONZEC7" globalServiceCode="FRSBRONZEC7" copyOf="CFS_FP_SERVICE_GENERAL" description="Скидки на красивые номера Bronze Corp 777" />
     <CFS name="FRSCHSMPL" globalServiceCode="FRSCHSMPL" copyOf="CFS_FP_SERVICE_GENERAL" description="Услуга Счетчик смены ТП" />
     <CFS name="FRSGOLDNEW" globalServiceCode="FRSGOLDNEW" copyOf="CFS_FP_SERVICE_GENERAL" description="Скидка 85% Super Gold New" />
     <CFS name="FRSHTRAFXIZMAT" globalServiceCode="FRSHTRAFXIZMAT" copyOf="CFS_FP_SERVICE_GENERAL" description="Штраф на выбор номера ТП Xizmat" />
@@ -1562,9 +1614,13 @@
     <CFS name="FRSPSPLAT85" globalServiceCode="FRSPSPLAT85" copyOf="CFS_FP_SERVICE_GENERAL" description="Скидки продолжаются SUPER PLATINUM 85%" />
     <CFS name="FRSPSTEEL50" globalServiceCode="FRSPSTEEL50" copyOf="CFS_FP_SERVICE_GENERAL" description="Скидки продолжаются STEEL 50%" />
     <CFS name="FRSSILVER" globalServiceCode="FRSSILVER" copyOf="CFS_FP_SERVICE_GENERAL" description="Скидки на красивые номера Silver" />
+    <CFS name="FRSSILVERC7" globalServiceCode="FRSSILVERC7" copyOf="CFS_FP_SERVICE_GENERAL" description="Скидки на красивые номера Silver Corp 777" />
     <CFS name="FRSSILVERL" globalServiceCode="FRSSILVERL" copyOf="CFS_FP_SERVICE_GENERAL" description="Скидки на красивые номера Silver Light" />
+    <CFS name="FRSSILVERLC7" globalServiceCode="FRSSILVERLC7" copyOf="CFS_FP_SERVICE_GENERAL" description="Скидки на красивые номера Silver Light Corp 777" />
     <CFS name="FRSSTEEL" globalServiceCode="FRSSTEEL" copyOf="CFS_FP_SERVICE_GENERAL" description="Скидки на красивые номера Steel" />
+    <CFS name="FRSSTEELC7" globalServiceCode="FRSSTEELC7" copyOf="CFS_FP_SERVICE_GENERAL" description="Скидки на красивые номера Steel Corp 777" />
     <CFS name="FRSSTEELL" globalServiceCode="FRSSTEELL" copyOf="CFS_FP_SERVICE_GENERAL" description="Скидки на красивые номера Steel Light" />
+    <CFS name="FRSSTEELLC7" globalServiceCode="FRSSTEELLC7" copyOf="CFS_FP_SERVICE_GENERAL" description="Скидки на красивые номера Steel Light Corp 777" />
     <CFS name="FRSTEEL" globalServiceCode="FRSTEEL" copyOf="CFS_FP_SERVICE_GENERAL" description="STEEL (периодическая)" />
     <CFS name="FRSTEEL100CORPER" globalServiceCode="FRSTEEL100CORPER" copyOf="CFS_FP_SERVICE_GENERAL" description="Скидка STEEL 100% Corporate Perfect" />
     <CFS name="FRSTEEL100MY" globalServiceCode="FRSTEEL100MY" copyOf="CFS_FP_SERVICE_GENERAL" description="Скидка STEEL 100% Maxi Year" />
@@ -1729,6 +1785,11 @@
     <CFS name="FRVIGSHTRSALE100" globalServiceCode="FRVIGSHTRSALE100" copyOf="CFS_FP_SERVICE_GENERAL" description="Скидка 100% на Штраф выгодная сделка 12 месяцев" />
     <CFS name="FRVNUMBER" globalServiceCode="FRVNUMBER" copyOf="CFS_FP_SERVICE_GENERAL" description="Восстановление скидка 100%" />
     <CFS name="FRVNUMBERNS" globalServiceCode="FRVNUMBERNS" copyOf="CFS_FP_SERVICE_GENERAL" description="Восстановление номера без скидки" />
+    <CFS name="FRVPBRONZE" globalServiceCode="FRVPBRONZE" copyOf="CFS_FP_SERVICE_GENERAL" description="Выгодное предложение Bronze" />
+    <CFS name="FRVPSILVER" globalServiceCode="FRVPSILVER" copyOf="CFS_FP_SERVICE_GENERAL" description="Выгодное предложение Silver" />
+    <CFS name="FRVPSILVERL" globalServiceCode="FRVPSILVERL" copyOf="CFS_FP_SERVICE_GENERAL" description="Выгодное предложение Silver Light" />
+    <CFS name="FRVPSTEEL" globalServiceCode="FRVPSTEEL" copyOf="CFS_FP_SERVICE_GENERAL" description="Выгодное предложение Steel" />
+    <CFS name="FRVPSTEELL" globalServiceCode="FRVPSTEELL" copyOf="CFS_FP_SERVICE_GENERAL" description="Выгодное предложение Steel Light" />
     <CFS name="FRVSBRONZE" globalServiceCode="FRVSBRONZE" copyOf="CFS_FP_SERVICE_GENERAL" description="Выгодные скидки Bronze" />
     <CFS name="FRVSBRONZE70" globalServiceCode="FRVSBRONZE70" copyOf="CFS_FP_SERVICE_GENERAL" description="Весенние скидки BRONZE" />
     <CFS name="FRVSGOLD70" globalServiceCode="FRVSGOLD70" copyOf="CFS_FP_SERVICE_GENERAL" description="Весенние скидки GOLD" />
@@ -1769,6 +1830,7 @@
     <CFS name="FSINTRNSHNL" globalServiceCode="FSINTRNSHNL" copyOf="CFS_FP_SERVICE_GENERAL" description="Услуга международной связи" />
     <CFS name="FSTRUNK" globalServiceCode="FSTRUNK" copyOf="CFS_FP_SERVICE_GENERAL" description="Услуга междугородней связи" />
     <CFS name="INFBALEMAIL" globalServiceCode="INFBALEMAIL" copyOf="CFS_FP_SERVICE_GENERAL" description="Автоинформирование о балансе через E-mail" />
+    <CFS name="INFOBALEMAIL" globalServiceCode="INFOBALEMAIL" copyOf="CFS_FP_SERVICE_GENERAL" description="Автоинформирование о балансе через E-mail" />
     <CFS name="INFONOTDELIVACC" globalServiceCode="INFONOTDELIVACC" copyOf="CFS_FP_SERVICE_GENERAL" description="Автоинформирование о недоставке счета" />
     <CFS name="LGHTRMNG" priority="99" description="Light Роуминг">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
