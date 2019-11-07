@@ -22,53 +22,43 @@
       </resultlist>
       <parameterslist>
         <param name="XmlPath:0" value="//AddList/*" />
+        <param name="XmlPath:1" value="//ModifyList/*" />
       </parameterslist>
     </node>
     <node name="CheckCFService" object="IfMultipleXmlConditionsResolver">
       <resultlist>
-        <result value="0" node="SwitchType" />
+        <result value="0" node="CF_Update" />
         <result value="" node="RequestCutterByXmlNodes" />
       </resultlist>
       <parameterslist>
         <param name="ObjectNameInContext" value="request" />
-        <param name="OrXmlPath:0" value="//AddList/RFS_HLR_CFB" />
-        <param name="OrXmlPath:1" value="//AddList/RFS_HLR_CFU" />
-        <param name="OrXmlPath:2" value="//AddList/RFS_HLR_CFNRC" />
-        <param name="OrXmlPath:3" value="//AddList/RFS_HLR_CFNRY" />
-        <param name="OrXmlPath:4" value="//AddList/RFS_HLR_CFD" />
-      </parameterslist>
-    </node>
-    <node name="SwitchType" object="Switch">
-      <resultlist>
-        <result value="0" node="SwitchMode" />
-        <result value="1" node="SwitchMode" />
-        <result value="2" node="CF_Update" />
-        <result value="3" node="CF_Add" />
-      </resultlist>
-      <parameterslist>
-        <param name="XmlPath" value="//CallForwardType/Value/text()" />
-        <param name="Value:2" value="Update" />
-        <param name="Value:3" value="Provision" />
+        <param name="OrXmlPath:0" value="//RFS_HLR_CFB" />
+        <param name="OrXmlPath:1" value="//RFS_HLR_CFU" />
+        <param name="OrXmlPath:2" value="//RFS_HLR_CFNRC" />
+        <param name="OrXmlPath:3" value="//RFS_HLR_CFNRY" />
+        <param name="OrXmlPath:4" value="//RFS_HLR_CFD" />
       </parameterslist>
     </node>
     <node name="CF_Update" object="IfCommander">
       <resultlist>
         <result value="0" node="CF_Add" />
-        <result value="1538" node="RequestCutterByXmlNodes" />
+        <result value="1538" node="CF_Add" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="OrXmlPath:0" value="//CallForwardMode/Value[text()='Activate']" />
-        <param name="OrXmlPath:1" value="//CallForwardMode/Value[text()='Deactivate']" />
+        <param name="IfXmlPath:0" value="//CallForwardType/Value[text()='Update']" />
         <param name="Command" value="SC.Delete_CF" />
       </parameterslist>
     </node>
-    <node name="CF_Add" object="Commander">
+    <node name="CF_Add" object="IfCommander">
       <resultlist>
         <result value="0" node="SwitchMode" />
+        <result value="1538" node="SwitchMode" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
+        <param name="OrXmlPath:0" value="//CallForwardType/Value[text()='Update']" />
+        <param name="OrXmlPath:1" value="//AddList//CallForwardType/Value[text()='Provision']" />
         <param name="Command" value="SC.Add_CF" />
       </parameterslist>
     </node>

@@ -12,6 +12,7 @@
     <Error Name="000008;" Expression="$(Error)" Value="InvalidParameterValue" />
     <Error Name="101040;" Expression="$(Error)" Value="FAILURE" />
     <Error Name="101041;" Expression="$(Error)" Value="MsisdnAlreadyDefined" />
+    <Error Name="110107;" Expression="$(Error)" Value="MsisdnAlreadyDefined" />
     <Error Name="101063;" Expression="$(Error)" Value="ImsiIsNotRegisteredInAC" />
     <Error Name="ERR1001;" Expression="$(Error)" Value="NotSupportedCommandOrAction" />
     <Error Name="ERR1004;" Expression="$(Error)" Value="InvalidParameterValue" />
