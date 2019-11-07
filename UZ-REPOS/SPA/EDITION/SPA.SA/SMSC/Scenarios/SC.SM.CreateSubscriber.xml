@@ -13,10 +13,20 @@
     </node>
     <node name="AddSubscriber" object="Commander">
       <resultlist>
+        <result value="1797" node="DeleteSubscriber" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
         <param name="Command" value="SC.SM.AddSubscriber" />
+      </parameterslist>
+    </node>
+    <node name="DeleteSubscriber" object="Commander">
+      <resultlist>
+        <result value="0" node="AddSubscriber" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.SM.DeleteSubscriber" />
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">
