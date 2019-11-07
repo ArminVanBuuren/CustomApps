@@ -10,11 +10,11 @@
     <Item Name="Profile" Type="LocalParameter" />
   </Request>
   <ParametersList>
-    <Parameter Name="Profile">
-      <Source Path="//RES_SM_PROFILE/Value[text()!='']" />
-    </Parameter>
     <Parameter Name="NewIMSI">
       <Source Path="//NewIMSI/Value[text()!='']" />
+    </Parameter>
+    <Parameter Name="Profile">
+      <Source Path="//RES_SM_PROFILE/Value[text()!='']" />
     </Parameter>
   </ParametersList>
   <ErrorsList CodePage="ascii" />
