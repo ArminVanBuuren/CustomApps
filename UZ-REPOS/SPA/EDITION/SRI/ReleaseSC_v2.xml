@@ -208,8 +208,8 @@
     <RFS name="RFS_HLR_CFB" hostType="HL" description="Call forwarding on mobile subscriber busy" />
     <RFS name="RFS_HLR_CFB_ACT" base="RFS_HLR_CFB" hostType="HL" description="Activate Call forwarding on mobile subscriber busy">
       <RFSParameter name="CallForwardMode">
-        <Value condition="(//ProvisionList//CFB)" value="Activate" />
-        <Value condition="(//WithdrawalList//CFB)" value="Deactivate" />
+        <Value condition="//ProvisionList//CFB" value="Activate" />
+        <Value condition="//WithdrawalList//CFB" value="Deactivate" />
       </RFSParameter>
       <RFSParameter name="CallForwardType">
         <Value condition="//ActionNameOriginal[text()='Activate Call Forwarding Sync']" value="Update" />
@@ -220,8 +220,8 @@
     </RFS>
     <RFS name="RFS_HLR_CFB_PRV" base="RFS_HLR_CFB" hostType="HL" description="Provision Call forwarding on mobile subscriber busy">
       <RFSParameter name="CallForwardMode">
-        <Value condition="(//ProvisionList//CFB)" value="Activate" />
-        <Value condition="(//WithdrawalList//CFB)" value="Deactivate" />
+        <Value condition="//ProvisionList//CFB" value="Activate" />
+        <Value condition="//WithdrawalList//CFB" value="Deactivate" />
       </RFSParameter>
       <RFSParameter name="CallForwardType" value="Provision" />
     </RFS>
@@ -233,8 +233,8 @@
     <RFS name="RFS_HLR_CFNRC" hostType="HL" description="Call forwarding on mobile subscriber not reachable" />
     <RFS name="RFS_HLR_CFNRC_ACT" base="RFS_HLR_CFNRC" hostType="HL" description="Activate Call forwarding on mobile subscriber not reachable">
       <RFSParameter name="CallForwardMode">
-        <Value condition="(//ProvisionList//CFNRC)" value="Activate" />
-        <Value condition="(//WithdrawalList//CFNRC)" value="Deactivate" />
+        <Value condition="//ProvisionList//CFNRC" value="Activate" />
+        <Value condition="//WithdrawalList//CFNRC" value="Deactivate" />
       </RFSParameter>
       <RFSParameter name="CallForwardType">
         <Value condition="//ActionNameOriginal[text()='Activate Call Forwarding Sync']" value="Update" />
@@ -245,8 +245,8 @@
     </RFS>
     <RFS name="RFS_HLR_CFNRC_PRV" base="RFS_HLR_CFNRC" hostType="HL" description="Provision Call forwarding on mobile subscriber not reachable">
       <RFSParameter name="CallForwardMode">
-        <Value condition="(//ProvisionList//CFNRC)" value="Activate" />
-        <Value condition="(//WithdrawalList//CFNRC)" value="Deactivate" />
+        <Value condition="//ProvisionList//CFNRC" value="Activate" />
+        <Value condition="//WithdrawalList//CFNRC" value="Deactivate" />
       </RFSParameter>
       <RFSParameter name="CallForwardType" value="Provision" />
     </RFS>
@@ -254,8 +254,8 @@
     <RFS name="RFS_HLR_CFNRY_ACT" base="RFS_HLR_CFNRY" hostType="HL" description="Activate Call forwarding on no reply">
       <RFSParameter name="CallForwardingTimer" path="//CFNRY/NoReplyTimer" />
       <RFSParameter name="CallForwardMode">
-        <Value condition="(//ProvisionList//CFNRY)" value="Activate" />
-        <Value condition="(//WithdrawalList//CFNRY)" value="Deactivate" />
+        <Value condition="//ProvisionList//CFNRY" value="Activate" />
+        <Value condition="//WithdrawalList//CFNRY" value="Deactivate" />
       </RFSParameter>
       <RFSParameter name="CallForwardType">
         <Value condition="//ActionNameOriginal[text()='Activate Call Forwarding Sync']" value="Update" />
@@ -266,16 +266,16 @@
     </RFS>
     <RFS name="RFS_HLR_CFNRY_PRV" base="RFS_HLR_CFNRY" hostType="HL" description="Provision Call forwarding on no reply">
       <RFSParameter name="CallForwardMode">
-        <Value condition="(//ProvisionList//CFNRY)" value="Activate" />
-        <Value condition="(//WithdrawalList//CFNRY)" value="Deactivate" />
+        <Value condition="//ProvisionList//CFNRY" value="Activate" />
+        <Value condition="//WithdrawalList//CFNRY" value="Deactivate" />
       </RFSParameter>
       <RFSParameter name="CallForwardType" value="Provision" />
     </RFS>
     <RFS name="RFS_HLR_CFU" hostType="HL" description="Call forwarding unconditional" />
     <RFS name="RFS_HLR_CFU_ACT" base="RFS_HLR_CFU" hostType="HL" description="Activate Call forwarding unconditional">
       <RFSParameter name="CallForwardMode">
-        <Value condition="(//ProvisionList//CFU)" value="Activate" />
-        <Value condition="(//WithdrawalList//CFU)" value="Deactivate" />
+        <Value condition="//ProvisionList//CFU" value="Activate" />
+        <Value condition="//WithdrawalList//CFU" value="Deactivate" />
       </RFSParameter>
       <RFSParameter name="CallForwardType">
         <Value condition="//ActionNameOriginal[text()='Activate Call Forwarding Sync']" value="Update" />
@@ -286,8 +286,8 @@
     </RFS>
     <RFS name="RFS_HLR_CFU_PRV" base="RFS_HLR_CFU" hostType="HL" description="Provision Call forwarding unconditional">
       <RFSParameter name="CallForwardMode">
-        <Value condition="(//ProvisionList//CFU)" value="Activate" />
-        <Value condition="(//WithdrawalList//CFU)" value="Deactivate" />
+        <Value condition="//ProvisionList//CFU" value="Activate" />
+        <Value condition="//WithdrawalList//CFU" value="Deactivate" />
       </RFSParameter>
       <RFSParameter name="CallForwardType" value="Provision" />
     </RFS>
