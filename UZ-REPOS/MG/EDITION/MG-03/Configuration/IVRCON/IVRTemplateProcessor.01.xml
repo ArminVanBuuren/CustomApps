@@ -1,9 +1,19 @@
 <templates connector="IVR">
   <macros>
     <!--
-    type = "1"      string
-    type = "2"      byte
-    type = "3"      integer
+ 
+  1 String
+  2 Byte
+  3 Int
+  4 Date
+  5 Time
+  6 DateTime
+  7 IntsArray
+  8 Word
+  9 Service
+  10 OctetString
+  133 Parameter
+     
     -->
     <!-- ==========================  REDIRECT CONNECTORS   ========================= -->
     <define name="_SMSCON_1" value="SMSCON_03_01" />
@@ -116,7 +126,7 @@
     <define name="_CURRENT_INITIATOR" value="ivrcon" />
     <!-- ==========================  SETTINGS   ========================= -->
   </macros>
-  <template procedureName="DB_CValidation" handler="DBCON_03_01" sessionStorage="Memory" sessionLifetime="60">
+  <template procedureName="DB_CValidation" handler="DBCON_03_01" sessionStorage="Memory" sessionLifetime="30">
     <condition />
     <receiveTemplate>
       <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(IVR_CVal_${customer})}">
@@ -135,15 +145,15 @@
       <param name="customer" />
     </input>
     <output>
-      <param name="dbresult" type="1" value="0" />
-      <param name="TariffPlan" type="1" value="0" />
-      <param name="State" type="1" value="0" />
+      <param name="dbresult" type="3" value="0" />
+      <param name="TariffPlan" type="3" value="0" />
+      <param name="State" type="2" value="0" />
       <param name="Password" type="1" value="" />
-      <param name="regioncode" type="1" value="0" />
-      <param name="MarkCat" type="1" value="0" />
+      <param name="regioncode" type="3" value="0" />
+      <param name="MarkCat" type="3" value="0" />
     </output>
   </template>
-  <template procedureName="DB_CValidation_Step2" sessionStorage="Memory" sessionLifetime="60">
+  <template procedureName="DB_CValidation_Step2" sessionStorage="Memory" sessionLifetime="30">
     <condition />
     <receiveTemplate>
       <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
@@ -160,7 +170,6 @@
       <set item="param:Password" value="${password}" />
       <set item="param:regioncode" value="${regioncode}" />
       <set item="param:MarkCat" value="${sMarkCat}" />
-      <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
     <input>
       <param name="dbresult" />
@@ -171,12 +180,12 @@
       <param name="MarkCat" />
     </input>
     <output>
-      <param name="dbresult" type="1" value="0" />
-      <param name="TariffPlan" type="1" value="0" />
-      <param name="State" type="1" value="0" />
+      <param name="dbresult" type="3" value="0" />
+      <param name="TariffPlan" type="3" value="0" />
+      <param name="State" type="2" value="0" />
       <param name="Password" type="1" value="" />
-      <param name="regioncode" type="1" value="0" />
-      <param name="MarkCat" type="1" value="0" />
+      <param name="regioncode" type="3" value="0" />
+      <param name="MarkCat" type="3" value="0" />
     </output>
   </template>
   <template procedureName="DB_SInterrogation" sessionStorage="Memory" sessionLifetime="30">
@@ -852,10 +861,10 @@
     </input>
     <output>
       <param name="DBResult" type="3" value="-1" />
-      <param name="AccBalance" type="1" value="-1" />
-      <param name="AccGPRS" type="1" value="-1" />
-      <param name="AccMIN" type="1" value="-1" />
-      <param name="AccSMS" type="1" value="-1" />
+      <param name="AccBalance" type="3" value="-1" />
+      <param name="AccGPRS" type="3" value="-1" />
+      <param name="AccMIN" type="3" value="-1" />
+      <param name="AccSMS" type="3" value="-1" />
     </output>
   </template>
   <template procedureName="DB_BalanceRetriev3">
