@@ -3,6 +3,7 @@
     <object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="WellknownsReplacer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.WellknownsReplacer" assembly="FORIS.SPA.MmlProcessing.dll" />
   </objectList>
   <automat>
     <node name="BySubscribersCutter-Node" object="BySubscribersCutter">
@@ -13,11 +14,19 @@
     </node>
     <node name="ChangeIMSI" object="Commander">
       <resultlist>
-        <result value="1837" node="AddSubscriber" />
+        <result value="1837" node="WellknownsReplacer" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
         <param name="Command" value="SC.SM.ChangeIMSI" />
+      </parameterslist>
+    </node>
+    <node name="WellknownsReplacer" object="WellknownsReplacer">
+      <resultlist>
+        <result value="" node="AddSubscriber" />
+      </resultlist>
+      <parameterslist>
+        <param name="IMSI" value="xmlsubstr(&quot;//NewIMSI/Value&quot;)" />
       </parameterslist>
     </node>
     <node name="AddSubscriber" object="Commander">
