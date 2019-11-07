@@ -24,6 +24,7 @@
     <Error Name="ERR3027;" Expression="$(Error)" Value="NoServices" />
     <Error Name="ERR3028;" Expression="$(Error)" Value="AccessDenied" />
     <Error Name="ERR3050;" Expression="$(Error)" Value="ImsiAssinedToAnotherSubscriber" />
+    <Error Name="101060;" Expression="$(Error)" Value="ImsiAssinedToAnotherSubscriber" />
     <Error Name="ERR3100;" Expression="$(Error)" Value="ResourceLimitation" />
     <Error Name="ERR5002;" Expression="$(Error)" Value="ResourceLimitation" />
   </ErrorsList>
