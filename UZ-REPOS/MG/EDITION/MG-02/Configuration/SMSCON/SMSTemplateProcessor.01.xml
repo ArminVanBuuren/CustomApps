@@ -149,7 +149,7 @@
     </condition>
     <receiveTemplate />
     <deliveryTemplate>
-      <set item="Content" value="#{XmlReplacer('#{replace('${Content}','([@]+)','${customer}')}')}" />
+      <set item="Content" value="#{XmlReplacer('#{replace('${Content}','(@@@@@@)','${customer}')}')}" />
       <set item="Sender" value="_SMS_NUM_1" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="_ENCODING" />
