@@ -125,7 +125,6 @@
     <Content Include="EDITION\MG-01\CRMFilter\XSLT\Scripts\DuplicateBalanceAnswer.xsl" />
     <Content Include="EDITION\MG-01\CRMFilter\XSLT\Scripts\DuplicateCounterAnswer.xsl" />
     <Content Include="EDITION\MG-01\CRMFilter\XSLT\Scripts\GetCounters.xsl" />
-    <Content Include="EDITION\MG-01\CRMFilter\XSLT\Scripts\ReplaceCodeFromContent.xsl" />
     <Content Include="EDITION\MG-01\CRMFilter\XSLT\Scripts\StringFormat.xsl" />
     <Content Include="EDITION\MG-01\CRMFilter\XSLT\Scripts\TransformDeliveryReq.xsl" />
     <Content Include="EDITION\MG-01\CRMFilter\XSLT\Scripts\TransformDeliveryReqFromISSA.xsl" />
@@ -245,7 +244,6 @@
     <Content Include="EDITION\MG-02\CRMFilter\XSLT\Scripts\DuplicateBalanceAnswer.xsl" />
     <Content Include="EDITION\MG-02\CRMFilter\XSLT\Scripts\DuplicateCounterAnswer.xsl" />
     <Content Include="EDITION\MG-02\CRMFilter\XSLT\Scripts\GetCounters.xsl" />
-    <Content Include="EDITION\MG-02\CRMFilter\XSLT\Scripts\ReplaceCodeFromContent.xsl" />
     <Content Include="EDITION\MG-02\CRMFilter\XSLT\Scripts\StringFormat.xsl" />
     <Content Include="EDITION\MG-02\CRMFilter\XSLT\Scripts\TransformDeliveryReq.xsl" />
     <Content Include="EDITION\MG-02\CRMFilter\XSLT\Scripts\TransformDeliveryReqFromISSA.xsl" />
@@ -299,7 +297,6 @@
     <Content Include="EDITION\MG-03\CRMFilter\XSLT\Scripts\DuplicateBalanceAnswer.xsl" />
     <Content Include="EDITION\MG-03\CRMFilter\XSLT\Scripts\DuplicateCounterAnswer.xsl" />
     <Content Include="EDITION\MG-03\CRMFilter\XSLT\Scripts\GetCounters.xsl" />
-    <Content Include="EDITION\MG-03\CRMFilter\XSLT\Scripts\ReplaceCodeFromContent.xsl" />
     <Content Include="EDITION\MG-03\CRMFilter\XSLT\Scripts\StringFormat.xsl" />
     <Content Include="EDITION\MG-03\CRMFilter\XSLT\Scripts\TransformDeliveryReq.xsl" />
     <Content Include="EDITION\MG-03\CRMFilter\XSLT\Scripts\TransformDeliveryReqFromISSA.xsl" />
@@ -362,7 +359,6 @@
     <Content Include="EDITION\MG-04\CRMFilter\XSLT\Scripts\DuplicateBalanceAnswer.xsl" />
     <Content Include="EDITION\MG-04\CRMFilter\XSLT\Scripts\DuplicateCounterAnswer.xsl" />
     <Content Include="EDITION\MG-04\CRMFilter\XSLT\Scripts\GetCounters.xsl" />
-    <Content Include="EDITION\MG-04\CRMFilter\XSLT\Scripts\ReplaceCodeFromContent.xsl" />
     <Content Include="EDITION\MG-04\CRMFilter\XSLT\Scripts\StringFormat.xsl" />
     <Content Include="EDITION\MG-04\CRMFilter\XSLT\Scripts\TransformDeliveryReq.xsl" />
     <Content Include="EDITION\MG-04\CRMFilter\XSLT\Scripts\TransformDeliveryReqFromISSA.xsl" />

@@ -206,5 +206,54 @@
 ]]>
       </code>
     </Format>
+    <XmlReplacer>
+      <summary>
+        <syntax>XmlReplacer(string)</syntax>
+        <definition>
+          Created by Vladimir Khovanskiy. 
+          Replace xml entity names to related char.
+        </definition>
+      </summary>
+      <code>
+        <![CDATA[
+    public class XmlReplacerFunction : IXsltContextFunction
+    {
+        public int Minargs
+        {
+            get { return 1; }
+        }
+
+        public int Maxargs
+        {
+            get { return 1; }
+        }
+
+        public XPathResultType ReturnType
+        {
+            get { return XPathResultType.String; }
+        }
+
+        public XPathResultType[] ArgTypes
+        {
+            get { return new[] { XPathResultType.String, XPathResultType.String }; }
+        }
+
+        public object Invoke(XsltContext xsltContext, object[] args, XPathNavigator docContext)
+        {
+            if (args == null)
+                throw new ArgumentNullException("args");
+            if (args.Length != 1)
+                throw new ArgumentException("Function XmlReplacer() takes only one parameter");
+
+            return ((string)args[0]).Replace("&amp;", "&")
+                                    .Replace("&apos;", "'")
+                                    .Replace("&quot;", "\"")
+                                    .Replace("&lt;", "<")
+                                    .Replace("&gt;", ">");
+        }
+    }
+]]>
+      </code>
+    </XmlReplacer>
   </functions>
 </root>

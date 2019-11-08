@@ -12,6 +12,5 @@
   <transform condition="/Message/@type='deliveryrequest'  and /Message/Package/@template_id='DirectSendSMS' 
                     and /Message/Package/Item/@sender!='' 
                     and /Message/Package/Item/@customer!=''" validation="1=1" successTemplate="XSLT\Scripts\TransformDeliveryReqFromISSA.xsl" errorTemplate="" />
-  <transform condition="/Message/@type='deliveryrequest' and /Message/Package/@template_id='SMSAutoInformation'" validation="1=1" successTemplate="XSLT\Scripts\ReplaceCodeFromContent.xsl" errorTemplate="" />
   <transform condition="/Message/@type='retrievecustomerdataresult' and /Message/Item/Attribute[@name='accumulator']/@value!=''" validation="1=1" successTemplate="XSLT\Scripts\GetCounters.xsl" errorTemplate="" />
 </plugin>
