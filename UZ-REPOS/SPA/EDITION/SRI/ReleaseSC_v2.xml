@@ -2144,12 +2144,7 @@
       <RFS name="RFS_SM_RESTORE" linkType="Add" handler="SM_RecreateSubscriber" />
     </RFSGroup>
   </RFSGroupList>
-  <RestrictionList>
-    <Restriction name="HLR_RESTRICTION_ROAMING_LTE" description="Невозможно добавить одновременно LTE и роуминг, т.к. это взаимоисключающие сервисы">
-      <RFS name="RFS_HLR_LTE" scenarioType="Add" />
-      <RFS name="RFS_HLR_ROAMING" scenarioType="Add" />
-    </Restriction>
-  </RestrictionList>
+  <RestrictionList />
   <RFSDependencyList />
   <HandlerList>
     <Handler name="ChangeFPMSISDNHandler" type="Custom" description="Обработчик RFS для изменения номера MSISDN">

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration markers="*" scenarioPrefix="SC." mainIdentities="MSISDN,PersonalAccountNumber,ContractNumber" SICreation="" formatVersion="1">
+  <HostTypeList>
+  </HostTypeList>
+  <IdentityList />
+  <AttributeList />
+  <ResourceList>
+  </ResourceList>
+  <RFSParameterList>
+  </RFSParameterList>
+  <FlagList />
+  <RFSList>
+  </RFSList>
+  <CFSList>
+  </CFSList>
+  <CFSGroupList>
+  </CFSGroupList>
+  <ScenarioList>
+  </ScenarioList>
+  <WfmScenarioList />
+</Configuration>
