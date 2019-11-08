@@ -628,9 +628,6 @@
     <Content Include="EDITION\OLD\SPA.SA\HLR.ZTE.v1\Scripts\login.xml" />
     <Content Include="EDITION\OLD\SPA.SA\HLR.ZTE.v1\Scripts\logoff.xml" />
     <Content Include="EDITION\OLD\SPA.SA\HLR.ZTE.v1\Scripts\nosleep.xml" />
-    <Content Include="EDITION\SRI\SC-TEST - 2 - Copy.xml">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="EDITION\SRI\SC-TEST - 3.xml">
       <SubType>Designer</SubType>
     </Content>
