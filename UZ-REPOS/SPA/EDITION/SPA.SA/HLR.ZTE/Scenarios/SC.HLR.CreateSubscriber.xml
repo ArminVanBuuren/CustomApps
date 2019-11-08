@@ -91,8 +91,8 @@
       <resultlist>
         <result value="0" node="Add_Region" />
         <result value="1" node="Add_Region" />
-        <result value="2" node="Modify_GPRS_Barring" />
-        <result value="3" node="Modify_GPRS_Barring" />
+        <result value="2" node="Delete_NAM" />
+        <result value="3" node="Delete_NAM" />
       </resultlist>
       <parameterslist>
         <param name="XmlPath" value="//RES_HLR_PROFILE/Value/text()" />
@@ -292,8 +292,8 @@
     </node>
     <node name="Modify_Roaming" object="IfCommander">
       <resultlist>
-        <result value="0" node="Modify_GPRS_Barring" />
-        <result value="1538" node="Modify_GPRS_Barring" />
+        <result value="0" node="Delete_NAM" />
+        <result value="1538" node="Delete_NAM" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
@@ -301,22 +301,33 @@
         <param name="Command" value="SC.Modify_Roaming" />
       </parameterslist>
     </node>
-    <node name="Modify_GPRS_Barring" object="Commander">
+    <node name="Delete_NAM" object="Commander">
       <resultlist>
         <result value="0" node="Modify_NAM" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SC.Modify_GPRS_Barring" />
+        <param name="Command" value="SC.Delete_NAM" />
       </parameterslist>
     </node>
-    <node name="Modify_NAM" object="Commander">
+    <node name="Modify_NAM" object="IfCommander">
+      <resultlist>
+        <result value="0" node="Modify_GPRS_Barring" />
+        <result value="1538" node="GetSubscriber" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//RFS_HLR_NET" />
+        <param name="Command" value="SC.Modify_NAM" />
+      </parameterslist>
+    </node>
+    <node name="Modify_GPRS_Barring" object="Commander">
       <resultlist>
         <result value="0" node="GetSubscriber" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="Command" value="SC.Modify_NAM" />
+        <param name="Command" value="SC.Modify_GPRS_Barring" />
       </parameterslist>
     </node>
     <node name="GetSubscriber" object="Commander">
