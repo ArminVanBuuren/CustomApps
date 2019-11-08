@@ -3,7 +3,7 @@
   <Author Name="A.Branov" Date="2018-09-25+15:00" />
   <Request>
     <RequestTemplate>
-      <![CDATA["cmd=##Action##&msisdn=##msisdn##"]]>
+      <![CDATA[cmd=##Action##&msisdn=##msisdn##]]>
     </RequestTemplate>
     <Item Name="msisdn" Type="Wellknown" />
     <Item Name="Action" Type="LocalParameter" />
