@@ -5,13 +5,23 @@
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll" />
     <object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll" />
+    <object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
   </objectList>
   <automat>
     <node name="BySubscribersCutter" object="BySubscribersCutter">
       <resultlist>
-        <result value="0" node="GetIp" />
+        <result value="0" node="CheckSubscriber" />
         <result value="1" node="" />
       </resultlist>
+    </node>
+    <node name="CheckSubscriber" object="IfMultipleXmlConditionsResolver">
+      <resultlist>
+        <result value="0" node="GetIpDealer" />
+        <result value="" node="GetIp" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//RES_MG_PROFILE/Value[text()='DEALERS']" />
+      </parameterslist>
     </node>
     <node name="GetIp" object="DataBaseProcessor">
       <resultlist>
@@ -21,6 +31,22 @@
       <parameterslist>
         <param name="DataBaseName" value="UMS.TAS_SPA" />
         <param name="FunctionName" value="SELECT ip FROM static_ip WHERE MSISDN = '{0}'" />
+        <param name="FunctionType" value="customQuery" />
+        <param name="OutXml" value="db_unit_result" />
+        <param name="DbParameterName:0" value="p_msisdn" />
+        <param name="DbParameterDirection:0" value="Input" />
+        <param name="DbParameterType:0" value="Varchar2" />
+        <param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN" />
+      </parameterslist>
+    </node>
+    <node name="GetIpDealer" object="DataBaseProcessor">
+      <resultlist>
+        <result value="0" node="ExtractIP" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="DataBaseName" value="UMS.TAS_SPA" />
+        <param name="FunctionName" value="SELECT ip FROM static_ip_dealer WHERE MSISDN = '{0}'" />
         <param name="FunctionType" value="customQuery" />
         <param name="OutXml" value="db_unit_result" />
         <param name="DbParameterName:0" value="p_msisdn" />

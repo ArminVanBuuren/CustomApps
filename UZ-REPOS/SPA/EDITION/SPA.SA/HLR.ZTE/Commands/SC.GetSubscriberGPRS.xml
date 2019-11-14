@@ -1,0 +1,14 @@
+<Command Name="SC.GetSubscriberGPRS">
+  <Description>Запрос состояния абонента на HLR</Description>
+  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[Qry User:MSISDN=##msisdn##,Item=GPRS;^M]]>
+    </RequestTemplate>
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="windows-1251">
+    <Error Name="ERR3001" Value="NoSuchObjectInstance" />
+    <Error Name="" Value="SUCCESS" />
+  </ErrorsList>
+</Command>

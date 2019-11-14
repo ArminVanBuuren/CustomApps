@@ -28,6 +28,7 @@
     <Resource name="RES_HLR_SMS_MO" description="Барринг на исходящей SMS" />
     <Resource name="RES_HLR_SMS_MT" description="Барринг на входящей SMS" />
     <Resource name="RES_HLR_USSD" description="Доступ к USSD" />
+    <Resource name="RES_MG_PROFILE" description="Профиль абонента для MG" />
     <Resource name="RES_SM_PROFILE" description="Тип абонента" />
   </ResourceList>
   <RFSParameterList>
@@ -277,6 +278,7 @@
     <RFS name="RFS_HLR_CLIR" hostType="HL" description="Антиопределитель номера" />
     <RFS name="RFS_HLR_CWCH" hostType="HL" description="Ожидание / Удержание вызова" />
     <RFS name="RFS_HLR_DATATRANSFER" hostType="HL" description="Мобильная передача данных" />
+    <RFS name="RFS_HLR_GET_SUBSCRIBER" hostType="HL" description="Получение состояния абонента" />
     <RFS name="RFS_HLR_LTE" hostType="HL" description="Мобильный интернет LTE">
       <Resource name="RES_HLR_NET_APN" value="NET.UMS.UZ">
         <Value hosts="FP:05" value="POSTPAID.UMS.UZ" />
@@ -397,6 +399,8 @@
     <RFS name="RFS_HLR_TEST_ADDLTE_1" hostType="HL" description="Добавить LTE" />
     <RFS name="RFS_HLR_TEST_ADDLTE_2" hostType="HL" description="Добавить LTE" />
     <RFS name="RFS_HLR_TEST_ADDLTE_3" hostType="HL" description="Добавить LTE" />
+    <RFS name="RFS_HLR_TEST_ADDLTE_SC" hostType="HL" description="Добавить LTE" />
+    <RFS name="RFS_HLR_TEST_ADDLTE_ST" hostType="HL" description="Добавить LTE" />
     <RFS name="RFS_HLR_TEST_BIC0" hostType="HL" description="Модификация баррингов входящей связи" />
     <RFS name="RFS_HLR_TEST_BIC1" hostType="HL" description="Модификация баррингов входящей связи" />
     <RFS name="RFS_HLR_TEST_BOC0" hostType="HL" description="Модификация баррингов исходящей связи" />
@@ -411,6 +415,8 @@
     <RFS name="RFS_HLR_TEST_MODLOC" hostType="HL" description="Разрыв сессии" />
     <RFS name="RFS_HLR_TEST_NAM0_1" hostType="HL" description="Добавить интернет сервис" />
     <RFS name="RFS_HLR_TEST_NAM0_2" hostType="HL" description="Добавить интернет сервис" />
+    <RFS name="RFS_HLR_TEST_NAM0_SC" hostType="HL" description="Добавить интернет сервис" />
+    <RFS name="RFS_HLR_TEST_NAM0_ST" hostType="HL" description="Добавить интернет сервис" />
     <RFS name="RFS_HLR_TEST_NAM1" hostType="HL" description="Удалить интернет сервис" />
     <RFS name="RFS_HLR_TEST_QRYUSER" hostType="HL" description="Запрос состояния баррингов абонента" />
     <RFS name="RFS_HLR_TEST_SCHEMEACT_1" hostType="HL" description="Добавление управляющей схемы для роуминга" />
@@ -437,7 +443,9 @@
     </RFS>
     <RFS name="RFS_MCA_RESTORE" hostType="MA" description="Восстановление услуги MCA" />
     <RFS name="RFS_MCA_SUBSCRIPTION" hostType="MA" processType="Subscription" description="Абонент а платформе MCA" />
-    <RFS name="RFS_MG_RESTORE" hostType="MG" description="Восстановление услуги на платформе MG" />
+    <RFS name="RFS_MG_RESTORE" hostType="MG" description="Восстановление услуги на платформе MG">
+      <Resource name="RES_MG_PROFILE" value="DEALERS" />
+    </RFS>
     <RFS name="RFS_MG_SUBSCRIPTION" hostType="MG" processType="Subscription" description="Метка абонента на платформе MG" />
     <RFS name="RFS_RBT_CHANGE_MSISDN" hostType="RBT" description="Изменение номера MSISDN на платформе RBT">
       <RFSParameter name="NewMSISDN" />
@@ -475,10 +483,15 @@
     <CFS name="AddBOC2" description="Модификация баррингов исходящей связи">
       <RFS name="RFS_HLR_TEST_BOC2" linkType="Add" />
     </CFS>
-    <CFS name="AddLTE" description="Добавить LTE">
+    <CFS name="AddLTE_SC" description="Добавить LTE">
       <RFS name="RFS_HLR_TEST_ADDLTE_1" linkType="Add" />
-      <RFS name="RFS_HLR_TEST_ADDLTE_2" linkType="Add" />
       <RFS name="RFS_HLR_TEST_ADDLTE_3" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_ADDLTE_SC" linkType="Add" />
+    </CFS>
+    <CFS name="AddLTE_ST" description="Добавить LTE">
+      <RFS name="RFS_HLR_TEST_ADDLTE_1" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_ADDLTE_3" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_ADDLTE_ST" linkType="Add" />
     </CFS>
     <CFS name="AddSMMT0" description="Служба коротких сообщений Входящие">
       <RFS name="RFS_HLR_TEST_SMMT0" linkType="Add" />
@@ -829,6 +842,7 @@
     <CFS name="FRAPMINI" globalServiceCode="FRAPMINI" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Mini" />
     <CFS name="FRAPMOBI110" globalServiceCode="FRAPMOBI110" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП MOBI 110" />
     <CFS name="FRAPMOBI150" globalServiceCode="FRAPMOBI150" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП MOBI 150" />
+    <CFS name="FRAPMOBI20" globalServiceCode="FRAPMOBI20" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП MOBI 20" />
     <CFS name="FRAPMOBI30" globalServiceCode="FRAPMOBI30" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП MOBI 30" />
     <CFS name="FRAPMOBI40" globalServiceCode="FRAPMOBI40" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП MOBI 40" />
     <CFS name="FRAPMOBI50" globalServiceCode="FRAPMOBI50" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП MOBI 50" />
@@ -990,6 +1004,7 @@
     <CFS name="FRBONGPRSS1000" globalServiceCode="FRBONGPRSS1000" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket 1000 MB" />
     <CFS name="FRBONGPRSS300" globalServiceCode="FRBONGPRSS300" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket 300 MB" />
     <CFS name="FRBONGPRSS500" globalServiceCode="FRBONGPRSS500" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket 500 MB" />
+    <CFS name="FRBONMB10" globalServiceCode="FRBONMB10" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus 10 MB" />
     <CFS name="FRBONMB300" globalServiceCode="FRBONMB300" copyOf="CFS_FP_SERVICE_GENERAL" description="Бонус 300 мб" />
     <CFS name="FRBONMB5" globalServiceCode="FRBONMB5" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus 5 MB" />
     <CFS name="FRBONMB500" globalServiceCode="FRBONMB500" copyOf="CFS_FP_SERVICE_GENERAL" description="Бонус 500 мб" />
@@ -1956,9 +1971,13 @@
       <RFS name="RFS_HLR_TEST_MODLOC" linkType="Add" />
     </CFS>
     <CFS name="MTSFamily" globalServiceCode="MTSFamily" copyOf="CFS_FP_SERVICE_GENERAL" description="Family" />
-    <CFS name="NAM0" description="Добавить интернет сервис">
+    <CFS name="NAM0_SC" description="Добавить интернет сервис">
       <RFS name="RFS_HLR_TEST_NAM0_1" linkType="Add" />
-      <RFS name="RFS_HLR_TEST_NAM0_2" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_NAM0_SC" linkType="Add" />
+    </CFS>
+    <CFS name="NAM0_ST" description="Добавить интернет сервис">
+      <RFS name="RFS_HLR_TEST_NAM0_1" linkType="Add" />
+      <RFS name="RFS_HLR_TEST_NAM0_ST" linkType="Add" />
     </CFS>
     <CFS name="NAM1" description="Удалить интернет сервис">
       <RFS name="RFS_HLR_TEST_NAM1" linkType="Add" />
@@ -2049,6 +2068,7 @@
     <CFS name="Synchronize" priority="1" description="Обработка кнопки Синхронизировать в СПА">
       <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" linkType="Add" />
       <RFS name="RFS_MG_RESTORE" linkType="Add" dependsOn="RFS_MG_SUBSCRIPTION" />
+      <RFSGroup name="RFS_GROUP_HLR_GET_SUBSCRIBER" />
       <RFSGroup name="RFS_GROUP_HLR_RECREATE_SUBSCRIBER" />
       <RFSGroup name="RFS_GROUP_MCA_RECREATE_SUBSCRIBER" />
       <RFSGroup name="RFS_GROUP_SM_RECREATE_SUBSCRIBER" />
@@ -2060,10 +2080,22 @@
     <CFS name="TESTKGK" globalServiceCode="TESTKGK" copyOf="CFS_FP_SERVICE_GENERAL" description="Корпоративный годовой контракт (test)" />
     <CFS name="TESTMONDAY" globalServiceCode="TESTMONDAY" copyOf="CFS_FP_SERVICE_GENERAL" description="Тестовая услуга Понедельник" />
     <CFS name="TESTPPDA" globalServiceCode="TESTPPDA" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="Тест.Услуга A" />
+    <CFS name="TESTPPDAA" globalServiceCode="TESTPPDAA" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="Тест.Услуга A Подключение услуги" />
+    <CFS name="TESTPPDAD" globalServiceCode="TESTPPDAD" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="TEST.Услуга A: Отключение услуги" />
+    <CFS name="TESTPPDAE" globalServiceCode="TESTPPDAE" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="TEST.Услуга A: Изменение услуги" />
     <CFS name="TESTPPDB" globalServiceCode="TESTPPDB" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="Тест.Услуга B" />
+    <CFS name="TESTPPDBA" globalServiceCode="TESTPPDBA" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="TEST.Услуга B: Подключение услуги" />
+    <CFS name="TESTPPDBD" globalServiceCode="TESTPPDBD" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="TEST.Услуга B: Отключение услуги" />
+    <CFS name="TESTPPDBE" globalServiceCode="TESTPPDBE" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="TEST.Услуга B:  Изменение услуги " />
     <CFS name="TESTPPDC" globalServiceCode="TESTPPDC" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="Тест.Услуга C" />
     <CFS name="TESTPPDD" globalServiceCode="TESTPPDD" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="Тест.Услуга D" />
+    <CFS name="TESTPPDDA" globalServiceCode="TESTPPDDA" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="TEST.Услуга D: Подключение услуги" />
+    <CFS name="TESTPPDDD" globalServiceCode="TESTPPDDA" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="TEST.Услуга D: Отключение услуги " />
+    <CFS name="TESTPPDDE" globalServiceCode="TESTPPDDE" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="TEST.Услуга D: Изменение услуги" />
     <CFS name="TESTPPDS" globalServiceCode="TESTPPDS" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="Тест.Услуга S" />
+    <CFS name="TESTPPDSA" globalServiceCode="TESTPPDSA" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="TEST.Услуга S: Подключение услуги " />
+    <CFS name="TESTPPDSD" globalServiceCode="TESTPPDSD" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="TEST.Услуга S: Отключение услуги" />
+    <CFS name="TESTPPDSE" globalServiceCode="TESTPPDSE" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="TEST.Услуга S: Изменение услуги " />
     <CFS name="TESTPPDSERV" globalServiceCode="TESTPPDSERV" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="TESTPPDSERV" />
     <CFS name="TESTTUESDAY" globalServiceCode="TESTTUESDAY" copyOf="CFS_FP_SERVICE_GENERAL" description="Тестовая услуга Вторник" />
     <CFS name="TESTWEDNESDAY" globalServiceCode="TESTWEDNESDAY" copyOf="CFS_FP_SERVICE_GENERAL" description="Тестовая услуга Среда" />
@@ -2112,6 +2144,7 @@
       <CFS name="FRASKUE" />
       <CFS name="FRDGU" />
       <CFS name="FRPARTAPN" />
+      <CFS name="FRUNLIMLTE" />
     </CFSGroup>
   </CFSGroupList>
   <RFSGroupList>
@@ -2130,6 +2163,9 @@
     </RFSGroup>
     <RFSGroup name="RFS_GROUP_HLR_CHANGE_PROFILE" type="Choice" description="Группа RFS для пересоздания абонента">
       <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" handler="HLR_ChangeProfile" />
+    </RFSGroup>
+    <RFSGroup name="RFS_GROUP_HLR_GET_SUBSCRIBER" type="Choice" description="Группа RFS для получения статуса абонента">
+      <RFS name="RFS_HLR_GET_SUBSCRIBER" linkType="Add" handler="HLR_GetSubscriber" />
     </RFSGroup>
     <RFSGroup name="RFS_GROUP_HLR_RECREATE_SUBSCRIBER" type="Choice" description="Группа RFS для пересоздания абонента">
       <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" handler="HLR_RecreateSubscriber" />
@@ -2198,6 +2234,12 @@
         <RFS name="RFS_HLR_SUBSCRIBER_AIISKUE" />
         <RFS name="RFS_HLR_SUBSCRIBER_DGU" />
         <RFS name="RFS_HLR_SUBSCRIBER_DEALERS" />
+      </Configuration>
+    </Handler>
+    <Handler name="HLR_GetSubscriber" type="RecreateSubscriber" description="Обработчик RFS для получения статуса абонента">
+      <Configuration>
+        <RFS name="RFS_HLR_GET_SUBSCRIBER" action="Remove" />
+        <RFS name="RFS_HLR_GET_SUBSCRIBER" action="Add" order="20" />
       </Configuration>
     </Handler>
     <Handler name="HLR_RecreateSubscriber" type="RecreateSubscriber" description="Обработчик RFS для пересоздания абонента">
@@ -2407,6 +2449,12 @@
       <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" scenarioType="Add, Remove" />
       <RFS name="RFS_HLR_SUBSCRIBER" scenarioType="Remove" useType="Mandatory" />
     </Scenario>
+    <Scenario name="HLR.Dummy" sendType="Drop" description="Фейковый сценарий HLR">
+      <RFS name="RFS_HLR_GET_SUBSCRIBER" scenarioType="Modify, Remove" />
+    </Scenario>
+    <Scenario name="HLR.GetSubscriber" description="Получение состояния абонента">
+      <RFS name="RFS_HLR_GET_SUBSCRIBER" scenarioType="Add" useType="Mandatory" />
+    </Scenario>
     <Scenario name="HLR.Modify.CALLS_BAN" description="Изменение голосовой и видео связи">
       <RFS name="RFS_HLR_CALLS_BAN" scenarioType="Add, Remove" />
     </Scenario>
@@ -2474,6 +2522,8 @@
       <RFS name="RFS_HLR_TEST_ADDLTE_1" scenarioType="Add, Remove" />
       <RFS name="RFS_HLR_TEST_ADDLTE_2" scenarioType="Add, Remove" />
       <RFS name="RFS_HLR_TEST_ADDLTE_3" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_ADDLTE_SC" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_ADDLTE_ST" scenarioType="Add, Remove" />
       <RFS name="RFS_HLR_TEST_BIC0" scenarioType="Add, Remove" />
       <RFS name="RFS_HLR_TEST_BIC1" scenarioType="Add, Remove" />
       <RFS name="RFS_HLR_TEST_BOC0" scenarioType="Add, Remove" />
@@ -2488,6 +2538,8 @@
       <RFS name="RFS_HLR_TEST_MODLOC" scenarioType="Add, Remove" />
       <RFS name="RFS_HLR_TEST_NAM0_1" scenarioType="Add, Remove" />
       <RFS name="RFS_HLR_TEST_NAM0_2" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_NAM0_SC" scenarioType="Add, Remove" />
+      <RFS name="RFS_HLR_TEST_NAM0_ST" scenarioType="Add, Remove" />
       <RFS name="RFS_HLR_TEST_NAM1" scenarioType="Add, Remove" />
       <RFS name="RFS_HLR_TEST_QRYUSER" scenarioType="Add, Remove" />
       <RFS name="RFS_HLR_TEST_SCHEMEACT_1" scenarioType="Add, Remove" />

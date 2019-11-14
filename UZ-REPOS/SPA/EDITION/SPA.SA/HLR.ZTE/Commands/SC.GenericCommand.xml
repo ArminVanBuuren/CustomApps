@@ -21,11 +21,15 @@
       <Source Path="/*[1][AdditionalData//RFS_HLR_TEST_BR1]//Identifier/MSISDN" PostFormat="MOD ODB:MSISDN={0},BR=2;" />
       <Source Path="/*[1][AdditionalData//RFS_HLR_TEST_ADDLTE_1]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},SubType=2;" />
       <Source Path="/*[1][AdditionalData//RFS_HLR_TEST_ADDLTE_2]//Identifier/MSISDN" PostFormat="Set TPLAPNCP:MSISDN={0},EPCAPNCPTPL=51;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_TEST_ADDLTE_SC]//Identifier/MSISDN" PostFormat="Add APNPROF:MSISDN={0},EPCAPN=NET.UMS.UZ,PDNGWATYPE=1,EPSQOSID=100,VPLMNDAA=0,PDNType=0,EPCPDNAddr1=*,EPCPDNAddr2=*,APNCHARGE=0,APNLIPAP=255,APNSIPTORAN=255,APNSIPLOCNW=255;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_TEST_ADDLTE_ST]//Identifier/MSISDN" PostFormat="Add APNPROF:MSISDN={0},EPCAPN=POSTPAID.UMS.UZ,PDNGWATYPE=1,EPSQOSID=100,VPLMNDAA=0,PDNType=0,EPCPDNAddr1=*,EPCPDNAddr2=*,APNCHARGE=0,APNLIPAP=255,APNSIPTORAN=255,APNSIPLOCNW=255;" />
       <Source Path="/*[1][AdditionalData//RFS_HLR_TEST_ADDLTE_3]//Identifier/MSISDN" PostFormat="Set EPCBsc:MSISDN={0},EPCCHARGCHRT=8,EPCRFSP=0,EPCSTNSR=FFFFFFFFFFFFFFF,EPCICSIND=0,EPCAMBRUP=100000000,EPCAMBRDOWN=100000000;" />
       <Source Path="/*[1][AdditionalData//RFS_HLR_TEST_DELETE]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},SubType=1;" />
       <Source Path="/*[1][AdditionalData//RFS_HLR_TEST_MODLOC]//Identifier/MSISDN" PostFormat="MOD LOC:MSISDN={0},MSCNumber=*,VLRnumber=*,SGSNNumber=*,SGSNAddr=*,EPCMMEHost=*,EPCMMERealm=*,EPCSGSNHost=*,EPCSGSNRealm=*;" />
       <Source Path="/*[1][AdditionalData//RFS_HLR_TEST_NAM0_1]//Identifier/MSISDN" PostFormat="MOD NAM:MSISDN={0},NAM=0,Keep=1,KEEPEPS=1;" />
       <Source Path="/*[1][AdditionalData//RFS_HLR_TEST_NAM0_2]//Identifier/MSISDN" PostFormat="SET TPLGPRS:MSISDN={0},GPRSTPL=51;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_TEST_NAM0_SC]//Identifier/MSISDN" PostFormat="Add PDP:MSISDN={0},PDPType=0,APN=NET.UMS.UZ,QOSID=100;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_TEST_NAM0_ST]//Identifier/MSISDN" PostFormat="Add PDP:MSISDN={0},PDPType=0,APN=POSTPAID.UMS.UZ,QOSID=100;" />
       <Source Path="/*[1][AdditionalData//RFS_HLR_TEST_NAM1]//Identifier/MSISDN" PostFormat="MOD NAM:MSISDN={0},NAM=1,Keep=1,KEEPEPS=1;" />
       <Source Path="/*[1][AdditionalData//RFS_HLR_TEST_QRYUSER]//Identifier/MSISDN" PostFormat="Qry User:MSISDN={0},Item=ALL;" />
       <Source Path="/*[1][AdditionalData//RFS_HLR_TEST_SCHEMEACT_1]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},ROAMSCH=STEERING;" />

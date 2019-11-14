@@ -1,0 +1,65 @@
+<scenario name="SC.HLR.GetSubscriber">
+  <objectList>
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll" />
+    <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="RequestCutterBySubscribers" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll" />
+    <object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll" />
+    <object name="DataBaseProcessorEncoder" class="FORIS.ScenarioProcessing.OtherParty.DataBaseProcessorEncoder" assembly="FORIS.SPA.OTHERPARTY.dll"/>
+  </objectList>
+  <automat>
+    <node name="RequestCutterBySubscribers" object="RequestCutterBySubscribers">
+      <resultlist>
+        <result value="0" node="GetSubscriber" />
+        <result value="1" node="" />
+      </resultlist>
+    </node>
+    <node name="GetSubscriber" object="Commander">
+      <resultlist>
+        <result value="" node="GetSubscriberGPRS" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.GetSubscriber" />
+      </parameterslist>
+    </node>
+    <node name="GetSubscriberGPRS" object="Commander">
+      <resultlist>
+        <result value="" node="GetSubscriberLTE" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.GetSubscriberGPRS" />
+      </parameterslist>
+    </node>
+    <node name="GetSubscriberLTE" object="Commander">
+      <resultlist>
+        <result value="" node="GetSubscriberCAMEL" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.GetSubscriberLTE" />
+      </parameterslist>
+    </node>
+    <node name="GetSubscriberCAMEL" object="Commander">
+      <resultlist>
+        <result value="" node="GetSubscriberLOC" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.GetSubscriberCAMEL" />
+      </parameterslist>
+    </node>
+    <node name="GetSubscriberLOC" object="Commander">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.GetSubscriberLOC" />
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="RequestCutterBySubscribers" />
+      </resultlist>
+    </node>
+  </automat>
+</scenario>
