@@ -47,7 +47,7 @@
     <Item name="StoringHWM" value="50" />
     <!-- MG Cache. Save DB after count records -->
     <Item name="HealthParam" value="500" />
-    <Item name="ThreadMultiplifier" value="10" />
+    <Item name="ThreadMultiplifier" value="1" />
     <Item name="UtcOffset" value="04+" />
     <Item name="SendSpeedLimit" value="200" />
   </Settings>

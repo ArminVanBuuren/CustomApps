@@ -53,7 +53,7 @@
     <Item name="UtcOffset" value="04+" />
     <Item name="SendSpeedLimit" value="200" />
     <!--200-->
-    <Item name="ThreadMultiplifier" value="10" />
+    <Item name="ThreadMultiplifier" value="1" />
     <!--10-->
   </Settings>
   <SMSCenters>
