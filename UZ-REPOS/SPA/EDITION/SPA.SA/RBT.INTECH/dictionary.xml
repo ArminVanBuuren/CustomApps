@@ -5,6 +5,7 @@
   <ErrorsList CodePage="ASCII">
     <Error Name="000;" Expression="$(Error)" Value="SUCCESS" />
     <Error Name="101;" Expression="$(Error)" Value="SUCCESS" />
+    <Error Name="102;" Expression="$(Error)" Value="SUCCESS" />
     <Error Name="100;" Expression="$(Error)" Value="FAILURE" />
     <Error Name="103;" Expression="$(Error)" Value="SUCCESS" />
     <Error Name="105;" Expression="$(Error)" Value="SUCCESS" />
