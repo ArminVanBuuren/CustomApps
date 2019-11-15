@@ -443,9 +443,7 @@
     </RFS>
     <RFS name="RFS_MCA_RESTORE" hostType="MA" description="Восстановление услуги MCA" />
     <RFS name="RFS_MCA_SUBSCRIPTION" hostType="MA" processType="Subscription" description="Абонент а платформе MCA" />
-    <RFS name="RFS_MG_RESTORE" hostType="MG" description="Восстановление услуги на платформе MG">
-      <Resource name="RES_MG_PROFILE" value="DEALERS" />
-    </RFS>
+    <RFS name="RFS_MG_RESTORE" hostType="MG" description="Восстановление услуги на платформе MG"/>
     <RFS name="RFS_MG_SUBSCRIPTION" hostType="MG" processType="Subscription" description="Метка абонента на платформе MG" />
     <RFS name="RFS_RBT_CHANGE_MSISDN" hostType="RBT" description="Изменение номера MSISDN на платформе RBT">
       <RFSParameter name="NewMSISDN" />
@@ -2443,7 +2441,7 @@
       <RFS name="RFS_HLR_ROAMING" scenarioType="Add" />
       <RFS name="RFS_HLR_SMS_MO" scenarioType="Add, Modify" />
       <RFS name="RFS_HLR_SMS_MT" scenarioType="Add, Modify" />
-      <RFS name="RFS_HLR_SUBSCRIBER" scenarioType="Add" useType="Mandatory" />
+      <RFS name="RFS_HLR_SUBSCRIBER" scenarioType="Add" useType="Mandatory"/>
     </Scenario>
     <Scenario name="HLR.DeleteSubscriber" description="Удаление абонента">
       <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" scenarioType="Add, Remove" />
@@ -2470,7 +2468,7 @@
     <Scenario name="HLR.Modify.DATATRANSFER" description="Изменение сервиса передачи данных">
       <RFS name="RFS_HLR_DATATRANSFER" scenarioType="Add, Remove" />
     </Scenario>
-    <Scenario name="HLR.Modify.LTE" description="Изменение сервиса LTE">
+    <Scenario name="HLR.Modify.LTE" legacyType="CopyRegisteredList" description="Изменение сервиса LTE">
       <RFS name="RFS_HLR_LTE" scenarioType="Add, Remove" />
     </Scenario>
     <Scenario name="HLR.Modify.MPTY" description="Изменение сервиса Конференц-связь">

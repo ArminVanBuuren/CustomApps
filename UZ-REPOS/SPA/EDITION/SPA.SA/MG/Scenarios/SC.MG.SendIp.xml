@@ -10,18 +10,9 @@
   <automat>
     <node name="BySubscribersCutter" object="BySubscribersCutter">
       <resultlist>
-        <result value="0" node="CheckSubscriber" />
+        <result value="0" node="GetIp" />
         <result value="1" node="" />
       </resultlist>
-    </node>
-    <node name="CheckSubscriber" object="IfMultipleXmlConditionsResolver">
-      <resultlist>
-        <result value="0" node="GetIpDealer" />
-        <result value="" node="GetIp" />
-      </resultlist>
-      <parameterslist>
-        <param name="IfXmlPath:0" value="//RES_MG_PROFILE/Value[text()='DEALERS']" />
-      </parameterslist>
     </node>
     <node name="GetIp" object="DataBaseProcessor">
       <resultlist>
@@ -30,23 +21,7 @@
       </resultlist>
       <parameterslist>
         <param name="DataBaseName" value="UMS.TAS_SPA" />
-        <param name="FunctionName" value="SELECT ip FROM static_ip WHERE MSISDN = '{0}'" />
-        <param name="FunctionType" value="customQuery" />
-        <param name="OutXml" value="db_unit_result" />
-        <param name="DbParameterName:0" value="p_msisdn" />
-        <param name="DbParameterDirection:0" value="Input" />
-        <param name="DbParameterType:0" value="Varchar2" />
-        <param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN" />
-      </parameterslist>
-    </node>
-    <node name="GetIpDealer" object="DataBaseProcessor">
-      <resultlist>
-        <result value="0" node="ExtractIP" />
-        <result value="" node="ResponseAssembler" />
-      </resultlist>
-      <parameterslist>
-        <param name="DataBaseName" value="UMS.TAS_SPA" />
-        <param name="FunctionName" value="SELECT ip FROM static_ip_dealer WHERE MSISDN = '{0}'" />
+        <param name="FunctionName" value="select ip from (SELECT ip,msisdn FROM static_ip union all SELECT ip,msisdn FROM static_ip_dealer )t WHERE t.MSISDN = {0}" />
         <param name="FunctionType" value="customQuery" />
         <param name="OutXml" value="db_unit_result" />
         <param name="DbParameterName:0" value="p_msisdn" />

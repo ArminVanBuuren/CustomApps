@@ -3,10 +3,11 @@
   <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
   <Request>
     <RequestTemplate>
-      <![CDATA[Mod BscEx:MSISDN=##msisdn##,SubType=##ACTION##;^M]]>
+      <![CDATA[Mod BscEx:MSISDN=##msisdn##,SubType=##LTE_TYPE##;^M]]>
     </RequestTemplate>
     <Item Name="msisdn" Type="Wellknown" />
-    <Item Name="ACTION" Type="LocalParameter" />
+    <Item Name="LTE_TYPE" Type="LogicalGroupParameter" />
+    <!--Item Name="ACTION" Type="LocalParameter" /-->
   </Request>
   <ParametersList>
     <Parameter Name="ACTION">

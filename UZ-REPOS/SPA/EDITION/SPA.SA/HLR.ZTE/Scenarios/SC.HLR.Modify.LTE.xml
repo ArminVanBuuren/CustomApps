@@ -19,7 +19,10 @@
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="IfXmlPath:0" value="//RemoveList/RFS_HLR_LTE" />
+        <param name="OrXmlPath:0" value="//RemoveList/RFS_HLR_LTE" />
+        <param name="OrXmlPath:1" value="//RegisteredList/FRPARTAPN" />
+        <param name="OrXmlPath:2" value="//RegisteredList/FRASKUE" />
+        <param name="OrXmlPath:3" value="//RegisteredList/FRDGU" />
         <param name="Command" value="SC.Modify_LTE" />
       </parameterslist>
     </node>
