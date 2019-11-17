@@ -6,12 +6,16 @@
       <![CDATA[Mod BscEx:MSISDN=##msisdn##,SubType=##LTE_TYPE##;^M]]>
     </RequestTemplate>
     <Item Name="msisdn" Type="Wellknown" />
-    <Item Name="LTE_TYPE" Type="LogicalGroupParameter" />
-    <!--Item Name="ACTION" Type="LocalParameter" /-->
+    <Item Name="LTE_TYPE" Type="LocalLogicalGroupParameter" />
   </Request>
-  <ParametersList>
-    <Parameter Name="ACTION">
-      <Source Path="//AddList/RFS_HLR_LTE" PresenceValue="2" AbsenceValue="1" />
-    </Parameter>
-  </ParametersList>
+  <LogicalGroupParametersList>
+    <LogicalGroupParameter Name="LTE_TYPE" AbsenceValue="2">
+      <SourcesList PresenceValue="1">
+        <Source Type="OrXmlPath:0" Path="//RemoveList/RFS_HLR_LTE"/>
+        <Source Type="OrXmlPath:1" Path="//RES_HLR_PROFILE/Value[text()='DEALERS']"/>
+        <Source Type="OrXmlPath:2" Path="//RES_HLR_PROFILE/Value[text()='DGU']"/>
+        <Source Type="OrXmlPath:3" Path="//RES_HLR_PROFILE/Value[text()='AIISKUE']"/>
+      </SourcesList>
+    </LogicalGroupParameter>
+  </LogicalGroupParametersList>
 </Command>
