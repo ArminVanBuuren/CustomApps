@@ -6,18 +6,15 @@
       <![CDATA[MOD NAM:MSISDN=##msisdn##,##NAM_STATE##;^M]]>
     </RequestTemplate>
     <Item Name="msisdn" Type="Wellknown" />
-    <Item Name="NAM_STATE" Type="LocalParameter" />
+    <Item Name="NAM_STATE" Type="LocalLogicalGroupParameter" />
   </Request>
-  <ParametersList>
-    <Parameter Name="NAM_STATE" IsChoice="true" AbsenceValue="NAM=1">
-      <Source Path="//AddList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Allow']" PostFormat="NAM=0,Keep=1,KEEPEPS=1" />
-      <Source Path="//AddList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Deny']" PostFormat="NAM=1,Keep=1,KEEPEPS=1" />
-      <Source Path="//ModifyList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Allow']" PostFormat="NAM=0,Keep=1,KEEPEPS=1" />
-      <Source Path="//ModifyList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Deny']" PostFormat="NAM=1,Keep=1,KEEPEPS=1" />
-      <Source Path="//EndList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Allow']" PostFormat="NAM=0,Keep=1,KEEPEPS=1" />
-      <Source Path="//EndList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Deny']" PostFormat="NAM=1,Keep=1,KEEPEPS=1" />
-    </Parameter>
-  </ParametersList>
+  <LogicalGroupParametersList>
+    <LogicalGroupParameter Name="NAM_STATE" AbsenceValue="NAM=1">
+      <SourcesList PresenceValue="NAM=0,Keep=1,KEEPEPS=1" Multi="(//AddList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Allow']) OR (//ModifyList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Allow']) OR (//EndList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Allow'])"/>
+      <SourcesList PresenceValue="NAM=0,Keep=1,KEEPEPS=1" Multi="((//AddList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Deny']) OR (//ModifyList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Deny']) OR (//EndList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Deny'])) AND (NOT //RFS_HLR_ROAMING)"/>
+      <SourcesList PresenceValue="NAM=1,Keep=1,KEEPEPS=1" Multi="((//AddList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Deny']) OR (//ModifyList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Deny']) OR (//EndList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Deny'])) AND (//RFS_HLR_ROAMING)"/>
+    </LogicalGroupParameter>
+  </LogicalGroupParametersList>
   <ErrorsList CodePage="windows-1251">
     <Error Name="110109" Value="SUCCESS" />
     <!--Subscriber does not exist-->

@@ -20,9 +20,9 @@
       </resultlist>
       <parameterslist>
         <param name="OrXmlPath:0" value="//RemoveList/RFS_HLR_LTE" />
-        <param name="OrXmlPath:1" value="//RegisteredList/FRPARTAPN" />
-        <param name="OrXmlPath:2" value="//RegisteredList/FRASKUE" />
-        <param name="OrXmlPath:3" value="//RegisteredList/FRDGU" />
+        <param name="OrXmlPath:1" value="//RES_HLR_PROFILE/Value[text()='DEALERS']" />
+        <param name="OrXmlPath:2" value="//RES_HLR_PROFILE/Value[text()='DGU']" />
+        <param name="OrXmlPath:3" value="//RES_HLR_PROFILE/Value[text()='AIISKUE']" />
         <param name="Command" value="SC.Modify_LTE" />
       </parameterslist>
     </node>

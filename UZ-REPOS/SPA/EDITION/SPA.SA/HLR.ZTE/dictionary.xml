@@ -47,16 +47,6 @@
       <Source Path="//RemoveList/RFS_HLR_SPEEDLIMIT" PresenceValue="100" />
     </Parameter>
   </ParametersList>
-  <LogicalGroupParametersList>
-    <LogicalGroupParameter Name="LTE_TYPE" AbsenceValue="2">
-      <SourcesList PresenceValue="1">
-        <Source Type="OrXmlPath:0" Path="//RemoveList/RFS_HLR_LTE"/>
-        <Source Type="OrXmlPath:1" Path="//RegisteredList/FRASKUE"/>
-        <Source Type="OrXmlPath:2" Path="//RegisteredList/FRPARTAPN"/>
-        <Source Type="OrXmlPath:3" Path="//RegisteredList/FRDGU"/>
-      </SourcesList>
-    </LogicalGroupParameter>
-   </LogicalGroupParametersList>
   <CommandsList Root="Commands" Mask="*.xml" />
   <DecodersList Root="Decoders">
     <Decoder Path="MML.ZTE.CallForwardingInfoDecoder.xml" />
