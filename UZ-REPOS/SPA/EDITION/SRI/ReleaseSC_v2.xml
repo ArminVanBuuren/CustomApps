@@ -432,6 +432,7 @@
     <RFS name="RFS_HLR_USSD" hostType="HL" description="USSD сервис">
       <Resource name="RES_HLR_USSD" useType="Mandatory" />
     </RFS>
+    <RFS name="RFS_HLR_SKIP" hostType="HL" processType="CancelHostType" description="Пропуск обработки заявок на HLR" />
     <RFS name="RFS_HLR_USSD_ALLOW" base="RFS_HLR_USSD" hostType="HL" description="USSD сервис разрешен">
       <Resource name="RES_HLR_USSD" value="Allow" />
     </RFS>
@@ -727,6 +728,9 @@
     <CFS name="CONTENTMARKER" globalServiceCode="CONTENTMARKER" copyOf="CFS_FP_SERVICE_GENERAL" description="Отдельный ЛС для контента" />
     <CFS name="DeleteLTE" description="Удалить LTE">
       <RFS name="RFS_HLR_TEST_DELETE" linkType="Add" />
+    </CFS>
+    <CFS name="SkipHLR" priority="1" description="Пропуск обработки заявок на HLR">
+      <RFS name="RFS_HLR_SKIP" linkType="Add" />
     </CFS>
     <CFS name="FR1000ICT" globalServiceCode="FR1000ICT" copyOf="CFS_FP_SERVICE_GENERAL" description="Promo ICT 1000 MB" />
     <CFS name="FR1000ICT19" globalServiceCode="FR1000ICT19" copyOf="CFS_FP_SERVICE_GENERAL" description="ICT 1000 MB" />
@@ -2441,6 +2445,7 @@
       <RFS name="RFS_HLR_ROAMING" scenarioType="Add" />
       <RFS name="RFS_HLR_SMS_MO" scenarioType="Add, Modify" />
       <RFS name="RFS_HLR_SMS_MT" scenarioType="Add, Modify" />
+      <RFS name="RFS_HLR_SKIP" scenarioType="Add, Modify" />
       <RFS name="RFS_HLR_SUBSCRIBER" scenarioType="Add" useType="Mandatory" />
     </Scenario>
     <Scenario name="HLR.DeleteSubscriber" description="Удаление абонента">
