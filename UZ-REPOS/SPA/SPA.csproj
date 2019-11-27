@@ -565,6 +565,7 @@
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.HLR.Modify.Roaming.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.HLR.Modify.SMS.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.HLR.Modify.SpeedLimit.xml" />
+    <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.HLR.Modify.StaticIP_LTE.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.HLR.Modify.USSD.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.HLR.Remove.CallForwarding.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.HLR.Remove.NET_APN.xml" />

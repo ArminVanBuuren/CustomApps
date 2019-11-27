@@ -1,6 +1,7 @@
 <Configuration>
   <Application Path="..\SPA.SA\BSP\configuration.application.xml" />
   <Settings>
+    <Add Key="ProfilerConfiguration" Value="Profiler-ERROR.xml" />
     <Add Key="TransactionalRxMode" Value="true" />
     <Add Key="ReportTimeout" Value="300" />
     <Add Key="DictionaryCommandsOnDisk" Value="true" />
@@ -11,7 +12,6 @@
     <Add Key="Requests.PollPeriod" Value="1" />
     <Add Key="Requests.PollIdlePeriod" Value="1" />
     <Add Key="Responses.WritersCount" Value="5" />
-    <Add Key="ProfilerConfiguration" Value="Profiler.xml" />
   </Settings>
   <DatabaseObjects Remotable="false">
     <Add Name="FORIS.SPA.CBP" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.CBP" />

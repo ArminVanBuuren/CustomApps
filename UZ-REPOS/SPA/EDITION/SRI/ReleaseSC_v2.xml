@@ -18,6 +18,7 @@
     <Resource name="RES_CT4_SERVICE_ID" description="ServiceID на платформе CT4" />
     <Resource name="RES_HLR_CANCEL_LOCATION" description="Тип станции для сброса информации" />
     <Resource name="RES_HLR_DEALER_APN" description="Название дилерской точки доступа (Access Point Name)" />
+    <Resource name="RES_HLR_LTE" description="Доступ к сервису LTE" />
     <Resource name="RES_HLR_NET" description="Доступ к сервису интернет" />
     <Resource name="RES_HLR_NET_APN" description="Название точки доступа (Access Point Name)" />
     <Resource name="RES_HLR_NET_SERVICE" description="Услуга интернет" />
@@ -223,7 +224,7 @@
     <RFS name="RFS_HLR_CFD" hostType="HL" description="Call forwarding (to MCA) on mobile subscriber busy">
       <RFSParameter name="CallForwardMode" value="Activate" />
       <RFSParameter name="CallForwardType" value="Provision" />
-      <RFSParameter name="ForwardedToNumber" value="998970000007" />
+      <RFSParameter name="ForwardedToNumber" value="998972690002" />
     </RFS>
     <RFS name="RFS_HLR_CFNRC" hostType="HL" description="Call forwarding on mobile subscriber not reachable" />
     <RFS name="RFS_HLR_CFNRC_ACT" parent="RFS_HLR_CFNRC" hostType="HL" description="Activate Call forwarding on mobile subscriber not reachable">
@@ -280,7 +281,7 @@
     <RFS name="RFS_HLR_DATATRANSFER" hostType="HL" description="Мобильная передача данных" />
     <RFS name="RFS_HLR_GET_SUBSCRIBER" hostType="HL" description="Получение состояния абонента" />
     <RFS name="RFS_HLR_LTE" hostType="HL" description="Мобильный интернет LTE">
-      <Resource name="RES_HLR_NET_APN" value="NET.UMS.UZ">
+      <Resource name="RES_HLR_NET_APN" value="NET.UMS.UZ" useType="Mandatory">
         <Value hosts="FP:05" value="POSTPAID.UMS.UZ" />
       </Resource>
     </RFS>
@@ -351,6 +352,7 @@
     <RFS name="RFS_HLR_RBT" hostType="HL" description="Caller Ring Back Tone. GOODOK" />
     <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" hostType="HL" description="Маркер который указывает что абонент пересоздается" />
     <RFS name="RFS_HLR_ROAMING" hostType="HL" description="Международный роуминг" />
+    <RFS name="RFS_HLR_SKIP" hostType="HL" processType="CancelHostType" description="Пропуск обработки заявок на HLR" />
     <RFS name="RFS_HLR_SMS_MO" hostType="HL" description="Служба коротких сообщений (SMS) исходящие">
       <Resource name="RES_HLR_SMS_MO" useType="Mandatory" />
     </RFS>
@@ -376,6 +378,11 @@
     <RFS name="RFS_HLR_STATIC_IP" hostType="HL" description="Статический IP адрес">
       <Resource name="RES_HLR_DEALER_APN" value="DEALERS.UMS.UZ" useType="Mandatory" />
       <Resource name="RES_HLR_NET_APN" value="NET.UMS.UZ" useType="Mandatory">
+        <Value hosts="FP:05" value="POSTPAID.UMS.UZ" />
+      </Resource>
+    </RFS>
+    <RFS name="RFS_HLR_STATIC_IP_LTE" hostType="HL" description="Статический IP адрес LTE">
+      <Resource name="RES_HLR_NET_APN" value="NET.UMS.UZ">
         <Value hosts="FP:05" value="POSTPAID.UMS.UZ" />
       </Resource>
     </RFS>
@@ -432,7 +439,6 @@
     <RFS name="RFS_HLR_USSD" hostType="HL" description="USSD сервис">
       <Resource name="RES_HLR_USSD" useType="Mandatory" />
     </RFS>
-    <RFS name="RFS_HLR_SKIP" hostType="HL" processType="CancelHostType" description="Пропуск обработки заявок на HLR" />
     <RFS name="RFS_HLR_USSD_ALLOW" base="RFS_HLR_USSD" hostType="HL" description="USSD сервис разрешен">
       <Resource name="RES_HLR_USSD" value="Allow" />
     </RFS>
@@ -444,7 +450,6 @@
     </RFS>
     <RFS name="RFS_MCA_RESTORE" hostType="MA" description="Восстановление услуги MCA" />
     <RFS name="RFS_MCA_SUBSCRIPTION" hostType="MA" processType="Subscription" description="Абонент а платформе MCA" />
-    <RFS name="RFS_MG_RESTORE" hostType="MG" description="Восстановление услуги на платформе MG" />
     <RFS name="RFS_MG_SUBSCRIPTION" hostType="MG" processType="Subscription" description="Метка абонента на платформе MG" />
     <RFS name="RFS_RBT_CHANGE_MSISDN" hostType="RBT" description="Изменение номера MSISDN на платформе RBT">
       <RFSParameter name="NewMSISDN" />
@@ -659,7 +664,7 @@
     <CFS name="CFS_FP_COUNTER_AND_SDP" description="Шаблон SCP + BSProxy + SDP счетчика">
       <RFS name="RFS_BSPROXY_COUNTER" linkType="Add" actionName="Counter Reinitialization" />
       <RFS name="RFS_FP_COUNTER" linkType="Add" actionName="Counter Reinitialization" />
-      <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" actionName="-Counter Reinitialization" />
+      <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" actionName="Counter Reinitialization" />
     </CFS>
     <CFS name="CFS_FP_CUG" description="Шаблон ЗГП для FP">
       <RFS name="RFS_FP_SERVICE_CUG" linkType="Add" />
@@ -729,9 +734,6 @@
     <CFS name="DeleteLTE" description="Удалить LTE">
       <RFS name="RFS_HLR_TEST_DELETE" linkType="Add" />
     </CFS>
-    <CFS name="SkipHLR" priority="1" description="Пропуск обработки заявок на HLR">
-      <RFS name="RFS_HLR_SKIP" linkType="Add" />
-    </CFS>
     <CFS name="FR1000ICT" globalServiceCode="FR1000ICT" copyOf="CFS_FP_SERVICE_GENERAL" description="Promo ICT 1000 MB" />
     <CFS name="FR1000ICT19" globalServiceCode="FR1000ICT19" copyOf="CFS_FP_SERVICE_GENERAL" description="ICT 1000 MB" />
     <CFS name="FR100ICT" globalServiceCode="FR100ICT" copyOf="CFS_FP_SERVICE_GENERAL" description="Promo ICT 100 MB" />
@@ -777,6 +779,9 @@
     <CFS name="FRALLMOV1D" globalServiceCode="FRALLMOV1D" copyOf="CFS_FP_SERVICE_GENERAL" description="Мобильное ТВ: Allmovies 1 день" />
     <CFS name="FRALLMOV30D" globalServiceCode="FRALLMOV30D" copyOf="CFS_FP_SERVICE_GENERAL" description="Мобильное ТВ: Allmovies 30 дней" />
     <CFS name="FRALLMOV7D" globalServiceCode="FRALLMOV7D" copyOf="CFS_FP_SERVICE_GENERAL" description="Мобильное ТВ: Allmovies 7 дней" />
+    <CFS name="FRAMEDIATEKA1D" globalServiceCode="FRAMEDIATEKA1D" copyOf="CFS_FP_SERVICE_GENERAL" description="Мобильное ТВ: Amediateka 1 день" />
+    <CFS name="FRAMEDIATEKA30D" globalServiceCode="FRAMEDIATEKA30D" copyOf="CFS_FP_SERVICE_GENERAL" description="Мобильное ТВ: Amediateka 30 дней" />
+    <CFS name="FRAMEDIATEKA7D" globalServiceCode="FRAMEDIATEKA7D" copyOf="CFS_FP_SERVICE_GENERAL" description="Мобильное ТВ: Amediateka 7 дней" />
     <CFS name="FRANTIOP" description="Антиопределитель номера">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
       <RFS name="RFS_HLR_CLIR" linkType="Add" />
@@ -844,9 +849,9 @@
     <CFS name="FRAPMINI" globalServiceCode="FRAPMINI" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Mini" />
     <CFS name="FRAPMOBI110" globalServiceCode="FRAPMOBI110" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП MOBI 110" />
     <CFS name="FRAPMOBI150" globalServiceCode="FRAPMOBI150" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП MOBI 150" />
-    <CFS name="FRAPMOBI20" globalServiceCode="FRAPMOBI20" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП MOBI 20" />
+    <CFS name="FRAPMOBI20" globalServiceCode="FRAPMOBI20" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП MOBI 20" />
     <CFS name="FRAPMOBI30" globalServiceCode="FRAPMOBI30" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП MOBI 30" />
-    <CFS name="FRAPMOBI40" globalServiceCode="FRAPMOBI40" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП MOBI 40" />
+    <CFS name="FRAPMOBI40" globalServiceCode="FRAPMOBI40" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП MOBI 40" />
     <CFS name="FRAPMOBI50" globalServiceCode="FRAPMOBI50" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП MOBI 50" />
     <CFS name="FRAPMOBI70" globalServiceCode="FRAPMOBI70" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП MOBI 70" />
     <CFS name="FRAPMOBI90" globalServiceCode="FRAPMOBI90" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП MOBI 90" />
@@ -878,7 +883,6 @@
     <CFS name="FRAPSLUZSCP1M" globalServiceCode="FRAPSLUZSCP1M" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Служебный SCP(первый месяц)" />
     <CFS name="FRAPSPECSVYAZ" description="Проверка на спецсвязь">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
-      <RFS name="RFS_HLR_SPEC_CALLS" linkType="Add" />
     </CFS>
     <CFS name="FRAPSTANDART" globalServiceCode="FRAPSTANDART" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Standart" />
     <CFS name="FRAPSUPOPTIMA" globalServiceCode="FRAPSUPOPTIMA" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Super Optima" />
@@ -886,6 +890,7 @@
     <CFS name="FRAPTERMINALY" globalServiceCode="FRAPTERMINALY" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Terminal Yillik" />
     <CFS name="FRAPTEST" globalServiceCode="FRAPTEST" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Тестовый" />
     <CFS name="FRAPTEST2" globalServiceCode="FRAPTEST2" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Тестовый2" />
+    <CFS name="FRAPTESTYEAR" globalServiceCode="FRAPTESTYEAR" copyOf="CFS_FP_SERVICE_GENERAL" description="Тестовая Годовая Абонентская плата" />
     <CFS name="FRAPULTRA" globalServiceCode="FRAPULTRA" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Ultra" />
     <CFS name="FRAPULTRAYEAR" globalServiceCode="FRAPULTRAYEAR" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Ultra Year" />
     <CFS name="FRAPUNIVERSAL" globalServiceCode="FRAPUNIVERSAL" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Universal" />
@@ -1007,8 +1012,11 @@
     <CFS name="FRBONGPRSS300" globalServiceCode="FRBONGPRSS300" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket 300 MB" />
     <CFS name="FRBONGPRSS500" globalServiceCode="FRBONGPRSS500" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket 500 MB" />
     <CFS name="FRBONMB10" globalServiceCode="FRBONMB10" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus 10 MB" />
+    <CFS name="FRBONMB100" globalServiceCode="FRBONMB100" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus 100 MB" />
+    <CFS name="FRBONMB20" globalServiceCode="FRBONMB20" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus 20 MB" />
     <CFS name="FRBONMB300" globalServiceCode="FRBONMB300" copyOf="CFS_FP_SERVICE_GENERAL" description="Бонус 300 мб" />
     <CFS name="FRBONMB5" globalServiceCode="FRBONMB5" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus 5 MB" />
+    <CFS name="FRBONMB50" globalServiceCode="FRBONMB50" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus 50 MB" />
     <CFS name="FRBONMB500" globalServiceCode="FRBONMB500" copyOf="CFS_FP_SERVICE_GENERAL" description="Бонус 500 мб" />
     <CFS name="FRBONMB700" globalServiceCode="FRBONMB700" copyOf="CFS_FP_SERVICE_GENERAL" description="Бонус 700 мб" />
     <CFS name="FRBONMIN100" globalServiceCode="FRBONMIN100" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket 100 MIN" />
@@ -1203,6 +1211,7 @@
     <CFS name="FRIP" description="Статический IP адрес">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
       <RFS name="RFS_HLR_STATIC_IP" linkType="Add" dependsOn="RFS_HLR_NET" />
+      <RFS name="RFS_HLR_STATIC_IP_LTE" linkType="Add" dependsOn="RFS_HLR_LTE" />
       <RFS name="RFS_MG_SUBSCRIPTION" linkType="Add" />
     </CFS>
     <CFS name="FRITVMIKSTV10D" globalServiceCode="FRITVMIKSTV10D" copyOf="CFS_FP_SERVICE_GENERAL" description="iTV на 10 дней: Микс : ТВ+Видео клуб" />
@@ -1691,7 +1700,7 @@
     <CFS name="FRTHLGSALE100" globalServiceCode="FRTHLGSALE100" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая скидка 100% для КБ" />
     <CFS name="FRUNLIMLTE" description="Доступ к сети 4G LTE">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
-      <RFS name="RFS_HLR_LTE" linkType="Add" dependsOn="RFS_HLR_NET" />
+      <RFS name="RFS_HLR_LTE" linkType="Add" />
     </CFS>
     <CFS name="FRUNVMB100" globalServiceCode="FRUNVMB100" copyOf="CFS_FP_SERVICE_GENERAL" description="Universal Интернет пакеты 120" />
     <CFS name="FRUNVMB1000" globalServiceCode="FRUNVMB1000" copyOf="CFS_FP_SERVICE_GENERAL" description="Universal Интернет пакеты 1500" />
@@ -2035,6 +2044,9 @@
       <RFS name="RFS_HLR_TEST_SCHEMEDEL_1" linkType="Add" />
       <RFS name="RFS_HLR_TEST_SCHEMEDEL_2" linkType="Add" />
     </CFS>
+    <CFS name="SkipHLR" priority="1" description="Пропуск обработки заявок на HLR">
+      <RFS name="RFS_HLR_SKIP" linkType="Add" />
+    </CFS>
     <CFS name="SMMO0" description="Служба коротких сообщений Исходящие">
       <RFS name="RFS_HLR_TEST_SMMO0" linkType="Add" />
     </CFS>
@@ -2069,7 +2081,7 @@
     <CFS name="SubscriberInHLR" priority="9999" type="ManagedObject" copyOf="Subscriber" description="Абонент - копия" />
     <CFS name="Synchronize" priority="1" description="Обработка кнопки Синхронизировать в СПА">
       <RFS name="RFS_HLR_RECREATE_SUBSCRIBER" linkType="Add" />
-      <RFS name="RFS_MG_RESTORE" linkType="Add" dependsOn="RFS_MG_SUBSCRIPTION" />
+      <RFS name="RFS_MG_SUBSCRIPTION" linkType="Add" dependsOn="RFS_HLR_STATIC_IP" />
       <RFSGroup name="RFS_GROUP_HLR_GET_SUBSCRIBER" />
       <RFSGroup name="RFS_GROUP_HLR_RECREATE_SUBSCRIBER" />
       <RFSGroup name="RFS_GROUP_MCA_RECREATE_SUBSCRIBER" />
@@ -2081,27 +2093,13 @@
     <CFS name="TESTFRIDAY" globalServiceCode="TESTFRIDAY" copyOf="CFS_FP_SERVICE_GENERAL" description="Тестовая услуга Пятница" />
     <CFS name="TESTKGK" globalServiceCode="TESTKGK" copyOf="CFS_FP_SERVICE_GENERAL" description="Корпоративный годовой контракт (test)" />
     <CFS name="TESTMONDAY" globalServiceCode="TESTMONDAY" copyOf="CFS_FP_SERVICE_GENERAL" description="Тестовая услуга Понедельник" />
-    <CFS name="TESTPPDA" globalServiceCode="TESTPPDA" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="Тест.Услуга A" />
-    <CFS name="TESTPPDAA" globalServiceCode="TESTPPDAA" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="Тест.Услуга A Подключение услуги" />
-    <CFS name="TESTPPDAD" globalServiceCode="TESTPPDAD" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="TEST.Услуга A: Отключение услуги" />
-    <CFS name="TESTPPDAE" globalServiceCode="TESTPPDAE" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="TEST.Услуга A: Изменение услуги" />
-    <CFS name="TESTPPDB" globalServiceCode="TESTPPDB" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="Тест.Услуга B" />
-    <CFS name="TESTPPDBA" globalServiceCode="TESTPPDBA" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="TEST.Услуга B: Подключение услуги" />
-    <CFS name="TESTPPDBD" globalServiceCode="TESTPPDBD" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="TEST.Услуга B: Отключение услуги" />
-    <CFS name="TESTPPDBE" globalServiceCode="TESTPPDBE" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="TEST.Услуга B:  Изменение услуги " />
-    <CFS name="TESTPPDC" globalServiceCode="TESTPPDC" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="Тест.Услуга C" />
-    <CFS name="TESTPPDD" globalServiceCode="TESTPPDD" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="Тест.Услуга D" />
-    <CFS name="TESTPPDDA" globalServiceCode="TESTPPDDA" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="TEST.Услуга D: Подключение услуги" />
-    <CFS name="TESTPPDDD" globalServiceCode="TESTPPDDA" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="TEST.Услуга D: Отключение услуги " />
-    <CFS name="TESTPPDDE" globalServiceCode="TESTPPDDE" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="TEST.Услуга D: Изменение услуги" />
-    <CFS name="TESTPPDS" globalServiceCode="TESTPPDS" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="Тест.Услуга S" />
-    <CFS name="TESTPPDSA" globalServiceCode="TESTPPDSA" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="TEST.Услуга S: Подключение услуги " />
-    <CFS name="TESTPPDSD" globalServiceCode="TESTPPDSD" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="TEST.Услуга S: Отключение услуги" />
-    <CFS name="TESTPPDSE" globalServiceCode="TESTPPDSE" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="TEST.Услуга S: Изменение услуги " />
-    <CFS name="TESTPPDSERV" globalServiceCode="TESTPPDSERV" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="TESTPPDSERV" />
+    <CFS name="TESTPPDA" globalServiceCode="TESTPPDA" copyOf="CFS_FP_SERVICE_GENERAL" description="TEST.Услуга A" />
+    <CFS name="TESTPPDB" globalServiceCode="TESTPPDB" copyOf="CFS_FP_SERVICE_GENERAL" description="TEST.Услуга B" />
+    <CFS name="TESTPPDD" globalServiceCode="TESTPPDD" copyOf="CFS_FP_SERVICE_GENERAL" description="TEST.Услуга D" />
+    <CFS name="TESTPPDS" globalServiceCode="TESTPPDS" copyOf="CFS_FP_SERVICE_GENERAL" description="TEST.Услуга S" />
     <CFS name="TESTTUESDAY" globalServiceCode="TESTTUESDAY" copyOf="CFS_FP_SERVICE_GENERAL" description="Тестовая услуга Вторник" />
     <CFS name="TESTWEDNESDAY" globalServiceCode="TESTWEDNESDAY" copyOf="CFS_FP_SERVICE_GENERAL" description="Тестовая услуга Среда" />
-    <CFS name="TIMESW" globalServiceCode="TIMESW" copyOf="CFS_FP_SERVICE_GENERAL" description="Time Tariff Swich" />
+    <CFS name="TIMESW" globalServiceCode="TIMESW" copyOf="CFS_FP_SERVICE_GENERAL" description="Time Tariff Switch" />
     <CFS name="TMP000002" copyOf="CFS_FP_SERVICE_GENERAL" description="Услуга 1" />
     <CFS name="TMP000003" copyOf="CFS_FP_SERVICE_GENERAL" description="Услуга 2" />
     <CFS name="TMP000004" copyOf="CFS_FP_SERVICE_GENERAL" description="Услуга 3" />
@@ -2183,7 +2181,10 @@
     </RFSGroup>
   </RFSGroupList>
   <RestrictionList />
-  <RFSDependencyList />
+  <RFSDependencyList>
+    <RFSDependency parent="RFS_HLR_LTE" child="RFS_HLR_STATIC_IP_LTE" />
+    <RFSDependency parent="RFS_HLR_STATIC_IP" child="RFS_MG_SUBSCRIPTION" />
+  </RFSDependencyList>
   <HandlerList>
     <Handler name="ChangeFPMSISDNHandler" type="Custom" description="Обработчик RFS для изменения номера MSISDN">
       <Configuration type="FORIS.SPA.SC.Customization.ChangeFPMSISDNHandler, FORIS.SPA.SC.Customization">
@@ -2404,6 +2405,7 @@
     <Scenario name="HLR.Add.NET_APN" description="Добавление интернет и APN">
       <RFS name="RFS_HLR_NET" scenarioType="Add" />
       <RFS name="RFS_HLR_NET_APN" scenarioType="Add, Modify" />
+      <Append name="RFS_HLR_LTE" listType="EndList" />
     </Scenario>
     <Scenario name="HLR.Add.StaticIP" description="Добавить статический IP адрес">
       <RFS name="RFS_HLR_STATIC_IP" scenarioType="Add" />
@@ -2443,9 +2445,9 @@
       <RFS name="RFS_HLR_ODB_IC" scenarioType="Add, Modify" />
       <RFS name="RFS_HLR_ODB_OC" scenarioType="Add, Modify" />
       <RFS name="RFS_HLR_ROAMING" scenarioType="Add" />
+      <RFS name="RFS_HLR_SKIP" scenarioType="Add, Modify" />
       <RFS name="RFS_HLR_SMS_MO" scenarioType="Add, Modify" />
       <RFS name="RFS_HLR_SMS_MT" scenarioType="Add, Modify" />
-      <RFS name="RFS_HLR_SKIP" scenarioType="Add, Modify" />
       <RFS name="RFS_HLR_SUBSCRIBER" scenarioType="Add" useType="Mandatory" />
     </Scenario>
     <Scenario name="HLR.DeleteSubscriber" description="Удаление абонента">
@@ -2503,6 +2505,10 @@
       <RFS name="RFS_HLR_SPEEDLIMIT" scenarioType="Add, Remove" />
       <Append name="RFS_HLR_LTE" listType="EndList" />
     </Scenario>
+    <Scenario name="HLR.Modify.StaticIP_LTE" description="Добавить статический IP адрес LTE">
+      <RFS name="RFS_HLR_STATIC_IP_LTE" scenarioType="Add, Remove" />
+      <Append name="RFS_HLR_SUBSCRIBER" listType="EndList" />
+    </Scenario>
     <Scenario name="HLR.Modify.USSD" description="Изменение сервиса USSD">
       <RFS name="RFS_HLR_USSD" scenarioType="Add, Modify, Remove" />
     </Scenario>
@@ -2558,11 +2564,9 @@
       <RFS name="RFS_HLR_TEST_SMMT1" scenarioType="Add, Remove" />
     </Scenario>
     <Scenario name="MG.Dummy" sendType="Drop" description="Фейковый сценарий MG">
-      <RFS name="RFS_MG_RESTORE" scenarioType="Modify, Remove" />
       <RFS name="RFS_MG_SUBSCRIPTION" scenarioType="Modify, Remove" />
     </Scenario>
     <Scenario name="MG.SendIp" description="Отправить статический Ip">
-      <RFS name="RFS_MG_RESTORE" scenarioType="Add" />
       <RFS name="RFS_MG_SUBSCRIPTION" scenarioType="Add" />
     </Scenario>
     <Scenario name="RBT.Modify.Subscriber" description="Создание, удаление абонента на RBT">

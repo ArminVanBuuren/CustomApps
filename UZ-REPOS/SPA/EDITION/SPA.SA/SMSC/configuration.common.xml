@@ -1,7 +1,7 @@
 <Configuration>
   <Application Path="..\SPA.SA\SMSC\configuration.application.xml" />
   <Settings>
-    <Add Key="ProfilerConfiguration" Value="Profiler.xml" />
+    <Add Key="ProfilerConfiguration" Value="Profiler-ERROR.xml" />
     <Add Key="ReportTimeout" Value="300" />
     <Add Key="TransactionalRxMode" Value="true" />
     <Add Key="DictionaryCommandsOnDisk" Value="true" />
