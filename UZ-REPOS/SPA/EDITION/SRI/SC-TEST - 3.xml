@@ -5,114 +5,124 @@
   </HostTypeList>
   <IdentityList />
   <AttributeList />
-  <ResourceList>
-    <Resource name="RES_HLR_PROFILE" description="Профиль абонента" />
-  </ResourceList>
+  <ResourceList />
   <RFSParameterList>
+    <RFSParameter name="CallForwardingTimer" description="Таймер переадресации" />
+    <RFSParameter name="CallForwardMode" description="Режим переадресации" />
+    <RFSParameter name="CallForwardType" description="Тип установки переадресаций" />
+    <RFSParameter name="ForwardedToNumber" description="Номер переадресации" />
   </RFSParameterList>
   <FlagList />
   <RFSList>
-    <RFS name="RFS_HLR_CHANGE_PROFILE" hostType="HL" description="Маркер который указывает что абонент пересоздается" />
-    <RFS name="RFS_HLR_SUBSCRIBER" hostType="HL" processType="Subscription" description="Создание абонента"/>
-    <RFS name="RFS_HLR_PROFILE" hostType="HL" description="Создание абонента">
-      <Resource name="RES_HLR_PROFILE" useType="Mandatory" />
+    <RFS name="RFS_HLR_CFB" hostType="HL" description="Call forwarding on mobile subscriber busy" />
+    <RFS name="RFS_HLR_CFB_ACT" base="RFS_HLR_CFB" hostType="HL" description="Activate Call forwarding on mobile subscriber busy">
+      <RFSParameter name="CallForwardMode">
+        <Value condition="(//ProvisionList//CFB)" value="Activate" />
+        <Value condition="(//WithdrawalList//CFB)" value="Deactivate" />
+      </RFSParameter>
+      <RFSParameter name="CallForwardType">
+        <Value condition="(//ActionNameOriginal[text()='Update Call Forwarding'])" value="Update" />
+      </RFSParameter>
+      <RFSParameter name="ForwardedToNumber" path="//CFB/ForwardingToAddress" />
     </RFS>
-    <RFS name="RFS_HLR_PROFILE_AIISKUE" base="RFS_HLR_PROFILE" hostType="HL" description="Создание абонента ASKUE - АИИСКУЭ">
-      <Resource name="RES_HLR_PROFILE" value="AIISKUE" />
+    <RFS name="RFS_HLR_CFB_PRV" base="RFS_HLR_CFB" hostType="HL" description="Provision Call forwarding on mobile subscriber busy">
+      <RFSParameter name="CallForwardType" value="Provision" />
     </RFS>
-    <RFS name="RFS_HLR_PROFILE_DEALERS" base="RFS_HLR_PROFILE" hostType="HL" description="Создание дилерского абонента">
-      <Resource name="RES_HLR_PROFILE" value="DEALERS" />
+    <RFS name="RFS_HLR_CFD" hostType="HL" description="Call forwarding (to MCA) on mobile subscriber busy">
+      <RFSParameter name="CallForwardMode" value="Activate" />
+      <RFSParameter name="CallForwardType" value="Provision" />
+      <RFSParameter name="ForwardedToNumber" value="998972690002" />
     </RFS>
-    <RFS name="RFS_HLR_PROFILE_DEFAULT" base="RFS_HLR_PROFILE" hostType="HL" description="Создание абонента">
-      <Resource name="RES_HLR_PROFILE" value="Prepaid">
-        <Value hosts="FP:05" value="Postpaid" />
-      </Resource>
+    <RFS name="RFS_HLR_CFNRC" hostType="HL" description="Call forwarding on mobile subscriber not reachable" />
+    <RFS name="RFS_HLR_CFNRC_ACT" base="RFS_HLR_CFNRC" hostType="HL" description="Activate Call forwarding on mobile subscriber not reachable">
+      <RFSParameter name="CallForwardMode">
+        <Value condition="(//ProvisionList//CFNRC)" value="Activate" />
+        <Value condition="(//WithdrawalList//CFNRC)" value="Deactivate" />
+      </RFSParameter>
+      <RFSParameter name="CallForwardType">
+        <Value condition="(//ActionNameOriginal[text()='Update Call Forwarding'])" value="Update" />
+      </RFSParameter>
+      <RFSParameter name="ForwardedToNumber" path="//CFNRC/ForwardingToAddress" />
     </RFS>
-    <RFS name="RFS_HLR_PROFILE_DGU" base="RFS_HLR_PROFILE" hostType="HL" description="Создание абонента ТП ДГУ">
-      <Resource name="RES_HLR_PROFILE" value="DGU" />
+    <RFS name="RFS_HLR_CFNRC_PRV" base="RFS_HLR_CFNRC" hostType="HL" description="Provision Call forwarding on mobile subscriber not reachable">
+      <RFSParameter name="CallForwardType" value="Provision" />
     </RFS>
-    <RFS name="RFS_HLR_RBT" hostType="HL" description="Caller Ring Back Tone. GOODOK" />
-    <RFS name="RFS_HLR_MPTY" hostType="HL" description="Конференц-связь вызова" />
+    <RFS name="RFS_HLR_CFNRY" hostType="HL" description="Call forwarding on no reply" />
+    <RFS name="RFS_HLR_CFNRY_ACT" base="RFS_HLR_CFNRY" hostType="HL" description="Activate Call forwarding on no reply">
+      <RFSParameter name="CallForwardingTimer" path="//CFNRY/NoReplyTimer" />
+      <RFSParameter name="CallForwardMode">
+        <Value condition="(//ProvisionList//CFNRY)" value="Activate" />
+        <Value condition="(//WithdrawalList//CFNRY)" value="Deactivate" />
+      </RFSParameter>
+      <RFSParameter name="CallForwardType">
+        <Value condition="(//ActionNameOriginal[text()='Update Call Forwarding'])" value="Update" />
+      </RFSParameter>
+      <RFSParameter name="ForwardedToNumber" path="//CFNRY/ForwardingToAddress" />
+    </RFS>
+    <RFS name="RFS_HLR_CFNRY_PRV" base="RFS_HLR_CFNRY" hostType="HL" description="Provision Call forwarding on no reply">
+      <RFSParameter name="CallForwardType" value="Provision" />
+    </RFS>
+    <RFS name="RFS_HLR_CFU" hostType="HL" description="Call forwarding unconditional" />
+    <RFS name="RFS_HLR_CFU_ACT" base="RFS_HLR_CFU" hostType="HL" description="Activate Call forwarding unconditional">
+      <RFSParameter name="CallForwardMode">
+        <Value condition="(//ProvisionList//CFU)" value="Activate" />
+        <Value condition="(//WithdrawalList//CFU)" value="Deactivate" />
+      </RFSParameter>
+      <RFSParameter name="CallForwardType">
+        <Value condition="(//ActionNameOriginal[text()='Update Call Forwarding'])" value="Update" />
+      </RFSParameter>
+      <RFSParameter name="ForwardedToNumber" path="//CFU/ForwardingToAddress" />
+    </RFS>
+    <RFS name="RFS_HLR_CFU_PRV" base="RFS_HLR_CFU" hostType="HL" description="Provision Call forwarding unconditional">
+      <RFSParameter name="CallForwardType" value="Provision" />
+    </RFS>
   </RFSList>
   <CFSList>
-    <CFS name="CB1011" priority="9998" description="Ежемесячная плата за тариф">
-      <RFS name="RFS_HLR_PROFILE_DEFAULT" linkType="Set" />
-      <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" />
+    <CFS name="CallForwarding" description="Активация пользовательской переадресации вызова">
+      <RFS name="RFS_HLR_CFB_ACT" linkType="Add" />
+      <RFS name="RFS_HLR_CFNRC_ACT" linkType="Add" />
+      <RFS name="RFS_HLR_CFNRY_ACT" linkType="Add" />
+      <RFS name="RFS_HLR_CFU_ACT" linkType="Add" />
     </CFS>
-    <CFS name="ChangeTP" priority="9999" type="OneTime" description="Изменение тарифного плана">
-      <RFS name="RFS_HLR_CHANGE_PROFILE" linkType="Add" />
-      <RFSGroup name="RFS_GROUP_HLR_RECREATE_PROFILE" />
-      <RFSGroup name="RFS_GROUP_HLR_RECREATE_SUBSCRIBER" />
+    <CFS name="CB532" description="Переадресация вызова (периодическая)">
+      <RFS name="RFS_HLR_CFB_PRV" linkType="Add" />
+      <RFS name="RFS_HLR_CFNRC_PRV" linkType="Add" />
+      <RFS name="RFS_HLR_CFNRY_PRV" linkType="Add" />
+      <RFS name="RFS_HLR_CFU_PRV" linkType="Add" />
     </CFS>
-    <CFS name="FRASKUE" priority="9997" description="Создание абонентов АИИСКУЭ (APN Profile ID - 10 ASKUE)">
-      <RFS name="RFS_HLR_PROFILE_AIISKUE" linkType="Set" />
-      <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" />
+    <CFS name="CB6311" description="Условная переадресация">
+      <RFS name="RFS_HLR_CFB_PRV" linkType="Add" />
+      <RFS name="RFS_HLR_CFNRC_PRV" linkType="Add" />
+      <RFS name="RFS_HLR_CFNRY_PRV" linkType="Add" />
     </CFS>
-    <CFS name="FRDGU" priority="9997" description="Услуга передачи данных ТП ДГУ">
-      <RFS name="RFS_HLR_PROFILE_DGU" linkType="Set" />
-      <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" />
-    </CFS>
-    <CFS name="FRPARTAPN" priority="9997" description="Создание абонентов Partner APN (APN Profile ID - 20 DEALERS.UMS.UZ)">
-      <RFS name="RFS_HLR_PROFILE_DEALERS" linkType="Set" />
-      <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" />
-    </CFS>
-    <CFS name="FRCRBT" description="GOODOK">
-      <RFS name="RFS_HLR_RBT" linkType="Add" />
-    </CFS>
-    <CFS name="CB10363" description="Конференц-связь вызова">
-      <RFS name="RFS_HLR_MPTY" linkType="Add" />
+    <CFS name="FRMCA" description="Вам звонили / Я на связи">
+      <RFS name="RFS_HLR_CFD" linkType="Add" />
     </CFS>
   </CFSList>
-  <RFSGroupList>
-    <RFSGroup name="RFS_GROUP_HLR_RECREATE_PROFILE" type="Choice" description="Группа RFS для пересоздания абонента">
-      <RFS name="RFS_HLR_PROFILE" linkType="Add" handler="HLR_ChangeProfile" />
-    </RFSGroup>
-    <RFSGroup name="RFS_GROUP_HLR_RECREATE_SUBSCRIBER" type="Choice" description="Группа RFS для пересоздания абонента">
-      <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" handler="HLR_RecreateSubscriber" />
-    </RFSGroup>
-  </RFSGroupList>
+  <RFSGroupList />
   <RFSDependencyList />
-  <HandlerList>
-    <Handler name="HLR_ChangeProfile" type="ChangeTariffPlan" description="Обработчик RFS для изменения тарифного плана">
-      <Configuration>
-        <RFS name="RFS_HLR_PROFILE_DEFAULT"/>
-        <RFS name="RFS_HLR_PROFILE_AIISKUE"/>
-        <RFS name="RFS_HLR_PROFILE_DGU"/>
-        <RFS name="RFS_HLR_PROFILE_DEALERS"/>
-      </Configuration>
-    </Handler>
-    <Handler name="HLR_RecreateSubscriber" type="RecreateSubscriber" description="Обработчик RFS для пересоздания абонента">
-      <Configuration>
-        <RFS name="RFS_HLR_SUBSCRIBER" action="Remove" />
-        <RFS name="RFS_HLR_SUBSCRIBER" action="Add" />
-      </Configuration>
-    </Handler>
-  </HandlerList>
-  <CFSGroupList>
-    <CFSGroup name="CFS_GROUP_HLR_SUBSCRIBER" type="Mutex" description="Группа взаимоисключающих услуг при создании абонента">
-      <CFS name="FRASKUE" />
-      <CFS name="FRDGU" />
-      <CFS name="FRPARTAPN" />
-    </CFSGroup>
-  </CFSGroupList>
+  <HandlerList />
+  <CFSGroupList />
+  <RestrictionList>
+    <Restriction name="RESTRICTION_ROAMING_LTE" description="Невозможно добавить одновременно LTE и роуминг, т.к. это взаимоисключающие сервисы">
+      <RFS name="RFS_HLR_CFD" scenarioType="Add" />
+      <RFS name="RFS_HLR_CFU_PRV" scenarioType="Add" />
+    </Restriction>
+  </RestrictionList>
   <ScenarioList>
-    <Scenario name="HLR.ChangeProfile" description="Пересоздание абонента">
-      <RFS name="RFS_HLR_CHANGE_PROFILE" scenarioType="Add, Remove" />
-      <RFS name="RFS_HLR_PROFILE" scenarioType="Modify" useType="Mandatory" />
+    <Scenario name="HLR.Add.CallForwarding" description="Добавление/активация переадресаций">
+      <RFS name="RFS_HLR_CFB" scenarioType="Add" />
+      <RFS name="RFS_HLR_CFD" scenarioType="Add" />
+      <RFS name="RFS_HLR_CFNRC" scenarioType="Add" />
+      <RFS name="RFS_HLR_CFNRY" scenarioType="Add" />
+      <RFS name="RFS_HLR_CFU" scenarioType="Add" />
     </Scenario>
-    <Scenario name="HLR.CreateSubscriber" description="Создание абонента">
-      <RFS name="RFS_HLR_PROFILE" scenarioType="Add" />
-      <RFS name="RFS_HLR_SUBSCRIBER" scenarioType="Add" useType="Mandatory" />
-    </Scenario>
-    <Scenario name="HLR.DeleteSubscriber" description="Удаление абонента">
-      <RFS name="RFS_HLR_PROFILE" scenarioType="Remove" />
-      <RFS name="RFS_HLR_SUBSCRIBER" scenarioType="Remove" useType="Mandatory" />
-    </Scenario>
-    <Scenario name="HLR.Modify.RBT" description="Изменение сервиса RBT">
-      <RFS name="RFS_HLR_RBT" scenarioType="Add, Remove" />
-    </Scenario>
-    <Scenario name="HLR.Modify.MPTY" description="Изменение сервиса Конференц-связь">
-      <RFS name="RFS_HLR_MPTY" scenarioType="Add, Remove" />
+    <Scenario name="HLR.Remove.CallForwarding" description="Удаление/деактивация переадресаций">
+      <RFS name="RFS_HLR_CFB" scenarioType="Remove" />
+      <RFS name="RFS_HLR_CFD" scenarioType="Remove" />
+      <RFS name="RFS_HLR_CFNRC" scenarioType="Remove" />
+      <RFS name="RFS_HLR_CFNRY" scenarioType="Remove" />
+      <RFS name="RFS_HLR_CFU" scenarioType="Remove" />
     </Scenario>
   </ScenarioList>
   <WfmScenarioList />

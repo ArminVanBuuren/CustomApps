@@ -2456,6 +2456,7 @@
     </Scenario>
     <Scenario name="HLR.Dummy" sendType="Drop" description="Фейковый сценарий HLR">
       <RFS name="RFS_HLR_GET_SUBSCRIBER" scenarioType="Modify, Remove" />
+      <RFS name="RFS_HLR_SKIP" scenarioType="Modify, Remove" />
     </Scenario>
     <Scenario name="HLR.GetSubscriber" description="Получение состояния абонента">
       <RFS name="RFS_HLR_GET_SUBSCRIBER" scenarioType="Add" useType="Mandatory" />
