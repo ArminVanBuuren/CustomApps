@@ -2272,15 +2272,10 @@ rez="Читайте любимые журналы от ведущих издат
 	</condition>
         <receiveTemplate>
           <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-            <Item customer="${Sender}" datasource="state">
-                <Service id="guaranteedpayment" action="6">
-                    <Attribute name="amount" value="${Content}" />
-                    <Attribute name="currency" value="933" />
-                    <Attribute name="init" value="6" /> 
-					<Attribute name="p_addon" value="0" /> 
-                </Service>
+            <Item customer="${Sender}">
+                <Service id="guaranteedpayment" action="6"/>
             </Item>
-			@{store(sContent,${Content})}
+            @{store(sContent,#{number(${Content} * 100)})}
           </Message>
        </receiveTemplate>
 	<deliveryTemplate conditionEx="#{('${allowed}' = 1 and '${dbresult}'= 0) }" call="SMS_GuaranteedPayment">
@@ -2289,21 +2284,19 @@ rez="Читайте любимые журналы от ведущих издат
 		<set conditionEx="0@{freeSession}" />
        </deliveryTemplate>       
 	<deliveryTemplate>
-		<set item="Content" value="Извините, но данный запрос не может быть выполнен." />
-		<set item="Content" condition="//Item/@dbresult=0" value="Обещанный платеж не может быть принят." />
-		<set item="Content" condition="//Item/@dbresult=329203" value="${pending_str}" />
-		<!--set item="Content" condition="//Item/@dbresult=320203" value="Регистрация запрещена - предыдущий обещанный платеж не оплачен." /-->
-		<set item="Content" condition="//Item/@dbresult=320111" value="Превышена разрешенная сумма обещанного платежа в 3 руб." />
-		<set item="Content" condition="//Item/@dbresult=320114" value="${pending_str}" />	
-		<set item="Content" condition="//Item/@dbresult=320115" value="${pending_str}" />	
-		<set item="Content" condition="//Item/@dbresult=320116" value="${pending_str}" />
-		<set item="Content" condition="//Item/@dbresult=320121" value="Платеж не может быть зарегистрирован." />
-		<set item="Content" condition="//Item/@dbresult=320341" value="${pending_str}" />
-		<set item="Content" condition="//Item/@dbresult=320346" value="${pending_str}" />
-	    <!--set item="Content" condition="//Item/@dbresult=320341" value="Нельзя ввести обещанный платеж на Вашем тарифном плане" /-->
-		<set item="Content" condition="//Item/@dbresult=320203" value="${pending_str}" />
-		<set item="Content" condition="//Item/@dbresult=100001" value="${pending_str}" />
-		<set item="Content" condition="//Item/@dbresult=320110" value="Минимальная сумма обещанного платежа 1 руб.Введите большую сумму." />
+    <set item="Content" value="Извините, но данный запрос не может быть выполнен." />
+    <set item="Content" condition="//Item/@dbresult=0" value="Обещанный платеж не может быть принят." />
+    <set item="Content" conditionEx="#{${dbresult}=320341}" value="Номер Вашего телефона не зарегистрирован" />
+    <set item="Content" conditionEx="#{${dbresult}=320347}" value="Услуга не может быть предоставлена, потому что номер заблокирован" />
+    <set item="Content" conditionEx="#{${dbresult}=320191}" value="Данный сервис недоступен. Ваш баланс #{number('${balance}') div 100} р." />
+    <set item="Content" conditionEx="#{${dbresult}=320203}" value="Услуга не может быть предоставлена, предыдущий обещанный платеж не погашен или в процессе регистрации" />
+    <set item="Content" conditionEx="#{${dbresult}=320111}" value="Указывайте сумму не превышающую #{${maximumrur} div 100} р." />
+    <set item="Content" conditionEx="#{${dbresult}=320121}" value="Невозможно установить обещанный платеж" />
+    <set item="Content" conditionEx="#{${dbresult}=320113}" value="Сумма обещанного платежа меньше минимально возможной" />
+    <set item="Content" conditionEx="#{${dbresult}=330140}" value="Обратитесь к персональному менеджеру" />
+    <set item="Content" conditionEx="#{${dbresult}=330141}" value="Превышено допустимое кол-во обещанных платежей" />
+    <set item="Content" conditionEx="#{${dbresult}=330142}" value="Исчерпан лимит средств для ввода обещанного платежа" />
+    <set item="Content" conditionEx="#{${dbresult}=330132}" value="Данный сервис недоступен. Ваш баланс #{number('${balance}') div 100} р." />
 		<set item="Encoding" value="unicodefffe" />
 		<set item="Sender" value="0870" />
 		<set item="Recipient" value="${customer}" />
@@ -2316,25 +2309,25 @@ rez="Читайте любимые журналы от ведущих издат
         </condition>
         <receiveTemplate>
           <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
-            <Item customer="${Sender}" datasource="state">
+            <Item customer="${Sender}">
                 <Service id="guaranteedpayment" action="7">
                     <Attribute name="amount" value="${Content}" />
                     <Attribute name="currency" value="933" />
-                    <Attribute name="init" value="6" /> 
-					<Attribute name="p_addon" value="0" /> 
                 </Service>
             </Item>
           </Message>
        </receiveTemplate>
        <deliveryTemplate>
-            <set item="Content" value="Услуга не предоставляется для Вашего тарифного плана." />
-            <set item="Content" condition="//Item/@dbresult=0" value="Обещанный платеж на сумму ${amount} р. принят.Отображение на балансе в течение 10 минут." />
-            <set item="Content" condition="//Item/@dbresult=320203" value="Регистрация запрещена - предыдущий обещанный платеж не оплачен." />
-            <set item="Content" condition="//Item/@dbresult=320111" value="Превышена разрешенная сумма обещанного платежа в 3 руб." />
-            <set item="Content" condition="//Item/@dbresult=320121" value="Платеж не может быть зарегистрирован." />
-			<set item="Content" condition="//Item/@dbresult=320341" value="Нельзя ввести обещанный платеж на Вашем тарифном плане" />
-			<set item="Content" condition="//Item/@dbresult=320110" value="Минимальная сумма обещанного платежа 1 руб.Введите большую сумму." />
-            <set item="Content" condition="//Item/@dbresult=-1" value="Обещанный платеж не может быть принят." />
+         <set item="Content" value="Услуга не предоставляется для Вашего тарифного плана." />
+         <set item="Content" condition="//Item/@dbresult=0" value="Обещанный платеж на сумму #{${amount} div 100} р. принят.Отображение на балансе в течение 10 минут." />
+         <set item="Content" condition="//Item/@dbresult=320203" value="Регистрация запрещена - предыдущий обещанный платеж не оплачен." />
+         <set item="Content" condition="//Item/@dbresult=320111" value="Превышена разрешенная сумма обещанного платежа." />
+         <set item="Content" condition="//Item/@dbresult=320121" value="Платеж не может быть зарегистрирован." />
+         <set item="Content" condition="//Item/@dbresult=320341" value="Нельзя ввести обещанный платеж на Вашем тарифном плане" />
+         <set item="Content" condition="//Item/@dbresult=320110" value="Минимальная сумма обещанного платежа 1 руб.Введите большую сумму." />
+         <set item="Content" conditionEx="#{${dbresult}=320347}" value="Услуга не может быть предоставлена, потому что номер заблокирован" />
+         <set item="Content" conditionEx="#{${dbresult}=320191}" value="Услуга не может быть предоставлена, недостаточно средств" />
+         <set item="Content" condition="//Item/@dbresult=-1" value="Обещанный платеж не может быть принят." />
             <set item="Encoding" value="unicodefffe" />
             <set item="Sender" value="0870" />
             <set item="Recipient" value="${customer}" />

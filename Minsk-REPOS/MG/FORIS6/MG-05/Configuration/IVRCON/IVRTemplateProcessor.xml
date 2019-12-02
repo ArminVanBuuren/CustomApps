@@ -1248,11 +1248,10 @@ type = "3"      integer
     </condition>
     <receiveTemplate>
       <Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
- 	<Item customer="${customer}" datasource="state">
+ 	<Item customer="${customer}">
  	  <Service id="guaranteedpayment" action="7">
-     		<Attribute name="amount" value="${amount}" />
+     		<Attribute name="amount" value="#{${amount} * 100}" />
 		<Attribute name="currency" value="${currency}" />
-		<Attribute name="init" value="${init}" />
 	  </Service>
  	</Item>
       </Message>

@@ -3160,76 +3160,91 @@
 		<output>
 			<param name="result_msg" />
 		</output>
-	</template> 	
-	
-	
-	<!--    MTS_GuaranteedPayment             -->
-	<template procedureName="MTS_GuaranteedPayment" handler="DBCON_01">
-		<receiveTemplate>
-			<Message type="serviceorder" initiator="soapcon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-				<Item procedureName="BILLING.mg_auth" >
-					<Attribute name="i_source" type="STRING" value="${sourceid}" /> 
-					<Attribute name="i_code" type="STRING" value="${sec_code}" /> 
-					<Attribute name="i_method" type="STRING" value="MTS_GuaranteedPayment" /> 
-					<Attribute name="o_result" type="STRING" /> 
-					<Attribute name="o_message" type="STRING" /> 
-				</Item>
-				@{store(MTSGuaranteedPaymentcustomer,${customer})} 
-				@{store(MTSGuaranteedPaymentamount,${amount})} 
-				@{store(MTSGuaranteedPaymentsourceid,${sourceid})} 
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate  conditionEx="#{'#{/Message/Item/Attribute[@name='o_result']/@value}'='0'}" call="MTSGuaranteedPayment" >
-			<set item="iparam:customer" value="${MTSGuaranteedPaymentcustomer}" /> 
-			<set item="iparam:amount" value="${MTSGuaranteedPaymentamount}" /> 
-			<set item="iparam:sourceid" value="${MTSGuaranteedPaymentsourceid}" /> 
-			<set conditionEx="0@{freeSession}" /> 
-		</deliveryTemplate>	 
-		<deliveryTemplate>
-			<set item="oparam:result_code" value="${o_result}" />
-			<set item="oparam:result_msg" value="${o_message}" />
-		</deliveryTemplate>	
-		<input>
-			<param name="sourceid" />
-			<param name="sec_code" />
-			<param name="customer" />
-			<param name="amount" />
-		</input>
-		<output>
-			<param name="result_code" />
-			<param name="result_msg" />		
-		</output>
-	</template>	
-	<template procedureName="MTSGuaranteedPayment" handler="DBCON_01">
-		<receiveTemplate>
-			<Message type="retrievecustomerdata" initiator="soapcon" id="@{newGuid}" session_id="@{newGuid}">
-				<Item procedureName="billing.mg_pack.GuaranteedPayment" >
-					<Attribute name="i_msisdn" type="STRING" value="${customer}" /> 
-					<Attribute name="i_source" type="STRING" value="${sourceid}" /> 
-					<Attribute name="i_summa" type="STRING" value="${amount}" /> 
-					<Attribute name="o_rez" type="STRING" />
-					<Attribute name="o_dbresult" type="STRING" /> 
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate>
-			<set item="oparam:result_code" condition="//Item/@dbresult='0'" value="${o_dbresult}" /> 
-			<set item="oparam:result_code" condition="//Item/@dbresult!='0'" value="Ошибка при выполнении запроса." /> 
-			<set item="oparam:result_msg" condition="//Item/@dbresult='0'" value="${o_rez}" /> 
-			<set item="oparam:result_msg" condition="//Item/@dbresult!='0'" value="Ошибка при выполнении запроса." /> 
-		</deliveryTemplate>	
-		<input>
-			<param name="customer" />
-			<param name="amount" />
-			<param name="sourceid" />
-		</input>
-		<output>
-			<param name="result_code" />
-			<param name="result_msg" />
-		</output>
-	</template> 		
+	</template>
 
-	<!--    MTS_Wargaming_GiftList             -->
+
+  <!--    MTS_GuaranteedPayment             -->
+  <template procedureName="MTS_GuaranteedPayment">
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="soapcon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item customer="${Sender}" >
+          <Service id="guaranteedpayment" action="6" />
+        </Item>
+        @{store(MTSGuaranteedPaymentcustomer,${customer})}
+        @{store(MTSGuaranteedPaymentamount,#{${amount} * 100})}
+        @{store(MTSGuaranteedPaymentsourceid,${sourceid})}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate  conditionEx="#{('${allowed}' = 1 and '${dbresult}'= 0) }" call="MTSGuaranteedPayment" >
+      <set item="iparam:customer" value="${MTSGuaranteedPaymentcustomer}" />
+      <set item="iparam:amount" value="${MTSGuaranteedPaymentamount}" />
+      <set item="iparam:sourceid" value="${MTSGuaranteedPaymentsourceid}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="oparam:result_code" value="${dbresult}" />
+      <set item="oparam:result_msg" value="Извините, но данный запрос не может быть выполнен." />
+      <set item="oparam:result_msg" condition="//Item/@dbresult=0" value="Обещанный платеж не может быть принят." />
+      <set item="oparam:result_msg" conditionEx="#{${dbresult}=320341}" value="Номер Вашего телефона не зарегистрирован" />
+      <set item="oparam:result_msg" conditionEx="#{${dbresult}=320347}" value="Услуга не может быть предоставлена, потому что номер заблокирован" />
+      <set item="oparam:result_msg" conditionEx="#{${dbresult}=320191}" value="Данный сервис недоступен. Ваш баланс #{number('${balance}') div 100} р." />
+      <set item="oparam:result_msg" conditionEx="#{${dbresult}=320203}" value="Услуга не может быть предоставлена, предыдущий обещанный платеж не погашен или в процессе регистрации" />
+      <set item="oparam:result_msg" conditionEx="#{${dbresult}=320111}" value="Указывайте сумму не превышающую #{${maximumrur} div 100} р." />
+      <set item="oparam:result_msg" conditionEx="#{${dbresult}=320121}" value="Невозможно установить обещанный платеж" />
+      <set item="oparam:result_msg" conditionEx="#{${dbresult}=320113}" value="Сумма обещанного платежа меньше минимально возможной" />
+      <set item="oparam:result_msg" conditionEx="#{${dbresult}=330140}" value="Обратитесь к персональному менеджеру" />
+      <set item="oparam:result_msg" conditionEx="#{${dbresult}=330141}" value="Превышено допустимое кол-во обещанных платежей" />
+      <set item="oparam:result_msg" conditionEx="#{${dbresult}=330142}" value="Исчерпан лимит средств для ввода обещанного платежа" />
+      <set item="oparam:result_msg" conditionEx="#{${dbresult}=330132}" value="Данный сервис недоступен. Ваш баланс #{number('${balance}') div 100} р." />
+    </deliveryTemplate>
+    <input>
+      <param name="sourceid" />
+      <param name="sec_code" />
+      <param name="customer" />
+      <param name="amount" />
+    </input>
+    <output>
+      <param name="result_code" />
+      <param name="result_msg" />
+    </output>
+  </template>
+  <template procedureName="MTSGuaranteedPayment">
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Sender}">
+          <Service id="guaranteedpayment" action="7">
+            <Attribute name="amount" value="${amount}" />
+            <Attribute name="currency" value="933" />
+          </Service>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:result_code" condition="//Item/@dbresult='0'" value="${dbresult}" />
+      <set item="oparam:result_code" condition="//Item/@dbresult!='0'" value="Ошибка при выполнении запроса." />
+      <set item="oparam:result_msg" value="Ошибка при выполнении запроса." />
+      <set item="oparam:result_msg" condition="//Item/@dbresult=0" value="Обещанный платеж на сумму #{${amount} div 100} р. принят.Отображение на балансе в течение 10 минут." />
+      <set item="oparam:result_msg" condition="//Item/@dbresult=320203" value="Регистрация запрещена - предыдущий обещанный платеж не оплачен." />
+      <set item="oparam:result_msg" condition="//Item/@dbresult=320111" value="Превышена разрешенная сумма обещанного платежа." />
+      <set item="oparam:result_msg" condition="//Item/@dbresult=320121" value="Платеж не может быть зарегистрирован." />
+      <set item="oparam:result_msg" condition="//Item/@dbresult=320341" value="Нельзя ввести обещанный платеж на Вашем тарифном плане" />
+      <set item="oparam:result_msg" condition="//Item/@dbresult=320110" value="Минимальная сумма обещанного платежа 1 руб.Введите большую сумму." />
+      <set item="oparam:result_msg" conditionEx="#{${dbresult}=320347}" value="Услуга не может быть предоставлена, потому что номер заблокирован" />
+      <set item="oparam:result_msg" conditionEx="#{${dbresult}=320191}" value="Услуга не может быть предоставлена, недостаточно средств" />
+      <set item="oparam:result_msg" condition="//Item/@dbresult=-1" value="Обещанный платеж не может быть принят." />
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+      <param name="amount" />
+      <param name="sourceid" />
+    </input>
+    <output>
+      <param name="result_code" />
+      <param name="result_msg" />
+    </output>
+  </template>
+
+  <!--    MTS_Wargaming_GiftList             -->
 		<template procedureName="MTS_Wargaming_GiftList" handler="DBCON_01">
 		<receiveTemplate>
 			<Message type="serviceorder" initiator="soapcon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
