@@ -894,7 +894,8 @@
       </SendTemplate>
     </Procedure>
     <!-- SMS_Check_GuaranteedPayment -->
-    <Procedure cond="/Message/@type='serviceorder' and /Message/Item/Service/@id='guaranteedpayment' and /Message/Item/Service/@action='6'" call="BILLING.is_pay_claimed" using="db">
+    <Procedure cond="/Message/@type='serviceorder' and /Message/Item/Service/@id='guaranteedpayment'
+               and /Message/Item/@datasource='state' and /Message/Item/Service/@action='6'" call="BILLING.is_pay_claimed" using="db">
       <Parameters>
         <param name="dbresult" type="out:string" value="" />
         <param name="p_Allowed" type="out:string" value="0" />

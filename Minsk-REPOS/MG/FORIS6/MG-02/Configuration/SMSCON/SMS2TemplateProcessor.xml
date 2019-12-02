@@ -2145,10 +2145,7 @@
     <receiveTemplate>
       <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
         <Item customer="${Sender}">
-          <Service id="guaranteedpayment" action="6">
-            <Attribute name="amount" value="${Content}" />
-            <Attribute name="currency" value="933" />
-          </Service>
+          <Service id="guaranteedpayment" action="6"/>
         </Item>
         @{store(sContent,#{number(${Content} * 100)})}
       </Message>
