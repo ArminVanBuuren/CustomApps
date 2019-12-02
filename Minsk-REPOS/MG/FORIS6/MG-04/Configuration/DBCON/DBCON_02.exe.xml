@@ -1,7 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <Application>
   <TargetDatabase>
-      <Database forisDataKey="OMS" interfacePackage="" />
+    <Database forisDataKey="OMS" interfacePackage="" />
   </TargetDatabase>
   <Settings>
     <Item name="ModuleType" value="DBCON" />

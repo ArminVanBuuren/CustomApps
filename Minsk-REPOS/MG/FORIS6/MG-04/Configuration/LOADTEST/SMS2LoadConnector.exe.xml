@@ -1,4 +1,3 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <Application configClass="FORIS.MessagingGateway.SMSConnector.SMSConnectorConfiguration" type="SMSCON">
   <Settings>
     <Item name="ModuleType" value="SMSCON" />
@@ -53,11 +52,10 @@
     <!-- winter 12+ , summer 16+   -->
     <Item name="ThreadMultiplifier" value="1" />
     <Item name="SendSpeedLimit" value="5" />
- <!--Item name="ExposeSmsLogService" value="true" /-->
-<Item name="SmsLogging" value="enable" /> 
+    <!--Item name="ExposeSmsLogService" value="true" /-->
+    <Item name="SmsLogging" value="enable" />
   </Settings>
   <SMSCenters>
-    
     <Connection host="localhost" port="9008" systemType="502" systemId="admin" pass="admin" />
   </SMSCenters>
   <Anumbertransformations>
@@ -69,9 +67,7 @@
     <!-- <Anumbertransformation prefix="+7" newprefix="12311" /> -->
   </Anumbertransformations>
   <TemplateProcessors defaultConfig="SMSTemplateProcessor_LoadTest.xml">
-   
     <Processor dll="DefaultTemplates.dll" class="SMSTemplateProcessor" config="SMSTemplateProcessor_LoadTest.xml" />
- 
   </TemplateProcessors>
   <BlackList propertyName="Sender" regExpBan="^88">
     <Ban>603221981</Ban>

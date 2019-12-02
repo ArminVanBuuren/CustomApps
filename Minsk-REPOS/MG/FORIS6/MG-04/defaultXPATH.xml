@@ -1,4 +1,3 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
 <root>
   <assemblies>
     <assembly>System.dll</assembly>
@@ -52,14 +51,13 @@
         }]]>
       </code>
     </sqrt>
-
-	<toupper>
-	  <summary>
-		<syntax>toupper(string_in)</syntax>
-		<definition>
-		</definition>
-	  </summary>
-	  <code><![CDATA[
+    <toupper>
+      <summary>
+        <syntax>toupper(string_in)</syntax>
+        <definition />
+      </summary>
+      <code>
+        <![CDATA[
 		public class ToupperFunction : IXsltContextFunction
 		{
 			public int Minargs
@@ -90,9 +88,9 @@
 				    return instr;
 				}
 			}
-			}]]></code>
-	</toupper>
-
+			}]]>
+      </code>
+    </toupper>
     <!--getTimeInRange>
       <summary>
         <syntax>getTimeInRange(from, to)</syntax>
@@ -161,15 +159,14 @@
         }]]>
       </code>
     </getTimeInRange-->
-
-	<formatDate>
+    <formatDate>
       <summary>
         <syntax>getTimeInRange(timeZone, from, to)</syntax>
         <definition>
-			Returns formated by template date
-			Parameters:
-			- date you want to format
-			- C# style date format 
+          Returns formated by template date
+          Parameters:
+          - date you want to format
+          - C# style date format
         </definition>
       </summary>
       <code>
@@ -213,18 +210,17 @@
 				}
 			}
         }]]>
-		</code>
+      </code>
     </formatDate>
-	
-	 <getTimeInRange>
+    <getTimeInRange>
       <summary>
         <syntax>getTimeInRange(timeZone, from, to)</syntax>
         <definition>
-			timeZone define time zone shift in minutes
-			Returns empty string if the current time is in the range (from, to).
-			Otherwise returns random time within first spreadMinutes minutes of the range (from, to).
-			Default value of spread is 120 minutes. Custom value of spread can be passed throw third parameter.
-			Format of bounds must be 'hh:mm'.
+          timeZone define time zone shift in minutes
+          Returns empty string if the current time is in the range (from, to).
+          Otherwise returns random time within first spreadMinutes minutes of the range (from, to).
+          Default value of spread is 120 minutes. Custom value of spread can be passed throw third parameter.
+          Format of bounds must be 'hh:mm'.
         </definition>
       </summary>
       <code>
@@ -312,8 +308,5 @@
         }]]>
       </code>
     </getTimeInRange>
-	
   </functions>
 </root>
-
-

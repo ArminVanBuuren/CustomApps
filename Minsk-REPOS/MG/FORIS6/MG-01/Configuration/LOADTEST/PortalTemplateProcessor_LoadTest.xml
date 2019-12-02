@@ -1,1559 +1,1448 @@
-﻿<templates connector="SMS">
-#include "config\GuaranteedPayment\ussd.xml"
-#include "config\services_packages\ussd.xml"
-#include "config\annual_contract\ussd.xml"
-    <macros>
-     <define name="_SMSCON" value="SMSCON_01_03" />
-     <define name="__LOCAL" value="11111" />
-     <define name="__APPGW" value="00111" />
-     <define name="__REGEX_PTP_FOR_GW" value="^[0-9]{11}\*direct_money_transfer\*\+?[0-9]{10,11}\*[1-9]{1}[0-9]*$" />
-     <define name="__REGEX_SPONSOR_FOR_GW" value="^[0-9]{11}\*periodic_money_transfer\*\+?[0-9]{10,11}\*(1|2|3)\*[1-9]{1}[0-9]*\s*$" />
-     <define name="__REGEX_CANCEL_SPONSOR_FOR_GW" value="^[0-9]{11}\*periodic_money_transfer\*\+?[0-9]{10,11}\*off$" />
-    </macros>
-#include "config\ServiceOrderErrorHandler.xml"	
-<template procedureName="GUDOK_Adding">
-                               <condition>
-                                               <test item="${Recipient}" matches="^222$"/>
-                                               <test item="${Content}" matches="^3\*1\*2\*1$"/>
-                               </condition>
-                               <receiveTemplate>
-                                               <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                                                               <Item customer="${Sender}">
-                                                                              <Service id="FRGOODOK" action="2" class="0"/>
-                                                               </Item>
-                                               </Message>
-                               </receiveTemplate>
-                               <deliveryTemplate>
-                                               <set item="Content" value="Usluga GOOD'OK ne predostavljaetsja dlja vashego tarifnogo plana"/>
-                                               <set item="Content" condition="//Item/@dbresult=0" value="Usluga GOODOK dobavlena"/>
-                                               <set item="Content" condition="//Item/@dbresult=320174" value="Usluga GOODOK byla dobavlena ranee"/>
-                                               <set item="Content" condition="//Item/@dbresult=320191" value="Na balanse nedostatochno sredstv dlya provedeniya operacii"/>
-                                               <!-- ???DBresult -->
-                                               <set item="Content" condition="//Item/@dbresult=yyy" value="Usluga GOODOK ne predostavljaetsja v vashem regione"/>
-                                               <!-- ???DBresult -->
-                                               <set item="Encoding" value="ascii"/>
-                               </deliveryTemplate>
-                </template>
-
-
-                <template procedureName="GUDOK_Deleting">
-                               <condition>
-                                               <test item="${Recipient}" matches="^222$"/>
-                                               <test item="${Content}" matches="^3\*1\*2\*2$"/>
-                               </condition>
-                               <receiveTemplate>
-                                               <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                                                               <Item customer="${Sender}">
-                                                                              <Service id="FRGOODOK" action="3" class="0"/>
-                                                              </Item>
-                                               </Message>
-                               </receiveTemplate>
-                               <deliveryTemplate>
-                                               <set item="Content" value="Usluga GOOD'OK ne predostavljaetsja dlja vashego tarifnogo plana"/>
-                                               <set item="Content" condition="//Item/@dbresult=0" value="Usluga GOODOK udalena"/>
-                                               <set item="Content" condition="//Item/@dbresult=320174" value="Usluga GOODOK byla udalena ranee"/>
-                                               <!-- ???DBresult -->
-                                               <set item="Content" condition="//Item/@dbresult=yyy" value="Usluga GOODOK ne predostavljaetsja v vashem regione"/>
-                                               <!-- ???DBresult -->
-                                               <set item="Encoding" value="ascii"/>
-                               </deliveryTemplate>
-                </template>
-
-
-<!-- Begin *111*60# Информирование о текущих начислениях   -->
-		<template procedureName="USSD_PortalOpenBills">
-        <condition>
-            <test item="${Sender}" matches="^00111$" />
-	<test item="${Content}" matches="^[0-9]{11}\*check_payment$" />
-        </condition>
-        <receiveTemplate>
-            <Message type="retrievecustomerdata" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${token0}" subject="openbills"> 
-					<Attribute name="includeunbilleddata" value="1" />              
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON"/>
-    </template> 	
-<!-- End *111*60# Информирование о текущих начислениях   -->	
-
-
-
-<!-- =============== START Mobile Detail  *111*556#  *111*557# -->
-    <template procedureName="CheckLastDetailCost">
-        <condition>
-            <test item="${Sender}" matches="^00111$" />
-	<test item="${Content}" matches="^[0-9]{11}\*check_lastpayment$" />
-        </condition>
-        <receiveTemplate>
-           <Message type="retrievecustomerdata" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-				<Item customer="${token0}" subject="last_sms_detail_cost" />
-			</Message>
-
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON" />
-    </template> 
-
-    <template procedureName="CheckLastDetailAll">
-        <condition>
-             <test item="${Sender}" matches="^00111$" />
-	<test item="${Content}" matches="^[0-9]{11}\*check_lastoperations$" />
-        </condition>
-        <receiveTemplate>
-          <Message type="retrievecustomerdata" initiator="ussd" id="${guid}"  session_id="@{newGuid}">
-				<Item customer="${token0}" subject="last_sms_detail" />
-			</Message>
-
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON" />
-    </template> 
-<!-- ===========   END Mobile Detail -->
-
-<!-- ===========   START PromisedPaymentl  change number notif-->
+<templates connector="SMS">
+  #include "config\GuaranteedPayment\ussd.xml"
+  #include "config\services_packages\ussd.xml"
+  #include "config\annual_contract\ussd.xml"
+  <macros>
+    <define name="_SMSCON" value="SMSCON_01_03" />
+    <define name="__LOCAL" value="11111" />
+    <define name="__APPGW" value="00111" />
+    <define name="__REGEX_PTP_FOR_GW" value="^[0-9]{11}\*direct_money_transfer\*\+?[0-9]{10,11}\*[1-9]{1}[0-9]*$" />
+    <define name="__REGEX_SPONSOR_FOR_GW" value="^[0-9]{11}\*periodic_money_transfer\*\+?[0-9]{10,11}\*(1|2|3)\*[1-9]{1}[0-9]*\s*$" />
+    <define name="__REGEX_CANCEL_SPONSOR_FOR_GW" value="^[0-9]{11}\*periodic_money_transfer\*\+?[0-9]{10,11}\*off$" />
+  </macros>#include "config\ServiceOrderErrorHandler.xml"	
+  <template procedureName="GUDOK_Adding">
+    <condition>
+      <test item="${Recipient}" matches="^222$" />
+      <test item="${Content}" matches="^3\*1\*2\*1$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Sender}">
+          <Service id="FRGOODOK" action="2" class="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Usluga GOOD'OK ne predostavljaetsja dlja vashego tarifnogo plana" />
+      <set item="Content" condition="//Item/@dbresult=0" value="Usluga GOODOK dobavlena" />
+      <set item="Content" condition="//Item/@dbresult=320174" value="Usluga GOODOK byla dobavlena ranee" />
+      <set item="Content" condition="//Item/@dbresult=320191" value="Na balanse nedostatochno sredstv dlya provedeniya operacii" />
+      <!-- ???DBresult -->
+      <set item="Content" condition="//Item/@dbresult=yyy" value="Usluga GOODOK ne predostavljaetsja v vashem regione" />
+      <!-- ???DBresult -->
+      <set item="Encoding" value="ascii" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="GUDOK_Deleting">
+    <condition>
+      <test item="${Recipient}" matches="^222$" />
+      <test item="${Content}" matches="^3\*1\*2\*2$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Sender}">
+          <Service id="FRGOODOK" action="3" class="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Usluga GOOD'OK ne predostavljaetsja dlja vashego tarifnogo plana" />
+      <set item="Content" condition="//Item/@dbresult=0" value="Usluga GOODOK udalena" />
+      <set item="Content" condition="//Item/@dbresult=320174" value="Usluga GOODOK byla udalena ranee" />
+      <!-- ???DBresult -->
+      <set item="Content" condition="//Item/@dbresult=yyy" value="Usluga GOODOK ne predostavljaetsja v vashem regione" />
+      <!-- ???DBresult -->
+      <set item="Encoding" value="ascii" />
+    </deliveryTemplate>
+  </template>
+  <!-- Begin *111*60# Информирование о текущих начислениях   -->
+  <template procedureName="USSD_PortalOpenBills">
+    <condition>
+      <test item="${Sender}" matches="^00111$" />
+      <test item="${Content}" matches="^[0-9]{11}\*check_payment$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}" subject="openbills">
+          <Attribute name="includeunbilleddata" value="1" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <!-- End *111*60# Информирование о текущих начислениях   -->
+  <!-- =============== START Mobile Detail  *111*556#  *111*557# -->
+  <template procedureName="CheckLastDetailCost">
+    <condition>
+      <test item="${Sender}" matches="^00111$" />
+      <test item="${Content}" matches="^[0-9]{11}\*check_lastpayment$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}" subject="last_sms_detail_cost" />
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="CheckLastDetailAll">
+    <condition>
+      <test item="${Sender}" matches="^00111$" />
+      <test item="${Content}" matches="^[0-9]{11}\*check_lastoperations$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}" subject="last_sms_detail" />
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <!-- ===========   END Mobile Detail -->
+  <!-- ===========   START PromisedPaymentl  change number notif-->
   <template procedureName="InfOPNumChange">
-        <condition>
-             <test item="${Sender}" matches="^00111$" />
-	     <test item="${Content}" matches="^[0-9]{11}\*zero$" />
-        </condition>
-        <receiveTemplate>
-            <Message type="verificationrequest" initiator="ussd" id="@{newGuid}" session_id="@{setSessionId(@{newGuid})}">
-                <Item customer="${token0}">
-                    <Attribute name="checkivrservice" value="1" />
-                    <Attribute name="checkblocks" value="1" />
-                </Item>
-            </Message>
-        </receiveTemplate>  
-        <deliveryTemplate direction="input">            
-            <set item="Content"   value="Номер услуги изменился на *111*123#.Подробнее 059045" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-   	    <set conditionEx="0@{freeSession}"  />
-	 </deliveryTemplate>
-    </template> 
-
-<!-- ===========   END PromisedPayment -->
-
-
-	
-    <template procedureName="APPGW_CheckBlockBeforePTP"  sessionStorage="Memory" sessionLifetime="25" onClean="Session_onClean">
-        <condition>
-            <test item="${Sender}" matches="^__APPGW$" />
-            <test item="${Content}" matches="^[0-9]{11}\*(direct_money_transfer|periodic_money_transfer)\*.*" />
-        </condition>
-        <receiveTemplate>
-            <Message type="verificationrequest" initiator="ussd" id="@{newGuid}" session_id="@{setSessionId(@{newGuid})}">
-                <Item customer="${token0}">
-                    <Attribute name="checkivrservice" value="0" />
-                    <Attribute name="checkblocks" value="1" />
-                </Item>
-                @{store(sCustomer,${token0})}
-                @{store(sServiceNumber,${Recipient})}
-                @{store(sContent,${Content})}
-            </Message>
-        </receiveTemplate>  
-	<deliveryTemplate call="APPGW_PtPRegular" conditionEx="#{'${dbresult}'='0' and  matches('${sContent}','__REGEX_PTP_FOR_GW')}">
-            <set item="Sender" value="${sCustomer}" />
-            <set item="Recipient" value="${sServiceNumber}" />
-            <set item="Content"   value="${sContent}" />
-            <!-- <set item="Content"   value="PtPRegular*${sReceiver}*${sAmount}" /> -->
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{${dbresult}=0 and  matches('${sContent}','^[0-9]{11}\*direct_money_transfer')}">
-            <set item="Sender" value="__LOCAL" />
-            <set item="Recipient" value="__APPGW" />
-	<set item="Content" value="Ошибка в формате: номер телефона получателя, сумма" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>		
-	<deliveryTemplate call="APPGW_SponsorRequest" conditionEx="#{${dbresult}=0 and  matches('${sContent}','__REGEX_SPONSOR_FOR_GW')}">
-            <set item="Sender" value="${sCustomer}" />
-            <set item="Recipient" value="${sServiceNumber}" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  /> 
-        </deliveryTemplate>
-	<deliveryTemplate call="APPGW_SponsorDelReceiver" conditionEx="#{${dbresult}=0 and matches('${sContent}','__REGEX_CANCEL_SPONSOR_FOR_GW')}">
-            <set item="Sender" value="${sCustomer}" />
-            <set item="Recipient" value="${sServiceNumber}" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  /> 
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{${dbresult}=0 and  matches('${sContent}','^[0-9]{11}\*periodic_money_transfer\*.*off')}">
-            <set item="Sender" value="__LOCAL" />
-            <set item="Recipient" value="__APPGW" />
-            <set item="Content" value="Ошибка–форматa" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-	<deliveryTemplate conditionEx="#{${dbresult}=0 and  matches('${sContent}','^[0-9]{11}\*periodic_money_transfer')}">
-            <set item="Sender" value="__LOCAL" />
-            <set item="Recipient" value="__APPGW" />
-	<set item="Content" value="Ошибка–формат: [Nтел], [период(1,2,3)], [сумма(в валюте счета)]" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>	
-        <deliveryTemplate conditionEx="#{'${sCustomer}'!='' and ${dbresult}=320347}">
-            <set item="Content"   value="Установлена блокировка. Операция недоступна" />
-            <set item="Sender" value="__LOCAL" />
-            <set item="Recipient" value="__APPGW" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{'${sCustomer}'!='' and ${dbresult}!=0}">
-            <set item="Content"   value="Услуга по данному тарифному плану недоступна" />
-            <set item="Sender" value="__LOCAL" />
-            <set item="Recipient" value="__APPGW" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate>
-            <set item="Content"   value="Операция недоступна" />
-            <set item="Sender" value="__LOCAL" />
-            <set item="Recipient" value="__APPGW" />
-            <set item="Encoding" value="unicodefffe"/>
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-    </template>
-
-    <template procedureName="CheckBlock"  sessionStorage="Memory" sessionLifetime="25" onClean="Session_onClean">
-        <condition>
-            <test item="${Sender}" matches="^00111$" />
-			<test item="${Content}" matches="^[0-9]{11}\*\w+" />
-        </condition>
-        <receiveTemplate>
-            <Message type="verificationrequest" initiator="ussd" id="@{newGuid}" session_id="@{setSessionId(@{newGuid})}">
-                <Item customer="${token0}">
-                    <Attribute name="checkivrservice" value="1" />
-                    <Attribute name="checkblocks" value="0" />
-                </Item>
-                @{store(sCustomer,${token0})}
-                @{store(sContent,${Content})}
-            </Message>
-        </receiveTemplate>  
-        <deliveryTemplate conditionEx="#{${dbresult}=-1 and '${sCustomer}'=''}">
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-            <set item="Content"   value="Данный запрос сейчас не может быть выполнен. Попробуйте позже" />
-        </deliveryTemplate>
-	<deliveryTemplate conditionEx="#{${dbresult}=-1 and number(${sTryCountUSSD})>3}" call="CheckBlock"> 
-	    <set conditionEx="0@{store(sTryCountUSSD,1)}" />
-	    <set item="Content" value="${sContent}" />
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-        </deliveryTemplate>
-	<deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*promised_payment_rur\*0') }"> 
-	    <set item="Content"   value="Обещанный платеж не установлен. Подробнее об условиях 059022" />
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*promised_payment_rur\*[0-9]+$') and ${dbresult}=0 and count(document('op_access.xml')//tps/tp[@ivr='${tariffplan}'] )=0  }"> 
-            <set item="Content"   value="Услуга не предоставляется на вашем тарифном плане" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>    
-        <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*promised_payment_rur\*[0-9]+$') and ${dbresult}=0}" call="GuarantedPaymentRUR">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*promised_payment_usd\*[0-9]+$') and ${dbresult}=0 }">
-			<set item="Content"   value="Обещанные платежи принимаются только в рублях." />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-      
-        <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*payment_retrieve$') and ${dbresult}=0}" call="PaymentRetrieve">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*exchange_rate$') and ${dbresult}=0}" call="ExchangeRate">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*gprs\*configure$') and ${dbresult}=0}" call="GPRS_configure">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-
-        <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*packet_min_1_mp\*activate$') and ${dbresult}=0}" call="Maxi100_200_activate">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-
-
-        <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*((ITG36586S01)|(ITG36586S02)|(ITG36586S03)|(ITG36586S04)|(ITG36586S05)|(ITG36586S06)|(ITG36586S07)|(ITG36586S08)|(ITG36586S09)|(ITG36586S10)|(ITG36586S11)|(ITG36586S12)|(ITG36586S13)|(ITG36586S14)|(ITG36586S15)|(gprs)|(tone)|(imode)|(issa)|(missed_calls)|(CLIP)|(CLIR)|(office)|(assistant_rus)|(assistant_eng)|(roaming)|(international_calls)|(conference)|(call_barring)|(call_waiting)|(call_divert)|(single_bill)|(mms)|(wapplus)|(inetplus)|(red_zone)|(privileged_calls)|(day_off)|(mts_numbers)|(night_talk)|(im_online)|(im_offline)|(home_country)|(stupino_inet)|(stupino)|(folk_email_wap)|(folk_email_sms)|(grow_bonus)|(redmusic)|(banner_off)|(innetworkunlim)|(firstminute)|(erorest)|(3bonus)|(3bonuscorp)|(mtsroaming)|(guest_home)|(unlimit_night_inet)|(intercity_mts)|(inetplus_for_free)|(my_choice)|(freetime)|(freetime_center)|(discount_popular_countries_7)|(discount_popular_countries_14)|(discount_foreign_countries_7)|(discount_foreign_countries_14)|(individ_credit)|(24gprsfree)|(always_advantage)|(clir_on_demand)|(internet40)|(internet100)|(internet200)|(internet500)|(internet1000)|(x_kop_to_all)|(anywhere_like_home)|(friends_balance)|(bonus_150_rub)|(tourist)|(night_unlim_sms)|(easy_roaming)|(progress_inet)|(sms_50)|(sms_150)|(sms_300)|(sms_30)|(sms_100)|(sms_200)|(red_mts_unlim)|(red_sms_unlim)|(mms_3_free)|(sms_optim)|(far_relatives)|(packet_min_2_mp)|(packet_300_sms_mp)|(packet_500_sms_mp)|(base_balance)|(prohib_cc)|(connect3000))\*(activate)$')}" call="Service_activate">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*((ITG36586S01)|(ITG36586S02)|(ITG36586S03)|(ITG36586S04)|(ITG36586S05)|(ITG36586S06)|(ITG36586S07)|(ITG36586S08)|(ITG36586S09)|(ITG36586S10)|(ITG36586S11)|(ITG36586S12)|(ITG36586S13)|(ITG36586S14)|(ITG36586S15)|(gprs)|(tone)|(imode)|(issa)|(missed_calls)|(CLIP)|(CLIR)|(office)|(assistant_rus)|(assistant_eng)|(conference)|(call_barring)|(call_waiting)|(call_divert)|(single_bill)|(mms)|(wapplus)|(inetplus)|(red_zone)|(privileged_calls)|(day_off)|(mts_numbers)|(night_talk)|(im_online)|(im_offline)|(grow_bonus)|(redmusic)|(banner_off)|(innetworkunlim)|(firstminute)|(guest_home)|(unlimit_night_inet)|(intercity_mts)|(inetplus_for_free)|(my_choice)|(freetime)|(freetime_center)|(credit)|(individ_credit)|(24gprsfree)|(always_advantage)|(clir_on_demand)|(internet40)|(internet100)|(internet200)|(internet500)|(roaming)|(international_calls)|(internet1000)|(x_kop_to_all)|(anywhere_like_home)|(friends_balance)|(night_unlim_sms)|(easy_roaming)|(progress_inet)|(red_mts_unlim)|(red_sms_unlim)|(sms_optim)|(base_balance)|(prohib_cc))\*(deactivate)$') and ${dbresult}=0}" call="Service_deactivate">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-       
-		
-		<deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*issa\*password\*') and ${dbresult}=0}" call="ISSA_Password">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*detailed_balance$') and ${dbresult}=0}" call="Detailed_balance">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*detailed_bill$') and ${dbresult}=0}" call="Detailed_bill">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*bill$') and ${dbresult}=0}" call="Bill">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*prepayment_bill') and ${dbresult}=0}" call="Prepayment_Bill">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*fax_update\*[0-9]{10}$') and ${dbresult}=0}" call="Fax_update">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-		<deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*fav_number\*\S+\*[0-9]{1,11}$') and ${dbresult}=0}" call="FavNumber_Upd">
-			<set item="Sender" value="00111" />
-			<set item="Recipient" value="11111" />
-			<set item="Content"   value="${sContent}" />
-			<set conditionEx="0@{freeSession}"  />
-		</deliveryTemplate>
-		<deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*fav_number_deactivate\*\S+\*[0-9]{1,11}$') and ${dbresult}=0}" call="FavNumber_Del">
-			<set item="Sender" value="00111" />
-			<set item="Recipient" value="11111" />
-			<set item="Content"   value="${sContent}" />
-			<set conditionEx="0@{freeSession}"  />
-		</deliveryTemplate>
-		<deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*fav_number_deactivate\*\S+$') and ${dbresult}=0}" call="FavNumber_Del_empty">
-			<set item="Sender" value="00111" />
-			<set item="Recipient" value="11111" />
-			<set item="Content"   value="${sContent}" />
-			<set conditionEx="0@{freeSession}"  />
-		</deliveryTemplate>
-		<deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*fav_number_browse\*\S+$') and ${dbresult}=0}" call="FavNumbers_browse">
-			<set item="Sender" value="00111" />
-			<set item="Recipient" value="11111" />
-			<set item="Content"   value="${sContent}*${language_id}" />
-			<set conditionEx="0@{freeSession}"  />
-		</deliveryTemplate>
-        <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*change_tp\*((optima)|(vse_svoi)|(universalnyj)|(bud_praktichnee)|(lyubimyj)|(profi_30)|(profi_VIP_800)|(red)|(maxi)|(base)|(redtext)|(free)|(oblast)|(maxione)|(onliner)|(connect)|(stimul)|(podruzki)|(raschetliv)|(rednew)|(superzero)|(first_jeans)|(maxiactive)|(connect2)|(guest)|(many_calls)|(oblast)|(careful)|(red_relaunch)|(long_conversations)|(red_energy)|(maxiplus))$') and ${dbresult}=0}" call="Change_tarifplan">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}*#{//Item/@tariffplan}*#{//Item/Attribute[@name='regioncode']/@value}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*(maxiplus)$') and ${dbresult}=0}" call="Change_tarifplan2">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}*#{//Item/@tariffplan}*#{//Item/Attribute[@name='regioncode']/@value}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-
-        <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*check_tp$') and ${dbresult}=0}" call="Check_tarifplan">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*inter_access\*activate') and ${dbresult}=0 and document('md_inter_access_ban.xml')//tps/tp/@ivr='${tariffplan}'}" >
-            <set item="Content"   value="На вашем тарифе услуга не предоставляется, обратитесь в контактный центр" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-	<deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*inter_access\*activate') and ${dbresult}=0}" call="Inter_Access_Activate">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*inter_access\*deactivate') and ${dbresult}=0 and document('md_inter_access_ban.xml')//tps/tp/@ivr='${tariffplan}'}" >
-            <set item="Content"   value="На вашем тарифе услуга не предоставляется, обратитесь в контактный центр" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-	<deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*inter_access\*deactivate') and ${dbresult}=0}" call="Inter_Access_Deactivate">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*one_for_four\*activate') and ${dbresult}=0}" call="OneFor_four1">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-	<deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*activateim') and ${dbresult}=0}" call="Activateim">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*deactivateim') and ${dbresult}=0}" call="Deactivateim">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-
-		<deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*bank_card_payment\*[0-9]+$') and ${dbresult}=0}" call="BankCardPayment">
-            <set item="Sender" value="11111" />			      
-            <set item="Recipient" value="00111" />
-			<set item="Content"   value="${sContent}" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-
-        <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*group_mts') and ${dbresult}=0}" call="GroupMTS">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-
-       <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*connect100\*') and ${dbresult}=0}" call="Connect100">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-		<deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*connect250') and ${dbresult}=0}" call="Connect250">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*connect500') and ${dbresult}=0}" call="Connect400">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*connect1000\*') and ${dbresult}=0}" call="Connect900">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-       <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*plus50minutes') and ${dbresult}=0}" call="MaxiPlus50Minutes">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>			
-       <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*plus100minutes') and ${dbresult}=0}" call="MaxiPlus100minutes">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>	
-       <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*plus200minutes') and ${dbresult}=0}" call="MaxiPlus200minutes">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-       <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*mobbusiness') and ${dbresult}=0}" call="MobBusiness">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>	
-       <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*discount_from_payment') and ${dbresult}=0}" call="Discount_from_payment">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-<!--        <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*check_payment$') and ${dbresult}=0}" call="USSD_PortalOpenBills">
+    <condition>
+      <test item="${Sender}" matches="^00111$" />
+      <test item="${Content}" matches="^[0-9]{11}\*zero$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="verificationrequest" initiator="ussd" id="@{newGuid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item customer="${token0}">
+          <Attribute name="checkivrservice" value="1" />
+          <Attribute name="checkblocks" value="1" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input">
+      <set item="Content" value="Номер услуги изменился на *111*123#.Подробнее 059045" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+  </template>
+  <!-- ===========   END PromisedPayment -->
+  <template procedureName="APPGW_CheckBlockBeforePTP" sessionStorage="Memory" sessionLifetime="25" onClean="Session_onClean">
+    <condition>
+      <test item="${Sender}" matches="^__APPGW$" />
+      <test item="${Content}" matches="^[0-9]{11}\*(direct_money_transfer|periodic_money_transfer)\*.*" />
+    </condition>
+    <receiveTemplate>
+      <Message type="verificationrequest" initiator="ussd" id="@{newGuid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item customer="${token0}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="1" />
+        </Item>
+        @{store(sCustomer,${token0})}
+        @{store(sServiceNumber,${Recipient})}
+        @{store(sContent,${Content})}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate call="APPGW_PtPRegular" conditionEx="#{'${dbresult}'='0' and  matches('${sContent}','__REGEX_PTP_FOR_GW')}">
+      <set item="Sender" value="${sCustomer}" />
+      <set item="Recipient" value="${sServiceNumber}" />
+      <set item="Content" value="${sContent}" />
+      <!-- <set item="Content"   value="PtPRegular*${sReceiver}*${sAmount}" /> -->
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0 and  matches('${sContent}','^[0-9]{11}\*direct_money_transfer')}">
+      <set item="Sender" value="__LOCAL" />
+      <set item="Recipient" value="__APPGW" />
+      <set item="Content" value="Ошибка в формате: номер телефона получателя, сумма" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate call="APPGW_SponsorRequest" conditionEx="#{${dbresult}=0 and  matches('${sContent}','__REGEX_SPONSOR_FOR_GW')}">
+      <set item="Sender" value="${sCustomer}" />
+      <set item="Recipient" value="${sServiceNumber}" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate call="APPGW_SponsorDelReceiver" conditionEx="#{${dbresult}=0 and matches('${sContent}','__REGEX_CANCEL_SPONSOR_FOR_GW')}">
+      <set item="Sender" value="${sCustomer}" />
+      <set item="Recipient" value="${sServiceNumber}" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0 and  matches('${sContent}','^[0-9]{11}\*periodic_money_transfer\*.*off')}">
+      <set item="Sender" value="__LOCAL" />
+      <set item="Recipient" value="__APPGW" />
+      <set item="Content" value="Ошибка–форматa" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0 and  matches('${sContent}','^[0-9]{11}\*periodic_money_transfer')}">
+      <set item="Sender" value="__LOCAL" />
+      <set item="Recipient" value="__APPGW" />
+      <set item="Content" value="Ошибка–формат: [Nтел], [период(1,2,3)], [сумма(в валюте счета)]" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${sCustomer}'!='' and ${dbresult}=320347}">
+      <set item="Content" value="Установлена блокировка. Операция недоступна" />
+      <set item="Sender" value="__LOCAL" />
+      <set item="Recipient" value="__APPGW" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${sCustomer}'!='' and ${dbresult}!=0}">
+      <set item="Content" value="Услуга по данному тарифному плану недоступна" />
+      <set item="Sender" value="__LOCAL" />
+      <set item="Recipient" value="__APPGW" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Операция недоступна" />
+      <set item="Sender" value="__LOCAL" />
+      <set item="Recipient" value="__APPGW" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="CheckBlock" sessionStorage="Memory" sessionLifetime="25" onClean="Session_onClean">
+    <condition>
+      <test item="${Sender}" matches="^00111$" />
+      <test item="${Content}" matches="^[0-9]{11}\*\w+" />
+    </condition>
+    <receiveTemplate>
+      <Message type="verificationrequest" initiator="ussd" id="@{newGuid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item customer="${token0}">
+          <Attribute name="checkivrservice" value="1" />
+          <Attribute name="checkblocks" value="0" />
+        </Item>
+        @{store(sCustomer,${token0})}
+        @{store(sContent,${Content})}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=-1 and '${sCustomer}'=''}">
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+      <set item="Content" value="Данный запрос сейчас не может быть выполнен. Попробуйте позже" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=-1 and number(${sTryCountUSSD})&gt;3}" call="CheckBlock">
+      <set conditionEx="0@{store(sTryCountUSSD,1)}" />
+      <set item="Content" value="${sContent}" />
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*promised_payment_rur\*0') }">
+      <set item="Content" value="Обещанный платеж не установлен. Подробнее об условиях 059022" />
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*promised_payment_rur\*[0-9]+$') and ${dbresult}=0 and count(document('op_access.xml')//tps/tp[@ivr='${tariffplan}'] )=0  }">
+      <set item="Content" value="Услуга не предоставляется на вашем тарифном плане" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*promised_payment_rur\*[0-9]+$') and ${dbresult}=0}" call="GuarantedPaymentRUR">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*promised_payment_usd\*[0-9]+$') and ${dbresult}=0 }">
+      <set item="Content" value="Обещанные платежи принимаются только в рублях." />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*payment_retrieve$') and ${dbresult}=0}" call="PaymentRetrieve">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*exchange_rate$') and ${dbresult}=0}" call="ExchangeRate">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*gprs\*configure$') and ${dbresult}=0}" call="GPRS_configure">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*packet_min_1_mp\*activate$') and ${dbresult}=0}" call="Maxi100_200_activate">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*((ITG36586S01)|(ITG36586S02)|(ITG36586S03)|(ITG36586S04)|(ITG36586S05)|(ITG36586S06)|(ITG36586S07)|(ITG36586S08)|(ITG36586S09)|(ITG36586S10)|(ITG36586S11)|(ITG36586S12)|(ITG36586S13)|(ITG36586S14)|(ITG36586S15)|(gprs)|(tone)|(imode)|(issa)|(missed_calls)|(CLIP)|(CLIR)|(office)|(assistant_rus)|(assistant_eng)|(roaming)|(international_calls)|(conference)|(call_barring)|(call_waiting)|(call_divert)|(single_bill)|(mms)|(wapplus)|(inetplus)|(red_zone)|(privileged_calls)|(day_off)|(mts_numbers)|(night_talk)|(im_online)|(im_offline)|(home_country)|(stupino_inet)|(stupino)|(folk_email_wap)|(folk_email_sms)|(grow_bonus)|(redmusic)|(banner_off)|(innetworkunlim)|(firstminute)|(erorest)|(3bonus)|(3bonuscorp)|(mtsroaming)|(guest_home)|(unlimit_night_inet)|(intercity_mts)|(inetplus_for_free)|(my_choice)|(freetime)|(freetime_center)|(discount_popular_countries_7)|(discount_popular_countries_14)|(discount_foreign_countries_7)|(discount_foreign_countries_14)|(individ_credit)|(24gprsfree)|(always_advantage)|(clir_on_demand)|(internet40)|(internet100)|(internet200)|(internet500)|(internet1000)|(x_kop_to_all)|(anywhere_like_home)|(friends_balance)|(bonus_150_rub)|(tourist)|(night_unlim_sms)|(easy_roaming)|(progress_inet)|(sms_50)|(sms_150)|(sms_300)|(sms_30)|(sms_100)|(sms_200)|(red_mts_unlim)|(red_sms_unlim)|(mms_3_free)|(sms_optim)|(far_relatives)|(packet_min_2_mp)|(packet_300_sms_mp)|(packet_500_sms_mp)|(base_balance)|(prohib_cc)|(connect3000))\*(activate)$')}" call="Service_activate">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*((ITG36586S01)|(ITG36586S02)|(ITG36586S03)|(ITG36586S04)|(ITG36586S05)|(ITG36586S06)|(ITG36586S07)|(ITG36586S08)|(ITG36586S09)|(ITG36586S10)|(ITG36586S11)|(ITG36586S12)|(ITG36586S13)|(ITG36586S14)|(ITG36586S15)|(gprs)|(tone)|(imode)|(issa)|(missed_calls)|(CLIP)|(CLIR)|(office)|(assistant_rus)|(assistant_eng)|(conference)|(call_barring)|(call_waiting)|(call_divert)|(single_bill)|(mms)|(wapplus)|(inetplus)|(red_zone)|(privileged_calls)|(day_off)|(mts_numbers)|(night_talk)|(im_online)|(im_offline)|(grow_bonus)|(redmusic)|(banner_off)|(innetworkunlim)|(firstminute)|(guest_home)|(unlimit_night_inet)|(intercity_mts)|(inetplus_for_free)|(my_choice)|(freetime)|(freetime_center)|(credit)|(individ_credit)|(24gprsfree)|(always_advantage)|(clir_on_demand)|(internet40)|(internet100)|(internet200)|(internet500)|(roaming)|(international_calls)|(internet1000)|(x_kop_to_all)|(anywhere_like_home)|(friends_balance)|(night_unlim_sms)|(easy_roaming)|(progress_inet)|(red_mts_unlim)|(red_sms_unlim)|(sms_optim)|(base_balance)|(prohib_cc))\*(deactivate)$') and ${dbresult}=0}" call="Service_deactivate">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*issa\*password\*') and ${dbresult}=0}" call="ISSA_Password">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*detailed_balance$') and ${dbresult}=0}" call="Detailed_balance">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*detailed_bill$') and ${dbresult}=0}" call="Detailed_bill">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*bill$') and ${dbresult}=0}" call="Bill">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*prepayment_bill') and ${dbresult}=0}" call="Prepayment_Bill">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*fax_update\*[0-9]{10}$') and ${dbresult}=0}" call="Fax_update">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*fav_number\*\S+\*[0-9]{1,11}$') and ${dbresult}=0}" call="FavNumber_Upd">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*fav_number_deactivate\*\S+\*[0-9]{1,11}$') and ${dbresult}=0}" call="FavNumber_Del">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*fav_number_deactivate\*\S+$') and ${dbresult}=0}" call="FavNumber_Del_empty">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*fav_number_browse\*\S+$') and ${dbresult}=0}" call="FavNumbers_browse">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}*${language_id}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*change_tp\*((optima)|(vse_svoi)|(universalnyj)|(bud_praktichnee)|(lyubimyj)|(profi_30)|(profi_VIP_800)|(red)|(maxi)|(base)|(redtext)|(free)|(oblast)|(maxione)|(onliner)|(connect)|(stimul)|(podruzki)|(raschetliv)|(rednew)|(superzero)|(first_jeans)|(maxiactive)|(connect2)|(guest)|(many_calls)|(oblast)|(careful)|(red_relaunch)|(long_conversations)|(red_energy)|(maxiplus))$') and ${dbresult}=0}" call="Change_tarifplan">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}*#{//Item/@tariffplan}*#{//Item/Attribute[@name='regioncode']/@value}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*(maxiplus)$') and ${dbresult}=0}" call="Change_tarifplan2">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}*#{//Item/@tariffplan}*#{//Item/Attribute[@name='regioncode']/@value}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*check_tp$') and ${dbresult}=0}" call="Check_tarifplan">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*inter_access\*activate') and ${dbresult}=0 and document('md_inter_access_ban.xml')//tps/tp/@ivr='${tariffplan}'}">
+      <set item="Content" value="На вашем тарифе услуга не предоставляется, обратитесь в контактный центр" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*inter_access\*activate') and ${dbresult}=0}" call="Inter_Access_Activate">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*inter_access\*deactivate') and ${dbresult}=0 and document('md_inter_access_ban.xml')//tps/tp/@ivr='${tariffplan}'}">
+      <set item="Content" value="На вашем тарифе услуга не предоставляется, обратитесь в контактный центр" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*inter_access\*deactivate') and ${dbresult}=0}" call="Inter_Access_Deactivate">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*one_for_four\*activate') and ${dbresult}=0}" call="OneFor_four1">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*activateim') and ${dbresult}=0}" call="Activateim">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*deactivateim') and ${dbresult}=0}" call="Deactivateim">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*bank_card_payment\*[0-9]+$') and ${dbresult}=0}" call="BankCardPayment">
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Content" value="${sContent}" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*group_mts') and ${dbresult}=0}" call="GroupMTS">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*connect100\*') and ${dbresult}=0}" call="Connect100">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*connect250') and ${dbresult}=0}" call="Connect250">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*connect500') and ${dbresult}=0}" call="Connect400">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*connect1000\*') and ${dbresult}=0}" call="Connect900">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*plus50minutes') and ${dbresult}=0}" call="MaxiPlus50Minutes">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*plus100minutes') and ${dbresult}=0}" call="MaxiPlus100minutes">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*plus200minutes') and ${dbresult}=0}" call="MaxiPlus200minutes">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*mobbusiness') and ${dbresult}=0}" call="MobBusiness">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*discount_from_payment') and ${dbresult}=0}" call="Discount_from_payment">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <!--        <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*check_payment$') and ${dbresult}=0}" call="USSD_PortalOpenBills">
             <set item="Sender" value="00111" />
             <set item="Recipient" value="11111" />
             <set item="Content"   value="${sContent}" />
             <set conditionEx="0@{freeSession}"  />
 		</deliveryTemplate> -->
-       <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*addim') and ${dbresult}=0}" call="Addim_MTSChat">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-       <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*deleteim') and ${dbresult}=0}" call="Deleteim_MTSChat">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>	
-	<deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*olimp08\*activate') and ${dbresult}=0}" call="Olimp08">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>		
-	<deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*folk_email\*deactivate') and ${dbresult}=0}" call="FolkMailDeactivateSMS">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-		</deliveryTemplate> 
-		<deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*recalculation_prohibition\*activate') and ${dbresult}=0}" call="RecalculationProhibitionActivate">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-		</deliveryTemplate>
- 
-		<deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*recalculation_prohibition\*deactivate') and ${dbresult}=0}" call="RecalculationProhibitionDeactivate">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-
-
-
-
-
-		
-
-
-<!-- закрытые ТП -->
-        <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*change_tp\*((first)|(profi_150)|(profi_300)|(we)|(super_perv))$') and ${dbresult}=0}" >
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-            <set item="Content"   value="Тариф закрыт. Выберите, пожалуйста, другой тарифный план" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-
-	
-        <deliveryTemplate conditionEx="#{'${sContent}'!='' and ${dbresult}=0}">
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Content"   value="Ошибка в формате запроса" />
-            <set item="Encoding" value="unicodefffe"/>  
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{'${sContent}'!='' and ${dbresult}=320347}">
-            <set item="Content"   value="Установлена блокировка. Операция недоступна" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-       <deliveryTemplate conditionEx="#{'${sContent}'!='' and ${dbresult}=320343}">
-            <set item="Content"   value="Доступ к Мобильному помощнику запрещен" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{'${sContent}'!='' and ${dbresult}!=0}">
-            <set item="Content"   value="Ошибка авторизации. Операция недоступна" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate>
-	<set item="Content"   value="Операция недоступна" />
-            <set item="Sender" value="11111"/>
-	<set item="Recipient" value="00111" />
-	<set item="Encoding" value="unicodefffe"/>
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-    </template>
-
-    <template procedureName="Session_onClean" sessionStorage="Memory">
-        <condition>
-            <test item="0" matches="1" />
-        </condition>
-        <deliveryTemplate>
-            <set item="Content"  value="Сервис временно недоступен. Пожалуйста, повторите попытку позже" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-    </template>
-
-
-
-    <template procedureName="Maxi100_200_activate">
-        <condition>
-            <test item="0" matches="1" />
-        </condition>
-        <receiveTemplate>
-            <Message type="retrieveinfo" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${token0}" subject="currencyrate" />
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-
-    </template>
-
-	<template procedureName="GuarantedPaymentRUR" sessionStorage="Memory" sessionLifetime="620">
-		<condition>
-			<test item="0" matches="1" />
-		</condition>
-		<receiveTemplate>
-			<Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-				<Item customer="${token0}">
-					<Service id="guaranteedpayment" action="6" />
-					@{store(sContent,${Content})}
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate direction="input" terminating="false">
-			<set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-			<set item="Sender" value="11111" />
-			<set item="Recipient" value="00111" />
-			<set item="Encoding" value="unicodefffe" />
-		</deliveryTemplate>
-	        <deliveryTemplate conditionEx="#{'${sContent}'!='' and (number(${sAmount})=0)}" terminating="true">
-		   <set item="Content" value="Обещанный платеж не установлен. Подробнее об условиях 059022" />
-                   <set item="Sender" value="11111" />
-                   <set item="Recipient" value="00111" />
-                   <set item="Encoding" value="unicodefffe" />
-		   <set conditionEx="0@{freeSession}"  /> 
-                </deliveryTemplate>
-		<deliveryTemplate conditionEx="#{'${sContent}'!='' and ${dbresult}=0}" call="GuarantedPaymentRUR2">
-			<set item="Content" value="${sContent}" />
-			<set item="Sender" value="00111" />
-			<set item="Recipient" value="11111" />
-			<set item="Encoding" value="unicodefffe" />
-			<set conditionEx="0@{freeSession}"  />
-		</deliveryTemplate>
-		<deliveryTemplate conditionEx="1@{freeSession}" connector="_SMSCON" />
-	</template>
-	
-	<template procedureName="GuarantedPaymentRUR2">
-		<condition>
-			<test item="0" matches="1" />
-		</condition>
-		<receiveTemplate>
-			<Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-				<Item customer="${token0}">
-					<Service id="guaranteedpayment" action="7">
-						<Attribute name="amount" value="#{${token2} * 100}" />
-						<Attribute name="currency" value="810" />
-					</Service>
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate conditionEx="1@{freeSession}" connector="_SMSCON" />
-	</template>
-     
-    
-    
-    <template procedureName="PaymentRetrieve">
-        <condition>
-            <test item="0" matches="1" />
-		</condition>
-        <receiveTemplate>
-            <Message type="retrievecustomerdata" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${token0}" subject="payments">
-                    <Attribute name="index" value="0" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON" />
-    </template>
-
-    <template procedureName="ExchangeRate">
-        <condition>
-            <test item="0" matches="1" />
-        </condition>
-        <receiveTemplate>
-            <Message type="retrieveinfo" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${token0}" subject="currencyrate" />
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON" />
-    </template>
-    
-    <template procedureName="GPRS_configure"> <!--?????????????????????? must automaticaly send via SPA after adding GPRS -->
-        <condition>
-            <test item="0" matches="1" />
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${token0}">
-                    <Service id="CB404447" action="2" class="0" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" condition="//Item/Service/@id='404446'">
-            <set item="Content"    value="Конфигурирование GPRS выполняется автоматически при добавлении услуги" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON" />
-    </template>
-    
-
-	<template procedureName="Service_activate" sessionStorage="Database" sessionLifetime="60" >
-        <condition>
-            <test item="0" matches="1" />            
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(Activ7#{substring('${token0}',string-length('${token0}')-9)})}">
-                <Item customer="${token0}">
-                    <Service id="@{switch(${token1}|???????,ITG36586S01|ITG36586S01,ITG36586S02|ITG36586S02,ITG36586S03|ITG36586S03,ITG36586S04|ITG36586S04,ITG36586S05|ITG36586S05,ITG36586S06|ITG36586S06,ITG36586S07|ITG36586S07,ITG36586S08|ITG36586S08,ITG36586S09|ITG36586S09,ITG36586S10|ITG36586S10,ITG36586S11|ITG36586S11,ITG36586S12|ITG36586S12,ITG36586S13|ITG36586S13,ITG36586S14|ITG36586S14,ITG36586S15|ITG36586S15,gprs|CB404447,tone|4043,imode|4045,issa|10555,missed_calls|4060,CLIP|264,CLIR|534,office|573,assistant_rus|406139,assistant_eng|406140,conference|FRKONF,call_barring|265,call_waiting|539,call_divert|532,single_bill|121,mms|404453,wapplus|FRWAP,inetplus|404449,red_zone|4095,privileged_calls|FRLGVR,day_off|4062,mts_numbers|4064,night_talk|4066,im_online|FRNETGRT,im_offline|FRNETGRTRESTR,home_country|FRRODNSTR,stupino_inet|FRSTUPINET,stupino|FRHOMEMOB,folk_email_wap|FRMAILWAP,guets_home|FRVKD,folk_email_sms|FRMAILSMS,grow_bonus|FRRBON,redmusic|FRREDMUSIC,banner_off|CB401555,innetworkunlim|FRUNLIMMTS2,firstminute|FRPERVMIN,erorest|CB414525,3bonus|FRTRBONUS,3bonuscorp|FRTRBONUSKORP,mtsroaming|FRRMTSSNG,guest_home|FRVKD,unlimit_night_inet|FRUNINT,intercity_mts|CB414547,inetplus_for_free|CB411859_free,my_choice|FRMYCHOICE,zero_all_mobile|CB414554,freetime|FRFREETIMEMSK,freetime_center|FRFREETIME,discount_popular_countries_7|FRPEVRAZ7,discount_popular_countries_14|FRPEVRAZ14,discount_foreign_countries_7|FRBEVRAZ7,discount_foreign_countries_14|FRBEVRAZ14,individ_credit|FRINDKREDIT,24gprsfree|FRUNINTDAY,always_advantage|FRVVP,clir_on_demand|CB405529,internet40|FR40MB,internet100|FRPAKET100,internet200|FR200MB,roaming|CB123,international_calls|CB108,internet500|FR500MB,internet1000|FR1000MB,x_kop_to_all|FR19KOPVSE,anywhere_like_home|FRVEZDKD,friends_balance|FRPAR,bonus_150_rub|FRBONUS150,tourist|FRTUR,night_unlim_sms|FRNDR,easy_roaming|FRMERGIN_TEST,progress_inet|FRSTEPGPRS,sms_50|FR_SMSPACK50,sms_150|FR_SMSPACK150,sms_300|FR_SMSPACK300,sms_30|FR_SMSPACK30,sms_100|FR_SMSPACK100,sms_200|FR_SMSPACK200,red_mts_unlim|FRUNLIMCALLS,red_sms_unlim|FRUNLSMSHTR,mms_3_free|FRMMSPAKET3,sms_optim|FRSMSBOOM,far_relatives|FRDISTNR,packet_min_1_mp|FR200MIN,packet_min_2_mp|FR300MIN,packet_300_sms_mp|FR300SMS,packet_500_sms_mp|FR500SMS,base_balance|FRBaseBal,prohib_cc|DISABLE_HELPME,connect3000|KONN2900)}"
-                    action="2" class="0" />
-				</Item>
-				@{store(sContent,${Content})}
-				@{store(sExceptServ,${token1})}
-			</Message>
-        </receiveTemplate>
-		<deliveryTemplate direction="input" conditionEx="#{('${sAlreadyActivate}'!='' and '${sInviterCustomer}'='${Customer}') and (('${sActServ}'='FRMAILWAP' and '${sExceptServ}'='folk_email_sms') or ('${sActServ}'='FRMAILSMS' and '${sExceptServ}'='folk_email_wap'))}">
-			<set item="Content"   value="Данный запрос сейчас не может быть выполнен. Повторите пожалуйста позже." />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-		</deliveryTemplate> 
-        <deliveryTemplate direction="input" terminating="false">            
-			<set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-			<set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-			<set conditionEx="0@{store(sActServ,${Service_id})}" />
-			<set conditionEx="0@{store(sAlreadyActivate,1)}" />
-            <set conditionEx="0@{store(sInviterCustomer,${Customer})}" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON" />
-    </template> 	
-    
-    <template procedureName="Service_deactivate">
-        <condition>
-            <test item="0" matches="1" />            
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${token0}">
-                    <Service id="@{switch(${token1}|??????,ITG36586S01|ITG36586S01,ITG36586S02|ITG36586S02,ITG36586S03|ITG36586S03,ITG36586S04|ITG36586S04,ITG36586S05|ITG36586S05,ITG36586S06|ITG36586S06,ITG36586S07|ITG36586S07,ITG36586S08|ITG36586S08,ITG36586S09|ITG36586S09,ITG36586S10|ITG36586S10,ITG36586S11|ITG36586S11,ITG36586S12|ITG36586S12,ITG36586S13|ITG36586S13,ITG36586S14|ITG36586S14,ITG36586S15|ITG36586S15,gprs|CB404447,tone|4043,imode|4045,issa|10555,missed_calls|4060,CLIP|264,CLIR|534,office|573,assistant_rus|406139,assistant_eng|406140,conference|FRKONF,call_barring|265,call_waiting|539,call_divert|532,single_bill|121,mms|404453,wapplus|FRWAP,inetplus|404449,red_zone|4095,privileged_calls|FRLGVR,guets_home|FRVKD,day_off|4062,mts_numbers|4064,night_talk|4066,im_online|FRNETGRT,im_offline|FRNETGRTRESTR,grow_bonus|FRRBON,redmusic|FRREDMUSIC,banner_off|CB401555,innetworkunlim|FRUNLIMMTS2,firstminute|FRPERVMIN,guest_home|FRVKD,unlimit_night_inet|FRUNINT,intercity_mts|CB414547,inetplus_for_free|CB411859_free,my_choice|FRMYCHOICE,zero_all_mobile|CB414554,freetime|FRFREETIMEMSK,freetime_center|FRFREETIME,credit|FRKREDIT,individ_credit|FRINDKREDIT,24gprsfree|FRUNINTDAY,always_advantage|FRVVP,clir_on_demand|CB405529,internet40|FR40MB,internet100|FRPAKET100,internet200|FR200MB,internet500|FR500MB,internet1000|FR1000MB,x_kop_to_all|FR19KOPVSE,anywhere_like_home|FRVEZDKD,friends_balance|FRPAR,night_unlim_sms|FRNDR,easy_roaming|FRMERGIN_TEST,roaming|CB123,international_calls|CB108,progress_inet|FRSTEPGPRS,red_mts_unlim|FRUNLSMSHTR,red_sms_unlim|FRUNLIMCALLS,sms_optim|FRSMSBOOM,base_balance|FRBaseBal,prohib_cc|DISABLE_HELPME)}"
-					
-                    action="3" class="0" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON" />
-    </template>    
-
-    <template procedureName="ISSA_Password" sessionStorage="Memory" sessionLifetime="30">
-        <condition>
-            <test item="0" matches="1" />
-        </condition>
-        <receiveTemplate>
-            <Message type="verificationrequest" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-                <Item customer="${token0}">
-                    <Attribute name="checkivrservice" value="0" />
-                    <Attribute name="checkblocks" value="0" />
-                </Item>
-                @{store(sSender,${Sender})}
-                @{store(sRecipient,${Recipient})}
-                @{store(sContent,${Content})}
-                @{store(sPassword,${token3})}
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" conditionEx="#{not(matches('${sPassword}','^(?=[a-zA-Z0-9]{6,10})(?=[a-zA-Z0-9]*\d)(?=[a-zA-Z0-9]*[A-Z])(?=[a-zA-Z0-9]*[a-z])[a-zA-Z0-9]{3,10}$'))}">
-            <set item="Content"   value="Пароль должен содержать не менее одной цифры, одной строчной и одной заглавной латинской буквы и иметь длину 6-10 символов" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{'${sSender}'!='' and //Item/@dbresult=0}" call="ISSA_Password2" terminating="true">
-            <set item="Content" value="${sContent}*${password}" />
-            <set item="Sender" value="${sSender}" />
-            <set item="Recipient" value="${sRecipient}" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON" />
-    </template>
-    <template procedureName="ISSA_Password2">
-        <condition>
-            <test item="0" matches="1" />
-        </condition>
-        <receiveTemplate>
-            <Message type="setprofile" initiator="ussd" id="@{newGuid}" session_id="${SessionId}">
-                <Item customer="${token0}">
-                    <Attribute name="oldpassword" value="${token4}" />
-                    <Attribute name="newpassword" value="${token3}" />
-                    <Attribute name="confirmpassword" value="${token3}" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate connector="_SMSCON" />
-    </template>
-
-    <template procedureName="Detailed_balance">
-      <condition>
-            <test item="0" matches="1" />
-      </condition>
-      <receiveTemplate>
-        <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-         <Item customer="${token0}">
-            <Service action="4" id="otdetailedbalance">
-              <Attribute name="start" value="#{substring('@{now}',1,10)}" /> 
-              <Attribute name="end" value="#{substring('@{now}',1,10)}" />
-              <Attribute name="faxnumber" value="" />
-            </Service>
-         </Item>
-        </Message>
-      </receiveTemplate>
-      <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-      </deliveryTemplate>
-      <deliveryTemplate connector="_SMSCON" />
-    </template>
-
-  
-<!--            
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*addim') and ${dbresult}=0}" call="Addim_MTSChat">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*deleteim') and ${dbresult}=0}" call="Deleteim_MTSChat">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*olimp08\*activate') and ${dbresult}=0}" call="Olimp08">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*folk_email\*deactivate') and ${dbresult}=0}" call="FolkMailDeactivateSMS">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*recalculation_prohibition\*activate') and ${dbresult}=0}" call="RecalculationProhibitionActivate">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*recalculation_prohibition\*deactivate') and ${dbresult}=0}" call="RecalculationProhibitionDeactivate">
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <!-- закрытые ТП -->
+    <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*change_tp\*((first)|(profi_150)|(profi_300)|(we)|(super_perv))$') and ${dbresult}=0}">
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+      <set item="Content" value="Тариф закрыт. Выберите, пожалуйста, другой тарифный план" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${sContent}'!='' and ${dbresult}=0}">
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Content" value="Ошибка в формате запроса" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${sContent}'!='' and ${dbresult}=320347}">
+      <set item="Content" value="Установлена блокировка. Операция недоступна" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${sContent}'!='' and ${dbresult}=320343}">
+      <set item="Content" value="Доступ к Мобильному помощнику запрещен" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${sContent}'!='' and ${dbresult}!=0}">
+      <set item="Content" value="Ошибка авторизации. Операция недоступна" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Операция недоступна" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="Session_onClean" sessionStorage="Memory">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <deliveryTemplate>
+      <set item="Content" value="Сервис временно недоступен. Пожалуйста, повторите попытку позже" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="Maxi100_200_activate">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="retrieveinfo" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}" subject="currencyrate" />
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="GuarantedPaymentRUR" sessionStorage="Memory" sessionLifetime="620">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item customer="${token0}">
+          <Service id="guaranteedpayment" action="6" />
+          @{store(sContent,${Content})}
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${sContent}'!='' and (number(${sAmount})=0)}" terminating="true">
+      <set item="Content" value="Обещанный платеж не установлен. Подробнее об условиях 059022" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${sContent}'!='' and ${dbresult}=0}" call="GuarantedPaymentRUR2">
+      <set item="Content" value="${sContent}" />
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="1@{freeSession}" connector="_SMSCON" />
+  </template>
+  <template procedureName="GuarantedPaymentRUR2">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}">
+          <Service id="guaranteedpayment" action="7">
+            <Attribute name="amount" value="#{${token2} * 100}" />
+            <Attribute name="currency" value="810" />
+          </Service>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="1@{freeSession}" connector="_SMSCON" />
+  </template>
+  <template procedureName="PaymentRetrieve">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}" subject="payments">
+          <Attribute name="index" value="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="ExchangeRate">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="retrieveinfo" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}" subject="currencyrate" />
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="GPRS_configure">
+    <!--?????????????????????? must automaticaly send via SPA after adding GPRS -->
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}">
+          <Service id="CB404447" action="2" class="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" condition="//Item/Service/@id='404446'">
+      <set item="Content" value="Конфигурирование GPRS выполняется автоматически при добавлении услуги" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="Service_activate" sessionStorage="Database" sessionLifetime="60">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(Activ7#{substring('${token0}',string-length('${token0}')-9)})}">
+        <Item customer="${token0}">
+          <Service id="@{switch(${token1}|???????,ITG36586S01|ITG36586S01,ITG36586S02|ITG36586S02,ITG36586S03|ITG36586S03,ITG36586S04|ITG36586S04,ITG36586S05|ITG36586S05,ITG36586S06|ITG36586S06,ITG36586S07|ITG36586S07,ITG36586S08|ITG36586S08,ITG36586S09|ITG36586S09,ITG36586S10|ITG36586S10,ITG36586S11|ITG36586S11,ITG36586S12|ITG36586S12,ITG36586S13|ITG36586S13,ITG36586S14|ITG36586S14,ITG36586S15|ITG36586S15,gprs|CB404447,tone|4043,imode|4045,issa|10555,missed_calls|4060,CLIP|264,CLIR|534,office|573,assistant_rus|406139,assistant_eng|406140,conference|FRKONF,call_barring|265,call_waiting|539,call_divert|532,single_bill|121,mms|404453,wapplus|FRWAP,inetplus|404449,red_zone|4095,privileged_calls|FRLGVR,day_off|4062,mts_numbers|4064,night_talk|4066,im_online|FRNETGRT,im_offline|FRNETGRTRESTR,home_country|FRRODNSTR,stupino_inet|FRSTUPINET,stupino|FRHOMEMOB,folk_email_wap|FRMAILWAP,guets_home|FRVKD,folk_email_sms|FRMAILSMS,grow_bonus|FRRBON,redmusic|FRREDMUSIC,banner_off|CB401555,innetworkunlim|FRUNLIMMTS2,firstminute|FRPERVMIN,erorest|CB414525,3bonus|FRTRBONUS,3bonuscorp|FRTRBONUSKORP,mtsroaming|FRRMTSSNG,guest_home|FRVKD,unlimit_night_inet|FRUNINT,intercity_mts|CB414547,inetplus_for_free|CB411859_free,my_choice|FRMYCHOICE,zero_all_mobile|CB414554,freetime|FRFREETIMEMSK,freetime_center|FRFREETIME,discount_popular_countries_7|FRPEVRAZ7,discount_popular_countries_14|FRPEVRAZ14,discount_foreign_countries_7|FRBEVRAZ7,discount_foreign_countries_14|FRBEVRAZ14,individ_credit|FRINDKREDIT,24gprsfree|FRUNINTDAY,always_advantage|FRVVP,clir_on_demand|CB405529,internet40|FR40MB,internet100|FRPAKET100,internet200|FR200MB,roaming|CB123,international_calls|CB108,internet500|FR500MB,internet1000|FR1000MB,x_kop_to_all|FR19KOPVSE,anywhere_like_home|FRVEZDKD,friends_balance|FRPAR,bonus_150_rub|FRBONUS150,tourist|FRTUR,night_unlim_sms|FRNDR,easy_roaming|FRMERGIN_TEST,progress_inet|FRSTEPGPRS,sms_50|FR_SMSPACK50,sms_150|FR_SMSPACK150,sms_300|FR_SMSPACK300,sms_30|FR_SMSPACK30,sms_100|FR_SMSPACK100,sms_200|FR_SMSPACK200,red_mts_unlim|FRUNLIMCALLS,red_sms_unlim|FRUNLSMSHTR,mms_3_free|FRMMSPAKET3,sms_optim|FRSMSBOOM,far_relatives|FRDISTNR,packet_min_1_mp|FR200MIN,packet_min_2_mp|FR300MIN,packet_300_sms_mp|FR300SMS,packet_500_sms_mp|FR500SMS,base_balance|FRBaseBal,prohib_cc|DISABLE_HELPME,connect3000|KONN2900)}" action="2" class="0" />
+        </Item>
+        @{store(sContent,${Content})}
+        @{store(sExceptServ,${token1})}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" conditionEx="#{('${sAlreadyActivate}'!='' and '${sInviterCustomer}'='${Customer}') and (('${sActServ}'='FRMAILWAP' and '${sExceptServ}'='folk_email_sms') or ('${sActServ}'='FRMAILSMS' and '${sExceptServ}'='folk_email_wap'))}">
+      <set item="Content" value="Данный запрос сейчас не может быть выполнен. Повторите пожалуйста позже." />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set conditionEx="0@{store(sActServ,${Service_id})}" />
+      <set conditionEx="0@{store(sAlreadyActivate,1)}" />
+      <set conditionEx="0@{store(sInviterCustomer,${Customer})}" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="Service_deactivate">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}">
+          <Service id="@{switch(${token1}|??????,ITG36586S01|ITG36586S01,ITG36586S02|ITG36586S02,ITG36586S03|ITG36586S03,ITG36586S04|ITG36586S04,ITG36586S05|ITG36586S05,ITG36586S06|ITG36586S06,ITG36586S07|ITG36586S07,ITG36586S08|ITG36586S08,ITG36586S09|ITG36586S09,ITG36586S10|ITG36586S10,ITG36586S11|ITG36586S11,ITG36586S12|ITG36586S12,ITG36586S13|ITG36586S13,ITG36586S14|ITG36586S14,ITG36586S15|ITG36586S15,gprs|CB404447,tone|4043,imode|4045,issa|10555,missed_calls|4060,CLIP|264,CLIR|534,office|573,assistant_rus|406139,assistant_eng|406140,conference|FRKONF,call_barring|265,call_waiting|539,call_divert|532,single_bill|121,mms|404453,wapplus|FRWAP,inetplus|404449,red_zone|4095,privileged_calls|FRLGVR,guets_home|FRVKD,day_off|4062,mts_numbers|4064,night_talk|4066,im_online|FRNETGRT,im_offline|FRNETGRTRESTR,grow_bonus|FRRBON,redmusic|FRREDMUSIC,banner_off|CB401555,innetworkunlim|FRUNLIMMTS2,firstminute|FRPERVMIN,guest_home|FRVKD,unlimit_night_inet|FRUNINT,intercity_mts|CB414547,inetplus_for_free|CB411859_free,my_choice|FRMYCHOICE,zero_all_mobile|CB414554,freetime|FRFREETIMEMSK,freetime_center|FRFREETIME,credit|FRKREDIT,individ_credit|FRINDKREDIT,24gprsfree|FRUNINTDAY,always_advantage|FRVVP,clir_on_demand|CB405529,internet40|FR40MB,internet100|FRPAKET100,internet200|FR200MB,internet500|FR500MB,internet1000|FR1000MB,x_kop_to_all|FR19KOPVSE,anywhere_like_home|FRVEZDKD,friends_balance|FRPAR,night_unlim_sms|FRNDR,easy_roaming|FRMERGIN_TEST,roaming|CB123,international_calls|CB108,progress_inet|FRSTEPGPRS,red_mts_unlim|FRUNLSMSHTR,red_sms_unlim|FRUNLIMCALLS,sms_optim|FRSMSBOOM,base_balance|FRBaseBal,prohib_cc|DISABLE_HELPME)}" action="3" class="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="ISSA_Password" sessionStorage="Memory" sessionLifetime="30">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="verificationrequest" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item customer="${token0}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="0" />
+        </Item>
+        @{store(sSender,${Sender})}
+        @{store(sRecipient,${Recipient})}
+        @{store(sContent,${Content})}
+        @{store(sPassword,${token3})}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" conditionEx="#{not(matches('${sPassword}','^(?=[a-zA-Z0-9]{6,10})(?=[a-zA-Z0-9]*\d)(?=[a-zA-Z0-9]*[A-Z])(?=[a-zA-Z0-9]*[a-z])[a-zA-Z0-9]{3,10}$'))}">
+      <set item="Content" value="Пароль должен содержать не менее одной цифры, одной строчной и одной заглавной латинской буквы и иметь длину 6-10 символов" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${sSender}'!='' and //Item/@dbresult=0}" call="ISSA_Password2" terminating="true">
+      <set item="Content" value="${sContent}*${password}" />
+      <set item="Sender" value="${sSender}" />
+      <set item="Recipient" value="${sRecipient}" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="ISSA_Password2">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="setprofile" initiator="ussd" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${token0}">
+          <Attribute name="oldpassword" value="${token4}" />
+          <Attribute name="newpassword" value="${token3}" />
+          <Attribute name="confirmpassword" value="${token3}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="Detailed_balance">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}">
+          <Service action="4" id="otdetailedbalance">
+            <Attribute name="start" value="#{substring('@{now}',1,10)}" />
+            <Attribute name="end" value="#{substring('@{now}',1,10)}" />
+            <Attribute name="faxnumber" value="" />
+          </Service>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <!--            
             <Service id="otdetailedbill" action="4">
--->            
-    <template procedureName="Detailed_bill">
-      <condition>
-            <test item="0" matches="1" />
-      </condition>
-      <receiveTemplate>
-        <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-          <Item customer="${token0}">
+-->
+  <template procedureName="Detailed_bill">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}">
+          <Service id="otbillviafax" action="4">
+            <Attribute name="faxnumber" value="" />
+            <Attribute name="start" value="#{substring('@{now}',1,10)}" />
+            <Attribute name="end" value="#{substring('@{now}',1,10)}" />
+          </Service>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <!--          
             <Service id="otbillviafax" action="4">
-              <Attribute name="faxnumber" value="" /> 
-              <Attribute name="start" value="#{substring('@{now}',1,10)}" />
-              <Attribute name="end" value="#{substring('@{now}',1,10)}" />
-            </Service>
-          </Item>
-        </Message>
-      </receiveTemplate>
-      <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-      </deliveryTemplate>
-      <deliveryTemplate connector="_SMSCON" />
-    </template>
-
-  
-<!--          
-            <Service id="otbillviafax" action="4">
--->            
-    <template procedureName="Bill">
-      <condition>
-            <test item="0" matches="1" />
-      </condition>
-      <receiveTemplate>
-        <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-          <Item customer="${token0}">
-            <Service id="otdetailedbill" action="4">
-              <Attribute name="faxnumber" value="" /> 
-              <Attribute name="start" value="#{substring('@{now}',1,10)}" />
-              <Attribute name="end" value="#{substring('@{now}',1,10)}" />
-            </Service>
-          </Item>
-        </Message>
-      </receiveTemplate>
-      <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-      </deliveryTemplate>
-      <deliveryTemplate connector="_SMSCON" />
-    </template>
-  
-    <template procedureName="Prepayment_Bill">
-      <condition>
-            <test item="0" matches="1" />
-      </condition>
-      <receiveTemplate>
-        <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-          <Item customer="${token0}">
-            <Service id="otprepaymentbill" action="4">
-              <Attribute name="faxnumber" value="" /> 
-              <Attribute name="amountintpartdotpart" value="100" />   
-            </Service>
-          </Item>
-        </Message>
-      </receiveTemplate>
-      <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-      </deliveryTemplate>
-      <deliveryTemplate connector="_SMSCON" />
-    </template>
-  
-    <template procedureName="Fax_update">
-      <condition>
-            <test item="0" matches="1" />
-      </condition>
-      <receiveTemplate>
-        <Message type="setprofile" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-          <Item customer="${token0}">
-            <Attribute name="faxnumber" value="7${token2}" />
-         </Item>
-        </Message>
-      </receiveTemplate>
-      <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-      </deliveryTemplate>
-      <deliveryTemplate connector="_SMSCON" />
-    </template>
-  
-	<template procedureName="FavNumber_Upd">
-		<condition>
-			<test item="0" matches="1" />
-		</condition>
-		<receiveTemplate>
-			<Message type="setprofile" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-				<Item customer="${token0}" action="10">
-					<Attribute name="favouritenumber" value="#{if(string-length(${token3})=10,7${token3},${token3})}" />
-					<Attribute name="favouritenumbertypeid" value="#{document('XML\fndtypes.xml')/fndtypes/fndtype[@ussdcode='${token2}']/@id}" />
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate direction="input" terminating="false">
-			<set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-			<set item="Sender" value="11111" />
-			<set item="Recipient" value="00111" />
-			<set item="Encoding" value="unicodefffe" />
-		</deliveryTemplate>
-		<deliveryTemplate connector="_SMSCON" />
-	</template>
-	<template procedureName="FavNumber_Del">
-		<condition>
-			<test item="0" matches="1" />
-		</condition>
-		<receiveTemplate>
-			<Message type="setprofile" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-				<Item customer="${token0}" action="11">
-					<Attribute name="favouritenumber" value="#{if(string-length(${token3})=10,7${token3},${token3})}" />
-					<Attribute name="favouritenumbertypeid" value="#{document('XML\fndtypes.xml')/fndtypes/fndtype[@ussdcode='${token2}']/@id}" />
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate direction="input" terminating="false">
-			<set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-			<set item="Sender" value="11111" />
-			<set item="Recipient" value="00111" />
-			<set item="Encoding" value="unicodefffe" />
-		</deliveryTemplate>
-		<deliveryTemplate connector="_SMSCON" />
-	</template>
-	<template procedureName="FavNumber_Del_empty">
-		<condition>
-			<test item="0" matches="1" />
-		</condition>
-		<receiveTemplate>
-			<Message type="setprofile" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-				<Item customer="${token0}" action="11">
-					<Attribute name="favouritenumber" value="" />
-					<Attribute name="favouritenumbertypeid" value="#{document('XML\fndtypes.xml')/fndtypes/fndtype[@ussdcode='${token2}']/@id}" />
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate direction="input">
-			<set item="Content"    value="Необходимо ввести номер для удаления" />
-			<set item="Encoding"   value="unicodefffe" />
-			<set item="Sender" value="11111" />
-			<set item="Recipient"  value="00111" />
-		</deliveryTemplate>
-	</template>
-	<template procedureName="FavNumbers_browse">
-		<condition>
-			<test item="0" matches="1" />
-		</condition>
-		<receiveTemplate>
-			<Message type="setprofile" initiator="ussd" id="${guid}" session_id="@{newGuid}" language_id="${token2}">
-				<Item customer="${token0}" action="8">
-					<Attribute name="favouritenumber" value="" />
-					<Attribute name="favouritenumbertypeid" value="#{document('XML\fndtypes.xml')/fndtypes/fndtype[@ussdcode='${token2}']/@id}" />
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate direction="input" terminating="false">
-			<set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-			<set item="Sender" value="11111" />
-			<set item="Recipient" value="00111" />
-			<set item="Encoding" value="unicodefffe" />
-		</deliveryTemplate>
-		<deliveryTemplate connector="_SMSCON" />
-	</template>
-
-    <template procedureName="Change_tarifplan" sessionStorage="Memory" sessionLifetime="5">
-      <condition>
-            <test item="0" matches="1" />
-      </condition>
-      <receiveTemplate>
-        <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-          @{store(sCurrentTP,${token3})} 
-          @{store(sIvr,@{switch(${token2}|702,optima|1059,universalnyj|701,bud_praktichnee|704,lyubimyj|703,profi_30|1030,profi_150|1037,profi_300|1042,profi_VIP_800|1052,first|710,red|761,maxi|1322,base|700,redtext|740,free|770,maxione|1138,onliner|721,connect|1021,stimul|755,podruzki|756,maxiplus|1323,raschetliv|683,rednew|675,first_jeans|659,maxiactive|1208,connect2|1213,guest|633,superzero|616,many_calls|1313,oblast|815,careful|650,red_relaunch|827,long_conversations|829,red_energy|827)})}
-          @{store(sNewIvr,#{document('tpchange.xml')//root/tp_rules/rule/sources/src[@tp='${sCurrentTP}']/../../destinations/dst[@old='${sIvr}']/@new})}
-          @{store(sNewIvr2,#{document('tpchange.xml')//root/region_rules/rule/sources/src[@region='${token4}']/../../destinations/dst[@old='${sIvr}']/@new})}
-          <Item customer="${token0}" >
-<!--            <Service id="changetariffplan" action="0" class="#{if('${sNewIvr}'='' and '${sNewIvr2}'='','${sIvr}',@{switch('${sNewIvr2}'|'${sNewIvr2}',''|'${sNewIvr}')})}" />  -->
-
-		<Service id="changetariffplan" action="0" class="#{if('${token0}'='79167187534','18',(if('${sNewIvr}'='' and '${sNewIvr2}'='','${sIvr}',@{switch('${sNewIvr2}'|'${sNewIvr2}',''|'${sNewIvr}')})))}" />
-      
-          </Item>
-        </Message>
-      </receiveTemplate>
-	  
-     <deliveryTemplate direction="input" conditionEx="#{'${sCurrentTP}'='#{//Item/Service/@class}'}">            
-            <set item="Content"   value="Это ваш текущий тарифный план. Операция отменена." />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-      </deliveryTemplate>
-
-      <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-      </deliveryTemplate>
-      <deliveryTemplate connector="_SMSCON" conditionEx="1@{freeSession}" />
-    </template>
-
- <template procedureName="Change_tarifplan2" sessionStorage="Memory" sessionLifetime="5">
-      <condition>
-            <test item="0" matches="1" />
-      </condition>
-      <receiveTemplate>
-        <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-          @{store(sCurrentTP,${token3})} 
-          @{store(sIvr,@{switch(${token2}|1107,maxiplus)})}
-          @{store(sNewIvr,#{document('tpchange.xml')//root/tp_rules/rule/sources/src[@tp='${sCurrentTP}']/../../destinations/dst[@old='${sIvr}']/@new})}
-          @{store(sNewIvr2,#{document('tpchange.xml')//root/region_rules/rule/sources/src[@region='${token4}']/../../destinations/dst[@old='${sIvr}']/@new})}
-          <Item customer="${token0}" >
-            <Service id="changetariffplan" action="0" class="#{if('${sNewIvr}'='' and '${sNewIvr2}'='','${sIvr}',@{switch('${sNewIvr2}'|'${sNewIvr2}',''|'${sNewIvr}')})}" />        
-          </Item>
-        </Message>
-      </receiveTemplate>
-      <deliveryTemplate direction="input" conditionEx="#{'${sCurrentTP}'='#{//Item/Service/@class}'}">            
-            <set item="Content"   value="Это ваш текущий тарифный план. Операция отменена." />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-      </deliveryTemplate>
-      <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-      </deliveryTemplate>
-      <deliveryTemplate connector="_SMSCON" conditionEx="1@{freeSession}" />
-    </template>
-
-    <template procedureName="Check_tarifplan">
-      <condition>
-            <test item="0" matches="1" />
-      </condition>
-      <receiveTemplate>
-            <Message type="retrievetariffplan" initiator="ussd" id="${guid}" session_id="@{newGuid}"> 
-                <Item customer="${token0}" />
-            </Message>
-      </receiveTemplate>
-      <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-      </deliveryTemplate>
-      <deliveryTemplate connector="_SMSCON" />
-    </template>
-
-	    <template procedureName="Inter_Access_Activate">
-        <condition>
-            <test item="0" matches="1" />            
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${token0}">
-                    <Service id="CB108"
-                    action="2" class="0" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON" />
-    </template>  
-
-	    <template procedureName="Inter_Access_Deactivate">
-        <condition>
-            <test item="0" matches="1" />            
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${token0}">
-                    <Service id="CB108"
-                    action="3" class="0" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON" />
-    </template> 
- 
-
-	<template procedureName="OneFor_four1" sessionStorage="Memory" sessionLifetime="120">
-        <condition>
-            <test item="0" matches="1" />            
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-                <Item customer="${token0}">
-                    <Service id="FRGPTEST"
-                    action="2" class="0" />
-                    @{store(sContent,${Content})}					
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate conditionEx="#{//Item/@dbresult!=''}" call="OneFor_four2" terminating="false">		
-            <set item="Content" value="${sContent}" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON"/>
-    </template>
-	<template procedureName="OneFor_four2">
-        <condition>
-            <test item="0" matches="1" />            
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="@{newGuid}" session_id="${SessionId}">
-                <Item customer="${token0}">
-                    <Service id="FRWAPTEST"
-                    action="2" class="0" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate conditionEx="#{//Item/@dbresult!=''}" call="OneFor_four3" terminating="false">		
-            <set item="Content" value="${sContent}" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON"/>
-    </template>
-	<template procedureName="OneFor_four3">
-        <condition>
-            <test item="0" matches="1" />            
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="@{newGuid}" session_id="${SessionId}">
-                <Item customer="${token0}">
-                    <Service id="FRMMSTEST"
-                    action="2" class="0" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate conditionEx="#{//Item/@dbresult!=''}" call="OneFor_four4" terminating="false">		
-            <set item="Content" value="${sContent}" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON"/>
-    </template>
-	<template procedureName="OneFor_four4">
-        <condition>
-            <test item="0" matches="1" />            
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="@{newGuid}" session_id="${SessionId}">
-                <Item customer="${token0}">
-                    <Service id="FROGRTEST"
-                    action="2" class="0" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-	<deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />			
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON"/>
-    </template>
-
-    <template procedureName="Activateim">
-        <condition>
-            <test item="0" matches="1" />            
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${token0}">
-                    <Service id="FRCHAT"
-                    action="2" class="0" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON"/>
-    </template>    
-    
-    <template procedureName="Deactivateim">
-        <condition>
-            <test item="0" matches="1" />            
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${token0}">
-                    <Service id="FRCHAT"
-                    action="3" class="0" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON" />
-    </template> 
-
-
-
-
-    <template procedureName="GroupMTS">
-        <condition>
-            <test item="0" matches="1" />            
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${token0}">
-                    <Service id="FRMTSSNG"
-                    action="2" class="0" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON"/>
-    </template>  
-
-
-     <template procedureName="Connect100" sessionStorage="Memory" sessionLifetime="120">
-        <condition>
-            <test item="0" matches="1" />            
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${token0}">
-                    <Service id="FRTEST50"
-                    action="3" class="0" />
-                    @{store(sContent,${Content})}			
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON"/>
-    </template>
-	
-    <template procedureName="Connect250">
-        <condition>
-            <test item="0" matches="1" />            
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${token0}">
-                    <Service id="FRTEST25"
-                    action="2" class="0" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON"/>
-    </template> 	
-	
-    <template procedureName="Connect400">
-        <condition>
-            <test item="0" matches="1" />            
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${token0}">
-                    <Service id="FRTEST50"
-                    action="2" class="0" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON"/>
-    </template> 
-
-    <template procedureName="Connect900">
-        <condition>
-            <test item="0" matches="1" />            
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${token0}">
-                    <Service id="FRTEST100"
-                    action="2" class="0" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON"/>
-    </template>
-
-	<template procedureName="MaxiPlus50Minutes">
-        <condition>
-            <test item="0" matches="1" />            
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${token0}">
-                    <Service id="4078"
-                    action="2" class="0" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON"/>
-    </template> 
-
-		<template procedureName="MaxiPlus100minutes">
-        <condition>
-            <test item="0" matches="1" />            
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${token0}">
-                    <Service id="4079"
-                    action="2" class="0" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON"/>
-    </template> 
-
-		<template procedureName="MaxiPlus200minutes">
-        <condition>
-            <test item="0" matches="1" />            
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${token0}">
-                    <Service id="4080"
-                    action="2" class="0" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON"/>
-    </template> 
-
-		<template procedureName="MobBusiness">
-        <condition>
-            <test item="0" matches="1" />            
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${token0}">
-                    <Service id="CB411809"
-                    action="2" class="0" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON"/>
-    </template> 
-
-		<template procedureName="Discount_from_payment">
-        <condition>
-            <test item="0" matches="1" />            
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${token0}">
-                    <Service id="FRAKMM4"
-                    action="2" class="0" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON"/>
-    </template>
-
-<!--		<template procedureName="USSD_PortalOpenBills">
+-->
+  <template procedureName="Bill">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}">
+          <Service id="otdetailedbill" action="4">
+            <Attribute name="faxnumber" value="" />
+            <Attribute name="start" value="#{substring('@{now}',1,10)}" />
+            <Attribute name="end" value="#{substring('@{now}',1,10)}" />
+          </Service>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="Prepayment_Bill">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}">
+          <Service id="otprepaymentbill" action="4">
+            <Attribute name="faxnumber" value="" />
+            <Attribute name="amountintpartdotpart" value="100" />
+          </Service>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="Fax_update">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="setprofile" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}">
+          <Attribute name="faxnumber" value="7${token2}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="FavNumber_Upd">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="setprofile" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}" action="10">
+          <Attribute name="favouritenumber" value="#{if(string-length(${token3})=10,7${token3},${token3})}" />
+          <Attribute name="favouritenumbertypeid" value="#{document('XML\fndtypes.xml')/fndtypes/fndtype[@ussdcode='${token2}']/@id}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="FavNumber_Del">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="setprofile" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}" action="11">
+          <Attribute name="favouritenumber" value="#{if(string-length(${token3})=10,7${token3},${token3})}" />
+          <Attribute name="favouritenumbertypeid" value="#{document('XML\fndtypes.xml')/fndtypes/fndtype[@ussdcode='${token2}']/@id}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="FavNumber_Del_empty">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="setprofile" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}" action="11">
+          <Attribute name="favouritenumber" value="" />
+          <Attribute name="favouritenumbertypeid" value="#{document('XML\fndtypes.xml')/fndtypes/fndtype[@ussdcode='${token2}']/@id}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input">
+      <set item="Content" value="Необходимо ввести номер для удаления" />
+      <set item="Encoding" value="unicodefffe" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="FavNumbers_browse">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="setprofile" initiator="ussd" id="${guid}" session_id="@{newGuid}" language_id="${token2}">
+        <Item customer="${token0}" action="8">
+          <Attribute name="favouritenumber" value="" />
+          <Attribute name="favouritenumbertypeid" value="#{document('XML\fndtypes.xml')/fndtypes/fndtype[@ussdcode='${token2}']/@id}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="Change_tarifplan" sessionStorage="Memory" sessionLifetime="5">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+        @{store(sCurrentTP,${token3})}
+        @{store(sIvr,@{switch(${token2}|702,optima|1059,universalnyj|701,bud_praktichnee|704,lyubimyj|703,profi_30|1030,profi_150|1037,profi_300|1042,profi_VIP_800|1052,first|710,red|761,maxi|1322,base|700,redtext|740,free|770,maxione|1138,onliner|721,connect|1021,stimul|755,podruzki|756,maxiplus|1323,raschetliv|683,rednew|675,first_jeans|659,maxiactive|1208,connect2|1213,guest|633,superzero|616,many_calls|1313,oblast|815,careful|650,red_relaunch|827,long_conversations|829,red_energy|827)})}
+        @{store(sNewIvr,#{document('tpchange.xml')//root/tp_rules/rule/sources/src[@tp='${sCurrentTP}']/../../destinations/dst[@old='${sIvr}']/@new})}
+        @{store(sNewIvr2,#{document('tpchange.xml')//root/region_rules/rule/sources/src[@region='${token4}']/../../destinations/dst[@old='${sIvr}']/@new})}
+        <Item customer="${token0}">
+          <!--            <Service id="changetariffplan" action="0" class="#{if('${sNewIvr}'='' and '${sNewIvr2}'='','${sIvr}',@{switch('${sNewIvr2}'|'${sNewIvr2}',''|'${sNewIvr}')})}" />  -->
+          <Service id="changetariffplan" action="0" class="#{if('${token0}'='79167187534','18',(if('${sNewIvr}'='' and '${sNewIvr2}'='','${sIvr}',@{switch('${sNewIvr2}'|'${sNewIvr2}',''|'${sNewIvr}')})))}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" conditionEx="#{'${sCurrentTP}'='#{//Item/Service/@class}'}">
+      <set item="Content" value="Это ваш текущий тарифный план. Операция отменена." />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" conditionEx="1@{freeSession}" />
+  </template>
+  <template procedureName="Change_tarifplan2" sessionStorage="Memory" sessionLifetime="5">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+        @{store(sCurrentTP,${token3})}
+        @{store(sIvr,@{switch(${token2}|1107,maxiplus)})}
+        @{store(sNewIvr,#{document('tpchange.xml')//root/tp_rules/rule/sources/src[@tp='${sCurrentTP}']/../../destinations/dst[@old='${sIvr}']/@new})}
+        @{store(sNewIvr2,#{document('tpchange.xml')//root/region_rules/rule/sources/src[@region='${token4}']/../../destinations/dst[@old='${sIvr}']/@new})}
+        <Item customer="${token0}">
+          <Service id="changetariffplan" action="0" class="#{if('${sNewIvr}'='' and '${sNewIvr2}'='','${sIvr}',@{switch('${sNewIvr2}'|'${sNewIvr2}',''|'${sNewIvr}')})}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" conditionEx="#{'${sCurrentTP}'='#{//Item/Service/@class}'}">
+      <set item="Content" value="Это ваш текущий тарифный план. Операция отменена." />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" conditionEx="1@{freeSession}" />
+  </template>
+  <template procedureName="Check_tarifplan">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="retrievetariffplan" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}" />
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="Inter_Access_Activate">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}">
+          <Service id="CB108" action="2" class="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="Inter_Access_Deactivate">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}">
+          <Service id="CB108" action="3" class="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="OneFor_four1" sessionStorage="Memory" sessionLifetime="120">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item customer="${token0}">
+          <Service id="FRGPTEST" action="2" class="0" />
+          @{store(sContent,${Content})}
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{//Item/@dbresult!=''}" call="OneFor_four2" terminating="false">
+      <set item="Content" value="${sContent}" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="OneFor_four2">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${token0}">
+          <Service id="FRWAPTEST" action="2" class="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{//Item/@dbresult!=''}" call="OneFor_four3" terminating="false">
+      <set item="Content" value="${sContent}" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="OneFor_four3">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${token0}">
+          <Service id="FRMMSTEST" action="2" class="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{//Item/@dbresult!=''}" call="OneFor_four4" terminating="false">
+      <set item="Content" value="${sContent}" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="OneFor_four4">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${token0}">
+          <Service id="FROGRTEST" action="2" class="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="Activateim">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}">
+          <Service id="FRCHAT" action="2" class="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="Deactivateim">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}">
+          <Service id="FRCHAT" action="3" class="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="GroupMTS">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}">
+          <Service id="FRMTSSNG" action="2" class="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="Connect100" sessionStorage="Memory" sessionLifetime="120">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}">
+          <Service id="FRTEST50" action="3" class="0" />
+          @{store(sContent,${Content})}
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="Connect250">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}">
+          <Service id="FRTEST25" action="2" class="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="Connect400">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}">
+          <Service id="FRTEST50" action="2" class="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="Connect900">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}">
+          <Service id="FRTEST100" action="2" class="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="MaxiPlus50Minutes">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}">
+          <Service id="4078" action="2" class="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="MaxiPlus100minutes">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}">
+          <Service id="4079" action="2" class="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="MaxiPlus200minutes">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}">
+          <Service id="4080" action="2" class="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="MobBusiness">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}">
+          <Service id="CB411809" action="2" class="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="Discount_from_payment">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}">
+          <Service id="FRAKMM4" action="2" class="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <!--		<template procedureName="USSD_PortalOpenBills">
         <condition>
             <test item="0" matches="1" />            
         </condition>
@@ -1572,306 +1461,272 @@
         </deliveryTemplate>
         <deliveryTemplate connector="_SMSCON"/>
     </template> -->
-	
-<!--Начало  МТС ЧАТ  -->	
-    <template procedureName="Addim_MTSChat">
-        <condition>
-            <test item="0" matches="1" />            
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${token0}">
-                    <Service id="FRCHAT"
-                    action="2" class="0" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON"/>
-    </template>    
-    
-    <template procedureName="Deleteim_MTSChat">
-        <condition>
-            <test item="0" matches="1" />            
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${token0}">
-                    <Service id="FRCHAT"
-                    action="3" class="0" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON" />
-    </template> 
-<!--Окончание МТС ЧАТ  -->
-
-	
-<!--Начало  Почта Онлайн  -->	
-   
-    <template procedureName="FolkMailDeactivateSMS">
-        <condition>
-            <test item="0" matches="1" />            
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${token0}">
-                    <Service id="FRMAILSMS"
-                    action="3" class="0" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON" />
-    </template> 
-<!--Окончание  Почта Онлайн  -->
-
-
-
-
-
-<!-- Начало Олимпийской Акции -->
-    <template procedureName="Olimp08">
-        <condition>
-            <test item="0" matches="1" />            
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-                <Item customer="${token0}">
-                    <Service id="FRUAKZ2008"
-                    action="2" class="0" />
-                </Item>
-	@{store(vToday, #{concat(substring('@{now}',7,4),substring('@{now}',4,2),substring('@{now}',1,2))})}
-            </Message>
-        </receiveTemplate>
-	
-       <deliveryTemplate direction="input"  conditionEx="#{ '${vToday}' > '20080831'}"  >
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Content" value="Услуга больше недоступна для подключения " />
-            <set item="Encoding" value="unicodefffe" />
-	<set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-
-        <deliveryTemplate direction="input"  conditionEx="#{ '${vToday}' &lt; '20080801'}"  >
-	<set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Content" value="Услуга будет доступна с 01.08.2008" />
-            <set item="Encoding" value="unicodefffe" />
-	<set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-
-
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON"/>
-    </template> 
-<!-- Окончание Олимпийской Акции   -->	
-
-
-
-
-
-    <!--  USSD BEGIN PtPRegular | SPONSOR -->
-    <template procedureName="APPGW_PtPRegular">
-        <condition>
-            <test item="0" matches="1" />
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${Sender}">
-                    <Service id="movepaymentrequest" action="5">
-                      <Attribute name="receiver" value="7${token2}" />
-                      <Attribute name="amount" value="#{normalize-space('${token3}')}" />
-                    </Service>
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-	<set item="Content"   value="Ваша заявка принята. Ждите результат по SMS" />
-            <set item="Sender" value="__LOCAL" />
-            <set item="Recipient" value="__APPGW" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON" />
-    </template>
-
-    <template procedureName="APPGW_SponsorRequest">
-        <condition>
-            <test item="0" matches="1" />
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${Sender}">
-                    <Service id="sponsorrequest" action="5">
-                      <Attribute name="receiver" value="7${token2}" />
-                      <Attribute name="amount" value="#{normalize-space('${token4}')}" />
-                      <Attribute name="period" value="1" />
-                      <Attribute name="metric" value="@{switch(${token3}|-1,1|DAY,2|WEEK,3|MONTH)}" />
-                      <Attribute name="operation" value="1" />
-                    </Service>
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите результат по SMS" />
-            <set item="Sender" value="__LOCAL" />
-            <set item="Recipient" value="__APPGW" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON" />
-    </template>
-
-    <template procedureName="APPGW_SponsorDelReceiver">
-        <condition>
-            <test item="0" matches="1" />
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${Sender}">
-                    <Service id="sponsorrequest" action="5">
-                      <Attribute name="receiver" value="7${token2}" />
-                      <Attribute name="amount" value="0" />
-                      <Attribute name="period" value="1" />
-                      <Attribute name="metric" value="DAY" />
-                      <Attribute name="operation" value="2" />
-                    </Service>
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите результат по SMS" />
-            <set item="Sender" value="__LOCAL" />
-            <set item="Recipient" value="__APPGW" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON" />
-    </template>
-    <!-- USSD END PtPRegular | SPONSOR -->
-	
-<!--Начало  Оплата банковской картойн  -->	
-     <template procedureName="BankCardPayment">
-        <condition>
-            <test item="0" matches="1" />            
-        </condition>
-        <receiveTemplate>
-             <Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
-				<Item customer="${token0}">
-					<Service id="creditcardpayment" action="5">
-						<Attribute name="amount" value="${token2}" /> 
-					</Service>
-				</Item>
-			</Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON" />
-    </template> 
-<!--Окончание  Оплата банковской картой  -->	
-
-<!--  Begin активации/деактивации признака «Запрет перерасчета КД и КЛ»    --> 
-<template procedureName="RecalculationProhibitionActivate">
-	<condition>
-		<test item="0" matches="1" />
-	</condition>
-	<receiveTemplate>
-		<Message type="changecreditlimitaccesslevelrequest" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-			<Item customer="${token0}" > 
-				<Attribute name="action" value="1" />
-			</Item>
-		</Message>
-	</receiveTemplate> 
-		<deliveryTemplate>
-			<set item="Content"   value="Сервис временно не доступен" />
-            <set item="Content" condition="//Item/@dbresult=0" value="Статус перерасчета кредитного лимита изменен" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-</template>
-
-<template procedureName="RecalculationProhibitionDeactivate">
-	<condition>
-		<test item="0" matches="1" />
-	</condition>
-	<receiveTemplate>
-		<Message type="changecreditlimitaccesslevelrequest" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-			<Item customer="${token0}" > 
-				<Attribute name="action" value="0" />
-			</Item>
-		</Message>
-	</receiveTemplate>   
-		<deliveryTemplate>
-			<set item="Content"   value="Сервис временно не доступен" />
-            <set item="Content" condition="//Item/@dbresult=0" value="Статус перерасчета кредитного лимита изменен" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-</template>
-<!--  END активации/деактивации признака «Запрет перерасчета КД и КЛ»    -->
-
-
-<!--  Запрет пересчета КД и КЛ-->
-<template procedureName="ChangeCreditlimit_ReCalculation_USSD" sessionStorage="Memory" sessionLifetime="20">
-                <condition>
-                               <test item="${Sender}" matches="^11111$" />
-                               <test item="${Content}" matches="^[0-9]{11}\*recalculation_prohibition\*((activate)|(deactivate))" />
-                </condition>
-                <receiveTemplate>
-                               <Message type="changecreditlimitaccesslevelrequest" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                                               <Item customer="${token0}" >
-                                                               <Attribute name="action" value="#{if('${token2}'='activate',1,0)}" />
-                                               </Item>
-                               </Message>
-                </receiveTemplate>
-                <deliveryTemplate direction="input" terminating="false">            
-                               <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-                              <set item="Sender" value="00111" /> <set item="Recipient" value="11111" />
-                              <set item="Encoding" value="unicodefffe" />
-            </deliveryTemplate>
-            <deliveryTemplate connector="_SMSCON" />
-</template>  
-
-
-	
-    <template procedureName="USSD_ASSA_InternalError">
-        <condition>
-        </condition>
-        <receiveTemplate>
-            <Message id="${guid}" session_id="@{newGuid}" />
-        </receiveTemplate>
-        <deliveryTemplate direction="input">
-            <set item="Content"  value="Внутренняя ошибка сервиса" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-    </template>
-
-</templates> 
+  <!--Начало  МТС ЧАТ  -->
+  <template procedureName="Addim_MTSChat">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}">
+          <Service id="FRCHAT" action="2" class="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="Deleteim_MTSChat">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}">
+          <Service id="FRCHAT" action="3" class="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <!--Окончание МТС ЧАТ  -->
+  <!--Начало  Почта Онлайн  -->
+  <template procedureName="FolkMailDeactivateSMS">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}">
+          <Service id="FRMAILSMS" action="3" class="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <!--Окончание  Почта Онлайн  -->
+  <!-- Начало Олимпийской Акции -->
+  <template procedureName="Olimp08">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item customer="${token0}">
+          <Service id="FRUAKZ2008" action="2" class="0" />
+        </Item>
+        @{store(vToday, #{concat(substring('@{now}',7,4),substring('@{now}',4,2),substring('@{now}',1,2))})}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" conditionEx="#{ '${vToday}' &gt; '20080831'}">
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Content" value="Услуга больше недоступна для подключения " />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" conditionEx="#{ '${vToday}' &lt; '20080801'}">
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Content" value="Услуга будет доступна с 01.08.2008" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <!-- Окончание Олимпийской Акции   -->
+  <!--  USSD BEGIN PtPRegular | SPONSOR -->
+  <template procedureName="APPGW_PtPRegular">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Sender}">
+          <Service id="movepaymentrequest" action="5">
+            <Attribute name="receiver" value="7${token2}" />
+            <Attribute name="amount" value="#{normalize-space('${token3}')}" />
+          </Service>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите результат по SMS" />
+      <set item="Sender" value="__LOCAL" />
+      <set item="Recipient" value="__APPGW" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="APPGW_SponsorRequest">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Sender}">
+          <Service id="sponsorrequest" action="5">
+            <Attribute name="receiver" value="7${token2}" />
+            <Attribute name="amount" value="#{normalize-space('${token4}')}" />
+            <Attribute name="period" value="1" />
+            <Attribute name="metric" value="@{switch(${token3}|-1,1|DAY,2|WEEK,3|MONTH)}" />
+            <Attribute name="operation" value="1" />
+          </Service>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите результат по SMS" />
+      <set item="Sender" value="__LOCAL" />
+      <set item="Recipient" value="__APPGW" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="APPGW_SponsorDelReceiver">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Sender}">
+          <Service id="sponsorrequest" action="5">
+            <Attribute name="receiver" value="7${token2}" />
+            <Attribute name="amount" value="0" />
+            <Attribute name="period" value="1" />
+            <Attribute name="metric" value="DAY" />
+            <Attribute name="operation" value="2" />
+          </Service>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите результат по SMS" />
+      <set item="Sender" value="__LOCAL" />
+      <set item="Recipient" value="__APPGW" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <!-- USSD END PtPRegular | SPONSOR -->
+  <!--Начало  Оплата банковской картойн  -->
+  <template procedureName="BankCardPayment">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}">
+          <Service id="creditcardpayment" action="5">
+            <Attribute name="amount" value="${token2}" />
+          </Service>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <!--Окончание  Оплата банковской картой  -->
+  <!--  Begin активации/деактивации признака «Запрет перерасчета КД и КЛ»    -->
+  <template procedureName="RecalculationProhibitionActivate">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="changecreditlimitaccesslevelrequest" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}">
+          <Attribute name="action" value="1" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Сервис временно не доступен" />
+      <set item="Content" condition="//Item/@dbresult=0" value="Статус перерасчета кредитного лимита изменен" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="RecalculationProhibitionDeactivate">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="changecreditlimitaccesslevelrequest" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}">
+          <Attribute name="action" value="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Сервис временно не доступен" />
+      <set item="Content" condition="//Item/@dbresult=0" value="Статус перерасчета кредитного лимита изменен" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+  </template>
+  <!--  END активации/деактивации признака «Запрет перерасчета КД и КЛ»    -->
+  <!--  Запрет пересчета КД и КЛ-->
+  <template procedureName="ChangeCreditlimit_ReCalculation_USSD" sessionStorage="Memory" sessionLifetime="20">
+    <condition>
+      <test item="${Sender}" matches="^11111$" />
+      <test item="${Content}" matches="^[0-9]{11}\*recalculation_prohibition\*((activate)|(deactivate))" />
+    </condition>
+    <receiveTemplate>
+      <Message type="changecreditlimitaccesslevelrequest" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${token0}">
+          <Attribute name="action" value="#{if('${token2}'='activate',1,0)}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите СМС с результатом" />
+      <set item="Sender" value="00111" />
+      <set item="Recipient" value="11111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="USSD_ASSA_InternalError">
+    <condition />
+    <receiveTemplate>
+      <Message id="${guid}" session_id="@{newGuid}" />
+    </receiveTemplate>
+    <deliveryTemplate direction="input">
+      <set item="Content" value="Внутренняя ошибка сервиса" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="00111" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+  </template>
+</templates>

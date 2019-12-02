@@ -1,5 +1,5 @@
 <counters>
-	<counter ussd_code="1001" ivr_code="1001" bms_code="Uchet PRA Counter" />
-	<counter ussd_code="456" ivr_code="654" bms_code="2222" />
-	<counter ussd_code="789" ivr_code="987" bms_code="3333" />
+  <counter ussd_code="1001" ivr_code="1001" bms_code="Uchet PRA Counter" />
+  <counter ussd_code="456" ivr_code="654" bms_code="2222" />
+  <counter ussd_code="789" ivr_code="987" bms_code="3333" />
 </counters>

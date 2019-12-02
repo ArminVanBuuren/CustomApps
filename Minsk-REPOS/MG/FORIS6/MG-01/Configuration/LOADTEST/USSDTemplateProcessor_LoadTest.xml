@@ -1,96 +1,89 @@
-﻿<!-- templates for ptp via USSD connector, last part of communicatio is via SMS coonector-->
-<!-- VERSION 1.0 -->
-
 <templates>
   <macros>
     <define name="_PTP_SERVICE_NUMBER" value="500" />
     <define name="_SPONSOR_SERVICE_NUMBER" value="550" />
-    <define name="_SMSCON" value="SMSCON_01_01"/><!--"USSDCON_01_02" />--> 
-	<define name="_IRPA_NUMBER" value="600" />
+    <define name="_SMSCON" value="SMSCON_01_01" />
+    <!--"USSDCON_01_02" />-->
+    <define name="_IRPA_NUMBER" value="600" />
   </macros>
-  
- 
   <template procedureName="Balance_100">
-        <condition>
-            <test item="${Recipient}" matches="^100$" />
-        </condition>
-        <receiveTemplate>
-			<Message type="retrievecustomerdata" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-				<Item customer="${Sender}" subject="balance" >
-					<Attribute name="requestcountertype" value="1" />
-				</Item>
-			</Message>
-		</receiveTemplate>
-        <deliveryTemplate>
-			<set item="Content"   value="Error: ${dbresult}" />
-			<set item="Content" conditionEx="#{${dbresult}=0}" value="Balance OK ${dbresult}" />
-			<set item="Encoding" value="ascii" />
-        </deliveryTemplate>
-    </template>
-
-    <template procedureName="CheckBlockBeforePTP"  sessionStorage="Memory" sessionLifetime="300" onClean="Session_onClean">
-        <condition>
-            <test item="${Sender}" matches="^[0-9]{11}$" />
-            <test item="${Recipient}" matches="^(_PTP_SERVICE_NUMBER)|(_SPONSOR_SERVICE_NUMBER)$" />
-        </condition>
-        <receiveTemplate>
-            <Message type="verificationrequest" initiator="ussd" id="@{newGuid}" session_id="@{setSessionId(@{newGuid})}">
-                <Item customer="${Sender}">
-                    <Attribute name="checkivrservice" value="0" />
-                    <Attribute name="checkblocks" value="1" />
-                </Item>
-                @{store(sCustomer,${Sender})}
-                @{store(sServiceNumber,${Recipient})}
-                @{store(sContent,${Content})}
-            </Message>
-        </receiveTemplate>  
-	<deliveryTemplate call="PtPStep1" conditionEx="#{${dbresult}=0 and '${sServiceNumber}'='_PTP_SERVICE_NUMBER' and matches('${sContent}','^[0-9]{10}\*[1-9]{1}[0-9]*\s*$')}">
-            <set item="Sender" value="${sCustomer}" />
-            <set item="Recipient" value="${sServiceNumber}" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate call="PtPStep2" conditionEx="#{${dbresult}=0 and '${sServiceNumber}'='_PTP_SERVICE_NUMBER' and matches('${sContent}','^\s*[0-9]{4}\s*$')}">
-            <set item="Sender" value="${sCustomer}" />
-            <set item="Recipient" value="${sServiceNumber}" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{${dbresult}=0 and '${sServiceNumber}'='_PTP_SERVICE_NUMBER'}">
-            <set item="Sender" value="${sServiceNumber}" />
-            <set item="Recipient" value="${sCustomer}" />
-            <set item="Content" value="Создайте запрос в формате *_PTP_SERVICE_NUMBER*номер телефона получателя*сумма#" />
-            <set item="Encoding" value="ascii" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-
-        <deliveryTemplate call="SponsorRequest" conditionEx="#{${dbresult}=0 and '${sServiceNumber}'='_SPONSOR_SERVICE_NUMBER' and matches('${sContent}','^[0-9]{10}\*(1|2|3)\*[1-9]{1}[0-9]*\s*$')}">
-            <set item="Sender" value="${sCustomer}" />
-            <set item="Recipient" value="${sServiceNumber}" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate call="SponsorAcceptance" conditionEx="#{${dbresult}=0 and '${sServiceNumber}'='_SPONSOR_SERVICE_NUMBER' and matches('${sContent}','^\s*[0-9]{4}\s*$')}">
-            <set item="Sender" value="${sCustomer}" />
-            <set item="Recipient" value="${sServiceNumber}" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate call="SponsorDelReceiver" conditionEx="#{${dbresult}=0 and '${sServiceNumber}'='_SPONSOR_SERVICE_NUMBER' and matches('${sContent}','^\s*[0-9]{10}\s*$')}">
-            <set item="Sender" value="${sCustomer}" />
-            <set item="Recipient" value="${sServiceNumber}" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{${dbresult}=0 and '${sServiceNumber}'='_SPONSOR_SERVICE_NUMBER'}">
-            <set item="Sender" value="${sServiceNumber}" />
-            <set item="Recipient" value="${sCustomer}" />
-            <set item="Content" value="Создайте запрос в формате: *_SPONSOR_SERVICE_NUMBER*[Nтел]*[период(1,2,3)]*[сумма]#" />
-            <set item="Encoding" value="ascii" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-
-<!-- Это тестовая вставка для установки языка интерфейса 
+    <condition>
+      <test item="${Recipient}" matches="^100$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Sender}" subject="balance">
+          <Attribute name="requestcountertype" value="1" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Error: ${dbresult}" />
+      <set item="Content" conditionEx="#{${dbresult}=0}" value="Balance OK ${dbresult}" />
+      <set item="Encoding" value="ascii" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="CheckBlockBeforePTP" sessionStorage="Memory" sessionLifetime="300" onClean="Session_onClean">
+    <condition>
+      <test item="${Sender}" matches="^[0-9]{11}$" />
+      <test item="${Recipient}" matches="^(_PTP_SERVICE_NUMBER)|(_SPONSOR_SERVICE_NUMBER)$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="verificationrequest" initiator="ussd" id="@{newGuid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item customer="${Sender}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="1" />
+        </Item>
+        @{store(sCustomer,${Sender})}
+        @{store(sServiceNumber,${Recipient})}
+        @{store(sContent,${Content})}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate call="PtPStep1" conditionEx="#{${dbresult}=0 and '${sServiceNumber}'='_PTP_SERVICE_NUMBER' and matches('${sContent}','^[0-9]{10}\*[1-9]{1}[0-9]*\s*$')}">
+      <set item="Sender" value="${sCustomer}" />
+      <set item="Recipient" value="${sServiceNumber}" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate call="PtPStep2" conditionEx="#{${dbresult}=0 and '${sServiceNumber}'='_PTP_SERVICE_NUMBER' and matches('${sContent}','^\s*[0-9]{4}\s*$')}">
+      <set item="Sender" value="${sCustomer}" />
+      <set item="Recipient" value="${sServiceNumber}" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0 and '${sServiceNumber}'='_PTP_SERVICE_NUMBER'}">
+      <set item="Sender" value="${sServiceNumber}" />
+      <set item="Recipient" value="${sCustomer}" />
+      <set item="Content" value="Создайте запрос в формате *_PTP_SERVICE_NUMBER*номер телефона получателя*сумма#" />
+      <set item="Encoding" value="ascii" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate call="SponsorRequest" conditionEx="#{${dbresult}=0 and '${sServiceNumber}'='_SPONSOR_SERVICE_NUMBER' and matches('${sContent}','^[0-9]{10}\*(1|2|3)\*[1-9]{1}[0-9]*\s*$')}">
+      <set item="Sender" value="${sCustomer}" />
+      <set item="Recipient" value="${sServiceNumber}" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate call="SponsorAcceptance" conditionEx="#{${dbresult}=0 and '${sServiceNumber}'='_SPONSOR_SERVICE_NUMBER' and matches('${sContent}','^\s*[0-9]{4}\s*$')}">
+      <set item="Sender" value="${sCustomer}" />
+      <set item="Recipient" value="${sServiceNumber}" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate call="SponsorDelReceiver" conditionEx="#{${dbresult}=0 and '${sServiceNumber}'='_SPONSOR_SERVICE_NUMBER' and matches('${sContent}','^\s*[0-9]{10}\s*$')}">
+      <set item="Sender" value="${sCustomer}" />
+      <set item="Recipient" value="${sServiceNumber}" />
+      <set item="Content" value="${sContent}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0 and '${sServiceNumber}'='_SPONSOR_SERVICE_NUMBER'}">
+      <set item="Sender" value="${sServiceNumber}" />
+      <set item="Recipient" value="${sCustomer}" />
+      <set item="Content" value="Создайте запрос в формате: *_SPONSOR_SERVICE_NUMBER*[Nтел]*[период(1,2,3)]*[сумма]#" />
+      <set item="Encoding" value="ascii" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <!-- Это тестовая вставка для установки языка интерфейса 
         <deliveryTemplate call="SetCommunicationLang" conditionEx="#{${dbresult}=0 and '${sServiceNumber}'='_PTP_SERVICE_NUMBER' and matches('${sContent}','^555\*(1|2)$')}">
             <set item="Sender" value="${sCustomer}" />
             <set item="Recipient" value="${sServiceNumber}" />
@@ -98,172 +91,165 @@
             <set conditionEx="0@{freeSession}"  />
         </deliveryTemplate>
 -->
-        <deliveryTemplate conditionEx="#{'${sCustomer}'!='' and ${dbresult}=320347}">
-            <set item="Content"   value="Error: Ustanovlena blokirovka. Operaciya nedostupna" />
-            <set item="Sender" value="${sServiceNumber}" />
-            <set item="Recipient" value="${customer}" />
-            <set item="Encoding" value="ascii" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{'${sCustomer}'!='' and ${dbresult}!=0}">
-            <set item="Content"   value="Error: ${dbresult}" />
-            <set item="Sender" value="${sServiceNumber}" />
-            <set item="Recipient" value="${customer}" />
-            <set item="Encoding" value="ascii" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate>
-            <set item="Content"   value="Operaciya nedostupna" />
-            <set item="Sender" value="${sServiceNumber}" />
-            <set item="Recipient" value="${customer}" />
-            <set item="Encoding" value="ascii"/>
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-    </template>
-
-    <template procedureName="Session_onClean" sessionStorage="Memory">
-        <condition>
-            <test item="0" matches="1" />
-        </condition>
-        <deliveryTemplate >
-            <set item="Content"  value="Error: Servis vremenno nedostupen" />
-            <set item="Sender" value="${sServiceNumber}" />
-            <set item="Recipient" value="${sCustomer}" />
-            <set item="Encoding" value="ascii" />
-        </deliveryTemplate>
-    </template>
-
-    <!--  P-t-P -->
-    <template procedureName="PtPStep1">
-        <condition>
-            <test item="0" matches="1" />
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${Sender}">
-                    <Service id="movepaymentrequest" action="5">
-                      <Attribute name="receiver" value="7${token0}" />
-                      <Attribute name="amount" value="#{normalize-space('${token1}')}" />
-                    </Service>
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate>            
-            <set item="Content"   value="Error: ${dbresult}" />
-            <set item="Content" condition="//Item/@dbresult=0" value="${code}" />
-            <set item="Sender" value="_PTP_SERVICE_NUMBER" />
-            <set item="Recipient" value="${customer}" />
-            <set item="Encoding" value="ascii" />
-        </deliveryTemplate>
-        <!--deliveryTemplate connector="_SMSCON" /-->
-    </template>
-
-    <template procedureName="PtPStep2">
-        <condition>
-            <test item="0" matches="1" />
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${Sender}">
-                    <Service id="movepaymentacceptance" action="5">
-                      <Attribute name="code" value="#{normalize-space('${content}')}" />
-                    </Service>
-                </Item>
-            </Message>
-        </receiveTemplate>
-		<deliveryTemplate>            
-            <!--<set item="Content"   value="Вам будет направлено смс-сообщение с кодом подтверждения" />-->
-			<set item="Content"   value="Error: ${dbresult}" />
-			<set item="Content" condition="//Item/@dbresult=0" value="OK" />
-			<set item="Sender" value="_PTP_SERVICE_NUMBER" />
-            <set item="Recipient" value="${customer}" />
-            <set item="Encoding" value="ascii" />
-        </deliveryTemplate>
-        <!--deliveryTemplate direction="input" terminating="false">            
+    <deliveryTemplate conditionEx="#{'${sCustomer}'!='' and ${dbresult}=320347}">
+      <set item="Content" value="Error: Ustanovlena blokirovka. Operaciya nedostupna" />
+      <set item="Sender" value="${sServiceNumber}" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Encoding" value="ascii" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${sCustomer}'!='' and ${dbresult}!=0}">
+      <set item="Content" value="Error: ${dbresult}" />
+      <set item="Sender" value="${sServiceNumber}" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Encoding" value="ascii" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Operaciya nedostupna" />
+      <set item="Sender" value="${sServiceNumber}" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Encoding" value="ascii" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="Session_onClean" sessionStorage="Memory">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <deliveryTemplate>
+      <set item="Content" value="Error: Servis vremenno nedostupen" />
+      <set item="Sender" value="${sServiceNumber}" />
+      <set item="Recipient" value="${sCustomer}" />
+      <set item="Encoding" value="ascii" />
+    </deliveryTemplate>
+  </template>
+  <!--  P-t-P -->
+  <template procedureName="PtPStep1">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Sender}">
+          <Service id="movepaymentrequest" action="5">
+            <Attribute name="receiver" value="7${token0}" />
+            <Attribute name="amount" value="#{normalize-space('${token1}')}" />
+          </Service>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Error: ${dbresult}" />
+      <set item="Content" condition="//Item/@dbresult=0" value="${code}" />
+      <set item="Sender" value="_PTP_SERVICE_NUMBER" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Encoding" value="ascii" />
+    </deliveryTemplate>
+    <!--deliveryTemplate connector="_SMSCON" /-->
+  </template>
+  <template procedureName="PtPStep2">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Sender}">
+          <Service id="movepaymentacceptance" action="5">
+            <Attribute name="code" value="#{normalize-space('${content}')}" />
+          </Service>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <!--<set item="Content"   value="Вам будет направлено смс-сообщение с кодом подтверждения" />-->
+      <set item="Content" value="Error: ${dbresult}" />
+      <set item="Content" condition="//Item/@dbresult=0" value="OK" />
+      <set item="Sender" value="_PTP_SERVICE_NUMBER" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Encoding" value="ascii" />
+    </deliveryTemplate>
+    <!--deliveryTemplate direction="input" terminating="false">            
             <set item="Content"   value="Vasha zayavka prinyata" />
             <set item="Sender" value="_PTP_SERVICE_NUMBER" />
             <set item="Recipient" value="${customer}" />
             <set item="Encoding" value="ascii" />
         </deliveryTemplate>
         <deliveryTemplate connector="_SMSCON" /-->
-    </template>
-
-    <!--  SPONSOR -->
-    <template procedureName="SponsorRequest">
-        <condition>
-            <test item="0" matches="1" />
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${Sender}">
-                    <Service id="sponsorrequest" action="5">
-                      <Attribute name="receiver" value="7${token0}" />
-                      <Attribute name="amount" value="#{normalize-space('${token2}')}" />
-                      <Attribute name="period" value="1" />
-                      <Attribute name="metric" value="@{switch(${token1}|-1,1|DAY,2|WEEK,3|MONTH)}" />
-                      <Attribute name="operation" value="1" />
-                    </Service>
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Вам будет направлено SMS-сообщение с кодом подтверждения" />
-            <set item="Sender" value="_SPONSOR_SERVICE_NUMBER" />
-            <set item="Recipient" value="${customer}" />
-            <set item="Encoding" value="ascii" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON" />
-    </template>
-
-    <template procedureName="SponsorAcceptance">
-        <condition>
-            <test item="0" matches="1" />
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${Sender}">
-                    <Service id="sponsoracceptance" action="5">
-                      <Attribute name="code" value="#{normalize-space('${content}')}" />
-                    </Service>
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Vasha zayavka prinyata" />
-            <set item="Sender" value="_SPONSOR_SERVICE_NUMBER" />
-            <set item="Recipient" value="${customer}" />
-            <set item="Encoding" value="ascii" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON" />
-    </template>
-
-    <template procedureName="SponsorDelReceiver">
-        <condition>
-            <test item="0" matches="1" />
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${Sender}">
-                    <Service id="sponsorrequest" action="5">
-                      <Attribute name="receiver" value="7#{normalize-space('${content}')}" />
-                      <Attribute name="amount" value="0" />
-                      <Attribute name="period" value="1" />
-                      <Attribute name="metric" value="DAY" />
-                      <Attribute name="operation" value="2" />
-                    </Service>
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Vasha zayavka prinyata" />
-            <set item="Sender" value="_SPONSOR_SERVICE_NUMBER" />
-            <set item="Recipient" value="${customer}" />
-            <set item="Encoding" value="ascii" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON" />
-    </template>
-
-    <!--template procedureName="SetCommunicationLang">
+  </template>
+  <!--  SPONSOR -->
+  <template procedureName="SponsorRequest">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Sender}">
+          <Service id="sponsorrequest" action="5">
+            <Attribute name="receiver" value="7${token0}" />
+            <Attribute name="amount" value="#{normalize-space('${token2}')}" />
+            <Attribute name="period" value="1" />
+            <Attribute name="metric" value="@{switch(${token1}|-1,1|DAY,2|WEEK,3|MONTH)}" />
+            <Attribute name="operation" value="1" />
+          </Service>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Вам будет направлено SMS-сообщение с кодом подтверждения" />
+      <set item="Sender" value="_SPONSOR_SERVICE_NUMBER" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Encoding" value="ascii" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="SponsorAcceptance">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Sender}">
+          <Service id="sponsoracceptance" action="5">
+            <Attribute name="code" value="#{normalize-space('${content}')}" />
+          </Service>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Vasha zayavka prinyata" />
+      <set item="Sender" value="_SPONSOR_SERVICE_NUMBER" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Encoding" value="ascii" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="SponsorDelReceiver">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Sender}">
+          <Service id="sponsorrequest" action="5">
+            <Attribute name="receiver" value="7#{normalize-space('${content}')}" />
+            <Attribute name="amount" value="0" />
+            <Attribute name="period" value="1" />
+            <Attribute name="metric" value="DAY" />
+            <Attribute name="operation" value="2" />
+          </Service>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Vasha zayavka prinyata" />
+      <set item="Sender" value="_SPONSOR_SERVICE_NUMBER" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Encoding" value="ascii" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <!--template procedureName="SetCommunicationLang">
         <condition>
             <test item="0" matches="1" />
         </condition>
@@ -282,70 +268,66 @@
         </deliveryTemplate>
         <deliveryTemplate connector="_SMSCON" />
     </template-->
-
-<template procedureName="USSDAddService">
-        <condition>
-            <test item="${Recipient}" matches="^200$" />
-            <test item="${Content}" matches="^1111\*\w+" />
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${Sender}">
-                    <Service id="${token1}" action="2" class="0" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate>
-			<set item="Content"   value="Error: ${dbresult}" />
-			<set item="Content" conditionEx="#{${dbresult}=0}" value="Service Added" />
-            <set item="Encoding" value="ascii" />
-        </deliveryTemplate>
-    </template>
-    
-    <template procedureName="USSDRemService">
-        <condition>
-            <test item="${Recipient}" matches="^200$" />
-            <test item="${Content}" matches="^2222\*\w+" />
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${Sender}">
-                    <Service id="${token1}" action="3" class="0" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate>
-			<set item="Content"   value="Error: ${dbresult}" />
-			<set item="Content" conditionEx="#{${dbresult}=0}" value="Service Removed" />
-			<set item="Encoding" value="ascii" />
-        </deliveryTemplate>
-    </template>
-	
-	<template procedureName="GuarantedPaymentRUR">
-        <condition>
-            <test item="${Recipient}" matches="^300$" />
-            <test item="${Content}" matches="^[0-9]{1,3}$" />
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${Sender}">
-                    <Service id="guaranteedpayment" action="7">
-                        <Attribute name="amount" value="${token0}" />
-                        <Attribute name="currency" value="810" />
-                    </Service>
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate>
-			<set item="Content"   value="Error: ${dbresult}" />
-			<set item="Content" conditionEx="#{${dbresult}=0}" value="summa ${amount} ${dbresult}" />
-			<!--set item="Content" value="Error: ${dbresult}" />
+  <template procedureName="USSDAddService">
+    <condition>
+      <test item="${Recipient}" matches="^200$" />
+      <test item="${Content}" matches="^1111\*\w+" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Sender}">
+          <Service id="${token1}" action="2" class="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Error: ${dbresult}" />
+      <set item="Content" conditionEx="#{${dbresult}=0}" value="Service Added" />
+      <set item="Encoding" value="ascii" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="USSDRemService">
+    <condition>
+      <test item="${Recipient}" matches="^200$" />
+      <test item="${Content}" matches="^2222\*\w+" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Sender}">
+          <Service id="${token1}" action="3" class="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Error: ${dbresult}" />
+      <set item="Content" conditionEx="#{${dbresult}=0}" value="Service Removed" />
+      <set item="Encoding" value="ascii" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="GuarantedPaymentRUR">
+    <condition>
+      <test item="${Recipient}" matches="^300$" />
+      <test item="${Content}" matches="^[0-9]{1,3}$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Sender}">
+          <Service id="guaranteedpayment" action="7">
+            <Attribute name="amount" value="${token0}" />
+            <Attribute name="currency" value="810" />
+          </Service>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Error: ${dbresult}" />
+      <set item="Content" conditionEx="#{${dbresult}=0}" value="summa ${amount} ${dbresult}" />
+      <!--set item="Content" value="Error: ${dbresult}" />
 			<set item="Content" condition="${dbresult}" value="Obeshhannyj platezh na summu ${amount} rub prinjat" /-->
-			<set item="Encoding" value="ascii" />
-        </deliveryTemplate>
-    </template>
-
-    <!--template procedureName="ISSA_Password">
+      <set item="Encoding" value="ascii" />
+    </deliveryTemplate>
+  </template>
+  <!--template procedureName="ISSA_Password">
         <condition>
             <test item="${Recipient}" matches="^555$" />
             <test item="${Content}" matches="^[0-9]{4,7}$" />
@@ -366,49 +348,45 @@
         </deliveryTemplate>
 
     </template-->
-	
-	<!-- Информация о последних начислениях -->
-	
-	<template procedureName="USSDLastCharges">
-        <condition>
-            <test item="${Sender}" matches="^[0-9]{11}$" />
-            <test item="${Recipient}" matches="^107$" />
-	<test item="${Content}" matches="^2468$" />	
-        </condition>
-        <receiveTemplate>
-          <Message type="retrievecustomerdata" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-            <Item customer="${sender}" subject="balance_history" />
-          </Message>
-        </receiveTemplate>
-        <deliveryTemplate conditionEx="#{${dbresult}=0 and count(/Message/Item/row)>0}">
-          <set item="Content" value="#{/Message/Item/@charges}" />
-          <set item="Sender" value="107" />
-          <set item="Recipient" value="${customer}" />
-          <set item="Encoding" value="ascii" />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{${dbresult}=0}">
-          <set item="Content"   value="No charges at last month" />
-          <set item="Sender" value="107" />
-          <set item="Recipient" value="${customer}" />
-          <set item="Encoding" value="ascii" />
-        </deliveryTemplate>
-        <deliveryTemplate>
-          <set item="Content"   value="Error: ${dbresult}" />
-          <set item="Sender" value="107" />
-          <set item="Recipient" value="${customer}" />
-          <set item="Encoding" value="ascii" />
-        </deliveryTemplate>
-    </template>	
-
-	<template procedureName="GetIndividualBillingPeriodDate">
-		<condition>
+  <!-- Информация о последних начислениях -->
+  <template procedureName="USSDLastCharges">
+    <condition>
+      <test item="${Sender}" matches="^[0-9]{11}$" />
+      <test item="${Recipient}" matches="^107$" />
+      <test item="${Content}" matches="^2468$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${sender}" subject="balance_history" />
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0 and count(/Message/Item/row)&gt;0}">
+      <set item="Content" value="#{/Message/Item/@charges}" />
+      <set item="Sender" value="107" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Encoding" value="ascii" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0}">
+      <set item="Content" value="No charges at last month" />
+      <set item="Sender" value="107" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Encoding" value="ascii" />
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Error: ${dbresult}" />
+      <set item="Sender" value="107" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Encoding" value="ascii" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="GetIndividualBillingPeriodDate">
+    <condition>
       <test item="${Recipient}" matches="^_IRPA_NUMBER$" />
-			<test item="${Content}" matches="^_getbillingperiod_$" />
-		</condition>
+      <test item="${Content}" matches="^_getbillingperiod_$" />
+    </condition>
     <receiveTemplate>
       <Message type="getindividualbillingperioddate" initiator="ussd" id="${guid}" session_id="${guid}">
-        <Item customer="${Sender}">
-        </Item>
+        <Item customer="${Sender}" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate>
@@ -418,59 +396,56 @@
       <set item="Sender" value="_IRPA_NUMBER" />
       <set item="Recipient" value="${customer}" />
     </deliveryTemplate>
-	</template>
-	<template procedureName="CheckBlock" sessionStorage="Memory" sessionLifetime="25" onClean="Session_onClean">
-        <condition>
-            <test item="${Recipient}" matches="^210$" />  
-       </condition>
-        <receiveTemplate>
-                <Message type="verificationrequest" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${sender}">
-                    <Attribute name="checkivrservice" value="1" />
-                    <Attribute name="checkblocks" value="1" />
-                </Item>
-            </Message>
-        </receiveTemplate> 
-        <deliveryTemplate>
-		   <set item="Content"   value="Error: ${dbresult}" />
-		   <set item="Content" conditionEx="#{${dbresult}=0}" value="CheckBlock OK ${dbresult}" />
-		   <set item="Encoding" value="ascii" />
-        </deliveryTemplate>
-    </template>
-
-    <template procedureName="CheckLastDetailCost">
-        <condition>
-            <test item="${Recipient}" matches="^230$" />  
-        </condition>
-        <receiveTemplate>
-            <Message type="retrievecustomerdata" initiator="ussd" id="${guid}"  session_id="@{newGuid}">
-                <Item customer="${sender}" subject="last_sms_detail_cost" />
-            </Message>
-
-        </receiveTemplate>
-        <deliveryTemplate>
-		   <set item="Content"   value="Error: ${dbresult}" />
-		   <set item="Content" conditionEx="#{${dbresult}=0}" value="${textlastdetail}" />
-		   <set item="Encoding" value="ascii" />
-        </deliveryTemplate>
-	</template>
-
-	<template procedureName="USSD_Phone_Number">
-        <condition>
-            <test item="${Recipient}" matches="^220$" />  
-        </condition>
-        <receiveTemplate>
-            <Message type="verificationrequest" initiator="ussd" id="${guid}"  session_id="@{newGuid}">
-                <Item customer="${Sender}">
-                    <Attribute name="checkivrservice" value="0" />
-                    <Attribute name="checkblocks" value="0" />
-                </Item>
-            </Message>
-       </receiveTemplate> 
-        <deliveryTemplate>
-		   <set item="Content"   value="Error: ${dbresult}" />
-		   <set item="Content" conditionEx="#{${dbresult}=0}" value="Phone number: ${Customer}" />
-		   <set item="Encoding" value="ascii" />
-        </deliveryTemplate>
-    </template>                 
+  </template>
+  <template procedureName="CheckBlock" sessionStorage="Memory" sessionLifetime="25" onClean="Session_onClean">
+    <condition>
+      <test item="${Recipient}" matches="^210$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="verificationrequest" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${sender}">
+          <Attribute name="checkivrservice" value="1" />
+          <Attribute name="checkblocks" value="1" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Error: ${dbresult}" />
+      <set item="Content" conditionEx="#{${dbresult}=0}" value="CheckBlock OK ${dbresult}" />
+      <set item="Encoding" value="ascii" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="CheckLastDetailCost">
+    <condition>
+      <test item="${Recipient}" matches="^230$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${sender}" subject="last_sms_detail_cost" />
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Error: ${dbresult}" />
+      <set item="Content" conditionEx="#{${dbresult}=0}" value="${textlastdetail}" />
+      <set item="Encoding" value="ascii" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="USSD_Phone_Number">
+    <condition>
+      <test item="${Recipient}" matches="^220$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="verificationrequest" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Sender}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Error: ${dbresult}" />
+      <set item="Content" conditionEx="#{${dbresult}=0}" value="Phone number: ${Customer}" />
+      <set item="Encoding" value="ascii" />
+    </deliveryTemplate>
+  </template>
 </templates>

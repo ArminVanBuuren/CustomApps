@@ -1,7 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-
 <templates connector="SMS">
-
   <!-- ############################  Service Add/Del ####################### -->
   <!-- ############################                  ####################### -->
   <template procedureName="Service_Delete_" persistent="true" sessionStorage="Memory" sessionLifetime="60" handler="DBCON_01">
@@ -9,13 +6,13 @@
       <test item="${Recipient}" matches="^(206|208|216|217|218|219|220|224|226|228|231|232|233|236|237|238|239|240|241|242|243|244|245|254|260|305|311|312|313|314|315|316|325|326|327|328|329|339|350|355|360|361|365|375|376|377|380|385|389|390|401|402|440|441|442|445|450|451|452|489|530|531|532|533|534|535|536|537|541|581|582|583|585|620|704|705|710|716|717|718|719|720|721|726|730|740|741|742|743|760|761|763|764|765|780|781|782|510|540|545|546|547|383|562|603|607|605|640|641|642|650|690|692|693|694|695|696|697|725|727|728|744|746|805|850|855|890|929|202|203|880|885|802|808|820|821|825|830|835|840|845|844|860|905|910|917|919|920|921|923|925|931|932|939|941|942|949|959|965|966|967|968|969)$" />
       <test item="${Token0}" matches="^(0)$" />
     </condition>
-    <receiveTemplate >
+    <receiveTemplate>
       <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="BILLING.add_close_srv_req.del_srv_req" >
+        <Item procedureName="BILLING.add_close_srv_req.del_srv_req">
           <Attribute name="p_msisdn" type="STRING" value="${Sender}" />
           <Attribute name="srv_del_str" type="STRING" value="@{switch(${Recipient}|FR16850,202|FR9389,203|FR9388,208|FR10998,216|FR16813,217|FR16814,218|FR16815,219|FR16816,220|FR11873,224|FR16494,226|FR11873,228|FR16695,231|FR12151,232|FR12150,233|FR12968,236|FR16817,237|FR16818,238|FR16819,239|FR16820,240|FR15475,241|FR16821,242|FR16822,243|FR16823,244|FR16824,245|FR15476,254|FR11883,260|FR16401,305|FR8718,311|FR1949,312|FR1950,313|FR1951,314|FR1952,315|FR1953,316|FR1954,325|FR12583,326|FR12585,327|FR12587,328|FR12589,329|FR11873,339|FR11873,340|FR14534,341|FR14537,342|FR14541,343|FR14545,350|FR10280,355|FR16285,360|FR12345,361|FR12794,365|FR11064,375|FR16445,376|FR10335,377|FR14766,380|FR12346,383|FR8993,385|FR15731,389|FR16852,390|FR11730,401|FR13139,402|FR17041,440|FR14353,441|FR15494,442|FR16772,445|FR14352,450|FR15472,451|FR15473,452|FR15474,489|FR16853,510|FR8765,530|FR15573,531|FR10761,532|FR10762,533|FR10763,534|FR10764,535|FR10765,536|FR10766,537|FR11543,540|FR8887,541|FR11489,545|FR8888,546|FR11644,547|FR11645,562|FR2045,581|FR17066,582|FR17067,583|FR17064,585|FR16731,620|FR11873,603|FR16638,607|FR9257,605|FR9256,640|FR11526,641|FR11666,642|FR11672,650|FR11560,690|FR9811,692|FR9813,693|FR9814,694|FR9815,695|FR9816,696|FR9817,697|FR9818,704|FR11095,705|FR10757,710|FR5595,716|FR12194,717|FR17087,718|FR12194,719|FR12194,720|FR5596,721|FR8799,725|FR14294,726|FR16501,727|FR12194,728|FR17001730|FR8798,740|FR10361,741|FR10767,742|FR10768,743|FR10769,744|FR14150,746|FR16347,760|FR12002,761|FR16500,763|FR16502,764|FR16503,765|FR9807,780|FR16871,781|FR16872,782|FR16873,805|FR10284,850|FR9305,855|FR11003,890|FR9404,929|FR9465,880|FR10936,885|FR10073,802|FR9008,808|FR10924,820|FR10810,821|FR15500,825|FR16735,830|FR16891,835|FR16892,840|FR16893,844|FR12433,845|FR16894,860|FR9739,905|FR14700,910|FR15645,917|FR16407,919|FR10978,920|FR15647,921|FR15872,923|FR15875,925|FR17069,931|FR11342,932|FR11434,939|FR9989,941|FR11432,942|FR11340,949|FR9847,959|FR9849,965|FR17036,966|FR13265,967|FR17037,968|FR17038,969|FR9991)}" />
-          <Attribute name="source" type="STRING" value="15"/>
-          <Attribute name="d_end" type="STRING" value="0"/>
+          <Attribute name="source" type="STRING" value="15" />
+          <Attribute name="d_end" type="STRING" value="0" />
           <Attribute name="dbresult" type="STRING" />
           <Attribute name="reply" type="STRING" />
           <Attribute name="ret_code" type="STRING" />
@@ -30,17 +27,16 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="Service_Add_" persistent="true" sessionStorage="Memory" sessionLifetime="60" handler="DBCON_01">
     <condition>
       <test item="${Recipient}" matches="^(122|123|191|206|208|216|217|218|219|220|224|226|228|231|232|233|236|237|238|239|240|241|242|243|244|245|252|254|260|305|320|325|326|327|328|329|338|339|340|341|342|343|350|355|360|361|365|375|376|377|380|385|388|389|390|401|402|440|441|442|445|450|451|452|489|530|531|532|533|534|535|536|537|581|582|583|584|585|620|704|705|716|717|718|719|721|726|740|741|742|743|760|761|763|764|765|780|781|782|785|510|540|541|545|546|547|383|562|603|607|605|640|641|642|645|650|646|690|692|693|694|695|696|697|725|727|728|744|746|805|850|855|714|890|929|202|203|880|885|802|808|820|821|825|830|835|840|844|845|860|905|910|912|913|915|917|919|920|921|923|925|931|932|939|941|942|949|959|969|991|992|993|994|995|965|966|967|968|996|997|998|999)$" />
     </condition>
-    <receiveTemplate >
+    <receiveTemplate>
       <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="billing.add_close_srv_req.add_srv_req" >
+        <Item procedureName="billing.add_close_srv_req.add_srv_req">
           <Attribute name="p_msisdn" type="STRING" value="${Sender}" />
           <Attribute name="srv_del_str" type="STRING" value="@{switch(${Recipient}|FR16367,123|FR11482,191|FR16334,202|FR9389,203|FR9388,206|FR16850,208|FR10998,216|FR16813,217|FR16814,218|FR16815,219|FR16816,220|FR11873,224|FR16494,228|FR16695,226|FR11873,231|FR12151,232|FR12150,233|FR12968,236|FR16817,237|FR16818,238|FR16819,239|FR16820,240|FR15475,241|FR16821,242|FR16822,243|FR16823,244|FR16824,245|FR15476,252|FR15128,254|FR11883,260|FR16401,305|FR8718,320|FR11873,325|FR12583,326|FR12585,327|FR12587,328|FR12589,329|FR11873,338|FR15126,339|FR11873,340|FR14534,341|FR14537,342|FR14541,343|FR14545,350|FR10280,355|FR16285,360|FR12345,361|FR12794,365|FR11064,375|FR16274,376|FR10335,377|FR14766,380|FR12346,383|FR8993,385|FR15731,388|FR16523,389|FR16852,390|FR11730,401|FR13139,402|FR17041,440|FR14353,441|FR15494,442|FR16772,445|FR14352,450|FR15472,451|FR15473,452|FR15474,489|FR16853,510|FR8765,530|FR15573,531|FR10761,532|FR10762,533|FR10763,534|FR10764,535|FR10765,536|FR10766,537|FR11543,540|FR8887,541|FR11489,545|FR8888,546|FR11644,547|FR11645,562|FR2045,581|FR17066,582|FR17067,583|FR17064,584|FR15635,585|FR16731,603|FR16638,605|FR9256,607|FR9257,620|FR11873,640|FR11526,641|FR11666,642|FR11672,645|FR11478,646|FR12154,650|FR11560,690|FR9811,692|FR9813,693|FR9814,694|FR9815,695|FR9816,696|FR9817,697|FR9818,704|FR11095,705|FR10757,714|FR5614,716|FR12194,717|FR17087,718|FR12194,719|FR12194,721|FR8799,725|FR14294,726|FR16501,727|FR12194,728|FR17001,740|FR10361,741|FR10767,742|FR10768,743|FR10769,760|FR12002,761|FR16500,763|FR16502,764|FR16503,765|FR9807,780|FR16871,781|FR16872,782|FR16873,785|FR12006,744|FR14150,746|FR16347,805|FR10284,850|FR9305,855|FR11003,890|FR9404,929|FR9465,880|FR10936,885|FR10073,802|FR9008,808|FR10924,820|FR10810,821|FR15500,825|FR16735,830|FR16891,835|FR16892,840|FR16893,844|FR12433,845|FR16894,860|FR9739,905|FR14700,910|FR15645,912|FR15326,913|FR15327,915|FR16534,917|FR16407,919|FR10978,920|FR15647,921|FR15872,923|FR15875,925|FR17069,931|FR11342,932|FR11434,939|FR9989,941|FR11432,942|FR11340,949|FR9847,959|FR9849,969|FR9991,965|FR17036,966|FR13265,967|FR17037,968|FR17038,991|FR11007,992|FR11008,993|FR11009,994|FR11004,995|FR11005,996|FR11006,997|FR14360,998|FR14361,999|FR14362)}" />
-          <Attribute name="source" type="STRING" value="15"/>
+          <Attribute name="source" type="STRING" value="15" />
           <Attribute name="dbresult" type="STRING" />
           <Attribute name="reply" type="STRING" />
           <Attribute name="ret_code" type="STRING" />
@@ -55,21 +51,19 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!-- ######################################################################## -->
-
   <template procedureName="Service_Delete2_" handler="DBCON_01">
     <condition>
       <test item="${Recipient}" matches="^(567)$" />
       <test item="${Token0}" matches="^(0)$" />
     </condition>
-    <receiveTemplate >
+    <receiveTemplate>
       <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="BILLING.add_close_srv_req.del_srv_req" >
+        <Item procedureName="BILLING.add_close_srv_req.del_srv_req">
           <Attribute name="p_msisdn" type="STRING" value="${Sender}" />
           <Attribute name="srv_del_str" type="STRING" value="@{switch(${Recipient}|FR10649)}" />
-          <Attribute name="source" type="STRING" value="15"/>
-          <Attribute name="d_end" type="STRING" value="0"/>
+          <Attribute name="source" type="STRING" value="15" />
+          <Attribute name="d_end" type="STRING" value="0" />
           <Attribute name="dbresult" type="STRING" />
           <Attribute name="reply" type="STRING" />
           <Attribute name="ret_code" type="STRING" />
@@ -84,18 +78,17 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="Service_Add2_" handler="DBCON_01">
     <condition>
       <test item="${Recipient}" matches="^(567)$" />
       <test item="${Token0}" matches="^(1)$" />
     </condition>
-    <receiveTemplate >
+    <receiveTemplate>
       <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="billing.add_close_srv_req.add_srv_req" >
+        <Item procedureName="billing.add_close_srv_req.add_srv_req">
           <Attribute name="p_msisdn" type="STRING" value="${Sender}" />
           <Attribute name="srv_del_str" type="STRING" value="@{switch(${Recipient}|FR10649)}" />
-          <Attribute name="source" type="STRING" value="15"/>
+          <Attribute name="source" type="STRING" value="15" />
           <Attribute name="dbresult" type="STRING" />
           <Attribute name="reply" type="STRING" />
           <Attribute name="ret_code" type="STRING" />
@@ -110,14 +103,13 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
-  <template procedureName="SyntaxError_Service_add_del_2_" >
+  <template procedureName="SyntaxError_Service_add_del_2_">
     <condition>
       <test item="${Recipient}" matches="^(567)$" />
     </condition>
     <receiveTemplate>
       <Message>
-        <Item customer="${Sender}"/>
+        <Item customer="${Sender}" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input">
@@ -127,21 +119,18 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
-
-
   <!-- ################## Unlim for PAyment  ############################################################### -->
   <template procedureName="Add_Unlim4Pay_" handler="DBCON_01">
     <condition>
       <test item="${Recipient}" matches="^(870)$" />
       <test item="${Token0}" matches="^(1|2)$" />
     </condition>
-    <receiveTemplate >
+    <receiveTemplate>
       <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="billing.add_close_srv_req.add_srv_req" >
+        <Item procedureName="billing.add_close_srv_req.add_srv_req">
           <Attribute name="p_msisdn" type="STRING" value="${Sender}" />
           <Attribute name="srv_del_str" type="STRING" value="@{switch(${Token0}|FR16564,2|FR16563)}" />
-          <Attribute name="source" type="STRING" value="15"/>
+          <Attribute name="source" type="STRING" value="15" />
           <Attribute name="dbresult" type="STRING" />
           <Attribute name="reply" type="STRING" />
           <Attribute name="ret_code" type="STRING" />
@@ -156,14 +145,13 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
-  <template procedureName="SyntaxError_Add_Unlim4Pay" >
+  <template procedureName="SyntaxError_Add_Unlim4Pay">
     <condition>
       <test item="${Recipient}" matches="^(870)$" />
     </condition>
     <receiveTemplate>
       <Message>
-        <Item customer="${Sender}"/>
+        <Item customer="${Sender}" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input">
@@ -173,9 +161,6 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
-
-
   <!-- ################## Gift Mother  ############################################################### -->
   <!-- <template procedureName="mother_gift_" sessionStorage="Database" sessionLifetime="60" handler="DBCON_01">
  <condition>
@@ -222,7 +207,6 @@
 		<set item="Encoding" value="unicodefffe" />
        		</deliveryTemplate>
    	</template>	 -->
-
   <!-- ################## congratulation 14.02.2018   ######################################################## -->
   <!--<template procedureName="congratulation_17022018_" sessionStorage="Database" sessionLifetime="60" handler="DBCON_01">
  <condition>
@@ -259,7 +243,6 @@
   </deliveryTemplate>
   <deliveryTemplate dropReply="true"/>
 </template> -->
-
   <!--	<template procedureName="SyntaxError_congratulation_17022018_" >
 	    <condition>
         	<test item="${Recipient}" matches="^(142)$" />
@@ -276,7 +259,6 @@
 		<set item="Encoding" value="ascii" />
        		</deliveryTemplate>
    	</template> 	-->
-
   <!-- *************** 580 gift_mts_user *************  -->
   <template procedureName="gift_mts_user" handler="DBCON_01">
     <condition>
@@ -284,7 +266,7 @@
     </condition>
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-        <Item procedureName="billing.mg_validateservice" >
+        <Item procedureName="billing.mg_validateservice">
           <Attribute name="p_msisdn" type="STRING" value="${Sender}" />
           <Attribute name="p_service_code" type="STRING" value="FR16447" />
           <Attribute name="rez" type="STRING" />
@@ -293,7 +275,7 @@
         @{store(storedRecipient,${Recipient})}
       </Message>
     </receiveTemplate>
-    <deliveryTemplate terminating="false" >
+    <deliveryTemplate terminating="false">
       <set item="Content" value="K sozhaleniyu, proizoshla oshibka. Poprobuyte eshe raz." />
       <set item="Content" conditionEx="#{${rez}=0}" value="Извините, на Вашем номере недоступно участие в акции." />
       <set item="Content" conditionEx="#{${rez}=1}" value="Запрос принят, Вам будет отправлено SMS с информацией." />
@@ -301,7 +283,7 @@
       <set item="Recipient" value="${storedSender}" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{${rez}=1}" connector="SMSCON_02" >
+    <deliveryTemplate conditionEx="#{${rez}=1}" connector="SMSCON_02">
       <!--<set item="Content" value="Вам доступно участие в акции! Заходите в приложение «Мой МТС» и выбирайте Ваш подарок: безлимитные звонки на МТС или безлимитный интернет. Узнать больше: https://m.mts.by/new-user С заботой, Ваш МТС" />  -->
       <set item="Sender" value="0884" />
       <set item="Recipient" value="${storedSender}" />
@@ -309,20 +291,19 @@
     </deliveryTemplate>
     <deliveryTemplate conditionEx="#{${rez}=0}" dropReply="true" />
   </template>
-
   <!-- *************** 691 MySafety *************  -->
   <template procedureName="Service_Delete_MySafety_" handler="DBCON_01">
     <condition>
       <test item="${Recipient}" matches="^(691)$" />
       <test item="${Token0}" matches="^(0)$" />
     </condition>
-    <receiveTemplate >
+    <receiveTemplate>
       <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="BILLING.add_close_srv_req.del_srv_req" >
+        <Item procedureName="BILLING.add_close_srv_req.del_srv_req">
           <Attribute name="p_msisdn" type="STRING" value="${Sender}" />
           <Attribute name="srv_del_str" type="STRING" value="FR13172" />
-          <Attribute name="source" type="STRING" value="15"/>
-          <Attribute name="d_end" type="STRING" value="0"/>
+          <Attribute name="source" type="STRING" value="15" />
+          <Attribute name="d_end" type="STRING" value="0" />
           <Attribute name="dbresult" type="STRING" />
           <Attribute name="reply" type="STRING" />
           <Attribute name="ret_code" type="STRING" />
@@ -337,18 +318,17 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="Service_Add_MySafety_" handler="DBCON_01">
     <condition>
       <test item="${Recipient}" matches="^(691)$" />
       <test item="${Token0}" matches="^(1)$" />
     </condition>
-    <receiveTemplate >
+    <receiveTemplate>
       <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="billing.add_close_srv_req.add_srv_req" >
+        <Item procedureName="billing.add_close_srv_req.add_srv_req">
           <Attribute name="p_msisdn" type="STRING" value="${Sender}" />
           <Attribute name="srv_del_str" type="STRING" value="FR13172" />
-          <Attribute name="source" type="STRING" value="15"/>
+          <Attribute name="source" type="STRING" value="15" />
           <Attribute name="dbresult" type="STRING" />
           <Attribute name="reply" type="STRING" />
           <Attribute name="ret_code" type="STRING" />
@@ -363,14 +343,13 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
-  <template procedureName="SyntaxError_MySafety_" >
+  <template procedureName="SyntaxError_MySafety_">
     <condition>
       <test item="${Recipient}" matches="^(691)$" />
     </condition>
     <receiveTemplate>
       <Message>
-        <Item customer="${Sender}"/>
+        <Item customer="${Sender}" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input">
@@ -380,8 +359,6 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
-
   <!-- ############################  448 OpenInternet in Roaming ####################### -->
   <template procedureName="OpenInternet_In_Roaming" handler="DBCON_01">
     <condition>
@@ -389,7 +366,7 @@
     </condition>
     <receiveTemplate>
       <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="BILLING.get_qps_bal_str" >
+        <Item procedureName="BILLING.get_qps_bal_str">
           <Attribute name="p_msisdn" type="STRING" value="${Sender}" />
           <Attribute name="p_ussd" type="INT" value="448" />
           <Attribute name="o_res" type="STRING" />
@@ -404,9 +381,6 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
-
-
   <!-- ############################  444 OpenInternet ####################### -->
   <template procedureName="OpenInternet_" handler="DBCON_01">
     <condition>
@@ -414,7 +388,7 @@
     </condition>
     <receiveTemplate>
       <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="BILLING.mg_pack.GetHonestUSSD" >
+        <Item procedureName="BILLING.mg_pack.GetHonestUSSD">
           <Attribute name="i_msisdn" type="STRING" value="${Sender}" />
           <Attribute name="o_msg" type="STRING" />
         </Item>
@@ -428,15 +402,14 @@
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
   <!-- ###################  Change TP business   ##################################################### -->
   <template procedureName="ChangeTPtoBusiness_" handler="DBCON_01">
     <condition>
       <test item="${Recipient}" matches="^(771|772|773|774|775)$" />
     </condition>
-    <receiveTemplate >
+    <receiveTemplate>
       <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="billing.mg_smena_tp_ussd" >
+        <Item procedureName="billing.mg_smena_tp_ussd">
           <Attribute name="num" type="STRING" value="${Sender}" />
           <Attribute name="v_tp" type="STRING" value="@{switch(${Recipient}|205,772|206,773|207,774|208,775|218)}" />
           <Attribute name="msg" type="STRING" />
@@ -451,11 +424,7 @@
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
-
   <!-- ###################  Add Rem FR11841 (lesson english)   ##################################################### -->
-
-
   <!--<template procedureName="Rem_Lesson_English_USSD_" handler="DBCON_01">
 	<condition>
 		<test item="${Recipient}" matches="^(709)$" />
@@ -509,7 +478,6 @@
        </deliveryTemplate>
    </template> 	
 	-->
-
   <!-- ############################  Inet_Packages_5Gb__ ####################### -->
   <template procedureName="Inet_Packages_XGb_" handler="DBCON_02">
     <condition>
@@ -518,11 +486,11 @@
     </condition>
     <receiveTemplate>
       <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="oms.adapters_in.create_synch_order" >
+        <Item procedureName="oms.adapters_in.create_synch_order">
           <Attribute name="i_ident" type="STRING" value="${Sender}" />
-          <Attribute name="i_product" type="STRING" value="28"/>
-          <Attribute name="i_action" type="STRING" value="1"/>
-          <Attribute name="i_source_id" type="STRING" value="3"/>
+          <Attribute name="i_product" type="STRING" value="28" />
+          <Attribute name="i_action" type="STRING" value="1" />
+          <Attribute name="i_source_id" type="STRING" value="3" />
           <Attribute name="i_add_param" type="STRING" value="INPUTNUM=${Recipient};CODE=${Token0}" />
           <Attribute name="o_order_id" type="STRING" />
           <Attribute name="o_result_code" type="STRING" />
@@ -545,9 +513,7 @@
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
   <!-- ###################  FTTX bonus   ##################################################### -->
-
   <template procedureName="Delete_bonus_fttx_" handler="DBCON_01">
     <condition>
       <test item="${Recipient}" matches="^(767)$" />
@@ -555,9 +521,9 @@
       <test item="${Token1}" matches="^[0-9]{1,8}$" />
       <test item="${Token2}" matches="^(0)$" />
     </condition>
-    <receiveTemplate >
+    <receiveTemplate>
       <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="billing.bms_additional_func.delnumacceptor" >
+        <Item procedureName="billing.bms_additional_func.delnumacceptor">
           <Attribute name="i_msisdn_mobile" type="STRING" value="${Sender}" />
           <Attribute name="i_msisdn_fttx" type="STRING" value="${Token0}" />
           <Attribute name="i_pwd_fttx" type="STRING" value="${Token1}" />
@@ -574,16 +540,15 @@
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="Add_bonus_fttx_" handler="DBCON_01">
     <condition>
       <test item="${Recipient}" matches="^(767)$" />
       <test item="${Token0}" matches="^375\d{9}$" />
       <test item="${Token1}" matches="^[0-9]{1,8}$" />
     </condition>
-    <receiveTemplate >
+    <receiveTemplate>
       <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="billing.bms_additional_func.addnumacceptor" >
+        <Item procedureName="billing.bms_additional_func.addnumacceptor">
           <Attribute name="i_msisdn_mobile" type="STRING" value="${Sender}" />
           <Attribute name="i_msisdn_fttx" type="STRING" value="${Token0}" />
           <Attribute name="i_pwd_fttx" type="STRING" value="${Token1}" />
@@ -600,7 +565,6 @@
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="Bonus_fttx_767_SyntaxError_">
     <condition>
       <test item="${Recipient}" matches="^(767)$" />
@@ -617,7 +581,6 @@
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
   <!-- *************** 560 Scool Book *************  -->
   <template procedureName="Service_Delete_Scool_Books_" handler="DBCON_01">
     <condition>
@@ -625,13 +588,13 @@
       <test item="${Token0}" matches="^(5|6|7|8|9|10|11|12)$" />
       <test item="${Token1}" matches="^(0)$" />
     </condition>
-    <receiveTemplate >
+    <receiveTemplate>
       <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="BILLING.add_close_srv_req.del_srv_req" >
+        <Item procedureName="BILLING.add_close_srv_req.del_srv_req">
           <Attribute name="p_msisdn" type="STRING" value="${Sender}" />
           <Attribute name="srv_del_str" type="STRING" value="@{switch(${Token0}|FR11189,6|FR11190,7|FR11191,8|FR11192,9|FR11193,10|FR11194,11|FR11195,12|FR11196)}" />
-          <Attribute name="source" type="STRING" value="15"/>
-          <Attribute name="d_end" type="STRING" value="0"/>
+          <Attribute name="source" type="STRING" value="15" />
+          <Attribute name="d_end" type="STRING" value="0" />
           <Attribute name="dbresult" type="STRING" />
           <Attribute name="reply" type="STRING" />
           <Attribute name="ret_code" type="STRING" />
@@ -646,19 +609,18 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="Service_Delete_All_Scool_Book_" handler="DBCON_01">
     <condition>
       <test item="${Recipient}" matches="^(560)$" />
       <test item="${Token0}" matches="^(0)$" />
     </condition>
-    <receiveTemplate >
+    <receiveTemplate>
       <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="BILLING.add_close_srv_req.del_srv_req" >
+        <Item procedureName="BILLING.add_close_srv_req.del_srv_req">
           <Attribute name="p_msisdn" type="STRING" value="${Sender}" />
           <Attribute name="srv_del_str" type="STRING" value="FR11196" />
-          <Attribute name="source" type="STRING" value="15"/>
-          <Attribute name="d_end" type="STRING" value="0"/>
+          <Attribute name="source" type="STRING" value="15" />
+          <Attribute name="d_end" type="STRING" value="0" />
           <Attribute name="dbresult" type="STRING" />
           <Attribute name="reply" type="STRING" />
           <Attribute name="ret_code" type="STRING" />
@@ -673,19 +635,17 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
-
   <template procedureName="Service_Add_Scool_Book_" handler="DBCON_01">
     <condition>
       <test item="${Recipient}" matches="^(560)$" />
       <test item="${Token0}" matches="^(5|6|7|8|9|10|11|12)$" />
     </condition>
-    <receiveTemplate >
+    <receiveTemplate>
       <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="billing.add_close_srv_req.add_srv_req" >
+        <Item procedureName="billing.add_close_srv_req.add_srv_req">
           <Attribute name="p_msisdn" type="STRING" value="${Sender}" />
           <Attribute name="srv_del_str" type="STRING" value="@{switch(${Token0}|FR11189,6|FR11190,7|FR11191,8|FR11192,9|FR11193,10|FR11194,11|FR11195,12|FR11196)}" />
-          <Attribute name="source" type="STRING" value="15"/>
+          <Attribute name="source" type="STRING" value="15" />
           <Attribute name="dbresult" type="STRING" />
           <Attribute name="reply" type="STRING" />
           <Attribute name="ret_code" type="STRING" />
@@ -700,14 +660,13 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
-  <template procedureName="SyntaxError_ScoolBook_add_del_2_" >
+  <template procedureName="SyntaxError_ScoolBook_add_del_2_">
     <condition>
       <test item="${Recipient}" matches="^(560)$" />
     </condition>
     <receiveTemplate>
       <Message>
-        <Item customer="${Sender}"/>
+        <Item customer="${Sender}" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input">
@@ -717,7 +676,6 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!-- *************** Bonus FTTX USSD 357 *************  -->
   <template procedureName="Bonus_fttx_ussd_357_" handler="DBCON_02">
     <condition>
@@ -756,7 +714,6 @@
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="Bonus_fttx_ussd_357_SyntaxError_">
     <condition>
       <test item="${Recipient}" matches="^(357)$" />
@@ -773,16 +730,14 @@
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
   <!-- ############################  Fake responce 3G connect ####################### -->
-
   <template procedureName="Fake_responce_3G_connect">
     <condition>
       <test item="${Recipient}" matches="^(311|312|313|314|315|316|710|720|730)$" />
     </condition>
     <receiveTemplate>
       <Message initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-        <Item customer="${Sender}"/>
+        <Item customer="${Sender}" />
         @{store(cust,${Sender})} @{store(recep,${Recipient})}
       </Message>
     </receiveTemplate>
@@ -794,8 +749,6 @@
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
   </template>
-
-
   <!-- ############################  Get_Info_CellPhone_LTE ####################### -->
   <template procedureName="Get_Info_CellPhone_LTE_" handler="DBCON_01">
     <condition>
@@ -803,7 +756,7 @@
     </condition>
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="billing.mg_check_lte" >
+        <Item procedureName="billing.mg_check_lte">
           <Attribute name="mob_num" type="STRING" value="${Sender}" />
           <Attribute name="msg" type="STRING" />
         </Item>
@@ -817,7 +770,6 @@
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
   <!-- ############################  Hei_Code #######################  закрылся -->
   <!--	<template procedureName="Hei_Code_" handler="DBCON_01">
 		<condition>
@@ -839,7 +791,6 @@
 			<set item="Encoding" value="ascii" />
        </deliveryTemplate>
    </template> -->
-
   <!-- ############################  last 5 cost events ####################### -->
   <template procedureName="f_callinfo_" handler="DBCON_01">
     <condition>
@@ -847,7 +798,7 @@
     </condition>
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="billing.spa_func.f_callinfo2" >
+        <Item procedureName="billing.spa_func.f_callinfo2">
           <Attribute name="i_msisdn" type="STRING" value="${Sender}" />
           <Attribute name="i_params" type="STRING" value="${Content}" />
           <Attribute name="o_retstr" type="STRING" />
@@ -862,19 +813,18 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!-- ############################  Video Monitoring service delete ####################### -->
   <template procedureName="VideoMonitoring_del_" handler="DBCON_01">
     <condition>
       <test item="${Recipient}" matches="^(222)$" />
     </condition>
-    <receiveTemplate >
+    <receiveTemplate>
       <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="BILLING.add_close_srv_req.del_srv_req" >
+        <Item procedureName="BILLING.add_close_srv_req.del_srv_req">
           <Attribute name="p_msisdn" type="STRING" value="${Sender}" />
           <Attribute name="srv_del_str" type="STRING" value="FR8288" />
-          <Attribute name="source" type="STRING" value="15"/>
-          <Attribute name="d_end" type="STRING" value="0"/>
+          <Attribute name="source" type="STRING" value="15" />
+          <Attribute name="d_end" type="STRING" value="0" />
           <Attribute name="dbresult" type="STRING" />
           <Attribute name="reply" type="STRING" />
           <Attribute name="ret_code" type="STRING" />
@@ -889,22 +839,20 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!-- ############################  All NET ####################### -->
-
   <template procedureName="All_Net_Del_" handler="DBCON_01">
     <condition>
       <test item="${Recipient}" matches="^(810)$" />
       <test item="${Token0}" matches="^(100|300|500|1000)$" />
       <test item="${Token1}" matches="^(0)$" />
     </condition>
-    <receiveTemplate >
+    <receiveTemplate>
       <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="BILLING.add_close_srv_req.del_srv_req" >
+        <Item procedureName="BILLING.add_close_srv_req.del_srv_req">
           <Attribute name="p_msisdn" type="STRING" value="${Sender}" />
           <Attribute name="srv_del_str" type="STRING" value="@{switch(${Token0}|FR10257,300|FR10258,500|FR10259,1000|FR10260)}" />
-          <Attribute name="source" type="STRING" value="15"/>
-          <Attribute name="d_end" type="STRING" value="0"/>
+          <Attribute name="source" type="STRING" value="15" />
+          <Attribute name="d_end" type="STRING" value="0" />
           <Attribute name="dbresult" type="STRING" />
           <Attribute name="reply" type="STRING" />
           <Attribute name="ret_code" type="STRING" />
@@ -919,18 +867,17 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="All_Net_Add_" handler="DBCON_01">
     <condition>
       <test item="${Recipient}" matches="^(810)$" />
       <test item="${Token0}" matches="^(100|300|500|1000)$" />
     </condition>
-    <receiveTemplate >
+    <receiveTemplate>
       <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="billing.add_close_srv_req.add_srv_req" >
+        <Item procedureName="billing.add_close_srv_req.add_srv_req">
           <Attribute name="p_msisdn" type="STRING" value="${Sender}" />
           <Attribute name="srv_del_str" type="STRING" value="@{switch(${Token0}|FR10257,300|FR10258,500|FR10259,1000|FR10260)}" />
-          <Attribute name="source" type="STRING" value="15"/>
+          <Attribute name="source" type="STRING" value="15" />
           <Attribute name="dbresult" type="STRING" />
           <Attribute name="reply" type="STRING" />
           <Attribute name="ret_code" type="STRING" />
@@ -945,12 +892,7 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
-
-
   <!-- ######################################### FTTx static IP adress 801 ##################################################### -->
-
-
   <template procedureName="mg_static_IP" handler="DBCON_01">
     <condition>
       <test item="${Recipient}" matches="^801$" />
@@ -958,7 +900,7 @@
     </condition>
     <receiveTemplate>
       <Message type="ussd_mg_static_IP" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="billing.mg_fttx_stat_ip" >
+        <Item procedureName="billing.mg_fttx_stat_ip">
           <Attribute name="num" type="STRING" value="${Sender}" />
           <Attribute name="ac" type="STRING" value="@{switch(${Content}|1,0|0)}" />
           <Attribute name="msg" type="STRING" />
@@ -974,10 +916,7 @@
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
   <!-- ######################################### mg ostatok bonusnyh paketov 706 ##################################################### -->
-
-
   <template procedureName="mg_ostatok_bonus_paketov_706" handler="DBCON_01">
     <condition>
       <test item="${Recipient}" matches="^706$" />
@@ -985,7 +924,7 @@
     </condition>
     <receiveTemplate>
       <Message type="ussd_mg_bonus_packet_ostatok" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="billing.bonus_ussd_p.get_bonus_balance_mg" >
+        <Item procedureName="billing.bonus_ussd_p.get_bonus_balance_mg">
           <Attribute name="num" type="STRING" value="${Sender}" />
           <Attribute name="msg" type="STRING" />
           <Attribute name="dbresult" type="STRING" />
@@ -1000,7 +939,6 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!-- #########################################    370 FTTX  ############### -->
   <template procedureName="mg_FTTX_pass" handler="DBCON_01">
     <condition>
@@ -1008,7 +946,7 @@
     </condition>
     <receiveTemplate>
       <Message type="ussd_mg_FTTX_pass" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="billing.mg_lll_fttx_pass" >
+        <Item procedureName="billing.mg_lll_fttx_pass">
           <Attribute name="num" type="STRING" value="${Sender}" />
           <Attribute name="msg" type="STRING" />
           <Attribute name="dbresult" type="STRING" />
@@ -1023,7 +961,6 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!-- #########################################    310 unlim toning  ############### -->
   <template procedureName="Add_Del_USSD_unlim_toning_310">
     <condition>
@@ -1033,7 +970,7 @@
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
         <Item customer="${Sender}">
-          <Service id="FR7783" service_id="FR7783" action="@{switch(${Content}|2,0|3)}" class="0" needtariffication="1"  informOnImpossibility="0" createrequest="1" enddate="01.01.0001 00.00.00"/>
+          <Service id="FR7783" service_id="FR7783" action="@{switch(${Content}|2,0|3)}" class="0" needtariffication="1" informOnImpossibility="0" createrequest="1" enddate="01.01.0001 00.00.00" />
         </Item>
       </Message>
     </receiveTemplate>
@@ -1046,14 +983,13 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="SyntaxError_Add_Del_USSD_unlim_toning_310">
     <condition>
       <test item="${Recipient}" matches="^(310)$" />
     </condition>
     <receiveTemplate>
       <Message>
-        <Item customer="${Sender}"/>
+        <Item customer="${Sender}" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input">
@@ -1063,10 +999,7 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
-
   <!-- #########################################    520 tarify popolam  ############### -->
-
   <template procedureName="tarify_popolam_ussd__520">
     <condition>
       <test item="${Recipient}" matches="^(520)$" />
@@ -1075,7 +1008,7 @@
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
         <Item customer="${Sender}">
-          <Service id="FR7599" service_id="FR7599" action="@{switch(${Content}|2,0|3)}" class="0" needtariffication="1"  informOnImpossibility="0" createrequest="1" enddate="01.01.0001 00.00.00"/>
+          <Service id="FR7599" service_id="FR7599" action="@{switch(${Content}|2,0|3)}" class="0" needtariffication="1" informOnImpossibility="0" createrequest="1" enddate="01.01.0001 00.00.00" />
         </Item>
       </Message>
     </receiveTemplate>
@@ -1088,10 +1021,7 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
-
   <!-- #########################################    133 troinoi zaryad 31.08.2012 po 31.10.2012   ############### -->
-
   <template procedureName="troynoi_zaryad_ussd__133">
     <condition>
       <test item="${Recipient}" matches="^(133)$" />
@@ -1100,7 +1030,7 @@
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
         <Item customer="${Sender}">
-          <Service id="FR3612" service_id="FR3612" action="@{switch(${Content}|2,0|3)}" class="0" needtariffication="1"  informOnImpossibility="0" createrequest="1" enddate="01.01.0001 00.00.00"/>
+          <Service id="FR3612" service_id="FR3612" action="@{switch(${Content}|2,0|3)}" class="0" needtariffication="1" informOnImpossibility="0" createrequest="1" enddate="01.01.0001 00.00.00" />
         </Item>
       </Message>
     </receiveTemplate>
@@ -1113,15 +1043,11 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
-
-
   <!-- #########################################    505 Отличный интернет             ############### -->
   <!-- #########################################    506 Oblastnoi Unlim        ############### -->
   <!-- #########################################    790 3G lite                ############### -->
   <!-- #########################################    302 Vam podarok                ############### -->
   <!-- #########################################    213 Технологическая: Новогодний интернет  ############### -->
-
   <template procedureName="Snow_unlim_505">
     <condition>
       <test item="${Recipient}" matches="^(505|506|790|302|213)$" />
@@ -1130,7 +1056,7 @@
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
         <Item customer="${Sender}">
-          <Service id="@{switch(${Recipient}|FR8100,506|FR6926,790|FR7476,302|FR7833,213|FR7902)}" service_id="@{switch(${Recipient}|FR8100,506|FR6926,790|FR7476,302|FR7833,213|FR7902)}" action="@{switch(${Content}|2,0|3)}" class="0" needtariffication="1"  informOnImpossibility="0" createrequest="1" enddate="01.01.0001 00.00.00"/>
+          <Service id="@{switch(${Recipient}|FR8100,506|FR6926,790|FR7476,302|FR7833,213|FR7902)}" service_id="@{switch(${Recipient}|FR8100,506|FR6926,790|FR7476,302|FR7833,213|FR7902)}" action="@{switch(${Content}|2,0|3)}" class="0" needtariffication="1" informOnImpossibility="0" createrequest="1" enddate="01.01.0001 00.00.00" />
         </Item>
       </Message>
     </receiveTemplate>
@@ -1143,9 +1069,7 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!-- #########################################    125 kredit dov             ############### -->
-
   <template procedureName="kredit_dov_ussd">
     <condition>
       <test item="${Recipient}" matches="^(125)$" />
@@ -1153,25 +1077,24 @@
     </condition>
     <receiveTemplate>
       <Message type="kredit_dov" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-        <Item customer="${Sender}"  ac="@{switch(${Content}|0,|1)}" />
+        <Item customer="${Sender}" ac="@{switch(${Content}|0,|1)}" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate>
-      <set item="Content" value=" Информация недоступна."/>
+      <set item="Content" value=" Информация недоступна." />
       <set item="Content" condition="//Item/@dbresult=0" value="${reply}" />
       <set item="Sender" value="125" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="err-kredit_dov_ussd">
     <condition>
       <test item="${Recipient}" matches="^(125)$" />
     </condition>
     <receiveTemplate>
       <Message>
-        <Item customer="${Sender}"/>
+        <Item customer="${Sender}" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input">
@@ -1181,10 +1104,7 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
-
   <!-- #########################################    Avtomobilist             ############### -->
-
   <template procedureName="Add_Del_USSD_Avtomobilist_911">
     <condition>
       <test item="${Recipient}" matches="^(911)$" />
@@ -1193,7 +1113,7 @@
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
         <Item customer="${Sender}">
-          <Service id="FR5423" service_id="FR5423" action="@{switch(${Content}|3,|2)}" class="0" needtariffication="1"  informOnImpossibility="0" createrequest="1" enddate="01.01.0001 00.00.00"/>
+          <Service id="FR5423" service_id="FR5423" action="@{switch(${Content}|3,|2)}" class="0" needtariffication="1" informOnImpossibility="0" createrequest="1" enddate="01.01.0001 00.00.00" />
         </Item>
       </Message>
     </receiveTemplate>
@@ -1206,14 +1126,13 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="SyntaxError_Add_Del_USSD_Avtomobilist_911">
     <condition>
       <test item="${Recipient}" matches="^(911)$" />
     </condition>
     <receiveTemplate>
       <Message>
-        <Item customer="${Sender}"/>
+        <Item customer="${Sender}" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input">
@@ -1223,9 +1142,7 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!-- ######################################### ussd_981  ###################################### -->
-
   <!--<template procedureName="ussd_981" persistent="true" sessionStorage="Memory" sessionLifetime="60">
 		<condition>
 			<test item="${Recipient}" matches="^981" />
@@ -1244,19 +1161,18 @@
 		<set item="Encoding" value="ascii" />
        </deliveryTemplate>
    </template> -->
-
   <template procedureName="ussd_981_0_" persistent="true" sessionStorage="Memory" sessionLifetime="60" handler="DBCON_01">
     <condition>
       <test item="${Recipient}" matches="^(981)$" />
       <test item="${Token0}" matches="^(0)$" />
     </condition>
-    <receiveTemplate >
+    <receiveTemplate>
       <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="BILLING.add_close_srv_req.del_srv_req" >
+        <Item procedureName="BILLING.add_close_srv_req.del_srv_req">
           <Attribute name="p_msisdn" type="STRING" value="${Sender}" />
           <Attribute name="srv_del_str" type="STRING" value="FR14291" />
-          <Attribute name="source" type="STRING" value="15"/>
-          <Attribute name="d_end" type="STRING" value="0"/>
+          <Attribute name="source" type="STRING" value="15" />
+          <Attribute name="d_end" type="STRING" value="0" />
           <Attribute name="dbresult" type="STRING" />
           <Attribute name="reply" type="STRING" />
           <Attribute name="ret_code" type="STRING" />
@@ -1271,8 +1187,6 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
-
   <template procedureName="ussd_981_" handler="DBCON_01">
     <condition>
       <test item="${Recipient}" matches="^981$" />
@@ -1281,7 +1195,7 @@
     </condition>
     <receiveTemplate>
       <Message type="ussd_981_v3_" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="billing.mg_get_ussd981_string_v3" >
+        <Item procedureName="billing.mg_get_ussd981_string_v3">
           <Attribute name="CUSTOMER" type="STRING" value="${Sender}" />
           <Attribute name="P_MSISDN" type="STRING" value="${Token1}" />
           <Attribute name="P_DILER_NUM" type="STRING" value="${Sender}" />
@@ -1298,14 +1212,13 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="ussd_981_err_">
     <condition>
       <test item="${Recipient}" matches="^981$" />
     </condition>
     <receiveTemplate>
-      <Message >
-        <Item customer="${Sender}"/>
+      <Message>
+        <Item customer="${Sender}" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input">
@@ -1315,8 +1228,6 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
-
   <!-- *************** My Car *************  -->
   <template procedureName="My_Car">
     <condition>
@@ -1326,7 +1237,7 @@
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
         <Item customer="${Sender}">
-          <Service id="FR3613" service_id="FR3613" action="@{switch(${Content}|2,0|3)}"/>
+          <Service id="FR3613" service_id="FR3613" action="@{switch(${Content}|2,0|3)}" />
         </Item>
       </Message>
     </receiveTemplate>
@@ -1339,14 +1250,13 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="SyntaxError_My_Car">
     <condition>
       <test item="${Recipient}" matches="^(673)$" />
     </condition>
     <receiveTemplate>
       <Message>
-        <Item customer="${Sender}"/>
+        <Item customer="${Sender}" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input">
@@ -1391,8 +1301,6 @@
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
-
   <!-- *************** SEND URL *************  -->
   <template procedureName="send_url">
     <condition>
@@ -1400,7 +1308,7 @@
     </condition>
     <receiveTemplate>
       <Message>
-        <Item customer="${Sender}" snd="${Recipient}" rez="@{switch(${Recipient}|Мобильное приложение для любителей рыбалки Fish Сlub! Интерактивная карта рыбалок. Статистика клева. Фотоотчеты и возможность общаться с единомышленниками - качай приложение на http://fish-club.by/,711|Приложение Тонинг можно скачать по ссылке http://goo.gl/L2te5,712|SMS-Привет можно скачать по ссылке http://mts.javacity.by/D4VDR6PM48/game.jad,713|МТС-Каталог можно скачать по ссылке http://cat.333by.com/mts%20Katalog/)}"></Item>
+        <Item customer="${Sender}" snd="${Recipient}" rez="@{switch(${Recipient}|Мобильное приложение для любителей рыбалки Fish Сlub! Интерактивная карта рыбалок. Статистика клева. Фотоотчеты и возможность общаться с единомышленниками - качай приложение на http://fish-club.by/,711|Приложение Тонинг можно скачать по ссылке http://goo.gl/L2te5,712|SMS-Привет можно скачать по ссылке http://mts.javacity.by/D4VDR6PM48/game.jad,713|МТС-Каталог можно скачать по ссылке http://cat.333by.com/mts%20Katalog/)}" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input" terminating="false">
@@ -1408,23 +1316,21 @@
       <set item="Sender" value="${snd}" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="unicodefffe" />
-    </deliveryTemplate >
-    <deliveryTemplate  direction="input" connector="SMSCON_02">
-      <set item= "Content" value="${rez}" />
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" connector="SMSCON_02">
+      <set item="Content" value="${rez}" />
       <set item="Sender" value="0884" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="send_ussd_515_">
     <condition>
       <test item="${Recipient}" matches="^515$" />
     </condition>
     <receiveTemplate>
       <Message>
-        <Item customer="${Sender}" snd="${Recipient}"
-  rez="Подарок, который порадует: подарите 7-дневную подписку на полезный сервис! 
+        <Item customer="${Sender}" snd="${Recipient}" rez="Подарок, который порадует: подарите 7-дневную подписку на полезный сервис! 
 Отправьте SMS c номером получателя подарка в формате 375XXYYYYYYY на номер:
 * МТС Music — 5511; 
 * МТС Пресса — 5522; 
@@ -1434,7 +1340,7 @@
 Стоимость: от 1,54 руб.
 Подробнее: https://m.mts.by/podarki/
 Ваш МТС
-Срок действия Акции по 15.03.2018"></Item>
+Срок действия Акции по 15.03.2018" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input" terminating="false">
@@ -1442,15 +1348,14 @@
       <set item="Sender" value="${snd}" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="unicodefffe" />
-    </deliveryTemplate >
-    <deliveryTemplate  direction="input" connector="SMSCON_02">
-      <set item= "Content" value="${rez}" />
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" connector="SMSCON_02">
+      <set item="Content" value="${rez}" />
       <set item="Sender" value="0884" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
   <!-- закрыто 20.08.2019 для добавления МТС Музыки  по распоряжению  -->
   <!--	<template procedureName="send_url_717_tutby">
 		<condition>
@@ -1475,14 +1380,13 @@
        </deliveryTemplate>	   
     </template> 
 -->
-
   <template procedureName="send_url_221_mts_tv">
     <condition>
       <test item="${Recipient}" matches="^221$" />
     </condition>
     <receiveTemplate>
       <Message>
-        <Item customer="${Sender}" snd="${Recipient}" rez="Мобильное приложение МТС ТВ для iOS и Android можно скачать по ссылке: http://tv.mts.by/get"></Item>
+        <Item customer="${Sender}" snd="${Recipient}" rez="Мобильное приложение МТС ТВ для iOS и Android можно скачать по ссылке: http://tv.mts.by/get" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input" terminating="false">
@@ -1490,26 +1394,22 @@
       <set item="Sender" value="${snd}" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="unicodefffe" />
-    </deliveryTemplate >
-    <deliveryTemplate  direction="input" connector="SMSCON_02">
-      <set item= "Content" value="${rez}" />
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" connector="SMSCON_02">
+      <set item="Content" value="${rez}" />
       <set item="Sender" value="0884" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
-
-
   <!-- begin информирование о МТС ТВ и Кино от Start 420 и 425  -->
-
   <template procedureName="send_text_420_mts_tv">
     <condition>
       <test item="${Recipient}" matches="^420$" />
     </condition>
     <receiveTemplate>
       <Message>
-        <Item customer="${Sender}" snd="${Recipient}" rez="Подключите сервис МТС ТВ и смотрите любимые ТВ-передачи в любом месте. Скачайте приложение по ссылке:  https://tv.mts.by/getapp. Первые семь дней бесплатно, далее 0,35 руб/сут. Ваш МТС"></Item>
+        <Item customer="${Sender}" snd="${Recipient}" rez="Подключите сервис МТС ТВ и смотрите любимые ТВ-передачи в любом месте. Скачайте приложение по ссылке:  https://tv.mts.by/getapp. Первые семь дней бесплатно, далее 0,35 руб/сут. Ваш МТС" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input" terminating="false">
@@ -1517,22 +1417,21 @@
       <set item="Sender" value="${snd}" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="unicodefffe" />
-    </deliveryTemplate >
-    <deliveryTemplate  direction="input" connector="SMSCON_02">
-      <set item= "Content" value="${rez}" />
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" connector="SMSCON_02">
+      <set item="Content" value="${rez}" />
       <set item="Sender" value="0884" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="send_text_425_kino_ot_start">
     <condition>
       <test item="${Recipient}" matches="^425$" />
     </condition>
     <receiveTemplate>
       <Message>
-        <Item customer="${Sender}" snd="${Recipient}" rez="Подписывайтесь на «Кино от Start» в сервисе «МТС ТВ» и наслаждайтесь новинками русского кино. Скачайте приложение по ссылке: https://tv.mts.by/getapp. Первые 7 дней бесплатно, далее 0,35 руб/сут. Интернет-трафик МТС – 0 руб. Подробнее: http://mts.by/start. Ваш МТС"></Item>
+        <Item customer="${Sender}" snd="${Recipient}" rez="Подписывайтесь на «Кино от Start» в сервисе «МТС ТВ» и наслаждайтесь новинками русского кино. Скачайте приложение по ссылке: https://tv.mts.by/getapp. Первые 7 дней бесплатно, далее 0,35 руб/сут. Интернет-трафик МТС – 0 руб. Подробнее: http://mts.by/start. Ваш МТС" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input" terminating="false">
@@ -1540,15 +1439,14 @@
       <set item="Sender" value="${snd}" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="unicodefffe" />
-    </deliveryTemplate >
-    <deliveryTemplate  direction="input" connector="SMSCON_02">
-      <set item= "Content" value="${rez}" />
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" connector="SMSCON_02">
+      <set item="Content" value="${rez}" />
       <set item="Sender" value="0884" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
   <!-- end информирование о МТС ТВ и Кино от Start 420 и 425  -->
   <template procedureName="send_info_mts_tv">
     <condition>
@@ -1556,7 +1454,7 @@
     </condition>
     <receiveTemplate>
       <Message>
-        <Item customer="${Sender}" snd="${Recipient}"></Item>
+        <Item customer="${Sender}" snd="${Recipient}" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input" terminating="false">
@@ -1564,22 +1462,20 @@
       <set item="Sender" value="${snd}" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="unicodefffe" />
-    </deliveryTemplate >
-    <deliveryTemplate  direction="input" connector="SMSCON_02">
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" connector="SMSCON_02">
       <set item="Sender" value="0884" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
-
   <template procedureName="My_MTS">
     <condition>
       <test item="${Recipient}" matches="^702$" />
     </condition>
     <receiveTemplate>
       <Message>
-        <Item customer="${Sender}" snd="${Recipient}" rez="Приложение Мой МТС - удобный способ контролировать свои расходы. Скачайте приложение на http://my.mts.by и следите за балансом, остатком минут и мегабайт."></Item>
+        <Item customer="${Sender}" snd="${Recipient}" rez="Приложение Мой МТС - удобный способ контролировать свои расходы. Скачайте приложение на http://my.mts.by и следите за балансом, остатком минут и мегабайт." />
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input" terminating="false">
@@ -1587,22 +1483,21 @@
       <set item="Sender" value="${snd}" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="unicodefffe" />
-    </deliveryTemplate >
-    <deliveryTemplate  direction="input" connector="SMSCON_02">
-      <set item= "Content" value="${rez}" />
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" connector="SMSCON_02">
+      <set item="Content" value="${rez}" />
       <set item="Sender" value="0884" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="MTS_Kino">
     <condition>
       <test item="${Recipient}" matches="^519$" />
     </condition>
     <receiveTemplate>
       <Message>
-        <Item customer="${Sender}" snd="${Recipient}" rez="Попробуйте приложение «МТС Кино» - тысячи фильмов, сериалов и мультфильмов в HD качестве. Смотрите на телефоне, телевизоре, компьютере! С услугой «Мобильное кино»  - первые 7 дней бесплатно. Далее – 0,35 руб./сутки. Трафик 0 руб./МБ. Скачайте приложение по ссылке https://kinomts.app.link/"></Item>
+        <Item customer="${Sender}" snd="${Recipient}" rez="Попробуйте приложение «МТС Кино» - тысячи фильмов, сериалов и мультфильмов в HD качестве. Смотрите на телефоне, телевизоре, компьютере! С услугой «Мобильное кино»  - первые 7 дней бесплатно. Далее – 0,35 руб./сутки. Трафик 0 руб./МБ. Скачайте приложение по ссылке https://kinomts.app.link/" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input" terminating="false">
@@ -1610,15 +1505,14 @@
       <set item="Sender" value="${snd}" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="unicodefffe" />
-    </deliveryTemplate >
-    <deliveryTemplate  direction="input" connector="SMSCON_02">
-      <set item= "Content" value="${rez}" />
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" connector="SMSCON_02">
+      <set item="Content" value="${rez}" />
       <set item="Sender" value="0884" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="send_url_715_english_test">
     <condition>
       <test item="${Recipient}" matches="^715$" />
@@ -1627,7 +1521,7 @@
       <Message>
         <Item customer="${Sender}" snd="${Recipient}" rez="Насколько хорошо Вы знаете английский? Проверьте себя: 
 https://smart-university.ru/eng/ege/express
-Ваш МТС"></Item>
+Ваш МТС" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input" terminating="false">
@@ -1635,22 +1529,21 @@ https://smart-university.ru/eng/ege/express
       <set item="Sender" value="${snd}" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="unicodefffe" />
-    </deliveryTemplate >
-    <deliveryTemplate  direction="input" connector="SMSCON_02">
-      <set item= "Content" value="${rez}" />
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" connector="SMSCON_02">
+      <set item="Content" value="${rez}" />
       <set item="Sender" value="0884" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="Send_sms_BOOKMATE">
     <condition>
       <test item="${Recipient}" matches="^703$" />
     </condition>
     <receiveTemplate>
       <Message>
-        <Item customer="${Sender}" snd="${Recipient}" rez="Читайте где угодно и даже без интернета! Тысячи книг на любой вкус в «Мобильной библиотеке МТС». 3 дня бесплатно, далее — 0,20 р./2000 руб. в сутки. Установить приложение: http://bm.gg/mtsby"></Item>
+        <Item customer="${Sender}" snd="${Recipient}" rez="Читайте где угодно и даже без интернета! Тысячи книг на любой вкус в «Мобильной библиотеке МТС». 3 дня бесплатно, далее — 0,20 р./2000 руб. в сутки. Установить приложение: http://bm.gg/mtsby" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input" terminating="false">
@@ -1658,15 +1551,14 @@ https://smart-university.ru/eng/ege/express
       <set item="Sender" value="${snd}" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="unicodefffe" />
-    </deliveryTemplate >
-    <deliveryTemplate  direction="input" connector="SMSCON_02">
-      <set item= "Content" value="${rez}" />
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" connector="SMSCON_02">
+      <set item="Content" value="${rez}" />
       <set item="Sender" value="0884" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
   <!-- ############################  116 zadoljennost ####################### -->
   <template procedureName="rassrochka_passport_z" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
@@ -1676,38 +1568,34 @@ https://smart-university.ru/eng/ege/express
     </condition>
     <receiveTemplate>
       <Message type="rassrochka_pasport_z" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-        <Item customer="${Sender}"  pass_n="${Token0}"  pa_n="${Token1}"/>
+        <Item customer="${Sender}" pass_n="${Token0}" pa_n="${Token1}" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate>
-      <set item="Content" value=" Информация недоступна."/>
+      <set item="Content" value=" Информация недоступна." />
       <set item="Content" condition="//Item/@dbresult=0" value="${reply}" />
       <set item="Sender" value="116" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="err-rassrochka_pasport_z" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^116$" />
     </condition>
     <receiveTemplate>
-      <Message >
-        <Item customer="${Sender}"/>
+      <Message>
+        <Item customer="${Sender}" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input">
-      <set item="Content" value="Неверный запрос!Формат:*116*&#925;паспорта*&#925;лицевого счета#" />
+      <set item="Content" value="Неверный запрос!Формат:*116*Νпаспорта*Νлицевого счета#" />
       <set item="Sender" value="116" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
-
   <!-- #########################################   dvoynoy zaryad  USSD 302,602   ####################### -->
-
   <template procedureName="dvoynoy_zaryad_302_602">
     <condition>
       <test item="${Recipient}" matches="^(302|602)$" />
@@ -1716,7 +1604,7 @@ https://smart-university.ru/eng/ege/express
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
         <Item customer="${Sender}">
-          <Service id="FR3611" service_id="FR3611" action="@{switch(${Content}|3,|2)}"/>
+          <Service id="FR3611" service_id="FR3611" action="@{switch(${Content}|3,|2)}" />
         </Item>
       </Message>
     </receiveTemplate>
@@ -1729,14 +1617,13 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="SyntaxError_dvoynoy_zaryad_302_602">
     <condition>
       <test item="${Recipient}" matches="^(302|602)$" />
     </condition>
     <receiveTemplate>
       <Message>
-        <Item customer="${Sender}"/>
+        <Item customer="${Sender}" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input">
@@ -1746,16 +1633,14 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!-- ######################################### mg 350 novogodnii ekspress  ###################################### -->
-
   <template procedureName="mg_ny_xpress" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^350$" />
     </condition>
     <receiveTemplate>
       <Message type="ussd_350" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-        <Item customer="${Sender}"  />
+        <Item customer="${Sender}" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate>
@@ -1766,11 +1651,8 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!-- #########################################         end           ##################################################### -->
-
   <!-- ######################################### mg smartfony na novy god  ###################################### -->
-
   <template procedureName="mg_smartfony_ny" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^171$" />
@@ -1778,7 +1660,7 @@ https://smart-university.ru/eng/ege/express
     </condition>
     <receiveTemplate>
       <Message type="ussd_171" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-        <Item customer="${Sender}"  act="@{switch(${Token0}|1,2|2,3|3)}" />
+        <Item customer="${Sender}" act="@{switch(${Token0}|1,2|2,3|3)}" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate>
@@ -1789,14 +1671,13 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="mg_smartfony_ny_err" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^171$" />
     </condition>
     <receiveTemplate>
-      <Message >
-        <Item customer="${Sender}"/>
+      <Message>
+        <Item customer="${Sender}" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input">
@@ -1806,16 +1687,9 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!-- #########################################         end           ##################################################### -->
-
-
-
-
   <!-- #########################################   Skidka posle 2 SMS 60%  USSD 485   ####################### -->
-
   <!-- #########################################   Skidka  USSD 486   ####################### -->
-
   <template procedureName="skidka_posle_2_sms_60_485_486">
     <condition>
       <test item="${Recipient}" matches="^(485|486)$" />
@@ -1824,7 +1698,7 @@ https://smart-university.ru/eng/ege/express
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
         <Item customer="${Sender}">
-          <Service id="@{switch(${Recipient}|FR1742,486|FR1747)}" service_id="@{switch(${Recipient}|FR1742,486|FR1747)}" action="@{switch(${Content}|3,|2)}"/>
+          <Service id="@{switch(${Recipient}|FR1742,486|FR1747)}" service_id="@{switch(${Recipient}|FR1742,486|FR1747)}" action="@{switch(${Content}|3,|2)}" />
         </Item>
       </Message>
     </receiveTemplate>
@@ -1837,14 +1711,13 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="SyntaxError_USSD_485_486">
     <condition>
       <test item="${Recipient}" matches="^(485|486)$" />
     </condition>
     <receiveTemplate>
       <Message>
-        <Item customer="${Sender}"/>
+        <Item customer="${Sender}" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input">
@@ -1854,16 +1727,14 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!-- ######################################### mg inet bunus ussd 323 ##################################################### -->
-
   <template procedureName="mg_add_inet_bonus_323" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^323$" />
     </condition>
     <receiveTemplate>
       <Message type="ussd_mg_inet_bonus" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-        <Item customer="${Sender}"/>
+        <Item customer="${Sender}" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate>
@@ -1874,17 +1745,14 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
-
-
   <!-- ######################################### Add MTS-ovec ##################################################### -->
-  <template procedureName="AddBonusMTSovec_"  handler="DBCON_01">
+  <template procedureName="AddBonusMTSovec_" handler="DBCON_01">
     <condition>
       <test item="${Recipient}" matches="^(151|152|153)$" />
     </condition>
     <receiveTemplate>
       <Message type="Service" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="billing.mg_lll_mts_ovec" >
+        <Item procedureName="billing.mg_lll_mts_ovec">
           <Attribute name="p_msisdn" type="STRING" value="${Sender}" />
           <Attribute name="p_ac" type="INT" value="@{switch(${Recipient}|1,152|2,153|3)}" />
           <Attribute name="p_src" type="STRING" value="USSD" />
@@ -1900,9 +1768,7 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
   <!-- ######################################### smartfony ussd 151 152 153 ##################################################### -->
-
   <!--<template procedureName="mg_add_smart_151" persistent="true" sessionStorage="Memory" sessionLifetime="60">
 	<condition>
         	<test item="${Recipient}" matches="^151$" />
@@ -2010,12 +1876,8 @@ https://smart-university.ru/eng/ege/express
 		<set item="Encoding" value="ascii" />
        		</deliveryTemplate>
    	</template> -->
-
   <!-- #########################################         end           ##################################################### -->
-
-
   <!-- #########################################    MTS Connect 0.1, 0.5, 1, 2, 3, 5 Gb add/del/syntax  ############### -->
-
   <template procedureName="Add_Del_USSD_MTS_connect">
     <condition>
       <test item="${Recipient}" matches="^(811|812|813|814|815|816)$" />
@@ -2024,8 +1886,8 @@ https://smart-university.ru/eng/ege/express
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
         <Item customer="${Sender}">
-          <Service id="@{switch(${Recipient}|FR2327,812|FR2328,813|FR2329,814|FR2330,815|FR2331,816|FR2332)}" service_id="@{switch(${Recipient}|FR2327,812|FR2328,813|FR2329,814|FR2330,815|FR2331,816|FR2332)}"
-  action="@{switch(${Content}|3,|2)}" class="0" needtariffication="1"  informOnImpossibility="0" createrequest="1" enddate="01.01.0001 00.00.00"/>/>
+          <Service id="@{switch(${Recipient}|FR2327,812|FR2328,813|FR2329,814|FR2330,815|FR2331,816|FR2332)}" service_id="@{switch(${Recipient}|FR2327,812|FR2328,813|FR2329,814|FR2330,815|FR2331,816|FR2332)}" action="@{switch(${Content}|3,|2)}" class="0" needtariffication="1" informOnImpossibility="0" createrequest="1" enddate="01.01.0001 00.00.00" />
+          /&gt;
         </Item>
       </Message>
     </receiveTemplate>
@@ -2038,14 +1900,13 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="SyntaxError_USSD_MTS_connect">
     <condition>
       <test item="${Recipient}" matches="^(811|812|813|814|815|816)$" />
     </condition>
     <receiveTemplate>
       <Message>
-        <Item customer="${Sender}"/>
+        <Item customer="${Sender}" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input">
@@ -2055,10 +1916,8 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!-- #########################################    Internight only add 322   ######################################### -->
   <!-- #########################################    Y personi vse otlichno only add 999 ############################### -->
-
   <template procedureName="Add_USSD_InterNight">
     <condition>
       <test item="${Recipient}" matches="^(322|999)$" />
@@ -2066,7 +1925,7 @@ https://smart-university.ru/eng/ege/express
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
         <Item customer="${Sender}">
-          <Service id="@{switch(${Recipient}|FR1960,999|FR6096)}" service_id="@{switch(${Recipient}|FR1960,999|FR6096)}" action="2"/>
+          <Service id="@{switch(${Recipient}|FR1960,999|FR6096)}" service_id="@{switch(${Recipient}|FR1960,999|FR6096)}" action="2" />
         </Item>
       </Message>
     </receiveTemplate>
@@ -2079,12 +1938,8 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!-- #########################################    Internight end    ################################################# -->
-
-
   <!-- ######################################### Skidka posle 2 sms 35% ussd 484 ########################################### -->
-
   <template procedureName="mg_skidka_posle_sms" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^484$" />
@@ -2092,8 +1947,8 @@ https://smart-university.ru/eng/ege/express
     </condition>
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-        <Item customer="${Sender}" >
-          <Service id="FR1739" service_id="FR1739"  action="@{switch(${Token0}|3,|2)}"/>
+        <Item customer="${Sender}">
+          <Service id="FR1739" service_id="FR1739" action="@{switch(${Token0}|3,|2)}" />
         </Item>
       </Message>
     </receiveTemplate>
@@ -2105,14 +1960,13 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="mg_skidka_posle_sms_error" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^484$" />
     </condition>
     <receiveTemplate>
-      <Message >
-        <Item customer="${Sender}"/>
+      <Message>
+        <Item customer="${Sender}" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input">
@@ -2122,11 +1976,8 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!-- #########################################         end           ##################################################### -->
-
   <!-- ##################### ussd 483 over 3 min. razgovora - 40% ############################## -->
-
   <template procedureName="mg_del_483" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^483$" />
@@ -2134,8 +1985,8 @@ https://smart-university.ru/eng/ege/express
     </condition>
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-        <Item customer="${Sender}" >
-          <Service id="FR1732" service_id="FR1732"  action="3"/>
+        <Item customer="${Sender}">
+          <Service id="FR1732" service_id="FR1732" action="3" />
         </Item>
       </Message>
     </receiveTemplate>
@@ -2147,15 +1998,14 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="mg_add_483" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^483$" />
     </condition>
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-        <Item customer="${Sender}" >
-          <Service id="FR1732" service_id="FR1732"  action="2"/>
+        <Item customer="${Sender}">
+          <Service id="FR1732" service_id="FR1732" action="2" />
         </Item>
       </Message>
     </receiveTemplate>
@@ -2167,11 +2017,8 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!-- #########################################        483 end           ##################################################### -->
-
   <!-- ##################### ussd 367 skidka na mejdunarodnie vizovi 26.07.2010 po 26.07.2010 ############################## -->
-
   <template procedureName="mg_del_367" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^367$" />
@@ -2179,8 +2026,8 @@ https://smart-university.ru/eng/ege/express
     </condition>
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-        <Item customer="${Sender}" >
-          <Service id="FR1851" service_id="FR1851"  action="3"/>
+        <Item customer="${Sender}">
+          <Service id="FR1851" service_id="FR1851" action="3" />
         </Item>
       </Message>
     </receiveTemplate>
@@ -2192,7 +2039,6 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="mg_add_367" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^367$" />
@@ -2200,8 +2046,8 @@ https://smart-university.ru/eng/ege/express
     </condition>
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-        <Item customer="${Sender}" >
-          <Service id="@{switch(${Token0}|FR1851,2|FR1837,3|FR1839,4|FR1841,5|FR1853,6|FR1855)}" service_id="@{switch(${Token0}|FR1851,2|FR1837,3|FR1839,4|FR1841,5|FR1853,6|FR1855)}"  action="2"/>
+        <Item customer="${Sender}">
+          <Service id="@{switch(${Token0}|FR1851,2|FR1837,3|FR1839,4|FR1841,5|FR1853,6|FR1855)}" service_id="@{switch(${Token0}|FR1851,2|FR1837,3|FR1839,4|FR1841,5|FR1853,6|FR1855)}" action="2" />
         </Item>
       </Message>
     </receiveTemplate>
@@ -2213,11 +2059,8 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!-- #########################################         end           ##################################################### -->
-
   <!-- #########################################     ussd WIFI MTS 351 353     ######################################### -->
-
   <template procedureName="mg_del_351_353" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^(351|353)$" />
@@ -2225,8 +2068,8 @@ https://smart-university.ru/eng/ege/express
     </condition>
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-        <Item customer="${Sender}" >
-          <Service id="@{switch(${Recipient}|FR1871,353|FR1872)}" service_id="@{switch(${Recipient}|FR1871,353|FR1872)}"  action="3"/>
+        <Item customer="${Sender}">
+          <Service id="@{switch(${Recipient}|FR1871,353|FR1872)}" service_id="@{switch(${Recipient}|FR1871,353|FR1872)}" action="3" />
         </Item>
       </Message>
     </receiveTemplate>
@@ -2238,15 +2081,14 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="mg_add_351_353" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^(351|353)$" />
     </condition>
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-        <Item customer="${Sender}" >
-          <Service id="@{switch(${Recipient}|FR1871,353|FR1872)}" service_id="@{switch(${Recipient}|FR1871,353|FR1872)}"  action="2"/>
+        <Item customer="${Sender}">
+          <Service id="@{switch(${Recipient}|FR1871,353|FR1872)}" service_id="@{switch(${Recipient}|FR1871,353|FR1872)}" action="2" />
         </Item>
       </Message>
     </receiveTemplate>
@@ -2258,11 +2100,8 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!-- #########################################         end           ##################################################### -->
-
   <!-- ######################################### ussd 482 acckaia skidka ##################################################### -->
-
   <template procedureName="mg_del_482" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^482$" />
@@ -2270,8 +2109,8 @@ https://smart-university.ru/eng/ege/express
     </condition>
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-        <Item customer="${Sender}" >
-          <Service id="FR1728" service_id="FR1728"  action="3"/>
+        <Item customer="${Sender}">
+          <Service id="FR1728" service_id="FR1728" action="3" />
         </Item>
       </Message>
     </receiveTemplate>
@@ -2283,15 +2122,14 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="mg_add_482" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^482$" />
     </condition>
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-        <Item customer="${Sender}" >
-          <Service id="FR1728" service_id="FR1728"  action="2"/>
+        <Item customer="${Sender}">
+          <Service id="FR1728" service_id="FR1728" action="2" />
         </Item>
       </Message>
     </receiveTemplate>
@@ -2303,11 +2141,8 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!-- #########################################         end           ##################################################### -->
-
   <!-- ######################################### ussd 481 acckaia skidka ##################################################### -->
-
   <template procedureName="mg_del_481" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^481$" />
@@ -2315,8 +2150,8 @@ https://smart-university.ru/eng/ege/express
     </condition>
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-        <Item customer="${Sender}" >
-          <Service id="FR1724" service_id="FR1724"  action="3"/>
+        <Item customer="${Sender}">
+          <Service id="FR1724" service_id="FR1724" action="3" />
         </Item>
       </Message>
     </receiveTemplate>
@@ -2328,15 +2163,14 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="mg_add_481" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^481$" />
     </condition>
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-        <Item customer="${Sender}" >
-          <Service id="FR1724" service_id="FR1724"  action="2"/>
+        <Item customer="${Sender}">
+          <Service id="FR1724" service_id="FR1724" action="2" />
         </Item>
       </Message>
     </receiveTemplate>
@@ -2348,11 +2182,8 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!-- #########################################         end           ##################################################### -->
-
   <!-- ######################################### ussd 480 -30% skidka ##################################################### -->
-
   <template procedureName="mg_del_480" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^480$" />
@@ -2360,8 +2191,8 @@ https://smart-university.ru/eng/ege/express
     </condition>
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-        <Item customer="${Sender}" >
-          <Service id="FR1722" service_id="FR1722"  action="3"/>
+        <Item customer="${Sender}">
+          <Service id="FR1722" service_id="FR1722" action="3" />
         </Item>
       </Message>
     </receiveTemplate>
@@ -2373,15 +2204,14 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="mg_add_480" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^480$" />
     </condition>
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-        <Item customer="${Sender}" >
-          <Service id="FR1722" service_id="FR1722"  action="2"/>
+        <Item customer="${Sender}">
+          <Service id="FR1722" service_id="FR1722" action="2" />
         </Item>
       </Message>
     </receiveTemplate>
@@ -2393,12 +2223,8 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!-- #########################################         end           ##################################################### -->
-
-
   <!-- ######################################### ussd 479 festival  ##################################################### -->
-
   <template procedureName="mg_del_479" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^479$" />
@@ -2406,8 +2232,8 @@ https://smart-university.ru/eng/ege/express
     </condition>
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-        <Item customer="${Sender}" >
-          <Service id="FR1719" service_id="FR1719"  action="3"/>
+        <Item customer="${Sender}">
+          <Service id="FR1719" service_id="FR1719" action="3" />
         </Item>
       </Message>
     </receiveTemplate>
@@ -2419,15 +2245,14 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="mg_add_479" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^479$" />
     </condition>
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-        <Item customer="${Sender}" >
-          <Service id="FR1719" service_id="FR1719"  action="2"/>
+        <Item customer="${Sender}">
+          <Service id="FR1719" service_id="FR1719" action="2" />
         </Item>
       </Message>
     </receiveTemplate>
@@ -2439,11 +2264,8 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!-- #########################################         end           ##################################################### -->
-
   <!-- ######################################### ussd 478 utrom deshevle ##################################################### -->
-
   <template procedureName="Add_Del_ussd_478_utrom_deshevle">
     <condition>
       <test item="${Recipient}" matches="^(478)$" />
@@ -2465,16 +2287,9 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!-- #########################################         end           ##################################################### -->
-
-
-
-
   <!-- #########################################         end           ##################################################### -->
-
   <!-- ######################################### sms-30% ussd 846 ##################################################### -->
-
   <template procedureName="mg_del_sms-30" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^846$" />
@@ -2495,7 +2310,6 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="mg_add_sms-30" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^846$" />
@@ -2515,11 +2329,8 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!-- #########################################         end           ##################################################### -->
-
   <!-- ######################################### +200 +400 +600 ussd 106 ##################################################### -->
-
   <template procedureName="mg_add_del_plus" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^106$" />
@@ -2527,7 +2338,7 @@ https://smart-university.ru/eng/ege/express
     </condition>
     <receiveTemplate>
       <Message type="ussd_106" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-        <Item customer="${Sender}"  action="@{switch(${Token0}|0,200|FR1132,400|FR1130,600|FR1131)}" srv="plus"/>
+        <Item customer="${Sender}" action="@{switch(${Token0}|0,200|FR1132,400|FR1130,600|FR1131)}" srv="plus" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate>
@@ -2538,14 +2349,13 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="mg_plus_syntax_error" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^106$" />
     </condition>
     <receiveTemplate>
-      <Message >
-        <Item customer="${Sender}"/>
+      <Message>
+        <Item customer="${Sender}" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input">
@@ -2555,12 +2365,8 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!-- #########################################         end           ##################################################### -->
-
-
   <!-- ######################################### Rassrochka passport 791 ##################################################### -->
-
   <template procedureName="mg_RassrochkaPassport_791" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^791$" />
@@ -2571,7 +2377,7 @@ https://smart-university.ru/eng/ege/express
     </condition>
     <receiveTemplate>
       <Message type="rassrochka_pasport" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-        <Item customer="${Sender}"  num_pr="${Token1}" pass_n="${Token0}" cod_o="${Token2}" sum_o="${Token3}" src_con="USSD"/>
+        <Item customer="${Sender}" num_pr="${Token1}" pass_n="${Token0}" cod_o="${Token2}" sum_o="${Token3}" src_con="USSD" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate>
@@ -2582,39 +2388,36 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="mg_RassrochkaPassport_791_syntax_error" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^791$" />
     </condition>
     <receiveTemplate>
       <Message>
-        <Item customer="${Sender}"> </Item>
+        <Item customer="${Sender}" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input">
-      <set item="Content" value="Ошибка!Формат:&#925;паспорта*&#925;телефона(7цифр)*код*сумма." />
+      <set item="Content" value="Ошибка!Формат:Νпаспорта*Νтелефона(7цифр)*код*сумма." />
       <set item="Sender" value="791" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
   <!-- #########################################         end           ##################################################### -->
-
   <!-- ######################################### Creditniy method rasschetov ussd 150 ##################################################### -->
   <!-- if content equal empty=add, 0=del, 1=check, 2= add FR9069 в ас=3 -->
-  <template procedureName="mg_check_del_add_CMR"  handler="DBCON_01">
+  <template procedureName="mg_check_del_add_CMR" handler="DBCON_01">
     <condition>
       <test item="${Recipient}" matches="^150$" />
       <test item="${Content}" matches="^(|0|1|2)" />
     </condition>
     <receiveTemplate>
       <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="BILLING.credit_method_pkg.mg_credit_method" >
+        <Item procedureName="BILLING.credit_method_pkg.mg_credit_method">
           <Attribute name="num" type="STRING" value="${Sender}" />
           <Attribute name="ac" type="STRING" value="@{switch(${Content}|1,0|0,1|2,2|3)}" />
-          <Attribute name="is_mars" type="STRING" value="0"/>
+          <Attribute name="is_mars" type="STRING" value="0" />
           <Attribute name="msg" type="STRING" />
           <Attribute name="dbresult" type="STRING" />
         </Item>
@@ -2628,13 +2431,8 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
-
-
   <!-- #########################################         end           ##################################################### -->
-
   <!-- ######################################### Jivoi balans ussd 500 ##################################################### -->
-
   <template procedureName="mg_500_del" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^500$" />
@@ -2655,9 +2453,6 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
-
-
   <template procedureName="mg_500_add" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^500$" />
@@ -2677,18 +2472,15 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!-- #########################################         end           ##################################################### -->
-
   <!--<template procedureName="mg_172_ostavaisa_s_MTS">-->
-
   <template procedureName="mg_172_ostavaisa_s_MTS" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^172$" />
     </condition>
     <receiveTemplate>
       <Message type="ussd_172" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-        <Item customer="${Sender}"/>
+        <Item customer="${Sender}" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate>
@@ -2700,7 +2492,6 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!--<template procedureName="AdddelFavNumber_190">
     <condition>
 	<test item="${Recipient}" matches="^190$" />
@@ -2728,9 +2519,7 @@ https://smart-university.ru/eng/ege/express
 		<set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template> -->
-
   <!-- ######################################### Podderji RED ENERGY 104,105 ########################################### -->
-
   <template procedureName="mg_104" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^104$" />
@@ -2748,9 +2537,6 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
-
-
   <template procedureName="mg_105" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^105$" />
@@ -2768,11 +2554,8 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!-- ######################################### end Podderji RED ENERGY ########################################### -->
-
   <!-- ######################################### CRM Kampania 488        ########################################### -->
-
   <template procedureName="mg_CRM_kampania_ussd" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^488$" />
@@ -2780,7 +2563,7 @@ https://smart-university.ru/eng/ege/express
     </condition>
     <receiveTemplate>
       <Message type="ussd_CRM_kampania" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-        <Item customer="${Sender}" action="${Token0}"/>
+        <Item customer="${Sender}" action="${Token0}" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate>
@@ -2791,14 +2574,13 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="mg_CRM_kampania_ussd_add" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^488$" />
     </condition>
     <receiveTemplate>
       <Message type="ussd_CRM_kampania" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-        <Item customer="${Sender}" action="1"/>
+        <Item customer="${Sender}" action="1" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate>
@@ -2809,10 +2591,8 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!-- ######################################### end CRM kampania       ########################################### -->
-
-  <template procedureName="AddFavNumber_190_ussd" sessionStorage="Memory" sessionLifetime="300" >
+  <template procedureName="AddFavNumber_190_ussd" sessionStorage="Memory" sessionLifetime="300">
     <condition>
       <test item="${Recipient}" matches="^190$" />
       <test item="${Token0}" matches="^(1)$" />
@@ -2846,7 +2626,6 @@ https://smart-university.ru/eng/ege/express
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="AddFavNumber_190_2">
     <condition>
       <test item="0" matches="1" />
@@ -2866,7 +2645,6 @@ https://smart-university.ru/eng/ege/express
       <set item="Sender" value="${customer}" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="DelFavNumber_190">
     <condition>
       <test item="${Recipient}" matches="^190$" />
@@ -2895,11 +2673,7 @@ https://smart-university.ru/eng/ege/express
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
   </template>
-
-
   <!--  ####################   Vecherom deshevle -30%     ######################## -->
-
-
   <template procedureName="mg_847_del" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^847$" />
@@ -2939,10 +2713,7 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!-- ################### end Vecherom deshevle    ##############################-->
-
-
   <template procedureName="mg_175_del" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^175$" />
@@ -2963,9 +2734,6 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
-
-
   <template procedureName="mg_175_add" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^175$" />
@@ -2985,14 +2753,13 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="mg_181_festival" persistent="true" sessionStorage="Memory" sessionLifetime="40">
     <condition>
       <test item="${Recipient}" matches="^181$" />
     </condition>
     <receiveTemplate>
       <Message type="ussd_181_festival" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-        <Item customer="${Sender}"/>
+        <Item customer="${Sender}" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate>
@@ -3003,7 +2770,6 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="mg_304_del" persistent="true" sessionStorage="Memory" sessionLifetime="40">
     <condition>
       <test item="${Recipient}" matches="^304$" />
@@ -3011,7 +2777,7 @@ https://smart-university.ru/eng/ege/express
     </condition>
     <receiveTemplate>
       <Message type="mg_add_del_KIP" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-        <Item customer="${Sender}" action="0"/>
+        <Item customer="${Sender}" action="0" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate>
@@ -3023,14 +2789,13 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="mg_304" persistent="true" sessionStorage="Memory" sessionLifetime="40">
     <condition>
       <test item="${Recipient}" matches="^304$" />
     </condition>
     <receiveTemplate>
       <Message type="mg_add_del_KIP" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-        <Item customer="${Sender}" action = "1"/>
+        <Item customer="${Sender}" action="1" />
       </Message>
     </receiveTemplate>
     <deliveryTemplate>
@@ -3042,7 +2807,6 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="mg_add_del_PersonaInternet" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^(155|156)$" />
@@ -3063,9 +2827,6 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
-
-
   <!--<template procedureName="mg_add_170" persistent="true" sessionStorage="Memory" sessionLifetime="40">
 	<condition>
         	<test item="${Sender}" matches="^(375297003002|375292720015)$" />
@@ -3091,7 +2852,6 @@ https://smart-university.ru/eng/ege/express
        </deliveryTemplate>
 </template>
 -->
-
   <!--<template procedureName="mg_del_171" persistent="true" sessionStorage="Memory" sessionLifetime="40">
 	<condition>
 	        <test item="${Sender}" matches="^(375297003002|375292720015)$" />
@@ -3116,7 +2876,6 @@ https://smart-university.ru/eng/ege/express
 		<set item="Encoding" value="ascii" />
        </deliveryTemplate>
 </template> -->
-
   <template procedureName="mg_del_hyper_voice_160" persistent="true" sessionStorage="Memory" sessionLifetime="40">
     <condition>
       <test item="${Recipient}" matches="^160$" />
@@ -3130,13 +2889,11 @@ https://smart-university.ru/eng/ege/express
     <deliveryTemplate>
       <set item="Content" value="K sozhaleniyu, proizoshla oshibka. Poprobuyte eshe raz." />
       <set item="Content" condition="//Item/@dbresult='0'" value="${msg}" />
-      <set item="Sender" value="160"/>
+      <set item="Sender" value="160" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
-
   <template procedureName="mg_add_hyper_voice_160" persistent="true" sessionStorage="Memory" sessionLifetime="40">
     <condition>
       <test item="${Recipient}" matches="^160$" />
@@ -3149,13 +2906,11 @@ https://smart-university.ru/eng/ege/express
     <deliveryTemplate>
       <set item="Content" value="K sozhaleniyu, proizoshla oshibka. Poprobuyte eshe raz." />
       <set item="Content" condition="//Item/@dbresult='0'" value="${msg}" />
-      <set item="Sender" value="160"/>
+      <set item="Sender" value="160" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
-
   <template procedureName="KEO_PtP" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^115$" />
@@ -3220,7 +2975,6 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="VMASPayment">
     <condition>
       <test item="${Recipient}" matches="^115$" />
@@ -3265,15 +3019,14 @@ https://smart-university.ru/eng/ege/express
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input">
-      <set item="Content" value="Pozhaluysta, vvodite 14 cifr!"/>
+      <set item="Content" value="Pozhaluysta, vvodite 14 cifr!" />
       <set item="Sender" value="115" />
-      <set item="Recipient" value="${customer}"/>
+      <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
   <!-- Personal Guaranteed payment-->
-  <template procedureName="SMS_Check_PersonalGuaranteedPayment" sessionLifetime="60" >
+  <template procedureName="SMS_Check_PersonalGuaranteedPayment" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^(114)$" />
       <test item="${Content}" matches="^(1|2|3|4|5|6|7|8|9|10){1,2}$" />
@@ -3311,7 +3064,6 @@ https://smart-university.ru/eng/ege/express
       <set item="Recipient" value="${customer}" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="SMS_PersonalGuaranteedPayment">
     <condition>
       <test item="0" matches="1" />
@@ -3333,7 +3085,7 @@ https://smart-university.ru/eng/ege/express
       <set item="Content" condition="//Item/@dbresult=320203" value="Регистрация запрещена - предыдущий обещанный платеж не оплачен." />
       <set item="Content" condition="//Item/@dbresult=320111" value="Превышена разрешенная сумма обещанного платежа в 3 р." />
       <set item="Content" condition="//Item/@dbresult=320112" value="Срочный кредит недоступен." />
-      <set item="Content" conditionEx="#{('${amount}' > 0 and '${dbresult}'= 320113) }" value="Макс. сумма - #{${amount} div 100} р. Для ввода наберите *114*сумма#." />
+      <set item="Content" conditionEx="#{('${amount}' &gt; 0 and '${dbresult}'= 320113) }" value="Макс. сумма - #{${amount} div 100} р. Для ввода наберите *114*сумма#." />
       <set item="Content" conditionEx="#{('${amount}' = 0 and '${dbresult}'= 320113) }" value="Услуга Вам недоступна.Воспользуйтесь ОП *113*сумма# (до 3 р.)" />
       <set item="Content" condition="//Item/@dbresult=320121" value="Платеж не может быть зарегистрирован." />
       <set item="Content" condition="//Item/@dbresult=320341" value="Нельзя ввести срочный кредит на Вашем тарифном плане." />
@@ -3353,17 +3105,14 @@ https://smart-university.ru/eng/ege/express
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input">
-      <set item="Content" value="Pozhaluista, posylaite tol'ko tsifry!"/>
+      <set item="Content" value="Pozhaluista, posylaite tol'ko tsifry!" />
       <set item="Sender" value="114" />
-      <set item="Recipient" value="${customer}"/>
+      <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
-
-
   <!-- Guaranteed payment WORK-->
-  <template procedureName="SMS_Check_GuaranteedPayment" sessionLifetime="60" >
+  <template procedureName="SMS_Check_GuaranteedPayment" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^113$" />
       <test item="${Content}" matches="^[1-3]{1}$" />
@@ -3442,16 +3191,13 @@ https://smart-university.ru/eng/ege/express
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input">
-      <set item="Content" value="Pozhaluista, posylaite tol'ko tsifry!"/>
+      <set item="Content" value="Pozhaluista, posylaite tol'ko tsifry!" />
       <set item="Sender" value="113" />
-      <set item="Recipient" value="${customer}"/>
+      <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-
-
-
-  <template procedureName="SMS_Check_GuaranteedPaymenttest" sessionLifetime="60" >
+  <template procedureName="SMS_Check_GuaranteedPaymenttest" sessionLifetime="60">
     <condition>
       <test item="${Sender}" matches="^(375297003002|375297776319|375297776010)$" />
       <test item="${Recipient}" matches="^113$" />
@@ -3527,22 +3273,14 @@ https://smart-university.ru/eng/ege/express
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input">
-      <set item="Content" value="Произошла ошибка!"/>
+      <set item="Content" value="Произошла ошибка!" />
       <set item="Sender" value="113" />
-      <set item="Recipient" value="${customer}"/>
+      <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
-
-
   <!-- ACHTUNG P-t-P  pereneseno v SRVConnector-->
-
-
-
-
   <!-- ACHTUNG SPONSOR -->
-
   <template procedureName="add_sponsor">
     <condition>
       <test item="${Recipient}" matches="^336$" />
@@ -3551,9 +3289,8 @@ https://smart-university.ru/eng/ege/express
       <test item="${token2}" matches="^[0-9]{1,3}$" />
       <test item="${token3}" matches="^[0-9]{1,3}$" />
     </condition>
-
     <receiveTemplate>
-      <Message type="serviceorder"  initiator="ussd" id="${guid}" session_id="@{newGuid}">
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
         <Item customer="${Sender}">
           <Service id="sponsorrequest" action="5">
             <Attribute name="receiver" value="${token1}" />
@@ -3565,7 +3302,6 @@ https://smart-university.ru/eng/ege/express
         </Item>
       </Message>
     </receiveTemplate>
-
     <deliveryTemplate>
       <set item="Content" value="dbresult #{//Item/@dbresult}" />
       <set item="Content" condition="//Item/@dbresult='0'" value="Dlya podtwerjdeniya perevoda #{/Message/Item/Service/Attribute[@name='amount']/@value div 100} r. abonentu ${receiver} kajdie #{/Message/Item/Service/Attribute[@name='period']/@value} dn. prishlite kod #{/Message/Item/Service/Attribute[@name='code']/@value} na nomer 336" />
@@ -3591,18 +3327,14 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="iso-8859-1" />
     </deliveryTemplate>
   </template>
-
-
   <template procedureName="del_sponsor">
     <condition>
       <test item="${Recipient}" matches="^336$" />
       <test item="${token0}" matches="^2$" />
       <test item="${token1}" matches="^\d{12}$" />
-
     </condition>
-
     <receiveTemplate>
-      <Message type="serviceorder"  initiator="ussd" id="${guid}" session_id="@{newGuid}">
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
         <Item customer="${Sender}">
           <Service id="sponsorrequest" action="5">
             <Attribute name="receiver" value="${token1}" />
@@ -3614,7 +3346,6 @@ https://smart-university.ru/eng/ege/express
         </Item>
       </Message>
     </receiveTemplate>
-
     <deliveryTemplate>
       <set item="Content" value="dbresult #{//Item/@dbresult}" />
       <set item="Content" condition="//Item/@dbresult='0'" value="Dlya otmeny perevodov abonentu ${receiver} prishlite kod #{/Message/Item/Service/Attribute[@name='code']/@value} na nomer 336" />
@@ -3640,16 +3371,13 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="iso-8859-1" />
     </deliveryTemplate>
   </template>
-
-
   <template procedureName="confirm_sponsor">
     <condition>
       <test item="${Recipient}" matches="^336$" />
       <test item="${Content}" matches="^[0-9]{4}$" />
     </condition>
-
     <receiveTemplate>
-      <Message type="serviceorder"  initiator="ussd" id="${guid}" session_id="@{newGuid}">
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
         <Item customer="${Sender}">
           <Service id="sponsoracceptance" action="5">
             <Attribute name="code" value="${Content}" />
@@ -3657,8 +3385,6 @@ https://smart-university.ru/eng/ege/express
         </Item>
       </Message>
     </receiveTemplate>
-
-
     <deliveryTemplate>
       <set item="Content" value="dbresult #{//Item/@dbresult}" />
       <set item="Content" condition="//Item/@dbresult='-1'" value="Perevod newozmojen, povtorite pozje" />
@@ -3682,8 +3408,6 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="iso-8859-1" />
     </deliveryTemplate>
   </template>
-
-
   <template procedureName="rej_sponsor">
     <condition>
       <test item="${Recipient}" matches="^336$" />
@@ -3694,13 +3418,12 @@ https://smart-university.ru/eng/ege/express
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input">
-      <set item="Content" value="Oshibka v zaprose - proverte i sozdayte zapros snova v formate:336*operacija*nomer*summa*period#"/>
-      <set item="Recipient" value="${customer}"/>
+      <set item="Content" value="Oshibka v zaprose - proverte i sozdayte zapros snova v formate:336*operacija*nomer*summa*period#" />
+      <set item="Recipient" value="${customer}" />
       <set item="Sender" value="336" />
       <set item="Encoding" value="iso-8859-1" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="CCP_canselreg">
     <condition>
       <test item="${Recipient}" matches="^297$" />
@@ -3708,7 +3431,7 @@ https://smart-university.ru/eng/ege/express
     </condition>
     <receiveTemplate>
       <Message type="bankcardpayments" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-        <Item customer="${Sender}" subject="canselreg" datasource="cust" >
+        <Item customer="${Sender}" subject="canselreg" datasource="cust">
           <Attribute name="pMSISDN" value="${Sender}" />
         </Item>
       </Message>
@@ -3731,7 +3454,6 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="CCP_changeatt">
     <condition>
       <test item="${Recipient}" matches="^297$" />
@@ -3740,7 +3462,7 @@ https://smart-university.ru/eng/ege/express
     </condition>
     <receiveTemplate>
       <Message type="bankcardpayments" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-        <Item customer="${Sender}" subject="change" datasource="cust" >
+        <Item customer="${Sender}" subject="change" datasource="cust">
           <Attribute name="pMSISDN" value="${Sender}" />
           <Attribute name="pThreshold_Value" value="${token1}" />
         </Item>
@@ -3764,7 +3486,6 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="CCP_onepayment">
     <condition>
       <test item="${Recipient}" matches="^297$" />
@@ -3772,7 +3493,7 @@ https://smart-university.ru/eng/ege/express
     </condition>
     <receiveTemplate>
       <Message type="bankcardpayments" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-        <Item customer="${Sender}" subject="payment" datasource="cust" >
+        <Item customer="${Sender}" subject="payment" datasource="cust">
           <Attribute name="pMSISDN" value="${Sender}" />
           <Attribute name="pAmount" value="${token0}" />
         </Item>
@@ -3796,7 +3517,6 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="CCP_wrongformat">
     <condition>
       <test item="${Recipient}" matches="^297$" />
@@ -3813,5 +3533,4 @@ https://smart-university.ru/eng/ege/express
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
 </templates>

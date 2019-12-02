@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Application configClass="FORIS.MessagingGateway.Configuration.CommonConfiguration">
   <Connections>
     <Database forisDataKey="MG" interfacePackage="API" cmdTimeout="0" />
@@ -16,10 +15,8 @@
     <Handler name="WCFHND_01" type="WCFHND" host="localhost" port="3300" sessionHandler="false" serviceName="FORIS.MG.WCFHND_01" config="Configuration\WCFHND\WCFHND_01.exe.xml" />
     <Monitor type="CRMCON" port="0" sessionHandler="false" />
     <Emulator type="CRMCON" port="0" sessionHandler="false" serviceName="FORIS.MessagingGateway.CRMConnector1" />
- 
- <Connector name="USSDCON_LOAD_02" type="SMSCON" host="localhost" port="4446" sessionHandler="false" serviceName="FORIS.MG.USSDCON_LOAD_02" config="Configuration\LOADTEST\USSD2_LoadConnector.exe.xml" />
- <Connector name="SMSCON_LOAD_01" type="SMSCON" host="localhost" port="4445" sessionHandler="false" serviceName="FORIS.MG.SMSCON_LOAD_01" config="Configuration\LOADTEST\SMS1LoadConnector.exe.xml" />
-      
+    <Connector name="USSDCON_LOAD_02" type="SMSCON" host="localhost" port="4446" sessionHandler="false" serviceName="FORIS.MG.USSDCON_LOAD_02" config="Configuration\LOADTEST\USSD2_LoadConnector.exe.xml" />
+    <Connector name="SMSCON_LOAD_01" type="SMSCON" host="localhost" port="4445" sessionHandler="false" serviceName="FORIS.MG.SMSCON_LOAD_01" config="Configuration\LOADTEST\SMS1LoadConnector.exe.xml" />
   </Connections>
   <Settings>
     <Item name="ContextScopeEnabled" value="false" />

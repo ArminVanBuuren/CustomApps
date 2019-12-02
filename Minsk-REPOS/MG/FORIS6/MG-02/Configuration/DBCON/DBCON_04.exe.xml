@@ -1,7 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <Application>
   <TargetDatabase>
-      <Database forisDataKey="INTEGRATION" interfacePackage="" />
+    <Database forisDataKey="INTEGRATION" interfacePackage="" />
   </TargetDatabase>
   <Settings>
     <Item name="ModuleType" value="DBCON" />

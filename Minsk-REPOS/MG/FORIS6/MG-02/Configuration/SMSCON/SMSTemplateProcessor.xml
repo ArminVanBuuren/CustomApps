@@ -1,20 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
-
 <templates connector="SMS">
-
   #include "..\..\config\get_bms_counters\sms.xml"
-
   <template procedureName="DeliveryRequest" persistent="true">
     <retry delay="300" attempts="2" />
-    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37500'}" dropReply="true"/>
-    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37515'}" dropReply="true"/>
-    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37516'}" dropReply="true"/>
-    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37517'}" dropReply="true"/>
-    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37521'}" dropReply="true"/>
-    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37522'}" dropReply="true"/>
-    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37523'}" dropReply="true"/>
-    <deliveryTemplate conditionEx="#{(substring(//Content/text(),1,6) = 'Gruppa')}" dropReply="true">
-    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37500'}" dropReply="true" />
+    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37515'}" dropReply="true" />
+    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37516'}" dropReply="true" />
+    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37517'}" dropReply="true" />
+    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37521'}" dropReply="true" />
+    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37522'}" dropReply="true" />
+    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37523'}" dropReply="true" />
+    <deliveryTemplate conditionEx="#{(substring(//Content/text(),1,6) = 'Gruppa')}" dropReply="true" />
     <deliveryTemplate conditionEx="#{(substring(//Content/text(),1,20) = 'Vypolneno popolnenie') or (substring(//Content/text(),1,20) = 'Выполнено пополнение') or (substring(//Content/text(),1,18) = 'Пополнение баланса')}">
       <set item="Content" value="#{//Content/text()}" />
       <set item="Sender" value="364" />
@@ -36,16 +31,15 @@
       		<set item="ScheduleDeliveryTime" condition = "//Item/@scheduleTime" value="${scheduleTime}" /> -->
     </deliveryTemplate>
   </template>
-
   <template procedureName="DeliveryRequestPtP" persistent="true">
     <retry delay="300" attempts="2" />
-    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37500'}" dropReply="true"/>
-    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37515'}" dropReply="true"/>
-    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37516'}" dropReply="true"/>
-    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37517'}" dropReply="true"/>
-    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37521'}" dropReply="true"/>
-    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37522'}" dropReply="true"/>
-    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37523'}" dropReply="true"/>
+    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37500'}" dropReply="true" />
+    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37515'}" dropReply="true" />
+    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37516'}" dropReply="true" />
+    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37517'}" dropReply="true" />
+    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37521'}" dropReply="true" />
+    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37522'}" dropReply="true" />
+    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37523'}" dropReply="true" />
     <deliveryTemplate>
       <set item="Content" value="#{//Content/text()}" />
       <set item="Sender" value="364" />
@@ -57,16 +51,15 @@
       <set item="ScheduleDeliveryTime" condition = "//Item/@scheduleTime" value="${scheduleTime}" /> -->
     </deliveryTemplate>
   </template>
-
   <template procedureName="DeliveryRequestIssa" persistent="true">
     <retry delay="300" attempts="2" />
-    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37500'}" dropReply="true"/>
-    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37515'}" dropReply="true"/>
-    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37516'}" dropReply="true"/>
-    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37517'}" dropReply="true"/>
-    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37521'}" dropReply="true"/>
-    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37522'}" dropReply="true"/>
-    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37523'}" dropReply="true"/>
+    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37500'}" dropReply="true" />
+    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37515'}" dropReply="true" />
+    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37516'}" dropReply="true" />
+    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37517'}" dropReply="true" />
+    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37521'}" dropReply="true" />
+    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37522'}" dropReply="true" />
+    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37523'}" dropReply="true" />
     <deliveryTemplate conditionEx="#{(substring(//Content/text(),1,18) = 'Произведен вход в ')}">
       <set item="Content" value="#{//Content/text()}" />
       <set item="Sender" value="0870" />
@@ -89,21 +82,16 @@
       <set item="ScheduleDeliveryTime" condition = "//Item/@scheduleTime" value="${scheduleTime}" /> -->
     </deliveryTemplate>
   </template>
-
-
   <template procedureName="DB_Send_SMS" persistent="false">
-    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37500'}" dropReply="true">
-    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'#{substring('${customer}',1,5)}'='37500'}" dropReply="true" />
     <deliveryTemplate>
       <set item="Content" value="#{//Content/text()}" />
       <set item="Sender" value="0870" />
       <set item="Encoding" value="#{//Content/@charset}" />
       <set item="Encoding" condition="not(//Content/@charset)" value="unicodefffe" />
       <set item="Recipient" value="${customer}" />
-      <set item="ValidityPeriod" condition = "//Item/@validityPeriod" value="${validityPeriod}" />
-      <set item="ScheduleDeliveryTime" condition = "//Item/@scheduleTime" value="${scheduleTime}" />
+      <set item="ValidityPeriod" condition="//Item/@validityPeriod" value="${validityPeriod}" />
+      <set item="ScheduleDeliveryTime" condition="//Item/@scheduleTime" value="${scheduleTime}" />
     </deliveryTemplate>
   </template>
-
-
 </templates>

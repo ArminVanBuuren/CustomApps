@@ -1,4 +1,3 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
 <plugin name="LMSplitterPlugin">
-	<LargeQueue name=".\lmq_output" />
+  <LargeQueue name=".\lmq_output" />
 </plugin>

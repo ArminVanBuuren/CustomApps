@@ -1,38 +1,32 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-
 <templates connector="SMS">
   <macros>
     <define name="_mob_msisdn" value="^(375(25|29|33|44)\d{7})$" />
     <define name="_pass_num" value="^(\d{4,8})$" />
   </macros>
-
-
-<template procedureName="Get_PinPuk_OtherMSISDN_" handler="DBCON_01">
-	<condition>
-		<test item="${Recipient}" matches="^(839)$" />
-		<test item="${Content}" matches="^(\s*375(25|29|33|44)\d{7}\s*\d{4,}\s*)$" />
-    </condition>		
-       <receiveTemplate>
-		<Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
-				<Item procedureName="billing.ttt_get_pinpuk_othermsisdn_v2" >
-					<Attribute name="i_msisdn" type="STRING" value="${Sender}" />
-					<Attribute name="i_content" type="STRING" value="${Content}" />
-					<Attribute name="rez" type="STRING" /> 					
-				</Item>
-    	</Message>		
-       </receiveTemplate>
-       <deliveryTemplate>
-		<set item="Content" condition="//Item/@dbresult='0'" value="${rez}" />
-		<set item="Content" condition="//Item/@dbresult!='0'" value="Ошибка выполнения запроса." />
-		<set item="Sender" value="839" />
-		<set item="Recipient" value="${customer}" />
-		<set item="Encoding" value="unicodefffe" />
-       </deliveryTemplate>
-   </template>  
-
-
-<!--- Добавление технологического. НЕ удалять -->
-<!-- <template procedureName="Get_PinPuk_OtherMSISDN_" contentSeparator="  * " handler="DBCON_01" >
+  <template procedureName="Get_PinPuk_OtherMSISDN_" handler="DBCON_01">
+    <condition>
+      <test item="${Recipient}" matches="^(839)$" />
+      <test item="${Content}" matches="^(\s*375(25|29|33|44)\d{7}\s*\d{4,}\s*)$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+        <Item procedureName="billing.ttt_get_pinpuk_othermsisdn_v2">
+          <Attribute name="i_msisdn" type="STRING" value="${Sender}" />
+          <Attribute name="i_content" type="STRING" value="${Content}" />
+          <Attribute name="rez" type="STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="Content" condition="//Item/@dbresult='0'" value="${rez}" />
+      <set item="Content" condition="//Item/@dbresult!='0'" value="Ошибка выполнения запроса." />
+      <set item="Sender" value="839" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+  </template>
+  <!--- Добавление технологического. НЕ удалять -->
+  <!-- <template procedureName="Get_PinPuk_OtherMSISDN_" contentSeparator="  * " handler="DBCON_01" >
 	<condition>
 		<test item="${Recipient}" matches="^(839)$" />
 		<test item="${Token0}" matches="^(375(25|29|33|44)\d{7})$" />
@@ -72,34 +66,31 @@
 				<set item="Encoding" value="unicodefffe" />
        		</deliveryTemplate>
    	</template> -->
-
-<!--- Добавление технологического. НЕ удалять -->
-<template procedureName="Add_srv_tech_" handler="DBCON_01">
-	<condition>
-		<test item="${Sender}" matches="^(375297776242|375297776319)$" />
-		<test item="${Recipient}" matches="^(839)$" />
-		<test item="${Token0}" matches="^(111)$" />
-		<test item="${Token1}" matches="^\d{12}$" />
-    </condition>		
-       <receiveTemplate>
-		<Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
-				<Item procedureName="rep.addsrv_sychro_tech" >
-					<Attribute name="i_msisdn" type="STRING" value="${Token1}" />
-					<Attribute name="o_rez" type="STRING" /> 					
-				</Item>
-    	</Message>		
-       </receiveTemplate>
-       <deliveryTemplate>
-		<set item="Content" condition="//Item/@dbresult='0'" value="${o_rez}" />
-		<set item="Content" condition="//Item/@dbresult!='0'" value="Ошибка выполнения запроса." />
-		<set item="Sender" value="839" />
-		<set item="Recipient" value="${customer}" />
-		<set item="Encoding" value="unicodefffe" />
-       </deliveryTemplate>
-   </template>  
-
-
-<!--<template procedureName="FOOD_FLOOD_" handler="DBCON_01">
+  <!--- Добавление технологического. НЕ удалять -->
+  <template procedureName="Add_srv_tech_" handler="DBCON_01">
+    <condition>
+      <test item="${Sender}" matches="^(375297776242|375297776319)$" />
+      <test item="${Recipient}" matches="^(839)$" />
+      <test item="${Token0}" matches="^(111)$" />
+      <test item="${Token1}" matches="^\d{12}$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+        <Item procedureName="rep.addsrv_sychro_tech">
+          <Attribute name="i_msisdn" type="STRING" value="${Token1}" />
+          <Attribute name="o_rez" type="STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="Content" condition="//Item/@dbresult='0'" value="${o_rez}" />
+      <set item="Content" condition="//Item/@dbresult!='0'" value="Ошибка выполнения запроса." />
+      <set item="Sender" value="839" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+  </template>
+  <!--<template procedureName="FOOD_FLOOD_" handler="DBCON_01">
 	<condition>
 		<test item="${Recipient}" matches="^(839)$" />
     </condition>		
@@ -120,9 +111,8 @@
 		<set item="Encoding" value="unicodefffe" />
        </deliveryTemplate>
    </template>  -->
-
-<!--- Добавление технологического. НЕ удалять -->
-<!-- <template procedureName="ChangePass_" handler="DBCON_01">
+  <!--- Добавление технологического. НЕ удалять -->
+  <!-- <template procedureName="ChangePass_" handler="DBCON_01">
 	<condition>
 		<test item="${Recipient}" matches="^(839)$" />
 		<test item="${Token0}" matches="^([0-9a-zA-Z]{4,10})$" />
@@ -166,10 +156,7 @@
    	</template>
 
 -->
-   
-   
-   
- <!--  
+  <!--  
   <template procedureName="2017_check_p2p" sessionStorage="Database" sessionLifetime="60">
   <condition>
    <test item="${Recipient}" matches="^839$" />
@@ -261,9 +248,8 @@
 	<deliveryTemplate direction="input"  connector="SMSCON_03" />
   </template> 
 -->
-<!--- Добавление технологического. НЕ удалять -->	
-	
- <!-- <template procedureName="WifiRequest" handler="DBCON_02">
+  <!--- Добавление технологического. НЕ удалять -->
+  <!-- <template procedureName="WifiRequest" handler="DBCON_02">
 	<condition>
         	<test item="${Recipient}" matches="^839$" />
         </condition>
@@ -289,9 +275,7 @@
 		<set item="Encoding" value="unicodefffe" />
        </deliveryTemplate>
    </template>  -->
-
-
-<!--<template procedureName="rassrochka_1155" handler="DBCON_01">
+  <!--<template procedureName="rassrochka_1155" handler="DBCON_01">
 	<condition>
         	<test item="${Recipient}" matches="^839$" />
 			<test item="${token0}" matches="^\d{12}$" />			
@@ -338,9 +322,7 @@
 		<set item="Encoding" value="unicodefffe" />
        </deliveryTemplate>
    </template>  -->
-   
-  
-<!--	<template procedureName="List_service_customer">
+  <!--	<template procedureName="List_service_customer">
 	<condition>
 			<test item="${Recipient}" matches="^(839)$" />
         </condition>
@@ -360,8 +342,7 @@
            	<set item="Encoding" value="unicodefffe" />
        </deliveryTemplate>
        </template> -->
-
- <!-- <template procedureName="Test_839" handler="DBCON_02">
+  <!-- <template procedureName="Test_839" handler="DBCON_02">
 	<condition>
 		<test item="${Recipient}" matches="^(839)$" />
     </condition>
@@ -394,8 +375,7 @@
 		<set item="Encoding" value="unicodefffe" />
        </deliveryTemplate>	   
     </template>  -->
-
- <!--<template procedureName="707_fake">
+  <!--<template procedureName="707_fake">
 	    <condition>
         	<test item="${Recipient}" matches="^(839)$" />
    	    </condition>
@@ -411,9 +391,7 @@
 		<set item="Encoding" value="unicodefffe" />
        		</deliveryTemplate>
    	</template>  -->
-
-
- <!--template procedureName="SMS_email">
+  <!--template procedureName="SMS_email">
  <condition>
   <test item="${Recipient}" matches="^(839)$" /> 
   </condition>
@@ -434,10 +412,8 @@
   </deliveryTemplate>
   <deliveryTemplate direction="input" connector="EMAILCON_01" /> 
   </template-->
-
-
-<!-- ############################  1982 TUT BY Testing  ####################### -->	
-<!--	<template procedureName="Add_tut_by">
+  <!-- ############################  1982 TUT BY Testing  ####################### -->
+  <!--	<template procedureName="Add_tut_by">
 	    <condition>
         	<test item="${Recipient}" matches="^(839)$" />
 			<test item="${Token0}" matches="^(M|m|N|n|D|d)" />
@@ -460,8 +436,7 @@
 		<set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
    	</template>  -->
-
-<!-- <template procedureName="SyntaxError_Add_Del_mobileTV">
+  <!-- <template procedureName="SyntaxError_Add_Del_mobileTV">
 	    <condition>
         	<test item="${Recipient}" matches="^(839)$" />
    	    </condition>
@@ -477,9 +452,7 @@
 		<set item="Encoding" value="unicodefffe" />
        		</deliveryTemplate>
    	</template> -->
-
-
-<!-- <template procedureName="kredit_dov" persistent="true" sessionStorage="Memory" sessionLifetime="60">
+  <!-- <template procedureName="kredit_dov" persistent="true" sessionStorage="Memory" sessionLifetime="60">
 	<condition>
 		<test item="${Recipient}" matches="^839$" />
 		<test item="${Token0}" matches="^(0|1)$" />
@@ -497,8 +470,7 @@
 		<set item="Encoding" value="unicodefffe" />
        </deliveryTemplate>
    </template> -->
-   
- <!-- <template procedureName="err-kredit_dov" persistent="true" sessionStorage="Memory" sessionLifetime="60">
+  <!-- <template procedureName="err-kredit_dov" persistent="true" sessionStorage="Memory" sessionLifetime="60">
 	<condition>
         	<test item="${Recipient}" matches="^839$" />
         </condition>
@@ -512,8 +484,7 @@
 		<set item="Encoding" value="unicodefffe" />
        </deliveryTemplate>
    </template>	  -->
-
-<!--   <template procedureName="send_url">
+  <!--   <template procedureName="send_url">
 - <condition>
   <test item="0" matches="1" /> 
   </condition>
@@ -527,8 +498,7 @@
   <set item="Encoding" value="unicodefffe" /> 
   </deliveryTemplate>
   </template> -->
- 
- <!--   <template procedureName="ussd_839_lopatov">
+  <!--   <template procedureName="ussd_839_lopatov">
 - 		<condition>
 			<test item="0" matches="1" /> 
 		</condition>
@@ -542,8 +512,7 @@
 		<set item="Encoding" value="unicodefffe" /> 
 		</deliveryTemplate>
 	</template> -->
- 
-<!-- <template procedureName="Add_Del_service">
+  <!-- <template procedureName="Add_Del_service">
 	    <condition>
         	<test item="${Recipient}" matches="^(510|311|312|313|314|315|316|707|500|0870246|330|320|0870249|839)$" />
         	<test item="${Token0}" matches="^(A|a|R|r)$" />		
@@ -574,8 +543,7 @@
 		<set item="Encoding" value="unicodefffe" />
        		</deliveryTemplate>
    	</template> -->
-
-<!-- <template procedureName="SyntaxError_Add_Del_service">
+  <!-- <template procedureName="SyntaxError_Add_Del_service">
 	    <condition>
         	<test item="${Recipient}" matches="^(510|311|312|313|314|315|316|707|500|0870246|330|320|839)$" />
    	    </condition>
@@ -591,6 +559,4 @@
 		<set item="Encoding" value="unicodefffe" />
        		</deliveryTemplate>
    	</template> -->
-
-
 </templates>

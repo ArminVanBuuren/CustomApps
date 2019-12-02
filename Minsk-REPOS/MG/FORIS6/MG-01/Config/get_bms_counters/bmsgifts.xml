@@ -1,19 +1,19 @@
 <gifts>
-  <gift number="61" code="FR2325" needPrpReg="false" name="Сертификат 50 000 на телефон" /> 
-  <gift number="11" code="FR2315" needPrpReg="false" name="Пакет 50 минут на МТС"/> 
-  <gift number="12" code="FR2316" needPrpReg="false" name="Пакет 100 мин. на МТС" /> 
-  <gift number="13" code="FR2317" needPrpReg="false" name="Пакет 300 мин. на МТС" /> 
-  <gift number="21" code="FR2318" needPrpReg="false" name="Пакет 25 мин. на другие сети" /> 
-  <gift number="22" code="FR2319" needPrpReg="false" name="Пакет 50 мин. на другие сети" /> 
-  <gift number="23" code="FR2320" needPrpReg="false" name="Пакет 100 мин. на другие сети" /> 
-  <gift number="31" code="FR2322" needPrpReg="false" name="Пакет 50 МБ" /> 
-  <gift number="32" code="FR2323" needPrpReg="false" name="Пакет 100 МБ" /> 
-  <gift number="33" code="FR2324" needPrpReg="false" name="Пакет 500 МБ" /> 
-  <gift number="41" code="FR2326" needPrpReg="false" name="SMS-пакет 25" /> 
-  <gift number="42" code="FR5570" needPrpReg="false" name="SMS-пакет 50" /> 
-  <gift number="43" code="FR5571" needPrpReg="false" name="SMS-пакет 100" /> 
-  <gift number="51" code="FR11932" needPrpReg="false" name="Пакет 1 руб. МТС Бонус (с НДС)" /> 
-  <gift number="52" code="FR11933" needPrpReg="false" name="Пакет 2 руб. МТС Бонус (с НДС)" /> 
+  <gift number="61" code="FR2325" needPrpReg="false" name="Сертификат 50 000 на телефон" />
+  <gift number="11" code="FR2315" needPrpReg="false" name="Пакет 50 минут на МТС" />
+  <gift number="12" code="FR2316" needPrpReg="false" name="Пакет 100 мин. на МТС" />
+  <gift number="13" code="FR2317" needPrpReg="false" name="Пакет 300 мин. на МТС" />
+  <gift number="21" code="FR2318" needPrpReg="false" name="Пакет 25 мин. на другие сети" />
+  <gift number="22" code="FR2319" needPrpReg="false" name="Пакет 50 мин. на другие сети" />
+  <gift number="23" code="FR2320" needPrpReg="false" name="Пакет 100 мин. на другие сети" />
+  <gift number="31" code="FR2322" needPrpReg="false" name="Пакет 50 МБ" />
+  <gift number="32" code="FR2323" needPrpReg="false" name="Пакет 100 МБ" />
+  <gift number="33" code="FR2324" needPrpReg="false" name="Пакет 500 МБ" />
+  <gift number="41" code="FR2326" needPrpReg="false" name="SMS-пакет 25" />
+  <gift number="42" code="FR5570" needPrpReg="false" name="SMS-пакет 50" />
+  <gift number="43" code="FR5571" needPrpReg="false" name="SMS-пакет 100" />
+  <gift number="51" code="FR11932" needPrpReg="false" name="Пакет 1 руб. МТС Бонус (с НДС)" />
+  <gift number="52" code="FR11933" needPrpReg="false" name="Пакет 2 руб. МТС Бонус (с НДС)" />
   <gift number="53" code="FR11934" needPrpReg="false" name="Пакет 3 руб. МТС Бонус (с НДС)" />
   <gift number="54" code="FR11935" needPrpReg="false" name="Пакет 4 руб. МТС Бонус (с НДС)" />
   <gift number="55" code="FR11936" needPrpReg="false" name="Пакет 5 руб. МТС Бонус (с НДС)" />
@@ -26,7 +26,7 @@
   <gift number="66" code="FR10790" needPrpReg="false" name="Подписка Настроение" />
   <gift number="67" code="FR10791" needPrpReg="false" name="Подписка Диеты" />
   <gift number="68" code="FR10792" needPrpReg="false" name="Подписка Как стать богатым" />
-  <gift number="70" code="FR11725" needPrpReg="false" name="Инвайт-код World of Warships (Diana)" />      
+  <gift number="70" code="FR11725" needPrpReg="false" name="Инвайт-код World of Warships (Diana)" />
   <gift number="71" code="FR11726" needPrpReg="false" name="Инвайт-код World of Warships (Tachibana)" />
   <gift number="72" code="FR10755" needPrpReg="false" name="Инвайт-код World of Warplanes" />
   <gift number="73" code="FR10489" needPrpReg="false" name="Инвайт-код World of Tanks" />
@@ -68,7 +68,7 @@
   <gift number="1400" code="FR11235" needPrpReg="false" name="Пакет минут в сети МТС 400" />
   <gift number="1450" code="FR11236" needPrpReg="false" name="Пакет минут в сети МТС 450" />
   <gift number="1500" code="FR11237" needPrpReg="false" name="Пакет минут в сети МТС 500" />
-  <gift number="2005" code="FR11242" needPrpReg="false" name="Пакет минут в другие сети 005" /> 
+  <gift number="2005" code="FR11242" needPrpReg="false" name="Пакет минут в другие сети 005" />
   <gift number="2010" code="FR11247" needPrpReg="false" name="Пакет минут в другие сети 010" />
   <gift number="2020" code="FR11248" needPrpReg="false" name="Пакет минут в другие сети 020" />
   <gift number="2030" code="FR11249" needPrpReg="false" name="Пакет минут в другие сети 030" />

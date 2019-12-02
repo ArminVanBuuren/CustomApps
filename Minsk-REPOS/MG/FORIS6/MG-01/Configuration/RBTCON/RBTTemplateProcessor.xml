@@ -1,77 +1,73 @@
 <templates connector="SMS">
-
-<template procedureName="rbt_unpause2">
+  <template procedureName="rbt_unpause2">
     <condition>
-	<!--<test item="${token0}" matches="^375297776340$" />  -->
-	<test item="${Sender}" matches="^(000111|000222|000333)$" />
-	<test item="${token1}" matches="^RbtActivate$" />
+      <!--<test item="${token0}" matches="^375297776340$" />  -->
+      <test item="${Sender}" matches="^(000111|000222|000333)$" />
+      <test item="${token1}" matches="^RbtActivate$" />
     </condition>
-	<receiveTemplate>
-		<Message type="serviceorder" initiator="rbtcon" id="${guid}" session_id="${Sender}">
-			<Item customer="${token0}">
-				<Service  id="@{switch(${token2}|fail,rbt_subscr|CB412694,rbt_fsubscr|CB412694,tech_rbt_fsubscr|CB412716,rbt_unpause|CB412694,rbt_paydaymel|FR848,rbt_addoutruleset|FR856,rbt_addcorprbt|FR857)}" service_id="@{switch(${token2}|fail,rbt_subscr|CB412694,rbt_fsubscr|CB412694,tech_rbt_fsubscr|CB412716,rbt_unpause|CB412694,rbt_paydaymel|FR848,rbt_addoutruleset|FR856,rbt_addcorprbt|FR857)}" action="2"/>
-		</Item>
-	</Message>
-	</receiveTemplate>
-	<deliveryTemplate direction="input" condition="//Item/Service/@id='fail'" >
-		<set item="Content" value="INVALID SERVICE ID!" />
-		<set item="Encoding" value="iso-8859-1" />
-		<set item="Sender" value="11111" />
-		<set item="Recipient" value="${session_id}"/>
-	</deliveryTemplate>	
-    <deliveryTemplate>
-		<set item="Content" value="UNKNOWN ERROR!" />
-		<set item="Content" condition="//Item/@dbresult=0" value="0" />
-		<set item="Content" condition="//Item/@dbresult=320173" value="2" />
-		<set item="Content" condition="//Item/@dbresult=320172" value="2" />
-		<set item="Content" condition="//Item/@dbresult=320204" value="8" />
-		<set item="Content" condition="//Item/@dbresult=320191" value="7" />
-		<set item="Content" condition="//Item/@dbresult=320205" value="8" />
-		<set item="Content" condition="//Item/@dbresult=320203" value="7" />
-		<set item="Content" condition="//Item/@dbresult=320206" value="5" />		
-		<set item="Content" condition="//Item/@dbresult=-1" value="20" />
-		<set item="Encoding" value="iso-8859-1" />
-		<set item="Sender" value="11111" />
-		<set item="Recipient" value="${session_id}"/>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="rbtcon" id="${guid}" session_id="${Sender}">
+        <Item customer="${token0}">
+          <Service id="@{switch(${token2}|fail,rbt_subscr|CB412694,rbt_fsubscr|CB412694,tech_rbt_fsubscr|CB412716,rbt_unpause|CB412694,rbt_paydaymel|FR848,rbt_addoutruleset|FR856,rbt_addcorprbt|FR857)}" service_id="@{switch(${token2}|fail,rbt_subscr|CB412694,rbt_fsubscr|CB412694,tech_rbt_fsubscr|CB412716,rbt_unpause|CB412694,rbt_paydaymel|FR848,rbt_addoutruleset|FR856,rbt_addcorprbt|FR857)}" action="2" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" condition="//Item/Service/@id='fail'">
+      <set item="Content" value="INVALID SERVICE ID!" />
+      <set item="Encoding" value="iso-8859-1" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="${session_id}" />
     </deliveryTemplate>
-</template>
-	
-	<template procedureName="Rbtrbt_pause2">
+    <deliveryTemplate>
+      <set item="Content" value="UNKNOWN ERROR!" />
+      <set item="Content" condition="//Item/@dbresult=0" value="0" />
+      <set item="Content" condition="//Item/@dbresult=320173" value="2" />
+      <set item="Content" condition="//Item/@dbresult=320172" value="2" />
+      <set item="Content" condition="//Item/@dbresult=320204" value="8" />
+      <set item="Content" condition="//Item/@dbresult=320191" value="7" />
+      <set item="Content" condition="//Item/@dbresult=320205" value="8" />
+      <set item="Content" condition="//Item/@dbresult=320203" value="7" />
+      <set item="Content" condition="//Item/@dbresult=320206" value="5" />
+      <set item="Content" condition="//Item/@dbresult=-1" value="20" />
+      <set item="Encoding" value="iso-8859-1" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="${session_id}" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="Rbtrbt_pause2">
     <condition>
-	<!--<test item="${token0}" matches="^375297776340$" />           -->
-	<test item="${Sender}" matches="^(000111|000222|000333)$" />
-	<test item="${token1}" matches="^RbtDeactivate$" />
+      <!--<test item="${token0}" matches="^375297776340$" />           -->
+      <test item="${Sender}" matches="^(000111|000222|000333)$" />
+      <test item="${token1}" matches="^RbtDeactivate$" />
     </condition>
-	<receiveTemplate>
-				<Message type="serviceorder" initiator="rbtcon" id="${guid}" session_id="${Sender}">
-					<Item customer="${token0}">
-						<Service id="@{switch(${token2}|fail,rbt_unsubscr|CB412694,rbt_pause|CB412694,tech_rbt_unsubscr|CB412716,rbt_unpaydaymel|FR848,rbt_deloutruleset|FR856,rbt_delcorprbt|FR857)}" service_id="@{switch(${token2}|fail,rbt_unsubscr|CB412694,rbt_pause|CB412694,tech_rbt_unsubscr|CB412716,rbt_unpaydaymel|FR848,rbt_deloutruleset|FR856,rbt_delcorprbt|FR857)}" action="3" />
-					</Item>
-				</Message>
-	</receiveTemplate>
-	<deliveryTemplate direction="input" condition="//Item/Service/@id='fail'" >
-		<set item="Content" value="INVALID SERVICE ID!" />
-		<set item="Encoding" value="iso-8859-1" />
-		<set item="Sender" value="11111" />
-		<set item="Recipient" value="${session_id}"/>
-	</deliveryTemplate>	
-    <deliveryTemplate>
-		<set item="Content" value="UNKNOWN ERROR!" />
-		<set item="Content" condition="//Item/@dbresult=0" value="0" />
-		<set item="Content" condition="//Item/@dbresult=320172" value="2" />
-		<set item="Content" condition="//Item/@dbresult=320174" value="0" />
-		<set item="Content" condition="//Item/@dbresult=320204" value="6" />
-		<set item="Content" condition="//Item/@dbresult=320203" value="9" />
-		<set item="Content" condition="//Item/@dbresult=320206" value="5" />
-		<set item="Content" condition="//Item/@dbresult=-1" value="20" />
-        <set item="Encoding" value="iso-8859-1" />
-		<set item="Sender" value="11111" />
-		<set item="Recipient" value="${session_id}"/>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="rbtcon" id="${guid}" session_id="${Sender}">
+        <Item customer="${token0}">
+          <Service id="@{switch(${token2}|fail,rbt_unsubscr|CB412694,rbt_pause|CB412694,tech_rbt_unsubscr|CB412716,rbt_unpaydaymel|FR848,rbt_deloutruleset|FR856,rbt_delcorprbt|FR857)}" service_id="@{switch(${token2}|fail,rbt_unsubscr|CB412694,rbt_pause|CB412694,tech_rbt_unsubscr|CB412716,rbt_unpaydaymel|FR848,rbt_deloutruleset|FR856,rbt_delcorprbt|FR857)}" action="3" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" condition="//Item/Service/@id='fail'">
+      <set item="Content" value="INVALID SERVICE ID!" />
+      <set item="Encoding" value="iso-8859-1" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="${session_id}" />
     </deliveryTemplate>
-</template>
-
-
-<!--<template procedureName="rbt_unpause">
+    <deliveryTemplate>
+      <set item="Content" value="UNKNOWN ERROR!" />
+      <set item="Content" condition="//Item/@dbresult=0" value="0" />
+      <set item="Content" condition="//Item/@dbresult=320172" value="2" />
+      <set item="Content" condition="//Item/@dbresult=320174" value="0" />
+      <set item="Content" condition="//Item/@dbresult=320204" value="6" />
+      <set item="Content" condition="//Item/@dbresult=320203" value="9" />
+      <set item="Content" condition="//Item/@dbresult=320206" value="5" />
+      <set item="Content" condition="//Item/@dbresult=-1" value="20" />
+      <set item="Encoding" value="iso-8859-1" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="${session_id}" />
+    </deliveryTemplate>
+  </template>
+  <!--<template procedureName="rbt_unpause">
     <condition>
 	
 	<test item="${Sender}" matches="^(000111|000222|000333)$" />
@@ -110,8 +106,7 @@
 		<set item="Recipient" value="${session_id}"/>
     </deliveryTemplate>
 </template> -->
-	
-<!--<template procedureName="Rbtrbt_pause">
+  <!--<template procedureName="Rbtrbt_pause">
     <condition>
 	<test item="${Sender}" matches="^(000111|000222|000333)$" />
 	<test item="${token1}" matches="^RbtDeactivate$" />
@@ -151,8 +146,7 @@ service_id="@{switch(${token2}|fail,rbt_unsubscr|CB412694,rbt_pause|CB412694,tec
 		<set item="Recipient" value="${session_id}"/>
     </deliveryTemplate>
 </template> -->
-
-<!--<template procedureName="RbtActivate">
+  <!--<template procedureName="RbtActivate">
     <condition>
         <test item="${Sender}" matches="^(000111|000222|000333)$" />
 	<test item="${token1}" matches="^RbtActivate$" />
@@ -188,8 +182,7 @@ service_id="@{switch(${token2}|fail,rbt_unsubscr|CB412694,rbt_pause|CB412694,tec
 		<set item="Recipient" value="${session_id}"/>
     </deliveryTemplate>
 </template>  -->
-	
-<!--<template procedureName="RbtDeactivate">
+  <!--<template procedureName="RbtDeactivate">
     <condition>
         <test item="${Sender}" matches="^(000111|000222|000333)$" />
 	<test item="${token1}" matches="^RbtDeactivate$" />
@@ -226,37 +219,35 @@ id="@{switch(${token2}|fail,rbt_unsubscr|CB412694,rbt_pause|CB412694,tech_rbt_un
 		<set item="Recipient" value="${session_id}"/>
     </deliveryTemplate>
 </template>  -->
-
-<template procedureName="RbtPayment">
+  <template procedureName="RbtPayment">
     <condition>
-        <test item="${Sender}" matches="^(000111|000222|000333)$" />
-		<test item="${token1}" matches="^RbtPayment$" />
+      <test item="${Sender}" matches="^(000111|000222|000333)$" />
+      <test item="${token1}" matches="^RbtPayment$" />
     </condition>
-	<receiveTemplate>
-        <Message type="retrievecustomerdata" initiator="rbtcon" id="${guid}" session_id="${Sender}">
-            <Item customer="${token0}" subject="balance" />
-        </Message>
-	</receiveTemplate>
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" initiator="rbtcon" id="${guid}" session_id="${Sender}">
+        <Item customer="${token0}" subject="balance" />
+      </Message>
+    </receiveTemplate>
     <deliveryTemplate>
-		<set item="Content" condition="//Item/@dbresult=0" value="0" />
-		<set item="Content" condition="//Item/@dbresult=320341" value="1" />
-		<set item="Content" condition="//Item/@dbresult=320204" value="2" />
-		<set item="Content" condition="//Item/@dbresult=320282" value="3" />
-		<set item="Content" condition="//Item/@dbresult=320343" value="3" />
-		<set item="Content" condition="//Item/@dbresult=320172" value="3" />
-		<set item="Content" condition="//Item/@dbresult=320173" value="3" />
-		<set item="Content" condition="//Item/@dbresult=320191" value="7" />
-		<set item="Content" condition="//Item/@dbresult=320205" value="8" />
-		<set item="Content" condition="//Item/@dbresult=320206" value="9" />
-		<set item="Content" condition="//Item/@dbresult=-1" value="20" />
-		<set item="Content" value="UNKNOWN ERROR!" />
-        <set item="Encoding" value="iso-8859-1" />
-		<set item="Sender" value="11111" />
-		<set item="Recipient" value="${session_id}"/>
+      <set item="Content" condition="//Item/@dbresult=0" value="0" />
+      <set item="Content" condition="//Item/@dbresult=320341" value="1" />
+      <set item="Content" condition="//Item/@dbresult=320204" value="2" />
+      <set item="Content" condition="//Item/@dbresult=320282" value="3" />
+      <set item="Content" condition="//Item/@dbresult=320343" value="3" />
+      <set item="Content" condition="//Item/@dbresult=320172" value="3" />
+      <set item="Content" condition="//Item/@dbresult=320173" value="3" />
+      <set item="Content" condition="//Item/@dbresult=320191" value="7" />
+      <set item="Content" condition="//Item/@dbresult=320205" value="8" />
+      <set item="Content" condition="//Item/@dbresult=320206" value="9" />
+      <set item="Content" condition="//Item/@dbresult=-1" value="20" />
+      <set item="Content" value="UNKNOWN ERROR!" />
+      <set item="Encoding" value="iso-8859-1" />
+      <set item="Sender" value="11111" />
+      <set item="Recipient" value="${session_id}" />
     </deliveryTemplate>
-</template>
-
-<!--
+  </template>
+  <!--
 RC_InvalidService		320172
 RC_InvalidServiceListRead	320173
 RC_WrongAction			320174
@@ -269,21 +260,18 @@ RC_NotEnoughMoney		320191
 RC_InvalidNumber		320341
 RC_ServiceAlreadyIs		320205
 -->
-
-<template procedureName="DeliveryRequest">
-  <retry delay="5" attempts="1" />
-  <deliveryTemplate>
-    <set item="Content" value="#{//Content/text()}"/>
-    <set item="Encoding" value="iso-8859-1"/>
-  </deliveryTemplate>
-</template>
-
-<template procedureName="retrievecustomerdataresult">
-  <retry delay="5" attempts="1" />
-  <deliveryTemplate>
-    <set item="Content" value="#{//Content/text()}"/>
-    <set item="Encoding" value="iso-8859-1"/>
-  </deliveryTemplate>
-</template>
-
+  <template procedureName="DeliveryRequest">
+    <retry delay="5" attempts="1" />
+    <deliveryTemplate>
+      <set item="Content" value="#{//Content/text()}" />
+      <set item="Encoding" value="iso-8859-1" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="retrievecustomerdataresult">
+    <retry delay="5" attempts="1" />
+    <deliveryTemplate>
+      <set item="Content" value="#{//Content/text()}" />
+      <set item="Encoding" value="iso-8859-1" />
+    </deliveryTemplate>
+  </template>
 </templates>

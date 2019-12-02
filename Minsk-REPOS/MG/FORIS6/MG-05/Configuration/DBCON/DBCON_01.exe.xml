@@ -1,7 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <Application>
   <TargetDatabase>
-      <Database forisDataKey="FORIS.TelCRM.CustomerManagement" interfacePackage="" />
+    <Database forisDataKey="FORIS.TelCRM.CustomerManagement" interfacePackage="" />
   </TargetDatabase>
   <Settings>
     <Item name="ModuleType" value="DBCON" />

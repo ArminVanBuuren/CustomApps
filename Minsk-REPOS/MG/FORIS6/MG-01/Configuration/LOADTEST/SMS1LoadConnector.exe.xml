@@ -1,4 +1,3 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <Application configClass="FORIS.MessagingGateway.SMSConnector.SMSConnectorConfiguration" type="SMSCON">
   <Settings>
     <Item name="ModuleType" value="SMSCON" />
@@ -53,11 +52,11 @@
     <!-- winter 12+ , summer 16+   -->
     <Item name="ThreadMultiplifier" value="1" />
     <Item name="SendSpeedLimit" value="5" />
- <!--Item name="ExposeSmsLogService" value="true" /-->
-<Item name="SmsLogging" value="enable" /> 
+    <!--Item name="ExposeSmsLogService" value="true" /-->
+    <Item name="SmsLogging" value="enable" />
   </Settings>
   <SMSCenters>
-		<Connection host="10.84.176.246" port="4001" systemType="502" systemId="admin" pass="admin" />
+    <Connection host="10.84.176.246" port="4001" systemType="502" systemId="admin" pass="admin" />
   </SMSCenters>
   <Anumbertransformations>
     <!-- Configuration for St-Peterburg region -->
@@ -71,7 +70,7 @@
     <!-- Processor dll="DefaultTemplates.dll" class="SMSTemplateProcessor" config="SMSTemplateProcessor4SOAP.xml" /-->
     <Processor dll="DefaultTemplates.dll" class="SMSTemplateProcessor" config="SMSTemplateProcessor_LoadTest.xml" />
     <!-- <Processor dll="DefaultTemplates.dll" class="SMSTemplateProcessor" config="SMSTemplateProcessor.xml" /> -->
- <!--
+    <!--
   <Processor dll="DefaultTemplates.dll" class="SMSTemplateProcessor" config="SMSTemplateProcessor_Partial.xml" /> -->
   </TemplateProcessors>
   <BlackList propertyName="Sender" regExpBan="^88">

@@ -1,4 +1,3 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <Application configClass="FORIS.MessagingGateway.SMSConnector.SMSConnectorConfiguration" type="SMSCON">
   <Settings>
     <Item name="ModuleType" value="SMSCON" />
@@ -39,9 +38,9 @@
     <Item name="HealthParam" value="500" />
   </Settings>
   <SMSCenters>
-	<!-- Коннектор используется для нагрузочного тестирования СТС - ПРОСЬБА НЕ ТРОГАТЬ НАСТРОЙКИ ! -->
+    <!-- Коннектор используется для нагрузочного тестирования СТС - ПРОСЬБА НЕ ТРОГАТЬ НАСТРОЙКИ ! -->
     <Connection host="10.84.176.246" port="7043" systemType="ussd" systemId="admin" pass="admin" />
-	<!--<Connection host="10.84.176.188" port="6932" systemType="comm" systemId="admin" pass="admin" />-->
+    <!--<Connection host="10.84.176.188" port="6932" systemType="comm" systemId="admin" pass="admin" />-->
   </SMSCenters>
   <Anumbertransformations>
     <!-- Configuration for St-Peterburg region -->
@@ -51,13 +50,12 @@
     <!-- <Anumbertransformation prefix="78" newprefix="6" /> -->
     <!-- <Anumbertransformation prefix="+7" newprefix="12311" /> -->
   </Anumbertransformations>
-<!--<TemplateProcessors defaultConfig="PortalTemplateProcessor_LoadTest.xml">
+  <!--<TemplateProcessors defaultConfig="PortalTemplateProcessor_LoadTest.xml">
     <Processor dll="DefaultTemplates.dll" class="SMSTemplateProcessor" config="PortalTemplateProcessor_LoadTest.xml" />
   </TemplateProcessors>-->
   <TemplateProcessors defaultConfig="USSDTemplateProcessor_LoadTest.xml">
     <Processor dll="DefaultTemplates.dll" class="SMSTemplateProcessor" config="USSDTemplateProcessor_LoadTest.xml" />
   </TemplateProcessors>
-  
   <!--	<BlackList propertyName="Sender" regExpBan="^88" >
 		<Ban>603221981</Ban>
 		<Ban>555715</Ban>

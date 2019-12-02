@@ -1,15 +1,15 @@
-﻿<Application>
-   <TargetDatabase>
-      <Database forisDataKey="FORIS.TelCRM.CustomerManagement" interfacePackage="" />
-   </TargetDatabase>
-   <Settings>
-      <Item name="ModuleType" value="DBCON" />
-      <Item name="ModuleName" value="DBCON_01" />
-      <Item name="CRMCacheCleanInterval" value="10" />
-      <Item name="StoringInterval" value="20" />
-      <Item name="StoringHWM" value="200" />
-      <Item name="ThreadMultiplifier" value="1" />
-      <Item name="FetchLimit" value="150" />
-      <Item name="NumOfThreads" value="16" />
-   </Settings>
+<Application>
+  <TargetDatabase>
+    <Database forisDataKey="FORIS.TelCRM.CustomerManagement" interfacePackage="" />
+  </TargetDatabase>
+  <Settings>
+    <Item name="ModuleType" value="DBCON" />
+    <Item name="ModuleName" value="DBCON_01" />
+    <Item name="CRMCacheCleanInterval" value="10" />
+    <Item name="StoringInterval" value="20" />
+    <Item name="StoringHWM" value="200" />
+    <Item name="ThreadMultiplifier" value="1" />
+    <Item name="FetchLimit" value="150" />
+    <Item name="NumOfThreads" value="16" />
+  </Settings>
 </Application>

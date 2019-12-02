@@ -1,56 +1,53 @@
-﻿<templateGroup name="BMS">
-	<macros>
-		<define name="_GET_BMS_COUNTER"	value="1234" />
-  		<define name="_MSCPCON" value="WCFHND_01" />
-  		<define name="_SMSCON" value="SMSCON_01" />
-	</macros>
-
-	<template procedureName="GetBMSCounter" handler="_MSCPCON" sessionStorage="Remoting" sessionLifetime="300">
-		<condition>
-			<test item="${Recipient}"	matches="^_GET_BMS_COUNTER$" />
-			<test item="${Content}"		matches="^[0-9]{1,}$" />
-		</condition>
-    	<receiveTemplate>
-			<Message type="getcounters" initiator="ussd" id="${guid}" session_id="@{setSessionId(${guid})}">
-				<Item procedureName="GetMsisdnCurrentCounterInstances">
-					<Attribute name="Customer" type="String" value="${sender}" />
-					<Attribute name="CounterInstances" />
-					<Attribute name="Result" />
-	       		</Item>
-	       		@{store(sBMScode,#{document('config\get_bms_counters\counters.xml')/counters/counter[@ussd_code='${content}']/@bms_code})}
-			</Message>
-    	</receiveTemplate>
-		<deliveryTemplate direction="input" conditionEx="#{'${sBMScode}'=''}">
-			<set item="Content"  value="Не найден счетчик с кодом '${sBMScode}'" />
-			<set item="Sender" value="_GET_BMS_COUNTER" />
-			<set item="Recipient" value="${customer}" />
-			<set item="Encoding" value="unicodefffe" />
-			<set conditionEx="0@{freeSession}"  />
-		</deliveryTemplate>
-		<deliveryTemplate direction="input" terminating="false">
-			<set item="Content"   value="Ваша заявка принята. Ждите ответа по смс." />
-            <set item="Sender" value="_GET_BMS_COUNTER" />
-            <set item="Recipient" value="${Customer}" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-		<deliveryTemplate connector="_SMSCON" />
-	</template>
-
-	<template procedureName="GetBMSCounterInvalidFormat">
-        <condition>
-            <test item="${Recipient}" matches="^_GET_BMS_COUNTER$" />
-        </condition>
-        <receiveTemplate>
-			<Message id="${guid}" session_id="${guid}" >
-				<Attribute name="Customer"		value="${Sender}" />
-			</Message>
-        </receiveTemplate>
-		<deliveryTemplate direction="input" >
-			<set item="Content"		value="Формат запроса счетчика: *_GET_BMS_COUNTER*код_счетчика#" />
-			<set item="Encoding"	value="unicodefffe" />
-			<set item="Sender"		value="_GET_BMS_COUNTER" />
-			<set item="Recipient"	value="${Customer}" />
-		</deliveryTemplate>
-	</template>
-
+<templateGroup name="BMS">
+  <macros>
+    <define name="_GET_BMS_COUNTER" value="1234" />
+    <define name="_MSCPCON" value="WCFHND_01" />
+    <define name="_SMSCON" value="SMSCON_01" />
+  </macros>
+  <template procedureName="GetBMSCounter" handler="_MSCPCON" sessionStorage="Remoting" sessionLifetime="300">
+    <condition>
+      <test item="${Recipient}" matches="^_GET_BMS_COUNTER$" />
+      <test item="${Content}" matches="^[0-9]{1,}$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="getcounters" initiator="ussd" id="${guid}" session_id="@{setSessionId(${guid})}">
+        <Item procedureName="GetMsisdnCurrentCounterInstances">
+          <Attribute name="Customer" type="String" value="${sender}" />
+          <Attribute name="CounterInstances" />
+          <Attribute name="Result" />
+        </Item>
+        @{store(sBMScode,#{document('config\get_bms_counters\counters.xml')/counters/counter[@ussd_code='${content}']/@bms_code})}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" conditionEx="#{'${sBMScode}'=''}">
+      <set item="Content" value="Не найден счетчик с кодом '${sBMScode}'" />
+      <set item="Sender" value="_GET_BMS_COUNTER" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите ответа по смс." />
+      <set item="Sender" value="_GET_BMS_COUNTER" />
+      <set item="Recipient" value="${Customer}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="GetBMSCounterInvalidFormat">
+    <condition>
+      <test item="${Recipient}" matches="^_GET_BMS_COUNTER$" />
+    </condition>
+    <receiveTemplate>
+      <Message id="${guid}" session_id="${guid}">
+        <Attribute name="Customer" value="${Sender}" />
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input">
+      <set item="Content" value="Формат запроса счетчика: *_GET_BMS_COUNTER*код_счетчика#" />
+      <set item="Encoding" value="unicodefffe" />
+      <set item="Sender" value="_GET_BMS_COUNTER" />
+      <set item="Recipient" value="${Customer}" />
+    </deliveryTemplate>
+  </template>
 </templateGroup>

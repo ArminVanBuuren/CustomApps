@@ -1,16 +1,16 @@
-﻿<Application configClass="FORIS.MessagingGateway.IVRConnector.IVRConnectorConfiguration" type="IVRCON">
-   <Settings>
-      <Item name="ModuleType" value="IVRCON" />
-      <Item name="ModuleName" value="IVRCON_02" />
-      <Item name="CRMCacheCleanInterval" value="100" />
-      <Item name="StoringInterval" value="20" />
-      <Item name="StoringHWM" value="200" />
-   </Settings>
-   <IVRServers>
-      <!--MedioListener host="" port="9993" scp="0x0988" remoteHost="10.128.49.15" /-->
-      <MedioListener host="" port="9993" scp="0x0988" />
-   </IVRServers>
-   <TemplateProcessors defaultConfig="IVRTemplateProcessor.xml">
-      <Processor dll="DefaultTemplates.dll" class="IVRTemplateProcessor" />
-   </TemplateProcessors>
+<Application configClass="FORIS.MessagingGateway.IVRConnector.IVRConnectorConfiguration" type="IVRCON">
+  <Settings>
+    <Item name="ModuleType" value="IVRCON" />
+    <Item name="ModuleName" value="IVRCON_02" />
+    <Item name="CRMCacheCleanInterval" value="100" />
+    <Item name="StoringInterval" value="20" />
+    <Item name="StoringHWM" value="200" />
+  </Settings>
+  <IVRServers>
+    <!--MedioListener host="" port="9993" scp="0x0988" remoteHost="10.128.49.15" /-->
+    <MedioListener host="" port="9993" scp="0x0988" />
+  </IVRServers>
+  <TemplateProcessors defaultConfig="IVRTemplateProcessor.xml">
+    <Processor dll="DefaultTemplates.dll" class="IVRTemplateProcessor" />
+  </TemplateProcessors>
 </Application>
