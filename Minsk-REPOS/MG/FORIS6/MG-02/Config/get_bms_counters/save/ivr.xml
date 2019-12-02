@@ -1,0 +1,79 @@
+<templateGroup name="BMS">
+	<macros>
+  		<define name="_MSCPCON" value="WCFHND_01" />
+  		<define name="_SMSCON" value="SMSCON_01" />
+	</macros>
+
+	<template procedureName="GetBMSCounter" handler="_MSCPCON" sessionStorage="Remoting" sessionLifetime="300">
+		<receiveTemplate>
+			<Message type="getcounters" initiator="ivrcon" id="${guid}" session_id="@{setSessionId(${guid})}">
+				<Item procedureName="GetMsisdnCurrentCounterInstances">
+				<Attribute name="Customer" type="String" value="${customer}" />
+				<Attribute name="CounterInstances" />
+				<Attribute name="Result" />
+	       		</Item>
+	       		@{store(sBMScode,#{document('config\get_bms_counters\counters.xml')/counters/counter[@ivr_code='${countercode}']/@bms_code})}
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate direction="input" conditionEx="#{'${sBMScode}'=''}">
+			<set item="param:dbresult" value="-1"/>
+			<set conditionEx="0@{freeSession}"  />
+		</deliveryTemplate>
+		<deliveryTemplate direction="input" terminating="false">
+			<set item="param:dbresult" value="0"/>
+	        </deliveryTemplate>
+		<deliveryTemplate connector="_SMSCON" />
+		<input>
+			<param name="customer" />
+			<param name="countercode" />
+		</input>
+		<output>
+			<param name="dbresult" type="3" value="0" />
+		</output>
+	</template>
+
+<!--
+
+<CounterInstances>
+	<CounterInstance>
+		<CampaignId>1001001</CampaignId>
+		<CampaignName>Uchet PRA</CampaignName>
+		<CounterDescription>For Uchet PRA testing</CounterDescription>
+		<CounterId>1001</CounterId>
+		<CounterName>Uchet PRA Counter</CounterName>
+		<CounterTypeCode>PRAC</CounterTypeCode>
+		<CounterTypeName>PRA Counter</CounterTypeName>
+		<CounterValue>0</CounterValue>
+		<EndDate>26.11.2010 10:35:35</EndDate>
+		<StartDate>25.11.2010 10:35:36</StartDate>
+	</CounterInstance>
+</CounterInstances>
+
+-->
+
+	<template procedureName="GetBMSBalance" handler="_MSCPCON">
+		<receiveTemplate>
+			<Message type="getcounters" initiator="ivrcon" id="${guid}" session_id="${newGuid}">
+				<Item procedureName="GetBalance">
+					<Attribute name="Customer" type="String" value="${customer}" />
+					<Attribute name="Balance" />
+					<Attribute name="Counters" />
+					<Attribute name="CreateDate" />
+					<Attribute name="Result" />
+					<Attribute name="Result" />
+	       		</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate terminating="false">
+			<set item="param:dbresult" value="${Result}"/>
+	        </deliveryTemplate>
+		<deliveryTemplate connector="_SMSCON" />
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="dbresult" type="3" value="0" />
+		</output>
+	</template>
+
+</templateGroup>

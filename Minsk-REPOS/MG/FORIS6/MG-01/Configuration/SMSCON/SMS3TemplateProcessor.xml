@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<templates connector="SMS">
+
+<template procedureName="congratulation_17022018_" sessionStorage="Database" sessionLifetime="60" >
+ <condition>
+  <test item="0" matches="1" /> 
+ </condition>
+  <receiveTemplate/>
+ <deliveryTemplate>
+  <set item="Content" value="${rez}" />
+  <set item="Sender" value="${storedSender}" />
+  <set item="Recipient" value="${sContent}" /> 
+  <set item="Encoding" value="unicodefffe" />
+  <set conditionEx="0@{freeSession}" />
+ </deliveryTemplate>
+</template>
+
+<template procedureName="gift_mts_user" sessionStorage="Database" sessionLifetime="60" >
+ <condition>
+  <test item="0" matches="1" /> 
+ </condition>
+  <receiveTemplate/>
+ <deliveryTemplate>
+  <set item="Content" value="Вам доступно участие в акции! Заходите в приложение «Мой МТС» и выбирайте Ваш подарок: безлимитные звонки на МТС или безлимитный интернет. Узнать больше: https://m.mts.by/new-user С заботой, Ваш МТС" />
+  <set item="Sender" value="0884" />
+  <set item="Recipient" value="${sContent}" /> 
+  <set item="Encoding" value="unicodefffe" />
+  <set conditionEx="0@{freeSession}" />
+ </deliveryTemplate>
+</template>
+
+
+<template procedureName="SendSMSMinJust">
+ <condition>
+  <test item="0" matches="1" /> 
+ </condition>
+  <receiveTemplate/>
+ <deliveryTemplate>
+  <set item="Content" value="${txt}" />
+  <set item="Recipient" value="${customer}" />
+  <set item="Sender" value="MTS.BY" /> 
+  <set item="Encoding" value="unicodefffe" />
+  <!--<set item="ValidityPeriod" value="000000002000000R" /> -->
+ </deliveryTemplate>
+</template>
+
+
+</templates>

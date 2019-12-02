@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Application configClass="FORIS.MessagingGateway.Configuration.CommonConfiguration">
+  <Connections>
+    <Database forisDataKey="MG" interfacePackage="API" cmdTimeout="0" />
+    <Connector name="EMAILCON_01" type="EMAILCON" host="localhost" port="6660" sessionHandler="false" serviceName="FORIS.MG.EMAILCON_01" config="Configuration\EMAILCON\EMAILCON_01.exe.xml" />
+    <Connector name="SOAPCON_01" type="SOAPCON" host="localhost" port="7440" sessionHandler="false" serviceName="FORIS.MG.SOAPCON_01" config="Configuration\SOAPCON\SOAPCON_01.exe.xml" />
+    <Connector name="SMSCON_01" type="SMSCON" host="localhost" port="5550" sessionHandler="false" serviceName="FORIS.MG.SMSCON_01" config="Configuration\SMSCON\SMSCON_01.exe.xml" />
+    <Connector name="SMSCON_02" type="SMSCON" host="localhost" port="5551" sessionHandler="false" serviceName="FORIS.MG.SMSCON_02" config="Configuration\SMSCON\SMSCON_02.exe.xml" />
+    <Connector name="SMSCON_03" type="SMSCON" host="localhost" port="5552" sessionHandler="false" serviceName="FORIS.MG.SMSCON_03" config="Configuration\SMSCON\SMSCON_03.exe.xml" />
+    <Connector name="SMSCON_04" type="SMSCON" host="localhost" port="5553" sessionHandler="false" serviceName="FORIS.MG.SMSCON_04" config="Configuration\SMSCON\SMSCON_04.exe.xml" />
+    <Connector name="SMSCON_05" type="SMSCON" host="localhost" port="5559" sessionHandler="false" serviceName="FORIS.MG.SMSCON_05" config="Configuration\SMSCON\SMSCON_05.exe.xml" />
+    <Connector name="RBTCON_01" type="SMSCON" host="localhost" port="5554" sessionHandler="false" serviceName="FORIS.MG.RBTCON_01" config="Configuration\RBTCON\RBTCON_01.exe.xml" />
+    <Connector name="USSDCON_01" type="SMSCON" host="localhost" port="5555" sessionHandler="false" serviceName="FORIS.MG.USSDCON_01" config="Configuration\USSDCON\USSDCON_01.exe.xml" />
+    <Connector name="USSDCON_02" type="SMSCON" host="localhost" port="5556" sessionHandler="false" serviceName="FORIS.MG.USSDCON_02" config="Configuration\USSDCON\USSDCON_02.exe.xml" />
+    <Connector name="USSDCON_03" type="SMSCON" host="localhost" port="5557" sessionHandler="false" serviceName="FORIS.MG.USSDCON_03" config="Configuration\USSDCON\USSDCON_03.exe.xml" />
+    <Connector name="USSDCON_04" type="SMSCON" host="localhost" port="5558" sessionHandler="false" serviceName="FORIS.MG.USSDCON_04" config="Configuration\USSDCON\USSDCON_04.exe.xml" />
+    <Connector name="USSDCON_06" type="SMSCON" host="localhost" port="5561" sessionHandler="false" serviceName="FORIS.MG.USSDCON_06" config="Configuration\USSDCON\USSDCON_06.exe.xml" />
+    <Handler name="CRMCON_01" type="CRMCON" host="localhost" port="7770" sessionHandler="false" serviceName="FORIS.MG.CRMCON_01" config="Configuration\CRMCON\CRMCON_01.exe.xml" />
+    <Handler name="DBCON_01" type="DBCON" host="localhost" port="2200" sessionHandler="false" serviceName="FORIS.MG.DBCON_01" config="Configuration\DBCON\DBCON_01.exe.xml" />
+    <Handler name="DBCON_02" type="DBCON" host="localhost" port="2220" sessionHandler="false" serviceName="FORIS.MG.DBCON_02" config="Configuration\DBCON\DBCON_02.exe.xml" />
+    <Handler name="WCFHND_01" type="WCFHND" host="localhost" port="3399" sessionHandler="false" serviceName="FORIS.MG.WCFHND_01" config="Configuration\WCFHND\WCFHND_01.exe.xml" />
+    <Monitor type="CRMCON" port="0" sessionHandler="false" />
+    <Emulator type="CRMCON" port="0" sessionHandler="false" serviceName="FORIS.MessagingGateway.CRMConnector1" />
+  </Connections>
+  <Settings>
+    <Item name="ContextScopeEnabled" value="false" />
+    <Item name="CentralLoggingEnabled" value="false" />
+  </Settings>
+  <log4net>
+    <appender name="BufferingDataFileAppender" type="log4net.Appender.BufferingForwardingAppender">
+      <bufferSize value="5" />
+      <appender-ref ref="DataFileAppender" />
+    </appender>
+    <appender name="DataFileAppender" type="log4net.Appender.RollingFileAppender">
+      <file type="log4net.Util.PatternString" value="C:\FORISLOG\MG\data\%property{TYPE}_%property{NAME}_data.log" />
+      <staticLogFileName value="false" />
+      <countDirection value="1" />
+      <maxSizeRollBackups value="-1" />
+      <maximumFileSize value="300MB" />
+      <lockingModel type="log4net.Appender.FileAppender+MinimalLock" />
+      <filter type="log4net.Filter.LevelRangeFilter">
+        <levelMin value="ProcessingContent" />
+        <levelMax value="ProcessingContent" />
+      </filter>
+      <layout type="log4net.Layout.PatternLayout">
+        <conversionPattern value="%date{dd.MM.yyyy HH:mm:ss.fff} [%17level] %thread: %message%newline" />
+      </layout>
+    </appender>
+    <appender name="BufferingActivityFileAppender" type="log4net.Appender.BufferingForwardingAppender">
+      <bufferSize value="5" />
+      <appender-ref ref="ActivityFileAppender" />
+    </appender>
+    <appender name="ActivityFileAppender" type="log4net.Appender.RollingFileAppender">
+      <file type="log4net.Util.PatternString" value="C:\FORISLOG\MG\activity\%property{TYPE}_%property{NAME}_activity.log" />
+      <staticLogFileName value="false" />
+      <countDirection value="1" />
+      <maxSizeRollBackups value="-1" />
+      <maximumFileSize value="300MB" />
+      <lockingModel type="log4net.Appender.FileAppender+MinimalLock" />
+      <filter type="log4net.Filter.LevelRangeFilter">
+        <levelMin value="DEBUG" />
+        <levelMax value="FATAL" />
+      </filter>
+      <layout type="log4net.Layout.PatternLayout">
+        <conversionPattern value="%date{dd.MM.yyyy HH:mm:ss.fff} [%17level] %thread: %message%newline" />
+      </layout>
+    </appender>
+    <appender name="ErrorFileAppender" type="log4net.Appender.RollingFileAppender">
+      <file type="log4net.Util.PatternString" value="C:\FORISLOG\MG\error\%property{TYPE}_%property{NAME}_error.log" />
+      <staticLogFileName value="false" />
+      <countDirection value="1" />
+      <maxSizeRollBackups value="-1" />
+      <maximumFileSize value="300MB" />
+      <lockingModel type="log4net.Appender.FileAppender+MinimalLock" />
+      <filter type="log4net.Filter.LevelRangeFilter">
+        <levelMin value="ERROR" />
+        <levelMax value="FATAL" />
+      </filter>
+      <layout type="log4net.Layout.PatternLayout">
+        <conversionPattern value="%date{dd.MM.yyyy HH:mm:ss.fff} [%17level] %thread: %message%newline" />
+      </layout>
+    </appender>
+    <logger name="MG">
+      <level value="DEBUG" />
+      <appender-ref ref="BufferingActivityFileAppender" />
+      <appender-ref ref="BufferingDataFileAppender" />
+      <appender-ref ref="ErrorFileAppender" />
+    </logger>
+  </log4net>
+  <XPathExtentionFile>defaultXPATH.xml</XPathExtentionFile>
+</Application>

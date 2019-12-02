@@ -1,0 +1,6 @@
+<plugin name="SplitterPlugin"   >
+      <condition expression="/Message/@initiator">
+            <match value="nnnn" />
+      </condition>
+</plugin>
+

@@ -1,0 +1,219 @@
+<templateGroup name="BMS">
+ 
+ <!--template procedureName="7070_fake">
+	    <condition>
+        	<test item="${Recipient}" matches="^(7070)$" />
+   	    </condition>
+           <receiveTemplate>
+		<Message>
+			<Item customer="${Sender}"/>
+		</Message>
+           </receiveTemplate>
+       		<deliveryTemplate direction="input">
+		<set item="Content" value="Извините, услуга временно недоступна" />
+		<set item="Sender" value="7070" />
+		<set item="Recipient" value="${customer}" />
+		<set item="Encoding" value="unicodefffe" />
+       		</deliveryTemplate>
+   	</template--> 
+
+<template procedureName="BMS_OrderGift_SMS" sessionStorage="Memory" sessionLifetime="120" >
+    <condition>
+	        <test item="${Recipient}" matches="^7070$" />
+			<test item="${token0}" matches="^\d{2,5}$" /> 
+			<test item="#{if(document('config\get_bms_counters\bmsgifts.xml')//gifts/gift/@number='${token0}',1,0)}" matches="1" />
+    </condition>
+    <receiveTemplate>
+	      	<Message type="orderbonusgiftrequest" initiator="SMSCON" id="@{setMessageId(@{newGuid})}" session_id="@{setSessionId(@{newGuid})}">
+				<Item customer="${Sender}">
+					<Attribute name="giftcode" value="#{document('config\get_bms_counters\bmsgifts.xml')/gifts/gift[@number='${content}']/@code}" />
+				</Item>
+				@{store(sGCode,${content})} 				                  
+			</Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+			<set item="Content" value="Произошла ошибка при заказе подарка." />
+			<set item="Content" condition="//Item/@dbresult='320301'" value="Недостаточно бонусных баллов!" /> 
+			<set item="Content" condition="//Item/@dbresult='0'" value="Заявка на добавление &quot;#{document('config\get_bms_counters\bmsgifts.xml')/gifts/gift[@number='${sGCode}']/@name}&quot; принята. Стоимость: ${ordercost} бонусных баллов." />
+            <set item="Recipient" value="${customer}" />
+			<set item="Sender" value="7070" />
+			<set item="Encoding" value="unicodefffe" />
+	        <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+  </template>
+
+   <template procedureName="BMS_OrderGift" persistent="false">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message />
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Произошла ошибка при заказе подарка. Пожалуйста,повторите попытку позже." />            
+      <set item="Encoding" value="unicodefffe" />
+      <set item="Sender" value="7070" />
+      <set item="Recipient" value="${customer}" />
+    </deliveryTemplate>	
+  </template>	 
+	
+    <template procedureName="BMS_OrderGift_Step2" persistent="false">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message />
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0}">
+      <set item="Content" value="Заказ подарка получен. Стоимость ${ordercost} бонусных баллов" />            
+      <set item="Encoding" value="unicodefffe" />
+      <set item="Sender" value="7070" />
+      <set item="Recipient" value="${customer}" />
+    </deliveryTemplate>	
+    <deliveryTemplate>
+      <set item="Content" value="Произошла ошибка при заказе подарка." />            
+      <set item="Encoding" value="unicodefffe" />
+      <set item="Sender" value="7070" />
+      <set item="Recipient" value="${customer}" />
+    </deliveryTemplate>
+  </template>	 
+
+  <template procedureName="AddDelBMSService_LF" sessionStorage="Memory" sessionLifetime="100">
+  <condition>
+   <test item="${Recipient}" matches="^707$" />
+   <test item="${Content}" matches="^(A|a|R|r)$"/>
+   </condition> 
+  <receiveTemplate>
+    <Message type="serviceorder" initiator="SMSCON" id="@{newGuid}" session_id="${session_id}">
+     <Item customer="${Sender}">
+      <Service id="FR2314" service_id="FR2314" action="@{switch(${Token0}|2,a|2,A|2,R|3,r|3)}"/>
+     </Item> 
+    </Message> 
+  </receiveTemplate>
+   <deliveryTemplate>
+  <set item="Content" value="К сожалению, произошла ошибка. Попробуйте еще раз." />
+  <set item="Content" condition="//Item/@dbresult=320191" value="На балансе недостаточно средств для проведения операции." />
+  <set item="Content" condition="//Item/@dbresult=320174" value="Неверно задана операция." />
+  <set item="Content" condition="//Item/@dbresult=320172" value="Неверно задана услуга." />
+  <set item="Content" condition="//Item/@dbresult=320173" value="На тарифном плане нет данной услуги." />
+  <set item="Content" condition="//Item/@dbresult=320203" value="Существует заявка на удаление услуги." />
+  <set item="Content" condition="//Item/@dbresult=320204" value="Существует заявка на добавление услуги." />
+  <set item="Content" condition="//Item/@dbresult=320205" value="Услуга уже существует." />
+  <set item="Content" condition="//Item/@dbresult=320206" value="Услуга не назначена." />
+  <set item="Content" condition="//Item/@dbresult=0" value="Заявка успешно принята." />
+  <set item="Content" condition="//Item/@dbresult=-1" value="Данный запрос не может быть выполнен." />
+  <set item="Sender" value="707" />
+  <set item="Recipient" value="${customer}" />
+  <set item="Encoding" value="unicodefffe" />
+
+   </deliveryTemplate>
+ 
+ </template>
+ 
+<template procedureName="Add_fttx_bonus_" handler="DBCON_01">
+	<condition>
+        	<test item="${Recipient}" matches="^7070$" />
+			<test item="${token0}" matches="^((([1234]{1}[Ff])|[Tt])37500[0-9]{7})$" />
+        </condition>
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="billing.mg_add_bonus_fttx" >
+					<Attribute name="i_msisdn" type="STRING" value="${Sender}" />
+					<Attribute name="i_param" type="STRING" value="${token0}"/> 
+					<Attribute name="o_dbrez" type="STRING" /> 
+				</Item>
+			</Message>
+       </receiveTemplate>
+       <deliveryTemplate>
+		<set item="Content" condition="//Item/@dbresult='0'" value="${o_dbrez}" />
+		<set item="Content" condition="//Item/@dbresult!='0'" value="Данный запрос не может быть выполнен." />		
+		<set item="Sender" value="7070" />
+		<set item="Recipient" value="${customer}" />
+		<set item="Encoding" value="unicodefffe" />
+       </deliveryTemplate>
+   </template>  
+ 
+ <template procedureName="wrongformat_7070" persistent="false">
+    	<condition>
+        	<test item="${Recipient}" matches="^(7070)$" />
+    	</condition>
+   	<receiveTemplate>
+    		<Message initiator="SMSCON" id="${guid}" session_id="@{newGuid}">
+      			<Item customer="${Sender}" />
+    		</Message>
+   	</receiveTemplate>
+    	<deliveryTemplate direction="input">
+		<set item="Content" value="Неправильный формат запроса" />
+		<set item="Sender" value="7070" />
+		<set item="Recipient" value="${customer}" />
+		<set item="Encoding" value="unicodefffe" />
+	</deliveryTemplate>
+</template>
+ 
+ <template procedureName="wrongformat_707" persistent="false">
+    	<condition>
+        	<test item="${Recipient}" matches="^(707)$" />
+    	</condition>
+   	<receiveTemplate>
+    		<Message initiator="SMSCON" id="${guid}" session_id="@{newGuid}">
+      			<Item customer="${Sender}" />
+    		</Message>
+   	</receiveTemplate>
+    	<deliveryTemplate direction="input">
+		<set item="Content" value="Неправильный формат запроса" />
+		<set item="Sender" value="707" />
+		<set item="Recipient" value="${customer}" />
+		<set item="Encoding" value="unicodefffe" />
+	</deliveryTemplate>
+</template>
+
+</templateGroup>
+<!--
+	<template procedureName="DB_AddRemoveService">
+        <condition>
+            <test item="0" matches="1" />
+        </condition>
+	<retry delay="300" attempts="2" />
+        <deliveryTemplate>
+            <set item="Content" value="#{//Content/text()}" />
+            <set item="Sender" value="0870" />
+            <set item="Recipient" value="${customer}" />
+            <set item="Encoding" value="ascii" />
+            <set item="ScheduleDeliveryTime" value="#{getTimeInRange('08:00','23:30')}" /> 
+            <set item="ValidityPeriod" value="#{getTimeInRange('11:00','23:30')}" />  
+            <set item="RegisteredDelivery" value="false" />
+        </deliveryTemplate>
+	 </template>
+
+	<template procedureName="DeliveryRequestBMS">
+        <condition>
+            <test item="0" matches="1" />
+        </condition>
+	<retry delay="300" attempts="2" />
+        <deliveryTemplate>
+            <set item="Content" value="#{//Content/text()}" />
+            <set item="Sender" value="0870" />
+            <set item="Recipient" value="${customer}" />
+            <set item="Encoding" value="ascii" />
+            <set item="ScheduleDeliveryTime" value="#{getTimeInRange('08:00','23:30')}" />  
+            <set item="ValidityPeriod" value="#{getTimeInRange('11:00','23:30')}" />  
+            <set item="RegisteredDelivery" value="false" />
+        </deliveryTemplate>
+	 </template>
+
+	<template procedureName="DeliveryRequestIssa" persistent="false">
+	<retry delay="300" attempts="2" />
+	<deliveryTemplate>
+      <set item="Content" value="#{//Content/text()}" />
+      <set item="Sender" value="#{if(substring('${Sender}',1,3)='375','1241${Sender}','0870')}" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Encoding" value="#{//Content/@charset}" />
+      <set item="Encoding" condition="not(//Content/@charset)" value="unicodefffe" />
+      <set item="ValidityPeriod" condition = "//Item/@validityPeriod" value="${validityPeriod}" />
+      <set item="ScheduleDeliveryTime" condition = "//Item/@scheduleTime" value="${scheduleTime}" />
+	</deliveryTemplate> 
+	</template>
+
+-->
+
+

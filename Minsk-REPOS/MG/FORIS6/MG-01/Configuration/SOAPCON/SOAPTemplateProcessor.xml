@@ -1,0 +1,84 @@
+﻿<templates connector="SOAP">
+#include "..\..\config\get_bms_counters\soap.xml"
+#include "..\..\config\callcenter\callcenter.xml"
+	
+<template procedureName="DB_AddRemoveService" persistent="true">
+    <receiveTemplate>
+      <Message type="bundleprovision" initiator="IVRCON" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}">
+          <Service id="${servicecode}" action="#{if('${serviceaction}'='2','add',if('${serviceaction}'='3','remove',-1))}" needtariffication="${needtariffication}" enddate="${enddate}" informOnImpossibility="${informOnImpossibility}" sourcetypeid ="${sourcetypeid}" userid="${userid}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate terminating="false">
+      <set item="oparam:RESULT" value="0" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${message}'!=''}" connector="SMSCON_01">
+      <set item="Content" value="${message}" />
+      <set item="Recipient" value="${customer}" />
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+      <param name="servicecode" value="" />
+      <param name="serviceaction" value="2" />
+      <param name="needtariffication" value="" />
+	  <param name="enddate" value="00.00.01 01.01.2099"/>
+      <param name="informOnImpossibility" value="1" />
+      <param name="sourcetypeid" value="1" />
+      <param name="userid" value="1" />
+    </input>
+    <output>
+      <param name="RESULT" value="0" />
+    </output>
+</template> 
+ 
+
+<template procedureName="VMASPayment">
+	<receiveTemplate>
+		<Message type="vmaspayment" id="${guid}" initiator="SMS" session_id="@{newGuid}">
+			<Item>
+				<Attribute name="payer" value="${customer}" />
+				<Attribute name="receiver" value="${customer}" />
+				<Attribute name="pin" value="${pin}" />
+				<Attribute name="network_operator_code" value="BELORUSSIA" />
+				<Attribute name="operator_id" value="15" />
+			</Item>
+		</Message>
+	</receiveTemplate>
+	<deliveryTemplate>
+		<set item="oparam:dbresult" value="${dbresult}"/>
+	</deliveryTemplate>
+	<input>
+		<param name="customer"/>
+		<param name="pin"/>
+	</input>
+	<output>
+		<param name="dbresult"/>
+	</output>
+</template>
+
+ <template procedureName="DB_BalanceRetriev" persistent="false">
+  <input>
+   <param name="Customer"/>
+  </input>
+  <output>
+   <param name="balanceintpartdotpart"     type="3" value="0"/>
+   <param name="DisconnectionTime"         type="3" value="0"/>
+   <param name="recommendedprepayment"     type="3" value="0"/>
+   <param name="accumulator1"               type="3" value="0"/>
+   <param name="currency"                  type="3" value="933"/>
+   <param name="creditlimitintpartdotpart" type="3" value="0"/>
+   <param name="debtintpartdotpart"        type="3" value="0"/>
+   <param name="dateofissue"               type="1" value="0"/>
+   <param name="iscredit"                  type="2" value="0"/>
+  </output>
+  <receiveTemplate>
+   <Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+    <Item customer="${customer}" subject="balance" />
+   </Message>
+  </receiveTemplate>
+  <deliveryTemplate />
+ </template>  
+
+
+</templates>
