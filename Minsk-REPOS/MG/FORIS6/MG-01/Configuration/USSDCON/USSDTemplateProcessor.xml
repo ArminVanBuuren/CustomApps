@@ -3039,7 +3039,7 @@ https://smart-university.ru/eng/ege/express
         @{store(sContent,#{number(${Content} * 100)})}
       </Message>
     </receiveTemplate>
-    <deliveryTemplate conditionEx="#{('${allowed}' = 1 and '${dbresult}'= 0) }" call="SMS_PersonalGuaranteedPayment">
+    <deliveryTemplate conditionEx="#{'${dbresult}'='0'}" call="SMS_PersonalGuaranteedPayment">
       <set item="Sender" value="${customer}" />
       <set item="Content" value="${sContent}" />
       <set conditionEx="0@{freeSession}" />
@@ -3047,12 +3047,11 @@ https://smart-university.ru/eng/ege/express
     <retry delay="1" attempts="0" />
     <deliveryTemplate>
       <set item="Content" value="Извините, но данный запрос не может быть выполнен." />
-      <set item="Content" condition="//Item/@dbresult=0" value="Обещанный платеж не может быть принят." />
       <set item="Content" conditionEx="#{${dbresult}=320341}" value="Номер Вашего телефона не зарегистрирован" />
       <set item="Content" conditionEx="#{${dbresult}=320347}" value="Услуга не может быть предоставлена, потому что номер заблокирован" />
       <set item="Content" conditionEx="#{${dbresult}=320191}" value="Данный сервис недоступен. Ваш баланс #{number('${balance}') div 100} р." />
       <set item="Content" conditionEx="#{${dbresult}=320203}" value="Услуга не может быть предоставлена, предыдущий обещанный платеж не погашен или в процессе регистрации" />
-      <set item="Content" conditionEx="#{${dbresult}=320111}" value="Указывайте сумму не превышающую #{${maximumrur} div 100} р." />
+      <set item="Content" conditionEx="#{${dbresult}=320111}" value="Указывайте сумму не превышающую #{${maximumusd} div 100} р." />
       <set item="Content" conditionEx="#{${dbresult}=320121}" value="Невозможно установить обещанный платеж" />
       <set item="Content" conditionEx="#{${dbresult}=320113}" value="Сумма обещанного платежа меньше минимально возможной" />
       <set item="Content" conditionEx="#{${dbresult}=330140}" value="Обратитесь к персональному менеджеру" />
@@ -3120,15 +3119,12 @@ https://smart-university.ru/eng/ege/express
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
         <Item customer="${Sender}">
-          <Service id="guaranteedpayment" action="6">
-            <Attribute name="amount" value="${Content}" />
-            <Attribute name="currency" value="933" />
-          </Service>
+          <Service id="guaranteedpayment" action="6"/>
         </Item>
         @{store(sContent,${Content})}
       </Message>
     </receiveTemplate>
-    <deliveryTemplate conditionEx="#{('${allowed}' = 1 and '${dbresult}'= 0) }" call="SMS_GuaranteedPayment">
+    <deliveryTemplate conditionEx="#{'${dbresult}'='0'}" call="SMS_GuaranteedPayment">
       <set item="Sender" value="${customer}" />
       <set item="Content" value="${sContent}" />
       <set conditionEx="0@{freeSession}" />
@@ -3136,7 +3132,6 @@ https://smart-university.ru/eng/ege/express
     <retry delay="1" attempts="0" />
     <deliveryTemplate>
       <set item="Content" value="Извините. Информация временно недоступна." />
-      <set item="Content" condition="//Item/@dbresult=0" value="Обещанный платеж не может быть принят." />
       <set item="Content" condition="//Item/@dbresult=329203" value="${pending_str}" />
       <set item="Content" condition="//Item/@dbresult=320341" value="${pending_str}" />
       <set item="Content" condition="//Item/@dbresult=320114" value="${pending_str}" />
@@ -3206,15 +3201,12 @@ https://smart-university.ru/eng/ege/express
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
         <Item customer="${Sender}">
-          <Service id="guaranteedpayment" action="6">
-            <Attribute name="amount" value="${Content}" />
-            <Attribute name="currency" value="933" />
-          </Service>
+          <Service id="guaranteedpayment" action="6"/>
         </Item>
         @{store(sContent,${Content})}
       </Message>
     </receiveTemplate>
-    <deliveryTemplate conditionEx="#{('${allowed}' = 1 and '${dbresult}'= 0) }" call="SMS_GuaranteedPaymenttest">
+    <deliveryTemplate conditionEx="#{'${dbresult}'='0'}" call="SMS_GuaranteedPaymenttest">
       <set item="Sender" value="${customer}" />
       <set item="Content" value="${sContent}" />
       <set conditionEx="0@{freeSession}" />
@@ -3222,7 +3214,6 @@ https://smart-university.ru/eng/ege/express
     <retry delay="1" attempts="0" />
     <deliveryTemplate>
       <set item="Content" value="Услуга не предоставляется для тарифного плана." />
-      <set item="Content" condition="//Item/@dbresult=0" value="Обещанный платеж не может быть принят." />
       <set item="Content" condition="//Item/@dbresult=320203" value="Регистрация запрещена - предыдущий платеж не оплачен." />
       <set item="Content" condition="//Item/@dbresult=320111" value="Превышена разрешенная сумма платежа в 3 руб." />
       <set item="Content" condition="//Item/@dbresult=320121" value="Платеж не может быть зарегистрирован." />

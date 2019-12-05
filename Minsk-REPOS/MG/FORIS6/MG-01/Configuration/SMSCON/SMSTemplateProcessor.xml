@@ -2747,19 +2747,18 @@
         @{store(sContent,#{number(${Content} * 100)})}
       </Message>
     </receiveTemplate>
-    <deliveryTemplate conditionEx="#{('${allowed}' = 1 and '${dbresult}'= 0) }" call="SMS_GuaranteedPayment">
+    <deliveryTemplate conditionEx="#{'${dbresult}'='0'}" call="SMS_GuaranteedPayment">
       <set item="Sender" value="${customer}" />
       <set item="Content" value="${sContent}" />
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
     <deliveryTemplate>
       <set item="Content" value="Извините, но данный запрос не может быть выполнен." />
-      <set item="Content" condition="//Item/@dbresult=0" value="Обещанный платеж не может быть принят." />
       <set item="Content" conditionEx="#{${dbresult}=320341}" value="Номер Вашего телефона не зарегистрирован" />
       <set item="Content" conditionEx="#{${dbresult}=320347}" value="Услуга не может быть предоставлена, потому что номер заблокирован" />
       <set item="Content" conditionEx="#{${dbresult}=320191}" value="Данный сервис недоступен. Ваш баланс #{number('${balance}') div 100} р." />
       <set item="Content" conditionEx="#{${dbresult}=320203}" value="Услуга не может быть предоставлена, предыдущий обещанный платеж не погашен или в процессе регистрации" />
-      <set item="Content" conditionEx="#{${dbresult}=320111}" value="Указывайте сумму не превышающую #{${maximumrur} div 100} р." />
+      <set item="Content" conditionEx="#{${dbresult}=320111}" value="Указывайте сумму не превышающую #{${maximumusd} div 100} р." />
       <set item="Content" conditionEx="#{${dbresult}=320121}" value="Невозможно установить обещанный платеж" />
       <set item="Content" conditionEx="#{${dbresult}=320113}" value="Сумма обещанного платежа меньше минимально возможной" />
       <set item="Content" conditionEx="#{${dbresult}=330140}" value="Обратитесь к персональному менеджеру" />
