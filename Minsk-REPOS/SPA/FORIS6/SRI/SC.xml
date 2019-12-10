@@ -378,6 +378,7 @@
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
     </CFS>
     <CFS name="CBBLKLOST" globalServiceCode="BL0001" priority="11" description="Блокировка аппарат утрачен">
+      <RFS name="RFS_FP_BLOCK" linkType="Add" />
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
     </CFS>
     <CFS name="CBBLKUSER" priority="11" copyOf="FRBLKUSER" description="Добровольная блокировка" />
@@ -13661,6 +13662,7 @@
     <CFS name="FRAVN" copyOf="EXTNUM" description="Дополнительный номер для телефонии (голосовой связи)" />
     <CFS name="FRBLCNCOT" globalServiceCode="FRBLCNCOT" copyOf="CFS_FP_SERVICE_GENERAL" description="Блокировка НЦОТ" />
     <CFS name="FRBLKCHK" globalServiceCode="BL0003" priority="11" description="Блокировка 'Проверка'">
+      <RFS name="RFS_FP_BLOCK" linkType="Add" />
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
     </CFS>
     <CFS name="FRBLKCHKAN" globalServiceCode="BL0017" priority="11" copyOf="FRBLKCHK" description="Тест. Аналог блокировки ПРОВЕРКА" />
@@ -13671,6 +13673,7 @@
     <CFS name="FRBLKDEBT" globalServiceCode="BL0016" priority="11" copyOf="FRBLKCHK" description="Тест ITGC 43297. Блокировка СУДЗ" />
     <CFS name="FRBLKEND" globalServiceCode="BL0006" priority="3" description="Заключительная блокировка">
       <RFS name="RFS_BMS_BLOCK" linkType="Add" />
+      <RFS name="RFS_FP_BLOCK" linkType="Add" />
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
     </CFS>
     <CFS name="FRBLKFIN" globalServiceCode="BL0009" priority="14" description="Принудительная блокировка">
@@ -13678,7 +13681,6 @@
     </CFS>
     <CFS name="FRBLKINIT" globalServiceCode="FRBLKINIT" priority="10" description="Первоначальная блокировка">
       <RFS name="RFS_FP_BLOCK" linkType="Add" />
-      <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
     </CFS>
     <CFS name="FRBLKKEEP" globalServiceCode="FRBLKKEEP" copyOf="CFS_FP_SERVICE_GENERAL" description="Блокировка комплекта" />
     <CFS name="FRBLKP" globalServiceCode="FRBLKP" copyOf="CFS_FP_SERVICE_GENERAL" description="Частичная блокировка" />
@@ -13686,6 +13688,7 @@
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
     </CFS>
     <CFS name="FRBLKPAY" globalServiceCode="BL0011" priority="14" description="Принудительная блокировка по неоплате счета">
+      <RFS name="RFS_FP_BLOCK" linkType="Add" />
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
     </CFS>
     <CFS name="FRBLKPAYSRV" globalServiceCode="BL0013" priority="14" description="Блокировка по недостаточности средств на оплату услуг">
@@ -13693,6 +13696,7 @@
     </CFS>
     <CFS name="FRBLKTIME" globalServiceCode="FRBLKTIME" copyOf="CFS_FP_SERVICE_GENERAL" description="Блокировка срок годности комплекта истек" />
     <CFS name="FRBLKUSER" globalServiceCode="BL0005" priority="11" description="Добровольная блокировка">
+      <RFS name="RFS_FP_BLOCK" linkType="Add" />
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
     </CFS>
     <CFS name="FRBLKUSERABS" globalServiceCode="FRBLKUSERABS" copyOf="CFS_FP_SERVICE_GENERAL" description="Добровольная блокировка (Абсолют)" />
@@ -13771,6 +13775,16 @@
       <RFS name="RFS_FP_AUTO_PAYMENT_LIMIT" linkType="Add" actionName="Assign Autopayment Limit;Remove Autopayment Limit;Modify Autopayment Limit" />
       <RFS name="RFS_FP_PERSONAL_ACCOUNT" linkType="Add" actionName="-Assign Autopayment Limit;-Remove Autopayment Limit;-Modify Autopayment Limit" />
     </CFS>
+    <CFS name="PPD175_1.1" globalServiceCode="PPD175_1.1" copyOf="CFS_FP_COUNTER_AND_SDP" description="PPD175_1.1" />
+    <CFS name="PPD175_2.1" globalServiceCode="PPD175_2.1" copyOf="CFS_FP_COUNTER_AND_SDP" description="PPD175_2.1" />
+    <CFS name="PPD175_3.1" globalServiceCode="PPD175_3.1" copyOf="CFS_FP_COUNTER_AND_SDP" description="PPD175_3.1" />
+    <CFS name="PPD175_4.1" globalServiceCode="PPD175_4.1" copyOf="CFS_FP_COUNTER_AND_SDP" description="PPD175_4.1" />
+    <CFS name="PPD175_5.1" globalServiceCode="PPD175_5.1" copyOf="CFS_FP_COUNTER_AND_SDP" description="PPD175_5.1" />
+    <CFS name="PPD175_6.1" globalServiceCode="PPD175_6.1" copyOf="CFS_FP_COUNTER_AND_SDP" description="PPD175_6.1" />
+    <CFS name="PPD175_7.1" globalServiceCode="PPD175_7.1" copyOf="CFS_FP_COUNTER_AND_SDP" description="PPD175_7.1" />
+    <CFS name="PPD175_8.1" globalServiceCode="PPD175_8.1" copyOf="CFS_FP_COUNTER_AND_SDP" description="PPD175_8.1" />
+    <CFS name="PPD175_9.1" globalServiceCode="PPD175_9.1" copyOf="CFS_FP_COUNTER_AND_SDP" description="PPD175_9.1" />
+    <CFS name="PPD175_P2APN.1" globalServiceCode="PPD175_P2APN.1" copyOf="CFS_FP_COUNTER_AND_SDP" description="PPD175_P2APN.1" />
     <CFS name="PRABSMS10" globalServiceCode="PRABSMS10" copyOf="CFS_FP_SERVICE_GENERAL" description="SMS-пакет 10 (подарок)" />
     <CFS name="PSPLA" globalServiceCode="PSPLA" copyOf="CFS_FP_SERVICE_GENERAL" description="Стимулирование платежей" />
     <CFS name="SCP1001" globalServiceCode="SCP1001" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Информирование абонента (тест)" />
@@ -13789,12 +13803,28 @@
       <RFS name="RFS_FP_SUBSCRIBER" linkType="Add" />
     </CFS>
     <CFS name="SubscriberInHLR" priority="9999" type="ManagedObject" copyOf="Subscriber" description="Абонент - копия" />
+    <CFS name="TAXTEMP20" globalServiceCode="TAXTEMP20" copyOf="CFS_FP_SERVICE_GENERAL" description="TAXTEMP20" />
+    <CFS name="TAXTEMPP11" globalServiceCode="TAXTEMPP11" copyOf="CFS_FP_SERVICE_GENERAL" description="TAXTEMPP11" />
+    <CFS name="TAXTEMPP1208" globalServiceCode="TAXTEMPP1208" copyOf="CFS_FP_SERVICE_GENERAL" description="TAXTEMPP1208" />
+    <CFS name="TAXTEMPP20" globalServiceCode="TAXTEMPP20" copyOf="CFS_FP_SERVICE_GENERAL" description="TAXTEMPP20" />
+    <CFS name="TAXTEMPP201" globalServiceCode="TAXTEMPP201" copyOf="CFS_FP_SERVICE_GENERAL" description="TAXTEMPP201" />
+    <CFS name="TAXTEMPP202" globalServiceCode="TAXTEMPP202" copyOf="CFS_FP_SERVICE_GENERAL" description="TAXTEMPP202" />
+    <CFS name="TAXTEMPP20S" globalServiceCode="TAXTEMPP20S" copyOf="CFS_FP_SERVICE_GENERAL" description="TAXTEMPP20S" />
+    <CFS name="TAXTEMPP21" globalServiceCode="TAXTEMPP21" copyOf="CFS_FP_SERVICE_GENERAL" description="TAXTEMPP21" />
+    <CFS name="TAXTEMPP22" globalServiceCode="TAXTEMPP22" copyOf="CFS_FP_SERVICE_GENERAL" description="TAXTEMPP22" />
+    <CFS name="TAXTEMPP220" globalServiceCode="TAXTEMPP220" copyOf="CFS_FP_SERVICE_GENERAL" description="TAXTEMPP220" />
+    <CFS name="TAXTEMPP2S" globalServiceCode="TAXTEMPP2S" copyOf="CFS_FP_SERVICE_GENERAL" description="TAXTEMPP2S" />
+    <CFS name="TAXTEMPPS" globalServiceCode="TAXTEMPPS" copyOf="CFS_FP_SERVICE_GENERAL" description="TAXTEMPPS" />
+    <CFS name="TAXTEMPPS1" globalServiceCode="TAXTEMPPS1" copyOf="CFS_FP_SERVICE_GENERAL" description="TAXTEMPPS1" />
+    <CFS name="TAXTEMPPS2" globalServiceCode="TAXTEMPPS2" copyOf="CFS_FP_SERVICE_GENERAL" description="TAXTEMPPS2" />
+    <CFS name="TAXTEMPPS20" globalServiceCode="TAXTEMPPS20" copyOf="CFS_FP_SERVICE_GENERAL" description="TAXTEMPPS20" />
+    <CFS name="TAXTEMPPSS" globalServiceCode="TAXTEMPPSS" copyOf="CFS_FP_SERVICE_GENERAL" description="TAXTEMPPSS" />
     <CFS name="TE1000" globalServiceCode="TE1000" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Услуга пакета 1 (20 мин)" />
     <CFS name="TE1001" globalServiceCode="TE1001" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Услуга пакета 2 (30 мин)" />
     <CFS name="TESTPPDA" globalServiceCode="TESTPPDA" copyOf="CFS_FP_SERVICE_GENERAL" description="Тест.Услуга А" />
     <CFS name="TESTPPDB" globalServiceCode="TESTPPDB" copyOf="CFS_FP_SERVICE_GENERAL" description="Тест.Услуга B" />
-    <CFS name="TESTPPDC" globalServiceCode="TESTPPDC" copyOf="CFS_FP_SERVICE_GENERAL" description="Тест.Услуга C" />
-    <CFS name="TESTPPDD" globalServiceCode="TESTPPDD" copyOf="CFS_FP_SERVICE_GENERAL" description="Тест.Услуга D" />
+    <CFS name="TESTPPDC" globalServiceCode="TESTPPDC" copyOf="CFS_FP_COUNTER_AND_SDP" description="Тест.Услуга C" />
+    <CFS name="TESTPPDD" globalServiceCode="TESTPPDD" copyOf="CFS_FP_COUNTER_AND_SDP" description="Тест.Услуга D" />
     <CFS name="TESTPPDS" globalServiceCode="TESTPPDS" copyOf="CFS_FP_SERVICE_GENERAL" description="Тест.Услуга S" />
     <CFS name="TESTPPDSERV" globalServiceCode="TESTPPDSERV" copyOf="CFS_FP_SERVICE_GENERAL" description="TEST. First PPD service" />
     <CFS name="TMP000002" globalServiceCode="TMP000002" copyOf="CFS_FP_SERVICE_GENERAL" description="Тестовая услуга 25" />
