@@ -5,15 +5,8 @@
         <object name="AddFR333" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
         <object name="SplitForDummy" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
         <object name="DummyResult" class="FORIS.ScenarioProcessing.CommonUnits.ConditionalDummyResultCreator" assembly="FORIS.SPA.SPF.dll" />
-        <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
       </objectlist>
       <automat>
-        <node name="SCProcessingUnit" object="SCProcessingUnit">
-          <parameterslist />
-          <resultlist>
-            <result value="" node="AddFR333" />
-          </resultlist>
-        </node>
         <node name="AddFR333" object="AddFR333">
           <parameterslist>
             <param name="operation" value="AddFR333" />

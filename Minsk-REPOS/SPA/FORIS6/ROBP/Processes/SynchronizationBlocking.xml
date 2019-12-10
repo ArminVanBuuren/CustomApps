@@ -4,15 +4,8 @@
       <objectlist>
         <object name="SyncroBloking" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
         <object name="ParallelSyncroBloking" class="FORIS.ServiceProvisioning.BPM.ParallelProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
-        <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
       </objectlist>
       <automat>
-        <node name="SCProcessingUnit" object="SCProcessingUnit">
-          <parameterslist />
-          <resultlist>
-            <result value="" node="AddFR2370" />
-          </resultlist>
-        </node>
         <node name="AddFR2370" object="SyncroBloking">
           <parameterslist>
             <param name="operation" value="AddFR2370" />

@@ -3,15 +3,8 @@
     <scenario>
       <objectlist>
         <object name="DeactivateCallForwarding" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
-        <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
       </objectlist>
       <automat>
-        <node name="SCProcessingUnit" object="SCProcessingUnit">
-          <parameterslist />
-          <resultlist>
-            <result value="" node="DeactivateCallForwarding" />
-          </resultlist>
-        </node>
         <node name="DeactivateCallForwarding" object="DeactivateCallForwarding">
           <parameterslist>
             <param name="operation" value="DeactivateCallForwarding" />

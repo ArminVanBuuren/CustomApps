@@ -11,7 +11,7 @@
       </objectlist>
       <automat>
         <node name="SCProcessingUnit" object="SCProcessingUnit">
-          <parameterslist/>
+          <parameterslist />
           <resultlist>
             <result value="" node="DeleteSubscriberOnFINPlatform" />
           </resultlist>
@@ -55,25 +55,6 @@
         <node name="DeleteMsisdnFromCampaign" object="BPMProcessingUnit">
           <parameterslist>
             <param name="operation" value="DeleteMsisdnFromCampaign" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="DeleteSubscriberOnDB" />
-            <!-- Comment - VR for SuspendContract -->
-          </resultlist>
-        </node>
-        <!--SCP&BMS PoP - TEMPORARY solution (in Operation - for FRPOPMAP) -->
-        <node name="DeleteSubscriberOnDB" object="DeleteSubscriberOnDB">
-          <parameterslist>
-            <param name="operation" value="DeleteSubscriberOnDB" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="" />
-          </resultlist>
-        </node>
-        <!--SCP&BMS PoP - TEMPORARY solution (in Operation - for VIRTUAL TD_Type) -->
-        <node name="DeleteSubscriberVPOonDB" object="DeleteSubscriberVPOonDB">
-          <parameterslist>
-            <param name="operation" value="DeleteSubscriberOnDB" />
           </parameterslist>
           <resultlist>
             <result value="" node="" />

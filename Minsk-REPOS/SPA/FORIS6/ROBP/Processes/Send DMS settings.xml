@@ -3,15 +3,8 @@
     <scenario>
       <objectlist>
         <object name="AddFR511000" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
-        <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
       </objectlist>
       <automat>
-        <node name="SCProcessingUnit" object="SCProcessingUnit">
-          <parameterslist />
-          <resultlist>
-            <result value="" node="AddFR511000" />
-          </resultlist>
-        </node>
         <node name="AddFR511000" object="AddFR511000">
           <parameterslist>
             <param name="operation" value="AddFR511000" />

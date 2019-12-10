@@ -3,15 +3,8 @@
     <scenario>
       <objectlist>
         <object name="ModifyFR333" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
-        <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
       </objectlist>
       <automat>
-        <node name="SCProcessingUnit" object="SCProcessingUnit">
-          <parameterslist />
-          <resultlist>
-            <result value="" node="ModifyFR333" />
-          </resultlist>
-        </node>
         <node name="ModifyFR333" object="ModifyFR333">
           <parameterslist>
             <param name="operation" value="ModifyFR333" />

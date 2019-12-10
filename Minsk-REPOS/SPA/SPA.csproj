@@ -77,6 +77,7 @@
     <Content Include="FORIS6\ROBP\Operations\BS\DeleteMsisdnFromCampaign.xml" />
     <Content Include="FORIS6\ROBP\Operations\BS\DeleteSubscriberBlockOnBMS.xml" />
     <Content Include="FORIS6\ROBP\Operations\BS\RemoveMsisdnFromCampaign.xml" />
+    <Content Include="FORIS6\ROBP\Operations\BS\RestoreSubscriber_BS.xml" />
     <Content Include="FORIS6\ROBP\Operations\BT\AddBLTDLIMonBT.xml" />
     <Content Include="FORIS6\ROBP\Operations\BT\AddCBBLKLOSTonBT.xml" />
     <Content Include="FORIS6\ROBP\Operations\BT\AddFR10235onBT.xml" />
@@ -2013,6 +2014,7 @@
     <Content Include="FORIS6\ROBP\Processes\Change MSISDN or IMSI on Platform.xml" />
     <Content Include="FORIS6\ROBP\Processes\Change tariff plan in All platform.xml" />
     <Content Include="FORIS6\ROBP\Processes\Change tariff plan.xml" />
+    <Content Include="FORIS6\ROBP\Processes\Counter Reinitialization.xml" />
     <Content Include="FORIS6\ROBP\Processes\Create personal account in All platform.xml" />
     <Content Include="FORIS6\ROBP\Processes\Create Subscriber in All platform.xml" />
     <Content Include="FORIS6\ROBP\Processes\Create Subscriber in financial platform.xml" />

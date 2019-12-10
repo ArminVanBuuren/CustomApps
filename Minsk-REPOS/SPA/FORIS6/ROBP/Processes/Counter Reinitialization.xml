@@ -1,13 +1,14 @@
-<BusinessProcessData name="Unblock Dummy" successOnNoOperation="true">
+<BusinessProcessData name="Counter Reinitialization">
   <businessprocess>
     <scenario>
       <objectlist>
         <object name="BPMProcessingUnit" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
       </objectlist>
       <automat>
-        <node name="Dummy" object="BPMProcessingUnit">
+        <node name="SCProcessingUnit" object="SCProcessingUnit">
           <parameterslist>
-            <param name="operation" value="Dummy" />
+            <param name="ProcessingOptions:0" value="IsCounterProcess" />
           </parameterslist>
           <resultlist>
             <result value="" node="" />
