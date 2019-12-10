@@ -14793,7 +14793,6 @@
     <None Include="PROD-2019.09.01\SPA.SA\ViaMobi\scenarios\DeleteSubscriberOnVI.xml_old" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="FORIS6\ROBP\Operations\%28 Archived %29\" />
     <Folder Include="FORIS6\SPA.SA\Contents\2Memory\Decoders\" />
     <Folder Include="FORIS6\SPA.SA\Contents\FMK\Decoders\" />
     <Folder Include="FORIS6\SPA.SA\Contents\Jobsms\Decoders\" />
