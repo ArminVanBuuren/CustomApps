@@ -127,7 +127,7 @@
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="MultiLevelCondition" value="(//RFS_HLR_ODB_OC) OR (//RFS_HLR_ODB_OC/RES_HLR_ODB_OC/Value[text()='LocalCalls'])" /> <!--(NOT //RFS_HLR_ODB_OC) OR (//RFS_HLR_ODB_OC/RES_HLR_ODB_OC/Value[text()!='LocalCalls'])-->
+        <param name="MultiLevelCondition" value="(NOT //RFS_HLR_ODB_OC) OR (//RFS_HLR_ODB_OC/RES_HLR_ODB_OC/Value[text()!='IntercityCalls'])" />
         <param name="Command" value="SC.Modify_BOC" />
       </parameterslist>
     </node>
