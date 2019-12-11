@@ -11,8 +11,9 @@
   <LogicalGroupParametersList>
     <LogicalGroupParameter Name="NAM_STATE" AbsenceValue="NAM=1">
       <SourcesList PresenceValue="NAM=0,Keep=1,KEEPEPS=1" Multi="(//AddList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Allow']) OR (//ModifyList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Allow']) OR (//EndList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Allow'])"/>
-      <SourcesList PresenceValue="NAM=0,Keep=1,KEEPEPS=1" Multi="((//AddList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Deny']) OR (//ModifyList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Deny']) OR (//EndList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Deny'])) AND (NOT //RFS_HLR_ROAMING)"/>
-      <SourcesList PresenceValue="NAM=1,Keep=1,KEEPEPS=1" Multi="((//AddList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Deny']) OR (//ModifyList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Deny']) OR (//EndList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Deny'])) AND (//RFS_HLR_ROAMING)"/>
+      <SourcesList PresenceValue="NAM=0,Keep=1,KEEPEPS=1" Multi="((//AddList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Barring']) OR (//ModifyList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Barring']) OR (//EndList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Barring'])) AND (NOT //RFS_HLR_ROAMING)"/>
+      <SourcesList PresenceValue="NAM=1,Keep=1,KEEPEPS=1" Multi="((//AddList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Barring']) OR (//ModifyList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Barring']) OR (//EndList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Barring'])) AND (//RFS_HLR_ROAMING)"/>
+      <SourcesList PresenceValue="NAM=1,Keep=1,KEEPEPS=1" Multi="(//AddList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Deny']) OR (//ModifyList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Deny']) OR (//EndList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Deny'])"/>
     </LogicalGroupParameter>
   </LogicalGroupParametersList>
   <ErrorsList CodePage="windows-1251">

@@ -9,10 +9,10 @@
     <Item Name="NET_STATE" Type="LocalParameter" />
   </Request>
   <ParametersList>
-    <Parameter Name="NET_STATE" IsChoice="true" AbsenceValue="1">
-      <Source Path="//AddList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Allow']" PresenceValue="0" />
-      <Source Path="//ModifyList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Allow']" PresenceValue="0" />
-      <Source Path="//EndList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Allow']" PresenceValue="0" />
+    <Parameter Name="NET_STATE" IsChoice="true" AbsenceValue="0">
+      <Source Path="//AddList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Barring']" PresenceValue="1" />
+      <Source Path="//ModifyList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Barring']" PresenceValue="1" />
+      <Source Path="//EndList/RFS_HLR_NET/RES_HLR_NET/Value[text()='Barring']" PresenceValue="1" />
     </Parameter>
   </ParametersList>
 </Command>

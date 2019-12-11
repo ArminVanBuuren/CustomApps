@@ -11,7 +11,7 @@
     <Add Key="Requests.MaxQueuedPerHost" Value="600" />
     <Add Key="Requests.PollPeriod" Value="2" />
     <Add Key="Requests.PollIdlePeriod" Value="2" />
-    <Add Key="Responses.WritersCount" Value="4" />
+    <Add Key="Responses.WritersCount" Value="10" />
     <Add Key="CloseSessionOnCommandTimeOut" Value="true" />
     <Add Key="InfiniteLoopWarningThreshold" Value="200" />
     <Add Key="InfiniteLoopInterruptThreshold" Value="500" />

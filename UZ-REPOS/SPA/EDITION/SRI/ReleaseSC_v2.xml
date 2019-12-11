@@ -280,6 +280,7 @@
     <RFS name="RFS_HLR_CWCH" hostType="HL" description="Ожидание / Удержание вызова" />
     <RFS name="RFS_HLR_DATATRANSFER" hostType="HL" description="Мобильная передача данных" />
     <RFS name="RFS_HLR_GET_SUBSCRIBER" hostType="HL" description="Получение состояния абонента" />
+    <RFS name="RFS_HLR_INSPECT_FLAG" hostType="HL" description="Услуга маркер-Инспектор" />
     <RFS name="RFS_HLR_LTE" hostType="HL" description="Мобильный интернет LTE">
       <Resource name="RES_HLR_NET_APN" value="NET.UMS.UZ" useType="Mandatory">
         <Value hosts="FP:05" value="POSTPAID.UMS.UZ" />
@@ -291,6 +292,9 @@
     </RFS>
     <RFS name="RFS_HLR_NET_ALLOW" base="RFS_HLR_NET" hostType="HL" description="Доступ в интернет разрешен">
       <Resource name="RES_HLR_NET" value="Allow" />
+    </RFS>
+    <RFS name="RFS_HLR_NET_BARRING" base="RFS_HLR_NET" hostType="HL" description="Установка барринга на интернет">
+      <Resource name="RES_HLR_NET" value="Barring" />
     </RFS>
     <RFS name="RFS_HLR_NET_DENY" base="RFS_HLR_NET" hostType="HL" description="Доступ в интернет запрещен">
       <Resource name="RES_HLR_NET" value="Deny" />
@@ -644,7 +648,7 @@
     <CFS name="CBBLKLOST" priority="1" description="Блокировка аппарат утрачен">
       <RFS name="RFS_FP_BLOCK" linkType="Add" />
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
-      <RFS name="RFS_HLR_NET_DENY" linkType="Modify" />
+      <RFS name="RFS_HLR_NET_BARRING" linkType="Modify" />
       <RFS name="RFS_HLR_ODB_OC_NO_CALLS" linkType="Modify" />
       <RFS name="RFS_HLR_SMS_MO_DENY" linkType="Modify" />
       <RFS name="RFS_HLR_USSD_DENY" linkType="Set" />
@@ -961,7 +965,7 @@
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
     </CFS>
     <CFS name="FRBLKFIN" globalServiceCode="FRBLKFIN" priority="1" description="Принудительная блокировка">
-      <RFS name="RFS_HLR_NET_DENY" linkType="Modify" />
+      <RFS name="RFS_HLR_NET_BARRING" linkType="Modify" />
       <RFS name="RFS_HLR_ODB_IC_NO_CALLS" linkType="Modify" />
       <RFS name="RFS_HLR_ODB_OC_NO_CALLS" linkType="Modify" />
       <RFS name="RFS_HLR_SMS_MO_DENY" linkType="Modify" />
@@ -971,7 +975,7 @@
     <CFS name="FRBLKINIT" priority="1" description="Первоначальная блокировка">
       <RFS name="RFS_FP_BLOCK" linkType="Add" />
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
-      <RFS name="RFS_HLR_NET_DENY" linkType="Modify" />
+      <RFS name="RFS_HLR_NET_BARRING" linkType="Modify" />
       <RFS name="RFS_HLR_ODB_IC_NO_CALLS" linkType="Modify" />
       <RFS name="RFS_HLR_ODB_OC_NO_CALLS" linkType="Modify" />
       <RFS name="RFS_HLR_SMS_MO_DENY" linkType="Modify" />
@@ -985,7 +989,7 @@
     <CFS name="FRBLOUTGO" priority="1" description="Предварительная ФРОД блокировка">
       <RFS name="RFS_FP_BLOCK" linkType="Add" />
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
-      <RFS name="RFS_HLR_NET_DENY" linkType="Modify" />
+      <RFS name="RFS_HLR_NET_BARRING" linkType="Modify" />
       <RFS name="RFS_HLR_ODB_OC_NO_CALLS" linkType="Modify" />
       <RFS name="RFS_HLR_SMS_MO_DENY" linkType="Modify" />
     </CFS>
@@ -1206,7 +1210,10 @@
     <CFS name="FRHWSALE" globalServiceCode="FRHWSALE" copyOf="CFS_FP_SERVICE_GENERAL" description="Скидка 100% на Huawei OnNet 3000 MB" />
     <CFS name="FRINDKRED" globalServiceCode="FRINDKRED" copyOf="CFS_FP_SERVICE_GENERAL" description="Индивидуальный кредит" />
     <CFS name="FRINETNAS" globalServiceCode="FRINETNAS" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-доступ без настроек" />
-    <CFS name="FRINSPECT" globalServiceCode="FRINSPECT" copyOf="CFS_FP_SERVICE_GENERAL" description="Инспектор" />
+    <CFS name="FRINSPECT" globalServiceCode="FRINSPECT" description="Услуга маркер-Инспектор">
+      <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
+      <RFS name="RFS_HLR_INSPECT_FLAG" linkType="Add" />
+    </CFS>
     <CFS name="FRINT" globalServiceCode="FRINT" copyOf="CFS_FP_SERVICE_GENERAL" description="Регистрация Интернет абонентов" />
     <CFS name="FRIP" description="Статический IP адрес">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
@@ -1315,6 +1322,7 @@
     <CFS name="FRMB100PR" globalServiceCode="FRMB100PR" copyOf="CFS_FP_SERVICE_GENERAL" description="Promo (old)" />
     <CFS name="FRMB12000PRON" globalServiceCode="FRMB12000PRON" copyOf="CFS_FP_SERVICE_GENERAL" description="Праздник Online 12000 Mb" />
     <CFS name="FRMB200SALE" globalServiceCode="FRMB200SALE" copyOf="CFS_FP_SERVICE_GENERAL" description="Скидка 15% M2M Интернет пакеты 200 MB" />
+    <CFS name="FRMB2020" globalServiceCode="FRMB2020" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-пакет 2020 Mb" />
     <CFS name="FRMB3000PRON" globalServiceCode="FRMB3000PRON" copyOf="CFS_FP_SERVICE_GENERAL" description="Праздник Online 3000 Mb" />
     <CFS name="FRMB300HV" globalServiceCode="FRMB300HV" copyOf="CFS_FP_SERVICE_GENERAL" description="Промо-пакет 300 Mb HV" />
     <CFS name="FRMB300P" globalServiceCode="FRMB300P" copyOf="CFS_FP_SERVICE_GENERAL" description="Промо-пакет 300 Mb" />
@@ -1355,6 +1363,7 @@
     <CFS name="FRMIN180" globalServiceCode="FRMIN180" copyOf="CFS_FP_SERVICE_GENERAL" description="Голосовой-пакет 180 минут" />
     <CFS name="FRMIN1800" globalServiceCode="FRMIN1800" copyOf="CFS_FP_SERVICE_GENERAL" description="Голосовой-пакет 1800 минут" />
     <CFS name="FRMIN2019" globalServiceCode="FRMIN2019" copyOf="CFS_FP_SERVICE_GENERAL" description="Голосовой-пакет 2019 минут" />
+    <CFS name="FRMIN2020" globalServiceCode="FRMIN2020" copyOf="CFS_FP_SERVICE_GENERAL" description="Голосовой-пакет 2020 минут" />
     <CFS name="FRMIN20NBUZB" globalServiceCode="FRMIN20NBUZB" copyOf="CFS_FP_SERVICE_GENERAL" description="Новогодний бонус UZB 20 минут" />
     <CFS name="FRMIN300" globalServiceCode="FRMIN300" copyOf="CFS_FP_SERVICE_GENERAL" description="Голосовой-пакет 300 минут" />
     <CFS name="FRMIN300PRUMS" globalServiceCode="FRMIN300PRUMS" copyOf="CFS_FP_SERVICE_GENERAL" description="Promo (old)" />
@@ -1510,7 +1519,7 @@
       <RFS name="RFS_HLR_SUBSCRIBER_DEALERS" linkType="Set" />
     </CFS>
     <CFS name="FRPARTBL" globalServiceCode="FRPARTBL" priority="1" description="Частичная блокировка">
-      <RFS name="RFS_HLR_NET_DENY" linkType="Modify" />
+      <RFS name="RFS_HLR_NET_BARRING" linkType="Modify" />
       <RFS name="RFS_HLR_ODB_OC_NO_CALLS" linkType="Modify" />
       <RFS name="RFS_HLR_SMS_MO_DENY" linkType="Modify" />
     </CFS>
@@ -1681,7 +1690,7 @@
     <CFS name="FRTECHBLK" priority="1" description="Технологическая блокировка">
       <RFS name="RFS_FP_BLOCK" linkType="Add" />
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
-      <RFS name="RFS_HLR_NET_DENY" linkType="Modify" />
+      <RFS name="RFS_HLR_NET_BARRING" linkType="Modify" />
       <RFS name="RFS_HLR_ODB_IC_NO_CALLS" linkType="Modify" />
       <RFS name="RFS_HLR_ODB_OC_NO_CALLS" linkType="Modify" />
       <RFS name="RFS_HLR_SMS_MO_DENY" linkType="Modify" />
@@ -2092,7 +2101,10 @@
     <CFS name="TESTAVTO2" globalServiceCode="TESTAVTO2" copyOf="CFS_FP_SERVICE_GENERAL" description="Тестовая услуга созданная скриптом 2" />
     <CFS name="TESTFRIDAY" globalServiceCode="TESTFRIDAY" copyOf="CFS_FP_SERVICE_GENERAL" description="Тестовая услуга Пятница" />
     <CFS name="TESTKGK" globalServiceCode="TESTKGK" copyOf="CFS_FP_SERVICE_GENERAL" description="Корпоративный годовой контракт (test)" />
-    <CFS name="TESTMONDAY" globalServiceCode="TESTMONDAY" copyOf="CFS_FP_SERVICE_GENERAL" description="Тестовая услуга Понедельник" />
+    <CFS name="TESTMONDAY" globalServiceCode="TESTMONDAY" priority="0" description="Тестовая услуга Понедельник">
+      <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
+      <RFS name="RFS_HLR_NET_DENY" linkType="Modify" dependsOn="RFS_HLR_INSPECT_FLAG" />
+    </CFS>
     <CFS name="TESTPPDA" globalServiceCode="TESTPPDA" copyOf="CFS_FP_SERVICE_GENERAL" description="TEST.Услуга A" />
     <CFS name="TESTPPDB" globalServiceCode="TESTPPDB" copyOf="CFS_FP_SERVICE_GENERAL" description="TEST.Услуга B" />
     <CFS name="TESTPPDD" globalServiceCode="TESTPPDD" copyOf="CFS_FP_SERVICE_GENERAL" description="TEST.Услуга D" />
@@ -2456,6 +2468,7 @@
     </Scenario>
     <Scenario name="HLR.Dummy" sendType="Drop" description="Фейковый сценарий HLR">
       <RFS name="RFS_HLR_GET_SUBSCRIBER" scenarioType="Modify, Remove" />
+      <RFS name="RFS_HLR_INSPECT_FLAG" scenarioType="Add, Modify, Remove" />
       <RFS name="RFS_HLR_SKIP" scenarioType="Modify, Remove" />
     </Scenario>
     <Scenario name="HLR.GetSubscriber" description="Получение состояния абонента">
@@ -2485,6 +2498,7 @@
     </Scenario>
     <Scenario name="HLR.Modify.NET" description="Изменение сервисов интернет">
       <RFS name="RFS_HLR_NET" scenarioType="Modify" />
+      <Append name="RFS_HLR_INSPECT_FLAG" listType="EndList" />
       <Append name="RFS_HLR_ROAMING" listType="EndList" />
     </Scenario>
     <Scenario name="HLR.Modify.ODB" description="Управление ограничениями связи">

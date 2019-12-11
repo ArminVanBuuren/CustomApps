@@ -28,7 +28,8 @@
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="IfXmlPath:0" value="//EndList/RFS_HLR_ROAMING" />
+        <param name="OrXmlPath:0" value="//EndList/RFS_HLR_ROAMING" />
+        <param name="OrXmlPath:1" value="//EndList/RFS_HLR_INSPECT_FLAG" />
         <param name="Command" value="SC.Modify_NAM" />
       </parameterslist>
     </node>
