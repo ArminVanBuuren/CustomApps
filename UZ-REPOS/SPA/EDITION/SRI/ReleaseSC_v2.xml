@@ -377,7 +377,9 @@
     </RFS>
     <RFS name="RFS_HLR_SPEC_CALLS" hostType="HL" description="Проверка на спецсвязь (на спа не выполняется)" />
     <RFS name="RFS_HLR_SPEEDLIMIT" hostType="HL" description="Ограничение скорости Интернет">
-      <Resource name="RES_HLR_NET_APN" value="NET.UMS.UZ" useType="Mandatory" />
+      <Resource name="RES_HLR_NET_APN" value="NET.UMS.UZ" useType="Mandatory">
+        <Value hosts="FP:05" value="POSTPAID.UMS.UZ" />
+      </Resource>
     </RFS>
     <RFS name="RFS_HLR_STATIC_IP" hostType="HL" description="Статический IP адрес">
       <Resource name="RES_HLR_DEALER_APN" value="DEALERS.UMS.UZ" useType="Mandatory" />
