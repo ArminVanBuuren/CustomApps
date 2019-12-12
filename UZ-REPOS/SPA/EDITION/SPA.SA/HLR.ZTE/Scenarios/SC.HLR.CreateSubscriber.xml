@@ -18,7 +18,7 @@
     </node>
     <node name="Create_Subscriber" object="Commander">
       <resultlist>
-        <result value="0" node="SwitchMode" />
+        <result value="0" node="Add_Region" />
         <result value="1797" node="Delete_Subscriber_MSISDN" />
         <result value="1796" node="Delete_Subscriber_IMSI" />
         <result value="1793" node="GetKI" />
@@ -87,10 +87,19 @@
         <param name="Command" value="SC.Add_KI" />
       </parameterslist>
     </node>
+    <node name="Add_Region" object="Commander">
+      <resultlist>
+        <result value="0" node="SwitchMode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.Add_Region" />
+      </parameterslist>
+    </node>
     <node name="SwitchMode" object="Switch">
       <resultlist>
-        <result value="0" node="Add_Region" />
-        <result value="1" node="Add_Region" />
+        <result value="0" node="Add_TCSI" />
+        <result value="1" node="Add_TCSI" />
         <result value="2" node="Delete_NAM" />
         <result value="3" node="Delete_NAM" />
       </resultlist>
@@ -100,15 +109,6 @@
         <param name="Value:3" value="DEALERS" />
       </parameterslist>
     </node>
-    <node name="Add_Region" object="Commander">
-      <resultlist>
-        <result value="0" node="Add_TCSI" />
-        <result value="" node="ResponseAssembler" />
-      </resultlist>
-      <parameterslist>
-        <param name="Command" value="SC.Add_Region" />
-      </parameterslist>
-    </node>
     <node name="Add_TCSI" object="IfCommander">
       <resultlist>
         <result value="0" node="Modify_BOC" />
@@ -116,18 +116,16 @@
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="IfNotXmlPath" value="//RES_HLR_PROFILE/Value[text()='Postpaid']" />
+        <param name="IfXmlPath:0" value="//RES_HLR_PROFILE/Value[text()='Prepaid']" />
         <param name="Command" value="SC.Add_TCSI" />
       </parameterslist>
     </node>
-    <node name="Modify_BOC" object="IfCommander">
+    <node name="Modify_BOC" object="Commander">
       <resultlist>
         <result value="0" node="Modify_BIC" />
-        <result value="1538" node="Modify_BIC" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="MultiLevelCondition" value="(NOT //RFS_HLR_ODB_OC) OR (//RFS_HLR_ODB_OC/RES_HLR_ODB_OC/Value[text()!='IntercityCalls'])" />
         <param name="Command" value="SC.Modify_BOC" />
       </parameterslist>
     </node>
