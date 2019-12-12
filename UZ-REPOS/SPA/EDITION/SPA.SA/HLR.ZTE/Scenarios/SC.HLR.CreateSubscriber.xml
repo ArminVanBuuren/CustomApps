@@ -290,13 +290,31 @@
     </node>
     <node name="Modify_Roaming" object="IfCommander">
       <resultlist>
-        <result value="0" node="Delete_NAM" />
+        <result value="0" node="Modify_RoamingSchemeCS" />
         <result value="1538" node="Delete_NAM" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
         <param name="IfXmlPath:0" value="//RFS_HLR_ROAMING" />
         <param name="Command" value="SC.Modify_Roaming" />
+      </parameterslist>
+    </node>
+    <node name="Modify_RoamingSchemeCS" object="Commander">
+      <resultlist>
+        <result value="0" node="Modify_RoamingSchemePS" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.Modify_RoamingSchemeCS" />
+      </parameterslist>
+    </node>
+    <node name="Modify_RoamingSchemePS" object="Commander">
+      <resultlist>
+        <result value="0" node="Delete_NAM" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Command" value="SC.Modify_RoamingSchemePS" />
       </parameterslist>
     </node>
     <node name="Delete_NAM" object="Commander">
