@@ -157,7 +157,7 @@ namespace FastColoredTextBoxNS
             ChangedLineColor = Color.Transparent;
             HighlightFoldingIndicator = true;
             ShowLineNumbers = true;
-            TabLength = 4;
+            TabLength = 2;
             FoldedBlockStyle = new FoldedBlockStyle(Brushes.Gray, null, FontStyle.Regular);
             SelectionColor = Color.Blue;
             BracketsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(80, Color.Lime)));

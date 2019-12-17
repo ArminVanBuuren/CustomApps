@@ -47,7 +47,7 @@ namespace Utils.WinForm.Notepad
                 {
                     //var indexOfDifference = Source.Zip(FCTB.Text, (c1, c2) => c1 == c2).TakeWhile(b => b).Count() + 1;
                     // реплейсим Tab на Spaces, потмоу что FCTB для выравнивание не поддерживает Tab. Поэтому сразу заменяем на Spaces, для корректного компаринга.
-                    _source = value.Replace('\u0009'.ToString(), new string(' ', 4));
+                    _source = value.Replace('\u0009'.ToString(), new string(' ', FCTB?.TabLength ?? 2));
                 }
                 else
                 {
@@ -137,6 +137,7 @@ namespace Utils.WinForm.Notepad
         void InitializeFCTB(Language language, bool wordWrap)
         {
             FCTB = new FastColoredTextBox();
+            
             ((ISupportInitialize)(FCTB)).BeginInit();
             FCTB.ClearStylesBuffer();
             FCTB.Range.ClearStyle(StyleIndex.All);

@@ -129,7 +129,7 @@ namespace Utils
         {
             var schemas = new XmlSchemaSet();
             var doc = XDocument.Load(docPath);
-            var msg = "";
+            var msg = string.Empty;
             doc.Validate(schemas, (o, e) => { msg += e.Message + Environment.NewLine; });
             return msg.IsNullOrEmpty();
         }
