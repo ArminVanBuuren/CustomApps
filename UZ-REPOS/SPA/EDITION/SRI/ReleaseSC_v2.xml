@@ -855,6 +855,7 @@
     <CFS name="FRAPMINI" globalServiceCode="FRAPMINI" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Mini" />
     <CFS name="FRAPMOBI110" globalServiceCode="FRAPMOBI110" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП MOBI 110" />
     <CFS name="FRAPMOBI150" globalServiceCode="FRAPMOBI150" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП MOBI 150" />
+    <CFS name="FRAPMOBI150YILLIK" globalServiceCode="FRAPMOBI150YILLIK" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП MOBI 150 Yillik" />
     <CFS name="FRAPMOBI20" globalServiceCode="FRAPMOBI20" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП MOBI 20" />
     <CFS name="FRAPMOBI30" globalServiceCode="FRAPMOBI30" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП MOBI 30" />
     <CFS name="FRAPMOBI40" globalServiceCode="FRAPMOBI40" copyOf="CFS_FP_COUNTER,CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП MOBI 40" />
@@ -1216,6 +1217,10 @@
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
       <RFS name="RFS_HLR_INSPECT_FLAG" linkType="Add" />
     </CFS>
+    <CFS name="FRINSPECTBLOCK" globalServiceCode="FRINSPECTBLOCK" priority="0" description="Инспектор Ограничение Доступа">
+      <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
+      <RFS name="RFS_HLR_NET_DENY" linkType="Modify" dependsOn="RFS_HLR_INSPECT_FLAG" />
+    </CFS>
     <CFS name="FRINT" globalServiceCode="FRINT" copyOf="CFS_FP_SERVICE_GENERAL" description="Регистрация Интернет абонентов" />
     <CFS name="FRIP" description="Статический IP адрес">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
@@ -1257,6 +1262,7 @@
     <CFS name="FRKKSTEEL" globalServiceCode="FRKKSTEEL" copyOf="CFS_FP_SERVICE_GENERAL" description="КК Скидка STEEL 100%" />
     <CFS name="FRKKSTEELL" globalServiceCode="FRKKSTEELL" copyOf="CFS_FP_SERVICE_GENERAL" description="КК Скидка STEEL LIGHT 100%" />
     <CFS name="FRKKSUPLAT" globalServiceCode="FRKKSUPLAT" copyOf="CFS_FP_SERVICE_GENERAL" description="КК Скидка SUPER PLATINUM 100%" />
+    <CFS name="FRKKSUPLATPL" globalServiceCode="FRKKSUPLATPL" copyOf="CFS_FP_SERVICE_GENERAL" description="КК Скидка SUPER PLATINUM PLUS 100%" />
     <CFS name="FRKKUNI100" globalServiceCode="FRKKUNI100" copyOf="CFS_FP_SERVICE_GENERAL" description="КК Скидка 100% на пакет Universal" />
     <CFS name="FRKORPMOB" globalServiceCode="FRKORPMOB" copyOf="CFS_FP_SERVICE_GENERAL" description="Корпоративный Мобильный Помощник" />
     <CFS name="FRLAMUZ" globalServiceCode="FRLAMUZ" copyOf="CFS_FP_SERVICE_GENERAL" description="МузON (30 дней)" />
@@ -2103,10 +2109,7 @@
     <CFS name="TESTAVTO2" globalServiceCode="TESTAVTO2" copyOf="CFS_FP_SERVICE_GENERAL" description="Тестовая услуга созданная скриптом 2" />
     <CFS name="TESTFRIDAY" globalServiceCode="TESTFRIDAY" copyOf="CFS_FP_SERVICE_GENERAL" description="Тестовая услуга Пятница" />
     <CFS name="TESTKGK" globalServiceCode="TESTKGK" copyOf="CFS_FP_SERVICE_GENERAL" description="Корпоративный годовой контракт (test)" />
-    <CFS name="TESTMONDAY" globalServiceCode="TESTMONDAY" priority="0" description="Тестовая услуга Понедельник">
-      <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
-      <RFS name="RFS_HLR_NET_DENY" linkType="Modify" dependsOn="RFS_HLR_INSPECT_FLAG" />
-    </CFS>
+    <CFS name="TESTMONDAY" globalServiceCode="TESTMONDAY" copyOf="CFS_FP_SERVICE_GENERAL" description="Тестовая услуга Понедельник" />
     <CFS name="TESTPPDA" globalServiceCode="TESTPPDA" copyOf="CFS_FP_SERVICE_GENERAL" description="TEST.Услуга A" />
     <CFS name="TESTPPDB" globalServiceCode="TESTPPDB" copyOf="CFS_FP_SERVICE_GENERAL" description="TEST.Услуга B" />
     <CFS name="TESTPPDD" globalServiceCode="TESTPPDD" copyOf="CFS_FP_SERVICE_GENERAL" description="TEST.Услуга D" />

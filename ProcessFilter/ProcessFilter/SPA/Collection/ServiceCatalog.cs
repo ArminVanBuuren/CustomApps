@@ -224,7 +224,7 @@ namespace SPAFilter.SPA.Collection
                     throw new Exception($"{rfsName} is invalid. Attribute \"hostType\" not found.");
                 if (processType.Equals("CancelHostType", StringComparison.CurrentCultureIgnoreCase))
                     continue;
-                if(AllRFS.ContainsKey(rfsName))
+                if(AllRFS.TryGetValue(rfsName, out var rfsOP) && !rfsOP.All(p => (p.Bindings.Base is RFSOperation) && ((RFSOperation)p.Bindings.Base).RFSName.Equals(rfsName, StringComparison.CurrentCultureIgnoreCase)))
                     throw new Exception($"{rfsName} already exist.");
 
                 

@@ -11,7 +11,7 @@ namespace SPAFilter.SPA.Components.SRI
 {
     internal class RFSBindings
     {
-        readonly CatalogOperation _baseOperation;
+        public CatalogOperation Base { get; }
         public DistinctList<XmlNode> HostTypeList { get; } = new DistinctList<XmlNode>();
         public DistinctList<XmlNode> ResourceList { get; } = new DistinctList<XmlNode>();
         public DistinctList<XmlNode> RFSParameterList { get; } = new DistinctList<XmlNode>();
@@ -26,12 +26,12 @@ namespace SPAFilter.SPA.Components.SRI
 
         internal RFSBindings(CatalogOperation baseOperation)
         {
-            _baseOperation = baseOperation;
+            Base = baseOperation;
         }
 
         internal RFSBindings(CatalogOperation baseOperation, string rfsName, XPathNavigator navigator)
         {
-            _baseOperation = baseOperation;
+            Base = baseOperation;
 
             BuildRFSList(XPATH.Select(navigator, $"/Configuration/RFSList/RFS[@name='{rfsName}']"));
             BuildRFSList(XPATH.Select(navigator, $"/Configuration/RFSList/RFS[@base='{rfsName}']"));

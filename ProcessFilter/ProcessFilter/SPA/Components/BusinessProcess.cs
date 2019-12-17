@@ -55,9 +55,6 @@ namespace SPAFilter.SPA.Components
                 }
             }
 
-            if (operations.Count <= 0)
-                return false;
-
             var navigator = document.CreateNavigator();
             var hasCatalogCall = false;
             var isExistscObject = XPATH.Select(navigator, @"/BusinessProcessData/businessprocess/scenario/objectlist/object[@class='FORIS.ServiceProvisioning.BPM.SCProcessingUnit']/@name");
@@ -73,6 +70,9 @@ namespace SPAFilter.SPA.Components
                     break;
                 }
             }
+
+            if (operations.Count == 0 && !hasCatalogCall)
+                return false;
 
             bpResult = new BusinessProcess(filePath, operations, hasCatalogCall);
             return true;
