@@ -1,0 +1,1297 @@
+﻿<templates connector="IVR">
+
+#include "..\..\config\annual_contract\ivr.xml"
+#include "..\..\config\get_bms_counters\ivr.xml" 
+#include "..\..\config\services_packages\ivr.xml"
+
+<template procedureName="DB_AddParametricDiscount">
+		<condition></condition>
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="${guid}">
+				<Item customer="${customer}">
+					<Service id="#{document('Dictionary\ParametricDiscount.xml')/discounts/discount[@ivrcode='${discount}']/@crmcode}" action="2" needtariffication="0">
+						<Attribute name="isparametricaldiscount" value="1" />
+					</Service>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<input>
+			<param name="customer" />
+			<param name="discount" />
+		</input>
+		<output>
+			<param name="dbresult" type="3" value="0" />
+		</output>
+	</template>
+
+	<template procedureName="DB_GetParametricDiscount">
+		<condition></condition>
+		<receiveTemplate>
+			<Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="${guid}">
+				<Item customer="${customer}" subject="get_parametrical_discount">
+				    <Attribute name="service_id" value="#{document('Dictionary\ParametricDiscount.xml')/discounts/discount[@ivrcode='${discount}']/@service_id}" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="${dbresult}"/>
+			<set item="param:service_id" value="#{/Message/Item/row/Attribute[@name='service_id']/@value}"/>
+			<set item="param:discount_counter" value="#{/Message/Item/row/Attribute[@name='discount_counter']/@value}"/>
+			<set item="param:discount_type" value="#{/Message/Item/row/Attribute[@name='discount_type']/@value}"/>
+			<set item="param:discount_value" value="#{/Message/Item/row/Attribute[@name='discount_value']/@value}"/>
+			<set item="param:currency_code" value="#{/Message/Item/row/Attribute[@name='currency_code']/@value}"/>
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+			<param name="discount" />
+		</input>
+		<output>
+			<param name="dbresult" type="3" value="0" />
+			<param name="service_id" type="1" value="0" />
+			<param name="discount_counter" type="1" value="0" />
+			<param name="discount_type" type="2" value="0" />
+			<param name="discount_value" type="3" value="0" />
+			<param name="currency_code" type="3" value="0" />
+		</output>
+	</template>
+
+<template procedureName="DB_IndividualBillingPeriodDate" >
+    <receiveTemplate>
+      <Message type="getindividualbillingperioddate" initiator="ivrcon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item customer="${customer}">
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:dbresult" value="${dbresult}" />
+      <set item="oparam:individualBillingPeriodDate" value="${IndividualBillingPeriodDate}" />
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+    </input>
+    <output>
+      <param name="dbresult" value=""/>
+      <param name="individualBillingPeriodDate" value=""  type="1"/>
+    </output>
+  </template>
+
+	<template procedureName="DB_GetServicePackages">
+		<condition></condition>
+		<receiveTemplate>
+			<Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}" subject="product" />
+			</Message>
+		</receiveTemplate>
+		<input>
+			<param name="customer" />
+		</input>
+		<output>
+			<param name="pkgcodelist" type="1" value="" />
+			<param name="dbresult" type="3" value="0"/>
+		</output>
+	</template>
+	<template procedureName="DB_ManageServicePackages">
+		<condition></condition>
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+			<Item customer="${customer}" action="@{switch(${action}|?,2|9.2,3|10.2)}">
+				<Product code="#{document('config\services_packages\servicepackage.xml')/packages/package[@ivrcode='${code}']/@crmcode}" />
+			</Item>
+			</Message>
+		</receiveTemplate>
+		<input>
+			<param name="customer" />
+			<param name="action" /> <!-- 0-add package, 1-remove package -->
+			<param name="code" />   <!-- code of package -->
+		</input>
+		<output>
+			<param name="dbresult" type="3" value="0"/>
+		</output>
+	</template>
+	<template procedureName="DB_AddFavouriteCountry">
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="${guid}">
+				<Item customer="${customer}">
+					<Service id="#{document('Dictionary\FavouriteCountry.xml')/favcountries/favcountry[@ivrcode='${favcountry}']/@crmcode}" action="2" needtariffication="0">
+						<Attribute name="isparametricaldiscount" value="1" />
+					</Service>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<input>
+			<param name="customer" />
+			<param name="favcountry" />
+		</input>
+		<output>
+			<param name="dbresult" type="3" value="0" />
+		</output>
+	</template>
+
+	<template procedureName="DB_GetFavouriteCountry">
+		<receiveTemplate>
+			<Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}" subject="get_parametrical_discount">
+					<Attribute name="service_id" value="#{document('Dictionary\FavouriteCountry.xml')/favcountries/favcountry[@ivrcode='${favouritecountry}']/@crmcode}" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="param:dbresult" value="${dbresult}"/>
+			<set item="param:service_id" value="#{/Message/Item/row/Attribute[@name='service_id']/@value}"/>
+			<set item="param:discount_counter" value="#{/Message/Item/row/Attribute[@name='discount_counter']/@value}"/>
+			<set item="param:discount_type" value="#{if(/Message/Item/row/Attribute[@name='discount_type']/@value != '', /Message/Item/row/Attribute[@name='discount_type']/@value, '0')}"/>
+			<set item="param:discount_value" value="#{if(/Message/Item/row/Attribute[@name='discount_value']/@value != '', /Message/Item/row/Attribute[@name='discount_value']/@value, '0')}"/>
+			<set item="param:currency_code" value="#{/Message/Item/row/Attribute[@name='currency_code']/@value}"/>
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+			<param name="favouritecountry" />
+		</input>
+		<output>
+			<param name="dbresult" type="3" value="0" />
+			<param name="service_id" type="1" value="" />
+			<param name="discount_counter" type="1" value="" />
+			<param name="discount_type" type="2" value="0" />
+			<param name="discount_value" type="3" value="0" />
+			<param name="currency_code" type="3" value="0" />
+		</output>
+	</template>
+
+
+  <template procedureName="DB_FaxUpdating" persistent="false">
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="setprofile" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}">
+          <Attribute name="faxnumber" value="${faxnumber}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+      <param name="faxnumber" />
+    </input>
+    <output>
+    </output>
+  </template>
+
+  <template procedureName="DB_FavUpdate" persistent="false">
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="setprofile" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}" action="${action}">
+          <Attribute name="favouritenumber" value="${favouritenumber}" />
+          <Attribute name="index" value="${index}" />
+          <!--<Attribute name="favouritenumbertypeid" value="#{document('XML\fndtypes.xml')/fndtypes/fndtype[@ivrcode='${fntype}']/@id}" />-->
+		  <Attribute name="favouritenumbertypeid" value="#{document('XML\fndtypes.xml')/fndtypes/fndtype[@ivrcode='${fntype}' and @action='${action}']/@id}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+      <param name="index" />
+      <param name="action" />
+      <param name="favouritenumber" />
+      <param name="fntype" />
+    </input>
+    <output>
+      <param name="favouritenumber" type="1" value="" />
+      <param name="favouritenumbercount" type="3" value="0" />
+    </output>
+  </template>
+  
+ <template procedureName="DB_LastPeriodBill">
+    <receiveTemplate>
+        <Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+           <Item customer="${customer}" subject="lastperiodbill" />
+           <Attribute name="startdate" value="${startdate}" />
+           <Attribute name="enddate" value="${enddate}" />
+        </Message>
+    </receiveTemplate>
+    <input>
+      <param name="customer" />      
+    </input>
+    <output>
+      <param name="draftintdotpart" type="3" value="0" />
+      <param name="beginday" type="1" value="" />
+      <param name="endday" type="1" value="" />
+    </output>
+ </template>
+  
+<template procedureName="DB_LastOpenBills"> 
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+      <Item customer="${customer}" subject="openbills">
+        <Attribute name="includeunbilleddata" value="1" />             
+      </Item>
+      </Message>
+    </receiveTemplate>
+    <input>
+      <param name="customer" />      
+    </input>
+    <output>
+      <param name="summintdotpart" type="3" value="0" />
+      <param name="currency" type="3" value="810" />
+      <param name="lastminibillingdate" type="1" value="00.00.0000" />
+    </output>
+</template>
+
+  <template procedureName="DB_CAuthentication" persistent="false">
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="authenticationrequest" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}" pin="${password}" />
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate />
+    <input>
+      <param name="customer" />
+      <param name="password" />
+    </input>
+    <output>
+      <param name="TariffPlan" type="3" value="0" />
+      <param name="State" type="2" value="0" />
+      <param name="regioncode" type="3" value="0" />
+      <param name="customerblocks" type="1" value="" />
+    </output>
+  </template>
+
+  
+ <template procedureName="DB_ProcessDate" persistent="false">
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="internal" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}" action="${action}">
+          <Attribute name="startdate" value="${startdate}" />
+          <Attribute name="enddate" value="${enddate}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+      <param name="action" />
+      <param name="startdate" />
+      <param name="enddate" />
+    </input>
+    <output>
+      <param name="startdate" type="1" value="" />
+      <param name="enddate" type="1" value="" />
+    </output>
+  </template>
+
+  
+<!-- Для не кредитников -->  
+ <template procedureName="DB_BalanceRetriev" persistent="false">
+  <input>
+   <param name="Customer"/>
+  </input>
+  <output>
+   <param name="dbresult"     type="3" value="0"/>
+   <param name="balanceintpartdotpart"     type="3" value="0"/>
+   <param name="accumulator11"               type="1" value="-1" />   
+
+   <param name="CreditLimit"               type="3" value="-1" />   
+   <param name="debt"               type="3" value="-1" />   
+   <param name="dEndDate"               type="1" value="-1" />   
+   <param name="Accumulator8"               type="3" value="-1" />   
+   <param name="currency"     type="3" value="0"/>
+
+
+
+  </output>
+  <receiveTemplate>
+   <Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+    <Item customer="${customer}" subject="balance" datasource="db" >
+		<Attribute name="requestcountertype" value="3" />
+    </Item>
+   </Message>
+  </receiveTemplate>
+  <deliveryTemplate conditionEx="#{count(/Message/Item/accumulators/accumulator)>0}">
+    <set item="param:dbresult" value="${dbresult}" />
+    <set item="param:balanceintpartdotpart" value="${balanceintpartdotpart}" />
+    <set item="param:accumulator11" value="#{if(/Message/Item/accumulators/accumulator/@id='voicemin',/Message/Item/accumulators/accumulator[@id='voicemin']/@val,if(/Message/Item/accumulators/accumulator/@id='voicesec',round(/Message/Item/accumulators/accumulator[@id='voicesec']/@val div 60),-1))}" /> 
+
+    <set item="param:CreditLimit" value="#{if('${creditlimitintpartdotpart}'!='','${creditlimitintpartdotpart}' ,-1)}" /> 
+    <set item="param:debt" value="#{if('${unpaymentintpartdotpart}'!='','${unpaymentintpartdotpart}',-1)}" />
+    <set item="param:dEndDate" value="#{if('${unpaymentdate}'!='','${unpaymentdate}',-1)}" />
+    <set item="param:Accumulator8" value="#{if(/Message/Item/accumulators/accumulator/@id='voicemin700',/Message/Item/accumulators/accumulator[@id='voicemin700']/@val,-1)}" />
+    <set item="param:currency" value="#{if('${currency}'='',0,number('${currency}'))}" />
+
+  </deliveryTemplate>
+  <deliveryTemplate />
+ </template>
+
+<!-- Для тестов для ТП с IVR кодами 17, 18--> 
+ <template procedureName="DB_BalanceRetriev2" persistent="false"> 
+  <input> 
+   <param name="Customer"/> 
+  </input> 
+  <output> 
+   <param name="dbresult"		 type="3" value="0"/> 
+   <param name="balanceintpartdotpart"	 type="3" value="0"/> 
+   <param name="accumulator11"		 type="3" value="-1"/> 
+   <param name="accumulatorSMS"		 type="3" value="-1"/> 
+   <param name="accumulatorGPRS"	 type="3" value="-1"/> 
+   <param name="accumulatorMinutesUsed"	 type="3" value="-1"/> 
+   <param name="accumulatorMMS"		 type="3" value="-1"/>
+   <param name="accumulatorUsedLimitCorp"		 type="3" value="-1"/>
+   <param name="accumulatorMinutes1"	 type="3" value="-1"/> 
+   <param name="accumulatorVoiceSec"	 type="3" value="-1"/>
+   <param name="accumulatorUsedmin_test"	 type="3" value="-1"/> 
+   <param name="accumulatorMinutes3"	 type="3" value="-1"/> 
+   <param name="accumulatorMinutes4"	 type="3" value="-1"/> 
+   <param name="accumulatorMinutes5"	 type="3" value="-1"/> 
+   <param name="accumulatorMinutes6"	 type="3" value="-1"/> 
+   <param name="accumulatorMinutes7"	 type="3" value="-1"/>  
+   <param name="currency"		 type="3" value="0"/> 
+  </output> 
+  <receiveTemplate> 
+   <Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}"> 
+    <Item customer="${customer}" subject="balance" datasource="db" >
+		<Attribute name="requestcountertype" value="1" />
+    </Item>
+   </Message> 
+  </receiveTemplate> 
+  <deliveryTemplate conditionEx="#{count(/Message/Item/accumulators/accumulator)>=1}"> 
+    <set item="param:dbresult" value="${dbresult}" /> 
+    <set item="param:balanceintpartdotpart" value="${balanceintpartdotpart}" /> 
+    <set item="param:accumulator11" value="#{if(/Message/Item/accumulators/accumulator/@id='voicemin',/Message/Item/accumulators/accumulator[@id='voicemin']/@val,if(/Message/Item/accumulators/accumulator/@id='voicesec',round(/Message/Item/accumulators/accumulator[@id='voicesec']/@val div 60),-1))}" /> 
+    <set item="param:accumulatorSMS" value="#{if(/Message/Item/accumulators/accumulator/@id='sms',/Message/Item/accumulators/accumulator[@id='sms']/@val,-1)}" /> 
+    <set item="param:accumulatorGPRS" value="#{if(/Message/Item/accumulators/accumulator/@id='gprs',/Message/Item/accumulators/accumulator[@id='gprs']/@val,-1)}" /> 
+    <set item="param:accumulatorMinutesUsed" value="#{if(/Message/Item/accumulators/accumulator/@id='usedmin',/Message/Item/accumulators/accumulator[@id='usedmin']/@val,if(/Message/Item/accumulators/accumulator/@id='usedsec',round(/Message/Item/accumulators/accumulator[@id='usedsec']/@val div 60),-1))}" /> 
+    <set item="param:accumulatorMMS" value="#{if(/Message/Item/accumulators/accumulator/@id='mms',/Message/Item/accumulators/accumulator[@id='mms']/@val,-1)}" />
+    <set item="param:accumulatorUsedLimitCorp" value="#{if(/Message/Item/accumulators/accumulator/@id='usedrur',/Message/Item/accumulators/accumulator[@id='usedrur']/@val*100,-1)}" />
+    <set item="param:accumulatorMinutes1" value="#{if(/Message/Item/accumulators/accumulator/@id='voicemin1',/Message/Item/accumulators/accumulator[@id='voicemin1']/@val,-1)}" />
+    <set item="param:accumulatorVoiceSec" value="#{if(/Message/Item/accumulators/accumulator/@id='voicesec',round(/Message/Item/accumulators/accumulator[@id='voicesec']/@val div 60),-1)}" /> 	
+    <set item="param:accumulatorUsedmin_test" value="#{if(/Message/Item/accumulators/accumulator/@id='usedmin_test',/Message/Item/accumulators/accumulator[@id='usedmin_test']/@val,-1)}" /> 
+    <set item="param:accumulatorMinutes3" value="-1" /> 
+    <set item="param:accumulatorMinutes4" value="-1" /> 
+    <set item="param:accumulatorMinutes5" value="-1" /> 
+    <set item="param:accumulatorMinutes6" value="-1" /> 
+    <set item="param:accumulatorMinutes7" value="-1" /> 	
+    <set item="param:Accumulator8" value="-1" /> 	
+    <set item="param:currency" value="#{if('${currency}'='',0,number('${currency}'))}" />
+  </deliveryTemplate> 
+  <deliveryTemplate /> 
+ </template>  
+ 
+
+<!-- <template procedureName="DB_BalanceRetriev3" persistent="false"> 
+  <input> 
+   <param name="Customer"/> 
+  </input> 
+  <output> 
+   <param name="dbresult"		 type="3" value="0"/> 
+   <param name="balanceintpartdotpart"	 type="3" value="0"/> 
+   <param name="accumulator11"		 type="3" value="-1"/> 
+   <param name="accumulatorSMS"		 type="3" value="-1"/> 
+   <param name="accumulatorGPRS"	 type="3" value="-1"/> 
+   <param name="accumulatorMinutesUsed"	 type="3" value="-1"/> 
+   <param name="accumulatorMMS"		 type="3" value="-1"/>
+   <param name="accumulatorMAXI"	 type="3" value="-1"/>   
+   <param name="accumulatorUsedLimitCorp"		 type="3" value="-1"/>
+   <param name="accumulatorFreeLN"		 type="3" value="-1"/>
+   <param name="accumulator24chas"		 type="3" value="-1"/>  
+   <param name="accumulatorStacRyzMin"	 type="3" value="-1"/>   
+   <param name="CreditLimit"               type="3" value="-1" />   
+   <param name="debt"               type="3" value="-1" />   
+   <param name="dEndDate"               type="1" value="-1" />   
+   <param name="Accumulator6"               type="3" value="-1" />   
+   <param name="dEndDate_2"               type="1" value="-1" />   
+   <param name="Accumulator7"               type="3" value="-1" />   
+   <param name="dEndDate_3"               type="1" value="-1" />   
+   <param name="Accumulator8"               type="3" value="-1" />   
+   <param name="currency"		 type="3" value="0"/> 
+  </output> 
+  <receiveTemplate> 
+   <Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}"> 
+    <Item customer="${customer}" subject="balance" datasource="db" >
+		<Attribute name="requestcountertype" value="3" />
+    </Item>
+   </Message> 
+  </receiveTemplate> 
+  <deliveryTemplate conditionEx="#{count(/Message/Item/accumulators/accumulator)>=0}"> 
+    <set item="param:dbresult" value="${dbresult}" /> 
+    <set item="param:balanceintpartdotpart" value="${balanceintpartdotpart}" /> 
+    <set item="param:accumulator11" value="#{if(/Message/Item/accumulators/accumulator/@id='voicemin',/Message/Item/accumulators/accumulator[@id='voicemin']/@val,if(/Message/Item/accumulators/accumulator/@id='voicesec',round(/Message/Item/accumulators/accumulator[@id='voicesec']/@val div 60),-1))}" /> 
+    <set item="param:accumulatorSMS" value="#{if(/Message/Item/accumulators/accumulator/@id='sms',/Message/Item/accumulators/accumulator[@id='sms']/@val,-1)}" /> 
+    <set item="param:accumulatorGPRS" value="#{if(/Message/Item/accumulators/accumulator/@id='gprs',/Message/Item/accumulators/accumulator[@id='gprs']/@val,-1)}" /> 
+    <set item="param:accumulatorMinutesUsed" value="#{if(/Message/Item/accumulators/accumulator/@id='usedmin',/Message/Item/accumulators/accumulator[@id='usedmin']/@val,if(/Message/Item/accumulators/accumulator/@id='voiceminaccum',/Message/Item/accumulators/accumulator[@id='voiceminaccum']/@val,if(/Message/Item/accumulators/accumulator/@id='usedsec',round(/Message/Item/accumulators/accumulator[@id='usedsec']/@val div 60),-1)))}" /> 
+    <set item="param:accumulatorMMS" value="#{if(/Message/Item/accumulators/accumulator/@id='mms',/Message/Item/accumulators/accumulator[@id='mms']/@val,-1)}" />
+    <set item="param:accumulatorMAXI" value="#{if(/Message/Item/accumulators/accumulator/@id='voiceminmaxi',/Message/Item/accumulators/accumulator[@id='voiceminmaxi']/@val,if(/Message/Item/accumulators/accumulator/@id='voicesec_mts',/Message/Item/accumulators/accumulator[@id='voicesec_mts']/@val,if(/Message/Item/accumulators/accumulator/@id='voicesecmaxi',round(/Message/Item/accumulators/accumulator[@id='voicesecmaxi']/@val div 60)  ,  if(/Message/Item/accumulators/accumulator/@id='voiceminmg',/Message/Item/accumulators/accumulator[@id='voiceminmg']/@val  ,if(/Message/Item/accumulators/accumulator/@id='voiceminmts',/Message/Item/accumulators/accumulator[@id='voiceminmts']/@val,-1)))))}" />  
+    <set item="param:accumulatorUsedLimitCorp" value="#{if(/Message/Item/accumulators/accumulator/@id='usedrur',string(translate(/Message/Item/accumulators/accumulator[@id='usedrur']/@val,',','.'))*100,-1)}" />	
+    <set item="param:accumulatorFreeLN" value="#{if(/Message/Item/accumulators/accumulator/@id='usedminfreeln',/Message/Item/accumulators/accumulator[@id='usedminfreeln']/@val,-1)}" />
+    <set item="param:accumulator24chas" value="#{if(/Message/Item/accumulators/accumulator/@id='voiceminmts',round(/Message/Item/accumulators/accumulator[@id='voiceminmts']/@val*60),if(/Message/Item/accumulators/accumulator/@id='voicesec_mts',round(/Message/Item/accumulators/accumulator[@id='voicesec_mts']/@val div 60),0))}" /> 
+    <set item="param:accumulatorStacRyzMin" value="#{if(/Message/Item/accumulators/accumulator/@id='voicemin',/Message/Item/accumulators/accumulator[@id='voicemin']/@val,-1)}" />
+    <set item="param:CreditLimit" value="#{if('${creditlimitintpartdotpart}'!='','${creditlimitintpartdotpart}' ,-1)}" /> 
+    <set item="param:debt" value="#{if('${debtintpartdotpart}'!='','-${debtintpartdotpart}',-1)}" />
+    <set item="param:dEndDate" value="#{if(('${dateofissue}'='' or '${debtintpartdotpart}'='000' or '${debtintpartdotpart}'=''),-1,'${dateofissue}')}" />
+    <set item="param:Accumulator6" value="#{if(/Message/Item/accumulators/accumulator/@id='voicemin1',/Message/Item/accumulators/accumulator[@id='voicemin1']/@val,-1)}" />
+    <set item="param:dEndDate_2" value="#{if(/Message/Item/accumulators/accumulator/@id='voicemin1',/Message/Item/accumulators/accumulator[@id='voicemin1']/@dt,-1)}" />
+    <set item="param:Accumulator7" value="#{if(/Message/Item/accumulators/accumulator/@id='sms1',/Message/Item/accumulators/accumulator[@id='sms1']/@val,-1)}" />
+    <set item="param:dEndDate_3" value="#{if(/Message/Item/accumulators/accumulator/@id='sms1',/Message/Item/accumulators/accumulator[@id='sms1']/@dt,-1)}" />
+    <set item="param:Accumulator8" value="#{if(/Message/Item/accumulators/accumulator/@id='voicemin700',/Message/Item/accumulators/accumulator[@id='voicemin700']/@val,-1)}" />
+    <set item="param:currency" value="#{if('${currency}'='',0,number('${currency}'))}" />
+  </deliveryTemplate> 
+  <deliveryTemplate /> 
+ </template> -->
+
+<!--    <set item="param:Accumulator6" value="-1" />
+    <set item="param:dEndDate_2" value="-1" />
+    <set item="param:Accumulator7" value="-1" />
+    <set item="param:dEndDate_3" value="-1" /> -->
+	
+ <template procedureName="DB_BalanceRetriev3" persistent="false"> 
+  <input> 
+   <param name="Customer"/> 
+  </input> 
+  <output> 
+   <param name="dbresult"		 type="3" value="0"/> 
+   <param name="balanceintpartdotpart"	 type="3" value="0"/> 
+   <param name="Accumulator_1"		 type="3" value="-1"/> 
+   <param name="accumulatorSMS"		 type="3" value="-1"/> 
+   <param name="accumulatorGPRS"	 type="3" value="-1"/> 
+   <param name="accumulatorMinutesUsed"	 type="3" value="-1"/> 
+   <param name="accumulatorMMS"		 type="3" value="-1"/>
+   <param name="dEndDate_4"               type="1" value="-1" />   
+   <param name="accumulatorMAXI"	 type="3" value="-1"/>   
+   <param name="accumulatorUsedLimitCorp"		 type="3" value="-1"/>
+   <param name="accumulatorFreeLN"		 type="3" value="-1"/>
+   <param name="accumulator24chas"		 type="3" value="-1"/>  
+   <param name="accumulatorStacRyzMin"	 type="3" value="-1"/>   
+   <param name="CreditLimit"               type="3" value="-1" />   
+   <param name="debt"               type="3" value="-1" />   
+   <param name="dEndDate"               type="1" value="-1" />   
+   <param name="Accumulator6"               type="3" value="-1" />   
+   <param name="dEndDate_2"               type="1" value="-1" />   
+   <param name="Accumulator7"               type="3" value="-1" />   
+   <param name="dEndDate_3"               type="1" value="-1" />   
+   <param name="Accumulator8"               type="3" value="-1" />   
+   <param name="Accumulator9"               type="3" value="-1" />   
+   <param name="dEndDate_5"               type="1" value="-1" />   
+   <param name="Accumulator10"               type="3" value="-1" />   
+   <param name="dEndDate_6"               type="1" value="-1" />  
+	<param name="Accumulator11"               type="3" value="-1" />   
+   <param name="Accumulator12"               type="3" value="-1" />      
+   <param name="currency"		 type="3" value="0"/> 
+   <param name="AccumUkr_1"               type="3" value="-1" />
+   <param name="Accumulator13"               type="3" value="-1" /> 
+   <param name="Accum_Onl"               type="3" value="-1" /> <!---->
+   <param name="Accum_Netb"               type="3" value="-1" /> <!---->
+   <param name="Accum_SMS"               type="3" value="-1" /> <!---->
+  </output> 
+  <receiveTemplate> 
+   <Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}"> 
+    <Item customer="${customer}" subject="balance" datasource="db" >
+		<Attribute name="requestcountertype" value="3" />
+    </Item>
+   </Message> 
+  </receiveTemplate> 
+  <deliveryTemplate conditionEx="#{count(/Message/Item/accumulators/accumulator)>=0}"> 
+    <set item="param:dbresult" value="${dbresult}" /> 
+    <set item="param:balanceintpartdotpart" value="${balanceintpartdotpart}" /> 
+    <set item="param:Accumulator_1" value="#{if(/Message/Item/accumulators/accumulator/
+@id='voicemin.AA',/Message/Item/accumulators/accumulator[@id='voicemin.AA']/@val,if(/Message/Item/accumulators/accumulator/
+@id='voicesec.AA',round(/Message/Item/accumulators/accumulator[@id='voicesec.AA']/@val div 60),-1))}" /> 
+    <set item="param:accumulatorSMS" value="#{if(/Message/Item/accumulators/accumulator/
+@id='sms.AM',/Message/Item/accumulators/accumulator[@id='sms.AM']/@val,-1)}" /> 
+    <set item="param:accumulatorGPRS" value="#{if(/Message/Item/accumulators/accumulator/
+@id='gprs.AS',/Message/Item/accumulators/accumulator[@id='gprs.AS']/@val,if(/Message/Item/accumulators/accumulator/
+@id='gprs.DT',/Message/Item/accumulators/accumulator[@id='gprs.DT']/@val,-1))}" /> 
+    <set item="param:accumulatorMinutesUsed" value="#{if(/Message/Item/accumulators/accumulator/
+@id='usedmin.DA',/Message/Item/accumulators/accumulator[@id='usedmin.DA']/@val,if(/Message/Item/accumulators/accumulator/
+@id='voiceminaccum.DA',/Message/Item/accumulators/accumulator[@id='voiceminaccum.DA']/@val,if
+(/Message/Item/accumulators/accumulator/@id='usedsec.DA',round(/Message/Item/accumulators/accumulator[@id='usedsec.DA']/
+@val div 
+60),-1)))}" /> 
+    <set item="param:accumulatorMMS" value="#{if(/Message/Item/accumulators/accumulator/
+@id='mms.AR',/Message/Item/accumulators/accumulator[@id='mms.AR']/@val,-1)}" />
+    <set item="param:dEndDate_4" value="#{if(/Message/Item/accumulators/accumulator/@id='mms.AR',(if(string-length
+(/Message/Item/accumulators/accumulator[@id='mms.AR']/@dt)=5,concat(/Message/Item/accumulators/accumulator[@id='mms.AR']/
+@dt,concat('.',if (substring(/Message/Item/accumulators/accumulator[@id='mms.AR']/@dt,4,2)='01','#{number(substring('@{now}',7,4))+
+0}',substring('@{now}',7,4)))),/Message/Item/accumulators/accumulator[@id='mms.AR']/@dt)),-1)}" />
+    <set item="param:accumulatorMAXI" value="#{if(/Message/Item/accumulators/accumulator/
+@id='voiceminmaxi.AA',/Message/Item/accumulators/accumulator[@id='voiceminmaxi.AA']/@val,if
+(/Message/Item/accumulators/accumulator/
+@id='voicesec_mts',/Message/Item/accumulators/accumulator[@id='voicesec_mts']/@val,if(/Message/Item/accumulators/accumulator/
+@id='voicesecmaxi',round(/Message/Item/accumulators/accumulator[@id='voicesecmaxi']/@val div 60)  ,  if
+(/Message/Item/accumulators/accumulator/@id='voiceminmg.AF',/Message/Item/accumulators/accumulator[@id='voiceminmg.AF']/@val  
+,if
+(/Message/Item/accumulators/accumulator/@id='voiceminmts.AB',/Message/Item/accumulators/accumulator[@id='voiceminmts.AB']/
+@val,if(/Message/Item/accumulators/accumulator/
+@id='usedgprs.DT',/Message/Item/accumulators/accumulator[@id='usedgprs.DT']/@val,if(/Message/Item/accumulators/accumulator/
+@id='voicemin.AA',/Message/Item/accumulators/accumulator[@id='voicemin.AA']/@val,-1)))))))}" />  
+    <set item="param:accumulatorUsedLimitCorp" value="#{if(/Message/Item/accumulators/accumulator/@id='usedrur.DW',string(translate
+(/Message/Item/accumulators/accumulator[@id='usedrur.DW']/@val,',','.'))*100,-1)}" />	
+    <set item="param:accumulatorFreeLN" value="#{if(/Message/Item/accumulators/accumulator/
+@id='usedminfreeln',/Message/Item/accumulators/accumulator[@id='usedminfreeln']/@val,if(/Message/Item/accumulators/accumulator/
+@id='usedminln',/Message/Item/accumulators/accumulator[@id='usedminln']/@val,-1))}" />
+    <set item="param:accumulator24chas" value="#{if(/Message/Item/accumulators/accumulator/@id='voiceminmts.AB',round(/Message/Item/accumulators/accumulator[@id='voiceminmts.AB']/@val*60),if(/Message/Item/accumulators/accumulator/@id='voicesec_mts',round(/Message/Item/accumulators/accumulator[@id='voicesec_mts']/@val div 60),if(/Message/Item/accumulators/accumulator/@id='voiceminmg.AA',/Message/Item/accumulators/accumulator[@id='voiceminmg.AA']/@val,-1)))}" /> 
+    <!--set item="param:accumulatorStacRyzMin" value="#{if(/Message/Item/accumulators/accumulator/
+@id='voicemin.AA',/Message/Item/accumulators/accumulator[@id='voicemin.AA']/@val,-1)}" /-->
+<!--      <set item="param:debt" value="#{if('${creditlimitintpartdotpart}'!='','${creditlimitintpartdotpart}',-1)}" />  -->
+    <set item="param:CreditLimit" value="#{if (string-length('${creditlimitintpartdotpart}')>10,-1, if (string-length('${creditlimitintpartdotpart}')=0, -
+1, '${creditlimitintpartdotpart}'))}" />  
+    <set item="param:debt" value="#{if('${debtintpartdotpart}'!='','-${debtintpartdotpart}',-1)}" />
+    <set item="param:dEndDate" value="#{if(('${dateofissue}'='' or '${debtintpartdotpart}'='000' or '${debtintpartdotpart}'=''),-
+1,'${dateofissue}')}" />
+    <set item="param:Accumulator6" value="#{if(/Message/Item/accumulators/accumulator/
+@id='vbon.AA',/Message/Item/accumulators/accumulator[@id='vbon.AA']/@val,-1)}" />
+    <set item="param:dEndDate_2" value="#{if(/Message/Item/accumulators/accumulator/@id='vbon.AA',if(string-length
+(/Message/Item/accumulators/accumulator[@id='vbon.AA']/@dt)=5,concat(/Message/Item/accumulators/accumulator
+[@id='vbon.AA']/@dt,concat('.',if (substring(/Message/Item/accumulators/accumulator[@id='vbon.AA']/@dt,4,2)='01','#{number
+(substring('@{now}',7,4))+0}',substring('@{now}',7,4)))),/Message/Item/accumulators/accumulator[@id='vbon.AA']/@dt),-1)}" /> <!-- 
+если 
+получаем короткую дату, то добавляем к ней год, в январе поправить на +0, в декабре +1 -->    
+    <set item="param:Accumulator7" value="#{if(/Message/Item/accumulators/accumulator/
+@id='sms1.AM',/Message/Item/accumulators/accumulator[@id='sms1.AM']/@val,-1)}" />
+    <set item="param:dEndDate_3" value="#{if(/Message/Item/accumulators/accumulator/@id='sms1.AM',if(string-length
+(/Message/Item/accumulators/accumulator[@id='sms1.AM']/@dt)=5,concat(/Message/Item/accumulators/accumulator[@id='sms1.AM']/
+@dt,concat('.',if (substring(/Message/Item/accumulators/accumulator[@id='sms1.AM']/@dt,4,2)='01','#{number(substring('@{now}',7,4))+
+0}',substring('@{now}',7,4)))),/Message/Item/accumulators/accumulator[@id='sms1.AM']/@dt),-1)}" /> <!-- если получаем короткую 
+дату, то 
+добавляем к ней год -->    
+    <!--set item="param:Accumulator8" value="#{if(/Message/Item/accumulators/accumulator/
+@id='voicemin700.AA',/Message/Item/accumulators/accumulator[@id='voicemin700.AA']/@val,-1)}" /-->
+	<set item="param:accumulator8" value="#{if(/Message/Item/accumulators/accumulator/@id='p700',/Message/Item/accumulators/accumulator[@id='p700']/@val,if(/Message/Item/accumulators/accumulator/@id='voicemin700.AA',/Message/Item/accumulators/accumulator[@id='voicemin700.AA']/@val,if(/Message/Item/accumulators/accumulator/@id='p700.BA',/Message/Item/accumulators/accumulator[@id='p700.BA']/@val,-1)))}" />
+
+
+ <set item="param:Accumulator9" value="#{if(/Message/Item/accumulators/accumulator/
+@id='voicemin1.AA',/Message/Item/accumulators/accumulator[@id='voicemin1.AA']/@val,-1)}" />
+    <set item="param:dEndDate_5" value="#{if(/Message/Item/accumulators/accumulator/@id='voicemin1.AA',if(string-length
+(/Message/Item/accumulators/accumulator[@id='voicemin1.AA']/@dt)=5,concat(/Message/Item/accumulators/accumulator[@id='voicemin1.AA']/
+@dt,concat('.',if (substring(/Message/Item/accumulators/accumulator[@id='voicemin1.AA']/@dt,4,2)='01','#{number(substring('@{now}',7,4))+
+0}',substring('@{now}',7,4)))),/Message/Item/accumulators/accumulator[@id='voicemin1.AA']/@dt),-1)}" /> <!-- если получаем короткую 
+дату, то 
+добавляем к ней год -->    
+ <set item="param:Accumulator10" value="#{if(/Message/Item/accumulators/accumulator/
+@id='sms.AZ',/Message/Item/accumulators/accumulator[@id='sms.AZ']/@val,-1)}" />
+    <set item="param:dEndDate_6" value="#{if(/Message/Item/accumulators/accumulator/@id='sms.AZ',if(string-length
+(/Message/Item/accumulators/accumulator[@id='sms.AZ']/@dt)=5,concat(/Message/Item/accumulators/accumulator[@id='sms.AZ']/
+@dt,concat('.',if (substring(/Message/Item/accumulators/accumulator[@id='sms.AZ']/@dt,4,2)='01','#{number(substring('@{now}',7,4))+
+0}',substring('@{now}',7,4)))),/Message/Item/accumulators/accumulator[@id='sms.AZ']/@dt),-1)}" /> <!-- если получаем короткую 
+дату, то 
+добавляем к ней год -->   
+
+<set item="param:Accumulator11" value="#{if(/Message/Item/accumulators/accumulator/
+@id='voicemin1.AAO',/Message/Item/accumulators/accumulator[@id='voicemin1.AAO']/@val,-1)}" />
+	<set item="param:Accumulator12" value="#{if(/Message/Item/accumulators/accumulator/
+@id='voicemin1.AAP',/Message/Item/accumulators/accumulator[@id='voicemin1.AAP']/@val,-1)}" /> 
+
+    <set item="param:currency" value="#{if('${currency}'='',0,number('${currency}'))}" />
+	
+		<!--set item="param:AccumUkr_1" value="#{if(/Message/Item/accumulators/accumulator/
+@id='gprs.AAR',/Message/Item/accumulators/accumulator[@id='gprs.AAR']/@val,-1)}" /-->
+	
+	<set item="param:Accumulator13" value="#{if(/Message/Item/accumulators/accumulator/
+@id='voicemin.AAS',/Message/Item/accumulators/accumulator[@id='voicemin.AAS']/@val,-1)}" />
+  </deliveryTemplate> 
+  <deliveryTemplate /> 
+ </template> 	
+
+  <template procedureName="DB_KEOAuthorisation" persistent="false">
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}">
+          <Service id="keoactivation" action="5">
+            <Attribute name="keonumber" value="${keonumber}" />
+          </Service>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+      <param name="keonumber" />
+    </input>
+    <output>
+      <param name="allowed" type="2" value="0" />
+      <param name="amount" type="3" value="0" />
+     <!-- <param name="enddate" type="1" value="" /> -->
+    </output>
+  </template>
+
+  <template procedureName="DB_SInterrogation" persistent="false">
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceinterrogation" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}">
+          <Service id="${service}" action="interrogation" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate />
+    <input>
+      <param name="customer" />
+      <param name="service" />
+    </input>
+    <output>
+      <param name="Allowed" type="2" value="0" />
+      <param name="Subscription" type="2" value="0" />
+      <param name="Status" type="2" value="0" />
+      <param name="Class" type="3" value="0" />
+      <param name="ChargedAmount" type="3" value="0" />
+    </output>
+  </template>
+
+  <template procedureName="DB_PassChange" persistent="false">
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="setprofile" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}">
+          <Attribute name="oldpassword" value="${password}" />
+          <Attribute name="newpassword" value="${newpassword}" />
+          <Attribute name="confirmpassword" value="${confirmpassword}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate />
+    <input>
+      <param name="customer" />
+      <param name="password" />
+      <param name="newpassword" />
+      <param name="confirmpassword" />
+    </input>
+    <output>
+      <param name="newpassword" type="1" value="" />
+    </output>
+  </template>
+
+  <template procedureName="DB_SProcessing"  sessionStorage="Database" sessionLifetime="180" >
+    <condition>    
+	</condition>    
+    <receiveTemplate>
+		<Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+			<Item customer="${customer}">
+			<!--	<Service id="${service}" action="#{if('${service}'='changetariffplan' or '${service}'='11111',${action}, if(${action}=0,2,if(${action}=1,3,${action})))}" class="${class}" /> -->
+				
+				<Service id="${service}" action="#{if('${service}'='changetariffplan' or '${service}'='11111',${action}, if(${action}=0,2,if(${action}=1,3,${action})))}" class="#{if('${service}'='changetariffplan' or '${service}'='11111',if('${customer}'='79167187534','18',${class}),${class})}" />
+			</Item>
+  			@{store(sAction,${action})}
+		</Message>
+	</receiveTemplate>
+	<deliveryTemplate conditionEx="#{${dbresult}=330140}" connector="SMSCON_01_01" call="ServiceOrderErrorHandler.SendCRMErrorMessage" terminating="false" />	
+    <deliveryTemplate conditionEx="#{${dbresult}=330154 or ${dbresult}=330155}" connector="SMSCON_01_02" call="ServiceOrderErrorHandler.SendCRMErrorMessage" terminating="false" />	
+<!--    <deliveryTemplate conditionEx="#{('${Service_id}'='_411017' or '${Service_id}'='_411018') and  '${tdc}'!='_63' and '${sAction}'='0' }" terminating="false" connector="SMSCON_01_03" /> -->
+	
+	<deliveryTemplate conditionEx="#{('${Service_id}'='411069') and (${sAction}='0')}"  terminating="false" connector="SMSCON_01_01" />
+	
+	<deliveryTemplate conditionEx="#{('${dbresult}'='320181' or '${dbresult}'='320191') and '${Service_id}'='11111'}"  terminating="false" connector="SMSCON_01_01" />	
+	<deliveryTemplate />
+	
+	<deliveryTemplate />
+    <input>
+      <param name="customer" />
+      <param name="service" />
+      <param name="class" />
+      <param name="action" />
+    </input>
+    <output>
+      <param name="dbresult" type="3" value="0" />
+      <param name="Subscription" type="2" value="0" />
+      <param name="Status" type="3" value="0" />
+      <param name="ISCharged" type="2" value="0" />
+      <param name="price" type="2" value="0" />
+    </output>
+   </template>
+
+  
+<!--
+  <template procedureName="DB_SProcessing" persistent="false">
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}">
+          <Service id="${service}" action="${action}" class="${class}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate />
+    <input>
+      <param name="customer" />
+      <param name="service" />
+      <param name="class" />
+      <param name="action" />
+    </input>
+    <output>
+      <param name="Subscription" type="2" value="0" />
+      <param name="Status" type="2" value="0" />
+      <param name="ISCharged" type="2" value="0" />
+    </output>
+  </template>
+-->
+  
+	<template procedureName="DB_SProcessing_NEW">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}">
+					<Service id="${service}" action="${action}" class="${class}" needtariffication="1" informOnImpossibility="0" createrequest="1" enddate="01.01.0001 00.00.00"/>
+				</Item>
+			</Message>
+		</receiveTemplate>
+	
+		<input>
+			<param name="customer" />
+			<param name="service" />
+			<param name="class" />
+			<param name="action" />
+		</input>
+		<output>
+			<param name="dbresult"		type="3" value="0" />
+			<param name="subscription"	type="2" value="0" />
+			<param name="status"		type="2" value="0" />
+			<param name="ischarged"		type="2" value="0" />
+		</output>
+	</template>
+  
+
+
+  <template procedureName="DB_CCPayments" persistent="false">
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}">
+          <Service id="creditcardpayment" action="5">
+            <Attribute name="amount" value="${amount}" />
+          </Service>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+      <param name="amount" />
+    </input>
+    <output>
+      <param name="allowed" type="2" value="0" />
+      <param name="amount" type="3" value="0" />
+    </output>
+  </template>
+
+  <template procedureName="DB_FaxRetriev" persistent="false">
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="retrieveinfo" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}" subject="faxnumber" />
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+    </input>
+    <output>
+      <param name="assigned" type="2" value="0" />
+      <param name="faxnumber" type="1" value="" />
+    </output>
+  </template>
+
+  <template procedureName="dbAdd" persistent="false">
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}" subject="balance" >
+			<Attribute name="requestcountertype" value="1" />
+		</Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate />
+    <input>
+      <param name="Customer" />
+      <param name="Param2" />
+    </input>
+    <output>
+    </output>
+  </template>
+
+  <template procedureName="DB_CValidation" persistent="false">
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="verificationrequest" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}">
+            <Attribute name="checkivrservice" value="1" />
+            <Attribute name="checkblocks" value="1" />
+       </Item> 
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate />
+    <input>
+      <param name="customer" />
+    </input>
+    <output>
+      <param name="TariffPlan" type="3" value="0" />
+      <param name="State" type="2" value="0" />
+      <param name="Password" type="1" value="" />
+      <param name="regioncode" type="3" value="0" />
+      <param name="language_id" type="3" value="1" />
+      <param name="customerblocks" type="1" value="" />
+    </output>
+  </template>
+
+  <template procedureName="DB_BillsRetriev" persistent="false">
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}" subject="bills">
+          <Attribute name="index" value="${index}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+<!--	   	<set item="param:beginday" value="#{concat('${beginday}',' 00:00:00')}" />
+          	<set item="param:endday" value="#{concat('${endday}',' 23:59:59')}" /> -->
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+      <param name="index" />
+    </input>
+    <output>
+      <param name="count" type="3" value="0" />
+      <param name="beginday" type="1" value="" />
+      <param name="endday" type="1" value="" />
+    </output>
+  </template>
+
+  <template procedureName="SendPriceSMS" persistent="false">
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="sendsms" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${sender}" recipient="${recipient}">
+          <Content>${content}</Content>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate />
+    <input>
+      <param name="anumber" />
+      <param name="sender" />
+      <param name="content" />
+      <param name="recipient" />
+    </input>
+    <output>
+    </output>
+  </template>
+
+  <template procedureName="DB_PaymentRetriev" persistent="false">
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}" subject="payments">
+          <Attribute name="index" value="${index}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate />
+    <input>
+      <param name="customer" />
+      <param name="index" />
+    </input>
+    <output>
+      <param name="count" type="3" value="0" />
+      <param name="day" type="4" value="" />
+      <param name="currency" type="3" value="0" />
+      <param name="intpartfracpart" type="3" value="0" />
+    </output>
+  </template>
+
+<!--
+   <template procedureName="DB_CustomerBlock">
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}">
+          <Service id="blockphone" action="4">
+            <Attribute name="state" value="${action}" />
+            <Attribute name="start" value="${start}" /> 
+          </Service>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    
+    <input>
+      <param name="customer" />
+      <param name="start" />
+      <param name="action" />
+    </input>
+    <output>
+      <param name="state" type="3" value="0" />
+    </output>
+  </template>
+
+-->
+
+  <template procedureName="DB_CustomerBlock">
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}">
+          <Service id="blockphone" action="4">
+            <Attribute name="state" value="@{switch(${action}|-1,0|1,1|0)}" />
+            <Attribute name="start" value="${start}" />
+            <Attribute name="end" value="#{if(substring('${end}',7,4)='2099','','${end}')}" />
+          </Service>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+      <param name="action" />
+      <param name="start" />
+      <param name="end" />
+    </input>
+    <output>
+      <param name="state" type="2" value="0" />
+    </output>
+  </template> 
+
+
+  <template procedureName="DB_ExchangeRate" persistent="false">
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="retrieveinfo" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}" subject="currencyrate" />
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+    </input>
+    <output>
+      <param name="rateintpartdotpart" type="3" value="0" />
+    </output>
+  </template>
+
+  <template procedureName="VM_CRM_SETLANGUAGE" persistent="false">
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="InvokeResult" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item request_id="${requestId}">
+          <Result paremeter1="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate />
+    <input>
+      <param name="ResultCode" />
+    </input>
+    <output>
+      <param name="Subscriber" type="1" value="" />
+      <param name="Language" type="3" value="0" />
+    </output>
+  </template>
+
+  <template procedureName="DB_PrepaymentBill" persistent="false">
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}">
+          <Service id="otprepaymentbill" action="4">
+            <Attribute name="faxnumber" value="${faxnumber}" />
+            <Attribute name="amount" value="${amountintpartdotpart}" />
+          </Service>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+      <param name="amountintpartdotpart" />
+      <param name="faxnumber" />
+    </input>
+    <output>
+    </output>
+  </template>
+  
+   <template procedureName="DB_PayVerification" persistent="false">
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}">
+          <Service id="guaranteedpayment" action="6" />
+        </Item>
+    </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+    </input>
+		<output>
+			<param name="dbresult" value=""/>
+			<param name="maximumusd" type="3" value="0" />
+                        <param name="maximumrur" type="3" value="0" />
+			<param name="balance" type="3" value="0" />
+		</output>
+  </template>
+
+  <template procedureName="DB_PayAcceptance" persistent="false">
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+ <Item customer="${customer}">
+   <Service id="guaranteedpayment" action="7">
+     <Attribute name="amount" value="${amount}" />
+     <Attribute name="currency" value="${currency}" />
+   </Service>
+ </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+      <param name="currency" />
+      <param name="amount" />
+    </input>
+    <output>
+    </output>
+  </template>
+
+  <template procedureName="DB_GrInterrogation" persistent="false">
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="groupinterrogation" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}">
+          <Service id="${groupcode}" action="interrogation" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+      <param name="groupcode" />
+    </input>
+    <output>
+      <param name="service_id" type="3" value="0" />
+    </output>
+  </template>
+
+
+<template procedureName="DB_PRequest" persistent="false">
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}">
+          <Service action="4" id="@{switch(${Service}|???,10|otdetailedbill,11|otbillviafax,12|otdetailedbalance,13|otprepaymentbill)}">
+
+	<Attribute name="start" value="#{if(string-length('${start}')=18,substring('${start}',1,10),'${start}')} 00:00:00" />
+	<Attribute name="end" value="#{if(string-length('${end}')=18,substring('${end}',1,10),'${end}')} 23:59:59" />  
+	<Attribute name="faxnumber" value="${faxnumber}" />
+          </Service>
+		</Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate />
+    <input>
+      <param name="Customer" />
+      <param name="Service" />
+      <param name="Start" />
+      <param name="End" />
+      <param name="FaxNumber" />
+    </input>
+    <output>
+    </output>
+  </template>  
+  
+  
+  
+
+  <template procedureName="DB_TPChangeStatus" persistent="false">
+    <input>
+      <param name="customer" />
+    </input>
+    <receiveTemplate>
+      <Message type="retrieveinfo" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}" subject="changetariffplanrequeststatus" />
+      </Message>
+    </receiveTemplate>
+    <output>
+      <param name="requeststatus" type="3" value="" />
+      <param name="dateofstart" type="1" value="" />
+      <param name="dateofcomplete" type="1" value="" />
+    </output>
+  </template>
+
+  <template procedureName="MG_DateValidate" sessionStorage="Memory" sessionLifetime="30">
+        <input>
+            <param name="date"/>
+        </input>
+        <output>
+            <param name="dbresult"     type="3" value="0"/>
+        </output>
+        <receiveTemplate>
+           <Message id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+               <Item date="${date}" />
+               @{store(sDate,${date})}
+	   @{store(sDay,#{substring-before('${date}','.')})}
+	   @{store(sMonth,#{substring-before(substring-after('${date}','.'),'.')})}
+	   @{store(sYear,#{substring(substring-after(substring-after('${date}','.'),'.'),1,4)})}
+             </Message>
+        </receiveTemplate>
+        <deliveryTemplate direction="input" conditionEx="#{not(matches('${sDate}','^\d{2}\.\d{2}\.\d{4}$')) or 0>=number('${sDay}') or number('${sDay}')>31 or 0>=number('${sMonth}') or number('${sMonth}')>12 or 0>=number('${sYear}')}">
+            <set item="param:dbresult" value="1" />
+	<set conditionEx="0@{freeSession}"  />
+        </deliveryTemplate>
+        <deliveryTemplate direction="input" conditionEx="#{number('${sDay}') > number(substring(LastDayOfMonth('01.${sMonth}.${sYear}'),1,2))}">
+            <set item="param:dbresult" value="1" />
+	<set conditionEx="0@{freeSession}"  />
+        </deliveryTemplate>
+        <deliveryTemplate direction="input">
+            <set item="param:dbresult" value="0" />
+	<set conditionEx="0@{freeSession}"  />
+        </deliveryTemplate>
+  </template>
+
+  <template procedureName="DB_LangSetting" persistent="false">
+        <input>
+          <param name="customer" />
+          <param name="language" />
+        </input>
+        <receiveTemplate>
+            <Message type="setprofile" initiator="ivrcon" id="${guid}" session_id="@{newGuid}" reply="">
+                <Item customer="${customer}">
+		<Attribute name="communicationlanguage" value="${language}" />
+                </Item>
+            </Message>
+        </receiveTemplate>
+        <deliveryTemplate>
+        </deliveryTemplate>
+        <output>
+        </output>
+  </template>
+ 
+<!--  активации/деактивации признака «Запрет перерасчета КД и КЛ»    --> 
+  <template procedureName="DB_ChangeCreditlimit_ReCalculation">
+    <condition>
+    </condition>
+    <receiveTemplate>
+		<Message type="changecreditlimitaccesslevelrequest" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+			<Item customer="${Sender}" >
+				<Attribute name="action" value="${Content}" />
+			</Item>
+		</Message>
+    </receiveTemplate>
+	<deliveryTemplate >
+	  <set item="param:dbresult" value="${dbresult}" />
+      <set item="param:result" condition="//Item/@dbresult=0" value="1" />
+    </deliveryTemplate>
+    <input>
+		<param name="Sender"/>
+		<param name="Content"/>
+    </input>
+    <output>
+	  <param name="dbresult"     type="2" value="0"/>
+      <param name="result" type="2" value="0" />
+    </output>
+  </template>
+  <template procedureName="DB_PromisedPaymentRetriev">
+ <receiveTemplate>
+ <Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{setSessionId(${guid})}">
+  <Item customer="${customer}" subject="get_guaranteedpayment" /> 
+  @{store(sIndex,#{number('${index}')+1})} 
+  </Message>
+  </receiveTemplate>
+ <deliveryTemplate conditionEx="#{'${count}'='0' or number('${sIndex}') > number('${count}') or 0 >= number('${sIndex}')}">
+  <set item="param:dbresult" value="${dbresult}" /> 
+  <set item="param:count" value="${count}" /> 
+  <set item="param:day" value="" /> 
+  <set item="param:currency" value="0" /> 
+  <set item="param:intpartfracpart" value="0" /> 
+  <set item="param:" conditionEx="0@{freeSession}" /> 
+  </deliveryTemplate>
+ <deliveryTemplate>
+  <set item="param:dbresult" value="${dbresult}" /> 
+  <set item="param:count" value="#{//Item/@count}" /> 
+  <set item="param:day" value="#{//Item/row[${sIndex}]/Attribute[@name='day']/@value}" /> 
+  <set item="param:currency" value="#{//Item/row[${sIndex}]/Attribute[@name='currency']/@value}" /> 
+  <set item="param:intpartfracpart" value="#{//Item/row[${sIndex}]/Attribute[@name='intpartfracpart']/@value}" /> 
+  <set item="param:" conditionEx="0@{freeSession}" /> 
+  </deliveryTemplate>
+ <input>
+  <param name="customer" /> 
+  <param name="index" /> 
+  </input>
+ <output>
+  <param name="dbresult" type="3" value="0" /> 
+  <param name="count" type="3" value="0" /> 
+  <param name="day" type="4" value="" /> 
+  <param name="currency" type="3" value="0" /> 
+  <param name="intpartfracpart" type="3" value="0" /> 
+  </output>
+  </template>
+<template procedureName="DB_CustomerCategoryRetriev">
+ <receiveTemplate>
+ <Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+  <Item customer="${customer}" subject="category" /> 
+  </Message>
+  </receiveTemplate>
+ <input>
+  <param name="customer" /> 
+  </input>
+ <output>
+  <param name="customercategory" type="2" value="0" /> 
+  <param name="clientstatus" type="3" value="0" /> 
+  <param name="personalaccounttype" type="3" value="0" /> 
+  </output>
+  </template>
+
+   <template procedureName="DB_AverageSpendingsRetriev">
+    <receiveTemplate>
+        <Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+           <Item customer="${customer}" subject="averagespendings" />
+        </Message>
+    </receiveTemplate>
+    <input>
+      <param name="customer" />      
+    </input>
+    <output>
+      <param name="speedintpartdotpart" type="3" value="0" />
+    </output>
+ </template>
+
+
+
+  </templates>
+

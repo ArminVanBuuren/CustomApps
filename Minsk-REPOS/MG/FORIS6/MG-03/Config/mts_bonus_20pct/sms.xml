@@ -1,0 +1,248 @@
+﻿<templateGroup name="MTS_BONUS_20PCT">
+	<macros>
+    <define name="_SMS_SERVICE_NUMBER"	value="4545" />
+    <define name="_BMSHND" value="WCFHND_01" />
+    <define name="_ESBHND" value="WCFHND_ESB" />
+
+    <define name="_USER_ID_OF_CHANGE" value="-1"/>
+    <define name="_CHANNEL_CODE" value="SMS"/>
+    <define name="_CAMPAIGN_CODE" value="MTS_BONUS"/>
+    <define name="_CAMPAIGN_20PCT_CODE" value="MTS_CB_20"/>
+    <define name="_ACCOUNT_TYPE_CODE" value="CB_DATA_MSISDN"/>
+    <define name="_LANGUAGE_CODE" value="1"/>
+  </macros>
+
+  <!-- 4.5.2.4	F_MG_04 Проверка участия в кампании 20%  -->
+  <template procedureName="MTS20PctGetStatus" handler="_BMSHND" smsLogTemplateId="BMSAutoInformation20pct">
+    <condition>
+      <test item="${Recipient}"	matches="^_SMS_SERVICE_NUMBER$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="getaccountcampaignparticipationstatusmulti" initiator="sms" id="${guid}" session_id="${guid}">
+        <Item procedureName="GetAccountCampaignParticipationStatusMulti">
+          <Attribute name="Account" value="${Sender}" />
+          <Attribute name="CampaignCode" value="_CAMPAIGN_CODE,_CAMPAIGN_20PCT_CODE" />
+          <Attribute name="LanguageCode" value="_LANGUAGE_CODE" />
+          <Attribute name="RequiredStatus" value="AWC,ACT" />
+          <Attribute name="ChannelCode" value="_CHANNEL_CODE" />
+          <Attribute name="UserIdOfChange" value="_USER_ID_OF_CHANGE" />
+          <Attribute name="aContent" value="${Content}" />
+          
+          <Attribute name="ParticipationResult" />
+          <Attribute name="Result" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'${Result}'!='0'}" >
+
+
+      <set item="Content" value="В настоящее время мы не можем обработать ваш запрос. Пожалуйста, попробуйте позднее." />
+
+
+      <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+      <set item="Recipient" value="${Account}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <!-- 4.5.2.7	F_MG_12 Привязка DATA MSISDN -->
+    <deliveryTemplate conditionEx="#{matches('${aContent}','^(\+7|8|7){0,1}9[0-9]{9}$') and '${ParticipationResult}'='0'}" call="MTS20GetAccountByAccountIdentifier">
+      <set item="Content" value="${aContent}" />
+      <set item="Sender" value="${Account}" />
+      <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${aContent}','^(\+7|8|7){0,1}9[0-9]{9}$')}" >
+      <set item="Content" value="Ваш запрос нераспознан. Пожалуйста, попробуйте еще раз. Подробные правила программы на сайте: 20.mts.ru" />
+      <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+      <set item="Recipient" value="${Account}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <!-- 4.5.2.8	F_MG_13 Валидация кода подтверждения -->
+    <deliveryTemplate conditionEx="#{matches('${aContent}','^\d{6}$') and '${ParticipationResult}'='1'}" call="MTS20GetCurrentAccountIdentifierStatuses">
+      <set item="Content" value="${aContent}" />
+      <set item="Sender" value="${Account}" />
+      <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${aContent}','^\d{6}$')}" dropReply="true"/>
+    <!-- 4.5.2.9	F_MG_14 Выход из 20% (проверка) -->
+    <deliveryTemplate conditionEx="#{matches('${aContent}','^(?i)(0|stop|стоп)$') and '${ParticipationResult}'='1'}">
+      <set item="Content" value="При выходе из программы &quot;20% возвращаются&quot; Вы не будете получать скидки за пользование услугами МТС. Подтвердите выход, отправив &quot;Да&quot; на 4545." />
+      <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+      <set item="Recipient" value="${Account}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${aContent}','^(?i)(0|stop|стоп)$')}" dropReply="true"/>
+    <!-- 4.5.2.10	F_MG_15 Выход из 20% (запуск выхода) -->
+    <deliveryTemplate conditionEx="#{matches('${aContent}','^(?i)(y|yes|да)$') and '${ParticipationResult}'='1'}" call="MTS20RemoveFromCampaign">
+      <set item="Content" value="${aContent}" />
+      <set item="Sender" value="${Account}" />
+      <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${aContent}','^(?i)(y|yes|да)$')}" dropReply="true"/>
+    <!-- 4.5.2.11	F_MG_16 Нераспознаный запрос-->
+    <deliveryTemplate conditionEx="#{'${ParticipationResult}'='1'}">
+      <set item="Content" value="Ваш запрос нераспознан. Пожалуйста, попробуйте еще раз. Подробные правила программы на сайте: 20.mts.ru" />
+      <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+      <set item="Recipient" value="${Account}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <!-- 4.5.2.12	F_MG_17 Неформатный DATA MSISDN -->
+    <deliveryTemplate conditionEx="#{'${ParticipationResult}'='0' and '${aContent}'!=''}">
+      <set item="Content" value="Для получения скидки укажите номер мобильного интернета на сайте: 20.mts.ru" />
+      <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+      <set item="Recipient" value="${Account}" />
+      <set item="Encoding" value="unicodefffe" />
+      <set item="ScheduleDeliveryTime" value="000000000200000R" />  <!-- Задержка на 2 минуты отправки смс, даем время зарегистрироваться. -->
+    </deliveryTemplate>
+    <deliveryTemplate dropReply="true"/>   
+  </template>
+ 
+   
+  <!-- 4.5.2.7	F_MG_12 Привязка DATA MSISDN  СДЕЛАТЬ-->
+  <template procedureName="MTS20GetAccountByAccountIdentifier"   handler="_ESBHND"  smsLogTemplateId="BMSAutoInformation20pct">
+    <condition>
+      <test item="1" matches="0"/>
+    </condition>
+    <receiveTemplate>
+      <Message type="getaccountbyaccountidentifier" initiator="sms" id="${guid}" session_id="${guid}">
+        <Item procedureName="GetAccountByAccountIdentifier">
+          <Attribute name="Account" value="${Sender}" />
+          <Attribute name="TargetAccount" value="7#{substring(normalize-space('${Content}'),string-length(normalize-space('${Content}'))-9)}" />
+          <Attribute name="AccountTypeCode" value="_ACCOUNT_TYPE_CODE" />
+
+          <Attribute name="Result" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'${Result}' = '0'}">
+      <set item="Content" value="Номер ${TargetAccount} уже участвует в программе &quot;20% возвращаются&quot;. Изменить или добавить номер мобильного интернета Вы можете на сайте: 20.mts.ru" />
+      <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+      <set item="Recipient" value="${Account}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate call="MTS20SetAccountIdentifier">
+      <set item="Content" value="${TargetAccount}" />
+      <set item="Sender" value="${Account}" />
+      <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="MTS20SetAccountIdentifier" handler="_BMSHND" smsLogTemplateId="BMSAutoInformation20pct">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="setaccountidentifier" initiator="sms" id="${guid}" session_id="${guid}">
+        <Item procedureName="SetAccountIdentifier">
+          <Attribute name="Account" value="${Sender}" />
+          <Attribute name="TargetAccount" value="${Content}" />
+          <Attribute name="UserIdOfChange" value="_USER_ID_OF_CHANGE" />
+          <Attribute name="AccountTypeCode" value="_ACCOUNT_TYPE_CODE" />
+
+          <Attribute name="ResultReason" />
+          <Attribute name="Result" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="В настоящее время мы не можем обработать ваш запрос. Пожалуйста, попробуйте позднее." />
+      <set item="Content" conditionEx="#{'${Result}'='0'}" value="Запрос на добавление номера мобильного Интернета в программу &quot;20% возвращаются&quot; принят. Код подтверждения отправлен на ${TargetAccount}." />
+      <!-- <set item="Content" conditionEx="#{'${Result}'='-770817'}" value="Ваш запрос нераспознан. Пожалуйста, попробуйте еще раз. Подробные правила программы на сайте: 20.mts.ru" /> -->
+	  <set item="Content" conditionEx="#{'${Result}'='-770817'}" value="Номер ${TargetAccount} уже участвует в программе &quot;20% возвращаются&quot;. Изменить или добавить номер мобильного интернета Вы можете на сайте: 20.mts.ru" />
+      <set item="ScheduleDeliveryTime" conditionEx="#{'${Result}'='0'}" value="000000000200000R" />  <!-- Задержка на 2 минуты отправки смс, даем время зарегистрироваться. -->
+
+      <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+      <set item="Recipient" value="${Account}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+  </template>
+
+
+  <!-- 4.5.2.8	F_MG_13 Валидация кода подтверждения  -->
+  <template procedureName="MTS20GetCurrentAccountIdentifierStatuses" handler="_BMSHND" smsLogTemplateId="BMSAutoInformation20pct">
+    <condition>
+      <test item="1" matches="0"/>
+    </condition>
+    <receiveTemplate>
+      <Message type="getcurrentaccountidentifierstatuses" initiator="sms" id="${guid}" session_id="${guid}">
+        <Item procedureName="GetCurrentAccountIdentifierStatuses">
+          <Attribute name="Account" value="${Sender}" />
+          <Attribute name="CampaignCode" value="_CAMPAIGN_20PCT_CODE" />
+          <Attribute name="AccountTypeCode" value="_ACCOUNT_TYPE_CODE" />
+          <Attribute name="aContent" value="${Content}" />
+
+          <Attribute name="AccountIdentifierStatus" />
+          <Attribute name="Result" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'${Result}' = '0' and '${AccountIdentifierStatus}' = 'AWC'}" call="MTS20ConfirmAccountIdentifier">
+      <set item="Content" value="${aContent}" />
+      <set item="Sender" value="${Account}" />
+      <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Ваш запрос нераспознан. Пожалуйста, попробуйте еще раз. Подробные правила программы на сайте: 20.mts.ru" />
+      <set item="Content" conditionEx="#{'${Result}' = '0' and ('${AccountIdentifierStatus}' = 'ACT' or '${AccountIdentifierStatus}' = 'AWV')}"  value="У вас уже есть зарегистрированный номер в программе &quot;20% возвращаются&quot;. Изменить номер Вы можете на сайте: 20.mts.ru" />
+      <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+      <set item="Recipient" value="${Account}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="MTS20ConfirmAccountIdentifier" handler="_BMSHND" smsLogTemplateId="BMSAutoInformation20pct">
+    <condition>
+      <test item="1" matches="0"/>
+    </condition>
+    <receiveTemplate>
+      <Message type="confirmaccountidentifier" initiator="sms" id="${guid}" session_id="${guid}">
+        <Item procedureName="ConfirmAccountIdentifier">
+          <Attribute name="Account" value="${Sender}" />
+          <Attribute name="AccountTypeCode" value="_ACCOUNT_TYPE_CODE" />
+          <Attribute name="ConfirmationCode" value="${Content}" />
+
+          <Attribute name="Result" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'${Result}' = '0'}" dropReply="true"/>
+    <deliveryTemplate>
+      <set item="Content" value="В настоящее время мы не можем обработать ваш запрос. Пожалуйста, попробуйте позднее." />
+      <set item="Content" conditionEx="#{'${Result}' = '-770810'}"  value="Код указан неверно. Пожалуйста, укажите корректный код. Правила программы читайте на сайте www.20.mts.ru" />
+      <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+      <set item="Recipient" value="${Account}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+  </template>   
+    
+      
+  <!-- 4.5.2.10	F_MG_15 Выход из 20% (запуск выхода)-->     
+  <template procedureName="MTS20RemoveFromCampaign" handler="_BMSHND" smsLogTemplateId="BMSAutoInformation20pct">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="removeaccountfromcampaign" initiator="sms" id="${guid}" session_id="${guid}">
+        <Item procedureName="RemoveAccountFromCampaign">
+          <Attribute name="RemoveAccount" value="${Sender}" />
+          <Attribute name="CampaignCode" value="_CAMPAIGN_20PCT_CODE" />
+          <Attribute name="ChannelCode" value="_CHANNEL_CODE" />
+          <Attribute name="UserIdOfChange" value="_USER_ID_OF_CHANGE" />
+
+          <Attribute name="RemoveResponse" />
+          <Attribute name="Result" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'${Result}'='0'}" dropReply="true"/>
+    <deliveryTemplate>
+      <set item="Content" value="В настоящее мы не можем обработать ваш запрос. Пожалуйста, попробуйте позднее." />
+      <set item="Sender"   value="_SMS_SERVICE_NUMBER" />
+      <set item="Recipient" value="${RemoveAccount}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate dropReply="true" />
+  </template>
+
+</templateGroup>

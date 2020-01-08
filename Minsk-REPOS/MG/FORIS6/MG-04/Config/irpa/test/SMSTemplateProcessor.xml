@@ -1,0 +1,75 @@
+﻿<!-- VERSION 3.0 -->
+<!-- 05.12.2006 16:01, AddToGroup_onResponse. Если отправить два согласия с небольшим интервалом, в CRM отрпавлялись 2 заявки и обрабатывались там -->
+<!-- 06.12.2006 11:06, AddToGroup_onResponse, DelInvitation. Разрешены лидирующие и финальные пробелы в тексте СМС ответа на приглашение -->
+<!-- 06.12.2006 16:45, исправлен запрос verificationrequest, могло влиять отсутствие услуги Мобильный помощник -->
+<!-- VERSION 2.1 -->
+<!-- 25.01.2007 10:00, изменен шаблон PtP. Разрешены финальные пробелы, изменена минимальная сумма -->
+<!-- 26.01.2007 10:00, в шаблонах MTSGroup изменено сообщение на dbresult=-1 при проверке ТП -->
+<!-- 31.01.2007 17:00, в шаблонах MTSGroup добавлены повторы (5) verificationrequest если dbresult=-1 -->
+<!-- 29.05.07 Support for Duet has been added -->
+<templates connector="SMS">
+  <macros>
+    <define name="_SMS_SERVICE_NUMBER" value="111" />
+    <define name="_MI_SERVICE_NUMBER" value="5800" />
+    <define name="_FND_SERVICE_NUMBER" value="1777"/>
+<!-- DIALOG-->	
+    <define name="_MI_MAXIDUET_SERVICE_NUMBER" value="1388" />	
+<!--Udalit' eto DIALOG	
+	<define name="_MAX_MAXIDUET_LIST_LENGTH" value="16" />
+-->	
+    <define name="_MAXIDUET_ISSA_NUMBER" value="ISSA_MAXIDUET" />	
+    <define name="_MAX_LIST_LENGTH" value="89" />
+    <define name="_MAX_FAVOURITE_NUM" value="7" />
+    <define name="_CREDIT_SERVICE_NUMBER" value="2828" />
+    <define name="_4MONITORING" value="79163515044" />
+    <define name="_PTP_SERVICE_NUMBER" value="112" />
+    <define name="_SPONSOR_SERVICE_NUMBER" value="1114" />
+    <define name="_MAX_DUET_LIST_LENGTH" value="16" />
+    <define name="_USSD_SPONSOR_NUMBER" value="114" />
+    <define name="_INVITE_OPERATION_CODE" value="0" />
+    <define name="_DUET_INVITE_CODE" value="001" />
+    <define name="_MI_ISSA_NUMBER" value="ISSA_MI" />
+    <define name="_DUET_ISSA_NUMBER" value="ISSA_DUET" />
+
+    <define name="_MACR_CRMACT_SMSNUM_TO_SERVICE_CODE" value="@{switch(${Recipient}|-1,6275|FR7MMS)}" />
+    <define name="_MACR_CRMACT_SERVICE_CODE_TO_MESSAGE" value="@{switch(${service_id}|,FR50SMS|50 SMS,FR7MMS|7 MMS)}" />
+
+    <define name="_CHILDTP" value="789" />
+    <define name="_CHILDS_BALANCE_SERVICE" value="140" />
+
+    <define name="_TRANSPORT" value="SMS" />
+    <define name="_FINDMASKFORADDSRV" value="@number='${Recipient}' and @source='SMS' and ((@addtextsms='${Content}') or (@addtextsms='allchars*'))" />
+    <define name="_FINDMASKFORDELSRV" value="@number='${Recipient}' and @source='SMS' and ((@deltextsms='${Content}') or (@deltextsms='allchars*'))" />
+    <define name="_FINDMASKFORWRONGSRV" value="@number='${Recipient}' and @source='SMS'" />
+	
+	<define name="_CHILTP_ALLSMS" value="@{switch(${tariffplan}|-1,789|789,648|648,655|655|720)}" />	
+
+	<define name="_PKG_SERVICE_NUMBER" value="5191" />
+  <define name="_WWW_IRPA" value="example.irpa.mts.ru" />
+  </macros>
+
+
+<template procedureName="GetIndividualBillingPeriodDate">
+		<condition>
+			
+		<test item="${Recipient}" matches="^12345$" />			
+		<test item="${Content}" matches="^12345$" />		
+		</condition>		
+		<receiveTemplate>	
+		<Message type="getindividualbillingperioddate" initiator="smscon" id="${guid}" session_id="${guid}">	
+			<Item customer="${Sender}">				
+		</Item>			
+		</Message>		
+		</receiveTemplate>		
+<deliveryTemplate>    
+  <set item="Content" value="Данный запрос сейчас не может быть выполнен. Повторите пожалуйста позже." />  
+   <set item="Content" conditionEx="#{${dbresult}=0}" value="Дата списания ежемесячной платы за услуги и опции по Вашему номеру - #{substring('${IndividualBillingPeriodDate}',1,2)} число каждого месяца. Не забудьте вовремя пополнять счет. Подробнее: _WWW_IRPA. Спасибо, что Вы с нами, МТС" />
+  
+  <set item="Content" conditionEx="#{${dbresult}=330161}" value="Дата списания ежемесячной платы за услуги и опции по Вашему номеру будет установлена после активации номера. Подробнее: _WWW_IRPA. Спасибо, что Вы с нами, МТС" />
+   <set item="Encoding" value="unicodefffe" />    
+  <set item="Sender" value="_SMS_SERVICE_NUMBER" /> 
+   <set item="Recipient" value="${customer}" />
+  </deliveryTemplate>
+</template>
+
+  </templates>

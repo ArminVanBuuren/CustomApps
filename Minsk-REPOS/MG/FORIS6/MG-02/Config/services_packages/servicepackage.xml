@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<packages>
+
+        <package smscode="1" ussdcode="1" ivrcode="1" crmcode="PRODUCT_PACKAGE#4530" /> 
+	<package smscode="2520" ussdcode="2520" ivrcode="2520" crmcode="PRODUCT_PACKAGE#2520" /> 
+	<package smscode="PKG_SMS" 	ussdcode="PKG_USSD" ivrcode="PKG_IVR"	crmcode="PKG_CRM" />
+	<package smscode="1221" ussdcode="1221" ivrcode="IP6" crmcode="PRODUCT_PACKAGE#1362" />
+        <package smscode="44444" ussdcode="55555" ivrcode="PKG1259" crmcode="PRODUCT_PACKAGE#1259" /> 
+	<package smscode="12321" ussdcode="12231" ivrcode="IP6" crmcode="PRODUCT_PACKAGE" /> 
+	<package smscode="1488"    ussdcode="5974" ivrcode="5975"        crmcode="PRODUCT_PACKAGE#1187" />
+	<package smscode="ZLO_SMS"	ussdcode="ZLO_USSD"	ivrcode="ZLO_IVR"	crmcode="PRODUCT_PACKAGE#2908" />
+	<package smscode="21"  ussdcode="21" ivrcode="21" crmcode="PRODUCT_PACKAGE#1185" name="Internet 25mb"	/>
+        <package smscode="683" ussdcode="683" ivrcode="683" crmcode="PRODUCT_PACKAGE#683" /> 
+
+	<package smscode="P1" ussdcode="P1" ivrcode="P1" crmcode="PRODUCT_PACKAGE#1970" /> 
+	<package smscode="P2" ussdcode="P2" ivrcode="P2" crmcode="PRODUCT_PACKAGE#1762" /> 
+	<package smscode="P3" ussdcode="P3" ivrcode="P3" crmcode="PRODUCT_PACKAGE#1967" /> 
+	<package smscode="P4" ussdcode="P4" ivrcode="P4" crmcode="PRODUCT_PACKAGE#1920" /> 
+	<package smscode="P5" ussdcode="P5" ivrcode="P5" crmcode="PRODUCT_PACKAGE#1921" />
+        <package smscode="z1" ussdcode="z1" ivrcode="z1" crmcode="PRODUCT_PACKAGE#1971" /> 
+	<package smscode="z2" ussdcode="z2" ivrcode="z2" crmcode="PRODUCT_PACKAGE#1972" /> 
+	<package smscode="z3" ussdcode="z3" ivrcode="z3" crmcode="PRODUCT_PACKAGE#1922" /> 
+    <package smscode="P15" ussdcode="P15" ivrcode="P15" crmcode="PRODUCT_PACKAGE#1980" />
+	<package smscode="PP15" ussdcode="PP15" ivrcode="PP15" crmcode="PRODUCT_PACKAGE#1981" />
+	<package smscode="P01" ussdcode="P01" ivrcode="P01" crmcode="PRODUCT_PACKAGE#2202" />
+	<package smscode="10" ussdcode="10" ivrcode="10" crmcode="TURBO2" />
+<package smscode="110" ussdcode="110" ivrcode="1" crmcode="PRODUCT_PACKAGE#2122" /> 
+<package smscode="10" ussdcode="10" ivrcode="FRG" crmcode="FRGOODOK" />
+<package smscode="2947" ussdcode="2947" ivrcode="2947" crmcode="PRODUCT_PACKAGE#2947" /> 
+<package smscode="2948" ussdcode="2948" ivrcode="2948" crmcode="PRODUCT_PACKAGE#2948" /> 
+<package smscode="2890" ussdcode="2890" ivrcode="2890" crmcode="PRODUCT_PACKAGE#2890" />
+<package smscode="3214" ussdcode="3214" ivrcode="3214" crmcode="PRODUCT_PACKAGE#3214" />
+<package smscode="3212" ussdcode="3212" ivrcode="3212" crmcode="PRODUCT_PACKAGE#3212" />
+<package smscode="2243" ussdcode="2243" ivrcode="2243" crmcode="PRODUCT_PACKAGE#2243" />
+<package smscode="3272" ussdcode="3272" ivrcode="3272" crmcode="PRODUCT_PACKAGE#3272" />
+<package smscode="3276" ussdcode="3276" ivrcode="3276" crmcode="PRODUCT_PACKAGE#3276" />
+<package smscode="2517" ussdcode="2517" ivrcode="2517" crmcode="PRODUCT_PACKAGE#2517" />
+<package smscode="10555" ussdcode="10555" ivrcode="10555" crmcode="PRODUCT_PACKAGE#CB10555" />
+<package smscode="4510" ussdcode="4510" ivrcode="4510" crmcode="PRODUCT_PACKAGE#4510" />
+<package smscode="19991"    ussdcode="19991" ivrcode="19991"        crmcode="PRODUCT_PACKAGE#2511" />
+<package smscode="18881"    ussdcode="18881" ivrcode="18881"        crmcode="PRODUCT_PACKAGE#1242" />
+<package smscode="78780" ussdcode="78780" ivrcode="78780" crmcode="PRODUCT_PACKAGE#7878" />
+<package smscode="7877" ussdcode="7879" ivrcode="7876" crmcode="PRODUCT_PACKAGE#7878" />
+<package smscode="8224" ussdcode="8224" ivrcode="8224" crmcode="PRODUCT_PACKAGE#8224" />
+<package smscode="8222" ussdcode="8222" ivrcode="8222" crmcode="PRODUCT_PACKAGE#8222" />
+<package smscode="8223" ussdcode="8223" ivrcode="8223" crmcode="PRODUCT_PACKAGE#8223" />
+<package smscode="8262" ussdcode="8262" ivrcode="8262" crmcode="PRODUCT_PACKAGE#8262" />
+<package smscode="9650" ussdcode="9650" ivrcode="9650" crmcode="PRODUCT_PACKAGE#9650" />
+<package smscode="9614" ussdcode="9649" ivrcode="9649" crmcode="PRODUCT_PACKAGE#9649" />
+<package smscode="9648" ussdcode="9648" ivrcode="9648" crmcode="PRODUCT_PACKAGE#9648" />
+<package smscode="9652" ussdcode="9652" ivrcode="9652" crmcode="PRODUCT_PACKAGE#9652" />
+<package smscode="9653" ussdcode="9653" ivrcode="9653" crmcode="PRODUCT_PACKAGE#9653" />
+<package smscode="9655" ussdcode="9655" ivrcode="9655" crmcode="PRODUCT_PACKAGE#9655" />
+<package smscode="9656" ussdcode="9656" ivrcode="9656" crmcode="PRODUCT_PACKAGE#9656" />
+<package smscode="9657" ussdcode="9657" ivrcode="9657" crmcode="PRODUCT_PACKAGE#9657" />
+<package smscode="9654" ussdcode="9654" ivrcode="9654" crmcode="PRODUCT_PACKAGE#9654" />
+<package smscode="5838" ussdcode="5838" ivrcode="5838" crmcode="PRODUCT_PACKAGE#5838" />
+<package smscode="9686" ussdcode="9686" ivrcode="9686" crmcode="PRODUCT_PACKAGE#9686" />
+</packages>

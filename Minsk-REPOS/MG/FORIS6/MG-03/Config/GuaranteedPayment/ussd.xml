@@ -1,0 +1,124 @@
+﻿<templateGroup name="GuaranteedPayment">
+	<macros>
+		<define name="_SMSCON" value="SMSCON_01_03" />
+	     	<define name="promised_payment_rur" value="123456" />
+	</macros>
+
+<!--	<template procedureName="Zero_payment">
+		<condition>
+            <test item="${Sender}" matches="^00111$" />
+			<test item="${Content}" matches="^[0-9]{11}\*promised_payment_rur\*0" />
+		</condition>
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="ussd" id="${guid}" session_id="${guid}">
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate direction="input" terminating="true">
+			<set item="Content"   value="Обещанный платеж не установлен. Подробнее об условиях 059022" />
+			<set item="Sender" value="11111" />
+			<set item="Recipient" value="00111" />
+			<set item="Encoding" value="unicodefffe" />
+		</deliveryTemplate>
+		<deliveryTemplate connector="_SMSCON" />
+	</template>
+	<template procedureName="Acceptance">
+		<condition>
+            <test item="${Sender}" matches="^00111$" />
+			<test item="${Content}" matches="^[0-9]{11}\*promised_payment_rur(\*[0-9]+)?$" />
+		</condition>
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="ussd" id="${guid}" session_id="${guid}">
+				<Item customer="${token0}">
+					<Service id="guaranteedpayment" action="7">
+						<Attribute name="amount" value="#{if('${token2}'!='',number('${token2}') * 100,'')}" />
+						<Attribute name="currency" value="810" />
+					</Service>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate direction="input" terminating="false">
+			<set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
+			<set item="Sender" value="11111" />
+			<set item="Recipient" value="00111" />
+			<set item="Encoding" value="unicodefffe" />
+		</deliveryTemplate>
+		<deliveryTemplate connector="_SMSCON" />
+	</template> -->
+	
+		<template procedureName="Acceptance">
+		<condition>
+            <test item="${Sender}" matches="^00111$" />
+			<test item="${Content}" matches="^[0-9]{11}\*promised_payment_rur(\*[0-9]+)?$" />
+		</condition>
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="ussd" id="${guid}" session_id="${guid}">
+				<Item customer="${token0}">
+					<Service id="guaranteedpayment" action="7">
+						<Attribute name="amount" value="#{if('${token2}'!='',number('${token2}') * 100,'')}" />
+						<Attribute name="currency" value="810" />
+					</Service>
+				</Item>
+			</Message>
+		</receiveTemplate>
+       <deliveryTemplate>
+            <set item="Content"   value="Данный запрос сейчас не может быть выполнен. Повторите пожалуйста позже." />
+            <set item="Content" conditionEx="#{${dbresult}=0}" value="Обещанный платеж на сумму #{number('${amount}') div 100} руб. принят" />
+            <set item="Content" conditionEx="#{${dbresult}=320203}" value="Услуга не может быть предоставлена, предыдущий обещанный платеж не погашен или в процессе регистрации" />
+            <set item="Content" conditionEx="#{${dbresult}=320341}" value="Номер Вашего телефона не зарегистрирован" />
+            <set item="Content" conditionEx="#{${dbresult}=320347}" value="Данный сервис недоступен. Номер заблокирован" />
+            <set item="Content" conditionEx="#{${dbresult}=320191}" value="Данный сервис недоступен. Ваш баланс #{number('${balance}') div 100} руб." />
+            <set item="Content" conditionEx="#{${dbresult}=320203}" value="Невозможно установить обещанный платеж. На лицевом счете уже действует обещанный платеж" />
+            <set item="Content" conditionEx="#{${dbresult}=320111}" value="Укажите сумму не более #{number('${maximumrur}') div 100} руб." />
+            <set item="Content" conditionEx="#{${dbresult}=320121}" value="Невозможно установить обещанный платеж" />
+			<set item="Content" conditionEx="#{${dbresult}=320113}" value="Сумма обещанного платежа меньше минимально возможной" />
+            <set item="Content" conditionEx="#{${dbresult}=330140}" value="Шестая категория доверия" />
+            <set item="Content" conditionEx="#{${dbresult}=330141}" value="Исчерпан лимит на количество обещанных платежей" />
+            <set item="Content" conditionEx="#{${dbresult}=330142}" value="Исчерпан лимит средств на установку обещанного платежа" />
+            <set item="Content" conditionEx="#{${dbresult}=330132}" value="Задолженность по балансу превышает максимальный порог" />
+            <set item="Sender" value="11111" />
+            <set item="Recipient" value="00111" />
+            <set item="Encoding" value="unicodefffe" />
+        </deliveryTemplate>
+	</template>
+
+	<template procedureName="Verification">
+		<condition>
+            <test item="${Sender}" matches="^00111$" />
+			<test item="${Content}" matches="^[0-9]{11}\*promised_payment_verification$" />
+		</condition>
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="ussd" id="${guid}" session_id="${guid}">
+				<Item customer="${token0}">
+					<Service id="guaranteedpayment" action="6" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate direction="input" terminating="false">
+			<set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
+			<set item="Sender" value="11111" />
+			<set item="Recipient" value="00111" />
+			<set item="Encoding" value="unicodefffe" />
+		</deliveryTemplate>
+		<deliveryTemplate connector="_SMSCON" />
+	</template>
+
+	<template procedureName="List">
+		<condition>
+            <test item="${Sender}" matches="^00111$" />
+			<test item="${Content}" matches="^[0-9]{11}\*promised_payment_list$" />
+		</condition>
+		<receiveTemplate>
+			<Message type="retrievecustomerdata" initiator="ussd" id="${guid}" session_id="${guid}">
+				<Item customer="${token0}" subject="get_guaranteedpayment" />
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate direction="input" terminating="false">
+			<set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
+			<set item="Sender" value="11111" />
+			<set item="Recipient" value="00111" />
+			<set item="Encoding" value="unicodefffe" />
+		</deliveryTemplate>
+		<deliveryTemplate connector="_SMSCON" />
+	</template>
+
+</templateGroup>

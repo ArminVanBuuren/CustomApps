@@ -465,17 +465,15 @@
     <RFS name="RFS_RBT_SUBSCRIPTION" hostType="RBT" processType="Subscription" description="Абонент на RBT" />
     <RFS name="RFS_SM_CHANGE_IMSI" hostType="SM" description="Изменение номера IMSI на SMSC">
       <Scenario name="SM.ChangeIMSI" type="Add" />
-      <Resource name="RES_SM_PROFILE" useType="Mandatory">
+      <Resource name="RES_SM_PROFILE" value="SCP3">
         <Value hosts="FP:05" value="AM" />
-        <Value hosts="FP:MS-155" value="SCP3" />
       </Resource>
       <RFSParameter name="NewIMSI" />
     </RFS>
     <RFS name="RFS_SM_CHANGE_TARIFF" hostType="SM" description="Изменение тарифного плана на SMSC">
       <Scenario name="SM.ChangeTP" type="Add" />
-      <Resource name="RES_SM_PROFILE" useType="Mandatory">
+      <Resource name="RES_SM_PROFILE" value="SCP3">
         <Value hosts="FP:05" value="AM" />
-        <Value hosts="FP:MS-155" value="SCP3" />
       </Resource>
       <RFSParameter name="ChangeTP" />
     </RFS>
@@ -483,9 +481,8 @@
     <RFS name="RFS_SM_SUBSCRIPTION" hostType="SM" processType="Subscription" description="Абонент на SMSC">
       <Scenario name="SM.CreateSubscriber" type="Add" />
       <Scenario name="SM.DeleteSubscriber" type="Remove" />
-      <Resource name="RES_SM_PROFILE" useType="Mandatory">
+      <Resource name="RES_SM_PROFILE" value="SCP3">
         <Value hosts="FP:05" value="AM" />
-        <Value hosts="FP:MS-155" value="SCP3" />
       </Resource>
     </RFS>
   </RFSList>
@@ -2179,7 +2176,7 @@
       <RFS name="RFS_FP_TRANSFER_TD" linkType="Add" handler="ChangeFPPATDLinkHandler" />
     </RFSGroup>
     <RFSGroup name="RFS_GROUP_HLR_CHANGE_PROFILE" type="Choice" description="Группа RFS для пересоздания абонента">
-      <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" handler="HLR_ChangeProfile" />
+      <RFS name="RFS_HLR_SUBSCRIBER" linkType="Add" handler="UMSChangeProfile" />
     </RFSGroup>
     <RFSGroup name="RFS_GROUP_HLR_GET_SUBSCRIBER" type="Choice" description="Группа RFS для получения статуса абонента">
       <RFS name="RFS_HLR_GET_SUBSCRIBER" linkType="Add" handler="HLR_GetSubscriber" />
@@ -2254,6 +2251,20 @@
         <RFS name="RFS_HLR_SUBSCRIBER_AIISKUE" />
         <RFS name="RFS_HLR_SUBSCRIBER_DGU" />
         <RFS name="RFS_HLR_SUBSCRIBER_DEALERS" />
+      </Configuration>
+    </Handler>
+    <Handler name="UMSChangeProfile" type="Custom" description="Обработчик RFS для пересоздания профиля UMS">
+      <Configuration type="FORIS.SPA.SC.Customization.UMSChangeProfileHandler, FORIS.SPA.SC.Customization">
+        <RecreateSubscriber>
+          <RFS name="RFS_HLR_SUBSCRIBER" action="Remove" />
+          <RFS name="RFS_HLR_SUBSCRIBER" action="Add" />
+        </RecreateSubscriber>
+        <ChangeTariffPlan>
+          <RFS name="RFS_HLR_SUBSCRIBER_DEFAULT" />
+          <RFS name="RFS_HLR_SUBSCRIBER_AIISKUE" />
+          <RFS name="RFS_HLR_SUBSCRIBER_DGU" />
+          <RFS name="RFS_HLR_SUBSCRIBER_DEALERS" />
+        </ChangeTariffPlan>
       </Configuration>
     </Handler>
     <Handler name="HLR_GetSubscriber" type="RecreateSubscriber" description="Обработчик RFS для получения статуса абонента">

@@ -38,7 +38,7 @@
     <Item name="HealthParam" value="500" />
   </Settings>
   <SMSCenters>
-    <Connection host="localhost" port="9009" systemType="ussd" systemId="admin" pass="admin" />
+    <Connection host="10.128.235.1" port="9039" systemType="ussd" systemId="admin" pass="admin" />
     <!-- <Connection host="localhost" port="7042" systemType="ussd" systemId="admin" pass="admin" /> -->
   </SMSCenters>
   <Anumbertransformations>

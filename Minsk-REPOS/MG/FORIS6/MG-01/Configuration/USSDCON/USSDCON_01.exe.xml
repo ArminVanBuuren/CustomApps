@@ -28,7 +28,7 @@
   <SMSCenters>
     <!--<Connection host="172.17.129.20" port="5000" systemType="USSD" systemId="srvHyperNet" pass="s.v$Hyp7" /> -->
     <!--Connection host="172.24.224.6" port="900" systemId="srvHyperNet" pass="s.v$Hyp7" /> -->
-    <Connection host="localhost" port="9002" systemType="USSD" systemId="admin" pass="admin" />
+    <Connection host="localhost" port="9005" systemType="USSD" systemId="admin" pass="admin" />
   </SMSCenters>
   <TemplateProcessors defaultConfig="USSDTemplateProcessor.xml">
     <Processor dll="DefaultTemplates.dll" class="SMSTemplateProcessor" config="USSDTemplateProcessor.xml" />

@@ -1,4 +1,4 @@
-<templates connector="SMS">
+﻿<templates connector="SMS">
   <macros>
     <define name="_BMSHND" value="WCFHND_01" />
     <define name="_CRM_BMS_SERVICE_CODE " value="TMTSBONA" />
@@ -35,19 +35,17 @@
     <define name="_WWW_IRPA" value="example.irpa.mts.ru" />
     <define name="_DELIVERY_REQUEST_SENDER" value="1234" />
   </macros>
-  #include "config\vm2email\sms.xml"
-  #include "config\get_bms_counters\sms.xml"
-  #include "config\GuaranteedPayment\sms.xml"
-  #include "config\closed_user_group\sms_macros.xml"
-  #include "SMS\VoicePortal.xml"
-  #include "config\ServiceOrderErrorHandler.xml"
-  #include "config\closed_user_group\sms.xml"
-  #include "SMS\SMSParametricDiscount.xml"
-  #include "config\services_packages\sms.xml"
-  #include "config\annual_contract\sms.xml"
-  #include "config\mts_bonus\sms.xml"
-  #include "c:\Foris\Messaging Gateway\config\irpa\sms.xml"
-  #include "config\mts_bonus_20pct\sms.xml"
+  #include "..\..\config\vm2email\sms.xml"
+  #include "..\..\config\get_bms_counters\sms.xml"
+  #include "..\..\config\GuaranteedPayment\sms.xml"
+  #include "..\..\config\closed_user_group\sms_macros.xml"
+  #include "..\..\config\ServiceOrderErrorHandler.xml"
+  #include "..\..\config\closed_user_group\sms.xml"
+  #include "..\..\config\services_packages\sms.xml"
+  #include "..\..\config\annual_contract\sms.xml"
+  #include "..\..\config\mts_bonus\sms.xml"
+  #include "..\..\config\irpa\sms.xml"
+  #include "..\..\config\mts_bonus_20pct\sms.xml"
   <template procedureName="GetIndividualBillingPeriodDate" secretMarker="##" secretText="******">
     <condition>
       <test item="${Recipient}" matches="^12345$" />

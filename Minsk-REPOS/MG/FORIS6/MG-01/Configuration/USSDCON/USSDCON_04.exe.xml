@@ -28,7 +28,7 @@
   <SMSCenters>
     <!--<Connection host="localhost" port="5000" systemId="admin" pass="admin" /> -->
     <!-- <Connection host="172.17.129.20" port="5000" systemId="testuit" pass="uit" /> -->
-    <Connection host="172.24.224.6" port="900" systemId="testuit" pass="uit" />
+    <Connection host="localhost" port="900" systemId="testuit" pass="uit" />
   </SMSCenters>
   <TemplateProcessors defaultConfig="USSDTestTemplateProcessor.xml">
     <Processor dll="DefaultTemplates.dll" class="SMSTemplateProcessor" config="USSDTestTemplateProcessor.xml" />

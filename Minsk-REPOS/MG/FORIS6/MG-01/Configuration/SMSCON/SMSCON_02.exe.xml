@@ -28,7 +28,7 @@
   </Settings>
   <SMSCenters>
     <Connection host="localhost" port="9002" systemType="90016" systemId="admin" pass="admin" />
-    <!--<Connection host="172.24.224.6" port="900" systemId="forismg" pass="mgforis" /> -->
+    <!--<Connection host="localhost" port="900" systemId="forismg" pass="mgforis" /> -->
   </SMSCenters>
   <Anumbertransformations />
   <TemplateProcessors defaultConfig="SMSTemplateProcessor.xml">

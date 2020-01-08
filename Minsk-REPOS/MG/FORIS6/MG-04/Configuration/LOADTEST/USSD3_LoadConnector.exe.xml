@@ -38,7 +38,7 @@
     <Item name="HealthParam" value="500" />
   </Settings>
   <SMSCenters>
-    <Connection host="localhost" port="9009" systemType="ussd" systemId="admin" pass="admin" />
+    <Connection host="f6-testcli01" port="9049" systemType="ussd" systemId="admin" pass="admin" />
   </SMSCenters>
   <Anumbertransformations>
     <!-- Configuration for St-Peterburg region -->

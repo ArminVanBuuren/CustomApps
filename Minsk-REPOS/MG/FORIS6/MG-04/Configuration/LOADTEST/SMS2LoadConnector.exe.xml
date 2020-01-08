@@ -56,7 +56,7 @@
     <Item name="SmsLogging" value="enable" />
   </Settings>
   <SMSCenters>
-    <Connection host="localhost" port="9008" systemType="502" systemId="admin" pass="admin" />
+    <Connection host="f6-testcli01" port="9048" systemType="502" systemId="admin" pass="admin" />
   </SMSCenters>
   <Anumbertransformations>
     <!-- Configuration for St-Peterburg region -->

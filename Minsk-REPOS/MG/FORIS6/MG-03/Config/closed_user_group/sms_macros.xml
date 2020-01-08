@@ -1,0 +1,5 @@
+﻿
+	<define name="_MI_TEST_GROUP_SERVICE_NUMBER" value="5193" />
+	<define name="_MI_TEST_GROUP_SERVICE_RESP" value="5194" />	
+	<define name="_MAX_TEST_GROUP_LIST_LENGTH" value="35" />
+    <define name="_TEST_GROUP_ISSA_NUMBER" value="ISSA_TEST_GROUP" />
