@@ -14,6 +14,7 @@ using SPAFilter.SPA.Components.ROBP;
 using SPAFilter.SPA.SC;
 using Utils;
 using Utils.CollectionHelper;
+using Utils.Handles;
 using Utils.WinForm.CustomProgressBar;
 
 namespace SPAFilter.SPA
@@ -164,7 +165,7 @@ namespace SPAFilter.SPA
                 // обновляются свойства Scenarios и Commands
                 lock (ACTIVATORS_SYNC)
                 {
-                    ReloadActivators();
+                    ReloadActivators(_activators.Values);
                 }
                 // Получаем общие объекты по именам операций и сценариев. Т.е. фильтруем все сценарии по отфильтрованным операциям.
                 var scenarios = Scenarios.Intersect(fileteredOperations, new SAComparer()).Cast<Scenario>().ToDictionary(x => x.Name, x => x, StringComparer.CurrentCultureIgnoreCase);
@@ -418,7 +419,7 @@ namespace SPAFilter.SPA
                         }
                     }
 
-                    ReloadActivators();
+                    ReloadActivators(_activators.Values);
                 }
             });
         }
@@ -430,50 +431,32 @@ namespace SPAFilter.SPA
             {
                 lock (ACTIVATORS_SYNC)
                 {
-                    ReloadActivators();
+                    ReloadActivators(_activators.Values);
                 }
             });
         }
 
         /// <summary>
-        /// Перезагрузить по списку все экземпляры активаторов, сценарии и комманды.
+        /// Перезагрузить все экземпляры активаторов, сценарии и комманды.
         /// </summary>
-        void ReloadActivators(IEnumerable<ServiceActivator> toReload)
+        void ReloadActivators(IEnumerable<ServiceActivator> activators)
         {
-            if (toReload != null && toReload.Any())
+            if (activators != null && activators.Any())
             {
-                Task.WaitAll(toReload.Select(x => Task.Factory.StartNew(() =>
+                var process = new SemaphoreHelper<ServiceActivator>((ServiceActivator sa) =>
                 {
                     try
                     {
-                        x.Refresh();
+                        sa.Refresh();
                     }
                     catch (Exception ex)
                     {
                         MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                })).ToArray());
+                }, 10);
+
+                process.Performer(activators);
             }
-
-            LoadActivators();
-        }
-
-        /// <summary>
-        /// Перезагрузить все экземпляры активаторов, сценарии и комманды.
-        /// </summary>
-        void ReloadActivators()
-        {
-            Task.WaitAll(_activators.Values.Select(x => Task.Factory.StartNew(() =>
-            {
-                try
-                {
-                    x.Refresh();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            })).ToArray());
 
             LoadActivators();
         }
