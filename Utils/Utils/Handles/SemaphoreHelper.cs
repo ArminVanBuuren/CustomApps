@@ -20,15 +20,19 @@ namespace Utils.Handles
 
         public void Performer(IEnumerable<T> data)
         {
+            var listTasks = new List<Task>();
             foreach (var item in data)
             {
                 pool.WaitOne();
-                var task = Task.Factory.StartNew(() =>
+
+                listTasks.Add(Task.Factory.StartNew(() =>
                 {
                     _action.Invoke(item);
                     pool.Release();
-                });
+                }));
             }
+
+            Task.WaitAll(listTasks.ToArray());
         }
     }
 }
