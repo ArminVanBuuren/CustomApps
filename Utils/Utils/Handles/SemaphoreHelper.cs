@@ -10,12 +10,12 @@ namespace Utils.Handles
     public class SemaphoreHelper<T>
     {
         private readonly Action<T> _action;
-        private readonly Semaphore pool;
+        private readonly Semaphore _pool;
 
         public SemaphoreHelper(Action<T> action, int maxThreads = 2)
         {
             _action = action;
-            pool = new Semaphore(maxThreads, maxThreads, "SemaphoreHelper");
+            _pool = new Semaphore(maxThreads, maxThreads, "SemaphoreHelper");
         }
 
         public void Performer(IEnumerable<T> data)
@@ -23,12 +23,12 @@ namespace Utils.Handles
             var listOfTasks = new List<Task>();
             foreach (var item in data)
             {
-                pool.WaitOne();
+                _pool.WaitOne();
 
                 listOfTasks.Add(Task.Factory.StartNew((token) =>
                 {
                     _action.Invoke((T)token);
-                    pool.Release();
+                    _pool.Release();
                 }, item));
             }
 
