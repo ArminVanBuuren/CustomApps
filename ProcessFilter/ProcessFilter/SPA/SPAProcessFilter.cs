@@ -455,7 +455,7 @@ namespace SPAFilter.SPA
                     }
                 }, 10);
 
-                process.Performer(activators);
+                process.Execute(activators);
             }
 
             LoadActivators();
