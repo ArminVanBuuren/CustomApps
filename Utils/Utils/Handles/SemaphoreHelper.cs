@@ -7,32 +7,65 @@ using System.Threading.Tasks;
 
 namespace Utils.Handles
 {
-    public class SemaphoreHelper<T>
+    public class SemaphoreHelper<T> : IDisposable
     {
-        private readonly Action<T> _action;
-        private readonly Semaphore _pool;
+        private bool _isCancelledOperation;
+        private Action<T> _action;
+        private Semaphore _pool;
 
         public SemaphoreHelper(Action<T> action, int maxThreads = 2)
         {
             _action = action;
             _pool = new Semaphore(maxThreads, maxThreads, "SemaphoreHelper");
+            _isCancelledOperation = false;
         }
 
-        public void Performer(IEnumerable<T> data)
+        public async Task ExecuteAsync(IEnumerable<T> data)
+        {
+            await Task.Factory.StartNew((token) => { Execute((IEnumerable<T>)token); }, data);
+        }
+
+        public void Execute(IEnumerable<T> data)
         {
             var listOfTasks = new List<Task>();
             foreach (var item in data)
             {
-                _pool.WaitOne();
+                if (_isCancelledOperation)
+                    break;
+
+                _pool?.WaitOne();
 
                 listOfTasks.Add(Task.Factory.StartNew((token) =>
                 {
-                    _action.Invoke((T)token);
-                    _pool.Release();
+                    if (_isCancelledOperation)
+                    {
+                        _pool?.Release();
+                        return;
+                    }
+
+                    _action?.Invoke((T)token);
+                    _pool?.Release();
                 }, item));
             }
 
             Task.WaitAll(listOfTasks.ToArray());
+        }
+
+        public void Abort()
+        {
+            _isCancelledOperation = true;
+        }
+
+        public void Reload()
+        {
+            _isCancelledOperation = false;
+        }
+
+        public void Dispose()
+        {
+            _action = null;
+            _pool = null;
+            _isCancelledOperation = true;
         }
     }
 }
